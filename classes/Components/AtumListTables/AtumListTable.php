@@ -497,10 +497,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type' ); // WPCS: XSS ok.
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Supplier filtering.
-		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // WPCS: XSS ok.
+		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -560,7 +560,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		do_action( 'atum/list_table/before_single_row', $item, $this );
 
 		// Output the row.
-		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>'; // WPCS: XSS ok.
+		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -658,7 +658,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/before_single_expandable_row', $item, $this );
 
-		echo '<tr data-id="' . absint( $this->get_current_product_id() ) . '" class="expandable has-compounded ' . esc_attr( $type ) . '"' . $row_style . '>'; // WPCS: XSS ok.
+		echo '<tr data-id="' . absint( $this->get_current_product_id() ) . '" class="expandable has-compounded ' . esc_attr( $type ) . '"' . $row_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -751,7 +751,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( 'cb' === $column_name ) {
 
 				echo '<th scope="row" class="check-column column-cb">';
-				echo $this->column_cb( $item ); // WPCS: XSS ok.
+				echo $this->column_cb( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</th>';
 
 			}
@@ -763,21 +763,21 @@ abstract class AtumListTable extends \WP_List_Table {
 					$classes,
 					$data,
 					$primary
-				); // WPCS: XSS ok.
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			}
 			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ) ) {
 
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ), $item ); // WPCS: XSS ok.
+				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo call_user_func( array( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 
 			}
 			else {
 
-				echo "<td $attributes>"; // WPCS: XSS ok.
+				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				/* @noinspection PhpParamsInspection */
-				echo $this->column_default( $item, $column_name ); // WPCS: XSS ok.
+				echo $this->column_default( $item, $column_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 
 			}
@@ -1493,7 +1493,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$classes         = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
 		$classes         = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' . $stock_indicator . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . $data . $classes . '>' . $stock_indicator . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -1835,7 +1835,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$views[ $class ] = "\t<li class='$class'>$view";
 			endforeach;
 
-			echo implode( "</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
+			echo implode( "</li>\n", $views ) . "</li>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</ul>
 		<?php
@@ -2864,7 +2864,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
+			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		}
 
@@ -2886,13 +2886,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				$data = $group_column['collapsed'] ? ' data-collapsed="1"' : '';
 
 				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '>' .
-						'<span>' . $group_column['title'] . '</span>'; // WPCS: XSS ok.
+						'<span>' . $group_column['title'] . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 				if ( $group_column['toggler'] ) {
 					/* translators: the column group title */
 					$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr( sprintf( __( "Show/Hide the '%s' columns", ATUM_TEXT_DOMAIN ), $group_column['title'] ) ) . '"' : '';
 
-					echo '<span class="group-toggler tips"' . $data_tip . '></span>'; // WPCS: XSS ok.
+					echo '<span class="group-toggler tips"' . $data_tip . '></span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				echo '</th>';
@@ -2978,7 +2978,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$class = "class='" . join( ' ', $class ) . "'";
 			}
 
-			echo "<$tag $scope $class $colspan>$column_display</th>"; // WPCS: XSS ok.
+			echo "<$tag $scope $class $colspan>$column_display</th>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		}
 
@@ -2999,7 +2999,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<div class="atum-table-wrapper">
-			<table class="wp-list-table atum-list-table <?php echo implode( ' ', $this->get_table_classes() ); // WPCS: XSS ok. ?>"
+			<table class="wp-list-table atum-list-table <?php echo implode( ' ', $this->get_table_classes() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"
 				data-currency-pos="<?php echo esc_attr( get_option( 'woocommerce_currency_pos', 'left' ) ) ?>">
 
 				<thead>
@@ -3130,7 +3130,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				<?php
 				$this->pagination( $which );
-				echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // WPCS: XSS ok.
+				echo str_replace( '<input ', '<input autocomplete="off" ', ob_get_clean() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 
 			</div>
@@ -3147,11 +3147,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function no_items() {
 
 		$post_type_obj = get_post_type_object( $this->post_type );
-		echo $post_type_obj->labels->not_found; // WPCS: XSS ok.
+		echo $post_type_obj->labels->not_found; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			/* translators: the search query */
-			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), stripslashes( esc_attr( $_REQUEST['s'] ) ) ); // WPCS: XSS ok.
+			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), stripslashes( esc_attr( $_REQUEST['s'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 	}
@@ -3167,7 +3167,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( empty( $this->_pagination_args ) ) {
 			$output = '<span class="displaying-num">' . esc_html__( '0 items', ATUM_TEXT_DOMAIN ) . '</span>';
-			echo "<div class='tablenav-pages extend-list-table'>$output</div>"; // WPCS: XSS ok.
+			echo "<div class='tablenav-pages extend-list-table'>$output</div>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
 
@@ -3301,7 +3301,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->_pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
 
-		echo $this->_pagination; // WPCS: XSS ok.
+		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

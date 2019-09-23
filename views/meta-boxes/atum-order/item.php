@@ -95,10 +95,10 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<div class="view">
 			<?php
 			$currency = $atum_order->get_currency();
-			echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+			echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
+				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -117,10 +117,10 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	<td class="line_cost" width="1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
 		<div class="view">
 			<?php
-			echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+			echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
+				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -158,7 +158,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 				<div class="view">
 					<?php
 					if ( '' !== $tax_item_total ) :
-						echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+						echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					else :
 						echo '&ndash;';
 					endif;
@@ -167,7 +167,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 						if ( '' === $tax_item_total ) : ?>
 							<span class="atum-order-item-discount">&ndash;</span>
 						<?php else : ?>
-							<span class="atum-order-item-discount">-<?php echo wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></span>
+							<span class="atum-order-item-discount">-<?php echo wc_price( wc_round_tax_total( $tax_item_subtotal - $tax_item_total ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif;
 					endif;
 					?>

@@ -706,7 +706,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
-		echo apply_filters( 'atum/settings/display_text', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 
@@ -732,7 +732,7 @@ class Settings {
 			$this->find_option_value( $args['id'] )
 		) . $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -761,7 +761,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 
-		echo apply_filters( 'atum/settings/display_number', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_number', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -797,7 +797,7 @@ class Settings {
 
 		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_wc_country', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_wc_country', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 	
@@ -820,7 +820,7 @@ class Settings {
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
 		
-		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -850,7 +850,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" data-toggle="buttons" id="<?php echo ATUM_PREFIX . $args['id']; // WPCS: XSS ok. ?>">
+		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" data-toggle="buttons" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 
 				<?php
@@ -887,7 +887,7 @@ class Settings {
 
 		echo wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_button_group', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -918,7 +918,7 @@ class Settings {
 
 		echo wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -960,7 +960,7 @@ class Settings {
 		<?php
 
 		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
-		echo apply_filters( 'atum/settings/display_script_runner', $output, $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_script_runner', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 	
@@ -988,7 +988,7 @@ class Settings {
 		
 		echo wp_kses_post( $this->get_description( $args ) );
 		
-		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 	
@@ -1008,11 +1008,11 @@ class Settings {
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr( $id ) ?>" class="atum-settings-html"<?php echo esc_attr( $style ) ?>>
-			<?php echo $value // WPCS: XSS ok. ?>
+			<?php echo $value // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 		<?php
 		
-		echo apply_filters( 'atum/settings/display_html', ob_get_clean(), $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_html', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 
@@ -1056,7 +1056,7 @@ class Settings {
 		<?php
 		echo wp_kses_post( $this->get_description( $args ) );
 
-		echo apply_filters( 'atum/settings/display_theme_selector', ob_get_clean(), $args ); // WPCS: XSS ok.
+		echo apply_filters( 'atum/settings/display_theme_selector', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

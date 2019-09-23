@@ -38,7 +38,7 @@ $currency = $atum_order->get_currency();
 
 	<td class="line_cost" width="1%">
 		<div class="view">
-			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 
 		<div class="edit" style="display: none;">
@@ -61,7 +61,7 @@ $currency = $atum_order->get_currency();
 			?>
 			<td class="line_tax" width="1%">
 				<div class="view">
-					<?php echo ( '' !== $tax_item_total ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;' ); // WPCS: XSS ok. ?>
+					<?php echo ( '' !== $tax_item_total ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 
 				<div class="edit" style="display: none;">

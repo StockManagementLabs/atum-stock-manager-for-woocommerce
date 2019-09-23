@@ -29,7 +29,7 @@ use Atum\Inc\Globals;
 		<input type="text" class="short wc_input_price<?php if ( $field_value > $price ) echo ' tips' ?>" name="<?php echo esc_attr( $field_name ) ?>"
 			id="<?php echo esc_attr( $field_id ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $field_value ) ) ?>" placeholder=""
 			<?php if ( $field_value > $price ) echo ' data-tip="' . esc_attr__( "The Purchase Price set is greater than the product's active price", ATUM_TEXT_DOMAIN ) . '"' ?>
-			<?php echo apply_filters( 'atum/views/meta_boxes/purchase_price_field_extra_atts', '', $variation, $loop ); // WPCS: XSS ok. ?>
+			<?php echo apply_filters( 'atum/views/meta_boxes/purchase_price_field_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			>
 	</span>
 </p>

@@ -144,7 +144,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 				<td class="label"><span class="atum-help-tip atum-tooltip" data-toggle="tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
 				<td width="1%"></td>
 				<td class="total">
-					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>-->
 
@@ -157,7 +157,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 				</td>
 				<td width="1%"></td>
 				<td class="total">
-					<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+					<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 
@@ -173,7 +173,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 						<tr>
 							<td class="label"><?php echo esc_html( $tax->label ) ?>:</td>
 							<td width="1%"></td>
-							<td class="total"><?php echo $tax->formatted_amount; // WPCS: XSS ok. ?></td>
+							<td class="total"><?php echo $tax->formatted_amount; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 						</tr>
 					<?php endforeach; ?>
 
@@ -181,7 +181,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 						<td class="label"><?php esc_html_e( 'Subtotal', ATUM_TEXT_DOMAIN ) ?>:</td>
 						<td width="1%"></td>
 						<td class="total">
-							<?php echo $atum_order->get_formatted_total( '', TRUE ); // WPCS: XSS ok. ?>
+							<?php echo $atum_order->get_formatted_total( '', TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</td>
 					</tr>
 
@@ -199,7 +199,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 				</td>
 				<td width="1%"></td>
 				<td class="total">
-					<?php echo $atum_order->get_formatted_total(); // WPCS: XSS ok. ?>
+					<?php echo $atum_order->get_formatted_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 

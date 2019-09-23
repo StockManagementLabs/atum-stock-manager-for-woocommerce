@@ -46,4 +46,4 @@ defined( 'ABSPATH' ) || die;
 
 </div>
 
-<?php echo $config; // WPCS: XSS ok.
+<?php echo $config; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || die;
 			$currency = get_post_meta( $supplier_id, '_billing_information_currency', TRUE );
 			foreach ( get_woocommerce_currencies() as $code => $name ) :
 				/* translators: the fist one is the currency name and the second is the currency code */
-				echo '<option value="' . esc_attr( $code ) . '" ' . selected( $currency, $code, FALSE ) . '>' . sprintf( esc_html__( '%1$s (%2$s)', ATUM_TEXT_DOMAIN ), $name, get_woocommerce_currency_symbol( $code ) ) . '</option>'; // WPCS: XSS ok.
+				echo '<option value="' . esc_attr( $code ) . '" ' . selected( $currency, $code, FALSE ) . '>' . sprintf( esc_html__( '%1$s (%2$s)', ATUM_TEXT_DOMAIN ), $name, get_woocommerce_currency_symbol( $code ) ) . '</option>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			endforeach;
 			?>
 		</select>

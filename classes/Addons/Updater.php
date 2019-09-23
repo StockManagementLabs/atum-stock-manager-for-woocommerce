@@ -280,7 +280,7 @@ class Updater {
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>'
-				); // WPCS: XSS ok.
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			}
 			else {
@@ -294,7 +294,7 @@ class Updater {
 					'</a>',
 					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) . '">',
 					'</a>'
-				); // WPCS: XSS ok.
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			}
 
@@ -499,7 +499,7 @@ class Updater {
 		}
 
 		if ( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:white;padding:10px;">' . $version_info->sections['changelog'] . '</div>'; // WPCS: XSS ok.
+			echo '<div style="background:white;padding:10px;">' . $version_info->sections['changelog'] . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		exit;

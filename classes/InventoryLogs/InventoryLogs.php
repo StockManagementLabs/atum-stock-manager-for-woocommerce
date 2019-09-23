@@ -302,7 +302,7 @@ class InventoryLogs extends AtumOrderPostType {
 				$log_type = $log->get_log_type();
 
 				if ( in_array( $log_type, array_keys( $types ) ) ) {
-					echo $types[ $log_type ]; // WPCS: XSS ok.
+					echo $types[ $log_type ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 					if ( 'other' === $log_type ) {
 						$custom_name = $log->get_custom_name();
@@ -318,7 +318,7 @@ class InventoryLogs extends AtumOrderPostType {
 			case 'wc_order':
 				$log_order = $log->get_order();
 
-				echo $log_order ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . esc_attr__( 'Order #', ATUM_TEXT_DOMAIN ) . $log_order->get_id() . '</a>' : '&ndash;'; // WPCS: XSS ok.
+				echo $log_order ? '<a href="' . admin_url( 'post.php?post=' . absint( $log_order->get_id() ) . '&action=edit' ) . '" target="_blank">' . esc_attr__( 'Order #', ATUM_TEXT_DOMAIN ) . $log_order->get_id() . '</a>' : '&ndash;'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				break;
 
 		}

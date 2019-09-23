@@ -67,7 +67,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endif; ?>
 				</div>
 
-				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // WPCS: XSS ok. ?>">
+				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 
 					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
 					<button type="button" class="sticky-columns-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>">

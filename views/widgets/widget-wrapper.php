@@ -11,7 +11,7 @@
 defined( 'ABSPATH' ) || die;
 ?>
 
-<div class="atum-widget <?php echo esc_attr( $widget->get_id() ) ?> grid-stack-item"<?php echo $widget_data; // WPCS: XSS ok. ?>>
+<div class="atum-widget <?php echo esc_attr( $widget->get_id() ) ?> grid-stack-item"<?php echo $widget_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 
 	<div class="widget-wrapper grid-stack-item-content">
 		<div class="widget-header">
