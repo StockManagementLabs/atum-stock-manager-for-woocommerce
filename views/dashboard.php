@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) || die;
 			<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php
 			/* translators: the first one is the WordPress reviews page for ATUM's link and the second is the closing link tag */
-			printf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' ); // WPCS: XSS ok.
+			printf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
 	</section>
@@ -56,10 +56,10 @@ defined( 'ABSPATH' ) || die;
 					<?php if ( ! empty( $title ) ) : ?>
 						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? "color:{$title->text_color};" : '' ) ?><?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? "font-size:{$title->text_size};" : '' ) ?><?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? "text-align:{$title->text_align};" : '' ) ?>">
 
-							<?php echo isset( $title->text ) ? $title->text : ''; // WPCS: XSS ok. ?>
+							<?php echo isset( $title->text ) ? $title->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 							<?php if ( ! empty( $version ) ) : ?>
-								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? "color:{$version->text_color};" : '' ) ?><?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? "background:{$version->background};" : '' ) ?>"><?php echo isset( $version->text ) ? $version->text : ''; // WPCS: XSS ok. ?></span>
+								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? "color:{$version->text_color};" : '' ) ?><?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? "background:{$version->background};" : '' ) ?>"><?php echo isset( $version->text ) ? $version->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 							<?php endif; ?>
 
 						</h1>
@@ -67,13 +67,13 @@ defined( 'ABSPATH' ) || die;
 
 					<?php $description = $marketing_popup->get_description(); ?>
 					<?php if ( ! empty( $description ) ) : ?>
-						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? "color:{$description->text_color};" : '' ) ?><?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? "font-size:{$description->text_size};" : '' ) ?><?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? "text-align:{$description->text_align};" : '' ) ?>"><?php echo isset( $description->text ) ? $description->text : ''; // WPCS: XSS ok. ?></p>
+						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? "color:{$description->text_color};" : '' ) ?><?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? "font-size:{$description->text_size};" : '' ) ?><?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? "text-align:{$description->text_align};" : '' ) ?>"><?php echo isset( $description->text ) ? $description->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					<?php endif; ?>
 
 					<?php $footer_notice = $marketing_popup->get_footer_notice() ?>
 					<?php if ( ! empty( $footer_notice ) ) : ?>
-						<div class="footer-notice"<?php echo ! empty( $footer_notice->bg_color ) ? ' style="background-color:' . esc_attr( $footer_notice->bg_color ) . '"' : ''; // WPCS: XSS ok. ?>>
-							<?php echo $footer_notice->text; // WPCS: XSS ok. ?>
+						<div class="footer-notice"<?php echo ! empty( $footer_notice->bg_color ) ? ' style="background-color:' . esc_attr( $footer_notice->bg_color ) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+							<?php echo $footer_notice->text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</div>
 					<?php endif; ?>
 				</div>

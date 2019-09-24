@@ -33,7 +33,7 @@ if ( empty( $variation ) ) : ?>
 			<select class="wc-product-search atum-enhanced-select" id="<?php echo esc_attr( $supplier_field_id ) ?>" name="<?php echo esc_attr( $supplier_field_name ) ?>" style="width: <?php echo ( empty( $variation ) ) ? 80 : 100 ?>%"
 				data-allow_clear="true" data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 				data-multiple="false" data-selected="" data-minimum_input_length="1" data-container-css="atum-enhanced-select"
-				<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_extra_atts', '', $variation, $loop ); // WPCS: XSS ok. ?>
+				<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				>
 
 				<?php if ( ! empty( $supplier ) ) : ?>
@@ -43,7 +43,7 @@ if ( empty( $variation ) ) : ?>
 
 			</select>
 
-			<?php echo wc_help_tip( esc_attr__( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); // WPCS: XSS ok. ?>
+			<?php echo wc_help_tip( esc_attr__( 'Choose a supplier for this product.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 	</p>
 
@@ -57,9 +57,9 @@ if ( empty( $variation ) ) : ?>
 
 			<input type="text" class="short" style="" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>"
 				id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ) ?>"
-				<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_sku_extra_atts', '', $variation, $loop ); // WPCS: XSS ok. ?>
+				<?php echo apply_filters( 'atum/views/meta_boxes/supplier_fields/supplier_sku_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				>
-			<?php echo wc_help_tip( esc_html__( "Supplier's SKU refers to a Stock-keeping unit coming from the product's supplier, a unique identifier for each distinct product and service that can be purchased.", ATUM_TEXT_DOMAIN ) ); // WPCS: XSS ok. ?>
+			<?php echo wc_help_tip( esc_html__( "Supplier's SKU refers to a Stock-keeping unit coming from the product's supplier, a unique identifier for each distinct product and service that can be purchased.", ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 	</p>
 

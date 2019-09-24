@@ -163,7 +163,7 @@ class HtmlReport extends ListTable {
 
 		do_action( 'atum/list_table/before_single_row', $item, $this );
 
-		echo '<tr' . $row_style . '>'; // WPCS: XSS ok.
+		echo '<tr' . $row_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -435,7 +435,7 @@ class HtmlReport extends ListTable {
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // WPCS: XSS ok.
+		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 

@@ -95,5 +95,5 @@ $title_color             = 'color: #333;';
 		</tbody>
 	</table>
 
-	<?php echo $report; // WPCS: XSS ok. ?>
+	<?php echo $report; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 </div>

@@ -233,10 +233,10 @@ class DataExport {
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date( 'Y-m-d' );
-			wp_die( $mpdf->Output( "atum-inventory-report-$date_now.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
+			wp_die( $mpdf->Output( "atum-inventory-report-$date_now.pdf", Destination::INLINE ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		} catch ( MpdfException $e ) {
-			wp_die( $e->getMessage() ); // WPCS: XSS ok.
+			wp_die( $e->getMessage() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 	}

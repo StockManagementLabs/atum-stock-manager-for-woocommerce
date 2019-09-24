@@ -16,7 +16,7 @@ use Atum\Inc\Globals;
 ?>
 <div class="atum-data-panel">
 	<h2 class="atum-section-title">
-		<img src="<?php echo ATUM_URL . 'assets/images/atum-icon.svg'; // WPCS: XSS ok. ?>">
+		<img src="<?php echo ATUM_URL . 'assets/images/atum-icon.svg'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 		<?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?>
 	</h2>
 

@@ -34,7 +34,7 @@ $po_status = $atum_order->get_status();
 		<h2>
 			<?php
 			/* translators: first one is the purchase order name and second is the ID */
-			printf( esc_html__( '%1$s #%2$s details', ATUM_TEXT_DOMAIN ), $labels['singular_name'], $atum_order_post->ID ); // WPCS: XSS ok.
+			printf( esc_html__( '%1$s #%2$s details', ATUM_TEXT_DOMAIN ), $labels['singular_name'], $atum_order_post->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</h2>
 
@@ -54,7 +54,7 @@ $po_status = $atum_order->get_status();
 
 					<?php
 					$supplier_id = $supplier ? $supplier->ID : '';
-					echo Helpers::suppliers_dropdown( $supplier_id, TRUE ); // WPCS: XSS ok.
+					echo Helpers::suppliers_dropdown( $supplier_id, TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty( $supplier ) ) echo esc_attr( $supplier->ID ) ?>">
 				</p>

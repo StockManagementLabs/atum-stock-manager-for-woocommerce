@@ -192,7 +192,7 @@ class Bootstrap {
 		if ( ! empty( $this->admin_message ) ) : ?>
 			<div class="error fade">
 				<p>
-					<strong><?php echo $this->admin_message; // WPCS: XSS ok. ?></strong>
+					<strong><?php echo $this->admin_message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
 				</p>
 			</div>
 		<?php endif;

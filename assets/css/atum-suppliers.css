@@ -235,6 +235,7 @@
   --tertiary-hover-text: #69C61D;
   --tertiary-hover-border: none;
   --main-border: rgba(255, 255, 255, 0.2);
+  --main-dropdown-border: #dee2e6;
   --atum-border-expanded: #adb5bd;
   --atum-text-color-var1: #adb5bd;
   --atum-text-color-var2: #adb5bd;
@@ -1079,8 +1080,8 @@ body .select2-container--default .select2-results__group {
 }
 
 body .select2-container--default.select2-container--open .select2-dropdown {
-  -webkit-box-shadow: 0 0 0 2px var(--main-border);
-  box-shadow: 0 0 0 2px var(--main-border);
+  -webkit-box-shadow: 0 0 0 2px var(--main-dropdown-border);
+  box-shadow: 0 0 0 2px var(--main-dropdown-border);
 }
 
 @font-face {

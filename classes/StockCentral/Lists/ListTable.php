@@ -1186,12 +1186,12 @@ class ListTable extends AtumListTable {
 			<p><?php esc_attr_e( 'You can do it in 3 ways:', ATUM_TEXT_DOMAIN ) ?></p>
 
 			<ol>
-				<li><?php _e( "Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></li>
-				<li><?php _e( "Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN ); // WPCS: XSS ok. ?></li>
+				<li><?php _e( "Using the <strong>ATUM Control Switch</strong> that you'll find in every product <strong>edit</strong> page within the <strong>Product Data</strong> section. It may take a lot of time as this is per product edit.", ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></li>
+				<li><?php _e( "Going to the <strong>Uncontrolled</strong> list using the above button (<strong>Show Uncontrolled</strong>).<br>You can select all products you'd like to take control of, open the bulk action drop-down and press <strong>Enable ATUM's Stock Control</strong> option.", ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></li>
 				<li>
 					<?php
 					/* translators: first one is the button html tag and second is the closing tag */
-					printf( __( 'We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%1$sControl all my products%2$s', ATUM_TEXT_DOMAIN ), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce( 'atum-control-all-products-nonce' ) . '">', '</button>' ); // WPCS: XSS ok.
+					printf( __( 'We can add all your products at once! Just click the button below. If you change your mind later, you can revert the action by using the <code>ATUM Settings menu > Tools</code>.<br>%1$sControl all my products%2$s', ATUM_TEXT_DOMAIN ), '<button class="btn btn-sm btn-secondary" id="control-all-products" data-nonce="' . wp_create_nonce( 'atum-control-all-products-nonce' ) . '">', '</button>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 				</li>
 			</ol>

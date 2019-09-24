@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || die;
 		) );
 
 		// Product type filtering.
-		echo WidgetHelpers::product_types_dropdown( '', 'product-types-list' ); // WPCS: XSS ok.
+		echo WidgetHelpers::product_types_dropdown( '', 'product-types-list' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		?>
 	</div>

@@ -390,13 +390,13 @@ abstract class AtumOrderPostType {
 					$username = 'ATUM';
 				}
 
-				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>'; // WPCS: XSS ok.
+				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				$rendered = TRUE;
 
 				break;
 
 			case 'date':
-				printf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) ); // WPCS: XSS ok.
+				printf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				$rendered = TRUE;
 
 				break;
@@ -416,15 +416,15 @@ abstract class AtumOrderPostType {
 					$latest_note = current( $latest_notes );
 
 					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) { // WPCS: loose comparison ok.
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 					elseif ( isset( $latest_note->comment_content ) ) {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 					else {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // WPCS: XSS ok.
+						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 
 				}
@@ -440,7 +440,7 @@ abstract class AtumOrderPostType {
 				$atum_order = Helpers::get_atum_order_model( $post->ID );
 
 				if ( ! is_wp_error( $atum_order ) ) {
-					echo $atum_order->get_formatted_total(); // WPCS: XSS ok.
+					echo $atum_order->get_formatted_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				break;
@@ -480,7 +480,7 @@ abstract class AtumOrderPostType {
 					$actions = apply_filters( "atum/$post_type/admin_order_actions", $actions, $atum_order );
 
 					foreach ( $actions as $action ) {
-						printf( '<a class="%1$s tips" target="%2$s" href="%3$s" data-tip="%4$s">%5$s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), $action['icon'] ); // WPCS: XSS ok.
+						printf( '<a class="%1$s tips" target="%2$s" href="%3$s" data-tip="%4$s">%5$s</a>', esc_attr( $action['action'] ), esc_attr( $action['target'] ), esc_url( $action['url'] ), esc_attr( $action['name'] ), $action['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 
 					do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>

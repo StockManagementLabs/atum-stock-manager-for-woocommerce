@@ -49,10 +49,10 @@ use Atum\Addons\Addons;
 							<div class="addon-details">
 								<p><?php echo wp_kses_post( $addon['info']['excerpt'] ) ?></p>
 
-								<?php echo $more_details_link; // WPCS: XSS ok. ?>
+								<?php echo $more_details_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</div>
 							<?php else :
-								echo $more_details_link; // WPCS: XSS ok.
+								echo $more_details_link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							endif ?>
 
 						</div>

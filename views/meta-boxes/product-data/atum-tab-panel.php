@@ -43,7 +43,7 @@ use Atum\Inc\Globals;
 				<?php esc_html_e( 'Change Now!', ATUM_TEXT_DOMAIN ) ?>
 			</button>
 
-			<?php echo wc_help_tip( esc_html__( 'Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN ) ); // WPCS: XSS ok. ?>
+			<?php echo wc_help_tip( esc_html__( 'Changes the ATUM Control switch for all the variations to the status set at once.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</p>
 
 	</div>

@@ -17,7 +17,7 @@ use Atum\Suppliers\Suppliers;
 ?>
 <div class="po-wrapper content-header">
 	<div class="float-left">
-		<strong><?php echo preg_replace( '/<br/', '</strong><br', $po->get_company_address(), 1 ); // WPCS: XSS ok. ?>
+		<strong><?php echo preg_replace( '/<br/', '</strong><br', $po->get_company_address(), 1 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	</div>
 	<div class="float-right">
 		<h3 class="po-title"><?php esc_html_e( 'Purchase Order', ATUM_TEXT_DOMAIN ) ?></h3>
@@ -108,11 +108,11 @@ use Atum\Suppliers\Suppliers;
 						endif; ?>
 					</td>
 					<td class="qty"><?php echo esc_html( $item->get_quantity() ) ?></td>
-					<td class="price"><?php echo wc_price( $po->get_item_subtotal( $item, FALSE, FALSE ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></td>
+					<td class="price"><?php echo wc_price( $po->get_item_subtotal( $item, FALSE, FALSE ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 					<?php if ( $discount ) : ?>
 						<td class="discount">
 							<?php if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-								-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+								-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							<?php endif; ?>
 						</td>
 					<?php endif; ?>
@@ -125,7 +125,7 @@ use Atum\Suppliers\Suppliers;
 							$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 							<td class="tax">
 								<?php if ( '' !== $tax_item_total ) :
-									echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+									echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								else :
 									echo '&ndash;';
 								endif; ?>
@@ -133,7 +133,7 @@ use Atum\Suppliers\Suppliers;
 						<?php endforeach;
 
 					endif; ?>
-					<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></td>
+					<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 				</tr>
 			<?php endforeach; ?>
 
@@ -155,7 +155,7 @@ use Atum\Suppliers\Suppliers;
 								$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 								<td class="tax">
 									<?php if ( '' !== $tax_item_total ) :
-										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									else :
 										echo '&ndash;';
 									endif; ?>
@@ -163,7 +163,7 @@ use Atum\Suppliers\Suppliers;
 							<?php endforeach;
 
 						endif; ?>
-						<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></td>
+						<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php endif; ?>
@@ -186,7 +186,7 @@ use Atum\Suppliers\Suppliers;
 								$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : ''; ?>
 								<td class="tax">
 									<?php if ( '' !== $tax_item_total ) :
-										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // WPCS: XSS ok.
+										echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									else :
 										echo '&ndash;';
 									endif; ?>
@@ -194,7 +194,7 @@ use Atum\Suppliers\Suppliers;
 							<?php endforeach;
 
 						endif; ?>
-						<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?></td>
+						<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 					</tr>
 				<?php endforeach; ?>
 
@@ -207,7 +207,7 @@ use Atum\Suppliers\Suppliers;
 				<?php esc_html_e( 'Subtotal', ATUM_TEXT_DOMAIN ) ?>:
 			</td>
 			<td class="total">
-				<?php echo $po->get_formatted_total( '', TRUE ); // WPCS: XSS ok. ?>
+				<?php echo $po->get_formatted_total( '', TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</td>
 		</tr>
 
@@ -217,7 +217,7 @@ use Atum\Suppliers\Suppliers;
 					<?php esc_html_e( 'Discount', ATUM_TEXT_DOMAIN ) ?>:
 				</td>
 				<td class="total">
-					-<?php echo wc_price( $po->get_total_discount(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+					-<?php echo wc_price( $po->get_total_discount(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 		<?php endif; ?>
@@ -228,7 +228,7 @@ use Atum\Suppliers\Suppliers;
 					<?php esc_html_e( 'Shipping', ATUM_TEXT_DOMAIN ) ?>:
 				</td>
 				<td class="total">
-					<?php echo wc_price( $po->get_shipping_total(), array( 'currency' => $currency ) ); // WPCS: XSS ok. ?>
+					<?php echo wc_price( $po->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 		<?php endif; ?>
@@ -245,7 +245,7 @@ use Atum\Suppliers\Suppliers;
 							<?php echo esc_html( $tax->label ) ?>:
 						</td>
 						<td class="total">
-							<?php echo $tax->formatted_amount; // WPCS: XSS ok. ?>
+							<?php echo $tax->formatted_amount; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -262,7 +262,7 @@ use Atum\Suppliers\Suppliers;
 				printf( esc_html__( '%s Total', ATUM_TEXT_DOMAIN ), esc_html( $post_type->labels->singular_name ) ) ?>:
 			</td>
 			<td class="total">
-				<?php echo $po->get_formatted_total(); // WPCS: XSS ok. ?>
+				<?php echo $po->get_formatted_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</td>
 		</tr>
 

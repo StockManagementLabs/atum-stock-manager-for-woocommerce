@@ -274,7 +274,7 @@ class PurchaseOrders extends AtumOrderPostType {
 					$expected_date = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $expected_date ) ) . '">' . gmdate( 'Y/m/d', strtotime( $expected_date ) ) . '</abbr>';
 				}
 
-				echo $expected_date; // WPCS: XSS ok.
+				echo $expected_date; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				break;
 
 		}
@@ -537,10 +537,10 @@ class PurchaseOrders extends AtumOrderPostType {
 				$mpdf->WriteHTML( $po_export->get_content() );
 
 				// Output a PDF file directly to the browser.
-				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) ); // WPCS: XSS ok.
+				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			} catch ( MpdfException $e ) {
-				wp_die( $e->getMessage() ); // WPCS: XSS ok.
+				wp_die( $e->getMessage() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 		}

@@ -263,7 +263,7 @@ final class Ajax {
 		ob_start();
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
 
-		wp_die( ob_get_clean() ); // WPCS: XSS ok.
+		wp_die( ob_get_clean() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -1199,7 +1199,7 @@ final class Ajax {
 				?>
 				<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
 					<div class="note_content">
-						<?php echo wpautop( wptexturize( $note ) ); // WPCS: XSS ok. ?>
+						<?php echo wpautop( wptexturize( $note ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 
 					<p class="meta">

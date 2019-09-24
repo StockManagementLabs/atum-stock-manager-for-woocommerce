@@ -779,7 +779,7 @@ final class Helpers {
 		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
-			echo apply_filters( "atum/print_option/$name", $option ); // WPCS: XSS ok.
+			echo apply_filters( "atum/print_option/$name", $option ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			return FALSE;
 		}
@@ -1231,7 +1231,7 @@ final class Helpers {
 
 		?>
 		<div class="notice <?php echo esc_attr( implode( ' ', $notice_classes ) ) ?> atum-notice" data-key="<?php echo esc_attr( $key ) ?>">
-			<p><?php echo $message; // WPCS: XSS ok. ?></p>
+			<p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 
 			<?php if ( $is_dismissible ) : ?>
 			<script type="text/javascript">
@@ -1244,7 +1244,7 @@ final class Helpers {
 						url   : ajaxurl,
 						method: 'POST',
 						data  : {
-							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // WPCS: XSS ok. ?>',
+							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
 							action: 'atum_dismiss_notice',
 							key   : $notice.data('key')
 						}
