@@ -8,6 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
     'Atum\\Addons\\Updater' => $baseDir . '/classes/Addons/Updater.php',
+    'Atum\\Api\\AtumApi' => $baseDir . '/classes/Api/AtumApi.php',
+    'Atum\\Api\\Controllers\\V3\\AtumDataController' => $baseDir . '/classes/Api/Controllers/V3/AtumDataController.php',
+    'Atum\\Api\\Legacy\\V3\\AtumData' => $baseDir . '/classes/Api/Legacy/V3/AtumData.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
     'Atum\\Components\\AtumCache' => $baseDir . '/classes/Components/AtumCache.php',
     'Atum\\Components\\AtumCapabilities' => $baseDir . '/classes/Components/AtumCapabilities.php',

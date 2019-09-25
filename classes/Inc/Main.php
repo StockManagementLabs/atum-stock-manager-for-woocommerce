@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Api\AtumApi;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
@@ -227,6 +228,7 @@ class Main {
 		Settings::get_instance();
 		ProductDataMetaBoxes::get_instance();
 		AtumQueues::get_instance();
+		AtumApi::get_instance();
 		
 		//
 		// Enable WPML module if needed
