@@ -65,7 +65,7 @@
 		<exclude name="WordPress.PHP.DontExtract" />
 		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
 		<exclude name="WordPress.Security.EscapeOutput.UnsafePrintingFunction" />
-		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
+		<exclude name="WordPress.Security.NonceVerificationMissing" />
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.BlankLineAfterEnd" />
 		<exclude name="WordPress.WP.GlobalVariablesOverride.OverrideProhibited" />
 		<exclude name="WordPress.WP.I18n.NonSingularStringLiteralDomain" />
