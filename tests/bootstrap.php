@@ -48,7 +48,8 @@ function atum_manually_install_plugins() {
 	}
 	echo esc_html( 'Installing WooCommerce...' . PHP_EOL );
 
-	\Atum\Bootstrap::get_instance();
+	include dirname( dirname( __FILE__ ) ) . '/classes/Inc/Upgrade.php';
+	new \Atum\Inc\Upgrade( ATUM_VERSION );
 	echo esc_html( 'Installing ATUM...' . PHP_EOL );
 }
 
