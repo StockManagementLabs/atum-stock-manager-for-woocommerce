@@ -14,6 +14,8 @@ namespace Atum\Api;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\Extenders\AtumProductData;
+
 class AtumApi {
 
 	/**
@@ -60,6 +62,8 @@ class AtumApi {
 		 */
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
 
+		$this->load_extenders();
+
 	}
 
 	/**
@@ -89,11 +93,22 @@ class AtumApi {
 	 */
 	public function register_api_controllers( $api_controllers ) {
 
-		if ( ! empty( $api_controllers['wc/v3' ] ) ) {
-			$api_controllers['wc/v3' ] = array_merge( $api_controllers['wc/v3' ], apply_filters( 'atum/api/registered_controllers', $this->api_controllers ) );
+		if ( ! empty( $api_controllers['wc/v3'] ) ) {
+			$api_controllers['wc/v3'] = array_merge( $api_controllers['wc/v3'], apply_filters( 'atum/api/registered_controllers', $this->api_controllers ) );
 		}
 
 		return $api_controllers;
+
+	}
+
+	/**
+	 * Load the ATUM API extenders (all those that are extending an existing WC endpoint)
+	 *
+	 * @since 1.6.2
+	 */
+	public function load_extenders() {
+
+		AtumProductData::get_instance();
 
 	}
 
