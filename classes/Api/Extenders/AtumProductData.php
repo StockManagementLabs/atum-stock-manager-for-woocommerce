@@ -102,6 +102,8 @@ class AtumProductData {
 	/**
 	 * Gets extended (unprefixed) schema properties for products.
 	 *
+	 * @since 1.6.2
+	 *
 	 * @return array
 	 */
 	private static function get_extended_product_schema() {
