@@ -469,15 +469,14 @@ class Hooks {
 			// the hooks that trigger the stock status changes should be added or removed depending on the
 			// new option.
 			$out_stock_threshold_option = Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
-			$hooks                      = Hooks::get_instance();
 
 			if ( 'no' === $out_stock_threshold_option ) {
-				remove_action( 'woocommerce_product_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
-				remove_action( 'woocommerce_variation_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
+				remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			}
 			else {
-				add_action( 'woocommerce_product_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
-				add_action( 'woocommerce_variation_set_stock', array( $hooks, 'maybe_change_stock_threshold' ) );
+				add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
+				add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			}
 
 			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );

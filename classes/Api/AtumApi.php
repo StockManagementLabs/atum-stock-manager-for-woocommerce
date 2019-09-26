@@ -29,7 +29,7 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_legacy_classes = array(
-		__NAMESPACE__ . '\Legacy\V3\AtumData'
+		__NAMESPACE__ . '\Legacy\V3\AtumProductData',
 	);
 
 	/**
@@ -38,7 +38,7 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_controllers = array(
-		'atum-product-data' => __NAMESPACE__ . '\Controllers\V3\AtumDataController',
+		'suppliers' => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 	);
 
 	/**

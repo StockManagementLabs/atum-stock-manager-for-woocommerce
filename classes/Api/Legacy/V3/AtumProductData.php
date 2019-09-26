@@ -18,7 +18,7 @@ namespace Atum\Api\Legacy\V3;
 
 defined( 'ABSPATH' ) || die;
 
-class AtumData extends \WC_API_Resource {
+class AtumProductData extends \WC_API_Resource {
 
 	/**
 	 * The route base

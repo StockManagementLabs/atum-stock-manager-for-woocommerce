@@ -1,8 +1,8 @@
 <?php
 /**
- * REST API Products controller
+ * REST ATUM API Suppliers controller
  *
- * Handles requests to the /atum/product-data endpoint.
+ * Handles requests to the /atum/suppliers endpoint.
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
@@ -16,7 +16,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || die;
 
-class AtumDataController extends \WC_REST_CRUD_Controller {
+class SuppliersController extends \WC_REST_CRUD_Controller {
 
 	/**
 	 * Endpoint namespace.
@@ -30,7 +30,7 @@ class AtumDataController extends \WC_REST_CRUD_Controller {
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'atum/product-data';
+	protected $rest_base = 'atum/suppliers';
 
 	/**
 	 * If object is hierarchical.
