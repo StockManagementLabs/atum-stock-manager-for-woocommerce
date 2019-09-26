@@ -33,7 +33,7 @@
 		They are not intended as advice about which sniffs to exclude.
 		-->
 		<exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found" />
-		<exclude name="Generic.Commenting.Todo.TaskFound" />
+		<exclude name="Generic.Commenting.Todo" />
 		<exclude name="Generic.ControlStructures.InlineControlStructure" />
 		<exclude name="Generic.Files.InlineHTML" />
 		<exclude name="Generic.Files.LineLength" />
