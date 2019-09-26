@@ -1,14 +1,13 @@
 <?php
 /**
  * REST ATUM API Suppliers controller
- *
  * Handles requests to the /atum/suppliers endpoint.
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
  * @copyright   ©2019 Stock Management Labs™
  *
- * @package     Atum/Api/Controllers
+ * @package     Atum\Api\Controllers
  * @subpackage  V3
  */
 
@@ -19,7 +18,7 @@ defined( 'ABSPATH' ) || die;
 class SuppliersController extends \WC_REST_CRUD_Controller {
 
 	/**
-	 * Endpoint namespace.
+	 * Endpoint namespace
 	 *
 	 * @var string
 	 */
@@ -33,14 +32,16 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	protected $rest_base = 'atum/suppliers';
 
 	/**
-	 * If object is hierarchical.
+	 * If object is hierarchical
 	 *
 	 * @var bool
 	 */
-	protected $hierarchical = true;
+	protected $hierarchical = TRUE;
 
 	/**
-	 * Register the routes for products.
+	 * Register the routes for products
+	 *
+	 * @since 1.6.2
 	 */
 	public function register_routes() {
 
@@ -125,73 +126,87 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	}
 
 	/**
-	 * Get object.
+	 * Get Supplier object
 	 *
 	 * @param int $id Object ID.
 	 *
-	 * @since  3.0.0
-	 * @return WC_Data
+	 * @since  1.6.2
+	 *
+	 * @return \WP_Post
 	 */
 	protected function get_object( $id ) {
-		return wc_get_product( $id );
+		return get_post( $id );
 	}
 
 	/**
-	 * Check if a given request has access to read an item.
+	 * Check if a given request has access to read an item
 	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 * @return \WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
+
 		$object = $this->get_object( (int) $request['id'] );
 
 		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot view this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+			return new \WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
-		return true;
+		return TRUE;
+
 	}
 
 	/**
-	 * Check if a given request has access to update an item.
+	 * Check if a given request has access to update an item
 	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 * @return \WP_Error|boolean
 	 */
 	public function update_item_permissions_check( $request ) {
+
 		$object = $this->get_object( (int) $request['id'] );
 
 		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+			return new \WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
-		return true;
+		return TRUE;
+
 	}
 
 	/**
-	 * Check if a given request has access to delete an item.
+	 * Check if a given request has access to delete an item
 	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return bool|WP_Error
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 * @return bool|\WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
+
 		$object = $this->get_object( (int) $request['id'] );
 
 		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
+			return new \WP_Error( 'woocommerce_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
-		return true;
+		return TRUE;
+
 	}
 
 	/**
-	 * Prepare a single product output for response.
+	 * Prepare a single product output for response
 	 *
-	 * @param WC_Data         $object  Object data.
-	 * @param WP_REST_Request $request Request object.
+	 * @since 1.6.2
 	 *
-	 * @since  3.0.0
-	 * @return WP_REST_Response
+	 * @param \WP_Post         $object  Object data.
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response
 	 */
 	public function prepare_object_for_response( $object, $request ) {
 
@@ -219,18 +234,22 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		 * The dynamic portion of the hook name, $this->post_type,
 		 * refers to object type being prepared for the response.
 		 *
-		 * @param WP_REST_Response $response The response object.
-		 * @param WC_Data          $object   Object data.
-		 * @param WP_REST_Request  $request  Request object.
+		 * @param \WP_REST_Response $response The response object.
+		 * @param \WC_Data          $object   Object data.
+		 * @param \WP_REST_Request  $request  Request object.
 		 */
-		return apply_filters( "woocommerce_rest_prepare_{$this->post_type}_object", $response, $object, $request );
+		return apply_filters( "atum/api/rest_prepare_{$this->post_type}_object", $response, $object, $request );
+
 	}
 
 	/**
 	 * Make extra product orderby features supported by WooCommerce available to the WC API.
 	 * This includes 'price', 'popularity', and 'rating'.
 	 *
-	 * @param WP_REST_Request $request Request data.
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Request data.
+	 *
 	 * @return array
 	 */
 	protected function prepare_objects_query( $request ) {
@@ -240,8 +259,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		// Set post_status.
 		$args['post_status'] = $request['status'];
 
-		// Taxonomy query to filter products by type, category,
-		// tag, shipping class, and attribute.
+		// Taxonomy query to filter products by type, category, tag, shipping class, and attribute.
 		$tax_query = array();
 
 		// Map between taxonomy name and arg's key.
@@ -357,7 +375,8 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		// Force the post_type argument, since it's not a user input variable.
 		if ( ! empty( $request['sku'] ) ) {
 			$args['post_type'] = array( 'product', 'product_variation' );
-		} else {
+		}
+		else {
 			$args['post_type'] = $this->post_type;
 		}
 
@@ -367,21 +386,26 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		$ordering_args   = WC()->query->get_catalog_ordering_args( $orderby, $order );
 		$args['orderby'] = $ordering_args['orderby'];
 		$args['order']   = $ordering_args['order'];
+
 		if ( $ordering_args['meta_key'] ) {
 			$args['meta_key'] = $ordering_args['meta_key']; // WPCS: slow query ok.
 		}
 
 		return $args;
+
 	}
 
 	/**
 	 * Prepare a single product for create or update.
 	 *
-	 * @param  WP_REST_Request $request Request object.
-	 * @param  bool            $creating If is creating a new object.
-	 * @return WP_Error|WC_Data
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 * @param bool             $creating If is creating a new object.
+	 *
+	 * @return \WP_Error|\WC_Data
 	 */
-	protected function prepare_object_for_database( $request, $creating = false ) {
+	protected function prepare_object_for_database( $request, $creating = FALSE ) {
 
 		$id = isset( $request['id'] ) ? absint( $request['id'] ) : 0;
 
@@ -394,15 +418,17 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 			}
 
 			$product = new $classname( $id );
-		} elseif ( isset( $request['id'] ) ) {
+		}
+		elseif ( isset( $request['id'] ) ) {
 			$product = wc_get_product( $id );
-		} else {
+		}
+		else {
 			$product = new \WC_Product_Simple();
 		}
 
 		if ( 'variation' === $product->get_type() ) {
 			return new \WP_Error(
-				"woocommerce_rest_invalid_{$this->post_type}_id", __( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', 'woocommerce' ), array(
+				"woocommerce_rest_invalid_{$this->post_type}_id", __( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', ATUM_TEXT_DOMAIN ), array(
 					'status' => 404,
 				)
 			);
@@ -493,7 +519,8 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 				if ( ! empty( $attribute['id'] ) ) {
 					$attribute_id   = absint( $attribute['id'] );
 					$attribute_name = wc_attribute_taxonomy_name_by_id( $attribute_id );
-				} elseif ( ! empty( $attribute['name'] ) ) {
+				}
+				elseif ( ! empty( $attribute['name'] ) ) {
 					$attribute_name = wc_clean( $attribute['name'] );
 				}
 
@@ -513,7 +540,8 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 
 						$values = array_map( 'wc_sanitize_term_text_based', $options );
 						$values = array_filter( $values, 'strlen' );
-					} else {
+					}
+					else {
 						$values = array();
 					}
 
@@ -528,11 +556,13 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 						$attribute_object->set_variation( ( isset( $attribute['variation'] ) && $attribute['variation'] ) ? 1 : 0 );
 						$attributes[] = $attribute_object;
 					}
-				} elseif ( isset( $attribute['options'] ) ) {
+				}
+				elseif ( isset( $attribute['options'] ) ) {
 					// Custom attribute - Add attribute to array and set the values.
 					if ( is_array( $attribute['options'] ) ) {
 						$values = $attribute['options'];
-					} else {
+					}
+					else {
 						$values = explode( WC_DELIMITER, $attribute['options'] );
 					}
 					$attribute_object = new \WC_Product_Attribute();
@@ -550,13 +580,14 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		}
 
 		// Sales and prices.
-		if ( in_array( $product->get_type(), array( 'variable', 'grouped' ), true ) ) {
+		if ( in_array( $product->get_type(), array( 'variable', 'grouped' ), TRUE ) ) {
 			$product->set_regular_price( '' );
 			$product->set_sale_price( '' );
 			$product->set_date_on_sale_to( '' );
 			$product->set_date_on_sale_from( '' );
 			$product->set_price( '' );
-		} else {
+		}
+		else {
 			// Regular Price.
 			if ( isset( $request['regular_price'] ) ) {
 				$product->set_regular_price( $request['regular_price'] );
@@ -572,7 +603,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 			}
 
 			if ( isset( $request['date_on_sale_from_gmt'] ) ) {
-				$product->set_date_on_sale_from( $request['date_on_sale_from_gmt'] ? strtotime( $request['date_on_sale_from_gmt'] ) : null );
+				$product->set_date_on_sale_from( $request['date_on_sale_from_gmt'] ? strtotime( $request['date_on_sale_from_gmt'] ) : NULL );
 			}
 
 			if ( isset( $request['date_on_sale_to'] ) ) {
@@ -580,7 +611,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 			}
 
 			if ( isset( $request['date_on_sale_to_gmt'] ) ) {
-				$product->set_date_on_sale_to( $request['date_on_sale_to_gmt'] ? strtotime( $request['date_on_sale_to_gmt'] ) : null );
+				$product->set_date_on_sale_to( $request['date_on_sale_to_gmt'] ? strtotime( $request['date_on_sale_to_gmt'] ) : NULL );
 			}
 		}
 
@@ -597,7 +628,8 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		// Stock status; stock_status has priority over in_stock.
 		if ( isset( $request['stock_status'] ) ) {
 			$stock_status = $request['stock_status'];
-		} else {
+		}
+		else {
 			$stock_status = $product->get_stock_status();
 		}
 
@@ -618,12 +650,14 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 				$product->set_backorders( 'no' );
 				$product->set_stock_quantity( '' );
 				$product->set_stock_status( $stock_status );
-			} elseif ( $product->is_type( 'external' ) ) {
+			}
+			elseif ( $product->is_type( 'external' ) ) {
 				$product->set_manage_stock( 'no' );
 				$product->set_backorders( 'no' );
 				$product->set_stock_quantity( '' );
 				$product->set_stock_status( 'instock' );
-			} elseif ( $product->get_manage_stock() ) {
+			}
+			elseif ( $product->get_manage_stock() ) {
 				// Stock status is always determined by children so sync later.
 				if ( ! $product->is_type( 'variable' ) ) {
 					$product->set_stock_status( $stock_status );
@@ -632,18 +666,21 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 				// Stock quantity.
 				if ( isset( $request['stock_quantity'] ) ) {
 					$product->set_stock_quantity( wc_stock_amount( $request['stock_quantity'] ) );
-				} elseif ( isset( $request['inventory_delta'] ) ) {
-					$stock_quantity  = wc_stock_amount( $product->get_stock_quantity() );
+				}
+				elseif ( isset( $request['inventory_delta'] ) ) {
+					$stock_quantity = wc_stock_amount( $product->get_stock_quantity() );
 					$stock_quantity += wc_stock_amount( $request['inventory_delta'] );
 					$product->set_stock_quantity( wc_stock_amount( $stock_quantity ) );
 				}
-			} else {
+			}
+			else {
 				// Don't manage stock.
 				$product->set_manage_stock( 'no' );
 				$product->set_stock_quantity( '' );
 				$product->set_stock_status( $stock_status );
 			}
-		} elseif ( ! $product->is_type( 'variable' ) ) {
+		}
+		elseif ( ! $product->is_type( 'variable' ) ) {
 			$product->set_stock_status( $stock_status );
 		}
 
@@ -765,23 +802,24 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		/**
 		 * Filters an object before it is inserted via the REST API.
 		 *
-		 * The dynamic portion of the hook name, `$this->post_type`,
-		 * refers to the object type slug.
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the object type slug.
 		 *
-		 * @param WC_Data         $product  Object object.
-		 * @param WP_REST_Request $request  Request object.
-		 * @param bool            $creating If is creating a new object.
+		 * @param \WC_Data         $product  Object object.
+		 * @param \WP_REST_Request $request  Request object.
+		 * @param bool             $creating If is creating a new object.
 		 */
-		return apply_filters( "woocommerce_rest_pre_insert_{$this->post_type}_object", $product, $request, $creating );
+		return apply_filters( "atum/api/rest_pre_insert_{$this->post_type}_object", $product, $request, $creating );
 
 	}
 
 	/**
-	 * Delete a single item.
+	 * Delete a single item
 	 *
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @since 1.6.2
 	 *
-	 * @return WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function delete_item( $request ) {
 
@@ -793,7 +831,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		if ( ! $object || 0 === $object->get_id() ) {
 			return new \WP_Error(
 				"woocommerce_rest_{$this->post_type}_invalid_id",
-				__( 'Invalid ID.', 'woocommerce' ),
+				__( 'Invalid ID.', ATUM_TEXT_DOMAIN ),
 				array(
 					'status' => 404,
 				)
@@ -803,7 +841,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		if ( 'variation' === $object->get_type() ) {
 			return new \WP_Error(
 				"woocommerce_rest_invalid_{$this->post_type}_id",
-				__( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', 'woocommerce' ),
+				__( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', ATUM_TEXT_DOMAIN ),
 				array(
 					'status' => 404,
 				)
@@ -818,7 +856,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		 * Return false to disable trash support for the object.
 		 *
 		 * @param boolean $supports_trash Whether the object type support trashing.
-		 * @param WC_Data $object         The object being considered for trashing support.
+		 * @param \WC_Data $object         The object being considered for trashing support.
 		 */
 		$supports_trash = apply_filters( "woocommerce_rest_{$this->post_type}_object_trashable", $supports_trash, $object );
 
@@ -826,7 +864,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 			return new \WP_Error(
 				"woocommerce_rest_user_cannot_delete_{$this->post_type}",
 				/* translators: %s: post type */
-				sprintf( __( 'Sorry, you are not allowed to delete %s.', 'woocommerce' ), $this->post_type ),
+				sprintf( __( 'Sorry, you are not allowed to delete %s.', ATUM_TEXT_DOMAIN ), $this->post_type ),
 				array(
 					'status' => rest_authorization_required_code(),
 				)
@@ -842,10 +880,11 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 				foreach ( $object->get_children() as $child_id ) {
 					$child = wc_get_product( $child_id );
 					if ( ! empty( $child ) ) {
-						$child->delete( true );
+						$child->delete( TRUE );
 					}
 				}
-			} else {
+			}
+			else {
 				// For other product types, if the product has children, remove the relationship.
 				foreach ( $object->get_children() as $child_id ) {
 					$child = wc_get_product( $child_id );
@@ -856,15 +895,16 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 				}
 			}
 
-			$object->delete( true );
+			$object->delete( TRUE );
 			$result = 0 === $object->get_id();
-		} else {
+		}
+		else {
 			// If we don't support trashing for this type, error out.
 			if ( ! $supports_trash ) {
 				return new \WP_Error(
 					'woocommerce_rest_trash_not_supported',
 					/* translators: %s: post type */
-					sprintf( __( 'The %s does not support trashing.', 'woocommerce' ), $this->post_type ),
+					sprintf( __( 'The %s does not support trashing.', ATUM_TEXT_DOMAIN ), $this->post_type ),
 					array(
 						'status' => 501,
 					)
@@ -877,7 +917,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 					return new \WP_Error(
 						'woocommerce_rest_already_trashed',
 						/* translators: %s: post type */
-						sprintf( __( 'The %s has already been deleted.', 'woocommerce' ), $this->post_type ),
+						sprintf( __( 'The %s has already been deleted.', ATUM_TEXT_DOMAIN ), $this->post_type ),
 						array(
 							'status' => 410,
 						)
@@ -893,7 +933,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 			return new \WP_Error(
 				'woocommerce_rest_cannot_delete',
 				/* translators: %s: post type */
-				sprintf( __( 'The %s cannot be deleted.', 'woocommerce' ), $this->post_type ),
+				sprintf( __( 'The %s cannot be deleted.', ATUM_TEXT_DOMAIN ), $this->post_type ),
 				array(
 					'status' => 500,
 				)
@@ -908,620 +948,193 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		/**
 		 * Fires after a single object is deleted or trashed via the REST API.
 		 *
-		 * @param WC_Data          $object   The deleted or trashed object.
-		 * @param WP_REST_Response $response The response data.
-		 * @param WP_REST_Request  $request  The request sent to the API.
+		 * @param \WC_Data          $object   The deleted or trashed object.
+		 * @param \WP_REST_Response $response The response data.
+		 * @param \WP_REST_Request  $request  The request sent to the API.
 		 */
-		do_action( "woocommerce_rest_delete_{$this->post_type}_object", $object, $response, $request );
+		do_action( "atum/api/rest_delete_{$this->post_type}_object", $object, $response, $request );
 
 		return $response;
+
 	}
 
 	/**
-	 * Get the Product's schema, conforming to JSON Schema.
+	 * Get the Product's schema, conforming to JSON Schema
+	 *
+	 * @since 1.6.2
 	 *
 	 * @return array
 	 */
 	public function get_item_schema() {
 
-		$weight_unit    = get_option( 'woocommerce_weight_unit' );
-		$dimension_unit = get_option( 'woocommerce_dimension_unit' );
-		$schema         = array(
+		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
 			'title'      => $this->post_type,
 			'type'       => 'object',
 			'properties' => array(
-				'id'                    => array(
-					'description' => __( 'Unique identifier for the resource.', 'woocommerce' ),
+				'id'                => array(
+					'description' => __( 'Unique identifier for the resource.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'readonly'    => TRUE,
 				),
-				'name'                  => array(
-					'description' => __( 'Product name.', 'woocommerce' ),
+				'name'              => array(
+					'description' => __( 'Supplier name.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'slug'                  => array(
-					'description' => __( 'Product slug.', 'woocommerce' ),
+				'slug'              => array(
+					'description' => __( 'Supplier slug.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'permalink'             => array(
-					'description' => __( 'Product URL.', 'woocommerce' ),
+				'permalink'         => array(
+					'description' => __( 'Product URL.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'format'      => 'uri',
 					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'readonly'    => TRUE,
 				),
-				'date_created'          => array(
-					'description' => __( "The date the product was created, in the site's timezone.", 'woocommerce' ),
+				'date_created'      => array(
+					'description' => __( "The date the supplier was created, in the site's timezone.", ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'date_created_gmt'      => array(
-					'description' => __( 'The date the product was created, as GMT.', 'woocommerce' ),
+				'date_created_gmt'  => array(
+					'description' => __( 'The date the supplier was created, as GMT.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'date_modified'         => array(
-					'description' => __( "The date the product was last modified, in the site's timezone.", 'woocommerce' ),
+				'date_modified'     => array(
+					'description' => __( "The date the supplier was last modified, in the site's timezone.", ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'readonly'    => TRUE,
 				),
-				'date_modified_gmt'     => array(
-					'description' => __( 'The date the product was last modified, as GMT.', 'woocommerce' ),
+				'date_modified_gmt' => array(
+					'description' => __( 'The date the supplier was last modified, as GMT.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'readonly'    => TRUE,
 				),
-				'type'                  => array(
-					'description' => __( 'Product type.', 'woocommerce' ),
-					'type'        => 'string',
-					'default'     => 'simple',
-					'enum'        => array_keys( wc_get_product_types() ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'status'                => array(
-					'description' => __( 'Product status (post status).', 'woocommerce' ),
+				'status'            => array(
+					'description' => __( 'Supplier status (post status).', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'default'     => 'publish',
-					'enum'        => array_merge( array_keys( get_post_statuses() ), array( 'future' ) ),
+					'enum'        => array_keys( get_post_statuses() ),
 					'context'     => array( 'view', 'edit' ),
 				),
-				'featured'              => array(
-					'description' => __( 'Featured product.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => false,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'catalog_visibility'    => array(
-					'description' => __( 'Catalog visibility.', 'woocommerce' ),
-					'type'        => 'string',
-					'default'     => 'visible',
-					'enum'        => array( 'visible', 'catalog', 'search', 'hidden' ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'description'           => array(
-					'description' => __( 'Product description.', 'woocommerce' ),
+				'code'              => array(
+					'description' => __( 'Supplier code.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'short_description'     => array(
-					'description' => __( 'Product short description.', 'woocommerce' ),
+				'tax_number'        => array(
+					'description' => __( 'Supplier tax/VAT number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'sku'                   => array(
-					'description' => __( 'Unique identifier.', 'woocommerce' ),
+				'phone'             => array(
+					'description' => __( 'Supplier phone number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'price'                 => array(
-					'description' => __( 'Current product price.', 'woocommerce' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'regular_price'         => array(
-					'description' => __( 'Product regular price.', 'woocommerce' ),
+				'fax'               => array(
+					'description' => __( 'Supplier fax number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'sale_price'            => array(
-					'description' => __( 'Product sale price.', 'woocommerce' ),
+				'website'           => array(
+					'description' => __( 'Supplier website.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'date_on_sale_from'     => array(
-					'description' => __( "Start date of sale price, in the site's timezone.", 'woocommerce' ),
-					'type'        => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'date_on_sale_from_gmt' => array(
-					'description' => __( 'Start date of sale price, as GMT.', 'woocommerce' ),
-					'type'        => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'date_on_sale_to'       => array(
-					'description' => __( "End date of sale price, in the site's timezone.", 'woocommerce' ),
-					'type'        => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'date_on_sale_to_gmt'   => array(
-					'description' => __( "End date of sale price, in the site's timezone.", 'woocommerce' ),
-					'type'        => 'date-time',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'price_html'            => array(
-					'description' => __( 'Price formatted in HTML.', 'woocommerce' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'on_sale'               => array(
-					'description' => __( 'Shows if the product is on sale.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'purchasable'           => array(
-					'description' => __( 'Shows if the product can be bought.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'total_sales'           => array(
-					'description' => __( 'Amount of sales.', 'woocommerce' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'virtual'               => array(
-					'description' => __( 'If the product is virtual.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => false,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'downloadable'          => array(
-					'description' => __( 'If the product is downloadable.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => false,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'downloads'             => array(
-					'description' => __( 'List of downloadable files.', 'woocommerce' ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'   => array(
-								'description' => __( 'File ID.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name' => array(
-								'description' => __( 'File name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'file' => array(
-								'description' => __( 'File URL.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-						),
-					),
-				),
-				'download_limit'        => array(
-					'description' => __( 'Number of times downloadable files can be downloaded after purchase.', 'woocommerce' ),
-					'type'        => 'integer',
-					'default'     => -1,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'download_expiry'       => array(
-					'description' => __( 'Number of days until access to downloadable files expires.', 'woocommerce' ),
-					'type'        => 'integer',
-					'default'     => -1,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'external_url'          => array(
-					'description' => __( 'Product external URL. Only for external products.', 'woocommerce' ),
-					'type'        => 'string',
-					'format'      => 'uri',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'button_text'           => array(
-					'description' => __( 'Product external button text. Only for external products.', 'woocommerce' ),
+				'ordering_url'      => array(
+					'description' => __( 'Supplier ordering URL.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'tax_status'            => array(
-					'description' => __( 'Tax status.', 'woocommerce' ),
-					'type'        => 'string',
-					'default'     => 'taxable',
-					'enum'        => array( 'taxable', 'shipping', 'none' ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'tax_class'             => array(
-					'description' => __( 'Tax class.', 'woocommerce' ),
+				'general_email'     => array(
+					'description' => __( 'Supplier general email.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'manage_stock'          => array(
-					'description' => __( 'Stock management at product level.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => false,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'stock_quantity'        => array(
-					'description' => __( 'Stock quantity.', 'woocommerce' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'stock_status'          => array(
-					'description' => __( 'Controls the stock status of the product.', 'woocommerce' ),
-					'type'        => 'string',
-					'default'     => 'instock',
-					'enum'        => array_keys( wc_get_product_stock_status_options() ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'backorders'            => array(
-					'description' => __( 'If managing stock, this controls if backorders are allowed.', 'woocommerce' ),
-					'type'        => 'string',
-					'default'     => 'no',
-					'enum'        => array( 'no', 'notify', 'yes' ),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'backorders_allowed'    => array(
-					'description' => __( 'Shows if backorders are allowed.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'backordered'           => array(
-					'description' => __( 'Shows if the product is on backordered.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'sold_individually'     => array(
-					'description' => __( 'Allow one item to be bought in a single order.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => false,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'weight'                => array(
-					/* translators: %s: weight unit */
-					'description' => sprintf( __( 'Product weight (%s).', 'woocommerce' ), $weight_unit ),
+				'ordering_email'    => array(
+					'description' => __( 'Supplier ordering email.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'dimensions'            => array(
-					'description' => __( 'Product dimensions.', 'woocommerce' ),
-					'type'        => 'object',
-					'context'     => array( 'view', 'edit' ),
-					'properties'  => array(
-						'length' => array(
-							/* translators: %s: dimension unit */
-							'description' => sprintf( __( 'Product length (%s).', 'woocommerce' ), $dimension_unit ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'width'  => array(
-							/* translators: %s: dimension unit */
-							'description' => sprintf( __( 'Product width (%s).', 'woocommerce' ), $dimension_unit ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-						'height' => array(
-							/* translators: %s: dimension unit */
-							'description' => sprintf( __( 'Product height (%s).', 'woocommerce' ), $dimension_unit ),
-							'type'        => 'string',
-							'context'     => array( 'view', 'edit' ),
-						),
-					),
-				),
-				'shipping_required'     => array(
-					'description' => __( 'Shows if the product need to be shipped.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'shipping_taxable'      => array(
-					'description' => __( 'Shows whether or not the product shipping is taxable.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'shipping_class'        => array(
-					'description' => __( 'Shipping class slug.', 'woocommerce' ),
+				'description'       => array(
+					'description' => __( 'Supplier description.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'shipping_class_id'     => array(
-					'description' => __( 'Shipping class ID.', 'woocommerce' ),
+				'currency'          => array(
+					'description' => __( 'Supplier currency.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
+					'enum'        => array_keys( get_woocommerce_currencies() ),
 				),
-				'reviews_allowed'       => array(
-					'description' => __( 'Allow reviews.', 'woocommerce' ),
-					'type'        => 'boolean',
-					'default'     => true,
-					'context'     => array( 'view', 'edit' ),
-				),
-				'average_rating'        => array(
-					'description' => __( 'Reviews average rating.', 'woocommerce' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'rating_count'          => array(
-					'description' => __( 'Amount of reviews that the product have.', 'woocommerce' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'related_ids'           => array(
-					'description' => __( 'List of related products IDs.', 'woocommerce' ),
-					'type'        => 'array',
-					'items'       => array(
-						'type' => 'integer',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'upsell_ids'            => array(
-					'description' => __( 'List of up-sell products IDs.', 'woocommerce' ),
-					'type'        => 'array',
-					'items'       => array(
-						'type' => 'integer',
-					),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'cross_sell_ids'        => array(
-					'description' => __( 'List of cross-sell products IDs.', 'woocommerce' ),
-					'type'        => 'array',
-					'items'       => array(
-						'type' => 'integer',
-					),
-					'context'     => array( 'view', 'edit' ),
-				),
-				'parent_id'             => array(
-					'description' => __( 'Product parent ID.', 'woocommerce' ),
-					'type'        => 'integer',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'purchase_note'         => array(
-					'description' => __( 'Optional note to send the customer after purchase.', 'woocommerce' ),
+				'address'           => array(
+					'description' => __( 'Supplier address.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'categories'            => array(
-					'description' => __( 'List of categories.', 'woocommerce' ),
-					'type'        => 'array',
+				'city'              => array(
+					'description' => __( 'Supplier city.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'   => array(
-								'description' => __( 'Category ID.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name' => array(
-								'description' => __( 'Category name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'slug' => array(
-								'description' => __( 'Category slug.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-						),
-					),
 				),
-				'tags'                  => array(
-					'description' => __( 'List of tags.', 'woocommerce' ),
-					'type'        => 'array',
+				'country'           => array(
+					'description' => __( 'Supplier city.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'   => array(
-								'description' => __( 'Tag ID.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name' => array(
-								'description' => __( 'Tag name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'slug' => array(
-								'description' => __( 'Tag slug.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-						),
-					),
+					'enum'        => array_keys( wc()->countries->get_countries() ),
 				),
-				'images'                => array(
-					'description' => __( 'List of images.', 'woocommerce' ),
-					'type'        => 'object',
+				'state'             => array(
+					'description' => __( 'Supplier state.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'                => array(
-								'description' => __( 'Image ID.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'date_created'      => array(
-								'description' => __( "The date the image was created, in the site's timezone.", 'woocommerce' ),
-								'type'        => 'date-time',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'date_created_gmt'  => array(
-								'description' => __( 'The date the image was created, as GMT.', 'woocommerce' ),
-								'type'        => 'date-time',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'date_modified'     => array(
-								'description' => __( "The date the image was last modified, in the site's timezone.", 'woocommerce' ),
-								'type'        => 'date-time',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'date_modified_gmt' => array(
-								'description' => __( 'The date the image was last modified, as GMT.', 'woocommerce' ),
-								'type'        => 'date-time',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'src'               => array(
-								'description' => __( 'Image URL.', 'woocommerce' ),
-								'type'        => 'string',
-								'format'      => 'uri',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name'              => array(
-								'description' => __( 'Image name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'alt'               => array(
-								'description' => __( 'Image alternative text.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-						),
-					),
 				),
-				'attributes'            => array(
-					'description' => __( 'List of attributes.', 'woocommerce' ),
-					'type'        => 'array',
+				'zip_code'          => array(
+					'description' => __( 'Supplier ZIP code.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'        => array(
-								'description' => __( 'Attribute ID.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name'      => array(
-								'description' => __( 'Attribute name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'position'  => array(
-								'description' => __( 'Attribute position.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'visible'   => array(
-								'description' => __( "Define if the attribute is visible on the \"Additional information\" tab in the product's page.", 'woocommerce' ),
-								'type'        => 'boolean',
-								'default'     => false,
-								'context'     => array( 'view', 'edit' ),
-							),
-							'variation' => array(
-								'description' => __( 'Define if the attribute can be used as variation.', 'woocommerce' ),
-								'type'        => 'boolean',
-								'default'     => false,
-								'context'     => array( 'view', 'edit' ),
-							),
-							'options'   => array(
-								'description' => __( 'List of available term names of the attribute.', 'woocommerce' ),
-								'type'        => 'array',
-								'items'       => array(
-									'type' => 'string',
-								),
-								'context'     => array( 'view', 'edit' ),
-							),
-						),
-					),
 				),
-				'default_attributes'    => array(
-					'description' => __( 'Defaults variation attributes.', 'woocommerce' ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id'     => array(
-								'description' => __( 'Attribute ID.', 'woocommerce' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name'   => array(
-								'description' => __( 'Attribute name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'option' => array(
-								'description' => __( 'Selected attribute term name.', 'woocommerce' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-							),
-						),
-					),
-				),
-				'variations'            => array(
-					'description' => __( 'List of variations IDs.', 'woocommerce' ),
+				'products'          => array(
+					'description' => __( 'List of product IDs assigned to this supplier.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'array',
 					'context'     => array( 'view', 'edit' ),
 					'items'       => array(
 						'type' => 'integer',
 					),
-					'readonly'    => true,
+					'readonly'    => TRUE,
 				),
-				'grouped_products'      => array(
-					'description' => __( 'List of grouped products ID.', 'woocommerce' ),
-					'type'        => 'array',
-					'items'       => array(
-						'type' => 'integer',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'menu_order'            => array(
-					'description' => __( 'Menu order, used to custom sort products.', 'woocommerce' ),
+				'menu_order'        => array(
+					'description' => __( 'Menu order, used to custom sort products.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'meta_data'             => array(
-					'description' => __( 'Meta data.', 'woocommerce' ),
+				'meta_data'         => array(
+					'description' => __( 'Meta data.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'array',
 					'context'     => array( 'view', 'edit' ),
 					'items'       => array(
 						'type'       => 'object',
 						'properties' => array(
 							'id'    => array(
-								'description' => __( 'Meta ID.', 'woocommerce' ),
+								'description' => __( 'Meta ID.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
+								'readonly'    => TRUE,
 							),
 							'key'   => array(
-								'description' => __( 'Meta key.', 'woocommerce' ),
+								'description' => __( 'Meta key.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'string',
 								'context'     => array( 'view', 'edit' ),
 							),
 							'value' => array(
-								'description' => __( 'Meta value.', 'woocommerce' ),
+								'description' => __( 'Meta value.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'mixed',
 								'context'     => array( 'view', 'edit' ),
 							),
@@ -1536,17 +1149,20 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	}
 
 	/**
-	 * Add new options for 'orderby' to the collection params.
+	 * Add new options for 'orderby' to the collection params
+	 *
+	 * @since 1.6.2
 	 *
 	 * @return array
 	 */
 	public function get_collection_params() {
+
 		$params                    = parent::get_collection_params();
 		$params['orderby']['enum'] = array_merge( $params['orderby']['enum'], array( 'price', 'popularity', 'rating' ) );
 
 		unset( $params['in_stock'] );
 		$params['stock_status'] = array(
-			'description'       => __( 'Limit result set to products with specified stock status.', 'woocommerce' ),
+			'description'       => __( 'Limit result set to products with specified stock status.', ATUM_TEXT_DOMAIN ),
 			'type'              => 'string',
 			'enum'              => array_keys( wc_get_product_stock_status_options() ),
 			'sanitize_callback' => 'sanitize_text_field',
@@ -1554,6 +1170,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		);
 
 		return $params;
+
 	}
 
 	/**
@@ -1565,6 +1182,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	 * @return array
 	 */
 	protected function get_product_data( $product, $context = 'view' ) {
+
 		$data = parent::get_product_data( $product, $context );
 
 		// Replace in_stock with stock_status.
@@ -1573,5 +1191,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		$array_section_2 = array_slice( $data, $pos + 1, null, true );
 
 		return $array_section_1 + array( 'stock_status' => $product->get_stock_status( $context ) ) + $array_section_2;
+
 	}
+	
 }

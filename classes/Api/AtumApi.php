@@ -31,7 +31,7 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_legacy_classes = array(
-		__NAMESPACE__ . '\Legacy\V3\AtumProductData',
+		__NAMESPACE__ . '\Legacy\V3\Suppliers',
 	);
 
 	/**
