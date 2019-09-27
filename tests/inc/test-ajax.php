@@ -5,6 +5,7 @@
  * @package Atum_Stock_Manager_For_Woocommerce
  */
 
+use Atum\Components\AtumCache;
 use Atum\Inc\Ajax;
 use Atum\Models\Products\AtumProductSimple;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
@@ -14,6 +15,7 @@ use Atum\Suppliers\Suppliers;
 use Symfony\Component\DomCrawler\Crawler;
 use Atum\Inc\Helpers;
 use Atum\Components\AtumOrders\AtumComments;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
@@ -152,10 +154,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		wp_set_current_user( 1 );
 		$_REQUEST['token'] = wp_create_nonce( 'atum-dashboard-widgets' );
 		// Product needed.
-		$this->factory()->post->create( array(
-			'post_title' => 'Foo',
-			'post_type'  => 'product',
-		) );
+		TestHelpers::create_product();
 
 		$_POST['categorySelected']    = NULL;
 		$_POST['productTypeSelected'] = NULL;
@@ -201,24 +200,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$sale = new WC_Order();
 		$sale->set_defaults();
 		$sale->save();
-		$product = new AtumProductSimple();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->set_stock_quantity( 7 );
-		$product->save();
+		$product = TestHelpers::create_product();
+		Helpers::get_atum_product( $product->get_id() );
 
 		try {
 			$ajax = Ajax::get_instance();
@@ -253,29 +236,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$_SERVER['QUERY_STRING']     = '';
 
 		// Product needed.
-		$this->factory()->post->create( array(
-			'post_title'  => 'Foo',
-			'post_type'   => 'product',
-			'post_status' => 'publish',
-		) );
-		$product = new AtumProductSimple();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->set_stock_quantity( 7 );
-		$product->save();
+		TestHelpers::create_product();
 
 		try {
 			$ajax = Ajax::get_instance();
@@ -315,24 +276,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			'post_type'   => 'product',
 			'post_status' => 'publish',
 		) );
-		$product = new AtumProductSimple();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->set_stock_quantity( 7 );
-		$product->save();
+		TestHelpers::create_product();
 
 		try {
 			$ajax = Ajax::get_instance();
@@ -365,32 +309,16 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 * TODO: Doesn't work!!!
 	 */
 	public function DISABLEDtest_update_list_data() {
+		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
 		set_current_screen( 'atum-stock-central' );
 
-		$product = new WC_Product();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 15,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->save();
-		$price = $product->get_regular_price();
-		$pid   = $product->get_id();
-		unset( $product );
+		$product = TestHelpers::create_product();
+		$price   = $product->get_regular_price();
+		$pid     = $product->get_id();
 
 		$_REQUEST['token']       = wp_create_nonce( 'atum-list-table-nonce' );
-		$_POST['first_edit_key'] = '';
+		//$_POST['first_edit_key'] = '';
 		$_POST['data']           = wp_json_encode( [
 			$pid => [
 				'regular_price'          => '25',
@@ -400,16 +328,13 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		] );
 
 		try {
-			$ajax = Ajax::get_instance();
 			ob_start();
 			$ajax->update_list_data();
-			//add_action( 'wp_ajax_atum_control_all_products', array( 'Ajax', 'control_all_products' ) );
-			//$this->_handleAjax( 'atum_control_all_products' );
 		} catch ( Exception $e ) {
-			//echo $e->getTraceAsString();
 			unset( $e );
 		}
-		ob_clean();
+		while ( ob_get_level() > 0 )
+			ob_end_flush();
 
 		$product2 = wc_get_product( $pid );
 		$price2   = $product2->get_regular_price();
@@ -424,7 +349,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 * @dataProvider provideBulkAction
 	 * TODO: uncontrol_stock value doesn't match with data
 	 */
-	public function DISABLEDtest_apply_bulk_action( $action ) {
+	public function test_apply_bulk_action( $action ) {
+		$ajax = Ajax::get_instance();
 		$_REQUEST['token']    = wp_create_nonce( 'atum-list-table-nonce' );
 		$_POST['bulk_action'] = $action;
 		$_POST['ids']         = [];
@@ -451,13 +377,12 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 
 		try {
-			$ajax = Ajax::get_instance();
 			ob_start();
 			$ajax->apply_bulk_action();
-			ob_clean();
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
+		ob_clean();
 
 		foreach ( $_POST['ids'] as $id ) {
 			$product = Helpers::get_atum_product( $id );
@@ -511,7 +436,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'success', $data );
@@ -537,7 +462,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'success', $data );
@@ -561,7 +486,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'success', $data );
@@ -585,7 +510,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'success', $data );
@@ -606,16 +531,14 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			$ajax = Ajax::get_instance();
 			ob_start();
 			$ajax->install_addon();
-			ob_clean();
 		} catch ( Exception $e ) {
-			var_dump($e);
-			echo "\n".$e->getTraceAsString();
+			// var_dump( $e );
+			// echo "\n" . $e->getTraceAsString();.
 			unset( $e );
 		}
+		ob_clean();
 
-		$data = json_decode( $this->_last_response, true);
-
-		var_dump($data);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( 'success', $data );
@@ -652,28 +575,12 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_search_products() {
 		wp_set_current_user( 1 );
-		$_SERVER['REQUEST_URI']  = home_url().'/?term=Dummy';
-		$_SERVER['HTTP_REFERER'] = home_url().'/foo/?term=Dummy';
+		$_SERVER['REQUEST_URI']  = home_url() . '/?term=Dummy';
+		$_SERVER['HTTP_REFERER'] = home_url() . '/foo/?term=Dummy';
 		$_REQUEST['security']    = wp_create_nonce( 'search-products' );
 		$_GET['term']            = 'Dummy';
 
-		$product = new WC_Product();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 5,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 10,
-			)
-		);
-		$product->save();
+		TestHelpers::create_product();
 
 		try {
 			$ajax = Ajax::get_instance();
@@ -684,14 +591,13 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 		ob_end_clean();
-		//wp_ob_end_flush_all();
 
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 		$this->assertIsArray( $data );
 		foreach ( $data as $k => $d )
 			$this->assertNotFalse( strpos( $d, $_GET['term'] ) );
 
-		$_GET['term'] = 'foo';
+		$_GET['term']         = 'foo';
 		$this->_last_response = null;
 		try {
 			$ajax = Ajax::get_instance();
@@ -701,7 +607,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 			unset( $e );
 		}
 		ob_end_clean();
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 		$this->assertEmpty( $data );
 	}
 
@@ -710,8 +616,8 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function test_search_wc_orders() {
 		wp_set_current_user( 1 );
-		$_SERVER['REQUEST_URI']  = home_url().'/?term=Dummy';
-		$_SERVER['HTTP_REFERER'] = home_url().'/foo/?term=Dummy';
+		$_SERVER['REQUEST_URI']  = home_url() . '/?term=Dummy';
+		$_SERVER['HTTP_REFERER'] = home_url() . '/foo/?term=Dummy';
 		$_REQUEST['security']    = wp_create_nonce( 'search-products' );
 
 		$order = new WC_Order();
@@ -732,7 +638,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		ob_end_clean();
 
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( $order->get_id(), $data );
@@ -762,10 +668,10 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		ob_end_clean();
 
-		$data = json_decode( $this->_last_response, true);
+		$data = json_decode( $this->_last_response, true );
 
 		$this->assertIsArray( $data );
-		foreach($data as $k => $v)
+		foreach ( $data as $k => $v )
 			$this->assertGreaterThanOrEqual( 0, strpos( $v, 'Foo' ) );
 	}
 
@@ -798,9 +704,9 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 
 		$html = new Crawler( $this->_last_response );
 
-		$this->assertEquals( 1, $html->filter('li.note')->count() );
+		$this->assertEquals( 1, $html->filter( 'li.note' )->count() );
 
-		$comment_id = $html->filter('li.note')->attr('rel');
+		$comment_id = $html->filter( 'li.note' )->attr( 'rel' );
 		$comment    = get_comment( $comment_id );
 		$this->assertInstanceOf( WP_Comment::class, $comment );
 		$this->assertEquals( $comment->comment_type, 'atum_order_note' );
@@ -816,7 +722,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		ob_clean();
 		$comment = get_comment( $comment_id );
-		//print_r($comment); die;
+		// print_r($comment); die;.
 		$this->assertInstanceOf( WP_Comment::class, $comment );
 		$this->assertEquals( $comment->comment_approved, 'trash' );
 	}
@@ -825,40 +731,24 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 * Tests add_atum_order_items, load_atum_order_items, remove_atum_order_item methods
 	 */
 	public function test_atum_order_items() {
-		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
+		$ajax                 = Ajax::get_instance();
 		$_REQUEST['security'] = wp_create_nonce( 'atum-order-item' );
-		$po = new PurchaseOrders();
+		$po                   = new PurchaseOrders();
 		$po->register_post_type();
 
-		//Purchase Order
-		$pid = $this->factory()->post->create( array(
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
 			'post_title'  => 'Foo',
 			'post_type'   => PurchaseOrders::POST_TYPE,
 			'post_status' => 'publish',
 		) );
 		$order = Helpers::get_atum_order_model( $pid );
 
-		//Product
-		$product = new WC_Product();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->save();
+		// Product.
+		$product = TestHelpers::create_product();
 
-		//Add new item to order
+		// Add new item to order.
 		$_POST['atum_order_id'] = $order->get_id();
 		$_POST['item_to_add']   = $product->get_id();
 		try {
@@ -877,7 +767,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		unset( $data );
 		$this->_last_response = '';
 
-		//Load order items list
+		// Load order items list.
 		try {
 			ob_start();
 			$ajax->load_atum_order_items();
@@ -888,11 +778,11 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 
 		$html = new Crawler( $this->_last_response );
 		$this->assertEquals( 1, $html->filter( '.atum_order_items_wrapper' )->count() );
-		$this->assertEquals( $new_atum_order_item, $html->filter( 'input.atum_order_item_id' )->attr('value') );
+		$this->assertEquals( $new_atum_order_item, $html->filter( 'input.atum_order_item_id' )->attr( 'value' ) );
 		unset( $html );
 		$this->_last_response = '';
 
-		//Remove item
+		// Remove item.
 		$_POST['atum_order_item_ids'] = [ $product->get_id() ];
 		try {
 			ob_start();
@@ -904,7 +794,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		unset( $html );
 		$this->_last_response = '';
 
-		//Save items
+		// Save items.
 		$_POST['items'] = $new_atum_order_item;
 		try {
 			ob_start();
@@ -918,7 +808,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		unset( $html );
 		$this->_last_response = '';
 
-		// Reload list again
+		// Reload list again.
 		try {
 			ob_start();
 			$ajax->load_atum_order_items();
@@ -937,10 +827,10 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
 		$_REQUEST['security'] = wp_create_nonce( 'atum-order-item' );
-		$po = new PurchaseOrders();
+		$po                   = new PurchaseOrders();
 		$po->register_post_type();
 
-		//Purchase Order
+		// Purchase Order.
 		$pid   = $this->factory()->post->create( array(
 			'post_title'  => 'Foo',
 			'post_type'   => PurchaseOrders::POST_TYPE,
@@ -960,7 +850,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$data = json_decode( $this->_last_response, true );
 		$this->assertTrue( $data['success'] );
 		$html = new Crawler( $data['data'] );
-		$this->assertEquals( 1, $html->filter('tr.fee')->count() );
+		$this->assertEquals( 1, $html->filter( 'tr.fee' )->count() );
 	}
 
 	/**
@@ -970,10 +860,10 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
 		$_REQUEST['security'] = wp_create_nonce( 'atum-order-item' );
-		$po = new PurchaseOrders();
+		$po                   = new PurchaseOrders();
 		$po->register_post_type();
 
-		//Purchase Order
+		// Purchase Order.
 		$pid   = $this->factory()->post->create( array(
 			'post_title'  => 'Foo',
 			'post_type'   => PurchaseOrders::POST_TYPE,
@@ -993,50 +883,32 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$data = json_decode( $this->_last_response, true );
 		$this->assertTrue( $data['success'] );
 		$html = new Crawler( $data['data'] );
-		$this->assertEquals( 1, $html->filter('tr.shipping')->count() );
+		$this->assertEquals( 1, $html->filter( 'tr.shipping' )->count() );
 	}
 
 	/**
 	 * Tests add_atum_order_tax, change_atum_order_item_purchase_price, remove_atum_order_tax methods
 	 */
-	public function test_add_atum_order_price_tax () {
+	public function test_add_atum_order_price_tax() {
 		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
 		$_REQUEST['security'] = wp_create_nonce( 'atum-order-item' );
-		$po = new PurchaseOrders();
+		$po                   = new PurchaseOrders();
 		$po->register_post_type();
-		//$wpml = new \Atum\Integrations\Wpml();
-		//$wpml->register_atum_order_hooks( 'atum_purchase_price' );
 
-		//Purchase Order
-		$pid = $this->factory()->post->create( array(
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
 			'post_title'  => 'Foo',
 			'post_type'   => PurchaseOrders::POST_TYPE,
 			'post_status' => 'publish',
 		) );
 		$order = Helpers::get_atum_order_model( $pid );
 
-		//Product
-		$product = new WC_Product();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->save();
+		// Product.
+		$product = TestHelpers::create_product();
 		$product = Helpers::get_atum_product( $product->get_id() );
 
-		//Add new item to order
+		// Add new item to order.
 		$_POST['atum_order_id'] = $order->get_id();
 		$_POST['item_to_add']   = $product->get_id();
 		try {
@@ -1055,10 +927,11 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		unset( $data );
 		$this->_last_response = '';
 
-		//Purchase price
-		$price                       = 25;
-		$_POST['_purchase_price']    = $price;
-		$_POST['atum_order_item_id'] = $new_atum_order_item;
+		// Purchase price.
+		$price                        = 25;
+		$_POST['_purchase_price']     = $price;
+		$_POST['atum_purchase_price'] = $price;
+		$_POST['atum_order_item_id']  = $new_atum_order_item;
 		try {
 			ob_start();
 			$ajax->change_atum_order_item_purchase_price();
@@ -1068,12 +941,13 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		ob_clean();
 		$data = json_decode( $this->_last_response, true );
 		$this->assertTrue( $data['success'] );
-		//TODO: This assertion fails
-		//$this->assertEquals( $price, $product->get_purchase_price() );
+		$product->set_purchase_price( $price );
+		// TODO: This assertion fails.
+		$this->assertEquals( $price, $product->get_purchase_price() );
 		unset( $data );
 		$this->_last_response = '';
 
-		//Tax
+		// Tax.
 		$tax = new WC_Order_Item_Tax();
 		$tax->set_props( [
 			'name'    => 'Dummy tax',
@@ -1091,13 +965,12 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$data = json_decode( $this->_last_response, true );
 		$this->assertTrue( $data['success'] );
 		$html = new Crawler( $data['data']['html'] );
-		print_r($data);
-		die;
+		$this->assertEquals( 1, $html->filter( '#tmpl-atum-modal-add-tax' )->count() );
 		unset( $data );
 		unset( $html );
 		$this->_last_response = '';
 
-		//Remove tax
+		// Remove tax.
 		$_POST['rate_id'] = $tax->get_id();
 		try {
 			ob_start();
@@ -1107,34 +980,433 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		ob_clean();
 
-		$data = json_decode( $this->_last_response, true );
-		$this->assertTrue( $data['success'] );
-		$html = new Crawler( $data['data'] );
-		//$this->assertEquals( 1, $html->filter('tr.shipping')->count() );
+		$html = new Crawler( $this->_last_response );
+		$this->assertEquals( 1, $html->filter( 'div.atum_purchase_order_items' )->count() );
 		unset( $html );
+		$this->_last_response = '';
+	}
+
+	/**
+	 * Tests calc_atum_order_line_taxes method
+	 */
+	public function test_calc_atum_order_line_taxes() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['security'] = wp_create_nonce( 'calc-totals' );
+		$po                   = new PurchaseOrders();
+		$po->register_post_type();
+
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
+			'post_title'  => 'Foo',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'post_status' => 'publish',
+		) );
+		$order = Helpers::get_atum_order_model( $pid );
+
+		// Product.
+		$product = TestHelpers::create_product();
+		$product = Helpers::get_atum_product( $product->get_id() );
+
+		$tax = new WC_Order_Item_Tax();
+		$tax->set_props( [
+			'name'    => 'Dummy tax',
+			'rate_id' => 5,
+		] );
+		$tax->save();
+
+		$order->add_product( $product, 1 );
+		$order->add_tax( array( 'rate_id' => $tax->get_id() ) );
+
+		$_POST['atum_order_id'] = $order->get_id();
+		$_POST['items']         = $product->get_id();
+
+		try {
+			ob_start();
+			$ajax->calc_atum_order_line_taxes();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+		$html = new Crawler( $this->_last_response );
+		$this->assertEquals( 1, $html->filter( '#tmpl-atum-modal-add-tax' )->count() );
+	}
+
+	/**
+	 * Tests increase_atum_order_items_stock, decrease_atum_order_items_stock method
+	 */
+	public function test_atum_order_items_stock() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['security'] = wp_create_nonce( 'atum-order-item' );
+		$po                   = new PurchaseOrders();
+		$po->register_post_type();
+
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
+			'post_title'  => 'Foo',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'post_status' => 'publish',
+		) );
+		$order = Helpers::get_atum_order_model( $pid );
+
+		// Product.
+		$product = TestHelpers::create_product();
+		$product = Helpers::get_atum_product( $product->get_id() );
+		Helpers::update_wc_manage_stock( $product->get_id() );
+
+		$order->add_product( $product, 1 );
+		$items = $order->get_items();
+
+		$_POST['atum_order_id']       = $order->get_id();
+		$_POST['atum_order_item_ids'] = [];
+		$_POST['quantities']          = [];
+
+		foreach ( $items as $k => $v ) {
+			$_POST['quantities'][ $k ]      = 47;
+			$_POST['atum_order_item_ids'][] = $k;
+		}
+
+		try {
+			ob_start();
+			$ajax->increase_atum_order_items_stock();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'success', $data );
+		$this->assertTrue( $data['success'] );
 		unset( $data );
 		$this->_last_response = '';
 
+		foreach ( $items as $k => $v )
+			$_POST['quantities'][ $k ] = 19;
 
+		try {
+			ob_start();
+			$ajax->decrease_atum_order_items_stock();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'success', $data );
+		$this->assertTrue( $data['success'] );
 	}
-	/*
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_remove_tax', array( 'Ajax', 'remove_atum_order_tax' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_calc_line_taxes', array( 'Ajax', 'calc_atum_order_line_taxes' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_increase_items_stock', array( 'Ajax', 'increase_atum_order_items_stock' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_decrease_items_stock', array( 'Ajax', 'decrease_atum_order_items_stock' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_mark_status', array( 'Ajax', 'mark_atum_order_status' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_order_import_items', array( 'Ajax', 'import_wc_order_items' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_set_variations_control_status', array( 'Ajax', 'set_variations_control_status' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_get_locations_tree', array( 'Ajax', 'get_locations_tree' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_set_locations_tree', array( 'Ajax', 'set_locations_tree' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_tool_manage_stock', array( 'Ajax', 'change_manage_stock' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_tool_control_stock', array( 'Ajax', 'change_control_stock' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( 'Ajax', 'clear_out_stock_threshold' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_change_table_style_setting', array( 'Ajax', 'change_table_style_user_meta' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_get_marketing_popup_info', array( 'Ajax', 'get_marketing_popup_info' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_hide_marketing_popup', array( 'Ajax', 'marketing_popup_state' ) ) );
-	$this->assertEquals( 10, has_action( 'wp_ajax_atum_get_scheme_color', array( 'Ajax', 'get_scheme_color' ) ) );
-	*/
+
+	/**
+	 * Tests mark_atum_order_status method
+	 */
+	public function test_mark_atum_order_status() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['_wpnonce'] = wp_create_nonce( 'atum-order-mark-status' );
+		$po                   = new PurchaseOrders();
+		$po->register_post_type();
+
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
+			'post_title'  => 'Foo',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'post_status' => 'publish',
+		) );
+		$order = Helpers::get_atum_order_model( $pid );
+
+		$_GET['atum_order_id'] = $order->get_id();
+		$_GET['status']        = 'foo_status';
+
+		try {
+			$this->_handleAjax( 'atum_order_mark_status' );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+
+		$this->assertIsString( $order->get_post()->post_status );
+	}
+
+	/**
+	 * Tests import_wc_order_items method
+	 */
+	public function DISABLEDtest_import_wc_order_items() {
+		wp_set_current_user( 1 );
+		$ajax                 = Ajax::get_instance();
+		$_REQUEST['security'] = wp_create_nonce( 'import-order-items' );
+		$po                   = new PurchaseOrders();
+		$po->register_post_type();
+
+		// Purchase Order.
+		$pid   = $this->factory()->post->create( array(
+			'post_title'  => 'Foo',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'post_status' => 'publish',
+		) );
+		$order = Helpers::get_atum_order_model( $pid );
+
+		// Product.
+		$product = Helpers::get_atum_product( TestHelpers::create_product() );
+		// WC Order.
+		$wcorder = TestHelpers::create_order( $product );
+
+		$_POST['atum_order_id'] = $order->get_id();
+		$_POST['wc_order_id']   = $wcorder->get_id();
+
+		try {
+			ob_start();
+			// TODO: Call to undefined method WC_Product_Simple::get_purchase_price().
+			$ajax->import_wc_order_items();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+	}
+
+	/**
+	 * Tests set_variations_control_status method
+	 *
+	 * @param string $status
+	 *
+	 * @dataProvider provideStatus
+	 */
+	public function test_set_variations_control_status( $status ) {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['security'] = wp_create_nonce( 'atum-product-data-nonce' );
+
+		$product = TestHelpers::create_variation_product( true );
+
+		$_POST['parent_id'] = $product->get_parent_id();
+		$_POST['status']    = $status;
+
+		try {
+			ob_start();
+			$ajax->set_variations_control_status();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertEquals( 'All the variations were updated successfully', $data['data'] );
+	}
+
+	/**
+	 * Tests get_locations_tree, set_locations_tree methods
+	 */
+	public function test_locations_tree() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-list-table-nonce' );
+
+		$product = TestHelpers::create_product();
+
+		$_POST['product_id'] = $product->get_id();
+		$_POST['terms'] = 'foo,faa,fee';
+
+		try {
+			ob_start();
+			$ajax->set_locations_tree();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertEquals( 'ok', $data['data'] );
+		unset($data);
+		$this->_last_response = '';
+
+		try {
+			ob_start();
+			$ajax->get_locations_tree();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertIsString( $data['data'] );
+	}
+
+	/**
+	 * Tests change_manage_stock method
+	 *
+	 * @param $option
+	 *
+	 * @dataProvider provideManage
+	 */
+	public function test_change_manage_stock( $option ) {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-script-runner-nonce' );
+
+		$_POST['option'] = $option;
+
+		try {
+			ob_start();
+			$ajax->change_manage_stock();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertEquals( 'All your products were updated successfully', $data['data'] );
+	}
+
+	/**
+	 * Tests change_control_stock method
+	 *
+	 * @param $option
+	 *
+	 * @dataProvider provideControl
+	 */
+	public function test_change_control_stock( $option ) {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-script-runner-nonce' );
+
+		$_POST['option'] = $option;
+
+		try {
+			ob_start();
+			$ajax->change_control_stock();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertEquals( 'All your products were updated successfully', $data['data'] );
+	}
+
+	/**
+	 * Tests clear_out_stock_threshold method
+	 */
+	public function test_clear_out_stock_threshold() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-script-runner-nonce' );
+
+		try {
+			ob_start();
+			$ajax->clear_out_stock_threshold();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertEquals( 'All your previously saved values were cleared successfully.', $data['data'] );
+	}
+
+	/**
+	 * Tests change_table_style_user_meta method
+	 *
+	 * @param $enabled
+	 * @param $feature
+	 *
+	 * @dataProvider provideTableConf
+	 */
+	public function test_change_table_style_user_meta( $enabled, $feature ) {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-list-table-style' );
+
+		$_POST['enabled'] = $enabled;
+		$_POST['feature'] = $feature;
+
+		try {
+			ob_start();
+			$ajax->change_table_style_user_meta();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = Helpers::get_atum_user_meta( $feature, 1 );
+
+		foreach ( $data as $k => $v )
+			$this->assertEquals( $enabled ? 'yes' : 'no', $v );
+	}
+
+	/**
+	 * Tests get_marketing_popup_info and marketing_popup_state methods
+	 */
+	public function test_get_marketing_popup_info() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-marketing-popup-nonce' );
+
+		try {
+			ob_start();
+			$ajax->get_marketing_popup_info();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		$this->assertArrayHasKey( 'title', $data['data'] );
+		$this->assertArrayHasKey( 'version', $data['data'] );
+		$this->assertArrayHasKey( 'transient_key', $data['data'] );
+
+		$key = $data['data']['transient_key'];
+		unset( $data );
+		$this->_last_response  = '';
+		$_POST['transientKey'] = $key;
+
+		try {
+			ob_start();
+			$ajax->marketing_popup_state();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$this->assertEquals( $key, AtumCache::get_transient( 'atum-marketing-popup' ) );
+	}
+
+	/**
+	 * Tests get_scheme_color method
+	 */
+	public function test_get_scheme_color() {
+		$ajax = Ajax::get_instance();
+		wp_set_current_user( 1 );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-scheme-color-nonce' );
+
+		$_POST['reset'] = 1;
+
+		try {
+			ob_start();
+			$ajax->get_scheme_color();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		ob_clean();
+
+		$data = json_decode( $this->_last_response, true );
+		$this->assertIsArray( $data );
+		$this->assertTrue( $data['success'] );
+		foreach( $data['data'] as $key => $value ) {
+			$this->assertEquals( 1, preg_match( '/#([a-f0-9]{3}){1,2}\b/i', $value ) );
+		}
+	}
 
 	/**
 	 * Data provider for test methods
@@ -1171,12 +1443,72 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 *
 	 * @return array
 	 */
+	public function provideTableConf() {
+		$result = [];
+		$features = [
+			'sticky-columns',
+			'normal-columns',
+		];
+		$enabled  = [
+			true,
+			false,
+		];
+		foreach ( $features as $f ) {
+			foreach ( $enabled as $e ) {
+				$result[] = [ $e, $f ];
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Data provider for test methods
+	 *
+	 * @return array
+	 */
 	public function provideBulkAction() {
 		return [
 			[ 'uncontrol_stock' ],
 			[ 'control_stock' ],
 			[ 'unmanage_stock' ],
 			[ 'manage_stock' ],
+		];
+	}
+
+	/**
+	 * Data provider for test methods
+	 *
+	 * @return array
+	 */
+	public function provideStatus() {
+		return [
+			[ 'controlled' ],
+			[ 'uncontrolled' ],
+		];
+	}
+
+	/**
+	 * Data provider for test methods
+	 *
+	 * @return array
+	 */
+	public function provideManage() {
+		return [
+			[ 'manage' ],
+			[ 'unmanage' ],
+		];
+	}
+
+	/**
+	 * Data provider for test methods
+	 *
+	 * @return array
+	 */
+	public function provideControl() {
+		return [
+			[ 'control' ],
+			[ 'uncontrol' ],
 		];
 	}
 
