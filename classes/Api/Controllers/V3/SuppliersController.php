@@ -15,7 +15,10 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || die;
 
-class SuppliersController extends \WC_REST_CRUD_Controller {
+use Atum\Inc\Helpers;
+use Atum\Suppliers\Suppliers;
+
+class SuppliersController extends \WC_REST_Posts_Controller {
 
 	/**
 	 * Endpoint namespace
@@ -32,6 +35,20 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	protected $rest_base = 'atum/suppliers';
 
 	/**
+	 * Post type
+	 *
+	 * @var string
+	 */
+	protected $post_type = Suppliers::POST_TYPE;
+
+	/**
+	 * Instance of a post meta fields object.
+	 *
+	 * @var \WP_REST_Post_Meta_Fields
+	 */
+	protected $meta;
+
+	/**
 	 * If object is hierarchical
 	 *
 	 * @var bool
@@ -39,7 +56,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	protected $hierarchical = TRUE;
 
 	/**
-	 * Register the routes for products
+	 * Register the routes for Suppliers
 	 *
 	 * @since 1.6.2
 	 */
@@ -126,6 +143,63 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	}
 
 	/**
+	 * Get the query params for collections of suppliers (for filtering purposes)
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+
+		$params = parent::get_collection_params();
+
+		$supplier_params = array(
+			'slug'        => array(
+				'description'       => __( 'Limit result set to suppliers with a specific slug.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'status'      => array(
+				'default'           => 'publish',
+				'description'       => __( 'Limit result set to suppliers assigned a specific status.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'enum'              => array_keys( get_post_statuses() ),
+				'sanitize_callback' => 'sanitize_key',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'currency'    => array(
+				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+				'enum'              => array_keys( get_woocommerce_currencies() ),
+			),
+			'country'     => array(
+				'description'       => __( 'Limit result set to suppliers from the specified country code.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+				'enum'              => array_keys( wc()->countries->get_countries() ),
+			),
+			'assigned_to' => array(
+				'description'       => __( 'Limit result set to suppliers assigned to the specified user ID.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'product'     => array(
+				'description'       => __( 'Limit result set to suppliers assigned to the specific product ID.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+		);
+
+		return array_merge( $params, $supplier_params );
+
+	}
+
+	/**
 	 * Get Supplier object
 	 *
 	 * @param int $id Object ID.
@@ -144,14 +218,16 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	 * @since 1.6.2
 	 *
 	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
 	 * @return \WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
 
 		$object = $this->get_object( (int) $request['id'] );
 
-		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
 		return TRUE;
@@ -164,14 +240,16 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	 * @since 1.6.2
 	 *
 	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
 	 * @return \WP_Error|boolean
 	 */
 	public function update_item_permissions_check( $request ) {
 
 		$object = $this->get_object( (int) $request['id'] );
 
-		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
 		return TRUE;
@@ -184,14 +262,16 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	 * @since 1.6.2
 	 *
 	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
 	 * @return bool|\WP_Error
 	 */
 	public function delete_item_permissions_check( $request ) {
 
 		$object = $this->get_object( (int) $request['id'] );
 
-		if ( $object && 0 !== $object->get_id() && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->get_id() ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
 		return TRUE;
@@ -254,7 +334,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	 */
 	protected function prepare_objects_query( $request ) {
 
-		$args = \WC_REST_CRUD_Controller::prepare_objects_query( $request );
+		$args = \WC_REST_Posts_Controller::prepare_objects_query( $request );
 
 		// Set post_status.
 		$args['post_status'] = $request['status'];
@@ -668,7 +748,7 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 					$product->set_stock_quantity( wc_stock_amount( $request['stock_quantity'] ) );
 				}
 				elseif ( isset( $request['inventory_delta'] ) ) {
-					$stock_quantity = wc_stock_amount( $product->get_stock_quantity() );
+					$stock_quantity  = wc_stock_amount( $product->get_stock_quantity() );
 					$stock_quantity += wc_stock_amount( $request['inventory_delta'] );
 					$product->set_stock_quantity( wc_stock_amount( $stock_quantity ) );
 				}
@@ -813,6 +893,169 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	}
 
 	/**
+	 * Prepares a single supplier output for response
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_Post         $supplier Supplier post object.
+	 * @param \WP_REST_Request $request  Request object.
+	 *
+	 * @return \WP_REST_Response Response object.
+	 */
+	public function prepare_item_for_response( $supplier, $request ) {
+
+		$GLOBALS['post'] = $supplier;
+		setup_postdata( $supplier );
+
+		$fields = $this->get_fields_for_response( $request );
+
+		// Base fields for every post.
+		$data = array();
+
+		if ( in_array( 'id', $fields, TRUE ) ) {
+			$data['id'] = $supplier->ID;
+		}
+
+		if ( in_array( 'name', $fields, TRUE ) ) {
+			$data['name'] = $supplier->post_title;
+		}
+
+		if ( in_array( 'slug', $fields, TRUE ) ) {
+			$data['slug'] = $supplier->post_name;
+		}
+
+		if ( in_array( 'permalink', $fields, TRUE ) ) {
+			$data['permalink'] = get_permalink( $supplier->ID );
+		}
+
+		if ( in_array( 'date_created', $fields, TRUE ) ) {
+			$data['date_created'] = wc_rest_prepare_date_response( $supplier->post_date );
+		}
+
+		if ( in_array( 'date_created_gmt', $fields, TRUE ) ) {
+			$data['date_created_gmt'] = wc_rest_prepare_date_response( $supplier->post_date_gmt );
+		}
+
+		if ( in_array( 'date_modified', $fields, TRUE ) ) {
+			$data['date_modified'] = wc_rest_prepare_date_response( $supplier->post_modified );
+		}
+
+		if ( in_array( 'date_modified_gmt', $fields, TRUE ) ) {
+			$data['date_modified_gmt'] = wc_rest_prepare_date_response( $supplier->post_modified_gmt );
+		}
+
+		if ( in_array( 'status', $fields, TRUE ) ) {
+			$data['status'] = $supplier->post_status;
+		}
+
+		$supplier_meta      = get_metadata( 'post', $supplier->ID );
+		$supplier_meta_keys = array_keys( $supplier_meta );
+
+		// Supplier details' meta.
+		foreach (
+			[
+				'code',
+				'tax_number',
+				'phone',
+				'fax',
+				'website',
+				'ordering_url',
+				'general_email',
+				'ordering_email',
+				'description',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_supplier_details_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_supplier_details_$meta_key" ] );
+			}
+
+		}
+
+		// Billing information's meta.
+		foreach (
+			[
+				'currency',
+				'address',
+				'city',
+				'country',
+				'state',
+				'zip_code',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_billing_information_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_billing_information_$meta_key" ] );
+			}
+
+		}
+
+		// Default settings' meta.
+		foreach (
+			[
+				'assigned_to',
+				'location',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_default_settings_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_default_settings_$meta_key" ] );
+			}
+
+		}
+
+		if ( in_array( 'image', $fields, TRUE ) ) {
+
+			$attachment_id   = (int) get_post_thumbnail_id( $supplier->ID );
+			$attachment_post = get_post( $attachment_id );
+
+			if ( ! is_null( $attachment_post ) ) {
+
+				$attachment = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+				if ( is_array( $attachment ) ) {
+
+					$data['image'] = array(
+						'id'                => (int) $attachment_id,
+						'date_created'      => wc_rest_prepare_date_response( $attachment_post->post_date, FALSE ),
+						'date_created_gmt'  => wc_rest_prepare_date_response( strtotime( $attachment_post->post_date_gmt ) ),
+						'date_modified'     => wc_rest_prepare_date_response( $attachment_post->post_modified, FALSE ),
+						'date_modified_gmt' => wc_rest_prepare_date_response( strtotime( $attachment_post->post_modified_gmt ) ),
+						'src'               => current( $attachment ),
+						'name'              => get_the_title( $attachment_id ),
+						'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', TRUE ),
+					);
+
+				}
+
+			}
+
+		}
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$data    = $this->filter_response_by_context( $data, $context );
+
+		// Wrap the data in a response object.
+		$response = rest_ensure_response( $data );
+
+		$links = $this->prepare_links( $supplier, $request );
+		$response->add_links( $links );
+
+		/**
+		 * Filters the post data for a response.
+		 *
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
+		 *
+		 * @param \WP_REST_Response $response The response object.
+		 * @param \WP_Post          $supplier Post object.
+		 * @param \WP_REST_Request  $request  Request object.
+		 */
+		return apply_filters( "atum/api/rest_prepare_{$this->post_type}", $response, $supplier, $request );
+
+	}
+
+	/**
 	 * Delete a single item
 	 *
 	 * @since 1.6.2
@@ -825,27 +1068,11 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 
 		$id     = (int) $request['id'];
 		$force  = (bool) $request['force'];
-		$object = $this->get_object( (int) $request['id'] );
-		$result = false;
+		$object = $this->get_object( $id );
+		$result = FALSE;
 
-		if ( ! $object || 0 === $object->get_id() ) {
-			return new \WP_Error(
-				"woocommerce_rest_{$this->post_type}_invalid_id",
-				__( 'Invalid ID.', ATUM_TEXT_DOMAIN ),
-				array(
-					'status' => 404,
-				)
-			);
-		}
-
-		if ( 'variation' === $object->get_type() ) {
-			return new \WP_Error(
-				"woocommerce_rest_invalid_{$this->post_type}_id",
-				__( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', ATUM_TEXT_DOMAIN ),
-				array(
-					'status' => 404,
-				)
-			);
+		if ( ! $object || 0 === $object->ID ) {
+			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
 		$supports_trash = EMPTY_TRASH_DAYS > 0 && is_callable( array( $object, 'get_status' ) );
@@ -856,19 +1083,12 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 		 * Return false to disable trash support for the object.
 		 *
 		 * @param boolean $supports_trash Whether the object type support trashing.
-		 * @param \WC_Data $object         The object being considered for trashing support.
+		 * @param \WP_Post $object        The object being considered for trashing support.
 		 */
-		$supports_trash = apply_filters( "woocommerce_rest_{$this->post_type}_object_trashable", $supports_trash, $object );
+		$supports_trash = apply_filters( "atum/api/rest_{$this->post_type}_object_trashable", $supports_trash, $object );
 
-		if ( ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->get_id() ) ) {
-			return new \WP_Error(
-				"woocommerce_rest_user_cannot_delete_{$this->post_type}",
-				/* translators: %s: post type */
-				sprintf( __( 'Sorry, you are not allowed to delete %s.', ATUM_TEXT_DOMAIN ), $this->post_type ),
-				array(
-					'status' => rest_authorization_required_code(),
-				)
-			);
+		if ( ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
+			return new \WP_Error( "atum_rest_user_cannot_delete_{$this->post_type}", __( 'Sorry, you are not allowed to delete Suppliers.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
 		$request->set_param( 'context', 'edit' );
@@ -876,79 +1096,54 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 
 		// If we're forcing, then delete permanently.
 		if ( $force ) {
-			if ( $object->is_type( 'variable' ) ) {
-				foreach ( $object->get_children() as $child_id ) {
-					$child = wc_get_product( $child_id );
-					if ( ! empty( $child ) ) {
-						$child->delete( TRUE );
-					}
+
+			// Get all the products that were linked to this supplier and unlink them.
+			$supplier_products = Suppliers::get_supplier_products( $object->ID );
+
+			foreach ( $supplier_products as $product_id ) {
+
+				$product = Helpers::get_atum_product( $product_id );
+
+				if ( is_a( $product, '\WC_Product' ) ) {
+					$product->set_supplier_id( NULL );
+					$product->save_atum_data();
 				}
-			}
-			else {
-				// For other product types, if the product has children, remove the relationship.
-				foreach ( $object->get_children() as $child_id ) {
-					$child = wc_get_product( $child_id );
-					if ( ! empty( $child ) ) {
-						$child->set_parent_id( 0 );
-						$child->save();
-					}
-				}
+
 			}
 
 			$object->delete( TRUE );
-			$result = 0 === $object->get_id();
+			$result = 0 === $object->ID;
+
 		}
 		else {
+
 			// If we don't support trashing for this type, error out.
 			if ( ! $supports_trash ) {
-				return new \WP_Error(
-					'woocommerce_rest_trash_not_supported',
-					/* translators: %s: post type */
-					sprintf( __( 'The %s does not support trashing.', ATUM_TEXT_DOMAIN ), $this->post_type ),
-					array(
-						'status' => 501,
-					)
-				);
+				return new \WP_Error( 'atum_rest_trash_not_supported', __( 'The Suppliers does not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
 			}
 
 			// Otherwise, only trash if we haven't already.
 			if ( is_callable( array( $object, 'get_status' ) ) ) {
+
 				if ( 'trash' === $object->get_status() ) {
-					return new \WP_Error(
-						'woocommerce_rest_already_trashed',
-						/* translators: %s: post type */
-						sprintf( __( 'The %s has already been deleted.', ATUM_TEXT_DOMAIN ), $this->post_type ),
-						array(
-							'status' => 410,
-						)
-					);
+					return new \WP_Error( 'atum_rest_already_trashed', __( 'The Supplier has already been deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 410 ] );
 				}
 
 				$object->delete();
 				$result = 'trash' === $object->get_status();
+
 			}
+
 		}
 
 		if ( ! $result ) {
-			return new \WP_Error(
-				'woocommerce_rest_cannot_delete',
-				/* translators: %s: post type */
-				sprintf( __( 'The %s cannot be deleted.', ATUM_TEXT_DOMAIN ), $this->post_type ),
-				array(
-					'status' => 500,
-				)
-			);
-		}
-
-		// Delete parent product transients.
-		if ( 0 !== $object->get_parent_id() ) {
-			wc_delete_product_transients( $object->get_parent_id() );
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'The Supplier cannot be deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 500 ] );
 		}
 
 		/**
 		 * Fires after a single object is deleted or trashed via the REST API.
 		 *
-		 * @param \WC_Data          $object   The deleted or trashed object.
+		 * @param \WP_Post          $object   The deleted or trashed object.
 		 * @param \WP_REST_Response $response The response data.
 		 * @param \WP_REST_Request  $request  The request sent to the API.
 		 */
@@ -1101,19 +1296,70 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'products'          => array(
-					'description' => __( 'List of product IDs assigned to this supplier.', ATUM_TEXT_DOMAIN ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type' => 'integer',
-					),
-					'readonly'    => TRUE,
-				),
-				'menu_order'        => array(
-					'description' => __( 'Menu order, used to custom sort products.', ATUM_TEXT_DOMAIN ),
+				'assigned_to'       => array(
+					'description' => __( 'The user ID that this supplier is assigned to.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit' ),
+				),
+				'location'          => array(
+					'description' => __( 'The location used in Purchase Orders assigned to this supplier.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'image'             => array(
+					'description' => __( 'Supplier featured image.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'object',
+					'context'     => array( 'view', 'edit' ),
+					'items'       => array(
+						'type'       => 'object',
+						'properties' => array(
+							'id'                => array(
+								'description' => __( 'Image ID.', ATUM_TEXT_DOMAIN ),
+								'type'        => 'integer',
+								'context'     => array( 'view', 'edit' ),
+							),
+							'date_created'      => array(
+								'description' => __( "The date the image was created, in the site's timezone.", ATUM_TEXT_DOMAIN ),
+								'type'        => 'date-time',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => TRUE,
+							),
+							'date_created_gmt'  => array(
+								'description' => __( 'The date the image was created, as GMT', ATUM_TEXT_DOMAIN ),
+								'type'        => 'date-time',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => TRUE,
+							),
+							'date_modified'     => array(
+								'description' => __( "The date the image was modified, in the site's timezone.", ATUM_TEXT_DOMAIN ),
+								'type'        => 'date-time',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => TRUE,
+							),
+							'date_modified_gmt' => array(
+								'description' => __( 'The date the image was modified, as GMT.', ATUM_TEXT_DOMAIN ),
+								'type'        => 'date-time',
+								'context'     => array( 'view', 'edit' ),
+								'readonly'    => TRUE,
+							),
+							'src'               => array(
+								'description' => __( 'Image URL.', ATUM_TEXT_DOMAIN ),
+								'type'        => 'string',
+								'format'      => 'uri',
+								'context'     => array( 'view', 'edit' ),
+							),
+							'name'              => array(
+								'description' => __( 'Image name.', ATUM_TEXT_DOMAIN ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+							),
+							'alt'               => array(
+								'description' => __( 'Image alternative text.', ATUM_TEXT_DOMAIN ),
+								'type'        => 'string',
+								'context'     => array( 'view', 'edit' ),
+							),
+						),
+					),
 				),
 				'meta_data'         => array(
 					'description' => __( 'Meta data.', ATUM_TEXT_DOMAIN ),
@@ -1149,49 +1395,26 @@ class SuppliersController extends \WC_REST_CRUD_Controller {
 	}
 
 	/**
-	 * Add new options for 'orderby' to the collection params
+	 * Prepare links for the request.
 	 *
-	 * @since 1.6.2
+	 * @param \WP_Post         $object  Object data.
+	 * @param \WP_REST_Request $request Request object.
 	 *
-	 * @return array
+	 * @return array                    Links for the given post.
 	 */
-	public function get_collection_params() {
+	protected function prepare_links( $object, $request ) {
 
-		$params                    = parent::get_collection_params();
-		$params['orderby']['enum'] = array_merge( $params['orderby']['enum'], array( 'price', 'popularity', 'rating' ) );
-
-		unset( $params['in_stock'] );
-		$params['stock_status'] = array(
-			'description'       => __( 'Limit result set to products with specified stock status.', ATUM_TEXT_DOMAIN ),
-			'type'              => 'string',
-			'enum'              => array_keys( wc_get_product_stock_status_options() ),
-			'sanitize_callback' => 'sanitize_text_field',
-			'validate_callback' => 'rest_validate_request_arg',
+		$links = array(
+			'self'       => array(
+				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $object->ID ) ),
+			),
+			'collection' => array(
+				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ),
+			),
 		);
 
-		return $params;
+		return $links;
 
 	}
 
-	/**
-	 * Get product data.
-	 *
-	 * @param WC_Product $product Product instance.
-	 * @param string     $context Request context.
-	 *                            Options: 'view' and 'edit'.
-	 * @return array
-	 */
-	protected function get_product_data( $product, $context = 'view' ) {
-
-		$data = parent::get_product_data( $product, $context );
-
-		// Replace in_stock with stock_status.
-		$pos             = array_search( 'in_stock', array_keys( $data ), true );
-		$array_section_1 = array_slice( $data, 0, $pos, true );
-		$array_section_2 = array_slice( $data, $pos + 1, null, true );
-
-		return $array_section_1 + array( 'stock_status' => $product->get_stock_status( $context ) ) + $array_section_2;
-
-	}
-	
 }
