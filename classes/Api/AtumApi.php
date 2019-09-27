@@ -40,7 +40,7 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_controllers = array(
-		'suppliers' => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
+		'atum-suppliers' => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 	);
 
 	/**
