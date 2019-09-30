@@ -143,1017 +143,6 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	}
 
 	/**
-	 * Get the query params for collections of suppliers (for filtering purposes)
-	 *
-	 * @since 1.6.2
-	 *
-	 * @return array
-	 */
-	public function get_collection_params() {
-
-		$params = parent::get_collection_params();
-
-		$supplier_params = array(
-			'slug'        => array(
-				'description'       => __( 'Limit result set to suppliers with a specific slug.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'string',
-				'validate_callback' => 'rest_validate_request_arg',
-			),
-			'status'      => array(
-				'default'           => 'publish',
-				'description'       => __( 'Limit result set to suppliers assigned a specific status.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'string',
-				'enum'              => array_keys( get_post_statuses() ),
-				'sanitize_callback' => 'sanitize_key',
-				'validate_callback' => 'rest_validate_request_arg',
-			),
-			'currency'    => array(
-				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'string',
-				'sanitize_callback' => 'sanitize_text_field',
-				'validate_callback' => 'rest_validate_request_arg',
-				'enum'              => array_keys( get_woocommerce_currencies() ),
-			),
-			'country'     => array(
-				'description'       => __( 'Limit result set to suppliers from the specified country code.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'string',
-				'sanitize_callback' => 'sanitize_text_field',
-				'validate_callback' => 'rest_validate_request_arg',
-				'enum'              => array_keys( wc()->countries->get_countries() ),
-			),
-			'assigned_to' => array(
-				'description'       => __( 'Limit result set to suppliers assigned to the specified user ID.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'integer',
-				'sanitize_callback' => 'absint',
-				'validate_callback' => 'rest_validate_request_arg',
-			),
-			'product'     => array(
-				'description'       => __( 'Limit result set to suppliers assigned to the specific product ID.', ATUM_TEXT_DOMAIN ),
-				'type'              => 'integer',
-				'sanitize_callback' => 'absint',
-				'validate_callback' => 'rest_validate_request_arg',
-			),
-		);
-
-		return array_merge( $params, $supplier_params );
-
-	}
-
-	/**
-	 * Get Supplier object
-	 *
-	 * @param int $id Object ID.
-	 *
-	 * @since  1.6.2
-	 *
-	 * @return \WP_Post
-	 */
-	protected function get_object( $id ) {
-		return get_post( $id );
-	}
-
-	/**
-	 * Check if a given request has access to read an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|boolean
-	 */
-	public function get_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Check if a given request has access to update an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|boolean
-	 */
-	public function update_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Check if a given request has access to delete an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return bool|\WP_Error
-	 */
-	public function delete_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Prepare a single product output for response
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param \WP_Post         $object  Object data.
-	 * @param \WP_REST_Request $request Request object.
-	 *
-	 * @return \WP_REST_Response
-	 */
-	public function prepare_object_for_response( $object, $request ) {
-
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-		$data    = $this->get_product_data( $object, $context );
-
-		// Add variations to variable products.
-		if ( $object->is_type( 'variable' ) && $object->has_child() ) {
-			$data['variations'] = $object->get_children();
-		}
-
-		// Add grouped products data.
-		if ( $object->is_type( 'grouped' ) && $object->has_child() ) {
-			$data['grouped_products'] = $object->get_children();
-		}
-
-		$data     = $this->add_additional_fields_to_object( $data, $request );
-		$data     = $this->filter_response_by_context( $data, $context );
-		$response = rest_ensure_response( $data );
-		$response->add_links( $this->prepare_links( $object, $request ) );
-
-		/**
-		 * Filter the data for a response.
-		 *
-		 * The dynamic portion of the hook name, $this->post_type,
-		 * refers to object type being prepared for the response.
-		 *
-		 * @param \WP_REST_Response $response The response object.
-		 * @param \WC_Data          $object   Object data.
-		 * @param \WP_REST_Request  $request  Request object.
-		 */
-		return apply_filters( "atum/api/rest_prepare_{$this->post_type}_object", $response, $object, $request );
-
-	}
-
-	/**
-	 * Make extra product orderby features supported by WooCommerce available to the WC API.
-	 * This includes 'price', 'popularity', and 'rating'.
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param \WP_REST_Request $request Request data.
-	 *
-	 * @return array
-	 */
-	protected function prepare_objects_query( $request ) {
-
-		$args = \WC_REST_Posts_Controller::prepare_objects_query( $request );
-
-		// Set post_status.
-		$args['post_status'] = $request['status'];
-
-		// Taxonomy query to filter products by type, category, tag, shipping class, and attribute.
-		$tax_query = array();
-
-		// Map between taxonomy name and arg's key.
-		$taxonomies = array(
-			'product_cat'            => 'category',
-			'product_tag'            => 'tag',
-			'product_shipping_class' => 'shipping_class',
-		);
-
-		// Set tax_query for each passed arg.
-		foreach ( $taxonomies as $taxonomy => $key ) {
-			if ( ! empty( $request[ $key ] ) ) {
-				$tax_query[] = array(
-					'taxonomy' => $taxonomy,
-					'field'    => 'term_id',
-					'terms'    => $request[ $key ],
-				);
-			}
-		}
-
-		// Filter product type by slug.
-		if ( ! empty( $request['type'] ) ) {
-			$tax_query[] = array(
-				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => $request['type'],
-			);
-		}
-
-		// Filter by attribute and term.
-		if ( ! empty( $request['attribute'] ) && ! empty( $request['attribute_term'] ) ) {
-			if ( in_array( $request['attribute'], wc_get_attribute_taxonomy_names(), true ) ) {
-				$tax_query[] = array(
-					'taxonomy' => $request['attribute'],
-					'field'    => 'term_id',
-					'terms'    => $request['attribute_term'],
-				);
-			}
-		}
-
-		// Build tax_query if taxonomies are set.
-		if ( ! empty( $tax_query ) ) {
-			if ( ! empty( $args['tax_query'] ) ) {
-				$args['tax_query'] = array_merge( $tax_query, $args['tax_query'] ); // WPCS: slow query ok.
-			} else {
-				$args['tax_query'] = $tax_query; // WPCS: slow query ok.
-			}
-		}
-
-		// Filter featured.
-		if ( is_bool( $request['featured'] ) ) {
-			$args['tax_query'][] = array(
-				'taxonomy' => 'product_visibility',
-				'field'    => 'name',
-				'terms'    => 'featured',
-				'operator' => true === $request['featured'] ? 'IN' : 'NOT IN',
-			);
-		}
-
-		// Filter by sku.
-		if ( ! empty( $request['sku'] ) ) {
-			$skus = explode( ',', $request['sku'] );
-			// Include the current string as a SKU too.
-			if ( 1 < count( $skus ) ) {
-				$skus[] = $request['sku'];
-			}
-
-			$args['meta_query'] = $this->add_meta_query( // WPCS: slow query ok.
-				$args, array(
-					'key'     => '_sku',
-					'value'   => $skus,
-					'compare' => 'IN',
-				)
-			);
-		}
-
-		// Filter by tax class.
-		if ( ! empty( $request['tax_class'] ) ) {
-			$args['meta_query'] = $this->add_meta_query( // WPCS: slow query ok.
-				$args, array(
-					'key'   => '_tax_class',
-					'value' => 'standard' !== $request['tax_class'] ? $request['tax_class'] : '',
-				)
-			);
-		}
-
-		// Price filter.
-		if ( ! empty( $request['min_price'] ) || ! empty( $request['max_price'] ) ) {
-			$args['meta_query'] = $this->add_meta_query( $args, wc_get_min_max_price_meta_query( $request ) );  // WPCS: slow query ok.
-		}
-
-		// Filter product by stock_status.
-		if ( ! empty( $request['stock_status'] ) ) {
-			$args['meta_query'] = $this->add_meta_query( // WPCS: slow query ok.
-				$args, array(
-					'key'   => '_stock_status',
-					'value' => $request['stock_status'],
-				)
-			);
-		}
-
-		// Filter by on sale products.
-		if ( is_bool( $request['on_sale'] ) ) {
-			$on_sale_key = $request['on_sale'] ? 'post__in' : 'post__not_in';
-			$on_sale_ids = wc_get_product_ids_on_sale();
-
-			// Use 0 when there's no on sale products to avoid return all products.
-			$on_sale_ids = empty( $on_sale_ids ) ? array( 0 ) : $on_sale_ids;
-
-			$args[ $on_sale_key ] += $on_sale_ids;
-		}
-
-		// Force the post_type argument, since it's not a user input variable.
-		if ( ! empty( $request['sku'] ) ) {
-			$args['post_type'] = array( 'product', 'product_variation' );
-		}
-		else {
-			$args['post_type'] = $this->post_type;
-		}
-
-		$orderby = $request->get_param( 'orderby' );
-		$order   = $request->get_param( 'order' );
-
-		$ordering_args   = WC()->query->get_catalog_ordering_args( $orderby, $order );
-		$args['orderby'] = $ordering_args['orderby'];
-		$args['order']   = $ordering_args['order'];
-
-		if ( $ordering_args['meta_key'] ) {
-			$args['meta_key'] = $ordering_args['meta_key']; // WPCS: slow query ok.
-		}
-
-		return $args;
-
-	}
-
-	/**
-	 * Prepare a single product for create or update.
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param \WP_REST_Request $request Request object.
-	 * @param bool             $creating If is creating a new object.
-	 *
-	 * @return \WP_Error|\WC_Data
-	 */
-	protected function prepare_object_for_database( $request, $creating = FALSE ) {
-
-		$id = isset( $request['id'] ) ? absint( $request['id'] ) : 0;
-
-		// Type is the most important part here because we need to be using the correct class and methods.
-		if ( isset( $request['type'] ) ) {
-			$classname = \WC_Product_Factory::get_classname_from_product_type( $request['type'] );
-
-			if ( ! class_exists( $classname ) ) {
-				$classname = 'WC_Product_Simple';
-			}
-
-			$product = new $classname( $id );
-		}
-		elseif ( isset( $request['id'] ) ) {
-			$product = wc_get_product( $id );
-		}
-		else {
-			$product = new \WC_Product_Simple();
-		}
-
-		if ( 'variation' === $product->get_type() ) {
-			return new \WP_Error(
-				"woocommerce_rest_invalid_{$this->post_type}_id", __( 'To manipulate product variations you should use the /products/&lt;product_id&gt;/variations/&lt;id&gt; endpoint.', ATUM_TEXT_DOMAIN ), array(
-					'status' => 404,
-				)
-			);
-		}
-
-		// Post title.
-		if ( isset( $request['name'] ) ) {
-			$product->set_name( wp_filter_post_kses( $request['name'] ) );
-		}
-
-		// Post content.
-		if ( isset( $request['description'] ) ) {
-			$product->set_description( wp_filter_post_kses( $request['description'] ) );
-		}
-
-		// Post excerpt.
-		if ( isset( $request['short_description'] ) ) {
-			$product->set_short_description( wp_filter_post_kses( $request['short_description'] ) );
-		}
-
-		// Post status.
-		if ( isset( $request['status'] ) ) {
-			$product->set_status( get_post_status_object( $request['status'] ) ? $request['status'] : 'draft' );
-		}
-
-		// Post slug.
-		if ( isset( $request['slug'] ) ) {
-			$product->set_slug( $request['slug'] );
-		}
-
-		// Menu order.
-		if ( isset( $request['menu_order'] ) ) {
-			$product->set_menu_order( $request['menu_order'] );
-		}
-
-		// Comment status.
-		if ( isset( $request['reviews_allowed'] ) ) {
-			$product->set_reviews_allowed( $request['reviews_allowed'] );
-		}
-
-		// Virtual.
-		if ( isset( $request['virtual'] ) ) {
-			$product->set_virtual( $request['virtual'] );
-		}
-
-		// Tax status.
-		if ( isset( $request['tax_status'] ) ) {
-			$product->set_tax_status( $request['tax_status'] );
-		}
-
-		// Tax Class.
-		if ( isset( $request['tax_class'] ) ) {
-			$product->set_tax_class( $request['tax_class'] );
-		}
-
-		// Catalog Visibility.
-		if ( isset( $request['catalog_visibility'] ) ) {
-			$product->set_catalog_visibility( $request['catalog_visibility'] );
-		}
-
-		// Purchase Note.
-		if ( isset( $request['purchase_note'] ) ) {
-			$product->set_purchase_note( wp_kses_post( wp_unslash( $request['purchase_note'] ) ) );
-		}
-
-		// Featured Product.
-		if ( isset( $request['featured'] ) ) {
-			$product->set_featured( $request['featured'] );
-		}
-
-		// Shipping data.
-		$product = $this->save_product_shipping_data( $product, $request );
-
-		// SKU.
-		if ( isset( $request['sku'] ) ) {
-			$product->set_sku( wc_clean( $request['sku'] ) );
-		}
-
-		// Attributes.
-		if ( isset( $request['attributes'] ) ) {
-			$attributes = array();
-
-			foreach ( $request['attributes'] as $attribute ) {
-				$attribute_id   = 0;
-				$attribute_name = '';
-
-				// Check ID for global attributes or name for product attributes.
-				if ( ! empty( $attribute['id'] ) ) {
-					$attribute_id   = absint( $attribute['id'] );
-					$attribute_name = wc_attribute_taxonomy_name_by_id( $attribute_id );
-				}
-				elseif ( ! empty( $attribute['name'] ) ) {
-					$attribute_name = wc_clean( $attribute['name'] );
-				}
-
-				if ( ! $attribute_id && ! $attribute_name ) {
-					continue;
-				}
-
-				if ( $attribute_id ) {
-
-					if ( isset( $attribute['options'] ) ) {
-						$options = $attribute['options'];
-
-						if ( ! is_array( $attribute['options'] ) ) {
-							// Text based attributes - Posted values are term names.
-							$options = explode( WC_DELIMITER, $options );
-						}
-
-						$values = array_map( 'wc_sanitize_term_text_based', $options );
-						$values = array_filter( $values, 'strlen' );
-					}
-					else {
-						$values = array();
-					}
-
-					if ( ! empty( $values ) ) {
-						// Add attribute to array, but don't set values.
-						$attribute_object = new \WC_Product_Attribute();
-						$attribute_object->set_id( $attribute_id );
-						$attribute_object->set_name( $attribute_name );
-						$attribute_object->set_options( $values );
-						$attribute_object->set_position( isset( $attribute['position'] ) ? (string) absint( $attribute['position'] ) : '0' );
-						$attribute_object->set_visible( ( isset( $attribute['visible'] ) && $attribute['visible'] ) ? 1 : 0 );
-						$attribute_object->set_variation( ( isset( $attribute['variation'] ) && $attribute['variation'] ) ? 1 : 0 );
-						$attributes[] = $attribute_object;
-					}
-				}
-				elseif ( isset( $attribute['options'] ) ) {
-					// Custom attribute - Add attribute to array and set the values.
-					if ( is_array( $attribute['options'] ) ) {
-						$values = $attribute['options'];
-					}
-					else {
-						$values = explode( WC_DELIMITER, $attribute['options'] );
-					}
-					$attribute_object = new \WC_Product_Attribute();
-					$attribute_object->set_name( $attribute_name );
-					$attribute_object->set_options( $values );
-					$attribute_object->set_position( isset( $attribute['position'] ) ? (string) absint( $attribute['position'] ) : '0' );
-					$attribute_object->set_visible( ( isset( $attribute['visible'] ) && $attribute['visible'] ) ? 1 : 0 );
-					$attribute_object->set_variation( ( isset( $attribute['variation'] ) && $attribute['variation'] ) ? 1 : 0 );
-					$attributes[] = $attribute_object;
-				}
-			}
-
-			$product->set_attributes( $attributes );
-
-		}
-
-		// Sales and prices.
-		if ( in_array( $product->get_type(), array( 'variable', 'grouped' ), TRUE ) ) {
-			$product->set_regular_price( '' );
-			$product->set_sale_price( '' );
-			$product->set_date_on_sale_to( '' );
-			$product->set_date_on_sale_from( '' );
-			$product->set_price( '' );
-		}
-		else {
-			// Regular Price.
-			if ( isset( $request['regular_price'] ) ) {
-				$product->set_regular_price( $request['regular_price'] );
-			}
-
-			// Sale Price.
-			if ( isset( $request['sale_price'] ) ) {
-				$product->set_sale_price( $request['sale_price'] );
-			}
-
-			if ( isset( $request['date_on_sale_from'] ) ) {
-				$product->set_date_on_sale_from( $request['date_on_sale_from'] );
-			}
-
-			if ( isset( $request['date_on_sale_from_gmt'] ) ) {
-				$product->set_date_on_sale_from( $request['date_on_sale_from_gmt'] ? strtotime( $request['date_on_sale_from_gmt'] ) : NULL );
-			}
-
-			if ( isset( $request['date_on_sale_to'] ) ) {
-				$product->set_date_on_sale_to( $request['date_on_sale_to'] );
-			}
-
-			if ( isset( $request['date_on_sale_to_gmt'] ) ) {
-				$product->set_date_on_sale_to( $request['date_on_sale_to_gmt'] ? strtotime( $request['date_on_sale_to_gmt'] ) : NULL );
-			}
-		}
-
-		// Product parent ID.
-		if ( isset( $request['parent_id'] ) ) {
-			$product->set_parent_id( $request['parent_id'] );
-		}
-
-		// Sold individually.
-		if ( isset( $request['sold_individually'] ) ) {
-			$product->set_sold_individually( $request['sold_individually'] );
-		}
-
-		// Stock status; stock_status has priority over in_stock.
-		if ( isset( $request['stock_status'] ) ) {
-			$stock_status = $request['stock_status'];
-		}
-		else {
-			$stock_status = $product->get_stock_status();
-		}
-
-		// Stock data.
-		if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
-			// Manage stock.
-			if ( isset( $request['manage_stock'] ) ) {
-				$product->set_manage_stock( $request['manage_stock'] );
-			}
-
-			// Backorders.
-			if ( isset( $request['backorders'] ) ) {
-				$product->set_backorders( $request['backorders'] );
-			}
-
-			if ( $product->is_type( 'grouped' ) ) {
-				$product->set_manage_stock( 'no' );
-				$product->set_backorders( 'no' );
-				$product->set_stock_quantity( '' );
-				$product->set_stock_status( $stock_status );
-			}
-			elseif ( $product->is_type( 'external' ) ) {
-				$product->set_manage_stock( 'no' );
-				$product->set_backorders( 'no' );
-				$product->set_stock_quantity( '' );
-				$product->set_stock_status( 'instock' );
-			}
-			elseif ( $product->get_manage_stock() ) {
-				// Stock status is always determined by children so sync later.
-				if ( ! $product->is_type( 'variable' ) ) {
-					$product->set_stock_status( $stock_status );
-				}
-
-				// Stock quantity.
-				if ( isset( $request['stock_quantity'] ) ) {
-					$product->set_stock_quantity( wc_stock_amount( $request['stock_quantity'] ) );
-				}
-				elseif ( isset( $request['inventory_delta'] ) ) {
-					$stock_quantity  = wc_stock_amount( $product->get_stock_quantity() );
-					$stock_quantity += wc_stock_amount( $request['inventory_delta'] );
-					$product->set_stock_quantity( wc_stock_amount( $stock_quantity ) );
-				}
-			}
-			else {
-				// Don't manage stock.
-				$product->set_manage_stock( 'no' );
-				$product->set_stock_quantity( '' );
-				$product->set_stock_status( $stock_status );
-			}
-		}
-		elseif ( ! $product->is_type( 'variable' ) ) {
-			$product->set_stock_status( $stock_status );
-		}
-
-		// Upsells.
-		if ( isset( $request['upsell_ids'] ) ) {
-			$upsells = array();
-			$ids     = $request['upsell_ids'];
-
-			if ( ! empty( $ids ) ) {
-				foreach ( $ids as $id ) {
-					if ( $id && $id > 0 ) {
-						$upsells[] = $id;
-					}
-				}
-			}
-
-			$product->set_upsell_ids( $upsells );
-		}
-
-		// Cross sells.
-		if ( isset( $request['cross_sell_ids'] ) ) {
-			$crosssells = array();
-			$ids        = $request['cross_sell_ids'];
-
-			if ( ! empty( $ids ) ) {
-				foreach ( $ids as $id ) {
-					if ( $id && $id > 0 ) {
-						$crosssells[] = $id;
-					}
-				}
-			}
-
-			$product->set_cross_sell_ids( $crosssells );
-		}
-
-		// Product categories.
-		if ( isset( $request['categories'] ) && is_array( $request['categories'] ) ) {
-			$product = $this->save_taxonomy_terms( $product, $request['categories'] );
-		}
-
-		// Product tags.
-		if ( isset( $request['tags'] ) && is_array( $request['tags'] ) ) {
-			$product = $this->save_taxonomy_terms( $product, $request['tags'], 'tag' );
-		}
-
-		// Downloadable.
-		if ( isset( $request['downloadable'] ) ) {
-			$product->set_downloadable( $request['downloadable'] );
-		}
-
-		// Downloadable options.
-		if ( $product->get_downloadable() ) {
-
-			// Downloadable files.
-			if ( isset( $request['downloads'] ) && is_array( $request['downloads'] ) ) {
-				$product = $this->save_downloadable_files( $product, $request['downloads'] );
-			}
-
-			// Download limit.
-			if ( isset( $request['download_limit'] ) ) {
-				$product->set_download_limit( $request['download_limit'] );
-			}
-
-			// Download expiry.
-			if ( isset( $request['download_expiry'] ) ) {
-				$product->set_download_expiry( $request['download_expiry'] );
-			}
-		}
-
-		// Product url and button text for external products.
-		if ( $product->is_type( 'external' ) ) {
-			if ( isset( $request['external_url'] ) ) {
-				$product->set_product_url( $request['external_url'] );
-			}
-
-			if ( isset( $request['button_text'] ) ) {
-				$product->set_button_text( $request['button_text'] );
-			}
-		}
-
-		// Save default attributes for variable products.
-		if ( $product->is_type( 'variable' ) ) {
-			$product = $this->save_default_attributes( $product, $request );
-		}
-
-		// Set children for a grouped product.
-		if ( $product->is_type( 'grouped' ) && isset( $request['grouped_products'] ) ) {
-			$product->set_children( $request['grouped_products'] );
-		}
-
-		// Check for featured/gallery images, upload it and set it.
-		if ( isset( $request['images'] ) ) {
-			$product = $this->set_product_images( $product, $request['images'] );
-		}
-
-		// Allow set meta_data.
-		if ( is_array( $request['meta_data'] ) ) {
-			foreach ( $request['meta_data'] as $meta ) {
-				$product->update_meta_data( $meta['key'], $meta['value'], isset( $meta['id'] ) ? $meta['id'] : '' );
-			}
-		}
-
-		if ( ! empty( $request['date_created'] ) ) {
-			$date = rest_parse_date( $request['date_created'] );
-
-			if ( $date ) {
-				$product->set_date_created( $date );
-			}
-		}
-
-		if ( ! empty( $request['date_created_gmt'] ) ) {
-			$date = rest_parse_date( $request['date_created_gmt'], true );
-
-			if ( $date ) {
-				$product->set_date_created( $date );
-			}
-		}
-
-		/**
-		 * Filters an object before it is inserted via the REST API.
-		 *
-		 * The dynamic portion of the hook name, `$this->post_type`, refers to the object type slug.
-		 *
-		 * @param \WC_Data         $product  Object object.
-		 * @param \WP_REST_Request $request  Request object.
-		 * @param bool             $creating If is creating a new object.
-		 */
-		return apply_filters( "atum/api/rest_pre_insert_{$this->post_type}_object", $product, $request, $creating );
-
-	}
-
-	/**
-	 * Prepares a single supplier output for response
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param \WP_Post         $supplier Supplier post object.
-	 * @param \WP_REST_Request $request  Request object.
-	 *
-	 * @return \WP_REST_Response Response object.
-	 */
-	public function prepare_item_for_response( $supplier, $request ) {
-
-		$GLOBALS['post'] = $supplier;
-		setup_postdata( $supplier );
-
-		$fields = $this->get_fields_for_response( $request );
-
-		// Base fields for every post.
-		$data = array();
-
-		if ( in_array( 'id', $fields, TRUE ) ) {
-			$data['id'] = $supplier->ID;
-		}
-
-		if ( in_array( 'name', $fields, TRUE ) ) {
-			$data['name'] = $supplier->post_title;
-		}
-
-		if ( in_array( 'slug', $fields, TRUE ) ) {
-			$data['slug'] = $supplier->post_name;
-		}
-
-		if ( in_array( 'permalink', $fields, TRUE ) ) {
-			$data['permalink'] = get_permalink( $supplier->ID );
-		}
-
-		if ( in_array( 'date_created', $fields, TRUE ) ) {
-			$data['date_created'] = wc_rest_prepare_date_response( $supplier->post_date );
-		}
-
-		if ( in_array( 'date_created_gmt', $fields, TRUE ) ) {
-			$data['date_created_gmt'] = wc_rest_prepare_date_response( $supplier->post_date_gmt );
-		}
-
-		if ( in_array( 'date_modified', $fields, TRUE ) ) {
-			$data['date_modified'] = wc_rest_prepare_date_response( $supplier->post_modified );
-		}
-
-		if ( in_array( 'date_modified_gmt', $fields, TRUE ) ) {
-			$data['date_modified_gmt'] = wc_rest_prepare_date_response( $supplier->post_modified_gmt );
-		}
-
-		if ( in_array( 'status', $fields, TRUE ) ) {
-			$data['status'] = $supplier->post_status;
-		}
-
-		$supplier_meta      = get_metadata( 'post', $supplier->ID );
-		$supplier_meta_keys = array_keys( $supplier_meta );
-
-		// Supplier details' meta.
-		foreach (
-			[
-				'code',
-				'tax_number',
-				'phone',
-				'fax',
-				'website',
-				'ordering_url',
-				'general_email',
-				'ordering_email',
-				'description',
-			] as $meta_key
-		) {
-
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_supplier_details_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_supplier_details_$meta_key" ] );
-			}
-
-		}
-
-		// Billing information's meta.
-		foreach (
-			[
-				'currency',
-				'address',
-				'city',
-				'country',
-				'state',
-				'zip_code',
-			] as $meta_key
-		) {
-
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_billing_information_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_billing_information_$meta_key" ] );
-			}
-
-		}
-
-		// Default settings' meta.
-		foreach (
-			[
-				'assigned_to',
-				'location',
-			] as $meta_key
-		) {
-
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_default_settings_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_default_settings_$meta_key" ] );
-			}
-
-		}
-
-		if ( in_array( 'image', $fields, TRUE ) ) {
-
-			$attachment_id   = (int) get_post_thumbnail_id( $supplier->ID );
-			$attachment_post = get_post( $attachment_id );
-
-			if ( ! is_null( $attachment_post ) ) {
-
-				$attachment = wp_get_attachment_image_src( $attachment_id, 'full' );
-
-				if ( is_array( $attachment ) ) {
-
-					$data['image'] = array(
-						'id'                => (int) $attachment_id,
-						'date_created'      => wc_rest_prepare_date_response( $attachment_post->post_date, FALSE ),
-						'date_created_gmt'  => wc_rest_prepare_date_response( strtotime( $attachment_post->post_date_gmt ) ),
-						'date_modified'     => wc_rest_prepare_date_response( $attachment_post->post_modified, FALSE ),
-						'date_modified_gmt' => wc_rest_prepare_date_response( strtotime( $attachment_post->post_modified_gmt ) ),
-						'src'               => current( $attachment ),
-						'name'              => get_the_title( $attachment_id ),
-						'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', TRUE ),
-					);
-
-				}
-
-			}
-
-		}
-
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-		$data    = $this->add_additional_fields_to_object( $data, $request );
-		$data    = $this->filter_response_by_context( $data, $context );
-
-		// Wrap the data in a response object.
-		$response = rest_ensure_response( $data );
-
-		$links = $this->prepare_links( $supplier, $request );
-		$response->add_links( $links );
-
-		/**
-		 * Filters the post data for a response.
-		 *
-		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
-		 *
-		 * @param \WP_REST_Response $response The response object.
-		 * @param \WP_Post          $supplier Post object.
-		 * @param \WP_REST_Request  $request  Request object.
-		 */
-		return apply_filters( "atum/api/rest_prepare_{$this->post_type}", $response, $supplier, $request );
-
-	}
-
-	/**
-	 * Delete a single item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_REST_Response|\WP_Error
-	 */
-	public function delete_item( $request ) {
-
-		$id     = (int) $request['id'];
-		$force  = (bool) $request['force'];
-		$object = $this->get_object( $id );
-		$result = FALSE;
-
-		if ( ! $object || 0 === $object->ID ) {
-			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
-		}
-
-		$supports_trash = EMPTY_TRASH_DAYS > 0 && is_callable( array( $object, 'get_status' ) );
-
-		/**
-		 * Filter whether an object is trashable.
-		 *
-		 * Return false to disable trash support for the object.
-		 *
-		 * @param boolean $supports_trash Whether the object type support trashing.
-		 * @param \WP_Post $object        The object being considered for trashing support.
-		 */
-		$supports_trash = apply_filters( "atum/api/rest_{$this->post_type}_object_trashable", $supports_trash, $object );
-
-		if ( ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
-			return new \WP_Error( "atum_rest_user_cannot_delete_{$this->post_type}", __( 'Sorry, you are not allowed to delete Suppliers.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		$request->set_param( 'context', 'edit' );
-		$response = $this->prepare_object_for_response( $object, $request );
-
-		// If we're forcing, then delete permanently.
-		if ( $force ) {
-
-			// Get all the products that were linked to this supplier and unlink them.
-			$supplier_products = Suppliers::get_supplier_products( $object->ID );
-
-			foreach ( $supplier_products as $product_id ) {
-
-				$product = Helpers::get_atum_product( $product_id );
-
-				if ( is_a( $product, '\WC_Product' ) ) {
-					$product->set_supplier_id( NULL );
-					$product->save_atum_data();
-				}
-
-			}
-
-			$object->delete( TRUE );
-			$result = 0 === $object->ID;
-
-		}
-		else {
-
-			// If we don't support trashing for this type, error out.
-			if ( ! $supports_trash ) {
-				return new \WP_Error( 'atum_rest_trash_not_supported', __( 'The Suppliers does not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
-			}
-
-			// Otherwise, only trash if we haven't already.
-			if ( is_callable( array( $object, 'get_status' ) ) ) {
-
-				if ( 'trash' === $object->get_status() ) {
-					return new \WP_Error( 'atum_rest_already_trashed', __( 'The Supplier has already been deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 410 ] );
-				}
-
-				$object->delete();
-				$result = 'trash' === $object->get_status();
-
-			}
-
-		}
-
-		if ( ! $result ) {
-			return new \WP_Error( 'atum_rest_cannot_delete', __( 'The Supplier cannot be deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 500 ] );
-		}
-
-		/**
-		 * Fires after a single object is deleted or trashed via the REST API.
-		 *
-		 * @param \WP_Post          $object   The deleted or trashed object.
-		 * @param \WP_REST_Response $response The response data.
-		 * @param \WP_REST_Request  $request  The request sent to the API.
-		 */
-		do_action( "atum/api/rest_delete_{$this->post_type}_object", $object, $response, $request );
-
-		return $response;
-
-	}
-
-	/**
 	 * Get the Product's schema, conforming to JSON Schema
 	 *
 	 * @since 1.6.2
@@ -1395,6 +384,875 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	}
 
 	/**
+	 * Get the query params for collections of suppliers (for filtering purposes)
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+
+		$params = parent::get_collection_params();
+
+		$supplier_params = array(
+			'slug'        => array(
+				'description'       => __( 'Limit result set to suppliers with a specific slug.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'status'      => array(
+				'default'           => 'any',
+				'description'       => __( 'Limit result set to suppliers assigned a specific status.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'enum'              => array_merge( array_keys( get_post_statuses() ), [ 'any' ] ),
+				'sanitize_callback' => 'sanitize_key',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'currency'    => array(
+				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+				'enum'              => array_keys( get_woocommerce_currencies() ),
+			),
+			'country'     => array(
+				'description'       => __( 'Limit result set to suppliers from the specified country code.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+				'enum'              => array_keys( wc()->countries->get_countries() ),
+			),
+			'assigned_to' => array(
+				'description'       => __( 'Limit result set to suppliers assigned to the specified user ID.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'product'     => array(
+				'description'       => __( 'Limit result set to suppliers assigned to the specific product ID.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'integer',
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+		);
+
+		return array_merge( $params, $supplier_params );
+
+	}
+
+	/**
+	 * Get a collection of supplier posts.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function get_items( $request ) {
+
+		$args            = array();
+		$args['offset']  = $request['offset'];
+		$args['order']   = $request['order'];
+		$args['orderby'] = $request['orderby'];
+		$args['paged']   = $request['page'];
+
+		$included = (array) $request['include'];
+
+		// When filtering by product, get the supplier of the specified product ID.
+		if ( ! empty( $request['product'] ) ) {
+
+			$product_id = $request['product'];
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				$supplier_id = $product->get_supplier_id();
+				$included[]  = $supplier_id;
+			}
+
+		}
+
+		$args['post__in']            = array_unique( $included );
+		$args['post__not_in']        = $request['exclude'];
+		$args['posts_per_page']      = $request['per_page'];
+		$args['name']                = $request['slug'];
+		$args['post_parent__in']     = $request['parent'];
+		$args['post_parent__not_in'] = $request['parent_exclude'];
+		$args['s']                   = $request['search'];
+		$args['post_status']         = $request['status'];
+
+		// When filtering by currency, get all the suppliers that are using the specified currency.
+		if ( ! empty( $request['currency'] ) ) {
+
+			$args['meta_query'] = array(
+				array(
+					'key'   => '_billing_information_currency',
+					'value' => $request['currency'],
+				),
+			);
+
+		}
+
+		// When filtering by currency, get all the suppliers within the specified country.
+		if ( ! empty( $request['country'] ) ) {
+
+			if ( ! isset( $args['meta_query'] ) ) {
+				$args['meta_query'] = array();
+			}
+
+			$args['meta_query'][] = array(
+				'key'   => '_billing_information_country',
+				'value' => $request['country'],
+			);
+
+		}
+
+		// When filtering by assigned user, get all the suppliers that have the specified user ID assigned.
+		if ( ! empty( $request['assigned_to'] ) ) {
+
+			if ( ! isset( $args['meta_query'] ) ) {
+				$args['meta_query'] = array();
+			}
+
+			$args['meta_query'][] = array(
+				'key'   => '_default_settings_assigned_to',
+				'value' => $request['assigned_to'],
+				'type'  => 'NUMERIC',
+			);
+
+		}
+
+		$args['date_query'] = array();
+		// Set before into date query. Date query must be specified as an array of an array.
+		if ( isset( $request['before'] ) ) {
+			$args['date_query'][0]['before'] = $request['before'];
+		}
+
+		// Set after into date query. Date query must be specified as an array of an array.
+		if ( isset( $request['after'] ) ) {
+			$args['date_query'][0]['after'] = $request['after'];
+		}
+
+		// Force the post_type argument, since it's not a user input variable.
+		$args['post_type'] = $this->post_type;
+
+		/**
+		 * Filter the query arguments for a request.
+		 *
+		 * Enables adding extra arguments or setting defaults for a post collection request.
+		 *
+		 * @param array            $args    Key value array of query var to query value.
+		 * @param \WP_REST_Request $request The request used.
+		 */
+		$args       = apply_filters( "atum/api/rest_{$this->post_type}_query", $args, $request );
+		$query_args = $this->prepare_items_query( $args, $request );
+
+		$posts_query  = new \WP_Query();
+		$query_result = $posts_query->query( $query_args );
+
+		$posts = array();
+		foreach ( $query_result as $post ) {
+
+			if ( ! wc_rest_check_post_permissions( $this->post_type, 'read', $post->ID ) ) {
+				continue;
+			}
+
+			$data    = $this->prepare_item_for_response( $post, $request );
+			$posts[] = $this->prepare_response_for_collection( $data );
+
+		}
+
+		$page        = (int) $query_args['paged'];
+		$total_posts = $posts_query->found_posts;
+
+		if ( $total_posts < 1 ) {
+			// Out-of-bounds, run the query again without LIMIT for total count.
+			unset( $query_args['paged'] );
+			$count_query = new \WP_Query();
+			$count_query->query( $query_args );
+			$total_posts = $count_query->found_posts;
+		}
+
+		$max_pages = ceil( $total_posts / (int) $query_args['posts_per_page'] );
+
+		$response = rest_ensure_response( $posts );
+		$response->header( 'X-WP-Total', (int) $total_posts );
+		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+
+		$request_params = $request->get_query_params();
+
+		if ( ! empty( $request_params['filter'] ) ) {
+			// Normalize the pagination params.
+			unset( $request_params['filter']['posts_per_page'] );
+			unset( $request_params['filter']['paged'] );
+		}
+
+		$base = add_query_arg( $request_params, rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ) );
+
+		if ( $page > 1 ) {
+
+			$prev_page = $page - 1;
+
+			if ( $prev_page > $max_pages ) {
+				$prev_page = $max_pages;
+			}
+
+			$prev_link = add_query_arg( 'page', $prev_page, $base );
+			$response->link_header( 'prev', $prev_link );
+
+		}
+
+		if ( $max_pages > $page ) {
+			$next_page = $page + 1;
+			$next_link = add_query_arg( 'page', $next_page, $base );
+			$response->link_header( 'next', $next_link );
+		}
+
+		return $response;
+
+	}
+
+	/**
+	 * Get Supplier object
+	 *
+	 * @param int $id Object ID.
+	 *
+	 * @since  1.6.2
+	 *
+	 * @return \WP_Post
+	 */
+	protected function get_object( $id ) {
+		return get_post( $id );
+	}
+
+	/**
+	 * Check if a given request has access to read an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to update an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function update_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to delete an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function delete_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Prepare a single product for create or update.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 * @param bool             $creating If is creating a new object.
+	 *
+	 * @return \WP_Error|\WP_Post
+	 */
+	protected function prepare_item_for_database( $request, $creating = FALSE ) {
+
+		$prepared_post = new \stdClass();
+
+		// Post ID.
+		if ( isset( $request['id'] ) ) {
+
+			$existing_post = $this->get_object( $request['id'] );
+
+			if ( is_wp_error( $existing_post ) ) {
+				return $existing_post;
+			}
+
+			$prepared_post->ID = $existing_post->ID;
+
+		}
+
+		$schema = $this->get_item_schema();
+
+		// Post title.
+		if ( ! empty( $schema['properties']['name'] ) && isset( $request['name'] ) ) {
+
+			if ( is_string( $request['name'] ) ) {
+				$prepared_post->post_title = $request['name'];
+			}
+			elseif ( ! empty( $request['name']['raw'] ) ) {
+				$prepared_post->post_title = $request['name']['raw'];
+			}
+
+		}
+
+		// Post type.
+		$prepared_post->post_type = $this->post_type;
+
+		// Post status.
+		if ( ! empty( $schema['properties']['status'] ) && isset( $request['status'] ) ) {
+
+			$status = $this->handle_status_param( $request['status'], get_post_type_object( $this->post_type ) );
+
+			if ( is_wp_error( $status ) ) {
+				return $status;
+			}
+
+			$prepared_post->post_status = $status;
+
+		}
+
+		// Post date.
+		if ( ! empty( $schema['properties']['date_created'] ) && ! empty( $request['date_created'] ) ) {
+
+			$date_data = rest_get_date_with_gmt( $request['date_created'] );
+
+			if ( ! empty( $date_data ) ) {
+				list( $prepared_post->post_date, $prepared_post->post_date_gmt ) = $date_data;
+
+				$prepared_post->edit_date = TRUE;
+			}
+
+		}
+		elseif ( ! empty( $schema['properties']['date_created_gmt'] ) && ! empty( $request['date_created_gmt'] ) ) {
+
+			$date_data = rest_get_date_with_gmt( $request['date_created_gmt'], TRUE );
+
+			if ( ! empty( $date_data ) ) {
+				list( $prepared_post->post_date, $prepared_post->post_date_gmt ) = $date_data;
+
+				$prepared_post->edit_date = TRUE;
+			}
+
+		}
+
+		// Post slug.
+		if ( ! empty( $schema['properties']['slug'] ) && isset( $request['slug'] ) ) {
+			$prepared_post->post_name = $request['slug'];
+		}
+		elseif ( $prepared_post->post_title ) {
+			$prepared_post->post_name = sanitize_title( $prepared_post->post_title );
+		}
+
+		// Menu order.
+		if ( ! empty( $schema['properties']['menu_order'] ) && isset( $request['menu_order'] ) ) {
+			$prepared_post->menu_order = (int) $request['menu_order'];
+		}
+
+		$prepared_post->meta_input = array();
+
+		// Supplier details' meta.
+		foreach (
+			[
+				'code',
+				'tax_number',
+				'phone',
+				'fax',
+				'website',
+				'ordering_url',
+				'general_email',
+				'ordering_email',
+				'description',
+			] as $meta_key
+		) {
+
+			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
+				$prepared_post->meta_input[ "_supplier_details_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
+			}
+
+		}
+
+		// Billing information's meta.
+		foreach (
+			[
+				'currency',
+				'address',
+				'city',
+				'country',
+				'state',
+				'zip_code',
+			] as $meta_key
+		) {
+
+			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
+				$prepared_post->meta_input[ "_billing_information_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
+			}
+
+		}
+
+		// Default settings' meta.
+		foreach (
+			[
+				'assigned_to',
+				'location',
+			] as $meta_key
+		) {
+
+			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
+				$prepared_post->meta_input[ "_default_settings_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
+			}
+
+		}
+
+		/**
+		 * Filters a post before it is inserted via the REST API.
+		 *
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
+		 *
+		 * @param \stdClass        $prepared_post An object representing a single post prepared for inserting or updating the database.
+		 * @param \WP_REST_Request $request       Request object.
+		 */
+		return apply_filters( "atum/api/rest_pre_insert_{$this->post_type}", $prepared_post, $request );
+
+	}
+
+	/**
+	 * Prepares a single supplier output for response
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_Post         $supplier Supplier post object.
+	 * @param \WP_REST_Request $request  Request object.
+	 *
+	 * @return \WP_REST_Response Response object.
+	 */
+	public function prepare_item_for_response( $supplier, $request ) {
+
+		$GLOBALS['post'] = $supplier;
+		setup_postdata( $supplier );
+
+		$fields = $this->get_fields_for_response( $request );
+
+		// Base fields for every post.
+		$data = array();
+
+		if ( in_array( 'id', $fields, TRUE ) ) {
+			$data['id'] = $supplier->ID;
+		}
+
+		if ( in_array( 'name', $fields, TRUE ) ) {
+			$data['name'] = $supplier->post_title;
+		}
+
+		if ( in_array( 'slug', $fields, TRUE ) ) {
+			$data['slug'] = $supplier->post_name;
+		}
+
+		if ( in_array( 'permalink', $fields, TRUE ) ) {
+			$data['permalink'] = get_permalink( $supplier->ID );
+		}
+
+		if ( in_array( 'date_created', $fields, TRUE ) ) {
+			$data['date_created'] = wc_rest_prepare_date_response( $supplier->post_date );
+		}
+
+		if ( in_array( 'date_created_gmt', $fields, TRUE ) ) {
+			$data['date_created_gmt'] = wc_rest_prepare_date_response( $supplier->post_date_gmt );
+		}
+
+		if ( in_array( 'date_modified', $fields, TRUE ) ) {
+			$data['date_modified'] = wc_rest_prepare_date_response( $supplier->post_modified );
+		}
+
+		if ( in_array( 'date_modified_gmt', $fields, TRUE ) ) {
+			$data['date_modified_gmt'] = wc_rest_prepare_date_response( $supplier->post_modified_gmt );
+		}
+
+		if ( in_array( 'status', $fields, TRUE ) ) {
+			$data['status'] = $supplier->post_status;
+		}
+
+		$supplier_meta      = get_metadata( 'post', $supplier->ID );
+		$supplier_meta_keys = array_keys( $supplier_meta );
+
+		// Supplier details' meta.
+		foreach (
+			[
+				'code',
+				'tax_number',
+				'phone',
+				'fax',
+				'website',
+				'ordering_url',
+				'general_email',
+				'ordering_email',
+				'description',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_supplier_details_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_supplier_details_$meta_key" ] );
+			}
+
+		}
+
+		// Billing information's meta.
+		foreach (
+			[
+				'currency',
+				'address',
+				'city',
+				'country',
+				'state',
+				'zip_code',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_billing_information_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_billing_information_$meta_key" ] );
+			}
+
+		}
+
+		// Default settings' meta.
+		foreach (
+			[
+				'assigned_to',
+				'location',
+			] as $meta_key
+		) {
+
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_default_settings_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_default_settings_$meta_key" ] );
+			}
+
+		}
+
+		if ( in_array( 'image', $fields, TRUE ) ) {
+
+			$attachment_id   = (int) get_post_thumbnail_id( $supplier->ID );
+			$attachment_post = get_post( $attachment_id );
+
+			if ( ! is_null( $attachment_post ) ) {
+
+				$attachment = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+				if ( is_array( $attachment ) ) {
+
+					$data['image'] = array(
+						'id'                => (int) $attachment_id,
+						'date_created'      => wc_rest_prepare_date_response( $attachment_post->post_date, FALSE ),
+						'date_created_gmt'  => wc_rest_prepare_date_response( strtotime( $attachment_post->post_date_gmt ) ),
+						'date_modified'     => wc_rest_prepare_date_response( $attachment_post->post_modified, FALSE ),
+						'date_modified_gmt' => wc_rest_prepare_date_response( strtotime( $attachment_post->post_modified_gmt ) ),
+						'src'               => current( $attachment ),
+						'name'              => get_the_title( $attachment_id ),
+						'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', TRUE ),
+					);
+
+				}
+
+			}
+
+		}
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$data    = $this->filter_response_by_context( $data, $context );
+
+		// Wrap the data in a response object.
+		$response = rest_ensure_response( $data );
+
+		$links = $this->prepare_links( $supplier, $request );
+		$response->add_links( $links );
+
+		/**
+		 * Filters the post data for a response.
+		 *
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
+		 *
+		 * @param \WP_REST_Response $response The response object.
+		 * @param \WP_Post          $supplier Post object.
+		 * @param \WP_REST_Request  $request  Request object.
+		 */
+		return apply_filters( "atum/api/rest_prepare_{$this->post_type}", $response, $supplier, $request );
+
+	}
+
+	/**
+	 * Creates a single supplier.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_REST_Response|\WP_Error Response object on success, or \WP_Error object on failure.
+	 */
+	public function create_item( $request ) {
+
+		if ( ! empty( $request['id'] ) ) {
+			return new \WP_Error( 'atum_rest_post_exists', __( 'Cannot create existing supplier.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+		}
+
+		$prepared_post = $this->prepare_item_for_database( $request );
+
+		if ( is_wp_error( $prepared_post ) ) {
+			return $prepared_post;
+		}
+
+		$prepared_post->post_type = $this->post_type;
+
+		$post_id = wp_insert_post( wp_slash( (array) $prepared_post ), TRUE );
+
+		if ( is_wp_error( $post_id ) ) {
+
+			$post_id->add_data( [ 'status' => ( 'db_insert_error' === $post_id->get_error_code() ? 500 : 400 ) ] );
+
+			return $post_id;
+		}
+
+		$post = $this->get_object( $post_id );
+
+		/**
+		 * Fires after a single post is created or updated via the REST API.
+		 *
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
+		 *
+		 * @param \WP_Post         $post     Inserted or updated post object.
+		 * @param \WP_REST_Request $request  Request object.
+		 * @param bool             $creating True when creating a post, false when updating.
+		 */
+		do_action( "atum/api/rest_insert_{$this->post_type}", $post, $request, TRUE );
+
+		$schema = $this->get_item_schema();
+
+		if ( ! empty( $schema['properties']['image'] ) && isset( $request['image'] ) ) {
+			$this->handle_featured_media( $request['image'], $post_id );
+		}
+
+		if ( ! empty( $schema['properties']['meta'] ) && isset( $request['meta'] ) ) {
+			$meta_update = $this->meta->update_value( $request['meta'], $post_id );
+
+			if ( is_wp_error( $meta_update ) ) {
+				return $meta_update;
+			}
+		}
+
+		$fields_update = $this->update_additional_fields_for_object( $post, $request );
+
+		if ( is_wp_error( $fields_update ) ) {
+			return $fields_update;
+		}
+
+		$request->set_param( 'context', 'edit' );
+
+		/**
+		 * Fires after a single post is completely created or updated via the REST API.
+		 *
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
+		 *
+		 * @param \WP_Post         $post     Inserted or updated post object.
+		 * @param \WP_REST_Request $request  Request object.
+		 * @param bool             $creating True when creating a post, false when updating.
+		 */
+		do_action( "atum/api/rest_after_insert_{$this->post_type}", $post, $request, TRUE );
+
+		$response = $this->prepare_item_for_response( $post, $request );
+		$response = rest_ensure_response( $response );
+
+		$response->set_status( 201 );
+		$response->header( 'Location', rest_url( sprintf( '%s/%s/%d', $this->namespace, $this->rest_base, $post_id ) ) );
+
+		return $response;
+
+	}
+
+	/**
+	 * Update a single supplier.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function update_item( $request ) {
+
+		$id   = absint( $request['id'] );
+		$post = $this->get_object( $id );
+
+		if ( empty( $id ) || empty( $post->ID ) || $post->post_type !== $this->post_type ) {
+			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'ID is invalid.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+		}
+
+		$post = $this->prepare_item_for_database( $request );
+		if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+		// Convert the post object to an array, otherwise wp_update_post will expect non-escaped input.
+		$post_id = wp_update_post( (array) $post, TRUE );
+		if ( is_wp_error( $post_id ) ) {
+
+			$post_id->add_data( [ 'status' => ( 'db_update_error' === $post_id->get_error_code() ? 500 : 400 ) ] );
+
+			return $post_id;
+
+		}
+
+		$post = $this->get_object( $post_id );
+		$this->update_additional_fields_for_object( $post, $request );
+
+		// Update meta fields.
+		$meta_fields = $this->update_post_meta_fields( $post, $request );
+		if ( is_wp_error( $meta_fields ) ) {
+			return $meta_fields;
+		}
+
+		/**
+		 * Fires after a single item is created or updated via the REST API.
+		 *
+		 * @param \WP_Post         $post      Post object.
+		 * @param \WP_REST_Request $request   Request object.
+		 * @param bool             $creating  True when creating item, false when updating.
+		 */
+		do_action( "atum/api/rest_insert_{$this->post_type}", $post, $request, FALSE );
+
+		$request->set_param( 'context', 'edit' );
+		$response = $this->prepare_item_for_response( $post, $request );
+
+		return rest_ensure_response( $response );
+
+	}
+
+	/**
+	 * Delete a single supplier
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function delete_item( $request ) {
+
+		$id     = absint( $request['id'] );
+		$force  = (bool) $request['force'];
+		$object = $this->get_object( $id );
+
+		if ( ! $object || 0 === $object->ID ) {
+			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		$supports_trash = EMPTY_TRASH_DAYS > 0;
+
+		/**
+		 * Filter whether an object is trashable.
+		 *
+		 * Return false to disable trash support for the object.
+		 *
+		 * @param boolean $supports_trash Whether the object type support trashing.
+		 * @param \WP_Post $object        The object being considered for trashing support.
+		 */
+		$supports_trash = apply_filters( "atum/api/rest_{$this->post_type}_object_trashable", $supports_trash, $object );
+
+		if ( ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
+			return new \WP_Error( "atum_rest_user_cannot_delete_{$this->post_type}", __( 'Sorry, you are not allowed to delete Suppliers.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		$request->set_param( 'context', 'edit' );
+		$response = $this->prepare_item_for_response( $object, $request );
+
+		// If we're forcing, then delete permanently.
+		if ( $force ) {
+
+			// Get all the products that were linked to this supplier and unlink them.
+			$supplier_products = Suppliers::get_supplier_products( $object->ID );
+
+			foreach ( $supplier_products as $product_id ) {
+
+				$product = Helpers::get_atum_product( $product_id );
+
+				if ( is_a( $product, '\WC_Product' ) ) {
+					$product->set_supplier_id( NULL );
+					$product->save_atum_data();
+				}
+
+			}
+
+			$result = wp_delete_post( $object->ID, TRUE );
+
+		}
+		else {
+
+			// If we don't support trashing for this type, error out.
+			if ( ! $supports_trash ) {
+				return new \WP_Error( 'atum_rest_trash_not_supported', __( 'The Suppliers do not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
+			}
+
+			// Otherwise, only trash if we haven't already.
+			if ( 'trash' === $object->post_status ) {
+				return new \WP_Error( 'atum_rest_already_trashed', __( 'The Supplier has already been deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 410 ] );
+			}
+
+			$result = wp_trash_post( $object->ID );
+
+		}
+
+		if ( ! $result ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'The Supplier cannot be deleted.', ATUM_TEXT_DOMAIN ), [ 'status' => 500 ] );
+		}
+
+		/**
+		 * Fires after a single object is deleted or trashed via the REST API.
+		 *
+		 * @param \WP_Post          $object   The deleted or trashed object.
+		 * @param \WP_REST_Response $response The response data.
+		 * @param \WP_REST_Request  $request  The request sent to the API.
+		 */
+		do_action( "atum/api/rest_delete_{$this->post_type}_object", $object, $response, $request );
+
+		return $response;
+
+	}
+
+	/**
 	 * Prepare links for the request.
 	 *
 	 * @param \WP_Post         $object  Object data.
@@ -1414,6 +1272,78 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		);
 
 		return $links;
+
+	}
+
+	/**
+	 * Determines the featured media based on a request param.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param int $featured_media Featured Media ID.
+	 * @param int $post_id        Post ID.
+	 *
+	 * @return bool|\WP_Error Whether the post thumbnail was successfully deleted, otherwise \WP_Error.
+	 */
+	protected function handle_featured_media( $featured_media, $post_id ) {
+
+		$featured_media = (int) $featured_media;
+		if ( $featured_media ) {
+
+			$result = set_post_thumbnail( $post_id, $featured_media );
+
+			if ( $result ) {
+				return TRUE;
+			}
+			else {
+				return new \WP_Error( 'atum_rest_invalid_featured_media', __( 'Invalid featured media ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+			}
+
+		}
+		else {
+			return delete_post_thumbnail( $post_id );
+		}
+
+	}
+
+	/**
+	 * Determines validity and normalizes the given status parameter.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $post_status Post status.
+	 * @param object $post_type   Post type.
+	 *
+	 * @return string|\WP_Error Post status or \WP_Error if lacking the proper permission.
+	 */
+	protected function handle_status_param( $post_status, $post_type ) {
+
+		switch ( $post_status ) {
+			case 'draft':
+			case 'pending':
+				break;
+
+			case 'private':
+				if ( ! current_user_can( $post_type->cap->publish_posts ) ) {
+					return new \WP_Error( 'rest_cannot_publish', __( 'Sorry, you are not allowed to create private posts in this post type.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+				}
+				break;
+
+			case 'publish':
+			case 'future':
+				if ( ! current_user_can( $post_type->cap->publish_posts ) ) {
+					return new \WP_Error( 'rest_cannot_publish', __( 'Sorry, you are not allowed to publish posts in this post type.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+				}
+				break;
+
+			default:
+				if ( ! get_post_status_object( $post_status ) ) {
+					$post_status = 'draft';
+				}
+				break;
+		}
+
+		return $post_status;
 
 	}
 
