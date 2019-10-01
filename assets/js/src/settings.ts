@@ -6,8 +6,6 @@
  * @since 0.0.2
  */
 
-window['$'] = window['jQuery'];
-
 /**
  * Third Party Plugins
  */
@@ -26,6 +24,8 @@ import SettingsPage from './components/settings-page/_settings-page';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the options from the localized var.
 	let settings = new Settings('atumSettingsVars');

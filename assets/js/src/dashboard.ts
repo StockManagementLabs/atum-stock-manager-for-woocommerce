@@ -6,8 +6,6 @@
  * @since 1.4.0
  */
 
-window['$'] = window['jQuery'];
-
 /**
  * Third Party Plugins
  */
@@ -28,6 +26,8 @@ import Tooltip from './components/_tooltip';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the settings from localized var.
 	let settings = new Settings('atumDashVars', {
