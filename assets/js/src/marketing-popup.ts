@@ -6,8 +6,6 @@
  * @since 1.5.2
  */
 
-window['$'] = window['jQuery'];
-
 /**
  * Components
  */
@@ -18,6 +16,8 @@ import Settings from './config/_settings';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the options from the localized var.
 	let settings = new Settings('atumMarketingPopupVars');

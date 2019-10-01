@@ -5,24 +5,24 @@
  *
  * @since 1.5.0
  */
-import Globals from './components/list-table/_globals';
 
-window['$'] = window['jQuery'];
 
 /**
  * Third Party Plugins
  */
 
-import '../vendor/select2';      // A fixed version compatible with webpack
 
+import '../vendor/select2';      // A fixed version compatible with webpack
 
 /**
  * Components
  */
 
+
 import DateTimePicker from "./components/_date-time-picker";
 import DragScroll from "./components/list-table/_drag-scroll";
 import EnhancedSelect from './components/_enhanced-select';
+import Globals from './components/list-table/_globals';
 import Popover from './components/_popover';
 import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
@@ -32,6 +32,8 @@ import Tooltip from './components/_tooltip';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the settings from localized var.
 	let settings = new Settings('atumPostTypeListVars');
