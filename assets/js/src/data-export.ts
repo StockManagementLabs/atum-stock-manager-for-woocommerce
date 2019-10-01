@@ -6,8 +6,6 @@
  * @since 1.2.5
  */
 
-window['$'] = window['jQuery'];
-
 
 /**
  * Components
@@ -19,6 +17,8 @@ import DataExport from './components/export/_export';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the options from the localized var.
 	let settings = new Settings('atumExport');

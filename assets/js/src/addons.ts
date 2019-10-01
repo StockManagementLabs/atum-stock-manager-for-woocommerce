@@ -6,8 +6,6 @@
  * @since 1.2.0
  */
 
-window['$'] = window['jQuery'];
-
 /**
  * Components
  */
@@ -18,6 +16,8 @@ import AddonsPage from './components/addons-page/_addons-page';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the options from the localized var.
 	let settings = new Settings('atumAddons');

@@ -6,8 +6,6 @@
  * @since 1.4.1
  */
 
-window['$'] = window['jQuery'];
-
 
 /**
  * Components
@@ -19,6 +17,8 @@ import ProductDataMetaBoxes from './components/product-data/_product-data-meta-b
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
+	
+	window['$'] = $; // Avoid conflicts.
 	
 	// Get the settings from localized var.
 	let settings = new Settings('atumProductData');
