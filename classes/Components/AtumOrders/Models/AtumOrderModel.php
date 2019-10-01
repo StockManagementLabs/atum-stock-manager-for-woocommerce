@@ -1530,6 +1530,44 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Getter to collect all the ATUM Order data within an array
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+
+		// Prepare the data array based on the \WC_Order_Data structure (some unneeded data was excluded).
+		$data = array(
+			'id'                 => $this->id,
+			'status'             => $this->post->post_status,
+			'currency'           => metadata_exists( 'post', $this->id, '_order_currency' ) ? $this->get_meta( '_order_currency' ) : get_woocommerce_currency(),
+			'prices_include_tax' => metadata_exists( 'post', $this->id, '_prices_include_tax' ) ? 'yes' === $this->get_meta( '_prices_include_tax' ) : 'yes' === get_option( 'woocommerce_prices_include_tax' ),
+			'date_created'       => new \WC_DateTime( $this->post->post_date ),
+			'date_modified'      => new \WC_DateTime( $this->post->post_modified ),
+			'discount_total'     => $this->get_meta( '_cart_discount' ),
+			'discount_tax'       => $this->get_meta( '_cart_discount_tax' ),
+			'shipping_total'     => $this->get_meta( '_order_shipping' ),
+			'shipping_tax'       => $this->get_meta( '_order_shipping_tax' ),
+			'cart_tax'           => $this->get_meta( '_order_tax' ),
+			'total'              => $this->get_meta( '_order_total' ),
+			'total_tax'          => $this->get_meta( '_order_total' ),
+			'date_completed'     => $this->get_meta( '_date_completed' ),
+			'supplier'           => $this->get_meta( '_supplier' ),
+			'multiple_suppliers' => $this->get_meta( '_multiple_suppliers' ),
+			'date_expected'      => $this->get_meta( '_expected_at_location_date' ) ? new \WC_DateTime( $this->get_meta( '_expected_at_location_date' ) ) : '',
+			'line_items'         => $this->get_items(),
+			'tax_lines'          => $this->get_items( 'tax' ),
+			'shipping_lines'     => $this->get_items( 'shipping' ),
+			'fee_lines'          => $this->get_items( 'fee' ),
+		);
+
+		return apply_filters( 'atum/orders/data', $data, $this->post->post_type );
+
+	}
+
+	/**
 	 * Get the title for the ATUM Order post
 	 *
 	 * @since 1.2.9

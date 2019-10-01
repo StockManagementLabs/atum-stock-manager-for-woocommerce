@@ -380,7 +380,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
 		}
 		else {
-			$price = $price * $qty;
+			$price *= $qty;
 		}
 		
 		return $price;
@@ -514,6 +514,28 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 
 		do_action( 'atum/purchase_orders/after_save', $po, $items );
+
+	}
+
+	/**
+	 * Getter to collect all the Purchase Order data within an array
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+
+		// Prepare the data array based on the WC_Order_Data structure.
+		$data = parent::get_data();
+
+		$po_data = array(
+			'supplier'           => $this->get_supplier( 'id' ),
+			'multiple_suppliers' => $this->has_multiple_suppliers(),
+			'date_expected'      => $this->get_expected_at_location_date() ? new \WC_DateTime( $this->get_expected_at_location_date() ) : '',
+		);
+
+		return array_merge( $data, $po_data );
 
 	}
 

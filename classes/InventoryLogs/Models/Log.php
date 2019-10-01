@@ -400,4 +400,30 @@ class Log extends AtumOrderModel {
 
 	}
 
+	/**
+	 * Getter to collect all the Inventory Log data within an array
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+
+		// Prepare the data array based on the WC_Order_Data structure.
+		$data = parent::get_data();
+
+		$log_data = array(
+			'type'             => $this->get_log_type(),
+			'order'            => $this->get_order(),
+			'reservation_date' => $this->get_reservation_date() ? new \WC_DateTime( $this->get_reservation_date() ) : '',
+			'return_date'      => $this->get_return_date() ? new \WC_DateTime( $this->get_return_date() ) : '',
+			'damage_date'      => $this->get_damage_date() ? new \WC_DateTime( $this->get_damage_date() ) : '',
+			'shipping_company' => $this->get_shipping_company(),
+			'custom_name'      => $this->get_custom_name(),
+		);
+
+		return array_merge( $data, $log_data );
+
+	}
+
 }
