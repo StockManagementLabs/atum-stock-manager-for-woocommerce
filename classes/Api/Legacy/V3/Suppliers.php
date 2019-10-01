@@ -38,48 +38,48 @@ class Suppliers extends \WC_API_Resource {
 	 */
 	public function register_routes( $routes ) {
 
-		# GET/POST /atum/product-data
+		// GET/POST /atum/product-data.
 		$routes[ $this->base ] = array(
 			array( array( $this, 'get_products_data' ), \WC_API_Server::READABLE ),
 			array( array( $this, 'create_products_data' ), \WC_API_SERVER::CREATABLE | \WC_API_Server::ACCEPT_DATA ),
 		);
 
-		# GET/PUT/DELETE /atum/product-data/<id>
+		// GET/PUT/DELETE /atum/product-data/<id>.
 		$routes[ $this->base . '/(?P<id>\d+)' ] = array(
 			array( array( $this, 'get_product_data' ), \WC_API_Server::READABLE ),
 			array( array( $this, 'edit_product_data' ), \WC_API_Server::EDITABLE | \WC_API_Server::ACCEPT_DATA ),
 			array( array( $this, 'delete_product_data' ), \WC_API_Server::DELETABLE ),
 		);
 
-		# GET /atum/product-data/<id>/supplier
+		// GET /atum/product-data/<id>/supplier.
 		$routes[ $this->base . '/(?P<id>\d+)/supplier' ] = array(
 			array( array( $this, 'get_product_supplier' ), \WC_API_Server::READABLE ),
 		);
 
-		# GET /atum/product-data/<id>/purchase-orders
+		// GET /atum/product-data/<id>/purchase-orders.
 		$routes[ $this->base . '/(?P<id>\d+)/purchase-orders' ] = array(
 			array( array( $this, 'get_product_purchase_orders' ), \WC_API_Server::READABLE ),
 		);
 
-		# GET /atum/product-data/<id>/inventory-logs
+		// GET /atum/product-data/<id>/inventory-logs.
 		$routes[ $this->base . '/(?P<id>\d+)/inventory-logs' ] = array(
 			array( array( $this, 'get_product_inventory_logs' ), \WC_API_Server::READABLE ),
 		);
 
-		# GET/POST /atum/product-data/locations
+		// GET/POST /atum/product-data/locations.
 		$routes[ $this->base . '/locations' ] = array(
 			array( array( $this, 'get_product_locations' ), \WC_API_Server::READABLE ),
 			array( array( $this, 'create_product_location' ), \WC_API_Server::CREATABLE | \WC_API_Server::ACCEPT_DATA ),
 		);
 
-		# GET/PUT/DELETE /atum/product-data/locations/<id>
+		// GET/PUT/DELETE /atum/product-data/locations/<id>.
 		$routes[ $this->base . '/locations/(?P<id>\d+)' ] = array(
 			array( array( $this, 'get_product_location' ), \WC_API_Server::READABLE ),
 			array( array( $this, 'edit_product_location' ), \WC_API_Server::EDITABLE | \WC_API_Server::ACCEPT_DATA ),
 			array( array( $this, 'delete_product_location' ), \WC_API_Server::DELETABLE ),
 		);
 
-		# POST|PUT /atum/product-data/bulk
+		// POST|PUT /atum/product-data/bulk.
 		$routes[ $this->base . '/bulk' ] = array(
 			array( array( $this, 'bulk' ), \WC_API_Server::EDITABLE | \WC_API_Server::ACCEPT_DATA ),
 		);

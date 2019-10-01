@@ -40,7 +40,8 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_controllers = array(
-		'atum-suppliers' => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
+		'atum-suppliers'       => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
+		'atum-purchase-orders' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
 	);
 
 	/**
@@ -55,7 +56,7 @@ class AtumApi {
 		 *
 		 * @deprecated WC 2.6.0
 		 */
-		add_filter( 'woocommerce_api_classes', array( $this, 'register_legacy_api_classes' ) );
+		/*add_filter( 'woocommerce_api_classes', array( $this, 'register_legacy_api_classes' ) );*/
 
 		/**
 		 * Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3)
