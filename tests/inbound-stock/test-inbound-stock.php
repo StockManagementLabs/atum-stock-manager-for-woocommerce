@@ -8,6 +8,7 @@
 use Atum\InboundStock\InboundStock;
 use Atum\Models\Products\AtumProductSimple;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 use Atum\Inc\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
@@ -17,7 +18,7 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Sample test case.
  */
-class InboundStockTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
+class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 
 	public function test_get_instance() {
 		$this->assertInstanceOf( InboundStock::class, InboundStock::get_instance() );
@@ -77,12 +78,23 @@ class InboundStockTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
 				'inbound_stock' => 16,
 			)
 		);
+		$product->set_inbound_stock( 16 );
 		$product->save();
 		//$product = wc_get_product( $product->get_id() );
 		//$product = Helpers::get_atum_product( $product->get_id() );
 		//$product->set_inbound_stock( 16 );
 
-		$po = new PurchaseOrder( $product->get_id() );
+		$pos = new \Atum\PurchaseOrders\PurchaseOrders();
+		$pos->register_post_type();
+
+		// Post
+		$pid = $this->factory()->post->create( array(
+			'post_title'  => 'Foo',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'post_status' => 'publish',
+		) );
+
+		$po = Helpers::get_atum_order_model( $pid );
 
 		//$product = Helpers::get_atum_product( $post_product->ID );
 		//$product = wc_get_product( $post_product );

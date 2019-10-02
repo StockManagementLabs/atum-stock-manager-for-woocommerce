@@ -2,6 +2,7 @@
 
 namespace TestHelpers;
 
+use Atum\Models\Products\AtumProductSimple;
 use WC_Cache_Helper;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -16,6 +17,27 @@ use WC_Product_Attribute;
 
 
 class TestHelpers {
+
+	public static function create_atum_product() {
+		$product = new AtumProductSimple( self::create_product() );
+		$product->set_props(
+			array(
+				'name'          => 'Dummy Product',
+				'regular_price' => 10,
+				'price'         => 10,
+				'sku'           => 'DUMMY SKU',
+				'manage_stock'  => false,
+				'tax_status'    => 'taxable',
+				'downloadable'  => false,
+				'virtual'       => false,
+				'stock_status'  => 'instock',
+				'weight'        => '1.1',
+				'inbound_stock' => 16,
+			)
+		);
+		$product->save();
+		return $product;
+	}
 
 	/**
 	 * Creates a Order object.
