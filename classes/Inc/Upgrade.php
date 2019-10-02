@@ -95,6 +95,11 @@ class Upgrade {
 			$this->create_atum_log_table();
 		}*/
 
+		// ** version 1.6.1.1 ** Change field types in ATUM data for products.
+		if ( version_compare( $db_version, '1.6.1.1', '<' ) ) {
+			$this->create_list_table_columns();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -531,6 +536,48 @@ class Upgrade {
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( ! $wpdb->get_var( $index_exist ) ) {
 				$wpdb->query( "ALTER TABLE $atum_data_table ADD INDEX `$index` (`$index`)" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			}
+
+		}
+
+	}
+
+	/**
+	 * Modify the stock count inventory fields from bigint to double
+	 *
+	 * @since 1.6.1.1
+	 */
+	private function alter_list_table_columns() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$columns         = array(
+			'sold_today'       => 'DOUBLE',
+			'sales_last_days'  => 'DOUBLE',
+			'reserved_stock'   => 'DOUBLE',
+			'customer_returns' => 'DOUBLE',
+			'warehouse_damage' => 'DOUBLE',
+			'lost_in_post'     => 'DOUBLE',
+			'other_logs'       => 'DOUBLE',
+		);
+
+		foreach ( array_keys( $columns ) as $column_name ) {
+
+			// Avoid adding the column if was already added.
+			$column_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
+			', $db_name, $atum_data_table, $column_name );
+
+			// Add the new column to the table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			if ( ! $wpdb->get_var( $column_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			}
+			else {
+				$wpdb->query( "ALTER TABLE $atum_data_table MODIFY `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 			}
 
 		}
