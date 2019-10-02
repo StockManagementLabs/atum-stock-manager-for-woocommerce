@@ -163,6 +163,17 @@ class PurchaseOrder extends AtumOrderModel {
 	}
 
 	/**
+	 * Setter for the PO's supplier ID
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param int $supplier_id
+	 */
+	public function set_supplier( $supplier_id ) {
+		$this->set_meta( '_supplier', absint( $supplier_id ) );
+	}
+
+	/**
 	 * Check whether this PO allows products from multiple suppliers
 	 *
 	 * @since 1.4.2
@@ -170,8 +181,18 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @return bool
 	 */
 	public function has_multiple_suppliers() {
-		return 'yes' === $this->get_meta( '_multiple_suppliers' );
+		return 'yes' === wc_bool_to_string( $this->get_meta( '_multiple_suppliers' ) );
+	}
 
+	/**
+	 * Setter for the multiple suppliers meta
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|bool $value
+	 */
+	public function set_multiple_suppliers( $value ) {
+		$this->set_meta( '_multiple_suppliers', wc_bool_to_string( $value ) );
 	}
 	
 	/**
@@ -346,8 +367,19 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @return string
 	 */
-	public function get_expected_at_location_date() {
+	public function get_date_expected() {
 		return $this->get_meta( '_expected_at_location_date' );
+	}
+
+	/**
+	 * Setter for the expected at location date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $date_expected
+	 */
+	public function set_date_expected( $date_expected ) {
+		$this->set_meta( '_expected_at_location_date', Helpers::get_wc_time( $date_expected ) );
 	}
 
 	/**
@@ -532,7 +564,7 @@ class PurchaseOrder extends AtumOrderModel {
 		$po_data = array(
 			'supplier'           => $this->get_supplier( 'id' ),
 			'multiple_suppliers' => $this->has_multiple_suppliers(),
-			'date_expected'      => $this->get_expected_at_location_date() ? new \WC_DateTime( $this->get_expected_at_location_date() ) : '',
+			'date_expected'      => $this->get_date_expected() ? new \WC_DateTime( $this->get_date_expected() ) : '',
 		);
 
 		return array_merge( $data, $po_data );

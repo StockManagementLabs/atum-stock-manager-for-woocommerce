@@ -89,6 +89,13 @@ abstract class AtumOrderModel {
 	 * @var string
 	 */
 	protected $block_message = '';
+
+	/**
+	 * Array to store the meta data to add/update
+	 *
+	 * @var array
+	 */
+	protected $meta = [];
 	
 	/**
 	 * AtumOrderModel constructor
@@ -738,9 +745,11 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
+	 * @param bool $including_meta Optional. Whether to save the meta too.
+	 *
 	 * @return int order ID
 	 */
-	public function save() {
+	public function save( $including_meta = TRUE ) {
 
 		// Trigger action before saving to the DB. Allows you to adjust object props before save.
 		do_action( 'atum/order/before_object_save', $this );
@@ -750,6 +759,10 @@ abstract class AtumOrderModel {
 		}
 		else {
 			$this->create();
+		}
+
+		if ( $including_meta ) {
+			$this->save_meta();
 		}
 
 		$this->process_status();
@@ -794,7 +807,7 @@ abstract class AtumOrderModel {
 					}
 
 					// If ID changed (new item saved to DB)...
-					if ( $item_id != $item_key ) { // WPCS: loose comparison ok.
+					if ( $item_id != $item_key ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 						$this->items[ $item_group ][ $item_id ] = $item;
 					}
 
@@ -1408,38 +1421,10 @@ abstract class AtumOrderModel {
 
 		if ( NULL !== $meta_key ) {
 			// Get a single field.
-			return get_post_meta( $this->id, $meta_key, $single );
+			return isset( $this->meta[ $meta_key ] ) ? $this->meta[ $meta_key ] : get_post_meta( $this->id, $meta_key, $single );
 		}
 		else {
 			return get_post_custom( $this->id );
-		}
-
-	}
-
-	/**
-	 * Saves the given meta key/value pairs
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param array $meta An associative array of meta keys and their values to save.
-	 * @param bool  $trim
-	 *
-	 * @return void
-	 */
-	public function save_meta( $meta = array(), $trim = FALSE ) {
-
-		foreach ( $meta as $key => $value ) {
-
-			if ( $trim ) {
-				$value = Helpers::trim_input( $value );
-			}
-
-			do_action( "atum/order/before_save_meta$key", $value, $this );
-
-			$this->set_meta( $key, $value );
-
-			do_action( "atum/order/after_save_meta$key", $value, $this );
-
 		}
 
 	}
@@ -1449,11 +1434,33 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $meta_key
-	 * @param mixed  $meta_value
+	 * @param string|array $meta_key
+	 * @param mixed        $meta_value
 	 */
 	public function set_meta( $meta_key, $meta_value ) {
-		update_post_meta( $this->id, $meta_key, $meta_value );
+
+		if ( is_array( $meta_key ) ) {
+			$this->meta = array_merge( $this->meta, $meta_key );
+		}
+		else {
+			$this->meta[ $meta_key ] = $meta_value;
+		}
+
+	}
+
+	/**
+	 * Update all the previously-set meta fields to the current order post
+	 *
+	 * @since 1.6.2
+	 */
+	public function save_meta() {
+
+		foreach ( $this->meta as $meta_key => $meta_value ) {
+			do_action( "atum/order/before_save_meta$meta_key", $meta_value, $this );
+			update_post_meta( $this->id, $meta_key, $meta_value );
+			do_action( "atum/order/after_save_meta$meta_key", $meta_value, $this );
+		}
+
 	}
 
 	/**

@@ -134,7 +134,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add custom search for POs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
-		add_filter( 'atum/' . self:: POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
 
 	}
 
@@ -165,13 +165,13 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Save the ATUM Order meta boxes
+	 * Save the Purchase Order meta boxes
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $log_id
+	 * @param int $po_id
 	 */
-	public function save_meta_boxes( $log_id ) {
+	public function save_meta_boxes( $po_id ) {
 
 		if ( empty( $_POST['status'] ) || empty( $_POST['atum_meta_nonce'] ) ) {
 			return;
@@ -181,9 +181,9 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $log_id );
+		$po = $this->get_current_atum_order( $po_id );
 
-		if ( empty( $log ) ) {
+		if ( empty( $po ) ) {
 			return;
 		}
 
@@ -195,7 +195,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
-		$log->save_meta( array(
+		$po->set_meta( array(
 			'_status'                    => esc_attr( $_POST['status'] ),
 			'_date_created'              => $po_date,
 			Suppliers::SUPPLIER_META_KEY => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? absint( $_POST['supplier'] ) : '',
@@ -203,10 +203,10 @@ class PurchaseOrders extends AtumOrderPostType {
 			'_expected_at_location_date' => $expected_at_location_date,
 		) );
 
-		// Set the Log description as post content.
-		$log->set_description( $_POST['description'] );
+		// Set the PO description as post content.
+		$po->set_description( $_POST['description'] );
 
-		$log->save();
+		$po->save();
 
 	}
 
@@ -268,7 +268,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				break;
 
 			case 'expected_date':
-				$expected_date = $po->get_expected_at_location_date();
+				$expected_date = $po->get_date_expected();
 
 				if ( $expected_date ) {
 					$expected_date = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $expected_date ) ) . '">' . gmdate( 'Y/m/d', strtotime( $expected_date ) ) . '</abbr>';
@@ -329,7 +329,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			3  => __( 'Custom field deleted.', ATUM_TEXT_DOMAIN ),
 			4  => __( 'PO updated.', ATUM_TEXT_DOMAIN ),
 			/* translators: the PO's revision title */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'PO restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE,
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'PO restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( absint( $_GET['revision'] ), FALSE ) ) : FALSE,
 			6  => __( 'PO updated.', ATUM_TEXT_DOMAIN ),
 			7  => __( 'PO saved.', ATUM_TEXT_DOMAIN ),
 			8  => __( 'PO submitted.', ATUM_TEXT_DOMAIN ),
@@ -519,9 +519,9 @@ class PurchaseOrders extends AtumOrderPostType {
 				] );
 
 				// Add support for non-Latin languages.
-				$mpdf->useAdobeCJK      = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
-				$mpdf->autoScriptToLang = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
-				$mpdf->autoLangToFont   = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
+				$mpdf->useAdobeCJK      = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				$mpdf->autoScriptToLang = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				$mpdf->autoLangToFont   = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 				$mpdf->SetTitle( __( 'Purchase Order', ATUM_TEXT_DOMAIN ) );
 
