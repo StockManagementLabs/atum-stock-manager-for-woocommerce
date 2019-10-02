@@ -97,7 +97,7 @@ class Upgrade {
 
 		// ** version 1.6.1.1 ** Change field types in ATUM data for products.
 		if ( version_compare( $db_version, '1.6.1.1', '<' ) ) {
-			$this->create_list_table_columns();
+			$this->alter_list_table_columns();
 		}
 
 		/**********************
@@ -561,6 +561,7 @@ class Upgrade {
 			'warehouse_damage' => 'DOUBLE',
 			'lost_in_post'     => 'DOUBLE',
 			'other_logs'       => 'DOUBLE',
+			'lost_sales'       => 'DOUBLE',
 		);
 
 		foreach ( array_keys( $columns ) as $column_name ) {
