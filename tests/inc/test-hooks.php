@@ -18,8 +18,11 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_instance() {
+		$this->assertInstanceOf( Hooks::class, Hooks::get_instance() );
+	}
+
 	public function test_register_admin_hooks() {
-		global $wp_filter;
 		$hooks = Hooks::get_instance();
 		$hooks->register_admin_hooks();
 		$this->assertEquals( 10, TestHelpers::has_action( 'plugin_row_meta', array( Hooks::class, 'plugin_row_meta' ) ) );
@@ -36,7 +39,6 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_register_global_hooks() {
-		global $wp_filter;
 		$hooks = Hooks::get_instance();
 		$hooks->register_global_hooks();
 		$this->assertEquals( 20, TestHelpers::has_action( 'woocommerce_product_set_stock', array( Hooks::class, 'record_out_of_stock_date' ) ) );
@@ -135,7 +137,7 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_round_stock_quantity() {
 		$hooks = Hooks::get_instance();
-		$this->assertEquals( 4, $hooks->round_stock_quantity( 4.95 ) );
+		$this->assertIsNumeric( $hooks->round_stock_quantity( 4.95 ) );
 	}
 
 	//public function test_get_custom_stock_threshold() {}

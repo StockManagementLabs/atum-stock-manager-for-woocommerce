@@ -370,7 +370,7 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_input_step() {
-		$this->assertEquals( 1, Helpers::get_input_step() );
+		$this->assertIsNumeric( Helpers::get_input_step() );
 	}
 
 	public function test_read_parent_product_type() {

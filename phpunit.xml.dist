@@ -20,8 +20,14 @@
 		<testsuite name="atum-stock-manager-data-export">
 			<directory prefix="test-" suffix=".php">./tests/dataexport/</directory>
 		</testsuite>
-		<testsuite name="atum-stock-manager-inbound-stick">
-			<directory prefix="test-" suffix=".php">./tests/inbound/stock/</directory>
+		<testsuite name="atum-stock-manager-inbound-stock">
+			<directory prefix="test-" suffix=".php">./tests/inbound-stock/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inc">
+			<directory prefix="test-" suffix=".php">./tests/inc/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inventory">
+			<directory prefix="test-" suffix=".php">./tests/inventory-logs/</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

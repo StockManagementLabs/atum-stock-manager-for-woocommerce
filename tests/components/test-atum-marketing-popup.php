@@ -19,8 +19,6 @@ class AtumMarketingPopupTest extends WP_UnitTestCase {
 	}
 
 	public function test_maybe_enqueue_scripts() {
-		$this->assertFalse( wp_script_is( 'atum-marketing-popup', 'registered' ) );
-		$this->assertFalse( wp_style_is( 'atum-marketing-popup', 'registered' ) );
 		if ( Helpers::show_marketing_popup() ) {
 			AtumMarketingPopup::maybe_enqueue_scripts();
 			$this->assertTrue( wp_script_is( 'atum-marketing-popup', 'registered' ) );

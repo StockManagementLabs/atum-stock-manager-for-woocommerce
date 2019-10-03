@@ -51,7 +51,8 @@ function atum_manually_install_plugins() {
 
 	//ATUM Stock Manager installation
 	include dirname( dirname( __FILE__ ) ) . '/classes/Inc/Upgrade.php';
-	new \Atum\Inc\Upgrade( '1.0.0' );
+	new \Atum\Inc\Upgrade( '0.0.1' );
+	\Atum\Inc\Main::get_instance()->load_modules();
 	echo esc_html( 'Installing ATUM...' . PHP_EOL );
 
 	// Load helpers methods

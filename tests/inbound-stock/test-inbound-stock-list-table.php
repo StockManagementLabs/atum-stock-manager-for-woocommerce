@@ -11,7 +11,7 @@ use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
 use Symfony\Component\DomCrawler\Crawler;
-use Atum\Models\Products\AtumProductSimple;
+use TestHelpers\TestHelpers;
 
 
 /**
@@ -59,42 +59,15 @@ class InboundStockListTableTest extends PHPUnit_Framework_TestCase { //WP_UnitTe
 
 	public function test_single_row() {
 		$instance = new ListTable();
-		$product  = new AtumProductSimple(); //WC_Product_Simple();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->save();
-		//print_r($product);
+		$product  =  TestHelpers::create_atum_product();
 
-		$po = new PurchaseOrder( $product->get_id() );
-		$po->add_product( $product );
-		$po->save();
-		$po->save_meta( array(
-			'_status'                    => 'atum_ordered',
-			'_date_created'              => date( 'Y-m-d H:i:s', current_time( 'timestamp', TRUE ) ),
-			Suppliers::SUPPLIER_META_KEY => '',
-			'_multiple_suppliers'        => 'no',
-			'_expected_at_location_date' => date( 'Y-m-d H:i:s', current_time( 'timestamp', TRUE ) ),
-		) );
-		print_r($po);
+		$po = TestHelpers::create_atum_purchase_order( $product );
 
 		ob_start();
 		$instance->single_row( $po );
 		$result = ob_get_clean();
 
-		var_dump($result);
+		$this->assertIsString( $result );
 	}
 
 }

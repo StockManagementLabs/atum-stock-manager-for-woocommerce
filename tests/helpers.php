@@ -2,7 +2,9 @@
 
 namespace TestHelpers;
 
+use Atum\Inc\Helpers;
 use Atum\Models\Products\AtumProductSimple;
+use Atum\PurchaseOrders\PurchaseOrders;
 use WC_Cache_Helper;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -33,6 +35,32 @@ class TestHelpers {
 			}
 		}
 		return false;
+	}
+
+	public static function create_atum_purchase_order( $product ) {
+		wp_set_current_user( 1 );
+		$pos = new PurchaseOrders();
+		$pos->register_post_type();
+
+		$post = wp_insert_post( array(
+			'post_title'  => 'Purchase Order #xxxx details',
+			'post_type'   => PurchaseOrders::POST_TYPE,
+			'description' => 'Some description',
+			'user_ID'     => 1,
+			'post_author' => 1,
+			'post_status' => 'atum_ordered',
+		) );
+
+		$order = Helpers::get_atum_order_model( $post );
+		if( !is_a( $product, WC_Product::class ) )
+			$product = self::create_atum_product();
+
+		$product->set_inbound_stock( 25 );
+
+		$order->add_product( $product->get_id() );
+		$order->save();
+
+		return $order;
 	}
 
 	public static function create_atum_product() {
