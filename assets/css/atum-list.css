@@ -3744,6 +3744,18 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   padding-left: 5px;
 }
 
+#atum-locations-tree .easytree-node a {
+  color: var(--dark) !important;
+}
+
+#atum-locations-tree .easytree-node.checked a {
+  color: var(--primary) !important;
+}
+
+#atum-locations-tree .easytree-node.checked.easytree-active a {
+  color: var(--atum-table-bg) !important;
+}
+
 .blockUI.blockOverlay:before {
   display: none;
 }

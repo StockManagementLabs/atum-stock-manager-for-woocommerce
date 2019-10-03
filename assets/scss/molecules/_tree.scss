@@ -286,3 +286,22 @@ ul.easytree-container.easytree-focused {
 		
 	}
 }
+
+// ATUM locations tree
+#atum-locations-tree {
+	.easytree-node{
+		
+		a {
+			color: var(--dark) !important;
+		}
+		&.checked {
+			a {
+				color: var(--primary) !important;
+			}
+			&.easytree-active a{
+				color: var(--atum-table-bg) !important;
+			}
+		}
+	}
+
+}
