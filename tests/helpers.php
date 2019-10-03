@@ -18,6 +18,23 @@ use WC_Product_Attribute;
 
 class TestHelpers {
 
+	public static function has_action( $tag, $function ) {
+		global $wp_filter;
+
+		if( !isset ( $wp_filter[ $tag ] ) )
+			return false;
+
+		$hook = $wp_filter[ $tag ];
+
+		foreach ( $hook->callbacks as $priority => $call ) {
+			foreach ( $call as $idx => $data ) {
+				if( $data['function'][0] instanceof $function[0] && $data['function'][1] === $function[1] )
+					return $priority;
+			}
+		}
+		return false;
+	}
+
 	public static function create_atum_product() {
 		$product = new AtumProductSimple( self::create_product() );
 		$product->set_props(
