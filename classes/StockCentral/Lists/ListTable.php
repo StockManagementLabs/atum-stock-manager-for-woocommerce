@@ -734,7 +734,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $out_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$out_stock_days = Helpers::get_product_out_stock_days( $this->product );
 				$this->product->set_out_stock_days( $out_stock_days );
-				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't change.
 			}
 
 		}

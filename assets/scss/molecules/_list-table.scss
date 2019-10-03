@@ -1888,6 +1888,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				
 				td, a {
 					color:  var(--main-text-expanded);
+					
+					&.not-empty {
+						color:  var(--atum-table-link-text);
+					}
 				}
 				
 				.check-column {
@@ -2161,6 +2165,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 							&:before {
 								color: var(--main-text-expanded) !important;
 							}
+						}
+						
+						a.not-empty:before {
+							color:  var(--atum-table-link-text) !important;
 						}
 					}
 				}
