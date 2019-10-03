@@ -4545,9 +4545,8 @@ ul.atum_order_notes li .note_content::after {
   border-bottom: 1px dotted #999;
 }
 
-#atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div {
+#atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div {
   display: block;
-  text-indent: -9999px;
   position: relative;
   height: 1em;
   width: 1em;
@@ -4557,18 +4556,13 @@ ul.atum_order_notes li .note_content::after {
   margin: 0;
 }
 
-#atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
+#atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
   color: #adb5bd;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before {
   font-family: "atum-icon-font";
   content: "";
-}
-
-#atum_order_items .atum_order_items_wrapper table.atum_order_items tr.refund .thumb div:before {
-  font-family: "atum-icon-font";
-  content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
