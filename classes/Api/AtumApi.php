@@ -42,6 +42,7 @@ class AtumApi {
 	private $api_controllers = array(
 		'atum-suppliers'       => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-purchase-orders' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
+		'atum-inventory-logs'  => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
 	);
 
 	/**
