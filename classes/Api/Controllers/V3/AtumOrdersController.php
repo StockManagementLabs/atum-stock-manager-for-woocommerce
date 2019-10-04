@@ -395,7 +395,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 	/**
 	 * Prepare an item product
- 	 *
+	 *
 	 * @since 1.6.2
 	 *
 	 * @param array                $posted Line item data.
@@ -414,7 +414,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 			if ( 'create' === $action ) {
 				$quantity = isset( $posted['quantity'] ) ? $posted['quantity'] : 1;
-				$total    = wc_get_price_excluding_tax( $product, array( 'qty' => $quantity ) );
+				$total    = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
 				$item->set_total( $total );
 				$item->set_subtotal( $total );
 			}
