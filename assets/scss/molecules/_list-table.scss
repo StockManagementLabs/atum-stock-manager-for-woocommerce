@@ -2162,13 +2162,15 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						a, span {
 							color: var(--main-text-expanded) !important;
 							
-							&:before {
+							&.show-locations:before {
 								color: var(--main-text-expanded) !important;
+								opacity: .55;
 							}
 						}
 						
-						a.not-empty:before {
-							color:  var(--atum-table-link-text) !important;
+						a.show-locations.not-empty:before {
+							color: var(--main-text-expanded) !important;
+							opacity: 1;
 						}
 					}
 				}
@@ -2180,9 +2182,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						a, span {
 							color: var(--main-text-expanded) !important;
 							
-							&:before {
+							&.show-locations:before {
 								color: var(--main-text-expanded) !important;
+								opacity: .55
 							}
+						}
+						a.show-locations.not-empty:before {
+							color: var(--main-text-expanded) !important;
+							opacity: 1;
 						}
 					}
 				}
