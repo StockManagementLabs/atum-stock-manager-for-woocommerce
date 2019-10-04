@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Items\LogItemProduct;
 
 
@@ -182,14 +183,14 @@ class Log extends AtumOrderModel {
 	}
 	
 	/**
-	 * Get the Order's type
+	 * Get the Inventory Log's type
 	 *
 	 * @since 1.4.16
 	 *
 	 * @return string
 	 */
 	public function get_type() {
-		return ATUM_PREFIX . 'inventory_log';
+		return InventoryLogs::POST_TYPE;
 	}
 
 	/**

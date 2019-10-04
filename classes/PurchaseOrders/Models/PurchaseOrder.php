@@ -196,14 +196,14 @@ class PurchaseOrder extends AtumOrderModel {
 	}
 	
 	/**
-	 * Get the Order's type
+	 * Get the Purchase Order's type
 	 *
 	 * @since 1.4.16
 	 *
 	 * @return string
 	 */
 	public function get_type() {
-		return ATUM_PREFIX . 'purchase_order';
+		return PurchaseOrders::POST_TYPE;
 	}
 
 	/**

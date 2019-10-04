@@ -2862,14 +2862,14 @@ final class Helpers {
 		if (
 			defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
 			|| isset( $_GET['rest_route'] ) // (#2)
-			&& strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 ) === 0
+			&& 0 === strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 )
 		) {
 			return TRUE;
 		}
 
 		// (#3)
 		global $wp_rewrite;
-		if ( $wp_rewrite === NULL ) {
+		if ( NULL === $wp_rewrite ) {
 			$wp_rewrite = new \WP_Rewrite();
 		}
 
