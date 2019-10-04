@@ -15,16 +15,11 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
-use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\InventoryLogs\Items\LogItemShipping;
 use Atum\InventoryLogs\Models\Log;
-use Atum\PurchaseOrders\Items\POItemFee;
-use Atum\PurchaseOrders\Items\POItemProduct;
-use Atum\PurchaseOrders\Items\POItemShipping;
-use Atum\PurchaseOrders\Models\PurchaseOrder;
 
 class InventoryLogsController extends AtumOrdersController {
 
@@ -43,7 +38,7 @@ class InventoryLogsController extends AtumOrdersController {
 	protected $post_type = InventoryLogs::POST_TYPE;
 
 	/**
-	 * Allowed data keys for the PO
+	 * Allowed data keys for the Log
 	 *
 	 * @var array
 	 */
@@ -80,6 +75,7 @@ class InventoryLogsController extends AtumOrdersController {
 		'shipping_lines',
 		'fee_lines',
 		'meta_data',
+		'description',
 	);
 
 
@@ -231,7 +227,7 @@ class InventoryLogsController extends AtumOrdersController {
 		$data_keys = array_keys( array_filter( $schema['properties'], array( $this, 'filter_writable_props' ) ) );
 
 		// Log type's setter does not follow the naming convention.
-		if ( isset( $data_keys['type'] ) ) {
+		if ( in_array( 'type', $data_keys, TRUE ) ) {
 			$log->set_log_type( $request['type'] );
 		}
 
@@ -355,7 +351,7 @@ class InventoryLogsController extends AtumOrdersController {
 	 */
 	protected function get_formatted_item_data( $object ) {
 
-		// Format the specific purchase order's data.
+		// Format the specific inventory log's data.
 		$formatted_data = parent::get_formatted_item_data( $object );
 		$format_date    = [ 'reservation_date', 'return_date', 'damage_date' ];
 

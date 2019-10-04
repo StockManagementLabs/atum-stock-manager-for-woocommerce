@@ -54,6 +54,12 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		$schema['properties']['status']['default'] = ATUM_PREFIX . 'pending';
 		$schema['properties']['status']['enum']    = array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) );
 
+		$schema['properties']['description'] = array(
+			'description' => __( 'The ATUM order description.', ATUM_TEXT_DOMAIN ),
+			'type'        => 'string',
+			'context'     => array( 'view', 'edit' ),
+		);
+
 		return $schema;
 
 	}
@@ -74,7 +80,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		$params['status'] = array(
 			'default'           => 'any',
-			'description'       => __( 'Limit result set to purchase orders which have specific statuses.', ATUM_TEXT_DOMAIN ),
+			'description'       => __( 'Limit result set to ATUM orders which have specific statuses.', ATUM_TEXT_DOMAIN ),
 			'type'              => 'array',
 			'items'             => array(
 				'type' => 'string',
@@ -99,7 +105,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	protected function get_object( $post ) {
 
 		$id    = is_a( $post, '\WP_Post' ) ? $post->ID : $post;
-		$order = Helpers::get_atum_order_model( $id );
+		$order = Helpers::get_atum_order_model( $id, $this->post_type );
 
 		// In case id is not an ATUM Order, don't expose it via API.
 		if ( ! $order ) {
@@ -505,7 +511,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 * @param string         $item_type The item type.
 	 * @param array          $posted    Item provided in the request body.
 	 *
-	 * @throws \WC_REST_Exception If item ID is not associated with the purchase order.
+	 * @throws \WC_REST_Exception If item ID is not associated with the ATUM order.
 	 */
 	protected function set_item( $order, $item_type, $posted ) {
 

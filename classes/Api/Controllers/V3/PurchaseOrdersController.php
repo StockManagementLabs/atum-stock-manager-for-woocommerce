@@ -15,7 +15,6 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
-use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Items\POItemFee;
 use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
@@ -70,6 +69,7 @@ class PurchaseOrdersController extends AtumOrdersController {
 		'shipping_lines',
 		'fee_lines',
 		'meta_data',
+		'description',
 	);
 
 

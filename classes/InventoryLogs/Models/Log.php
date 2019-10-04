@@ -450,7 +450,7 @@ class Log extends AtumOrderModel {
 	 * @param string $log_type
 	 */
 	public function set_log_type( $log_type ) {
-		$this->set_meta( '_type', in_array( array_keys( self::get_log_types() ), $log_type, TRUE ) ? $log_type : '' );
+		$this->set_meta( '_type', in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '' );
 	}
 
 	/**

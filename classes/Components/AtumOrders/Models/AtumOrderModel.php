@@ -1613,6 +1613,7 @@ abstract class AtumOrderModel {
 			'tax_lines'          => $this->get_items( 'tax' ),
 			'shipping_lines'     => $this->get_items( 'shipping' ),
 			'fee_lines'          => $this->get_items( 'fee' ),
+			'description'        => $this->post->post_content,
 		);
 
 		return apply_filters( 'atum/orders/data', $data, $this->get_type() );

@@ -1571,13 +1571,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $atum_order_id
+	 * @param int    $atum_order_id
+	 * @param string $post_type
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model( $atum_order_id ) {
+	public static function get_atum_order_model( $atum_order_id, $post_type = '' ) {
 
-		$post_type = get_post_type( $atum_order_id );
+		if ( ! $post_type ) {
+			$post_type = get_post_type( $atum_order_id );
+		}
 
 		switch ( $post_type ) {
 			case InventoryLogs::POST_TYPE:
