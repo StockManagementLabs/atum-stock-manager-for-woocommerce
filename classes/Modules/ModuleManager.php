@@ -69,7 +69,7 @@ class ModuleManager {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['module_manager'] = array(
-			'tab_name' => __( 'Modules', ATUM_TEXT_DOMAIN ),
+			'label'    => __( 'Modules', ATUM_TEXT_DOMAIN ),
 			'icon'     => 'atmi-database',
 			'sections' => array(
 				'module_manager' => __( 'Module Manager', ATUM_TEXT_DOMAIN ),

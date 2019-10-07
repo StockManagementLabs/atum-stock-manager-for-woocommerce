@@ -2010,10 +2010,16 @@ final class Ajax {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
+		$terms = empty( $_POST['terms'] ) ? [] : $_POST['terms'];
+
 		$product_id      = absint( $_POST['product_id'] );
-		$sanitized_terms = array_map( 'absint', $_POST['terms'] );
+		$sanitized_terms = array_map( 'absint', $terms );
 
 		wp_set_post_terms( $product_id, $sanitized_terms, Globals::PRODUCT_LOCATION_TAXONOMY, FALSE );
+
+		$product = Helpers::get_atum_product( $product_id );
+		$product->set_has_location( ! empty( $terms ) );
+		$product->save();
 
 		wp_send_json_success( 'ok' );
 

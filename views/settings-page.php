@@ -49,7 +49,7 @@ use Atum\Components\AtumColors;
 								<span class="menu-helper">
 									<i class="<?php echo esc_attr( $atts['icon'] ); ?>"></i>
 									<span>
-										<?php echo esc_attr( $atts['tab_name'] ); ?>
+										<?php echo esc_attr( $atts['label'] ); ?>
 									</span>
 								</span>
 							</a>

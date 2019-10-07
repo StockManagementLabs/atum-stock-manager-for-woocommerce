@@ -258,14 +258,14 @@ class Settings {
 
 		$this->tabs = array(
 			'general'       => array(
-				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
+				'label'    => __( 'General', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN ),
 				),
 			),
 			'store_details' => array(
-				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
+				'label'    => __( 'Store Details', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
