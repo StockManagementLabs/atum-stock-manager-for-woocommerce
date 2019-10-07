@@ -730,11 +730,10 @@ ul.atum_order_notes {
 			
 			tr {
 				
-				&.fee, &.refund, &.shipping {
+				&.fee, &.shipping {
 					.thumb {
 						div {
 							display: block;
-							text-indent: -9999px;
 							position: relative;
 							height: 1em;
 							width: 1em;
@@ -755,15 +754,6 @@ ul.atum_order_notes {
 						&:before {
 							font-family: $atum-icon-font;
 							content: $atmi-plus-circle;
-						}
-					}
-				}
-				
-				&.refund {
-					.thumb div {
-						&:before {
-							font-family: $atum-icon-font;
-							content: $atmi-sync;
 						}
 					}
 				}
