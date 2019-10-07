@@ -347,8 +347,8 @@ export default class SettingsPage {
             url   : window['ajaxurl'],
             method: 'POST',
             data  : {
-                token : this.settings.get('schemeColorNonce'),
-                action: this.settings.get('getSchemeColor'),
+                token : this.settings.get('colorSchemeNonce'),
+                action: this.settings.get('getColorScheme'),
                 theme : themeSelectedValue,
 	            reset : resetDefault
             },
