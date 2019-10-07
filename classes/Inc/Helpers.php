@@ -762,10 +762,10 @@ final class Helpers {
 	 *
 	 * @since   0.0.2
 	 *
-	 * @param string  $name    The option key to retrieve.
-	 * @param mixed   $default Optional. The default value returned if the option was not found.
-	 * @param bool    $echo    Optional. If the option has to be returned or printed.
-	 * @param bool    $force   Optional. Whether to get the option from db instead of using the cached value.
+	 * @param string $name    The option key to retrieve.
+	 * @param mixed  $default Optional. The default value returned if the option was not found.
+	 * @param bool   $echo    Optional. If the option has to be returned or printed.
+	 * @param bool   $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
@@ -1815,7 +1815,7 @@ final class Helpers {
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
-					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // WPCS: prefix ok.
+					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 					
 					break;
 				
@@ -2807,6 +2807,7 @@ final class Helpers {
 		}
 
 		return $is_array ? $classes : implode( ' ', $classes );
+
 	}
 	
 	/**

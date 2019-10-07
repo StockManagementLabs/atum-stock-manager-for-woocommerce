@@ -31,7 +31,7 @@ class Settings {
 	private static $instance;
 	
 	/**
-	 * Tabs and sections structure
+	 * Tabs (groups) and sections structure
 	 *
 	 * @var array
 	 */
@@ -209,7 +209,7 @@ class Settings {
 				'cancel'             => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'continue'           => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
 				'dark'               => __( 'Dark', ATUM_TEXT_DOMAIN ),
- 				'done'               => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'done'               => __( 'Done!', ATUM_TEXT_DOMAIN ),
 				'error'              => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'getSchemeColor'     => 'atum_get_scheme_color',
 				'highContrast'       => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
@@ -475,29 +475,34 @@ class Settings {
 		// Load the tools tab.
 		Tools::get_instance();
 
-		// Add the tabs.
+		// Add the tabs (groups).
 		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs );
-		foreach ( $this->tabs as $tab => $tab_data ) {
 
-			foreach ( $tab_data['sections'] as $section_key => $section_name ) {
+		if ( ! Helpers::is_rest_request() ) {
 
-				/* @noinspection PhpParamsInspection */
-				add_settings_section(
-					ATUM_PREFIX . "setting_{$section_key}",  // ID.
-					$section_name,                           // Title.
-					FALSE,                                   // Callback.
-					ATUM_PREFIX . "setting_{$section_key}"   // Page.
-				);
+			foreach ( $this->tabs as $tab => $tab_data ) {
 
-				// Register the settings.
-				register_setting(
-					ATUM_PREFIX . "setting_{$section_key}",  // Option group.
-					self::OPTION_NAME,                       // Option name.
-					array( $this, 'sanitize' )               // Sanitization callback.
-				);
+				foreach ( $tab_data['sections'] as $section_key => $section_name ) {
+
+					/* @noinspection PhpParamsInspection */
+					add_settings_section(
+						ATUM_PREFIX . "setting_{$section_key}",  // ID.
+						$section_name,                           // Title.
+						FALSE,                                   // Callback.
+						ATUM_PREFIX . "setting_{$section_key}"   // Page.
+					);
+
+					// Register the settings.
+					register_setting(
+						ATUM_PREFIX . "setting_{$section_key}",  // Option group.
+						self::OPTION_NAME,                       // Option name.
+						array( $this, 'sanitize' )               // Sanitization callback.
+					);
+
+				}
 
 			}
-			
+
 		}
 		
 		// Add the fields.
@@ -506,14 +511,16 @@ class Settings {
 
 			$options['id'] = $field;
 
-			add_settings_field(
-				$field,                                             // ID.
-				$options['name'],                                   // Title.
-				array( $this, 'display_' . $options['type'] ),      // Callback.
-				ATUM_PREFIX . 'setting_' . $options['section'],     // Page.
-				ATUM_PREFIX . 'setting_' . $options['section'],     // Section.
-				$options
-			);
+			if ( ! Helpers::is_rest_request() ) {
+				add_settings_field(
+					$field,                                             // ID.
+					$options['name'],                                   // Title.
+					array( $this, 'display_' . $options['type'] ),      // Callback.
+					ATUM_PREFIX . 'setting_' . $options['section'],     // Page.
+					ATUM_PREFIX . 'setting_' . $options['section'],     // Section.
+					$options
+				);
+			}
 
 			// Register the fields that must be saved as user meta.
 			if ( ! empty( $options['to_user_meta'] ) ) {
@@ -1097,6 +1104,28 @@ class Settings {
 
 		return '';
 
+	}
+
+	/**
+	 * Getter for the tabs (groups) prop
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_groups() {
+		return $this->tabs;
+	}
+
+	/**
+	 * Getter for the defaults prop
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_default_settings() {
+		return $this->defaults;
 	}
 
 	/**

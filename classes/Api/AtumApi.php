@@ -43,6 +43,8 @@ class AtumApi {
 		'atum-suppliers'       => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-purchase-orders' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
 		'atum-inventory-logs'  => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
+		'atum-settings'        => __NAMESPACE__ . '\Controllers\V3\SettingsController',
+		'atum-setting-options' => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
 	);
 
 	/**
