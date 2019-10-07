@@ -18,6 +18,7 @@ export default class LocationsTree {
 	productId: number = null;
 	productTitle: string = '';
 	swal: any = window['swal'];
+	$button: JQuery = null;
 	
 	constructor(
 		private settings: Settings,
@@ -41,6 +42,7 @@ export default class LocationsTree {
 		
 		const $row: JQuery = $button.closest('tr');
 		
+		this.$button        = $button;
 		this.productId      = $row.data('id');
 		this.productTitle   = $row.find('.column-title').find('.atum-title-small').length ? $row.find('.column-title').find('.atum-title-small').text() : $row.find('.column-title').text();
 		this.toSetLocations = [];
@@ -228,6 +230,12 @@ export default class LocationsTree {
 				success   : (response: any) => {
 					
 					if (response.success === true) {
+						if ( toSetTerms.length ) {
+							this.$button.addClass('not-empty')
+						}
+						else {
+							this.$button.removeClass('not-empty')
+						}
 						resolve();
 					}
 					else {
