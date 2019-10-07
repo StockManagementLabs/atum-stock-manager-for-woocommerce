@@ -48,7 +48,7 @@ class Tools {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['tools'] = array(
-			'tab_name'  => __( 'Tools', ATUM_TEXT_DOMAIN ),
+			'label'     => __( 'Tools', ATUM_TEXT_DOMAIN ),
 			'icon'      => 'atum-icon atmi-rocket',
 			'sections'  => array(
 				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN ),

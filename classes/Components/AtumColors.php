@@ -522,7 +522,7 @@ class AtumColors {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['visual_settings'] = array(
-			'tab_name' => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
+			'label'    => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
 			'icon'     => 'atmi-highlight',
 			'sections' => array(
 				'color_mode'   => __( 'Color Mode', ATUM_TEXT_DOMAIN ),
