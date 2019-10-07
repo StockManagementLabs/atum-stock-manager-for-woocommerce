@@ -139,7 +139,7 @@ use Atum\Components\AtumColors;
 								<?php if ( $section['title'] ) : ?>
 									<div class="section-title">
 										<h2>
-											<?php if ( 'atum_setting_scheme_color' === $section['id'] ) :
+											<?php if ( 'atum_setting_color_scheme' === $section['id'] ) :
 
 												$theme = AtumColors::get_user_theme();
 
@@ -177,7 +177,7 @@ use Atum\Components\AtumColors;
 										<?php do_settings_fields( $page, $section['id'] ); ?>
 									</table>
 
-									<?php if ( 'atum_setting_scheme_color' === $section['id'] ) : ?>
+									<?php if ( 'atum_setting_color_scheme' === $section['id'] ) : ?>
 										<button class="btn btn-primary reset-default-colors" data-reset="1"
 											type="button" data-value="<?php echo esc_attr( $theme ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
 									<?php endif; ?>
