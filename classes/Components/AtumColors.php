@@ -546,6 +546,7 @@ class AtumColors {
 
 		$color_settings = array(
 			'theme'                    => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_mode',
 				'name'         => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
 				'desc'         => '',
@@ -576,6 +577,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_primary_color'         => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -585,6 +587,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color'         => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -594,6 +597,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color'         => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -603,6 +607,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color'       => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -612,6 +617,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color'       => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -621,6 +627,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_tertiary_color'        => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -630,6 +637,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_tertiary_color'        => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -639,6 +647,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_tertiary_color_light'  => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Outside Elements Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons outside of ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -648,6 +657,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_danger_color'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -657,6 +667,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_danger_color'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -666,6 +677,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_title_color'           => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
@@ -675,6 +687,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_title_color'           => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
@@ -684,6 +697,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color'            => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -693,6 +707,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color'            => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -702,6 +717,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color_2'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -711,6 +727,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color_2'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -720,6 +737,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color_expanded'   => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -729,6 +747,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color_expanded'   => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -738,6 +757,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_border_color'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -747,6 +767,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_border_color'          => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -756,6 +777,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_bg_1_color'            => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Primary Background Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for background color in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -765,6 +787,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_bg_2_color'            => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Secondary Background Color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the background color of striped rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -774,6 +797,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_primary_color_light'   => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -783,6 +807,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color_light'   => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -792,6 +817,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color_light'   => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -801,6 +827,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_primary_color_dark'    => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -810,6 +837,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color_dark'    => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -819,6 +847,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color_dark'    => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -828,6 +857,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color_light' => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -837,6 +867,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color_light' => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -846,6 +877,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color_dark'  => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
@@ -855,6 +887,7 @@ class AtumColors {
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color_dark'  => array(
+				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
 				'name'         => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
