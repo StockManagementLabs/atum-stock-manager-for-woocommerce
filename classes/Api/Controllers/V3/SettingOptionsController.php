@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
 class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
@@ -41,26 +42,122 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	protected $atum_settings;
 
 	/**
-	 * Get setting data
+	 * Get the settings schema, conforming to JSON Schema
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $group_id   Group (section) ID.
-	 * @param string $setting_id Setting ID.
-	 *
-	 * @return \stdClass|\WP_Error
+	 * @return array
 	 */
-	public function get_setting( $group_id, $setting_id ) {
+	public function get_item_schema() {
 
-		$setting = parent::get_setting( $group_id, $setting_id );
+		$schema = array(
+			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'title'      => 'setting',
+			'type'       => 'object',
+			'properties' => array(
+				'id'          => array(
+					'description' => __( 'A unique identifier for the setting.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_title',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'group_id'    => array(
+					'description' => __( 'An identifier for the group this setting belongs to.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_title',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'section'     => array(
+					'description' => __( 'An identifier for the group section this setting belongs to.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_title',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'name'        => array(
+					'description' => __( 'A human readable name for the setting used in interfaces.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'desc'        => array(
+					'description' => __( 'A human readable description for the setting used in interfaces.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'value'       => array(
+					'description' => __( 'Setting value.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'mixed',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'default'     => array(
+					'description' => __( 'Default value for the setting.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'mixed',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'type'        => array(
+					'description' => __( 'Type of setting.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'enum'        => array(
+						'text',
+						'number',
+						'color',
+						'switcher',
+						'textarea',
+						'select',
+						'html',
+						'wc_country',
+						'button_group',
+						'script_runner',
+						'theme_selector',
+					),
+					'readonly'    => TRUE,
+				),
+				'options'     => array(
+					'description' => __( 'Array of options (key value pairs) for inputs such as select, multiselect, and radio buttons.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'object',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'dependency'  => array(
+					'description' => __( 'The dependency config array for any depedent settings.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'object',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+				'confirm_msg' => array(
+					'description' => __( 'The message that is shown when a confirmation is needed when changing a setting.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => TRUE,
+				),
+			),
+		);
 
-		if ( is_wp_error( $setting ) ) {
-			return $setting;
-		}
-
-		$setting['group_id'] = $group_id;
-
-		return $setting;
+		return $this->add_additional_fields_schema( $schema );
 
 	}
 
@@ -69,42 +166,66 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param  string $key Key to check.
+	 * @param string $key Key to check.
 	 *
 	 * @return boolean
 	 */
 	public function allowed_setting_keys( $key ) {
 
-		return in_array(
-			$key, array(
-				'id',
-				'group_id',
-				'label',
-				'description',
-				'default',
-				'tip',
-				'placeholder',
-				'type',
-				'options',
-				'value',
-				'option_key',
-			), true
-		);
+		return in_array( $key, array(
+			'id',
+			'group',
+			'section',
+			'name',
+			'desc',
+			'default',
+			'type',
+			'options',
+			'value',
+			'dependency',
+			'confirm_msg',
+			'to_user_meta',
+		), TRUE );
+
+	}
+
+	/**
+	 * Boolean for if a setting type is a valid supported setting type.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $type Type.
+	 *
+	 * @return bool
+	 */
+	public function is_setting_type_valid( $type ) {
+
+		return in_array( $type, array(
+			'text',
+			'switcher',
+			'number',
+			'color',
+			'textarea',
+			'select',
+			'button_group',
+			'wc_country',
+			'theme_selector',
+		) );
 
 	}
 
 	/**
 	 * Return all settings in a group.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
-	 * @param  \WP_REST_Request $request Request data.
+	 * @param \WP_REST_Request $request Request data.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function get_items( $request ) {
 
-		$this->atum_settings = Settings::get_instance();
+		$this->maybe_register_atum_settings();
 
 		return parent::get_items( $request );
 
@@ -115,7 +236,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $group_id Group (section) ID.
+	 * @param string $group_id Group ID.
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -125,61 +246,28 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 			return new \WP_Error( 'atum_rest_setting_group_invalid', __( 'Invalid setting group.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
+		$this->maybe_register_atum_settings();
 		$default_settings = $this->atum_settings->get_default_settings();
-		$settings         = apply_filters( "atum/api/rest_settings-$group_id", $default_settings );
 
 		// Find the group within the settings array.
-		if ( $group_id ) {
-			$settings = wp_list_filter( $settings, [ 'section' => $group_id ] );
-		}
+		$settings = wp_list_filter( $default_settings, [ 'group' => $group_id ] );
 
 		if ( empty( $settings ) ) {
 			return new \WP_Error( 'atum_rest_setting_group_invalid', __( 'Invalid setting group.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
 		$filtered_settings = array();
-		foreach ( $settings as $setting ) {
+		foreach ( $settings as $setting_id => $setting ) {
 
-			$option_key = $setting['option_key'];
-			$setting    = $this->filter_setting( $setting );
-			$default    = isset( $setting['default'] ) ? $setting['default'] : '';
+			$setting = array_merge( [ 'id' => $setting_id ], $setting );
+			$setting = $this->filter_setting( $setting );
+			$default = isset( $setting['default'] ) ? $setting['default'] : '';
 
 			// Get the option value.
-			if ( is_array( $option_key ) ) {
-				$option           = get_option( $option_key[0] );
-				$setting['value'] = isset( $option[ $option_key[1] ] ) ? $option[ $option_key[1] ] : $default;
-			}
-			else {
-				$admin_setting_value = WC_Admin_Settings::get_option( $option_key, $default );
-				$setting['value']    = $admin_setting_value;
-			}
+			$setting['value'] = Helpers::get_option( $setting_id, $default );
 
-			if ( 'multi_select_countries' === $setting['type'] ) {
-				$setting['options'] = WC()->countries->get_countries();
-				$setting['type']    = 'multiselect';
-			}
-			elseif ( 'single_select_country' === $setting['type'] ) {
-				$setting['type']    = 'select';
-				$setting['options'] = $this->get_countries_and_states();
-			}
-			elseif ( 'single_select_page' === $setting['type'] ) {
-
-				$pages   = get_pages(
-					array(
-						'sort_column'  => 'menu_order',
-						'sort_order'   => 'ASC',
-						'hierarchical' => 0,
-					)
-				);
-				$options = array();
-
-				foreach ( $pages as $page ) {
-					$options[ $page->ID ] = ! empty( $page->post_title ) ? $page->post_title : '#' . $page->ID;
-				}
-
-				$setting['type']    = 'select';
-				$setting['options'] = $options;
-
+			if ( 'wc_country' === $setting['type'] ) {
+				$setting['options'] = array( 'values' => $this->get_countries_and_states() );
 			}
 
 			$filtered_settings[] = $setting;
@@ -191,15 +279,36 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	}
 
 	/**
+	 * Filters out bad values from the settings array/filter so we only return known values via the API.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  array $setting Settings.
+	 *
+	 * @return array
+	 */
+	public function filter_setting( $setting ) {
+
+		$setting = parent::filter_setting( $setting );
+
+		if ( 'button_group' === $setting['type'] && isset( $setting['options']['multiple'] ) && TRUE === $setting['options']['multiple'] ) {
+			$setting['value'] = maybe_unserialize( $setting['value'] );
+		}
+
+		return $setting;
+
+	}
+
+	/**
 	 * Returns a list of countries and states for use in the base location setting.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
 	 * @return array Array of states and countries.
 	 */
 	protected function get_countries_and_states() {
 
-		$countries = WC()->countries->get_countries();
+		$countries = wc()->countries->get_countries();
 
 		if ( ! $countries ) {
 			return array();
@@ -208,7 +317,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		$output = array();
 		foreach ( $countries as $key => $value ) {
 
-			$states = WC()->countries->get_states( $key );
+			$states = wc()->countries->get_states( $key );
 
 			if ( $states ) {
 
@@ -228,103 +337,85 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	}
 
 	/**
-	 * Get the settings schema, conforming to JSON Schema
+	 * Register the ATUM Settings object (if not registered yet)
+	 *
+	 * @since 1.6.2
+	 */
+	protected function maybe_register_atum_settings() {
+
+		if ( ! is_a( $this->atum_settings, '\Atum\Settings\Settings' ) ) {
+			$this->atum_settings = Settings::get_instance();
+		}
+
+		if ( empty( $this->atum_settings->get_groups() ) ) {
+			$this->atum_settings->register_settings();
+		}
+
+	}
+
+	/**
+	 * Update a single setting in a group.
 	 *
 	 * @since 1.6.2
 	 *
-	 * @return array
+	 * @param \WP_REST_Request $request Request data.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
 	 */
-	public function get_item_schema() {
+	public function update_item( $request ) {
 
-		$schema = array(
-			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'setting',
-			'type'       => 'object',
-			'properties' => array(
-				'id'          => array(
-					'description' => __( 'A unique identifier for the setting.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_title',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'group_id'    => array(
-					'description' => __( 'An identifier for the group this setting belongs to.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_title',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'label'       => array(
-					'description' => __( 'A human readable label for the setting used in interfaces.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'description' => array(
-					'description' => __( 'A human readable description for the setting used in interfaces.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'value'       => array(
-					'description' => __( 'Setting value.', 'woocommerce' ),
-					'type'        => 'mixed',
-					'context'     => array( 'view', 'edit' ),
-				),
-				'default'     => array(
-					'description' => __( 'Default value for the setting.', 'woocommerce' ),
-					'type'        => 'mixed',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'tip'         => array(
-					'description' => __( 'Additional help text shown to the user about the setting.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'placeholder' => array(
-					'description' => __( 'Placeholder text to be displayed in text inputs.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-				'type'        => array(
-					'description' => __( 'Type of setting.', 'woocommerce' ),
-					'type'        => 'string',
-					'arg_options' => array(
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'context'     => array( 'view', 'edit' ),
-					'enum'        => array( 'text', 'email', 'number', 'color', 'password', 'textarea', 'select', 'multiselect', 'radio', 'image_width', 'checkbox' ),
-					'readonly'    => true,
-				),
-				'options'     => array(
-					'description' => __( 'Array of options (key value pairs) for inputs such as select, multiselect, and radio buttons.', 'woocommerce' ),
-					'type'        => 'object',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-			),
-		);
+		$setting = $this->get_setting( $request['group_id'], $request['id'] );
 
-		return $this->add_additional_fields_schema( $schema );
+		if ( is_wp_error( $setting ) ) {
+			return $setting;
+		}
+
+		$value = $this->atum_settings->sanitize_option( $request['id'], [ $request['id'] => $request['value'] ], $setting );
+
+		if ( is_wp_error( $value ) ) {
+			return $value;
+		}
+
+		// Handle user meta setting.
+		if ( ! empty( $setting['to_user_meta'] ) ) {
+
+			// Save the the user meta options and exclude them from global settings.
+			if ( ! empty( $this->atum_settings->get_user_meta_options() ) ) {
+
+				foreach ( $this->atum_settings->get_user_meta_options() as $user_meta_key => $user_meta_options ) {
+
+					$user_options = Helpers::get_atum_user_meta( $user_meta_key );
+
+					foreach ( $user_meta_options as $user_meta_option ) {
+						if ( $request['id'] === $user_meta_option ) {
+							$user_options[ $user_meta_option ] = $setting['value'] = $value;
+							break;
+						}
+					}
+
+					Helpers::set_atum_user_meta( $user_meta_key, $user_options );
+
+				}
+
+			}
+
+		}
+		// Handle global setting.
+		else {
+
+			$settings = Helpers::get_options();
+
+			if ( isset( $settings[ $request['id'] ] ) && $value !== $settings[ $request['id'] ] ) {
+				$settings[ $request['id'] ] = $setting['value'] = $value;
+				update_option( Settings::OPTION_NAME, $settings );
+			}
+
+		}
+
+		$response = $this->prepare_item_for_response( $setting, $request );
+
+		return rest_ensure_response( $response );
+
 	}
+
 }

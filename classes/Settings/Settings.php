@@ -539,9 +539,9 @@ class Settings {
 				add_settings_field(
 					$field,                                             // ID.
 					$options['name'],                                   // Title.
-					array( $this, 'display_' . $options['type'] ),      // Callback.
-					ATUM_PREFIX . 'setting_' . $options['section'],     // Page.
-					ATUM_PREFIX . 'setting_' . $options['section'],     // Section.
+					array( $this, "display_{$options['type']}" ),      // Callback.
+					ATUM_PREFIX . "setting_{$options['section']}",     // Page.
+					ATUM_PREFIX . "setting_{$options['section']}",     // Section.
 					$options
 				);
 			}
@@ -652,38 +652,83 @@ class Settings {
 	 * @param array  $input
 	 * @param array  $atts
 	 *
-	 * @return mixed
+	 * @return mixed|\WP_Error
 	 */
-	private function sanitize_option( $key, $input, $atts ) {
+	public function sanitize_option( $key, $input, $atts ) {
+
+		// Calling to this method from the ATUM API, needs to return an error instead of setting the default value.
+		$is_api_request = Helpers::is_rest_request();
 
 		switch ( $this->defaults[ $key ]['type'] ) {
 
 			case 'switcher':
-				$sanitized_option = isset( $input[ $key ] ) ? 'yes' : 'no';
+				if ( $is_api_request && ! in_array( $input[ $key ], [ 'yes', 'no' ], TRUE ) ) {
+					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+				}
+
+				$sanitized_option = ( isset( $input[ $key ] ) && 'yes' === $input[ $key ] ) ? 'yes' : 'no';
 				break;
 
 			case 'number':
+				if ( isset( $input[ $key ] ) && ! empty( $atts['options'] ) ) {
+
+					$value = floatval( $input[ $key ] );
+
+					// Check min and max allowed values.
+					if (
+						( isset( $atts['options']['min'] ) && $value < $atts['options']['min'] ) ||
+						( isset( $atts['options']['max'] ) && $value > $atts['options']['max'] )
+					) {
+
+						if ( $is_api_request ) {
+							return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+						}
+						else {
+							return $atts['default'];
+						}
+
+					}
+
+				}
+
 				$sanitized_option = isset( $input[ $key ] ) ? floatval( $input[ $key ] ) : $atts['default'];
 				break;
 
 			case 'select':
+			case 'wc_country':
+				if ( $is_api_request && ! in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) {
+					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+				}
+
 				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
 			case 'button_group':
-				// The button groups could allow multiple values (checkboxes).
-				if ( ! empty( $atts['options']['multiple'] ) && $atts['options']['multiple'] ) {
+				$default_values = array_keys( $atts['options']['values'] );
+
+				// The button groups could allow multiple values (multi-checkboxes).
+				if ( ! empty( $atts['options']['multiple'] ) && TRUE === $atts['options']['multiple'] ) {
 
 					$values = array();
 
-					foreach ( array_keys( $atts['options']['values'] ) as $default_value ) {
+					foreach ( $default_values as $default_value ) {
 
 						// Save always the required value as checked.
 						if ( isset( $atts['options']['required_value'] ) && $atts['options']['required_value'] === $default_value ) {
 							$values[ $default_value ] = 'yes';
 						}
 						else {
-							$values[ $default_value ] = ( isset( $input[ $key ] ) && in_array( $default_value, $input[ $key ] ) ) ? 'yes' : 'no';
+
+							if ( $is_api_request && ! in_array( $default_value, array_keys( $input[ $key ] ) ) ) {
+								return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+							}
+
+							$values[ $default_value ] = (
+								isset( $input[ $key ] ) && is_array( $input[ $key ] ) &&
+								in_array( $default_value, array_keys( $input[ $key ] ) ) &&
+								'yes' === $input[ $key ][ $default_value ]
+							) ? 'yes' : 'no';
+
 						}
 
 					}
@@ -692,17 +737,48 @@ class Settings {
 
 				}
 				else {
-					$sanitized_option = ! empty( $input[ $key ] ) ? esc_attr( $input[ $key ] ) : $atts['default'];
+
+					if ( $is_api_request && ! in_array( $input[ $key ], $default_values ) ) {
+						return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+					}
+
+					$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], $default_values ) ) ? $input[ $key ] : $atts['default'];
+
 				}
 
 				break;
 
 			case 'textarea':
-				$sanitized_option = isset( $input[ $key ] ) ? sanitize_textarea_field( $input[ $key ] ) : $atts['default'];
+				$sanitized_option = isset( $input[ $key ] ) ? wp_kses(
+					trim( stripslashes( $input[ $key ] ) ),
+					array_merge(
+						array(
+							'iframe' => array(
+								'src'   => true,
+								'style' => true,
+								'id'    => true,
+								'class' => true,
+							),
+						),
+						wp_kses_allowed_html( 'post' )
+					)
+				) : $atts['default'];
 				break;
 
 			case 'color':
+				if ( $is_api_request && ! Helpers::validate_color( $input[ $key ] ) ) {
+					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+				}
+
 				$sanitized_option = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
+				break;
+
+			case 'theme_selector':
+				if ( $is_api_request && ! in_array( $input[ $key ], wp_list_pluck( $atts['options']['values'], 'key' ) ) ) {
+					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+				}
+
+				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], wp_list_pluck( $atts['options']['values'], 'key' ) ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
 			case 'text':
@@ -726,7 +802,7 @@ class Settings {
 	public function display_text( $args ) {
 
 		$placeholder = isset( $args['options']['placeholder'] ) ? $args['options']['placeholder'] : '';
-		$default     = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default     = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
 			'<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
@@ -751,7 +827,7 @@ class Settings {
 	 */
 	public function display_textarea( $args ) {
 
-		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
 			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d" cols="%3$d" name="%4$s" %5$s>%6$s</textarea>',
@@ -779,7 +855,7 @@ class Settings {
 		$step    = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
 		$min     = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
 		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
-		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
 			'<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
@@ -806,7 +882,7 @@ class Settings {
 	public function display_wc_country( $args ) {
 	
 		$country_setting = (string) $this->options[ $args['id'] ];
-		$default         = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default         = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 		
 		if ( strstr( $country_setting, ':' ) ) {
 			$country_setting = explode( ':', $country_setting );
@@ -841,7 +917,7 @@ class Settings {
 	 */
 	public function display_switcher( $args ) {
 
-		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
 			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input" style="display: none" %4$s>',
@@ -876,7 +952,7 @@ class Settings {
 		$default = '';
 		if ( isset( $args['default'] ) ) {
 			$default = is_array( $args['default'] ) ? wp_json_encode( $args['default'] ) : $args['default'];
-			$default = ' data-default="' . $default . '"';
+			$default = " data-default='" . $default . "'";
 		}
 
 		ob_start();
@@ -934,7 +1010,7 @@ class Settings {
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
-		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		ob_start();
 		?>
@@ -1006,7 +1082,7 @@ class Settings {
 		
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
-		$default = isset( $args['default'] ) ? ' data-default="' . $args['default'] . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
 		$value   = $this->find_option_value( $args['id'] );
 
@@ -1150,6 +1226,28 @@ class Settings {
 	 */
 	public function get_default_settings() {
 		return $this->defaults;
+	}
+
+	/**
+	 * Getter for the user_meta_options prop
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_user_meta_options() {
+		return $this->user_meta_options;
+	}
+
+	/**
+	 * Setter for the user_meta_options prop
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param array $user_meta_options
+	 */
+	public function set_user_meta_options( $user_meta_options ) {
+		$this->user_meta_options = $user_meta_options;
 	}
 
 	/**

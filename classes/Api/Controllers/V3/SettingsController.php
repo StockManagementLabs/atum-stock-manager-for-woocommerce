@@ -61,7 +61,7 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	/**
 	 * Get the groups schema, conforming to JSON Schema.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
 	 * @return array
 	 */
@@ -102,9 +102,9 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	/**
 	 * Get all settings groups items.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
-	 * @param  \WP_REST_Request $request Request data.
+	 * @param \WP_REST_Request $request Request data.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
@@ -146,7 +146,8 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	/**
 	 * Returns default settings for groups. null means the field is required.
 	 *
-	 * @since  3.0.0
+	 * @since 1.6.2
+	 *
 	 * @return array
 	 */
 	protected function group_defaults() {
@@ -157,14 +158,15 @@ class SettingsController extends \WC_REST_Settings_Controller {
 			'description' => '',
 			'sections'    => array(),
 		);
+
 	}
 
 	/**
 	 * Callback for allowed keys for each group response.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
-	 * @param  string $key Key to check.
+	 * @param string $key Key to check.
 	 *
 	 * @return bool
 	 */

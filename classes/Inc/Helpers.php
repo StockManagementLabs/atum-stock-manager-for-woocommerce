@@ -2403,7 +2403,7 @@ final class Helpers {
 
 		if ( ! $has_cache ) {
 
-			$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+			$atum_user_meta = get_user_meta( $user_id, Globals::ATUM_USER_META_KEY, TRUE );
 
 			if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
 				$atum_user_meta = $atum_user_meta[ $key ];
@@ -2436,7 +2436,7 @@ final class Helpers {
 		}
 
 		$atum_user_meta[ $key ] = $value;
-		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+		update_user_meta( $user_id, Globals::ATUM_USER_META_KEY, $atum_user_meta );
 
 		// Delete any saved user meta after updating its value.
 		$cache_key = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );

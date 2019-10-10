@@ -127,6 +127,11 @@ final class Globals {
 	const IS_INHERITABLE_KEY = '_inheritable';
 
 	/**
+	 * The user meta key used to store settings per user
+	 */
+	const ATUM_USER_META_KEY = ATUM_PREFIX . 'user_meta';
+
+	/**
 	 * Searchable columns and their types
 	 */
 	const SEARCHABLE_COLUMNS = array(
