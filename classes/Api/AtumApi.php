@@ -46,6 +46,7 @@ class AtumApi {
 		'atum-settings'        => __NAMESPACE__ . '\Controllers\V3\SettingsController',
 		'atum-setting-options' => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
 		'atum-locations'       => __NAMESPACE__ . '\Controllers\V3\ProductLocationsController',
+		'atum-inbound-stock'   => __NAMESPACE__ . '\Controllers\V3\InboundStockController',
 	);
 
 	/**

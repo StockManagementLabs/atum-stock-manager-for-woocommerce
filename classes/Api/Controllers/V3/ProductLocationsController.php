@@ -14,10 +14,9 @@
 
 namespace Atum\Api\Controllers\V3;
 
-use Atum\Inc\Globals;
-
-
 defined( 'ABSPATH' ) || exit;
+
+use Atum\Inc\Globals;
 
 
 class ProductLocationsController extends \WC_REST_Product_Categories_Controller {
