@@ -11,6 +11,7 @@ return array(
     'Atum\\Api\\AtumApi' => $baseDir . '/classes/Api/AtumApi.php',
     'Atum\\Api\\Controllers\\V3\\AtumOrdersController' => $baseDir . '/classes/Api/Controllers/V3/AtumOrdersController.php',
     'Atum\\Api\\Controllers\\V3\\InventoryLogsController' => $baseDir . '/classes/Api/Controllers/V3/InventoryLogsController.php',
+    'Atum\\Api\\Controllers\\V3\\ProductLocationsController' => $baseDir . '/classes/Api/Controllers/V3/ProductLocationsController.php',
     'Atum\\Api\\Controllers\\V3\\PurchaseOrdersController' => $baseDir . '/classes/Api/Controllers/V3/PurchaseOrdersController.php',
     'Atum\\Api\\Controllers\\V3\\SettingOptionsController' => $baseDir . '/classes/Api/Controllers/V3/SettingOptionsController.php',
     'Atum\\Api\\Controllers\\V3\\SettingsController' => $baseDir . '/classes/Api/Controllers/V3/SettingsController.php',
