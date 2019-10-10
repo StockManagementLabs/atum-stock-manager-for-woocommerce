@@ -313,6 +313,11 @@ class ListTable extends AtumListTable {
 	protected function column_calc_date_ordered( $item ) {
 
 		$date_ordered = get_post_meta( $item->po_id, '_date_created', TRUE );
+
+		if ( $date_ordered ) {
+			$date_ordered = Helpers::date_format( $date_ordered );
+		}
+		
 		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->product );
 	}
 
@@ -328,6 +333,11 @@ class ListTable extends AtumListTable {
 	protected function column_calc_date_expected( $item ) {
 
 		$date_expected = get_post_meta( $item->po_id, '_expected_at_location_date', TRUE );
+
+		if ( $date_expected ) {
+			$date_expected = Helpers::date_format( $date_expected );
+		}
+
 		return apply_filters( 'atum/inbound_stock_list/column_date_expected', $date_expected, $item, $this->product );
 	}
 
