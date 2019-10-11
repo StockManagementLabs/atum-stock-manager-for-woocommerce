@@ -25,7 +25,7 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class InboundStockController  extends \WC_REST_Products_Controller {
 
 	/**
-	 * Endpoint namespace.
+	 * Endpoint namespace
 	 *
 	 * @var string
 	 */
@@ -39,7 +39,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	protected $rest_base = 'atum/inbound-stock';
 
 	/**
-	 * Hold the inbound stock items here.
+	 * Hold the inbound stock items here
 	 *
 	 * @var array
 	 */
@@ -95,7 +95,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
-	 * Get the Product's schema, conforming to JSON Schema.
+	 * Get the Product's schema, conforming to JSON Schema
 	 *
 	 * @since 1.6.2
 	 *
@@ -178,7 +178,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
-	 * Get a collection of products in Inbound Stock.
+	 * Get a collection of products in Inbound Stock
 	 *
 	 * @since 1.6.2
 	 *
@@ -255,11 +255,39 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
-	 * Get objects.
+	 * Get a single item
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
-	 * @param  array $query_args Query args.
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function get_item( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if ( ! $object || 0 === $object->ID ) {
+			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		$data     = $this->prepare_object_for_response( $object, $request );
+		$response = rest_ensure_response( $data );
+
+		if ( $this->public ) {
+			$response->link_header( 'alternate', $this->get_permalink( $object ), [ 'type' => 'text/html' ] );
+		}
+
+		return $response;
+
+	}
+
+	/**
+	 * Get objects
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param array $query_args Query args.
 	 *
 	 * @return array
 	 */
@@ -359,6 +387,23 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
+	 * Get object.
+	 *
+	 * @param int $id Object ID.
+	 *
+	 * @since  1.6.2
+	 *
+	 * @return \WP_Post
+	 */
+	protected function get_object( $id ) {
+
+		$this->get_objects( [] );
+
+		return wp_list_filter( $this->inbound_stock_items, [ 'ID' => $id ] );
+
+	}
+
+	/**
 	 * Get product data
 	 *
 	 * @since 1.6.2
@@ -392,12 +437,33 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
-	 * Prepare a single product output for response.
+	 * Check if a given request has access to read an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Prepare a single product output for response
+	 *
+	 * @since  1.6.2
 	 *
 	 * @param \WP_Post         $object  Object data.
 	 * @param \WP_REST_Request $request Request object.
-	 *
-	 * @since  1.6.2
 	 *
 	 * @return \WP_REST_Response
 	 */
@@ -425,7 +491,9 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
-	 * Prepare links for the request.
+	 * Prepare links for the request
+	 *
+	 * @since 1.6.2
 	 *
 	 * @param \WP_Post         $object  Object post.
 	 * @param \WP_REST_Request $request Request object.
