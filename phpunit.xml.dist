@@ -29,5 +29,20 @@
 		<testsuite name="atum-stock-manager-inventory">
 			<directory prefix="test-" suffix=".php">./tests/inventory-logs/</directory>
 		</testsuite>
+		<testsuite name="atum-stock-manager-metaboxes">
+			<directory prefix="test-" suffix=".php">./tests/metaboxes/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-models">
+			<directory prefix="test-" suffix=".php">./tests/models/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-modules">
+			<directory prefix="test-" suffix=".php">./tests/modules/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-purchase-orders">
+			<directory prefix="test-" suffix=".php">./tests/purchase-orders/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-purchase-queries">
+			<directory prefix="test-" suffix=".php">./tests/queries/</directory>
+		</testsuite>
 	</testsuites>
 </phpunit>

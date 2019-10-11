@@ -37,7 +37,7 @@ class TestHelpers {
 		return false;
 	}
 
-	public static function create_atum_purchase_order( $product ) {
+	public static function create_atum_purchase_order( $product = null ) {
 		wp_set_current_user( 1 );
 		$pos = new PurchaseOrders();
 		$pos->register_post_type();
@@ -57,8 +57,11 @@ class TestHelpers {
 
 		$product->set_inbound_stock( 25 );
 
-		$order->add_product( $product->get_id() );
 		$order->save();
+
+		$item = $order->add_product( $product->get_id(), 25 );
+		$item->save();
+
 
 		return $order;
 	}
@@ -71,7 +74,7 @@ class TestHelpers {
 				'regular_price' => 10,
 				'price'         => 10,
 				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
+				'manage_stock'  => true,
 				'tax_status'    => 'taxable',
 				'downloadable'  => false,
 				'virtual'       => false,
@@ -80,6 +83,7 @@ class TestHelpers {
 				'inbound_stock' => 16,
 			)
 		);
+		$product->set_manage_stock( TRUE );
 		$product->save();
 		return $product;
 	}
