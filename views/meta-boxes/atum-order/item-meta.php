@@ -26,14 +26,17 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 	'_taxes',
 	'_stock_changed',
 ) );
+
+
+$meta_data = $item->get_formatted_meta_data( '' );
 ?>
 <div class="view">
-	<?php if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : ?>
+	<?php if ( ! empty( $meta_data ) ) : ?>
 
 		<table cellspacing="0" class="display_meta">
 			<?php foreach ( $meta_data as $meta_id => $meta ) :
 
-				if ( in_array( $meta->key, $hidden_item_meta ) ) :
+				if ( in_array( $meta->key, $hidden_item_meta, TRUE ) ) :
 					continue;
 				endif;
 
@@ -55,11 +58,11 @@ $hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 <div class="edit" style="display: none;">
 	<table class="meta" cellspacing="0">
 		<tbody class="meta_items">
-			<?php if ( $meta_data = $item->get_formatted_meta_data( '' ) ) : ?>
+			<?php if ( ! empty( $meta_data ) ) : ?>
 
 				<?php foreach ( $meta_data as $meta_id => $meta ) :
 
-					if ( in_array( $meta->key, $hidden_item_meta ) ) :
+					if ( in_array( $meta->key, $hidden_item_meta, TRUE ) ) :
 						continue;
 					endif;
 					?>

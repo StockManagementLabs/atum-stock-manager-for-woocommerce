@@ -2932,7 +2932,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$class   = array( 'manage-column', "column-$column_key" );
 			$colspan = '';
 
-			if ( in_array( $column_key, $hidden ) && 'cb' === $first_column ) {
+			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
 			}
 

@@ -185,6 +185,31 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.1.1`
+
+*2019-10-11*
+
+**Features**
+
+* Allow searching POs through their creator's name.
+
+**Changes**
+
+* Updated phpcs rules to match with the new WPCS version.
+* Changed ATUM data table counter fields' type.
+* Changed ATUM Locations tree colors.
+
+**Fixes**
+
+* Fixed "has_location" prop not being updated after editing locations.
+* Fixed fee and shipping icons not displaying in ATUM orders.
+* Fixed date formatting in Inbound Stock list.
+* Fixed totals column positioning.
+* Show custom ATUM order item meta just after saving the items.
+* CSS fixes.
+
+---
+
 `1.6.1`
 
 *2019-09-20*
