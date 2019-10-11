@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
+use Atum\PurchaseOrders\Models\POItem;
 
 
 trait AtumOrderItemTrait {
@@ -215,6 +216,77 @@ trait AtumOrderItemTrait {
 	public function get_order() {
 		
 		return Helpers::get_atum_order_model( $this->get_atum_order_id() );
+	}
+
+	/**
+	 * Expands things like term slugs before return
+	 *
+	 * @since 1.6.1.1
+	 *
+	 * @param string $hideprefix  Meta data prefix, (default: _).
+	 * @param bool   $include_all Include all meta data, this stop skip items with values already in the product name.
+	 *
+	 * @return array
+	 */
+	public function get_formatted_meta_data( $hideprefix = '_', $include_all = false ) {
+
+		$formatted_meta    = array();
+		$meta_data         = $this->get_meta_data();
+		$hideprefix_length = ! empty( $hideprefix ) ? strlen( $hideprefix ) : 0;
+		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : false;
+		$order_item_name   = $this->get_name();
+		$po_item           = new POItem( $this );
+		$po_meta           = $po_item->get_all_meta();
+
+		foreach ( $meta_data as $meta ) {
+
+			// After adding meta to any ATUM order item, it was discarding all the custom meta until reloading the page.
+			if ( is_a( $meta, '\WC_Meta_Data' ) ) {
+
+				if ( empty( $meta->id ) ) {
+
+					$found_meta = wp_list_filter( $po_meta, [ 'key' => $meta->key ] );
+
+					if ( ! empty( $found_meta ) ) {
+						$found_meta = current( $found_meta );
+						$meta->id   = $found_meta->id;
+					}
+
+				}
+
+			}
+
+			if ( empty( $meta->id ) || '' === $meta->value || ! is_scalar( $meta->value ) || ( $hideprefix_length && substr( $meta->key, 0, $hideprefix_length ) === $hideprefix ) ) {
+				continue;
+			}
+
+			$meta->key     = rawurldecode( (string) $meta->key );
+			$meta->value   = rawurldecode( (string) $meta->value );
+			$attribute_key = str_replace( 'attribute_', '', $meta->key );
+			$display_key   = wc_attribute_label( $attribute_key, $product );
+			$display_value = wp_kses_post( $meta->value );
+
+			if ( taxonomy_exists( $attribute_key ) ) {
+				$term = get_term_by( 'slug', $meta->value, $attribute_key );
+				if ( ! is_wp_error( $term ) && is_object( $term ) && $term->name ) {
+					$display_value = $term->name;
+				}
+			}
+
+			// Skip items with values already in the product details area of the product name.
+			if ( ! $include_all && $product && $product->is_type( 'variation' ) && wc_is_attribute_in_product_name( $display_value, $order_item_name ) ) {
+				continue;
+			}
+
+			$formatted_meta[ $meta->id ] = (object) array(
+				'key'           => $meta->key,
+				'value'         => $meta->value,
+				'display_key'   => apply_filters( 'woocommerce_order_item_display_meta_key', $display_key, $meta, $this ),
+				'display_value' => wpautop( make_clickable( apply_filters( 'woocommerce_order_item_display_meta_value', $display_value, $meta, $this ) ) ),
+			);
+		}
+
+		return apply_filters( 'woocommerce_order_item_get_formatted_meta_data', $formatted_meta, $this );
 	}
 
 }
