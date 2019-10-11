@@ -207,11 +207,12 @@ class Settings {
 				'atumPrefix'         => ATUM_PREFIX,
 				'branded'            => __( 'Branded', ATUM_TEXT_DOMAIN ),
 				'cancel'             => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'colorSchemeNonce'   => wp_create_nonce( 'atum-color-scheme-nonce' ),
 				'continue'           => __( "I don't want to save, Continue", ATUM_TEXT_DOMAIN ),
 				'dark'               => __( 'Dark', ATUM_TEXT_DOMAIN ),
- 				'done'               => __( 'Done!', ATUM_TEXT_DOMAIN ),
+				'done'               => __( 'Done!', ATUM_TEXT_DOMAIN ),
 				'error'              => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'getSchemeColor'     => 'atum_get_scheme_color',
+				'getColorScheme'     => 'atum_get_color_scheme',
 				'highContrast'       => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
 				'isAnyOostSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
@@ -222,7 +223,6 @@ class Settings {
 				'oostSetClearText'   => __( "We did save all your previous 'Out of stock' values the last time you used this option. Would you like to clear all the saved data and to start fresh? If you've added new products since then, these will just use the global WooCommerce value (if set).", ATUM_TEXT_DOMAIN ),
 				'run'                => __( 'Run', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'        => wp_create_nonce( 'atum-script-runner-nonce' ),
-				'schemeColorNonce'   => wp_create_nonce( 'atum-scheme-color-nonce' ),
 				'selectColor'        => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'startFresh'         => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
@@ -258,14 +258,14 @@ class Settings {
 
 		$this->tabs = array(
 			'general'       => array(
-				'tab_name' => __( 'General', ATUM_TEXT_DOMAIN ),
+				'label'    => __( 'General', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-cog',
 				'sections' => array(
 					'general' => __( 'General Options', ATUM_TEXT_DOMAIN ),
 				),
 			),
 			'store_details' => array(
-				'tab_name' => __( 'Store Details', ATUM_TEXT_DOMAIN ),
+				'label'    => __( 'Store Details', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-store',
 				'sections' => array(
 					'company'  => __( 'Company info', ATUM_TEXT_DOMAIN ),
@@ -276,6 +276,7 @@ class Settings {
 
 		$this->defaults = array(
 			'enable_ajax_filter'        => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Enable Filter Autosearch', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the manual search button disappears. Disable this function if you don't use or find the automatic search feature helpful.", ATUM_TEXT_DOMAIN ),
@@ -283,6 +284,7 @@ class Settings {
 				'default' => 'yes',
 			),
 			'enhanced_suppliers_filter' => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( "Enhanced Suppliers' Filter", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the List Tables Suppliers' filter will be replaced by an advanced search box. Recommended for sites with many suppliers.", ATUM_TEXT_DOMAIN ),
@@ -290,6 +292,7 @@ class Settings {
 				'default' => 'no',
 			),
 			'show_totals'               => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Show Totals Row', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, ATUM will display new row at the bottom of Stock Central. You will be able to preview page column totals of essential stock counters.', ATUM_TEXT_DOMAIN ),
@@ -297,6 +300,7 @@ class Settings {
 				'default' => 'yes',
 			),
 			'enable_admin_bar_menu'     => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Enable Admin Bar Menu', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, the ATUM menu will be accessible through the WP admin bar.', ATUM_TEXT_DOMAIN ),
@@ -304,6 +308,7 @@ class Settings {
 				'default' => 'yes',
 			),
 			'show_variations_stock'     => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( "Override 'Out of stock' Status", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, the variations' stock status will be displayed in WooCommerce products' list for variable products. This overrides the 'Out of stock' status displayed by WooCommerce, when stock is managed at product level for variable products.", ATUM_TEXT_DOMAIN ),
@@ -311,6 +316,7 @@ class Settings {
 				'default' => 'yes',
 			),
 			'out_stock_threshold'       => array(
+				'group'       => 'general',
 				'section'     => 'general',
 				'name'        => __( 'Out of Stock Threshold per product', ATUM_TEXT_DOMAIN ),
 				'desc'        => __( "Activate the switch to disable WooCommerce's global out of stock threshold setting and enable ATUM's out of stock threshold per product. All products will inherit the WooCommerce's global value by default (if set).<br><br>
@@ -321,6 +327,7 @@ class Settings {
 				'confirm_msg' => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),
 			),
 			'unmanaged_counters'        => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Unmanaged Product Counters', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Add 'In Stock', 'Out of Stock' and 'Back Ordered' counters and views for Unmanaged by WooCommerce Products in all ATUM list tables. This option will also add these products to the Dashboard Stock Control Widget. Please note that enabling this option can affect the performance in stores with a large number of products.", ATUM_TEXT_DOMAIN ),
@@ -328,6 +335,7 @@ class Settings {
 				'default' => 'no',
 			),
 			'stock_quantity_decimals'   => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields.  Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
@@ -339,6 +347,7 @@ class Settings {
 				),
 			),
 			'stock_quantity_step'       => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Stock change arrows behaviour', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Tell WooCommerce, how much to increase/decrease the stock value with each arrow click. Example: If set to ‘0.5’; the stock will change from value ‘5’ to value ‘5.5’ when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to ‘4.5’.', ATUM_TEXT_DOMAIN ),
@@ -351,6 +360,7 @@ class Settings {
 				),
 			),
 			'sales_last_ndays'          => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enter the number of days to calculate the number of sales in that period in one Stock Central column.', ATUM_TEXT_DOMAIN ),
@@ -362,6 +372,7 @@ class Settings {
 				),
 			),
 			'delete_data'               => array(
+				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Delete Data When Uninstalling', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
@@ -369,6 +380,7 @@ class Settings {
 				'default' => 'no',
 			),
 			'company_name'              => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Company Name', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Fill your company's name", ATUM_TEXT_DOMAIN ),
@@ -376,6 +388,7 @@ class Settings {
 				'default' => '',
 			),
 			'tax_number'                => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Tax/VAT Number', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Fill your company's Tax/VAT Number", ATUM_TEXT_DOMAIN ),
@@ -383,6 +396,7 @@ class Settings {
 				'default' => '',
 			),
 			'address_1'                 => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The company's street address", ATUM_TEXT_DOMAIN ),
@@ -390,6 +404,7 @@ class Settings {
 				'default' => '',
 			),
 			'address_2'                 => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the Address', ATUM_TEXT_DOMAIN ),
@@ -404,6 +419,7 @@ class Settings {
 				'default' => '',
 			),
 			'country'                   => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The country and state or province if any', ATUM_TEXT_DOMAIN ),
@@ -411,6 +427,7 @@ class Settings {
 				'default' => $default_country,
 			),
 			'zip'                       => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your business', ATUM_TEXT_DOMAIN ),
@@ -418,6 +435,7 @@ class Settings {
 				'default' => '',
 			),
 			'same_ship_address'         => array(
+				'group'      => 'store_details',
 				'section'    => 'company',
 				'name'       => __( 'Use as Shipping Address', ATUM_TEXT_DOMAIN ),
 				'desc'       => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
@@ -429,6 +447,7 @@ class Settings {
 				),
 			),
 			'ship_to'                   => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Ship to Name', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The ship to name that will appear in the Shipping address', ATUM_TEXT_DOMAIN ),
@@ -436,6 +455,7 @@ class Settings {
 				'default' => '',
 			),
 			'ship_address_1'            => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The shipping street address', ATUM_TEXT_DOMAIN ),
@@ -443,6 +463,7 @@ class Settings {
 				'default' => '',
 			),
 			'ship_address_2'            => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Address Line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the Shipping Address', ATUM_TEXT_DOMAIN ),
@@ -450,6 +471,7 @@ class Settings {
 				'default' => '',
 			),
 			'ship_city'                 => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where is your Shipping address', ATUM_TEXT_DOMAIN ),
@@ -457,6 +479,7 @@ class Settings {
 				'default' => '',
 			),
 			'ship_country'              => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The country and state/province (if any)', ATUM_TEXT_DOMAIN ),
@@ -464,6 +487,7 @@ class Settings {
 				'default' => $default_country,
 			),
 			'ship_zip'                  => array(
+				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),

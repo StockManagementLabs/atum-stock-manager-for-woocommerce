@@ -48,7 +48,7 @@ class Tools {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['tools'] = array(
-			'tab_name'  => __( 'Tools', ATUM_TEXT_DOMAIN ),
+			'label'     => __( 'Tools', ATUM_TEXT_DOMAIN ),
 			'icon'      => 'atum-icon atmi-rocket',
 			'sections'  => array(
 				'tools' => __( 'ATUM Tools', ATUM_TEXT_DOMAIN ),
@@ -73,6 +73,7 @@ class Tools {
 		$atum_label = '<br><span class="label label-secondary">ATUM</span>';
 
 		$defaults['update_manage_stock'] = array(
+			'group'   => 'tools',
 			'section' => 'tools',
 			'name'    => __( "Update WC's Manage Stock", ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( "Update the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
@@ -89,6 +90,7 @@ class Tools {
 		);
 
 		$defaults['update_control_stock'] = array(
+			'group'   => 'tools',
 			'section' => 'tools',
 			'name'    => __( "Update ATUM's stock control", ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( "Update the ATUM's stock control option for all the products at once.", ATUM_TEXT_DOMAIN ),
@@ -105,6 +107,7 @@ class Tools {
 		);
 
 		$defaults['clear_out_stock_threshold'] = array(
+			'group'   => 'tools',
 			'section' => 'tools',
 			'name'    => __( 'Clear Out Stock Threshold', ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( 'Clear all previously saved Out of Stock Threshold values.', ATUM_TEXT_DOMAIN ),

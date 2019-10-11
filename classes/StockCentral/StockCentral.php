@@ -209,7 +209,7 @@ class StockCentral extends AtumListPage {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['stock_central'] = array(
-			'tab_name' => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
+			'label'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 			'icon'     => 'atmi-layers',
 			'sections' => array(
 				'stock_central' => __( 'Stock Central Options', ATUM_TEXT_DOMAIN ),
@@ -231,6 +231,7 @@ class StockCentral extends AtumListPage {
 	public function add_settings_defaults( $defaults ) {
 
 		$defaults['posts_per_page'] = array(
+			'group'   => 'stock_central',
 			'section' => 'stock_central',
 			'name'    => __( 'Products per Page', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "Controls the number of products displayed per page within the Stock Central screen. Please note, you can set this value within the 'Screen Options' tab as well. Enter '-1' to remove the pagination and display all available products on one page (not recommended if your store contains a large number of products as it may affect the performance).", ATUM_TEXT_DOMAIN ),
@@ -243,6 +244,7 @@ class StockCentral extends AtumListPage {
 		);
 
 		$defaults['sale_days'] = array(
+			'group'   => 'stock_central',
 			'section' => 'stock_central',
 			'name'    => __( 'Days to Re-Order', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
@@ -255,6 +257,7 @@ class StockCentral extends AtumListPage {
 		);
 
 		$defaults['expandable_rows'] = array(
+			'group'   => 'stock_central',
 			'section' => 'stock_central',
 			'name'    => __( 'Expandable Rows', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Show variable and grouped products expanded (ON) or collapsed (OFF) by default.', ATUM_TEXT_DOMAIN ),
@@ -266,6 +269,7 @@ class StockCentral extends AtumListPage {
 		if ( class_exists( '\WC_Subscriptions' ) ) {
 
 			$defaults['show_subscriptions'] = array(
+				'group'   => 'stock_central',
 				'section' => 'stock_central',
 				'name'    => __( 'Show WC Subscriptions', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, ATUM will show the WC Subscriptions's products in Stock Central.", ATUM_TEXT_DOMAIN ),
@@ -279,6 +283,7 @@ class StockCentral extends AtumListPage {
 		if ( class_exists( '\WC_Bookings' ) ) {
 
 			$defaults['show_bookable_products'] = array(
+				'group'   => 'stock_central',
 				'section' => 'stock_central',
 				'name'    => __( 'Show Bookable Products', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'When enabled, ATUM will show the Bookable products from WC Bookings add-on in Stock Central.', ATUM_TEXT_DOMAIN ),
@@ -292,6 +297,7 @@ class StockCentral extends AtumListPage {
 		if ( class_exists( '\WC_Bundles' ) ) {
 
 			$defaults['show_bundles'] = array(
+				'group'   => 'stock_central',
 				'section' => 'stock_central',
 				'name'    => __( 'Show WC Product Bundles', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabled, ATUM will show the WC Product Bundles' products in Stock Central.", ATUM_TEXT_DOMAIN ),

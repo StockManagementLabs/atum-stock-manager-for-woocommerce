@@ -69,7 +69,7 @@ class ModuleManager {
 	public function add_settings_tab( $tabs ) {
 
 		$tabs['module_manager'] = array(
-			'tab_name' => __( 'Modules', ATUM_TEXT_DOMAIN ),
+			'label'    => __( 'Modules', ATUM_TEXT_DOMAIN ),
 			'icon'     => 'atmi-database',
 			'sections' => array(
 				'module_manager' => __( 'Module Manager', ATUM_TEXT_DOMAIN ),
@@ -91,6 +91,7 @@ class ModuleManager {
 	public function add_settings_defaults( $defaults ) {
 
 		$defaults['dashboard_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Dashboard', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the ATUM Dashboard module.', ATUM_TEXT_DOMAIN ),
@@ -99,6 +100,7 @@ class ModuleManager {
 		);
 
 		$defaults['stock_central_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Stock Central module.', ATUM_TEXT_DOMAIN ),
@@ -107,6 +109,7 @@ class ModuleManager {
 		);
 
 		$defaults['inventory_logs_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Inventory Logs', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Inventory Logs module.', ATUM_TEXT_DOMAIN ),
@@ -115,6 +118,7 @@ class ModuleManager {
 		);
 
 		$defaults['purchase_orders_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "Enables/Disables the Purchase Orders module. It'll disable the dependant modules too (Inbound Stock, Suppliers, Product Locations and Purchase Price).", ATUM_TEXT_DOMAIN ),
@@ -123,6 +127,7 @@ class ModuleManager {
 		);
 
 		$defaults['data_export_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Data Export', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Data Export module.', ATUM_TEXT_DOMAIN ),
@@ -131,6 +136,7 @@ class ModuleManager {
 		);
 
 		$defaults['visual_settings_module'] = array(
+			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Visual Settings module.', ATUM_TEXT_DOMAIN ),

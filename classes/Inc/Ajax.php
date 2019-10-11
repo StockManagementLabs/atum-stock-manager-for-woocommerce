@@ -147,8 +147,8 @@ final class Ajax {
 		// Hide marketing popup.
 		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'marketing_popup_state' ) );
 
-		// Get scheme color.
-		add_action( 'wp_ajax_atum_get_scheme_color', array( $this, 'get_scheme_color' ) );
+		// Get color scheme.
+		add_action( 'wp_ajax_atum_get_color_scheme', array( $this, 'get_color_scheme' ) );
 
 	}
 
@@ -2295,15 +2295,15 @@ final class Ajax {
 	}
 
 	/**
-	 * Settings - Get Scheme Color
+	 * Settings - Get Color Scheme
 	 *
 	 * @package ATUM Settings
 	 *
 	 * @since 1.5.9
 	 */
-	public function get_scheme_color() {
+	public function get_color_scheme() {
 
-		check_ajax_referer( 'atum-scheme-color-nonce', 'token' );
+		check_ajax_referer( 'atum-color-scheme-nonce', 'token' );
 
 		$custom_settings = array();
 		$def_settings    = array(
