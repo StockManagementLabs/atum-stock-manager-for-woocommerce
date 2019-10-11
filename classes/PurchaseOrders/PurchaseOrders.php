@@ -134,7 +134,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add custom search for POs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
-		add_filter( 'atum/' . self:: POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
 
 	}
 
@@ -548,7 +548,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Set the custom fields that are available for searches within the IL's list
+	 * Set the custom fields that are available for searches within the PO's list
 	 *
 	 * @since 1.6.1
 	 *
@@ -595,18 +595,32 @@ class PurchaseOrders extends AtumOrderPostType {
 			", $term, $term, self::POST_TYPE ) );
 
 		}
-		// Strings: search in supplier names.
+		// Strings: search in supplier names or user names.
 		else {
 
-			$ids = $wpdb->get_col( $wpdb->prepare( "
+			$sup_ids = $wpdb->get_col( $wpdb->prepare( "
 				SELECT ID FROM $wpdb->posts p
 				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = %s)
 				WHERE meta_value IN (
 					SELECT ID FROM $wpdb->posts
 					WHERE post_title LIKE %s AND post_type = %s
 				)	
-				AND post_type = %s			
-			", Suppliers::SUPPLIER_META_KEY, '%' . $wpdb->esc_like( $term ) . '%', Suppliers::POST_TYPE, self::POST_TYPE ) );
+				AND post_type = %s",
+				Suppliers::SUPPLIER_META_KEY,
+				'%' . $wpdb->esc_like( $term ) . '%',
+				Suppliers::POST_TYPE,
+				self::POST_TYPE
+			) );
+
+			$usr_ids = $wpdb->get_col( $wpdb->prepare( "
+				SELECT p.ID FROM $wpdb->posts p
+				LEFT JOIN $wpdb->users u ON (p.post_author = u.ID)
+				WHERE user_login LIKE %s AND post_type = %s",
+				'%' . $wpdb->esc_like( $term ) . '%',
+				self::POST_TYPE
+			) );
+
+			$ids = array_merge( $sup_ids, $usr_ids );
 
 		}
 
