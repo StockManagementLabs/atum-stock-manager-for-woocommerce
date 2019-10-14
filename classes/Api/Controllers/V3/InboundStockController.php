@@ -178,6 +178,77 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
+	 * Exclude unneeded params from the collection
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+
+		$allowed_params = array(
+			'page',
+			'per_page',
+			'search',
+			'after',
+			'before',
+			'exclude',
+			'include',
+			'offset',
+			'order',
+			'orderby',
+		);
+
+		$params = parent::get_collection_params();
+
+		foreach ( $params as $param => $data ) {
+
+			if ( ! in_array( $param, $allowed_params, TRUE ) ) {
+				unset( $params[ $param ] );
+			}
+
+		}
+
+		// Add custom params.
+		$params['include_po'] = array(
+			'description'       => __( 'Limit result set to products with specified Purchase Order IDs.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'array',
+			'items'             => array(
+				'type' => 'integer',
+			),
+			'default'           => [],
+			'sanitize_callback' => 'wp_parse_id_list',
+		);
+
+		$params['exclude_po'] = array(
+			'description'       => __( 'Ensure result set excludes specific Purchasr Order IDs.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'array',
+			'items'             => array(
+				'type' => 'integer',
+			),
+			'default'           => array(),
+			'sanitize_callback' => 'wp_parse_id_list',
+		);
+
+		$params['expected_after'] = array(
+			'description'       => __( 'Limit response to purchase orders expected after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
+		$params['expected_before'] = array(
+			'description'       => __( 'Limit response to purchase orders expected before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
+		return $params;
+
+	}
+
+	/**
 	 * Get a collection of products in Inbound Stock
 	 *
 	 * @since 1.6.2
@@ -271,8 +342,26 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
-		$data     = $this->prepare_object_for_response( $object, $request );
-		$response = rest_ensure_response( $data );
+		// It could return multiple products (same product within distinct POs.
+		if ( is_array( $object ) && count( $object ) > 1 ) {
+
+			$objects = array();
+
+			foreach ( $object as $item ) {
+				$data      = $this->prepare_object_for_response( $item, $request );
+				$objects[] = $this->prepare_response_for_collection( $data );
+			}
+
+			$response = rest_ensure_response( $objects );
+
+		}
+		else {
+
+			$object   = ( is_array( $object ) && 1 === count( $object ) ) ? current( $object ) : $object;
+			$data     = $this->prepare_object_for_response( $object, $request );
+			$response = rest_ensure_response( $data );
+
+		}
 
 		if ( $this->public ) {
 			$response->link_header( 'alternate', $this->get_permalink( $object ), [ 'type' => 'text/html' ] );
@@ -327,35 +416,46 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		}
 
-		$order    = ( ! empty( $query_args['order'] ) && in_array( strtoupper( $query_args['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $query_args['order'] ) : 'DESC';
-		$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+		$order           = ( ! empty( $query_args['order'] ) && in_array( strtoupper( $query_args['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $query_args['order'] ) : 'DESC';
+		$statuses        = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+		$post_in         = ! empty( $query_args['post__in'] ) ? 'AND oim.`meta_value` IN (' . implode( ',', $query_args['post__in'] ) . ')' : '';
+		$po_in           = ! empty( $query_args['include_po'] ) ? 'AND p.`ID` IN (' . implode( ',', $query_args['include_po'] ) . ')' : '';
+		$post_not_in     = ! empty( $query_args['post__not_in'] ) ? 'AND oim.`meta_value` NOT IN (' . implode( ',', $query_args['post__not_in'] ) . ')' : '';
+		$po_not_in       = ! empty( $query_args['exclude_po'] ) ? 'AND p.`ID` NOT IN (' . implode( ',', $query_args['exclude_po'] ) . ')' : '';
+		$date_query      = ! empty( $query_args['date_query'] ) ? current( $query_args['date_query'] ) : [];
+		$before          = ! empty( $date_query['before'] ) ? "AND p.post_date < '" . $date_query['before'] . "'" : '';
+		$expected_before = ! empty( $query_args['expected_before'] ) ? "AND de.`meta_value` < '" . $query_args['expected_before'] . "'" : '';
+		$after           = ! empty( $date_query['after'] ) ? "AND p.`post_date` > '" . $date_query['after'] . "'" : '';
+		$expected_after  = ! empty( $query_args['expected_after'] ) ? "AND de.`meta_value` > '" . $query_args['expected_after'] . "'" : '';
+		$expected_join   = $expected_before || $expected_after ? "LEFT JOIN `$wpdb->postmeta` AS de ON (de.`post_id` = p.`ID` AND de.`meta_key` = '_expected_at_location_date')" : '';
 
 		// phpcs:disable
 		$sql = $wpdb->prepare("
-			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
+			SELECT MAX(CAST( oim.`meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
 			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` IN ('" . implode( "','", $statuses ) . "')
-			$search_query
+			LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+			LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
+			$expected_join
+			WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+			AND p.`post_type` = %s AND oim.`meta_value` > 0 AND `post_status` IN ('" . implode( "','", $statuses ) . "')
+			$post_in $po_in $post_not_in $po_not_in $before $expected_before $after $expected_after $search_query
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",
 			PurchaseOrders::POST_TYPE
 		);
 		// phpcs:enable
 
-		$po_products = $wpdb->get_results( $sql );// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$po_products = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$per_page    = intval( isset( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : get_option( 'posts_per_page' ) );
 
 		if ( ! empty( $po_products ) ) {
 
 			$found_posts = count( $po_products );
-			$per_page    = intval( isset( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : get_option( 'posts_per_page' ) );
 
 			// Paginate the results (if needed).
-			if ( -1 !== $this->per_page && $found_posts > $this->per_page ) {
+			if ( -1 !== $per_page && $found_posts > $per_page ) {
 				$page   = isset( $query_args['paged'] ) ? $query_args['paged'] : 0;
-				$offset = ( $page - 1 ) * $per_page;
+				$offset = ! empty( $query_args['offset'] ) ? $query_args['offset'] : ( $page - 1 ) * $per_page;
 
 				$po_products = array_slice( $po_products, $offset, $per_page );
 			}
@@ -381,7 +481,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		return array(
 			'objects' => $this->inbound_stock_items,
 			'total'   => $found_posts,
-			'pages'   => (int) ceil( $found_posts / $per_page ),
+			'pages'   => $found_posts ? (int) ceil( $found_posts / $per_page ) : 0,
 		);
 
 	}
@@ -397,9 +497,16 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 */
 	protected function get_object( $id ) {
 
-		$this->get_objects( [] );
+		if ( empty( $this->inbound_stock_items ) ) {
 
-		return wp_list_filter( $this->inbound_stock_items, [ 'ID' => $id ] );
+			$this->get_objects( array(
+				'post__in'       => [ $id ],
+				'posts_per_page' => - 1,
+			) );
+
+		}
+
+		return $this->inbound_stock_items;
 
 	}
 
@@ -454,6 +561,39 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		}
 
 		return TRUE;
+
+	}
+
+	/**
+	 * Prepare the args for the db query
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Request data.
+	 *
+	 * @return array
+	 */
+	protected function prepare_objects_query( $request ) {
+
+		$args = parent::prepare_objects_query( $request );
+
+		if ( ! empty( $request['include_po'] ) ) {
+			$args['include_po'] = $request['include_po'];
+		}
+
+		if ( ! empty( $request['exclude_po'] ) ) {
+			$args['exclude_po'] = $request['exclude_po'];
+		}
+
+		if ( ! empty( $request['expected_before'] ) ) {
+			$args['expected_before'] = $request['expected_before'];
+		}
+
+		if ( ! empty( $request['expected_after'] ) ) {
+			$args['expected_after'] = $request['expected_after'];
+		}
+
+		return $args;
 
 	}
 
