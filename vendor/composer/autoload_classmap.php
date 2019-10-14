@@ -9,6 +9,7 @@ return array(
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
     'Atum\\Addons\\Updater' => $baseDir . '/classes/Addons/Updater.php',
     'Atum\\Api\\AtumApi' => $baseDir . '/classes/Api/AtumApi.php',
+    'Atum\\Api\\Controllers\\V3\\AddonsController' => $baseDir . '/classes/Api/Controllers/V3/AddonsController.php',
     'Atum\\Api\\Controllers\\V3\\AtumOrdersController' => $baseDir . '/classes/Api/Controllers/V3/AtumOrdersController.php',
     'Atum\\Api\\Controllers\\V3\\InboundStockController' => $baseDir . '/classes/Api/Controllers/V3/InboundStockController.php',
     'Atum\\Api\\Controllers\\V3\\InventoryLogsController' => $baseDir . '/classes/Api/Controllers/V3/InventoryLogsController.php',
