@@ -6,8 +6,7 @@
  * @author      Be Rebel - https://berebel.io
  * @copyright   ©2019 Stock Management Labs™
  *
- * @package     Atum/Api/Legacy
- * @subpackage  V3
+ * @package     Atum\Api
  */
 
 namespace Atum\Api;
@@ -24,15 +23,6 @@ class AtumApi {
 	 * @var AtumApi
 	 */
 	private static $instance;
-
-	/**
-	 * The legacy API endpoints classes
-	 *
-	 * @var array
-	 */
-	private $api_legacy_classes = array(
-		__NAMESPACE__ . '\Legacy\V3\Suppliers',
-	);
 
 	/**
 	 * The ATUM API controllers
@@ -58,34 +48,11 @@ class AtumApi {
 	private function __construct() {
 
 		/**
-		 * Register the API classes (legacy API support: /wc-api/v3)
-		 *
-		 * @deprecated WC 2.6.0
-		 */
-		/*add_filter( 'woocommerce_api_classes', array( $this, 'register_legacy_api_classes' ) );*/
-
-		/**
 		 * Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3)
 		 */
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
 
 		$this->load_extenders();
-
-	}
-
-	/**
-	 * Register the legacy API classes
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param array $api_classes
-	 *
-	 * @return     array
-	 * @deprecated WC 2.6.0
-	 */
-	public function register_legacy_api_classes( $api_classes ) {
-
-		return array_merge( $api_classes, apply_filters( 'atum/legacy_api/registered_classes', $this->api_legacy_classes ) );
 
 	}
 
