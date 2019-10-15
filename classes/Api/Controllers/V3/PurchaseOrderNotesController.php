@@ -15,7 +15,6 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
-use Atum\Components\AtumOrders\AtumComments;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
@@ -52,27 +51,82 @@ class PurchaseOrderNotesController extends AtumOrderNotesController {
 			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid purchase order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
-		$args = array(
-			'post_id' => $order->get_id(),
-			'approve' => 'approve',
-			'type'    => AtumComments::NOTES_KEY,
-		);
+		return $this->get_order_notes( $order, $request );
 
-		// Bypass the AtumComments filter to get rid of ATUM Order notes comments from queries.
-		$atum_comments = AtumComments::get_instance();
+	}
 
-		remove_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes' ) );
-		$notes = get_comments( $args );
-		add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes' ) );
+	/**
+	 * Get a single order note.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function get_item( $request ) {
 
-		$data = array();
-		foreach ( $notes as $note ) {
-			$order_note = $this->prepare_item_for_response( $note, $request );
-			$order_note = $this->prepare_response_for_collection( $order_note );
-			$data[]     = $order_note;
+		$order = new PurchaseOrder( (int) $request['order_id'] );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid purchase order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
-		return rest_ensure_response( $data );
+		return $this->get_order_note( $order, $request );
+
+	}
+
+	/**
+	 * Create a single purchase order note
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function create_item( $request ) {
+
+		if ( ! empty( $request['id'] ) ) {
+			/* translators: %s: post type */
+			return new \WP_Error( "atum_rest_{$this->post_type}_exists", sprintf( __( 'Cannot create existing %s.', ATUM_TEXT_DOMAIN ), $this->post_type ), [ 'status' => 400 ] );
+		}
+
+		$order = new PurchaseOrder( (int) $request['order_id'] );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid purchase order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		return $this->create_order_note( $order, $request );
+
+	}
+
+	/**
+	 * Delete a single purchase order note
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function delete_item( $request ) {
+
+		$force = isset( $request['force'] ) ? (bool) $request['force'] : false;
+
+		// We don't support trashing for this type, error out.
+		if ( ! $force ) {
+			return new \WP_Error( 'atum_rest_trash_not_supported', __( 'Webhooks do not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
+		}
+
+		$order = new PurchaseOrder( (int) $request['order_id'] );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid purchase order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		return $this->delete_order_note( $order, $request );
 
 	}
 
