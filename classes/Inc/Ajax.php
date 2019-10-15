@@ -1247,7 +1247,7 @@ final class Ajax {
 		$note_id = absint( $_POST['note_id'] );
 
 		if ( $note_id ) {
-			wp_delete_comment( $note_id );
+			wc_delete_order_note( $note_id );
 		}
 
 		wp_die();
