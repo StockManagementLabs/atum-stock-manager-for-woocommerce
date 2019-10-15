@@ -15,6 +15,7 @@ namespace Atum\Settings;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
@@ -96,10 +97,15 @@ class Settings {
 	private function __construct() {
 
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 
-		// Add the module menu.
-		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
+		if ( AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
+
+			// Add the module menu.
+			add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
+
+		}
 
 	}
 
@@ -502,7 +508,7 @@ class Settings {
 		// Add the tabs (groups).
 		$this->tabs = (array) apply_filters( 'atum/settings/tabs', $this->tabs );
 
-		if ( ! Helpers::is_rest_request() ) {
+		if ( ! Helpers::is_rest_request() && AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 
 			foreach ( $this->tabs as $tab => $tab_data ) {
 
@@ -535,7 +541,7 @@ class Settings {
 
 			$options['id'] = $field;
 
-			if ( ! Helpers::is_rest_request() ) {
+			if ( ! Helpers::is_rest_request() && AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 				add_settings_field(
 					$field,                                             // ID.
 					$options['name'],                                   // Title.
