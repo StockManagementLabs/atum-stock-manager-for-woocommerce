@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
+use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
@@ -1421,19 +1422,28 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $note Note to add.
+	 * @param string $note           Note to add.
+	 * @param bool   $added_by_user  Optional. Whether the note was added manually by the user.
 	 *
 	 * @return int   Comment ID
 	 */
-	public function add_note( $note ) {
+	public function add_note( $note, $added_by_user = FALSE ) {
 
-		if ( ! $this->id || ! is_user_logged_in() || ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) {
+		if ( ! $this->id || ( is_user_logged_in() && ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) ) {
 			return 0;
 		}
 
-		$user                 = get_user_by( 'id', get_current_user_id() );
-		$comment_author       = $user->display_name;
-		$comment_author_email = $user->user_email;
+		if ( is_user_logged_in() && current_user_can( 'edit_shop_order', $this->get_id() ) && $added_by_user ) {
+			$user                 = get_user_by( 'id', get_current_user_id() );
+			$comment_author       = $user->display_name;
+			$comment_author_email = $user->user_email;
+		}
+		else {
+			$comment_author        = 'ATUM';
+			$comment_author_email  = ATUM_SHORT_NAME . '@';
+			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com'; // WPCS: input var ok.
+			$comment_author_email  = sanitize_email( $comment_author_email );
+		}
 
 		$commentdata = apply_filters( 'atum/orders/note_data', array(
 			'comment_post_ID'      => $this->id,
@@ -1442,7 +1452,7 @@ abstract class AtumOrderModel {
 			'comment_author_url'   => '',
 			'comment_content'      => $note,
 			'comment_agent'        => 'ATUM',
-			'comment_type'         => 'atum_order_note',
+			'comment_type'         => AtumComments::NOTES_KEY,
 			'comment_parent'       => 0,
 			'comment_approved'     => 1,
 		), $this->id );
