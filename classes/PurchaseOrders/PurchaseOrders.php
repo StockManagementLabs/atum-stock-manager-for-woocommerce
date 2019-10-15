@@ -70,6 +70,8 @@ class PurchaseOrders extends AtumOrderPostType {
 		'delete_post'        => 'delete_purchase_order',
 		'edit_posts'         => 'edit_purchase_orders',
 		'edit_others_posts'  => 'edit_others_purchase_orders',
+		'read_private_posts' => 'read_private_purchase_orders',
+		'publish_posts'      => 'publish_purchase_orders',
 		'create_posts'       => 'create_purchase_orders',
 		'delete_posts'       => 'delete_purchase_orders',
 		'delete_other_posts' => 'delete_other_purchase_orders',

@@ -61,6 +61,8 @@ class InventoryLogs extends AtumOrderPostType {
 		'delete_post'        => 'delete_inventory_log',
 		'edit_posts'         => 'edit_inventory_logs',
 		'edit_others_posts'  => 'edit_others_inventory_logs',
+		'read_private_posts' => 'read_private_inventory_logs',
+		'publish_posts'      => 'publish_inventory_logs',
 		'create_posts'       => 'create_inventory_logs',
 		'delete_posts'       => 'delete_inventory_logs',
 		'delete_other_posts' => 'delete_other_inventory_logs',

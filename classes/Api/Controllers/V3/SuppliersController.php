@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\Suppliers\Suppliers;
 
@@ -441,6 +442,126 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	}
 
 	/**
+	 * Check if a given request has access to read items
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'read_private_suppliers' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to create an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function create_item_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'publish_suppliers' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_create', __( 'Sorry, you are not allowed to create resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to read an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if ( $object && 0 !== $object->ID && ! AtumCapabilities::current_user_can( 'read_supplier', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to update an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function update_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if ( $object && 0 !== $object->ID && ! AtumCapabilities::current_user_can( 'edit_supplier', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to delete an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function delete_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if ( $object && 0 !== $object->ID && ! AtumCapabilities::current_user_can( 'delete_supplier', $object->ID ) ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access batch create, update and delete items
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function batch_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'edit_others_suppliers' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_batch', __( 'Sorry, you are not allowed to batch manipulate this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
 	 * Get a collection of supplier posts.
 	 *
 	 * @since 1.6.2
@@ -553,7 +674,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		$posts = array();
 		foreach ( $query_result as $post ) {
 
-			if ( ! wc_rest_check_post_permissions( $this->post_type, 'read', $post->ID ) ) {
+			if ( ! AtumCapabilities::current_user_can( 'read_supplier', $post->ID ) ) {
 				continue;
 			}
 
@@ -623,72 +744,6 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	 */
 	protected function get_object( $id ) {
 		return get_post( $id );
-	}
-
-	/**
-	 * Check if a given request has access to read an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|boolean
-	 */
-	public function get_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Check if a given request has access to update an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|boolean
-	 */
-	public function update_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'edit', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Check if a given request has access to delete an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return bool|\WP_Error
-	 */
-	public function delete_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		// TODO: CHECK OUR OWN SUPPLIER PERMISSIONS.
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
 	}
 
 	/**
@@ -1192,7 +1247,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		 */
 		$supports_trash = apply_filters( "atum/api/rest_{$this->post_type}_object_trashable", $supports_trash, $object );
 
-		if ( ! wc_rest_check_post_permissions( $this->post_type, 'delete', $object->ID ) ) {
+		if ( ! AtumCapabilities::current_user_can( 'delete_supplier', $object->ID ) ) {
 			return new \WP_Error( "atum_rest_user_cannot_delete_{$this->post_type}", __( 'Sorry, you are not allowed to delete Suppliers.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 

@@ -16,6 +16,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Inc\Helpers;
@@ -249,6 +250,51 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	}
 
 	/**
+	 * Check if a given request has access to read items
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_items_permissions_check( $request ) {
+
+		if ( ! wc_rest_check_post_permissions( $this->post_type, 'read' ) || ! AtumCapabilities::current_user_can( 'read_inbound_stock' ) ) {
+			return new \WP_Error( 'woocommerce_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to read an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+
+		if (
+			$object && 0 !== $object->ID && (
+				! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ||
+				! AtumCapabilities::current_user_can( 'read_inbound_stock', $object->ID )
+			)
+		) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
 	 * Get a collection of products in Inbound Stock
 	 *
 	 * @since 1.6.2
@@ -264,12 +310,17 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		$objects = array();
 		foreach ( $query_results['objects'] as $object ) {
-			if ( ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
+
+			if (
+				! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ||
+				! AtumCapabilities::current_user_can( 'read_inbound_stock', $object->ID )
+			) {
 				continue;
 			}
 
 			$data      = $this->prepare_object_for_response( $object, $request );
 			$objects[] = $this->prepare_response_for_collection( $data );
+
 		}
 
 		$page      = (int) $query_args['paged'];
@@ -540,27 +591,6 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		);
 
 		return $data;
-
-	}
-
-	/**
-	 * Check if a given request has access to read an item
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|bool
-	 */
-	public function get_item_permissions_check( $request ) {
-
-		$object = $this->get_object( (int) $request['id'] );
-
-		if ( $object && 0 !== $object->ID && ! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ) {
-			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
 
 	}
 

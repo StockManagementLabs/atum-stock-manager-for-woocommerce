@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Settings\Settings;
 
 class SettingsController extends \WC_REST_Settings_Controller {
@@ -39,24 +40,6 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	 * @var Settings
 	 */
 	protected $atum_settings;
-
-	/**
-	 * Update a setting
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Request data.
-	 *
-	 * @return \WP_Error|\WP_REST_Response
-	 */
-	public function update_item( $request ) {
-
-		$options_controller = new SettingOptionsController();
-		$response           = $options_controller->update_item( $request );
-
-		return $response;
-
-	}
 
 	/**
 	 * Get the groups schema, conforming to JSON Schema.
@@ -100,6 +83,44 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	}
 
 	/**
+	 * Makes sure the current user has access to READ the settings APIs
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function get_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Makes sure the current user has access to WRITE the settings APIs
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function update_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you cannot edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
 	 * Get all settings groups items.
 	 *
 	 * @since 1.6.2
@@ -138,6 +159,24 @@ class SettingsController extends \WC_REST_Settings_Controller {
 		}
 
 		$response = rest_ensure_response( $filtered_groups );
+
+		return $response;
+
+	}
+
+	/**
+	 * Update a setting
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Request data.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function update_item( $request ) {
+
+		$options_controller = new SettingOptionsController();
+		$response           = $options_controller->update_item( $request );
 
 		return $response;
 

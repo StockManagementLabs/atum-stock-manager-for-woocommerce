@@ -14,12 +14,15 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
+use Atum\PurchaseOrders\PurchaseOrders;
+
 
 abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
@@ -90,6 +93,114 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		);
 
 		return $params;
+
+	}
+
+	/**
+	 * Check if a given request has access to read items
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_items_permissions_check( $request ) {
+
+		$cap = PurchaseOrders::POST_TYPE === $this->post_type ? 'read_private_purchase_orders' : 'read_private_inventory_logs';
+
+		if ( ! AtumCapabilities::current_user_can( $cap ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to read an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+		$cap    = PurchaseOrders::POST_TYPE === $this->post_type ? 'read_purchase_order' : 'read_inventory_log';
+
+		if ( $object && 0 !== $object->get_id() && ! AtumCapabilities::current_user_can( $cap, $object->get_id() ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to update an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function update_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+		$cap    = PurchaseOrders::POST_TYPE === $this->post_type ? 'edit_purchase_order' : 'edit_inventory_log';
+
+		if ( $object && 0 !== $object->get_id() && ! AtumCapabilities::current_user_can( $cap, $object->get_id() ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to delete an item
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function delete_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+		$cap    = PurchaseOrders::POST_TYPE === $this->post_type ? 'delete_purchase_order' : 'delete_inventory_log';
+
+		if ( $object && 0 !== $object->get_id() && ! AtumCapabilities::current_user_can( $cap, $object->get_id() ) ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access batch create, update and delete items
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function batch_items_permissions_check( $request ) {
+
+		$cap = PurchaseOrders::POST_TYPE === $this->post_type ? 'edit_others_purchase_orders' : 'edit_others_inventory_logs';
+
+		if ( ! AtumCapabilities::current_user_can( $cap ) ) {
+			return new \WP_Error( 'atum_rest_cannot_batch', __( 'Sorry, you are not allowed to batch manipulate this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
 
 	}
 

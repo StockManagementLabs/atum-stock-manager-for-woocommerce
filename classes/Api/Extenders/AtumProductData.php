@@ -15,7 +15,10 @@ namespace Atum\Api\Extenders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
+use Atum\Modules\ModuleManager;
+
 
 class AtumProductData {
 
@@ -66,7 +69,54 @@ class AtumProductData {
 	 */
 	private function __construct() {
 
-		// Register the ATUM Product data custom fields to the WC API.
+		/**
+		 * Pre-filter the data props according to the enabled modules and current user's capabilities.
+		 */
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			unset(
+				$this->product_fields['purchase_price'],
+				$this->product_fields['supplier_id'],
+				$this->product_fields['supplier_sku'],
+				$this->product_fields['inbound_stock'],
+				$this->product_fields['has_location']
+			);
+		}
+		elseif ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
+			unset( $this->product_fields['purchase_price'] );
+		}
+		elseif ( ! AtumCapabilities::current_user_can( 'read_inbound_stock' ) ) {
+			unset( $this->product_fields['inbound_stock'] );
+		}
+		elseif ( ! AtumCapabilities::current_user_can( 'read_private_suppliers' ) ) {
+			unset( $this->product_fields['supplier_id'], $this->product_fields['supplier_sku'] );
+		}
+		elseif ( ! AtumCapabilities::current_user_can( 'manage_location_terms' ) ) {
+			unset( $this->product_fields['has_location'] );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'inventory_logs' ) ) {
+			unset(
+				$this->product_fields['reserved_stock'],
+				$this->product_fields['customer_returns'],
+				$this->product_fields['warehouse_damage'],
+				$this->product_fields['lost_in_post'],
+				$this->product_fields['other_logs']
+			);
+		}
+
+		if ( ! defined( 'ATUM_LEVELS_VERSION' ) ) {
+			unset(
+				$this->product_fields['bom_sellable'],
+				$this->product_fields['minimum_threshold'],
+				$this->product_fields['available_to_purchase'],
+				$this->product_fields['selling_priority'],
+				$this->product_fields['calculated_stock']
+			);
+		}
+
+		/**
+		 * Register the ATUM Product data custom fields to the WC API.
+		 */
 		add_action( 'rest_api_init', array( $this, 'register_product_fields' ), 0 );
 
 	}
@@ -303,6 +353,14 @@ class AtumProductData {
 	 */
 	public static function update_product_field_value( $field_value, $response, $field_name ) {
 
+		if (
+			( 'purchase_price' === $field_name && ! AtumCapabilities::current_user_can( 'edit_purchase_price' ) ) ||
+			( 'out_stock_threshold' === $field_name && ! AtumCapabilities::current_user_can( 'edit_out_stock_threshold' ) )
+		) {
+			/* translators: the field name */
+			throw new \WC_REST_Exception( 'atum_rest_invalid_product', sprintf( __( 'You are not allowed to edit the %s field.', ATUM_TEXT_DOMAIN ), $field_name ), 400 );
+		}
+
 		$product_id = NULL;
 
 		if ( is_a( $response, '\WC_Product' ) ) {
@@ -316,7 +374,7 @@ class AtumProductData {
 
 		if ( ! is_a( $product, '\WC_Product' ) ) {
 			/* translators: the product ID */
-			throw new \WC_REST_Exception( 'woocommerce_rest_invalid_product', sprintf( __( 'Invalid product with ID #%s.', ATUM_TEXT_DOMAIN ), $product_id ), 400 );
+			throw new \WC_REST_Exception( 'atum_rest_invalid_product', sprintf( __( 'Invalid product with ID #%s.', ATUM_TEXT_DOMAIN ), $product_id ), 400 );
 		}
 
 		$setter = "set_$field_name";

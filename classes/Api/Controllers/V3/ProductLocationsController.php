@@ -16,6 +16,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 
 
@@ -77,6 +78,50 @@ class ProductLocationsController extends \WC_REST_Product_Categories_Controller 
 		}
 
 		return $this->add_additional_fields_schema( $schema );
+
+	}
+
+	/**
+	 * Check permissions
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 * @param string           $context Request context.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	protected function check_permissions( $request, $context = 'read' ) {
+
+		// Get taxonomy.
+		$taxonomy = $this->get_taxonomy( $request );
+		if ( ! $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
+			return new \WP_Error( 'atum_rest_taxonomy_invalid', __( 'Taxonomy does not exist.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		$contexts = array(
+			'read'   => 'manage_location_terms',
+			'create' => 'edit_location_terms',
+			'edit'   => 'edit_location_terms',
+			'delete' => 'delete_location_terms',
+			'batch'  => 'edit_location_terms',
+		);
+
+		// Check permissions for a single term.
+		$id = absint( $request['id'] );
+		if ( $id ) {
+
+			$term = get_term( $id, $taxonomy );
+
+			if ( is_wp_error( $term ) || ! $term || $term->taxonomy !== $taxonomy ) {
+				return new \WP_Error( 'atum_rest_term_invalid', __( 'Resource does not exist.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+			}
+
+			return AtumCapabilities::current_user_can( $contexts[ $context ], $term->term_id );
+
+		}
+
+		return AtumCapabilities::current_user_can( $contexts[ $context ] );
 
 	}
 

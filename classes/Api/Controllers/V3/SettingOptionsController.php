@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
 
@@ -158,6 +159,44 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		);
 
 		return $this->add_additional_fields_schema( $schema );
+
+	}
+
+	/**
+	 * Makes sure the current user has access to READ the settings APIs
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return \WP_Error|boolean
+	 */
+	public function get_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Makes sure the current user has access to WRITE the settings APIs
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function update_items_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you cannot edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
 
 	}
 

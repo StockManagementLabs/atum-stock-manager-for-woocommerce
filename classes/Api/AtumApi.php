@@ -14,6 +14,8 @@ namespace Atum\Api;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Api\Extenders\AtumProductData;
+use Atum\Modules\ModuleManager;
+
 
 class AtumApi {
 
@@ -47,9 +49,21 @@ class AtumApi {
 	 */
 	private function __construct() {
 
-		/**
-		 * Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3)
-		 */
+		// Pre-filter the available endpoints according to currently-enabled modules.
+		if ( ! ModuleManager::is_module_active( 'inventory_logs' ) ) {
+			unset( $this->api_controllers['atum-inventory-logs'] );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			unset(
+				$this->api_controllers['atum-purchase-orders'],
+				$this->api_controllers['atum-suppliers'],
+				$this->api_controllers['atum-locations'],
+				$this->api_controllers['atum-inbound-stock']
+			);
+		}
+
+		// Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3).
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
 
 		$this->load_extenders();
@@ -83,6 +97,9 @@ class AtumApi {
 	public function load_extenders() {
 
 		AtumProductData::get_instance();
+
+		// Allow ATUM plugins to load their extenders.
+		do_action( 'atum/api/load_extenders' );
 
 	}
 
