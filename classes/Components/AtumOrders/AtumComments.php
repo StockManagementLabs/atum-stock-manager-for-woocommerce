@@ -112,7 +112,7 @@ class AtumComments {
 				// phpcs:disable
 				$count = $wpdb->get_results( "
 					SELECT comment_approved, COUNT(*) AS num_comments
-					FROM {$wpdb->comments}
+					FROM $wpdb->comments
 					WHERE comment_type NOT IN ('order_note', 'webhook_delivery', 'log_note', '" . self::NOTES_KEY . "')
 					GROUP BY comment_approved
 				", ARRAY_A );
