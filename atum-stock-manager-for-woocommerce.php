@@ -15,7 +15,7 @@
  * Author URI:           https://www.stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
  * Requires at least:    4.4
- * Tested up to:         5.2.3
+ * Tested up to:         5.2.4
  * Requires PHP:         5.6
  * WC requires at least: 2.7.0
  * WC tested up to:      3.7.1
