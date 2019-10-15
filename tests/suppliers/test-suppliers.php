@@ -264,8 +264,6 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertIsArray( $data );
 		$this->assertEquals( 'edit.php?post_type=' . Suppliers::POST_TYPE, $data[0]['slug'] );
 		$this->assertEquals( Suppliers::MENU_ORDER, $data[0]['menu_order'] );
-
-		print_r( TestHelpers::count_public_methods($obj) );
 	}
 
 	public function DISABLEDtest_get_product_id_by_supplier_sku() {
