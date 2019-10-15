@@ -1171,7 +1171,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Add a note to an ATUM Order
+	 * Add a custom note to an ATUM Order
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1194,7 +1194,8 @@ final class Ajax {
 
 			if ( ! is_wp_error( $atum_order ) ) {
 
-				$comment_id = $atum_order->add_note( $note );
+				$comment_id   = $atum_order->add_note( $note, TRUE );
+				$note_comment = get_comment( $comment_id );
 
 				?>
 				<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
@@ -1203,7 +1204,19 @@ final class Ajax {
 					</div>
 
 					<p class="meta">
-						<a href="#" class="delete_note"><?php esc_attr_e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
+
+						<abbr class="exact-date" title="<?php echo esc_attr( $note_comment->comment_date ) ?>">
+							<?php
+							/* translators: first one is the date added and second is the time */
+							printf( esc_html__( '%1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note_comment->comment_date ) ) ), esc_html( date_i18n( wc_time_format(), strtotime( $note_comment->comment_date ) ) ) );
+							?>
+						</abbr>
+
+						<?php
+						/* translators: the note author */
+						printf( ' ' . esc_html__( 'by %s', ATUM_TEXT_DOMAIN ), esc_html( $note_comment->comment_author ) ); ?>
+
+						<a href="#" class="delete_note"><?php esc_html_e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
 					</p>
 				</li>
 				<?php
