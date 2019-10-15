@@ -34,8 +34,14 @@ class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_pre_init() {
-		//It updates private attributes that can not be tested
-		$this->markTestSkipped();
+		$main = Main::get_instance();
+
+		try {
+			$main->pre_init();
+			$this->assertTrue( true );
+		} catch( Exception $e ) {
+			$this->expectExceptionMessage( $e->getMessage() );
+		}
 	}
 
 	public function test_init() {

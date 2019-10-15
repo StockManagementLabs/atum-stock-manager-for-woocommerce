@@ -20,6 +20,19 @@ use WC_Product_Attribute;
 
 class TestHelpers {
 
+	public static function count_public_methods( $object ) {
+		if( !is_object( $object ) )
+			return false;
+
+		$result = [];
+
+		foreach( $object as $att => $value ) {
+			$result['methods'][] = $att;
+			$result['num'] ++ ;
+		}
+		return $result;
+	}
+
 	public static function has_action( $tag, $function ) {
 		global $wp_filter;
 
@@ -66,8 +79,8 @@ class TestHelpers {
 		return $order;
 	}
 
-	public static function create_atum_product() {
-		$product = new AtumProductSimple( self::create_product() );
+	public static function create_atum_product( $product = false ) {
+		$product = new AtumProductSimple( ( false === $product ) ? self::create_product() : $product );
 		$product->set_props(
 			array(
 				'name'          => 'Dummy Product',

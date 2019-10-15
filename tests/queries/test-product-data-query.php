@@ -25,6 +25,13 @@ class ProductDataQueryTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCas
 		$this->assertArrayHasKey( 'where', $data );
 	}
 
-	//public function test_get_sql_for_clause() {}
+	public function test_get_sql_for_clause() {
+		$obj = new ProductDataQuery();
+		$query = $obj->get_sql();
+		$data = $obj->get_sql_for_clause( $query, [] );
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'join', $data );
+		$this->assertArrayHasKey( 'where', $data );
+	}
 
 }

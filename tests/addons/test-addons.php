@@ -55,11 +55,6 @@ class AddonsTest extends WP_UnitTestCase {
 	public function test_load_addons_page() {
 		$instance = Addons::get_instance();
 
-		$this->assertFalse( wp_script_is( 'sweetalert2', 'registered' ) );
-		$this->assertFalse( wp_script_is( 'atum-addons', 'registered' ) );
-		$this->assertFalse( wp_style_is( 'sweetalert2', 'registered' ) );
-		$this->assertFalse( wp_style_is( 'atum-addons', 'registered' ) );
-
 		ob_start();
 		$instance->load_addons_page();
 		$response = ob_get_clean();

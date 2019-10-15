@@ -6,7 +6,6 @@
  */
 
 use TestHelpers\TestHelpers;
-use WC_Product_Booking;
 use Atum\Models\Products\AtumProductBooking;
 use Atum\Models\Products\AtumProductBundle;
 use Atum\Models\Products\AtumProductDownload;

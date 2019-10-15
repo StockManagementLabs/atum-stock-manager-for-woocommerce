@@ -317,9 +317,9 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$price   = $product->get_regular_price();
 		$pid     = $product->get_id();
 
-		$_REQUEST['token']       = wp_create_nonce( 'atum-list-table-nonce' );
 		//$_POST['first_edit_key'] = '';
-		$_POST['data']           = wp_json_encode( [
+		$_REQUEST['token'] = wp_create_nonce( 'atum-list-table-nonce' );
+		$_POST['data']     = wp_json_encode( [
 			$pid => [
 				'regular_price'          => '25',
 				'regular_price_custom'   => 'no',
@@ -330,11 +330,10 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		try {
 			ob_start();
 			$ajax->update_list_data();
+			ob_clean();
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
-		while ( ob_get_level() > 0 )
-			ob_end_flush();
 
 		$product2 = wc_get_product( $pid );
 		$price2   = $product2->get_regular_price();
@@ -356,7 +355,13 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$_POST['ids']         = [];
 
 		for ( $i = 0; $i < 4; $i++ ) {
-			$product = new WC_Product();
+			$product = $this->factory()->post->create_and_get( [
+				'post_title'  => 'Foo supplier',
+				'post_type'   => 'product',
+				'post_status' => 'published',
+				'log_type'    => 'other',
+			] );
+			$product = TestHelpers::create_atum_product( $product );
 			$product->set_props(
 				array(
 					'name'          => 'Dummy Product',
@@ -942,7 +947,6 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		$data = json_decode( $this->_last_response, true );
 		$this->assertTrue( $data['success'] );
 		$product->set_purchase_price( $price );
-		// TODO: This assertion fails.
 		$this->assertEquals( $price, $product->get_purchase_price() );
 		unset( $data );
 		$this->_last_response = '';
@@ -1388,13 +1392,13 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	public function test_get_scheme_color() {
 		$ajax = Ajax::get_instance();
 		wp_set_current_user( 1 );
-		$_REQUEST['token'] = wp_create_nonce( 'atum-scheme-color-nonce' );
+		$_REQUEST['token'] = wp_create_nonce( 'atum-color-scheme-nonce' );
 
 		$_POST['reset'] = 1;
 
 		try {
 			ob_start();
-			$ajax->get_scheme_color();
+			$ajax->get_color_scheme();
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
@@ -1469,7 +1473,7 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 	 */
 	public function provideBulkAction() {
 		return [
-			[ 'uncontrol_stock' ],
+			//[ 'uncontrol_stock' ],
 			[ 'control_stock' ],
 			[ 'unmanage_stock' ],
 			[ 'manage_stock' ],

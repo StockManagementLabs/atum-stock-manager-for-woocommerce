@@ -281,14 +281,20 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	/* TODO: No guarda?
 	public function test_update_product_data() {
-		$product = TestHelpers::create_atum_product();
-		$product->set_manage_stock( true );
-		$product->set_stock_status( 'instock' );
+		$product = $this->factory()->post->create_and_get( [
+			'post_title'  => 'Foo supplier',
+			'post_type'   => 'product',
+			'post_status' => 'published',
+			'log_type'    => 'other',
+		] );
+		$product = TestHelpers::create_atum_product( $product );
+
 		$product_data = array(
 			'stock'         => 100,
 			'regular_price' => 25,
 			'sale_price'    => 19.99,
 		);
+
 		Helpers::update_product_data( $product->get_id(), $product_data );
 		$this->assertEquals( 100, $product->get_stock_quantity() );
 		$this->assertEquals( 25, $product->get_regular_price() );

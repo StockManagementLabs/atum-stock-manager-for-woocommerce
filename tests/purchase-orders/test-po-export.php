@@ -17,8 +17,8 @@ class POExportTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	private $po;
 
 	public function setUp() {
-		$this->po = TestHelpers::create_atum_purchase_order();
 		parent::setUp();
+		$this->po = TestHelpers::create_atum_purchase_order();
 	}
 
 	public function test_instance() {

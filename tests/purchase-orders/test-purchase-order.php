@@ -19,11 +19,11 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	private $po;
 
 	public function setUp() {
+		parent::setUp();
+
 		$this->product = TestHelpers::create_atum_product();
 		$this->order = TestHelpers::create_atum_purchase_order( $this->product );
 		$this->po = new PurchaseOrder( $this->order->get_id() );
-
-		parent::setUp();
 	}
 
 	public function test_instance() {

@@ -130,6 +130,8 @@ class LogTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function setUp() {
+		parent::setUp();
+
 		wp_set_current_user( 1 );
 		global $post;
 		$post = $this->factory()->post->create_and_get( [
@@ -154,7 +156,5 @@ class LogTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		];
 		foreach( $metas as $k => $m )
 			add_post_meta( $post->ID, $k, $m );
-
-		parent::setUp();
 	}
 }

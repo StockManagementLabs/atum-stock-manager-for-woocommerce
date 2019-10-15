@@ -8,6 +8,9 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
+		<testsuite name="atum-stock-manager-settings">
+			<directory prefix="test-" suffix=".php">./tests/settings/</directory>
+		</testsuite>
 		<testsuite name="atum-stock-manager-addons">
 			<directory prefix="test-" suffix=".php">./tests/addons/</directory>
 		</testsuite>
@@ -43,6 +46,12 @@
 		</testsuite>
 		<testsuite name="atum-stock-manager-purchase-queries">
 			<directory prefix="test-" suffix=".php">./tests/queries/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-stock-central">
+			<directory prefix="test-" suffix=".php">./tests/stock-central/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-suppliers">
+			<directory prefix="test-" suffix=".php">./tests/suppliers/</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
