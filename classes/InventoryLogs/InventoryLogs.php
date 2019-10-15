@@ -120,7 +120,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Add custom search for ILs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'il_search' ), 10, 3 );
-		add_filter( 'atum/' . self:: POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
 		
 	}
 
