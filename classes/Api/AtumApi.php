@@ -32,14 +32,16 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_controllers = array(
-		'atum-suppliers'       => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
-		'atum-purchase-orders' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
-		'atum-inventory-logs'  => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
-		'atum-settings'        => __NAMESPACE__ . '\Controllers\V3\SettingsController',
-		'atum-setting-options' => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
-		'atum-locations'       => __NAMESPACE__ . '\Controllers\V3\ProductLocationsController',
-		'atum-inbound-stock'   => __NAMESPACE__ . '\Controllers\V3\InboundStockController',
-		'atum-addons'          => __NAMESPACE__ . '\Controllers\V3\AddonsController',
+		'atum-suppliers'            => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
+		'atum-purchase-orders'      => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
+		'atum-purchase-order-notes' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrderNotesController',
+		'atum-inventory-logs'       => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
+		'atum-inventory-log-notes'  => __NAMESPACE__ . '\Controllers\V3\InventoryLogNotesController',
+		'atum-settings'             => __NAMESPACE__ . '\Controllers\V3\SettingsController',
+		'atum-setting-options'      => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
+		'atum-locations'            => __NAMESPACE__ . '\Controllers\V3\ProductLocationsController',
+		'atum-inbound-stock'        => __NAMESPACE__ . '\Controllers\V3\InboundStockController',
+		'atum-addons'               => __NAMESPACE__ . '\Controllers\V3\AddonsController',
 	);
 
 	/**
