@@ -142,8 +142,9 @@ class AtumProductData {
 				$args['update_callback'] = array( $this, 'update_product_field_value' );
 			}
 
-			// Add the field to the product endpoint.
+			// Add the field to the product and product_variations endpoints.
 			register_rest_field( 'product', $field_name, $args );
+			register_rest_field( 'product_variation', $field_name, $args );
 
 		}
 
