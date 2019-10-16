@@ -12,6 +12,7 @@
 
 namespace Atum\Api\Controllers\V3;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 
@@ -26,6 +27,13 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 	 * @var string
 	 */
 	protected $namespace = 'wc/v3';
+
+	/**
+	 * The current order object
+	 *
+	 * @var AtumOrderModel
+	 */
+	protected $order = NULL;
 
 	/**
 	 * Get the Purchase Order Notes schema, conforming to JSON Schema
@@ -70,57 +78,108 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 	}
 
 	/**
-	 * Prepare a single order note output for response
+	 * Check whether a given request has permission to read ATUM order notes
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param \WP_Comment      $note    Order note object.
-	 * @param \WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request $request Full details about the request.
 	 *
-	 * @return \WP_REST_Response $response Response data.
+	 * @return \WP_Error|bool
 	 */
-	public function prepare_item_for_response( $note, $request ) {
+	public function get_items_permissions_check( $request ) {
 
-		$data = array(
-			'id'               => (int) $note->comment_ID,
-			'author'           => $note->comment_author,
-			'date_created'     => wc_rest_prepare_date_response( $note->comment_date ),
-			'date_created_gmt' => wc_rest_prepare_date_response( $note->comment_date_gmt ),
-			'note'             => $note->comment_content,
-			'added_by_user'    => 'ATUM' !== $note->comment_author,
-		);
+		if ( ! AtumCapabilities::current_user_can( 'read_order_notes' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
 
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-		$data    = $this->add_additional_fields_to_object( $data, $request );
-		$data    = $this->filter_response_by_context( $data, $context );
-
-		// Wrap the data in a response object.
-		$response = rest_ensure_response( $data );
-
-		$response->add_links( $this->prepare_links( $note ) );
-
-		/**
-		 * Filter ATUM order note object returned from the REST API
-		 *
-		 * @param \WP_REST_Response $response The response object.
-		 * @param \WP_Comment       $note     Order note object used to create response.
-		 * @param \WP_REST_Request  $request  Request object.
-		 */
-		return apply_filters( 'atum/api/rest_prepare_atum_order_note', $response, $note, $request );
+		return TRUE;
 
 	}
 
 	/**
-	 * Get order notes from an ATUM Order
+	 * Check if a given request has access create ATUM order notes
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param AtumOrderModel   $order
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function create_item_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_create', __( 'Sorry, you are not allowed to create resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check if a given request has access to read an ATUM order note
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		$order = $this->get_atum_order( $request );
+
+		if ( $order && ! AtumCapabilities::current_user_can( 'read_order_notes' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+	}
+
+	/**
+	 * Check if a given request has access delete an ATUM order note.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function delete_item_permissions_check( $request ) {
+
+		$order = $this->get_atum_order( $request );
+
+		if ( $order && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $order->get_id() ) ) {
+			return new WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+	}
+
+	/**
+	 * Get the current ATUM order object
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return AtumOrderModel
+	 */
+	abstract protected function get_atum_order( $request );
+
+	/**
+	 * Get order notes from an ATUM order
+	 *
+	 * @since 1.6.2
+	 *
 	 * @param \WP_REST_Request $request Request data.
 	 *
-	 * @return \WP_REST_Response
+	 * @return array|\WP_Error
 	 */
-	protected function get_order_notes( $order, $request ) {
+	public function get_items( $request ) {
+
+		$order = $this->get_atum_order( $request );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
 
 		$args = array(
 			'post_id' => $order->get_id(),
@@ -161,16 +220,21 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 	}
 
 	/**
-	 * Get a single ATUM order note.
+	 * Get a single order note.
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param AtumOrderModel   $order   The ATUM Order where the order resides.
 	 * @param \WP_REST_Request $request Full details about the request.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
-	public function get_order_note( $order, $request ) {
+	public function get_item( $request ) {
+
+		$order = $this->get_atum_order( $request );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
 
 		$id   = (int) $request['id'];
 		$note = get_comment( $id );
@@ -191,12 +255,22 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param AtumOrderModel   $order   The ATUM order where the notes will be saved.
 	 * @param \WP_REST_Request $request Full details about the request.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
-	public function create_order_note( $order, $request ) {
+	public function create_item( $request ) {
+
+		if ( ! empty( $request['id'] ) ) {
+			/* translators: %s: post type */
+			return new \WP_Error( "atum_rest_{$this->post_type}_exists", sprintf( __( 'Cannot create existing %s.', ATUM_TEXT_DOMAIN ), $this->post_type ), [ 'status' => 400 ] );
+		}
+
+		$order = $this->get_atum_order( $request );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
 
 		// Create the note.
 		$note_id = $order->add_note( $request['note'], $request['added_by_user'] );
@@ -229,16 +303,28 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 	}
 
 	/**
-	 * Delete a single order note
+	 * Delete a single ATUM order note
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param AtumOrderModel   $order   The ATUM Order where the comment to be deleted resides.
 	 * @param \WP_REST_Request $request Full details about the request.
 	 *
 	 * @return \WP_REST_Response|\WP_Error
 	 */
-	public function delete_order_note( $order, $request ) {
+	public function delete_item( $request ) {
+
+		$force = isset( $request['force'] ) ? (bool) $request['force'] : false;
+
+		// We don't support trashing for this type, error out.
+		if ( ! $force ) {
+			return new \WP_Error( 'atum_rest_trash_not_supported', __( 'Webhooks do not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
+		}
+
+		$order = $this->get_atum_order( $request );
+
+		if ( ! $order || $this->post_type !== $order->get_type() ) {
+			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
 
 		$id   = (int) $request['id'];
 		$note = get_comment( $id );
@@ -266,6 +352,47 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 		do_action( 'atum/api/rest_delete_order_note', $note, $response, $request );
 
 		return $response;
+
+	}
+
+	/**
+	 * Prepare a single order note output for response
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_Comment      $note    Order note object.
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response $response Response data.
+	 */
+	public function prepare_item_for_response( $note, $request ) {
+
+		$data = array(
+			'id'               => (int) $note->comment_ID,
+			'author'           => $note->comment_author,
+			'date_created'     => wc_rest_prepare_date_response( $note->comment_date ),
+			'date_created_gmt' => wc_rest_prepare_date_response( $note->comment_date_gmt ),
+			'note'             => $note->comment_content,
+			'added_by_user'    => 'ATUM' !== $note->comment_author,
+		);
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$data    = $this->filter_response_by_context( $data, $context );
+
+		// Wrap the data in a response object.
+		$response = rest_ensure_response( $data );
+
+		$response->add_links( $this->prepare_links( $note ) );
+
+		/**
+		 * Filter ATUM order note object returned from the REST API
+		 *
+		 * @param \WP_REST_Response $response The response object.
+		 * @param \WP_Comment       $note     Order note object used to create response.
+		 * @param \WP_REST_Request  $request  Request object.
+		 */
+		return apply_filters( 'atum/api/rest_prepare_atum_order_note', $response, $note, $request );
 
 	}
 
