@@ -396,4 +396,30 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 	}
 
+	/**
+	 * Prepare links for the request
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_Comment $note Delivery order_note object.
+	 *
+	 * @return array Links for the given order note.
+	 */
+	protected function prepare_links( $note ) {
+
+		$order_id = (int) $note->comment_post_ID;
+		$base     = str_replace( '(?P<order_id>[\d]+)', $order_id, $this->rest_base );
+		$links    = array(
+			'self'       => array(
+				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $base, $note->comment_ID ) ),
+			),
+			'collection' => array(
+				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $base ) ),
+			),
+		);
+
+		return $links;
+
+	}
+
 }

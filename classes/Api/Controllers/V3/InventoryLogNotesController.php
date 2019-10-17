@@ -50,5 +50,26 @@ class InventoryLogNotesController extends AtumOrderNotesController {
 		return $this->order;
 
 	}
+
+	/**
+	 * Prepare links for the request
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_Comment $note Delivery order_note object.
+	 *
+	 * @return array Links for the given order note.
+	 */
+	protected function prepare_links( $note ) {
+
+		$order_id    = (int) $note->comment_post_ID;
+		$links       = parent::prepare_links( $note );
+		$links['up'] = array(
+			'href' => rest_url( sprintf( '/%s/atum/inventory-logs/%d', $this->namespace, $order_id ) ),
+		);
+
+		return $links;
+
+	}
 	
 }

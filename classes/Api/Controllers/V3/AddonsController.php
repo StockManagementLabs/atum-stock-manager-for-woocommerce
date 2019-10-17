@@ -66,7 +66,7 @@ class AddonsController extends \WC_REST_Controller {
 
 		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'addons',
+			'title'      => 'atum-addons',
 			'type'       => 'object',
 			'properties' => array(
 				'name'   => array(
@@ -126,7 +126,7 @@ class AddonsController extends \WC_REST_Controller {
 		$formatted_addons  = [];
 
 		if ( $name && ! empty( $registered_addons ) ) {
-			return array_merge( [ 'name' => $request['name'] ], $registered_addons );
+			return rest_ensure_response( array_merge( [ 'name' => $request['name'] ], $registered_addons ) );
 		}
 
 		foreach ( $registered_addons as $name => $addon ) {

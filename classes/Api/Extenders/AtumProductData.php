@@ -239,7 +239,7 @@ class AtumProductData {
 			),
 			'reserved_stock'        => array(
 				'required'    => FALSE,
-				'description' => __( 'Stock reserved by Inventory Logs.', ATUM_TEXT_DOMAIN ),
+				'description' => __( "Stock set as 'reserved_stock' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
 			'customer_returns'      => array(
