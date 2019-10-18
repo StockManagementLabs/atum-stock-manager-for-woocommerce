@@ -747,7 +747,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	}
 
 	/**
-	 * Prepare a single product for create or update.
+	 * Prepare a single supplier for create or update.
 	 *
 	 * @since 1.6.2
 	 *
@@ -896,11 +896,11 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		}
 
 		/**
-		 * Filters a post before it is inserted via the REST API.
+		 * Filters a supplier before it is inserted via the REST API.
 		 *
 		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @param \stdClass        $prepared_post An object representing a single post prepared for inserting or updating the database.
+		 * @param \stdClass        $prepared_post An object representing a single supplier prepared for inserting or updating the database.
 		 * @param \WP_REST_Request $request       Request object.
 		 */
 		return apply_filters( "atum/api/rest_pre_insert_{$this->post_type}", $prepared_post, $request );
@@ -1082,7 +1082,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	public function create_item( $request ) {
 
 		if ( ! empty( $request['id'] ) ) {
-			return new \WP_Error( 'atum_rest_post_exists', __( 'Cannot create existing supplier.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+			return new \WP_Error( 'atum_rest_supplier_exists', __( 'Cannot create existing supplier.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 		}
 
 		$prepared_post = $this->prepare_item_for_database( $request );
