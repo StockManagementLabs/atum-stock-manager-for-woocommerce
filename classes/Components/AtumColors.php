@@ -609,7 +609,7 @@ class AtumColors {
 				'section'      => 'color_mode',
 				'name'         => __( 'Theme settings', ATUM_TEXT_DOMAIN ),
 				'desc'         => '',
-				'default'      => '',
+				'default'      => 'branded_mode',
 				'type'         => 'theme_selector',
 				'options'      => array(
 					'values' => array(
@@ -978,7 +978,7 @@ class AtumColors {
 	public static function get_user_theme( $user_id = 0 ) {
 
 		$visual_settings = Helpers::get_atum_user_meta( self::VISUAL_SETTINGS_USER_META, $user_id );
-		$theme           = isset( $visual_settings['theme'] ) ? $visual_settings['theme'] : 'branded_mode';
+		$theme           = ! empty( $visual_settings['theme'] ) ? $visual_settings['theme'] : 'branded_mode';
 
 		return $theme;
 
