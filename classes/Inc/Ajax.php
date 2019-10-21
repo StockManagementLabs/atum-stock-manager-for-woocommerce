@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Dashboard\Dashboard;
@@ -2305,63 +2306,11 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-color-scheme-nonce', 'token' );
 
-		$custom_settings = array();
-		$def_settings    = array(
-			'dm_primary_color'         => '#A8F1FF',
-			'dm_primary_color_light'   => '#DBF9FF',
-			'dm_primary_color_dark'    => '#00B8DB',
-			'dm_secondary_color'       => '#FFDF89',
-			'dm_secondary_color_light' => '#FFDF89',
-			'dm_secondary_color_dark'  => '#EFAF00',
-			'dm_tertiary_color'        => '#BAEF8D',
-			'dm_tertiary_color_light'  => '#69C61D',
-			'dm_text_color'            => '#FFFFFF',
-			'dm_text_color_2'          => '#31324A',
-			'dm_text_color_expanded'   => '#27283B',
-			'dm_border_color'          => '#FFFFFF',
-			'dm_bg_1_color'            => '#31324A',
-			'dm_bg_2_color'            => '#3B3D5A',
-			'dm_danger_color'          => '#FFAEAE',
-			'dm_title_color'           => '#FFFFFF',
-
-			'hc_primary_color'         => '#016B7F',
-			'hc_primary_color_light'   => '#F5FDFF',
-			'hc_primary_color_dark'    => '#E6FBFF',
-			'hc_secondary_color'       => '#016B7F',
-			'hc_secondary_color_light' => '#F5FDFF',
-			'hc_secondary_color_dark'  => '#E6FBFF',
-			'hc_tertiary_color'        => '#016B7F',
-			'hc_tertiary_color_light'  => '#F5FDFF',
-			'hc_text_color'            => '#016B7F',
-			'hc_text_color_2'          => '#27283B',
-			'hc_text_color_expanded'   => '#FFFFFF',
-			'hc_border_color'          => '#ADB5BD',
-			'hc_bg_1_color'            => '#FFFFFF',
-			'hc_bg_2_color'            => '#FFFFFF',
-			'hc_danger_color'          => '#FF4848',
-			'hc_title_color'           => '#27283B',
-
-			'bm_primary_color'         => '#00B8DB',
-			'bm_primary_color_light'   => '#F5FDFF',
-			'bm_primary_color_dark'    => '#DBF9FF',
-			'bm_secondary_color'       => '#EFAF00',
-			'bm_secondary_color_light' => '#FFF4D6',
-			'bm_secondary_color_dark'  => '#FFEDBC',
-			'bm_tertiary_color'        => '#69C61D',
-			'bm_tertiary_color_light'  => '#69C61D',
-			'bm_text_color'            => '#6C757D',
-			'bm_text_color_2'          => '#ADB5BD',
-			'bm_text_color_expanded'   => '#FFFFFF',
-			'bm_border_color'          => '#E9ECEF',
-			'bm_bg_1_color'            => '#FFFFFF',
-			'bm_bg_2_color'            => '#F8F9FA',
-			'bm_danger_color'          => '#FF4848',
-			'bm_title_color'           => '#27283B',
-		);
+		$custom_settings = $settings = [];
 
 		if ( 0 === absint( $_POST['reset'] ) ) {
 
-			foreach ( $def_settings as $dset => $dval ) {
+			foreach ( AtumColors::DEFAULT_COLOR_SCHEMES as $dset => $dval ) {
 				$val = Helpers::get_color_value( $dset );
 
 				if ( $val && $val !== $dval ) {
@@ -2372,13 +2321,13 @@ final class Ajax {
 
 			if ( count( $custom_settings ) > 0 ) {
 				foreach ( $custom_settings as $cset => $cval ) {
-					$def_settings[ $cset ] = $cval;
+					$settings[ $cset ] = $cval;
 				}
 			}
 
 		}
 
-		wp_send_json_success( $def_settings );
+		wp_send_json_success( $settings );
 
 	}
 
