@@ -566,24 +566,6 @@ class Settings {
 		
 		$this->options = Helpers::get_options();
 
-		// Save the the user meta options and exclude them from global settings.
-		if ( ! empty( $this->user_meta_options ) ) {
-
-			foreach ( $this->user_meta_options as $user_meta_key => $user_meta_options ) {
-
-				$user_options = array();
-
-				foreach ( $user_meta_options as $user_meta_option ) {
-					$user_options[ $user_meta_option ] = $this->sanitize_option( $user_meta_option, $input, $this->defaults[ $user_meta_option ] );
-					unset( $this->options[ $user_meta_option ] ); // Don't save the user meta on global options.
-				}
-
-				Helpers::set_atum_user_meta( $user_meta_key, $user_options );
-
-			}
-
-		}
-
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
 
@@ -605,6 +587,20 @@ class Settings {
 		}
 
 		if ( isset( $input['settings_section'] ) ) {
+
+			// Save the the user meta options and exclude them from global settings.
+			if ( ! empty( $this->user_meta_options[ $input['settings_section'] ] ) ) {
+
+				$user_meta_options = $this->user_meta_options[ $input['settings_section'] ];
+				$user_options      = array();
+
+				foreach ( $user_meta_options as $user_meta_option ) {
+					$user_options[ $user_meta_option ] = $this->sanitize_option( $user_meta_option, $input, $this->defaults[ $user_meta_option ] );
+					unset( $this->options[ $user_meta_option ] ); // Don't save the user meta on global options.
+				}
+
+				Helpers::set_atum_user_meta( $input['settings_section'], $user_options );
+			}
 			
 			// Only accept settings defined.
 			foreach ( $this->defaults as $key => $atts ) {
