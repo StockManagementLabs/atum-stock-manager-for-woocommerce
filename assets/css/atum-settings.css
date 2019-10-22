@@ -4563,8 +4563,34 @@ body .select2-container--default.select2-container--open .select2-dropdown {
           transform: none;
 }
 
+.atum-settings-wrapper #atum-settings .wp-picker-container {
+  position: relative;
+}
+
 .atum-settings-wrapper #atum-settings .wp-picker-container .wp-color-picker {
   max-width: 85px;
+}
+
+.atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-input-wrap > label {
+  position: absolute;
+  left: 24px;
+}
+
+.atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-input-wrap input[type=text] {
+  background-color: transparent;
+  height: 25px;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.17px;
+  font-family: inherit;
+}
+
+.atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-input-wrap input[type=text], .atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-input-wrap input[type=text]:hover, .atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-input-wrap input[type=text]:focus {
+  border: none;
+}
+
+.atum-settings-wrapper #atum-settings .wp-picker-container.wp-picker-active .wp-color-result-text {
+  display: none;
 }
 
 @media all and (max-width: 768px) {
