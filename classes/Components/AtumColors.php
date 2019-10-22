@@ -14,6 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 
@@ -56,6 +57,64 @@ class AtumColors {
 		'blue_light' => '#DBF9FF',
 		'green'      => '#69C61D',
 		'orange'     => '#EFAF00',
+	);
+
+	/**
+	 * The default color schemes values for ATUM
+	 *
+	 * @since 1.6.2
+	 */
+	const DEFAULT_COLOR_SCHEMES = array(
+		'dm_primary_color'         => '#A8F1FF',
+		'dm_primary_color_light'   => '#DBF9FF',
+		'dm_primary_color_dark'    => '#00B8DB',
+		'dm_secondary_color'       => '#FFDF89',
+		'dm_secondary_color_light' => '#FFDF89',
+		'dm_secondary_color_dark'  => '#EFAF00',
+		'dm_tertiary_color'        => '#BAEF8D',
+		'dm_tertiary_color_light'  => '#69C61D',
+		'dm_text_color'            => '#FFFFFF',
+		'dm_text_color_2'          => '#31324A',
+		'dm_text_color_expanded'   => '#27283B',
+		'dm_border_color'          => '#FFFFFF',
+		'dm_bg_1_color'            => '#31324A',
+		'dm_bg_2_color'            => '#3B3D5A',
+		'dm_danger_color'          => '#FFAEAE',
+		'dm_title_color'           => '#FFFFFF',
+
+		'hc_primary_color'         => '#016B7F',
+		'hc_primary_color_light'   => '#F5FDFF',
+		'hc_primary_color_dark'    => '#E6FBFF',
+		'hc_secondary_color'       => '#016B7F',
+		'hc_secondary_color_light' => '#F5FDFF',
+		'hc_secondary_color_dark'  => '#E6FBFF',
+		'hc_tertiary_color'        => '#016B7F',
+		'hc_tertiary_color_light'  => '#F5FDFF',
+		'hc_text_color'            => '#016B7F',
+		'hc_text_color_2'          => '#27283B',
+		'hc_text_color_expanded'   => '#FFFFFF',
+		'hc_border_color'          => '#ADB5BD',
+		'hc_bg_1_color'            => '#FFFFFF',
+		'hc_bg_2_color'            => '#FFFFFF',
+		'hc_danger_color'          => '#FF4848',
+		'hc_title_color'           => '#27283B',
+
+		'bm_primary_color'         => '#00B8DB',
+		'bm_primary_color_light'   => '#F5FDFF',
+		'bm_primary_color_dark'    => '#DBF9FF',
+		'bm_secondary_color'       => '#EFAF00',
+		'bm_secondary_color_light' => '#FFF4D6',
+		'bm_secondary_color_dark'  => '#FFEDBC',
+		'bm_tertiary_color'        => '#69C61D',
+		'bm_tertiary_color_light'  => '#69C61D',
+		'bm_text_color'            => '#6C757D',
+		'bm_text_color_2'          => '#ADB5BD',
+		'bm_text_color_expanded'   => '#FFFFFF',
+		'bm_border_color'          => '#E9ECEF',
+		'bm_bg_1_color'            => '#FFFFFF',
+		'bm_bg_2_color'            => '#F8F9FA',
+		'bm_danger_color'          => '#FF4848',
+		'bm_title_color'           => '#27283B',
 	);
 
 	/**
@@ -583,7 +642,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#00B8DB',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_primary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color'         => array(
@@ -593,7 +652,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
-				'default'      => '#016B7F',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['hc_primary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color'         => array(
@@ -603,7 +662,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#A8F1FF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_primary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color'       => array(
@@ -613,7 +672,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#EFAF00',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_secondary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color'       => array(
@@ -623,7 +682,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFDF89',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_secondary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_tertiary_color'        => array(
@@ -633,7 +692,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#69C61D',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_tertiary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_tertiary_color'        => array(
@@ -643,7 +702,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#BAEF8D',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_tertiary_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_tertiary_color_light'  => array(
@@ -653,7 +712,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons outside of ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#69C61D',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_tertiary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_danger_color'          => array(
@@ -663,7 +722,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#FF4848',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_danger_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_danger_color'          => array(
@@ -673,7 +732,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFAEAE',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_danger_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_title_color'           => array(
@@ -683,7 +742,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#27283B',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_title_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_title_color'           => array(
@@ -693,7 +752,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_title_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color'            => array(
@@ -703,7 +762,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#6C757D',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_text_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color'            => array(
@@ -713,7 +772,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_text_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color_2'          => array(
@@ -723,7 +782,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#ADB5BD',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_text_color_2'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color_2'          => array(
@@ -733,7 +792,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#31324A',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_text_color_2'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_text_color_expanded'   => array(
@@ -743,7 +802,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_text_color_expanded'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_text_color_expanded'   => array(
@@ -753,7 +812,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_text_color_expanded'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_border_color'          => array(
@@ -763,7 +822,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#E9ECEF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_border_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_border_color'          => array(
@@ -773,7 +832,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_border_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_bg_1_color'            => array(
@@ -783,7 +842,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for background color in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#FFFFFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_bg_1_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_bg_2_color'            => array(
@@ -793,7 +852,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the background color of striped rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#F8F9FA',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_bg_2_color'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_primary_color_light'   => array(
@@ -803,7 +862,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#F5FDFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_primary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color_light'   => array(
@@ -813,7 +872,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
-				'default'      => '#F5FDFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['hc_primary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color_light'   => array(
@@ -823,7 +882,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#DBF9FF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_primary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_primary_color_dark'    => array(
@@ -833,7 +892,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#DBF9FF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_primary_color_dark'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'hc_primary_color_dark'    => array(
@@ -843,7 +902,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
-				'default'      => '#E6FBFF',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['hc_primary_color_dark'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_primary_color_dark'    => array(
@@ -853,7 +912,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#00B8DB',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_primary_color_dark'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color_light' => array(
@@ -863,7 +922,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#FFF4D6',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_secondary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color_light' => array(
@@ -873,7 +932,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#FFDF89',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_secondary_color_light'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'bm_secondary_color_dark'  => array(
@@ -883,7 +942,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
-				'default'      => '#FFEDBC',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['bm_secondary_color_dark'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 			'dm_secondary_color_dark'  => array(
@@ -893,7 +952,7 @@ class AtumColors {
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
-				'default'      => '#EFAF00',
+				'default'      => self::DEFAULT_COLOR_SCHEMES['dm_secondary_color_dark'],
 				'to_user_meta' => self::VISUAL_SETTINGS_USER_META,
 			),
 		);
