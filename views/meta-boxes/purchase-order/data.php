@@ -73,7 +73,7 @@ $po_status = $atum_order->get_status();
 
 				<p class="form-field expected-at-location-date">
 					<label for="reservation_date"><?php esc_html_e( 'Expected at location date', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php $expected_at_location_date = $atum_order->get_expected_at_location_date() ?>
+					<?php $expected_at_location_date = $atum_order->get_date_expected() ?>
 					<input type="text" class="date-picker" name="expected_at_location_date" id="expected_at_location_date" maxlength="10" value="<?php echo esc_attr( $expected_at_location_date ? date_i18n( 'Y-m-d', strtotime( $expected_at_location_date ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" autocomplete="off">@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="expected_at_location_date_hour" id="expected_at_location_date_hour" min="0" max="23" step="1" value="<?php echo esc_attr( $expected_at_location_date ? date_i18n( 'H', strtotime( $expected_at_location_date ) ) : '' ) ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})">:
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="expected_at_location_date_minute" id="expected_at_location_date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( $expected_at_location_date ? date_i18n( 'i', strtotime( $expected_at_location_date ) ) : '' ) ?>" pattern="[0-5]{1}[0-9]{1}">

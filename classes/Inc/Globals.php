@@ -127,6 +127,11 @@ final class Globals {
 	const IS_INHERITABLE_KEY = '_inheritable';
 
 	/**
+	 * The user meta key used to store settings per user
+	 */
+	const ATUM_USER_META_KEY = ATUM_PREFIX . 'user_meta';
+
+	/**
 	 * Searchable columns and their types
 	 */
 	const SEARCHABLE_COLUMNS = array(
@@ -445,15 +450,18 @@ final class Globals {
 	 *
 	 * @param string $type
 	 *
-	 * @return int
+	 * @return int|array
 	 */
-	public static function get_order_type_table_id( $type = '' ) {
+	public static function get_order_type_table_id( $type = 'shop_order' ) {
+
+		if ( $type && isset( self::$order_type_tables_id[ $type ] ) ) {
+			return self::$order_type_tables_id[ $type ];
+		}
 		
-		$type = ( $type && isset( self::$order_type_tables_id[ $type ] ) ) ? $type : 'shop_order';
-		
-		return self::$order_type_tables_id[ $type ];
+		return self::$order_type_tables_id;
 		
 	}
+
 
 	/**
 	 * Get the JS localization vars for the DateTimePicker

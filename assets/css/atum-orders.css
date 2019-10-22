@@ -4022,6 +4022,14 @@ ul.atum_order_notes li .note_content p {
   word-wrap: break-word;
 }
 
+ul.atum_order_notes li.system-note .note_content {
+  background-color: #d7cad2;
+}
+
+ul.atum_order_notes li.system-note .note_content:after {
+  border-color: #d7cad2 transparent;
+}
+
 ul.atum_order_notes li p.meta {
   padding: 10px;
   color: #999;
@@ -4034,7 +4042,7 @@ ul.atum_order_notes li p.meta .exact-date {
 }
 
 ul.atum_order_notes li a.delete_note {
-  color: #FF4848;
+  color: #A00;
 }
 
 ul.atum_order_notes li .note_content::after {
