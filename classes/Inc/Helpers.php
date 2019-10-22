@@ -762,10 +762,10 @@ final class Helpers {
 	 *
 	 * @since   0.0.2
 	 *
-	 * @param string  $name    The option key to retrieve.
-	 * @param mixed   $default Optional. The default value returned if the option was not found.
-	 * @param bool    $echo    Optional. If the option has to be returned or printed.
-	 * @param bool    $force   Optional. Whether to get the option from db instead of using the cached value.
+	 * @param string $name    The option key to retrieve.
+	 * @param mixed  $default Optional. The default value returned if the option was not found.
+	 * @param bool   $echo    Optional. If the option has to be returned or printed.
+	 * @param bool   $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
@@ -1571,13 +1571,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $atum_order_id
+	 * @param int    $atum_order_id
+	 * @param string $post_type
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model( $atum_order_id ) {
+	public static function get_atum_order_model( $atum_order_id, $post_type = '' ) {
 
-		$post_type = get_post_type( $atum_order_id );
+		if ( ! $post_type ) {
+			$post_type = get_post_type( $atum_order_id );
+		}
 
 		switch ( $post_type ) {
 			case InventoryLogs::POST_TYPE:
@@ -1812,7 +1815,7 @@ final class Helpers {
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
-					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // WPCS: prefix ok.
+					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 					
 					break;
 				
@@ -2400,7 +2403,7 @@ final class Helpers {
 
 		if ( ! $has_cache ) {
 
-			$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+			$atum_user_meta = get_user_meta( $user_id, Globals::ATUM_USER_META_KEY, TRUE );
 
 			if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
 				$atum_user_meta = $atum_user_meta[ $key ];
@@ -2433,7 +2436,7 @@ final class Helpers {
 		}
 
 		$atum_user_meta[ $key ] = $value;
-		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+		update_user_meta( $user_id, Globals::ATUM_USER_META_KEY, $atum_user_meta );
 
 		// Delete any saved user meta after updating its value.
 		$cache_key = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );
@@ -2804,6 +2807,7 @@ final class Helpers {
 		}
 
 		return $is_array ? $classes : implode( ' ', $classes );
+
 	}
 	
 	/**
@@ -2862,14 +2866,14 @@ final class Helpers {
 		if (
 			defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
 			|| isset( $_GET['rest_route'] ) // (#2)
-			&& strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 ) === 0
+			&& 0 === strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 )
 		) {
 			return TRUE;
 		}
 
 		// (#3)
 		global $wp_rewrite;
-		if ( $wp_rewrite === NULL ) {
+		if ( NULL === $wp_rewrite ) {
 			$wp_rewrite = new \WP_Rewrite();
 		}
 

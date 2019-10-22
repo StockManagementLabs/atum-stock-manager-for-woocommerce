@@ -414,7 +414,7 @@ class ListTable extends AtumListTable {
 		);
 		// phpcs:enable
 
-		$po_products = $wpdb->get_results( $sql );// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$po_products = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! empty( $po_products ) ) {
 

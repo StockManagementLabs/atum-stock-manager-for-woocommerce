@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Api\AtumApi;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
@@ -158,7 +159,7 @@ class Main {
 
 	/**
 	 * Initialize the front stuff
-	 * This will execute as a priority 11 within the "init" hook
+	 * This will run with priority 11 within the "init" hook
 	 *
 	 * @since 1.2.0
 	 */
@@ -189,6 +190,12 @@ class Main {
 			'query_var'    => is_admin(),
 			'rewrite'      => FALSE,
 			'public'       => FALSE,
+			'capabilities' => array(
+				'manage_terms' => ATUM_PREFIX . 'manage_location_terms',
+				'edit_terms'   => ATUM_PREFIX . 'edit_location_terms',
+				'delete_terms' => ATUM_PREFIX . 'delete_location_terms',
+				'assign_terms' => ATUM_PREFIX . 'assign_location_terms',
+			),
 		) );
 
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
@@ -227,6 +234,7 @@ class Main {
 		Settings::get_instance();
 		ProductDataMetaBoxes::get_instance();
 		AtumQueues::get_instance();
+		AtumApi::get_instance();
 		
 		//
 		// Enable WPML module if needed

@@ -61,6 +61,8 @@ class InventoryLogs extends AtumOrderPostType {
 		'delete_post'        => 'delete_inventory_log',
 		'edit_posts'         => 'edit_inventory_logs',
 		'edit_others_posts'  => 'edit_others_inventory_logs',
+		'read_private_posts' => 'read_private_inventory_logs',
+		'publish_posts'      => 'publish_inventory_logs',
 		'create_posts'       => 'create_inventory_logs',
 		'delete_posts'       => 'delete_inventory_logs',
 		'delete_other_posts' => 'delete_other_inventory_logs',
@@ -154,9 +156,9 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param int $log_id
+	 * @param int $po_id
 	 */
-	public function save_meta_boxes( $log_id ) {
+	public function save_meta_boxes( $po_id ) {
 
 		if ( ! isset( $_POST['atum_order_type'], $_POST['status'], $_POST['atum_meta_nonce'] ) ) {
 			return;
@@ -166,7 +168,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $log_id );
+		$log = $this->get_current_atum_order( $po_id );
 
 		if ( empty( $log ) ) {
 			return;
@@ -188,7 +190,7 @@ class InventoryLogs extends AtumOrderPostType {
 			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
-		$log->save_meta( array(
+		$log->set_meta( array(
 			'_type'             => $log_type,
 			'_status'           => esc_attr( $_POST['status'] ),
 			'_order'            => ! empty( $_POST['wc_order'] ) ? absint( $_POST['wc_order'] ) : '',
@@ -202,7 +204,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Add the Log post to the appropriate Log Type taxonomy.
 		if ( in_array( $log_type, array_keys( Log::get_log_types() ) ) ) {
-			wp_set_object_terms( $log_id, $log_type, self::TAXONOMY );
+			wp_set_object_terms( $po_id, $log_type, self::TAXONOMY );
 			
 			// Update all Log counters.
 			$get_terms_args = array(
@@ -237,7 +239,7 @@ class InventoryLogs extends AtumOrderPostType {
 				'taxonomy'        => self::TAXONOMY,
 				'name'            => self::TAXONOMY,
 				'orderby'         => 'name',
-				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? esc_attr( $_GET[ self::TAXONOMY ] ) : '',
+				'selected'        => isset( $_GET[ self::TAXONOMY ] ) ? esc_attr( $_GET[ self::TAXONOMY ] ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				'hierarchical'    => FALSE,
 				'show_count'      => TRUE,
 				'hide_empty'      => FALSE,
@@ -373,7 +375,7 @@ class InventoryLogs extends AtumOrderPostType {
 			3  => __( 'Custom field deleted.', ATUM_TEXT_DOMAIN ),
 			4  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			/* translators: the revision name */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE,
+			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Log restored to revision from %s', ATUM_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], FALSE ) ) : FALSE, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			6  => __( 'Log updated.', ATUM_TEXT_DOMAIN ),
 			7  => __( 'Log saved.', ATUM_TEXT_DOMAIN ),
 			8  => __( 'Log submitted.', ATUM_TEXT_DOMAIN ),
