@@ -450,15 +450,18 @@ final class Globals {
 	 *
 	 * @param string $type
 	 *
-	 * @return int
+	 * @return int|array
 	 */
-	public static function get_order_type_table_id( $type = '' ) {
+	public static function get_order_type_table_id( $type = 'shop_order' ) {
+
+		if ( $type && isset( self::$order_type_tables_id[ $type ] ) ) {
+			return self::$order_type_tables_id[ $type ];
+		}
 		
-		$type = ( $type && isset( self::$order_type_tables_id[ $type ] ) ) ? $type : 'shop_order';
-		
-		return self::$order_type_tables_id[ $type ];
+		return self::$order_type_tables_id;
 		
 	}
+
 
 	/**
 	 * Get the JS localization vars for the DateTimePicker

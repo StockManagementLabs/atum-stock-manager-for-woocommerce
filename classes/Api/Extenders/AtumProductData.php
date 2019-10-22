@@ -157,7 +157,7 @@ class AtumProductData {
 	 *
 	 * @return array
 	 */
-	private static function get_extended_product_schema() {
+	private function get_extended_product_schema() {
 
 		return array(
 			'purchase_price'        => array(
@@ -352,7 +352,7 @@ class AtumProductData {
 	 *
 	 * @throws \WC_REST_Exception
 	 */
-	public static function update_product_field_value( $field_value, $response, $field_name ) {
+	public function update_product_field_value( $field_value, $response, $field_name ) {
 
 		if (
 			( 'purchase_price' === $field_name && ! AtumCapabilities::current_user_can( 'edit_purchase_price' ) ) ||
