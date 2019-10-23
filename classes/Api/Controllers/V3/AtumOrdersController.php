@@ -22,6 +22,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
+use AtumExport\Queries\AtumOrderItem;
 
 
 abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
@@ -507,6 +508,33 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		}
 
 		return $formatted_data;
+
+	}
+
+	/**
+	 * Expands an ATUM order item to get its data.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param AtumOrderItem $item ATUM Order item data.
+	 *
+	 * @return array
+	 */
+	protected function get_order_item_data( $item ) {
+
+		$data = parent::get_order_item_data( $item );
+
+		if ( ! empty( $data['meta_data'] ) ) {
+
+			foreach ( $data['meta_data'] as $index => $meta ) {
+				if ( $item->is_internal_meta( $meta->key ) ) {
+					unset( $data['meta_data'][ $index ] );
+				}
+			}
+
+		}
+
+		return $data;
 
 	}
 
