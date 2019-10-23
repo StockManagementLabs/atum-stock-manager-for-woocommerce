@@ -1072,7 +1072,9 @@ class Settings {
 		echo apply_filters( 'atum/settings/display_script_runner', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
-	
+
+
+
 	/**
 	 * Get the settings option array and prints color picker
 	 *
@@ -1081,24 +1083,24 @@ class Settings {
 	 * @param array $args Field arguments.
 	 */
 	public function display_color( $args ) {
-		
+
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
-		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
-		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
-		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
 		$value   = $this->find_option_value( $args['id'] );
+		$style   = isset( $args['options']['style'] ) ? ' style="' . esc_attr( $args['options']['style'] ) . '"' : '';
+		$default = isset( $args['default'] ) ? " data-default='" . esc_attr( $args['default'] ) . "'" : '';
+		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
 
 		ob_start();
 		?>
 		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
-		type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo esc_attr( $default . $style ) ?>>
-		
+				type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+
 		<?php
-		
+
 		echo wp_kses_post( $this->get_description( $args ) );
-		
+
 		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
+
 	}
 	
 	/**
