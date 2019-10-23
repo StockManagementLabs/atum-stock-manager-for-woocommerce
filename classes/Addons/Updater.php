@@ -261,9 +261,9 @@ class Updater {
 
 		if ( ! empty( $update_cache->response[ $this->name ] ) && version_compare( $this->version, $version_info->new_version, '<' ) ) {
 
-			// Build a plugin list row, with update notification
-			// $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-			/* <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">*/
+			// Build a plugin list row, with update notification.
+			/** $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );*/
+			/** <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">*/
 
 			echo '<tr class="plugin-update-tr" id="' . esc_attr( $this->slug ) . '-update" data-slug="' . esc_attr( $this->slug ) . '" data-plugin="' . esc_attr( $this->slug ) . '/' . esc_attr( $file ) . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
@@ -275,30 +275,30 @@ class Updater {
 
 				printf(
 					/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
-					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', ATUM_TEXT_DOMAIN ),
+					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', ATUM_TEXT_DOMAIN ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>'
-				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
 
 			}
 			else {
 
 				printf(
 					/* translators: first is the add-on name, second is the change log link, third is the version, forth is the closing tag for the link, fifth is the plugin update link and sixth is the closing tag for the second link  */
-					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', ATUM_TEXT_DOMAIN ),
+					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', ATUM_TEXT_DOMAIN ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
 					esc_html( $version_info->new_version ),
 					'</a>',
 					'<a href="' . esc_url( wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $this->name, 'upgrade-plugin_' . $this->name ) ) . '">',
 					'</a>'
-				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
 
 			}
 
-			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info ); // WPCS: prefix ok.
+			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info ); // phpcs:ignore  WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 			echo '</div></td></tr>';
 
