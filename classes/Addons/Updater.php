@@ -12,12 +12,9 @@
 
 namespace Atum\Addons;
 
-use Atum\Components\AtumCache;
-use Atum\Inc\Helpers;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 
 class Updater {
 
