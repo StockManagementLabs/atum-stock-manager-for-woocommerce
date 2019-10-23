@@ -524,6 +524,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		$data = parent::get_order_item_data( $item );
 
+		// Get rid of the internal meta data from the meta_data object.
 		if ( ! empty( $data['meta_data'] ) ) {
 
 			foreach ( $data['meta_data'] as $index => $meta ) {
