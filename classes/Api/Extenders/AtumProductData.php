@@ -63,6 +63,22 @@ class AtumProductData {
 	);
 
 	/**
+	 * Internal meta keys that shoudln't appear on the product's meta_data
+	 *
+	 * @var array
+	 */
+	private $internal_meta_keys = array(
+		'_atum_manage_stock',
+		'_supplier',
+		'_supplier_sku',
+		'_purchase_price',
+		'_out_stock_threshold',
+		'_out_stock_threshold_custom',
+		'_out_stock_threshold_currency',
+		'_inheritable',
+	);
+
+	/**
 	 * AtumProductData constructor
 	 *
 	 * @since 1.6.2
@@ -119,6 +135,9 @@ class AtumProductData {
 		 */
 		add_action( 'rest_api_init', array( $this, 'register_product_fields' ), 0 );
 
+		// Exclude internal meta keys from the product's meta_data.
+		add_filter( 'woocommerce_data_store_wp_post_read_meta', array( $this, 'filter_product_meta' ), 10, 3 );
+
 	}
 
 	/**
@@ -128,7 +147,9 @@ class AtumProductData {
 	 */
 	public function register_product_fields() {
 
-		foreach ( $this->product_fields as $field_name => $field_supports ) {
+		$product_fields = apply_filters( 'atum/api/product_data/product_fields', $this->product_fields );
+
+		foreach ( $product_fields as $field_name => $field_supports ) {
 
 			$args = array(
 				'schema' => $this->get_product_field_schema( $field_name ),
@@ -159,7 +180,7 @@ class AtumProductData {
 	 */
 	private function get_extended_product_schema() {
 
-		return array(
+		$extended_product_schema = array(
 			'purchase_price'        => array(
 				'required'    => FALSE,
 				'description' => __( "Product's purchase price.", ATUM_TEXT_DOMAIN ),
@@ -289,6 +310,8 @@ class AtumProductData {
 			),
 		);
 
+		return apply_filters( 'atum/api/product_data/extended_schema', $extended_product_schema );
+
 	}
 
 	/**
@@ -329,8 +352,22 @@ class AtumProductData {
 			$product = Helpers::get_atum_product( $response['id'] );
 			$getter  = "get_$field_name";
 
-			if ( is_a( $product, '\WC_Product' ) && is_callable( array( $product, $getter ) ) ) {
-				$data = call_user_func( array( $product, $getter ) );
+			if ( is_a( $product, '\WC_Product' ) ) {
+
+				if ( is_callable( array( $product, $getter ) ) ) {
+
+					$data = call_user_func( array( $product, $getter ) );
+
+					if ( $data instanceof \WC_DateTime ) {
+						$data = wc_rest_prepare_date_response( $data );
+					}
+
+				}
+				// Allow to handle some fields externally.
+				else {
+					$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $field_name, $response, $product );
+				}
+
 			}
 
 		}
@@ -385,7 +422,38 @@ class AtumProductData {
 			$product->save_atum_data();
 		}
 
+		do_action( 'atum/api/product_data/update_product_field', $field_value, $response, $field_name, $product );
+
 		return TRUE;
+
+	}
+
+	/**
+	 * Exclude the ATUM's known meta keys from the meta_data prop
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param array $meta_data
+	 * @param mixed $object
+	 * @param mixed $data_store
+	 *
+	 * @return array
+	 */
+	public function filter_product_meta( $meta_data, $object, $data_store ) {
+
+		if ( $object instanceof \WC_Product ) {
+
+			$internal_meta_keys = apply_filters( 'atum/api/product_data/internal_meta_keys', $this->internal_meta_keys );
+
+			foreach ( $meta_data as $index => $meta ) {
+				if ( in_array( $meta->meta_key, $internal_meta_keys, TRUE ) ) {
+					unset( $meta_data[ $index ] );
+				}
+			}
+
+		}
+
+		return $meta_data;
 
 	}
 
