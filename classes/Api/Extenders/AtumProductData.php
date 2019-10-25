@@ -166,132 +166,107 @@ class AtumProductData {
 	private function get_extended_product_schema() {
 
 		$extended_product_schema = array(
-			'purchase_price'        => array(
+			'purchase_price'      => array(
 				'required'    => FALSE,
 				'description' => __( "Product's purchase price.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'supplier_id'           => array(
+			'supplier_id'         => array(
 				'required'    => FALSE,
 				'description' => __( 'The ID of the ATUM Supplier that is linked to this product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'integer',
 			),
-			'supplier_sku'          => array(
+			'supplier_sku'        => array(
 				'required'    => FALSE,
 				'description' => __( "The Supplier's SKU for this product.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
 			),
-			'atum_controlled'       => array(
+			'atum_controlled'     => array(
 				'required'    => FALSE,
 				'description' => __( 'Whether this product is being controlled by ATUM.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 				'default'     => FALSE,
 			),
-			'out_stock_date'        => array(
+			'out_stock_date'      => array(
 				'required'    => FALSE,
 				'description' => __( 'The date when this product run out of stock.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
 			),
-			'out_stock_threshold'   => array(
+			'out_stock_threshold' => array(
 				'required'    => FALSE,
 				'description' => __( 'Out of stock threshold at product level.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'inheritable'           => array(
+			'inheritable'         => array(
 				'required'    => FALSE,
 				'description' => __( 'Whether this product may have children.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 				'default'     => FALSE,
 			),
-			'inbound_stock'         => array(
+			'inbound_stock'       => array(
 				'required'    => FALSE,
 				'description' => __( "Product's inbound stock.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'stock_on_hold'         => array(
+			'stock_on_hold'       => array(
 				'required'    => FALSE,
 				'description' => __( "Product's stock on hold.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'sold_today'            => array(
+			'sold_today'          => array(
 				'required'    => FALSE,
 				'description' => __( 'Units sold today.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'sales_last_days'       => array(
+			'sales_last_days'     => array(
 				'required'    => FALSE,
 				'description' => __( 'Sales the last 14 days.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'reserved_stock'        => array(
+			'reserved_stock'      => array(
 				'required'    => FALSE,
 				'description' => __( "Stock set as 'reserved_stock' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'customer_returns'      => array(
+			'customer_returns'    => array(
 				'required'    => FALSE,
 				'description' => __( "Stock set as 'customer returns' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'warehouse_damage'      => array(
+			'warehouse_damage'    => array(
 				'required'    => FALSE,
 				'description' => __( "Stock set as 'warehouse damage' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'lost_in_post'          => array(
+			'lost_in_post'        => array(
 				'required'    => FALSE,
 				'description' => __( "Stock set as 'lost in post' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'other_logs'            => array(
+			'other_logs'          => array(
 				'required'    => FALSE,
 				'description' => __( "Stock set as 'other' within Inventory Logs.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'out_stock_days'        => array(
+			'out_stock_days'      => array(
 				'required'    => FALSE,
 				'description' => __( 'The number of days that the product is Out of stock.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'integer',
 			),
-			'lost_sales'            => array(
+			'lost_sales'          => array(
 				'required'    => FALSE,
 				'description' => __( 'Product lost sales.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
-			'has_location'          => array(
+			'has_location'        => array(
 				'required'    => FALSE,
 				'description' => __( 'Whether this product has any ATUM location set.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 			),
-			'update_date'           => array(
+			'update_date'         => array(
 				'required'    => FALSE,
 				'description' => __( 'Last date when the ATUM product data was calculated and saved for this product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
-			),
-			'bom_sellable'          => array(
-				'required'    => FALSE,
-				'description' => __( 'If Product Levels is enabled and the product is a BOM, indicates if the product may have children.', ATUM_TEXT_DOMAIN ),
-				'type'        => 'boolean',
-			),
-			'minimum_threshold'     => array(
-				'required'    => FALSE,
-				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's minimum threshold.", ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
-			),
-			'available_to_purchase' => array(
-				'required'    => FALSE,
-				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's available to purchase.", ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
-			),
-			'selling_priority'      => array(
-				'required'    => FALSE,
-				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's selling priority.", ATUM_TEXT_DOMAIN ),
-				'type'        => 'integer',
-			),
-			'calculated_stock'      => array(
-				'required'    => FALSE,
-				'description' => __( 'If Product Levels is enabled with the BOM stock control option and the product has linked BOM, it indicates the calculated stock quantity.', ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
 			),
 		);
 
