@@ -35,31 +35,26 @@ class AtumProductData {
 	 * @var array
 	 */
 	private $product_fields = array(
-		'purchase_price'        => [ 'get', 'update' ],
-		'supplier_id'           => [ 'get', 'update' ],
-		'supplier_sku'          => [ 'get', 'update' ],
-		'atum_controlled'       => [ 'get', 'update' ],
-		'out_stock_date'        => [ 'get', 'update' ],
-		'out_stock_threshold'   => [ 'get', 'update' ],
-		'inheritable'           => [ 'get', 'update' ],
-		'bom_sellable'          => [ 'get', 'update' ],
-		'minimum_threshold'     => [ 'get', 'update' ],
-		'available_to_purchase' => [ 'get', 'update' ],
-		'selling_priority'      => [ 'get', 'update' ],
-		'inbound_stock'         => [ 'get', 'update' ],
-		'stock_on_hold'         => [ 'get', 'update' ],
-		'sold_today'            => [ 'get', 'update' ],
-		'sales_last_days'       => [ 'get', 'update' ],
-		'reserved_stock'        => [ 'get', 'update' ],
-		'customer_returns'      => [ 'get', 'update' ],
-		'warehouse_damage'      => [ 'get', 'update' ],
-		'lost_in_post'          => [ 'get', 'update' ],
-		'other_logs'            => [ 'get', 'update' ],
-		'out_stock_days'        => [ 'get', 'update' ],
-		'lost_sales'            => [ 'get', 'update' ],
-		'has_location'          => [ 'get', 'update' ],
-		'update_date'           => [ 'get', 'update' ],
-		'calculated_stock'      => [ 'get', 'update' ],
+		'purchase_price'      => [ 'get', 'update' ],
+		'supplier_id'         => [ 'get', 'update' ],
+		'supplier_sku'        => [ 'get', 'update' ],
+		'atum_controlled'     => [ 'get', 'update' ],
+		'out_stock_date'      => [ 'get', 'update' ],
+		'out_stock_threshold' => [ 'get', 'update' ],
+		'inheritable'         => [ 'get', 'update' ],
+		'inbound_stock'       => [ 'get', 'update' ],
+		'stock_on_hold'       => [ 'get', 'update' ],
+		'sold_today'          => [ 'get', 'update' ],
+		'sales_last_days'     => [ 'get', 'update' ],
+		'reserved_stock'      => [ 'get', 'update' ],
+		'customer_returns'    => [ 'get', 'update' ],
+		'warehouse_damage'    => [ 'get', 'update' ],
+		'lost_in_post'        => [ 'get', 'update' ],
+		'other_logs'          => [ 'get', 'update' ],
+		'out_stock_days'      => [ 'get', 'update' ],
+		'lost_sales'          => [ 'get', 'update' ],
+		'has_location'        => [ 'get', 'update' ],
+		'update_date'         => [ 'get', 'update' ],
 	);
 
 	/**
@@ -117,16 +112,6 @@ class AtumProductData {
 				$this->product_fields['warehouse_damage'],
 				$this->product_fields['lost_in_post'],
 				$this->product_fields['other_logs']
-			);
-		}
-
-		if ( ! defined( 'ATUM_LEVELS_VERSION' ) ) {
-			unset(
-				$this->product_fields['bom_sellable'],
-				$this->product_fields['minimum_threshold'],
-				$this->product_fields['available_to_purchase'],
-				$this->product_fields['selling_priority'],
-				$this->product_fields['calculated_stock']
 			);
 		}
 
@@ -218,26 +203,6 @@ class AtumProductData {
 				'type'        => 'boolean',
 				'default'     => FALSE,
 			),
-			'bom_sellable'          => array(
-				'required'    => FALSE,
-				'description' => __( 'Whether this product may have children.', ATUM_TEXT_DOMAIN ),
-				'type'        => 'boolean',
-			),
-			'minimum_threshold'     => array(
-				'required'    => FALSE,
-				'description' => __( "Product's minimum threshold (Product Levels).", ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
-			),
-			'available_to_purchase' => array(
-				'required'    => FALSE,
-				'description' => __( "Product's available to purchase (Product Levels).", ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
-			),
-			'selling_priority'      => array(
-				'required'    => FALSE,
-				'description' => __( "Product's selling priority (Product Levels).", ATUM_TEXT_DOMAIN ),
-				'type'        => 'integer',
-			),
 			'inbound_stock'         => array(
 				'required'    => FALSE,
 				'description' => __( "Product's inbound stock.", ATUM_TEXT_DOMAIN ),
@@ -303,9 +268,29 @@ class AtumProductData {
 				'description' => __( 'Last date when the ATUM product data was calculated and saved for this product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
 			),
+			'bom_sellable'          => array(
+				'required'    => FALSE,
+				'description' => __( 'If Product Levels is enabled and the product is a BOM, indicates if the product may have children.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'boolean',
+			),
+			'minimum_threshold'     => array(
+				'required'    => FALSE,
+				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's minimum threshold.", ATUM_TEXT_DOMAIN ),
+				'type'        => 'number',
+			),
+			'available_to_purchase' => array(
+				'required'    => FALSE,
+				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's available to purchase.", ATUM_TEXT_DOMAIN ),
+				'type'        => 'number',
+			),
+			'selling_priority'      => array(
+				'required'    => FALSE,
+				'description' => __( "If Product Levels is enabled and the product is a BOM, indicates the product's selling priority.", ATUM_TEXT_DOMAIN ),
+				'type'        => 'integer',
+			),
 			'calculated_stock'      => array(
 				'required'    => FALSE,
-				'description' => __( 'Calculated stock quantity (Product Levels).', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'If Product Levels is enabled with the BOM stock control option and the product has linked BOM, it indicates the calculated stock quantity.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'number',
 			),
 		);
@@ -355,17 +340,37 @@ class AtumProductData {
 			if ( is_a( $product, '\WC_Product' ) ) {
 
 				if ( is_callable( array( $product, $getter ) ) ) {
-
 					$data = call_user_func( array( $product, $getter ) );
-
-					if ( $data instanceof \WC_DateTime ) {
-						$data = wc_rest_prepare_date_response( $data );
-					}
-
 				}
 				// Allow to handle some fields externally.
 				else {
 					$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $field_name, $response, $product );
+				}
+
+				$schema = $this->get_extended_product_schema();
+
+				if ( ! is_null( $data ) && isset( $schema[ $field_name ], $schema[ $field_name ]['type'] ) ) {
+
+					switch ( $schema[ $field_name ]['type'] ) {
+						case 'date-time':
+							if ( $data instanceof \WC_DateTime ) {
+								$data = wc_rest_prepare_date_response( $data );
+							}
+							break;
+
+						case 'number':
+							$data = (float) $data;
+							break;
+
+						case 'integer':
+							$data = (int) $data;
+							break;
+
+						case 'boolean':
+							$data = wc_string_to_bool( $data );
+							break;
+					}
+
 				}
 
 			}
