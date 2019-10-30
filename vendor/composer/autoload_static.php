@@ -78,6 +78,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Api\\Controllers\\V3\\AddonsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/AddonsController.php',
         'Atum\\Api\\Controllers\\V3\\AtumOrderNotesController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/AtumOrderNotesController.php',
         'Atum\\Api\\Controllers\\V3\\AtumOrdersController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/AtumOrdersController.php',
+        'Atum\\Api\\Controllers\\V3\\DashboardStatisticsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/DashboardStatisticsController.php',
         'Atum\\Api\\Controllers\\V3\\InboundStockController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/InboundStockController.php',
         'Atum\\Api\\Controllers\\V3\\InventoryLogNotesController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/InventoryLogNotesController.php',
         'Atum\\Api\\Controllers\\V3\\InventoryLogsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/InventoryLogsController.php',
