@@ -106,7 +106,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'inbound-stock',
+			'title'      => 'atum-inbound-stock',
 			'type'       => 'object',
 			'properties' => array(
 				'id'                => array(

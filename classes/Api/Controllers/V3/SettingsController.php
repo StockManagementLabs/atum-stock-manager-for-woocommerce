@@ -52,7 +52,7 @@ class SettingsController extends \WC_REST_Settings_Controller {
 
 		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'setting_group',
+			'title'      => 'atum-setting-group',
 			'type'       => 'object',
 			'properties' => array(
 				'id'          => array(

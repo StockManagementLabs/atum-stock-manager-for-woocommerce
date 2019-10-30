@@ -53,7 +53,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 
 		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'setting',
+			'title'      => 'atum-setting',
 			'type'       => 'object',
 			'properties' => array(
 				'id'          => array(
