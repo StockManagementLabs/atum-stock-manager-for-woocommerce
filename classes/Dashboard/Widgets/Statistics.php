@@ -14,10 +14,10 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
-
 
 class Statistics extends AtumWidget {
 
@@ -57,18 +57,25 @@ class Statistics extends AtumWidget {
 	 */
 	public function render() {
 
-		// Get sales data.
-		// TODO: GET THE RIGHT INITIAL CHART DATA FROM WIDGET CONFIG.
-		$dataset = WidgetHelpers::get_sales_chart_data( 'this_year' );
-		$period  = 'month';
-		$legends = array(
-			'value'    => __( 'Sales', ATUM_TEXT_DOMAIN ),
-			'products' => __( 'Products', ATUM_TEXT_DOMAIN ),
-		);
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			Helpers::load_view( 'widgets/not-allowed' );
+		}
+		else {
 
-		$config = $this->get_config();
+			// Get sales data.
+			// TODO: GET THE RIGHT INITIAL CHART DATA FROM WIDGET CONFIG.
+			$dataset = WidgetHelpers::get_sales_chart_data( 'this_year' );
+			$period  = 'month';
+			$legends = array(
+				'value'    => __( 'Sales', ATUM_TEXT_DOMAIN ),
+				'products' => __( 'Products', ATUM_TEXT_DOMAIN ),
+			);
 
-		Helpers::load_view( 'widgets/statistics', compact( 'dataset', 'period', 'legends', 'config' ) );
+			$config = $this->get_config();
+
+			Helpers::load_view( 'widgets/statistics', compact( 'dataset', 'period', 'legends', 'config' ) );
+
+		}
 
 	}
 

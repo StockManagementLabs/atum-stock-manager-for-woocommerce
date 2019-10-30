@@ -14,10 +14,10 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
-
 
 class Orders extends AtumWidget {
 
@@ -57,44 +57,54 @@ class Orders extends AtumWidget {
 	 */
 	public function render() {
 
-		$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', [ 'wc-processing', 'wc-completed' ] );
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			Helpers::load_view( 'widgets/not-allowed' );
+		}
+		else {
 
-		/**
-		 * This month
-		 */
-		$stats_this_month = WidgetHelpers::get_orders_stats( array(
-			'status'     => $order_status,
-			'date_start' => 'first day of this month midnight',
-		) );
+			$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', [
+				'wc-processing',
+				'wc-completed',
+			] );
 
-		/**
-		 * Previous month
-		 */
-		$stats_previous_month = WidgetHelpers::get_orders_stats( array(
-			'status'     => $order_status,
-			'date_start' => 'first day of last month midnight',
-			'date_end'   => 'last day of last month 23:59:59',
-		) );
+			/**
+			 * This month
+			 */
+			$stats_this_month = WidgetHelpers::get_orders_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'first day of this month midnight',
+			) );
 
-		/**
-		 * This week
-		 */
-		$stats_this_week = WidgetHelpers::get_orders_stats( array(
-			'status'     => $order_status,
-			'date_start' => 'this week midnight',
-		) );
+			/**
+			 * Previous month
+			 */
+			$stats_previous_month = WidgetHelpers::get_orders_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'first day of last month midnight',
+				'date_end'   => 'last day of last month 23:59:59',
+			) );
 
-		/**
-		 * Today
-		 */
-		$stats_today = WidgetHelpers::get_orders_stats( array(
-			'status'     => $order_status,
-			'date_start' => 'today midnight',
-		) );
+			/**
+			 * This week
+			 */
+			$stats_this_week = WidgetHelpers::get_orders_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'this week midnight',
+			) );
 
-		$config = $this->get_config();
+			/**
+			 * Today
+			 */
+			$stats_today = WidgetHelpers::get_orders_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'today midnight',
+			) );
 
-		Helpers::load_view( 'widgets/orders', compact( 'stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config' ) );
+			$config = $this->get_config();
+
+			Helpers::load_view( 'widgets/orders', compact( 'stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config' ) );
+
+		}
 
 	}
 

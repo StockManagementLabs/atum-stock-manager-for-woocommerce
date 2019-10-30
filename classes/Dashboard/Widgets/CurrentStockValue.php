@@ -14,6 +14,7 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
@@ -65,11 +66,17 @@ class CurrentStockValue extends AtumWidget {
 	 */
 	public function render() {
 
-		$current_stock_values = WidgetHelpers::get_items_in_stock();
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			Helpers::load_view( 'widgets/not-allowed' );
+		}
+		else {
 
-		$config = $this->get_config();
+			$current_stock_values = WidgetHelpers::get_items_in_stock();
+			$config               = $this->get_config();
 
-		Helpers::load_view( 'widgets/current-stock-value', compact( 'config', 'current_stock_values' ) );
+			Helpers::load_view( 'widgets/current-stock-value', compact( 'config', 'current_stock_values' ) );
+
+		}
 
 	}
 
