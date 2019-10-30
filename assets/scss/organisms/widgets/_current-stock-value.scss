@@ -75,7 +75,7 @@
 		text-align: left;
 		padding: 40px 0;
 		
-		.total-items-purcharse-price, .items-count {
+		.total-items-purchase-price, .items-count {
 			font-size: 36px;
 			font-weight: bold;
 		}
@@ -84,7 +84,7 @@
 			display: inline;
 		}
 		
-		.total-items-purcharse-price {
+		.total-items-purchase-price {
 			color: var(--dash-stats-data-widget-success);
 		}
 		
@@ -109,7 +109,7 @@
 			padding-bottom: 25px;
 		}
 		
-		.items-without-purcharse-price {
+		.items-without-purchase-price {
 			border-radius: 4px;
 			background-color: var(--dash-widget-current-stock-value-bg);
 			font-size: 12px;
