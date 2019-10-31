@@ -31,7 +31,6 @@ use Atum\InventoryLogs\Models\Log;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
 
-
 final class Ajax {
 	
 	/**
@@ -548,7 +547,7 @@ final class Ajax {
 	public function control_all_products() {
 
 		check_ajax_referer( 'atum-control-all-products-nonce', 'token' );
-		$this->change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 
 	}
 
@@ -2059,7 +2058,7 @@ final class Ajax {
 		
 		if ( in_array( $option, [ 'manage', 'unmanage' ] ) ) {
 			$manage_status = 'manage' === $option ? 'yes' : 'no';
-			$this->change_status_meta( '_manage_stock', $manage_status );
+			Helpers::change_status_meta( '_manage_stock', $manage_status );
 		}
 
 		wp_send_json_error( __( 'Something failed changing the Manage Stock option', ATUM_TEXT_DOMAIN ) );
@@ -2086,13 +2085,12 @@ final class Ajax {
 
 		if ( in_array( $option, [ 'control', 'uncontrol' ] ) ) {
 			$control_status = 'control' === $option ? 'yes' : 'no';
-			$this->change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
+			Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
 		}
 
 		wp_send_json_error( __( 'Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN ) );
 
 	}
-
 
 	/**
 	 * Clear all Out Stock Threshold values that have been set
@@ -2113,115 +2111,6 @@ final class Ajax {
 		}
 
 		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
-
-	}
-
-	/**
-	 * Change the value of a meta key for all products at once
-	 *
-	 * @since 1.4.5
-	 *
-	 * @package    Settings
-	 * @subpackage Tools
-	 *
-	 * @param string $meta_key
-	 * @param string $status
-	 */
-	private function change_status_meta( $meta_key, $status ) {
-
-		global $wpdb;
-		$wpdb->hide_errors();
-
-		$insert_success = $update_success = $stock_success = NULL;
-
-		if ( Globals::ATUM_CONTROL_STOCK_KEY === $meta_key ) {
-
-			$meta_value      = 'yes' === $status ? 1 : 0;
-			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-
-			// phpcs:disable WordPress.DB.PreparedSQL
-			$update_success = $wpdb->query( $wpdb->prepare( "
-				UPDATE $atum_data_table SET atum_controlled = %d		        		
-            	WHERE atum_controlled != %d",
-				$meta_value,
-				$meta_value
-			) );
-			// phpcs:enable
-			
-			// Get product still not inserted.
-			// phpcs:disable WordPress.DB.PreparedSQL
-			$update_success_2 = $wpdb->query( "
-				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
-				FROM {$wpdb->posts} p
-				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
-				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
-			" );
-			// phpcs:enable
-			
-			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
-			
-		}
-		else {
-
-			// If there are products without the manage_stock meta key, insert it for them.
-			$insert_success = $wpdb->query( $wpdb->prepare( "
-				INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-				SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts AS posts
-	            LEFT JOIN $wpdb->postmeta AS pm ON posts.ID = pm.post_id
-	            WHERE posts.post_type IN ('product', 'product_variation')
-	            AND posts.ID NOT IN (
-	                SELECT DISTINCT post_id FROM $wpdb->postmeta
-	                WHERE meta_key = %s
-	            )",
-				$meta_key,
-				$status,
-				$meta_key
-			) );
-
-			// For the rest, just update those that don't have the right status.
-			$update_success = $wpdb->query( $wpdb->prepare( "
-				UPDATE $wpdb->postmeta SET meta_value = %s		        		
-	            WHERE meta_key = %s AND meta_value != %s",
-				$status,
-				$meta_key,
-				$status
-			) );
-
-			// Ensure there is no _stock set to 0 for managed products.
-			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
-
-				if ( Helpers::is_using_new_wc_tables() ) {
-					
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
-		                WHERE stock_quantity IS NULL
-		                AND product_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				}
-				else {
-
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->postmeta} SET meta_value = '0'
-		                WHERE meta_key = '_stock'
-		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-				}
-				
-			}
-
-		}
-
-		// If all goes fine, die with the message, if not, just do nothing (the next method will display the error).
-		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
-			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
-		}
 
 	}
 
