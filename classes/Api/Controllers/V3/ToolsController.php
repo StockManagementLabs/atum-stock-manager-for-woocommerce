@@ -117,6 +117,11 @@ class ToolsController extends \WC_REST_Controller {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
+				'config'      => array(
+					'description' => __( 'If the tool needs config in order to work.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'object',
+					'context'     => array( 'edit' ),
+				),
 				'success'     => array(
 					'description' => __( 'Did the tool run successfully?', ATUM_TEXT_DOMAIN ),
 					'type'        => 'boolean',
@@ -331,7 +336,11 @@ class ToolsController extends \WC_REST_Controller {
 			'description' => $tool['desc'],
 		);
 
-		$run_return = $this->run_tool( $request['id'] );
+		if ( ! empty( $request['config'] ) ) {
+			$tools['config'] = $request['config'];
+		}
+
+		$run_return = $this->run_tool( $request['id'], $request );
 		$tool       = array_merge( $tool, $run_return );
 
 		/**
@@ -401,11 +410,12 @@ class ToolsController extends \WC_REST_Controller {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $tool Tool.
+	 * @param string           $tool    The tool ID.
+	 * @param \WP_REST_Request $request The request.
 	 *
 	 * @return array
 	 */
-	public function run_tool( $tool ) {
+	public function run_tool( $tool, $request ) {
 
 		$ran = TRUE;
 
@@ -444,7 +454,7 @@ class ToolsController extends \WC_REST_Controller {
 				if ( isset( $tools[ $tool ]['callback'] ) ) {
 
 					$callback = $tools[ $tool ]['callback'];
-					$return   = call_user_func( $callback );
+					$return   = call_user_func( $callback, $request );
 
 					if ( is_string( $return ) ) {
 						$message = $return;
@@ -458,6 +468,7 @@ class ToolsController extends \WC_REST_Controller {
 					else {
 						$message = __( 'Tool ran.', ATUM_TEXT_DOMAIN );
 					}
+
 				}
 				else {
 					$ran     = FALSE;
