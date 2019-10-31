@@ -1,7 +1,7 @@
 <?php
 /**
- * REST ATUM API Dashboard controller
- * Handles requests to the /atum/dashboard endpoint.
+ * REST ATUM API Tools controller
+ * Handles requests to the /atum/tools endpoint.
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
@@ -16,9 +16,10 @@ namespace Atum\Api\Controllers\V3;
 defined( 'ABSPATH' ) || exit;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Modules\ModuleManager;
+use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 
-class DashboardController extends \WC_REST_Controller {
+class ToolsController extends \WC_REST_Controller {
 
 	/**
 	 * Endpoint namespace.
@@ -32,28 +33,49 @@ class DashboardController extends \WC_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'atum/dashboard';
+	protected $rest_base = 'atum/tools';
 
 	/**
-	 * Register the routes for dashboard
+	 * Register the routes for tools
 	 *
 	 * @since 1.6.2
 	 */
 	public function register_routes() {
 
-		if ( ModuleManager::is_module_active( 'dashboard' ) ) {
+		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+			array(
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_items' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				'args'                => $this->get_collection_params(),
+			),
+			'schema' => array( $this, 'get_public_item_schema' ),
+		) );
 
-			register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<id>[\w-]+)',
+			array(
+				'args'   => array(
+					'id' => array(
+						'description' => __( 'Unique identifier for the resource.', ATUM_TEXT_DOMAIN ),
+						'type'        => 'string',
+					),
+				),
 				array(
 					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_items' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-					'args'                => $this->get_collection_params(),
+					'callback'            => array( $this, 'get_item' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+				array(
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::EDITABLE ),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
-			) );
-
-		}
+			)
+		);
 
 	}
 
@@ -68,20 +90,45 @@ class DashboardController extends \WC_REST_Controller {
 
 		$schema = array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'atum-dashboard',
+			'title'      => 'atum-tools',
 			'type'       => 'object',
 			'properties' => array(
-				'slug'        => array(
-					'description' => __( 'An alphanumeric identifier for the resource.', ATUM_TEXT_DOMAIN ),
+				'id'          => array(
+					'description' => __( 'A unique identifier for the tool.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
-					'context'     => array( 'view' ),
-					'readonly'    => TRUE,
+					'context'     => array( 'view', 'edit' ),
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_title',
+					),
+				),
+				'name'        => array(
+					'description' => __( 'Tool nice name.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
 				),
 				'description' => array(
-					'description' => __( 'A human-readable description of the resource.', ATUM_TEXT_DOMAIN ),
+					'description' => __( 'Tool description.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
-					'context'     => array( 'view' ),
-					'readonly'    => TRUE,
+					'context'     => array( 'view', 'edit' ),
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+				),
+				'success'     => array(
+					'description' => __( 'Did the tool run successfully?', ATUM_TEXT_DOMAIN ),
+					'type'        => 'boolean',
+					'context'     => array( 'edit' ),
+				),
+				'message'     => array(
+					'description' => __( 'Tool return message.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'context'     => array( 'edit' ),
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
 				),
 			),
 		);
@@ -104,16 +151,16 @@ class DashboardController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Check whether a given request has permission to read the dashboard
+	 * Check whether a given request has permission to read the tools
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 * @return \WP_Error|bool
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
@@ -122,111 +169,308 @@ class DashboardController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Get reports list.
+	 * Check whether a given request has permission to view a specific ATUM tool
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function get_item_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Check whether a given request has permission to execute a specific ATUM tool
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Full details about the request.
+	 *
+	 * @return \WP_Error|bool
+	 */
+	public function update_item_permissions_check( $request ) {
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			return new \WP_Error( 'atum_rest_cannot_update', __( 'Sorry, you cannot update resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * A list of available tools for use in the ATUM Settings section
 	 *
 	 * @since 1.6.2
 	 *
 	 * @return array
 	 */
-	protected function get_dashboard_widgets() {
+	public function get_tools() {
 
-		return array(
-			array(
-				'slug'        => 'statistics',
-				'description' => __( 'Displays both: your earnings and product sales over time.', ATUM_TEXT_DOMAIN ),
+		$tools = array(
+			'enable-manage-stock'       => array(
+				'name' => __( "Enable WC's Manage Stock", ATUM_TEXT_DOMAIN ),
+				'desc' => __( "Enable the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
 			),
-			array(
-				'slug'        => 'sales',
-				'description' => __( 'Displays all of your sales and number of products sold by day or month.', ATUM_TEXT_DOMAIN ),
+			'disable-manage-stock'      => array(
+				'name' => __( "Disable WC's Manage Stock", ATUM_TEXT_DOMAIN ),
+				'desc' => __( "Disable the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
 			),
-			array(
-				'slug'        => 'lost-sales',
-				'description' => __( 'Displays all of your lost revenue and number of products not sold by day or month.', ATUM_TEXT_DOMAIN ),
+			'enable-atum-control'       => array(
+				'name' => __( 'Enable ATUM Stock Control', ATUM_TEXT_DOMAIN ),
+				'desc' => __( "Enable the ATUM's stock control option for all the products at once.", ATUM_TEXT_DOMAIN ),
 			),
-			array(
-				'slug'        => 'orders',
-				'description' => __( 'Displays all of your orders by day, week or month.', ATUM_TEXT_DOMAIN ),
+			'disable-atum-control'      => array(
+				'name' => __( 'Disable ATUM Stock Control', ATUM_TEXT_DOMAIN ),
+				'desc' => __( "Disable the ATUM's stock control option for all the products at once.", ATUM_TEXT_DOMAIN ),
 			),
-			array(
-				'slug'        => 'promo-sales',
-				'description' => __( 'Displays all of your promo sales and number of promo products sold by day, week or month.', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'slug'        => 'stock-control',
-				'description' => __( 'Displays the number of your products that are in stock, out of stock, running low and unmanaged.', ATUM_TEXT_DOMAIN ),
-			),
-			array(
-				'slug'        => 'current-stock-value',
-				'description' => __( 'Displays the total quantity of items physically in stock (that have known purchase price) and their cumulated purchase value.', ATUM_TEXT_DOMAIN ),
+			'clear-out-stock-threshold' => array(
+				'name' => __( 'Clear Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+				'desc' => __( 'Clear all previously saved Out of Stock Threshold values.', ATUM_TEXT_DOMAIN ),
 			),
 		);
+
+		return apply_filters( 'atum/api/tools', $tools );
 
 	}
 
 	/**
-	 * Get all dashboard endpoints
+	 * Get a list of ATUM tools
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param \WP_REST_Request $request
+	 * @param \WP_REST_Request $request Full details about the request.
 	 *
-	 * @return array|\WP_Error
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function get_items( $request ) {
 
-		$data    = array();
-		$widgets = $this->get_dashboard_widgets();
+		$tools = array();
+		foreach ( $this->get_tools() as $id => $tool ) {
 
-		foreach ( $widgets as $widget ) {
-			$item   = $this->prepare_item_for_response( (object) $widget, $request );
-			$data[] = $this->prepare_response_for_collection( $item );
+			$tools[] = $this->prepare_response_for_collection(
+				$this->prepare_item_for_response(
+					array(
+						'id'          => $id,
+						'name'        => $tool['name'],
+						'description' => $tool['desc'],
+					),
+					$request
+				)
+			);
+
 		}
 
-		return rest_ensure_response( $data );
+		$response = rest_ensure_response( $tools );
+
+		return $response;
 
 	}
 
 	/**
-	 * Prepare a dashboard object for serialization
+	 * Return a single tool
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param \stdClass        $widget  Report data.
-	 * @param \WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request $request Request data.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function get_item( $request ) {
+
+		$tools = $this->get_tools();
+
+		if ( empty( $tools[ $request['id'] ] ) ) {
+			return new \WP_Error( 'atum_rest_tool_invalid_id', __( 'Invalid tool ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		$tool = $tools[ $request['id'] ];
+
+		return rest_ensure_response(
+			$this->prepare_item_for_response(
+				array(
+					'id'          => $request['id'],
+					'name'        => $tool['name'],
+					'description' => $tool['desc'],
+				),
+				$request
+			)
+		);
+
+	}
+
+	/**
+	 * Update (run) a tool
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param \WP_REST_Request $request Request data.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function update_item( $request ) {
+
+		$tools = $this->get_tools();
+
+		if ( empty( $tools[ $request['id'] ] ) ) {
+			return new \WP_Error( 'atum_rest_tool_invalid_id', __( 'Invalid tool ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		$tool = $tools[ $request['id'] ];
+		$tool = array(
+			'id'          => $request['id'],
+			'name'        => $tool['name'],
+			'description' => $tool['desc'],
+		);
+
+		$run_return = $this->run_tool( $request['id'] );
+		$tool       = array_merge( $tool, $run_return );
+
+		/**
+		 * Fires after an ATUM tool has been executed.
+		 *
+		 * @param array            $tool    Details about the tool that has been executed.
+		 * @param \WP_REST_Request $request The current WP_REST_Request object.
+		 */
+		do_action( 'atum/api/rest_run_tool', $tool, $request );
+
+		$request->set_param( 'context', 'edit' );
+		$response = $this->prepare_item_for_response( $tool, $request );
+
+		return rest_ensure_response( $response );
+
+	}
+
+	/**
+	 * Prepare a tool item for serialization
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param  array            $item     Object.
+	 * @param  \WP_REST_Request $request  Request object.
 	 *
 	 * @return \WP_REST_Response $response Response data.
 	 */
-	public function prepare_item_for_response( $widget, $request ) {
+	public function prepare_item_for_response( $item, $request ) {
 
-		$data = array(
-			'slug'        => $widget->slug,
-			'description' => $widget->description,
-		);
-
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$context = empty( $request['context'] ) ? 'view' : $request['context'];
+		$data    = $this->add_additional_fields_to_object( $item, $request );
 		$data    = $this->filter_response_by_context( $data, $context );
 
-		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
-		$response->add_links( array(
-			'self'       => array(
-				'href' => rest_url( sprintf( '/%s/%s/%s', $this->namespace, $this->rest_base, $widget->slug ) ),
-			),
-			'collection' => array(
-				'href' => rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ),
-			),
-		) );
 
-		/**
-		 * Filter a dashboard returned from the API.
-		 * Allows modification of the dashboard data right before it is returned.
-		 *
-		 * @param \WP_REST_Response $response The response object.
-		 * @param object            $widget   The original report object.
-		 * @param \WP_REST_Request  $request  Request used to generate the response.
-		 */
-		return apply_filters( 'atum/api/rest_prepare_dashboard', $response, $widget, $request );
+		$response->add_links( $this->prepare_links( $item['id'] ) );
+
+		return $response;
+
+	}
+
+	/**
+	 * Prepare links for the request
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $id ID.
+	 *
+	 * @return array
+	 */
+	protected function prepare_links( $id ) {
+
+		$base  = '/' . $this->namespace . '/' . $this->rest_base;
+		$links = array(
+			'item' => array(
+				'href'       => rest_url( trailingslashit( $base ) . $id ),
+				'embeddable' => true,
+			),
+		);
+
+		return $links;
+
+	}
+
+	/**
+	 * Runs a tool
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $tool Tool.
+	 *
+	 * @return array
+	 */
+	public function run_tool( $tool ) {
+
+		$ran = TRUE;
+
+		switch ( $tool ) {
+			case 'enable-manage-stock':
+				$message = Helpers::change_status_meta( '_manage_stock', 'yes', TRUE );
+				break;
+
+			case 'disable-manage-stock':
+				$message = Helpers::change_status_meta( '_manage_stock', 'no', TRUE );
+				break;
+
+			case 'enable-atum-control':
+				$message = Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes', TRUE );
+				break;
+
+			case 'disable-atum-control':
+				$message = Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'no', TRUE );
+				break;
+
+			case 'clear-out-stock-threshold':
+				Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
+
+				if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
+					$message = __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN );
+				}
+				else {
+					$message = __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN );
+				}
+
+				break;
+
+			default:
+				$tools = $this->get_tools();
+
+				if ( isset( $tools[ $tool ]['callback'] ) ) {
+
+					$callback = $tools[ $tool ]['callback'];
+					$return   = call_user_func( $callback );
+
+					if ( is_string( $return ) ) {
+						$message = $return;
+					}
+					elseif ( FALSE === $return ) {
+						$callback_string = is_array( $callback ) ? get_class( $callback[0] ) . '::' . $callback[1] : $callback;
+						$ran             = FALSE;
+						/* translators: %s: callback string */
+						$message = sprintf( __( 'There was an error calling %s', ATUM_TEXT_DOMAIN ), $callback_string );
+					}
+					else {
+						$message = __( 'Tool ran.', ATUM_TEXT_DOMAIN );
+					}
+				}
+				else {
+					$ran     = FALSE;
+					$message = __( 'There was an error calling this tool. There is no callback present.', ATUM_TEXT_DOMAIN );
+				}
+
+				break;
+		}
+
+		return array(
+			'success' => $ran,
+			'message' => $message,
+		);
 
 	}
 

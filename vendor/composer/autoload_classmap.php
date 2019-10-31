@@ -30,6 +30,7 @@ return array(
     'Atum\\Api\\Controllers\\V3\\SettingOptionsController' => $baseDir . '/classes/Api/Controllers/V3/SettingOptionsController.php',
     'Atum\\Api\\Controllers\\V3\\SettingsController' => $baseDir . '/classes/Api/Controllers/V3/SettingsController.php',
     'Atum\\Api\\Controllers\\V3\\SuppliersController' => $baseDir . '/classes/Api/Controllers/V3/SuppliersController.php',
+    'Atum\\Api\\Controllers\\V3\\ToolsController' => $baseDir . '/classes/Api/Controllers/V3/ToolsController.php',
     'Atum\\Api\\Extenders\\AtumProductData' => $baseDir . '/classes/Api/Extenders/AtumProductData.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
     'Atum\\Components\\AtumCache' => $baseDir . '/classes/Components/AtumCache.php',

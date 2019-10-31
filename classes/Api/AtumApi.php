@@ -49,6 +49,7 @@ class AtumApi {
 		'atum-dashboard-promo-sales'         => __NAMESPACE__ . '\Controllers\V3\DashboardPromoSalesController',
 		'atum-dashboard-stock-control'       => __NAMESPACE__ . '\Controllers\V3\DashboardStockControlController',
 		'atum-dashboard-current-stock-value' => __NAMESPACE__ . '\Controllers\V3\DashboardCurrentStockValueController',
+		'atum-tools'                         => __NAMESPACE__ . '\Controllers\V3\ToolsController',
 	);
 
 	/**
