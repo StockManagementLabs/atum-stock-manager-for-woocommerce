@@ -62,7 +62,7 @@ class Orders extends AtumWidget {
 		}
 		else {
 
-			$order_status = (array) apply_filters( 'atum/dashboard/promo_sales_widget/order_status', [
+			$order_status = (array) apply_filters( 'atum/dashboard/orders_widget/order_status', [
 				'wc-processing',
 				'wc-completed',
 			] );

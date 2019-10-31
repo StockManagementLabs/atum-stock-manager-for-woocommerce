@@ -1,6 +1,6 @@
 <?php
 /**
- * REST ATUM API Dashboard Statistics controller
+ * REST ATUM API Dashboard Statistics widget controller
  * Handles requests to the /atum/dashboard/statistics endpoint.
  *
  * @since       1.6.2
@@ -15,18 +15,9 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
-use Atum\Components\AtumCapabilities;
 use Atum\Dashboard\WidgetHelpers;
-use Atum\Modules\ModuleManager;
 
-class DashboardStatisticsController extends \WC_REST_Controller {
-
-	/**
-	 * Endpoint namespace.
-	 *
-	 * @var string
-	 */
-	protected $namespace = 'wc/v3';
+class DashboardStatisticsController extends DashboardWidgetController {
 
 	/**
 	 * Route base.
@@ -34,29 +25,6 @@ class DashboardStatisticsController extends \WC_REST_Controller {
 	 * @var string
 	 */
 	protected $rest_base = 'atum/dashboard/statistics';
-
-	/**
-	 * Register the routes for the Dashboard Statistics
-	 *
-	 * @since 1.6.2
-	 */
-	public function register_routes() {
-
-		if ( ModuleManager::is_module_active( 'dashboard' ) ) {
-
-			register_rest_route( $this->namespace, '/' . $this->rest_base, array(
-				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_items' ),
-					'permission_callback' => array( $this, 'get_items_permissions_check' ),
-					'args'                => $this->get_collection_params(),
-				),
-				'schema' => array( $this, 'get_public_item_schema' ),
-			) );
-
-		}
-
-	}
 
 	/**
 	 * Get the Statistics' schema, conforming to JSON Schema
@@ -179,44 +147,6 @@ class DashboardStatisticsController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Check whether a given request has permission to read statistics
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param  \WP_REST_Request $request Full details about the request.
-	 *
-	 * @return \WP_Error|bool
-	 */
-	public function get_items_permissions_check( $request ) {
-
-		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
-			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot list resources.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
-		}
-
-		return TRUE;
-
-	}
-
-	/**
-	 * Get statistics
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param |WP_REST_Request $request
-	 *
-	 * @return array|\WP_Error
-	 */
-	public function get_items( $request ) {
-
-		$data   = array();
-		$item   = $this->prepare_item_for_response( NULL, $request );
-		$data[] = $this->prepare_response_for_collection( $item );
-
-		return rest_ensure_response( $data );
-
-	}
-
-	/**
 	 * Prepare a statistics object for serialization
 	 *
 	 * @since 1.6.2
@@ -294,7 +224,7 @@ class DashboardStatisticsController extends \WC_REST_Controller {
 		 * Allows modification of the data right before it is returned.
 		 *
 		 * @param \WP_REST_Response $response The response object.
-		 * @param \stdClass         $data     The original report object.
+		 * @param \stdClass         $data     The original statistics widget object.
 		 * @param \WP_REST_Request  $request  Request used to generate the response.
 		 */
 		return apply_filters( 'atum/api/rest_prepare_dashboard_statistics', $response, (object) $data, $request );

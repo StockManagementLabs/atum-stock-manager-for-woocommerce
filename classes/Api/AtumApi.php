@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Modules\ModuleManager;
 
-
 class AtumApi {
 
 	/**
@@ -32,17 +31,24 @@ class AtumApi {
 	 * @var array
 	 */
 	private $api_controllers = array(
-		'atum-suppliers'            => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
-		'atum-purchase-orders'      => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
-		'atum-purchase-order-notes' => __NAMESPACE__ . '\Controllers\V3\PurchaseOrderNotesController',
-		'atum-inventory-logs'       => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
-		'atum-inventory-log-notes'  => __NAMESPACE__ . '\Controllers\V3\InventoryLogNotesController',
-		'atum-settings'             => __NAMESPACE__ . '\Controllers\V3\SettingsController',
-		'atum-setting-options'      => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
-		'atum-locations'            => __NAMESPACE__ . '\Controllers\V3\ProductLocationsController',
-		'atum-inbound-stock'        => __NAMESPACE__ . '\Controllers\V3\InboundStockController',
-		'atum-addons'               => __NAMESPACE__ . '\Controllers\V3\AddonsController',
-		'atum-dashboard-statistics' => __NAMESPACE__ . '\Controllers\V3\DashboardStatisticsController',
+		'atum-suppliers'                     => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
+		'atum-purchase-orders'               => __NAMESPACE__ . '\Controllers\V3\PurchaseOrdersController',
+		'atum-purchase-order-notes'          => __NAMESPACE__ . '\Controllers\V3\PurchaseOrderNotesController',
+		'atum-inventory-logs'                => __NAMESPACE__ . '\Controllers\V3\InventoryLogsController',
+		'atum-inventory-log-notes'           => __NAMESPACE__ . '\Controllers\V3\InventoryLogNotesController',
+		'atum-settings'                      => __NAMESPACE__ . '\Controllers\V3\SettingsController',
+		'atum-setting-options'               => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
+		'atum-locations'                     => __NAMESPACE__ . '\Controllers\V3\ProductLocationsController',
+		'atum-inbound-stock'                 => __NAMESPACE__ . '\Controllers\V3\InboundStockController',
+		'atum-addons'                        => __NAMESPACE__ . '\Controllers\V3\AddonsController',
+		'atum-dashboard'                     => __NAMESPACE__ . '\Controllers\V3\DashboardController',
+		'atum-dashboard-statistics'          => __NAMESPACE__ . '\Controllers\V3\DashboardStatisticsController',
+		'atum-dashboard-sales'               => __NAMESPACE__ . '\Controllers\V3\DashboardSalesController',
+		'atum-dashboard-lost-sales'          => __NAMESPACE__ . '\Controllers\V3\DashboardLostSalesController',
+		'atum-dashboard-orders'              => __NAMESPACE__ . '\Controllers\V3\DashboardOrdersController',
+		'atum-dashboard-promo-sales'         => __NAMESPACE__ . '\Controllers\V3\DashboardPromoSalesController',
+		'atum-dashboard-stock-control'       => __NAMESPACE__ . '\Controllers\V3\DashboardStockControlController',
+		'atum-dashboard-current-stock-value' => __NAMESPACE__ . '\Controllers\V3\DashboardCurrentStockValueController',
 	);
 
 	/**
