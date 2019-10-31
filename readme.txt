@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.2.4
+Tested up to: 5.3.0
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.7.1
-Stable tag: 1.6.1.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,8 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 **With The Advanced [ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/) comes ATUM 1.6** - yet the best, faster and more user friendly ATUM Inventory Management for WooCommerce.
 
 **NEW Colour Modes added to improve your management experience**
+
+**NEW ATUM REST API**
 
 = AVAILABLE PREMIUM ADD-ONS =
 
@@ -222,6 +224,47 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.2`
+
+*2019-10-31*
+
+**Features**
+
+* NEW ATUM REST API fully integrated into WooCommerce API v3 (API docs available soon).
+* Added extender to add all the ATUM product data to the WC's products endpoint.
+* Added new endpoint for Suppliers.
+* Added new endpoint for ATUM Settings.
+* Added new endpoint for Purchase Orders.
+* Added new endpoint for Purchase Orders' notes.
+* Added new endpoint for Inventory Logs.
+* Added new endpoint for Inventory Logs' notes.
+* Added new endpoint for Inbound Stock products.
+* Added new endpoint for ATUM Locations.
+* Added new endpoint for the ATUM add-ons.
+* Added new endpoints for all the Dashboard widgets.
+* Added new endpoint for ATUM Tools.
+* Registered new custom capabilities.
+
+**Changes**
+
+* Check current user capabilities before showing ATUM Settings.
+* Added custom capabilities to ATUM Location taxonomy.
+* Show ATUM Order's system notes in red.
+* Assign the system notes to ATUM instead of the currently-logged in user.
+* Restrict the statistics widgets to user roles that have the right capability.
+
+**Fixes**
+
+* Fixed Visual settings disappearing when saving other settings' sections.
+* No colors were shown in Visual Settings if no theme was set.
+* Fixed color picker fields not working as expected.
+* Show the ATUM Order notes date and author when adding a new note manually.
+* Fixed the default dashboard layout (all the widgets are added now by default).
+* CSS fixes.
+* Refactory.
 
 ---
 
