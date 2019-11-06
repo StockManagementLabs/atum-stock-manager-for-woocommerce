@@ -15,7 +15,9 @@ namespace Atum\Api\Extenders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 
@@ -55,6 +57,7 @@ class AtumProductData {
 		'lost_sales'          => [ 'get', 'update' ],
 		'has_location'        => [ 'get', 'update' ],
 		'update_date'         => [ 'get', 'update' ],
+		'atum_locations'      => [ 'get', 'update' ],
 	);
 
 	/**
@@ -102,7 +105,10 @@ class AtumProductData {
 			unset( $this->product_fields['supplier_id'], $this->product_fields['supplier_sku'] );
 		}
 		elseif ( ! AtumCapabilities::current_user_can( 'manage_location_terms' ) ) {
-			unset( $this->product_fields['has_location'] );
+			unset(
+				$this->product_fields['has_location'],
+				$this->product_fields['atum_locations']
+			);
 		}
 
 		if ( ! ModuleManager::is_module_active( 'inventory_logs' ) ) {
@@ -173,23 +179,23 @@ class AtumProductData {
 			),
 			'supplier_id'         => array(
 				'required'    => FALSE,
-				'description' => __( 'The ID of the ATUM Supplier that is linked to this product.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'The ID of the ATUM Supplier that is linked to the product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'integer',
 			),
 			'supplier_sku'        => array(
 				'required'    => FALSE,
-				'description' => __( "The Supplier's SKU for this product.", ATUM_TEXT_DOMAIN ),
+				'description' => __( "The Supplier's SKU for the product.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
 			),
 			'atum_controlled'     => array(
 				'required'    => FALSE,
-				'description' => __( 'Whether this product is being controlled by ATUM.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'Whether the product is being controlled by ATUM.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 				'default'     => FALSE,
 			),
 			'out_stock_date'      => array(
 				'required'    => FALSE,
-				'description' => __( 'The date when this product run out of stock.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'The date when the product run out of stock.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
 			),
 			'out_stock_threshold' => array(
@@ -260,13 +266,40 @@ class AtumProductData {
 			),
 			'has_location'        => array(
 				'required'    => FALSE,
-				'description' => __( 'Whether this product has any ATUM location set.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'Whether the product has any ATUM location set.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 			),
 			'update_date'         => array(
 				'required'    => FALSE,
-				'description' => __( 'Last date when the ATUM product data was calculated and saved for this product.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'Last date when the ATUM product data was calculated and saved for the product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
+			),
+			'atum_locations'      => array(
+				'description' => __( 'List of ATUM locations linked to the product.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'array',
+				'context'     => array( 'view', 'edit' ),
+				'items'       => array(
+					'type'       => 'object',
+					'properties' => array(
+						'id'   => array(
+							'description' => __( 'Location ID.', ATUM_TEXT_DOMAIN ),
+							'type'        => 'integer',
+							'context'     => array( 'view', 'edit' ),
+						),
+						'name' => array(
+							'description' => __( 'Location name.', ATUM_TEXT_DOMAIN ),
+							'type'        => 'string',
+							'context'     => array( 'view', 'edit' ),
+							'readonly'    => TRUE,
+						),
+						'slug' => array(
+							'description' => __( 'Location slug.', ATUM_TEXT_DOMAIN ),
+							'type'        => 'string',
+							'context'     => array( 'view', 'edit' ),
+							'readonly'    => TRUE,
+						),
+					),
+				),
 			),
 		);
 
@@ -314,12 +347,25 @@ class AtumProductData {
 
 			if ( is_a( $product, '\WC_Product' ) ) {
 
-				if ( is_callable( array( $product, $getter ) ) ) {
+				if ( 'atum_locations' === $field_name ) {
+
+					$data = array();
+
+					foreach ( wc_get_object_terms( $product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY ) as $term ) {
+						$data[] = array(
+							'id'   => $term->term_id,
+							'name' => $term->name,
+							'slug' => $term->slug,
+						);
+					}
+
+				}
+				elseif ( is_callable( array( $product, $getter ) ) ) {
 					$data = call_user_func( array( $product, $getter ) );
 				}
 				// Allow to handle some fields externally.
 				else {
-					$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $field_name, $response, $product );
+					$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $response, $field_name, $product );
 				}
 
 				$schema = $this->get_extended_product_schema();
@@ -397,9 +443,21 @@ class AtumProductData {
 
 		$setter = "set_$field_name";
 
-		if ( is_callable( array( $product, $setter ) ) ) {
+		if ( 'atum_locations' === $field_name ) {
+
+			$term_ids = wp_list_pluck( $field_value, 'id' );
+			$term_ids = array_unique( array_filter( array_map( 'absint', $term_ids ) ) );
+
+			if ( ! empty( $term_ids ) ) {
+				wp_set_object_terms( $product_id, $term_ids, Globals::PRODUCT_LOCATION_TAXONOMY );
+			}
+
+		}
+		elseif ( is_callable( array( $product, $setter ) ) ) {
 			call_user_func( array( $product, $setter ), $field_value );
+			AtumCache::disable_cache();
 			$product->save_atum_data();
+			AtumCache::enable_cache();
 		}
 
 		do_action( 'atum/api/product_data/update_product_field', $field_value, $response, $field_name, $product );
