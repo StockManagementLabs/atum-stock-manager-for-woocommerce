@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Dashboard\Dashboard;
@@ -29,7 +30,6 @@ use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
-
 
 final class Ajax {
 	
@@ -547,7 +547,7 @@ final class Ajax {
 	public function control_all_products() {
 
 		check_ajax_referer( 'atum-control-all-products-nonce', 'token' );
-		$this->change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
+		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 
 	}
 
@@ -1171,7 +1171,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Add a note to an ATUM Order
+	 * Add a custom note to an ATUM Order
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1194,7 +1194,8 @@ final class Ajax {
 
 			if ( ! is_wp_error( $atum_order ) ) {
 
-				$comment_id = $atum_order->add_note( $note );
+				$comment_id   = $atum_order->add_note( $note, TRUE );
+				$note_comment = get_comment( $comment_id );
 
 				?>
 				<li rel="<?php echo esc_attr( $comment_id ) ?>" class="note">
@@ -1203,7 +1204,19 @@ final class Ajax {
 					</div>
 
 					<p class="meta">
-						<a href="#" class="delete_note"><?php esc_attr_e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
+
+						<abbr class="exact-date" title="<?php echo esc_attr( $note_comment->comment_date ) ?>">
+							<?php
+							/* translators: first one is the date added and second is the time */
+							printf( esc_html__( '%1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note_comment->comment_date ) ) ), esc_html( date_i18n( wc_time_format(), strtotime( $note_comment->comment_date ) ) ) );
+							?>
+						</abbr>
+
+						<?php
+						/* translators: the note author */
+						printf( ' ' . esc_html__( 'by %s', ATUM_TEXT_DOMAIN ), esc_html( $note_comment->comment_author ) ); ?>
+
+						<a href="#" class="delete_note"><?php esc_html_e( 'Delete note', ATUM_TEXT_DOMAIN ) ?></a>
 					</p>
 				</li>
 				<?php
@@ -1234,7 +1247,7 @@ final class Ajax {
 		$note_id = absint( $_POST['note_id'] );
 
 		if ( $note_id ) {
-			wp_delete_comment( $note_id );
+			wc_delete_order_note( $note_id );
 		}
 
 		wp_die();
@@ -2045,7 +2058,7 @@ final class Ajax {
 		
 		if ( in_array( $option, [ 'manage', 'unmanage' ] ) ) {
 			$manage_status = 'manage' === $option ? 'yes' : 'no';
-			$this->change_status_meta( '_manage_stock', $manage_status );
+			Helpers::change_status_meta( '_manage_stock', $manage_status );
 		}
 
 		wp_send_json_error( __( 'Something failed changing the Manage Stock option', ATUM_TEXT_DOMAIN ) );
@@ -2072,13 +2085,12 @@ final class Ajax {
 
 		if ( in_array( $option, [ 'control', 'uncontrol' ] ) ) {
 			$control_status = 'control' === $option ? 'yes' : 'no';
-			$this->change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
+			Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
 		}
 
 		wp_send_json_error( __( 'Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN ) );
 
 	}
-
 
 	/**
 	 * Clear all Out Stock Threshold values that have been set
@@ -2099,115 +2111,6 @@ final class Ajax {
 		}
 
 		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
-
-	}
-
-	/**
-	 * Change the value of a meta key for all products at once
-	 *
-	 * @since 1.4.5
-	 *
-	 * @package    Settings
-	 * @subpackage Tools
-	 *
-	 * @param string $meta_key
-	 * @param string $status
-	 */
-	private function change_status_meta( $meta_key, $status ) {
-
-		global $wpdb;
-		$wpdb->hide_errors();
-
-		$insert_success = $update_success = $stock_success = NULL;
-
-		if ( Globals::ATUM_CONTROL_STOCK_KEY === $meta_key ) {
-
-			$meta_value      = 'yes' === $status ? 1 : 0;
-			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-
-			// phpcs:disable WordPress.DB.PreparedSQL
-			$update_success = $wpdb->query( $wpdb->prepare( "
-				UPDATE $atum_data_table SET atum_controlled = %d		        		
-            	WHERE atum_controlled != %d",
-				$meta_value,
-				$meta_value
-			) );
-			// phpcs:enable
-			
-			// Get product still not inserted.
-			// phpcs:disable WordPress.DB.PreparedSQL
-			$update_success_2 = $wpdb->query( "
-				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
-				FROM {$wpdb->posts} p
-				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
-				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
-			" );
-			// phpcs:enable
-			
-			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
-			
-		}
-		else {
-
-			// If there are products without the manage_stock meta key, insert it for them.
-			$insert_success = $wpdb->query( $wpdb->prepare( "
-				INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-				SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts AS posts
-	            LEFT JOIN $wpdb->postmeta AS pm ON posts.ID = pm.post_id
-	            WHERE posts.post_type IN ('product', 'product_variation')
-	            AND posts.ID NOT IN (
-	                SELECT DISTINCT post_id FROM $wpdb->postmeta
-	                WHERE meta_key = %s
-	            )",
-				$meta_key,
-				$status,
-				$meta_key
-			) );
-
-			// For the rest, just update those that don't have the right status.
-			$update_success = $wpdb->query( $wpdb->prepare( "
-				UPDATE $wpdb->postmeta SET meta_value = %s		        		
-	            WHERE meta_key = %s AND meta_value != %s",
-				$status,
-				$meta_key,
-				$status
-			) );
-
-			// Ensure there is no _stock set to 0 for managed products.
-			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
-
-				if ( Helpers::is_using_new_wc_tables() ) {
-					
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
-		                WHERE stock_quantity IS NULL
-		                AND product_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				}
-				else {
-
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->postmeta} SET meta_value = '0'
-		                WHERE meta_key = '_stock'
-		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-				}
-				
-			}
-
-		}
-
-		// If all goes fine, die with the message, if not, just do nothing (the next method will display the error).
-		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
-			wp_send_json_success( __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN ) );
-		}
 
 	}
 
@@ -2305,63 +2208,11 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-color-scheme-nonce', 'token' );
 
-		$custom_settings = array();
-		$def_settings    = array(
-			'dm_primary_color'         => '#A8F1FF',
-			'dm_primary_color_light'   => '#DBF9FF',
-			'dm_primary_color_dark'    => '#00B8DB',
-			'dm_secondary_color'       => '#FFDF89',
-			'dm_secondary_color_light' => '#FFDF89',
-			'dm_secondary_color_dark'  => '#EFAF00',
-			'dm_tertiary_color'        => '#BAEF8D',
-			'dm_tertiary_color_light'  => '#69C61D',
-			'dm_text_color'            => '#FFFFFF',
-			'dm_text_color_2'          => '#31324A',
-			'dm_text_color_expanded'   => '#27283B',
-			'dm_border_color'          => '#FFFFFF',
-			'dm_bg_1_color'            => '#31324A',
-			'dm_bg_2_color'            => '#3B3D5A',
-			'dm_danger_color'          => '#FFAEAE',
-			'dm_title_color'           => '#FFFFFF',
-
-			'hc_primary_color'         => '#016B7F',
-			'hc_primary_color_light'   => '#F5FDFF',
-			'hc_primary_color_dark'    => '#E6FBFF',
-			'hc_secondary_color'       => '#016B7F',
-			'hc_secondary_color_light' => '#F5FDFF',
-			'hc_secondary_color_dark'  => '#E6FBFF',
-			'hc_tertiary_color'        => '#016B7F',
-			'hc_tertiary_color_light'  => '#F5FDFF',
-			'hc_text_color'            => '#016B7F',
-			'hc_text_color_2'          => '#27283B',
-			'hc_text_color_expanded'   => '#FFFFFF',
-			'hc_border_color'          => '#ADB5BD',
-			'hc_bg_1_color'            => '#FFFFFF',
-			'hc_bg_2_color'            => '#FFFFFF',
-			'hc_danger_color'          => '#FF4848',
-			'hc_title_color'           => '#27283B',
-
-			'bm_primary_color'         => '#00B8DB',
-			'bm_primary_color_light'   => '#F5FDFF',
-			'bm_primary_color_dark'    => '#DBF9FF',
-			'bm_secondary_color'       => '#EFAF00',
-			'bm_secondary_color_light' => '#FFF4D6',
-			'bm_secondary_color_dark'  => '#FFEDBC',
-			'bm_tertiary_color'        => '#69C61D',
-			'bm_tertiary_color_light'  => '#69C61D',
-			'bm_text_color'            => '#6C757D',
-			'bm_text_color_2'          => '#ADB5BD',
-			'bm_text_color_expanded'   => '#FFFFFF',
-			'bm_border_color'          => '#E9ECEF',
-			'bm_bg_1_color'            => '#FFFFFF',
-			'bm_bg_2_color'            => '#F8F9FA',
-			'bm_danger_color'          => '#FF4848',
-			'bm_title_color'           => '#27283B',
-		);
+		$custom_settings = $settings = [];
 
 		if ( 0 === absint( $_POST['reset'] ) ) {
 
-			foreach ( $def_settings as $dset => $dval ) {
+			foreach ( AtumColors::DEFAULT_COLOR_SCHEMES as $dset => $dval ) {
 				$val = Helpers::get_color_value( $dset );
 
 				if ( $val && $val !== $dval ) {
@@ -2372,13 +2223,13 @@ final class Ajax {
 
 			if ( count( $custom_settings ) > 0 ) {
 				foreach ( $custom_settings as $cset => $cval ) {
-					$def_settings[ $cset ] = $cval;
+					$settings[ $cset ] = $cval;
 				}
 			}
 
 		}
 
-		wp_send_json_success( $def_settings );
+		wp_send_json_success( $settings );
 
 	}
 

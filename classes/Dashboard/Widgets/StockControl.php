@@ -14,12 +14,12 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
-
 
 class StockControl extends AtumWidget {
 
@@ -60,20 +60,27 @@ class StockControl extends AtumWidget {
 	 */
 	public function render() {
 
-		$stock_counters = WidgetHelpers::get_stock_levels();
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			Helpers::load_view( 'widgets/not-allowed' );
+		}
+		else {
 
-		$sc_url   = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url( 'admin.php' ) );
-		$sc_links = array(
-			'in_stock'  => add_query_arg( 'view', 'in_stock', $sc_url ),
-			'out_stock' => add_query_arg( 'view', 'out_stock', $sc_url ),
-			'low_stock' => add_query_arg( 'view', 'low_stock', $sc_url ),
-			'unmanaged' => add_query_arg( 'view', 'unmanaged', $sc_url ),
-		);
+			$stock_counters = WidgetHelpers::get_stock_levels();
 
-		$config = $this->get_config();
-		$mode   = AtumColors::get_user_theme();
+			$sc_url   = add_query_arg( 'page', StockCentral::UI_SLUG, admin_url( 'admin.php' ) );
+			$sc_links = array(
+				'in_stock'  => add_query_arg( 'view', 'in_stock', $sc_url ),
+				'out_stock' => add_query_arg( 'view', 'out_stock', $sc_url ),
+				'low_stock' => add_query_arg( 'view', 'low_stock', $sc_url ),
+				'unmanaged' => add_query_arg( 'view', 'unmanaged', $sc_url ),
+			);
 
-		Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config', 'mode' ) );
+			$config = $this->get_config();
+			$mode   = AtumColors::get_user_theme();
+
+			Helpers::load_view( 'widgets/stock-control', compact( 'stock_counters', 'sc_links', 'config', 'mode' ) );
+
+		}
 
 	}
 

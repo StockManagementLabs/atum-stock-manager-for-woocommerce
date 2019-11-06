@@ -846,9 +846,9 @@ final class WidgetHelpers {
 
 		// Init values counter.
 		$counters = [
-			'items_stocks_counter'          => 0,
-			'items_purcharse_price_total'   => 0,
-			'items_without_purcharse_price' => 0,
+			'items_stocks_counter'         => 0,
+			'items_purchase_price_total'   => 0,
+			'items_without_purchase_price' => 0,
 		];
 
 		/*
@@ -966,20 +966,24 @@ final class WidgetHelpers {
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
+
 			$product       = Helpers::get_atum_product( $product_id );
 			$product_stock = (float) $product->get_stock_quantity();
 			/* @noinspection PhpUndefinedMethodInspection */
-			$product_purcharse_price = (float) $product->get_purchase_price();
+			$product_purchase_price = (float) $product->get_purchase_price();
 
 			if ( $product_stock && $product_stock > 0 ) {
+
 				$counters['items_stocks_counter'] += $product_stock;
-				if ( $product_purcharse_price && ! empty( $product_purcharse_price ) ) {
-					$counters['items_purcharse_price_total'] += ( $product_purcharse_price * $product_stock );
+				if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
+					$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
 				}
 				else {
-					$counters['items_without_purcharse_price'] += $product_stock;
+					$counters['items_without_purchase_price'] += $product_stock;
 				}
+
 			}
+
 		}
 
 		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.

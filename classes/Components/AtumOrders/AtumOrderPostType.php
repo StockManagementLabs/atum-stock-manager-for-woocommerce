@@ -21,7 +21,6 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 use Atum\InventoryLogs\InventoryLogs;
-use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -142,6 +141,12 @@ abstract class AtumOrderPostType {
 		add_action( 'untrashed_post', array( $this, 'update_order_item_props' ) );
 		
 		do_action( 'atum/order_post_type/init', $post_type );
+
+		// Delete the ATUM orders with our own method to be able to clean up all the data.
+		// When deleting from API, it's not really needed and does not work correctly.
+		if ( ! Helpers::is_rest_request() ) {
+			add_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX, 3 );
+		}
 
 	}
 
@@ -457,23 +462,23 @@ abstract class AtumOrderPostType {
 
 					do_action( "atum/$post_type/admin_actions_start", $atum_order );
 
-					$actions = array();
+					$actions  = array();
 					$statuses = static::get_statuses();
 
 					if ( static::FINISHED !== $atum_order->get_status() ) {
 
 						if ( isset( $statuses[ static::FINISHED ] ) ) {
 
-						$actions['complete'] = array(
-							'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-							/* translators: Change the order's status to finished */
+							$actions['complete'] = array(
+								'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
+								/* translators: Change the order's status to finished */
 								'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $statuses[ static::FINISHED ] ),
-							'action' => 'complete',
-							'target' => '_self',
-							'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
-						);
+								'action' => 'complete',
+								'target' => '_self',
+								'icon'   => '<i class="atum-icon atmi-checkmark-circle"></i>',
+							);
 
-					}
+						}
 
 					}
 
@@ -924,7 +929,7 @@ abstract class AtumOrderPostType {
 					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type ? TRUE : FALSE,
+					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
 				);
 
 				if ( InventoryLogs::POST_TYPE !== $post_type ) {
@@ -1197,6 +1202,35 @@ abstract class AtumOrderPostType {
 		</select>
 		<?php
 		
+	}
+
+	/**
+	 * Use our own method to delete ATUM Orders in order to clean up all the data
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param mixed    $check        Just return NULL to bypass this filter or any other value to bypass the original delete_post.
+	 * @param \WP_Post $post         The post being deleted.
+	 * @param bool     $force_delete Whether to bypass the trash and delete the post definitely.
+	 *
+	 * @return mixed
+	 */
+	public function maybe_delete_atum_order( $check, $post, $force_delete ) {
+
+		if ( in_array( $post->post_type, [ InventoryLogs::POST_TYPE, PurchaseOrders::POST_TYPE ], TRUE ) ) {
+
+			// Avoid cyclical calls to this method.
+			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
+
+			$atum_order = Helpers::get_atum_order_model( $post->ID );
+			$atum_order->delete( $force_delete );
+
+			$check = FALSE;
+
+		}
+
+		return $check;
+
 	}
 
 }

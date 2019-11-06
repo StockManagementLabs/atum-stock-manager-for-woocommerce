@@ -85,20 +85,12 @@ class Dashboard {
 			'min-height' => 5,
 		),
 		ATUM_PREFIX . 'current_stock_value_widget' => array(
-			'x'          => 0,
-			'y'          => 20,
-			'width'      => 6,
-			'height'     => 4,
-			'min-height' => 5,
-			'default'    => FALSE,
-		),
-		/*ATUM_PREFIX . 'news_widget'                => array(
 			'x'          => 6,
 			'y'          => 10,
 			'width'      => 6,
 			'height'     => 4,
 			'min-height' => 5,
-		),*/
+		),
 		ATUM_PREFIX . 'videos_widget'              => array(
 			'x'          => 0,
 			'y'          => 15,

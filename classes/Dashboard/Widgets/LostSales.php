@@ -14,10 +14,10 @@ namespace Atum\Dashboard\Widgets;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
-
 
 class LostSales extends AtumWidget {
 
@@ -57,31 +57,38 @@ class LostSales extends AtumWidget {
 	 */
 	public function render() {
 
-		// Get all the products IDs (including variations).
-		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
-		), TRUE );
-
-		if ( empty( $products ) ) {
-			return;
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			Helpers::load_view( 'widgets/not-allowed' );
 		}
+		else {
 
-		$stats_this_month = WidgetHelpers::get_sales_stats( array(
-			'types'      => array( 'lost_sales' ),
-			'products'   => $products,
-			'date_start' => 'first day of this month midnight',
-		) );
+			// Get all the products IDs (including variations).
+			$products = Helpers::get_all_products( array(
+				'post_type' => [ 'product', 'product_variation' ],
+			), TRUE );
 
-		$stats_today = WidgetHelpers::get_sales_stats( array(
-			'types'      => array( 'lost_sales' ),
-			'products'   => $products,
-			'date_start' => 'midnight today',
-			'days'       => 1,
-		) );
+			if ( empty( $products ) ) {
+				return;
+			}
 
-		$config = $this->get_config();
+			$stats_this_month = WidgetHelpers::get_sales_stats( array(
+				'types'      => array( 'lost_sales' ),
+				'products'   => $products,
+				'date_start' => 'first day of this month midnight',
+			) );
 
-		Helpers::load_view( 'widgets/lost-sales', compact( 'stats_this_month', 'stats_today', 'config' ) );
+			$stats_today = WidgetHelpers::get_sales_stats( array(
+				'types'      => array( 'lost_sales' ),
+				'products'   => $products,
+				'date_start' => 'midnight today',
+				'days'       => 1,
+			) );
+
+			$config = $this->get_config();
+
+			Helpers::load_view( 'widgets/lost-sales', compact( 'stats_this_month', 'stats_today', 'config' ) );
+
+		}
 
 	}
 

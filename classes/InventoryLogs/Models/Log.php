@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Items\LogItemProduct;
 
 
@@ -62,6 +63,37 @@ class Log extends AtumOrderModel {
 		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Increase Stock', ATUM_TEXT_DOMAIN ); ?></button>
 		<button type="button" class="button bulk-decrease-stock"><?php esc_attr_e( 'Reduce Stock', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php
+	}
+
+	/**
+	 * Recalculate the IL's data props every time a log is saved.
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param Log $log
+	 */
+	public function after_save( $log ) {
+
+		$items = $log->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var LogItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( is_a( $product, '\WC_Product' ) ) {
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
+			}
+
+		}
+
+		do_action( 'atum/inventory_logs/after_save', $log, $items );
+
 	}
 
 	/**********
@@ -151,14 +183,14 @@ class Log extends AtumOrderModel {
 	}
 	
 	/**
-	 * Get the Order's type
+	 * Get the Inventory Log's type
 	 *
 	 * @since 1.4.16
 	 *
 	 * @return string
 	 */
 	public function get_type() {
-		return ATUM_PREFIX . 'inventory_log';
+		return InventoryLogs::POST_TYPE;
 	}
 
 	/**
@@ -370,34 +402,110 @@ class Log extends AtumOrderModel {
 	}
 
 	/**
-	 * Recalculate the IL's data props every time a log is saved.
+	 * Getter to collect all the Inventory Log data within an array
 	 *
-	 * @since 1.5.8
+	 * @since 1.6.2
 	 *
-	 * @param Log $log
+	 * @return array
 	 */
-	public function after_save( $log ) {
+	public function get_data() {
 
-		$items = $log->get_items();
+		// Prepare the data array based on the WC_Order_Data structure.
+		$data = parent::get_data();
 
-		foreach ( $items as $item ) {
+		$log_data = array(
+			'type'             => $this->get_log_type(),
+			'order'            => $this->get_order(),
+			'reservation_date' => $this->get_reservation_date() ? new \WC_DateTime( $this->get_reservation_date() ) : '',
+			'return_date'      => $this->get_return_date() ? new \WC_DateTime( $this->get_return_date() ) : '',
+			'damage_date'      => $this->get_damage_date() ? new \WC_DateTime( $this->get_damage_date() ) : '',
+			'shipping_company' => $this->get_shipping_company(),
+			'custom_name'      => $this->get_custom_name(),
+		);
 
-			/**
-			 * Variable definition
-			 *
-			 * @var LogItemProduct $item
-			 */
-			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
+		return array_merge( $data, $log_data );
 
-			if ( is_a( $product, '\WC_Product' ) ) {
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
-			}
+	}
 
-		}
+	/**********
+	 * SETTERS
+	 **********/
 
-		do_action( 'atum/inventory_logs/after_save', $log, $items );
+	/**
+	 * Setter for the related Order ID
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param int $order_id
+	 */
+	public function set_order( $order_id ) {
+		$this->set_meta( '_order', absint( $order_id ) );
+	}
 
+	/**
+	 * Setter for the Log Type
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $log_type
+	 */
+	public function set_log_type( $log_type ) {
+		$this->set_meta( '_type', in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '' );
+	}
+
+	/**
+	 * Setter for the reservation date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $r_date
+	 */
+	public function set_reservation_date( $r_date ) {
+		$this->set_meta( '_reservation_date', Helpers::get_wc_time( $r_date ) );
+	}
+
+	/**
+	 * Setter for the warehouse damage date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $d_date
+	 */
+	public function set_damage_date( $d_date ) {
+		$this->set_meta( '_damage_date', Helpers::get_wc_time( $d_date ) );
+	}
+
+	/**
+	 * Setter for the customer returns date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $r_date
+	 */
+	public function set_return_date( $r_date ) {
+		$this->set_meta( '_return_date', Helpers::get_wc_time( $r_date ) );
+	}
+
+	/**
+	 * Setter for the custom type name
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $name
+	 */
+	public function set_custom_name( $name ) {
+		$this->set_meta( '_custom_name', sanitize_text_field( $name ) );
+	}
+
+	/**
+	 * Setter for the Lost in Post's shipping company
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $name
+	 */
+	public function set_shipping_company( $name ) {
+		$this->set_meta( '_shipping_company', sanitize_text_field( $name ) );
 	}
 
 }

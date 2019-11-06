@@ -195,6 +195,16 @@ ul.atum_order_notes {
 			}
 		}
 		
+		&.system-note {
+			.note_content {
+				background-color: $wc-red-light-alt;
+				
+				&:after {
+					border-color: $wc-red-light-alt transparent;
+				}
+			}
+		}
+		
 		p.meta {
 			padding: 10px;
 			color: $wp-gray-1;
@@ -207,7 +217,7 @@ ul.atum_order_notes {
 		}
 		
 		a.delete_note {
-			color: $danger;
+			color: $wp-red;
 		}
 		
 		.note_content::after {

@@ -872,9 +872,40 @@
 		// Color Pickers
 		.wp-picker-container {
 			
+			position: relative;
+			
 			.wp-color-picker {
 				max-width: 85px;
 			}
+			
+			.wp-picker-input-wrap {
+				
+				> label {
+					position: absolute;
+					left: 24px;
+				}
+				
+				input[type=text] {
+					background-color: transparent;
+					height: 25px;
+					margin-top: 3px;
+					font-size: 12px;
+					line-height: 1.17px;
+					font-family: inherit;
+					&, &:hover, &:focus {
+						border: none;
+					}
+				}
+				
+			}
+			
+			&.wp-picker-active {
+				.wp-color-result-text {
+					display: none;
+				}
+				
+			}
+			
 			
 			@include tablet-max {
 				.wp-picker-clear {

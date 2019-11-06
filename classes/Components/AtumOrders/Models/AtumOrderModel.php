@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumException;
+use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
@@ -89,6 +90,13 @@ abstract class AtumOrderModel {
 	 * @var string
 	 */
 	protected $block_message = '';
+
+	/**
+	 * Array to store the meta data to add/update
+	 *
+	 * @var array
+	 */
+	protected $meta = [];
 	
 	/**
 	 * AtumOrderModel constructor
@@ -192,15 +200,29 @@ abstract class AtumOrderModel {
 
 		global $wpdb;
 
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$meta_sql = $wpdb->prepare("
+			DELETE FROM itemmeta USING $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta 
+			INNER JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items 
+			WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d 
+		', $this->id );
+		// phpcs:enable
+
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$items_sql = $wpdb->prepare( "
+			DELETE FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . '
+			WHERE order_id = %d 
+		', $this->id );
+		// phpcs:enable
+
 		if ( ! empty( $type ) ) {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d AND items.order_item_type = %s', $this->id, $type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d AND order_item_type = %s', $this->id, $type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		}
-		else {
-			$wpdb->query( $wpdb->prepare( "DELETE FROM itemmeta USING $wpdb->prefix" . AtumOrderPostType::ORDER_ITEM_META_TABLE . " itemmeta INNER JOIN $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' items WHERE itemmeta.order_item_id = items.order_item_id AND items.order_id = %d', $this->id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_id = %d', $this->id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$type_sql   = $wpdb->prepare( ' AND order_item_type = %s', $type );
+			$meta_sql  .= $type_sql;
+			$items_sql .= $type_sql;
 		}
 
+		$wpdb->query( $meta_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $items_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$this->clear_caches();
 
 	}
@@ -738,9 +760,11 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
+	 * @param bool $including_meta Optional. Whether to save the meta too.
+	 *
 	 * @return int order ID
 	 */
-	public function save() {
+	public function save( $including_meta = TRUE ) {
 
 		// Trigger action before saving to the DB. Allows you to adjust object props before save.
 		do_action( 'atum/order/before_object_save', $this );
@@ -750,6 +774,10 @@ abstract class AtumOrderModel {
 		}
 		else {
 			$this->create();
+		}
+
+		if ( $including_meta ) {
+			$this->save_meta();
 		}
 
 		$this->process_status();
@@ -794,7 +822,7 @@ abstract class AtumOrderModel {
 					}
 
 					// If ID changed (new item saved to DB)...
-					if ( $item_id != $item_key ) { // WPCS: loose comparison ok.
+					if ( $item_id != $item_key ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 						$this->items[ $item_group ][ $item_id ] = $item;
 					}
 
@@ -819,7 +847,7 @@ abstract class AtumOrderModel {
 		if ( $new_status ) {
 			
 			$old_status = $this->db_status;
-			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->get_type() );
 			
 			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
 			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
@@ -854,15 +882,16 @@ abstract class AtumOrderModel {
 
 		try {
 
-			$current_date = Helpers::get_wc_time( current_time( 'timestamp', TRUE ) );
 			$this->set_currency( $this->get_currency() ?: get_woocommerce_currency() );
-			$status = $this->get_status();
+			$status       = $this->get_status();
+			$date_created = Helpers::get_wc_time( $this->get_date() ?: current_time( 'timestamp', TRUE ) );
+			$this->set_date( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-				'post_date'     => gmdate( 'Y-m-d H:i:s', $current_date->getOffsetTimestamp() ),
-				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $current_date->getTimestamp() ),
-				'post_type'     => $this->post->post_type,
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? $status : ATUM_PREFIX . 'pending',
+				'post_date'     => gmdate( 'Y-m-d H:i:s', $date_created->getOffsetTimestamp() ),
+				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $date_created->getTimestamp() ),
+				'post_type'     => $this->get_type(),
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
@@ -896,7 +925,7 @@ abstract class AtumOrderModel {
 		$date         = $this->get_date();
 		$created_date = Helpers::get_wc_time( $date );
 		
-		if ( $this->post->post_date !== $date ) {
+		if ( ! empty( $this->post->post_date ) && $this->post->post_date !== $date ) {
 			// Empty the post title to be updated by the get_title() method.
 			$this->post->post_title = '';
 		}
@@ -904,7 +933,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
 			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
-			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post->post_type ) ) ) ? $status : ATUM_PREFIX . 'pending',
+			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -917,7 +946,7 @@ abstract class AtumOrderModel {
 		 *
 		 * This ensures hooks are fired by either WP itself (admin screen save), or an update purely from CRUD
 		 */
-		if ( doing_action( "save_post_{$this->post->post_type}" ) ) {
+		if ( doing_action( "save_post_{$this->get_type()}" ) ) {
 			$GLOBALS['wpdb']->update( $GLOBALS['wpdb']->posts, $post_data, array( 'ID' => $this->id ) );
 			clean_post_cache( $this->id );
 		}
@@ -938,7 +967,7 @@ abstract class AtumOrderModel {
 	 */
 	public function update_status( $new_status ) {
 
-		$statuses = Helpers::get_atum_order_post_type_statuses( $this->post->post_type );
+		$statuses = Helpers::get_atum_order_post_type_statuses( $this->get_type() );
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
@@ -948,6 +977,39 @@ abstract class AtumOrderModel {
 		$this->set_status( $new_status );
 		$this->save();
 		
+	}
+
+	/**
+	 * Method to delete an ATUM order from the database.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param bool $force_delete Whether to skip the trash and remove the order definitely.
+	 *
+	 * @return void
+	 */
+	public function delete( $force_delete = FALSE ) {
+
+		if ( ! $this->id ) {
+			return;
+		}
+
+		if ( $force_delete ) {
+
+			// Delete all associated the order items + meta.
+			$this->delete_items();
+
+			wp_delete_post( $this->id );
+			$this->id = 0;
+			do_action( 'atum/orders/delete_order', $this );
+
+		}
+		else {
+			wp_trash_post( $this->id );
+			$this->set_status( 'trash' );
+			do_action( 'atum/orders/trash_order', $this );
+		}
+
 	}
 
 	/***************
@@ -1352,7 +1414,7 @@ abstract class AtumOrderModel {
 	public function is_editable() {
 		$status = $this->get_status();
 		
-		return apply_filters( 'atum/orders/is_editable', ! $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->post->post_type, TRUE ) ) );
+		return apply_filters( 'atum/orders/is_editable', ! $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->get_type(), TRUE ) ) );
 	}
 
 	/**
@@ -1360,19 +1422,28 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $note Note to add.
+	 * @param string $note           Note to add.
+	 * @param bool   $added_by_user  Optional. Whether the note was added manually by the user.
 	 *
 	 * @return int   Comment ID
 	 */
-	public function add_note( $note ) {
+	public function add_note( $note, $added_by_user = FALSE ) {
 
-		if ( ! $this->id || ! is_user_logged_in() || ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) {
+		if ( ! $this->id || ( is_user_logged_in() && ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) ) {
 			return 0;
 		}
 
-		$user                 = get_user_by( 'id', get_current_user_id() );
-		$comment_author       = $user->display_name;
-		$comment_author_email = $user->user_email;
+		if ( is_user_logged_in() && current_user_can( 'edit_shop_order', $this->get_id() ) && $added_by_user ) {
+			$user                 = get_user_by( 'id', get_current_user_id() );
+			$comment_author       = $user->display_name;
+			$comment_author_email = $user->user_email;
+		}
+		else {
+			$comment_author        = 'ATUM';
+			$comment_author_email  = ATUM_SHORT_NAME . '@';
+			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com'; // WPCS: input var ok.
+			$comment_author_email  = sanitize_email( $comment_author_email );
+		}
 
 		$commentdata = apply_filters( 'atum/orders/note_data', array(
 			'comment_post_ID'      => $this->id,
@@ -1381,7 +1452,7 @@ abstract class AtumOrderModel {
 			'comment_author_url'   => '',
 			'comment_content'      => $note,
 			'comment_agent'        => 'ATUM',
-			'comment_type'         => 'atum_order_note',
+			'comment_type'         => AtumComments::NOTES_KEY,
 			'comment_parent'       => 0,
 			'comment_approved'     => 1,
 		), $this->id );
@@ -1408,38 +1479,10 @@ abstract class AtumOrderModel {
 
 		if ( NULL !== $meta_key ) {
 			// Get a single field.
-			return get_post_meta( $this->id, $meta_key, $single );
+			return isset( $this->meta[ $meta_key ] ) ? $this->meta[ $meta_key ] : get_post_meta( $this->id, $meta_key, $single );
 		}
 		else {
 			return get_post_custom( $this->id );
-		}
-
-	}
-
-	/**
-	 * Saves the given meta key/value pairs
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param array $meta An associative array of meta keys and their values to save.
-	 * @param bool  $trim
-	 *
-	 * @return void
-	 */
-	public function save_meta( $meta = array(), $trim = FALSE ) {
-
-		foreach ( $meta as $key => $value ) {
-
-			if ( $trim ) {
-				$value = Helpers::trim_input( $value );
-			}
-
-			do_action( "atum/order/before_save_meta$key", $value, $this );
-
-			$this->set_meta( $key, $value );
-
-			do_action( "atum/order/after_save_meta$key", $value, $this );
-
 		}
 
 	}
@@ -1449,11 +1492,33 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $meta_key
-	 * @param mixed  $meta_value
+	 * @param string|array $meta_key    The meta key name.
+	 * @param mixed        $meta_value  Optional. Only needed for settings single metas. The array should contain the values.
 	 */
-	public function set_meta( $meta_key, $meta_value ) {
-		update_post_meta( $this->id, $meta_key, $meta_value );
+	public function set_meta( $meta_key, $meta_value = NULL ) {
+
+		if ( is_array( $meta_key ) ) {
+			$this->meta = array_merge( $this->meta, $meta_key );
+		}
+		else {
+			$this->meta[ $meta_key ] = $meta_value;
+		}
+
+	}
+
+	/**
+	 * Update all the previously-set meta fields to the current order post
+	 *
+	 * @since 1.6.2
+	 */
+	public function save_meta() {
+
+		foreach ( $this->meta as $meta_key => $meta_value ) {
+			do_action( "atum/order/before_save_meta$meta_key", $meta_value, $this );
+			update_post_meta( $this->id, $meta_key, $meta_value );
+			do_action( "atum/order/after_save_meta$meta_key", $meta_value, $this );
+		}
+
 	}
 
 	/**
@@ -1530,6 +1595,42 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Getter to collect all the ATUM Order data within an array
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+
+		// Prepare the data array based on the \WC_Order_Data structure (some unneeded data was excluded).
+		$data = array(
+			'id'                 => $this->id,
+			'status'             => $this->get_status(),
+			'currency'           => $this->get_currency() ?: get_woocommerce_currency(),
+			'prices_include_tax' => metadata_exists( 'post', $this->id, '_prices_include_tax' ) ? 'yes' === $this->get_meta( '_prices_include_tax' ) : 'yes' === get_option( 'woocommerce_prices_include_tax' ),
+			'date_created'       => new \WC_DateTime( $this->get_date() ),
+			'date_modified'      => new \WC_DateTime( $this->post->post_modified ),
+			'discount_total'     => $this->get_discount_total(),
+			'discount_tax'       => $this->get_discount_tax(),
+			'shipping_total'     => $this->get_shipping_total(),
+			'shipping_tax'       => $this->get_shipping_tax(),
+			'cart_tax'           => $this->get_cart_tax(),
+			'total'              => $this->get_total(),
+			'total_tax'          => $this->get_total_tax(),
+			'date_completed'     => $this->get_meta( '_date_completed' ),
+			'line_items'         => $this->get_items(),
+			'tax_lines'          => $this->get_items( 'tax' ),
+			'shipping_lines'     => $this->get_items( 'shipping' ),
+			'fee_lines'          => $this->get_items( 'fee' ),
+			'description'        => $this->post->post_content,
+		);
+
+		return apply_filters( 'atum/orders/data', $data, $this->get_type() );
+
+	}
+
+	/**
 	 * Get the title for the ATUM Order post
 	 *
 	 * @since 1.2.9
@@ -1572,7 +1673,7 @@ abstract class AtumOrderModel {
 	public function get_status() {
 		$status = $this->get_meta( '_status' );
 
-		return $status && strpos( $status, ATUM_PREFIX ) !== 0 ? ATUM_PREFIX . $status : $status;
+		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
 	}
 
 	/**
@@ -1595,6 +1696,28 @@ abstract class AtumOrderModel {
 	 */
 	public function get_currency() {
 		return $this->get_meta( '_currency' );
+	}
+
+	/**
+	 * Getter for created via
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return string
+	 */
+	public function get_created_via() {
+		return $this->get_meta( '_created_via' );
+	}
+
+	/**
+	 * Getter for prices_include_tax meta
+	 *
+	 * @since 1.6.2
+	 *
+	 * @return string
+	 */
+	public function get_prices_include_tax() {
+		return $this->get_meta( '_prices_include_tax' );
 	}
 
 	/**
@@ -1637,7 +1760,7 @@ abstract class AtumOrderModel {
 	}
 	
 	/**
-	 * Get order's type
+	 * Get ATUM order's type
 	 *
 	 * @since 1.4.16
 	 *
@@ -1854,6 +1977,17 @@ abstract class AtumOrderModel {
 	 **********/
 
 	/**
+	 * Set the ATUM Order date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $value
+	 */
+	public function set_date( $value ) {
+		$this->set_meta( '_date_created', Helpers::get_wc_time( $value ) );
+	}
+
+	/**
 	 * Set ATUM Order currency
 	 *
 	 * @since 1.2.9
@@ -1961,11 +2095,33 @@ abstract class AtumOrderModel {
 	 */
 	public function set_status( $value ) {
 
-		if ( $value && strpos( $value, ATUM_PREFIX ) !== 0 ) {
+		if ( $value && strpos( $value, ATUM_PREFIX ) !== 0 && ! in_array( $value, [ 'trash', 'any' ], TRUE ) ) {
 			$value = ATUM_PREFIX . $value;
 		}
 
 		$this->set_meta( '_status', wc_clean( $value ) );
+	}
+
+	/**
+	 * Set created via
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string $value
+	 */
+	public function set_created_via( $value ) {
+		$this->set_meta( '_created_via', esc_attr( $value ) );
+	}
+
+	/**
+	 * Set prices_include_tax meta
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param bool $value
+	 */
+	public function set_prices_include_tax( $value ) {
+		$this->set_meta( '_prices_include_tax', wc_bool_to_string( $value ) );
 	}
 
 	/**

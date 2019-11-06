@@ -762,10 +762,10 @@ final class Helpers {
 	 *
 	 * @since   0.0.2
 	 *
-	 * @param string  $name    The option key to retrieve.
-	 * @param mixed   $default Optional. The default value returned if the option was not found.
-	 * @param bool    $echo    Optional. If the option has to be returned or printed.
-	 * @param bool    $force   Optional. Whether to get the option from db instead of using the cached value.
+	 * @param string $name    The option key to retrieve.
+	 * @param mixed  $default Optional. The default value returned if the option was not found.
+	 * @param bool   $echo    Optional. If the option has to be returned or printed.
+	 * @param bool   $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
@@ -1179,6 +1179,127 @@ final class Helpers {
 	}
 
 	/**
+	 * Change the value of a meta key for all products at once
+	 *
+	 * @since 1.4.5
+	 *
+	 * @param string $meta_key
+	 * @param string $status
+	 * @param bool   $return_message
+	 *
+	 * @return void|string
+	 */
+	public static function change_status_meta( $meta_key, $status, $return_message = FALSE ) {
+
+		global $wpdb;
+		$wpdb->hide_errors();
+
+		$insert_success = $update_success = $stock_success = NULL;
+
+		if ( Globals::ATUM_CONTROL_STOCK_KEY === $meta_key ) {
+
+			$meta_value      = 'yes' === $status ? 1 : 0;
+			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			// phpcs:disable WordPress.DB.PreparedSQL
+			$update_success = $wpdb->query( $wpdb->prepare( "
+				UPDATE $atum_data_table SET atum_controlled = %d		        		
+            	WHERE atum_controlled != %d",
+				$meta_value,
+				$meta_value
+			) );
+			// phpcs:enable
+
+			// Get product still not inserted.
+			// phpcs:disable WordPress.DB.PreparedSQL
+			$update_success_2 = $wpdb->query( "
+				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
+				FROM {$wpdb->posts} p
+				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
+				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
+			" );
+			// phpcs:enable
+
+			$update_success = FALSE !== $update_success && FALSE !== $update_success_2;
+
+		}
+		else {
+
+			// If there are products without the manage_stock meta key, insert it for them.
+			$insert_success = $wpdb->query( $wpdb->prepare( "
+				INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
+				SELECT DISTINCT posts.ID, %s, %s FROM $wpdb->posts AS posts
+	            LEFT JOIN $wpdb->postmeta AS pm ON posts.ID = pm.post_id
+	            WHERE posts.post_type IN ('product', 'product_variation')
+	            AND posts.ID NOT IN (
+	                SELECT DISTINCT post_id FROM $wpdb->postmeta
+	                WHERE meta_key = %s
+	            )",
+				$meta_key,
+				$status,
+				$meta_key
+			) );
+
+			// For the rest, just update those that don't have the right status.
+			$update_success = $wpdb->query( $wpdb->prepare( "
+				UPDATE $wpdb->postmeta SET meta_value = %s		        		
+	            WHERE meta_key = %s AND meta_value != %s",
+				$status,
+				$meta_key,
+				$status
+			) );
+
+			// Ensure there is no _stock set to 0 for managed products.
+			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
+
+				if ( self::is_using_new_wc_tables() ) {
+
+					$stock_success = $wpdb->query( "
+						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
+		                WHERE stock_quantity IS NULL
+		                AND product_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				}
+				else {
+
+					$stock_success = $wpdb->query( "
+						UPDATE {$wpdb->postmeta} SET meta_value = '0'
+		                WHERE meta_key = '_stock'
+		                AND post_id IN (
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                )
+		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+				}
+
+			}
+
+		}
+
+		// If all goes fine, die with the message, if not, just do nothing (the next method will display the error).
+		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
+
+			$mesage = __( 'All your products were updated successfully', ATUM_TEXT_DOMAIN );
+
+			if ( ! $return_message ) {
+				wp_send_json_success( $mesage );
+			}
+			else {
+				return $mesage;
+			}
+
+		}
+		elseif ( $return_message ) {
+			return __( 'Something failed while updating your products', ATUM_TEXT_DOMAIN );
+		}
+
+	}
+
+	/**
 	 * Check whether a specific plugin is installed
 	 *
 	 * @since 1.2.0
@@ -1571,13 +1692,16 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $atum_order_id
+	 * @param int    $atum_order_id
+	 * @param string $post_type
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model( $atum_order_id ) {
+	public static function get_atum_order_model( $atum_order_id, $post_type = '' ) {
 
-		$post_type = get_post_type( $atum_order_id );
+		if ( ! $post_type ) {
+			$post_type = get_post_type( $atum_order_id );
+		}
 
 		switch ( $post_type ) {
 			case InventoryLogs::POST_TYPE:
@@ -1812,7 +1936,7 @@ final class Helpers {
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
-					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // WPCS: prefix ok.
+					do_action( $product->is_type( 'variation' ) ? 'woocommerce_variation_set_stock' : 'woocommerce_product_set_stock', $product ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals
 					
 					break;
 				
@@ -2400,7 +2524,7 @@ final class Helpers {
 
 		if ( ! $has_cache ) {
 
-			$atum_user_meta = get_user_meta( $user_id, ATUM_PREFIX . 'user_meta', TRUE );
+			$atum_user_meta = get_user_meta( $user_id, Globals::ATUM_USER_META_KEY, TRUE );
 
 			if ( $key && is_array( $atum_user_meta ) && in_array( $key, array_keys( $atum_user_meta ), TRUE ) ) {
 				$atum_user_meta = $atum_user_meta[ $key ];
@@ -2433,7 +2557,7 @@ final class Helpers {
 		}
 
 		$atum_user_meta[ $key ] = $value;
-		update_user_meta( $user_id, ATUM_PREFIX . 'user_meta', $atum_user_meta );
+		update_user_meta( $user_id, Globals::ATUM_USER_META_KEY, $atum_user_meta );
 
 		// Delete any saved user meta after updating its value.
 		$cache_key = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );
@@ -2804,6 +2928,7 @@ final class Helpers {
 		}
 
 		return $is_array ? $classes : implode( ' ', $classes );
+
 	}
 	
 	/**
@@ -2862,14 +2987,14 @@ final class Helpers {
 		if (
 			defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
 			|| isset( $_GET['rest_route'] ) // (#2)
-			&& strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 ) === 0
+			&& 0 === strpos( trim( $_GET['rest_route'], '\\/' ), $prefix, 0 )
 		) {
 			return TRUE;
 		}
 
 		// (#3)
 		global $wp_rewrite;
-		if ( $wp_rewrite === NULL ) {
+		if ( NULL === $wp_rewrite ) {
 			$wp_rewrite = new \WP_Rewrite();
 		}
 
