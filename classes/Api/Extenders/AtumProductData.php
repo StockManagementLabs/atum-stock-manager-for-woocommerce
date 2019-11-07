@@ -567,6 +567,16 @@ class AtumProductData {
 
 		}
 
+		// Supplier SKU filter.
+		if ( ! empty( $request['supplier_sku'] ) ) {
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'supplier_sku',
+				'value' => esc_attr( $request['supplier_sku'] ),
+			);
+
+		}
+
 		$this->atum_query_data = apply_filters( 'atum/api/product_data/atum_query_args', $this->atum_query_data, $request );
 
 		if ( ! empty( $this->atum_query_data ) ) {
