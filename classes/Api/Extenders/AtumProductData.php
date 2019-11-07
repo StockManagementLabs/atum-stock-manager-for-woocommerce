@@ -32,6 +32,13 @@ class AtumProductData {
 	private static $instance;
 
 	/**
+	 * The ATUM product data used in WP_Query
+	 *
+	 * @var array
+	 */
+	protected $atum_query_data = array();
+
+	/**
 	 * Custom ATUM API's product field names, indicating support for getting/updating.
 	 *
 	 * @var array
@@ -128,6 +135,11 @@ class AtumProductData {
 
 		// Exclude internal meta keys from the product's meta_data.
 		add_filter( 'woocommerce_data_store_wp_post_read_meta', array( $this, 'filter_product_meta' ), 10, 3 );
+
+		// Add extra data to the products' query.
+		foreach ( [ 'product', 'product_variation' ] as $post_type ) {
+			add_filter( "woocommerce_rest_{$post_type}_object_query", array( $this, 'prepare_objects_query' ), 10, 2 );
+		}
 
 	}
 
@@ -493,6 +505,89 @@ class AtumProductData {
 
 		return $meta_data;
 
+	}
+
+	/**
+	 * Prepare the products query for filtering by ATUM fields
+	 *
+	 * @since 1.6.3
+	 *
+	 * @param array            $args    Key value array of query var to query value.
+	 * @param \WP_REST_Request $request The request used.
+	 *
+	 * @return array
+	 */
+	public function prepare_objects_query( $args, $request ) {
+
+		// ATUM Locations filter.
+		if ( ! empty( $request['atum_locations'] ) ) {
+
+			$args['tax_query'][] = array(
+				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+				'field'    => 'term_id',
+				'terms'    => $request['atum_locations'],
+			);
+
+		}
+
+		// ATUM controlled filter.
+		if ( isset( $request['atum_controlled'] ) ) {
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'atum_controlled',
+				'value' => TRUE === wc_string_to_bool( $request['atum_controlled'] ) ? 1 : 0,
+				'type'  => 'NUMERIC',
+			);
+
+		}
+
+		// Price filter.
+		if ( isset( $request['min_purchase_price'] ) || isset( $request['max_purchase_price'] ) ) {
+
+			$current_min_price = isset( $request['min_purchase_price'] ) ? floatval( $request['min_purchase_price'] ) : 0;
+			$current_max_price = isset( $request['max_purchase_price'] ) ? floatval( $request['max_purchase_price'] ) : PHP_INT_MAX;
+
+			$this->atum_query_data['where'][] = array(
+				'key'     => 'purchase_price',
+				'value'   => array( $current_min_price, $current_max_price ),
+				'compare' => 'BETWEEN',
+				'type'    => 'DECIMAL(10,' . wc_get_price_decimals() . ')',
+			);
+
+		}
+
+		// Supplier filter.
+		if ( ! empty( $request['supplier'] ) ) {
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'supplier_id',
+				'value' => absint( $request['supplier'] ),
+				'type'  => 'NUMERIC',
+			);
+
+		}
+
+		$this->atum_query_data = apply_filters( 'atum/api/product_data/atum_query_args', $this->atum_query_data, $request );
+
+		if ( ! empty( $this->atum_query_data ) ) {
+			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+		}
+
+		return apply_filters( 'atum/api/product_data/objects_query_args', $args, $request );
+
+	}
+
+	/**
+	 * Customize the WP_Query to handle ATUM product data
+	 *
+	 * @since 1.6.3
+	 *
+	 * @param array $pieces
+	 *
+	 * @return array
+	 */
+	public function atum_product_data_query_clauses( $pieces ) {
+		return Helpers::product_data_query_clauses( $this->atum_query_data, $pieces );
 	}
 
 
