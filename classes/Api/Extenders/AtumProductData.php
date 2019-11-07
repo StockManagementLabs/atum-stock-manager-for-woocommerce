@@ -168,7 +168,10 @@ class AtumProductData {
 
 			// Add the field to the product and product_variations endpoints.
 			register_rest_field( 'product', $field_name, $args );
-			register_rest_field( 'product_variation', $field_name, $args );
+
+			if ( ! in_array( $field_name, [ 'has_location', 'atum_locations' ], TRUE ) ) {
+				register_rest_field( 'product_variation', $field_name, $args );
+			}
 
 		}
 
@@ -520,12 +523,12 @@ class AtumProductData {
 	public function prepare_objects_query( $args, $request ) {
 
 		// ATUM Locations filter.
-		if ( ! empty( $request['atum_locations'] ) ) {
+		if ( ! empty( $request['atum_location'] ) ) {
 
 			$args['tax_query'][] = array(
 				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
 				'field'    => 'term_id',
-				'terms'    => $request['atum_locations'],
+				'terms'    => $request['atum_location'],
 			);
 
 		}
