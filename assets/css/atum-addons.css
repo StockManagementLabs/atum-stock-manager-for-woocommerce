@@ -2519,6 +2519,12 @@ input[type="button"].btn-block {
   }
 }
 
+@media all and (max-width: 480px) {
+  #wpfooter {
+    padding: 0;
+  }
+}
+
 #wpbody-content {
   padding-bottom: 0;
 }
