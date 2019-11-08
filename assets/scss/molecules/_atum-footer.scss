@@ -107,4 +107,8 @@
 		display: block;
 		margin-left: 0 !important;
 	}
+	
+	@include mobile-max {
+		padding: 10px;
+	}
 }
