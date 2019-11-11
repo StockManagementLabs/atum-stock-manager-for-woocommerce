@@ -158,7 +158,7 @@ class InventoryLogsController extends AtumOrdersController {
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 
-		$params['order'] = array(
+		$params['order_id'] = array(
 			'description'       => __( 'Limit result set to inventory logs linked to the specified WC order ID.', ATUM_TEXT_DOMAIN ),
 			'type'              => 'integer',
 			'sanitize_callback' => 'absint',
@@ -261,12 +261,12 @@ class InventoryLogsController extends AtumOrdersController {
 		}
 
 		// Linked WC order.
-		if ( ! empty( $request['order'] ) ) {
+		if ( ! empty( $request['order_id'] ) ) {
 
 			$args['meta_query'] = array(
 				array(
 					'key'   => '_order',
-					'value' => $request['order'],
+					'value' => $request['order_id'],
 					'type'  => 'NUMERIC',
 				),
 			);
@@ -352,17 +352,63 @@ class InventoryLogsController extends AtumOrdersController {
 	protected function get_formatted_item_data( $object ) {
 
 		// Format the specific inventory log's data.
-		$formatted_data = parent::get_formatted_item_data( $object );
-		$format_date    = [ 'reservation_date', 'return_date', 'damage_date' ];
+		$formatted_data     = parent::get_formatted_item_data( $object );
+		$format_date        = [ 'reservation_date', 'return_date', 'damage_date' ];
+		$conditional_fields = array(
+			'reservation_date',
+			'reservation_date_gmt',
+			'return_date',
+			'return_date_gmt',
+			'damage_date',
+			'damage_date_gmt',
+			'shipping_company',
+			'custom_name',
+		);
+
+		// Filter out some fields depending on the Log type.
+		switch ( $formatted_data['type'] ) {
+			case 'reserved-stock':
+				unset(
+					$conditional_fields[ array_search( 'reservation_date', $conditional_fields ) ],
+					$conditional_fields[ array_search( 'reservation_date_gmt', $conditional_fields ) ]
+				);
+				break;
+
+			case 'customer-returns':
+				unset(
+					$conditional_fields[ array_search( 'return_date', $conditional_fields ) ],
+					$conditional_fields[ array_search( 'return_date_gmt', $conditional_fields ) ]
+				);
+				break;
+
+			case 'warehouse-damage':
+				unset(
+					$conditional_fields[ array_search( 'damage_date', $conditional_fields ) ],
+					$conditional_fields[ array_search( 'damage_date_gmt', $conditional_fields ) ]
+				);
+				break;
+
+			case 'lost-in-post':
+				unset( $conditional_fields[ array_search( 'shipping_company', $conditional_fields ) ] );
+				break;
+
+			case 'other':
+				unset( $conditional_fields[ array_search( 'custom_name', $conditional_fields ) ] );
+				break;
+		}
+
+		$object_rest_data_keys = array_diff( $this->rest_data_keys, $conditional_fields );
 
 		// Format date values.
 		foreach ( $format_date as $key ) {
-			if ( in_array( $key, $this->rest_data_keys ) ) {
+			if ( in_array( $key, $object_rest_data_keys ) ) {
 				$datetime                       = $formatted_data[ $key ];
 				$formatted_data[ $key ]         = wc_rest_prepare_date_response( $datetime, FALSE );
 				$formatted_data[ "{$key}_gmt" ] = wc_rest_prepare_date_response( $datetime );
 			}
 		}
+
+		$formatted_data = array_intersect_key( $formatted_data, array_flip( $object_rest_data_keys ) );
 
 		return $formatted_data;
 
