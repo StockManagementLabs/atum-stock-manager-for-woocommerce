@@ -169,7 +169,8 @@ class AtumProductData {
 			// Add the field to the product and product_variations endpoints.
 			register_rest_field( 'product', $field_name, $args );
 
-			if ( ! in_array( $field_name, [ 'has_location', 'atum_locations' ], TRUE ) ) {
+			// Some fields are not needed in variations.
+			if ( ! in_array( $field_name, [ 'has_location', 'atum_locations', 'inheritable' ], TRUE ) ) {
 				register_rest_field( 'product_variation', $field_name, $args );
 			}
 

@@ -76,7 +76,7 @@ class DashboardStatisticsController extends DashboardWidgetController {
 					'readonly'    => TRUE,
 				),
 				'legends' => array(
-					'description' => __( 'The collection of data for the statistics.', ATUM_TEXT_DOMAIN ),
+					'description' => __( 'The legends used on the statistics charts.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'object',
 					'context'     => array( 'view' ),
 					'readonly'    => TRUE,

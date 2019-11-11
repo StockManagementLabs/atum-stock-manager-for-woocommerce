@@ -58,7 +58,7 @@ class DashboardController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Get the Report's schema, conforming to JSON Schema.
+	 * Get the Dashboard's schema, conforming to JSON Schema.
 	 *
 	 * @since 1.6.2
 	 *
