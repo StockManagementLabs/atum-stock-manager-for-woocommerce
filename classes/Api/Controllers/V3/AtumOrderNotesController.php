@@ -317,7 +317,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		// We don't support trashing for this type, error out.
 		if ( ! $force ) {
-			return new \WP_Error( 'atum_rest_trash_not_supported', __( 'Webhooks do not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
+			return new \WP_Error( 'atum_rest_trash_not_supported', __( 'Order notes do not support trashing.', ATUM_TEXT_DOMAIN ), [ 'status' => 501 ] );
 		}
 
 		$order = $this->get_atum_order( $request );
