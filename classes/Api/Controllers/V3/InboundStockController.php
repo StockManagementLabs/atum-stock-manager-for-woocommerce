@@ -130,13 +130,13 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 					'readonly'    => TRUE,
 				),
 				'sku'               => array(
-					'description' => __( 'Unique identifier.', ATUM_TEXT_DOMAIN ),
+					'description' => __( "Product's Stock Keeping Unit.", ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
 				),
 				'inbound_stock'     => array(
-					'description' => __( 'Amount of inbound stock.', ATUM_TEXT_DOMAIN ),
+					'description' => __( 'The quantity of the product set within the purchase order.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'number',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
@@ -574,7 +574,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	protected function get_product_data( $item, $context = 'view' ) {
 
 		$product = Helpers::get_atum_product( $item );
-		$po_id   = $item->po_id;
+		$po_id   = absint( $item->po_id );
 		$po      = new PurchaseOrder( $po_id );
 
 		$data = array(
@@ -582,7 +582,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 			'name'                  => $product->get_name( $context ),
 			'type'                  => $product->get_type(),
 			'sku'                   => $product->get_sku( $context ),
-			'inbound_stock'         => AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' ),
+			'inbound_stock'         => (float) AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' ),
 			'date_ordered'          => wc_rest_prepare_date_response( $po->get_date(), FALSE ),
 			'date_on_sale_from_gmt' => wc_rest_prepare_date_response( $po->get_date() ),
 			'date_expected'         => wc_rest_prepare_date_response( $po->get_date_expected(), FALSE ),
