@@ -3199,6 +3199,12 @@ input[type="button"].btn-block {
   }
 }
 
+@media all and (max-width: 480px) {
+  #wpfooter {
+    padding: 0;
+  }
+}
+
 .atum-meta-box {
   padding: 15px 10px;
 }

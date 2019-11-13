@@ -4511,6 +4511,12 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   }
 }
 
+@media all and (max-width: 480px) {
+  #wpfooter {
+    padding: 0;
+  }
+}
+
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
