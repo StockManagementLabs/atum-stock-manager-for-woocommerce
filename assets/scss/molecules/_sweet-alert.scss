@@ -83,6 +83,12 @@
 				top: .15em;
 				padding-right: 3px;
 			}
+			
+			@include mobile-max {
+				width: 100%;
+				margin-bottom: 10px;
+			}
+			
 		}
 		
 		a {
