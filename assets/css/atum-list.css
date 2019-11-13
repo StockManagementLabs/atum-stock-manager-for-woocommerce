@@ -3481,6 +3481,13 @@ body .select2-container--default .select2-results__group {
   padding-right: 3px;
 }
 
+@media all and (max-width: 480px) {
+  .swal2-container .swal2-modal button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
 .swal2-container .swal2-modal a {
   text-decoration: none;
   color: var(--primary) !important;
@@ -4513,7 +4520,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 
 @media all and (max-width: 480px) {
   #wpfooter {
-    padding: 0;
+    padding: 10px;
   }
 }
 
