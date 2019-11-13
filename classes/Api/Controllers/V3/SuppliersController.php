@@ -174,7 +174,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 					'context'     => array( 'view', 'edit' ),
 				),
 				'permalink'         => array(
-					'description' => __( 'Product URL.', ATUM_TEXT_DOMAIN ),
+					'description' => __( 'Supplier URL.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'format'      => 'uri',
 					'context'     => array( 'view', 'edit' ),
@@ -271,7 +271,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 					'context'     => array( 'view', 'edit' ),
 				),
 				'country'           => array(
-					'description' => __( 'Supplier city.', ATUM_TEXT_DOMAIN ),
+					'description' => __( 'Supplier country.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'enum'        => array_keys( wc()->countries->get_countries() ),
