@@ -5,7 +5,7 @@
 /**
  * Third party plugins
  */
-import dragscroll from '../../../vendor/dragscroll.min';         // A patched fork of dragscroll
+import dragscroll from '../../../vendor/dragscroll';             // A patched fork of dragscroll
 import Hammer from 'hammerjs/hammer.min';                        // From node_modules
 
 import Globals from './_globals';
@@ -95,6 +95,7 @@ export default class DragScroll {
 		});
 		
 		dragscroll.reset();
+		
 		
 	}
 	
