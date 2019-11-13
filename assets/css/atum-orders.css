@@ -3420,6 +3420,13 @@ input[type="button"].btn-block {
   padding-right: 3px;
 }
 
+@media all and (max-width: 480px) {
+  .swal2-container .swal2-modal button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
 .swal2-container .swal2-modal a {
   text-decoration: none;
   color: var(--primary) !important;
@@ -4879,7 +4886,7 @@ ul.atum_order_notes li .note_content::after {
 
 @media all and (max-width: 480px) {
   #wpfooter {
-    padding: 0;
+    padding: 10px;
   }
 }
 
