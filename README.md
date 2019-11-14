@@ -187,6 +187,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.3`
+
+*2019-11-14*
+
+**Features**
+
+* Added ATUM Locations array to the Products' API endpoint.
+* Added filtering to Products' endpoint using ATUM fields.
+* Allow filtering by Supplier SKU.
+* Added touch events to ListTables' dragscroll.
+
+**Changes**
+
+* Disable unneeded ATUM REST fields from the Product Variations' endpoint.
+* CSS changes for accessibility (following WordPress 5.3 new styling).
+
+**Fixes**
+
+* CSS fixes for mobiles.
+* Fixed returning types in Inbound Stock's API endpoint.
+* Fixed param name + added conditional fields to the InventoryLogs' API endpoint.
+
+---
+
 `1.6.2`
 
 *2019-10-31*
