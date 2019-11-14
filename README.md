@@ -187,6 +187,17 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.3.1`
+
+*2019-11-14*
+
+**Fixes**
+
+* CSS fixes.
+* Fixed ListTable's stock filters cannot be clicked due to dragscroll.
+
+---
+
 `1.6.3`
 
 *2019-11-14*
