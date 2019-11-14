@@ -7,7 +7,7 @@ Tested up to: 5.3.0
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.8.0
-Stable tag: 1.6.3
+Stable tag: 1.6.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,17 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.3.1`
+
+*2019-11-14*
+
+**Fixes**
+
+* CSS fixes.
+* Fixed ListTable's stock filters cannot be clicked due to dragscroll.
 
 ---
 
