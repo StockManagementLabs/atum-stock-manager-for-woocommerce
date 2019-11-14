@@ -52,7 +52,7 @@ body {
 					font-family: atum-icon-font;
 					content: $atmi-chevron-down;
 					font-size: 10px;
-					color: var(--atum-table-filter-dropdown);
+					color: var(--main-border-alt);
 				}
 			}
 			
@@ -258,7 +258,7 @@ body {
 			.select2-selection--single {
 				height: 30px;
 				border-radius: 5px;
-				border: 1px solid var(--atum-select2-border);
+				border: 1px solid var(--main-border-alt);
 				background-color: var(--atum-table-bg);
 				
 				.select2-selection__rendered {
@@ -286,7 +286,7 @@ body {
 					width: 18px;
 					
 					b {
-						border-color: var(--atum-text-color-var3) transparent transparent transparent;
+						border-color: var(--main-border-alt) transparent transparent transparent;
 						border-style: solid;
 						border-width: 5px 4px 0 4px;
 						height: 0;
@@ -619,7 +619,7 @@ body {
 				.select2-selection__arrow {
 					background-color: $wp-gray-4;
 					border: none;
-					border-left: 1px solid var(--gray-500);
+					border-left: 1px solid var(--main-border-alt);
 					border-top-right-radius: 4px;
 					border-bottom-right-radius: 4px;
 					height: 26px;
@@ -653,7 +653,7 @@ body {
 					
 					.select2-selection__arrow {
 						border: none;
-						border-right: 1px solid var(--gray-500);
+						border-right: 1px solid var(--main-border-alt);
 						border-radius: 0;
 						border-top-left-radius: 4px;
 						border-bottom-left-radius: 4px;

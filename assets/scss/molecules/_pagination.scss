@@ -20,6 +20,7 @@
 			height: 30px;
 			line-height: 27px;
 			text-decoration: none;
+			box-sizing: border-box;
 			
 			@include tablet-max-wp {
 				width: 35px;
@@ -33,9 +34,9 @@
 		}
 		
 		#current-page-selector {
-			border: 1px solid var(--main-border);
+			border: 1px solid var(--main-border-alt);
+			background-color: var(--atum-pagination-bg);
 			vertical-align: 0;
-			background-color: var(--main-border);
 			box-shadow: none;
 			
 			&:focus {
@@ -50,13 +51,14 @@
 		
 		.tablenav-pages-navspan {
 			background-color: var(--atum-table-bg2);
-			border: 1px solid var(--atum-pagination-border-disabled);
+			border: 1px solid var(--main-border-alt);
 			color: var(--atum-pagination-disabled);
 		}
 		
 		.tablenav-current-page {
 			background-color: var(--atum-pagination-bg);
-			padding: 8px 12px 6px;
+			border: 1px solid var(--main-border-alt);
+			padding: 6px 12px;
 			
 			@include tablet-max-wp {
 				padding: 8px 15px 11px;
@@ -97,6 +99,7 @@
 			height: 30px;
 			text-decoration: none;
 			background-color: var(--atum-pagination-bg);
+			box-sizing: border-box;
 			
 			&:hover, &:focus {
 				background-color: var(--atum-pagination-bg);

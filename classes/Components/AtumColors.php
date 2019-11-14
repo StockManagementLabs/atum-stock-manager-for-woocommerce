@@ -49,6 +49,7 @@ class AtumColors {
 		'gray_100'   => '#F8F9FA',
 		'gray_200'   => '#E9ECEF',
 		'gray_500'   => '#ADB5BD',
+		'gray_600'   => '#6C757D',
 		'dark'       => '#343A40',
 		'white'      => '#FFFFFF',
 		'black'      => '#000000',
@@ -160,7 +161,7 @@ class AtumColors {
 		$this->colors['tertiary_color_dark']   = ! empty( $visual_settings[ "{$prefix}tertiary_color_dark" ] ) ? $visual_settings[ "{$prefix}tertiary_color_dark" ] : '#B4F0C9';
 		$this->colors['text_color']            = ! empty( $visual_settings[ "{$prefix}text_color" ] ) ? $visual_settings[ "{$prefix}text_color" ] : '#6C757D';
 		$this->colors['text_color_rgb']        = $this->convert_hexadecimal_to_rgb( $this->colors['text_color'] );
-		$this->colors['text_color_2']          = ! empty( $visual_settings[ "{$prefix}text_color_2" ] ) ? $visual_settings[ "{$prefix}text_color_2" ] : $this->colors['gray_500'];
+		$this->colors['text_color_2']          = ! empty( $visual_settings[ "{$prefix}text_color_2" ] ) ? $visual_settings[ "{$prefix}text_color_2" ] : $this->colors['gray_600'];
 		$this->colors['text_color_2_rgb']      = $this->convert_hexadecimal_to_rgb( $this->colors['text_color_2'] );
 		$this->colors['text_color_expanded']   = ! empty( $visual_settings[ "{$prefix}text_color_expanded" ] ) ? $visual_settings[ "{$prefix}text_color_expanded" ] : $this->colors['white'];
 		$this->colors['border_color']          = ! empty( $visual_settings[ "{$prefix}border_color" ] ) ? $visual_settings[ "{$prefix}border_color" ] : '#E9ECEF';
@@ -171,6 +172,7 @@ class AtumColors {
 		$this->colors['danger_color']          = ! empty( $visual_settings[ "{$prefix}danger_color" ] ) ? $visual_settings[ "{$prefix}danger_color" ] : '#FF4848';
 		$this->colors['danger_color_rgb']      = $this->convert_hexadecimal_to_rgb( $this->colors['danger_color'] );
 		$this->colors['title_color']           = ! empty( $visual_settings[ "{$prefix}title_color" ] ) ? $visual_settings[ "{$prefix}title_color" ] : $this->colors['blue_dark'];
+		$this->colors['main_border_alt']       = ! empty( $visual_settings[ "{$prefix}main_border_alt" ] ) ? $visual_settings[ "{$prefix}main_border_alt" ] : '#6C757D';
 
 		// Add the Visual Settings to ATUM settings.
 		if ( ModuleManager::is_module_active( 'visual_settings' ) && AtumCapabilities::current_user_can( 'edit_visual_settings' ) ) {
@@ -231,8 +233,7 @@ class AtumColors {
 			--atum-menu-text-highlight: {$this->colors['primary_color']};
 			--atum-pagination-border-disabled: $border_color;
 			--atum-pagination-disabled: $text_color_2;
-			--atum-pagination-text: $text_color_2;
-			--atum-select2-border: $border_color;
+			--atum-pagination-text: $text_color_2;			
 			--atum-settings-heads-bg: {$this->colors['primary_color']};
 			--atum-settings-input-border: $border_color;
 			--atum-settings-nav-link: {$this->colors['primary_color']};
@@ -283,6 +284,7 @@ class AtumColors {
 			--green-light: {$this->colors['primary_color_dark']};
 			--js-scroll-bg: {$this->colors['primary_color']};
 			--main-border: $border_color;
+			--main-border-alt: $border_color;
 			--main-dropdown-border: $border_color;
 			--main-text: $text_color;
 			--main-text-2: {$this->colors['text_color_2']};
@@ -363,8 +365,7 @@ class AtumColors {
 			--atum-menu-text-highlight: $bg_2_color;
 			--atum-pagination-border-disabled: rgba({$this->colors['border_color_rgb']}, 0.0);
 			--atum-pagination-disabled: {$this->colors['text_color']};
-			--atum-pagination-text: {$this->colors['text_color_2']};
-			--atum-select2-border: rgba({$this->colors['border_color_rgb']},0.5);
+			--atum-pagination-text: {$this->colors['text_color_2']};	
 			--atum-settings-btn-save: {$this->colors['primary_color']};
 			--atum-settings-btn-save-hover: rgba({$this->colors['primary_color_rgb']},0.7);
 			--atum-settings-heads-bg: $bg_1_color;
@@ -383,7 +384,7 @@ class AtumColors {
 			--atum-text-color-dark2: {$this->colors['text_color_2']};
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color']};
-			--atum-text-color-var3: {$this->colors['text_color_2']};
+			--atum-text-color-var3: {$this->colors['text_color']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
 			--blue-light: $bg_1_color;
 			--danger: {$this->colors['danger_color']};
@@ -417,6 +418,7 @@ class AtumColors {
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color']};
 		    --main-border: rgba({$this->colors['border_color_rgb']}, 0.2);
+		    --main-border-alt: rgba({$this->colors['border_color_rgb']},0.5);
 		    --main-dropdown-border: rgba({$this->colors['border_color_rgb']},0.5);
 			--main-text: {$this->colors['text_color']};
 			--main-text-2: {$this->colors['text_color_2']};
@@ -479,15 +481,14 @@ class AtumColors {
 			--atum-border-expanded: {$this->colors['border_color']};
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
 			--atum-column-groups-bg: {$this->colors['gray_200']};
-			--atum-dropdown-toggle-bg: {$this->colors['bg_2_color']};
+			--atum-dropdown-toggle-bg: {$this->colors['gray_200']};
 			--atum-expanded-bg: {$this->colors['bg_1_color']};
 		    --atum-footer-title: {$this->colors['title_color']};
 		    --atum-menu-text: {$this->colors['primary_color']};
 		    --atum-menu-text-highlight: {$this->colors['primary_color']};
 			--atum-pagination-border-disabled: {$this->colors['border_color']};
 			--atum-pagination-disabled: {$this->colors['text_color']};
-			--atum-pagination-text: {$this->colors['text_color']};
-		    --atum-select2-border: {$this->colors['border_color']};
+			--atum-pagination-text: {$this->colors['text_color']};		   
 			--atum-settings-btn-save: {$this->colors['white']};
 			--atum-settings-btn-save-hover: rgba({$this->colors['white_rgb']}, 0.7);
 			--atum-settings-heads-bg: {$this->colors['primary_color']};
@@ -521,6 +522,7 @@ class AtumColors {
 			--green-light: rgba({$this->colors['tertiary_color_rgb']}, 0.6);
 		    --js-scroll-bg: {$this->colors['text_color_2']};
 			--main-border: {$this->colors['border_color']};
+			--main-border-alt: {$this->colors['main_border_alt']};
 			--main-dropdown-border: {$this->colors['border_color']};
 			--main-text: {$this->colors['text_color']};
 			--main-text-2: {$this->colors['text_color_2']};

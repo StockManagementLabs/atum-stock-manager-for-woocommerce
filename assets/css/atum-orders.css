@@ -292,127 +292,127 @@
   --wc-purple: #96588a;
   --wc-purple-hover: rgba(150, 88, 138, 0.6);
   --wc-purple-shadow: rgba(150, 88, 138, 0.2);
-  --secondary: #EFAF00;
-  --secondary-var: #EFAF00;
-  --secondary-light: #fff8e5;
-  --secondary-dark: #ffedbc;
-  --orange-dark-light: #ffdf89;
-  --secondary-hover: rgba(239, 175, 0, 0.6);
-  --black-shadow-light: rgba(0, 0, 0, 0.04);
-  --atum-table-bg: #fff;
-  --atum-table-bg2: #f8f9fa;
-  --atum-bg-white: #fff;
-  --atum-text-white: #fff;
-  --wp-yiq-text-dark: #212529;
-  --wp-yiq-text-light: #fff;
-  --wp-pink-darken-expanded: #e7d0e3;
-  --wc-purple-expanded: #96588a;
-  --blue-light-expanded: #dbf9ff;
-  --green-light-expanded: #d5f5ba;
-  --tertiary-var: #69C61D;
-  --tertiary-light: #f0fbe7;
-  --tertiary-hover-text: #69C61D;
-  --tertiary-hover-border: none;
-  --main-border: rgba(255, 255, 255, 0.2);
-  --main-dropdown-border: #dee2e6;
-  --atum-border-expanded: #adb5bd;
-  --atum-text-color-var1: #adb5bd;
-  --atum-text-color-var2: #adb5bd;
-  --atum-text-color-var3: #6c757d;
-  --atum-text-color-dark2: #6c757d;
-  --atum-table-views-tabs: #adb5bd;
-  --atum-table-views-tabs-active: #00B8DB;
-  --atum-table-views-tabs-active-text: #fff;
-  --atum-menu-text: #00B8DB;
-  --atum-menu-text-highlight: #00B8DB;
-  --primary-var-dark: #00B8DB;
-  --primary-var-text2: #00B8DB;
-  --atum-table-link-text: #6c757d;
-  --atum-dropdown-toggle-bg: #f8f9fa;
-  --atum-select2-border: #dee2e6;
-  --atum-pagination-bg: #e9ecef;
-  --atum-pagination-border: transparent;
-  --atum-pagination-border-disabled: transparent;
-  --order-green-light: #d5f5ba;
-  --main-text: #343a40;
-  --atum-row-shadow: rgba(0, 0, 0, 0.04);
-  --atum-expanded-bg: #fff;
-  --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
-  --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
-  --atum-column-groups-bg: #e9ecef;
-  --primary-dark: #dbf9ff;
-  --atum-table-row-variation-text: #fff;
-  --primary-light: #f5fdff;
-  --main-text-expanded: #fff;
-  --atum-table-search-text-disabled: #fff;
-  --atum-dark-bg: #3b3d5a;
-  --popover-black-shadow: rgba(0, 0, 0, 0.2);
-  --atum-settings-nav-bg: #fff;
-  --atum-settings-heads-bg: #00B8DB;
-  --atum-settings-section-general-bg: #3b3d5a;
-  --atum-settings-section-bg: #fff;
-  --atum-settings-nav-link: #00B8DB;
-  --main-title: #27283B;
-  --atum-settings-text-logo: #27283B;
-  --atum-settings-input-border: #e9ecef;
-  --atum-settings-btn-save: #fff;
-  --atum-settings-btn-save-hover: #dbf9ff;
-  --atum-settings-wp-color-bg: transparent;
-  --wp-nth-child: #f8f9fa;
-  --dash-card-text: #adb5bd;
-  --dash-atum-version: rgba(0, 0, 0, 0.1);
-  --dash-subscription-input: rgba(255, 255, 255, 0.7);
-  --dash-nice-select-bg: #fff;
-  --dash-nice-select-list-bg: #fff;
-  --dash-nice-select-hover: #cbd3da;
-  --dash-nice-select-disabled: #eff1f3;
-  --dash-nice-select-disabled-after: #e6e8ea;
-  --dash-nice-select-option-hover-bg: #f8f9fa;
-  --dash-nice-select-option-selected-bg: #dbf9ff;
-  --dash-widget-list-border: rgba(248, 249, 250, 0.5);
-  --dash-stats-data-widget-primary: #00B8DB;
-  --dash-stats-data-widget-success: #69C61D;
-  --dash-widget-current-stock-value-bg: #ffe1e1;
-  --dash-widget-current-stock-value-text: #FF4848;
-  --dash-add-widget-color: #adb5bd;
-  --dash-card-bg: #fff;
-  --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-green-trans: rgba(106, 200, 30, 0.79);
-  --dash-green-light: #d5f5ba;
-  --dash-green-blue: rgba(30, 200, 149, 0.79);
-  --dash-input-group-bg: rgba(255, 255, 255, 0.66);
-  --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
-  --dash-statistics-ticks: #27283B;
-  --dash-statistics-grid-lines: #e9ecef;
-  --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
-  --atum-border-var: #e9ecef;
-  --dash-widget-icon: #adb5bd;
-  --dash-statistics-chart-type-selected-bg: transparent;
-  --dash-statistics-chart-type-selected-text: #EFAF00;
-  --dash-statistics-legend-switch-bg: rgba(248, 249, 250, 0.2);
-  --dash-next-text:  #e9ecef;
-  --dash-video-title: #343a40;
-  --dash-video-subs-text: #adb5bd;
-  --dash-add-widget-color-dark: #00B8DB;
   --atum-add-widget-title: #343a40;
   --atum-add-widget-separator: #f8f9fa;
-  --atum-version: #fff;
-  --atum-version-bg: rgba(0, 0, 0, 0.2);
-  --atum-table-search-submit-bg: #adb5bd;
-  --atum-table-filter-dropdown: #adb5bd;
+  --atum-bg-white: #fff;
+  --atum-border-expanded: #adb5bd;
+  --atum-border-var: #e9ecef;
+  --atum-column-groups-bg: #e9ecef;
+  --atum-dark-bg: #3b3d5a;
+  --atum-dropdown-toggle-bg: #e9ecef;
+  --atum-expanded-bg: #fff;
   --atum-footer-title: #27283B;
   --atum-footer-link: #0073AA;
   --atum-footer-text: #495057;
-  --primary-hover-text: #00B8DB;
-  --primary-hover-border: none;
-  --secondary-hover-text: #EFAF00;
-  --secondary-hover-border: none;
-  --danger-hover-text: #fff;
+  --atum-menu-text: #00B8DB;
+  --atum-menu-text-highlight: #00B8DB;
+  --atum-pagination-bg: #e9ecef;
+  --atum-pagination-border: transparent;
+  --atum-pagination-border-disabled: transparent;
+  --atum-row-shadow: rgba(0, 0, 0, 0.04);
+  --atum-settings-btn-save: #fff;
+  --atum-settings-btn-save-hover: #dbf9ff;
+  --atum-settings-input-border: #e9ecef;
+  --atum-settings-heads-bg: #00B8DB;
+  --atum-settings-nav-bg: #fff;
+  --atum-settings-nav-link: #00B8DB;
+  --atum-settings-section-general-bg: #3b3d5a;
+  --atum-settings-section-bg: #fff;
+  --atum-settings-text-logo: #27283B;
+  --atum-settings-wp-color-bg: transparent;
+  --atum-table-bg: #fff;
+  --atum-table-bg2: #f8f9fa;
+  --atum-table-filter-dropdown: #6c757d;
+  --atum-table-link-text: #6c757d;
+  --atum-table-row-variation-text: #fff;
+  --atum-table-search-submit-bg: #adb5bd;
+  --atum-table-search-text-disabled: #fff;
+  --atum-table-views-tabs: #6c757d;
+  --atum-table-views-tabs-active: #00B8DB;
+  --atum-table-views-tabs-active-text: #fff;
+  --atum-text-color-dark2: #6c757d;
+  --atum-text-color-var1: #adb5bd;
+  --atum-text-color-var2: #adb5bd;
+  --atum-text-color-var3: #6c757d;
+  --atum-text-white: #fff;
+  --atum-version: #fff;
+  --atum-version-bg: rgba(0, 0, 0, 0.2);
+  --black-shadow-light: rgba(0, 0, 0, 0.04);
+  --blue-light-expanded: #dbf9ff;
   --danger-hover-border: 1px solid transparent;
-  --success-hover-border: 1px solid transparent;
-  --warning-hover-border: 1px solid transparent;
+  --danger-hover-text: #fff;
+  --dash-add-widget-color: #adb5bd;
+  --dash-add-widget-color-dark: #00B8DB;
+  --dash-atum-version: rgba(0, 0, 0, 0.1);
+  --dash-blue-trans: rgba(0, 183, 219, 0.79);
+  --dash-card-bg: #fff;
+  --dash-card-text: #adb5bd;
+  --dash-green-blue: rgba(30, 200, 149, 0.79);
+  --dash-green-light: #d5f5ba;
+  --dash-green-trans: rgba(106, 200, 30, 0.79);
+  --dash-input-group-bg: rgba(255, 255, 255, 0.66);
+  --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
+  --dash-next-text:  #e9ecef;
+  --dash-nice-select-bg: #fff;
+  --dash-nice-select-disabled: #eff1f3;
+  --dash-nice-select-disabled-after: #e6e8ea;
+  --dash-nice-select-hover: #cbd3da;
+  --dash-nice-select-list-bg: #fff;
+  --dash-nice-select-option-hover-bg: #f8f9fa;
+  --dash-nice-select-option-selected-bg: #dbf9ff;
+  --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
+  --dash-statistics-chart-type-selected-bg: transparent;
+  --dash-statistics-chart-type-selected-text: #EFAF00;
+  --dash-statistics-grid-lines: #e9ecef;
+  --dash-statistics-legend-switch-bg: rgba(248, 249, 250, 0.2);
+  --dash-statistics-ticks: #27283B;
+  --dash-stats-data-widget-primary: #00B8DB;
+  --dash-stats-data-widget-success: #69C61D;
+  --dash-subscription-input: rgba(255, 255, 255, 0.7);
+  --dash-video-title: #343a40;
+  --dash-video-subs-text: #adb5bd;
+  --dash-widget-current-stock-value-bg: #ffe1e1;
+  --dash-widget-current-stock-value-text: #FF4848;
+  --dash-widget-icon: #adb5bd;
+  --dash-widget-list-border: rgba(248, 249, 250, 0.5);
+  --green-light-expanded: #d5f5ba;
   --info-hover-border: 1px solid transparent;
+  --main-border: rgba(255, 255, 255, 0.2);
+  --main-border-alt: #6c757d;
+  --main-dropdown-border: #dee2e6;
+  --main-text: #343a40;
+  --main-text-expanded: #fff;
+  --main-title: #27283B;
+  --orange-dark-light: #ffdf89;
+  --order-green-light: #d5f5ba;
+  --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  --popover-black-shadow: rgba(0, 0, 0, 0.2);
+  --primary-dark: #dbf9ff;
+  --primary-light: #f5fdff;
+  --primary-hover-border: none;
+  --primary-hover-text: #00B8DB;
+  --primary-var-dark: #00B8DB;
+  --primary-var-text2: #00B8DB;
+  --secondary: #EFAF00;
+  --secondary-dark: #ffedbc;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
+  --secondary-hover-border: none;
+  --secondary-hover-text: #EFAF00;
+  --secondary-light: #fff8e5;
+  --secondary-var: #EFAF00;
+  --success-hover-border: 1px solid transparent;
+  --tertiary-hover-border: none;
+  --tertiary-hover-text: #69C61D;
+  --tertiary-light: #f0fbe7;
+  --tertiary-var: #69C61D;
+  --warning-hover-border: 1px solid transparent;
   --wp-link-hover: #00B8DB;
+  --wp-nth-child: #f8f9fa;
+  --wp-pink-darken-expanded: #e7d0e3;
+  --wc-purple-expanded: #96588a;
+  --wp-yiq-text-dark: #212529;
+  --wp-yiq-text-light: #fff;
 }
 
 body .select2-container.atum-select2, body .select2-container.atum-enhanced-select {
@@ -460,7 +460,7 @@ body .select2-container.atum-select2 .select2-selection__arrow:after, body .sele
   font-family: atum-icon-font;
   content: "";
   font-size: 10px;
-  color: var(--atum-table-filter-dropdown);
+  color: var(--main-border-alt);
 }
 
 body .select2-container.atum-select2 .select2-selection--single, body .select2-container.atum-enhanced-select .select2-selection--single {
@@ -670,7 +670,7 @@ body .select2-hidden-accessible {
 body .select2-container--default.atum-select2 .select2-selection--single, body .select2-container--default.atum-enhanced-select .select2-selection--single {
   height: 30px;
   border-radius: 5px;
-  border: 1px solid var(--atum-select2-border);
+  border: 1px solid var(--main-border-alt);
   background-color: var(--atum-table-bg);
 }
 
@@ -700,7 +700,7 @@ body .select2-container--default.atum-select2 .select2-selection--single .select
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__arrow b, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__arrow b {
-  border-color: var(--atum-text-color-var3) transparent transparent transparent;
+  border-color: var(--main-border-alt) transparent transparent transparent;
   border-style: solid;
   border-width: 5px 4px 0 4px;
   height: 0;
@@ -969,7 +969,7 @@ body .select2-container--classic.atum-select2 .select2-selection--single .select
 body .select2-container--classic.atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--classic.atum-enhanced-select .select2-selection--single .select2-selection__arrow {
   background-color: #DDD;
   border: none;
-  border-left: 1px solid var(--gray-500);
+  border-left: 1px solid var(--main-border-alt);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   height: 26px;
@@ -1001,7 +1001,7 @@ body .select2-container--classic.atum-select2[dir="rtl"] .select2-selection--sin
 
 body .select2-container--classic.atum-select2[dir="rtl"] .select2-selection--single .select2-selection__arrow, body .select2-container--classic.atum-enhanced-select[dir="rtl"] .select2-selection--single .select2-selection__arrow {
   border: none;
-  border-right: 1px solid var(--gray-500);
+  border-right: 1px solid var(--main-border-alt);
   border-radius: 0;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -3232,6 +3232,8 @@ input[type="button"].btn-block {
   height: 30px;
   line-height: 27px;
   text-decoration: none;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 @media all and (max-width: 782px) {
@@ -3248,9 +3250,9 @@ input[type="button"].btn-block {
 }
 
 .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
-  border: 1px solid var(--main-border);
+  border: 1px solid var(--main-border-alt);
+  background-color: var(--atum-pagination-bg);
   vertical-align: 0;
-  background-color: var(--main-border);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -3269,13 +3271,14 @@ input[type="button"].btn-block {
 
 .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan {
   background-color: var(--atum-table-bg2);
-  border: 1px solid var(--atum-pagination-border-disabled);
+  border: 1px solid var(--main-border-alt);
   color: var(--atum-pagination-disabled);
 }
 
 .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page {
   background-color: var(--atum-pagination-bg);
-  padding: 8px 12px 6px;
+  border: 1px solid var(--main-border-alt);
+  padding: 6px 12px;
 }
 
 @media all and (max-width: 782px) {
@@ -3320,6 +3323,8 @@ input[type="button"].btn-block {
   height: 30px;
   text-decoration: none;
   background-color: var(--atum-pagination-bg);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .atum-list-wrapper .tablenav-pages a:hover, .atum-list-wrapper .tablenav-pages a:focus, #posts-filter .tablenav-pages a:hover, #posts-filter .tablenav-pages a:focus {
@@ -3588,6 +3593,8 @@ input[type="button"].btn-block {
 
 .atum-meta-box .form-field.form-field-wide > .wc-customer-search, .atum-meta-box .form-field.form-field-wide > .wc-enhanced-select, .atum-meta-box .form-field.form-field-wide > input, .atum-meta-box .form-field.form-field-wide > select, .atum-meta-box .form-field.form-field-wide > textarea, .atum-meta-box .form-field.form-field-wide .select2-container {
   width: 100%;
+  max-width: 100%;
+  height: 32px;
 }
 
 .atum-meta-box .form-field .wp-editor-area {
@@ -4760,6 +4767,7 @@ ul.atum_order_notes li .note_content::after {
   background-color: var(--white);
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
+  border: 1px solid var(--gray-400);
   background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
   padding: 0 23px;
@@ -4777,6 +4785,7 @@ ul.atum_order_notes li .note_content::after {
 #wpfooter .footer-box.no-style {
   background-image: none;
   background-color: transparent;
+  border: none;
   -webkit-box-shadow: none;
           box-shadow: none;
   padding: 0;
@@ -4879,7 +4888,7 @@ ul.atum_order_notes li .note_content::after {
 
 @media all and (max-width: 480px) {
   #wpfooter {
-    padding: 0;
+    padding: 10px;
   }
 }
 
@@ -5322,6 +5331,8 @@ ul.atum_order_notes li .note_content::after {
   margin-left: 14px;
   top: 0;
   display: none;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
 }
 
 .wrap .page-title-action.extend-list-table, .wrap .page-title-action:active.extend-list-table {
@@ -5334,7 +5345,8 @@ ul.atum_order_notes li .note_content::after {
 
 .wrap .page-title-action:hover, .wrap .page-title-action:focus, .wrap .page-title-action:active:hover, .wrap .page-title-action:active:focus {
   background-color: var(--tertiary-var);
-  opacity: 0.6;
+  color: var(--white);
+  opacity: 0.9;
 }
 
 @media all and (max-width: 782px) {
@@ -5627,7 +5639,7 @@ ul.atum_order_notes li .note_content::after {
   padding: 1px;
   z-index: 999;
   margin: 20px 10px 20px auto;
-  border: 1px solid var(--main-border);
+  border: 1px solid var(--main-border-alt);
   border-radius: 5px;
 }
 
@@ -5648,7 +5660,7 @@ ul.atum_order_notes li .note_content::after {
       -ms-flex-pack: end;
           justify-content: flex-end;
   border-radius: 0;
-  border: 0;
+  border: none;
   margin: 0 0 3px auto !important;
 }
 
@@ -5678,31 +5690,26 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box #post-search-input::-webkit-input-placeholder, p.search-box #post-search-input::-webkit-input-placeholder {
-  font-size: 12px;
   font-style: italic;
   color: var(--atum-text-color-var2);
 }
 
 .search-box #post-search-input::-moz-placeholder, p.search-box #post-search-input::-moz-placeholder {
-  font-size: 12px;
   font-style: italic;
   color: var(--atum-text-color-var2);
 }
 
 .search-box #post-search-input:-ms-input-placeholder, p.search-box #post-search-input:-ms-input-placeholder {
-  font-size: 12px;
   font-style: italic;
   color: var(--atum-text-color-var2);
 }
 
 .search-box #post-search-input::-ms-input-placeholder, p.search-box #post-search-input::-ms-input-placeholder {
-  font-size: 12px;
   font-style: italic;
   color: var(--atum-text-color-var2);
 }
 
 .search-box #post-search-input::placeholder, p.search-box #post-search-input::placeholder {
-  font-size: 12px;
   font-style: italic;
   color: var(--atum-text-color-var2);
 }
@@ -5804,6 +5811,7 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .search-box #search_column_btn, p.search-box #search_column_btn {
+  border-right: 1px solid var(--main-border-alt);
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
 }
@@ -5880,7 +5888,7 @@ ul.atum_order_notes li .note_content::after {
 
 .search-box .input-group, p.search-box .input-group {
   border-radius: 5px;
-  border: solid 1px var(--main-border);
+  border: solid 1px var(--main-border-alt);
   background-color: var(--atum-table-bg);
   margin-left: 10px;
   padding-right: 1px;
@@ -5934,7 +5942,7 @@ ul.atum_order_notes li .note_content::after {
   font-size: 10px;
   position: absolute;
   right: 10px;
-  top: 8px;
+  top: 9px;
 }
 
 .search-box .dropdown-toggle:focus, .search-box .dropdown-toggle:active, .search-box .dropdown-toggle:hover, p.search-box .dropdown-toggle:focus, p.search-box .dropdown-toggle:active, p.search-box .dropdown-toggle:hover {
@@ -6040,7 +6048,7 @@ ul.atum_order_notes li .note_content::after {
   border: none;
   padding: 0;
   background: var(--atum-pagination-bg);
-  border: 1px solid var(--atum-pagination-border);
+  border: 1px solid var(--main-border-alt);
   font-size: 16px;
   font-weight: 400;
   text-align: center;
@@ -6350,6 +6358,7 @@ ul.atum_order_notes li .note_content::after {
   background-color: var(--white);
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
+  border: 1px solid var(--gray-400);
   background-color: var(--atum-table-bg);
   padding: 0 0 10px;
   margin: 0 0 18px;
@@ -6380,16 +6389,16 @@ ul.atum_order_notes li .note_content::after {
 }
 
 .atum-list-wrapper .table-style-buttons button {
-  width: 30px;
-  height: 30px;
+  width: 33px;
+  height: 33px;
   border-radius: 5px;
-  border: solid 1px var(--main-border);
+  border: solid 1px var(--main-border-alt);
   background-color: var(--atum-table-bg);
   color: var(--atum-text-color-var1);
   cursor: pointer;
-  -webkit-transition: all 0.20s;
-  transition: all 0.20s;
-  line-height: 2;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  line-height: 2.4;
 }
 
 .atum-list-wrapper .table-style-buttons button:first-child {
@@ -6404,12 +6413,11 @@ ul.atum_order_notes li .note_content::after {
 .atum-list-wrapper .table-style-buttons button.active, .atum-list-wrapper .table-style-buttons button:hover {
   background-color: var(--primary);
   color: var(--atum-table-bg);
-  border-color: var(--atum-table-bg);
+  border-color: var(--primary);
 }
 
 .atum-list-wrapper .table-style-buttons button:hover {
   background-color: var(--blue-hover);
-  border-color: var(--atum-table-bg);
 }
 
 @media all and (max-width: 480px) {
@@ -6812,7 +6820,7 @@ ul.atum_order_notes li .note_content::after {
           align-items: center;
   margin: 0 11px 0 11px;
   background-color: var(--atum-table-bg);
-  border-bottom: 1px solid var(--main-border);
+  border-bottom: 1px solid var(--gray-400);
 }
 
 .list-table-header.no-margin {
@@ -7068,7 +7076,7 @@ table.atum-list-table thead .item-heads th, table.atum-list-table tfoot .item-he
   white-space: normal;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
 }
 
 table.atum-list-table thead .item-heads th .atum-icon, table.atum-list-table tfoot .item-heads th .atum-icon, .floatThead-container thead .item-heads th .atum-icon, .floatThead-container tfoot .item-heads th .atum-icon, .inbound-stock-list thead .item-heads th .atum-icon, .inbound-stock-list tfoot .item-heads th .atum-icon, table.wp-list-table thead .item-heads th .atum-icon, table.wp-list-table tfoot .item-heads th .atum-icon {
@@ -7079,7 +7087,7 @@ table.atum-list-table thead .item-heads th .atum-icon, table.atum-list-table tfo
   width: 1em;
   margin: 0 auto;
   font-size: 19px;
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
 }
 
 table.atum-list-table thead .item-heads th .atum-icon:before, table.atum-list-table tfoot .item-heads th .atum-icon:before, .floatThead-container thead .item-heads th .atum-icon:before, .floatThead-container tfoot .item-heads th .atum-icon:before, .inbound-stock-list thead .item-heads th .atum-icon:before, .inbound-stock-list tfoot .item-heads th .atum-icon:before, table.wp-list-table thead .item-heads th .atum-icon:before, table.wp-list-table tfoot .item-heads th .atum-icon:before {
@@ -7571,7 +7579,7 @@ table.atum-list-table input[type=checkbox], .floatThead-container input[type=che
   border-radius: 3px;
   -webkit-box-shadow: none;
           box-shadow: none;
-  border-color: var(--gray-400);
+  border-color: var(--main-border-alt);
 }
 
 table.atum-list-table input[type=checkbox]:checked, .floatThead-container input[type=checkbox]:checked, .inbound-stock-list input[type=checkbox]:checked, table.wp-list-table input[type=checkbox]:checked {
@@ -8157,6 +8165,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   background-color: var(--white);
   -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
           box-shadow: 0 4px 0 0 var(--gray-200);
+  border: 1px solid var(--gray-400);
   background-color: var(--atum-table-bg);
   padding: 0 0 10px;
 }
@@ -8170,6 +8179,12 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 .wp-heading-inline ~ .subsubsub {
   display: none;
+}
+
+table.wp-list-table th.check-column input[type=checkbox] {
+  -webkit-transform: none;
+          transform: none;
+  top: 18%;
 }
 
 .tips {

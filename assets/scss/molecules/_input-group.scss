@@ -97,7 +97,7 @@
 .input-group-append {
 	display: flex;
 	z-index: 1;
-	border: $input-border-width solid $input-border-color;
+	border: $input-border-width solid var(--main-border-alt);
 	
 	.input-group.invalid & {
 		border-color: $danger;

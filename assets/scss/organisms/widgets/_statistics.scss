@@ -106,8 +106,8 @@
 		margin: auto;
 		
 		svg {
-			max-width: 32px;
-			max-height: 32px;
+			max-width: 26px;
+			max-height: 26px;
 			fill: var(--atum-text-color-var1);
 			transition: 0.2s ease-in-out;
 			
@@ -124,7 +124,7 @@
 			color: var(--primary);
 			padding: 3px 7px;
 			border-radius: 4px;
-			border: 0.5px solid var(--atum-border-var);
+			border: 0.5px solid var(--main-border-alt);
 			
 			&.active, &:hover {
 				background-color: var(--dash-statistics-chart-type-selected-bg);
@@ -141,8 +141,8 @@
 		display: flex;
 		
 		.legend-switch {
-			padding: 10px 40px;
-			border: 0.5px solid var(--atum-border-var);
+			padding: 9px 30px;
+			border: 0.5px solid var(--main-border-alt);
 			border-radius: 4px;
 			background-color: var(--dash-statistics-legend-switch-bg);
 			position: relative;

@@ -127,7 +127,7 @@
 	}
 	
 	hr {
-		border-top: 1px solid var(--main-border);
+		border-top: 1px solid var(--gray-400);
 		border-bottom: none;
 		margin: $grid-gutter-width/2 0;
 		
@@ -135,7 +135,7 @@
 			clear: both;
 			padding: $grid-gutter-width/3 0;
 			border-top: none;
-			border-bottom: 1px solid var(--main-border);
+			border-bottom: 1px solid var(--gray-400);
 		}
 		
 		@include mobile-max {
