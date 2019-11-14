@@ -20,8 +20,8 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="config-controls">
-		<input type="submit" value="<?php esc_attr_e( 'Save', ATUM_TEXT_DOMAIN ) ?>" class="btn btn-primary btn-pill">
-		<button type="button" class="cancel-config btn btn-danger btn-pill"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ) ?></button>
+		<input type="submit" value="<?php esc_attr_e( 'Save', ATUM_TEXT_DOMAIN ) ?>" class="btn btn-primary">
+		<button type="button" class="cancel-config btn btn-danger"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ) ?></button>
 	</div>
 
 </form>

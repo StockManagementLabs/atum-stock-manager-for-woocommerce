@@ -165,7 +165,7 @@
 		display: block;
 		margin: 0;
 		box-shadow: 0 1px 0 0 var(--white-shadow);
-		border-bottom: solid 1px var(--main-border);
+		border-bottom: solid 1px var(--gray-400);
 	}
 
 	.atum-nav-link {
@@ -194,7 +194,7 @@
 			background-color: var(--primary-dark);
 			font-size: 15px;
 			font-weight: bold;
-			border-right: 3px solid var(--primary-var-text2);
+			border-right: 5px solid var(--primary-var-text2);
 			
 		}
 
@@ -429,7 +429,7 @@
 		
 		.section-title {
 			margin-top: 11px;
-			border-bottom: 2px solid var(--main-border);
+			border: 1px solid var(--gray-400);
 			background-color: var(--atum-settings-section-bg);
 			border-top-right-radius: 6px;
 			border-top-left-radius: 6px;
@@ -528,6 +528,7 @@
 			background-size: 100% auto;
 			box-shadow: 0 4px 0 0 var(--gray-200);
 			position: relative;
+			border: 1px solid var(--gray-400);
 			
 			.reset-default-colors {
 				position: absolute;
@@ -540,7 +541,7 @@
 			
 			tr {
 				&:not(:last-child) {
-					border-bottom: 0.5px solid var(--main-border);
+					border-bottom: 0.5px solid var(--gray-400);
 				}
 			}
 			

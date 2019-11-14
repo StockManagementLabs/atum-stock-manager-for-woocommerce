@@ -164,11 +164,11 @@ body.toplevel_page_atum-dashboard {
 		.dash-card {
 			margin: $grid-gutter-width $grid-gutter-width/4;
 			width: 33.3333%;
-			border: 1px solid $card-border;
+			border: 1px solid var(--gray-400);
 			border-radius: 5px;
 			background: $card-bg center 1px no-repeat;
-			background-size: contain;
 			background-position: bottom;
+			background-size: contain;
 			position: relative;
 			overflow: hidden;
 			
@@ -380,6 +380,7 @@ body.toplevel_page_atum-dashboard {
 						button {
 							max-width: 300px;
 							width: 100% !important;
+							border: 1px solid;
 							
 							&:first-child {
 								margin-bottom: 10px;
@@ -460,6 +461,10 @@ body.toplevel_page_atum-dashboard {
 					}
 				}
 				
+				.card-content {
+					padding-bottom: 5px;
+				}
+				
 				form {
 					clear: both;
 					width: 90%;
@@ -467,7 +472,7 @@ body.toplevel_page_atum-dashboard {
 					
 					.input-group {
 						background-color: var(--dash-input-group-bg);
-						border-radius: 15px;
+						border-radius: 5px;
 						box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
 						display: flex;
 					}
@@ -479,7 +484,8 @@ body.toplevel_page_atum-dashboard {
 						padding: 7px 15px;
 						font-size: 10px;
 						font-weight: 300;
-						border-radius: 15px;
+						@include border-right-radius(0);
+						@include border-left-radius(5px);
 						flex-grow: 1;
 						color: var(--atum-text-color-var1);
 						
@@ -555,14 +561,15 @@ body.toplevel_page_atum-dashboard {
 			background-color: $widget-bg;
 			border-radius: 5px;
 			box-shadow: 0 3px 2px var(--gray-200);
+			border: 1px solid var(--gray-400);
 		}
 		
 		.widget-header, .widget-body {
-			padding: $grid-gutter-width/2;
+			padding: 14px;
 		}
 		
 		.widget-header {
-			border-bottom: 1px solid var(--main-border);
+			border-bottom: 1px solid var(--gray-400);
 			text-align: left;
 			cursor: move;
 			position: relative;

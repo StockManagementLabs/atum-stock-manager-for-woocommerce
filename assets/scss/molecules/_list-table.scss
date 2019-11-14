@@ -82,6 +82,7 @@
 		margin-left: 14px;
 		top: 0;
 		display: none;
+		transition: .2s ease-in-out;
 		
 		&.extend-list-table {
 			font-size: 12px;
@@ -92,8 +93,9 @@
 		}
 		
 		&:hover, &:focus {
-			background-color:  var(--tertiary-var);
-			opacity: 0.6;
+			background-color: var(--tertiary-var);
+			color:  var(--white);
+			opacity: 0.9;
 		}
 		
 		@include tablet-max-wp{
@@ -352,7 +354,7 @@
 	padding: 1px;
 	z-index: 999;
 	margin: 20px 10px 20px auto;
-	border: 1px solid var(--main-border);
+	border: 1px solid var(--main-border-alt);
 	border-radius: 5px;
 	
 	@include tablet-max-wp {
@@ -366,7 +368,7 @@
 		display: flex;
 		justify-content: flex-end;
 		border-radius: 0;
-		border: 0;
+		border: none;
 		margin: 0 0 3px auto !important;
 		
 		@include tablet-max-wp {
@@ -392,7 +394,6 @@
 		color: var(--atum-text-color-var1);
 		
 		&::placeholder {
-			font-size: 12px;
 			font-style: italic;
 			color: var(--atum-text-color-var2);
 		}
@@ -470,6 +471,7 @@
 	}
 	
 	#search_column_btn{
+		border-right: 1px solid var(--main-border-alt);
 		@if $enable-rounded {
 			border-top-left-radius : $border-radius;
 			border-bottom-left-radius: $border-radius;
@@ -516,7 +518,7 @@
 	
 	.input-group {
 		border-radius: 5px;
-		border: solid 1px var(--main-border);
+		border: solid 1px var(--main-border-alt);
 		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
 		padding-right: 1px;
@@ -565,7 +567,7 @@
 			font-size: 10px;
 			position: absolute;
 			right: 10px;
-			top: 8px;
+			top: 9px;
 		}
 		
 		&:focus, &:active, &:hover {
@@ -664,7 +666,7 @@
 			border: none;
 			padding: 0;
 			background: var(--atum-pagination-bg);
-			border: 1px solid var(--atum-pagination-border);
+			border: 1px solid var(--main-border-alt);
 			font-size: 16px;
 			font-weight: 400;
 			text-align: center;
@@ -946,15 +948,15 @@
 		align-items: center;
 		
 		button {
-			width: 30px;
-			height: 30px;
+			width: 33px;
+			height: 33px;
 			border-radius: 5px;
-			border: solid 1px var(--main-border);
+			border: solid 1px var(--main-border-alt);
 			background-color:  var(--atum-table-bg);
 			color: var(--atum-text-color-var1);
 			cursor: pointer;
-			transition: all 0.20s;
-			line-height: 2;
+			transition: all 0.2s ease-in-out;
+			line-height: 2.4;
 			
 			&:first-child {
 				margin-left: 9px;
@@ -968,12 +970,11 @@
 			&.active, &:hover {
 				background-color: var(--primary);
 				color:  var(--atum-table-bg);
-				border-color:  var(--atum-table-bg);
+				border-color: var(--primary);
 			}
 			
 			&:hover {
 				background-color: var(--blue-hover);
-				border-color:  var(--atum-table-bg);
 			}
 			
 		}
@@ -1358,7 +1359,7 @@
 	align-items: center;
 	margin: 0 11px 0 11px;
 	background-color:  var(--atum-table-bg);
-	border-bottom: 1px solid var(--main-border);
+	border-bottom: 1px solid var(--gray-400);
 	
 	&.no-margin {
 		margin: 0;
@@ -1579,46 +1580,49 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 	}
 	
-	thead .item-heads, tfoot .item-heads {
-		background-color:  var(--atum-table-bg);
-		border-top: 1px solid var(--main-border);
-		border-bottom: 1px solid var(--main-border);
+	thead, tfoot {
 		
-		th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
-		td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
-			border: none;
-			box-shadow: none;
-		}
-		
-		th {
-			padding: 3px 5px;
-			line-height: 1.1;
-			font-size: 14px;
-			min-width: 50px;
-			height: 60px;
-			white-space: normal;
-			font-weight: 600;
-			letter-spacing: 0.3px;
-			color: var(--atum-text-color-var2);
+		.item-heads {
+			background-color: var(--atum-table-bg);
+			border-top: 1px solid var(--main-border);
+			border-bottom: 1px solid var(--main-border);
 			
-			.atum-icon {
-				display: block;
-				text-indent: -9999px;
-				position: relative;
-				height: 1em;
-				width: 1em;
-				margin: 0 auto;
-				font-size: 19px;
-				color: var(--atum-text-color-var2);
-				
-				&:before {
-					text-indent: 0;
-					position: absolute;
-					left: 0;
-					top: 0;
-				}
+			th:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory),
+			td:not(.column-calc_returns):not(.column-calc_other):not(.multi-inventory) {
+				border: none;
+				box-shadow: none;
 			}
 			
+			th {
+				padding: 3px 5px;
+				line-height: 1.1;
+				font-size: 14px;
+				min-width: 50px;
+				height: 60px;
+				white-space: normal;
+				font-weight: 600;
+				letter-spacing: 0.3px;
+				color: var(--atum-text-color-var3);
+				
+				.atum-icon {
+					display: block;
+					text-indent: -9999px;
+					position: relative;
+					height: 1em;
+					width: 1em;
+					margin: 0 auto;
+					font-size: 19px;
+					color: var(--atum-text-color-var3);
+					
+					&:before {
+						text-indent: 0;
+						position: absolute;
+						left: 0;
+						top: 0;
+					}
+				}
+				
+			}
 		}
 	}
 	
@@ -2132,7 +2136,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	input[type=checkbox] {
 		border-radius: 3px;
 		box-shadow: none;
-		border-color: var(--gray-400);
+		border-color: var(--main-border-alt);
 		
 		&:checked {
 			background-color: var(--primary-var-dark);

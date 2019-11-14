@@ -29,8 +29,12 @@
 	
 	.atum-field {
 		
+		.input-group-prepend {
+			@include border-left-radius(4px);
+		}
+		
 		.input-group-text {
-			padding: 2px 7px 3px;
+			padding: 4px 7px;
 		}
 		
 		input[type=text], input[type=number] {
@@ -38,6 +42,8 @@
 			padding-top: 4px;
 			padding-bottom: 4px;
 			max-height: 27px;
+			@include border-left-radius(0);
+			border: 1px solid var(--main-border-alt);
 			
 			&:focus {
 				box-shadow: none;
@@ -69,10 +75,10 @@
 					height: auto;
 					margin: 0;
 					font-size: $font-size-base;
-					border: 1px solid $wp-gray-4;
+					border: 1px solid var(--main-border-alt);
 					
 					.select2-selection__rendered {
-						line-height: 1.8;
+						line-height: 2;
 					}
 					
 					.select2-selection__clear {
@@ -115,14 +121,39 @@
 			position: relative;
 			margin-top: 2px;
 			
+			.input-group-text {
+				padding: 8px 7px;
+			}
+			
 			input[type=text], input[type=number] {
 				margin-top: 0;
 				width: calc(100% - 33px) !important;
+				max-height: 40px;
 			}
 			
 			.select2-container {
 				&.atum-select2, &.atum-enhanced-select {
 					max-width: calc(100% - 33px) !important;
+				}
+				
+				.select2-selection {
+					height: 38px;
+				}
+				
+				.select2-selection__rendered {
+					line-height: 2.5 !important;
+				}
+				
+				.select2-selection__arrow {
+					&:after {
+						line-height: 32px;
+					}
+				}
+				
+				.select2-selection__clear {
+					&:after {
+						line-height: 2.8;
+					}
 				}
 			}
 			

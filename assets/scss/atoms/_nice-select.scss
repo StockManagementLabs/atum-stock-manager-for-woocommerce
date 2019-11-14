@@ -7,10 +7,10 @@
 $ns-font-size:                     14px !default;
 $ns-font-size-small:               12px !default;
 
-$ns-dropdown-border-radius:        30px !default;
-$ns-list-border-radius:            10px !default;
-$ns-dropdown-height:               42px !default;
-$ns-dropdown-height-small:         36px !default;
+$ns-dropdown-border-radius:        5px !default;
+$ns-list-border-radius:            5px !default;
+$ns-dropdown-height:               35px !default;
+$ns-dropdown-height-small:         26px !default;
 $ns-dropdown-padding:              18px !default
 
 $ns-arrow-color:                   var(--main-text) !default;
@@ -22,7 +22,7 @@ $ns-arrow-size:                    5px !default;;
 	-webkit-tap-highlight-color: rgba($black, 0);
 	background-color: var(--dash-nice-select-bg);
 	border-radius: $ns-dropdown-border-radius;
-	border: solid 1px var(--atum-border-var);
+	border: solid 1px var(--main-border-alt);
 	box-sizing: border-box;
 	clear: both;
 	cursor: pointer;
@@ -49,8 +49,8 @@ $ns-arrow-size:                    5px !default;;
 	
 	// Arrow
 	&:after {
-		border-bottom: 1px solid $ns-arrow-color;
-		border-right: 1px solid $ns-arrow-color;
+		border-bottom: 1px solid var(--main-border-alt);
+		border-right: 1px solid var(--main-border-alt);
 		content: '';
 		display: block;
 		height: $ns-arrow-size;
