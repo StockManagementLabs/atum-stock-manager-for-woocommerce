@@ -29,3 +29,12 @@
 		display: none;
 	}
 }
+
+table.wp-list-table {
+	th.check-column {
+		input[type=checkbox] {
+			transform: none;
+			top: 18%;
+		}
+	}
+}
