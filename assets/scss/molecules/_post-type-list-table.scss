@@ -9,6 +9,15 @@
 	background-color: var(--atum-table-bg);
 	padding: 0 0 10px;
 	
+	table.wp-list-table {
+		th.check-column {
+			input[type=checkbox] {
+				transform: none;
+				top: 18%;
+			}
+		}
+	}
+	
 	.tablenav-pages {
 		float: none;
 		flex-grow: 1;
@@ -18,14 +27,5 @@
 .wp-heading-inline {
 	~ .subsubsub {
 		display: none;
-	}
-}
-
-table.wp-list-table {
-	th.check-column {
-		input[type=checkbox] {
-			transform: none;
-			top: 18%;
-		}
 	}
 }

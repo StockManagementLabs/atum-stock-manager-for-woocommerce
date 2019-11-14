@@ -2680,7 +2680,7 @@ body .select2-search--dropdown .select2-search__field {
           box-sizing: border-box;
   min-width: inherit;
   border-radius: 5px;
-  border-color: var(--gray-500);
+  border-color: var(--main-border-alt);
 }
 
 body .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
@@ -2905,7 +2905,8 @@ body .select2-container--default.atum-select2.select2-container--open.select2-co
 }
 
 body .select2-container--default .select2-search--dropdown .select2-search__field {
-  border: 1px solid var(--gray-400);
+  height: 30px;
+  border-color: var(--main-border-alt);
   -webkit-box-shadow: none;
           box-shadow: none;
   border-radius: 4px;
@@ -6356,13 +6357,9 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   line-height: 30px;
 }
 
-.tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
+.tablenav .tablenav-pages a:not(.extend-list-table):hover, .tablenav .tablenav-pages a:not(.extend-list-table):active, .tablenav .tablenav-pages a:not(.extend-list-table):focus {
   background-color: var(--secondary) !important;
-  color: var(--white) !important;
-}
-
-.tablenav .tablenav-pages a:not(.extend-list-table):hover {
-  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
   color: var(--white) !important;
 }
 
@@ -7893,7 +7890,7 @@ table.atum-list-table input[type=checkbox]:checked:before, .floatThead-container
   content: "";
   font-family: "atum-icon-font";
   font-size: 14px;
-  margin: 1px 0 0;
+  margin: 8px -2px 0;
   font-weight: bold;
 }
 
@@ -8471,6 +8468,12 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   padding: 0 0 10px;
 }
 
+#posts-filter table.wp-list-table th.check-column input[type=checkbox] {
+  -webkit-transform: none;
+          transform: none;
+  top: 18%;
+}
+
 #posts-filter .tablenav-pages {
   float: none;
   -webkit-box-flex: 1;
@@ -8480,11 +8483,5 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 .wp-heading-inline ~ .subsubsub {
   display: none;
-}
-
-table.wp-list-table th.check-column input[type=checkbox] {
-  -webkit-transform: none;
-          transform: none;
-  top: 18%;
 }
 /*# sourceMappingURL=atum-list.css.map */
