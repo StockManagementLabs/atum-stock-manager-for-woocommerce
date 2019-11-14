@@ -39,9 +39,6 @@
 		
 		input[type=text], input[type=number] {
 			width: calc(80% - 31px) !important;
-			padding-top: 4px;
-			padding-bottom: 4px;
-			max-height: 27px;
 			@include border-left-radius(0);
 			border: 1px solid var(--main-border-alt);
 			
@@ -128,7 +125,7 @@
 			input[type=text], input[type=number] {
 				margin-top: 0;
 				width: calc(100% - 33px) !important;
-				max-height: 40px;
+				max-height: 38px;
 			}
 			
 			.select2-container {
