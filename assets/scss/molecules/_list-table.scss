@@ -672,14 +672,12 @@
 			text-align: center;
 			line-height: 30px;
 			
-			&:active, &:focus {
+			&:hover, &:active, &:focus {
 				background-color: var(--secondary) !important;
+				border-color: var(--secondary) !important;;
 				color:  var(--white) !important;
 			}
-			&:hover {
-				background-color: var(--secondary) !important;
-				color:  var(--white) !important;
-			}
+			
 		}
 		
 		.displaying-num {
@@ -2147,7 +2145,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				content: $atmi-checkmark;
 				font-family: $atum-icon-font;
 				font-size: 14px;
-				margin: 1px 0 0;
+				margin: 8px -2px 0;
 				font-weight: bold;
 			}
 		}

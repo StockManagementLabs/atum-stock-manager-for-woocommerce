@@ -2466,7 +2466,7 @@ body .select2-search--dropdown .select2-search__field {
           box-sizing: border-box;
   min-width: inherit;
   border-radius: 5px;
-  border-color: var(--gray-500);
+  border-color: var(--main-border-alt);
 }
 
 body .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
@@ -2691,7 +2691,8 @@ body .select2-container--default.atum-select2.select2-container--open.select2-co
 }
 
 body .select2-container--default .select2-search--dropdown .select2-search__field {
-  border: 1px solid var(--gray-400);
+  height: 30px;
+  border-color: var(--main-border-alt);
   -webkit-box-shadow: none;
           box-shadow: none;
   border-radius: 4px;
