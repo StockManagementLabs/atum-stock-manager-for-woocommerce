@@ -581,7 +581,7 @@
 				}
 				
 				.selector-container:not(:last-child) {
-					border-bottom: solid 1px var(--main-border);
+					border-bottom: solid 1px var(--gray-400);
 				}
 				
 				.selector-container {
@@ -651,12 +651,8 @@
 				border-radius: 4px;
 				height: 30px;
 				color: var(--atum-text-color-var3);
-				border: 1px solid var(--atum-settings-input-border);
+				border: 1px solid var(--main-border-alt);
 				box-shadow: none;
-				
-				&:hover {
-					border: solid 1px var(--atum-text-color-var1)
-				}
 				
 				&:focus {
 					border: solid 1px var(--blue);
@@ -876,7 +872,7 @@
 			position: relative;
 			
 			.wp-color-picker {
-				max-width: 85px;
+				max-width: 154px;
 			}
 			
 			.wp-picker-input-wrap {
@@ -889,10 +885,10 @@
 				input[type=text] {
 					background-color: transparent;
 					height: 25px;
-					margin-top: 3px;
 					font-size: 12px;
 					line-height: 1.17px;
 					font-family: inherit;
+					
 					&, &:hover, &:focus {
 						border: none;
 					}
@@ -934,14 +930,10 @@
 				border-radius: 5px;
 				width: 180px;
 				margin-right: 10px;
-				border: solid 0.5px var(--atum-settings-input-border);
+				border: solid 0.5px var(--main-border-alt);
 				background-color: var(--atum-settings-wp-color-bg) !important;
 				position: relative;
 				padding: 0 0 0 20px;
-				
-				&:hover {
-					border-color: var(--atum-text-color-var1);
-				}
 				
 				&:focus {
 					border-color: var(--blue);
@@ -984,8 +976,9 @@
 				background-color: var(--secondary);
 				color: $white;
 				border: none;
-				height: 31px;
-				line-height: 31px;
+				height: 30px;
+				line-height: 30px;
+				text-transform: uppercase;
 				
 				&:hover {
 					background-color: var(--secondary-hover);
