@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2019-10-31 13:12+0100\n"
+"POT-Creation-Date: 2019-11-14 12:09+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Be Rebel <contact@stockmanagementlabs.com>\n"
@@ -152,11 +152,11 @@ msgstr ""
 
 #: classes/Addons/Addons.php:773 classes/Addons/Addons.php:781
 #: classes/Api/AtumApi.php:125 classes/Api/AtumApi.php:132
-#: classes/Api/Extenders/AtumProductData.php:449
-#: classes/Api/Extenders/AtumProductData.php:456 classes/Bootstrap.php:284
+#: classes/Api/Extenders/AtumProductData.php:616
+#: classes/Api/Extenders/AtumProductData.php:623 classes/Bootstrap.php:284
 #: classes/Bootstrap.php:291 classes/Components/AtumCapabilities.php:165
 #: classes/Components/AtumCapabilities.php:172
-#: classes/Components/AtumColors.php:1030 classes/Components/AtumColors.php:1037
+#: classes/Components/AtumColors.php:1032 classes/Components/AtumColors.php:1039
 #: classes/Components/AtumLogs/AtumLogs.php:84
 #: classes/Components/AtumLogs/AtumLogs.php:91
 #: classes/Components/AtumMarketingPopup.php:354
@@ -274,7 +274,7 @@ msgid "Cannot create order note, please try again."
 msgstr ""
 
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:320
-msgid "Webhooks do not support trashing."
+msgid "Order notes do not support trashing."
 msgstr ""
 
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:342
@@ -447,7 +447,6 @@ msgid "The period to get sales data from."
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:44
-#: classes/Api/Controllers/V3/DashboardStatisticsController.php:79
 msgid "The collection of data for the statistics."
 msgstr ""
 
@@ -461,6 +460,10 @@ msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:73
 msgid "The period window used to get the statistics for."
+msgstr ""
+
+#: classes/Api/Controllers/V3/DashboardStatisticsController.php:79
+msgid "The legends used on the statistics charts."
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:87
@@ -567,11 +570,11 @@ msgid "Product type."
 msgstr ""
 
 #: classes/Api/Controllers/V3/InboundStockController.php:133
-msgid "Unique identifier."
+msgid "Product's Stock Keeping Unit."
 msgstr ""
 
 #: classes/Api/Controllers/V3/InboundStockController.php:139
-msgid "Amount of inbound stock."
+msgid "The quantity of the product set within the purchase order."
 msgstr ""
 
 #: classes/Api/Controllers/V3/InboundStockController.php:145
@@ -806,7 +809,7 @@ msgid "Supplier slug."
 msgstr ""
 
 #: classes/Api/Controllers/V3/SuppliersController.php:177
-msgid "Product URL."
+msgid "Supplier URL."
 msgstr ""
 
 #: classes/Api/Controllers/V3/SuppliersController.php:184
@@ -874,8 +877,11 @@ msgid "Supplier address."
 msgstr ""
 
 #: classes/Api/Controllers/V3/SuppliersController.php:269
-#: classes/Api/Controllers/V3/SuppliersController.php:274
 msgid "Supplier city."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:274
+msgid "Supplier country."
 msgstr ""
 
 #: classes/Api/Controllers/V3/SuppliersController.php:280
@@ -1108,95 +1114,111 @@ msgstr ""
 msgid "There was an error calling this tool. There is no callback present."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:171
+#: classes/Api/Extenders/AtumProductData.php:193
 msgid "Product's purchase price."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:176
-msgid "The ID of the ATUM Supplier that is linked to this product."
+#: classes/Api/Extenders/AtumProductData.php:198
+msgid "The ID of the ATUM Supplier that is linked to the product."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:181
-msgid "The Supplier's SKU for this product."
-msgstr ""
-
-#: classes/Api/Extenders/AtumProductData.php:186
-msgid "Whether this product is being controlled by ATUM."
-msgstr ""
-
-#: classes/Api/Extenders/AtumProductData.php:192
-msgid "The date when this product run out of stock."
-msgstr ""
-
-#: classes/Api/Extenders/AtumProductData.php:197
-msgid "Out of stock threshold at product level."
-msgstr ""
-
-#: classes/Api/Extenders/AtumProductData.php:202
-msgid "Whether this product may have children."
+#: classes/Api/Extenders/AtumProductData.php:203
+msgid "The Supplier's SKU for the product."
 msgstr ""
 
 #: classes/Api/Extenders/AtumProductData.php:208
+msgid "Whether the product is being controlled by ATUM."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:214
+msgid "The date when the product run out of stock."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:219
+msgid "Out of stock threshold at product level."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:224
+msgid "Whether this product may have children."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:230
 msgid "Product's inbound stock."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:213
+#: classes/Api/Extenders/AtumProductData.php:235
 msgid "Product's stock on hold."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:218
+#: classes/Api/Extenders/AtumProductData.php:240
 msgid "Units sold today."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:223
+#: classes/Api/Extenders/AtumProductData.php:245
 msgid "Sales the last 14 days."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:228
+#: classes/Api/Extenders/AtumProductData.php:250
 msgid "Stock set as 'reserved_stock' within Inventory Logs."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:233
+#: classes/Api/Extenders/AtumProductData.php:255
 msgid "Stock set as 'customer returns' within Inventory Logs."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:238
+#: classes/Api/Extenders/AtumProductData.php:260
 msgid "Stock set as 'warehouse damage' within Inventory Logs."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:243
+#: classes/Api/Extenders/AtumProductData.php:265
 msgid "Stock set as 'lost in post' within Inventory Logs."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:248
+#: classes/Api/Extenders/AtumProductData.php:270
 msgid "Stock set as 'other' within Inventory Logs."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:253
+#: classes/Api/Extenders/AtumProductData.php:275
 msgid "The number of days that the product is Out of stock."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:258
+#: classes/Api/Extenders/AtumProductData.php:280
 msgid "Product lost sales."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:263
-msgid "Whether this product has any ATUM location set."
+#: classes/Api/Extenders/AtumProductData.php:285
+msgid "Whether the product has any ATUM location set."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:268
+#: classes/Api/Extenders/AtumProductData.php:290
 msgid ""
-"Last date when the ATUM product data was calculated and saved for this product."
+"Last date when the ATUM product data was calculated and saved for the product."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:294
+msgid "List of ATUM locations linked to the product."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:301
+msgid "Location ID."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:306
+msgid "Location name."
+msgstr ""
+
+#: classes/Api/Extenders/AtumProductData.php:312
+msgid "Location slug."
 msgstr ""
 
 #. translators: the field name
-#: classes/Api/Extenders/AtumProductData.php:379
+#: classes/Api/Extenders/AtumProductData.php:441
 #, php-format
 msgid "You are not allowed to edit the %s field."
 msgstr ""
 
 #. translators: the product ID
-#: classes/Api/Extenders/AtumProductData.php:395
+#: classes/Api/Extenders/AtumProductData.php:457
 #, php-format
 msgid "Invalid product with ID #%s."
 msgstr ""
@@ -1234,171 +1256,171 @@ msgstr ""
 msgid "ATUM requires WooCommerce version "
 msgstr ""
 
-#: classes/Components/AtumColors.php:584 classes/Modules/ModuleManager.php:141
+#: classes/Components/AtumColors.php:586 classes/Modules/ModuleManager.php:141
 #: views/settings-page.php:113
 msgid "Visual Settings"
 msgstr ""
 
-#: classes/Components/AtumColors.php:587
+#: classes/Components/AtumColors.php:589
 msgid "Color Mode"
 msgstr ""
 
-#: classes/Components/AtumColors.php:588
+#: classes/Components/AtumColors.php:590
 msgid "Color Scheme"
 msgstr ""
 
-#: classes/Components/AtumColors.php:610
+#: classes/Components/AtumColors.php:612
 msgid "Theme settings"
 msgstr ""
 
-#: classes/Components/AtumColors.php:618
+#: classes/Components/AtumColors.php:620
 msgid "Branded Mode"
 msgstr ""
 
-#: classes/Components/AtumColors.php:620
+#: classes/Components/AtumColors.php:622
 msgid ""
 "Activate the Branded mode. Colour mode for the ATUM default branded colours."
 msgstr ""
 
-#: classes/Components/AtumColors.php:624
+#: classes/Components/AtumColors.php:626
 msgid "Dark Mode"
 msgstr ""
 
-#: classes/Components/AtumColors.php:626
+#: classes/Components/AtumColors.php:628
 msgid "Activate the Dark mode. Colour Mode for tired/weary eyes."
 msgstr ""
 
-#: classes/Components/AtumColors.php:630
+#: classes/Components/AtumColors.php:632
 msgid "High Contrast Mode"
 msgstr ""
 
-#: classes/Components/AtumColors.php:632
+#: classes/Components/AtumColors.php:634
 msgid ""
 "Activate the High Contrast mode. This mode is for users that find difficult "
 "viewing data while browsing the interface in ATUM's branded colours."
 msgstr ""
 
-#: classes/Components/AtumColors.php:641 classes/Components/AtumColors.php:651
-#: classes/Components/AtumColors.php:661
+#: classes/Components/AtumColors.php:643 classes/Components/AtumColors.php:653
+#: classes/Components/AtumColors.php:663
 msgid "Primary Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:642 classes/Components/AtumColors.php:652
-#: classes/Components/AtumColors.php:662
+#: classes/Components/AtumColors.php:644 classes/Components/AtumColors.php:654
+#: classes/Components/AtumColors.php:664
 msgid "Mainly used for links and editable values in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:671 classes/Components/AtumColors.php:681
+#: classes/Components/AtumColors.php:673 classes/Components/AtumColors.php:683
 msgid "Secondary Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:672 classes/Components/AtumColors.php:682
+#: classes/Components/AtumColors.php:674 classes/Components/AtumColors.php:684
 msgid "Mainly used for buttons in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:691 classes/Components/AtumColors.php:701
+#: classes/Components/AtumColors.php:693 classes/Components/AtumColors.php:703
 msgid "Tertiary Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:692 classes/Components/AtumColors.php:702
+#: classes/Components/AtumColors.php:694 classes/Components/AtumColors.php:704
 msgid "Mainly used for buttons and UX elements in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:711
+#: classes/Components/AtumColors.php:713
 msgid "Outside Elements Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:712
+#: classes/Components/AtumColors.php:714
 msgid "Mainly used for buttons outside of ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:721 classes/Components/AtumColors.php:731
+#: classes/Components/AtumColors.php:723 classes/Components/AtumColors.php:733
 msgid "Danger Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:722 classes/Components/AtumColors.php:732
+#: classes/Components/AtumColors.php:724 classes/Components/AtumColors.php:734
 msgid "Mainly used for highlighted text and edited values in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:741 classes/Components/AtumColors.php:751
+#: classes/Components/AtumColors.php:743 classes/Components/AtumColors.php:753
 msgid "Titles Text Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:742 classes/Components/AtumColors.php:752
+#: classes/Components/AtumColors.php:744 classes/Components/AtumColors.php:754
 msgid "Mainly used for titles."
 msgstr ""
 
-#: classes/Components/AtumColors.php:761 classes/Components/AtumColors.php:771
+#: classes/Components/AtumColors.php:763 classes/Components/AtumColors.php:773
 msgid "Main Text Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:762 classes/Components/AtumColors.php:772
+#: classes/Components/AtumColors.php:764 classes/Components/AtumColors.php:774
 msgid "Mainly used for the text in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:781 classes/Components/AtumColors.php:791
+#: classes/Components/AtumColors.php:783 classes/Components/AtumColors.php:793
 msgid "Soft Text Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:782 classes/Components/AtumColors.php:792
+#: classes/Components/AtumColors.php:784 classes/Components/AtumColors.php:794
 msgid "Mainly used for secondary texts and UX elements in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:801 classes/Components/AtumColors.php:811
+#: classes/Components/AtumColors.php:803 classes/Components/AtumColors.php:813
 msgid "Light Text Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:802 classes/Components/AtumColors.php:812
+#: classes/Components/AtumColors.php:804 classes/Components/AtumColors.php:814
 msgid "Mainly used for buttons text and expanded row text in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:821 classes/Components/AtumColors.php:831
+#: classes/Components/AtumColors.php:823 classes/Components/AtumColors.php:833
 msgid "Borders Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:822 classes/Components/AtumColors.php:832
+#: classes/Components/AtumColors.php:824 classes/Components/AtumColors.php:834
 msgid "Mainly used for borders in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:841
+#: classes/Components/AtumColors.php:843
 msgid "Primary Background Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:842
+#: classes/Components/AtumColors.php:844
 msgid "Mainly used for background color in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:851
+#: classes/Components/AtumColors.php:853
 msgid "Secondary Background Color"
 msgstr ""
 
-#: classes/Components/AtumColors.php:852
+#: classes/Components/AtumColors.php:854
 msgid "Mainly used for the background color of striped rows in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:861 classes/Components/AtumColors.php:871
-#: classes/Components/AtumColors.php:881
+#: classes/Components/AtumColors.php:863 classes/Components/AtumColors.php:873
+#: classes/Components/AtumColors.php:883
 msgid "Colored Background Color 1"
 msgstr ""
 
-#: classes/Components/AtumColors.php:862 classes/Components/AtumColors.php:872
-#: classes/Components/AtumColors.php:882 classes/Components/AtumColors.php:892
-#: classes/Components/AtumColors.php:902 classes/Components/AtumColors.php:912
-#: classes/Components/AtumColors.php:922 classes/Components/AtumColors.php:932
-#: classes/Components/AtumColors.php:942 classes/Components/AtumColors.php:952
+#: classes/Components/AtumColors.php:864 classes/Components/AtumColors.php:874
+#: classes/Components/AtumColors.php:884 classes/Components/AtumColors.php:894
+#: classes/Components/AtumColors.php:904 classes/Components/AtumColors.php:914
+#: classes/Components/AtumColors.php:924 classes/Components/AtumColors.php:934
+#: classes/Components/AtumColors.php:944 classes/Components/AtumColors.php:954
 msgid "Mainly used for the striped background of expanded rows in ATUM tables."
 msgstr ""
 
-#: classes/Components/AtumColors.php:891 classes/Components/AtumColors.php:901
-#: classes/Components/AtumColors.php:911
+#: classes/Components/AtumColors.php:893 classes/Components/AtumColors.php:903
+#: classes/Components/AtumColors.php:913
 msgid "Colored Background Color 2"
 msgstr ""
 
-#: classes/Components/AtumColors.php:921 classes/Components/AtumColors.php:931
+#: classes/Components/AtumColors.php:923 classes/Components/AtumColors.php:933
 msgid "Colored Background Color 3"
 msgstr ""
 
-#: classes/Components/AtumColors.php:941 classes/Components/AtumColors.php:951
+#: classes/Components/AtumColors.php:943 classes/Components/AtumColors.php:953
 msgid "Colored Background Color 4"
 msgstr ""
 
