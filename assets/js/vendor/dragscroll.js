@@ -24,71 +24,108 @@
 	var mousemove = 'mousemove touchmove';
 	var mouseup = 'mouseup touchend';
 	var mousedown = 'mousedown touchstart';
+	var mouseenter = 'mouseenter';
+	var click = 'click';
 	var EventListener = 'EventListener';
 	var addEventListener = 'add'+EventListener;
 	var removeEventListener = 'remove'+EventListener;
 	var newScrollX, newScrollY;
+	var moveThreshold = 4;
 	
 	var dragged = [];
 	var reset = function(i, el) {
 		for (i = 0; i < dragged.length;) {
 			el = dragged[i++];
 			el = el.container || el;
-			el[removeEventListener](mousedown, el.md, 0);
-			mouseup.split(' ').forEach(function(ev) {
-				_window[removeEventListener](ev, el.mu, 0);
+			mousedown.split(' ').forEach(function(ev,index) {
+				el[removeEventListener](ev, el['md'+index], 0);
 			});
-			mousemove.split(' ').forEach(function(ev) {
-				_window[removeEventListener](ev, el.mm, 0);
+			el[removeEventListener](click, el.mc, 1 );
+			mouseup.split(' ').forEach(function(ev,index) {
+				_window[removeEventListener](ev, el['mu'+index], 0);
 			});
+			mousemove.split(' ').forEach(function(ev,index) {
+				_window[removeEventListener](ev, el['mm'+index], 0);
+			});
+			_document[removeEventListener](mouseenter, el.me, 0);
 		}
 		
 		// cloning into array since HTMLCollection is updated dynamically
 		dragged = [].slice.call(_document.getElementsByClassName('dragscroll'));
 		for (i = 0; i < dragged.length;) {
-			(function(el, lastClientX, lastClientY, pushed, scroller, cont){
-				mousedown.split(' ').forEach(function(ev) {
+			(function(el, lastClientX, lastClientY, startX, startY, moved, pushed, scroller, cont){
+				mousedown.split(' ').forEach(function(ev, index) {
 					(cont = el.container || el)[addEventListener](
 						ev,
-						cont.md = function(e) {
-							el.classList.add('dragging');
-							fixTouches(e);
+						cont['md' +index] = function(e) {
 							if (!el.hasAttribute('nochilddrag') ||
 								_document.elementFromPoint(
 									e.pageX, e.pageY
 								) == cont
 							) {
+								el.classList.add('dragging');
+								fixTouches(e);
 								pushed = 1;
-								lastClientX = e.clientX;
-								lastClientY = e.clientY;
-								
+								moved = 0;
+								startX = lastClientX = e.clientX;
+								startY = lastClientY = e.clientY;
 								e.preventDefault();
+								e.stopPropagation();
 							}
 						}, 0
 					);
 				});
+				(cont = el.container || el)[addEventListener](
+					click,
+					cont.mc = function(e) {
+						if (moved) {
+							e.preventDefault();
+							e.stopPropagation();
+							moved = 0; pushed = 0;
+						}
+						else {
+							var child = e.target.children[0];
+							if (undefined !== child) {
+								child.click();
+							}
+						}
+					}, 1
+				);
 				
-				mouseup.split(' ').forEach(function(ev) {
+				mouseup.split(' ').forEach(function(ev,index) {
 					_window[addEventListener](
-						ev, cont.mu = function() {
-							el.classList.remove('dragging');
+						ev, cont['mu'+index] = function() {
+							setTimeout(function() {
+								el.classList.remove('dragging')
+							}, 100);
 							pushed = 0;
 							}, 0
 					);
 				});
-				mousemove.split(' ').forEach(function(ev) {
+				_document[addEventListener](
+					mouseenter, cont.me = function(e) {if (!e.buttonsPressed) pushed = 0;}, 0
+				);
+				mousemove.split(' ').forEach(function(ev, index) {
 					_window[addEventListener](
 						ev,
-						cont.mm = function(e) {
+						cont['mm'+index] = function(e) {
 							fixTouches(e);
 							if (pushed) {
-								(scroller = el.scroller||el).scrollLeft -=
-									newScrollX = (- lastClientX + (lastClientX=e.clientX));
-								scroller.scrollTop -=
-									newScrollY = (- lastClientY + (lastClientY=e.clientY));
-								if (el == _document.body) {
-									(scroller = _document.documentElement).scrollLeft -= newScrollX;
-									scroller.scrollTop -= newScrollY;
+								if (!moved &&
+									(Math.abs(e.clientX - startX) > moveThreshold ||
+										Math.abs(e.clientY - startY) > moveThreshold)) {
+									moved = true;
+								}
+								if (moved) {
+									
+									(scroller = el.scroller || el).scrollLeft -=
+										newScrollX = (-lastClientX + (lastClientX = e.clientX));
+									scroller.scrollTop -=
+										newScrollY = (-lastClientY + (lastClientY = e.clientY));
+									if (el == _document.body) {
+										(scroller = _document.documentElement).scrollLeft -= newScrollX;
+										scroller.scrollTop -= newScrollY;
+									}
 								}
 							}
 						}, 0
