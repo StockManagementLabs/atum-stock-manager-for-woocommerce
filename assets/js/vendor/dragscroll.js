@@ -94,11 +94,14 @@
 				
 				mouseup.split(' ').forEach(function(ev,index) {
 					_window[addEventListener](
-						ev, cont['mu'+index] = function() {
+						ev, cont['mu'+index] = function(e) {
 							setTimeout(function() {
 								el.classList.remove('dragging')
 							}, 100);
 							pushed = 0;
+							if (undefined !== moved && ! moved) {
+								e.target.click();
+							}
 							}, 0
 					);
 				});
