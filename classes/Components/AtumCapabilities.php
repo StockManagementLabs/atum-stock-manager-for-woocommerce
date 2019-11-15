@@ -129,7 +129,7 @@ class AtumCapabilities {
 
 		foreach ( $admin_roles as $admin_role ) {
 
-			if ( is_a( $admin_role, '\WP_Role' ) ) {
+			if ( $admin_role instanceof \WP_Role ) {
 				foreach ( $this->capabilities as $cap ) {
 					$admin_role->add_cap( $cap );
 				}

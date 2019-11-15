@@ -340,7 +340,7 @@ abstract class AtumOrderModel {
 	 */
 	public function add_product( $product, $qty = NULL, $args = array() ) {
 
-		if ( is_a( $product, '\WC_Product' ) ) {
+		if ( $product instanceof \WC_Product ) {
 			
 			if ( is_null( $qty ) ) {
 				$qty = $product->get_min_purchase_quantity();

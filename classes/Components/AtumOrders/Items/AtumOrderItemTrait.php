@@ -241,7 +241,7 @@ trait AtumOrderItemTrait {
 		foreach ( $meta_data as $meta ) {
 
 			// After adding meta to any ATUM order item, it was discarding all the custom meta until reloading the page.
-			if ( is_a( $meta, '\WC_Meta_Data' ) ) {
+			if ( $meta instanceof \WC_Meta_Data ) {
 
 				if ( empty( $meta->id ) ) {
 

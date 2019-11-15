@@ -609,7 +609,7 @@ final class Helpers {
 
 		$lost_sales = FALSE;
 
-		if ( ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			$product = self::get_atum_product( $product );
 		}
 
@@ -656,7 +656,7 @@ final class Helpers {
 
 		$out_stock_days = NULL;
 
-		if ( ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			$product = self::get_atum_product( $product );
 		}
 
@@ -1129,7 +1129,7 @@ final class Helpers {
 	 */
 	public static function get_atum_control_status( $product ) {
 
-		if ( ! is_a( $product, '\WC_product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			$product = self::get_atum_product( $product );
 		}
 
@@ -1148,7 +1148,7 @@ final class Helpers {
 	 */
 	public static function update_atum_control( $product, $status = 'enable' ) {
 
-		if ( ! is_a( $product, '\WC_product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			$product = self::get_atum_product( $product );
 		}
 
@@ -1168,7 +1168,7 @@ final class Helpers {
 	 */
 	public static function update_wc_manage_stock( $product, $status = 'enable' ) {
 
-		if ( ! is_a( $product, '\WC_product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
 		}
 
@@ -1919,7 +1919,7 @@ final class Helpers {
 		
 		$product = self::get_atum_product( $product_id );
 		
-		if ( ! $product || ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product || ! $product instanceof \WC_Product ) {
 			return;
 		}
 		
@@ -2081,7 +2081,7 @@ final class Helpers {
 		global $wpdb;
 		$wpdb->hide_errors();
 
-		if ( $product && is_a( $product, '\WC_Product' ) ) {
+		if ( $product && $product instanceof \WC_Product ) {
 
 			if ( $clean_meta ) {
 				/* @noinspection PhpUndefinedMethodInspection */
@@ -2124,7 +2124,7 @@ final class Helpers {
 
 				$product = self::get_atum_product( $id_to_rebuild );
 
-				if ( is_a( $product, '\WC_Product' ) ) {
+				if ( $product instanceof \WC_Product ) {
 
 					// Delete _out_stock_threshold (avoid partial works to be done again).
 					if ( $clean_meta ) {
@@ -2580,7 +2580,7 @@ final class Helpers {
 		
 		try {
 			
-			if ( is_a( $value, 'WC_DateTime' ) ) {
+			if ( $value instanceof \WC_DateTime ) {
 				$date_time = $value;
 			}
 			elseif ( is_numeric( $value ) ) {

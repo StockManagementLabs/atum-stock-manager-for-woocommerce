@@ -20,6 +20,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
+use Atum\Components\AtumWidget;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
@@ -223,7 +224,7 @@ final class Ajax {
 
 		$widget = $available_widgets[ $widget_id ];
 
-		if ( ! is_a( $widget, '\Atum\Components\AtumWidget' ) ) {
+		if ( ! $widget instanceof AtumWidget ) {
 			wp_die( esc_attr__( 'Invalid widget', ATUM_TEXT_DOMAIN ) );
 		}
 
@@ -1021,7 +1022,7 @@ final class Ajax {
 			$po = Helpers::get_atum_order_model( absint( $url_query['post'] ) );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
-			if ( is_a( $po, '\Atum\PurchaseOrders\Models\PurchaseOrder' ) && ! $po->has_multiple_suppliers() ) {
+			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
 
 				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE ) );
 
@@ -1770,7 +1771,7 @@ final class Ajax {
 		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
 		$product    = Helpers::get_atum_product( $product_id );
 
-		if ( ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
@@ -1821,7 +1822,7 @@ final class Ajax {
 
 						foreach ( $items as $item ) {
 
-							if ( is_a( $item, '\WC_Order_Item_Product' ) ) {
+							if ( $item instanceof \WC_Order_Item_Product ) {
 								/**
 								 * Variable definition
 								 *
@@ -1829,7 +1830,7 @@ final class Ajax {
 								 */
 								$log_item = $atum_order->add_product( $item->get_product(), $item->get_quantity() );
 							}
-							elseif ( is_a( $item, '\WC_Order_Item_Fee' ) ) {
+							elseif ( $item instanceof \WC_Order_Item_Fee ) {
 								/**
 								 * Variable definition
 								 *
@@ -1837,7 +1838,7 @@ final class Ajax {
 								 */
 								$log_item = $atum_order->add_fee( $item );
 							}
-							elseif ( is_a( $item, '\WC_Order_Item_Shipping' ) ) {
+							elseif ( $item instanceof \WC_Order_Item_Shipping ) {
 								/**
 								 * Variable definition
 								 *
@@ -1845,7 +1846,7 @@ final class Ajax {
 								 */
 								$log_item = $atum_order->add_shipping_cost( $item );
 							}
-							elseif ( empty( $current_tax ) && is_a( $item, '\WC_Order_Item_Tax' ) ) {
+							elseif ( empty( $current_tax ) && $item instanceof \WC_Order_Item_Tax ) {
 								/**
 								 * Variable definition
 								 *
@@ -1935,7 +1936,7 @@ final class Ajax {
 
 		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
-		if ( ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
 		}
 

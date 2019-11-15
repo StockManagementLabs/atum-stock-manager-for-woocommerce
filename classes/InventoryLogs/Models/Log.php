@@ -86,7 +86,7 @@ class Log extends AtumOrderModel {
 			$product_id = $item->get_variation_id() ?: $item->get_product_id();
 			$product    = Helpers::get_atum_product( $product_id );
 
-			if ( is_a( $product, '\WC_Product' ) ) {
+			if ( $product instanceof \WC_Product ) {
 				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
 			}
 
@@ -261,7 +261,7 @@ class Log extends AtumOrderModel {
 
 		$item_type = $id = FALSE;
 
-		if ( is_a( $item, '\WC_Order_Item' ) ) {
+		if ( $item instanceof \WC_Order_Item ) {
 			/**
 			 * Variable definition
 			 *

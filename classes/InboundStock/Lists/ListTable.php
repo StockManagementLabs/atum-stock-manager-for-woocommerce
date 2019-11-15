@@ -468,7 +468,7 @@ class ListTable extends AtumListTable {
 
 		$this->product = Helpers::get_atum_product( $item );
 
-		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+		if ( ! $this->product instanceof \WC_Product ) {
 			return;
 		}
 

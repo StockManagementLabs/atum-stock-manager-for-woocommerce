@@ -135,7 +135,7 @@ class HtmlReport extends ListTable {
 
 		$this->product = Helpers::get_atum_product( $item );
 
-		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+		if ( ! $this->product instanceof \WC_Product ) {
 			return;
 		}
 
@@ -204,7 +204,7 @@ class HtmlReport extends ListTable {
 					$this->is_child = TRUE;
 					$this->product  = Helpers::get_atum_product( $child_id );
 
-					if ( is_a( $this->product, '\WC_Product' ) ) {
+					if ( $this->product instanceof \WC_Product ) {
 
 						if ( 'grouped' === $type ) {
 							$return_type = 'grouped';
