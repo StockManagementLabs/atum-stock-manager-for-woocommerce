@@ -19,6 +19,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -1126,7 +1127,7 @@ class ListTable extends AtumListTable {
 
 					foreach ( $log_items as $log_item ) {
 
-						if ( ! is_a( $log_item, '\Atum\InventoryLogs\Items\LogItemProduct' ) ) {
+						if ( ! $log_item instanceof LogItemProduct ) {
 							continue;
 						}
 

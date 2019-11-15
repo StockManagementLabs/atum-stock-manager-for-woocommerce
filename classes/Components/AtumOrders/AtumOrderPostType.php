@@ -383,7 +383,7 @@ abstract class AtumOrderPostType {
 
 					$user = get_user_by( 'id', $author );
 
-					if ( is_a( $user, '\WP_User' ) ) {
+					if ( $user instanceof \WP_User ) {
 						$username = ucwords( $user->display_name );
 					}
 					else {

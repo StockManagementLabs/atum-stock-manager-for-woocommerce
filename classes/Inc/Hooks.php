@@ -557,7 +557,7 @@ class Hooks {
 			$this->stock_threshold = NULL;
 
 			// When the product is being created, no change is needed.
-			if ( ! is_a( $product, '\WC_Product' ) ) {
+			if ( ! $product instanceof \WC_Product ) {
 				return;
 			}
 
@@ -706,7 +706,7 @@ class Hooks {
 
 		$order = wc_get_order( $order_id );
 
-		if ( ! is_a( $order, '\WC_Order' ) ) {
+		if ( ! $order instanceof \WC_Order ) {
 			return;
 		}
 
@@ -724,7 +724,7 @@ class Hooks {
 				$product_id = $item->get_variation_id() ?: $item->get_product_id();
 				$product    = Helpers::get_atum_product( $product_id );
 
-				if ( is_a( $product, '\WC_Product' ) ) {
+				if ( $product instanceof \WC_Product ) {
 					Helpers::update_order_item_product_data( $product );
 					do_action( 'atum/after_save_order_item_props', $item, $order_id );
 				}
@@ -763,7 +763,7 @@ class Hooks {
 
 		$product = Helpers::get_atum_product( $product_id );
 
-		if ( is_a( $product, '\WC_Product' ) ) {
+		if ( $product instanceof \WC_Product ) {
 			$product->delete_atum_data();
 		}
 
@@ -780,7 +780,7 @@ class Hooks {
 
 		$product = Helpers::get_atum_product( $variation_id );
 
-		if ( is_a( $product, '\WC_Product' ) ) {
+		if ( $product instanceof \WC_Product ) {
 			$product->save_atum_data();
 		}
 
@@ -805,7 +805,7 @@ class Hooks {
 			$product_id = $item->get_product_id();
 			$product    = Helpers::get_atum_product( $product_id );
 
-			if ( is_a( $product, '\WC_Product' ) ) {
+			if ( $product instanceof \WC_Product ) {
 				$product->set_update_date();
 				$product->save_atum_data();
 			}

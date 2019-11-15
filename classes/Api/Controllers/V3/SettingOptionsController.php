@@ -382,7 +382,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	 */
 	protected function maybe_register_atum_settings() {
 
-		if ( ! is_a( $this->atum_settings, '\Atum\Settings\Settings' ) ) {
+		if ( ! $this->atum_settings instanceof Settings ) {
 			$this->atum_settings = Settings::get_instance();
 		}
 

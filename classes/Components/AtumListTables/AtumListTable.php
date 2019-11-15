@@ -515,7 +515,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->product = Helpers::get_atum_product( $item );
 
-		if ( ! is_a( $this->product, '\WC_Product' ) ) {
+		if ( ! $this->product instanceof \WC_Product ) {
 			return;
 		}
 
@@ -613,7 +613,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					// Save the child product to the product prop.
 					$this->product = Helpers::get_atum_product( $child_id );
 
-					if ( is_a( $this->product, '\WC_Product' ) ) {
+					if ( $this->product instanceof \WC_Product ) {
 
 						if ( 'grouped' === $type ) {
 							$child_type = 'grouped';
@@ -2338,7 +2338,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$variation_product = Helpers::get_atum_product( $variation_id );
 
-			if ( ! is_a( $variation_product, '\WC_Product_Variation' ) ) {
+			if ( ! $variation_product instanceof \WC_Product_Variation ) {
 				unset( $this->supplier_variation_products[ $index ] );
 				continue;
 			}

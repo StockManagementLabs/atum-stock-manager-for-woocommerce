@@ -148,7 +148,7 @@ trait AjaxLegacyTrait {
 			$po = Helpers::get_atum_order_model( absint( $url_query['post'] ) );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
-			if ( is_a( $po, '\Atum\PurchaseOrders\Models\PurchaseOrder' ) && ! $po->has_multiple_suppliers() ) {
+			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
 
 				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE ) );
 

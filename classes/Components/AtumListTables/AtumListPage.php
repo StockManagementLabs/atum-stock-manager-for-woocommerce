@@ -88,7 +88,7 @@ abstract class AtumListPage {
 	 */
 	public function set_list_table( AtumListTable $list ) {
 
-		if ( is_a( $list, '\Atum\Components\AtumListTables\AtumListTable' ) ) {
+		if ( $list instanceof AtumListTable ) {
 			$this->list = $list;
 		}
 

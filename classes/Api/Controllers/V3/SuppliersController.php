@@ -586,7 +586,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 			$product_id = $request['product'];
 			$product    = Helpers::get_atum_product( $product_id );
 
-			if ( is_a( $product, '\WC_Product' ) ) {
+			if ( $product instanceof \WC_Product ) {
 				$supplier_id = $product->get_supplier_id();
 				$included[]  = $supplier_id;
 			}
@@ -1264,7 +1264,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 				$product = Helpers::get_atum_product( $product_id );
 
-				if ( is_a( $product, '\WC_Product' ) ) {
+				if ( $product instanceof \WC_Product ) {
 					$product->set_supplier_id( NULL );
 					$product->save_atum_data();
 				}

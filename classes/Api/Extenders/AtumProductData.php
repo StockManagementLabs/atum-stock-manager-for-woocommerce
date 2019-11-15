@@ -361,7 +361,7 @@ class AtumProductData {
 			$product = Helpers::get_atum_product( $response['id'] );
 			$getter  = "get_$field_name";
 
-			if ( is_a( $product, '\WC_Product' ) ) {
+			if ( $product instanceof \WC_Product ) {
 
 				if ( 'atum_locations' === $field_name ) {
 
@@ -443,16 +443,16 @@ class AtumProductData {
 
 		$product_id = NULL;
 
-		if ( is_a( $response, '\WC_Product' ) ) {
+		if ( $response instanceof \WC_Product ) {
 			$product_id = $response->get_id();
 		}
-		elseif ( is_a( $response, '\WP_Post' ) ) {
+		elseif ( $response instanceof \WP_Post ) {
 			$product_id = absint( $response->ID );
 		}
 
 		$product = Helpers::get_atum_product( $product_id );
 
-		if ( ! is_a( $product, '\WC_Product' ) ) {
+		if ( ! $product instanceof \WC_Product ) {
 			/* translators: the product ID */
 			throw new \WC_REST_Exception( 'atum_rest_invalid_product', sprintf( __( 'Invalid product with ID #%s.', ATUM_TEXT_DOMAIN ), $product_id ), 400 );
 		}

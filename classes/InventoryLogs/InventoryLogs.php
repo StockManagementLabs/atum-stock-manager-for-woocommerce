@@ -137,7 +137,7 @@ class InventoryLogs extends AtumOrderPostType {
 
 		$atum_order = $this->get_current_atum_order( $post->ID );
 
-		if ( ! is_a( $atum_order, 'Atum\InventoryLogs\Models\Log' ) ) {
+		if ( ! $atum_order instanceof Log ) {
 			return;
 		}
 
