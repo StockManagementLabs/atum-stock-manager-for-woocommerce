@@ -43,16 +43,17 @@ body {
 			}
 			
 			.select2-selection__arrow {
+				color: var(--main-border-alt);
+				
 				b {
 					display: none;
 				}
 				
 				&:after {
+					content: $atmi-chevron-down;
 					line-height: 27px;
 					font-family: atum-icon-font;
-					content: $atmi-chevron-down;
 					font-size: 10px;
-					color: var(--main-border-alt);
 				}
 			}
 			
@@ -73,12 +74,14 @@ body {
 				.select2-selection__clear {
 					position: relative;
 					visibility: hidden;
+					color: var(--main-border-alt);
 					
 					&:after {
 						font-family: atum-icon-font;
 						content: $atmi-cross;
 						visibility: visible;
 						line-height: 2;
+						vertical-align: middle;
 					}
 				}
 			}
