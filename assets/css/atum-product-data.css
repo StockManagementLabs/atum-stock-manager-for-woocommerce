@@ -3361,6 +3361,7 @@ body .select2-container--default .select2-results__group {
 
 .product_data .atum-field .input-group-text {
   padding: 4px 7px;
+  height: 20px;
 }
 
 .product_data .atum-field input[type=text], .product_data .atum-field input[type=number] {
