@@ -73,10 +73,19 @@
 			@include tablet-max-wp {
 				margin: 0;
 			}
+			@include mobile-max {
+				flex-grow: 1;
+				text-align: center;
+			}
 		}
 		
 		@include tablet-max-wp {
 			font-size: 13px;
+		}
+		
+		@include mobile-max {
+			width: 100%;
+			display: flex;
 		}
 		
 		.tablenav-paging-text {
