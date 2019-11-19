@@ -227,9 +227,9 @@ $body-color:                            $gray-900 !default;
 
 // Links
 
-$link-color:                            $wp-link !default;
+$link-color:                            $primary !default;
 $link-decoration:                       none !default;
-$link-hover-color:                      $wp-link-hover !default;
+$link-hover-color:                      darken($link-color, 5%) !default;
 $link-hover-decoration:                 underline !default;
 
 $border-color:                          $gray-300 !default;

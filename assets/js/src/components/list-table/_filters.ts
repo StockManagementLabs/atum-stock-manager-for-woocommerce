@@ -164,8 +164,23 @@ export default class Filters {
 				
 			})
 			
+			.on('click', '.show-filters', (evt: JQueryEventObject) => {
+				
+				const button = <HTMLElement>evt.target;
+			
+				if ( 'show' === button.dataset.action ) {
+					button.dataset.action = 'hide';
+					button.innerText = this.settings.get('hideFilters');
+					$(button).parent().next().slideDown();
+				}
+				else {
+					button.dataset.action = 'show';
+					button.innerText = this.settings.get('showFilters');
+					$(button).parent().next().slideUp();
+				}
+			})
+			
 			.on('atum-table-updated', () => this.addDateSelectorFilter());
-		
 		
 		//
 		// Add date selector filter.

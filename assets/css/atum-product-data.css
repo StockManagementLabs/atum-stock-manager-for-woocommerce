@@ -395,7 +395,7 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #0073AA;
+  color: #00B8DB;
   background-color: transparent;
 }
 
@@ -424,7 +424,7 @@ fieldset:disabled a.btn {
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -1323,12 +1323,12 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #0073AA;
+  color: #00B8DB;
   background-color: transparent;
 }
 
 .btn-link:hover {
-  color: #00A0D2;
+  color: #00a3c2;
   text-decoration: underline;
   background-color: transparent;
   border-color: transparent;
@@ -3312,7 +3312,7 @@ body .select2-container--default .select2-results__group {
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }

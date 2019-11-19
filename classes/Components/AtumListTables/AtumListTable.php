@@ -470,6 +470,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
+			<div class="alignleft show-filters-wrapper">
+					<span><?php esc_html_e( 'Filters', ATUM_TEXT_DOMAIN ) ?></span>
+					<button type="button" class="show-filters btn btn-link no-drag" data-action="show">
+						<?php esc_html_e( 'Show', ATUM_TEXT_DOMAIN ) ?>
+					</button>
+			</div>
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
 
@@ -3054,6 +3060,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'noItemsSelected'      => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
 			'selectItems'          => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
 			'applyBulkAction'      => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'showFilters'          => __( 'Show', ATUM_TEXT_DOMAIN ),
+			'hideFilters'          => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'applyAction'          => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations'     => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
 			'editProductLocations' => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),

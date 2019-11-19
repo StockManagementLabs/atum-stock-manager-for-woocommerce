@@ -86,6 +86,10 @@
 		@include mobile-max {
 			width: 100%;
 			display: flex;
+			
+			.tablenav-pages-navspan, .next-page {
+				margin-right: 5px;
+			}
 		}
 		
 		.tablenav-paging-text {
