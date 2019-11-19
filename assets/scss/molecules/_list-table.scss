@@ -138,6 +138,10 @@
 		margin-right: 20px;
 		margin-left: 10px;
 	}
+	
+	@include mobile-max{
+		margin: 0 10px 50px 0;
+	}
 }
 
 .subsubsub {
@@ -626,8 +630,13 @@
 	.actions {
 		white-space: nowrap;
 		
+		.show-filters {
+			display: none;
+		}
+		
 		@include mobile-max {
 			white-space: inherit;
+			
 		}
 		
 		&.bulkactions {
@@ -647,6 +656,38 @@
 					margin-top: 10px !important;
 				}
 			}
+		}
+		
+	}
+	
+	
+	.show-filters-wrapper {
+		display: none;
+		width: 100%;
+		margin-top: 15px;
+		font-size: 15px;
+		
+		.btn {
+			font-size: 15px;
+		}
+		
+		@include mobile-max {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			
+			> span {
+				text-transform: uppercase;
+			}
+			
+			+ .actions {
+				margin-top: 15px;
+				.select2-container {
+					margin-bottom: 10px;
+				}
+			}
+			
+			
 		}
 		
 	}
@@ -692,12 +733,6 @@
 				color:  var(--white) !important;
 			}
 			
-		}
-		
-		.displaying-num {
-			@include mobile-max{
-				width: 100%;
-			}
 		}
 		
 		@include mobile-max{
@@ -804,12 +839,16 @@
 					text-align: right;
 				}
 				
-				@include mobile-max{
-					margin: 5px 0 5px auto;
-				}
-				
 				.displaying-num {
 					display: inline-block;
+				}
+				
+				
+				@include mobile-max{
+					margin: 5px 0 10px auto;
+					.displaying-num {
+						display: none;
+					}
 				}
 				
 			}
@@ -898,7 +937,7 @@
 	}
 	
 	&.bottom {
-		margin: 10px 11px 0;
+		margin: 10px 10px 15px 10px;
 		
 		.tablenav-pages-container {
 			flex-grow: 1;
@@ -918,10 +957,17 @@
 				display: contents;
 				
 				@include mobile-max {
-					display: inline-block;
-					position: inherit;
-					top: inherit;
+					display: none;
 				}
+			}
+		}
+		
+		@include mobile-max {
+			flex-direction: column;
+			align-items: stretch;
+			
+			.bulkactions {
+				margin-bottom: 15px;
 			}
 		}
 		
@@ -1184,7 +1230,7 @@
 		transition: 0.2s ease-in-out;
 		
 		@include mobile-max {
-			margin-bottom: 15px;
+			margin-bottom: 3px;
 		}
 		
 		&:focus {
@@ -1325,6 +1371,7 @@
 		.search-box {
 			display: flex;
 			justify-content: center;
+			flex-direction: row-reverse;
 			width: 100%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
