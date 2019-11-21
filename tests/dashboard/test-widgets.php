@@ -16,6 +16,7 @@ use Atum\Dashboard\Widgets\Sales;
 use Atum\Dashboard\Widgets\Statistics;
 use Atum\Dashboard\Widgets\StockControl;
 use Atum\Dashboard\Widgets\Videos;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
@@ -177,35 +178,23 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for get_items_in_stock.
 	 */
 	public function test_get_items_in_stock() {
-		// Product needed.
-		$p = $this->factory()->post->create( array(
-			'post_title' => 'Foo',
-			'post_type'  => 'product',
-		) );
+		TestHelpers::create_product();
 
-		if ( $p > 0 ) {
-			$stats = WidgetHelpers::get_items_in_stock();
+		$stats = WidgetHelpers::get_items_in_stock();
 
-			$this->assertIsArray( $stats );
-			$this->assertArrayHasKey( 'items_stocks_counter', $stats );
-			$this->assertArrayHasKey( 'items_purcharse_price_total', $stats );
-			$this->assertArrayHasKey( 'items_without_purcharse_price', $stats );
-		} else {
-			$this->assertFalse( true, 'Product was not created.' );
-		}
-
+		$this->assertIsArray( $stats );
+		$this->assertArrayHasKey( 'items_stocks_counter', $stats );
+		$this->assertArrayHasKey( 'items_purchase_price_total', $stats );
+		$this->assertArrayHasKey( 'items_without_purchase_price', $stats );
 	}
 
 	/**
 	 * Test method for stock_value_widget.
 	 */
 	public function test_current_stock_value_widget() {
+		wp_set_current_user( 1 );
 		$widget = new CurrentStockValue();
-		// Product needed.
-		$this->factory()->post->create( array(
-			'post_title' => 'Foo',
-			'post_type'  => 'product',
-		) );
+		TestHelpers::create_product();
 
 		ob_start();
 		$widget->render();
@@ -219,12 +208,9 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for lost_sales_widget.
 	 */
 	public function test_lost_sales_widget() {
+		wp_set_current_user( 1 );
 		$widget = new LostSales();
-		// Product needed.
-		$this->factory()->post->create( array(
-			'post_title' => 'Foo',
-			'post_type'  => 'product',
-		) );
+		TestHelpers::create_product();
 
 		ob_start();
 		$widget->render();
@@ -238,6 +224,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for promo_sales_widget.
 	 */
 	public function test_promo_sales_widget() {
+		wp_set_current_user( 1 );
 		$widget = new PromoSales();
 
 		ob_start();
@@ -252,6 +239,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for orders_widget.
 	 */
 	public function test_orders_widget() {
+		wp_set_current_user( 1 );
 		$widget = new Orders();
 
 		ob_start();
@@ -266,6 +254,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for statistics_widget.
 	 */
 	public function test_statistics_widget() {
+		wp_set_current_user( 1 );
 		$widget = new Statistics();
 
 		ob_start();
@@ -280,6 +269,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for stock_control_widget.
 	 */
 	public function test_stock_control_widget() {
+		wp_set_current_user( 1 );
 		$widget = new StockControl();
 
 		ob_start();
@@ -294,6 +284,7 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	 * Test method for videos_widget.
 	 */
 	public function test_videos_widget() {
+		wp_set_current_user( 1 );
 		$widget = new Videos();
 
 		ob_start();

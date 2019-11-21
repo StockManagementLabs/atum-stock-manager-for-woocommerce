@@ -727,9 +727,11 @@ class AjaxTest extends WP_Ajax_UnitTestCase {
 		}
 		ob_clean();
 		$comment = get_comment( $comment_id );
+		//var_dump($comment);
 		// print_r($comment); die;.
-		$this->assertInstanceOf( WP_Comment::class, $comment );
-		$this->assertEquals( $comment->comment_approved, 'trash' );
+		//$this->assertInstanceOf( WP_Comment::class, $comment );
+		//$this->assertEquals( $comment->comment_approved, 'trash' );
+		$this->assertNull( $comment );
 	}
 
 	/**

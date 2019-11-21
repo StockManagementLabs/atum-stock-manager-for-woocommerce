@@ -109,9 +109,9 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		}
 	}
 
-	public function test_get_expected_at_location_date() {
+	public function test_get_date_expected() {
 		update_post_meta( $this->po->get_id(), '_expected_at_location_date', 'foo' );
-		$data = $this->po->get_expected_at_location_date();
+		$data = $this->po->get_date_expected();
 		$this->assertEquals( 'foo', $data );
 	}
 
