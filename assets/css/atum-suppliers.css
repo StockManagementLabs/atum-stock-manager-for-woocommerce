@@ -5546,6 +5546,10 @@ table.wp-list-table tbody tr:hover {
           box-shadow: -1px -1px 19px -1px var(--atum-row-shadow) inset;
 }
 
+table.wp-list-table .hidden {
+  display: none !important;
+}
+
 table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list-table {
   margin-bottom: 15px;
   border-collapse: collapse;
