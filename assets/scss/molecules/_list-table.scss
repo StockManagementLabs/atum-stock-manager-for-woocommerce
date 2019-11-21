@@ -6,6 +6,16 @@
 	padding-bottom: 100px;
 }
 
+@include mobile-max {
+	
+	#screen-meta-links {
+		display: flex;
+	}
+	#atum-export-link-wrap {
+		order: 1;
+	}
+}
+
 .wrap {
 	
 	h1.wp-heading-inline {
@@ -394,7 +404,7 @@
 		}
 	}
 	
-	#search-submit {
+	#search-submit:not([disabled]) {
 		background-color: var(--secondary) !important;
 		color: var(--main-text-expanded) !important;
 		border: none;
@@ -547,16 +557,17 @@
 			margin-left: 0;
 		}
 		
-		input[type=submit] {
-			height: 29px !important;
-			color: var(--main-text-expanded) !important;
-			background-color: var(--atum-table-search-submit-bg);
-			
-			&:disabled {
-				color: var(--atum-table-search-text-disabled) !important;
-			}
-			
+	}
+	
+	input[type=submit] {
+		height: 29px !important;
+		color: var(--main-text-expanded) !important;
+		background-color: var(--atum-table-search-submit-bg);
+		
+		&:disabled {
+			color: var(--atum-table-search-text-disabled) !important;
 		}
+		
 	}
 	
 	.input-group-append {
@@ -701,6 +712,9 @@
 			
 			@include tablet-max-wp {
 				margin: 0;
+				&.hidden-sm {
+					display: none;
+				}
 			}
 			
 			@include mobile-max {
@@ -791,6 +805,7 @@
 			
 			@include mobile-max {
 				padding: 0;
+				width: 100%;
 			}
 			
 		}
@@ -1266,15 +1281,18 @@
 					height: 35px;
 				}
 				
-				@include mobile-max {
-					width: 100%;
-					margin: 10px 0;
-				}
 			}
 			
 			@include mobile-max {
 				width: 100%;
 				float: none;
+			}
+		}
+		
+		.btn {
+			@include mobile-max {
+				width: 100%;
+				margin: 10px 0;
 			}
 		}
 		
@@ -1411,7 +1429,7 @@
 		.tablenav {
 			.tablenav-pages {
 				width: 100%;
-				margin: 0;
+				margin: 10px 0 0 0;
 			}
 		}
 	}
@@ -1440,6 +1458,10 @@
 	@include mobile-max {
 		margin: 0 11px 15px;
 		border-bottom: none;
+		
+		&.no-margin {
+			margin: 0 11px 15px;
+		}
 	}
 	
 	.nav-container-box {

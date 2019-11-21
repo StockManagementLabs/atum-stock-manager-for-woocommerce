@@ -948,6 +948,9 @@ abstract class AtumOrderPostType {
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
+					'showFiltersButton' => Helpers::load_view_to_string( 'show-fields-button' ),
+					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
+					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
 				) );
 
 				wp_enqueue_style( 'atum-orders' );

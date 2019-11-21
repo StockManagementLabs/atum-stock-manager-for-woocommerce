@@ -6,12 +6,15 @@ import { ActiveRow } from './_active-row';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Settings from '../../config/_settings';
+import showFilters from './_show-filters';
 
 export default class PostTypeList {
 	
 	$tableContainer: JQuery;
 	$scrollPane: JQuery;
+	$topTableNav:JQuery;
 	jScrollApi: any;
+	showFilters: showFilters;
 	
 	constructor(
 		private settings: Settings,
@@ -19,9 +22,10 @@ export default class PostTypeList {
 		private enhancedSelect: EnhancedSelect
 	) {
 		
+		this.$topTableNav = $('.tablenav.top');
 		this.$tableContainer = $('<div class="atum-table-wrapper" />');
 		
-		$('.tablenav.top').after( this.$tableContainer );
+		this.$topTableNav.after( this.$tableContainer );
 		
 		// Add placeholder to input search.
 		$('#post-search-input').attr('placeholder', this.settings.get('placeholderSearch'));
@@ -42,6 +46,10 @@ export default class PostTypeList {
             .append($('.search-box'))
             .addClass('no-margin')
 	        .prependTo($('form#posts-filter'));
+        
+        // Add show filters button for mobile screens.
+		this.$topTableNav.find('.bulkactions').after(this.settings.get('showFiltersButton'));
+		this.showFilters = new showFilters(this.$topTableNav, this.settings);
 
         // Show add button in head.
         $('.wp-heading-inline').append( $('.page-title-action').show() );

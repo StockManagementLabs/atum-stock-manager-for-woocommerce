@@ -9,8 +9,11 @@ import Router from './_router';
 import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
 import { Utils } from '../../utils/_utils';
+import showFilters from './_show-filters';
 
 export default class Filters {
+	
+	showFilters: showFilters;
 	
 	constructor(
 		private settings: Settings,
@@ -164,23 +167,9 @@ export default class Filters {
 				
 			})
 			
-			.on('click', '.show-filters', (evt: JQueryEventObject) => {
-				
-				const button = <HTMLElement>evt.target;
-			
-				if ( 'show' === button.dataset.action ) {
-					button.dataset.action = 'hide';
-					button.innerText = this.settings.get('hideFilters');
-					$(button).parent().next().slideDown();
-				}
-				else {
-					button.dataset.action = 'show';
-					button.innerText = this.settings.get('showFilters');
-					$(button).parent().next().slideUp();
-				}
-			})
-			
 			.on('atum-table-updated', () => this.addDateSelectorFilter());
+		
+		this.showFilters = new showFilters( this.globals.$atumList, this.settings);
 		
 		//
 		// Add date selector filter.

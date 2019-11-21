@@ -470,12 +470,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
-			<div class="alignleft show-filters-wrapper">
-					<span><?php esc_html_e( 'Filters', ATUM_TEXT_DOMAIN ) ?></span>
-					<button type="button" class="show-filters btn btn-link no-drag" data-action="show">
-						<?php esc_html_e( 'Show', ATUM_TEXT_DOMAIN ) ?>
-					</button>
-			</div>
+			<?php Helpers::load_view( 'show-fields-button'); ?>
+
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
 
@@ -3133,7 +3129,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			<div class="tablenav-pages-container<?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? ' one-page' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 
 				<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
-					<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
+					<input type="submit" name="filter_action" class="btn btn-warning search-category hidden-sm" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 				<?php endif; ?>
 
 				<?php
