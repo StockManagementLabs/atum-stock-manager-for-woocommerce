@@ -393,28 +393,6 @@ fieldset:disabled a.btn {
   pointer-events: none;
 }
 
-.btn-link {
-  font-weight: 400;
-  color: #00B8DB;
-  background-color: transparent;
-}
-
-.btn-link:hover {
-  text-decoration: underline;
-  background-color: transparent;
-}
-
-.btn-link:focus, .btn-link.focus {
-  text-decoration: underline;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-.btn-link:disabled, .btn-link.disabled {
-  color: #6c757d;
-  pointer-events: none;
-}
-
 .btn-lg, .btn-group-lg > .btn {
   padding: 0.5rem 1rem;
   font-size: 1.09375rem;
@@ -1329,13 +1307,11 @@ fieldset:disabled a.btn {
 
 .btn-link:hover {
   color: #00a3c2;
-  text-decoration: underline;
   background-color: transparent;
   border-color: transparent;
 }
 
 .btn-link:focus, .btn-link.focus {
-  text-decoration: underline;
   border-color: transparent;
   -webkit-box-shadow: none;
           box-shadow: none;
