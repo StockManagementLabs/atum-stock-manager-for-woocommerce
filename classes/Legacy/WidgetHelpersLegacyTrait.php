@@ -429,9 +429,10 @@ trait WidgetHelpersLegacyTrait {
 			$product_stock          = (float) $product->get_stock_quantity();
 			$product_purchase_price = (float) $product->get_purchase_price();
 			
-			if ( $product_stock && $product_stock > 0 ) {
+			if ( $product_stock > 0 ) {
 
 				$counters['items_stocks_counter'] += $product_stock;
+
 				if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
 					$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
 				}
