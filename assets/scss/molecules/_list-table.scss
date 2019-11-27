@@ -1909,7 +1909,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						&.product-type {
 							&:before {
 								content: $atmi-wc-contract;
-								color:  var(--atum-text-color-var1);
+								color:  var(--main-text-expanded);
 							}
 						}
 						
