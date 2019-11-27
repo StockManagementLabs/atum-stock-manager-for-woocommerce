@@ -3319,6 +3319,7 @@ body .select2-container--default .select2-results__group {
   font-size: 30px;
   line-height: 30px;
   color: var(--gray-500);
+  z-index: 100001;
 }
 
 .swal2-container .swal2-modal p {

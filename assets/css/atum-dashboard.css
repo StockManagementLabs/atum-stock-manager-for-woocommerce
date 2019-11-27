@@ -4524,6 +4524,7 @@ input[type="button"].btn-block {
   font-size: 30px;
   line-height: 30px;
   color: var(--gray-500);
+  z-index: 100001;
 }
 
 .swal2-container .swal2-modal p {
