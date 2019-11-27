@@ -6,6 +6,7 @@
  * https://github.com/iluhaua/dragscroll/commit/910dd9e43c0bc419f37162a668c779d35a341995 (adds touch events)
  * mixed up with
  * https://github.com/iluhaua/dragscroll/tree/patch-1 (Adds dragging class when dragging)
+ * and allow a child element to bwe not draggable
  *
  * @license MIT, see http://github.com/asvd/dragscroll
  * @copyright 2015 asvd <heliosframework@gmail.com>
@@ -58,10 +59,10 @@
 					(cont = el.container || el)[addEventListener](
 						ev,
 						cont['md' +index] = function(e) {
-							if (!el.hasAttribute('nochilddrag') ||
+							if ( !e.target.classList.contains('no-drag') && ( !el.hasAttribute('nochilddrag') ||
 								_document.elementFromPoint(
 									e.pageX, e.pageY
-								) == cont
+								) == cont )
 							) {
 								el.classList.add('dragging');
 								fixTouches(e);

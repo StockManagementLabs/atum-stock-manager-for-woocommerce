@@ -470,6 +470,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
+			<?php Helpers::load_view( 'show-fields-button'); ?>
+
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
 
@@ -3054,6 +3056,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'noItemsSelected'      => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
 			'selectItems'          => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
 			'applyBulkAction'      => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'showFilters'          => __( 'Show', ATUM_TEXT_DOMAIN ),
+			'hideFilters'          => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'applyAction'          => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'productLocations'     => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
 			'editProductLocations' => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
@@ -3125,7 +3129,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			<div class="tablenav-pages-container<?php echo empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ? ' one-page' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 
 				<?php if ( 'no' === Helpers::get_option( 'enable_ajax_filter', 'yes' ) ) : ?>
-					<input type="submit" name="filter_action" class="btn btn-warning search-category" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
+					<input type="submit" name="filter_action" class="btn btn-warning search-category hidden-sm" value="<?php esc_attr_e( 'Filter', ATUM_TEXT_DOMAIN ) ?>">
 				<?php endif; ?>
 
 				<?php

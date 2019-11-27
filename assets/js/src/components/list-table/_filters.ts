@@ -9,8 +9,11 @@ import Router from './_router';
 import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
 import { Utils } from '../../utils/_utils';
+import showFilters from './_show-filters';
 
 export default class Filters {
+	
+	showFilters: showFilters;
 	
 	constructor(
 		private settings: Settings,
@@ -166,6 +169,7 @@ export default class Filters {
 			
 			.on('atum-table-updated', () => this.addDateSelectorFilter());
 		
+		this.showFilters = new showFilters( this.globals.$atumList, this.settings);
 		
 		//
 		// Add date selector filter.
