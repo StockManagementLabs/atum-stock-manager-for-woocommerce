@@ -100,6 +100,11 @@ class Upgrade {
 			$this->alter_list_table_columns();
 		}
 
+		// ** version 1.6.3.2 ** Set the default for atum_controlled and disallow NULL.
+		if ( version_compare( $db_version, '1.6.3.2', '<' ) ) {
+			$this->alter_atum_controlled_column();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -582,6 +587,38 @@ class Upgrade {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Set the default value for atum_controlled and disallow NULL
+	 *
+	 * @since 1.6.3.2
+	 */
+	private function alter_atum_controlled_column() {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Make sure that there are no NULL values currently.
+		$wpdb->update(
+			$atum_data_table,
+			array(
+				'atum_controlled' => 1, // All those that were incorrectly set to NULL should be enabled by default.
+			),
+			array(
+				'atum_controlled' => NULL,
+			),
+			array(
+				'%d',
+			),
+			array(
+				NULL,
+			)
+		);
+
+		$wpdb->query( "ALTER TABLE $atum_data_table MODIFY `atum_controlled` TINYINT(1) NOT NULL DEFAULT '1';" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 	}
 	
