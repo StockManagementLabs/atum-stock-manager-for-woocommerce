@@ -544,7 +544,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 *
 	 * @since  1.6.2
 	 *
-	 * @return \WP_Post
+	 * @return array
 	 */
 	protected function get_object( $id ) {
 

@@ -18,6 +18,7 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemProduct;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 
@@ -41,7 +42,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 		
-		if ( version_compare( wc()->version, '3.5.0', '<' ) ) {
+		if ( version_compare( WC()->version, '3.5.0', '<' ) ) {
 			// Add the button for adding the inbound stock products to the WC stock.
 			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
 		}
@@ -387,9 +388,9 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param float       $price
-	 * @param float       $qty
-	 * @param \WC_Product $product
+	 * @param float                        $price
+	 * @param float                        $qty
+	 * @param \WC_Product|AtumProductTrait $product
 	 *
 	 * @return float|mixed|string
 	 */

@@ -1722,8 +1722,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.4
 	 *
-	 * @param \WC_Product $product  The product to check.
-	 * @param bool        $force    Optional. Whether to force the recalculation from db.
+	 * @param \WC_Product|AtumProductTrait $product  The product to check.
+	 * @param bool                         $force    Optional. Whether to force the recalculation from db.
 	 *
 	 * @return int|float
 	 */
@@ -1783,8 +1783,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product $product
-	 * @param bool        $force
+	 * @param \WC_Product|AtumProductTrait $product
+	 * @param bool                         $force
 	 *
 	 * @return int|float
 	 */
@@ -2067,9 +2067,9 @@ final class Helpers {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param \WC_Product $product    Optional. The product to rebuild the threshold for.
-	 * @param bool        $clean_meta Optional. Whether to clean the threshold value.
-	 * @param bool        $all        Optional. Whether to apply to all the products that reached the individual threshold.
+	 * @param \WC_Product|AtumProductTrait $product    Optional. The product to rebuild the threshold for.
+	 * @param bool                         $clean_meta Optional. Whether to clean the threshold value.
+	 * @param bool                         $all        Optional. Whether to apply to all the products that reached the individual threshold.
 	 */
 	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
@@ -2356,6 +2356,7 @@ final class Helpers {
 					if ( class_exists( $class ) ) {
 
 						if ( $is_singleton ) {
+							/** @noinspection PhpUndefinedMethodInspection */
 							$class::get_instance();
 						}
 						else {
@@ -2772,8 +2773,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product $product      The product to check.
-	 * @param string      $time_frame   Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param \WC_Product|AtumProductTrait $product    The product to check.
+	 * @param string                       $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
 	 *
 	 * @return bool
 	 */
@@ -2850,8 +2851,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product $product
-	 * @param int         $order_type_id
+	 * @param \WC_Product|AtumProductTrait $product
+	 * @param int                          $order_type_id
 	 */
 	public static function update_order_item_product_data( $product, $order_type_id = 1 ) {
 

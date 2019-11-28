@@ -350,6 +350,8 @@ trait WidgetHelpersLegacyTrait {
 		if ( $variations ) {
 			$products = array_unique( array_merge( $products, $variations ) );
 		}
+
+		$args = array();
 		
 		// WC Subscriptions compatibility.
 		if ( $products ) {

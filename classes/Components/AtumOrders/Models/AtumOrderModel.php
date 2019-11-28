@@ -1388,7 +1388,7 @@ abstract class AtumOrderModel {
 			}
 			else {
 				$tax_amount         = $this->get_total_tax();
-				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), wc()->countries->tax_or_vat() );
+				$tax_string_array[] = sprintf( '%s %s', wc_price( $tax_amount, array( 'currency' => $this->get_currency() ) ), WC()->countries->tax_or_vat() );
 			}
 
 			if ( ! empty( $tax_string_array ) ) {

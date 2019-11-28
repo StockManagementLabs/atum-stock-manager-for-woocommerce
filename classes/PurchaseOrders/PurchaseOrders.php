@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
-use Atum\Inc\Globals;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
@@ -26,7 +25,6 @@ use Atum\Suppliers\Suppliers;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
-
 
 class PurchaseOrders extends AtumOrderPostType {
 

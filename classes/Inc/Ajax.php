@@ -1412,7 +1412,7 @@ final class Ajax {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
 			}
 
-			$shipping_methods = wc()->shipping() ? wc()->shipping->load_shipping_methods() : array();
+			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
 
 			// Add new shipping cost line item.
 			$item    = $atum_order->add_shipping_cost();

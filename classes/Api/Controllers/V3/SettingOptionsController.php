@@ -347,7 +347,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	 */
 	protected function get_countries_and_states() {
 
-		$countries = wc()->countries->get_countries();
+		$countries = WC()->countries->get_countries();
 
 		if ( ! $countries ) {
 			return array();
@@ -356,7 +356,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		$output = array();
 		foreach ( $countries as $key => $value ) {
 
-			$states = wc()->countries->get_states( $key );
+			$states = WC()->countries->get_states( $key );
 
 			if ( $states ) {
 

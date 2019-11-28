@@ -116,7 +116,7 @@ class Videos extends AtumWidget {
 				$filtered_vid_ids = array();
 
 				foreach ( $video_ids as $video_id ) {
-					$filtered_vid_ids[] = $video_id->videoId; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
+					$filtered_vid_ids[] = $video_id->videoId; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				}
 
 				$video_data['videos']      = $youtube->getVideosInfo( $filtered_vid_ids );

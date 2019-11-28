@@ -330,7 +330,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 *
-	 * @throws \WC_REST_Exception|\WC_Data_Exception But all errors are validated before returning any data.
+	 * @throws \WC_Data_Exception But all errors are validated before returning any data.
 	 */
 	protected function save_object( $request, $creating = FALSE ) {
 

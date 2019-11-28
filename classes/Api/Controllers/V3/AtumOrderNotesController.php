@@ -149,7 +149,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 		$order = $this->get_atum_order( $request );
 
 		if ( $order && ! wc_rest_check_post_permissions( $this->post_type, 'delete', $order->get_id() ) ) {
-			return new WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to delete this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
 		return TRUE;

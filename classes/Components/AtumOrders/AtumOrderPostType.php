@@ -420,7 +420,8 @@ abstract class AtumOrderPostType {
 					
 					$latest_note = current( $latest_notes );
 
-					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) { // WPCS: loose comparison ok.
+					// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) {
 						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					}
 					elseif ( isset( $latest_note->comment_content ) ) {
@@ -929,7 +930,7 @@ abstract class AtumOrderPostType {
 					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'        => version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
+					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
 				);
 
 				if ( InventoryLogs::POST_TYPE !== $post_type ) {

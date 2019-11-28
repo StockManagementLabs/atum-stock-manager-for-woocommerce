@@ -474,7 +474,7 @@ class Main {
 				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
 				wc_enqueue_js( "
 					jQuery( 'a.wc-rating-link' ).click( function() {
-						jQuery.post( '" . wc()->ajax_url() . "', { action: 'atum_rated' } );
+						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
 						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
 					});
 				" );

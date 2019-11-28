@@ -14,10 +14,8 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
-
 
 class AtumColors {
 
@@ -36,7 +34,7 @@ class AtumColors {
 	/**
 	 * Defaults values for custom colors
 	 *
-	 * @var defaults
+	 * @var array
 	 */
 	private $defaults;
 
@@ -211,7 +209,6 @@ class AtumColors {
 		$secondary_color       = $this->colors['primary_color'];
 		$secondary_color_light = $this->colors['primary_color_light'];
 		$secondary_color_dark  = $this->colors['primary_color_dark'];
-		$secondary_color_rgb   = $this->colors['primary_color_rgb'];
 		$tertiary_color        = $this->colors['primary_color'];
 		$tertiary_color_light  = $this->colors['primary_color_light'];
 		$text_color            = '#016B7F';

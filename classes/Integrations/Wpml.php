@@ -612,10 +612,10 @@ class Wpml {
 	public function wpml_sanitize_purchase_price_in_custom_prices( $prices, $code, $variation_id = false ) {
 
 		if ( $variation_id ) {
-			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : ''; // WPCS: CSRF ok.
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) ? wc_format_decimal( $_POST['_custom_variation_purchase_price'][ $code ][ $variation_id ] ) : '';
 		}
 		else {
-			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : ''; // WPCS: CSRF ok.
+			$prices[ Globals::PURCHASE_PRICE_KEY ] = ! empty( $_POST['_custom_purchase_price'][ $code ] ) ? wc_format_decimal( $_POST['_custom_purchase_price'][ $code ] ) : '';
 		}
 
 		return $prices;
@@ -831,7 +831,8 @@ class Wpml {
 		if ( $product_id ) {
 			
 			$post_type = get_post_type( $product_id );
-			
+
+			/* @noinspection PhpUndefinedMethodInspection */
 			if ( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ) === self::$sitepress->get_element_trid( $product->get_id(), 'post_' . $post_type ) ) {
 				return FALSE;
 			}
