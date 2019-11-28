@@ -36,8 +36,8 @@ defined( 'ABSPATH' ) || die;
 							<?php
 							echo esc_html( $item->get_author()->name );
 
-							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
-							echo ' · ' . esc_html( $timeAgo->inWords( $item->get_date() ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+							echo ' · ' . esc_html( $timeAgo->inWords( $item->get_date() ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 							?>
 						</div>
 

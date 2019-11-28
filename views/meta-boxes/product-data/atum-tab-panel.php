@@ -4,10 +4,10 @@
  *
  * @since 1.4.5
  *
- * @var \WC_Product $product
- * @var string      $product_status
- * @var array       $checkbox_wrapper_classes
- * @var array       $control_button_classes
+ * @var \WC_Product|\Atum\Models\Products\AtumProductTrait $product
+ * @var string                                             $product_status
+ * @var array                                              $checkbox_wrapper_classes
+ * @var array                                              $control_button_classes
  */
 
 defined( 'ABSPATH' ) || die;

@@ -4,11 +4,12 @@
  *
  * @since        1.4.0
  *
- * @var string                    $support_link
- * @var string                    $support_button_text
- * @var array                     $widgets
- * @var \Atum\Dashboard\Dashboard $dashboard
+ * @var string                              $support_link
+ * @var string                              $support_button_text
+ * @var array                               $widgets
+ * @var \Atum\Dashboard\Dashboard           $dashboard
  * @var \Atum\Components\AtumMarketingPopup $marketing_popup
+ * @var bool                                $dark_mode
  */
 
 defined( 'ABSPATH' ) || die;
@@ -25,7 +26,7 @@ defined( 'ABSPATH' ) || die;
 		</div>
 
 		<div class="dash-header-logo">
-			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo<?php if ( $darkmode ) echo '-white'; ?>.svg" alt="ATUM">
+			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo<?php if ( $dark_mode ) echo '-white'; ?>.svg" alt="ATUM">
 			<h3><?php esc_html_e( 'Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN ) ?></h3>
 			<a href="https://www.stockmanagementlabs.com/the-changelog/" target="_blank" class="atum-version">v<?php echo esc_html( ATUM_VERSION ) ?></a>
 		</div>

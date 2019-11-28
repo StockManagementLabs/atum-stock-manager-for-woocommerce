@@ -13,17 +13,18 @@
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\Components\AtumCapabilities;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
-$product = $item->get_product();
+$product = Helpers::get_atum_product( $item->get_product() );
 
 if ( empty( $product ) ) {
 	return;
 }
 
-$step         = \Atum\Inc\Helpers::get_input_step();
+$step         = Helpers::get_input_step();
 $product_id   = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
 $product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
 $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
@@ -91,7 +92,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php echo esc_html( $locations_list ) ?>
 	</td>
 
-	<td class="item_cost" width="1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>">
+	<td class="item_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>">
 		<div class="view">
 			<?php
 			$currency = $atum_order->get_currency();
@@ -103,7 +104,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		</div>
 	</td>
 
-	<td class="quantity" width="1%">
+	<td class="quantity" style="width: 1%">
 
 		<div class="view">
 			<small class="times">&times;</small> <?php echo esc_html( $item->get_quantity() ); ?>
@@ -114,7 +115,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		</div>
 
 	</td>
-	<td class="line_cost" width="1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
+	<td class="line_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $item->get_total() ); ?>">
 		<div class="view">
 			<?php
 			echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -154,7 +155,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			$tax_item_total    = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : '';
 			$tax_item_subtotal = isset( $tax_data['subtotal'][ $tax_item_id ] ) ? $tax_data['subtotal'][ $tax_item_id ] : '';
 			?>
-			<td class="line_tax" width="1%">
+			<td class="line_tax" style="width: 1%">
 				<div class="view">
 					<?php
 					if ( '' !== $tax_item_total ) :
@@ -192,7 +193,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 
 	endif; ?>
 
-	<td class="atum-order-edit-line-item" width="1%">
+	<td class="atum-order-edit-line-item" style="width: 1%">
 		<div class="atum-order-edit-line-item-actions">
 			<?php if ( $atum_order->is_editable() ) : ?>
 				<a class="edit-atum-order-item atum-tooltip" href="#" data-tip="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>

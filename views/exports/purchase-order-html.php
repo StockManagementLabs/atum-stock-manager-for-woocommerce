@@ -5,15 +5,15 @@
  * @since 1.4.0
  *
  * @var \Atum\PurchaseOrders\Exports\POExport $po
- * @var int   $desc_percent
- * @var float $discount
- * @var int   $total_text_colspan
+ * @var int                                   $desc_percent
+ * @var float                                 $discount
+ * @var int                                   $total_text_colspan
  */
 
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
-use Atum\Suppliers\Suppliers;
+use Atum\Inc\Helpers;
 ?>
 <div class="po-wrapper content-header">
 	<div class="float-left">
@@ -85,7 +85,7 @@ use Atum\Suppliers\Suppliers;
 				<tr class="po-line">
 					<td class="description"><?php echo esc_html( $item->get_name() ) ?>
 						<?php
-						$product = $item->get_product();
+						$product = Helpers::get_atum_product( $item->get_product() );
 
 						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 							$supplier_sku = $product->get_supplier_sku();
