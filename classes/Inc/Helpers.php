@@ -24,11 +24,13 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Legacy\HelpersLegacyTrait;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
+use AtumLevels\Levels\Products\BOMProductTrait;
 
 
 final class Helpers {
@@ -613,7 +615,6 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date && $days > 0 ) {
@@ -661,7 +662,6 @@ final class Helpers {
 		}
 
 		// Check if the current product has the "Out of stock" date recorded.
-		/* @noinspection PhpUndefinedMethodInspection */
 		$out_stock_date = $product->get_out_stock_date();
 
 		if ( $out_stock_date ) {
@@ -1133,7 +1133,6 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		return $product->get_atum_controlled();
 
 	}
@@ -1152,9 +1151,7 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
-		/* @noinspection PhpUndefinedMethodInspection */
 		$product->save_atum_data();
 	}
 
@@ -1172,7 +1169,6 @@ final class Helpers {
 			$product = wc_get_product( $product ); // We don't need to use the ATUM models here.
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$product->set_manage_stock( ( 'enable' === $status ? 'yes' : 'no' ) );
 		$product->save();
 
@@ -1894,7 +1890,7 @@ final class Helpers {
 	 *
 	 * @param mixed $the_product Post object or post ID of the product.
 	 *
-	 * @return \WC_Product|null|false
+	 * @return \WC_Product|AtumProductTrait|BOMProductTrait|null|false
 	 */
 	public static function get_atum_product( $the_product = FALSE ) {
 
@@ -2014,7 +2010,6 @@ final class Helpers {
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
-					/* @noinspection PhpUndefinedMethodInspection */
 					$product->set_purchase_price( $meta_value );
 					
 					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
@@ -2084,7 +2079,6 @@ final class Helpers {
 		if ( $product && $product instanceof \WC_Product ) {
 
 			if ( $clean_meta ) {
-				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_out_stock_threshold( NULL );
 			}
 
@@ -2128,7 +2122,6 @@ final class Helpers {
 
 					// Delete _out_stock_threshold (avoid partial works to be done again).
 					if ( $clean_meta ) {
-						/* @noinspection PhpUndefinedMethodInspection */
 						$product->set_out_stock_threshold( NULL );
 					}
 
@@ -2363,7 +2356,6 @@ final class Helpers {
 					if ( class_exists( $class ) ) {
 
 						if ( $is_singleton ) {
-							/* @noinspection PhpUndefinedMethodInspection */
 							$class::get_instance();
 						}
 						else {

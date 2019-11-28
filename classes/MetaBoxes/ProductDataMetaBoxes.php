@@ -249,9 +249,8 @@ class ProductDataMetaBoxes {
 
 		$woocommerce_notify_no_stock_amount = get_option( 'woocommerce_notify_no_stock_amount' );
 
-		$product_id = empty( $variation ) ? $post->ID : $variation->ID;
-		$product    = Helpers::get_atum_product( $product_id );
-		/* @noinspection PhpUndefinedMethodInspection */
+		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
+		$product             = Helpers::get_atum_product( $product_id );
 		$out_stock_threshold = $product->get_out_stock_threshold();
 		$product_type        = empty( $variation ) ? $product->get_type() : '';
 
@@ -269,7 +268,7 @@ class ProductDataMetaBoxes {
 				return "show_if_{$val}";
 			}, Globals::get_product_types_with_stock() );
 
-			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', array_merge( $visibility_classes, Helpers::get_option_group_hidden_classes( ) ) );
+			$visibility_classes = (array) apply_filters( 'atum/product_data/out_stock_threshold/classes', array_merge( $visibility_classes, Helpers::get_option_group_hidden_classes() ) );
 
 			Helpers::load_view( 'meta-boxes/product-data/out-stock-threshold-field', compact( 'variation', 'loop', 'product_type', 'out_stock_threshold', 'out_stock_threshold_field_name', 'out_stock_threshold_field_id', 'visibility_classes', 'woocommerce_notify_no_stock_amount' ) );
 
@@ -330,9 +329,8 @@ class ProductDataMetaBoxes {
 			$field_id      = "variation_purchase_price{$loop}";
 			$wrapper_class = "$field_name form-row form-row-first";
 		}
-		
-		$product = Helpers::get_atum_product( $product_id );
-		/* @noinspection PhpUndefinedMethodInspection */
+
+		$product        = Helpers::get_atum_product( $product_id );
 		$purchase_price = $product->get_purchase_price();
 		$field_value    = '' === $purchase_price ? '' : (float) $purchase_price;
 		$price          = (float) $product->get_price();
@@ -350,8 +348,7 @@ class ProductDataMetaBoxes {
 	 */
 	private function save_purchase_price() {
 
-		$product_type = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
-		/* @noinspection PhpUndefinedMethodInspection */
+		$product_type       = empty( $_POST['product-type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product-type'] ) );
 		$old_purchase_price = $this->product->get_purchase_price();
 		$new_purchase_price = $old_purchase_price ?: '';
 
@@ -407,11 +404,9 @@ class ProductDataMetaBoxes {
 		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
 		$supplier_meta     = Suppliers::SUPPLIER_META_KEY;
 		$supplier_sku_meta = Suppliers::SUPPLIER_SKU_META_KEY;
-		/* @noinspection PhpUndefinedMethodInspection */
-		$supplier_id = $product->get_supplier_id();
-		/* @noinspection PhpUndefinedMethodInspection */
-		$supplier_sku = $product->get_supplier_sku();
-		$supplier     = $supplier_id ? get_post( $supplier_id ) : NULL;
+		$supplier_id       = $product->get_supplier_id();
+		$supplier_sku      = $product->get_supplier_sku();
+		$supplier          = $supplier_id ? get_post( $supplier_id ) : NULL;
 
 		$supplier_field_name     = empty( $variation ) ? $supplier_meta : "variation{$supplier_meta}[$loop]";
 		$supplier_field_id       = empty( $variation ) ? $supplier_meta : $supplier_meta . $loop;
@@ -575,8 +570,7 @@ class ProductDataMetaBoxes {
 			if ( is_wp_error( $errors ) ) {
 				\WC_Admin_Meta_Boxes::add_error( $errors->get_error_message() );
 			}
-
-			/* @noinspection PhpUndefinedMethodInspection */
+			
 			$this->product->save_atum_data();
 
 			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {

@@ -335,9 +335,7 @@ class Hooks {
 					$out_stock_date = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
 				}
 
-				/* @noinspection PhpUndefinedMethodInspection */
 				$product->set_out_stock_date( $out_stock_date );
-				/* @noinspection PhpUndefinedMethodInspection */
 				$product->save_atum_data();
 
 			}
@@ -561,8 +559,7 @@ class Hooks {
 				return;
 			}
 
-			$product_id = $product->get_id();
-			/* @noinspection PhpUndefinedMethodInspection */
+			$product_id             = $product->get_id();
 			$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 			// Allow to be hooked externally.
@@ -594,8 +591,7 @@ class Hooks {
 
 		$this->stock_threshold = NULL;
 
-		$product = Helpers::get_atum_product( $variation_id );
-		/* @noinspection PhpUndefinedMethodInspection */
+		$product                = Helpers::get_atum_product( $variation_id );
 		$out_of_stock_threshold = $product->get_out_stock_threshold();
 
 		// Allow to be hooked externally.

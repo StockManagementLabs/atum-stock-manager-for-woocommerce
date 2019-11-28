@@ -967,9 +967,8 @@ final class WidgetHelpers {
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
 
-			$product       = Helpers::get_atum_product( $product_id );
-			$product_stock = (float) $product->get_stock_quantity();
-			/* @noinspection PhpUndefinedMethodInspection */
+			$product                = Helpers::get_atum_product( $product_id );
+			$product_stock          = (float) $product->get_stock_quantity();
 			$product_purchase_price = (float) $product->get_purchase_price();
 
 			if ( $product_stock && $product_stock > 0 ) {
