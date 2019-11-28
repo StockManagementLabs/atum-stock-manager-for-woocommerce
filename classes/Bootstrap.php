@@ -1,5 +1,4 @@
-<?php /** @noinspection ALL */
-
+<?php
 /**
  * Main loader
  *
@@ -164,6 +163,7 @@ class Bootstrap {
 
 		// Minimum PHP version required: 5.6.
 		if ( version_compare( phpversion(), ATUM_PHP_MINIMUM_VERSION, '<' ) ) {
+			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 			throw new AtumException( 'php_min_version_required', __( 'ATUM requires PHP version ' . ATUM_PHP_MINIMUM_VERSION . ' or greater. Please, update or contact your hosting provider.', ATUM_TEXT_DOMAIN ), self::DEPENDENCIES_UNSATISFIED );
 		}
 
@@ -171,13 +171,13 @@ class Bootstrap {
 		global $wp_version;
 		if ( version_compare( $wp_version, ATUM_WP_MINIMUM_VERSION, '<' ) ) {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
-			throw new AtumException( 'wordpress_min_version_required', sprintf( __( 'ATUM requires WordPress version ' . ATUM_WP_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'wordpress_min_version_required', sprintf( __( 'ATUM requires WordPress version ' . ATUM_WP_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 		}
 
 		// Minimum WooCommerce version required: 3.0.
 		if ( version_compare( WC()->version, ATUM_WC_MINIMUM_VERSION, '<' ) ) {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
-			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version ' . ATUM_WC_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED );
+			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version ' . ATUM_WC_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 		}
 
 	}
@@ -215,9 +215,9 @@ class Bootstrap {
 			$itemmeta_table     = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
 
 			// Delete the ATUM tables in db.
-			$wpdb->query( "DROP TABLE IF EXISTS $product_data_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$wpdb->query( "DROP TABLE IF EXISTS $items_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "DROP TABLE IF EXISTS $product_data_table" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			$wpdb->query( "DROP TABLE IF EXISTS $items_table" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			$wpdb->query( "DROP TABLE IF EXISTS $itemmeta_table" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 			// Delete all the posts of ATUM's custom post types and their meta.
 			$atum_post_types = array(
@@ -254,12 +254,12 @@ class Bootstrap {
 			// Delete the ATUM options.
 			delete_option( ATUM_PREFIX . 'version' );
 
-			$settings = get_option( ATUM_PREFIX . 'settings') ;
+			$settings = get_option( ATUM_PREFIX . 'settings' );
 
 			// Save delete data setting.
 			if ( $settings && ! empty( $settings ) ) {
 				$delete_data_setting = [
-					'delete_data' => $settings['delete_data']
+					'delete_data' => $settings['delete_data'],
 				];
 
 				update_option( ATUM_PREFIX . 'settings', $delete_data_setting );

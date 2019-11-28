@@ -147,7 +147,7 @@ class POExport extends PurchaseOrder {
 	 */
 	public function get_company_address() {
 		
-		return apply_filters( 'atum/purchase_orders/po_export/company_address', wc()->countries->get_formatted_address( $this->company_data ), $this->company_data );
+		return apply_filters( 'atum/purchase_orders/po_export/company_address', WC()->countries->get_formatted_address( $this->company_data ), $this->company_data );
 
 	}
 	
@@ -163,7 +163,7 @@ class POExport extends PurchaseOrder {
 		
 		if ( $supplier_id ) {
 			
-			$address = wc()->countries->get_formatted_address( array(
+			$address = WC()->countries->get_formatted_address( array(
 				'first_name' => get_the_title( $supplier_id ),
 				'company'    => get_post_meta( $supplier_id, '_supplier_details_tax_number', TRUE ),
 				'address_1'  => get_post_meta( $supplier_id, '_billing_information_address', TRUE ),
@@ -188,7 +188,7 @@ class POExport extends PurchaseOrder {
 	 */
 	public function get_shipping_address() {
 		
-		return apply_filters( 'atum/purchase_orders/po_export/shipping_address', wc()->countries->get_formatted_address( $this->shipping_data ), $this->shipping_data );
+		return apply_filters( 'atum/purchase_orders/po_export/shipping_address', WC()->countries->get_formatted_address( $this->shipping_data ), $this->shipping_data );
 		
 	}
 

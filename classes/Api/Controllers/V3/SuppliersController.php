@@ -274,7 +274,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 					'description' => __( 'Supplier country.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
-					'enum'        => array_keys( wc()->countries->get_countries() ),
+					'enum'        => array_keys( WC()->countries->get_countries() ),
 				),
 				'state'             => array(
 					'description' => __( 'Supplier state.', ATUM_TEXT_DOMAIN ),
@@ -421,7 +421,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
-				'enum'              => array_keys( wc()->countries->get_countries() ),
+				'enum'              => array_keys( WC()->countries->get_countries() ),
 			),
 			'assigned_to' => array(
 				'description'       => __( 'Limit result set to suppliers assigned to the specified user ID.', ATUM_TEXT_DOMAIN ),

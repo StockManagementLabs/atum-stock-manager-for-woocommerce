@@ -1,6 +1,6 @@
 <?php
 /**
- * Anstract class for the REST ATUM API Dashboard Widgets
+ * Abstract class for the REST ATUM API Dashboard Widgets
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io

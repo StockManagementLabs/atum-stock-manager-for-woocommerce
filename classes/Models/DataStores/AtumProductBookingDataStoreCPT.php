@@ -28,8 +28,8 @@ class AtumProductBookingDataStoreCPT extends \WC_Product_Booking_Data_Store_CPT 
 	 */
 	protected function read_resources( &$product ) {
 
-		$cache_key    = AtumCache::get_cache_key( 'product_booking_resource_ids', $product->get_id() );
-		$resource_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$cache_key = AtumCache::get_cache_key( 'product_booking_resource_ids', $product->get_id() );
+		AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
 
@@ -60,8 +60,8 @@ class AtumProductBookingDataStoreCPT extends \WC_Product_Booking_Data_Store_CPT 
 	 */
 	protected function read_person_types( &$product ) {
 
-		$cache_key    = AtumCache::get_cache_key( 'product_booking_person_types', $product->get_id() );
-		$person_types = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$cache_key = AtumCache::get_cache_key( 'product_booking_person_types', $product->get_id() );
+		AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
 

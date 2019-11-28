@@ -56,11 +56,7 @@ class AtumLogs {
 	 *
 	 * @since 1.4.15
 	 */
-	private function __construct() {
-
-
-
-	}
+	private function __construct() {}
 
 	/**
 	 * Getter for the Log table name

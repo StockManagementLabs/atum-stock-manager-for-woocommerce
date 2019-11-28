@@ -183,6 +183,7 @@ class AtumHelpPointers {
 		wp_enqueue_script( 'wp-pointer' );
 
 		// TODO: MOVE TO A FILE?
+		// phpcs:disable
 		?>
 		<script type="text/javascript">
 			jQuery(function ($) {
@@ -293,7 +294,7 @@ class AtumHelpPointers {
 			});
 		</script>
 		<?php
-
+		// phpcs:enable
 	}
 
 }

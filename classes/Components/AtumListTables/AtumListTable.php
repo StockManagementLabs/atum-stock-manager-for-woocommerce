@@ -470,7 +470,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
-			<?php Helpers::load_view( 'show-fields-button'); ?>
+			<?php Helpers::load_view( 'show-fields-button' ); ?>
 
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
@@ -759,13 +759,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), "_column_$column_name" ) ) {
 
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo call_user_func(
 					array( apply_filters( "atum/list_table/column_source_object/_column_$column_name", $this, $item ), "_column_$column_name" ),
 					$item,
 					$classes,
 					$data,
 					$primary
-				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
 
 			}
 			elseif ( method_exists( apply_filters( "atum/list_table/column_source_object/column_$column_name", $this, $item ), "column_$column_name" ) ) {
@@ -2732,7 +2733,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
-					$products_low_stock = $wpdb->get_results( $str_sql ); // WPCS: unprepared SQL ok.
+					$products_low_stock = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
 					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
 
@@ -2883,8 +2884,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$data = $group_column['collapsed'] ? ' data-collapsed="1"' : '';
 
-				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '>' .
-						'<span>' . $group_column['title'] . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<th class="' . esc_attr( $group_column['name'] ) . '" colspan="' . esc_attr( $group_column['colspan'] ) . '"' . $data . '><span>' . $group_column['title'] . '</span>';
 
 				if ( $group_column['toggler'] ) {
 					/* translators: the column group title */
@@ -3335,7 +3336,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 * In newer versions the get_id() method always be the variation_id if it's a variation
 			 */
 			/* @noinspection PhpDeprecationInspection */
-			return version_compare( wc()->version, '3.0.0', '<' ) ? $this->product->get_variation_id() : $this->product->get_id();
+			return version_compare( WC()->version, '3.0.0', '<' ) ? $this->product->get_variation_id() : $this->product->get_id();
 		}
 
 		return $this->product->get_id();
@@ -3563,11 +3564,13 @@ abstract class AtumListTable extends \WP_List_Table {
 					$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
 					// Get suppliers.
+					// phpcs:disable WordPress.DB.PreparedSQL
 					$query = $wpdb->prepare(
 						"SELECT ID FROM $wpdb->posts
 					    WHERE post_type = %s AND $search_query",
 						Suppliers::POST_TYPE
-					); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					);
+					// phpcs:enable
 
 					$search_supplier_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -4161,12 +4164,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
 		}
 
+		// phpcs:disable WordPress.DB.PreparedSQL
 		$parents = $wpdb->get_col( $wpdb->prepare( "
 			SELECT p.ID FROM $wpdb->posts p  
 			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
 			WHERE $where AND pr.type = %s
 			GROUP BY p.ID
-		", $parent_type ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		", $parent_type ) );
+		// phpcs:enable
 
 		$parents_with_child = $grouped_products = $bundle_children = array();
 
@@ -4376,6 +4381,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $children as $child ) {
 
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Product|AtumProductTrait|BOMProductTrait $child
+				 */
 				$atum_control_status = $child->get_atum_controlled();
 
 				if (
@@ -4401,12 +4411,14 @@ abstract class AtumListTable extends \WP_List_Table {
 				$where = "$wpdb->postmeta.post_id IS NULL";
 			}
 
+			// phpcs:disable WordPress.DB.PreparedSQL
 			$sql = $wpdb->prepare( "
 				SELECT COUNT(*) FROM $wpdb->posts 
 				LEFT JOIN $wpdb->postmeta ON $join
 				WHERE $wpdb->posts.post_type = 'product_variation' AND $wpdb->posts.post_parent = %d
 				AND $where
-			", $product->get_id() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			", $product->get_id() );
+			// phpcs:enable
 
 			$children_count = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 

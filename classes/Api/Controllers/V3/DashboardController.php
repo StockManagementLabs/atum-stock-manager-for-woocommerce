@@ -108,8 +108,8 @@ class DashboardController extends \WC_REST_Controller {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @param  \WP_REST_Request $request Full details about the request.
+	 * @return \WP_Error|bool
 	 */
 	public function get_items_permissions_check( $request ) {
 

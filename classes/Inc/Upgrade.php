@@ -314,6 +314,7 @@ class Upgrade {
 
 		$post_metas = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $post_metas as $post_meta ) {
+			/* @noinspection Annotator */
 			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
 
 			if ( $non_latin_character ) {

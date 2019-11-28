@@ -157,6 +157,12 @@ class PurchaseOrdersController extends AtumOrdersController {
 
 		$po = parent::prepare_object_for_database( $request, $creating );
 
+		/**
+		 * Variable definition
+		 *
+		 * @var PurchaseOrder $po
+		 */
+
 		// All the POs must have a supplier or multiple_suppliers set (any of them).
 		if ( ! $po->get_supplier( 'id' ) && ! $po->has_multiple_suppliers() ) {
 			$po->set_multiple_suppliers( TRUE );

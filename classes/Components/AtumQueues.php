@@ -59,7 +59,7 @@ class AtumQueues {
 	 */
 	public function check_queues() {
 
-		$wc = wc();
+		$wc = WC();
 
 		// Ensure that the current WC version supports queues.
 		if ( ! is_callable( array( $wc, 'queue' ) ) ) {

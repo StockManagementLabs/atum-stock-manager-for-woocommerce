@@ -320,10 +320,6 @@ class Dashboard {
 
 			$dash_vars = array(
 				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
-				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'defaultsWillRestore'   => __( 'Defaults will restore', ATUM_TEXT_DOMAIN ),
-				'continue'              => __( 'Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'inStockLabel'          => __( 'In Stock', ATUM_PREFIX ),
 				'lowStockLabel'         => __( 'Low Stock', ATUM_PREFIX ),
 				'outStockLabel'         => __( 'Out of Stock', ATUM_PREFIX ),

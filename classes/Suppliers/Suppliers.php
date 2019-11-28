@@ -451,7 +451,7 @@ class Suppliers {
 
 			$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders
 			$where = $wpdb->prepare( "WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')", $supplier_id );
 
 			if ( $type_filter ) {
