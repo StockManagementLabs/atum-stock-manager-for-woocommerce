@@ -4,9 +4,9 @@
  *
  * @since 1.4.5
  *
- * @var int                   $loop
- * @var \WC_Product_Variation $variation
- * @var array                 $variation_data
+ * @var int                                                          $loop
+ * @var \WC_Product_Variation|\Atum\Models\Products\AtumProductTrait $variation
+ * @var array                                                        $variation_data
  */
 
 defined( 'ABSPATH' ) || die;

@@ -17,8 +17,6 @@
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
-use Atum\Inc\Globals;
-
 ?>
 <p class="form-field <?php echo esc_attr( $wrapper_class ) ?>">
 	<label for="<?php echo esc_attr( $field_id ) ?>"><?php echo esc_html( $field_title ) ?></label>

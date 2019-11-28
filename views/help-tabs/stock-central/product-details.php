@@ -30,11 +30,11 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'SKU', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options and manufacturer of the merchandise. An SKU is used to track inventory in your retail store. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take the full advantage of ATUM's features.<br>You can set the SKU in this column. After you click the 'Set' button and 'Save Data', the SKU will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options and manufacturer of the merchandise. An SKU is used to track inventory in your retail store. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take the full advantage of ATUM's features.<br>You can set the SKU in this column. After you click the 'Set' button and 'Save Data', the SKU will update automatically in your store.", ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Supplier SKU', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php _e( "The stock keeping unit code of the product within your supplier's product list.<br>You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php _e( "The stock keeping unit code of the product within your supplier's product list.<br>You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.", ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'ID', ATUM_TEXT_DOMAIN ) ?></strong></td>

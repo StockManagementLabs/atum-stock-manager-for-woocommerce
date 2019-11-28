@@ -71,7 +71,7 @@ defined( 'ABSPATH' ) || die;
 									/* @noinspection PhpUnhandledExceptionInspection */
 									$start = new \DateTime( '@0' ); // Unix epoch.
 									try {
-										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
+										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 									} catch ( \Exception $e ) {
 
 										if ( ATUM_DEBUG ) {
@@ -95,7 +95,7 @@ defined( 'ABSPATH' ) || die;
 									printf( esc_html__( '%d Views', ATUM_TEXT_DOMAIN ), esc_attr( $video->statistics->viewCount ) );
 
 									$time_ago = new \Westsworld\TimeAgo();
-									echo ' · ' . esc_html( $time_ago->inWords( $video_snippet->publishedAt ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar
+									echo ' · ' . esc_html( $time_ago->inWords( $video_snippet->publishedAt ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 									?>
 								</div>
 

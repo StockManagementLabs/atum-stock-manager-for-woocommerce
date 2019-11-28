@@ -7,11 +7,9 @@
  * @var array $current_stock_values
  */
 
-use Atum\Dashboard\WidgetHelpers;
-use Atum\Inc\Helpers;
-
-
 defined( 'ABSPATH' ) || die;
+
+use Atum\Dashboard\WidgetHelpers;
 ?>
 
 <div class="current-stock-value-widget">

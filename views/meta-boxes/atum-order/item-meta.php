@@ -71,7 +71,7 @@ $meta_data = $item->get_formatted_meta_data( '' );
 							<input type="text" placeholder="<?php esc_attr_e( 'Name (required)', ATUM_TEXT_DOMAIN ) ?>" name="meta_key[<?php echo esc_attr( $item_id ) ?>][<?php echo esc_attr( $meta_id ) ?>]" value="<?php echo esc_attr( $meta->key ) ?>" />
 							<textarea placeholder="<?php esc_attr_e( 'Value (required)', ATUM_TEXT_DOMAIN ) ?>" name="meta_value[<?php echo esc_attr( $item_id ) ?>][<?php echo esc_attr( $meta_id ) ?>]"><?php echo esc_textarea( rawurldecode( $meta->value ) ) ?></textarea>
 						</td>
-						<td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
+						<td style="width: 1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
 					</tr>
 
 				<?php endforeach; ?>

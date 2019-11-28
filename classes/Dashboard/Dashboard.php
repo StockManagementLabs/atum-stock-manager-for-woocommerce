@@ -184,7 +184,7 @@ class Dashboard {
 			'layout'          => $user_widgets_layout,
 			'dashboard'       => $this,
 			'marketing_popup' => $marketing_popup,
-			'darkmode'        => 'dark_mode' === AtumColors::get_user_theme() ? 1 : 0,
+			'dark_mode'       => 'dark_mode' === AtumColors::get_user_theme(),
 		), Helpers::get_support_buttons() ) );
 		
 	}

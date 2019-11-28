@@ -4,7 +4,7 @@
  *
  * @since 1.2.4
  *
- * @var \Atum\Components\AtumOrders\Models\AtumOrderModel $atum_order
+ * @var \Atum\PurchaseOrders\Models\PurchaseOrder|\Atum\InventoryLogs\Models\Log $atum_order
  */
 
 defined( 'ABSPATH' ) || die;
@@ -88,7 +88,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 
 					endif; ?>
 
-					<th class="atum-order-edit-line-item" width="1%">&nbsp;</th>
+					<th class="atum-order-edit-line-item" style="width: 1%">&nbsp;</th>
 				</tr>
 			</thead>
 
@@ -108,7 +108,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 
 			<tbody id="atum_order_shipping_line_items">
 				<?php
-				$shipping_methods = wc()->shipping() ? wc()->shipping->load_shipping_methods() : array();
+				$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
 				foreach ( $line_items_shipping as $item_id => $item ) :
 					include 'item-shipping.php';
 				endforeach;
@@ -130,7 +130,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 		</table>
 	</div>
 
-	<?php if ( version_compare( wc()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type->name ) : // Only allow bulk edit before 3.5.0 VC Version. ?>
+	<?php if ( version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::get_post_type() !== $post_type->name ) : // Only allow bulk edit before 3.5.0 VC Version. ?>
 	<div class="atum-order-data-row atum-order-item-bulk-edit" style="display:none;">
 		<button type="button" class="button bulk-delete-items"><?php esc_html_e( 'Delete selected row(s)', ATUM_TEXT_DOMAIN ); ?></button>
 		<?php do_action( 'atum/atum_order/item_bulk_controls', $atum_order ); ?>
@@ -155,7 +155,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 					<?php /* translators: the post type name */ ?>
 					<span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
 				</td>
-				<td width="1%"></td>
+				<td style="width: 1%"></td>
 				<td class="total">
 					<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
@@ -172,14 +172,14 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 					foreach ( $tax_totals as $code => $tax ) : ?>
 						<tr>
 							<td class="label"><?php echo esc_html( $tax->label ) ?>:</td>
-							<td width="1%"></td>
+							<td style="width: 1%"></td>
 							<td class="total"><?php echo $tax->formatted_amount; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 						</tr>
 					<?php endforeach; ?>
 
 					<tr>
 						<td class="label"><?php esc_html_e( 'Subtotal', ATUM_TEXT_DOMAIN ) ?>:</td>
-						<td width="1%"></td>
+						<td style="width: 1%"></td>
 						<td class="total">
 							<?php echo $atum_order->get_formatted_total( '', TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</td>
@@ -197,7 +197,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 					/* translators: the post type name */
 					printf( esc_html__( '%s Total', ATUM_TEXT_DOMAIN ), esc_html( $post_type->labels->singular_name ) ) ?>:
 				</td>
-				<td width="1%"></td>
+				<td style="width: 1%"></td>
 				<td class="total">
 					<?php echo $atum_order->get_formatted_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>

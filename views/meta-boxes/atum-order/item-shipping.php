@@ -61,10 +61,10 @@ $currency = $atum_order->get_currency();
 	<?php do_action( 'atum/atum_order/shipping_item_values', null, $item, $item_id ); ?>
 
 	<td class="item_location">&nbsp;</td>
-	<td class="item_cost" width="1%">&nbsp;</td>
-	<td class="quantity" width="1%">&nbsp;</td>
+	<td class="item_cost" style="width: 1%">&nbsp;</td>
+	<td class="quantity" style="width: 1%">&nbsp;</td>
 
-	<td class="line_cost" width="1%">
+	<td class="line_cost" style="width: 1%">
 		<div class="view">
 			<?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
@@ -90,7 +90,7 @@ $currency = $atum_order->get_currency();
 			$tax_item_id    = $tax_item->get_rate_id();
 			$tax_item_total = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : '';
 			?>
-			<td class="line_tax" width="1%">
+			<td class="line_tax" style="width: 1%">
 				<div class="view">
 					<?php echo ( '' !== $tax_item_total ? wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $currency ) ) : '&ndash;' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
@@ -109,7 +109,7 @@ $currency = $atum_order->get_currency();
 
 	endif; ?>
 
-	<td class="atum-order-edit-line-item" width="1%">
+	<td class="atum-order-edit-line-item" style="width: 1%">
 		<div class="atum-order-edit-line-item-actions">
 			<?php if ( $atum_order->is_editable() ) : ?>
 				<a class="edit-atum-order-item atum-tooltip" href="#" data-tip="<?php esc_attr_e( 'Edit item', ATUM_TEXT_DOMAIN ); ?>"></a><a class="delete-atum-order-item" href="#" data-toggle="tooltip" title="<?php esc_attr_e( 'Delete item', ATUM_TEXT_DOMAIN ); ?>"></a>
