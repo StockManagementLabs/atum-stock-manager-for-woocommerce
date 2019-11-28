@@ -14,6 +14,9 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Models\DataStores\AtumDataStoreCommonTrait;
+use Atum\Models\DataStores\AtumDataStoreCPTTrait;
+use Atum\Models\DataStores\AtumDataStoreCustomTableTrait;
 use Atum\Suppliers\Suppliers;
 
 
@@ -695,7 +698,12 @@ trait AtumProductTrait {
 	public function save_atum_data() {
 
 		$data_store = $this->get_data_store();
-		/* @noinspection PhpUndefinedMethodInspection */
+
+		/**
+		 * Variable definition
+		 *
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 */
 		$data_store->update_atum_product_data( $this );
 
 	}
@@ -708,7 +716,12 @@ trait AtumProductTrait {
 	public function delete_atum_data() {
 
 		$data_store = $this->get_data_store();
-		/* @noinspection PhpUndefinedMethodInspection */
+
+		/**
+		 * Variable definition
+		 *
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 */
 		$data_store->delete( $this, [
 			'force_delete'   => TRUE,
 			'delete_product' => FALSE,

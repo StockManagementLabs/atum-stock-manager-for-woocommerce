@@ -176,13 +176,22 @@ class HtmlReport extends ListTable {
 			$parent_product = new $product_class( $this->product->get_id() );
 
 			if ( 'bundle' === $type ) {
+
 				$child_products = Helpers::get_bundle_items( array(
 					'return'    => 'id=>product_id',
 					'bundle_id' => $this->product->get_id(),
 				) );
-			}else {
-				/* @noinspection PhpUndefinedMethodInspection */
+
+			}
+			else {
+
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Product $parent_product
+				 */
 				$child_products = $parent_product->get_children();
+
 			}
 
 			if ( ! empty( $child_products ) ) {
@@ -279,7 +288,6 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {

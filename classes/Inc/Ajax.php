@@ -1767,7 +1767,11 @@ final class Ajax {
 		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ) );
 		$atum_order_item = $atum_order->get_item( absint( $_POST['atum_order_item_id'] ) );
 
-		/* @noinspection PhpUndefinedMethodInspection */
+		/**
+		 * Variable definition
+		 *
+		 * @var \WC_Order_Item_Product $atum_order_item
+		 */
 		$product_id = $atum_order_item->get_variation_id() ?: $atum_order_item->get_product_id();
 		$product    = Helpers::get_atum_product( $product_id );
 
@@ -1775,9 +1779,7 @@ final class Ajax {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
-		/* @noinspection PhpUndefinedMethodInspection */
 		$product->save_atum_data();
 
 		wp_send_json_success();

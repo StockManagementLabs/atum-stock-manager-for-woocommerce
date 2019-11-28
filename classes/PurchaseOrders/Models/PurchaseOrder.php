@@ -396,7 +396,6 @@ class PurchaseOrder extends AtumOrderModel {
 	public function use_purchase_price( $price, $qty, $product ) {
 		
 		// Get the purchase price (if set).
-		/* @noinspection PhpUndefinedMethodInspection */
 		$price = $product->get_purchase_price();
 		
 		if ( ! $price ) {

@@ -17,13 +17,13 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumMarketingPopup;
-use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Legacy\ListTableLegacyTrait;
-use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
+use AtumLevels\Levels\Products\BOMProductTrait;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -41,7 +41,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Current product used
 	 *
-	 * @var \WC_Product
+	 * @var \WC_Product|\WC_Product_Variation|AtumProductTrait|BOMProductTrait
 	 */
 	protected $product;
 
@@ -983,7 +983,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $editable ) {
 
-			/* @noinspection PhpUndefinedMethodInspection */
 			$supplier_sku = $this->product->get_supplier_sku();
 
 			if ( 0 === strlen( $supplier_sku ) ) {
@@ -1154,7 +1153,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			/* @noinspection PhpUndefinedMethodInspection */
 			$purchase_price_value = $this->product->get_purchase_price();
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
 				'trim_zeros' => TRUE,
@@ -1189,7 +1187,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__out_stock_threshold( $item, $editable = TRUE ) {
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$out_stock_threshold = $this->product->get_out_stock_threshold();
 		$out_stock_threshold = $out_stock_threshold ?: self::EMPTY_COL;
 
@@ -1297,7 +1294,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $is_out_stock_threshold_managed && ! $is_grouped ) {
 
-			/* @noinspection PhpUndefinedMethodInspection */
 			$out_stock_threshold = $this->product->get_out_stock_threshold();
 
 			if ( strlen( $out_stock_threshold ) > 0 ) {
@@ -4380,7 +4376,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $children as $child ) {
 
-				/* @noinspection PhpUndefinedMethodInspection */
 				$atum_control_status = $child->get_atum_controlled();
 
 				if (
