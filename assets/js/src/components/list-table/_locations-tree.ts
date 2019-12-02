@@ -5,7 +5,7 @@
 /**
  * Third party plugins
  */
-import '../../../vendor/jquery.easytree.min';         // This has no package available for npm
+import '../../../vendor/jquery.easytree';
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';
