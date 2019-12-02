@@ -38,7 +38,7 @@ class ProductDataMetaboxesTest extends WP_UnitTestCase { //PHPUnit_Framework_Tes
 	public function test_add_product_data_tab_panel() {
 		include dirname( dirname( dirname( __FILE__ ) ) ) . '/../woocommerce/includes/admin/wc-meta-box-functions.php';
 		global $post;
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$post = get_post( $product->get_id() );
 		$obj = ProductDataMetaBoxes::get_instance();
 		ob_start();
@@ -104,7 +104,7 @@ class ProductDataMetaboxesTest extends WP_UnitTestCase { //PHPUnit_Framework_Tes
 
 	public function test_save_product_meta_boxes() {
 		$obj = ProductDataMetaBoxes::get_instance();
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$obj->save_product_meta_boxes( $product->get_id(), get_post( $product->get_id() ) );
 		$this->assertTrue( true );
 	}

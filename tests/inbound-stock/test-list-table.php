@@ -59,7 +59,7 @@ class InboundStockListTableTest extends PHPUnit_Framework_TestCase { //WP_UnitTe
 
 	public function test_single_row() {
 		$instance = new ListTable();
-		$product  =  TestHelpers::create_atum_product();
+		$product  =  TestHelpers::create_atum_simple_product();
 
 		$po = TestHelpers::create_atum_purchase_order( $product );
 

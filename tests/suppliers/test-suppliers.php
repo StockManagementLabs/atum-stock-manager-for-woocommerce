@@ -225,7 +225,7 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$pos = new PurchaseOrders();
 		$pos->register_post_type();
 
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$post = $this->factory()->post->create_and_get( [
 			'post_title'  => 'Foo post',
 			'post_type'   => PurchaseOrders::POST_TYPE,
@@ -268,7 +268,7 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function DISABLEDtest_get_product_id_by_supplier_sku() {
 		$sku = 'foosku';
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$product->set_sku( $sku );
 		$supplier = $this->factory()->post->create_and_get( [
 			'post_title'  => 'Foo supplier',

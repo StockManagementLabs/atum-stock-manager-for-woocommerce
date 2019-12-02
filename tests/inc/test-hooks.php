@@ -107,7 +107,7 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_wc_order_add_location_column_value() {
 		$hooks = Hooks::get_instance();
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		ob_start();
 		$hooks->wc_order_add_location_column_value( $product, false, false );
 		$data = ob_get_clean();

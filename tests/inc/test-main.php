@@ -82,16 +82,16 @@ class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty( $submenu['atum-dashboard'] );
 	}
 
-	/*
-	public function test_add_admin_bar_menu() {
+	public function DISABLEDtest_add_admin_bar_menu() {
 		wp_set_current_user( 1 );
 		global $wp_admin_bar;
+		$wp_admin_bar = new WP_Admin_Bar();
 		set_current_screen( 'atum-dashboard' );
 		$main = Main::get_instance();
 		$main->add_admin_bar_menu();
 		print_r($wp_admin_bar);
 		$this->assertIsArray( $wp_admin_bar );
-	}*/
+	}
 
 	public function test_admin_footer_text() {
 		wp_set_current_user( 1 );

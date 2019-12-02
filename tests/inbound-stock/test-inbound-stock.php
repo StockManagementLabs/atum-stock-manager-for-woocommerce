@@ -6,11 +6,13 @@
  */
 
 use Atum\InboundStock\InboundStock;
+use Atum\Inc\Globals;
 use Atum\Models\Products\AtumProductSimple;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 use Atum\Inc\Helpers;
+use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
 
 
@@ -21,7 +23,11 @@ use Symfony\Component\DomCrawler\Crawler;
 class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 
 	public function test_get_instance() {
+		wp_set_current_user( 1 );
+		set_current_screen( 'atum-inbound-stock' );
 		$this->assertInstanceOf( InboundStock::class, InboundStock::get_instance() );
+		$this->assertEquals( InboundStock::MENU_ORDER, TestHelpers::has_action( 'atum/admin/menu_items', array( InboundStock::class, 'add_menu' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . InboundStock::UI_SLUG, array( InboundStock::class, 'screen_options' ) ) );
 	}
 
 	public function test_add_menu() {
@@ -41,28 +47,7 @@ class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 		$wpdb->atum_order_itemmeta = $wpdb->prefix . ATUM_PREFIX . 'order_itemmeta';
 
 		$instance = InboundStock::get_instance();
-
-		$product = new AtumProductSimple();
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => false,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
-		);
-		$product->set_inbound_stock( 16 );
-		$product->save();
-		//$product = wc_get_product( $product->get_id() );
-		//$product = Helpers::get_atum_product( $product->get_id() );
-		//$product->set_inbound_stock( 16 );
+		$product  = TestHelpers::create_atum_simple_product();
 
 		$pos = new \Atum\PurchaseOrders\PurchaseOrders();
 		$pos->register_post_type();
@@ -76,12 +61,6 @@ class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 
 		$po = Helpers::get_atum_order_model( $pid );
 
-		//$product = Helpers::get_atum_product( $post_product->ID );
-		//$product = wc_get_product( $post_product );
-		//$product = new WC_Product_Simple($post_product->ID);
-
-		//echo "\n========== Product ==========";
-		//print_r($product);
 		$po->add_product( $product );
 		$po->save_meta( array(
 			'_status'                    => 'atum_ordered',
@@ -90,8 +69,6 @@ class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 			'_multiple_suppliers'        => 'no',
 			'_expected_at_location_date' => date( 'Y-m-d H:i:s', current_time( 'timestamp', TRUE ) ),
 		) );
-		//echo "\n========== Purchase Order ==========";
-		//print_r($po);
 
 		$instance->screen_options();
 		ob_start();

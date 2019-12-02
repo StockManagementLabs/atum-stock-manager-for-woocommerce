@@ -18,9 +18,33 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
-	//public function test_get_term_ids_by_slug() {}
+	public function test_get_term_ids_by_slug() {
+		$cat = wp_insert_category( [
+			'cat_ID'               => 0,
+			'taxonomy'             => 'atum_location',
+			'cat_name'             => 'foo',
+			'category_description' => '',
+			'category_nicename'    => 'Foo',
+			'category_parent'      => '',
+		], false );
+		$data = Helpers::get_term_ids_by_slug( [ 'Foo' ], 'atum_location' );
+		$this->assertTrue( in_array( $cat, $data ) );
+	}
 
-	//public function test_add_help_tab() {}
+	public function test_add_help_tab() {
+		set_current_screen( 'atum_inventory_log' );
+		$help_tabs = array(
+			array(
+				'name'  => 'columns',
+				'title' => __( 'Columns', ATUM_TEXT_DOMAIN ),
+			),
+		);
+
+		ob_start();
+		Helpers::add_help_tab( $help_tabs, new \Atum\InventoryLogs\InventoryLogs() );
+		$data = ob_get_clean();
+		$this->assertIsString( $data );
+	}
 
 	public function test_array_to_data() {
 		$array = [ 'foo' => 'far' ];
@@ -218,7 +242,7 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'post_status' => 'publish',
 		) );
 		// Product
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$product->set_inbound_stock( 25 );
 		// Purchase Order.
 		$order = Helpers::get_atum_order_model( $pid );
@@ -246,7 +270,7 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'post_status' => 'publish',
 		) );
 		// Product
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$product->set_stock_on_hold( 25 );
 		// Purchase Order.
 		$order = Helpers::get_atum_order_model( $pid );
@@ -274,32 +298,30 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_atum_product() {
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$data = Helpers::get_atum_product( $product->get_id() );
 		$this->assertInstanceOf( \Atum\Models\Products\AtumProductSimple::class, $data );
 	}
 
-	/* TODO: No guarda?
 	public function test_update_product_data() {
-		$product = $this->factory()->post->create_and_get( [
-			'post_title'  => 'Foo supplier',
-			'post_type'   => 'product',
-			'post_status' => 'published',
-			'log_type'    => 'other',
-		] );
-		$product = TestHelpers::create_atum_product( $product );
-
+		$product = TestHelpers::create_atum_simple_product();
+		$product->set_manage_stock( 'yes' );
+		$product->save();
+		$product_id = $product->get_id();
 		$product_data = array(
 			'stock'         => 100,
 			'regular_price' => 25,
 			'sale_price'    => 19.99,
 		);
 
-		Helpers::update_product_data( $product->get_id(), $product_data );
+		Helpers::update_product_data( $product_id, $product_data );
+
+		//Reinstance
+		$product = Helpers::get_atum_product( $product_id );
 		$this->assertEquals( 100, $product->get_stock_quantity() );
 		$this->assertEquals( 25, $product->get_regular_price() );
 		$this->assertEquals( 19.99, $product->get_sale_price() );
-	}*/
+	}
 
 	public function test_get_support_buttons() {
 		$data = Helpers::get_support_buttons();
@@ -309,7 +331,7 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_force_rebuild_stock_status() {
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$predata = [
 			'stock'  => $product->get_stock_quantity(),
 			'manage' => $product->get_manage_stock(),
@@ -326,13 +348,13 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( $predata, $postdata );
 	}
 
-	/*
 	public function test_is_any_out_stock_threshold_set() {
 		$this->assertEquals( 0, Helpers::is_any_out_stock_threshold_set() );
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$product->set_out_stock_threshold( 5 );
+		$product->save();
 		$this->assertGreaterThan( 0, Helpers::is_any_out_stock_threshold_set() );
-	}*/
+	}
 
 	public function test_in_multi_array() {
 		$arr = [[[[[ 'foo' ]]]]];
@@ -401,11 +423,22 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter( 'span.thumb-placeholder' )->count() );
 	}
 
-	//public function test_show_marketing_popup() {}
+	public function test_show_marketing_popup() {
+		$this->assertIsBool( Helpers::show_marketing_popup() );
+	}
 
-	//public function test_get_atum_icon_type() {}
+	public function test_get_atum_icon_type() {
+		$product = TestHelpers::create_atum_simple_product();
+		$data = Helpers::get_atum_icon_type( $product );
+		$this->assertEquals( 'atum-icon atmi-wc-simple', $data );
+	}
 
-	//public function test_get_bundle_items() {}
+	public function test_get_bundle_items() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . DIRECTORY_SEPARATOR . 'woocommerce-product-bundles'.
+		        DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'class-wc-pb-db.php';
+		$data = Helpers::get_bundle_items( [] );
+		$this->assertIsArray( $data );
+	}
 
 	//public function test_is_product_data_outdated() {}
 
@@ -428,11 +461,49 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( Helpers::validate_color( Helpers::get_color_value( $color_name ) ) );
 	}
 
-	//public function test_update_order_item_product_data() {}
+	/**
+	 * @param $type
+	 * @dataProvider provideType
+	 */
+	public function DISABLEDtest_update_order_item_product_data( $type ) {
+		$product = TestHelpers::create_atum_simple_product();
+		$id = $product->get_id();
+		switch ( $type ) {
+			case 2:
+				$inbound_stock = $product->get_inbound_stock();
+				break;
+			case 3:
+				$log = Helpers::get_log_item_qty();
+				break;
+			default:
+				break;
+		}
 
-	//public function test_get_option_group_hidden_classes() {}
+		$data = Helpers::update_order_item_product_data( $product, $type );
+		var_dump($data);
+		//Reinstance
+		$product = Helpers::get_atum_product( $id );
+		switch ( $type ) {
+			case 2:
+				$this->assertNotEquals( $inbound_stock, $product->get_inbound_stock() );
+				break;
+			case 3:
+				break;
+			default:
+				break;
+		}
+	}
 
-	//public function test_duplicate_atum_product() {}
+	public function test_get_option_group_hidden_classes() {
+		$classes = Helpers::get_option_group_hidden_classes();
+		$this->assertTrue( in_array( 'hide_if_external', $classes ) );
+	}
+
+	public function DISABLEDtest_duplicate_atum_product() {
+		$p = TestHelpers::create_atum_simple_product();
+		$p2 = Helpers::duplicate_atum_product( $p->get_id(), 0 );
+		var_dump( $p2 );
+	}
 
 	public function test_is_rest_request() {
 		$this->assertFalse( Helpers::is_rest_request() );
@@ -458,6 +529,10 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			$names[] = [ $k ];
 		}
 		return $names;
+	}
+
+	public function provideType() {
+		return [ [1], [2], [3], ];
 	}
 
 }

@@ -22,19 +22,22 @@ use Atum\Models\Products\AtumProductVariation;
  */
 class ModelsProductTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
-	public function DISABLEDtest_product_booking() {
+	public function test_product_booking() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce-bookings/includes/data-objects/class-wc-product-booking.php';
 		$product = TestHelpers::create_product();
 		$obj = new AtumProductBooking( $product );
 		$this->assertInstanceOf( AtumProductBooking::class, $obj );
 	}
 
-	public function DISABLEDtest_product_bundle() {
+	public function test_product_bundle() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce-product-bundles/includes/class-wc-product-bundle.php';
 		$product = TestHelpers::create_product();
 		$obj = new AtumProductBundle( $product );
 		$this->assertInstanceOf( AtumProductBundle::class, $obj );
 	}
 
 	public function DISABLEDtest_product_download() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce/includes/class-wc-product-download.php';
 		$product = TestHelpers::create_product();
 		$obj = new AtumProductDownload( $product );
 		$this->assertInstanceOf( AtumProductDownload::class, $obj );
@@ -50,13 +53,15 @@ class ModelsProductTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( AtumProductSimple::class, $obj );
 	}
 
-	public function DISABLEDtest_product_subscription() {
+	public function test_product_subscription() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce-subscriptions/includes/class-wc-product-subscription.php';
 		$product = TestHelpers::create_product();
 		$obj = new AtumProductSubscription( $product );
 		$this->assertInstanceOf( AtumProductSubscription::class, $obj );
 	}
 
 	public function DISABLEDtest_wc_subscription_variation() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce-subscriptions/includes/class-wc-product-subscription-variation.php';
 		$product = TestHelpers::create_variation_product( true );
 		$obj = new WCSubscriptionVariation( $product );
 		$this->assertInstanceOf( WCSubscriptionVariation::class, $obj );
@@ -68,7 +73,8 @@ class ModelsProductTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( AtumProductVariable::class, $obj );
 	}
 
-	public function DISABLEDtest_product_variable_subscription() {
+	public function test_product_variable_subscription() {
+		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/woocommerce-subscriptions/includes/class-wc-product-variable-subscription.php';
 		$product = TestHelpers::create_variation_product();
 		$obj = new AtumProductVariableSubscription( $product );
 		$this->assertInstanceOf( AtumProductVariableSubscription::class, $obj );

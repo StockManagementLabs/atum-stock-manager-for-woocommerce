@@ -20,6 +20,7 @@ class StockCentralTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 		$obj = StockCentral::get_instance();
 		$this->assertInstanceOf( StockCentral::class, $obj );
+
 		$this->assertEquals( StockCentral::MENU_ORDER, TestHelpers::has_action( 'atum/admin/menu_items', array( $obj, 'add_menu' ) ) );
 		//$this->assertEquals( 10, TestHelpers::has_action( 'load-atum-inventory_page_atum-stock-central', array( $obj, 'screen_options' ) ) );
 		//$this->assertEquals( 10, TestHelpers::has_action( 'load-toplevel_page_atum-stock-central', array( $obj, 'screen_options' ) ) );

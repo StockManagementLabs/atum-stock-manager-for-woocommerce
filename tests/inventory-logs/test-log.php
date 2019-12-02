@@ -108,7 +108,7 @@ class LogTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	public function DISABLEDtest_get_atum_order_item() {
 		global $post;
 		$obj = new Log( $post->ID );
-		$product = TestHelpers::create_atum_product();
+		$product = TestHelpers::create_atum_simple_product();
 		$item = new WC_Order_Item_Product();
 		$item->set_props( [
 			'product'  => $product,

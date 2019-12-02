@@ -5,6 +5,7 @@ namespace TestHelpers;
 use Atum\Inc\Helpers;
 use Atum\Models\Products\AtumProductSimple;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Suppliers;
 use WC_Cache_Helper;
 use WC_Order;
 use WC_Order_Item_Product;
@@ -40,14 +41,38 @@ class TestHelpers {
 			return false;
 
 		$hook = $wp_filter[ $tag ];
-
 		foreach ( $hook->callbacks as $priority => $call ) {
 			foreach ( $call as $idx => $data ) {
-				if( $data['function'][0] instanceof $function[0] && $data['function'][1] === $function[1] )
-					return $priority;
+				if( is_array( $function ) ) {
+					if(is_object($data['function'][0])) {
+						if ( $data['function'][0] instanceof $function[0] && $data['function'][1] === $function[1] ) {
+							return $priority;
+						}
+					} else {
+						if ( $data['function'][0] === $function[0] && $data['function'][1] === $function[1] ) {
+							return $priority;
+						}
+					}
+				} else {
+					if ( $idx === $function ) {
+						return $priority;
+					}
+				}
 			}
 		}
 		return false;
+	}
+
+	public static function create_supplier( $props = [] ) {
+		$defaults = array(
+			'post_title'  => 'Foo supplier',
+			'post_type'   => Suppliers::POST_TYPE,
+			'post_status' => 'published',
+			'log_type'    => 'other',
+		);
+		$post_id = wp_insert_post( array_merge( $defaults, $props ) );
+
+		return get_post( $post_id );
 	}
 
 	public static function create_atum_purchase_order( $product = null ) {
@@ -66,37 +91,38 @@ class TestHelpers {
 
 		$order = Helpers::get_atum_order_model( $post );
 		if( !is_a( $product, WC_Product::class ) )
-			$product = self::create_atum_product();
+			$product = self::create_atum_simple_product();
 
 		$product->set_inbound_stock( 25 );
 
-		$order->save();
-
 		$item = $order->add_product( $product->get_id(), 25 );
 		$item->save();
-
+		$order->save();
 
 		return $order;
 	}
 
-	public static function create_atum_product( $product = false ) {
-		$product = new AtumProductSimple( ( false === $product ) ? self::create_product() : $product );
-		$product->set_props(
-			array(
-				'name'          => 'Dummy Product',
-				'regular_price' => 10,
-				'price'         => 10,
-				'sku'           => 'DUMMY SKU',
-				'manage_stock'  => true,
-				'tax_status'    => 'taxable',
-				'downloadable'  => false,
-				'virtual'       => false,
-				'stock_status'  => 'instock',
-				'weight'        => '1.1',
-				'inbound_stock' => 16,
-			)
+	public static function create_atum_simple_product( $props = [] ) {
+		$defaults = array(
+			'name'          => 'Dummy Product',
+			'regular_price' => 10,
+			'price'         => 10,
+			'sku'           => 'DUMMY SKU',
+			'manage_stock'  => TRUE,
+			'tax_status'    => 'taxable',
+			'downloadable'  => false,
+			'virtual'       => false,
+			'stock_status'  => 'instock',
+			'stock_quantity' => 30,
+			'weight'        => '1.1',
+			'inbound_stock' => 16,
+			'purchase_price' => 8,
 		);
-		$product->set_manage_stock( TRUE );
+		$product = new AtumProductSimple();
+		$product->save();
+		$product = Helpers::get_atum_product( $product );
+		$product->save();
+		$product->set_props( array_merge( $defaults, $props ) );
 		$product->save();
 		return $product;
 	}
@@ -106,11 +132,12 @@ class TestHelpers {
 	 *
 	 * @param null $product
 	 * @param int  $customer_id
+	 * @param int  $qty
 	 *
 	 * @return WC_Order|WP_Error
 	 * @throws WC_Data_Exception
 	 */
-	public static function create_order( $product = null, $customer_id = 1 ) {
+	public static function create_order( $product = null, $customer_id = 1, $qty = 4 ) {
 		if ( ! is_a( $product, 'WC_Product' ) ) {
 			$product = self::create_product();
 		}
@@ -144,9 +171,9 @@ class TestHelpers {
 		$item->set_props(
 			array(
 				'product'  => $product,
-				'quantity' => 4,
-				'subtotal' => wc_get_price_excluding_tax( $product, array( 'qty' => 4 ) ),
-				'total'    => wc_get_price_excluding_tax( $product, array( 'qty' => 4 ) ),
+				'quantity' => $qty,
+				'subtotal' => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
+				'total'    => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
 			)
 		);
 		$item->save();

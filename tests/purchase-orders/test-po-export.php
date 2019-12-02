@@ -26,20 +26,22 @@ class POExportTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( POExport::class, $obj );
 	}
 
-	public function DISABLEDtest_get_content() {
+	public function test_get_content() {
 		$obj = new POExport( $this->po->get_id() );
 
 		try {
-			ob_start();
-			$obj->get_content();
+			$data = $obj->get_content();
 		} catch( Exception $e ) {
-			//var_dump($e->getMessage());
+			var_dump($e->getMessage());
 			unset( $e );
 		}
-		$data = ob_get_clean();
-		var_dump($data);
+
 		$html = new Crawler( $data );
-		$this->assertEquals( 1, $html->filter('???')->count() );
+		$this->assertEquals( 1, $html->filter('div.po-wrapper.content-header')->count() );
+		$this->assertEquals( 1, $html->filter('div.po-wrapper.content-address')->count() );
+		$this->assertEquals( 1, $html->filter('div.po-wrapper.content-lines')->count() );
+		$this->assertEquals( 1, $html->filter('div.po-wrapper.content-description')->count() );
+		$this->assertContains( '<h3 class="po-title">Purchase Order</h3>', $data );
 	}
 
 	public function test_get_company_address() {

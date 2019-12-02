@@ -64,16 +64,14 @@ class AtumCacheTest extends WP_UnitTestCase {
 		$name = 'foo';
 		$key = AtumCache::get_transient_key( $name );
 
-		AtumCache::set_transient( $key, 'val', 5, true );
+		AtumCache::set_transient( $key, 'val', 1, true );
 		$this->assertEquals( 'val', AtumCache::get_transient( $key, TRUE ) );
 
-		//TODO: No borra transients, por qué??
-		/*
-		sleep(5);
+		sleep(2);
 		AtumCache::delete_transients( $key );
 		AtumCache::delete_transients();
 		$this->assertFalse( AtumCache::get_transient( $key, TRUE ) );
-		*/
+
 	}
 
 	public function test_enable() {
