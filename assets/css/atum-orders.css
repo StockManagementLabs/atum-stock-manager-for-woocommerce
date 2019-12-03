@@ -6096,6 +6096,7 @@ ul.atum_order_notes li .note_content::after {
   margin-left: 5px;
   padding: 0.344rem 0.75rem;
   line-height: 1.55;
+  height: 30px;
 }
 
 @media all and (max-width: 782px) {
