@@ -5694,6 +5694,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
           box-shadow: none;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
+  border: none;
 }
 
 @media all and (max-width: 782px) {
@@ -7785,7 +7786,7 @@ table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound
   background-color: var(--primary-dark);
 }
 
-table.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), table.wp-list-table tr.variation:nth-child(even) {
+table.atum-list-table tr.variation:nth-of-type(even), .floatThead-container tr.variation:nth-of-type(even), .inbound-stock-list tr.variation:nth-of-type(even), table.wp-list-table tr.variation:nth-of-type(even) {
   background-color: var(--primary-light);
 }
 

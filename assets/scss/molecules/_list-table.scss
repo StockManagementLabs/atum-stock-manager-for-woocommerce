@@ -131,6 +131,7 @@
 		text-transform: uppercase;
 		box-shadow: none;
 		transition: .2s ease-in-out;
+		border: none;
 		
 		@include tablet-max-wp{
 			height: 35px;
@@ -2045,7 +2046,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.variation {
 			background-color:  var(--primary-dark);
 			
-			&:nth-child(even) {
+			&:nth-of-type(even) {
 				background-color:  var(--primary-light);
 			}
 			
