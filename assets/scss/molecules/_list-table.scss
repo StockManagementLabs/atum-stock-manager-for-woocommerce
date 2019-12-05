@@ -805,6 +805,10 @@
 		
 		.actions {
 			
+			@include tablet-only {
+			
+			}
+			
 			@include mobile-max {
 				padding: 0;
 				width: 100%;
@@ -947,6 +951,7 @@
 			}
 			
 			@include tablet-max-wp {
+				height: 55px;
 				right: 63%;
 				width: inherit;
 			}
@@ -1390,8 +1395,7 @@
 		
 		.search-box {
 			display: flex;
-			justify-content: center;
-			flex-direction: row-reverse;
+			justify-content: flex-end;
 			width: 100%;
 			
 			input[type="text"], input[type="number"], button:not(.reset-filters) {
@@ -1455,11 +1459,11 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		margin-bottom: 15px;
+		border-bottom: none;
 	}
 	
 	@include mobile-max {
 		margin: 0 11px 15px;
-		border-bottom: none;
 		
 		&.no-margin {
 			margin: 0 11px 15px;
@@ -2136,6 +2140,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						display: inline-block;
 						vertical-align: middle;
 						margin-top: 10px;
+						font-size: 12px;
+						text-transform: uppercase;
 					}
 					
 					.atum-spinner {
@@ -2145,6 +2151,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						
 						span {
 							@include loader($color: $secondary);
+						}
+					}
+					@include tablet-max {
+						width: calc( 100vw - 93px);
+						
+						button {
+							height: 35px;
 						}
 					}
 					
@@ -2640,6 +2653,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				input[type="checkbox"] {
 					width: 18px;
 					height: 18px;
+					margin-bottom: 0;
 					
 					&:before {
 						margin: -5px -8px;
