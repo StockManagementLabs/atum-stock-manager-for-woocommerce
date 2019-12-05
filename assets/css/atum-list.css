@@ -7905,6 +7905,17 @@ table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-cont
   }
 }
 
+@media all and (max-width: 480px) {
+  table.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert, .inbound-stock-list tr.no-items td .alert, table.wp-list-table tr.no-items td .alert {
+    width: calc( 100vw - 73px);
+  }
+  table.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button, .inbound-stock-list tr.no-items td .alert button, table.wp-list-table tr.no-items td .alert button {
+    margin-left: -2em;
+    width: calc( 100% + 2em);
+    margin-top: 15px;
+  }
+}
+
 table.atum-list-table tr.totals, .floatThead-container tr.totals, .inbound-stock-list tr.totals, table.wp-list-table tr.totals {
   background-color: var(--atum-column-groups-bg);
 }
@@ -8485,6 +8496,34 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   line-height: 1.67;
   font-weight: 400;
   color: var(--atum-text-color-var2);
+}
+
+@media all and (max-width: 480px) {
+  .filter-range-dates-modal {
+    height: 250px;
+  }
+  .filter-range-dates-modal .swal2-title {
+    margin-bottom: 10px;
+  }
+  .filter-range-dates-modal .swal2-content {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+  }
+  .filter-range-dates-modal .swal2-content button {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .filter-range-dates-modal .swal2-content .input-date {
+    margin-right: 0;
+  }
+  .filter-range-dates-modal .swal2-content .input-date input {
+    width: 100%;
+  }
 }
 
 .btn.btn-warning:hover {

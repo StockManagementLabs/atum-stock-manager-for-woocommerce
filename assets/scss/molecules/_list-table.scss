@@ -2148,6 +2148,15 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 						}
 					}
 					
+					@include mobile-max {
+						
+						width: calc( 100vw - 73px);
+						button {
+							margin-left: -2em;
+							width: calc( 100% + 2em );
+							margin-top: 15px;
+						}
+					}
 				}
 			}
 		}
@@ -2797,6 +2806,34 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			line-height: 1.67;
 			font-weight: 400;
 			color: var(--atum-text-color-var2);
+		}
+		
+	}
+	
+	@include mobile-max {
+		
+		height: 250px;
+		
+		.swal2-title {
+			margin-bottom: 10px;
+		}
+		
+		.swal2-content {
+			flex-direction: column;
+			align-items: stretch;
+			
+			button {
+				width: 100%;
+				margin-top: 15px;
+			}
+			
+			.input-date {
+				
+				margin-right: 0;
+				input {
+					width: 100%;
+				}
+			}
 		}
 	}
 }

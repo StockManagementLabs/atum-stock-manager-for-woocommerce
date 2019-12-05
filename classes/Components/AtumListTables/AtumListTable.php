@@ -3066,7 +3066,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'stickyColumns'        => $this->sticky_columns,
 			'dateSelectorFilters'  => [ 'best_seller', 'worst_seller' ],
 			'setTimeWindow'        => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
-			'selectDateRange'      => __( 'Select the date range to filter the produts.', ATUM_TEXT_DOMAIN ),
+			'selectDateRange'      => __( 'Select the date range to filter the products.', ATUM_TEXT_DOMAIN ),
 			'from'                 => __( 'From', ATUM_TEXT_DOMAIN ),
 			'to'                   => __( 'To', ATUM_TEXT_DOMAIN ),
 			'apply'                => __( 'Apply', ATUM_TEXT_DOMAIN ),
