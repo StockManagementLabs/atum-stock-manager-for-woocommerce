@@ -187,6 +187,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.4`
+
+*2019-12-05*
+
+**Changes**
+
+* Set the default value for "atum_controlled" to 1 and disallow NULL.
+* Enhanced jQuery.easytree to accept extra data attributes in nodes.
+
+**Fixes**
+
+* Fixed dragscroll.js didn't allow clicking events on mobiles.
+* Fixed responsive issues on Stock Central.
+* Fixed responsive issues on ATUM's post list tables.
+* Fixed screen options filter not working on mobiles.
+* Fixed wrong product model class name for Subscription Variations.
+* Fixed ATUM product data wasn't being deleted.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.6.3.1`
 
 *2019-11-14*
