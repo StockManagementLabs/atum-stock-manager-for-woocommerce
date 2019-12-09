@@ -233,9 +233,14 @@ class Hooks {
 				foreach ( $variations as $variation_id ) {
 					
 					$variation_product = wc_get_product( $variation_id ); // We don't need to use ATUM models here.
-					$variation_stock   = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
-					$variation_status  = $variation_product->get_stock_status();
-					$style             = 'color:#a44';
+
+					if ( ! $variation_product instanceof \WC_Product ) {
+						continue;
+					}
+
+					$variation_stock  = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
+					$variation_status = $variation_product->get_stock_status();
+					$style            = 'color:#a44';
 					
 					switch ( $variation_status ) {
 						case 'instock':
