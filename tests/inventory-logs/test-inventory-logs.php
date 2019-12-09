@@ -15,6 +15,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class InventoryLogsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( InventoryLogs::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		wp_set_current_user( 1 );
 		$obj = new InventoryLogs();
@@ -216,6 +224,11 @@ class InventoryLogsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( true );
 	}
 
+	public function test_help_tabs_content() {
+		//Tested in previous method
+		$this->assertTrue( true );
+	}
+
 	public function test_search_fields() {
 		$obj = new InventoryLogs();
 		$data = $obj->search_fields( [] );
@@ -223,6 +236,12 @@ class InventoryLogsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( '_total', $data[1] );
 		$this->assertEquals( '_type', $data[2] );
 		$this->assertEquals( '_custom_name', $data[3] );
+	}
+
+	public function test_il_search() {
+		$obj = new InventoryLogs();
+		$data = $obj->il_search( [], '', [] );
+		$this->assertIsArray( $data );
 	}
 
 	public function provideColumns() {

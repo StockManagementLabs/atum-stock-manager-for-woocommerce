@@ -6,13 +6,22 @@
  */
 
 use Atum\Components\AtumCapabilities;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
  */
 class AtumCapabilitiesTest extends WP_UnitTestCase {
 
-	public function test_get_instance() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( AtumCapabilities::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_instance() {
 		$this->assertInstanceOf( AtumCapabilities::class, AtumCapabilities::get_instance() );
 	}
 

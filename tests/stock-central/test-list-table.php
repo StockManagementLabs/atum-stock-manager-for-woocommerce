@@ -6,11 +6,20 @@
  */
 
 use Atum\StockCentral\Lists\ListTable;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
  */
 class ListTableTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
+
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( ListTable::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
 
 	public function test_instance() {
 		wp_set_current_user( 1 );

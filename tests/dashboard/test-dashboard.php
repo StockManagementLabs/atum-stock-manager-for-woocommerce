@@ -7,13 +7,22 @@
 
 use Atum\Dashboard\Dashboard;
 use Symfony\Component\DomCrawler\Crawler;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
  */
 class DashboardTest extends WP_UnitTestCase {
 
-	public function test_get_instance() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Dashboard::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_instance() {
 		$this->assertInstanceOf( Dashboard::class, Dashboard::get_instance() );
 	}
 
@@ -58,12 +67,14 @@ class DashboardTest extends WP_UnitTestCase {
 		}
 	}
 
-	/* TODO: Enable when News_DISABLED be enabled or removed
 	public function test_load_widgets() {
 		$dash = Dashboard::get_instance();
-		$e    = $dash->load_widgets();
-		$this->assertTrue($e);
-	}*/
+		// TODO: Enable when News_DISABLED be enabled or removed
+		//$data = $dash->load_widgets();
+		//$this->assertIsArray( $data );
+		//$this->assertNotEmpty( $data );
+		$this->assertTrue( TRUE );
+	}
 
 	public function test_enqueue_scripts() {
 		wp_set_current_user(1);
@@ -80,7 +91,17 @@ class DashboardTest extends WP_UnitTestCase {
 		$this->assertTrue( wp_style_is( 'atum-dashboard', 'registered' ) );
 	}
 
-	public function test_user_widgets_layout() {
+	public function test_save_user_widgets_layout() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_restore_user_widgets_layout() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_get_user_widgets_layout() {
 		wp_set_current_user( 1 );
 
 		$lout = [
@@ -100,8 +121,36 @@ class DashboardTest extends WP_UnitTestCase {
 		//print_r($user_data);
 		$this->assertEquals( $lout, $user_data );
 
+		$ulout = Dashboard::get_user_widgets_layout();
+		foreach ( $lout as $l => $val )
+			$this->assertArrayHasKey( $l, $ulout );
+
 		Dashboard::restore_user_widgets_layout( 1 );
 
 		$this->assertEquals( '', get_user_meta( 1, ATUM_PREFIX . 'dashboard_widgets_layout', true ) );
 	}
+
+	public function test_get_default_widgets_layout() {
+		wp_set_current_user( 1 );
+		$data = Dashboard::get_default_widgets_layout();
+		$ulout = Dashboard::get_user_widgets_layout();
+
+		$this->assertEquals( $ulout, $data );
+	}
+
+	public function test_get_widgets() {
+		$dash    = Dashboard::get_instance();
+		$widgets = $dash->get_widgets();
+		$this->assertGreaterThan( 0, count($widgets) );
+	}
+
+	public function test_get_widget_grid_item_defaults() {
+		$dash = Dashboard::get_instance();
+		$data = $dash->get_widget_grid_item_defaults();
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'id', $data );
+		$this->assertArrayHasKey( 'min-width', $data );
+		$this->assertArrayHasKey( 'max-width', $data );
+	}
+
 }

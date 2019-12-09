@@ -6,13 +6,38 @@
  */
 
 use Atum\Components\AtumCache;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
  */
 class AtumCacheTest extends WP_UnitTestCase {
 
-	public function test_cache() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( AtumCache::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_get_cache_key() {
+		$name = 'foo';
+		$key = AtumCache::get_cache_key( $name );
+		$this->assertEquals( 'atum_foo', $key );
+	}
+
+	public function test_set_cache() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_delete_cache() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_get_cache() {
 		$name = 'foo';
 		$key = AtumCache::get_cache_key( $name );
 
@@ -25,6 +50,16 @@ class AtumCacheTest extends WP_UnitTestCase {
 
 		$actual = AtumCache::get_cache( $key );
 		$this->assertFalse( $actual );
+	}
+
+	public function test_delete_group_cache() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_delete_all_atum_caches() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
 	}
 
 	public function test_group_cache() {
@@ -60,7 +95,23 @@ class AtumCacheTest extends WP_UnitTestCase {
 		$this->assertFalse( AtumCache::get_cache( $vars['keys'][4], $vars['groups'][4] ) );
 	}
 
-	public function test_transient() {
+	public function test_get_transient_key() {
+		$name = 'foo';
+		$key  = AtumCache::get_transient_key( $name );
+		$this->assertEquals( 'atum_foo', $key );
+	}
+
+	public function test_delete_transients() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_set_transient() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_get_transient() {
 		$name = 'foo';
 		$key = AtumCache::get_transient_key( $name );
 
@@ -71,10 +122,24 @@ class AtumCacheTest extends WP_UnitTestCase {
 		AtumCache::delete_transients( $key );
 		AtumCache::delete_transients();
 		$this->assertFalse( AtumCache::get_transient( $key, TRUE ) );
-
 	}
 
-	public function test_enable() {
+	public function test_is_cache_disabled() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_disable_cache() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_set_disable_cache() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_enable_cache() {
 		AtumCache::disable_cache();
 		$this->assertTrue( AtumCache::is_cache_disabled() );
 

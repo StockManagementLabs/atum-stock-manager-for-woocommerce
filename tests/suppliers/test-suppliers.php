@@ -16,6 +16,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Suppliers::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		wp_set_current_user( 1 );
 		set_current_screen( 'atum-stock-central' );
@@ -221,6 +229,10 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( wp_script_is( 'atum-suppliers-table', 'registered' ) );
 	}
 
+	public function test_get_supplier_products_legacy() {
+		//Tested in next method
+		$this->expectNotToPerformAssertions();
+	}
 	public function test_get_supplier_products() {
 		$pos = new PurchaseOrders();
 		$pos->register_post_type();
@@ -266,19 +278,26 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( Suppliers::MENU_ORDER, $data[0]['menu_order'] );
 	}
 
-	public function DISABLEDtest_get_product_id_by_supplier_sku() {
+	public function test_get_product_id_by_supplier_sku() {
 		$sku = 'foosku';
 		$product = TestHelpers::create_atum_simple_product();
 		$product->set_sku( $sku );
-		$supplier = $this->factory()->post->create_and_get( [
-			'post_title'  => 'Foo supplier',
-			'post_type'   => 'atum_supplier',
-			'post_status' => 'published',
-			'log_type'    => 'other',
-		] );
+		$supplier = TestHelpers::create_supplier();
 		add_post_meta( $supplier->ID, Suppliers::SUPPLIER_SKU_META_KEY, $sku );
-		$data = Suppliers::get_product_id_by_supplier_sku( $product->get_id(), $sku );
-		print_r($data);
+
+		$data = Suppliers::get_product_id_by_supplier_sku( 0, $sku );
+		$this->assertNull( $data );
+	}
+
+	public function test_supplier_join() {
+		$data = Suppliers::supplier_join( '' );
+		$this->assertContains( ' INNER JOIN wptests_atum_product_data apd ON (wptests_posts.ID = apd.product_id)', $data );
+	}
+
+	public function test_supplier_where() {
+		global $wp_query;
+		$data = Suppliers::supplier_where( '', $wp_query );
+		$this->assertContains( 'AND (apd.supplier_id', $data );
 	}
 
 	public function provideColumn() {

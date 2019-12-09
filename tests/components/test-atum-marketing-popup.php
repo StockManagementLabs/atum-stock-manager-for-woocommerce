@@ -7,6 +7,7 @@
 
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
+use TestHelpers\TestHelpers;
 
 
 /**
@@ -14,7 +15,15 @@ use Atum\Inc\Helpers;
  */
 class AtumMarketingPopupTest extends WP_UnitTestCase {
 
-	public function test_get_instance() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( AtumMarketingPopup::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_instance() {
 		$this->assertInstanceOf( AtumMarketingPopup::class, AtumMarketingPopup::get_instance() );
 	}
 
@@ -80,6 +89,12 @@ class AtumMarketingPopupTest extends WP_UnitTestCase {
 		$mk = AtumMarketingPopup::get_instance();
 		$data = $mk->get_background();
 		$this->assertIsString( $data );
+	}
+
+	public function test_get_dash_background() {
+		$mk = AtumMarketingPopup::get_instance();
+		$data = $mk->get_dash_background();
+		$this->assertEquals( 'white url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/waves-export.svg) bottom/cover no-repeat;', $data );
 	}
 
 	public function test_get_transient_key() {

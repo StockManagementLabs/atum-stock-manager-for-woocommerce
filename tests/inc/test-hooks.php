@@ -18,6 +18,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Hooks::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		$this->assertInstanceOf( Hooks::class, Hooks::get_instance() );
 	}
@@ -94,7 +102,13 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter('script')->count() );
 	}
 
-	//public function test_set_wc_products_list_stock_status() {}
+	public function test_set_wc_products_list_stock_status() {
+		$product = TestHelpers::create_atum_simple_product();
+		$stock_html = '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+		$hooks = Hooks::get_instance();
+		$response = $hooks->set_wc_products_list_stock_status( $stock_html, $product );
+		$this->assertEquals( $stock_html, $response );
+	}
 
 	public function test_wc_order_add_location_column_header() {
 		$hooks = Hooks::get_instance();
@@ -116,9 +130,48 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter( 'div.view' )->count() );
 	}
 
-	//public function test_stock_decimals() {}
+	public function test_record_out_of_stock_date() {
+		$product = TestHelpers::create_product();
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->record_out_of_stock_date( $product );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
-	//public function test_stock_quantity_input_atts() {}
+	public function test_delete_transients() {
+		$product = TestHelpers::create_product();
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->delete_transients( $product );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_stock_decimals() {
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->stock_decimals();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_stock_quantity_input_atts() {
+		$hooks = Hooks::get_instance();
+		$product = TestHelpers::create_product();
+		try {
+			$hooks->stock_quantity_input_atts( 50, $product );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
 	public function test_add_to_cart_message() {
 		$hooks = Hooks::get_instance();
@@ -126,7 +179,15 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertGreaterThan( 0, strpos( $msg, 'have been added to your cart' ) );
 	}
 
-	//public function test_rebuild_wc_stock_status_on_disable() {}
+	public function test_rebuild_wc_stock_status_on_disable() {
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->rebuild_wc_stock_status_on_disable( 'atum_settings', [], 'out_stock_threshold' );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
 	public function test_set_dropdown_autocomplete() {
 		$hooks = Hooks::get_instance();
@@ -140,10 +201,128 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertIsNumeric( $hooks->round_stock_quantity( 4.95 ) );
 	}
 
-	//public function test_get_custom_stock_threshold() {}
+	public function test_get_custom_stock_threshold() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
 
-	//public function test_maybe_change_stock_threshold() {}
+	public function test_maybe_change_stock_threshold() {
+		$product = TestHelpers::create_atum_simple_product();
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->maybe_change_stock_threshold( $product );
+			$this->assertTrue( TRUE );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->assertTrue( $hooks->get_custom_stock_threshold( TRUE, '', [] ) );
+	}
 
-	//public function test_maybe_change_variation_stock_status() {}
+	public function test_maybe_change_variation_stock_status() {
+		$product = TestHelpers::create_variation_product( TRUE );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->maybe_change_variation_stock_status( $product->get_id(), 5 );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_remove_stock_status_threshold() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_add_stock_status_threshold() {
+		$product = TestHelpers::create_atum_simple_product();
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->add_stock_status_threshold( $product->get_id() );
+			$hooks->remove_stock_status_threshold( $product->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_plugin_row_meta() {
+		$hooks = Hooks::get_instance();
+		$data = $hooks->plugin_row_meta( [], ATUM_BASENAME );
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'video_tutorials', $data);
+		$this->assertArrayHasKey( 'addons', $data);
+		$this->assertArrayHasKey( 'support', $data);
+	}
+
+	public function test_maybe_save_paid_date() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->maybe_save_paid_date( $order->get_id(), $order );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_save_order_items_props() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->save_order_items_props( $order->get_id(), false );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_maybe_save_order_items_props() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->maybe_save_order_items_props( $order->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_after_delete_product() {
+		$product = TestHelpers::create_atum_simple_product();
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->after_delete_product( $product->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_save_variation_atum_data() {
+		$product = TestHelpers::create_variation_product( TRUE );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->save_variation_atum_data( $product->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_clean_up_update_date() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->clean_up_update_date( $order, FALSE );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
 }

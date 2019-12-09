@@ -5,8 +5,11 @@
  * @package Atum_Stock_Manager_For_Woocommerce
  */
 
+use Atum\Components\AtumCapabilities;
+use Atum\Dashboard\Widgets\Videos;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 use TestHelpers\TestHelpers;
@@ -17,6 +20,14 @@ use Symfony\Component\DomCrawler\Crawler;
  * Sample test case.
  */
 class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
+
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Helpers::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
 
 	public function test_get_term_ids_by_slug() {
 		$cat = wp_insert_category( [
@@ -63,7 +74,25 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter('span.input-group-text')->count() );
 	}
 
-	//public function test_date_format() {}
+	/**
+	 * @param $date
+	 * @dataProvider provideDate
+	 */
+	public function test_date_format( $date ) {
+		$response = Helpers::date_format( $date );
+		$this->assertIsString( $response );
+	}
+
+	public function provideDate() {
+		return [
+			[ time() ],
+			[ '-7 days' ],
+			[ '+3 days' ],
+			[ 'timestamp' ],
+			[ 'today_midnight' ],
+			[ '2025-09-09 12:00:01' ],
+		];
+	}
 
 	public function test_decode_json_string() {
 		$array = [ 'foo' => 'test' ];
@@ -110,25 +139,67 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		}
 	}
 
-	//public function test_get_sold_last_days() {}
+	public function test_get_sold_last_days() {
+		Globals::enable_atum_product_data_models();
+		$product = TestHelpers::create_atum_simple_product();
+		$expected = 50;
+		TestHelpers::create_order( $product, [ 'qty' => $expected, 'status' => 'completed' ] );
+		$data = Helpers::get_sold_last_days(
+			[ $product->get_id() ],
+			Helpers::date_format( '-7 days' ),
+			Helpers::date_format( '+1 days' )
+		);
+		$this->assertEquals( $expected, $data);
+	}
 
-	/*
 	public function test_get_product_lost_sales() {
 		Globals::enable_atum_product_data_models();
-		$product = Helpers::get_atum_product( TestHelpers::create_product() );
+		$days_ago       = 3;
+		$sold           = 300;
+		$product        = TestHelpers::create_atum_simple_product( [ 'qty' => 0 ] );
+		$out_stock_date = Helpers::date_format( "-$days_ago days" );
+		$product->set_out_stock_date( $out_stock_date );
+		$product->save();
+		$order = TestHelpers::create_order( $product, [ 'status' => 'completed', 'qty' => $sold ] );
+		$order->set_date_created( Helpers::date_format( "-$days_ago days" ) );
+		$order->set_date_completed( Helpers::date_format( "-$days_ago days" ) );
+		$order->save();
 		$data = Helpers::get_product_lost_sales( $product );
-		var_dump($data);
+		$this->assertEquals( $days_ago * ( $sold / 7 ) * $product->get_regular_price(), $data);
+	}
 
-	}*/
-
-	/*
 	public function test_get_product_out_stock_days() {
-		$product = Helpers::get_atum_product( TestHelpers::create_product() );
+		Globals::enable_atum_product_data_models();
+		$days_ago       = 3;
+		$sold           = 300;
+		$product        = TestHelpers::create_atum_simple_product( [ 'qty' => 0 ] );
+		$out_stock_date = Helpers::date_format( "-$days_ago days" );
+		$product->set_out_stock_date( $out_stock_date );
+		$product->save();
+		$order = TestHelpers::create_order( $product, [ 'status' => 'completed', 'qty' => $sold ] );
+		$order->set_date_created( Helpers::date_format( "-$days_ago days" ) );
+		$order->set_date_completed( Helpers::date_format( "-$days_ago days" ) );
+		$order->save();
 		$data = Helpers::get_product_out_stock_days( $product );
-		print_r($data);
-	}*/
+		$this->assertEquals( $days_ago, $data);
+	}
 
-	//public function test_get_log_item_qty() {}
+	/**
+	 * @param $log_type
+	 * @dataProvider provideLogType
+	 */
+	public function test_get_log_item_qty( $log_type ) {
+		$product = TestHelpers::create_atum_simple_product();
+		$data = Helpers::get_log_item_qty( $log_type, $product );
+		$this->assertIsNumeric( $data );
+	}
+
+	public function provideLogType() {
+		$data = [];
+		foreach( \Atum\InventoryLogs\Models\Log::get_log_type_columns() as $log => $val )
+			$data[] = [ $log ];
+		return $data;
+	}
 
 	public function test_get_option() {
 		$data = Helpers::get_option( 'foo', 'test' );
@@ -151,7 +222,15 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertIsInt( $data );
 	}
 
-	//public function test_get_unmanaged_products() {}
+	public function test_get_unmanaged_products_legacy() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_get_unmanaged_products() {
+		$data = Helpers::get_unmanaged_products( [ 'product' ], TRUE );
+		$this->assertIsArray( $data );
+	}
 
 	public function test_format_price() {
 		$price = 50.99;
@@ -159,11 +238,43 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertGreaterThanOrEqual( 0, strpos( $data, chr( $price ) ) );
 	}
 
-	//public function test_load_view() {}
+	public function test_load_view() {
+		ob_start();
+		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos() );
+		$response = ob_get_clean();
+		$html = new Crawler( $response );
+		$this->assertGreaterThan( 50, $html->filter('div')->count() );
+	}
 
-	//public function test_load_view_to_string() {}
+	public function test_load_view_to_string() {
+		$response = Helpers::load_view_to_string( 'widgets/videos', Videos::get_filtered_videos() );
+		$html = new Crawler( $response );
+		$this->assertGreaterThan( 50, $html->filter('div')->count() );
+	}
 
-	//public function test_locate_template() {}
+	public function test_get_atum_control_status() {
+		$product = TestHelpers::create_atum_simple_product();
+		$this->assertEquals( 'yes', Helpers::get_atum_control_status( $product ) );
+	}
+
+	public function test_update_atum_control() {
+		$product = TestHelpers::create_atum_simple_product();
+		Helpers::update_atum_control( $product, 'disable' );
+		$this->assertEquals( 'no', Helpers::get_atum_control_status( $product ) );
+	}
+
+	public function test_update_wc_manage_stock() {
+		$product = TestHelpers::create_atum_simple_product();
+		Helpers::update_wc_manage_stock( $product, 'disable' );
+		$this->assertFalse( $product->get_manage_stock() );
+	}
+
+	public function test_change_status_meta() {
+		$product = TestHelpers::create_atum_simple_product();
+		$data = Helpers::change_status_meta( 'foo_meta_test', 'yes', true );
+		$this->assertEquals( 'All your products were updated successfully', $data );
+		//$this->assertEquals( 'yes', get_post_meta( $product->get_id(), 'foo_meta_test', TRUE ) );
+	}
 
 	public function test_is_atum_controlling_stock() {
 		$product = Helpers::get_atum_product( TestHelpers::create_product() );
@@ -180,15 +291,56 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertIsBool( Helpers::is_child_type( 'product' ) );
 	}
 
-	//public function test_is_plugin_installed() {}
+	public function test_is_plugin_installed() {
+		$this->assertIsBool( Helpers::is_plugin_installed( 'atum_export_pro' ) );
+	}
 
-	//public function test_display_notice() {}
+	public function test_display_notice() {
+		wp_set_current_user( 1 );
+		ob_start();
+		Helpers::display_notice( 'foo-notice', 'Foo message' );
+		$data = ob_get_clean();
+		$this->assertContains( '<div class="notice notice-foo-notice atum-notice" data-key="">', $data );
+		$this->assertContains( '<p>Foo message</p>', $data );
+	}
 
-	//public function test_dismiss_notice() {}
+	public function test_dismiss_notice() {
+		wp_set_current_user( 1 );
+		ob_start();
+		Helpers::display_notice( 'foo-notice', 'Foo message' );
+		ob_get_clean();
+		$data = Helpers::dismiss_notice( 'Foo message' );
+		$this->assertIsNumeric( $data );
+	}
 
-	//public function test_get_dismissed_notices() {}
+	public function test_get_dismissed_notices() {
+		wp_set_current_user( 1 );
+		ob_start();
+		Helpers::display_notice( 'foo-notice', 'Foo message' );
+		ob_get_clean();
+		Helpers::dismiss_notice( 'Foo message' );
+		$data = Helpers::get_dismissed_notices( 1 );
+		$this->assertEquals( 'yes', $data['Foo message'] );
+	}
 
-	//public function test_is_notice_dismissed() {}
+	public function test_is_notice_dismissed() {
+		wp_set_current_user( 1 );
+		ob_start();
+		Helpers::display_notice( 'foo-notice', 'Foo message', FALSE, 'foo-key' );
+		ob_get_clean();
+		$this->assertIsBool( Helpers::is_notice_dismissed( 'foo-key' ) );
+		Helpers::dismiss_notice( 'Foo message' );
+		$this->assertIsBool( Helpers::is_notice_dismissed( 'foo-key' ) );
+	}
+
+	public function test_maybe_es6_promise() {
+		try {
+			Helpers::maybe_es6_promise();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
 	public function test_trim_input() {
 		$this->assertEquals( 'foo', Helpers::trim_input(' foo ') );
@@ -200,14 +352,28 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter('select.dropdown_product_type')->count() );
 	}
 
-	/*
 	public function test_suppliers_dropdown() {
+		wp_set_current_user( 1 );
+		global $atum_global_options;
+		$atum_global_options['purchase_orders_module'] = 'yes';
+		update_option( 'atum_settings', $atum_global_options );
+
+		for($k = 0; $k < 5; $k++) {
+			$this->factory()->post->create( array( 'post_title' => 'Foo Supplier '.( $k + 1 ), 'post_type'  => Suppliers::POST_TYPE, ) );
+		}
+
 		$data = Helpers::suppliers_dropdown();
 		$html = new Crawler( $data );
 		$this->assertEquals( 1, $html->filter('select.dropdown_supplier')->count() );
-	}*/
+	}
 
-	//public function test_get_logs() {}
+	/**
+	 * @param $log_type
+	 * @dataProvider provideLogType
+	 */
+	public function test_get_logs( $log_type ) {
+		$this->assertIsArray( Helpers::get_logs( $log_type ) );
+	}
 
 	public function test_get_order_items() {
 		$order = TestHelpers::create_order();
@@ -287,6 +453,10 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 25, $data );
 	}
 
+	public function test_is_using_new_wc_tables() {
+		$this->assertFalse( Helpers::is_using_new_wc_tables() );
+	}
+
 	public function test_get_atum_order_post_type_statuses() {
 		$data = Helpers::get_atum_order_post_type_statuses( 'atum_purchase_order' );
 		$this->assertIsArray( $data );
@@ -356,6 +526,11 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertGreaterThan( 0, Helpers::is_any_out_stock_threshold_set() );
 	}
 
+	public function test_product_data_query_clauses() {
+		$data = Helpers::product_data_query_clauses( [], [], '' );
+		$this->assertIsArray( $data );
+	}
+
 	public function test_in_multi_array() {
 		$arr = [[[[[ 'foo' ]]]]];
 		$this->assertTrue( Helpers::in_multi_array( 'foo', $arr ));
@@ -377,6 +552,11 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$result = Helpers::array_group_by( $data, $key );
 		$this->assertIsArray( $result );
 		$this->assertEquals( 3, count( $result ) );
+	}
+
+	public function test_load_psr4_classes() {
+		Helpers::load_psr4_classes( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . '/atum-multi-inventory', '\\AtumMultiInventory\\Shortcodes\\' );
+		$this->expectNotToPerformAssertions();
 	}
 
 	/**
@@ -407,6 +587,16 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'variable', $data );
 	}
 
+	public function test_set_atum_user_meta() {
+		//Tested in next method
+		$this->assertTrue( TRUE );
+	}
+
+	public function test_get_atum_user_meta() {
+		Helpers::set_atum_user_meta( 'foo-meta-key', 'foo value', 1 );
+		$this->assertEquals( 'foo value', Helpers::get_atum_user_meta( 'foo-meta-key', 1 ) );
+	}
+
 	public function test_atum_user_meta() {
 		Helpers::set_atum_user_meta( 'foo', 7, 1 );
 		$this->assertEquals( 7, Helpers::get_atum_user_meta( 'foo', 1) );
@@ -435,12 +625,18 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_get_bundle_items() {
 		include dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . DIRECTORY_SEPARATOR . 'woocommerce-product-bundles'.
-		        DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'class-wc-pb-db.php';
+	        DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'class-wc-pb-db.php';
 		$data = Helpers::get_bundle_items( [] );
 		$this->assertIsArray( $data );
 	}
 
-	//public function test_is_product_data_outdated() {}
+	public function test_is_product_data_outdated() {
+		$product = TestHelpers::create_atum_simple_product( [ 'qty' => 5 ] );
+		$product->set_update_date( strtotime( '-5 days' ) );
+		$product->save();
+		$data = Helpers::is_product_data_outdated( $product );
+		$this->assertTrue( $data );
+	}
 
 	public function test_is_atum_ajax() {
 		$this->assertFalse( Helpers::is_atum_ajax() );
@@ -461,37 +657,27 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( Helpers::validate_color( Helpers::get_color_value( $color_name ) ) );
 	}
 
+	public function test_enqueue_atum_colors() {
+		try {
+			Helpers::enqueue_atum_colors( 'foo' );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
 	/**
 	 * @param $type
 	 * @dataProvider provideType
 	 */
-	public function DISABLEDtest_update_order_item_product_data( $type ) {
+	public function test_update_order_item_product_data( $type ) {
 		$product = TestHelpers::create_atum_simple_product();
-		$id = $product->get_id();
-		switch ( $type ) {
-			case 2:
-				$inbound_stock = $product->get_inbound_stock();
-				break;
-			case 3:
-				$log = Helpers::get_log_item_qty();
-				break;
-			default:
-				break;
+		try {
+			Helpers::update_order_item_product_data( $product , $type );
+		} catch ( Exception $e ) {
+			unset( $e );
 		}
-
-		$data = Helpers::update_order_item_product_data( $product, $type );
-		var_dump($data);
-		//Reinstance
-		$product = Helpers::get_atum_product( $id );
-		switch ( $type ) {
-			case 2:
-				$this->assertNotEquals( $inbound_stock, $product->get_inbound_stock() );
-				break;
-			case 3:
-				break;
-			default:
-				break;
-		}
+		$this->expectNotToPerformAssertions();
 	}
 
 	public function test_get_option_group_hidden_classes() {
@@ -499,10 +685,13 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( in_array( 'hide_if_external', $classes ) );
 	}
 
-	public function DISABLEDtest_duplicate_atum_product() {
+	public function test_duplicate_atum_product() {
 		$p = TestHelpers::create_atum_simple_product();
-		$p2 = Helpers::duplicate_atum_product( $p->get_id(), 0 );
-		var_dump( $p2 );
+		Helpers::duplicate_atum_product( $p->get_id(), 9999 );
+		$p2 = Helpers::get_atum_product( 9999 );
+		//var_dump( $p2 );
+		//TODO
+		$this->expectNotToPerformAssertions();
 	}
 
 	public function test_is_rest_request() {

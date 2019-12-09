@@ -16,6 +16,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class PurchaseOrdersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( PurchaseOrders::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		$obj = new PurchaseOrders();
 		$this->assertInstanceOf( PurchaseOrders::class, $obj );
@@ -182,7 +190,12 @@ class PurchaseOrdersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase 
 		$this->assertArrayHasKey( ATUM_PREFIX . 'received', $data );
 	}
 
-	public function test_help_tab() {
+	public function test_add_help_tab() {
+		//Tested in next method
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_help_tabs_content() {
 		set_current_screen( 'atum-purchase-orders' );
 		$obj = new PurchaseOrders();
 

@@ -16,6 +16,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Settings::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		wp_set_current_user( 1 );
 		$this->assertInstanceOf( Settings::class, Settings::get_instance() );
@@ -66,6 +74,16 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertTrue( wp_style_is( 'wp-color-picker', 'registered' ) );
 	}
 
+	public function test_register_settings() {
+		$obj = Settings::get_instance();
+		try {
+			$obj->register_settings();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
 	public function test_sanitize() {
 		$obj = Settings::get_instance();
 		$input = array( 'show_totals' => array(
@@ -83,6 +101,11 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->arrayHasKey( 'out_stock_threshold', $data );
 		$this->arrayHasKey( 'stock_quantity_step', $data );
 		$this->arrayHasKey( 'ship_country', $data );
+	}
+
+	public function test_sanitize_option() {
+		//Tested in previous method
+		$this->expectNotToPerformAssertions();
 	}
 
 	public function test_display_text() {
@@ -299,6 +322,77 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$obj = Settings::get_instance();
 		$data = $obj->get_dependency( [ 'dependency' => 'WC' ] );
 		$this->assertEquals( " data-dependency='\"WC\"'", $data );
+	}
+
+	public function test_get_groups() {
+		$obj = Settings::get_instance();
+		$data = $obj->get_groups();
+		$expected = [ 'general', 'store_details', 'module_manager' ];
+		$this->assertIsArray( $data );
+		foreach( $expected as $e ) {
+			$this->assertArrayHasKey( $e, $data );
+			$this->assertArrayHasKey( 'label', $data[ $e ] );
+			$this->assertArrayHasKey( 'icon', $data[ $e ] );
+			$this->assertArrayHasKey( 'sections', $data[ $e ] );
+		}
+	}
+
+	public function test_get_default_settings() {
+		$obj = Settings::get_instance();
+		$data = $obj->get_default_settings();
+		$expected = [
+			'enable_ajax_filter',
+			'enhanced_suppliers_filter',
+			'show_totals',
+			'enable_admin_bar_menu',
+			'show_variations_stock',
+			'out_stock_threshold',
+			'unmanaged_counters',
+			'stock_quantity_decimals',
+			'stock_quantity_step',
+			'sales_last_ndays',
+			'delete_data',
+			'company_name',
+			'tax_number',
+			'address_1',
+			'address_2',
+			'city',
+			'country',
+			'zip',
+			'same_ship_address',
+			'ship_to',
+			'ship_address_1',
+			'ship_address_2',
+			'ship_city',
+			'ship_country',
+			'ship_zip',
+		];
+		$this->assertIsArray( $data );
+		foreach( $expected as $e ) {
+			$this->assertArrayHasKey( $e, $data );
+			if( 'city' !== $e )
+				$this->assertArrayHasKey( 'group', $data[ $e ], "$e has not a group key" );
+			$this->assertArrayHasKey( 'section', $data[ $e ] );
+			$this->assertArrayHasKey( 'name', $data[ $e ] );
+			$this->assertArrayHasKey( 'desc', $data[ $e ] );
+			$this->assertArrayHasKey( 'type', $data[ $e ] );
+			$this->assertArrayHasKey( 'default', $data[ $e ] );
+		}
+	}
+
+	public function test_set_user_meta_options() {
+		//Tested in next method
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_get_user_meta_options() {
+		$obj = Settings::get_instance();
+		$obj->set_user_meta_options( [ 'meta' => [ 'test' => 'foo' ] ] );
+		$data = $obj->get_user_meta_options();
+		$this->assertIsArray( $data );
+		$this->assertArrayHasKey( 'meta', $data );
+		$this->assertArrayHasKey( 'test', $data['meta'] );
+		$this->assertEquals( 'foo', $data['meta']['test'] );
 	}
 
 	public function test_find_option_value() {

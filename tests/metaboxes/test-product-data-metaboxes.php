@@ -15,6 +15,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class ProductDataMetaboxesTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( ProductDataMetaBoxes::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		$this->assertInstanceOf( ProductDataMetaBoxes::class, ProductDataMetaBoxes::get_instance() );
 	}

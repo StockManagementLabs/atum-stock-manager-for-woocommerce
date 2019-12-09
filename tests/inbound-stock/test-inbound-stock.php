@@ -7,14 +7,12 @@
 
 use Atum\InboundStock\InboundStock;
 use Atum\Inc\Globals;
-use Atum\Models\Products\AtumProductSimple;
-use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 use Atum\Inc\Helpers;
+use Atum\InboundStock\Lists\ListTable;
 use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
-
 
 
 /**
@@ -22,7 +20,15 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 
-	public function test_get_instance() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( InboundStock::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_instance() {
 		wp_set_current_user( 1 );
 		set_current_screen( 'atum-inbound-stock' );
 		$this->assertInstanceOf( InboundStock::class, InboundStock::get_instance() );
@@ -109,25 +115,20 @@ class InboundStockTest extends WP_UnitTestCase { // PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, $html->filter( 'table.widefat' )->count() );
 	}
 
+	public function test_set_screen_option() {
+		$instance = InboundStock::get_instance();
+		$this->assertEquals( 43, $instance->set_screen_option( false, '', 43 ) );
+	}
 
-	public function importCSVProducts() {
-		$path = dirname( dirname ( dirname( dirname( __FILE__ ) ) ) );
-		require_once( $path . '/woocommerce/includes/import/class-wc-product-csv-importer.php' );
-		require_once( $path . '/woocommerce/includes/admin/importers/class-wc-product-csv-importer-controller.php' );
-
-		if ( ! is_file( $file = $path . '/woocommerce/sample-data/sample_products.csv' ) )
-			$file = null;
-
-		$params = array(
-			'delimiter'       => ',',
-			'start_pos'       => 0,
-			'mapping'         => array(),
-			'update_existing' => false,
-			'lines'           => apply_filters( 'woocommerce_product_import_batch_size', 30 ),
-			'parse'           => true,
-		);
-		$importer = WC_Product_CSV_Importer_Controller::get_importer( $file, $params );
-		return $importer->import();
+	public function test_set_list_table() {
+		$instance = InboundStock::get_instance();
+		$lt = new ListTable( [] );
+		try {
+			$instance->set_list_table( $lt );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
 	}
 
 }

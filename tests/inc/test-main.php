@@ -14,17 +14,26 @@ use TestHelpers\TestHelpers;
  */
 class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Main::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		wp_set_current_user( 1 );
 		$this->assertInstanceOf( Main::class, Main::get_instance() );
 
+		/*
 		if ( is_admin() ) {
 			$this->assertEquals( 1, TestHelpers::has_action( 'admin_menu', array( Main::class, 'create_menu' ) ) );
 			$this->assertEquals( 10, TestHelpers::has_action( 'init', array( Main::class, 'admin_load' ) ) );
 		} else {
 			$this->assertFalse( TestHelpers::has_action( 'admin_menu', array( Main::class, 'create_menu' ) ) );
 			$this->assertFalse( TestHelpers::has_action( 'init', array( Main::class, 'admin_load' ) ) );
-		}
+		}*/
 		$this->assertEquals( 1, TestHelpers::has_action( 'init', array( Main::class, 'pre_init' ) ) );
 		$this->assertEquals( 11, TestHelpers::has_action( 'init', array( Main::class, 'init' ) ) );
 		//$this->assertEquals( 10, TestHelpers::has_action( 'custom_menu_order', '__return_true' ) );
@@ -60,7 +69,16 @@ class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 1, TestHelpers::has_action( 'admin_footer_text', array( Main::class, 'admin_footer_text' ) ) );
 	}
 
-	//public function test_load_modules() {}
+	public function test_load_modules() {
+		$main = Main::get_instance();
+
+		try {
+			$main->load_modules();
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
 
 	public function test_create_menu() {
 		wp_set_current_user( 1 );
@@ -82,15 +100,25 @@ class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty( $submenu['atum-dashboard'] );
 	}
 
-	public function DISABLEDtest_add_admin_bar_menu() {
+	public function test_add_admin_bar_menu() {
 		wp_set_current_user( 1 );
 		global $wp_admin_bar;
+		if(!class_exists( WP_Admin_Bar::class ) )
+			include dirname( dirname( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) ) . '/wp-includes/class-wp-admin-bar.php';
 		$wp_admin_bar = new WP_Admin_Bar();
 		set_current_screen( 'atum-dashboard' );
 		$main = Main::get_instance();
 		$main->add_admin_bar_menu();
-		print_r($wp_admin_bar);
-		$this->assertIsArray( $wp_admin_bar );
+		$this->assertInstanceOf( WP_Admin_Bar::class, $wp_admin_bar );
+		$expected = [
+			'atum-dashboard',
+			'atum-dashboard-item',
+			'atum-stock-central-item',
+			'atum-addons-item',
+		];
+		foreach ( $expected as $e ) {
+			$this->assertIsObject( $wp_admin_bar->get_node( $e ) );
+		}
 	}
 
 	public function test_admin_footer_text() {

@@ -6,13 +6,22 @@
  */
 
 use Atum\Components\AtumColors;
+use TestHelpers\TestHelpers;
 
 /**
  * Sample test case.
  */
 class AtumColorsTest extends WP_UnitTestCase {
 
-	public function test_get_instance() {
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( AtumColors::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
+	public function test_instance() {
 		$this->assertInstanceOf( AtumColors::class, AtumColors::get_instance() );
 	}
 
@@ -57,7 +66,7 @@ class AtumColorsTest extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'visual_settings', $tabs );
 	}
 
-	public function test_add_settings_default() {
+	public function test_add_settings_defaults() {
 		$instance = AtumColors::get_instance();
 		$defaults = [ 'other' => 'foo' ];
 		$defaults = $instance->add_settings_defaults( $defaults );

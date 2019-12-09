@@ -21,6 +21,14 @@ class POExportTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->po = TestHelpers::create_atum_purchase_order();
 	}
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( POExport::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_instance() {
 		$obj = new POExport( $this->po->get_id() );
 		$this->assertInstanceOf( POExport::class, $obj );

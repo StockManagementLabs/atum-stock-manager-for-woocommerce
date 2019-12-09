@@ -21,16 +21,25 @@ use WC_Product_Attribute;
 
 class TestHelpers {
 
-	public static function count_public_methods( $object ) {
-		if( !is_object( $object ) )
+	public static function count_public_methods( $class ) {
+		if( !class_exists( $class ) )
 			return false;
 
-		$result = [];
+		$result = [ 'methods' => [], 'num' => 0 ];
 
-		foreach( $object as $att => $value ) {
-			$result['methods'][] = $att;
+		$f = new \ReflectionClass( $class );
+
+		foreach( $f->getMethods() as $att ) {
+			if( $att->class != $class ) continue;
+			if( $att->isPrivate() || $att->isProtected() ) continue;
+			if( '__clone' === $att->name || '__sleep' === $att->name || '__wakeup' === $att->name ) continue;
+			if( 'get_instance' === $att->name || '__construct' === $att->name )
+				$result['methods'][] = 'instance';
+			else
+				$result['methods'][] = $att->name;
 			$result['num'] ++ ;
 		}
+
 		return $result;
 	}
 
@@ -68,10 +77,9 @@ class TestHelpers {
 			'post_title'  => 'Foo supplier',
 			'post_type'   => Suppliers::POST_TYPE,
 			'post_status' => 'published',
-			'log_type'    => 'other',
+			//'log_type'    => 'other',
 		);
 		$post_id = wp_insert_post( array_merge( $defaults, $props ) );
-
 		return get_post( $post_id );
 	}
 
@@ -92,6 +100,8 @@ class TestHelpers {
 		$order = Helpers::get_atum_order_model( $post );
 		if( !is_a( $product, WC_Product::class ) )
 			$product = self::create_atum_simple_product();
+		else
+			$product = Helpers::get_atum_product( $product );
 
 		$product->set_inbound_stock( 25 );
 
@@ -131,16 +141,21 @@ class TestHelpers {
 	 * Creates a Order object.
 	 *
 	 * @param null $product
-	 * @param int  $customer_id
-	 * @param int  $qty
+	 * @param mix  $args
 	 *
 	 * @return WC_Order|WP_Error
 	 * @throws WC_Data_Exception
 	 */
-	public static function create_order( $product = null, $customer_id = 1, $qty = 4 ) {
+	public static function create_order( $product = null, $args = [] ) {
 		if ( ! is_a( $product, 'WC_Product' ) ) {
 			$product = self::create_product();
 		}
+		$defaults = [
+			'customer_id' => 1,
+			'qty' => 4,
+			'status' => 'pending'
+		];
+		$params = array_merge( $defaults, $args );
 
 		$flat_rate_settings = array(
 			'enabled'      => 'yes',
@@ -157,8 +172,8 @@ class TestHelpers {
 		WC()->shipping()->load_shipping_methods();
 
 		$order_data = array(
-			'status'        => 'pending',
-			'customer_id'   => $customer_id,
+			'status'        => $params['status'],
+			'customer_id'   => $params['customer_id'],
 			'customer_note' => '',
 			'total'         => '',
 		);
@@ -171,9 +186,9 @@ class TestHelpers {
 		$item->set_props(
 			array(
 				'product'  => $product,
-				'quantity' => $qty,
-				'subtotal' => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
-				'total'    => wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ),
+				'quantity' => $params['qty'],
+				'subtotal' => wc_get_price_excluding_tax( $product, array( 'qty' => $params['qty'] ) ),
+				'total'    => wc_get_price_excluding_tax( $product, array( 'qty' => $params['qty'] ) ),
 			)
 		);
 		$item->save();

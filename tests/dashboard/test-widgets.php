@@ -23,6 +23,14 @@ use TestHelpers\TestHelpers;
  */
 class WidgetsHelpersTest extends WP_UnitTestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( WidgetHelpers::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	/**
 	 * Test method for get_sales_stats.
 	 */
@@ -151,6 +159,30 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test method for get_date_period
+	 */
+	public function test_get_date_period() {
+		$ini = new DateTime();
+		$end = date_add( $ini, DateInterval::createFromDateString('3 days') );
+		$data = WidgetHelpers::get_date_period( $ini->format( 'Y-m-d' ), $end->format( 'Y-m-d' ) );
+		$this->assertInstanceOf( DatePeriod::class, $data );
+	}
+
+	/**
+	 * Test method for get_stock_levels_legacy.
+	 */
+	public function test_get_stock_levels_legacy() {
+		$stats = WidgetHelpers::get_stock_levels_legacy();
+
+		$this->assertIsArray( $stats );
+		$this->assertArrayHasKey( 'count_in_stock', $stats );
+		$this->assertArrayHasKey( 'count_out_stock', $stats );
+		$this->assertArrayHasKey( 'count_low_stock', $stats );
+		$this->assertArrayHasKey( 'count_all', $stats );
+		$this->assertArrayHasKey( 'count_unmanaged', $stats );
+	}
+
+	/**
 	 * Test method for get_stock_levels.
 	 */
 	public function test_get_stock_levels() {
@@ -162,6 +194,13 @@ class WidgetsHelpersTest extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'count_low_stock', $stats );
 		$this->assertArrayHasKey( 'count_all', $stats );
 		$this->assertArrayHasKey( 'count_unmanaged', $stats );
+	}
+
+	/**
+	 * Test method for wc_product_data_query_clauses
+	 */
+	public function test_wc_product_data_query_clauses() {
+		$this->assertIsArray( WidgetHelpers::wc_product_data_query_clauses( [] ) );
 	}
 
 	/**

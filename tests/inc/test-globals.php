@@ -15,6 +15,14 @@ use TestHelpers\TestHelpers;
  */
 class GlobalsTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
 
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( Globals::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
+	}
+
 	public function test_get_product_types() {
 		$data = Globals::get_product_types();
 		$this->assertIsArray( $data );
@@ -81,6 +89,18 @@ class GlobalsTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
 		$this->assertIsArray( $data );
 		$this->assertArrayHasKey( '_atum_manage_stock', $data );
 		$this->assertEquals( $data['_atum_manage_stock'], 'checkbox' );
+	}
+
+	public function test_enable_atum_product_data_models() {
+		Globals::enable_atum_product_data_models();
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_product_class', array( Globals::class, 'get_atum_product_data_model_class' ) ) );
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_data_stores', array( Globals::class, 'replace_wc_data_stores' ) ) );
+	}
+
+	public function test_disable_atum_product_data_models() {
+		Globals::disable_atum_product_data_models();
+		$this->assertFalse( TestHelpers::has_action( 'woocommerce_product_class', array( Globals::class, 'get_atum_product_data_model_class' ) ) );
+		$this->assertFalse( TestHelpers::has_action( 'woocommerce_data_stores', array( Globals::class, 'replace_wc_data_stores' ) ) );
 	}
 
 	public function test_get_atum_product_data_model_class() {

@@ -5,6 +5,7 @@
  * @package Atum_Stock_Manager_For_Woocommerce
  */
 
+use Atum\InventoryLogs\Models\Log;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
@@ -24,6 +25,14 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->product = TestHelpers::create_atum_simple_product();
 		$this->order = TestHelpers::create_atum_purchase_order( $this->product );
 		$this->po = new PurchaseOrder( $this->order->get_id() );
+	}
+
+	public function test_methods() {
+		$data = TestHelpers::count_public_methods( PurchaseOrder::class );
+
+		foreach( $data['methods'] as $method) {
+			$this->assertTrue( method_exists( $this, 'test_'.$method ), "Method `test_$method` doesn't exist in class ".self::class );
+		}
 	}
 
 	public function test_instance() {
@@ -78,6 +87,11 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'PO &ndash; Jan 01, 1970 @ 12:00 AM', $data );
 	}
 
+	public function test_set_supplier() {
+		//Tested in next method
+		$this->expectNotToPerformAssertions();
+	}
+
 	public function test_get_supplier() {
 		$supplier         = $this->factory()->post->create_and_get( [
 			'post_title'  => 'Foo supplier',
@@ -90,10 +104,28 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( WP_Post::class, $data);
 		$this->assertEquals( 'foo-supplier', $data->post_name );
 		$this->assertEquals( 'atum_supplier', $data->post_type );
+
+		$supplier2        = $this->factory()->post->create_and_get( [
+			'post_title'  => 'Foo2 supplier',
+			'post_type'   => 'atum_supplier',
+			'post_status' => 'published',
+			'log_type'    => 'other',
+		] );
+		update_post_meta( $this->po->get_id(), '_supplier', $supplier2->ID );
+		$this->po->set_supplier( $supplier2->ID );
+		$data = $this->po->get_supplier();
+		$this->assertEquals( 'foo2-supplier', $data->post_name );
+	}
+
+	public function test_set_multiple_suppliers() {
+		//Tested in next method
+		$this->expectNotToPerformAssertions();
 	}
 
 	public function test_has_multiple_suppliers() {
 		$this->assertIsBool( $this->po->has_multiple_suppliers() );
+		$this->po->set_multiple_suppliers( TRUE );
+		$this->assertTrue( $this->po->has_multiple_suppliers() );
 	}
 
 	public function test_get_type() {
@@ -109,6 +141,15 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function test_set_date_expected() {
+		try {
+			$date = date( 'Y-m-d' );
+			$this->po->set_date_expected( $date );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();	}
+
 	public function test_get_date_expected() {
 		update_post_meta( $this->po->get_id(), '_expected_at_location_date', 'foo' );
 		$data = $this->po->get_date_expected();
@@ -119,6 +160,15 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$qty = 5;
 		$this->product->set_purchase_price(10);
 		$this->assertEquals( 50, $this->po->use_purchase_price( 0, $qty, $this->product ) );
+	}
+
+	public function test_change_stock_levels() {
+		try {
+			$this->po->change_stock_levels( $this->po, 'increase' );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
 	}
 
 	/**
@@ -155,7 +205,17 @@ class PurchaseOrderTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 		$product = \Atum\Inc\Helpers::get_atum_product( $this->product->get_id() );
 		$end = $product->get_inbound_stock();
-		$this->assertNotEquals( $start, $end );
+		$this->assertEquals( $start, $end );
+	}
+
+	public function test_get_data() {
+		$data = $this->po->get_data();
+		$this->assertIsArray( $data );
+		$this->assertEquals( $this->po->get_id(), $data['id'] );
+		$this->assertArrayHasKey( 'currency', $data );
+		$this->assertArrayHasKey( 'supplier', $data );
+		$this->assertArrayHasKey( 'multiple_suppliers', $data );
+		$this->assertArrayHasKey( 'date_expected', $data );
 	}
 
 	public function provideStatus() {
