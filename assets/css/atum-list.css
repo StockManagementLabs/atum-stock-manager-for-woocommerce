@@ -5694,6 +5694,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
           box-shadow: none;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
+  border: none;
 }
 
 @media all and (max-width: 782px) {
@@ -6391,6 +6392,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   margin-left: 5px;
   padding: 0.344rem 0.75rem;
   line-height: 1.55;
+  height: 30px;
 }
 
 @media all and (max-width: 782px) {
@@ -6672,6 +6674,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 @media all and (max-width: 782px) {
   .tablenav.top .nav-with-scroll-effect {
+    height: 55px;
     right: 63%;
     width: inherit;
   }
@@ -7151,13 +7154,9 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
     width: 100%;
   }
   .atum-list-wrapper .search-box input[type="text"], #posts-filter .search-box input[type="text"], .atum-list-wrapper .search-box input[type="number"], #posts-filter .search-box input[type="number"], .atum-list-wrapper .search-box button:not(.reset-filters), #posts-filter .search-box button:not(.reset-filters) {
@@ -7223,13 +7222,13 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
         -ms-flex-pack: center;
             justify-content: center;
     margin-bottom: 15px;
+    border-bottom: none;
   }
 }
 
 @media all and (max-width: 480px) {
   .list-table-header {
     margin: 0 11px 15px;
-    border-bottom: none;
   }
   .list-table-header.no-margin {
     margin: 0 11px 15px;
@@ -7784,7 +7783,7 @@ table.atum-list-table tr.variation, .floatThead-container tr.variation, .inbound
   background-color: var(--primary-dark);
 }
 
-table.atum-list-table tr.variation:nth-child(even), .floatThead-container tr.variation:nth-child(even), .inbound-stock-list tr.variation:nth-child(even), table.wp-list-table tr.variation:nth-child(even) {
+table.atum-list-table tr.variation:nth-of-type(even), .floatThead-container tr.variation:nth-of-type(even), .inbound-stock-list tr.variation:nth-of-type(even), table.wp-list-table tr.variation:nth-of-type(even) {
   background-color: var(--primary-light);
 }
 
@@ -7872,6 +7871,8 @@ table.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-
   display: inline-block;
   vertical-align: middle;
   margin-top: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
 }
 
 table.atum-list-table tr.no-items td .alert .atum-spinner, .floatThead-container tr.no-items td .alert .atum-spinner, .inbound-stock-list tr.no-items td .alert .atum-spinner, table.wp-list-table tr.no-items td .alert .atum-spinner {
@@ -7900,6 +7901,26 @@ table.atum-list-table tr.no-items td .alert .atum-spinner span, .floatThead-cont
   to {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
+  }
+}
+
+@media all and (max-width: 768px) {
+  table.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert, .inbound-stock-list tr.no-items td .alert, table.wp-list-table tr.no-items td .alert {
+    width: calc( 100vw - 93px);
+  }
+  table.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button, .inbound-stock-list tr.no-items td .alert button, table.wp-list-table tr.no-items td .alert button {
+    height: 35px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  table.atum-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert, .inbound-stock-list tr.no-items td .alert, table.wp-list-table tr.no-items td .alert {
+    width: calc( 100vw - 73px);
+  }
+  table.atum-list-table tr.no-items td .alert button, .floatThead-container tr.no-items td .alert button, .inbound-stock-list tr.no-items td .alert button, table.wp-list-table tr.no-items td .alert button {
+    margin-left: -2em;
+    width: calc( 100% + 2em);
+    margin-top: 15px;
   }
 }
 
@@ -8325,6 +8346,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   table.atum-list-table th.check-column input[type="checkbox"], table.atum-list-table td.check-column input[type="checkbox"], .floatThead-container th.check-column input[type="checkbox"], .floatThead-container td.check-column input[type="checkbox"], .inbound-stock-list th.check-column input[type="checkbox"], .inbound-stock-list td.check-column input[type="checkbox"], table.wp-list-table th.check-column input[type="checkbox"], table.wp-list-table td.check-column input[type="checkbox"] {
     width: 18px;
     height: 18px;
+    margin-bottom: 0;
   }
   table.atum-list-table th.check-column input[type="checkbox"]:before, table.atum-list-table td.check-column input[type="checkbox"]:before, .floatThead-container th.check-column input[type="checkbox"]:before, .floatThead-container td.check-column input[type="checkbox"]:before, .inbound-stock-list th.check-column input[type="checkbox"]:before, .inbound-stock-list td.check-column input[type="checkbox"]:before, table.wp-list-table th.check-column input[type="checkbox"]:before, table.wp-list-table td.check-column input[type="checkbox"]:before {
     margin: -5px -8px;
@@ -8483,6 +8505,34 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   line-height: 1.67;
   font-weight: 400;
   color: var(--atum-text-color-var2);
+}
+
+@media all and (max-width: 480px) {
+  .filter-range-dates-modal {
+    height: 250px;
+  }
+  .filter-range-dates-modal .swal2-title {
+    margin-bottom: 10px;
+  }
+  .filter-range-dates-modal .swal2-content {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+  }
+  .filter-range-dates-modal .swal2-content button {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .filter-range-dates-modal .swal2-content .input-date {
+    margin-right: 0;
+  }
+  .filter-range-dates-modal .swal2-content .input-date input {
+    width: 100%;
+  }
 }
 
 .btn.btn-warning:hover {

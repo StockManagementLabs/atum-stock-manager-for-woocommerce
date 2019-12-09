@@ -4009,7 +4009,7 @@ body .select2-container--default .select2-results__group {
 }
 
 .atum-settings-wrapper #atum-settings .btn {
-  line-height: 1;
+  line-height: 18px;
 }
 
 .atum-settings-wrapper #atum-settings .btn-secondary {

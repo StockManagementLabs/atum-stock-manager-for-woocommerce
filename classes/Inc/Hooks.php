@@ -81,8 +81,8 @@ class Hooks {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
 		// Clean up the ATUM data when a product is deleted from database.
-		add_action( 'woocommerce_delete_product', array( $this, 'after_delete_product' ) );
-		add_action( 'woocommerce_delete_product_variation', array( $this, 'after_delete_product' ) );
+		add_action( 'woocommerce_before_delete_product', array( $this, 'before_delete_product' ) );
+		add_action( 'woocommerce_before_delete_product_variation', array( $this, 'before_delete_product' ) );
 
 		// Save the ATUM product data for all the variations when created from attibutes.
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
@@ -233,9 +233,14 @@ class Hooks {
 				foreach ( $variations as $variation_id ) {
 					
 					$variation_product = wc_get_product( $variation_id ); // We don't need to use ATUM models here.
-					$variation_stock   = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
-					$variation_status  = $variation_product->get_stock_status();
-					$style             = 'color:#a44';
+
+					if ( ! $variation_product instanceof \WC_Product ) {
+						continue;
+					}
+
+					$variation_stock  = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
+					$variation_status = $variation_product->get_stock_status();
+					$style            = 'color:#a44';
 					
 					switch ( $variation_status ) {
 						case 'instock':
@@ -755,7 +760,7 @@ class Hooks {
 	 *
 	 * @param int $product_id
 	 */
-	public function after_delete_product( $product_id ) {
+	public function before_delete_product( $product_id ) {
 
 		$product = Helpers::get_atum_product( $product_id );
 

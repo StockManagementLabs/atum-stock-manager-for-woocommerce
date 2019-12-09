@@ -395,17 +395,11 @@ export default class SettingsPage {
 		const themeSelectedValue: string    = $element.data('value'),
 		      $colorSettingsWrapper: JQuery = this.$settingsWrapper.find('#atum_setting_color_scheme'),
 		      $colorInputs: JQuery          = $colorSettingsWrapper.find(`input.atum-settings-input[data-display='${ themeSelectedValue }']`);
-		
-		console.log('hola');
-		console.log($colorSettingsWrapper.length);
-		console.log($colorInputs.length);
-		
+	
 		$colorInputs.each( (index: number, elem: Element) => {
 			const $elem: JQuery = $(elem);
 			
 			$elem.val($elem.data('default')).change();
-			
-			console.log($elem.val());
 			
 		});
 		

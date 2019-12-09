@@ -6,8 +6,8 @@ Requires at least: 4.4
 Tested up to: 5.3.0
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.8.0
-Stable tag: 1.6.3.1
+WC tested up to: 3.8.1
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.4`
+
+*2019-12-05*
+
+**Changes**
+
+* Set the default value for "atum_controlled" to 1 and disallow NULL.
+* Enhanced jQuery.easytree to accept extra data attributes in nodes.
+
+**Fixes**
+
+* Fixed dragscroll.js didn't allow clicking events on mobiles.
+* Fixed responsive issues on Stock Central.
+* Fixed responsive issues on ATUM's post list tables.
+* Fixed screen options filter not working on mobiles.
+* Fixed wrong product model class name for Subscription Variations.
+* Fixed ATUM product data wasn't being deleted.
+* CSS fixes.
+* Refactory.
 
 ---
 
