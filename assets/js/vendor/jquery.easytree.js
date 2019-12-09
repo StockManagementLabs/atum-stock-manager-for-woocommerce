@@ -37,6 +37,7 @@
 	// node.tooltip = '';
 	// node.uiIcon = '';
 	// node.dataAtts = {};
+	// node.spanCss = '';
 	
 	var EasyTree = function (jQueryContext, options) {
 		
@@ -787,6 +788,11 @@
 			
 			spanCss += getExpCss(node, lastSibling);
 			
+			// ATUM: Allow passing any other custom CSS class name to the nodes via the spanCss prop.
+			if (node.spanCss) {
+				spanCss += ' ' + node.spanCss;
+			}
+			
 			var ico = node.isExpanded ? "e" : "c";
 			if (node.isFolder) {
 				ico += "f";
@@ -1010,7 +1016,6 @@
 			if (data.hasOwnProperty('uiicon')) {
 				node.uiIcon = data.uiicon;
 				delete data.uiicon;
-			
 			}
 			
 			// ATUM: Pass the data atts coming in the HTML to the nodes.
