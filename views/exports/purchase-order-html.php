@@ -84,15 +84,17 @@ use Atum\Inc\Helpers;
 				?>
 				<tr class="po-line">
 					<td class="description"><?php echo esc_html( $item->get_name() ) ?>
+
 						<?php
 						$product = Helpers::get_atum_product( $item->get_product() );
 
 						if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
+
 							$supplier_sku = $product->get_supplier_sku();
 							
 							if ( $supplier_sku ) : ?>
 								<br>
-								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
+								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
 									<?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
 								</span>
 							<?php endif;
@@ -101,11 +103,53 @@ use Atum\Inc\Helpers;
 							
 							if ( $sku ) : ?>
 								<br>
-								<span class="atum-order-item-sku" style="color: #888; font-size: 12px ">
+								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
 									<?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $sku ) ?>
 								</span>
 							<?php endif;
+
 						endif; ?>
+
+						<?php
+						// Show the custom meta.
+						$hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
+							'_qty',
+							'_tax_class',
+							'_product_id',
+							'_variation_id',
+							'_line_subtotal',
+							'_line_subtotal_tax',
+							'_line_total',
+							'_line_tax',
+							'_line_tax_data',
+							'_method_id',
+							'_cost',
+							'_total_tax',
+							'_taxes',
+							'_stock_changed',
+						) );
+
+						$meta_data = $item->get_formatted_meta_data( '' );
+
+						foreach ( $meta_data as $meta_id => $meta ) :
+
+							if ( in_array( $meta->key, $hidden_item_meta, TRUE ) ) :
+								continue;
+							endif;
+
+							$meta_label = $meta->display_key;
+
+							if ( '_order_id' === $meta->display_key ) :
+								$meta_label = esc_html__( 'Order ID', ATUM_TEXT_DOMAIN );
+							endif;
+							?>
+							<br>
+							<span class="atum-order-item-<?php echo esc_attr( $meta->display_key ) ?>" style="color: #888; font-size: 12px;">
+								<?php echo esc_html( $meta_label ) ?>: <?php echo esc_html( wp_strip_all_tags( $meta->display_value ) ) ?>
+							</span>
+
+						<?php endforeach; ?>
+
 					</td>
 					<td class="qty"><?php echo esc_html( $item->get_quantity() ) ?></td>
 					<td class="price"><?php echo wc_price( $po->get_item_subtotal( $item, FALSE, FALSE ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
