@@ -727,8 +727,7 @@ class Settings {
 
 							$values[ $default_value ] = (
 								isset( $input[ $key ] ) && is_array( $input[ $key ] ) &&
-								in_array( $default_value, array_keys( $input[ $key ] ) ) &&
-								'yes' === $input[ $key ][ $default_value ]
+								in_array( $default_value, $input[ $key ] )
 							) ? 'yes' : 'no';
 
 						}
