@@ -150,9 +150,9 @@
   --wp-link-hover: #00A0D2;
   --wp-link-hover-hover: rgba(0, 160, 210, 0.6);
   --wp-link-hover-shadow: rgba(0, 160, 210, 0.2);
-  --wp-input-focus: #5B9DD9;
-  --wp-input-focus-hover: rgba(91, 157, 217, 0.6);
-  --wp-input-focus-shadow: rgba(91, 157, 217, 0.2);
+  --wp-input-focus: #007CBA;
+  --wp-input-focus-hover: rgba(0, 124, 186, 0.6);
+  --wp-input-focus-shadow: rgba(0, 124, 186, 0.2);
   --wp-pink: #E6CCE1;
   --wp-pink-hover: rgba(230, 204, 225, 0.6);
   --wp-pink-shadow: rgba(230, 204, 225, 0.2);
