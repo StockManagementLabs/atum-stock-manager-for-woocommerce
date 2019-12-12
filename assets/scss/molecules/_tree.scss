@@ -62,6 +62,11 @@ ul.easytree-container {
 		outline: none;
 	}
 	
+	.easytree-node {
+		display: flex;
+		align-items: center;
+	}
+	
 	ul {
 		padding: 0 0 0 16px;
 		margin: 0;
@@ -126,7 +131,8 @@ span {
 	&.easytree-empty, &.easytree-vline, &.easytree-expander, &.easytree-icon {
 		width: 16px;
 		height: 16px;
-		font-size: 17px;
+		font-size: 16px;
+		line-height: 1;
 		display: inline-block;
 		vertical-align: top;
 		font-family: $atum-icon-font;

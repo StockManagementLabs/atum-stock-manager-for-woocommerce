@@ -3579,6 +3579,15 @@ ul.easytree-container:focus {
   outline: none;
 }
 
+ul.easytree-container .easytree-node {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 ul.easytree-container ul {
   padding: 0 0 0 16px;
   margin: 0;
@@ -3626,7 +3635,8 @@ ul.easytree-no-connector > li {
 span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-icon {
   width: 16px;
   height: 16px;
-  font-size: 17px;
+  font-size: 16px;
+  line-height: 1;
   display: inline-block;
   vertical-align: top;
   font-family: "atum-icon-font";
