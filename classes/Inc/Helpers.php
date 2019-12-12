@@ -989,7 +989,7 @@ final class Helpers {
 		}
 
 		if ( $allow_theme_override ) {
-			$file = self::locate_template( array( $view ), $file );
+			$file = self::locate_template( [ $file ], $file );
 		}
 
 		// Allow using full paths as view name.
