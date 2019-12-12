@@ -3372,7 +3372,7 @@ body .select2-container--default .select2-results__group {
 }
 
 .product_data .atum-field .select2-container.atum-select2 .select2-selection--single, .product_data .atum-field .select2-container.atum-enhanced-select .select2-selection--single {
-  height: auto;
+  height: 30px;
   margin: 0;
   font-size: 0.875rem;
   border: 1px solid var(--main-border-alt);

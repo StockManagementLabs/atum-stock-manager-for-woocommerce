@@ -70,7 +70,7 @@
 				max-width: calc(80% - 31px) !important;
 				
 				.select2-selection--single {
-					height: auto;
+					height: 30px;
 					margin: 0;
 					font-size: $font-size-base;
 					border: 1px solid var(--main-border-alt);
