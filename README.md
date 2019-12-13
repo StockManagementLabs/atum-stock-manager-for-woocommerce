@@ -187,6 +187,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.5`
+
+*2019-12-13*
+
+**Features**
+
+* Display order item's metadata on exported PO PDF.
+
+**Changes**
+
+* Upgraded to TypeScript 3.7.3.
+* Enhanced jQuery.easytree to accept span classes to be passed as a prop.
+
+**Fixes**
+
+* Check if variation product really exists to avoid problems with corrupted data on stock status texts.
+* Fixed MI Geo prompt's required fields not saved in ATUM Settings.
+* Fixed file path to be able to overwrite ATUM templates on the theme's folder.
+* Prevent "0.00" as discount to be shown on order items eventually.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.6.4`
 
 *2019-12-05*
