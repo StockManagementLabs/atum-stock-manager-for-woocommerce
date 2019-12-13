@@ -98,8 +98,9 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			$currency = $atum_order->get_currency();
 			echo wc_price( $atum_order->get_item_total( $item, FALSE, TRUE ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			$item_discount = wc_format_decimal( $atum_order->get_item_subtotal( $item, FALSE, FALSE ) - $atum_order->get_item_total( $item, FALSE, FALSE ), '' );
+			if ( floatval( $item_discount ) ) : ?>
+				<span class="atum-order-item-discount">-<?php echo wc_price( $item_discount, array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 			<?php endif; ?>
 		</div>
 	</td>
@@ -120,8 +121,9 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 			<?php
 			echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-			if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison ?>
-				<span class="atum-order-item-discount">-<?php echo wc_price( wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' ), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			$total_discount = wc_format_decimal( $item->get_subtotal() - $item->get_total(), '' );
+			if ( floatval( $total_discount ) ) : ?>
+				<span class="atum-order-item-discount">-<?php echo wc_price( $total_discount, array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -164,7 +166,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 						echo '&ndash;';
 					endif;
 
-					if ( $item->get_subtotal() != $item->get_total() ) : // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+					if ( floatval( $total_discount ) ) :
 						if ( '' === $tax_item_total ) : ?>
 							<span class="atum-order-item-discount">&ndash;</span>
 						<?php else : ?>
