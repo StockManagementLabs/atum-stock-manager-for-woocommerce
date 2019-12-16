@@ -3315,7 +3315,7 @@ body .select2-container--default .select2-results__group {
   cursor: text;
 }
 
-.product_data input[type=text]:disabled, .product_data input[type=text]:-moz-read-only, .product_data input[type=number]:disabled, .product_data input[type=number]:-moz-read-only, .product_data textarea:disabled, .product_data textarea:-moz-read-only {
+.product_data input[type=text]:-moz-read-only, .product_data input[type=number]:-moz-read-only, .product_data textarea:-moz-read-only {
   cursor: default;
 }
 
