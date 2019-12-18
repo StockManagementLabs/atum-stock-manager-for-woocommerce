@@ -3661,8 +3661,8 @@ body .select2-container--default .select2-results__group {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 }
 
 .atum-settings-wrapper .atum-nav-header .toogle-menu {
@@ -4072,6 +4072,7 @@ body .select2-container--default .select2-results__group {
 .atum-settings-wrapper #atum-settings .section-title {
   margin-top: 11px;
   border: 1px solid var(--gray-400);
+  border-bottom: none;
   background-color: var(--atum-settings-section-bg);
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
