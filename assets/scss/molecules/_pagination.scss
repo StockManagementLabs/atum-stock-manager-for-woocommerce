@@ -23,8 +23,8 @@
 			box-sizing: border-box;
 			
 			@include tablet-max-wp {
-				width: 35px;
-				height: 35px;
+				min-width: 44px!important;
+				min-height: 44px;
 			}
 		}
 		
@@ -53,6 +53,7 @@
 			background-color: var(--atum-table-bg2);
 			border: 1px solid var(--main-border-alt);
 			color: var(--atum-pagination-disabled);
+			
 		}
 		
 		.tablenav-current-page {
@@ -61,16 +62,19 @@
 			padding: 6px 12px;
 			
 			@include tablet-max-wp {
-				padding: 8px 15px 11px;
+				padding: 13px 18px;
 			}
 		}
 		
-		.paging-input, .table-paging {
+		.table-paging {
 			width: 30px;
 			height: 30px;
 			line-height: 30px;
 			
 			@include tablet-max-wp {
+				width: 44px;
+				height: 44px;
+				line-height: 44px;
 				margin: 0;
 			}
 			@include mobile-max {
@@ -81,23 +85,46 @@
 		
 		@include tablet-max-wp {
 			font-size: 13px;
+			display: flex;
+			
+			.tablenav-pages-navspan {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.tablenav-pages-navspan, .first-page, .prev-page, .next-page {
+				margin-right: 5px;
+			}
+		
+		}
+		
+		@include tablet-max-wp {
+			.paging-input {
+				margin-right: 10px;
+			}
 		}
 		
 		@include mobile-max {
 			width: 100%;
-			display: flex;
-			
-			.tablenav-pages-navspan, .next-page {
-				margin-right: 5px;
+			align-items: center;
+			.paging-input {
+				flex-grow: 1;
+				display: flex;
+				margin-right: 0;
+				
+				> span {
+					width: 100%;
+					text-align: center;
+				}
 			}
+			
 		}
 		
 		.tablenav-paging-text {
 			@include mobile-max{
-				width: auto;
 				float: none;
-				padding: 0;
 				margin-left: auto;
+				padding-top: 0;
 			}
 		}
 	}
@@ -120,8 +147,8 @@
 			}
 			
 			@include tablet-max-wp{
-				width: 35px;
-				height: 35px;
+				min-width: 44px;
+				min-height: 44px;
 			}
 		}
 		

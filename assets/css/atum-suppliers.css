@@ -247,7 +247,7 @@
   --atum-table-link-text: #6c757d;
   --atum-table-row-variation-text: #fff;
   --atum-table-search-submit-bg: #adb5bd;
-  --atum-table-search-text-disabled: #fff;
+  --atum-table-search-text-disabled: #ced4da;
   --atum-table-views-tabs: #6c757d;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
@@ -3059,8 +3059,8 @@ input[type="button"].btn-block {
   height: 90px;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
@@ -3541,8 +3541,8 @@ h2 .atum-help-tip {
 
 @media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page, .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-current-page, #posts-filter .pagination-links #current-page-selector {
-    width: 35px;
-    height: 35px;
+    min-width: 44px !important;
+    min-height: 44px;
   }
 }
 
@@ -3586,24 +3586,27 @@ h2 .atum-help-tip {
 
 @media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page {
-    padding: 8px 15px 11px;
+    padding: 13px 18px;
   }
 }
 
-.atum-list-wrapper .pagination-links .paging-input, #posts-filter .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .paging-input, #posts-filter .pagination-links .table-paging {
+.atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .table-paging {
   width: 30px;
   height: 30px;
   line-height: 30px;
 }
 
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .pagination-links .paging-input, #posts-filter .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .paging-input, #posts-filter .pagination-links .table-paging {
+  .atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .table-paging {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
     margin: 0;
   }
 }
 
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .pagination-links .paging-input, #posts-filter .pagination-links .paging-input, .atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .paging-input, #posts-filter .pagination-links .table-paging {
+  .atum-list-wrapper .pagination-links .table-paging, #posts-filter .pagination-links .table-paging, #posts-filter .pagination-links .table-paging {
     -webkit-box-flex: 1;
         -ms-flex-positive: 1;
             flex-grow: 1;
@@ -3614,27 +3617,59 @@ h2 .atum-help-tip {
 @media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links, #posts-filter .pagination-links, #posts-filter .pagination-links {
     font-size: 13px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .first-page, #posts-filter .pagination-links .first-page, .atum-list-wrapper .pagination-links .prev-page, #posts-filter .pagination-links .prev-page, .atum-list-wrapper .pagination-links .next-page, #posts-filter .pagination-links .next-page, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .first-page, #posts-filter .pagination-links .prev-page, #posts-filter .pagination-links .next-page {
+    margin-right: 5px;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .pagination-links .paging-input, #posts-filter .pagination-links .paging-input, #posts-filter .pagination-links .paging-input {
+    margin-right: 10px;
   }
 }
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .pagination-links, #posts-filter .pagination-links, #posts-filter .pagination-links {
     width: 100%;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .atum-list-wrapper .pagination-links .paging-input, #posts-filter .pagination-links .paging-input, #posts-filter .pagination-links .paging-input {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    margin-right: 0;
   }
-  .atum-list-wrapper .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .tablenav-pages-navspan, .atum-list-wrapper .pagination-links .next-page, #posts-filter .pagination-links .next-page, #posts-filter .pagination-links .tablenav-pages-navspan, #posts-filter .pagination-links .next-page {
-    margin-right: 5px;
+  .atum-list-wrapper .pagination-links .paging-input > span, #posts-filter .pagination-links .paging-input > span, #posts-filter .pagination-links .paging-input > span {
+    width: 100%;
+    text-align: center;
   }
 }
 
 @media all and (max-width: 480px) {
   .atum-list-wrapper .pagination-links .tablenav-paging-text, #posts-filter .pagination-links .tablenav-paging-text, #posts-filter .pagination-links .tablenav-paging-text {
-    width: auto;
     float: none;
-    padding: 0;
     margin-left: auto;
+    padding-top: 0;
   }
 }
 
@@ -3658,8 +3693,8 @@ h2 .atum-help-tip {
 
 @media all and (max-width: 782px) {
   .atum-list-wrapper .tablenav-pages a, #posts-filter .tablenav-pages a, #posts-filter .tablenav-pages a {
-    width: 35px;
-    height: 35px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -3672,6 +3707,7 @@ h2 .atum-help-tip {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    margin: 0;
   }
   #atum-export-link-wrap {
     -webkit-box-ordinal-group: 2;
@@ -3818,13 +3854,7 @@ h2 .atum-help-tip {
           box-shadow: none;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
-  border: none;
-}
-
-@media all and (max-width: 782px) {
-  .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {
-    height: 35px;
-  }
+  border: 1px solid var(--atum-table-bg);
 }
 
 .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit):hover, .wrap input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit).active {
@@ -4271,7 +4301,7 @@ h2 .atum-help-tip {
   border-bottom-left-radius: 0.25rem;
 }
 
-.search-box .atum-post-search, p.search-box .atum-post-search {
+.search-box input.atum-post-search, p.search-box input.atum-post-search {
   margin-right: 0;
   border: none;
   -webkit-box-shadow: none;
@@ -4284,53 +4314,49 @@ h2 .atum-help-tip {
 }
 
 @media all and (max-width: 782px) {
-  .search-box .atum-post-search, p.search-box .atum-post-search {
-    width: 100%;
-  }
-}
-
-@media all and (max-width: 480px) {
-  .search-box .atum-post-search, p.search-box .atum-post-search {
+  .search-box input.atum-post-search, p.search-box input.atum-post-search {
     max-width: inherit;
+    width: 100%;
+    margin-bottom: 0;
   }
 }
 
-.search-box .atum-post-search::-webkit-input-placeholder, p.search-box .atum-post-search::-webkit-input-placeholder {
+.search-box input.atum-post-search::-webkit-input-placeholder, p.search-box input.atum-post-search::-webkit-input-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
 }
 
-.search-box .atum-post-search::-moz-placeholder, p.search-box .atum-post-search::-moz-placeholder {
+.search-box input.atum-post-search::-moz-placeholder, p.search-box input.atum-post-search::-moz-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
 }
 
-.search-box .atum-post-search:-ms-input-placeholder, p.search-box .atum-post-search:-ms-input-placeholder {
+.search-box input.atum-post-search:-ms-input-placeholder, p.search-box input.atum-post-search:-ms-input-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
 }
 
-.search-box .atum-post-search::-ms-input-placeholder, p.search-box .atum-post-search::-ms-input-placeholder {
+.search-box input.atum-post-search::-ms-input-placeholder, p.search-box input.atum-post-search::-ms-input-placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
 }
 
-.search-box .atum-post-search::placeholder, p.search-box .atum-post-search::placeholder {
+.search-box input.atum-post-search::placeholder, p.search-box input.atum-post-search::placeholder {
   color: var(--atum-text-color-var2);
   font-style: italic;
   letter-spacing: normal;
   margin-left: 10px;
 }
 
-.search-box .atum-post-search:focus, .search-box .atum-post-search:active, p.search-box .atum-post-search:focus, p.search-box .atum-post-search:active {
+.search-box input.atum-post-search:focus, .search-box input.atum-post-search:active, p.search-box input.atum-post-search:focus, p.search-box input.atum-post-search:active {
   border: none;
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -4374,6 +4400,12 @@ h2 .atum-help-tip {
   height: 31px;
 }
 
+@media all and (max-width: 782px) {
+  .search-box .input-group-append, p.search-box .input-group-append {
+    height: 42px;
+  }
+}
+
 .search-box .dropdown-toggle, p.search-box .dropdown-toggle {
   width: 100px;
   overflow: hidden;
@@ -4386,7 +4418,6 @@ h2 .atum-help-tip {
   line-height: 15px !important;
   border: none;
   background-color: var(--atum-dropdown-toggle-bg);
-  font-size: 15px;
   color: var(--atum-text-color-var1);
 }
 
@@ -4399,6 +4430,12 @@ h2 .atum-help-tip {
   position: absolute;
   right: 10px;
   top: 9px;
+}
+
+@media all and (max-width: 782px) {
+  .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
+    top: 15px;
+  }
 }
 
 .search-box .dropdown-toggle:focus, .search-box .dropdown-toggle:active, .search-box .dropdown-toggle:hover, p.search-box .dropdown-toggle:focus, p.search-box .dropdown-toggle:active, p.search-box .dropdown-toggle:hover {
@@ -4543,7 +4580,6 @@ h2 .atum-help-tip {
 
 .tablenav .tablenav-pages a:not(.extend-list-table) {
   display: inline-block;
-  border: none;
   padding: 0;
   background: var(--atum-pagination-bg);
   border: 1px solid var(--main-border-alt);
@@ -4559,10 +4595,35 @@ h2 .atum-help-tip {
   color: var(--white) !important;
 }
 
-@media all and (max-width: 480px) {
+@media all and (max-width: 782px) {
   .tablenav .tablenav-pages {
     width: 100%;
     text-align: center;
+  }
+  .tablenav .tablenav-pages a:not(.extend-list-table) {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .tablenav .filters-container-box {
+    -ms-flex-item-align: end;
+        align-self: flex-end;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .tablenav .filters-container-box {
+    -ms-flex-item-align: stretch;
+        align-self: stretch;
   }
 }
 
@@ -4572,7 +4633,12 @@ h2 .atum-help-tip {
 
 @media all and (max-width: 782px) {
   .tablenav #table-paging {
-    margin-left: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
 }
 
@@ -4815,6 +4881,7 @@ h2 .atum-help-tip {
 }
 
 .tablenav.bottom .tablenav-pages {
+  position: relative;
   margin-left: auto;
   margin-bottom: 0;
   z-index: 999;
@@ -4829,11 +4896,25 @@ h2 .atum-help-tip {
 
 .tablenav.bottom .tablenav-pages .displaying-num {
   display: contents;
+  text-align: right;
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.bottom .tablenav-pages .displaying-num {
+    display: block;
+    top: -20px;
+  }
 }
 
 @media all and (max-width: 480px) {
   .tablenav.bottom .tablenav-pages .displaying-num {
     display: none;
+  }
+}
+
+@media all and (max-width: 782px) {
+  .tablenav.bottom .tablenav-pages-container .tablenav-pages {
+    margin-top: 15px;
   }
 }
 
@@ -4862,8 +4943,8 @@ h2 .atum-help-tip {
   overflow: hidden;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background-color: var(--atum-table-bg);
   padding: 0 0 10px;
@@ -5135,9 +5216,16 @@ h2 .atum-help-tip {
   transition: 0.2s ease-in-out;
 }
 
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .reset-filters, #posts-filter .reset-filters {
+    margin-left: 0;
+  }
+}
+
 @media all and (max-width: 480px) {
   .atum-list-wrapper .reset-filters, #posts-filter .reset-filters {
     margin-bottom: 3px;
+    margin-right: 10px;
   }
 }
 
@@ -5175,6 +5263,19 @@ h2 .atum-help-tip {
   }
 }
 
+@media all and (max-width: 782px) {
+  .atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
+    display: block;
+    float: left;
+  }
+  .atum-list-wrapper .actions.bulkactions select, #posts-filter .actions.bulkactions select {
+    width: auto;
+    float: none;
+    display: block;
+    margin: auto;
+  }
+}
+
 @media all and (max-width: 480px) {
   .atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
     width: 100%;
@@ -5201,14 +5302,14 @@ h2 .atum-help-tip {
 
 @media all and (max-width: 782px) {
   .atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
-    height: 35px;
+    height: 44px;
   }
   .atum-list-wrapper .actions input.atum-select2 .select2-selection, #posts-filter .actions input.atum-select2 .select2-selection, .atum-list-wrapper .actions input.atum-select2 .select2-selection__rendered, #posts-filter .actions input.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, #posts-filter .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection, #posts-filter .actions input.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions input.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection, #posts-filter .actions select.atum-select2 .select2-selection, .atum-list-wrapper .actions select.atum-select2 .select2-selection__rendered, #posts-filter .actions select.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, #posts-filter .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection, #posts-filter .actions select.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions select.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection, #posts-filter .actions .select2-container.atum-select2 .select2-selection, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__rendered, #posts-filter .actions .select2-container.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, #posts-filter .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
-    height: 35px;
-    line-height: 35px;
+    height: 44px;
+    line-height: 44px;
   }
   .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, #posts-filter .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, #posts-filter .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, #posts-filter .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
-    top: -2px;
+    top: 1px;
   }
 }
 
@@ -5278,23 +5379,16 @@ h2 .atum-help-tip {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: end;
-        -ms-flex-pack: end;
-            justify-content: flex-end;
     width: 100%;
   }
-  .atum-list-wrapper .search-box input[type="text"], #posts-filter .search-box input[type="text"], .atum-list-wrapper .search-box input[type="number"], #posts-filter .search-box input[type="number"], .atum-list-wrapper .search-box button:not(.reset-filters), #posts-filter .search-box button:not(.reset-filters) {
-    height: 30px;
+  .atum-list-wrapper .search-box .table-style-buttons button, #posts-filter .search-box .table-style-buttons button {
+    width: 44px;
+    height: 44px;
   }
-  .atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
-    display: block;
-    float: left;
-  }
-  .atum-list-wrapper .actions.bulkactions select, #posts-filter .actions.bulkactions select {
-    width: auto;
-    float: none;
-    display: block;
-    margin: auto;
+  .atum-list-wrapper .search-box > .input-group, #posts-filter .search-box > .input-group {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
   }
   .atum-list-wrapper .filter-box, #posts-filter .filter-box {
     display: -webkit-box;
