@@ -469,16 +469,21 @@ class PurchaseOrders extends AtumOrderPostType {
 	public function add_generate_pdf( $actions, $purchase_order ) {
 		
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && ModuleManager::is_module_active( 'data_export' ) ) {
-			$actions['pdf'] = array(
-				'url'    => self::get_pdf_generation_link( $purchase_order->get_id() ),
-				'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
-				'action' => 'pdf',
-				'target' => '_blank',
-				'icon'   => '<i class="atum-icon atmi-pdf"></i>',
-			);
+
+			$actions = array_merge( array(
+				'pdf' => array(
+					'url'    => self::get_pdf_generation_link( $purchase_order->get_id() ),
+					'name'   => __( 'Generate PDF', ATUM_TEXT_DOMAIN ),
+					'action' => 'pdf',
+					'target' => '_blank',
+					'icon'   => '<i class="atum-icon atmi-pdf"></i>',
+				),
+			), $actions );
+
 		}
 		
 		return $actions;
+
 	}
 
 	/**
