@@ -3991,6 +3991,12 @@ h2 .atum-help-tip {
   float: left;
 }
 
+.atum_order_actions li .pdf-link i {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  vertical-align: middle;
+}
+
 .atum_order_actions li .save-atum-order {
   float: right;
 }
@@ -4773,8 +4779,8 @@ ul.atum_order_notes li .note_content::after {
   height: 90px;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
@@ -6441,8 +6447,8 @@ ul.atum_order_notes li .note_content::after {
   overflow: hidden;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background-color: var(--atum-table-bg);
   padding: 0 0 10px;

@@ -4415,8 +4415,8 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   height: 90px;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
@@ -6746,8 +6746,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   overflow: hidden;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background-color: var(--atum-table-bg);
   padding: 0 0 10px;

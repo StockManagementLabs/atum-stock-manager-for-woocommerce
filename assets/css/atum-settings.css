@@ -3440,8 +3440,8 @@ body .select2-container--default .select2-results__group {
   height: 90px;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background: var(--atum-expanded-bg) url("../images/stock-central/bg-footer.png") no-repeat center 81%;
   background-size: cover;
@@ -3606,8 +3606,8 @@ body .select2-container--default .select2-results__group {
   height: 44px;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background-color: var(--blue-dark-lighten);
   color: var(--white);
@@ -3633,8 +3633,8 @@ body .select2-container--default .select2-results__group {
   border: none;
   border-radius: 5px;
   background-color: var(--white);
-  -webkit-box-shadow: 0 4px 0 0 var(--gray-200);
-          box-shadow: 0 4px 0 0 var(--gray-200);
+  -webkit-box-shadow: 0 4px 0 0 var(--gray-400);
+          box-shadow: 0 4px 0 0 var(--gray-400);
   border: 1px solid var(--gray-400);
   background-color: var(--atum-settings-nav-bg);
   position: relative;
