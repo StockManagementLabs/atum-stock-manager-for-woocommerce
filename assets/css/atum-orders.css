@@ -4026,6 +4026,12 @@ h2 .atum-help-tip {
   float: left;
 }
 
+.atum_order_actions li .pdf-link i {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  vertical-align: middle;
+}
+
 .atum_order_actions li .save-atum-order {
   float: right;
 }
