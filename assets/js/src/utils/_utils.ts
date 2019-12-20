@@ -209,6 +209,26 @@ export let Utils = {
 		
 		// If we made it this far, objects are considered equivalent.
 		return true;
+	},
+	
+	/**
+	 * Toggle easytree nodes
+	 *
+	 * @param {any[]}  nodes
+	 * @param {string} openOrClose
+	 */
+	toggleNodes(nodes: any[], openOrClose: string){
+		
+		for (let i = 0; i < nodes.length; i++) {
+			
+			nodes[i].isExpanded = openOrClose == 'open'; // Either expand node or don't
+			
+			// If has children open/close those as well.
+			if (nodes[i].children && nodes[i].children.length > 0) {
+				this.toggleNodes(nodes[i].children, openOrClose);
+			}
+			
+		}
 	}
 	
 }
