@@ -58,6 +58,8 @@ trait AtumDataStoreCommonTrait {
 			'lost_sales',
 			'has_location',
 			'update_date',
+			'atum_stock_status',
+			'low_stock',
 		) );
 
 		// Columns data need to be converted to datetime.
@@ -71,6 +73,7 @@ trait AtumDataStoreCommonTrait {
 			'atum_controlled',
 			'inheritable',
 			'has_location',
+			'low_stock',
 		) );
 
 		// Values which can be null in the database.

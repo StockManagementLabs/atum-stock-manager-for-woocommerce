@@ -65,10 +65,13 @@ class AtumProductData {
 		'has_location'        => [ 'get', 'update' ],
 		'update_date'         => [ 'get', 'update' ],
 		'atum_locations'      => [ 'get', 'update' ],
+		'atum_stock_status'   => [ 'get', 'update' ],
+		'low_stock'           => [ 'get', 'update' ],
+
 	);
 
 	/**
-	 * Internal meta keys that shoudln't appear on the product's meta_data
+	 * Internal meta keys that shouldn't appear on the product's meta_data
 	 *
 	 * @var array
 	 */
@@ -316,6 +319,16 @@ class AtumProductData {
 						),
 					),
 				),
+			),
+			'atum_stock_status'   => array(
+				'required'    => FALSE,
+				'description' => __( 'Used to store the stock status (same as WC) but both values may differ for MI enable products.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'string',
+			),
+			'low_stock'           => array(
+				'required'    => FALSE,
+				'description' => __( 'Indicates whether the stock will run out before reordered or not.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'boolean',
 			),
 		);
 

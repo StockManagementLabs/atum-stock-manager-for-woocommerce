@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Settings\Settings;
+use Symfony\Component\Console\Helper\Helper;
 
 
 class Hooks {
@@ -134,6 +135,9 @@ class Hooks {
 
 		// Get rid of the Update Date on products once an Order is saved to make the appropriate calculations again.
 		add_action( 'woocommerce_after_order_object_save', array( $this, 'clean_up_update_date' ), 10, 2 );
+
+		// Update atum_stock_status and low_stock if needed.
+		add_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_calc_fields' ), 10, 2 );
 
 	}
 
@@ -811,6 +815,46 @@ class Hooks {
 				$product->save_atum_data();
 			}
 
+		}
+
+	}
+
+	/**
+	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param \WC_Product                $product
+	 * @param \WC_Product_Data_Store_CPT $data_store
+	 */
+	public function update_atum_calc_fields( $product, $data_store ) {
+
+		$product = Helpers::get_atum_product( $product );
+
+		if ( $product instanceof \WC_Product ) {
+
+			$update = FALSE;
+
+			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+			$stock_status = $product->get_stock_status();
+			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+
+			if ( $product->get_atum_stock_status() !== $stock_status ) {
+				$product->set_atum_stock_status( $stock_status );
+				$update = TRUE;
+			}
+
+			$low = wc_bool_to_string( Helpers::is_product_low_stock( $product ) );
+
+			if ( $product->get_low_stock() !== $low ) {
+				$product->set_low_stock( $low );
+				$update = TRUE;
+			}
+
+			if ( $update ) {
+
+				$product->save_atum_data();
+			}
 		}
 
 	}
