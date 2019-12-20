@@ -2898,6 +2898,9 @@ final class Helpers {
 				break;
 		}
 
+		$product->set_low_stock( self::is_product_low_stock( $product ) );
+		$product->set_atum_stock_status( $product->get_stock_status() );
+
 		$product->save_atum_data();
 
 	}
@@ -2948,11 +2951,11 @@ final class Helpers {
 				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
 				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date$fields)
+				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
 			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
 			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date$fields
+			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
 			FROM $atum_product_data_table WHERE product_id = $original_id;
 		" );
 		// phpcs:enable
@@ -2996,6 +2999,35 @@ final class Helpers {
 		$current_url = wp_parse_url( add_query_arg( [] ) );
 
 		return strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
+
+	}
+
+
+	/**
+	 * Get if a product is low of stock: There're enough stock to fulfill the next "days to reorder" days expected sales.
+	 * TODO: Perhaps change the static 7 days sales average by a setting.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param \WC_Product|AtumProductTrait $product
+	 *
+	 * @return boolean
+	 */
+	public static function is_product_low_stock( $product ) {
+
+		// sale_day option means actually Days to reorder.
+		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
+		$current_time    = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+
+		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
+
+			$expected_sales = self::get_sold_last_days( $product->get_id(), "$current_time -7 days", $current_time ) / 7 * $days_to_reorder;
+
+			return $expected_sales > $product->get_stock_quantity();
+
+		}
+
+		return FALSE;
 
 	}
 	
