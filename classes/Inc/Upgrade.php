@@ -41,7 +41,7 @@ class Upgrade {
 	public function __construct( $db_version ) {
 
 		$this->current_atum_version = $db_version;
-		
+
 		// Update the db version to the current ATUM version before upgrade to prevent various executions.
 		update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
 
@@ -73,7 +73,7 @@ class Upgrade {
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
 			$this->add_default_hidden_columns();
 		}
-		
+
 		// ** version 1.4.18.2. Removed date_i18n function.Check if post meta values contains not latins characters.
 		if ( version_compare( $db_version, '1.4.18.2', '<' ) ) {
 			$this->check_post_meta_values();
@@ -103,6 +103,12 @@ class Upgrade {
 		// ** version 1.6.3.2 ** Set the default for atum_controlled and disallow NULL.
 		if ( version_compare( $db_version, '1.6.3.2', '<' ) ) {
 			$this->alter_atum_controlled_column();
+		}
+
+		// ** version 1.6.6 ** Add stock status and low stock calculated fields to ATUM data.
+		if ( version_compare( $db_version, '1.6.6', '<' ) ) {
+			$this->add_atum_stock_fields();
+			add_action( 'atum/after_init', array( $this, 'fill_new_fields_values' ) );
 		}
 
 		/**********************
@@ -455,21 +461,21 @@ class Upgrade {
 		}
 
 	}
-	
+
 	/**
 	 * Update PO status completed to received.
 	 *
 	 * @since 1.5.0
 	 */
 	private function update_po_status() {
-		
+
 		global $wpdb;
-		
+
 		$wpdb->update( $wpdb->posts, [ 'post_status' => ATUM_PREFIX . 'received' ], [
 			'post_status' => ATUM_PREFIX . 'completed',
 			'post_type'   => PurchaseOrders::get_post_type(),
 		] );
-		
+
 		$sql = "
 			UPDATE $wpdb->postmeta pm
 			INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
@@ -477,9 +483,9 @@ class Upgrade {
 			WHERE p.post_type='atum_purchase_order' AND
 			pm.meta_key = '_status' AND pm.meta_value = 'completed'
 		";
-		
+
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		
+
 	}
 
 	/**
@@ -622,7 +628,99 @@ class Upgrade {
 		$wpdb->query( "ALTER TABLE $atum_data_table MODIFY `atum_controlled` TINYINT(1) NOT NULL DEFAULT '1';" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 	}
-	
+
+	/**
+	 * Modify the stock count inventory fields from bigint to double
+	 *
+	 * @since 1.6.6
+	 */
+	private function add_atum_stock_fields() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$columns         = array(
+			ATUM_PREFIX . 'stock_status' => array(
+				'type'    => 'VARCHAR(15)',
+				'default' => "'instock'",
+			),
+			'low_stock'                  => array(
+				'type'    => 'TINYINT(1)',
+				'default' => '0',
+			),
+		);
+
+		foreach ( $columns as $column_name => $props ) {
+
+			// Avoid adding the column if was already added.
+			$column_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
+			', $db_name, $atum_data_table, $column_name );
+
+			// Add the new column to the table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			if ( ! $wpdb->get_var( $column_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$props[ 'type' ]} NOT NULL DEFAULT {$props[ 'default' ]};" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			}
+			else {
+				$wpdb->query( "ALTER TABLE $atum_data_table MODIFY `$column_name` {$props[ 'type' ]} NOT NULL DEFAULT {$props[ 'default' ]};" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			}
+
+		}
+
+	}
+
+	/**
+	 * Update the ATUM Stock Status and Low Stock fields.
+	 *
+	 * @since 1.6.6
+	 */
+	public static function fill_new_fields_values() {
+
+		global $wpdb;
+
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$product_statuses = array(
+			'instock'     => [],
+			'outofstock'  => [],
+			'onbackorder' => [],
+
+		);
+
+		$ids = $wpdb->get_col( "SELECT product_id FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( $ids ) {
+			foreach ( $ids as $id ) {
+
+				$product = Helpers::get_atum_product( $id );
+
+				if ( $product instanceof \WC_Product ) {
+					$product_statuses[ $product->get_stock_status() ][] = $id;
+
+					$low_stock = Helpers::is_product_low_stock( $product );
+
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					$wpdb->query( $wpdb->prepare( 'UPDATE ' . $atum_product_data_table . ' SET low_stock = %1$d
+					WHERE product_id = %2$d  ', $low_stock, $product->get_id() ) );
+				}
+			}
+		}
+
+		foreach ( $product_statuses as $status => $products_ids ) {
+
+			if ( $products_ids ) {
+
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$wpdb->query( $wpdb->prepare( "UPDATE $atum_product_data_table SET atum_stock_status = %s
+					WHERE product_id IN(" . implode( ',', $products_ids ) . ')', $status ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			}
+		}
+
+	}
+
 	/**
 	 * Create the table for the ATUM Logs
 	 *
@@ -647,14 +745,14 @@ class Upgrade {
 			$sql = "
 			CREATE TABLE $log_table (
 				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		  		ref VARCHAR(256) NOT NULL,			
-			  	user_id BIGINT DEFAULT NULL,			  
+		  		ref VARCHAR(256) NOT NULL,
+			  	user_id BIGINT DEFAULT NULL,
 				type VARCHAR(64) DEFAULT NULL,
 				source VARCHAR(256) DEFAULT NULL,
-				time BIGINT DEFAULT NULL,			  
+				time BIGINT DEFAULT NULL,
 				entry LONGTEXT,
 				status INT(11) DEFAULT '0',
-				data LONGTEXT,			
+				data LONGTEXT,
 			  	PRIMARY KEY (id),
 			  	UNIQUE KEY id (id)
 			) $collate;
