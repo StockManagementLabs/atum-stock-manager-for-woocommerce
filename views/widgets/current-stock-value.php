@@ -28,6 +28,7 @@ use Atum\Dashboard\WidgetHelpers;
 		// Product type filtering.
 		echo WidgetHelpers::product_types_dropdown( '', 'product-types-list' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
+		do_action( 'atum/dashboard/current_stock_value_widget/after_filters' );
 		?>
 	</div>
 
