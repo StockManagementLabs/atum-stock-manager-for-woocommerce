@@ -281,6 +281,7 @@ final class Ajax {
 		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
 
 		$current_stock_values = WidgetHelpers::get_items_in_stock( $_POST['categorySelected'], $_POST['productTypeSelected'] );
+		$current_stock_values = array_map( 'strval', $current_stock_values ); // Avoid issues with decimals when encoding to JSON.
 
 		wp_send_json_success( compact( 'current_stock_values' ) );
 
