@@ -2076,13 +2076,18 @@ final class Helpers {
 		global $wpdb;
 		$wpdb->hide_errors();
 
-		if ( $product && $product instanceof \WC_Product ) {
+		if ( $product instanceof \WC_Product ) {
 
 			if ( $clean_meta ) {
 				$product->set_out_stock_threshold( NULL );
 			}
 
 			if ( $product->managing_stock() ) {
+
+				// Force a stock quantity change to ensure the stock status is correctly updated.
+				$current_stock = $product->get_stock_quantity();
+				$product->set_stock_quantity( $current_stock + 1 );
+				$product->set_stock_quantity( $current_stock ); // Restore the value.
 
 				// Trigger the "Out of Stock threshold" hooks.
 				if ( $product->is_type( 'variation' ) ) {
