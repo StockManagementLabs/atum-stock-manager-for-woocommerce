@@ -31,6 +31,10 @@
 		
 		.input-group-prepend {
 			@include border-left-radius(4px);
+			
+			&.focus {
+				box-shadow: 0 0 0 1px $input-focus;
+			}
 		}
 		
 		.input-group-text {
@@ -44,7 +48,7 @@
 			border: 1px solid var(--main-border-alt);
 			
 			&:focus {
-				box-shadow: none;
+				box-shadow: 0 0 0 1px $input-focus;
 				border-color: $input-focus;
 			}
 		}
@@ -84,7 +88,11 @@
 					}
 					
 					.select2-selection__arrow {
-						height: 25px;
+						height: 31px;
+						
+						&:after {
+							display: none;
+						}
 					}
 					
 					&:focus {
@@ -93,6 +101,7 @@
 				}
 				
 			}
+			
 		}
 		
 	}

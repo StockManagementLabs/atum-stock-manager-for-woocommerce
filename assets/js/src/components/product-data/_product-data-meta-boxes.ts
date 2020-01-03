@@ -101,6 +101,11 @@ export default class ProductDataMetaBoxes {
 			
 		});
 		
+		// Activate the focus for ATUM fields.
+		this.$productDataMetaBox
+			.on('focus select2:opening', '.atum-field :input', (evt: JQueryEventObject) => $(evt.target).siblings('.input-group-prepend').addClass('focus') )
+			.on('blur select2:close', '.atum-field :input', (evt: JQueryEventObject) => $(evt.target).siblings('.input-group-prepend').removeClass('focus') );
+		
 	}
 	
 }
