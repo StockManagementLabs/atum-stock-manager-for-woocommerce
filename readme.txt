@@ -7,7 +7,7 @@ Tested up to: 5.3.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.8.1
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.6`
+
+*2020-01-03*
+
+**Features**
+
+* Added the "Generate PDF" button within POs.
+* Add "atum_stock_status" and "low_stock" calculated fields to ATUM's product data table.
+
+**Changes**
+
+* Updated dependency versions.
+* Added custom trigger after reloading the ATUM order items.
+* Switched the PO's PDF icon position.
+
+**Fixes**
+
+* Fixed order items not reloading when cancel editing.
+* CSS fixes.
 
 ---
 
