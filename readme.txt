@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.3.0
+Tested up to: 5.3.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.8.1
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.5`
+
+*2019-12-13*
+
+**Features**
+
+* Display order item's metadata on exported PO PDF.
+
+**Changes**
+
+* Upgraded to TypeScript 3.7.3.
+* Enhanced jQuery.easytree to accept span classes to be passed as a prop.
+
+**Fixes**
+
+* Check if variation product really exists to avoid problems with corrupted data on stock status texts.
+* Fixed MI Geo prompt's required fields not saved in ATUM Settings.
+* Fixed file path to be able to overwrite ATUM templates on the theme's folder.
+* Prevent "0.00" as discount to be shown on order items eventually.
+* CSS fixes.
+* Refactory.
 
 ---
 

@@ -200,6 +200,8 @@ export default class AtumOrders {
 					callback();
 				}
 				
+				this.$container.trigger('atum-after-loading-order-items');
+				
 			}
 		});
 		

@@ -210,7 +210,8 @@ final class AtumCache {
 	 * @param int    $expiration    Optional. Time until expiration in seconds. By default is set to 0 (does not expire).
 	 * @param bool   $force         Optional. If set to TRUE, will set the transient in debug mode too.
 	 *
-	 * @return bool  FALSE if value was not set or TRUE if value was set
+	 * @return bool  FALSE if value was not set or TRUE if value was set.
+	 * NOTE: When updating a transient, if the old and new values are identical, it'll return FALSE too.
 	 */
 	public static function set_transient( $transient_key, $value, $expiration = 0, $force = FALSE ) {
 

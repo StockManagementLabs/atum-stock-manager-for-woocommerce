@@ -31,7 +31,8 @@ trait AtumProductTrait {
 		'purchase_price'        => '',
 		'supplier_id'           => 0,
 		'supplier_sku'          => '',
-		'atum_controlled'       => TRUE, // When a new product is created, the ATUM controlled should be enabled by default.
+		'atum_controlled'       => TRUE,
+		// When a new product is created, the ATUM controlled should be enabled by default.
 		'out_stock_date'        => NULL,
 		'out_stock_threshold'   => '',
 		'inheritable'           => FALSE,
@@ -48,6 +49,8 @@ trait AtumProductTrait {
 		'lost_sales'            => NULL,
 		'has_location'          => NULL,
 		'update_date'           => NULL,
+		'atum_stock_status'     => NULL,
+		'low_stock'             => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,
 		'available_to_purchase' => NULL,
@@ -323,6 +326,33 @@ trait AtumProductTrait {
 	 */
 	public function get_update_date( $context = 'view' ) {
 		return $this->get_prop( 'update_date', $context );
+	}
+
+	/**
+	 * Returns the ATUM stock status.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_atum_stock_status( $context = 'view' ) {
+		return $this->get_prop( 'atum_stock_status', $context );
+	}
+
+	/**
+	 * Returns the Low Stock indicator.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return boolean
+	 */
+	public function get_low_stock( $context = 'view' ) {
+		$low_stock = $this->get_prop( 'low_stock', $context );
+		return wc_bool_to_string( $low_stock );
 	}
 
 
@@ -635,6 +665,33 @@ trait AtumProductTrait {
 		$this->set_date_prop( 'update_date', $update_date );
 	}
 
+	/** Set customer returns for the current product.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param string $atum_stock_status
+	 */
+	public function set_atum_stock_status( $atum_stock_status = 'instock' ) {
+		$valid_statuses = wc_get_product_stock_status_options();
+
+		if ( isset( $valid_statuses[ $atum_stock_status ] ) ) {
+			$this->set_prop( 'atum_stock_status', $atum_stock_status );
+		}
+		else {
+			$this->set_prop( 'atum_stock_status', 'instock' );
+		}
+	}
+
+	/**
+	 * Set whether the product has low stock or not.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param string|bool $low_stock
+	 */
+	public function set_low_stock( $low_stock ) {
+		$this->set_prop( 'low_stock', wc_string_to_bool( $low_stock ) );
+	}
 
 	/****************************************
 	 * EXTRA SETTERS USED BY PREMIUM ADD-ONS

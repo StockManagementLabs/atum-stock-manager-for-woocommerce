@@ -94,7 +94,6 @@ body {
 				user-select: none;
 				
 				.select2-selection__rendered {
-					display: inline-block;
 					padding-left: 8px;
 					@include text-overflow;
 				}
@@ -541,7 +540,6 @@ body {
 			
 			&.select2-results__message {
 				line-height: 1.3;
-				text-align: center;
 			}
 			
 			.select2-results__option {

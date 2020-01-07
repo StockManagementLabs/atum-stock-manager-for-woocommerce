@@ -234,7 +234,7 @@ class ProductDataMetaBoxes {
 	}
 
 	/**
-	 * Add the individual out stock threshold field to WC's WC's product data meta box
+	 * Add the individual out stock threshold field to WC's product data meta box
 	 *
 	 * @since 1.4.10
 	 *
@@ -294,7 +294,7 @@ class ProductDataMetaBoxes {
 		$out_stock_threshold = $this->is_variation ? $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ][ $this->loop ] : $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ];
 
 		// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-		if ( $out_stock_threshold ) {
+		if ( (float) $this->product->get_out_stock_threshold() !== (float) $out_stock_threshold ) {
 			Helpers::force_rebuild_stock_status( $this->product );
 		}
 

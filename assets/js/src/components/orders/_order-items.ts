@@ -56,7 +56,7 @@ export default class AtumOrderItems {
 		$('.atum-order-edit-line-item .atum-order-edit-line-item-actions').show();
 		
 		// Reload the items
-		if ( 'true' === $(evt.currentTarget).data('reload') ) {
+		if ( true === $(evt.currentTarget).data('reload') ) {
 			this.atumOrders.reloadItems();
 		}
 		
