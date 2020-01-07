@@ -3392,7 +3392,10 @@ body .select2-container--default .select2-results__group {
 }
 
 .product_data .atum-field .select2-container.atum-select2 .select2-selection--single .select2-selection__arrow, .product_data .atum-field .select2-container.atum-enhanced-select .select2-selection--single .select2-selection__arrow {
-  height: 31px;
+  height: 24px;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+  background-size: 16px 16px;
+  width: 28px;
 }
 
 .product_data .atum-field .select2-container.atum-select2 .select2-selection--single .select2-selection__arrow:after, .product_data .atum-field .select2-container.atum-enhanced-select .select2-selection--single .select2-selection__arrow:after {
@@ -3435,12 +3438,12 @@ body .select2-container--default .select2-results__group {
   height: 38px;
 }
 
-.woocommerce_variations .form-row-first .atum-field .select2-container .select2-selection__rendered, .woocommerce_variations .form-row-last .atum-field .select2-container .select2-selection__rendered {
-  line-height: 2.5 !important;
+.woocommerce_variations .form-row-first .atum-field .select2-container .select2-selection__arrow, .woocommerce_variations .form-row-last .atum-field .select2-container .select2-selection__arrow {
+  height: 31px !important;
 }
 
-.woocommerce_variations .form-row-first .atum-field .select2-container .select2-selection__arrow:after, .woocommerce_variations .form-row-last .atum-field .select2-container .select2-selection__arrow:after {
-  line-height: 32px;
+.woocommerce_variations .form-row-first .atum-field .select2-container .select2-selection__rendered, .woocommerce_variations .form-row-last .atum-field .select2-container .select2-selection__rendered {
+  line-height: 2.5 !important;
 }
 
 .woocommerce_variations .form-row-first .atum-field .select2-container .select2-selection__clear:after, .woocommerce_variations .form-row-last .atum-field .select2-container .select2-selection__clear:after {
