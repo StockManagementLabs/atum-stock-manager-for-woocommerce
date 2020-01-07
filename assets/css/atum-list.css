@@ -3272,7 +3272,7 @@ body .select2-container--default .select2-results__group {
   border: 1px solid var(--gray-200);
   font-size: 15px;
   line-height: 1.47px;
-  text-align: right;
+  text-align: left;
   color: var(--atum-text-color-var1);
   -webkit-box-shadow: none;
           box-shadow: none;
