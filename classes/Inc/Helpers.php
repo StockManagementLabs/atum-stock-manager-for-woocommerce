@@ -3017,7 +3017,7 @@ final class Helpers {
 
 
 	/**
-	 * Get if a product is low of stock: There're enough stock to fulfill the next "days to reorder" days expected sales.
+	 * Get if a product is low of stock: There's insufficient stock to fulfill the next "days to reorder" days expected sales.
 	 * TODO: Perhaps change the static 7 days sales average by a setting.
 	 *
 	 * @since 1.6.6
