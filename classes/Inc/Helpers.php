@@ -2031,6 +2031,11 @@ final class Helpers {
 		}
 		
 		$product->save();
+
+		// Trigger the "after_save_purchase_price" hook is needed if the PL's sync purchase price option is enabled.
+		if ( array_key_exists( substr( Globals::PURCHASE_PRICE_KEY, 1 ), $product_data ) ) {
+			do_action( 'atum/product_data/after_save_purchase_price', $product_id, $product_data[ substr( Globals::PURCHASE_PRICE_KEY, 1 ) ], NULL );
+		}
 		
 		if ( ! $skip_action ) {
 			do_action( 'atum/product_data_updated', $product_id, $product_data );
