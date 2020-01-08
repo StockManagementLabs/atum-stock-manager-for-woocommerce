@@ -2040,7 +2040,10 @@ final class Helpers {
 		if ( ! $skip_action ) {
 			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
-		
+
+		// Run all the hooks that are triggered after a product is saved.
+		do_action( 'atum/product_data/after_save_data', $product_data, $product );
+
 	}
 	
 	/**
