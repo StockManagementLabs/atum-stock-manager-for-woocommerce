@@ -1486,13 +1486,14 @@ abstract class AtumListTable extends \WP_List_Table {
 				$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
 			}
 
+			$content = apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this );
+
 		}
 
-		$stock_indicator = apply_filters( 'atum/list_table/column_stock_indicator', $content, $item, $this->product, $this );
-		$classes         = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
-		$classes         = $classes ? ' class="' . $classes . '"' : '';
+		$classes = apply_filters( 'atum/list_table/column_stock_indicator_classes', $classes, $this->product );
+		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . $data . $classes . '>' . $stock_indicator . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<td ' . $data . $classes . '>' . $content . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -2136,6 +2137,8 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( ! empty( $post_ids ) ) {
 						
 						$get_parents = FALSE;
+						$parents     = array();
+
 						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
 							
 							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
@@ -2176,7 +2179,6 @@ abstract class AtumListTable extends \WP_List_Table {
 								$parents = array_merge( $parents, $grouped_parents );
 
 							}
-
 
 						}
 						
@@ -2685,14 +2687,14 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'CHAR',
 			);
 
-			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->wc_query_data, $this->atum_query_data ) );
+			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $products_args, $this->wc_query_data, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 			
 			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 
 				// Pass through the WC query data filter (new tables).
 				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
+				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
@@ -4492,7 +4494,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		global $wpdb;
 
-
 		$like_clauses = [];
 
 		foreach ( $product_ids as $product_id ) {
@@ -4502,8 +4503,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$grouped_sql = "
 			SELECT DISTINCT post_id FROM $wpdb->postmeta 		
 			WHERE post_id IN (" . implode( ',', $this->container_products['grouped'] ) . ")
-			AND meta_key = '_children' AND ( " . implode( ' OR ', $like_clauses ) . ")	
-		";
+			AND meta_key = '_children' AND ( " . implode( ' OR ', $like_clauses ) . ')	
+		';
 
 		return $like_clauses ? $wpdb->get_col( $grouped_sql ) : []; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
