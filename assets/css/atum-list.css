@@ -6306,19 +6306,19 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
-  vertical-align: middle;
-  font-family: "atum-icon-font";
-  content: "";
-  display: inline;
-  font-size: 10px;
+  content: '';
+  height: 24px;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+  background-size: 16px 16px;
+  width: 28px;
   position: absolute;
-  right: 10px;
-  top: 9px;
+  right: 0;
+  top: 5px;
 }
 
 @media all and (max-width: 782px) {
   .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
-    top: 15px;
+    top: 9px;
   }
 }
 
@@ -7182,6 +7182,17 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   height: 30px;
   margin: 0 0 0 5px;
   float: none;
+}
+
+.atum-list-wrapper .actions input .select2-selection__arrow, #posts-filter .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection__arrow, #posts-filter .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection__arrow, #posts-filter .actions .select2-container .select2-selection__arrow {
+  height: 24px;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+  background-size: 16px 16px;
+  width: 28px;
+}
+
+.atum-list-wrapper .actions input .select2-selection__arrow:after, #posts-filter .actions input .select2-selection__arrow:after, .atum-list-wrapper .actions select .select2-selection__arrow:after, #posts-filter .actions select .select2-selection__arrow:after, .atum-list-wrapper .actions .select2-container .select2-selection__arrow:after, #posts-filter .actions .select2-container .select2-selection__arrow:after {
+  display: none;
 }
 
 @media all and (max-width: 782px) {

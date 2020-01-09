@@ -589,16 +589,14 @@
 		color: var(--atum-text-color-var1);
 		
 		&:after {
-			vertical-align: middle;
-			font-family: $atum-icon-font;
-			content: $atmi-chevron-down;
-			display: inline;
-			font-size: 10px;
+			content: '';
+			@include dropdown-arrow;
 			position: absolute;
-			right: 10px;
-			top: 9px;
+			right: 0;
+			top: 5px;
+			
 			@include tablet-max-wp{
-				top: 15px;
+				top: 9px;
 			}
 		}
 		
@@ -673,7 +671,6 @@
 		}
 		
 	}
-	
 	
 	.show-filters-wrapper {
 		display: none;
@@ -1366,6 +1363,14 @@
 			margin: 0 0 0 5px;
 			float: none;
 			
+			.select2-selection__arrow {
+				@include dropdown-arrow;
+				
+				&:after {
+					display: none;
+				}
+			}
+			
 			@include tablet-max-wp {
 				height: 44px;
 				
@@ -1374,6 +1379,7 @@
 						height: 44px;
 						line-height: 44px;
 					}
+					
 					.select2-selection__arrow {
 						top: 1px;
 					}
