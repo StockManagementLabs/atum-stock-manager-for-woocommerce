@@ -233,17 +233,34 @@ trait ListTableLegacyTrait {
 						// Add the parent products again to the query.
 						if ( $get_parents ) {
 
-							$parents = $this->get_parents( $post_ids );
+							$parents = $this->get_variation_parents( $post_ids );
 
 							// Exclude the parents with no children.
 							// For example: the current list may have the "Out of stock" filter applied and a variable product
-							// may have all of its variations in stock, but its own stock could be 0. The shouldn't appear empty.
+							// may have all of its variations in stock, but its own stock could be 0. It shouldn't appear empty.
 							$empty_variables = array_diff( $this->container_products['variable'], $parents );
 
 							foreach ( $empty_variables as $empty_variable ) {
 								if ( in_array( $empty_variable, $post_ids ) ) {
 									unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
 								}
+							}
+
+							// Get the Grouped parents.
+							if ( ! empty( $this->container_products['grouped'] ) ) {
+
+								$grouped_parents = $this->get_grouped_parents( $post_ids );
+
+								$empty_grouped_parents = array_diff( $this->container_products['grouped'], $parents );
+
+								foreach ( $empty_grouped_parents as $empty_grouped ) {
+									if ( in_array( $empty_grouped, $post_ids ) ) {
+										unset( $post_ids[ array_search( $empty_grouped, $post_ids ) ] );
+									}
+								}
+
+								$parents = array_merge( $parents, $grouped_parents );
+
 							}
 
 							$args['post__in'] = array_merge( $parents, $post_ids );
@@ -525,31 +542,42 @@ trait ListTableLegacyTrait {
 			}
 
 			/*
-			 * Products in stock
+			 * Products args.
 			 */
-			$in_stock_args = array(
+			$products_args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
-				'meta_query'     => array(
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '>',
-					),
-				),
 				'post__in'       => $products,
 			);
 
-			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', array_merge( $in_stock_args, $this->atum_query_data ) );
+			$temp_atum_query_data = $this->atum_query_data;
+
+			/*
+			 * Products in stock.
+			 */
+			if ( ! empty( $this->atum_query_data['where'] ) ) {
+				$this->atum_query_data['where']['relation'] = 'AND';
+			}
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'atum_stock_status',
+				'value' => 'instock',
+				'type'  => 'CHAR',
+			);
+
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', array_merge( $products_args, $this->atum_query_data ) );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) ) {
 				// As this query does not contain ATUM params, doesn't need the filters.
-				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $in_stock_args ) );
+				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $products_args ) );
+				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
 			}
+
+			$this->atum_query_data = $temp_atum_query_data;
 
 			$products_in_stock = $products_in_stock->posts;
 
@@ -559,43 +587,35 @@ trait ListTableLegacyTrait {
 			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
 
 			/**
-			 * Products on Back Order
+			 * Products on Back Order.
 			 */
-			$back_order_args = array(
-				'post_type'      => $post_types,
-				'posts_per_page' => - 1,
-				'fields'         => 'ids',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '<=',
-					),
-					array(
-						'key'     => '_backorders',
-						'value'   => array( 'yes', 'notify' ),
-						'type'    => 'char',
-						'compare' => 'IN',
-					),
+			$products_args['post__in'] = $products_not_stock;
 
-				),
-				'post__in'       => $products_not_stock,
+			if ( ! empty( $this->atum_query_data['where'] ) ) {
+				$this->atum_query_data['where']['relation'] = 'AND';
+			}
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'atum_stock_status',
+				'value' => 'onbackorder',
+				'type'  => 'CHAR',
 			);
 
-			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $back_order_args, $this->atum_query_data ) );
+			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $products_args, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
 
 			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
-				// As this query does not contain ATUM params, doesn't need the filters.
-				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $back_order_args ) );
+				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $products_args ) );
+				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$products_back_order = $products_back_order->posts;
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
 			}
 			else {
 				$products_back_order = array();
 			}
+
+			$this->atum_query_data = $temp_atum_query_data;
 
 			$this->id_views['back_order']          = (array) $products_back_order;
 			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
