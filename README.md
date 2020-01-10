@@ -187,6 +187,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.6`
+
+*2020-01-03*
+
+**Features**
+
+* Added the "Generate PDF" button within POs.
+* Add "atum_stock_status" and "low_stock" calculated fields to ATUM's product data table.
+
+**Changes**
+
+* Updated dependency versions.
+* Added custom trigger after reloading the ATUM order items.
+* Switched the PO's PDF icon position.
+
+**Fixes**
+
+* Fixed order items not reloading when cancel editing.
+* CSS fixes.
+
+---
+
 `1.6.5`
 
 *2019-12-13*

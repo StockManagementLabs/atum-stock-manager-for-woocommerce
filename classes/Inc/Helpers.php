@@ -2031,11 +2031,19 @@ final class Helpers {
 		}
 		
 		$product->save();
+
+		// Trigger the "after_save_purchase_price" hook is needed if the PL's sync purchase price option is enabled.
+		if ( array_key_exists( substr( Globals::PURCHASE_PRICE_KEY, 1 ), $product_data ) ) {
+			do_action( 'atum/product_data/after_save_purchase_price', $product_id, $product_data[ substr( Globals::PURCHASE_PRICE_KEY, 1 ) ], NULL );
+		}
 		
 		if ( ! $skip_action ) {
 			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
-		
+
+		// Run all the hooks that are triggered after a product is saved.
+		do_action( 'atum/product_data/after_save_data', $product_data, $product );
+
 	}
 	
 	/**
@@ -3009,7 +3017,7 @@ final class Helpers {
 
 
 	/**
-	 * Get if a product is low of stock: There're enough stock to fulfill the next "days to reorder" days expected sales.
+	 * Get if a product is low of stock: There's insufficient stock to fulfill the next "days to reorder" days expected sales.
 	 * TODO: Perhaps change the static 7 days sales average by a setting.
 	 *
 	 * @since 1.6.6

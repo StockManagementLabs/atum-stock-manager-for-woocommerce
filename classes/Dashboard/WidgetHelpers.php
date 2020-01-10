@@ -593,7 +593,7 @@ final class WidgetHelpers {
 			);
 
 			add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/in_stock_args', $args ) );
 			remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
 			$products_in_stock                 = $products_in_stock->posts;
@@ -618,7 +618,7 @@ final class WidgetHelpers {
 				),
 			);
 
-			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
+			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/out_stock_products_args', $args ) );
 			$products_out_stock                 = $products_out_stock->posts;
 			$stock_counters['count_out_stock'] += count( $products_out_stock );
 
@@ -663,7 +663,7 @@ final class WidgetHelpers {
 		            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
 		            ) AS statuses';
 
-				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
+				$str_sql = apply_filters( 'atum/dashboard/stock_control_widget/low_stock_products_sql', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
 				$products_low_stock                = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
@@ -724,11 +724,12 @@ final class WidgetHelpers {
 			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
 			if ( in_array( $parent_type, [ 'variable', 'variable-subscription' ], TRUE ) ) {
 				self::$variable_products = array_merge( self::$variable_products, $parents );
-			} elseif ( 'grouped' === $parent_type ) {
+			}
+			elseif ( 'grouped' === $parent_type ) {
 				self::$grouped_products = array_merge( self::$grouped_products, $parents );
 			}
 
-			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
+			$children_args = (array) apply_filters( 'atum/dashboard/get_children/children_args', array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'posts_per_page'  => - 1,
@@ -820,7 +821,7 @@ final class WidgetHelpers {
 
 		$extra_output = '';
 
-		$output .= apply_filters( 'atum/dashboard_widgets/current_stock_counters/product_types_dropdown', $extra_output );
+		$output .= apply_filters( 'atum/dashboard/current_stock_value_widget/product_types_dropdown', $extra_output );
 
 		$output .= '</select>';
 
@@ -961,13 +962,18 @@ final class WidgetHelpers {
 
 		// Get products.
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard/current_stock_value_widget/in_stock_products_args', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
 
-			$product                = Helpers::get_atum_product( $product_id );
+			$product = Helpers::get_atum_product( $product_id );
+
+			if ( ! apply_filters( 'atum/dashboard/current_stock_value_widget/allowed_product', TRUE, $product ) ) {
+				continue;
+			}
+
 			$product_stock          = (float) $product->get_stock_quantity();
 			$product_purchase_price = (float) $product->get_purchase_price();
 
@@ -987,7 +993,8 @@ final class WidgetHelpers {
 
 		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.
 
-		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
+		return apply_filters( 'atum/dashboard/current_stock_value_widget/counters', $counters );
+
 	}
 
 }

@@ -11,6 +11,7 @@
 			padding-bottom: 0;
 		}
 	}
+	
 	.grid-stack-item-content {
 		overflow-x: hidden;
 		overflow-y: hidden;
@@ -57,14 +58,14 @@
 		flex-wrap: wrap;
 		
 		.nice-select {
-			margin-right: 10px;
+			margin-right: 7px;
 			margin-top: 10px;
 			
 			&.open {
 				.list {
 					max-height: 200px;
 					overflow-x: hidden;
-					overflow-y: scroll;
+					overflow-y: auto;
 				}
 			}
 			
