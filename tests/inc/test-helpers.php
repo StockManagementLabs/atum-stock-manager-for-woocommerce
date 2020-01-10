@@ -398,6 +398,13 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( Atum\PurchaseOrders\Models\PurchaseOrder::class, $order );
 	}
 
+	public function test_get_atum_order_model_from_item_id() {
+		$order = TestHelpers::create_order();
+		foreach ( $order->get_items() as $item ) ;
+		$data = Helpers::get_atum_order_model_from_item_id( $item->get_id() );
+		$this->assertIsObject( $data );
+	}
+
 	public function test_get_product_inbound_stock()  {
 		$po = new PurchaseOrders();
 		$po->register_post_type();
