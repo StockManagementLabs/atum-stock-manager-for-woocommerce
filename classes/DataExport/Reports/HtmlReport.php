@@ -443,7 +443,7 @@ class HtmlReport extends ListTable {
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product, $this ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 
@@ -517,7 +517,7 @@ class HtmlReport extends ListTable {
 
 		$report = ob_get_clean();
 
-		Helpers::load_view( 'exports/stock-central-html', compact( 'report', 'columns', 'max_columns', 'product_type', 'category', 'count_views' ) );
+		Helpers::load_view( 'reports/stock-central-html', compact( 'report', 'columns', 'max_columns', 'product_type', 'category', 'count_views' ) );
 
 	}
 	
