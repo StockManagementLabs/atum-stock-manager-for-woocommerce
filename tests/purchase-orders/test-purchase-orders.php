@@ -221,6 +221,11 @@ class PurchaseOrdersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase 
 		$this->assertContains( 'atum_order_id=' . $order->get_id(), $data['pdf']['url'] );
 	}
 
+	public function test_get_pdf_generation_link() {
+		$data = PurchaseOrders::get_pdf_generation_link(7);
+		$this->assertContains( 'atum_order_id=7', $data );
+	}
+
 	public function test_generate_order_pdf() {
 		wp_set_current_user( 1 );
 

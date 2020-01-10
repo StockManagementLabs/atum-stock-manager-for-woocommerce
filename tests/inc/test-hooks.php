@@ -41,8 +41,8 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 10, TestHelpers::has_action( 'wp_dropdown_cats', array( Hooks::class, 'set_dropdown_autocomplete' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'updated_option', array( Hooks::class, 'rebuild_wc_stock_status_on_disable' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_order_status_completed', array( Hooks::class, 'maybe_save_paid_date' ) ) );
-		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_delete_product', array( Hooks::class, 'after_delete_product' ) ) );
-		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_delete_product_variation', array( Hooks::class, 'after_delete_product' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_before_delete_product', array( Hooks::class, 'before_delete_product' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_before_delete_product_variation', array( Hooks::class, 'before_delete_product' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'product_variation_linked', array( Hooks::class, 'save_variation_atum_data' ) ) );
 	}
 
@@ -70,6 +70,7 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 10, TestHelpers::has_action( 'trashed_post', array( Hooks::class, 'maybe_save_order_items_props' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'untrashed_post', array( Hooks::class, 'maybe_save_order_items_props' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_after_order_object_save', array( Hooks::class, 'clean_up_update_date' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_after_product_object_save', array( Hooks::class, 'update_atum_calc_fields' ) ) );
 	}
 
 	public function test_enqueue_scripts() {
@@ -291,11 +292,11 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->expectNotToPerformAssertions();
 	}
 
-	public function test_after_delete_product() {
+	public function test_before_delete_product() {
 		$product = TestHelpers::create_atum_simple_product();
 		$hooks = Hooks::get_instance();
 		try {
-			$hooks->after_delete_product( $product->get_id() );
+			$hooks->before_delete_product( $product->get_id() );
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
@@ -322,6 +323,13 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_update_atum_calc_fields() {
+		$product = TestHelpers::create_atum_simple_product();
+		$hooks = Hooks::get_instance();
+		$hooks->update_atum_calc_fields( $product, false );
 		$this->expectNotToPerformAssertions();
 	}
 

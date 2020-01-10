@@ -164,8 +164,9 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$order->set_date_created( Helpers::date_format( "-$days_ago days" ) );
 		$order->set_date_completed( Helpers::date_format( "-$days_ago days" ) );
 		$order->save();
+		//var_dump( Helpers::get_sold_last_days( $product->get_id(), "$out_stock_date -$days_ago days", $out_stock_date ) );
 		$data = Helpers::get_product_lost_sales( $product );
-		$this->assertEquals( $days_ago * ( $sold / 7 ) * $product->get_regular_price(), $data);
+		$this->assertEquals( $days_ago * ( $sold / 7 ) * $product->get_regular_price(), $data );
 	}
 
 	public function test_get_product_out_stock_days() {
@@ -696,6 +697,11 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_is_rest_request() {
 		$this->assertFalse( Helpers::is_rest_request() );
+	}
+
+	public function test_is_product_low_stock() {
+		$product = TestHelpers::create_product();
+		$this->assertIsBool( Helpers::is_product_low_stock( $product ) );
 	}
 
 	// Data Providers
