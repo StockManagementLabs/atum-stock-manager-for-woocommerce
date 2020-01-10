@@ -1718,6 +1718,23 @@ final class Helpers {
 	}
 
 	/**
+	 * Get the appropriate ATUM Order model object from the ATUM order item id
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $atum_order_item_id
+	 *
+	 * @return AtumOrderModel|\WP_Error
+	 */
+	public static function get_atum_order_model_from_item_id( $atum_order_item_id ) {
+
+		global $wpdb;
+		$atum_order_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d', $atum_order_item_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return self::get_atum_order_model( $atum_order_id );
+	}
+
+	/**
 	 * Get the inbound stock amount for the specified product
 	 *
 	 * @since 1.5.4
