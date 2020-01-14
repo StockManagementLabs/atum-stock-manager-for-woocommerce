@@ -21,6 +21,53 @@ use WC_Product_Attribute;
 
 class TestHelpers {
 
+	public static function scan_dir_for_files() {
+		$path = dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR;
+
+		return self::scan_dir( $path );
+	}
+
+	public static function scan_dir( $path, $file_list = [] ){
+		$dir = opendir( $path );
+		while ( $item = readdir( $dir ) ) {
+			if( 'tests' === $item || '.git' === $item || 'node_modules' === $item ) continue;
+			if( $item != "." && $item != ".." ) {
+				if( is_dir( $path . $item ) ) {
+					$file_list = self::scan_dir( $path . $item . DIRECTORY_SEPARATOR, $file_list );
+				} else {
+					$file_list[] = $path . $item;
+				}
+			}
+		}
+
+		return $file_list;
+	}
+
+	public static function scan_file( $filepath, $summary = array( 'count' => 0, 'msg' => '' ) ) {
+		$search = [
+			'atum-stock-manager-for-woocommerce' => 'ATUM_TEXT_DOMAIN',
+			'atum-multi-inventory' => 'ATUM_MULTINV_TEXT_DOMAIN',
+			'atum-product-levels' => 'ATUM_LEVELS_TEXT_DOMAIN',
+			'atum-export-pro' => 'ATUM_EXPORT_TEXT_DOMAIN',
+		];
+
+		if( 0 === filesize( $filepath ) )
+			return $summary;
+
+		$file = fopen( $filepath, 'r' );
+		$text = fread( $file, filesize( $filepath ) );
+
+		foreach ( $search as $subpath => $s ) {
+			if( strpos( $filepath, $subpath ) > 0 ) continue;
+			if( strpos( $text, $s ) > 0 ) {
+				$summary['count']++;
+				$summary['msg'] .= $s . ' found in ' . $filepath . "\n";
+			}
+		}
+
+		return $summary;
+	}
+
 	public static function count_public_methods( $class ) {
 		if( !class_exists( $class ) )
 			return false;

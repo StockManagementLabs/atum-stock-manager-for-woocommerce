@@ -14,6 +14,16 @@ use TestHelpers\TestHelpers;
  */
 class MainTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
+	public function test_scan_text_constant() {
+		$files = TestHelpers::scan_dir_for_files();
+
+		foreach ( $files as $file ) {
+			$data = TestHelpers::scan_file( $file );
+			$this->assertIsArray( $data );
+			$this->assertEquals( 0, $data['count'], $data['msg'] );
+		}
+	}
+
 	public function test_methods() {
 		$data = TestHelpers::count_public_methods( Main::class );
 
