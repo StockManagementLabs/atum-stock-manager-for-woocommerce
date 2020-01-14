@@ -5,7 +5,7 @@
  * @package         Atum\DataExport
  * @subpackage      Reports
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2019 Stock Management Labs™
+ * @copyright       ©2020 Stock Management Labs™
  *
  * @since           1.3.9
  */
@@ -134,7 +134,7 @@ class POExport extends PurchaseOrder {
 		
 		ob_start();
 
-		Helpers::load_view( 'exports/purchase-order-html', compact( 'po', 'total_text_colspan', 'post_type', 'currency', 'discount', 'desc_percent', 'taxes', 'n_taxes', 'line_items_fee', 'line_items_shipping' ) );
+		Helpers::load_view( 'reports/purchase-order-html', compact( 'po', 'total_text_colspan', 'post_type', 'currency', 'discount', 'desc_percent', 'taxes', 'n_taxes', 'line_items_fee', 'line_items_shipping' ) );
 
 		return ob_get_clean();
 		

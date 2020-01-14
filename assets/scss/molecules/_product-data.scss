@@ -177,6 +177,7 @@
 	.atum-data-panel {
 		border-top: 1px solid $wp-gray-4;
 		padding-top: $grid-gutter-width/2;
+		clear: both;
 		
 		.form-field {
 			display: flex;

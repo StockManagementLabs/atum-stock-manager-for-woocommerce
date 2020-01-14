@@ -3459,6 +3459,7 @@ body .select2-container--default .select2-results__group {
 .woocommerce_variations .atum-data-panel {
   border-top: 1px solid #DDD;
   padding-top: 15px;
+  clear: both;
 }
 
 .woocommerce_variations .atum-data-panel .form-field {
