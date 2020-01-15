@@ -88,6 +88,12 @@ class Hooks {
 		// Save the ATUM product data for all the variations when created from attibutes.
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
 
+		// Save the orders-related data every time order items change.
+		add_action( 'woocommerce_ajax_order_items_added', array( $this, 'save_added_order_items_props' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_before_delete_order_item', array( $this, 'before_delete_order_item' ), PHP_INT_MAX );
+		add_action( 'woocommerce_delete_order_item', array( $this, 'after_delete_order_item' ), PHP_INT_MAX );
+
+
 	}
 
 	/**
@@ -127,7 +133,7 @@ class Hooks {
 		}
 
 		// Save the orders-related data every time an order is saved.
-		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
 		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
@@ -700,14 +706,14 @@ class Hooks {
 	}
 
 	/**
-	 * Save the order-related ATUM props every time a WC order is saved
+	 * Save the order-related ATUM props every time WC order items are saved
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param int      $order_id
-	 * @param \WP_Post $post
+	 * @param int   $order_id
+	 * @param array $item_keys
 	 */
-	public function save_order_items_props( $order_id, $post = NULL ) {
+	public function save_order_items_props( $order_id, $item_keys = NULL ) {
 
 		$order = wc_get_order( $order_id );
 
@@ -735,6 +741,87 @@ class Hooks {
 				}
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Save the order-related ATUM props every time a WC order item is added from the backend
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param array     $added_items
+	 * @param \WC_Order $order
+	 */
+	public function save_added_order_items_props( $added_items, $order ) {
+
+		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+
+
+		foreach ( $added_items as $item_id => $item_data ) {
+
+			$item = $order->get_item( $item_id );
+
+			/**
+			 * Variable definition
+			 *
+			 * @var \WC_Order_Item_Product $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( $product instanceof \WC_Product ) {
+				Helpers::update_order_item_product_data( $product );
+
+				do_action( 'atum/after_save_order_item_props', $item, $order->get_id() );
+			}
+
+		}
+
+	}
+
+	/**
+	 * Store the product from which we need to re-calc statistics before deleting an Order Item.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $order_item_id
+	 */
+	public function before_delete_order_item( $order_item_id ) {
+
+		$item = new \WC_Order_Item_Product( $order_item_id );
+
+		if ( $item ) {
+
+			global $atum_delete_item_product_id;
+
+			$atum_delete_item_product_id = $item->get_variation_id() ?: $item->get_product_id();
+			do_action( 'atum/before_delete_order_item', $order_item_id );
+
+		}
+		
+	}
+
+	/**
+	 * Update product Stats for stored product.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $order_item_id
+	 */
+	public function after_delete_order_item( $order_item_id ) {
+
+		global $atum_delete_item_product_id;
+
+		$product = Helpers::get_atum_product( $atum_delete_item_product_id );
+
+		if ( $product instanceof \WC_Product ) {
+
+			Helpers::update_order_item_product_data( $product );
+			do_action( 'atum/after_delete_order_item', $order_item_id );
 
 		}
 
