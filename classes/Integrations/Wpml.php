@@ -857,7 +857,7 @@ class Wpml {
 			
 			$master_post_id = $this->wpml->products->get_original_product_id( $master_post_id );
 			
-			Helpers::duplicate_atum_product( $master_post_id, $id );
+			$this->duplicate_atum_product( $master_post_id, $id );
 			
 			$product = wc_get_product( $id );
 			
@@ -869,11 +869,45 @@ class Wpml {
 					
 					$original_product_id = $this->wpml->products->get_original_product_id( $child_id );
 					
-					Helpers::duplicate_atum_product( $original_product_id, $child_id );
+					$this->duplicate_atum_product( $original_product_id, $child_id );
 				}
 				
 			}
 		}
+	}
+
+	/**
+	 * Duplicates an entry from atum product data table.
+	 * Needs to be updated when the database changes.
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param int $original_id
+	 * @param int $destination_id
+	 */
+	public static function duplicate_atum_product( $original_id, $destination_id ) {
+
+		global $wpdb;
+
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
+		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
+
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$wpdb->query( "
+			INSERT IGNORE INTO $atum_product_data_table (
+				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
+				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
+				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
+			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
+			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
+			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
+			FROM $atum_product_data_table WHERE product_id = $original_id;
+		" );
+		// phpcs:enable
 	}
 	
 	/**
