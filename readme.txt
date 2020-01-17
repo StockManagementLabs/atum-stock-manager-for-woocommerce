@@ -3,7 +3,7 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.3.1
+Tested up to: 5.3.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.8.1
@@ -229,23 +229,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.6.6`
 
-*2020-01-03*
+*2020-01-17*
 
 **Features**
 
 * Added the "Generate PDF" button within POs.
 * Add "atum_stock_status" and "low_stock" calculated fields to ATUM's product data table.
+* Duplicate the ATUM product data when duplicating a product.
 
 **Changes**
 
 * Updated dependency versions.
 * Added custom trigger after reloading the ATUM order items.
 * Switched the PO's PDF icon position.
+* Added support for external customizations to the Current Stock Value widget.
+* Recalculate the entire BOM tree stock when updating a stock quantity on Manufacturing Central.
+* Do not show the out of stock threshold message on Stock Central when the product is not managing the stock.
+* Added helper for get atum order model from order item ID.
+* Recalculate the ATUM product data stats when editing items from the backend.
 
 **Fixes**
 
 * Fixed order items not reloading when cancel editing.
+* Fixed wrong decimals precission when encoding to JSON.
+* Update the stock status when chaging the out of stock threshold from backend.
+* Fixed Sync purchase price not working when updating the purchase price from Manufacturing Central.
+* Re-added missing JS utility.
+* Fixed Stock Central view where shown Multi-Inventory products only depend on the Main Inventory status.
+* Fixed duplicated ID DOM warnings in Stock Central caused by cloning the Screen Optins tab.
+* Fixed issue with ATUM cache when saving multiple variations at once.
+* Fixed stock indicator icons being shown for parent products when MI was enabled.
+* Fixed the ATUM data removal when a product is deleted.
 * CSS fixes.
+* Refactory.
 
 ---
 
