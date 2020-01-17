@@ -16,8 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Settings\Settings;
-use Symfony\Component\Console\Helper\Helper;
-
 
 class Hooks {
 	
@@ -82,8 +80,7 @@ class Hooks {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
 		// Clean up the ATUM data when a product is deleted from database.
-		add_action( 'woocommerce_before_delete_product', array( $this, 'before_delete_product' ) );
-		add_action( 'woocommerce_before_delete_product_variation', array( $this, 'before_delete_product' ) );
+		add_action( 'delete_post', array( $this, 'before_delete_product' ) );
 
 		// Save the ATUM product data for all the variations when created from attibutes.
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
@@ -93,6 +90,8 @@ class Hooks {
 		add_action( 'woocommerce_before_delete_order_item', array( $this, 'before_delete_order_item' ), PHP_INT_MAX );
 		add_action( 'woocommerce_delete_order_item', array( $this, 'after_delete_order_item' ), PHP_INT_MAX );
 
+		// Duplicate the ATUM data when duplicating a product.
+		add_action( 'woocommerce_product_duplicate', array( $this, 'duplicate_product' ), 10, 2 );
 
 	}
 
@@ -857,6 +856,8 @@ class Hooks {
 
 		if ( $product instanceof \WC_Product ) {
 			$product->delete_atum_data();
+
+			do_action( 'atum/after_delete_atum_product_data', $product );
 		}
 
 	}
@@ -943,6 +944,99 @@ class Hooks {
 				$product->save_atum_data();
 			}
 		}
+
+	}
+
+	/**
+	 * Duplicate the ATUM data when duplicating a product.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param \WC_Product $duplicate
+	 * @param \WC_Product $product
+	 * @param bool        $check_children
+	 */
+	public function duplicate_product( $duplicate, $product, $check_children = TRUE ) {
+
+		global $wpdb;
+
+		/**
+		 * Duplicate the ATUM data props.
+		 */
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product->get_id() ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL
+
+		// Exclude non-clonable props.
+		$calculated_props = array(
+			'product_id',
+			'out_stock_date',
+			'supplier_sku', // This must be unique.
+			'inbound_stock',
+			'stock_on_hold',
+			'sold_today',
+			'sales_last_days',
+			'reserved_stock',
+			'customer_returns',
+			'warehouse_damage',
+			'lost_in_post',
+			'other_logs',
+			'out_stock_days',
+			'lost_sales',
+			'calculated_stock',
+		);
+
+		foreach ( $calculated_props as $prop ) {
+			unset( $atum_data[ $prop ] );
+		}
+
+		$duplicate = Helpers::get_atum_product( $duplicate );
+
+		foreach ( $atum_data as $atum_prop => $value ) {
+			if ( is_callable( array( $duplicate, "set_$atum_prop" ) ) ) {
+				$duplicate->{"set_$atum_prop"}( $value );
+			}
+		}
+
+		$duplicate->save_atum_data();
+
+		// If the current product has children (variations), run this function for all of them.
+		if ( $check_children ) {
+
+			$duplicated_children = $duplicate->get_children();
+
+			if ( 'grouped' !== $duplicate->get_type() && ! empty( $duplicated_children ) ) {
+
+				$original_children = $product->get_children();
+
+				foreach ( $duplicated_children as $key => $child_id ) {
+
+					if ( isset( $original_children[ $key ] ) ) {
+						$duplicated_child = wc_get_product( $child_id );
+						$original_child   = wc_get_product( $original_children[ $key ] );
+
+						$this->duplicate_product( $duplicated_child, $original_child, FALSE );
+					}
+
+				}
+
+			}
+
+		}
+
+		/**
+		 * Duplicate the ATUM locations for the supported types
+		 */
+		if ( ! in_array( $product->get_type(), Globals::get_child_product_types() ) ) {
+
+			$atum_locations = wp_get_object_terms( $product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY, [ 'fields' => 'ids' ] );
+
+			if ( ! empty( $atum_locations ) ) {
+				wp_set_object_terms( $duplicate->get_id(), $atum_locations, Globals::PRODUCT_LOCATION_TAXONOMY );
+			}
+
+		}
+
+		do_action( 'atum/after_duplicate_product', $duplicate, $product );
 
 	}
 

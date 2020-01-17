@@ -116,7 +116,7 @@ class Wpml {
 	public function register_hooks() {
 
 		add_action( 'atum/data_store/after_save_product_data', array( $this, 'update_atum_data' ), 10, 2 );
-		add_action( 'atum/data_store/after_delete_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
+		add_action( 'atum/after_delete_atum_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
 		
 		if ( is_admin() ) {
 
@@ -977,40 +977,36 @@ class Wpml {
 	 * @since 1.5.8.4
 	 *
 	 * @param \WC_Product $product The product object.
-	 * @param array       $args    Array of args passed to the delete method.
 	 */
-	public function delete_atum_data( $product, $args ) {
+	public function delete_atum_data( $product ) {
 		
 		global $wpdb;
 		
 		// Delete the ATUM data for this product.
-		if ( ! empty( $args['force_delete'] ) && TRUE === $args['force_delete'] ) {
-			
-			$product_id       = $product->get_id();
-			$post_type        = get_post_type( $product_id );
-			$translations_ids = [];
-			
-			/* @noinspection PhpUndefinedMethodInspection */
-			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
-			
-			foreach ( $product_translations as $translation ) {
-				
-				$translation_id = (int) $translation->element_id;
-				if ( $product_id !== $translation_id ) {
-					
-					$translations_ids[] = $translation_id;
-				}
-				
+		$product_id       = $product->get_id();
+		$post_type        = get_post_type( $product_id );
+		$translations_ids = [];
+
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
+
+		foreach ( $product_translations as $translation ) {
+
+			$translation_id = (int) $translation->element_id;
+			if ( $product_id !== $translation_id ) {
+
+				$translations_ids[] = $translation_id;
 			}
-			
-			if ( $translations_ids ) {
-				
-				// Don't need prepare, all are integers.
-				$translations_ids_str = implode( ',', $translations_ids );
-				$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-				
-				$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
-			}
+
+		}
+
+		if ( $translations_ids ) {
+
+			// Don't need prepare, all are integers.
+			$translations_ids_str = implode( ',', $translations_ids );
+			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 		
 	}
