@@ -74,7 +74,7 @@ class Hooks {
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
-		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
+		add_action( 'updated_option', array( $this, 'rebuild_stock_status_on_oost_changes' ), 10, 3 );
 
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
@@ -462,7 +462,7 @@ class Hooks {
 
 	/**
 	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
-	 * Then, if we have any out_stock_threshold meta, rebuild that product to update the stock_status if required
+	 * Then, if we have any out_stock_threshold set, rebuild that product to update the stock_status if required
 	 *
 	 * @since 1.4.10
 	 *
@@ -470,19 +470,18 @@ class Hooks {
 	 * @param array  $old_value
 	 * @param array  $option_value
 	 */
-	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
+	public function rebuild_stock_status_on_oost_changes( $option_name, $old_value, $option_value ) {
 
 		if (
-			Settings::OPTION_NAME === $option_name && isset( $option_value['out_stock_threshold'] ) &&
-			Helpers::is_any_out_stock_threshold_set() && isset( $_POST['option_page'] ) && 'atum_setting_general' === $_POST['option_page']
+			Settings::OPTION_NAME === $option_name &&
+			isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
+			$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
+			Helpers::is_any_out_stock_threshold_set()
 		) {
 
-			// When updating the out of stock threshold on ATUM settings,
-			// the hooks that trigger the stock status changes should be added or removed depending on the
-			// new option.
-			$out_stock_threshold_option = Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
-
-			if ( 'no' === $out_stock_threshold_option ) {
+			// When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
+			// changes should be added or removed depending on the new option.
+			if ( 'no' === $option_value['out_stock_threshold'] ) {
 				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 				remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			}
