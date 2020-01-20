@@ -4,7 +4,7 @@
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2019 Stock Management Labs 
+ * License : ©2020 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -6366,14 +6366,14 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .current-stock-value-widget .current-stock-value-filters .nice-select {
-  margin-right: 10px;
+  margin-right: 7px;
   margin-top: 10px;
 }
 
 .current-stock-value-widget .current-stock-value-filters .nice-select.open .list {
   max-height: 200px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .current-stock-value-widget .current-stock-value-content {

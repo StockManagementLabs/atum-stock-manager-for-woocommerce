@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2019 Stock Management Labs™
+ * @copyright      ©2020 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -1718,6 +1718,23 @@ final class Helpers {
 	}
 
 	/**
+	 * Get the appropriate ATUM Order model object from the ATUM order item id
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $atum_order_item_id
+	 *
+	 * @return AtumOrderModel|\WP_Error
+	 */
+	public static function get_atum_order_model_from_item_id( $atum_order_item_id ) {
+
+		global $wpdb;
+		$atum_order_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d', $atum_order_item_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return self::get_atum_order_model( $atum_order_id );
+	}
+
+	/**
 	 * Get the inbound stock amount for the specified product
 	 *
 	 * @since 1.5.4
@@ -2031,11 +2048,19 @@ final class Helpers {
 		}
 		
 		$product->save();
+
+		// Trigger the "after_save_purchase_price" hook is needed if the PL's sync purchase price option is enabled.
+		if ( array_key_exists( substr( Globals::PURCHASE_PRICE_KEY, 1 ), $product_data ) ) {
+			do_action( 'atum/product_data/after_save_purchase_price', $product_id, $product_data[ substr( Globals::PURCHASE_PRICE_KEY, 1 ) ], NULL );
+		}
 		
 		if ( ! $skip_action ) {
 			do_action( 'atum/product_data_updated', $product_id, $product_data );
 		}
-		
+
+		// Run all the hooks that are triggered after a product is saved.
+		do_action( 'atum/product_data/after_save_data', $product_data, $product );
+
 	}
 	
 	/**
@@ -2076,13 +2101,18 @@ final class Helpers {
 		global $wpdb;
 		$wpdb->hide_errors();
 
-		if ( $product && $product instanceof \WC_Product ) {
+		if ( $product instanceof \WC_Product ) {
 
 			if ( $clean_meta ) {
 				$product->set_out_stock_threshold( NULL );
 			}
 
 			if ( $product->managing_stock() ) {
+
+				// Force a stock quantity change to ensure the stock status is correctly updated.
+				$current_stock = $product->get_stock_quantity();
+				$product->set_stock_quantity( $current_stock + 1 );
+				$product->set_stock_quantity( $current_stock ); // Restore the value.
 
 				// Trigger the "Out of Stock threshold" hooks.
 				if ( $product->is_type( 'variation' ) ) {
@@ -2926,40 +2956,6 @@ final class Helpers {
 		return $is_array ? $classes : implode( ' ', $classes );
 
 	}
-	
-	/**
-	 * Duplicates an entry from atum product data table.
-	 * Needs to be updated when the database changes.
-	 *
-	 * @since 1.5.8.4
-	 *
-	 * @param integer $original_id
-	 * @param integer $destination_id
-	 */
-	public static function duplicate_atum_product( $original_id, $destination_id ) {
-		
-		global $wpdb;
-
-		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-
-		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
-		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
-
-		// phpcs:disable WordPress.DB.PreparedSQL
-		$wpdb->query( "
-			INSERT IGNORE INTO $atum_product_data_table (
-				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
-			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
-			FROM $atum_product_data_table WHERE product_id = $original_id;
-		" );
-		// phpcs:enable
-	}
 
 	/**
 	 * Checks if the current request is a WP REST API request.
@@ -3004,7 +3000,7 @@ final class Helpers {
 
 
 	/**
-	 * Get if a product is low of stock: There're enough stock to fulfill the next "days to reorder" days expected sales.
+	 * Get if a product is low of stock: There's insufficient stock to fulfill the next "days to reorder" days expected sales.
 	 * TODO: Perhaps change the static 7 days sales average by a setting.
 	 *
 	 * @since 1.6.6

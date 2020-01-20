@@ -5,7 +5,7 @@
  * @package         Atum\DataExport
  * @subpackage      Reports
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2019 Stock Management Labs™
+ * @copyright       ©2020 Stock Management Labs™
  *
  * @since           1.2.5
  */
@@ -517,7 +517,7 @@ class HtmlReport extends ListTable {
 
 		$report = ob_get_clean();
 
-		Helpers::load_view( 'exports/stock-central-html', compact( 'report', 'columns', 'max_columns', 'product_type', 'category', 'count_views' ) );
+		Helpers::load_view( 'reports/stock-central-html', compact( 'report', 'columns', 'max_columns', 'product_type', 'category', 'count_views' ) );
 
 	}
 	

@@ -589,16 +589,14 @@
 		color: var(--atum-text-color-var1);
 		
 		&:after {
-			vertical-align: middle;
-			font-family: $atum-icon-font;
-			content: $atmi-chevron-down;
-			display: inline;
-			font-size: 10px;
+			content: '';
+			@include dropdown-arrow;
 			position: absolute;
-			right: 10px;
-			top: 9px;
+			right: 0;
+			top: 5px;
+			
 			@include tablet-max-wp{
-				top: 15px;
+				top: 9px;
 			}
 		}
 		
@@ -673,7 +671,6 @@
 		}
 		
 	}
-	
 	
 	.show-filters-wrapper {
 		display: none;
@@ -1366,6 +1363,14 @@
 			margin: 0 0 0 5px;
 			float: none;
 			
+			.select2-selection__arrow {
+				@include dropdown-arrow;
+				
+				&:after {
+					display: none;
+				}
+			}
+			
 			@include tablet-max-wp {
 				height: 44px;
 				
@@ -1374,6 +1379,7 @@
 						height: 44px;
 						line-height: 44px;
 					}
+					
 					.select2-selection__arrow {
 						top: 1px;
 					}
@@ -1779,7 +1785,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				min-width: 50px;
 				height: 60px;
 				white-space: normal;
-				font-weight: bold;
+				font-weight: 600;
 				letter-spacing: 0.3px;
 				color: var(--atum-text-color-var2);
 				
@@ -1788,19 +1794,23 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	tfoot, thead {
+		
 		tr.totals {
 			th, td {
 				border-top: none;
 			}
 		}
+		
 		.item-heads {
 			td, th {
 				box-shadow: 0 1px 0 0 var(--main-border);
+				
 				a {
-					color: var(--atum-text-color-var2);
+					color: var(--atum-text-color-var3);
 				}
 			}
 		}
+		
 		th, td {
 			&:not(.column-title) {
 				border-top: 1px solid var(--main-border);
@@ -1812,6 +1822,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 		}
+		
 	}
 	
 	.column-groups {
@@ -2383,7 +2394,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				&.column-title, &.atum_order_title {
 					a, .row-title {
 						font-size: 14px;
-						font-weight: 600;
+						font-weight: 500;
 						color: var(--primary);
 					}
 				}
@@ -2498,9 +2509,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	th {
 		span {
 			&.col-stock-counters, &.col-stock-negatives, &.col-stock-selling-manager {
-				color: var(--atum-text-color-var2);
-				font-weight: bold;
+				color: var(--atum-text-color-var3);
+				font-weight: 600;
 				font-size: 14px;
+				
 				.set-header {
 					color: var(--primary);
 				}

@@ -5,7 +5,7 @@
  * @package         Atum\Models
  * @subpackage      Products
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2019 Stock Management Labs™
+ * @copyright       ©2020 Stock Management Labs™
  *
  * @since           1.5.0
  */
@@ -49,7 +49,7 @@ trait AtumProductTrait {
 		'lost_sales'            => NULL,
 		'has_location'          => NULL,
 		'update_date'           => NULL,
-		'atum_stock_status'     => NULL,
+		'atum_stock_status'     => 'instock',
 		'low_stock'             => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'     => NULL,

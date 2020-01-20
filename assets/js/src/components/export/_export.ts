@@ -60,7 +60,7 @@ export default class DataExport {
 			'aria-label': this.settings.get('tabTitle'),
 		});
 		
-		$tabContent.find('form').attr('id', 'atum-export-settings');
+		$tabContent.find('form').attr('id', 'atum-export-settings').find('input').removeAttr('id');
 		$tabContent.find('.screen-options').remove();
 		$tabContent.find('input[type=submit]').val( this.settings.get('submitTitle') );
 		$tabContent.find('#screenoptionnonce').remove();

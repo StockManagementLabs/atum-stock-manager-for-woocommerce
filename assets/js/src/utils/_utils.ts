@@ -212,14 +212,14 @@ export let Utils = {
 	},
 	
 	/**
-	 * Toggle easytree nodes
+	 * Toggle tree nodes
 	 *
 	 * @param {any[]}  nodes
 	 * @param {string} openOrClose
 	 */
 	toggleNodes(nodes: any[], openOrClose: string){
 		
-		for (let i = 0; i < nodes.length; i++) {
+		for (let i: number = 0; i < nodes.length; i++) {
 			
 			nodes[i].isExpanded = openOrClose == 'open'; // Either expand node or don't
 			
@@ -229,6 +229,7 @@ export let Utils = {
 			}
 			
 		}
+		
 	}
 	
 }

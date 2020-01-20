@@ -31,6 +31,10 @@
 		
 		.input-group-prepend {
 			@include border-left-radius(4px);
+			
+			&.focus {
+				box-shadow: 0 0 0 1px $input-focus;
+			}
 		}
 		
 		.input-group-text {
@@ -44,7 +48,7 @@
 			border: 1px solid var(--main-border-alt);
 			
 			&:focus {
-				box-shadow: none;
+				box-shadow: 0 0 0 1px $input-focus;
 				border-color: $input-focus;
 			}
 		}
@@ -84,7 +88,14 @@
 					}
 					
 					.select2-selection__arrow {
-						height: 25px;
+						height: 24px;
+						background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+						background-size: 16px 16px;
+						width: 28px;
+						
+						&:after {
+							display: none;
+						}
 					}
 					
 					&:focus {
@@ -93,6 +104,7 @@
 				}
 				
 			}
+			
 		}
 		
 	}
@@ -138,14 +150,12 @@
 					height: 38px;
 				}
 				
-				.select2-selection__rendered {
-					line-height: 2.5 !important;
+				.select2-selection__arrow {
+					height: 31px !important;
 				}
 				
-				.select2-selection__arrow {
-					&:after {
-						line-height: 32px;
-					}
+				.select2-selection__rendered {
+					line-height: 2.5 !important;
 				}
 				
 				.select2-selection__clear {
@@ -167,6 +177,7 @@
 	.atum-data-panel {
 		border-top: 1px solid $wp-gray-4;
 		padding-top: $grid-gutter-width/2;
+		clear: both;
 		
 		.form-field {
 			display: flex;

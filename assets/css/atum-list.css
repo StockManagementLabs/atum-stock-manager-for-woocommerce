@@ -4,7 +4,7 @@
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2019 Stock Management Labs 
+ * License : ©2020 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -3272,7 +3272,7 @@ body .select2-container--default .select2-results__group {
   border: 1px solid var(--gray-200);
   font-size: 15px;
   line-height: 1.47px;
-  text-align: right;
+  text-align: left;
   color: var(--atum-text-color-var1);
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -6306,19 +6306,19 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
-  vertical-align: middle;
-  font-family: "atum-icon-font";
-  content: "";
-  display: inline;
-  font-size: 10px;
+  content: '';
+  height: 24px;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+  background-size: 16px 16px;
+  width: 28px;
   position: absolute;
-  right: 10px;
-  top: 9px;
+  right: 0;
+  top: 5px;
 }
 
 @media all and (max-width: 782px) {
   .search-box .dropdown-toggle:after, p.search-box .dropdown-toggle:after {
-    top: 15px;
+    top: 9px;
   }
 }
 
@@ -7184,6 +7184,17 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   float: none;
 }
 
+.atum-list-wrapper .actions input .select2-selection__arrow, #posts-filter .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection__arrow, #posts-filter .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection__arrow, #posts-filter .actions .select2-container .select2-selection__arrow {
+  height: 24px;
+  background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
+  background-size: 16px 16px;
+  width: 28px;
+}
+
+.atum-list-wrapper .actions input .select2-selection__arrow:after, #posts-filter .actions input .select2-selection__arrow:after, .atum-list-wrapper .actions select .select2-selection__arrow:after, #posts-filter .actions select .select2-selection__arrow:after, .atum-list-wrapper .actions .select2-container .select2-selection__arrow:after, #posts-filter .actions .select2-container .select2-selection__arrow:after {
+  display: none;
+}
+
 @media all and (max-width: 782px) {
   .atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
     height: 44px;
@@ -7604,7 +7615,7 @@ table.atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-he
   min-width: 50px;
   height: 60px;
   white-space: normal;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 0.3px;
   color: var(--atum-text-color-var2);
 }
@@ -7619,7 +7630,7 @@ table.atum-list-table tfoot .item-heads td, table.atum-list-table tfoot .item-he
 }
 
 table.atum-list-table tfoot .item-heads td a, table.atum-list-table tfoot .item-heads th a, table.atum-list-table thead .item-heads td a, table.atum-list-table thead .item-heads th a, .floatThead-container tfoot .item-heads td a, .floatThead-container tfoot .item-heads th a, .floatThead-container thead .item-heads td a, .floatThead-container thead .item-heads th a, .inbound-stock-list tfoot .item-heads td a, .inbound-stock-list tfoot .item-heads th a, .inbound-stock-list thead .item-heads td a, .inbound-stock-list thead .item-heads th a, table.wp-list-table tfoot .item-heads td a, table.wp-list-table tfoot .item-heads th a, table.wp-list-table thead .item-heads td a, table.wp-list-table thead .item-heads th a {
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
 }
 
 table.atum-list-table tfoot th:not(.column-title), table.atum-list-table tfoot td:not(.column-title), table.atum-list-table thead th:not(.column-title), table.atum-list-table thead td:not(.column-title), .floatThead-container tfoot th:not(.column-title), .floatThead-container tfoot td:not(.column-title), .floatThead-container thead th:not(.column-title), .floatThead-container thead td:not(.column-title), .inbound-stock-list tfoot th:not(.column-title), .inbound-stock-list tfoot td:not(.column-title), .inbound-stock-list thead th:not(.column-title), .inbound-stock-list thead td:not(.column-title), table.wp-list-table tfoot th:not(.column-title), table.wp-list-table tfoot td:not(.column-title), table.wp-list-table thead th:not(.column-title), table.wp-list-table thead td:not(.column-title) {
@@ -8168,7 +8179,7 @@ table.atum-list-table tbody tr.expandable td.column-calc_location a:before, tabl
 
 table.atum-list-table tbody tr td.column-title a, table.atum-list-table tbody tr td.column-title .row-title, table.atum-list-table tbody tr td.atum_order_title a, table.atum-list-table tbody tr td.atum_order_title .row-title, table.atum-list-table #the-list tr td.column-title a, table.atum-list-table #the-list tr td.column-title .row-title, table.atum-list-table #the-list tr td.atum_order_title a, table.atum-list-table #the-list tr td.atum_order_title .row-title, .floatThead-container tbody tr td.column-title a, .floatThead-container tbody tr td.column-title .row-title, .floatThead-container tbody tr td.atum_order_title a, .floatThead-container tbody tr td.atum_order_title .row-title, .floatThead-container #the-list tr td.column-title a, .floatThead-container #the-list tr td.column-title .row-title, .floatThead-container #the-list tr td.atum_order_title a, .floatThead-container #the-list tr td.atum_order_title .row-title, .inbound-stock-list tbody tr td.column-title a, .inbound-stock-list tbody tr td.column-title .row-title, .inbound-stock-list tbody tr td.atum_order_title a, .inbound-stock-list tbody tr td.atum_order_title .row-title, .inbound-stock-list #the-list tr td.column-title a, .inbound-stock-list #the-list tr td.column-title .row-title, .inbound-stock-list #the-list tr td.atum_order_title a, .inbound-stock-list #the-list tr td.atum_order_title .row-title, table.wp-list-table tbody tr td.column-title a, table.wp-list-table tbody tr td.column-title .row-title, table.wp-list-table tbody tr td.atum_order_title a, table.wp-list-table tbody tr td.atum_order_title .row-title, table.wp-list-table #the-list tr td.column-title a, table.wp-list-table #the-list tr td.column-title .row-title, table.wp-list-table #the-list tr td.atum_order_title a, table.wp-list-table #the-list tr td.atum_order_title .row-title {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--primary);
 }
 
@@ -8267,8 +8278,8 @@ table.atum-list-table td.calc_mi_status .multi-inventory i, table.atum-list-tabl
 }
 
 table.atum-list-table th span.col-stock-counters, table.atum-list-table th span.col-stock-negatives, table.atum-list-table th span.col-stock-selling-manager, .floatThead-container th span.col-stock-counters, .floatThead-container th span.col-stock-negatives, .floatThead-container th span.col-stock-selling-manager, .inbound-stock-list th span.col-stock-counters, .inbound-stock-list th span.col-stock-negatives, .inbound-stock-list th span.col-stock-selling-manager, table.wp-list-table th span.col-stock-counters, table.wp-list-table th span.col-stock-negatives, table.wp-list-table th span.col-stock-selling-manager {
-  color: var(--atum-text-color-var2);
-  font-weight: bold;
+  color: var(--atum-text-color-var3);
+  font-weight: 600;
   font-size: 14px;
 }
 

@@ -5,7 +5,7 @@
  * @package         Atum\Models
  * @subpackage      DataStores
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2019 Stock Management Labs™
+ * @copyright       ©2020 Stock Management Labs™
  *
  * @since           1.5.0
  */
@@ -212,7 +212,7 @@ trait AtumDataStoreCommonTrait {
 			if ( $args['force_delete'] ) {
 
 				// Avoid our custom hook to run this method again.
-				remove_action( "woocommerce_delete_$post_type", array( Hooks::get_instance(), 'before_delete_product' ) );
+				remove_action( 'delete_post', array( Hooks::get_instance(), 'before_delete_product' ) );
 
 				do_action( "woocommerce_before_delete_$post_type", $id ); // Default WC action for compatibility.
 				wp_delete_post( $id );

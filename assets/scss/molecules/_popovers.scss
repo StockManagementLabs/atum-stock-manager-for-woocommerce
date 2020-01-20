@@ -62,25 +62,26 @@
 		margin-left: 5px;
 		color: var(--atum-table-bg);
 	}
-}
-
-.popover-content > input[type=number], .popover-content > input[type=text] {
-	border-radius: 5px;
-	background-color: var(--atum-table-bg);
-	border: 1px solid var(--gray-200);
-	font-size: 15px;
-	line-height: 1.47px;
-	text-align: right;
-	color: var(--atum-text-color-var1);
-	box-shadow: none;
 	
-	&:focus {
-		border-color: var(--primary);
+	> input[type=number], > input[type=text] {
+		border-radius: 5px;
+		background-color: var(--atum-table-bg);
+		border: 1px solid var(--gray-200);
+		font-size: 15px;
+		line-height: 1.47px;
+		text-align: left;
+		color: var(--atum-text-color-var1);
+		box-shadow: none;
+		
+		&:focus {
+			border-color: var(--primary);
+		}
+		
+		&:hover {
+			border-color: var(--atum-text-color-var1);
+		}
 	}
 	
-	&:hover {
-		border-color: var(--atum-text-color-var1);
-	}
 }
 
 // Arrows

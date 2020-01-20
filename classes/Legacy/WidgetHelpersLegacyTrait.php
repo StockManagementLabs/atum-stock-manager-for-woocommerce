@@ -4,7 +4,7 @@
  *
  * @package         Atum\Legacy
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2019 Stock Management Labs™
+ * @copyright       ©2020 Stock Management Labs™
  *
  * @deprecated      This legacy class is only here for backwards compatibility and will be removed in a future version.
  *
@@ -139,7 +139,7 @@ trait WidgetHelpersLegacyTrait {
 				),
 			);
 
-			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/in_stock', $args ) );
+			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/in_stock_products_args', $args ) );
 			$products_in_stock                 = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );
 
@@ -184,7 +184,7 @@ trait WidgetHelpersLegacyTrait {
 				'post__in'       => $products_not_stock,
 			);
 
-			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard_widgets/stock_counters/out_stock', $args ) );
+			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/out_stock_products_args', $args ) );
 			$products_out_stock                 = $products_out_stock->posts;
 			$stock_counters['count_out_stock'] += count( $products_out_stock );
 
@@ -229,7 +229,7 @@ trait WidgetHelpersLegacyTrait {
 		            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
 		            ) AS statuses';
 
-				$str_sql = apply_filters( 'atum/dashboard_widgets/stock_counters/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
+				$str_sql = apply_filters( 'atum/dashboard/stock_control_widget/low_stock_products_sql', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
 				$products_low_stock                = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
@@ -256,7 +256,7 @@ trait WidgetHelpersLegacyTrait {
 	private static function get_children_legacy( $parent_type, $post_type = 'product' ) {
 
 		// Get the published Variables first.
-		$parent_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/parent_args', array(
+		$parent_args = (array) apply_filters( 'atum/dashboard/get_children/parent_args', array(
 			'post_type'      => 'product',
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'posts_per_page' => - 1,
@@ -282,7 +282,7 @@ trait WidgetHelpersLegacyTrait {
 				self::$grouped_products = array_merge( self::$grouped_products, $parents->posts );
 			}
 
-			$children_args = (array) apply_filters( 'atum/dashboard_widgets/get_children/children_args', array(
+			$children_args = (array) apply_filters( 'atum/dashboard/get_children/children_args', array(
 				'post_type'       => $post_type,
 				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 				'posts_per_page'  => - 1,
@@ -422,12 +422,17 @@ trait WidgetHelpersLegacyTrait {
 		}
 		
 		// Get products.
-		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard_widgets/current_stock_counters/in_stock', $args ) );
+		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard/current_stock_value_widget/in_stock_products_args', $args ) );
 		
 		// Get current stock values.
 		foreach ( $products_in_stock->posts as $product_id ) {
 
-			$product                = Helpers::get_atum_product( $product_id );
+			$product = Helpers::get_atum_product( $product_id );
+
+			if ( ! apply_filters( 'atum/dashboard/current_stock_value_widget/allowed_product', TRUE, $product ) ) {
+				continue;
+			}
+
 			$product_stock          = (float) $product->get_stock_quantity();
 			$product_purchase_price = (float) $product->get_purchase_price();
 			
@@ -446,7 +451,7 @@ trait WidgetHelpersLegacyTrait {
 
 		}
 		
-		return apply_filters( 'atum/dashboard_widgets/current_stock_counters/counters', $counters, $products_in_stock->posts );
+		return apply_filters( 'atum/dashboard/current_stock_value_widget/counters', $counters );
 		
 	}
 

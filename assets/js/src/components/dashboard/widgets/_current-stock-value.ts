@@ -30,6 +30,7 @@ export default class CurrentStockValueWidget {
 					action             : 'atum_current_stock_values',
 					categorySelected   : $('.categories-list').val(),
 					productTypeSelected: $('.product-types-list').val(),
+					writeOff           : $('.write-off-filter').val() || 'no'
 				},
 				dataType  : 'json',
 				beforeSend: () => {
