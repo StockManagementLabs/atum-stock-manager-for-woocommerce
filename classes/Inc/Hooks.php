@@ -16,8 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Settings\Settings;
-use Symfony\Component\Console\Helper\Helper;
-
 
 class Hooks {
 	
@@ -76,17 +74,24 @@ class Hooks {
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
-		add_action( 'updated_option', array( $this, 'rebuild_wc_stock_status_on_disable' ), 10, 3 );
+		add_action( 'updated_option', array( $this, 'rebuild_stock_status_on_oost_changes' ), 10, 3 );
 
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
 		// Clean up the ATUM data when a product is deleted from database.
-		add_action( 'woocommerce_before_delete_product', array( $this, 'before_delete_product' ) );
-		add_action( 'woocommerce_before_delete_product_variation', array( $this, 'before_delete_product' ) );
+		add_action( 'delete_post', array( $this, 'before_delete_product' ) );
 
 		// Save the ATUM product data for all the variations when created from attibutes.
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
+
+		// Save the orders-related data every time order items change.
+		add_action( 'woocommerce_ajax_order_items_added', array( $this, 'save_added_order_items_props' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_before_delete_order_item', array( $this, 'before_delete_order_item' ), PHP_INT_MAX );
+		add_action( 'woocommerce_delete_order_item', array( $this, 'after_delete_order_item' ), PHP_INT_MAX );
+
+		// Duplicate the ATUM data when duplicating a product.
+		add_action( 'woocommerce_product_duplicate', array( $this, 'duplicate_product' ), 10, 2 );
 
 	}
 
@@ -127,7 +132,7 @@ class Hooks {
 		}
 
 		// Save the orders-related data every time an order is saved.
-		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
 		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
@@ -457,7 +462,7 @@ class Hooks {
 
 	/**
 	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
-	 * Then, if we have any out_stock_threshold meta, rebuild that product to update the stock_status if required
+	 * Then, if we have any out_stock_threshold set, rebuild that product to update the stock_status if required
 	 *
 	 * @since 1.4.10
 	 *
@@ -465,19 +470,18 @@ class Hooks {
 	 * @param array  $old_value
 	 * @param array  $option_value
 	 */
-	public function rebuild_wc_stock_status_on_disable( $option_name, $old_value, $option_value ) {
+	public function rebuild_stock_status_on_oost_changes( $option_name, $old_value, $option_value ) {
 
 		if (
-			Settings::OPTION_NAME === $option_name && isset( $option_value['out_stock_threshold'] ) &&
-			Helpers::is_any_out_stock_threshold_set() && isset( $_POST['option_page'] ) && 'atum_setting_general' === $_POST['option_page']
+			Settings::OPTION_NAME === $option_name &&
+			isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
+			$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
+			Helpers::is_any_out_stock_threshold_set()
 		) {
 
-			// When updating the out of stock threshold on ATUM settings,
-			// the hooks that trigger the stock status changes should be added or removed depending on the
-			// new option.
-			$out_stock_threshold_option = Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
-
-			if ( 'no' === $out_stock_threshold_option ) {
+			// When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
+			// changes should be added or removed depending on the new option.
+			if ( 'no' === $option_value['out_stock_threshold'] ) {
 				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 				remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			}
@@ -700,14 +704,14 @@ class Hooks {
 	}
 
 	/**
-	 * Save the order-related ATUM props every time a WC order is saved
+	 * Save the order-related ATUM props every time WC order items are saved
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param int      $order_id
-	 * @param \WP_Post $post
+	 * @param int   $order_id
+	 * @param array $item_keys
 	 */
-	public function save_order_items_props( $order_id, $post = NULL ) {
+	public function save_order_items_props( $order_id, $item_keys = NULL ) {
 
 		$order = wc_get_order( $order_id );
 
@@ -735,6 +739,87 @@ class Hooks {
 				}
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Save the order-related ATUM props every time a WC order item is added from the backend
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param array     $added_items
+	 * @param \WC_Order $order
+	 */
+	public function save_added_order_items_props( $added_items, $order ) {
+
+		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+
+
+		foreach ( $added_items as $item_id => $item_data ) {
+
+			$item = $order->get_item( $item_id );
+
+			/**
+			 * Variable definition
+			 *
+			 * @var \WC_Order_Item_Product $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( $product instanceof \WC_Product ) {
+				Helpers::update_order_item_product_data( $product );
+
+				do_action( 'atum/after_save_order_item_props', $item, $order->get_id() );
+			}
+
+		}
+
+	}
+
+	/**
+	 * Store the product from which we need to re-calc statistics before deleting an Order Item.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $order_item_id
+	 */
+	public function before_delete_order_item( $order_item_id ) {
+
+		$item = new \WC_Order_Item_Product( $order_item_id );
+
+		if ( $item ) {
+
+			global $atum_delete_item_product_id;
+
+			$atum_delete_item_product_id = $item->get_variation_id() ?: $item->get_product_id();
+			do_action( 'atum/before_delete_order_item', $order_item_id );
+
+		}
+		
+	}
+
+	/**
+	 * Update product Stats for stored product.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param int $order_item_id
+	 */
+	public function after_delete_order_item( $order_item_id ) {
+
+		global $atum_delete_item_product_id;
+
+		$product = Helpers::get_atum_product( $atum_delete_item_product_id );
+
+		if ( $product instanceof \WC_Product ) {
+
+			Helpers::update_order_item_product_data( $product );
+			do_action( 'atum/after_delete_order_item', $order_item_id );
 
 		}
 
@@ -770,6 +855,8 @@ class Hooks {
 
 		if ( $product instanceof \WC_Product ) {
 			$product->delete_atum_data();
+
+			do_action( 'atum/after_delete_atum_product_data', $product );
 		}
 
 	}
@@ -856,6 +943,99 @@ class Hooks {
 				$product->save_atum_data();
 			}
 		}
+
+	}
+
+	/**
+	 * Duplicate the ATUM data when duplicating a product.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param \WC_Product $duplicate
+	 * @param \WC_Product $product
+	 * @param bool        $check_children
+	 */
+	public function duplicate_product( $duplicate, $product, $check_children = TRUE ) {
+
+		global $wpdb;
+
+		/**
+		 * Duplicate the ATUM data props.
+		 */
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$atum_data               = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $atum_product_data_table WHERE product_id = %d;", $product->get_id() ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL
+
+		// Exclude non-clonable props.
+		$calculated_props = array(
+			'product_id',
+			'out_stock_date',
+			'supplier_sku', // This must be unique.
+			'inbound_stock',
+			'stock_on_hold',
+			'sold_today',
+			'sales_last_days',
+			'reserved_stock',
+			'customer_returns',
+			'warehouse_damage',
+			'lost_in_post',
+			'other_logs',
+			'out_stock_days',
+			'lost_sales',
+			'calculated_stock',
+		);
+
+		foreach ( $calculated_props as $prop ) {
+			unset( $atum_data[ $prop ] );
+		}
+
+		$duplicate = Helpers::get_atum_product( $duplicate );
+
+		foreach ( $atum_data as $atum_prop => $value ) {
+			if ( is_callable( array( $duplicate, "set_$atum_prop" ) ) ) {
+				$duplicate->{"set_$atum_prop"}( $value );
+			}
+		}
+
+		$duplicate->save_atum_data();
+
+		// If the current product has children (variations), run this function for all of them.
+		if ( $check_children ) {
+
+			$duplicated_children = $duplicate->get_children();
+
+			if ( 'grouped' !== $duplicate->get_type() && ! empty( $duplicated_children ) ) {
+
+				$original_children = $product->get_children();
+
+				foreach ( $duplicated_children as $key => $child_id ) {
+
+					if ( isset( $original_children[ $key ] ) ) {
+						$duplicated_child = wc_get_product( $child_id );
+						$original_child   = wc_get_product( $original_children[ $key ] );
+
+						$this->duplicate_product( $duplicated_child, $original_child, FALSE );
+					}
+
+				}
+
+			}
+
+		}
+
+		/**
+		 * Duplicate the ATUM locations for the supported types
+		 */
+		if ( ! in_array( $product->get_type(), Globals::get_child_product_types() ) ) {
+
+			$atum_locations = wp_get_object_terms( $product->get_id(), Globals::PRODUCT_LOCATION_TAXONOMY, [ 'fields' => 'ids' ] );
+
+			if ( ! empty( $atum_locations ) ) {
+				wp_set_object_terms( $duplicate->get_id(), $atum_locations, Globals::PRODUCT_LOCATION_TAXONOMY );
+			}
+
+		}
+
+		do_action( 'atum/after_duplicate_product', $duplicate, $product );
 
 	}
 

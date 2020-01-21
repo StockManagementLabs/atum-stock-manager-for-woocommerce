@@ -4,7 +4,9 @@
 	"license": "Copyrighted",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"preferred-install": "dist",
+	"config": {
+		"preferred-install": "dist"
+	},
 	"require": {
 		"php": ">=5.4.0",
 		"mpdf/mpdf": "^8.0.0",

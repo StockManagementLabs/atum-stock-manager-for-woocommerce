@@ -2098,10 +2098,11 @@ final class Helpers {
 	 */
 	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
-		global $wpdb;
-		$wpdb->hide_errors();
-
 		if ( $product instanceof \WC_Product ) {
+
+			if ( ! apply_filters( 'atum/force_rebuild_stock_status_allowed', TRUE, $product ) ) {
+				return;
+			}
 
 			if ( $clean_meta ) {
 				$product->set_out_stock_threshold( NULL );
@@ -2955,40 +2956,6 @@ final class Helpers {
 
 		return $is_array ? $classes : implode( ' ', $classes );
 
-	}
-	
-	/**
-	 * Duplicates an entry from atum product data table.
-	 * Needs to be updated when the database changes.
-	 *
-	 * @since 1.5.8.4
-	 *
-	 * @param integer $original_id
-	 * @param integer $destination_id
-	 */
-	public static function duplicate_atum_product( $original_id, $destination_id ) {
-		
-		global $wpdb;
-
-		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-
-		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
-		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
-
-		// phpcs:disable WordPress.DB.PreparedSQL
-		$wpdb->query( "
-			INSERT IGNORE INTO $atum_product_data_table (
-				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
-			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
-			FROM $atum_product_data_table WHERE product_id = $original_id;
-		" );
-		// phpcs:enable
 	}
 
 	/**

@@ -116,7 +116,7 @@ class Wpml {
 	public function register_hooks() {
 
 		add_action( 'atum/data_store/after_save_product_data', array( $this, 'update_atum_data' ), 10, 2 );
-		add_action( 'atum/data_store/after_delete_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
+		add_action( 'atum/after_delete_atum_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
 		
 		if ( is_admin() ) {
 
@@ -857,7 +857,7 @@ class Wpml {
 			
 			$master_post_id = $this->wpml->products->get_original_product_id( $master_post_id );
 			
-			Helpers::duplicate_atum_product( $master_post_id, $id );
+			$this->duplicate_atum_product( $master_post_id, $id );
 			
 			$product = wc_get_product( $id );
 			
@@ -869,11 +869,45 @@ class Wpml {
 					
 					$original_product_id = $this->wpml->products->get_original_product_id( $child_id );
 					
-					Helpers::duplicate_atum_product( $original_product_id, $child_id );
+					$this->duplicate_atum_product( $original_product_id, $child_id );
 				}
 				
 			}
 		}
+	}
+
+	/**
+	 * Duplicates an entry from atum product data table.
+	 * Needs to be updated when the database changes.
+	 *
+	 * @since 1.5.8.4
+	 *
+	 * @param int $original_id
+	 * @param int $destination_id
+	 */
+	public static function duplicate_atum_product( $original_id, $destination_id ) {
+
+		global $wpdb;
+
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
+		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
+
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$wpdb->query( "
+			INSERT IGNORE INTO $atum_product_data_table (
+				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
+				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
+				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
+			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
+			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
+			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
+			FROM $atum_product_data_table WHERE product_id = $original_id;
+		" );
+		// phpcs:enable
 	}
 	
 	/**
@@ -943,40 +977,36 @@ class Wpml {
 	 * @since 1.5.8.4
 	 *
 	 * @param \WC_Product $product The product object.
-	 * @param array       $args    Array of args passed to the delete method.
 	 */
-	public function delete_atum_data( $product, $args ) {
+	public function delete_atum_data( $product ) {
 		
 		global $wpdb;
 		
 		// Delete the ATUM data for this product.
-		if ( ! empty( $args['force_delete'] ) && TRUE === $args['force_delete'] ) {
-			
-			$product_id       = $product->get_id();
-			$post_type        = get_post_type( $product_id );
-			$translations_ids = [];
-			
-			/* @noinspection PhpUndefinedMethodInspection */
-			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
-			
-			foreach ( $product_translations as $translation ) {
-				
-				$translation_id = (int) $translation->element_id;
-				if ( $product_id !== $translation_id ) {
-					
-					$translations_ids[] = $translation_id;
-				}
-				
+		$product_id       = $product->get_id();
+		$post_type        = get_post_type( $product_id );
+		$translations_ids = [];
+
+		/* @noinspection PhpUndefinedMethodInspection */
+		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
+
+		foreach ( $product_translations as $translation ) {
+
+			$translation_id = (int) $translation->element_id;
+			if ( $product_id !== $translation_id ) {
+
+				$translations_ids[] = $translation_id;
 			}
-			
-			if ( $translations_ids ) {
-				
-				// Don't need prepare, all are integers.
-				$translations_ids_str = implode( ',', $translations_ids );
-				$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-				
-				$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
-			}
+
+		}
+
+		if ( $translations_ids ) {
+
+			// Don't need prepare, all are integers.
+			$translations_ids_str = implode( ',', $translations_ids );
+			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 		
 	}
