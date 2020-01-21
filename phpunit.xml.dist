@@ -10,11 +10,17 @@
 	stopOnFailure="false"
 	>
 	<testsuites>
-		<testsuite name="atum-stock-manager-settings">
-			<directory prefix="test-" suffix=".php">./tests/settings/</directory>
+		<testsuite name="atum-stock-manager">
+			<directory prefix="test-" suffix=".php">./tests/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-plugin">
+			<directory prefix="test-" suffix=".php">./tests/_plugin/</directory>
 		</testsuite>
 		<testsuite name="atum-stock-manager-addons">
 			<directory prefix="test-" suffix=".php">./tests/addons/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-api">
+			<directory prefix="test-" suffix=".php">./tests/api/</directory>
 		</testsuite>
 		<testsuite name="atum-stock-manager-components">
 			<directory prefix="test-" suffix=".php">./tests/components/</directory>
@@ -46,8 +52,11 @@
 		<testsuite name="atum-stock-manager-purchase-orders">
 			<directory prefix="test-" suffix=".php">./tests/purchase-orders/</directory>
 		</testsuite>
-		<testsuite name="atum-stock-manager-purchase-queries">
+		<testsuite name="atum-stock-manager-queries">
 			<directory prefix="test-" suffix=".php">./tests/queries/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-settings">
+			<directory prefix="test-" suffix=".php">./tests/settings/</directory>
 		</testsuite>
 		<testsuite name="atum-stock-manager-stock-central">
 			<directory prefix="test-" suffix=".php">./tests/stock-central/</directory>

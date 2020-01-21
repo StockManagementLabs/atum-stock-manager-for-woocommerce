@@ -7,16 +7,9 @@
 
 use Atum\InboundStock\InboundStock;
 use Atum\InboundStock\Lists\ListTable;
-use Atum\Inc\Helpers;
-use Atum\PurchaseOrders\Models\PurchaseOrder;
-use Atum\Suppliers\Suppliers;
 use Symfony\Component\DomCrawler\Crawler;
 use TestHelpers\TestHelpers;
 
-
-/**
- * Sample test case.
- */
 class InboundStockListTableTest extends PHPUnit_Framework_TestCase { //WP_UnitTestCase {
 
 	public function test_methods() {
@@ -74,20 +67,24 @@ class InboundStockListTableTest extends PHPUnit_Framework_TestCase { //WP_UnitTe
 		ob_start();
 		$instance->single_row( $po );
 		$result = ob_get_clean();
-
+		//var_dump($result);
 		$this->assertIsString( $result );
 	}
 
 	public function test_single_expandable_row() {
 		//FIXME: Error - Call to a member function get_type() on null
 		/*
-		$instance = new ListTable([ 'per_page' => 20 ]);
 		$product  = TestHelpers::create_variation_product();
-		TestHelpers::create_atum_purchase_order( $product );
-		$instance->product = $product;
+		$instance = new ListTable([ 'per_page' => 20 ]);
+		$is = InboundStock::get_instance();
 
-		$data = $instance->single_expandable_row( $product, $product->get_type() );
-		var_dump( $data );*/
+		$is->set_list_table( $instance );
+
+		ob_start();
+		$instance->single_expandable_row( $product, $product->get_type() );
+		$data = ob_get_clean();
+		//var_dump( $data );
+		//*/
 		$this->expectNotToPerformAssertions();
 	}
 

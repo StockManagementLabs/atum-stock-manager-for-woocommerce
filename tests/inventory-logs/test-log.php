@@ -181,6 +181,12 @@ class LogTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->expectNotToPerformAssertions();
 		/* FIXME
 		global $post;
+		$pid = $this->factory()->post->create( array(
+			'post_title'   => 'A Title',
+			'post_content' => '<p>Some content.</p>',
+			'post_type'    => InventoryLogs::POST_TYPE
+		) );
+		$post = get_post( $pid );
 		$obj = new Log( $post->ID );
 		$product = TestHelpers::create_atum_simple_product();
 		$order = TestHelpers::create_order( $product );
@@ -197,7 +203,8 @@ class LogTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		//$obj->set_order( $order->get_id() );
 		$obj->add_item( $item );
 
-		$this->assertIsObject( $obj->get_atum_order_item( $item ) );*/
+		$this->assertIsObject( $obj->get_atum_order_item( $item ) );
+		//*/
 	}
 
 	public function test_after_save() {

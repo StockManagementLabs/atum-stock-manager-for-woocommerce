@@ -14,7 +14,6 @@ use Atum\InboundStock\Lists\ListTable;
 use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
 
-
 /**
  * Sample test case.
  */

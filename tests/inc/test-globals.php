@@ -9,7 +9,6 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use TestHelpers\TestHelpers;
 
-
 /**
  * Sample test case.
  */

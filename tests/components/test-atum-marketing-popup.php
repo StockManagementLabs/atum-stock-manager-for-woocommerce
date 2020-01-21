@@ -9,7 +9,6 @@ use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
 use TestHelpers\TestHelpers;
 
-
 /**
  * Sample test case.
  */

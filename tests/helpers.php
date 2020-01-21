@@ -21,6 +21,12 @@ use WC_Product_Attribute;
 
 class TestHelpers {
 
+	public static function get_classes() {
+		$class_list = include_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'vendor' .
+		                           DIRECTORY_SEPARATOR . 'composer' . DIRECTORY_SEPARATOR . 'autoload_classmap.php';
+		return $class_list;
+	}
+
 	public static function scan_dir_for_files() {
 		$path = dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR;
 
@@ -35,6 +41,7 @@ class TestHelpers {
 				if( is_dir( $path . $item ) ) {
 					$file_list = self::scan_dir( $path . $item . DIRECTORY_SEPARATOR, $file_list );
 				} else {
+					if( '.php' !== substr( $item, -4 )) continue;
 					$file_list[] = $path . $item;
 				}
 			}
@@ -44,12 +51,7 @@ class TestHelpers {
 	}
 
 	public static function scan_file( $filepath, $summary = array( 'count' => 0, 'msg' => '' ) ) {
-		$search = [
-			'atum-stock-manager-for-woocommerce' => 'ATUM_TEXT_DOMAIN',
-			'atum-multi-inventory' => 'ATUM_MULTINV_TEXT_DOMAIN',
-			'atum-product-levels' => 'ATUM_LEVELS_TEXT_DOMAIN',
-			'atum-export-pro' => 'ATUM_EXPORT_TEXT_DOMAIN',
-		];
+		$text_constant = 'ATUM_TEXT_DOMAIN';
 
 		if( 0 === filesize( $filepath ) )
 			return $summary;
@@ -57,11 +59,14 @@ class TestHelpers {
 		$file = fopen( $filepath, 'r' );
 		$text = fread( $file, filesize( $filepath ) );
 
-		foreach ( $search as $subpath => $s ) {
-			if( strpos( $filepath, $subpath ) > 0 ) continue;
-			if( strpos( $text, $s ) > 0 ) {
+		preg_match_all('/(ATUM\S*_TEXT_DOMAIN)/m', $text, $matches, PREG_SET_ORDER);
+
+		if( count( $matches ) > 0) {
+			foreach ( $matches as $match ) {
+				if( empty( $match ) ) continue;
+				if( $text_constant === $match[0] ) continue;
 				$summary['count']++;
-				$summary['msg'] .= $s . ' found in ' . $filepath . "\n";
+				$summary['msg'] .= $match[0] . ' found in ' . $filepath . "\n";
 			}
 		}
 

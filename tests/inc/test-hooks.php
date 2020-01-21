@@ -12,7 +12,6 @@ use Atum\Suppliers\Suppliers;
 use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
 
-
 /**
  * Sample test case.
  */

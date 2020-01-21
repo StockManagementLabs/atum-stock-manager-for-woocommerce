@@ -109,6 +109,7 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_display_text() {
+		wp_set_current_user( 1 );
 		$obj  = Settings::get_instance();
 		$args = [
 			'id' => 'show_totals',
@@ -118,6 +119,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->register_settings();
 		$obj->display_text( $args );
 		$data = ob_get_clean();
@@ -126,6 +131,7 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	}
 
 	public function test_display_textarea() {
+		wp_set_current_user( 1 );
 		$obj  = Settings::get_instance();
 		$args = [
 			'id' => 'show_totals',
@@ -136,6 +142,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			],
 			'default' => 'foo',
 		];
+		ob_start();
+		$obj->display();
+		ob_get_clean();
+
 		ob_start();
 		$obj->register_settings();
 		$obj->display_textarea( $args );
@@ -154,6 +164,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->register_settings();
 		$obj->display_number( $args );
 		$data = ob_get_clean();
@@ -171,6 +185,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->display_wc_country( $args );
 		$data = ob_get_clean();
 		$html = new Crawler( $data );
@@ -187,6 +205,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			],
 			'default' => 'foo',
 		];
+		ob_start();
+		$obj->display();
+		ob_get_clean();
+
 		ob_start();
 		$obj->display_switcher( $args );
 		$data = ob_get_clean();
@@ -209,6 +231,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->display_button_group( $args );
 		$data = ob_get_clean();
 		$html = new Crawler( $data );
@@ -230,6 +256,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			],
 			'default' => 'foo',
 		];
+		ob_start();
+		$obj->display();
+		ob_get_clean();
+
 		ob_start();
 		$obj->display_select( $args );
 		$data = ob_get_clean();
@@ -255,6 +285,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->display_script_runner( $args );
 		$data = ob_get_clean();
 		$html = new Crawler( $data );
@@ -268,6 +302,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			'default' => 'foo',
 		];
 		ob_start();
+		$obj->display();
+		ob_get_clean();
+
+		ob_start();
 		$obj->display_color( $args );
 		$data = ob_get_clean();
 		$html = new Crawler( $data );
@@ -279,6 +317,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$args = [
 			'id' => 'show_totals',
 		];
+		ob_start();
+		$obj->display();
+		ob_get_clean();
+
 		ob_start();
 		$obj->display_html( $args );
 		$data = ob_get_clean();
@@ -299,6 +341,10 @@ class SettingsTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 				]
 			]
 		];
+		ob_start();
+		$obj->display();
+		ob_get_clean();
+
 		ob_start();
 		$obj->display_theme_selector( $args );
 		$data = ob_get_clean();

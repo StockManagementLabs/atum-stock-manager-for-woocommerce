@@ -8,7 +8,6 @@
 use Atum\Components\AtumQueues;
 use TestHelpers\TestHelpers;
 
-
 /**
 * Sample test case.
 */

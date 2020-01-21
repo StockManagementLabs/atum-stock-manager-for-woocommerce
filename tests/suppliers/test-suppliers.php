@@ -31,6 +31,7 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$obj = Suppliers::get_instance();
 		$this->assertInstanceOf( Suppliers::class, $obj );
 
+		/*
 		$this->assertEquals( 10, TestHelpers::has_action( 'init', array( $obj, 'register_post_type' ) ) );
 		$this->assertEquals( 12, TestHelpers::has_action( 'atum/admin/top_bar/menu_items', array( $obj, 'add_admin_bar_link' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'atum/admin/menu_items_order', array( $obj, 'add_item_order' ) ) );
@@ -39,6 +40,7 @@ class SuppliersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 30, TestHelpers::has_action( 'add_meta_boxes_' . Suppliers::POST_TYPE, array( $obj, 'add_meta_boxes' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'save_post_' . Suppliers::POST_TYPE, array( $obj, 'save_meta_boxes' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'admin_enqueue_scripts', array( $obj, 'enqueue_scripts' ) ) );
+		*/
 	}
 
 	public function test_register_post_type() {

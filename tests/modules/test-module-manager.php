@@ -11,7 +11,7 @@ use Atum\Modules\ModuleManager;
 /**
  * Sample test case.
  */
-class ModulesManagerTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
+class ModuleManagerTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_methods() {
 		$data = TestHelpers::count_public_methods( ModuleManager::class );

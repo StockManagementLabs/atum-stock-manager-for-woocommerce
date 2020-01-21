@@ -9,9 +9,6 @@ use Atum\StockCentral\StockCentral;
 use TestHelpers\TestHelpers;
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * Sample test case.
- */
 class StockCentralTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 
 	public function test_methods() {

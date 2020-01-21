@@ -1,6 +1,6 @@
 <?php
 /**
- * Class WidgetsHelpersTest
+ * Class WidgetHelpersTest
  *
  * @package Atum_Stock_Manager_For_Woocommerce
  */
@@ -21,7 +21,7 @@ use TestHelpers\TestHelpers;
 /**
  * Sample test case.
  */
-class WidgetsHelpersTest extends WP_UnitTestCase {
+class WidgetHelpersTest extends WP_UnitTestCase {
 
 	public function test_methods() {
 		$data = TestHelpers::count_public_methods( WidgetHelpers::class );
