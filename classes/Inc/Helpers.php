@@ -2098,10 +2098,11 @@ final class Helpers {
 	 */
 	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
-		global $wpdb;
-		$wpdb->hide_errors();
-
 		if ( $product instanceof \WC_Product ) {
+
+			if ( ! apply_filters( 'atum/force_rebuild_stock_status_allowed', TRUE, $product ) ) {
+				return;
+			}
 
 			if ( $clean_meta ) {
 				$product->set_out_stock_threshold( NULL );
