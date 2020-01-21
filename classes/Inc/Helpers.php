@@ -2134,6 +2134,8 @@ final class Helpers {
 		// When disabling the "Out of stock threshold", we must restore the stock status to its correct value.
 		if ( $all ) {
 
+			global $wpdb;
+
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT ID FROM $wpdb->posts p
