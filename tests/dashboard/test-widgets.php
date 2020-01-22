@@ -329,9 +329,7 @@ class WidgetHelpersTest extends WP_UnitTestCase {
 		ob_start();
 		$widget->render();
 		$response = ob_get_clean();
-
-		$html = new Crawler( $response );
-		$this->assertGreaterThan( 0, $html->filter( 'div.video-details' )->count() );
+		$this->assertContains( '<div class="videos-widget" data-widget="videos">', $response );
 	}
 
 

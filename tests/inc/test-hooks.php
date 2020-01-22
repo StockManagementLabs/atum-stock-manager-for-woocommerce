@@ -38,11 +38,14 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_admin_order_item_headers', array( Hooks::class, 'wc_order_add_location_column_header' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_admin_order_item_values', array( Hooks::class, 'wc_order_add_location_column_value' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'wp_dropdown_cats', array( Hooks::class, 'set_dropdown_autocomplete' ) ) );
-		$this->assertEquals( 10, TestHelpers::has_action( 'updated_option', array( Hooks::class, 'rebuild_wc_stock_status_on_disable' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'updated_option', array( Hooks::class, 'rebuild_stock_status_on_oost_changes' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_order_status_completed', array( Hooks::class, 'maybe_save_paid_date' ) ) );
-		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_before_delete_product', array( Hooks::class, 'before_delete_product' ) ) );
-		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_before_delete_product_variation', array( Hooks::class, 'before_delete_product' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'delete_post', array( Hooks::class, 'before_delete_product' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'product_variation_linked', array( Hooks::class, 'save_variation_atum_data' ) ) );
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_ajax_order_items_added', array( Hooks::class, 'save_added_order_items_props' ) ) );
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_before_delete_order_item', array( Hooks::class, 'before_delete_order_item' ) ) );
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_delete_order_item', array( Hooks::class, 'after_delete_order_item' ) ) );
+		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_product_duplicate', array( Hooks::class, 'duplicate_product' ) ) );
 	}
 
 	public function test_register_global_hooks() {
@@ -65,7 +68,7 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 			$this->assertEquals( 10, TestHelpers::has_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( Hooks::class, 'remove_stock_status_threshold' ) ) );
 		}
 
-		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_process_shop_order_meta', array( Hooks::class, 'save_order_items_props' ) ) );
+		$this->assertEquals( PHP_INT_MAX, TestHelpers::has_action( 'woocommerce_saved_order_items', array( Hooks::class, 'save_order_items_props' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'trashed_post', array( Hooks::class, 'maybe_save_order_items_props' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'untrashed_post', array( Hooks::class, 'maybe_save_order_items_props' ) ) );
 		$this->assertEquals( 10, TestHelpers::has_action( 'woocommerce_after_order_object_save', array( Hooks::class, 'clean_up_update_date' ) ) );
@@ -179,10 +182,10 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->assertGreaterThan( 0, strpos( $msg, 'have been added to your cart' ) );
 	}
 
-	public function test_rebuild_wc_stock_status_on_disable() {
+	public function test_rebuild_stock_status_on_oost_changes() {
 		$hooks = Hooks::get_instance();
 		try {
-			$hooks->rebuild_wc_stock_status_on_disable( 'atum_settings', [], 'out_stock_threshold' );
+			$hooks->rebuild_stock_status_on_oost_changes( 'atum_settings', [], [ 'out_stock_threshold' => 'yes' ] );
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
@@ -279,12 +282,51 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$this->expectNotToPerformAssertions();
 	}
 
+	public function test_save_added_order_items_props() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		foreach( $order->get_items() as $item ) ;
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->save_added_order_items_props( [ $item->get_id() => $item ], $order );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
 	public function test_maybe_save_order_items_props() {
 		$product = TestHelpers::create_atum_simple_product();
 		$order = TestHelpers::create_order( $product );
 		$hooks = Hooks::get_instance();
 		try {
 			$hooks->maybe_save_order_items_props( $order->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_before_delete_order_item() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		foreach( $order->get_items() as $item ) ;
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->before_delete_order_item( $item->get_id() );
+		} catch ( Exception $e ) {
+			unset( $e );
+		}
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_after_delete_order_item() {
+		$product = TestHelpers::create_atum_simple_product();
+		$order = TestHelpers::create_order( $product );
+		foreach( $order->get_items() as $item ) ;
+		$hooks = Hooks::get_instance();
+		try {
+			$hooks->after_delete_order_item( $item->get_id() );
 		} catch ( Exception $e ) {
 			unset( $e );
 		}
@@ -329,6 +371,14 @@ class HooksTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		$product = TestHelpers::create_atum_simple_product();
 		$hooks = Hooks::get_instance();
 		$hooks->update_atum_calc_fields( $product, false );
+		$this->expectNotToPerformAssertions();
+	}
+
+	public function test_duplicate_product() {
+		$product = TestHelpers::create_atum_simple_product();
+		$duplicated = TestHelpers::create_product();
+		$hooks = Hooks::get_instance();
+		$hooks->duplicate_product( $duplicated, $product, FALSE );
 		$this->expectNotToPerformAssertions();
 	}
 

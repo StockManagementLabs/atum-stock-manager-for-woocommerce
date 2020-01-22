@@ -242,14 +242,12 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 		ob_start();
 		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos() );
 		$response = ob_get_clean();
-		$html = new Crawler( $response );
-		$this->assertGreaterThan( 50, $html->filter('div')->count() );
+		$this->assertContains( '<div class="videos-widget" data-widget="videos">', $response );
 	}
 
 	public function test_load_view_to_string() {
 		$response = Helpers::load_view_to_string( 'widgets/videos', Videos::get_filtered_videos() );
-		$html = new Crawler( $response );
-		$this->assertGreaterThan( 50, $html->filter('div')->count() );
+		$this->assertContains( '<div class="videos-widget" data-widget="videos">', $response );
 	}
 
 	public function test_get_atum_control_status() {
@@ -690,15 +688,6 @@ class HelpersTest extends WP_UnitTestCase { //PHPUnit_Framework_TestCase {
 	public function test_get_option_group_hidden_classes() {
 		$classes = Helpers::get_option_group_hidden_classes();
 		$this->assertTrue( in_array( 'hide_if_external', $classes ) );
-	}
-
-	public function test_duplicate_atum_product() {
-		$p = TestHelpers::create_atum_simple_product();
-		Helpers::duplicate_atum_product( $p->get_id(), 9999 );
-		$p2 = Helpers::get_atum_product( 9999 );
-		//var_dump( $p2 );
-		//TODO
-		$this->expectNotToPerformAssertions();
 	}
 
 	public function test_is_rest_request() {
