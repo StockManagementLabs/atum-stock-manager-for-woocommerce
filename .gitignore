@@ -1,13 +1,1 @@
-# System files
-.DS_Store
-
-# Dev dependencies
-node_modules
-bower_components
-*.map
-.idea
-package-lock.json
-
-# mPDF temp dir
-vendor/mpdf/mpdf/ttfontdata/*
-/vendor/mcaskill/php-array-group-by
+/composer.lock

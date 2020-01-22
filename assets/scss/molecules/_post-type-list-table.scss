@@ -58,9 +58,9 @@
 .wrap {
 	
 	.wp-heading-inline {
-		~ .subsubsub {
-			display: none;
-		}
+	~ .subsubsub {
+		display: none;
+	}
 		@include mobile-max {
 			a.page-title-action {
 				padding: 0 12px;

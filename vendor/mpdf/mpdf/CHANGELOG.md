@@ -1,3 +1,22 @@
+mPDF 8.1.x
+===========================
+
+* Add proxy support to curl
+* Fixed date and time format in the informations dictionary (#1083, @peterdevpl)
+* Checking allowed stream wrappers in CssManager
+* PHP 7.4 support (until final 7.4 release with composer --ignore-platform-reqs)
+* Improve debugging of remote content issues (@ribeirobreno)
+
+mPDF 8.0.x
+===========================
+
+* Added the check for JPEG SOF header 0xFF 0xC1 (extended) (@jamiejones85)
+* Allows setting `none` as zoom mode in `SetDisplayMode` method, so that OpenAction is not written (#602)
+* Allowed image stream whitelist to be customised (#1005, thanks @jakejackson)
+* Fixed parsing of top-left-bottom-right CSS rules with !important (#1009)
+* Fixed skipping ordered list numbering with page-break-inside: avoid (#339)
+* Compound classes selector support, like `.one.two` or `div.message.special` (#538, @peterdevpl)
+
 mPDF 8.0.0
 ===========================
 
@@ -6,7 +25,9 @@ mPDF 8.0.0
 * Updated FPDI dependency to version 2 (thanks a lot, @JanSlabon)
     - removed `SetImportUse` method
     - case of `ImportPage` method changed to `importPage`
+    - similarly, case of `setSourceFile` and `useTemplate` was changed to a lowercase first letter.
     - signature of `importPage` changed
+    - returned value of `useTemplate` changed
 * Moved QRCode generating code portions to external package _mpdf/qrcode_
     - This reduced package size considerably (ca 6MB)
 * Fraction sizes without leading zeros allowed for font sizes (#973, thanks @peterdevpl)
