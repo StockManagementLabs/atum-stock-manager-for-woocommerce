@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	processIsolation="false"
+	stopOnFailure="false"
+	>
+	<testsuites>
+		<testsuite name="atum-stock-manager">
+			<directory prefix="test-" suffix=".php">./tests/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-plugin">
+			<directory prefix="test-" suffix=".php">./tests/_plugin/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-addons">
+			<directory prefix="test-" suffix=".php">./tests/addons/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-api">
+			<directory prefix="test-" suffix=".php">./tests/api/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-components">
+			<directory prefix="test-" suffix=".php">./tests/components/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-dashboard">
+			<directory prefix="test-" suffix=".php">./tests/dashboard/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-data-export">
+			<directory prefix="test-" suffix=".php">./tests/dataexport/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inbound-stock">
+			<directory prefix="test-" suffix=".php">./tests/inbound-stock/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inc">
+			<directory prefix="test-" suffix=".php">./tests/inc/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-inventory">
+			<directory prefix="test-" suffix=".php">./tests/inventory-logs/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-metaboxes">
+			<directory prefix="test-" suffix=".php">./tests/metaboxes/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-models">
+			<directory prefix="test-" suffix=".php">./tests/models/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-modules">
+			<directory prefix="test-" suffix=".php">./tests/modules/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-purchase-orders">
+			<directory prefix="test-" suffix=".php">./tests/purchase-orders/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-queries">
+			<directory prefix="test-" suffix=".php">./tests/queries/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-settings">
+			<directory prefix="test-" suffix=".php">./tests/settings/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-stock-central">
+			<directory prefix="test-" suffix=".php">./tests/stock-central/</directory>
+		</testsuite>
+		<testsuite name="atum-stock-manager-suppliers">
+			<directory prefix="test-" suffix=".php">./tests/suppliers/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
