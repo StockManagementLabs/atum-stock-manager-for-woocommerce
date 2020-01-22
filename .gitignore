@@ -3,10 +3,9 @@
 
 # Dev dependencies
 node_modules
-bower_components
 *.map
 .idea
-package-lock.json
+.vscode
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*
