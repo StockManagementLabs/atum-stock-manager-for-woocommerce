@@ -3323,6 +3323,12 @@ body .select2-container--default .select2-results__group {
   cursor: default;
 }
 
+.product_data input.atum-read-only, .product_data select.atum-read-only, .product_data textarea.atum-read-only {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .product_data_tabs .atum_tab a:before {
   content: "" !important;
   font-family: "atum-icon-font" !important;
