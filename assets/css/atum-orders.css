@@ -5565,6 +5565,8 @@ ul.atum_order_notes li .note_content::after {
 .subsubsub.extend-list-table li span a, #posts-filter .subsubsub li span a {
   color: var(--atum-table-views-tabs);
   padding: 0;
+  -webkit-transition: color .2s ease-in-out;
+  transition: color .2s ease-in-out;
 }
 
 .subsubsub.extend-list-table li span a.current, #posts-filter .subsubsub li span a.current {
@@ -5587,6 +5589,10 @@ ul.atum_order_notes li .note_content::after {
 
 .subsubsub.extend-list-table li span a.empty, #posts-filter .subsubsub li span a.empty {
   color: var(--atum-table-views-tabs);
+}
+
+.subsubsub.extend-list-table li span:hover a, #posts-filter .subsubsub li span:hover a {
+  color: var(--primary) !important;
 }
 
 .subsubsub.extend-list-table li span .extra-links-container, #posts-filter .subsubsub li span .extra-links-container {

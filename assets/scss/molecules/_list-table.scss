@@ -229,6 +229,7 @@
 				a {
 					color: var(--atum-table-views-tabs);
 					padding: 0;
+					transition: color .2s ease-in-out;
 					
 					&.current {
 						pointer-events: none;
@@ -242,6 +243,7 @@
 					
 					&.tips {
 						color:  var(--primary);
+						
 						&:hover {
 							cursor: pointer;
 						}
@@ -252,17 +254,26 @@
 					}
 				}
 				
+				&:hover {
+					a {
+						color:  var(--primary) !important;
+					}
+				}
+				
 				.extra-links-container {
 					font-size: 14px;
 					font-weight: normal;
 					color: var(--primary);
+					
 					&.empty {
 						color: var(--atum-table-views-tabs);
+						
 						a {
 							padding: 0;
 							color: var(--atum-table-views-tabs);
 						}
 					}
+					
 					a {
 						padding: 0;
 						color:  var(--primary);
