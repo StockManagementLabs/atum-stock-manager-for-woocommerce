@@ -62,12 +62,12 @@ abstract class AtumOrderPostType {
 	/**
 	 * The ATUM Order items table name
 	 */
-	const ORDER_ITEMS_TABLE = ATUM_PREFIX . 'order_items';
+	const ORDER_ITEMS_TABLE = 'atum_order_items';
 
 	/**
 	 * The ATUM Order item meta table name
 	 */
-	const ORDER_ITEM_META_TABLE = ATUM_PREFIX . 'order_itemmeta';
+	const ORDER_ITEM_META_TABLE = 'atum_order_itemmeta';
 
 	/**
 	 * AtumOrderPostType constructor

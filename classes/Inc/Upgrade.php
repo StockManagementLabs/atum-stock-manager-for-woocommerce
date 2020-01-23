@@ -43,7 +43,7 @@ class Upgrade {
 		$this->current_atum_version = $db_version;
 
 		// Update the db version to the current ATUM version before upgrade to prevent various executions.
-		update_option( ATUM_PREFIX . 'version', ATUM_VERSION );
+		update_option( 'atum_version', ATUM_VERSION );
 
 		// Delete transients if there after every version change.
 		AtumCache::delete_transients();
@@ -129,8 +129,8 @@ class Upgrade {
 		global $wpdb;
 
 		// Create DB tables for the ATUM Order items.
-		$items_table    = $wpdb->prefix . ATUM_PREFIX . 'order_items';
-		$itemmeta_table = $wpdb->prefix . ATUM_PREFIX . 'order_itemmeta';
+		$items_table    = $wpdb->prefix . 'atum_order_items';
+		$itemmeta_table = $wpdb->prefix . 'atum_order_itemmeta';
 
 		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$items_table';" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL
 
@@ -338,7 +338,7 @@ class Upgrade {
 
 		global $wpdb;
 
-		$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
+		$product_meta_table = $wpdb->prefix . 'atum_product_data';
 
 		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$product_meta_table';" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL
 
@@ -445,7 +445,7 @@ class Upgrade {
 			}
 
 			// Insert a new row of data.
-			$inserted_row = $wpdb->insert( $wpdb->prefix . ATUM_PREFIX . 'product_data', $new_data );
+			$inserted_row = $wpdb->insert( $wpdb->prefix . 'atum_product_data', $new_data );
 
 			// TODO: Move meta deletion to ATUM settings -> Tools
 			// If the row was inserted, delete the old meta.
@@ -630,7 +630,7 @@ class Upgrade {
 	}
 
 	/**
-	 * Modify the stock count inventory fields from bigint to double
+	 * Add atum_stock_status and lowstock columns to ATUM Product data
 	 *
 	 * @since 1.6.6
 	 */
@@ -641,11 +641,11 @@ class Upgrade {
 		$db_name         = DB_NAME;
 		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$columns         = array(
-			ATUM_PREFIX . 'stock_status' => array(
+			'atum_stock_status' => array(
 				'type'    => 'VARCHAR(15)',
 				'default' => "'instock'",
 			),
-			'low_stock'                  => array(
+			'low_stock'         => array(
 				'type'    => 'TINYINT(1)',
 				'default' => '0',
 			),
@@ -677,7 +677,7 @@ class Upgrade {
 	 *
 	 * @since 1.6.6
 	 */
-	public static function fill_new_fields_values() {
+	public function fill_new_fields_values() {
 
 		global $wpdb;
 
@@ -702,9 +702,12 @@ class Upgrade {
 
 					$low_stock = Helpers::is_product_low_stock( $product );
 
-					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-					$wpdb->query( $wpdb->prepare( 'UPDATE ' . $atum_product_data_table . ' SET low_stock = %1$d
-					WHERE product_id = %2$d  ', $low_stock, $product->get_id() ) );
+					// phpcs:disable WordPress.DB
+					$wpdb->query( $wpdb->prepare(
+						'UPDATE ' . $atum_product_data_table . ' SET low_stock = %1$d
+						WHERE product_id = %2$d', $low_stock, $product->get_id()
+					) );
+					// phpcs:enable
 				}
 			}
 		}
@@ -713,9 +716,13 @@ class Upgrade {
 
 			if ( $products_ids ) {
 
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$wpdb->query( $wpdb->prepare( "UPDATE $atum_product_data_table SET atum_stock_status = %s
-					WHERE product_id IN(" . implode( ',', $products_ids ) . ')', $status ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$wpdb->query( $wpdb->prepare( "
+					UPDATE $atum_product_data_table SET atum_stock_status = %s
+					WHERE product_id IN(" . implode( ',', $products_ids ) . ')',
+					$status
+				) );
+				// phpcs:enable
 			}
 		}
 

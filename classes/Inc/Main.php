@@ -132,7 +132,7 @@ class Main {
 	public function pre_init() {
 
 		// Upgrade if needed.
-		$db_version = get_option( ATUM_PREFIX . 'version' );
+		$db_version = get_option( 'atum_version' );
 
 		if ( version_compare( $db_version, ATUM_VERSION, '!=' ) ) {
 			// Do upgrade tasks.
