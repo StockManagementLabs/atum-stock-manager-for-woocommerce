@@ -3198,7 +3198,6 @@ body .select2-container--default .select2-results__group {
 }
 
 .input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
-  border-color: #FF4848;
   background-color: rgba(255, 72, 72, 0.15);
 }
 
@@ -3209,11 +3208,6 @@ body .select2-container--default .select2-results__group {
   display: flex;
   z-index: 1;
   border: 1px solid var(--main-border-alt);
-}
-
-.input-group.invalid .input-group-prepend, .input-group.invalid
-.input-group-append {
-  border-color: #FF4848;
 }
 
 .input-group-prepend .btn,
@@ -3316,15 +3310,14 @@ body .select2-container--default .select2-results__group {
 }
 
 .product_data input[type=text]:-moz-read-only, .product_data input[type=number]:-moz-read-only, .product_data textarea:-moz-read-only {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .product_data input[type=text]:disabled, .product_data input[type=text]:read-only, .product_data input[type=number]:disabled, .product_data input[type=number]:read-only, .product_data textarea:disabled, .product_data textarea:read-only {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .product_data input.atum-read-only, .product_data select.atum-read-only, .product_data textarea.atum-read-only {
-  pointer-events: none;
   cursor: not-allowed;
   opacity: 0.7;
 }

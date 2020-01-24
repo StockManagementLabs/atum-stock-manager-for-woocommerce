@@ -4021,7 +4021,6 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 }
 
 .input-group.invalid input[type=text], .input-group.invalid input[type=number], .input-group.invalid textarea, .input-group.invalid select, .input-group.invalid .select2-container {
-  border-color: #FF4848;
   background-color: rgba(255, 72, 72, 0.15);
 }
 
@@ -4032,11 +4031,6 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   display: flex;
   z-index: 1;
   border: 1px solid var(--main-border-alt);
-}
-
-.input-group.invalid .input-group-prepend, .input-group.invalid
-.input-group-append {
-  border-color: #FF4848;
 }
 
 .input-group-prepend .btn,

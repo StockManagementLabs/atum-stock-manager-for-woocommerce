@@ -79,7 +79,6 @@
 	
 	&.invalid {
 		input[type=text], input[type=number], textarea, select, .select2-container {
-			border-color: $danger;
 			background-color: transparentize($danger, 0.85);
 		}
 	}
@@ -99,9 +98,6 @@
 	z-index: 1;
 	border: $input-border-width solid var(--main-border-alt);
 	
-	.input-group.invalid & {
-		border-color: $danger;
-	}
 	
 	// Ensure buttons are always above inputs for more visually pleasing borders.
 	// This isn't needed for `.input-group-text` since it shares the same border-color
