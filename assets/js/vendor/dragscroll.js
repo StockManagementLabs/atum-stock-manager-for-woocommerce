@@ -64,14 +64,11 @@
 									e.pageX, e.pageY
 								) == cont )
 							) {
-								el.classList.add('dragging');
 								fixTouches(e);
 								pushed = 1;
 								moved = 0;
 								startX = lastClientX = e.clientX;
 								startY = lastClientY = e.clientY;
-								e.preventDefault();
-								e.stopPropagation();
 							}
 						}, 0
 					);
@@ -114,7 +111,11 @@
 						ev,
 						cont['mm'+index] = function(e) {
 							fixTouches(e);
+							
 							if (pushed) {
+								
+								el.classList.add('dragging');
+								
 								if (!moved &&
 									(Math.abs(e.clientX - startX) > moveThreshold ||
 										Math.abs(e.clientY - startY) > moveThreshold)) {
