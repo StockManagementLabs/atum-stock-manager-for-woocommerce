@@ -19,7 +19,14 @@ export let Blocker = {
 	},
 	
 	unblock($selector: any) {
+		
 		$selector.unblock();
+		
+		// In case there were some changes on the DOM and it's not able to completely remove the block UI, do it manually
+		if ($selector.find('.blockUI').length) {
+			$selector.find('.blockUI').remove();
+		}
+		
 	},
 	
 }

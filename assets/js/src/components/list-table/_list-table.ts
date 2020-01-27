@@ -4,6 +4,7 @@
 
 import { ActiveRow } from './_active-row';
 import { BeforeUnload } from '../_before-unload';
+import { Blocker } from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Settings from '../../config/_settings';
@@ -202,9 +203,7 @@ export default class ListTable {
 	 */
 	addOverlay() {
 		
-		const $tableWrapper: any = $('.atum-table-wrapper');
-		
-		$tableWrapper.block({
+		Blocker.block($('.atum-table-wrapper'), {
 			message   : null,
 			overlayCSS: {
 				background: '#000',
@@ -219,8 +218,7 @@ export default class ListTable {
 	 */
 	removeOverlay() {
 		
-		const $tableWrapper: any = $('.atum-table-wrapper');
-		$tableWrapper.unblock();
+		Blocker.unblock($('.atum-table-wrapper'));
 		
 	}
 	
