@@ -188,7 +188,7 @@ class POExport extends PurchaseOrder {
 	 */
 	public function get_shipping_address() {
 		
-		return apply_filters( 'atum/purchase_orders/po_export/shipping_address', WC()->countries->get_formatted_address( $this->shipping_data ), $this->shipping_data );
+		return apply_filters( 'atum/purchase_orders/po_export/shipping_address', WC()->countries->get_formatted_address( $this->shipping_data ), $this->shipping_data, $this->id );
 		
 	}
 
