@@ -94,7 +94,10 @@ export default class Router {
 		// Bind Views, Pagination and Sortable links.
 		this.globals.$atumList.on('click', '.tablenav-pages a, .item-heads a, .subsubsub a', (evt: JQueryEventObject) => {
 			evt.preventDefault();
-			this.updateHash();
+			
+			if (!$(evt.currentTarget).hasClass('current')) {
+				this.updateHash();
+			}
 		});
 	
 	}
