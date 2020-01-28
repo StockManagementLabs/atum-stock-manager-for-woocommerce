@@ -2099,10 +2099,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 		}
-		else {
-			$args['orderby'] = 'title';
-			$args['order']   = 'ASC';
-		}
 
 		/**
 		 * Searching

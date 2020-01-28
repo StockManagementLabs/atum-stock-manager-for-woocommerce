@@ -179,10 +179,6 @@ trait ListTableLegacyTrait {
 			}
 
 		}
-		else {
-			$args['orderby'] = 'title';
-			$args['order']   = 'ASC';
-		}
 
 		/**
 		 * Searching
