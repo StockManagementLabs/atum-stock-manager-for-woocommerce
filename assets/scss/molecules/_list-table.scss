@@ -704,6 +704,7 @@
 			
 			+ .actions {
 				margin-top: 15px;
+				
 				.select2-container {
 					margin-bottom: 10px;
 				}
@@ -755,7 +756,7 @@
 			&:hover, &:active, &:focus {
 				background-color: var(--secondary) !important;
 				border-color: var(--secondary) !important;;
-				color:  var(--white) !important;
+				color: var(--white) !important;
 			}
 			
 		}
@@ -816,7 +817,7 @@
 			flex-wrap: nowrap;
 			
 			@include tablet-max-wp {
-				flex-wrap: nowrap;
+				flex-wrap: wrap;
 				height: auto;
 			}
 			
@@ -833,8 +834,8 @@
 		
 		.actions {
 			
-			@include tablet-only {
-			
+			@include tablet-max-wp {
+				display: block;
 			}
 			
 			@include mobile-max {
@@ -930,6 +931,10 @@
 			&.no-submit {
 				@media screen and (max-width: $screen-lg-max + 200px) {
 					width: calc(100% - 300px);
+				}
+				
+				@include tablet-max-wp {
+					width: 100%;
 				}
 			}
 			
@@ -1403,10 +1408,6 @@
 			}
 		}
 		
-		#select2-supplier-container {
-			padding: 0 30px 0 16px;
-		}
-		
 		input[type=submit] {
 			line-height: 0;
 			text-transform: uppercase;
@@ -1472,8 +1473,10 @@
 				width: 44px;
 				height: 44px;
 			}
+			
 			> .input-group {
 				flex-grow: 1;
+				margin: 0;
 			}
 		}
 		
