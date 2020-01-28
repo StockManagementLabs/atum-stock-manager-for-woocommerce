@@ -96,11 +96,7 @@
 							setTimeout(function() {
 								el.classList.remove('dragging')
 							}, 100);
-							pushed = 0;
-							if (undefined !== moved && ! moved) {
-								e.target.click();
-							}
-							}, 0
+						}, 0
 					);
 				});
 				_document[addEventListener](
@@ -110,10 +106,9 @@
 					_window[addEventListener](
 						ev,
 						cont['mm'+index] = function(e) {
-							fixTouches(e);
-							
 							if (pushed) {
 								
+								fixTouches(e);
 								el.classList.add('dragging');
 								
 								if (!moved &&

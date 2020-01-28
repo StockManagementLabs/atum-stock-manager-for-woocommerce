@@ -73,8 +73,8 @@ export default class SearchByColumn {
 		
 			// Bind clicks on search by column button.
 			.click( (evt: JQueryEventObject) => {
-				$(evt.currentTarget).parent().find('.dropdown-menu').toggle();
 				evt.stopPropagation();
+				$(evt.currentTarget).parent().find('.dropdown-menu').toggle();
 			})
 			
 			// Set $searchColumnBtn data-value and label.
@@ -112,7 +112,7 @@ export default class SearchByColumn {
 				this.globals.$searchColumnBtn.trigger('atum-search-column-data-changed');
 			}
 			
-			$('.dropdown-toggle').attr('data-original-title', $item.html());
+			this.globals.$searchColumnBtn.attr('data-original-title', $item.html());
 			
 		});
 		
