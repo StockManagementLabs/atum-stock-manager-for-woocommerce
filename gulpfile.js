@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.6.1',
+var version = '1.6.7',
     curDate = new Date();
 
 // Global config
@@ -68,7 +68,7 @@ var options = {
 
 	sass: {
 		errLogToConsole: !enabled.failStyleTask,
-		outputStyle    : !config.production ? 'expanded' : 'compressed',
+		outputStyle    : 'expanded', // The compressed was causing issues.
 		//precision      : 10,
 		includePaths   : [
 			'.',
