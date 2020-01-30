@@ -771,7 +771,7 @@ class Settings {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 				}
 
-				$sanitized_option = isset( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ? $input[ $key ] : $atts['default'];
+				$sanitized_option = ( ! empty( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
 			case 'theme_selector':
