@@ -37,15 +37,15 @@ export default class ProductDataMetaBoxes {
 		// Toggle the "Out of Stock Threshold" field visibility.
 		$('#_manage_stock').change( (evt: JQueryEventObject) => $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none') ).change();
 		
-		// Change stock control for all variations at once.
+		// Run scripts for all the variations at once.
 		$('.product-tab-runner').find('.run-script').click( (evt: JQueryEventObject) => {
 			
 			const $button: JQuery = $(evt.currentTarget),
-			      status: string  = $button.siblings('select').val();
+			      value: string   = $button.siblings('select').val();
 			
 			this.swal({
 				title              : this.settings.get('areYouSure'),
-				text               : $button.data('confirm').replace('%s', `"${ status }"`),
+				text               : $button.data('confirm').replace('%s', `"${ value }"`),
 				type               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('continue'),
@@ -62,7 +62,7 @@ export default class ProductDataMetaBoxes {
 								action   : $button.data('action'),
 								security : this.settings.get('nonce'),
 								parent_id: $('#post_ID').val(),
-								status   : status
+								value    : value
 							},
 							method  : 'POST',
 							dataType: 'json',
@@ -81,9 +81,7 @@ export default class ProductDataMetaBoxes {
 					});
 					
 				},
-				allowOutsideClick  : (): boolean => {
-					return !this.swal.isLoading();
-				}
+				allowOutsideClick  : (): boolean => !this.swal.isLoading()
 			})
 			.then( (result: string) => {
 				
