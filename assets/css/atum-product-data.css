@@ -3414,6 +3414,10 @@ body .select2-container--default .select2-results__group {
   margin-left: 10px;
 }
 
+.product_data .product-tab-runner select {
+  width: 166px;
+}
+
 .woocommerce_variations .form-row-first .atum-field, .woocommerce_variations .form-row-last .atum-field {
   position: relative;
   margin-top: 2px;

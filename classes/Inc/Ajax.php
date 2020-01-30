@@ -130,6 +130,9 @@ final class Ajax {
 		// Set the ATUM control switch status to all variations at once.
 		add_action( 'wp_ajax_atum_set_variations_control_status', array( $this, 'set_variations_control_status' ) );
 
+		// Set the supplier to all variations at once.
+		add_action( 'wp_ajax_atum_set_variations_supplier', array( $this, 'set_variations_supplier' ) );
+
 		// Get the product locations tree.
 		add_action( 'wp_ajax_atum_get_locations_tree', array( $this, 'get_locations_tree' ) );
 		add_action( 'wp_ajax_atum_set_locations_tree', array( $this, 'set_locations_tree' ) );
@@ -1933,8 +1936,8 @@ final class Ajax {
 			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['status'] ) ) {
-			wp_send_json_error( __( 'No status specified', ATUM_TEXT_DOMAIN ) );
+		if ( empty( $_POST['value'] ) ) {
+			wp_send_json_error( __( 'Please, choose a status from the dropdown', ATUM_TEXT_DOMAIN ) );
 		}
 
 		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
@@ -1943,11 +1946,49 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$status     = esc_attr( $_POST['status'] );
+		$status     = esc_attr( $_POST['value'] );
 		$variations = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
 			Helpers::update_atum_control( $variation_id, ( 'uncontrolled' === $status ? 'disable' : 'enable' ) );
+		}
+
+		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
+
+	}
+
+	/**
+	 * Set the supplier to all variations at once
+	 *
+	 * @package Product Data
+	 *
+	 * @since 1.6.7
+	 */
+	public function set_variations_supplier() {
+
+		check_ajax_referer( 'atum-product-data-nonce', 'security' );
+
+		if ( empty( $_POST['parent_id'] ) ) {
+			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
+		}
+
+		if ( empty( $_POST['value'] ) ) {
+			wp_send_json_error( __( 'Please specify a valid supplier', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
+
+		if ( ! $product instanceof \WC_Product ) {
+			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$supplier_id = absint( $_POST['value'] );
+		$variations  = $product->get_children();
+
+		foreach ( $variations as $variation_id ) {
+			$variation = Helpers::get_atum_product( $variation_id );
+			$variation->set_supplier_id( $supplier_id );
+			$variation->save_atum_data();
 		}
 
 		wp_send_json_success( __( 'All the variations were updated successfully', ATUM_TEXT_DOMAIN ) );
