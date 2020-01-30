@@ -3418,6 +3418,38 @@ body .select2-container--default .select2-results__group {
   width: 166px;
 }
 
+.product_data #marketplace_suggestions .marketplace-suggestion-container img[src="#"] {
+  visibility: hidden;
+}
+
+.product_data #marketplace_suggestions .marketplace-suggestion-container img[src="#"]:before {
+  font-size: 26px;
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  visibility: visible;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #96588a;
+  text-align: center;
+  display: inline-block;
+  line-height: 1.6;
+}
+
+.product_data #marketplace_suggestions .marketplace-suggestion-container[data-suggestion-slug="multi_inventory"] img:before {
+  content: "";
+}
+
+.product_data #marketplace_suggestions .marketplace-suggestion-container[data-suggestion-slug="export_pro"] img:before {
+  content: "󩣚";
+}
+
+.product_data #marketplace_suggestions .marketplace-suggestion-container[data-suggestion-slug="product_levels"] img:before {
+  content: "";
+}
+
 .woocommerce_variations .form-row-first .atum-field, .woocommerce_variations .form-row-last .atum-field {
   position: relative;
   margin-top: 2px;

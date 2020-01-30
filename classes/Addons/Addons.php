@@ -111,6 +111,9 @@ class Addons {
 
 			}
 
+			// Add the ATUM add-ons to the WooCommerce suggestions.
+			add_filter( 'option_woocommerce_marketplace_suggestions', array( $this, 'add_atum_addons_suggestions' ), 100, 2 );
+
 		}
 
 	}
@@ -342,6 +345,37 @@ class Addons {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Add the ATUM add-ons suggestions to the WC's product data tab
+	 *
+	 * @since 1.6.7
+	 *
+	 * @param mixed  $value
+	 * @param string $option
+	 *
+	 * @return mixed
+	 */
+	public function add_atum_addons_suggestions( $value, $option ) {
+
+		foreach ( self::$addons as $slug => $addon ) {
+
+			array_unshift( $value['suggestions'], array(
+				'slug'        => $slug,
+				'product'     => $slug,
+				'context'     => [ 'product-edit-meta-tab-body' ],
+				'icon'        => '#',
+				'title'       => $addon['name'],
+				'copy'        => $addon['description'],
+				'button_text' => __( 'Learn More', ATUM_TEXT_DOMAIN ),
+				'url'         => $addon['addon_url'],
+			) );
+
+		}
+
+		return $value;
+
 	}
 
 	/**

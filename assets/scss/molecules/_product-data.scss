@@ -134,6 +134,56 @@
 			width: 166px;
 		}
 	}
+	
+	#marketplace_suggestions {
+		.marketplace-suggestion-container {
+			
+			img[src="#"] {
+				visibility: hidden;
+				
+				&:before {
+					font-size: 26px;
+					font-family: $atum-icon-font;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+					visibility: visible;
+					color: $white;
+					width: 40px;
+					height: 40px;
+					border-radius: 50%;
+					background-color: $wc-purple;
+					text-align: center;
+					display: inline-block;
+					line-height: 1.6;
+				}
+			}
+			
+			&[data-suggestion-slug="multi_inventory"] {
+				img {
+					&:before {
+						content: $atmi-multi-inventory;
+					}
+				}
+			}
+			
+			&[data-suggestion-slug="export_pro"] {
+				img {
+					&:before {
+						content: $atmi-export;
+					}
+				}
+			}
+			
+			&[data-suggestion-slug="product_levels"] {
+				img {
+					&:before {
+						content: $atmi-product-levels;
+					}
+				}
+			}
+			
+		}
+	}
 
 }
 
