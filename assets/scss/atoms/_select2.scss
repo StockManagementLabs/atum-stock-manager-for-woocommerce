@@ -132,7 +132,7 @@ body {
 		box-shadow: $dropdown-box-shadow;
 		background-color: var(--atum-table-bg) !important;
 		border: 1px solid var(--gray-500);
-		border-radius: 5px;
+		border-radius: 4px;
 		overflow: hidden;
 		box-sizing: border-box;
 		display: block;
@@ -159,7 +159,7 @@ body {
 		}
 		
 		&::-webkit-scrollbar-thumb {
-			border-radius: 5px;
+			border-radius: 4px;
 			background-color: var(--gray-500);
 		}
 	}
@@ -211,7 +211,7 @@ body {
 			width: 100%;
 			box-sizing: border-box;
 			min-width: inherit;
-			border-radius: 5px;
+			border-radius: 4px;
 			border-color: var(--main-border-alt);
 			
 			&::-webkit-search-cancel-button {
@@ -258,7 +258,7 @@ body {
 			
 			.select2-selection--single {
 				height: 30px;
-				border-radius: 5px;
+				border-radius: 4px;
 				border: 1px solid var(--main-border-alt);
 				background-color: var(--atum-table-bg);
 				
