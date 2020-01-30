@@ -112,7 +112,9 @@ class Addons {
 			}
 
 			// Add the ATUM add-ons to the WooCommerce suggestions.
-			add_filter( 'option_woocommerce_marketplace_suggestions', array( $this, 'add_atum_addons_suggestions' ), 100, 2 );
+			if ( 'yes' === get_option( 'woocommerce_show_marketplace_suggestions', 'yes' ) ) {
+				add_filter( 'option_woocommerce_marketplace_suggestions', array( $this, 'add_atum_addons_suggestions' ), 100, 2 );
+			}
 
 		}
 
