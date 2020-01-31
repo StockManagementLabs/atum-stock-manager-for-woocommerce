@@ -352,8 +352,7 @@ trait WidgetHelpersLegacyTrait {
 		}
 
 		$args = array();
-		
-		// WC Subscriptions compatibility.
+
 		if ( $products ) {
 			
 			$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
@@ -387,36 +386,45 @@ trait WidgetHelpersLegacyTrait {
 			
 			// Check if product type filter data exist.
 			if ( $product_type ) {
+				
 				if ( in_array( $product_type, Globals::get_inheritable_product_types() ) && 'bundle' !== $product_type ) {
-					
+
 					if ( $filtered_variations ) {
 						$args['post__in'] = $filtered_variations;
 					}
 					else {
 						return $counters;
 					}
+
 				}
 				elseif ( 'downloadable' === $product_type ) {
+
 					array_push( $args['meta_query'], array(
 						'key'     => '_downloadable',
 						'value'   => 'yes',
 						'compare' => '=',
 					) );
+
 				}
 				elseif ( 'virtual' === $product_type ) {
+
 					array_push( $args['meta_query'], array(
 						'key'     => '_virtual',
 						'value'   => 'yes',
 						'compare' => '=',
 					) );
+
 				}
 				else {
+
 					array_push( $args['tax_query'], array(
 						'taxonomy' => 'product_type',
 						'field'    => 'slug',
 						'terms'    => array( $product_type ),
 					) );
+
 				}
+
 			}
 			
 		}
