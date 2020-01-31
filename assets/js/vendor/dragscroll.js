@@ -70,7 +70,7 @@
 								startX = lastClientX = e.clientX;
 								startY = lastClientY = e.clientY;
 								
-								if ('touchstart' === ev) {
+								if ('mousedown' === ev) {
 									e.preventDefault();
 									e.stopPropagation();
 								}
