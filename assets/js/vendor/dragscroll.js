@@ -69,6 +69,8 @@
 								moved = 0;
 								startX = lastClientX = e.clientX;
 								startY = lastClientY = e.clientY;
+								e.preventDefault();
+								e.stopPropagation();
 							}
 						}, 0
 					);
@@ -96,6 +98,7 @@
 							setTimeout(function() {
 								el.classList.remove('dragging')
 							}, 100);
+							pushed = 0;
 						}, 0
 					);
 				});
