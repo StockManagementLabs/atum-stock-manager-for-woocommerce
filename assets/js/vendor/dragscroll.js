@@ -69,8 +69,11 @@
 								moved = 0;
 								startX = lastClientX = e.clientX;
 								startY = lastClientY = e.clientY;
-								e.preventDefault();
-								e.stopPropagation();
+								
+								if ('touchstart' === ev) {
+									e.preventDefault();
+									e.stopPropagation();
+								}
 							}
 						}, 0
 					);
