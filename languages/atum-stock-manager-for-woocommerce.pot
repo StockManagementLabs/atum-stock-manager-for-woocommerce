@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2020-01-30 10:19+0100\n"
+"POT-Creation-Date: 2020-01-31 13:42+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Be Rebel <contact@stockmanagementlabs.com>\n"
@@ -28,53 +28,53 @@ msgid ""
 "provider."
 msgstr ""
 
-#: classes/Addons/Addons.php:130 classes/Dashboard/Widgets/Videos.php:52
+#: classes/Addons/Addons.php:135 classes/Dashboard/Widgets/Videos.php:52
 #: classes/Inc/Hooks.php:673 views/dashboard.php:118
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Addons/Addons.php:179
+#: classes/Addons/Addons.php:184
 #: classes/Components/AtumOrders/AtumOrderPostType.php:931
 #: classes/Inc/Hooks.php:179 classes/Settings/Settings.php:220
 msgid "Error!"
 msgstr ""
 
-#: classes/Addons/Addons.php:180 classes/Inc/Hooks.php:178
+#: classes/Addons/Addons.php:185 classes/Inc/Hooks.php:178
 msgid "Success!"
 msgstr ""
 
-#: classes/Addons/Addons.php:181
+#: classes/Addons/Addons.php:186
 msgid "Activated!"
 msgstr ""
 
-#: classes/Addons/Addons.php:182
+#: classes/Addons/Addons.php:187
 msgid "License Activation"
 msgstr ""
 
-#: classes/Addons/Addons.php:183 classes/Addons/Addons.php:490
+#: classes/Addons/Addons.php:188 classes/Addons/Addons.php:526
 msgid "Activate"
 msgstr ""
 
-#: classes/Addons/Addons.php:184
+#: classes/Addons/Addons.php:189
 msgid "Your add-on license has been activated."
 msgstr ""
 
-#: classes/Addons/Addons.php:185
+#: classes/Addons/Addons.php:190
 msgid "Limited Deactivations!"
 msgstr ""
 
-#: classes/Addons/Addons.php:186
+#: classes/Addons/Addons.php:191
 msgid "You are allowed to deactivate a license a max of 2 times."
 msgstr ""
 
-#: classes/Addons/Addons.php:187
+#: classes/Addons/Addons.php:192
 #: classes/Components/AtumListTables/AtumListTable.php:3082
 #: classes/Components/AtumOrders/AtumOrderPostType.php:929
 #: classes/Settings/Settings.php:224
 msgid "OK"
 msgstr ""
 
-#: classes/Addons/Addons.php:188
+#: classes/Addons/Addons.php:193
 #: classes/Components/AtumOrders/AtumOrderPostType.php:928
 #: classes/Dashboard/Dashboard.php:356 classes/Inc/Hooks.php:177
 #: classes/Settings/Settings.php:215 views/meta-boxes/atum-order/items.php:246
@@ -82,47 +82,51 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: classes/Addons/Addons.php:189
+#: classes/Addons/Addons.php:194
 #: classes/Components/AtumOrders/AtumOrderPostType.php:927
 msgid "Continue"
 msgstr ""
 
-#: classes/Addons/Addons.php:190
+#: classes/Addons/Addons.php:195
 msgid "Please enter a valid add-on license key."
 msgstr ""
 
 #. translators: error message displayed
-#: classes/Addons/Addons.php:287
+#: classes/Addons/Addons.php:292
 #, php-format
 msgid "Something failed getting the ATUM's add-ons list: %s"
 msgstr ""
 
-#: classes/Addons/Addons.php:297
+#: classes/Addons/Addons.php:302
 msgid "Something failed getting the ATUM's add-ons list"
 msgstr ""
 
 #. translators: opening and closing HTML link to the add-ons page
-#: classes/Addons/Addons.php:319
+#: classes/Addons/Addons.php:324
 #, php-format
 msgid ""
 "Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive "
 "automatic updates."
 msgstr ""
 
-#: classes/Addons/Addons.php:482
+#: classes/Addons/Addons.php:373
+msgid "Learn More"
+msgstr ""
+
+#: classes/Addons/Addons.php:518
 msgid "Validate"
 msgstr ""
 
-#: classes/Addons/Addons.php:496
+#: classes/Addons/Addons.php:532
 msgid "Deactivate"
 msgstr ""
 
-#: classes/Addons/Addons.php:546
+#: classes/Addons/Addons.php:582
 msgid "The download link is not valid"
 msgstr ""
 
 #. translators: first one is the add-on nam and the second the error message
-#: classes/Addons/Addons.php:609
+#: classes/Addons/Addons.php:645
 #, php-format
 msgid ""
 "ATUM %1$s could not be installed (%2$s). Please download it from your account "
@@ -130,7 +134,7 @@ msgid ""
 msgstr ""
 
 #. translators: first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page
-#: classes/Addons/Addons.php:640
+#: classes/Addons/Addons.php:676
 #, php-format
 msgid ""
 "ATUM %1$s was installed but could not be activated. %2$sPlease activate it "
@@ -138,18 +142,18 @@ msgid ""
 msgstr ""
 
 #. translators: the add-on name
-#: classes/Addons/Addons.php:653
+#: classes/Addons/Addons.php:689
 #, php-format
 msgid "The ATUM %s addon was installed and activated successfully."
 msgstr ""
 
 #. translators: the add-on name
-#: classes/Addons/Addons.php:662
+#: classes/Addons/Addons.php:698
 #, php-format
 msgid "The ATUM %s addon was installed successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:773 classes/Addons/Addons.php:781
+#: classes/Addons/Addons.php:809 classes/Addons/Addons.php:817
 #: classes/Api/AtumApi.php:125 classes/Api/AtumApi.php:132
 #: classes/Api/Extenders/AtumProductData.php:629
 #: classes/Api/Extenders/AtumProductData.php:636 classes/Bootstrap.php:284
