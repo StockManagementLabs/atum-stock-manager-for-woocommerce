@@ -187,11 +187,12 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po_date = empty( $_POST['date'] ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$po_date = date( 'Y-m-d H:i:s', $po_date );
+		$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$po_date   = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
+		$po_date   = date_i18n( 'Y-m-d H:i:s', $po_date );
 
-		$expected_at_location_date = empty( $_POST['expected_at_location_date'] ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
-		$expected_at_location_date = date( 'Y-m-d H:i:s', $expected_at_location_date );
+		$expected_at_location_date = empty( $_POST['expected_at_location_date'] ) ? $timestamp : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
+		$expected_at_location_date = date_i18n( 'Y-m-d H:i:s', $expected_at_location_date );
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
@@ -221,7 +222,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function add_columns( $existing_columns ) {
 
-		$columns = array(
+		return array(
 			'cb'               => $existing_columns['cb'],
 			'atum_order_title' => __( 'PO', ATUM_TEXT_DOMAIN ),
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
@@ -231,8 +232,6 @@ class PurchaseOrders extends AtumOrderPostType {
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN ),
 		);
-
-		return $columns;
 
 	}
 

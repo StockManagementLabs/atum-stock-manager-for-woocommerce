@@ -39,11 +39,11 @@ defined( 'ABSPATH' ) || die;
 				<div class="video-list-layout">
 
 					<a class="active" href="#" title="<?php esc_attr_e( 'List View', ATUM_TEXT_DOMAIN ) ?>" data-view="list">
-						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/icon-view-list.svg">
+						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/icon-view-list.svg" alt="">
 					</a>
 
 					<a href="#" title="<?php esc_attr_e( 'Grid View', ATUM_TEXT_DOMAIN ) ?>" data-view="grid">
-						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/icon-view-grid.svg">
+						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/icon-view-grid.svg" alt="">
 					</a>
 
 				</div>
@@ -68,7 +68,6 @@ defined( 'ABSPATH' ) || die;
 
 								<time>
 									<?php
-									/* @noinspection PhpUnhandledExceptionInspection */
 									$start = new \DateTime( '@0' ); // Unix epoch.
 									try {
 										$start->add( new \DateInterval( $video->contentDetails->duration ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase

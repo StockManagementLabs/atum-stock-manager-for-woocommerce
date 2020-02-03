@@ -408,7 +408,7 @@ class Main {
 		// Add the main menu item.
 		$wp_admin_bar->add_node( array(
 			'id'    => self::$main_menu_item['slug'],
-			'title' => '<span class="ab-icon"><img src="' . ATUM_URL . 'assets/images/atum-icon.svg" style="padding-top: 2px"></span><span class="ab-label">ATUM</span>',
+			'title' => '<span class="ab-icon"><img src="' . ATUM_URL . 'assets/images/atum-icon.svg" style="padding-top: 2px" alt="ATUM"></span><span class="ab-label">ATUM</span>',
 			'href'  => admin_url( 'admin.php?page=' . self::$main_menu_item['slug'] ),
 		) );
 

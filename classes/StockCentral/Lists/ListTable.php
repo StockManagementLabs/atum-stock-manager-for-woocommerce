@@ -461,8 +461,8 @@ class ListTable extends AtumListTable {
 				'currency'   => self::$default_currency,
 			] ) : $sale_price;
 
-			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
-			$date_on_sale_to   = $this->product->get_date_on_sale_to( 'edit' ) ? date( 'Y-m-d', $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
+			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
+			$date_on_sale_to   = $this->product->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
 
 			$args = apply_filters( 'atum/stock_central_list/args_sale_price', array(
 				'meta_key'   => 'sale_price',
@@ -561,7 +561,8 @@ class ListTable extends AtumListTable {
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today midnight', $this->day );
 				$this->product->set_sold_today( $sold_today );
-				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 			}
 
 		}
@@ -666,7 +667,8 @@ class ListTable extends AtumListTable {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
 				$this->product->set_sales_last_days( $sales_last_ndays );
-				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 
 			}
 
@@ -735,7 +737,8 @@ class ListTable extends AtumListTable {
 			if ( is_null( $out_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$out_stock_days = Helpers::get_product_out_stock_days( $this->product );
 				$this->product->set_out_stock_days( $out_stock_days );
-				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't change.
+				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't change.
 			}
 
 		}
@@ -766,7 +769,8 @@ class ListTable extends AtumListTable {
 			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$lost_sales = Helpers::get_product_lost_sales( $this->product );
 				$this->product->set_lost_sales( $lost_sales );
-				$this->product->set_update_date( current_time( 'timestamp', TRUE ) ); // This will force the update even when the values didn't chnage.
+				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 			}
 
 		}

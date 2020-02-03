@@ -262,7 +262,7 @@ class AtumMarketingPopup {
 	 *
 	 * @since 1.5.3
 	 *
-	 * @return object
+	 * @return array
 	 */
 	public function get_buttons() {
 
@@ -274,7 +274,7 @@ class AtumMarketingPopup {
 	 *
 	 * @since 1.5.3
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_images() {
 

@@ -48,7 +48,7 @@ defined( 'ABSPATH' ) || die;
 			<img src="<?php echo esc_attr( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
 
 			<div class="content">
-				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>">
+				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_images()->logo ); ?>" alt="">
 
 				<div class="content-description">
 
@@ -107,7 +107,7 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-docs-img.png">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-docs-img.png" alt="">
 			</div>
 
 		</div>
@@ -124,7 +124,7 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-add-ons-img.png">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-add-ons-img.png" alt="">
 			</div>
 
 		</div>
@@ -139,7 +139,7 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-subscription-img.png">
+				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-subscription-img.png" alt="">
 			</div>
 
 			<form action="https://stockmanagementlabs.us12.list-manage.com/subscribe/post?u=bc146f9acefd460717d243671&id=b0263fe4a6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -186,7 +186,7 @@ defined( 'ABSPATH' ) || die;
 
 					<?php foreach ( $widgets as $widget_name => $widget ) : ?>
 						<li data-widget="<?php echo esc_attr( $widget_name ) ?>" class="<?php echo ( empty( $layout ) || ! is_array( $layout ) || ! in_array( $widget_name, array_keys( $layout ) ) ) ? 'not-added' : 'added' ?>">
-							<img src="<?php echo esc_url( $widget->get_thumbnail() ) ?>">
+							<img src="<?php echo esc_url( $widget->get_thumbnail() ) ?>" alt="">
 
 							<div class="widget-details">
 								<h3><?php echo esc_html( $widget->get_title() ) ?></h3>
@@ -201,7 +201,7 @@ defined( 'ABSPATH' ) || die;
 					<?php endforeach; ?>
 
 					<li class="coming-soon">
-						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/atum-widgets-coming-soon.png">
+						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/atum-widgets-coming-soon.png" alt="">
 					</li>
 				</ul>
 			</div>

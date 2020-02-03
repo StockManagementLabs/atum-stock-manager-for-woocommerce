@@ -244,9 +244,8 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 		}
 
 		$order_note = $this->prepare_item_for_response( $note, $request );
-		$response   = rest_ensure_response( $order_note );
 
-		return $response;
+		return rest_ensure_response( $order_note );
 
 	}
 
@@ -409,7 +408,8 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		$order_id = (int) $note->comment_post_ID;
 		$base     = str_replace( '(?P<order_id>[\d]+)', $order_id, $this->rest_base );
-		$links    = array(
+
+		return array(
 			'self'       => array(
 				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $base, $note->comment_ID ) ),
 			),
@@ -417,8 +417,6 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $base ) ),
 			),
 		);
-
-		return $links;
 
 	}
 

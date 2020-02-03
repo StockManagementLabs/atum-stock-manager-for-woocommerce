@@ -884,7 +884,8 @@ abstract class AtumOrderModel {
 
 			$this->set_currency( $this->get_currency() ?: get_woocommerce_currency() );
 			$status       = $this->get_status();
-			$date_created = Helpers::get_wc_time( $this->get_date() ?: current_time( 'timestamp', TRUE ) );
+			$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+			$date_created = Helpers::get_wc_time( $this->get_date() ?: $timestamp );
 			$this->set_date( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
@@ -1773,9 +1774,9 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param object $item
+	 * @param \WC_Order_Item|object|int $item
 	 *
-	 * @return \WC_Order_Item|false if not found
+	 * @return \WC_Order_Item|AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|false
 	 */
 	abstract public function get_atum_order_item( $item = NULL );
 
@@ -2161,8 +2162,8 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param int $atum_order_id
+	 * @param AtumOrderModel $atum_order
 	 */
-	abstract public function after_save( $atum_order_id );
+	abstract public function after_save( $atum_order );
 
 }

@@ -977,9 +977,8 @@ class AtumColors {
 	public static function get_user_theme( $user_id = 0 ) {
 
 		$visual_settings = Helpers::get_atum_user_meta( self::VISUAL_SETTINGS_USER_META, $user_id );
-		$theme           = ! empty( $visual_settings['theme'] ) ? $visual_settings['theme'] : 'branded_mode';
 
-		return $theme;
+		return ! empty( $visual_settings['theme'] ) ? $visual_settings['theme'] : 'branded_mode';
 
 	}
 
@@ -996,9 +995,8 @@ class AtumColors {
 	public static function get_user_color( $color_name, $user_id = 0 ) {
 
 		$visual_settings = Helpers::get_atum_user_meta( self::VISUAL_SETTINGS_USER_META, $user_id );
-		$color           = isset( $visual_settings[ $color_name ] ) ? $visual_settings[ $color_name ] : false;
 
-		return $color;
+		return isset( $visual_settings[ $color_name ] ) ? $visual_settings[ $color_name ] : FALSE;
 
 	}
 

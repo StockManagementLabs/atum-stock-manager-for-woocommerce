@@ -89,7 +89,6 @@ abstract class AtumOrderPostType {
 
 		// Register the post type.
 		add_action( 'init', array( $this, 'register_post_type' ) );
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		$post_type = static::POST_TYPE;
 
 		if ( is_admin() ) {
@@ -163,9 +162,7 @@ abstract class AtumOrderPostType {
 		$read_capability = isset( $this->capabilities['read_post'] ) ? $this->capabilities['read_post'] : 'manage_woocommerce';
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
-
-		/* @noinspection PhpUndefinedClassConstantInspection */
-		$post_type = static::POST_TYPE;
+		$post_type       = static::POST_TYPE;
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
@@ -219,7 +216,6 @@ abstract class AtumOrderPostType {
 		}
 
 		// Register the taxomony only if needed by the custom post type.
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( defined( 'static::TAXONOMY' ) && ! empty( static::TAXONOMY ) ) {
 
 			$args = apply_filters( 'atum/order_post_type/taxonomy_args', wp_parse_args( array(
@@ -233,7 +229,6 @@ abstract class AtumOrderPostType {
 			), $args ));
 
 			// Register the hidden order type taxonomy (if used).
-			/* @noinspection PhpUndefinedClassConstantInspection */
 			register_taxonomy( static::TAXONOMY, array( $post_type ), $args );
 
 		}
@@ -296,7 +291,6 @@ abstract class AtumOrderPostType {
 
 		global $typenow, $wp_post_statuses;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $typenow ) {
 
 			// Sorting.
@@ -356,7 +350,6 @@ abstract class AtumOrderPostType {
 		global $post;
 		$rendered = FALSE;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		$post_type = static::POST_TYPE;
 
 		switch ( $column ) {
@@ -513,7 +506,6 @@ abstract class AtumOrderPostType {
 	 */
 	public function row_actions( $actions, $post ) {
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post->post_type && isset( $actions['inline hide-if-no-js'] ) ) {
 			unset( $actions['inline hide-if-no-js'] );
 		}
@@ -533,7 +525,6 @@ abstract class AtumOrderPostType {
 	 */
 	public function list_table_primary_column( $default, $screen_id ) {
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( 'edit-' . static::POST_TYPE === $screen_id ) {
 			return 'atum_order_title';
 		}
@@ -572,7 +563,6 @@ abstract class AtumOrderPostType {
 	 */
 	public function add_meta_boxes() {
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		$post_type = static::POST_TYPE;
 
 		// Data meta box.
@@ -694,7 +684,6 @@ abstract class AtumOrderPostType {
 	 */
 	public function disable_view_mode_options( $post_types ) {
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		unset( $post_types[ static::POST_TYPE ] );
 		return $post_types;
 	}
@@ -705,12 +694,13 @@ abstract class AtumOrderPostType {
 	 * @since 1.2.4
 	 */
 	public function disable_autosave() {
+
 		global $post;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( $post && get_post_type( $post->ID ) === static::POST_TYPE ) {
 			wp_dequeue_script( 'autosave' );
 		}
+
 	}
 
 	/**
@@ -718,7 +708,7 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  array $actions List of actions.
+	 * @param array $actions List of actions.
 	 *
 	 * @return array
 	 */
@@ -764,10 +754,8 @@ abstract class AtumOrderPostType {
 			return $redirect_to;
 		}
 
-		$changed = 0;
-		$ids     = array_map( 'absint', $ids );
-
-		/* @noinspection PhpUndefinedClassConstantInspection */
+		$changed   = 0;
+		$ids       = array_map( 'absint', $ids );
 		$post_type = static::POST_TYPE;
 
 		foreach ( $ids as $id ) {
@@ -797,7 +785,6 @@ abstract class AtumOrderPostType {
 		global $post_type, $pagenow;
 
 		// Bail out if not on ATUM Order's list page.
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( 'edit.php' !== $pagenow || static::POST_TYPE !== $post_type ) {
 			return;
 		}
@@ -854,7 +841,6 @@ abstract class AtumOrderPostType {
 
 		global $post_type;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post_type ) {
 
 			global $post;
@@ -975,7 +961,6 @@ abstract class AtumOrderPostType {
 
 		global $post_type, $pagenow;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE === $post_type && 'edit.php' === $pagenow ) {
 
 			?>
@@ -1014,7 +999,6 @@ abstract class AtumOrderPostType {
 			return $query;
 		}
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		if ( static::POST_TYPE !== $typenow ) {
 			return $query;
 		}
@@ -1053,7 +1037,6 @@ abstract class AtumOrderPostType {
 
 		global $pagenow, $wpdb;
 
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		$post_type = static::POST_TYPE;
 
 		if ( 'edit.php' !== $pagenow || empty( $query->query_vars['s'] ) || $post_type !== $query->query_vars['post_type'] ) {
@@ -1154,8 +1137,6 @@ abstract class AtumOrderPostType {
 	 * @return string
 	 */
 	public static function get_post_type() {
-
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		return static::POST_TYPE;
 	}
 
@@ -1167,8 +1148,6 @@ abstract class AtumOrderPostType {
 	 * @return string|bool
 	 */
 	public static function get_type_taxonomy() {
-
-		/* @noinspection PhpUndefinedClassConstantInspection */
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
 	}
 	

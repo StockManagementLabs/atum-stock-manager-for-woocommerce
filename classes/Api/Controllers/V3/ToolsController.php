@@ -274,9 +274,7 @@ class ToolsController extends \WC_REST_Controller {
 
 		}
 
-		$response = rest_ensure_response( $tools );
-
-		return $response;
+		return rest_ensure_response( $tools );
 
 	}
 
@@ -393,15 +391,14 @@ class ToolsController extends \WC_REST_Controller {
 	 */
 	protected function prepare_links( $id ) {
 
-		$base  = '/' . $this->namespace . '/' . $this->rest_base;
-		$links = array(
+		$base = '/' . $this->namespace . '/' . $this->rest_base;
+
+		return array(
 			'item' => array(
 				'href'       => rest_url( trailingslashit( $base ) . $id ),
 				'embeddable' => true,
 			),
 		);
-
-		return $links;
 
 	}
 

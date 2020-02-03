@@ -90,11 +90,6 @@ class Upgrade {
 			$this->create_list_table_columns();
 		}
 
-		// ** version 1.6.0 ** New table for ATUM Logs component.
-		/*if ( version_compare( $db_version, '1.6.0', '<' ) ) {
-			$this->create_atum_log_table();
-		}*/
-
 		// ** version 1.6.1.1 ** Change field types in ATUM data for products.
 		if ( version_compare( $db_version, '1.6.1.1', '<' ) ) {
 			$this->alter_list_table_columns();
@@ -320,13 +315,15 @@ class Upgrade {
 
 		$post_metas = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		foreach ( $post_metas as $post_meta ) {
-			/* @noinspection Annotator */
+
 			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
 
 			if ( $non_latin_character ) {
 				delete_post_meta( $post_meta->post_id, Globals::OUT_OF_STOCK_DATE_KEY );
 			}
+
 		}
+
 	}
 
 	/**
@@ -727,49 +724,5 @@ class Upgrade {
 		}
 
 	}
-
-	/**
-	 * Create the table for the ATUM Logs
-	 *
-	 * @since 1.4.15
-	 */
-	// phpcs:ignore Squiz.Commenting.BlockComment.NoNewLine
-	/*private function create_atum_log_table() {
-
-		global $wpdb;
-
-		$log_table = $wpdb->prefix . AtumLogs::get_log_table();
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		if ( ! $wpdb->get_var( "SHOW TABLES LIKE '$log_table';" ) ) {
-
-			$collate = '';
-
-			if ( $wpdb->has_cap( 'collation' ) ) {
-				$collate = $wpdb->get_charset_collate();
-			}
-
-			$sql = "
-			CREATE TABLE $log_table (
-				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		  		ref VARCHAR(256) NOT NULL,
-			  	user_id BIGINT DEFAULT NULL,
-				type VARCHAR(64) DEFAULT NULL,
-				source VARCHAR(256) DEFAULT NULL,
-				time BIGINT DEFAULT NULL,
-				entry LONGTEXT,
-				status INT(11) DEFAULT '0',
-				data LONGTEXT,
-			  	PRIMARY KEY (id),
-			  	UNIQUE KEY id (id)
-			) $collate;
-			";
-
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			dbDelta( $sql );
-
-		}
-
-	}*/
 
 }

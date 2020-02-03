@@ -36,7 +36,7 @@ trait AtumDataStoreCPTTrait {
 			$atum_data
 		);
 
-		/* @noinspection PhpUndefinedClassInspection */
+		/* @noinspection PhpUnhandledExceptionInspection PhpUndefinedClassInspection */
 		parent::read_product_data( $product );
 
 	}

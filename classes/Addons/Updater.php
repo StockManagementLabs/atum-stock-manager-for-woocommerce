@@ -180,7 +180,7 @@ class Updater {
 				$_transient_data->response[ $this->name ]->icons = maybe_unserialize( $_transient_data->response[ $this->name ]->icons );
 			}
 
-			$_transient_data->last_checked           = current_time( 'timestamp' );
+			$_transient_data->last_checked           = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$_transient_data->checked[ $this->name ] = $this->version;
 
 		}
@@ -243,7 +243,7 @@ class Updater {
 				$update_cache->response[ $this->name ] = $version_info;
 			}
 
-			$update_cache->last_checked           = current_time( 'timestamp' );
+			$update_cache->last_checked           = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$update_cache->checked[ $this->name ] = $this->version;
 
 			set_site_transient( 'update_plugins', $update_cache );

@@ -348,9 +348,8 @@ class AtumProductData {
 	public function get_product_field_schema( $field_name ) {
 
 		$extended_schema = $this->get_extended_product_schema();
-		$field_schema    = isset( $extended_schema[ $field_name ] ) ? $extended_schema[ $field_name ] : NULL;
 
-		return $field_schema;
+		return isset( $extended_schema[ $field_name ] ) ? $extended_schema[ $field_name ] : NULL;
 
 	}
 

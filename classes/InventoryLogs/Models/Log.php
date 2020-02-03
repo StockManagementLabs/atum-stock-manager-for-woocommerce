@@ -18,7 +18,10 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
+use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
+use Atum\InventoryLogs\Items\LogItemShipping;
+use Atum\InventoryLogs\Items\LogItemTax;
 
 
 class Log extends AtumOrderModel {
@@ -132,9 +135,7 @@ class Log extends AtumOrderModel {
 		$order_id = $this->get_meta( '_order' );
 
 		if ( $order_id ) {
-			$order = wc_get_order( $order_id );
-
-			return $order;
+			return wc_get_order( $order_id );
 		}
 
 		return FALSE;
@@ -253,9 +254,9 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param object $item
+	 * @param \WC_Order_Item|object|int $item
 	 *
-	 * @return \WC_Order_Item|false if not found
+	 * @return \WC_Order_Item|LogItemFee|LogItemProduct|LogItemShipping|LogItemTax|false
 	 */
 	public function get_atum_order_item( $item = NULL ) {
 
@@ -271,7 +272,6 @@ class Log extends AtumOrderModel {
 			$id        = $item->get_id();
 		}
 		elseif ( is_object( $item ) && ! empty( $item->order_item_type ) ) {
-			/* @noinspection PhpUndefinedFieldInspection */
 			$id        = $item->order_item_id;
 			$item_type = $item->order_item_type;
 		}

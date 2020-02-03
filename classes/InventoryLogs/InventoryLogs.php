@@ -183,11 +183,12 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $return_date
 		 * @var string $damage_date
 		 */
-		$log_date = ( empty( $_POST['date'] ) ) ? current_time( 'timestamp', TRUE ) : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$log_date = date( 'Y-m-d H:i:s', $log_date );
+		$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$log_date  = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
+		$log_date  = date_i18n( 'Y-m-d H:i:s', $log_date );
 
 		foreach ( [ 'reservation_date', 'return_date', 'damage_date' ] as $date_field ) {
-			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
+			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
 		$log->set_meta( array(
@@ -261,7 +262,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	public function add_columns( $existing_columns ) {
 
-		$columns = array(
+		return array(
 			'cb'               => $existing_columns['cb'],
 			'atum_order_title' => __( 'Log', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
@@ -271,8 +272,6 @@ class InventoryLogs extends AtumOrderPostType {
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN ),
 		);
-
-		return $columns;
 
 	}
 

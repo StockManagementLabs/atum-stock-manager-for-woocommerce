@@ -409,7 +409,7 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 			return $setting;
 		}
 
-		$value = $this->atum_settings->sanitize_option( $request['id'], [ $request['id'] => $request['value'] ], $setting );
+		$value = $this->atum_settings->sanitize_option( $request['id'], [ $request['id'] => $request['value'] ], (array) $setting );
 
 		if ( is_wp_error( $value ) ) {
 			return $value;

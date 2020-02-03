@@ -19,10 +19,11 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
+use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
+use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
-use AtumExport\Queries\AtumOrderItem;
 
 
 abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
@@ -363,7 +364,9 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		} catch ( \WC_Data_Exception $e ) {
 			return new \WP_Error( $e->getErrorCode(), $e->getMessage(), $e->getErrorData() );
-		} catch ( \WC_REST_Exception $e ) {
+		}
+		/* @noinspection PhpRedundantCatchClauseInspection */
+		catch ( \WC_REST_Exception $e ) {
 			return new \WP_Error( $e->getErrorCode(), $e->getMessage(), array( 'status' => $e->getCode() ) );
 		}
 
@@ -516,7 +519,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param AtumOrderItem $item ATUM Order item data.
+	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item ATUM Order item data.
 	 *
 	 * @return array
 	 */
@@ -628,7 +631,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 */
 	protected function prepare_links( $object, $request ) {
 
-		$links = array(
+		return array(
 			'self'       => array(
 				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $object->get_id() ) ),
 			),
@@ -636,8 +639,6 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ),
 			),
 		);
-
-		return $links;
 
 	}
 

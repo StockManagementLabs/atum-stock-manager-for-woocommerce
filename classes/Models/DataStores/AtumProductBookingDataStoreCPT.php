@@ -43,8 +43,11 @@ class AtumProductBookingDataStoreCPT extends \WC_Product_Booking_Data_Store_CPT 
 				ORDER BY sort_order ASC
 			", $product->get_id() ) ) );
 
+			/* @noinspection PhpPossiblePolymorphicInvocationInspection */
 			$product->set_resource_ids( $resource_ids );
+			/* @noinspection PhpPossiblePolymorphicInvocationInspection */
 			$product->set_resource_base_costs( get_post_meta( $product->get_id(), '_resource_base_costs', true ) );
+			/* @noinspection PhpPossiblePolymorphicInvocationInspection */
 			$product->set_resource_block_costs( get_post_meta( $product->get_id(), '_resource_block_costs', true ) );
 
 			AtumCache::set_cache( $cache_key, $resource_ids );
@@ -80,6 +83,7 @@ class AtumProductBookingDataStoreCPT extends \WC_Product_Booking_Data_Store_CPT 
 				$person_types[ $person_type_object->ID ] = new \WC_Product_Booking_Person_Type( $person_type_object );
 			}
 
+			/* @noinspection PhpPossiblePolymorphicInvocationInspection */
 			$product->set_person_types( $person_types );
 			AtumCache::set_cache( $cache_key, $person_types );
 

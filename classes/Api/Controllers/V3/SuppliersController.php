@@ -1317,7 +1317,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	 */
 	protected function prepare_links( $object, $request ) {
 
-		$links = array(
+		return array(
 			'self'       => array(
 				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $object->ID ) ),
 			),
@@ -1325,8 +1325,6 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ),
 			),
 		);
-
-		return $links;
 
 	}
 

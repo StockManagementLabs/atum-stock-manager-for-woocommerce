@@ -158,9 +158,7 @@ class SettingsController extends \WC_REST_Settings_Controller {
 
 		}
 
-		$response = rest_ensure_response( $filtered_groups );
-
-		return $response;
+		return rest_ensure_response( $filtered_groups );
 
 	}
 
@@ -176,9 +174,8 @@ class SettingsController extends \WC_REST_Settings_Controller {
 	public function update_item( $request ) {
 
 		$options_controller = new SettingOptionsController();
-		$response           = $options_controller->update_item( $request );
 
-		return $response;
+		return $options_controller->update_item( $request );
 
 	}
 

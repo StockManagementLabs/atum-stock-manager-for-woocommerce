@@ -253,7 +253,6 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		/* @noinspection PhpUnhandledExceptionInspection */
 		$date_now    = new \DateTime();
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 
@@ -317,8 +316,7 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-		/* @noinspection PhpUnhandledExceptionInspection */
+		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/promo_sales/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -372,8 +370,7 @@ final class WidgetHelpers {
 			return $dataset;
 		}
 
-		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
-		/* @noinspection PhpUnhandledExceptionInspection */
+		$period_time  = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$date_now     = new \DateTime();
 		$order_status = (array) apply_filters( 'atum/dashboard/statistics_widget/orders/order_status', [ 'wc-processing', 'wc-completed' ] );
 
@@ -459,10 +456,9 @@ final class WidgetHelpers {
 		$start    = new \DateTime( $date_start );
 		$interval = \DateInterval::createFromDateString( $interval );
 		/* @noinspection PhpUnhandledExceptionInspection */
-		$end         = new \DateTime( $date_end );
-		$date_period = new \DatePeriod( $start, $interval, $end );
+		$end = new \DateTime( $date_end );
 
-		return $date_period;
+		return new \DatePeriod( $start, $interval, $end );
 	}
 
 	/**

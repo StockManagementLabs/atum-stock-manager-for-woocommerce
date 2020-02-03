@@ -279,15 +279,19 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		$object = $this->get_object( (int) $request['id'] );
+		$objects = $this->get_object( (int) $request['id'] );
 
-		if (
-			$object && 0 !== $object->ID && (
-				! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ||
-				! AtumCapabilities::current_user_can( 'read_inbound_stock', $object->ID )
-			)
-		) {
-			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		if ( ! empty( $objects ) && is_array( $objects ) ) {
+
+			foreach ( $objects as $object ) {
+				if (
+					! wc_rest_check_post_permissions( $this->post_type, 'read', $object->ID ) ||
+					! AtumCapabilities::current_user_can( 'read_inbound_stock', $object->ID )
+				) {
+					return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+				}
+			}
+
 		}
 
 		return TRUE;
@@ -387,18 +391,18 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 */
 	public function get_item( $request ) {
 
-		$object = $this->get_object( (int) $request['id'] );
+		$objects = $this->get_object( (int) $request['id'] );
 
-		if ( ! $object || 0 === $object->ID ) {
+		if ( empty( $objects ) ) {
 			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
 		// It could return multiple products (same product within distinct POs.
-		if ( is_array( $object ) && count( $object ) > 1 ) {
+		if ( is_array( $objects ) && count( $objects ) > 1 ) {
 
 			$objects = array();
 
-			foreach ( $object as $item ) {
+			foreach ( $objects as $item ) {
 				$data      = $this->prepare_object_for_response( $item, $request );
 				$objects[] = $this->prepare_response_for_collection( $data );
 			}
@@ -408,14 +412,14 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		}
 		else {
 
-			$object   = ( is_array( $object ) && 1 === count( $object ) ) ? current( $object ) : $object;
-			$data     = $this->prepare_object_for_response( $object, $request );
+			$objects  = ( is_array( $objects ) && 1 === count( $objects ) ) ? current( $objects ) : $objects;
+			$data     = $this->prepare_object_for_response( $objects, $request );
 			$response = rest_ensure_response( $data );
 
 		}
 
 		if ( $this->public ) {
-			$response->link_header( 'alternate', $this->get_permalink( $object ), [ 'type' => 'text/html' ] );
+			$response->link_header( 'alternate', $this->get_permalink( $objects ), [ 'type' => 'text/html' ] );
 		}
 
 		return $response;
@@ -577,7 +581,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		$po_id   = absint( $item->po_id );
 		$po      = new PurchaseOrder( $po_id );
 
-		$data = array(
+		return array(
 			'id'                    => $product->get_id(),
 			'name'                  => $product->get_name( $context ),
 			'type'                  => $product->get_type(),
@@ -589,8 +593,6 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 			'date_expected_gmt'     => wc_rest_prepare_date_response( $po->get_date_expected() ),
 			'purchase_order'        => $po_id,
 		);
-
-		return $data;
 
 	}
 
@@ -672,7 +674,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 */
 	protected function prepare_links( $object, $request ) {
 
-		$links = array(
+		return array(
 			'self'       => array(
 				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->rest_base, $object->ID ) ),
 			),
@@ -680,8 +682,6 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ),
 			),
 		);
-
-		return $links;
 
 	}
 

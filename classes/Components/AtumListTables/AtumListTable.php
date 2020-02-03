@@ -371,7 +371,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->is_filtering           = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters          = $this->get_filters_query_string();
 		$this->wc_out_stock_threshold = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
-		$this->day                    = Helpers::date_format( current_time( 'timestamp' ), TRUE, TRUE );
+		$timestamp                    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$this->day                    = Helpers::date_format( $timestamp, TRUE, TRUE );
 		self::$sale_days              = Helpers::get_sold_last_days_option();
 
 		// Filter the table data results to show specific product types only.
@@ -938,7 +939,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier;
 		}
 
-		/* @noinspection PhpUndefinedMethodInspection */
 		$supplier_id = $this->product->get_supplier_id();
 
 		if ( $supplier_id ) {
@@ -4146,7 +4146,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.4.16
 	 *
-	 * @return \WC_Product
+	 * @return string
 	 */
 	public static function get_default_currency() {
 		return self::$default_currency;
@@ -4232,16 +4232,16 @@ abstract class AtumListTable extends \WP_List_Table {
 					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents ) );
 					break;
 
-				// WC Bundle Producs compatibility.
+				// WC Products Bundle compatibility.
 				case 'bundle':
 					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents ) );
 
 					$bundle_children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
-						'bundle_id' => $parents->posts,
+						'bundle_id' => $parents,
 					) );
 
-					foreach ( $parents->posts as $parent_id ) {
+					foreach ( $parents as $parent_id ) {
 
 						if ( ! empty( $bundle_children ) && is_array( $bundle_children ) ) {
 							$parents_with_child[] = $parent_id;
@@ -4337,9 +4337,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			elseif ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $parent_type ) {
 
-				foreach ( $bundle_children as $key => $bundle_children ) {
+				foreach ( $bundle_children as $key => $bundle_child ) {
 
-					$product_children = Helpers::get_atum_product( $bundle_children );
+					$product_children = Helpers::get_atum_product( $bundle_child );
 
 					if ( $product_children ) {
 						if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
@@ -4362,8 +4362,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				else {
 
 					$bundle_parents = [];
-					foreach ( $bundle_children as $bundle_children ) {
-						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_children ) );
+					foreach ( $bundle_children as $bundle_child ) {
+						$bundle_parents = array_merge( $bundle_parents, wc_pb_get_bundled_product_map( $bundle_child ) );
 					}
 
 					$parents_with_child = $bundle_parents;

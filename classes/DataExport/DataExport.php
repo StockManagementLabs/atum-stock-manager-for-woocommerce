@@ -232,7 +232,7 @@ class DataExport {
 
 			$mpdf->WriteHTML( $html_report );
 
-			$date_now = date( 'Y-m-d' );
+			$date_now = date_i18n( 'Y-m-d' );
 			wp_die( $mpdf->Output( "atum-inventory-report-$date_now.pdf", Destination::INLINE ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		} catch ( MpdfException $e ) {

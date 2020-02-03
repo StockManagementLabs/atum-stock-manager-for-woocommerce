@@ -243,8 +243,6 @@ class Bootstrap {
 
 			}
 
-			$atum_prefix = 'atum_';
-
 			// Delete all the ATUM order notes.
 			$wpdb->query( "DELETE FROM $wpdb->comments WHERE comment_type LIKE '" . ATUM_PREFIX . "%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 

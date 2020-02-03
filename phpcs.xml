@@ -32,6 +32,7 @@
 		The below two examples just show how you can exclude rules.
 		They are not intended as advice about which sniffs to exclude.
 		-->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
 		<exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found" />
 		<exclude name="Generic.Commenting.Todo" />
 		<exclude name="Generic.ControlStructures.InlineControlStructure" />
@@ -62,6 +63,7 @@
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound" />
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_error_log" />
+		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
 		<exclude name="WordPress.PHP.DontExtract" />
 		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
 		<exclude name="WordPress.Security.EscapeOutput.UnsafePrintingFunction" />

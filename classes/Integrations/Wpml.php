@@ -413,8 +413,8 @@ class Wpml {
 			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );
 			$date_to   = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE );
 			
-			$args['extra_meta'][0]['value'] = $date_from ? date( 'Y-m-d', $date_from ) : '';
-			$args['extra_meta'][1]['value'] = $date_to ? date( 'Y-m-d', $date_to ) : '';
+			$args['extra_meta'][0]['value'] = $date_from ? date_i18n( 'Y-m-d', $date_from ) : '';
+			$args['extra_meta'][1]['value'] = $date_to ? date_i18n( 'Y-m-d', $date_to ) : '';
 			
 		}
 		

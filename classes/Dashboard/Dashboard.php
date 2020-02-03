@@ -237,6 +237,12 @@ class Dashboard {
 
 						// Load the widget (the class and file naming convention must follow PSR4 standards).
 						if ( class_exists( $widget_name ) ) {
+
+							/**
+							 * Variable definition
+							 *
+							 * @var AtumWidget $widget
+							 */
 							$widget = new $widget_name();
 							
 							$this->widgets[ $widget->get_id() ] = $widget;

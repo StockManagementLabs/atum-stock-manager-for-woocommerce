@@ -19,6 +19,10 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\Models\Products\AtumProductTrait;
+use Atum\PurchaseOrders\Items\POItemFee;
+use Atum\PurchaseOrders\Items\POItemProduct;
+use Atum\PurchaseOrders\Items\POItemShipping;
+use Atum\PurchaseOrders\Items\POItemTax;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 
@@ -152,9 +156,7 @@ class PurchaseOrder extends AtumOrderModel {
 				return $supplier_id;
 			}
 			else {
-				$supplier = get_post( $supplier_id );
-
-				return $supplier;
+				return get_post( $supplier_id );
 			}
 
 		}
@@ -212,9 +214,9 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param object $item
+	 * @param \WC_Order_Item|object|int $item
 	 *
-	 * @return \WC_Order_Item|false if not found
+	 * @return \WC_Order_Item|POItemFee|POItemProduct|POItemShipping|POItemTax|false
 	 */
 	public function get_atum_order_item( $item = NULL ) {
 
@@ -228,7 +230,6 @@ class PurchaseOrder extends AtumOrderModel {
 			$id        = $item->get_id();
 		}
 		elseif ( is_object( $item ) && ! empty( $item->order_item_type ) ) {
-			/* @noinspection PhpUndefinedFieldInspection */
 			$id        = $item->order_item_id;
 			$item_type = $item->order_item_type;
 		}

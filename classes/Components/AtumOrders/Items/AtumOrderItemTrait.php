@@ -55,6 +55,7 @@ trait AtumOrderItemTrait {
 			$this->set_object_read( true );
 		}
 
+		/* @noinspection PhpUndefinedFieldInspection */
 		$this->data = array_merge( $this->data, $this->extra_data );
 		$this->load();
 
@@ -228,12 +229,12 @@ trait AtumOrderItemTrait {
 	 *
 	 * @return array
 	 */
-	public function get_formatted_meta_data( $hideprefix = '_', $include_all = false ) {
+	public function get_formatted_meta_data( $hideprefix = '_', $include_all = FALSE ) {
 
 		$formatted_meta    = array();
 		$meta_data         = $this->get_meta_data();
 		$hideprefix_length = ! empty( $hideprefix ) ? strlen( $hideprefix ) : 0;
-		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : false;
+		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : FALSE;
 		$order_item_name   = $this->get_name();
 		$po_item           = new POItem( $this );
 		$po_meta           = $po_item->get_all_meta();
@@ -272,6 +273,12 @@ trait AtumOrderItemTrait {
 					$display_value = $term->name;
 				}
 			}
+
+			/**
+			 * Variable definition
+			 *
+			 * @var \WC_Product $product
+			 */
 
 			// Skip items with values already in the product details area of the product name.
 			if ( ! $include_all && $product && $product->is_type( 'variation' ) && wc_is_attribute_in_product_name( $display_value, $order_item_name ) ) {

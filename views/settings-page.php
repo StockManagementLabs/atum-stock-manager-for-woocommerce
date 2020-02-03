@@ -27,7 +27,7 @@ use Atum\Components\AtumColors;
 				<div class="atum-nav-header">
 					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
 						<div class="atum-brand">
-							<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+							<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>" alt="">
 							<span><?php esc_html_e( 'ATUM', ATUM_TEXT_DOMAIN ) ?></span>
 						</div>
 					</a>
@@ -59,7 +59,7 @@ use Atum\Components\AtumColors;
 
 				<div class="nav-footer">
 					<div class="nav-footer-logo">
-						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>">
+						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>" alt="">
 
 						<span><?php esc_html_e( 'ATUM', ATUM_TEXT_DOMAIN ) ?></span>
 					</div>

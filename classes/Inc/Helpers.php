@@ -149,7 +149,7 @@ final class Helpers {
 			$date = strtotime( $date );
 		}
 
-		return ! $gmt_date ? date( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
+		return ! $gmt_date ? date_i18n( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
 	}
 
 	/**
@@ -1985,7 +1985,8 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$now       = self::get_wc_time( current_time( 'timestamp', TRUE ) );
+						$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						$now       = self::get_wc_time( $timestamp );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
 						$date_to       = $date_to ? self::get_wc_time( $date_to ) : '';
@@ -2389,7 +2390,7 @@ final class Helpers {
 					if ( class_exists( $class ) ) {
 
 						if ( $is_singleton ) {
-							/** @noinspection PhpUndefinedMethodInspection */
+							/* @noinspection PhpUndefinedMethodInspection */
 							$class::get_instance();
 						}
 						else {
@@ -2905,7 +2906,8 @@ final class Helpers {
 
 			// WC Orders.
 			default:
-				$current_time = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+				$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$current_time = self::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = self::get_sold_last_days_option();
 				$product_id   = $product->get_id();
 
@@ -3016,7 +3018,8 @@ final class Helpers {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$current_time    = self::date_format( current_time( 'timestamp', TRUE ), TRUE, TRUE );
+		$timestamp       = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
 
