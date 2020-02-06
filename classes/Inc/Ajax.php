@@ -1201,7 +1201,7 @@ final class Ajax {
 
 			if ( ! is_wp_error( $atum_order ) ) {
 
-				$comment_id   = $atum_order->add_note( $note, TRUE );
+				$comment_id   = $atum_order->add_order_note( $note, TRUE );
 				$note_comment = get_comment( $comment_id );
 
 				?>
@@ -1726,7 +1726,7 @@ final class Ajax {
 
 					$return[] = $note;
 
-					$atum_order->add_note( $note );
+					$atum_order->add_order_note( $note );
 					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
 					$atum_order_item->save();
 

@@ -509,7 +509,7 @@ class PurchaseOrder extends AtumOrderModel {
 						$new_quantity
 					);
 					
-					$order->add_note( $note );
+					$order->add_order_note( $note );
 					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
 					$atum_order_item->save();
 				}

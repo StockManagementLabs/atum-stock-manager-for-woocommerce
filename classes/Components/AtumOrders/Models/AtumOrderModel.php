@@ -862,7 +862,7 @@ abstract class AtumOrderModel {
 				
 				/* translators: 1: old order status 2: new order status */
 				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
-				$this->add_note( $transition_note );
+				$this->add_order_note( $transition_note );
 				
 			}
 		}
@@ -1428,7 +1428,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @return int   Comment ID
 	 */
-	public function add_note( $note, $added_by_user = FALSE ) {
+	public function add_order_note( $note, $added_by_user = FALSE ) {
 
 		if ( ! $this->id || ( is_user_logged_in() && ! AtumCapabilities::current_user_can( 'create_order_notes' ) ) ) {
 			return 0;

@@ -272,7 +272,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 		}
 
 		// Create the note.
-		$note_id = $order->add_note( $request['note'], $request['added_by_user'] );
+		$note_id = $order->add_order_note( $request['note'], $request['added_by_user'] );
 
 		if ( ! $note_id ) {
 			return new \WP_Error( 'atum_api_cannot_create_order_note', __( 'Cannot create order note, please try again.', ATUM_TEXT_DOMAIN ), [ 'status' => 500 ] );
