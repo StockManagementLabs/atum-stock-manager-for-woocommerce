@@ -187,6 +187,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.7`
+
+*2020-02-07*
+
+**Features**
+
+* Added a new tool to set the supplier for all the variations at once.
+* Added suggestions for the ATUM add-ons to the WC's "Get more options" tab.
+
+**Changes**
+
+* Added new hook to allow bypassing the stock status rebuild for some products.
+* Deleted unneeded PHPCS rules.
+* Updated composer dependencies.
+* Get rid of the "ATUM_PREFIX" constant from db table names to avoid issues.
+* Added the PO ID to the shipping address filter.
+* Added the API Docs link to the plugin details on the plugins page.
+* Do not run filters on Stock Central when clicking on an currently-active views filter.
+* Use the defaullt orderby settings (date desc) for Stock Central on the first load.
+* Do not allow to empty a color from settings and fallback to the default color.
+
+**Fixes**
+
+* Fixed Out of Stock Threshold not updating the product status when enabling/disabling it.
+* Force the blockUI overlay to be removed when it should.
+* Fixed the DragScroll behaviour on touch devices.
+* Fixed SC filters not being shown on tablets.
+* Fixed Search By Column dropdown click event after using the dragscroll.
+* CSS fixes.
+* Refactory.
+
+---
+
 `1.6.6`
 
 *2020-01-17*
