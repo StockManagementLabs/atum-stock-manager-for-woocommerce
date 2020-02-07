@@ -1,36 +1,36 @@
 {
 	"background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/waves-export.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "contain",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/waves-export.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "cover",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/06/atum-icon-export-pro.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/07/label-out-now.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/02/label-update-280x280.png"
 	},
 	"title": {
-		"text"      : "<strong>ATUM</strong><span>ExportPRO</span>",
+		"text"      : "Product <strong>Levels</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "v1.0.0",
-		"text_color": "var(--main-text-expanded)",
-		"background": "var(--secondary)"
+		"text"      : "v1.4.0",
+		"text_color": "#FFF",
+		"background": "#9357CC"
 	},
 	"description": {
-		"text"           : "Finally HERE! The most advanced Export tool ever released and soon with free Import to complete the package. Generate manual or automated exports of almost any data in your stores.",
-		"text_color"     : "#adb5bd",
+		"text"           : "The Greatest Upgrade EVER!!!",
+		"text_color"     : "#ADB5BD",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
@@ -38,17 +38,17 @@
 	},
 	"buttons": [
 		{
-			"text"      : "More info",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-export-pro",
+			"text"      : "Buy Now",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
 			"class"     : "btn btn-sm btn-warning",
-			"css"       : "width:130px"
+			"css"       : "width:130px;background-color:#9357CC"
 		},
 		{
-			"text"      : "Live demo",
-			"url"       : "https://demo.export-pro.stockmanagementlabs.com/",
+			"text"      : "The Changelog",
+			"url"       : "https://www.stockmanagementlabs.com/the-changelog/",
 			"class"     : "btn btn-sm btn-outline-warning",
-			"css"       : "width:130px;"
+			"css"       : "width:130px;color:#9357CC;border-color:#9357CC"
 		}
 	],
-	"transient_key": "atum-export-pro-release"
+	"transient_key": "atum-product-levels-update"
 }
