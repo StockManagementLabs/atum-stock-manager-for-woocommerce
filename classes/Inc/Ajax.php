@@ -1339,7 +1339,7 @@ final class Ajax {
 
 				// Both hooks are needed to replicate WC ajax ones ( woocommerce_ajax_order_item & woocommerce_ajax_order_items_added )
 				// to simplify used hooks (e.g. see MI Hooks).
-				$item = apply_filters( 'atum/atum_order/add_order_item', $item, $item_id, $atum_order, $product );
+				$item = apply_filters( 'atum/atum_order/order_item', $item, $item_id, $atum_order, $product );
 				do_action( 'atum/atum_order/add_order_item_meta', $item_id, $item, $atum_order );
 				
 				// Load template.
