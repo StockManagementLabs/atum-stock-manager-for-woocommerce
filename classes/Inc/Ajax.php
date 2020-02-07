@@ -1332,11 +1332,16 @@ final class Ajax {
 				}
 
 				// Add the product to the ATUM Order.
-				$item    = $atum_order->add_product( Helpers::get_atum_product( $item_to_add ) );
+				$product = Helpers::get_atum_product( $item_to_add );
+				$item    = $atum_order->add_product( $product );
 				$item_id = $item->get_id();
 				$class   = 'new_row';
-				
+
+				// Both hooks are needed to replicate WC ajax ones ( woocommerce_ajax_order_item & woocommerce_ajax_order_items_added )
+				// to simplify used hooks (e.g. see MI Hooks).
+				do_action( 'atum/atum_order/add_order_item', $item, $item_id, $atum_order, $product );
 				do_action( 'atum/atum_order/add_order_item_meta', $item_id, $item, $atum_order );
+				
 				// Load template.
 				$html .= Helpers::load_view_to_string( 'meta-boxes/atum-order/item', compact( 'atum_order', 'item', 'item_id', 'class' ) );
 
