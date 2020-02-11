@@ -1210,7 +1210,7 @@ final class Helpers {
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$update_success_2 = $wpdb->query( "
 				INSERT INTO $atum_data_table (product_id, atum_controlled) SELECT p.ID, $meta_value
-				FROM {$wpdb->posts} p
+				FROM $wpdb->posts p
 				LEFT JOIN (SELECT * FROM $atum_data_table) ada ON p.ID = ada.product_id
 				WHERE p.post_type IN('product', 'product_variation') AND ada.product_id IS NULL
 			" );
@@ -1262,7 +1262,7 @@ final class Helpers {
 				else {
 
 					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->postmeta} SET meta_value = '0'
+						UPDATE $wpdb->postmeta SET meta_value = '0'
 		                WHERE meta_key = '_stock'
 		                AND post_id IN (
 		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
@@ -1275,6 +1275,8 @@ final class Helpers {
 			}
 
 		}
+
+		do_action( 'atum/after_change_status_meta', $meta_key, $status );
 
 		// If all goes fine, die with the message, if not, just do nothing (the next method will display the error).
 		if ( FALSE !== $insert_success && FALSE !== $update_success && FALSE !== $stock_success ) {
