@@ -829,12 +829,14 @@ class Settings {
 	public function display_textarea( $args ) {
 
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
+		$rows    = isset( $args['rows'] ) ? absint( $args['rows'] ) : 4;
+		$cols    = isset( $args['cols'] ) ? ' cols="' . absint( $args['cols'] ) . '"' : '';
 
 		$output = sprintf(
-			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d" cols="%3$d" name="%4$s" %5$s>%6$s</textarea>',
+			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d"%3$d name="%4$s" %5$s>%6$s</textarea>',
 			ATUM_PREFIX . $args['id'],
-			absint( $args['rows'] ),
-			absint( $args['cols'] ),
+			$rows,
+			$cols,
 			self::OPTION_NAME . "[{$args['id']}]",
 			$this->get_dependency( $args ) . $default,
 			$this->find_option_value( $args['id'] )
