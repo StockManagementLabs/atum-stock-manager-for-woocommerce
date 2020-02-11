@@ -571,6 +571,20 @@
 				font-weight: bold;
 				font-size: 15px;
 				padding-top: 25px;
+				
+				.label {
+					border-radius: 4px;
+					padding: 2px 6px;
+					display: inline-block;
+					margin-top: 5px;
+					font-weight: normal;
+					font-size: 10px;
+					
+					&-secondary {
+						background-color: var(--atum-text-color-var1);
+						color: $white;
+					}
+				}
 			}
 			
 			.theme-selector-wrapper {
