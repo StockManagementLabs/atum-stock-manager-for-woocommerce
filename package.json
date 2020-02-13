@@ -32,6 +32,7 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-watch": "^5.0.1",
 		"gulp-wrap": "^0.15.0",
+		"prettier": "1.19.1",
 		"ts-loader": "^3.5.0",
 		"typescript": "^3.7.3",
 		"webpack": "^3.12.0",
