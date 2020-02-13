@@ -32,9 +32,7 @@ export default class Filters {
 			this.globals.$atumList
 				
 				// Dropdown filters.
-				.on('change', '.dropdown_product_cat, .dropdown_product_type, .dropdown_supplier, .dropdown_extra_filter', (evt: JQueryEventObject) => {
-					this.keyUp(evt);
-				})
+				.on('change', '.auto-filter', (evt: JQueryEventObject) => this.keyUp(evt, true) )
 				
 				// Search filter.
 				.on('keyup paste search input', '.atum-post-search', (evt: JQueryEventObject) => {
@@ -42,16 +40,17 @@ export default class Filters {
 					const searchColumnBtnVal: string      = this.globals.$searchColumnBtn.data('value'),
 					      searchInputVal: string | number = $(evt.currentTarget).val();
 					
-					Utils.delay( () => {
-						this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal);
-					}, 500);
+					Utils.delay( () => this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal), 500);
 					
 				})
 				
 				// Pagination input changes.
-				.on('keyup paste', '.current-page', (evt: JQueryEventObject) => {
+				.on('change', '.current-page', (evt: JQueryEventObject) => {
+					
+					$.address.parameter('paged', parseInt( $( evt.currentTarget ).val() ) );
 					this.keyUp(evt);
-				});
+					
+				} );
 				
 			this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
 				this.pseudoKeyUpAjax( $(evt.currentTarget).data('value'), decodeURIComponent( this.globals.$searchInput.val() ) );
@@ -109,7 +108,7 @@ export default class Filters {
 				if (searchInputVal.length > 0) {
 					$.address.parameter('s', searchInputVal);
 					$.address.parameter('search_column', searchColumnBtnVal);
-					this.keyUp(evt);
+					this.keyUp(evt, true);
 				}
 				// Force clean s when required.
 				else {
@@ -213,9 +212,7 @@ export default class Filters {
 				 * we don't, the keyup event will trigger instantly and
 				 * thus may cause duplicate calls before sending the intended value.
 				 */
-				Utils.delay( () => {
-					this.router.updateHash();
-				}, delay);
+				Utils.delay( () => this.router.updateHash(), delay );
 				
 			}
 			
@@ -278,11 +275,11 @@ export default class Filters {
 			
 		}
 		
-		$dateSelector.on('select2:select', (evt: any) => {
+		$dateSelector.on( 'select2:select', ( evt: any ) => {
 			
-			const $select: JQuery = $(evt.currentTarget);
+			const $select: JQuery = $( evt.currentTarget );
 		
-			if ( $.inArray($select.val(), linkedFilters) > -1 ) {
+			if ( $.inArray( $select.val(), linkedFilters ) > -1 ) {
 				
 				$select.val('');
 				
@@ -312,7 +309,7 @@ export default class Filters {
 						this.dateTimePicker.addDateTimePickers($('.date-picker'), {minDate: false});
 						
 						$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
-							this.keyUp(evt);
+							this.keyUp(evt, true);
 							swal.close();
 						});
 						
@@ -324,7 +321,7 @@ export default class Filters {
 					onClose: () => {
 						
 						if ( this.settings.get('ajaxFilter') === 'yes' ) {
-							this.keyUp(evt);
+							this.keyUp(evt, true);
 						}
 						
 					},

@@ -83,16 +83,16 @@ export default class ListTable {
 		//
 		// Global save for edited cells.
 		// -----------------------------
-		$('body').on('click', '#atum-update-list', (evt: JQueryEventObject) => this.saveData( $(evt.currentTarget) ));
+		$( 'body' ).on( 'click', '#atum-update-list', ( evt: JQueryEventObject ) => this.saveData( $( evt.currentTarget ) ) );
 		
 		
 		//
 		// Warn the user about unsaved changes before navigating away.
 		// -----------------------------------------------------------
-		BeforeUnload.addPrompt( () => !this.globals.$editInput.val() );
+		BeforeUnload.addPrompt( () => ! this.globals.$editInput.val() );
 		
 		// Display hidden footer.
-		$(window).on('load', () => $('#wpfooter').show());
+		$( window ).on( 'load', () => $( '#wpfooter' ).show() );
 		
 	}
 	
@@ -108,16 +108,13 @@ export default class ListTable {
 		// Overwrite the filterData with the URL hash parameters
 		this.globals.filterData = $.extend(this.globals.filterData, {
 			view          : $.address.parameter('view') || '',
-			product_cat   : $.address.parameter('product_cat') || '',
-			product_type  : $.address.parameter('product_type') || '',
-			supplier      : $.address.parameter('supplier') || '',
-			extra_filter  : $.address.parameter('extra_filter') || '',
 			paged         : $.address.parameter('paged') || 1,
 			order         : $.address.parameter('order') || '',
 			orderby       : $.address.parameter('orderby') || '',
 			search_column : $.address.parameter('search_column') || '',
 			sold_last_days: $.address.parameter('sold_last_days') || '',
 			s             : $.address.parameter('s') || '',
+			...this.globals.getAutoFilters( true ),
 		});
 		
 		this.doingAjax = $.ajax({
@@ -169,6 +166,9 @@ export default class ListTable {
 					if (response.extra_t_n.bottom.length) {
 						this.globals.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
 					}
+					
+					// Update the autoFilters prop.
+					this.globals.$autoFilters = this.globals.$atumList.find('#filters_container .auto-filter');
 					
 				}
 				

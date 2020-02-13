@@ -109,15 +109,23 @@ export default class Popover {
 			    step : '',
 		    };
 		
-		if (inputType === 'number' || $metaCell.text() === '-') {
-			const numericValue = Number($metaCell.text().replace(window['thousandsSeparator'], '').replace('-', '').replace(symbol, ''));
-			inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
+		if ( inputType === 'number' || $metaCell.text() === '-' ) {
+			
+			let metaValue: string = $metaCell.text().replace( window[ 'thousandsSeparator' ], '' ).replace( symbol, '' );
+			
+			// Get rid of negative symbol from currency fields.
+			if ( symbol ) {
+				metaValue = metaValue.replace( '-', '' );
+			}
+			
+			const numericValue: number = Number( metaValue );
+			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
+			
 		}
 		
-		if (inputType === 'number') {
-			inputAtts.min = '0';
-			// Allow decimals only for the pricing fields for now.
-			inputAtts.step = symbol ? '0.1' : '1';
+		if ( inputType === 'number' ) {
+			inputAtts.min = symbol ? '0' : ''; // The minimum value for currency fields is 0.
+			inputAtts.step = symbol ? '0.1' : '1'; // Allow decimals only for the currency fields for now.
 		}
 		
 		let $input: JQuery       = $('<input />', inputAtts),

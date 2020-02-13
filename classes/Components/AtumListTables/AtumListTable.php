@@ -496,14 +496,16 @@ abstract class AtumListTable extends \WP_List_Table {
 		wc_product_dropdown_categories( array(
 			'show_count' => 0,
 			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip',
+			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip auto-filter',
 		) );
 
 		// Product type filtering.
-		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type auto-filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Supplier filtering.
 		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		do_action( 'atum/list_table/after_nav_filters', $this );
 
 	}
 
@@ -524,7 +526,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$type              = $this->product->get_type();
 		$this->allow_calcs = TRUE;
-		$row_classes       = array( ( ++ $this->row_count % 2 ? 'even' : 'odd' ) );
+		$row_classes       = array( ( ++$this->row_count % 2 ? 'even' : 'odd' ) );
 
 		// Inheritable products do not allow calcs.
 		if ( Helpers::is_inheritable_type( $type ) ) {

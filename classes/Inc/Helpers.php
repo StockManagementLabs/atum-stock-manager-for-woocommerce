@@ -1581,7 +1581,7 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="wc-enhanced-select atum-enhanced-select atum-tooltip <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
+			<select name="supplier" class="wc-enhanced-select atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>
@@ -1591,7 +1591,7 @@ final class Helpers {
 
 		<?php else : ?>
 
-			<select class="wc-product-search atum-enhanced-select atum-tooltip <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
+			<select class="wc-product-search atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
 				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :

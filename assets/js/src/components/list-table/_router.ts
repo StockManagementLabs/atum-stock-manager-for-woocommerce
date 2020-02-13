@@ -128,21 +128,18 @@ export default class Router {
 	 */
 	updateHash() {
 		
-		const beforeFilters: any = {...this.globals.filterData};
+		const beforeFilters: any = {...this.globals.filterData}; // Deconstruct the object.
 		
-		Object.assign(this.globals.filterData, {
-			view          : $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '',
-			product_cat   : this.globals.$atumList.find('.dropdown_product_cat').val() || '',
-			product_type  : this.globals.$atumList.find('.dropdown_product_type').val() || '',
-			supplier      : this.globals.$atumList.find('.dropdown_supplier').val() || '',
-			extra_filter  : this.globals.$atumList.find('.dropdown_extra_filter').val() || '',
-			paged         : parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged')),
-			s             : decodeURIComponent( $.address.parameter('s') || '' ),
-			search_column : $.address.parameter('search_column') || '',
-			sold_last_days: $.address.parameter('sold_last_days') || '',
-			orderby       : $.address.parameter('orderby') || this.settings.get('orderby'),
-			order         : $.address.parameter('order') || this.settings.get('order'),
-		});
+		Object.assign( this.globals.filterData, {
+			view          : $.address.parameter( 'view' ) || this.globals.$atumList.find( '.subsubsub a.current' ).attr( 'id' ) || '',
+			paged         : parseInt( $.address.parameter( 'paged' ) || this.globals.$atumList.find( '.current-page' ).val() || this.settings.get( 'paged' ) ),
+			s             : decodeURIComponent( $.address.parameter( 's' ) || '' ),
+			search_column : $.address.parameter( 'search_column' ) || '',
+			sold_last_days: $.address.parameter( 'sold_last_days' ) || '',
+			orderby       : $.address.parameter( 'orderby' ) || this.settings.get( 'orderby' ),
+			order         : $.address.parameter( 'order' ) || this.settings.get( 'order' ),
+			...this.globals.getAutoFilters(),
+		} );
 		
 		// If the filter data has not changed, we don't need to update the hash.
 		if (Utils.areEquivalent(beforeFilters, this.globals.filterData)) {
@@ -150,7 +147,12 @@ export default class Router {
 		}
 
 		// Update the URL hash parameters.
-		$.each(['view', 'product_cat', 'product_type', 'supplier', 'paged', 'order', 'orderby', 's', 'search_column', 'extra_filter', 'sold_last_days'], (index: number, elem: any) => {
+		const autoFilterNames: string[] = [];
+		this.globals.$autoFilters.each( ( index: number, elem: Element ) => {
+			autoFilterNames.push( $( elem ).attr( 'name' ) );
+		} );
+		
+		$.each( [ 'view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', ...autoFilterNames ], (index: number, elem: string) => {
 			
 			// Disable auto-update on each iteration until all the parameters have been set.
 			this.navigationReady = false;

@@ -88,9 +88,7 @@ export default class DragScroll {
 			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
 			this.tooltip.destroyTooltips();
 			
-			Utils.delay( () => {
-				this.tooltip.addTooltips();
-			}, 1000);
+			Utils.delay( () => this.tooltip.addTooltips(), 1000);
 			
 		});
 		
