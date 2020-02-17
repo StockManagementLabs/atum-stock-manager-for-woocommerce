@@ -43,37 +43,38 @@ export default class EnhancedSelect {
 		
 		$selector.each( (index: number, elem: Element) => {
 			
-			const $select: any = $(elem);
+			const $select: any = $( elem );
+			let selectOptions: any = { ...options };
 			
 			if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
 				$select.prop('multiple', true);
 			}
 			
-			if (avoidEmptySelections) {
+			if ( avoidEmptySelections ) {
 				
-				$select.on('select2:selecting', (evt: Event) => {
+				$select.on( 'select2:selecting', ( evt: Event ) => {
 					
-					let $this = $(evt.currentTarget),
-					    value = $this.val();
+					let $select: JQuery = $( evt.currentTarget ),
+					    value: any    = $select.val();
 					
-					// Avoid selecting the "None" option
-					if ($.isArray(value) && $.inArray('', value) > -1) {
+					if ( $.isArray( value ) && $.inArray( '', value ) > -1 ) {
 						
-						$.each(value, (index: number, elem: string) => {
-							if (elem === '') {
-								value.splice(index, 1);
+						// Avoid selecting the "None" option.
+						$.each( value, ( index: number, elem: string ) => {
+							if ( elem === '' ) {
+								value.splice( index, 1 );
 							}
-						});
+						} );
 						
-						$this.val(value);
+						$select.val( value );
 						
 					}
 					
-				});
+				} );
 				
 			}
 			
-			$select.select2(options);
+			$select.select2(selectOptions);
 			$select.siblings('.select2-container').addClass('atum-select2');
 			this.maybeAddTooltip($select);
 			

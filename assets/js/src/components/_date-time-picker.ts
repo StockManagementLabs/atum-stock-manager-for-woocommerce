@@ -72,8 +72,8 @@ export default class DateTimePicker {
 	/**
 	 * Add the date time pickers
 	 *
-	 * @param jQuery $selector
-	 * @param Object opts
+	 * @param {JQuery} $selector
+	 * @param {any}    opts
 	 */
 	addDateTimePickers($selector: JQuery, opts: any = {}) {
 		
@@ -99,7 +99,8 @@ export default class DateTimePicker {
 			
 			evt.stopImmediatePropagation();
 			
-			const $fieldLabel: JQuery = $(evt.currentTarget).siblings('.field-label');
+			const $dpField: JQuery    = $( evt.currentTarget ),
+			      $fieldLabel: JQuery = $dpField.siblings( '.field-label' );
 			
 			if ($fieldLabel.length) {
 				
@@ -115,6 +116,8 @@ export default class DateTimePicker {
 				}
 				
 			}
+			
+			$dpField.trigger( 'atum-dp-change' );
 			
 		})
 		.on('dp.show', (evt: any) => {
@@ -140,7 +143,7 @@ export default class DateTimePicker {
 		
 		$selector.each( (index: number, elem: Element) => {
 			
-			let dateTimePicker: any = $(elem).data('DateTimePicker');
+			const dateTimePicker: any = $(elem).data('DateTimePicker');
 			
 			if (typeof dateTimePicker !== 'undefined') {
 				dateTimePicker.destroy();
