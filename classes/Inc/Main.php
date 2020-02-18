@@ -259,7 +259,7 @@ class Main {
 		}
 
 		if ( AtumCapabilities::current_user_can( 'read_inventory_log' ) && ModuleManager::is_module_active( 'inventory_logs' ) ) {
-			new InventoryLogs();
+			InventoryLogs::get_instance();
 		}
 
 		if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
@@ -269,7 +269,7 @@ class Main {
 
 				// The Suppliers is a dependency for Purchase Orders.
 				if ( AtumCapabilities::current_user_can( 'read_purchase_order' ) ) {
-					new PurchaseOrders();
+					PurchaseOrders::get_instance();
 
 					// The Purchase Orders is a dependency for Inbound Stock.
 					if ( AtumCapabilities::current_user_can( 'read_inbound_stock' ) ) {

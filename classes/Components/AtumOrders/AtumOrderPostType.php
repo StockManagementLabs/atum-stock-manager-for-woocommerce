@@ -70,11 +70,11 @@ abstract class AtumOrderPostType {
 	const ORDER_ITEM_META_TABLE = 'atum_order_itemmeta';
 
 	/**
-	 * AtumOrderPostType constructor
+	 * Load the ATUM Order's common stuff
 	 *
 	 * @since 1.2.9
 	 */
-	public function __construct() {
+	protected function init() {
 
 		// Add the ATUM prefix to all the capabilities.
 		$this->capabilities = preg_filter( '/^/', ATUM_PREFIX, $this->capabilities );

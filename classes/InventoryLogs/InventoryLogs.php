@@ -22,6 +22,13 @@ use Atum\InventoryLogs\Models\Log;
 class InventoryLogs extends AtumOrderPostType {
 
 	/**
+	 * The singleton instance holder
+	 *
+	 * @var InventoryLogs
+	 */
+	private static $instance;
+
+	/**
 	 * The query var name used in list searches
 	 *
 	 * @var string
@@ -70,11 +77,11 @@ class InventoryLogs extends AtumOrderPostType {
 
 
 	/**
-	 * InventoryLogs constructor
+	 * InventoryLogs singleton constructor
 	 *
 	 * @since 1.2.4
 	 */
-	public function __construct() {
+	private function __construct() {
 
 		// Set post type labels.
 		$this->labels = array(
@@ -106,7 +113,7 @@ class InventoryLogs extends AtumOrderPostType {
 		);
 
 		// Initialize.
-		parent::__construct();
+		$this->init();
 
 		// Add item order.
 		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
@@ -531,6 +538,39 @@ class InventoryLogs extends AtumOrderPostType {
 
 		return $atum_order_ids;
 
+	}
+
+
+	/****************************
+	 * Instance methods
+	 ****************************/
+
+	/**
+	 * Cannot be cloned
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Cannot be serialized
+	 */
+	public function __sleep() {
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return InventoryLogs instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 }
