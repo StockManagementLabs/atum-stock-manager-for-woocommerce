@@ -1119,6 +1119,55 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
+	 * Output a dropdown to choose the ATUM Order status
+	 *
+	 * @since 1.2.9
+	 *
+	 * @param string $id        The select ID.
+	 * @param string $value     The selected option.
+	 */
+	public static function atum_order_status_dropdown( $id, $value ) {
+
+		?>
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select atum-enhanced-select">
+			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
+				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
+	 * Use our own method to delete ATUM Orders in order to clean up all the data
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param mixed    $check        Just return NULL to bypass this filter or any other value to bypass the original delete_post.
+	 * @param \WP_Post $post         The post being deleted.
+	 * @param bool     $force_delete Whether to bypass the trash and delete the post definitely.
+	 *
+	 * @return mixed
+	 */
+	public function maybe_delete_atum_order( $check, $post, $force_delete ) {
+
+		if ( in_array( $post->post_type, [ InventoryLogs::POST_TYPE, PurchaseOrders::POST_TYPE ], TRUE ) ) {
+
+			// Avoid cyclical calls to this method.
+			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
+
+			$atum_order = Helpers::get_atum_order_model( $post->ID );
+			$atum_order->delete( $force_delete );
+
+			$check = FALSE;
+
+		}
+
+		return $check;
+
+	}
+
+	/**
 	 * Get the currently instantiated ATUM Order object (if any) or create a new one
 	 *
 	 * @since 1.2.9
@@ -1164,55 +1213,6 @@ abstract class AtumOrderPostType {
 			ATUM_PREFIX . 'pending'   => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
 			ATUM_PREFIX . 'completed' => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
 		) );
-
-	}
-	
-	/**
-	 * Output a dropdown to choose the ATUM Order status
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $id        The select ID.
-	 * @param string $value     The selected option.
-	 */
-	public static function atum_order_status_dropdown( $id, $value ) {
-		
-		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select atum-enhanced-select">
-			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
-				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
-			<?php endforeach; ?>
-		</select>
-		<?php
-		
-	}
-
-	/**
-	 * Use our own method to delete ATUM Orders in order to clean up all the data
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param mixed    $check        Just return NULL to bypass this filter or any other value to bypass the original delete_post.
-	 * @param \WP_Post $post         The post being deleted.
-	 * @param bool     $force_delete Whether to bypass the trash and delete the post definitely.
-	 *
-	 * @return mixed
-	 */
-	public function maybe_delete_atum_order( $check, $post, $force_delete ) {
-
-		if ( in_array( $post->post_type, [ InventoryLogs::POST_TYPE, PurchaseOrders::POST_TYPE ], TRUE ) ) {
-
-			// Avoid cyclical calls to this method.
-			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
-
-			$atum_order = Helpers::get_atum_order_model( $post->ID );
-			$atum_order->delete( $force_delete );
-
-			$check = FALSE;
-
-		}
-
-		return $check;
 
 	}
 
