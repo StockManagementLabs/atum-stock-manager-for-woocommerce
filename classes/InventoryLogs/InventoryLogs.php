@@ -442,7 +442,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @return Log
 	 */
-	protected function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id ) {
 
 		if ( ! $this->log || $this->log->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$this->log = new Log( $post_id );

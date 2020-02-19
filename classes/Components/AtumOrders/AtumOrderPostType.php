@@ -1176,7 +1176,7 @@ abstract class AtumOrderPostType {
 	 *
 	 * @return AtumOrderModel
 	 */
-	abstract protected function get_current_atum_order( $post_id );
+	abstract public function get_current_atum_order( $post_id );
 
 	/**
 	 * Getter for the ATUM Order post type name

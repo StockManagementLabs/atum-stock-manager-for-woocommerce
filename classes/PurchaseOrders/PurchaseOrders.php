@@ -396,7 +396,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @return PurchaseOrder
 	 */
-	protected function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id ) {
 
 		if ( ! $this->po || $this->po->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 			$this->po = new PurchaseOrder( $post_id );
