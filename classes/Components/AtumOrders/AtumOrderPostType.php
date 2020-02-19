@@ -1159,7 +1159,7 @@ abstract class AtumOrderPostType {
 			$atum_order = Helpers::get_atum_order_model( $post->ID );
 			$atum_order->delete( $force_delete );
 
-			$check = FALSE;
+			$check = TRUE; // Let WP know that the post was successfully deleted.
 
 		}
 
