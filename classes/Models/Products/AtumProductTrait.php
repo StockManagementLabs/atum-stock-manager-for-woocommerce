@@ -678,7 +678,9 @@ trait AtumProductTrait {
 			$this->set_prop( 'atum_stock_status', $atum_stock_status );
 		}
 		else {
-			$this->set_prop( 'atum_stock_status', 'instock' );
+			// Ensure instock is saved.
+			$this->set_prop( 'atum_stock_status', '' );
+			$this->changes['atum_stock_status'] = 'instock';
 		}
 	}
 
