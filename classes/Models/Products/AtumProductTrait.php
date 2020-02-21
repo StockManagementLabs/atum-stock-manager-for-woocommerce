@@ -29,7 +29,7 @@ trait AtumProductTrait {
 	 */
 	protected $atum_data = array(
 		'purchase_price'        => '',
-		'supplier_id'           => 0,
+		'supplier_id'           => NULL,
 		'supplier_sku'          => '',
 		'atum_controlled'       => TRUE,
 		// When a new product is created, the ATUM controlled should be enabled by default.
@@ -446,7 +446,7 @@ trait AtumProductTrait {
 	 * @param int $supplier_id
 	 */
 	public function set_supplier_id( $supplier_id ) {
-		$this->set_prop( 'supplier_id', absint( $supplier_id ) );
+		$this->set_prop( 'supplier_id', absint( $supplier_id ) ? absint( $supplier_id ) : NULL );
 	}
 
 	/**

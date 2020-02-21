@@ -78,6 +78,7 @@ trait AtumDataStoreCommonTrait {
 
 		// Values which can be null in the database.
 		$allow_null = (array) apply_filters( 'atum/data_store/allow_null_columns', array(
+			'supplier_id',
 			'purchase_price',
 			'out_stock_date',
 			'out_stock_threshold',
