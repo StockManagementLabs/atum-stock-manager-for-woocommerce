@@ -94,11 +94,11 @@ class Supplier {
 	 */
 	public function __construct( $id ) {
 
-		$supplier = get_post( $id );
-		$this->id = $id;
+		$this->post = get_post( $id );
+		$this->id   = $id;
 		$this->read_data();
 
-		return ( $supplier && Suppliers::POST_TYPE === $supplier->post_type ) ? $supplier : NULL;
+		return ( $this->post && Suppliers::POST_TYPE === $this->post->post_type ) ? $this->post : NULL;
 
 	}
 
@@ -110,16 +110,20 @@ class Supplier {
 	public function read_data() {
 
 		// Get the name from the inherent post.
-		$this->data['name'] = $this->post->post_title;
+		if ( $this->post ) {
 
-		// Get the rest of the data from meta.
-		$meta_data = get_metadata( 'post', $this->id, '', TRUE );
+			$this->data['name'] = $this->post->post_title;
 
-		foreach ( $meta_data as $meta_key => $meta_value ) {
+			// Get the rest of the data from meta.
+			$meta_data = get_metadata( 'post', $this->id, '', TRUE );
 
-			$data_name = ltrim( $meta_key, '_' );
-			if ( array_key_exists( $data_name, $this->data ) ) {
-				$this->data[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
+			foreach ( $meta_data as $meta_key => $meta_value ) {
+
+				$data_name = ltrim( $meta_key, '_' );
+				if ( array_key_exists( $data_name, $this->data ) ) {
+					$this->data[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
+				}
+
 			}
 
 		}
