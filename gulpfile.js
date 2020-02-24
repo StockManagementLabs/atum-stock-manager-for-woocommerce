@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.6.7',
+var version = '1.6.8',
     curDate = new Date();
 
 // Global config
@@ -25,7 +25,7 @@ var config = {
 	assetsDir : './assets',
 
 	devUrl    : 'http://atum.loc',
-	production: false, // NOTE: the production tag was causing problems with CSS compression when adding the @charset "UTF-8"
+	production: false,
 
 	// decorate
 	decorate: {
@@ -68,7 +68,7 @@ var options = {
 
 	sass: {
 		errLogToConsole: !enabled.failStyleTask,
-		outputStyle    : 'expanded', // The compressed was causing issues.
+		outputStyle    : 'expanded', // NOTE: the CSS compression was causing problems when adding the @charset "UTF-8"
 		//precision      : 10,
 		includePaths   : [
 			'.',
