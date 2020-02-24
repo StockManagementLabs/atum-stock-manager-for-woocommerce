@@ -59,6 +59,10 @@
 				max-width: 100%;
 				height: 32px;
 			}
+		
+			> textarea {
+				height: auto;
+			}
 		}
 		
 		.wp-editor-area {

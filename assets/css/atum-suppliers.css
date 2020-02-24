@@ -144,6 +144,10 @@
   --gray-hover: rgba(108, 117, 125, 0.6);
   --gray-shadow: rgba(108, 117, 125, 0.2);
   --gray-hover-border: none;
+  --default: #adb5bd;
+  --default-hover: rgba(173, 181, 189, 0.6);
+  --default-shadow: rgba(173, 181, 189, 0.2);
+  --default-hover-border: none;
   --wp-link: #0073AA;
   --wp-link-hover: rgba(0, 115, 170, 0.6);
   --wp-link-shadow: rgba(0, 115, 170, 0.2);
@@ -2509,6 +2513,44 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
 }
 
+.btn-default {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default);
+  border: none;
+}
+
+.btn-default:hover {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default-hover);
+  border: none;
+}
+
+.btn-default:focus, .btn-default.focus {
+  color: var(--wp-yiq-text-dark);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+}
+
+.btn-default.disabled, .btn-default:disabled {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default);
+  border-color: var(--default);
+}
+
+.btn-default:not(:disabled):not(.disabled):active, .btn-default:not(:disabled):not(.disabled).active,
+.show > .btn-default.dropdown-toggle {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default-hover);
+  border-color: var(--default-hover);
+}
+
+.btn-default:not(:disabled):not(.disabled):active:focus, .btn-default:not(:disabled):not(.disabled).active:focus,
+.show > .btn-default.dropdown-toggle:focus {
+  color: var(--wp-yiq-text-dark);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba(173, 181, 189, 0.5);
+}
+
 .btn-outline-primary {
   color: var(--primary);
   background-color: transparent;
@@ -2941,6 +2983,42 @@ fieldset:disabled a.btn {
           box-shadow: 0 0 0 0.2rem var(--gray-shadow);
 }
 
+.btn-outline-default {
+  color: var(--default);
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--default);
+}
+
+.btn-outline-default:hover {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default);
+  border-color: var(--default);
+}
+
+.btn-outline-default:focus, .btn-outline-default.focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--default-shadow);
+          box-shadow: 0 0 0 0.2rem var(--default-shadow);
+}
+
+.btn-outline-default.disabled, .btn-outline-default:disabled {
+  color: "default";
+  background-color: transparent;
+}
+
+.btn-outline-default:not(:disabled):not(.disabled):active, .btn-outline-default:not(:disabled):not(.disabled).active,
+.show > .btn-outline-default.dropdown-toggle {
+  color: var(--wp-yiq-text-dark);
+  background-color: var(--default);
+  border-color: var(--default);
+}
+
+.btn-outline-default:not(:disabled):not(.disabled):active:focus, .btn-outline-default:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-default.dropdown-toggle:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem var(--default-shadow);
+          box-shadow: 0 0 0 0.2rem var(--default-shadow);
+}
+
 .btn-pill {
   border-radius: 16px;
 }
@@ -3250,6 +3328,10 @@ input[type="button"].btn-block {
   width: 100%;
   max-width: 100%;
   height: 32px;
+}
+
+.atum-meta-box .form-field.form-field-wide > textarea {
+  height: auto;
 }
 
 .atum-meta-box .form-field .wp-editor-area {
