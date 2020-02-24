@@ -187,6 +187,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.8`
+
+*2020-02-25*
+
+**Changes**
+
+* Added new action to be hooked when changing the manage stock through the ATUM tool.
+* Added default values for textarea properties in Settings.
+* Refactory to use auto-filters so we can add extra filters externally to List Tables.
+* Added custom hooks to PO's data meta box.
+* Ensure a correct atum stock status is stored in db when saving.
+* Allow NULL values for the Supplier ID.
+* Created supplier model.
+
+**Fixes**
+
+* Fixed error when deleting an ATUM order permanently.
+* Minor CSS fixes.
+
+---
+
 `1.6.7`
 
 *2020-02-07*

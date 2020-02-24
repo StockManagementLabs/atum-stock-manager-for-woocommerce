@@ -6,8 +6,8 @@ Requires at least: 4.4
 Tested up to: 5.3.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 3.9.1
-Stable tag: 1.6.7
+WC tested up to: 3.9.2
+Stable tag: 1.6.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.8`
+
+*2020-02-25*
+
+**Changes**
+
+* Added new action to be hooked when changing the manage stock through the ATUM tool.
+* Added default values for textarea properties in Settings.
+* Refactory to use auto-filters so we can add extra filters externally to List Tables.
+* Added custom hooks to PO's data meta box.
+* Ensure a correct atum stock status is stored in db when saving.
+* Allow NULL values for the Supplier ID.
+* Created supplier model.
+
+**Fixes**
+
+* Fixed error when deleting an ATUM order permanently.
+* Minor CSS fixes.
 
 ---
 
