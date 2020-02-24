@@ -47,12 +47,8 @@ var config = {
 
 // CLI options
 var enabled = {
-	// Enable static asset revisioning when `--production`
-	rev: config.production,
 	// Disable source maps when `--production`
 	maps: !config.production,
-	// Fail styles task on error when `--production`
-	failStyleTask: config.production
 };
 
 
@@ -67,7 +63,7 @@ var onError = function (err) {
 var options = {
 
 	sass: {
-		errLogToConsole: !enabled.failStyleTask,
+		errLogToConsole: !config.production,
 		outputStyle    : config.production ? 'compressed' : 'expanded',
 		//precision      : 10,
 		includePaths   : [
