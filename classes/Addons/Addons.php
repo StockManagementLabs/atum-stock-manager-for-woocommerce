@@ -815,7 +815,7 @@ class Addons {
 
 		if ( in_array( $file, array_filter( wp_list_pluck( self::$addons, 'basename' ) ), TRUE ) ) {
 			$row_meta = array(
-				'support' => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Open a private ticket', ATUM_PO_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Premium Support', ATUM_PO_TEXT_DOMAIN ) . '</a>',
+				'support' => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Open a private ticket', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Premium Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );

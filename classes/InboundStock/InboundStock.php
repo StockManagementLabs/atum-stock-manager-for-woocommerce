@@ -96,7 +96,7 @@ class InboundStock extends AtumListPage {
 		
 		parent::display();
 
-		Helpers::load_view( 'inbound-stock', array(
+		Helpers::load_view( 'list-tables/inbound-stock', array(
 			'list' => $this->list,
 			'ajax' => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 		) );

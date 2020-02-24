@@ -1,6 +1,6 @@
 <?php
 /**
- * View for the Stock Central page
+ * View for the Show Filters button on Stock Central page
  *
  * @since 1.6.4
  */

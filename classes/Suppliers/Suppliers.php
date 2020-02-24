@@ -38,6 +38,13 @@ class Suppliers {
 	 * @var array
 	 */
 	protected $labels = array();
+
+	/**
+	 * Store the supplier being loaded
+	 *
+	 * @var Supplier
+	 */
+	private $supplier = NULL;
 	
 	/**
 	 * The Supplier post type name
@@ -217,19 +224,20 @@ class Suppliers {
 
 		global $post;
 		$rendered = FALSE;
+		$supplier = new Supplier( $post->ID );
 
 		switch ( $column ) {
 
 			case 'company_code':
-				echo esc_html( get_post_meta( $post->ID, '_supplier_details_code', TRUE ) );
+				echo esc_html( $supplier->code );
 				break;
 
 			case 'company_phone':
-				echo esc_html( get_post_meta( $post->ID, '_supplier_details_phone', TRUE ) );
+				echo esc_html( $supplier->phone );
 				break;
 
 			case 'assigned_to':
-				$user_id = esc_html( get_post_meta( $post->ID, '_default_settings_assigned_to', TRUE ) );
+				$user_id = esc_html( $supplier->assigned_to );
 
 				if ( $user_id > 0 ) {
 					$user = get_user_by( 'id', $user_id );
@@ -243,7 +251,7 @@ class Suppliers {
 				break;
 
 			case 'location':
-				echo esc_html( get_post_meta( $post->ID, '_default_settings_location', TRUE ) );
+				echo esc_html( $supplier->location );
 				break;
 
 		}
@@ -258,6 +266,9 @@ class Suppliers {
 	 * @since 1.2.9
 	 */
 	public function add_meta_boxes() {
+
+		global $post;
+		$this->supplier = new Supplier( $post->ID );
 
 		// Supplier Details meta box.
 		add_meta_box(
@@ -299,7 +310,7 @@ class Suppliers {
 	 * @param \WP_Post $post
 	 */
 	public function show_supplier_details_meta_box( $post ) {
-		Helpers::load_view( 'meta-boxes/suppliers/details', array( 'supplier_id' => $post->ID ) );
+		Helpers::load_view( 'meta-boxes/suppliers/details', array( 'supplier' => $this->supplier ) );
 	}
 
 	/**
@@ -312,11 +323,10 @@ class Suppliers {
 	public function show_billing_information_meta_box( $post ) {
 
 		$country_obj = new \WC_Countries();
-		$countries   = $country_obj->get_countries();
 
 		Helpers::load_view( 'meta-boxes/suppliers/billing-information', array(
-			'supplier_id' => $post->ID,
-			'countries'   => $countries,
+			'supplier'  => $this->supplier,
+			'countries' => $country_obj->get_countries(),
 		) );
 	}
 
@@ -328,7 +338,7 @@ class Suppliers {
 	 * @param \WP_Post $post
 	 */
 	public function show_default_settings_meta_box( $post ) {
-		Helpers::load_view( 'meta-boxes/suppliers/default-settings', array( 'supplier_id' => $post->ID ) );
+		Helpers::load_view( 'meta-boxes/suppliers/default-settings', array( 'supplier' => $this->supplier ) );
 	}
 
 	/**
@@ -344,21 +354,13 @@ class Suppliers {
 			return;
 		}
 
+		$supplier = new Supplier( $supplier_id );
+
 		foreach ( [ 'supplier_details', 'billing_information', 'default_settings' ] as $metabox_key ) {
-
-			foreach ( array_map( 'esc_attr', $_POST[ $metabox_key ] ) as $meta_key => $meta_value ) {
-
-				// The meta key names will follow the format: _supplier_details_name.
-				if ( '' === $meta_value ) {
-					delete_post_meta( $supplier_id, "_{$metabox_key}_{$meta_key}" );
-				}
-				else {
-					update_post_meta( $supplier_id, "_{$metabox_key}_{$meta_key}", $meta_value );
-				}
-
-			}
-
+			$supplier->set_data( $_POST[ $metabox_key ] );
 		}
+
+		$supplier->save();
 
 	}
 

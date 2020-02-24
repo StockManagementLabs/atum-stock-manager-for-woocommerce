@@ -109,7 +109,7 @@ class StockCentral extends AtumListPage {
 			$sc_url = add_query_arg( 'uncontrolled', 1, $sc_url );
 		}
 
-		Helpers::load_view( 'stock-central', array(
+		Helpers::load_view( 'list-tables/stock-central', array(
 			'list'                 => $this->list,
 			'ajax'                 => Helpers::get_option( 'enable_ajax_filter', 'yes' ),
 			'is_uncontrolled_list' => $this->is_uncontrolled_list,

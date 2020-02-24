@@ -20,6 +20,7 @@ use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\StockCentral;
 use Atum\StockCentral\Lists\ListTable;
+use Atum\Suppliers\Suppliers;
 
 
 class Upgrade {
@@ -104,6 +105,11 @@ class Upgrade {
 		if ( version_compare( $db_version, '1.6.6', '<' ) ) {
 			$this->add_atum_stock_fields();
 			add_action( 'atum/after_init', array( $this, 'fill_new_fields_values' ) );
+		}
+
+		// ** version 1.6.8 ** Change the supplier's meta key names.
+		if ( version_compare( $db_version, '1.6.8', '<' ) ) {
+			$this->change_supplier_meta_key_names();
 		}
 
 		/**********************
@@ -721,6 +727,34 @@ class Upgrade {
 				) );
 				// phpcs:enable
 			}
+		}
+
+	}
+
+	/**
+	 * Change the supplier meta key names to be compatible with the new model
+	 *
+	 * @since 1.6.8
+	 */
+	private function change_supplier_meta_key_names() {
+
+		$group_keys = array(
+			'_supplier_details',
+			'_default_settings',
+			'_billing_information',
+		);
+
+		global $wpdb;
+
+		foreach ( $group_keys as $group_key ) {
+
+			$wpdb->query( $wpdb->prepare( "
+				UPDATE $wpdb->postmeta SET meta_key = REPLACE(meta_key, %s, '')
+				WHERE post_id IN (
+					SELECT ID FROM $wpdb->posts WHERE post_type = %s
+				)
+			", $group_key, Suppliers::POST_TYPE ) );
+
 		}
 
 	}

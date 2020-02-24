@@ -935,7 +935,7 @@ abstract class AtumOrderPostType {
 
 				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
-					'showFiltersButton' => Helpers::load_view_to_string( 'show-fields-button' ),
+					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
 					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
 					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
 				) );
@@ -1123,13 +1123,14 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $id        The select ID.
-	 * @param string $value     The selected option.
+	 * @param string $id    The select ID.
+	 * @param string $value The selected option.
+	 * @param string $class Optional. The CSS classes for the select.
 	 */
-	public static function atum_order_status_dropdown( $id, $value ) {
+	public static function atum_order_status_dropdown( $id, $value, $class = 'wc-enhanced-select atum-enhanced-select' ) {
 
 		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="wc-enhanced-select atum-enhanced-select">
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="<?php echo esc_attr( $class ) ?>">
 			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
 				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
 			<?php endforeach; ?>
