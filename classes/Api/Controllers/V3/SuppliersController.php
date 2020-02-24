@@ -842,7 +842,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		$prepared_post->meta_input = array();
 
-		// Supplier details' meta.
+		// Supplier's meta.
 		foreach (
 			[
 				'code',
@@ -854,43 +854,19 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'general_email',
 				'ordering_email',
 				'description',
-			] as $meta_key
-		) {
-
-			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
-				$prepared_post->meta_input[ "_supplier_details_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
-			}
-
-		}
-
-		// Billing information's meta.
-		foreach (
-			[
 				'currency',
 				'address',
 				'city',
 				'country',
 				'state',
 				'zip_code',
-			] as $meta_key
-		) {
-
-			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
-				$prepared_post->meta_input[ "_billing_information_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
-			}
-
-		}
-
-		// Default settings' meta.
-		foreach (
-			[
 				'assigned_to',
 				'location',
 			] as $meta_key
 		) {
 
 			if ( ! empty( $schema['properties'][ $meta_key ] ) && isset( $request[ $meta_key ] ) ) {
-				$prepared_post->meta_input[ "_default_settings_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
+				$prepared_post->meta_input[ "_$meta_key" ] = sanitize_text_field( $request[ $meta_key ] );
 			}
 
 		}
@@ -966,7 +942,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		$supplier_meta      = get_metadata( 'post', $supplier->ID );
 		$supplier_meta_keys = array_keys( $supplier_meta );
 
-		// Supplier details' meta.
+		// Supplier's meta.
 		foreach (
 			[
 				'code',
@@ -978,43 +954,19 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'general_email',
 				'ordering_email',
 				'description',
-			] as $meta_key
-		) {
-
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_supplier_details_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_supplier_details_$meta_key" ] );
-			}
-
-		}
-
-		// Billing information's meta.
-		foreach (
-			[
 				'currency',
 				'address',
 				'city',
 				'country',
 				'state',
 				'zip_code',
-			] as $meta_key
-		) {
-
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_billing_information_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_billing_information_$meta_key" ] );
-			}
-
-		}
-
-		// Default settings' meta.
-		foreach (
-			[
 				'assigned_to',
 				'location',
 			] as $meta_key
 		) {
 
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_default_settings_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_default_settings_$meta_key" ] );
+			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_$meta_key", $supplier_meta_keys, TRUE ) ) {
+				$data[ $meta_key ] = current( $supplier_meta[ "_$meta_key" ] );
 			}
 
 		}

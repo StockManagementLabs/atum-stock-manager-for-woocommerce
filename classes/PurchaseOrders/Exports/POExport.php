@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Supplier;
 
 
 class POExport extends PurchaseOrder {
@@ -162,15 +163,17 @@ class POExport extends PurchaseOrder {
 		$supplier_id = $this->get_supplier( 'id' );
 		
 		if ( $supplier_id ) {
+
+			$supplier = new Supplier( $supplier_id );
 			
 			$address = WC()->countries->get_formatted_address( array(
-				'first_name' => get_the_title( $supplier_id ),
-				'company'    => get_post_meta( $supplier_id, '_supplier_details_tax_number', TRUE ),
-				'address_1'  => get_post_meta( $supplier_id, '_billing_information_address', TRUE ),
-				'city'       => get_post_meta( $supplier_id, '_billing_information_city', TRUE ),
-				'state'      => get_post_meta( $supplier_id, '_billing_information_state', TRUE ),
-				'postcode'   => get_post_meta( $supplier_id, '_billing_information_zip_code', TRUE ),
-				'country'    => get_post_meta( $supplier_id, '_billing_information_country', TRUE ),
+				'first_name' => $supplier->name,
+				'company'    => $supplier->tax_number,
+				'address_1'  => $supplier->address,
+				'city'       => $supplier->city,
+				'state'      => $supplier->state,
+				'postcode'   => $supplier->zip_code,
+				'country'    => $supplier->country,
 			) );
 			
 		}

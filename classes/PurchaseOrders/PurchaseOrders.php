@@ -45,7 +45,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	/**
 	 * Status that means an ATUM Order is finished
 	 */
-	const FINISHED = ATUM_PREFIX . 'received';
+	const FINISHED = 'atum_received';
 
 	/**
 	 * The Purchase Order post type name
@@ -414,13 +414,13 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @return array
 	 */
 	public static function get_statuses() {
-		
+
 		return (array) apply_filters( 'atum/purchase_orders/statuses', array(
-			ATUM_PREFIX . 'pending'    => _x( 'Pending', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			ATUM_PREFIX . 'ordered'    => _x( 'Ordered', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			ATUM_PREFIX . 'onthewayin' => _x( 'On the Way In', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			ATUM_PREFIX . 'receiving'  => _x( 'Receiving', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
-			ATUM_PREFIX . 'received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'atum_pending'    => _x( 'Pending', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'atum_ordered'    => _x( 'Ordered', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'atum_onthewayin' => _x( 'On the Way In', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'atum_receiving'  => _x( 'Receiving', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
+			'atum_received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
 		) );
 		
 	}

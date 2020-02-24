@@ -4,7 +4,7 @@
  *
  * @since 1.2.9
  *
- * @var int $supplier_id
+ * @var \Atum\Suppliers\Supplier $supplier
  */
 
 defined( 'ABSPATH' ) || die;
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || die;
 		<?php
 		$args = array(
 			'show_option_none' => esc_html__( 'Choose a user&hellip;', ATUM_TEXT_DOMAIN ),
-			'selected'         => get_post_meta( $supplier_id, '_default_settings_assigned_to', TRUE ),
+			'selected'         => $supplier->assigned_to,
 			'name'             => 'default_settings[assigned_to]',
 			'id'               => 'assigned_to',
 			'class'            => 'wc-enhanced-select atum-enhanced-select',
@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="form-field form-field-wide">
 		<label for="location"><?php esc_html_e( 'Location', ATUM_TEXT_DOMAIN ) ?></label>
-		<input type="text" id="location" name="default_settings[location]" value="<?php echo esc_attr( get_post_meta( $supplier_id, '_default_settings_location', TRUE ) ) ?>">
+		<input type="text" id="location" name="default_settings[location]" value="<?php echo esc_attr( $supplier->location ) ?>">
 	</div>
 
 </div>

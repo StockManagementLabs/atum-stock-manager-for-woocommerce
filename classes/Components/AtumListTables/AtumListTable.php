@@ -471,7 +471,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
-			<?php Helpers::load_view( 'show-fields-button' ); ?>
+			<?php Helpers::load_view( 'list-tables/show-filters-button' ); ?>
 
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
