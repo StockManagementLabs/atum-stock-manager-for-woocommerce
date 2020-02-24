@@ -68,7 +68,7 @@ var options = {
 
 	sass: {
 		errLogToConsole: !enabled.failStyleTask,
-		outputStyle    : 'expanded', // NOTE: the CSS compression was causing problems when adding the @charset "UTF-8"
+		outputStyle    : config.production ? 'compressed' : 'expanded',
 		//precision      : 10,
 		includePaths   : [
 			'.',
@@ -166,7 +166,7 @@ gulp.task('js::atum', function () {
 					output   : {
 						comments: false,
 					},
-					sourceMap: true
+					sourceMap: enabled.maps
 				}),
 				
 				// Fixes warning in moment-with-locales.min.js
