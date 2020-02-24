@@ -143,6 +143,10 @@
   --gray-hover: rgba(108, 117, 125, 0.6);
   --gray-shadow: rgba(108, 117, 125, 0.2);
   --gray-hover-border: none;
+  --default: #adb5bd;
+  --default-hover: rgba(173, 181, 189, 0.6);
+  --default-shadow: rgba(173, 181, 189, 0.2);
+  --default-hover-border: none;
   --wp-link: #0073AA;
   --wp-link-hover: rgba(0, 115, 170, 0.6);
   --wp-link-shadow: rgba(0, 115, 170, 0.2);
