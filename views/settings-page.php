@@ -99,38 +99,7 @@ use Atum\Components\AtumColors;
 								<?php if ( ! $last_section || 1 === count( $active_sections ) ) : ?>
 
 									<div class="section-general-title">
-										<?php
-										$header_settings_title = NULL;
-
-										switch ( $section['id'] ) :
-											case 'atum_setting_general':
-												$header_settings_title = __( 'General', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_company':
-												$header_settings_title = __( 'Store Details', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_color_mode':
-												$header_settings_title = __( 'Visual Settings', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_module_manager':
-												$header_settings_title = __( 'Modules', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_stock_central':
-												$header_settings_title = __( 'Stock Central', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_multi_inventory':
-												$header_settings_title = __( 'Multi-Inventory', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_product_levels':
-												$header_settings_title = __( 'Product Levels', ATUM_TEXT_DOMAIN );
-												break;
-											case 'atum_setting_tools':
-												$header_settings_title = __( 'Tools', ATUM_TEXT_DOMAIN );
-												break;
-										endswitch;
-										?>
-
-										<h2><?php echo esc_attr( $header_settings_title ) ?></h2>
+										<h2><?php echo esc_attr( ! empty( $tabs[ $active ]['label'] ) ? $tabs[ $active ]['label'] : '' ) ?></h2>
 
 										<?php submit_button( __( 'Save Changes', ATUM_TEXT_DOMAIN ) ); ?>
 									</div>
