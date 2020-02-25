@@ -24,6 +24,7 @@ use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
 use Atum\PurchaseOrders\Items\POItemTax;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 
@@ -106,9 +107,9 @@ class PurchaseOrder extends AtumOrderModel {
 
 		$supplier = $po->get_supplier();
 
-		if ( $supplier ) {
+		if ( $supplier->id ) {
 			/* translators: the supplier title */
-			echo '<em class="alert"><i class="atmi-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->post_title ) ) . '</em>';
+			echo '<em class="alert"><i class="atmi-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->name ) ) . '</em>';
 		}
 	}
 
@@ -142,11 +143,11 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $return    Optional. The type of object to return. Possible values 'id' or 'post'.
+	 * @param string $return    Optional. The type of object to return. Possible values 'id' or 'object'.
 	 *
-	 * @return \WP_Post|int|bool
+	 * @return Supplier|int|bool
 	 */
-	public function get_supplier( $return = 'post' ) {
+	public function get_supplier( $return = 'object' ) {
 
 		$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
 
@@ -156,7 +157,7 @@ class PurchaseOrder extends AtumOrderModel {
 				return $supplier_id;
 			}
 			else {
-				return get_post( $supplier_id );
+				return new Supplier( $supplier_id );
 			}
 
 		}

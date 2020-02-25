@@ -268,8 +268,8 @@ class PurchaseOrders extends AtumOrderPostType {
 			case 'supplier':
 				$supplier = $po->get_supplier();
 				
-				if ( $supplier ) {
-					echo esc_html( $supplier->post_title );
+				if ( $supplier->name ) {
+					echo esc_html( $supplier->name );
 				}
 				break;
 
