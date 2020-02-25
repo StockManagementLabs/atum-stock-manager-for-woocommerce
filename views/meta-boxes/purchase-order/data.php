@@ -7,7 +7,7 @@
  * @var \Atum\PurchaseOrders\Models\PurchaseOrder $atum_order
  * @var \WP_Post                                  $atum_order_post
  * @var array                                     $labels
- * @var \WP_Post                                  $supplier
+ * @var \Atum\Suppliers\Supplier                  $supplier
  * @var bool                                      $has_multiple_suppliers
  */
 
@@ -53,11 +53,8 @@ $po_status = $atum_order->get_status();
 				<p class="form-field form-field-wide"<?php if ($has_multiple_suppliers) echo ' style="display:none"' ?>>
 					<label for="customer_user"><?php esc_html_e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<?php
-					$supplier_id = $supplier ? $supplier->ID : '';
-					echo Helpers::suppliers_dropdown( $supplier_id, TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					?>
-					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty( $supplier ) ) echo esc_attr( $supplier->ID ) ?>">
+					<?php echo Helpers::suppliers_dropdown( $supplier->id, TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<input type="hidden" class="item-blocker-old-value" value="<?php if ( ! empty( $supplier ) ) echo esc_attr( $supplier->id ) ?>">
 				</p>
 
 				<p class="form-field">

@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 /**
  * Class Supplier
  *
+ * @property int    $id
  * @property string $name
  * @property string $code
  * @property string $tax_number
@@ -41,7 +42,7 @@ class Supplier {
 	 *
 	 * @var int
 	 */
-	protected $id;
+	protected $id = NULL;
 
 	/**
 	 * The post associated to this supplier
@@ -495,6 +496,17 @@ class Supplier {
 	 */
 	public function get_post() {
 		return $this->post;
+	}
+
+	/**
+	 * Get the Supplier's thumbnail URL
+	 *
+	 * @since 1.6.9
+	 *
+	 * @return false|string
+	 */
+	public function get_thumb_url() {
+		return $this->data['thumbnail_id'] ? wp_get_attachment_url( $this->data['thumbnail_id'] ) : '';
 	}
 
 
