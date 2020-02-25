@@ -98,8 +98,6 @@ class Supplier {
 		$this->id   = $id;
 		$this->read_data();
 
-		return ( $this->post && Suppliers::POST_TYPE === $this->post->post_type ) ? $this->post : NULL;
-
 	}
 
 	/**
@@ -482,6 +480,21 @@ class Supplier {
 			$this->data['location'] = $location;
 			$this->register_change( 'location' );
 		}
+	}
+
+	/***********
+	 * GETTERS
+	 ***********/
+
+	/**
+	 * Getter for the Supplier's inherent post
+	 *
+	 * @since 1.6.8
+	 *
+	 * @return array|\WP_Post|null
+	 */
+	public function get_post() {
+		return $this->post;
 	}
 
 
