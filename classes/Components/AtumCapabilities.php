@@ -123,7 +123,7 @@ class AtumCapabilities {
 	private function __construct() {
 
 		// Add the ATUM prefix to all the capabilities.
-		$this->capabilities = array_merge( preg_filter( '/^/', ATUM_PREFIX, $this->capabilities ), $this->wp_capabilities );
+		$this->capabilities = array_merge( preg_filter( '/^/', ATUM_PREFIX, $this->capabilities ), $this->wp_capabilities, apply_filters( 'atum/capabilities', [] ) );
 
 		$admin_roles = (array) apply_filters( 'atum/capabilities/admin_roles', [ get_role( 'administrator' ) ] );
 
