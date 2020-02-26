@@ -1554,10 +1554,11 @@ final class Helpers {
 	 * @param string $selected  Optional. The pre-selected option.
 	 * @param bool   $enhanced  Optional. Whether to show an enhanced select.
 	 * @param string $class     Optional. The dropdown class name.
+	 * @param string $name      Optional. The input's name.
 	 *
 	 * @return string
 	 */
-	public static function suppliers_dropdown( $selected = '', $enhanced = FALSE, $class = 'dropdown_supplier' ) {
+	public static function suppliers_dropdown( $selected = '', $enhanced = FALSE, $class = 'dropdown_supplier', $name = 'supplier' ) {
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return '';
@@ -1581,7 +1582,7 @@ final class Helpers {
 			endif;
 			?>
 
-			<select name="supplier" class="wc-enhanced-select atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
+			<select name="<?php echo esc_attr( $name ) ?>" class="wc-enhanced-select atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" autocomplete="off" style="width: 165px">
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>

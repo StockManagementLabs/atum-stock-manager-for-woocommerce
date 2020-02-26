@@ -1493,7 +1493,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string|array $meta_key    The meta key name.
+	 * @param string|array $meta_key    The meta key name or an array of meta_key => meta_value pairs.
 	 * @param mixed        $meta_value  Optional. Only needed for settings single metas. The array should contain the values.
 	 */
 	public function set_meta( $meta_key, $meta_value = NULL ) {
@@ -1516,6 +1516,7 @@ abstract class AtumOrderModel {
 
 		foreach ( $this->meta as $meta_key => $meta_value ) {
 			do_action( "atum/order/before_save_meta$meta_key", $meta_value, $this );
+			$meta_key = '_' !== substr( $meta_key, 0, 1 ) ? "_$meta_key" : $meta_key;
 			update_post_meta( $this->id, $meta_key, $meta_value );
 			do_action( "atum/order/after_save_meta$meta_key", $meta_value, $this );
 		}

@@ -36,6 +36,13 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @var string
 	 */
 	protected $action = 'add';
+
+	/**
+	 * The supplier assigned to the current PO (if any).
+	 *
+	 * @var Supplier
+	 */
+	protected $supplier = NULL;
 	
 	/**
 	 * PurchaseOrder constructor
@@ -66,6 +73,11 @@ class PurchaseOrder extends AtumOrderModel {
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
 
 		parent::__construct( $id, $read_items );
+
+		// Load the POs supplier.
+		if ( $id ) {
+			$this->get_supplier();
+		}
 		
 		$this->block_message = __( 'Set the Supplier field above in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
@@ -148,15 +160,21 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function get_supplier( $return = 'object' ) {
 
-		$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
+		if ( is_null( $this->supplier ) ) {
+			$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
 
-		if ( $supplier_id ) {
+			if ( $supplier_id ) {
+				$this->supplier = new Supplier( $supplier_id );
+			}
+		}
+
+		if ( ! is_null( $this->supplier ) && $this->supplier->id ) {
 
 			if ( 'id' === $return ) {
-				return $supplier_id;
+				return $this->supplier->id;
 			}
 			else {
-				return new Supplier( $supplier_id );
+				return $this->supplier;
 			}
 
 		}
@@ -173,7 +191,13 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param int $supplier_id
 	 */
 	public function set_supplier( $supplier_id ) {
-		$this->set_meta( '_supplier', absint( $supplier_id ) );
+
+		$supplier_id = absint( $supplier_id );
+
+		if ( is_null( $this->supplier ) || $this->supplier->id !== $supplier_id ) {
+			$this->set_meta( Suppliers::SUPPLIER_META_KEY, $supplier_id );
+			$this->supplier = $supplier_id ? new Supplier( $supplier_id ) : NULL;
+		}
 	}
 
 	/**

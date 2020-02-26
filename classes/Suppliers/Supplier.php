@@ -27,6 +27,7 @@ defined( 'ABSPATH' ) || die;
  * @property string $general_email
  * @property string $ordering_email
  * @property string $description
+ * @property string $currency
  * @property string $address
  * @property string $city
  * @property string $country
@@ -34,6 +35,9 @@ defined( 'ABSPATH' ) || die;
  * @property string $zip_code
  * @property int    $assigned_to
  * @property string $location
+ * @property int    $thumbnail_id
+ * @property int    $discount
+ * @property int    $tax_rate
  */
 class Supplier {
 
@@ -76,6 +80,8 @@ class Supplier {
 		'assigned_to'    => NULL,
 		'location'       => '',
 		'thumbnail_id'   => NULL,
+		'discount'       => NULL,
+		'tax_rate'       => NULL,
 	);
 
 	/**
@@ -108,9 +114,9 @@ class Supplier {
 	 */
 	public function read_data() {
 
-		// Get the name from the inherent post.
 		if ( $this->post ) {
 
+			// Get the name from the inherent post.
 			$this->data['name'] = $this->post->post_title;
 
 			// Get the rest of the data from meta.
