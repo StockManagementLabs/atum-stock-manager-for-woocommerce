@@ -130,6 +130,9 @@ class InventoryLogs extends AtumOrderPostType {
 		// Add custom search for ILs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'il_search' ), 10, 3 );
 		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+
+		// Add the buttons for increasing/decreasing the Log products' stock.
+		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
 		
 	}
 
@@ -540,6 +543,17 @@ class InventoryLogs extends AtumOrderPostType {
 
 	}
 
+	/**
+	 * Add the buttons for increasing/decreasing the Log products' stock
+	 *
+	 * @since 1.3.0
+	 */
+	public function add_stock_buttons() {
+		?>
+		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Increase Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<button type="button" class="button bulk-decrease-stock"><?php esc_attr_e( 'Reduce Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<?php
+	}
 
 	/****************************
 	 * Instance methods

@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
@@ -139,9 +140,27 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Add the hooks for the Purchase Price field.
 		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
 
+		// Use the purchase price when adding products to a PO.
+		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 3 );
+
 		// Add custom search for POs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
 		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+
+		// Add message before the PO product search.
+		add_action( 'atum/atum_order/before_product_search_modal', array( $this, 'product_search_message' ) );
+
+		if ( version_compare( WC()->version, '3.5.0', '<' ) ) {
+			// Add the button for adding the inbound stock products to the WC stock.
+			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_button' ) );
+		}
+
+		// Add the button for setting the purchase price to products within POs.
+		add_action( 'atum/atum_order/item_meta_controls', array( $this, 'set_purchase_price_button' ) );
+
+		// Maybe change product stock when order status change.
+		add_action( 'atum/orders/status_atum_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
+		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
 
 	}
 
@@ -652,6 +671,182 @@ class PurchaseOrders extends AtumOrderPostType {
 
 	}
 
+	/**
+	 * Add the button for adding the inbound stock products to the WC stock
+	 *
+	 * @since 1.3.0
+	 */
+	public function add_stock_button() {
+		?>
+		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Add to Stock', ATUM_TEXT_DOMAIN ); ?></button>
+		<?php
+	}
+
+	/**
+	 * Add the button for setting the purchase price to products within POs
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param \WC_Product $item
+	 */
+	public function set_purchase_price_button( $item ) {
+
+		if ( 'line_item' === $item->get_type() ) : ?>
+			<button type="button" class="button set-purchase-price"><?php esc_attr_e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button>
+		<?php endif;
+	}
+
+	/**
+	 * Add message before the PO product search
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param PurchaseOrder $po
+	 */
+	public function product_search_message( $po ) {
+
+		$supplier = $po->get_supplier();
+
+		if ( $supplier->id ) {
+			/* translators: the supplier title */
+			echo '<em class="alert"><i class="atmi-info"></i> ' . sprintf( esc_attr__( "Only products linked to '%s' supplier can be searched.", ATUM_TEXT_DOMAIN ), esc_attr( $supplier->name ) ) . '</em>';
+		}
+	}
+
+	/**
+	 * Use the purchase price for the products added to POs
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param float                        $price
+	 * @param float                        $qty
+	 * @param \WC_Product|AtumProductTrait $product
+	 *
+	 * @return float|mixed|string
+	 */
+	public function use_purchase_price( $price, $qty, $product ) {
+
+		// Get the purchase price (if set).
+		$price = $product->get_purchase_price();
+
+		if ( ! $price ) {
+			return '';
+		}
+		elseif ( empty( $qty ) ) {
+			return 0.0;
+		}
+
+		if ( $product->is_taxable() && wc_prices_include_tax() ) {
+			$tax_rates = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
+			$taxes     = \WC_Tax::calc_tax( $price * $qty, $tax_rates, TRUE );
+			$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
+		}
+		else {
+			$price *= $qty;
+		}
+
+		return $price;
+
+	}
+
+	/**
+	 * Maybe increase stock Levels
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int           $order_id
+	 * @param string        $old_status
+	 * @param string        $new_status
+	 * @param PurchaseOrder $order
+	 */
+	public function maybe_decrease_stock_levels( $order_id, $old_status, $new_status, $order ) {
+
+		if ( self::FINISHED === $new_status ) {
+			return;
+		}
+
+		// Any status !== finished is like pending, so reduce stock.
+		if ( $order && self::FINISHED === $old_status && $old_status !== $new_status && apply_filters( 'atum/purchase_orders/can_reduce_order_stock', TRUE, $order ) ) {
+			$this->change_stock_levels( $order, 'decrease' );
+			do_action( 'atum/purchase_orders/po/after_decrease_stock_levels', $order );
+		}
+
+	}
+
+	/**
+	 * Maybe decrease stock Levels
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int           $order_id
+	 * @param PurchaseOrder $order
+	 */
+	public function maybe_increase_stock_levels( $order_id, $order ) {
+
+		if ( $order && apply_filters( 'atum/purchase_orders/can_restore_order_stock', TRUE, $order ) ) {
+			$this->change_stock_levels( $order, 'increase' );
+			do_action( 'atum/purchase_orders/po/after_increase_stock_levels', $order );
+		}
+
+	}
+
+	/**
+	 * Change product stock from items
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param PurchaseOrder $order
+	 * @param string        $action
+	 */
+	public function change_stock_levels( $order, $action ) {
+
+		$atum_order_items = $order->get_items();
+
+		if ( ! empty( $atum_order_items ) ) {
+			foreach ( $atum_order_items as $item_id => $atum_order_item ) {
+
+				$product = $atum_order_item->get_product();
+
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Product $product
+				 */
+
+				if ( $product && $product->exists() && $product->managing_stock() ) {
+
+					$old_stock = $product->get_stock_quantity();
+
+					// if stock is null but WC is managing stock.
+					if ( is_null( $old_stock ) ) {
+						$old_stock = 0;
+						wc_update_product_stock( $product, $old_stock );
+					}
+
+					$stock_change = apply_filters( 'atum/purchase_orders/po/restore_atum_order_stock_quantity', $atum_order_item->get_quantity(), $item_id );
+					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
+
+					$old_stock_note = 'increase' === $action ? $new_quantity - $stock_change : $new_quantity + $stock_change;
+
+					$item_name = $product->get_sku() ? $product->get_sku() : $product->get_id();
+					$note      = sprintf(
+					/* translators: first is the item name, second is the action, third is the old stock and forth is the new stock */
+						__( 'Item %1$s stock %2$s from %3$s to %4$s.', ATUM_TEXT_DOMAIN ),
+						$item_name,
+						'increase' === $action ? __( 'increased', ATUM_TEXT_DOMAIN ) : __( 'decreased', ATUM_TEXT_DOMAIN ),
+						$old_stock_note,
+						$new_quantity
+					);
+
+					$order->add_order_note( $note );
+					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
+					$atum_order_item->save();
+				}
+
+			}
+		}
+
+	}
 
 	/****************************
 	 * Instance methods
