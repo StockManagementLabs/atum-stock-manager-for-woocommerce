@@ -119,9 +119,6 @@ abstract class AtumOrderModel {
 
 		}
 
-		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is saved.
-		add_action( 'atum/order/after_object_save', array( $this, 'after_save' ) );
-
 	}
 
 	/**
@@ -782,6 +779,8 @@ abstract class AtumOrderModel {
 
 		$this->process_status();
 		$this->save_items();
+
+		$this->after_save();
 
 		do_action( 'atum/order/after_object_save', $this );
 
@@ -2161,9 +2160,7 @@ abstract class AtumOrderModel {
 	 * Do stuff after saving an ATUM Order
 	 *
 	 * @since 1.5.8
-	 *
-	 * @param AtumOrderModel $atum_order
 	 */
-	abstract public function after_save( $atum_order );
+	abstract public function after_save();
 
 }

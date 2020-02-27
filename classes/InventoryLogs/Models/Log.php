@@ -49,35 +49,20 @@ class Log extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 
-		// Add the buttons for increasing/decreasing the Log products' stock.
-		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
+
 
 		parent::__construct( $id, $read_items );
 
 	}
 
 	/**
-	 * Add the buttons for increasing/decreasing the Log products' stock
-	 *
-	 * @since 1.3.0
-	 */
-	public function add_stock_buttons() {
-		?>
-		<button type="button" class="button bulk-increase-stock"><?php esc_attr_e( 'Increase Stock', ATUM_TEXT_DOMAIN ); ?></button>
-		<button type="button" class="button bulk-decrease-stock"><?php esc_attr_e( 'Reduce Stock', ATUM_TEXT_DOMAIN ); ?></button>
-		<?php
-	}
-
-	/**
 	 * Recalculate the IL's data props every time a log is saved.
 	 *
 	 * @since 1.5.8
-	 *
-	 * @param Log $log
 	 */
-	public function after_save( $log ) {
+	public function after_save() {
 
-		$items = $log->get_items();
+		$items = $this->get_items();
 
 		foreach ( $items as $item ) {
 
@@ -95,7 +80,7 @@ class Log extends AtumOrderModel {
 
 		}
 
-		do_action( 'atum/inventory_logs/after_save', $log, $items );
+		do_action( 'atum/inventory_logs/after_save', $this, $items );
 
 	}
 
