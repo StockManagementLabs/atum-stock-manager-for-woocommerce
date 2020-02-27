@@ -509,10 +509,12 @@ class Supplier {
 	 *
 	 * @since 1.6.9
 	 *
-	 * @return false|string
+	 * @param string $size
+	 *
+	 * @return string
 	 */
-	public function get_thumb_url() {
-		return $this->data['thumbnail_id'] ? wp_get_attachment_url( $this->data['thumbnail_id'] ) : '';
+	public function get_thumb( $size = 'thumbnail' ) {
+		return $this->data['thumbnail_id'] ? wp_get_attachment_image( $this->data['thumbnail_id'], $size ) : '';
 	}
 
 
