@@ -96,16 +96,18 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @param string $return    Optional. The type of object to return. Possible values 'id' or 'object'.
 	 *
-	 * @return Supplier|int|bool
+	 * @return Supplier|int|NULL
 	 */
 	public function get_supplier( $return = 'object' ) {
 
 		if ( is_null( $this->supplier ) ) {
+
 			$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
 
 			if ( $supplier_id ) {
 				$this->supplier = new Supplier( $supplier_id );
 			}
+
 		}
 
 		if ( ! is_null( $this->supplier ) && $this->supplier->id ) {
@@ -119,7 +121,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		}
 
-		return FALSE;
+		return NULL;
 
 	}
 
