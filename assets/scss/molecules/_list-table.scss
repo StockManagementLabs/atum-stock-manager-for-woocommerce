@@ -20,14 +20,7 @@
 .wrap {
 	
 	h1.wp-heading-inline {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		margin-right: 15px;
-		line-height: 1.5;
-		position: relative;
-		font-size: 36px;
-		font-weight: bold;
+		margin-bottom: 0;
 		
 		&.extend-list-table {
 			line-height: 1;
@@ -79,46 +72,6 @@
 	
 	.subtitle {
 		display: none;
-	}
-	
-	.page-title-action, .page-title-action:active {
-		border-radius: 5px;
-		background-color: var(--tertiary-var);
-		color:  var(--white);
-		font-size: 14px;
-		font-weight: normal;
-		line-height: 30px;
-		text-transform: uppercase;
-		border: none;
-		margin-left: 14px;
-		top: 0;
-		display: none;
-		transition: .2s ease-in-out;
-		
-		&.extend-list-table {
-			font-size: 12px;
-			padding: 0 12px;
-			top: 1px;
-			margin-left: 14px;
-			display: inline-block;
-		}
-		
-		&:hover, &:focus {
-			background-color: var(--tertiary-var);
-			color:  var(--white);
-			opacity: 0.9;
-		}
-		
-		@include tablet-max-wp{
-			font-size: 14px;
-			height: 35px;
-			line-height: 35px;
-		}
-		
-		@include mobile-max{
-			margin: 0;
-		}
-		
 	}
 	
 	input[type=submit]:not(.save-atum-order):not(#publish):not(#save-post):not(#bulk_edit):not(#newmeta-submit) {

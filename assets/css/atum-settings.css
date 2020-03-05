@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.6.8 
+ * @version 1.6.9 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -581,13 +581,13 @@ fieldset:disabled a.btn {
 .btn-primary {
   color: var(--wp-yiq-text-light);
   background-color: var(--primary);
-  border: none;
+  border-color: var(--primary);
 }
 
 .btn-primary:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--primary-hover);
-  border: none;
+  border-color: var(--primary-hover);
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -619,13 +619,13 @@ fieldset:disabled a.btn {
 .btn-secondary {
   color: var(--wp-yiq-text-light);
   background-color: var(--secondary);
-  border: none;
+  border-color: var(--secondary);
 }
 
 .btn-secondary:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--secondary-hover);
-  border: none;
+  border-color: var(--secondary-hover);
 }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -657,13 +657,13 @@ fieldset:disabled a.btn {
 .btn-tertiary {
   color: var(--wp-yiq-text-light);
   background-color: var(--tertiary);
-  border: none;
+  border-color: var(--tertiary);
 }
 
 .btn-tertiary:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--tertiary-hover);
-  border: none;
+  border-color: var(--tertiary-hover);
 }
 
 .btn-tertiary:focus, .btn-tertiary.focus {
@@ -695,13 +695,13 @@ fieldset:disabled a.btn {
 .btn-success {
   color: var(--wp-yiq-text-light);
   background-color: var(--success);
-  border: none;
+  border-color: var(--success);
 }
 
 .btn-success:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--success-hover);
-  border: none;
+  border-color: var(--success-hover);
 }
 
 .btn-success:focus, .btn-success.focus {
@@ -733,13 +733,13 @@ fieldset:disabled a.btn {
 .btn-main {
   color: var(--wp-yiq-text-light);
   background-color: var(--main);
-  border: none;
+  border-color: var(--main);
 }
 
 .btn-main:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--main-hover);
-  border: none;
+  border-color: var(--main-hover);
 }
 
 .btn-main:focus, .btn-main.focus {
@@ -771,13 +771,13 @@ fieldset:disabled a.btn {
 .btn-info {
   color: var(--wp-yiq-text-dark);
   background-color: var(--info);
-  border: none;
+  border-color: var(--info);
 }
 
 .btn-info:hover {
   color: var(--wp-yiq-text-dark);
   background-color: var(--info-hover);
-  border: none;
+  border-color: var(--info-hover);
 }
 
 .btn-info:focus, .btn-info.focus {
@@ -809,13 +809,13 @@ fieldset:disabled a.btn {
 .btn-warning {
   color: var(--wp-yiq-text-light);
   background-color: var(--warning);
-  border: none;
+  border-color: var(--warning);
 }
 
 .btn-warning:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--warning-hover);
-  border: none;
+  border-color: var(--warning-hover);
 }
 
 .btn-warning:focus, .btn-warning.focus {
@@ -847,13 +847,13 @@ fieldset:disabled a.btn {
 .btn-danger {
   color: var(--wp-yiq-text-light);
   background-color: var(--danger);
-  border: none;
+  border-color: var(--danger);
 }
 
 .btn-danger:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--danger-hover);
-  border: none;
+  border-color: var(--danger-hover);
 }
 
 .btn-danger:focus, .btn-danger.focus {
@@ -885,13 +885,13 @@ fieldset:disabled a.btn {
 .btn-light {
   color: var(--wp-yiq-text-dark);
   background-color: var(--light);
-  border: none;
+  border-color: var(--light);
 }
 
 .btn-light:hover {
   color: var(--wp-yiq-text-dark);
   background-color: var(--light-hover);
-  border: none;
+  border-color: var(--light-hover);
 }
 
 .btn-light:focus, .btn-light.focus {
@@ -923,13 +923,13 @@ fieldset:disabled a.btn {
 .btn-dark {
   color: var(--wp-yiq-text-light);
   background-color: var(--dark);
-  border: none;
+  border-color: var(--dark);
 }
 
 .btn-dark:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--dark-hover);
-  border: none;
+  border-color: var(--dark-hover);
 }
 
 .btn-dark:focus, .btn-dark.focus {
@@ -961,13 +961,13 @@ fieldset:disabled a.btn {
 .btn-purple-pl {
   color: var(--wp-yiq-text-light);
   background-color: var(--purple-pl);
-  border: none;
+  border-color: var(--purple-pl);
 }
 
 .btn-purple-pl:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--purple-pl-hover);
-  border: none;
+  border-color: var(--purple-pl-hover);
 }
 
 .btn-purple-pl:focus, .btn-purple-pl.focus {
@@ -999,13 +999,13 @@ fieldset:disabled a.btn {
 .btn-gray {
   color: var(--wp-yiq-text-light);
   background-color: var(--gray);
-  border: none;
+  border-color: var(--gray);
 }
 
 .btn-gray:hover {
   color: var(--wp-yiq-text-light);
   background-color: var(--gray-hover);
-  border: none;
+  border-color: var(--gray-hover);
 }
 
 .btn-gray:focus, .btn-gray.focus {
@@ -1037,13 +1037,13 @@ fieldset:disabled a.btn {
 .btn-default {
   color: var(--wp-yiq-text-dark);
   background-color: var(--default);
-  border: none;
+  border-color: var(--default);
 }
 
 .btn-default:hover {
   color: var(--wp-yiq-text-dark);
   background-color: var(--default-hover);
-  border: none;
+  border-color: var(--default-hover);
 }
 
 .btn-default:focus, .btn-default.focus {
@@ -1542,6 +1542,10 @@ fieldset:disabled a.btn {
 
 .btn-pill {
   border-radius: 16px;
+}
+
+.btn-default, .btn-default:hover {
+  color: #fff;
 }
 
 .btn-link {
@@ -3229,12 +3233,63 @@ body .select2-container--default .select2-results__group {
 }
 
 .wrap h1.wp-heading-inline {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   text-transform: capitalize;
-  margin-bottom: 15px;
+  margin-right: 15px;
   font-weight: bold;
   color: #27283B;
   font-size: 36px;
-  margin-bottom: 20px;
+  line-height: 1.5;
+  position: relative;
+}
+
+.wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+  border-radius: 5px;
+  background-color: var(--tertiary-var);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 30px;
+  text-transform: uppercase;
+  border: none;
+  margin-left: 14px;
+  top: 0;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
+  font-size: 12px;
+  padding: 0 12px;
+  top: 1px;
+  margin-left: 14px;
+  display: inline-block;
+}
+
+.wrap h1.wp-heading-inline .page-title-action:hover, .wrap h1.wp-heading-inline .page-title-action:focus, .wrap h1.wp-heading-inline .page-title-action:active:hover, .wrap h1.wp-heading-inline .page-title-action:active:focus {
+  background-color: var(--tertiary-var);
+  color: var(--white);
+  opacity: 0.9;
+}
+
+@media all and (max-width: 782px) {
+  .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+    margin: 0;
+  }
 }
 
 .btn-group {

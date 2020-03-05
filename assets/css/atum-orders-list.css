@@ -8882,4 +8882,253 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
     padding: 0 12px;
   }
 }
-/*# sourceMappingURL=atum-list.css.map */
+
+.tips {
+  cursor: help;
+  text-decoration: none;
+}
+
+img.tips {
+  padding: 5px 0 0;
+}
+
+#tiptip_holder {
+  display: none;
+  z-index: 8675309;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#tiptip_holder.tip_top {
+  padding-bottom: 5px;
+}
+
+#tiptip_holder.tip_top #tiptip_arrow_inner {
+  margin-top: -7px;
+  margin-left: -6px;
+  border-top-color: var(--white);
+}
+
+#tiptip_holder.tip_bottom {
+  padding-top: 5px;
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+  margin-top: -5px;
+  margin-left: -6px;
+  border-bottom-color: var(--white);
+}
+
+#tiptip_holder.tip_right {
+  padding-left: 5px;
+}
+
+#tiptip_holder.tip_right #tiptip_arrow_inner {
+  margin-top: -6px;
+  margin-left: -5px;
+  border-right-color: var(--white);
+}
+
+#tiptip_holder.tip_left {
+  padding-right: 5px;
+}
+
+#tiptip_holder.tip_left #tiptip_arrow_inner {
+  margin-top: -6px;
+  margin-left: -7px;
+  border-left-color: var(--white);
+}
+
+.swal2-in #tiptip_holder {
+  z-index: 100000001;
+}
+
+#tiptip_content {
+  color: var(--gray-600);
+  font-size: 0.8em;
+  max-width: 150px;
+  background: var(--white);
+  text-align: center;
+  border-radius: 3px;
+  padding: 0.618em 1em;
+  -webkit-box-shadow: 0 1px 3px var(--black-shadow);
+          box-shadow: 0 1px 3px var(--black-shadow);
+}
+
+#tiptip_content code {
+  padding: 1px;
+  background: var(--wp-gray-7);
+}
+
+#tiptip_arrow, #tiptip_arrow_inner {
+  position: absolute;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 6px;
+  height: 0;
+  width: 0;
+}
+
+table.wp-list-table .column-notes {
+  width: 48px;
+  text-align: center;
+}
+
+table.wp-list-table .column-notes img {
+  margin: 0 auto;
+  padding-top: 0 !important;
+}
+
+table.wp-list-table .column-actions {
+  width: 110px;
+}
+
+table.wp-list-table .column-actions a {
+  float: left;
+  margin: 0 4px 2px 0;
+  cursor: pointer;
+  height: inherit;
+  padding: 3px 4px;
+}
+
+table.wp-list-table .column-actions a img {
+  display: block;
+  width: 12px;
+  height: auto;
+}
+
+table.wp-list-table .column-status {
+  text-align: left;
+}
+
+table.wp-list-table .column-status .order-status-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  line-height: 2.5em;
+  color: var(--secondary);
+  background: var(--light);
+  border-radius: 4px;
+  cursor: inherit !important;
+  white-space: nowrap;
+  max-width: 100%;
+  width: 16px;
+  height: 16px;
+  line-height: 26px;
+  margin: 0 5px 0 0;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_completed, table.wp-list-table .column-status .order-status-container .order-status.status-atum_received {
+  background: #69c61d;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_on-hold {
+  background: #94660c;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_failed, table.wp-list-table .column-status .order-status-container .order-status.status-atum_trash {
+  background: #761919;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_pending {
+  background: #ff4848;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_ordered {
+  background: #efaf00;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_onthewayin {
+  background: #00b8db;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status.status-atum_receiving {
+  background: #ba7df7;
+}
+
+table.wp-list-table .column-status .order-status-container .order-status > span {
+  margin: 0 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.wp-list-table tbody > :nth-child(odd), table.wp-list-table ul.striped > :nth-child(odd), table.wp-list-table .alternate {
+  background-color: var(--atum-table-row-odd);
+}
+
+table.wp-list-table tbody > :nth-child(odd).active-row, table.wp-list-table ul.striped > :nth-child(odd).active-row, table.wp-list-table .alternate.active-row {
+  background-color: var(--primary-dark);
+}
+
+table.wp-list-table td.column-status {
+  padding-top: 9px;
+}
+
+table.wp-list-table .column-notes .note-on {
+  display: block;
+  text-indent: -9999px;
+  position: relative;
+  height: 1em;
+  width: 1em;
+  margin: 0 auto;
+  color: var(--wp-gray-1);
+}
+
+table.wp-list-table .column-notes .note-on:after {
+  font-family: "atum-icon-font";
+  content: "";
+  line-height: 16px;
+}
+
+table.wp-list-table .column-actions .complete i, table.wp-list-table .column-actions .view i, table.wp-list-table .column-actions .pdf i {
+  font-size: 18px;
+}
+
+table.wp-list-table .column-actions .pdf i {
+  color: var(--danger);
+}
+
+table.wp-list-table img {
+  margin: 1px 2px;
+}
+
+table.wp-list-table .row-actions, table.wp-list-table span.na {
+  color: var(--wp-gray-1);
+}
+
+table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-table .status_head {
+  display: block;
+  text-indent: -9999px;
+  position: relative;
+  height: 1em;
+  width: 1em;
+  margin: 0 auto;
+}
+
+table.wp-list-table .notes_head:after, table.wp-list-table .notes_head:after, table.wp-list-table .status_head:after {
+  font-family: "atum-icon-font";
+}
+
+table.wp-list-table .notes_head::after {
+  content: "";
+}
+
+table.wp-list-table .status_head::after {
+  content: "";
+}
+/*# sourceMappingURL=atum-orders-list.css.map */

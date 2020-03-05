@@ -845,14 +845,12 @@ abstract class AtumOrderPostType {
 
 			global $post;
 
+			// Sweet Alert assets.
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::maybe_enqueue_scripts();
-
-			// Sweet Alert script.
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
@@ -865,9 +863,7 @@ abstract class AtumOrderPostType {
 				// Switchery.
 				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
 
-				// Enqueue styles.
-				wp_enqueue_style( 'sweetalert2' );
-				wp_enqueue_style( 'switchery' );
+				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2', 'switchery' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-orders' );
 
 				// Enqueue the script with the required WooCommerce dependencies.
@@ -931,20 +927,21 @@ abstract class AtumOrderPostType {
 			}
 			elseif ( 'edit.php' === $hook ) {
 
-				wp_register_script( 'atum-orders-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
+				wp_register_style( 'atum-orders-list', ATUM_URL . 'assets/css/atum-orders-list.css', [], ATUM_VERSION );
+				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
 
-				wp_localize_script( 'atum-orders-table', 'atumPostTypeListVars', array(
+				wp_localize_script( 'atum-orders-list', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
 					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
 					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
 				) );
 
-				wp_enqueue_style( 'atum-orders' );
-				wp_enqueue_script( 'atum-orders-table' );
+				wp_enqueue_style( 'atum-orders-list' );
+				wp_enqueue_script( 'atum-orders-list' );
 
 				// Load the ATUM colors.
-				Helpers::enqueue_atum_colors( 'atum-orders' );
+				Helpers::enqueue_atum_colors( 'atum-orders-list' );
 
 			}
 

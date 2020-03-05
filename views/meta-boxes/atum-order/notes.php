@@ -33,36 +33,9 @@ add_filter( 'comments_clauses', array( $atum_comments, 'exclude_atum_order_notes
 
 		<?php if ( $notes ) :
 
-			foreach ( $notes as $note ) :
-
-				$note_classes   = array( 'note' );
-				$note_classes[] = ( 'ATUM' === $note->comment_author ) ? 'system-note' : '';
-				$note_classes   = apply_filters( 'atum/atum_order/note_class', array_filter( $note_classes ), $note );
-				?>
-
-				<li rel="<?php echo absint( $note->comment_ID ); ?>" class="<?php echo esc_attr( implode( ' ', $note_classes ) ); ?>">
-					<div class="note_content">
-						<?php echo wp_kses_post( wpautop( wptexturize( $note->comment_content ) ) ) ?>
-					</div>
-
-					<p class="meta">
-						<abbr class="exact-date" title="<?php echo esc_attr( $note->comment_date ) ?>">
-							<?php
-							/* translators: first one is the date added and second is the time */
-							printf( esc_html__( '%1$s at %2$s', ATUM_TEXT_DOMAIN ), esc_html( date_i18n( wc_date_format(), strtotime( $note->comment_date ) ) ), esc_html( date_i18n( wc_time_format(), strtotime( $note->comment_date ) ) ) );
-							?>
-						</abbr>
-
-						<?php if ( 'ATUM' !== $note->comment_author ) :
-							/* translators: the note author */
-							printf( ' ' . esc_html__( 'by %s', ATUM_TEXT_DOMAIN ), esc_html( $note->comment_author ) );
-						endif; ?>
-
-						<a href="#" class="delete_note" role="button"><?php esc_html_e( 'Delete note', ATUM_TEXT_DOMAIN ); ?></a>
-					</p>
-				</li>
-
-			<?php endforeach; ?>
+			foreach ( $notes as $note_comment ) :
+				include 'note.php';
+			endforeach; ?>
 
 		<?php else : ?>
 

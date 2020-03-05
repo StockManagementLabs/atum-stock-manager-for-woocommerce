@@ -201,6 +201,8 @@ class AtumMarketingPopup {
 	 * Enqueue the Marketing popup scripts if needed
 	 *
 	 * @since 1.5.3.2
+	 *
+	 * @return bool
 	 */
 	public static function maybe_enqueue_scripts() {
 
@@ -217,7 +219,11 @@ class AtumMarketingPopup {
 			wp_enqueue_style( 'atum-marketing-popup' );
 			wp_enqueue_script( 'atum-marketing-popup' );
 
+			return TRUE;
+
 		}
+
+		return FALSE;
 
 	}
 
