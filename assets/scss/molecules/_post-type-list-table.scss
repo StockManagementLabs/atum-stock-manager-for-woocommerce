@@ -4,6 +4,7 @@
 
 #posts-filter {
 	@extend .atum-list-wrapper;
+	
 	table.wp-list-table {
 		th.check-column {
 			input[type=checkbox] {
@@ -20,10 +21,10 @@
 	
 	.subsubsub {
 		@extend .extend-list-table;
-		
 	}
 	
 	.nav-with-scroll-effect .subsubsub {
+		
 		li, li a {
 			display: flex;
 			flex-wrap: nowrap;
@@ -31,7 +32,7 @@
 		
 		li {
 			color: transparent;
-			padding: 20px 0 20px 0;
+			padding: 20px 0;
 			margin-right: 0;
 			
 			&:first-child {
@@ -58,13 +59,13 @@
 .wrap {
 	
 	.wp-heading-inline {
-	~ .subsubsub {
-		display: none;
-	}
+		~ .subsubsub {
+			display: none;
+		}
+		
 		@include mobile-max {
 			a.page-title-action {
 				padding: 0 12px;
-				
 			}
 		}
 		
