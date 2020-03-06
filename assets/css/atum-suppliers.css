@@ -3342,6 +3342,10 @@ input[type="button"].btn-block {
   border: none;
 }
 
+.atum-meta-box.supplier label {
+  color: #343a40;
+}
+
 .wc-backbone-modal * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -6900,7 +6904,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
 
 #posts-filter .nav-with-scroll-effect .subsubsub li {
   color: transparent;
-  padding: 20px 0 20px 0;
+  padding: 20px 0;
   margin-right: 0;
 }
 

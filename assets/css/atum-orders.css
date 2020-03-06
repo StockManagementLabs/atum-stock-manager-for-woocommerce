@@ -3790,6 +3790,10 @@ input[type="button"].btn-block {
   border: none;
 }
 
+.atum-meta-box.supplier label {
+  color: #343a40;
+}
+
 .wc-backbone-modal * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
