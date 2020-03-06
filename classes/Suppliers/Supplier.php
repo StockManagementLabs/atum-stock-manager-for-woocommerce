@@ -38,6 +38,7 @@ defined( 'ABSPATH' ) || die;
  * @property int    $thumbnail_id
  * @property int    $discount
  * @property int    $tax_rate
+ * @property int    $lead_time
  */
 class Supplier {
 
@@ -82,6 +83,7 @@ class Supplier {
 		'thumbnail_id'   => NULL,
 		'discount'       => NULL,
 		'tax_rate'       => NULL,
+		'lead_time'      => NULL,
 	);
 
 	/**
@@ -456,7 +458,7 @@ class Supplier {
 	}
 
 	/**
-	 * Set the the user assigned to
+	 * Set the user assigned to
 	 *
 	 * @since 1.6.8
 	 *
@@ -473,7 +475,7 @@ class Supplier {
 	}
 
 	/**
-	 * Set the the location
+	 * Set the location
 	 *
 	 * @since 1.6.8
 	 *
@@ -486,6 +488,74 @@ class Supplier {
 		if ( $this->data['location'] !== $location ) {
 			$this->data['location'] = $location;
 			$this->register_change( 'location' );
+		}
+	}
+
+	/**
+	 * Set the thumbnail ID
+	 *
+	 * @since 1.6.9
+	 *
+	 * @param string $thumbnail_id
+	 */
+	public function set_thumbnail_id( $thumbnail_id ) {
+
+		$thumbnail_id = absint( $thumbnail_id );
+
+		if ( $this->data['thumbnail_id'] !== $thumbnail_id ) {
+			$this->data['thumbnail_id'] = $thumbnail_id;
+			$this->register_change( 'thumbnail_id' );
+		}
+	}
+
+	/**
+	 * Set the discount
+	 *
+	 * @since 1.6.9
+	 *
+	 * @param string $discount
+	 */
+	public function set_discount( $discount ) {
+
+		$discount = absint( $discount );
+
+		if ( $this->data['discount'] !== $discount ) {
+			$this->data['discount'] = $discount;
+			$this->register_change( 'discount' );
+		}
+	}
+
+	/**
+	 * Set the tax rate
+	 *
+	 * @since 1.6.9
+	 *
+	 * @param string $tax_rate
+	 */
+	public function set_tax_rate( $tax_rate ) {
+
+		$tax_rate = absint( $tax_rate );
+
+		if ( $this->data['tax_rate'] !== $tax_rate ) {
+			$this->data['tax_rate'] = $tax_rate;
+			$this->register_change( 'tax_rate' );
+		}
+	}
+
+	/**
+	 * Set the lead time
+	 *
+	 * @since 1.6.9
+	 *
+	 * @param string $lead_time
+	 */
+	public function set_lead_time( $lead_time ) {
+
+		$lead_time = absint( $lead_time );
+
+		if ( $this->data['lead_time'] !== $lead_time ) {
+			$this->data['lead_time'] = $lead_time;
+			$this->register_change( 'lead_time' );
 		}
 	}
 
