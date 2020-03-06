@@ -7,7 +7,7 @@ Tested up to: 5.3.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
 WC tested up to: 3.9.3
-Stable tag: 1.6.8
+Stable tag: 1.6.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.6.9`
+
+*2020-03-06*
+
+**Changes**
+
+* Added filter to allow adding new ATUM capabilities.
+* Use the supplier's model everywhere.
+* Added new props to supplier's model.
+
+**Fixes**
+
+* Refactory + supplier model fixing.
+* Fixed repeated set purchase price button in POs.
+* Prevent accesing supplier in PO if multiple suppliers is seleted.
+* Fixed notice error on POs list when there is no supplier assigned.
+* Order item icons' refactory.
+* CSS fixes.
 
 ---
 

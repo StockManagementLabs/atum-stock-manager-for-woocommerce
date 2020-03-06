@@ -187,6 +187,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.9`
+
+*2020-03-06*
+
+**Changes**
+
+* Added filter to allow adding new ATUM capabilities.
+* Use the supplier's model everywhere.
+* Added new props to supplier's model.
+
+**Fixes**
+
+* Refactory + supplier model fixing.
+* Fixed repeated set purchase price button in POs.
+* Prevent accesing supplier in PO if multiple suppliers is seleted.
+* Fixed notice error on POs list when there is no supplier assigned.
+* Order item icons' refactory.
+* CSS fixes.
+
+---
+
 `1.6.8`
 
 *2020-02-25*
