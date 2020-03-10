@@ -730,7 +730,11 @@ class Addons {
 	 * @return array|\WP_Error
 	 */
 	public static function activate_license( $addon_name, $key ) {
-		return self::api_request( $addon_name, $key, 'activate_license' );
+
+		$result = self::api_request( $addon_name, $key, 'activate_license' );
+		do_action( 'atum/addons/activate_license', $result );
+
+		return $result;
 	}
 
 	/**
@@ -744,7 +748,11 @@ class Addons {
 	 * @return array|\WP_Error
 	 */
 	public static function deactivate_license( $addon_name, $key ) {
-		return self::api_request( $addon_name, $key, 'deactivate_license' );
+
+		$result = self::api_request( $addon_name, $key, 'deactivate_license' );
+		do_action( 'atum/addons/deactivate_license', $result );
+
+		return $result;
 	}
 
 	/**
