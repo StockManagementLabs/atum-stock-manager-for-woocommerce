@@ -1,13 +1,16 @@
 /* ===================
-   POs POPOVERS
+   UI POPOVERS
    =================== */
 
-import Settings from '../../../../../../atum-stock-manager-for-woocommerce/assets/js/src/config/_settings';
+import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
+import EnhancedSelect from './_enhanced-select';
+import Settings from '../config/_settings';
 
-export default class POPopovers {
+export default class UIPopovers {
 	
 	constructor(
-		private settings: Settings
+		private settings: Settings,
+		private enhancedSelect?: EnhancedSelect,
 	) {
 		
 		//
@@ -15,95 +18,121 @@ export default class POPopovers {
 		//----------------
 		$('body')
 		
-			// Set the field data.
-			.on('click', '.popover .set', (evt: JQueryEventObject) => {
+			// Set the field data when clicking the "Set" button.
+			.on( 'click', '.popover .set', ( evt: JQueryEventObject ) => {
 				
-				let $setButton: JQuery    = $(evt.currentTarget),
-				    popoverId: string     = $setButton.closest('.popover').attr('id'),
-				    $fieldWrapper: JQuery = $(`[data-popover="${popoverId}"]`).parent(),
-				    $popoverInput: any    = $setButton.closest('.popover-content').find('.meta-value'),
-				    newValue: any         = $popoverInput.val(),
-				    newLabel: string;
+				const $setButton: JQuery    = $( evt.currentTarget ),
+				      popoverId: string     = $setButton.closest( '.popover' ).attr( 'id' ),
+				      $fieldWrapper: JQuery = $( `[data-popover="${ popoverId }"]` ).parent(),
+				      $popoverInput: any    = $setButton.closest( '.popover-content' ).find( '.meta-value' ),
+				      newValue: any         = $popoverInput.val();
 				
-				if ($popoverInput.is('select')) {
+				let newLabel: string;
+				
+				if ( $popoverInput.is( 'select' ) ) {
 					
-					if (!newValue) {
-						newLabel = this.settings.get('none');
+					if ( ! newValue ) {
+						newLabel = this.settings.get( 'none' );
 					}
-					else if ($.isArray(newValue)) {
+					else if ( $.isArray( newValue ) ) {
 						
 						let selectedLabels: string[] = [];
 						
-						$popoverInput.find('option:selected').each( (index: number, elem: Element) => {
-							selectedLabels.push( $.trim( $(elem).text() ) );
-						});
+						$popoverInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
+							selectedLabels.push( $.trim( $( elem ).text() ) );
+						} );
 						
-						newLabel = selectedLabels.join(', ');
+						newLabel = selectedLabels.join( ', ' );
 						
 					}
 					else {
-						newLabel = $.trim( $popoverInput.find('option:selected').text() );
+						newLabel = $.trim( $popoverInput.find( 'option:selected' ).text() );
 					}
 					
 				}
 				else {
-					newLabel = newValue ? newValue : this.settings.get('none');
+					newLabel = newValue ? newValue : this.settings.get( 'none' );
 				}
 				
-				let option: JQuery = $popoverInput.find('option');
-				
-				option.each( (index: number, elem: Element) => {
+				$popoverInput.find( 'option' ).each( ( index: number, elem: Element ) => {
 					
-					const $option = $(elem);
+					const $option: JQuery = $( elem );
 					
-					if ( $.inArray($option.val().toString(), newValue) != -1 ) {
-						$option.attr('selected', 'selected');
+					if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
+						$option.attr( 'selected', 'selected' );
 					}
 					else {
-						$option.removeAttr('selected');
+						$option.removeAttr( 'selected' );
 					}
 					
-				});
+				} );
 				
-				$(`#${ $fieldWrapper.find('.edit-col').data('content-id') }`).html($popoverInput);
+				$( `#${ $fieldWrapper.find( '.atum-edit-field' ).data( 'content-id' ) }` ).html( $popoverInput );
 				
-				$fieldWrapper.find('input[type=hidden]').val(newValue);
-				$fieldWrapper.find('.field-label').addClass('unsaved').text(newLabel);
-				this.destroyPopover($fieldWrapper.find('.edit-col'));
+				$fieldWrapper.find( 'input[type=hidden]' ).val( newValue );
+				
+				// Set the field label.
+				const $fieldLabel: JQuery = $fieldWrapper.find( '.field-label' );
+				
+				if ( $fieldLabel.length ) {
+					
+					$fieldLabel.addClass( 'unsaved' );
+					
+					// Check if a template exists for the label
+					if ( $fieldLabel.data( 'template' ) ) {
+						$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', newLabel ) );
+					}
+					else {
+						$fieldLabel.text( newLabel );
+					}
+					
+				}
+				
+				// Once set, destroy the opened popover.
+				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
 				
 			})
 			
-			.on('keyup', '.popover .meta-value', (evt: JQueryEventObject) => {
+			// Bind keys pressed on the popover.
+			.on( 'keyup', '.popover .meta-value', ( evt: JQueryEventObject ) => {
 				
-				const $field = $(evt.currentTarget);
+				const $field: JQuery = $( evt.currentTarget );
 				
 				// Enter key.
-				if (evt.keyCode === 13) {
-					$field.siblings('.set').click();
+				if ( evt.keyCode === 13 ) {
+					$field.siblings( '.set' ).click();
 				}
 				// Esc key.
-				else if (evt.keyCode === 27) {
-					this.destroyPopover( $(`[data-popover="${ $field.closest('.popover').attr('id') }"]`) );
+				else if ( evt.keyCode === 27 ) {
+					this.destroyPopover( $( `[data-popover="${ $field.closest( '.popover' ).attr( 'id' ) }"]` ) );
 				}
 				
-			});
+			} );
 		
-		// Hide any other opened popover before opening a new one.
-		$('#wpbody-content').click( (evt: JQueryEventObject) => {
-			
-			let $target: JQuery     = $(evt.target),
-			    // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			    $editButton: JQuery = $target.hasClass('edit-col') ? $('.atum-edit-field').not($target) : $('.atum-edit-field');
-			
-			// Get only the cells with an opened popover.
-			$editButton = $editButton.filter( (index: number, elem: Element) => {
-				const $btn: JQuery = $(elem);
-				return typeof $btn.data('bs.popover') !== 'undefined' && ($btn.data('bs.popover').inState || false) && $btn.data('bs.popover').inState.click === true;
-			});
-			
-			this.destroyPopover($editButton);
-			
-		});
+			// Hide any other opened popover before opening a new one.
+			// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
+			$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
+				
+				const $target: JQuery = $( evt.target );
+				let $editButton: JQuery = $( '.atum-edit-field' );
+				
+				// If we are clicking on a editable cell, get the other opened popovers, if not, get them all.
+				if ( $target.hasClass( 'atum-edit-field' ) ) {
+					$editButton = $editButton.not( $target );
+				}
+				else if ( $target.closest( '.atum-edit-field' ).length ) {
+					$editButton = $editButton.not( $target.closest( '.atum-edit-field' ) );
+				}
+				
+				// Get only the cells with an opened popover.
+				$editButton = $editButton.filter( ( index: number, elem: Element ) => {
+					const $btn: JQuery = $( elem );
+					return typeof $btn.data( 'bs.popover' ) !== 'undefined' && ( $btn.data( 'bs.popover' ).inState || false ) && $btn.data( 'bs.popover' ).inState.click === true;
+				} );
+				
+				this.destroyPopover( $editButton );
+				
+			} );
 		
 	}
 	
@@ -112,17 +141,15 @@ export default class POPopovers {
 	 *
 	 * @param {JQuery} $editButtons The edit buttons where are attached the popovers.
 	 */
-	bindPopovers($editButtons: JQuery) {
+	bindPopovers( $editButtons: JQuery ) {
 		
-		console.log('binding popovers', $editButtons);
-		
-		$editButtons.each( (index: number, elem: Element) => {
+		$editButtons.each( ( index: number, elem: Element ) => {
 			
-			let $editButton: JQuery = $( elem ),
-			    content: string     = $( `#${ $editButton.data( 'content-id' ) }` ).html(),
-			    setButton: string   = ! $( content ).hasClass( 'alert' ) ? `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>` : '';
+			const $editButton: JQuery = $( elem ),
+			      content: string     = $( `#${ $editButton.data( 'content-id' ) }` ).html(),
+			      setButton: string   = ! $( content ).hasClass( 'alert' ) ? `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>` : '';
 			
-			(<any>$editButton).popover({
+			( <any>$editButton ).popover( {
 				content  : content + setButton,
 				html     : true,
 				template : `
@@ -134,8 +161,9 @@ export default class POPopovers {
 				placement: 'bottom',
 				trigger  : 'click',
 				container: 'body',
-			});
+			} );
 			
+			// Prepare the popover's fields when shown.
 			$editButton.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
 				
 				const $activePopover: JQuery = $( '.popover.in' ),
@@ -147,7 +175,7 @@ export default class POPopovers {
 					$( `#${ $activePopover.attr( 'id' ) } .select2` ).remove();
 				}
 				
-				this.addSelect2( $editButton );
+				this.prepareSelect( $editButton );
 				
 				if ( $activePopover.find( 'select[multiple]' ).length ) {
 					
@@ -164,7 +192,7 @@ export default class POPopovers {
 				
 			} );
 			
-		});
+		} );
 		
 	}
 	
@@ -188,54 +216,35 @@ export default class POPopovers {
 	}
 	
 	/**
-	 * Add the select2
-	 *
-	 * TODO: WHY ARE NOT WE USING THE EnhancedSelect COMPONENT HERE?
+	 * Add the enhancedSelect components to the popover
 	 *
 	 * @param {JQuery} $editButton
 	 */
-	addSelect2($editButton: JQuery) {
+	prepareSelect( $editButton: JQuery ) {
 		
-		$('.atum-select2').each( (index: number, elem: Element) => {
+		if ( this.enhancedSelect) {
 			
-			const $select: JQuery = $(elem),
-			      selectOptions: any = {
-				      minimumResultsForSearch: 20,
-				      placeholder            : {
-					      id  : '-1',
-					      text: $select.find('option').first().text()
-				      }
-			      };
-			
-			if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
-				$select.prop( 'multiple', true );
-				$select.val( $editButton.siblings( 'input[type=hidden]' ).val().split( ',' ) );
-			}
-			
-			(<any>$select)
-				.css('width', '200px')
-				.select2( selectOptions )
-				.on( 'select2:selecting', ( evt: Event ) => {
-					
-					let $select: JQuery = $( evt.currentTarget ),
-					    value: any      = $select.val();
-					
-					// Avoid selecting the "None" option.
-					if ( $.isArray( value ) && $.inArray( '-1', value ) > -1 ) {
-						$.each( value, ( index: number, elem: any ) => {
-							if ( elem === '-1' ) {
-								value.splice( index, 1 );
-							}
-						} );
-						
-						$select.val( value );
-					}
-					
-				} );
-			
-			$select.siblings('.select2-container').addClass('atum-select2');
-			
-		});
+			$('.popover .atum-select2').each( (index: number, elem: Element) => {
+				
+				const $select: JQuery = $(elem),
+				      selectOptions: any = {
+					      minimumResultsForSearch: 20,
+					      placeholder            : {
+						      id  : '-1',
+						      text: $select.find('option').first().text()
+					      }
+				      };
+				
+				if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
+					$select.val( $editButton.siblings( 'input[type=hidden]' ).val().split( ',' ) );
+				}
+				
+				$select.css('width', '200px');
+				this.enhancedSelect.doSelect2( $select, selectOptions, true );
+				
+			});
+		
+		}
 		
 	}
 	

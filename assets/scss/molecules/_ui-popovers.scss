@@ -1,0 +1,73 @@
+//
+// UI Popovers component
+//----------------------
+
+.popover {
+	&.edit-field-popover {
+		
+		div.popover-arrow {
+			&:after {
+				background: $white;
+			}
+		}
+		
+		.popover-content {
+			display: flex;
+			min-height: 34px;
+			
+			button {
+				height: 35px;
+			}
+		}
+		
+		input, select {
+			width: auto !important;
+			flex-grow: 1;
+			min-width: 120px;
+			border: 1px solid var(--main-border-alt) !important;
+			height: 35px !important;
+			color: $wp-gray-dark !important;
+		}
+		
+		.select2-container {
+			.select2-selection {
+				border-radius: 0.2rem;
+				border: 1px solid var(--main-border-alt) !important;
+				padding-left: 5px;
+				
+				.select2-search, .select2-search__field {
+					width: 100% !important;
+					border: none !important;
+					margin: 0 !important;
+					height: auto !important;
+					line-height: 1.5;
+				}
+				
+				.select2-search__field {
+					background: none !important;
+					margin-top: 0;
+				}
+			}
+			
+			&.select2-container--focus {
+				.select2-selection--multiple {
+					border-color: $input-border-color;
+				}
+			}
+		}
+		
+		.set {
+			margin-left: 4px;
+			max-height: 36px;
+		}
+		
+	}
+	
+	.alert {
+		display: block;
+	}
+	
+	+ .select2-container {
+		z-index: 999999991;
+	}
+}

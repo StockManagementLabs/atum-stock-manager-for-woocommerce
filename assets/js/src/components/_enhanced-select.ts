@@ -8,9 +8,7 @@ export default class EnhancedSelect {
 		
 		this.addAtumClasses();
 		
-		$('body').on('wc-enhanced-select-init', () => {
-			this.addAtumClasses();
-		});
+		$( 'body' ).on( 'wc-enhanced-select-init', () => this.addAtumClasses() );
 		
 	}
 	
@@ -19,8 +17,8 @@ export default class EnhancedSelect {
 	 */
 	maybeRestoreEnhancedSelect() {
 		
-		$('.select2-container--open').remove();
-		$('body').trigger('wc-enhanced-select-init');
+		$( '.select2-container--open' ).remove();
+		$( 'body' ).trigger( 'wc-enhanced-select-init' );
 		
 	}
 	
@@ -31,37 +29,37 @@ export default class EnhancedSelect {
 	 * @param {any}     options
 	 * @param {boolean} avoidEmptySelections
 	 */
-	doSelect2($selector: JQuery, options: any = {}, avoidEmptySelections: boolean = false) {
+	doSelect2( $selector: JQuery, options: any = {}, avoidEmptySelections: boolean = false ) {
 		
-		if (typeof $.fn['select2'] !== 'function') {
+		if ( typeof $.fn[ 'select2' ] !== 'function' ) {
 			return;
 		}
 		
 		options = Object.assign( {
 			minimumResultsForSearch: 10,
-		}, options);
+		}, options );
 		
-		$selector.each( (index: number, elem: Element) => {
+		$selector.each( ( index: number, elem: Element ) => {
 			
-			const $select: any = $( elem );
+			const $select: JQuery = $( elem );
 			let selectOptions: any = { ...options };
 			
-			if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
-				$select.prop('multiple', true);
+			if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
+				$select.prop( 'multiple', true );
 			}
 			
 			if ( avoidEmptySelections ) {
 				
 				$select.on( 'select2:selecting', ( evt: Event ) => {
 					
-					let $select: JQuery = $( evt.currentTarget ),
-					    value: any    = $select.val();
+					const $select: JQuery = $( evt.currentTarget ),
+					      value: any      = $select.val();
 					
-					if ( $.isArray( value ) && $.inArray( '', value ) > -1 ) {
+					if ( $.isArray( value ) && ( $.inArray( '', value ) > -1 || $.inArray( '-1', value ) > -1 ) ) {
 						
-						// Avoid selecting the "None" option.
+						// Avoid selecting the "None" option (empty value or -1 in some cases).
 						$.each( value, ( index: number, elem: string ) => {
-							if ( elem === '' ) {
+							if ( elem === '' || elem === '-1' ) {
 								value.splice( index, 1 );
 							}
 						} );
@@ -74,9 +72,9 @@ export default class EnhancedSelect {
 				
 			}
 			
-			$select.select2(selectOptions);
-			$select.siblings('.select2-container').addClass('atum-select2');
-			this.maybeAddTooltip($select);
+			( <any>$select ).select2( selectOptions );
+			$select.siblings( '.select2-container' ).addClass( 'atum-select2' );
+			this.maybeAddTooltip( $select );
 			
 		} );
 	
@@ -87,27 +85,32 @@ export default class EnhancedSelect {
 	 */
 	addAtumClasses() {
 		
-		$('select').filter('.atum-select2, .atum-enhanced-select').each( (index: number, elem: Element) => {
+		$( 'select' ).filter( '.atum-select2, .atum-enhanced-select' ).each( ( index: number, elem: Element ) => {
 			
-			const $select: JQuery           = $(elem),
-			      $select2Container: JQuery = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select')
+			const $select: JQuery           = $( elem ),
+			      $select2Container: JQuery = $select.siblings( '.select2-container' ).not( '.atum-select2, .atum-enhanced-select' )
 			
-			if ($select2Container.length) {
-				$select2Container.addClass( $select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select' );
+			if ( $select2Container.length ) {
+				$select2Container.addClass( $select.hasClass( 'atum-select2' ) ? 'atum-select2' : 'atum-enhanced-select' );
 				
 				// Pass any attached tooltip
-				this.maybeAddTooltip($select);
+				this.maybeAddTooltip( $select );
 			}
 			
-		});
+		} );
 		
 	}
 	
-	maybeAddTooltip($select: JQuery) {
+	/**
+	 * Add tooltip to the select if needed
+	 *
+	 * @param {JQuery} $select
+	 */
+	maybeAddTooltip( $select: JQuery ) {
 		
-		if ( $select.hasClass('atum-tooltip') ) {
-			const $select2Rendered: JQuery = $select.siblings('.select2-container').find('.select2-selection__rendered');
-			$select2Rendered.addClass('atum-tooltip');
+		if ( $select.hasClass( 'atum-tooltip' ) ) {
+			const $select2Rendered: JQuery = $select.siblings( '.select2-container' ).find( '.select2-selection__rendered' );
+			$select2Rendered.addClass( 'atum-tooltip' );
 		}
 		
 	}
