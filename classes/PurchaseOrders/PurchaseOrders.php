@@ -705,6 +705,10 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function product_search_message( $po ) {
 
+		if ( ! $po instanceof PurchaseOrder ) {
+			return;
+		}
+
 		$supplier = $po->get_supplier();
 
 		if ( $supplier && $supplier->id ) {
