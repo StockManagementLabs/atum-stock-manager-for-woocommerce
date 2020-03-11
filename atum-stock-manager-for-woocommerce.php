@@ -32,7 +32,7 @@ if ( ! defined( 'ATUM_VERSION' ) ) {
 }
 
 if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
-	define( 'ATUM_WC_MINIMUM_VERSION', '2.7.0' );
+	define( 'ATUM_WC_MINIMUM_VERSION', '3.1.0' );
 }
 
 if ( ! defined( 'ATUM_WP_MINIMUM_VERSION' ) ) {

@@ -394,7 +394,7 @@ class PurchaseOrder extends AtumOrderModel {
 		$po_data = array(
 			'supplier'           => $this->get_supplier( 'id' ),
 			'multiple_suppliers' => $this->has_multiple_suppliers(),
-			'date_expected'      => $this->get_date_expected() ? new \WC_DateTime( $this->get_date_expected() ) : '',
+			'date_expected'      => $this->get_date_expected() ? wc_string_to_datetime( $this->get_date_expected() ) : '',
 		);
 
 		return array_merge( $data, $po_data );

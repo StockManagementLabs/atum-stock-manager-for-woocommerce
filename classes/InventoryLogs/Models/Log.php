@@ -401,9 +401,9 @@ class Log extends AtumOrderModel {
 		$log_data = array(
 			'type'             => $this->get_log_type(),
 			'order'            => $this->get_order(),
-			'reservation_date' => $this->get_reservation_date() ? new \WC_DateTime( $this->get_reservation_date() ) : '',
-			'return_date'      => $this->get_return_date() ? new \WC_DateTime( $this->get_return_date() ) : '',
-			'damage_date'      => $this->get_damage_date() ? new \WC_DateTime( $this->get_damage_date() ) : '',
+			'reservation_date' => $this->get_reservation_date() ? wc_string_to_datetime( $this->get_reservation_date() ) : '',
+			'return_date'      => $this->get_return_date() ? wc_string_to_datetime( $this->get_return_date() ) : '',
+			'damage_date'      => $this->get_damage_date() ? wc_string_to_datetime( $this->get_damage_date() ) : '',
 			'shipping_company' => $this->get_shipping_company(),
 			'custom_name'      => $this->get_custom_name(),
 		);
