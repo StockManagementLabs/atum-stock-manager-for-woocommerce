@@ -872,7 +872,6 @@ abstract class AtumOrderPostType {
 					'wc-backbone-modal',
 					'jquery-blockui',
 					'stupidtable',
-					'accounting',
 					'sweetalert2',
 				));
 

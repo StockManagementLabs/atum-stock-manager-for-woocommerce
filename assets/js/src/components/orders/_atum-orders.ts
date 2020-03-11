@@ -11,6 +11,7 @@ import Tooltip from '../_tooltip';
 import Settings from '../../config/_settings';
 import { StupidTable } from '../_stupid-table';
 import { Switcher } from '../_switcher';
+import { Utils } from '../../utils/_utils';
 
 export default class AtumOrders {
 	
@@ -19,7 +20,6 @@ export default class AtumOrders {
 	areItemsSelectable: boolean;
 	isEditable: string;
 	swal: any = window['swal'];
-	accounting: any = window['accounting'];
 
 	constructor(
 		private settings: Settings,
@@ -122,18 +122,18 @@ export default class AtumOrders {
 		    $lineSubtotal: JQuery = $row.find('input.line_subtotal');
 		
 		// Totals
-		let unitTotal: number = this.accounting.unformat( $lineTotal.data( 'total' ), this.settings.get('mon_decimal_point') ) / oQty;
+		let unitTotal: number = <number>Utils.unformat( $lineTotal.data( 'total' ), this.settings.get('mon_decimal_point') ) / oQty;
 		
 		$lineTotal.val(
-			parseFloat( this.accounting.formatNumber( unitTotal * qty, this.settings.get('rounding_precision'), '' ) )
+			parseFloat( <string>Utils.formatNumber( unitTotal * qty, this.settings.get('rounding_precision'), '' ) )
 				.toString()
 				.replace( '.', this.settings.get('mon_decimal_point') )
 		);
 		
-		let unitSubtotal: number = this.accounting.unformat( $lineSubtotal.data( 'subtotal' ),this.settings.get('mon_decimal_point') ) / oQty;
+		let unitSubtotal: number = <number>Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get('mon_decimal_point') ) / oQty;
 		
 		$lineSubtotal.val(
-			parseFloat( this.accounting.formatNumber( unitSubtotal * qty, this.settings.get('rounding_precision'), '' ) )
+			parseFloat( <string>Utils.formatNumber( unitSubtotal * qty, this.settings.get('rounding_precision'), '' ) )
 				.toString()
 				.replace( '.', this.settings.get('mon_decimal_point') )
 		);
@@ -143,13 +143,13 @@ export default class AtumOrders {
 			
 			let $lineTotalTax: JQuery    = $(elem),
 			    taxId: string            = $lineTotalTax.data('tax_id'),
-			    unitTotalTax: number     = this.accounting.unformat($lineTotalTax.data('total_tax'), this.settings.get('mon_decimal_point')) / oQty,
+			    unitTotalTax: number     = <number>Utils.unformat($lineTotalTax.data('total_tax'), this.settings.get('mon_decimal_point')) / oQty,
 			    $lineSubtotalTax: JQuery = $row.find(`input.line_subtotal_tax[data-tax_id="${ taxId }"]`),
-			    unitSubtotalTax: number  = this.accounting.unformat($lineSubtotalTax.data('subtotal_tax'), this.settings.get('mon_decimal_point')) / oQty;
+			    unitSubtotalTax: number  = <number>Utils.unformat($lineSubtotalTax.data('subtotal_tax'), this.settings.get('mon_decimal_point')) / oQty;
 			
 			if ( 0 < unitTotalTax ) {
 				$lineTotalTax.val(
-					parseFloat( this.accounting.formatNumber( unitTotalTax * qty, this.settings.get('rounding_precision'), '' ) )
+					parseFloat( <string>Utils.formatNumber( unitTotalTax * qty, this.settings.get('rounding_precision'), '' ) )
 						.toString()
 						.replace( '.', this.settings.get('mon_decimal_point') )
 				);
@@ -157,7 +157,7 @@ export default class AtumOrders {
 			
 			if ( 0 < unitSubtotalTax ) {
 				$lineSubtotalTax.val(
-					parseFloat( this.accounting.formatNumber( unitSubtotalTax * qty, this.settings.get('rounding_precision'), '' ) )
+					parseFloat( <string>Utils.formatNumber( unitSubtotalTax * qty, this.settings.get('rounding_precision'), '' ) )
 						.toString()
 						.replace( '.', this.settings.get('mon_decimal_point') )
 				);

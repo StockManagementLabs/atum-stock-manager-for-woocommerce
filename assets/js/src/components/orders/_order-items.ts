@@ -5,6 +5,7 @@
 import AtumOrders from './_atum-orders';
 import { Blocker } from '../_blocker';
 import Settings from '../../config/_settings';
+import { Utils } from '../../utils/_utils';
 
 export default class AtumOrderItems {
 	
@@ -333,7 +334,7 @@ export default class AtumOrderItems {
 		
 		let $item: JQuery         = $(evt.currentTarget).closest('.item'),
 		    qty: number           = parseFloat($item.find('input.quantity').val() || 1),
-		    purchasePrice: number = qty !== 0 ? window['accounting'].unformat($item.find('input.line_total').val() || 0, this.settings.get('mon_decimal_point')) / qty : 0,
+		    purchasePrice: number = qty !== 0 ? <number>Utils.unformat($item.find('input.line_total').val() || 0, this.settings.get('mon_decimal_point')) / qty : 0,
 		    data: any             = {
 			    atum_order_id     : this.settings.get('post_id'),
 			    atum_order_item_id: $item.data('atum_order_item_id'),

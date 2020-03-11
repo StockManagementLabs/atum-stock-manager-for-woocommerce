@@ -11,10 +11,18 @@ export let Utils = {
 	settings: {
 		delayTimer: 0,
 		number    : {
-			precision: 0,
-			grouping : 3,
+			precision: 0,       // default precision on numbers is 0.
+			grouping : 3,       // digit grouping (not implemented yet).
 			thousand : ',',
 			decimal  : '.',
+		},
+		currency: {
+			symbol : '$',
+			format : '%s%v',	// controls output: %s = symbol, %v = value (can be object).
+			decimal : '.',		// decimal point separator.
+			thousand : ',',		// thousands separator.
+			precision : 2,		// decimal places.
+			grouping : 3		// digit grouping (not implemented yet).
 		},
 	},
 	
@@ -254,9 +262,9 @@ export let Utils = {
 	 * @param {string} thousand
 	 * @param {string} decimal
 	 *
-	 * @return {string | string[]}
+	 * @return {string[] | string}
 	 */
-	formatNumber( number: number, precision: number, thousand: string, decimal: string ): string | string[] {
+	formatNumber( number: number[] | number, precision?: number, thousand?: string, decimal?: string ): string[] | string {
 		
 		// Resursively format arrays.
 		if ( $.isArray( number ) ) {
@@ -272,11 +280,52 @@ export let Utils = {
 		      usePrecision  = this.checkPrecision( opts.precision ),
 		      // Do some calc.
 		      negative      = number < 0 ? '-' : '',
-		      base          = parseInt( this.toFixed( Math.abs( number || 0 ), usePrecision ), 10 ) + '',
+		      base          = parseInt( this.toFixed( Math.abs( <number>number || 0 ), usePrecision ), 10 ) + '',
 		      mod           = base.length > 3 ? base.length % 3 : 0;
 		
 		// Format the number.
-		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + ( usePrecision ? opts.decimal + this.toFixed( Math.abs( number ), usePrecision ).split( '.' )[ 1 ] : '' );
+		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + ( usePrecision ? opts.decimal + this.toFixed( Math.abs( <number>number ), usePrecision ).split( '.' )[ 1 ] : '' );
+		
+	},
+	
+	/**
+	 * Format a number into currency
+	 * Based on accounting.js.
+	 *
+	 * Usage: Utils.formatMoney( number, symbol, precision, thousandsSep, decimalSep, format )
+	 * defaults: (0, '$', 2, ',', '.', '%s%v')
+	 *
+	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
+	 * Second param can be an object matching `settings.currency` which is the easiest way.
+	 */
+	formatMoney( number: number[] | number, symbol?: string, precision?: number, thousand?: string, decimal?: string, format?: string ) : string[] | string {
+		
+		// Resursively format arrays.
+		if ( $.isArray( number ) ) {
+			return $.map( number, val => this.formatMoney( val, symbol, precision, thousand, decimal, format ) );
+		}
+		
+		// Clean up number.
+		number = this.unformat(number);
+		
+		const defaults: any = { ...this.settings.currency },
+		      opts: any     = {
+			      defaults,
+			      ...{
+				      symbol: symbol,
+				      precision: precision,
+				      thousand: thousand,
+				      decimal: decimal,
+				      format: format,
+			      },
+		      },
+		      // Check format (returns object with pos, neg and zero).
+		      formats       = this.checkCurrencyFormat( opts.format ),
+		      // Choose which format to use for this value.
+		      useFormat     = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
+		
+		// Return with currency symbol added.
+		return useFormat.replace( '%s', opts.symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( opts.precision ), opts.thousand, opts.decimal ) );
 		
 	},
 	
@@ -285,7 +334,7 @@ export let Utils = {
 	 * Based on accounting.js.
 	 *
 	 * Decimal must be included in the regular expression to match floats (defaults to
-	 * accounting.settings.number.decimal), so if the number uses a non-standard decimal
+	 * Utils.settings.number.decimal), so if the number uses a non-standard decimal
 	 * separator, provide it as the second argument.
 	 *
 	 * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
@@ -297,7 +346,7 @@ export let Utils = {
 	 *
 	 * @return {number | number[]}
 	 */
-	unformat( value: number, decimal?: string ): number | number[] {
+	unformat( value: number, decimal?: string ): number[] | number {
 		
 		// Recursively unformat arrays:
 		if ( $.isArray( value ) ) {
@@ -361,6 +410,53 @@ export let Utils = {
 		
 		// Multiply up by precision, round accurately, then divide and use native toFixed().
 		return ( Math.round( this.unformat( value ) * power ) / power ).toFixed( precision );
-	}
+	},
+	
+	/**
+	 * Parses a format string or object and returns format obj for use in rendering.
+	 * Based on accounting.js.
+	 *
+	 * `format` is either a string with the default (positive) format, or object
+	 * containing `pos` (required), `neg` and `zero` values (or a function returning
+	 * either a string or object)
+	 *
+	 * Either string or format.pos must contain '%v' (value) to be valid
+	 */
+	checkCurrencyFormat( format: any | string ): any | string {
+		
+		const defaults = this.settings.currency.format;
+		
+		// Allow function as format parameter (should return string or object).
+		if ( typeof format === 'function' ) {
+			format = format();
+		}
+		// Format can be a string, in which case `value` ('%v') must be present.
+		else if ( typeof format === 'string' && format.match('%v') ) {
+			
+			// Create and return positive, negative and zero formats.
+			return {
+				pos : format,
+				neg : format.replace( '-', '' ).replace( '%v', '-%v' ),
+				zero: format,
+			};
+			
+		}
+		// If no format, or object is missing valid positive value, use defaults.
+		else if ( ! format || ! format.pos || ! format.pos.match( '%v' ) ) {
+			
+			// If defaults is a string, casts it to an object for faster checking next time.
+			return ( typeof defaults !== 'string' ) ? defaults : this.settings.currency.format = {
+				pos : defaults,
+				neg : defaults.replace( '%v', '-%v' ),
+				zero: defaults,
+			};
+			
+		}
+		
+		// Otherwise, assume format was fine.
+		return format;
+		
+	},
+	
 	
 }
