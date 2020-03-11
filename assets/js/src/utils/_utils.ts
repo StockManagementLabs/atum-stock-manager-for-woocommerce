@@ -5,17 +5,28 @@
 
 export let Utils = {
 	
-	delayTimer : 0,
+	/**
+	 * Utils settings.
+	 */
+	settings: {
+		delayTimer: 0,
+		number    : {
+			precision: 0,
+			grouping : 3,
+			thousand : ',',
+			decimal  : '.',
+		},
+	},
 	
 	/**
 	 * Apply a delay
 	 *
 	 * @return {Function}
 	 */
-	delay(callback: Function, ms: number) {
+	delay( callback: Function, ms: number ) {
 		
-		clearTimeout(this.delayTimer);
-		this.delayTimer = setTimeout(callback, ms);
+		clearTimeout( this.settings.delayTimer );
+		this.settings.delayTimer = setTimeout( callback, ms );
 		
 	},
 	
@@ -230,6 +241,126 @@ export let Utils = {
 			
 		}
 		
+	},
+	
+	/**
+	 * Format a number, with comma-separated thousands and custom precision/decimal places.
+	 * Based on accounting.js.
+	 *
+	 * Localise by overriding the precision and thousand / decimal separators.
+	 *
+	 * @param {number} number
+	 * @param {number} precision
+	 * @param {string} thousand
+	 * @param {string} decimal
+	 *
+	 * @return {string | string[]}
+	 */
+	formatNumber( number: number, precision: number, thousand: string, decimal: string ): string | string[] {
+		
+		// Resursively format arrays.
+		if ( $.isArray( number ) ) {
+			return $.map( number, val => this.formatNumber( val, precision, thousand, decimal ) );
+		}
+		
+		// Clean up number.
+		number = this.unformat( number );
+		
+		const defaults: any = { ...this.settings.number },
+		      opts: any     = { defaults, ...{ precision: precision, thousand: thousand, decimal: decimal } },
+		      // Clean up precision.
+		      usePrecision  = this.checkPrecision( opts.precision ),
+		      // Do some calc.
+		      negative      = number < 0 ? '-' : '',
+		      base          = parseInt( this.toFixed( Math.abs( number || 0 ), usePrecision ), 10 ) + '',
+		      mod           = base.length > 3 ? base.length % 3 : 0;
+		
+		// Format the number.
+		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + ( usePrecision ? opts.decimal + this.toFixed( Math.abs( number ), usePrecision ).split( '.' )[ 1 ] : '' );
+		
+	},
+	
+	/**
+	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
+	 * Based on accounting.js.
+	 *
+	 * Decimal must be included in the regular expression to match floats (defaults to
+	 * accounting.settings.number.decimal), so if the number uses a non-standard decimal
+	 * separator, provide it as the second argument.
+	 *
+	 * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
+	 *
+	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+	 *
+	 * @param {number} value
+	 * @param {string} decimal
+	 *
+	 * @return {number | number[]}
+	 */
+	unformat( value: number, decimal?: string ): number | number[] {
+		
+		// Recursively unformat arrays:
+		if ( $.isArray( value ) ) {
+			return $.map( value, val => this.unformat( val, decimal ) );
+		}
+		
+		// Fails silently (need decent errors).
+		value = value || 0;
+		
+		// Return the value as-is if it's already a number.
+		if ( typeof value === 'number' ) {
+			return value;
+		}
+		
+		// Default decimal point comes from settings, but could be set to eg. "," in opts.
+		decimal = decimal || this.settings.number.decimal;
+		
+		// Build regex to strip out everything except digits, decimal point and minus sign.
+		const regex       = new RegExp( `[^0-9-${ decimal }]`, 'g' ),
+		      unformatted = parseFloat(
+			      ( '' + value )
+				      .replace( /\((.*)\)/, '-$1' ) // replace bracketed values with negatives
+				      .replace( regex, '' )         // strip out any cruft
+				      .replace( decimal, '.' ),     // make sure decimal point is standard
+		      );
+		
+		// This will fail silently which may cause trouble, let's wait and see.
+		return ! isNaN( unformatted ) ? unformatted : 0;
+		
+	},
+	
+	/**
+	 * Check and normalise the value of precision (must be positive integer).
+	 * Based on accounting.js.
+	 *
+	 * @param {number} val
+	 * @param {number} base
+	 *
+	 * @return {number}
+	 */
+	checkPrecision( val: number, base: number = 0 ): number {
+		val = Math.round( Math.abs( val ) );
+		return isNaN( val ) ? base : val;
+	},
+	
+	/**
+	 * Implementation of toFixed() that treats floats more like decimals.
+	 * Based on accounting.js.
+	 *
+	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === "0.61") that present
+	 * problems for accounting and finance-related software.
+	 *
+	 * @param {number} value
+	 * @param {number} precision
+	 *
+	 * @return {string}
+	 */
+	toFixed( value: number, precision: number ): string {
+		precision = this.checkPrecision( precision, this.settings.number.precision );
+		const power = Math.pow( 10, precision );
+		
+		// Multiply up by precision, round accurately, then divide and use native toFixed().
+		return ( Math.round( this.unformat( value ) * power ) / power ).toFixed( precision );
 	}
 	
 }

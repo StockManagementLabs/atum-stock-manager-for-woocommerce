@@ -5,6 +5,7 @@
 import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
 import EnhancedSelect from './_enhanced-select';
 import Settings from '../config/_settings';
+import { Utils } from '../utils/_utils';
 
 export default class UIPopovers {
 	
@@ -77,6 +78,11 @@ export default class UIPopovers {
 				if ( $fieldLabel.length ) {
 					
 					$fieldLabel.addClass( 'unsaved' );
+					
+					// For numeric labels, adjust the decimal separator if needed.
+					if ( $.isNumeric( newLabel ) && $fieldLabel.data('decimal-separator') ) {
+						newLabel = <string>Utils.formatNumber( parseFloat( newLabel ), 2, '', $fieldLabel.data('decimal-separator') );
+					}
 					
 					// Check if a template exists for the label
 					if ( $fieldLabel.data( 'template' ) ) {
