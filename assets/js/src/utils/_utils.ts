@@ -341,12 +341,12 @@ export let Utils = {
 	 *
 	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
 	 *
-	 * @param {number} value
+	 * @param {number | string} value
 	 * @param {string} decimal
 	 *
 	 * @return {number | number[]}
 	 */
-	unformat( value: number, decimal?: string ): number[] | number {
+	unformat( value: number | string, decimal?: string ): number[] | number {
 		
 		// Recursively unformat arrays:
 		if ( $.isArray( value ) ) {

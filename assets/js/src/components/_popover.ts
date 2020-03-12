@@ -4,6 +4,7 @@
 
 import Settings from '../config/_settings';
 import DateTimePicker from './_date-time-picker';
+import { Utils } from '../utils/_utils';
 import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4
 
 export default class Popover {
@@ -109,17 +110,11 @@ export default class Popover {
 			    step : '',
 		    };
 		
-		if ( inputType === 'number' || $metaCell.text() === '-' ) {
+		if (inputType === 'number' || $metaCell.text() === '-') {
 			
-			let metaValue: string = $metaCell.text().replace( window[ 'thousandsSeparator' ], '' ).replace( symbol, '' );
+			let numericValue: number = Math.abs(<number>Utils.unformat($metaCell.text(), this.settings.get('currencyFormatDecimalSeparator')));
 			
-			// Get rid of negative symbol from currency fields.
-			if ( symbol ) {
-				metaValue = metaValue.replace( '-', '' );
-			}
-			
-			const numericValue: number = Number( metaValue );
-			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
+			inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
 			
 		}
 		
