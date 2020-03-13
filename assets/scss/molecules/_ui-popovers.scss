@@ -8,11 +8,23 @@
 		div.popover-arrow {
 			&:after {
 				background: $white;
+				box-shadow: -2px -2px 5px -3px var(--popover-black-shadow);
+			}
+		}
+		
+		&.left {
+			div.popover-arrow {
+				&:after {
+					background: transparent;
+					box-shadow: none;
+					border-left-color: $white;
+				}
 			}
 		}
 		
 		.popover-content {
 			display: flex;
+			flex-wrap: nowrap;
 			min-height: 34px;
 			
 			button {
@@ -21,12 +33,16 @@
 		}
 		
 		input, select {
-			width: auto !important;
+			width: 100% !important;
 			flex-grow: 1;
 			min-width: 120px;
 			border: 1px solid var(--main-border-alt) !important;
 			height: 35px !important;
 			color: $wp-gray-dark !important;
+			
+			+ input, + select, + .select2-container {
+				margin-top: 4px;
+			}
 		}
 		
 		.select2-container {

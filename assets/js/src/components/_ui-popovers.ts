@@ -22,15 +22,17 @@ export default class UIPopovers {
 			// Set the field data when clicking the "Set" button.
 			.on( 'click', '.popover .set', ( evt: JQueryEventObject ) => {
 				
-				const $setButton: JQuery    = $( evt.currentTarget ),
-				      popoverId: string     = $setButton.closest( '.popover' ).attr( 'id' ),
-				      $fieldWrapper: JQuery = $( `[data-popover="${ popoverId }"]` ).parent(),
-				      $popoverInput: any    = $setButton.closest( '.popover-content' ).find( '.meta-value' ),
-				      newValue: any         = $popoverInput.val();
+				const $setButton: JQuery      = $( evt.currentTarget ),
+				      popoverId: string       = $setButton.closest( '.popover' ).attr( 'id' ),
+				      $editField: JQuery      = $( `[data-popover="${ popoverId }"]` ),
+				      $fieldWrapper: JQuery   = $editField.parent(),
+				      $popoverWrapper: JQuery = $setButton.closest( '.popover-content' ),
+				      $setMetaInput: JQuery   = $popoverWrapper.find( '.meta-value' ),
+				      newValue: any           = $setMetaInput.val();
 				
 				let newLabel: string;
 				
-				if ( $popoverInput.is( 'select' ) ) {
+				if ( $setMetaInput.is( 'select' ) ) {
 					
 					if ( ! newValue ) {
 						newLabel = this.settings.get( 'none' );
@@ -39,7 +41,7 @@ export default class UIPopovers {
 						
 						let selectedLabels: string[] = [];
 						
-						$popoverInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
+						$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
 							selectedLabels.push( $.trim( $( elem ).text() ) );
 						} );
 						
@@ -47,7 +49,7 @@ export default class UIPopovers {
 						
 					}
 					else {
-						newLabel = $.trim( $popoverInput.find( 'option:selected' ).text() );
+						newLabel = $.trim( $setMetaInput.find( 'option:selected' ).text() );
 					}
 					
 				}
@@ -55,7 +57,7 @@ export default class UIPopovers {
 					newLabel = newValue ? newValue : this.settings.get( 'none' );
 				}
 				
-				$popoverInput.find( 'option' ).each( ( index: number, elem: Element ) => {
+				$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
 					
 					const $option: JQuery = $( elem );
 					
@@ -68,9 +70,9 @@ export default class UIPopovers {
 					
 				} );
 				
-				$( `#${ $fieldWrapper.find( '.atum-edit-field' ).data( 'content-id' ) }` ).html( $popoverInput );
-				
-				$fieldWrapper.find( 'input[type=hidden]' ).val( newValue );
+				// Set the value to the related hidden input.
+				const $valueInput: JQuery = $fieldWrapper.find( 'input[type=hidden]' );
+				$valueInput.val( newValue );
 				
 				// Set the field label.
 				const $fieldLabel: JQuery = $fieldWrapper.find( '.field-label' );
@@ -97,20 +99,22 @@ export default class UIPopovers {
 				// Once set, destroy the opened popover.
 				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
 				
+				$editField.trigger( 'atum-ui-popover-set-value', [ $valueInput, newValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
+				
 			})
 			
 			// Bind keys pressed on the popover.
-			.on( 'keyup', '.popover .meta-value', ( evt: JQueryEventObject ) => {
+			.on( 'keyup', '.popover', ( evt: JQueryEventObject ) => {
 				
-				const $field: JQuery = $( evt.currentTarget );
+				const $popover: JQuery = $( evt.currentTarget );
 				
 				// Enter key.
 				if ( evt.keyCode === 13 ) {
-					$field.siblings( '.set' ).click();
+					$popover.find( '.set' ).click();
 				}
 				// Esc key.
 				else if ( evt.keyCode === 27 ) {
-					this.destroyPopover( $( `[data-popover="${ $field.closest( '.popover' ).attr( 'id' ) }"]` ) );
+					this.destroyPopover( $( `[data-popover="${ $popover.attr( 'id' ) }"]` ) );
 				}
 				
 			} );
@@ -164,7 +168,7 @@ export default class UIPopovers {
 						<h3 class="popover-title"></h3>
 						<div class="popover-content"></div>
 					</div>`,
-				placement: 'bottom',
+				placement: $editButton.data('placement') || 'bottom',
 				trigger  : 'click',
 				container: 'body',
 			} );
@@ -173,7 +177,7 @@ export default class UIPopovers {
 			$editButton.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
 				
 				const $activePopover: JQuery = $( '.popover.in' ),
-				      currentValue: any      = $editButton.siblings( 'input[type=hidden]' ).val();
+				      currentValue: string   = $editButton.siblings( 'input[type=hidden]' ).val();
 				
 				$( evt.currentTarget ).attr( 'data-popover', $activePopover.attr( 'id' ) );
 				
@@ -191,10 +195,10 @@ export default class UIPopovers {
 					
 				}
 				else {
-					$activePopover.find( ':input' ).val( currentValue ).change();
+					$activePopover.find( '.meta-value' ).val( currentValue ).change();
 				}
 				
-				$activePopover.find( ':input:visible' ).first().focus().select();
+				$activePopover.find( '.meta-value' ).focus().select();
 				
 			} );
 			
@@ -230,7 +234,7 @@ export default class UIPopovers {
 		
 		if ( this.enhancedSelect) {
 			
-			$('.popover .atum-select2').each( (index: number, elem: Element) => {
+			$( '.popover .atum-select2' ).each( ( index: number, elem: Element ) => {
 				
 				const $select: JQuery = $(elem),
 				      selectOptions: any = {
