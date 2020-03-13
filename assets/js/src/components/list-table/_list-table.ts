@@ -237,7 +237,17 @@ export default class ListTable {
 			value = this.settings.get('emptyCol');
 		}
 		else if (symbol) {
-			value = currencyPos === 'left' ? symbol + value : value + symbol;
+			
+			const precision: number = this.settings.get('currencyFormatNumDecimals'),
+			      thousand: string  = '',
+			      decimal: string   = this.settings.get('currencyFormatDecimalSeparator'),
+			      format: string    = this.settings.get('currencyFormat');
+			
+			let numericValue: number = parseFloat( value );
+			console.log(numericValue);
+			
+			value = <string>Utils.formatMoney( numericValue, symbol, precision, thousand, decimal, format);
+			
 		}
 		
 		$metaCell.addClass('unsaved').text(value);
