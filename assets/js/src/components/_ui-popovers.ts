@@ -75,26 +75,7 @@ export default class UIPopovers {
 				$valueInput.val( newValue );
 				
 				// Set the field label.
-				const $fieldLabel: JQuery = $fieldWrapper.find( '.field-label' );
-				
-				if ( $fieldLabel.length ) {
-					
-					$fieldLabel.addClass( 'unsaved' );
-					
-					// For numeric labels, adjust the decimal separator if needed.
-					if ( $.isNumeric( newLabel ) && $fieldLabel.data('decimal-separator') ) {
-						newLabel = <string>Utils.formatNumber( parseFloat( newLabel ), 2, '', $fieldLabel.data('decimal-separator') );
-					}
-					
-					// Check if a template exists for the label
-					if ( $fieldLabel.data( 'template' ) ) {
-						$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', newLabel ) );
-					}
-					else {
-						$fieldLabel.text( newLabel );
-					}
-					
-				}
+				this.setEditFieldLabel( $fieldWrapper.find( '.field-label' ), newLabel );
 				
 				// Once set, destroy the opened popover.
 				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
@@ -254,6 +235,35 @@ export default class UIPopovers {
 				
 			});
 		
+		}
+		
+	}
+	
+	/**
+	 * Set the label for an edit field
+	 *
+	 * @param {JQuery} $fieldLabel
+	 * @param {string} label
+	 */
+	setEditFieldLabel( $fieldLabel: JQuery, label: string ) {
+		
+		if ( $fieldLabel.length ) {
+			
+			$fieldLabel.addClass( 'unsaved' );
+			
+			// For numeric labels, adjust the decimal separator if needed.
+			if ( $.isNumeric( label ) && $fieldLabel.data('decimal-separator') ) {
+				label = <string>Utils.formatNumber( parseFloat( label ), 2, '', $fieldLabel.data('decimal-separator') );
+			}
+			
+			// Check if a template exists for the label
+			if ( $fieldLabel.data( 'template' ) ) {
+				$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', label ) );
+			}
+			else {
+				$fieldLabel.text( label );
+			}
+			
 		}
 		
 	}
