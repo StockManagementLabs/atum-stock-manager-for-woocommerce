@@ -187,6 +187,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.6.10`
+
+*2020-03-16*
+
+**Features**
+
+* Added extra fields to Supplier's profile.
+
+**Changes**
+
+* Added custom hooks to Addons class.
+* Moved the UIPopovers component to ATUM to be reused by add-ons.
+* Allow setting the decimal separator for UIPopover fields.
+* Removed the accounting.js dependency and added the functions to the Utils component.
+
+**Fixes**
+
+* Fixed error when trying to access suppliers from a Inventory Logs screen.
+* Fixed wrong ATUM Order dates in ATUM API.
+* Fixed Stock Central's decimal separator being removed when editing (if it's a comma).
+
+---
+
 `1.6.9`
 
 *2020-03-06*
