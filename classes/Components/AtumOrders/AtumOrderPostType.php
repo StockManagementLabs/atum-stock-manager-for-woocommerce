@@ -850,7 +850,7 @@ abstract class AtumOrderPostType {
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 
 			// ATUM marketing popup.
-			AtumMarketingPopup::maybe_enqueue_scripts();
+			$show_marketing_popup = AtumMarketingPopup::maybe_enqueue_scripts();
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
@@ -926,8 +926,16 @@ abstract class AtumOrderPostType {
 			}
 			elseif ( 'edit.php' === $hook ) {
 
-				wp_register_style( 'atum-orders-list', ATUM_URL . 'assets/css/atum-orders-list.css', [], ATUM_VERSION );
-				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery', 'jquery-tiptip' ), ATUM_VERSION, TRUE );
+				$css_dependencies = array();
+				$js_dependencies  = array( 'jquery', 'jquery-tiptip' );
+
+				if ( $show_marketing_popup ) {
+					$css_dependencies[] = 'sweetalert2';
+					$js_dependencies[]  = 'sweetalert2';
+				}
+
+				wp_register_style( 'atum-orders-list', ATUM_URL . 'assets/css/atum-orders-list.css', $css_dependencies, ATUM_VERSION );
+				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', $js_dependencies, ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-list', 'atumPostTypeListVars', array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
