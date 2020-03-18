@@ -149,19 +149,34 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 			</tr>-->
 
 			<?php // do_action( 'atum/atum_order/totals_after_discount', $atum_order->get_id() );! ?>
+			
+			<?php if ( ! empty( $line_items_fee ) ) : ?>
+				<tr>
+					<td class="label">
+						<?php esc_html_e( 'Fees:', ATUM_TEXT_DOMAIN ); ?>
+					</td>
+					<td style="width: 1%"></td>
+					<td class="total">
+						<?php echo wc_price( $atum_order->get_total_fees(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</td>
+				</tr>
+			<?php endif; ?>
 
-			<tr>
-				<td class="label">
-					<?php /* translators: the post type name */ ?>
-					<span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
-				</td>
-				<td style="width: 1%"></td>
-				<td class="total">
-					<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</td>
-			</tr>
+			<?php if ( ! empty( $line_items_shipping ) ) : ?>
+				<tr>
+					<td class="label">
+						<?php /* translators: the post type name */ ?>
+						<span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
+					</td>
+					<td style="width: 1%"></td>
+					<td class="total">
+						<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</td>
+				</tr>
 
-			<?php do_action( 'atum/atum_order/totals_after_shipping', $atum_order->get_id() ); ?>
+				<?php do_action( 'atum/atum_order/totals_after_shipping', $atum_order->get_id() ); ?>
+			<?php endif; ?>
+
 
 			<?php if ( wc_tax_enabled() ) :
 
