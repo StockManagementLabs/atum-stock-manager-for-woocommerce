@@ -1902,6 +1902,22 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Calculate fees for all line items.
+	 *
+	 * @since 1.6.11
+	 *
+	 * @return float Fee total.
+	 */
+	public function get_total_fees() {
+		return array_reduce(
+			$this->get_fees(),
+			function( $carry, $item ) {
+				return $carry + $item->get_total();
+			}
+		);
+	}
+
+	/**
 	 * Return an array of taxes within this ATUM Order
 	 *
 	 * @since 1.2.4
