@@ -14,6 +14,7 @@ namespace Atum\Integrations;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCache;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -675,32 +676,40 @@ class Wpml {
 	 * @return int|array
 	 */
 	public static function get_original_product_id( $product_id = 0, $post_type = array( 'product', 'product_variation' ) ) {
-		
-		$return_array = is_array( $product_id );
-		$results      = array( 0 );
-		
-		if ( $product_id ) {
-			
-			global $wpdb;
-			
-			$product_id = (array) $product_id;
-			$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
-			// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
-			$str_sql = "
+
+		$cache_key   = AtumCache::get_cache_key( 'wpml_original_id', $product_id );
+		$original_id = AtumCache::get_cache( $cache_key, ATUM_MULTINV_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache ) {
+			$return_array = is_array( $product_id );
+			$results      = array( 0 );
+
+			if ( $product_id ) {
+
+				global $wpdb;
+
+				$product_id = (array) $product_id;
+				$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
+				// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
+				$str_sql = "
 				SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
 				LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
   				WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
   				AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
   				AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL
             ";
-			
-			$results = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-			$results = array_map( 'intval', $results ?: $product_id );
-			
+				$results = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+				$results = array_map( 'intval', $results ?: $product_id );
+			}
+
+			$original_id = $return_array ? $results : $results[0];
+
+			AtumCache::set_cache( $cache_key, $original_id, ATUM_MULTINV_TEXT_DOMAIN );
 		}
-		
-		return $return_array ? $results : $results[0];
+
+		return $original_id;
 		
 	}
 
