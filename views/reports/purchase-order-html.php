@@ -18,6 +18,13 @@ use Atum\Inc\Helpers;
 <div class="po-wrapper content-header">
 	<div class="float-left">
 		<strong><?php echo preg_replace( '/<br/', '</strong><br', $po->get_company_address(), 1 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
+		<?php $vat_number = $po->get_tax_number() ?>
+
+		<?php if ( $vat_number ) : ?>
+			<br>
+			<?php printf( esc_html__( 'Tax/VAT number: %s' ) , $vat_number ) ?>
+		<?php endif; ?>
 	</div>
 	<div class="float-right">
 		<h3 class="po-title"><?php esc_html_e( 'Purchase Order', ATUM_TEXT_DOMAIN ) ?></h3>

@@ -62,22 +62,25 @@ class POExport extends PurchaseOrder {
 	/**
 	 * Get all extra data not present in a PO by default
 	 *
+	 * TODO: THIS NEEDS A FULL REFACTORY AND TO CREATE A MODEL FOR THE STORE DETAILS
+	 *
 	 * @since 1.3.9
 	 */
 	private function load_extra_data() {
 		
 		$default_country = get_option( 'woocommerce_default_country' );
+		$country_state   = wc_format_country_state_string( Helpers::get_option( 'country', $default_country ) );
+
 		// Company data.
-		$country_state = wc_format_country_state_string( Helpers::get_option( 'country', $default_country ) );
-		
 		$this->company_data = array(
-			'company'   => Helpers::get_option( 'company_name' ),
-			'address_1' => Helpers::get_option( 'address_1' ),
-			'address_2' => Helpers::get_option( 'address_2' ),
-			'city'      => Helpers::get_option( 'city' ),
-			'state'     => $country_state['state'],
-			'postcode'  => Helpers::get_option( 'zip' ),
-			'country'   => $country_state['country'],
+			'company'    => Helpers::get_option( 'company_name' ),
+			'address_1'  => Helpers::get_option( 'address_1' ),
+			'address_2'  => Helpers::get_option( 'address_2' ),
+			'city'       => Helpers::get_option( 'city' ),
+			'state'      => $country_state['state'],
+			'postcode'   => Helpers::get_option( 'zip' ),
+			'country'    => $country_state['country'],
+			'tax_number' => Helpers::get_option( 'tax_number' ),
 		);
 		
 		if ( 'yes' === Helpers::get_option( 'same_ship_address' ) ) {
@@ -193,6 +196,18 @@ class POExport extends PurchaseOrder {
 		
 		return apply_filters( 'atum/purchase_orders/po_export/shipping_address', WC()->countries->get_formatted_address( $this->shipping_data ), $this->shipping_data, $this->id );
 		
+	}
+
+	/**
+	 * Getter for the company's Tax/VAT number
+	 *
+	 * @since 1.6.11
+	 *
+	 * @return string
+	 */
+	public function get_tax_number() {
+
+		return $this->company_data['tax_number'];
 	}
 
 	/**
