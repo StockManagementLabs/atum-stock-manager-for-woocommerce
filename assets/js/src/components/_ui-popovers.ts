@@ -3,9 +3,11 @@
    =================== */
 
 import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
+
 import EnhancedSelect from './_enhanced-select';
 import Settings from '../config/_settings';
 import { Utils } from '../utils/_utils';
+import { ButtonGroup } from './_button-group';
 
 export default class UIPopovers {
 	
@@ -167,6 +169,11 @@ export default class UIPopovers {
 				}
 				
 				this.prepareSelect( $editButton );
+
+				// Prepare the button groups (if any).
+				if ( $activePopover.find('.btn-group').length ) {
+					ButtonGroup.doButtonGroups( $activePopover );
+				}
 				
 				if ( $activePopover.find( 'select[multiple]' ).length ) {
 					
