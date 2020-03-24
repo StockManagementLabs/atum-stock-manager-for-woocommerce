@@ -660,8 +660,9 @@ class Settings {
 
 		// Calling to this method from the ATUM API, needs to return an error instead of setting the default value.
 		$is_api_request = Helpers::is_rest_request();
+		$field_type     = $this->defaults[ $key ]['type'];
 
-		switch ( $this->defaults[ $key ]['type'] ) {
+		switch ( $field_type ) {
 
 			case 'switcher':
 				if ( $is_api_request && ! in_array( $input[ $key ], [ 'yes', 'no' ], TRUE ) ) {
@@ -702,7 +703,36 @@ class Settings {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 				}
 
-				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) ? $input[ $key ] : $atts['default'];
+				$sanitized_option = $atts['default'];
+
+				if ( isset( $input[ $key ] ) ) {
+
+					// wc_country field.
+					if ( 'wc_country' === $field_type ) {
+
+						if ( strpos( $input[ $key ], ':' ) !== FALSE ) {
+
+							$country_states = WC()->countries->get_allowed_country_states();
+							list( $country, $state ) = explode( ':', $input[ $key ] );
+
+							if ( isset( $country_states[ $country ], $country_states[ $country ][ $state ] ) ) {
+								$sanitized_option = $input[ $key ];
+							}
+
+						}
+						elseif ( in_array( $input[ $key ], array_keys( WC()->countries->get_countries() ) ) ) {
+							$sanitized_option = $input[ $key ];
+						}
+
+
+					}
+					// select field.
+					elseif ( in_array( $input[ $key ], array_keys( $atts['options']['values'] ) ) ) {
+						$sanitized_option = $input[ $key ];
+					}
+
+				}
+
 				break;
 
 			case 'button_group':

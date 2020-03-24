@@ -62,7 +62,7 @@ class POExport extends PurchaseOrder {
 	/**
 	 * Get all extra data not present in a PO by default
 	 *
-	 * TODO: THIS NEEDS A FULL REFACTORY AND TO CREATE A MODEL FOR THE STORE DETAILS
+	 * TODO: THIS NEEDS A FULL REFACTORY AND TO CREATE A MODEL FOR THE STORE DETAILS. ALSO NOT IT SHOULDN'T STORE SEPARATED META KEYS.
 	 *
 	 * @since 1.3.9
 	 */
