@@ -94,7 +94,11 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php echo esc_html( $locations_list ) ?>
 	</td>
 
-	<td class="item_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>">
+	<?php
+	$product_tax_rates = wc_prices_include_tax() ? ' data-product-tax-rates="' . htmlspecialchars( wp_json_encode( \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) ) ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
+	?>
+
+	<td class="item_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>"<?php echo $product_tax_rates // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<div class="view">
 			<?php
 			$currency = $atum_order->get_currency();
