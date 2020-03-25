@@ -37,7 +37,7 @@ export default class UIPopovers {
 				if ( $setMetaInput.is( 'select' ) ) {
 					
 					if ( ! newValue ) {
-						newLabel = this.settings.get( 'none' );
+						newLabel = null;
 					}
 					else if ( $.isArray( newValue ) ) {
 						
@@ -56,7 +56,7 @@ export default class UIPopovers {
 					
 				}
 				else {
-					newLabel = newValue ? newValue : this.settings.get( 'none' );
+					newLabel = newValue ? newValue : null;
 				}
 				
 				$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
@@ -264,8 +264,12 @@ export default class UIPopovers {
 			}
 			
 			// Check if a template exists for the label
-			if ( $fieldLabel.data( 'template' ) ) {
+			if ( null !== label && $fieldLabel.data( 'template' ) ) {
 				$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', label ) );
+			}
+			else if ( null === label ) {
+				const noneLabel: string = $fieldLabel.data( 'none' ) ? $fieldLabel.data( 'none' ) : this.settings.get( 'none' );
+				$fieldLabel.text( noneLabel );
 			}
 			else {
 				$fieldLabel.text( label );
