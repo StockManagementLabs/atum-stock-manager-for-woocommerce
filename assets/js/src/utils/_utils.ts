@@ -275,13 +275,16 @@ export let Utils = {
 		number = this.unformat( number );
 		
 		const defaults: any = { ...this.settings.number },
-		      opts: any     = { defaults, ...{ precision: precision, thousand: thousand, decimal: decimal } },
+		      // Prevent undefined decimals.
+		      paramOpts: any = typeof decimal === 'undefined' ? { precision: precision, thousand: thousand } : { precision: precision, thousand: thousand, decimal: decimal },
+		      opts: any     = { ...defaults, ...paramOpts },
 		      // Clean up precision.
 		      usePrecision  = this.checkPrecision( opts.precision ),
 		      // Do some calc.
 		      negative      = number < 0 ? '-' : '',
 		      base          = parseInt( this.toFixed( Math.abs( <number>number || 0 ), usePrecision ), 10 ) + '',
 		      mod           = base.length > 3 ? base.length % 3 : 0;
+		
 		
 		// Format the number.
 		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + ( usePrecision ? opts.decimal + this.toFixed( Math.abs( <number>number ), usePrecision ).split( '.' )[ 1 ] : '' );
