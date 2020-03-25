@@ -332,20 +332,33 @@ export default class AtumOrderItems {
 		
 		evt.preventDefault();
 		
-		let $item: JQuery         = $(evt.currentTarget).closest('.item'),
-		    qty: number           = parseFloat($item.find('input.quantity').val() || 1),
-		    purchasePrice: number = qty !== 0 ? <number>Utils.unformat($item.find('input.line_total').val() || 0, this.settings.get('mon_decimal_point')) / qty : 0,
-		    data: any             = {
+		let $item: JQuery            = $(evt.currentTarget).closest('.item'),
+		    qty: number              = parseFloat($item.find('input.quantity').val() || 1),
+		    purchasePrice: number    = qty !== 0 ? <number>Utils.unformat($item.find('input.line_total').val() || 0, this.settings.get('mon_decimal_point')) / qty : 0,
+		    purchasePriceTxt: string = purchasePrice.toString(),
+		    taxes: number            = 0,
+		    data: any                = {
 			    atum_order_id     : this.settings.get('post_id'),
 			    atum_order_item_id: $item.data('atum_order_item_id'),
 			    action            : 'atum_order_change_purchase_price',
 			    security          : this.settings.get('atum_order_item_nonce'),
-		    };
+		    },
+		    rates: any               = $item.find('.item_cost').data('productTaxRates');
+		
+		if (typeof rates === 'object') {
+			taxes = this.calcTaxesFromBase(purchasePrice, rates);
+			if( taxes ) {
+				
+				purchasePriceTxt = `${purchasePrice+taxes} (${purchasePrice} + ${taxes}${this.settings.get('taxes_name')})`;
+				purchasePrice += taxes;
+			}
+			
+		}
 		
 		data[ this.settings.get('purchase_price_field') ] = purchasePrice;
 		
 		this.swal({
-			html               : this.settings.get('confirm_purchase_price').replace('{{number}}', `<strong>${ purchasePrice }</strong>`),
+			html               : this.settings.get('confirm_purchase_price').replace('{{number}}', `<strong>${ purchasePriceTxt }</strong>`),
 			type               : 'question',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get('continue'),
@@ -388,6 +401,46 @@ export default class AtumOrderItems {
 			
 		}).catch(this.swal.noop);
 		
+	}
+	
+	/**
+	 * Calc a base price taxes. Based on WC_Tax::calc_exclusive_tax as we have a price without applied taxes.
+	 *
+	 * @param {number} price
+	 * @param {any[]} rates
+	 * @return {number}
+	 */
+	calcTaxesFromBase( price: number, rates: any[]) {
+		
+		let taxes: number[] = [0],
+		    preCompoundTaxes: number;
+		
+		$.each( rates, (i: number, rate: any) => {
+			
+			if ( 'yes' === rate['compound'] ) {
+				return true;
+			}
+			taxes.push(price * rate['rate'] / 100);
+		});
+		
+		preCompoundTaxes = taxes.reduce((a, b) => a + b, 0 );
+		
+		// Compound taxes.
+		$.each( rates, (i: number, rate: any) => {
+			
+			let currentTax: number;
+			
+			if ( 'no' === rate['compound'] ) {
+				return true;
+			}
+			
+			currentTax = ( price + preCompoundTaxes ) * rate['rate'] / 100;
+			taxes.push(currentTax);
+			preCompoundTaxes += currentTax;
+			
+		});
+	
+		return taxes.reduce((a, b) => a + b, 0 );
 	}
 	
 }

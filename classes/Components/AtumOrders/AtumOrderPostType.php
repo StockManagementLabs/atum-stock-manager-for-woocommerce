@@ -910,6 +910,7 @@ abstract class AtumOrderPostType {
 					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
 					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
+					'taxes_name'               => __( 'VAT', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
 					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
 				);
