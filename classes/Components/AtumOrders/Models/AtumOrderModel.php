@@ -1912,7 +1912,7 @@ abstract class AtumOrderModel {
 		return array_reduce(
 			$this->get_fees(),
 			function( $carry, $item ) {
-				return $carry + $item->get_total();
+				return $carry + (float) $item->get_total();
 			}
 		);
 	}
