@@ -1,5 +1,5 @@
 /* ===================
-   UI POPOVERS
+   EDIT POPOVERS
    =================== */
 
 import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
@@ -9,7 +9,7 @@ import Settings from '../config/_settings';
 import { Utils } from '../utils/_utils';
 import { ButtonGroup } from './_button-group';
 
-export default class UIPopovers {
+export default class EditPopovers {
 	
 	constructor(
 		private settings: Settings,
