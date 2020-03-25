@@ -40,7 +40,7 @@
 			height: 35px !important;
 			color: $wp-gray-dark !important;
 			
-			+ input, + select, + .select2-container {
+			+ input, + select, + .select2-container, + .btn-group {
 				margin-top: 4px;
 			}
 		}
@@ -70,6 +70,10 @@
 					border-color: $input-border-color;
 				}
 			}
+		}
+		
+		.btn-group {
+			display: flex;
 		}
 		
 		.set {
