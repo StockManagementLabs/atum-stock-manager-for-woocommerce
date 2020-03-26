@@ -91,14 +91,14 @@ export default class MenuPopover {
 		$( 'body' ).on( 'click', `.${ this.popoverClassName } a`, ( evt: JQueryEventObject ) => {
 
 			evt.preventDefault();
-			const $item: JQuery = $( evt.currentTarget );
+			const $menuItem: JQuery = $( evt.currentTarget );
 
 			// Avoid triggering multiple times as this event is binded once per registered component.
-			if ( ! this.popoverId || this.popoverId !== $item.closest( `.${ this.popoverClassName }` ).attr( 'id' ) ) {
+			if ( ! this.popoverId || this.popoverId !== $menuItem.closest( `.${ this.popoverClassName }` ).attr( 'id' ) ) {
 				return;
 			}
 
-			this.$menuButton.trigger( 'atum-menu-popover-item-clicked', [ $item.data( 'name' ), $item.attr( 'href' ) ] );
+			this.$menuButton.trigger( 'atum-menu-popover-item-clicked', [ this.$menuButton.closest( 'tr' ), $menuItem.data( 'name' ), $menuItem.attr( 'href' ) ] );
 
 		} );
 
