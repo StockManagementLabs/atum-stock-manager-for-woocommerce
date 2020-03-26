@@ -82,7 +82,7 @@ export default class EditPopovers {
 				// Once set, destroy the opened popover.
 				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
 				
-				$editField.trigger( 'atum-ui-popover-set-value', [ $valueInput, newValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
+				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
 				
 			})
 			
