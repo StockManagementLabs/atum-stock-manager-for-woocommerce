@@ -4515,9 +4515,8 @@ div.add_note #add_atum_order_note {
 #atum_order_items .atum_order_items_wrapper table.atum_order_items td.thumb .atum-order-item-thumbnail {
   width: 38px;
   height: 38px;
-  border: 2px solid #e9ecef;
-  background: #f9f9f9;
-  color: #ccc;
+  background: #e9ecef;
+  color: #6c757d;
   position: relative;
   font-size: 21px;
   display: block;

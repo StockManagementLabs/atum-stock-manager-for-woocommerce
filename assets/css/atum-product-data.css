@@ -3106,6 +3106,10 @@ body .select2-container--default .select2-results__group {
   z-index: 1;
 }
 
+.btn-group > .btn.active {
+  cursor: default;
+}
+
 .btn-group .btn + .btn,
 .btn-group .btn + .btn-group,
 .btn-group .btn-group + .btn,
