@@ -244,7 +244,6 @@ export default class ListTable {
 			      format: string    = this.settings.get('currencyFormat');
 			
 			let numericValue: number = parseFloat( value );
-			console.log(numericValue);
 			
 			value = <string>Utils.formatMoney( numericValue, symbol, precision, thousand, decimal, format);
 			
