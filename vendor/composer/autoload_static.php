@@ -197,6 +197,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\StockCentral\\Lists\\ListTable' => __DIR__ . '/../..' . '/classes/StockCentral/Lists/ListTable.php',
         'Atum\\StockCentral\\Lists\\UncontrolledListTable' => __DIR__ . '/../..' . '/classes/StockCentral/Lists/UncontrolledListTable.php',
         'Atum\\StockCentral\\StockCentral' => __DIR__ . '/../..' . '/classes/StockCentral/StockCentral.php',
+        'Atum\\Suppliers\\Supplier' => __DIR__ . '/../..' . '/classes/Suppliers/Supplier.php',
         'Atum\\Suppliers\\Suppliers' => __DIR__ . '/../..' . '/classes/Suppliers/Suppliers.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',

@@ -131,6 +131,7 @@ return array(
     'Atum\\StockCentral\\Lists\\ListTable' => $baseDir . '/classes/StockCentral/Lists/ListTable.php',
     'Atum\\StockCentral\\Lists\\UncontrolledListTable' => $baseDir . '/classes/StockCentral/Lists/UncontrolledListTable.php',
     'Atum\\StockCentral\\StockCentral' => $baseDir . '/classes/StockCentral/StockCentral.php',
+    'Atum\\Suppliers\\Supplier' => $baseDir . '/classes/Suppliers/Supplier.php',
     'Atum\\Suppliers\\Suppliers' => $baseDir . '/classes/Suppliers/Suppliers.php',
     'DeepCopy\\DeepCopy' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
     'DeepCopy\\Exception\\CloneException' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',

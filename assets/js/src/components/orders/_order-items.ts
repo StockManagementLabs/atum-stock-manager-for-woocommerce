@@ -362,7 +362,7 @@ export default class AtumOrderItems {
 				taxes = this.calcTaxesFromBase( purchasePrice, rates );
 
 				if ( taxes ) {
-					purchasePriceTxt = `${ purchasePrice + taxes } (${ purchasePrice } + ${ taxes }${ this.settings.get( 'taxes_name' ) })`;
+					purchasePriceTxt = `${ purchasePrice + taxes } (${ purchasePrice } + ${ taxes } ${ this.settings.get( 'taxes_name' ) })`;
 					purchasePrice += taxes;
 				}
 
