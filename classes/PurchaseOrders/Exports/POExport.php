@@ -201,7 +201,7 @@ class POExport extends PurchaseOrder {
 	/**
 	 * Getter for the company's Tax/VAT number
 	 *
-	 * @since 1.6.11
+	 * @since 1.7.0
 	 *
 	 * @return string
 	 */

@@ -1904,7 +1904,7 @@ abstract class AtumOrderModel {
 	/**
 	 * Calculate fees for all line items.
 	 *
-	 * @since 1.6.11
+	 * @since 1.7.0
 	 *
 	 * @return float Fee total.
 	 */
