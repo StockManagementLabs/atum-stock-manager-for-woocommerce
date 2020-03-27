@@ -317,7 +317,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( "Override 'Out of stock' Status", ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "When enabled, the variations' stock status will be displayed in WooCommerce products' list for variable products. This overrides the 'Out of stock' status displayed by WooCommerce, when stock is managed at product level for variable products.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabled, the variations' stock status will be displayed in WooCommerce products' list (admin side) for variable products. This overrides the 'Out of stock' status displayed by WooCommerce, when stock is managed at product level for variable products.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
