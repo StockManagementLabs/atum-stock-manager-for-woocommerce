@@ -1157,7 +1157,14 @@ abstract class AtumOrderPostType {
 	 */
 	public function maybe_delete_atum_order( $check, $post, $force_delete ) {
 
-		if ( in_array( $post->post_type, [ InventoryLogs::POST_TYPE, PurchaseOrders::POST_TYPE ], TRUE ) ) {
+		if ( static::POST_TYPE === $post->post_type ) {
+
+			global $pagenow;
+
+			// Id the page is edit.php, it's a 'Delete permanently' action.
+			if ( 'edit.php' === $pagenow ) {
+				$force_delete = TRUE;
+			}
 
 			// Avoid cyclical calls to this method.
 			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
