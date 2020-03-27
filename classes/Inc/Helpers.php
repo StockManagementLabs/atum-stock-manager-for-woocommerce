@@ -2146,7 +2146,7 @@ final class Helpers {
                 LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
                 LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND pm.meta_key = '_stock')
                 WHERE p.post_status IN ('publish', 'future', 'private')
-                AND ap.out_stock_threshold > 0 AND ap.out_stock_threshold >= pm.meta_value
+                AND ap.out_stock_threshold > 0
                 AND p.post_type IN ('product', 'product_variation');
             " );
 			// phpcs:enable
