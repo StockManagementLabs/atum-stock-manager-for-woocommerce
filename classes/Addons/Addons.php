@@ -787,6 +787,19 @@ class Addons {
 	}
 
 	/**
+	 * Check whether the specified add-on is active (so installed + enabled + meeting all the minimum requirements)
+	 *
+	 * @since 1.7.0
+	 *
+	 * @param string $addon_name
+	 *
+	 * @return bool
+	 */
+	public static function is_addon_active( $addon_name ) {
+		return isset( self::$addons[ $addon_name ] );
+	}
+
+	/**
 	 * Checks if there is a valid key installed in the current site
 	 *
 	 * @since 1.4.1.2
