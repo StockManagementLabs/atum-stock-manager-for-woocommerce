@@ -35,7 +35,14 @@ export default class AtumOrderItems {
 			.on( 'click', 'button.add-atum-order-item-meta', (evt: JQueryEventObject) => this.addItemMeta(evt) )
 			.on( 'click', 'button.remove-atum-order-item-meta', (evt: JQueryEventObject) => this.removeItemMeta(evt) )
 			.on( 'click', 'button.set-purchase-price', (evt: JQueryEventObject) => this.setPurchasePrice(evt) );
-		
+
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window['atum'] = {};
+		}
+
+		window['atum']['AtumOrderItems'] = this;
 		
 	}
 	
