@@ -2127,6 +2127,8 @@ final class Helpers {
 					do_action( 'woocommerce_product_set_stock', $product );
 				}
 
+				$product->set_atum_stock_status( $product->get_stock_status() );
+
 			}
 
 			$product->save();
