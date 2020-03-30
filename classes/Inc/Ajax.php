@@ -1819,7 +1819,8 @@ final class Ajax {
 								 *
 								 * @var \WC_Order_Item_Product $item
 								 */
-								$log_item = $atum_order->add_product( $item->get_product(), $item->get_quantity() );
+								$product  = Helpers::get_atum_product( $item->get_product() );
+								$log_item = $atum_order->add_product( $product, $item->get_quantity() );
 							}
 							elseif ( $item instanceof \WC_Order_Item_Fee ) {
 								/**
