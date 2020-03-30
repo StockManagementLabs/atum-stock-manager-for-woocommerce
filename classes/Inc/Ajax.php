@@ -2190,6 +2190,7 @@ final class Ajax {
 				'description'   => $marketing_popup->get_description(),
 				'version'       => $marketing_popup->get_version(),
 				'buttons'       => $marketing_popup->get_buttons(),
+				'hoverButtons'  => $marketing_popup->get_buttons_hover_style_block(),
 				'images'        => $marketing_popup->get_images(),
 				'footerNotice'  => $marketing_popup->get_footer_notice(),
 				'transient_key' => $marketing_popup->get_transient_key(),

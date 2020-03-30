@@ -78,10 +78,10 @@ defined( 'ABSPATH' ) || die;
 						</div>
 					<?php endif; ?>
 				</div>
-
 				<div class="content-buttons">
 					<?php $buttons = $marketing_popup->get_buttons(); ?>
 					<?php if ( ! empty( $buttons ) ) :
+						echo $marketing_popup->get_buttons_hover_style_block(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						foreach ( $buttons as $button ) : ?>
 							<button data-url="<?php echo esc_attr( $button->url ); ?>" class="<?php echo esc_attr( $button->class ); ?> banner-button" style="<?php echo esc_attr( $button->css ); ?>"><?php echo esc_attr( $button->text ); ?></button>
 						<?php endforeach;

@@ -5349,7 +5349,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   border: 1px solid;
 }
 
-.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button:first-child {
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-buttons button:first-of-type {
   margin-bottom: 10px;
 }
 

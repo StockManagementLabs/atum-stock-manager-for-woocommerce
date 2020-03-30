@@ -38,6 +38,7 @@ interface MPopupSettings {
 	description: MPopupText;
 	version?: MPopupLabel;
 	buttons?: MPopupButton[];
+	hoverButtons?: string;
 	images: any;
 	footerNotice?: MPopupFooterNotice;
 	transient_key: string;
@@ -86,6 +87,7 @@ export default class MarketingPopup {
 					    titleAlign: string          = popupSettings.title.text_align ? `text-align:${ popupSettings.title.text_align };` : '',
 					    title: string,
 					    buttons: string             = '',
+					    hoverButtons                = popupSettings.hoverButtons || '',
 					    imageTopLeft: string        = popupSettings.images.top_left,
 					    logo: string                = `<img class="mp-logo" src="${ popupSettings.images.logo }">`,
 					    footerNoticeStyle: string   = popupSettings.footerNotice.bg_color ? ` style="background-color:${ popupSettings.footerNotice.bg_color };"` : '',
@@ -100,10 +102,14 @@ export default class MarketingPopup {
 					title = `<h1 style="${ titleColor + titleFontSize + titleAlign }"><span>${ popupSettings.title.text + version }</span></h1>`
 					
 					// Add buttons.
-					if (popupSettings.buttons && popupSettings.buttons.length) {
-						popupSettings.buttons.forEach( (button: MPopupButton) => {
-							buttons += `<button data-url="${ button.url }" class="${ button.class } popup-button" style="${ button.css }">${ button.text }</button>`
-						});
+					if ( popupSettings.buttons && popupSettings.buttons.length ) {
+						if ( hoverButtons ) {
+
+							$( hoverButtons ).appendTo( 'body' );
+						}
+						popupSettings.buttons.forEach( ( button: MPopupButton ) => {
+							buttons += `<button data-url="${ button.url }" class="${ button.class } popup-button" style="${ button.css }">${ button.text }</button>`;
+						} );
 					}
 					
 					this.swal({

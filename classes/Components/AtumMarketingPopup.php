@@ -276,6 +276,38 @@ class AtumMarketingPopup {
 	}
 
 	/**
+	 * Generate the css block for buttons
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return string
+	 */
+	public function get_buttons_hover_style_block() {
+
+		$css = '';
+
+		$hovered_buttons = array_filter( $this->buttons, function ( $button ) {
+
+			return ! empty( $button->hover );
+		} );
+
+		if ( $hovered_buttons ) {
+
+			$css .= '<style type="text/css">';
+			foreach ( $hovered_buttons as $hovered_button ) {
+
+				$css .= '.' . implode( '.', explode( ' ', $hovered_button->class ) ) . ':hover';
+				$css .= "{ {$hovered_button->hover} }";
+
+			}
+
+			$css .= '</style>';
+		}
+
+		return $css;
+	}
+
+	/**
 	 * Getter for the images
 	 *
 	 * @since 1.5.3

@@ -41,13 +41,14 @@
 			"text"      : "Buy Now",
 			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
 			"class"     : "btn btn-sm btn-warning",
-			"css"       : "width:130px;background-color:#9357CC"
+			"css"       : "width:130px;background-color:#9357CC;border-color:#9357CC"
 		},
 		{
 			"text"      : "The Changelog",
 			"url"       : "https://www.stockmanagementlabs.com/the-changelog/",
 			"class"     : "btn btn-sm btn-outline-warning",
-			"css"       : "width:130px;color:#9357CC;border-color:#9357CC"
+			"css"       : "width:130px;color:#9357CC;border-color:#9357CC",
+			"hover"     : "background-color:#9357CC;color:var(--wp-yiq-text-light)!important;"
 		}
 	],
 	"transient_key": "atum-product-levels-update"
