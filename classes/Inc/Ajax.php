@@ -1865,7 +1865,13 @@ final class Ajax {
 					}
 
 				}
+				else {
+					wp_send_json_error( array( 'error' => __( 'The order is empty', ATUM_TEXT_DOMAIN ) ) );
+				}
 
+			}
+			else {
+				wp_send_json_error( array( 'error' => __( 'The order doesn\t exist', ATUM_TEXT_DOMAIN ) ) );
 			}
 
 		}
