@@ -4,8 +4,9 @@
  *
  * @since 1.2.4
  *
- * @var \WC_Order_Item $item
- * @var int            $item_id
+ * @var \Atum\Components\AtumOrders\Models\AtumOrderModel      $atum_order
+ * @var \Atum\Components\AtumOrders\Items\AtumOrderItemProduct $item
+ * @var int                                                    $item_id
  */
 
 defined( 'ABSPATH' ) || die;
@@ -82,7 +83,7 @@ $meta_data = $item->get_formatted_meta_data( '' );
 			<tr>
 				<td colspan="4">
 					<button class="add-atum-order-item-meta button"><?php esc_html_e( 'Add&nbsp;meta', ATUM_TEXT_DOMAIN ) ?></button>
-					<?php do_action( 'atum/atum_order/item_meta_controls', $item ) ?>
+					<?php do_action( 'atum/atum_order/item_meta_controls', $item, $atum_order ) ?>
 				</td>
 			</tr>
 		</tfoot>
