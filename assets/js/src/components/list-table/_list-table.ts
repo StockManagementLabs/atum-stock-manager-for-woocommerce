@@ -25,6 +25,13 @@ export default class ListTable {
 		
 		// Bind events.
 		this.events();
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window['atum'] = {};
+		}
+
+		window['atum']['ListTable'] = this;
 		
 	}
 	
