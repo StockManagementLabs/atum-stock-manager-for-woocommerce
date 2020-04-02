@@ -816,9 +816,7 @@ class Wpml {
 	 */
 	public function where_add_icl_translations( $where_clause, $product_type = '', $post_types = [] ) {
 		
-		/* @noinspection PhpUndefinedMethodInspection */
-		$lang          = self::$sitepress->get_default_language();
-		$where_clause .= " AND tr.language_code = '{$lang}'";
+		$where_clause .= ' AND tr.source_language_code IS NULL';
 		
 		return $where_clause;
 		
