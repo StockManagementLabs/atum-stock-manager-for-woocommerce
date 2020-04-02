@@ -16,6 +16,8 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
+use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\Exports\POExport;
@@ -156,7 +158,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		}
 
 		// Add the button for setting the purchase price to products within POs.
-		add_action( 'atum/atum_order/item_meta_controls', array( $this, 'set_purchase_price_button' ) );
+		add_action( 'atum/atum_order/item_meta_controls', array( $this, 'set_purchase_price_button' ), 10, 2 );
 
 		// Maybe change product stock when order status change.
 		add_action( 'atum/orders/status_atum_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
@@ -685,11 +687,16 @@ class PurchaseOrders extends AtumOrderPostType {
 	/**
 	 * Add the button for setting the purchase price to products within POs
 	 *
-	 * @since 1.3.0
+	 * @param AtumOrderItemProduct $item
+	 * @param AtumOrderModel       $atum_order
 	 *
-	 * @param \WC_Product $item
+	 * @since 1.3.0
 	 */
-	public function set_purchase_price_button( $item ) {
+	public function set_purchase_price_button( $item, $atum_order ) {
+
+		if ( ! $atum_order instanceof PurchaseOrder ) {
+			return;
+		}
 
 		if ( 'line_item' === $item->get_type() ) : ?>
 			<button type="button" class="button set-purchase-price"><?php esc_attr_e( 'Set purchase price', ATUM_TEXT_DOMAIN ); ?></button>
