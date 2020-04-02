@@ -4789,7 +4789,7 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
   font-family: "atum-icon-font";
-  content: "";
+  content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .shipping_method_name, #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .shipping_method {
