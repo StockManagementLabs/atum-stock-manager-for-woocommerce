@@ -24,6 +24,16 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-duplicate {
+	&:before {
+		content: $atmi-duplicate;
+	}
+}
+.atmi-shipping {
+	&:before {
+		content: $atmi-shipping;
+	}
+}
 .atmi-export {
 	&:before {
 		content: $atmi-export;

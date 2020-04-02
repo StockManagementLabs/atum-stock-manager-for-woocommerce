@@ -2358,6 +2358,14 @@ body .select2-container--default .select2-results__group {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-duplicate:before {
+  content: "";
+}
+
+.atmi-shipping:before {
+  content: "";
+}
+
 .atmi-export:before {
   content: "󩣚";
 }

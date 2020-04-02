@@ -1107,6 +1107,14 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-duplicate:before {
+  content: "";
+}
+
+.atmi-shipping:before {
+  content: "";
+}
+
 .atmi-export:before {
   content: "󩣚";
 }
