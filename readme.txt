@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.0.0
-Stable tag: 1.6.10
+WC tested up to: 4.0.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,50 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.0`
+
+*2020-04-03*
+
+**Features**
+
+* Added fee totals column to ATUM Order totals.
+* Added VAT number to POs PDF.
+* Added support for button groups to UI Popovers.
+* Added support for "none" label as data attribute in UIPopovers component.
+* Added menu popover JS component.
+* Added editorconfg file.
+* Added new method to check whether an ATUM add-on is active.
+
+**Changes**
+
+* Added get_total_fees method to ATUM orders.
+* Added ATUM cache for WPML's original post id queries.
+* Show the default cursor on button groups' checked items.
+* Add taxes to PO's "Set Purchase price" if prices are set with taxes.
+* Make the AtumOrderItems JS component as globally available.
+* Update the "atum_stock_status" when the ATUM's Out of Stock Threshold option changes.
+* Add CSS hover button support to the marketing popup.
+* Added ListTable to the global scope for reusing it from our add-ons.
+* Updated icons font.
+* Changed shipping icon in ATUM orders.
+
+**Fixes**
+
+* Fixed marketing popup not showing on POs list.
+* Fixed country/state field not being saved on ATUM Settings.
+* Fixed possible casting errors when summing an empty string on ATUM Orders.
+* Fixed Utils' formatNumber rounding off the decimals.
+* Fixed product not changing the stock status when enabling/disabling the ATUM's Out of Stock Threshold option.
+* Fixed the first PO wasn't deleted permanently from bulk actions.
+* Fixed products were loaded without the ATUM models when linking Orders to Inventory Logs.
+* Fixed browser console's error shown when adding an empty WC Order to an Inventory Log.
+* Fixed "Set purchase price" buttons being shown in Inventory Logs.
+* Fixed wrong WPML language filtering in ATUM ajax searches.
+* CSS fixes.
+* Refactory.
 
 ---
 
