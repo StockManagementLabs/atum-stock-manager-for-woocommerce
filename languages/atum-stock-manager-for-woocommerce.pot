@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2020-03-27 12:08+0100\n"
+"POT-Creation-Date: 2020-04-03 10:08+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Be Rebel <contact@stockmanagementlabs.com>\n"
@@ -146,15 +146,15 @@ msgstr ""
 msgid "The ATUM %s addon was installed successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:826
+#: classes/Addons/Addons.php:839
 msgid "Open a private ticket"
 msgstr ""
 
-#: classes/Addons/Addons.php:826
+#: classes/Addons/Addons.php:839
 msgid "Premium Support"
 msgstr ""
 
-#: classes/Addons/Addons.php:846 classes/Addons/Addons.php:854
+#: classes/Addons/Addons.php:859 classes/Addons/Addons.php:867
 #: classes/Api/AtumApi.php:125 classes/Api/AtumApi.php:132
 #: classes/Api/Extenders/AtumProductData.php:628
 #: classes/Api/Extenders/AtumProductData.php:635 classes/Bootstrap.php:282
@@ -163,23 +163,23 @@ msgstr ""
 #: classes/Components/AtumColors.php:1027 classes/Components/AtumColors.php:1034
 #: classes/Components/AtumLogs/AtumLogs.php:80
 #: classes/Components/AtumLogs/AtumLogs.php:87
-#: classes/Components/AtumMarketingPopup.php:360
-#: classes/Components/AtumMarketingPopup.php:367
+#: classes/Components/AtumMarketingPopup.php:392
+#: classes/Components/AtumMarketingPopup.php:399
 #: classes/Components/AtumOrders/AtumComments.php:181
 #: classes/Components/AtumOrders/AtumComments.php:188
 #: classes/Components/AtumQueues.php:131 classes/Components/AtumQueues.php:140
 #: classes/Dashboard/Dashboard.php:482 classes/Dashboard/Dashboard.php:489
 #: classes/InboundStock/InboundStock.php:160
-#: classes/InboundStock/InboundStock.php:168 classes/Inc/Ajax.php:2275
-#: classes/Inc/Ajax.php:2282 classes/Inc/Hooks.php:1049 classes/Inc/Hooks.php:1056
+#: classes/InboundStock/InboundStock.php:168 classes/Inc/Ajax.php:2283
+#: classes/Inc/Ajax.php:2290 classes/Inc/Hooks.php:1049 classes/Inc/Hooks.php:1056
 #: classes/Inc/Main.php:528 classes/Inc/Main.php:535
 #: classes/InventoryLogs/InventoryLogs.php:566
 #: classes/InventoryLogs/InventoryLogs.php:573
 #: classes/MetaBoxes/ProductDataMetaBoxes.php:596
 #: classes/MetaBoxes/ProductDataMetaBoxes.php:603
 #: classes/Modules/ModuleManager.php:198 classes/Modules/ModuleManager.php:205
-#: classes/PurchaseOrders/PurchaseOrders.php:863
-#: classes/PurchaseOrders/PurchaseOrders.php:870 classes/Settings/Settings.php:1327
+#: classes/PurchaseOrders/PurchaseOrders.php:870
+#: classes/PurchaseOrders/PurchaseOrders.php:877 classes/Settings/Settings.php:1327
 #: classes/Settings/Settings.php:1335 classes/Settings/Tools.php:136
 #: classes/Settings/Tools.php:144 classes/StockCentral/StockCentral.php:369
 #: classes/StockCentral/StockCentral.php:376 classes/Suppliers/Suppliers.php:584
@@ -1096,11 +1096,11 @@ msgstr ""
 msgid "Invalid tool ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/ToolsController.php:440 classes/Inc/Ajax.php:2140
+#: classes/Api/Controllers/V3/ToolsController.php:440 classes/Inc/Ajax.php:2147
 msgid "All your previously saved values were cleared successfully."
 msgstr ""
 
-#: classes/Api/Controllers/V3/ToolsController.php:443 classes/Inc/Ajax.php:2143
+#: classes/Api/Controllers/V3/ToolsController.php:443 classes/Inc/Ajax.php:2150
 msgid "Something failed clearing the Out of Stock Threshold values"
 msgstr ""
 
@@ -1850,7 +1850,7 @@ msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:605
 #: classes/InventoryLogs/InventoryLogs.php:283
-#: classes/PurchaseOrders/PurchaseOrders.php:259
+#: classes/PurchaseOrders/PurchaseOrders.php:261
 #: views/help-tabs/inventory-logs/columns.php:44
 #: views/help-tabs/purchase-orders/columns.php:63
 msgid "Actions"
@@ -1891,12 +1891,12 @@ msgid "You cannot add the same tax rate twice!"
 msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:895
-#: views/meta-boxes/atum-order/item-meta.php:71
+#: views/meta-boxes/atum-order/item-meta.php:72
 msgid "Name (required)"
 msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:896
-#: views/meta-boxes/atum-order/item-meta.php:72
+#: views/meta-boxes/atum-order/item-meta.php:73
 msgid "Value (required)"
 msgstr ""
 
@@ -1972,12 +1972,12 @@ msgstr ""
 msgid "Log #"
 msgstr ""
 
-#: classes/Components/AtumOrders/AtumOrderPostType.php:1219
+#: classes/Components/AtumOrders/AtumOrderPostType.php:1226
 msgctxt "ATUM Order status"
 msgid "Pending"
 msgstr ""
 
-#: classes/Components/AtumOrders/AtumOrderPostType.php:1220
+#: classes/Components/AtumOrders/AtumOrderPostType.php:1227
 msgctxt "ATUM Order status"
 msgid "Completed"
 msgstr ""
@@ -2327,7 +2327,7 @@ msgstr ""
 
 #: classes/InboundStock/InboundStock.php:126
 #: classes/InventoryLogs/InventoryLogs.php:472
-#: classes/PurchaseOrders/PurchaseOrders.php:461
+#: classes/PurchaseOrders/PurchaseOrders.php:463
 msgid "Columns"
 msgstr ""
 
@@ -2363,14 +2363,14 @@ msgid "Date Ordered"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:79
-#: classes/PurchaseOrders/PurchaseOrders.php:257
+#: classes/PurchaseOrders/PurchaseOrders.php:259
 #: views/help-tabs/inbound-stock/columns.php:44
 #: views/help-tabs/purchase-orders/columns.php:55
 msgid "Date Expected"
 msgstr ""
 
 #: classes/InboundStock/Lists/ListTable.php:80
-#: classes/PurchaseOrders/PurchaseOrders.php:253
+#: classes/PurchaseOrders/PurchaseOrders.php:255
 #: views/help-tabs/inbound-stock/columns.php:48
 #: views/help-tabs/purchase-orders/columns.php:20
 msgid "PO"
@@ -2515,18 +2515,18 @@ msgstr ""
 msgid "Invalid data provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1703 classes/PurchaseOrders/PurchaseOrders.php:838
+#: classes/Inc/Ajax.php:1703 classes/PurchaseOrders/PurchaseOrders.php:845
 #, php-format
 msgid "Item %1$s stock %2$s from %3$s to %4$s."
 msgstr ""
 
 #: classes/Inc/Ajax.php:1705 classes/Inc/Ajax.php:1726
-#: classes/PurchaseOrders/PurchaseOrders.php:840
+#: classes/PurchaseOrders/PurchaseOrders.php:847
 msgid "increased"
 msgstr ""
 
 #: classes/Inc/Ajax.php:1705 classes/Inc/Ajax.php:1726
-#: classes/PurchaseOrders/PurchaseOrders.php:840
+#: classes/PurchaseOrders/PurchaseOrders.php:847
 msgid "decreased"
 msgstr ""
 
@@ -2540,43 +2540,51 @@ msgstr ""
 msgid "Product not found"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1921 classes/Inc/Ajax.php:1957
+#: classes/Inc/Ajax.php:1869
+msgid "The order is empty"
+msgstr ""
+
+#: classes/Inc/Ajax.php:1874
+msgid "The order doesn\\t exist"
+msgstr ""
+
+#: classes/Inc/Ajax.php:1928 classes/Inc/Ajax.php:1964
 msgid "No parent ID specified"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1925
+#: classes/Inc/Ajax.php:1932
 msgid "Please, choose a status from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1931 classes/Inc/Ajax.php:1967
+#: classes/Inc/Ajax.php:1938 classes/Inc/Ajax.php:1974
 msgid "Invalid parent product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1941 classes/Inc/Ajax.php:1979
+#: classes/Inc/Ajax.php:1948 classes/Inc/Ajax.php:1986
 msgid "All the variations were updated successfully"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1961
+#: classes/Inc/Ajax.php:1968
 msgid "Please specify a valid supplier"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1997 classes/Inc/Ajax.php:2053
+#: classes/Inc/Ajax.php:2004 classes/Inc/Ajax.php:2060
 msgid "No valid product ID provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2007
+#: classes/Inc/Ajax.php:2014
 msgid "No Locations were set for this product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2084 classes/Inc/Ajax.php:2111
+#: classes/Inc/Ajax.php:2091 classes/Inc/Ajax.php:2118
 msgid "Please select an option from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2094
+#: classes/Inc/Ajax.php:2101
 msgid "Something failed changing the Manage Stock option"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2121
+#: classes/Inc/Ajax.php:2128
 msgid "Something failed changing the Control Stock option"
 msgstr ""
 
@@ -2852,7 +2860,7 @@ msgid "Add New Log"
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:93
-#: classes/PurchaseOrders/PurchaseOrders.php:100
+#: classes/PurchaseOrders/PurchaseOrders.php:102
 #: classes/Suppliers/Suppliers.php:138
 msgid "Edit"
 msgstr ""
@@ -2925,7 +2933,7 @@ msgid "Log"
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:278
-#: classes/PurchaseOrders/PurchaseOrders.php:255
+#: classes/PurchaseOrders/PurchaseOrders.php:257
 msgid "Status"
 msgstr ""
 
@@ -2935,7 +2943,7 @@ msgid "Type"
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:280
-#: classes/PurchaseOrders/PurchaseOrders.php:254
+#: classes/PurchaseOrders/PurchaseOrders.php:256
 #: views/help-tabs/inventory-logs/columns.php:32
 #: views/help-tabs/purchase-orders/columns.php:24
 msgid "Date"
@@ -2948,7 +2956,7 @@ msgid "Order"
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:282
-#: classes/PurchaseOrders/PurchaseOrders.php:258
+#: classes/PurchaseOrders/PurchaseOrders.php:260
 #: views/help-tabs/inventory-logs/columns.php:40
 #: views/help-tabs/purchase-orders/columns.php:59
 #: views/meta-boxes/atum-order/items.php:67
@@ -2998,12 +3006,12 @@ msgid "Log updated."
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:383
-#: classes/PurchaseOrders/PurchaseOrders.php:353
+#: classes/PurchaseOrders/PurchaseOrders.php:355
 msgid "Custom field updated."
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:384
-#: classes/PurchaseOrders/PurchaseOrders.php:354
+#: classes/PurchaseOrders/PurchaseOrders.php:356
 msgid "Custom field deleted."
 msgstr ""
 
@@ -3026,7 +3034,7 @@ msgid "Log scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
 #: classes/InventoryLogs/InventoryLogs.php:392
-#: classes/PurchaseOrders/PurchaseOrders.php:362
+#: classes/PurchaseOrders/PurchaseOrders.php:364
 msgid "M j, Y @ G:i"
 msgstr ""
 
@@ -3122,7 +3130,7 @@ msgid "Enables/Disables the Inventory Logs module."
 msgstr ""
 
 #: classes/Modules/ModuleManager.php:123
-#: classes/PurchaseOrders/PurchaseOrders.php:95
+#: classes/PurchaseOrders/PurchaseOrders.php:97
 msgid "Purchase Orders"
 msgstr ""
 
@@ -3163,75 +3171,75 @@ msgctxt "PO date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:97
+#: classes/PurchaseOrders/PurchaseOrders.php:99
 msgctxt " post type singular name"
 msgid "Purchase Order"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:98
-#: classes/PurchaseOrders/PurchaseOrders.php:99
+#: classes/PurchaseOrders/PurchaseOrders.php:100
+#: classes/PurchaseOrders/PurchaseOrders.php:101
 msgid "Add New PO"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:101
+#: classes/PurchaseOrders/PurchaseOrders.php:103
 msgid "Edit PO"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:102
+#: classes/PurchaseOrders/PurchaseOrders.php:104
 msgid "New PO"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:103
-#: classes/PurchaseOrders/PurchaseOrders.php:104
+#: classes/PurchaseOrders/PurchaseOrders.php:105
+#: classes/PurchaseOrders/PurchaseOrders.php:106
 msgid "View PO"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:105
+#: classes/PurchaseOrders/PurchaseOrders.php:107
 msgid "Search POs"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:106
+#: classes/PurchaseOrders/PurchaseOrders.php:108
 msgid "No purchase orders found"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:107
+#: classes/PurchaseOrders/PurchaseOrders.php:109
 msgid "No purchase orders found in trash"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:108
+#: classes/PurchaseOrders/PurchaseOrders.php:110
 msgid "Parent purchase order"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:109
+#: classes/PurchaseOrders/PurchaseOrders.php:111
 msgctxt "Admin menu name"
 msgid "Purchase Orders"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:110
+#: classes/PurchaseOrders/PurchaseOrders.php:112
 msgid "Filter purchase orders"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:111
+#: classes/PurchaseOrders/PurchaseOrders.php:113
 msgid "Purchase orders navigation"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:112
+#: classes/PurchaseOrders/PurchaseOrders.php:114
 msgid "Purchase orders list"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:117
+#: classes/PurchaseOrders/PurchaseOrders.php:119
 msgid "PO Data"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:118
+#: classes/PurchaseOrders/PurchaseOrders.php:120
 msgid "PO Notes"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:119
+#: classes/PurchaseOrders/PurchaseOrders.php:121
 msgid "PO Actions"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:256
+#: classes/PurchaseOrders/PurchaseOrders.php:258
 #: classes/StockCentral/Lists/ListTable.php:308
 #: classes/StockCentral/Lists/UncontrolledListTable.php:52
 #: views/help-tabs/purchase-orders/columns.php:51
@@ -3242,118 +3250,118 @@ msgstr ""
 msgid "Supplier"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:323
+#: classes/PurchaseOrders/PurchaseOrders.php:325
 #, php-format
 msgid "%s PO updated."
 msgid_plural "%s POs updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:325
+#: classes/PurchaseOrders/PurchaseOrders.php:327
 #, php-format
 msgid "%s PO not updated, somebody is editing it."
 msgid_plural "%s POs not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:327
+#: classes/PurchaseOrders/PurchaseOrders.php:329
 #, php-format
 msgid "%s PO permanently deleted."
 msgid_plural "%s POs permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:329
+#: classes/PurchaseOrders/PurchaseOrders.php:331
 #, php-format
 msgid "%s PO moved to the Trash."
 msgid_plural "%s POs moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:331
+#: classes/PurchaseOrders/PurchaseOrders.php:333
 #, php-format
 msgid "%s PO restored from the Trash."
 msgid_plural "%s POs restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:352
-#: classes/PurchaseOrders/PurchaseOrders.php:355
-#: classes/PurchaseOrders/PurchaseOrders.php:358
+#: classes/PurchaseOrders/PurchaseOrders.php:354
+#: classes/PurchaseOrders/PurchaseOrders.php:357
+#: classes/PurchaseOrders/PurchaseOrders.php:360
 msgid "PO updated."
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:357
+#: classes/PurchaseOrders/PurchaseOrders.php:359
 #, php-format
 msgid "PO restored to revision from %s"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:359
+#: classes/PurchaseOrders/PurchaseOrders.php:361
 msgid "PO saved."
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:360
+#: classes/PurchaseOrders/PurchaseOrders.php:362
 msgid "PO submitted."
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:362
+#: classes/PurchaseOrders/PurchaseOrders.php:364
 #, php-format
 msgid "PO scheduled for: <strong>%1$s</strong>."
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:363
+#: classes/PurchaseOrders/PurchaseOrders.php:365
 msgid "PO draft updated."
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:364
+#: classes/PurchaseOrders/PurchaseOrders.php:366
 msgid "PO updated and email sent."
-msgstr ""
-
-#: classes/PurchaseOrders/PurchaseOrders.php:438
-msgctxt "ATUM Purchase Order status"
-msgid "Pending"
-msgstr ""
-
-#: classes/PurchaseOrders/PurchaseOrders.php:439
-msgctxt "ATUM Purchase Order status"
-msgid "Ordered"
 msgstr ""
 
 #: classes/PurchaseOrders/PurchaseOrders.php:440
 msgctxt "ATUM Purchase Order status"
-msgid "On the Way In"
+msgid "Pending"
 msgstr ""
 
 #: classes/PurchaseOrders/PurchaseOrders.php:441
 msgctxt "ATUM Purchase Order status"
-msgid "Receiving"
+msgid "Ordered"
 msgstr ""
 
 #: classes/PurchaseOrders/PurchaseOrders.php:442
 msgctxt "ATUM Purchase Order status"
+msgid "On the Way In"
+msgstr ""
+
+#: classes/PurchaseOrders/PurchaseOrders.php:443
+msgctxt "ATUM Purchase Order status"
+msgid "Receiving"
+msgstr ""
+
+#: classes/PurchaseOrders/PurchaseOrders.php:444
+msgctxt "ATUM Purchase Order status"
 msgid "Received"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:501
+#: classes/PurchaseOrders/PurchaseOrders.php:503
 #: views/meta-boxes/atum-order/actions.php:38
 msgid "Generate PDF"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:569
+#: classes/PurchaseOrders/PurchaseOrders.php:571
 #: views/meta-boxes/purchase-order/data.php:26
 #: views/reports/purchase-order-html.php:30
 msgid "Purchase Order"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:681
+#: classes/PurchaseOrders/PurchaseOrders.php:683
 msgid "Add to Stock"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:695
+#: classes/PurchaseOrders/PurchaseOrders.php:702
 msgid "Set purchase price"
 msgstr ""
 
-#: classes/PurchaseOrders/PurchaseOrders.php:716
+#: classes/PurchaseOrders/PurchaseOrders.php:723
 #, php-format
 msgid "Only products linked to '%s' supplier can be searched."
 msgstr ""
@@ -4712,12 +4720,12 @@ msgstr ""
 msgid "Delete item"
 msgstr ""
 
-#: views/meta-boxes/atum-order/item-meta.php:44
+#: views/meta-boxes/atum-order/item-meta.php:45
 #: views/reports/purchase-order-html.php:150
 msgid "Order ID"
 msgstr ""
 
-#: views/meta-boxes/atum-order/item-meta.php:84
+#: views/meta-boxes/atum-order/item-meta.php:85
 msgid "Add&nbsp;meta"
 msgstr ""
 
