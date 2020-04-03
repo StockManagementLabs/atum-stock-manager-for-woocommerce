@@ -1112,6 +1112,10 @@ body .select2-container--default .select2-results__group {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-save:before {
+  content: "";
+}
+
 .atmi-duplicate:before {
   content: "";
 }

@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-save {
+	&:before {
+		content: $atmi-save;
+	}
+}
 .atmi-duplicate {
 	&:before {
 		content: $atmi-duplicate;

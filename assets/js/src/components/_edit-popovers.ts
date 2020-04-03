@@ -73,7 +73,9 @@ export default class EditPopovers {
 				} );
 				
 				// Set the value to the related hidden input.
-				const $valueInput: JQuery = $fieldWrapper.find( 'input[type=hidden]' );
+				const $valueInput: JQuery       = $fieldWrapper.find( 'input[type=hidden]' ),
+				      oldValue: string | number = $valueInput.val();
+
 				$valueInput.val( newValue );
 				
 				// Set the field label.
@@ -82,7 +84,7 @@ export default class EditPopovers {
 				// Once set, destroy the opened popover.
 				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
 				
-				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
+				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
 				
 			})
 			
