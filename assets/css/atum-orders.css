@@ -4507,7 +4507,7 @@ div.add_note #add_atum_order_note {
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody tr:last-child td {
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #ced4da;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tbody tr:first-child td {
