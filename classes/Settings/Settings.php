@@ -1310,7 +1310,14 @@ class Settings {
 
 		}
 
-		return $this->options[ $option_key ];
+		if ( isset( $this->options[ $option_key ] ) ) {
+			return $this->options[ $option_key ];
+		}
+		elseif( $this->defaults[ $option_key ]['default'] ) {
+			return $this->defaults[ $option_key ]['default'];
+		}
+
+		return FALSE;
 
 	}
 
