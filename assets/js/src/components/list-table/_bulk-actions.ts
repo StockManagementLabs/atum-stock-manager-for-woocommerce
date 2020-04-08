@@ -8,6 +8,8 @@ import Settings from '../../config/_settings';
 import { Utils } from '../../utils/_utils';
 
 export default class BulkActions {
+
+	swal: any = window[ 'swal' ];
 	
 	constructor(
 		private settings: Settings,
@@ -20,13 +22,13 @@ export default class BulkActions {
 			//
 			// Apply Bulk Actions.
 			// -------------------
-			.on( 'click', '.apply-bulk-action', () => {
+			.on( 'click', '.apply-bulk-action', ( evt: JQueryEventObject ) => {
+
+				const $bulkButton: JQuery = $( evt.currentTarget );
 
 				if ( ! this.globals.$atumList.find( '.check-column input:checked' ).length ) {
 
-					const swal: any = window[ 'swal' ];
-
-					swal( {
+					this.swal( {
 						title             : this.settings.get( 'noItemsSelected' ),
 						text              : this.settings.get( 'selectItems' ),
 						type              : 'info',
@@ -36,7 +38,7 @@ export default class BulkActions {
 
 				}
 				else {
-					this.applyBulk();
+					this.applyBulk( $bulkButton );
 				}
 
 			} )
@@ -46,36 +48,39 @@ export default class BulkActions {
 			// ----------------------
 			.on( 'change', '.bulkactions select', ( evt: JQueryEventObject ) => {
 
-				this.updateBulkButton();
+				const $select: JQuery     = $( evt.currentTarget ),
+				      $bulkButton: JQuery = $select.siblings( '.apply-bulk-action' );
 
-				if ( $( evt.currentTarget ).val() !== '-1' ) {
-					$( '.apply-bulk-action' ).show();
+				this.updateBulkButton( $bulkButton );
+
+				if ( $select.val() !== '-1' ) {
+					$bulkButton.show();
 				}
 				else {
-					$( '.apply-bulk-action' ).hide();
+					$bulkButton.hide();
 				}
 
 			} )
 			
 			//
-			// Change the Bulk Button text when selecting boxes.
-			// -------------------------------------------------
-			.on( 'change', '.check-column input:checkbox', () => {
-				this.updateBulkButton();
-			} );
+			// Change the Bulk Buttons texts when selecting boxes.
+			// ---------------------------------------------------
+			.on( 'change', '.check-column input:checkbox', () => this.updateBulkButton( $( '.apply-bulk-action' ) ) );
 		
 	}
 	
 	/**
 	 * Apply a bulk action for the selected rows
+	 *
+	 * @param {JQuery} $bulkButton
 	 */
-	applyBulk() {
+	applyBulk( $bulkButton: JQuery ) {
 
-		let $bulkButton: JQuery     = $( '.apply-bulk-action' ),
-		    bulkAction: string      = this.globals.$atumList.find( '.bulkactions select' ).filter( ( index: number, elem: Element ) => {
-			    return $( elem ).val() !== '-1';
-		    } ).val(),
-		    selectedItems: string[] = [];
+		const bulkAction: string    = this.globals.$atumList.find( '.bulkactions select' ).filter(
+			( index: number, elem: Element ) => {
+				return $( elem ).val() !== '-1';
+			} ).val(),
+	        selectedItems: string[] = [];
 
 		this.globals.$atumList.find( 'tbody .check-column input:checkbox' ).filter( ':checked' ).each( ( index: number, elem: Element ) => {
 			selectedItems.push( $( elem ).val() );
@@ -125,13 +130,15 @@ export default class BulkActions {
 	
 	/**
 	 * Update the Bulk Button text depending on the number of checkboxes selected
+	 *
+	 * @param {JQuery} $bulkButton
 	 */
-	updateBulkButton() {
+	updateBulkButton( $bulkButton: JQuery ) {
 
-		let numChecked: number = this.globals.$atumList.find( '.check-column input:checkbox:checked' ).length,
-		    buttonText: string = numChecked > 1 ? this.settings.get( 'applyBulkAction' ) : this.settings.get( 'applyAction' );
+		const numChecked: number = this.globals.$atumList.find( '.check-column input:checkbox:checked' ).length,
+		      buttonText: string = numChecked > 1 ? this.settings.get( 'applyBulkAction' ) : this.settings.get( 'applyAction' );
 
-		$( '.apply-bulk-action' ).text( buttonText );
+		$bulkButton.text( buttonText );
 		
 	}
 	
