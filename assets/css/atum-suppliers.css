@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.6.10 
+ * @version 1.7.1 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -3075,6 +3075,66 @@ input[type="submit"].btn-block,
 input[type="reset"].btn-block,
 input[type="button"].btn-block {
   width: 100%;
+}
+
+.wrap h1.wp-heading-inline {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-transform: capitalize;
+  margin-right: 15px;
+  font-weight: bold;
+  color: #27283B;
+  font-size: 36px;
+  line-height: 1.5;
+  position: relative;
+}
+
+.wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+  border-radius: 5px;
+  background-color: var(--tertiary-var);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 30px;
+  text-transform: uppercase;
+  border: none;
+  margin-left: 14px;
+  top: 0;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub:active, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub:active {
+  font-size: 12px;
+  padding: 0 12px;
+  top: 1px;
+  margin-left: 14px;
+  display: inline-block;
+}
+
+.wrap h1.wp-heading-inline .page-title-action:hover, .wrap h1.wp-heading-inline .page-title-action:focus, .wrap h1.wp-heading-inline .page-title-action:active:hover, .wrap h1.wp-heading-inline .page-title-action:active:focus {
+  background-color: var(--tertiary-var);
+  color: var(--white);
+  opacity: 0.9;
+}
+
+@media all and (max-width: 782px) {
+  .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+    font-size: 14px;
+    height: 35px;
+    line-height: 35px;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+    margin: 0;
+  }
 }
 
 .blockUI.blockOverlay:before {
