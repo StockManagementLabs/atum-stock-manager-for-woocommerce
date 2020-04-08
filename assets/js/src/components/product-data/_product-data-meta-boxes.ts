@@ -3,6 +3,7 @@
    ======================================= */
 
 import { ButtonGroup } from '../_button-group';
+import EnhancedSelect from '../_enhanced-select';
 import Settings from '../../config/_settings';
 import { Switcher } from '../_switcher';
 
@@ -16,6 +17,9 @@ export default class ProductDataMetaBoxes {
 	) {
 		
 		this.$productDataMetaBox = $('#woocommerce-product-data');
+
+		// Customize enhanced selects.
+		new EnhancedSelect();
 		
 		// Add switchery.
 		Switcher.doSwitchers();

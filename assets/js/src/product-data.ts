@@ -11,17 +11,17 @@
  * Components
  */
 
-import Settings from './config/_settings';
 import ProductDataMetaBoxes from './components/product-data/_product-data-meta-boxes';
+import Settings from './config/_settings';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-	
-	window['$'] = $; // Avoid conflicts.
-	
+jQuery( ( $: JQueryStatic ) => {
+
+	window[ '$' ] = $; // Avoid conflicts.
+
 	// Get the settings from localized var.
-	let settings = new Settings('atumProductData');
-	new ProductDataMetaBoxes(settings);
-	
-});
+	let settings = new Settings( 'atumProductData' );
+	new ProductDataMetaBoxes( settings );
+
+} );
