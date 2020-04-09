@@ -734,7 +734,7 @@ class Wpml {
 			/* @noinspection PhpUndefinedMethodInspection */
 			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
 			foreach ( $product_translations as $translation ) {
-				$translations[ $translation->language_code ] = $translation->element_id;
+				$translations[ $translation->language_code ] = (int) $translation->element_id;
 			}
 
 		}
