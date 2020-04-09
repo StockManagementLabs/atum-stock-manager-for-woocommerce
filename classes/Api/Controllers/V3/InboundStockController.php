@@ -579,7 +579,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		$product = Helpers::get_atum_product( $item );
 		$po_id   = absint( $item->po_id );
-		$po      = new PurchaseOrder( $po_id );
+		$po      = Helpers::get_atum_order_model( $po_id, PurchaseOrders::POST_TYPE );
 
 		return array(
 			'id'                    => $product->get_id(),

@@ -587,25 +587,7 @@ abstract class AtumOrderModel {
 				) );
 
 				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
-
-					foreach ( $items['meta_key'][ $item_id ] as $meta_id => $meta_key ) {
-
-						$meta_value = isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
-
-						if ( '' === $meta_key && '' === $meta_value ) {
-							if ( ! strstr( $meta_id, 'new-' ) ) {
-								$item->delete_meta_data_by_mid( $meta_id );
-							}
-						}
-						elseif ( strstr( $meta_id, 'new-' ) ) {
-							$item->add_meta_data( $meta_key, $meta_value, false );
-						}
-						else {
-							$item->update_meta_data( $meta_key, $meta_value, $meta_id );
-						}
-
-					}
-
+					$this->save_item_meta( $item, $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] );
 				}
 
 				$this->add_item( $item );
@@ -647,25 +629,7 @@ abstract class AtumOrderModel {
 				) );
 
 				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
-
-					foreach ( $items['meta_key'][ $item_id ] as $meta_id => $meta_key ) {
-
-						$meta_value = isset( $items['meta_value'][ $item_id ][ $meta_id ] ) ? wp_unslash( $items['meta_value'][ $item_id ][ $meta_id ] ) : '';
-
-						if ( '' === $meta_key && '' === $meta_value ) {
-							if ( ! strstr( $meta_id, 'new-' ) ) {
-								$item->delete_meta_data_by_mid( $meta_id );
-							}
-						}
-						elseif ( strstr( $meta_id, 'new-' ) ) {
-							$item->add_meta_data( $meta_key, $meta_value, FALSE );
-						}
-						else {
-							$item->update_meta_data( $meta_key, $meta_value, $meta_id );
-						}
-
-					}
-
+					$this->save_item_meta( $item, $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] );
 				}
 
 				$this->add_item( $item );
@@ -683,6 +647,37 @@ abstract class AtumOrderModel {
 
 		// Inform other plugins that the items have been saved.
 		do_action( 'atum/orders/after_save_items', $this, $items );
+
+	}
+
+	/**
+	 * Save item meta
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item
+	 * @param array                                                                        $meta_keys
+	 * @param array                                                                        $meta_values
+	 */
+	public function save_item_meta( $item, $meta_keys, $meta_values ) {
+
+		foreach ( $meta_keys as $meta_id => $meta_key ) {
+
+			$meta_value = isset( $meta_values[ $meta_id ] ) ? wp_unslash( $meta_values[ $meta_id ] ) : '';
+
+			if ( '' === $meta_key && '' === $meta_value ) {
+				if ( ! strstr( $meta_id, 'new-' ) ) {
+					$item->delete_meta_data_by_mid( $meta_id );
+				}
+			}
+			elseif ( strstr( $meta_id, 'new-' ) ) {
+				$item->add_meta_data( $meta_key, $meta_value, FALSE );
+			}
+			else {
+				$item->update_meta_data( $meta_key, $meta_value, $meta_id );
+			}
+
+		}
 
 	}
 

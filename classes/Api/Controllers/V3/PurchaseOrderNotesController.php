@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
@@ -44,7 +45,7 @@ class PurchaseOrderNotesController extends AtumOrderNotesController {
 	protected function get_atum_order( $request ) {
 
 		if ( is_null( $this->order ) ) {
-			$this->order = new PurchaseOrder( (int) $request['order_id'] );
+			$this->order = Helpers::get_atum_order_model( (int) $request['order_id'], $this->post_type );
 		}
 
 		return $this->order;

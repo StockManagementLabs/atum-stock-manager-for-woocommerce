@@ -1702,6 +1702,8 @@ final class Helpers {
 			$post_type = get_post_type( $atum_order_id );
 		}
 
+		$model_class = NULL;
+
 		switch ( $post_type ) {
 			case InventoryLogs::POST_TYPE:
 				$model_class = '\Atum\InventoryLogs\Models\Log';
@@ -1712,7 +1714,9 @@ final class Helpers {
 				break;
 		}
 
-		if ( ! isset( $model_class ) || ! class_exists( $model_class ) ) {
+		$model_class = apply_filters( 'atum/order_model_class', $model_class, $post_type );
+
+		if ( ! $model_class || ! class_exists( $model_class ) ) {
 			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
