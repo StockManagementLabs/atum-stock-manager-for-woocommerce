@@ -177,7 +177,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		$order = $this->get_atum_order( $request );
 
-		if ( ! $order || $this->post_type !== $order->get_type() ) {
+		if ( ! $order || $this->post_type !== $order->get_post_type() ) {
 			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
@@ -232,7 +232,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		$order = $this->get_atum_order( $request );
 
-		if ( ! $order || $this->post_type !== $order->get_type() ) {
+		if ( ! $order || $this->post_type !== $order->get_post_type() ) {
 			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
@@ -267,7 +267,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		$order = $this->get_atum_order( $request );
 
-		if ( ! $order || $this->post_type !== $order->get_type() ) {
+		if ( ! $order || $this->post_type !== $order->get_post_type() ) {
 			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
@@ -321,7 +321,7 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 
 		$order = $this->get_atum_order( $request );
 
-		if ( ! $order || $this->post_type !== $order->get_type() ) {
+		if ( ! $order || $this->post_type !== $order->get_post_type() ) {
 			return new \WP_Error( 'atum_rest_order_invalid_id', __( 'Invalid order ID.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 

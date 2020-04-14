@@ -310,13 +310,13 @@ class InventoryLogs extends AtumOrderPostType {
 
 			case 'type':
 				$types    = Log::get_log_types();
-				$log_type = $log->get_log_type();
+				$log_type = $log->type;
 
 				if ( in_array( $log_type, array_keys( $types ) ) ) {
 					echo $types[ $log_type ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 					if ( 'other' === $log_type ) {
-						$custom_name = $log->get_custom_name();
+						$custom_name = $log->custom_name;
 
 						if ( $custom_name ) {
 							echo ': <small><strong>' . esc_html( $custom_name ) . '</strong></small>';

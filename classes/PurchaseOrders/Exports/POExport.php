@@ -116,7 +116,7 @@ class POExport extends PurchaseOrder {
 		
 		$total_text_colspan = 3;
 		$post_type          = get_post_type_object( get_post_type( $this->get_id() ) );
-		$currency           = $this->get_currency();
+		$currency           = $this->currency;
 		$discount           = $this->get_total_discount();
 
 		if ( $discount ) {

@@ -31,7 +31,7 @@ use Atum\Inc\Helpers;
 		<div class="content-header-po-data">
 			<div class="row">
 				<span class="label"><?php esc_html_e( 'Date:', ATUM_TEXT_DOMAIN ) ?>&nbsp;&nbsp;</span>
-				<span class="field"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $po->get_date() ) ) ) ?></span>
+				<span class="field"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $po->date_created ) ) ) ?></span>
 			</div>
 			<div class="row">
 				<span class="label"><?php esc_html_e( 'P.O. #:', ATUM_TEXT_DOMAIN ) ?>&nbsp;&nbsp;</span>
@@ -268,7 +268,7 @@ use Atum\Inc\Helpers;
 					<?php esc_html_e( 'Discount', ATUM_TEXT_DOMAIN ) ?>:
 				</td>
 				<td class="total">
-					-<?php echo wc_price( $po->get_total_discount(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					-<?php echo wc_price( $po->discount_total, [ 'currency' => $currency ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 		<?php endif; ?>
@@ -279,7 +279,7 @@ use Atum\Inc\Helpers;
 					<?php esc_html_e( 'Shipping', ATUM_TEXT_DOMAIN ) ?>:
 				</td>
 				<td class="total">
-					<?php echo wc_price( $po->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo wc_price( $po->shipping_total, [ 'currency' => $currency ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</td>
 			</tr>
 		<?php endif; ?>

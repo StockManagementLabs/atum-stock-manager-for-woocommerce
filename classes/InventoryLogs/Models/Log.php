@@ -24,6 +24,19 @@ use Atum\InventoryLogs\Items\LogItemShipping;
 use Atum\InventoryLogs\Items\LogItemTax;
 
 
+/**
+ * Class Log
+ *
+ * Meta props available through the __get magic method:
+ *
+ * @property int    $order
+ * @property string $type
+ * @property string $reservation_date
+ * @property string $damage_date
+ * @property string $return_date
+ * @property string $custom_name
+ * @property string $shipping_company
+ */
 class Log extends AtumOrderModel {
 
 	/**
@@ -49,7 +62,16 @@ class Log extends AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 
-
+		// Add the IL's default custom meta.
+		$this->meta = (array) apply_filters( 'atum/inventory_logs/log_meta', array_merge( $this->meta, array(
+			'order'            => NULL,
+			'type'             => '',
+			'reservation_date' => '',
+			'damage_date'      => '',
+			'return_date'      => '',
+			'custom_name'      => '',
+			'shipping_company' => '',
+		) ) );
 
 		parent::__construct( $id, $read_items );
 
@@ -75,7 +97,7 @@ class Log extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
 			}
 
 		}
@@ -102,7 +124,7 @@ class Log extends AtumOrderModel {
 		}
 		else {
 			/* translators: the log name */
-			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Log date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->get_date() ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Log date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
 		}
 
 		return apply_filters( 'atum/inventory_logs/log/title', $post_title );
@@ -117,7 +139,7 @@ class Log extends AtumOrderModel {
 	 */
 	public function get_order() {
 
-		$order_id = $this->get_meta( '_order' );
+		$order_id = $this->order;
 
 		if ( $order_id ) {
 			return wc_get_order( $order_id );
@@ -156,17 +178,6 @@ class Log extends AtumOrderModel {
 	public static function get_log_type_columns() {
 		return self::$log_type_columns;
 	}
-
-	/**
-	 * Get the log type
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_log_type() {
-		return $this->get_meta( '_type' );
-	}
 	
 	/**
 	 * Get the Inventory Log's type
@@ -175,63 +186,8 @@ class Log extends AtumOrderModel {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_post_type() {
 		return InventoryLogs::POST_TYPE;
-	}
-
-	/**
-	 * Get the log reservation date
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_reservation_date() {
-		return $this->get_meta( '_reservation_date' );
-	}
-
-	/**
-	 * Get the log damage date
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_damage_date() {
-		return $this->get_meta( '_damage_date' );
-	}
-
-	/**
-	 * Get the log return date
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_return_date() {
-		return $this->get_meta( '_return_date' );
-	}
-
-	/**
-	 * Get the custom log name (for "Other" type logs)
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_custom_name() {
-		return $this->get_meta( '_custom_name' );
-	}
-
-	/**
-	 * Get shipping company
-	 *
-	 * @since 1.2.4
-	 *
-	 * @return string
-	 */
-	public function get_shipping_company() {
-		return $this->get_meta( '_shipping_company' );
 	}
 
 	/**
@@ -399,13 +355,13 @@ class Log extends AtumOrderModel {
 		$data = parent::get_data();
 
 		$log_data = array(
-			'type'             => $this->get_log_type(),
+			'type'             => $this->type,
 			'order'            => $this->get_order(),
-			'reservation_date' => $this->get_reservation_date() ? wc_string_to_datetime( $this->get_reservation_date() ) : '',
-			'return_date'      => $this->get_return_date() ? wc_string_to_datetime( $this->get_return_date() ) : '',
-			'damage_date'      => $this->get_damage_date() ? wc_string_to_datetime( $this->get_damage_date() ) : '',
-			'shipping_company' => $this->get_shipping_company(),
-			'custom_name'      => $this->get_custom_name(),
+			'reservation_date' => $this->reservation_date ? wc_string_to_datetime( $this->reservation_date ) : '',
+			'return_date'      => $this->return_date ? wc_string_to_datetime( $this->return_date ) : '',
+			'damage_date'      => $this->damage_date ? wc_string_to_datetime( $this->damage_date ) : '',
+			'shipping_company' => $this->shipping_company,
+			'custom_name'      => $this->custom_name,
 		);
 
 		return array_merge( $data, $log_data );

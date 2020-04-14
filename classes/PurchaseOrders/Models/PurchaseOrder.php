@@ -28,6 +28,14 @@ use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 
+/**
+ * Class PurchaseOrder
+ *
+ * Meta props available through the __get magic method:
+ *
+ * @property string $multiple_suppliers
+ * @property string $date_expected
+ */
 class PurchaseOrder extends AtumOrderModel {
 	
 	/**
@@ -53,6 +61,12 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param bool $read_items Optional. Whether to read the inner items.
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
+
+		// Add the PO's default custom meta.
+		$this->meta = (array) apply_filters( 'atum/purchase_orders/po_meta', array_merge( $this->meta, array(
+			'supplier'           => NULL,
+			'multiple_suppliers' => 'no',
+		) ) );
 
 		parent::__construct( $id, $read_items );
 
@@ -83,7 +97,7 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 		else {
 			/* translators: the purchase order date */
-			$post_title = sprintf( __( 'PO &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'PO date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->get_date() ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'PO &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'PO date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
 		}
 
 		return apply_filters( 'atum/purchase_orders/po/title', $post_title );
@@ -150,7 +164,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @return bool
 	 */
 	public function has_multiple_suppliers() {
-		return 'yes' === wc_bool_to_string( $this->get_meta( '_multiple_suppliers' ) );
+		return 'yes' === wc_bool_to_string( $this->multiple_suppliers );
 	}
 
 	/**
@@ -161,7 +175,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param string|bool $value
 	 */
 	public function set_multiple_suppliers( $value ) {
-		$this->set_meta( '_multiple_suppliers', wc_bool_to_string( $value ) );
+		$this->set_meta( 'multiple_suppliers', wc_bool_to_string( $value ) );
 	}
 	
 	/**
@@ -171,7 +185,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_post_type() {
 		return PurchaseOrders::POST_TYPE;
 	}
 
@@ -329,17 +343,6 @@ class PurchaseOrder extends AtumOrderModel {
 	}
 
 	/**
-	 * Get the expected at location date
-	 *
-	 * @since 1.2.9
-	 *
-	 * @return string
-	 */
-	public function get_date_expected() {
-		return $this->get_meta( '_expected_at_location_date' );
-	}
-
-	/**
 	 * Setter for the expected at location date
 	 *
 	 * @since 1.6.2
@@ -347,7 +350,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @param string|\WC_DateTime $date_expected
 	 */
 	public function set_date_expected( $date_expected ) {
-		$this->set_meta( '_expected_at_location_date', Helpers::get_wc_time( $date_expected ) );
+		$this->set_meta( 'expected_at_location_date', Helpers::get_wc_time( $date_expected ) );
 	}
 
 	/**
@@ -370,7 +373,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_type() ) );
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
 			}
 
 		}
@@ -394,7 +397,7 @@ class PurchaseOrder extends AtumOrderModel {
 		$po_data = array(
 			'supplier'           => $this->get_supplier( 'id' ),
 			'multiple_suppliers' => $this->has_multiple_suppliers(),
-			'date_expected'      => $this->get_date_expected() ? wc_string_to_datetime( $this->get_date_expected() ) : '',
+			'date_expected'      => $this->date_expected ? wc_string_to_datetime( $this->date_expected ) : '',
 		);
 
 		return array_merge( $data, $po_data );

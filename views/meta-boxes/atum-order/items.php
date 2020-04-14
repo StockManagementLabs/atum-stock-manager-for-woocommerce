@@ -25,7 +25,7 @@ if ( wc_tax_enabled() ) {
 	$show_tax_columns = 1 === count( $taxes );
 }
 
-$currency  = $atum_order->get_currency();
+$currency  = $atum_order->currency;
 $post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 
 // ! wp_doing_ajax allow add taxes in still non-created order items.
@@ -170,7 +170,7 @@ $add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( Purchas
 					</td>
 					<td style="width: 1%"></td>
 					<td class="total">
-						<?php echo wc_price( $atum_order->get_shipping_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php echo wc_price( $atum_order->shipping_total, [ 'currency' => $currency ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</td>
 				</tr>
 

@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) || die;
 
 do_action( 'atum/atum_order/before_item_fee_html', $item, $atum_order );
-$currency = $atum_order->get_currency();
+$currency = $atum_order->currency;
 
 ?>
 <tr class="fee <?php echo esc_attr( ! empty( $class ) ? $class : '' ); ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">

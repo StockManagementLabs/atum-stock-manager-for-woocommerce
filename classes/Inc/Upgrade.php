@@ -112,6 +112,11 @@ class Upgrade {
 			$this->change_supplier_meta_key_names();
 		}
 
+		// ** version 1.7.1 ** Change the POs date_expected's meta key names.
+		if ( version_compare( $db_version, '1.7.1', '<' ) ) {
+			$this->change_date_expected_meta_key_names();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -756,6 +761,22 @@ class Upgrade {
 			", $group_key, Suppliers::POST_TYPE ) );
 
 		}
+
+	}
+
+	/**
+	 * Change the POs date expected meta key names to be compatible with the new model
+	 *
+	 * @since 1.7.1
+	 */
+	private function change_date_expected_meta_key_names() {
+
+		global $wpdb;
+
+		$wpdb->query( $wpdb->prepare( "
+			UPDATE $wpdb->postmeta SET meta_key = '_date_expected'
+			WHERE meta_key = '_expected_at_location_date'
+		" ) );
 
 	}
 

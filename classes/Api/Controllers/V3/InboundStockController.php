@@ -579,7 +579,13 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		$product = Helpers::get_atum_product( $item );
 		$po_id   = absint( $item->po_id );
-		$po      = Helpers::get_atum_order_model( $po_id, PurchaseOrders::POST_TYPE );
+
+		/**
+		 * Variable definition
+		 *
+		 * @var PurchaseOrder $po
+		 */
+		$po = Helpers::get_atum_order_model( $po_id, PurchaseOrders::POST_TYPE );
 
 		return array(
 			'id'                    => $product->get_id(),
@@ -587,10 +593,10 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 			'type'                  => $product->get_type(),
 			'sku'                   => $product->get_sku( $context ),
 			'inbound_stock'         => (float) AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' ),
-			'date_ordered'          => wc_rest_prepare_date_response( $po->get_date(), FALSE ),
-			'date_on_sale_from_gmt' => wc_rest_prepare_date_response( $po->get_date() ),
-			'date_expected'         => wc_rest_prepare_date_response( $po->get_date_expected(), FALSE ),
-			'date_expected_gmt'     => wc_rest_prepare_date_response( $po->get_date_expected() ),
+			'date_ordered'          => wc_rest_prepare_date_response( $po->date_created, FALSE ),
+			'date_on_sale_from_gmt' => wc_rest_prepare_date_response( $po->date_created ),
+			'date_expected'         => wc_rest_prepare_date_response( $po->date_expected, FALSE ),
+			'date_expected_gmt'     => wc_rest_prepare_date_response( $po->date_expected ),
 			'purchase_order'        => $po_id,
 		);
 

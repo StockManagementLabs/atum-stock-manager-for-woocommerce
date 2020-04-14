@@ -295,7 +295,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				break;
 
 			case 'expected_date':
-				$expected_date = $po->get_date_expected();
+				$expected_date = $po->date_expected;
 
 				if ( $expected_date ) {
 					$expected_date = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $expected_date ) ) . '">' . gmdate( 'Y/m/d', strtotime( $expected_date ) ) . '</abbr>';
