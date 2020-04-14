@@ -37,7 +37,6 @@ export default class EnhancedSelect {
 
 		options = Object.assign( {
 			minimumResultsForSearch: 10,
-			dropdownCssClass       : 'atum-select2-dropdown',
 		}, options );
 		
 		$selector.each( ( index: number, elem: Element ) => {

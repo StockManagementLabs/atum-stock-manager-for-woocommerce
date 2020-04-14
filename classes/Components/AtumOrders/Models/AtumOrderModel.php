@@ -921,7 +921,7 @@ abstract class AtumOrderModel {
 			$status       = $this->get_status();
 			$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$date_created = Helpers::get_wc_time( $this->date_created ?: $timestamp );
-			$this->set_date( $date_created );
+			$this->set_date_created( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
 				'post_date'     => gmdate( 'Y-m-d H:i:s', $date_created->getOffsetTimestamp() ),
@@ -1940,18 +1940,19 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string|\WC_DateTime $date
+	 * @param string|\WC_DateTime $date_created
 	 */
-	public function set_date( $date ) {
+	public function set_date_created( $date_created ) {
 
-		/*$date = ! $date instanceof \WC_DateTime ? sanitize_text_field( $date ) : $date;
+		$date_created = ! $date_created instanceof \WC_DateTime ? sanitize_text_field( $date_created ) : $date_created;
 
 		// Only registered the change if it was manually changed.
-		if ( $date !== $this->meta['_date_created'] && $this->post && $this->post->post_date !== $date ) {
+		if ( $date_created !== $this->date_created && $this->post && $this->post->post_date !== $date_created ) {
 			$this->register_change( 'date_created' );
-		}*/
+		}
 
-		$this->set_meta( '_date_created', Helpers::get_wc_time( $date ) );
+		$this->set_meta( 'date_created', Helpers::get_wc_time( $date_created ) );
+
 	}
 
 	/**
@@ -1959,17 +1960,29 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $value
+	 * @param string $currency
 	 *
 	 * @throws AtumException
 	 */
-	public function set_currency( $value ) {
+	public function set_currency( $currency ) {
 
-		if ( $value && ! in_array( $value, array_keys( get_woocommerce_currencies() ) ) ) {
+		$currency = esc_attr( $currency );
+
+		if ( array_key_exists( $currency, get_woocommerce_currencies() ) ) {
+
+			if ( $currency !== $this->currency ) {
+				$this->register_change( 'currency' );
+			}
+
+			$this->set_meta( 'currency', esc_attr( $currency ) );
+
+		}
+		else {
+			$currency = get_woocommerce_currency();
 			$this->error( 'order_invalid_currency', __( 'Invalid currency code', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$this->set_meta( '_currency', $value ? $value : get_woocommerce_currency() );
+		$this->set_meta( 'currency', $currency );
 
 	}
 
@@ -1978,10 +1991,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $total
 	 */
-	public function set_total( $value ) {
-		$this->set_meta( '_total', wc_format_decimal( $value, wc_get_price_decimals() ) );
+	public function set_total( $total ) {
+
+		$total = wc_format_decimal( $total );
+
+		if ( $total !== $this->total ) {
+			$this->register_change( 'total' );
+			$this->set_meta( 'total', $total );
+		}
+
 	}
 
 	/**
@@ -1989,10 +2009,18 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $discount_total
+	 *
 	 */
-	public function set_discount_total( $value ) {
-		$this->set_meta( '_discount_total', wc_format_decimal( $value ) );
+	public function set_discount_total( $discount_total ) {
+
+		$discount_total = wc_format_decimal( $discount_total );
+
+		if ( $discount_total !== $this->discount_total ) {
+			$this->register_change( 'discount_total' );
+			$this->set_meta( 'discount_total', $discount_total );
+		}
+
 	}
 
 	/**
@@ -2000,10 +2028,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $discount_tax
 	 */
-	public function set_discount_tax( $value ) {
-		$this->set_meta( '_discount_tax', wc_format_decimal( $value ) );
+	public function set_discount_tax( $discount_tax ) {
+
+		$discount_tax = wc_format_decimal( $discount_tax );
+
+		if ( $discount_tax !== $this->discount_tax ) {
+			$this->register_change( 'discount_tax' );
+			$this->set_meta( 'discount_tax', $discount_tax );
+		}
+
 	}
 
 	/**
@@ -2011,10 +2046,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $shipping_total
 	 */
-	public function set_shipping_total( $value ) {
-		$this->set_meta( '_shipping_total', wc_format_decimal( $value ) );
+	public function set_shipping_total( $shipping_total ) {
+
+		$shipping_total = wc_format_decimal( $shipping_total );
+
+		if ( $shipping_total !== $this->shipping_total ) {
+			$this->register_change( 'shipping_total' );
+			$this->set_meta( 'shipping_total', $shipping_total );
+		}
+
 	}
 
 	/**
@@ -2022,11 +2064,18 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $shipping_tax
 	 */
-	public function set_shipping_tax( $value ) {
-		$this->set_meta( '_shipping_tax', wc_format_decimal( $value ) );
-		$this->set_total_tax( (float) $this->cart_tax + (float) $this->shipping_tax );
+	public function set_shipping_tax( $shipping_tax ) {
+
+		$shipping_tax = wc_format_decimal( $shipping_tax );
+
+		if ( $shipping_tax !== $this->shipping_tax ) {
+			$this->register_change( 'shipping_tax' );
+			$this->set_meta( 'shipping_tax', $shipping_tax );
+			$this->set_total_tax( (float) $this->cart_tax + (float) $shipping_tax );
+		}
+
 	}
 
 	/**
@@ -2034,11 +2083,18 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $cart_tax
 	 */
-	public function set_cart_tax( $value ) {
-		$this->set_meta( '_cart_tax', wc_format_decimal( $value ) );
-		$this->set_total_tax( (float) $this->cart_tax + (float) $this->shipping_tax );
+	public function set_cart_tax( $cart_tax ) {
+
+		$cart_tax = wc_format_decimal( $cart_tax );
+
+		if ( $cart_tax !== $this->cart_tax ) {
+			$this->register_change( 'cart_tax' );
+			$this->set_meta( 'cart_tax', $cart_tax );
+			$this->set_total_tax( (float) $this->shipping_tax + (float) $cart_tax );
+		}
+
 	}
 
 	/**
@@ -2047,10 +2103,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param float $value
+	 * @param float $total_tax
 	 */
-	protected function set_total_tax( $value ) {
-		$this->set_meta( '_total_tax', wc_format_decimal( $value ) );
+	protected function set_total_tax( $total_tax ) {
+
+		$total_tax = wc_format_decimal( $total_tax );
+
+		if ( $total_tax !== $this->total_tax ) {
+			$this->register_change( 'total_tax' );
+			$this->set_meta( 'total_tax', $total_tax );
+		}
+
 	}
 
 	/**
