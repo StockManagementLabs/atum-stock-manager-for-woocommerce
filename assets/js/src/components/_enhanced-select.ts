@@ -34,15 +34,16 @@ export default class EnhancedSelect {
 		if ( typeof $.fn[ 'select2' ] !== 'function' ) {
 			return;
 		}
-		
+
 		options = Object.assign( {
 			minimumResultsForSearch: 10,
+			dropdownCssClass       : 'atum-select2-dropdown',
 		}, options );
 		
 		$selector.each( ( index: number, elem: Element ) => {
-			
-			const $select: JQuery = $( elem );
-			let selectOptions: any = { ...options };
+
+			const $select: JQuery    = $( elem ),
+			      selectOptions: any = { ...options };
 			
 			if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
 				$select.prop( 'multiple', true );
@@ -85,19 +86,39 @@ export default class EnhancedSelect {
 	 */
 	addAtumClasses() {
 		
-		$( 'select' ).filter( '.atum-select2, .atum-enhanced-select' ).each( ( index: number, elem: Element ) => {
+		$( 'select' ).filter( '.atum-select2, .atum-enhanced-select' )
+
+			// Add custom classes to the select2 containers.
+			.each( ( index: number, elem: Element ) => {
 			
-			const $select: JQuery           = $( elem ),
-			      $select2Container: JQuery = $select.siblings( '.select2-container' ).not( '.atum-select2, .atum-enhanced-select' )
-			
-			if ( $select2Container.length ) {
-				$select2Container.addClass( $select.hasClass( 'atum-select2' ) ? 'atum-select2' : 'atum-enhanced-select' );
-				
-				// Pass any attached tooltip
-				this.maybeAddTooltip( $select );
-			}
-			
-		} );
+				const $select: JQuery           = $( elem ),
+				      $select2Container: JQuery = $select.siblings( '.select2-container' ).not( '.atum-select2, .atum-enhanced-select' )
+
+				if ( $select2Container.length ) {
+					$select2Container.addClass( $select.hasClass( 'atum-select2' ) ? 'atum-select2' : 'atum-enhanced-select' );
+
+					// Pass any attached tooltip
+					this.maybeAddTooltip( $select );
+				}
+
+			} )
+
+			// Add custom class to the select2 dropdown on opening.
+			.on( 'select2:opening', ( evt: JQueryEventObject ) => {
+
+				const $select: JQuery  = $( evt.currentTarget ),
+				      select2Data: any = $select.data();
+
+				if ( select2Data.hasOwnProperty('select2') ) {
+
+					const $dropdown: JQuery = select2Data.select2.dropdown.$dropdown;
+
+					if ( $dropdown.length) {
+						$dropdown.addClass('atum-select2-dropdown');
+					}
+				}
+
+			} );
 		
 	}
 	
