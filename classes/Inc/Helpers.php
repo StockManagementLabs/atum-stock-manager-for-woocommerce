@@ -3041,5 +3041,43 @@ final class Helpers {
 		return FALSE;
 
 	}
-	
+
+	/**
+	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
+	 *
+	 * @since 1.7.2
+	 *
+	 * @param \WC_Product|int $product
+	 */
+	public static function update_atum_calc_fields( $product ) {
+
+		$product = self::get_atum_product( $product );
+
+		if ( $product instanceof \WC_Product ) {
+
+			$update = FALSE;
+
+			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+			$stock_status = $product->get_stock_status();
+			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+
+			if ( $product->get_atum_stock_status() !== $stock_status ) {
+				$product->set_atum_stock_status( $stock_status );
+				$update = TRUE;
+			}
+
+			$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
+
+			if ( $product->get_low_stock() !== $low ) {
+				$product->set_low_stock( $low );
+				$update = TRUE;
+			}
+
+			if ( $update ) {
+
+				$product->save_atum_data();
+			}
+		}
+
+	}
 }
