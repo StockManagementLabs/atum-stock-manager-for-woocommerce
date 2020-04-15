@@ -1476,7 +1476,7 @@ abstract class AtumOrderModel {
 		else {
 			$comment_author        = 'ATUM';
 			$comment_author_email  = ATUM_SHORT_NAME . '@';
-			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com'; // WPCS: input var ok.
+			$comment_author_email .= isset( $_SERVER['HTTP_HOST'] ) ? str_replace( 'www.', '', wc_clean( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : 'noreply.com'; // WPCS: input var ok.
 			$comment_author_email  = sanitize_email( $comment_author_email );
 		}
 
@@ -1543,6 +1543,21 @@ abstract class AtumOrderModel {
 		}
 		else {
 			return get_post_custom( $this->id );
+		}
+
+	}
+
+	/**
+	 * Register any change done to any data field
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param string $meta_field
+	 */
+	protected function register_change( $meta_field ) {
+
+		if ( ! in_array( $meta_field, $this->changes ) ) {
+			$this->changes[] = $meta_field;
 		}
 
 	}
@@ -1616,34 +1631,11 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Internal meta keys we don't want exposed as part of meta_data.
-	 * This is in addition to all data props with _ prefix.
+	 * Do stuff after saving an ATUM Order
 	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $key
-	 *
-	 * @return string
+	 * @since 1.5.8
 	 */
-	protected function prefix_key( $key ) {
-		return '_' === substr( $key, 0, 1 ) ? $key : '_' . $key;
-	}
-
-	/**
-	 * When invalid data is found, throw an exception unless reading from the DB
-	 *
-	 * @since 1.2.9
-	 *
-	 * @param string $code             Error code.
-	 * @param string $message          Error message.
-	 * @param int    $http_status_code HTTP status code.
-	 * @param array  $data             Extra error data.
-	 *
-	 * @throws AtumException
-	 */
-	public function error( $code, $message, $http_status_code = 400, $data = array() ) {
-		throw new AtumException( $code, $message, $http_status_code, $data );
-	}
+	abstract public function after_save();
 
 	/**********
 	 * GETTERS
@@ -1738,7 +1730,7 @@ abstract class AtumOrderModel {
 	 */
 	public function get_status() {
 
-		$status = $this->status;
+		$status = $this->get_meta('status'); // NOTE: Using the __get magic method within a getter is not allowed.
 		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
 	}
 
@@ -1944,14 +1936,13 @@ abstract class AtumOrderModel {
 	 */
 	public function set_date_created( $date_created ) {
 
-		$date_created = ! $date_created instanceof \WC_DateTime ? sanitize_text_field( $date_created ) : $date_created;
+		$date_created = ! $date_created instanceof \WC_DateTime ? wc_clean( $date_created ) : $date_created;
 
-		// Only registered the change if it was manually changed.
+		// Only register the change if it was manually changed.
 		if ( $date_created !== $this->date_created && $this->post && $this->post->post_date !== $date_created ) {
 			$this->register_change( 'date_created' );
+			$this->set_meta( 'date_created', Helpers::get_wc_time( $date_created ) );
 		}
-
-		$this->set_meta( 'date_created', Helpers::get_wc_time( $date_created ) );
 
 	}
 
@@ -1961,28 +1952,19 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param string $currency
-	 *
-	 * @throws AtumException
 	 */
 	public function set_currency( $currency ) {
 
-		$currency = esc_attr( $currency );
+		$currency = wc_clean( $currency );
 
-		if ( array_key_exists( $currency, get_woocommerce_currencies() ) ) {
-
-			if ( $currency !== $this->currency ) {
-				$this->register_change( 'currency' );
-			}
-
-			$this->set_meta( 'currency', esc_attr( $currency ) );
-
-		}
-		else {
+		if ( ! array_key_exists( $currency, get_woocommerce_currencies() ) ) {
 			$currency = get_woocommerce_currency();
-			$this->error( 'order_invalid_currency', __( 'Invalid currency code', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$this->set_meta( 'currency', $currency );
+		if ( $currency !== $this->currency ) {
+			$this->register_change( 'currency' );
+			$this->set_meta( 'currency', $currency );
+		}
 
 	}
 
@@ -2121,15 +2103,21 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $value
+	 * @param string $status
 	 */
-	public function set_status( $value ) {
+	public function set_status( $status ) {
 
-		if ( $value && strpos( $value, ATUM_PREFIX ) !== 0 && ! in_array( $value, [ 'trash', 'any' ], TRUE ) ) {
-			$value = ATUM_PREFIX . $value;
+		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) {
+			$status = ATUM_PREFIX . $status;
 		}
 
-		$this->set_meta( '_status', wc_clean( $value ) );
+		$status = wc_clean( $status );
+
+		if ( $status !== $this->status ) {
+			$this->register_change('status');
+			$this->set_meta( 'status', $status );
+		}
+
 	}
 
 	/**
@@ -2137,10 +2125,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $value
+	 * @param string $created_via
 	 */
-	public function set_created_via( $value ) {
-		$this->set_meta( '_created_via', esc_attr( $value ) );
+	public function set_created_via( $created_via ) {
+
+		$created_via = wc_clean( $created_via );
+
+		if ( $created_via !== $this->created_via ) {
+			$this->register_change( 'created_via' );
+			$this->set_meta( 'created_via', $created_via );
+		}
+
 	}
 
 	/**
@@ -2148,10 +2143,17 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param bool $value
+	 * @param bool $prices_include_tax
 	 */
-	public function set_prices_include_tax( $value ) {
-		$this->set_meta( '_prices_include_tax', wc_bool_to_string( $value ) );
+	public function set_prices_include_tax( $prices_include_tax ) {
+
+		$prices_include_tax = wc_bool_to_string( $prices_include_tax );
+
+		if ( $prices_include_tax !== $this->prices_include_tax ) {
+			$this->register_change( 'prices_include_tax' );
+			$this->set_meta( 'prices_include_tax', $prices_include_tax );
+		}
+
 	}
 
 	/**
@@ -2186,20 +2188,13 @@ abstract class AtumOrderModel {
 		$this->post->post_content = wp_kses( $value, $allowed_html );
 	}
 
-	/**
-	 * Do stuff after saving an ATUM Order
-	 *
-	 * @since 1.5.8
-	 */
-	abstract public function after_save();
-
 
 	/***************
 	 * MAGIC METHODS
 	 ***************/
 
 	/**
-	 * Magic Getter
+	 * Magic Getter (used for meta)
 	 * To avoid illegal access errors, the property being accessed must be declared within data or meta prop arrays
 	 *
 	 * @since 1.7.1

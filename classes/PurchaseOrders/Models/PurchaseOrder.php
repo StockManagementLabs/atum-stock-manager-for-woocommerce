@@ -33,6 +33,7 @@ use Atum\Suppliers\Suppliers;
  *
  * Meta props available through the __get magic method:
  *
+ * @property int    $supplier
  * @property string $multiple_suppliers
  * @property string $date_expected
  */
@@ -50,7 +51,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @var Supplier
 	 */
-	protected $supplier = NULL;
+	protected $supplier_obj = NULL;
 	
 	/**
 	 * PurchaseOrder constructor
@@ -66,6 +67,7 @@ class PurchaseOrder extends AtumOrderModel {
 		$this->meta = (array) apply_filters( 'atum/purchase_orders/po_meta', array_merge( $this->meta, array(
 			'supplier'           => NULL,
 			'multiple_suppliers' => 'no',
+			'date_expected'      => '',
 		) ) );
 
 		parent::__construct( $id, $read_items );
@@ -76,6 +78,35 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 		
 		$this->block_message = __( 'Set the Supplier field above in order to add/edit items.', ATUM_TEXT_DOMAIN );
+
+	}
+
+	/**
+	 * Recalculate the inbound stock for products within POs, every time a PO is saved.
+	 *
+	 * @since 1.5.8
+	 */
+	public function after_save() {
+
+		$items = $this->get_items();
+
+		foreach ( $items as $item ) {
+
+			/**
+			 * Variable definition
+			 *
+			 * @var POItemProduct $item
+			 */
+			$product_id = $item->get_variation_id() ?: $item->get_product_id();
+			$product    = Helpers::get_atum_product( $product_id );
+
+			if ( $product instanceof \WC_Product ) {
+				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
+			}
+
+		}
+
+		do_action( 'atum/purchase_orders/after_save', $this, $items );
 
 	}
 
@@ -114,46 +145,29 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function get_supplier( $return = 'object' ) {
 
-		if ( is_null( $this->supplier ) ) {
+		if ( is_null( $this->supplier_obj ) ) {
 
-			$supplier_id = $this->get_meta( Suppliers::SUPPLIER_META_KEY );
+			$supplier_id = $this->get_meta( 'supplier' );
 
 			if ( $supplier_id ) {
-				$this->supplier = new Supplier( $supplier_id );
+				$this->supplier_obj = new Supplier( $supplier_id );
 			}
 
 		}
 
-		if ( ! is_null( $this->supplier ) && $this->supplier->id ) {
+		if ( ! is_null( $this->supplier_obj ) && $this->supplier_obj->id ) {
 
 			if ( 'id' === $return ) {
-				return $this->supplier->id;
+				return $this->supplier_obj->id;
 			}
 			else {
-				return $this->supplier;
+				return $this->supplier_obj;
 			}
 
 		}
 
 		return NULL;
 
-	}
-
-	/**
-	 * Setter for the PO's supplier ID
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param int $supplier_id
-	 */
-	public function set_supplier( $supplier_id ) {
-
-		$supplier_id = absint( $supplier_id );
-
-		if ( is_null( $this->supplier ) || $this->supplier->id !== $supplier_id ) {
-			$this->set_meta( Suppliers::SUPPLIER_META_KEY, $supplier_id );
-			$this->supplier = $supplier_id ? new Supplier( $supplier_id ) : NULL;
-		}
 	}
 
 	/**
@@ -165,17 +179,6 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function has_multiple_suppliers() {
 		return 'yes' === wc_bool_to_string( $this->multiple_suppliers );
-	}
-
-	/**
-	 * Setter for the multiple suppliers meta
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param string|bool $value
-	 */
-	public function set_multiple_suppliers( $value ) {
-		$this->set_meta( 'multiple_suppliers', wc_bool_to_string( $value ) );
 	}
 	
 	/**
@@ -343,46 +346,6 @@ class PurchaseOrder extends AtumOrderModel {
 	}
 
 	/**
-	 * Setter for the expected at location date
-	 *
-	 * @since 1.6.2
-	 *
-	 * @param string|\WC_DateTime $date_expected
-	 */
-	public function set_date_expected( $date_expected ) {
-		$this->set_meta( 'expected_at_location_date', Helpers::get_wc_time( $date_expected ) );
-	}
-
-	/**
-	 * Recalculate the inbound stock for products within POs, every time a PO is saved.
-	 *
-	 * @since 1.5.8
-	 */
-	public function after_save() {
-
-		$items = $this->get_items();
-
-		foreach ( $items as $item ) {
-
-			/**
-			 * Variable definition
-			 *
-			 * @var POItemProduct $item
-			 */
-			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
-
-			if ( $product instanceof \WC_Product ) {
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
-			}
-
-		}
-
-		do_action( 'atum/purchase_orders/after_save', $this, $items );
-
-	}
-
-	/**
 	 * Getter to collect all the Purchase Order data within an array
 	 *
 	 * @since 1.6.2
@@ -401,6 +364,67 @@ class PurchaseOrder extends AtumOrderModel {
 		);
 
 		return array_merge( $data, $po_data );
+
+	}
+
+	/*********
+	 * SETTERS
+	 *********/
+
+	/**
+	 * Setter for the PO's supplier ID
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param int $supplier_id
+	 */
+	public function set_supplier( $supplier_id ) {
+
+		$supplier_id = absint( $supplier_id );
+
+		if ( absint( $this->supplier ) !== $supplier_id ) {
+
+			$this->register_change( 'supplier' );
+			$this->set_meta( 'supplier', $supplier_id );
+
+			$this->supplier_obj = $supplier_id ? new Supplier( $supplier_id ) : NULL;
+
+		}
+	}
+
+	/**
+	 * Setter for the multiple suppliers meta
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|bool $multiple_suppliers
+	 */
+	public function set_multiple_suppliers( $multiple_suppliers ) {
+
+		$multiple_suppliers = wc_bool_to_string( $multiple_suppliers );
+
+		if ( $multiple_suppliers !== $this->multiple_suppliers ) {
+			$this->register_change( 'multiple_suppliers' );
+			$this->set_meta( 'multiple_suppliers', $multiple_suppliers );
+		}
+
+	}
+
+	/**
+	 * Setter for the expected at location date
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param string|\WC_DateTime $date_expected
+	 */
+	public function set_date_expected( $date_expected ) {
+
+		$date_expected = ! $date_expected instanceof \WC_DateTime ? sanitize_text_field( $date_expected ) : $date_expected;
+
+		if ( $date_expected !== $this->date_expected ) {
+			$this->register_change( 'date_expected' );
+			$this->set_meta( 'date_expected', Helpers::get_wc_time( $date_expected ) );
+		}
 
 	}
 

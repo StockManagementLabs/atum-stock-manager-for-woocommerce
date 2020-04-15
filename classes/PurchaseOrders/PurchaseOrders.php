@@ -256,7 +256,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
-			'expected_date'    => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
+			'date_expected'    => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
 			'actions'          => __( 'Actions', ATUM_TEXT_DOMAIN ),
 		);
@@ -294,14 +294,14 @@ class PurchaseOrders extends AtumOrderPostType {
 				}
 				break;
 
-			case 'expected_date':
-				$expected_date = $po->date_expected;
+			case 'date_expected':
+				$date_expected = $po->date_expected;
 
-				if ( $expected_date ) {
-					$expected_date = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $expected_date ) ) . '">' . gmdate( 'Y/m/d', strtotime( $expected_date ) ) . '</abbr>';
+				if ( $date_expected ) {
+					$date_expected = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $date_expected ) ) . '">' . gmdate( 'Y/m/d', strtotime( $date_expected ) ) . '</abbr>';
 				}
 
-				echo $expected_date; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $date_expected; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				break;
 
 		}
