@@ -1612,8 +1612,8 @@ abstract class AtumOrderModel {
 
 			do_action( "atum/order/before_save_meta$meta_key", $this->meta[ $meta_key ], $this );
 
-			$meta_key = '_' !== substr( $meta_key, 0, 1 ) ? "_$meta_key" : $meta_key;
-			update_post_meta( $this->id, $meta_key, $this->meta[ $meta_key ] );
+			$meta_key_name = '_' !== substr( $meta_key, 0, 1 ) ? "_$meta_key" : $meta_key;
+			update_post_meta( $this->id, $meta_key_name, $this->meta[ $meta_key ] );
 
 			do_action( "atum/order/after_save_meta$meta_key", $this->meta[ $meta_key ], $this );
 
