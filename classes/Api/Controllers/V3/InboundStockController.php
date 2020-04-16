@@ -482,7 +482,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		$expected_before = ! empty( $query_args['expected_before'] ) ? "AND de.`meta_value` < '" . $query_args['expected_before'] . "'" : '';
 		$after           = ! empty( $date_query['after'] ) ? "AND p.`post_date` > '" . $date_query['after'] . "'" : '';
 		$expected_after  = ! empty( $query_args['expected_after'] ) ? "AND de.`meta_value` > '" . $query_args['expected_after'] . "'" : '';
-		$expected_join   = $expected_before || $expected_after ? "LEFT JOIN `$wpdb->postmeta` AS de ON (de.`post_id` = p.`ID` AND de.`meta_key` = '_expected_at_location_date')" : '';
+		$expected_join   = $expected_before || $expected_after ? "LEFT JOIN `$wpdb->postmeta` AS de ON (de.`post_id` = p.`ID` AND de.`meta_key` = '_date_expected')" : '';
 
 		// phpcs:disable
 		$sql = $wpdb->prepare("

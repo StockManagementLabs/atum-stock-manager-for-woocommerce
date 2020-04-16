@@ -219,17 +219,17 @@ class PurchaseOrders extends AtumOrderPostType {
 		$po_date   = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
 		$po_date   = date_i18n( 'Y-m-d H:i:s', $po_date );
 
-		$expected_at_location_date = empty( $_POST['expected_at_location_date'] ) ? $timestamp : strtotime( $_POST['expected_at_location_date'] . ' ' . (int) $_POST['expected_at_location_date_hour'] . ':' . (int) $_POST['expected_at_location_date_minute'] . ':00' );
-		$expected_at_location_date = date_i18n( 'Y-m-d H:i:s', $expected_at_location_date );
+		$date_expected = empty( $_POST['date_expected'] ) ? $timestamp : strtotime( $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] . ':00' );
+		$date_expected = date_i18n( 'Y-m-d H:i:s', $date_expected );
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
 		$po->set_meta( array(
-			'_status'                    => esc_attr( $_POST['status'] ),
-			'_date_created'              => $po_date,
-			Suppliers::SUPPLIER_META_KEY => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? absint( $_POST['supplier'] ) : '',
-			'_multiple_suppliers'        => $multiple_suppliers,
-			'_expected_at_location_date' => $expected_at_location_date,
+			'status'             => esc_attr( $_POST['status'] ),
+			'date_created'       => $po_date,
+			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? absint( $_POST['supplier'] ) : '',
+			'multiple_suppliers' => $multiple_suppliers,
+			'date_expected'      => $date_expected,
 		) );
 
 		// Set the PO description as post content.
@@ -634,7 +634,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 			$ids = $wpdb->get_col( $wpdb->prepare( "
 				SELECT ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = '_expected_at_location_date')
+				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = '_date_expected')
 				WHERE (meta_value LIKE %s OR post_date_gmt LIKE %s)
 				AND post_type = %s			
 			", $term, $term, self::POST_TYPE ) );
