@@ -1570,13 +1570,32 @@ abstract class AtumOrderModel {
 	 * @param string|array $meta_key    The meta key name or an array of meta_key => meta_value pairs.
 	 * @param mixed        $meta_value  Optional. Only needed for settings single metas. The array should contain the values.
 	 */
-	public function set_meta( $meta_key, $meta_value = NULL ) {
+	protected function set_meta( $meta_key, $meta_value = NULL ) {
 
 		if ( is_array( $meta_key ) ) {
 			$this->meta = array_merge( $this->meta, $meta_key );
 		}
 		else {
 			$this->meta[ $meta_key ] = $meta_value;
+		}
+
+	}
+
+	/**
+	 * Set multiple meta props at once
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param array $meta_props
+	 */
+	public function set_props( array $meta_props ) {
+
+		foreach ( $meta_props as $meta_key => $meta_value ) {
+
+			if ( is_callable( array( $this, "set_$meta_key" ) ) ) {
+				call_user_func( array( $this, "set_$meta_key" ), $meta_value );
+			}
+
 		}
 
 	}

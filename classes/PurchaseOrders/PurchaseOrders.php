@@ -224,10 +224,10 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
-		$po->set_meta( array(
-			'status'             => esc_attr( $_POST['status'] ),
+		$po->set_props( array(
+			'status'             => $_POST['status'],
 			'date_created'       => $po_date,
-			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? absint( $_POST['supplier'] ) : '',
+			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? $_POST['supplier'] : '',
 			'multiple_suppliers' => $multiple_suppliers,
 			'date_expected'      => $date_expected,
 		) );
