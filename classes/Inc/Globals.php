@@ -450,12 +450,12 @@ final class Globals {
 	 *
 	 * @param string $type
 	 *
-	 * @return int|array
+	 * @return int|array|FALSE
 	 */
 	public static function get_order_type_table_id( $type = 'shop_order' ) {
 
-		if ( $type && isset( self::$order_type_tables_id[ $type ] ) ) {
-			return self::$order_type_tables_id[ $type ];
+		if ( $type ) {
+			return isset( self::$order_type_tables_id[ $type ] ) ? self::$order_type_tables_id[ $type ] : FALSE;
 		}
 		
 		return self::$order_type_tables_id;
