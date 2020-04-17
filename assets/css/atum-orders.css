@@ -3312,6 +3312,10 @@ input[type="button"].btn-block {
   position: relative;
 }
 
+.wrap h1.wp-heading-inline + .page-title-action {
+  display: none;
+}
+
 .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
   border-radius: 5px;
   background-color: var(--tertiary-var);
@@ -3774,7 +3778,7 @@ input[type="button"].btn-block {
   width: 100% !important;
 }
 
-.atum-meta-box .form-field .date-picker {
+.atum-meta-box .form-field .atum-datepicker {
   width: 50%;
 }
 
@@ -3788,6 +3792,17 @@ input[type="button"].btn-block {
 
 .atum-meta-box .form-field.atum-editor label {
   margin-bottom: -30px;
+}
+
+.atum-meta-box .form-field .date-field.with-icon {
+  position: relative;
+}
+
+.atum-meta-box .form-field .date-field.with-icon:after {
+  content: "";
+  font-family: "atum-icon-font";
+  position: absolute;
+  right: 8px;
 }
 
 .atum-meta-box .form-field.form-field-wide {

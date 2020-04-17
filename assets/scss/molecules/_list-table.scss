@@ -1754,7 +1754,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				white-space: normal;
 				font-weight: 600;
 				letter-spacing: 0.3px;
-				color: var(--atum-text-color-var2);
+				color: var(--atum-text-color-var3);
 				
 			}
 		}
@@ -2838,7 +2838,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 		}
 		
-		.date-picker::-webkit-input-placeholder {
+		.atum-datepicker::-webkit-input-placeholder {
 			font-size: 12px;
 			font-style: italic;
 			line-height: 1.67;

@@ -34,7 +34,7 @@
 			width: 100% !important;
 		}
 		
-		.date-picker {
+		.atum-datepicker {
 			width: 50%;
 		}
 		
@@ -47,6 +47,19 @@
 			
 			label {
 				margin-bottom: -$grid-gutter-width;
+			}
+		}
+		
+		.date-field {
+			&.with-icon {
+				position: relative;
+				
+				&:after {
+					content: $atmi-calendar-full;
+					font-family: $atum-icon-font;
+					position: absolute;
+					right: 8px;
+				}
 			}
 		}
 		

@@ -3268,6 +3268,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   position: relative;
 }
 
+.wrap h1.wp-heading-inline + .page-title-action {
+  display: none;
+}
+
 .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
   border-radius: 5px;
   background-color: var(--tertiary-var);
