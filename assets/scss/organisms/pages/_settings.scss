@@ -232,7 +232,28 @@
 		}
 
 	}
-
+	
+	.atum-multi-checkbox-option, .atum-multi-checkbox-all {
+		width: 50%;
+		display: inline-block;
+		
+		&.setting-checked label {
+			font-weight: bold;
+			
+			[type=checkbox] {
+				background-color: var(--tertiary-hover);
+				color: var(--white);
+				border: 0;
+			}
+		}
+	}
+	
+	.atum-multi-checkbox-all {
+		display: block;
+		width: 100%;
+		margin-bottom: 20px;
+	}
+	
 	@include desktop-max {
 		.atum-nav {
 			min-width: 200px;
@@ -331,6 +352,10 @@
 				}
 			}
 
+		}
+		
+		.atum-multi-checkbox-option {
+			width: 100%;
 		}
 		
 	}

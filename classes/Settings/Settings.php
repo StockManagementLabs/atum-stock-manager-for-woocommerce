@@ -222,6 +222,8 @@ class Settings {
 				'highContrast'       => __( 'High Contrast', ATUM_TEXT_DOMAIN ),
 				'isAnyOostSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
+				'selectAll'          => __( 'Select All', ATUM_TEXT_DOMAIN ),
+				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
 				'oostDisableAction'  => 'atum_disable_out_stock_threshold',
 				'oostDisableNonce'   => wp_create_nonce( 'atum-out-stock-threshold-disable-nonce' ),
 				'oostDisableText'    => __( "We are going to leave your saved values in your database in case you decide to re-enable the ATUM's Out of Stock threshold per product again. From now on, your system will start using the WooCommerce's global Out of Stock threshold value (if set).", ATUM_TEXT_DOMAIN ),
@@ -664,6 +666,29 @@ class Settings {
 
 		switch ( $field_type ) {
 
+			case 'multi_checkbox':
+				if ( $is_api_request && ! is_array( $input[ $key ] ) ) {
+					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
+				}
+				$option = $input[ $key ];
+
+				$option['value'] = ( isset( $option['value'] ) && 'yes' === $option['value'] ) ? 'yes' : 'no';
+
+				if ( isset( $option['options'] ) ) {
+					foreach ( $option['options'] as $index => $value ) {
+						$option['options'][ $index ] = ( isset( $option['options'][ $index ] ) && 'yes' === $option['options'][ $index ] ) ? 'yes' : 'no';
+					}
+				}
+
+				foreach ( $atts['default']['options'] as $index => $value ) {
+					if ( ! isset( $option['options'][ $index ] ) ) {
+						$option['options'][ $index ] = 'no';
+					}
+				}
+
+				$sanitized_option = $option;
+
+				break;
 			case 'switcher':
 				if ( $is_api_request && ! in_array( $input[ $key ], [ 'yes', 'no' ], TRUE ) ) {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
@@ -961,6 +986,59 @@ class Settings {
 		) . $this->get_description( $args );
 		
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
+	 * Get the settings option array and prints a switcher with a multi-checkbox
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_multi_checkbox( $args ) {
+
+		$data_default  = isset( $args['default'] ) && isset( $args['default']['value'] ) ? " data-default='" . $args['default']['value'] . "'" : '';
+		$stored_values = $this->find_option_value( $args['id'] );
+		$enabled       = checked( 'yes', $stored_values['value'], FALSE );
+
+		$output = sprintf(
+			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input atum-multi-checkbox-main" style="display: none" %4$s>',
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}][value]",
+			$enabled,
+			$this->get_dependency( $args ) . $data_default
+		) . $this->get_description( $args );
+
+		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
+		$check_defs = $args['default']['options'];
+
+		if ( ! empty( $check_defs ) ) {
+			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
+			$output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
+					. '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';
+
+			foreach ( $check_defs as $id => $checkbox ) {
+				$default = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
+				$checked = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : '';
+				$checked = empty( $checkboxes ) ? 'checked' : $checked;
+				$output .= '<div class="atum-multi-checkbox-option' . ( $checked ? ' setting-checked' : '' ) . '"><label>';
+				$output .= sprintf(
+					'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="atum-settings-input" %4$s>',
+					ATUM_PREFIX . $id,
+					self::OPTION_NAME . "[{$args['id']}][options]" . "[{$id}]",
+					$checked,
+					$default
+				);
+				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
+				$output .= ' <span class="atum-help-tip tips" data-placement="right" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				$output .= '</div>';
+			}
+
+			$output .= '</div>';
+		}
+
+		echo apply_filters( 'atum/settings/display_multi_checkbox', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
@@ -1313,7 +1391,7 @@ class Settings {
 		if ( isset( $this->options[ $option_key ] ) ) {
 			return $this->options[ $option_key ];
 		}
-		elseif( $this->defaults[ $option_key ]['default'] ) {
+		elseif ( $this->defaults[ $option_key ]['default'] ) {
 			return $this->defaults[ $option_key ]['default'];
 		}
 
