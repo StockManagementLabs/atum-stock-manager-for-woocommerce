@@ -16,6 +16,10 @@
 			line-height: 1.5;
 			position: relative;
 			
+			+ .page-title-action {
+				display: none; // Prevent the WP button (with the wrong style) to be shown until we move it inside the h1.
+			}
+			
 			.page-title-action {
 				
 				&, &:active {

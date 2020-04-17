@@ -331,7 +331,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_date_expected( $item ) {
 
-		$date_expected = get_post_meta( $item->po_id, '_expected_at_location_date', TRUE );
+		$date_expected = get_post_meta( $item->po_id, '_date_expected', TRUE );
 
 		if ( $date_expected ) {
 			$date_expected = Helpers::date_format( $date_expected );

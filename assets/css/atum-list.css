@@ -2667,6 +2667,11 @@ body .select2-container.atum-select2 .select2-search--inline .select2-search__fi
           appearance: none;
 }
 
+body .select2-container.atum-select2 .select2-search--inline .select2-search__field:focus, body .select2-container.atum-enhanced-select .select2-search--inline .select2-search__field:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 body .select2-dropdown.atum-select2-dropdown {
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
@@ -2955,7 +2960,9 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--mul
 }
 
 body .select2-container--default.atum-select2.select2-container--focus .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--focus .select2-selection--multiple {
-  border: solid var(--black) 1px;
+  -webkit-box-shadow: 0 0 2px rgba(0, 124, 186, 0.8);
+          box-shadow: 0 0 2px rgba(0, 124, 186, 0.8);
+  border-color: #007CBA;
   outline: 0;
 }
 
@@ -3306,6 +3313,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   font-size: 36px;
   line-height: 1.5;
   position: relative;
+}
+
+.wrap h1.wp-heading-inline + .page-title-action {
+  display: none;
 }
 
 .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
@@ -7739,7 +7750,7 @@ table.atum-list-table tfoot .item-heads th, .floatThead-container tfoot .item-he
   white-space: normal;
   font-weight: 600;
   letter-spacing: 0.3px;
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
 }
 
 table.atum-list-table tfoot tr.totals th, table.atum-list-table tfoot tr.totals td, table.atum-list-table thead tr.totals th, table.atum-list-table thead tr.totals td, .floatThead-container tfoot tr.totals th, .floatThead-container tfoot tr.totals td, .floatThead-container thead tr.totals th, .floatThead-container thead tr.totals td, .inbound-stock-list tfoot tr.totals th, .inbound-stock-list tfoot tr.totals td, .inbound-stock-list thead tr.totals th, .inbound-stock-list thead tr.totals td, table.wp-list-table tfoot tr.totals th, table.wp-list-table tfoot tr.totals td, table.wp-list-table thead tr.totals th, table.wp-list-table thead tr.totals td {
@@ -8734,7 +8745,7 @@ table.atum-list-table .column-groups th, .floatThead-container .column-groups th
   content: "";
 }
 
-.filter-range-dates-modal .swal2-content .date-picker::-webkit-input-placeholder {
+.filter-range-dates-modal .swal2-content .atum-datepicker::-webkit-input-placeholder {
   font-size: 12px;
   font-style: italic;
   line-height: 1.67;

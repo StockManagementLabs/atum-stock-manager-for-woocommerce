@@ -184,7 +184,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log_type = esc_attr( $_POST['atum_order_type'] );
+		$log_type = wc_clean( $_POST['atum_order_type'] );
 
 		/**
 		 * Set the log dates
@@ -201,16 +201,16 @@ class InventoryLogs extends AtumOrderPostType {
 			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
-		$log->set_meta( array(
-			'_type'             => $log_type,
-			'_status'           => esc_attr( $_POST['status'] ),
-			'_order'            => ! empty( $_POST['wc_order'] ) ? absint( $_POST['wc_order'] ) : '',
-			'_date_created'     => $log_date,
-			'_reservation_date' => $reservation_date,
-			'_return_date'      => $return_date,
-			'_damage_date'      => $damage_date,
-			'_shipping_company' => esc_attr( $_POST['shipping_company'] ),
-			'_custom_name'      => esc_attr( $_POST['custom_name'] ),
+		$log->set_props( array(
+			'type'             => $log_type,
+			'status'           => $_POST['status'],
+			'order'            => ! empty( $_POST['wc_order'] ) ? $_POST['wc_order'] : '',
+			'date_created'     => $log_date,
+			'reservation_date' => $reservation_date,
+			'return_date'      => $return_date,
+			'damage_date'      => $damage_date,
+			'shipping_company' => $_POST['shipping_company'],
+			'custom_name'      => $_POST['custom_name'],
 		) );
 
 		// Add the Log post to the appropriate Log Type taxonomy.

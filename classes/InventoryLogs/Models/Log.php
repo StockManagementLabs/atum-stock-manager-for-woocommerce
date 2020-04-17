@@ -139,7 +139,7 @@ class Log extends AtumOrderModel {
 	 */
 	public function get_order() {
 
-		$order_id = $this->order;
+		$order_id = $this->get_meta('order'); // NOTE: Using the __get magic method within a getter is not allowed.
 
 		if ( $order_id ) {
 			return wc_get_order( $order_id );
@@ -380,7 +380,14 @@ class Log extends AtumOrderModel {
 	 * @param int $order_id
 	 */
 	public function set_order( $order_id ) {
-		$this->set_meta( '_order', absint( $order_id ) );
+
+		$order_id = absint( $order_id );
+
+		if ( $order_id !== absint( $this->order ) ) {
+			$this->register_change( 'order' );
+			$this->set_meta( 'order', $order_id );
+		}
+
 	}
 
 	/**
@@ -390,8 +397,15 @@ class Log extends AtumOrderModel {
 	 *
 	 * @param string $log_type
 	 */
-	public function set_log_type( $log_type ) {
-		$this->set_meta( '_type', in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '' );
+	public function set_type( $log_type ) {
+
+		$log_type = in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '';
+
+		if ( $log_type !== $this->type  ) {
+			$this->register_change( 'type' );
+			$this->set_meta( 'type', $log_type );
+		}
+
 	}
 
 	/**
@@ -399,10 +413,17 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string|\WC_DateTime $r_date
+	 * @param string|\WC_DateTime $reservation_date
 	 */
-	public function set_reservation_date( $r_date ) {
-		$this->set_meta( '_reservation_date', Helpers::get_wc_time( $r_date ) );
+	public function set_reservation_date( $reservation_date ) {
+
+		$reservation_date = ! $reservation_date instanceof \WC_DateTime ? wc_clean( $reservation_date ) : $reservation_date;
+
+		if ( $reservation_date !== $this->reservation_date ) {
+			$this->register_change( 'reservation_date' );
+			$this->set_meta( 'reservation_date', Helpers::get_wc_time( $reservation_date ) );
+		}
+
 	}
 
 	/**
@@ -410,10 +431,17 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string|\WC_DateTime $d_date
+	 * @param string|\WC_DateTime $damage_date
 	 */
-	public function set_damage_date( $d_date ) {
-		$this->set_meta( '_damage_date', Helpers::get_wc_time( $d_date ) );
+	public function set_damage_date( $damage_date ) {
+
+		$damage_date = ! $damage_date instanceof \WC_DateTime ? wc_clean( $damage_date ) : $damage_date;
+
+		if ( $damage_date !== $this->damage_date ) {
+			$this->register_change( 'damage_date' );
+			$this->set_meta( 'damage_date', Helpers::get_wc_time( $damage_date ) );
+		}
+
 	}
 
 	/**
@@ -421,10 +449,17 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string|\WC_DateTime $r_date
+	 * @param string|\WC_DateTime $return_date
 	 */
-	public function set_return_date( $r_date ) {
-		$this->set_meta( '_return_date', Helpers::get_wc_time( $r_date ) );
+	public function set_return_date( $return_date ) {
+
+		$return_date = ! $return_date instanceof \WC_DateTime ? wc_clean( $return_date ) : $return_date;
+
+		if ( $return_date !== $this->return_date ) {
+			$this->register_change( 'return_date' );
+			$this->set_meta( 'return_date', Helpers::get_wc_time( $return_date ) );
+		}
+
 	}
 
 	/**
@@ -432,10 +467,17 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $name
+	 * @param string $custom_name
 	 */
-	public function set_custom_name( $name ) {
-		$this->set_meta( '_custom_name', sanitize_text_field( $name ) );
+	public function set_custom_name( $custom_name ) {
+
+		$custom_name = wc_clean( $custom_name );
+
+		if ( $custom_name !== $this->custom_name ) {
+			$this->register_change( 'custom_name' );
+			$this->set_meta( 'custom_name', $custom_name );
+		}
+
 	}
 
 	/**
@@ -443,10 +485,17 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param string $name
+	 * @param string $shipping_company
 	 */
-	public function set_shipping_company( $name ) {
-		$this->set_meta( '_shipping_company', sanitize_text_field( $name ) );
+	public function set_shipping_company( $shipping_company ) {
+
+		$shipping_company = wc_clean( $shipping_company );
+
+		if ( $shipping_company !== $this->shipping_company ) {
+			$this->register_change( 'shipping_company' );
+			$this->set_meta( 'shipping_company', $shipping_company );
+		}
+
 	}
 
 }

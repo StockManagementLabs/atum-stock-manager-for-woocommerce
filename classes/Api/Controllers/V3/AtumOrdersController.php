@@ -288,7 +288,12 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 						if ( is_array( $value ) && $id ) {
 
 							foreach ( $value as $meta ) {
-								$order->set_meta( $meta['key'], $meta['value'] );
+
+								$meta_key = strpos( $meta['key'], '_' ) === 0 ? $meta['key'] : "_{$meta['key']}";
+
+								if ( is_callable( array( $order, "set$meta_key" ) ) ) {
+									call_user_func( array( $order, "set$meta_key" ), $meta['value'] );
+								}
 							}
 
 						}

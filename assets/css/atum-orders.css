@@ -547,6 +547,11 @@ body .select2-container.atum-select2 .select2-search--inline .select2-search__fi
           appearance: none;
 }
 
+body .select2-container.atum-select2 .select2-search--inline .select2-search__field:focus, body .select2-container.atum-enhanced-select .select2-search--inline .select2-search__field:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 body .select2-dropdown.atum-select2-dropdown {
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
@@ -835,7 +840,9 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--mul
 }
 
 body .select2-container--default.atum-select2.select2-container--focus .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--focus .select2-selection--multiple {
-  border: solid var(--black) 1px;
+  -webkit-box-shadow: 0 0 2px rgba(0, 124, 186, 0.8);
+          box-shadow: 0 0 2px rgba(0, 124, 186, 0.8);
+  border-color: #007CBA;
   outline: 0;
 }
 
@@ -3305,6 +3312,10 @@ input[type="button"].btn-block {
   position: relative;
 }
 
+.wrap h1.wp-heading-inline + .page-title-action {
+  display: none;
+}
+
 .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
   border-radius: 5px;
   background-color: var(--tertiary-var);
@@ -3767,7 +3778,7 @@ input[type="button"].btn-block {
   width: 100% !important;
 }
 
-.atum-meta-box .form-field .date-picker {
+.atum-meta-box .form-field .atum-datepicker {
   width: 50%;
 }
 
@@ -3781,6 +3792,17 @@ input[type="button"].btn-block {
 
 .atum-meta-box .form-field.atum-editor label {
   margin-bottom: -30px;
+}
+
+.atum-meta-box .form-field .date-field.with-icon {
+  position: relative;
+}
+
+.atum-meta-box .form-field .date-field.with-icon:after {
+  content: "";
+  font-family: "atum-icon-font";
+  position: absolute;
+  right: 8px;
 }
 
 .atum-meta-box .form-field.form-field-wide {

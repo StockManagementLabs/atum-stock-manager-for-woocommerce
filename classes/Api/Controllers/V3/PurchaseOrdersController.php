@@ -190,7 +190,7 @@ class PurchaseOrdersController extends AtumOrdersController {
 
 			$args['meta_query'] = array(
 				array(
-					'key'   => '_expected_at_location_date',
+					'key'   => '_date_expected',
 					'value' => $request['date_expected'],
 					'type'  => 'DATETIME',
 				),

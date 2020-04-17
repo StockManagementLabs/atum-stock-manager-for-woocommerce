@@ -47,6 +47,12 @@ export default class EnhancedSelect {
 			if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
 				$select.prop( 'multiple', true );
 			}
+
+			// Add the classes for not well-prepared selects.
+			if ( ! $select.hasClass( 'atum-select2') ) {
+				$select.addClass('atum-select2');
+				this.addAtumClasses( $select );
+			}
 			
 			if ( avoidEmptySelections ) {
 				
@@ -82,10 +88,18 @@ export default class EnhancedSelect {
 	
 	/**
 	 * Add the ATUM classes to all the enhanced selects to avoid conflicts with other selects
+	 *
+	 * @param {JQuery} $selects
 	 */
-	addAtumClasses() {
-		
-		$( 'select' ).filter( '.atum-select2, .atum-enhanced-select' )
+	addAtumClasses( $selects: JQuery = null ) {
+
+		$selects = $selects || $( 'select' ).filter( '.atum-select2, .atum-enhanced-select' );
+
+		if ( ! $selects.length ) {
+			return;
+		}
+
+		$selects
 
 			// Add custom classes to the select2 containers.
 			.each( ( index: number, elem: Element ) => {

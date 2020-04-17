@@ -228,7 +228,7 @@ class InventoryLogsController extends AtumOrdersController {
 
 		// Log type's setter does not follow the naming convention.
 		if ( in_array( 'type', $data_keys, TRUE ) ) {
-			$log->set_log_type( $request['type'] );
+			$log->set_type( $request['type'] );
 		}
 
 		return $log;
