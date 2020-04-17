@@ -59,7 +59,7 @@ $po_status = $atum_order->get_status();
 
 				<p class="form-field">
 					<label for="date"><?php esc_html_e( 'PO date', ATUM_TEXT_DOMAIN ) ?></label>
-					<input type="text" class="date-picker" name="date" id="date" maxlength="10" value="<?php echo esc_attr( date_i18n( 'Y-m-d', strtotime( $atum_order_post->post_date ) ) ); ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" autocomplete="off">@
+					<input type="text" class="atum-datepicker" name="date" id="date" maxlength="10" value="<?php echo esc_attr( date_i18n( 'Y-m-d', strtotime( $atum_order_post->post_date ) ) ); ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" autocomplete="off">@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="date_hour" id="date_hour" min="0" max="23" step="1" value="<?php echo esc_attr( date_i18n( 'H', strtotime( $atum_order_post->post_date ) ) ); ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})">:
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="date_minute" id="date_minute" min="0" max="59" step="1" value="<?php echo esc_attr( date_i18n( 'i', strtotime( $atum_order_post->post_date ) ) ); ?>" pattern="[0-5]{1}[0-9]{1}">
 				</p>
@@ -72,7 +72,7 @@ $po_status = $atum_order->get_status();
 				<p class="form-field date-expected">
 					<label for="date_expected"><?php esc_html_e( 'Expected at location date', ATUM_TEXT_DOMAIN ) ?></label>
 					<?php $date_expected = $atum_order->date_expected ?>
-					<input type="text" class="date-picker" name="date_expected" id="date_expected" maxlength="10" value="<?php echo esc_attr( $date_expected ? date_i18n( 'Y-m-d', strtotime( $date_expected ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" autocomplete="off">@
+					<input type="text" class="atum-datepicker" name="date_expected" id="date_expected" maxlength="10" value="<?php echo esc_attr( $date_expected ? date_i18n( 'Y-m-d', strtotime( $date_expected ) ) : '' ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/purchase_orders/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" autocomplete="off">@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="date_expected_hour" id="date_expected_hour" min="0" max="23" step="1" value="<?php echo esc_attr( $date_expected ? date_i18n( 'H', strtotime( $date_expected ) ) : '' ) ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})">:
 					<input type="number" class="minute" placeholder="<?php esc_attr_e( 'm', ATUM_TEXT_DOMAIN ) ?>" name="date_expected_minute" id="date_expected_minute" min="0" max="59" step="1" value="<?php echo esc_attr( $date_expected ? date_i18n( 'i', strtotime( $date_expected ) ) : '' ) ?>" pattern="[0-5]{1}[0-9]{1}">
 				</p>
