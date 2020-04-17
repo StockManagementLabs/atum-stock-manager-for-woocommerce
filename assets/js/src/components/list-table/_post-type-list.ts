@@ -68,9 +68,7 @@ export default class PostTypeList {
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );
 		
 		// Footer position.
-		$(window).on('load', () => {
-			$('#wpfooter').show();
-		});
+		$(window).on('load', () => $('#wpfooter').show() );
 		
 		this.enhancedSelect.doSelect2( $('select') );
 		

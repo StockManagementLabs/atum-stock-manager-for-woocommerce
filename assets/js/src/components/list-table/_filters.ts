@@ -294,11 +294,11 @@ export default class Filters {
 					html           : `
 						<div class="input-date">
 							<label for="date_from">${ this.settings.get('from') }</label><br/>
-							<input type="text" placeholder="Beginning" class="date-picker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
+							<input type="text" placeholder="Beginning" class="atum-datepicker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
 						</div>
 						<div class="input-date">
 							<label for="date_to">${ this.settings.get('to') }</label><br/>
-							<input type="text" class="date-picker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
+							<input type="text" class="atum-datepicker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
 						</div>
 						<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
 					`,
@@ -306,7 +306,7 @@ export default class Filters {
 					onOpen           : () => {
 						
 						// Init date time pickers.
-						this.dateTimePicker.addDateTimePickers($('.date-picker'), {minDate: false});
+						this.dateTimePicker.addDateTimePickers( $( '.atum-datepicker' ), { minDate: false } );
 						
 						$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
 							this.keyUp(evt, true);
