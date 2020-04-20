@@ -1015,8 +1015,8 @@ class Settings {
 
 		if ( ! empty( $check_defs ) ) {
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
-			$output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
-					. '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';
+			//$output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
+			//		. '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';
 
 			foreach ( $check_defs as $id => $checkbox ) {
 				$default = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
