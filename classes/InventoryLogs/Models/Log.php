@@ -417,11 +417,11 @@ class Log extends AtumOrderModel {
 	 */
 	public function set_reservation_date( $reservation_date ) {
 
-		$reservation_date = ! $reservation_date instanceof \WC_DateTime ? wc_clean( $reservation_date ) : $reservation_date;
+		$reservation_date = $reservation_date instanceof \WC_DateTime ? $reservation_date->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $reservation_date );
 
 		if ( $reservation_date !== $this->reservation_date ) {
 			$this->register_change( 'reservation_date' );
-			$this->set_meta( 'reservation_date', Helpers::get_wc_time( $reservation_date ) );
+			$this->set_meta( 'reservation_date', $reservation_date );
 		}
 
 	}
@@ -435,11 +435,11 @@ class Log extends AtumOrderModel {
 	 */
 	public function set_damage_date( $damage_date ) {
 
-		$damage_date = ! $damage_date instanceof \WC_DateTime ? wc_clean( $damage_date ) : $damage_date;
+		$damage_date = $damage_date instanceof \WC_DateTime ? $damage_date->date( 'Y-m-d H:i:s' ) : wc_clean( $damage_date );
 
 		if ( $damage_date !== $this->damage_date ) {
 			$this->register_change( 'damage_date' );
-			$this->set_meta( 'damage_date', Helpers::get_wc_time( $damage_date ) );
+			$this->set_meta( 'damage_date', $damage_date );
 		}
 
 	}
@@ -453,11 +453,11 @@ class Log extends AtumOrderModel {
 	 */
 	public function set_return_date( $return_date ) {
 
-		$return_date = ! $return_date instanceof \WC_DateTime ? wc_clean( $return_date ) : $return_date;
+		$return_date = $return_date instanceof \WC_DateTime ? $return_date->date( 'Y-m-d H:i:s' ) : wc_clean( $return_date );
 
 		if ( $return_date !== $this->return_date ) {
 			$this->register_change( 'return_date' );
-			$this->set_meta( 'return_date', Helpers::get_wc_time( $return_date ) );
+			$this->set_meta( 'return_date', $return_date );
 		}
 
 	}

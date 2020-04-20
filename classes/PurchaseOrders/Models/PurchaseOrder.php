@@ -17,15 +17,12 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\InventoryLogs\Items\LogItemProduct;
-use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\Items\POItemFee;
 use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
 use Atum\PurchaseOrders\Items\POItemTax;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Supplier;
-use Atum\Suppliers\Suppliers;
 
 
 /**
@@ -419,11 +416,11 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function set_date_expected( $date_expected ) {
 
-		$date_expected = ! $date_expected instanceof \WC_DateTime ? sanitize_text_field( $date_expected ) : $date_expected;
+		$date_expected = $date_expected instanceof \WC_DateTime ? $date_expected->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_expected );
 
 		if ( $date_expected !== $this->date_expected ) {
 			$this->register_change( 'date_expected' );
-			$this->set_meta( 'date_expected', Helpers::get_wc_time( $date_expected ) );
+			$this->set_meta( 'date_expected', $date_expected );
 		}
 
 	}

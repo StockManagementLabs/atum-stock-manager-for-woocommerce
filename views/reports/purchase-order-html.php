@@ -321,11 +321,14 @@ use Atum\Inc\Helpers;
 	</table>
 </div>
 
+<?php  $description = $po->get_description() ?>
+<?php if ( $description ) : ?>
 <div class="po-wrapper content-description">
 	<div class="label">
-		<?php esc_html_e( 'Description', ATUM_TEXT_DOMAIN ) ?>
+		<?php esc_html_e( 'Notes', ATUM_TEXT_DOMAIN ) ?>
 	</div>
 	<div class="po-content">
-		<?php echo wp_kses_post( apply_filters( 'the_content', $po->get_description() ) ) // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?>
+		<?php echo wp_kses_post( apply_filters( 'the_content', $description ) ) // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?>
 	</div>
 </div>
+<?php endif;

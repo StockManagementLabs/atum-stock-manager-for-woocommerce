@@ -83,13 +83,6 @@ abstract class AtumOrderModel {
 	protected $items_to_delete = array();
 
 	/**
-	 * The available ATUM Order item types
-	 *
-	 * @var array
-	 */
-	protected $item_types = [ 'line_item', 'tax', 'shipping', 'fee' ];
-
-	/**
 	 * The WP cache key name
 	 *
 	 * @var string
@@ -180,7 +173,7 @@ abstract class AtumOrderModel {
 	protected function load_post() {
 		
 		$this->post      = get_post( $this->id );
-		$this->db_status = $this->get_status();
+		$this->db_status = $this->post->post_status;
 
 		// Load the order meta data.
 		$this->read_meta();
@@ -884,8 +877,8 @@ abstract class AtumOrderModel {
 			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->get_post_type() );
 			
 			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && 'trash' !== $old_status ) ) {
-				$old_status = ATUM_PREFIX . 'pending';
+			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any' ] ) ) ) {
+				$old_status = 'atum_pending';
 			}
 			
 			if ( $new_status !== $old_status ) {
@@ -959,7 +952,7 @@ abstract class AtumOrderModel {
 		
 		$status       = $this->status;
 		$date         = $this->date_created;
-		$created_date = Helpers::get_wc_time( $date );
+		$date_created = Helpers::get_wc_time( $date );
 		
 		if ( ! empty( $this->post->post_date ) && $this->post->post_date !== $date ) {
 			// Empty the post title to be updated by the get_title() method.
@@ -967,8 +960,8 @@ abstract class AtumOrderModel {
 		}
 
 		$post_data = array(
-			'post_date'         => gmdate( 'Y-m-d H:i:s', $created_date->getOffsetTimestamp() ),
-			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $created_date->getTimestamp() ),
+			'post_date'         => gmdate( 'Y-m-d H:i:s', $date_created->getOffsetTimestamp() ),
+			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $date_created->getTimestamp() ),
 			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
@@ -983,11 +976,12 @@ abstract class AtumOrderModel {
 		 * This ensures hooks are fired by either WP itself (admin screen save), or an update purely from CRUD
 		 */
 		if ( doing_action( "save_post_{$this->get_post_type()}" ) ) {
-			$GLOBALS['wpdb']->update( $GLOBALS['wpdb']->posts, $post_data, array( 'ID' => $this->id ) );
+			global $wpdb;
+			$wpdb->update( $wpdb->posts, $post_data, [ 'ID' => $this->id ] );
 			clean_post_cache( $this->id );
 		}
 		else {
-			wp_update_post( array_merge( array( 'ID' => $this->id ), $post_data ) );
+			wp_update_post( array_merge( [ 'ID' => $this->id ], $post_data ) );
 		}
 
 		$this->clear_caches();
@@ -1007,7 +1001,7 @@ abstract class AtumOrderModel {
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
-			$new_status = ATUM_PREFIX . 'pending';
+			$new_status = 'atum_pending';
 		}
 		
 		$this->set_status( $new_status );
@@ -1955,12 +1949,12 @@ abstract class AtumOrderModel {
 	 */
 	public function set_date_created( $date_created ) {
 
-		$date_created = ! $date_created instanceof \WC_DateTime ? wc_clean( $date_created ) : $date_created;
+		$date_created = $date_created instanceof \WC_DateTime ? $date_created->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_created );
 
 		// Only register the change if it was manually changed.
 		if ( $date_created !== $this->date_created && $this->post && $this->post->post_date !== $date_created ) {
 			$this->register_change( 'date_created' );
-			$this->set_meta( 'date_created', Helpers::get_wc_time( $date_created ) );
+			$this->set_meta( 'date_created', $date_created );
 		}
 
 	}
