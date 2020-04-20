@@ -20,7 +20,7 @@ import '../vendor/select2';             // A fixed version compatible with webpa
 import EnhancedSelect from './components/_enhanced-select';
 import Settings from './config/_settings';
 import SettingsPage from './components/settings-page/_settings-page';
-
+import Tooltip from './components/_tooltip';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
@@ -30,8 +30,9 @@ jQuery( ($) => {
 	// Get the options from the localized var.
 	let settings = new Settings('atumSettingsVars');
 	let enhancedSelect = new EnhancedSelect();
-	let settingsPage = new SettingsPage(settings, enhancedSelect);
-	
+	let tooltip = new Tooltip();
+	let settingsPage = new SettingsPage(settings, enhancedSelect, tooltip);
+
 	if( $('#atum-table-color-settings').length ) {
 		settingsPage.hideColors();
 	}

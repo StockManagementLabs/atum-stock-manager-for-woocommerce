@@ -9,6 +9,7 @@ import Settings from '../../config/_settings';
 import { Switcher } from '../_switcher';
 import SmartForm from '../_smart-form';
 import TabLoader from '../_tab-loader';
+import Tooltip from '../_tooltip';
 
 export default class SettingsPage {
 	
@@ -19,10 +20,11 @@ export default class SettingsPage {
 	numHashParameters: number = 0;
 	swal: any = window['swal'];
 	tabLoader: TabLoader;
-	
+
 	constructor(
 		private settings: Settings,
-		private enhancedSelect: EnhancedSelect
+		private enhancedSelect: EnhancedSelect,
+		private tooltip: Tooltip
 	) {
 		
 		// Initialize selectors.
@@ -39,6 +41,9 @@ export default class SettingsPage {
 			color    : '#dbf9ff',
 			jackColor: '#00b8db',
 		});
+
+		// Enable Tooltips.
+		this.tooltip.addTooltips(this.$form);
 		
 		// Enable ColoPickers.
 		ColorPicker.doColorPickers(this.settings.get('selectColor'));
@@ -54,8 +59,7 @@ export default class SettingsPage {
 
 		// Toggle Menu.
 		this.toggleMenu();
-		
-		
+
 		this.$form
 			
 			// Out of stock threshold option updates.
@@ -66,11 +70,16 @@ export default class SettingsPage {
 
             // Theme selector fields.
             .on('click', '.selector-box', (evt: JQueryEventObject) => this.doThemeSelector($(evt.currentTarget)) )
-		
+
+			// Toggle checkboxes.
+			.on('click', '.atum-settings-input[type=checkbox]', (evt: JQueryEventObject) => this.clickCheckbox($(evt.currentTarget)) )
+
 			// Default color fields.
-			.on('click', '.reset-default-colors', (evt: JQueryEventObject) => this.doResetDefault($(evt.currentTarget)) );
-		
-		
+			.on('click', '.reset-default-colors', (evt: JQueryEventObject) => this.doResetDefault($(evt.currentTarget)) )
+
+			// Switcher multicheckbox.
+			.on('change', '.atum-multi-checkbox-main', (evt: JQueryEventObject) => this.toggleMultiCheckboxPanel($(evt.currentTarget)) );
+
 		new SmartForm(this.$form, this.settings.get('atumPrefix'));
 		
 		
@@ -85,7 +94,7 @@ export default class SettingsPage {
 		});
 	
 	}
-	
+
 	setupNavigation() {
 		
 		// Instantiate the loader to register the jQuery.address and the events.
@@ -172,7 +181,10 @@ export default class SettingsPage {
 			else {
 				$inputButton.show();
 			}
-			
+
+			// Enable Tooltips.
+			this.tooltip.addTooltips(this.$form);
+
 			this.$settingsWrapper.trigger('atum-settings-page-loaded', [ $navLink.data('tab') ]);
 			
 			if ( 'visual_settings' === $navLink.data('tab') ) {
@@ -404,5 +416,18 @@ export default class SettingsPage {
 		});
 		
 	}
-	
+
+	toggleMultiCheckboxPanel( $switcher: JQuery ) {
+		const $panel: JQuery = $switcher.siblings('.atum-settings-multi-checkbox');
+
+		$panel.css('display',$switcher.is(':checked') ? 'block' : 'none');
+	}
+
+	clickCheckbox( $checkbox: JQuery ) {
+		if($checkbox.is(':checked'))
+			$checkbox.parents('.atum-multi-checkbox-option').addClass('setting-checked');
+		else
+			$checkbox.parents('.atum-multi-checkbox-option').removeClass('setting-checked');
+	}
+
 }

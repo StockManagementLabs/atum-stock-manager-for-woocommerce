@@ -1526,7 +1526,7 @@ fieldset:disabled a.btn {
 
 .btn-sm {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -4268,7 +4268,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -4589,7 +4589,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   display: block;
   padding: 0.5rem 1.5rem;
   margin-bottom: 0;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   color: #6c757d;
   white-space: nowrap;
 }

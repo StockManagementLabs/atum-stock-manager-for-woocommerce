@@ -9,6 +9,7 @@
 @import "common/animations";
 @import "common/root";
 
+@import "atoms/tooltip";
 @import "atoms/buttons";
 @import "atoms/select2";
 @import "atoms/atum-icons";
@@ -18,5 +19,6 @@
 @import "molecules/sweet-alert";
 @import "atoms/switchery";
 @import "molecules/atum-footer";
+@import "molecules/meta-boxes";
 
 @import "organisms/pages/settings";
