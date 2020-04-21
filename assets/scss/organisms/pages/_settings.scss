@@ -241,10 +241,33 @@
 			font-weight: bold;
 			
 			[type=checkbox] {
-				background-color: var(--tertiary-hover);
-				color: var(--white);
+				background-color: var(--success);
 				border: 0;
+				
+				&:checked::before {
+					color: var(--white);
+					content: $atmi-checkmark;
+					font-family: $atum-icon-font;
+					font-size: 14px;
+					margin: 8px -2px 0;
+					font-weight: bold;
+				}
 			}
+		}
+	}
+	
+	.remove-datepicker-range {
+		border: 0;
+		
+		&:checked::before {
+			background-color: var(--success);
+			color: var(--white);
+			content: $atmi-checkmark;
+			font-family: $atum-icon-font;
+			font-size: 14px;
+			font-weight: bold;
+			padding-top: 10px;
+			height: .68rem;
 		}
 	}
 	
@@ -718,7 +741,7 @@
 				}
 			}
 			
-			.region-switcher {
+			.region-switcher, .range-remover {
 				display: flex;
 				flex-wrap: wrap !important;
 			}
@@ -783,6 +806,12 @@
 					}
 				}
 				
+				.checkbox-wrapper {
+					margin-bottom: 20px;
+					margin-left: 14px;
+					line-height: 30px;
+				}
+				
 				.tool-fields-wrapper {
 					width: 100%;
 					margin-bottom: 20px;
@@ -812,6 +841,21 @@
 						
 						.tool-fields-from, .tool-fields-to, .tool-controls {
 							width: 100%;
+							
+							.range-datepicker {
+								width: inherit;
+								&:after {
+									display: block;
+									font-family: atum-icon-font;
+									content: $atmi-calendar-full;
+									padding-right: 15px;
+									font-size: 12px;
+									top: 13px;
+									right: 0;
+									position: absolute;
+								}
+								
+							}
 							
 							.select2-container {
 								&.atum-select2, &.atum-enhanced-select {

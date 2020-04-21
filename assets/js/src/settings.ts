@@ -21,6 +21,7 @@ import EnhancedSelect from './components/_enhanced-select';
 import Settings from './config/_settings';
 import SettingsPage from './components/settings-page/_settings-page';
 import Tooltip from './components/_tooltip';
+import DateTimePicker from './components/_date-time-picker';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ($) => {
@@ -31,7 +32,8 @@ jQuery( ($) => {
 	let settings = new Settings('atumSettingsVars');
 	let enhancedSelect = new EnhancedSelect();
 	let tooltip = new Tooltip();
-	let settingsPage = new SettingsPage(settings, enhancedSelect, tooltip);
+	let dateTimePicker = new DateTimePicker( settings );
+	let settingsPage = new SettingsPage(settings, enhancedSelect, tooltip, dateTimePicker);
 
 	if( $('#atum-table-color-settings').length ) {
 		settingsPage.hideColors();

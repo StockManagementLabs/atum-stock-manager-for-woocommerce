@@ -224,6 +224,8 @@ class Settings {
 				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
 				'selectAll'          => __( 'Select All', ATUM_TEXT_DOMAIN ),
 				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
+				'removeAll'          => __( 'Remove All!', ATUM_TEXT_DOMAIN ),
+				'removeRange'        => __( 'Remove Range!', ATUM_TEXT_DOMAIN ),
 				'oostDisableAction'  => 'atum_disable_out_stock_threshold',
 				'oostDisableNonce'   => wp_create_nonce( 'atum-out-stock-threshold-disable-nonce' ),
 				'oostDisableText'    => __( "We are going to leave your saved values in your database in case you decide to re-enable the ATUM's Out of Stock threshold per product again. From now on, your system will start using the WooCommerce's global Out of Stock threshold value (if set).", ATUM_TEXT_DOMAIN ),
@@ -1168,7 +1170,8 @@ class Settings {
 			</div>
 			<?php endif; ?>
 
-			<button type="button" class="btn btn-primary tool-runner"<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
+			<button type="button" class="btn btn-<?php echo esc_attr( isset( $args['options']['button_style'] ) ? $args['options']['button_style'] : 'primary' ) ?> tool-runner"
+				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
 				<?php echo esc_attr( $args['options']['button_text'] ) ?>
 			</button>
 

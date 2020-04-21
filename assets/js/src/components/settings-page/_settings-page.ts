@@ -10,6 +10,8 @@ import { Switcher } from '../_switcher';
 import SmartForm from '../_smart-form';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
+import DateTimePicker from '../_date-time-picker';
+import moment from 'moment/min/moment-with-locales.min';
 
 export default class SettingsPage {
 	
@@ -24,7 +26,8 @@ export default class SettingsPage {
 	constructor(
 		private settings: Settings,
 		private enhancedSelect: EnhancedSelect,
-		private tooltip: Tooltip
+		private tooltip: Tooltip,
+		private dateTimePicker: DateTimePicker
 	) {
 		
 		// Initialize selectors.
@@ -41,6 +44,9 @@ export default class SettingsPage {
 			color    : '#dbf9ff',
 			jackColor: '#00b8db',
 		});
+
+		// Enable DateTimePickers
+		this.initDateTimePicker();
 
 		// Enable Tooltips.
 		this.tooltip.addTooltips(this.$form);
@@ -78,7 +84,11 @@ export default class SettingsPage {
 			.on('click', '.reset-default-colors', (evt: JQueryEventObject) => this.doResetDefault($(evt.currentTarget)) )
 
 			// Switcher multicheckbox.
-			.on('change', '.atum-multi-checkbox-main', (evt: JQueryEventObject) => this.toggleMultiCheckboxPanel($(evt.currentTarget)) );
+			.on('change', '.atum-multi-checkbox-main', (evt: JQueryEventObject) => this.toggleMultiCheckboxPanel($(evt.currentTarget)) )
+
+			.on('change', '.remove-datepicker-range', (evt: JQueryEventObject) => this.toggleRangeRemove($(evt.currentTarget)) )
+
+			.on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to', (evt: JQueryEventObject) => this.setDateTimeInputs() );
 
 		new SmartForm(this.$form, this.settings.get('atumPrefix'));
 		
@@ -168,6 +178,7 @@ export default class SettingsPage {
 			
 			Switcher.doSwitchers();
 			ColorPicker.doColorPickers(this.settings.get('selectColor'));
+			this.initDateTimePicker();
 			this.enhancedSelect.maybeRestoreEnhancedSelect();
 			this.enhancedSelect.doSelect2($('.atum-select2'), {}, true);
 			this.$form.find('[data-dependency]').change().removeClass('dirty');
@@ -429,5 +440,33 @@ export default class SettingsPage {
 		else
 			$checkbox.parents('.atum-multi-checkbox-option').removeClass('setting-checked');
 	}
+
+	initDateTimePicker() {
+		let $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
+			$dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' );
+
+		if ( $dateFrom.length && $dateTo.length ) {
+			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate : false, maxDate: moment() } );
+			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate : false } );
+
+		}
+	}
+
+	setDateTimeInputs() {
+		let $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
+		    $dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' ),
+			$field: JQuery = this.$form.find( '.range-value' );
+
+		$field.val( JSON.stringify( { dateFrom: $dateFrom.val(), dateTo: $dateTo.val() } ) );
+	}
+
+	toggleRangeRemove( $checkbox: JQuery ) {
+		const $panel: JQuery = $checkbox.parent().siblings('.range-fields-block'),
+			$button: JQuery = $checkbox.parent().siblings('.tool-runner');
+
+		$panel.css('display',$checkbox.is(':checked') ? 'block' : 'none');
+		$button.text($checkbox.is(':checked') ? this.settings.get('removeRange') : this.settings.get('removeAll'));
+	}
+
 
 }
