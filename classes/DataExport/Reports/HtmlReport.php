@@ -471,9 +471,11 @@ class HtmlReport extends ListTable {
 		parent::display();
 
 		// The title column cannot be disabled, so we must add 1 to the count.
-		$columns     = count( self::$table_columns ) + 1;
-		$max_columns = count( $this->_args['table_columns'] );
-		$count_views = $this->count_views;
+		$columns      = count( self::$table_columns ) + 1;
+		$max_columns  = count( $this->_args['table_columns'] );
+		$count_views  = $this->count_views;
+		$product_type = FALSE;
+		$category     = FALSE;
 
 		if ( ! empty( $_REQUEST['product_type'] ) ) {
 
