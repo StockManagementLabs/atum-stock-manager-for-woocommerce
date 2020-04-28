@@ -495,18 +495,18 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param array|int $items      Array of Product IDs (or single ID) we want to calculate sales from.
 	 * @param int       $date_start The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
 	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array|int $items      Optional. Array of Product IDs (or single ID) we want to calculate sales from.
 	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 *
 	 * @return array|int|float
 	 */
-	public static function get_sold_last_days( $items, $date_start, $date_end = NULL, $colums = [ 'qty' ] ) {
+	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ] ) {
 
 		$items_sold = array();
 
-		if ( ! empty( $items ) && ! empty( $colums ) ) {
+		if ( ! empty( $colums ) ) {
 
 			global $wpdb;
 
@@ -525,47 +525,118 @@ final class Helpers {
 				AND post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-completed')				  
 			";
 
-			if ( is_array( $items ) ) {
-				$products_where = 'IN (' . implode( ',', $items ) . ')';
-			}
-			else {
-				$products_where = "= $items";
+			$query_columns              = $query_joins = [];
+			$use_lookup_table           = FALSE;
+			$order_product_lookup_table = $wpdb->prefix . 'wc_order_product_lookup';
+
+			// TODO: ENABLE IT FROM SETTINGS
+			if ( $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0 ) {
+				$use_lookup_table = TRUE;
 			}
 
-			$query_columns = $query_joins = [];
+			// Filter by product IDs.
+			$products_where = '';
+			if ( ! empty( $items ) ) {
+
+				if ( is_array( $items ) ) {
+
+					if ( $use_lookup_table ) {
+						$products_where = 'AND (`opl`.`product_id` IN (' . implode( ',', $items ) . ') OR `opl`.`variation_id` IN (' . implode( ',', $items ) . '))';
+					}
+					else {
+						$products_where = 'AND `mt_id`.`meta_value` IN (' . implode( ',', $items ) . ')';
+					}
+
+				}
+				else {
+
+					if ( $use_lookup_table ) {
+						$products_where = "AND (`opl`.`product_id` = $items OR `opl`.`variation_id` = $items)";
+					}
+					else {
+						$products_where = "AND `mt_id`.`meta_value` = $items";
+					}
+
+				}
+
+			}
+			// Get the product ID column too.
+			elseif ( in_array( 'prod_id', $colums ) && ! $use_lookup_table ) {
+				$products_where = " AND `mt_id`.`meta_value` > 0";
+			}
 
 			if ( in_array( 'qty', $colums ) ) {
-				$query_columns[] = 'SUM(`mt_qty`.`meta_value`) AS `QTY`';
-				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_qty` ON (`mt_id`.`order_item_id` = `mt_qty`.`order_item_id`) AND `mt_qty`.`meta_key` = '_qty'";
+
+				if ( $use_lookup_table ) {
+					$query_columns[] = 'SUM(`opl`.`product_qty`) AS `QTY`';
+				}
+				else {
+					$query_columns[] = 'SUM(`mt_qty`.`meta_value`) AS `QTY`';
+					$query_joins[]   = "LEFT JOIN `$wpdb->order_itemmeta` AS `mt_qty` ON (`items`.`order_item_id` = `mt_qty`.`order_item_id` AND `mt_qty`.`meta_key` = '_qty')";
+				}
+
+
 			}
 
 			if ( in_array( 'total', $colums ) ) {
-				$query_columns[] = 'SUM(`mt_total`.`meta_value`) AS `TOTAL`';
-				$query_joins[]   = "INNER JOIN `$wpdb->order_itemmeta` AS `mt_total` ON (`mt_id`.`order_item_id` = `mt_total`.`order_item_id`) AND `mt_total`.`meta_key` = '_line_total'";
+
+				if ( $use_lookup_table ) {
+					$query_columns[] = 'SUM(`opl`.`product_net_revenue`) AS `TOTAL`';
+				}
+				else {
+					$query_columns[] = 'SUM(`mt_total`.`meta_value`) AS `TOTAL`';
+					$query_joins[]   = "LEFT JOIN `$wpdb->order_itemmeta` AS `mt_total` ON (`items`.`order_item_id` = `mt_total`.`order_item_id` AND `mt_total`.`meta_key` = '_line_total')";
+				}
+
 			}
 
 			if ( in_array( 'prod_id', $colums ) ) {
-				$query_columns[] = 'MAX(CAST(`mt_id`.`meta_value` AS SIGNED)) AS `PROD_ID`';
+
+				if ( $use_lookup_table ) {
+					$query_columns[] = '( IF( MAX(`opl`.`variation_id`) > 0, MAX(`opl`.`variation_id`), MAX(`opl`.`product_id`) ) ) AS `PROD_ID`';
+				}
+				else {
+					$query_columns[] = 'MAX( CAST(`mt_id`.`meta_value` AS SIGNED) ) AS `PROD_ID`';
+				}
+
 			}
 
 			$query_columns_str = implode( ', ', $query_columns );
 			$query_joins_str   = implode( "\n", $query_joins );
 
-			// TODO: USE LOOK UP TABLE AVAILABLE SINCE WC 3.6 FOR BETTER PERFORMANCE.
-			$query = "
-				SELECT $query_columns_str
-				FROM `$wpdb->posts` AS `orders`
-			    INNER JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
-			    INNER JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
-		        $query_joins_str
-				WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_value` $products_where
-			    AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')
-				GROUP BY `mt_id`.`meta_value`
-				HAVING (`QTY` IS NOT NULL);
-			";
+			if ( $use_lookup_table ) {
+
+				$query = "
+					SELECT $query_columns_str
+					FROM `$wpdb->posts` AS `orders`
+				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
+				    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
+			        $query_joins_str
+					WHERE `orders`.`ID` IN ($orders_query)
+			        $products_where			  
+					GROUP BY `opl`.`variation_id`, `opl`.`product_id`
+					HAVING (`QTY` IS NOT NULL);
+				";
+
+			}
+			else {
+
+				$query = "
+					SELECT $query_columns_str
+					FROM `$wpdb->posts` AS `orders`
+				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
+				    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)	    
+			        $query_joins_str
+					WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id') 
+			        $products_where			  
+					GROUP BY `mt_id`.`meta_value`
+					HAVING (`QTY` IS NOT NULL);
+				";
+
+			}
 
 			// For single products.
-			if ( ! is_array( $items ) || count( $items ) === 1 ) {
+			if ( ( ! empty( $items ) && ! is_array( $items ) ) || ( is_array( $items ) && count( $items ) === 1 ) ) {
 
 				// When only 1 single result is requested.
 				if ( count( $colums ) === 1 ) {
@@ -625,7 +696,7 @@ final class Helpers {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( $product->get_id(), "$out_of_stock_date -$days days", $out_of_stock_date );
+				$sold_last_days = self::get_sold_last_days( "$out_of_stock_date -$days days", $out_of_stock_date, $product->get_id() );
 				$lost_sales     = 0;
 
 				if ( $sold_last_days > 0 ) {
@@ -814,45 +885,50 @@ final class Helpers {
 
 	/**
 	 * Get a setting for the specified product
-	 * First checks if has a meta key, if the meta value is distinct to the global one, returns that value,
-	 * but if it's set to global, returns the global's ATUM setting default for it.
+	 * First checks if has the product has a specific value for that setting, if the value isn't NULL, returns that value,
+	 * but if it's set to NULL, returns the ATUM's global setting for it.
 	 *
-	 * NOTE: The global setting MUST HAVE the same name as the individual meta key but starting with the keyword "default".
+	 * NOTE: The global setting MUST HAVE the same name as the individual setting but starting with the keyword "default".
 	 *
-	 * @since 1.4.18
+	 * @since   1.4.18
+	 * @version 1.1
 	 *
-	 * @param int    $product_id     The product ID.
-	 * @param string $meta_key       The meta key name.
-	 * @param mixed  $default        The default value for the global option.
-	 * @param string $prefix         Optional. The ATUM add-ons should use a prefix for their settings.
-	 * @param bool   $allow_global   Optional. If FALSE, only can return meta value or default. If TRUE, it could return 'global'.
+	 * @param \WC_Product|AtumProductTrait $product      The ATUM product object.
+	 * @param string                       $prop_name    The prop name.
+	 * @param mixed                        $default      The default value for the global option.
+	 * @param string                       $prefix       Optional. The ATUM add-ons should use a prefix for their settings.
+	 * @param bool                         $allow_global Optional. If FALSE, only can return meta value or default. If TRUE, it could return 'global'.
 	 *
 	 * @return mixed
 	 */
-	public static function get_product_setting( $product_id, $meta_key, $default, $prefix = '', $allow_global = FALSE ) {
-		
-		$meta_value = get_post_meta( $product_id, $meta_key, TRUE );
-		
+	public static function get_product_prop( $product, $prop_name, $default, $prefix = '', $allow_global = FALSE ) {
+
+		$prop_value = NULL;
+
+		if ( is_callable( array( $product, "get_$prop_name" ) ) ) {
+			$prop_value = call_user_func( array( $product, "get_$prop_name" ) );
+		}
+
 		// If has no value saved, get the default.
-		if ( ! $meta_value || 'global' === $meta_value ) {
+		if ( ! $prop_value ) {
 			
-			$option_name = "default{$meta_key}";
+			$option_name = "default_$prop_name";
 			
 			if ( ! empty( $prefix ) ) {
 				
-				if ( '_' !== substr( $prefix, - 1, 1 ) ) {
+				if ( '_' !== substr( $prefix, -1, 1 ) ) {
 					$prefix .= '_';
 				}
 				
 				$option_name = $prefix . $option_name;
 				
 			}
-			
-			$meta_value = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
+
+			$prop_value = ! $allow_global ? self::get_option( $option_name, $default ) : 'global';
 			
 		}
 		
-		return $meta_value;
+		return $prop_value;
 
 	}
 
@@ -933,7 +1009,7 @@ final class Helpers {
 		$unmng_where = array(
 			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
 			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
-			"AND (mt1.post_id IS NULL OR (mt1.meta_key = '_manage_stock' AND mt1.meta_value = 'no'))",
+			"AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')",
 			"AND wpd.type NOT IN ('" . implode( "','", $excluded_types ) . "')",
 		);
 		
@@ -2924,11 +3000,11 @@ final class Helpers {
 				self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
 				// Set sold today.
-				$sold_today = self::get_sold_last_days( $product_id, 'today midnight', $current_time );
+				$sold_today = self::get_sold_last_days( 'today midnight', $current_time, $product_id );
 				$product->set_sold_today( $sold_today );
 
 				// Sales last days.
-				$sales_last_ndays = self::get_sold_last_days( $product_id, "$current_time -$sale_days days", $current_time );
+				$sales_last_ndays = self::get_sold_last_days( "$current_time -$sale_days days", $current_time, $product_id );
 				$product->set_sales_last_days( $sales_last_ndays );
 
 				// Out stock days.
@@ -3032,7 +3108,7 @@ final class Helpers {
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
 
-			$expected_sales = self::get_sold_last_days( $product->get_id(), "$current_time -7 days", $current_time ) / 7 * $days_to_reorder;
+			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id() ) / 7 * $days_to_reorder;
 
 			return $expected_sales > $product->get_stock_quantity();
 

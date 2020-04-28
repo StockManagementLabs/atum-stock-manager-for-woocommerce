@@ -52,12 +52,23 @@ trait AjaxLegacyTrait {
 		$join_counter  = 1;
 
 		// Search by meta keys.
-		$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ '_sku' ] ) );
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
 
-		foreach ( $searched_metas as $searched_meta ) {
-			$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
-			$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // phpcs:ignore WordPress.DB.PreparedSQL
-			$join_counter ++;
+			$meta_join[]  = "LEFT JOIN $wpdb->wc_product_meta_lookup plu ON posts.ID = plu.product_id";
+			$meta_where[] = $wpdb->prepare( "OR plu.sku LIKE %s", $like_term );
+
+		}
+		/* @deprecated Searching by meta keys is too slow, so we should us the lookup tables where possible */
+		else {
+
+			$searched_metas = array_map( 'wc_clean', apply_filters( 'atum/ajax/search_products/searched_meta_keys', [ '_sku' ] ) );
+
+			foreach ( $searched_metas as $searched_meta ) {
+				$meta_join[]  = "LEFT JOIN {$wpdb->postmeta} pm{$join_counter} ON posts.ID = pm{$join_counter}.post_id";
+				$meta_where[] = $wpdb->prepare( "OR ( pm{$join_counter}.meta_key = %s AND pm{$join_counter}.meta_value LIKE %s )", $searched_meta, $like_term ); // phpcs:ignore WordPress.DB.PreparedSQL
+				$join_counter ++;
+			}
+
 		}
 
 		// Search by Supplier SKU.

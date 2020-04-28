@@ -51,10 +51,10 @@ final class WidgetHelpers {
 	 * @param array $atts {
 	 *      Array of stats filter params.
 	 *
-	 *      @type array  $types              An array of stats to get. Possible values: "sales" and/or "lost_sales"
-	 *      @type array  $products           The array of products to include in calculations
+	 *      @type array  $types              An array of stats to get. Possible values: "sales" and/or "lost_sales"*
 	 *      @type string $date_start         The date from when to start the items' sales calculations (must be a string format convertible with strtotime)
 	 *      @type string $date_end           Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime)
+	 *      @type array  $products           Optional. The array of products to include in calculations
 	 *      @type int    $days               Optional. The days used for lost sales calculations. Only used when asking for lost sales. If not passed will be calculated
 	 *      @type bool   $formatted_value    Optional. Whether to return the value formatted as currency
 	 * }
@@ -67,9 +67,9 @@ final class WidgetHelpers {
 		 * Variables definition
 		 *
 		 * @var array  $types
-		 * @var array  $products
 		 * @var string $date_start
 		 * @var string $date_end
+		 * @var array  $products
 		 * @var int    $days
 		 * @var bool   $formatted_value
 		 */
@@ -87,7 +87,7 @@ final class WidgetHelpers {
 			$stats['lost_products'] = 0;
 		}
 
-		$products_sold  = Helpers::get_sold_last_days( $products, $date_start, ( isset( $date_end ) ? $date_end : NULL ), [ 'qty', 'total', 'prod_id' ] );
+		$products_sold  = Helpers::get_sold_last_days( $date_start, ( isset( $date_end ) ? $date_end : NULL ), ! empty( $products ) ? $products : NULL, [ 'qty', 'total', 'prod_id' ] );
 		$lost_processed = array();
 
 		if ( $products_sold ) {
@@ -237,15 +237,7 @@ final class WidgetHelpers {
 	 */
 	public static function get_sales_chart_data( $time_window, $types = [ 'sales' ] ) {
 
-		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
-		), TRUE );
-
 		$data = $dataset = array();
-
-		if ( empty( $products ) ) {
-			return $dataset;
-		}
 
 		$period = self::get_chart_data_period( $time_window );
 
@@ -272,7 +264,6 @@ final class WidgetHelpers {
 
 			$data[] = self::get_sales_stats( array(
 				'types'           => $types,
-				'products'        => $products,
 				'date_start'      => $dt->format( 'Y-m-d H:i:s' ),
 				'date_end'        => 'year' === $period_time ? 'last day of ' . $dt->format( 'F Y' ) . ' 23:59:59' : $dt->format( 'Y-m-d 23:59:59' ),
 				'formatted_value' => FALSE,
@@ -646,18 +637,39 @@ final class WidgetHelpers {
 				    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
 					GROUP BY IDs) AS sales";
 
-				$str_statuses = "
-					(SELECT p.ID, IF( 
-						CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
-						CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
-					) AS status
-					FROM $wpdb->posts AS p
-				    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
-				    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-					WHERE {$wpdb->postmeta}.meta_key = '_stock'
-		            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
-		            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
-		            ) AS statuses';
+				if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+
+					$str_statuses = "
+						(SELECT p.ID, IF( 
+							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= {$wpdb->wc_product_meta_lookup}.stock_quantity, TRUE, FALSE	
+						) AS status
+						FROM $wpdb->posts AS p
+					    LEFT JOIN $wpdb->wc_product_meta_lookup ON (p.ID = {$wpdb->wc_product_meta_lookup}.product_id)
+					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+						WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
+			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
+			            ) AS statuses
+		            ';
+
+				}
+				/* @deprecated Uses the postmeta table to get the stock quantity */
+				else {
+
+					$str_statuses = "
+						(SELECT p.ID, IF( 
+							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
+							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
+						) AS status
+						FROM $wpdb->posts AS p
+					    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
+					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+						WHERE {$wpdb->postmeta}.meta_key = '_stock'
+			            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
+			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
+			            ) AS statuses
+		            ';
+
+				}
 
 				$str_sql = apply_filters( 'atum/dashboard/stock_control_widget/low_stock_products_sql', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
@@ -697,46 +709,47 @@ final class WidgetHelpers {
 
 		global $wpdb;
 
-		// Get all the published Variables first.
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
-		$where         = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $post_statuses ) . "')";
+		// Get all the published parents first.
+		$products_visibility = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$where               = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $products_visibility ) . "')";
 
 		if ( ! empty( $post_in ) ) {
 			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
 		}
 
 		// phpcs:disable
-		$parents = $wpdb->get_col( $wpdb->prepare( "
+		$parents_sql = $wpdb->prepare( "
 			SELECT p.ID FROM $wpdb->posts p  
 			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
 			WHERE $where AND pr.type = %s
 			GROUP BY p.ID
-		", $parent_type ) );
+		", $parent_type );
+
+		$parents = $wpdb->get_col( $parents_sql );
 		// phpcs:enable
 
 		if ( ! empty( $parents ) ) {
 
-			// Save them to be used when preparing the list query.
+			// Save them to be used when counting products.
 			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
 			if ( in_array( $parent_type, [ 'variable', 'variable-subscription' ], TRUE ) ) {
-				self::$variable_products = array_merge( self::$variable_products, $parents );
+				self::$variable_products = array_merge( self::$variable_products, array_map( 'absint', $parents ) );
 			}
 			elseif ( 'grouped' === $parent_type ) {
-				self::$grouped_products = array_merge( self::$grouped_products, $parents );
+				self::$grouped_products = array_merge( self::$grouped_products, array_map( 'absint', $parents ) );
 			}
 
-			$children_args = (array) apply_filters( 'atum/dashboard/get_children/children_args', array(
-				'post_type'       => $post_type,
-				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-				'posts_per_page'  => - 1,
-				'fields'          => 'ids',
-				'post_parent__in' => $parents,
-			) );
+			$children_sql = $wpdb->prepare("
+				SELECT p.ID FROM $wpdb->posts p
+				WHERE p.post_parent IN (
+					$parents_sql
+				) AND p.post_type = %s AND p.post_status IN ('" . implode( "','", $products_visibility ) . "')
+			", $post_type );
 
-			$children = new \WP_Query( $children_args );
+			$children = $wpdb->get_col( $children_sql );
 
-			if ( $children->found_posts ) {
-				return $children->posts;
+			if ( ! empty( $children ) ) {
+				return array_map( 'absint', $children );
 			}
 
 		}

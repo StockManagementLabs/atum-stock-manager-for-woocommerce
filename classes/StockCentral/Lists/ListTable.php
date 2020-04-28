@@ -559,7 +559,7 @@ class ListTable extends AtumListTable {
 			$sold_today = $this->product->get_sold_today();
 
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
-				$sold_today = Helpers::get_sold_last_days( $this->product->get_id(), 'today midnight', $this->day );
+				$sold_today = Helpers::get_sold_last_days( 'today midnight', $this->day, $this->product->get_id() );
 				$this->product->set_sold_today( $sold_today );
 				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
@@ -665,7 +665,7 @@ class ListTable extends AtumListTable {
 				Helpers::is_product_data_outdated( $this->product )
 			) {
 
-				$sales_last_ndays = Helpers::get_sold_last_days( $this->product->get_id(), "$this->day -$sale_days days", $this->day );
+				$sales_last_ndays = Helpers::get_sold_last_days( "$this->day -$sale_days days", $this->day, $this->product->get_id() );
 				$this->product->set_sales_last_days( $sales_last_ndays );
 				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.

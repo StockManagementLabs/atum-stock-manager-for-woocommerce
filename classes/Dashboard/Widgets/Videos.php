@@ -97,7 +97,7 @@ class Videos extends AtumWidget {
 		try {
 
 			// TODO: IMPLEMENT PAGINATION ONCE THE SML CHANNEL REACHES 50 VIDEOS.
-			$youtube = new Youtube( array( 'key' => 'AIzaSyDFqjZKnJDQTDu8d-Ger27Z5lbqAx3yQpE' ) );
+			$youtube = new Youtube( array( 'key' => 'AIzaSyA-F1nv-MzeGiAUjG87jlPIWDQJegiT0Dc' ) );
 
 			$params = array(
 				'q'          => '',

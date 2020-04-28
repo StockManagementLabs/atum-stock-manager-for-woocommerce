@@ -656,18 +656,39 @@ trait ListTableLegacyTrait {
 						GROUP BY IDs) AS sales
 					";
 
-					$str_statuses = "
-						(SELECT p.ID, IF(
-							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
-							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
-						) AS status
-						FROM $wpdb->posts AS p
-					    LEFT JOIN $wpdb->postmeta ON (p.ID = {$wpdb->postmeta}.post_id)
-					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-						WHERE {$wpdb->postmeta}.meta_key = '_stock'
-			            AND p.post_type IN ('" . implode( "', '", $post_types ) . "')
-			            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
-			            ) AS statuses';
+					if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+
+						$str_statuses = "
+							(SELECT p.ID, IF(
+								CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= {$wpdb->wc_product_meta_lookup}.stock_quantity, TRUE, FALSE
+							) AS status
+							FROM $wpdb->posts AS p
+						    LEFT JOIN $wpdb->wc_product_meta_lookup ON (p.ID = {$wpdb->wc_product_meta_lookup}.product_id)
+						    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+							WHERE p.post_type IN ('" . implode( "', '", $post_types ) . "')
+				            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
+				            ) AS statuses
+			            ';
+
+					}
+					/* @deprecated Uses the postmeta table to get the stock quantity */
+					else {
+
+						$str_statuses = "
+							(SELECT p.ID, IF(
+								CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
+								CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
+							) AS status
+							FROM $wpdb->posts AS p
+						    LEFT JOIN $wpdb->postmeta ON (p.ID = {$wpdb->postmeta}.post_id)
+						    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+							WHERE {$wpdb->postmeta}.meta_key = '_stock'
+				            AND p.post_type IN ('" . implode( "', '", $post_types ) . "')
+				            AND p.ID IN (" . implode( ', ', $products_in_stock ) . ') 
+				            ) AS statuses
+			            ';
+
+					}
 
 					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
