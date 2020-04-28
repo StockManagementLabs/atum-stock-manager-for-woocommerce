@@ -234,8 +234,15 @@ final class AtumCache {
 
 		$type         = esc_attr( $type );
 		$transient_id = $type ?: $prefix;
+		$transient    = "_transient_{$transient_id}";
 
-		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '_transient_{$transient_id}%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// Ensure the transient isn't in the WP cache.
+		$alloptions = wp_cache_get( 'alloptions', 'options', FALSE );
+		unset( $alloptions[ $transient ] );
+		wp_cache_delete( 'alloptions', 'options' );
+		wp_cache_add( 'alloptions', $alloptions, 'options' );
+
+		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
