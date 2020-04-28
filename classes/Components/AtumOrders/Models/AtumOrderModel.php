@@ -1209,12 +1209,14 @@ abstract class AtumOrderModel {
 			$this->calculate_taxes();
 		}
 
+		do_action( 'atum/purchase_orders/before_calculate_item_totals', $this );
+
 		// Line items.
 		foreach ( $this->get_items() as $item ) {
-			$cart_subtotal     += $item->get_subtotal();
-			$cart_total        += $item->get_total();
-			$cart_subtotal_tax += $item->get_subtotal_tax();
-			$cart_total_tax    += $item->get_total_tax();
+			$cart_subtotal     += (float) $item->get_subtotal();
+			$cart_total        += (float) $item->get_total();
+			$cart_subtotal_tax += (float) $item->get_subtotal_tax();
+			$cart_total_tax    += (float) $item->get_total_tax();
 		}
 
 		$this->calculate_shipping();
@@ -1224,7 +1226,7 @@ abstract class AtumOrderModel {
 		}
 
 		/* @noinspection PhpWrongStringConcatenationInspection */
-		$grand_total = round( $cart_total + $fee_total + $this->shipping_total + $this->cart_tax + $this->shipping_tax, wc_get_price_decimals() );
+		$grand_total = round( $cart_total + $fee_total + (float) $this->shipping_total + (float) $this->cart_tax + (float) $this->shipping_tax, wc_get_price_decimals() );
 
 		$this->set_discount_total( $cart_subtotal - $cart_total );
 		$this->set_discount_tax( $cart_subtotal_tax - $cart_total_tax );
@@ -1837,6 +1839,17 @@ abstract class AtumOrderModel {
 
 		return FALSE;
 
+	}
+
+	/**
+	 * Getter for the changes prop
+	 *
+	 * @since 1.7.1
+	 *
+	 * @return array
+	 */
+	public function get_changes() {
+		return $this->changes;
 	}
 
 	/**
