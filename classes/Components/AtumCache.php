@@ -234,7 +234,7 @@ final class AtumCache {
 
 		$type         = esc_attr( $type );
 		$transient_id = $type ?: $prefix;
-		$transient    = "_transient_{$transient_id}";
+		$transient    = "_transient_%{$transient_id}";
 
 		// Ensure the transient isn't in the WP cache.
 		$alloptions = wp_cache_get( 'alloptions', 'options', FALSE );
