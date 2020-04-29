@@ -678,7 +678,7 @@ class Wpml {
 	public static function get_original_product_id( $product_id = 0, $post_type = array( 'product', 'product_variation' ) ) {
 
 		$cache_key   = AtumCache::get_cache_key( 'wpml_original_id', $product_id );
-		$original_id = AtumCache::get_cache( $cache_key, ATUM_MULTINV_TEXT_DOMAIN, FALSE, $has_cache );
+		$original_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
 			$return_array = is_array( $product_id );
@@ -706,7 +706,7 @@ class Wpml {
 
 			$original_id = $return_array ? $results : $results[0];
 
-			AtumCache::set_cache( $cache_key, $original_id, ATUM_MULTINV_TEXT_DOMAIN );
+			AtumCache::set_cache( $cache_key, $original_id, ATUM_TEXT_DOMAIN );
 		}
 
 		return $original_id;
