@@ -47,7 +47,14 @@ trait HelpersLegacyTrait {
 
 		// TODO: Change the query to remove the subquery and get the values with joins.
 		if ( $get_stock_status ) {
-			$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
+
+			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+				$unmng_join[]   = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON (posts.ID = pml.product_id)";
+				$unmng_fields[] = "pml.stock_status";
+			}
+			else {
+				$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
+			}
 		}
 
 		$unmng_where = array(

@@ -152,7 +152,7 @@ class Wpml {
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
 			
 			// Add WPML filters to get_posts in Helpers::get_all_products and for Suppliers::get_supplier_products.
-			add_filter( 'atum/get_all_products/args', array( $this, 'filter_get_all_products' ) );
+			//add_filter( 'atum/get_all_products/args', array( $this, 'filter_get_all_products' ) );
 			add_filter( 'atum/suppliers/supplier_products_args', array( $this, 'filter_get_all_products' ) );
 			
 			// Add upgrade ATUM tasks.

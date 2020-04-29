@@ -62,24 +62,13 @@ class Sales extends AtumWidget {
 		}
 		else {
 
-			// Get all the products IDs (including variations).
-			$products = Helpers::get_all_products( array(
-				'post_type' => [ 'product', 'product_variation' ],
-			), TRUE );
-
-			if ( empty( $products ) ) {
-				return;
-			}
-
 			$stats_this_month = WidgetHelpers::get_sales_stats( array(
 				'types'      => array( 'sales' ),
-				'products'   => $products,
 				'date_start' => 'first day of this month midnight',
 			) );
 
 			$stats_today = WidgetHelpers::get_sales_stats( array(
 				'types'      => array( 'sales' ),
-				'products'   => $products,
 				'date_start' => 'today midnight',
 			) );
 

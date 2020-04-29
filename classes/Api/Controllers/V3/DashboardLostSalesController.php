@@ -120,26 +120,17 @@ class DashboardLostSalesController extends DashboardWidgetController {
 			'period' => $period,
 		);
 
-		// Get all the products IDs (including variations).
-		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
-		), TRUE );
+		$args = array(
+			'types'      => array( 'lost_sales' ),
+			'date_start' => 'today' === $period ? 'today midnight' : 'first day of this month midnight',
+		);
 
-		if ( ! empty( $products ) ) {
-
-			$args = array(
-				'types'      => array( 'lost_sales' ),
-				'products'   => $products,
-				'date_start' => 'today' === $period ? 'today midnight' : 'first day of this month midnight',
-			);
-
-			if ( 'today' === $period ) {
-				$args['days'] = 1;
-			}
-
-			$data['data'] = WidgetHelpers::get_sales_stats( $args );
-
+		if ( 'today' === $period ) {
+			$args['days'] = 1;
 		}
+
+		$data['data'] = WidgetHelpers::get_sales_stats( $args );
+
 
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data    = $this->add_additional_fields_to_object( $data, $request );

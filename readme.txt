@@ -1025,7 +1025,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Click the Popover's Set button when hitting enter after entering a value.
 * Close the Popovers when hitting the ESC key.
 * Added ATUM Data Stores for WC Bookings, WC Subscriptions and WC Product Bundles.
-* Improved performance using cache in "get_product_setting".
+* Improved performance using cache in "get_product_prop".
 
 **Changes**
 

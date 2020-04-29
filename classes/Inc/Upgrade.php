@@ -773,10 +773,10 @@ class Upgrade {
 
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( "
+		$wpdb->query( "
 			UPDATE $wpdb->postmeta SET meta_key = '_date_expected'
-			WHERE meta_key = '_date_expected'
-		" ) );
+			WHERE meta_key = '_expected_at_location_date'
+		" );
 
 	}
 

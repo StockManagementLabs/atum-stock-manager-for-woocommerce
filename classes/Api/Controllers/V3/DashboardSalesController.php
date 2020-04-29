@@ -121,20 +121,10 @@ class DashboardSalesController extends DashboardWidgetController {
 			'period' => $period,
 		);
 
-		// Get all the products IDs (including variations).
-		$products = Helpers::get_all_products( array(
-			'post_type' => [ 'product', 'product_variation' ],
-		), TRUE );
-
-		if ( ! empty( $products ) ) {
-
-			$data['data'] = WidgetHelpers::get_sales_stats( array(
-				'types'      => array( 'sales' ),
-				'products'   => $products,
-				'date_start' => 'today' === $period ? 'today midnight' : 'first day of this month midnight',
-			) );
-
-		}
+		$data['data'] = WidgetHelpers::get_sales_stats( array(
+			'types'      => array( 'sales' ),
+			'date_start' => 'today' === $period ? 'today midnight' : 'first day of this month midnight',
+		) );
 
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data    = $this->add_additional_fields_to_object( $data, $request );

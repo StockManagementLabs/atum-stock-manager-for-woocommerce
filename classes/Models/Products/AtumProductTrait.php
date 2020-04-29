@@ -28,34 +28,39 @@ trait AtumProductTrait {
 	 * @var bool
 	 */
 	protected $atum_data = array(
-		'purchase_price'        => '',
-		'supplier_id'           => NULL,
-		'supplier_sku'          => '',
-		'atum_controlled'       => TRUE,
+		'purchase_price'         => '',
+		'supplier_id'            => NULL,
+		'supplier_sku'           => '',
+		'atum_controlled'        => TRUE,
 		// When a new product is created, the ATUM controlled should be enabled by default.
-		'out_stock_date'        => NULL,
-		'out_stock_threshold'   => '',
-		'inheritable'           => FALSE,
-		'inbound_stock'         => NULL,
-		'stock_on_hold'         => NULL,
-		'sold_today'            => NULL,
-		'sales_last_days'       => NULL,
-		'reserved_stock'        => NULL,
-		'customer_returns'      => NULL,
-		'warehouse_damage'      => NULL,
-		'lost_in_post'          => NULL,
-		'other_logs'            => NULL,
-		'out_stock_days'        => NULL,
-		'lost_sales'            => NULL,
-		'has_location'          => NULL,
-		'update_date'           => NULL,
-		'atum_stock_status'     => 'instock',
-		'low_stock'             => NULL,
+		'out_stock_date'         => NULL,
+		'out_stock_threshold'    => '',
+		'inheritable'            => FALSE,
+		'inbound_stock'          => NULL,
+		'stock_on_hold'          => NULL,
+		'sold_today'             => NULL,
+		'sales_last_days'        => NULL,
+		'reserved_stock'         => NULL,
+		'customer_returns'       => NULL,
+		'warehouse_damage'       => NULL,
+		'lost_in_post'           => NULL,
+		'other_logs'             => NULL,
+		'out_stock_days'         => NULL,
+		'lost_sales'             => NULL,
+		'has_location'           => NULL,
+		'update_date'            => NULL,
+		'atum_stock_status'      => 'instock',
+		'low_stock'              => NULL,
 		// Extra props (from ATUM add-ons).
-		'minimum_threshold'     => NULL,
-		'available_to_purchase' => NULL,
-		'selling_priority'      => NULL,
-		'calculated_stock'      => NULL,
+		'minimum_threshold'      => NULL, // PL.
+		'available_to_purchase'  => NULL, // PL.
+		'selling_priority'       => NULL, // PL.
+		'calculated_stock'       => NULL, // PL.
+		'multi_inventory'        => NULL, // MI.
+		'inventory_iteration'    => NULL, // MI.
+		'inventory_sorting_mode' => NULL, // MI.
+		'expirable_inventories'  => NULL, // MI.
+		'price_per_inventory'    => NULL, // MI.
 	);
 
 
@@ -417,6 +422,76 @@ trait AtumProductTrait {
 		return $this->get_prop( 'calculated_stock', $context );
 	}
 
+	/**
+	 * Returns the product's inventory iteration prop.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_inventory_iteration( $context = 'view' ) {
+		return $this->get_prop( 'inventory_iteration', $context );
+	}
+
+	/**
+	 * Returns the product's multi inventory status prop.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_multi_inventory( $context = 'view' ) {
+		return $this->get_prop( 'multi_inventory', $context );
+	}
+
+	/**
+	 * Returns the product's inventory sorting mode prop.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_inventory_sorting_mode( $context = 'view' ) {
+		return $this->get_prop( 'inventory_sorting_mode', $context );
+	}
+
+	/**
+	 * Returns the product's inventory expiration prop.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_expirable_inventories( $context = 'view' ) {
+		return $this->get_prop( 'inventory_sorting_mode', $context );
+	}
+
+	/**
+	 * Returns the product's price per inventory prop.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_price_per_inventory( $context = 'view' ) {
+		return $this->get_prop( 'inventory_sorting_mode', $context );
+	}
+
 
 	/*
 	|----------------------------------------------------------------------------
@@ -745,6 +820,108 @@ trait AtumProductTrait {
 	 */
 	public function set_calculated_stock( $calculated_stock ) {
 		$this->set_prop( 'calculated_stock', is_null( $calculated_stock ) || '' === $calculated_stock ? '' : wc_stock_amount( $calculated_stock ) );
+	}
+
+	/**
+	 * Set the inventory iteration for the current product.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $inventory_iteration Allowed values: NULL, 'use_next' and 'out_of_stock'.
+	 */
+	public function set_inventory_iteration( $inventory_iteration ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'use_next',
+			'out_of_stock',
+		);
+
+		$inventory_iteration = in_array( $inventory_iteration, $valid_values, TRUE ) ? $inventory_iteration : NULL;
+		$this->set_prop( 'inventory_iteration', $inventory_iteration );
+	}
+
+	/**
+	 * Set the multi inventory status for the current product.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $multi_inventory Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_multi_inventory( $multi_inventory ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'yes',
+			'no',
+		);
+
+		$multi_inventory = in_array( $multi_inventory, $valid_values, TRUE ) ? $multi_inventory : NULL;
+		$this->set_prop( 'multi_inventory', $multi_inventory );
+	}
+
+	/**
+	 * Set the inventory sorting mode for the current product.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $inventory_sorting_mode Allowed values: NULL, 'fifo', 'lifo', 'bbe' and 'manual'.
+	 */
+	public function set_inventory_sorting_mode( $inventory_sorting_mode ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'fifo',
+			'lifo',
+			'bbe',
+			'manual'
+		);
+
+		$inventory_sorting_mode = in_array( $inventory_sorting_mode, $valid_values, TRUE ) ? $inventory_sorting_mode : NULL;
+		$this->set_prop( 'inventory_sorting_mode', $inventory_sorting_mode );
+	}
+
+	/**
+	 * Set the inventory expiration mode for the current product.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $expirable_inventories Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_expirable_inventories( $expirable_inventories ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'yes',
+			'no',
+		);
+
+		$expirable_inventories = in_array( $expirable_inventories, $valid_values, TRUE ) ? $expirable_inventories : NULL;
+		$this->set_prop( 'expirable_inventories', $expirable_inventories );
+	}
+
+	/**
+	 * Set the price per inventory for the current product.
+	 *
+	 * @since   1.7.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $price_per_inventory Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_price_per_inventory( $price_per_inventory ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'yes',
+			'no',
+		);
+
+		$price_per_inventory = in_array( $price_per_inventory, $valid_values, TRUE ) ? $price_per_inventory : NULL;
+		$this->set_prop( 'price_per_inventory', $price_per_inventory );
 	}
 
 

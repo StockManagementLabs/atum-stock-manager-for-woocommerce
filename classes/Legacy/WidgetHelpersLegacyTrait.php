@@ -79,7 +79,7 @@ trait WidgetHelpersLegacyTrait {
 			
 		}
 
-		if ( $products ) {
+		if ( ! empty( $products ) ) {
 
 			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 
@@ -87,17 +87,17 @@ trait WidgetHelpersLegacyTrait {
 			 * Unmanaged products
 			 */
 			if ( $show_unmanaged_counter ) {
+
 				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, TRUE );
 
 				$stock_counters['count_in_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
-
 					return ( 'instock' === $row[1] );
 				} ) );
 
 				$stock_counters['count_out_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
-
 					return ( 'outofstock' === $row[1] );
 				} ) );
+
 			}
 			else {
 				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, FALSE );
@@ -118,6 +118,7 @@ trait WidgetHelpersLegacyTrait {
 			/*
 			 * Products In Stock
 			 */
+			// TODO: WHAT ABOUT PRODUCTS WITH MI OR PRODUCTS WITH CALCULATED STOCK?
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
@@ -146,7 +147,7 @@ trait WidgetHelpersLegacyTrait {
 			/*
 			 * Products Out of Stock
 			 */
-			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
+			$products_out_of_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
 			$args               = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
@@ -181,7 +182,7 @@ trait WidgetHelpersLegacyTrait {
 					),
 
 				),
-				'post__in'       => $products_not_stock,
+				'post__in'       => $products_out_of_stock,
 			);
 
 			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/out_stock_products_args', $args ) );
@@ -216,18 +217,39 @@ trait WidgetHelpersLegacyTrait {
 				    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
 					GROUP BY IDs) AS sales";
 
-				$str_statuses = "
-					(SELECT p.ID, IF( 
-						CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
-						CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
-					) AS status
-					FROM $wpdb->posts AS p
-				    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
-				    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-					WHERE {$wpdb->postmeta}.meta_key = '_stock'
-		            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
-		            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
-		            ) AS statuses';
+				if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+
+					$str_statuses = "
+						(SELECT p.ID, IF( 
+							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= {$wpdb->wc_product_meta_lookup}.stock_quantity, TRUE, FALSE	
+						) AS status
+						FROM $wpdb->posts AS p
+					    LEFT JOIN $wpdb->wc_product_meta_lookup ON (p.ID = {$wpdb->wc_product_meta_lookup}.product_id)
+					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+						WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
+			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
+			            ) AS statuses
+		            ';
+
+				}
+				/* @deprecated Uses the postmeta table to get the stock quantity */
+				else {
+
+					$str_statuses = "
+						(SELECT p.ID, IF( 
+							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
+							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
+						) AS status
+						FROM $wpdb->posts AS p
+					    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
+					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
+						WHERE {$wpdb->postmeta}.meta_key = '_stock'
+			            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
+			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
+			            ) AS statuses
+		            ';
+
+				}
 
 				$str_sql = apply_filters( 'atum/dashboard/stock_control_widget/low_stock_products_sql', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
 
@@ -255,45 +277,42 @@ trait WidgetHelpersLegacyTrait {
 	 */
 	private static function get_children_legacy( $parent_type, $post_type = 'product' ) {
 
-		// Get the published Variables first.
-		$parent_args = (array) apply_filters( 'atum/dashboard/get_children/parent_args', array(
-			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-			'posts_per_page' => - 1,
-			'fields'         => 'ids',
-			'tax_query'      => array(
-				array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => $parent_type,
-				),
-			),
-		) );
+		global $wpdb;
 
-		$parents = new \WP_Query( $parent_args );
+		// Get the published parents first.
+		$products_visibility = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$parent_product_type = get_term_by( 'slug', $parent_type, 'product_type' );
+		$parents_sql         = $wpdb->prepare( "
+			SELECT p.ID FROM $wpdb->posts p
+			LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) 
+			WHERE tr.term_taxonomy_id = %d AND p.post_type = 'product' 
+			AND p.post_status IN ('" . implode( "','", $products_visibility ) . "') 
+			GROUP BY p.ID		 
+		", $parent_product_type->term_taxonomy_id );
 
-		if ( $parents->found_posts ) {
+		$parents = $wpdb->get_col( $parents_sql );
 
-			// Save them to be used when preparing the list query.
+		if ( ! empty( $parents ) ) {
+
+			// Save them to be used when counting products.
 			if ( 'variable' === $parent_type ) {
-				self::$variable_products = array_merge( self::$variable_products, $parents->posts );
+				self::$variable_products = array_merge( self::$variable_products, array_map( 'absint', $parents ) );
 			}
 			else {
-				self::$grouped_products = array_merge( self::$grouped_products, $parents->posts );
+				self::$grouped_products = array_merge( self::$grouped_products, array_map( 'absint', $parents ) );
 			}
 
-			$children_args = (array) apply_filters( 'atum/dashboard/get_children/children_args', array(
-				'post_type'       => $post_type,
-				'post_status'     => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-				'posts_per_page'  => - 1,
-				'fields'          => 'ids',
-				'post_parent__in' => $parents->posts,
-			) );
+			$children_sql = $wpdb->prepare("
+				SELECT p.ID FROM $wpdb->posts p
+				WHERE p.post_parent IN (
+					$parents_sql
+				) AND p.post_type = %s AND p.post_status IN ('" . implode( "','", $products_visibility ) . "')
+			", $post_type );
 
-			$children = new \WP_Query( $children_args );
+			$children = $wpdb->get_col( $children_sql );
 
-			if ( $children->found_posts ) {
-				return $children->posts;
+			if ( ! empty( $children ) ) {
+				return array_map( 'absint', $children );
 			}
 
 		}
