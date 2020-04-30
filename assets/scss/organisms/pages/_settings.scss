@@ -260,6 +260,7 @@
 		border: 0;
 		
 		&:checked::before {
+			border-radius: 4px;
 			background-color: var(--success);
 			color: var(--white);
 			content: $atmi-checkmark;
@@ -269,6 +270,10 @@
 			padding-top: 10px;
 			height: .68rem;
 		}
+	}
+	.btn.btn-danger.tool-runner {
+		padding-left: initial;
+		padding-right: initial;
 	}
 	
 	.atum-multi-checkbox-all {
@@ -844,10 +849,14 @@
 							
 							.range-datepicker {
 								width: inherit;
-								&:after {
-									display: block;
-									font-family: atum-icon-font;
+								position: relative;
+								
+								&::after {
+									width: 24px;
+									display: inline-block;
+									background-color: red;
 									content: $atmi-calendar-full;
+									font-family: $atum-icon-font;
 									padding-right: 15px;
 									font-size: 12px;
 									top: 13px;

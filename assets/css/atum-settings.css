@@ -4853,6 +4853,7 @@ h2 .atum-help-tip {
 }
 
 .atum-settings-wrapper .remove-datepicker-range:checked::before {
+  border-radius: 4px;
   background-color: var(--success);
   color: var(--white);
   content: "";
@@ -4861,6 +4862,11 @@ h2 .atum-help-tip {
   font-weight: bold;
   padding-top: 10px;
   height: .68rem;
+}
+
+.atum-settings-wrapper .btn.btn-danger.tool-runner {
+  padding-left: initial;
+  padding-right: initial;
 }
 
 .atum-settings-wrapper .atum-multi-checkbox-all {
@@ -5512,12 +5518,15 @@ h2 .atum-help-tip {
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .range-datepicker {
   width: inherit;
+  position: relative;
 }
 
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker:after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker:after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .range-datepicker:after {
-  display: block;
-  font-family: atum-icon-font;
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-controls .range-datepicker::after {
+  width: 24px;
+  display: inline-block;
+  background-color: red;
   content: "";
+  font-family: "atum-icon-font";
   padding-right: 15px;
   font-size: 12px;
   top: 13px;
