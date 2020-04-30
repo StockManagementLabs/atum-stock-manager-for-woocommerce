@@ -447,7 +447,14 @@ trait AtumProductTrait {
 	 * @return string
 	 */
 	public function get_multi_inventory( $context = 'view' ) {
-		return $this->get_prop( 'multi_inventory', $context );
+		
+		$multi_inventory = $this->get_prop( 'multi_inventory', $context );
+		
+		if ( ! is_null( $multi_inventory ) ) {
+			$multi_inventory = wc_bool_to_string( $multi_inventory );
+		}
+		
+		return $multi_inventory;
 	}
 
 	/**
@@ -475,7 +482,14 @@ trait AtumProductTrait {
 	 * @return string
 	 */
 	public function get_expirable_inventories( $context = 'view' ) {
-		return $this->get_prop( 'inventory_sorting_mode', $context );
+
+		$expirable_inventories = $this->get_prop( 'expirable_inventories', $context );
+
+		if ( ! is_null( $expirable_inventories ) ) {
+			$expirable_inventories = wc_bool_to_string( $expirable_inventories );
+		}
+
+		return $expirable_inventories;
 	}
 
 	/**
@@ -489,7 +503,15 @@ trait AtumProductTrait {
 	 * @return string
 	 */
 	public function get_price_per_inventory( $context = 'view' ) {
-		return $this->get_prop( 'inventory_sorting_mode', $context );
+
+		$price_per_inventory = $this->get_prop( 'price_per_inventory', $context );
+
+		if ( ! is_null( $price_per_inventory ) ) {
+			$price_per_inventory = wc_bool_to_string( $price_per_inventory );
+		}
+
+		return $price_per_inventory;
+
 	}
 
 
@@ -852,13 +874,7 @@ trait AtumProductTrait {
 	 */
 	public function set_multi_inventory( $multi_inventory ) {
 
-		$valid_values = array(
-			NULL, // NULL means 'global'.
-			'yes',
-			'no',
-		);
-
-		$multi_inventory = in_array( $multi_inventory, $valid_values, TRUE ) ? $multi_inventory : NULL;
+		$multi_inventory = ! is_null( $multi_inventory ) && 'global' !== $multi_inventory ? wc_string_to_bool( $multi_inventory ) : NULL;
 		$this->set_prop( 'multi_inventory', $multi_inventory );
 	}
 
@@ -877,7 +893,7 @@ trait AtumProductTrait {
 			'fifo',
 			'lifo',
 			'bbe',
-			'manual'
+			'manual',
 		);
 
 		$inventory_sorting_mode = in_array( $inventory_sorting_mode, $valid_values, TRUE ) ? $inventory_sorting_mode : NULL;
@@ -894,14 +910,9 @@ trait AtumProductTrait {
 	 */
 	public function set_expirable_inventories( $expirable_inventories ) {
 
-		$valid_values = array(
-			NULL, // NULL means 'global'.
-			'yes',
-			'no',
-		);
-
-		$expirable_inventories = in_array( $expirable_inventories, $valid_values, TRUE ) ? $expirable_inventories : NULL;
+		$expirable_inventories = ! is_null( $expirable_inventories ) && 'global' !== $expirable_inventories ? wc_string_to_bool( $expirable_inventories ) : NULL;
 		$this->set_prop( 'expirable_inventories', $expirable_inventories );
+		
 	}
 
 	/**
@@ -913,15 +924,10 @@ trait AtumProductTrait {
 	 * @param string $price_per_inventory Allowed values: NULL, 'yes' and 'no'.
 	 */
 	public function set_price_per_inventory( $price_per_inventory ) {
-
-		$valid_values = array(
-			NULL, // NULL means 'global'.
-			'yes',
-			'no',
-		);
-
-		$price_per_inventory = in_array( $price_per_inventory, $valid_values, TRUE ) ? $price_per_inventory : NULL;
+		
+		$price_per_inventory = ! is_null( $price_per_inventory ) && 'global' !== $price_per_inventory ? wc_string_to_bool( $price_per_inventory ) : NULL;
 		$this->set_prop( 'price_per_inventory', $price_per_inventory );
+
 	}
 
 
