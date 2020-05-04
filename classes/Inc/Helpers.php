@@ -3121,7 +3121,7 @@ final class Helpers {
 	/**
 	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
 	 *
-	 * @since 1.7.2
+	 * @since 1.7.1
 	 *
 	 * @param \WC_Product|int $product
 	 */
