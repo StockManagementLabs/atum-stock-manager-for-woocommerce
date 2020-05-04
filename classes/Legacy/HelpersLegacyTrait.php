@@ -55,6 +55,7 @@ trait HelpersLegacyTrait {
 			else {
 				$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
 			}
+
 		}
 
 		$unmng_where = array(

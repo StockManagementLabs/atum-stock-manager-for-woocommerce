@@ -242,6 +242,7 @@ final class Helpers {
 		$products              = AtumCache::get_transient( $product_ids_transient );
 
 		if ( ! $products ) {
+
 			$products = get_posts( $args );
 			
 			if ( $remove_variables ) {
@@ -256,7 +257,9 @@ final class Helpers {
 				$products  = array_diff( $products, $variables );
 			
 			}
+
 			AtumCache::set_transient( $product_ids_transient, $products, HOUR_IN_SECONDS );
+
 		}
 
 		return $products;

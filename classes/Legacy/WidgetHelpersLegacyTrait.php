@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Settings\Settings;
 
 
 trait WidgetHelpersLegacyTrait {
@@ -41,47 +40,45 @@ trait WidgetHelpersLegacyTrait {
 			'count_unmanaged' => 0,
 		);
 
-		$show_unmanaged_counter      = 'yes' === Helpers::get_option( 'unmanaged_counters' );
-		$products                    = Helpers::get_all_products();
-		$stock_counters['count_all'] = count( $products );
-
-		$variations = self::get_children_legacy( 'variable', 'product_variation' );
-
-		// Add the Variations to the posts list.
-		if ( $variations ) {
-			// The Variable products are just containers and don't count for the list views.
-			$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
-			$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $variations ) );
-		}
-
-		$group_items = self::get_children_legacy( 'grouped' );
-
-		// Add the Group Items to the posts list.
-		if ( $group_items ) {
-			// The Grouped products are just containers and don't count for the list views.
-			$stock_counters['count_all'] += ( count( $group_items ) - count( self::$grouped_products ) );
-			$products                     = array_unique( array_merge( array_diff( $products, self::$grouped_products ), $group_items ) );
-
-		}
-		
-		// WC Subscriptions compatibility.
-		$subscription_variations = [];
-		if ( class_exists( '\WC_Subscriptions' ) ) {
-			
-			$subscription_variations = self::get_children_legacy( 'variable-subscription', 'product_variation' );
-			
-			// Add the Variations to the posts list.
-			if ( $subscription_variations ) {
-				// The Variable products are just containers and don't count for the list views.
-				$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
-				$products                     = array_unique( array_merge( array_diff( $products, self::$variable_products ), $subscription_variations ) );
-			}
-			
-		}
+		$products = Helpers::get_all_products();
 
 		if ( ! empty( $products ) ) {
 
-			$post_types = $variations || $subscription_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+			$show_unmanaged_counter      = 'yes' === Helpers::get_option( 'unmanaged_counters' );
+			$stock_counters['count_all'] = count( $products );
+
+			$variations = self::get_children_legacy( 'variable', 'product_variation' );
+
+			// Add the Variations to the posts list.
+			if ( ! empty( $variations ) ) {
+				// The Variable products are just containers and don't count for the list views.
+				$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
+			}
+
+			$group_items = self::get_children_legacy( 'grouped' );
+
+			// Add the Group Items to the posts list.
+			if ( ! empty( $group_items ) ) {
+				// The Grouped products are just containers and don't count for the list views.
+				$stock_counters['count_all'] += ( count( $group_items ) - count( self::$grouped_products ) );
+
+			}
+
+			// WC Subscriptions compatibility.
+			$subscription_variations = [];
+			if ( class_exists( '\WC_Subscriptions' ) ) {
+
+				$subscription_variations = self::get_children_legacy( 'variable-subscription', 'product_variation' );
+
+				// Add the Variations to the posts list.
+				if ( $subscription_variations ) {
+					// The Variable products are just containers and don't count for the list views.
+					$stock_counters['count_all'] += ( count( $variations ) - count( self::$variable_products ) );
+				}
+
+			}
+
+			$post_types = ( ! empty( $variations ) || ! empty( $subscription_variations ) ) ? [ 'product', 'product_variation' ] : [ 'product' ];
 
 			/*
 			 * Unmanaged products
@@ -91,11 +88,11 @@ trait WidgetHelpersLegacyTrait {
 				$products_unmanaged_status = Helpers::get_unmanaged_products( $post_types, TRUE );
 
 				$stock_counters['count_in_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
-					return ( 'instock' === $row[1] );
+					return 'instock' === $row[1];
 				} ) );
 
 				$stock_counters['count_out_stock'] += count( array_filter( $products_unmanaged_status, function ( $row ) {
-					return ( 'outofstock' === $row[1] );
+					return 'outofstock' === $row[1];
 				} ) );
 
 			}
@@ -106,14 +103,7 @@ trait WidgetHelpersLegacyTrait {
 			$products_unmanaged                = array_column( $products_unmanaged_status, 0 );
 			$stock_counters['count_unmanaged'] = count( $products_unmanaged );
 
-			// Remove the unmanaged from the products list.
-			if ( ! empty( $products_unmanaged ) && ! empty( $products ) ) {
-				$matching = array_intersect( $products, $products_unmanaged );
-
-				if ( ! empty( $matching ) ) {
-					$products = array_diff( $products, $matching );
-				}
-			}
+			$product_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
 			/*
 			 * Products In Stock
@@ -122,139 +112,67 @@ trait WidgetHelpersLegacyTrait {
 			$args = array(
 				'post_type'      => $post_types,
 				'posts_per_page' => - 1,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'post_status'    => $product_statuses,
 				'fields'         => 'ids',
-				'post__in'       => $products,
+				// Exclude variable and grouped products.
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'product_type',
+						'field'    => 'slug',
+						'terms'    => [ 'variable', 'variable-subscription', 'grouped' ],
+						'operator' => 'NOT IN'
+					),
+				),
+				// Exclude unmanaged products.
 				'meta_query'     => array(
-					'relation' => 'AND',
 					array(
 						'key'   => '_manage_stock',
 						'value' => 'yes',
 					),
-					array(
-						'key'     => '_stock',
-						'value'   => 0,
-						'type'    => 'numeric',
-						'compare' => '>',
-					),
 				),
 			);
 
-			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/in_stock_products_args', $args ) );
+			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_stock_levels/in_stock_products_atum_args', array(
+				'key'   => 'atum_stock_status',
+				'value' => [ 'instock', 'onbackorder' ],
+				'type'  => 'CHAR',
+			) );
+
+			add_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
+
+			$products_in_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/get_stock_levels/in_stock_products_args', $args ) );
 			$products_in_stock                 = $products_in_stock->posts;
 			$stock_counters['count_in_stock'] += count( $products_in_stock );
+			self::$atum_query_data             = array(); // Empty the ATUM query data to not conflict with next queries.
 
 			/*
 			 * Products Out of Stock
 			 */
-			$products_out_of_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
-			$args               = array(
-				'post_type'      => $post_types,
-				'posts_per_page' => - 1,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
-				'fields'         => 'ids',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'relation' => 'OR',
-						array(
-							'key'     => '_stock',
-							'value'   => 0,
-							'type'    => 'numeric',
-							'compare' => '<=',
-						),
-						array(
-							'key'     => '_stock',
-							'compare' => 'NOT EXISTS',
-						),
-					),
-					array(
-						'relation' => 'OR',
-						array(
-							'key'   => '_backorders',
-							'value' => 'no',
-							'type'  => 'char',
-						),
-						array(
-							'key'     => '_backorders',
-							'compare' => 'NOT EXISTS',
-						),
-					),
+			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_stock_levels/out_stock_products_atum_args', array(
+				'key'   => 'atum_stock_status',
+				'value' => 'outofstock',
+				'type'  => 'CHAR',
+			) );
 
-				),
-				'post__in'       => $products_out_of_stock,
-			);
-
-			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/stock_control_widget/out_stock_products_args', $args ) );
+			$products_out_stock                 = new \WP_Query( apply_filters( 'atum/dashboard/get_stock_levels/out_stock_products_args', $args ) );
 			$products_out_stock                 = $products_out_stock->posts;
 			$stock_counters['count_out_stock'] += count( $products_out_stock );
+			self::$atum_query_data              = array(); // Empty the ATUM query data to not conflict with next queries.
+
+			// ATUM query clauses not needed anymore.
+			remove_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
 
 			/*
 			 * Products with low stock
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
+				$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+				$str_sql = apply_filters( 'atum/dashboard/get_stock_levels/low_stock_products', "
+					SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
+				" );
 
-				// Compare last seven days average sales per day * re-order days with current stock.
-				$str_sales = "
-					(SELECT	(
-						SELECT MAX(CAST( meta_value AS SIGNED )) AS q 
-						FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-						WHERE meta_key IN ('_product_id', '_variation_id') 
-						AND order_item_id = item.order_item_id
-					) AS IDs,
-				    CEIL(SUM((
-				        SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-				        WHERE meta_key = '_qty' AND order_item_id = item.order_item_id))/7*$days_to_reorder
-			        ) AS qty
-					FROM $wpdb->posts AS orders
-				    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS item ON (orders.ID = item.order_id)
-					INNER JOIN $wpdb->postmeta AS order_meta ON (orders.ID = order_meta.post_id)
-					WHERE (orders.post_type = 'shop_order'
-				    AND orders.post_status IN ('wc-completed', 'wc-processing') AND item.order_item_type ='line_item'
-				    AND order_meta.meta_key = '_paid_date'
-				    AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "')
-					GROUP BY IDs) AS sales";
-
-				if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
-
-					$str_statuses = "
-						(SELECT p.ID, IF( 
-							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= {$wpdb->wc_product_meta_lookup}.stock_quantity, TRUE, FALSE	
-						) AS status
-						FROM $wpdb->posts AS p
-					    LEFT JOIN $wpdb->wc_product_meta_lookup ON (p.ID = {$wpdb->wc_product_meta_lookup}.product_id)
-					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-						WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
-			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
-			            ) AS statuses
-		            ';
-
-				}
-				/* @deprecated Uses the postmeta table to get the stock quantity */
-				else {
-
-					$str_statuses = "
-						(SELECT p.ID, IF( 
-							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
-							CAST( IF( LENGTH({$wpdb->postmeta}.meta_value) = 0 , 0, {$wpdb->postmeta}.meta_value) AS DECIMAL(10,2) ), TRUE, FALSE
-						) AS status
-						FROM $wpdb->posts AS p
-					    LEFT JOIN {$wpdb->postmeta} ON (p.ID = {$wpdb->postmeta}.post_id)
-					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-						WHERE {$wpdb->postmeta}.meta_key = '_stock'
-			            AND p.post_type IN ('" . implode( "','", $post_types ) . "')
-			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ' )
-			            ) AS statuses
-		            ';
-
-				}
-
-				$str_sql = apply_filters( 'atum/dashboard/stock_control_widget/low_stock_products_sql', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
-
-				$products_low_stock                = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$products_low_stock                = wp_list_pluck( $products_low_stock, 'ID' );
+				$products_low_stock = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
 			}
@@ -282,20 +200,28 @@ trait WidgetHelpersLegacyTrait {
 		// Get the published parents first.
 		$products_visibility = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 		$parent_product_type = get_term_by( 'slug', $parent_type, 'product_type' );
-		$parents_sql         = $wpdb->prepare( "
-			SELECT p.ID FROM $wpdb->posts p
+
+		if ( ! $parent_product_type ) {
+			return FALSE;
+		}
+
+		// Let adding extra parent types externally.
+		$parent_product_type_ids = apply_filters( 'atum/dashboard/get_children/parent_product_types', [ $parent_product_type->term_taxonomy_id ], $parent_type );
+
+		$parents_sql = "
+			SELECT DISTINCT p.ID FROM $wpdb->posts p
 			LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) 
-			WHERE tr.term_taxonomy_id = %d AND p.post_type = 'product' 
+			WHERE tr.term_taxonomy_id IN (" . implode( ',', $parent_product_type_ids ) . ") AND p.post_type = 'product' 
 			AND p.post_status IN ('" . implode( "','", $products_visibility ) . "') 
 			GROUP BY p.ID		 
-		", $parent_product_type->term_taxonomy_id );
+		";
 
 		$parents = $wpdb->get_col( $parents_sql );
 
 		if ( ! empty( $parents ) ) {
 
 			// Save them to be used when counting products.
-			if ( 'variable' === $parent_type ) {
+			if ( $parent_type === 'variable' ) {
 				self::$variable_products = array_merge( self::$variable_products, array_map( 'absint', $parents ) );
 			}
 			else {

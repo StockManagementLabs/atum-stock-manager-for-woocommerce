@@ -2480,7 +2480,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Pass through the ATUM query data filter.
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_args', $args ) );
+			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_products_args', $args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 			$products = $wp_query->posts;
@@ -2660,7 +2660,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				// Pass through the WC query data filter (new tables).
 				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_args', $products_args ) );
+				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 
 				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
@@ -2697,7 +2697,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				// Pass through the WC query data filter (new tables).
 				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_args', $products_args ) );
+				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 
 				AtumCache::set_transient( $back_order_transient, $products_back_order );
@@ -2727,46 +2727,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				if ( empty( $products_low_stock ) ) {
 
-					// Compare last seven days average sales per day * re-order days with current stock.
-					$str_sales = "
-						(SELECT (
-					        SELECT MAX(CAST( meta_value AS SIGNED )) AS q 
-					        FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-					        WHERE meta_key IN('_product_id', '_variation_id') 
-					        AND order_item_id = itm.order_item_id
-				        ) AS IDs,
-				        CEIL(SUM((
-				                SELECT meta_value FROM {$wpdb->prefix}woocommerce_order_itemmeta 
-				                WHERE meta_key = '_qty' AND order_item_id = itm.order_item_id
-				            ))/7*$this->days_to_reorder
-			            ) AS qty
-						FROM $wpdb->posts AS orders
-					    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS itm ON (orders.ID = itm.order_id)
-						INNER JOIN $wpdb->postmeta AS order_meta ON (orders.ID = order_meta.post_id)
-						WHERE orders.post_type = 'shop_order'
-						AND orders.post_status IN ('wc-completed', 'wc-processing') AND itm.order_item_type ='line_item'
-						AND order_meta.meta_key = '_paid_date'
-						AND order_meta.meta_value >= '" . Helpers::date_format( '-7 days' ) . "'
-						GROUP BY IDs) AS sales
-					";
+					$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
+						SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
+					" );
 
-					$str_statuses = "
-						(SELECT p.ID, IF( 
-							CAST( IFNULL(sales.qty, 0) AS DECIMAL(10,2) ) <= 
-							CAST( IF( LENGTH(pr.stock_quantity) = 0 , 0, pr.stock_quantity) AS DECIMAL(10,2) ), TRUE, FALSE
-						) AS status
-						FROM $wpdb->posts AS p
-					    LEFT JOIN {$wpdb->prefix}wc_products AS pr ON (p.ID = pr.product_id)
-					    LEFT JOIN " . $str_sales . " ON (p.ID = sales.IDs)
-						WHERE p.post_type IN ('" . implode( "','", $post_types ) . "')
-			            AND p.ID IN (" . implode( ',', $products_in_stock ) . ') 
-			            ) AS statuses
-		            ';
-
-					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock', "SELECT ID FROM $str_statuses WHERE status IS FALSE;" );
-
-					$products_low_stock = $wpdb->get_results( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-					$products_low_stock = wp_list_pluck( $products_low_stock, 'ID' );
+					$products_low_stock = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
 
 				}
