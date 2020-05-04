@@ -24,6 +24,21 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-featured {
+	&:before {
+		content: $atmi-featured;
+	}
+}
+.atmi-logs {
+	&:before {
+		content: $atmi-logs;
+	}
+}
+.atmi-read {
+	&:before {
+		content: $atmi-read;
+	}
+}
 .atmi-save {
 	&:before {
 		content: $atmi-save;
