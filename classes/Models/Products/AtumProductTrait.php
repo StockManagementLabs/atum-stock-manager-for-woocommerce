@@ -416,7 +416,7 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return int|null
+	 * @return int|float|null
 	 */
 	public function get_calculated_stock( $context = 'view' ) {
 		return $this->get_prop( 'calculated_stock', $context );
@@ -838,7 +838,7 @@ trait AtumProductTrait {
 	 * @since   1.5.8
 	 * @package Product Levels
 	 *
-	 * @param int|string $calculated_stock Empty string if value not set.
+	 * @param int|float|string $calculated_stock Empty string if value not set.
 	 */
 	public function set_calculated_stock( $calculated_stock ) {
 		$this->set_prop( 'calculated_stock', is_null( $calculated_stock ) || '' === $calculated_stock ? '' : wc_stock_amount( $calculated_stock ) );
