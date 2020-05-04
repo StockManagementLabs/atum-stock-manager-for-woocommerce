@@ -117,6 +117,9 @@ class Hooks {
 			
 			add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
 			add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_stock_threshold' ) );
+
+			add_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
+			add_action( 'woocommerce_variation_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
 			
 			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
 			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
@@ -560,6 +563,9 @@ class Hooks {
 	 * @param \WC_Product $product   The product.
 	 */
 	public function maybe_change_stock_threshold( $product ) {
+
+		// The status stock also is set here.
+		remove_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10 );
 		
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 
@@ -603,6 +609,9 @@ class Hooks {
 	 */
 	public function maybe_change_variation_stock_status( $variation_id, $i ) {
 
+		// The status stock also is set here.
+		remove_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10 );
+
 		$this->stock_threshold = NULL;
 
 		$product                = Helpers::get_atum_product( $variation_id );
@@ -624,6 +633,21 @@ class Hooks {
 			
 		}
 		
+	}
+
+	/**
+	 * Check if the product status set is the correct status.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param int         $product_id
+	 * @param string      $stock_status
+	 * @param \WC_Product $product
+	 */
+	public function check_stock_status_set( $product_id, $stock_status, $product ) {
+
+		$this->maybe_change_stock_threshold( $product );
+
 	}
 	
 	/**
