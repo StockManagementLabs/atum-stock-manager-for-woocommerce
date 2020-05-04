@@ -2231,7 +2231,7 @@ final class Helpers {
                 LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
                 LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND pm.meta_key = '_stock')
                 WHERE p.post_status IN ('publish', 'future', 'private')
-                AND ap.out_stock_threshold > 0
+                AND ap.out_stock_threshold IS NOT NULL
                 AND p.post_type IN ('product', 'product_variation');
             " );
 			// phpcs:enable
@@ -3124,7 +3124,7 @@ final class Helpers {
 	/**
 	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
 	 *
-	 * @since 1.7.2
+	 * @since 1.7.1
 	 *
 	 * @param \WC_Product|int $product
 	 */
