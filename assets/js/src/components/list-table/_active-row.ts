@@ -14,11 +14,11 @@ export const ActiveRow = {
 		$listTable.find('tbody .check-column input:checkbox').change( (evt: JQueryEventObject) => this.switchActiveClass( $(evt.currentTarget) ) );
 		
 		// Selet all rows checkbox.
-		$('#cb-select-all-1').change( (evt: JQueryEventObject) => {
+		$('#cb-select-all-1, #cb-select-all-2').change( (evt: JQueryEventObject) => {
 			
 			const $selectAll = $(evt.currentTarget);
 			
-			$listTable.find('.check-column input:checkbox').each( (index: number, elem: Element) => {
+			$listTable.find('tbody .check-column input:checkbox').each( (index: number, elem: Element) => {
 				
 				const $checkbox = $(elem);
 				
