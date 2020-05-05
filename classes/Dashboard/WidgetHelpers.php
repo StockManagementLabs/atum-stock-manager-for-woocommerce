@@ -585,8 +585,8 @@ final class WidgetHelpers {
 				),
 				// Exclude variable and grouped products.
 				array(
-					'key' => 'type',
-					'value' => [ 'variable', 'variable-subscription', 'grouped' ],
+					'key'     => 'type',
+					'value'   => [ 'variable', 'variable-subscription', 'grouped' ],
 					'compare' => 'NOT IN',
 				),
 			);
@@ -608,8 +608,8 @@ final class WidgetHelpers {
 				),
 				// Exclude variable and grouped products.
 				array(
-					'key' => 'type',
-					'value' => [ 'variable', 'variable-subscription', 'grouped' ],
+					'key'     => 'type',
+					'value'   => [ 'variable', 'variable-subscription', 'grouped' ],
 					'compare' => 'NOT IN',
 				),
 			);
@@ -627,11 +627,11 @@ final class WidgetHelpers {
 			if ( ! empty( $products_in_stock ) ) {
 
 				$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-				$str_sql = apply_filters( 'atum/dashboard/get_stock_levels/low_stock_products', "
+				$str_sql                 = apply_filters( 'atum/dashboard/get_stock_levels/low_stock_products', "
 					SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
 				" );
 
-				$products_low_stock = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$products_low_stock                = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$stock_counters['count_low_stock'] = count( $products_low_stock );
 
 			}
@@ -656,71 +656,63 @@ final class WidgetHelpers {
 	}
 
 	/**
-	 * Get all the available children products of the published parent products (Variable and Grouped)
+	 * Get all the available children products of the published parent products
 	 *
 	 * @since 1.4.0
 	 *
-	 * @param string $parent_type   The parent product type.
-	 * @param string $post_type     Optional. The children post type.
+	 * @param string $parent_type The parent product type.
+	 * @param string $post_type   Optional. The children post type.
 	 *
 	 * @return array|bool
 	 */
 	private static function get_children( $parent_type, $post_type = 'product' ) {
 
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-			return self::get_children_legacy( $parent_type, $post_type );
-		}
-
 		global $wpdb;
 
-		// Get all the published parents first.
+		// Get the published parents first.
 		$products_visibility = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
-		$where               = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $products_visibility ) . "')";
+		$parent_product_type = get_term_by( 'slug', $parent_type, 'product_type' );
 
-		if ( ! empty( $post_in ) ) {
-			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
+		if ( ! $parent_product_type ) {
+			return FALSE;
 		}
 
-		// phpcs:disable
-		$parents_sql = $wpdb->prepare( "
-			SELECT p.ID FROM $wpdb->posts p  
-			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
-			WHERE $where AND pr.type = %s
-			GROUP BY p.ID
-		", $parent_type );
+		// Let adding extra parent types externally.
+		$parent_product_type_ids = apply_filters( 'atum/dashboard/get_children/parent_product_types', [ $parent_product_type->term_taxonomy_id ], $parent_type );
 
-		$parents = $wpdb->get_col( $parents_sql );
+		$parents_sql = "
+			SELECT DISTINCT p.ID FROM $wpdb->posts p
+			LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) 
+			WHERE tr.term_taxonomy_id IN (" . implode( ',', $parent_product_type_ids ) . ") AND p.post_type = 'product' 
+			AND p.post_status IN ('" . implode( "','", $products_visibility ) . "') 
+			GROUP BY p.ID		 
+		";
+
+		// TODO: THIS CANNOT WORK FOR GROUPED PRODUCTS BECAUSE THESE ITEMS ARE NOT SAVING THEIR PARENTS IN THE post_parent COL ANYMORE.
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$children_sql = $wpdb->prepare("
+			SELECT p.ID, p.post_parent FROM $wpdb->posts p
+			WHERE p.post_parent IN (
+				$parents_sql
+			) AND p.post_type = %s AND p.post_status IN ('" . implode( "','", $products_visibility ) . "')
+		", $post_type );
 		// phpcs:enable
 
-		if ( ! empty( $parents ) ) {
+		$results = $wpdb->get_results( $children_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( ! empty( $results ) ) {
+
+			$parents = array_unique( array_map( 'absint', wp_list_pluck( $results, 'post_parent' ) ) );
 
 			// Save them to be used when counting products.
-			// TODO: WHAT ABOUT VARIABLE PRODUCT LEVELS?
-			if ( in_array( $parent_type, [ 'variable', 'variable-subscription' ], TRUE ) ) {
-				self::$variable_products = array_merge( self::$variable_products, array_map( 'absint', $parents ) );
+			if ( strpos( $parent_type, 'variable' ) !== FALSE ) {
+				self::$variable_products = array_merge( self::$variable_products, $parents );
 			}
-			elseif ( 'grouped' === $parent_type ) {
-				self::$grouped_products = array_merge( self::$grouped_products, array_map( 'absint', $parents ) );
+			else {
+				self::$grouped_products = array_merge( self::$grouped_products, $parents );
 			}
 
-			$children_sql = $wpdb->prepare("
-				SELECT p.ID FROM $wpdb->posts p
-				WHERE p.post_parent IN (
-					$parents_sql
-				) AND p.post_type = %s AND p.post_status IN ('" . implode( "','", $products_visibility ) . "')
-			", $post_type );
-
-			$children = $wpdb->get_col( $children_sql );
-
-			if ( ! empty( $children ) ) {
-				return array_map( 'absint', $children );
-			}
+			return array_map( 'absint', wp_list_pluck( $results, 'ID' ) );
 
 		}
 
@@ -834,48 +826,11 @@ final class WidgetHelpers {
 		/*
 		 * Products In Stock
 		 */
-		
-		$products   = Helpers::get_all_products();
-		$variations = $filtered_variations = [];
-		
-		foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-			
-			if ( 'grouped' === $inheritable_product_type && 'grouped' === $product_type ) {
-				$filtered_variations = self::get_children( 'grouped' );
-			}
-			elseif ( 'grouped' !== $inheritable_product_type ) {
-				
-				$current_variations = self::get_children( $inheritable_product_type, 'product_variation' );
-				
-				if ( $inheritable_product_type === $product_type ) {
-					$filtered_variations = $current_variations;
-				}
-				
-				if ( $current_variations ) {
-					$variations = array_unique( array_merge( $variations, $current_variations ) );
-				}
-				
-			}
-			
-		}
-		
-		// Add the Variations to the posts list. We skip grouped products.
-		if ( $variations ) {
-			$products = array_unique( array_merge( $products, $variations ) );
-		}
-		
-		$temp_wc_query_data = self::$wc_query_data; // Save the original value.
-		
-		self::$wc_query_data['where'] = [];
-		
-		if ( ! $products ) {
-			return $counters;
-		}
-			
-		$post_types = $variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+		$temp_wc_query_data           = self::$wc_query_data; // Save the original value.
+		self::$wc_query_data['where'] = []; // Reset value.
 
 		$args = array(
-			'post_type'      => $post_types,
+			'post_type'      => [ 'product', 'product_variation' ],
 			'posts_per_page' => - 1,
 			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
 			'fields'         => 'ids',
@@ -883,87 +838,113 @@ final class WidgetHelpers {
 				'relation' => 'AND',
 			),
 			'meta_query'     => array(
-				'relation' => 'AND',
-				array(
+				// TODO: DO WE NEED TO EXCLUDE UNMANAGED PRODUCTS?
+				/*array(
 					'key'   => '_manage_stock',
 					'value' => 'yes',
-				),
+				),*/
 			),
 
 		);
 
+		// As when we filter by any taxonomy, the variation products are lost,
+		// we need to create another query to get the children.
+		$children_query_needed = FALSE;
+
 		// Check if category filter data exist.
 		if ( $category ) {
+
 			array_push( $args['tax_query'], array(
 				'taxonomy' => 'product_cat',
 				'field'    => 'slug',
-				'terms'    => array( $category ),
+				'terms'    => $category,
 			) );
+
+			$children_query_needed = TRUE;
+
 		}
 
 		// Check if product type filter data exist.
 		if ( $product_type ) {
-			if ( in_array( $product_type, Globals::get_inheritable_product_types() ) && 'bundle' !== $product_type ) {
 
-				if ( $filtered_variations ) {
-					$args['post__in'] = $filtered_variations;
-				}
-				else {
-					return $counters;
-				}
-			}
-			elseif ( 'downloadable' === $product_type ) {
+			if ( 'downloadable' === $product_type ) {
+
 				self::$wc_query_data['where'][] = array(
 					'key'   => 'downloadable',
-					'value' => array( '1' ),
+					'value' => [ '1' ],
 				);
+
 			}
 			elseif ( 'virtual' === $product_type ) {
+
 				self::$wc_query_data['where'][] = array(
 					'key'   => 'virtual',
-					'value' => array( '1' ),
+					'value' => [ '1' ],
 				);
+
 			}
-			elseif ( in_array( $product_type, [ 'raw-material', 'product-part', 'variable-product-part', 'variable-raw-material' ] ) ) {
+			else {
+
 				self::$wc_query_data['where'][] = array(
 					'key'   => 'type',
 					'value' => $product_type,
 				);
+
+				$children_query_needed = TRUE;
+
 			}
-			else {
-				array_push( $args['tax_query'], array(
-					'taxonomy' => 'product_type',
-					'field'    => 'slug',
-					'terms'    => array( $product_type ),
-				) );
-			}
+
 		}
 
 		// Get products.
 		add_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
-		$products_in_stock = new \WP_Query( apply_filters( 'atum/dashboard/current_stock_value_widget/in_stock_products_args', $args ) );
+		$products_in_stock_query = new \WP_Query( apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_args', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
-		// Get current stock values.
-		foreach ( $products_in_stock->posts as $product_id ) {
+		$products_in_stock = $products_in_stock_query->posts;
 
-			$product = Helpers::get_atum_product( $product_id );
+		if ( ! empty( $products_in_stock ) ) {
 
-			if ( ! apply_filters( 'atum/dashboard/current_stock_value_widget/allowed_product', TRUE, $product ) ) {
-				continue;
+			if ( $children_query_needed ) {
+
+				global $wpdb;
+				$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+				// phpcs:disable WordPress.DB.PreparedSQL
+				$children_in_stock = $wpdb->get_col( "
+					SELECT p.ID FROM $wpdb->posts p
+					LEFT JOIN $atum_product_data_table apd ON (p.ID = apd.product_id)
+					WHERE apd.atum_stock_status IN ('instock', 'onbackorder') AND p.post_type = 'product_variation'
+					AND p.post_parent IN (" . $products_in_stock_query->request . ');
+				' );
+				// phpcs:enable
+
+				$products_in_stock = array_unique( array_merge( $products_in_stock, $children_in_stock ) );
+
 			}
 
-			$product_stock          = (float) $product->get_stock_quantity();
-			$product_purchase_price = (float) $product->get_purchase_price();
+			// Get current stock values.
+			foreach ( $products_in_stock as $product_id ) {
 
-			if ( $product_stock && $product_stock > 0 ) {
+				$product = Helpers::get_atum_product( $product_id );
 
-				$counters['items_stocks_counter'] += $product_stock;
-				if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
-					$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
+				if ( ! apply_filters( 'atum/dashboard/get_items_in_stock/allowed_product', TRUE, $product ) ) {
+					continue;
 				}
-				else {
-					$counters['items_without_purchase_price'] += $product_stock;
+
+				$product_stock          = (float) $product->get_stock_quantity();
+				$product_purchase_price = (float) $product->get_purchase_price();
+
+				if ( $product_stock && $product_stock > 0 ) {
+
+					$counters['items_stocks_counter'] += $product_stock;
+					if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
+						$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
+					}
+					else {
+						$counters['items_without_purchase_price'] += $product_stock;
+					}
+
 				}
 
 			}
@@ -972,7 +953,7 @@ final class WidgetHelpers {
 
 		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.
 
-		return apply_filters( 'atum/dashboard/current_stock_value_widget/counters', $counters );
+		return apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters );
 
 	}
 
