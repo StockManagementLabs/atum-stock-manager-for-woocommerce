@@ -532,8 +532,7 @@ final class Helpers {
 			$use_lookup_table           = FALSE;
 			$order_product_lookup_table = $wpdb->prefix . 'wc_order_product_lookup';
 
-			// TODO: ENABLE IT FROM SETTINGS
-			if ( $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0 ) {
+			if ( self::maybe_use_wc_order_product_lookup_table() ) {
 				$use_lookup_table = TRUE;
 			}
 
@@ -565,7 +564,7 @@ final class Helpers {
 			}
 			// Get the product ID column too.
 			elseif ( in_array( 'prod_id', $colums ) && ! $use_lookup_table ) {
-				$products_where = " AND `mt_id`.`meta_value` > 0";
+				$products_where = ' AND `mt_id`.`meta_value` > 0';
 			}
 
 			if ( in_array( 'qty', $colums ) ) {
@@ -3159,4 +3158,34 @@ final class Helpers {
 		}
 
 	}
+
+	/**
+	 * Whether to use the wc_order_product_lookup table to improve queries performance
+	 *
+	 * @since 1.7.1
+	 *
+	 * @return bool
+	 */
+	public static function maybe_use_wc_order_product_lookup_table() {
+
+		// TODO: ENABLE IT FROM SETTINGS.
+		$cache_key  = AtumCache::get_cache_key( 'use_wc_order_product_lookup_table' );
+		$use_lookup = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache ) {
+			return $use_lookup;
+		}
+
+		global $wpdb;
+
+		$order_product_lookup_table = $wpdb->prefix . 'wc_order_product_lookup';
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$use_lookup = $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0;
+		AtumCache::set_cache( $cache_key, $use_lookup );
+
+		return $use_lookup;
+
+	}
+
 }
