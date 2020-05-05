@@ -1100,7 +1100,7 @@ abstract class AtumOrderPostType {
 			$query->query_vars[ $this->search_label ] = TRUE;
 
 			// Search by found posts.
-			$query->query_vars['post__in'] = array_merge( $atum_order_ids, array( 0 ) );
+			$query->query_vars['post__in'] = array_merge( $atum_order_ids, [ 0 ] );
 		}
 
 	}
