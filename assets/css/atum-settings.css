@@ -688,7 +688,7 @@ fieldset:disabled a.btn {
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76563rem;
+  font-size: 0.76562rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -2478,6 +2478,18 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-featured:before {
+  content: "";
+}
+
+.atmi-logs:before {
+  content: "";
+}
+
+.atmi-read:before {
+  content: "";
 }
 
 .atmi-save:before {
