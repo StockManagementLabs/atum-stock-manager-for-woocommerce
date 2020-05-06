@@ -238,7 +238,7 @@
 		display: inline-block;
 		
 		&.setting-checked label {
-			font-weight: bold;
+			color: var(--black);
 			
 			[type=checkbox] {
 				background-color: var(--success);

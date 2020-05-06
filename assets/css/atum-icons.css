@@ -28,6 +28,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-featured:before {
+  content: "";
+}
+
+.atmi-logs:before {
+  content: "";
+}
+
+.atmi-read:before {
+  content: "";
+}
+
 .atmi-save:before {
   content: "";
 }
