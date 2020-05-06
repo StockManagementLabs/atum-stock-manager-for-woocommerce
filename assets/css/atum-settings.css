@@ -4843,7 +4843,7 @@ h2 .atum-help-tip {
 }
 
 .atum-settings-wrapper .atum-multi-checkbox-option.setting-checked label, .atum-settings-wrapper .atum-multi-checkbox-all.setting-checked label {
-  font-weight: bold;
+  color: var(--black);
 }
 
 .atum-settings-wrapper .atum-multi-checkbox-option.setting-checked label [type=checkbox], .atum-settings-wrapper .atum-multi-checkbox-all.setting-checked label [type=checkbox] {

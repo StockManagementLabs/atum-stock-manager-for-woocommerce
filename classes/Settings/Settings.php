@@ -740,7 +740,7 @@ class Settings {
 
 						if ( strpos( $input[ $key ], ':' ) !== FALSE ) {
 
-							$country_states = WC()->countries->get_allowed_country_states();
+							$country_states          = WC()->countries->get_allowed_country_states();
 							list( $country, $state ) = explode( ':', $input[ $key ] );
 
 							if ( isset( $country_states[ $country ], $country_states[ $country ][ $state ] ) ) {
@@ -1034,7 +1034,7 @@ class Settings {
 					$default
 				);
 				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
-				$output .= ' <span class="atum-help-tip tips" data-placement="right" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				$output .= ' <span class="atum-help-tip tips" data-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
 				$output .= '</div>';
 			}
 
