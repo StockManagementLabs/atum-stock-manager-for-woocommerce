@@ -1,55 +1,55 @@
 {
 	"background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "contain",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "cover",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2018/07/product-levels_icon.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2019/02/label-update-280x280.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/icon-action-logs.svg",
+		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/label-new-logs@2x.png"
 	},
 	"title": {
-		"text"      : "Product <strong>Levels</strong>",
+		"text"      : "Action <strong>Logs</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "v1.4.0",
+		"text"      : "v1.0.0",
 		"text_color": "#FFF",
-		"background": "#9357CC"
+		"background": "#f95e90"
 	},
 	"description": {
-		"text"           : "The Greatest Upgrade EVER!!!",
-		"text_color"     : "#ADB5BD",
+		"text"           : "Keeping track of any changes happening in your shop has never been easier.<br>The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.",
+		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
 		"dash_text_align": "justify",
-		"padding"        : "0 9px 25px"
+		"padding"        : "0 28px 25px"
 	},
 	"buttons": [
 		{
-			"text"      : "Buy Now",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-product-levels/",
+			"text"      : "More Info",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-action-logs/",
 			"class"     : "btn btn-sm btn-warning",
-			"css"       : "width:130px;background-color:#9357CC;border-color:#9357CC"
+			"css"       : "width:130px;background-color:#f95e90;border-color:#f95e90"
 		},
 		{
-			"text"      : "The Changelog",
-			"url"       : "https://www.stockmanagementlabs.com/the-changelog/",
+			"text"      : "Live Demo",
+			"url"       : "https://demo.action-logs.stockmanagementlabs.com/",
 			"class"     : "btn btn-sm btn-outline-warning",
-			"css"       : "width:130px;color:#9357CC;border-color:#9357CC",
-			"hover"     : "background-color:#9357CC;color:var(--wp-yiq-text-light)!important;"
+			"css"       : "width:130px;color:#f95e90;border-color:#f95e90",
+			"hover"     : "background-color:#f95e90;color:#FFF!important;"
 		}
 	],
-	"transient_key": "atum-product-levels-update"
+	"transient_key": "atum-action-logs-release"
 }
