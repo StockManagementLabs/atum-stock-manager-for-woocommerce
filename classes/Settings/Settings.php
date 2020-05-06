@@ -682,13 +682,6 @@ class Settings {
 					}
 				}
 
-				/*
-				foreach ( $atts['default']['options'] as $index => $value ) {
-					if ( ! isset( $option['options'], $option['options'][ $index ] ) ) {
-						$option['options'][ $index ] = 'no';
-					}
-				}*/
-
 				$sanitized_option = $option;
 
 				break;
@@ -1014,7 +1007,7 @@ class Settings {
 		) . $this->get_description( $args );
 
 		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
-		$check_defs = $args['default']['options'];
+		$check_defs = $args['default_options'];
 
 		if ( ! empty( $check_defs ) ) {
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
@@ -1023,8 +1016,9 @@ class Settings {
 
 			foreach ( $check_defs as $id => $checkbox ) {
 				$default = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
-				$checked = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ]['value'], FALSE ) : '';
+				$checked = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : '';
 				$checked = empty( $checkboxes ) ? 'checked' : $checked;
+
 				$output .= '<div class="atum-multi-checkbox-option' . ( $checked ? ' setting-checked' : '' ) . '"><label>';
 				$output .= sprintf(
 					'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="atum-settings-input" %4$s>',
