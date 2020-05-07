@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.0.1
-Stable tag: 1.7.0
+WC tested up to: 4.1.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -224,6 +224,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.1`
+
+*2020-05-07*
+
+**Features**
+
+* Overall performance improvements.
+* Reduced SQL queries complexity.
+* Removed duplicated queries.
+* New MultiCheckbox field type for ATUM Settings.
+* New Ranged DateTimePicker removal Tool to be used by add-ons.
+* Added Marketing Popup for ATUM Action Logs release.
+
+**Changes**
+
+* Added custom triggers after running a bulk action.
+* Apply select2's dropdown styles to ATUM fields only.
+* AtumOrderModel refactoring.
+* "get_order_type_table_id" will return FALSE if "order_type" is not supported.
+* Remove transients from "$alloptions" global when deleting them.
+* Updated ATUM icons font.
+
+**Fixes**
+
+* Fixed PHP notice in settings options with no default value specified.
+* Avoid triggering post bulk actions multiple times (one per button).
+* Fixed "atum-enhanced-select" class not being applied to product data's selects.
+* Fixed "New Supplier" button styling.
+* Minor CSS fixes.
+* Fixed WPML translations being returned as string.
+* Fixed POs' date fields formatting + status changes behaviour.
+* Fixed notice: undefined variables in report.
+* Fixed timeout transient not being deleted when deleting transients.
+* Fixed "select all" checkbox behaviour in List Tables' footer.
+* Fixed OOST not cleaned if the value is set to 0.
+* Fixed wrong stock status set when saving a product and the OOST per product active.
 
 ---
 
