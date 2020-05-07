@@ -2968,7 +2968,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Update the expiring data for the specified product.
+	 * Update the expiring data (calculated props) for the specified product when updating an order item.
 	 *
 	 * @since 1.5.8
 	 *
@@ -3152,7 +3152,6 @@ final class Helpers {
 			}
 
 			if ( $update ) {
-
 				$product->save_atum_data();
 			}
 		}
