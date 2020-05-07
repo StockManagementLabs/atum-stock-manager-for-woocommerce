@@ -62,15 +62,21 @@ class Sales extends AtumWidget {
 		}
 		else {
 
-			$stats_this_month = WidgetHelpers::get_sales_stats( array(
-				'types'      => array( 'sales' ),
-				'date_start' => 'first day of this month midnight',
-			) );
-
+			/**
+			 * Today
+			 */
 			$stats_today = WidgetHelpers::get_sales_stats( array(
 				'types'      => array( 'sales' ),
 				'date_start' => 'today midnight',
 			) );
+
+			/**
+			 * This Month
+			 */
+			/*$stats_this_month = WidgetHelpers::get_sales_stats( array(
+				'types'      => array( 'sales' ),
+				'date_start' => 'first day of this month midnight',
+			) );*/
 
 			$config = $this->get_config();
 

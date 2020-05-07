@@ -62,16 +62,22 @@ class LostSales extends AtumWidget {
 		}
 		else {
 
-			$stats_this_month = WidgetHelpers::get_sales_stats( array(
-				'types'      => array( 'lost_sales' ),
-				'date_start' => 'first day of this month midnight',
-			) );
-
+			/**
+			 * Today
+			 */
 			$stats_today = WidgetHelpers::get_sales_stats( array(
 				'types'      => array( 'lost_sales' ),
 				'date_start' => 'midnight today',
 				'days'       => 1,
 			) );
+
+			/**
+			 * This Month
+			 */
+			/*$stats_this_month = WidgetHelpers::get_sales_stats( array(
+				'types'      => array( 'lost_sales' ),
+				'date_start' => 'first day of this month midnight',
+			) );*/
 
 			$config = $this->get_config();
 

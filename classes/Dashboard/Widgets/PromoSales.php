@@ -68,37 +68,37 @@ class PromoSales extends AtumWidget {
 			] );
 
 			/**
-			 * This month
-			 */
-			$stats_this_month = WidgetHelpers::get_promo_sales_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'first day of this month midnight',
-			) );
-
-			/**
-			 * Previous month
-			 */
-			$stats_previous_month = WidgetHelpers::get_promo_sales_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'first day of last month midnight',
-				'date_end'   => 'last day of last month 23:59:59',
-			) );
-
-			/**
-			 * This week
-			 */
-			$stats_this_week = WidgetHelpers::get_promo_sales_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'this week midnight',
-			) );
-
-			/**
 			 * Today
 			 */
 			$stats_today = WidgetHelpers::get_promo_sales_stats( array(
 				'status'     => $order_status,
 				'date_start' => 'today midnight',
 			) );
+
+			/**
+			 * This month
+			 */
+			/*$stats_this_month = WidgetHelpers::get_promo_sales_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'first day of this month midnight',
+			) );*/
+
+			/**
+			 * Previous month
+			 */
+			/*$stats_previous_month = WidgetHelpers::get_promo_sales_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'first day of last month midnight',
+				'date_end'   => 'last day of last month 23:59:59',
+			) );*/
+
+			/**
+			 * This week
+			 */
+			/*$stats_this_week = WidgetHelpers::get_promo_sales_stats( array(
+				'status'     => $order_status,
+				'date_start' => 'this week midnight',
+			) );*/
 
 			$config = $this->get_config();
 
