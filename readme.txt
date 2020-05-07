@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.0.1
-Stable tag: 1.7.0
+WC tested up to: 4.1.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,9 +15,9 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**With The Advanced [ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/) comes ATUM 1.6** - yet the best, faster and more user friendly ATUM Inventory Management for WooCommerce.
+**With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/) ** - fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
-**NEW Colour Modes added to improve your management experience**
+**NEW IMPROVED ATUM 1.7**
 
 **NEW ATUM REST API**
 
@@ -35,11 +35,18 @@ WooCommerce, as the most popular WordPress e-commerce solution, did not include 
 
 ATUM’s Multi-Inventory premium add-on is trying to remove the above issues and brings advanced features for a fracture of the cost charged by 3rd party service. Now you, as a shop owner have the option to add as many inventory records per product as your business needs. What is even better, the system is trying to push the editing boundaries far beyond the usual standard. Scroll below to find out about all existing and soon to come features or even try the demo FREE of charge.
 
-[ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
+[ATUM Export Pro Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
 
 Generate manual or automated exports of almost any data in your stores. We believe the most advanced tool of its kind with XML, CSV, and JSON exports to be available at launch. If it was not enough, we are adding an import tool as a bonus.
 
 Exports of data are done automatically instead of copying and pasting manually. The ability to export data has an enormous economic advantage. Such data can then be used in further business controlling systems or in other business software.
+
+[ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+
+ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These recordings we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
+
+We equipped the ATUM Action Logs with a complete set of recording tools to avoid any capital loss.
+Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 
 = FREE VERSION DESCRIPTION =
@@ -147,8 +154,8 @@ After successful activation of ATUM, you are ready to make your business even mo
 
 = What are the minimum ATUM requirements? =
 
-ATUM requires PHP version 5.6 or greater, but our recommended environment is the same as WordPress:
-[https://wordpress.org/about/requirements/](https://wordpress.org/about/requirements/).
+ATUM requires PHP version 5.6 or greater (recommended 7.1.3 or greater), WordPress 4.4 or greater (recommended 5.0 or greater) and WooCommerce 2.7.0 or greater (recommended 3.6 or greater), but our recommended environment is the same as WooCommerce:
+[https://docs.woocommerce.com/document/server-requirements/).
 
 **For ATUM to work you need to activate the Enable Stock Management option in WooCommerce settings (WooCommerce-Settings-Products-Inventory-Manage Stock).
 
@@ -189,7 +196,7 @@ Also, try to reload the ATUM pages with CTRL + F5 (Windows) or CMD + R (MacOs) t
 
 = The plugin won't work < PHP 5.6 =
 
-We are very sorry, but the current version of the plugin needs PHP 5.6+. Our team has tested it on PHP7 that is recommended by WordPress. Please, see the link here https://wordpress.org/about/requirements/
+We are very sorry, but the current version of the plugin needs PHP 5.6+. Our team has tested it on PHP7 that is recommended by WordPress. Please, see the link [here](https://wordpress.org/about/requirements/)
 
 We do not plan any support for older PHP and version 5.6 is the minimum.
 
@@ -224,6 +231,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.1`
+
+*2020-05-07*
+
+**Features**
+
+* Overall performance improvements.
+* Reduced SQL queries complexity.
+* Removed duplicated queries.
+* New MultiCheckbox field type for ATUM Settings.
+* New Ranged DateTimePicker removal Tool to be used by add-ons.
+* Added Marketing Popup for ATUM Action Logs release.
+
+**Changes**
+
+* Added custom triggers after running a bulk action.
+* Apply select2's dropdown styles to ATUM fields only.
+* AtumOrderModel refactoring.
+* "get_order_type_table_id" will return FALSE if "order_type" is not supported.
+* Remove transients from "$alloptions" global when deleting them.
+* Updated ATUM icons font.
+
+**Fixes**
+
+* Fixed PHP notice in settings options with no default value specified.
+* Avoid triggering post bulk actions multiple times (one per button).
+* Fixed "atum-enhanced-select" class not being applied to product data's selects.
+* Fixed "New Supplier" button styling.
+* Minor CSS fixes.
+* Fixed WPML translations being returned as string.
+* Fixed POs' date fields formatting + status changes behaviour.
+* Fixed notice: undefined variables in report.
+* Fixed timeout transient not being deleted when deleting transients.
+* Fixed "select all" checkbox behaviour in List Tables' footer.
+* Fixed OOST not cleaned if the value is set to 0.
+* Fixed wrong stock status set when saving a product and the OOST per product active.
 
 ---
 
