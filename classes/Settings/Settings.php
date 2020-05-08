@@ -676,8 +676,8 @@ class Settings {
 
 				$option['value'] = ( isset( $option['value'] ) && 'yes' === $option['value'] ) ? 'yes' : 'no';
 
-				if ( isset( $option['options'] ) ) {
-					foreach ( $option['options'] as $index => $value ) {
+				if ( isset( $atts['default_options'] ) ) {
+					foreach ( $atts['default_options'] as $index => $value ) {
 						$option['options'][ $index ] = ( isset( $option['options'][ $index ] ) && 'yes' === $option['options'][ $index ] ) ? 'yes' : 'no';
 					}
 				}
@@ -1011,13 +1011,15 @@ class Settings {
 
 		if ( ! empty( $check_defs ) ) {
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
-			//$output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
-			//		. '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';
+
+			// Check-all checkbox.
+			// $output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
+			// . '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';!
 
 			foreach ( $check_defs as $id => $checkbox ) {
-				$default = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
-				$checked = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : '';
-				$checked = empty( $checkboxes ) ? 'checked' : $checked;
+				$default_attr    = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
+				$default_checked = 'yes' === $checkbox['value'] ? 'checked' : '';
+				$checked         = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : $default_checked;
 
 				$output .= '<div class="atum-multi-checkbox-option' . ( $checked ? ' setting-checked' : '' ) . '"><label>';
 				$output .= sprintf(
@@ -1025,7 +1027,7 @@ class Settings {
 					ATUM_PREFIX . $id,
 					self::OPTION_NAME . "[{$args['id']}][options][{$id}]",
 					$checked,
-					$default
+					$default_attr
 				);
 				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
 				$output .= ' <span class="atum-help-tip tips" data-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
