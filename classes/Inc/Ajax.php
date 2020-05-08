@@ -64,8 +64,11 @@ final class Ajax {
 		// Sort the videos within the Videos Widget.
 		add_action( 'wp_ajax_atum_videos_widget_sorting', array( $this, 'videos_widget_sorting' ) );
 
-		// Filter current stock values.
+		// Filter current stock values within the Dashboard widget.
 		add_action( 'wp_ajax_atum_current_stock_values', array( $this, 'current_stock_values' ) );
+
+		// Load sales data on Dashboard widgets.
+		add_action( 'wp_ajax_atum_dashboard_load_sales', array( $this, 'load_sales_data' ) );
 
 		// Ajax callback for Stock Central ListTable.
 		add_action( 'wp_ajax_atum_fetch_stock_central_list', array( $this, 'fetch_stock_central_list' ) );
@@ -287,6 +290,98 @@ final class Ajax {
 		$current_stock_values = array_map( 'strval', $current_stock_values ); // Avoid issues with decimals when encoding to JSON.
 
 		wp_send_json_success( compact( 'current_stock_values' ) );
+
+	}
+
+	/**
+	 * Load sales data within the Sales widgets
+	 *
+	 * @package    Dashboard
+	 * @subpackage Sales Widgets
+	 *
+	 * @since 1.7.1
+	 */
+	public function load_sales_data() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		if ( empty( $_POST['widget'] ) || empty( $_POST['filter'] ) ) {
+			wp_send_json_error( __( 'Invalid data', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$widget = wc_clean( $_POST['widget'] );
+		$filter = wc_clean( $_POST['filter'] );
+
+		switch ( $widget ) {
+			case 'sales':
+				// Only 'today' and 'month' are available.
+				$stats = WidgetHelpers::get_sales_stats( array(
+					'types'      => [ 'sales' ],
+					'date_start' => 'today' === $filter ? 'today midnight' : 'first day of this month midnight',
+				) );
+
+				break;
+
+			case 'lost_sales':
+				$args = array(
+					'types' => [ 'lost_sales' ],
+				);
+
+				// Today.
+				if ( 'today' === $filter ) {
+					$args['days']       = 1;
+					$args['date_start'] = 'midnight today';
+				}
+				// This month.
+				else {
+					$args['date_start'] = 'first day of this month midnight';
+				}
+
+				$stats = WidgetHelpers::get_sales_stats( $args );
+
+				break;
+
+			case 'orders':
+			case 'promo_sales':
+				$order_status = (array) apply_filters( 'atum/dashboard/orders_widget/order_status', [
+					'wc-processing',
+					'wc-completed',
+				] );
+
+				$args = array(
+					'status' => $order_status,
+				);
+
+				switch ( $filter ) {
+					case 'today':
+						$args['date_start'] = 'today midnight';
+						break;
+
+					case 'this_month':
+						$args['date_start'] = 'first day of this month midnight';
+						break;
+
+					case 'previous_month':
+						$args['date_start'] = 'first day of last month midnight';
+						$args['date_end']   = 'last day of last month 23:59:59';
+						break;
+
+					case 'this_week':
+						$args['date_start'] = 'this week midnight';
+						break;
+				}
+
+				$stats = 'orders' === $widget ? WidgetHelpers::get_orders_stats( $args ) : WidgetHelpers::get_promo_sales_stats( $args );
+
+				break;
+
+		}
+
+		if ( ! isset( $stats ) ) {
+			wp_send_json_error( __( 'Invalid data', ATUM_TEXT_DOMAIN ) );
+		}
+
+		wp_send_json_success( $stats );
 
 	}
 

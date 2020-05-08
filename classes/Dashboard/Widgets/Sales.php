@@ -70,17 +70,9 @@ class Sales extends AtumWidget {
 				'date_start' => 'today midnight',
 			) );
 
-			/**
-			 * This Month
-			 */
-			/*$stats_this_month = WidgetHelpers::get_sales_stats( array(
-				'types'      => array( 'sales' ),
-				'date_start' => 'first day of this month midnight',
-			) );*/
-
 			$config = $this->get_config();
 
-			Helpers::load_view( 'widgets/sales', compact( 'stats_this_month', 'stats_today', 'config' ) );
+			Helpers::load_view( 'widgets/sales', compact( 'stats_today', 'config' ) );
 
 		}
 

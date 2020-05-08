@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || die;
 ?>
 
-<div class="stats-data-widget" data-widget="sales_data">
+<div class="stats-data-widget" data-widget="sales_data" data-type="orders">
 
 	<div class="data-filter">
 		<select>

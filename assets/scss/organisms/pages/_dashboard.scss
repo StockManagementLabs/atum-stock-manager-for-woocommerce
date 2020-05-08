@@ -629,6 +629,30 @@ body.toplevel_page_atum-dashboard {
 				left: 0;
 				right: 0;
 			}
+			
+			> .overlay {
+				&:before {
+					content: '';
+					position: absolute;
+					left: 0;
+					right: 0;
+					top: 0;
+					bottom: 0;
+					z-index: 10;
+					background-color: var(--gray-100);
+					opacity: 0.5;
+				}
+				
+				&:after {
+					content: '';
+					top: 45%;
+					left: 0;
+					right: 0;
+					margin: auto;
+					@include loader(50px, $info, 3px);
+					border-top-color: var(--gray-600);
+				}
+			}
 		}
 		
 		// Widget config
