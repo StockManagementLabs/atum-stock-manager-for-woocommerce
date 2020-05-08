@@ -68,31 +68,6 @@ class Orders extends AtumWidget {
 			] );
 
 			/**
-			 * This month
-			 */
-			$stats_this_month = WidgetHelpers::get_orders_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'first day of this month midnight',
-			) );
-
-			/**
-			 * Previous month
-			 */
-			$stats_previous_month = WidgetHelpers::get_orders_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'first day of last month midnight',
-				'date_end'   => 'last day of last month 23:59:59',
-			) );
-
-			/**
-			 * This week
-			 */
-			$stats_this_week = WidgetHelpers::get_orders_stats( array(
-				'status'     => $order_status,
-				'date_start' => 'this week midnight',
-			) );
-
-			/**
 			 * Today
 			 */
 			$stats_today = WidgetHelpers::get_orders_stats( array(
@@ -102,7 +77,7 @@ class Orders extends AtumWidget {
 
 			$config = $this->get_config();
 
-			Helpers::load_view( 'widgets/orders', compact( 'stats_this_month', 'stats_previous_month', 'stats_this_week', 'stats_today', 'config' ) );
+			Helpers::load_view( 'widgets/orders', compact( 'stats_today', 'config' ) );
 
 		}
 
