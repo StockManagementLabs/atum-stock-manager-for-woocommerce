@@ -994,9 +994,11 @@ class Settings {
 	 */
 	public function display_multi_checkbox( $args ) {
 
-		$data_default  = isset( $args['default'] ) && isset( $args['default']['value'] ) ? " data-default='" . $args['default']['value'] . "'" : '';
+		$data_default  = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 		$stored_values = $this->find_option_value( $args['id'] );
-		$enabled       = checked( 'yes', $stored_values['value'], FALSE );
+
+		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
+		$enabled         = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 
 		$output = sprintf(
 			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input atum-multi-checkbox-main" style="display: none" %4$s>',
