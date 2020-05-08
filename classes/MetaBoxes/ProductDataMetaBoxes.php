@@ -523,14 +523,19 @@ class ProductDataMetaBoxes {
 		do_action( 'atum/product_data/before_save_product_variation_meta_boxes', $variation_id, $loop );
 		
 		$this->product = Helpers::get_atum_product( $variation_id );
-		$this->product->set_object_read( TRUE );
 
-		$this->is_variation = TRUE;
-		$this->loop         = $loop;
+		if ( $this->product instanceof \WC_Product ) {
 
-		$this->save_atum_meta_boxes();
+			$this->product->set_object_read( TRUE );
 
-		do_action( 'atum/product_data/after_save_product_variation_meta_boxes', $variation_id, $loop );
+			$this->is_variation = TRUE;
+			$this->loop         = $loop;
+
+			$this->save_atum_meta_boxes();
+
+			do_action( 'atum/product_data/after_save_product_variation_meta_boxes', $variation_id, $loop );
+
+		}
 
 		if ( ! $was_cache_disabled ) {
 			AtumCache::enable_cache();
