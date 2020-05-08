@@ -285,7 +285,7 @@ export default class Dashboard {
 			$.inArray('atum_lost_sales_widget', widgets) > -1 || $.inArray('atum_orders_widget', widgets) > -1 ||
 			$.inArray('atum_promo_sales_widget', widgets) > -1
 		) {
-			new SalesStatsWidget();
+			new SalesStatsWidget( this.$widgetsContainer );
 		}
 		
 		// Stock Control widget.

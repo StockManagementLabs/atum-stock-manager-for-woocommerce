@@ -33,10 +33,8 @@ export default class CurrentStockValueWidget {
 					writeOff           : $('.write-off-filter').val() || 'no'
 				},
 				dataType  : 'json',
-				beforeSend: () => {
-					this.$currentStockValueWidget.addClass('overlay');
-				},
-				success   : (response: any) => {
+				beforeSend: () => this.$currentStockValueWidget.addClass('overlay'),
+				success   : ( response: any ) => {
 					
 					if (typeof response === 'object' && response.success === true) {
 						
