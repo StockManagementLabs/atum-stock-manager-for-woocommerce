@@ -199,6 +199,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * New MultiCheckbox field type for ATUM Settings.
 * New Ranged DateTimePicker removal Tool to be used by add-ons.
 * Added Marketing Popup for ATUM Action Logs release.
+* Prevent some Dashboard stats from being loaded since the start to improve loading times.
 
 **Changes**
 
@@ -208,6 +209,9 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * "get_order_type_table_id" will return FALSE if "order_type" is not supported.
 * Remove transients from "$alloptions" global when deleting them.
 * Updated ATUM icons font.
+* Refactoring.
+* Made the Dashboard sales widgets dynamic.
+* Check whether a variation still exists before saving meta.
 
 **Fixes**
 
@@ -223,6 +227,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed "select all" checkbox behaviour in List Tables' footer.
 * Fixed OOST not cleaned if the value is set to 0.
 * Fixed wrong stock status set when saving a product and the OOST per product active.
+* Fixed some ATUM transients not being unset from "$alloptions" when deleting them.
 
 ---
 
