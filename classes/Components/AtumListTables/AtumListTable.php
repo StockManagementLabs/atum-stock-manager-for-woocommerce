@@ -335,13 +335,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected static $is_report = FALSE;
 
 	/**
-	 * WC's out of stock Threshold
-	 *
-	 * @var int
-	 */
-	protected $wc_out_stock_threshold;
-
-	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&#45;';
@@ -368,12 +361,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->is_filtering           = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
-		$this->query_filters          = $this->get_filters_query_string();
-		$this->wc_out_stock_threshold = intval( get_option( 'woocommerce_notify_no_stock_amount' ) );
-		$timestamp                    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-		$this->day                    = Helpers::date_format( $timestamp, TRUE, TRUE );
-		self::$sale_days              = Helpers::get_sold_last_days_option();
+		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->query_filters = $this->get_filters_query_string();
+		$timestamp           = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$this->day           = Helpers::date_format( $timestamp, TRUE, TRUE );
+		self::$sale_days     = Helpers::get_sold_last_days_option();
 
 		// Filter the table data results to show specific product types only.
 		$this->set_product_types_query_data();
@@ -1385,14 +1377,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$back_orders = '--';
 			if ( $this->product->backorders_allowed() ) {
-
-				// TODO: threshold recalc if needed.
-				$stock_quantity = $this->product->get_stock_quantity();
-				$back_orders    = 0;
-				if ( $stock_quantity < $this->wc_out_stock_threshold ) {
-					$back_orders = $this->wc_out_stock_threshold - $stock_quantity;
-				}
-
+				$back_orders = $this->product->get_stock_quantity();
 			}
 
 			$this->increase_total( 'calc_back_orders', $back_orders );
