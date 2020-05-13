@@ -985,7 +985,7 @@ class ListTable extends AtumListTable {
 
 					// Get all the products that allow back orders.
 					$args     = array(
-						'post_type'      => 'product',
+						'post_type'      => [ 'product', 'product_variation' ],
 						'posts_per_page' => - 1,
 						'meta_key'       => '_backorders',
 						'meta_value'     => 'yes',
@@ -995,18 +995,20 @@ class ListTable extends AtumListTable {
 					foreach ( $products as $product ) {
 
 						$wc_product     = wc_get_product( $product->ID ); // We don't need to use the ATUM models here.
-						$back_orders    = 0;
 						$stock_quantity = $wc_product->get_stock_quantity();
 
-						if ( $stock_quantity < $this->wc_out_stock_threshold ) {
-							$back_orders = $this->wc_out_stock_threshold - $stock_quantity;
-						}
+						$filtered_products[ $wc_product->get_id() ] = $stock_quantity;
 
-						if ( $back_orders ) {
-							$filtered_products[ $wc_product->get_id() ] = $back_orders;
+						// Add the variable products, so the variations can be displayed.
+						if ( $wc_product->is_type( 'variation' ) ) {
+							$filtered_products[ $wc_product->get_parent_id() ] = $stock_quantity;
 						}
 
 					}
+
+					// The backorders products better to be sorted ASC, so those with lower stock at top.
+					asort( $filtered_products );
+					$sorted = TRUE;
 
 					// Re-add the action.
 					add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
