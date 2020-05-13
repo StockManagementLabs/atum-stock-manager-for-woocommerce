@@ -1595,6 +1595,8 @@ final class Ajax {
 				wp_die( - 1 );
 			}
 
+			do_action( 'atum/ajax/atum_order/before_remove_order_items', $atum_order, $atum_order_item_ids );
+
 			foreach ( $atum_order_item_ids as $id ) {
 				$atum_order->remove_item( $id );
 				do_action( 'atum/atum_order/delete_order_item', $id );
@@ -1629,6 +1631,8 @@ final class Ajax {
 		if ( is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
 		}
+
+		do_action( 'atum/ajax/atum_order/before_remove_order_items', $atum_order, $rate_id );
 
 		$atum_order->remove_item( $rate_id );
 		$atum_order->save_items();
