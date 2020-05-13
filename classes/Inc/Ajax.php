@@ -1707,6 +1707,8 @@ final class Ajax {
 			$items = array();
 			parse_str( $_POST['items'], $items );
 
+			do_action( 'atum/ajax/atum_order/before_save_order_items', $atum_order, $items );
+
 			// Save order items.
 			$atum_order->save_order_items( $items );
 
