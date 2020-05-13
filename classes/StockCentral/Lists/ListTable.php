@@ -1169,7 +1169,7 @@ class ListTable extends AtumListTable {
 		parent::no_items();
 
 		// Do not add the message when filtering.
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( wp_doing_ajax() ) {
 			return;
 		}
 

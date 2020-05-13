@@ -60,7 +60,7 @@ defined( 'ABSPATH' ) || die;
 						$tags          = array_map( 'sanitize_title', property_exists( $video_snippet, 'tags' ) ? $video_snippet->tags : [] );
 						?>
 
-						<article class="<?php echo esc_attr( implode( ' ', $tags ) ) ?><?php if ( ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) && 0 === $index ) echo ' active' ?>" data-video="<?php echo esc_attr( $video->id ) ?>">
+						<article class="<?php echo esc_attr( implode( ' ', $tags ) ) ?><?php if ( ! wp_doing_ajax() && 0 === $index ) echo ' active' ?>" data-video="<?php echo esc_attr( $video->id ) ?>">
 
 							<a href="#" class="video-thumb">
 
