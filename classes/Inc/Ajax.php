@@ -1461,6 +1461,8 @@ final class Ajax {
 			$item    = $atum_order->add_fee();
 			$item_id = $item->get_id();
 
+			do_action( 'atum/ajax/atum_order/fee_added', $atum_order, $item );
+
 			// Load template.
 			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/item-fee', compact( 'atum_order', 'item', 'item_id' ) );
 
@@ -1503,6 +1505,8 @@ final class Ajax {
 			// Add new shipping cost line item.
 			$item    = $atum_order->add_shipping_cost();
 			$item_id = $item->get_id();
+
+			do_action( 'atum/ajax/atum_order/shipping_cost_added', $atum_order, $item );
 
 			// Load template.
 			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/item-shipping', compact( 'atum_order', 'item', 'item_id', 'shipping_methods' ) );
