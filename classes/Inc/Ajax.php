@@ -633,6 +633,8 @@ final class Ajax {
 				break;
 		}
 
+		do_action( 'atum/ajax/stock_central_list/bulk_action_applied', $_POST['bulk_action'], $ids );
+
 		wp_send_json_success( __( 'Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN ) );
 
 	}
