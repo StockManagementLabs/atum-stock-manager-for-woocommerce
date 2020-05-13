@@ -339,19 +339,22 @@ export default class AtumOrderItems {
 		
 		evt.preventDefault();
 
-		let $item: JQuery = $( evt.currentTarget ).closest( '.item' ),
-		    qty: number   = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		    taxes: number = 0,
-		    data: any     = {
+		let $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
+		    $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
+		    $lineTotal: JQuery    = $item.find( 'input.line_total' ),
+		    qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
+		    taxes: number         = 0,
+		    lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
+		    data: any             = {
 			    atum_order_id     : this.settings.get( 'post_id' ),
 			    atum_order_item_id: $item.data( 'atum_order_item_id' ),
 			    action            : 'atum_order_change_purchase_price',
 			    security          : this.settings.get( 'atum_order_item_nonce' ),
 		    },
-		    rates: any    = $item.find( '.item_cost' ).data( 'productTaxRates' );
+		    rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' );
 
 		if ( ! purchasePrice ) {
-			purchasePrice = qty !== 0 ? <number>Utils.unformat($item.find('input.line_total').val() || 0, this.settings.get('mon_decimal_point')) / qty : 0;
+			purchasePrice =   qty !== 0 ? lineTotal / qty : 0;
 		}
 
 		if ( ! purchasePriceTxt ) {
@@ -406,6 +409,9 @@ export default class AtumOrderItems {
 				
 			}
 		}).then( () => {
+
+			$lineSubTotal.val( $lineTotal.val() );
+			$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
 			
 			this.swal({
 				title            : this.settings.get('done'),

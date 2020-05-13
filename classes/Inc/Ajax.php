@@ -633,6 +633,8 @@ final class Ajax {
 				break;
 		}
 
+		do_action( 'atum/ajax/stock_central_list/bulk_action_applied', $_POST['bulk_action'], $ids );
+
 		wp_send_json_success( __( 'Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN ) );
 
 	}
@@ -2160,11 +2162,15 @@ final class Ajax {
 		$product_id      = absint( $_POST['product_id'] );
 		$sanitized_terms = array_map( 'absint', $terms );
 
+		do_action( 'atum/ajax/stock_central_list/before_set_locations', $product_id );
+
 		wp_set_post_terms( $product_id, $sanitized_terms, Globals::PRODUCT_LOCATION_TAXONOMY, FALSE );
 
 		$product = Helpers::get_atum_product( $product_id );
 		$product->set_has_location( ! empty( $terms ) );
 		$product->save();
+
+		do_action( 'atum/ajax/stock_central_list/after_set_locations', $product_id );
 
 		wp_send_json_success( 'ok' );
 

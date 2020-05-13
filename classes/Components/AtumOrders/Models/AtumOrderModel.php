@@ -1003,7 +1003,9 @@ abstract class AtumOrderModel {
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
 			$new_status = 'atum_pending';
 		}
-		
+
+		do_action( 'atum/atum_order_model/update_status', $this, $new_status );
+
 		$this->set_status( $new_status );
 		$this->save();
 		

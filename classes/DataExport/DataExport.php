@@ -113,6 +113,8 @@ class DataExport {
 		$max_columns = (int) apply_filters( 'atum/data_export/max_portrait_cols', 12 );
 		$format      = $this->number_columns > $max_columns ? 'A4-L' : 'A4';
 
+		do_action( 'atum/data_export/before_export_data', $_GET );
+
 		try {
 
 			$uploads = wp_upload_dir();
