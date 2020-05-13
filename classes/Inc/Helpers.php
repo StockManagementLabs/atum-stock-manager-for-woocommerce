@@ -2913,7 +2913,7 @@ final class Helpers {
 	 */
 	public static function is_atum_ajax() {
 
-		return defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_REQUEST['action'] ) && 'atum_' === substr( $_REQUEST['action'], 0, 5 ); // phpcs:ignore WordPress.Security.NonceVerification
+		return wp_doing_ajax() && ! empty( $_REQUEST['action'] ) && 'atum_' === substr( $_REQUEST['action'], 0, 5 ); // phpcs:ignore WordPress.Security.NonceVerification
 	}
 	
 	/**

@@ -14,7 +14,7 @@
  * Author:               Stock Management Labs™
  * Author URI:           https://www.stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
- * Requires at least:    4.4
+ * Requires at least:    4.7.0
  * Tested up to:         5.4.1
  * Requires PHP:         5.6
  * WC requires at least: 2.7.0
@@ -36,7 +36,7 @@ if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
 }
 
 if ( ! defined( 'ATUM_WP_MINIMUM_VERSION' ) ) {
-	define( 'ATUM_WP_MINIMUM_VERSION', '4.4' );
+	define( 'ATUM_WP_MINIMUM_VERSION', '4.7.0' );
 }
 
 if ( ! defined( 'ATUM_PHP_MINIMUM_VERSION' ) ) {
