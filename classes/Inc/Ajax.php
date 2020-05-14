@@ -1330,6 +1330,8 @@ final class Ajax {
 
 		$note_id = absint( $_POST['note_id'] );
 
+		do_action( 'atum/ajax/atum_order/before_remove_note', $note_id );
+
 		if ( $note_id ) {
 			wc_delete_order_note( $note_id );
 		}
