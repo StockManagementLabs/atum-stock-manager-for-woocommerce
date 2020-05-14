@@ -1877,6 +1877,8 @@ final class Ajax {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
 
+		do_action( 'atum/ajax/atum_order/before_set_purchase_price', $atum_order, $atum_order_item, $_POST[ Globals::PURCHASE_PRICE_KEY ] );
+
 		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
 		$product->save_atum_data();
 
