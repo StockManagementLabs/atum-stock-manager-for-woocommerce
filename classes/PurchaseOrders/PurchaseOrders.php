@@ -143,7 +143,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
 
 		// Use the purchase price when adding products to a PO.
-		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 3 );
+		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 4 );
 
 		// Add custom search for POs.
 		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
@@ -732,30 +732,33 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @param float                        $price
 	 * @param float                        $qty
 	 * @param \WC_Product|AtumProductTrait $product
+	 * @param AtumOrderModel               $order
 	 *
 	 * @return float|mixed|string
 	 */
-	public function use_purchase_price( $price, $qty, $product ) {
+	public function use_purchase_price( $price, $qty, $product, $order ) {
 
-		// Get the purchase price (if set).
-		$price = $product->get_purchase_price();
+		if ( $order instanceof PurchaseOrder ) {
+			// Get the purchase price (if set).
+			$price = $product->get_purchase_price();
 
-		if ( ! $price ) {
-			return '';
-		}
-		elseif ( empty( $qty ) ) {
-			return 0.0;
-		}
+			if ( ! $price ) {
+				return '';
+			}
+			elseif ( empty( $qty ) ) {
+				return 0.0;
+			}
 
-		if ( $product->is_taxable() && wc_prices_include_tax() ) {
-			$tax_rates = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
-			$taxes     = \WC_Tax::calc_tax( $price * $qty, $tax_rates, TRUE );
-			$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
-		}
-		else {
-			$price *= $qty;
-		}
+			if ( $product->is_taxable() && wc_prices_include_tax() ) {
+				$tax_rates = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
+				$taxes     = \WC_Tax::calc_tax( $price * $qty, $tax_rates, TRUE );
+				$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
+			}
+			else {
+				$price *= $qty;
+			}
 
+		}
 		return $price;
 
 	}
