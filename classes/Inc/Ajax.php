@@ -1301,6 +1301,8 @@ final class Ajax {
 				$comment_id   = $atum_order->add_order_note( $note, TRUE );
 				$note_comment = get_comment( $comment_id );
 
+				do_action( 'atum/ajax/atum_order/note_added', $atum_order, $comment_id );
+
 				Helpers::load_view( 'meta-boxes/atum-order/note', compact( 'note_comment' ) );
 
 			}
