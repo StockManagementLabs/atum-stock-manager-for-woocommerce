@@ -557,6 +557,8 @@ class PurchaseOrders extends AtumOrderPostType {
 					
 				}
 
+				do_action( 'atum/purchase_orders/generate_order_pdf', $atum_order_id );
+
 				$mpdf = new Mpdf( [
 					'mode'    => 'utf-8',
 					'format'  => 'A4',

@@ -1301,6 +1301,8 @@ final class Ajax {
 				$comment_id   = $atum_order->add_order_note( $note, TRUE );
 				$note_comment = get_comment( $comment_id );
 
+				do_action( 'atum/ajax/atum_order/note_added', $atum_order, $comment_id );
+
 				Helpers::load_view( 'meta-boxes/atum-order/note', compact( 'note_comment' ) );
 
 			}
@@ -1327,6 +1329,8 @@ final class Ajax {
 		}
 
 		$note_id = absint( $_POST['note_id'] );
+
+		do_action( 'atum/ajax/atum_order/before_remove_note', $note_id );
 
 		if ( $note_id ) {
 			wc_delete_order_note( $note_id );
@@ -1550,6 +1554,8 @@ final class Ajax {
 			// Add new tax.
 			$atum_order->add_tax( array( 'rate_id' => $rate_id ) );
 
+			do_action( 'atum/ajax/atum_order/tax_added', $atum_order, $rate_id );
+
 			// Load template.
 			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact( 'atum_order' ) );
 
@@ -1593,6 +1599,8 @@ final class Ajax {
 				wp_die( - 1 );
 			}
 
+			do_action( 'atum/ajax/atum_order/before_remove_order_items', $atum_order, $atum_order_item_ids );
+
 			foreach ( $atum_order_item_ids as $id ) {
 				$atum_order->remove_item( $id );
 				do_action( 'atum/atum_order/delete_order_item', $id );
@@ -1627,6 +1635,8 @@ final class Ajax {
 		if ( is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
 		}
+
+		do_action( 'atum/ajax/atum_order/before_remove_order_items', $atum_order, $rate_id );
 
 		$atum_order->remove_item( $rate_id );
 		$atum_order->save_items();
@@ -1704,6 +1714,8 @@ final class Ajax {
 			// Parse the jQuery serialized items.
 			$items = array();
 			parse_str( $_POST['items'], $items );
+
+			do_action( 'atum/ajax/atum_order/before_save_order_items', $atum_order, $items );
 
 			// Save order items.
 			$atum_order->save_order_items( $items );
@@ -1868,6 +1880,8 @@ final class Ajax {
 		if ( ! $product instanceof \WC_Product ) {
 			wp_send_json_error( __( 'Product not found', ATUM_TEXT_DOMAIN ) );
 		}
+
+		do_action( 'atum/ajax/atum_order/before_set_purchase_price', $atum_order, $atum_order_item, $_POST[ Globals::PURCHASE_PRICE_KEY ] );
 
 		$product->set_purchase_price( $_POST[ Globals::PURCHASE_PRICE_KEY ] );
 		$product->save_atum_data();
