@@ -2217,6 +2217,8 @@ final class Ajax {
 			Helpers::change_status_meta( '_manage_stock', $manage_status );
 		}
 
+		do_action( 'atum/ajax/tool_change_manage_stock' );
+
 		wp_send_json_error( __( 'Something failed changing the Manage Stock option', ATUM_TEXT_DOMAIN ) );
 
 	}
@@ -2244,6 +2246,8 @@ final class Ajax {
 			Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
 		}
 
+		do_action( 'atum/ajax/tool_change_control_stock' );
+
 		wp_send_json_error( __( 'Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN ) );
 
 	}
@@ -2265,6 +2269,8 @@ final class Ajax {
 		if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
 			wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 		}
+
+		do_action( 'atum/ajax/tool_clear_out_stock_threshold' );
 
 		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
 
