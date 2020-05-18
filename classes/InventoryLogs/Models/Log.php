@@ -97,7 +97,7 @@ class Log extends AtumOrderModel {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
+				Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
 			}
 
 		}

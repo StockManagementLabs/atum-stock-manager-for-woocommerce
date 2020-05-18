@@ -297,7 +297,7 @@ abstract class AtumOrderItemModel {
 				$product_id = $this->atum_order_item->get_variation_id() ?: $this->atum_order_item->get_product_id();
 				$product    = Helpers::get_atum_product( $product_id );
 				$order      = $this->atum_order_item->get_order();
-				Helpers::update_order_item_product_data( $product, Globals::get_order_type_table_id( $order->get_post_type() ) );
+				Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $order->get_post_type() ) );
 			}
 
 			do_action( 'atum/orders/after_delete_item', $this, $this->atum_order_item );

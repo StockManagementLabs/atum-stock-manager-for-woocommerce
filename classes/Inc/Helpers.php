@@ -1996,12 +1996,30 @@ final class Helpers {
 	 */
 	public static function get_atum_product( $the_product = FALSE ) {
 
+		// No need to obtain the product again if what is coming is already an ATUM product.
+		if ( self::is_atum_product( $the_product ) ) {
+			return $the_product;
+		}
+
 		Globals::enable_atum_product_data_models();
 		$product = wc_get_product( $the_product );
 		Globals::disable_atum_product_data_models();
 
 		return $product;
 
+	}
+
+	/**
+	 * Check whether the passed product is an ATUM product object
+	 *
+	 * @since 1.7.2
+	 *
+	 * @param \WC_Product|AtumProductTrait|BOMProductTrait $product
+	 *
+	 * @return bool
+	 */
+	public static function is_atum_product( $product ) {
+		return $product instanceof \WC_Product && is_callable( array( $product, 'get_atum_controlled' ) );
 	}
 	
 	/**
@@ -2975,7 +2993,7 @@ final class Helpers {
 	 * @param \WC_Product|AtumProductTrait $product
 	 * @param int                          $order_type_id
 	 */
-	public static function update_order_item_product_data( $product, $order_type_id = 1 ) {
+	public static function update_atum_sales_calc_props( $product, $order_type_id = 1 ) {
 
 		switch ( $order_type_id ) {
 			// Purchase Orders.
@@ -3020,10 +3038,49 @@ final class Helpers {
 				break;
 		}
 
-		$product->set_low_stock( self::is_product_low_stock( $product ) );
-		$product->set_atum_stock_status( $product->get_stock_status() );
+		// As we are forcing the save, thie methos should save the product.
+		self::update_atum_product_calc_props( $product, TRUE );
 
-		$product->save_atum_data();
+	}
+
+	/**
+	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @param \WC_Product|int $product
+	 * @param bool            $force_save
+	 */
+	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
+
+		$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
+
+		if ( $product instanceof \WC_Product ) {
+
+			$update = FALSE;
+
+			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+			$stock_status = $product->get_stock_status();
+			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+
+			if ( $product->get_atum_stock_status() !== $stock_status ) {
+				$product->set_atum_stock_status( $stock_status );
+				$update = TRUE;
+			}
+
+			$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
+
+			if ( $product->get_low_stock() !== $low ) {
+				$product->set_low_stock( $low );
+				$update = TRUE;
+			}
+
+			if ( $update || $force_save ) {
+				$product->save_atum_data();
+
+				do_action( 'atum/after_update_product_calc_props', $product );
+			}
+		}
 
 	}
 
@@ -3117,44 +3174,6 @@ final class Helpers {
 		}
 
 		return FALSE;
-
-	}
-
-	/**
-	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
-	 *
-	 * @since 1.7.1
-	 *
-	 * @param \WC_Product|int $product
-	 */
-	public static function update_atum_calc_fields( $product ) {
-
-		$product = self::get_atum_product( $product );
-
-		if ( $product instanceof \WC_Product ) {
-
-			$update = FALSE;
-
-			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
-			$stock_status = $product->get_stock_status();
-			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
-
-			if ( $product->get_atum_stock_status() !== $stock_status ) {
-				$product->set_atum_stock_status( $stock_status );
-				$update = TRUE;
-			}
-
-			$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
-
-			if ( $product->get_low_stock() !== $low ) {
-				$product->set_low_stock( $low );
-				$update = TRUE;
-			}
-
-			if ( $update ) {
-				$product->save_atum_data();
-			}
-		}
 
 	}
 

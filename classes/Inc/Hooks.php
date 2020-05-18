@@ -141,11 +141,11 @@ class Hooks {
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
-		// Get rid of the Update Date on products once an Order is saved to make the appropriate calculations again.
-		add_action( 'woocommerce_after_order_object_save', array( $this, 'clean_up_update_date' ), 10, 2 );
+		// Update the sales-related calculated props when saving an order.
+		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props' ), 10, 2 );
 
 		// Update atum_stock_status and low_stock if needed.
-		add_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_calc_fields' ), 10, 2 );
+		add_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_product_calc_props' ), 10, 2 );
 
 	}
 
@@ -757,7 +757,7 @@ class Hooks {
 				$product    = Helpers::get_atum_product( $product_id );
 
 				if ( $product instanceof \WC_Product ) {
-					Helpers::update_order_item_product_data( $product );
+					Helpers::update_atum_sales_calc_props( $product );
 					do_action( 'atum/after_save_order_item_props', $item, $order_id );
 				}
 
@@ -794,7 +794,7 @@ class Hooks {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_order_item_product_data( $product );
+				Helpers::update_atum_sales_calc_props( $product );
 
 				do_action( 'atum/after_save_order_item_props', $item, $order->get_id() );
 			}
@@ -840,7 +840,7 @@ class Hooks {
 
 		if ( $product instanceof \WC_Product ) {
 
-			Helpers::update_order_item_product_data( $product );
+			Helpers::update_atum_sales_calc_props( $product );
 			do_action( 'atum/after_delete_order_item', $order_item_id );
 
 		}
@@ -901,12 +901,17 @@ class Hooks {
 	}
 
 	/**
-	 * Clean Up the ATUM's
+	 * Update ATUM product data calculated props that depend exclusively on the sale.
+	 *
+	 * @since 1.7.1
 	 *
 	 * @param \WC_Order                $order
 	 * @param \WC_Order_Data_Store_CPT $data_store
 	 */
-	public function clean_up_update_date( $order, $data_store ) {
+	public function update_atum_sales_calc_props( $order, $data_store ) {
+
+		// Prevent saving the calc props muliple times when a new order is created from the frontend.
+		remove_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_product_calc_props' ), 10 );
 
 		$items = $order->get_items();
 
@@ -920,8 +925,7 @@ class Hooks {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				$product->set_update_date();
-				$product->save_atum_data();
+				Helpers::update_atum_sales_calc_props( $product );
 			}
 
 		}
@@ -929,16 +933,15 @@ class Hooks {
 	}
 
 	/**
-	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
+	 * Update ATUM product data calculated props that not depend exclusively on the sale.
 	 *
 	 * @since 1.6.6
 	 *
 	 * @param \WC_Product                $product
 	 * @param \WC_Product_Data_Store_CPT $data_store
 	 */
-	public function update_atum_calc_fields( $product, $data_store ) {
-
-		Helpers::update_atum_calc_fields( $product );
+	public function update_atum_product_calc_props( $product, $data_store ) {
+		Helpers::update_atum_product_calc_props( $product );
 	}
 
 	/**
