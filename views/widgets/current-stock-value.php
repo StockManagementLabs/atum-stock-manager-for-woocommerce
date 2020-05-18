@@ -36,7 +36,7 @@ use Atum\Dashboard\WidgetHelpers;
 		<div class="stock-counter">
 			<div class="total-items-purchase-price">
 				<div class="total" data-currency="<?php echo esc_html( get_woocommerce_currency_symbol() ); ?>">
-					<?php echo esc_html( get_woocommerce_currency_symbol() ); ?> <?php echo esc_html( $current_stock_values['items_purchase_price_total'] ); ?>
+					<?php echo wc_price( $current_stock_values['items_purchase_price_total'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 				<div class="stock-value-title">
 					<h5><?php esc_html_e( 'Stock value', ATUM_TEXT_DOMAIN ) ?></h5>
