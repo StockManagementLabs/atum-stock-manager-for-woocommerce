@@ -1991,19 +1991,39 @@ final class Helpers {
 	 * @since 1.5.0
 	 *
 	 * @param mixed $the_product Post object or post ID of the product.
+	 * @param bool  $use_cache   Whether to use the ATUM cache or not.
 	 *
 	 * @return \WC_Product|AtumProductTrait|BOMProductTrait|null|false
 	 */
-	public static function get_atum_product( $the_product = FALSE ) {
+	public static function get_atum_product( $the_product = FALSE, $use_cache = FALSE ) {
 
 		// No need to obtain the product again if what is coming is already an ATUM product.
 		if ( self::is_atum_product( $the_product ) ) {
 			return $the_product;
 		}
 
-		Globals::enable_atum_product_data_models();
-		$product = wc_get_product( $the_product );
-		Globals::disable_atum_product_data_models();
+		$has_cache = FALSE;
+		$product   = FALSE;
+
+		if ( $use_cache ) {
+
+			$product_id = $the_product instanceof \WC_Product ? $the_product->get_id() : $the_product;
+
+			$cache_key = AtumCache::get_cache_key( 'atum_product', $product_id );
+			$product   = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		}
+
+		if ( ! $has_cache ) {
+
+			Globals::enable_atum_product_data_models();
+			$product = wc_get_product( $the_product );
+			Globals::disable_atum_product_data_models();
+
+			if ( $product && $use_cache ) {
+				AtumCache::set_cache( $cache_key, $product );
+			}
+
+		}
 
 		return $product;
 
