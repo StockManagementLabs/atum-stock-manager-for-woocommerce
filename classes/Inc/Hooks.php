@@ -36,6 +36,25 @@ class Hooks {
 	private static $instance;
 
 	/**
+	 * WoCommerce shortcode product loops types.
+	 *
+	 * @since 1.7.2
+	 *
+	 * @var array
+	 */
+	private $wc_shortcode_loop_types = [
+		'product',
+		'products',
+		'product_category',
+		'recent_products',
+		'sale_products',
+		'best_selling_products',
+		'top_rated_products',
+		'featured_products',
+		'product_attribute',
+	];
+
+	/**
 	 * Hooks singleton constructor
 	 *
 	 * @since 1.3.8.2
@@ -146,6 +165,13 @@ class Hooks {
 
 		// Update atum_stock_status and low_stock if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_product_calc_props' ), 10, 2 );
+
+		// Add ATUM product caching when needed for performance reasons.
+		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
+		add_action( 'woocommerce_before_shop_loop', array( $this, 'allow_product_caching' ) );
+		foreach ( $this->wc_shortcode_loop_types as $type ) {
+			add_action( "woocommerce_shortcode_before_{$type}_loop", array( $this, 'allow_product_caching' ) );
+		}
 
 	}
 
@@ -1035,6 +1061,16 @@ class Hooks {
 
 		do_action( 'atum/after_duplicate_product', $duplicate, $product );
 
+	}
+
+	/**
+	 * Enable product caching in Helpers get_atum_product function.
+	 *
+	 * @since 1.7.2
+	 */
+	public function allow_product_caching() {
+
+		add_filter( 'atum/get_atum_product/use_cache', '__return_true' );
 	}
 
 	
