@@ -2002,6 +2002,7 @@ final class Helpers {
 			return $the_product;
 		}
 
+		$use_cache = apply_filters( 'atum/get_atum_product/use_cache', $use_cache, $the_product );
 		$has_cache = FALSE;
 		$product   = FALSE;
 
