@@ -577,7 +577,6 @@ final class Helpers {
 					$query_joins[]   = "LEFT JOIN `$wpdb->order_itemmeta` AS `mt_qty` ON (`items`.`order_item_id` = `mt_qty`.`order_item_id` AND `mt_qty`.`meta_key` = '_qty')";
 				}
 
-
 			}
 
 			if ( in_array( 'total', $colums ) ) {
@@ -816,6 +815,9 @@ final class Helpers {
 				// Save it for future quicker access.
 				if ( $column_name && is_callable( array( $product, "set_$column_name" ) ) ) {
 					call_user_func( array( $product, "set_$column_name" ), $qty );
+
+					// If it's a variation, sum up all the variations' log types and save the result to the variable (so it can be used in SC sortings).
+					self::maybe_update_variable_calc_prop( $product, $column_name, $qty );
 				}
 
 			}
@@ -1870,6 +1872,9 @@ final class Helpers {
 				// Save it for future quicker access.
 				$product->set_inbound_stock( $inbound_stock );
 
+				// If it's a variation, sum up all the variations' inbound stocks and save the result as the variable inbound (so it can be used in SC sortings).
+				self::maybe_update_variable_calc_prop( $product, 'inbound_stock', $inbound_stock );
+
 			}
 
 			AtumCache::set_cache( $cache_key, $inbound_stock );
@@ -1924,6 +1929,9 @@ final class Helpers {
 
 				// Save it for future quicker access.
 				$product->set_stock_on_hold( $stock_on_hold );
+
+				// If it's a variation, sum up all the variations' stocks on hold and save the result to the variable (so it can be used in SC sortings).
+				self::maybe_update_variable_calc_prop( $product, 'stock_on_hold', $stock_on_hold );
 
 			}
 
@@ -2348,9 +2356,10 @@ final class Helpers {
 			$table_name = $table_name ? $table_name : Globals::ATUM_PRODUCT_DATA_TABLE;
 			$column     = "{$wpdb->prefix}$table_name.{$query_data['order']['field']}";
 
-			// If is a numeric column, the NULL values should display at the end.
+			// If it's a numeric column, the NULL values should display at the end.
 			if ( 'NUMERIC' === $query_data['order']['type'] ) {
-				$column = "IFNULL($column, " . PHP_INT_MAX . ')';
+				$compare_value = 'DESC' === strtoupper( $query_data['order']['order'] ) ? ( - 1 * PHP_INT_MAX ) : PHP_INT_MAX;
+				$column        = "IFNULL($column, $compare_value)";
 			}
 			
 			$pieces['orderby'] = "$column {$query_data['order']['order']}";
@@ -3022,10 +3031,12 @@ final class Helpers {
 				// Set sold today.
 				$sold_today = self::get_sold_last_days( 'today midnight', $current_time, $product_id );
 				$product->set_sold_today( $sold_today );
+				self::maybe_update_variable_calc_prop( $product, 'sold_today', $sold_today );
 
 				// Sales last days.
 				$sales_last_ndays = self::get_sold_last_days( "$current_time -$sale_days days", $current_time, $product_id );
 				$product->set_sales_last_days( $sales_last_ndays );
+				self::maybe_update_variable_calc_prop( $product, 'sales_last_days', $sales_last_ndays );
 
 				// Out stock days.
 				$out_of_stock_days = self::get_product_out_stock_days( $product );
@@ -3034,6 +3045,7 @@ final class Helpers {
 				// Lost sales.
 				$lost_sales = self::get_product_lost_sales( $product );
 				$product->set_lost_sales( $lost_sales );
+				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
 				break;
 		}
@@ -3080,6 +3092,50 @@ final class Helpers {
 
 				do_action( 'atum/after_update_product_calc_props', $product );
 			}
+		}
+
+	}
+
+	/**
+	 * For some ATUM calc props, we need to store the sum of all the variations' calc props in the variable
+	 *
+	 * @since 1.7.2
+	 *
+	 * @param \WC_Product $product The variation product.
+	 * @param string      $prop    The calculated prop name to update.
+	 * @param mixed       $value   The current value for the specified prop on the specified product.
+	 */
+	public static function maybe_update_variable_calc_prop( $product, $prop, $value ) {
+
+		// If it's a variation, sum up all the variations' inbound stocks and save the result as the variable inbound (so it can be used in SC sortings).
+		if ( $product instanceof \WC_Product && $product->is_type( 'variation' ) && is_callable( array( $product, "get_$prop" ) ) ) {
+
+			$product_id       = $product->get_id();
+			$variable_product = self::get_atum_product( $product->get_parent_id() );
+
+			if ( ! $variable_product instanceof \WC_Product || ! is_callable( array( $variable_product, 'get_children' ) ) ) {
+				return;
+			}
+
+			$children       = $variable_product->get_children();
+			$variable_value = $value;
+
+			foreach ( $children as $child_id ) {
+
+				if ( $product_id === $child_id ) {
+					continue;
+				}
+
+				$variation_product = self::get_atum_product( $child_id );
+				$variable_value   += call_user_func( array( $variation_product, "get_$prop" ) );
+
+			}
+
+			if ( is_callable( array( $variable_product, "set_$prop" ) ) ) {
+				call_user_func( array( $variable_product, "set_$prop" ), $variable_value );
+				$variable_product->save_atum_data();
+			}
+
 		}
 
 	}

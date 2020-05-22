@@ -117,6 +117,11 @@ class Upgrade {
 			$this->change_date_expected_meta_key_names();
 		}
 
+		// ** version 1.7.2 ** Update the calculated props for variable products.
+		if ( version_compare( $db_version, '1.7.2', '<' ) ) {
+			add_action( 'atum/after_init', array( $this, 'update_variable_calc_props' ) );
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -777,6 +782,56 @@ class Upgrade {
 			UPDATE $wpdb->postmeta SET meta_key = '_date_expected'
 			WHERE meta_key = '_expected_at_location_date'
 		" );
+
+	}
+
+	/**
+	 * Update the calculated props for all the site variables
+	 *
+	 * @since 1.7.2
+	 */
+	public function update_variable_calc_props() {
+
+		$variation_products = get_posts( array(
+			'posts_per_page' => - 1,
+			'post_type'      => 'product_variation',
+		) );
+
+		$processed_variables = [];
+
+		if ( ! empty( $variation_products ) ) {
+
+			foreach ( $variation_products as $variation_product ) {
+
+				if ( in_array( $variation_product->post_parent, $processed_variables ) ) {
+					continue;
+				}
+
+				$processed_variables[] = $variation_product->post_parent;
+				$variation_product     = Helpers::get_atum_product( $variation_product->ID );
+
+				foreach (
+					[
+						'inbound_stock',
+						'stock_on_hold',
+						'sold_today',
+						'sales_last_days',
+						'reserved_stock',
+						'customer_returns',
+						'warehouse_damage',
+						'lost_in_post',
+						'other_logs',
+						'lost_sales',
+					] as $prop
+				) {
+
+					Helpers::maybe_update_variable_calc_prop( $variation_product, $prop, call_user_func( array( $variation_product, "get_$prop" ) ) );
+
+				}
+
+			}
+
+		}
 
 	}
 

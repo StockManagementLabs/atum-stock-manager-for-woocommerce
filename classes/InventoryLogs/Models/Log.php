@@ -139,7 +139,7 @@ class Log extends AtumOrderModel {
 	 */
 	public function get_order() {
 
-		$order_id = $this->get_meta('order'); // NOTE: Using the __get magic method within a getter is not allowed.
+		$order_id = $this->get_meta( 'order' ); // NOTE: Using the __get magic method within a getter is not allowed.
 
 		if ( $order_id ) {
 			return wc_get_order( $order_id );
@@ -383,7 +383,7 @@ class Log extends AtumOrderModel {
 
 		$order_id = absint( $order_id );
 
-		if ( $order_id !== absint( $this->order ) ) {
+		if ( absint( $this->order ) !== $order_id ) {
 			$this->register_change( 'order' );
 			$this->set_meta( 'order', $order_id );
 		}
@@ -401,7 +401,7 @@ class Log extends AtumOrderModel {
 
 		$log_type = in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '';
 
-		if ( $log_type !== $this->type  ) {
+		if ( $log_type !== $this->type ) {
 			$this->register_change( 'type' );
 			$this->set_meta( 'type', $log_type );
 		}
