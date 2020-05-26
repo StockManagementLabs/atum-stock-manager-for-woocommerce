@@ -107,35 +107,6 @@ trait ListTableLegacyTrait {
 		}
 
 		/**
-		 * Supplier filter
-		 */
-		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-
-			$supplier = absint( $_REQUEST['supplier'] );
-
-			if ( ! empty( $this->atum_query_data['where'] ) ) {
-				$this->atum_query_data['where']['relation'] = 'AND';
-			}
-
-			$this->atum_query_data['where'][] = array(
-				'key'   => 'supplier_id',
-				'value' => $supplier,
-				'type'  => 'NUMERIC',
-			);
-
-			// This query does not get product variations and as each variation may have a distinct supplier,
-			// we have to get them separately and to add their variables to the results.
-			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ] );
-
-			if ( ! empty( $this->supplier_variation_products ) ) {
-				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
-			}
-
-		}
-
-		/**
 		 * Extra meta args
 		 */
 		if ( ! empty( $this->extra_meta ) ) {
@@ -186,8 +157,39 @@ trait ListTableLegacyTrait {
 		if ( ! empty( $_REQUEST['search_column'] ) ) {
 			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
 		}
+
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$args['s'] = esc_attr( $_REQUEST['s'] );
+		}
+
+		/**
+		 * Supplier filter
+		 * NOTE: it's important to run this filter after processing all the rest because we need to pass the $args through.
+		 */
+		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+
+			$supplier = absint( $_REQUEST['supplier'] );
+
+			if ( ! empty( $this->atum_query_data['where'] ) ) {
+				$this->atum_query_data['where']['relation'] = 'AND';
+			}
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'supplier_id',
+				'value' => $supplier,
+				'type'  => 'NUMERIC',
+			);
+
+			// This query does not get product variations and as each variation may have a distinct supplier,
+			// we have to get them separately and to add their variables to the results.
+			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
+
+			if ( ! empty( $this->supplier_variation_products ) ) {
+				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
+			}
+
 		}
 
 		// Let others play.
@@ -632,7 +634,7 @@ trait ListTableLegacyTrait {
 				if ( empty( $products_low_stock ) ) {
 
 					$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
+					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
 						SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
 					" );
 

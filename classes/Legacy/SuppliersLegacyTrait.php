@@ -32,15 +32,16 @@ trait SuppliersLegacyTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int          $supplier_id  The supplier ID.
-	 * @param array|string $post_type    Optional. The product post types to get.
-	 * @param bool         $type_filter  Optional. Whether to filter the retrieved suppliers by product type or not.
+	 * @param int          $supplier_id   The supplier ID.
+	 * @param array|string $post_type     Optional. The product post types to get.
+	 * @param bool         $type_filter   Optional. Whether to filter the retrieved suppliers by product type or not.
+	 * @param array        $extra_filters Optional. Any other extra filters needed to reduce the returned results.
 	 *
 	 * @return array|bool
 	 *
 	 * TODO: 1.5.
 	 */
-	public static function get_supplier_products_legacy( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE ) {
+	public static function get_supplier_products_legacy( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE, $extra_filters = array() ) {
 
 		global $wpdb;
 
@@ -53,36 +54,56 @@ trait SuppliersLegacyTrait {
 			
 			$args = array(
 				'post_type'      => $post_type,
-				'post_status'    => array( 'publish', 'private' ),
+				'post_status'    => [ 'publish', 'private' ],
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
+				'tax_query'      => array(),
 			);
 			
 			$term_join = $term_where = '';
-			
+
+			// Check the product type if needed.
 			if ( $type_filter ) {
 
 				// SC parents default taxonomies and ready to override to MC (or others) requirements.
-				$product_taxonomies = apply_filters( 'atum/suppliers/supplier_product_types', Globals::get_product_types() );
-				$term_ids           = Helpers::get_term_ids_by_slug( $product_taxonomies, $taxonomy = 'product_type' );
+				$product_types = apply_filters( 'atum/suppliers/supplier_product_types', Globals::get_product_types() );
+				$term_ids      = Helpers::get_term_ids_by_slug( $product_types, 'product_type' );
 
-				$args['tax_query'] = array(
-					'relation' => 'AND',
-					array(
-						'taxonomy' => 'product_type',
-						'field'    => 'id',
-						'terms'    => $term_ids,
-					),
+				$args['tax_query'][] = array(
+					'taxonomy' => 'product_type',
+					'field'    => 'id',
+					'terms'    => $term_ids,
 				);
 
-				$term_join  = " LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) ";
-				$term_where = ' AND tr.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ') ';
+				$term_join  = " LEFT JOIN $wpdb->term_relationships trpt ON (p.ID = trpt.object_id) ";
+				$term_where = ' AND trpt.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ') ';
 
+			}
+
+			// Add any extra filter (product category for example).
+			if ( ! empty( $extra_filters['tax_query'] ) && is_array( $extra_filters['tax_query'] ) ) {
+
+				foreach ( $extra_filters['tax_query'] as $index => $tax_query ) {
+
+					if ( 'product_type' !== $tax_query['taxonomy'] ) {
+						$args['tax_query'][] = $tax_query;
+						$term_ids            = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
+
+						$term_join  = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
+						$term_where = " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ') ';
+					}
+
+				}
+
+			}
+
+			if ( ! empty( $args['tax_query'] ) ) {
+				$args['tax_query']['relation'] = 'AND';
 			}
 			
 			add_filter( 'posts_join', array( __CLASS__, 'supplier_join' ), 10 );
 			add_filter( 'posts_where', array( __CLASS__, 'supplier_where' ), 10, 2 );
-			// Father IDs.
+			// Parent IDs.
 			$query    = new \WP_Query( apply_filters( 'atum/suppliers/supplier_products_args', $args ) );
 			$products = $query->posts;
 			remove_filter( 'posts_join', array( __CLASS__, 'supplier_join' ), 10 );
@@ -92,7 +113,7 @@ trait SuppliersLegacyTrait {
 
 				$child_ids = array();
 
-				// Get rebel parents (rebel childs doesn't have term_relationships.term_taxonomy_id).
+				// Get rebel parents (rebel children don't have term_relationships.term_taxonomy_id).
 				// phpcs:disable WordPress.DB.PreparedSQL
 				$query_parents = $wpdb->prepare( "
 					SELECT DISTINCT p.ID FROM $wpdb->posts p
@@ -115,7 +136,7 @@ trait SuppliersLegacyTrait {
 
 				if ( ! empty( $parent_ids ) ) {
 
-					// Get rebel childs.
+					// Get rebel children.
 					// phpcs:disable WordPress.DB.PreparedSQL
 					$query_childs = $wpdb->prepare( "
 		                SELECT DISTINCT p.ID FROM $wpdb->posts p

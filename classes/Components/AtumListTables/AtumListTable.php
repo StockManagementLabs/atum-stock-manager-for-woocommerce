@@ -2014,35 +2014,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		/**
-		 * Supplier filter
-		 */
-		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-
-			$supplier = absint( $_REQUEST['supplier'] );
-
-			if ( ! empty( $this->atum_query_data['where'] ) ) {
-				$this->atum_query_data['where']['relation'] = 'AND';
-			}
-
-			$this->atum_query_data['where'][] = array(
-				'key'   => 'supplier_id',
-				'value' => $supplier,
-				'type'  => 'NUMERIC',
-			);
-
-			// This query does not get product variations and as each variation may have a distinct supplier,
-			// we have to get them separately and to add their variables to the results.
-			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ] );
-
-			if ( ! empty( $this->supplier_variation_products ) ) {
-				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
-			}
-
-		}
-
-		/**
 		 * Extra meta args
 		 */
 		if ( ! empty( $this->extra_meta ) ) {
@@ -2096,6 +2067,36 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$args['s'] = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
+		}
+
+		/**
+		 * Supplier filter
+		 * NOTE: it's important to run this filter after processing all the rest because we need to pass the $args through.
+		 */
+		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+
+			$supplier = absint( $_REQUEST['supplier'] );
+
+			if ( ! empty( $this->atum_query_data['where'] ) ) {
+				$this->atum_query_data['where']['relation'] = 'AND';
+			}
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'supplier_id',
+				'value' => $supplier,
+				'type'  => 'NUMERIC',
+			);
+
+			// This query does not get product variations and as each variation may have a distinct supplier,
+			// we have to get them separately and to add their variables to the results.
+			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
+
+			if ( ! empty( $this->supplier_variation_products ) ) {
+				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
+			}
+
 		}
 
 		// Let others play.

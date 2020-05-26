@@ -427,13 +427,14 @@ class Suppliers {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int          $supplier_id  The supplier ID.
-	 * @param array|string $post_type    Optional. The product post types to get.
-	 * @param bool         $type_filter  Optional. Whether to filter the retrieved suppliers by product type or not.
+	 * @param int          $supplier_id   The supplier ID.
+	 * @param array|string $post_type     Optional. The product post types to get.
+	 * @param bool         $type_filter   Optional. Whether to filter the retrieved suppliers by product type or not.
+	 * @param array        $extra_filters Optional. Any other extra filter needed to reduce the returned results.
 	 *
 	 * @return array|bool
 	 */
-	public static function get_supplier_products( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE ) {
+	public static function get_supplier_products( $supplier_id, $post_type = [ 'product', 'product_variation' ], $type_filter = TRUE, $extra_filters = array() ) {
 
 		/**
 		 * If the site is not using the new tables, use the legacy method
@@ -442,7 +443,7 @@ class Suppliers {
 		 * @deprecated Only for backwards compatibility and will be removed in a future version.
 		 */
 		if ( ! Helpers::is_using_new_wc_tables() ) {
-			return self::get_supplier_products_legacy( $supplier_id, $post_type, $type_filter );
+			return self::get_supplier_products_legacy( $supplier_id, $post_type, $type_filter, $extra_filters );
 		}
 
 		global $wpdb;
