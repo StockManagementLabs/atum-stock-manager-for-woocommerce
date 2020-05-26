@@ -592,6 +592,7 @@ class Hooks {
 
 		// The status stock also is set here.
 		remove_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10 );
+		remove_action( 'woocommerce_variation_set_stock_status', array( $this, 'check_stock_status_set' ), 10 );
 		
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 
