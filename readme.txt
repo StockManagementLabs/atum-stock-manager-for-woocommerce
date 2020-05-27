@@ -154,7 +154,7 @@ After successful activation of ATUM, you are ready to make your business even mo
 
 = What are the minimum ATUM requirements? =
 
-ATUM requires PHP version 5.6 or greater (recommended 7.1.3 or greater), WordPress 4.4 or greater (recommended 5.0 or greater) and WooCommerce 2.7.0 or greater (recommended 3.6 or greater), but our recommended environment is the same as WooCommerce:
+ATUM requires PHP version 5.6 or greater (recommended 7.1.3 or greater), WordPress 4.7 or greater (recommended 5.0 or greater) and WooCommerce 2.7.0 or greater (recommended 3.6 or greater), but our recommended environment is the same as WooCommerce:
 [https://docs.woocommerce.com/document/server-requirements/).
 
 **For ATUM to work you need to activate the Enable Stock Management option in WooCommerce settings (WooCommerce-Settings-Products-Inventory-Manage Stock).
@@ -231,6 +231,37 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.2`
+
+*2020-05-29*
+
+**Features**
+
+* Added new custom hooks.
+* Performance Improvement: added caching for products in single and loop product pages and shortcodes.
+* Allow filtering by supplier + category at the same time.
+
+**Changes**
+
+* Added missing mPDF font.
+* Updated minimum required WordPress version to 4.7.0.
+* Allow using cache in "get_atum_product" function with param and filter.
+* Update the variable products' calc props when updating any of their variations.
+
+**Fixes**
+
+* Fixed variation products not being shown in Back Orders extra filter on Stock Central.
+* Fixed line subtotal not being refreshed after setting the purchase price.
+* CSS fixes.
+* Fixed Inventory Log items that were wrongly using the Purchase Price.
+* Fixed product data sales calc props not being updated when an order is created from the frontend.
+* Fixed price formatting on Current Stock Value widget.
+* Fixed variations were not being saved if the product object was an ATUM product.
+* Fixed duplicated queries in Stock Central.
+* Fixed "worst sellers" and "best sellers" extra filters in Stock Central.
 
 ---
 
