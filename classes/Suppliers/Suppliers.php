@@ -456,6 +456,7 @@ class Suppliers {
 
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders
 			$where = $wpdb->prepare( "WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')", $supplier_id );
+			$join  = '';
 
 			if ( $type_filter ) {
 
@@ -471,11 +472,27 @@ class Suppliers {
 
 			}
 
+			// Add any extra filter (product category for example).
+			if ( ! empty( $extra_filters['tax_query'] ) && is_array( $extra_filters['tax_query'] ) ) {
+
+				foreach ( $extra_filters['tax_query'] as $index => $tax_query ) {
+
+					if ( 'product_type' !== $tax_query['taxonomy'] ) {
+						$term_ids = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
+						$join     = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
+						$where   .= " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ')';
+					}
+
+				}
+
+			}
+
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$products = $wpdb->get_results( "
 				SELECT p.ID, p.post_parent FROM $wpdb->posts p
 				LEFT JOIN {$wpdb->prefix}wc_products wcp ON p.ID = wcp.product_id
 				LEFT JOIN $atum_data_table apd ON p.ID = apd.product_id 
+				$join
 				$where
 			", ARRAY_A );
 			// phpcs:enable

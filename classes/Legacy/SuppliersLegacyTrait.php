@@ -75,8 +75,8 @@ trait SuppliersLegacyTrait {
 					'terms'    => $term_ids,
 				);
 
-				$term_join  = " LEFT JOIN $wpdb->term_relationships trpt ON (p.ID = trpt.object_id) ";
-				$term_where = ' AND trpt.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ') ';
+				$term_join  = " LEFT JOIN $wpdb->term_relationships tr ON (p.ID = tr.object_id) ";
+				$term_where = ' AND tr.term_taxonomy_id IN (' . implode( ',', $term_ids ) . ') ';
 
 			}
 
@@ -121,14 +121,12 @@ trait SuppliersLegacyTrait {
 	                WHERE p.post_type = 'product'
 	                $term_where
 	                AND p.post_status IN ('publish', 'private')              
-	                AND p.ID IN (
-	                
+	                AND p.ID IN (	            
 	                    SELECT DISTINCT sp.post_parent FROM $wpdb->posts sp
 	                    INNER JOIN $atum_data_table AS apd ON (sp.ID = apd.product_id)
 	                    WHERE sp.post_type = 'product_variation'
 	                    AND apd.supplier_id = %d
-	                    AND sp.post_status IN ('publish', 'private')
-	                      
+	                    AND sp.post_status IN ('publish', 'private')	                      
 	                )", $supplier_id );
 				// phpcs:enable
 
@@ -156,7 +154,7 @@ trait SuppliersLegacyTrait {
 
 			}
 
-			return apply_filters( 'atum/suppliers/products', $products, $supplier, $post_type, $type_filter );
+			return apply_filters( 'atum/suppliers/products', $products, $supplier, $post_type, $type_filter, $extra_filters );
 
 		}
 
