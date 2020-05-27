@@ -375,12 +375,20 @@ class ListTable extends AtumListTable {
 			'worst_seller'      => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
 		));
 
+		$no_auto_filter = array(
+			'best_seller',
+			'worst_seller',
+		);
+
 		?>
 		<select name="extra_filter" class="wc-enhanced-select atum-enhanced-select dropdown_extra_filter auto-filter date-selector" autocomplete="off">
 			<option value=""><?php esc_attr_e( 'Extra Filters', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
-				<option value="<?php echo esc_attr( $extra_filter ) ?>"<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] === $extra_filter, TRUE ); ?>><?php echo esc_attr( $label ) ?></option>
+				<option value="<?php echo esc_attr( $extra_filter ) ?>"
+					<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] === $extra_filter, TRUE ); ?>
+					<?php if ( in_array( $extra_filter, $no_auto_filter, TRUE ) ) echo ' data-auto-filter="no"' ?>
+				><?php echo esc_attr( $label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php

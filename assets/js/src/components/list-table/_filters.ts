@@ -32,7 +32,15 @@ export default class Filters {
 			this.globals.$atumList
 				
 				// Dropdown filters.
-				.on('change', '.auto-filter', (evt: JQueryEventObject) => this.keyUp(evt, true) )
+				.on( 'change', '.auto-filter', ( evt: JQueryEventObject ) => {
+
+					const $selected = $( evt.currentTarget ).find( 'option:selected' );
+
+					if ( ! $selected.length || $selected.data( 'auto-filter' ) !== 'no' ) {
+						this.keyUp( evt, true );
+					}
+
+				} )
 				
 				// Search filter.
 				.on('keyup paste search input', '.atum-post-search', (evt: JQueryEventObject) => {
@@ -183,7 +191,7 @@ export default class Filters {
 	 * @param Object  evt       The event data object.
 	 * @param Boolean noTimer   Optional. Whether to delay before triggering the update (used for autosearch).
 	 */
-	keyUp(evt: JQueryEventObject, noTimer?: boolean) {
+	keyUp( evt: JQueryEventObject, noTimer?: boolean ) {
 		
 		let delay: number       = 500,
 		    searchInputVal: any = this.globals.$searchInput.val();
@@ -196,13 +204,13 @@ export default class Filters {
 		 *
 		 * Also, if the 's' param is empty, we don't want to search anything.
 		 */
-		if (evt.type !== 'keyup' || searchInputVal.length > 0) {
+		if ( evt.type !== 'keyup' || searchInputVal.length > 0 ) {
 			
-			if (13 === evt.which) {
+			if ( 13 === evt.which ) {
 				evt.preventDefault();
 			}
 			
-			if (noTimer) {
+			if ( noTimer ) {
 				this.router.updateHash();
 			}
 			else {
@@ -223,7 +231,7 @@ export default class Filters {
 		
 	}
 	
-	pseudoKeyUpAjax(searchColumnBtnVal: string, searchInputVal: any) {
+	pseudoKeyUpAjax( searchColumnBtnVal: string, searchInputVal: any ) {
 		
 		if (searchInputVal.length === 0) {
 			
@@ -275,13 +283,11 @@ export default class Filters {
 			
 		}
 		
-		$dateSelector.on( 'select2:select', ( evt: any ) => {
-			
+		$dateSelector.on( 'select2:select', ( evt: JQueryEventObject ) => {
+
 			const $select: JQuery = $( evt.currentTarget );
 		
 			if ( $.inArray( $select.val(), linkedFilters ) > -1 ) {
-				
-				$select.val('');
 				
 				const popupClass: string = 'filter-range-dates-modal',
 				      swal: any          = window['swal'];
@@ -304,30 +310,34 @@ export default class Filters {
 					`,
 					showConfirmButton: false,
 					onOpen           : () => {
+
+						const $popup: JQuery = $( '.' + popupClass );
 						
 						// Init date time pickers.
-						this.dateTimePicker.addDateTimePickers( $( '.atum-datepicker' ), { minDate: false } );
-						
-						$('.' + popupClass).find('.swal2-content .apply').on('click', () => {
-							this.keyUp(evt, true);
+						this.dateTimePicker.addDateTimePickers( $popup.find( '.atum-datepicker' ), { minDate: false } );
+
+						$popup.find( '.swal2-content .apply' ).click( () => {
+							this.globals.filterData['date_from'] = $popup.find( '.date_from' ).val();
+							this.globals.filterData['date_to'] = $popup.find( '.date_to' ).val();
+							this.keyUp( evt, true );
+							$select.val('');
 							swal.close();
 						});
-						
-						$('.' + popupClass).find('.swal2-close').on('click', () => {
-							$('.' + popupClass).find('.date_to, .date_from').val('');
-						});
+
+						$popup.find( '.swal2-close' ).click( () => $popup.find( '.date_to, .date_from' ).val( '' ) );
 					
 					},
 					onClose: () => {
 						
-						if ( this.settings.get('ajaxFilter') === 'yes' ) {
-							this.keyUp(evt, true);
+						if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
+							this.keyUp( evt, true );
+							$select.val('');
 						}
 						
 					},
 					
 				})
-				.catch(swal.noop);
+				.catch( swal.noop );
 				
 			}
 			

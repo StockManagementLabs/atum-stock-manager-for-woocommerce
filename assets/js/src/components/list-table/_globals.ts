@@ -12,6 +12,7 @@ export default class Globals {
 	$editInput: JQuery = null;
 	$searchInput: JQuery = null;
 	$autoFilters: JQuery = null;
+	autoFiltersNames: string[] = [];
 	$searchColumnBtn: JQuery = null;
 	$searchColumnDropdown: JQuery = null;
 	$stickyCols: JQuery = null;
@@ -35,13 +36,17 @@ export default class Globals {
 	initProps() {
 		
 		// Initialize selectors.
-		this.$atumList = (this.defaults && this.defaults.$atumList) || $('.atum-list-wrapper');
-		this.$atumTable = (this.defaults && this.defaults.$atumTable) || this.$atumList.find('.atum-list-table');
-		this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('#atum-column-edits');
-		this.$searchInput = (this.defaults && this.defaults.$searchInput) || this.$atumList.find('.atum-post-search');
-		this.$autoFilters = this.$atumList.find('#filters_container .auto-filter');
-		this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
-		this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
+		this.$atumList = ( this.defaults && this.defaults.$atumList ) || $( '.atum-list-wrapper' );
+		this.$atumTable = ( this.defaults && this.defaults.$atumTable ) || this.$atumList.find( '.atum-list-table' );
+		this.$editInput = ( this.defaults && this.defaults.$editInput ) || this.$atumList.find( '#atum-column-edits' );
+		this.$searchInput = ( this.defaults && this.defaults.$searchInput ) || this.$atumList.find( '.atum-post-search' );
+		this.$autoFilters = this.$atumList.find( '#filters_container .auto-filter' );
+		this.$searchColumnBtn = ( this.defaults && this.defaults.$searchColumnBtn ) || this.$atumList.find( '#search_column_btn' );
+		this.$searchColumnDropdown = ( this.defaults && this.defaults.$searchColumnDropdown ) || this.$atumList.find( '#search_column_dropdown' );
+
+		this.$autoFilters.each( ( index: number, elem: Element ) => {
+			this.autoFiltersNames.push( $( elem ).attr( 'name' ) );
+		} );
 		
 		const inputPerPage: string = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val();
 		let perPage: number;
@@ -68,7 +73,7 @@ export default class Globals {
 			search_column  : '',
 			sold_last_days : '',
 			view           : '',
-			...this.getAutoFilters( false, true )
+			...this.getAutoFiltersValues( false, true )
 		}
 		
 	}
@@ -81,7 +86,7 @@ export default class Globals {
 	 *
 	 * @return {any}
 	 */
-	getAutoFilters( getFromAddress: boolean = false, emptyValues: boolean = false ): any {
+	getAutoFiltersValues( getFromAddress: boolean = false, emptyValues: boolean = false ): any {
 		
 		let autoFiltersValues: any = {};
 	

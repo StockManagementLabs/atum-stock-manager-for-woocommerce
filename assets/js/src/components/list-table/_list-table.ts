@@ -121,7 +121,7 @@ export default class ListTable {
 			search_column : $.address.parameter('search_column') || '',
 			sold_last_days: $.address.parameter('sold_last_days') || '',
 			s             : $.address.parameter('s') || '',
-			...this.globals.getAutoFilters( true ),
+			...this.globals.getAutoFiltersValues( true ),
 		});
 		
 		this.doingAjax = $.ajax({

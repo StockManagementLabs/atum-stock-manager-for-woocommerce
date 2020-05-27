@@ -138,41 +138,36 @@ export default class Router {
 			sold_last_days: $.address.parameter( 'sold_last_days' ) || '',
 			orderby       : $.address.parameter( 'orderby' ) || this.settings.get( 'orderby' ),
 			order         : $.address.parameter( 'order' ) || this.settings.get( 'order' ),
-			...this.globals.getAutoFilters(),
+			...this.globals.getAutoFiltersValues(),
 		} );
 		
 		// If the filter data has not changed, we don't need to update the hash.
-		if (Utils.areEquivalent(beforeFilters, this.globals.filterData)) {
+		if ( Utils.areEquivalent( beforeFilters, this.globals.filterData ) ) {
 			return;
 		}
 
 		// Update the URL hash parameters.
-		const autoFilterNames: string[] = [];
-		this.globals.$autoFilters.each( ( index: number, elem: Element ) => {
-			autoFilterNames.push( $( elem ).attr( 'name' ) );
-		} );
-		
-		$.each( [ 'view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', ...autoFilterNames ], (index: number, elem: string) => {
-			
+		$.each( [ 'view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to', ...this.globals.autoFiltersNames ], ( index: number, elem: string ) => {
+
 			// Disable auto-update on each iteration until all the parameters have been set.
 			this.navigationReady = false;
-			
+
 			// If it's not saved on the filter data, continue.
-			if ( !this.globals.filterData.hasOwnProperty(elem) ) {
+			if ( ! this.globals.filterData.hasOwnProperty( elem ) ) {
 				return true;
 			}
-			
-			$.address.parameter(elem, this.globals.filterData[elem]);
-			
-		});
-		
+
+			$.address.parameter( elem, this.globals.filterData[ elem ] );
+
+		} );
+
 		// Restore navigation and update if needed.
 		const numCurrentParams: number = $.address.parameterNames().length;
-		if (numCurrentParams || this.numHashParameters !== numCurrentParams) {
+		if ( numCurrentParams || this.numHashParameters !== numCurrentParams ) {
 			this.listTable.updateTable();
 		}
-		
-		this.navigationReady   = true;
+
+		this.navigationReady = true;
 		this.numHashParameters = numCurrentParams;
 		
 	}
