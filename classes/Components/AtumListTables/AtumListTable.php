@@ -4229,6 +4229,14 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_args['post_parent__in'] = $parents;
 			}
 
+			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
+			$query_cache_key = AtumCache::get_cache_key( 'get_children_query', $children_args );
+			$children_ids    = AtumCache::get_cache( $query_cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+			if ( $has_cache ) {
+				return $children_ids;
+			}
+
 			/*
 			 * NOTE: we should apply here all the query filters related to individual child products
 			 * like the ATUM control switch or the supplier
@@ -4288,6 +4296,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->children_products = array_unique( array_merge( $this->children_products, $children_ids ) );
 
 				AtumCache::set_cache( $cache_key, $children_ids );
+				AtumCache::set_cache( $query_cache_key, $children_ids );
 
 				return $children_ids;
 
@@ -4333,6 +4342,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
 				$this->children_products = array_unique( array_merge( $this->children_products, array_map( 'intval', $bundle_children ) ) );
+				AtumCache::set_cache( $cache_key, $children_ids );
+				AtumCache::set_cache( $query_cache_key, $bundle_children );
 
 				return $bundle_children;
 
