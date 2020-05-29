@@ -2210,7 +2210,7 @@ final class Helpers {
 			$support['support_button_text'] = __( 'Get Premium Support', ATUM_TEXT_DOMAIN );
 		}
 		else {
-			$support['support_link']        = 'https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions';
+			$support['support_link']        = 'https://forum.stockmanagementlabs.com/all';
 			$support['support_button_text'] = __( 'Get Support', ATUM_TEXT_DOMAIN );
 		}
 		

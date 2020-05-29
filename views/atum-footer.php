@@ -25,7 +25,7 @@
 	</div>
 
 	<div class="footer-atum-buttons">
-		<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-wp-plugin-issues-bugs-discussions" class="btn btn-primary footer-button">
+		<a target="_blank" href="https://forum.stockmanagementlabs.com/all" class="btn btn-primary footer-button">
 			<?php esc_html_e( 'Get Support', ATUM_TEXT_DOMAIN ); ?>
 		</a>
 		<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
