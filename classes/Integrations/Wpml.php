@@ -27,7 +27,10 @@ class Wpml {
 	/**
 	 * Searchable MultiCurrency columns and their types
 	 */
-	const MULTICURRENCY_COLUMNS = array( '_regular_price', '_sale_price', Globals::PURCHASE_PRICE_KEY );
+	const MULTICURRENCY_COLUMNS = array(
+		'_regular_price',
+		'_sale_price',
+	);
 	
 	/**
 	 * Whether the WC multicurrency option is active or not

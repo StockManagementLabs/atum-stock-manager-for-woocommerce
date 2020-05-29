@@ -130,27 +130,6 @@ final class Globals {
 	 * The user meta key used to store settings per user
 	 */
 	const ATUM_USER_META_KEY = ATUM_PREFIX . 'user_meta';
-
-	/**
-	 * Searchable columns and their types
-	 */
-	const SEARCHABLE_COLUMNS = array(
-		'string'  => array(
-			'title',
-			'_sku',
-			Suppliers::SUPPLIER_SKU_META_KEY,
-			'IDs', // ID as string to allow the use of commas ex: s = '12, 13, 89'.
-			'_supplier',
-		),
-		'numeric' => array(
-			'ID',
-			'_regular_price',
-			'_sale_price',
-			self::PURCHASE_PRICE_KEY,
-			'_weight',
-			'_stock',
-		),
-	);
 	
 	/**
 	 * Getter for the product_types property

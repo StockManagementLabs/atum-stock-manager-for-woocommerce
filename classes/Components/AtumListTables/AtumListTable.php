@@ -60,7 +60,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected static $default_hidden_columns = array();
 
 	/**
-	 * What columns are numeric and searchable? and strings? append to this two keys
+	 * Which columns are numeric and searchable? and strings? append to this two keys
 	 *
 	 * @var array
 	 */
@@ -3491,7 +3491,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		else {
 
-			if ( Helpers::in_multi_array( $search_column, Globals::SEARCHABLE_COLUMNS ) ) {
+			if ( Helpers::in_multi_array( $search_column, $this->default_searchable_columns ) ) {
+
+				$column_name = ltrim( $search_column, '_' );
 
 				//
 				// Search by ID.
@@ -3552,8 +3554,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// Get suppliers.
 					// phpcs:disable WordPress.DB.PreparedSQL
-					$query = $wpdb->prepare(
-						"SELECT ID FROM $wpdb->posts
+					$query = $wpdb->prepare( "
+						SELECT ID FROM $wpdb->posts
 					    WHERE post_type = %s AND $search_query",
 						Suppliers::POST_TYPE
 					);
@@ -3588,8 +3590,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 				//
-				// Search by title and other meta fields.
-				// --------------------------------------!
+				// Search by title and other calc or meta fields.
+				// ----------------------------------------------!
 				else {
 
 					$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
@@ -3606,13 +3608,15 @@ abstract class AtumListTable extends \WP_List_Table {
 				         ";
 
 					}
-					// Numeric fields.
-					elseif ( in_array( $search_column, Globals::SEARCHABLE_COLUMNS['numeric'] ) ) {
+					/**
+					 *  Numeric fields.
+					 */
+					elseif ( in_array( $search_column, $this->default_searchable_columns['numeric'] ) ) {
 
-						// Search by purchase price using the new ATUM data table.
-						if ( Globals::PURCHASE_PRICE_KEY === $search_column ) {
+						// Search by ATUM product data columns.
+						if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
 
-							$search_query = $this->build_search_query( $search_terms, 'purchase_price', 'float', 'apd' );
+							$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'apd' );
 							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
 
 							$query = "
@@ -3626,14 +3630,12 @@ abstract class AtumListTable extends \WP_List_Table {
 						// Search using the new WC tables.
 						elseif ( Helpers::is_using_new_wc_tables() ) {
 
-							$search_column = ltrim( $search_column, '_' );
-
 							// The _stock meta key was renamed to stock_quantity in the new products table.
-							if ( 'stock' === $search_column ) {
-								$search_column = 'stock_quantity';
+							if ( 'stock' === $column_name ) {
+								$column_name = 'stock_quantity';
 							}
 
-							$search_query = $this->build_search_query( $search_terms, $search_column, 'float', 'wcd' );
+							$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'wcd' );
 							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
 
 							$query = "
@@ -3661,13 +3663,15 @@ abstract class AtumListTable extends \WP_List_Table {
 						}
 
 					}
-					// String fields.
+					/**
+					 * String fields.
+					 */
 					else {
 
-						// Search by supplier SKU.
-						if ( Suppliers::SUPPLIER_SKU_META_KEY === $search_column ) {
+						// Search by supplier SKU (or any other possible ATUM string col).
+						if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
 
-							$search_query = $this->build_search_query( $search_terms, 'supplier_sku', 'string', 'apd' );
+							$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'apd' );
 							$meta_where   = apply_filters( 'atum/list_table/product_search/string_meta_where', $search_query, $search_column, $search_terms );
 
 							$query = "
@@ -3681,14 +3685,12 @@ abstract class AtumListTable extends \WP_List_Table {
 						// Search using the new WC tables.
 						elseif ( Helpers::is_using_new_wc_tables() ) {
 
-							$search_column = ltrim( $search_column, '_' );
-
 							// The _stock meta key was renamed to stock_quantity in the new products table.
-							if ( 'stock' === $search_column ) {
-								$search_column = 'stock_quantity';
+							if ( 'stock' === $column_name ) {
+								$column_name = 'stock_quantity';
 							}
 
-							$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'wcd' );
+							$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'wcd' );
 							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
 
 							$query = "
@@ -3999,6 +4001,21 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Increase the total of the specified column by the specified amount
+	 *
+	 * @since 1.4.2
+	 *
+	 * @param string    $column_name
+	 * @param int|float $amount
+	 */
+	protected function increase_total( $column_name, $amount ) {
+
+		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && ! in_array( $this->parent_type, [ 'grouped', 'bundle' ], TRUE ) ) {
+			$this->totalizers[ $column_name ] += floatval( $amount );
+		}
+	}
+
+	/**
 	 * Enqueue the required scripts
 	 *
 	 * @since 0.0.1
@@ -4085,6 +4102,20 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function set_group_members( $group_members ) {
 		$this->group_members = $group_members;
+	}
+
+	/**
+	 * Getter for the ATUM's searchable columns (only those stored on the ATUM product data table)
+	 *
+	 * @since 1.7.2
+	 *
+	 * @return array
+	 */
+	public function get_searchable_atum_columns() {
+
+		// Just extract the column names from the atum_sortable_columnms
+		return array_keys( $this->atum_sortable_columns );
+
 	}
 
 	/**
@@ -4409,21 +4440,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return $like_clauses ? $wpdb->get_col( $grouped_sql ) : []; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-	}
-
-	/**
-	 * Increase the total of the specified column by the specified amount
-	 *
-	 * @since 1.4.2
-	 *
-	 * @param string    $column_name
-	 * @param int|float $amount
-	 */
-	protected function increase_total( $column_name, $amount ) {
-		
-		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && ! in_array( $this->parent_type, [ 'grouped', 'bundle' ], TRUE ) ) {
-			$this->totalizers[ $column_name ] += floatval( $amount );
-		}
 	}
 
 	/**
