@@ -203,13 +203,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Added new custom hooks.
 * Performance Improvement: added caching for products in single and loop product pages and shortcodes.
 * Allow filtering by supplier + category at the same time.
+* Added extra sorting columns to Inbound Stock list.
 
 **Changes**
 
 * Added missing mPDF font.
 * Updated minimum required WordPress version to 4.7.0.
 * Allow using cache in "get_atum_product" function with param and filter.
+* Fixed support forums URL
 * Update the variable products' calc props when updating any of their variations.
+* Allow setting -1 as posts per page in Stock Central settings.
 
 **Fixes**
 
@@ -222,6 +225,9 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed variations were not being saved if the product object was an ATUM product.
 * Fixed duplicated queries in Stock Central.
 * Fixed "worst sellers" and "best sellers" extra filters in Stock Central.
+* Fixed support forums URL.
+* CSS fixes.
+* Fixed Stock Central's search by column functionality for calculated columns.
 
 ---
 
