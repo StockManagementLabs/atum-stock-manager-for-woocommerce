@@ -577,7 +577,7 @@
 	}
 	
 	.dropdown-menu{
-		margin-top: 0px;
+		margin-top: 1px;
 		right: 0px;
 		box-shadow: $dropdown-box-shadow;
 		background-color:  var(--atum-table-bg);
@@ -590,6 +590,17 @@
 	.dropdown-item{
 		width: auto;
 		color: var(--atum-text-color-var1);
+		
+		&:first-child {
+			margin-top: -8px;
+			padding-top: 8px;
+		}
+		
+		&:last-child {
+			margin-bottom: -8px;
+			padding-bottom: 8px;
+		}
+		
 		&:hover, &.active, &:focus, &:active {
 			background-color: var(--primary-dark);
 			color: var(--primary-var-dark);

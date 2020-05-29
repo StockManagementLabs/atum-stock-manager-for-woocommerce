@@ -6471,7 +6471,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .search-box .dropdown-menu, p.search-box .dropdown-menu {
-  margin-top: 0px;
+  margin-top: 1px;
   right: 0px;
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
@@ -6485,6 +6485,16 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .search-box .dropdown-item, p.search-box .dropdown-item {
   width: auto;
   color: var(--atum-text-color-var1);
+}
+
+.search-box .dropdown-item:first-child, p.search-box .dropdown-item:first-child {
+  margin-top: -8px;
+  padding-top: 8px;
+}
+
+.search-box .dropdown-item:last-child, p.search-box .dropdown-item:last-child {
+  margin-bottom: -8px;
+  padding-bottom: 8px;
 }
 
 .search-box .dropdown-item:hover, .search-box .dropdown-item.active, .search-box .dropdown-item:focus, .search-box .dropdown-item:active, p.search-box .dropdown-item:hover, p.search-box .dropdown-item.active, p.search-box .dropdown-item:focus, p.search-box .dropdown-item:active {
