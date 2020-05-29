@@ -37,7 +37,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected $default_searchable_columns = array(
 		'numeric' => array(
-			'_inbound_stock',
+			'calc_inbound_stock',
 		),
 	);
 
@@ -69,19 +69,19 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$args['table_columns'] = array(
-			'thumb'               => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
-			'ID'                  => __( 'ID', ATUM_TEXT_DOMAIN ),
-			'title'               => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'           => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
-			'_sku'                => __( 'SKU', ATUM_TEXT_DOMAIN ),
-			'_inbound_stock'      => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'calc_date_ordered'   => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
-			'calc_date_expected'  => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
-			'calc_purchase_order' => __( 'PO', ATUM_TEXT_DOMAIN ),
+			'thumb'              => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
+			'ID'                 => __( 'ID', ATUM_TEXT_DOMAIN ),
+			'title'              => __( 'Product Name', ATUM_TEXT_DOMAIN ),
+			'calc_type'          => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . __( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'_sku'               => __( 'SKU', ATUM_TEXT_DOMAIN ),
+			'calc_inbound_stock' => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+			'_date_ordered'      => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
+			'_date_expected'     => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
+			'_purchase_order'    => __( 'PO', ATUM_TEXT_DOMAIN ),
 		);
 
 		// Initialize totalizers.
-		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( '_inbound_stock' => 0 ) );
+		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound_stock' => 0 ) );
 
 		parent::__construct( $args );
 		
@@ -282,7 +282,7 @@ class ListTable extends AtumListTable {
 	}
 
 	/**
-	 * Column for inbound stock
+	 * Column for inbound stock quantity
 	 *
 	 * @since 1.3.0
 	 *
@@ -290,11 +290,11 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column__inbound_stock( $item ) {
+	protected function column_calc_inbound_stock( $item ) {
 
 		// Get the quantity for the ATUM Order Item.
 		$qty = AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' );
-		$this->increase_total( '_inbound_stock', $qty );
+		$this->increase_total( 'calc_inbound_stock', $qty );
 
 		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
 
@@ -309,7 +309,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_calc_date_ordered( $item ) {
+	protected function column__date_ordered( $item ) {
 
 		$date_ordered = get_post_meta( $item->po_id, '_date_created', TRUE );
 
@@ -329,7 +329,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_calc_date_expected( $item ) {
+	protected function column__date_expected( $item ) {
 
 		$date_expected = get_post_meta( $item->po_id, '_date_expected', TRUE );
 
@@ -349,7 +349,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @return string
 	 */
-	protected function column_calc_purchase_order( $item ) {
+	protected function column__purchase_order( $item ) {
 
 		$po_link = '<a href="' . get_edit_post_link( $item->po_id ) . '" target="_blank">' . $item->po_id . '</a>';
 		return apply_filters( 'atum/inbound_stock_list/column_purchase_order', $po_link, $item, $this->product );
