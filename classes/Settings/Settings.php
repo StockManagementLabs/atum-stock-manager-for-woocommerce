@@ -586,7 +586,12 @@ class Settings {
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
 
-			$this->options = wp_list_pluck( $this->defaults, 'default' );
+			//Remove the settings without defaults
+			$defaults = array_filter( $this->options, function( $option ) {
+				return isset( $option['default'] );
+			});
+
+			$this->options = wp_list_pluck( $defaults, 'default' );
 
 			// Avoid infinite loop calling this method.
 			remove_filter( 'sanitize_option_' . self::OPTION_NAME, array( $this, 'sanitize' ) );
