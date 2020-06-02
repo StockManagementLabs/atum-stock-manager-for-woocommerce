@@ -75,12 +75,13 @@ final class AtumCache {
 	 * @param string $cache_group   Optional. The cache group.
 	 * @param bool   $force         Optional. Whether to force an update of the local cache from the persistent cache.
 	 * @param bool   $found         Optional. Whether key was found in the cache. Disambiguates a return of false, a storable value.
+	 * @param bool   $allow_disable Optional. Whether the cache can be disabled or not.
 	 *
 	 * @return mixed|bool  The ATUM cache value or FALSE if the cache does not exist
 	 */
-	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP, $force = FALSE, &$found = NULL ) {
+	public static function get_cache( $cache_key, $cache_group = self::CACHE_GROUP, $force = FALSE, &$found = NULL, $allow_disable = TRUE ) {
 
-		if ( self::$disable_cache ) {
+		if ( self::$disable_cache && $allow_disable ) {
 			$found = FALSE;
 			return $found;
 		}
@@ -284,7 +285,6 @@ final class AtumCache {
 	 * @return bool
 	 */
 	public static function is_cache_disabled() {
-
 		return self::$disable_cache;
 	}
 
