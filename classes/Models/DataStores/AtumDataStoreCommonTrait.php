@@ -163,6 +163,8 @@ trait AtumDataStoreCommonTrait {
 			
 		}
 
+		$this->clear_caches( $product );
+
 		do_action( 'atum/data_store/after_save_product_data', $data, $product->get_id() );
 		
 	}
@@ -217,6 +219,7 @@ trait AtumDataStoreCommonTrait {
 
 				do_action( "woocommerce_before_delete_$post_type", $id ); // Default WC action for compatibility.
 				wp_delete_post( $id );
+				$this->clear_caches( $product );
 				$product->set_id( 0 );
 				do_action( "woocommerce_delete_$post_type", $id ); // Default WC action for compatibility.
 

@@ -168,8 +168,8 @@ class Hooks {
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
-		// Update the sales-related calculated props when saving an order.
-		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props' ), 10, 2 );
+		// Update the sales-related calculated props when saving an order or changing the status.
+		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), 10, 2 );
 
 		// Update atum_stock_status and low_stock if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_product_calc_props' ), 10, 2 );
@@ -946,7 +946,7 @@ class Hooks {
 	 * @param \WC_Order                $order
 	 * @param \WC_Order_Data_Store_CPT $data_store
 	 */
-	public function update_atum_sales_calc_props( $order, $data_store ) {
+	public function update_atum_sales_calc_props_after_saving( $order, $data_store = NULL ) {
 
 		// Prevent saving the calc props muliple times when a new order is created from the frontend.
 		remove_action( 'woocommerce_after_product_object_save', array( $this, 'update_atum_product_calc_props' ), 10 );

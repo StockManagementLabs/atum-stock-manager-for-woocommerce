@@ -2015,11 +2015,9 @@ final class Helpers {
 		$product   = FALSE;
 
 		if ( $use_cache ) {
-
 			$product_id = $the_product instanceof \WC_Product ? $the_product->get_id() : $the_product;
-
-			$cache_key = AtumCache::get_cache_key( 'atum_product', $product_id );
-			$product   = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+			$cache_key  = AtumCache::get_cache_key( 'atum_product', $product_id );
+			$product    = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 		}
 
 		if ( ! $has_cache ) {
