@@ -122,6 +122,11 @@ class Upgrade {
 			add_action( 'atum/after_init', array( $this, 'update_variable_calc_props' ) );
 		}
 
+		// ** version 1.7.3 ** Delete the comments count transient, so the unapproved and spam comments are counted.
+		if ( version_compare( $db_version, '1.7.3', '<' ) ) {
+			delete_transient( ATUM_PREFIX . 'count_comments' );
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/

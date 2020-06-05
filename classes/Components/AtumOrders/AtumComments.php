@@ -29,7 +29,7 @@ class AtumComments {
 	/**
 	 * The key name used for ATUM Order comments
 	 */
-	const NOTES_KEY = ATUM_PREFIX . 'order_note';
+	const NOTES_KEY = 'atum_order_note';
 
 	/**
 	 * AtumComments constructor
@@ -44,6 +44,10 @@ class AtumComments {
 
 		// Recount comments. Priority must be higher than the \WC_Comments filter (10).
 		add_filter( 'wp_count_comments', array( $this, 'wp_count_comments' ), 11, 2 );
+
+		// Delete comments count cache whenever there is a new comment or a comment status changes.
+		add_action( 'wp_insert_comment', array( $this, 'delete_comments_count_cache' ) );
+		add_action( 'wp_set_comment_status', array( $this, 'delete_comments_count_cache' ) );
 
 	}
 
@@ -106,19 +110,21 @@ class AtumComments {
 
 			if ( ! $stats ) {
 
-				$stats = array();
+				$stats = array(
+					'total_comments' => 0,
+					'all'            => 0,
+				);
 
 				// *** The 'log_note' is deprecated and could be deleted in future versions ***
 				// phpcs:disable
 				$count = $wpdb->get_results( "
 					SELECT comment_approved, COUNT(*) AS num_comments
 					FROM $wpdb->comments
-					WHERE comment_type NOT IN ('order_note', 'webhook_delivery', 'log_note', '" . self::NOTES_KEY . "')
+					WHERE comment_type NOT IN ('action_log', 'order_note', 'webhook_delivery', 'log_note', '" . self::NOTES_KEY . "')
 					GROUP BY comment_approved
 				", ARRAY_A );
 				// phpcs:enable
 
-				$total    = 0;
 				$approved = array(
 					'0'            => 'moderated',
 					'1'            => 'approved',
@@ -130,8 +136,12 @@ class AtumComments {
 				foreach ( (array) $count as $row ) {
 
 					// Don't count post-trashed toward totals.
-					if ( ! in_array( $row['comment_approved'], [ 'post-trashed', 'trash' ] ) ) {
-						$total += $row['num_comments'];
+					if ( ! in_array( $row['comment_approved'], array( 'post-trashed', 'trash', 'spam' ), true ) ) {
+						$stats['all']            += $row['num_comments'];
+						$stats['total_comments'] += $row['num_comments'];
+					}
+					elseif ( ! in_array( $row['comment_approved'], array( 'post-trashed', 'trash' ), true ) ) {
+						$stats['total_comments'] += $row['num_comments'];
 					}
 
 					if ( isset( $approved[ $row['comment_approved'] ] ) ) {
@@ -139,9 +149,6 @@ class AtumComments {
 					}
 
 				}
-
-				$stats['total_comments'] = $total;
-				$stats['all']            = $total;
 
 				foreach ( $approved as $key ) {
 					if ( empty( $stats[ $key ] ) ) {
