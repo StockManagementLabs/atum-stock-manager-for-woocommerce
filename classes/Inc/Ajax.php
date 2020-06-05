@@ -1809,18 +1809,19 @@ final class Ajax {
 					}
 					
 					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
-					$new_quantity = wc_update_product_stock( $product, $stock_change, $action );
-					$item_name    = $product->get_sku() ? $product->get_sku() : $product->get_id();
-					$note         = sprintf(
-						/* translators: first is the item name, second is the action, third is the old stock and forth is the new stock */
-						__( 'Item %1$s stock %2$s from %3$s to %4$s.', ATUM_TEXT_DOMAIN ),
-						$item_name,
-						'increase' === $action ? __( 'increased', ATUM_TEXT_DOMAIN ) : __( 'decreased', ATUM_TEXT_DOMAIN ),
-						$old_stock,
-						$new_quantity
-					);
+					$new_stock    = wc_update_product_stock( $product, $stock_change, $action );
+					$item_name    = $product->get_formatted_name();
 
-					$return[] = $note;
+					if ( 'increase' === $action ) {
+						$note = __( 'Stock levels increased:', ATUM_TEXT_DOMAIN );
+					}
+					else {
+						$note = __( 'Stock levels reduced:', ATUM_TEXT_DOMAIN );
+					}
+
+					$note .= ' ' . $item_name . ' ' . $old_stock . '&rarr;' . $new_stock;
+
+					$return[] = apply_filters( 'atum/atum_order/add_stock_change_note', $note, $product, $action );
 
 					$atum_order->add_order_note( $note );
 					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
