@@ -120,6 +120,9 @@ class Hooks {
 		// Duplicate the ATUM data when duplicating a product.
 		add_action( 'woocommerce_product_duplicate', array( $this, 'duplicate_product' ), 10, 2 );
 
+		// Delete transients after bulk changing products from SC.
+		add_action( 'atum/ajax/stock_central_list/bulk_action_applied', array( $this, 'delete_transients' ) );
+
 	}
 
 	/**
