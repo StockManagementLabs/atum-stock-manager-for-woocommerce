@@ -76,7 +76,7 @@ export default class EditPopovers {
 				const $valueInput: JQuery       = $fieldWrapper.find( 'input[type=hidden]' ),
 				      oldValue: string | number = $valueInput.val();
 
-				$valueInput.val( newValue );
+				$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
 				
 				// Set the field label.
 				this.setEditFieldLabel( $fieldWrapper.find( '.field-label' ), newLabel );
