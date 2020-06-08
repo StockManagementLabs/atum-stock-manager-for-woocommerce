@@ -244,7 +244,7 @@ final class AtumCache {
 		wp_cache_delete( 'alloptions', 'options' );
 		wp_cache_add( 'alloptions', $alloptions, 'options' );
 
-		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` = '$transient' OR `option_name` = '$timeout'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%' OR `option_name` LIKE '$timeout%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
