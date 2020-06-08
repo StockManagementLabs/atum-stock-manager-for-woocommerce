@@ -239,10 +239,13 @@ final class AtumCache {
 		$timeout      = "_transient_timeout_{$transient_id}";
 		
 		// Ensure the transient isn't in the WP cache.
-		$alloptions = wp_cache_get( 'alloptions', 'options', FALSE );
-		unset( $alloptions[ $transient ] );
-		wp_cache_delete( 'alloptions', 'options' );
-		wp_cache_add( 'alloptions', $alloptions, 'options' );
+		$all_options = wp_cache_get( 'alloptions', 'options', FALSE );
+
+		if ( isset( $all_options[ $transient ] ) ) {
+			unset( $all_options[ $transient ] );
+			wp_cache_delete( 'alloptions', 'options' );
+			wp_cache_add( 'alloptions', $all_options, 'options' );
+		}
 
 		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%' OR `option_name` LIKE '$timeout%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
