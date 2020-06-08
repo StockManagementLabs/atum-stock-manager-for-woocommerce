@@ -707,7 +707,7 @@ abstract class AtumOrderModel {
 				$item->add_meta_data( $meta_key, $meta_value, FALSE );
 			}
 			else {
-				$item->update_meta_data( $meta_key, $meta_value, $meta_id );
+				$item->update_meta_data( $meta_key, $meta_value, (string) $meta_id ); // NOTE: WC is doing a strict comparison for the meta_id and treating it as string.
 			}
 
 		}
