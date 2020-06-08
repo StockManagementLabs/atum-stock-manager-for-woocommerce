@@ -307,7 +307,7 @@ export default class AtumOrderItems {
 		
 	}
 	
-	removeItemMeta(evt: JQueryEventObject) {
+	removeItemMeta( evt: JQueryEventObject ) {
 		
 		evt.preventDefault();
 		
@@ -323,8 +323,8 @@ export default class AtumOrderItems {
 				
 				return new Promise( (resolve: Function, reject: Function) => {
 					
-					const $row: JQuery = $(evt.currentTarget).closest('tr');
-					$row.find(':input').val('');
+					const $row: JQuery = $( evt.currentTarget ).closest( 'tr' );
+					$row.find('[name^="meta_value"]').val(''); // Clear the value, so it's deleted when saving.
 					$row.hide();
 					resolve();
 					
