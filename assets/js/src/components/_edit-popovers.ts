@@ -224,7 +224,7 @@ export default class EditPopovers {
 		
 		if ( this.enhancedSelect) {
 			
-			$( '.popover .atum-select2' ).each( ( index: number, elem: Element ) => {
+			$( '.popover select' ).each( ( index: number, elem: Element ) => {
 				
 				const $select: JQuery = $(elem),
 				      selectOptions: any = {

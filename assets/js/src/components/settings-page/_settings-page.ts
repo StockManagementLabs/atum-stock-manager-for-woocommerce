@@ -55,7 +55,7 @@ export default class SettingsPage {
 		ColorPicker.doColorPickers(this.settings.get('selectColor'));
 		
 		// Enable Select2.
-		this.enhancedSelect.doSelect2($('.atum-select2'), {}, true);
+		this.enhancedSelect.doSelect2( this.$settingsWrapper.find('select'), {}, true );
 		
 		// Enable button groups.
 		ButtonGroup.doButtonGroups(this.$form);
@@ -180,7 +180,7 @@ export default class SettingsPage {
 			ColorPicker.doColorPickers(this.settings.get('selectColor'));
 			this.initDateTimePicker();
 			this.enhancedSelect.maybeRestoreEnhancedSelect();
-			this.enhancedSelect.doSelect2($('.atum-select2'), {}, true);
+			this.enhancedSelect.doSelect2( this.$settingsWrapper.find('select'), {}, true );
 			this.$form.find('[data-dependency]').change().removeClass('dirty');
 			this.$form.show();
 			

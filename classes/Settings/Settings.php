@@ -956,7 +956,7 @@ class Settings {
 		ob_start();
 
 		?>
-		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" class="atum-select2" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -1131,7 +1131,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<select class="atum-select2" name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+		<select name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
 			<?php echo wp_kses_post( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
@@ -1165,9 +1165,9 @@ class Settings {
 
 			<?php if ( isset( $args['options']['select'] ) ) : ?>
 			<div class="atum-select2-container">
-			<select class="atum-select2" style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
-				<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
-				<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
+				<select style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
+					<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
+					<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
 					<?php endforeach ?>
 				</select>
 				&nbsp;
