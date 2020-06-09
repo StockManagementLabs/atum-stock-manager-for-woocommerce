@@ -762,7 +762,8 @@ trait AtumProductTrait {
 		$this->set_date_prop( 'update_date', $update_date );
 	}
 
-	/** Set customer returns for the current product.
+	/**
+	 * Set the ATUM stock status for the current product.
 	 *
 	 * @since 1.6.6
 	 *
