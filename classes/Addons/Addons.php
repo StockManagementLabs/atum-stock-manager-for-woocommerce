@@ -366,6 +366,10 @@ class Addons {
 	 */
 	public function add_atum_addons_suggestions( $value, $option ) {
 
+		if ( ! isset( $value['suggestions'] ) ) {
+			return $value;
+		}
+
 		foreach ( self::$addons as $slug => $addon ) {
 
 			array_unshift( $value['suggestions'], array(
