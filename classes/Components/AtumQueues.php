@@ -39,6 +39,13 @@ class AtumQueues {
 	);
 
 	/**
+	 * Hooks that are triggered just one time asychronously
+	 *
+	 * @var array
+	 */
+	private static $async_hooks = array();
+
+	/**
 	 * AtumQueues singleton constructor
 	 *
 	 * @since 1.5.8
@@ -111,6 +118,51 @@ class AtumQueues {
 
 			if ( $product instanceof \WC_Product ) {
 				Helpers::update_atum_sales_calc_props( $product );
+			}
+
+		}
+
+	}
+
+	/**
+	 * Defer an action to run one time on the WP's 'shutodown' action.
+	 *
+	 * @since 1.7.3
+	 *
+	 * @param string   $hook     The hook name to call after shutdown.
+	 * @param callable $callback A callable function or method.
+	 * @param array    $params   Optional. Any params that need to be passed to the async action. These params will be unpacked with the spread operator.
+	 */
+	public static function add_async_action( $hook, $callback, $params = array() ) {
+
+		// NOTE: For now we only allow unique calls to the same hook.
+		self::$async_hooks[ $hook ] = array(
+			'callback' => $callback,
+			'params'   => $params,
+		);
+
+		// Ensure that we add the action only once.
+		if ( ! has_action( 'shutdown', array( __CLASS__, 'trigger_async_actions' ) ) ) {
+			add_action( 'shutdown', array( __CLASS__, 'trigger_async_actions' ) );
+		}
+
+	}
+
+	/**
+	 * Trigger all the registered async actions
+	 *
+	 * @since 1.7.3
+	 */
+	public static function trigger_async_actions() {
+
+		if ( ! empty( self::$async_hooks ) ) {
+
+			foreach ( self::$async_hooks as $async_hook => $hook_data ) {
+
+				if ( is_callable( $hook_data['callback'] ) ) {
+					call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+				}
+
 			}
 
 		}

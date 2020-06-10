@@ -2714,7 +2714,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( empty( $products_low_stock ) ) {
 
 					$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-					$str_sql = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
+					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
 						SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
 					" );
 
@@ -4113,7 +4113,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function get_searchable_atum_columns() {
 
-		// Just extract the column names from the atum_sortable_columnms
+		// Just extract the column names from the atum_sortable_columnms.
 		return array_keys( $this->atum_sortable_columns );
 
 	}
