@@ -140,20 +140,17 @@ export default class EditPopovers {
 		
 		$editButtons.each( ( index: number, elem: Element ) => {
 
-			const $editButton: JQuery = $( elem ),
-			      // NOTE: the template should be a button sibling to avoid unexpected issues with possible duplicated IDs.
-			      $content: JQuery    = $( $editButton.parent().find( `#${ $editButton.data( 'content-id' ) }` ).html() );
+			const $editButton: JQuery = $( elem );
 
-			if ( ! $content.length ) {
-				return;
-			}
+			// NOTE: the template should be a button sibling to avoid unexpected issues with possible duplicated IDs.
+		    let content: string = $editButton.parent().find( `#${ $editButton.data( 'content-id' ) }` ).html();
 
-			if ( ! $content.hasClass( 'alert' ) ) {
-				$content.after( $( `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>` ) );
+			if ( ! $( content ).hasClass( 'alert' ) ) {
+				content += `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>`;
 			}
 			
 			( <any>$editButton ).popover( {
-				content  : $content,
+				content  : content,
 				html     : true,
 				template : `
 					<div class="popover edit-field-popover" role="tooltip">
