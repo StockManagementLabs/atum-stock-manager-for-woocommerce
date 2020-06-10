@@ -985,6 +985,7 @@ class Hooks {
 	 */
 	public function defer_update_atum_product_calc_props( $product, $data_store ) {
 
+		// Run the calculated propducts props asynchronously.
 		AtumQueues::add_async_action( 'update_atum_product_calc_props', array(
 			'\Atum\Inc\Helpers',
 			'update_atum_product_calc_props',

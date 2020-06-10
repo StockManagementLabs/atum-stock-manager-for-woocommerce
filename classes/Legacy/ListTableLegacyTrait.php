@@ -382,7 +382,7 @@ trait ListTableLegacyTrait {
 		unset( $args['paged'] );
 
 		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERALLY TO AVOID REPETITIVE WORK.
-		$all_transient = AtumCache::get_transient_key( 'list_table_all', array_merge( $args, $this->atum_query_data ) );
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', [ $args, $this->wc_query_data, $this->atum_query_data ] );
 		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
@@ -564,7 +564,7 @@ trait ListTableLegacyTrait {
 				'type'  => 'CHAR',
 			);
 
-			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', array_merge( $products_args, $this->atum_query_data ) );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', [ $products_args, $this->wc_query_data, $this->atum_query_data ] );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) ) {
@@ -584,7 +584,7 @@ trait ListTableLegacyTrait {
 			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
 
 			/**
-			 * Products on Back Order.
+			 * Products on Backorder.
 			 */
 			$products_args['post__in'] = $products_not_stock;
 
@@ -598,29 +598,26 @@ trait ListTableLegacyTrait {
 				'type'  => 'CHAR',
 			);
 
-			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $products_args, $this->atum_query_data ) );
-			$products_back_order  = AtumCache::get_transient( $back_order_transient );
+			$backorders_transient = AtumCache::get_transient_key( 'list_table_backorders', [ $products_args, $this->wc_query_data, $this->atum_query_data ] );
+			$products_backorders  = AtumCache::get_transient( $backorders_transient );
 
-			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
+			if ( empty( $products_backorders ) && ! empty( $products_not_stock ) ) {
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
+				$products_backorders = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-				$products_back_order = $products_back_order->posts;
-				AtumCache::set_transient( $back_order_transient, $products_back_order );
-			}
-			else {
-				$products_back_order = array();
+				$products_backorders = $products_backorders->posts;
+				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
 
-			$this->id_views['back_order']          = (array) $products_back_order;
-			$this->count_views['count_back_order'] = is_array( $products_back_order ) ? count( $products_back_order ) : 0;
+			$this->id_views['back_order']          = (array) $products_backorders;
+			$this->count_views['count_back_order'] = is_array( $products_backorders ) ? count( $products_backorders ) : 0;
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
 				$this->count_views['count_in_stock']   += count( array_intersect( $group_items, (array) $products_in_stock ) );
-				$this->count_views['count_back_order'] += count( array_intersect( $group_items, (array) $products_back_order ) );
+				$this->count_views['count_back_order'] += count( array_intersect( $group_items, (array) $products_backorders ) );
 			}
 
 			/**
@@ -628,7 +625,7 @@ trait ListTableLegacyTrait {
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', array_merge( $args, $this->atum_query_data ) );
+				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', [ $args, $this->wc_query_data, $this->atum_query_data ] );
 				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
 
 				if ( empty( $products_low_stock ) ) {
@@ -651,7 +648,7 @@ trait ListTableLegacyTrait {
 			/**
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( (array) $products_not_stock, (array) $products_back_order );
+			$products_out_stock = array_diff( (array) $products_not_stock, (array) $products_backorders );
 
 			$this->id_views['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
