@@ -458,7 +458,14 @@ class Suppliers {
 			$where = $wpdb->prepare( "WHERE apd.supplier_id = %d AND p.post_type IN ('" . implode( "','", $post_type ) . "')", $supplier_id );
 			$join  = '';
 
-			if ( $type_filter ) {
+			// Check the product type if needed.
+			$is_filtering_product_type = FALSE;
+
+			if ( ! empty( $extra_filters['tax_query'] ) ) {
+				$is_filtering_product_type = ! empty( wp_list_filter( $extra_filters['tax_query'], [ 'taxonomy' => 'product_type' ] ) );
+			}
+
+			if ( $type_filter && ! $is_filtering_product_type ) {
 
 				$product_types = Globals::get_product_types();
 
@@ -476,13 +483,9 @@ class Suppliers {
 			if ( ! empty( $extra_filters['tax_query'] ) && is_array( $extra_filters['tax_query'] ) ) {
 
 				foreach ( $extra_filters['tax_query'] as $index => $tax_query ) {
-
-					if ( 'product_type' !== $tax_query['taxonomy'] ) {
-						$term_ids = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
-						$join     = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
-						$where   .= " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ')';
-					}
-
+					$term_ids = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
+					$join     = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
+					$where   .= " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ')';
 				}
 
 			}

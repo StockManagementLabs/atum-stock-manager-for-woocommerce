@@ -63,7 +63,13 @@ trait SuppliersLegacyTrait {
 			$term_join = $term_where = '';
 
 			// Check the product type if needed.
-			if ( $type_filter ) {
+			$is_filtering_product_type = FALSE;
+
+			if ( ! empty( $extra_filters['tax_query'] ) ) {
+				$is_filtering_product_type = ! empty( wp_list_filter( $extra_filters['tax_query'], [ 'taxonomy' => 'product_type' ] ) );
+			}
+
+			if ( $type_filter && ! $is_filtering_product_type ) {
 
 				// SC parents default taxonomies and ready to override to MC (or others) requirements.
 				$product_types = apply_filters( 'atum/suppliers/supplier_product_types', Globals::get_product_types() );
@@ -85,13 +91,11 @@ trait SuppliersLegacyTrait {
 
 				foreach ( $extra_filters['tax_query'] as $index => $tax_query ) {
 
-					if ( 'product_type' !== $tax_query['taxonomy'] ) {
-						$args['tax_query'][] = $tax_query;
-						$term_ids            = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
+					$args['tax_query'][] = $tax_query;
+					$term_ids            = Helpers::get_term_ids_by_slug( (array) $tax_query['terms'], $tax_query['taxonomy'] );
 
-						$term_join  = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
-						$term_where = " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ') ';
-					}
+					$term_join  = " LEFT JOIN $wpdb->term_relationships tr$index ON (p.ID = tr$index.object_id) ";
+					$term_where = " AND tr$index.term_taxonomy_id IN (" . implode( ',', $term_ids ) . ') ';
 
 				}
 
