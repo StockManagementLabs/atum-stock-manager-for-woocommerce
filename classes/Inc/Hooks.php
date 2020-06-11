@@ -53,7 +53,7 @@ class Hooks {
 	 *
 	 * @var int
 	 */
-	private $current_out_stock_threshold = NULL;
+	public $current_out_stock_threshold = NULL;
 
 	/**
 	 * Store the products where the out of stock threshold was already processed
@@ -143,27 +143,30 @@ class Hooks {
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
 
-		// Add out_stock_threshold hooks if required.
+		/*
+		 * TODO: Remove these Hooks if finally no needed.
+		 * // Add out_stock_threshold hooks if required.
 		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			
+
 			add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
 			add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
 
 			add_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
 			add_action( 'woocommerce_variation_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
-			
+
 			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
 			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
-			
+
 			add_action( 'woocommerce_process_product_meta', array( $this, 'add_stock_status_threshold' ), 19 );
 			add_action( 'woocommerce_process_product_meta', array( $this, 'remove_stock_status_threshold' ), 21 );
-			
+
 			add_action( 'atum/product_data/before_save_product_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
 			add_action( 'atum/product_data/after_save_product_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
 			add_action( 'atum/product_data/before_save_product_variation_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
 			add_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
-		
+
 		}
+		*/
 
 		// Save the orders-related data every time an order is saved.
 		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
@@ -520,8 +523,9 @@ class Hooks {
 			$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
 			Helpers::is_any_out_stock_threshold_set()
 		) {
-
-			// When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
+			/*
+			 * TODO: Remove this code if finally not needed.
+			 * // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
 			// changes should be added or removed depending on the new option.
 			if ( 'no' === $option_value['out_stock_threshold'] ) {
 				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
@@ -531,7 +535,10 @@ class Hooks {
 				add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
 				add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
 			}
+			*/
 
+			// Ensure the option is up to date.
+			Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
 			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
 
 		}
@@ -595,6 +602,7 @@ class Hooks {
 	
 	/**
 	 * Change the stock threshold if current product has one set.
+	 * TODO: Maybe remove when hooks removed
 	 *
 	 * @since 1.4.15
 	 *
@@ -642,6 +650,7 @@ class Hooks {
 	
 	/**
 	 * Change the stock status if current variation has one set.
+	 * TODO: Maybe remove when hooks removed
 	 *
 	 * @since 1.4.15
 	 *
@@ -679,6 +688,7 @@ class Hooks {
 
 	/**
 	 * Check if the product status set is the correct status.
+	 * TODO: Maybe remove when hooks removed
 	 *
 	 * @since 1.7.1
 	 *
@@ -985,7 +995,7 @@ class Hooks {
 	 */
 	public function defer_update_atum_product_calc_props( $product, $data_store ) {
 
-		AtumQueues::add_async_action( 'update_atum_product_calc_props', array(
+		AtumQueues::add_async_action( 'update_atum_product_calc_props_' . $product->get_id(), array(
 			'\Atum\Inc\Helpers',
 			'update_atum_product_calc_props',
 		), [ $product, TRUE ] );

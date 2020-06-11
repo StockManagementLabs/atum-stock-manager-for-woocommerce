@@ -3086,6 +3086,25 @@ final class Helpers {
 
 		if ( $product instanceof \WC_Product ) {
 
+			if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+
+				$out_of_stock_threshold = $product->get_out_stock_threshold();
+
+				// Allow to be hooked externally.
+				$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product->get_id() );
+
+				if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
+
+					// TODO: Refactory to move the Hooks functions to Helpers.
+					Hooks::get_instance()->current_out_stock_threshold = (int) $out_of_stock_threshold;
+					Hooks::get_instance()->add_stock_status_threshold();
+					$product->save();
+					Hooks::get_instance()->remove_stock_status_threshold();
+
+				}
+
+			}
+
 			$update = FALSE;
 
 			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
@@ -3109,6 +3128,7 @@ final class Helpers {
 
 				do_action( 'atum/after_update_product_calc_props', $product );
 			}
+
 		}
 
 	}
