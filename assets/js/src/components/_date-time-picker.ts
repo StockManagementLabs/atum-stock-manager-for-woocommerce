@@ -5,7 +5,6 @@
 /**
  * Third party plugins
  */
-import moment from 'moment/min/moment-with-locales.min';
 import '../../vendor/bootstrap-datetimepicker';     // A fixed version compatible with webpack
 
 import Settings from '../config/_settings';
@@ -33,7 +32,7 @@ export default class DateTimePicker {
 				clear   : 'atum-icon atmi-trash',
 				close   : 'atum-icon atmi-cross',
 			},
-			minDate          : moment(), // By default, we are not allowing to select dates before today
+			minDate          : new Date(), // By default, we are not allowing to select dates before today
 			showClear        : true,
 			showTodayButton  : true,
 			widgetPositioning: {
