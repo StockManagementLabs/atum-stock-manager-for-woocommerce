@@ -11,7 +11,6 @@ import SmartForm from '../_smart-form';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
-import moment from 'moment/min/moment-with-locales.min';
 
 export default class SettingsPage {
 	
@@ -88,7 +87,7 @@ export default class SettingsPage {
 
 			.on('change', '.remove-datepicker-range', (evt: JQueryEventObject) => this.toggleRangeRemove($(evt.currentTarget)) )
 
-			.on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to', (evt: JQueryEventObject) => this.setDateTimeInputs() );
+			.on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', (evt: JQueryEventObject) => this.setDateTimeInputs() );
 
 		new SmartForm(this.$form, this.settings.get('atumPrefix'));
 		
@@ -446,7 +445,7 @@ export default class SettingsPage {
 			$dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' );
 
 		if ( $dateFrom.length && $dateTo.length ) {
-			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate : false, maxDate: moment() } );
+			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate : false, maxDate: new Date() } );
 			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate : false } );
 
 		}
@@ -455,9 +454,10 @@ export default class SettingsPage {
 	setDateTimeInputs() {
 		let $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
 		    $dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' ),
-			$field: JQuery = this.$form.find( '.range-value' );
+			$field: JQuery = this.$form.find( '.range-value' ),
+			$checkbox: JQuery = this.$form.find( '.remove-datepicker-range' );
 
-		$field.val( JSON.stringify( { dateFrom: $dateFrom.val(), dateTo: $dateTo.val() } ) );
+		$field.val( JSON.stringify( { checked: $checkbox.is(':checked'), dateFrom: $dateFrom.val(), dateTo: $dateTo.val() } ) );
 	}
 
 	toggleRangeRemove( $checkbox: JQuery ) {

@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumQueues;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -119,7 +120,8 @@ class Upgrade {
 
 		// ** version 1.7.2 ** Update the calculated props for variable products.
 		if ( version_compare( $db_version, '1.7.2', '<' ) ) {
-			add_action( 'atum/after_init', array( $this, 'update_variable_calc_props' ) );
+			// Run the method asynchronously.
+			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( $this, 'update_variable_calc_props' ) );
 		}
 
 		// ** version 1.7.3 ** Delete the comments count transient, so the unapproved and spam comments are counted.
