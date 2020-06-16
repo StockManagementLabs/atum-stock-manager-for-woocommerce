@@ -1937,6 +1937,8 @@ final class Ajax {
 								 */
 								$product  = Helpers::get_atum_product( $item->get_product() );
 								$log_item = $atum_order->add_product( $product, $item->get_quantity() );
+
+								do_action( 'atum/atum_order/import_order_item', $log_item, $atum_order, $item, $wc_order );
 							}
 							elseif ( $item instanceof \WC_Order_Item_Fee ) {
 								/**
