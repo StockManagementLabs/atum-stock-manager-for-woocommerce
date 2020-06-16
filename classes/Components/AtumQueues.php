@@ -142,8 +142,8 @@ class AtumQueues {
 		);
 
 		// Ensure that we add the action only once.
-		if ( ! has_action( 'shutdown', array( __CLASS__, 'trigger_async_actions' ) ) ) {
-			add_action( 'shutdown', array( __CLASS__, 'trigger_async_actions' ) );
+		if ( ! has_action( 'shutdown', array( get_class(), 'trigger_async_actions' ) ) ) {
+			add_action( 'shutdown', array( get_class(), 'trigger_async_actions' ) );
 		}
 
 	}
