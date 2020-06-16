@@ -34,6 +34,13 @@ class Upgrade {
 	private $current_atum_version = '';
 
 	/**
+	 * Whether ATUM is being installed for the first time
+	 *
+	 * @var bool
+	 */
+	private $is_fresh_install = FALSE;
+
+	/**
 	 * Upgrade constructor
 	 *
 	 * @since 1.2.4
@@ -43,6 +50,10 @@ class Upgrade {
 	public function __construct( $db_version ) {
 
 		$this->current_atum_version = $db_version;
+
+		if ( ! $db_version || version_compare( $db_version, '0.0.1' ) ) {
+			$this->is_fresh_install = TRUE;
+		}
 
 		// Update the db version to the current ATUM version before upgrade to prevent various executions.
 		update_option( 'atum_version', ATUM_VERSION );
@@ -119,7 +130,7 @@ class Upgrade {
 		}
 
 		// ** version 1.7.2 ** Update the calculated props for variable products.
-		if ( version_compare( $db_version, '1.7.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.7.2', '<' ) && ! $this->is_fresh_install ) {
 			// Run the method asynchronously.
 			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( $this, 'update_variable_calc_props' ) );
 		}
