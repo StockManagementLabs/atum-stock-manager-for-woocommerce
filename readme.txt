@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 4.4
-Tested up to: 5.4.1
+Tested up to: 5.4.2
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.1.1
-Stable tag: 1.7.2
+WC tested up to: 4.2.0
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -231,6 +231,46 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.3`
+
+*2020-06-19*
+
+**Features**
+
+* Added new custom hooks before adding order notes.
+* Added async actions method to AtumQueues component.
+* Allow filtering by supplier + product type.
+* Added action after importing items to an Inventory Log from a WC Order.
+
+**Changes**
+
+* Disallow disabling the ATUM cache optionally.
+* Delete transients after bulk changes in Stock Central.
+* Trigger the edit popovers' input change event after setting a new value.
+* Adjusted select2 components to follow the enhancedSelect component conventions.
+* Check that the WC suggestions exist before adding our premium add-ons there.
+* Delayed the out of stock threshold calculation until the async queues are triggered.
+* Update the variable calc props asynchronously when upgrading.
+* Set the checkbox state in date range remover.
+* Refactoring.
+
+**Fixes**
+
+* Avoid endless loops when saving a prodcut with BOMs.
+* Fixed undefined index notice when saving settings for the first time if MI is enabled.
+* Fixed issue with cached ATUM props values when saving calculating props after chaging an order's status.
+* Fixed ATUM comments counting.
+* Fixed ATUM transients not being deleted.
+* Fixed custom meta keys cannot be deleted on ATUM Orders.
+* Fixed new custom meta being created in ATUM Orders when trying to only update its value.
+* Fixed decimal separator for some inputs when editing a cell on Stock Central.
+* Fixed ATUM stock status not being recalculated after creating a new order.
+* Fixed the "on backorder" view being nulled when using the Stock Central transients.
+* Fixed edit popover content not being shown when there are duplicated HTML IDs.
+* Fixed atum/atum_order/add_stock_change_note filter not being applied.
 
 ---
 
