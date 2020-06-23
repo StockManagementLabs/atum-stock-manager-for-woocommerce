@@ -1821,7 +1821,7 @@ final class Ajax {
 
 					$note .= ' ' . $item_name . ' ' . $old_stock . '&rarr;' . $new_stock;
 
-					$note     = apply_filters( 'atum/atum_order/add_stock_change_note', $note, $product, $action );
+					$note     = apply_filters( 'atum/atum_order/add_stock_change_note', $note, $product, $action, $stock_change );
 					$return[] = $note;
 
 					$atum_order->add_order_note( $note );
