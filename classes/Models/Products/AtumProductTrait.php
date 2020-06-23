@@ -28,39 +28,41 @@ trait AtumProductTrait {
 	 * @var bool
 	 */
 	protected $atum_data = array(
-		'purchase_price'         => '',
-		'supplier_id'            => NULL,
-		'supplier_sku'           => '',
-		'atum_controlled'        => TRUE,
+		'purchase_price'              => '',
+		'supplier_id'                 => NULL,
+		'supplier_sku'                => '',
+		'atum_controlled'             => TRUE,
 		// When a new product is created, the ATUM controlled should be enabled by default.
-		'out_stock_date'         => NULL,
-		'out_stock_threshold'    => '',
-		'inheritable'            => FALSE,
-		'inbound_stock'          => NULL,
-		'stock_on_hold'          => NULL,
-		'sold_today'             => NULL,
-		'sales_last_days'        => NULL,
-		'reserved_stock'         => NULL,
-		'customer_returns'       => NULL,
-		'warehouse_damage'       => NULL,
-		'lost_in_post'           => NULL,
-		'other_logs'             => NULL,
-		'out_stock_days'         => NULL,
-		'lost_sales'             => NULL,
-		'has_location'           => NULL,
-		'update_date'            => NULL,
-		'atum_stock_status'      => 'instock',
-		'low_stock'              => NULL,
+		'out_stock_date'              => NULL,
+		'out_stock_threshold'         => '',
+		'inheritable'                 => FALSE,
+		'inbound_stock'               => NULL,
+		'stock_on_hold'               => NULL,
+		'sold_today'                  => NULL,
+		'sales_last_days'             => NULL,
+		'reserved_stock'              => NULL,
+		'customer_returns'            => NULL,
+		'warehouse_damage'            => NULL,
+		'lost_in_post'                => NULL,
+		'other_logs'                  => NULL,
+		'out_stock_days'              => NULL,
+		'lost_sales'                  => NULL,
+		'has_location'                => NULL,
+		'update_date'                 => NULL,
+		'atum_stock_status'           => 'instock',
+		'low_stock'                   => NULL,
 		// Extra props (from ATUM add-ons).
-		'minimum_threshold'      => NULL, // PL.
-		'available_to_purchase'  => NULL, // PL.
-		'selling_priority'       => NULL, // PL.
-		'calculated_stock'       => NULL, // PL.
-		'multi_inventory'        => NULL, // MI.
-		'inventory_iteration'    => NULL, // MI.
-		'inventory_sorting_mode' => NULL, // MI.
-		'expirable_inventories'  => NULL, // MI.
-		'price_per_inventory'    => NULL, // MI.
+		'minimum_threshold'           => NULL, // PL.
+		'available_to_purchase'       => NULL, // PL.
+		'selling_priority'            => NULL, // PL.
+		'calculated_stock'            => NULL, // PL.
+		'multi_inventory'             => NULL, // MI.
+		'inventory_iteration'         => NULL, // MI.
+		'inventory_sorting_mode'      => NULL, // MI.
+		'expirable_inventories'       => NULL, // MI.
+		'price_per_inventory'         => NULL, // MI.
+		'selectable_inventories'      => NULL, // MI.
+		'selectable_inventories_mode' => NULL, // MI.
 	);
 
 
@@ -514,6 +516,41 @@ trait AtumProductTrait {
 
 	}
 
+	/**
+	 * Returns the product's selectable inventories prop.
+	 *
+	 * @since   1.7.4
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_selectable_inventories( $context = 'view' ) {
+
+		$selectable_inventories = $this->get_prop( 'selectable_inventories', $context );
+
+		if ( ! is_null( $selectable_inventories ) ) {
+			$selectable_inventories = wc_bool_to_string( $selectable_inventories );
+		}
+
+		return $selectable_inventories;
+	}
+
+	/**
+	 * Returns the product's selectable inventories mode prop.
+	 *
+	 * @since   1.7.4
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_selectable_inventories_mode( $context = 'view' ) {
+		return $this->get_prop( 'selectable_inventories_mode', $context );
+	}
+
 
 	/*
 	|----------------------------------------------------------------------------
@@ -929,6 +966,41 @@ trait AtumProductTrait {
 		$price_per_inventory = ! is_null( $price_per_inventory ) && 'global' !== $price_per_inventory ? wc_string_to_bool( $price_per_inventory ) : NULL;
 		$this->set_prop( 'price_per_inventory', $price_per_inventory );
 
+	}
+
+	/**
+	 * Set the selectable inventories prop for the current product.
+	 *
+	 * @since   1.7.4
+	 * @package Multi-Inventory
+	 *
+	 * @param string $selectable_inventories Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_selectable_inventories( $selectable_inventories ) {
+
+		$selectable_inventories = ! is_null( $selectable_inventories ) && 'global' !== $selectable_inventories ? wc_string_to_bool( $selectable_inventories ) : NULL;
+		$this->set_prop( 'selectable_inventories', $selectable_inventories );
+
+	}
+
+	/**
+	 * Set the selectable inventories mode for the current product.
+	 *
+	 * @since   1.7.4
+	 * @package Multi-Inventory
+	 *
+	 * @param string $selectable_inventories_mode Allowed values: NULL, 'dropdown', 'list'.
+	 */
+	public function set_selectable_inventories_mode( $selectable_inventories_mode ) {
+
+		$valid_values = array(
+			NULL, // NULL means 'global'.
+			'dropdown',
+			'list',
+		);
+
+		$selectable_inventories_mode = in_array( $selectable_inventories_mode, $valid_values, TRUE ) ? $selectable_inventories_mode : NULL;
+		$this->set_prop( 'selectable_inventories_mode', $selectable_inventories_mode );
 	}
 
 
