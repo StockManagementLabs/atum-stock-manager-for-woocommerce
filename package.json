@@ -15,10 +15,10 @@
 		"lint:scripts:fix": "eslint --fix assets/js/src assets/js/build"
 	},
 	"devDependencies": {
-		"@types/es6-shim": "^0.31.39",
+		"@types/es6-shim": "^0.31.40",
 		"@types/jquery": "^2.0.54",
-		"autoprefixer": "^9.7.3",
-		"eslint": "^6.7.2",
+		"autoprefixer": "^9.8.4",
+		"eslint": "^7.3.1",
 		"eslint-loader": "^2.2.1",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^7.0.1",
@@ -28,26 +28,26 @@
 		"gulp-livereload": "^4.0.2",
 		"gulp-notify": "^3.2.0",
 		"gulp-plumber": "^1.2.1",
-		"gulp-sass": "^4.0.2",
+		"gulp-sass": "^4.1.0",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-watch": "^5.0.1",
 		"gulp-wrap": "^0.15.0",
-		"prettier": "1.19.1",
+		"prettier": "^2.0.5",
 		"ts-loader": "^3.5.0",
-		"typescript": "^3.7.3",
+		"typescript": "^3.9.5",
 		"webpack": "^3.12.0",
 		"webpack-stream": "^4.0.3"
 	},
 	"dependencies": {
-		"bootstrap": "^4.4.1",
+		"bootstrap": "^4.5.0",
 		"chart.js": "^2.9.3",
 		"hammerjs": "^2.0.8",
-		"jquery": "^3.4.1",
+		"jquery": "^3.5.1",
 		"jquery-nice-select": "^1.1.0",
-		"lightgallery.js": "^1.1.3",
-		"moment": "^2.24.0",
+		"lightgallery.js": "^1.2.0",
+		"moment": "^2.27.0",
 		"owl.carousel": "^2.3.4",
-		"popper.js": "^1.16.0",
+		"popper.js": "^1.16.1",
 		"switchery-npm": "^0.8.2"
 	}
 }
