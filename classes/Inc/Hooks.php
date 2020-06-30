@@ -962,7 +962,7 @@ class Hooks {
 	 */
 	public function update_atum_sales_calc_props_after_saving( $order, $data_store = NULL ) {
 
-		// TODO: Prevent saving the calc props muliple times when a new order is created from the frontend.
+		// TODO: Prevent saving the calc props multiple times when a new order is created from the frontend.
 		// NOTE: The remove_action below is not a valid solution as it was not recalculating the "atum_stock_status" after setting a product to "onbackorder" when an order is created from the frontend.
 		//remove_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), 10 );
 
@@ -974,7 +974,7 @@ class Hooks {
 			 *
 			 * @var \WC_Order_Item_Product $item
 			 */
-			$product_id = $item->get_product_id();
+			$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
