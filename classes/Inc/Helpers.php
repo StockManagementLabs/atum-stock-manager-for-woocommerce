@@ -687,6 +687,11 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
+		// Prevent error if no product is set.
+		if ( ! $product ) {
+			return FALSE;
+		}
+
 		$out_of_stock_date = $product->get_out_stock_date();
 
 		if ( $out_of_stock_date && $days > 0 ) {
@@ -731,6 +736,11 @@ final class Helpers {
 
 		if ( ! $product instanceof \WC_Product ) {
 			$product = self::get_atum_product( $product );
+		}
+
+		// Prevent error if no product is set.
+		if ( ! $product ) {
+			return NULL;
 		}
 
 		// Check if the current product has the "Out of stock" date recorded.
