@@ -1683,7 +1683,7 @@ final class Helpers {
 		<?php else : ?>
 
 			<select class="wc-product-search atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
-				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Search Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
 				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
@@ -1691,9 +1691,7 @@ final class Helpers {
 				<?php endif; ?>
 			</select>
 
-			<?php
-
-		endif;
+		<?php endif;
 
 		return ob_get_clean();
 
