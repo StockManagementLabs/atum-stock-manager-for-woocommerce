@@ -194,6 +194,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.7.4`
+
+*2020-07-10*
+
+**Features**
+
+* Handle new Multi-Inventory product props.
+
+**Changes**
+
+* Renamed purchase orders' hook.
+* Modified filter "add_stock_change_note" for Inventory Logs.
+* Updated JS dependencies.
+* Only show backorder quantities in List Tables if the product is on backorder.
+* Refactoring.
+
+**Fixes**
+
+* Fixed "update_sales_calc_props_after_saving" that were saving variables stats but not variations stats.
+* Prevent errors when trying to get data for non existing products.
+
+---
+
 `1.7.3`
 
 *2020-06-19*
