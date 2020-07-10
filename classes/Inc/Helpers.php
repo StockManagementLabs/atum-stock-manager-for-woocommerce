@@ -1661,7 +1661,6 @@ final class Helpers {
 			$args = array(
 				'post_type'      => Suppliers::POST_TYPE,
 				'posts_per_page' => - 1,
-
 			);
 
 			$suppliers = get_posts( $args );
