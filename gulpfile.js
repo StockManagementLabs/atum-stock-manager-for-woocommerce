@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.7.3',
+var version = '1.7.4',
     curDate = new Date();
 
 // Global config
