@@ -57,7 +57,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		}
 
 		$schema['properties']['status']['default'] = ATUM_PREFIX . 'pending';
-		$schema['properties']['status']['enum']    = array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) );
+		$schema['properties']['status']['enum']    = $this->get_atum_order_statuses();
 
 		$schema['properties']['description'] = array(
 			'description' => __( 'The ATUM order description.', ATUM_TEXT_DOMAIN ),
@@ -89,7 +89,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			'type'              => 'array',
 			'items'             => array(
 				'type' => 'string',
-				'enum' => array_merge( [ 'any', 'trash' ], array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) ) ),
+				'enum' => $this->get_atum_order_statuses(),
 			),
 			'validate_callback' => 'rest_validate_request_arg',
 		);
@@ -396,7 +396,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		$args['post_status'] = array();
 		foreach ( $statuses as $status ) {
 
-			if ( in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) ), TRUE ) ) {
+			if ( in_array( $status, $this->get_atum_order_statuses(), TRUE ) ) {
 				$args['post_status'][] = $status;
 			}
 			elseif ( 'any' === $status ) {
@@ -689,6 +689,17 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		// Add/Update the item on the ATUM Order object.
 		$order->add_item( $item );
 
+	}
+
+	/**
+	 * Get the post statuses allowed for ATUM Orders
+	 *
+	 * @since 1.7.5
+	 *
+	 * @return array
+	 */
+	private function get_atum_order_statuses() {
+		return apply_filters( 'atum/api/atum_orders/statuses', array_merge( array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) ), [ 'any', 'trash' ] ) );
 	}
 
 }
