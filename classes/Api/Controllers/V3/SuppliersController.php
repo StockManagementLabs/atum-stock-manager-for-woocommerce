@@ -206,7 +206,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 					'description' => __( 'Supplier status (post status).', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'default'     => 'publish',
-					'enum'        => array_keys( get_post_statuses() ),
+					'enum'        => $this->get_supplier_post_statuses(),
 					'context'     => array( 'view', 'edit' ),
 				),
 				'code'              => array(
@@ -405,7 +405,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'default'           => 'any',
 				'description'       => __( 'Limit result set to suppliers assigned a specific status.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
-				'enum'              => array_merge( array_keys( get_post_statuses() ), [ 'any' ] ),
+				'enum'              => $this->get_supplier_post_statuses(),
 				'sanitize_callback' => 'sanitize_key',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
@@ -1350,6 +1350,17 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		return $post_status;
 
+	}
+
+	/**
+	 * Get the post statuses allowed for suppliers
+	 *
+	 * @since 1.7.5
+	 *
+	 * @return array
+	 */
+	private function get_supplier_post_statuses() {
+		return apply_filters( 'atum/api/suppliers/statuses', array_merge( array_keys( get_post_statuses() ), [ 'any', 'trash' ] ) );
 	}
 
 }
