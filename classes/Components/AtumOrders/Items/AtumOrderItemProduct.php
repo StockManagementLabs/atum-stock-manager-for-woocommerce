@@ -84,7 +84,7 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 	 */
 	public function get_product() {
 		
-		$product = Helpers::get_atum_product( $this->get_variation_id() ? $this->get_variation_id() : $this->get_product_id() );
+		$product = Helpers::get_atum_product( $this->get_variation_id() ?: $this->get_product_id() );
 		
 		return apply_filters( 'atum/orders/item_product/product', $product, $this );
 	}

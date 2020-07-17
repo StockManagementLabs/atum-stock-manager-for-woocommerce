@@ -846,27 +846,37 @@ class ListTable extends AtumListTable {
 					}
 
 					$sql = "
-						SELECT order_item_meta__product_id.meta_value as product_id,
+						SELECT order_item_meta__product_id.meta_value as product_id, order_item_meta__variation_id.meta_value as variation_id,
 						SUM( order_item_meta__qty.meta_value) as order_item_qty
 						FROM $wpdb->posts AS posts 
 						INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
 						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = '_product_id') 
+						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__variation_id ON (order_items.order_item_id = order_item_meta__variation_id.order_item_id)  AND (order_item_meta__variation_id.meta_key = '_variation_id') 
 						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
 						WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
 						AND posts.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
 						$dates_where
-						GROUP BY product_id ORDER BY order_item_qty DESC
+						GROUP BY variation_id, product_id ORDER BY order_item_qty DESC
 					";
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 					if ( ! empty( $product_results ) ) {
 
-						array_walk( $product_results, function ( &$item ) {
+						$filtered_products = array();
+
+						array_walk( $product_results, function ( &$item ) use ( &$filtered_products ) {
+
+							// Add the variable products too, so the variations can be displayed.
+							if ( $item->variation_id ) {
+								$filtered_products[ $item->variation_id ] = $item->order_item_qty;
+							}
+
 							$item = $item->order_item_qty;
+
 						} );
 
-						$filtered_products = $product_results;
+						$filtered_products = $product_results + $filtered_products;
 						$sorted            = TRUE;
 
 					}
@@ -887,7 +897,7 @@ class ListTable extends AtumListTable {
 					$sql = "
 						SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
 						FROM $wpdb->posts pr 
-						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key = '_product_id') 
+						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
 						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
 						LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
 						LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
@@ -940,12 +950,31 @@ class ListTable extends AtumListTable {
 
 					if ( ! empty( $product_results ) ) {
 
-						array_walk( $product_results, function ( &$item ) {
+						$filtered_products = array();
+
+						array_walk( $product_results, function ( &$item ) use ( &$filtered_products ) {
+
+							// Add the variable products too, so the variations can be displayed.
+							$product = wc_get_product( $item->product_id );
+
+							if ( $product instanceof \WC_Product && $product->is_type( 'variation' ) ) {
+
+								$variable_id = $product->get_parent_id();
+
+								if ( ! isset( $filtered_products[ $variable_id ] ) || ( isset( $filtered_products[ $variable_id ] ) && $filtered_products[ $variable_id ] < $item->qty ) ) {
+									$filtered_products[ $variable_id ] = $item->qty;
+								}
+
+							}
+
 							$item = $item->qty;
+
 						} );
 
-						$filtered_products = $product_results;
-						$sorted            = TRUE;
+						$filtered_products = $filtered_products + $product_results;
+
+						arsort( $filtered_products );
+						$sorted = TRUE;
 
 					}
 
@@ -972,12 +1001,31 @@ class ListTable extends AtumListTable {
 
 					if ( ! empty( $product_results ) ) {
 
-						array_walk( $product_results, function ( &$item ) {
+						$filtered_products = array();
+
+						array_walk( $product_results, function ( &$item ) use ( &$filtered_products ) {
+
+							// Add the variable products too, so the variations can be displayed.
+							$product = wc_get_product( $item->product_id );
+
+							if ( $product instanceof \WC_Product && $product->is_type( 'variation' ) ) {
+
+								$variable_id = $product->get_parent_id();
+
+								if ( ! isset( $filtered_products[ $variable_id ] ) || ( isset( $filtered_products[ $variable_id ] ) && $filtered_products[ $variable_id ] < $item->qty ) ) {
+									$filtered_products[ $variable_id ] = $item->qty;
+								}
+
+							}
+
 							$item = $item->qty;
+
 						} );
 
-						$filtered_products = $product_results;
-						$sorted            = TRUE;
+						$filtered_products = $filtered_products + $product_results;
+
+						arsort( $filtered_products );
+						$sorted = TRUE;
 
 					}
 
@@ -1010,7 +1058,13 @@ class ListTable extends AtumListTable {
 
 						// Add the variable products, so the variations can be displayed.
 						if ( $wc_product->is_type( 'variation' ) ) {
-							$filtered_products[ $wc_product->get_parent_id() ] = $stock_quantity;
+
+							$variable_id = $wc_product->get_parent_id();
+
+							if ( ! isset( $filtered_products[ $variable_id ] ) || ( isset( $filtered_products[ $variable_id ] ) && $filtered_products[ $variable_id ] < $stock_quantity ) ) {
+								$filtered_products[ $variable_id ] = $stock_quantity;
+							}
+
 						}
 
 					}
@@ -1031,7 +1085,29 @@ class ListTable extends AtumListTable {
 						'date_start' => 'today midnight',
 					);
 
+					// Disable our custom filters to not alter the orders query.
+					$has_atum_clauses_filter = $has_wc_clauses_filter = FALSE;
+
+					if ( has_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) ) ) {
+						remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+						$has_atum_clauses_filter = TRUE;
+					}
+
+					if ( has_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) ) ) {
+						remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
+						$has_wc_clauses_filter = TRUE;
+					}
+
 					$today_orders = Helpers::get_orders( $atts );
+
+					// Re-add the filters if necessary.
+					if ( $has_atum_clauses_filter ) {
+						add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+					}
+
+					if ( $has_wc_clauses_filter ) {
+						add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
+					}
 
 					foreach ( $today_orders as $today_order ) {
 
@@ -1044,11 +1120,25 @@ class ListTable extends AtumListTable {
 
 						foreach ( $products as $product ) {
 
-							if ( isset( $filtered_products[ $product['product_id'] ] ) ) {
-								$filtered_products[ $product['product_id'] ] += $product['qty'];
+							$product_id = ! empty( $product['variation_id'] ) ? $product['variation_id'] : $product['product_id'];
+
+							if ( isset( $filtered_products[ $product_id ] ) ) {
+								$filtered_products[ $product_id ] += $product['qty'];
 							}
 							else {
-								$filtered_products[ $product['product_id'] ] = $product['qty'];
+								$filtered_products[ $product_id ] = $product['qty'];
+							}
+
+							// Add the variable products, so the variations can be displayed.
+							if ( ! empty( $product['variation_id'] ) ) {
+
+								if (
+									! isset( $filtered_products[ $product['product_id'] ] ) ||
+									( isset( $filtered_products[ $product['product_id'] ] ) && $filtered_products[ $product['product_id'] ] < $filtered_products[ $product_id ] )
+								) {
+									$filtered_products[ $product['product_id'] ] = $filtered_products[ $product_id ];
+								}
+
 							}
 
 						}
@@ -1154,6 +1244,19 @@ class ListTable extends AtumListTable {
 						}
 						else {
 							$products[ $product_id ] = $qty;
+						}
+
+						$log_item_product = $log_item->get_product();
+
+						// Add the variable products, so the variations can be displayed.
+						if ( $log_item_product instanceof \WC_Product && $log_item_product->is_type( 'variation' ) ) {
+
+							$variable_id = $log_item_product->get_parent_id();
+
+							if ( ! isset( $products[ $variable_id ] ) || ( isset( $products[ $variable_id ] ) && $products[ $variable_id ] < $qty ) ) {
+								$products[ $variable_id ] = $qty;
+							}
+
 						}
 
 					}
