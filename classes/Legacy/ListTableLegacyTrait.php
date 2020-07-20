@@ -221,7 +221,7 @@ trait ListTableLegacyTrait {
 						$get_parents = FALSE;
 						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
 
-							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
+							if ( ! empty( $this->container_products[ str_replace( '-', '_', $inheritable_product_type ) ] ) ) {
 								$get_parents = TRUE;
 								break;
 							}
@@ -236,12 +236,26 @@ trait ListTableLegacyTrait {
 							// Exclude the parents with no children.
 							// For example: the current list may have the "Out of stock" filter applied and a variable product
 							// may have all of its variations in stock, but its own stock could be 0. It shouldn't appear empty.
-							$empty_variables = array_diff( $this->container_products['variable'], $parents );
+							foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
 
-							foreach ( $empty_variables as $empty_variable ) {
-								if ( in_array( $empty_variable, $post_ids ) ) {
-									unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+								$inheritable_product_type = str_replace( '-', '_', $inheritable_product_type );
+
+								if ( strpos( $inheritable_product_type, 'variable' ) !== 0 ) {
+									continue;
 								}
+
+								if ( ! isset( $this->container_products[ $inheritable_product_type ] ) ) {
+									continue;
+								}
+
+								$empty_variables = array_diff( $this->container_products[ $inheritable_product_type ], $parents );
+
+								foreach ( $empty_variables as $empty_variable ) {
+									if ( in_array( $empty_variable, $post_ids ) ) {
+										unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+									}
+								}
+
 							}
 
 							// Get the Grouped parents.
@@ -686,14 +700,18 @@ trait ListTableLegacyTrait {
 	 */
 	protected function get_children_legacy( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
+		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+
 		// Get the published products of the same type first.
 		$parent_args = array(
 			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => $post_statuses,
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
-			'orderby'        => 'title',
-			'order'          => 'ASC',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'DESC',
+			),
 			'tax_query'      => array(
 				array(
 					'taxonomy' => 'product_type',
@@ -759,7 +777,7 @@ trait ListTableLegacyTrait {
 
 			$children_args = array(
 				'post_type'      => $post_type,
-				'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+				'post_status'    => $post_statuses,
 				'posts_per_page' => - 1,
 				'fields'         => 'id=>parent',
 				'orderby'        => 'menu_order',

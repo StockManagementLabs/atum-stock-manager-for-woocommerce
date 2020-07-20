@@ -1632,7 +1632,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'all_stock'  => __( 'All', ATUM_TEXT_DOMAIN ),
 			'in_stock'   => __( 'In Stock', ATUM_TEXT_DOMAIN ),
 			'out_stock'  => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
-			'back_order' => __( 'on Back Order', ATUM_TEXT_DOMAIN ),
+			'back_order' => __( 'Backorder', ATUM_TEXT_DOMAIN ),
 			'low_stock'  => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
 			'unmanaged'  => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 		);
