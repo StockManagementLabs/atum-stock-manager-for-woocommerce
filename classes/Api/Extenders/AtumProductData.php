@@ -408,11 +408,11 @@ class AtumProductData {
 							break;
 
 						case 'number':
-							$data = (float) $data;
+							$data = is_numeric( $data ) ? (float) $data : NULL;
 							break;
 
 						case 'integer':
-							$data = (int) $data;
+							$data = is_numeric( $data ) ? (int) $data : NULL;
 							break;
 
 						case 'boolean':
@@ -476,9 +476,7 @@ class AtumProductData {
 			$term_ids = wp_list_pluck( $field_value, 'id' );
 			$term_ids = array_unique( array_filter( array_map( 'absint', $term_ids ) ) );
 
-			if ( ! empty( $term_ids ) ) {
-				wp_set_object_terms( $product_id, $term_ids, Globals::PRODUCT_LOCATION_TAXONOMY );
-			}
+			wp_set_object_terms( $product_id, $term_ids, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 		}
 		elseif ( is_callable( array( $product, $setter ) ) ) {
