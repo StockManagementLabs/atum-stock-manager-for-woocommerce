@@ -32,6 +32,7 @@ return array(
     'Atum\\Api\\Controllers\\V3\\SuppliersController' => $baseDir . '/classes/Api/Controllers/V3/SuppliersController.php',
     'Atum\\Api\\Controllers\\V3\\ToolsController' => $baseDir . '/classes/Api/Controllers/V3/ToolsController.php',
     'Atum\\Api\\Extenders\\AtumProductData' => $baseDir . '/classes/Api/Extenders/AtumProductData.php',
+    'Atum\\Api\\Extenders\\ProductAttributes' => $baseDir . '/classes/Api/Extenders/ProductAttributes.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
     'Atum\\Components\\AtumCache' => $baseDir . '/classes/Components/AtumCache.php',
     'Atum\\Components\\AtumCapabilities' => $baseDir . '/classes/Components/AtumCapabilities.php',

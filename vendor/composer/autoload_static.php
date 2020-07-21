@@ -98,6 +98,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Api\\Controllers\\V3\\SuppliersController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/SuppliersController.php',
         'Atum\\Api\\Controllers\\V3\\ToolsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/ToolsController.php',
         'Atum\\Api\\Extenders\\AtumProductData' => __DIR__ . '/../..' . '/classes/Api/Extenders/AtumProductData.php',
+        'Atum\\Api\\Extenders\\ProductAttributes' => __DIR__ . '/../..' . '/classes/Api/Extenders/ProductAttributes.php',
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
         'Atum\\Components\\AtumCache' => __DIR__ . '/../..' . '/classes/Components/AtumCache.php',
         'Atum\\Components\\AtumCapabilities' => __DIR__ . '/../..' . '/classes/Components/AtumCapabilities.php',
