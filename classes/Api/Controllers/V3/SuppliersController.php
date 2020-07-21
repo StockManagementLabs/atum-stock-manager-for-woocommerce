@@ -831,7 +831,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		if ( ! empty( $schema['properties']['slug'] ) && isset( $request['slug'] ) ) {
 			$prepared_post->post_name = $request['slug'];
 		}
-		elseif ( $prepared_post->post_title ) {
+		elseif ( ! empty( $prepared_post->post_title ) ) {
 			$prepared_post->post_name = sanitize_title( $prepared_post->post_title );
 		}
 
