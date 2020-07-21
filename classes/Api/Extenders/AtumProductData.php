@@ -144,6 +144,9 @@ class AtumProductData {
 			add_filter( "woocommerce_rest_{$post_type}_object_query", array( $this, 'prepare_objects_query' ), 10, 2 );
 		}
 
+		// Alter some of the WC fields before sending the response.
+		add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_rest_response' ), 10, 3 );
+
 	}
 
 	/**
@@ -612,6 +615,51 @@ class AtumProductData {
 	 */
 	public function atum_product_data_query_clauses( $pieces ) {
 		return Helpers::product_data_query_clauses( $this->atum_query_data, $pieces );
+	}
+
+	/**
+	 * Alter some WC fields before sending the response
+	 *
+	 * @since 1.7.5
+	 *
+	 * @param \WP_REST_Response $response
+	 * @param \WC_Product       $object
+	 * @param \WP_REST_Request  $request
+	 *
+	 * @return \WP_REST_Response
+	 */
+	public function prepare_rest_response( $response, $object, $request ) {
+
+		if ( $object instanceof \WC_Product ) {
+
+			$product_data = $response->get_data();
+
+			// Add an array with option_ids for all the attributes (WC was only returning the attribute names).
+			if ( ! empty( $product_data['attributes'] ) ) {
+
+				$product_attributes = $object->get_attributes();
+
+				foreach ( $product_data['attributes'] as $index => $attribute ) {
+
+					foreach ( $product_attributes as $attribute_slug => $attribute_data ) {
+
+						if ( $attribute['id'] === $attribute_data['id'] ) {
+							$product_data['attributes'][ $index ]['option_ids'] = $attribute_data['options'];
+							break;
+						}
+
+					}
+
+				}
+
+			}
+
+			$response->set_data( $product_data );
+
+		}
+
+		return $response;
+
 	}
 
 
