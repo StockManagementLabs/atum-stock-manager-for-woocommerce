@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\ProductAttributes;
+use Atum\Api\Extenders\ProductCategories;
 use Atum\Modules\ModuleManager;
 
 class AtumApi {
@@ -109,6 +110,7 @@ class AtumApi {
 
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
+		ProductCategories::get_instance();
 
 		// Allow ATUM plugins to load their extenders.
 		do_action( 'atum/api/load_extenders' );
