@@ -422,6 +422,7 @@ class Settings {
 				'default' => '',
 			),
 			'city'                      => array(
+				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where your business is located', ATUM_TEXT_DOMAIN ),
