@@ -879,40 +879,42 @@ abstract class AtumOrderPostType {
 
 				$vars = array(
 					'add_note_nonce'           => wp_create_nonce( 'add-atum-order-note' ),
-					'delete_note_nonce'        => wp_create_nonce( 'delete-atum-order-note' ),
-					'delete_note'              => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
-					'post_id'                  => isset( $post->ID ) ? $post->ID : '',
+					'are_you_sure'             => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 					'atum_order_item_nonce'    => wp_create_nonce( 'atum-order-item' ),
-					'rounding_precision'       => wc_get_rounding_precision(),
-					'mon_decimal_point'        => wc_get_price_decimal_separator(),
-					'remove_item_notice'       => __( 'Are you sure you want to remove this item?', ATUM_TEXT_DOMAIN ),
-					'delete_tax_notice'        => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
 					'calc_totals'              => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
 					'calc_totals_nonce'        => wp_create_nonce( 'calc-totals' ),
-					'tax_based_on'             => esc_attr( get_option( 'woocommerce_tax_based_on' ) ),
-					'remove_item_meta'         => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
-					'tax_rate_already_exists'  => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
+					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+					'confirm_purchase_price'   => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN ),
+					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
+					'delete_note_nonce'        => wp_create_nonce( 'delete-atum-order-note' ),
+					'delete_note'              => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'decrease_stock_msg'       => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'delete_tax_notice'        => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
+					// Disable order item selection for only PO when WC version >= 3.5.0.
+					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
+					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
+					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
+					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
+					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'mon_decimal_point'        => wc_get_price_decimal_separator(),
+					'no'                       => __( 'No', ATUM_TEXT_DOMAIN ),
+					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
 					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
 					'placeholder_value'        => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
-					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this?', ATUM_TEXT_DOMAIN ),
-					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
-					'are_you_sure'             => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
-					'decrease_stock_msg'       => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
-					'stock_increased'          => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN ),
-					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN ),
-					'confirm_purchase_price'   => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN ),
+					'post_id'                  => isset( $post->ID ) ? $post->ID : '',
 					'purchase_price_changed'   => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
 					'purchase_price_field'     => Globals::PURCHASE_PRICE_KEY,
 					'remove_all_items_notice'  => __( 'This will remove all the items previously added to this order', ATUM_TEXT_DOMAIN ),
-					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
-					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
-					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
-					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
+					'remove_item_meta'         => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
+					'remove_item_notice'       => __( 'Are you sure you want to remove this item?', ATUM_TEXT_DOMAIN ),
+					'rounding_precision'       => wc_get_rounding_precision(),
+					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN ),
+					'stock_increased'          => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN ),
 					'taxes_name'               => __( 'VAT', ATUM_TEXT_DOMAIN ),
-					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
+					'tax_based_on'             => esc_attr( get_option( 'woocommerce_tax_based_on' ) ),
+					'tax_rate_already_exists'  => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
+					'yes'                      => __( 'Yes', ATUM_TEXT_DOMAIN ),
 				);
 
 				if ( InventoryLogs::POST_TYPE !== $post_type ) {
@@ -1129,13 +1131,14 @@ abstract class AtumOrderPostType {
 	 * @since 1.2.9
 	 *
 	 * @param string $id    The select ID.
+	 * @param string $name  The select field name.
 	 * @param string $value The selected option.
 	 * @param string $class Optional. The CSS classes for the select.
 	 */
-	public static function atum_order_status_dropdown( $id, $value, $class = 'wc-enhanced-select atum-enhanced-select' ) {
+	public static function atum_order_status_dropdown( $id, $name, $value, $class = 'wc-enhanced-select atum-enhanced-select' ) {
 
 		?>
-		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $id ) ?>" class="<?php echo esc_attr( $class ) ?>">
+		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="<?php echo esc_attr( $class ) ?>">
 			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
 				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
 			<?php endforeach; ?>

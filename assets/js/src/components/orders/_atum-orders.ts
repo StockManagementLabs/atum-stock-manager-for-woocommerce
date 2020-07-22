@@ -338,8 +338,8 @@ export default class AtumOrders {
 			text             : this.settings.get('import_order_items'),
 			type             : 'warning',
 			showCancelButton : true,
-			confirmButtonText: this.settings.get('continue'),
-			cancelButtonText : this.settings.get('cancel'),
+			confirmButtonText: this.settings.get('yes'),
+			cancelButtonText : this.settings.get('no'),
 			reverseButtons   : true,
 			allowOutsideClick: false,
 			preConfirm       : (): Promise<any> => {
