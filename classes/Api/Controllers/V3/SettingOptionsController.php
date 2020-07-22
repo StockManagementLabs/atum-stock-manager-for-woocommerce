@@ -43,6 +43,13 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 	protected $atum_settings;
 
 	/**
+	 * All the options stored in ATUM settings
+	 *
+	 * @var array
+	 */
+	protected $atum_settings_options = array();
+
+	/**
 	 * Get the settings schema, conforming to JSON Schema
 	 *
 	 * @since 1.6.2
@@ -442,11 +449,14 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		// Handle global setting.
 		else {
 
-			$settings = Helpers::get_options();
+			// When using the BATCH mode, this can be executed multiple times, so we need to avoid problems with cache storing the options as a prop.
+			if ( empty( $this->atum_settings_options ) ) {
+				$this->atum_settings_options = Helpers::get_options();
+			}
 
-			if ( isset( $settings[ $request['id'] ] ) && $value !== $settings[ $request['id'] ] ) {
-				$settings[ $request['id'] ] = $setting['value'] = $value;
-				update_option( Settings::OPTION_NAME, $settings );
+			if ( isset( $this->atum_settings_options[ $request['id'] ] ) && $value !== $this->atum_settings_options[ $request['id'] ] ) {
+				$this->atum_settings_options[ $request['id'] ] = $setting['value'] = $value;
+				update_option( Settings::OPTION_NAME, $this->atum_settings_options );
 			}
 
 		}
