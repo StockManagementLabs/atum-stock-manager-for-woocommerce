@@ -94,8 +94,8 @@ $log_status = $atum_order->get_status();
 				</p>
 
 				<p class="form-field form-field-wide">
-					<label for="status"><?php esc_html_e( 'Log status', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php InventoryLogs::atum_order_status_dropdown( 'status', $log_status ); ?>
+					<label for="log_status"><?php esc_html_e( 'Log status', ATUM_TEXT_DOMAIN ) ?></label>
+					<?php InventoryLogs::atum_order_status_dropdown( 'log_status', 'status', $log_status ); ?>
 				</p>
 
 				<p class="form-field form-field-wide">

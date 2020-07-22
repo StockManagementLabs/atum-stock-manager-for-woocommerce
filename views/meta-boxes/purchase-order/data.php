@@ -65,8 +65,8 @@ $po_status = $atum_order->get_status();
 				</p>
 
 				<p class="form-field form-field-wide">
-					<label for="status"><?php esc_html_e( 'PO status', ATUM_TEXT_DOMAIN ) ?></label>
-					<?php PurchaseOrders::atum_order_status_dropdown( 'status', $po_status ) ?>
+					<label for="po_status"><?php esc_html_e( 'PO status', ATUM_TEXT_DOMAIN ) ?></label>
+					<?php PurchaseOrders::atum_order_status_dropdown( 'po_status', 'status', $po_status ) ?>
 				</p>
 
 				<p class="form-field date-expected">
