@@ -408,6 +408,11 @@ class InventoryLogsController extends AtumOrdersController {
 			}
 		}
 
+		// Format the order ID.
+		if ( ! empty( $formatted_data['order'] ) ) {
+			$formatted_data['order'] = $formatted_data['order']->get_id();
+		}
+
 		$formatted_data = array_intersect_key( $formatted_data, array_flip( $object_rest_data_keys ) );
 
 		return $formatted_data;
