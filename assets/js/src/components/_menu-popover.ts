@@ -32,8 +32,20 @@ export default class MenuPopover {
 
 		// Prepare the menu's HTML.
 		this.menu.items.forEach( ( item: MenuItem ) => {
-			const icon: string = item.icon ? `<i class="atum-icon ${ item.icon }"></i> `: '';
-			$menuHtml.append(`<li>${ icon }<a data-name="${ item.name }" href="${ item.link || '#' }">${ item.label }</a></li>`);
+
+			const icon: string      = item.icon ? `<i class="atum-icon ${ item.icon }"></i> ` : '',
+			      $menuItem: JQuery = $( `<li>${ icon }<a data-name="${ item.name }" href="${ item.link || '#' }">${ item.label }</a></li>` );
+
+			if ( item.data ) {
+
+				$.each( item.data, ( key: string, value: string ) => {
+					$menuItem.find( 'a' ).data( key, value );
+				} );
+
+			}
+
+			$menuHtml.append( $menuItem );
+
 		} );
 
 		// Add the popover to the menu button.
