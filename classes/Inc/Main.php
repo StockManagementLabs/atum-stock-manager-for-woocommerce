@@ -122,6 +122,8 @@ class Main {
 		// Load ATUM modules.
 		add_action( 'setup_theme', array( $this, 'load_modules' ) );
 
+		//add_action( 'set_current_user', array( $this, 'bypass_wp_endpoints_with_wc_keys' ), 1 );
+
 	}
 
 	/**
@@ -501,6 +503,34 @@ class Main {
 		}
 		
 		return $footer_text;
+
+	}
+
+	/**
+	 * Allow authenticating the WP's media endpoint using the WC keys, so we can upload images to products
+	 *
+	 * @since 1.7.5
+	 *
+	 * @param bool $is_request_to_rest_api
+	 *
+	 * @return bool
+	 */
+	public function bypass_wp_endpoints_with_wc_keys( $is_request_to_rest_api ) {
+
+		if ( ! $is_request_to_rest_api ) {
+
+			if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+				return FALSE;
+			}
+
+			$rest_prefix = trailingslashit( rest_get_url_prefix() );
+			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+
+			$is_request_to_rest_api = ( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/media' ) );
+
+		}
+
+		return $is_request_to_rest_api;
 
 	}
 

@@ -23,7 +23,7 @@ use Atum\Inc\Helpers;
 
 		<?php if ( $vat_number ) : ?>
 			<br>
-			<?php printf( esc_html__( 'Tax/VAT number: %s' ) , $vat_number ) ?>
+			<?php printf( esc_html__( 'Tax/VAT number: %s' ), $vat_number ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php endif; ?>
 	</div>
 	<div class="float-right">
@@ -321,7 +321,7 @@ use Atum\Inc\Helpers;
 	</table>
 </div>
 
-<?php  $description = $po->get_description() ?>
+<?php $description = $po->get_description() ?>
 <?php if ( $description ) : ?>
 <div class="po-wrapper content-description">
 	<div class="label">
