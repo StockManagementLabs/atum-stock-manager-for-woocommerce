@@ -122,7 +122,10 @@ class Main {
 		// Load ATUM modules.
 		add_action( 'setup_theme', array( $this, 'load_modules' ) );
 
-		//add_action( 'set_current_user', array( $this, 'bypass_wp_endpoints_with_wc_keys' ), 1 );
+		// This filter needs to be registered at the right time.
+		add_action( 'setup_theme', function() {
+			add_filter( 'woocommerce_rest_is_request_to_rest_api', array( $this, 'bypass_wp_endpoints_with_wc_keys' ) );
+		}, 1 );
 
 	}
 
