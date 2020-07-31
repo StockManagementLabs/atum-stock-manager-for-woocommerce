@@ -278,7 +278,6 @@ class Hooks {
 			$variations     = $the_product->get_children();
 			$managing_stock = $the_product->managing_stock();
 			$stock_status   = $managing_stock ? $the_product->get_stock_status() : 'outofstock';
-			$stock_text     = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
 			$stock_html     = '';
 			
 			if ( ! empty( $variations ) ) {
@@ -300,14 +299,12 @@ class Hooks {
 						case 'instock':
 							if ( ! $managing_stock ) {
 								$stock_status = 'instock';
-								$stock_text   = esc_attr__( 'In stock', ATUM_TEXT_DOMAIN );
 							}
 							$style = 'color:#7ad03a';
 							break;
 						case 'onbackorder':
 							if ( ! $managing_stock && 'instock' !== $stock_status ) {
 								$stock_status = 'onbackorder';
-								$stock_text   = esc_attr__( 'On backorder', ATUM_TEXT_DOMAIN );
 							}
 							$style = 'color:#eaa600';
 							break;
@@ -318,6 +315,21 @@ class Hooks {
 				}
 				
 				$stock_html = substr( $stock_html, 0, -2 ) . ')';
+			}
+
+			switch ( $stock_status ) {
+
+				case 'instock':
+					$stock_text = esc_attr__( 'In stock', ATUM_TEXT_DOMAIN );
+					break;
+
+				case 'onbackorder':
+					$stock_text = esc_attr__( 'On backorder', ATUM_TEXT_DOMAIN );
+					break;
+
+				default:
+					$stock_text = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
+					break;
 			}
 			
 			$stock_html = "<mark class='$stock_status'>$stock_text</mark>" . $stock_html;
