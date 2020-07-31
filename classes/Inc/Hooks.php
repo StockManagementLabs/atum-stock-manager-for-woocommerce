@@ -275,10 +275,11 @@ class Hooks {
 		) {
 
 			// Get the variations within the variable.
-			$variations   = $the_product->get_children();
-			$stock_status = 'outofstock';
-			$stock_text   = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
-			$stock_html   = '';
+			$variations     = $the_product->get_children();
+			$managing_stock = $the_product->managing_stock();
+			$stock_status   = $managing_stock ? $the_product->get_stock_status() : 'outofstock';
+			$stock_text     = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
+			$stock_html     = '';
 			
 			if ( ! empty( $variations ) ) {
 				
@@ -297,12 +298,14 @@ class Hooks {
 					
 					switch ( $variation_status ) {
 						case 'instock':
-							$stock_status = 'instock';
-							$stock_text   = esc_attr__( 'In stock', ATUM_TEXT_DOMAIN );
-							$style        = 'color:#7ad03a';
+							if ( ! $managing_stock ) {
+								$stock_status = 'instock';
+								$stock_text   = esc_attr__( 'In stock', ATUM_TEXT_DOMAIN );
+							}
+							$style = 'color:#7ad03a';
 							break;
 						case 'onbackorder':
-							if ( 'instock' !== $stock_status ) {
+							if ( ! $managing_stock && 'instock' !== $stock_status ) {
 								$stock_status = 'onbackorder';
 								$stock_text   = esc_attr__( 'On backorder', ATUM_TEXT_DOMAIN );
 							}
