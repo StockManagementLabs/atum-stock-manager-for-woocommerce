@@ -2223,7 +2223,7 @@ final class Helpers {
 
 	/**
 	 * Force save with changes to validate_props and rebuild stock_status if required.
-	 * We can use it with 1 product/variation or set all to true to aply to all products OUT_STOCK_THRESHOLD_KEY
+	 * We can use it with 1 product/variation or set all to true to apply to all products OUT_STOCK_THRESHOLD_KEY
 	 * set and clean or not the OUT_STOCK_THRESHOLD_KEY meta keys
 	 *
 	 * @since 1.4.10
@@ -3113,10 +3113,23 @@ final class Helpers {
 			}
 
 			$update = FALSE;
+			$bypass = '__return_false';
 
-			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE ) ) {
+
+				add_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
+
+				if ( $product->managing_stock() ) {
+					$bypass = '__return_true';
+				}
+
+				remove_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
+
+			}
+
+			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
 			$stock_status = $product->get_stock_status();
-			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', '__return_false' );
+			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
 
 			if ( $product->get_atum_stock_status() !== $stock_status ) {
 				$product->set_atum_stock_status( $stock_status );
