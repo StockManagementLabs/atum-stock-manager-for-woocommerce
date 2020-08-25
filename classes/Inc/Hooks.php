@@ -223,7 +223,6 @@ class Hooks {
 				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
 				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
-				'hideShippingClass'             => apply_filters( 'atum/product_data/show_shipping_class', TRUE ),
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
 			) );
 
