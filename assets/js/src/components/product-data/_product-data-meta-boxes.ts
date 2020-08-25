@@ -37,7 +37,11 @@ export default class ProductDataMetaBoxes {
             Switcher.doSwitchers();
             ButtonGroup.doButtonGroups(this.$productDataMetaBox.find('.woocommerce_variations'));
 		});
-		
+
+		if ( this.settings.get('hideShippingClass') ) {
+			this.$productDataMetaBox.find( '.shipping_class_field' ).parent().css( 'display', 'none' );
+		}
+
 		// Toggle the "Out of Stock Threshold" field visibility.
 		$('#_manage_stock').change( (evt: JQueryEventObject) => $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none') ).change();
 		
