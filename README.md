@@ -194,6 +194,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.7.6`
+
+*2020-08-27*
+
+**Features**
+
+* Allow the WP's REST API media endpoint to recognise the WC keys' authentication.
+
+**Changes**
+
+* Prioritize variable stock status in products' backend view.
+* Adjust stock status text to the new logic.
+* Adjust atum stock status for variable products when managing stock.
+
+**Fixes**
+
+* Install and activate addons with slug different to plugin folder.
+
+---
+
 `1.7.5`
 
 *2020-07-30*
