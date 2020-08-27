@@ -1393,19 +1393,20 @@ final class Helpers {
 	 * @since 1.2.0
 	 *
 	 * @param string $plugin        The plugin name/slug.
+	 * @param string $folder        The plugin folder.
 	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'.
 	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
 	 */
-	public static function is_plugin_installed( $plugin, $by = 'slug', $return_bool = TRUE ) {
+	public static function is_plugin_installed( $plugin, $folder = '', $by = 'slug', $return_bool = TRUE ) {
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
 			// Get the plugin slug from its path.
 			$installed_plugin_key = 'slug' === $by ? explode( DIRECTORY_SEPARATOR, $plugin_file )[0] : $plugin_data['Title'];
 
-			if ( $installed_plugin_key === $plugin ) {
+			if ( in_array( $installed_plugin_key, [ $plugin, $folder ] ) ) {
 				return $return_bool ? TRUE : array( $plugin_file => $plugin_data );
 			}
 		}

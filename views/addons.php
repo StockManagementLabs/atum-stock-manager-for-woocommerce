@@ -24,7 +24,8 @@ use Atum\Addons\Addons;
 			<div class="themes wp-clearfix">
 				<?php foreach ( $addons as $addon ) :
 
-					$addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'] );
+					$addon_folder         = isset( $addon['info']['folder'] ) ? $addon['info']['folder'] : '';
+					$addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'], $addon_folder );
 					$more_details_link    = '<a class="more-details" href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
 					$is_coming_soon_addon = isset( $addon['info']['coming_soon'] ) && $addon['info']['coming_soon'];
 					$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
