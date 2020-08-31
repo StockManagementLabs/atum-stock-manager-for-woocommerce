@@ -339,40 +339,47 @@ export default class AtumOrderItems {
 		
 		evt.preventDefault();
 
-		let $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
-		    $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
-		    $lineTotal: JQuery    = $item.find( 'input.line_total' ),
-		    qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		    taxes: number         = 0,
-		    lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
-		    data: any             = {
+		let $item: JQuery            = $( evt.currentTarget ).closest( '.item' ),
+		    $lineSubTotal: JQuery    = $item.find( 'input.line_subtotal' ),
+		    $lineTotal: JQuery       = $item.find( 'input.line_total' ),
+		    qty: number              = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
+		    taxes: number            = 0,
+		    lineTotal: number        = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
+		    data: any                = {
 			    atum_order_id     : this.settings.get( 'post_id' ),
 			    atum_order_item_id: $item.data( 'atum_order_item_id' ),
 			    action            : 'atum_order_change_purchase_price',
 			    security          : this.settings.get( 'atum_order_item_nonce' ),
 		    },
-		    rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' );
+		    rates: any               = $item.find( '.item_cost' ).data( 'productTaxRates' ),
+		    purchasePriceFmt: string;
 
 		if ( ! purchasePrice ) {
-			purchasePrice =   qty !== 0 ? lineTotal / qty : 0;
+			purchasePrice = qty !== 0 ? lineTotal / qty : 0;
 		}
 
 		if ( ! purchasePriceTxt ) {
 
-			purchasePriceTxt = purchasePrice.toString();
+			purchasePriceFmt = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : purchasePrice.toString();
+			purchasePriceTxt = purchasePriceFmt;
 
 			if ( typeof rates === 'object' ) {
+
 				taxes = this.calcTaxesFromBase( purchasePrice, rates );
 
 				if ( taxes ) {
-					purchasePriceTxt = `${ purchasePrice + taxes } (${ purchasePrice } + ${ taxes } ${ this.settings.get( 'taxes_name' ) })`;
-					purchasePrice += taxes;
+					let purchasePriceWithTaxesFmt : string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : ( purchasePrice + taxes ).toString();
+					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } (${ purchasePriceFmt } + ${ taxes } ${ this.settings.get( 'taxes_name' ) })`;
+					purchasePrice = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'mon_decimal_point' ) );
 				}
 
 			}
+			else {
+				purchasePrice = <number> Utils.unformat( purchasePriceFmt, this.settings.get( 'mon_decimal_point' ) );
+			}
 
 		}
-		
+
 		data[ this.settings.get('purchase_price_field') ] = purchasePrice;
 		
 		this.swal({
@@ -429,11 +436,12 @@ export default class AtumOrderItems {
 	 *
 	 * @param {number} price
 	 * @param {any[]} rates
+	 *
 	 * @return {number}
 	 */
 	calcTaxesFromBase( price: number, rates: any[]) {
-		
-		let taxes: number[] = [0],
+
+		let taxes: number[] = [ 0 ],
 		    preCompoundTaxes: number;
 		
 		$.each( rates, (i: number, rate: any) => {
