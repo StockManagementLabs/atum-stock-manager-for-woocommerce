@@ -86,7 +86,7 @@ export default class AtumOrders {
 		$('#atum_order_type').change( (evt: JQueryEventObject) => this.toggleExtraFields(evt) ).change();
 		
 		// Hide/show the blocker section on supplier dropdown changes.
-		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.toggleItemsBlocker( $(evt.currentTarget).val() !== null ) ).change();
+		$('.dropdown_supplier').change( (evt: JQueryEventObject) => this.savePurchaseOrderSupplier( $( evt.currentTarget ) ) ).change();
 		
 		// Trigger multiple suppliers' dependent fields
 		$('#multiple_suppliers').change( (evt: JQueryEventObject) => this.toggleSupplierField(evt) ).change();
@@ -107,6 +107,49 @@ export default class AtumOrders {
 			
 		});
 		
+	}
+
+	/**
+	 * Save Supplier on change field
+	 *
+	 * @param {JQuery} $supplier
+	 */
+	savePurchaseOrderSupplier( $supplier: JQuery ) {
+
+		let $multiple: JQuery = $('#multiple_suppliers');
+
+		$.ajax({
+			url     : window['ajaxurl'],
+			data    : {
+				action       : 'atum_save_po_supplier',
+				security     : this.settings.get('atum_order_item_nonce'),
+				atum_order_id: this.settings.get('post_id'),
+				supplier     : $supplier.val(),
+			},
+			dataType: 'json',
+			method  : 'POST',
+			success : (response: any) => {
+				if ( !$multiple.is(':checked') )
+					this.toggleItemsBlocker( 0 !== response.data.supplier );
+			},
+		});
+	}
+
+	saveMultipleSuppliers( val: string ) {
+		$.ajax({
+			url     : window['ajaxurl'],
+			data    : {
+				action       : 'atum_save_po_multiple_supplier',
+				security     : this.settings.get('atum_order_item_nonce'),
+				atum_order_id: this.settings.get('post_id'),
+				multiple     : val,
+			},
+			dataType: 'json',
+			method  : 'POST',
+			success : (response: any) => {
+
+			},
+		});
 	}
 	
 	/**
@@ -297,22 +340,44 @@ export default class AtumOrders {
 		      $dropdownWrapper: JQuery = $dropdown.parent();
 
 		if ($checkbox.is(':checked')) {
+			this.saveMultipleSuppliers( 'yes' );
 			$dropdown.val('').change();
 			$body.addClass('allow-multiple-suppliers');
 			this.toggleItemsBlocker();
 			$dropdownWrapper.slideUp();
 		}
 		else {
+			this.saveMultipleSuppliers( 'no' );
 			$body.removeClass('allow-multiple-suppliers');
 			this.toggleItemsBlocker( $dropdown.val() !== null ); // Only block the items if there is no supplier selected.
 			$dropdownWrapper.slideDown();
 		}
 
 	}
-	
+
+	checkPoIdExistsInQuerystring() {
+		let queryString: string = window.location.search.substring(1);
+		let check: boolean = false;
+
+		const queries = queryString.split("&");
+
+		queries.forEach((indexQuery: string) => {
+			const indexPair = indexQuery.split("=");
+
+			const queryKey: string = decodeURIComponent(indexPair[0]);
+			const queryValue: string = decodeURIComponent(indexPair.length > 1 ? indexPair[1] : "");
+
+			if ( 'post' === queryKey && queryValue.length > 0 )
+				check = true;
+		});
+
+		return check;
+	}
+
 	toggleItemsBlocker(on: boolean = true) {
 		
-		if (!this.$itemsBlocker.length) {
+		//if (!this.$itemsBlocker.length || !this.checkPoIdExistsInQuerystring() ) {
+		if (!this.$itemsBlocker.length ) {
 			return;
 		}
 		

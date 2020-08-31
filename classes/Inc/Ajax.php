@@ -27,6 +27,7 @@ use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
 use Atum\Legacy\AjaxLegacyTrait;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
 use Atum\StockCentral\Lists\ListTable;
@@ -157,6 +158,11 @@ final class Ajax {
 		// Get color scheme.
 		add_action( 'wp_ajax_atum_get_color_scheme', array( $this, 'get_color_scheme' ) );
 
+		// Save PO Supplier on change.
+		add_action( 'wp_ajax_atum_save_po_supplier', array( $this, 'save_purchase_order_supplier' ) );
+
+		// Save PO Multiple Suppliers.
+		add_action( 'wp_ajax_atum_save_po_multiple_supplier', array( $this, 'save_purchase_order_multiple_suppliers' ) );
 	}
 
 	/**
@@ -1031,6 +1037,8 @@ final class Ajax {
 
 		$term = stripslashes( $_GET['term'] );
 
+		$post_id = intval( $_GET['limit'] );
+
 		if ( empty( $term ) ) {
 			wp_die();
 		}
@@ -1117,12 +1125,18 @@ final class Ajax {
 
 		if ( ! empty( $url_query['post'] ) ) {
 
+			$post_id = absint( $url_query['post'] );
+
+		}
+
+		if ( $post_id ) {
+
 			/**
 			 * Variable definition
 			 *
 			 * @var PurchaseOrder $po
 			 */
-			$po = Helpers::get_atum_order_model( absint( $url_query['post'] ) );
+			$po = Helpers::get_atum_order_model( $post_id );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
 			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
@@ -2397,6 +2411,60 @@ final class Ajax {
 		}
 
 		wp_send_json_success( $settings );
+
+	}
+
+	/**
+	 * Save PO Supplier
+	 *
+	 * @package ATUM Purchase Orders
+	 *
+	 * @since 1.7.6
+	 */
+	public function save_purchase_order_supplier() {
+
+		check_ajax_referer( 'atum-order-item', 'security' );
+
+		$atum_order_id = absint( $_POST['atum_order_id'] );
+		$supplier      = absint( $_POST['supplier'] );
+
+		/**
+		 * Variable definition
+		 *
+		 * @var PurchaseOrder $atum_order
+		 */
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order->set_supplier( $supplier );
+		$atum_order->save_meta();
+
+		wp_send_json_success( [ 'atum_order_id' => $atum_order_id, 'supplier' => $supplier ] );
+
+	}
+
+	/**
+	 * Save PO Multiple Suppliers
+	 *
+	 * @package ATUM Purchase Orders
+	 *
+	 * @since 1.7.6
+	 */
+	public function save_purchase_order_multiple_suppliers() {
+
+		check_ajax_referer( 'atum-order-item', 'security' );
+
+		$atum_order_id = absint( $_POST['atum_order_id'] );
+		$multiple      = stripslashes( $_POST['multiple'] );
+
+		/**
+		 * Variable definition
+		 *
+		 * @var PurchaseOrder $atum_order
+		 */
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order->set_multiple_suppliers( $multiple );
+		$atum_order->save_meta();
+
+		wp_send_json_success( [ 'atum_order_id' => $atum_order_id, 'multiple' => $multiple ] );
 
 	}
 
