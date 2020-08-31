@@ -898,6 +898,7 @@ abstract class AtumOrderPostType {
 					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
 					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
 					'mon_decimal_point'        => wc_get_price_decimal_separator(),
+					'mon_decimals'             => wc_get_price_decimals(),
 					'no'                       => __( 'No', ATUM_TEXT_DOMAIN ),
 					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
 					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
