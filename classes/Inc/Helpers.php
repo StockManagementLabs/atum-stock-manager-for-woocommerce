@@ -1996,7 +1996,7 @@ final class Helpers {
 			
 		}
 		
-		return $statuses;
+		return apply_filters( 'atum/order_post_type/statuses', $statuses, $post_type );
 		
 	}
 	
