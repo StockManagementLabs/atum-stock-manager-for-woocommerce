@@ -38,6 +38,8 @@ trait AjaxLegacyTrait {
 
 		$term = stripslashes( $_GET['term'] );
 
+		$post_id = intval( $_GET['limit'] );
+
 		if ( empty( $term ) ) {
 			wp_die();
 		}
@@ -151,12 +153,17 @@ trait AjaxLegacyTrait {
 
 		if ( ! empty( $url_query['post'] ) ) {
 
+			$post_id = absint( $url_query['post'] );
+
+		}
+
+		if ( $post_id ) {
 			/**
 			 * Variable definition
 			 *
 			 * @var PurchaseOrder $po
 			 */
-			$po = Helpers::get_atum_order_model( absint( $url_query['post'] ) );
+			$po = Helpers::get_atum_order_model( $post_id );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
 			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
@@ -179,9 +186,9 @@ trait AjaxLegacyTrait {
 			$ids = array_intersect( $ids, $included );
 		}
 
-		if ( ! empty( $_GET['limit'] ) ) {
-			$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
-		}
+		//if ( ! empty( $_GET['limit'] ) ) {
+		//	$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
+		//}
 
 		$product_objects = array_filter( array_map( 'wc_get_product', $ids ), 'wc_products_array_filter_editable' );
 		$products        = array();
