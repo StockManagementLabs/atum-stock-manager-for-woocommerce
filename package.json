@@ -14,6 +14,9 @@
 		"lint:scripts": "eslint assets/js/src assets/js/build",
 		"lint:scripts:fix": "eslint --fix assets/js/src assets/js/build"
 	},
+	"engines": {
+		"node": "12"
+	},
 	"devDependencies": {
 		"@types/es6-shim": "^0.31.40",
 		"@types/jquery": "^2.0.54",
