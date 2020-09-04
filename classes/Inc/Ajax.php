@@ -155,6 +155,9 @@ final class Ajax {
 		// Hide marketing popup.
 		add_action( 'wp_ajax_atum_hide_marketing_popup', array( $this, 'marketing_popup_state' ) );
 
+		// Hide marketing dashboard.
+		add_action( 'wp_ajax_atum_hide_marketing_dashboard', array( $this, 'marketing_dashboard_state' ) );
+
 		// Get color scheme.
 		add_action( 'wp_ajax_atum_get_color_scheme', array( $this, 'get_color_scheme' ) );
 
@@ -2373,6 +2376,30 @@ final class Ajax {
 
 		update_user_meta( get_current_user_id(), 'atum-marketing-popup', $transient_key );
 		AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
+
+		wp_die();
+
+	}
+
+	/**
+	 * Hide marketing dashboard
+	 *
+	 * @package ATUM Dashboard
+	 *
+	 * @since 1.7.6
+	 */
+	public function marketing_dashboard_state() {
+
+		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+
+		if ( ! isset( $_POST['transientKey'] ) ) {
+			wp_die();
+		}
+
+		$transient_key = esc_attr( $_POST['transientKey'] );
+
+		update_user_meta( get_current_user_id(), 'atum-marketing-dash', $transient_key );
+		AtumCache::set_transient( 'atum-marketing-dash', $transient_key, WEEK_IN_SECONDS, TRUE );
 
 		wp_die();
 

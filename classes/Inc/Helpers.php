@@ -2808,8 +2808,40 @@ final class Helpers {
 	 */
 	public static function show_marketing_popup() {
 
+		return self::show_marketing( 'popup' );
+
+	}
+
+	/**
+	 * Check if it shows the marketing dashboard.
+	 *
+	 * @since 1.7.6
+	 *
+	 * @return bool
+	 */
+	public static function show_marketing_dashboard() {
+
+		return self::show_marketing( 'dash' );
+
+	}
+
+	/**
+	 * Check if it shows the marketing widget at popup or dashboard.
+	 *
+	 * @since 1.7.6
+	 *
+	 * @param string $wich
+	 *
+	 * @return bool
+	 */
+	private static function show_marketing( $wich = 'popup' ) {
+
+		if ( FALSE === in_array( $wich, array( 'popup', 'dash' ) ) ) {
+			return FALSE;
+		}
+
 		$marketing_popup = AtumMarketingPopup::get_instance();
-		$transient_key   = AtumCache::get_transient( 'atum-marketing-popup', TRUE );
+		$transient_key   = AtumCache::get_transient( 'atum-marketing-' . $wich, TRUE );
 
 		if ( ! $transient_key || $marketing_popup->get_transient_key() !== $transient_key ) {
 
@@ -2818,12 +2850,12 @@ final class Helpers {
 			}
 
 			$transient_key = $marketing_popup->get_transient_key();
-			AtumCache::set_transient( 'atum-marketing-popup', $transient_key, WEEK_IN_SECONDS, TRUE );
+			AtumCache::set_transient( 'atum-marketing-' . $wich, $transient_key, WEEK_IN_SECONDS, TRUE );
 
 		}
 
 		// Get marketing popup user meta.
-		$marketing_popup_user_meta = get_user_meta( get_current_user_id(), 'atum-marketing-popup', TRUE );
+		$marketing_popup_user_meta = get_user_meta( get_current_user_id(), 'atum-marketing-' . $wich, TRUE );
 
 		if ( $marketing_popup_user_meta && $marketing_popup_user_meta === $transient_key ) {
 			return FALSE;
