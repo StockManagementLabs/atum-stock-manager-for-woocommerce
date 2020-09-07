@@ -13,6 +13,9 @@
  */
 
 defined( 'ABSPATH' ) || die;
+
+use Atum\Inc\Helpers;
+
 ?>
 <div class="atum-dashboard">
 
@@ -40,11 +43,13 @@ defined( 'ABSPATH' ) || die;
 		</div>
 	</section>
 
+	<?php if ( Helpers::show_marketing_dashboard() ) : ?>
+
 	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
 
 		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ); ?>;">
 
-			<span class="atmi-cross marketing-close"></span>
+			<span class="atmi-cross marketing-close" data-transient-key="<?php echo esc_attr( $marketing_popup->get_transient_key() ); ?>"></span>
 			<img src="<?php echo esc_attr( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
 
 			<div class="content">
@@ -92,6 +97,7 @@ defined( 'ABSPATH' ) || die;
 		</div>
 
 	</section>
+	<?php endif; ?>
 
 	<section class="dash-cards owl-carousel owl-theme">
 

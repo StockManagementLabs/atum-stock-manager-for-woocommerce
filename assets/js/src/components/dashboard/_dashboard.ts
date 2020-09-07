@@ -314,8 +314,20 @@ export default class Dashboard {
 	marketingBannerConfig() {
 		
 		// Hide banner.
-		$('.marketing-close').on('click', () => {
+		$('.marketing-close').on('click', ( evt: JQueryEventObject ) => {
+			let transientKey: string = $(evt.currentTarget).data('transient-key');
 			$('.dash-marketing-banner-container').fadeOut();
+			$.ajax({
+				url       : window['ajaxurl'],
+				dataType  : 'json',
+				method    : 'post',
+				data      : {
+					action       : 'atum_hide_marketing_dashboard',
+					token        : this.$widgetsContainer.data('nonce'),
+					transientKey : transientKey,
+				},
+			});
+
 		});
 		
 		// Redirect to button url.

@@ -83,6 +83,8 @@ use Atum\Inc\Helpers;
 		</thead>
 		<tbody class="po-lines">
 			<?php foreach ( $po->get_items() as $item ) :
+
+				$show_sku = apply_filters( 'atum/atum_order/report/show_sku', TRUE, $item, $item->get_order() );
 				/**
 				 * Variable definition
 				 *
@@ -99,25 +101,27 @@ use Atum\Inc\Helpers;
 
 							$supplier_sku = $product->get_supplier_sku();
 							
-							if ( $supplier_sku ) : ?>
-								<br>
+							if ( $supplier_sku && $show_sku ) : ?>
 								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
+								<br>
 									<?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
 								</span>
 							<?php endif;
 							
 							$sku = $product->get_sku();
 							
-							if ( $sku ) : ?>
-								<br>
+							if ( $sku && $show_sku ) : ?>
 								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
+								<br>
 									<?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $sku ) ?>
 								</span>
 							<?php endif;
 
-						endif; ?>
+							do_action( 'atum/atum_order/after_item_product_report', $item, $item->get_order() );
 
-						<?php
+						endif;
+
+
 						// Show the custom meta.
 						$hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
 							'_qty',
