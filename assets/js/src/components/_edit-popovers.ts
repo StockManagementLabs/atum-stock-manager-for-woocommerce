@@ -142,7 +142,7 @@ export default class EditPopovers {
 
 			const $editButton: JQuery = $( elem );
 
-			// NOTE: the template should be a button sibling to avoid unexpected issues with possible duplicated IDs.
+			// NOTE: the template should be a button's sibling to avoid unexpected issues with possible duplicated IDs.
 		    let content: string = $editButton.parent().find( `#${ $editButton.data( 'content-id' ) }` ).html();
 
 			if ( ! $( content ).hasClass( 'alert' ) ) {
