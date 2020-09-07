@@ -204,9 +204,10 @@ export default class EditPopovers {
 	/**
 	 * Destroy the popovers
 	 *
-	 * @param {JQuery} $editButton The edit button that holds the popover to destroy.
+	 * @param {JQuery}  $editButton The edit button that holds the popover to destroy.
+	 * @param {boolean} rebind      Optional. Whether to re-bind the popover after destroying it.
 	 */
-	destroyPopover( $editButton: JQuery ) {
+	destroyPopover( $editButton: JQuery, rebind: boolean = true ) {
 		
 		if ( $editButton.length ) {
 			
@@ -214,7 +215,9 @@ export default class EditPopovers {
 			$editButton.removeAttr( 'data-popover' );
 			
 			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
-			setTimeout( () => this.bindPopovers( $editButton ), 300 );
+			if ( rebind ) {
+				setTimeout( () => this.bindPopovers( $editButton ), 300 );
+			}
 			
 		}
 		
