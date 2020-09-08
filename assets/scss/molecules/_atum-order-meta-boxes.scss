@@ -8,7 +8,7 @@
 
 #atum_order_data {
 	
-	.hndle, .handlediv {
+	.hndle, .handlediv, .postbox-header {
 		display: none;
 	}
 	
@@ -265,6 +265,10 @@ div.add_note {
 //----------------
 
 #atum_order_items {
+	
+	.postbox-header {
+		display: none;
+	}
 	
 	.inside {
 		display: block !important;
