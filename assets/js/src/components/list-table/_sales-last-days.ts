@@ -36,6 +36,10 @@ export default class SalesLastDays {
 		$selectDays.html('<span class="textvalue">' + selectDaysText + '</span>');
 		$selectDays.append($selectableDays);
 		$selectDays.find('select').hide().val(selectDaysText);
+		$selectDays.click( (evt: JQueryEventObject ) => {
+			evt.preventDefault();
+			evt.stopImmediatePropagation();
+		});
 		
 		$selectableDays.change( (evt: JQueryEventObject) => {
 			
