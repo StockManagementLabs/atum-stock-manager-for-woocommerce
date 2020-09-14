@@ -57,6 +57,10 @@ class AtumQueues {
 		// Add the ATUM's recurring hooks.
 		add_action( 'atum/update_expiring_product_props', array( $this, 'update_expiring_product_props_action' ) );
 
+		// Add the ATUM Queues async hooks listeners.
+		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
+		add_action( 'wp_ajax_nopriv_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
+
 	}
 
 	/**
@@ -149,7 +153,7 @@ class AtumQueues {
 	}
 
 	/**
-	 * Trigger all the registered async actions
+	 * Trigger all the registered async actions. Caution!!: as it's a remote post, some variables must be serialized (e.g. an object).
 	 *
 	 * @since 1.7.3
 	 */
@@ -157,12 +161,56 @@ class AtumQueues {
 
 		if ( ! empty( self::$async_hooks ) ) {
 
-			foreach ( self::$async_hooks as $async_hook => $hook_data ) {
+			$data = [
+				'action' => 'atum_async_hooks',
+				'token'  => wp_create_nonce( 'atum_async_hooks' ),
+				'hooks'  => self::$async_hooks,
+			];
 
-				if ( is_callable( $hook_data['callback'] ) ) {
-					call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+			if ( ! empty( $data ) ) {
+
+				$cookies = array();
+				foreach ( $_COOKIE as $name => $value ) {
+					$cookies[] = "$name=" . urlencode( is_array( $value ) ? serialize( $value ) : $value );
 				}
 
+				$request_args = array(
+					'timeout'   => 0.01,
+					'blocking'  => FALSE,
+					'sslverify' => apply_filters( 'https_local_ssl_verify', TRUE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+					'body'      => $data,
+					'headers'   => array(
+						'cookie' => implode( '; ', $cookies ),
+					),
+				);
+
+				$url = admin_url( 'admin-ajax.php' );
+
+				wp_remote_post( $url, $request_args );
+			}
+
+		}
+
+	}
+
+	/**
+	 * Execute the async hooks called using Ajax by the trigger async actions function.
+	 *
+	 * @since 1.7.7
+	 */
+	public function handle_async_hooks() {
+
+		check_ajax_referer( 'atum_async_hooks', 'token' );
+
+		$hooks = $_POST['hooks'];
+
+		foreach ( $hooks as $async_hook => $hook_data ) {
+
+			// The class path comes with double slash.
+			$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
+
+			if ( is_callable( $hook_data['callback'] ) ) {
+				call_user_func( $hook_data['callback'], ...$hook_data['params'] );
 			}
 
 		}
