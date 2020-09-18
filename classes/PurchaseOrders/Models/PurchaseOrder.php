@@ -379,7 +379,7 @@ class PurchaseOrder extends AtumOrderModel {
 
 		$supplier_id = absint( $supplier_id );
 
-		if ( absint( $this->supplier ) !== $supplier_id ) {
+		if ( is_null( $this->supplier_obj ) || $this->supplier_obj->id !== $supplier_id ) {
 
 			$this->register_change( 'supplier' );
 			$this->set_meta( 'supplier', $supplier_id );

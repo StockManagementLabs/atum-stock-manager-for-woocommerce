@@ -1013,7 +1013,7 @@ class Hooks {
 		AtumQueues::add_async_action( 'update_atum_product_calc_props_' . $product->get_id(), array(
 			'\Atum\Inc\Helpers',
 			'update_atum_product_calc_props',
-		), [ $product, TRUE ] );
+		), [ $product->get_id(), TRUE ] );
 
 	}
 
