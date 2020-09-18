@@ -805,7 +805,7 @@ trait ListTableLegacyTrait {
 			 */
 			$this->set_controlled_query_data();
 
-			if ( ! empty( $this->supplier_variation_products ) ) {
+			if ( ! empty( $this->supplier_variation_products ) && ! empty( $this->atum_query_data['where'] ) && ! empty( wp_list_filter( $this->atum_query_data['where'], [ 'key' => 'supplier_id' ] ) ) ) {
 
 				$this->atum_query_data['where'][] = array(
 					'key'   => 'supplier_id',
@@ -910,46 +910,6 @@ trait ListTableLegacyTrait {
 		}
 
 		return array();
-
-	}
-
-	/**
-	 * Set the query data for filtering the Controlled/Uncontrolled products.
-	 *
-	 * @since 1.5.0
-	 */
-	protected function set_controlled_query_data() {
-
-		if ( $this->show_controlled ) {
-
-			$this->atum_query_data['where'] = array(
-				array(
-					'key'   => 'atum_controlled',
-					'value' => 1,
-					'type'  => 'NUMERIC',
-				),
-			);
-
-		}
-		else {
-
-			$this->atum_query_data['where'] = array(
-				array(
-					'relation' => 'OR',
-					array(
-						'key'   => 'atum_controlled',
-						'value' => 0,
-						'type'  => 'NUMERIC',
-					),
-					array(
-						'key'   => 'inheritable',
-						'value' => 1,
-						'type'  => 'NUMERIC',
-					),
-				),
-			);
-
-		}
 
 	}
 

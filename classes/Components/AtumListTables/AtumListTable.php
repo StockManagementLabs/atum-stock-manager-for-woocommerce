@@ -116,7 +116,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		'bundle'                    => [],
 		'all_bundle'                => [],
 	);
-	
+
 	/**
 	 * Store parent type when in an inheritable sub-loop
 	 *
@@ -1050,9 +1050,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
-							esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ),
-							'grouped' === $type ? esc_attr__( 'grouped items', ATUM_TEXT_DOMAIN ) : esc_attr__( 'variations', ATUM_TEXT_DOMAIN )
-						);
+								esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ),
+								'grouped' === $type ? esc_attr__( 'grouped items', ATUM_TEXT_DOMAIN ) : esc_attr__( 'variations', ATUM_TEXT_DOMAIN )
+							);
 						$type .= ' has-child';
 
 					}
@@ -1084,7 +1084,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( $children ) {
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
-						esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN ) );
+								esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN ) );
 						$type .= ' has-child';
 					}
 
@@ -1579,8 +1579,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$extra_data      = ! empty( $extra_data ) ? Helpers::array_to_data( $extra_data ) : '';
 
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
-			'" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
-			$input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
+		                '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
+		                $input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
 
@@ -2120,21 +2120,21 @@ abstract class AtumListTable extends \WP_List_Table {
 			foreach ( $this->id_views as $key => $post_ids ) {
 
 				if ( $view === $key ) {
-					
+
 					$this->supplier_variation_products = array_intersect( $this->supplier_variation_products, $post_ids );
-					
+
 					if ( ! empty( $post_ids ) ) {
-						
+
 						$get_parents = FALSE;
 						$parents     = array();
 
 						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-							
+
 							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
 								$get_parents = TRUE;
 								break;
 							}
-							
+
 						}
 
 						if ( $get_parents ) {
@@ -2170,7 +2170,7 @@ abstract class AtumListTable extends \WP_List_Table {
 							}
 
 						}
-						
+
 						// Add the parent products again to the query.
 						$args['post__in'] = array_merge( $parents, $post_ids );
 						$allow_query      = TRUE;
@@ -2254,32 +2254,33 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function set_controlled_query_data() {
 
+		// Do not need to alter the query data if the 'atum_controlled' key is already there.
+		if ( ! empty( $this->atum_query_data['where'] ) && ! empty( wp_list_filter( $this->atum_query_data['where'], [ 'key' => 'atum_controlled' ] ) ) ) {
+			return;
+		}
+
 		if ( $this->show_controlled ) {
 
-			$this->atum_query_data['where'] = array(
-				array(
-					'key'   => 'atum_controlled',
-					'value' => 1,
-					'type'  => 'NUMERIC',
-				),
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'atum_controlled',
+				'value' => 1,
+				'type'  => 'NUMERIC',
 			);
 
 		}
 		else {
 
-			$this->atum_query_data['where'] = array(
+			$this->atum_query_data['where'][] = array(
+				'relation' => 'OR',
 				array(
-					'relation' => 'OR',
-					array(
-						'key'   => 'atum_controlled',
-						'value' => 0,
-						'type'  => 'NUMERIC',
-					),
-					array(
-						'key'   => 'inheritable',
-						'value' => 1,
-						'type'  => 'NUMERIC',
-					),
+					'key'   => 'atum_controlled',
+					'value' => 0,
+					'type'  => 'NUMERIC',
+				),
+				array(
+					'key'   => 'inheritable',
+					'value' => 1,
+					'type'  => 'NUMERIC',
 				),
 			);
 
@@ -2678,7 +2679,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $products_args, $this->wc_query_data, $this->atum_query_data ) );
 			$products_back_order  = AtumCache::get_transient( $back_order_transient );
-			
+
 			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
 
 				// Pass through the WC query data filter (new tables).
@@ -2777,7 +2778,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			static $cb_counter = 1;
 
 			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
-							'<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+			                 '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
 
@@ -2986,28 +2987,28 @@ abstract class AtumListTable extends \WP_List_Table {
 				data-currency-pos="<?php echo esc_attr( get_option( 'woocommerce_currency_pos', 'left' ) ) ?>">
 
 				<thead>
-					<?php $this->print_group_columns(); ?>
+				<?php $this->print_group_columns(); ?>
 
-					<tr class="item-heads">
-						<?php $this->print_column_headers(); ?>
-					</tr>
+				<tr class="item-heads">
+					<?php $this->print_column_headers(); ?>
+				</tr>
 				</thead>
 
 				<tbody id="the-list"<?php if ( $singular ) echo esc_attr( " data-wp-lists='list:$singular'" ); ?>>
-					<?php $this->display_rows_or_placeholder(); ?>
+				<?php $this->display_rows_or_placeholder(); ?>
 				</tbody>
 
 				<tfoot>
 
-					<?php if ( $this->show_totals ) : ?>
+				<?php if ( $this->show_totals ) : ?>
 					<tr class="totals">
 						<?php $this->print_totals_columns(); ?>
 					</tr>
-					<?php endif ?>
+				<?php endif ?>
 
-					<tr class="item-heads">
-						<?php $this->print_column_headers( FALSE ); ?>
-					</tr>
+				<tr class="item-heads">
+					<?php $this->print_column_headers( FALSE ); ?>
+				</tr>
 
 				</tfoot>
 
@@ -3313,7 +3314,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_current_product_id() {
-		
+
 		if ( 'variation' === $this->product->get_type() ) {
 			/**
 			 * Deprecated notice
@@ -4238,7 +4239,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					break;
-					
+
 			}
 
 			// Store the main query data to not lose when returning back.
