@@ -15,7 +15,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
+**With an Online Selling Boost Comes [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 **NEW IMPROVED ATUM 1.7**
 
@@ -37,21 +37,21 @@ In addition, in the preparation process for the development stage, we have teste
 
 = AVAILABLE PREMIUM ADD-ONS =
 
-[Product Levels - Bill Of Materials Management](https://www.stockmanagementlabs.com/addons/atum-product-levels/)
+[ATUM Product Levels - Bill Of Materials Management](https://www.stockmanagementlabs.com/addons/atum-product-levels/)
 
 A **bill of materials** (also known as a BOM or bill of material) is a broad list of items, product parts, raw materials, assemblies, and other components mandatory to create a product. Even the guidance or direction needed for preparation is understood to be part of BOM. We interpret the bill of materials as the recipe for creating a final product. To start a manufacturing process, every entrepreneur no matter what trade has to start by establishing a bill of materials (BOM).
 
 The current version of Product Levels introduces the first two levels of BOM. ATUM inventory management for WooCommerce lets you set company’s **Raw Materials and Product Parts**. Retailers, distributors, wholesalers, standard manufacturers, or any other businesses that need to take complete control over their growth will find this premium add-on irreplaceable. Our experienced team of developers and designers bring new features on monthly basis. Many other components of the manufacturing process are still to come. Read the full list of currently included functions below.
 
-[The usefulness of Product Levels](http://demo.productlevels.stockmanagementlabs.com/)add-on add-on for any online store owner is indisputable. Being able to **manage the stock by levels** allows a better organization of the materials necessary to produce the final products that are sold to the user. In addition, it presents an interface so simple that it is very easy to manage.
+[The usefulness of Product Levels](http://demo.productlevels.stockmanagementlabs.com/) add-on for any online store owner is indisputable. Being able to **manage the stock by levels** allows a better organization of the materials necessary to produce the final products that are sold to the user. In addition, it presents an interface so simple that it is very easy to manage.
 
-[Multi-Inventory for WooCommerce](https://www.stockmanagementlabs.com/addons/atum-multi-inventory/)
+[ATUM Multi-Inventory](https://www.stockmanagementlabs.com/addons/atum-multi-inventory/)
 
 WooCommerce, as the most popular WordPress e-commerce solution, did not include an option for business **selling from different warehouses** or using several suppliers. Up until now, shop owners have had a choice to either find a 3rd party solution or to have one built specifically for their site. Neither solution is ideal unless the shop has a significant budget to cover the cost. As experts in stock management, we needed to provide a solution here.
 
 ATUM’s Multi-Inventory premium add-on is trying to remove the above issues and brings advanced features for a fracture of the cost charged by 3rd party service. Now you, as a shop owner have the option to **add as many inventory records per product** as your business needs. What is even better, the system is trying to push the editing boundaries far beyond the usual standard. Scroll below to find out about all existing and soon to come features or even try the [demo FREE](http://demo.multi-inventory.stockmanagementlabs.com/) of charge.
 
-[ATUM Export Pro Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
+[ATUM Export PRO](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
 
 Generate **manual or automated exports** of almost any data in your stores. We believe the most advanced tool of its kind with XML, CSV, and JSON exports to be available at launch. If it was not enough, we are adding an import tool as a bonus.
 
@@ -59,7 +59,7 @@ Exports of data are done automatically instead of copying and pasting manually. 
 
 In addition, with the import feature of the [Export Pro add-on](https://demo.export-pro.stockmanagementlabs.com/), you will be able to save a lot of time by importing data in a bulk.
 
-[ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+[ATUM Action Logs](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
 
 ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These **recordings** we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
 
