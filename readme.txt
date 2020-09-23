@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.5
+Tested up to: 5.5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.4.1
-Stable tag: 1.7.6
+WC tested up to: 4.5.2
+Stable tag: 1.7.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,36 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.7`
+
+*2020-09-23*
+
+**Features**
+
+* Added filter for managing statuses from other ATUM orders in add-ons.
+* Added filter for hiding SKU in PO's PDF.
+* Added action for adding extra info to PO's PDF.
+
+**Changes**
+
+* Purchase Orders search product and add product item limited by Supplier.
+* Hide arrows from some meta boxes on POs.
+* Hide the menu popover component after any of its items is clicked.
+* Refactoring.
+* Added a param to destroyPopover method to allow avoiding rebindings.
+* Async actions behaviour changed to remote post and Ajax calls, so they work in background.
+
+**Fixes**
+
+* Round the purchase prices to the right number of decimals when setting them from POs.
+* Store in user meta data the dashboard marketing banner's closed state.
+* Fixed "Sales Last Days" selector not allowing to select value.
+* Fixed scheduled action "atum/update_expiring_product_props" not updating product data with NULL update_date.
+* Fixed unused variable conversion to int.
+* Fixed sorting by supplier in Stock Central not working in all cases.
 
 ---
 
