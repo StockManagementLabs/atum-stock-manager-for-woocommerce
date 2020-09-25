@@ -3723,7 +3723,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( empty( $search_terms_ids ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
-						return $where_without_results;
+						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 					}
 
 					$search_terms_ids_str = '';
