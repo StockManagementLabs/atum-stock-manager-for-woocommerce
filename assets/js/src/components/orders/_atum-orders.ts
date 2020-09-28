@@ -12,6 +12,7 @@ import Settings from '../../config/_settings';
 import { StupidTable } from '../_stupid-table';
 import { Switcher } from '../_switcher';
 import { Utils } from '../../utils/_utils';
+import { WPHooks } from '../../interfaces/wp.hooks';
 
 export default class AtumOrders {
 
@@ -20,6 +21,7 @@ export default class AtumOrders {
 	areItemsSelectable: boolean;
 	isEditable: string;
 	swal: any = window[ 'swal' ];
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
 		private settings: Settings,
@@ -247,7 +249,7 @@ export default class AtumOrders {
 					callback();
 				}
 
-				this.$container.trigger( 'atum-after-loading-order-items' );
+				this.wpHooks.doAction( 'atumOrders_afterLoadItemsTable' );
 
 			},
 		} );
