@@ -1747,7 +1747,7 @@ abstract class AtumOrderModel {
 	 */
 	public function get_status() {
 
-		$status = $this->get_meta('status'); // NOTE: Using the __get magic method within a getter is not allowed.
+		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
 		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
 	}
 
@@ -2020,7 +2020,6 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $discount_total
-	 *
 	 */
 	public function set_discount_total( $discount_total ) {
 
@@ -2142,7 +2141,7 @@ abstract class AtumOrderModel {
 		$status = wc_clean( $status );
 
 		if ( $status !== $this->status ) {
-			$this->register_change('status');
+			$this->register_change( 'status' );
 			$this->set_meta( 'status', $status );
 		}
 
@@ -2235,7 +2234,7 @@ abstract class AtumOrderModel {
 
 		// Sometimes a prop requires custom logic and needs to have its own method.
 		if ( is_callable( array( $this , "get_$name" ) ) ) {
-			return call_user_func( array( $this , "get_$name" ) );
+			return call_user_func( array( $this, "get_$name" ) );
 		}
 
 		// Search in declared class props.
