@@ -180,6 +180,7 @@ class Hooks {
 
 		// Update atum_stock_status and low_stock if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
+		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 9 ); // Before the AtumQueues trigger_async_action.
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
@@ -1010,10 +1011,40 @@ class Hooks {
 	 */
 	public function defer_update_atum_product_calc_props( $product, $data_store ) {
 
-		AtumQueues::add_async_action( 'update_atum_product_calc_props_' . $product->get_id(), array(
-			'\Atum\Inc\Helpers',
-			'update_atum_product_calc_props',
-		), [ $product->get_id(), TRUE ] );
+		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
+		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache ) {
+			$products = [ $product->get_id() ];
+		}
+		else {
+			$products[] = $product->get_id();
+			array_unique( $products );
+		}
+
+		AtumCache::set_cache( $cache_key, $products );
+
+	}
+
+	/**
+	 * Add the asynchronous action for updating calculated product properties fi ant products has changed.
+	 *
+	 * @since 1.7.8
+	 */
+	public function maybe_create_defer_update_async_action() {
+
+		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
+		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache && ! empty( $products ) ) {
+
+			AtumQueues::add_async_action( 'update_atum_product_calc_props', array(
+				'\Atum\Inc\Helpers',
+				'update_atum_product_calc_props',
+			), [ $products, TRUE ] );
+		}
+
+		AtumCache::delete_cache( $cache_key );
 
 	}
 
