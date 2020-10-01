@@ -1019,7 +1019,7 @@ class Hooks {
 		}
 		else {
 			$products[] = $product->get_id();
-			array_unique( $products );
+			$products   = array_unique( $products );
 		}
 
 		AtumCache::set_cache( $cache_key, $products );
@@ -1027,7 +1027,7 @@ class Hooks {
 	}
 
 	/**
-	 * Add the asynchronous action for updating calculated product properties fi ant products has changed.
+	 * Add the asynchronous action for updating calculated product properties if any product has changed.
 	 *
 	 * @since 1.7.8
 	 */
