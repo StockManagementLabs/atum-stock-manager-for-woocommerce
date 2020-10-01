@@ -184,6 +184,7 @@ export default class EditPopovers {
 
 							let $targetInput: JQuery = $activePopover.find( `[name=${ dataKey }]` );
 
+							// Radio buttons.
 							if ( $targetInput.is( ':radio' ) ) {
 
 								$targetInput = $targetInput.filter( `[value="${ inputData[ dataKey ] }"]` );
@@ -198,11 +199,18 @@ export default class EditPopovers {
 								}
 
 							}
+							// Checkboxes.
 							else if ( $targetInput.is( ':checkbox' ) ) {
 								$targetInput.prop( 'checked', true );
 							}
+							// Input groups.
+							else if ( $targetInput.closest( '.input-group-append, .input-group-prepend' ).length  ) {
+								$targetInput.siblings( '.input-group-text.active' ).removeClass( 'active' );
+								$targetInput.siblings( `[data-value="${ inputData[ dataKey ] }"]` ).addClass( 'active' );
+								$targetInput.val( inputData[ dataKey ] );
+							}
 							else {
-								$targetInput.val();
+								$targetInput.val( inputData[ dataKey ] );
 							}
 
 						}
