@@ -11,7 +11,7 @@
 	max-width: $popover-max-width;
 	background-color: var(--atum-table-bg);
 	background-clip: padding-box;
-	border: none;
+	border: 1px solid var(--atum-text-color-var1);
 	border-radius: $popover-border-radius;
 	box-shadow: 0 1px 5px 0 var(--popover-black-shadow);
 	
@@ -66,7 +66,7 @@
 	> input[type=number], > input[type=text] {
 		border-radius: 5px;
 		background-color: var(--atum-table-bg);
-		border: 1px solid var(--gray-200);
+		border: 1px solid var(--main-border-alt);
 		font-size: 15px;
 		line-height: 1.47px;
 		text-align: left;
@@ -114,7 +114,7 @@
 		left: 50%;
 		margin-left: -$popover-arrow-outer-width;
 		border-bottom-width: 0;
-		border-top-color: var(--popover-black-shadow);
+		border-top-color: var(--atum-text-color-var1);
 		bottom: -$popover-arrow-outer-width;
 		
 		&:after {
@@ -122,8 +122,9 @@
 			bottom: 1px;
 			margin-left: -$popover-arrow-width;
 			border-bottom-width: 0;
-			border-top-color: var(--gray-100);
+			border-top-color: var(--atum-table-bg);
 		}
+		
 	}
 	
 	&.right > .popover-arrow {
@@ -131,14 +132,14 @@
 		left: -$popover-arrow-outer-width;
 		margin-top: -$popover-arrow-outer-width;
 		border-left-width: 0;
-		border-right-color: var(--popover-black-shadow);
+		border-right-color: var(--atum-text-color-var1);
 		
 		&:after {
 			content: " ";
 			left: 1px;
 			bottom: -$popover-arrow-width;
 			border-left-width: 0;
-			border-right-color: var(--gray-100);
+			border-right-color: var(--atum-table-bg);
 		}
 	}
 	
@@ -146,19 +147,15 @@
 		left: 50%;
 		margin-left: -$popover-arrow-outer-width;
 		border-top-width: 0;
+		border-bottom-color: var(--atum-text-color-var1);
 		top: -$popover-arrow-outer-width;
 		
-			&:after {
-				content: " ";
-				margin-left: -$popover-arrow-width;
-				z-index: -1;
-				margin-left: -10px;
-				content: "";
-				position: absolute;
-				background: var(--gray-100);
-				transform: rotate(45deg);
-				box-shadow: none;
-				top: 2px;
+		&:after {
+			content: " ";
+			top: 1px;
+			margin-left: -$popover-arrow-width;
+			border-top-width: 0;
+			border-bottom-color: var(--atum-table-bg);
 		}
 	}
 	
@@ -167,13 +164,13 @@
 		right: -$popover-arrow-outer-width;
 		margin-top: -$popover-arrow-outer-width;
 		border-right-width: 0;
-		border-left-color: var(--popover-black-shadow);
+		border-left-color: var(--atum-text-color-var1);
 		
 		&:after {
 			content: " ";
 			right: 1px;
 			border-right-width: 0;
-			border-left-color: var(--gray-100);
+			border-left-color: var(--atum-table-bg);
 			bottom: -$popover-arrow-width;
 		}
 	}

@@ -5,23 +5,6 @@
 .popover {
 	&.edit-field-popover {
 		
-		div.popover-arrow {
-			&:after {
-				background: $white;
-				box-shadow: -2px -2px 5px -3px var(--popover-black-shadow);
-			}
-		}
-		
-		&.left {
-			div.popover-arrow {
-				&:after {
-					background: transparent;
-					box-shadow: none;
-					border-left-color: $white;
-				}
-			}
-		}
-		
 		.popover-content {
 			display: flex;
 			flex-wrap: nowrap;
