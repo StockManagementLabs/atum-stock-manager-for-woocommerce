@@ -72,13 +72,13 @@ class Upgrade {
 		}
 
 		// ** version 1.4.1 ** ATUM now uses its own way to manage the stock of the products.
-		if ( version_compare( $db_version, '1.4.1', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.1', '<' ) && $this->is_fresh_install ) {
 			$this->set_individual_manage_stock();
 			$this->add_inheritable_meta();
 		}
 
 		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta.
-		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.1.2', '<' ) && $this->is_fresh_install ) {
 			$this->add_inheritable_sock_meta();
 		}
 
@@ -88,7 +88,7 @@ class Upgrade {
 		}
 
 		// ** version 1.4.18.2. Removed date_i18n function.Check if post meta values contains not latins characters.
-		if ( version_compare( $db_version, '1.4.18.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.18.2', '<' ) && $this->is_fresh_install ) {
 			$this->check_post_meta_values();
 		}
 
