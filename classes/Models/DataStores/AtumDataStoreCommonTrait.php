@@ -242,10 +242,15 @@ trait AtumDataStoreCommonTrait {
 	 * @param \WC_Product $product The product object.
 	 */
 	protected function clear_caches( &$product ) {
+
 		/* @noinspection PhpUndefinedClassInspection */
 		parent::clear_caches( $product );
-		$cache_key = AtumCache::get_cache_key( 'product_data', $product->get_id() );
-		AtumCache::delete_cache( $cache_key );
+		foreach ( [ 'product_data', 'atum_product' ] as $cache_name ) {
+
+			$cache_key = AtumCache::get_cache_key( $cache_name, $product->get_id() );
+			AtumCache::delete_cache( $cache_key );
+		}
+
 	}
 	
 }
