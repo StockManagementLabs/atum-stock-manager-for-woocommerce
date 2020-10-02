@@ -6,10 +6,12 @@ import AtumOrders from './_atum-orders';
 import { Blocker } from '../_blocker';
 import Settings from '../../config/_settings';
 import { Utils } from '../../utils/_utils';
+import { WPHooks } from '../../interfaces/wp.hooks';
 
 export default class AtumOrderItems {
 	
 	swal: any = window['swal'];
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -275,14 +277,15 @@ export default class AtumOrderItems {
 
 		evt.preventDefault();
 
-		this.atumOrders.loadItemsTable( {
+		const data: any = this.wpHooks.applyFilters( 'orderItems_saveLineItems_data', {
 			atum_order_id: this.settings.get( 'post_id' ),
 			items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
 			action       : 'atum_order_save_items',
 			security     : this.settings.get( 'atum_order_item_nonce' ),
 		} );
 
-		$( evt.currentTarget ).trigger( 'items_saved' );
+		this.atumOrders.loadItemsTable( data );
+		this.wpHooks.doAction( 'orderItems_saveLineItems_itemsSaved' );
 
 	}
 
