@@ -72,13 +72,13 @@ class Upgrade {
 		}
 
 		// ** version 1.4.1 ** ATUM now uses its own way to manage the stock of the products.
-		if ( version_compare( $db_version, '1.4.1', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.1', '<' ) && $this->is_fresh_install ) {
 			$this->set_individual_manage_stock();
 			$this->add_inheritable_meta();
 		}
 
 		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta.
-		if ( version_compare( $db_version, '1.4.1.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.1.2', '<' ) && $this->is_fresh_install ) {
 			$this->add_inheritable_sock_meta();
 		}
 
@@ -88,7 +88,7 @@ class Upgrade {
 		}
 
 		// ** version 1.4.18.2. Removed date_i18n function.Check if post meta values contains not latins characters.
-		if ( version_compare( $db_version, '1.4.18.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.18.2', '<' ) && $this->is_fresh_install ) {
 			$this->check_post_meta_values();
 		}
 
@@ -138,6 +138,11 @@ class Upgrade {
 		// ** version 1.7.3 ** Delete the comments count transient, so the unapproved and spam comments are counted.
 		if ( version_compare( $db_version, '1.7.3', '<' ) ) {
 			delete_transient( ATUM_PREFIX . 'count_comments' );
+		}
+
+		// ** version 1.7.8 ** Add the is_bom column
+		if ( version_compare( $db_version, '1.7.8', '<' ) ) {
+			$this->create_is_bom_column();
 		}
 
 		/**********************
@@ -848,6 +853,33 @@ class Upgrade {
 				}
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Alter the the ATUM product data table to add the is_bom column.
+	 *
+	 * @since 1.7.8
+	 */
+	private function create_is_bom_column() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'is_bom'
+		", $db_name, $atum_data_table );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `is_bom` TINYINT(1) NULL DEFAULT 0;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		}
 
