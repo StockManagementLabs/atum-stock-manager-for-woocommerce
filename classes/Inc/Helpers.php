@@ -3107,7 +3107,7 @@ final class Helpers {
 				break;
 		}
 
-		// As we are forcing the save, thie methos should save the product.
+		// As we are forcing the save, this method should save the product.
 		self::update_atum_product_calc_props( $product, TRUE );
 
 	}
