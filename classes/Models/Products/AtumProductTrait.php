@@ -56,6 +56,7 @@ trait AtumProductTrait {
 		'available_to_purchase'       => NULL, // PL.
 		'selling_priority'            => NULL, // PL.
 		'calculated_stock'            => NULL, // PL.
+		'is_bom'                      => 0,    // PL.
 		'multi_inventory'             => NULL, // MI.
 		'inventory_iteration'         => NULL, // MI.
 		'inventory_sorting_mode'      => NULL, // MI.
@@ -551,6 +552,26 @@ trait AtumProductTrait {
 		return $this->get_prop( 'selectable_inventories_mode', $context );
 	}
 
+	/**
+	 * Returns the product is BOM prop.
+	 *
+	 * @since 1.7.8
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string 'yes' or 'no'
+	 */
+	public function get_is_bom( $context = 'view' ) {
+
+		$is_bom = $this->get_prop( 'is_bom', $context );
+
+		if ( is_null( $is_bom ) ) {
+			$is_bom = FALSE;
+		}
+
+		return wc_bool_to_string( $is_bom );
+
+	}
 
 	/*
 	|----------------------------------------------------------------------------
@@ -1003,6 +1024,18 @@ trait AtumProductTrait {
 		$this->set_prop( 'selectable_inventories_mode', $selectable_inventories_mode );
 	}
 
+	/**
+	 * Set the product is BOM prop.
+	 *
+	 * @since 1.7.8
+	 *
+	 * @param string|bool $is_bom Whether or not the product is a BOM.
+	 */
+	public function set_is_bom( $is_bom ) {
+
+		$is_bom = wc_string_to_bool( $is_bom );
+		$this->set_prop( 'is_bom', $is_bom );
+	}
 
 
 	/**
