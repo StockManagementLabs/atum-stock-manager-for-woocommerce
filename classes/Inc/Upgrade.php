@@ -140,6 +140,11 @@ class Upgrade {
 			delete_transient( ATUM_PREFIX . 'count_comments' );
 		}
 
+		// ** version 1.7.8 ** Add the is_bom column
+		if ( version_compare( $db_version, '1.7.8', '<' ) ) {
+			$this->create_is_bom_column();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -848,6 +853,33 @@ class Upgrade {
 				}
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Alter the the ATUM product data table to add the is_bom column.
+	 *
+	 * @since 1.7.8
+	 */
+	private function create_is_bom_column() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'is_bom'
+		", $db_name, $atum_data_table );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `is_bom` TINYINT(1) NULL DEFAULT 0;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		}
 

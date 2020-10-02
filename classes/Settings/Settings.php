@@ -348,12 +348,12 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Decimals in Stock Quantity', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields.  Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the number of decimal places your shop needs in stock quantity fields. Set 0 to keep or 1 and higher to override the default WooCommerce NO decimal setting.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
 					'min' => 0,
-					'max' => 4,
+					'max' => 6,
 				),
 			),
 			'stock_quantity_step'       => array(
@@ -365,7 +365,7 @@ class Settings {
 				'default' => 0,
 				'options' => array(
 					'min'  => 0,
-					'max'  => 4,
+					'max'  => 1,
 					'step' => 0.01,
 				),
 			),

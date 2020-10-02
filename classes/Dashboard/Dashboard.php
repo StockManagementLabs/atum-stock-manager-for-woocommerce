@@ -326,10 +326,10 @@ class Dashboard {
 
 			$dash_vars = array(
 				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
-				'inStockLabel'          => __( 'In Stock', ATUM_PREFIX ),
-				'lowStockLabel'         => __( 'Low Stock', ATUM_PREFIX ),
-				'outStockLabel'         => __( 'Out of Stock', ATUM_PREFIX ),
-				'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_PREFIX ),
+				'inStockLabel'          => __( 'In Stock', ATUM_TEXT_DOMAIN ),
+				'lowStockLabel'         => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
+				'outStockLabel'         => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
+				'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 				'months'                => array(
 					__( 'January', ATUM_TEXT_DOMAIN ),
 					__( 'February', ATUM_TEXT_DOMAIN ),

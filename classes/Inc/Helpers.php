@@ -3117,71 +3117,79 @@ final class Helpers {
 	 *
 	 * @since 1.7.1
 	 *
-	 * @param \WC_Product|int $product
-	 * @param bool            $force_save
+	 * @param \WC_Product|int|array $product
+	 * @param bool                  $force_save
 	 */
 	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
 
-		$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
+		if ( ! is_array( $product ) ) {
+			$product = [ $product ];
 
-		if ( $product instanceof \WC_Product ) {
+		}
 
-			if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+		foreach ( $product as $product_id ) {
 
-				$out_of_stock_threshold = $product->get_out_stock_threshold();
+			$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
 
-				// Allow to be hooked externally.
-				$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product->get_id() );
+			if ( $product instanceof \WC_Product ) {
 
-				if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
+				if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
 
-					// TODO: Refactory to move the Hooks functions to Helpers.
-					Hooks::get_instance()->current_out_stock_threshold = (int) $out_of_stock_threshold;
-					Hooks::get_instance()->add_stock_status_threshold();
-					$product->save();
-					Hooks::get_instance()->remove_stock_status_threshold();
+					$out_of_stock_threshold = $product->get_out_stock_threshold();
+
+					// Allow to be hooked externally.
+					$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product->get_id() );
+
+					if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
+
+						// TODO: Refactory to move the Hooks functions to Helpers.
+						Hooks::get_instance()->current_out_stock_threshold = (int) $out_of_stock_threshold;
+						Hooks::get_instance()->add_stock_status_threshold();
+						$product->save();
+						Hooks::get_instance()->remove_stock_status_threshold();
+
+					}
 
 				}
 
-			}
+				$update = FALSE;
+				$bypass = '__return_false';
 
-			$update = FALSE;
-			$bypass = '__return_false';
+				if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE ) ) {
 
-			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE ) ) {
+					add_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
 
-				add_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
+					if ( $product->managing_stock() ) {
+						$bypass = '__return_true';
+					}
 
-				if ( $product->managing_stock() ) {
-					$bypass = '__return_true';
+					remove_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
+
 				}
 
-				remove_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
+				add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
+				$stock_status = $product->get_stock_status();
+				remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
+
+				if ( $product->get_atum_stock_status() !== $stock_status ) {
+					$product->set_atum_stock_status( $stock_status );
+					$update = TRUE;
+				}
+
+				$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
+
+				if ( $product->get_low_stock() !== $low ) {
+					$product->set_low_stock( $low );
+					$update = TRUE;
+				}
+
+				if ( $update || $force_save ) {
+					$product->save_atum_data();
+
+					do_action( 'atum/after_update_product_calc_props', $product );
+				}
 
 			}
-
-			add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
-			$stock_status = $product->get_stock_status();
-			remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
-
-			if ( $product->get_atum_stock_status() !== $stock_status ) {
-				$product->set_atum_stock_status( $stock_status );
-				$update = TRUE;
-			}
-
-			$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
-
-			if ( $product->get_low_stock() !== $low ) {
-				$product->set_low_stock( $low );
-				$update = TRUE;
-			}
-
-			if ( $update || $force_save ) {
-				$product->save_atum_data();
-
-				do_action( 'atum/after_update_product_calc_props', $product );
-			}
-
 		}
 
 	}

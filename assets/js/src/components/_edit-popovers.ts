@@ -165,9 +165,62 @@ export default class EditPopovers {
 			
 			// Prepare the popover's fields when shown.
 			$editButton.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
-				
+
 				const $activePopover: JQuery = $( '.popover.in' ),
-				      currentValue: string   = $editButton.siblings( 'input[type=hidden]' ).val();
+				      $sourceInput: JQuery   = $editButton.siblings( 'input[type=hidden]' ),
+				      inputData: any         = $sourceInput.data();
+
+				let currentValue: string = '';
+
+				// Check whether to load the initial values from data attributes.
+				if ( Object.keys( inputData ).length && inputData.fieldValue ) {
+
+					for ( const dataKey in inputData ) {
+
+						if ( 'fieldValue' === dataKey ) {
+							currentValue = inputData[ dataKey ];
+						}
+						else if ( $activePopover.find( `[name=${ dataKey }]` ).length ) {
+
+							let $targetInput: JQuery = $activePopover.find( `[name=${ dataKey }]` );
+
+							// Radio buttons.
+							if ( $targetInput.is( ':radio' ) ) {
+
+								$targetInput = $targetInput.filter( `[value="${ inputData[ dataKey ] }"]` );
+
+								// Button group input.
+								if ( $targetInput.closest( '.btn-group' ).length ) {
+									$targetInput.closest( '.btn' ).click();
+								}
+								// Regular radio.
+								else {
+									$targetInput.prop( 'checked', true );
+								}
+
+							}
+							// Checkboxes.
+							else if ( $targetInput.is( ':checkbox' ) ) {
+								$targetInput.prop( 'checked', true );
+							}
+							// Input groups.
+							else if ( $targetInput.closest( '.input-group-append, .input-group-prepend' ).length  ) {
+								$targetInput.siblings( '.input-group-text.active' ).removeClass( 'active' );
+								$targetInput.siblings( `[data-value="${ inputData[ dataKey ] }"]` ).addClass( 'active' );
+								$targetInput.val( inputData[ dataKey ] );
+							}
+							else {
+								$targetInput.val( inputData[ dataKey ] );
+							}
+
+						}
+
+					}
+					
+				}
+				else {
+					currentValue = $sourceInput.val();
+				}
 				
 				$( evt.currentTarget ).attr( 'data-popover', $activePopover.attr( 'id' ) );
 				

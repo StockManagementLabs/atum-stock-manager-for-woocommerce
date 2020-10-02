@@ -1201,11 +1201,11 @@ abstract class AtumOrderModel {
 	 */
 	public function calculate_totals( $and_taxes = TRUE ) {
 
-		$cart_subtotal     = 0;
-		$cart_total        = 0;
-		$fee_total         = 0;
-		$cart_subtotal_tax = 0;
-		$cart_total_tax    = 0;
+		$subtotal     = 0;
+		$total        = 0;
+		$fee_total    = 0;
+		$subtotal_tax = 0;
+		$total_tax    = 0;
 
 		if ( $and_taxes ) {
 			$this->calculate_taxes();
@@ -1215,10 +1215,10 @@ abstract class AtumOrderModel {
 
 		// Line items.
 		foreach ( $this->get_items() as $item ) {
-			$cart_subtotal     += (float) $item->get_subtotal();
-			$cart_total        += (float) $item->get_total();
-			$cart_subtotal_tax += (float) $item->get_subtotal_tax();
-			$cart_total_tax    += (float) $item->get_total_tax();
+			$subtotal     += (float) $item->get_subtotal();
+			$total        += (float) $item->get_total();
+			$subtotal_tax += (float) $item->get_subtotal_tax();
+			$total_tax    += (float) $item->get_total_tax();
 		}
 
 		$this->calculate_shipping();
@@ -1228,10 +1228,10 @@ abstract class AtumOrderModel {
 		}
 
 		/* @noinspection PhpWrongStringConcatenationInspection */
-		$grand_total = round( $cart_total + $fee_total + (float) $this->shipping_total + (float) $this->cart_tax + (float) $this->shipping_tax, wc_get_price_decimals() );
+		$grand_total = round( $total + $fee_total + (float) $this->shipping_total + (float) $this->cart_tax + (float) $this->shipping_tax, wc_get_price_decimals() );
 
-		$this->set_discount_total( $cart_subtotal - $cart_total );
-		$this->set_discount_tax( $cart_subtotal_tax - $cart_total_tax );
+		$this->set_discount_total( $subtotal - $total );
+		$this->set_discount_tax( $subtotal_tax - $total_tax );
 		$this->set_total( $grand_total );
 		$this->save();
 
@@ -1263,7 +1263,6 @@ abstract class AtumOrderModel {
 			$qty = ! empty( $item->get_quantity() ) ? $item->get_quantity() : 1;
 
 			if ( $inc_tax ) {
-				/* @noinspection PhpWrongStringConcatenationInspection */
 				$subtotal = ( $item->get_subtotal() + $item->get_subtotal_tax() ) / $qty;
 			}
 			else {
@@ -1747,7 +1746,7 @@ abstract class AtumOrderModel {
 	 */
 	public function get_status() {
 
-		$status = $this->get_meta('status'); // NOTE: Using the __get magic method within a getter is not allowed.
+		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
 		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
 	}
 
@@ -2020,7 +2019,6 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $discount_total
-	 *
 	 */
 	public function set_discount_total( $discount_total ) {
 
@@ -2142,7 +2140,7 @@ abstract class AtumOrderModel {
 		$status = wc_clean( $status );
 
 		if ( $status !== $this->status ) {
-			$this->register_change('status');
+			$this->register_change( 'status' );
 			$this->set_meta( 'status', $status );
 		}
 
@@ -2235,7 +2233,7 @@ abstract class AtumOrderModel {
 
 		// Sometimes a prop requires custom logic and needs to have its own method.
 		if ( is_callable( array( $this , "get_$name" ) ) ) {
-			return call_user_func( array( $this , "get_$name" ) );
+			return call_user_func( array( $this, "get_$name" ) );
 		}
 
 		// Search in declared class props.

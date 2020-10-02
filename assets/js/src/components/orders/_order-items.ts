@@ -19,339 +19,339 @@ export default class AtumOrderItems {
 		
 		// Bind items' events
 		this.$container
-			.on( 'click', 'button.add-line-item', (evt: JQueryEventObject) => this.addLineItem(evt) )
-			.on( 'click', '.cancel-action', (evt: JQueryEventObject) => this.cancel(evt) )
-			.on( 'click', 'button.add-atum-order-item', (evt: JQueryEventObject) => this.addItem(evt) )
-			.on( 'click', 'button.add-atum-order-fee', (evt: JQueryEventObject) => this.addFee(evt) )
-			.on( 'click', 'button.add-atum-order-shipping', (evt: JQueryEventObject) => this.addShipping(evt) )
-			.on( 'click', 'button.add-atum-order-tax', (evt: JQueryEventObject) => this.addTax(evt) )
-			.on( 'click', 'a.delete-atum-order-tax', (evt: JQueryEventObject) => this.deleteTax(evt) )
-			.on( 'click', 'button.calculate-action', (evt: JQueryEventObject) => this.recalculate(evt) )
-			.on( 'click', 'a.edit-atum-order-item', (evt: JQueryEventObject) => this.editItem(evt) )
-			.on( 'click', 'a.delete-atum-order-item', (evt: JQueryEventObject) => this.deleteItem(evt) )
-			.on( 'click', 'button.save-action', (evt: JQueryEventObject) => this.saveLineItems(evt) )
-			
+			.on( 'click', 'button.add-line-item', ( evt: JQueryEventObject ) => this.addLineItem( evt ) )
+			.on( 'click', '.cancel-action', ( evt: JQueryEventObject ) => this.cancel( evt ) )
+			.on( 'click', 'button.add-atum-order-item', ( evt: JQueryEventObject ) => this.addItem( evt ) )
+			.on( 'click', 'button.add-atum-order-fee', ( evt: JQueryEventObject ) => this.addFee( evt ) )
+			.on( 'click', 'button.add-atum-order-shipping', ( evt: JQueryEventObject ) => this.addShipping( evt ) )
+			.on( 'click', 'button.add-atum-order-tax', ( evt: JQueryEventObject ) => this.addTax( evt ) )
+			.on( 'click', 'a.delete-atum-order-tax', ( evt: JQueryEventObject ) => this.deleteTax( evt ) )
+			.on( 'click', 'button.calculate-action', ( evt: JQueryEventObject ) => this.recalculate( evt ) )
+			.on( 'click', 'a.edit-atum-order-item', ( evt: JQueryEventObject ) => this.editItem( evt ) )
+			.on( 'click', 'a.delete-atum-order-item', ( evt: JQueryEventObject ) => this.deleteItem( evt ) )
+			.on( 'click', 'button.save-action', ( evt: JQueryEventObject ) => this.saveLineItems( evt ) )
+
 			// Meta
-			.on( 'click', 'button.add-atum-order-item-meta', (evt: JQueryEventObject) => this.addItemMeta(evt) )
-			.on( 'click', 'button.remove-atum-order-item-meta', (evt: JQueryEventObject) => this.removeItemMeta(evt) )
-			.on( 'click', 'button.set-purchase-price', (evt: JQueryEventObject) => this.setPurchasePrice(evt) );
+			.on( 'click', 'button.add-atum-order-item-meta', ( evt: JQueryEventObject ) => this.addItemMeta( evt ) )
+			.on( 'click', 'button.remove-atum-order-item-meta', ( evt: JQueryEventObject ) => this.removeItemMeta( evt ) )
+			.on( 'click', 'button.set-purchase-price', ( evt: JQueryEventObject ) => this.setPurchasePrice( evt ) );
 
 
 		// Add this component to the global scope so can be accessed by other add-ons.
 		if ( ! window.hasOwnProperty( 'atum' ) ) {
-			window['atum'] = {};
+			window[ 'atum' ] = {};
 		}
 
-		window['atum']['AtumOrderItems'] = this;
+		window[ 'atum' ][ 'AtumOrderItems' ] = this;
 		
 	}
-	
-	addLineItem(evt: JQueryEventObject) {
-		
+
+	addLineItem( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		$('div.atum-order-add-item').slideDown();
-		$('div.atum-order-data-row-toggle').not('div.atum-order-add-item').slideUp();
-		
+
+		$( 'div.atum-order-add-item' ).slideDown();
+		$( 'div.atum-order-data-row-toggle' ).not( 'div.atum-order-add-item' ).slideUp();
+
 	}
-	
-	cancel(evt: JQueryEventObject) {
-		
+
+	cancel( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		$('div.atum-order-data-row-toggle' ).not('div.atum-order-bulk-actions').slideUp();
-		$('div.atum-order-bulk-actions, div.atum-order-totals-items').slideDown();
-		$('.atum-order-edit-line-item .atum-order-edit-line-item-actions').show();
-		
+
+		$( 'div.atum-order-data-row-toggle' ).not( 'div.atum-order-bulk-actions' ).slideUp();
+		$( 'div.atum-order-bulk-actions, div.atum-order-totals-items' ).slideDown();
+		$( '.atum-order-edit-line-item .atum-order-edit-line-item-actions' ).show();
+
 		// Reload the items
-		if ( true === $(evt.currentTarget).data('reload') ) {
+		if ( true === $( evt.currentTarget ).data( 'reload' ) ) {
 			this.atumOrders.reloadItems();
 		}
-		
+
 	}
-	
-	addItem(evt: JQueryEventObject) {
-		
+
+	addItem( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		(<any>$(evt.currentTarget)).WCBackboneModal({
-			template: 'atum-modal-add-products'
-		});
-		
+
+		( <any> $( evt.currentTarget ) ).WCBackboneModal( {
+			template: 'atum-modal-add-products',
+		} );
+
 	}
-	
-	addFee(evt: JQueryEventObject) {
-		
+
+	addFee( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		Blocker.block(this.$container);
-		
+
+		Blocker.block( this.$container );
+
 		const data: any = {
 			action       : 'atum_order_add_fee',
-			atum_order_id: this.settings.get('post_id'),
-			security     : this.settings.get('atum_order_item_nonce'),
+			atum_order_id: this.settings.get( 'post_id' ),
+			security     : this.settings.get( 'atum_order_item_nonce' ),
 		};
-		
-		$.post( window['ajaxurl'], data, (response: any) => {
-			
+
+		$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
+
 			if ( response.success ) {
-				$('#atum_order_fee_line_items').append( response.data.html );
+				$( '#atum_order_fee_line_items' ).append( response.data.html );
 			}
 			else {
-				this.atumOrders.showAlert('error', this.settings.get('error'), response.data.error);
+				this.atumOrders.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
 			}
-			
-			Blocker.unblock(this.$container);
-			
-		}, 'json');
-		
+
+			Blocker.unblock( this.$container );
+
+		}, 'json' );
+
 	}
-	
-	addShipping(evt:JQueryEventObject) {
-		
+
+	addShipping( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		Blocker.block(this.$container);
-		
+
+		Blocker.block( this.$container );
+
 		const data: any = {
 			action       : 'atum_order_add_shipping',
-			atum_order_id: this.settings.get('post_id'),
-			security     : this.settings.get('atum_order_item_nonce'),
+			atum_order_id: this.settings.get( 'post_id' ),
+			security     : this.settings.get( 'atum_order_item_nonce' ),
 		};
-		
-		$.post( window['ajaxurl'], data, (response: any) => {
-			
+
+		$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
+
 			if ( response.success ) {
-				$('#atum_order_shipping_line_items').append( response.data.html );
+				$( '#atum_order_shipping_line_items' ).append( response.data.html );
 			}
 			else {
-				this.atumOrders.showAlert('error', this.settings.get('error'), response.data.error);
+				this.atumOrders.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
 			}
-			
-			Blocker.unblock(this.$container);
-			
-		}, 'json');
-		
+
+			Blocker.unblock( this.$container );
+
+		}, 'json' );
+
 	}
-	
-	addTax(evt: JQueryEventObject) {
-		
-		evt.preventDefault();
-		
-		(<any>$(evt.currentTarget)).WCBackboneModal({
-			template: 'atum-modal-add-tax'
-		});
-		
-	}
-	
-	deleteTax(evt: JQueryEventObject) {
+
+	addTax( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
-		let $item: JQuery = $(evt.currentTarget);
+		( <any> $( evt.currentTarget ) ).WCBackboneModal( {
+			template: 'atum-modal-add-tax',
+		} );
 
-		this.swal({
-			text               : this.settings.get('delete_tax_notice'),
+	}
+
+	deleteTax( evt: JQueryEventObject ) {
+
+		evt.preventDefault();
+
+		let $item: JQuery = $( evt.currentTarget );
+
+		this.swal( {
+			text               : this.settings.get( 'delete_tax_notice' ),
 			type               : 'warning',
 			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
+			confirmButtonText  : this.settings.get( 'continue' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( (resolve: Function, reject: Function) => {
+				return new Promise( ( resolve: Function, reject: Function ) => {
 
-					this.atumOrders.loadItemsTable({
+					this.atumOrders.loadItemsTable( {
 						action       : 'atum_order_remove_tax',
-						rate_id      : $item.data('rate_id'),
-						atum_order_id: this.settings.get('post_id'),
-						security     : this.settings.get('atum_order_item_nonce'),
-					}, 'html', resolve);
+						rate_id      : $item.data( 'rate_id' ),
+						atum_order_id: this.settings.get( 'post_id' ),
+						security     : this.settings.get( 'atum_order_item_nonce' ),
+					}, 'html', resolve );
 
-				});
+				} );
 
-			}
-		}).catch(this.swal.noop);
-		
+			},
+		} ).catch( this.swal.noop );
+
 	}
-	
-	recalculate(evt: JQueryEventObject) {
-		
+
+	recalculate( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		this.swal({
-			text               : this.settings.get('calc_totals'),
+
+		this.swal( {
+			text               : this.settings.get( 'calc_totals' ),
 			type               : 'warning',
 			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
+			confirmButtonText  : this.settings.get( 'continue' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
-					this.atumOrders.loadItemsTable({
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
+					this.atumOrders.loadItemsTable( {
 						action       : 'atum_order_calc_line_taxes',
-						atum_order_id: this.settings.get('post_id'),
-						items        : $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-						security     : this.settings.get('calc_totals_nonce'),
-					}, 'html', resolve);
-					
-				});
-				
-			}
-		}).catch(this.swal.noop);
-		
+						atum_order_id: this.settings.get( 'post_id' ),
+						items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
+						security     : this.settings.get( 'calc_totals_nonce' ),
+					}, 'html', resolve );
+
+				} );
+
+			},
+		} ).catch( this.swal.noop );
+
 	}
-	
-	editItem(evt: JQueryEventObject) {
-		
+
+	editItem( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		const $item: JQuery = $(evt.currentTarget);
-		
+
+		const $item: JQuery = $( evt.currentTarget );
+
 		$item.closest( 'tr' ).find( '.view' ).hide();
 		$item.closest( 'tr' ).find( '.edit' ).show();
 		$item.hide();
-		$('button.add-line-item').click();
-		$('button.cancel-action').data( 'reload', true );
-		
+		$( 'button.add-line-item' ).click();
+		$( 'button.cancel-action' ).data( 'reload', true );
+
 	}
-	
-	deleteItem(evt:JQueryEventObject) {
-		
+
+	deleteItem( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		let $item: JQuery           = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'),
-		    atumOrderItemId: number = $item.data('atum_order_item_id'),
-		    $container: JQuery      = $item.closest('#atum_order_items');
-		
-		this.swal({
-			text               : this.settings.get('remove_item_notice'),
+
+		let $item: JQuery           = $( evt.currentTarget ).closest( 'tr.item, tr.fee, tr.shipping' ),
+		    atumOrderItemId: number = $item.data( 'atum_order_item_id' ),
+		    $container: JQuery      = $item.closest( '#atum_order_items' );
+
+		this.swal( {
+			text               : this.settings.get( 'remove_item_notice' ),
 			type               : 'warning',
 			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
+			confirmButtonText  : this.settings.get( 'continue' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
-					Blocker.block(this.$container);
-					
-					$.ajax({
-						url    : window['ajaxurl'],
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
+					Blocker.block( this.$container );
+
+					$.ajax( {
+						url    : window[ 'ajaxurl' ],
 						data   : {
-							atum_order_id      : this.settings.get('post_id'),
+							atum_order_id      : this.settings.get( 'post_id' ),
 							atum_order_item_ids: atumOrderItemId,
 							action             : 'atum_order_remove_item',
-							security           : this.settings.get('atum_order_item_nonce'),
+							security           : this.settings.get( 'atum_order_item_nonce' ),
 						},
 						type   : 'POST',
 						success: () => {
 							resolve();
-						}
-					});
-					
-				});
-			}
-		}).then( () => {
-			
+						},
+					} );
+
+				} );
+			},
+		} ).then( () => {
+
 			$item.remove();
-			$container.trigger('atum_item_line_removed', [atumOrderItemId]);
-			Blocker.unblock(this.$container);
-			
-		}).catch(this.swal.noop);
-		
+			$container.trigger( 'atum_item_line_removed', [ atumOrderItemId ] );
+			Blocker.unblock( this.$container );
+
+		} ).catch( this.swal.noop );
+
 	}
-	
-	saveLineItems(evt: JQueryEventObject) {
-		
+
+	saveLineItems( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		this.atumOrders.loadItemsTable({
-			atum_order_id: this.settings.get('post_id'),
-			items        : $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
+
+		this.atumOrders.loadItemsTable( {
+			atum_order_id: this.settings.get( 'post_id' ),
+			items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
 			action       : 'atum_order_save_items',
-			security     : this.settings.get('atum_order_item_nonce'),
-		});
-		
-		$(evt.currentTarget).trigger( 'items_saved' );
-		
+			security     : this.settings.get( 'atum_order_item_nonce' ),
+		} );
+
+		$( evt.currentTarget ).trigger( 'items_saved' );
+
 	}
-	
-	addItemMeta(evt: JQueryEventObject) {
-		
+
+	addItemMeta( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
-		let $button: JQuery = $(evt.currentTarget),
-		    $item: JQuery   = $button.closest('tr.item, tr.shipping'),
-		    $items: JQuery  = $item.find('tbody.meta_items'),
-		    index: number   = $items.find('tr').length + 1,
-		    $row: string    =  `
+
+		let $button: JQuery = $( evt.currentTarget ),
+		    $item: JQuery   = $button.closest( 'tr.item, tr.shipping' ),
+		    $items: JQuery  = $item.find( 'tbody.meta_items' ),
+		    index: number   = $items.find( 'tr' ).length + 1,
+		    $row: string    = `
 				<tr data-meta_id="0">
 			        <td>
-			            <input type="text" placeholder="${ this.settings.get('placeholder_name') }" name="meta_key[${ $item.data('atum_order_item_id') }][new-${ index }]" />
-			            <textarea placeholder="${ this.settings.get('placeholder_value') }" name="meta_value[${ $item.data('atum_order_item_id') }][new-${ index }]"></textarea>
+			            <input type="text" placeholder="${ this.settings.get( 'placeholder_name' ) }" name="meta_key[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]" />
+			            <textarea placeholder="${ this.settings.get( 'placeholder_value' ) }" name="meta_value[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]"></textarea>
 			        </td>
 			        <td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
 			    </tr>`;
-		
+
 		$items.append( $row );
-		
+
 	}
-	
+
 	removeItemMeta( evt: JQueryEventObject ) {
-		
+
 		evt.preventDefault();
-		
-		this.swal({
-			text               : this.settings.get('remove_item_meta'),
-			type               : 'warning',
-			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
-			reverseButtons     : true,
-			allowOutsideClick  : false,
-			preConfirm         : (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
+
+		this.swal( {
+			text             : this.settings.get( 'remove_item_meta' ),
+			type             : 'warning',
+			showCancelButton : true,
+			confirmButtonText: this.settings.get( 'continue' ),
+			cancelButtonText : this.settings.get( 'cancel' ),
+			reverseButtons   : true,
+			allowOutsideClick: false,
+			preConfirm       : (): Promise<any> => {
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
 					const $row: JQuery = $( evt.currentTarget ).closest( 'tr' );
-					$row.find('[name^="meta_value"]').val(''); // Clear the value, so it's deleted when saving.
+					$row.find( '[name^="meta_value"]' ).val( '' ); // Clear the value, so it's deleted when saving.
 					$row.hide();
 					resolve();
-					
-				});
-				
-			}
-		}).catch(this.swal.noop);
-		
+
+				} );
+
+			},
+		} ).catch( this.swal.noop );
+
 	}
 
 	setPurchasePrice( evt: JQueryEventObject, purchasePrice?: number, purchasePriceTxt?: string ) {
-		
+
 		evt.preventDefault();
 
-		let $item: JQuery            = $( evt.currentTarget ).closest( '.item' ),
-		    $lineSubTotal: JQuery    = $item.find( 'input.line_subtotal' ),
-		    $lineTotal: JQuery       = $item.find( 'input.line_total' ),
-		    qty: number              = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		    taxes: number            = 0,
-		    lineTotal: number        = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
-		    data: any                = {
+		let $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
+		    $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
+		    $lineTotal: JQuery    = $item.find( 'input.line_total' ),
+		    qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
+		    taxes: number         = 0,
+		    lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
+		    data: any             = {
 			    atum_order_id     : this.settings.get( 'post_id' ),
 			    atum_order_item_id: $item.data( 'atum_order_item_id' ),
 			    action            : 'atum_order_change_purchase_price',
 			    security          : this.settings.get( 'atum_order_item_nonce' ),
 		    },
-		    rates: any               = $item.find( '.item_cost' ).data( 'productTaxRates' ),
+		    rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' ),
 		    purchasePriceFmt: string;
 
 		if ( ! purchasePrice ) {
@@ -368,7 +368,7 @@ export default class AtumOrderItems {
 				taxes = this.calcTaxesFromBase( purchasePrice, rates );
 
 				if ( taxes ) {
-					let purchasePriceWithTaxesFmt : string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : ( purchasePrice + taxes ).toString();
+					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : ( purchasePrice + taxes ).toString();
 					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } (${ purchasePriceFmt } + ${ taxes } ${ this.settings.get( 'taxes_name' ) })`;
 					purchasePrice = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'mon_decimal_point' ) );
 				}
@@ -380,54 +380,54 @@ export default class AtumOrderItems {
 
 		}
 
-		data[ this.settings.get('purchase_price_field') ] = purchasePrice;
-		
-		this.swal({
-			html               : this.settings.get('confirm_purchase_price').replace('{{number}}', `<strong>${ purchasePriceTxt }</strong>`),
+		data[ this.settings.get( 'purchase_price_field' ) ] = purchasePrice;
+
+		this.swal( {
+			html               : this.settings.get( 'confirm_purchase_price' ).replace( '{{number}}', `<strong>${ purchasePriceTxt }</strong>` ),
 			type               : 'question',
 			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
+			confirmButtonText  : this.settings.get( 'continue' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
-					$.ajax({
-						url    : window['ajaxurl'],
-						data   : data,
-						type   : 'POST',
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
+					$.ajax( {
+						url     : window[ 'ajaxurl' ],
+						data    : data,
+						type    : 'POST',
 						dataType: 'json',
-						success: (response: any) => {
-							
-							if (response.success === false) {
-								reject(response.data);
+						success : ( response: any ) => {
+
+							if ( response.success === false ) {
+								reject( response.data );
 							}
 							else {
 								resolve();
 							}
-							
-						}
-					});
-					
-				});
-				
-			}
-		}).then( () => {
+
+						},
+					} );
+
+				} );
+
+			},
+		} ).then( () => {
 
 			$lineSubTotal.val( $lineTotal.val() );
 			$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
-			
-			this.swal({
-				title            : this.settings.get('done'),
-				text             : this.settings.get('purchase_price_changed'),
+
+			this.swal( {
+				title            : this.settings.get( 'done' ),
+				text             : this.settings.get( 'purchase_price_changed' ),
 				type             : 'success',
-				confirmButtonText: this.settings.get('ok'),
-			});
-			
-		}).catch(this.swal.noop);
+				confirmButtonText: this.settings.get( 'ok' ),
+			} );
+
+		} ).catch( this.swal.noop );
 		
 	}
 	
@@ -439,37 +439,37 @@ export default class AtumOrderItems {
 	 *
 	 * @return {number}
 	 */
-	calcTaxesFromBase( price: number, rates: any[]) {
+	calcTaxesFromBase( price: number, rates: any[] ) {
 
 		let taxes: number[] = [ 0 ],
 		    preCompoundTaxes: number;
-		
-		$.each( rates, (i: number, rate: any) => {
-			
-			if ( 'yes' === rate['compound'] ) {
+
+		$.each( rates, ( i: number, rate: any ) => {
+
+			if ( 'yes' === rate[ 'compound' ] ) {
 				return true;
 			}
-			taxes.push(price * rate['rate'] / 100);
-		});
-		
-		preCompoundTaxes = taxes.reduce((a, b) => a + b, 0 );
+			taxes.push( price * rate[ 'rate' ] / 100 );
+		} );
+
+		preCompoundTaxes = taxes.reduce( ( a, b ) => a + b, 0 );
 		
 		// Compound taxes.
-		$.each( rates, (i: number, rate: any) => {
-			
+		$.each( rates, ( i: number, rate: any ) => {
+
 			let currentTax: number;
-			
-			if ( 'no' === rate['compound'] ) {
+
+			if ( 'no' === rate[ 'compound' ] ) {
 				return true;
 			}
-			
-			currentTax = ( price + preCompoundTaxes ) * rate['rate'] / 100;
-			taxes.push(currentTax);
+
+			currentTax = ( price + preCompoundTaxes ) * rate[ 'rate' ] / 100;
+			taxes.push( currentTax );
 			preCompoundTaxes += currentTax;
-			
-		});
-	
-		return taxes.reduce((a, b) => a + b, 0 );
+
+		} );
+
+		return taxes.reduce( ( a, b ) => a + b, 0 );
 	}
 	
 }
