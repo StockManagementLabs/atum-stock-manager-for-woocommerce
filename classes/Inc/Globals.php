@@ -474,8 +474,12 @@ final class Globals {
 			'incrementMinute' => __( 'Increment Minute', ATUM_TEXT_DOMAIN ),
 			'pickMinute'      => __( 'Pick Minute', ATUM_TEXT_DOMAIN ),
 			'decrementMinute' => __( 'Decrement Minute', ATUM_TEXT_DOMAIN ),
+			'incrementSecond' => __( 'Increment Second', ATUM_TEXT_DOMAIN ),
+			'pickSecond'      => __( 'Pick Second', ATUM_TEXT_DOMAIN ),
+			'decrementSecond' => __( 'Decrement Second', ATUM_TEXT_DOMAIN ),
 			'dateFormat'      => 'YYYY-MM-DD',
 			'dateTimeFormat'  => 'YYYY-MM-DD HH:mm',
+			'calendarLocale'  => substr( get_user_locale(), 0, 2 ),
 		);
 
 		return array_merge( $defaults, $replace );
