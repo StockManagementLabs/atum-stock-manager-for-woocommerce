@@ -971,7 +971,7 @@ class ListTable extends AtumListTable {
 
 						} );
 
-						$filtered_products = $filtered_products + $product_results;
+						$filtered_products += $product_results;
 
 						arsort( $filtered_products );
 						$sorted = TRUE;
@@ -1022,7 +1022,7 @@ class ListTable extends AtumListTable {
 
 						} );
 
-						$filtered_products = $filtered_products + $product_results;
+						$filtered_products += $product_results;
 
 						arsort( $filtered_products );
 						$sorted = TRUE;
