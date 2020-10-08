@@ -3340,6 +3340,9 @@ final class Helpers {
 	 */
 	public static function maybe_use_wc_order_product_lookup_table() {
 
+		// FIXME: Temporary disable of use table because it's not populated in every cases.
+		return FALSE;
+
 		// TODO: ENABLE IT FROM SETTINGS.
 		$cache_key  = AtumCache::get_cache_key( 'use_wc_order_product_lookup_table' );
 		$use_lookup = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
