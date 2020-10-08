@@ -194,6 +194,41 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.7.8`
+
+*2020-10-08*
+
+**Features**
+
+* Allow other addons to search products if no results were found.
+* Added support for initial values on edit popover's fields.
+* Performance improvement: compact all product properties calc calls in only one function call.
+* Adding filter for possible hiding invalid class in the Purchase Price field.
+* Added support for input groups to the EditPopover component.
+* Added is_bom column to ATUM product data table.
+* Added is_bom column to the ATUM product model.
+
+**Changes**
+
+* Allow up to 6 decimals for the stock units.
+* Refactoring.
+* Moved JS trigger to hook.
+* Remove atum_product cache when after saving product_data.
+* Do not add deprecated metadata during ATUM installation on clean installs.
+* Use JS hooks in orderItems component.
+* Disable using WC order lookup tables in queries until we understand why don't work in all cases.
+
+**Fixes**
+
+* Fixed wrong text domain on some translatable strings.
+* Fixed async calcs may duplicate same product calcs.
+* Fixed popover arrows CSS.
+* Fixed datepicker not showing translated weekdays according to the users' locale.
+* Minor CSS fixes.
+* Fixed issue with GMT dates in Stock Central.
+
+---
+
 `1.7.7`
 
 *2020-09-23*
