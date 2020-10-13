@@ -3117,23 +3117,23 @@ final class Helpers {
 	 *
 	 * @since 1.7.1
 	 *
-	 * @param \WC_Product|int|array $product
+	 * @param \WC_Product|int|int[] $product
 	 * @param bool                  $force_save
 	 */
 	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
 
-		if ( ! is_array( $product ) ) {
-			$product = [ $product ];
+		$products = is_array( $product ) ? $product : [ $product ];
 
-		}
+		foreach ( $products as $product ) {
 
-		foreach ( $product as $product_id ) {
-
-			$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
+			if ( ! self::is_atum_product( $product ) ) {
+				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
+				$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
+			}
 
 			if ( $product instanceof \WC_Product ) {
 
-				if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
+				if ( 'yes' === self::get_option( 'out_stock_threshold', 'no' ) ) {
 
 					$out_of_stock_threshold = $product->get_out_stock_threshold();
 
