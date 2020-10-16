@@ -124,11 +124,15 @@ class Supplier {
 			// Get the rest of the data from meta.
 			$meta_data = get_metadata( 'post', $this->id, '', TRUE );
 
-			foreach ( $meta_data as $meta_key => $meta_value ) {
+			if ( is_array( $meta_data ) ) {
 
-				$data_name = ltrim( $meta_key, '_' );
-				if ( array_key_exists( $data_name, $this->data ) ) {
-					$this->data[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
+				foreach ( $meta_data as $meta_key => $meta_value ) {
+
+					$data_name = ltrim( $meta_key, '_' );
+					if ( array_key_exists( $data_name, $this->data ) ) {
+						$this->data[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
+					}
+
 				}
 
 			}
