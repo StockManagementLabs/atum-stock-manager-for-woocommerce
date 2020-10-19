@@ -1050,9 +1050,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
-								esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ),
-								'grouped' === $type ? esc_attr__( 'grouped items', ATUM_TEXT_DOMAIN ) : esc_attr__( 'variations', ATUM_TEXT_DOMAIN )
-							);
+							esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), 'grouped' === $type ? esc_attr__( 'grouped items', ATUM_TEXT_DOMAIN ) : esc_attr__( 'variations', ATUM_TEXT_DOMAIN )
+						);
 						$type .= ' has-child';
 
 					}
@@ -1084,7 +1083,8 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( $children ) {
 						$product_tip .= '<br>' . sprintf(
 							/* translators: product type names */
-								esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN ) );
+							esc_attr__( '(click to show/hide %s)', ATUM_TEXT_DOMAIN ), esc_attr__( 'bundle items', ATUM_TEXT_DOMAIN )
+						);
 						$type .= ' has-child';
 					}
 
@@ -1273,7 +1273,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Do not show the stock if the product is not managed by WC.
 		if ( ! $is_inheritable && ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) ) {
-			return $stock;
+			return apply_filters( 'atum/list_table/column_stock', $stock, $item, $this->product, $this );
 		}
 
 		if ( ! $is_grouped ) {
@@ -1578,9 +1578,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		$symbol_data     = ! empty( $symbol ) ? ' data-symbol="' . esc_attr( $symbol ) . '"' : '';
 		$extra_data      = ! empty( $extra_data ) ? Helpers::array_to_data( $extra_data ) : '';
 
+		// phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
 		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
 		                '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
 		                $input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
+		// phpcs:enable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
 
 		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
 
@@ -1815,8 +1817,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		$views = $this->get_views();
 		$views = apply_filters( "views_{$this->screen->id}", $views ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
-		if ( empty( $views ) )
+		if ( empty( $views ) ) {
 			return;
+		}
 
 		$this->screen->render_screen_reader_content( 'heading_views' );
 
@@ -3464,7 +3467,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			if ( empty( $search_terms_ids ) ) {
 				AtumCache::set_cache( $cache_key, $where_without_results );
-				return $where_without_results;
+				return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 			}
 
 			// Remove duplicate values from a multi-dimensional array.
@@ -3514,7 +3517,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( empty( $search_term_id ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
-						return $where_without_results;
+						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 					}
 
 					$search_terms_ids_str = '';
@@ -3566,7 +3569,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( empty( $search_supplier_ids ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
-						return $where_without_results;
+						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 					}
 
 					$supplier_products = array();
@@ -3584,7 +3587,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					if ( empty( $supplier_products ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
-						return $where_without_results;
+						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 					}
 
 					$where = "AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
