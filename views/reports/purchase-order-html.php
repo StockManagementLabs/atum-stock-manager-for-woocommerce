@@ -140,9 +140,9 @@ use Atum\Inc\Helpers;
 							'_stock_changed',
 						) );
 
-						$meta_data = $item->get_formatted_meta_data( '' );
+						$meta_data = $item->get_formatted_meta_data( '' ); ?>
 
-						foreach ( $meta_data as $meta_id => $meta ) :
+						<?php foreach ( $meta_data as $meta_id => $meta ) :
 
 							if ( in_array( $meta->key, $hidden_item_meta, TRUE ) ) :
 								continue;
@@ -223,7 +223,8 @@ use Atum\Inc\Helpers;
 				<?php endforeach; ?>
 			<?php endif; ?>
 
-			<?php if ( $line_items_fee ) : ?>
+			<?php if ( ! empty( $line_items_fee ) ) : ?>
+
 				<?php foreach ( $line_items_fee as $item_id => $item ) : ?>
 					<tr class="po-line content-fees">
 						<td class="description kk"><?php echo esc_html( $item->get_name() ?: __( 'Fee', ATUM_TEXT_DOMAIN ) ); ?></td>
