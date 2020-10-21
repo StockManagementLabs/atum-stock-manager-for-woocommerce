@@ -877,7 +877,7 @@ abstract class AtumOrderModel {
 			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->get_post_type() );
 			
 			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any' ] ) ) ) {
+			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
 				$old_status = 'atum_pending';
 			}
 			
@@ -949,9 +949,15 @@ abstract class AtumOrderModel {
 	 * @since 1.2.4
 	 */
 	public function update() {
-		
-		$status       = $this->status;
-		$date         = $this->date_created;
+
+		$status = $this->status;
+		$date   = $this->date_created;
+
+		// Prevent creating the PO when saving items with ths PO as draft.
+		if ( 'auto-draft' === $this->db_status && '' === $status ) {
+			return;
+		}
+
 		$date_created = Helpers::get_wc_time( $date );
 		
 		if ( ! empty( $this->post->post_date ) && $this->post->post_date !== $date ) {
@@ -1747,7 +1753,7 @@ abstract class AtumOrderModel {
 	public function get_status() {
 
 		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
-		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
+		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
 	}
 
 	/**
@@ -2133,7 +2139,7 @@ abstract class AtumOrderModel {
 	 */
 	public function set_status( $status ) {
 
-		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any' ], TRUE ) ) {
+		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) {
 			$status = ATUM_PREFIX . $status;
 		}
 
