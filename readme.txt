@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.5.1
 Requires PHP: 5.6
 WC requires at least: 2.7.0
-WC tested up to: 4.5.2
-Stable tag: 1.7.8
+WC tested up to: 4.6.1
+Stable tag: 1.7.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.7.9`
+
+*2020-10-27*
+
+**Changes**
+
+* Refactoring.
+* Prevent updating a draft PO when saving order items.
+
+**Fixes**
+
+* Fixed calculated props not being updated.
+* Fixed NaN on compounded stocks on some cases.
+* Avoid notice errors when there is an unknown meta in Suppliers.
+* Fixed stock amount not being shown for some MI products.
 
 ---
 

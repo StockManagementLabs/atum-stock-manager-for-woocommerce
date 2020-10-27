@@ -194,6 +194,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.7.9`
+
+*2020-10-27*
+
+**Changes**
+
+* Refactoring.
+* Prevent updating a draft PO when saving order items.
+
+**Fixes**
+
+* Fixed calculated props not being updated.
+* Fixed NaN on compounded stocks on some cases.
+* Avoid notice errors when there is an unknown meta in Suppliers.
+* Fixed stock amount not being shown for some MI products.
+
+---
+
 `1.7.8`
 
 *2020-10-08*
