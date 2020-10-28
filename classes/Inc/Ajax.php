@@ -1270,6 +1270,7 @@ final class Ajax {
 			"SELECT DISTINCT ID, post_title from $wpdb->posts 
 			WHERE post_type = %s $where
 			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			ORDER by post_title ASC
 			LIMIT %d",
 			Suppliers::POST_TYPE,
 			$max_results

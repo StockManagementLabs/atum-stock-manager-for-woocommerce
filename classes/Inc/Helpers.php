@@ -1662,6 +1662,8 @@ final class Helpers {
 			$args = array(
 				'post_type'      => Suppliers::POST_TYPE,
 				'posts_per_page' => - 1,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
 			);
 
 			$suppliers = get_posts( $args );
@@ -1684,7 +1686,7 @@ final class Helpers {
 
 			<select class="wc-product-search atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
 				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
-				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
+				data-multiple="false" data-selected="" data-minimum_input_length="1" data-sortable="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
 					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ) ?></option>
