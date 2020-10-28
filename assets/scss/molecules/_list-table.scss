@@ -2493,6 +2493,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-size: 14px;
 				
 				.set-header {
+					float: none;
+					display: inherit;
 					color: var(--primary);
 				}
 			}
