@@ -643,7 +643,7 @@ class AtumProductData {
 
 					foreach ( $product_attributes as $attribute_slug => $attribute_data ) {
 
-						if ( $attribute['id'] === $attribute_data['id'] ) {
+						if ( isset( $attribute['id'], $attribute_data['id'] ) && $attribute['id'] === $attribute_data['id'] ) {
 							$product_data['attributes'][ $index ]['option_ids'] = $attribute_data['options'];
 							break;
 						}

@@ -1071,7 +1071,7 @@ class Hooks {
 		$calculated_props = array(
 			'product_id',
 			'out_stock_date',
-			'supplier_sku', // This must be unique.
+			'supplier_sku', // This is not calculated but must be unique.
 			'inbound_stock',
 			'stock_on_hold',
 			'sold_today',
