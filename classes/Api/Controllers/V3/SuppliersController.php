@@ -1128,6 +1128,14 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 			return new \WP_Error( "atum_rest_{$this->post_type}_invalid_id", __( 'ID is invalid.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 		}
 
+		/**
+		 * Fires before a single item will be updated via the REST API.
+		 *
+		 * @param \WP_Post         $post      Post object.
+		 * @param \WP_REST_Request $request   Request object.
+		 */
+		do_action( "atum/api/rest_before_insert_{$this->post_type}", $post, $request );
+
 		$post = $this->prepare_item_for_database( $request );
 		if ( is_wp_error( $post ) ) {
 			return $post;
