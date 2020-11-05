@@ -994,7 +994,7 @@ class Hooks {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_atum_sales_calc_props( $product );
+				Helpers::defer_update_atum_product_calc_props( $product );
 			}
 
 		}
@@ -1011,19 +1011,7 @@ class Hooks {
 	 */
 	public function defer_update_atum_product_calc_props( $product, $data_store ) {
 
-		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
-		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-		if ( ! $has_cache ) {
-			$products = [ $product->get_id() ];
-		}
-		else {
-			$products[] = $product->get_id();
-			$products   = array_unique( $products );
-		}
-
-		AtumCache::set_cache( $cache_key, $products );
-
+		Helpers::defer_update_atum_product_calc_props( $product );
 	}
 
 	/**
