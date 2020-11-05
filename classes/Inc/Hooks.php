@@ -969,7 +969,7 @@ class Hooks {
 	}
 
 	/**
-	 * Update ATUM product data calculated props that depend exclusively on the sale.
+	 * Add each product in order to the array with the products to be async updated.
 	 *
 	 * @since 1.7.1
 	 *
@@ -977,10 +977,6 @@ class Hooks {
 	 * @param \WC_Order_Data_Store_CPT $data_store
 	 */
 	public function update_atum_sales_calc_props_after_saving( $order, $data_store = NULL ) {
-
-		// TODO: Prevent saving the calc props multiple times when a new order is created from the frontend.
-		// NOTE: The remove_action below is not a valid solution as it was not recalculating the "atum_stock_status" after setting a product to "onbackorder" when an order is created from the frontend.
-		//remove_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), 10 );
 
 		$items = $order->get_items();
 
@@ -991,11 +987,8 @@ class Hooks {
 			 * @var \WC_Order_Item_Product $item
 			 */
 			$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
 
-			if ( $product instanceof \WC_Product ) {
-				Helpers::defer_update_atum_product_calc_props( $product );
-			}
+			Helpers::defer_update_atum_product_calc_props( $product_id );
 
 		}
 
@@ -1025,6 +1018,8 @@ class Hooks {
 		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( $has_cache && ! empty( $products ) ) {
+
+			$products = array_unique( $products );
 
 			AtumQueues::add_async_action( 'update_atum_product_calc_props', array(
 				'\Atum\Inc\Helpers',

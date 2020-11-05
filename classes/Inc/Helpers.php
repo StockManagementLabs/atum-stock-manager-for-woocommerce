@@ -3338,19 +3338,22 @@ final class Helpers {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @param \WC_Product $product
+	 * @param \WC_Product|int $product
 	 */
 	public static function defer_update_atum_product_calc_props( $product ) {
+
+		if ( $product instanceof \WC_Product ) {
+			$product = $product->get_id();
+		}
 
 		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
 		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
-			$products = [ $product->get_id() ];
+			$products = [ $product ];
 		}
 		else {
-			$products[] = $product->get_id();
-			$products   = array_unique( $products );
+			$products[] = $product;
 		}
 
 		AtumCache::set_cache( $cache_key, $products );
