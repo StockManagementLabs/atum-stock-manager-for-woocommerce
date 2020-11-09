@@ -1230,7 +1230,7 @@ abstract class AtumOrderModel {
 		$this->calculate_shipping();
 
 		foreach ( $this->get_fees() as $item ) {
-			$fee_total += $item->get_total();
+			$fee_total += (float) $item->get_total();
 		}
 
 		/* @noinspection PhpWrongStringConcatenationInspection */
