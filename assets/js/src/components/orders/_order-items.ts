@@ -104,6 +104,7 @@ export default class AtumOrderItems {
 			}
 
 			Blocker.unblock( this.$container );
+			this.wpHooks.doAction( 'orderItems_afterAddingFee' );
 
 		}, 'json' );
 
@@ -131,6 +132,7 @@ export default class AtumOrderItems {
 			}
 
 			Blocker.unblock( this.$container );
+			this.wpHooks.doAction( 'orderItems_afterAddingShipping' );
 
 		}, 'json' );
 
