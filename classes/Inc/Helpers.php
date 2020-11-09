@@ -3334,6 +3334,33 @@ final class Helpers {
 	}
 
 	/**
+	 * Add a product to the array of products that need their calc properties updated,
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param \WC_Product|int $product
+	 */
+	public static function defer_update_atum_product_calc_props( $product ) {
+
+		if ( $product instanceof \WC_Product ) {
+			$product = $product->get_id();
+		}
+
+		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
+		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( ! $has_cache ) {
+			$products = [ $product ];
+		}
+		else {
+			$products[] = $product;
+		}
+
+		AtumCache::set_cache( $cache_key, $products );
+
+	}
+
+	/**
 	 * Whether to use the wc_order_product_lookup table to improve queries performance
 	 *
 	 * @since 1.7.1
