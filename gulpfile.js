@@ -133,6 +133,11 @@ gulp.task('js::atum', function () {
 				extensions: ['.js', '.ts']
 			},
 			
+			externals: {
+				'jquery': 'jQuery',
+				'$'     : 'window.$'
+			},
+			
 			module: {
 				rules: [
 					/* {
