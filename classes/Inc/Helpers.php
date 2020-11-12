@@ -3124,6 +3124,8 @@ final class Helpers {
 	 */
 	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
 
+		remove_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX );
+
 		$products = is_array( $product ) ? $product : [ $product ];
 
 		foreach ( $products as $product ) {
@@ -3193,6 +3195,8 @@ final class Helpers {
 
 			}
 		}
+
+		add_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
 
 	}
 
