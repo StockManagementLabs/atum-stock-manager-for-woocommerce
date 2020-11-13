@@ -510,7 +510,7 @@ class Main {
 	}
 
 	/**
-	 * Allow authenticating the WP's media endpoint using the WC keys, so we can upload images to products
+	 * Allow authenticating some WP API's endpoints using the WC API keys, so we can upload images to products, list comments, etc.
 	 *
 	 * @since 1.7.5
 	 *
@@ -529,7 +529,10 @@ class Main {
 			$rest_prefix = trailingslashit( rest_get_url_prefix() );
 			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
-			$is_request_to_rest_api = ( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/media' ) );
+			$is_request_to_rest_api = apply_filters( 'atum/api/bypass_wp_endpoints_with_wc_keys',
+				( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
+				( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
+			);
 
 		}
 
