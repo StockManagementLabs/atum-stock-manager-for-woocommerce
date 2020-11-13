@@ -3124,6 +3124,8 @@ final class Helpers {
 	 */
 	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
 
+		remove_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX );
+
 		$products = is_array( $product ) ? $product : [ $product ];
 
 		foreach ( $products as $product ) {
@@ -3193,6 +3195,8 @@ final class Helpers {
 
 			}
 		}
+
+		add_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
 
 	}
 
@@ -3390,6 +3394,51 @@ final class Helpers {
 
 		return $use_lookup;
 
+	}
+
+	/**
+	 * Search for ids in the an order note's data
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param array $note_data
+	 * @param array $searched_texts
+	 *
+	 * @return array
+	 */
+	public static function get_order_note_ids( $note_data, $searched_texts ) {
+
+		$found      = FALSE;
+		$return_ids = [];
+
+		foreach ( $searched_texts as $searched_text ) {
+
+			if ( strpos( $note_data['comment_content'], $searched_text ) !== FALSE ) {
+				$found = TRUE;
+				break;
+			}
+		}
+
+		if ( $found ) {
+
+			// Try to determine whether the product being processed has calculated stock.
+			preg_match_all( '#\((\#+[0-9]+)\)#', $note_data['comment_content'], $ids );
+
+			if ( ! empty( $ids ) ) {
+
+				$ids = $ids[0];
+
+				foreach ( $ids as $id ) {
+
+					$return_ids[] = absint( trim( $id, '()#' ) );
+
+				}
+
+			}
+
+		}
+
+		return $return_ids;
 	}
 
 }
