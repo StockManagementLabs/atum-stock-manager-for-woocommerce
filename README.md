@@ -6,7 +6,7 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 **With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
-**NEW IMPROVED ATUM 1.7**
+**NEW IMPROVED ATUM 1.8**
 
 **NEW ATUM REST API**
 
@@ -191,6 +191,36 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 ## Changelog
+
+---
+
+`1.8.0`
+
+*2020-11-13*
+
+**Features**
+
+* Added new API endpoint for performing batch actions to all the variables at once (no matter its parent).
+* Added required hooks for Action Logs.
+* Defer calc products update when WC Order items are changed.
+* Optimized code when updating WC Order items.
+* Added JS hooks after adding fee or shipping items.
+* Allow authenticathing with WC keys some extra WP API endpoints.
+
+**Changes**
+
+* Order suppliers dropdown query by title.
+* Sort by time spent since the last product's update.
+* Set min node version to 14 and added jquery as webpack's external.
+* Refactoring.
+* Updated select2 version.
+* Added support for ES2017 to tsconfig.json.
+
+**Fixes**
+
+* Fix sales las days number's styles.
+* Fixed type casting error when calculating fee item's total.
+* Prevent unending loop of ajax calls when updating product calc props via cron.
 
 ---
 

@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires PHP: 5.6
-WC requires at least: 2.7.0
+WC requires at least: 3.1.0
 WC tested up to: 4.6.1
-Stable tag: 1.7.9
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 **With an Online Selling Boost Comes [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
-**NEW IMPROVED ATUM 1.7**
+**NEW IMPROVED ATUM 1.8**
 
 **NEW ATUM REST API**
 
@@ -238,6 +238,36 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.0`
+
+*2020-11-13*
+
+**Features**
+
+* Added new API endpoint for performing batch actions to all the variables at once (no matter its parent).
+* Added required hooks for Action Logs.
+* Defer calc products update when WC Order items are changed.
+* Optimized code when updating WC Order items.
+* Added JS hooks after adding fee or shipping items.
+* Allow authenticathing with WC keys some extra WP API endpoints.
+
+**Changes**
+
+* Order suppliers dropdown query by title.
+* Sort by time spent since the last product's update.
+* Set min node version to 14 and added jquery as webpack's external.
+* Refactoring.
+* Updated select2 version.
+* Added support for ES2017 to tsconfig.json.
+
+**Fixes**
+
+* Fix sales las days number's styles.
+* Fixed type casting error when calculating fee item's total.
+* Prevent unending loop of ajax calls when updating product calc props via cron.
 
 ---
 
