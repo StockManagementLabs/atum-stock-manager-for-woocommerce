@@ -57,7 +57,7 @@ trait AjaxLegacyTrait {
 		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
 
 			$meta_join[]  = "LEFT JOIN $wpdb->wc_product_meta_lookup plu ON posts.ID = plu.product_id";
-			$meta_where[] = $wpdb->prepare( "OR plu.sku LIKE %s", $like_term );
+			$meta_where[] = $wpdb->prepare( 'OR plu.sku LIKE %s', $like_term );
 
 		}
 		/* @deprecated Searching by meta keys is too slow, so we should us the lookup tables where possible */
@@ -186,9 +186,9 @@ trait AjaxLegacyTrait {
 			$ids = array_intersect( $ids, $included );
 		}
 
-		//if ( ! empty( $_GET['limit'] ) ) {
-		//	$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
-		//}
+		/*if ( ! empty( $_GET['limit'] ) ) {
+			$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
+		}*/
 
 		$product_objects = array_filter( array_map( 'wc_get_product', $ids ), 'wc_products_array_filter_editable' );
 		$products        = array();

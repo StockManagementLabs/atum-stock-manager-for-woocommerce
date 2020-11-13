@@ -34,7 +34,7 @@ use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
 
 final class Ajax {
-	
+
 	/**
 	 * The singleton instance holder
 	 *
@@ -464,7 +464,7 @@ final class Ajax {
 		wp_send_json_success( compact( 'dataset', 'period', 'legends' ) );
 
 	}
-	
+
 	/**
 	 * Loads the Stock Central ListTable class and calls ajax_response method
 	 *
@@ -473,7 +473,7 @@ final class Ajax {
 	 * @since 0.0.1
 	 */
 	public function fetch_stock_central_list() {
-		
+
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
 		$args = array(
@@ -482,9 +482,9 @@ final class Ajax {
 			'show_controlled' => ! empty( $_REQUEST['show_controlled'] ) ? (bool) $_REQUEST['show_controlled'] : FALSE,
 			'screen'          => esc_attr( $_REQUEST['screen'] ),
 		);
-		
+
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
-		
+
 		if ( ! empty( $_REQUEST['view'] ) && 'all_stock' === $_REQUEST['view'] ) {
 			$_REQUEST['view'] = '';
 		}
@@ -499,7 +499,7 @@ final class Ajax {
 		 */
 		$list = new $list_class( $args );
 		$list->ajax_response();
-		
+
 	}
 
 	/**
@@ -536,7 +536,7 @@ final class Ajax {
 		update_option( 'atum_admin_footer_text_rated', 1 );
 		wp_die();
 	}
-	
+
 	/**
 	 * Update the meta values for the edited ListTable columns
 	 *
@@ -545,9 +545,9 @@ final class Ajax {
 	 * @since   1.1.2
 	 */
 	public function update_list_data() {
-		
+
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
-		
+
 		if ( empty( $_POST['data'] ) ) {
 			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
 		}
@@ -588,7 +588,7 @@ final class Ajax {
 		} catch ( \Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
 		}
-		
+
 	}
 
 	/**
@@ -1074,7 +1074,7 @@ final class Ajax {
 			)";
 
 		}
-		
+
 		$query_select = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
 
 		// phpcs:disable
@@ -1091,10 +1091,10 @@ final class Ajax {
 			$like_term
 		);
 		// phpcs:enable
-		
+
 		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
 		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
-		
+
 		$query = "$query_select $where_clause
 			ORDER BY posts.post_parent ASC, posts.post_title ASC";
 
@@ -1438,7 +1438,7 @@ final class Ajax {
 				// to simplify used hooks (e.g. see MI Hooks).
 				$item = apply_filters( 'atum/atum_order/order_item', $item, $item_id, $atum_order, $product );
 				do_action( 'atum/atum_order/add_order_item_meta', $item_id, $item, $atum_order );
-				
+
 				// Load template.
 				$html .= Helpers::load_view_to_string( 'meta-boxes/atum-order/item', compact( 'atum_order', 'item', 'item_id', 'class' ) );
 
@@ -1816,16 +1816,16 @@ final class Ajax {
 				$product = $atum_order_item->get_product();
 
 				if ( $product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
-					
+
 					$old_stock = $product->get_stock_quantity();
-					
+
 					// if stock is null but WC is managing stock.
 					if ( is_null( $old_stock ) ) {
 						$old_stock = 0;
 						wc_update_product_stock( $product, $old_stock );
-						
+
 					}
-					
+
 					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
 					$new_stock    = wc_update_product_stock( $product, $stock_change, $action );
 					$item_name    = $product->get_formatted_name();
@@ -2038,7 +2038,7 @@ final class Ajax {
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
 			}
-			
+
 			if ( $atum_order ) {
 				$atum_order->update_status( $status );
 			}
@@ -2233,13 +2233,12 @@ final class Ajax {
 		}
 
 		$option = esc_attr( $_POST['option'] );
-		
+
 		if ( in_array( $option, [ 'manage', 'unmanage' ] ) ) {
 			$manage_status = 'manage' === $option ? 'yes' : 'no';
 			do_action( 'atum/ajax/tool_change_manage_stock' );
 			Helpers::change_status_meta( '_manage_stock', $manage_status );
 		}
-
 
 		wp_send_json_error( __( 'Something failed changing the Manage Stock option', ATUM_TEXT_DOMAIN ) );
 
@@ -2269,7 +2268,6 @@ final class Ajax {
 			Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status );
 		}
 
-
 		wp_send_json_error( __( 'Something failed changing the Control Stock option', ATUM_TEXT_DOMAIN ) );
 
 	}
@@ -2292,7 +2290,6 @@ final class Ajax {
 			do_action( 'atum/ajax/tool_clear_out_stock_threshold' );
 			wp_send_json_success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 		}
-
 
 		wp_send_json_error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
 
@@ -2465,7 +2462,10 @@ final class Ajax {
 		$atum_order->set_supplier( $supplier );
 		$atum_order->save_meta();
 
-		wp_send_json_success( [ 'atum_order_id' => $atum_order_id, 'supplier' => $supplier ] );
+		wp_send_json_success( [
+			'atum_order_id' => $atum_order_id,
+			'supplier'      => $supplier,
+		] );
 
 	}
 
@@ -2492,7 +2492,10 @@ final class Ajax {
 		$atum_order->set_multiple_suppliers( $multiple );
 		$atum_order->save_meta();
 
-		wp_send_json_success( [ 'atum_order_id' => $atum_order_id, 'multiple' => $multiple ] );
+		wp_send_json_success( [
+			'atum_order_id' => $atum_order_id,
+			'multiple'      => $multiple,
+		] );
 
 	}
 
@@ -2514,19 +2517,19 @@ final class Ajax {
 	public function __sleep() {
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
 	/**
 	 * Get Singleton instance
 	 *
 	 * @return Ajax instance
 	 */
 	public static function get_instance() {
-		
+
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
 			self::$instance = new self();
 		}
-		
+
 		return self::$instance;
 	}
-	
+
 }
