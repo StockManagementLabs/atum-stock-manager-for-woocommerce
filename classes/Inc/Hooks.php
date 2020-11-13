@@ -1143,6 +1143,7 @@ class Hooks {
 	 * @param int $comment_id
 	 */
 	public function remove_order_comment( $comment_id ) {
+
 		remove_action( 'clean_comment_cache', array( $this, 'remove_order_comment' ) );
 		wp_delete_comment( $comment_id, TRUE );
 	}
