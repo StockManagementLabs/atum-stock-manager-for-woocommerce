@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"outDir": "./assets/js/build/",
+		"lib": ["es6", "dom", "es2017"],
 		"module": "es6",
 		"target": "es5",
 		"sourceMap": true,
