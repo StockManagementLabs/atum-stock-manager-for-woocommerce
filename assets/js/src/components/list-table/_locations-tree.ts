@@ -9,6 +9,7 @@ import '../../../vendor/jquery.easytree';
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import Tooltip from '../_tooltip';
 
 export default class LocationsTree {
@@ -17,7 +18,6 @@ export default class LocationsTree {
 	toSetLocations: string[] = [];
 	productId: number = null;
 	productTitle: string = '';
-	swal: any = window['swal'];
 	$button: JQuery = null;
 	
 	constructor(
@@ -49,7 +49,7 @@ export default class LocationsTree {
 		this.locationsSet   = [];
 		
 		// Open the view popup.
-		this.swal({
+		Swal.fire({
 			title             : `${ this.settings.get('productLocations') }<br><small>(${ this.productTitle })</small>`,
 			html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			showCancelButton  : false,
@@ -57,13 +57,18 @@ export default class LocationsTree {
 			confirmButtonText : this.settings.get('editProductLocations'),
 			confirmButtonColor: 'var(--primary)',
 			showCloseButton   : true,
-			onOpen            : () => this.onOpenViewPopup(),
-			onClose           : () => this.onCloseViewPopup(),
+			didOpen           : () => this.onOpenViewPopup(),
+			willClose          : () => this.onCloseViewPopup(),
             background        : 'var(--atum-table-bg)'
 		})
 		// Click on edit: open the edit popup.
-		.then( () => this.openEditPopup() )
-		.catch(this.swal.noop);
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+				this.openEditPopup();
+			}
+
+		} );
 		
 	}
 	
@@ -133,22 +138,34 @@ export default class LocationsTree {
 	 * Opens the edit popup
 	 */
 	openEditPopup() {
-		
-		this.swal({
-			title              : `${ this.settings.get('editProductLocations') }<br><small>(${ this.productTitle })</small>`,
+
+		Swal.fire( {
+			title              : `${ this.settings.get( 'editProductLocations' ) }<br><small>(${ this.productTitle })</small>`,
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
-			text               : this.settings.get('textToShow'),
-			confirmButtonText  : this.settings.get('saveButton'),
+			text               : this.settings.get( 'textToShow' ),
+			confirmButtonText  : this.settings.get( 'saveButton' ),
 			confirmButtonColor : 'var(--primary)',
 			showCloseButton    : true,
 			showCancelButton   : true,
 			showLoaderOnConfirm: true,
-			onOpen             : () => this.onOpenEditPopup(),
+			didOpen            : () => this.onOpenEditPopup(),
 			preConfirm         : () => this.saveLocations(),
-            background         : 'var(--atum-table-bg)'
-		})
-		.then( () => this.onCloseEditPopup() )
-		.catch(this.swal.noop);
+			background         : 'var(--atum-table-bg)',
+		} )
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+				Swal.fire({
+					title             : this.settings.get('done'),
+					icon              : 'success',
+					text              : this.settings.get('locationsSaved'),
+					confirmButtonText : this.settings.get('ok'),
+					confirmButtonColor: 'var(--primary)',
+					background        : 'var(--atum-table-bg)'
+				});
+			}
+
+		} );
 		
 	}
 	
@@ -158,48 +175,32 @@ export default class LocationsTree {
 	onOpenEditPopup() {
 		
 		let $locationsTreeContainer: JQuery = $('#atum-locations-tree');
-		
-		$.ajax({
-			url       : window['ajaxurl'],
+
+		$.ajax( {
+			url       : window[ 'ajaxurl' ],
 			dataType  : 'json',
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : this.settings.get('nonce'),
+				token     : this.settings.get( 'nonce' ),
 				product_id: -1, // Send -1 to get all the terms.
 			},
-			beforeSend: () => $locationsTreeContainer.append('<div class="atum-loading" />'),
-			success   : (response: any) => {
-				
-				if (response.success === true) {
-					
-					$locationsTreeContainer.html(response.data);
-					(<any>$locationsTreeContainer).easytree();
-					
+			beforeSend: () => $locationsTreeContainer.append( '<div class="atum-loading" />' ),
+			success   : ( response: any ) => {
+
+				if ( response.success === true ) {
+
+					$locationsTreeContainer.html( response.data );
+					( <any> $locationsTreeContainer ).easytree();
+
 					// Add instructions alert.
-					$locationsTreeContainer.append(`<div class="alert alert-primary"><i class="atmi-info"></i> ${ this.settings.get('editLocationsInfo') }</div>`);
-					
-					this.bindEditTreeEvents($locationsTreeContainer);
-					
+					$locationsTreeContainer.append( `<div class="alert alert-primary"><i class="atmi-info"></i> ${ this.settings.get( 'editLocationsInfo' ) }</div>` );
+
+					this.bindEditTreeEvents( $locationsTreeContainer );
+
 				}
 			},
-		});
-		
-	}
-	
-	/**
-	 * Triggers when the view popup is closed
-	 */
-	onCloseEditPopup() {
-		
-		this.swal({
-			title             : this.settings.get('done'),
-			type              : 'success',
-			text              : this.settings.get('locationsSaved'),
-			confirmButtonText : this.settings.get('ok'),
-			confirmButtonColor: 'var(--primary)',
-            background        : 'var(--atum-table-bg)'
-		});
+		} );
 		
 	}
 	

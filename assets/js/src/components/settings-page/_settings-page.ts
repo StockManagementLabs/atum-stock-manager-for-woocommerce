@@ -5,12 +5,13 @@
 import EnhancedSelect from '../_enhanced-select';
 import { ButtonGroup } from '../_button-group';
 import { ColorPicker } from '../_color-picker';
+import DateTimePicker from '../_date-time-picker';
 import Settings from '../../config/_settings';
-import { Switcher } from '../_switcher';
 import SmartForm from '../_smart-form';
+import Swal, { SweetAlertResult } from 'sweetalert2';
+import { Switcher } from '../_switcher';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
-import DateTimePicker from '../_date-time-picker';
 
 export default class SettingsPage {
 	
@@ -19,7 +20,6 @@ export default class SettingsPage {
 	$form: JQuery;
 	navigationReady: boolean = false;
 	numHashParameters: number = 0;
-	swal: any = window['swal'];
 	tabLoader: TabLoader;
 
 	constructor(
@@ -113,37 +113,41 @@ export default class SettingsPage {
 		this.$settingsWrapper
 		
 			// Show the form after the page is loaded.
-			.on('atum-tab-loader-init', () => this.$form.show())
+			.on( 'atum-tab-loader-init', () => this.$form.show() )
 		
 			// Tab clicked.
-			.on('atum-tab-loader-clicked-tab', (evt: JQueryEventObject, $navLink: JQuery, tab: string) => {
-			
-				if (this.$form.find('.dirty').length) {
-					
+			.on( 'atum-tab-loader-clicked-tab', ( evt: JQueryEventObject, $navLink: JQuery, tab: string ) => {
+
+				if ( this.$form.find( '.dirty' ).length ) {
+
 					// Warn the user about unsaved data.
-					this.swal({
-						title              : this.settings.get('areYouSure'),
-						text               : this.settings.get('unsavedData'),
-						type               : 'warning',
-						showCancelButton   : true,
-						confirmButtonText  : this.settings.get('continue'),
-						cancelButtonText   : this.settings.get('cancel'),
-						reverseButtons     : true,
-						allowOutsideClick  : false
-					})
-					.then( () => {
-						this.moveToTab($navLink);
-					},
-					(dismiss: string) => {
-						$navLink.blur();
-					});
-					
+					Swal.fire( {
+						title            : this.settings.get( 'areYouSure' ),
+						text             : this.settings.get( 'unsavedData' ),
+						icon             : 'warning',
+						showCancelButton : true,
+						confirmButtonText: this.settings.get( 'continue' ),
+						cancelButtonText : this.settings.get( 'cancel' ),
+						reverseButtons   : true,
+						allowOutsideClick: false,
+					} )
+					.then( ( result: SweetAlertResult ) => {
+
+						if ( result.isConfirmed ) {
+							this.moveToTab( $navLink );
+						}
+						else {
+							$navLink.blur();
+						}
+
+					} );
+
 				}
 				else {
-					this.moveToTab($navLink);
+					this.moveToTab( $navLink );
 				}
-			
-			});
+
+			} );
 		
 	}
 	
@@ -222,10 +226,10 @@ export default class SettingsPage {
 		
 		if ($checkbox.is(':checked') && this.settings.get('isAnyOostSet')) {
 			
-			this.swal({
+			Swal.fire({
 				title              : '',
 				text               : this.settings.get('oostSetClearText'),
-				type               : 'question',
+				icon               : 'question',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('startFresh'),
 				cancelButtonText   : this.settings.get('useSavedValues'),
@@ -235,63 +239,65 @@ export default class SettingsPage {
 				preConfirm         : (): Promise<any> => {
 					
 					return new Promise( (resolve: Function, reject: Function) => {
-						
-						$.ajax({
-							url     : window['ajaxurl'],
+
+						$.ajax( {
+							url     : window[ 'ajaxurl' ],
 							method  : 'POST',
 							dataType: 'json',
 							data    : {
-								action: this.settings.get('oostSetClearScript'),
-								token : this.settings.get('runnerNonce'),
+								action: this.settings.get( 'oostSetClearScript' ),
+								token : this.settings.get( 'runnerNonce' ),
 							},
-							success : (response: any) => {
-								
-								if (response.success === true) {
-									resolve(response.data);
+							success : ( response: any ) => {
+
+								if ( response.success !== true ) {
+									Swal.showValidationMessage( response.data );
 								}
-								else {
-									reject(response.data);
-								}
-								
-							}
-						});
+
+								resolve( response.data );
+
+							},
+						} );
 						
 					});
 					
 				}
-			}).then( (message: string) => {
+			})
+			.then( ( result: SweetAlertResult ) => {
+
+				if ( result.isConfirmed ) {
+					Swal.fire( {
+						title            : this.settings.get( 'done' ),
+						icon             : 'success',
+						text             : result.value,
+						confirmButtonText: this.settings.get( 'ok' )
+					} );
+				}
 				
-				this.swal({
-					title            : this.settings.get('done'),
-					type             : 'success',
-					text             : message,
-					confirmButtonText: this.settings.get('ok')
-				});
-				
-			}).catch(this.swal.noop);
+			});
 			
 		}
-		else if (!$checkbox.is(':checked')) {
+		else if ( !$checkbox.is( ':checked' ) ) {
 			
-			this.swal({
+			Swal.fire({
 				title            : '',
 				text             : this.settings.get('oostDisableText'),
-				type             : 'info',
+				icon             : 'info',
 				confirmButtonText: this.settings.get('ok'),
 			});
 			
 		}
 		
 	}
-	
-	runScript($button: JQuery) {
+
+	runScript( $button: JQuery ) {
 		
 		const $scriptRunner = $button.closest('.script-runner');
 		
-		this.swal({
+		Swal.fire({
 			title              : this.settings.get('areYouSure'),
 			text               : $scriptRunner.data('confirm'),
-			type               : 'warning',
+			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get('run'),
 			cancelButtonText   : this.settings.get('cancel'),
@@ -307,8 +313,8 @@ export default class SettingsPage {
 						    action: $scriptRunner.data('action'),
 						    token : this.settings.get('runnerNonce'),
 					    };
-					
-					if ($input.length) {
+
+					if ( $input.length ) {
 						data.option = $input.val();
 					}
 					
@@ -317,19 +323,16 @@ export default class SettingsPage {
 						method    : 'POST',
 						dataType  : 'json',
 						data      : data,
-						beforeSend: () => {
-							$button.prop('disabled', true);
-						},
-						success   : (response: any) => {
+						beforeSend: () => $button.prop('disabled', true),
+						success   : ( response: any ) => {
 							
 							$button.prop('disabled', false);
 							
-							if (response.success === true) {
-								resolve(response.data);
+							if (response.success !== true) {
+								Swal.showValidationMessage( response.data );
 							}
-							else {
-								reject(response.data);
-							}
+
+							resolve( response.data );
 							
 						}
 					});
@@ -338,18 +341,22 @@ export default class SettingsPage {
 				
 			}
 			
-		}).then( (message: string) => {
+		})
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+				Swal.fire( {
+					title            : this.settings.get( 'done' ),
+					icon             : 'success',
+					text             : result.value,
+					confirmButtonText: this.settings.get( 'ok' )
+				} )
+				.then( () => {
+					this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+				} );
+			}
 			
-			this.swal({
-				title            : this.settings.get('done'),
-				type             : 'success',
-				text             : message,
-				confirmButtonText: this.settings.get('ok')
-			}).then( () => {
-				this.$settingsWrapper.trigger('atum-settings-script-runner-done', [ $scriptRunner ]);
-			});
-			
-		}).catch(this.swal.noop);
+		});
 		
 	}
 

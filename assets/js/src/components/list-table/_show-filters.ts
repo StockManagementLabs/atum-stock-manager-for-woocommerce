@@ -4,7 +4,7 @@
 
 import Settings from '../../config/_settings';
 
-export default class showFilters {
+export default class ShowFilters {
 	
 	constructor(
 		private $wrapper: JQuery,

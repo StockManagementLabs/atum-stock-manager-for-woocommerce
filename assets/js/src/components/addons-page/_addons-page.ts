@@ -3,11 +3,11 @@
    ======================================= */
 
 import Settings from '../../config/_settings';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 export default class AddonsPage {
 	
 	$addonsList: JQuery;
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings
@@ -18,81 +18,84 @@ export default class AddonsPage {
 		this.$addonsList
 		
 		// Validate, Activate and Deactivate buttons.
-			.on('click', '.addon-key button', (evt: JQueryEventObject) => {
-			
-				evt.preventDefault();
-				
-				const $button: JQuery = $(evt.currentTarget),
-				      key: string     = $button.siblings('input').val();
-				
-				// If no key is present, show the error directly
-				if (!key) {
-					this.showErrorAlert( this.settings.get('invalidKey') );
-					return false;
-				}
-				
-				// Ask the user to confirm the deactivation
-				if ($button.hasClass('deactivate-key')) {
-					
-					this.swal({
-						title            : this.settings.get('limitedDeactivations'),
-						html             : this.settings.get('allowedDeactivations'),
-						type             : 'warning',
-						confirmButtonText: this.settings.get('continue'),
-						cancelButtonText : this.settings.get('cancel'),
-						showCancelButton : true
-					}).then( () => {
-						this.requestLicenseChange($button, key);
-					})
-					.catch(this.swal.noop);
-					
-				}
-				else {
-					this.requestLicenseChange($button, key);
-				}
-				
-			})
-			
-			// Install addon button.
-			.on('click', '.install-addon', (evt: JQueryEventObject) => {
-				
-				const $button: JQuery     = $(evt.currentTarget),
-				      $addonBlock: JQuery = $button.closest('.theme');
-				
-				$.ajax({
-					url       : window['ajaxurl'],
-					method    : 'POST',
-					dataType  : 'json',
-					data      : {
-						token : this.$addonsList.data('nonce'),
-						action: 'atum_install_addon',
-						addon : $addonBlock.data('addon'),
-						slug  : $addonBlock.data('addon-slug'),
-						key   : $addonBlock.find('.addon-key input').val()
-					},
-					beforeSend: () => {
-						this.beforeAjax($button);
-					},
-					success: (response: any) => {
-						
-						this.afterAjax($button);
-						
-						if (response.success === true) {
-							this.showSuccessAlert(response.data);
-						}
-						else {
-							this.showErrorAlert(response.data);
-						}
-						
+		.on('click', '.addon-key button', ( evt: JQueryEventObject ) => {
+
+			evt.preventDefault();
+
+			const $button: JQuery = $( evt.currentTarget ),
+			      key: string     = $button.siblings( 'input' ).val();
+
+			// If no key is present, show the error directly
+			if ( ! key ) {
+				this.showErrorAlert( this.settings.get( 'invalidKey' ) );
+				return false;
+			}
+
+			// Ask the user to confirm the deactivation
+			if ( $button.hasClass( 'deactivate-key' ) ) {
+
+				Swal.fire( {
+					title            : this.settings.get( 'limitedDeactivations' ),
+					html             : this.settings.get( 'allowedDeactivations' ),
+					icon             : 'warning',
+					confirmButtonText: this.settings.get( 'continue' ),
+					cancelButtonText : this.settings.get( 'cancel' ),
+					showCancelButton : true,
+				} ).then( ( result: SweetAlertResult ) => {
+
+					if ( result.isConfirmed ) {
+						this.requestLicenseChange( $button, key );
 					}
-				});
-				
-			})
-			
-			// Show the key fields.
-			.on('click', '.show-key', (evt: JQueryEventObject) => {
-				$(evt.currentTarget).closest('.theme').find('.addon-key').slideToggle('fast');
-			});
+
+				} );
+
+			}
+			else {
+				this.requestLicenseChange( $button, key );
+			}
+
+		})
+
+		// Install addon button.
+		.on( 'click', '.install-addon', ( evt: JQueryEventObject ) => {
+
+			const $button: JQuery     = $( evt.currentTarget ),
+			      $addonBlock: JQuery = $button.closest( '.theme' );
+
+			$.ajax( {
+				url       : window[ 'ajaxurl' ],
+				method    : 'POST',
+				dataType  : 'json',
+				data      : {
+					token : this.$addonsList.data( 'nonce' ),
+					action: 'atum_install_addon',
+					addon : $addonBlock.data( 'addon' ),
+					slug  : $addonBlock.data( 'addon-slug' ),
+					key   : $addonBlock.find( '.addon-key input' ).val(),
+				},
+				beforeSend: () => {
+					this.beforeAjax( $button );
+				},
+				success   : ( response: any ) => {
+
+					this.afterAjax( $button );
+
+					if ( response.success === true ) {
+						this.showSuccessAlert( response.data );
+					}
+					else {
+						this.showErrorAlert( response.data );
+					}
+
+				},
+			} );
+
+		})
+
+		// Show the key fields.
+		.on( 'click', '.show-key', ( evt: JQueryEventObject ) => {
+			$( evt.currentTarget ).closest( '.theme' ).find( '.addon-key' ).slideToggle( 'fast' );
+		} );
 		
 	}
 	
@@ -133,17 +136,17 @@ export default class AddonsPage {
 					
 					case 'activate':
 						
-						this.swal({
+						Swal.fire({
 							title            : this.settings.get('activation'),
 							html             : response.data,
-							type             : 'info',
+							icon             : 'info',
 							showCancelButton : true,
 							showLoaderOnConfirm: true,
 							confirmButtonText: this.settings.get('activate'),
 							allowOutsideClick: false,
 							preConfirm: (): Promise<any> => {
 								
-								return new Promise( (resolve: Function, reject: Function) => {
+								return new Promise( ( resolve: Function, reject: Function ) => {
 									
 									$.ajax({
 										url     : window['ajaxurl'],
@@ -157,23 +160,26 @@ export default class AddonsPage {
 										},
 										success : (response: any) => {
 											
-											if (response.success === true) {
-												resolve();
+											if (response.success !== true) {
+												Swal.showValidationMessage(response.data);
 											}
-											else {
-												reject(response.data);
-											}
-											
+
+											resolve();
+
 										}
 									});
 									
 								});
 								
 							}
-						}).then( () => {
-							this.showSuccessAlert( this.settings.get('addonActivated'), this.settings.get('activated') );
 						})
-						.catch(this.swal.noop);
+						.then( ( result: SweetAlertResult ) => {
+
+							if ( result.isConfirmed ) {
+								this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
+							}
+
+						});
 						
 						break;
 					
@@ -195,15 +201,14 @@ export default class AddonsPage {
 		if (!title) {
 			title = this.settings.get('success');
 		}
-		
-		this.swal({
+
+		Swal.fire( {
 			title            : title,
 			html             : message,
-			type             : 'success',
-			confirmButtonText: this.settings.get('ok')
-		}).then( () => {
-			location.reload();
-		});
+			icon             : 'success',
+			confirmButtonText: this.settings.get( 'ok' ),
+		} )
+		.then( () => location.reload() );
 		
 	}
 	
@@ -213,13 +218,13 @@ export default class AddonsPage {
 	 * @param string message
 	 */
 	showErrorAlert(message: string) {
-		
-		this.swal({
-			title            : this.settings.get('error'),
+
+		Swal.fire( {
+			title            : this.settings.get( 'error' ),
 			html             : message,
-			type             : 'error',
-			confirmButtonText: this.settings.get('ok')
-		});
+			icon             : 'error',
+			confirmButtonText: this.settings.get( 'ok' ),
+		} );
 		
 	}
 	

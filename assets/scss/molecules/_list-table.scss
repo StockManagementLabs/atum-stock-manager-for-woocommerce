@@ -2781,14 +2781,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 // Filter Range Dates Modal
 .filter-range-dates-modal {
-	height: 200px;
 	min-height: 200px !important;
-	//overflow: hidden;
-	overflow-y: unset;
-	overflow-x: unset;
+
 	.swal2-title {
-		text-align: left;
+		justify-content: flex-start;
 		line-height: 1;
+		flex-wrap: wrap;
 		
 		.title {
 			font-size: 26px;
@@ -2796,25 +2794,25 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			color:  var(--blue-dark);
 			margin: 0;
 		}
+		
 		.sub-title {
 			font-size: 15px;
 			color: var(--gray-500);
 			font-weight: 400;
+			margin-top: 4px;
 		}
 	}
-	.swal2-content {
+	
+	.swal2-html-container {
 		display: flex !important;
-		justify-content: center;
+		justify-content: space-evenly;
 		align-items: flex-end;
 		
 		a {
-			
 			color: var(--primary) !important;
 			
 			&:hover {
-				
 				color: var(--wp-link-hover);
-				
 			}
 		}
 		

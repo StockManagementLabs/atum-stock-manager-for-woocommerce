@@ -8,12 +8,13 @@ import ListTable from './_list-table';
 import Router from './_router';
 import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
+import ShowFilters from './_show-filters';
+import Swal from 'sweetalert2';
 import { Utils } from '../../utils/_utils';
-import showFilters from './_show-filters';
 
 export default class Filters {
 	
-	showFilters: showFilters;
+	showFilters: ShowFilters;
 	
 	constructor(
 		private settings: Settings,
@@ -176,7 +177,7 @@ export default class Filters {
 			
 			.on('atum-table-updated', () => this.addDateSelectorFilter());
 		
-		this.showFilters = new showFilters( this.globals.$atumList, this.settings);
+		this.showFilters = new ShowFilters( this.globals.$atumList, this.settings);
 		
 		//
 		// Add date selector filter.
@@ -289,11 +290,12 @@ export default class Filters {
 		
 			if ( $.inArray( $select.val(), linkedFilters ) > -1 ) {
 				
-				const popupClass: string = 'filter-range-dates-modal',
-				      swal: any          = window['swal'];
+				const popupClass: string = 'filter-range-dates-modal';
 				
-				swal({
-					customClass    : popupClass,
+				Swal.fire({
+					customClass    : {
+						popup: popupClass
+					},
 					width          : 440,
 					showCloseButton: true,
 					title          : `<h1 class="title">${ this.settings.get('setTimeWindow') }</h1><span class="sub-title">${ this.settings.get('selectDateRange') }</span>`,
@@ -309,7 +311,7 @@ export default class Filters {
 						<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
 					`,
 					showConfirmButton: false,
-					onOpen           : () => {
+					didOpen           : () => {
 
 						const $popup: JQuery = $( '.' + popupClass );
 						
@@ -321,23 +323,22 @@ export default class Filters {
 							this.globals.filterData['date_to'] = $popup.find( '.date_to' ).val();
 							this.keyUp( evt, true );
 							$select.val('');
-							swal.close();
+							Swal.close();
 						});
 
 						$popup.find( '.swal2-close' ).click( () => $popup.find( '.date_to, .date_from' ).val( '' ) );
 					
 					},
-					onClose: () => {
-						
+					willClose: () => {
+
 						if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
-							this.keyUp( evt, true );
+							//this.keyUp( evt, true );
 							$select.val('');
 						}
-						
+
 					},
-					
-				})
-				.catch( swal.noop );
+
+				});
 				
 			}
 			

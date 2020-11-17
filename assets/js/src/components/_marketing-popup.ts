@@ -3,6 +3,7 @@
    ======================================= */
 
 import Settings from '../config/_settings';
+import Swal from 'sweetalert2';
 
 // Interfaces.
 interface MPopupText {
@@ -46,8 +47,6 @@ interface MPopupSettings {
 
 
 export default class MarketingPopup {
-	
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings
@@ -112,16 +111,18 @@ export default class MarketingPopup {
 						} );
 					}
 					
-					this.swal({
+					Swal.fire({
 						width             : 520,
 						padding           : null,
-						customClass       : 'marketing-popup',
+						customClass       : {
+							container: 'marketing-popup'
+						},
 						background        : popupSettings.background,
 						showCloseButton   : true,
 						showConfirmButton : false,
 						html              : logo + title + description + buttons + footerNotice,
 						imageUrl          : imageTopLeft,
-					}).catch(this.swal.noop);
+					});
 					
 					// Redirect to button url
 					$('.popup-button').on('click', (evt: JQueryEventObject) => {

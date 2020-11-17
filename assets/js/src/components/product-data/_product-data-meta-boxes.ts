@@ -5,12 +5,12 @@
 import { ButtonGroup } from '../_button-group';
 import EnhancedSelect from '../_enhanced-select';
 import Settings from '../../config/_settings';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { Switcher } from '../_switcher';
 
 export default class ProductDataMetaBoxes {
 	
 	$productDataMetaBox: JQuery;
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings
@@ -43,14 +43,14 @@ export default class ProductDataMetaBoxes {
 		
 		// Run scripts for all the variations at once.
 		$('.product-tab-runner').find('.run-script').click( (evt: JQueryEventObject) => {
+
+			const $button: JQuery = $( evt.currentTarget ),
+			      value: string   = $button.siblings( 'select' ).val();
 			
-			const $button: JQuery = $(evt.currentTarget),
-			      value: string   = $button.siblings('select').val();
-			
-			this.swal({
+			Swal.fire({
 				title              : this.settings.get('areYouSure'),
 				text               : $button.data('confirm').replace('%s', `"${ value }"`),
-				type               : 'warning',
+				icon               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('continue'),
 				cancelButtonText   : this.settings.get('cancel'),
@@ -70,14 +70,13 @@ export default class ProductDataMetaBoxes {
 							},
 							method  : 'POST',
 							dataType: 'json',
-							success : (response: any) => {
+							success : ( response: any ) => {
 								
-								if (typeof response === 'object' && response.success === true) {
-									resolve( response.data );
+								if (typeof response !== 'object' || response.success !== true) {
+									Swal.showValidationMessage( response.data );
 								}
-								else {
-									reject( response.data );
-								}
+
+								resolve( response.data );
 								
 							}
 						});
@@ -85,21 +84,22 @@ export default class ProductDataMetaBoxes {
 					});
 					
 				},
-				allowOutsideClick  : (): boolean => !this.swal.isLoading()
+				allowOutsideClick  : (): boolean => !Swal.isLoading()
 			})
-			.then( (result: string) => {
+			.then( ( result: SweetAlertResult ) => {
+
+				if ( result.isConfirmed ) {
+
+					Swal.fire( {
+						icon : 'success',
+						title: this.settings.get( 'success' ),
+						text : result.value
+					} )
+					.then( () => location.reload() );
+
+				}
 				
-				this.swal({
-					type : 'success',
-					title: this.settings.get('success'),
-					text : result
-				})
-				.then( () => {
-					location.reload();
-				});
-				
-			})
-			.catch(this.swal.noop);
+			});
 			
 		});
 		

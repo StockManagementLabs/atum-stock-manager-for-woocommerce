@@ -8,6 +8,7 @@ import Settings from '../../config/_settings';
 import SalesStatsWidget from './widgets/_sales-stats';
 import StatisticsWidget from './widgets/_statistics';
 import StockControlWidget from './widgets/_stock-control';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import VideosWidget from './widgets/_videos';
 
@@ -17,7 +18,6 @@ export default class Dashboard {
 	$widgetsContainer: JQuery;
 	$addWidgetModalContent: JQuery;
 	grid: any;
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings,
@@ -125,23 +125,24 @@ export default class Dashboard {
 		
 		// "Add more widgets" popup.
 		$('.add-dash-widget').click( () => {
-			
-			this.swal({
-				title            : this.settings.get('availableWidgets'),
+
+			Swal.fire( {
+				title            : this.settings.get( 'availableWidgets' ),
 				html             : this.$addWidgetModalContent.html(),
 				showConfirmButton: false,
 				showCloseButton  : true,
-				customClass      : 'add-widget-popup',
-				width            : '620px',
-				onOpen           : (elem: any) => {
-					
-					// Wait until the show animation is complete
-					setTimeout( () => NiceScroll.addScrollBars($(elem)), 300 );
-					
+				customClass      : {
+					container: 'add-widget-popup',
 				},
-				onClose          : (elem: any) => NiceScroll.removeScrollBars($(elem))
-			})
-			.catch(this.swal.noop);
+				width            : '620px',
+				didOpen          : ( elem: any ) => {
+
+					// Wait until the show animation is complete
+					setTimeout( () => NiceScroll.addScrollBars( $( elem ) ), 300 );
+
+				},
+				willClose        : ( elem: any ) => NiceScroll.removeScrollBars( $( elem ) ),
+			} );
 			
 		});
 		
@@ -183,10 +184,10 @@ export default class Dashboard {
 		const $restoreDashDefaults: JQuery = $('.restore-defaults');
 		$restoreDashDefaults.click( () => {
 			
-			this.swal({
+			Swal.fire({
 				title              : this.settings.get('areYouSure'),
 				text               : this.settings.get('defaultsWillRestore'),
-				type               : 'warning',
+				icon               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get('continue'),
 				cancelButtonText   : this.settings.get('cancel'),
@@ -213,17 +214,20 @@ export default class Dashboard {
 								this.saveWidgetsLayout();
 								resolve();
 							},
-							error: () => {
-								reject();
-							}
+							error: () => reject()
 						});
 						
 					});
 					
 				}
 			})
-			.then( () => location.reload() )
-			.catch(this.swal.noop);
+			.then( ( result: SweetAlertResult ) => {
+
+				if ( result.isConfirmed ) {
+					location.reload();
+				}
+
+			} );
 			
 		});
 		

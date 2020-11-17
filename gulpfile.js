@@ -134,8 +134,9 @@ gulp.task('js::atum', function () {
 			},
 			
 			externals: {
-				'jquery': 'jQuery',
-				'$'     : 'window.$'
+				'jquery'       : 'jQuery',
+				'$'            : 'window.$',
+				'sweetalert2'  : 'Swal'
 			},
 			
 			module: {

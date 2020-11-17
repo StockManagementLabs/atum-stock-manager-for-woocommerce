@@ -10,6 +10,7 @@ import OrdersBulkActions from './_bulk-actions';
 import Tooltip from '../_tooltip';
 import Settings from '../../config/_settings';
 import { StupidTable } from '../_stupid-table';
+import Swal from 'sweetalert2';
 import { Switcher } from '../_switcher';
 import { Utils } from '../../utils/_utils';
 import { WPHooks } from '../../interfaces/wp.hooks';
@@ -20,7 +21,6 @@ export default class AtumOrders {
 	$itemsBlocker: JQuery;
 	areItemsSelectable: boolean;
 	isEditable: string;
-	swal: any = window[ 'swal' ];
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
@@ -266,12 +266,12 @@ export default class AtumOrders {
 
 	}
 
-	showAlert( type: string, title: string, message: string ) {
+	showAlert( type: 'warning'|'error'|'success'|'info'|'question', title: string, message: string ) {
 
-		this.swal( {
+		Swal.fire( {
 			title            : title,
 			text             : message,
-			type             : type,
+			icon             : type,
 			confirmButtonText: this.settings.get( 'ok' ),
 		} );
 
@@ -408,9 +408,9 @@ export default class AtumOrders {
 			return false;
 		}
 
-		this.swal( {
+		Swal.fire( {
 			text             : this.settings.get( 'import_order_items' ),
-			type             : 'warning',
+			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'yes' ),
 			cancelButtonText : this.settings.get( 'no' ),
@@ -430,7 +430,7 @@ export default class AtumOrders {
 				} );
 
 			},
-		} ).catch( this.swal.noop );
+		} );
 
 	}
 	

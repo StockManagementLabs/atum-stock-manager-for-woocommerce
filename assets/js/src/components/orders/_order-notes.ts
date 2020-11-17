@@ -4,12 +4,12 @@
 
 import { Blocker } from '../_blocker';
 import Settings from '../../config/_settings';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 export default class OrderNotes {
 	
 	$container: JQuery;
 	$textarea: JQuery;
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings
@@ -54,40 +54,45 @@ export default class OrderNotes {
 		
 	}
 	
-	deleteNote(evt: JQueryEventObject) {
+	deleteNote( evt: JQueryEventObject ) {
 		
 		evt.preventDefault();
-		
-		const $note: JQuery = $(evt.currentTarget).closest('li.note');
-		
-		this.swal({
-			text              : this.settings.get('delete_note'),
-			type               : 'warning',
-			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('continue'),
-			cancelButtonText   : this.settings.get('cancel'),
-			reverseButtons     : true,
-			allowOutsideClick  : false,
-			preConfirm         : (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
-					Blocker.block($note);
-					
+
+		const $note: JQuery = $( evt.currentTarget ).closest( 'li.note' );
+
+		Swal.fire( {
+			text             : this.settings.get( 'delete_note' ),
+			icon             : 'warning',
+			showCancelButton : true,
+			confirmButtonText: this.settings.get( 'continue' ),
+			cancelButtonText : this.settings.get( 'cancel' ),
+			reverseButtons   : true,
+			allowOutsideClick: false,
+			preConfirm       : (): Promise<any> => {
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
+					Blocker.block( $note );
+
 					const data: any = {
 						action  : 'atum_order_delete_note',
-						note_id : $note.attr('rel'),
-						security: this.settings.get('delete_note_nonce'),
+						note_id : $note.attr( 'rel' ),
+						security: this.settings.get( 'delete_note_nonce' ),
 					};
-					
-					$.post( window['ajaxurl'], data, () => resolve() );
-					
-				});
-				
+
+					$.post( window[ 'ajaxurl' ], data, () => resolve() );
+
+				} );
+
+			},
+		} )
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+				$note.remove();
 			}
-		})
-		.then( () => $note.remove() )
-		.catch(this.swal.noop);
+
+		} );
 		
 	}
 	

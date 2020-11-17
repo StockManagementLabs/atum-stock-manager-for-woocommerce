@@ -1532,7 +1532,7 @@ final class Helpers {
 		global $is_IE;
 		// ES6 Polyfill (only for IE<12). Required by SweetAlert2.
 		if ( $is_IE ) {
-			wp_register_script( 'es6-promise', 'https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js', [], ATUM_VERSION, TRUE );
+			wp_register_script( 'es6-promise', 'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js', [], ATUM_VERSION, TRUE );
 		}
 	}
 

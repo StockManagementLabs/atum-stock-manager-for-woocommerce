@@ -8,6 +8,7 @@ import { Blocker } from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Settings from '../../config/_settings';
+import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import { Utils } from '../../utils/_utils';
 
@@ -411,12 +412,10 @@ export default class ListTable {
 			// Check whether to show the first edit popup.
 			if ( typeof this.settings.get( 'firstEditKey' ) !== 'undefined' ) {
 
-				const swal: any = window[ 'swal' ];
-
-				swal( {
+				Swal.fire( {
 					title             : this.settings.get( 'important' ),
 					text              : this.settings.get( 'preventLossNotice' ),
-					type              : 'warning',
+					icon              : 'warning',
 					confirmButtonText : this.settings.get( 'ok' ),
 					confirmButtonColor: 'var(--primary)',
 				} );

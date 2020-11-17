@@ -5,12 +5,12 @@
 import AtumOrders from './_atum-orders';
 import { Blocker } from '../_blocker';
 import Settings from '../../config/_settings';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { Utils } from '../../utils/_utils';
 import { WPHooks } from '../../interfaces/wp.hooks';
 
 export default class AtumOrderItems {
-	
-	swal: any = window['swal'];
+
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -154,9 +154,9 @@ export default class AtumOrderItems {
 
 		let $item: JQuery = $( evt.currentTarget );
 
-		this.swal( {
+		Swal.fire( {
 			text               : this.settings.get( 'delete_tax_notice' ),
-			type               : 'warning',
+			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
 			cancelButtonText   : this.settings.get( 'cancel' ),
@@ -177,7 +177,7 @@ export default class AtumOrderItems {
 				} );
 
 			},
-		} ).catch( this.swal.noop );
+		} );
 
 	}
 
@@ -185,9 +185,9 @@ export default class AtumOrderItems {
 
 		evt.preventDefault();
 
-		this.swal( {
+		Swal.fire( {
 			text               : this.settings.get( 'calc_totals' ),
-			type               : 'warning',
+			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
 			cancelButtonText   : this.settings.get( 'cancel' ),
@@ -208,7 +208,7 @@ export default class AtumOrderItems {
 				} );
 
 			},
-		} ).catch( this.swal.noop );
+		} );
 
 	}
 
@@ -234,9 +234,9 @@ export default class AtumOrderItems {
 		    atumOrderItemId: number = $item.data( 'atum_order_item_id' ),
 		    $container: JQuery      = $item.closest( '#atum_order_items' );
 
-		this.swal( {
+		Swal.fire( {
 			text               : this.settings.get( 'remove_item_notice' ),
-			type               : 'warning',
+			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
 			cancelButtonText   : this.settings.get( 'cancel' ),
@@ -258,20 +258,22 @@ export default class AtumOrderItems {
 							security           : this.settings.get( 'atum_order_item_nonce' ),
 						},
 						type   : 'POST',
-						success: () => {
-							resolve();
-						},
+						success: () => resolve(),
 					} );
 
 				} );
 			},
-		} ).then( () => {
+		} )
+		.then( ( result: SweetAlertResult ) => {
 
-			$item.remove();
-			$container.trigger( 'atum_item_line_removed', [ atumOrderItemId ] );
+			if ( result.isConfirmed ) {
+				$item.remove();
+				$container.trigger( 'atum_item_line_removed', [ atumOrderItemId ] );
+			}
+
 			Blocker.unblock( this.$container );
 
-		} ).catch( this.swal.noop );
+		} );
 
 	}
 
@@ -316,9 +318,9 @@ export default class AtumOrderItems {
 
 		evt.preventDefault();
 
-		this.swal( {
+		Swal.fire( {
 			text             : this.settings.get( 'remove_item_meta' ),
-			type             : 'warning',
+			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'continue' ),
 			cancelButtonText : this.settings.get( 'cancel' ),
@@ -336,7 +338,7 @@ export default class AtumOrderItems {
 				} );
 
 			},
-		} ).catch( this.swal.noop );
+		} );
 
 	}
 
@@ -387,9 +389,9 @@ export default class AtumOrderItems {
 
 		data[ this.settings.get( 'purchase_price_field' ) ] = purchasePrice;
 
-		this.swal( {
+		Swal.fire( {
 			html               : this.settings.get( 'confirm_purchase_price' ).replace( '{{number}}', `<strong>${ purchasePriceTxt }</strong>` ),
-			type               : 'question',
+			icon               : 'question',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
 			cancelButtonText   : this.settings.get( 'cancel' ),
@@ -408,11 +410,10 @@ export default class AtumOrderItems {
 						success : ( response: any ) => {
 
 							if ( response.success === false ) {
-								reject( response.data );
+								Swal.showValidationMessage( response.data );
 							}
-							else {
-								resolve();
-							}
+
+							resolve();
 
 						},
 					} );
@@ -420,22 +421,27 @@ export default class AtumOrderItems {
 				} );
 
 			},
-		} ).then( () => {
+		} )
+		.then( ( result: SweetAlertResult ) => {
 
-			$lineSubTotal.val( $lineTotal.val() );
-			$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
+			if ( result.isConfirmed ) {
 
-			this.swal( {
-				title            : this.settings.get( 'done' ),
-				text             : this.settings.get( 'purchase_price_changed' ),
-				type             : 'success',
-				confirmButtonText: this.settings.get( 'ok' ),
-			} );
+				$lineSubTotal.val( $lineTotal.val() );
+				$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
 
-		} ).catch( this.swal.noop );
-		
+				Swal.fire( {
+					title            : this.settings.get( 'done' ),
+					text             : this.settings.get( 'purchase_price_changed' ),
+					icon             : 'success',
+					confirmButtonText: this.settings.get( 'ok' ),
+				} );
+
+			}
+
+		} );
+
 	}
-	
+
 	/**
 	 * Calc a base price taxes. Based on WC_Tax::calc_exclusive_tax as we have a price without applied taxes.
 	 *

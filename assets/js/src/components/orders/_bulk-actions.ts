@@ -3,13 +3,13 @@
    ======================================= */
 
 import AtumOrders from './_atum-orders';
-import Settings from '../../config/_settings';
 import {Blocker} from '../_blocker';
+import Settings from '../../config/_settings';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 export default class OrdersBulkActions {
 	
 	askRemoval: boolean = true;
-	swal: any = window['swal'];
 	
 	constructor(
 		private settings: Settings,
@@ -37,9 +37,9 @@ export default class OrdersBulkActions {
 			
 			if (this.askRemoval === true) {
 				
-				this.swal({
+				Swal.fire({
 					text               : this.settings.get('remove_item_notice'),
-					type               : 'warning',
+					icon               : 'warning',
 					showCancelButton   : true,
 					confirmButtonText  : this.settings.get('continue'),
 					cancelButtonText   : this.settings.get('cancel'),
@@ -67,24 +67,24 @@ export default class OrdersBulkActions {
 						});
 						
 					}
-				}).catch(this.swal.noop);
+				});
 				
 			}
 			else {
 				
 				deferred = this.bulkDeleteItems($rows);
 				this.askRemoval = true;
-				
-				if (deferred.length) {
-					
-					$.when.apply($, deferred).done( () => {
-						
+
+				if ( deferred.length ) {
+
+					$.when.apply( $, deferred ).done( () => {
+
 						this.atumOrders.reloadItems( () => {
-							this.swal.close();
-						});
-						
-					});
-					
+							Swal.close();
+						} );
+
+					} );
+
 				}
 				
 			}
@@ -138,10 +138,10 @@ export default class OrdersBulkActions {
 		
 		Blocker.block(this.$container);
 		
-		this.swal({
+		Swal.fire({
 			title              : this.settings.get('are_you_sure'),
 			text               : this.settings.get( action === 'increase' ?  'increase_stock_msg' : 'decrease_stock_msg' ),
-			type               : 'warning',
+			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get('continue'),
 			cancelButtonText   : this.settings.get('cancel'),
@@ -150,22 +150,22 @@ export default class OrdersBulkActions {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 				
-				return new Promise( (resolve: Function, reject: Function) => {
+				return new Promise( ( resolve: Function, reject: Function ) => {
 
-                    let $rows: JQuery = $('table.atum_order_items').find('tr.selected'),
-                        quantities: any = {},
-                        itemIds: number[] = [];
+					let $rows: JQuery     = $( 'table.atum_order_items' ).find( 'tr.selected' ),
+					    quantities: any   = {},
+					    itemIds: number[] = [];
 
-					$rows.each( (index: number, elem: Element) => {
-						
-						const $elem: JQuery = $(elem);
+					$rows.each( ( index: number, elem: Element ) => {
 
-						itemIds.push(parseInt($elem.data('atum_order_item_id'), 10));
-						if ($elem.find('input.quantity').length) {
-							quantities[ $elem.data('atum_order_item_id') ] = $elem.find('input.quantity').val();
+						const $elem: JQuery = $( elem );
+
+						itemIds.push( parseInt( $elem.data( 'atum_order_item_id' ), 10 ) );
+						if ( $elem.find( 'input.quantity' ).length ) {
+							quantities[ $elem.data( 'atum_order_item_id' ) ] = $elem.find( 'input.quantity' ).val();
 						}
 
-					});
+					} );
 
 					$.ajax({
 						url     : window['ajaxurl'],
@@ -178,35 +178,37 @@ export default class OrdersBulkActions {
 						},
 						method  : 'POST',
 						dataType: 'json',
-						success : (response: any) => {
+						success : ( response: any ) => {
 							
-							if (response.success === true) {
-								resolve();
+							if (response.success !== true) {
+								Swal.showValidationMessage( response.data );
 							}
-							else {
-								reject(response.data);
-							}
-							
+
+							resolve();
+
 						}
 					});
 					
 				});
 				
 			}
-		}).then( () => {
-			
-			this.swal({
-				title            : this.settings.get('done'),
-				text             : this.settings.get( action === 'increase' ? 'stock_increased' : 'stock_decreased' ),
-				type             : 'success',
-				confirmButtonText: this.settings.get('ok'),
-			});
+		})
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+
+				Swal.fire( {
+					title            : this.settings.get( 'done' ),
+					text             : this.settings.get( action === 'increase' ? 'stock_increased' : 'stock_decreased' ),
+					icon             : 'success',
+					confirmButtonText: this.settings.get( 'ok' ),
+				} );
+
+			}
 			
 			Blocker.unblock(this.$container);
 			
-		}, (dismiss: string) => {
-			Blocker.unblock(this.$container);
-		});
+		} );
 		
 	}
 	

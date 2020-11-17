@@ -5,11 +5,10 @@
 import Globals from './_globals';
 import ListTable from './_list-table';
 import Settings from '../../config/_settings';
+import Swal from 'sweetalert2';
 import { Utils } from '../../utils/_utils';
 
 export default class BulkActions {
-
-	swal: any = window[ 'swal' ];
 	
 	constructor(
 		private settings: Settings,
@@ -28,10 +27,10 @@ export default class BulkActions {
 
 				if ( ! this.globals.$atumList.find( '.check-column input:checked' ).length ) {
 
-					this.swal( {
+					Swal.fire( {
 						title             : this.settings.get( 'noItemsSelected' ),
 						text              : this.settings.get( 'selectItems' ),
-						type              : 'info',
+						icon              : 'info',
 						confirmButtonText : this.settings.get( 'ok' ),
 						confirmButtonColor: 'var(--primary)',
 					} );
