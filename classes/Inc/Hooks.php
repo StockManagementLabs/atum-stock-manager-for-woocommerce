@@ -18,6 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumQueues;
 use Atum\Settings\Settings;
 
+
 class Hooks {
 
 	/**
@@ -26,7 +27,14 @@ class Hooks {
 	 * @var Hooks
 	 */
 	private static $instance;
-
+	/**
+	 * Store current out of stock threshold
+	 *
+	 * @since 1.4.15
+	 *
+	 * @var int
+	 */
+	public $current_out_stock_threshold = NULL;
 	/**
 	 * WoCommerce shortcode product loops types.
 	 *
@@ -45,16 +53,6 @@ class Hooks {
 		'featured_products',
 		'product_attribute',
 	];
-
-	/**
-	 * Store current out of stock threshold
-	 *
-	 * @since 1.4.15
-	 *
-	 * @var int
-	 */
-	public $current_out_stock_threshold = NULL;
-
 	/**
 	 * Store the products where the out of stock threshold was already processed
 	 *
@@ -62,6 +60,23 @@ class Hooks {
 	 */
 	private $processed_oost_products = [];
 
+	/**
+	 * Store the products that need to have their calculated properties updated.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @var array
+	 */
+	private $deferred_calc_props_products = [];
+
+	/**
+	 * Store the products that need to have their sales calculated properties updated.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @var array
+	 */
+	private $deferred_sales_calc_props = [];
 
 	/**
 	 * Hooks singleton constructor
@@ -96,7 +111,10 @@ class Hooks {
 
 		// Add the location column to the items table in WC orders.
 		add_action( 'woocommerce_admin_order_item_headers', array( $this, 'wc_order_add_location_column_header' ) );
-		add_action( 'woocommerce_admin_order_item_values', array( $this, 'wc_order_add_location_column_value' ), 10, 3 );
+		add_action( 'woocommerce_admin_order_item_values', array(
+			$this,
+			'wc_order_add_location_column_value',
+		), 10, 3 );
 
 		// Firefox fix to not preserve the dropdown.
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
@@ -114,7 +132,10 @@ class Hooks {
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
 
 		// Save the orders-related data every time order items change.
-		add_action( 'woocommerce_ajax_order_items_added', array( $this, 'save_added_order_items_props' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_ajax_order_items_added', array(
+			$this,
+			'save_added_order_items_props',
+		), PHP_INT_MAX, 2 );
 		add_action( 'woocommerce_before_delete_order_item', array( $this, 'before_delete_order_item' ), PHP_INT_MAX );
 		add_action( 'woocommerce_delete_order_item', array( $this, 'after_delete_order_item' ), PHP_INT_MAX );
 
@@ -176,11 +197,20 @@ class Hooks {
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
 		// Update the sales-related calculated props when saving an order or changing the status.
-		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_after_order_object_save', array(
+			$this,
+			'update_atum_sales_calc_props_after_saving',
+		), PHP_INT_MAX, 2 );
 
 		// Update atum_stock_status and low_stock if needed.
-		add_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
-		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 9 ); // Before the AtumQueues trigger_async_action.
+		add_action( 'woocommerce_after_product_object_save', array(
+			$this,
+			'defer_update_atum_product_calc_props',
+		), PHP_INT_MAX, 2 );
+		add_action( 'shutdown', array(
+			$this,
+			'maybe_create_defer_update_async_action',
+		), 9 ); // Before the AtumQueues trigger_async_action.
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
@@ -189,6 +219,20 @@ class Hooks {
 			add_action( "woocommerce_shortcode_before_{$type}_loop", array( $this, 'allow_product_caching' ) );
 		}
 
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return Hooks instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**
@@ -207,14 +251,20 @@ class Hooks {
 			// Enqueue styles.
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array(
+				'switchery',
+				'sweetalert2',
+			), ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
 			// Enqueue scripts.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
-			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array(
+				'jquery',
+				'sweetalert2',
+			), ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
@@ -232,7 +282,7 @@ class Hooks {
 		}
 
 	}
-	
+
 	/**
 	 * Add set min quantities script to WC orders
 	 *
@@ -241,20 +291,20 @@ class Hooks {
 	 * @param \WC_Order $order
 	 */
 	public function wc_orders_min_qty( $order ) {
-		
+
 		$step = Helpers::get_input_step();
-		
+
 		?>
 		<script type="text/javascript">
-			jQuery(function ($) {
+			jQuery(function($) {
 				var $script = $('#tmpl-wc-modal-add-products');
-				
+
 				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
 					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>'));
-				
+
 			});
 		</script>
-		
+
 		<?php
 	}
 
@@ -263,8 +313,8 @@ class Hooks {
 	 *
 	 * @since 1.2.6
 	 *
-	 * @param string      $stock_html   The HTML markup for the stock status.
-	 * @param \WC_Product $the_product  The product that is currently checked.
+	 * @param string      $stock_html  The HTML markup for the stock status.
+	 * @param \WC_Product $the_product The product that is currently checked.
 	 *
 	 * @return string
 	 */
@@ -272,7 +322,10 @@ class Hooks {
 
 		if (
 			'yes' === Helpers::get_option( 'show_variations_stock', 'yes' ) &&
-			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE )
+			in_array( $the_product->get_type(), array_diff( Globals::get_inheritable_product_types(), [
+				'grouped',
+				'bundle',
+			] ), TRUE )
 		) {
 
 			// Get the variations within the variable.
@@ -280,12 +333,12 @@ class Hooks {
 			$managing_stock = $the_product->managing_stock();
 			$stock_status   = $managing_stock ? $the_product->get_stock_status() : 'outofstock';
 			$stock_html     = '';
-			
+
 			if ( ! empty( $variations ) ) {
-				
+
 				$stock_html = ' (';
 				foreach ( $variations as $variation_id ) {
-					
+
 					$variation_product = wc_get_product( $variation_id ); // We don't need to use ATUM models here.
 
 					if ( ! $variation_product instanceof \WC_Product ) {
@@ -295,7 +348,7 @@ class Hooks {
 					$variation_stock  = is_null( $variation_product->get_stock_quantity() ) ? 'X' : $variation_product->get_stock_quantity();
 					$variation_status = $variation_product->get_stock_status();
 					$style            = 'color:#a44';
-					
+
 					switch ( $variation_status ) {
 						case 'instock':
 							if ( ! $managing_stock ) {
@@ -310,12 +363,12 @@ class Hooks {
 							$style = 'color:#eaa600';
 							break;
 					}
-					
+
 					$stock_html .= sprintf( '<span style="%s">%s</span>, ', $style, $variation_stock );
-					
+
 				}
-				
-				$stock_html = substr( $stock_html, 0, -2 ) . ')';
+
+				$stock_html = substr( $stock_html, 0, - 2 ) . ')';
 			}
 
 			switch ( $stock_status ) {
@@ -332,7 +385,7 @@ class Hooks {
 					$stock_text = esc_attr__( 'Out of stock', ATUM_TEXT_DOMAIN );
 					break;
 			}
-			
+
 			$stock_html = "<mark class='$stock_status'>$stock_text</mark>" . $stock_html;
 
 		}
@@ -349,6 +402,7 @@ class Hooks {
 	 * @param \WC_Order $wc_order
 	 */
 	public function wc_order_add_location_column_header( $wc_order ) {
+
 		?>
 		<th class="item_location sortable" data-sort="string-ins"><?php esc_attr_e( 'Location', ATUM_TEXT_DOMAIN ); ?></th>
 		<?php
@@ -374,7 +428,8 @@ class Hooks {
 		}
 
 		?>
-		<td class="item_location"<?php if ($product) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
+		<td class="item_location"<?php if ( $product )
+			echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
 			<?php if ( $product ) : ?>
 				<div class="view"><?php echo esc_attr( $locations_list ) ?></div>
 			<?php else : ?>
@@ -389,7 +444,7 @@ class Hooks {
 	 *
 	 * @since 0.1.3
 	 *
-	 * @param \WC_Product $product    The product being changed.
+	 * @param \WC_Product $product The product being changed.
 	 */
 	public function record_out_of_stock_date( $product ) {
 
@@ -426,11 +481,12 @@ class Hooks {
 	 *
 	 * @since 0.1.5
 	 *
-	 * @param \WC_Product $product   The product.
+	 * @param \WC_Product $product The product.
 	 */
 	public function delete_transients( $product ) {
+
 		AtumCache::delete_transients();
-		
+
 	}
 
 	/**
@@ -444,7 +500,7 @@ class Hooks {
 
 		// Maybe allow decimals for WC products' stock quantity.
 		if ( Globals::get_stock_decimals() > 0 ) {
-			
+
 			// Add step value to the quantity field (WC default = 1).
 			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
@@ -456,7 +512,7 @@ class Hooks {
 
 			// Customise the "Add to Cart" message to allow decimals in quantities.
 			add_filter( 'wc_add_to_cart_message_html', array( $this, 'add_to_cart_message' ), 10, 2 );
-			
+
 			// Add custom decimal quantities to order add products.
 			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
@@ -475,11 +531,11 @@ class Hooks {
 	 * @return float|int
 	 */
 	public function stock_quantity_input_atts( $value, $product ) {
-		
+
 		if ( doing_filter( 'woocommerce_quantity_input_min' ) && 0 === $value ) {
 			return $value;
 		}
-		
+
 		return Helpers::get_input_step();
 	}
 
@@ -501,7 +557,7 @@ class Hooks {
 		foreach ( $products as $product_id => $qty ) {
 			/* translators: the product title */
 			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$count   += $qty;
+			$count    += $qty;
 		}
 
 		$titles = array_filter( $titles );
@@ -580,7 +636,7 @@ class Hooks {
 		return $dropdown;
 
 	}
-	
+
 	/**
 	 * Round the stock quantity according to the number of decimals specified in settings
 	 *
@@ -591,16 +647,16 @@ class Hooks {
 	 * @return float|int
 	 */
 	public function round_stock_quantity( $qty ) {
-		
+
 		if ( ! Globals::get_stock_decimals() ) {
 			return intval( $qty );
 		}
 		else {
 			return round( floatval( $qty ), Globals::get_stock_decimals() );
 		}
-		
+
 	}
-	
+
 	/**
 	 * Change the out of stock threshold if this->stock_threshold has value
 	 *
@@ -613,57 +669,10 @@ class Hooks {
 	 * @return mixed
 	 */
 	public function get_custom_out_stock_threshold( $pre, $option, $default ) {
+
 		return is_null( $this->current_out_stock_threshold ) ? $pre : $this->current_out_stock_threshold;
 	}
-	
-	/**
-	 * Change the stock threshold if current product has one set.
-	 * TODO: Maybe remove when hooks removed
-	 *
-	 * @since 1.4.15
-	 *
-	 * @param \WC_Product $product   The product.
-	 */
-	public function maybe_change_out_stock_threshold( $product ) {
-		
-		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 
-			// Ensure that is the product uses the ATUM models.
-			$product = Helpers::get_atum_product( $product );
-			
-			$this->current_out_stock_threshold = NULL;
-
-			// When the product is being created, no change is needed.
-			if ( ! $product instanceof \WC_Product ) {
-				return;
-			}
-
-			$product_id = $product->get_id();
-
-			// Do not process again the products that were already processed to avoid causing undending loops.
-			if ( in_array( $product_id, $this->processed_oost_products ) ) {
-				return;
-			}
-
-			$out_of_stock_threshold = $product->get_out_stock_threshold();
-
-			// Allow to be hooked externally.
-			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
-			
-			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
-
-				$this->processed_oost_products[] = $product_id;
-				
-				$this->current_out_stock_threshold = (int) $out_of_stock_threshold;
-				$this->add_stock_status_threshold();
-				$product->save();
-				$this->remove_stock_status_threshold();
-				
-			}
-			
-		}
-	}
-	
 	/**
 	 * Change the stock status if current variation has one set.
 	 * TODO: Maybe remove when hooks removed
@@ -697,9 +706,43 @@ class Hooks {
 			$this->add_stock_status_threshold();
 			$product->save();
 			$this->remove_stock_status_threshold();
-			
+
 		}
-		
+
+	}
+
+	/**
+	 * Add pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced.
+	 *
+	 * We don't need the parameter, so function can be called from various places.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $product_id
+	 */
+	public function add_stock_status_threshold( $product_id = 0 ) {
+
+		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array(
+			$this,
+			'get_custom_out_stock_threshold',
+		), 10, 3 );
+	}
+
+	/**
+	 * Remove pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced
+	 *
+	 * We don't need the parameter, so function can be called from various places.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $product_id
+	 */
+	public function remove_stock_status_threshold( $product_id = 0 ) {
+
+		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array(
+			$this,
+			'get_custom_out_stock_threshold',
+		) );
 	}
 
 	/**
@@ -717,33 +760,55 @@ class Hooks {
 		$this->maybe_change_out_stock_threshold( $product );
 
 	}
-	
+
 	/**
-	 * Add pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced.
+	 * Change the stock threshold if current product has one set.
+	 * TODO: Maybe remove when hooks removed
 	 *
-	 * We don't need the parameter, so function can be called from various places.
+	 * @since 1.4.15
 	 *
-	 * @since 1.5.0
-	 *
-	 * @param int $product_id
+	 * @param \WC_Product $product The product.
 	 */
-	public function add_stock_status_threshold( $product_id = 0 ) {
-		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_out_stock_threshold' ), 10, 3 );
+	public function maybe_change_out_stock_threshold( $product ) {
+
+		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
+
+			// Ensure that is the product uses the ATUM models.
+			$product = Helpers::get_atum_product( $product );
+
+			$this->current_out_stock_threshold = NULL;
+
+			// When the product is being created, no change is needed.
+			if ( ! $product instanceof \WC_Product ) {
+				return;
+			}
+
+			$product_id = $product->get_id();
+
+			// Do not process again the products that were already processed to avoid causing undending loops.
+			if ( in_array( $product_id, $this->processed_oost_products ) ) {
+				return;
+			}
+
+			$out_of_stock_threshold = $product->get_out_stock_threshold();
+
+			// Allow to be hooked externally.
+			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
+
+			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
+
+				$this->processed_oost_products[] = $product_id;
+
+				$this->current_out_stock_threshold = (int) $out_of_stock_threshold;
+				$this->add_stock_status_threshold();
+				$product->save();
+				$this->remove_stock_status_threshold();
+
+			}
+
+		}
 	}
-	
-	/**
-	 * Remove pre_option_woocommerce_notify_no_stock_amount filter after all order products stock is reduced
-	 *
-	 * We don't need the parameter, so function can be called from various places.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int $product_id
-	 */
-	public function remove_stock_status_threshold( $product_id = 0 ) {
-		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_out_stock_threshold' ) );
-	}
-	
+
 	/**
 	 * Show row meta on the plugin screen
 	 *
@@ -755,7 +820,7 @@ class Hooks {
 	 * @return array
 	 */
 	public function plugin_row_meta( $links, $file ) {
-		
+
 		if ( ATUM_BASENAME === $file ) {
 			$row_meta = array(
 				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
@@ -763,13 +828,13 @@ class Hooks {
 				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-free-plugin" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
 				'api_docs'        => '<a href="https://stockmanagementlabs.github.io/atum-rest-api-docs/" aria-label="' . esc_attr__( 'Read the ATUM REST API docs', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'API Docs', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
-			
+
 			return array_merge( $links, $row_meta );
 		}
-		
+
 		return $links;
 	}
-	
+
 	/**
 	 * Save WC Order's paid date meta if not set when changing the order status to Completed
 	 *
@@ -781,56 +846,15 @@ class Hooks {
 	 * @throws \WC_Data_Exception
 	 */
 	public function maybe_save_paid_date( $order_id, $order ) {
-		
+
 		$paid_date = $order->get_date_paid();
-		
+
 		if ( ! $paid_date ) {
-			
+
 			$order_mod = wc_get_order( $order_id );
 			$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$order_mod->set_date_paid( $timestamp );
 			$order_mod->save();
-		}
-		
-	}
-
-	/**
-	 * Save the order-related ATUM props every time WC order items are saved
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param int   $order_id
-	 * @param array $item_keys
-	 */
-	public function save_order_items_props( $order_id, $item_keys = NULL ) {
-
-		$order = wc_get_order( $order_id );
-
-		if ( ! $order instanceof \WC_Order ) {
-			return;
-		}
-
-		$items = $order->get_items();
-
-		if ( ! empty( $items ) ) {
-
-			foreach ( $items as $item ) {
-
-				/**
-				 * Variable definition
-				 *
-				 * @var \WC_Order_Item_Product $item
-				 */
-				$product_id = $item->get_variation_id() ?: $item->get_product_id();
-				$product    = Helpers::get_atum_product( $product_id );
-
-				if ( $product instanceof \WC_Product ) {
-					Helpers::update_atum_sales_calc_props( $product );
-					do_action( 'atum/after_save_order_item_props', $item, $order_id );
-				}
-
-			}
-
 		}
 
 	}
@@ -890,7 +914,7 @@ class Hooks {
 			do_action( 'atum/before_delete_order_item', $order_item_id );
 
 		}
-		
+
 	}
 
 	/**
@@ -929,6 +953,47 @@ class Hooks {
 		}
 
 		$this->save_order_items_props( $order_id );
+
+	}
+
+	/**
+	 * Save the order-related ATUM props every time WC order items are saved
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param int   $order_id
+	 * @param array $item_keys
+	 */
+	public function save_order_items_props( $order_id, $item_keys = NULL ) {
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+
+		$items = $order->get_items();
+
+		if ( ! empty( $items ) ) {
+
+			foreach ( $items as $item ) {
+
+				/**
+				 * Variable definition
+				 *
+				 * @var \WC_Order_Item_Product $item
+				 */
+				$product_id = $item->get_variation_id() ?: $item->get_product_id();
+				$product    = Helpers::get_atum_product( $product_id );
+
+				if ( $product instanceof \WC_Product ) {
+					Helpers::update_atum_sales_calc_props( $product );
+					do_action( 'atum/after_save_order_item_props', $item, $order_id );
+				}
+
+			}
+
+		}
 
 	}
 
@@ -988,9 +1053,26 @@ class Hooks {
 			 */
 			$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
 
-			Helpers::defer_update_atum_product_calc_props( $product_id );
+			$this->defer_update_atum_sales_calc_props( $product_id );
 
 		}
+
+	}
+
+	/**
+	 * Update ATUM product data calculated sales props.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param \WC_Product|int $product
+	 */
+	public function defer_update_atum_sales_calc_props( $product ) {
+
+		if ( $product instanceof \WC_Product ) {
+			$product = $product->get_id();
+		}
+
+		$this->deferred_sales_calc_props[] = $product;
 
 	}
 
@@ -1004,7 +1086,12 @@ class Hooks {
 	 */
 	public function defer_update_atum_product_calc_props( $product, $data_store ) {
 
-		Helpers::defer_update_atum_product_calc_props( $product );
+		if ( $product instanceof \WC_Product ) {
+			$product = $product->get_id();
+		}
+
+		$this->deferred_calc_props_products[] = $product;
+
 	}
 
 	/**
@@ -1014,21 +1101,34 @@ class Hooks {
 	 */
 	public function maybe_create_defer_update_async_action() {
 
-		$cache_key = AtumCache::get_cache_key( 'deferred_calc_props_products' );
-		$products  = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$hooks = [
+			'update_atum_sales_calc_props_deferred' => 'deferred_sales_calc_props',
+			'update_atum_product_calc_props'        => 'deferred_calc_props_products',
+		];
 
-		if ( $has_cache && ! empty( $products ) ) {
+		// As updating the sales props also updates de product calc props, the products already queued to get the sales updated,
+		// will be removed from the second hook if present.
+		$already_queued = [];
 
-			$products = array_unique( $products );
+		foreach ( $hooks as $hook => $variable ) {
 
-			AtumQueues::add_async_action( 'update_atum_product_calc_props', array(
-				'\Atum\Inc\Helpers',
-				'update_atum_product_calc_props',
-			), [ $products, TRUE ] );
+			if ( ! empty( $this->{$variable} ) ) {
+
+				$this->{$variable} = array_unique( $this->{$variable} );
+				$this->{$variable} = array_diff( $this->{$variable}, $already_queued );
+				$already_queued    = array_merge( $already_queued, $this->{$variable} );
+
+				if ( ! empty( $this->{$variable} ) ) {
+
+					AtumQueues::add_async_action( $hook, array(
+						'\Atum\Inc\Helpers',
+						$hook,
+					), [ $this->{$variable}, TRUE ] );
+				}
+			}
+
+			$this->{$variable} = [];
 		}
-
-		AtumCache::delete_cache( $cache_key );
-
 	}
 
 	/**
@@ -1134,6 +1234,10 @@ class Hooks {
 		add_filter( 'atum/get_atum_product/use_cache', '__return_true' );
 	}
 
+	/********************
+	 * Instance methods
+	 ********************/
+
 	/**
 	 * Remove the WC order note.
 	 * Use for PL stock changes and MI order creation API requests.
@@ -1148,14 +1252,11 @@ class Hooks {
 		wp_delete_comment( $comment_id, TRUE );
 	}
 
-	/********************
-	 * Instance methods
-	 ********************/
-
 	/**
 	 * Cannot be cloned
 	 */
 	public function __clone() {
+
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
@@ -1163,21 +1264,8 @@ class Hooks {
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
+
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
-	}
-
-	/**
-	 * Get Singleton instance
-	 *
-	 * @return Hooks instance
-	 */
-	public static function get_instance() {
-
-		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
 	}
 
 }
