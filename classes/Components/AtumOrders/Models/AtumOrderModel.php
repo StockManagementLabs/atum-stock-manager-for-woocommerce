@@ -24,6 +24,14 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\Items\LogItemFee;
+use Atum\InventoryLogs\Items\LogItemProduct;
+use Atum\InventoryLogs\Items\LogItemShipping;
+use Atum\InventoryLogs\Models\LogItem;
+use Atum\PurchaseOrders\Items\POItemFee;
+use Atum\PurchaseOrders\Items\POItemProduct;
+use Atum\PurchaseOrders\Items\POItemShipping;
+use Atum\PurchaseOrders\Models\POItem;
 
 
 /**
@@ -1763,7 +1771,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @param string|array $types Optional. Types of line items to get (array or string).
 	 *
-	 * @return \WC_Order_Item_Product array
+	 * @return POItemProduct[]|LogItemProduct[]|POItemFee[]|LogItemFee[]|POItemShipping[]|LogItemShipping[]
 	 */
 	public function get_items( $types = 'line_item' ) {
 
