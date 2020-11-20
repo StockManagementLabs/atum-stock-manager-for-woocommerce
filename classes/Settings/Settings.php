@@ -1158,21 +1158,34 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?>"
+		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?><?php if ( ! empty( $args['options']['is_recurrent'] ) ) echo ' recurrent'; ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"' ?>>
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) {
+				echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"';
+			}
+			if ( ! empty( $args['options']['processing_msg'] ) ) {
+				echo 'data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"';
+			}
+			if ( ! empty( $args['options']['processed_msg'] ) ) {
+				echo 'data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"';
+			} ?>>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
 			<?php if ( isset( $args['options']['select'] ) ) : ?>
-			<div class="atum-select2-container">
-				<select style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
-					<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
-					<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
-					<?php endforeach ?>
-				</select>
-				&nbsp;
-			</div>
+				<div class="atum-select2-container">
+					<select style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
+						<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
+							<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
+						<?php endforeach ?>
+					</select>
+					&nbsp;
+				</div>
+			<?php endif; ?>
+			<?php if ( isset( $args['options']['number'] ) ) :
+				$value = isset( $args['options']['number']['default'] ) ? $args['options']['number']['default'] : 1;
+				?>
+				<input class="atum-settings-input" type="number" min="1" max="100000" step="1" id="<?php echo esc_attr( $args['id'] ) ?>" value="<?php echo (int) $value ?>">
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-<?php echo esc_attr( isset( $args['options']['button_style'] ) ? $args['options']['button_style'] : 'primary' ) ?> tool-runner"

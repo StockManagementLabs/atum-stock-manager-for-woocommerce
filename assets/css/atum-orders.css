@@ -3604,6 +3604,10 @@ input[type="button"].btn-block {
   z-index: 100001;
 }
 
+.swal2-container .swal2-modal .swal2-validation-message {
+  margin: .625em 0 -.625em;
+}
+
 .swal2-container .swal2-modal p {
   font-size: 15px;
   text-align: center;

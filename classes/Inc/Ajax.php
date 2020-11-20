@@ -145,6 +145,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_manage_stock', array( $this, 'change_manage_stock' ) );
 		add_action( 'wp_ajax_atum_tool_control_stock', array( $this, 'change_control_stock' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
+		add_action( 'wp_ajax_atum_tool_update_calc_props', array( $this, 'update_calc_props' ) );
 
 		// Change sticky columns settting.
 		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
@@ -2499,6 +2500,60 @@ final class Ajax {
 
 	}
 
+	/**
+	 * Change the ATUM's control stock status for all products from Tools section
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 *
+	 * @since 1.4.5
+	 */
+	public function update_calc_props() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+
+		if ( empty( $_POST['option'] ) ) {
+			wp_send_json_error( __( 'Please enter the number of products you want to process per AJAX call', ATUM_TEXT_DOMAIN ) );
+		}
+
+		global $wpdb;
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$total  = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" );
+		$step   = (int) $_POST['option'] ? (int) $_POST['option'] : 400;
+		$offset = (int) $_POST['offset'] ? (int) $_POST['offset'] : 0;
+
+		$products = $wpdb->get_col( $wpdb->prepare(' 
+			SELECT product_id FROM ' . $atum_product_data_table . '
+			LIMIT %1$d, %2$d', $offset, $step ) );
+
+		foreach ( $products as $product_id ) {
+
+			$product = Helpers::get_atum_product( $product_id );
+
+			if ( $product instanceof \WC_Product ) {
+				$product->set_update_date( gmdate( 'Y-m-d H:i:s' ) );
+				Helpers::update_atum_sales_calc_props( $product );
+			}
+		}
+
+		if ( $offset + $step >= $total ) {
+			$return = [
+				'finished' => TRUE,
+				'limit'    => $total,
+				'total'    => $total,
+			];
+		}
+		else {
+			$return = [
+				'finished' => FALSE,
+				'limit'    => $offset + $step,
+				'total'    => $total,
+			];
+		}
+		wp_send_json_success( $return );
+
+	}
 
 	/*******************
 	 * Instance methods
