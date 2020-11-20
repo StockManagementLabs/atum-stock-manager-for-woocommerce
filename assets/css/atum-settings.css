@@ -3621,6 +3621,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   z-index: 100001;
 }
 
+.swal2-container .swal2-modal .swal2-validation-message {
+  margin: .625em 0 -.625em;
+}
+
 .swal2-container .swal2-modal p {
   font-size: 15px;
   text-align: center;
@@ -5597,6 +5601,10 @@ h2 .atum-help-tip {
 
 .atum-settings-wrapper #atum-settings .section-fields .script-runner button {
   border-radius: 4px;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
+  margin-right: 15px;
 }
 
 @media all and (max-width: 768px) {
