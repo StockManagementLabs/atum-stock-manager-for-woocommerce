@@ -40,19 +40,18 @@ class AtumComments {
 	private function __construct() {
 
 		// Exclude ATUM Order notes from queries (when not coming from the /comments endpoint).
-		if (
-			( ! empty( $_REQUEST['type'] ) && self::NOTES_KEY === $_REQUEST['type'] ) &&
-			apply_filters( 'atum/order_notes/show_in_comments_api', ! Helpers::is_rest_request() )
-		) {
+		if ( apply_filters( 'atum/order_notes/show_in_comments_api',
+			! Helpers::is_rest_request() || ( Helpers::is_rest_request() &&
+			empty( $_REQUEST['type'] ) || self::NOTES_KEY !== $_REQUEST['type'] )
+		) ) {
 			add_filter( 'comments_clauses', array( $this, 'exclude_atum_order_notes' ), 10, 1 );
 		}
 		add_action( 'comment_feed_where', array( $this, 'exclude_atum_order_notes_from_feed_where' ) );
 
 		// Show the WC order notes in the WP comments API endpoint.
-		if (
-			( ! empty( $_REQUEST['type'] ) && 'order_note' === $_REQUEST['type'] ) &&
-			apply_filters( 'atum/wc_order_notes/show_in_comments_api', Helpers::is_rest_request() )
-		) {
+		if ( apply_filters( 'atum/wc_order_notes/show_in_comments_api',
+			! empty( $_REQUEST['type'] ) && 'order_note' === $_REQUEST['type'] && Helpers::is_rest_request()
+		) ) {
 			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
 		}
 
