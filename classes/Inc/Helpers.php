@@ -3432,4 +3432,17 @@ final class Helpers {
 		return $return_ids;
 	}
 
+	/**
+	 * Get the ATUM logo image placeholder
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return string
+	 */
+	public static function get_atum_image_placeholder() {
+		return '<span class="atum-img-placeholder">
+			<img src="' . esc_url( ATUM_URL ) . 'assets/images/atum-icon.svg" alt="">
+		</span>';
+	}
+
 }
