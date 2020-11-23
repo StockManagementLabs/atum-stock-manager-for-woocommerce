@@ -290,9 +290,19 @@ export default class SettingsPage {
 		
 	}
 
-	runScript( $button: JQuery ) {
-		
+	runScript($button: JQuery) {
+
 		const $scriptRunner = $button.closest('.script-runner');
+
+		if ( $scriptRunner.is( '.recurrent' ) ) {
+			this.runRecurrentScript( $button, $scriptRunner );
+		}
+		else {
+			this.runSingleScript( $button, $scriptRunner );
+		}
+	}
+
+	runSingleScript( $button: JQuery, $scriptRunner ) {
 		
 		Swal.fire({
 			title              : this.settings.get('areYouSure'),
@@ -358,6 +368,101 @@ export default class SettingsPage {
 			
 		});
 		
+	}
+
+	runRecurrentScript( $button: JQuery, $scriptRunner ) {
+
+		Swal.fire({
+				title              : this.settings.get('areYouSure'),
+				text               : $scriptRunner.data('confirm'),
+				icon               : 'warning',
+				showCancelButton   : true,
+				confirmButtonText  : this.settings.get('run'),
+				cancelButtonText   : this.settings.get('cancel'),
+				reverseButtons     : true,
+				allowOutsideClick  : false,
+				showLoaderOnConfirm: true,
+				preConfirm: (): Promise<any> => {
+
+					return new Promise( (resolve: Function, reject: Function) => {
+
+						let $input: JQuery = $scriptRunner.find('#' + $scriptRunner.data('input')),
+						   option: string = '';
+
+						const action: string = $scriptRunner.data( 'action' )
+
+						if ( $input.length ) {
+							option = $input.val();
+						}
+
+						const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
+
+							let data: any = {
+								action: action,
+								token : this.settings.get( 'runnerNonce' ),
+								option: option,
+								offset: offset,
+							};
+
+							return $.ajax({
+								url       : window['ajaxurl'],
+								method    : 'POST',
+								dataType  : 'json',
+								data      : data,
+							});
+						}
+
+						$button.prop('disabled', true);
+
+						const recurrentCall = ( offset: number = 0 ) =>
+
+							doRecurrentAjaxCall( offset ).done( ( response: any ) => {
+								if ( response.success === true ) {
+
+									Swal.update( {
+										text             : $scriptRunner.data( 'processing' ).replace( '{processed}', response.data.limit ).replace( '{total}', response.data.total ),
+										showConfirmButton: false,
+									} );
+
+									if ( response.data.finished !== undefined && response.data.finished === true ) {
+										$button.prop( 'disabled', false );
+										resolve( response.data );
+									}
+									else {
+										offset = response.data.limit !== undefined ? response.data.limit : 100;
+										return recurrentCall( offset );
+									}
+								}
+								else {
+									$button.prop( 'disabled', false );
+									Swal.showValidationMessage( response.data );
+									resolve( response.data );
+								}
+							} );
+
+						recurrentCall();
+
+					});
+
+				}
+
+			})
+			.then( ( result: SweetAlertResult ) => {
+
+				if ( result.isConfirmed ) {
+					Swal.fire( {
+							title            : this.settings.get( 'done' ),
+							icon             : 'success',
+							text             : $scriptRunner.data( 'processed' ).replace( '{processed}', result.value.total ),
+							confirmButtonText: this.settings.get( 'ok' )
+						} )
+						.then( () => {
+							this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+						} );
+				}
+
+			});
+
 	}
 
     doThemeSelector($element: JQuery) {

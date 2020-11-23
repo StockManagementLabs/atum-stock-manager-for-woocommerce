@@ -119,6 +119,26 @@ class Tools {
 			),
 		);
 
+		$defaults['update_sales_calc_props'] = array(
+			'group'   => 'tools',
+			'section' => 'tools',
+			'default' => 300,
+			'name'    => __( 'Update Products calculated properties', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value', ATUM_TEXT_DOMAIN ),
+			'type'    => 'script_runner',
+			'options' => array(
+				'number'         => array(
+					'default' => 400,
+				),
+				'is_recurrent'   => TRUE,
+				'button_text'    => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
+				'script_action'  => 'atum_tool_update_calc_props',
+				'confirm_msg'    => esc_attr( __( 'This will update all products\' calculated properties and it can take a lot of time', ATUM_TEXT_DOMAIN ) ),
+				'processing_msg' => esc_attr( __( 'Processing {processed} from {total}', ATUM_TEXT_DOMAIN ) ),
+				'processed_msg'  => esc_attr( __( 'Processed {processed} products', ATUM_TEXT_DOMAIN ) ),
+			),
+		);
+
 		return $defaults;
 
 	}
