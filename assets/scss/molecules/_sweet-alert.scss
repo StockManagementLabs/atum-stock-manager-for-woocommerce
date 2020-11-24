@@ -107,6 +107,12 @@
 		
 	}
 	
+	.swal2-progress-steps {
+		.swal2-progress-step {
+			margin-bottom: 0;
+		}
+	}
+	
 	.atum-loading {
 		@include loader(18px, $primary, 3px, 1s);
 		top: $grid-gutter-width;

@@ -2447,6 +2447,10 @@ input[type="button"].btn-block {
   color: var(--wp-link-hover);
 }
 
+.swal2-container .swal2-progress-steps .swal2-progress-step {
+  margin-bottom: 0;
+}
+
 .swal2-container .atum-loading {
   width: 18px;
   height: 18px;

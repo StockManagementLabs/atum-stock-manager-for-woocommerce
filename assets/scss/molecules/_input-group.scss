@@ -207,3 +207,43 @@
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 }
+
+// Number mask fields
+.input-group.number-mask {
+	
+	input {
+		width: auto !important;
+		@include border-left-radius(4px);
+		@include border-right-radius(0);
+		z-index: 2;
+		
+		&:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+	
+	.input-group-append {
+		margin-left: -1px;
+		@include border-right-radius(4px);
+		cursor: pointer;
+		
+		.input-group-text {
+			background-color: $gray-200;
+			@include border-right-radius(3px !important);
+			transition: .2s ease-in-out;
+			
+			&:not(.active) {
+				display: none;
+			}
+		}
+		
+		&:hover {
+			.input-group-text {
+				background-color: $gray-600;
+				color: $white;
+			}
+		}
+	}
+	
+}

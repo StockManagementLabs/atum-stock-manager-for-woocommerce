@@ -3422,6 +3422,45 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   border-top-left-radius: 0;
 }
 
+.input-group.number-mask input {
+  width: auto !important;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  z-index: 2;
+}
+
+.input-group.number-mask input:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.input-group.number-mask .input-group-append {
+  margin-left: -1px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  cursor: pointer;
+}
+
+.input-group.number-mask .input-group-append .input-group-text {
+  background-color: #e9ecef;
+  border-top-right-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.input-group.number-mask .input-group-append .input-group-text:not(.active) {
+  display: none;
+}
+
+.input-group.number-mask .input-group-append:hover .input-group-text {
+  background-color: #6c757d;
+  color: #fff;
+}
+
 .product_data input[type=text].tips, .product_data input[type=number].tips, .product_data textarea.tips {
   cursor: text;
 }
