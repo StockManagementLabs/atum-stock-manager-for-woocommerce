@@ -27,11 +27,9 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\InventoryLogs\Items\LogItemShipping;
-use Atum\InventoryLogs\Models\LogItem;
 use Atum\PurchaseOrders\Items\POItemFee;
 use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
-use Atum\PurchaseOrders\Models\POItem;
 
 
 /**
@@ -1761,7 +1759,13 @@ abstract class AtumOrderModel {
 	public function get_status() {
 
 		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
-		return ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
+		$status = ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
+
+		if ( ! $status && ! empty( $this->post->post_status ) ) {
+			$status = $this->post->post_status;
+		}
+
+		return $status;
 	}
 
 	/**
@@ -2152,6 +2156,10 @@ abstract class AtumOrderModel {
 		}
 
 		$status = wc_clean( $status );
+
+		if ( ! $status && ! $this->status && ! empty( $this->post->post_status ) ) {
+			$status = $this->post->post_status;
+		}
 
 		if ( $status !== $this->status ) {
 			$this->register_change( 'status' );
