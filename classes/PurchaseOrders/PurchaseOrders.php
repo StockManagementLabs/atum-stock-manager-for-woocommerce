@@ -428,7 +428,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 	
 	/**
-	 * Get the available ATUM Order statuses
+	 * Get the available Purchase Orders statuses
 	 *
 	 * @since 1.5.0
 	 *
@@ -444,6 +444,25 @@ class PurchaseOrders extends AtumOrderPostType {
 			'atum_received'   => _x( 'Received', 'ATUM Purchase Order status', ATUM_TEXT_DOMAIN ),
 		) );
 		
+	}
+
+	/**
+	 * Get the colors for every Purchase Order status
+	 *
+	 * @since 1.8.2
+	 *
+	 * @return array
+	 */
+	public static function get_status_colors() {
+
+		return (array) apply_filters( 'atum/purchase_orders/status_colors', array(
+			'atum_pending'    => '#ff4848',
+			'atum_ordered'    => '#efaf00',
+			'atum_onthewayin' => '#00b8db',
+			'atum_receiving'  => '#ba7df7',
+			'atum_received'   => '#69c61d',
+		) );
+
 	}
 
 	/**

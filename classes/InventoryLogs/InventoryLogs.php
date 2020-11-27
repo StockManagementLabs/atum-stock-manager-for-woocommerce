@@ -555,6 +555,38 @@ class InventoryLogs extends AtumOrderPostType {
 		<?php
 	}
 
+	/**
+	 * Get the available Inventory Logs statuses
+	 *
+	 * @since 1.2.9
+	 *
+	 * @return array
+	 */
+	public static function get_statuses() {
+
+		return (array) apply_filters( 'atum/inventory_logs/statuses', array(
+			'atum_pending'   => _x( 'Pending', 'ATUM Inventory Log status', ATUM_TEXT_DOMAIN ),
+			'atum_completed' => _x( 'Completed', 'ATUM Inventory Log status', ATUM_TEXT_DOMAIN ),
+		) );
+
+	}
+
+	/**
+	 * Get the colors for every Inventory Log status
+	 *
+	 * @since 1.8.2
+	 *
+	 * @return array
+	 */
+	public static function get_status_colors() {
+
+		return (array) apply_filters( 'atum/inventory_logs/status_colors', array(
+			'atum_pending'   => '#ff4848',
+			'atum_completed' => '#69c61d',
+		) );
+
+	}
+
 	/****************************
 	 * Instance methods
 	 ****************************/

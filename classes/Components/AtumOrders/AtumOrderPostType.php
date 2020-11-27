@@ -265,7 +265,7 @@ abstract class AtumOrderPostType {
 
 			// Count all the orders with one of the ATUM Order's statuses.
 			if ( $object_types ) {
-				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", array_keys( $this->get_statuses() ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // phpcs:ignore
+				$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id AND post_status IN ('" . implode( "','", array_keys( static::get_statuses() ) ) . "') AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) ); // phpcs:ignore
 			}
 
 			// This action is documented in wp-includes/taxonomy.php.
@@ -307,7 +307,7 @@ abstract class AtumOrderPostType {
 			if ( empty( $vars['post_status'] ) ) {
 				
 				// All the ATUM Order posts must have the custom statuses created for them.
-				$statuses = array_keys( $this->get_statuses() );
+				$statuses = array_keys( static::get_statuses() );
 				
 				foreach ( $statuses as $key => $status ) {
 					if ( isset( $wp_post_statuses[ $status ] ) && FALSE === $wp_post_statuses[ $status ]->show_in_admin_all_list ) {
@@ -355,15 +355,17 @@ abstract class AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'status':
-				$statuses   = static::get_statuses();
-				$atum_order = Helpers::get_atum_order_model( $post->ID );
+				$statuses      = static::get_statuses();
+				$status_colors = static::get_status_colors();
+				$atum_order    = Helpers::get_atum_order_model( $post->ID );
 
 				if ( ! is_wp_error( $atum_order ) ) {
 
-					$status      = $atum_order->get_status();
-					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
+					$status       = $atum_order->get_status();
+					$status_name  = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
+					$status_color = isset( $status_colors[ $status ] ) ? ' style="background-color: ' . $status_colors[ $status ] . '"' : '';
 
-					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"' . $status_color . '></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
@@ -1198,6 +1200,24 @@ abstract class AtumOrderPostType {
 	abstract public function get_current_atum_order( $post_id );
 
 	/**
+	 * Get the available ATUM Order statuses
+	 *
+	 * @since 1.2.9
+	 *
+	 * @return array
+	 */
+	abstract public static function get_statuses();
+
+	/**
+	 * Get the colors for every ATUM order status
+	 *
+	 * @since 1.8.2
+	 *
+	 * @return array
+	 */
+	abstract public static function get_status_colors();
+
+	/**
 	 * Getter for the ATUM Order post type name
 	 *
 	 * @since 1.2.9
@@ -1217,22 +1237,6 @@ abstract class AtumOrderPostType {
 	 */
 	public static function get_type_taxonomy() {
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
-	}
-	
-	/**
-	 * Get the available ATUM Order statuses
-	 *
-	 * @since 1.2.9
-	 *
-	 * @return array
-	 */
-	public static function get_statuses() {
-		
-		return (array) apply_filters( 'atum/inventory_logs/statuses', array(
-			ATUM_PREFIX . 'pending'   => _x( 'Pending', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
-			ATUM_PREFIX . 'completed' => _x( 'Completed', 'ATUM Order status', ATUM_TEXT_DOMAIN ),
-		) );
-
 	}
 
 }

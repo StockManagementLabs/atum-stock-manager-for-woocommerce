@@ -150,33 +150,8 @@ table.wp-list-table {
 				line-height: 26px;
 				margin: 0 5px 0 0;
 				
-				&.status-atum_completed, &.status-atum_received {
-					background: #69c61d;
-				}
-				
-				&.status-atum_on-hold {
-					background: #94660c;
-				}
-				
 				&.status-atum_failed, &.status-atum_trash {
 					background: #761919;
-				}
-				
-				&.status-atum_pending {
-					background: #ff4848;
-				}
-				
-				
-				&.status-atum_ordered {
-					background: #efaf00;
-				}
-				
-				&.status-atum_onthewayin {
-					background: #00b8db;
-				}
-				
-				&.status-atum_receiving {
-					background: #ba7df7;
 				}
 				
 				> span {
