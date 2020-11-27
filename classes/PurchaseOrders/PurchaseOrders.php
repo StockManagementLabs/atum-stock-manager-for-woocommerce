@@ -298,7 +298,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				$date_expected = $po->date_expected;
 
 				if ( $date_expected ) {
-					$date_expected = '<abbr title="' . gmdate( 'Y/m/d H:i:s', strtotime( $date_expected ) ) . '">' . gmdate( 'Y/m/d', strtotime( $date_expected ) ) . '</abbr>';
+					$date_expected = '<abbr title="' . gmdate( 'Y-m-d H:i:s', strtotime( $date_expected ) ) . '">' . gmdate( 'Y-m-d', strtotime( $date_expected ) ) . '</abbr>';
 				}
 
 				echo $date_expected; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
