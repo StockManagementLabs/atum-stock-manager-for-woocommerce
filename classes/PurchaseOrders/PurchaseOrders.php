@@ -253,7 +253,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		return array(
 			'cb'               => $existing_columns['cb'],
 			'atum_order_title' => __( 'PO', ATUM_TEXT_DOMAIN ),
-			'date'             => __( 'Date', ATUM_TEXT_DOMAIN ),
+			'last_modified'    => __( 'Last Modified', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'date_expected'    => __( 'Date Expected', ATUM_TEXT_DOMAIN ),

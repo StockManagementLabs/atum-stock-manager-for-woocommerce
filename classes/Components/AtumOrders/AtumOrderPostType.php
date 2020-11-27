@@ -393,8 +393,8 @@ abstract class AtumOrderPostType {
 				$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
 				break;
 
-			case 'date':
-				$output = sprintf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) );
+			case 'last_modified':
+				$output = sprintf( '<time>%s</time>', Helpers::get_relative_date( $post->post_date ) );
 				break;
 
 			case 'notes':
