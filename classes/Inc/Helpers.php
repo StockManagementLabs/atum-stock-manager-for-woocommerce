@@ -3457,7 +3457,7 @@ final class Helpers {
 	public static function get_relative_date( $date ) {
 
 		$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		return $timeAgo->inWords( $date ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		return $timeAgo->inWordsFromStrings( $date ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 
 	}
 
