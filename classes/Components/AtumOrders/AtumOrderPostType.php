@@ -348,8 +348,8 @@ abstract class AtumOrderPostType {
 	public function render_columns( $column ) {
 
 		global $post;
-		$rendered = FALSE;
 
+		$output    = '';
 		$post_type = static::POST_TYPE;
 
 		switch ( $column ) {
@@ -363,7 +363,7 @@ abstract class AtumOrderPostType {
 					$status      = $atum_order->get_status();
 					$status_name = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
 
-					printf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
@@ -388,22 +388,18 @@ abstract class AtumOrderPostType {
 					$username = 'ATUM';
 				}
 
-				echo '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				$rendered = TRUE;
-
+				$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
 				break;
 
 			case 'date':
-				printf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				$rendered = TRUE;
-
+				$output = sprintf( '<time>%s</time>', date_i18n( 'Y-m-d', strtotime( $post->post_date ) ) );
 				break;
 
 			case 'notes':
 				if ( $post->comment_count && AtumCapabilities::current_user_can( 'read_order_notes' ) ) {
 
 					// Check the status of the post.
-					$status = ( 'trash' !== $post->post_status ) ? '' : 'post-trashed';
+					$status = 'trash' !== $post->post_status ? '' : 'post-trashed';
 					
 					$latest_notes = get_comments( array(
 						'post_id' => $post->ID,
@@ -413,25 +409,22 @@ abstract class AtumOrderPostType {
 					
 					$latest_note = current( $latest_notes );
 
-					// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-					if ( isset( $latest_note->comment_content ) && 1 == $post->comment_count ) {
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					if ( isset( $latest_note->comment_content ) && 1 === absint( $post->comment_count ) ) {
+						$output = '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
 					}
 					elseif ( isset( $latest_note->comment_content ) ) {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						$output = '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( $latest_note->comment_content . '<br/><small style="display:block">' . sprintf( _n( 'plus %d other note', 'plus %d other notes', ( $post->comment_count - 1 ), ATUM_TEXT_DOMAIN ), $post->comment_count - 1 ) . '</small>' ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
 					}
 					else {
 						/* translators: the notes' count */
-						echo '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						$output = '<span class="note-on tips" data-tip="' . wc_sanitize_tooltip( sprintf( _n( '%d note', '%d notes', $post->comment_count, ATUM_TEXT_DOMAIN ), $post->comment_count ) ) . '">' . esc_attr__( 'Yes', ATUM_TEXT_DOMAIN ) . '</span>';
 					}
 
 				}
 				else {
-					echo '<span class="na">&ndash;</span>';
+					$output = '<span class="na">&ndash;</span>';
 				}
-
-				$rendered = TRUE;
 
 				break;
 
@@ -439,7 +432,7 @@ abstract class AtumOrderPostType {
 				$atum_order = Helpers::get_atum_order_model( $post->ID );
 
 				if ( ! is_wp_error( $atum_order ) ) {
-					echo $atum_order->get_formatted_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					$output = $atum_order->get_formatted_total();
 				}
 
 				break;
@@ -450,6 +443,8 @@ abstract class AtumOrderPostType {
 				if ( is_wp_error( $atum_order ) ) {
 					break;
 				}
+
+				ob_start();
 
 				?><p>
 					<?php
@@ -485,12 +480,19 @@ abstract class AtumOrderPostType {
 					do_action( "atum/$post_type/admin_actions_end", $atum_order ); ?>
 				</p>
 				<?php
-				
+
+				$output = ob_get_clean();
 				break;
 
 		}
 
-		return $rendered;
+		$output = apply_filters( "atum/$post_type/list_cell_content", $output, $column );
+
+		if ( $output ) {
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+
+		return ! empty( $output );
 
 	}
 
