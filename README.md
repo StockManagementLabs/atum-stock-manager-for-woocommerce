@@ -194,6 +194,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.1`
+
+*2020-11-27*
+
+**Features**
+
+* Show the ATUM order notes and WC order notes on the /comments endpoint when requested.
+* Added new tool to ATUM Settings to calculate all products' calculated properties.
+* Added new helper to get an ATUM image placeholder.
+
+**Changes**
+
+* Updated SweetAlert2 dependency.
+* Refactoring.
+* Allow getting the ATUM order status from the post status when there is no status meta.
+
+---
+
 `1.8.0`
 
 *2020-11-13*

@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.5.3
 Requires PHP: 5.6
 WC requires at least: 3.1.0
-WC tested up to: 4.7.0
-Stable tag: 1.8.0
+WC tested up to: 4.7.1
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.1`
+
+*2020-11-27*
+
+**Features**
+
+* Show the ATUM order notes and WC order notes on the /comments endpoint when requested.
+* Added new tool to ATUM Settings to calculate all products' calculated properties.
+* Added new helper to get an ATUM image placeholder.
+
+**Changes**
+
+* Updated SweetAlert2 dependency.
+* Refactoring.
+* Allow getting the ATUM order status from the post status when there is no status meta.
+
+**Fixes**
+
+* CSS fixes.
+* Add deferred product calc sales props when needed.
+* Fixed ATUM order notes being shown on WP Dashboard widget.
 
 ---
 
