@@ -11,6 +11,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
 ?>
 
 <div class="videos-widget" data-widget="videos">
@@ -92,9 +93,7 @@ defined( 'ABSPATH' ) || die;
 									<?php
 									/* translators: the number of video views */
 									printf( esc_html__( '%d Views', ATUM_TEXT_DOMAIN ), esc_attr( $video->statistics->viewCount ) );
-
-									$time_ago = new \Westsworld\TimeAgo();
-									echo ' · ' . esc_html( $time_ago->inWords( $video_snippet->publishedAt ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+									echo ' · ' . esc_html( Helpers::get_relative_date( $video_snippet->publishedAt ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 									?>
 								</div>
 
@@ -146,9 +145,7 @@ defined( 'ABSPATH' ) || die;
 					<?php
 					/* translators: the number of video views */
 					printf( esc_html__( '%d Views', ATUM_TEXT_DOMAIN ), esc_attr( $first_video->statistics->viewCount ) );
-
-					$time_ago = new \Westsworld\TimeAgo();
-					echo ' · ' . esc_html( $time_ago->inWords( $first_video->snippet->publishedAt ) );
+					echo ' · ' . esc_html( Helpers::get_relative_date( $first_video->snippet->publishedAt ) );
 					?>
 				</div>
 

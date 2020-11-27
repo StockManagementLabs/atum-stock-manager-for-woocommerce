@@ -5,9 +5,12 @@
  * @since        1.4.0
  *
  * @var array $rss_items
+ * @var int   $max_items
  */
 
 defined( 'ABSPATH' ) || die;
+
+use Atum\Inc\Helpers;
 ?>
 <div class="news-widget" data-widget="news">
 
@@ -35,9 +38,7 @@ defined( 'ABSPATH' ) || die;
 						<div class="post-meta">
 							<?php
 							echo esc_html( $item->get_author()->name );
-
-							$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-							echo ' · ' . esc_html( $timeAgo->inWords( $item->get_date() ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+							echo ' · ' . esc_html( Helpers::get_relative_date( $item->get_date() ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 							?>
 						</div>
 
