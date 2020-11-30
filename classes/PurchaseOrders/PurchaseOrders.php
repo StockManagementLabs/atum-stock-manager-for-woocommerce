@@ -224,13 +224,13 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
-		$po->set_props( array(
+		$po->set_props( apply_filters( 'atum/purchase_orders/save_meta_boxes_props', array(
 			'status'             => $_POST['status'],
 			'date_created'       => $po_date,
 			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? $_POST['supplier'] : '',
 			'multiple_suppliers' => $multiple_suppliers,
 			'date_expected'      => $date_expected,
-		) );
+		), $po ) );
 
 		// Set the PO description as post content.
 		$po->set_description( $_POST['description'] );
