@@ -147,6 +147,9 @@ class AtumProductData {
 		// Alter some of the WC fields before sending the response.
 		add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_rest_response' ), 10, 3 );
 
+		// Update ATUM calc properties after saving.
+		add_filter( 'woocommerce_rest_insert_product_object', array( $this, 'after_rest_product_save'), 10, 3 );
+
 	}
 
 	/**
@@ -662,6 +665,20 @@ class AtumProductData {
 
 	}
 
+	/**
+	 * Do tasks after REST product save
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param \WC_Product      $product      Post data.
+	 * @param \WP_REST_Request $request   Request object.
+	 * @param boolean          $creating  True when creating item, false when updating.
+	 */
+	public function after_rest_product_save( $product, $request, $creating ) {
+
+		Helpers::update_atum_product_calc_props( $product );
+
+	}
 
 	/****************************
 	 * Instance methods
