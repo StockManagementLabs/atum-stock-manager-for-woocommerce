@@ -268,6 +268,15 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Unset all the previously assigned items
+	 *
+	 * @since 1.8.2
+	 */
+	public function unset_items() {
+		$this->items = [];
+	}
+
+	/**
 	 * Convert a type to a types group
 	 *
 	 * @since 1.2.4
@@ -1973,6 +1982,17 @@ abstract class AtumOrderModel {
 	 **********/
 
 	/**
+	 * Setter for the ID prop
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param int $id
+	 */
+	public function set_id( $id ) {
+		$this->id = $id;
+	}
+
+	/**
 	 * Set the ATUM Order date
 	 *
 	 * @since 1.6.2
@@ -2254,7 +2274,7 @@ abstract class AtumOrderModel {
 	public function __get( $name ) {
 
 		// Sometimes a prop requires custom logic and needs to have its own method.
-		if ( is_callable( array( $this , "get_$name" ) ) ) {
+		if ( is_callable( array( $this, "get_$name" ) ) ) {
 			return call_user_func( array( $this, "get_$name" ) );
 		}
 
