@@ -394,7 +394,7 @@ abstract class AtumOrderPostType {
 				break;
 
 			case 'last_modified':
-				$output = sprintf( '<time>%s</time>', Helpers::get_relative_date( $post->post_date ) );
+				$output = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', $post->post_date ), Helpers::get_relative_date( $post->post_date ) );
 				break;
 
 			case 'notes':
