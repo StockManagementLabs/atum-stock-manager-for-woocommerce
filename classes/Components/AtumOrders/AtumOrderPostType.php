@@ -132,6 +132,9 @@ abstract class AtumOrderPostType {
 			add_filter( 'get_search_query', array( $this, 'search_label' ) );
 			add_filter( 'query_vars', array( $this, 'add_custom_search_query_var' ) );
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
+
+			// Move the 'trash' status to the end of the list.
+			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status' ) );
 			
 		}
 
@@ -194,7 +197,7 @@ abstract class AtumOrderPostType {
 				'label'                     => $label,
 				'public'                    => FALSE,
 				'exclude_from_search'       => FALSE,
-				'show_in_admin_all_list'    => TRUE,
+				'show_in_admin_all_list'    => 'trash' !== $status,
 				'show_in_admin_status_list' => TRUE,
 				/* translators: the count of orders in current status */
 				'label_count'               => array(
@@ -1185,6 +1188,27 @@ abstract class AtumOrderPostType {
 		}
 
 		return $check;
+
+	}
+
+	/**
+	 * Send the trash status to the end of the status views list on ATUM Orders' List Tables
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $status_views
+	 *
+	 * @return array
+	 */
+	public function reorder_trash_status( $status_views ) {
+
+		if ( array_key_exists( 'trash', $status_views ) ) {
+			$trash_status = $status_views['trash'];
+			unset( $status_views['trash'] );
+			$status_views['trash'] = $trash_status;
+		}
+
+		return $status_views;
 
 	}
 
