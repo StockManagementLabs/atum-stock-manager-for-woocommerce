@@ -303,9 +303,7 @@ trait AtumOrderItemTrait {
 	 */
 	public function __clone() {
 
-		$this->id            = 0;
-		$this->atum_order_id = 0;
-
+		$this->id = 0;
 		$this->load();
 
 	}

@@ -1551,7 +1551,7 @@ abstract class AtumOrderModel {
 			return isset( $this->meta[ $meta_key ] ) ? $this->meta[ $meta_key ] : get_post_meta( $this->id, $meta_key, $single );
 		}
 		else {
-			return get_post_custom( $this->id );
+			return $this->meta;
 		}
 
 	}
