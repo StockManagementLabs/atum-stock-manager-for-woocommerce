@@ -218,7 +218,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	protected function get_object( $post ) {
 
 		$id    = $post instanceof \WP_Post ? $post->ID : $post;
-		$order = Helpers::get_atum_order_model( $id, $this->post_type );
+		$order = Helpers::get_atum_order_model( $id, TRUE, $this->post_type );
 
 		// In case id is not an ATUM Order, don't expose it via API.
 		if ( ! $order ) {

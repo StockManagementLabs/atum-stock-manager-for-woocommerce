@@ -145,7 +145,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	public function show_data_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 
 		if ( ! $atum_order instanceof Log ) {
 			return;
@@ -178,7 +178,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $po_id );
+		$log = $this->get_current_atum_order( $po_id, TRUE );
 
 		if ( empty( $log ) ) {
 			return;
@@ -304,7 +304,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $post->ID );
+		$log = $this->get_current_atum_order( $post->ID, FALSE );
 
 		switch ( $column ) {
 
@@ -441,14 +441,15 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return Log
 	 */
-	public function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id, $read_items ) {
 
 		if ( ! $this->log || $this->log->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$this->log = new Log( $post_id );
+			$this->log = Helpers::get_atum_order_model( $post_id, $read_items, self::POST_TYPE );
 		}
 
 		return $this->log;

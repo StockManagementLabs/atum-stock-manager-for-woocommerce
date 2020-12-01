@@ -1781,12 +1781,13 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int    $atum_order_id
-	 * @param string $post_type
+	 * @param int    $atum_order_id The order item ID.
+	 * @param bool   $read_items    NOTE: it's important to not read items when not necessary to improve performance.
+	 * @param string $post_type     Optional. The ATUM order post type. If not passed will get the post type from the passed order ID.
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model( $atum_order_id, $post_type = '' ) {
+	public static function get_atum_order_model( $atum_order_id, $read_items, $post_type = '' ) {
 
 		if ( ! $post_type ) {
 			$post_type = get_post_type( $atum_order_id );
@@ -1810,7 +1811,7 @@ final class Helpers {
 			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		return new $model_class( $atum_order_id );
+		return new $model_class( $atum_order_id, $read_items );
 
 	}
 
@@ -1828,7 +1829,7 @@ final class Helpers {
 		global $wpdb;
 		$atum_order_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d', $atum_order_item_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		return self::get_atum_order_model( $atum_order_id );
+		return self::get_atum_order_model( $atum_order_id, TRUE );
 	}
 
 	/**

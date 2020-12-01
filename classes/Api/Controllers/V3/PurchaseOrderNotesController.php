@@ -45,7 +45,7 @@ class PurchaseOrderNotesController extends AtumOrderNotesController {
 	protected function get_atum_order( $request ) {
 
 		if ( is_null( $this->order ) ) {
-			$this->order = Helpers::get_atum_order_model( (int) $request['order_id'], $this->post_type );
+			$this->order = Helpers::get_atum_order_model( (int) $request['order_id'], FALSE, $this->post_type );
 		}
 
 		return $this->order;

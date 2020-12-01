@@ -268,15 +268,6 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Unset all the previously assigned items
-	 *
-	 * @since 1.8.2
-	 */
-	public function unset_items() {
-		$this->items = [];
-	}
-
-	/**
 	 * Convert a type to a types group
 	 *
 	 * @since 1.2.4

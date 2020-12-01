@@ -216,7 +216,7 @@ trait AtumOrderItemTrait {
 	 */
 	public function get_order() {
 		
-		return Helpers::get_atum_order_model( $this->get_atum_order_id() );
+		return Helpers::get_atum_order_model( $this->get_atum_order_id(), TRUE );
 	}
 
 	/**
@@ -294,6 +294,20 @@ trait AtumOrderItemTrait {
 		}
 
 		return apply_filters( 'woocommerce_order_item_get_formatted_meta_data', $formatted_meta, $this );
+	}
+
+	/**
+	 * Allow cloning ATUM Order items
+	 *
+	 * @since 1.8.2
+	 */
+	public function __clone() {
+
+		$this->id            = 0;
+		$this->atum_order_id = 0;
+
+		$this->load();
+
 	}
 
 }

@@ -175,7 +175,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function show_data_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 
 		if ( ! $atum_order instanceof PurchaseOrder ) {
 			return;
@@ -209,7 +209,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po = $this->get_current_atum_order( $po_id );
+		$po = $this->get_current_atum_order( $po_id, TRUE );
 
 		if ( empty( $po ) ) {
 			return;
@@ -282,7 +282,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po = $this->get_current_atum_order( $post->ID );
+		$po = $this->get_current_atum_order( $post->ID, FALSE );
 
 		switch ( $column ) {
 
@@ -413,14 +413,15 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return PurchaseOrder
 	 */
-	public function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id, $read_items ) {
 
 		if ( ! $this->po || $this->po->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$this->po = Helpers::get_atum_order_model( $post_id, self::POST_TYPE );
+			$this->po = Helpers::get_atum_order_model( $post_id, $read_items, self::POST_TYPE );
 		}
 
 		return $this->po;

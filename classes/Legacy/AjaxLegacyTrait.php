@@ -163,7 +163,7 @@ trait AjaxLegacyTrait {
 			 *
 			 * @var PurchaseOrder $po
 			 */
-			$po = Helpers::get_atum_order_model( $post_id );
+			$po = Helpers::get_atum_order_model( $post_id, FALSE );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
 			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {

@@ -360,7 +360,7 @@ abstract class AtumOrderPostType {
 			case 'status':
 				$statuses      = static::get_statuses();
 				$status_colors = static::get_status_colors();
-				$atum_order    = Helpers::get_atum_order_model( $post->ID );
+				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( ! is_wp_error( $atum_order ) ) {
 
@@ -434,7 +434,7 @@ abstract class AtumOrderPostType {
 				break;
 
 			case 'total':
-				$atum_order = Helpers::get_atum_order_model( $post->ID );
+				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( ! is_wp_error( $atum_order ) ) {
 					$output = $atum_order->get_formatted_total();
@@ -443,7 +443,7 @@ abstract class AtumOrderPostType {
 				break;
 
 			case 'actions':
-				$atum_order = Helpers::get_atum_order_model( $post->ID );
+				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( is_wp_error( $atum_order ) ) {
 					break;
@@ -642,7 +642,7 @@ abstract class AtumOrderPostType {
 	 */
 	public function show_items_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 		Helpers::load_view( 'meta-boxes/atum-order/items', compact( 'atum_order' ) );
 
 	}
@@ -766,7 +766,7 @@ abstract class AtumOrderPostType {
 		$post_type = static::POST_TYPE;
 
 		foreach ( $ids as $id ) {
-			$atum_order = Helpers::get_atum_order_model( $id );
+			$atum_order = Helpers::get_atum_order_model( $id, FALSE, $post_type );
 			$atum_order->update_status( $new_status );
 			$changed++;
 		}
@@ -1128,7 +1128,7 @@ abstract class AtumOrderPostType {
 			return;
 		}
 
-		$atum_order = $this->get_current_atum_order( $po_id );
+		$atum_order = $this->get_current_atum_order( $po_id, TRUE );
 		$atum_order->after_save( $atum_order );
 
 	}
@@ -1180,7 +1180,7 @@ abstract class AtumOrderPostType {
 			// Avoid cyclical calls to this method.
 			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
 
-			$atum_order = Helpers::get_atum_order_model( $post->ID );
+			$atum_order = Helpers::get_atum_order_model( $post->ID, TRUE, $post->post_type );
 			$atum_order->delete( $force_delete );
 
 			$check = TRUE; // Let WP know that the post was successfully deleted.
@@ -1217,11 +1217,12 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return AtumOrderModel
 	 */
-	abstract public function get_current_atum_order( $post_id );
+	abstract public function get_current_atum_order( $post_id, $read_items );
 
 	/**
 	 * Get the available ATUM Order statuses
