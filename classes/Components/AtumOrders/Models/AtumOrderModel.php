@@ -855,8 +855,9 @@ abstract class AtumOrderModel {
 					}
 
 					// If ID changed (new item saved to DB)...
-					if ( $item_id != $item_key ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+					if ( absint( $item_id ) !== absint( $item_key ) ) {
 						$this->items[ $item_group ][ $item_id ] = $item;
+						unset( $this->items[ $item_group ][ $item_key ] ); // Remove old item to avoid duplicates.
 					}
 
 				}
