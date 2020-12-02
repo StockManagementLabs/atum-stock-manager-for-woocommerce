@@ -338,6 +338,71 @@ class InventoryLogs extends AtumOrderPostType {
 	}
 
 	/**
+	 * Add sortable IL columns to the list
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function sortable_columns( $columns ) {
+
+		$columns = parent::sortable_columns( $columns );
+
+		$columns['type']     = 'type';
+		$columns['wc_order'] = 'wc_order';
+
+		return $columns;
+	}
+
+	/**
+	 * Filters and sorting handler for IL columns
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param  array $query_vars
+	 *
+	 * @return array
+	 */
+	public function request_query( $query_vars ) {
+
+		global $typenow;
+
+		$query_vars = parent::request_query( $query_vars );
+
+		if ( self::POST_TYPE === $typenow ) {
+
+			if ( isset( $query_vars['orderby'] ) ) {
+
+				// Sort by "Type".
+				if ( 'type' === $query_vars['orderby'] ) {
+
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key' => '_type',
+						'orderby'  => 'meta_value',
+					) );
+
+				}
+				// Sort by "WC Order".
+				elseif ( 'wc_order' === $query_vars['orderby'] ) {
+
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key' => '_order',
+						'orderby'  => 'meta_value',
+					) );
+
+				}
+
+			}
+
+		}
+
+		return $query_vars;
+
+	}
+
+	/**
 	 * Specify custom bulk actions messages for the ATUM Order post type
 	 *
 	 * @since 1.2.4
