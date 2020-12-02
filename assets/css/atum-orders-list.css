@@ -9102,29 +9102,23 @@ table.wp-list-table .column-status .order-status-container {
   display: flex;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
 }
 
 table.wp-list-table .column-status .order-status-container .order-status {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  line-height: 2.5em;
   color: var(--secondary);
   background: var(--light);
   border-radius: 4px;
-  cursor: inherit !important;
-  white-space: nowrap;
+  cursor: default;
   max-width: 100%;
   width: 16px;
   height: 16px;
-  line-height: 26px;
-  margin: 0 5px 0 0;
+  margin: 3px 5px 0 0;
 }
 
 table.wp-list-table .column-status .order-status-container .order-status.status-atum_failed, table.wp-list-table .column-status .order-status-container .order-status.status-atum_trash {
