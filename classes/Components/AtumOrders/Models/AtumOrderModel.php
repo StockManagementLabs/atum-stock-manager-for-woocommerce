@@ -1524,9 +1524,10 @@ abstract class AtumOrderModel {
 
 			foreach ( $meta_data as $meta_key => $meta_value ) {
 
-				$data_name = ltrim( $meta_key, '_' );
-				if ( array_key_exists( $data_name, $this->meta ) ) {
-					$this->meta[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
+				$setter = 'set_' . ltrim( $meta_key, '_' );
+				if ( is_callable( array( $this, $setter ) ) ) {
+					// When reading the values, make sure there is no change registered.
+					$this->$setter( is_array( $meta_value ) ? current( $meta_value ) : $meta_value, TRUE );
 				}
 
 			}
@@ -1990,14 +1991,19 @@ abstract class AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|\WC_DateTime $date_created
+	 * @param bool                $skip_change
 	 */
-	public function set_date_created( $date_created ) {
+	public function set_date_created( $date_created, $skip_change = FALSE ) {
 
 		$date_created = $date_created instanceof \WC_DateTime ? $date_created->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_created );
 
 		// Only register the change if it was manually changed.
 		if ( $date_created !== $this->date_created && $this->post && $this->post->post_date !== $date_created ) {
-			$this->register_change( 'date_created' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'date_created' );
+			}
+
 			$this->set_meta( 'date_created', $date_created );
 		}
 
@@ -2009,8 +2015,9 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param string $currency
+	 * @param bool   $skip_change
 	 */
-	public function set_currency( $currency ) {
+	public function set_currency( $currency, $skip_change = FALSE ) {
 
 		$currency = wc_clean( $currency );
 
@@ -2019,7 +2026,11 @@ abstract class AtumOrderModel {
 		}
 
 		if ( $currency !== $this->currency ) {
-			$this->register_change( 'currency' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'currency' );
+			}
+
 			$this->set_meta( 'currency', $currency );
 		}
 
@@ -2031,13 +2042,18 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $total
+	 * @param bool  $skip_change
 	 */
-	public function set_total( $total ) {
+	public function set_total( $total, $skip_change = FALSE ) {
 
 		$total = wc_format_decimal( $total );
 
 		if ( $total !== $this->total ) {
-			$this->register_change( 'total' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'total' );
+			}
+
 			$this->set_meta( 'total', $total );
 		}
 
@@ -2049,13 +2065,18 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $discount_total
+	 * @param bool  $skip_change
 	 */
-	public function set_discount_total( $discount_total ) {
+	public function set_discount_total( $discount_total, $skip_change = FALSE ) {
 
 		$discount_total = wc_format_decimal( $discount_total );
 
 		if ( $discount_total !== $this->discount_total ) {
-			$this->register_change( 'discount_total' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'discount_total' );
+			}
+
 			$this->set_meta( 'discount_total', $discount_total );
 		}
 
@@ -2067,13 +2088,18 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $discount_tax
+	 * @param bool  $skip_change
 	 */
-	public function set_discount_tax( $discount_tax ) {
+	public function set_discount_tax( $discount_tax, $skip_change = FALSE ) {
 
 		$discount_tax = wc_format_decimal( $discount_tax );
 
 		if ( $discount_tax !== $this->discount_tax ) {
-			$this->register_change( 'discount_tax' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'discount_tax' );
+			}
+
 			$this->set_meta( 'discount_tax', $discount_tax );
 		}
 
@@ -2085,13 +2111,18 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $shipping_total
+	 * @param bool  $skip_change
 	 */
-	public function set_shipping_total( $shipping_total ) {
+	public function set_shipping_total( $shipping_total, $skip_change = FALSE ) {
 
 		$shipping_total = wc_format_decimal( $shipping_total );
 
 		if ( $shipping_total !== $this->shipping_total ) {
-			$this->register_change( 'shipping_total' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'shipping_total' );
+			}
+
 			$this->set_meta( 'shipping_total', $shipping_total );
 		}
 
@@ -2103,15 +2134,20 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $shipping_tax
+	 * @param bool  $skip_change
 	 */
-	public function set_shipping_tax( $shipping_tax ) {
+	public function set_shipping_tax( $shipping_tax, $skip_change = FALSE ) {
 
 		$shipping_tax = wc_format_decimal( $shipping_tax );
 
 		if ( $shipping_tax !== $this->shipping_tax ) {
-			$this->register_change( 'shipping_tax' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'shipping_tax' );
+			}
+
 			$this->set_meta( 'shipping_tax', $shipping_tax );
-			$this->set_total_tax( (float) $this->cart_tax + (float) $shipping_tax );
+			$this->set_total_tax( (float) $this->cart_tax + (float) $shipping_tax, $skip_change );
 		}
 
 	}
@@ -2122,15 +2158,20 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $cart_tax
+	 * @param bool  $skip_change
 	 */
-	public function set_cart_tax( $cart_tax ) {
+	public function set_cart_tax( $cart_tax, $skip_change = FALSE ) {
 
 		$cart_tax = wc_format_decimal( $cart_tax );
 
 		if ( $cart_tax !== $this->cart_tax ) {
-			$this->register_change( 'cart_tax' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'cart_tax' );
+			}
+
 			$this->set_meta( 'cart_tax', $cart_tax );
-			$this->set_total_tax( (float) $this->shipping_tax + (float) $cart_tax );
+			$this->set_total_tax( (float) $this->shipping_tax + (float) $cart_tax, $skip_change );
 		}
 
 	}
@@ -2142,13 +2183,18 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param float $total_tax
+	 * @param bool  $skip_change
 	 */
-	protected function set_total_tax( $total_tax ) {
+	protected function set_total_tax( $total_tax, $skip_change = FALSE ) {
 
 		$total_tax = wc_format_decimal( $total_tax );
 
 		if ( $total_tax !== $this->total_tax ) {
-			$this->register_change( 'total_tax' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'total_tax' );
+			}
+
 			$this->set_meta( 'total_tax', $total_tax );
 		}
 
@@ -2160,8 +2206,9 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param string $status
+	 * @param bool   $skip_change
 	 */
-	public function set_status( $status ) {
+	public function set_status( $status, $skip_change = FALSE ) {
 
 		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) {
 			$status = ATUM_PREFIX . $status;
@@ -2174,7 +2221,11 @@ abstract class AtumOrderModel {
 		}
 
 		if ( $status !== $this->status ) {
-			$this->register_change( 'status' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'status' );
+			}
+
 			$this->set_meta( 'status', $status );
 		}
 
@@ -2186,13 +2237,18 @@ abstract class AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string $created_via
+	 * @param bool   $skip_change
 	 */
-	public function set_created_via( $created_via ) {
+	public function set_created_via( $created_via, $skip_change = FALSE ) {
 
 		$created_via = wc_clean( $created_via );
 
 		if ( $created_via !== $this->created_via ) {
-			$this->register_change( 'created_via' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'created_via' );
+			}
+
 			$this->set_meta( 'created_via', $created_via );
 		}
 
@@ -2204,13 +2260,18 @@ abstract class AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param bool $prices_include_tax
+	 * @param bool $skip_change
 	 */
-	public function set_prices_include_tax( $prices_include_tax ) {
+	public function set_prices_include_tax( $prices_include_tax, $skip_change = FALSE ) {
 
 		$prices_include_tax = wc_bool_to_string( $prices_include_tax );
 
 		if ( $prices_include_tax !== $this->prices_include_tax ) {
-			$this->register_change( 'prices_include_tax' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'prices_include_tax' );
+			}
+
 			$this->set_meta( 'prices_include_tax', $prices_include_tax );
 		}
 
@@ -2222,8 +2283,9 @@ abstract class AtumOrderModel {
 	 * @since 1.2.9
 	 *
 	 * @param string $value
+	 * @param bool   $skip_change
 	 */
-	public function set_description( $value ) {
+	public function set_description( $value, $skip_change = FALSE ) {
 
 		$allowed_html = apply_filters( 'atum/orders/allowed_html_in_description', array(
 			'a'      => array(

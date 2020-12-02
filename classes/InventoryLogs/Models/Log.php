@@ -377,14 +377,19 @@ class Log extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param int $order_id
+	 * @param int  $order_id
+	 * @param bool $skip_change
 	 */
-	public function set_order( $order_id ) {
+	public function set_order( $order_id, $skip_change = FALSE ) {
 
 		$order_id = absint( $order_id );
 
 		if ( absint( $this->order ) !== $order_id ) {
-			$this->register_change( 'order' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'order' );
+			}
+
 			$this->set_meta( 'order', $order_id );
 		}
 
@@ -396,13 +401,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string $log_type
+	 * @param bool   $skip_change
 	 */
-	public function set_type( $log_type ) {
+	public function set_type( $log_type, $skip_change = FALSE ) {
 
 		$log_type = in_array( $log_type, array_keys( self::get_log_types() ), TRUE ) ? $log_type : '';
 
 		if ( $log_type !== $this->type ) {
-			$this->register_change( 'type' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'type' );
+			}
+
 			$this->set_meta( 'type', $log_type );
 		}
 
@@ -414,13 +424,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|\WC_DateTime $reservation_date
+	 * @param bool                $skip_change
 	 */
-	public function set_reservation_date( $reservation_date ) {
+	public function set_reservation_date( $reservation_date, $skip_change = FALSE ) {
 
 		$reservation_date = $reservation_date instanceof \WC_DateTime ? $reservation_date->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $reservation_date );
 
 		if ( $reservation_date !== $this->reservation_date ) {
-			$this->register_change( 'reservation_date' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'reservation_date' );
+			}
+
 			$this->set_meta( 'reservation_date', $reservation_date );
 		}
 
@@ -432,13 +447,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|\WC_DateTime $damage_date
+	 * @param bool                $skip_change
 	 */
-	public function set_damage_date( $damage_date ) {
+	public function set_damage_date( $damage_date, $skip_change = FALSE ) {
 
 		$damage_date = $damage_date instanceof \WC_DateTime ? $damage_date->date( 'Y-m-d H:i:s' ) : wc_clean( $damage_date );
 
 		if ( $damage_date !== $this->damage_date ) {
-			$this->register_change( 'damage_date' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'damage_date' );
+			}
+
 			$this->set_meta( 'damage_date', $damage_date );
 		}
 
@@ -450,13 +470,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|\WC_DateTime $return_date
+	 * @param bool                $skip_change
 	 */
-	public function set_return_date( $return_date ) {
+	public function set_return_date( $return_date, $skip_change = FALSE ) {
 
 		$return_date = $return_date instanceof \WC_DateTime ? $return_date->date( 'Y-m-d H:i:s' ) : wc_clean( $return_date );
 
 		if ( $return_date !== $this->return_date ) {
-			$this->register_change( 'return_date' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'return_date' );
+			}
+
 			$this->set_meta( 'return_date', $return_date );
 		}
 
@@ -468,13 +493,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string $custom_name
+	 * @param bool   $skip_change
 	 */
-	public function set_custom_name( $custom_name ) {
+	public function set_custom_name( $custom_name, $skip_change = FALSE ) {
 
 		$custom_name = wc_clean( $custom_name );
 
 		if ( $custom_name !== $this->custom_name ) {
-			$this->register_change( 'custom_name' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'custom_name' );
+			}
+
 			$this->set_meta( 'custom_name', $custom_name );
 		}
 
@@ -486,13 +516,18 @@ class Log extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string $shipping_company
+	 * @param bool   $skip_change
 	 */
-	public function set_shipping_company( $shipping_company ) {
+	public function set_shipping_company( $shipping_company, $skip_change ) {
 
 		$shipping_company = wc_clean( $shipping_company );
 
 		if ( $shipping_company !== $this->shipping_company ) {
-			$this->register_change( 'shipping_company' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'shipping_company' );
+			}
+
 			$this->set_meta( 'shipping_company', $shipping_company );
 		}
 

@@ -184,6 +184,9 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
+		// Avoid maximum function nesting on some cases.
+		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
+
 		$log_type = wc_clean( $_POST['atum_order_type'] );
 
 		/**
