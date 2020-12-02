@@ -253,6 +253,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		return array(
 			'cb'               => $existing_columns['cb'],
 			'atum_order_title' => __( 'PO', ATUM_TEXT_DOMAIN ),
+			'date_created'     => __( 'Created', ATUM_TEXT_DOMAIN ),
 			'last_modified'    => __( 'Last Modified', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
@@ -880,6 +881,57 @@ class PurchaseOrders extends AtumOrderPostType {
 
 			}
 		}
+
+	}
+
+	/**
+	 * Add sortable PO columns to the list
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function sortable_columns( $columns ) {
+
+		$columns = parent::sortable_columns( $columns );
+
+		$columns['date_expected'] = 'date_expected';
+
+		return $columns;
+	}
+
+	/**
+	 * Filters and sorting handler for PO columns
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param  array $query_vars
+	 *
+	 * @return array
+	 */
+	public function request_query( $query_vars ) {
+
+		global $typenow;
+
+		$query_vars = parent::request_query( $query_vars );
+
+		if ( self::POST_TYPE === $typenow ) {
+
+			// Sort by "Date Expected".
+			if ( isset( $query_vars['orderby'] ) && 'date_expected' === $query_vars['orderby'] ) {
+
+				$query_vars = array_merge( $query_vars, array(
+					'meta_key' => '_date_expected',
+					'orderby'  => 'meta_value',
+				) );
+
+			}
+
+		}
+
+		return $query_vars;
 
 	}
 

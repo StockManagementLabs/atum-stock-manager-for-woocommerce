@@ -277,6 +277,7 @@ class InventoryLogs extends AtumOrderPostType {
 			'atum_order_title' => __( 'Log', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'type'             => __( 'Type', ATUM_TEXT_DOMAIN ),
+			'date_created'     => __( 'Created', ATUM_TEXT_DOMAIN ),
 			'last_modified'    => __( 'Last Modified', ATUM_TEXT_DOMAIN ),
 			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),

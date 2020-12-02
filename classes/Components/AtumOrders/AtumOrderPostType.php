@@ -134,7 +134,7 @@ abstract class AtumOrderPostType {
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
 
 			// Move the 'trash' status to the end of the list.
-			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status' ) );
+			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status_view' ) );
 			
 		}
 
@@ -286,20 +286,20 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  array $vars
+	 * @param  array $query_vars
 	 *
 	 * @return array
 	 */
-	public function request_query( $vars ) {
+	public function request_query( $query_vars ) {
 
 		global $typenow, $wp_post_statuses;
 
 		if ( static::POST_TYPE === $typenow ) {
 
 			// Sorting.
-			if ( isset( $vars['orderby'] ) && 'total' === $vars['orderby'] ) {
+			if ( isset( $query_vars['orderby'] ) && 'total' === $query_vars['orderby'] ) {
 
-				$vars = array_merge( $vars, array(
+				$query_vars = array_merge( $query_vars, array(
 					'meta_key' => '_total',
 					'orderby'  => 'meta_value_num',
 				) );
@@ -307,7 +307,7 @@ abstract class AtumOrderPostType {
 			}
 
 			// Status.
-			if ( empty( $vars['post_status'] ) ) {
+			if ( empty( $query_vars['post_status'] ) ) {
 				
 				// All the ATUM Order posts must have the custom statuses created for them.
 				$statuses = array_keys( static::get_statuses() );
@@ -318,13 +318,13 @@ abstract class AtumOrderPostType {
 					}
 				}
 
-				$vars['post_status'] = $statuses;
+				$query_vars['post_status'] = $statuses;
 
 			}
 
 		}
 
-		return $vars;
+		return $query_vars;
 
 	}
 
@@ -396,8 +396,13 @@ abstract class AtumOrderPostType {
 				$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
 				break;
 
+			case 'date_created':
+				$post_date = strtotime( $post->post_date );
+				$output    = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', $post_date ), date_i18n( get_option( 'date_format' ), $post_date ) );
+				break;
+
 			case 'last_modified':
-				$output = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', $post->post_date ), Helpers::get_relative_date( $post->post_date ) );
+				$output = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', strtotime( $post->post_modified ) ), Helpers::get_relative_date( $post->post_modified ) );
 				break;
 
 			case 'notes':
@@ -553,13 +558,14 @@ abstract class AtumOrderPostType {
 
 		$custom = array(
 			'atum_order_title' => 'ID',
+			'date_created'     => 'post_date',
+			'last_modified'    => 'post_modified',
 			'total'            => 'total',
-			'date'             => 'date',
 		);
 
 		unset( $columns['comments'] );
 
-		return wp_parse_args( $custom, $columns );
+		return apply_filters( 'atum/order_post_type/sortable_columns', wp_parse_args( $custom, $columns ) );
 
 	}
 
@@ -1200,7 +1206,7 @@ abstract class AtumOrderPostType {
 	 *
 	 * @return array
 	 */
-	public function reorder_trash_status( $status_views ) {
+	public function reorder_trash_status_view( $status_views ) {
 
 		if ( array_key_exists( 'trash', $status_views ) ) {
 			$trash_status = $status_views['trash'];

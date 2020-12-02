@@ -3451,14 +3451,31 @@ final class Helpers {
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param string $date
+	 * @param string $date A Valid string date compatible with DateTime.
 	 *
 	 * @return string
 	 */
 	public static function get_relative_date( $date ) {
 
-		$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		return $timeAgo->inWordsFromStrings( $date ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		$lang_code       = ucfirst( get_locale() );
+		$short_lang_code = substr( $lang_code, 0, 2 );
+		$lang_class      = "\\Westsworld\\TimeAgo\\Translations\\$lang_code";
+		$alt_lang_class  = "\\Westsworld\\TimeAgo\\Translations\\$short_lang_code";
+
+		if ( class_exists( $lang_class ) ) {
+			$language = new $lang_class();
+		}
+		elseif ( class_exists( $alt_lang_class ) ) {
+			$language = new $alt_lang_class();
+		}
+		else {
+			$language = new \Westsworld\TimeAgo\Translations\En();
+		}
+
+		$time_zone = new \DateTimeZone( wp_timezone_string() );
+		$time_ago  = new \Westsworld\TimeAgo( $language );
+
+		return $time_ago->inWords( new \DateTime( $date, $time_zone ), new \DateTime( 'now', $time_zone ) );
 
 	}
 
