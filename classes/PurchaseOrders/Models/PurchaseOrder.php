@@ -373,17 +373,20 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param int $supplier_id
+	 * @param int  $supplier_id
+	 * @param bool $skip_change
 	 */
-	public function set_supplier( $supplier_id ) {
+	public function set_supplier( $supplier_id, $skip_change = FALSE ) {
 
 		$supplier_id = absint( $supplier_id );
 
 		if ( is_null( $this->supplier_obj ) || $this->supplier_obj->id !== $supplier_id ) {
 
-			$this->register_change( 'supplier' );
-			$this->set_meta( 'supplier', $supplier_id );
+			if ( ! $skip_change ) {
+				$this->register_change( 'supplier' );
+			}
 
+			$this->set_meta( 'supplier', $supplier_id );
 			$this->supplier_obj = $supplier_id ? new Supplier( $supplier_id ) : NULL;
 
 		}
@@ -395,13 +398,18 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|bool $multiple_suppliers
+	 * @param bool        $skip_change
 	 */
-	public function set_multiple_suppliers( $multiple_suppliers ) {
+	public function set_multiple_suppliers( $multiple_suppliers, $skip_change = FALSE ) {
 
 		$multiple_suppliers = wc_bool_to_string( $multiple_suppliers );
 
 		if ( $multiple_suppliers !== $this->multiple_suppliers ) {
-			$this->register_change( 'multiple_suppliers' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'multiple_suppliers' );
+			}
+
 			$this->set_meta( 'multiple_suppliers', $multiple_suppliers );
 		}
 
@@ -413,13 +421,18 @@ class PurchaseOrder extends AtumOrderModel {
 	 * @since 1.6.2
 	 *
 	 * @param string|\WC_DateTime $date_expected
+	 * @param bool                $skip_change
 	 */
-	public function set_date_expected( $date_expected ) {
+	public function set_date_expected( $date_expected, $skip_change = FALSE ) {
 
 		$date_expected = $date_expected instanceof \WC_DateTime ? $date_expected->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_expected );
 
 		if ( $date_expected !== $this->date_expected ) {
-			$this->register_change( 'date_expected' );
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'date_expected' );
+			}
+
 			$this->set_meta( 'date_expected', $date_expected );
 		}
 

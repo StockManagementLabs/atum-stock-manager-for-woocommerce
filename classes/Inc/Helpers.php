@@ -1781,12 +1781,13 @@ final class Helpers {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int    $atum_order_id
-	 * @param string $post_type
+	 * @param int    $atum_order_id The order item ID.
+	 * @param bool   $read_items    NOTE: it's important to not read items when not necessary to improve performance.
+	 * @param string $post_type     Optional. The ATUM order post type. If not passed will get the post type from the passed order ID.
 	 *
 	 * @return AtumOrderModel|\WP_Error
 	 */
-	public static function get_atum_order_model( $atum_order_id, $post_type = '' ) {
+	public static function get_atum_order_model( $atum_order_id, $read_items, $post_type = '' ) {
 
 		if ( ! $post_type ) {
 			$post_type = get_post_type( $atum_order_id );
@@ -1810,7 +1811,7 @@ final class Helpers {
 			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		return new $model_class( $atum_order_id );
+		return new $model_class( $atum_order_id, $read_items );
 
 	}
 
@@ -1828,7 +1829,7 @@ final class Helpers {
 		global $wpdb;
 		$atum_order_id = $wpdb->get_var( $wpdb->prepare( "SELECT order_id FROM $wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . ' WHERE order_item_id = %d', $atum_order_item_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		return self::get_atum_order_model( $atum_order_id );
+		return self::get_atum_order_model( $atum_order_id, TRUE );
 	}
 
 	/**
@@ -2123,7 +2124,7 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						$timestamp = Helpers::get_current_timestamp();
 						$now       = self::get_wc_time( $timestamp );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
@@ -3079,7 +3080,7 @@ final class Helpers {
 
 			// WC Orders.
 			default:
-				$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp    = Helpers::get_current_timestamp();
 				$current_time = self::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = self::get_sold_last_days_option();
 				$product_id   = $product->get_id();
@@ -3340,7 +3341,7 @@ final class Helpers {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$timestamp       = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$timestamp       = Helpers::get_current_timestamp();
 		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
@@ -3450,14 +3451,50 @@ final class Helpers {
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param string $date
+	 * @param string $date A Valid string date compatible with DateTime.
 	 *
 	 * @return string
 	 */
 	public static function get_relative_date( $date ) {
 
-		$timeAgo = new \Westsworld\TimeAgo(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		return $timeAgo->inWordsFromStrings( $date ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		$lang_code       = ucfirst( get_locale() );
+		$short_lang_code = substr( $lang_code, 0, 2 );
+		$lang_class      = "\\Westsworld\\TimeAgo\\Translations\\$lang_code";
+		$alt_lang_class  = "\\Westsworld\\TimeAgo\\Translations\\$short_lang_code";
+
+		if ( class_exists( $lang_class ) ) {
+			$language = new $lang_class();
+		}
+		elseif ( class_exists( $alt_lang_class ) ) {
+			$language = new $alt_lang_class();
+		}
+		else {
+			$language = new \Westsworld\TimeAgo\Translations\En();
+		}
+
+		$time_zone = new \DateTimeZone( wp_timezone_string() );
+		$time_ago  = new \Westsworld\TimeAgo( $language );
+
+		return $time_ago->inWords( new \DateTime( $date, $time_zone ), new \DateTime( 'now', $time_zone ) );
+
+	}
+
+	/**
+	 * Get the current timestamp
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param bool $gmt
+	 *
+	 * @return false|int|string
+	 */
+	public static function get_current_timestamp( $gmt = FALSE ) {
+
+		if ( $gmt ) {
+			return function_exists( 'wp_date' ) ? wp_date( 'U', NULL, new \DateTimeZone( 'GMT' ) ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		}
+
+		return function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 
 	}
 

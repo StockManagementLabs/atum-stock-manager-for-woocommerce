@@ -32,7 +32,7 @@ $log_status = $atum_order->get_status();
 		<h2>
 			<?php
 			/* translators: first one is the inventory log name and second is the ID */
-			printf( esc_html__( '%1$s #%2$s details', ATUM_TEXT_DOMAIN ), esc_attr( $labels['singular_name'] ), esc_attr( $atum_order_post->ID ) );
+			printf( esc_html__( '%1$s #%2$s', ATUM_TEXT_DOMAIN ), esc_attr( $labels['singular_name'] ), esc_attr( $atum_order_post->ID ) );
 			?>
 		</h2>
 

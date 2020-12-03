@@ -132,6 +132,9 @@ abstract class AtumOrderPostType {
 			add_filter( 'get_search_query', array( $this, 'search_label' ) );
 			add_filter( 'query_vars', array( $this, 'add_custom_search_query_var' ) );
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
+
+			// Move the 'trash' status to the end of the list.
+			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status_view' ) );
 			
 		}
 
@@ -194,7 +197,7 @@ abstract class AtumOrderPostType {
 				'label'                     => $label,
 				'public'                    => FALSE,
 				'exclude_from_search'       => FALSE,
-				'show_in_admin_all_list'    => TRUE,
+				'show_in_admin_all_list'    => 'trash' !== $status,
 				'show_in_admin_status_list' => TRUE,
 				/* translators: the count of orders in current status */
 				'label_count'               => array(
@@ -283,20 +286,20 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  array $vars
+	 * @param  array $query_vars
 	 *
 	 * @return array
 	 */
-	public function request_query( $vars ) {
+	public function request_query( $query_vars ) {
 
 		global $typenow, $wp_post_statuses;
 
 		if ( static::POST_TYPE === $typenow ) {
 
 			// Sorting.
-			if ( isset( $vars['orderby'] ) && 'total' === $vars['orderby'] ) {
+			if ( isset( $query_vars['orderby'] ) && 'total' === $query_vars['orderby'] ) {
 
-				$vars = array_merge( $vars, array(
+				$query_vars = array_merge( $query_vars, array(
 					'meta_key' => '_total',
 					'orderby'  => 'meta_value_num',
 				) );
@@ -304,7 +307,7 @@ abstract class AtumOrderPostType {
 			}
 
 			// Status.
-			if ( empty( $vars['post_status'] ) ) {
+			if ( empty( $query_vars['post_status'] ) ) {
 				
 				// All the ATUM Order posts must have the custom statuses created for them.
 				$statuses = array_keys( static::get_statuses() );
@@ -315,13 +318,13 @@ abstract class AtumOrderPostType {
 					}
 				}
 
-				$vars['post_status'] = $statuses;
+				$query_vars['post_status'] = $statuses;
 
 			}
 
 		}
 
-		return $vars;
+		return $query_vars;
 
 	}
 
@@ -357,7 +360,7 @@ abstract class AtumOrderPostType {
 			case 'status':
 				$statuses      = static::get_statuses();
 				$status_colors = static::get_status_colors();
-				$atum_order    = Helpers::get_atum_order_model( $post->ID );
+				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( ! is_wp_error( $atum_order ) ) {
 
@@ -393,8 +396,13 @@ abstract class AtumOrderPostType {
 				$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
 				break;
 
+			case 'date_created':
+				$post_date = strtotime( $post->post_date );
+				$output    = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', $post_date ), date_i18n( get_option( 'date_format' ), $post_date ) );
+				break;
+
 			case 'last_modified':
-				$output = sprintf( '<time>%s</time>', Helpers::get_relative_date( $post->post_date ) );
+				$output = sprintf( '<abbr title="%1$s" class="atum-tooltip">%2$s</abbr>', date_i18n( 'Y-m-d H:i', strtotime( $post->post_modified ) ), Helpers::get_relative_date( $post->post_modified ) );
 				break;
 
 			case 'notes':
@@ -431,7 +439,7 @@ abstract class AtumOrderPostType {
 				break;
 
 			case 'total':
-				$atum_order = Helpers::get_atum_order_model( $post->ID );
+				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( ! is_wp_error( $atum_order ) ) {
 					$output = $atum_order->get_formatted_total();
@@ -440,7 +448,7 @@ abstract class AtumOrderPostType {
 				break;
 
 			case 'actions':
-				$atum_order = Helpers::get_atum_order_model( $post->ID );
+				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
 				if ( is_wp_error( $atum_order ) ) {
 					break;
@@ -550,13 +558,14 @@ abstract class AtumOrderPostType {
 
 		$custom = array(
 			'atum_order_title' => 'ID',
+			'date_created'     => 'post_date',
+			'last_modified'    => 'post_modified',
 			'total'            => 'total',
-			'date'             => 'date',
 		);
 
 		unset( $columns['comments'] );
 
-		return wp_parse_args( $custom, $columns );
+		return apply_filters( 'atum/order_post_type/sortable_columns', wp_parse_args( $custom, $columns ) );
 
 	}
 
@@ -639,7 +648,7 @@ abstract class AtumOrderPostType {
 	 */
 	public function show_items_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 		Helpers::load_view( 'meta-boxes/atum-order/items', compact( 'atum_order' ) );
 
 	}
@@ -763,7 +772,7 @@ abstract class AtumOrderPostType {
 		$post_type = static::POST_TYPE;
 
 		foreach ( $ids as $id ) {
-			$atum_order = Helpers::get_atum_order_model( $id );
+			$atum_order = Helpers::get_atum_order_model( $id, FALSE, $post_type );
 			$atum_order->update_status( $new_status );
 			$changed++;
 		}
@@ -1125,7 +1134,7 @@ abstract class AtumOrderPostType {
 			return;
 		}
 
-		$atum_order = $this->get_current_atum_order( $po_id );
+		$atum_order = $this->get_current_atum_order( $po_id, TRUE );
 		$atum_order->after_save( $atum_order );
 
 	}
@@ -1177,7 +1186,7 @@ abstract class AtumOrderPostType {
 			// Avoid cyclical calls to this method.
 			remove_filter( 'pre_delete_post', array( $this, 'maybe_delete_atum_order' ), PHP_INT_MAX );
 
-			$atum_order = Helpers::get_atum_order_model( $post->ID );
+			$atum_order = Helpers::get_atum_order_model( $post->ID, TRUE, $post->post_type );
 			$atum_order->delete( $force_delete );
 
 			$check = TRUE; // Let WP know that the post was successfully deleted.
@@ -1189,15 +1198,37 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
+	 * Send the trash status to the end of the status views list on ATUM Orders' List Tables
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $status_views
+	 *
+	 * @return array
+	 */
+	public function reorder_trash_status_view( $status_views ) {
+
+		if ( array_key_exists( 'trash', $status_views ) ) {
+			$trash_status = $status_views['trash'];
+			unset( $status_views['trash'] );
+			$status_views['trash'] = $trash_status;
+		}
+
+		return $status_views;
+
+	}
+
+	/**
 	 * Get the currently instantiated ATUM Order object (if any) or create a new one
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return AtumOrderModel
 	 */
-	abstract public function get_current_atum_order( $post_id );
+	abstract public function get_current_atum_order( $post_id, $read_items );
 
 	/**
 	 * Get the available ATUM Order statuses

@@ -363,7 +363,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters = $this->get_filters_query_string();
-		$timestamp           = function_exists( 'wp_date' ) ? wp_date( 'U', NULL, new \DateTimeZone( 'GMT' ) ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$timestamp           = Helpers::get_current_timestamp( TRUE );
 		$this->day           = Helpers::date_format( $timestamp, TRUE, TRUE );
 		self::$sale_days     = Helpers::get_sold_last_days_option();
 

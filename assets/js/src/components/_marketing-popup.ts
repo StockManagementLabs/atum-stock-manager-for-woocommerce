@@ -115,7 +115,7 @@ export default class MarketingPopup {
 						width             : 520,
 						padding           : null,
 						customClass       : {
-							container: 'marketing-popup'
+							popup: 'marketing-popup'
 						},
 						background        : popupSettings.background,
 						showCloseButton   : true,

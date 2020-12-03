@@ -35,7 +35,7 @@ $po_status = $atum_order->get_status();
 		<h2>
 			<?php
 			/* translators: first one is the purchase order name and second is the ID */
-			printf( esc_html__( '%1$s #%2$s details', ATUM_TEXT_DOMAIN ), $labels['singular_name'], $atum_order_post->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			printf( esc_html__( '%1$s #%2$s', ATUM_TEXT_DOMAIN ), $labels['singular_name'], $atum_order_post->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</h2>
 

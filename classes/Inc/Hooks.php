@@ -461,7 +461,7 @@ class Hooks {
 				$out_stock_date = NULL;
 
 				if ( ! $current_stock ) {
-					$timestamp      = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+					$timestamp      = Helpers::get_current_timestamp();
 					$out_stock_date = Helpers::date_format( $timestamp, TRUE, TRUE );
 				}
 
@@ -852,7 +852,7 @@ class Hooks {
 		if ( ! $paid_date ) {
 
 			$order_mod = wc_get_order( $order_id );
-			$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+			$timestamp = Helpers::get_current_timestamp();
 			$order_mod->set_date_paid( $timestamp );
 			$order_mod->save();
 		}

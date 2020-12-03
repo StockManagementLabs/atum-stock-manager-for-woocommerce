@@ -175,7 +175,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function show_data_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 
 		if ( ! $atum_order instanceof PurchaseOrder ) {
 			return;
@@ -209,28 +209,33 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po = $this->get_current_atum_order( $po_id );
+		$po = $this->get_current_atum_order( $po_id, TRUE );
 
 		if ( empty( $po ) ) {
 			return;
 		}
 
-		$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-		$po_date   = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$po_date   = date_i18n( 'Y-m-d H:i:s', $po_date );
+		// Avoid maximum function nesting on some cases.
+		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
-		$date_expected = empty( $_POST['date_expected'] ) ? $timestamp : strtotime( $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] . ':00' );
-		$date_expected = date_i18n( 'Y-m-d H:i:s', $date_expected );
+		$timestamp      = Helpers::get_current_timestamp();
+		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
+		$po_date        = empty( $_POST['date'] ) ? $timestamp : strtotime( $posted_po_date );
+		$po_date        = date_i18n( 'Y-m-d H:i', $po_date );
+
+		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
+		$date_expected        = empty( $_POST['date_expected'] ) ? $timestamp : strtotime( $posted_date_expected );
+		$date_expected        = date_i18n( 'Y-m-d H:i', $date_expected );
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
-		$po->set_props( array(
+		$po->set_props( apply_filters( 'atum/purchase_orders/save_meta_boxes_props', array(
 			'status'             => $_POST['status'],
 			'date_created'       => $po_date,
 			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? $_POST['supplier'] : '',
 			'multiple_suppliers' => $multiple_suppliers,
 			'date_expected'      => $date_expected,
-		) );
+		), $po ) );
 
 		// Set the PO description as post content.
 		$po->set_description( $_POST['description'] );
@@ -253,6 +258,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		return array(
 			'cb'               => $existing_columns['cb'],
 			'atum_order_title' => __( 'PO', ATUM_TEXT_DOMAIN ),
+			'date_created'     => __( 'Created', ATUM_TEXT_DOMAIN ),
 			'last_modified'    => __( 'Last Modified', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'supplier'         => __( 'Supplier', ATUM_TEXT_DOMAIN ),
@@ -282,7 +288,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			return;
 		}
 
-		$po = $this->get_current_atum_order( $post->ID );
+		$po = $this->get_current_atum_order( $post->ID, FALSE );
 
 		switch ( $column ) {
 
@@ -298,13 +304,64 @@ class PurchaseOrders extends AtumOrderPostType {
 				$date_expected = $po->date_expected;
 
 				if ( $date_expected ) {
-					$date_expected = '<abbr title="' . gmdate( 'Y-m-d H:i:s', strtotime( $date_expected ) ) . '">' . gmdate( 'Y-m-d', strtotime( $date_expected ) ) . '</abbr>';
+					$date_expected = '<abbr title="' . gmdate( 'Y-m-d H:i', strtotime( $date_expected ) ) . '" class="atum-tooltip">' . gmdate( 'Y-m-d', strtotime( $date_expected ) ) . '</abbr>';
 				}
 
 				echo $date_expected; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				break;
 
 		}
+
+	}
+
+	/**
+	 * Add sortable PO columns to the list
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function sortable_columns( $columns ) {
+
+		$columns = parent::sortable_columns( $columns );
+
+		$columns['date_expected'] = 'date_expected';
+
+		return $columns;
+	}
+
+	/**
+	 * Filters and sorting handler for PO columns
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param  array $query_vars
+	 *
+	 * @return array
+	 */
+	public function request_query( $query_vars ) {
+
+		global $typenow;
+
+		$query_vars = parent::request_query( $query_vars );
+
+		if ( self::POST_TYPE === $typenow ) {
+
+			// Sort by "Date Expected".
+			if ( isset( $query_vars['orderby'] ) && 'date_expected' === $query_vars['orderby'] ) {
+
+				$query_vars = array_merge( $query_vars, array(
+					'meta_key' => '_date_expected',
+					'orderby'  => 'meta_value',
+				) );
+
+			}
+
+		}
+
+		return $query_vars;
 
 	}
 
@@ -413,14 +470,15 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return PurchaseOrder
 	 */
-	public function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id, $read_items ) {
 
 		if ( ! $this->po || $this->po->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$this->po = Helpers::get_atum_order_model( $post_id, self::POST_TYPE );
+			$this->po = Helpers::get_atum_order_model( $post_id, $read_items, self::POST_TYPE );
 		}
 
 		return $this->po;
@@ -881,6 +939,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		}
 
 	}
+
 
 	/****************************
 	 * Instance methods

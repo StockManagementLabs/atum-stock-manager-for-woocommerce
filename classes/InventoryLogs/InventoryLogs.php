@@ -145,7 +145,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	public function show_data_meta_box( $post ) {
 
-		$atum_order = $this->get_current_atum_order( $post->ID );
+		$atum_order = $this->get_current_atum_order( $post->ID, TRUE );
 
 		if ( ! $atum_order instanceof Log ) {
 			return;
@@ -178,11 +178,14 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $po_id );
+		$log = $this->get_current_atum_order( $po_id, TRUE );
 
 		if ( empty( $log ) ) {
 			return;
 		}
+
+		// Avoid maximum function nesting on some cases.
+		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
 		$log_type = wc_clean( $_POST['atum_order_type'] );
 
@@ -193,7 +196,7 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $return_date
 		 * @var string $damage_date
 		 */
-		$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$timestamp = Helpers::get_current_timestamp();
 		$log_date  = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
 		$log_date  = date_i18n( 'Y-m-d H:i:s', $log_date );
 
@@ -277,6 +280,7 @@ class InventoryLogs extends AtumOrderPostType {
 			'atum_order_title' => __( 'Log', ATUM_TEXT_DOMAIN ),
 			'status'           => __( 'Status', ATUM_TEXT_DOMAIN ),
 			'type'             => __( 'Type', ATUM_TEXT_DOMAIN ),
+			'date_created'     => __( 'Created', ATUM_TEXT_DOMAIN ),
 			'last_modified'    => __( 'Last Modified', ATUM_TEXT_DOMAIN ),
 			'wc_order'         => __( 'Order', ATUM_TEXT_DOMAIN ),
 			'total'            => __( 'Total', ATUM_TEXT_DOMAIN ),
@@ -304,7 +308,7 @@ class InventoryLogs extends AtumOrderPostType {
 			return;
 		}
 
-		$log = $this->get_current_atum_order( $post->ID );
+		$log = $this->get_current_atum_order( $post->ID, FALSE );
 
 		switch ( $column ) {
 
@@ -333,6 +337,71 @@ class InventoryLogs extends AtumOrderPostType {
 				break;
 
 		}
+
+	}
+
+	/**
+	 * Add sortable IL columns to the list
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function sortable_columns( $columns ) {
+
+		$columns = parent::sortable_columns( $columns );
+
+		$columns['type']     = 'type';
+		$columns['wc_order'] = 'wc_order';
+
+		return $columns;
+	}
+
+	/**
+	 * Filters and sorting handler for IL columns
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param  array $query_vars
+	 *
+	 * @return array
+	 */
+	public function request_query( $query_vars ) {
+
+		global $typenow;
+
+		$query_vars = parent::request_query( $query_vars );
+
+		if ( self::POST_TYPE === $typenow ) {
+
+			if ( isset( $query_vars['orderby'] ) ) {
+
+				// Sort by "Type".
+				if ( 'type' === $query_vars['orderby'] ) {
+
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key' => '_type',
+						'orderby'  => 'meta_value',
+					) );
+
+				}
+				// Sort by "WC Order".
+				elseif ( 'wc_order' === $query_vars['orderby'] ) {
+
+					$query_vars = array_merge( $query_vars, array(
+						'meta_key' => '_order',
+						'orderby'  => 'meta_value',
+					) );
+
+				}
+
+			}
+
+		}
+
+		return $query_vars;
 
 	}
 
@@ -441,14 +510,15 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $read_items
 	 *
 	 * @return Log
 	 */
-	public function get_current_atum_order( $post_id ) {
+	public function get_current_atum_order( $post_id, $read_items ) {
 
 		if ( ! $this->log || $this->log->get_id() != $post_id ) { // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$this->log = new Log( $post_id );
+			$this->log = Helpers::get_atum_order_model( $post_id, $read_items, self::POST_TYPE );
 		}
 
 		return $this->log;

@@ -570,7 +570,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $sold_today ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$sold_today = Helpers::get_sold_last_days( 'today midnight', $this->day, $this->product->get_id() );
 				$this->product->set_sold_today( $sold_today );
-				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp = Helpers::get_current_timestamp();
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 			}
 
@@ -676,7 +676,7 @@ class ListTable extends AtumListTable {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( "$this->day -$sale_days days", $this->day, $this->product->get_id() );
 				$this->product->set_sales_last_days( $sales_last_ndays );
-				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp = Helpers::get_current_timestamp();
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 
 			}
@@ -746,7 +746,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $out_stock_days ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$out_stock_days = Helpers::get_product_out_stock_days( $this->product );
 				$this->product->set_out_stock_days( $out_stock_days );
-				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp = Helpers::get_current_timestamp();
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't change.
 			}
 
@@ -778,7 +778,7 @@ class ListTable extends AtumListTable {
 			if ( is_null( $lost_sales ) || Helpers::is_product_data_outdated( $this->product ) ) {
 				$lost_sales = Helpers::get_product_lost_sales( $this->product );
 				$this->product->set_lost_sales( $lost_sales );
-				$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp = Helpers::get_current_timestamp();
 				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
 			}
 

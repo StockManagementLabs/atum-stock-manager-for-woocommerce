@@ -739,7 +739,7 @@ final class Ajax {
 				break;
 
 			case 'expired':
-				$timestamp     = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp     = Helpers::get_current_timestamp();
 				$error_message = sprintf(
 					/* translators: the expiration date */
 					__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
@@ -822,7 +822,7 @@ final class Ajax {
 				switch ( $license_data->error ) {
 
 					case 'expired':
-						$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						$timestamp = Helpers::get_current_timestamp();
 						$message   = sprintf(
 							/* translators: the expiration date */
 							__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
@@ -1140,7 +1140,7 @@ final class Ajax {
 			 *
 			 * @var PurchaseOrder $po
 			 */
-			$po = Helpers::get_atum_order_model( $post_id );
+			$po = Helpers::get_atum_order_model( $post_id, FALSE );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
 			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
@@ -1313,7 +1313,7 @@ final class Ajax {
 
 		if ( $post_id ) {
 
-			$atum_order = Helpers::get_atum_order_model( $post_id );
+			$atum_order = Helpers::get_atum_order_model( $post_id, FALSE );
 
 			if ( ! is_wp_error( $atum_order ) ) {
 
@@ -1375,7 +1375,7 @@ final class Ajax {
 		}
 
 		$atum_order_id = absint( $_POST['atum_order_id'] );
-		$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 		if ( is_wp_error( $atum_order ) ) {
 			wp_die( -1 );
@@ -1409,7 +1409,7 @@ final class Ajax {
 
 			$atum_order_id = absint( $_POST['atum_order_id'] );
 			$post_type     = get_post_type( $atum_order_id );
-			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
@@ -1474,7 +1474,7 @@ final class Ajax {
 		try {
 
 			$atum_order_id = absint( $_POST['atum_order_id'] );
-			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
@@ -1517,7 +1517,7 @@ final class Ajax {
 		try {
 
 			$atum_order_id = absint( $_POST['atum_order_id'] );
-			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
@@ -1564,7 +1564,7 @@ final class Ajax {
 
 			$atum_order_id = absint( $_POST['atum_order_id'] );
 			$rate_id       = absint( $_POST['rate_id'] );
-			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
@@ -1612,7 +1612,7 @@ final class Ajax {
 
 		if ( ! empty( $atum_order_item_ids ) ) {
 
-			$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
@@ -1649,7 +1649,7 @@ final class Ajax {
 
 		$atum_order_id = absint( $_POST['atum_order_id'] );
 		$rate_id       = absint( $_POST['rate_id'] );
-		$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 		if ( is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
@@ -1688,7 +1688,7 @@ final class Ajax {
 		$items = array();
 		parse_str( $_POST['items'], $items );
 
-		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 		if ( is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
@@ -1724,7 +1724,7 @@ final class Ajax {
 		if ( isset( $_POST['atum_order_id'], $_POST['items'] ) ) {
 
 			$atum_order_id = absint( $_POST['atum_order_id'] );
-			$atum_order    = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
@@ -1795,7 +1795,7 @@ final class Ajax {
 		$atum_order_item_ids = array_map( 'absint', $_POST['atum_order_item_ids'] );
 		$quantities          = array_map( 'wc_stock_amount', $_POST['quantities'] );
 
-		$atum_order       = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order       = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 		$atum_order_items = $atum_order->get_items();
 		$return           = array();
 
@@ -1887,7 +1887,7 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid data provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ) );
+		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ), TRUE );
 		$atum_order_item = $atum_order->get_item( absint( $_POST['atum_order_item_id'] ) );
 
 		/**
@@ -2034,7 +2034,7 @@ final class Ajax {
 		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-order-mark-status' ) ) {
 
 			$status     = sanitize_text_field( $_GET['status'] );
-			$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+			$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
@@ -2459,7 +2459,7 @@ final class Ajax {
 		 *
 		 * @var PurchaseOrder $atum_order
 		 */
-		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
 
 		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
 			wp_send_json_error();
@@ -2500,7 +2500,7 @@ final class Ajax {
 		 *
 		 * @var PurchaseOrder $atum_order
 		 */
-		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+		$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
 
 		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
 			wp_send_json_error();
