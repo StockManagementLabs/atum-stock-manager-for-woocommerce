@@ -219,13 +219,13 @@ class PurchaseOrders extends AtumOrderPostType {
 		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
 		$timestamp      = Helpers::get_current_timestamp();
-		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' : $_POST['date'];
+		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
 		$po_date        = empty( $_POST['date'] ) ? $timestamp : strtotime( $posted_po_date );
-		$po_date        = date_i18n( 'Y-m-d H:i:s', $po_date );
+		$po_date        = date_i18n( 'Y-m-d H:i', $po_date );
 
-		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] . ':00' : $_POST['date_expected'];
+		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
 		$date_expected        = empty( $_POST['date_expected'] ) ? $timestamp : strtotime( $posted_date_expected );
-		$date_expected        = date_i18n( 'Y-m-d H:i:s', $date_expected );
+		$date_expected        = date_i18n( 'Y-m-d H:i', $date_expected );
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
