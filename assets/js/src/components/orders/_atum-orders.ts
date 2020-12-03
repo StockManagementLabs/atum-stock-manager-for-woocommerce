@@ -88,10 +88,10 @@ export default class AtumOrders {
 		$( '#atum_order_type' ).change( ( evt: JQueryEventObject ) => this.toggleExtraFields( evt ) ).change();
 
 		// Hide/show the blocker section on supplier dropdown changes.
-		$( '.dropdown_supplier' ).change( ( evt: JQueryEventObject ) => this.savePurchaseOrderSupplier( $( evt.currentTarget ) ) ).change();
+		$( '.dropdown_supplier' ).change( ( evt: JQueryEventObject ) => this.savePurchaseOrderSupplier( $( evt.currentTarget ) ) );
 
 		// Trigger multiple suppliers' dependent fields
-		$( '#multiple_suppliers' ).change( ( evt: JQueryEventObject ) => this.toggleSupplierField( evt ) ).change();
+		$( '#multiple_suppliers' ).change( ( evt: JQueryEventObject ) => this.toggleSupplierField( evt ) );
 
 		// Ask for importing the order items after linking an order
 		$( '#wc_order' ).change( () => this.importOrderItems() );

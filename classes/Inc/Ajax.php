@@ -2460,8 +2460,19 @@ final class Ajax {
 		 * @var PurchaseOrder $atum_order
 		 */
 		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+
+		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
+			wp_send_json_error();
+		}
+
+		// Set the Supplier.
 		$atum_order->set_supplier( $supplier );
-		$atum_order->save_meta();
+
+		if ( ! $atum_order->get_status() || 'auto-draft' === $atum_order->get_status() ) {
+			$atum_order->set_status( 'atum_pending' );
+			$atum_order->save();
+		} else
+			$atum_order->save_meta();
 
 		wp_send_json_success( [
 			'atum_order_id' => $atum_order_id,
@@ -2490,8 +2501,18 @@ final class Ajax {
 		 * @var PurchaseOrder $atum_order
 		 */
 		$atum_order = Helpers::get_atum_order_model( $atum_order_id );
+
+		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
+			wp_send_json_error();
+		}
+
 		$atum_order->set_multiple_suppliers( $multiple );
-		$atum_order->save_meta();
+
+		if ( ! $atum_order->get_status() || 'auto-draft' === $atum_order->get_status() ) {
+			$atum_order->set_status( 'atum_pending' );
+			$atum_order->save();
+		} else
+			$atum_order->save_meta();
 
 		wp_send_json_success( [
 			'atum_order_id' => $atum_order_id,
