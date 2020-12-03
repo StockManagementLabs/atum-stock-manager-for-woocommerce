@@ -74,7 +74,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$this->get_supplier();
 		}
 		
-		$this->block_message = __( 'Set the Supplier field above in order to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->block_message = __( 'Set the Supplier field above or allow Multiple Suppliers in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 
