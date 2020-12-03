@@ -101,6 +101,9 @@ export default class SettingsPage {
 			}
 			
 		});
+
+		// Adjust the nav height.
+		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px`  );
 	
 	}
 
@@ -204,6 +207,7 @@ export default class SettingsPage {
 			if ( 'visual_settings' === $navLink.data('tab') ) {
 				this.hideColors();
 			}
+
 		});
 		
 	}
