@@ -2124,7 +2124,7 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						$timestamp = Helpers::get_current_timestamp();
 						$now       = self::get_wc_time( $timestamp );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
@@ -3080,7 +3080,7 @@ final class Helpers {
 
 			// WC Orders.
 			default:
-				$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp    = Helpers::get_current_timestamp();
 				$current_time = self::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = self::get_sold_last_days_option();
 				$product_id   = $product->get_id();
@@ -3341,7 +3341,7 @@ final class Helpers {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$timestamp       = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$timestamp       = Helpers::get_current_timestamp();
 		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
@@ -3476,6 +3476,25 @@ final class Helpers {
 		$time_ago  = new \Westsworld\TimeAgo( $language );
 
 		return $time_ago->inWords( new \DateTime( $date, $time_zone ), new \DateTime( 'now', $time_zone ) );
+
+	}
+
+	/**
+	 * Get the current timestamp
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param bool $gmt
+	 *
+	 * @return false|int|string
+	 */
+	public static function get_current_timestamp( $gmt = FALSE ) {
+
+		if ( $gmt ) {
+			return function_exists( 'wp_date' ) ? wp_date( 'U', NULL, new \DateTimeZone( 'GMT' ) ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		}
+
+		return function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 
 	}
 

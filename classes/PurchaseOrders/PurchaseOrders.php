@@ -218,7 +218,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Avoid maximum function nesting on some cases.
 		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
-		$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$timestamp = Helpers::get_current_timestamp();
 		$po_date   = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
 		$po_date   = date_i18n( 'Y-m-d H:i:s', $po_date );
 

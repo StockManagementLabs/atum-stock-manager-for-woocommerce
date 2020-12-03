@@ -919,7 +919,7 @@ abstract class AtumOrderModel {
 			$currency = $this->currency;
 			$this->set_currency( $currency ?: get_woocommerce_currency() );
 			$status       = $this->get_status();
-			$timestamp    = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+			$timestamp    = Helpers::get_current_timestamp();
 			$date_created = Helpers::get_wc_time( $this->date_created ?: $timestamp );
 			$this->set_date_created( $date_created );
 

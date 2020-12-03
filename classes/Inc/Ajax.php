@@ -739,7 +739,7 @@ final class Ajax {
 				break;
 
 			case 'expired':
-				$timestamp     = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+				$timestamp     = Helpers::get_current_timestamp();
 				$error_message = sprintf(
 					/* translators: the expiration date */
 					__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
@@ -822,7 +822,7 @@ final class Ajax {
 				switch ( $license_data->error ) {
 
 					case 'expired':
-						$timestamp = function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+						$timestamp = Helpers::get_current_timestamp();
 						$message   = sprintf(
 							/* translators: the expiration date */
 							__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
