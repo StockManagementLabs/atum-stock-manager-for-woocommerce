@@ -4,7 +4,7 @@
 
 // It needs the WP color picker script loaded in order to work.
 
-export let ColorPicker = {
+const ColorPicker = {
 	
 	doColorPickers(selectColorText: string) {
 		
@@ -65,3 +65,5 @@ export let ColorPicker = {
     }
 	
 };
+
+export default ColorPicker;

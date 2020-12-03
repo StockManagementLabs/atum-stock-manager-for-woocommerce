@@ -6,8 +6,8 @@ import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
 
 import EnhancedSelect from './_enhanced-select';
 import Settings from '../config/_settings';
-import { Utils } from '../utils/_utils';
-import { ButtonGroup } from './_button-group';
+import Utils from '../utils/_utils';
+import ButtonGroup from './_button-group';
 
 export default class EditPopovers {
 	

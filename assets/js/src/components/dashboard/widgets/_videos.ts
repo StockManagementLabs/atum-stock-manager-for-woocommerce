@@ -2,7 +2,7 @@
    DASHBOARD VIDEOS WIDGET
    ======================================= */
 
-import {NiceScroll} from '../../_nice-scroll';
+import NiceScroll from '../../_nice-scroll';
 
 export default class VideosWidget {
 	

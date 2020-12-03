@@ -3,7 +3,7 @@
    ======================================= */
 
 import CurrentStockValueWidget from './widgets/_current-stock-value';
-import { NiceScroll } from '../_nice-scroll';
+import NiceScroll from '../_nice-scroll';
 import Settings from '../../config/_settings';
 import SalesStatsWidget from './widgets/_sales-stats';
 import StatisticsWidget from './widgets/_statistics';

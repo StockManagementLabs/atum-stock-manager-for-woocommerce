@@ -2,7 +2,7 @@
    STUPID TABLE
    ======================================= */
 
-export let StupidTable = {
+const StupidTable = {
 	
 	init($table: JQuery) {
 		(<any>$table).stupidtable();
@@ -20,3 +20,5 @@ export let StupidTable = {
 	}
 	
 }
+
+export default StupidTable;

@@ -3,13 +3,14 @@
    ======================================= */
 
 import EnhancedSelect from '../_enhanced-select';
-import { ButtonGroup } from '../_button-group';
-import { ColorPicker } from '../_color-picker';
+import ButtonGroup from '../_button-group';
+import ColorPicker from '../_color-picker';
 import DateTimePicker from '../_date-time-picker';
+import ImageUploader from '../_image-uploader';
 import Settings from '../../config/_settings';
 import SmartForm from '../_smart-form';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import { Switcher } from '../_switcher';
+import Switcher from '../_switcher';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
 
@@ -58,6 +59,9 @@ export default class SettingsPage {
 		
 		// Enable button groups.
 		ButtonGroup.doButtonGroups(this.$form);
+
+		// Enable image uploader.
+		ImageUploader.doImageUploaders();
 
 		// Enable theme selector
         // this.doThemeSelector();

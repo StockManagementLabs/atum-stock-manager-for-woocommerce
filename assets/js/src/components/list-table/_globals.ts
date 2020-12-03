@@ -3,7 +3,7 @@
    ======================================= */
 
 import Settings from '../../config/_settings';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class Globals {
 	

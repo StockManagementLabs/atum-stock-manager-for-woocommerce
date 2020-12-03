@@ -4,15 +4,15 @@
 
 import AddItemsPopup from './_add-items-popup';
 import AtumOrderItems from './_order-items';
-import { Blocker } from '../_blocker';
+import Blocker from '../_blocker';
 import DateTimePicker from '../_date-time-picker';
 import OrdersBulkActions from './_bulk-actions';
 import Tooltip from '../_tooltip';
 import Settings from '../../config/_settings';
-import { StupidTable } from '../_stupid-table';
+import StupidTable from '../_stupid-table';
 import Swal from 'sweetalert2';
-import { Switcher } from '../_switcher';
-import { Utils } from '../../utils/_utils';
+import Switcher from '../_switcher';
+import Utils from '../../utils/_utils';
 import { WPHooks } from '../../interfaces/wp.hooks';
 
 export default class AtumOrders {

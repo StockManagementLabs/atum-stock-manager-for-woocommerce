@@ -2,7 +2,7 @@
    BLOCKUI WRAPPER
    ======================================= */
 
-export let Blocker = {
+const Blocker = {
 	
 	block($selector: any, opts?: any) {
 		
@@ -30,3 +30,5 @@ export let Blocker = {
 	},
 	
 }
+
+export default Blocker;

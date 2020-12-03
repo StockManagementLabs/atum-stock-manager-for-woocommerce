@@ -11,7 +11,7 @@ import Hammer from 'hammerjs/hammer.min';                        // From node_mo
 import Globals from './_globals';
 import Popover from '../_popover';
 import Tooltip from '../_tooltip';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class DragScroll {
 	

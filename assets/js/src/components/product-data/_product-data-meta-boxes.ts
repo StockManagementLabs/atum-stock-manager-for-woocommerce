@@ -2,11 +2,11 @@
    PRODUCT DATA META BOXES
    ======================================= */
 
-import { ButtonGroup } from '../_button-group';
+import ButtonGroup from '../_button-group';
 import EnhancedSelect from '../_enhanced-select';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import { Switcher } from '../_switcher';
+import Switcher from '../_switcher';
 
 export default class ProductDataMetaBoxes {
 	

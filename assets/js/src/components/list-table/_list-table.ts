@@ -2,15 +2,15 @@
    LIST TABLE
    ======================================= */
 
-import { ActiveRow } from './_active-row';
-import { BeforeUnload } from '../_before-unload';
-import { Blocker } from '../_blocker';
+import ActiveRow from './_active-row';
+import BeforeUnload from '../_before-unload';
+import Blocker from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class ListTable {
 	

@@ -3,7 +3,7 @@
    ======================================= */
 
 import AtumOrders from './_atum-orders';
-import {Blocker} from '../_blocker';
+import Blocker from '../_blocker';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 

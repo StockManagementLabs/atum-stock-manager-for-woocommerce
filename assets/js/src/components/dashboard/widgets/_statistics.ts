@@ -4,7 +4,7 @@
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';
-import { Switcher } from '../../_switcher';
+import Switcher from '../../_switcher';
 
 export default class StatisticsWidget {
 	

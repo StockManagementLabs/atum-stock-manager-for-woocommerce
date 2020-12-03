@@ -2,7 +2,7 @@
    ACTIVE ROW LIST TABLES
    ======================================= */
 
-export const ActiveRow = {
+const ActiveRow = {
 	
 	/**
 	 * Add/remove row active class when checkbox is clicked.
@@ -48,3 +48,5 @@ export const ActiveRow = {
 	}
 	
 }
+
+export default ActiveRow;

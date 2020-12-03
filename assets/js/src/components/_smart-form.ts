@@ -2,7 +2,7 @@
    SMART FORM
    ======================================= */
 
-import { BeforeUnload } from './_before-unload';
+import BeforeUnload from './_before-unload';
 
 export default class SmartForm {
 	

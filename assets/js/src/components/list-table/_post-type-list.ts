@@ -2,7 +2,7 @@
    LIST TABLE COMPONENT FOR POST TYPE LISTS
    ======================================== */
 
-import { ActiveRow } from './_active-row';
+import ActiveRow from './_active-row';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
 import Settings from '../../config/_settings';

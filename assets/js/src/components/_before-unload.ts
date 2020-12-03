@@ -2,7 +2,7 @@
    BEFORE UNLOAD PROMPT
    ======================================= */
 
-export let BeforeUnload = {
+const BeforeUnload = {
 	
 	addPrompt(checkCallback: Function) {
 		
@@ -32,3 +32,5 @@ export let BeforeUnload = {
 	}
 	
 }
+
+export default BeforeUnload;
