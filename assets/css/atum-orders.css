@@ -3826,6 +3826,7 @@ input[type="button"].btn-block {
   font-family: "atum-icon-font";
   position: absolute;
   right: 8px;
+  pointer-events: none;
 }
 
 .atum-meta-box .form-field.form-field-wide {
