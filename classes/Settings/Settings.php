@@ -250,6 +250,7 @@ class Settings {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
+			wp_enqueue_media();
 			wp_enqueue_script( 'color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
 
@@ -1309,15 +1310,35 @@ class Settings {
 	 */
 	public function display_image_uploader( $args ) {
 
-		$name    = self::OPTION_NAME . "[{$args['id']}]";
-		$value   = $this->find_option_value( $args['id'] );
-		$style   = isset( $args['options']['style'] ) ? ' style="' . esc_attr( $args['options']['style'] ) . '"' : '';
-		$default = isset( $args['default'] ) ? " data-default='" . esc_attr( $args['default'] ) . "'" : '';
-		$display = isset( $args['display'] ) ? str_replace( '_', '-', $args['display'] ) : '';
+		$name          = self::OPTION_NAME . "[{$args['id']}]";
+		$attachment_id = absint( $this->find_option_value( $args['id'] ) );
+		$data          = '';
+
+		if ( ! empty( $args['options'] ) ) {
+
+			foreach ( $args['options'] as $key => $value ) {
+				$data .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			}
+
+		}
 
 		ob_start();
 		?>
-		<button class="atum-image-uploader btn btn-primary"><?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?></button>
+		<div class="atum-image-uploader__wrapper">
+			<button type="button" class="atum-image-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+				<?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?>
+			</button>
+
+			<?php if ( $attachment_id ) :
+				$image_url = wp_get_attachment_image_url( $attachment_id );
+
+				if ( $image_url ) : ?>
+					<img class="atum-image-uploader__preview" src="<?php echo esc_url( $image_url ) ?>">
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>">
+		</div>
 		<?php
 
 		echo wp_kses_post( $this->get_description( $args ) );
