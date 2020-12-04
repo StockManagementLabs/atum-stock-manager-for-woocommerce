@@ -2,7 +2,7 @@
    NICE SCROLL
    ======================================= */
 
-export let NiceScroll = {
+const NiceScroll = {
 	
 	getScrollBars($elem: JQuery) {
 		return $elem.find('.scroll-box');
@@ -50,3 +50,5 @@ export let NiceScroll = {
 	},
 	
 }
+
+export default NiceScroll;

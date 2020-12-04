@@ -250,6 +250,7 @@ class Settings {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
+			wp_enqueue_media();
 			wp_enqueue_script( 'color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
 
@@ -587,7 +588,7 @@ class Settings {
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
 
-			//Remove the settings without defaults
+			// Remove the settings without defaults.
 			$defaults = array_filter( $this->options, function( $option ) {
 				return isset( $option['default'] );
 			});
@@ -750,7 +751,6 @@ class Settings {
 						elseif ( in_array( $input[ $key ], array_keys( WC()->countries->get_countries() ) ) ) {
 							$sanitized_option = $input[ $key ];
 						}
-
 
 					}
 					// select field.
@@ -1302,6 +1302,52 @@ class Settings {
 	}
 
 	/**
+	 * Gets an image uploader field
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_image_uploader( $args ) {
+
+		$name          = self::OPTION_NAME . "[{$args['id']}]";
+		$attachment_id = absint( $this->find_option_value( $args['id'] ) );
+		$data          = '';
+
+		if ( ! empty( $args['options'] ) ) {
+
+			foreach ( $args['options'] as $key => $value ) {
+				$data .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			}
+
+		}
+
+		ob_start();
+		?>
+		<div class="atum-image-uploader__wrapper">
+			<button type="button" class="atum-image-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+				<?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?>
+			</button>
+
+			<?php if ( $attachment_id ) :
+				$image_url = wp_get_attachment_image_url( $attachment_id );
+
+				if ( $image_url ) : ?>
+					<img class="atum-image-uploader__preview" src="<?php echo esc_url( $image_url ) ?>">
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $attachment_id ); ?>">
+		</div>
+		<?php
+
+		echo wp_kses_post( $this->get_description( $args ) );
+
+		echo apply_filters( 'atum/settings/display_image_uploader', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
 	 * Print field description if it exists
 	 *
 	 * @since 0.0.2
@@ -1412,7 +1458,7 @@ class Settings {
 		if ( isset( $this->options[ $option_key ] ) ) {
 			return $this->options[ $option_key ];
 		}
-		elseif ( $this->defaults[ $option_key ]['default'] ) {
+		elseif ( isset( $this->defaults[ $option_key ]['default'] ) ) {
 			return $this->defaults[ $option_key ]['default'];
 		}
 

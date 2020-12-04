@@ -6,7 +6,7 @@ import Globals from './_globals';
 import ListTable from './_list-table';
 import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class BulkActions {
 	

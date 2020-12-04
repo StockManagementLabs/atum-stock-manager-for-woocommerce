@@ -3442,6 +3442,228 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   }
 }
 
+.alert {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.alert i {
+  margin-right: 8px;
+  margin-left: -8px;
+  font-size: 17px;
+}
+
+.alert-heading {
+  color: inherit;
+}
+
+.alert-link {
+  font-weight: 700;
+}
+
+.alert-dismissible {
+  padding-right: 3.8125rem;
+}
+
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.75rem 1.25rem;
+  color: inherit;
+}
+
+.alert-primary {
+  color: #006072;
+  background-color: #ccf1f8;
+  border-color: #b8ebf5;
+}
+
+.alert-primary hr {
+  border-top-color: #a2e5f2;
+}
+
+.alert-primary .alert-link {
+  color: #00353f;
+}
+
+.alert-secondary {
+  color: #7c5b00;
+  background-color: #fcefcc;
+  border-color: #fbe9b8;
+}
+
+.alert-secondary hr {
+  border-top-color: #fae2a0;
+}
+
+.alert-secondary .alert-link {
+  color: #493600;
+}
+
+.alert-tertiary {
+  color: #37670f;
+  background-color: #e1f4d2;
+  border-color: #d5efc0;
+}
+
+.alert-tertiary hr {
+  border-top-color: #c7eaac;
+}
+
+.alert-tertiary .alert-link {
+  color: #1f3a09;
+}
+
+.alert-success {
+  color: #37670f;
+  background-color: #e1f4d2;
+  border-color: #d5efc0;
+}
+
+.alert-success hr {
+  border-top-color: #c7eaac;
+}
+
+.alert-success .alert-link {
+  color: #1f3a09;
+}
+
+.alert-main {
+  color: #006072;
+  background-color: #ccf1f8;
+  border-color: #b8ebf5;
+}
+
+.alert-main hr {
+  border-top-color: #a2e5f2;
+}
+
+.alert-main .alert-link {
+  color: #00353f;
+}
+
+.alert-info {
+  color: #76797f;
+  background-color: #f9fafd;
+  border-color: #f7f9fc;
+}
+
+.alert-info hr {
+  border-top-color: #e4ebf5;
+}
+
+.alert-info .alert-link {
+  color: #5d6065;
+}
+
+.alert-warning {
+  color: #7c5b00;
+  background-color: #fcefcc;
+  border-color: #fbe9b8;
+}
+
+.alert-warning hr {
+  border-top-color: #fae2a0;
+}
+
+.alert-warning .alert-link {
+  color: #493600;
+}
+
+.alert-danger {
+  color: #852525;
+  background-color: #ffdada;
+  border-color: #ffcccc;
+}
+
+.alert-danger hr {
+  border-top-color: #ffb3b3;
+}
+
+.alert-danger .alert-link {
+  color: #5d1a1a;
+}
+
+.alert-light {
+  color: #818182;
+  background-color: #fefefe;
+  border-color: #fdfdfe;
+}
+
+.alert-light hr {
+  border-top-color: #ececf6;
+}
+
+.alert-light .alert-link {
+  color: #686868;
+}
+
+.alert-dark {
+  color: #1b1e21;
+  background-color: #d6d8d9;
+  border-color: #c6c8ca;
+}
+
+.alert-dark hr {
+  border-top-color: #b9bbbe;
+}
+
+.alert-dark .alert-link {
+  color: #040505;
+}
+
+.alert-purple-pl {
+  color: #4c2d6a;
+  background-color: #e9ddf5;
+  border-color: #e1d0f1;
+}
+
+.alert-purple-pl hr {
+  border-top-color: #d4bceb;
+}
+
+.alert-purple-pl .alert-link {
+  color: #321e46;
+}
+
+.alert-gray {
+  color: #383d41;
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+}
+
+.alert-gray hr {
+  border-top-color: #c8cbcf;
+}
+
+.alert-gray .alert-link {
+  color: #202326;
+}
+
+.alert-default {
+  color: #5a5e62;
+  background-color: #eff0f2;
+  border-color: #e8eaed;
+}
+
+.alert-default hr {
+  border-top-color: #dadde2;
+}
+
+.alert-default .alert-link {
+  color: #424547;
+}
+
 .btn-group {
   position: relative;
   display: -webkit-inline-box;
@@ -5754,6 +5976,25 @@ h2 .atum-help-tip {
 
 .atum-settings-wrapper #atum-settings .wp-picker-container .wp-picker-clear:hover {
   background-color: var(--secondary-hover);
+}
+
+.atum-settings-wrapper #atum-settings .atum-image-uploader {
+  text-transform: uppercase;
+}
+
+.atum-settings-wrapper #atum-settings .atum-image-uploader__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.atum-settings-wrapper #atum-settings .atum-image-uploader__wrapper img {
+  max-width: 100px;
+  margin-left: 30px;
+  border: 2px solid #adb5bd;
 }
 
 .atum-settings-wrapper #atum-settings .atum-settings-html {

@@ -4,7 +4,7 @@
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class SearchByColumn {
 

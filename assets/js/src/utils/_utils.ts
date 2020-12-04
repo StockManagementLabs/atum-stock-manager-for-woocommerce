@@ -3,7 +3,7 @@
    ==================== */
 
 
-export let Utils = {
+const Utils = {
 	
 	/**
 	 * Utils settings.
@@ -463,3 +463,5 @@ export let Utils = {
 	
 	
 }
+
+export default Utils;

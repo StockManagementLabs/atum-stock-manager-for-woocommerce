@@ -16,7 +16,7 @@ interface SwitcherOptions {
 	speed?: string;
 }
 
-export let Switcher = {
+const Switcher = {
 	
 	/**
 	 * Add the switchery to the specified selectors
@@ -45,3 +45,5 @@ export let Switcher = {
 	}
 	
 }
+
+export default Switcher;

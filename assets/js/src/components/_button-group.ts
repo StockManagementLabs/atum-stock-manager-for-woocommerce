@@ -8,7 +8,7 @@
 import 'bootstrap/js/dist/button';      // From node_modules
 
 
-export let ButtonGroup = {
+const ButtonGroup = {
 
 	doButtonGroups($container: JQuery) {
 		
@@ -29,3 +29,5 @@ export let ButtonGroup = {
 	}
 
 }
+
+export default ButtonGroup;

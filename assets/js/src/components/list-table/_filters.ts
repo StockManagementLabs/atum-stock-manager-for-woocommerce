@@ -10,7 +10,7 @@ import Tooltip from '../_tooltip';
 import DateTimePicker from '../_date-time-picker';
 import ShowFilters from './_show-filters';
 import Swal from 'sweetalert2';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class Filters {
 	

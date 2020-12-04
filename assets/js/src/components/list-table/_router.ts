@@ -5,7 +5,7 @@
 import Settings from '../../config/_settings';
 import Globals from './_globals';
 import ListTable from './_list-table';
-import { Utils } from '../../utils/_utils';
+import Utils from '../../utils/_utils';
 
 export default class Router {
 	
