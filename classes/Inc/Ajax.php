@@ -162,11 +162,6 @@ final class Ajax {
 		// Get color scheme.
 		add_action( 'wp_ajax_atum_get_color_scheme', array( $this, 'get_color_scheme' ) );
 
-		// Save PO Supplier on change.
-		add_action( 'wp_ajax_atum_save_po_supplier', array( $this, 'save_purchase_order_supplier' ) );
-
-		// Save PO Multiple Suppliers.
-		add_action( 'wp_ajax_atum_save_po_multiple_supplier', array( $this, 'save_purchase_order_multiple_suppliers' ) );
 	}
 
 	/**
@@ -2437,87 +2432,6 @@ final class Ajax {
 		}
 
 		wp_send_json_success( $settings );
-
-	}
-
-	/**
-	 * Save PO Supplier
-	 *
-	 * @package ATUM Purchase Orders
-	 *
-	 * @since 1.7.6
-	 */
-	public function save_purchase_order_supplier() {
-
-		check_ajax_referer( 'atum-order-item', 'security' );
-
-		$atum_order_id = absint( $_POST['atum_order_id'] );
-		$supplier      = absint( $_POST['supplier'] );
-
-		/**
-		 * Variable definition
-		 *
-		 * @var PurchaseOrder $atum_order
-		 */
-		$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
-
-		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
-			wp_send_json_error();
-		}
-
-		// Set the Supplier.
-		$atum_order->set_supplier( $supplier );
-
-		if ( ! $atum_order->get_status() || 'auto-draft' === $atum_order->get_status() ) {
-			$atum_order->set_status( 'atum_pending' );
-			$atum_order->save();
-		} else
-			$atum_order->save_meta();
-
-		wp_send_json_success( [
-			'atum_order_id' => $atum_order_id,
-			'supplier'      => $supplier,
-		] );
-
-	}
-
-	/**
-	 * Save PO Multiple Suppliers
-	 *
-	 * @package ATUM Purchase Orders
-	 *
-	 * @since 1.7.6
-	 */
-	public function save_purchase_order_multiple_suppliers() {
-
-		check_ajax_referer( 'atum-order-item', 'security' );
-
-		$atum_order_id = absint( $_POST['atum_order_id'] );
-		$multiple      = stripslashes( $_POST['multiple'] );
-
-		/**
-		 * Variable definition
-		 *
-		 * @var PurchaseOrder $atum_order
-		 */
-		$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
-
-		if ( PurchaseOrders::POST_TYPE !== $atum_order->get_post_type() ) {
-			wp_send_json_error();
-		}
-
-		$atum_order->set_multiple_suppliers( $multiple );
-
-		if ( ! $atum_order->get_status() || 'auto-draft' === $atum_order->get_status() ) {
-			$atum_order->set_status( 'atum_pending' );
-			$atum_order->save();
-		} else
-			$atum_order->save_meta();
-
-		wp_send_json_success( [
-			'atum_order_id' => $atum_order_id,
-			'multiple'      => $multiple,
-		] );
 
 	}
 

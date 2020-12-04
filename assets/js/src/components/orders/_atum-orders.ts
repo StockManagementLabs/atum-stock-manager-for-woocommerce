@@ -21,6 +21,7 @@ export default class AtumOrders {
 	$itemsBlocker: JQuery;
 	areItemsSelectable: boolean;
 	isEditable: string;
+	canUnlockItems: boolean;
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
@@ -39,6 +40,7 @@ export default class AtumOrders {
 
 		this.areItemsSelectable = this.settings.get( 'enableSelectItems' );
 		this.isEditable = $( '#atum_order_is_editable' ).val();
+		this.canUnlockItems = 'auto-draft' === $( '#atum_order_data input[name=post_status]').val() ? false : true;
 
 		StupidTable.init( $( 'table.atum_order_items' ) );
 		new AtumOrderItems( this.settings, this.$container, this );
@@ -88,10 +90,10 @@ export default class AtumOrders {
 		$( '#atum_order_type' ).change( ( evt: JQueryEventObject ) => this.toggleExtraFields( evt ) ).change();
 
 		// Hide/show the blocker section on supplier dropdown changes.
-		$( '.dropdown_supplier' ).change( ( evt: JQueryEventObject ) => this.savePurchaseOrderSupplier( $( evt.currentTarget ) ) );
+		$( '.dropdown_supplier' ).change( ( evt: JQueryEventObject ) => this.toggleItemsBlocker( $( evt.currentTarget ).val() !== null ) ).change();
 
 		// Trigger multiple suppliers' dependent fields
-		$( '#multiple_suppliers' ).change( ( evt: JQueryEventObject ) => this.toggleSupplierField( evt ) );
+		$( '#multiple_suppliers' ).change( ( evt: JQueryEventObject ) => this.toggleSupplierField( evt ) ).change();
 
 		// Ask for importing the order items after linking an order
 		$( '#wc_order' ).change( () => this.importOrderItems() );
@@ -111,53 +113,6 @@ export default class AtumOrders {
 		
 	}
 
-	/**
-	 * Save Supplier on change field
-	 *
-	 * @param {JQuery} $supplier
-	 */
-	savePurchaseOrderSupplier( $supplier: JQuery ) {
-
-		let $multiple: JQuery = $( '#multiple_suppliers' );
-
-		$.ajax( {
-			url     : window[ 'ajaxurl' ],
-			data    : {
-				action       : 'atum_save_po_supplier',
-				security     : this.settings.get( 'atum_order_item_nonce' ),
-				atum_order_id: this.settings.get( 'post_id' ),
-				supplier     : $supplier.val(),
-			},
-			dataType: 'json',
-			method  : 'POST',
-			success : ( response: any ) => {
-				if ( ! $multiple.is( ':checked' ) ) {
-					this.toggleItemsBlocker( 0 !== response.data.supplier );
-				}
-			},
-		} );
-
-	}
-
-	saveMultipleSuppliers( val: string ) {
-
-		$.ajax( {
-			url     : window[ 'ajaxurl' ],
-			data    : {
-				action       : 'atum_save_po_multiple_supplier',
-				security     : this.settings.get( 'atum_order_item_nonce' ),
-				atum_order_id: this.settings.get( 'post_id' ),
-				multiple     : val,
-			},
-			dataType: 'json',
-			method  : 'POST',
-			success : ( response: any ) => {
-
-			},
-		} );
-
-	}
-	
 	/**
 	 * When the qty is changed, increase or decrease costs
 	 */
@@ -346,14 +301,11 @@ export default class AtumOrders {
 		      $dropdownWrapper: JQuery = $dropdown.parent();
 
 		if ( $checkbox.is( ':checked' ) ) {
-			this.saveMultipleSuppliers( 'yes' );
-			$dropdown.val( '' ).change();
 			$body.addClass( 'allow-multiple-suppliers' );
 			this.toggleItemsBlocker();
 			$dropdownWrapper.slideUp();
 		}
 		else {
-			this.saveMultipleSuppliers( 'no' );
 			$body.removeClass( 'allow-multiple-suppliers' );
 			this.toggleItemsBlocker( $dropdown.val() !== null ); // Only block the items if there is no supplier selected.
 			$dropdownWrapper.slideDown();
@@ -386,7 +338,7 @@ export default class AtumOrders {
 	toggleItemsBlocker( on: boolean = true ) {
 
 		//if (!this.$itemsBlocker.length || !this.checkPoIdExistsInQuerystring() ) {
-		if ( ! this.$itemsBlocker.length ) {
+		if ( ! this.$itemsBlocker.length || ! this.canUnlockItems ) {
 			return;
 		}
 
