@@ -5604,6 +5604,7 @@ h2 .atum-help-tip {
 
 .atum-settings-wrapper #atum-settings .section-fields .atum-setting-info ul li strong {
   font-weight: normal;
+  color: var(--gray-700);
 }
 
 .atum-settings-wrapper #atum-settings .section-fields input[type=text], .atum-settings-wrapper #atum-settings .section-fields input[type=number], .atum-settings-wrapper #atum-settings .section-fields select, .atum-settings-wrapper #atum-settings .section-fields textarea {

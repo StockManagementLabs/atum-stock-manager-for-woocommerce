@@ -846,6 +846,11 @@ class Settings {
 
 		}
 
+		// Check if there is any special validation for this field.
+		if ( ! empty( $atts['validation'] ) && is_callable( $atts['validation'] ) ) {
+			$sanitized_option = call_user_func( $atts['validation'], $sanitized_option );
+		}
+
 		return $sanitized_option;
 
 	}
