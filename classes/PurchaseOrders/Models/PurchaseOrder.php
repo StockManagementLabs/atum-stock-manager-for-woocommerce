@@ -73,8 +73,9 @@ class PurchaseOrder extends AtumOrderModel {
 		if ( $id ) {
 			$this->get_supplier();
 		}
-		
-		$this->block_message = __( 'Set the Supplier field above or allow Multiple Suppliers in order to add/edit items.', ATUM_TEXT_DOMAIN );
+
+		// Use the generic AtumOrder message.
+		// $this->block_message = __( 'Set the Supplier field above or allow Multiple Suppliers in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 
@@ -362,6 +363,20 @@ class PurchaseOrder extends AtumOrderModel {
 
 		return array_merge( $data, $po_data );
 
+	}
+
+	/**
+	 * Checks if a Purchase Order can be edited, specifically for use on the Edit screen
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return bool
+	 */
+	public function is_editable() {
+
+		$supplier_check = 'auto-draft' === $this->get_status() && ( $this->has_multiple_suppliers() || ! empty( $this->get_supplier() ) ) ? TRUE : FALSE;
+
+		return parent::is_editable() || $supplier_check;
 	}
 
 	/*********
