@@ -1337,7 +1337,7 @@ class Settings {
 				<?php endif; ?>
 			<?php endif; ?>
 
-			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>">
+			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $attachment_id ); ?>">
 		</div>
 		<?php
 
