@@ -732,6 +732,12 @@ abstract class AtumOrderPostType {
 		}
 		
 		foreach ( static::get_statuses() as $status => $label ) {
+
+			// Makes no sense to add a bulk action to convert any ATUM order to the same status is being listed.
+			if ( ! empty( $_GET['post_status'] ) && $status === $_GET['post_status'] ) {
+				continue;
+			}
+
 			/* translators: Change the order's status to $status */
 			$actions[ "atum_order_mark_$status" ] = sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $label );
 		}
