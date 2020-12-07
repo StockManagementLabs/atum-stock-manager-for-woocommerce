@@ -8,6 +8,9 @@
  */
 
 defined( 'ABSPATH' ) || die;
+
+use Atum\Inc\Helpers;
+
 ?>
 
 <div class="atum-meta-box supplier">

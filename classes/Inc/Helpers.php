@@ -898,6 +898,26 @@ final class Helpers {
 	}
 
 	/**
+	 * Update an individual option from ATUM Settings
+	 *
+	 * @since 1.8.2
+	 *
+	 * @param string $option
+	 * @param mixed  $value
+	 */
+	public static function update_atum_setting( $option, $value ) {
+
+		global $atum_global_options;
+
+		$atum_settings            = self::get_options();
+		$atum_settings[ $option ] = $value;
+		$atum_global_options      = $atum_settings;
+
+		update_option( Settings::OPTION_NAME, $atum_settings );
+
+	}
+
+	/**
 	 * Get a setting for the specified product
 	 * First checks if has the product has a specific value for that setting, if the value isn't NULL, returns that value,
 	 * but if it's set to NULL, returns the ATUM's global setting for it.
