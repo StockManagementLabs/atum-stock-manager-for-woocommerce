@@ -742,7 +742,7 @@ abstract class AtumOrderPostType {
 			$actions[ "atum_order_mark_$status" ] = sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $label );
 		}
 		
-		return $actions;
+		return apply_filters( 'atum/' . static::POST_TYPE . '/bulk_actions', $actions );
 
 	}
 

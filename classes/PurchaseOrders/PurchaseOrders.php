@@ -390,7 +390,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			'untrashed' => _n( '%s PO restored from the Trash.', '%s POs restored from the Trash.', $bulk_counts['untrashed'], ATUM_TEXT_DOMAIN ),
 		);
 
-		return $bulk_messages;
+		return apply_filters( 'atum/purchase_orders/bulk_messages', $bulk_messages, $bulk_counts );
 	}
 
 	/**
