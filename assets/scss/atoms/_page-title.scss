@@ -47,6 +47,7 @@
 						background-color: var(--tertiary-var);
 						color: var(--white);
 						opacity: 0.9;
+						box-shadow: none;
 					}
 					
 					@include tablet-max-wp {

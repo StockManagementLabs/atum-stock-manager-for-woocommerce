@@ -3426,6 +3426,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   background-color: var(--tertiary-var);
   color: var(--white);
   opacity: 0.9;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
 @media all and (max-width: 782px) {
