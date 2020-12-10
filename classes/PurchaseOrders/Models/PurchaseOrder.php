@@ -74,8 +74,7 @@ class PurchaseOrder extends AtumOrderModel {
 			$this->get_supplier();
 		}
 
-		// Use the generic AtumOrder message.
-		// $this->block_message = __( 'Set the Supplier field above or allow Multiple Suppliers in order to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->block_message = __( 'Set the Supplier field above or allow Multiple Suppliers in order to add/edit items.', ATUM_TEXT_DOMAIN );
 
 	}
 
@@ -374,9 +373,9 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function is_editable() {
 
-		$supplier_check = 'auto-draft' === $this->get_status() && ( $this->has_multiple_suppliers() || ! empty( $this->get_supplier() ) ) ? TRUE : FALSE;
+		$autodraft_check = 'auto-draft' === $this->get_status() ? TRUE : FALSE;
 
-		return parent::is_editable() || $supplier_check;
+		return parent::is_editable() || $autodraft_check;
 	}
 
 	/*********
