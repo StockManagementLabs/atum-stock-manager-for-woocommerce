@@ -14,6 +14,7 @@ namespace Atum\Addons;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
@@ -106,7 +107,16 @@ class Addons {
 				}
 
 				if ( ! empty( $this->not_activated_addons ) ) {
-					add_action( 'admin_notices', array( $this, 'show_addons_activation_notice' ) );
+
+					$message = sprintf(
+						/* translators: opening and closing HTML link to the add-ons page  */
+						__( 'Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+						'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
+						'</a>'
+					);
+
+					AtumAdminNotices::add_notice( $message, 'info', TRUE, FALSE, 'activate-addons' );
+
 				}
 
 			}
@@ -294,7 +304,7 @@ class Addons {
 				}
 
 				/* translators: error message displayed */
-				Helpers::display_notice( 'error', sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ) );
+				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error' );
 
 				return FALSE;
 
@@ -304,7 +314,7 @@ class Addons {
 			$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
 
 			if ( empty( $addons ) ) {
-				Helpers::display_notice( 'error', __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ) );
+				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error' );
 
 				return FALSE;
 			}
@@ -337,24 +347,6 @@ class Addons {
 		}
 
 		return FALSE;
-	}
-
-	/**
-	 * Display an admin notice if there are ATUM add-ons installed but not activated for updates
-	 *
-	 * @since 1.4.4
-	 */
-	public function show_addons_activation_notice() {
-
-		$message = sprintf(
-		/* translators: opening and closing HTML link to the add-ons page  */
-			__( 'Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
-			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
-			'</a>'
-		);
-
-		Helpers::display_notice( 'info', $message, TRUE, 'activate-addons' );
-
 	}
 
 	/**

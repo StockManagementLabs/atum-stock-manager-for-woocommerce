@@ -13,6 +13,7 @@ namespace Atum;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -39,13 +40,6 @@ class Bootstrap {
 	 * @var bool
 	 */
 	private $bootstrapped = FALSE;
-
-	/**
-	 * Error message holder
-	 *
-	 * @var string
-	 */
-	private $admin_message;
 
 	/**
 	 * The code for AtumException when throwing an exception trying to Bootstrap again
@@ -102,8 +96,7 @@ class Bootstrap {
 		} catch ( AtumException $e ) {
 
 			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
-				$this->admin_message = $e->getMessage();
-				add_action( 'admin_notices', array( $this, 'show_bootstrap_warning' ) );
+				AtumAdminNotices::add_notice( $e->getMessage(), 'error' );
 			}
 
 		}
@@ -179,23 +172,6 @@ class Bootstrap {
 			/* translators: the first one is the WP updates page link and the second is the link closing tag */
 			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version ' . ATUM_WC_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 		}
-
-	}
-
-	/**
-	 * Display an admin notice if was not possible to bootstrap the plugin
-	 *
-	 * @since 0.0.2
-	 */
-	public function show_bootstrap_warning() {
-
-		if ( ! empty( $this->admin_message ) ) : ?>
-			<div class="error fade">
-				<p>
-					<strong><?php echo $this->admin_message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
-				</p>
-			</div>
-		<?php endif;
 
 	}
 
