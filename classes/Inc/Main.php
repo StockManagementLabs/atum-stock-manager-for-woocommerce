@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
+use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
@@ -240,6 +241,7 @@ class Main {
 		ProductDataMetaBoxes::get_instance();
 		AtumQueues::get_instance();
 		AtumApi::get_instance();
+		AtumAdminNotices::get_instance();
 		
 		//
 		// Enable WPML module if needed

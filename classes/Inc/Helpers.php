@@ -1434,112 +1434,6 @@ final class Helpers {
 		return FALSE;
 
 	}
-
-	/**
-	 * Display a notice an ATUM's admin notice
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $type              The notice type: error, success, warning or info.
-	 * @param string $message           The message within the notice.
-	 * @param bool   $is_dismissible    Optional. Whether to make the notice dismissible.
-	 * @param string $key               Optional. Only needed for dismissible notices. Is the key used to save the dismissal on db.
-	 */
-	public static function display_notice( $type, $message, $is_dismissible = FALSE, $key = '' ) {
-
-		$notice_classes = array( "notice-$type" );
-
-		if ( $is_dismissible ) {
-
-			// Check if the notice was already dismissed.
-			if ( $key && self::is_notice_dismissed( $key ) ) {
-				return;
-			}
-
-			$notice_classes[] = 'is-dismissible';
-		}
-
-		?>
-		<div class="notice <?php echo esc_attr( implode( ' ', $notice_classes ) ) ?> atum-notice" data-key="<?php echo esc_attr( $key ) ?>">
-			<p><?php echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-
-			<?php if ( $is_dismissible ) : ?>
-			<script type="text/javascript">
-
-				jQuery('.atum-notice').click('.notice-dismiss', function() {
-
-					var $notice = jQuery(this).closest('.atum-notice');
-
-					jQuery.ajax({
-						url   : ajaxurl,
-						method: 'POST',
-						data  : {
-							token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
-							action: 'atum_dismiss_notice',
-							key   : $notice.data('key')
-						}
-					});
-				});
-
-			</script>
-			<?php endif; ?>
-		</div>
-		<?php
-
-	}
-
-	/**
-	 * Add a notice to the list of dismissed notices for the current user
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param string $notice    The notice key.
-	 *
-	 * @return int|bool
-	 */
-	public static function dismiss_notice( $notice ) {
-
-		$current_user_id                   = get_current_user_id();
-		$user_dismissed_notices            = self::get_dismissed_notices( $current_user_id );
-		$user_dismissed_notices            = ! is_array( $user_dismissed_notices ) ? array() : $user_dismissed_notices;
-		$user_dismissed_notices[ $notice ] = 'yes';
-
-		return update_user_meta( $current_user_id, Globals::DISMISSED_NOTICES, $user_dismissed_notices );
-
-	}
-
-	/**
-	 * Get the list of ATUM's dismissed notices for the current user
-	 *
-	 * @since 1.1.1
-	 *
-	 * @param int $user_id  The ID of the user to retrieve the dismissed notices from.
-	 *
-	 * @return array|bool
-	 */
-	public static function get_dismissed_notices( $user_id = NULL ) {
-
-		$user_id = $user_id ? absint( $user_id ) : get_current_user_id();
-
-		return apply_filters( 'atum/dismissed_notices', get_user_meta( $user_id, Globals::DISMISSED_NOTICES, TRUE ) );
-	}
-
-	/**
-	 * Check whether the specified notice was previously dismissed
-	 *
-	 * @since 1.4.4
-	 *
-	 * @param string $key
-	 *
-	 * @return bool
-	 */
-	public static function is_notice_dismissed( $key ) {
-
-		$current_user_id        = get_current_user_id();
-		$user_dismissed_notices = self::get_dismissed_notices( $current_user_id );
-
-		return isset( $user_dismissed_notices[ $key ] ) && 'yes' === $user_dismissed_notices[ $key ];
-	}
 	
 	/**
 	 * Check whether or not register the ES6 promise polyfill
@@ -2144,7 +2038,7 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$timestamp = Helpers::get_current_timestamp();
+						$timestamp = self::get_current_timestamp();
 						$now       = self::get_wc_time( $timestamp );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
@@ -3100,7 +2994,7 @@ final class Helpers {
 
 			// WC Orders.
 			default:
-				$timestamp    = Helpers::get_current_timestamp();
+				$timestamp    = self::get_current_timestamp();
 				$current_time = self::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = self::get_sold_last_days_option();
 				$product_id   = $product->get_id();
@@ -3361,7 +3255,7 @@ final class Helpers {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$timestamp       = Helpers::get_current_timestamp();
+		$timestamp       = self::get_current_timestamp();
 		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {

@@ -95,9 +95,6 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array( $this, 'deactivate_license' ) );
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 
-		// ATUM notice dismissals.
-		add_action( 'wp_ajax_atum_dismiss_notice', array( $this, 'dismiss_notice' ) );
-
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
 
@@ -982,24 +979,6 @@ final class Ajax {
 
 		wp_send_json_error( $default_error );
 
-	}
-
-	/**
-	 * Dismiss the ATUM notices
-	 *
-	 * @package Helpers
-	 *
-	 * @since 1.4.4
-	 */
-	public function dismiss_notice() {
-
-		check_ajax_referer( 'dismiss-atum-notice', 'token' );
-
-		if ( ! empty( $_POST['key'] ) ) {
-			Helpers::dismiss_notice( esc_attr( $_POST['key'] ) );
-		}
-
-		wp_die();
 	}
 
 	/**
