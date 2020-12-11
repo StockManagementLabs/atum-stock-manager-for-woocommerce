@@ -1021,7 +1021,7 @@ final class Ajax {
 
 		$term = stripslashes( $_GET['term'] );
 
-		$post_id = intval( $_GET['limit'] );
+		$post_id = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : 0;
 
 		if ( empty( $term ) ) {
 			wp_die();
