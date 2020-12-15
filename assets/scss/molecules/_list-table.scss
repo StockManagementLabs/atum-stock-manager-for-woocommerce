@@ -2498,6 +2498,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					color: var(--primary);
 				}
 			}
+			
+			&.col-stock-selling-manager {
+				text-align: center;
+			}
 		}
 	}
 	

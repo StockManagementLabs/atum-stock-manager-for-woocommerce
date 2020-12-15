@@ -34,7 +34,7 @@ export default class MenuPopover {
 		this.menu.items.forEach( ( item: MenuItem ) => {
 
 			const icon: string      = item.icon ? `<i class="atum-icon ${ item.icon }"></i> ` : '',
-			      $menuItem: JQuery = $( `<li>${ icon }<a data-name="${ item.name }" href="${ item.link || '#' }">${ item.label }</a></li>` );
+			      $menuItem: JQuery = $( `<li><a data-name="${ item.name }" href="${ item.link || '#' }">${ icon }${ item.label }</a></li>` );
 
 			if ( item.data ) {
 

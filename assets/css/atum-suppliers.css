@@ -6575,6 +6575,10 @@ table.atum-list-table th span.col-stock-counters .set-header, table.atum-list-ta
   color: var(--primary);
 }
 
+table.atum-list-table th span.col-stock-selling-manager, .floatThead-container th span.col-stock-selling-manager, .inbound-stock-list th span.col-stock-selling-manager, table.wp-list-table th span.col-stock-selling-manager {
+  text-align: center;
+}
+
 table.atum-list-table .column-calc_type, .floatThead-container .column-calc_type, .inbound-stock-list .column-calc_type, table.wp-list-table .column-calc_type {
   max-width: 50px;
   text-align: center;
