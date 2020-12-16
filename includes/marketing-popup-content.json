@@ -14,42 +14,35 @@
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/icon-action-logs.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/label-new-logs@2x.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2020/12/xmas-graphic-popup.svg",
+		"top_left": ""
 	},
 	"title": {
-		"text"      : "Action <strong>Logs</strong>",
+		"text"      : "Special <strong>Sale</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "v1.0.0",
+		"text"      : "Xmas 🎅🏻",
 		"text_color": "#FFF",
-		"background": "#f95e90"
+		"background": "#ff4848"
 	},
 	"description": {
-		"text"           : "Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.",
+		"text"           : "Merry Xmas and a Happy New Year!!! Subscribe to any ATUM's premium add-ons before December 31st and take advantage of our 50% off BIG SALE!!!<br><br>Use coupon <strong style='color:black'>XMASBIGSALE</strong> when checking out.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
-		"dash_text_align": "justify",
+		"dash_text_align": "left",
 		"padding"        : "0 28px 25px"
 	},
 	"buttons": [
 		{
-			"text"      : "More Info",
+			"text"      : "Purchase Now!",
 			"url"       : "https://www.stockmanagementlabs.com/addons/atum-action-logs/",
-			"class"     : "btn btn-sm btn-warning",
-			"css"       : "width:130px;background-color:#f95e90;border-color:#f95e90"
-		},
-		{
-			"text"      : "Live Demo",
-			"url"       : "https://demo.action-logs.stockmanagementlabs.com/",
-			"class"     : "btn btn-sm btn-outline-warning",
-			"css"       : "width:130px;color:#f95e90;border-color:#f95e90",
-			"hover"     : "background-color:#f95e90;color:#FFF!important;"
+			"class"     : "btn btn-sm btn-danger",
+			"css"       : "width:270px"
 		}
 	],
-	"transient_key": "atum-action-logs-release"
+	"transient_key": "christmas-sale-2020"
 }
