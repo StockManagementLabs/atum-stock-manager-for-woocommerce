@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.5.3
+Tested up to: 5.6
 Requires PHP: 5.6
 WC requires at least: 3.1.0
-WC tested up to: 4.7.1
-Stable tag: 1.8.1
+WC tested up to: 4.8.0
+Stable tag: 1.8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,62 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.2`
+
+*2020-12-16*
+
+**Features**
+
+* Allow filtering the ATUM Order status colors.
+* Added new helper for relative dates.
+* Show relative dates on POs list table.
+* Added tooltips for ATUM orders' list table dates.
+* Added new filter to be able to edit the PO meta before saving.
+* Added the ability to set an ATUM Order ID externally (so we can clone them).
+* Do not load the ATUM Order items when not needed to improve performance.
+* Allow cloning ATUM order and ATUM order item objects.
+* Added new "created" column to ATUM Orders + more sortable columns.
+* Allow sorting Inventory Logs by type and WC order.
+* Added new helper to obtain the current timestamp.
+* Added new image uploader field available for ATUM settings.
+* Added support for field validation functions to ATUM Settings.
+* Added new helper to save individual options to ATUM settings externally.
+* Added new filters for ATUM Orders' bulk actions.
+* Added new component for showing admin notices.
+* Added new marketing popup for the Christmas sale.
+* Improvements for the MenuPopover component.
+
+**Changes**
+
+* Updated composer dependencies.
+* Adapted relative dates helper to new version.
+* Moved the trash status to the end of the status views list on ATUM Orders' List Tables.
+* Refactoring.
+* Updated the PO items blocker message.
+* Adjust the ATUM Settings nav height dynamically.
+* Skip the status change's bulk action for the currently listed status.
+* Send PO id when adding new order item.
+* Updated ATUM icons font.
+
+**Fixes**
+
+* Fixed Inventory Logs' list table date column.
+* Update product calculated properties after REST Api save call.
+* Fixed marketing popup styling.
+* Avoid duplicating ATUM order item inventories within the object after saving them.
+* CSS fixes.
+* Added blocker when PO has no multiple suppliers selected.
+* Confirm that hours and minutes are coming for a PO date field before saving.
+* Make PO editable when supplier is set.
+* Fixed settings page header when there are more than 2 sections.
+* Do not allow add items while PO is not created.
+* Allow add items in new POs before creating them when multiple suppliers is enabled.
+* Fixed menu popover component icon placement.
+* Fixed error with Youtube's API in ATUM's Dashboard.
+* CSS fixes for the marketing banner on ATUM's dashboard.
 
 ---
 
