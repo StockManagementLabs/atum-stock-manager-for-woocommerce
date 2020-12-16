@@ -518,7 +518,7 @@ class Log extends AtumOrderModel {
 	 * @param string $shipping_company
 	 * @param bool   $skip_change
 	 */
-	public function set_shipping_company( $shipping_company, $skip_change ) {
+	public function set_shipping_company( $shipping_company, $skip_change = FALSE ) {
 
 		$shipping_company = wc_clean( $shipping_company );
 
