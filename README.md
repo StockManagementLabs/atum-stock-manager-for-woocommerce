@@ -194,6 +194,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.2.1`
+
+*2020-12-16*
+
+**Fixes**
+
+* Fixed missing parameter error on IL's shipping_company method.
+
+---
+
 `1.8.2`
 
 *2020-12-16*
