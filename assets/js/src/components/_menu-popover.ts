@@ -109,7 +109,7 @@ export default class MenuPopover {
 				return;
 			}
 
-			this.$menuButton.trigger( 'atum-menu-popover-item-clicked', [ this.$menuButton.closest( 'tr' ), $menuItem.data( 'name' ), $menuItem.attr( 'href' ) ] );
+			this.$menuButton.trigger( 'atum-menu-popover-item-clicked', [ $menuItem.data( 'name' ), $menuItem.attr( 'href' ) ] );
 			this.destroyPopover(); // Once a menu item link is clicked, close it automatically.
 
 		} );
