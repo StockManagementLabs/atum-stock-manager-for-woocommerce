@@ -124,8 +124,8 @@ class Videos extends AtumWidget {
 
 			}
 
-			$video_data['channel']    = $youtube->getChannelById( 'UCcTNwTCU4X_UrIj_5TUkweA' );
 			$video_data['video_tags'] = self::$video_tags;
+			$video_data['channel']    = $youtube->getChannelById( 'UCcTNwTCU4X_UrIj_5TUkweA' );
 
 		} catch ( \Exception $e ) {
 			error_log( $e->getMessage() );

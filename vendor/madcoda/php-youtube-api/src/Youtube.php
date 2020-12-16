@@ -309,7 +309,7 @@ class Youtube
         $API_URL = $this->getApi('channels.list');
         $params = array(
             'forUsername' => $username,
-            'part' => 'id,snippet,contentDetails,statistics,invideoPromotion'
+            'part' => 'id,snippet,contentDetails,statistics'
         );
         if ($optionalParams) {
             $params = array_merge($params, $optionalParams);
@@ -329,7 +329,7 @@ class Youtube
         $API_URL = $this->getApi('channels.list');
         $params = array(
             'id' => $id,
-            'part' => 'id,snippet,contentDetails,statistics,invideoPromotion'
+            'part' => 'id,snippet,contentDetails,statistics'
         );
         if ($optionalParams) {
             $params = array_merge($params, $optionalParams);
@@ -348,7 +348,7 @@ class Youtube
         $API_URL = $this->getApi('channels.list');
         $params = array(
             'id' => implode(',', $ids),
-            'part' => 'id,snippet,contentDetails,statistics,invideoPromotion'
+            'part' => 'id,snippet,contentDetails,statistics'
         );
         if($optionalParams){
             $params = array_merge($params, $optionalParams);
