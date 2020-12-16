@@ -292,8 +292,12 @@ body.toplevel_page_atum-dashboard {
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					padding: 0 20px 0 100px;
+					padding: 0 20px;
 					min-height: 200px;
+					
+					&.with-content {
+						padding-left: 100px;
+					}
 					
 					@include tablet-max {
 						flex-wrap: wrap;

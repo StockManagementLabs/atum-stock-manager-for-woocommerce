@@ -5283,8 +5283,12 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 0 20px 0 100px;
+  padding: 0 20px;
   min-height: 200px;
+}
+
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content.with-content {
+  padding-left: 100px;
 }
 
 @media all and (max-width: 768px) {
