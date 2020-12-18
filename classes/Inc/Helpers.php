@@ -3257,16 +3257,17 @@ final class Helpers {
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		$timestamp       = self::get_current_timestamp();
 		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
+		$is_low_stock    = FALSE;
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
 
 			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id() ) / 7 * $days_to_reorder;
 
-			return $expected_sales > $product->get_stock_quantity();
+			$is_low_stock = $expected_sales > $product->get_stock_quantity();
 
 		}
 
-		return FALSE;
+		return apply_filters( 'atum/is_product_low_stock', $is_low_stock, $product );
 
 	}
 
