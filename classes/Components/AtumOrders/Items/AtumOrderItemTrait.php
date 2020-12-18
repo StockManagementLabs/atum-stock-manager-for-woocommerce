@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
-use Atum\PurchaseOrders\Models\POItem;
 
 
 trait AtumOrderItemTrait {
@@ -236,8 +235,7 @@ trait AtumOrderItemTrait {
 		$hideprefix_length = ! empty( $hideprefix ) ? strlen( $hideprefix ) : 0;
 		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : FALSE;
 		$order_item_name   = $this->get_name();
-		$po_item           = new POItem( $this );
-		$po_meta           = $po_item->get_all_meta();
+		$item_meta         = $this->atum_order_item_model->get_all_meta();
 
 		foreach ( $meta_data as $meta ) {
 
@@ -246,7 +244,7 @@ trait AtumOrderItemTrait {
 
 				if ( empty( $meta->id ) ) {
 
-					$found_meta = wp_list_filter( $po_meta, [ 'key' => $meta->key ] );
+					$found_meta = wp_list_filter( $item_meta, [ 'key' => $meta->key ] );
 
 					if ( ! empty( $found_meta ) ) {
 						$found_meta = current( $found_meta );
@@ -288,12 +286,12 @@ trait AtumOrderItemTrait {
 			$formatted_meta[ $meta->id ] = (object) array(
 				'key'           => $meta->key,
 				'value'         => $meta->value,
-				'display_key'   => apply_filters( 'woocommerce_order_item_display_meta_key', $display_key, $meta, $this ),
-				'display_value' => wpautop( make_clickable( apply_filters( 'woocommerce_order_item_display_meta_value', $display_value, $meta, $this ) ) ),
+				'display_key'   => apply_filters( 'atum/order_item/display_meta_key', $display_key, $meta, $this ),
+				'display_value' => wpautop( make_clickable( apply_filters( 'atum/order_item/display_meta_value', $display_value, $meta, $this ) ) ),
 			);
 		}
 
-		return apply_filters( 'woocommerce_order_item_get_formatted_meta_data', $formatted_meta, $this );
+		return apply_filters( 'atum/order_item/get_formatted_meta_data', $formatted_meta, $this );
 	}
 
 	/**
