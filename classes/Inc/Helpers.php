@@ -2978,6 +2978,10 @@ final class Helpers {
 	 */
 	public static function update_atum_sales_calc_props( $product, $order_type_id = 1 ) {
 
+		if ( ! $product instanceof \WC_Product ) {
+			return;
+		}
+
 		switch ( $order_type_id ) {
 			// Purchase Orders.
 			case 2:
@@ -3041,7 +3045,6 @@ final class Helpers {
 		$product_ids = is_array( $product_ids ) ? $product_ids : [ $product_ids ];
 
 		foreach ( $product_ids as $product_id ) {
-
 			$product = self::get_atum_product( $product_id );
 			self::update_atum_sales_calc_props( $product );
 		}
