@@ -906,7 +906,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				 * @var \WC_Product $product
 				 */
 
-				if ( $product && $product->exists() && $product->managing_stock() ) {
+				if ( $product instanceof \WC_Product && $product->exists() && $product->managing_stock() ) {
 
 					$old_stock = $product->get_stock_quantity();
 

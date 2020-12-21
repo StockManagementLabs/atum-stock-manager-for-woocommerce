@@ -99,7 +99,10 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 		// Avoid the parent_id to be overridden by WC when no being sent on every batch update.
 		if ( isset( $request['id'] ) && ! isset( $request['product_id'] ) ) {
 			$variation = wc_get_product( absint( $request['id'] ) );
-			$request->set_url_params( [ 'product_id' => $variation->get_parent_id() ] );
+
+			if ( $variation instanceof \WC_Product ) {
+				$request->set_url_params( [ 'product_id' => $variation->get_parent_id() ] );
+			}
 		}
 
 		return parent::save_object( $request, $creating );

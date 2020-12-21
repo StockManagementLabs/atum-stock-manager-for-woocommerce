@@ -1796,7 +1796,7 @@ final class Ajax {
 
 				$product = $atum_order_item->get_product();
 
-				if ( $product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
+				if ( $product instanceof \WC_Product && $product->exists() && $product->managing_stock() && isset( $quantities[ $item_id ] ) && $quantities[ $item_id ] > 0 ) {
 
 					$old_stock = $product->get_stock_quantity();
 

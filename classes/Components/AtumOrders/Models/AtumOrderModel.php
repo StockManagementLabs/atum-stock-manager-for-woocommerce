@@ -1934,7 +1934,10 @@ abstract class AtumOrderModel {
 		$found_tax_classes = array();
 
 		foreach ( $this->get_items() as $item ) {
-			if ( $product = $item->get_product() ) {
+
+			$product = $item->get_product();
+
+			if ( $product instanceof \WC_Product ) {
 				/**
 				 * Variable definition
 				 *

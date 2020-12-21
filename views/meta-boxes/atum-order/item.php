@@ -20,7 +20,7 @@ do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
 $product = Helpers::get_atum_product( $item->get_product() );
 
-if ( empty( $product ) ) {
+if ( ! $product instanceof \WC_Product ) {
 	return;
 }
 
