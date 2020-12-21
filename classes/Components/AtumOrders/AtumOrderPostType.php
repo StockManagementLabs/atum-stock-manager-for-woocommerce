@@ -182,7 +182,7 @@ abstract class AtumOrderPostType {
 			'supports'            => array( 'title', 'comments', 'custom-fields' ),
 			'has_archive'         => FALSE,
 			'capabilities'        => $this->capabilities,
-		), $args ));
+		), $args ), $post_type );
 
 		// Register the ATUM Order post type.
 		register_post_type( $post_type, $args );
