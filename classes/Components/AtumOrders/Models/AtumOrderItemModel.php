@@ -296,8 +296,11 @@ abstract class AtumOrderItemModel {
 			if ( 'line_item' === $this->atum_order_item->get_type() ) {
 				$product_id = $this->atum_order_item->get_variation_id() ?: $this->atum_order_item->get_product_id();
 				$product    = Helpers::get_atum_product( $product_id );
-				$order      = $this->atum_order_item->get_order();
-				Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $order->get_post_type() ) );
+
+				if ( $product instanceof \WC_Product ) {
+					$order = $this->atum_order_item->get_order();
+					Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $order->get_post_type() ) );
+				}
 			}
 
 			do_action( 'atum/orders/after_delete_item', $this, $this->atum_order_item );
