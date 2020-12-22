@@ -1951,7 +1951,7 @@ final class Helpers {
 			$product = wc_get_product( $the_product );
 			Globals::disable_atum_product_data_models();
 
-			if ( $product && $use_cache ) {
+			if ( $product instanceof \WC_Product && $use_cache ) {
 				AtumCache::set_cache( $cache_key, $product );
 			}
 

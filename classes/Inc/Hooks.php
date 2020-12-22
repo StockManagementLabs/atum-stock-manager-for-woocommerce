@@ -1051,9 +1051,11 @@ class Hooks {
 			 *
 			 * @var \WC_Order_Item_Product $item
 			 */
-			$product_id = $item->get_variation_id() ? $item->get_variation_id() : $item->get_product_id();
+			$product_id = $item->get_variation_id() ? (int) $item->get_variation_id() : (int) $item->get_product_id();
 
-			$this->defer_update_atum_sales_calc_props( $product_id );
+			if ( $product_id ) {
+				$this->defer_update_atum_sales_calc_props( $product_id );
+			}
 
 		}
 

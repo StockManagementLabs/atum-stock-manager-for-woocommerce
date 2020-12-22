@@ -1051,18 +1051,23 @@ class ListTable extends AtumListTable {
 
 					foreach ( $products as $product ) {
 
-						$wc_product     = wc_get_product( $product->ID ); // We don't need to use the ATUM models here.
-						$stock_quantity = $wc_product->get_stock_quantity();
+						$wc_product = wc_get_product( $product->ID ); // We don't need to use the ATUM models here.
 
-						$filtered_products[ $wc_product->get_id() ] = $stock_quantity;
+						if ( $wc_product instanceof \WC_Product ) {
 
-						// Add the variable products, so the variations can be displayed.
-						if ( $wc_product->is_type( 'variation' ) ) {
+							$stock_quantity = $wc_product->get_stock_quantity();
 
-							$variable_id = $wc_product->get_parent_id();
+							$filtered_products[ $wc_product->get_id() ] = $stock_quantity;
 
-							if ( ! isset( $filtered_products[ $variable_id ] ) || ( isset( $filtered_products[ $variable_id ] ) && $filtered_products[ $variable_id ] < $stock_quantity ) ) {
-								$filtered_products[ $variable_id ] = $stock_quantity;
+							// Add the variable products, so the variations can be displayed.
+							if ( $wc_product->is_type( 'variation' ) ) {
+
+								$variable_id = $wc_product->get_parent_id();
+
+								if ( ! isset( $filtered_products[ $variable_id ] ) || ( isset( $filtered_products[ $variable_id ] ) && $filtered_products[ $variable_id ] < $stock_quantity ) ) {
+									$filtered_products[ $variable_id ] = $stock_quantity;
+								}
+
 							}
 
 						}
@@ -1239,11 +1244,13 @@ class ListTable extends AtumListTable {
 						$qty        = $log_item->get_quantity();
 						$product_id = $log_item->get_variation_id() ?: $log_item->get_product_id();
 
-						if ( isset( $products[ $product_id ] ) ) {
-							$products[ $product_id ] += $qty;
-						}
-						else {
-							$products[ $product_id ] = $qty;
+						if ( $product_id ) {
+							if ( isset( $products[ $product_id ] ) ) {
+								$products[ $product_id ] += $qty;
+							}
+							else {
+								$products[ $product_id ] = $qty;
+							}
 						}
 
 						$log_item_product = $log_item->get_product();
