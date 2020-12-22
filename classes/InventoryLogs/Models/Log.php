@@ -81,8 +81,10 @@ class Log extends AtumOrderModel {
 	 * Recalculate the IL's data props every time a log is saved.
 	 *
 	 * @since 1.5.8
+	 *
+	 * @param string $action
 	 */
-	public function after_save() {
+	public function after_save( $action ) {
 
 		$items = $this->get_items();
 

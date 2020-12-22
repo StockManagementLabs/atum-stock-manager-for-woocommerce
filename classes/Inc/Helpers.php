@@ -1904,7 +1904,7 @@ final class Helpers {
 				break;
 		}
 		
-		if ( isset( $post_type_class ) && class_exists( $post_type_class ) ) {
+		if ( ! empty( $post_type_class ) && class_exists( $post_type_class ) ) {
 			$statuses = call_user_func( array( $post_type_class, 'get_statuses' ) );
 			
 			if ( $remove_finished ) {

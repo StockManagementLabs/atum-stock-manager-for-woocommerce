@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
@@ -143,7 +142,7 @@ abstract class AtumOrderModel {
 	 * @param int  $id         Optional. The ATUM Order ID to initialize.
 	 * @param bool $read_items Optional. Whether to read the inner items.
 	 */
-	protected function __construct( $id = 0, $read_items = TRUE ) {
+	public function __construct( $id = 0, $read_items = TRUE ) {
 		
 		$this->block_message = __( 'Click the Create button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
 
@@ -802,9 +801,11 @@ abstract class AtumOrderModel {
 
 		if ( $this->id ) {
 			$this->update();
+			$action = 'update';
 		}
 		else {
 			$this->create();
+			$action = 'create';
 		}
 
 		if ( $including_meta ) {
@@ -814,7 +815,7 @@ abstract class AtumOrderModel {
 		$this->process_status();
 		$this->save_items();
 
-		$this->after_save();
+		$this->after_save( $action );
 
 		do_action( 'atum/order/after_object_save', $this );
 
@@ -917,7 +918,7 @@ abstract class AtumOrderModel {
 		try {
 
 			$currency = $this->currency;
-			$this->set_currency( $currency ?: get_woocommerce_currency() );
+			$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
 			$status       = $this->get_status();
 			$timestamp    = Helpers::get_current_timestamp();
 			$date_created = Helpers::get_wc_time( $this->date_created ?: $timestamp );
@@ -940,10 +941,10 @@ abstract class AtumOrderModel {
 				$this->clear_caches();
 			}
 
-		} catch ( AtumException $e ) {
+		} catch ( \Exception $e ) {
 
 			if ( ATUM_DEBUG ) {
-				error_log( __METHOD__ . '::' . $e->getErrorCode() . '::' . $e->getMessage() );
+				error_log( __METHOD__ . '::' . $e->getCode() . '::' . $e->getMessage() );
 			}
 
 		}
@@ -1664,8 +1665,10 @@ abstract class AtumOrderModel {
 	 * Do stuff after saving an ATUM Order
 	 *
 	 * @since 1.5.8
+	 *
+	 * @param string $action
 	 */
-	abstract public function after_save();
+	abstract public function after_save( $action );
 
 	/**********
 	 * GETTERS

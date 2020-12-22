@@ -82,8 +82,10 @@ class PurchaseOrder extends AtumOrderModel {
 	 * Recalculate the inbound stock for products within POs, every time a PO is saved.
 	 *
 	 * @since 1.5.8
+	 *
+	 * @param string $action
 	 */
-	public function after_save() {
+	public function after_save( $action ) {
 
 		$items = $this->get_items();
 
