@@ -2,7 +2,7 @@
  * WP Hooks interface
  * @ref https://www.npmjs.com/package/@wordpress/hooks
  */
-export interface WPHooks {
+export default interface WPHooks {
 	createHooks(): void;
 	addAction( hookName: string, namespace: string, callback: Function, priority?: number ): void;
 	addFilter( hookName: string, namespace: string, callback: Function, priority?: number ): void;

@@ -13,7 +13,7 @@ import StupidTable from '../_stupid-table';
 import Swal from 'sweetalert2';
 import Switcher from '../_switcher';
 import Utils from '../../utils/_utils';
-import { WPHooks } from '../../interfaces/wp.hooks';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class AtumOrders {
 

@@ -7,7 +7,7 @@ import Blocker from '../_blocker';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import Utils from '../../utils/_utils';
-import { WPHooks } from '../../interfaces/wp.hooks';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class AtumOrderItems {
 
