@@ -44,6 +44,11 @@ trait AtumOrderItemTrait {
 	 */
 	public function __construct( $item = 0 ) {
 
+		/* @noinspection PhpUndefinedFieldInspection */
+		$this->extra_data = apply_filters( 'atum/atum_order/order_item_extra_data', $this->extra_data, $this );
+		/* @noinspection PhpUndefinedFieldInspection */
+		$this->internal_meta_keys = apply_filters( 'atum/atum_order/order_item_internal_meta_keys', $this->internal_meta_keys, $this );
+
 		if ( $item instanceof \WC_Order_Item ) {
 			$this->set_id( $item->get_id() );
 		}
@@ -56,6 +61,7 @@ trait AtumOrderItemTrait {
 
 		/* @noinspection PhpUndefinedFieldInspection */
 		$this->data = array_merge( $this->data, $this->extra_data );
+
 		$this->load();
 
 	}

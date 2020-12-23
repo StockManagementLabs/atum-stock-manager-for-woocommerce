@@ -69,7 +69,7 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 			'_line_total'        => $this->get_total( 'edit' ),
 			'_line_tax'          => $this->get_total_tax( 'edit' ),
 			'_line_tax_data'     => $this->get_taxes( 'edit' ),
-		) );
+		), $this );
 
 		$this->atum_order_item_model->save_meta( $save_values );
 
