@@ -130,7 +130,7 @@ abstract class AtumOrderModel {
 	];
 
 	/**
-	 * Changes made to the PO that should be updated
+	 * Changes made to the ATUM Order that should be updated
 	 *
 	 * @var array
 	 */
@@ -961,7 +961,7 @@ abstract class AtumOrderModel {
 		$status = $this->status;
 		$date   = $this->date_created;
 
-		// Prevent creating the PO when saving items with ths PO as draft.
+		// Prevent creating the ATUM order when saving items when this order is in draft status.
 		if ( 'auto-draft' === $this->db_status && '' === $status ) {
 			return;
 		}
@@ -1512,7 +1512,7 @@ abstract class AtumOrderModel {
 	}
 
 	/**
-	 * Read the PO's meta data from db
+	 * Read the ATUM Order's meta data from db
 	 *
 	 * @since 1.7.1
 	 */
