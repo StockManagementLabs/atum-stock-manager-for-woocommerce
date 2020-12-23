@@ -190,9 +190,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  string $type Optional. Filter by item type.
-	 *
-	 * @return void
+	 * @param string $type Optional. Filter by item type.
 	 */
 	public function read_items( $type = '' ) {
 
@@ -375,7 +373,7 @@ abstract class AtumOrderModel {
 	 * @param  int|float   $qty
 	 * @param  array       $args
 	 *
-	 * @return \WC_Order_Item_Product The product item added to ATUM Order
+	 * @return AtumOrderItemProduct The product item added to ATUM Order
 	 */
 	public function add_product( $product, $qty = NULL, $args = array() ) {
 
@@ -433,7 +431,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @param \WC_Order_Item_Fee $fee   Optional. Fee item to import.
 	 *
-	 * @return \WC_Order_Item_Fee  The fee item added to the ATUM Order.
+	 * @return AtumOrderItemFee  The fee item added to the ATUM Order.
 	 */
 	public function add_fee( \WC_Order_Item_Fee $fee = NULL ) {
 
@@ -469,7 +467,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @param \WC_Order_Item_Shipping $shipping  Optional. Shipping cost item to import.
 	 *
-	 * @return \WC_Order_Item_Shipping  The shipping cost item added to the ATUM Order.
+	 * @return AtumOrderItemShipping  The shipping cost item added to the ATUM Order.
 	 */
 	public function add_shipping_cost( \WC_Order_Item_Shipping $shipping = NULL ) {
 
@@ -515,7 +513,7 @@ abstract class AtumOrderModel {
 	 * }
 	 * @param \WC_Order_Item_Tax $tax Optional. Tax item to import.
 	 *
-	 * @return \WC_Order_Item_Tax|bool  The tax item added to the ATUM Order or false if the required rate_id value is not passed
+	 * @return AtumOrderItemTax|bool  The tax item added to the ATUM Order or false if the required rate_id value is not passed
 	 */
 	public function add_tax( array $values, \WC_Order_Item_Tax $tax = NULL ) {
 
@@ -1815,9 +1813,9 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param \WC_Order_Item|object|int $item
+	 * @param AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|object|int $item
 	 *
-	 * @return \WC_Order_Item|AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|false
+	 * @return AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|false
 	 */
 	abstract public function get_atum_order_item( $item = NULL );
 
@@ -1826,7 +1824,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since  1.2.9
 	 *
-	 * @param  \WC_Order_Item $item  ATUM Order item object (product, shipping, fee, tax).
+	 * @param \WC_Order_Item|AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax $item  ATUM Order item object (product, shipping, fee, tax).
 	 *
 	 * @return string
 	 */
@@ -1852,7 +1850,7 @@ abstract class AtumOrderModel {
 	 * @param int    $item_id
 	 * @param string $type
 	 *
-	 * @return \WC_Order_Item|bool
+	 * @return \WC_Order_Item|AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|bool
 	 */
 	public function get_item( $item_id, $type = 'line_item' ) {
 
