@@ -236,6 +236,7 @@
 	.atum-multi-checkbox-option, .atum-multi-checkbox-all {
 		width: 50%;
 		display: inline-block;
+		margin-bottom: $grid-gutter-width/2;
 		
 		&.setting-checked label {
 			color: var(--black);
