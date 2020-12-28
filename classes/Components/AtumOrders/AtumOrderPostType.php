@@ -215,7 +215,14 @@ abstract class AtumOrderPostType {
 		$atum_statuses = (array) apply_filters( 'atum/order_post_type/register_post_statuses', $atum_statuses );
 		
 		foreach ( $atum_statuses as $atum_status => $values ) {
+
+			// Only register the statuses that starts with the ATUM prefix.
+			if ( strpos( $atum_status, ATUM_PREFIX ) === FALSE ) {
+				continue;
+			}
+
 			register_post_status( $atum_status, $values );
+
 		}
 
 		// Register the taxomony only if needed by the custom post type.
