@@ -28,10 +28,17 @@
 					text-decoration: none;
 					color: $gray-600;
 					font-weight: normal;
+					padding: 10px 0;
 					
 					&:focus {
 						box-shadow: none;
 						outline: none;
+					}
+					
+					&.disabled {
+						pointer-events: none;
+						opacity: .6;
+						color: $gray-600 !important;
 					}
 				}
 				
