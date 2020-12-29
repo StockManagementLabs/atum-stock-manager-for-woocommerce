@@ -5,11 +5,13 @@
 import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
 
 import { Menu, MenuItem } from '../interfaces/menu.interface';
+import WPHooks from '../interfaces/wp.hooks';
 
 export default class MenuPopover {
 
 	popoverClassName: string = 'menu-popover';
 	popoverId: string = '';
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private $menuButton: JQuery,
@@ -75,7 +77,11 @@ export default class MenuPopover {
 			} )
 
 			// Store the popover ID.
-			.on( 'shown.bs.popover', () => this.popoverId = $( `.${ this.popoverClassName }` ).attr( 'id' ) );
+			.on( 'shown.bs.popover', () => {
+				const $popover: JQuery = $( `.${ this.popoverClassName }` );
+				this.popoverId = $popover.attr( 'id' );
+				this.wpHooks.doAction( 'atum_menuPopover_shown', $popover );
+			} );
 
 	}
 
