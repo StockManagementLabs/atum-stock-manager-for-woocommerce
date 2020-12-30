@@ -118,9 +118,9 @@ export default class AtumOrders {
 	 */
 	savePurchaseOrderSupplier( $supplier: JQuery ) {
 
-		let $multiple: JQuery = $( '#multiple_suppliers' ),
-		    $searcher: JQuery = $( '#add_item_id' );
-		let atum_order_id: number = this.settings.get( 'post_id' );
+		const $multiple: JQuery     = $( '#multiple_suppliers' ),
+		      $searcher: JQuery     = $( '#add_item_id' ),
+		      atum_order_id: number = this.settings.get( 'post_id' );
 
 
 		$.ajax( {
@@ -144,6 +144,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Save the multiple suppliers state
+	 *
+	 * @param {string} val
+	 */
 	saveMultipleSuppliers( val: string ) {
 
 		$.ajax( {
@@ -156,28 +161,26 @@ export default class AtumOrders {
 			},
 			dataType: 'json',
 			method  : 'POST',
-			success : ( response: any ) => {
-
-			},
 		} );
 
 	}
 
-
 	/**
 	 * When the qty is changed, increase or decrease costs
+	 *
+	 * @param {JQueryEventObject} evt
 	 */
 	quantityChanged( evt: JQueryEventObject ) {
 
-		let $input: JQuery        = $( evt.currentTarget ),
-		    $row: JQuery          = $input.closest( 'tr.item' ),
-		    qty: number           = $input.val(),
-		    oQty: number          = $input.data( 'qty' ),
-		    $lineTotal: JQuery    = $row.find( 'input.line_total' ),
-		    $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' );
+		const $input: JQuery        = $( evt.currentTarget ),
+		      $row: JQuery          = $input.closest( 'tr.item' ),
+		      qty: number           = $input.val(),
+		      oQty: number          = $input.data( 'qty' ),
+		      $lineTotal: JQuery    = $row.find( 'input.line_total' ),
+		      $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' );
 		
 		// Totals
-		let unitTotal: number = <number> Utils.unformat( $lineTotal.data( 'total' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+		const unitTotal: number = <number> Utils.unformat( $lineTotal.data( 'total' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
 
 		$lineTotal.val(
 			parseFloat( <string> Utils.formatNumber( unitTotal * qty, this.settings.get( 'rounding_precision' ), '' ) )
@@ -185,7 +188,7 @@ export default class AtumOrders {
 				.replace( '.', this.settings.get( 'mon_decimal_point' ) ),
 		);
 
-		let unitSubtotal: number = <number> Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+		const unitSubtotal: number = <number> Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
 
 		$lineSubtotal.val(
 			parseFloat( <string> Utils.formatNumber( unitSubtotal * qty, this.settings.get( 'rounding_precision' ), '' ) )
@@ -196,11 +199,11 @@ export default class AtumOrders {
 		// Taxes
 		$row.find( 'input.line_tax' ).each( ( index: number, elem: Element ) => {
 
-			let $lineTotalTax: JQuery    = $( elem ),
-			    taxId: string            = $lineTotalTax.data( 'tax_id' ),
-			    unitTotalTax: number     = <number> Utils.unformat( $lineTotalTax.data( 'total_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty,
-			    $lineSubtotalTax: JQuery = $row.find( `input.line_subtotal_tax[data-tax_id="${ taxId }"]` ),
-			    unitSubtotalTax: number  = <number> Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+			const $lineTotalTax: JQuery    = $( elem ),
+			      taxId: string            = $lineTotalTax.data( 'tax_id' ),
+			      unitTotalTax: number     = <number> Utils.unformat( $lineTotalTax.data( 'total_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty,
+			      $lineSubtotalTax: JQuery = $row.find( `input.line_subtotal_tax[data-tax_id="${ taxId }"]` ),
+			      unitSubtotalTax: number  = <number> Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
 
 			if ( 0 < unitTotalTax ) {
 				$lineTotalTax.val(
@@ -224,6 +227,13 @@ export default class AtumOrders {
 		
 	}
 
+	/**
+	 * Load the items table from backend
+	 *
+	 * @param {any}      data
+	 * @param {string}   dataType
+	 * @param {Function} callback
+	 */
 	loadItemsTable( data: any, dataType?: string, callback?: Function ) {
 
 		Blocker.block( this.$container );
@@ -262,6 +272,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Reload the order items
+	 *
+	 * @param {Function} callback
+	 */
 	reloadItems( callback?: Function ) {
 
 		this.loadItemsTable( {
@@ -272,6 +287,13 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Show an alert with a message
+	 *
+	 * @param {"warning" | "error" | "success" | "info" | "question"} type
+	 * @param {string} title
+	 * @param {string} message
+	 */
 	showAlert( type: 'warning'|'error'|'success'|'info'|'question', title: string, message: string ) {
 
 		Swal.fire( {
@@ -283,6 +305,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Selects an item row when clicking it
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	selectRow( evt: JQueryEventObject ) {
 
 		const $row: JQuery   = $( evt.currentTarget ).is( 'tr' ) ? $( evt.currentTarget ) : $( evt.currentTarget ).closest( 'tr' ),
@@ -319,6 +346,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Show/Hide extra fields on the order data meta box
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	toggleExtraFields( evt: JQueryEventObject ) {
 
 		const $atumOrderType: JQuery = $( evt.currentTarget ),
@@ -344,6 +376,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Show/Hide the supplier field on POs
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	toggleSupplierField( evt: JQueryEventObject ) {
 
 		const $checkbox: JQuery        = $( evt.currentTarget ),
@@ -367,9 +404,15 @@ export default class AtumOrders {
 
 	}
 
-	checkPoIdExistsInQuerystring() {
+	/**
+	 * Checks whether a PO ID exists in URL's query string
+	 *
+	 * @return {boolean}
+	 * TODO: THIS IS NOT BEING USED. WHY IS STILL HERE??
+	 */
+	checkPoIdExistsInQuerystring(): boolean {
 
-		let queryString: string = window.location.search.substring( 1 );
+		const queryString: string = window.location.search.substring( 1 );
 		let check: boolean = false;
 
 		const queries = queryString.split( '&' );
@@ -389,6 +432,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Show/Hide the items blocker on POs
+	 *
+	 * @param {boolean} on
+	 */
 	toggleItemsBlocker( on: boolean = true ) {
 
 		//if (!this.$itemsBlocker.length || !this.checkPoIdExistsInQuerystring() ) {
@@ -405,6 +453,11 @@ export default class AtumOrders {
 
 	}
 
+	/**
+	 * Import items from related WC order
+	 *
+	 * @return {boolean}
+	 */
 	importOrderItems() {
 
 		const $wcOrder: JQuery = $( '#wc_order' ),

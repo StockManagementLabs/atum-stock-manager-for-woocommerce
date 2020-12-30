@@ -48,6 +48,11 @@ export default class AtumOrderItems {
 		
 	}
 
+	/**
+	 * Handles the "Add Product" button clicks
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addLineItem( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -57,6 +62,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Handles the "Cancel" button clicks
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	cancel( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -72,6 +82,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Opens up the modal for adding a new product item to the order
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addItem( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -82,6 +97,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Adds a new fee item to the order
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addFee( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -110,6 +130,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Adds a new shipping item to the order
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addShipping( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -138,6 +163,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Opens the modal to add a new tax item to the order
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addTax( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -148,12 +178,18 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Deletes a tax from the order
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	deleteTax( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
-		let $item: JQuery = $( evt.currentTarget );
+		const $item: JQuery = $( evt.currentTarget );
 
+		// Prompt for removal confirmation.
 		Swal.fire( {
 			text               : this.settings.get( 'delete_tax_notice' ),
 			icon               : 'warning',
@@ -181,6 +217,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Recalculate order totals
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	recalculate( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -212,6 +253,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Enables item edition
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	editItem( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -226,14 +272,20 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Deletes an order item
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	deleteItem( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
-		let $item: JQuery           = $( evt.currentTarget ).closest( 'tr.item, tr.fee, tr.shipping' ),
-		    atumOrderItemId: number = $item.data( 'atum_order_item_id' ),
-		    $container: JQuery      = $item.closest( '#atum_order_items' );
+		const $item: JQuery           = $( evt.currentTarget ).closest( 'tr.item, tr.fee, tr.shipping' ),
+		      atumOrderItemId: number = $item.data( 'atum_order_item_id' ),
+		      $container: JQuery      = $item.closest( '#atum_order_items' );
 
+		// Asks for confirmation before proceeding.
 		Swal.fire( {
 			text               : this.settings.get( 'remove_item_notice' ),
 			icon               : 'warning',
@@ -268,7 +320,7 @@ export default class AtumOrderItems {
 
 			if ( result.isConfirmed ) {
 				$item.remove();
-				$container.trigger( 'atum_item_line_removed', [ atumOrderItemId ] );
+				this.wpHooks.doAction( 'orderItems_deleteItem_removed', $container, atumOrderItemId );
 			}
 
 			Blocker.unblock( this.$container );
@@ -277,6 +329,11 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Save the order items to the db
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	saveLineItems( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
@@ -293,15 +350,20 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Add meta to an order item
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	addItemMeta( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
-		let $button: JQuery = $( evt.currentTarget ),
-		    $item: JQuery   = $button.closest( 'tr.item, tr.shipping' ),
-		    $items: JQuery  = $item.find( 'tbody.meta_items' ),
-		    index: number   = $items.find( 'tr' ).length + 1,
-		    $row: string    = `
+		const $button: JQuery = $( evt.currentTarget ),
+		      $item: JQuery   = $button.closest( 'tr.item, tr.shipping' ),
+		      $items: JQuery  = $item.find( 'tbody.meta_items' ),
+		      index: number   = $items.find( 'tr' ).length + 1,
+		      $row: string    = `
 				<tr data-meta_id="0">
 			        <td>
 			            <input type="text" placeholder="${ this.settings.get( 'placeholder_name' ) }" name="meta_key[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]" />
@@ -314,10 +376,16 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Remove a meta from an order item
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
 	removeItemMeta( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
+		// Asks for confirmation before removing.
 		Swal.fire( {
 			text             : this.settings.get( 'remove_item_meta' ),
 			icon             : 'warning',
@@ -342,24 +410,32 @@ export default class AtumOrderItems {
 
 	}
 
+	/**
+	 * Set the purchase price for an order item product
+	 *
+	 * @param {JQueryEventObject} evt
+	 * @param {number} purchasePrice
+	 * @param {string} purchasePriceTxt
+	 */
 	setPurchasePrice( evt: JQueryEventObject, purchasePrice?: number, purchasePriceTxt?: string ) {
 
 		evt.preventDefault();
 
-		let $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
-		    $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
-		    $lineTotal: JQuery    = $item.find( 'input.line_total' ),
-		    qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		    taxes: number         = 0,
-		    lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
-		    data: any             = {
-			    atum_order_id     : this.settings.get( 'post_id' ),
-			    atum_order_item_id: $item.data( 'atum_order_item_id' ),
-			    action            : 'atum_order_change_purchase_price',
-			    security          : this.settings.get( 'atum_order_item_nonce' ),
-		    },
-		    rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' ),
-		    purchasePriceFmt: string;
+		const $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
+		      $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
+		      $lineTotal: JQuery    = $item.find( 'input.line_total' ),
+		      qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
+		      lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
+		      data: any             = {
+			      atum_order_id     : this.settings.get( 'post_id' ),
+			      atum_order_item_id: $item.data( 'atum_order_item_id' ),
+			      action            : 'atum_order_change_purchase_price',
+			      security          : this.settings.get( 'atum_order_item_nonce' ),
+		      },
+		      rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' );
+
+		let purchasePriceFmt: string,
+		    taxes: number = 0;
 
 		if ( ! purchasePrice ) {
 			purchasePrice = qty !== 0 ? lineTotal / qty : 0;
@@ -450,7 +526,7 @@ export default class AtumOrderItems {
 	 *
 	 * @return {number}
 	 */
-	calcTaxesFromBase( price: number, rates: any[] ) {
+	calcTaxesFromBase( price: number, rates: any[] ): number {
 
 		let taxes: number[] = [ 0 ],
 		    preCompoundTaxes: number;
