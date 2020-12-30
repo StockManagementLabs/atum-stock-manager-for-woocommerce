@@ -44,14 +44,14 @@ export default class EditPopovers {
 						let selectedLabels: string[] = [];
 						
 						$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
-							selectedLabels.push( $.trim( $( elem ).text() ) );
+							selectedLabels.push( $( elem ).text().trim() );
 						} );
 						
 						newLabel = selectedLabels.join( ', ' );
 						
 					}
 					else {
-						newLabel = $.trim( $setMetaInput.find( 'option:selected' ).text() );
+						newLabel = $setMetaInput.find( 'option:selected' ).text().trim();
 					}
 					
 				}
