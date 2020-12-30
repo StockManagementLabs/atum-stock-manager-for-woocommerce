@@ -276,7 +276,7 @@ export default class Dashboard {
 	initWidgets(widgets?: string[]) {
 		
 		// TODO: DO NOT INIT WIDGETS THAT ARE NOT BEING DISPLAYED
-		const noWidgets: boolean = !widgets || !$.isArray(widgets);
+		const noWidgets: boolean = !widgets || !Array.isArray(widgets);
 		
 		// Statistics widget.
 		if (noWidgets || $.inArray('atum_statistics_widget', widgets) > -1) {

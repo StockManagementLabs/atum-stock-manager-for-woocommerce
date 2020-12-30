@@ -61,7 +61,7 @@ export default class EnhancedSelect {
 					const $select: JQuery = $( evt.currentTarget ),
 					      value: any      = $select.val();
 					
-					if ( $.isArray( value ) && ( $.inArray( '', value ) > -1 || $.inArray( '-1', value ) > -1 ) ) {
+					if ( Array.isArray( value ) && ( $.inArray( '', value ) > -1 || $.inArray( '-1', value ) > -1 ) ) {
 						
 						// Avoid selecting the "None" option (empty value or -1 in some cases).
 						$.each( value, ( index: number, elem: string ) => {

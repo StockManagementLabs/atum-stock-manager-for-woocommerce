@@ -41,7 +41,7 @@ export default class SmartForm {
 				    value: number | string = $field.val(),
 				    dependency: any        = $field.data('dependency');
 				
-				if ($.isArray(dependency)) {
+				if ( Array.isArray( dependency ) ) {
 					$.each(dependency, (index: number, dependencyElem: any) => this.checkDependency($field, dependencyElem, value) );
 				}
 				else {

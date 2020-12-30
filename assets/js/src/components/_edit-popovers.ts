@@ -6,8 +6,8 @@ import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
 
 import EnhancedSelect from './_enhanced-select';
 import Settings from '../config/_settings';
-import Utils from '../utils/_utils';
 import ButtonGroup from './_button-group';
+import Utils from '../utils/_utils';
 
 export default class EditPopovers {
 	
@@ -39,7 +39,7 @@ export default class EditPopovers {
 					if ( ! newValue ) {
 						newLabel = null;
 					}
-					else if ( $.isArray( newValue ) ) {
+					else if ( Array.isArray( newValue ) ) {
 						
 						let selectedLabels: string[] = [];
 						
@@ -322,7 +322,7 @@ export default class EditPopovers {
 			$fieldLabel.addClass( 'unsaved' );
 			
 			// For numeric labels, adjust the decimal separator if needed.
-			if ( $.isNumeric( label ) && $fieldLabel.data('decimal-separator') ) {
+			if ( Utils.isNumeric( label ) && $fieldLabel.data('decimal-separator') ) {
 				label = <string>Utils.formatNumber( parseFloat( label ), 2, '', $fieldLabel.data('decimal-separator') );
 			}
 			

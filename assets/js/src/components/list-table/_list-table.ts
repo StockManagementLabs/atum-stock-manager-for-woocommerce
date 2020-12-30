@@ -270,7 +270,7 @@ export default class ListTable {
 
 		if ( editedCols ) {
 
-			editedCols = $.parseJSON( editedCols );
+			editedCols = JSON.parse( editedCols );
 
 			$.each( editedCols, ( itemId: string, meta: any ) => {
 
@@ -339,7 +339,7 @@ export default class ListTable {
 
 		// Initialize the JSON object.
 		if ( editedCols ) {
-			editedCols = $.parseJSON( editedCols );
+			editedCols = JSON.parse( editedCols );
 		}
 
 		editedCols = editedCols || {};

@@ -267,7 +267,7 @@ const Utils = {
 	formatNumber( number: number[] | number, precision?: number, thousand?: string, decimal?: string ): string[] | string {
 		
 		// Resursively format arrays.
-		if ( $.isArray( number ) ) {
+		if ( Array.isArray( number ) ) {
 			return $.map( number, val => this.formatNumber( val, precision, thousand, decimal ) );
 		}
 		
@@ -304,7 +304,7 @@ const Utils = {
 	formatMoney( number: number[] | number, symbol?: string, precision?: number, thousand?: string, decimal?: string, format?: string ) : string[] | string {
 		
 		// Resursively format arrays.
-		if ( $.isArray( number ) ) {
+		if ( Array.isArray( number ) ) {
 			return $.map( number, val => this.formatMoney( val, symbol, precision, thousand, decimal, format ) );
 		}
 		
@@ -352,7 +352,7 @@ const Utils = {
 	unformat( value: number | string, decimal?: string ): number[] | number {
 		
 		// Recursively unformat arrays:
-		if ( $.isArray( value ) ) {
+		if ( Array.isArray( value ) ) {
 			return $.map( value, val => this.unformat( val, decimal ) );
 		}
 		
@@ -460,7 +460,18 @@ const Utils = {
 		return format;
 		
 	},
-	
+
+	/**
+	 * Check the parameter is numeric
+	 * NOTE: Previously we were using the jQuery.isNumeric() function but has been deprecated
+	 *
+	 * @param {any} n
+	 *
+	 * @return {boolean}
+	 */
+	isNumeric( n: any ): boolean {
+		return !isNaN( parseFloat( n ) ) && isFinite( n );
+	}
 	
 }
 

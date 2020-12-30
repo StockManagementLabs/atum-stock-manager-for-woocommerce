@@ -52,7 +52,7 @@ export default class Globals {
 		let perPage: number;
 		
 		// Initialize the filters' data
-		if (!$.isNumeric(inputPerPage)) {
+		if (!Utils.isNumeric(inputPerPage)) {
 			perPage = this.settings.get('perPage') || 20;
 		}
 		else {
