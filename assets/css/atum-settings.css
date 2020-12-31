@@ -5982,11 +5982,11 @@ h2 .atum-help-tip {
   background-color: var(--secondary-hover);
 }
 
-.atum-settings-wrapper #atum-settings .atum-image-uploader {
+.atum-settings-wrapper #atum-settings .atum-file-uploader {
   text-transform: uppercase;
 }
 
-.atum-settings-wrapper #atum-settings .atum-image-uploader__wrapper {
+.atum-settings-wrapper #atum-settings .atum-file-uploader__wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5995,7 +5995,7 @@ h2 .atum-help-tip {
           align-items: flex-end;
 }
 
-.atum-settings-wrapper #atum-settings .atum-image-uploader__wrapper img {
+.atum-settings-wrapper #atum-settings .atum-file-uploader__wrapper img {
   max-width: 100px;
   margin-left: 30px;
   border: 2px solid #adb5bd;

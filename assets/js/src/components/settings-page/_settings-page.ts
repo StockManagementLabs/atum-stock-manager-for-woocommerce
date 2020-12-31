@@ -6,7 +6,7 @@ import EnhancedSelect from '../_enhanced-select';
 import ButtonGroup from '../_button-group';
 import ColorPicker from '../_color-picker';
 import DateTimePicker from '../_date-time-picker';
-import ImageUploader from '../_image-uploader';
+import FileUploader from '../_file-uploader';
 import Settings from '../../config/_settings';
 import SmartForm from '../_smart-form';
 import Swal, { SweetAlertResult } from 'sweetalert2';
@@ -60,8 +60,8 @@ export default class SettingsPage {
 		// Enable button groups.
 		ButtonGroup.doButtonGroups(this.$form);
 
-		// Enable image uploader.
-		ImageUploader.doImageUploaders();
+		// Enable image uploader with the default options.
+		new FileUploader();
 
 		// Enable theme selector
         // this.doThemeSelector();

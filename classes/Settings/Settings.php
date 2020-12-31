@@ -1329,8 +1329,8 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="atum-image-uploader__wrapper">
-			<button type="button" class="atum-image-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+		<div class="atum-file-uploader__wrapper">
+			<button type="button" class="atum-file-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?>
 			</button>
 
@@ -1338,7 +1338,7 @@ class Settings {
 				$image_url = wp_get_attachment_image_url( $attachment_id );
 
 				if ( $image_url ) : ?>
-					<img class="atum-image-uploader__preview" src="<?php echo esc_url( $image_url ) ?>">
+					<img class="atum-file-uploader__preview" src="<?php echo esc_url( $image_url ) ?>">
 				<?php endif; ?>
 			<?php endif; ?>
 
