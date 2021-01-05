@@ -60,13 +60,13 @@ use Atum\Inc\Helpers;
 					<?php $title = $marketing_popup->get_title(); ?>
 					<?php if ( ! empty( $title ) ) : ?>
 						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? "color:{$title->text_color};" : '' ) ?><?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? "font-size:{$title->text_size};" : '' ) ?><?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? "text-align:{$title->text_align};" : '' ) ?>">
+							<span>
+								<?php echo isset( $title->text ) ? $title->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-							<?php echo isset( $title->text ) ? $title->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-
-							<?php if ( ! empty( $version ) ) : ?>
-								<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? "color:{$version->text_color};" : '' ) ?><?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? "background:{$version->background};" : '' ) ?>"><?php echo isset( $version->text ) ? $version->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-							<?php endif; ?>
-
+								<?php if ( ! empty( $version ) ) : ?>
+									<span class="version" style="<?php echo esc_attr( isset( $version->text_color ) && '' !== $version->text_color ? "color:{$version->text_color};" : '' ) ?><?php echo esc_attr( isset( $version->background ) && '' !== $version->background ? "background:{$version->background};" : '' ) ?>"><?php echo isset( $version->text ) ? $version->text : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+								<?php endif; ?>
+							</span>
 						</h1>
 					<?php endif; ?>
 

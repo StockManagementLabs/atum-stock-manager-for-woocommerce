@@ -14,22 +14,22 @@
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2020/12/xmas-graphic-popup.svg",
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2021/01/4th-anniversary.svg",
 		"top_left": ""
 	},
 	"title": {
-		"text"      : "Special <strong>Sale</strong>",
+		"text"      : "<strong>4 YEARS YOUNG</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "Xmas 🎅🏻",
+		"text"      : "🎂",
 		"text_color": "#FFF",
-		"background": "#ff4848"
+		"background": "#f95e90"
 	},
 	"description": {
-		"text"           : "Merry Xmas and a Happy New Year!!! Subscribe to any ATUM's premium add-ons before December 31st and take advantage of our 50% off BIG SALE!!!<br><br>Use coupon <strong style='color:black'>XMASBIGSALE</strong> when checking out.",
+		"text"           : "Celebrate <strong>4th Anniversary</strong> of ATUM's first ever release with Us!!!<br>Save 25% on our youngest premium add-on, the <strong>Action Logs</strong>.<br>Keep track of any WooCommerce or ATUM changes!<br><br>Use coupon code <strong style='color:black'>4YEARSOFATUM</strong> when checking out.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -41,8 +41,8 @@
 			"text"      : "Purchase Now!",
 			"url"       : "https://www.stockmanagementlabs.com/addons/atum-action-logs/",
 			"class"     : "btn btn-sm btn-danger",
-			"css"       : "width:270px"
+			"css"       : "width:270px;background-color:#f95e90"
 		}
 	],
-	"transient_key": "christmas-sale-2020"
+	"transient_key": "4th-anniversary-sale"
 }

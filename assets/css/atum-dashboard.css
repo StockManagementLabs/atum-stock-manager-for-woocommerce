@@ -5288,6 +5288,10 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   min-height: 200px;
 }
 
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content.with-top-image {
+  padding-left: 72px;
+}
+
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content.with-content {
   padding-left: 100px;
 }
@@ -5350,13 +5354,12 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .content .content-description .version {
-  padding: 2px 7px;
-  height: 21px;
+  padding: 1px 9px;
   line-height: 20px;
   border-radius: 11.5px;
-  position: relative;
-  top: -36px;
-  right: 34px;
+  position: absolute;
+  top: -16px;
+  right: -22px;
   font-size: 14px;
 }
 
