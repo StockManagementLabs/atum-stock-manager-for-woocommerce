@@ -360,8 +360,8 @@ class Settings {
 			'stock_quantity_step'       => array(
 				'group'   => 'general',
 				'section' => 'general',
-				'name'    => __( 'Stock change arrows behaviour', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Tell WooCommerce, how much to increase/decrease the stock value with each arrow click. Example: If set to '0.5'; the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Stock quantity steps', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Tell WooCommerce how much to increase/decrease the stock quantity value in frontend with each arrow click. Example: If set to '0.5'; the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
