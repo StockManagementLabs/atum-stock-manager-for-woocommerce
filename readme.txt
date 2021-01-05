@@ -243,7 +243,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.8.3`
 
-*2021-01-07*
+*2021-01-05*
 
 **Features**
 
