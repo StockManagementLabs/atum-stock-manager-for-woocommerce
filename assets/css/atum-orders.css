@@ -4,7 +4,7 @@
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2020 Stock Management Labs 
+ * License : ©2021 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -3891,6 +3891,12 @@ input[type="button"].btn-block {
   margin-bottom: 5px;
 }
 
+.wc-backbone-modal .alert i {
+  margin-left: 0;
+  margin-right: 3px;
+  vertical-align: middle;
+}
+
 body.allow-multiple-suppliers .wc-backbone-modal .alert {
   display: none;
 }
@@ -5019,10 +5025,6 @@ div.add_note #add_atum_order_note {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   text-align: center;
-}
-
-.items-blocker:not(.unblocked) + .atum_order_items_wrapper #atum_order_line_items {
-  display: none;
 }
 
 .items-blocker.unblocked {

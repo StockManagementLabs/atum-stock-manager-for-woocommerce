@@ -4,7 +4,7 @@
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2020 Stock Management Labs 
+ * License : ©2021 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -4214,6 +4214,12 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   display: block;
   font-size: 12px;
   margin-bottom: 5px;
+}
+
+.wc-backbone-modal .alert i {
+  margin-left: 0;
+  margin-right: 3px;
+  vertical-align: middle;
 }
 
 body.allow-multiple-suppliers .wc-backbone-modal .alert {

@@ -2,37 +2,39 @@
    FILE UPLOADER
    ======================================= */
 
-interface WPModalOptions {
-	frame?: string; // Accepts [ 'select', 'post', 'image', 'audio', 'video' ]
+import WPHooks from '../interfaces/wp.hooks';
+
+export interface WPMediaModalOptions {
+	frame?: 'select' | 'post' | 'image' | 'audio' | 'video'; // The modal frame type
 	title?: string; // Modal title.
 	multiple?: boolean; // Enable/disable multiple select.
 
 	library?: {
-		order?: string; // 'DESC' or 'ASC'.
-		orderby?: string; // [ 'name', 'author', 'date', 'title', 'modified', 'uploadedTo', 'id', 'post__in', 'menuOrder' ]
-		type: string; // Mime type. e.g. 'image', 'image/jpeg'.
+		order?: 'DESC' | 'ASC';
+		orderby?: 'name' | 'author' | 'date' | 'title' | 'modified' | 'uploadedTo' | 'id' | 'post__in' | 'menuOrder';
+		type?: string; // Mime type. e.g. 'image', 'image/jpeg'.
 		search?: string; // Searches the attachment title.
 		uploadedTo?: number; // Includes media only uploaded to the specified post (ID). wp.media.view.settings.post.id (for current post ID)
 	}
 
 	button?: {
-		text: string; // The modal button text.
+		text?: string; // The modal button text.
 	}
 }
 
 // It uses the WP media component.
 export default class FileUploader {
 
-	defaultOptions: WPModalOptions = {
-		library : {
-			type: 'image',
-		},
+	defaultOptions: WPMediaModalOptions = {
+		frame: 'select',
 		multiple: false,
 	};
 
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
+
 	constructor(
-		private options?: WPModalOptions,
-		private preview: boolean = true
+		private options?: WPMediaModalOptions,
+		private preview: boolean = false
 	) {
 
 		this.doFileUploaders();
@@ -51,7 +53,7 @@ export default class FileUploader {
 
 				const $button: JQuery = $( evt.currentTarget );
 
-				const modalOptions: WPModalOptions = { ...this.defaultOptions, ...this.options };
+				const modalOptions: WPMediaModalOptions = { ...this.defaultOptions, ...this.options };
 
 				// The button's data attributes have preference over the passed options.
 				if ( $button.data( 'modal-title' ) ) {
@@ -67,19 +69,43 @@ export default class FileUploader {
 				const uploader: any = window[ 'wp' ].media( modalOptions )
 					.on( 'select', () => {
 
-						const attachment: any = uploader.state().get( 'selection' ).first().toJSON();
-						$button.siblings( 'input:hidden' ).val( attachment.id );
+						const selection: any = uploader.state().get( 'selection' ),
+						      attachment: any = modalOptions.multiple ? selection.toJSON() : selection.first().toJSON(),
+						      $input: JQuery  = $button.siblings( 'input:hidden' );
 
+						if ( modalOptions.multiple ) {
+
+							let attachmentIds: number[] = [];
+							attachment.forEach( ( att: any ) => {
+								attachmentIds.push( att.id );
+							} );
+
+							$input.val( JSON.stringify( attachmentIds ) );
+
+						}
+						else {
+							$input.val( attachment.id );
+						}
 
 						// Show the preview for images only.
-						if ( this.preview && modalOptions.library.type.indexOf( 'image' ) > -1 ) {
-							if ( $button.siblings( 'img' ).length ) {
-								$button.siblings( 'img' ).attr( 'src', attachment.url );
+						if ( this.preview && ( ! modalOptions.library.type || modalOptions.library.type.indexOf( 'image' ) > -1 ) ) {
+
+							$button.siblings( 'img' ).remove();
+
+							if ( modalOptions.multiple ) {
+
+								attachment.forEach( ( att: any ) => {
+									$button.after( `<img class="atum-file-uploader__preview" src="${ att.url }">` );
+								} );
+
 							}
 							else {
 								$button.after( `<img class="atum-file-uploader__preview" src="${ attachment.url }">` );
 							}
+
 						}
+
+						this.wpHooks.doAction( 'atum_fileUploader_selected', uploader );
 
 					} )
 					.open();

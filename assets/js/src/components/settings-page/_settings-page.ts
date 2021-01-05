@@ -6,7 +6,7 @@ import EnhancedSelect from '../_enhanced-select';
 import ButtonGroup from '../_button-group';
 import ColorPicker from '../_color-picker';
 import DateTimePicker from '../_date-time-picker';
-import FileUploader from '../_file-uploader';
+import FileUploader, { WPMediaModalOptions } from '../_file-uploader';
 import Settings from '../../config/_settings';
 import SmartForm from '../_smart-form';
 import Swal, { SweetAlertResult } from 'sweetalert2';
@@ -61,7 +61,12 @@ export default class SettingsPage {
 		ButtonGroup.doButtonGroups(this.$form);
 
 		// Enable image uploader with the default options.
-		new FileUploader();
+		const uploaderOptions: WPMediaModalOptions = {
+			library : {
+				type: 'image',
+			}
+		}
+		new FileUploader( uploaderOptions, true );
 
 		// Enable theme selector
         // this.doThemeSelector();
