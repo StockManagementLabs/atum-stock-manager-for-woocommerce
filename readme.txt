@@ -7,7 +7,7 @@ Tested up to: 5.6.0
 Requires PHP: 5.6
 WC requires at least: 3.1.0
 WC tested up to: 4.8.0
-Stable tag: 1.8.2.1
+Stable tag: 1.8.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,37 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.3`
+
+*2021-01-07*
+
+**Features**
+
+* Added new helper to allow setting up the low stock formula externally.
+* Added extra parameter to the "atum/order_post_type/post_type_args" hook.
+* Added new JS hook when the menu popover is shown.
+* Added new JS hook when an order item gets removed.
+* Added new marketing popup for ATUM 4th anniversary.
+
+**Changes**
+
+* CSS adjustments.
+* Unified how the existence of the product is checked.
+* Refactoring.
+* Only register the custom statuses whose names start with the ATUM prefix.
+* ImageUploader component refactoring.
+* Unified rating messages and behaviour (in footer and dashboard).
+
+**Fixes**
+
+* Fixed a POItem instantiation on the generic AtumOrderItemTrait.
+* Check that a product exists before updating its calculated props.
+* Ensure Order item products exist before accesing them.
+* Fixed all the jQuery deprecations until version 3.5.
+* Adjusted behaviour for the PO items blocker.
 
 ---
 
