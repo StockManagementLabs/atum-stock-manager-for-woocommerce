@@ -9,7 +9,6 @@
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 global $wpdb;
@@ -26,20 +25,21 @@ if ( wc_tax_enabled() ) {
 	$show_tax_columns = 1 === count( $taxes );
 }
 
-$currency  = $atum_order->currency;
-$post_type = get_post_type_object( get_post_type( $atum_order->get_id() ) );
-
-// ! wp_doing_ajax allow add taxes in still non-created order items.
-$add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( PurchaseOrders::get_post_type() === $post_type->name && empty( $line_items ) && ! $atum_order->has_multiple_suppliers() );
+$currency    = $atum_order->currency;
+$post_type   = get_post_type_object( get_post_type( $atum_order->get_id() ) );
 $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limit="' . $atum_order->get_id() . '"' : '';
 ?>
 
 <div class="atum-meta-box <?php echo esc_attr( $post_type->name ) ?>_items">
 
 	<?php do_action( 'atum/atum_order/before_items_meta_box', $atum_order ) ?>
-	
-	<?php if ( $add_blocker ) : ?>
-		<div class="items-blocker"><h3><?php echo esc_attr( $atum_order->get_block_message() ) ?></h3></div>
+
+	<?php if ( PurchaseOrders::POST_TYPE === $post_type->name ) : ?>
+		<?php // ! wp_doing_ajax allow add taxes in still non-created order items.
+		$add_blocker = ( ! $atum_order->get_status() && ! wp_doing_ajax() ) || ( ! $atum_order->has_multiple_suppliers() && ! $atum_order->supplier ); ?>
+		<div class="items-blocker<?php if ( ! $add_blocker ) echo ' unblocked' ?>">
+			<h3><?php echo esc_attr( $atum_order->get_block_message() ) ?></h3>
+		</div>
 	<?php endif; ?>
 
 	<div class="atum_order_items_wrapper">

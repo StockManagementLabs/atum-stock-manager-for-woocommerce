@@ -944,10 +944,6 @@ abstract class AtumOrderPostType {
 					'yes'                      => __( 'Yes', ATUM_TEXT_DOMAIN ),
 				);
 
-				if ( InventoryLogs::POST_TYPE !== $post_type ) {
-					$vars['itemBlocker'] = __( 'Click the Update button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
-				}
-
 				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
 
 				wp_localize_script( 'atum-orders', 'atumOrder', $vars );

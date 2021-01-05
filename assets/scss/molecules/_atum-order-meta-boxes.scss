@@ -983,14 +983,6 @@ div.add_note {
 		text-align: center;
 	}
 	
-	&:not(.unblocked) {
-		+ .atum_order_items_wrapper {
-			#atum_order_line_items {
-				display: none;
-			}
-		}
-	}
-	
 	&.unblocked {
 		display: none;
 	}
