@@ -19,7 +19,6 @@
 			</span>
 		</div>
 		<div class="footer-atum-text">
-			<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php echo wp_kses_post( $footer_text ) ?>
 		</div>
 	</div>

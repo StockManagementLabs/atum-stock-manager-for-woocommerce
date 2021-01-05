@@ -4024,6 +4024,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 #wpfooter .footer-box .footer-atum-text span {
   color: var(--atum-footer-link);
+  margin-right: 5px;
 }
 
 #wpfooter .footer-box .footer-atum-text .wc-rating-link {

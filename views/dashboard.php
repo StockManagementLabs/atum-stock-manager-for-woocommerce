@@ -35,11 +35,7 @@ use Atum\Inc\Helpers;
 		</div>
 
 		<div class="dash-header-notice">
-			<span><?php esc_html_e( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) ?></span>
-			<?php
-			/* translators: the first one is the WordPress reviews page for ATUM's link and the second is the closing link tag */
-			printf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			?>
+			<?php echo wp_kses_post( Helpers::get_rating_text() ) ?>
 		</div>
 	</section>
 

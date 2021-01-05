@@ -4729,6 +4729,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 
 #wpfooter .footer-box .footer-atum-text span {
   color: var(--atum-footer-link);
+  margin-right: 5px;
 }
 
 #wpfooter .footer-box .footer-atum-text .wc-rating-link {

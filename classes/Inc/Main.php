@@ -475,21 +475,7 @@ class Main {
 			}
 
 			// Change the footer text.
-			if ( ! get_option( 'atum_admin_footer_text_rated' ) ) {
-
-				/* translators: the first one is the WordPress plugins directory link and the second is the link closing tag */
-				$footer_text = sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
-				wc_enqueue_js( "
-					jQuery( 'a.wc-rating-link' ).click( function() {
-						jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
-						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
-					});
-				" );
-
-			}
-			else {
-				$footer_text = __( 'Thank you for trusting in <strong>ATUM</strong> for managing your stock.', ATUM_TEXT_DOMAIN );
-			}
+			$footer_text = Helpers::get_rating_text();
 
 			$footer_class        = FALSE;
 			$screen_base         = get_current_screen()->base;

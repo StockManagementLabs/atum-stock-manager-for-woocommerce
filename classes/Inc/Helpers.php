@@ -3416,4 +3416,35 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Return the text used in some places to ask users for rating ATUM
+	 *
+	 * @since 1.8.3
+	 *
+	 * @return string
+	 */
+	public static function get_rating_text() {
+
+		if ( ! get_user_meta( get_current_user_id(), 'atum_admin_footer_text_rated' ) ) {
+
+			$rating_text = '<span>' . esc_html__( 'HELP US TO IMPROVE!', ATUM_TEXT_DOMAIN ) . ' 🙏</span>';
+
+			/* translators: the first one is the WordPress plugins directory link and the second is the link closing tag */
+			$rating_text .= sprintf( __( 'If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;&#9733;&#9733;%2$s rating. Huge thanks in advance!', ATUM_TEXT_DOMAIN ), '<a href="https://wordpress.org/support/plugin/atum-stock-manager-for-woocommerce/reviews/?filter=5#new-post" target="_blank" class="wc-rating-link" data-rated="' . esc_attr__( 'Thanks :)', ATUM_TEXT_DOMAIN ) . '">', '</a>' );
+			wc_enqueue_js( "
+				jQuery( 'a.wc-rating-link' ).click( function() {
+					jQuery.post( '" . WC()->ajax_url() . "', { action: 'atum_rated' } );
+					jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
+				});
+			" );
+
+		}
+		else {
+			$rating_text = __( 'Thank you for trusting <strong>ATUM</strong> to manage your inventory 🙌', ATUM_TEXT_DOMAIN );
+		}
+
+		return $rating_text;
+
+	}
+
 }

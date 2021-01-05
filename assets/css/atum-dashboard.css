@@ -5108,6 +5108,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 
 .atum-dashboard .dash-header .dash-header-notice span {
   color: var(--primary);
+  margin-right: 5px;
 }
 
 .atum-dashboard .dash-header .dash-header-notice .wc-rating-link {

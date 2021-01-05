@@ -532,7 +532,7 @@ final class Ajax {
 	 * @since 1.2.0
 	 */
 	public function rated() {
-		update_option( 'atum_admin_footer_text_rated', 1 );
+		update_user_meta( get_current_user_id(), 'atum_admin_footer_text_rated', 1 );
 		wp_die();
 	}
 
