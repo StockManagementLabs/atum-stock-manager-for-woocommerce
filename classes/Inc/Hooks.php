@@ -503,6 +503,7 @@ class Hooks {
 
 			// Add step value to the quantity field (WC default = 1).
 			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
 
 			// Removes the WooCommerce filter, that is validating the quantity to be an int.
 			remove_filter( 'woocommerce_stock_amount', 'intval' );
