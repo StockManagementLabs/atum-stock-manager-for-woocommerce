@@ -31,41 +31,41 @@ export default class SettingsPage {
 	) {
 		
 		// Initialize selectors.
-		this.$settingsWrapper = $('.atum-settings-wrapper');
-		this.$nav = this.$settingsWrapper.find('.atum-nav');
-		this.$form = this.$settingsWrapper.find('#atum-settings');
+		this.$settingsWrapper = $( '.atum-settings-wrapper' );
+		this.$nav = this.$settingsWrapper.find( '.atum-nav' );
+		this.$form = this.$settingsWrapper.find( '#atum-settings' );
 		
 		// URL hash navigation.
 		this.setupNavigation();
 		
 		// Enable switchers.
 		Switcher.doSwitchers();
-		Switcher.doSwitchers('.js-switch-menu', {
-			color    : '#dbf9ff',
-			jackColor: '#00b8db',
-		});
+		Switcher.doSwitchers( '.js-switch-menu', {
+			color    : '#DBF9FF',
+			jackColor: '#00B8DB',
+		} );
 
 		// Enable DateTimePickers
 		this.initDateTimePicker();
 
 		// Enable Tooltips.
-		this.tooltip.addTooltips(this.$form);
-		
+		this.tooltip.addTooltips( this.$form );
+
 		// Enable ColoPickers.
-		ColorPicker.doColorPickers(this.settings.get('selectColor'));
-		
+		ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
+
 		// Enable Select2.
-		this.enhancedSelect.doSelect2( this.$settingsWrapper.find('select'), {}, true );
-		
+		this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
+
 		// Enable button groups.
-		ButtonGroup.doButtonGroups(this.$form);
+		ButtonGroup.doButtonGroups( this.$form );
 
 		// Enable image uploader with the default options.
 		const uploaderOptions: WPMediaModalOptions = {
-			library : {
+			library: {
 				type: 'image',
-			}
-		}
+			},
+		};
 		new FileUploader( uploaderOptions, true );
 
 		// Enable theme selector
@@ -75,58 +75,57 @@ export default class SettingsPage {
 		this.toggleMenu();
 
 		this.$form
-			
-			// Out of stock threshold option updates.
-			.on('change', '#atum_out_stock_threshold', (evt: JQueryEventObject) => this.maybeClearOutStockThreshold($(evt.currentTarget)) )
-			
-			// Script Runner fields.
-			.on('click', '.script-runner .tool-runner', (evt: JQueryEventObject) => this.runScript($(evt.currentTarget)) )
 
-            // Theme selector fields.
-            .on('click', '.selector-box', (evt: JQueryEventObject) => this.doThemeSelector($(evt.currentTarget)) )
+			// Out of stock threshold option updates.
+			.on( 'change', '#atum_out_stock_threshold', ( evt: JQueryEventObject ) => this.maybeClearOutStockThreshold( $( evt.currentTarget ) ) )
+
+			// Script Runner fields.
+			.on( 'click', '.script-runner .tool-runner', ( evt: JQueryEventObject ) => this.runScript( $( evt.currentTarget ) ) )
+
+			// Theme selector fields.
+			.on( 'click', '.selector-box', ( evt: JQueryEventObject ) => this.doThemeSelector( $( evt.currentTarget ) ) )
 
 			// Toggle checkboxes.
-			.on('click', '.atum-settings-input[type=checkbox]', (evt: JQueryEventObject) => this.clickCheckbox($(evt.currentTarget)) )
+			.on( 'click', '.atum-settings-input[type=checkbox]', ( evt: JQueryEventObject ) => this.clickCheckbox( $( evt.currentTarget ) ) )
 
 			// Default color fields.
-			.on('click', '.reset-default-colors', (evt: JQueryEventObject) => this.doResetDefault($(evt.currentTarget)) )
+			.on( 'click', '.reset-default-colors', ( evt: JQueryEventObject ) => this.doResetDefault( $( evt.currentTarget ) ) )
 
 			// Switcher multicheckbox.
-			.on('change', '.atum-multi-checkbox-main', (evt: JQueryEventObject) => this.toggleMultiCheckboxPanel($(evt.currentTarget)) )
+			.on( 'change', '.atum-multi-checkbox-main', ( evt: JQueryEventObject ) => this.toggleMultiCheckboxPanel( $( evt.currentTarget ) ) )
 
-			.on('change', '.remove-datepicker-range', (evt: JQueryEventObject) => this.toggleRangeRemove($(evt.currentTarget)) )
+			.on( 'change', '.remove-datepicker-range', ( evt: JQueryEventObject ) => this.toggleRangeRemove( $( evt.currentTarget ) ) )
 
-			.on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', (evt: JQueryEventObject) => this.setDateTimeInputs() );
+			.on( 'change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', () => this.setDateTimeInputs() );
 
-		new SmartForm(this.$form, this.settings.get('atumPrefix'));
-		
-		
+		new SmartForm( this.$form, this.settings.get( 'atumPrefix' ) );
+
+
 		// Footer positioning.
-		$(window).on('load', () => {
-			
-			if ( $('.footer-box').hasClass('no-style') ) {
-				$('#wpfooter').css('position', 'relative').show();
-				$('#wpcontent').css('min-height', '95vh');
+		$( window ).on( 'load', () => {
+
+			if ( $( '.footer-box' ).hasClass( 'no-style' ) ) {
+				$( '#wpfooter' ).css( 'position', 'relative' ).show();
+				$( '#wpcontent' ).css( 'min-height', '95vh' );
 			}
-			
-		});
+
+		} );
 
 		// Adjust the nav height.
-		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px`  );
+		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px` );
 	
 	}
 
 	setupNavigation() {
-		
+
 		// Instantiate the loader to register the jQuery.address and the events.
-		this.tabLoader = new TabLoader(this.$settingsWrapper, this.$nav);
-		
+		this.tabLoader = new TabLoader( this.$settingsWrapper, this.$nav );
 		
 		this.$settingsWrapper
-		
+
 			// Show the form after the page is loaded.
 			.on( 'atum-tab-loader-init', () => this.$form.show() )
-		
+
 			// Tab clicked.
 			.on( 'atum-tab-loader-clicked-tab', ( evt: JQueryEventObject, $navLink: JQuery, tab: string ) => {
 
@@ -164,44 +163,56 @@ export default class SettingsPage {
 	}
 	
 	hideColors() {
-		//console.log("Yeeee haaaaa");
-		
-		if($("#atum-table-color-settings").length>0) {
-			let mode = $("#atum-table-color-settings").data('display');
-			$("#atum-table-color-settings .atum-settings-input.atum-color").each(function() {
-				if($(this).data('display')!=mode) {
-					$(this).parents('tr').hide();
+
+		const $tableColorSettings: JQuery = $( '#atum-table-color-settings' );
+
+		if ( $tableColorSettings.length > 0 ) {
+
+			const mode = $tableColorSettings.data( 'display' );
+
+			$tableColorSettings.find( '.atum-settings-input.atum-color' ).each( ( index: number, elem: Element ) => {
+				if ( $( elem ).data( 'display' ) !== mode ) {
+					$( elem ).closest( 'tr' ).hide();
 				}
-			});
-			$("#atum-table-color-settings tr").each(function() {
-				if($(this).css('display') == 'none')
-					$(this).prependTo($("#atum-table-color-settings tbody"));
-			});
+			} );
+
+			$tableColorSettings.find( 'tr' ).each( ( index: number, elem: Element ) => {
+				if ( $( elem ).css( 'display' ) === 'none' ) {
+					$( elem ).prependTo( $tableColorSettings.find( 'tbody' ) );
+				}
+			} );
+
 		}
+
 	}
-	
-	moveToTab($navLink: JQuery) {
-		
-		const $formSettingsWrapper: JQuery = this.$form.find('.form-settings-wrapper');
-		
-		this.$nav.find('.atum-nav-link.active').not($navLink).removeClass('active');
-		$navLink.addClass('active');
-		
-		$formSettingsWrapper.addClass('overlay');
-		
-		this.$form.load( `${ $navLink.attr('href') } .form-settings-wrapper`, () => {
-			
+
+	/**
+	 * Move to a new settings tab
+	 *
+	 * @param {JQuery} $navLink
+	 */
+	moveToTab( $navLink: JQuery ) {
+
+		const $formSettingsWrapper: JQuery = this.$form.find( '.form-settings-wrapper' );
+
+		this.$nav.find( '.atum-nav-link.active' ).not( $navLink ).removeClass( 'active' );
+		$navLink.addClass( 'active' );
+
+		$formSettingsWrapper.addClass( 'overlay' );
+
+		this.$form.load( `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
+
 			Switcher.doSwitchers();
-			ColorPicker.doColorPickers(this.settings.get('selectColor'));
+			ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
 			this.initDateTimePicker();
 			this.enhancedSelect.maybeRestoreEnhancedSelect();
-			this.enhancedSelect.doSelect2( this.$settingsWrapper.find('select'), {}, true );
-			this.$form.find('[data-dependency]').change().removeClass('dirty');
+			this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
+			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
 			this.$form.show();
-			
-			const $inputButton: JQuery = this.$form.find('input:submit');
-			
-			if ($navLink.parent().hasClass('no-submit')) {
+
+			const $inputButton: JQuery = this.$form.find( 'input:submit' );
+
+			if ( $navLink.parent().hasClass( 'no-submit' ) ) {
 				$inputButton.hide();
 			}
 			else {
@@ -209,49 +220,45 @@ export default class SettingsPage {
 			}
 
 			// Enable Tooltips.
-			this.tooltip.addTooltips(this.$form);
+			this.tooltip.addTooltips( this.$form );
 
-			this.$settingsWrapper.trigger('atum-settings-page-loaded', [ $navLink.data('tab') ]);
-			
-			if ( 'visual_settings' === $navLink.data('tab') ) {
+			this.$settingsWrapper.trigger( 'atum-settings-page-loaded', [ $navLink.data( 'tab' ) ] );
+
+			if ( 'visual_settings' === $navLink.data( 'tab' ) ) {
 				this.hideColors();
 			}
 
-		});
+		} );
 		
 	}
 	
 	toggleMenu() {
-		
-		const $navList: JQuery = this.$nav.find('.atum-nav-list');
-		
-		$('.toogle-menu, .atum-nav-link').click( () => {
-			$navList.toggleClass('expand-menu');
-		});
-		
-		$(window).resize( () => {
-			$navList.removeClass('expand-menu');
-		});
+
+		const $navList: JQuery = this.$nav.find( '.atum-nav-list' );
+
+		$( '.toogle-menu, .atum-nav-link' ).click( () => $navList.toggleClass( 'expand-menu' ) );
+
+		$( window ).resize( () => $navList.removeClass( 'expand-menu' ) );
 		
 	}
 	
-	maybeClearOutStockThreshold($checkbox: JQuery) {
-		
-		if ($checkbox.is(':checked') && this.settings.get('isAnyOostSet')) {
-			
-			Swal.fire({
+	maybeClearOutStockThreshold( $checkbox: JQuery ) {
+
+		if ( $checkbox.is( ':checked' ) && this.settings.get( 'isAnyOostSet' ) ) {
+
+			Swal.fire( {
 				title              : '',
-				text               : this.settings.get('oostSetClearText'),
+				text               : this.settings.get( 'oostSetClearText' ),
 				icon               : 'question',
 				showCancelButton   : true,
-				confirmButtonText  : this.settings.get('startFresh'),
-				cancelButtonText   : this.settings.get('useSavedValues'),
+				confirmButtonText  : this.settings.get( 'startFresh' ),
+				cancelButtonText   : this.settings.get( 'useSavedValues' ),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
 				showLoaderOnConfirm: true,
 				preConfirm         : (): Promise<any> => {
-					
-					return new Promise( (resolve: Function, reject: Function) => {
+
+					return new Promise( ( resolve: Function, reject: Function ) => {
 
 						$.ajax( {
 							url     : window[ 'ajaxurl' ],
@@ -271,11 +278,11 @@ export default class SettingsPage {
 
 							},
 						} );
-						
-					});
-					
-				}
-			})
+
+					} );
+
+				},
+			} )
 			.then( ( result: SweetAlertResult ) => {
 
 				if ( result.isConfirmed ) {
@@ -283,29 +290,34 @@ export default class SettingsPage {
 						title            : this.settings.get( 'done' ),
 						icon             : 'success',
 						text             : result.value,
-						confirmButtonText: this.settings.get( 'ok' )
+						confirmButtonText: this.settings.get( 'ok' ),
 					} );
 				}
-				
-			});
+
+			} );
 			
 		}
-		else if ( !$checkbox.is( ':checked' ) ) {
-			
-			Swal.fire({
+		else if ( ! $checkbox.is( ':checked' ) ) {
+
+			Swal.fire( {
 				title            : '',
-				text             : this.settings.get('oostDisableText'),
+				text             : this.settings.get( 'oostDisableText' ),
 				icon             : 'info',
-				confirmButtonText: this.settings.get('ok'),
-			});
-			
+				confirmButtonText: this.settings.get( 'ok' ),
+			} );
+
 		}
 		
 	}
 
-	runScript($button: JQuery) {
+	/**
+	 * Run a tool script
+	 *
+	 * @param {JQuery} $button
+	 */
+	runScript( $button: JQuery ) {
 
-		const $scriptRunner = $button.closest('.script-runner');
+		const $scriptRunner = $button.closest( '.script-runner' );
 
 		if ( $scriptRunner.is( '.recurrent' ) ) {
 			this.runRecurrentScript( $button, $scriptRunner );
@@ -316,282 +328,291 @@ export default class SettingsPage {
 	}
 
 	runSingleScript( $button: JQuery, $scriptRunner ) {
-		
-		Swal.fire({
-			title              : this.settings.get('areYouSure'),
-			text               : $scriptRunner.data('confirm'),
+
+		Swal.fire( {
+			title              : this.settings.get( 'areYouSure' ),
+			text               : $scriptRunner.data( 'confirm' ),
 			icon               : 'warning',
 			showCancelButton   : true,
-			confirmButtonText  : this.settings.get('run'),
-			cancelButtonText   : this.settings.get('cancel'),
+			confirmButtonText  : this.settings.get( 'run' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
-			preConfirm: (): Promise<any> => {
-				
-				return new Promise( (resolve: Function, reject: Function) => {
-					
-					let $input: JQuery = $scriptRunner.find('#' + $scriptRunner.data('input')),
+			preConfirm         : (): Promise<any> => {
+
+				return new Promise( ( resolve: Function, reject: Function ) => {
+
+					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
 					    data: any      = {
-						    action: $scriptRunner.data('action'),
-						    token : this.settings.get('runnerNonce'),
+						    action: $scriptRunner.data( 'action' ),
+						    token : this.settings.get( 'runnerNonce' ),
 					    };
 
 					if ( $input.length ) {
 						data.option = $input.val();
 					}
-					
-					$.ajax({
-						url       : window['ajaxurl'],
+
+					$.ajax( {
+						url       : window[ 'ajaxurl' ],
 						method    : 'POST',
 						dataType  : 'json',
 						data      : data,
-						beforeSend: () => $button.prop('disabled', true),
+						beforeSend: () => $button.prop( 'disabled', true ),
 						success   : ( response: any ) => {
-							
-							$button.prop('disabled', false);
-							
-							if (response.success !== true) {
+
+							$button.prop( 'disabled', false );
+
+							if ( response.success !== true ) {
 								Swal.showValidationMessage( response.data );
 							}
 
 							resolve( response.data );
-							
-						}
-					});
-					
-				});
-				
-			}
-			
-		})
+
+						},
+					} );
+
+				} );
+
+			},
+
+		} )
 		.then( ( result: SweetAlertResult ) => {
 
 			if ( result.isConfirmed ) {
 				Swal.fire( {
-					title            : this.settings.get( 'done' ),
-					icon             : 'success',
-					text             : result.value,
-					confirmButtonText: this.settings.get( 'ok' )
-				} )
-				.then( () => {
-					this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
-				} );
+						title            : this.settings.get( 'done' ),
+						icon             : 'success',
+						text             : result.value,
+						confirmButtonText: this.settings.get( 'ok' ),
+					} )
+					.then( () => {
+						this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+					} );
 			}
-			
-		});
+
+		} );
 		
 	}
 
 	runRecurrentScript( $button: JQuery, $scriptRunner ) {
 
-		Swal.fire({
-				title              : this.settings.get('areYouSure'),
-				text               : $scriptRunner.data('confirm'),
-				icon               : 'warning',
-				showCancelButton   : true,
-				confirmButtonText  : this.settings.get('run'),
-				cancelButtonText   : this.settings.get('cancel'),
-				reverseButtons     : true,
-				allowOutsideClick  : false,
-				showLoaderOnConfirm: true,
-				preConfirm: (): Promise<any> => {
+		Swal.fire( {
+			title              : this.settings.get( 'areYouSure' ),
+			text               : $scriptRunner.data( 'confirm' ),
+			icon               : 'warning',
+			showCancelButton   : true,
+			confirmButtonText  : this.settings.get( 'run' ),
+			cancelButtonText   : this.settings.get( 'cancel' ),
+			reverseButtons     : true,
+			allowOutsideClick  : false,
+			showLoaderOnConfirm: true,
+			preConfirm         : (): Promise<any> => {
 
-					return new Promise( (resolve: Function, reject: Function) => {
+				return new Promise( ( resolve: Function, reject: Function ) => {
 
-						let $input: JQuery = $scriptRunner.find('#' + $scriptRunner.data('input')),
-						   option: string = '';
+					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
+					    option: string = '';
 
-						const action: string = $scriptRunner.data( 'action' )
+					const action: string = $scriptRunner.data( 'action' );
 
-						if ( $input.length ) {
-							option = $input.val();
-						}
+					if ( $input.length ) {
+						option = $input.val();
+					}
 
-						const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
+					const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
 
-							let data: any = {
-								action: action,
-								token : this.settings.get( 'runnerNonce' ),
-								option: option,
-								offset: offset,
-							};
+						let data: any = {
+							action: action,
+							token : this.settings.get( 'runnerNonce' ),
+							option: option,
+							offset: offset,
+						};
 
-							return $.ajax({
-								url       : window['ajaxurl'],
-								method    : 'POST',
-								dataType  : 'json',
-								data      : data,
-							});
-						}
+						return $.ajax( {
+							url     : window[ 'ajaxurl' ],
+							method  : 'POST',
+							dataType: 'json',
+							data    : data,
+						} );
+					};
 
-						$button.prop('disabled', true);
+					$button.prop( 'disabled', true );
 
-						const recurrentCall = ( offset: number = 0 ) =>
+					const recurrentCall = ( offset: number = 0 ) =>
 
-							doRecurrentAjaxCall( offset ).done( ( response: any ) => {
-								if ( response.success === true ) {
+						doRecurrentAjaxCall( offset ).done( ( response: any ) => {
+							if ( response.success === true ) {
 
-									Swal.update( {
-										text             : $scriptRunner.data( 'processing' ).replace( '{processed}', response.data.limit ).replace( '{total}', response.data.total ),
-										showConfirmButton: false,
-									} );
+								Swal.update( {
+									text             : $scriptRunner.data( 'processing' ).replace( '{processed}', response.data.limit ).replace( '{total}', response.data.total ),
+									showConfirmButton: false,
+								} );
 
-									if ( response.data.finished !== undefined && response.data.finished === true ) {
-										$button.prop( 'disabled', false );
-										resolve( response.data );
-									}
-									else {
-										offset = response.data.limit !== undefined ? response.data.limit : 100;
-										return recurrentCall( offset );
-									}
-								}
-								else {
+								if ( response.data.finished !== undefined && response.data.finished === true ) {
 									$button.prop( 'disabled', false );
-									Swal.showValidationMessage( response.data );
 									resolve( response.data );
 								}
-							} );
-
-						recurrentCall();
-
-					});
-
-				}
-
-			})
-			.then( ( result: SweetAlertResult ) => {
-
-				if ( result.isConfirmed ) {
-					Swal.fire( {
-							title            : this.settings.get( 'done' ),
-							icon             : 'success',
-							text             : $scriptRunner.data( 'processed' ).replace( '{processed}', result.value.total ),
-							confirmButtonText: this.settings.get( 'ok' )
-						} )
-						.then( () => {
-							this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+								else {
+									offset = response.data.limit !== undefined ? response.data.limit : 100;
+									return recurrentCall( offset );
+								}
+							}
+							else {
+								$button.prop( 'disabled', false );
+								Swal.showValidationMessage( response.data );
+								resolve( response.data );
+							}
 						} );
-				}
 
-			});
+					recurrentCall();
+
+				} );
+
+			},
+
+		} )
+		.then( ( result: SweetAlertResult ) => {
+
+			if ( result.isConfirmed ) {
+				Swal.fire( {
+						title            : this.settings.get( 'done' ),
+						icon             : 'success',
+						text             : $scriptRunner.data( 'processed' ).replace( '{processed}', result.value.total ),
+						confirmButtonText: this.settings.get( 'ok' ),
+					} )
+					.then( () => {
+						this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+					} );
+			}
+
+		} );
 
 	}
 
-    doThemeSelector($element: JQuery) {
-	
-	    const $formSettingsWrapper: JQuery  = this.$form.find('.form-settings-wrapper'),
-	          $themeSelectorWrapper: JQuery = this.$form.find('.theme-selector-wrapper'),
-	          $themeOptions: JQuery         = $themeSelectorWrapper.find('.selector-container .selector-box img'),
-	          themeSelectedValue: string    = $element.data('value'),
-	          resetDefault: number          = $element.data('reset'),
-	          $radioInput: JQuery           = this.$form.find(`#${ themeSelectedValue }`),
-	          $resetDefaultColors           = this.$form.find('.reset-default-colors');
+    doThemeSelector( $element: JQuery ) {
 
-        $radioInput.prop('checked', true);
-        $themeOptions.removeClass('active');
-        $element.find('img').addClass('active');
-        $resetDefaultColors.data('value', themeSelectedValue);
+	    const $formSettingsWrapper: JQuery  = this.$form.find( '.form-settings-wrapper' ),
+	          $themeSelectorWrapper: JQuery = this.$form.find( '.theme-selector-wrapper' ),
+	          $themeOptions: JQuery         = $themeSelectorWrapper.find( '.selector-container .selector-box img' ),
+	          themeSelectedValue: string    = $element.data( 'value' ),
+	          resetDefault: number          = $element.data( 'reset' ),
+	          $radioInput: JQuery           = this.$form.find( `#${ themeSelectedValue }` ),
+	          $resetDefaultColors           = this.$form.find( '.reset-default-colors' );
 
-        $.ajax({
-            url   : window['ajaxurl'],
-            method: 'POST',
-            data  : {
-                token : this.settings.get('colorSchemeNonce'),
-                action: this.settings.get('getColorScheme'),
-                theme : themeSelectedValue,
-	            reset : resetDefault
-            },
-            beforeSend: () => $formSettingsWrapper.addClass('overlay'),
-            success : (response: any) => {
+	    $radioInput.prop( 'checked', true );
+	    $themeOptions.removeClass( 'active' );
+	    $element.find( 'img' ).addClass( 'active' );
+	    $resetDefaultColors.data( 'value', themeSelectedValue );
 
-                if (response.success === true) {
-	
-	                for (let dataKey in response.data) {
-		                ColorPicker.updateColorPicker( this.$form.find(`#atum_${ dataKey }`), response.data[dataKey] );
-	                }
-                 
-	                let title: string = '';
-	                
-                    if (themeSelectedValue === 'dark_mode') {
-                        title = this.settings.get('dark');
-                    }
-                    else if(themeSelectedValue === 'hc_mode'){
-                        title = this.settings.get('highContrast');
-                    }
-                    else{
-	                    title = this.settings.get('branded');
-                    }
-	
-	                this.$form.find('.section-title h2 span').html( title );
-                    $formSettingsWrapper.removeClass('overlay');
-                    this.$form.find('input:submit').click();
-                    
-                }
-                else {
-                    //console.log('Error');
-                }
+	    $.ajax( {
+		    url       : window[ 'ajaxurl' ],
+		    method    : 'POST',
+		    data      : {
+			    token : this.settings.get( 'colorSchemeNonce' ),
+			    action: this.settings.get( 'getColorScheme' ),
+			    theme : themeSelectedValue,
+			    reset : resetDefault,
+		    },
+		    beforeSend: () => $formSettingsWrapper.addClass( 'overlay' ),
+		    success   : ( response: any ) => {
 
-            }
-        });
+			    if ( response.success === true ) {
+
+				    for ( let dataKey in response.data ) {
+					    ColorPicker.updateColorPicker( this.$form.find( `#atum_${ dataKey }` ), response.data[ dataKey ] );
+				    }
+
+				    let title: string = '';
+
+				    if ( themeSelectedValue === 'dark_mode' ) {
+					    title = this.settings.get( 'dark' );
+				    }
+				    else if ( themeSelectedValue === 'hc_mode' ) {
+					    title = this.settings.get( 'highContrast' );
+				    }
+				    else {
+					    title = this.settings.get( 'branded' );
+				    }
+
+				    this.$form.find( '.section-title h2 span' ).html( title );
+				    $formSettingsWrapper.removeClass( 'overlay' );
+				    this.$form.find( 'input:submit' ).click();
+
+			    }
+			    else {
+				    //console.log('Error');
+			    }
+
+		    },
+	    } );
 
     }
 	
-	doResetDefault($element: JQuery) {
-		
-		const themeSelectedValue: string    = $element.data('value'),
-		      $colorSettingsWrapper: JQuery = this.$settingsWrapper.find('#atum_setting_color_scheme'),
-		      $colorInputs: JQuery          = $colorSettingsWrapper.find(`input.atum-settings-input[data-display='${ themeSelectedValue }']`);
-	
-		$colorInputs.each( (index: number, elem: Element) => {
-			const $elem: JQuery = $(elem);
-			
-			$elem.val($elem.data('default')).change();
-			
-		});
+	doResetDefault( $element: JQuery ) {
+
+		const themeSelectedValue: string    = $element.data( 'value' ),
+		      $colorSettingsWrapper: JQuery = this.$settingsWrapper.find( '#atum_setting_color_scheme' ),
+		      $colorInputs: JQuery          = $colorSettingsWrapper.find( `input.atum-settings-input[data-display='${ themeSelectedValue }']` );
+
+		$colorInputs.each( ( index: number, elem: Element ) => {
+			const $elem: JQuery = $( elem );
+
+			$elem.val( $elem.data( 'default' ) ).change();
+
+		} );
 		
 	}
 
 	toggleMultiCheckboxPanel( $switcher: JQuery ) {
-		const $panel: JQuery = $switcher.siblings('.atum-settings-multi-checkbox');
+		const $panel: JQuery = $switcher.siblings( '.atum-settings-multi-checkbox' );
 
-		$panel.css('display',$switcher.is(':checked') ? 'block' : 'none');
+		$panel.css( 'display', $switcher.is( ':checked' ) ? 'block' : 'none' );
 	}
 
 	clickCheckbox( $checkbox: JQuery ) {
-		if($checkbox.is(':checked'))
-			$checkbox.parents('.atum-multi-checkbox-option').addClass('setting-checked');
-		else
-			$checkbox.parents('.atum-multi-checkbox-option').removeClass('setting-checked');
+
+		const $wrapper: JQuery = $checkbox.parents( '.atum-multi-checkbox-option' );
+
+		if ( $checkbox.is( ':checked' ) ) {
+			$wrapper.addClass( 'setting-checked' );
+		}
+		else {
+			$wrapper.removeClass( 'setting-checked' );
+		}
+
 	}
 
 	initDateTimePicker() {
-		let $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
-			$dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' );
+
+		const $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
+		      $dateTo: JQuery   = this.$form.find( '.range-datepicker.range-to' );
 
 		if ( $dateFrom.length && $dateTo.length ) {
-			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate : false, maxDate: new Date() } );
-			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate : false } );
-
+			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate: false, maxDate: new Date() } );
+			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate: false } );
 		}
 	}
 
 	setDateTimeInputs() {
-		let $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
-		    $dateTo: JQuery = this.$form.find( '.range-datepicker.range-to' ),
-			$field: JQuery = this.$form.find( '.range-value' ),
-			$checkbox: JQuery = this.$form.find( '.remove-datepicker-range' );
+		const $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
+		      $dateTo: JQuery   = this.$form.find( '.range-datepicker.range-to' ),
+		      $field: JQuery    = this.$form.find( '.range-value' ),
+		      $checkbox: JQuery = this.$form.find( '.remove-datepicker-range' );
 
-		$field.val( JSON.stringify( { checked: $checkbox.is(':checked'), dateFrom: $dateFrom.val(), dateTo: $dateTo.val() } ) );
+		$field.val( JSON.stringify( {
+			checked : $checkbox.is( ':checked' ),
+			dateFrom: $dateFrom.val(),
+			dateTo  : $dateTo.val(),
+		} ) );
 	}
 
 	toggleRangeRemove( $checkbox: JQuery ) {
-		const $panel: JQuery = $checkbox.parent().siblings('.range-fields-block'),
-			$button: JQuery = $checkbox.parent().siblings('.tool-runner');
+		const $panel: JQuery  = $checkbox.parent().siblings( '.range-fields-block' ),
+		      $button: JQuery = $checkbox.parent().siblings( '.tool-runner' );
 
-		$panel.css('display',$checkbox.is(':checked') ? 'block' : 'none');
-		$button.text($checkbox.is(':checked') ? this.settings.get('removeRange') : this.settings.get('removeAll'));
+		$panel.css( 'display', $checkbox.is( ':checked' ) ? 'block' : 'none' );
+		$button.text( $checkbox.is( ':checked' ) ? this.settings.get( 'removeRange' ) : this.settings.get( 'removeAll' ) );
 	}
-
 
 }
