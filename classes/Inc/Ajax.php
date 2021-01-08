@@ -2014,7 +2014,7 @@ final class Ajax {
 		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-order-mark-status' ) ) {
 
 			$status     = sanitize_text_field( $_GET['status'] );
-			$atum_order = Helpers::get_atum_order_model( $atum_order_id, FALSE );
+			$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );

@@ -785,7 +785,7 @@ abstract class AtumOrderPostType {
 		$post_type = static::POST_TYPE;
 
 		foreach ( $ids as $id ) {
-			$atum_order = Helpers::get_atum_order_model( $id, FALSE, $post_type );
+			$atum_order = Helpers::get_atum_order_model( $id, TRUE, $post_type );
 			$atum_order->update_status( $new_status );
 			$changed++;
 		}

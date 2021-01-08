@@ -957,11 +957,16 @@ abstract class AtumOrderModel {
 	public function update() {
 
 		$status = $this->status;
-		$date   = $this->date_created;
 
 		// Prevent creating the ATUM order when saving items when this order is in draft status.
 		if ( 'auto-draft' === $this->db_status && '' === $status ) {
 			return;
+		}
+
+		$date = $this->date_created;
+
+		if ( ! $date ) {
+			$date = ( ! empty( $this->post ) && $this->post->post_date ) ? $this->post->post_date : date_i18n( 'Y-m-d H:i:s' );
 		}
 
 		$date_created = Helpers::get_wc_time( $date );

@@ -111,10 +111,7 @@ class Hooks {
 
 		// Add the location column to the items table in WC orders.
 		add_action( 'woocommerce_admin_order_item_headers', array( $this, 'wc_order_add_location_column_header' ) );
-		add_action( 'woocommerce_admin_order_item_values', array(
-			$this,
-			'wc_order_add_location_column_value',
-		), 10, 3 );
+		add_action( 'woocommerce_admin_order_item_values', array( $this, 'wc_order_add_location_column_value' ), 10, 3 );
 
 		// Firefox fix to not preserve the dropdown.
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
@@ -132,10 +129,7 @@ class Hooks {
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
 
 		// Save the orders-related data every time order items change.
-		add_action( 'woocommerce_ajax_order_items_added', array(
-			$this,
-			'save_added_order_items_props',
-		), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_ajax_order_items_added', array( $this, 'save_added_order_items_props' ), PHP_INT_MAX, 2 );
 		add_action( 'woocommerce_before_delete_order_item', array( $this, 'before_delete_order_item' ), PHP_INT_MAX );
 		add_action( 'woocommerce_delete_order_item', array( $this, 'after_delete_order_item' ), PHP_INT_MAX );
 
@@ -166,6 +160,7 @@ class Hooks {
 
 		/*
 		 * TODO: Remove these Hooks if finally no needed.
+		 * @deprecated
 		 * // Add out_stock_threshold hooks if required.
 		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
 
@@ -197,20 +192,11 @@ class Hooks {
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
 		// Update the sales-related calculated props when saving an order or changing the status.
-		add_action( 'woocommerce_after_order_object_save', array(
-			$this,
-			'update_atum_sales_calc_props_after_saving',
-		), PHP_INT_MAX, 2 );
+		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
 
 		// Update atum_stock_status and low_stock if needed.
-		add_action( 'woocommerce_after_product_object_save', array(
-			$this,
-			'defer_update_atum_product_calc_props',
-		), PHP_INT_MAX, 2 );
-		add_action( 'shutdown', array(
-			$this,
-			'maybe_create_defer_update_async_action',
-		), 9 ); // Before the AtumQueues trigger_async_action.
+		add_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
+		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 9 ); // Before the AtumQueues trigger_async_action.
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
