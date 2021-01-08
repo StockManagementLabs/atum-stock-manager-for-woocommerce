@@ -2510,13 +2510,17 @@ final class Ajax {
 		global $wpdb;
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$total  = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" );
+		$total  = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$step   = (int) $_POST['option'] ? (int) $_POST['option'] : 400;
 		$offset = (int) $_POST['offset'] ? (int) $_POST['offset'] : 0;
 
-		$products = $wpdb->get_col( $wpdb->prepare(' 
-			SELECT product_id FROM ' . $atum_product_data_table . '
-			LIMIT %1$d, %2$d', $offset, $step ) );
+		// phpcs:disable
+		$products = $wpdb->get_col( $wpdb->prepare( " 
+			SELECT product_id FROM $atum_product_data_table" . ' LIMIT %1$d, %2$d',
+			$offset,
+			$step
+		) );
+		// phpcs:enable
 
 		foreach ( $products as $product_id ) {
 
@@ -2542,6 +2546,7 @@ final class Ajax {
 				'total'    => $total,
 			];
 		}
+		
 		wp_send_json_success( $return );
 
 	}
