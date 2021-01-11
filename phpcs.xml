@@ -102,7 +102,7 @@
 	the wiki:
 	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
 	-->
-	<config name="minimum_supported_wp_version" value="4.5"/>
+	<config name="minimum_supported_wp_version" value="5.0"/>
 	
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -126,6 +126,17 @@
 		<properties>
 			<property name="prefixes" type="array" value="atum, Atum, woocommerce" />
 		</properties>
+	</rule>
+	
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
+	<rule ref="Generic.Classes.OpeningBraceSameLine" />
+	
+	<rule ref="Squiz.Classes.ClassFileName">
+		<include-pattern>classes/</include-pattern>
+	</rule>
+	
+	<rule ref="Squiz.Classes.ValidClassName">
+		<include-pattern>classes/</include-pattern>
 	</rule>
 
 </ruleset>
