@@ -354,7 +354,7 @@ class Settings {
 				'default' => 0,
 				'options' => array(
 					'min' => 0,
-					'max' => 6,
+					'max' => 8,
 				),
 			),
 			'stock_quantity_step'       => array(
