@@ -157,6 +157,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Legacy\\ListTableLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/ListTableLegacyTrait.php',
         'Atum\\Legacy\\SuppliersLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/SuppliersLegacyTrait.php',
         'Atum\\Legacy\\WidgetHelpersLegacyTrait' => __DIR__ . '/../..' . '/classes/Legacy/WidgetHelpersLegacyTrait.php',
+        'Atum\\MetaBoxes\\FileAttachment' => __DIR__ . '/../..' . '/classes/MetaBoxes/FileAttachment.php',
         'Atum\\MetaBoxes\\ProductDataMetaBoxes' => __DIR__ . '/../..' . '/classes/MetaBoxes/ProductDataMetaBoxes.php',
         'Atum\\Models\\DataStores\\AtumDataStoreCPTTrait' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumDataStoreCPTTrait.php',
         'Atum\\Models\\DataStores\\AtumDataStoreCommonTrait' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumDataStoreCommonTrait.php',

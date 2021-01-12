@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumQueues;
+use Atum\MetaBoxes\FileAttachment;
 use Atum\Settings\Settings;
 
 
@@ -237,22 +238,16 @@ class Hooks {
 			// Enqueue styles.
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array(
-				'switchery',
-				'sweetalert2',
-			), ATUM_VERSION );
+			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
 			// Enqueue scripts.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
-			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array(
-				'jquery',
-				'sweetalert2',
-			), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
-			wp_localize_script( 'atum-product-data', 'atumProductData', array(
+			$vars = array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
 				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
@@ -261,8 +256,11 @@ class Hooks {
 				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
 				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
-			) );
+				'attachToEmail'                 => __( 'Attach to email:', ATUM_TEXT_DOMAIN ),
+				'emailNotifications'            => FileAttachment::get_email_notifications(),
+			);
 
+			wp_localize_script( 'atum-product-data', 'atumProductData', $vars );
 			wp_enqueue_script( 'atum-product-data' );
 
 		}

@@ -93,6 +93,7 @@ return array(
     'Atum\\Legacy\\ListTableLegacyTrait' => $baseDir . '/classes/Legacy/ListTableLegacyTrait.php',
     'Atum\\Legacy\\SuppliersLegacyTrait' => $baseDir . '/classes/Legacy/SuppliersLegacyTrait.php',
     'Atum\\Legacy\\WidgetHelpersLegacyTrait' => $baseDir . '/classes/Legacy/WidgetHelpersLegacyTrait.php',
+    'Atum\\MetaBoxes\\FileAttachment' => $baseDir . '/classes/MetaBoxes/FileAttachment.php',
     'Atum\\MetaBoxes\\ProductDataMetaBoxes' => $baseDir . '/classes/MetaBoxes/ProductDataMetaBoxes.php',
     'Atum\\Models\\DataStores\\AtumDataStoreCPTTrait' => $baseDir . '/classes/Models/DataStores/AtumDataStoreCPTTrait.php',
     'Atum\\Models\\DataStores\\AtumDataStoreCommonTrait' => $baseDir . '/classes/Models/DataStores/AtumDataStoreCommonTrait.php',

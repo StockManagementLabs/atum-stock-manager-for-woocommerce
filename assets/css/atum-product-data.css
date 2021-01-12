@@ -3723,4 +3723,20 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   list-style: circle;
   line-height: 1.3;
 }
+
+.atum-attachments-list li {
+  background-color: #e9ecef;
+  padding: 10px;
+}
+
+.atum-attachments-list label {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.atum-attachments-list img {
+  max-width: 100%;
+  margin-top: 10px;
+}
 /*# sourceMappingURL=atum-product-data.css.map */

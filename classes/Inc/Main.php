@@ -24,6 +24,7 @@ use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
 use Atum\Integrations\Wpml;
+use Atum\MetaBoxes\FileAttachment;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -239,6 +240,7 @@ class Main {
 		Ajax::get_instance();
 		Settings::get_instance();
 		ProductDataMetaBoxes::get_instance();
+		FileAttachment::get_instance();
 		AtumQueues::get_instance();
 		AtumApi::get_instance();
 		AtumAdminNotices::get_instance();

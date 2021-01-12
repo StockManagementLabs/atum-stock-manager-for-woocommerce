@@ -1,0 +1,23 @@
+//
+// Atum Attachments meta box
+//--------------------------
+
+.atum-attachments-list {
+	
+	li {
+		background-color: $gray-200;
+		padding: 10px;
+	}
+	
+	label {
+		font-size: 12px;
+		display: block;
+		margin-bottom: 3px;
+	}
+	
+	img {
+		max-width: 100%;
+		margin-top: 10px;
+	}
+	
+}

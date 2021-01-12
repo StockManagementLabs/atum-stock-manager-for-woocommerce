@@ -80,11 +80,11 @@ export default class FileUploader {
 								attachmentIds.push( att.id );
 							} );
 
-							$input.val( JSON.stringify( attachmentIds ) );
+							$input.val( JSON.stringify( this.wpHooks.applyFilters( 'atum_fileUploader_inputVal', attachmentIds, $input ) ) );
 
 						}
 						else {
-							$input.val( attachment.id );
+							$input.val( this.wpHooks.applyFilters( 'atum_fileUploader_inputVal', attachment.id, $input ) );
 						}
 
 						// Show the preview for images only.
