@@ -30,7 +30,9 @@ use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
+use AtumLevels\Levels\Products\BOMProductSimpleTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
+use AtumLevels\Levels\Products\BOMProductVariationTrait;
 
 
 final class Helpers {
@@ -1926,7 +1928,7 @@ final class Helpers {
 	 * @param mixed $the_product Post object or post ID of the product.
 	 * @param bool  $use_cache   Whether to use the ATUM cache or not.
 	 *
-	 * @return \WC_Product|AtumProductTrait|BOMProductTrait|null|false
+	 * @return \WC_Product|AtumProductTrait|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|null|false
 	 */
 	public static function get_atum_product( $the_product = FALSE, $use_cache = FALSE ) {
 
