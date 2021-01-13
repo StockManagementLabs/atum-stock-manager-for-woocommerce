@@ -3725,8 +3725,31 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 }
 
 .atum-attachments-list li {
+  position: relative;
   background-color: #e9ecef;
   padding: 10px;
+}
+
+.atum-attachments-list li .delete-attachment {
+  position: absolute;
+  top: -4px;
+  right: -3px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: none;
+  color: #6c757d;
+}
+
+.atum-attachments-list li .delete-attachment:hover {
+  color: #761919;
+}
+
+.atum-attachments-list li:hover .delete-attachment {
+  display: block;
 }
 
 .atum-attachments-list label {

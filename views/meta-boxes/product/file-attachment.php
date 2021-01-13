@@ -11,7 +11,7 @@
 
 	<?php foreach ( $product_attachments as $attachment ) : ?>
 
-		<li>
+		<li data-id="<?php echo esc_attr( $attachment->id ) ?>">
 			<label><?php esc_html_e( 'Attach to email:', ATUM_TEXT_DOMAIN ); ?></label>
 			<select class="attach-to-email">
 				<?php foreach ( $email_notifications as $email_key => $email_title ) : ?>
@@ -24,6 +24,7 @@
 			<a href="<?php echo esc_url( wp_get_attachment_url( $attachment->id ) ) ?>" target="_blank">
 				<?php echo wp_get_attachment_image( $attachment->id, 'medium' ) ?>
 			</a>
+			<i class="delete-attachment dashicons dashicons-dismiss atum-tooltip" title="<?php esc_attr_e( 'Delete attachment', ATUM_TEXT_DOMAIN ); ?>"></i>
 		</li>
 
 	<?php endforeach; ?>

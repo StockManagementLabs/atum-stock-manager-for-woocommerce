@@ -86,7 +86,19 @@ export default class FileAttachments {
 		this.$attachmentsList
 
 			// Update the input value after changing any email notifications selector
-			.on( 'change', '.attach-to-email', () => this.updateInput() );
+			.on( 'change', '.attach-to-email', () => this.updateInput() )
+
+			// Delete an attachment.
+			.on( 'click', '.delete-attachment', ( evt: JQueryEventObject ) => {
+
+				const $button: JQuery   = $( evt.currentTarget ),
+				      tooltipId: string = $button.attr( 'aria-describedby' );
+
+				$button.closest( 'li' ).remove();
+				$(`#${ tooltipId }`).remove();
+				this.updateInput();
+
+			} );
 
 	}
 
