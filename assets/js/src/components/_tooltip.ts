@@ -27,21 +27,10 @@ export default class Tooltip {
 		
 		$wrapper.find('.tips, .atum-tooltip').each( (index: number, elem: Element) => {
 			
-			const $tipEl: any = $(elem);
-			let doTooltip: boolean = false;
+			const $tipEl: any = $(elem),
+			      title: string = $tipEl.data('tip') || $tipEl.attr('title');
 
-			// Only if the container is smaller than the content.
-			if ( typeof $tipEl.data('tooltip') !== 'undefined' && $tipEl.data('tooltip') === 'overflown' ) {
-
-			    if ( $tipEl[0].scrollWidth > $tipEl.innerWidth()) {
-			        doTooltip = true;
-                }
-            }
-			else {
-			    doTooltip = true;
-            }
-
-			if (doTooltip) {
+			if (title) {
                 $tipEl.tooltip({
                     html     : true,
                     title    : $tipEl.data('tip') || $tipEl.attr('title'),
