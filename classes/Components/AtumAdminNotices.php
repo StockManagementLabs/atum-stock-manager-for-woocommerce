@@ -98,8 +98,8 @@ final class AtumAdminNotices {
 
 					$printed_notices++;
 					?>
-					<div class="atum-notice notice notice-<?php echo esc_attr( $notice['type'] ) ?><?php if ( $notice['dismissible'] ) echo esc_attr( ' is-dismissible' ) ?>
-						data-dismiss-key=<?php echo esc_attr( $notice['dismiss_key'] ) ?>"
+					<div class="atum-notice notice notice-<?php echo esc_attr( $notice['type'] ) ?><?php if ( $notice['dismissible'] ) echo esc_attr( ' is-dismissible' ) ?>"
+						data-dismiss-key="<?php echo esc_attr( $notice['dismiss_key'] ) ?>"
 					>
 						<p>
 							<strong>
