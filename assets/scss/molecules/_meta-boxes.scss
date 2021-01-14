@@ -50,20 +50,6 @@
 			}
 		}
 		
-		.date-field {
-			&.with-icon {
-				position: relative;
-				
-				&:after {
-					content: $atmi-calendar-full;
-					font-family: $atum-icon-font;
-					position: absolute;
-					right: 8px;
-					pointer-events: none; // Allow the datepicker to show when clicking the icon.
-				}
-			}
-		}
-		
 		&.form-field-wide {
 			width: 100%;
 			clear: both;

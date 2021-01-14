@@ -3421,18 +3421,6 @@ input[type="button"].btn-block {
   margin-bottom: -30px;
 }
 
-.atum-meta-box .form-field .date-field.with-icon {
-  position: relative;
-}
-
-.atum-meta-box .form-field .date-field.with-icon:after {
-  content: "";
-  font-family: "atum-icon-font";
-  position: absolute;
-  right: 8px;
-  pointer-events: none;
-}
-
 .atum-meta-box .form-field.form-field-wide {
   width: 100%;
   clear: both;

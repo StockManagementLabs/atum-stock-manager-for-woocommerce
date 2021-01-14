@@ -5814,6 +5814,22 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   cursor: pointer;
 }
 
+.date-field.with-icon {
+  position: relative;
+}
+
+.date-field.with-icon:after {
+  content: "";
+  font-family: "atum-icon-font";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  font-size: 13px;
+  pointer-events: none;
+}
+
 #wpbody-content {
   padding-bottom: 100px;
 }

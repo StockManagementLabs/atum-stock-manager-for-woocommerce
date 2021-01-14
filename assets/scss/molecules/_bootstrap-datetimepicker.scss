@@ -383,3 +383,20 @@ $bs-datetimepicker-text-shadow:                     0 -1px 0 rgba($black, 0.25) 
         cursor: pointer;
     }
 }
+
+.date-field {
+	&.with-icon {
+		position: relative;
+		
+		&:after {
+			content: $atmi-calendar-full;
+			font-family: $atum-icon-font;
+			position: absolute;
+			right: 8px;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 13px;
+			pointer-events: none; // Allow the datepicker to show when clicking the icon.
+		}
+	}
+}
