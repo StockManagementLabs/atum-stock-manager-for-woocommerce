@@ -121,6 +121,10 @@ class Wpml {
 
 		add_action( 'atum/data_store/after_save_product_data', array( $this, 'update_atum_data' ), 10, 2 );
 		add_action( 'atum/after_delete_atum_product_data', array( $this, 'delete_atum_data' ), 10, 2 );
+
+		// Get all product translations ids to calculate calculated properties.
+		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
+		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_products_translations_ids' ) );
 		
 		if ( is_admin() ) {
 
@@ -743,6 +747,33 @@ class Wpml {
 		}
 
 		return $translations;
+
+	}
+
+	/**
+	 * Get all translations ids from an array of products
+	 *
+	 * @since 1.8.4
+	 *
+	 * @param int|array $product_ids
+	 * @param string    $post_type
+	 *
+	 * @return array
+	 */
+	public static function get_products_translations_ids( $product_ids, $post_type = '' ) {
+
+		$translations = [];
+
+		if ( ! is_array( $product_ids ) ) {
+			$product_ids = [ $product_ids ];
+		}
+
+		foreach ( $product_ids as $product_id ) {
+
+			$translations = $translations + self::get_product_translations_ids( $product_id, $post_type );
+		}
+
+		return array_unique( $translations );
 
 	}
 	
