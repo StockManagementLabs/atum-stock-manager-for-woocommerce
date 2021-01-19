@@ -542,6 +542,8 @@ final class Helpers {
 			$products_where = '';
 			if ( ! empty( $items ) ) {
 
+				$items = apply_filters( 'atum/get_sold_last_days/product_ids', $items );
+
 				if ( is_array( $items ) ) {
 
 					if ( $use_lookup_table ) {
@@ -1836,7 +1838,20 @@ final class Helpers {
 
 				global $wpdb;
 
-				$product_id_key = self::is_child_type( $product->get_type() ) ? '_variation_id' : '_product_id';
+				if ( self::is_child_type( $product->get_type() ) ) {
+
+					$product_id_key = '_variation_id';
+					$post_type      = 'product_variation';
+				}
+				else {
+
+					$product_id_key = '_product_id';
+					$post_type      = 'product';
+
+				}
+
+				$product_ids    = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
+				$product_sql    = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
 
 				$sql = $wpdb->prepare( "
 					SELECT SUM(omq.meta_value) AS qty 
@@ -1846,10 +1861,8 @@ final class Helpers {
 					WHERE order_id IN (
 						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')
 					)
-					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value = %d 
-					GROUP BY omp.meta_value",
-					$product_id_key,
-					$product->get_id()
+					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value $product_sql ;",
+					$product_id_key
 				);
 
 				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
