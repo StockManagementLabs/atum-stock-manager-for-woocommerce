@@ -243,7 +243,6 @@ class Main {
 		FileAttachment::get_instance();
 		AtumQueues::get_instance();
 		AtumApi::get_instance();
-		AtumAdminNotices::get_instance();
 		
 		//
 		// Enable WPML module if needed

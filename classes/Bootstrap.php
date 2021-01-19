@@ -86,6 +86,9 @@ class Bootstrap {
 			// in queries when any dependency is not met.
 			AtumComments::get_instance();
 
+			// We need the ATUM notices to be instantiated here also. So we can display Bootstrap error notices.
+			AtumAdminNotices::get_instance();
+
 			// Check that the plugin dependencies are met.
 			$this->check_dependencies();
 

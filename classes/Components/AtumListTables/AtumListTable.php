@@ -339,7 +339,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $actions = [];
+	protected $row_actions = [];
 
 	/**
 	 * Value for empty columns
@@ -417,8 +417,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the checkbox column to the table if enabled.
 		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], self::$table_columns ) : self::$table_columns;
 
-		if ( ! empty( $args['actions'] ) ) {
-			$this->actions = $args['actions'];
+		if ( empty( $this->row_actions ) && isset( self::$table_columns['calc_actions'] ) ) {
+			unset( self::$table_columns['calc_actions'] );
 		}
 
 		$this->per_page = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
