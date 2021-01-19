@@ -51,13 +51,11 @@ class ListTable extends AtumListTable {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column.
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not.
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination).
+	 *      @type array  $selected          Optional. The posts selected on the list table.
+	 *      @type array  $excluded          Optional. The posts excluded from the list table.
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -68,7 +66,7 @@ class ListTable extends AtumListTable {
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
-		$args['table_columns'] = array(
+		self::$table_columns = array(
 			'thumb'              => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                 => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'              => __( 'Product Name', ATUM_TEXT_DOMAIN ),

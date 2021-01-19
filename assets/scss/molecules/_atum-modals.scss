@@ -14,12 +14,16 @@
 		padding-right: 0;
 		margin-top: 0;
 	}
-
+	
 	.swal2-title {
 		color: $blue-dark;
 		font-size: 18px;
 		text-align: left;
 		margin-bottom: 0;
+	}
+	
+	.swal2-content {
+		z-index: unset;
 	}
 	
 	.atum-modal-content {
@@ -68,6 +72,11 @@
 		width: auto;
 		padding-right: 20px;
 		padding-top: 10px;
+	}
+	
+	.swal2-validation-message {
+		text-align: left;
+		font-size: 13px;
 	}
 	
 }

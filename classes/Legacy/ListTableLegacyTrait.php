@@ -38,7 +38,7 @@ trait ListTableLegacyTrait {
 		$posts               = array();
 		$sortable            = $this->get_sortable_columns();
 		$hidden              = get_hidden_columns( $this->screen );
-		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
+		$this->group_columns = $this->calc_groups( $hidden );
 
 		/**
 		 * REQUIRED. Build an array to be used by the class for column headers

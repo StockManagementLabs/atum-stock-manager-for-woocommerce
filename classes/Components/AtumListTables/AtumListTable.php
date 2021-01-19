@@ -335,6 +335,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected static $is_report = FALSE;
 
 	/**
+	 * A list of available actions for the "Actions" column (if any).
+	 *
+	 * @var array
+	 */
+	protected $actions = [];
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&#45;';
@@ -349,14 +356,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
+	 *      NOTE: These args are being passed here (instead of ussing the class props) because we need to be able to alter them dynamically.
 	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column.
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not.
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination).
+	 *      @type array  $selected          Optional. The posts selected on the list table.
+	 *      @type array  $excluded          Optional. The posts excluded from the list table.
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -391,12 +397,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->excluded = is_array( $args['excluded'] ) ? $args['excluded'] : explode( ',', $args['excluded'] );
 		}
 
-		if ( ! empty( $args['group_members'] ) ) {
-			$this->group_members = $args['group_members'];
-
-			if ( isset( $this->group_members['product-details'] ) && TRUE === $this->show_cb ) {
-				array_unshift( $this->group_members['product-details']['members'], 'cb' );
-			}
+		if ( isset( $this->group_members['product-details'] ) && TRUE === $this->show_cb ) {
+			array_unshift( $this->group_members['product-details']['members'], 'cb' );
 		}
 
 		// Remove _out_stock_threshold columns if not set, or add filters to get availability etc.
@@ -404,20 +406,23 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! $is_out_stock_threshold_managed ) {
 
-			unset( $args['table_columns'][ Globals::OUT_STOCK_THRESHOLD_KEY ] );
+			unset( self::$table_columns[ Globals::OUT_STOCK_THRESHOLD_KEY ] );
 
-			if ( isset( $args['group_members']['stock-counters']['members'] ) ) {
-				$this->group_members['stock-counters']['members']   = array_diff( $this->group_members['stock-counters']['members'], array( Globals::OUT_STOCK_THRESHOLD_KEY ) );
-				$args['group_members']['stock-counters']['members'] = array_diff( $args['group_members']['stock-counters']['members'], array( Globals::OUT_STOCK_THRESHOLD_KEY ) );
+			if ( isset( $this->group_members['stock-counters']['members'] ) ) {
+				$this->group_members['stock-counters']['members'] = array_diff( $this->group_members['stock-counters']['members'], array( Globals::OUT_STOCK_THRESHOLD_KEY ) );
 			}
 
 		}
 
 		// Add the checkbox column to the table if enabled.
-		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], $args['table_columns'] ) : $args['table_columns'];
-		$this->per_page      = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], self::$table_columns ) : self::$table_columns;
 
-		$post_type_obj = get_post_type_object( $this->post_type );
+		if ( ! empty( $args['actions'] ) ) {
+			$this->actions = $args['actions'];
+		}
+
+		$this->per_page = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+		$post_type_obj  = get_post_type_object( $this->post_type );
 
 		if ( ! $post_type_obj ) {
 			return;
@@ -425,9 +430,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Set \WP_List_Table defaults.
 		$args = array_merge( array(
-			'singular' => strtolower( $post_type_obj->labels->singular_name ),
-			'plural'   => strtolower( $post_type_obj->labels->name ),
-			'ajax'     => TRUE,
+			'singular'      => strtolower( $post_type_obj->labels->singular_name ),
+			'plural'        => strtolower( $post_type_obj->labels->name ),
+			'ajax'          => TRUE,
+			'table_columns' => self::$table_columns,
+			'group_members' => $this->group_members,
 		), $args );
 
 		parent::__construct( $args );
@@ -1947,7 +1954,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$posts               = array();
 		$sortable            = $this->get_sortable_columns();
 		$hidden              = get_hidden_columns( $this->screen );
-		$this->group_columns = $this->calc_groups( $this->group_members, $hidden );
+		$this->group_columns = $this->calc_groups( $hidden );
 
 		/**
 		 * REQUIRED. Build an array to be used by the class for column headers
@@ -2780,8 +2787,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 
-			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', ATUM_TEXT_DOMAIN ) . '</label>' .
-			                 '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+			$columns['cb'] = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . esc_html__( 'Select All', ATUM_TEXT_DOMAIN ) . '</label><input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
 			$cb_counter++;
 		}
 
@@ -3339,16 +3345,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param   array $group_members Parameter from __contruct method.
-	 * @param   array $hidden        Hidden columns.
+	 * @param array $hidden Hidden columns.
 	 *
-	 * @return  array
+	 * @return array
 	 */
-	public function calc_groups( $group_members, $hidden ) {
+	public function calc_groups( $hidden ) {
 
 		$response = array();
 
-		foreach ( $group_members as $name => $group ) {
+		foreach ( $this->group_members as $name => $group ) {
 
 			$counter = 0;
 

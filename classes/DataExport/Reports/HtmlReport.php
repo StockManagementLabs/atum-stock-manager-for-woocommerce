@@ -45,13 +45,11 @@ class HtmlReport extends ListTable {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column.
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not.
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination).
+	 *      @type array  $selected          Optional. The posts selected on the list table.
+	 *      @type array  $excluded          Optional. The posts excluded from the list table.
 	 * }
 	 */
 	public function __construct( $args = array() ) {

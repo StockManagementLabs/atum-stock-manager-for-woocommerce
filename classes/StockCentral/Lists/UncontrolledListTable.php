@@ -32,13 +32,11 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column.
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not.
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination).
+	 *      @type array  $selected          Optional. The posts selected on the list table.
+	 *      @type array  $excluded          Optional. The posts excluded from the list table.
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -46,7 +44,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
-		$args['table_columns'] = array(
+		self::$table_columns = array(
 			'thumb'           => '<span class="wc-image tips" data-placement="bottom" data-tip="' . __( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'title'           => __( 'Name', ATUM_TEXT_DOMAIN ),
 			'_supplier'       => __( 'Supplier', ATUM_TEXT_DOMAIN ),
@@ -61,18 +59,18 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 
 		// Hide the purchase price column if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) || ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			unset( $args['table_columns']['_purchase_price'] );
+			unset( self::$table_columns['_purchase_price'] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			unset( $args['table_columns']['_supplier'] );
-			unset( $args['table_columns']['_supplier_sku'] );
+			unset( self::$table_columns['_supplier'] );
+			unset( self::$table_columns['_supplier_sku'] );
 		}
 
-		$args['table_columns'] = (array) apply_filters( 'atum/uncontrolled_stock_central_list/table_columns', $args['table_columns'] );
+		self::$table_columns = (array) apply_filters( 'atum/uncontrolled_stock_central_list/table_columns', self::$table_columns );
 
-		$args['group_members'] = (array) apply_filters( 'atum/uncontrolled_stock_central_list/column_group_members', array(
+		$this->group_members = (array) apply_filters( 'atum/uncontrolled_stock_central_list/column_group_members', array(
 			'product-details' => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
 				'members' => array(

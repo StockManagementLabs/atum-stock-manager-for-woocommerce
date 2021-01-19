@@ -164,13 +164,11 @@ class ListTable extends AtumListTable {
 	 * @param array|string $args          {
 	 *      Array or string of arguments.
 	 *
-	 *      @type array  $table_columns     The table columns for the list table
-	 *      @type array  $group_members     The column grouping members
-	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column
-	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not
-	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination)
-	 *      @type array  $selected          Optional. The posts selected on the list table
-	 *      @type array  $excluded          Optional. The posts excluded from the list table
+	 *      @type bool   $show_cb           Optional. Whether to show the row selector checkbox as first table column.
+	 *      @type bool   $show_controlled   Optional. Whether to show items controlled by ATUM or not.
+	 *      @type int    $per_page          Optional. The number of posts to show per page (-1 for no pagination).
+	 *      @type array  $selected          Optional. The posts selected on the list table.
+	 *      @type array  $excluded          Optional. The posts excluded from the list table.
 	 * }
 	 */
 	public function __construct( $args = array() ) {
@@ -180,11 +178,14 @@ class ListTable extends AtumListTable {
 
 		$this->days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
+		// By default, we have no actions for SC but we have to add the ability to add them externally.
+		$this->actions = (array) apply_filters( 'atum/stock_central_list/actions', [] );
+
 		// Prepare the table columns.
-		$args['table_columns'] = self::get_table_columns();
+		self::$table_columns = self::get_table_columns();
 
 		// TODO: Add group table functionality if some columns are hidden.
-		$args['group_members'] = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
+		$this->group_members = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
 			'product-details'       => array(
 				'title'   => __( 'Product Details', ATUM_TEXT_DOMAIN ),
 				'members' => array(
@@ -237,17 +238,17 @@ class ListTable extends AtumListTable {
 
 		// Hide the purchase price column if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
-			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
+			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price' ] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_sku', '_supplier_sku' ] );
+			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_sku', '_supplier_sku' ] );
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			$args['group_members']['product-details']['members'] = array_diff( $args['group_members']['product-details']['members'], [ '_purchase_price' ] );
-			$args['group_members']['stock-counters']['members']  = array_diff( $args['group_members']['stock-counters']['members'], [ '_inbound_stock' ] );
+			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price' ] );
+			$this->group_members['stock-counters']['members']  = array_diff( $this->group_members['stock-counters']['members'], [ '_inbound_stock' ] );
 		}
 
 		// Initialize totalizers.
