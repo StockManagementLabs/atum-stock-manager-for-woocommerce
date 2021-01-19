@@ -177,6 +177,11 @@ final class AtumAdminNotices {
 			$persistent_notices    = AtumCache::get_transient( $transient_key_notices, TRUE );
 			$persistent_notices    = is_array( $persistent_notices ) ? $persistent_notices : [];
 
+			// Ensure that the same notices are not added more than once.
+			if ( ! empty( $persistent_notices ) && ! empty( wp_list_filter( $persistent_notices, [ 'message' => $message ] ) ) ) {
+				return;
+			}
+
 			$persistent_notices[] = array(
 				'message'     => $message,
 				'type'        => $type,
