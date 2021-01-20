@@ -18,7 +18,7 @@ export default class MenuPopover {
 		private menu: Menu
 	) {
 
-		if ( $menuButton.length && menu.items.length ) {
+		if ( $menuButton.length && typeof menu.items !== 'undefined' && menu.items.length ) {
 			this.buildMenu();
 			this.bindEvents();
 		}
@@ -30,7 +30,7 @@ export default class MenuPopover {
 	 */
 	buildMenu() {
 
-		const $menuHtml: JQuery = $('<ul />');
+		const $menuHtml: JQuery = $( '<ul />' );
 
 		// Prepare the menu's HTML.
 		this.menu.items.forEach( ( item: MenuItem ) => {
@@ -77,10 +77,10 @@ export default class MenuPopover {
 			} )
 
 			// Store the popover ID.
-			.on( 'shown.bs.popover', () => {
+			.on( 'inserted.bs.popover', () => {
 				const $popover: JQuery = $( `.${ this.popoverClassName }` );
 				this.popoverId = $popover.attr( 'id' );
-				this.wpHooks.doAction( 'atum_menuPopover_shown', $popover );
+				this.wpHooks.doAction( 'atum_menuPopover_inserted', $popover );
 			} );
 
 	}
@@ -115,7 +115,7 @@ export default class MenuPopover {
 				return;
 			}
 
-			this.$menuButton.trigger( 'atum-menu-popover-item-clicked', [ $menuItem.data( 'name' ), $menuItem.attr( 'href' ) ] );
+			this.wpHooks.doAction( 'atum_menuPopover_clicked', evt );
 			this.destroyPopover(); // Once a menu item link is clicked, close it automatically.
 
 		} );

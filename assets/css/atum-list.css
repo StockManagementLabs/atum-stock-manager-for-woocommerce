@@ -5834,7 +5834,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   padding-bottom: 3px;
   padding-top: 3px;
   font-size: 12px;
-  font-weight: normal;
+  font-weight: 500;
   color: #27283B;
   line-height: 1;
   background-color: #e9ecef;
@@ -5851,6 +5851,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   margin-top: 6px;
   margin-bottom: 0;
   text-align: left;
+  width: 100%;
+  padding: 0;
 }
 
 .popover.menu-popover ul li {
@@ -5889,6 +5891,12 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .popover.menu-popover ul li:hover, .popover.menu-popover ul li:hover a {
   color: #00B8DB;
+}
+
+.popover.menu-popover ul li i {
+  font-size: 15px;
+  margin-right: 2px;
+  vertical-align: -1px;
 }
 
 #wpbody-content {
@@ -8495,6 +8503,10 @@ table.atum-list-table td.column-ID, table.atum-list-table th.column-ID, .floatTh
 table.atum-list-table td.actions, table.atum-list-table td.column-calc_actions, table.atum-list-table th.actions, table.atum-list-table th.column-calc_actions, .floatThead-container td.actions, .floatThead-container td.column-calc_actions, .floatThead-container th.actions, .floatThead-container th.column-calc_actions, .inbound-stock-list td.actions, .inbound-stock-list td.column-calc_actions, .inbound-stock-list th.actions, .inbound-stock-list th.column-calc_actions, table.wp-list-table td.actions, table.wp-list-table td.column-calc_actions, table.wp-list-table th.actions, table.wp-list-table th.column-calc_actions {
   width: 1%;
   min-width: 0;
+}
+
+table.atum-list-table td.actions .show-actions, table.atum-list-table td.column-calc_actions .show-actions, table.atum-list-table th.actions .show-actions, table.atum-list-table th.column-calc_actions .show-actions, .floatThead-container td.actions .show-actions, .floatThead-container td.column-calc_actions .show-actions, .floatThead-container th.actions .show-actions, .floatThead-container th.column-calc_actions .show-actions, .inbound-stock-list td.actions .show-actions, .inbound-stock-list td.column-calc_actions .show-actions, .inbound-stock-list th.actions .show-actions, .inbound-stock-list th.column-calc_actions .show-actions, table.wp-list-table td.actions .show-actions, table.wp-list-table td.column-calc_actions .show-actions, table.wp-list-table th.actions .show-actions, table.wp-list-table th.column-calc_actions .show-actions {
+  cursor: context-menu;
 }
 
 table.atum-list-table td.pro-version, table.atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version, .inbound-stock-list td.pro-version, .inbound-stock-list th.pro-version, table.wp-list-table td.pro-version, table.wp-list-table th.pro-version {

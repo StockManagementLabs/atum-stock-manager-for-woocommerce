@@ -6498,6 +6498,10 @@ table.atum-list-table td.actions, table.atum-list-table td.column-calc_actions, 
   min-width: 0;
 }
 
+table.atum-list-table td.actions .show-actions, table.atum-list-table td.column-calc_actions .show-actions, table.atum-list-table th.actions .show-actions, table.atum-list-table th.column-calc_actions .show-actions, .floatThead-container td.actions .show-actions, .floatThead-container td.column-calc_actions .show-actions, .floatThead-container th.actions .show-actions, .floatThead-container th.column-calc_actions .show-actions, .inbound-stock-list td.actions .show-actions, .inbound-stock-list td.column-calc_actions .show-actions, .inbound-stock-list th.actions .show-actions, .inbound-stock-list th.column-calc_actions .show-actions, table.wp-list-table td.actions .show-actions, table.wp-list-table td.column-calc_actions .show-actions, table.wp-list-table th.actions .show-actions, table.wp-list-table th.column-calc_actions .show-actions {
+  cursor: context-menu;
+}
+
 table.atum-list-table td.pro-version, table.atum-list-table th.pro-version, .floatThead-container td.pro-version, .floatThead-container th.pro-version, .inbound-stock-list td.pro-version, .inbound-stock-list th.pro-version, table.wp-list-table td.pro-version, table.wp-list-table th.pro-version {
   background-color: var(--secondary);
 }

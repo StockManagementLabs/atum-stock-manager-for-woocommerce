@@ -2419,6 +2419,10 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		&.actions, &.column-calc_actions {
 			width: 1%;
 			min-width: 0;
+			
+			.show-actions {
+				cursor: context-menu;
+			}
 		}
 		
 		&.pro-version {

@@ -9,7 +9,7 @@
 			padding-bottom: 3px;
 			padding-top: 3px;
 			font-size: 12px;
-			font-weight: normal;
+			font-weight: 500;
 			color: $blue-dark;
 			line-height: 1;
 			background-color: $gray-200;
@@ -24,6 +24,8 @@
 			margin-top: 6px;
 			margin-bottom: 0;
 			text-align: left;
+			width: 100%;
+			padding: 0;
 			
 			li {
 				white-space: nowrap;
@@ -61,6 +63,12 @@
 					&, a {
 						color: $primary;
 					}
+				}
+				
+				i {
+					font-size: 15px;
+					margin-right: 2px;
+					vertical-align: -1px;
 				}
 			}
 		}

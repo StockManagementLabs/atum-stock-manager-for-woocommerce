@@ -339,7 +339,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $row_actions = [];
+	protected static $row_actions = [];
 
 	/**
 	 * Value for empty columns
@@ -418,7 +418,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], self::$table_columns ) : self::$table_columns;
 
 		// Add the row actions column if needed.
-		if ( ! empty( $this->row_actions ) ) {
+		if ( ! empty( self::$row_actions ) ) {
 
 			self::$table_columns = array_merge( self::$table_columns, [ 'calc_actions' => '<span class="atum-icon atmi-magic-wand-solid tips" data-placement="bottom" data-tip="' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '</span>' ] );
 
@@ -1519,7 +1519,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function column_calc_actions( $item ) {
 
-		if ( empty( $this->row_actions ) || ! $this->allow_calcs ) {
+		if ( apply_filters( 'atum/list_table/allow_row_actions', empty( self::$row_actions ), $item, $this->product, $this ) ) {
 			return '';
 		}
 
@@ -3101,7 +3101,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'currencyFormatNumDecimals'      => wc_get_price_decimals(),
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
-			'rowActions'                     => $this->row_actions,
+			'rowActions'                     => self::$row_actions,
 		);
 
 		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
