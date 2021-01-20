@@ -40,7 +40,12 @@ export default class RowActions {
 		};
 
 		this.globals.$atumList.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
-			new MenuPopover( $( elem ), actionsMenu );
+
+			const $button: JQuery = $( elem );
+
+			actionsMenu.title = $button.closest( 'tr' ).find( 'td.column-title' ).text().replace( '↵', '' ).trim();
+			new MenuPopover( $button, actionsMenu );
+
 		} );
 
 	}

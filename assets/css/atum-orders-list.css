@@ -5830,6 +5830,19 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   pointer-events: none;
 }
 
+.popover.menu-popover .popover-title {
+  padding-bottom: 3px;
+  padding-top: 3px;
+  font-size: 12px;
+  font-weight: normal;
+  color: #27283B;
+  line-height: 1;
+  background-color: #e9ecef;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .popover.menu-popover .popover-content {
   padding: 0;
 }
@@ -5849,6 +5862,10 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .popover.menu-popover ul li:not(:last-child) {
   border-bottom: 1px solid #ced4da;
+}
+
+.popover.menu-popover ul li:last-child {
+  padding-bottom: 0;
 }
 
 .popover.menu-popover ul li a {

@@ -5,6 +5,17 @@
 .popover {
 	&.menu-popover {
 		
+		.popover-title {
+			padding-bottom: 3px;
+			padding-top: 3px;
+			font-size: 12px;
+			font-weight: normal;
+			color: $blue-dark;
+			line-height: 1;
+			background-color: $gray-200;
+			@include text-overflow;
+		}
+		
 		.popover-content {
 			padding: 0;
 		}
@@ -22,6 +33,10 @@
 				
 				&:not(:last-child) {
 					border-bottom: 1px solid $gray-400;
+				}
+				
+				&:last-child {
+					padding-bottom: 0;
 				}
 				
 				a {
