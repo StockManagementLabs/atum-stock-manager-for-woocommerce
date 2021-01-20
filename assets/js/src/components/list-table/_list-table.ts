@@ -11,11 +11,13 @@ import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class ListTable {
 	
 	doingAjax: JQueryXHR  = null;
 	isRowExpanding = {};
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -197,8 +199,8 @@ export default class ListTable {
 				this.removeOverlay();
 				this.calculateCompoundedStocks();
 
-				// Custom trigger after updating.
-				this.globals.$atumList.trigger( 'atum-table-updated' );
+				// Trigger action after updating.
+				this.wpHooks.doAction( 'atum_listTable_tableUpdated' );
 
 			},
 			error     : () => this.removeOverlay(),

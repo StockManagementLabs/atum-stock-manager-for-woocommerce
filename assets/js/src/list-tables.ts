@@ -41,44 +41,46 @@ import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
 import TableButtons from './components/list-table/_table-buttons';
 import Tooltip from './components/_tooltip';
+import RowActions from './components/list-table/_row-actions';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
+jQuery( ( $ ) => {
 	
 	window['$'] = $; // Avoid conflicts.
 	
 	// Get the settings from localized var.
-	let settings = new Settings('atumListVars', {
-		ajaxFilter    : 'yes',
-		view          : 'all_stock',
-		order         : 'desc',
-		orderby       : 'date',
-		paged         : 1,
-	});
+	let settings = new Settings( 'atumListVars', {
+		ajaxFilter: 'yes',
+		view      : 'all_stock',
+		order     : 'desc',
+		orderby   : 'date',
+		paged     : 1,
+	} );
 	
 	// Set globals.
-	let globals = new Globals(settings);
+	let globals = new Globals( settings );
 	
 	// Initialize components with dependency injection.
 	let enhancedSelect = new EnhancedSelect();
 	let tooltip = new Tooltip();
-	let listTable = new ListTable(settings, globals, tooltip, enhancedSelect);
-	let router = new Router(settings, globals, listTable);
-	let stickyCols = new StickyColumns(settings, globals);
-	let stickyHeader = new StickyHeader(settings, globals, stickyCols, tooltip);
-	let dateTimePicker = new DateTimePicker(settings);
-	let popover = new Popover(settings, dateTimePicker);
-	new ScrollBar(globals);
-	new DragScroll(globals, tooltip, popover);
-	new SearchByColumn(settings, globals);
-	new ColumnGroups(globals, stickyHeader);
-	new Filters(settings, globals, listTable, router, tooltip, dateTimePicker);
-	new EditableCell(globals, popover, listTable);
+	let listTable = new ListTable( settings, globals, tooltip, enhancedSelect );
+	let router = new Router( settings, globals, listTable );
+	let stickyCols = new StickyColumns( settings, globals );
+	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
+	let dateTimePicker = new DateTimePicker( settings );
+	let popover = new Popover( settings, dateTimePicker );
+	new ScrollBar( globals );
+	new DragScroll( globals, tooltip, popover );
+	new SearchByColumn( settings, globals );
+	new ColumnGroups( globals, stickyHeader );
+	new Filters( settings, globals, listTable, router, tooltip, dateTimePicker );
+	new EditableCell( globals, popover, listTable );
 	new LightBox();
-	new TableButtons(globals, tooltip, stickyCols, stickyHeader);
-	new SalesLastDays(globals, router, enhancedSelect);
-	new BulkActions(settings, globals, listTable);
-	new LocationsTree(settings, globals, tooltip);
+	new TableButtons( globals, tooltip, stickyCols, stickyHeader );
+	new SalesLastDays( globals, router, enhancedSelect );
+	new BulkActions( settings, globals, listTable );
+	new LocationsTree( settings, globals, tooltip );
+	new RowActions( settings, globals );
 	
 });

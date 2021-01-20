@@ -61,8 +61,8 @@ export default class MenuPopover {
 						<h3 class="popover-title"></h3>
 						<div class="popover-content"></div>
 					</div>`,
-			placement: 'top',
-			trigger  : 'click',
+			placement: this.$menuButton.data( 'placement' ) || 'top',
+			trigger  : this.$menuButton.data( 'trigger' ) || 'click',
 		} );
 
 		this.$menuButton

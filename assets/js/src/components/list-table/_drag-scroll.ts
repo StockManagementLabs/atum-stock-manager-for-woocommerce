@@ -12,24 +12,36 @@ import Globals from './_globals';
 import Popover from '../_popover';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class DragScroll {
+
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private globals: Globals,
 		private tooltip: Tooltip,
 		private popover?: Popover
 	) {
-	
-		// Load Hammer for table dragging functionality.
-		this.globals.$atumList.on('atum-scroll-bar-loaded', () => this.loadHammer());
 		
 		// Add horizontal drag-scroll to table filters.
 		this.initHorizontalDragScroll();
-		
-		// Re-add the horizontal drag-scroll when the List Table is updated.
-		this.globals.$atumList.on('atum-table-updated', () => this.initHorizontalDragScroll());
+
+		this.addHooks();
 	
+	}
+
+	/**
+	 * Add hooks
+	 */
+	addHooks() {
+
+		// Load Hammer for table dragging functionality.
+		this.wpHooks.addAction( 'atum_scrollBar_loaded', 'atum', () => this.loadHammer() );
+
+		// Re-add the horizontal drag-scroll when the List Table is updated.
+		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.initHorizontalDragScroll() );
+
 	}
 	
 	loadHammer() {

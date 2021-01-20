@@ -2416,6 +2416,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			color: var(--atum-text-color-var1);
 		}
 		
+		&.actions, &.column-calc_actions {
+			width: 1%;
+			min-width: 0;
+		}
+		
 		&.pro-version {
 			background-color: var(--secondary);
 		}
@@ -2682,6 +2687,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	.column-groups {
 		th {
 			padding: 6px 20px !important;
+			
+			&.actions {
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+			}
 		}
 	}
 	

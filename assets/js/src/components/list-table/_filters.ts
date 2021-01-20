@@ -11,10 +11,12 @@ import DateTimePicker from '../_date-time-picker';
 import ShowFilters from './_show-filters';
 import Swal from 'sweetalert2';
 import Utils from '../../utils/_utils';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class Filters {
 	
 	showFilters: ShowFilters;
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -25,13 +27,30 @@ export default class Filters {
 		private dateTimePicker: DateTimePicker
 	) {
 		
+		this.bindEvents();
+		this.addHooks();
+		
+		this.showFilters = new ShowFilters( this.globals.$atumList, this.settings);
+		
+		//
+		// Add date selector filter.
+		// -------------------------
+		this.addDateSelectorFilter();
+		
+	}
+
+	/**
+	 * Bind events
+	 */
+	bindEvents() {
+
 		//
 		// Ajax filters.
 		// -------------
-		if (this.settings.get('ajaxFilter') === 'yes') {
-			
+		if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
+
 			this.globals.$atumList
-				
+
 				// Dropdown filters.
 				.on( 'change', '.auto-filter', ( evt: JQueryEventObject ) => {
 
@@ -42,148 +61,148 @@ export default class Filters {
 					}
 
 				} )
-				
+
 				// Search filter.
-				.on('keyup paste search input', '.atum-post-search', (evt: JQueryEventObject) => {
-					
-					const searchColumnBtnVal: string      = this.globals.$searchColumnBtn.data('value'),
-					      searchInputVal: string | number = $(evt.currentTarget).val();
-					
-					Utils.delay( () => this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal), 500);
-					
-				})
-				
+				.on( 'keyup paste search input', '.atum-post-search', ( evt: JQueryEventObject ) => {
+
+					const searchColumnBtnVal: string      = this.globals.$searchColumnBtn.data( 'value' ),
+					      searchInputVal: string | number = $( evt.currentTarget ).val();
+
+					Utils.delay( () => this.pseudoKeyUpAjax( searchColumnBtnVal, searchInputVal ), 500 );
+
+				} )
+
 				// Pagination input changes.
-				.on('change', '.current-page', (evt: JQueryEventObject) => {
-					
-					$.address.parameter('paged', parseInt( $( evt.currentTarget ).val() ) );
-					this.keyUp(evt);
-					
+				.on( 'change', '.current-page', ( evt: JQueryEventObject ) => {
+
+					$.address.parameter( 'paged', parseInt( $( evt.currentTarget ).val() ) );
+					this.keyUp( evt );
+
 				} );
-				
-			this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
-				this.pseudoKeyUpAjax( $(evt.currentTarget).data('value'), decodeURIComponent( this.globals.$searchInput.val() ) );
-			});
-			
+
+			this.globals.$searchColumnBtn.on( 'atum-search-column-data-changed', ( evt: JQueryEventObject ) => {
+				this.pseudoKeyUpAjax( $( evt.currentTarget ).data( 'value' ), decodeURIComponent( this.globals.$searchInput.val() ) );
+			} );
+
 		}
-		
+
 		//
 		// Non-ajax filters.
 		// -----------------
 		else {
-			
-			let $searchSubmitBtn: JQuery = this.globals.$searchInput.siblings('.search-submit');
-			
-			if (!this.globals.$searchInput.val()) {
-				$searchSubmitBtn.prop('disabled', true);
+
+			const $searchSubmitBtn: JQuery = this.globals.$searchInput.siblings( '.search-submit' );
+
+			if ( ! this.globals.$searchInput.val() ) {
+				$searchSubmitBtn.prop( 'disabled', true );
 			}
-			
+
 			// If s is empty, search-submit must be disabled and ?s removed.
 			// If s and searchColumnBtnVal have values, then we can push over search.
-			this.globals.$searchInput.on('input', (evt: JQueryEventObject) => {
-				
-				const searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value'),
-				      inputVal: any              = $(evt.currentTarget).val();
-				
-				if (!inputVal) {
-					
-					$searchSubmitBtn.prop('disabled', true);
-					
-					if (inputVal != $.address.parameter('s')) {
-						$.address.parameter('s', '');
-						$.address.parameter('search_column', '');
+			this.globals.$searchInput.on( 'input', ( evt: JQueryEventObject ) => {
+
+				const searchColumnBtnVal: string = this.globals.$searchColumnBtn.data( 'value' ),
+				      inputVal: any              = $( evt.currentTarget ).val();
+
+				if ( ! inputVal ) {
+
+					$searchSubmitBtn.prop( 'disabled', true );
+
+					if ( inputVal != $.address.parameter( 's' ) ) {
+						$.address.parameter( 's', '' );
+						$.address.parameter( 'search_column', '' );
 						this.router.updateHash(); // Force clean search.
 					}
-					
+
 				}
 				// Uncaught TypeError: Cannot read property 'length' of undefined (redundant check fails).
-				else if ( typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0) {
-					$searchSubmitBtn.prop('disabled', false);
+				else if ( typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0 ) {
+					$searchSubmitBtn.prop( 'disabled', false );
 				}
-				else if (inputVal) {
-					$searchSubmitBtn.prop('disabled', false);
+				else if ( inputVal ) {
+					$searchSubmitBtn.prop( 'disabled', false );
 				}
-				
-			});
-			
-			
+
+			} );
+
+
 			// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters.
 			// TODO: IS THIS WORKING HERE? IS NOT ONLY FOR AJAX FILTERS?
-			this.globals.$searchColumnBtn.on('atum-search-column-data-changed', (evt: JQueryEventObject) => {
-				
-				let searchInputVal: any        = this.globals.$searchInput.val(),
-				    searchColumnBtnVal: string = $(evt.currentTarget).data('value');
-				
-				if (searchInputVal.length > 0) {
-					$.address.parameter('s', searchInputVal);
-					$.address.parameter('search_column', searchColumnBtnVal);
-					this.keyUp(evt, true);
+			this.globals.$searchColumnBtn.on( 'atum-search-column-data-changed', ( evt: JQueryEventObject ) => {
+
+				const searchInputVal: any        = this.globals.$searchInput.val(),
+				    searchColumnBtnVal: string = $( evt.currentTarget ).data( 'value' );
+
+				if ( searchInputVal.length > 0 ) {
+					$.address.parameter( 's', searchInputVal );
+					$.address.parameter( 'search_column', searchColumnBtnVal );
+					this.keyUp( evt, true );
 				}
 				// Force clean s when required.
 				else {
-					$.address.parameter('s', '');
-					$.address.parameter('search_column', '');
+					$.address.parameter( 's', '' );
+					$.address.parameter( 'search_column', '' );
 				}
-				
-			});
-			
-			this.globals.$atumList.on('click', '.search-category, .search-submit', () => {
-				
+
+			} );
+
+			this.globals.$atumList.on( 'click', '.search-category, .search-submit', () => {
+
 				const searchInputVal: string     = this.globals.$searchInput.val(),
-				      searchColumnBtnVal: string = this.globals.$searchColumnBtn.data('value');
-				
-				$searchSubmitBtn.prop('disabled', typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length === 0 ? true : false);
-				
-				if (searchInputVal.length > 0) {
-					$.address.parameter('s', searchInputVal);
-					$.address.parameter('search_column', searchColumnBtnVal);
-					
+				      searchColumnBtnVal: string = this.globals.$searchColumnBtn.data( 'value' );
+
+				$searchSubmitBtn.prop( 'disabled', typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length === 0 ? true : false );
+
+				if ( searchInputVal.length > 0 ) {
+					$.address.parameter( 's', searchInputVal );
+					$.address.parameter( 'search_column', searchColumnBtnVal );
+
 					this.router.updateHash();
 				}
 				// Force clean s when required.
 				else {
-					$.address.parameter('s', '');
-					$.address.parameter('search_column', '');
+					$.address.parameter( 's', '' );
+					$.address.parameter( 'search_column', '' );
 					this.router.updateHash();
 				}
-				
-			});
-			
+
+			} );
+
 		}
-		
+
 		//
 		// Events common to all filters.
 		// -----------------------------
 		this.globals.$atumList
-		
+
 			//
 			// Reset Filters button.
 			// ---------------------
-			.on('click', '.reset-filters', (evt: JQueryEventObject) => {
-				
+			.on( 'click', '.reset-filters', ( evt: JQueryEventObject ) => {
+
 				this.tooltip.destroyTooltips();
-				
-				$.address.queryString('');
-				this.globals.$searchInput.val('');
-				
-				if (this.globals.$searchColumnBtn.data('value')) {
-					this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['', this.globals.$searchColumnDropdown.data('no-option')]);
+
+				$.address.queryString( '' );
+				this.globals.$searchInput.val( '' );
+
+				if ( this.globals.$searchColumnBtn.data( 'value' ) ) {
+					this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ '', this.globals.$searchColumnDropdown.data( 'no-option' ) ] );
 				}
-				
+
 				this.listTable.updateTable();
-				$(evt.currentTarget).addClass('hidden');
-				
-			})
-			
-			.on('atum-table-updated', () => this.addDateSelectorFilter());
-		
-		this.showFilters = new ShowFilters( this.globals.$atumList, this.settings);
-		
-		//
-		// Add date selector filter.
-		// -------------------------
-		this.addDateSelectorFilter();
-		
+				$( evt.currentTarget ).addClass( 'hidden' );
+
+			} );
+
+	}
+
+	/**
+	 * Add hooks
+	 */
+	addHooks() {
+
+		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.addDateSelectorFilter() )
+
 	}
 	
 	/**
@@ -233,23 +252,23 @@ export default class Filters {
 	}
 	
 	pseudoKeyUpAjax( searchColumnBtnVal: string, searchInputVal: any ) {
-		
-		if (searchInputVal.length === 0) {
-			
-			if (searchInputVal != $.address.parameter('s')) {
-				$.address.parameter('s', '');
-				$.address.parameter('search_column', '');
+
+		if ( searchInputVal.length === 0 ) {
+
+			if ( searchInputVal != $.address.parameter( 's' ) ) {
+				$.address.parameter( 's', '' );
+				$.address.parameter( 'search_column', '' );
 				this.router.updateHash(); // Force clean search.
 			}
-			
+
 		}
-		else if (typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0) {
-			$.address.parameter('s', searchInputVal);
-			$.address.parameter('search_column', searchColumnBtnVal);
+		else if ( typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0 ) {
+			$.address.parameter( 's', searchInputVal );
+			$.address.parameter( 'search_column', searchColumnBtnVal );
 			this.router.updateHash();
 		}
-		else if (searchInputVal.length > 0) {
-			$.address.parameter('s', searchInputVal);
+		else if ( searchInputVal.length > 0 ) {
+			$.address.parameter( 's', searchInputVal );
 			this.router.updateHash();
 		}
 		
@@ -259,29 +278,29 @@ export default class Filters {
 	 * Add the date selector filter
 	 */
 	addDateSelectorFilter() {
-		
-		let linkedFilters: string[] = this.settings.get('dateSelectorFilters'),
-		    $dateSelector: JQuery   = this.globals.$atumList.find('.date-selector'),
-		    dateFromVal: string     = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(),
-		    dateToVal: string       = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
-		
+
+		let linkedFilters: string[] = this.settings.get( 'dateSelectorFilters' ),
+		    $dateSelector: JQuery   = this.globals.$atumList.find( '.date-selector' ),
+		    dateFromVal: string     = $.address.parameter( 'date_from' ) ? $.address.parameter( 'date_from' ) : $( '.date_from' ).val(),
+		    dateToVal: string       = $.address.parameter( 'date_to' ) ? $.address.parameter( 'date_to' ) : $( '.date_to' ).val();
+
 		if ( ! dateToVal ) {
-			
+
 			let today: Date = new Date(),
 			    dd: any     = today.getDate(),
 			    mm: any     = today.getMonth() + 1, // January is 0.
 			    yyyy: any   = today.getFullYear();
-			
-			if (dd < 10) {
+
+			if ( dd < 10 ) {
 				dd = '0' + dd.toString();
 			}
-			
-			if (mm < 10) {
+
+			if ( mm < 10 ) {
 				mm = '0' + mm.toString();
 			}
-			
+
 			dateToVal = yyyy + '-' + mm + '-' + dd;
-			
+
 		}
 		
 		$dateSelector.on( 'select2:select', ( evt: JQueryEventObject ) => {

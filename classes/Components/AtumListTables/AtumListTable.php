@@ -417,8 +417,20 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the checkbox column to the table if enabled.
 		self::$table_columns = TRUE === $this->show_cb ? array_merge( [ 'cb' => 'cb' ], self::$table_columns ) : self::$table_columns;
 
-		if ( empty( $this->row_actions ) && isset( self::$table_columns['calc_actions'] ) ) {
-			unset( self::$table_columns['calc_actions'] );
+		// Add the row actions column if needed.
+		if ( ! empty( $this->row_actions ) ) {
+
+			self::$table_columns = array_merge( self::$table_columns, [ 'calc_actions' => '<span class="atum-icon atmi-magic-wand-solid tips" data-placement="bottom" data-tip="' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '</span>' ] );
+
+			if ( ! empty( $this->group_members ) ) {
+				$this->group_members['actions'] = array(
+					'title'   => '',
+					'members' => array(
+						'calc_actions',
+					),
+				);
+			}
+
 		}
 
 		$this->per_page = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
@@ -1493,6 +1505,27 @@ abstract class AtumListTable extends \WP_List_Table {
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
 		echo '<td ' . $data . $classes . '>' . $content . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
+	 * Column for row actions
+	 *
+	 * @since 1.8.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 *
+	 * @return string
+	 */
+	public function column_calc_actions( $item ) {
+
+		if ( empty( $this->row_actions ) || ! $this->allow_calcs ) {
+			return '';
+		}
+
+		$actions_button = '<i class="show-actions atum-icon atmi-options" data-placement="left"></i>';
+
+		return apply_filters( 'atum/list_table/column_calc_actions', $actions_button, $item, $this->product, $this );
 
 	}
 
@@ -3068,6 +3101,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'currencyFormatNumDecimals'      => wc_get_price_decimals(),
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
+			'rowActions'                     => $this->row_actions,
 		);
 
 		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
