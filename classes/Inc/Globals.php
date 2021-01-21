@@ -480,4 +480,16 @@ final class Globals {
 		return array_merge( $defaults, $replace );
 
 	}
+
+	/**
+	 * Return max number of decimals for backend ATUM prices (in frontend WC setting will be applied)
+	 *
+	 * @since 1.8.4
+	 *
+	 * @return integer
+	 */
+	public static function get_prices_decimals() {
+
+		return apply_filters( 'atum/price_decimals', 6 );
+	}
 }
