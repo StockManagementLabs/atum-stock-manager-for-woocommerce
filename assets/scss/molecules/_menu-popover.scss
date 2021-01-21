@@ -41,6 +41,24 @@
 					padding-bottom: 0;
 				}
 				
+				&.no-actions {
+					text-align: center;
+					color: $gray-500;
+					
+					&:before, &:after {
+						content: '--';
+					}
+					
+					&:before {
+						margin-right: 3px;
+					}
+					
+					&:after {
+						margin-left: 3px;
+					}
+					
+				}
+				
 				a {
 					text-decoration: none;
 					color: $gray-600;

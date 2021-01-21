@@ -5870,6 +5870,23 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   padding-bottom: 0;
 }
 
+.popover.menu-popover ul li.no-actions {
+  text-align: center;
+  color: #adb5bd;
+}
+
+.popover.menu-popover ul li.no-actions:before, .popover.menu-popover ul li.no-actions:after {
+  content: '--';
+}
+
+.popover.menu-popover ul li.no-actions:before {
+  margin-right: 3px;
+}
+
+.popover.menu-popover ul li.no-actions:after {
+  margin-left: 3px;
+}
+
 .popover.menu-popover ul li a {
   text-decoration: none;
   color: #6c757d;

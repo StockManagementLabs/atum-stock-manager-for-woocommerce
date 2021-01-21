@@ -3102,6 +3102,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
 			'rowActions'                     => self::$row_actions,
+			'noActions'                      => __( 'No actions', ATUM_TEXT_DOMAIN ),
 		);
 
 		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );

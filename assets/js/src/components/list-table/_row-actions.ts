@@ -58,6 +58,15 @@ export default class RowActions {
 		// Re-add the action menus after the list table is updaded.
 		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.prepareActionMenus() );
 
+		// Add the "no actions" message if there are no menu items. NOTE: A high priority is important here.
+		this.wpHooks.addAction( 'atum_menuPopover_inserted', 'atum', ( $popover: JQuery ) => {
+
+			if ( !$popover.find( 'li' ).length ) {
+				$popover.find( 'ul' ).append( `<li class="no-actions">${ this.settings.get( 'noActions' ) }</li>` );
+			}
+
+		}, 999 );
+
 	}
 
 }
