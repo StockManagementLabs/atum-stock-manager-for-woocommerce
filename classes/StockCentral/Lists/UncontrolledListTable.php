@@ -57,6 +57,9 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			'_purchase_price' => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
 		);
 
+		// By default, we have no actions for SC but we have to add the ability to add them externally.
+		self::$row_actions = (array) apply_filters( 'atum/uncontrolled_stock_central_list/row_actions', [] );
+
 		// Hide the purchase price column if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) || ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
 			unset( self::$table_columns['_purchase_price'] );

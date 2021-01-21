@@ -178,11 +178,11 @@ class ListTable extends AtumListTable {
 
 		$this->days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 
-		// By default, we have no actions for SC but we have to add the ability to add them externally.
-		self::$row_actions = (array) apply_filters( 'atum/stock_central_list/row_actions', [] );
-
 		// Prepare the table columns.
 		self::$table_columns = self::get_table_columns();
+
+		// By default, we have no actions for SC but we have to add the ability to add them externally.
+		self::$row_actions = (array) apply_filters( 'atum/stock_central_list/row_actions', [] );
 
 		// TODO: Add group table functionality if some columns are hidden.
 		$this->group_members = (array) apply_filters( 'atum/stock_central_list/column_group_members', array(
