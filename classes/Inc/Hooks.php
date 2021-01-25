@@ -194,6 +194,7 @@ class Hooks {
 
 		// Update the sales-related calculated props when saving an order or changing the status.
 		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
+		add_action( 'atum/order/after_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
 
 		// Update atum_stock_status and low_stock if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
