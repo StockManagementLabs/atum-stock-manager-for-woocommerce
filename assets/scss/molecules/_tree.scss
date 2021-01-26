@@ -84,6 +84,12 @@ ul.easytree-container {
 				color: var(--dark);
 			}
 			
+			.stock-negative {
+				&, a {
+					color: var(--danger);
+				}
+			}
+			
 			&.easytree-lastsib {
 				background-image: none;
 			}
