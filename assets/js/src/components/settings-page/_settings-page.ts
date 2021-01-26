@@ -164,17 +164,13 @@ export default class SettingsPage {
 	
 	hideColors() {
 
-		const $tableColorSettings: JQuery = $( '#atum-table-color-settings' );
+		const $tableColorSettings: JQuery = $( '#atum_setting_color_scheme #atum-table-color-settings' );
 
 		if ( $tableColorSettings.length > 0 ) {
 
 			const mode = $tableColorSettings.data( 'display' );
 
-			$tableColorSettings.find( '.atum-settings-input.atum-color' ).each( ( index: number, elem: Element ) => {
-				if ( $( elem ).data( 'display' ) !== mode ) {
-					$( elem ).closest( 'tr' ).hide();
-				}
-			} );
+			$tableColorSettings.find( '.atum-settings-input.atum-color' ).not( '[data-display=' + mode + ']' ).closest( 'tr' ).hide();
 
 			$tableColorSettings.find( 'tr' ).each( ( index: number, elem: Element ) => {
 				if ( $( elem ).css( 'display' ) === 'none' ) {

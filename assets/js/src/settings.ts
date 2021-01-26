@@ -35,9 +35,5 @@ jQuery( ($) => {
 	let dateTimePicker = new DateTimePicker( settings );
 	let settingsPage = new SettingsPage(settings, enhancedSelect, tooltip, dateTimePicker);
 
-	if( $('#atum-table-color-settings').length ) {
-		settingsPage.hideColors();
-	}
-	
 });
 
