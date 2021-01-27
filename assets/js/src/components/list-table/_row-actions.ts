@@ -34,16 +34,16 @@ export default class RowActions {
 	 */
 	prepareActionMenus() {
 
-		// NOTE: we assume that the rowActions comes with the right format (following the MenuItem interface format).
-		const actionsMenu: Menu = {
-			items: this.rowActions,
-		};
-
 		this.globals.$atumList.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
 
 			const $button: JQuery = $( elem );
 
-			actionsMenu.title = $button.closest( 'tr' ).find( 'td.column-title' ).text().replace( '↵', '' ).trim();
+			// NOTE: we assume that the rowActions comes with the right format (following the MenuItem interface format).
+			const actionsMenu: Menu = {
+				title: $button.closest( 'tr' ).find( 'td.column-title' ).text().replace( '↵', '' ).trim(),
+				items: this.rowActions,
+			};
+
 			new MenuPopover( $button, actionsMenu );
 
 		} );

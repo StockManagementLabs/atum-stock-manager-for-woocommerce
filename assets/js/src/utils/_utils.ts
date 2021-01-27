@@ -471,6 +471,17 @@ const Utils = {
 	 */
 	isNumeric( n: any ): boolean {
 		return !isNaN( parseFloat( n ) ) && isFinite( n );
+	},
+
+	/**
+	 * Convert an array of JQuery elements to string
+	 *
+	 * @param {JQuery} $elems
+	 *
+	 * @return {string}
+	 */
+	convertElemsToString( $elems: JQuery ): string {
+		return $('<div />').append( $elems ).html();
 	}
 	
 }

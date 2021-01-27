@@ -420,7 +420,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Add the row actions column if needed.
 		if ( ! empty( self::$row_actions ) ) {
 
-			self::$table_columns = array_merge( self::$table_columns, [ 'calc_actions' => '<span class="atum-icon atmi-magic-wand-solid tips" data-placement="bottom" data-tip="' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '</span>' ] );
+			self::$table_columns = array_merge( self::$table_columns, [ 'calc_actions' => '<span class="atum-icon atmi-magic-wand-solid tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Actions', ATUM_TEXT_DOMAIN ) . '</span>' ] );
 
 			if ( ! empty( $this->group_members ) ) {
 				$this->group_members['actions'] = array(
@@ -1523,7 +1523,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			return '';
 		}
 
-		$actions_button = '<i class="show-actions atum-icon atmi-options" data-placement="left"></i>';
+		$actions_button = '<i class="show-actions atum-icon atmi-options" data-bs-placement="left"></i>';
 
 		return apply_filters( 'atum/list_table/column_calc_actions', $actions_button, $item, $this->product, $this );
 
@@ -1619,12 +1619,18 @@ abstract class AtumListTable extends \WP_List_Table {
 		$extra_data      = ! empty( $extra_data ) ? Helpers::array_to_data( $extra_data ) : '';
 
 		// phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
-		$editable_col = '<span class="set-meta tips" data-tip="' . $tooltip . '" data-placement="' . $tooltip_position .
-		                '" data-meta="' . $meta_key . '" ' . $symbol_data . $extra_meta_data . ' data-input-type="' .
-		                $input_type . '" data-currency="' . $currency . '"' . $extra_data . ' data-cell-name="' . $cell_name . '">' . $value . '</span>';
-		// phpcs:enable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
+		ob_start(); ?>
+		<span class="atum-tooltip" title="<?php echo esc_attr( $tooltip ) ?>" data-bs-placement="<?php echo esc_attr( $tooltip_position ) ?>">
+			<span class="set-meta" data-meta="<?php echo esc_attr( $meta_key ) ?>" <?php echo $symbol_data . $extra_meta_data . $extra_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				data-input-type="<?php echo esc_attr( $input_type ) ?>" data-currency="<?php echo esc_attr( $currency ) ?>"
+				data-cell-name="<?php echo esc_attr( $cell_name ) ?>"
+			>
+				<?php echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</span>
+		</span>
+		<?php
 
-		return apply_filters( 'atum/list_table/editable_column', $editable_col, $args );
+		return apply_filters( 'atum/list_table/editable_column', ob_get_clean(), $args );
 
 	}
 

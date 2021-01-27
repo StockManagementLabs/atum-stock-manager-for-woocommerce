@@ -2,132 +2,25 @@
    EDIT POPOVERS
    =================== */
 
-import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
+import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
 import EnhancedSelect from './_enhanced-select';
 import Settings from '../config/_settings';
 import ButtonGroup from './_button-group';
 import Utils from '../utils/_utils';
+import PopoverBase from '../abstracts/_popover-base';
 
-export default class EditPopovers {
+export default class EditPopovers extends PopoverBase{
+
+	popoverClassName: string = 'edit-field-popover';
 	
 	constructor(
 		private settings: Settings,
 		private enhancedSelect?: EnhancedSelect,
 	) {
-		
-		//
-		// Popover events.
-		//----------------
-		$('body')
-		
-			// Set the field data when clicking the "Set" button.
-			.on( 'click', '.popover .set', ( evt: JQueryEventObject ) => {
-				
-				const $setButton: JQuery      = $( evt.currentTarget ),
-				      popoverId: string       = $setButton.closest( '.popover' ).attr( 'id' ),
-				      $editField: JQuery      = $( `[data-popover="${ popoverId }"]` ),
-				      $fieldWrapper: JQuery   = $editField.parent(),
-				      $popoverWrapper: JQuery = $setButton.closest( '.popover-content' ),
-				      $setMetaInput: JQuery   = $popoverWrapper.find( '.meta-value' ),
-				      newValue: any           = $setMetaInput.val();
-				
-				let newLabel: string;
-				
-				if ( $setMetaInput.is( 'select' ) ) {
-					
-					if ( ! newValue ) {
-						newLabel = null;
-					}
-					else if ( Array.isArray( newValue ) ) {
-						
-						let selectedLabels: string[] = [];
-						
-						$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
-							selectedLabels.push( $( elem ).text().trim() );
-						} );
-						
-						newLabel = selectedLabels.join( ', ' );
-						
-					}
-					else {
-						newLabel = $setMetaInput.find( 'option:selected' ).text().trim();
-					}
-					
-				}
-				else {
-					newLabel = newValue ? newValue : null;
-				}
-				
-				$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
-					
-					const $option: JQuery = $( elem );
-					
-					if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
-						$option.attr( 'selected', 'selected' );
-					}
-					else {
-						$option.removeAttr( 'selected' );
-					}
-					
-				} );
-				
-				// Set the value to the related hidden input.
-				const $valueInput: JQuery       = $fieldWrapper.find( 'input[type=hidden]' ),
-				      oldValue: string | number = $valueInput.val();
 
-				$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
-				
-				// Set the field label.
-				this.setEditFieldLabel( $fieldWrapper.find( '.field-label' ), newLabel );
-				
-				// Once set, destroy the opened popover.
-				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
-				
-				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find(':input').serializeArray() ] );
-				
-			})
-			
-			// Bind keys pressed on the popover.
-			.on( 'keyup', '.popover', ( evt: JQueryEventObject ) => {
-				
-				const $popover: JQuery = $( evt.currentTarget );
-				
-				// Enter key.
-				if ( evt.keyCode === 13 ) {
-					$popover.find( '.set' ).click();
-				}
-				// Esc key.
-				else if ( evt.keyCode === 27 ) {
-					this.destroyPopover( $( `[data-popover="${ $popover.attr( 'id' ) }"]` ) );
-				}
-				
-			} );
-		
-			// Hide any other opened popover before opening a new one.
-			// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
-			$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
-				
-				const $target: JQuery = $( evt.target );
-				let $editButton: JQuery = $( '.atum-edit-field' );
-				
-				// If we are clicking on a editable cell, get the other opened popovers, if not, get them all.
-				if ( $target.hasClass( 'atum-edit-field' ) ) {
-					$editButton = $editButton.not( $target );
-				}
-				else if ( $target.closest( '.atum-edit-field' ).length ) {
-					$editButton = $editButton.not( $target.closest( '.atum-edit-field' ) );
-				}
-				
-				// Get only the cells with an opened popover.
-				$editButton = $editButton.filter( ( index: number, elem: Element ) => {
-					const $btn: JQuery = $( elem );
-					return typeof $btn.data( 'bs.popover' ) !== 'undefined' && ( $btn.data( 'bs.popover' ).inState || false ) && $btn.data( 'bs.popover' ).inState.click === true;
-				} );
-				
-				this.destroyPopover( $editButton );
-				
-			} );
+		super();
+		this.bindEvents();
 		
 	}
 	
@@ -148,25 +41,20 @@ export default class EditPopovers {
 			if ( ! $( content ).hasClass( 'alert' ) ) {
 				content += `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>`;
 			}
-			
-			( <any>$editButton ).popover( {
-				content  : content,
-				html     : true,
-				template : `
-					<div class="popover edit-field-popover" role="tooltip">
-						<div class="popover-arrow"></div>
-						<h3 class="popover-title"></h3>
-						<div class="popover-content"></div>
-					</div>`,
-				placement: $editButton.data('placement') || 'bottom',
-				trigger  : 'click',
-				container: 'body',
+
+			new BsPopover( $editButton.get( 0 ), {
+				content    : $( '<div class="edit-popover-content" />' ).append( content ).get( 0 ),
+				html       : true,
+				customClass: this.popoverClassName,
+				placement  : $editButton.data( 'bs-placement' ) || 'bottom',
+				trigger    : 'click',
+				container  : 'body',
 			} );
 			
 			// Prepare the popover's fields when shown.
-			$editButton.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
+			$editButton.on( 'inserted.bs.popover', () => {
 
-				const $activePopover: JQuery = $( '.popover.in' ),
+				const $activePopover: JQuery = $( '.popover.show' ),
 				      $sourceInput: JQuery   = $editButton.siblings( 'input[type=hidden]' ),
 				      inputData: any         = $sourceInput.data();
 
@@ -221,13 +109,8 @@ export default class EditPopovers {
 				else {
 					currentValue = $sourceInput.val();
 				}
-				
-				$( evt.currentTarget ).attr( 'data-popover', $activePopover.attr( 'id' ) );
-				
-				if ( $( `#${ $activePopover.attr( 'id' ) } .select2` ).length === 0 ) {
-					$( `#${ $activePopover.attr( 'id' ) } .select2` ).remove();
-				}
-				
+
+				$( `#${ $activePopover.attr( 'id' ) } .select2` ).remove();
 				this.prepareSelect( $editButton );
 
 				// Prepare the button groups (if any).
@@ -253,6 +136,127 @@ export default class EditPopovers {
 		} );
 		
 	}
+
+	/**
+	 * Bind events
+	 */
+	bindEvents() {
+
+		$('body')
+
+			// Set the field data when clicking the "Set" button.
+			.on( 'click', `.popover.${ this.popoverClassName } .set`, ( evt: JQueryEventObject ) => {
+
+				console.log('clicking popover button');
+
+				const $setButton: JQuery      = $( evt.currentTarget ),
+				      popoverId: string       = $setButton.closest( '.popover' ).attr( 'id' ),
+				      $editField: JQuery      = $( `[aria-describedby="${ popoverId }"]` ),
+				      $fieldWrapper: JQuery   = $editField.parent(),
+				      $popoverWrapper: JQuery = $setButton.closest( '.popover-body' ),
+				      $setMetaInput: JQuery   = $popoverWrapper.find( '.meta-value' ),
+				      newValue: any           = $setMetaInput.val();
+
+				let newLabel: string;
+
+				if ( $setMetaInput.is( 'select' ) ) {
+
+					if ( ! newValue ) {
+						newLabel = null;
+					}
+					else if ( Array.isArray( newValue ) ) {
+
+						let selectedLabels: string[] = [];
+
+						$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
+							selectedLabels.push( $( elem ).text().trim() );
+						} );
+
+						newLabel = selectedLabels.join( ', ' );
+
+					}
+					else {
+						newLabel = $setMetaInput.find( 'option:selected' ).text().trim();
+					}
+
+				}
+				else {
+					newLabel = newValue ? newValue : null;
+				}
+
+				$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
+
+					const $option: JQuery = $( elem );
+
+					if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
+						$option.attr( 'selected', 'selected' );
+					}
+					else {
+						$option.removeAttr( 'selected' );
+					}
+
+				} );
+
+				// Set the value to the related hidden input.
+				const $valueInput: JQuery       = $fieldWrapper.find( 'input[type=hidden]' ),
+				      oldValue: string | number = $valueInput.val();
+
+				$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
+
+				// Set the field label.
+				this.setEditFieldLabel( $fieldWrapper.find( '.field-label' ), newLabel );
+
+				// Once set, destroy the opened popover.
+				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
+
+				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find( ':input' ).serializeArray() ] );
+
+			})
+
+			// Bind keys pressed on the popover.
+			.on( 'keyup', '.popover', ( evt: JQueryEventObject ) => {
+
+				const $popover: JQuery = $( evt.currentTarget );
+				console.log('keyup popover');
+
+				// Enter key.
+				if ( evt.keyCode === 13 ) {
+					$popover.find( '.set' ).click();
+				}
+				// Esc key.
+				else if ( evt.keyCode === 27 ) {
+					this.destroyPopover( $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` ) );
+				}
+
+			} );
+
+		// Hide any other opened popover before opening a new one.
+		// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
+		$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
+
+			console.log('clicking wpcontent body on editPopover');
+
+			const $target: JQuery = $( evt.target );
+			let $editButton: JQuery = $( '.atum-edit-field' );
+
+			// If we are clicking on a editable cell, get the other opened popovers, if not, get them all.
+			if ( $target.hasClass( 'atum-edit-field' ) ) {
+				$editButton = $editButton.not( $target );
+			}
+			else if ( $target.closest( '.atum-edit-field' ).length ) {
+				$editButton = $editButton.not( $target.closest( '.atum-edit-field' ) );
+			}
+
+			if ( ! $editButton.length ) {
+				return;
+			}
+
+			// Hide all the opened popovers.
+			this.hidePopover( $editButton );
+
+		} );
+
+	}
 	
 	/**
 	 * Destroy the popovers
@@ -260,19 +264,14 @@ export default class EditPopovers {
 	 * @param {JQuery}  $editButton The edit button that holds the popover to destroy.
 	 * @param {boolean} rebind      Optional. Whether to re-bind the popover after destroying it.
 	 */
-	destroyPopover( $editButton: JQuery, rebind: boolean = true ) {
-		
-		if ( $editButton.length ) {
-			
-			( <any>$editButton ).popover( 'destroy' );
-			$editButton.removeAttr( 'data-popover' );
-			
+	destroyPopover( $editButton: JQuery ) {
+
+		super.destroyPopover( $editButton, () => {
+
 			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
-			if ( rebind ) {
-				setTimeout( () => this.bindPopovers( $editButton ), 300 );
-			}
-			
-		}
+			setTimeout( () => this.bindPopovers( $editButton ), 300 );
+
+		} );
 		
 	}
 	
@@ -283,27 +282,27 @@ export default class EditPopovers {
 	 */
 	prepareSelect( $editButton: JQuery ) {
 		
-		if ( this.enhancedSelect) {
-			
-			$( '.popover select' ).each( ( index: number, elem: Element ) => {
-				
-				const $select: JQuery = $(elem),
+		if ( this.enhancedSelect ) {
+
+			$( `.popover.${ this.popoverClassName } select` ).each( ( index: number, elem: Element ) => {
+
+				const $select: JQuery    = $( elem ),
 				      selectOptions: any = {
 					      minimumResultsForSearch: 20,
 					      placeholder            : {
 						      id  : '-1',
-						      text: $select.find('option').first().text()
-					      }
+						      text: $select.find( 'option' ).first().text(),
+					      },
 				      };
-				
+
 				if ( $select.hasClass( 'atum-select-multiple' ) && $select.prop( 'multiple' ) === false ) {
 					$select.val( $editButton.siblings( 'input[type=hidden]' ).val().split( ',' ) );
 				}
-				
-				$select.css('width', '200px');
+
+				$select.css( 'width', '200px' );
 				this.enhancedSelect.doSelect2( $select, selectOptions, true );
-				
-			});
+
+			} );
 		
 		}
 		
@@ -316,16 +315,16 @@ export default class EditPopovers {
 	 * @param {string} label
 	 */
 	setEditFieldLabel( $fieldLabel: JQuery, label: string ) {
-		
+
 		if ( $fieldLabel.length ) {
-			
+
 			$fieldLabel.addClass( 'unsaved' );
-			
+
 			// For numeric labels, adjust the decimal separator if needed.
-			if ( Utils.isNumeric( label ) && $fieldLabel.data('decimal-separator') ) {
-				label = <string>Utils.formatNumber( parseFloat( label ), 2, '', $fieldLabel.data('decimal-separator') );
+			if ( Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
+				label = <string> Utils.formatNumber( parseFloat( label ), 2, '', $fieldLabel.data( 'decimal-separator' ) );
 			}
-			
+
 			// Check if a template exists for the label
 			if ( null !== label && $fieldLabel.data( 'template' ) ) {
 				$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', label ) );
@@ -337,7 +336,7 @@ export default class EditPopovers {
 			else {
 				$fieldLabel.text( label );
 			}
-			
+
 		}
 		
 	}

@@ -2928,7 +2928,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 .popover {
 	
 	// Inner content for "Set Field" popovers
-	.popover-content {
+	.popover-body {
 		
 		> input[type=number], > input[type=text], > .button {
 			display: inline-block;
@@ -2965,7 +2965,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	// Popover with extra meta fields
 	&.with-meta {
 		
-		.popover-content {
+		.popover-body {
 			input, button {
 				width: 100%;
 				margin: 3px 0;

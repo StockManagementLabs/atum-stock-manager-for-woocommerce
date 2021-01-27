@@ -27,6 +27,7 @@
 	}
 	
 	.atum-modal-content {
+		
 		.note {
 			text-align: left;
 			font-size: 12px;
@@ -43,7 +44,7 @@
 		
 		input {
 			width: 100% !important;
-			height: 30px !important;
+			height: 31px !important;
 			
 			&::-moz-placeholder {
 				font-style: italic;
@@ -58,6 +59,79 @@
 				font-size: 12px;
 				font-style: italic;
 			}
+		}
+		
+		form {
+			margin-left: -20px;
+			margin-right: -20px;
+			
+			fieldset {
+				
+				&:first-child {
+					padding-bottom: 10px;
+				}
+				
+				&:not(:first-child) {
+					padding-top: 10px;
+					border-top: 1px solid $gray-400;
+				}
+				
+				h3 {
+					text-align: left;
+					padding-left: 20px;
+					font-size: 14px;
+					color: $blue-dark;
+					margin-bottom: 10px;
+				}
+			}
+			
+			.input-group {
+				padding: 5px 20px;
+				box-sizing: border-box;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				
+				label {
+					font-size: 13px;
+				}
+				
+				input, select, .atum-enhanced-select {
+					width: 230px !important;
+					max-width: 100%;
+				}
+				
+				.atum-enhanced-select {
+					.select2-selection--single {
+						border-radius: 4px;
+						text-align: left;
+					}
+					
+					.select2-selection__placeholder {
+						font-size: 12px;
+						font-style: italic;
+					}
+					
+					.select2-selection__rendered {
+						color: $wp-gray-dark;
+						font-size: 14px;
+					}
+					
+					.select2-selection__arrow {
+						&:after {
+							display: none;
+						}
+					}
+				}
+				
+				.alert {
+					text-align: left;
+					display: block;
+					font-size: 11px;
+					margin-bottom: 0;
+				}
+			}
+			
 		}
 	}
 	

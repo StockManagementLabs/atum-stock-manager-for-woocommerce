@@ -39,7 +39,7 @@ export default class EditableCell {
 			const $button   = $( evt.currentTarget ),
 			      $popover  = $button.closest( '.popover' ),
 			      popoverId = $popover.attr( 'id' ),
-			      $setMeta  = $( '[data-popover="' + popoverId + '"]' );
+			      $setMeta  = $( `[aria-describedby="${ popoverId }"]` );
 
 			if ( $setMeta.length ) {
 				this.listTable.maybeAddSaveButton();
@@ -56,7 +56,7 @@ export default class EditableCell {
 	addHooks() {
 
 		// Restore the popovers after the List Table updates.
-		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.popover.setFieldPopover() );
+		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.popover.bindPopovers() );
 
 	}
 	

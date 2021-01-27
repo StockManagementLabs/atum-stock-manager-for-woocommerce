@@ -464,25 +464,40 @@ $tooltip-color:                         $gray-600 !default;
 $tooltip-bg:                            $white !default;
 $tooltip-opacity:                       1 !default;
 $tooltip-box-shadow:                    0 1px 5px 0 rgba($black, .15) !default;
+$tooltip-margin:                        0 !default;
+$tooltip-padding-y:                     $spacer / 4 !default;
+$tooltip-padding-x:                     $spacer / 2 !default;
+$tooltip-border-radius:                 $border-radius !default;
 
 $tooltip-arrow-width:                   5px !default;
 $tooltip-arrow-color:                   $tooltip-bg !default;
+$tooltip-arrow-height:                  .4rem !default;
 
 // Popovers
 
 $popover-bg:                            $white !default;
 $popover-max-width:                     276px !default;
 $popover-border-color:                  rgba($black, .2) !default;
+$popover-border-width:                  $border-width !default;
 $popover-fallback-border-color:         #CCC !default;
 $popover-border-radius:                 6px !default;
+$popover-font-size:                     $font-size-sm !default;
+$popover-inner-border-radius:           subtract($popover-border-radius, $popover-border-width) !default;
 
-$popover-title-bg:                      $gray-100;
+$popover-header-bg:                     $gray-100 !default;
+$popover-header-padding-y:              .5rem !default;
+$popover-header-padding-x:              $spacer !default;
 
-$popover-arrow-width:                   10px !default;
-$popover-arrow-color:                   $popover-title-bg !default;
+$popover-body-color:                    $body-color !default;
+$popover-body-padding-y:                $spacer !default;
+$popover-body-padding-x:                $spacer !default;
+
+$popover-arrow-width:                   1rem !default;
+$popover-arrow-height:                  .5rem !default;
+$popover-arrow-color:                   $popover-header-bg !default;
 
 $popover-arrow-outer-width:             ($popover-arrow-width + 1) !default;
-$popover-arrow-outer-color:             fade_in($popover-border-color, 0.05) !default;
+$popover-arrow-outer-color:             var(--atum-text-color-var1) !default;
 $popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
 
 $zindex-popover:                        99998 !default; // 1px lower than the WP admin bar

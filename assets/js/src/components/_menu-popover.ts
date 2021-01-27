@@ -2,15 +2,16 @@
    MENU POPOVER
    =================== */
 
-import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4 POPOVERS
+import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
 import { Menu, MenuItem } from '../interfaces/menu.interface';
+import PopoverBase from '../abstracts/_popover-base';
 import WPHooks from '../interfaces/wp.hooks';
 
-export default class MenuPopover {
+export default class MenuPopover extends PopoverBase{
 
 	popoverClassName: string = 'menu-popover';
-	popoverId: string = '';
+	popoverButtonClassName: string = 'menu-popover-btn';
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -18,8 +19,11 @@ export default class MenuPopover {
 		private menu: Menu
 	) {
 
+		super();
+
 		if ( $menuButton.length && typeof menu.items !== 'undefined' && menu.items.length ) {
-			this.buildMenu();
+			this.$menuButton.addClass( this.popoverButtonClassName );
+			this.bindPopovers();
 			this.bindEvents();
 		}
 		
@@ -28,7 +32,7 @@ export default class MenuPopover {
 	/**
 	 * Build the menu and add it to the popover
 	 */
-	buildMenu() {
+	bindPopovers() {
 
 		const $menuHtml: JQuery = $( '<ul />' );
 
@@ -51,36 +55,43 @@ export default class MenuPopover {
 		} );
 
 		// Add the popover to the menu button.
-		( <any>this.$menuButton ).popover( {
+		new BsPopover( this.$menuButton.get(0), {
 			title    : this.menu.title,
-			content  : $menuHtml,
+			content  : $( '<div />' ).append( $menuHtml ).get( 0 ), // It supports one element only.
 			html     : true,
-			template : `
-					<div class="popover ${ this.popoverClassName }" role="tooltip">
-						<div class="popover-arrow"></div>
-						<h3 class="popover-title"></h3>
-						<div class="popover-content"></div>
-					</div>`,
-			placement: this.$menuButton.data( 'placement' ) || 'top',
+			customClass: this.popoverClassName,
+			placement: this.$menuButton.data( 'bs-placement' ) || 'top',
 			trigger  : this.$menuButton.data( 'trigger' ) || 'click',
+			container: this.$menuButton.parent().get( 0 )
 		} );
 
 		this.$menuButton
 
 			// Hide any other menu popover opened before opening a new one.
-			.on( 'show.bs.popover', () => {
+			.on( 'show.bs.popover', ( evt: JQueryEventObject ) => {
+
+				const $shownPopover: JQuery = $( evt.currentTarget );
 
 				$( `.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
-					(<any>$( `[aria-describedby="${ $( elem ).attr('id') }"]` )).popover( 'destroy' );
+
+					const $currentButton: JQuery = $( `[aria-describedby="${ $( elem ).attr('id') }"]` );
+
+					if ( $currentButton.is( $shownPopover ) ) {
+						return;
+					}
+
+					this.hidePopover( $currentButton );
+
 				} );
 
 			} )
 
 			// Store the popover ID.
-			.on( 'inserted.bs.popover', () => {
-				const $popover: JQuery = $( `.${ this.popoverClassName }` );
-				this.popoverId = $popover.attr( 'id' );
+			.on( 'inserted.bs.popover', ( evt: JQueryEventObject ) => {
+
+				const $popover: JQuery = $( `#${ $ ( evt.currentTarget ).attr( 'aria-describedby' ) }` );
 				this.wpHooks.doAction( 'atum_menuPopover_inserted', $popover );
+
 			} );
 
 	}
@@ -90,48 +101,38 @@ export default class MenuPopover {
 	 */
 	bindEvents() {
 
-		// Hide any other opened popover before opening a new one.
-		// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
-		$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
+		$( 'body' )
 
-			const $target: JQuery = $( evt.target );
+			// Hide any other opened popover before opening a new one.
+			// NOTE: using the off/on technique to not bind the event once per each instantiated menu.
+			.off( 'click.atumMenuPopover', '#wpbody-content' )
+			.on( 'click.atumMenuPopover', '#wpbody-content', ( evt: JQueryEventObject ) => {
 
-			if ( ! this.popoverId || ! $( `#${ this.popoverId }` ).length || $target.is( this.$menuButton ) || $target.closest(`#${ this.popoverId }`).length ) {
-				return;
-			}
+				const $target: JQuery = $( evt.target );
 
-			this.destroyPopover();
+				if ( $target.hasClass( this.popoverButtonClassName ) || $target.hasClass( '.popover' ) || $target.closest( '.popover' ).length ) {
+					return;
+				}
 
-		} );
+				$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
+					this.hidePopover( $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` ) );
+				} );
 
-		// Bind the menu items' clicks.
-		$( 'body' ).on( 'click', `.${ this.popoverClassName } a`, ( evt: JQueryEventObject ) => {
+			} )
 
-			evt.preventDefault();
-			const $menuItem: JQuery = $( evt.currentTarget );
+			// Bind the menu items' clicks.
+			.off( 'click.atumMenuPopover', `.${ this.popoverClassName } a` )
+			.on( 'click.atumMenuPopover', `.${ this.popoverClassName } a`, ( evt: JQueryEventObject ) => {
 
-			// Avoid triggering multiple times as this event is binded once per registered component.
-			if ( ! this.popoverId || this.popoverId !== $menuItem.closest( `.${ this.popoverClassName }` ).attr( 'id' ) ) {
-				return;
-			}
+				evt.preventDefault();
 
-			this.wpHooks.doAction( 'atum_menuPopover_clicked', evt );
-			this.destroyPopover(); // Once a menu item link is clicked, close it automatically.
+				this.wpHooks.doAction( 'atum_menuPopover_clicked', evt );
 
-		} );
+				// Once a menu item link is clicked, close it automatically.
+				const $popover: JQuery = $( evt.currentTarget ).closest( '.popover' );
+				this.hidePopover( $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` ) );
 
-	}
-
-	/**
-	 * Destroy the popover
-	 */
-	destroyPopover() {
-
-		( <any>this.$menuButton ).popover( 'destroy' );
-		this.$menuButton.removeAttr( 'data-popover' );
-
-		// Give a small lapse to complete the 'fadeOut' animation before re-building.
-		setTimeout( () => this.buildMenu(), 300 );
+			} );
 
 	}
 	

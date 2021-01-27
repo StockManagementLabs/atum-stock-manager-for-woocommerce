@@ -2,40 +2,42 @@
    POPOVER
    ======================================= */
 
-import Settings from '../config/_settings';
-import DateTimePicker from './_date-time-picker';
-import Utils from '../utils/_utils';
-import '../../vendor/bootstrap3-custom.min'; // TODO: USE BOOTSTRAP 4
+import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
-export default class Popover {
+import DateTimePicker from './_date-time-picker';
+import PopoverBase from '../abstracts/_popover-base';
+import Settings from '../config/_settings';
+import Utils from '../utils/_utils';
+
+export default class Popover extends PopoverBase{
+
+	popoverClassName: string = 'atum-popover';
 	
 	constructor(
 		private settings: Settings,
 		private dateTimePicker?: DateTimePicker
 	) {
+
+		super();
 		
 		// Init popovers.
-		this.setFieldPopover();
+		this.bindPopovers();
 		
 		// Hide any other opened popover before opening a new one.
 		$( 'body' ).click( ( evt: JQueryEventObject ) => {
 
-			const $target: JQuery   = $( evt.target );
-
-	        // If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			let $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta' ).not( $target ) : $( '.set-meta' );
+			const $target: JQuery = $( evt.target );
 
 			// Do not hide any popover if the click is being performed within one.
-			if ( $target.is( '.popover' ) || $target.closest( '.popover.in' ).length ) {
+			if ( $target.is( '.popover' ) || $target.closest( '.popover.show' ).length ) {
 				return;
 			}
-			
-			// Get only the cells with an opened popover.
-			$metaCell = $metaCell.filter( ( index: number, elem: Element ) => {
-				return typeof $( elem ).data( 'bs.popover' ) !== 'undefined' && typeof $( elem ).data( 'bs.popover' ).inState !== 'undefined' && $( elem ).data( 'bs.popover' ).inState.click === true;
-			} );
 
-			this.destroyPopover( $metaCell );
+			// If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
+			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta' ).not( $target ) : $( '.set-meta' );
+			
+			// Hide all the opened popovers.
+			this.hidePopover( $metaCell );
 
 		} );
 		
@@ -44,7 +46,7 @@ export default class Popover {
 	/**
 	 * Enable "Set Field" popovers
 	 */
-	setFieldPopover( $metaCells?: JQuery ) {
+	bindPopovers( $metaCells?: JQuery ) {
 
 		if ( ! $metaCells ) {
 			$metaCells = $( '.set-meta' );
@@ -52,14 +54,14 @@ export default class Popover {
 		
 		// Set meta value for listed products.
 		$metaCells.each( ( index: number, elem: Element ) => {
-			this.bindPopover( $( elem ) );
+			this.addPopover( $( elem ) );
 		} );
 		
 		// Focus on the input field and set a reference to the popover to the editable column.
-		$metaCells.on('shown.bs.popover', (evt: JQueryEventObject) => {
+		$metaCells.on( 'inserted.bs.popover', ( evt: JQueryEventObject ) => {
 
 			const $metaCell: JQuery      = $( evt.currentTarget ),
-			      $activePopover: JQuery = $( '.popover.in' );
+			      $activePopover: JQuery = $( '.popover.show' );
 			
 			$activePopover.find('.meta-value').focus().select();
 
@@ -82,12 +84,10 @@ export default class Popover {
 				}
 				// ESC key.
 				else if ( 27 === evt.which ) {
-					this.destroyPopover( $metaCell );
+					this.hidePopover( $metaCell );
 				}
 
 			} );
-
-			$metaCell.attr( 'data-popover', $activePopover.attr( 'id' ) );
 			
 		});
 		
@@ -98,7 +98,7 @@ export default class Popover {
 	 *
 	 * @param jQuery $metaCell The cell where the popover will be attached.
 	 */
-	bindPopover( $metaCell: JQuery ) {
+	addPopover( $metaCell: JQuery ) {
 
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
@@ -142,36 +142,32 @@ export default class Popover {
 		      } ),
 		      extraMeta: any     = $metaCell.data( 'extra-meta' );
 
-		let popoverClass: string = '',
+		let popoverClass: string = this.popoverClassName,
 		    $extraFields: JQuery = null;
 
 		// Check whether to add extra fields to the popover.
-		if (typeof extraMeta !== 'undefined') {
-			
+		if ( typeof extraMeta !== 'undefined' ) {
+
 			popoverClass = ' with-meta';
-			$extraFields = $('<hr>');
+			$extraFields = $( '<hr>' );
 
 			$.each( extraMeta, ( index: number, metaAtts: any ) => {
 				$extraFields = $extraFields.add( $( '<input />', metaAtts ) );
 			} );
-			
+
 		}
-		
-		const $content: JQuery = $extraFields ? $input.add($extraFields).add($setButton) : $input.add($setButton);
+
+		const $content: JQuery = $extraFields ? $input.add( $extraFields ).add( $setButton ) : $input.add( $setButton );
 		
 		// Create the meta edit popover.
-		( <any> $metaCell ).popover( {
-			title    : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
-			content  : $content,
-			html     : true,
-			template : `<div class="popover ${ popoverClass }" role="tooltip">
-							<div class="popover-arrow"></div>
-							<h3 class="popover-title"></h3>
-							<div class="popover-content"></div>
-						</div>`,
-			placement: 'bottom',
-			trigger  : 'click',
-			container: 'body',
+		new BsPopover( $metaCell.get( 0 ), {
+			title      : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
+			content    : $( '<div class="edit-popover-content" />' ).append( $content ).get( 0 ), // It supports one element only.
+			html       : true,
+			customClass: popoverClass,
+			placement  : 'bottom',
+			trigger    : 'click',
+			container  : 'body',
 		} );
 		
 	}
@@ -179,22 +175,23 @@ export default class Popover {
 	/**
 	 * Destroy a popover attached to a specified table cell
 	 *
-	 * @param jQuery $metaCell The table cell where is attached the visible popover.
+	 * @param jQuery $metaCell Optional. The table cell where is attached the visible popover.
 	 */
 	destroyPopover( $metaCell?: JQuery ) {
 
 		// If not passing the popover to destroy, try to find out the currently active.
 		if ( ! $metaCell || ! $metaCell.length ) {
-			$metaCell = $( '.set-meta[data-popover]' );
+			$metaCell = $( '.set-meta[aria-describedby]' );
 		}
 
 		if ( $metaCell.length ) {
 
-			( <any> $metaCell ).popover( 'destroy' );
-			$metaCell.removeAttr( 'data-popover' );
+			super.destroyPopover( $metaCell, () => {
 
-			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
-			setTimeout( () => this.setFieldPopover( $metaCell ), 300 );
+				// Give a small lapse to complete the 'fadeOut' animation before re-binding.
+				setTimeout( () => this.bindPopovers( $metaCell ), 300 );
+
+			} );
 
 		}
 

@@ -47,36 +47,36 @@ export default class DragScroll {
 	loadHammer() {
 		
 		// Drag and drop scrolling on desktops.
-		const hammertime: any = new Hammer(this.globals.$scrollPane.get(0), {});
+		const hammertime: any = new Hammer( this.globals.$scrollPane.get( 0 ), {} );
 		
 		hammertime
-			
-			.on('panstart', () => {
+
+			.on( 'panstart', () => {
 				// As the popoover is not being repositioned when scrolling horizontally, we have to destroy it.
-				if (this.popover) {
+				if ( this.popover ) {
 					this.popover.destroyPopover();
 				}
-			})
+			} )
 			
 			// Horizontal drag scroll (JScrollPane).
-			.on('panright panleft', (evt: any) => {
-				
+			.on( 'panright panleft', ( evt: any ) => {
+
 				const velocityModifier: number = 10,
-				      displacement: number     = this.globals.jScrollApi.getContentPositionX() - (evt.distance * (evt.velocityX / velocityModifier));
-				
-				this.globals.jScrollApi.scrollToX(displacement, false);
-				
-			})
+				      displacement: number     = this.globals.jScrollApi.getContentPositionX() - ( evt.distance * ( evt.velocityX / velocityModifier ) );
+
+				this.globals.jScrollApi.scrollToX( displacement, false );
+
+			} )
 			
 			// Vertical drag scroll (browser scroll bar).
-			.on('panup pandown', (evt: any) => {
-				
+			.on( 'panup pandown', ( evt: any ) => {
+
 				const velocityModifier: number = 10,
-				      displacement: number     = $(window).scrollTop() - (evt.distance * (evt.velocityY / velocityModifier));
-				
-				$(window).scrollTop(displacement);
-				
-			});
+				      displacement: number     = $( window ).scrollTop() - ( evt.distance * ( evt.velocityY / velocityModifier ) );
+
+				$( window ).scrollTop( displacement );
+
+			} );
 		
 	}
 	
@@ -84,69 +84,67 @@ export default class DragScroll {
 	 * Init horizontal scroll
 	 */
 	initHorizontalDragScroll() {
-		
-		this.addHorizontalDragScroll('stock_central_nav', false);
-		this.addHorizontalDragScroll('filters_container', false);
-		
-		$(window).on('resize', () => {
-			this.addHorizontalDragScroll('stock_central_nav', false);
-			this.addHorizontalDragScroll('filters_container', false);
-		});
-		
-		$('.tablenav.top').find('input.btn').css('visibility', 'visible');
-		
-		$('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', (evt: JQueryEventObject) => {
-			
-			this.addHorizontalDragScroll( $(evt.currentTarget).attr('id'), true );
+
+		this.addHorizontalDragScroll( 'stock_central_nav', false );
+		this.addHorizontalDragScroll( 'filters_container', false );
+
+		$( window ).on( 'resize', () => {
+			this.addHorizontalDragScroll( 'stock_central_nav', false );
+			this.addHorizontalDragScroll( 'filters_container', false );
+		} );
+
+		$( '.tablenav.top' ).find( 'input.btn' ).css( 'visibility', 'visible' );
+
+		$( '.nav-with-scroll-effect' ).css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
+
+			this.addHorizontalDragScroll( $( evt.currentTarget ).attr( 'id' ), true );
 			this.tooltip.destroyTooltips();
-			
-			Utils.delay( () => this.tooltip.addTooltips(), 1000);
-			
-		});
-		
+
+			Utils.delay( () => this.tooltip.addTooltips(), 1000 );
+
+		} );
+
 		dragscroll.reset();
-		
-		
+
 	}
 	
 	/**
 	 * Add horizontal scroll effect to menu views
 	 */
 	addHorizontalDragScroll(elementId: string, checkEnhanced: boolean) {
-		
-		const $nav: JQuery = $(`#${ elementId }`);
-		
-		if (!$nav.length) {
+
+		const $nav: JQuery = $( `#${ elementId }` );
+
+		if ( ! $nav.length ) {
 			return;
 		}
-		
-		let $overflowOpacityRight: JQuery = $nav.find('.overflow-opacity-effect-right'),
-		    $overflowOpacityLeft: JQuery  = $nav.find('.overflow-opacity-effect-left'),
-		    leftMax: number               = $nav ? $nav.get(0).scrollWidth : 0,
-		    left: number                  = $nav ? $nav.get(0).scrollLeft : 0,
+
+		let $overflowOpacityRight: JQuery = $nav.find( '.overflow-opacity-effect-right' ),
+		    $overflowOpacityLeft: JQuery  = $nav.find( '.overflow-opacity-effect-left' ),
+		    leftMax: number               = $nav ? $nav.get( 0 ).scrollWidth : 0,
+		    left: number                  = $nav ? $nav.get( 0 ).scrollLeft : 0,
 		    diff: number                  = leftMax - left;
-		
+
 		if ( checkEnhanced ) {
-			(<any>$('.enhanced')).select2('close');
+			( <any> $( '.enhanced' ) ).select2( 'close' );
 		}
 
-		if (diff === $nav.outerWidth()) {
+		if ( diff === $nav.outerWidth() ) {
 			$overflowOpacityRight.hide();
 		}
 		else {
 			$overflowOpacityRight.show();
 		}
-		
-		if (left === 0) {
+
+		if ( left === 0 ) {
 			$overflowOpacityLeft.hide();
 		}
 		else {
 			$overflowOpacityLeft.show();
 		}
-		
-		$nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
+
+		$nav.css( 'cursor', $overflowOpacityLeft.is( ':visible' ) || $overflowOpacityRight.is( ':visible' ) ? 'grab' : 'auto' );
 		
 	}
 	
 }
-

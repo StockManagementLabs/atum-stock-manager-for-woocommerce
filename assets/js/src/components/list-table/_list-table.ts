@@ -27,7 +27,7 @@ export default class ListTable {
 	) {
 
 		// Bind events.
-		this.events();
+		this.bindEvents();
 
 		// Add this component to the global scope so can be accessed by other add-ons.
 		if ( ! window.hasOwnProperty( 'atum' ) ) {
@@ -41,7 +41,7 @@ export default class ListTable {
 	/**
 	 * Bind List Table events
 	 */
-	events() {
+	bindEvents() {
 
 		// Bind active class rows.
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );

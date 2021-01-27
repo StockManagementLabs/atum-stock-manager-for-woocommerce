@@ -6971,46 +6971,46 @@ table.atum-list-table .column-groups th.actions, .floatThead-container .column-g
   border-radius: 5px;
 }
 
-.popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+.popover .popover-body > input[type=number], .popover .popover-body > input[type=text], .popover .popover-body > .button {
   display: inline-block;
   vertical-align: middle;
   height: 30px;
 }
 
-.popover .popover-content > input[type=number], .popover .popover-content > input[type=text] {
+.popover .popover-body > input[type=number], .popover .popover-body > input[type=text] {
   width: 73%;
 }
 
-.popover .popover-content > .button {
+.popover .popover-body > .button {
   margin-left: 3px;
 }
 
-.popover .popover-content > .button:disabled {
+.popover .popover-body > .button:disabled {
   color: var(--light) !important;
   opacity: 0.6;
 }
 
 @media all and (max-width: 768px) {
-  .popover .popover-content > input[type=number], .popover .popover-content > input[type=text], .popover .popover-content > .button {
+  .popover .popover-body > input[type=number], .popover .popover-body > input[type=text], .popover .popover-body > .button {
     width: 100%;
   }
-  .popover .popover-content > .button {
+  .popover .popover-body > .button {
     margin-left: 0;
     margin-top: 5px;
   }
 }
 
-.popover.with-meta .popover-content input, .popover.with-meta .popover-content button {
+.popover.with-meta .popover-body input, .popover.with-meta .popover-body button {
   width: 100%;
   margin: 3px 0;
 }
 
-.popover.with-meta .popover-content .btn-link {
+.popover.with-meta .popover-body .btn-link {
   font-size: 10px;
   padding: 0;
 }
 
-.popover.with-meta .popover-content hr {
+.popover.with-meta .popover-body hr {
   border-color: var(--info);
 }
 

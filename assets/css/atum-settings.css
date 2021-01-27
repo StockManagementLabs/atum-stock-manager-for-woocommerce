@@ -511,115 +511,112 @@
   position: absolute;
   z-index: 1000070;
   display: block;
+  margin: 0;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  white-space: normal;
+  line-break: auto;
+  font-size: 0.75rem;
+  word-wrap: break-word;
   opacity: 0;
-  font-size: 12px;
 }
 
-.tooltip.in {
+.tooltip.show {
   opacity: 1;
 }
 
-.tooltip.top {
-  margin-top: -3px;
-  padding: 5px 0;
-}
-
-.tooltip.right {
-  margin-left: 3px;
-  padding: 0 5px;
-}
-
-.tooltip.bottom {
-  margin-top: 3px;
-  padding: 5px 0;
-}
-
-.tooltip.left {
-  margin-left: -3px;
-  padding: 0 5px;
-}
-
-.tooltip-inner {
-  max-width: 200px;
-  padding: 3px 8px;
-  color: #6c757d;
-  text-align: center;
-  background-color: #fff;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
-          box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
-}
-
-.tooltip-arrow {
+.tooltip .tooltip-arrow {
   position: absolute;
-  width: 0;
-  height: 0;
+  display: block;
+  width: 5px;
+  height: 0.4rem;
+}
+
+.tooltip .tooltip-arrow::before {
+  position: absolute;
+  content: "";
   border-color: transparent;
   border-style: solid;
 }
 
-.tooltip.top .tooltip-arrow {
+.bs-tooltip-top, .bs-tooltip-auto[data-popper-placement^="top"] {
+  padding: 0.4rem 0;
+}
+
+.bs-tooltip-top .tooltip-arrow, .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow {
   bottom: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px 5px 0;
+}
+
+.bs-tooltip-top .tooltip-arrow::before, .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+  top: -1px;
+  border-width: 0.4rem 2.5px 0;
   border-top-color: #fff;
 }
 
-.tooltip.top-left .tooltip-arrow {
-  bottom: 0;
-  right: 5px;
-  margin-bottom: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #fff;
+.bs-tooltip-end, .bs-tooltip-auto[data-popper-placement^="right"] {
+  padding: 0 0.4rem;
 }
 
-.tooltip.top-right .tooltip-arrow {
-  bottom: 0;
-  left: 5px;
-  margin-bottom: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #fff;
-}
-
-.tooltip.right .tooltip-arrow {
-  top: 50%;
+.bs-tooltip-end .tooltip-arrow, .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow {
   left: 0;
-  margin-top: -5px;
-  border-width: 5px 5px 5px 0;
+  width: 0.4rem;
+  height: 5px;
+}
+
+.bs-tooltip-end .tooltip-arrow::before, .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
+  right: -1px;
+  border-width: 2.5px 0.4rem 2.5px 0;
   border-right-color: #fff;
 }
 
-.tooltip.left .tooltip-arrow {
-  top: 50%;
+.bs-tooltip-bottom, .bs-tooltip-auto[data-popper-placement^="bottom"] {
+  padding: 0.4rem 0;
+}
+
+.bs-tooltip-bottom .tooltip-arrow, .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow {
+  top: 0;
+}
+
+.bs-tooltip-bottom .tooltip-arrow::before, .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
+  bottom: -1px;
+  border-width: 0 2.5px 0.4rem;
+  border-bottom-color: #fff;
+}
+
+.bs-tooltip-start, .bs-tooltip-auto[data-popper-placement^="left"] {
+  padding: 0 0.4rem;
+}
+
+.bs-tooltip-start .tooltip-arrow, .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow {
   right: 0;
-  margin-top: -5px;
-  border-width: 5px 0 5px 5px;
+  width: 0.4rem;
+  height: 5px;
+}
+
+.bs-tooltip-start .tooltip-arrow::before, .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+  left: -1px;
+  border-width: 2.5px 0 2.5px 0.4rem;
   border-left-color: #fff;
 }
 
-.tooltip.bottom .tooltip-arrow {
-  top: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #fff;
-}
-
-.tooltip.bottom-left .tooltip-arrow {
-  top: 0;
-  right: 5px;
-  margin-top: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #fff;
-}
-
-.tooltip.bottom-right .tooltip-arrow {
-  top: 0;
-  left: 5px;
-  margin-top: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #fff;
+.tooltip-inner {
+  max-width: 200px;
+  padding: 0.25rem 0.5rem;
+  color: #6c757d;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
+          box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
 }
 
 .btn {

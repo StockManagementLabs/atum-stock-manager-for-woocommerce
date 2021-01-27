@@ -143,7 +143,7 @@ $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limi
 
 		<table class="atum-order-totals">
 			<!--<tr>
-				<td class="label"><span class="atum-help-tip atum-tooltip" data-toggle="tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
+				<td class="label"><span class="atum-help-tip atum-tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
 				<td width="1%"></td>
 				<td class="total">
 					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

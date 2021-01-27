@@ -302,14 +302,14 @@ class ListTable extends AtumListTable {
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
 		$table_columns = array(
-			'thumb'                => '<span class="atum-icon atmi-picture tips" data-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '</span>',
+			'thumb'                => '<span class="atum-icon atmi-picture tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                   => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'                => __( 'Product Name', ATUM_TEXT_DOMAIN ),
-			'calc_type'            => '<span class="atum-icon atmi-tag tips" data-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_type'            => '<span class="atum-icon atmi-tag tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_sku'                 => __( 'SKU', ATUM_TEXT_DOMAIN ),
 			'_supplier'            => __( 'Supplier', ATUM_TEXT_DOMAIN ),
 			'_supplier_sku'        => __( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
-			'calc_location'        => '<span class="atum-icon atmi-map-marker tips" data-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_location'        => '<span class="atum-icon atmi-map-marker tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN ) . '</span>',
 			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'          => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'      => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
@@ -330,7 +330,7 @@ class ListTable extends AtumListTable {
 			'calc_will_last'       => __( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ),
 			'_out_stock_days'      => __( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ),
 			'_lost_sales'          => __( 'Lost Sales', ATUM_TEXT_DOMAIN ),
-			'calc_stock_indicator' => '<span class="atum-icon atmi-layers stock-indicator-icon tips" data-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
+			'calc_stock_indicator' => '<span class="atum-icon atmi-layers stock-indicator-icon tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
 		// Hide the purchase price column if the current user has not the capability.

@@ -2,13 +2,13 @@
    TOOLTIP
    ======================================= */
 
-import '../../vendor/bootstrap3-custom.min';  // TODO: USE BOOTSTRAP 4
+import BsTooltip from 'bootstrap/js/dist/tooltip';
 
 export default class Tooltip {
 	
-	constructor(initialize: boolean = true) {
-		
-		if (initialize) {
+	constructor( initialize: boolean = true ) {
+
+		if ( initialize ) {
 			this.addTooltips();
 		}
 		
@@ -17,43 +17,57 @@ export default class Tooltip {
     /**
      * Enable tooltips
      *
-     * @param $wrapper JQuery Optional. The wrapper where the elements with tooltips are contained,
+     * @param {JQuery} $wrapper Optional. The wrapper where the elements with tooltips are contained,
      */
-	addTooltips($wrapper?: JQuery) {
-		
-		if (!$wrapper) {
-			$wrapper = $('body');
-		}
-		
-		$wrapper.find('.tips, .atum-tooltip').each( (index: number, elem: Element) => {
-			
-			const $tipEl: any = $(elem),
-			      title: string = $tipEl.data('tip') || $tipEl.attr('title');
+    addTooltips( $wrapper?: JQuery ) {
 
-			if (title) {
-                $tipEl.tooltip({
-                    html     : true,
-                    title    : $tipEl.data('tip') || $tipEl.attr('title'),
-                    container: 'body',
-                });
+	    if ( ! $wrapper ) {
+		    $wrapper = $( 'body' );
+	    }
 
-            }
-		});
-		
-	}
+	    $wrapper.find( '.tips, .atum-tooltip' ).each( ( index: number, elem: Element ) => {
+
+		    const $tipEl: any   = $( elem ),
+		          title: string = $tipEl.data( 'tip' ) || $tipEl.attr( 'title' );
+
+		    if ( title ) {
+
+			    new BsTooltip( $tipEl.get( 0 ), {
+				    html     : true,
+				    title    : title,
+				    container: 'body',
+			    } );
+
+		    }
+
+	    } );
+
+    }
 
     /**
      * Destroy all the tooltips
      *
-     * @param $wrapper JQuery Optional. The wrapper where the elements with tooltips are contained
+     * @param {JQuery} $wrapper Optional. The wrapper where the elements with tooltips are contained
      */
-    destroyTooltips($wrapper?: JQuery) {
+    destroyTooltips( $wrapper?: JQuery ) {
 
-        if (!$wrapper) {
-            $wrapper = $('body');
-        }
+	    if ( ! $wrapper ) {
+		    $wrapper = $( 'body' );
+	    }
 
-        (<any>$wrapper.find('.tips, .atum-tooltip')).tooltip('destroy');
+	    $wrapper.find( '.tips, .atum-tooltip' ).each( ( index: number, elem: Element ) => {
+
+	    	const $elem: JQuery = $( elem );
+
+		    if ( typeof $elem.attr( 'aria-describedby' ) !== 'undefined' ) {
+			    const tooltip: BsTooltip = BsTooltip.getInstance( $elem.get( 0 ) );
+
+			    if ( tooltip ) {
+				    tooltip.dispose();
+			    }
+		    }
+
+	    } );
 
     }
 	

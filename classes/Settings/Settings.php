@@ -1043,7 +1043,7 @@ class Settings {
 					$default_attr
 				);
 				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
-				$output .= ' <span class="atum-help-tip tips" data-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				$output .= ' <span class="atum-help-tip tips" data-bs-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
 				$output .= '</div>';
 			}
 
