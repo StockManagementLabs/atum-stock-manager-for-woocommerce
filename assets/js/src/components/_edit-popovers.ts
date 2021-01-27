@@ -4,11 +4,11 @@
 
 import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
-import EnhancedSelect from './_enhanced-select';
-import Settings from '../config/_settings';
 import ButtonGroup from './_button-group';
-import Utils from '../utils/_utils';
+import EnhancedSelect from './_enhanced-select';
 import PopoverBase from '../abstracts/_popover-base';
+import Settings from '../config/_settings';
+import Utils from '../utils/_utils';
 
 export default class EditPopovers extends PopoverBase{
 
@@ -33,7 +33,8 @@ export default class EditPopovers extends PopoverBase{
 		
 		$editButtons.each( ( index: number, elem: Element ) => {
 
-			const $editButton: JQuery = $( elem );
+			const $editButton: JQuery   = $( elem ),
+			      $fieldWrapper: JQuery = this.getEditFieldWrapper( $editButton );
 
 			// NOTE: the template should be a button's sibling to avoid unexpected issues with possible duplicated IDs.
 		    let content: string = $editButton.parent().find( `#${ $editButton.data( 'content-id' ) }` ).html();
@@ -48,15 +49,15 @@ export default class EditPopovers extends PopoverBase{
 				customClass: this.popoverClassName,
 				placement  : $editButton.data( 'bs-placement' ) || 'bottom',
 				trigger    : 'click',
-				container  : 'body',
+				container  : $fieldWrapper,
 			} );
-			
+
 			// Prepare the popover's fields when shown.
 			$editButton.on( 'inserted.bs.popover', () => {
 
-				const $activePopover: JQuery = $( '.popover.show' ),
-				      $sourceInput: JQuery   = $editButton.siblings( 'input[type=hidden]' ),
-				      inputData: any         = $sourceInput.data();
+				const $popover: JQuery      = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
+				      $sourceInput: JQuery  = $editButton.siblings( 'input[type=hidden]' ),
+				      inputData: any        = $sourceInput.data();
 
 				let currentValue: string = '';
 
@@ -68,9 +69,9 @@ export default class EditPopovers extends PopoverBase{
 						if ( 'fieldValue' === dataKey ) {
 							currentValue = inputData[ dataKey ];
 						}
-						else if ( $activePopover.find( `[name=${ dataKey }]` ).length ) {
+						else if ( $popover.find( `[name=${ dataKey }]` ).length ) {
 
-							let $targetInput: JQuery = $activePopover.find( `[name=${ dataKey }]` );
+							let $targetInput: JQuery = $popover.find( `[name=${ dataKey }]` );
 
 							// Radio buttons.
 							if ( $targetInput.is( ':radio' ) ) {
@@ -104,35 +105,35 @@ export default class EditPopovers extends PopoverBase{
 						}
 
 					}
-					
+
 				}
 				else {
 					currentValue = $sourceInput.val();
 				}
 
-				$( `#${ $activePopover.attr( 'id' ) } .select2` ).remove();
+				$( `#${ $popover.attr( 'id' ) } .select2` ).remove();
 				this.prepareSelect( $editButton );
 
 				// Prepare the button groups (if any).
-				if ( $activePopover.find('.btn-group').length ) {
-					ButtonGroup.doButtonGroups( $activePopover );
+				if ( $popover.find( '.btn-group' ).length ) {
+					ButtonGroup.doButtonGroups( $popover );
 				}
-				
-				if ( $activePopover.find( 'select[multiple]' ).length ) {
-					
+
+				if ( $popover.find( 'select[multiple]' ).length ) {
+
 					if ( currentValue ) {
-						$activePopover.find( 'select' ).val( currentValue.split( ',' ) ).change();
+						$popover.find( 'select' ).val( currentValue.split( ',' ) ).change();
 					}
-					
+
 				}
 				else {
-					$activePopover.find( '.meta-value' ).val( currentValue ).change();
+					$popover.find( '.meta-value' ).val( currentValue ).change();
 				}
-				
-				$activePopover.find( '.meta-value' ).focus().select();
-				
+
+				$popover.find( '.meta-value' ).focus().select();
+
 			} );
-			
+
 		} );
 		
 	}
@@ -147,12 +148,10 @@ export default class EditPopovers extends PopoverBase{
 			// Set the field data when clicking the "Set" button.
 			.on( 'click', `.popover.${ this.popoverClassName } .set`, ( evt: JQueryEventObject ) => {
 
-				console.log('clicking popover button');
-
 				const $setButton: JQuery      = $( evt.currentTarget ),
 				      popoverId: string       = $setButton.closest( '.popover' ).attr( 'id' ),
 				      $editField: JQuery      = $( `[aria-describedby="${ popoverId }"]` ),
-				      $fieldWrapper: JQuery   = $editField.parent(),
+				      $fieldWrapper: JQuery   = this.getEditFieldWrapper( $editField ),
 				      $popoverWrapper: JQuery = $setButton.closest( '.popover-body' ),
 				      $setMetaInput: JQuery   = $popoverWrapper.find( '.meta-value' ),
 				      newValue: any           = $setMetaInput.val();
@@ -217,7 +216,6 @@ export default class EditPopovers extends PopoverBase{
 			.on( 'keyup', '.popover', ( evt: JQueryEventObject ) => {
 
 				const $popover: JQuery = $( evt.currentTarget );
-				console.log('keyup popover');
 
 				// Enter key.
 				if ( evt.keyCode === 13 ) {
@@ -234,28 +232,30 @@ export default class EditPopovers extends PopoverBase{
 		// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
 		$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
 
-			console.log('clicking wpcontent body on editPopover');
-
 			const $target: JQuery = $( evt.target );
-			let $editButton: JQuery = $( '.atum-edit-field' );
 
-			// If we are clicking on a editable cell, get the other opened popovers, if not, get them all.
-			if ( $target.hasClass( 'atum-edit-field' ) ) {
-				$editButton = $editButton.not( $target );
-			}
-			else if ( $target.closest( '.atum-edit-field' ).length ) {
-				$editButton = $editButton.not( $target.closest( '.atum-edit-field' ) );
-			}
-
-			if ( ! $editButton.length ) {
+			if ( $target.hasClass( 'atum-edit-field' ) || $target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length ) {
 				return;
 			}
 
 			// Hide all the opened popovers.
-			this.hidePopover( $editButton );
+			$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
+				super.hidePopover( $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` ) );
+			} );
 
 		} );
 
+	}
+
+	/**
+	 * Get the edit field wrapper
+	 *
+	 * @param {JQuery} $editField
+	 *
+	 * @return {JQuery}
+	 */
+	getEditFieldWrapper( $editField: JQuery ) {
+		return  $editField.parent().hasClass( 'atum-tooltip' ) ?  $editField.parent().parent() : $editField.parent();
 	}
 	
 	/**
@@ -266,6 +266,7 @@ export default class EditPopovers extends PopoverBase{
 	 */
 	destroyPopover( $editButton: JQuery ) {
 
+		console.log('destroying poopover');
 		super.destroyPopover( $editButton, () => {
 
 			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
@@ -284,7 +285,7 @@ export default class EditPopovers extends PopoverBase{
 		
 		if ( this.enhancedSelect ) {
 
-			$( `.popover.${ this.popoverClassName } select` ).each( ( index: number, elem: Element ) => {
+			$( `#${ $editButton.attr( 'aria-describedby' ) } select` ).each( ( index: number, elem: Element ) => {
 
 				const $select: JQuery    = $( elem ),
 				      selectOptions: any = {

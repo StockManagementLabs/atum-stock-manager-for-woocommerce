@@ -177,12 +177,16 @@
 .popover-body {
 	padding: $popover-body-padding-y $popover-body-padding-x;
 	color: $popover-body-color;
+	flex-wrap: wrap;
 	
 	&, .edit-popover-content {
 		display: flex;
 		align-items: center;
-		flex-wrap: wrap;
 		justify-content: space-between;
+	}
+	
+	.edit-popover-content {
+		flex-wrap: nowrap;
 	}
 	
 	button {

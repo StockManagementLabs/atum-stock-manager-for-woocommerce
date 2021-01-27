@@ -3540,6 +3540,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 .popover-body {
   padding: 1rem 1rem;
   color: #212529;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .popover-body, .popover-body .edit-popover-content {
@@ -3549,11 +3551,14 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.popover-body .edit-popover-content {
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
 }
 
 .popover-body button {

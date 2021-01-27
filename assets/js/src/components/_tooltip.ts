@@ -27,15 +27,27 @@ export default class Tooltip {
 
 	    $wrapper.find( '.tips, .atum-tooltip' ).each( ( index: number, elem: Element ) => {
 
-		    const $tipEl: any   = $( elem ),
-		          title: string = $tipEl.data( 'tip' ) || $tipEl.attr( 'title' );
+		    const $tipEl: JQuery = $( elem ),
+		          title: string  = $tipEl.data( 'tip' ) || $tipEl.attr( 'title' );
 
 		    if ( title ) {
+
+		    	// Do not add the tooltip twice.
+			    const tooltipInstance: BsTooltip = BsTooltip.getInstance( $tipEl.get( 0 ) );
+
+			    if ( tooltipInstance ) {
+			    	return;
+			    }
 
 			    new BsTooltip( $tipEl.get( 0 ), {
 				    html     : true,
 				    title    : title,
 				    container: 'body',
+				    trigger  : 'hover',
+				    delay: {
+				    	show: 100,
+					    hide: 200
+				    }, // The delay fixes an issue with tooltips breaking on some cases.
 			    } );
 
 		    }
