@@ -3827,6 +3827,10 @@ ul.easytree-container ul li, ul.easytree-container ul li a {
   color: var(--dark);
 }
 
+ul.easytree-container ul li .stock-negative, ul.easytree-container ul li .stock-negative a {
+  color: var(--danger);
+}
+
 ul.easytree-container ul li.easytree-lastsib {
   background-image: none;
 }
