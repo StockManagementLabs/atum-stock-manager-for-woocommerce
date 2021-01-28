@@ -99,5 +99,15 @@ export default class StickyColumns {
 		}
 		
 	}
+
+	/**
+	 * Destroy and create sticky columns
+	 */
+	refreshStickyColumns() {
+
+		this.destroyStickyColumns();
+		this.globals.$stickyCols = this.createStickyColumns( this.globals.$atumTable );
+
+	}
 	
 }

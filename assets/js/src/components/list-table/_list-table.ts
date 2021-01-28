@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
+import StickyColumns from './_sticky-columns';
 
 export default class ListTable {
 	
@@ -23,7 +24,8 @@ export default class ListTable {
 		private settings: Settings,
 		private globals: Globals,
 		private toolTip: Tooltip,
-		private enhancedSelect: EnhancedSelect
+		private enhancedSelect: EnhancedSelect,
+		private stickyCols: StickyColumns
 	) {
 
 		// Bind events.
@@ -198,6 +200,11 @@ export default class ListTable {
 				ActiveRow.addActiveClassRow( this.globals.$atumTable );
 				this.removeOverlay();
 				this.calculateCompoundedStocks();
+
+				// Reload stickyColumns if needed.
+				if ( this.globals.enabledStickyColumns ) {
+					this.stickyCols.refreshStickyColumns();
+				}
 
 				// Trigger action after updating.
 				this.wpHooks.doAction( 'atum_listTable_tableUpdated' );

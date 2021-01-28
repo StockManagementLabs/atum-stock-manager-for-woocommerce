@@ -64,9 +64,9 @@ jQuery( ( $ ) => {
 	// Initialize components with dependency injection.
 	let enhancedSelect = new EnhancedSelect();
 	let tooltip = new Tooltip();
-	let listTable = new ListTable( settings, globals, tooltip, enhancedSelect );
-	let router = new Router( settings, globals, listTable );
 	let stickyCols = new StickyColumns( settings, globals );
+	let listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
+	let router = new Router( settings, globals, listTable );
 	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 	let dateTimePicker = new DateTimePicker( settings );
 	let popover = new Popover( settings, dateTimePicker );
