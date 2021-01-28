@@ -194,6 +194,51 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.4`
+
+*2021-01-29*
+
+**Features**
+
+* Added ATUM attachments meta box to products.
+* Allow removing attachments.
+* Added shared styles for the ATUM Modal components.
+* Added RowActions component to List Tables + actions column.
+* Added product name to the actions menu popover.
+* Added default number of decimals for ATUM prices in backend.
+* Allow adding row actions to uncontrolled SC list table.
+* Add the "no actions" message when there are no actions available for a specific item.
+
+**Changes**
+
+* Updated PHPCS rules.
+* Refactoring.
+* Allow up to 8 decimals in stock.
+* Add needed classes to get_atum_product function definition.
+* Removed tooltip overflow behaviour bacause is not being used.
+* Moved date-field CSS to datetimepicker stylesheet.
+* Hide settings' color fields from different visual modes.
+* Mark products with negative stock within the BOM trees in red.
+* Upgraded popovers and tooltips to Bootstrap 5.
+* Removed bootstrap's button.js dependency.
+* Refresh sticky columns on table update.
+
+**Fixes**
+
+* Allow entering values lower than 1 when enabling decimals for the stock quantity.
+* Fixed POs not being added/discounted to/from stock when using POs list bulk actions or buttons.
+* Fixed dismiss button on ATUM admin notices not being saved.
+* Fixed translation sales not included in calculated properties.
+* Fixed ATUM bootstraping error notices not being shown.
+* Prevent multiple persistent ATUM admin notices for the same message from being shown.
+* Prevent scientific notation in Purchase Price.
+* Update sales props when saving an Atum Order.
+* Prevent non numeric notices for Purchase Prices.
+* Fixed button groups behaviour and colors.
+* CSS fixes.
+
+---
+
 `1.8.3`
 
 *2021-01-05*
