@@ -12,7 +12,7 @@
 	@include reset-text();
 	@include font-size($popover-font-size);
 	word-wrap: break-word;
-	background-color: var(--atum-table-bg);
+	background-color: $popover-bg;
 	background-clip: padding-box;
 	border: 1px solid var(--atum-text-color-var1);
 	border-radius: $popover-border-radius;
@@ -52,7 +52,7 @@
 		&::after {
 			bottom: $popover-border-width;
 			border-width: $popover-arrow-height ($popover-arrow-width / 2) 0;
-			border-top-color: var(--atum-table-bg);
+			border-top-color: $popover-arrow-color;
 		}
 	}
 }
@@ -76,7 +76,7 @@
 		&::after {
 			left: $popover-border-width;
 			border-width: ($popover-arrow-width / 2) $popover-arrow-height ($popover-arrow-width / 2) 0;
-			border-right-color: var(--atum-table-bg);
+			border-right-color: $popover-arrow-color;
 		}
 	}
 }
@@ -97,7 +97,7 @@
 		&::after {
 			top: $popover-border-width;
 			border-width: 0 ($popover-arrow-width / 2) $popover-arrow-height ($popover-arrow-width / 2);
-			border-bottom-color: var(--atum-table-bg);
+			border-bottom-color: $popover-arrow-color;
 		}
 	}
 	

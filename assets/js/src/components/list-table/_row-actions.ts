@@ -36,11 +36,12 @@ export default class RowActions {
 
 		this.globals.$atumList.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
 
-			const $button: JQuery = $( elem );
+			const $button: JQuery    = $( elem ),
+			      $titleCell: JQuery = $button.closest( 'tr' ).find( 'td.column-title' );
 
 			// NOTE: we assume that the rowActions comes with the right format (following the MenuItem interface format).
 			const actionsMenu: Menu = {
-				title: $button.closest( 'tr' ).find( 'td.column-title' ).text().replace( '↵', '' ).trim(),
+				title: ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim(),
 				items: this.rowActions,
 			};
 

@@ -13,6 +13,7 @@
 			color: $blue-dark;
 			line-height: 1;
 			background-color: $gray-200;
+			max-width: 150px;
 			@include text-overflow;
 		}
 		

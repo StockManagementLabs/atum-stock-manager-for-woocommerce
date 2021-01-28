@@ -3513,7 +3513,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 .bs-popover-start > .popover-arrow::after, .bs-popover-auto[data-popper-placement^="left"] > .popover-arrow::after {
   right: 1px;
   border-width: 0.5rem 0 0.5rem 0.5rem;
-  border-left-color: #f8f9fa;
+  border-left-color: var(--atum-table-bg);
 }
 
 .popover-header {
@@ -5883,6 +5883,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   color: #27283B;
   line-height: 1;
   background-color: #e9ecef;
+  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

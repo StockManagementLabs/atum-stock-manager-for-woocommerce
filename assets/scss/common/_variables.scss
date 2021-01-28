@@ -475,7 +475,7 @@ $tooltip-arrow-height:                  .4rem !default;
 
 // Popovers
 
-$popover-bg:                            $white !default;
+$popover-bg:                            var(--atum-table-bg) !default;
 $popover-max-width:                     276px !default;
 $popover-border-color:                  rgba($black, .2) !default;
 $popover-border-width:                  $border-width !default;
@@ -494,7 +494,7 @@ $popover-body-padding-x:                $spacer !default;
 
 $popover-arrow-width:                   1rem !default;
 $popover-arrow-height:                  .5rem !default;
-$popover-arrow-color:                   $popover-header-bg !default;
+$popover-arrow-color:                   var(--atum-table-bg) !default;
 
 $popover-arrow-outer-width:             ($popover-arrow-width + 1) !default;
 $popover-arrow-outer-color:             var(--atum-text-color-var1) !default;
