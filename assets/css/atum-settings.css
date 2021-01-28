@@ -5294,11 +5294,8 @@ h2 .atum-help-tip {
   color: var(--white);
 }
 
-.atum-settings-wrapper #atum-settings .btn-secondary:hover, .atum-settings-wrapper #atum-settings .btn-secondary:active {
-  background-color: var(--tertiary-var);
-  -webkit-box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
-          box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
-  color: var(--atum-table-bg);
+.atum-settings-wrapper #atum-settings .btn-secondary:hover:not(.active), .atum-settings-wrapper #atum-settings .btn-secondary:active:not(.active) {
+  background-color: var(--gray-600);
 }
 
 .atum-settings-wrapper #atum-settings .active {

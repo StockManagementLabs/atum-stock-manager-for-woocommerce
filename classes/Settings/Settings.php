@@ -1080,7 +1080,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" data-toggle="buttons" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 
 				<?php

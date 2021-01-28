@@ -5,21 +5,52 @@
 
 const ButtonGroup = {
 
+	/**
+	 * Bind the button groups
+	 *
+	 * @param {JQuery} $container
+	 */
 	doButtonGroups( $container: JQuery ) {
 
-		// Force change event triggering on Bootstrap radio buttons (for some reason are not being triggered anymore).
 		$container.on( 'click', '.btn-group .btn', ( evt: JQueryEventObject ) => {
 
 			const $button: JQuery = $( evt.currentTarget );
 
-			$button.siblings( '.active' ).removeClass( 'active' );
-			$button.addClass( 'active' );
+			// Checkboxes.
+			if ( $button.find( ':checkbox' ).length ) {
+				$button.toggleClass( 'active' );
+				console.log('togglingClass');
+			}
+			// Radio buttons.
+			else {
+				$button.siblings( '.active' ).removeClass( 'active' );
+				$button.addClass( 'active' );
+			}
 
+			this.updateChecked( $button.closest( '.btn-group' ) );
 			$button.find( 'input' ).change();
+
+			return false; // This avoids from running this twice.
 
 		} );
 
 	},
+
+	/**
+	 * Update the checked statuses
+	 *
+	 * @param {JQuery} $buttonGroup
+	 */
+	updateChecked( $buttonGroup: JQuery ) {
+
+		$buttonGroup.find( '.btn' ).each( ( index: number, elem: Element ) => {
+
+			const $button: JQuery = $( elem );
+			$button.find( 'input' ).prop( 'checked', $button.hasClass( 'active' ) );
+
+		} );
+
+	}
 
 }
 

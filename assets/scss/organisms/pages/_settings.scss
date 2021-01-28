@@ -436,9 +436,9 @@
 			color: var(--white);
 			
 			&:hover, &:active {
-				background-color: var(--tertiary-var);
-				box-shadow: inset -1px 1px 5px 0 var(--black-shadow);
-				color: var(--atum-table-bg);
+				&:not(.active) {
+					background-color: var(--gray-600);
+				}
 			}
 		}
 		
