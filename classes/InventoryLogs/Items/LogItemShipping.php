@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Items
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2020 Stock Management Labs™
+ * @copyright       ©2021 Stock Management Labs™
  *
  * @since           1.2.4
  */

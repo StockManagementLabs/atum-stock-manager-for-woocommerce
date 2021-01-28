@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Components
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2020 Stock Management Labs™
+ * @copyright       ©2021 Stock Management Labs™
  *
  * @since           1.4.0
  */
