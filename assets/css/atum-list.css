@@ -5892,6 +5892,10 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   padding: 0;
 }
 
+.popover.menu-popover .popover-body > div {
+  width: 100%;
+}
+
 .popover.menu-popover ul {
   margin-top: 6px;
   margin-bottom: 0;
