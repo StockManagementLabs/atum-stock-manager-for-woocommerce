@@ -40,7 +40,6 @@ export default abstract class PopoverBase {
 
 				if ( popover ) {
 					popover.dispose();
-					console.log('destroying popover', this.popoverClassName);
 
 					if ( callback ) {
 						callback();
@@ -78,7 +77,6 @@ export default abstract class PopoverBase {
 
 			if ( popover ) {
 				popover.hide();
-				console.log('hiding popover', this.popoverClassName);
 			}
 
 		}
