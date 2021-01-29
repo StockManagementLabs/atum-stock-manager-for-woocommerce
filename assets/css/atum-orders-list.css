@@ -8160,6 +8160,14 @@ table.atum-list-table tr.expandable .set-meta, table.atum-list-table tr.expandab
   color: var(--primary-var-dark) !important;
 }
 
+table.atum-list-table tr.expandable .popover a, .floatThead-container tr.expandable .popover a, .inbound-stock-list tr.expandable .popover a, table.wp-list-table tr.expandable .popover a {
+  color: #6c757d !important;
+}
+
+table.atum-list-table tr.expandable .popover a:hover, .floatThead-container tr.expandable .popover a:hover, .inbound-stock-list tr.expandable .popover a:hover, table.wp-list-table tr.expandable .popover a:hover {
+  color: var(--primary-var-dark) !important;
+}
+
 table.atum-list-table tr.even, .floatThead-container tr.even, .inbound-stock-list tr.even, table.wp-list-table tr.even {
   background-color: var(--atum-table-bg2);
 }

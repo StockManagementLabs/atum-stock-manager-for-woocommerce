@@ -1970,6 +1970,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			.set-meta, a {
 				color: var(--primary-var-dark) !important;
 			}
+			
+			.popover {
+				a {
+					color: $gray-600 !important;
+					
+					&:hover {
+						color: var(--primary-var-dark) !important;
+					}
+				}
+			}
 		}
 		
 		&.even {
