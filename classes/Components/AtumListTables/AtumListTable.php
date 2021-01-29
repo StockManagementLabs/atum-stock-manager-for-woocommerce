@@ -571,12 +571,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->parent_type = '';
 		}
 
-		$row_class = ' class="main-row ' . implode( ' ', $row_classes ) . '"';
+		$row_classes = apply_filters( 'atum/list_table/single_row_classes', $row_classes, $item, $this );
+		$row_class   = ' class="main-row ' . implode( ' ', $row_classes ) . '"';
+		$row_data    = apply_filters( 'atum/list_table/single_row_data', ' data-id="' . $this->get_current_product_id() . '"', $item, $this );
 
 		do_action( 'atum/list_table/before_single_row', $item, $this );
 
+
 		// Output the row.
-		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<tr' . $row_data . $row_class . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
