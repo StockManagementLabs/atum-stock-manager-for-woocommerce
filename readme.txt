@@ -283,6 +283,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Prevent non numeric notices for Purchase Prices.
 * Fixed button groups behaviour and colors.
 * CSS fixes.
+* Prevent HTML tags in atum_json_search_products.
 
 ---
 
