@@ -1,35 +1,35 @@
 {
 	"background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "contain",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
+		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
 		"bg_position"     : "bottom",
 		"bg_size"         : "cover",
 		"bg_repeat"       : "no-repeat",
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2021/01/4th-anniversary.svg",
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/multi-inventory_icon.svg",
 		"top_left": ""
 	},
 	"title": {
-		"text"      : "<strong>4 YEARS YOUNG</strong>",
+		"text"      : "Multi-<strong>Inventory</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "🎂",
+		"text"      : "v1.4.7",
 		"text_color": "#FFF",
-		"background": "#f95e90"
+		"background": "#69c61d"
 	},
 	"description": {
-		"text"           : "Celebrate <strong>4th Anniversary</strong> of ATUM's first ever release with Us!!!<br>Save 25% on our youngest premium add-on, the <strong>Action Logs</strong>.<br>Keep track of any WooCommerce or ATUM changes!<br><br>Use coupon code <strong style='color:black'>4YEARSOFATUM</strong> when checking out.",
+		"text"           : "NEW FEATURE!! Create new inventories easily from Stock Central and Manufacturing Central.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -38,11 +38,17 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Purchase Now!",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-action-logs/",
-			"class"     : "btn btn-sm btn-danger",
-			"css"       : "width:270px;background-color:#f95e90"
+			"text"      : "Purchase Now",
+			"url"       : "https://www.stockmanagementlabs.com/addons/atum-multi-inventory/",
+			"class"     : "btn btn-sm btn-success",
+			"css"       : "width:160px;"
+		},
+		{
+			"text"      : "More info",
+			"url"       : "https://forum.stockmanagementlabs.com/d/2445-adding-inventories-from-stock-central-and-manufacturing-central",
+			"class"     : "btn btn-sm btn-outline-success",
+			"css"       : "width:160px;"
 		}
 	],
-	"transient_key": "4th-anniversary-sale"
+	"transient_key": "add-inventory-from-sc"
 }
