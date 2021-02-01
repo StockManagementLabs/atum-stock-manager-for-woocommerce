@@ -1151,6 +1151,105 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Column for regular price
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 *
+	 * @return string
+	 */
+	protected function column__regular_price( $item ) {
+
+		$regular_price = self::EMPTY_COL;
+
+		if ( $this->allow_calcs ) {
+
+			$regular_price_value = $this->product->get_regular_price();
+			$regular_price_value = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
+				'trim_zeros' => TRUE,
+				'currency'   => self::$default_currency,
+			] ) : $regular_price;
+
+			$args = apply_filters( 'atum/list_table/args_regular_price', array(
+				'meta_key'  => 'regular_price',
+				'value'     => $regular_price_value,
+				'symbol'    => get_woocommerce_currency_symbol(),
+				'currency'  => self::$default_currency,
+				'tooltip'   => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'cell_name' => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
+			), $this->product );
+
+			$regular_price = self::get_editable_column( $args );
+
+		}
+
+		return apply_filters( 'atum/list_table/column_regular_price', $regular_price, $item, $this->product );
+
+	}
+
+	/**
+	 * Column for sale price
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 *
+	 * @return string
+	 */
+	protected function column__sale_price( $item ) {
+
+		$sale_price = self::EMPTY_COL;
+
+		if ( $this->allow_calcs ) {
+
+			$sale_price_value = $this->product->get_sale_price();
+			$sale_price_value = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
+				'trim_zeros' => TRUE,
+				'currency'   => self::$default_currency,
+			] ) : $sale_price;
+
+			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
+			$date_on_sale_to   = $this->product->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
+
+			$args = apply_filters( 'atum/list_table/args_sale_price', array(
+				'meta_key'   => 'sale_price',
+				'value'      => $sale_price_value,
+				'symbol'     => get_woocommerce_currency_symbol(),
+				'currency'   => self::$default_currency,
+				'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
+				'extra_meta' => array(
+					array(
+						'name'        => '_sale_price_dates_from',
+						'type'        => 'text',
+						'placeholder' => esc_attr_x( 'Sale date from...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
+						'value'       => $date_on_sale_from,
+						'maxlength'   => 10,
+						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+						'class'       => 'bs-datepicker from',
+					),
+					array(
+						'name'        => '_sale_price_dates_to',
+						'type'        => 'text',
+						'placeholder' => esc_attr_x( 'Sale date to...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
+						'value'       => $date_on_sale_to,
+						'maxlength'   => 10,
+						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+						'class'       => 'bs-datepicker to',
+					),
+				),
+			), $this->product );
+
+			$sale_price = self::get_editable_column( $args );
+
+		}
+
+		return apply_filters( 'atum/list_table/column_sale_price', $sale_price, $item, $this->product );
+
+	}
+
+	/**
 	 * Column for purchase price
 	 *
 	 * @since 1.2.0
@@ -1198,7 +1297,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
-	 * @return float
+	 * @return string
 	 */
 	protected function column_calc_gross_profit( $item ) {
 
