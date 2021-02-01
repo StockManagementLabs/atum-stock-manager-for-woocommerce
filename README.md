@@ -194,6 +194,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.4.1`
+
+*2021-02-01*
+
+**Fixes**
+
+* Fixed error when the object passed to the WC attachment filter wasn't an order.
+
+---
+
 `1.8.4`
 
 *2021-01-29*

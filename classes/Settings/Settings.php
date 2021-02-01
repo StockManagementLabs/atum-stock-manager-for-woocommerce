@@ -310,6 +310,20 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
+			'gross_profit'              => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Gross Profit', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose how to show up the gross profit column values in List Tables by default (the other value will show up on a tooltip when hovering each value).', ATUM_TEXT_DOMAIN ),
+				'type'    => 'button_group',
+				'default' => 'percentage',
+				'options' => array(
+					'values' => array(
+						'percentage' => __( 'Percentage', ATUM_TEXT_DOMAIN ),
+						'monetary'   => __( 'Monetary Value', ATUM_TEXT_DOMAIN ),
+					),
+				),
+			),
 			'enable_admin_bar_menu'     => array(
 				'group'   => 'general',
 				'section' => 'general',

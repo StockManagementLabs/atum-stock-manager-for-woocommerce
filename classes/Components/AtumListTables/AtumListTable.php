@@ -571,12 +571,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->parent_type = '';
 		}
 
-		$row_class = ' class="main-row ' . implode( ' ', $row_classes ) . '"';
+		$row_classes = apply_filters( 'atum/list_table/single_row_classes', $row_classes, $item, $this );
+		$row_class   = ' class="main-row ' . implode( ' ', $row_classes ) . '"';
+		$row_data    = apply_filters( 'atum/list_table/single_row_data', ' data-id="' . $this->get_current_product_id() . '"', $item, $this );
 
 		do_action( 'atum/list_table/before_single_row', $item, $this );
 
 		// Output the row.
-		echo '<tr data-id="' . $this->get_current_product_id() . '"' . $row_class . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<tr' . $row_data . $row_class . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -1186,6 +1188,46 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return apply_filters( 'atum/list_table/column_purchase_price', $purchase_price, $item, $this->product, $this );
+
+	}
+
+	/**
+	 * Column for gross profit
+	 *
+	 * @since 1.8.5
+	 *
+	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 *
+	 * @return float
+	 */
+	protected function column_calc_gross_profit( $item ) {
+
+		$gross_profit = self::EMPTY_COL;
+
+		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
+			return $gross_profit;
+		}
+
+		if ( $this->allow_calcs ) {
+
+			$purchase_price = (float) $this->product->get_purchase_price();
+			$regular_price  = (float) $this->product->get_regular_price();
+
+			if ( $purchase_price > 0 && $regular_price > 0 ) {
+				$gross_profit_value      = wp_strip_all_tags( wc_price( $regular_price - $purchase_price ) );
+				$gross_profit_percentage = wc_round_discount( ( 100 - ( ( $purchase_price * 100 ) / $regular_price ) ), 2 );
+
+				if ( 'percentage' === Helpers::get_option( 'gross_profit', 'percentage' ) ) {
+					$gross_profit = '<span class="tips" data-tip="' . $gross_profit_value . '">' . $gross_profit_percentage . '%</span>';
+				}
+				else {
+					$gross_profit = '<span class="tips" data-tip="' . $gross_profit_percentage . '%">' . $gross_profit_value . '</span>';
+				}
+			}
+
+		}
+
+		return apply_filters( 'atum/list_table/column_gross_profit', $gross_profit, $item, $this->product, $this );
 
 	}
 
@@ -3949,7 +3991,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 
 				default:
-					$term = "'%" . esc_sql( $wpdb->esc_like( $term ) ) . "%'";
+					$term = "'%%" . esc_sql( $wpdb->esc_like( $term ) ) . "%%'"; // Use double %, so it doesn't conflict with wpdb::prepare.
 					break;
 			}
 

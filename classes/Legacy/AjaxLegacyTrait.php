@@ -199,7 +199,7 @@ trait AjaxLegacyTrait {
 			 *
 			 * @var \WC_Product $product_object
 			 */
-			$products[ $product_object->get_id() ] = rawurldecode( $product_object->get_formatted_name() );
+			$products[ $product_object->get_id() ] = rawurldecode( wp_strip_all_tags( $product_object->get_formatted_name() ) );
 		}
 
 		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $products ) );

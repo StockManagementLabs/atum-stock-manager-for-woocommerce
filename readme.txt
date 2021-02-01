@@ -7,7 +7,7 @@ Tested up to: 5.6.0
 Requires PHP: 5.6
 WC requires at least: 3.1.0
 WC tested up to: 4.9.2
-Stable tag: 1.8.4
+Stable tag: 1.8.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -241,6 +241,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.4.1`
+
+*2021-02-01*
+
+**Fixes**
+
+* Fixed error when the object passed to the WC attachment filter wasn't an order.
+
+---
+
 `1.8.4`
 
 *2021-01-29*
@@ -283,6 +293,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Prevent non numeric notices for Purchase Prices.
 * Fixed button groups behaviour and colors.
 * CSS fixes.
+* Prevent HTML tags in atum_json_search_products.
 
 ---
 
