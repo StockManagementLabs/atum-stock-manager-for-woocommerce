@@ -15,6 +15,7 @@ namespace Atum\DataExport\Reports;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\Lists\ListTable;
 
@@ -443,6 +444,23 @@ class HtmlReport extends ListTable {
 
 		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
+	}
+
+	/**
+	 * Column for product location
+	 *
+	 * @since 1.8.4
+	 *
+	 * @param \WP_Post $item The WooCommerce product post.
+	 *
+	 * @return string
+	 */
+	protected function column_calc_location( $item ) {
+
+		$location_terms = wp_get_post_terms( $this->get_current_product_id(), Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+		$locations_list = ! empty( $location_terms ) ? implode( ', ', $location_terms ) : self::EMPTY_COL;
+
+		return $locations_list;
 	}
 
 	/**
