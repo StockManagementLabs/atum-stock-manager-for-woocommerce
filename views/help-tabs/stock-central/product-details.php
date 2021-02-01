@@ -58,7 +58,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Gross Profit', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "The gross profit is the difference between the regular price and the purchase price. If it's being represented as percentages and also as monetary values.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( "The gross profit is the difference between the regular price and the purchase price. It's being represented as percentages and also as monetary values. When shown in red, it means that is below the profit margin specified in ATUM Settings.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Weight', ATUM_TEXT_DOMAIN ) ?></strong></td>
