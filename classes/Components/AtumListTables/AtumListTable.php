@@ -1313,14 +1313,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			$regular_price  = (float) $this->product->get_regular_price();
 
 			if ( $purchase_price > 0 && $regular_price > 0 ) {
+
 				$gross_profit_value      = wp_strip_all_tags( wc_price( $regular_price - $purchase_price ) );
 				$gross_profit_percentage = wc_round_discount( ( 100 - ( ( $purchase_price * 100 ) / $regular_price ) ), 2 );
+				$profit_margin           = (float) Helpers::get_option( 'profit_margin', 50 );
+				$profit_margin_class     = $gross_profit_percentage < $profit_margin ? 'cell-red' : 'cell-green';
 
 				if ( 'percentage' === Helpers::get_option( 'gross_profit', 'percentage' ) ) {
-					$gross_profit = '<span class="tips" data-tip="' . $gross_profit_value . '">' . $gross_profit_percentage . '%</span>';
+					$gross_profit = '<span class="tips ' . $profit_margin_class . '" data-tip="' . $gross_profit_value . '">' . $gross_profit_percentage . '%</span>';
 				}
 				else {
-					$gross_profit = '<span class="tips" data-tip="' . $gross_profit_percentage . '%">' . $gross_profit_value . '</span>';
+					$gross_profit = '<span class="tips ' . $profit_margin_class . '" data-tip="' . $gross_profit_percentage . '%">' . $gross_profit_value . '</span>';
 				}
 			}
 
