@@ -57,6 +57,10 @@ defined( 'ABSPATH' ) || die;
 			<td><?php esc_html_e( "You can configure the purchase price of the product. After you click the 'Set' button and 'Save Data', the product purchase price will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
+			<td><strong><?php esc_html_e( 'Gross Profit', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php esc_html_e( "The gross profit is the difference between the regular price and the purchase price. If it's being represented as percentages and also as monetary values.", ATUM_TEXT_DOMAIN ) ?></td>
+		</tr>
+		<tr>
 			<td><strong><?php esc_html_e( 'Weight', ATUM_TEXT_DOMAIN ) ?></strong></td>
 			<td><?php esc_html_e( "You can configure the product weight in this column. After you click the 'Set' button and 'Save Data', the product weight will update automatically in your store.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
