@@ -130,14 +130,18 @@ class FileAttachment {
 	 *
 	 * @param array     $attachments
 	 * @param string    $email_id
-	 * @param \WC_Order $order
+	 * @param object    $object
 	 * @param \WC_Email $email
 	 *
 	 * @return array
 	 */
-	public function attach_files_to_wc_emails( $attachments, $email_id, $order, $email ) {
+	public function attach_files_to_wc_emails( $attachments, $email_id, $object, $email ) {
 
-		$order_items = $order->get_items();
+		if ( ! $object instanceof \WC_Order ) {
+			return $attachments;
+		}
+
+		$order_items = $object->get_items();
 
 		foreach ( $order_items as $order_item ) {
 
