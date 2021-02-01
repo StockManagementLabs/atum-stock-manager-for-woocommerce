@@ -3952,7 +3952,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					break;
 
 				default:
-					$term = "'%" . esc_sql( $wpdb->esc_like( $term ) ) . "%'";
+					$term = "'%%" . esc_sql( $wpdb->esc_like( $term ) ) . "%%'"; // Use double %, so it doesn't conflict with wpdb::prepare.
 					break;
 			}
 
