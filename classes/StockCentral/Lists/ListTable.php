@@ -200,6 +200,7 @@ class ListTable extends AtumListTable {
 					'_regular_price',
 					'_sale_price',
 					'_purchase_price',
+					'calc_gross_profit',
 					'_weight',
 				),
 			),
@@ -236,9 +237,9 @@ class ListTable extends AtumListTable {
 			),
 		) );
 
-		// Hide the purchase price column if the current user has not the capability.
+		// Hide the purchase price and the gross profit columns if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
-			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price' ] );
+			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price', 'calc_gross_profit' ] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
@@ -247,7 +248,7 @@ class ListTable extends AtumListTable {
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price' ] );
+			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_purchase_price', 'calc_gross_profit' ] );
 			$this->group_members['stock-counters']['members']  = array_diff( $this->group_members['stock-counters']['members'], [ '_inbound_stock' ] );
 		}
 
@@ -313,6 +314,7 @@ class ListTable extends AtumListTable {
 			'_regular_price'       => __( 'Regular Price', ATUM_TEXT_DOMAIN ),
 			'_sale_price'          => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price'      => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+			'calc_gross_profit'    => __( 'Gross Profit', ATUM_TEXT_DOMAIN ),
 			'_weight'              => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'_out_stock_threshold' => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
@@ -333,20 +335,19 @@ class ListTable extends AtumListTable {
 			'calc_stock_indicator' => '<span class="atum-icon atmi-layers stock-indicator-icon tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '">' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN ) . '</span>',
 		);
 
-		// Hide the purchase price column if the current user has not the capability.
+		// Hide the purchase price and gross profit columns if the current user has not the capability.
 		if ( ! AtumCapabilities::current_user_can( 'view_purchase_price' ) ) {
-			unset( $table_columns['_purchase_price'] );
+			unset( $table_columns['_purchase_price'], $table_columns['calc_gross_profit'] );
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
-			unset( $table_columns['_supplier'] );
-			unset( $table_columns['_supplier_sku'] );
+			unset( $table_columns['_supplier'], $table_columns['_supplier_sku'] );
 		}
 
+		// Hide the purchase price and gross profit columns if the purchase orders module is disabled.
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
-			unset( $table_columns['_purchase_price'] );
-			unset( $table_columns['_inbound_stock'] );
+			unset( $table_columns['_purchase_price'], $table_columns['_inbound_stock'], $table_columns['calc_gross_profit'] );
 		}
 
 		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
