@@ -324,6 +324,18 @@ class Settings {
 					),
 				),
 			),
+			'profit_margin'             => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Profit Margin', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Your profit margin in percentage. We'll use this value to mark in red all the gross profit values that fall below this margin and in green all the values equal or greater than this margin.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => '50',
+				'options' => array(
+					'min'  => 0,
+					'step' => 1,
+				),
+			),
 			'enable_admin_bar_menu'     => array(
 				'group'   => 'general',
 				'section' => 'general',
