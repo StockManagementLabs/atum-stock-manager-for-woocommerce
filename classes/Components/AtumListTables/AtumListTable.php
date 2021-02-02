@@ -1669,7 +1669,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$actions_button = '<i class="show-actions atum-icon atmi-options" data-bs-placement="left"></i>';
 
-		return apply_filters( 'atum/list_table/column_calc_actions', $actions_button, $item, $this->product, $this );
+		return apply_filters( 'atum/list_table/column_actions', $actions_button, $item, $this->product, $this );
 
 	}
 
