@@ -44,7 +44,7 @@ export default class LocationsTree {
 		
 		this.$button        = $button;
 		this.productId      = $row.data('id');
-		this.productTitle   = $row.find('.column-title').find('.atum-title-small').length ? $row.find('.column-title').find('.atum-title-small').text() : $row.find('.column-title').text();
+		this.productTitle   = $row.find('.column-title').find('.atum-title-small').length ? $row.find('.column-title').find('.atum-title-small').text().trim() : $row.find('.column-title').text().trim();
 		this.toSetLocations = [];
 		this.locationsSet   = [];
 		

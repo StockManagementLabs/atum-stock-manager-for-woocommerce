@@ -340,7 +340,7 @@ export default class ListTable {
 		    symbol: string   = $metaCell.data( 'symbol' ) || '',
 		    custom: string   = $metaCell.data( 'custom' ) || 'no',
 		    currency: string = $metaCell.data( 'currency' ) || '',
-		    value: any       = symbol ? $metaCell.text().replace( symbol, '' ) : $metaCell.text(),
+		    value: any       = symbol ? $metaCell.text().replace( symbol, '' ) : $metaCell.text().trim(),
 		    newValue: any    = $popover.find( '.meta-value' ).val();
 
 		// Update the cell value.
@@ -654,7 +654,7 @@ export default class ListTable {
 			while ( $nextRow.length ) {
 
 				const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
-				      stockValue = ! $stockCell.length ? '0' : $stockCell.text();
+				      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
 
 				compoundedAmt += parseFloat( stockValue ) || 0;
 				$nextRow = $nextRow.next( '.has-compounded' );

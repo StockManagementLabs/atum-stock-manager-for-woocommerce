@@ -61,7 +61,7 @@ export default class Router {
 					const $selectedSearchColumn: JQuery = this.globals.$searchColumnDropdown.find( '.dropdown-item' ).filter( ( index: number, elem: Element ) => {
 						return $( elem ).data( 'value' ) === searchColumn;
 					} ).addClass( 'active' );
-					this.globals.$searchColumnBtn.attr( 'data-original-title', $selectedSearchColumn.text() ).text( $selectedSearchColumn.text() );
+					this.globals.$searchColumnBtn.attr( 'data-original-title', $selectedSearchColumn.text().trim() ).text( $selectedSearchColumn.text().trim() );
 
 					// Update the Screen Options' checkboxes.
 					$( '#adv-settings :checkbox' ).each( ( index: number, elem: Element ) => {
@@ -70,7 +70,7 @@ export default class Router {
 
 						// Calc values are not searchable, also we can't search on thumb.
 						if ( optionVal.search( 'calc_' ) < 0 && optionVal !== 'thumb' && optionVal == searchColumn ) {
-							this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, $( elem ).parent().text() ] );
+							this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, $( elem ).parent().text().trim() ] );
 							return false;
 						}
 
