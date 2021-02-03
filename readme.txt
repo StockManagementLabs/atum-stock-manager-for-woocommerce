@@ -7,7 +7,7 @@ Tested up to: 5.6.0
 Requires PHP: 5.6
 WC requires at least: 3.1.0
 WC tested up to: 4.9.2
-Stable tag: 1.8.4.1
+Stable tag: 1.8.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,32 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.5`
+
+*2021-02-03*
+
+**Features**
+
+* Added a new column "Gross Profit" to Stock Central.
+* Added new option to ATUM settings to choose how to display the gross profit values.
+* Added help text for gross profit column.
+* Added a profit margin option to ATUM settings.
+* Show in red the gross profit values that are below the profit margin and in green all the rest.
+
+**Changes**
+
+* Refactoring.
+* Hooks name changes.
+
+**Fixes**
+
+* Fixed List Tables searching when using wildcards in SQL queries.
+* Readable location column at stock central export report.
+* Fixed error when some 3rd party plugin use the 'woocommerce_email_attachments' filter with 3 parameters.
+* Show the support link on premium add-ons when disabled.
 
 ---
 
