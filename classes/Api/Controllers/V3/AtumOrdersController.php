@@ -538,6 +538,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		if ( ! empty( $data['meta_data'] ) ) {
 
 			foreach ( $data['meta_data'] as $index => $meta ) {
+				$meta = (object) $meta;
 				if ( $item->is_internal_meta( $meta->key ) ) {
 					unset( $data['meta_data'][ $index ] );
 				}
