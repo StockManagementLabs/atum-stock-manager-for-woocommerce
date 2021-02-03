@@ -103,7 +103,7 @@ export default class Popover extends PopoverBase{
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
 		      inputType: string = $metaCell.data( 'input-type' ) || 'number',
-		      value: string     = $metaCell.text(),
+		      value: string     = $metaCell.text().trim(),
 		      inputAtts: any    = {
 			      type : inputType || 'number',
 			      value: value,
