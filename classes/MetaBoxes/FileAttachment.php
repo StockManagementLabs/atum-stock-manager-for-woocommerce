@@ -135,7 +135,7 @@ class FileAttachment {
 	 *
 	 * @return array
 	 */
-	public function attach_files_to_wc_emails( $attachments, $email_id, $object, $email ) {
+	public function attach_files_to_wc_emails( $attachments, $email_id, $object, $email = NULL ) {
 
 		if ( ! $object instanceof \WC_Order ) {
 			return $attachments;

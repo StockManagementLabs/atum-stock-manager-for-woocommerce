@@ -38,11 +38,11 @@ class Addons {
 	private static $addons = array();
 
 	/**
-	 * The list of add-ons installed but not activated for updates
+	 * The list of add-ons installed with no activated licenses
 	 *
 	 * @var array
 	 */
-	private $not_activated_addons = array();
+	private $no_activated_licenses = array();
 
 	/**
 	 * The ATUM's addons store URL
@@ -102,15 +102,15 @@ class Addons {
 					$addon_key = self::get_keys( $installed_addon['name'] );
 
 					if ( empty( $addon_key ) || ! $addon_key['key'] || in_array( $addon_key['status'], [ 'invalid', 'expired' ], TRUE ) ) {
-						$this->not_activated_addons[] = $installed_addon['name'];
+						$this->no_activated_licenses[] = $installed_addon['name'];
 					}
 				}
 
-				if ( ! empty( $this->not_activated_addons ) ) {
+				if ( ! empty( $this->no_activated_licenses ) ) {
 
 					$message = sprintf(
 						/* translators: opening and closing HTML link to the add-ons page  */
-						__( 'Please, activate %1$syour purchased ATUM premium add-ons%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+						__( 'Please, activate %1$syour ATUM premium add-ons licenses%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
 						'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 						'</a>'
 					);
@@ -859,7 +859,8 @@ class Addons {
 	 */
 	public function plugin_row_meta( $links, $file ) {
 
-		if ( in_array( $file, array_filter( wp_list_pluck( self::$addons, 'basename' ) ), TRUE ) ) {
+		if ( strpos( $file, 'atum-' ) === 0 && 'atum-stock-manager-for-woocommerce/atum-stock-manager-for-woocommerce.php' !== $file ) {
+
 			$row_meta = array(
 				'support' => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Open a private ticket', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Premium Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);

@@ -306,7 +306,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Show Totals Row', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'When enabled, ATUM will display new row at the bottom of Stock Central. You will be able to preview page column totals of essential stock counters.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, ATUM will display new row at the bottom of all the List Tables. You will be able to preview page column totals of essential stock counters.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
@@ -322,6 +322,18 @@ class Settings {
 						'percentage' => __( 'Percentage', ATUM_TEXT_DOMAIN ),
 						'monetary'   => __( 'Monetary Value', ATUM_TEXT_DOMAIN ),
 					),
+				),
+			),
+			'profit_margin'             => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Profit Margin', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Your profit margin in percentage. We'll use this value to mark in red all the gross profit values that fall below this margin and in green all the values equal or greater than this margin.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => '50',
+				'options' => array(
+					'min'  => 0,
+					'step' => 1,
 				),
 			),
 			'enable_admin_bar_menu'     => array(
@@ -388,7 +400,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Enter the number of days to calculate the number of sales in that period in one Stock Central column.', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enter the number of days to calculate the number of sales in that period in ATUM List Tables.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => self::DEFAULT_SALE_DAYS,
 				'options' => array(

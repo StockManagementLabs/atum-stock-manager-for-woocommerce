@@ -292,7 +292,7 @@ export default class EditPopovers extends PopoverBase{
 					      minimumResultsForSearch: 20,
 					      placeholder            : {
 						      id  : '-1',
-						      text: $select.find( 'option' ).first().text(),
+						      text: $select.find( 'option' ).first().text().trim(),
 					      },
 				      };
 

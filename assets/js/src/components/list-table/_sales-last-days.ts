@@ -25,7 +25,7 @@ export default class SalesLastDays {
 	setup() {
 
 		let $selectDays: any        = $( '#sales_last_ndays_val' ),
-		    selectDaysText: string  = $selectDays.text(),
+		    selectDaysText: string  = $selectDays.text().trim(),
 		    days: number[]          = Array.apply( null, { length: 31 } ).map( Number.call, Number ), // [0, 1, 2, 3 ... 30]
 		    $selectableDays: JQuery = $( '<select/>' );
 
