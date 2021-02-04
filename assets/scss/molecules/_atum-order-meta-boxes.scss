@@ -467,33 +467,47 @@ div.add_note {
 				
 			}
 			
-			tbody tr {
+			tbody {
 				
-				td {
-					cursor: pointer;
-				}
-				
-				&.selected {
-					background: $wp-pink-light;
+				tr {
 					
 					td {
-						border-color: $wp-pink;
-						opacity: 0.8;
+						cursor: pointer;
+					}
+					
+					&.selected {
+						background: $wp-pink-light;
+						
+						td {
+							border-color: $wp-pink;
+							opacity: 0.8;
+						}
+					}
+					
+					&.invalid {
+						background-color: rgba( $wc-red-light, 0.5);
+					}
+					
+					&:last-child {
+						td {
+							border-bottom: 1px solid $gray-400;
+						}
+					}
+					
+					&:first-child {
+						td {
+							border-top: 8px solid $wp-gray-6;
+						}
+					}
+					
+				}
+				
+				&#order_line_items {
+					tr:first-child td {
+						border-top: none;
 					}
 				}
 				
-			}
-			
-			tbody tr:last-child td {
-				border-bottom: 1px solid $gray-400;
-			}
-			
-			tbody tr:first-child td {
-				border-top: 8px solid $wp-gray-6;
-			}
-			
-			tbody#order_line_items tr:first-child td {
-				border-top: none;
 			}
 			
 			td.thumb {
