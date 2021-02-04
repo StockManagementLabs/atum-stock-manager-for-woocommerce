@@ -3941,6 +3941,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:before {
   font: normal 22px/50px "atum-icon-font" !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: #adb5bd;
   display: block;
   content: "";
@@ -4098,6 +4100,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .atum-help-tip::after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   cursor: help;
 }
@@ -4584,6 +4588,8 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items td.thumb .atum-order-item-thumbnail::before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   width: 38px;
   line-height: 38px;
@@ -4835,11 +4841,15 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.fee .thumb div:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items tr.shipping .thumb div:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
 }
 
@@ -4866,6 +4876,8 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items th.line_tax .delete-atum-order-tax:before, #atum_order_items .atum_order_items_wrapper table.atum_order_items td.line_tax .delete-atum-order-tax:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   color: #999;
 }
@@ -4887,6 +4899,8 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items small.refunded:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   position: relative;
   top: auto;
@@ -4949,6 +4963,8 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum-order-edit-line-item-actions .edit-atum-order-item:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   position: relative;
 }
@@ -4960,6 +4976,8 @@ div.add_note #add_atum_order_note {
 
 #atum_order_items .atum-order-edit-line-item-actions .delete-atum-order-item:before, #atum_order_items .atum-order-edit-line-item-actions .delete_refund:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   position: relative;
 }
@@ -5506,6 +5524,8 @@ div.add_note #add_atum_order_note {
 .date-field.with-icon:after {
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: absolute;
   right: 8px;
   top: 50%;

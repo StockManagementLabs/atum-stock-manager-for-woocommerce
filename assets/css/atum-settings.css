@@ -4267,6 +4267,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:before {
   font: normal 22px/50px "atum-icon-font" !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: #adb5bd;
   display: block;
   content: "";
@@ -4424,6 +4426,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .atum-help-tip::after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   cursor: help;
 }
@@ -4782,6 +4786,8 @@ h2 .atum-help-tip {
 .date-field.with-icon:after {
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: absolute;
   right: 8px;
   top: 50%;
@@ -5100,6 +5106,8 @@ h2 .atum-help-tip {
   color: var(--white);
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   margin: 8px -2px 0;
   font-weight: bold;
@@ -5115,6 +5123,8 @@ h2 .atum-help-tip {
   color: var(--white);
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   font-weight: bold;
   padding-top: 10px;
@@ -5377,6 +5387,8 @@ h2 .atum-help-tip {
 
 .atum-settings-wrapper #atum-settings .section-title .select2-search:after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   padding-right: 15px;
   font-size: 12px;
@@ -5782,6 +5794,8 @@ h2 .atum-help-tip {
   background-color: red;
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   padding-right: 15px;
   font-size: 12px;
   top: 13px;
@@ -6120,6 +6134,8 @@ h2 .atum-help-tip {
 
 .select2-search:after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   padding-right: 15px;
   font-size: 12px;

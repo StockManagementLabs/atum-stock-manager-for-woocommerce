@@ -186,6 +186,8 @@
 			
 			&:before {
 				font: normal 22px/50px $atum-icon-font !important;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 				color: color('gray');
 				display: block;
 				content: $atmi-cross;
@@ -364,7 +366,7 @@
 	width: 16px;
 	
 	&::after {
-		font-family: $atum-icon-font;
+		@include atum-icon-font-family;
 		content: $atmi-question-circle;
 		cursor: help;
 	}

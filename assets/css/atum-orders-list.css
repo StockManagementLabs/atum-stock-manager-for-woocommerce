@@ -3869,6 +3869,8 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   display: inline-block;
   vertical-align: top;
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   cursor: pointer;
   color: var(--main-text);
 }
@@ -5866,6 +5868,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .date-field.with-icon:after {
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: absolute;
   right: 8px;
   top: 50%;
@@ -7180,6 +7184,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 #bulk-titles .ntdelbutton:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
 }
 
@@ -8026,6 +8032,8 @@ table.atum-list-table .column-groups th .group-toggler, .floatThead-container .c
   font-size: 16px;
   cursor: pointer;
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before, table.wp-list-table .column-groups th .group-toggler:before {
@@ -8486,6 +8494,8 @@ table.atum-list-table input[type=checkbox]:checked:before, .floatThead-container
   color: var(--white);
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   margin: 8px -2px 0;
   font-weight: bold;
@@ -9340,6 +9350,8 @@ table.wp-list-table .column-notes .note-on {
 
 table.wp-list-table .column-notes .note-on:after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   line-height: 16px;
 }
@@ -9371,6 +9383,8 @@ table.wp-list-table .notes_head, table.wp-list-table .notes_head, table.wp-list-
 
 table.wp-list-table .notes_head:after, table.wp-list-table .notes_head:after, table.wp-list-table .status_head:after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table.wp-list-table .notes_head::after {

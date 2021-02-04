@@ -248,7 +248,7 @@
 				&:checked::before {
 					color: var(--white);
 					content: $atmi-checkmark;
-					font-family: $atum-icon-font;
+					@include atum-icon-font-family;
 					font-size: 14px;
 					margin: 8px -2px 0;
 					font-weight: bold;
@@ -265,7 +265,7 @@
 			background-color: var(--success);
 			color: var(--white);
 			content: $atmi-checkmark;
-			font-family: $atum-icon-font;
+			@include atum-icon-font-family;
 			font-size: 14px;
 			font-weight: bold;
 			padding-top: 10px;
@@ -507,7 +507,7 @@
 				line-height: 1;
 				
 				&:after {
-					font-family: $atum-icon-font;
+					@include atum-icon-font-family;
 					content: $atmi-magnifier;
 					padding-right: 15px;
 					font-size: 12px;
@@ -858,7 +858,7 @@
 									display: inline-block;
 									background-color: red;
 									content: $atmi-calendar-full;
-									font-family: $atum-icon-font;
+									@include atum-icon-font-family;
 									padding-right: 15px;
 									font-size: 12px;
 									top: 13px;
@@ -1247,7 +1247,7 @@
 	line-height: 1;
 	
 	&:after {
-		font-family: $atum-icon-font;
+		@include atum-icon-font-family;
 		content: $atmi-magnifier;
 		padding-right: 15px;
 		font-size: 12px;

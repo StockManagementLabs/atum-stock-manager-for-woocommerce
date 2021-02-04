@@ -3481,6 +3481,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 .product_data_tabs .atum_tab a:before {
   content: "" !important;
   font-family: "atum-icon-font" !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .product_data .atum-field .input-group-prepend {

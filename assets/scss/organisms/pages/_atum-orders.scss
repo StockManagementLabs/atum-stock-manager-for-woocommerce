@@ -179,7 +179,7 @@ table.wp-list-table {
 			color: var(--wp-gray-1);
 			
 			&:after {
-				font-family: $atum-icon-font;
+				@include atum-icon-font-family;
 				content: $atmi-bubble;
 				line-height: 16px;
 			}
@@ -215,7 +215,7 @@ table.wp-list-table {
 		margin: 0 auto;
 		
 		&:after {
-			font-family: $atum-icon-font;
+			@include atum-icon-font-family;
 		}
 	}
 	

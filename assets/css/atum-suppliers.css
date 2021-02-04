@@ -3546,6 +3546,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .wc-backbone-modal-main .wc-backbone-modal-header .modal-close-link:before {
   font: normal 22px/50px "atum-icon-font" !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   color: #adb5bd;
   display: block;
   content: "";
@@ -3703,6 +3705,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .atum-help-tip::after {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
   cursor: help;
 }
@@ -5102,6 +5106,8 @@ h2 .atum-help-tip {
 
 #bulk-titles .ntdelbutton:before {
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   content: "";
 }
 
@@ -5948,6 +5954,8 @@ table.atum-list-table .column-groups th .group-toggler, .floatThead-container .c
   font-size: 16px;
   cursor: pointer;
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 table.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before, table.wp-list-table .column-groups th .group-toggler:before {
@@ -6408,6 +6416,8 @@ table.atum-list-table input[type=checkbox]:checked:before, .floatThead-container
   color: var(--white);
   content: "";
   font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   margin: 8px -2px 0;
   font-weight: bold;
