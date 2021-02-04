@@ -396,6 +396,14 @@ class Settings {
 					'step' => 0.01,
 				),
 			),
+			'chg_stock_order_complete'  => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Change Stock on Order Complete', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "When enabling this option, the products' stock will be discounted only when any WooCommerce order's status is changed to 'Completed'. Any other status won't alter the stocks.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no',
+			),
 			'sales_last_ndays'          => array(
 				'group'   => 'general',
 				'section' => 'general',
@@ -945,7 +953,7 @@ class Settings {
 
 		$step    = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
 		$min     = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
-		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : 31;
+		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : '';
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
