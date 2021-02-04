@@ -467,33 +467,47 @@ div.add_note {
 				
 			}
 			
-			tbody tr {
+			tbody {
 				
-				td {
-					cursor: pointer;
-				}
-				
-				&.selected {
-					background: $wp-pink-light;
+				tr {
 					
 					td {
-						border-color: $wp-pink;
-						opacity: 0.8;
+						cursor: pointer;
+					}
+					
+					&.selected {
+						background: $wp-pink-light;
+						
+						td {
+							border-color: $wp-pink;
+							opacity: 0.8;
+						}
+					}
+					
+					&.invalid {
+						background-color: rgba( $wc-red-light, 0.5);
+					}
+					
+					&:last-child {
+						td {
+							border-bottom: 1px solid $gray-400;
+						}
+					}
+					
+					&:first-child {
+						td {
+							border-top: 8px solid $wp-gray-6;
+						}
+					}
+					
+				}
+				
+				&#order_line_items {
+					tr:first-child td {
+						border-top: none;
 					}
 				}
 				
-			}
-			
-			tbody tr:last-child td {
-				border-bottom: 1px solid $gray-400;
-			}
-			
-			tbody tr:first-child td {
-				border-top: 8px solid $wp-gray-6;
-			}
-			
-			tbody#order_line_items tr:first-child td {
-				border-top: none;
 			}
 			
 			td.thumb {
@@ -512,7 +526,7 @@ div.add_note {
 					text-align: center;
 					
 					&::before {
-						font-family: $atum-icon-font;
+						@include atum-icon-font-family;
 						content: $atmi-picture;
 						width: 38px;
 						line-height: 38px;
@@ -772,7 +786,7 @@ div.add_note {
 				&.fee {
 					.thumb div {
 						&:before {
-							font-family: $atum-icon-font;
+							@include atum-icon-font-family;
 							content: $atmi-plus-circle;
 						}
 					}
@@ -781,7 +795,7 @@ div.add_note {
 				&.shipping {
 					.thumb div {
 						&:before {
-							font-family: $atum-icon-font;
+							@include atum-icon-font-family;
 							content: $atmi-shipping;
 						}
 					}
@@ -812,7 +826,7 @@ div.add_note {
 					margin: 3px -18px 0 0;
 					
 					&:before {
-						font-family: $atum-icon-font;
+						@include atum-icon-font-family;
 						content: $atmi-cross-circle;
 						color: $wp-gray-1;
 					}
@@ -839,7 +853,7 @@ div.add_note {
 				margin-top: 0.5em;
 				
 				&:before {
-					font-family: $atum-icon-font;
+					@include atum-icon-font-family;
 					content: $atmi-undo;
 					position: relative;
 					top: auto;
@@ -910,7 +924,7 @@ div.add_note {
 		
 		.edit-atum-order-item {
 			&:before {
-				font-family: $atum-icon-font;
+				@include atum-icon-font-family;
 				content: $atmi-pencil;
 				position: relative;
 			}
@@ -923,7 +937,7 @@ div.add_note {
 		.delete-atum-order-item, .delete_refund {
 			
 			&:before {
-				font-family: $atum-icon-font;
+				@include atum-icon-font-family;
 				content: $atmi-cross;
 				position: relative;
 			}

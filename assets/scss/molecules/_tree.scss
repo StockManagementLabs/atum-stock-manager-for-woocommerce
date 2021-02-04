@@ -141,7 +141,7 @@ span {
 		line-height: 1;
 		display: inline-block;
 		vertical-align: top;
-		font-family: $atum-icon-font;
+		@include atum-icon-font-family;
 		cursor: pointer;
 		color: var(--main-text);
 	}

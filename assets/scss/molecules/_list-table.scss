@@ -1010,7 +1010,7 @@
 
 #bulk-titles {
 	.ntdelbutton:before {
-		font-family: $atum-icon-font;
+		@include atum-icon-font-family;
 		content: $atmi-cross;
 	}
 }
@@ -1826,7 +1826,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				float: right;
 				font-size: 16px;
 				cursor: pointer;
-				font-family: $atum-icon-font;
+				@include atum-icon-font-family;
 				
 				&:before {
 					content: $atmi-chevron-left-circle;
@@ -2304,7 +2304,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			&:before {
 				color:  var(--white);
 				content: $atmi-checkmark;
-				font-family: $atum-icon-font;
+				@include atum-icon-font-family;
 				font-size: 14px;
 				margin: 8px -2px 0;
 				font-weight: bold;
