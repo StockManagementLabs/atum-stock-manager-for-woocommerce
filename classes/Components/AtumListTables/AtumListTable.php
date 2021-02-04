@@ -1753,7 +1753,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			'input_type'       => 'number',
 			'extra_meta'       => array(),
 			'tooltip_position' => 'top',
-			'currency'         => self::$default_currency,
 			'cell_name'        => '',
 			'extra_data'       => array(),
 		) ) );
@@ -1766,8 +1765,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		ob_start(); ?>
 		<span class="atum-tooltip" title="<?php echo esc_attr( $tooltip ) ?>" data-bs-placement="<?php echo esc_attr( $tooltip_position ) ?>">
 			<span class="set-meta" data-meta="<?php echo esc_attr( $meta_key ) ?>" <?php echo $symbol_data . $extra_meta_data . $extra_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				data-input-type="<?php echo esc_attr( $input_type ) ?>" data-currency="<?php echo esc_attr( $currency ) ?>"
-				data-cell-name="<?php echo esc_attr( $cell_name ) ?>"
+				data-input-type="<?php echo esc_attr( $input_type ) ?>" data-cell-name="<?php echo esc_attr( $cell_name ) ?>"
 			>
 				<?php echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</span>

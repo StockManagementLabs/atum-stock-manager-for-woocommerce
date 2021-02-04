@@ -305,7 +305,7 @@ class Wpml {
 
 		// string $is_custom  For prices, whether value is a WPML custom price value or not.
 		if ( ! empty( $args['is_custom'] ) ) {
-			$editable_col = str_replace( ' data-currency=', 'data-custom="' . $args['is_custom'] . '" data-currency=', $editable_col );
+			$editable_col = str_replace( ' data-meta=', 'data-custom="' . $args['is_custom'] . '" data-currency="' . AtumListTable::get_default_currency() . '" data-meta=', $editable_col );
 		}
 
 		return $editable_col;

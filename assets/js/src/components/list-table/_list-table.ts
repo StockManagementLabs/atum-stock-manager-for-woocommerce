@@ -329,19 +329,16 @@ export default class ListTable {
 	/**
 	 * Every time a cell is edited, update the input value
 	 *
-	 * @param {JQuery} $metaCell  The table cell that is being edited.
-	 * @param {JQuery} $popover   The popover attached to the above cell.
+	 * @param {JQuery} $metaCell The table cell that is being edited.
+	 * @param {JQuery} $popover  The popover attached to the above cell.
 	 */
 	updateEditedColsInput( $metaCell: JQuery, $popover: JQuery ) {
 
-		let editedCols: any  = this.globals.$editInput.val(),
-		    itemId: number   = $metaCell.closest( 'tr' ).data( 'id' ),
-		    meta: string     = $metaCell.data( 'meta' ),
-		    symbol: string   = $metaCell.data( 'symbol' ) || '',
-		    custom: string   = $metaCell.data( 'custom' ) || 'no',
-		    currency: string = $metaCell.data( 'currency' ) || '',
-		    value: any       = symbol ? $metaCell.text().replace( symbol, '' ) : $metaCell.text().trim(),
-		    newValue: any    = $popover.find( '.meta-value' ).val();
+		let editedCols: any  = this.globals.$editInput.val();
+
+		const itemId: number = $metaCell.closest( 'tr' ).data( 'id' ),
+		      meta: string   = $metaCell.data( 'meta' ),
+		      newValue: any  = $popover.find( '.meta-value' ).val();
 
 		// Update the cell value.
 		this.setCellValue( $metaCell, newValue );
@@ -363,8 +360,16 @@ export default class ListTable {
 
 		// Add the meta value to the object.
 		editedCols[ itemId ][ meta ] = newValue;
-		editedCols[ itemId ][ meta + '_custom' ] = custom;
-		editedCols[ itemId ][ meta + '_currency' ] = currency;
+
+		// WPML compatibility.
+		if ( typeof $metaCell.data( 'custom' ) !== 'undefined' ) {
+			editedCols[ itemId ][ `${ meta }_custom` ] = $metaCell.data( 'custom' ) || 'no';
+		}
+
+		// WPML compatibility.
+		if ( typeof $metaCell.data( 'currency' ) !== 'undefined' ) {
+			editedCols[ itemId ][ `${ meta }_currency` ] = $metaCell.data( 'currency' );
+		}
 
 		// Add the extra meta data (if any).
 		if ( $popover.hasClass( 'with-meta' ) ) {

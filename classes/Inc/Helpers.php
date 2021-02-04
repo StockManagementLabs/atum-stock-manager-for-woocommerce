@@ -2015,7 +2015,6 @@ final class Helpers {
 			switch ( $meta_key ) {
 				
 				case 'stock':
-					unset( $product_data['stock_custom'], $product_data['stock_currency'] );
 					$product->set_stock_quantity( $meta_value );
 					
 					// Needed to clear transients and other stuff.
@@ -2034,8 +2033,6 @@ final class Helpers {
 					if ( class_exists( '\WC_Subscription' ) && in_array( $product->get_type(), [ 'subscription', 'variable-subscription' ] ) ) {
 						update_post_meta( $product_id, '_subscription_price', $meta_value );
 					}
-						
-					unset( $product_data['regular_price_custom'], $product_data['regular_price_currency'] );
 					
 					break;
 				
@@ -2090,19 +2087,20 @@ final class Helpers {
 						$product->set_date_on_sale_to( $date_to_str );
 
 					}
-						
-					unset( $product_data['sale_price_custom'], $product_data['sale_price_currency'] );
 					
 					break;
 				
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
 					$product->set_purchase_price( $meta_value );
-					
-					unset( $product_data['purchase_price_custom'], $product_data['purchase_price_currency'] );
 					break;
 				
 				// Any other text meta.
 				default:
+					// These fields are only needed for WPML compatibility.
+					if ( strpos( $meta_key, '_custom' ) !== FALSE || strpos( $meta_key, '_currency' ) !== FALSE ) {
+						break;
+					}
+
 					if ( is_callable( array( $product, "set_{$meta_key}" ) ) ) {
 						call_user_func( array( $product, "set_{$meta_key}" ), $meta_value );
 					}
@@ -2110,7 +2108,6 @@ final class Helpers {
 						update_post_meta( $product_id, '_' . $meta_key, esc_attr( $meta_value ) );
 					}
 
-					unset( $product_data[ '_' . $meta_key . '_custom' ], $product_data[ '_' . $meta_key . 'currency' ] );
 					break;
 			}
 			
