@@ -16,6 +16,8 @@ export default class DateTimePicker {
 	constructor(
 		private settings: Settings,
 	) {
+		let langs: Array<string> = [ 'haz', 'as', 'ar', 'as', 'azb', 'bo', 'dz', 'fa', 'gu', 'he', 'hi', 'hy', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'lo', 'ml', 'mr', 'my', 'ne', 'pa', 'ps', 'sd', 'si', 'skr', 'ta', 'ur' ];
+		let mylang: string       = langs.includes( this.settings.get( 'calendarLocale' ) ) ? 'en' : this.settings.get( 'calendarLocale' );
 
 		this.defaults = {
 			format           : this.settings.get( 'dateFormat' ),
@@ -64,7 +66,7 @@ export default class DateTimePicker {
 				pickSecond     : this.settings.get( 'pickSecond' ),
 				decrementSecond: this.settings.get( 'decrementSecond' ),
 			},
-			locale           : this.settings.get( 'calendarLocale' ) || 'en',
+			locale           : mylang || 'en',
 		};
 
 	}
@@ -86,6 +88,8 @@ export default class DateTimePicker {
 			if ( data.hasOwnProperty( 'DateTimePicker' ) ) {
 				this.destroyDateTimePickers( $dateTimePicker );
 			}
+
+			//$dateTimePicker.locale = this.settings.get( 'calendarLocale' ) || 'en';
 
 			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
 			$dateTimePicker.bsDatetimepicker( {
