@@ -8034,6 +8034,7 @@ table.atum-list-table .column-groups th .group-toggler, .floatThead-container .c
   font-family: "atum-icon-font";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: normal;
 }
 
 table.atum-list-table .column-groups th .group-toggler:before, .floatThead-container .column-groups th .group-toggler:before, .inbound-stock-list .column-groups th .group-toggler:before, table.wp-list-table .column-groups th .group-toggler:before {

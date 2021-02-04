@@ -1827,6 +1827,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				font-size: 16px;
 				cursor: pointer;
 				@include atum-icon-font-family;
+				font-weight: normal;
 				
 				&:before {
 					content: $atmi-chevron-left-circle;
