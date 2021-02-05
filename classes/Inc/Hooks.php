@@ -207,6 +207,20 @@ class Hooks {
 			add_action( "woocommerce_shortcode_before_{$type}_loop", array( $this, 'allow_product_caching' ) );
 		}
 
+		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete' ) ) {
+
+			// Prevent stock changes when items are modified.
+			add_filter( 'woocommerce_prevent_adjust_line_item_product_stock', array( $this, 'prevent_item_stock_changing' ), 10, 3 );
+
+			// Prevent stock changes when creating an order from the frontend.
+			add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'prevent_order_stock_changing' ), 10, 2 );
+
+			// Prevent stock changes when changing status to processing or on-hold.
+			add_action( 'woocommerce_order_status_processing', 'wc_maybe_increase_stock_levels' );
+			add_action( 'woocommerce_order_status_on-hold', 'wc_maybe_increase_stock_levels' );
+
+		}
+
 	}
 
 	/**
@@ -1220,6 +1234,50 @@ class Hooks {
 	public function allow_product_caching() {
 
 		add_filter( 'atum/get_atum_product/use_cache', '__return_true' );
+	}
+
+	/**
+	 * Prevent item stock changing if order status is distinct than 'completed'
+	 *
+	 * @since 1.8.6
+	 *
+	 * @param bool           $prevent
+	 * @param \WC_Order_Item $item
+	 * @param int|float      $item_qty
+	 *
+	 * @return bool
+	 */
+	public function prevent_item_stock_changing( $prevent, $item, $item_qty ) {
+
+		if ( ! $prevent ) {
+
+			$order = $item->get_order();
+
+			$prevent = 'completed' !== $order->get_status();
+
+		}
+
+		return $prevent;
+	}
+
+	/**
+	 * Prevent order stock changing if order status is distinct than 'completed'
+	 *
+	 * @since 1.8.6
+	 *
+	 * @param bool      $allow
+	 * @param \WC_Order $order
+	 *
+	 * @return bool
+	 */
+	public function prevent_order_stock_changing( $allow, $order ) {
+
+		if ( $allow ) {
+
+			$allow = 'completed' === $order->get_status();
+		}
+
+		return $allow;
 	}
 
 	/********************
