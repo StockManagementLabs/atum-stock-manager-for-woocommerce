@@ -6087,7 +6087,7 @@ table.atum-list-table tr.main-row:hover, table.atum-list-table tr.mi-row:hover, 
           box-shadow: 0 1px 19px 6px var(--atum-row-shadow) inset;
 }
 
-table.atum-list-table tr.expandable .set-meta, table.atum-list-table tr.expandable a, .floatThead-container tr.expandable .set-meta, .floatThead-container tr.expandable a, .inbound-stock-list tr.expandable .set-meta, .inbound-stock-list tr.expandable a, table.wp-list-table tr.expandable .set-meta, table.wp-list-table tr.expandable a {
+table.atum-list-table tr.expandable .set-meta, table.atum-list-table tr.expandable .set-date-meta, table.atum-list-table tr.expandable a, .floatThead-container tr.expandable .set-meta, .floatThead-container tr.expandable .set-date-meta, .floatThead-container tr.expandable a, .inbound-stock-list tr.expandable .set-meta, .inbound-stock-list tr.expandable .set-date-meta, .inbound-stock-list tr.expandable a, table.wp-list-table tr.expandable .set-meta, table.wp-list-table tr.expandable .set-date-meta, table.wp-list-table tr.expandable a {
   color: var(--primary-var-dark) !important;
 }
 
@@ -6115,20 +6115,20 @@ table.atum-list-table tr.active-row td .product-type, .floatThead-container tr.a
   color: var(--atum-text-color-dark2);
 }
 
-table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-row a, .floatThead-container tr.active-row .set-meta, .floatThead-container tr.active-row a, .inbound-stock-list tr.active-row .set-meta, .inbound-stock-list tr.active-row a, table.wp-list-table tr.active-row .set-meta, table.wp-list-table tr.active-row a {
+table.atum-list-table tr.active-row .set-meta, table.atum-list-table tr.active-row .set-date-meta, table.atum-list-table tr.active-row a, .floatThead-container tr.active-row .set-meta, .floatThead-container tr.active-row .set-date-meta, .floatThead-container tr.active-row a, .inbound-stock-list tr.active-row .set-meta, .inbound-stock-list tr.active-row .set-date-meta, .inbound-stock-list tr.active-row a, table.wp-list-table tr.active-row .set-meta, table.wp-list-table tr.active-row .set-date-meta, table.wp-list-table tr.active-row a {
   color: var(--primary-var-dark) !important;
 }
 
-table.atum-list-table tr .set-meta, .floatThead-container tr .set-meta, .inbound-stock-list tr .set-meta, table.wp-list-table tr .set-meta {
+table.atum-list-table tr .set-meta, table.atum-list-table tr .set-date-meta, .floatThead-container tr .set-meta, .floatThead-container tr .set-date-meta, .inbound-stock-list tr .set-meta, .inbound-stock-list tr .set-date-meta, table.wp-list-table tr .set-meta, table.wp-list-table tr .set-date-meta {
   cursor: pointer;
   color: var(--primary);
 }
 
-table.atum-list-table tr .set-meta:hover, .floatThead-container tr .set-meta:hover, .inbound-stock-list tr .set-meta:hover, table.wp-list-table tr .set-meta:hover {
+table.atum-list-table tr .set-meta:hover, table.atum-list-table tr .set-date-meta:hover, .floatThead-container tr .set-meta:hover, .floatThead-container tr .set-date-meta:hover, .inbound-stock-list tr .set-meta:hover, .inbound-stock-list tr .set-date-meta:hover, table.wp-list-table tr .set-meta:hover, table.wp-list-table tr .set-date-meta:hover {
   color: var(--wp-link-hover);
 }
 
-table.atum-list-table tr .set-meta.unsaved, .floatThead-container tr .set-meta.unsaved, .inbound-stock-list tr .set-meta.unsaved, table.wp-list-table tr .set-meta.unsaved {
+table.atum-list-table tr .set-meta.unsaved, table.atum-list-table tr .set-date-meta.unsaved, .floatThead-container tr .set-meta.unsaved, .floatThead-container tr .set-date-meta.unsaved, .inbound-stock-list tr .set-meta.unsaved, .inbound-stock-list tr .set-date-meta.unsaved, table.wp-list-table tr .set-meta.unsaved, table.wp-list-table tr .set-date-meta.unsaved {
   color: var(--danger) !important;
 }
 
@@ -6385,7 +6385,7 @@ table.atum-list-table .cell-yellow, .floatThead-container .cell-yellow, .inbound
   color: var(--secondary) !important;
 }
 
-table.atum-list-table .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-meta, .inbound-stock-list .cell-yellow .set-meta, table.wp-list-table .cell-yellow .set-meta {
+table.atum-list-table .cell-yellow .set-meta, table.atum-list-table .cell-yellow .set-date-meta, .floatThead-container .cell-yellow .set-meta, .floatThead-container .cell-yellow .set-date-meta, .inbound-stock-list .cell-yellow .set-meta, .inbound-stock-list .cell-yellow .set-date-meta, table.wp-list-table .cell-yellow .set-meta, table.wp-list-table .cell-yellow .set-date-meta {
   color: var(--secondary) !important;
 }
 
@@ -6393,7 +6393,7 @@ table.atum-list-table .cell-red, .floatThead-container .cell-red, .inbound-stock
   color: var(--danger) !important;
 }
 
-table.atum-list-table .cell-red .set-meta, .floatThead-container .cell-red .set-meta, .inbound-stock-list .cell-red .set-meta, table.wp-list-table .cell-red .set-meta {
+table.atum-list-table .cell-red .set-meta, table.atum-list-table .cell-red .set-date-meta, .floatThead-container .cell-red .set-meta, .floatThead-container .cell-red .set-date-meta, .inbound-stock-list .cell-red .set-meta, .inbound-stock-list .cell-red .set-date-meta, table.wp-list-table .cell-red .set-meta, table.wp-list-table .cell-red .set-date-meta {
   color: var(--danger) !important;
 }
 

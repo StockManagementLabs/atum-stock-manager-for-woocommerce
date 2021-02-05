@@ -9,7 +9,7 @@ import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
 
-export default class Popover extends PopoverBase{
+export default class TableCellPopovers extends PopoverBase{
 
 	popoverClassName: string = 'atum-popover';
 	
@@ -57,39 +57,41 @@ export default class Popover extends PopoverBase{
 			this.addPopover( $( elem ) );
 		} );
 		
-		// Focus on the input field and set a reference to the popover to the editable column.
-		$metaCells.on( 'inserted.bs.popover', ( evt: JQueryEventObject ) => {
+		$metaCells
 
-			const $metaCell: JQuery      = $( evt.currentTarget ),
-			      $activePopover: JQuery = $( '.popover.show' );
-			
-			$activePopover.find('.meta-value').focus().select();
+			// Focus on the input field and set a reference to the popover to the editable column.
+			.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
 
-			if ( this.dateTimePicker ) {
+				const $metaCell: JQuery      = $( evt.currentTarget ),
+				      $activePopover: JQuery = $( '.popover.show' );
 
-				const $dateInputs: JQuery = $activePopover.find( '.bs-datepicker' );
+				$activePopover.find( '.meta-value' ).focus().select();
 
-				if ( $dateInputs.length ) {
-					this.dateTimePicker.addDateTimePickers( $dateInputs );
+				if ( this.dateTimePicker ) {
+
+					const $dateInputs: JQuery = $activePopover.find( '.bs-datepicker' );
+
+					if ( $dateInputs.length ) {
+						this.dateTimePicker.addDateTimePickers( $dateInputs );
+					}
+
 				}
 
-			}
-			
-			// Click the "Set" button when hitting enter on an input field.
-			$activePopover.find( 'input' ).on( 'keyup', ( evt: JQueryEventObject ) => {
+				// Click the "Set" button when hitting enter on an input field.
+				$activePopover.find( 'input' ).on( 'keyup', ( evt: JQueryEventObject ) => {
 
-				// Enter key.
-				if ( 13 === evt.which ) {
-					$activePopover.find( '.set' ).click();
-				}
-				// ESC key.
-				else if ( 27 === evt.which ) {
-					this.hidePopover( $metaCell );
-				}
+					// Enter key.
+					if ( 13 === evt.which ) {
+						$activePopover.find( '.set' ).click();
+					}
+					// ESC key.
+					else if ( 27 === evt.which ) {
+						this.hidePopover( $metaCell );
+					}
+
+				} );
 
 			} );
-			
-		});
 		
 	}
 	
@@ -112,13 +114,13 @@ export default class Popover extends PopoverBase{
 			      step : '',
 		      };
 
-		if ( inputType === 'number' || value === '-' ) {
+		if ( inputType === 'number' || symbol ) {
 
 			let numericValue: number;
 
 			// For currency numbers.
 			if ( symbol ) {
-				numericValue= Math.abs( <number> Utils.unformat( value, this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
+				numericValue = Math.abs( <number> Utils.unformat( value, this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
 			}
 			// For regular numbers.
 			else {
@@ -127,6 +129,9 @@ export default class Popover extends PopoverBase{
 
 			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
 
+		}
+		else if ( value === '-' ) {
+			inputAtts.value = '';
 		}
 		
 		if ( inputType === 'number' ) {

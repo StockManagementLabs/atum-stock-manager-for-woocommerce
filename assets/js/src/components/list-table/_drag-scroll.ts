@@ -9,7 +9,7 @@ import dragscroll from '../../../vendor/dragscroll';             // A patched fo
 import Hammer from 'hammerjs/hammer.min';                        // From node_modules
 
 import Globals from './_globals';
-import Popover from '../_popover';
+import TableCellPopovers from '../_table-cell-popovers';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
@@ -21,7 +21,7 @@ export default class DragScroll {
 	constructor(
 		private globals: Globals,
 		private tooltip: Tooltip,
-		private popover?: Popover
+		private popover?: TableCellPopovers
 	) {
 		
 		// Add horizontal drag-scroll to table filters.

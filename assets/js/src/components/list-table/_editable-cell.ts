@@ -3,7 +3,7 @@
    ======================================= */
 
 import Globals from './_globals';
-import Popover from '../_popover';
+import TableCellPopovers from '../_table-cell-popovers';
 import ListTable from './_list-table';
 import WPHooks from '../../interfaces/wp.hooks';
 
@@ -13,7 +13,7 @@ export default class EditableCell {
 	
 	constructor(
 		private globals: Globals,
-		private popover: Popover,
+		private popover: TableCellPopovers,
 		private listTable: ListTable
 	) {
 		

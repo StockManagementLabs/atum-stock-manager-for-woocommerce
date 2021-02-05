@@ -23,7 +23,7 @@ import DateTimePicker from "./components/_date-time-picker";
 import DragScroll from "./components/list-table/_drag-scroll";
 import EnhancedSelect from './components/_enhanced-select';
 import Globals from './components/list-table/_globals';
-import Popover from './components/_popover';
+import TableCellPopovers from './components/_table-cell-popovers';
 import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
 import Settings from './config/_settings';
@@ -45,7 +45,7 @@ jQuery( ( $ ) => {
 	let enhancedSelect = new EnhancedSelect();
 	let tooltip = new Tooltip();
 	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new Popover( settings, dateTimePicker );
+	let popover = new TableCellPopovers( settings, dateTimePicker );
 
 	new PostTypeList( settings, globals, enhancedSelect );
 	new DragScroll( globals, tooltip, popover );

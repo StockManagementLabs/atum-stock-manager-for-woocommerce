@@ -31,7 +31,7 @@ import Globals from './components/list-table/_globals';
 import LightBox from './components/_light-box';
 import ListTable from './components/list-table/_list-table';
 import LocationsTree from './components/list-table/_locations-tree';
-import Popover from './components/_popover';
+import TableCellPopovers from './components/_table-cell-popovers';
 import Router from './components/list-table/_router';
 import SalesLastDays from './components/list-table/_sales-last-days';
 import ScrollBar from './components/list-table/_scroll-bar';
@@ -69,7 +69,7 @@ jQuery( ( $ ) => {
 	let router = new Router( settings, globals, listTable );
 	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new Popover( settings, dateTimePicker );
+	let popover = new TableCellPopovers( settings, dateTimePicker );
 	new ScrollBar( globals );
 	new DragScroll( globals, tooltip, popover );
 	new SearchByColumn( settings, globals );

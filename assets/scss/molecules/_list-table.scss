@@ -1968,7 +1968,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.expandable {
-			.set-meta, a {
+			.set-meta, .set-date-meta, a {
 				color: var(--primary-var-dark) !important;
 			}
 			
@@ -1995,13 +1995,13 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					color: var(--atum-text-color-dark2);
 				}
 			}
-			.set-meta, a {
+			.set-meta, .set-date-meta, a {
 				color: var(--primary-var-dark) !important;
 			}
 			
 		}
 		
-		.set-meta {
+		.set-meta, .set-date-meta {
 			
 			cursor: pointer;
 			color: var(--primary);
@@ -2276,14 +2276,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&-yellow {
 			color: var(--secondary) !important;
-			.set-meta {
+			
+			.set-meta, .set-date-meta {
 				color: var(--secondary) !important;
 			}
 		}
 
 		&-red {
 			color: var(--danger) !important;
-			.set-meta {
+			
+			.set-meta, .set-date-meta {
 				color: var(--danger) !important;
 			}
 		}

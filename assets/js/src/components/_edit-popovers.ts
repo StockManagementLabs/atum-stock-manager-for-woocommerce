@@ -9,10 +9,12 @@ import EnhancedSelect from './_enhanced-select';
 import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
+import WPHooks from '../interfaces/wp.hooks';
 
 export default class EditPopovers extends PopoverBase{
 
 	popoverClassName: string = 'edit-field-popover';
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -205,10 +207,11 @@ export default class EditPopovers extends PopoverBase{
 				// Set the field label.
 				this.setEditFieldLabel( $fieldWrapper.find( '.field-label' ), newLabel );
 
+				// Handle the value change extenally.
+				this.wpHooks.doAction( 'atum_editPopovers_setValue', $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find( ':input' ).serializeArray(), $setButton );
+
 				// Once set, destroy the opened popover.
 				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
-
-				$editField.trigger( 'atum-edit-popover-set-value', [ $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find( ':input' ).serializeArray() ] );
 
 			})
 
@@ -266,7 +269,6 @@ export default class EditPopovers extends PopoverBase{
 	 */
 	destroyPopover( $editButton: JQuery ) {
 
-		console.log('destroying poopover');
 		super.destroyPopover( $editButton, () => {
 
 			// Give a small lapse to complete the 'fadeOut' animation before re-binding.

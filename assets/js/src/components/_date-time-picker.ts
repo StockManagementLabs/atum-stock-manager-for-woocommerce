@@ -16,8 +16,9 @@ export default class DateTimePicker {
 	constructor(
 		private settings: Settings,
 	) {
-		let langs: Array<string> = [ 'haz', 'as', 'ar', 'as', 'azb', 'bo', 'dz', 'fa', 'gu', 'he', 'hi', 'hy', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'lo', 'ml', 'mr', 'my', 'ne', 'pa', 'ps', 'sd', 'si', 'skr', 'ta', 'ur' ];
-		let mylang: string       = langs.includes( this.settings.get( 'calendarLocale' ) ) ? 'en' : this.settings.get( 'calendarLocale' );
+
+		const langs: string[] = [ 'haz', 'as', 'ar', 'as', 'azb', 'bo', 'dz', 'fa', 'gu', 'he', 'hi', 'hy', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'lo', 'ml', 'mr', 'my', 'ne', 'pa', 'ps', 'sd', 'si', 'skr', 'ta', 'ur' ];
+		const mylang: string  = langs.includes( this.settings.get( 'calendarLocale' ) ) ? 'en' : this.settings.get( 'calendarLocale' );
 
 		this.defaults = {
 			format           : this.settings.get( 'dateFormat' ),
@@ -89,8 +90,6 @@ export default class DateTimePicker {
 				this.destroyDateTimePickers( $dateTimePicker );
 			}
 
-			//$dateTimePicker.locale = this.settings.get( 'calendarLocale' ) || 'en';
-
 			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
 			$dateTimePicker.bsDatetimepicker( {
 				...this.defaults,
@@ -143,6 +142,11 @@ export default class DateTimePicker {
 		
 	}
 
+	/**
+	 * Destroy the datepickers
+	 *
+	 * @param {JQuery} $selector
+	 */
 	destroyDateTimePickers( $selector: JQuery ) {
 
 		$selector.each( ( index: number, elem: Element ) => {
