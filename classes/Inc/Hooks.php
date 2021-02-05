@@ -212,12 +212,12 @@ class Hooks {
 			// Prevent stock changes when items are modified.
 			add_filter( 'woocommerce_prevent_adjust_line_item_product_stock', array( $this, 'prevent_item_stock_changing' ), 10, 3 );
 
-			// Prevent stock changes when creating an order from the frontend.
-			add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'prevent_order_stock_changing' ), 10, 2 );
-
 			// Prevent stock changes when changing status to processing or on-hold.
 			add_action( 'woocommerce_order_status_processing', 'wc_maybe_increase_stock_levels' );
 			add_action( 'woocommerce_order_status_on-hold', 'wc_maybe_increase_stock_levels' );
+			remove_action( 'woocommerce_order_status_processing', 'wc_maybe_reduce_stock_levels' );
+			remove_action( 'woocommerce_order_status_on-hold', 'wc_maybe_reduce_stock_levels' );
+			remove_action( 'woocommerce_payment_complete', 'wc_maybe_reduce_stock_levels' );
 
 		}
 
