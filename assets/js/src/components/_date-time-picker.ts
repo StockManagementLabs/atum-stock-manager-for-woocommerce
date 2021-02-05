@@ -89,8 +89,6 @@ export default class DateTimePicker {
 				this.destroyDateTimePickers( $dateTimePicker );
 			}
 
-			//$dateTimePicker.locale = this.settings.get( 'calendarLocale' ) || 'en';
-
 			// Use the spread operator to create a new options object in order to not conflict with other DateTimePicker options.
 			$dateTimePicker.bsDatetimepicker( {
 				...this.defaults,
