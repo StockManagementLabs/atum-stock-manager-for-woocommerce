@@ -64,7 +64,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $default_searchable_columns = array();
+	protected $searchable_columns = array();
 
 	/**
 	 * Set up the ATUM columns and types for correct sorting
@@ -460,8 +460,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Allow adding searchable columns externally.
-		if ( ! empty( $this->default_searchable_columns ) ) {
-			$this->default_searchable_columns = (array) apply_filters( 'atum/list_table/default_serchable_columns', $this->default_searchable_columns );
+		if ( ! empty( $this->searchable_columns ) ) {
+			$this->searchable_columns = (array) apply_filters( 'atum/list_table/default_serchable_columns', $this->searchable_columns );
 		}
 
 		// Custom image placeholder.
@@ -754,8 +754,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Check if it's a numeric cell.
 			if (
-				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
-				in_array( $column_name, $this->default_searchable_columns['numeric'], TRUE )
+				! empty( $this->searchable_columns['numeric'] ) && is_array( $this->searchable_columns['numeric'] ) &&
+				in_array( $column_name, $this->searchable_columns['numeric'], TRUE )
 			) {
 				$classes .= ' numeric';
 			}
@@ -1227,7 +1227,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						'value'       => $date_on_sale_from,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'bs-datepicker from',
+						'class'       => 'atum-datepicker from',
 					),
 					array(
 						'name'        => '_sale_price_dates_to',
@@ -1236,7 +1236,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						'value'       => $date_on_sale_to,
 						'maxlength'   => 10,
 						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'bs-datepicker to',
+						'class'       => 'atum-datepicker to',
 					),
 				),
 			), $this->product );
@@ -1723,7 +1723,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *      @type string $input_type        The input type field to use to edit the column value.
 	 *      @type array  $extra_meta        Any extra fields will be appended to the popover (as JSON array).
 	 *      @type string $tooltip_position  Where to place the tooltip.
-	 *      @type string $currency          Product prices currency.
+	 *      @type string $cell_name         The display name for the cell.
 	 *      @type array  $extra_data        Any other array of data that should be added to the element.
 	 * }
 	 *
@@ -1741,7 +1741,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var string $input_type
 		 * @var array  $extra_meta
 		 * @var string $tooltip_position
-		 * @var string $currency
 		 * @var string $cell_name
 		 * @var array  $extra_data
 		 */
@@ -1764,7 +1763,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		// phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
 		ob_start(); ?>
 		<span class="atum-tooltip" title="<?php echo esc_attr( $tooltip ) ?>" data-bs-placement="<?php echo esc_attr( $tooltip_position ) ?>">
-			<span class="set-meta" data-meta="<?php echo esc_attr( $meta_key ) ?>" <?php echo $symbol_data . $extra_meta_data . $extra_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<span class="set-meta" data-meta="<?php echo esc_attr( $meta_key ) ?>"
+				<?php echo $symbol_data . $extra_meta_data . $extra_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				data-input-type="<?php echo esc_attr( $input_type ) ?>" data-cell-name="<?php echo esc_attr( $cell_name ) ?>"
 			>
 				<?php echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -2982,8 +2982,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Check if it's a numeric column.
 			if (
-				! empty( $this->default_searchable_columns['numeric'] ) && is_array( $this->default_searchable_columns['numeric'] ) &&
-				in_array( $column_key, $this->default_searchable_columns['numeric'], TRUE )
+				! empty( $this->searchable_columns['numeric'] ) && is_array( $this->searchable_columns['numeric'] ) &&
+				in_array( $column_key, $this->searchable_columns['numeric'], TRUE )
 			) {
 				$class[] = 'numeric';
 			}
@@ -3237,7 +3237,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'textToShow'                     => __( 'Text to show?', ATUM_TEXT_DOMAIN ),
 			'locationsSaved'                 => __( 'Values Saved', ATUM_TEXT_DOMAIN ),
 			'done'                           => __( 'Done!', ATUM_TEXT_DOMAIN ),
-			'searchableColumns'              => $this->default_searchable_columns,
+			'searchableColumns'              => $this->searchable_columns,
 			'stickyColumns'                  => $this->sticky_columns,
 			'dateSelectorFilters'            => [ 'best_seller', 'worst_seller' ],
 			'setTimeWindow'                  => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
@@ -3683,7 +3683,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		else {
 
-			if ( Helpers::in_multi_array( $search_column, $this->default_searchable_columns ) ) {
+			if ( Helpers::in_multi_array( $search_column, $this->searchable_columns ) ) {
 
 				$column_name = ltrim( $search_column, '_' );
 
@@ -3803,7 +3803,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					/**
 					 *  Numeric fields.
 					 */
-					elseif ( in_array( $search_column, $this->default_searchable_columns['numeric'] ) ) {
+					elseif ( in_array( $search_column, $this->searchable_columns['numeric'] ) ) {
 
 						// Search by ATUM product data columns.
 						if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {

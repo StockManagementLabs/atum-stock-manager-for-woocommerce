@@ -56,7 +56,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @var array
 	 */
-	protected $default_searchable_columns = array(
+	protected $searchable_columns = array(
 		'string'  => array(
 			'title',
 			'_supplier',
@@ -276,6 +276,8 @@ class ListTable extends AtumListTable {
 			'title',
 			'calc_type',
 		) );
+
+		$this->searchable_columns = apply_filters( 'atum/stock_central_list/searchable_columns', $this->searchable_columns );
 
 		// Call the parent class once all the $args are set.
 		parent::__construct( $args );

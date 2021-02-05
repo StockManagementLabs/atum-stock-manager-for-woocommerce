@@ -35,7 +35,7 @@ class ListTable extends AtumListTable {
 	 *
 	 * @var array
 	 */
-	protected $default_searchable_columns = array(
+	protected $searchable_columns = array(
 		'numeric' => array(
 			'calc_inbound_stock',
 		),
