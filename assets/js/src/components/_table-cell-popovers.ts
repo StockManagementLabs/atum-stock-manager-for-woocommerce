@@ -63,18 +63,22 @@ export default class TableCellPopovers extends PopoverBase{
 			.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
 
 				const $metaCell: JQuery      = $( evt.currentTarget ),
-				      $activePopover: JQuery = $( '.popover.show' );
-
-				$activePopover.find( '.meta-value' ).focus().select();
+				      $activePopover: JQuery = $( '.popover.show' ),
+				      $metaInput: JQuery     = $activePopover.find( '.meta-value' );
 
 				if ( this.dateTimePicker ) {
 
-					const $dateInputs: JQuery = $activePopover.find( '.bs-datepicker' );
+					const $dateInputs: JQuery = $activePopover.find( '.atum-datepicker' );
 
 					if ( $dateInputs.length ) {
 						this.dateTimePicker.addDateTimePickers( $dateInputs );
 					}
 
+				}
+
+				// Do not focus over datepicker fields because the calendar is not showing.
+				if ( ! $metaInput.hasClass( 'atum-datepicker' ) ) {
+					$activePopover.find( '.meta-value' ).focus().select();
 				}
 
 				// Click the "Set" button when hitting enter on an input field.
@@ -110,8 +114,6 @@ export default class TableCellPopovers extends PopoverBase{
 			      type : inputType || 'number',
 			      value: value,
 			      class: 'meta-value',
-			      min  : '',
-			      step : '',
 		      };
 
 		if ( inputType === 'number' || symbol ) {
@@ -146,6 +148,23 @@ export default class TableCellPopovers extends PopoverBase{
 			      text : this.settings.get( 'setButton' ),
 		      } ),
 		      extraMeta: any     = $metaCell.data( 'extra-meta' );
+
+		// Add the datepicker to the input field if needed.
+		if ( $metaCell.data( 'has-datepicker' ) === 'yes' ) {
+			$input.addClass( 'atum-datepicker' );
+
+			if ( typeof $metaCell.data( 'date-format' ) !== 'undefined' ) {
+				$input.data( 'date-format', $metaCell.data( 'date-format' ) );
+			}
+
+			if ( typeof $metaCell.data( 'min-date' ) !== 'undefined' ) {
+				$input.data( 'min-date', $metaCell.data( 'min-date' ) );
+			}
+
+			if ( typeof $metaCell.data( 'max-date' ) !== 'undefined' ) {
+				$input.data( 'max-date', $metaCell.data( 'max-date' ) );
+			}
+		}
 
 		let popoverClass: string = this.popoverClassName,
 		    $extraFields: JQuery = null;

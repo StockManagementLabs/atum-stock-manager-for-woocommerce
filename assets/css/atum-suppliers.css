@@ -6923,6 +6923,7 @@ table.atum-list-table .column-groups th.actions, .floatThead-container .column-g
 
 .filter-range-dates-modal .swal2-html-container .input-date input {
   width: 150px;
+  height: auto;
   font-size: 15px;
   line-height: 1;
   color: var(--atum-text-color-var1);
