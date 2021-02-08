@@ -321,15 +321,24 @@ export default class LocationsTree {
 		// Set class checked the actual values on load.
 		$locationsTreeContainer.find( 'span[class^="cat-item-"], span[class*="cat-item-"]' ).each( ( index: number, elem: Element ) => {
 
-			const classList: string[] = $( elem ).attr( 'class' ).split( /\s+/ );
+			const classList: string[] = $( elem ).attr( 'class' ).split( /\s+/ ),
+			      $node: JQuery       = $( elem );
 
 			$.each( classList, ( index: number, className: string ) => {
 
 				if ( className.startsWith( 'cat-item-' ) && $.inArray( className, this.locationsSet ) > -1 ) {
-					$( `.${ className }` ).addClass( 'checked' );
+					$node.addClass( 'checked' );
 				}
 
 			} );
+
+			// Open the node parent for all the checked nodes (if closed).
+			if ( $node.hasClass( 'checked' ) ) {
+				const $parentNode: JQuery = $node.closest( 'ul' ).parent( 'li' );
+				if ( $parentNode.length ) {
+					$parentNode.children( '.easytree-exp-c, .easytree-exp-cl' ).find( '.easytree-expander' ).click();
+				}
+			}
 
 		} );
 		
