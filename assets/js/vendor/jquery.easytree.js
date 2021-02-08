@@ -6,7 +6,7 @@
  * Released under the MIT license
  * V1.0.1
  *
- * ENHANCED BY ATUM
+ * ENHANCED AND FIXED BY ATUM
  */
 
 (function ($) {
@@ -674,10 +674,10 @@
 			
 			var s6 = new Date();
 			
-			$($this.selector + " .easytree-node").on("click", nodes, nodeClick);
-			$($this.selector + " .easytree-expander").on("click", nodes, toggleNodeEvt);
-			$($this.selector + " .easytree-icon").on("dblclick", nodes, toggleNodeEvt);
-			$($this.selector + " .easytree-title").on("dblclick", nodes, toggleNodeEvt);
+			$this
+				.on('click', '.easytree-node', nodes, nodeClick)
+				.on('click', '.easytree-expander', nodes, toggleNodeEvt)
+				.on('dblclick', '.easytree-icon, .easytree-title', nodes, toggleNodeEvt);
 			
 			var s7 = new Date();
 			
