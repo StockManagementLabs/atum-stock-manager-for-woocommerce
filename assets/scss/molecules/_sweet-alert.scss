@@ -42,6 +42,7 @@
 		font-family: inherit;
 		
 		.swal2-close {
+			justify-content: flex-end;
 			font-weight: 100;
 			font-family: inherit;
 			font-size: 30px;
@@ -49,6 +50,7 @@
 			color: var(--gray-500);
 			z-index: 100001;
 		}
+		
 		.swal2-validation-message {
 			margin: .625em 0 -.625em;
 		}

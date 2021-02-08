@@ -148,6 +148,9 @@ export default class LocationsTree {
 			showCloseButton    : true,
 			showCancelButton   : true,
 			showLoaderOnConfirm: true,
+			customClass        : {
+				popup: 'edit-locations-modal'
+			},
 			didOpen            : () => this.onOpenEditPopup(),
 			preConfirm         : () => this.saveLocations(),
 			background         : 'var(--atum-table-bg)',

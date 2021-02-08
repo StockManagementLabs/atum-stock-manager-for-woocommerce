@@ -300,18 +300,33 @@ ul.easytree-container.easytree-focused {
 }
 
 // ATUM locations tree
-#atum-locations-tree {
-	.easytree-node{
+.edit-locations-modal {
+	.easytree-node {
 		
 		a {
 			color: var(--dark) !important;
 		}
+		
+		&.easytree-active {
+			.easytree-title {
+				background-color: var(--gray-400) !important;
+			}
+		}
+		
 		&.checked {
 			a {
 				color: var(--primary) !important;
 			}
-			&.easytree-active a{
-				color: var(--atum-table-bg) !important;
+			
+			&.easytree-active {
+				
+				.easytree-title {
+					background-color: var(--primary) !important;
+					
+					a {
+						color: var(--atum-table-bg) !important;
+					}
+				}
 			}
 		}
 	}

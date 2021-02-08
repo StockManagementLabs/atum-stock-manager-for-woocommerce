@@ -2382,6 +2382,9 @@ input[type="button"].btn-block {
 }
 
 .swal2-container .swal2-modal .swal2-close {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   font-weight: 100;
   font-family: inherit;
   font-size: 30px;
