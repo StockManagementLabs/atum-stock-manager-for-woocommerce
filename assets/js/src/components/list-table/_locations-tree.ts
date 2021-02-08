@@ -11,14 +11,15 @@ import Settings from '../../config/_settings';
 import Globals from './_globals';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import Tooltip from '../_tooltip';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class LocationsTree {
 	
 	locationsSet: string[] = [];
 	toSetLocations: string[] = [];
 	productId: number = null;
-	productTitle: string = '';
 	$button: JQuery = null;
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -44,17 +45,18 @@ export default class LocationsTree {
 
 		this.$button = $button;
 		this.productId = $row.data( 'id' );
-		this.productTitle = $row.find( '.column-title' ).find( '.atum-title-small' ).length ? $row.find( '.column-title' ).find( '.atum-title-small' ).text().trim() : $row.find( '.column-title' ).text().trim();
 		this.toSetLocations = [];
 		this.locationsSet = [];
-		
+
+		const modalTitle: string = this.wpHooks.applyFilters( 'atum_LocationsTree_showPopupTitle', `${ this.settings.get( 'productLocations' ) }<br><small>(${ this.getProductTitle( $row ) })</small>`, $button );
+
 		// Open the view popup.
 		Swal.fire( {
-			title             : `${ this.settings.get( 'productLocations' ) }<br><small>(${ this.productTitle })</small>`,
+			title             : modalTitle,
 			html              : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			showCancelButton  : false,
 			showConfirmButton : true,
-			confirmButtonText : this.settings.get( 'editProductLocations' ),
+			confirmButtonText : this.settings.get( 'editLocations' ),
 			confirmButtonColor: 'var(--primary)',
 			showCloseButton   : true,
 			didOpen           : () => this.onOpenViewPopup(),
@@ -65,7 +67,7 @@ export default class LocationsTree {
 		.then( ( result: SweetAlertResult ) => {
 
 			if ( result.isConfirmed ) {
-				this.openEditPopup();
+				this.openEditPopup( $button );
 			}
 
 		} );
@@ -126,6 +128,15 @@ export default class LocationsTree {
 		} );
 		
 	}
+
+	/**
+	 * Get the product title from the table row
+	 *
+	 * @param {JQuery} $row
+	 */
+	getProductTitle( $row: JQuery ): string {
+		return $row.find( '.column-title' ).find( '.atum-title-small' ).length ? $row.find( '.column-title' ).find( '.atum-title-small' ).text().trim() : $row.find( '.column-title' ).text().trim();
+	}
 	
 	/**
 	 * Triggers when the view popup is closed
@@ -136,11 +147,15 @@ export default class LocationsTree {
 	
 	/**
 	 * Opens the edit popup
+	 *
+	 * @param {JQuery} $button
 	 */
-	openEditPopup() {
+	openEditPopup( $button: JQuery ) {
+
+		const modalTitle: string = this.wpHooks.applyFilters(  'atum_LocationsTree_editPopupTitle', `${ this.settings.get( 'editProductLocations' ) }<br><small>(${ this.getProductTitle( $button.closest( 'tr' ) ) })</small>`, $button );
 
 		Swal.fire( {
-			title              : `${ this.settings.get( 'editProductLocations' ) }<br><small>(${ this.productTitle })</small>`,
+			title              : modalTitle,
 			html               : '<div id="atum-locations-tree" class="atum-tree"></div>',
 			text               : this.settings.get( 'textToShow' ),
 			confirmButtonText  : this.settings.get( 'saveButton' ),
@@ -216,9 +231,9 @@ export default class LocationsTree {
 	 *
 	 * @return Promise
 	 */
-	saveLocations(): Promise<any> {
+	saveLocations(): Promise<void> {
 
-		return new Promise( ( resolve: Function, reject: Function ) => {
+		return new Promise( ( resolve: Function ) => {
 			
 			// ["cat-item-40", "cat-item-39"] -> [40, 39]
 			const toSetTerms = this.toSetLocations.map( ( elem: string ) => {
@@ -238,17 +253,20 @@ export default class LocationsTree {
 				success : ( response: any ) => {
 
 					if ( response.success === true ) {
+
 						if ( toSetTerms.length ) {
 							this.$button.addClass( 'not-empty' );
 						}
 						else {
 							this.$button.removeClass( 'not-empty' );
 						}
-						resolve();
+
 					}
 					else {
-						reject();
+						Swal.showValidationMessage( response.data );
 					}
+
+					resolve();
 
 				},
 			} );

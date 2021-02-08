@@ -3976,6 +3976,14 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   padding-left: 5px;
 }
 
+.edit-locations-modal .swal2-content {
+  margin-bottom: 0;
+}
+
+.edit-locations-modal .swal2-actions {
+  margin-top: 0;
+}
+
 .edit-locations-modal .easytree-node a {
   color: var(--dark) !important;
 }

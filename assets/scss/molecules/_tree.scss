@@ -301,6 +301,15 @@ ul.easytree-container.easytree-focused {
 
 // ATUM locations tree
 .edit-locations-modal {
+	
+	.swal2-content {
+		margin-bottom: 0;
+	}
+	
+	.swal2-actions {
+		margin-top: 0;
+	}
+	
 	.easytree-node {
 		
 		a {

@@ -2122,14 +2122,16 @@ final class Ajax {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$product_id = intval( $_POST['product_id'] );
+		do_action( 'atum/ajax/stock_central_list/get_locations_tree' );
+
+		$product_id = intval( $_POST['product_id'] ); // Not using absint because it could be -1.
 
 		if ( $product_id > 0 ) {
 
 			$locations = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY );
 
 			if ( empty( $locations ) ) {
-				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No Locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
+				wp_send_json_success( '<div class="alert alert-warning no-locations-set">' . __( 'No locations were set for this product', ATUM_TEXT_DOMAIN ) . '</div>' );
 			}
 			else {
 
@@ -2147,9 +2149,9 @@ final class Ajax {
 			}
 
 		}
+		// Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 		elseif ( -1 === $product_id ) {
 
-			// Prepare all (used on set_locations_tree view). We don't care here of the urls... because they are disabled on this view.
 			$locations_tree = wp_list_categories( array(
 				'taxonomy'   => Globals::PRODUCT_LOCATION_TAXONOMY,
 				'title_li'   => '',
@@ -2183,7 +2185,7 @@ final class Ajax {
 		$product_id      = absint( $_POST['product_id'] );
 		$sanitized_terms = array_map( 'absint', $terms );
 
-		do_action( 'atum/ajax/stock_central_list/before_set_locations', $product_id );
+		do_action( 'atum/ajax/stock_central_list/before_set_locations', $product_id, $sanitized_terms );
 
 		wp_set_post_terms( $product_id, $sanitized_terms, Globals::PRODUCT_LOCATION_TAXONOMY, FALSE );
 
