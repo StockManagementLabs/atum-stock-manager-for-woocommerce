@@ -674,10 +674,15 @@
 			
 			var s6 = new Date();
 			
+			// Prevent double binding when rebuilding the tree.
+			$this.unbind( 'click.easytreeNode' );
+			$this.unbind( 'click.easytreeExpander' );
+			$this.unbind( 'dblclick.easytreeNode' );
+			
 			$this
-				.on('click', '.easytree-node', nodes, nodeClick)
-				.on('click', '.easytree-expander', nodes, toggleNodeEvt)
-				.on('dblclick', '.easytree-icon, .easytree-title', nodes, toggleNodeEvt);
+				.on('click.easytreeNode', '.easytree-node', nodes, nodeClick)
+				.on('click.easytreeExpander', '.easytree-expander', nodes, toggleNodeEvt)
+				.on('dblclick.easytreeNode', '.easytree-icon, .easytree-title', nodes, toggleNodeEvt);
 			
 			var s7 = new Date();
 			
