@@ -243,15 +243,20 @@ export default class EditPopovers extends PopoverBase{
 
 			if (
 				! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
-				$target.hasClass( 'atum-edit-field' ) || $target.hasClass( this.popoverClassName ) ||
-				$target.closest( `.${ this.popoverClassName }` ).length
+				$target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length
 			) {
 				return;
 			}
 
 			// Hide all the opened popovers.
 			$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
-				super.hidePopover( $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` ) );
+
+				const $editButton: JQuery = $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` );
+
+				if ( ! $editButton.is( $target ) ) {
+					super.hidePopover( $editButton );
+				}
+
 			} );
 
 		} );
