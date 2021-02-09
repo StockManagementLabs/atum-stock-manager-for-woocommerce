@@ -3559,6 +3559,9 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 .popover-body .edit-popover-content {
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 
 .popover-body button {
