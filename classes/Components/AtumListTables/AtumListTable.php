@@ -3229,7 +3229,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'from'                           => __( 'From', ATUM_TEXT_DOMAIN ),
 			'hideFilters'                    => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'listUrl'                        => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
-			'locationsSaved'                 => __( 'Locations Saved', ATUM_TEXT_DOMAIN ),
+			'locationsSaved'                 => __( 'Locations saved successfully', ATUM_TEXT_DOMAIN ),
 			'noItemsSelected'                => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
 			'noActions'                      => __( 'No actions', ATUM_TEXT_DOMAIN ),
 			'nonce'                          => wp_create_nonce( 'atum-list-table-nonce' ),
@@ -3250,7 +3250,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			'showFilters'                    => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'stickyColumns'                  => $this->sticky_columns,
 			'stickyColumnsNonce'             => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
-			'textToShow'                     => __( 'Text to show?', ATUM_TEXT_DOMAIN ),
 			'to'                             => __( 'To', ATUM_TEXT_DOMAIN ),
 		);
 
