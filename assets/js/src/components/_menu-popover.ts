@@ -108,9 +108,13 @@ export default class MenuPopover extends PopoverBase{
 			.off( 'click.atumMenuPopover', '#wpbody-content' )
 			.on( 'click.atumMenuPopover', '#wpbody-content', ( evt: JQueryEventObject ) => {
 
+				if ( ! $( '.popover' ).length ) {
+					return;
+				}
+
 				const $target: JQuery = $( evt.target );
 
-				if ( $target.hasClass( this.popoverButtonClassName ) || $target.hasClass( '.popover' ) || $target.closest( '.popover' ).length ) {
+				if ( ! $target.length || $target.hasClass( this.popoverButtonClassName ) || $target.hasClass( '.popover' ) || $target.closest( '.popover' ).length ) {
 					return;
 				}
 

@@ -235,9 +235,17 @@ export default class EditPopovers extends PopoverBase{
 		// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
 		$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => {
 
+			if ( ! $( '.popover' ).length ) {
+				return;
+			}
+
 			const $target: JQuery = $( evt.target );
 
-			if ( $target.hasClass( 'atum-edit-field' ) || $target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length ) {
+			if (
+				! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
+				$target.hasClass( 'atum-edit-field' ) || $target.hasClass( this.popoverClassName ) ||
+				$target.closest( `.${ this.popoverClassName }` ).length
+			) {
 				return;
 			}
 

@@ -122,12 +122,12 @@ export default class EnhancedSelect {
 				const $select: JQuery  = $( evt.currentTarget ),
 				      select2Data: any = $select.data();
 
-				if ( select2Data.hasOwnProperty('select2') ) {
+				if ( select2Data.hasOwnProperty( 'select2' ) ) {
 
 					const $dropdown: JQuery = select2Data.select2.dropdown.$dropdown;
 
-					if ( $dropdown.length) {
-						$dropdown.addClass('atum-select2-dropdown');
+					if ( $dropdown.length ) {
+						$dropdown.addClass( 'atum-select2-dropdown' );
 					}
 				}
 

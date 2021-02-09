@@ -59,7 +59,7 @@ export default abstract class PopoverBase {
 	 */
 	hidePopover( $popoverButton: JQuery ) {
 
-		if ( ! $popoverButton.length ) {
+		if ( ! $popoverButton.length || ! $( '.popover' ).length ) {
 			return;
 		}
 		else if ( $popoverButton.length > 1 ) {

@@ -19,7 +19,6 @@ const ButtonGroup = {
 			// Checkboxes.
 			if ( $button.find( ':checkbox' ).length ) {
 				$button.toggleClass( 'active' );
-				console.log('togglingClass');
 			}
 			// Radio buttons.
 			else {
