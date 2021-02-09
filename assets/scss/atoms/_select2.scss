@@ -37,7 +37,7 @@ body {
 			
 			&:focus {
 				.select2-selection {
-					box-shadow: 0 0 2px rgba($input-focus, .8);
+					box-shadow: none;
 					border-color: $input-focus;
 				}
 			}
@@ -475,7 +475,7 @@ body {
 			
 			&.select2-container--focus {
 				.select2-selection--multiple {
-					box-shadow: 0 0 2px rgba($input-focus, .8);
+					box-shadow: none;
 					border-color: $input-focus;
 					outline: 0;
 				}
