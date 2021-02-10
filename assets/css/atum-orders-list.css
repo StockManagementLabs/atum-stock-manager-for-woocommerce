@@ -2928,6 +2928,7 @@ body .select2-container--default.atum-select2 .select2-selection--multiple .sele
   overflow: hidden;
   margin: 4px 5px 0 0;
   color: var(--white);
+  line-height: 1;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
