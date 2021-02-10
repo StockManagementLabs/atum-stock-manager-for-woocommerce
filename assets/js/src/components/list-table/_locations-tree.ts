@@ -37,7 +37,7 @@ export default class LocationsTree {
 	/**
 	 * Opens a popup with the locations' tree and allows to edit locations
 	 *
-	 * @param jQuery $button
+	 * @param {JQuery} $button
 	 */
 	showLocationsPopup( $button: JQuery ) {
 
@@ -233,7 +233,7 @@ export default class LocationsTree {
 	/**
 	 * Saves the checked locations
 	 *
-	 * @return Promise
+	 * @return {Promise<void>}
 	 */
 	saveLocations(): Promise<void> {
 
@@ -281,6 +281,8 @@ export default class LocationsTree {
 
 	/**
 	 * Bind the events for the editable tree
+	 *
+	 * @param {JQuery} $locationsTreeContainer
 	 */
 	bindEditTreeEvents( $locationsTreeContainer: JQuery ) {
 
