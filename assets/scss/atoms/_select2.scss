@@ -409,22 +409,22 @@ body {
 					cursor: default;
 					float: left;
 					margin: 4px 5px 0 0;
-					padding: 0 5px;
+					padding: 3px 5px;
 					height: 24px;
 					overflow: hidden;
 					margin: 4px 5px 0 0;
 					color: var(--white);
-					
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
 				}
 				
 				.select2-selection__choice__remove {
 					color: $wp-gray-1;
 					cursor: pointer;
-					display: inline-block;
 					font-weight: bold;
-					margin-right: 3px;
+					margin-right: 0;
 					visibility: hidden;
-					vertical-align: middle;
 					
 					&:after {
 						font-family: atum-icon-font;
@@ -433,11 +433,15 @@ body {
 						position: relative;
 						left: -8px;
 						font-size: 14px;
+						line-height: 2;
 						color: var(--white);
+						transition: .2s ease-in-out;
 					}
 					
 					&:hover {
-						color: var(--gray-800);
+						&:after {
+							color: var(--gray-800);
+						}
 					}
 				}
 			}
