@@ -194,19 +194,19 @@ class Settings {
 		
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
+			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', [], ATUM_VERSION );
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
 
-			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', [ 'switchery', 'sweetalert2' ], ATUM_VERSION );
 
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', array( 'wp-color-picker' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
+			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', [ 'wp-color-picker' ], ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::maybe_enqueue_scripts();
 
-			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', array( 'jquery', 'sweetalert2', 'wp-color-picker' ), ATUM_VERSION, TRUE );
+			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'areYouSure'         => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),

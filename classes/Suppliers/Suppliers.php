@@ -380,13 +380,13 @@ class Suppliers {
 			if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) ) {
 
 				// Sweet Alert 2.
-				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 
 				// ATUM marketing popup.
 				AtumMarketingPopup::maybe_enqueue_scripts();
 
-				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', array( 'sweetalert2' ), ATUM_VERSION );
+				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [ 'sweetalert2' ], ATUM_VERSION );
 				wp_enqueue_style( 'atum-suppliers' );
 
 				// Load the ATUM colors.
@@ -398,7 +398,7 @@ class Suppliers {
 				}
 				elseif ( 'edit.php' === $hook ) {
 
-					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', array( 'jquery' ), ATUM_VERSION, TRUE );
+					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', [ 'jquery', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
 					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),

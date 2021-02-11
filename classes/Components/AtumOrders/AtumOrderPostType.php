@@ -899,6 +899,7 @@ abstract class AtumOrderPostType {
 					'jquery-blockui',
 					'stupidtable',
 					'sweetalert2',
+					'wp-hooks',
 				));
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
@@ -953,7 +954,7 @@ abstract class AtumOrderPostType {
 			elseif ( 'edit.php' === $hook ) {
 
 				$css_dependencies = array();
-				$js_dependencies  = array( 'jquery', 'jquery-tiptip' );
+				$js_dependencies  = array( 'jquery', 'jquery-tiptip', 'wp-hooks' );
 
 				if ( $show_marketing_popup ) {
 					$css_dependencies[] = 'sweetalert2';

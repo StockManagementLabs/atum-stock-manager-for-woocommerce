@@ -251,16 +251,16 @@ class Hooks {
 		if ( 'product' === $post_type && in_array( $hook, [ 'post.php', 'post-new.php' ], TRUE ) ) {
 
 			// Enqueue styles.
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', array( 'switchery', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', [], ATUM_VERSION );
+			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'switchery', 'sweetalert2' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
 			// Enqueue scripts.
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();
 
-			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', [ 'jquery', 'sweetalert2', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
 			$vars = array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),

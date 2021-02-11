@@ -297,7 +297,7 @@ class Dashboard {
 			 * Dependencies.
 			 */
 			$script_deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-blockui', 'jquery-ui-sortable' );
-			$style_deps  = array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' );
+			$style_deps  = array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme', 'wp-hooks' );
 
 			/*
 			 * Widgets scripts
