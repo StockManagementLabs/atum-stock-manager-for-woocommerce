@@ -2391,6 +2391,12 @@ input[type="button"].btn-block {
   line-height: 30px;
   color: var(--gray-500);
   z-index: 100001;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.swal2-container .swal2-modal .swal2-close:hover {
+  color: var(--gray-800);
 }
 
 .swal2-container .swal2-modal .swal2-validation-message {

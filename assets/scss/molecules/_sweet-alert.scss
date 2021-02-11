@@ -49,6 +49,11 @@
 			line-height: 30px;
 			color: var(--gray-500);
 			z-index: 100001;
+			transition: .2s ease-in-out;
+			
+			&:hover {
+				color: var(--gray-800);
+			}
 		}
 		
 		.swal2-validation-message {

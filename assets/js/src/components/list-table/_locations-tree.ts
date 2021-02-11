@@ -37,7 +37,7 @@ export default class LocationsTree {
 	/**
 	 * Opens a popup with the locations' tree and allows to edit locations
 	 *
-	 * @param jQuery $button
+	 * @param {JQuery} $button
 	 */
 	showLocationsPopup( $button: JQuery ) {
 
@@ -57,7 +57,7 @@ export default class LocationsTree {
 			confirmButtonText : this.settings.get( 'editLocations' ),
 			confirmButtonColor: 'var(--primary)',
 			showCloseButton   : true,
-			didOpen           : () => this.onOpenViewPopup(),
+			didOpen           : ( popup: HTMLElement ) => this.onOpenViewPopup( popup ),
 			willClose         : () => this.onCloseViewPopup(),
 			background        : 'var(--atum-table-bg)',
 			customClass       : {
@@ -77,10 +77,12 @@ export default class LocationsTree {
 
 	/**
 	 * Triggers when the view popup opens
+	 *
+	 * @param {HTMLElement} popup
 	 */
-	onOpenViewPopup() {
+	onOpenViewPopup( popup: HTMLElement ) {
 
-		const $locationsTreeContainer: JQuery = $( '#atum-locations-tree' );
+		const $locationsTreeContainer: JQuery = $( popup ).find( '#atum-locations-tree' );
 
 		this.tooltip.destroyTooltips();
 
@@ -100,14 +102,13 @@ export default class LocationsTree {
 
 					$locationsTreeContainer.html( response.data );
 
-					// If answer is like <span class="no-locations-set">...  don't put easytree on work.
-					// It will remove the span message.
+					// If the response is like <span class="no-locations-set">...  don't enable the easytree.
 					if ( ! ( response.data.indexOf( 'no-locations-set' ) > -1 ) ) {
 
 						( <any> $locationsTreeContainer ).easytree();
 
 						// Fill locationsSet.
-						$( '#atum-locations-tree span[class^="cat-item-"], #atum-locations-tree span[class*="cat-item-"]' ).each( ( index: number, elem: Element ) => {
+						$locationsTreeContainer.find( 'span[class^="cat-item-"], span[class*="cat-item-"]' ).each( ( index: number, elem: Element ) => {
 
 							const classList = $( elem ).attr( 'class' ).split( /\s+/ );
 
@@ -122,7 +123,7 @@ export default class LocationsTree {
 
 				}
 				else {
-					$( '#atum-locations-tree' ).html( `<h4 class="color-danger">${ response.data }</h4>` );
+					$locationsTreeContainer.html( `<h4 class="color-danger">${ response.data }</h4>` );
 				}
 
 			},
@@ -158,7 +159,6 @@ export default class LocationsTree {
 		Swal.fire( {
 			title              : this.wpHooks.applyFilters(  'atum_LocationsTree_editPopupTitle', this.settings.get( 'editProductLocations' ), $button ),
 			html               : `<div class="atum-modal-content"><div class="note">${ this.getProductTitle( $button.closest( 'tr' ) ) }</div><hr><div id="atum-locations-tree" class="atum-tree"></div></div>`,
-			text               : this.settings.get( 'textToShow' ),
 			confirmButtonText  : this.settings.get( 'saveButton' ),
 			confirmButtonColor : 'var(--primary)',
 			showCloseButton    : true,
@@ -168,7 +168,7 @@ export default class LocationsTree {
 				container: 'atum-modal',
 				popup    : 'edit-locations-modal',
 			},
-			didOpen            : () => this.onOpenEditPopup(),
+			didOpen            : ( popup: HTMLElement ) => this.onOpenEditPopup( popup ),
 			preConfirm         : () => this.saveLocations(),
 			background         : 'var(--atum-table-bg)',
 			showClass          : {
@@ -195,10 +195,12 @@ export default class LocationsTree {
 
 	/**
 	 * Triggers when the edit popup opens
+	 *
+	 * @param {HTMLElement} popup
 	 */
-	onOpenEditPopup() {
+	onOpenEditPopup( popup: HTMLElement  ) {
 
-		const $locationsTreeContainer: JQuery = $( '#atum-locations-tree' );
+		const $locationsTreeContainer: JQuery = $( popup ).find( '#atum-locations-tree' );
 
 		$.ajax( {
 			url       : window[ 'ajaxurl' ],
@@ -231,7 +233,7 @@ export default class LocationsTree {
 	/**
 	 * Saves the checked locations
 	 *
-	 * @return Promise
+	 * @return {Promise<void>}
 	 */
 	saveLocations(): Promise<void> {
 
@@ -279,6 +281,8 @@ export default class LocationsTree {
 
 	/**
 	 * Bind the events for the editable tree
+	 *
+	 * @param {JQuery} $locationsTreeContainer
 	 */
 	bindEditTreeEvents( $locationsTreeContainer: JQuery ) {
 
