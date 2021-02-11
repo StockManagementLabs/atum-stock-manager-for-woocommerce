@@ -35,6 +35,13 @@ final class Globals {
 	private static $inheritable_product_types = [ 'variable', 'grouped' ];
 
 	/**
+	 * The product types that allow children
+	 *
+	 * @var array
+	 */
+	private static $simple_product_types = [ 'simple' ];
+
+	/**
 	 * The child product types
 	 *
 	 * @var array
@@ -204,6 +211,29 @@ final class Globals {
 		AtumCache::set_cache( $cache_key, $inheritable_product_types );
 
 		return $inheritable_product_types;
+
+	}
+
+	/**
+	 * Getter for the simple_product_types property
+	 *
+	 * @since 1.8.5
+	 *
+	 * @return array
+	 */
+	public static function get_simple_product_types() {
+
+		$cache_key            = AtumCache::get_cache_key( 'simple_product_types' );
+		$simple_product_types = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache ) {
+			return $simple_product_types;
+		}
+
+		$simple_product_types = (array) apply_filters( 'atum/get_simple_product_types', self::$simple_product_types );
+		AtumCache::set_cache( $cache_key, $simple_product_types );
+
+		return $simple_product_types;
 
 	}
 

@@ -140,6 +140,9 @@ class Hooks {
 		// Delete transients after bulk changing products from SC.
 		add_action( 'atum/ajax/stock_central_list/bulk_action_applied', array( $this, 'delete_transients' ) );
 
+		// Make simple product types available for every addons.
+		add_filter( 'atum/get_simple_product_types', array( $this, 'get_simple_product_types' ) );
+
 	}
 
 	/**
@@ -1278,6 +1281,23 @@ class Hooks {
 		}
 
 		return $allow;
+	}
+
+	/**
+	 * Filter the ATUM's simple product types
+	 *
+	 * @since 1.8.5
+	 *
+	 * @param array $product_types
+	 *
+	 * @return array
+	 */
+	public function get_simple_product_types( $product_types ) {
+		foreach ( Globals::get_simple_product_types() as $type ) {
+			$product_types[] = $type;
+		}
+
+		return $product_types;
 	}
 
 	/********************
