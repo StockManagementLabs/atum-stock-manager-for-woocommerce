@@ -430,13 +430,15 @@ class Hooks {
 		}
 
 		?>
-		<td class="item_location"<?php if ( $product )
-			echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
-			<?php if ( $product ) : ?>
-				<div class="view"><?php echo esc_attr( $locations_list ) ?></div>
-			<?php else : ?>
-				&nbsp;
-			<?php endif; ?>
+		<td class="item_location"
+			<?php
+			if ( $product )
+				echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
+				<?php if ( $product ) : ?>
+					<div class="view"><?php echo esc_attr( $locations_list ) ?></div>
+				<?php else : ?>
+					&nbsp;
+				<?php endif; ?>
 		</td>
 		<?php
 	}
@@ -560,7 +562,7 @@ class Hooks {
 		foreach ( $products as $product_id => $qty ) {
 			/* translators: the product title */
 			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$count    += $qty;
+			$count   += $qty;
 		}
 
 		$titles = array_filter( $titles );
