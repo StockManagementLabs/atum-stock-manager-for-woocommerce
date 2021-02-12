@@ -230,7 +230,7 @@ final class Globals {
 			return $simple_product_types;
 		}
 
-		$simple_product_types = (array) apply_filters( 'atum/get_simple_product_types', self::$simple_product_types );
+		$simple_product_types = (array) apply_filters( 'atum/simple_product_types', self::$simple_product_types );
 		AtumCache::set_cache( $cache_key, $simple_product_types );
 
 		return $simple_product_types;
