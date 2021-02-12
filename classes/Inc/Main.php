@@ -27,6 +27,7 @@ use Atum\Integrations\Wpml;
 use Atum\MetaBoxes\FileAttachment;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
+use Atum\Orders\CheckOrderPrices;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
@@ -243,6 +244,7 @@ class Main {
 		FileAttachment::get_instance();
 		AtumQueues::get_instance();
 		AtumApi::get_instance();
+		CheckOrderPrices::get_instance();
 		
 		//
 		// Enable WPML module if needed

@@ -185,6 +185,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Models\\Products\\AtumProductVariableSubscription' => __DIR__ . '/../..' . '/classes/Models/Products/AtumProductVariableSubscription.php',
         'Atum\\Models\\Products\\AtumProductVariation' => __DIR__ . '/../..' . '/classes/Models/Products/AtumProductVariation.php',
         'Atum\\Modules\\ModuleManager' => __DIR__ . '/../..' . '/classes/Modules/ModuleManager.php',
+        'Atum\\Orders\\CheckOrderPrices' => __DIR__ . '/../..' . '/classes/Orders/CheckOrderPrices.php',
         'Atum\\PurchaseOrders\\Exports\\POExport' => __DIR__ . '/../..' . '/classes/PurchaseOrders/Exports/POExport.php',
         'Atum\\PurchaseOrders\\Items\\POItemFee' => __DIR__ . '/../..' . '/classes/PurchaseOrders/Items/POItemFee.php',
         'Atum\\PurchaseOrders\\Items\\POItemProduct' => __DIR__ . '/../..' . '/classes/PurchaseOrders/Items/POItemProduct.php',

@@ -925,4 +925,47 @@
             transform: rotate(360deg);
   }
 }
-/*# sourceMappingURL=atum-icons.css.map */
+
+#atum-checking-result {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  color: #EFAF00;
+}
+
+#atum-checking-result.checking:after {
+  content: '';
+  margin-left: 4px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(239, 175, 0, 0.25);
+  border-top-color: #EFAF00;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+/*# sourceMappingURL=atum-check-orders.css.map */

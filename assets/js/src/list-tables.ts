@@ -1,7 +1,7 @@
 /**
  * Atum List Tables
  *
- * @copyright Stock Management Labs ©2019
+ * @copyright Stock Management Labs ©2021
  *
  * @since 0.0.1
  */

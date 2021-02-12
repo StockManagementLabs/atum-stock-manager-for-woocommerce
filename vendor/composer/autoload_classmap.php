@@ -121,6 +121,7 @@ return array(
     'Atum\\Models\\Products\\AtumProductVariableSubscription' => $baseDir . '/classes/Models/Products/AtumProductVariableSubscription.php',
     'Atum\\Models\\Products\\AtumProductVariation' => $baseDir . '/classes/Models/Products/AtumProductVariation.php',
     'Atum\\Modules\\ModuleManager' => $baseDir . '/classes/Modules/ModuleManager.php',
+    'Atum\\Orders\\CheckOrderPrices' => $baseDir . '/classes/Orders/CheckOrderPrices.php',
     'Atum\\PurchaseOrders\\Exports\\POExport' => $baseDir . '/classes/PurchaseOrders/Exports/POExport.php',
     'Atum\\PurchaseOrders\\Items\\POItemFee' => $baseDir . '/classes/PurchaseOrders/Items/POItemFee.php',
     'Atum\\PurchaseOrders\\Items\\POItemProduct' => $baseDir . '/classes/PurchaseOrders/Items/POItemProduct.php',

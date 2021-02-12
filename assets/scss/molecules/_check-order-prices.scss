@@ -1,0 +1,18 @@
+//
+// Check order prices component
+//------------------------------
+
+#atum-checking-result {
+	display: inline-block;
+	margin-left: 4px;
+	vertical-align: text-bottom;
+	color: $warning;
+	
+	&.checking {
+		&:after {
+			content: '';
+			margin-left: 4px;
+			@include loader($color: $warning);
+		}
+	}
+}
