@@ -151,7 +151,7 @@ $active_sections = [];
 
 										<?php if ( 'atum_setting_color_scheme' === $section['id'] ) : ?>
 											<button class="btn btn-primary reset-default-colors" data-reset="1"
-												type="button" data-value="<?php echo esc_attr( $theme ); ?>"><?php echo esc_html( __( 'Reset To Default', ATUM_TEXT_DOMAIN ) ) ?></button>
+												type="button" data-value="<?php echo esc_attr( $theme ); ?>"><?php echo esc_html( __( 'Reset to default', ATUM_TEXT_DOMAIN ) ) ?></button>
 										<?php endif; ?>
 
 									</div>

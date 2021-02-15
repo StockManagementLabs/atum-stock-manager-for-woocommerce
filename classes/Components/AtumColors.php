@@ -614,21 +614,21 @@ class AtumColors {
 					'values' => array(
 						array(
 							'key'   => 'branded_mode',
-							'name'  => __( 'Branded Mode', ATUM_TEXT_DOMAIN ),
+							'name'  => __( 'Branded mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'branded-mode.png',
-							'desc'  => __( 'Activate the Branded mode. Colour mode for the ATUM default branded colours.', ATUM_TEXT_DOMAIN ),
+							'desc'  => __( 'Activate the branded mode. Color mode for the ATUM default branded colors.', ATUM_TEXT_DOMAIN ),
 						),
 						array(
 							'key'   => 'dark_mode',
-							'name'  => __( 'Dark Mode', ATUM_TEXT_DOMAIN ),
+							'name'  => __( 'Dark mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'dark-mode.png',
-							'desc'  => __( 'Activate the Dark mode. Colour Mode for tired/weary eyes.', ATUM_TEXT_DOMAIN ),
+							'desc'  => __( 'Activate the dark mode. Color mode for tired/weary eyes.', ATUM_TEXT_DOMAIN ),
 						),
 						array(
 							'key'   => 'hc_mode',
-							'name'  => __( 'High Contrast Mode', ATUM_TEXT_DOMAIN ),
+							'name'  => __( 'High contrast mode', ATUM_TEXT_DOMAIN ),
 							'thumb' => 'hc-mode.png',
-							'desc'  => __( "Activate the High Contrast mode. This mode is for users that find difficult viewing data while browsing the interface in ATUM's branded colours.", ATUM_TEXT_DOMAIN ),
+							'desc'  => __( "Activate the high contrast mode. This mode is for users that find difficult viewing data while browsing the interface in ATUM's branded colors.", ATUM_TEXT_DOMAIN ),
 						),
 					),
 				),
@@ -637,7 +637,7 @@ class AtumColors {
 			'bm_primary_color'         => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Primary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -647,7 +647,7 @@ class AtumColors {
 			'hc_primary_color'         => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Primary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
@@ -657,7 +657,7 @@ class AtumColors {
 			'dm_primary_color'         => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Primary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Primary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for links and editable values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -667,7 +667,7 @@ class AtumColors {
 			'bm_secondary_color'       => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Secondary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -677,7 +677,7 @@ class AtumColors {
 			'dm_secondary_color'       => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Secondary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Secondary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -687,7 +687,7 @@ class AtumColors {
 			'bm_tertiary_color'        => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Tertiary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -697,7 +697,7 @@ class AtumColors {
 			'dm_tertiary_color'        => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Tertiary Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Tertiary color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -707,7 +707,7 @@ class AtumColors {
 			'dm_tertiary_color_light'  => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Outside Elements Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Outside elements color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons outside of ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -717,7 +717,7 @@ class AtumColors {
 			'bm_danger_color'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Danger color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -727,7 +727,7 @@ class AtumColors {
 			'dm_danger_color'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Danger Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Danger color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for highlighted text and edited values in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -737,7 +737,7 @@ class AtumColors {
 			'bm_title_color'           => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Titles text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -747,7 +747,7 @@ class AtumColors {
 			'dm_title_color'           => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Titles Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Titles text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for titles.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -757,7 +757,7 @@ class AtumColors {
 			'bm_text_color'            => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Main text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -767,7 +767,7 @@ class AtumColors {
 			'dm_text_color'            => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Main Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Main text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -777,7 +777,7 @@ class AtumColors {
 			'bm_text_color_2'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Soft text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -787,7 +787,7 @@ class AtumColors {
 			'dm_text_color_2'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Soft Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Soft text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for secondary texts and UX elements in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -797,7 +797,7 @@ class AtumColors {
 			'bm_text_color_expanded'   => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Light text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -807,7 +807,7 @@ class AtumColors {
 			'dm_text_color_expanded'   => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Light Text Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Light text color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for buttons text and expanded row text in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -817,7 +817,7 @@ class AtumColors {
 			'bm_border_color'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Borders color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -827,7 +827,7 @@ class AtumColors {
 			'dm_border_color'          => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Borders Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Borders color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for borders in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -837,7 +837,7 @@ class AtumColors {
 			'bm_bg_1_color'            => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Primary Background Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Primary background color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for background color in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -847,7 +847,7 @@ class AtumColors {
 			'bm_bg_2_color'            => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Secondary Background Color', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Secondary background color', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the background color of striped rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -857,7 +857,7 @@ class AtumColors {
 			'bm_primary_color_light'   => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -867,7 +867,7 @@ class AtumColors {
 			'hc_primary_color_light'   => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
@@ -877,7 +877,7 @@ class AtumColors {
 			'dm_primary_color_light'   => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 1', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 1', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -887,7 +887,7 @@ class AtumColors {
 			'bm_primary_color_dark'    => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -897,7 +897,7 @@ class AtumColors {
 			'hc_primary_color_dark'    => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'hc_mode',
@@ -907,7 +907,7 @@ class AtumColors {
 			'dm_primary_color_dark'    => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 2', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 2', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -917,7 +917,7 @@ class AtumColors {
 			'bm_secondary_color_light' => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 3', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -927,7 +927,7 @@ class AtumColors {
 			'dm_secondary_color_light' => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 3', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 3', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
@@ -937,7 +937,7 @@ class AtumColors {
 			'bm_secondary_color_dark'  => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 4', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'branded_mode',
@@ -947,7 +947,7 @@ class AtumColors {
 			'dm_secondary_color_dark'  => array(
 				'group'        => 'visual_settings',
 				'section'      => 'color_scheme',
-				'name'         => __( 'Colored Background Color 4', ATUM_TEXT_DOMAIN ),
+				'name'         => __( 'Colored background color 4', ATUM_TEXT_DOMAIN ),
 				'desc'         => __( 'Mainly used for the striped background of expanded rows in ATUM tables.', ATUM_TEXT_DOMAIN ),
 				'type'         => 'color',
 				'display'      => 'dark_mode',
