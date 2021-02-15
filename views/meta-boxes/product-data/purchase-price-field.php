@@ -23,8 +23,7 @@ $decimals = \Atum\Inc\Globals::get_prices_decimals();
 
 $invalid_purchase_price = apply_filters( 'atum/meta_boxes/purchase_price/invalid', ( $field_value > $price ), $product_id );
 
-$wc_rounding_precission = defined( 'WC_ROUNDING_PRECISION' ) ? WC_ROUNDING_PRECISION : NULL;
-$purchase_price         = is_numeric( $field_value ) ? wc_format_localized_price( wc_format_decimal( $field_value, $decimals ) ) : '';
+$purchase_price = is_numeric( $field_value ) ? wc_format_localized_price( wc_format_decimal( $field_value, $decimals ) ) : '';
 
 ?>
 <p class="form-field <?php echo esc_attr( $wrapper_class ) ?>">
