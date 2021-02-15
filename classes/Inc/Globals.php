@@ -516,10 +516,10 @@ final class Globals {
 	 *
 	 * @since 1.8.4
 	 *
-	 * @return integer
+	 * @return integer|boolean
 	 */
 	public static function get_prices_decimals() {
 
-		return apply_filters( 'atum/price_decimals', 6 );
+		return apply_filters( 'atum/price_decimals', FALSE );
 	}
 }
