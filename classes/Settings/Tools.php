@@ -75,7 +75,7 @@ class Tools {
 		$defaults['update_manage_stock'] = array(
 			'group'   => 'tools',
 			'section' => 'tools',
-			'name'    => __( "Update WC's Manage Stock", ATUM_TEXT_DOMAIN ) . $atum_label,
+			'name'    => __( "Update WC's manage stock", ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( "Update the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
@@ -109,7 +109,7 @@ class Tools {
 		$defaults['clear_out_stock_threshold'] = array(
 			'group'   => 'tools',
 			'section' => 'tools',
-			'name'    => __( 'Clear Out Stock Threshold', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'name'    => __( 'Clear out stock threshold', ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( 'Clear all previously saved Out of Stock Threshold values.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
@@ -123,7 +123,7 @@ class Tools {
 			'group'   => 'tools',
 			'section' => 'tools',
 			'default' => 300,
-			'name'    => __( 'Update Products calculated properties', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'name'    => __( "Update products' calculated properties", ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
