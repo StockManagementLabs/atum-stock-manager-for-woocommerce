@@ -12,6 +12,7 @@
 
 import CheckOrderPrices from './components/_check-order-prices';
 import Settings from './config/_settings';
+import Tooltip from './components/_tooltip';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $) => {
@@ -20,7 +21,8 @@ jQuery( ( $) => {
 
 	// Get the settings from localized var.
 	const settings = new Settings('atumCheckOrders');
+	const tooltip  = new Tooltip( false );
 
-	new CheckOrderPrices( settings );
+	new CheckOrderPrices( settings, tooltip );
 
 });

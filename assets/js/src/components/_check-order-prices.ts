@@ -2,6 +2,7 @@
  CHECK ORDER PRICES
  ======================================= */
 
+import Tooltip from './_tooltip';
 import Settings from '../config/_settings';
 
 export default class CheckOrderPrices {
@@ -10,7 +11,8 @@ export default class CheckOrderPrices {
 	$checkingResultWrapper: JQuery;
 
 	constructor(
-		private settings: Settings
+		private settings: Settings,
+		private tooltip: Tooltip
 	) {
 
 		this.$checkPricesButton = $( `<button id="atum-check-order-prices" class="page-title-action">${ this.settings.get( 'checkOrderPrices' ) }</button>` );
@@ -35,8 +37,14 @@ export default class CheckOrderPrices {
 				url       : window[ 'ajaxurl' ],
 				method    : 'post',
 				dataType  : 'json',
-				data      : {},
+				data      : {
+					action      : 'atum_check_order_prices',
+					token       : this.settings.get( 'nonce' ),
+					query_string: location.search,
+				},
 				beforeSend: () => {
+
+					$( '#atum-mismatching-orders' ).remove();
 
 					this.$checkingResultWrapper
 						.addClass( 'checking' )
@@ -46,7 +54,12 @@ export default class CheckOrderPrices {
 				success   : ( response: any ) => {
 
 					this.$checkingResultWrapper.removeClass( 'checking' ).empty();
-					console.log( response );
+
+					if ( response.success ) {
+						const $resultBadge: JQuery = $( response.data );
+						$resultBadge.insertAfter( this.$checkPricesButton );
+						this.tooltip.addTooltips( $resultBadge.parent() );
+					}
 
 				},
 			} );
