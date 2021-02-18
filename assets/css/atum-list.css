@@ -3828,12 +3828,7 @@ ul.easytree-container:focus {
 }
 
 ul.easytree-container .easytree-node {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  display: inline-block;
 }
 
 ul.easytree-container ul {
