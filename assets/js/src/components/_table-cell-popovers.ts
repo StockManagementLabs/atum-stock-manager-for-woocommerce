@@ -176,21 +176,28 @@ export default class TableCellPopovers extends PopoverBase{
 		// Check whether to add extra fields to the popover.
 		if ( typeof extraMeta !== 'undefined' ) {
 
-			popoverClass = ' with-meta';
-			$extraFields = $( '<hr>' );
+			popoverClass += ' with-meta';
+			$extraFields  = $( '<div />' ).append( $input ).append( '<hr>' );
 
 			$.each( extraMeta, ( index: number, metaAtts: any ) => {
-				$extraFields = $extraFields.add( $( '<input />', metaAtts ) );
+				$extraFields.append( $( '<input />', metaAtts ) );
 			} );
 
 		}
 
-		const $content: JQuery = $extraFields ? $input.add( $extraFields ).add( $setButton ) : $input.add( $setButton );
+		let $content: JQuery = $( '<div class="edit-popover-content" />' );
+
+		if ( $extraFields ) {
+			$content.append( $extraFields ).append( $setButton );
+		}
+		else {
+			$content.append( $input ).append( $setButton );
+		}
 		
 		// Create the meta edit popover.
 		new BsPopover( $metaCell.get( 0 ), {
 			title      : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
-			content    : $( '<div class="edit-popover-content" />' ).append( $content ).get( 0 ), // It supports one element only.
+			content    : $content.get( 0 ), // It supports one element only.
 			html       : true,
 			customClass: popoverClass,
 			placement  : 'bottom',

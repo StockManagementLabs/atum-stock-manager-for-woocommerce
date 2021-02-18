@@ -7031,9 +7031,9 @@ table.atum-list-table .column-groups th.actions, .floatThead-container .column-g
   }
 }
 
-.popover.with-meta .popover-body input, .popover.with-meta .popover-body button {
+.popover.with-meta .popover-body input {
   width: 100%;
-  margin: 3px 0;
+  margin-bottom: 3px;
 }
 
 .popover.with-meta .popover-body .btn-link {
@@ -7042,7 +7042,8 @@ table.atum-list-table .column-groups th.actions, .floatThead-container .column-g
 }
 
 .popover.with-meta .popover-body hr {
-  border-color: var(--info);
+  border-top: 1px solid var(--info);
+  border-bottom: none;
 }
 
 [data-screen="atum-inventory_page_atum-inbound-stock"] .tablenav [name="filter_action"] {

@@ -2980,9 +2980,9 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	&.with-meta {
 		
 		.popover-body {
-			input, button {
+			input {
 				width: 100%;
-				margin: 3px 0;
+				margin-bottom: 3px;
 			}
 			
 			.btn-link {
@@ -2991,7 +2991,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			hr {
-				border-color: var(--info);
+				border-top: 1px solid var(--info);
+				border-bottom: none;
 			}
 		}
 		
