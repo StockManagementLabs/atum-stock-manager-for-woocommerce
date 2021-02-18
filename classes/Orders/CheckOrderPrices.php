@@ -199,8 +199,13 @@ class CheckOrderPrices {
 
 				$old_price = $editable_order_item->subtotal / $editable_order_item->qty;
 
-				$product_id    = $editable_order_item->variation_id ?: $editable_order_item->product_id;
-				$product       = wc_get_product( $product_id );
+				$product_id = $editable_order_item->variation_id ?: $editable_order_item->product_id;
+				$product    = wc_get_product( $product_id );
+
+				if ( ! $product instanceof \WC_Product ) {
+					continue;
+				}
+
 				$current_price = $product->get_price();
 
 				if ( (float) $old_price !== (float) $current_price ) {
