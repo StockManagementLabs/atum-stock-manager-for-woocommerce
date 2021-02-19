@@ -10,7 +10,6 @@ import FileUploader, { WPMediaModalOptions } from '../_file-uploader';
 import Settings from '../../config/_settings';
 import SmartForm from '../_smart-form';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import Switcher from '../_switcher';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
 
@@ -37,13 +36,6 @@ export default class SettingsPage {
 		
 		// URL hash navigation.
 		this.setupNavigation();
-		
-		// Enable switchers.
-		Switcher.doSwitchers();
-		Switcher.doSwitchers( '.js-switch-menu', {
-			color    : '#DBF9FF',
-			jackColor: '#00B8DB',
-		} );
 
 		// Enable DateTimePickers
 		this.initDateTimePicker();
@@ -198,7 +190,6 @@ export default class SettingsPage {
 
 		this.$form.load( `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
 
-			Switcher.doSwitchers();
 			ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
 			this.initDateTimePicker();
 			this.enhancedSelect.maybeRestoreEnhancedSelect();

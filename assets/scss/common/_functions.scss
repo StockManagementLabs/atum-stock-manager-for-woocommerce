@@ -111,3 +111,26 @@
 @function shade-color($color, $weight) {
 	@return mix(black, $color, $weight);
 }
+
+/*
+ * Bootstrap 5
+ */
+
+// See https://codepen.io/kevinweber/pen/dXWoRw
+//
+// Requires the use of quotes around data URIs.
+
+@function escape-svg($string) {
+	@if str-index($string, "data:image/svg+xml") {
+		@each $char, $encoded in $escaped-characters {
+			// Do not escape the url brackets
+			@if str-index($string, "url(") == 1 {
+				$string: url("#{str-replace(str-slice($string, 6, -3), $char, $encoded)}");
+			} @else {
+				$string: str-replace($string, $char, $encoded);
+			}
+		}
+	}
+	
+	@return $string;
+}

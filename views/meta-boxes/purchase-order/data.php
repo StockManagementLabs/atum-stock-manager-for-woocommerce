@@ -43,11 +43,11 @@ $po_status = $atum_order->get_status();
 			<div class="atum_order_data_column">
 
 				<p class="form-field form-field-wide">
-					<label for="multiple_suppliers">
-						<?php esc_html_e( 'Multiple Suppliers', ATUM_TEXT_DOMAIN ) ?>
-						<input type="checkbox" class="js-switch" name="multiple_suppliers" id="multiple_suppliers" value="yes"<?php checked( $has_multiple_suppliers, TRUE ) ?> style="display: none">
+					<span class="form-switch">
+						<input type="checkbox" class="form-check-input" name="multiple_suppliers" id="multiple_suppliers" value="yes"<?php checked( $has_multiple_suppliers, TRUE ) ?>>
 						<input type="hidden" class="item-blocker-old-value" value="<?php echo ( $has_multiple_suppliers ? 'yes' : 'no' ) ?>">
-					</label>
+						<label for="multiple_suppliers" class="form-check-label"><?php esc_html_e( 'Multiple Suppliers', ATUM_TEXT_DOMAIN ) ?></label>
+					</span>
 				</p>
 
 				<p class="form-field form-field-wide"<?php if ($has_multiple_suppliers) echo ' style="display:none"' ?>>

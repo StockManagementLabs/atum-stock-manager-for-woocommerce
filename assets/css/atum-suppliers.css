@@ -8,6 +8,9 @@
  */
 
  @charset "UTF-8";
+/*
+ * Bootstrap 5
+ */
 :root {
   --gray-100: #f8f9fa;
   --gray-100-hover: rgba(248, 249, 250, 0.6);
@@ -3396,7 +3399,7 @@ input[type="button"].btn-block {
   color: #888;
 }
 
-.atum-meta-box .form-field label {
+.atum-meta-box .form-field label:not(.form-check-label) {
   display: block;
   padding: 0 0 3px;
 }
@@ -3405,7 +3408,7 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
-.atum-meta-box .form-field input {
+.atum-meta-box .form-field input:not(.form-check-input) {
   height: 32px;
   border-radius: 4px;
   -webkit-box-shadow: none;
@@ -3418,10 +3421,6 @@ input[type="button"].btn-block {
 
 .atum-meta-box .form-field .atum-datepicker {
   width: 50%;
-}
-
-.atum-meta-box .form-field .switchery {
-  margin-left: 7px;
 }
 
 .atum-meta-box .form-field.atum-editor {

@@ -7,7 +7,10 @@
  * License : ©2021 Stock Management Labs 
  */
 
- :root {
+ /*
+ * Bootstrap 5
+ */
+:root {
   --gray-100: #f8f9fa;
   --gray-100-hover: rgba(248, 249, 250, 0.6);
   --gray-100-shadow: rgba(248, 249, 250, 0.2);

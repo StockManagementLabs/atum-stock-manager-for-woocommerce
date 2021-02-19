@@ -8,6 +8,9 @@
  */
 
  @charset "UTF-8";
+/*
+ * Bootstrap 5
+ */
 :root {
   --gray-100: #f8f9fa;
   --gray-100-hover: rgba(248, 249, 250, 0.6);

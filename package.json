@@ -51,7 +51,6 @@
 		"jquery-nice-select": "^1.1.0",
 		"lightgallery.js": "^1.2.0",
 		"moment": "^2.27.0",
-		"owl.carousel": "^2.3.4",
-		"switchery-npm": "^0.8.2"
+		"owl.carousel": "^2.3.4"
 	}
 }

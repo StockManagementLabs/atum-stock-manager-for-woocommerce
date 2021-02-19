@@ -156,6 +156,10 @@
 				cursor: ew-resize;
 			}
 			
+			.form-switch {
+				z-index: 1;
+			}
+			
 			&.legend-placeholder {
 				background-color: transparentize($light, 0.85);
 				border-style: dashed;

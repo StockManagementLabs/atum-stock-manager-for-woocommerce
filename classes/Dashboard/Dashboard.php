@@ -304,11 +304,6 @@ class Dashboard {
 			 */
 			$widget_keys = array_keys( $user_widgets_layout );
 
-			if ( in_array( ATUM_PREFIX . 'statistics_widget', $widget_keys ) ) {
-				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-				$style_deps[] = 'switchery';
-			}
-
 			if ( in_array( ATUM_PREFIX . 'current_stock_value_widget', $widget_keys ) ) {
 				$script_deps[] = 'jquery-blockui';
 			}

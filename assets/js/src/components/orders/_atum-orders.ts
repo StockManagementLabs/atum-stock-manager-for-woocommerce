@@ -11,7 +11,6 @@ import Tooltip from '../_tooltip';
 import Settings from '../../config/_settings';
 import StupidTable from '../_stupid-table';
 import Swal from 'sweetalert2';
-import Switcher from '../_switcher';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
@@ -43,7 +42,6 @@ export default class AtumOrders {
 		new OrdersBulkActions( this.settings, this.$container, this );
 		new AddItemsPopup( this.settings, this.$container, this, this.tooltip );
 		this.dateTimePicker.addDateTimePickers( $( '.atum-datepicker' ), { minDate: false } );
-		Switcher.doSwitchers();
 
 		this.bindEvents();
 		

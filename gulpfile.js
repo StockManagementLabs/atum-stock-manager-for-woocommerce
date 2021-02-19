@@ -157,7 +157,6 @@ gulp.task('js::atum', function () {
 						}
 					},
 				],
-				noParse: /switchery/
 			},
 			
 			plugins: [

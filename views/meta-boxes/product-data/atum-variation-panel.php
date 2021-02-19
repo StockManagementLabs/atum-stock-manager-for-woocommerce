@@ -21,17 +21,22 @@ use Atum\Inc\Globals;
 	</h2>
 
 	<div class="options_group">
-		<?php
-		woocommerce_wp_checkbox( array(
-			'id'          => Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop,
-			'name'        => 'variation_atum_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]",
-			'value'       => $variation->get_atum_controlled(),
-			'class'       => 'js-switch variation-atum-controlled',
-			'label'       => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-			'description' => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
-			'desc_tip'    => TRUE,
-		) );
-		?>
+
+		<?php $field_id = Globals::ATUM_CONTROL_STOCK_KEY . '_' . $loop ?>
+		<p class="form-field <?php echo esc_attr( $field_id ) ?>_field">
+			<label for="<?php echo esc_attr( $field_id ) ?>"><?php esc_html_e( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ); ?></label>
+
+			<?php echo wc_help_tip( __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
+			<?php $field_value = $variation->get_atum_controlled() ?>
+			<span class="form-switch">
+				<input type="checkbox" name="<?php echo esc_attr( 'variation_atum_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]" ) ?>"
+					id="<?php echo esc_attr( $field_id ) ?>" class="form-check-input variation-atum-controlled"
+					value="<?php echo esc_attr( $field_value ) ?>" <?php checked( $field_value, 'yes' ) ?>
+				>
+			</span>
+		</p>
+
 	</div>
 
 	<?php

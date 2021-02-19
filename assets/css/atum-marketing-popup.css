@@ -8,6 +8,9 @@
  */
 
  @charset "UTF-8";
+/*
+ * Bootstrap 5
+ */
 .btn {
   display: inline-block;
   font-weight: 400;

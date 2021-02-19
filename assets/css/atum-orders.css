@@ -8,6 +8,9 @@
  */
 
  @charset "UTF-8";
+/*
+ * Bootstrap 5
+ */
 .color-primary {
   color: #00B8DB;
 }
@@ -3298,21 +3301,120 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
-.switchery {
-  width: 48px;
-  border-radius: 100px;
-  -webkit-box-shadow: inset 1px 1px 3px 0 var(--black-shadow) !important;
-          box-shadow: inset 1px 1px 3px 0 var(--black-shadow) !important;
-  border: none;
+input.form-check-input {
+  width: 1.3em;
+  height: 1.3em;
+  margin-top: 0.1em;
+  vertical-align: top;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  -webkit-print-color-adjust: exact;
+          color-adjust: exact;
 }
 
-.switchery small {
-  height: 26px;
-  width: 26px;
-  top: -3px;
-  background-color: var(--tertiary-var);
-  -webkit-box-shadow: none;
-          box-shadow: none;
+input.form-check-input[type="checkbox"] {
+  border-radius: 0.25em;
+}
+
+input.form-check-input[type="radio"] {
+  border-radius: 50%;
+}
+
+input.form-check-input:active {
+  -webkit-filter: brightness(90%);
+          filter: brightness(90%);
+}
+
+input.form-check-input:focus {
+  border-color: #69C61D;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(105, 198, 29, 0.25);
+}
+
+input.form-check-input:checked {
+  background-color: #69C61D;
+  border-color: #69C61D;
+}
+
+input.form-check-input:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+
+input.form-check-input:checked[type="radio"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+input.form-check-input[type="checkbox"]:indeterminate {
+  background-color: #69C61D;
+  border-color: #69C61D;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+}
+
+input.form-check-input:disabled {
+  pointer-events: none;
+  -webkit-filter: none;
+          filter: none;
+  opacity: 0.5;
+}
+
+input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:disabled ~ .form-check-label {
+  opacity: 0.5;
+}
+
+.form-check-label {
+  display: inline-block;
+}
+
+.form-switch {
+  padding-left: 2.9em;
+}
+
+.form-switch input.form-check-input {
+  width: 2.4em;
+  margin-left: -2.9em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  background-position: left center;
+  border-radius: 2.4em;
+  -webkit-transition: background-position 0.15s ease-in-out;
+  transition: background-position 0.15s ease-in-out;
+}
+
+.form-switch input.form-check-input:before {
+  content: none !important;
+}
+
+.form-switch input.form-check-input:focus {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23abeb77'/%3e%3c/svg%3e");
+}
+
+.form-switch input.form-check-input:checked {
+  background-position: right center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+.form-switch input.form-check-input.blue-switch:focus {
+  border-color: #00B8DB;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 184, 219, 0.25);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%235ce5ff'/%3e%3c/svg%3e");
+}
+
+.form-switch input.form-check-input.blue-switch:checked {
+  background-color: #00B8DB;
+  border-color: #00B8DB;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+.woocommerce-help-tip + .form-switch {
+  margin-left: 8px;
+  vertical-align: -3px;
 }
 
 .wrap h1.wp-heading-inline {
@@ -3800,7 +3902,7 @@ input[type="button"].btn-block {
   color: #888;
 }
 
-.atum-meta-box .form-field label {
+.atum-meta-box .form-field label:not(.form-check-label) {
   display: block;
   padding: 0 0 3px;
 }
@@ -3809,7 +3911,7 @@ input[type="button"].btn-block {
   width: 100%;
 }
 
-.atum-meta-box .form-field input {
+.atum-meta-box .form-field input:not(.form-check-input) {
   height: 32px;
   border-radius: 4px;
   -webkit-box-shadow: none;
@@ -3822,10 +3924,6 @@ input[type="button"].btn-block {
 
 .atum-meta-box .form-field .atum-datepicker {
   width: 50%;
-}
-
-.atum-meta-box .form-field .switchery {
-  margin-left: 7px;
 }
 
 .atum-meta-box .form-field.atum-editor {

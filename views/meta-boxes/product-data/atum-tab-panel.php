@@ -19,18 +19,19 @@ use Atum\Inc\Helpers;
 <div id="atum_product_data" class="atum-data-panel panel woocommerce_options_panel hidden">
 	<div class="options_group">
 
-		<?php
-		woocommerce_wp_checkbox( array(
-			'id'            => Globals::ATUM_CONTROL_STOCK_KEY,
-			'name'          => 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']',
-			'value'         => 'auto-draft' === $product_status ? 'yes' : $product->get_atum_controlled(),
-			'class'         => 'js-switch',
-			'wrapper_class' => implode( ' ', $checkbox_wrapper_classes ),
-			'label'         => __( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ),
-			'description'   => __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ),
-			'desc_tip'      => TRUE,
-		) );
-		?>
+		<p class="form-field <?php echo esc_attr( implode( ' ', $checkbox_wrapper_classes ) . ' ' . Globals::ATUM_CONTROL_STOCK_KEY ) ?>_field">
+			<label for="<?php echo esc_attr( Globals::ATUM_CONTROL_STOCK_KEY ) ?>"><?php esc_html_e( 'ATUM Control Switch', ATUM_TEXT_DOMAIN ); ?></label>
+
+			<?php echo wc_help_tip( __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
+			<?php $field_value = 'auto-draft' === $product_status ? 'yes' : $product->get_atum_controlled() ?>
+			<span class="form-switch">
+				<input type="checkbox" name="<?php echo esc_attr( 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']' ) ?>"
+					id="<?php echo esc_attr( Globals::ATUM_CONTROL_STOCK_KEY ) ?>" class="form-check-input"
+					value="<?php echo esc_attr( $field_value ) ?>" <?php checked( $field_value, 'yes' ) ?>
+				>
+			</span>
+		</p>
 
 		<p class="form-field product-tab-runner <?php echo esc_attr( implode( ' ', $control_button_classes ) ) ?>">
 			<label for="stock_control_status"><?php esc_html_e( "Variations' ATUM Control", ATUM_TEXT_DOMAIN ) ?></label>

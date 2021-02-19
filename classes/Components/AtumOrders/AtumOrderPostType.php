@@ -886,10 +886,7 @@ abstract class AtumOrderPostType {
 					wp_enqueue_script( 'es6-promise' );
 				}
 
-				// Switchery.
-				wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', FALSE, ATUM_VERSION );
-
-				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2', 'switchery' ), ATUM_VERSION );
+				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-orders' );
 
 				// Enqueue the script with the required WooCommerce dependencies.

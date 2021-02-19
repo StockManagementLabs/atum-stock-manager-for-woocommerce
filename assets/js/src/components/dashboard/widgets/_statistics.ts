@@ -4,7 +4,6 @@
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';
-import Switcher from '../../_switcher';
 
 export default class StatisticsWidget {
 	
@@ -222,17 +221,6 @@ export default class StatisticsWidget {
 	}
 	
 	doLegendSwitches() {
-		
-		// Enable switches.
-		Switcher.doSwitchers('.value-chart', {
-			color    : 'var(--green-light)',
-			jackColor: 'var(--tertiary)',
-		});
-		
-		Switcher.doSwitchers('.products-chart', {
-			color    : 'var(--primary-switcher-bg)',
-			jackColor: 'var(--primary)',
-		});
 		
 		// Hide/show charts with legend switches.
 		$('#value-chart, #products-chart').change( (evt: JQueryEventObject) => {

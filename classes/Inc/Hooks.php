@@ -255,8 +255,7 @@ class Hooks {
 
 			// Enqueue styles.
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', [], ATUM_VERSION );
-			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'switchery', 'sweetalert2' ], ATUM_VERSION );
+			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'sweetalert2' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
 			// Enqueue scripts.

@@ -3,13 +3,11 @@
 //------------------
 
 // Paths
-
 $atum-assets-path:                      "../" !default;
 $atum-font-path:                        "#{$atum-assets-path}fonts/" !default;
 $atum-img-path:                         "#{$atum-assets-path}images/" !default;
 
 // Fonts
-
 $font-size-base:                        0.875rem !default;
 $font-size-lg:                          ($font-size-base * 1.25) !default;
 $font-size-sm:                          ($font-size-base * .875) !default;
@@ -25,30 +23,28 @@ $line-height-sm:                        1.5 !default;
 $border-width:                          1px !default;
 
 // Grid settings
-
 $main-sm-columns:                       12 !default;
 $sidebar-sm-columns:                    4 !default;
 $grid-gutter-width:                     30px !default;
 $grid-columns:                          12 !default;
 $grid-breakpoints: (
-		xs: 0,
-		sm: 576px,
-		md: 768px,
-		lg: 992px,
-		xl: 1200px
+	xs: 0,
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px
 ) !default;
 $container-max-widths: (
-		sm: 540px,
-		md: 720px,
-		lg: 960px,
-		xl: 1140px
+	sm: 540px,
+	md: 720px,
+	lg: 960px,
+	xl: 1140px
 ) !default;
 
 
 $max-width-limit:                       1280px !default;
 
 // Colors
-
 $white:                                 #fff !default;
 $gray-100:                              #f8f9fa !default;
 $gray-200:                              #e9ecef !default;
@@ -63,15 +59,15 @@ $black:                                 #000 !default;
 
 $grays: () !default;
 $grays: map-merge((
-		"100": $gray-100,
-		"200": $gray-200,
-		"300": $gray-300,
-		"400": $gray-400,
-		"500": $gray-500,
-		"600": $gray-600,
-		"700": $gray-700,
-		"800": $gray-800,
-		"900": $gray-900
+	"100": $gray-100,
+	"200": $gray-200,
+	"300": $gray-300,
+	"400": $gray-400,
+	"500": $gray-500,
+	"600": $gray-600,
+	"700": $gray-700,
+	"800": $gray-800,
+	"900": $gray-900
 ), $grays);
 
 $blue:                                  #00B8DB !default;
@@ -98,30 +94,28 @@ $blue-trans:                            rgba(0, 183, 219, 0.79);
 $green-trans:                           rgba(106, 200, 30, 0.79);
 $green-blue:                            rgba(30, 200, 149, 0.79);
 
-
 $colors: () !default;
 $colors: map-merge((
-		"blue":              $blue,
-		"blue-gray-light":   $blue-gray-light,
-		"orange":            $orange,
-		"red":               $red,
-		"red-light":         $red-light,
-		"red-light-2":       $red-light-2,
-		"green":             $green,
-		"green-light":       $green-light,
-		"blue-light":        $blue-light,
-		"blue-dark":         $blue-dark,
-		"blue-dark-lighten": $blue-dark-lighten,
-		"blue-dark-light-2": $blue-dark-light-2,
-		"white":             $white,
-		"gray":              $gray-500,
-		"gray-light":        $gray-200,
-		"gray-dark":         $gray-800,
-		"purple":            $purple,
-		"purple-light":      $purple-light,
-		"purple-pl":         $purple-pl,
-		"black":             $black,
-		
+	"blue":              $blue,
+	"blue-gray-light":   $blue-gray-light,
+	"orange":            $orange,
+	"red":               $red,
+	"red-light":         $red-light,
+	"red-light-2":       $red-light-2,
+	"green":             $green,
+	"green-light":       $green-light,
+	"blue-light":        $blue-light,
+	"blue-dark":         $blue-dark,
+	"blue-dark-lighten": $blue-dark-lighten,
+	"blue-dark-light-2": $blue-dark-light-2,
+	"white":             $white,
+	"gray":              $gray-500,
+	"gray-light":        $gray-200,
+	"gray-dark":         $gray-800,
+	"purple":            $purple,
+	"purple-light":      $purple-light,
+	"purple-pl":         $purple-pl,
+	"black":             $black,
 ), $colors);
 
 $primary:                               $blue !default;
@@ -136,27 +130,24 @@ $danger:                                $red !default;
 $light:                                 $gray-100 !default;
 $dark:                                  $gray-800 !default;
 
-
 $theme-colors: () !default;
 $theme-colors: map-merge((
-		"primary":    $primary,
-		"secondary":  $secondary,
-		"tertiary":   $tertiary,
-		"success":    $success,
-		"main":       $main,
-		"info":       $info,
-		"warning":    $warning,
-		"danger":     $danger,
-		"light":      $light,
-		"dark":       $dark,
-		"purple-pl":  $purple-pl,
-		"gray":       $gray-600,
-		"default":    $gray-500
+	"primary":    $primary,
+	"secondary":  $secondary,
+	"tertiary":   $tertiary,
+	"success":    $success,
+	"main":       $main,
+	"info":       $info,
+	"warning":    $warning,
+	"danger":     $danger,
+	"light":      $light,
+	"dark":       $dark,
+	"purple-pl":  $purple-pl,
+	"gray":       $gray-600,
+	"default":    $gray-500
 ), $theme-colors);
 
-
 // WP Colors
-
 $wp-link:                               #0073AA !default;
 $wp-link-hover:                         #00A0D2 !default;
 $wp-input-focus:                        #007CBA !default;
@@ -176,24 +167,22 @@ $wp-red:                                #A00 !default;
 
 $wp-colors: () !default;
 $wp-colors: map-merge((
-		"wp-link":         $wp-link,
-		"wp-link-hover":   $wp-link-hover,
-		"wp-input-focus":  $wp-input-focus,
-		"wp-pink":         $wp-pink,
-		"wp-pink-light":   $wp-pink-light,
-		"wp-pink-lighter": $wp-pink-lighter,
-		"wp-gray-dark":    $wp-gray-dark,
-		"wp-gray-1":       $wp-gray-1,
-		"wp-gray-3":       $wp-gray-3,
-		"wp-gray-4":       $wp-gray-4,
-		"wp-gray-5":       $wp-gray-5,
-		"wp-gray-6":       $wp-gray-6,
-		"wp-gray-7":       $wp-gray-7
-		
+	"wp-link":         $wp-link,
+	"wp-link-hover":   $wp-link-hover,
+	"wp-input-focus":  $wp-input-focus,
+	"wp-pink":         $wp-pink,
+	"wp-pink-light":   $wp-pink-light,
+	"wp-pink-lighter": $wp-pink-lighter,
+	"wp-gray-dark":    $wp-gray-dark,
+	"wp-gray-1":       $wp-gray-1,
+	"wp-gray-3":       $wp-gray-3,
+	"wp-gray-4":       $wp-gray-4,
+	"wp-gray-5":       $wp-gray-5,
+	"wp-gray-6":       $wp-gray-6,
+	"wp-gray-7":       $wp-gray-7
 ), $wp-colors);
 
 // WC Colors
-
 $wc-blue-gray:                          #2e4453 !default;
 $wc-blue-gray-light:                    #C8D7E1 !default;
 $wc-green:                              #5B841B !default;
@@ -207,22 +196,20 @@ $wc-purple:                             #9a69c7 !default;
 
 $wc-colors: () !default;
 $wc-colors: map-merge((
-		"wc-blue-gray":       $wc-blue-gray,
-		"wc-blue-gray-light": $wc-blue-gray-light,
-		"wc-green":           $wc-green,
-		"wc-green-light":     $wc-green-light,
-		"wc-orange":          $wc-orange,
-		"wc-orange-light":    $wc-orange-light,
-		"orange-light-2":     $orange-light-2,
-		"wc-red":             $wc-red,
-		"wc-red-light":       $wc-red-light,
-		"wc-purple":          $wc-purple,
-
+	"wc-blue-gray":       $wc-blue-gray,
+	"wc-blue-gray-light": $wc-blue-gray-light,
+	"wc-green":           $wc-green,
+	"wc-green-light":     $wc-green-light,
+	"wc-orange":          $wc-orange,
+	"wc-orange-light":    $wc-orange-light,
+	"orange-light-2":     $orange-light-2,
+	"wc-red":             $wc-red,
+	"wc-red-light":       $wc-red-light,
+	"wc-purple":          $wc-purple,
 ), $wc-colors);
 
 
 // Body
-
 $body-bg:                               $white !default;
 $body-color:                            $gray-900 !default;
 
@@ -268,28 +255,27 @@ $yiq-text-light:                        $white !default;
 $spacer: 1rem !default;
 $spacers: () !default;
 $spacers: map-merge((
-		0: 0,
-		1: ($spacer * .25),
-		2: ($spacer * .5),
-		3: $spacer,
-		4: ($spacer * 1.5),
-		5: ($spacer * 3)
+	0: 0,
+	1: ($spacer * .25),
+	2: ($spacer * .5),
+	3: $spacer,
+	4: ($spacer * 1.5),
+	5: ($spacer * 3)
 ), $spacers);
 
 // This variable affects the `.h-*` and `.w-*` classes.
 $sizes: () !default;
 $sizes: map-merge((
-		25: 25%,
-		50: 50%,
-		75: 75%,
-		100: 100%,
-		auto: auto
+	25: 25%,
+	50: 50%,
+	75: 75%,
+	100: 100%,
+	auto: auto
 ), $sizes);
 // stylelint-enable
 
 
 // Options
-
 $enable-caret:                          false !default;
 $enable-rounded:                        true !default;
 $enable-shadows:                        false !default;
@@ -299,7 +285,6 @@ $enable-grid-classes:                   true !default;
 $enable-print-styles:                   true !default;
 
 // Media queries breakpoints
-
 $screen-xs-max:                         480px !default;
 
 // Small screen / tablet
@@ -323,7 +308,6 @@ $screen-xl-min:                         ($screen-lg-max + 1) !default;
 // Buttons + Forms
 //
 // Shared variables that are reassigned to `$input-` and `$btn-` specific variables
-
 $input-btn-padding-y:                   .375rem !default;
 $input-btn-padding-x:                   .75rem !default;
 $input-btn-line-height:                 $line-height-base !default;
@@ -372,8 +356,6 @@ $input-focus-color:                     $input-color !default;
 $input-focus-width:                     $input-btn-focus-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
 
-
-
 // Buttons
 
 $btn-padding-y:                         $input-btn-padding-y !default;
@@ -409,8 +391,54 @@ $btn-border-radius-sm:                  $border-radius-sm !default;
 $btn-transition:                        color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 
 
-// Dropdowns
+// From check
+$form-check-input-width:                1.3em !default;
+$form-check-min-height:                 $font-size-base * $line-height-base !default;
+$form-check-padding-start:              $form-check-input-width + .5em !default;
+$form-check-margin-bottom:              .125rem !default;
+$form-check-label-color:                null !default;
+$form-check-label-cursor:               null !default;
+$form-check-transition:                 null !default;
 
+$form-check-input-active-filter:        brightness(90%) !default;
+
+$form-check-input-bg:                   $input-bg !default;
+$form-check-input-border:               1px solid rgba(0, 0, 0, .25) !default;
+$form-check-input-border-radius:        .25em !default;
+$form-check-radio-border-radius:        50% !default;
+$form-check-input-focus-border:         $success !default;
+$form-check-input-focus-box-shadow:     0 0 0 $input-btn-focus-width rgba($success, .25) !default;
+
+$form-check-input-checked-color:        $component-active-color !default;
+$form-check-input-checked-bg-color:     $success !default;
+$form-check-input-checked-border-color: $form-check-input-checked-bg-color !default;
+$form-check-input-checked-bg-image:     url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/></svg>") !default;
+$form-check-radio-checked-bg-image:     url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#{$form-check-input-checked-color}'/></svg>") !default;
+
+$form-check-input-indeterminate-color:        $component-active-color !default;
+$form-check-input-indeterminate-bg-color:     $success !default;
+$form-check-input-indeterminate-border-color: $form-check-input-indeterminate-bg-color !default;
+$form-check-input-indeterminate-bg-image:     url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-indeterminate-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/></svg>") !default;
+
+$form-check-input-disabled-opacity:     .5 !default;
+$form-check-label-disabled-opacity:     $form-check-input-disabled-opacity !default;
+$form-check-btn-check-disabled-opacity: $btn-disabled-opacity !default;
+
+$form-switch-color:                     rgba(0, 0, 0, .25) !default;
+$form-switch-width:                     2.4em !default;
+$form-switch-padding-start:             $form-switch-width + .5em !default;
+$form-switch-bg-image:                  url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-color}'/></svg>") !default;
+$form-switch-border-radius:             $form-switch-width !default;
+$form-switch-transition:                background-position .15s ease-in-out !default;
+
+$form-switch-focus-color:               lighten($success, 25%) !default;
+$form-switch-focus-bg-image:            url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-focus-color}'/></svg>") !default;
+
+$form-switch-checked-color:             $component-active-color !default;
+$form-switch-checked-bg-image:          url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-checked-color}'/></svg>") !default;
+$form-switch-checked-bg-position:       right center !default;
+
+// Dropdowns
 $dropdown-min-width:                    10rem !default;
 $dropdown-padding-y:                    .5rem !default;
 $dropdown-spacer:                       .125rem !default;
@@ -816,9 +844,7 @@ $zindex-playbutton: 100080 !default;
 $zindex-item: 100060 !default;
 $zindex-backdrop: 100040 !default;
 
-
 // Easing timing functions
-
 $easing: (
 		linear: cubic-bezier(0.250, 0.250, 0.750, 0.750),
 		
@@ -847,3 +873,12 @@ $easing: (
 		ease-out-quart: cubic-bezier(0.25, 0.46, 0.45, 0.94),
 		ease-in-out-quart: cubic-bezier(0.455, 0.03, 0.515, 0.955)
 );
+
+// Characters which are escaped by the escape-svg function
+$escaped-characters: (
+	("<", "%3c"),
+	(">", "%3e"),
+	("#", "%23"),
+	("(", "%28"),
+	(")", "%29"),
+) !default;

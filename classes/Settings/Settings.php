@@ -194,10 +194,9 @@ class Settings {
 		
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
-			wp_register_style( 'switchery', ATUM_URL . 'assets/css/vendor/switchery.min.css', [], ATUM_VERSION );
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
 
-			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', [ 'switchery', 'sweetalert2' ], ATUM_VERSION );
+			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', [ 'sweetalert2' ], ATUM_VERSION );
 
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', [ 'wp-color-picker' ], ATUM_VERSION, TRUE );
@@ -1020,7 +1019,7 @@ class Settings {
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input" style="display: none" %4$s>',
+			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input" %4$s /></span>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}]",
 			checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
@@ -1047,7 +1046,7 @@ class Settings {
 		$enabled         = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 
 		$output = sprintf(
-			'<input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="js-switch atum-settings-input atum-multi-checkbox-main" style="display: none" %4$s>',
+			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
 			ATUM_PREFIX . $args['id'],
 			self::OPTION_NAME . "[{$args['id']}][value]",
 			$enabled,
