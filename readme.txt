@@ -5,9 +5,9 @@ Tags: woocommerce inventory management, suppliers, purchase orders, inbound stoc
 Requires at least: 5.0
 Tested up to: 5.6.1
 Requires PHP: 5.6
-WC requires at least: 3.1.0
-WC tested up to: 4.9.2
-Stable tag: 1.8.5
+WC requires at least: 3.6.0
+WC tested up to: 5.0.0
+Stable tag: 1.8.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,49 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.6`
+
+*2021-02-19*
+
+**Features**
+
+* Added option to settings to let the user updating the stock only when the order status changes to "completed".
+* Added support for datepicker fields on List tables' editable fields.
+* Added support for inventory locations (display and edit) to Stock Central.
+* Added CheckOrderPrices component.
+* Added button to WC orders list to check mismatching prices in editable orders.
+
+**Changes**
+
+* Added antialiasing for all the ATUM font icons everywhere.
+* Avoid localising datetimepickers with eastern languages.
+* Do not use WMPL-specific meta when not needed.
+* Refactoring.
+* Modified order change statuses hooks.
+* Updated sweetalert2 dependency.
+* Auto-expand the location trees with at least one of its nodes checked.
+* Added the ATUM Modal styling to locations tree modal.
+* Splitted general settings into 2 separated sections.
+* Format purchase price as WooCommerce does in the backend (6 decimals max).
+* Replaced switchery by a 100% CSS switcher.
+
+**Fixes**
+
+* Fixed API error notice when using object as an array.
+* Fixed blank spaces being added when editing a text field in Stock Central.
+* CSS fixes.
+* Fixed jquery.easytree conflicts with jQuery 3.0.
+* Fixed multiple binding issue in jquery.easytree.
+* Fixed popover closing when removing an item from a multi-select.
+* Close other edit popovers when opening a new one.
+* Make simple products types available in all the add-ons.
+* Added the wp-hooks dependency to ensure they are loaded by WordPress.
+* Fixed wrong dependency added to the Dashboard's CSS.
+* Fixed sale price's edit popover in Stock Central.
+* Fixed error when checking order prices if a product no longer exists.
 
 ---
 
