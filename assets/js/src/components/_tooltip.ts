@@ -33,9 +33,7 @@ export default class Tooltip {
 		    if ( title ) {
 
 		    	// Do not add the tooltip twice.
-			    const tooltipInstance: BsTooltip = BsTooltip.getInstance( $tipEl.get( 0 ) );
-
-			    if ( tooltipInstance ) {
+			    if ( this.getInstance( $tipEl ) ) {
 			    	return;
 			    }
 
@@ -43,11 +41,21 @@ export default class Tooltip {
 				    html     : true,
 				    title    : title,
 				    container: 'body',
-				    trigger  : 'hover',
 				    delay: {
 				    	show: 100,
 					    hide: 200
 				    }, // The delay fixes an issue with tooltips breaking on some cases.
+			    } );
+
+			    /**
+			     * NOTE: for some reason (probably a Boostrap bug), after destroying a tooltip and recreating it,
+			     * it's showing ghost tooltips on the left top corner when hovering the recreated tooltips.
+			     * So we are removing them all with this method.
+			     * If this is fixed in a future version, it should be removed from here
+			     */
+			    $tipEl.on( 'inserted.bs.tooltip', ( evt: JQueryEventObject ) => {
+				    const tooltipId: string = $( evt.currentTarget ).attr( 'aria-describedby' );
+				    $( '.tooltip[class*="bs-tooltip-"]' ).not( `#${ tooltipId }` ).remove();
 			    } );
 
 		    }
@@ -69,18 +77,25 @@ export default class Tooltip {
 
 	    $wrapper.find( '.tips, .atum-tooltip' ).each( ( index: number, elem: Element ) => {
 
-	    	const $elem: JQuery = $( elem );
+		    const tooltip: BsTooltip = this.getInstance( $( elem ) );
 
-		    if ( typeof $elem.attr( 'aria-describedby' ) !== 'undefined' ) {
-			    const tooltip: BsTooltip = BsTooltip.getInstance( $elem.get( 0 ) );
-
-			    if ( tooltip ) {
-				    tooltip.dispose();
-			    }
+		    if ( tooltip ) {
+			    tooltip.dispose();
 		    }
 
 	    } );
 
+    }
+
+	/**
+	 * Get a tooltip instance from a specific element
+	 *
+	 * @param {JQuery} $tipEl
+	 *
+	 * @return {BsTooltip}
+	 */
+	getInstance( $tipEl: JQuery ): BsTooltip {
+    	return BsTooltip.getInstance( $tipEl.get( 0 ) );
     }
 	
 }
