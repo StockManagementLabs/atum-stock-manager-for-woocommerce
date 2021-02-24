@@ -274,6 +274,9 @@ class DataExport {
 			wp_die( esc_attr__( 'Report class not found', ATUM_TEXT_DOMAIN ) );
 		}
 
+		// Replace column names for the export.
+		add_filter( 'atum/stock_central_list/table_columns', array( $this, 'change_column_names' ) );
+
 		/**
 		 * Variable definition
 		 *
@@ -283,6 +286,9 @@ class DataExport {
 		$table_columns   = $html_list_table->get_table_columns();
 		$group_members   = $html_list_table->get_group_members();
 		$primary_column  = $html_list_table->get_primary_column();
+
+		// Replace column names for the export.
+		remove_filter( 'atum/stock_central_list/table_columns', array( $this, 'change_column_names' ) );
 
 		// Hide all the columns that were unchecked in export settings.
 		foreach ( $table_columns as $column_key => $column_title ) {
@@ -309,7 +315,7 @@ class DataExport {
 						array_splice( $group_members[ $group_key ]['members'], $key_found, 1 );
 
 						// If no columns available for this group, get rid of it.
-						if ( empty( $group_members[ $group_key ]['members'] ) ) {
+						if ( isset( $group_members[ $group_key ] ) && empty( $group_members[ $group_key ]['members'] ) ) {
 							unset( $group_members[ $group_key ] );
 						}
 					}
@@ -328,6 +334,25 @@ class DataExport {
 
 		return ob_get_clean();
 
+	}
+
+	/**
+	 * Replace table column names to display in report, as the :before pseudoclass is not shown at mPDF.
+	 *
+	 * @since 1.8.6
+	 *
+	 * @param $columns
+	 *
+	 * @return mixed
+	 */
+	public function change_column_names( $columns ) {
+
+		$columns['thumb']                = '<span class="atum-icon atmi-picture">&#xE985;</span> ' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN );
+		$columns['calc_type']            = '<span class="atum-icon atmi-tag">&#xE9a5;</span> ' . esc_attr__( 'Product Type', ATUM_TEXT_DOMAIN );
+		$columns['calc_location']        = '<span class="atum-icon atmi-map-marker">&#xE975;</span> ' . esc_attr__( 'Location', ATUM_TEXT_DOMAIN );
+		$columns['calc_stock_indicator'] = '<span class="atum-icon atmi-layers">&#xE969;</span> ' . esc_attr__( 'Stock Indicator', ATUM_TEXT_DOMAIN );
+
+		return $columns;
 	}
 
 }
