@@ -42,7 +42,7 @@
 			margin-right: -20px;
 		}
 		
-		input {
+		input[type=text], input[type=email], input[type=search] {
 			width: 100% !important;
 			height: 31px !important;
 			
@@ -96,7 +96,7 @@
 					font-size: 13px;
 				}
 				
-				input, select, .atum-enhanced-select {
+				input[type=text], input[type=email], input[type=search], select, .atum-enhanced-select {
 					width: 230px !important;
 					max-width: 100%;
 				}
