@@ -28,7 +28,7 @@ use Atum\Inc\Helpers;
 			<span class="form-switch">
 				<input type="checkbox" name="<?php echo esc_attr( 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']' ) ?>"
 					id="<?php echo esc_attr( Globals::ATUM_CONTROL_STOCK_KEY ) ?>" class="form-check-input"
-					value="<?php echo esc_attr( $field_value ) ?>" <?php checked( $field_value, 'yes' ) ?>
+					value="yes" <?php checked( $field_value, 'yes' ) ?>
 				>
 			</span>
 		</p>

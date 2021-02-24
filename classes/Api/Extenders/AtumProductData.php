@@ -148,7 +148,7 @@ class AtumProductData {
 		add_filter( 'woocommerce_rest_prepare_product_object', array( $this, 'prepare_rest_response' ), 10, 3 );
 
 		// Update ATUM calc properties after saving.
-		add_filter( 'woocommerce_rest_insert_product_object', array( $this, 'after_rest_product_save'), 10, 3 );
+		add_filter( 'woocommerce_rest_insert_product_object', array( $this, 'after_rest_product_save' ), 10, 3 );
 
 	}
 
