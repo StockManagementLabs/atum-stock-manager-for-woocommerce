@@ -18,6 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Components\AtumOrders\AtumOrderPostType;
+use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\InventoryLogs\Models\Log;
@@ -759,7 +760,7 @@ class ListTable extends AtumListTable {
 						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__variation_id ON (order_items.order_item_id = order_item_meta__variation_id.order_item_id)  AND (order_item_meta__variation_id.meta_key = '_variation_id') 
 						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
 						WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
-						AND posts.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						AND posts.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
 						$dates_where
 						GROUP BY variation_id, product_id ORDER BY order_item_qty DESC
 					";
@@ -807,7 +808,7 @@ class ListTable extends AtumListTable {
 						LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
 						LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
 						WHERE (pr.post_type IN ('product', 'product_variation')
-						AND ord.post_status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold')
+						AND ord.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
 						$dates_where ) OR ord.post_date IS NULL
 						GROUP BY product_id order by qty ASC;
 					";
