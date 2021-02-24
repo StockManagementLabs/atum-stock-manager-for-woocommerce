@@ -59,6 +59,19 @@ final class Globals {
 	];
 
 	/**
+	 * WC_Order statuses that allow changing the product stock
+	 *
+	 * @since 1.8.7
+	 *
+	 * @var array
+	 */
+	private static $order_statuses_change_stock = [
+		'wc-completed',
+		'wc-processing',
+		'wc-on-hold',
+	];
+
+	/**
 	 * The number of decimals specified in settings to round the stock quantities
 	 *
 	 * @var int
@@ -301,6 +314,18 @@ final class Globals {
 	public static function get_order_types() {
 		
 		return (array) apply_filters( 'atum/order_types', self::$order_types );
+	}
+
+	/**
+	 * Get the WC_Order statuses that allow changing the stock
+	 *
+	 * @since 1.8.7
+	 *
+	 * @return array
+	 */
+	public static function get_order_statuses_change_stock() {
+
+		return (array) apply_filters( 'atum/order_statuses_allow_change_stock', self::$order_statuses_change_stock );
 	}
 
 	/**
