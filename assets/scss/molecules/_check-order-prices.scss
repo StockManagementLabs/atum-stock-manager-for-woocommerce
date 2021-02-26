@@ -46,3 +46,11 @@
 		}
 	}
 }
+
+.wc-action-button {
+	&.fix_prices {
+		&:after {
+			content: "\f308";
+		}
+	}
+}
