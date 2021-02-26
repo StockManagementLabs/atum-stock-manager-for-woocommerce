@@ -4452,6 +4452,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_args['post_parent__in'] = $parents;
 			}
 
+			// Apply the same order and orderby args than their parent.
+			$children_args = $this->parse_orderby_args( $children_args );
+
 			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
 			$query_cache_key = AtumCache::get_cache_key( 'get_children_query', $children_args );
 			$children_ids    = AtumCache::get_cache( $query_cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
@@ -4695,4 +4698,55 @@ abstract class AtumListTable extends \WP_List_Table {
 		return self::$is_report;
 	}
 
+	/**
+	 * Apply order and orderby args by $_REQUEST options.
+	 *
+	 * @since 1.8.6
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	protected function parse_orderby_args( $args ) {
+
+		if ( ! isset( $_REQUEST['orderby'] ) || empty( $_REQUEST['orderby'] ) ) {
+			return $args;
+		}
+
+		$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+		$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
+
+		// Columns starting by underscore are based in meta keys, so can be sorted.
+		if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
+
+			if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
+
+				$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
+				$this->atum_query_data['order']['order'] = $order;
+
+			}
+			// All the meta key based columns are numeric except the SKU.
+			else {
+
+				if ( '_sku' === $_REQUEST['orderby'] ) {
+					$args['orderby'] = 'meta_value';
+				}
+				else {
+					$args['orderby'] = 'meta_value_num';
+				}
+
+				$args['meta_key'] = $_REQUEST['orderby'];
+				$args['order']    = $order;
+
+			}
+
+		}
+		// Standard Fields.
+		else {
+			$args['orderby'] = $_REQUEST['orderby'];
+			$args['order']   = $order;
+		}
+
+		return $args;
+	}
 }
