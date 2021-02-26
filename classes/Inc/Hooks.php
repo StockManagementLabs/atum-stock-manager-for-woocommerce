@@ -143,6 +143,9 @@ class Hooks {
 		// Make simple product types available for every addons.
 		add_filter( 'atum/get_simple_product_types', array( $this, 'get_simple_product_types' ) );
 
+		// Allow searching orders by inner products' SKUs.
+		add_filter( 'woocommerce_shop_order_search_results', array( $this, 'search_orders_by_sku' ), 10, 3 );
+
 	}
 
 	/**
@@ -227,17 +230,17 @@ class Hooks {
 	}
 
 	/**
-	 * Get Singleton instance
+	 * Remove the WC order note.
+	 * Use for PL stock changes and MI order creation API requests.
 	 *
-	 * @return Hooks instance
+	 * @since 1.8.0
+	 *
+	 * @param int $comment_id
 	 */
-	public static function get_instance() {
+	public function remove_order_comment( $comment_id ) {
 
-		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
+		remove_action( 'clean_comment_cache', array( $this, 'remove_order_comment' ) );
+		wp_delete_comment( $comment_id, TRUE );
 	}
 
 	/**
@@ -1265,26 +1268,6 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent order stock changing if order status is distinct than 'completed'
-	 *
-	 * @since 1.8.6
-	 *
-	 * @param bool      $allow
-	 * @param \WC_Order $order
-	 *
-	 * @return bool
-	 */
-	public function prevent_order_stock_changing( $allow, $order ) {
-
-		if ( $allow ) {
-
-			$allow = 'completed' === $order->get_status();
-		}
-
-		return $allow;
-	}
-
-	/**
 	 * Filter the ATUM's simple product types
 	 *
 	 * @since 1.8.5
@@ -1301,22 +1284,77 @@ class Hooks {
 		return $product_types;
 	}
 
+	/**
+	 * Allow searching WC orders by their inner products' SKUs
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param int[]    $order_ids
+	 * @param string   $term
+	 * @param string[] $search_fields
+	 *
+	 * @return int[]
+	 */
+	public function search_orders_by_sku( $order_ids, $term, $search_fields ) {
+
+		if ( $term ) {
+
+			global $wpdb;
+
+			$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$sql = "
+				SELECT DISTINCT order_id from {$wpdb->prefix}woocommerce_order_items oi
+				LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON (oi.order_item_id = oim.order_item_id AND oim.meta_key IN ('_product_id', '_variation_id'))
+				LEFT JOIN {$atum_product_data_table} apd ON (apd.product_id = oim.meta_value)
+			";
+
+			// Search by SKU using the product meta lookup table (preferably).
+			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+
+				$sql .= "
+					LEFT JOIN $wpdb->wc_product_meta_lookup pml ON(pml.product_id = oim.meta_value)
+					WHERE pml.sku LIKE '%%" . $wpdb->esc_like( $term ) . "%%'
+				";
+
+			}
+			// Search by SKU using the post meta table (slower).
+			else {
+
+				$sql .= "
+					LEFT JOIN $wpdb->postmeta pm ON(pm.post_id = oim.meta_value AND pm.meta_key = '_sku')
+					WHERE pm.meta_value LIKE '%%" . $wpdb->esc_like( $term ) . "%%'
+				";
+
+			}
+
+			// Also search by Supplier SKU.
+			$sql .= " OR apd.supplier_sku LIKE '%%" . $wpdb->esc_like( $term ) . "%%'";
+
+			$order_ids = array_unique( array_merge( $order_ids, $wpdb->get_col( $sql ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		}
+
+		return $order_ids;
+
+	}
+
 	/********************
 	 * Instance methods
 	 ********************/
 
 	/**
-	 * Remove the WC order note.
-	 * Use for PL stock changes and MI order creation API requests.
+	 * Get Singleton instance
 	 *
-	 * @since 1.8.0
-	 *
-	 * @param int $comment_id
+	 * @return Hooks instance
 	 */
-	public function remove_order_comment( $comment_id ) {
+	public static function get_instance() {
 
-		remove_action( 'clean_comment_cache', array( $this, 'remove_order_comment' ) );
-		wp_delete_comment( $comment_id, TRUE );
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**
