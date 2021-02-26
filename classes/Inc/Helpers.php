@@ -3459,4 +3459,18 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Adds the 'wc-' prefix to an order status if not set.
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param string $status
+	 *
+	 * @return string
+	 */
+	public static function get_raw_wc_order_status( $status ) {
+
+		return 'wc-' . str_replace( 'wc-', '', $status );
+	}
+
 }
