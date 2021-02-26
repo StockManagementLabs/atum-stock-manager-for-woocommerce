@@ -1046,6 +1046,7 @@ abstract class AtumOrderModel {
 		if ( $force_delete ) {
 
 			// Delete all associated the order items + meta.
+			do_action( 'atum/orders/delete_order_items', $this->id );
 			$this->delete_items();
 
 			wp_delete_post( $this->id );
