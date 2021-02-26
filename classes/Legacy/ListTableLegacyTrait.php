@@ -791,6 +791,9 @@ trait ListTableLegacyTrait {
 				$children_args['post_parent__in'] = $parents->posts;
 			}
 
+			// Apply the same order and orderby args than their parent.
+			$children_args = $this->parse_orderby_args( $children_args );
+
 			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
 			$cache_key    = AtumCache::get_cache_key( 'get_children_query', $children_args );
 			$children_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
