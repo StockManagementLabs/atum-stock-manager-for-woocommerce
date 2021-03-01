@@ -936,6 +936,7 @@ abstract class AtumOrderModel {
 
 			if ( $id && ! is_wp_error( $id ) ) {
 				$this->id = $id;
+				$this->load_post();
 				$this->clear_caches();
 			}
 
@@ -2008,7 +2009,7 @@ abstract class AtumOrderModel {
 		$date_created = $date_created instanceof \WC_DateTime ? $date_created->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_created );
 
 		// Only register the change if it was manually changed.
-		if ( $date_created !== $this->date_created && $this->post && $this->post->post_date !== $date_created ) {
+		if ( $date_created !== $this->date_created || ( $this->post && $this->post->post_date !== $date_created ) ) {
 
 			if ( ! $skip_change ) {
 				$this->register_change( 'date_created' );
