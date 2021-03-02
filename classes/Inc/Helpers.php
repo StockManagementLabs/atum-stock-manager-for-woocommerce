@@ -539,7 +539,8 @@ final class Helpers {
 			}
 
 			// Filter by product IDs.
-			$products_where = '';
+			$products_where      = '';
+			$products_type_where = "AND `mt_id`.`meta_key` = '_product_id'";
 			if ( ! empty( $items ) ) {
 
 				$items = apply_filters( 'atum/get_sold_last_days/product_ids', $items );
@@ -564,7 +565,7 @@ final class Helpers {
 					}
 
 				}
-
+				$products_type_where = "AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id')";
 			}
 			// Get the product ID column too.
 			elseif ( in_array( 'prod_id', $colums ) && ! $use_lookup_table ) {
@@ -618,7 +619,7 @@ final class Helpers {
 				    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
 			        $query_joins_str
 					WHERE `orders`.`ID` IN ($orders_query)
-			        $products_where			  
+			        $products_where
 					GROUP BY `opl`.`variation_id`, `opl`.`product_id`
 					HAVING (`QTY` IS NOT NULL);
 				";
@@ -629,11 +630,11 @@ final class Helpers {
 				$query = "
 					SELECT $query_columns_str
 					FROM `$wpdb->posts` AS `orders`
-				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
-				    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)	    
+				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
+				    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
 			        $query_joins_str
-					WHERE `orders`.`ID` IN ($orders_query) AND `mt_id`.`meta_key` IN ('_product_id', '_variation_id') 
-			        $products_where			  
+					WHERE `orders`.`ID` IN ($orders_query) $products_type_where
+			        $products_where
 					GROUP BY `mt_id`.`meta_value`
 					HAVING (`QTY` IS NOT NULL);
 				";
