@@ -1312,6 +1312,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			$purchase_price = (float) $this->product->get_purchase_price();
 			$regular_price  = (float) $this->product->get_regular_price();
 
+			// Exclude rates if prices includes them.
+			if ( 'yes' === get_option( 'woocommerce_prices_include_tax' ) ) {
+				$base_tax_rates = \WC_Tax::get_base_tax_rates( $this->product->get_tax_class() );
+				$base_pur_taxes = \WC_Tax::calc_tax( $purchase_price, $base_tax_rates, true );
+				$base_reg_taxes = \WC_Tax::calc_tax( $regular_price, $base_tax_rates, true );
+				$purchase_price = round( $purchase_price - array_sum( $base_pur_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+				$regular_price  = round( $regular_price - array_sum( $base_reg_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+			}
+
 			if ( $purchase_price > 0 && $regular_price > 0 ) {
 
 				$gross_profit_value      = wp_strip_all_tags( wc_price( $regular_price - $purchase_price ) );
