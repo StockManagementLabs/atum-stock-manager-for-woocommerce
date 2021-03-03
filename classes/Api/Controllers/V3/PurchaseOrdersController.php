@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Items\POItemFee;
 use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
@@ -85,7 +86,13 @@ class PurchaseOrdersController extends AtumOrdersController {
 		$schema = parent::get_item_schema();
 
 		$schema['properties']['date_expected'] = array(
-			'description' => __( 'The date when the purchase order is expected at location.', ATUM_TEXT_DOMAIN ),
+			'description' => __( "The date when the purchase order is expected at location in the site's timezone.", ATUM_TEXT_DOMAIN ),
+			'type'        => 'date-time',
+			'context'     => array( 'view', 'edit' ),
+		);
+
+		$schema['properties']['date_expected_gmt'] = array(
+			'description' => __( 'The date when the purchase order is expected at location, as GMT.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'date-time',
 			'context'     => array( 'view', 'edit' ),
 		);
@@ -155,13 +162,25 @@ class PurchaseOrdersController extends AtumOrdersController {
 	 */
 	protected function prepare_object_for_database( $request, $creating = FALSE ) {
 
-		$po = parent::prepare_object_for_database( $request, $creating );
-
 		/**
 		 * Variable definition
 		 *
 		 * @var PurchaseOrder $po
 		 */
+		$po = parent::prepare_object_for_database( $request, $creating );
+
+		$schema    = $this->get_item_schema();
+		$data_keys = array_keys( array_filter( $schema['properties'], array( $this, 'filter_writable_props' ) ) );
+
+		// If the expected date is coming as GMT, localize and save it.
+		if ( in_array( 'date_expected_gmt', $data_keys ) && ! is_null( $request['date_expected_gmt'] ) ) {
+
+			$date_value     = get_date_from_gmt( $request['date_expected_gmt'] );
+			$formatted_date = Helpers::get_wc_time( $date_value );
+
+			$po->set_date_expected( $formatted_date );
+
+		}
 
 		// All the POs must have a supplier or multiple_suppliers set (any of them).
 		if ( ! $po->get_supplier( 'id' ) && ! $po->has_multiple_suppliers() ) {

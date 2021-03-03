@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
@@ -104,19 +105,37 @@ class InventoryLogsController extends AtumOrdersController {
 		);
 
 		$schema['properties']['reservation_date'] = array(
-			'description' => __( 'The date for when the stock is reserved.', ATUM_TEXT_DOMAIN ),
+			'description' => __( "The date for when the stock is reserved, in the site's timezone.", ATUM_TEXT_DOMAIN ),
+			'type'        => 'date-time',
+			'context'     => array( 'view', 'edit' ),
+		);
+
+		$schema['properties']['reservation_date_gmt'] = array(
+			'description' => __( 'The date for when the stock is reserved, as GMT.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'date-time',
 			'context'     => array( 'view', 'edit' ),
 		);
 
 		$schema['properties']['return_date'] = array(
-			'description' => __( 'The date for when the customer returned the stock.', ATUM_TEXT_DOMAIN ),
+			'description' => __( "The date for when the customer returned the stock, in the site's timezone.", ATUM_TEXT_DOMAIN ),
+			'type'        => 'date-time',
+			'context'     => array( 'view', 'edit' ),
+		);
+
+		$schema['properties']['return_date_gmt'] = array(
+			'description' => __( 'The date for when the customer returned the stock, as GMT.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'date-time',
 			'context'     => array( 'view', 'edit' ),
 		);
 
 		$schema['properties']['damage_date'] = array(
-			'description' => __( 'The date for when the stock was damaged at warehouse.', ATUM_TEXT_DOMAIN ),
+			'description' => __( "The date for when the stock was damaged at warehouse, in the site's timezone.", ATUM_TEXT_DOMAIN ),
+			'type'        => 'date-time',
+			'context'     => array( 'view', 'edit' ),
+		);
+
+		$schema['properties']['damage_date_gmt'] = array(
+			'description' => __( 'The date for when the stock was damaged at warehouse, as GMT.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'date-time',
 			'context'     => array( 'view', 'edit' ),
 		);
@@ -227,8 +246,24 @@ class InventoryLogsController extends AtumOrdersController {
 		$data_keys = array_keys( array_filter( $schema['properties'], array( $this, 'filter_writable_props' ) ) );
 
 		// Log type's setter does not follow the naming convention.
-		if ( in_array( 'type', $data_keys, TRUE ) ) {
+		if ( in_array( 'type', $data_keys, TRUE ) && ! is_null( $request['type'] ) ) {
 			$log->set_type( $request['type'] );
+		}
+
+		// If any of the IL dates are coming as GMT, localize and save them.
+		foreach ( [ 'reservation_date', 'return_date', 'damage_date' ] as $date_key ) {
+
+			if ( in_array( "{$date_key}_gmt", $data_keys ) && ! is_null( $request[ "{$date_key}_gmt" ] ) ) {
+
+				$date_value     = get_date_from_gmt( $request[ "{$date_key}_gmt" ] );
+				$formatted_date = Helpers::get_wc_time( $date_value );
+
+				if ( is_callable( array( $log, "set_{$date_key}" ) ) ) {
+					$log->{"set_{$date_key}"}( $formatted_date );
+				}
+
+			}
+
 		}
 
 		return $log;

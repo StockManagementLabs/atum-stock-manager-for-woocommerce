@@ -20,7 +20,6 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
-use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -63,6 +62,14 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			'description' => __( 'The ATUM order description.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'string',
 			'context'     => array( 'view', 'edit' ),
+		);
+
+		// Allow editing order dates.
+		unset(
+			$schema['properties']['date_created']['readonly'],
+			$schema['properties']['date_created_gmt']['readonly'],
+			$schema['properties']['date_completed']['readonly'],
+			$schema['properties']['date_completed_gmt']['readonly'],
 		);
 
 		return $schema;
@@ -257,7 +264,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 				switch ( $key ) {
 					case 'status':
-						// Change should be done later so transitions have new data.
+						// Change must be done later so transitions have the new data.
 						break;
 
 					case 'line_items':
@@ -298,6 +305,21 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 						}
 
+						break;
+
+					// The right way to send dates is by using GMT formats, so we can convert them now to the site's timezone.
+					case 'date_created_gmt':
+					case 'date_completed_gmt':
+						$formatted_key = str_replace( '_gmt', '', $key );
+
+						if ( is_callable( array( $order, "set_{$formatted_key}" ) ) ) {
+							unset( $data_keys[ $formatted_key ] );
+
+							$date_value     = get_date_from_gmt( $value );
+							$formatted_date = Helpers::get_wc_time( $date_value );
+
+							$order->{"set_{$formatted_key}"}( $formatted_date );
+						}
 						break;
 
 					// date_expected || multiple_suppliers || supplier.

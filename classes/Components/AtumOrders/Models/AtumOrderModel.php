@@ -2021,6 +2021,30 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Set the ATUM Order completion date
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param string|\WC_DateTime $date_completed
+	 * @param bool                $skip_change
+	 */
+	public function set_date_completed( $date_completed, $skip_change = FALSE ) {
+
+		$date_completed = $date_completed instanceof \WC_DateTime ? $date_completed->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_completed );
+
+		// Only register the change if it was manually changed.
+		if ( $date_completed !== $this->date_completed ) {
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'date_completed' );
+			}
+
+			$this->set_meta( 'date_completed', $date_completed );
+		}
+
+	}
+
+	/**
 	 * Set ATUM Order currency
 	 *
 	 * @since 1.2.9
