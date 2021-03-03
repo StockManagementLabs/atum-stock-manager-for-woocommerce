@@ -1312,6 +1312,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			$purchase_price = (float) $this->product->get_purchase_price();
 			$regular_price  = (float) $this->product->get_regular_price();
 
+			// Exclude rates if prices includes them.
+			if ( 'yes' === get_option( 'woocommerce_prices_include_tax' ) ) {
+				$base_tax_rates = \WC_Tax::get_base_tax_rates( $this->product->get_tax_class() );
+				$base_pur_taxes = \WC_Tax::calc_tax( $purchase_price, $base_tax_rates, true );
+				$base_reg_taxes = \WC_Tax::calc_tax( $regular_price, $base_tax_rates, true );
+				$purchase_price = round( $purchase_price - array_sum( $base_pur_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+				$regular_price  = round( $regular_price - array_sum( $base_reg_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+			}
+
 			if ( $purchase_price > 0 && $regular_price > 0 ) {
 
 				$gross_profit_value      = wp_strip_all_tags( wc_price( $regular_price - $purchase_price ) );
@@ -4452,6 +4461,9 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_args['post_parent__in'] = $parents;
 			}
 
+			// Apply the same order and orderby args than their parent.
+			$children_args = $this->parse_orderby_args( $children_args );
+
 			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
 			$query_cache_key = AtumCache::get_cache_key( 'get_children_query', $children_args );
 			$children_ids    = AtumCache::get_cache( $query_cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
@@ -4695,4 +4707,55 @@ abstract class AtumListTable extends \WP_List_Table {
 		return self::$is_report;
 	}
 
+	/**
+	 * Apply order and orderby args by $_REQUEST options.
+	 *
+	 * @since 1.8.6
+	 *
+	 * @param array $args
+	 *
+	 * @return array
+	 */
+	protected function parse_orderby_args( $args ) {
+
+		if ( ! isset( $_REQUEST['orderby'] ) || empty( $_REQUEST['orderby'] ) ) {
+			return $args;
+		}
+
+		$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
+		$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
+
+		// Columns starting by underscore are based in meta keys, so can be sorted.
+		if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
+
+			if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
+
+				$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
+				$this->atum_query_data['order']['order'] = $order;
+
+			}
+			// All the meta key based columns are numeric except the SKU.
+			else {
+
+				if ( '_sku' === $_REQUEST['orderby'] ) {
+					$args['orderby'] = 'meta_value';
+				}
+				else {
+					$args['orderby'] = 'meta_value_num';
+				}
+
+				$args['meta_key'] = $_REQUEST['orderby'];
+				$args['order']    = $order;
+
+			}
+
+		}
+		// Standard Fields.
+		else {
+			$args['orderby'] = $_REQUEST['orderby'];
+			$args['order']   = $order;
+		}
+
+		return $args;
+	}
 }
