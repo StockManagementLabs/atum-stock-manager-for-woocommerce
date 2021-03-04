@@ -1697,9 +1697,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$result = array();
 
-		foreach ( self::$table_columns as $table => $slug ) {
-			$group            = $this->search_group_columns( $table );
-			$result[ $table ] = $group ? "<span class='col-$group'>$slug</span>" : $slug;
+		foreach ( self::$table_columns as $column_name => $column_label ) {
+			$group                  = $this->search_group_columns( $column_name );
+			$result[ $column_name ] = $group ? "<span class='col-$group'>$column_label</span>" : $column_label;
 		}
 
 		return apply_filters( 'atum/list_table/columns', $result );
@@ -3123,7 +3123,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$class[] = 'totals-heading';
 
-				if ( 'cb' === $first_column ) {
+				// Set a colspan of 2 if the checkbox column is present and the second column isn't hidden.
+				if ( 'cb' === $first_column && ! in_array( $second_column, $hidden ) ) {
 					$colspan = 'colspan="2"';
 				}
 
