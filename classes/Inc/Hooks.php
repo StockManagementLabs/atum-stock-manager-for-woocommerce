@@ -28,18 +28,16 @@ class Hooks {
 	 * @var Hooks
 	 */
 	private static $instance;
+
 	/**
 	 * Store current out of stock threshold
-	 *
-	 * @since 1.4.15
 	 *
 	 * @var int
 	 */
 	public $current_out_stock_threshold = NULL;
+
 	/**
 	 * WoCommerce shortcode product loops types.
-	 *
-	 * @since 1.7.2
 	 *
 	 * @var array
 	 */
@@ -63,8 +61,6 @@ class Hooks {
 
 	/**
 	 * Store the products that need to have their calculated properties updated.
-	 *
-	 * @since 1.8.1
 	 *
 	 * @var array
 	 */
