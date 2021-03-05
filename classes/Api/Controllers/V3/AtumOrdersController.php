@@ -380,7 +380,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				$object->calculate_totals( TRUE );
 			}
 
-			do_action( 'atum/order/before_api_save_oorder', $object, $request, $creating );
+			do_action( 'atum/order/before_api_save_order', $object, $request, $creating );
 
 			// Set status.
 			if ( ! empty( $request['status'] ) ) {
