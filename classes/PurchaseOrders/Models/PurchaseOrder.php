@@ -366,20 +366,6 @@ class PurchaseOrder extends AtumOrderModel {
 
 	}
 
-	/**
-	 * Checks if a Purchase Order can be edited, specifically for use on the Edit screen
-	 *
-	 * @since 1.8.1
-	 *
-	 * @return bool
-	 */
-	public function is_editable() {
-
-		$autodraft_check = 'auto-draft' === $this->get_status() ? TRUE : FALSE;
-
-		return parent::is_editable() || $autodraft_check;
-	}
-
 	/*********
 	 * SETTERS
 	 *********/

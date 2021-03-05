@@ -1465,7 +1465,7 @@ abstract class AtumOrderModel {
 	public function is_editable() {
 		$status = $this->get_status();
 		
-		return apply_filters( 'atum/orders/is_editable', ! $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->get_post_type(), TRUE ) ) );
+		return apply_filters( 'atum/orders/is_editable', ! $status || 'auto-draft' === $status || array_key_exists( $status, Helpers::get_atum_order_post_type_statuses( $this->get_post_type(), TRUE ) ) );
 	}
 
 	/**
