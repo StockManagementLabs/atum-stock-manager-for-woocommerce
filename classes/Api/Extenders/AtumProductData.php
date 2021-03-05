@@ -679,6 +679,12 @@ class AtumProductData {
 
 		Helpers::update_atum_product_calc_props( $product );
 
+		// Save low_stock_amount since Woocommerce missed it...
+		if ( ! is_null( $request->get_param( 'low_stock_amount' ) ) ) {
+
+			$product->set_low_stock_amount( floatval( $request->get_param( 'low_stock_amount' ) ) );
+			$product->save();
+		}
 	}
 
 	/****************************
