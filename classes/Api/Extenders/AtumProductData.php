@@ -67,6 +67,7 @@ class AtumProductData {
 		'atum_locations'      => [ 'get', 'update' ],
 		'atum_stock_status'   => [ 'get', 'update' ],
 		'low_stock'           => [ 'get', 'update' ],
+		'low_stock_amount'    => [ 'get', 'update' ],
 
 	);
 

@@ -880,6 +880,9 @@ class Hooks {
 
 			$item = $order->get_item( $item_id );
 
+			if ( ! $item instanceof \WC_Order_Item_Product )
+				continue;
+
 			/**
 			 * Variable definition
 			 *
