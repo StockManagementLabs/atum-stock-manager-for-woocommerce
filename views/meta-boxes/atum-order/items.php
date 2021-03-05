@@ -142,15 +142,6 @@ $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limi
 	<div class="atum-order-data-row atum-order-totals-items">
 
 		<table class="atum-order-totals">
-			<!--<tr>
-				<td class="label"><span class="atum-help-tip atum-tooltip" title="<?php esc_attr_e( 'This is the total discount. Discounts are defined per line item.', ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Discount:', ATUM_TEXT_DOMAIN ); ?></td>
-				<td width="1%"></td>
-				<td class="total">
-					<?php // echo wc_price( $atum_order->get_total_discount(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</td>
-			</tr>-->
-
-			<?php // do_action( 'atum/atum_order/totals_after_discount', $atum_order->get_id() );! ?>
 			
 			<?php if ( ! empty( $line_items_fee ) ) : ?>
 				<tr>
@@ -281,7 +272,7 @@ $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limi
 						<form action="" method="post">
 							<select class="wc-product-search atum-enhanced-select" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]"
 								data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-action="atum_json_search_products"
-								<?php echo $post_search; ?>></select>
+								<?php echo $post_search; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>></select>
 						</form>
 					</article>
 
