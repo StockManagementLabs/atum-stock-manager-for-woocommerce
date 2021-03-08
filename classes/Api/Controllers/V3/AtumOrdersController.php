@@ -23,6 +23,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
+use AtumExport\Queries\AtumOrderItem;
 
 
 abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
@@ -322,7 +323,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 						}
 						break;
 
-					// date_expected || multiple_suppliers || supplier.
+					// Any ATUM order prop with a setter.
 					default:
 						if ( is_callable( array( $order, "set_{$key}" ) ) ) {
 							$order->{"set_{$key}"}( $value );

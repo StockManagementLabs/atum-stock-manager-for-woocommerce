@@ -76,7 +76,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 				<i class="atum-icon atum-icon atmi-question-circle color-primary tips" data-tip="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
-			<?php if ( $item->get_meta( '_stock_changed' ) ) : ?>
+			<?php if ( 'yes' === $item->get_stock_changed() ) : ?>
 				<i class="atum-icon atmi-highlight color-warning tips" data-tip="<?php esc_attr_e( "This item's stock was already changed within this PO", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 

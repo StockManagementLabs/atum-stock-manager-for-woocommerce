@@ -930,9 +930,14 @@ class PurchaseOrders extends AtumOrderPostType {
 
 					$note .= ' ' . $item_name . ' ' . $old_stock . '&rarr;' . $new_stock;
 
+					// Add the order note.
 					$order->add_order_note( apply_filters( 'atum/purchase_order/add_stock_change_note', $note, $product, $action ) );
-					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
+
+					// Register the stock change for each item.
+					$atum_order_item->set_stock_changed( self::FINISHED === $order->get_status() );
+
 					$atum_order_item->save();
+
 				}
 
 			}

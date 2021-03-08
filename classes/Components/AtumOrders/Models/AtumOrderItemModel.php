@@ -124,13 +124,14 @@ abstract class AtumOrderItemModel {
 					$line_total    = $this->get_meta( '_line_total' );
 					$line_subtotal = $this->get_meta( '_line_subtotal' );
 					$this->atum_order_item->set_props( array(
-						'product_id'   => $this->get_meta( '_product_id' ),
-						'variation_id' => $this->get_meta( '_variation_id' ),
-						'quantity'     => $this->get_meta( '_qty' ),
-						'tax_class'    => $this->get_meta( '_tax_class' ),
-						'subtotal'     => $line_subtotal < $line_total ? $line_total : $line_subtotal,
-						'total'        => $line_total,
-						'taxes'        => $this->get_meta( '_line_tax_data' ),
+						'product_id'    => $this->get_meta( '_product_id' ),
+						'variation_id'  => $this->get_meta( '_variation_id' ),
+						'quantity'      => $this->get_meta( '_qty' ),
+						'tax_class'     => $this->get_meta( '_tax_class' ),
+						'subtotal'      => $line_subtotal < $line_total ? $line_total : $line_subtotal,
+						'total'         => $line_total,
+						'taxes'         => $this->get_meta( '_line_tax_data' ),
+						'stock_changed' => $this->get_meta( '_stock_changed' ),
 					) );
 					
 					break;

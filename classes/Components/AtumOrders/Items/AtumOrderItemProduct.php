@@ -12,11 +12,9 @@
 
 namespace Atum\Components\AtumOrders\Items;
 
-use Atum\Inc\Helpers;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
 
 abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 
@@ -26,18 +24,19 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 	 * @var array
 	 */
 	protected $extra_data = array(
-		'product_id'   => 0,
-		'variation_id' => 0,
-		'quantity'     => 1,
-		'tax_class'    => '',
-		'subtotal'     => 0,
-		'subtotal_tax' => 0,
-		'total'        => 0,
-		'total_tax'    => 0,
-		'taxes'        => array(
+		'product_id'    => 0,
+		'variation_id'  => 0,
+		'quantity'      => 1,
+		'tax_class'     => '',
+		'subtotal'      => 0,
+		'subtotal_tax'  => 0,
+		'total'         => 0,
+		'total_tax'     => 0,
+		'taxes'         => array(
 			'subtotal' => array(),
 			'total'    => array(),
 		),
+		'stock_changed' => 'no',
 	);
 
 	/**
@@ -69,6 +68,7 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 			'_line_total'        => $this->get_total( 'edit' ),
 			'_line_tax'          => $this->get_total_tax( 'edit' ),
 			'_line_tax_data'     => $this->get_taxes( 'edit' ),
+			'_stock_changed'     => $this->get_stock_changed( 'edit' ),
 		), $this );
 
 		$this->atum_order_item_model->save_meta( $save_values );
@@ -87,6 +87,30 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 		$product = Helpers::get_atum_product( $this->get_variation_id() ?: $this->get_product_id() );
 		
 		return apply_filters( 'atum/orders/item_product/product', $product, $this );
+	}
+
+	/**
+	 * Getter for the stock changed prop.
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param string $context What the value is for. Valid values are 'view' and 'edit'.
+	 *
+	 * @return string 'yes' or 'no'
+	 */
+	public function get_stock_changed( $context = 'view' ) {
+		return $this->get_prop( 'stock_changed', $context );
+	}
+
+	/**
+	 * Set the stock changed prop.
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param mixed $value Stock changed status (true or 'yes' if changed, false or 'no' if not changed).
+	 */
+	public function set_stock_changed( $value ) {
+		$this->set_prop( 'stock_changed', wc_bool_to_string( $value ) );
 	}
 
 }
