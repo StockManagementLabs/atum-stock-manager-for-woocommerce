@@ -1755,7 +1755,7 @@ final class Ajax {
 	 *
 	 * @package ATUM Orders
 	 *
-	 * @since   1.3.0
+	 * @since 1.3.0
 	 *
 	 * @param string $action
 	 */
@@ -1804,7 +1804,6 @@ final class Ajax {
 					if ( is_null( $old_stock ) ) {
 						$old_stock = 0;
 						wc_update_product_stock( $product, $old_stock );
-
 					}
 
 					$stock_change = apply_filters( 'atum/ajax/restore_atum_order_stock_quantity', $quantities[ $item_id ], $item_id );
@@ -1824,7 +1823,14 @@ final class Ajax {
 					$return[] = $note;
 
 					$atum_order->add_order_note( $note );
-					$atum_order_item->update_meta_data( '_stock_changed', TRUE );
+
+					if ( PurchaseOrders::POST_TYPE === $atum_order->get_post_type() ) {
+						$atum_order_item->set_stock_changed( PurchaseOrders::FINISHED === $atum_order->get_status() );
+					}
+					else {
+						$atum_order_item->set_stock_changed( TRUE );
+					}
+
 					$atum_order_item->save();
 
 				}
