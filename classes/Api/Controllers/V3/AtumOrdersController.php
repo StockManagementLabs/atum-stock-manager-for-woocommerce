@@ -601,7 +601,14 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		}
 
-		$this->maybe_set_item_props( $item, array( 'name', 'quantity', 'total', 'subtotal', 'tax_class' ), $posted );
+		$this->maybe_set_item_props( $item, array(
+			'name',
+			'quantity',
+			'total',
+			'subtotal',
+			'tax_class',
+			'stock_changed',
+		), $posted );
 		$this->maybe_set_item_meta_data( $item, $posted );
 
 	}
