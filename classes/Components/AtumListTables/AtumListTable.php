@@ -3754,8 +3754,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
-					$supplier_cache_key  = AtumCache::get_cache_key( 'search_supplier_ids', '_suppliers' );
-					$search_supplier_ids = AtumCache::get_cache( $supplier_cache_key, ATUM_MULTINV_TEXT_DOMAIN, FALSE, $has_cache );
+					$supplier_cache_key  = AtumCache::get_cache_key( 'search_supplier_ids', $search_query );
+					$search_supplier_ids = AtumCache::get_cache( $supplier_cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 					if ( $has_cache ) {
 						return $search_supplier_ids;
@@ -3782,7 +3782,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					$supplier_products = array();
 
 					// Avoid endless loops.
-					remove_filter( 'posts_search', array( $this, 'product_search' ), 10 );
+					remove_filter( 'posts_search', array( $this, 'product_search' ) );
 
 					foreach ( $search_supplier_ids as $supplier_id ) {
 						$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );

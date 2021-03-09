@@ -46,9 +46,9 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group input-group-sm">
 					<div class="input-group-append">
-						<button class="btn btn-outline-secondary dropdown-toggle tips" id="search_column_btn"
+						<button class="btn btn-outline-secondary dropdown-toggle atum-tooltip" id="search_column_btn"
 								title="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>" data-value=""
-								type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								type="button" data-toggle="dropdown" data-bs-placement="left" aria-haspopup="true" aria-expanded="false">
 							<?php esc_html_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>
 						</button>
 
@@ -70,12 +70,14 @@ defined( 'ABSPATH' ) || die;
 				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 
 					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
-					<button type="button" class="sticky-columns-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>">
+					<button type="button" class="sticky-columns-button atum-tooltip <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>"
+						title="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom">
 						<i class="atmi-view-sidebar-left"></i>
 					</button>
 
 					<?php $enabled_sticky_header = Helpers::get_atum_user_meta( 'enabled_sc_sticky_header' ); ?>
-					<button type="button" class="sticky-header-button tips <?php echo esc_attr( 'yes' === $enabled_sticky_header ? 'active' : '' ); ?>" data-tip="<?php esc_attr_e( 'Toggle Sticky Header', ATUM_TEXT_DOMAIN ) ?>">
+					<button type="button" class="sticky-header-button atum-tooltip <?php echo esc_attr( 'yes' === $enabled_sticky_header ? 'active' : '' ); ?>"
+						title="<?php esc_attr_e( 'Toggle Sticky Header', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom">
 						<i class="atmi-view-sticky-header"></i>
 					</button>
 
