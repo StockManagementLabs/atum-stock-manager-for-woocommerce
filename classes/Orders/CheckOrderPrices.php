@@ -62,6 +62,12 @@ class CheckOrderPrices {
 				// Filter the orders query before running it.
 				add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
 
+				// Add the action button to the filtered mismatching orders.
+				add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
+
+				// Fix the prices for the specified orders.
+				add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
+
 			}
 
 		}
@@ -152,7 +158,7 @@ class CheckOrderPrices {
 			$tooltip  = sprintf( _n( 'There is %d order with mismatching prices.', 'There are %d orders with mismatching prices.', $mismatching_orders_count, ATUM_TEXT_DOMAIN ), $mismatching_orders_count );
 			$tooltip .= '<br>' . _n( 'Click to show the order', 'Click to show the orders', $mismatching_orders_count, ATUM_TEXT_DOMAIN );
 
-			wp_send_json_success( '<a href="' . $_POST['query_string'] . '&show_mismatching=yes" id="atum-mismatching-orders" class="atum-tooltip" title="' . esc_attr( $tooltip ) . '">' . $mismatching_orders_count . '</a>' );
+			wp_send_json_success( '<a href="' . $_POST['query_string'] . '&atum_show_mismatching=yes" id="atum-mismatching-orders" class="atum-tooltip" title="' . esc_attr( $tooltip ) . '">' . $mismatching_orders_count . '</a>' );
 
 		}
 
@@ -229,7 +235,7 @@ class CheckOrderPrices {
 	 */
 	public function filter_mismatching_orders( $query ) {
 
-		if ( $query->get( 'post_type' ) === 'shop_order' && ! empty( $_GET['show_mismatching'] ) && 'yes' === $_GET['show_mismatching'] ) {
+		if ( $query->get( 'post_type' ) === 'shop_order' && ! empty( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] ) {
 
 			$queried_statuses          = (array) $query->get( 'post_status' );
 			$queried_editable_statuses = array_intersect( $queried_statuses, $this->editable_order_statuses );
@@ -246,6 +252,82 @@ class CheckOrderPrices {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Fix the prices for any order with mismatching prices
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param array     $actions
+	 * @param \WC_Order $order
+	 *
+	 * @return array
+	 */
+	public function add_fix_prices_button( $actions, $order ) {
+
+		if ( isset( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] && $order->has_status( [ 'pending', 'on-hold' ] ) ) {
+
+			$actions['fix_prices'] = array(
+				'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_fix_order_prices&order_id=' . $order->get_id() ), 'atum-fix-order-prices-nonce' ),
+				'name'   => __( 'Fix prices', ATUM_TEXT_DOMAIN ),
+				'action' => 'fix_prices',
+			);
+
+		}
+
+		return $actions;
+
+	}
+
+	/**
+	 * Fix the prices for the specified orders
+	 *
+	 * @since 1.8.7
+	 */
+	public function fix_order_prices() {
+
+		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-fix-order-prices-nonce' ) && isset( $_GET['order_id'] ) ) {
+
+			$order = wc_get_order( absint( wp_unslash( $_GET['order_id'] ) ) );
+
+			if ( $order ) {
+
+				$items = $order->get_items();
+
+				foreach ( $items as $item ) {
+
+					/**
+					 * Variable definition
+					 *
+					 * @var \WC_Order_Item_Product $item
+					 */
+					$product = $item->get_product();
+					$price   = $product->get_price();
+					$qty     = $item->get_quantity();
+
+					$item_cost = (float) $price * $qty;
+
+					if ( $item_cost !== (float) $item->get_subtotal() ) {
+
+						$item->set_subtotal( $item_cost );
+						$item->set_total( $item_cost );
+						$item->save();
+						$item->calculate_taxes();
+
+					}
+
+				}
+
+				$order->calculate_totals();
+
+			}
+
+		}
+
+		wp_safe_redirect( wp_get_referer() ?: admin_url( 'edit.php?post_type=shop_order&atum_show_mismatching=yes' ) );
+		exit;
 
 	}
 
