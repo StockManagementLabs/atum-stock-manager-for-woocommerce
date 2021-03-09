@@ -61,11 +61,18 @@ class PurchaseOrders extends AtumOrderPostType {
 	const MENU_ORDER = 3;
 	
 	/**
-	 * Will hold the current purchase order object
+	 * Will store the current purchase order object
 	 *
 	 * @var PurchaseOrder
 	 */
 	private $po;
+
+	/**
+	 * Will store the orders that are processed on a single requests to avoid changing stocks multiple times
+	 *
+	 * @var int[]
+	 */
+	private $processed_orders = [];
 
 	/**
 	 * The capabilities used when registering the post type
@@ -893,6 +900,13 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	public function change_stock_levels( $order, $action ) {
 
+		$order_id = $order->get_id();
+
+		// If this order was already processed, avoid changing the stock again.
+		if ( in_array( $order_id, $this->processed_orders ) ) {
+			return;
+		}
+
 		$atum_order_items = $order->get_items();
 		$is_completed     = self::FINISHED === $order->get_status();
 
@@ -948,6 +962,9 @@ class PurchaseOrders extends AtumOrderPostType {
 				}
 
 			}
+
+			$this->processed_orders[] = $order_id;
+
 		}
 
 	}
