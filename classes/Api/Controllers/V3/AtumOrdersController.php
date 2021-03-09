@@ -23,7 +23,6 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\PurchaseOrders;
-use AtumExport\Queries\AtumOrderItem;
 
 
 abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
@@ -381,12 +380,12 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				$object->calculate_totals( TRUE );
 			}
 
-			do_action( 'atum/order/before_api_save_order', $object, $request, $creating );
-
 			// Set status.
 			if ( ! empty( $request['status'] ) ) {
 				$object->set_status( $request['status'] );
 			}
+
+			do_action( 'atum/api/before_save_atum_order', $object, $request, $creating );
 
 			$object->save();
 
