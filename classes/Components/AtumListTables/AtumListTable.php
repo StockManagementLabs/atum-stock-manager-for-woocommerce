@@ -3754,6 +3754,13 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
+					$supplier_cache_key  = AtumCache::get_cache_key( 'search_supplier_ids', '_suppliers' );
+					$search_supplier_ids = AtumCache::get_cache( $supplier_cache_key, ATUM_MULTINV_TEXT_DOMAIN, FALSE, $has_cache );
+
+					if ( $has_cache ) {
+						return $search_supplier_ids;
+					}
+
 					// Get suppliers.
 					// phpcs:disable WordPress.DB.PreparedSQL
 					$query = $wpdb->prepare( "
@@ -3764,6 +3771,8 @@ abstract class AtumListTable extends \WP_List_Table {
 					// phpcs:enable
 
 					$search_supplier_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+					AtumCache::set_cache( $supplier_cache_key, $search_supplier_ids, ATUM_MULTINV_TEXT_DOMAIN );
 
 					if ( empty( $search_supplier_ids ) ) {
 						AtumCache::set_cache( $cache_key, $where_without_results );
