@@ -303,16 +303,28 @@ class CheckOrderPrices {
 					 *
 					 * @var \WC_Order_Item_Product $item
 					 */
-					$product = $item->get_product();
-					$price   = $product->get_price();
-					$qty     = $item->get_quantity();
+					$product       = $item->get_product();
+					$price         = (float) $product->get_price();
+					$qty           = $item->get_quantity();
+					$item_subtotal = (float) $item->get_subtotal();
+					$item_total    = (float) $item->get_total();
 
-					$item_cost = (float) $price * $qty;
+					$item_cost = $price * $qty;
 
-					if ( $item_cost !== (float) $item->get_subtotal() ) {
+					if ( $item_cost !== $item_subtotal ) {
 
 						$item->set_subtotal( $item_cost );
-						$item->set_total( $item_cost );
+
+						// Check if there is a discount applied and, if so, apply it proportionally.
+						if ( $item_subtotal > $item_total ) {
+							$item_discount  = $item_subtotal - $item_total;
+							$discount_ratio = $item_discount / $item_subtotal;
+							$item->set_total( $item_cost * $discount_ratio );
+						}
+						else {
+							$item->set_total( $item_cost );
+						}
+
 						$item->save();
 						$item->calculate_taxes();
 
