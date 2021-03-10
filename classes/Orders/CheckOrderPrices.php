@@ -68,6 +68,15 @@ class CheckOrderPrices {
 				// Fix the prices for the specified orders.
 				add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
 
+				// Add a bulk action to the orders list table.
+				add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
+
+				// Process the bulk action for fixing prices.
+				add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
+
+				// Show and admin notice after the prices have been changed.
+				add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
+
 			}
 
 		}
@@ -269,10 +278,10 @@ class CheckOrderPrices {
 
 		if ( isset( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] && $order->has_status( [ 'pending', 'on-hold' ] ) ) {
 
-			$actions['fix_prices'] = array(
+			$actions['atum_fix_prices'] = array(
 				'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_fix_order_prices&order_id=' . $order->get_id() ), 'atum-fix-order-prices-nonce' ),
 				'name'   => __( 'Fix prices', ATUM_TEXT_DOMAIN ),
-				'action' => 'fix_prices',
+				'action' => 'atum_fix_prices',
 			);
 
 		}
@@ -285,12 +294,40 @@ class CheckOrderPrices {
 	 * Fix the prices for the specified orders
 	 *
 	 * @since 1.8.7
+	 *
+	 * @param int[] $order_ids Optional. Only passed when processing a bulk action.
+	 *
+	 * @return int|void
 	 */
-	public function fix_order_prices() {
+	public function fix_order_prices( $order_ids = [] ) {
 
-		if ( current_user_can( 'edit_shop_orders' ) && check_admin_referer( 'atum-fix-order-prices-nonce' ) && isset( $_GET['order_id'] ) ) {
+		$changed      = 0;
+		$redirect_url = wp_get_referer() ?: admin_url( 'edit.php?post_type=shop_order&atum_show_mismatching=yes' );
 
-			$order = wc_get_order( absint( wp_unslash( $_GET['order_id'] ) ) );
+		// For ajax requests, check the nonce first.
+		if ( wp_doing_ajax() && ! check_admin_referer( 'atum-fix-order-prices-nonce' ) ) {
+			wp_safe_redirect( $redirect_url );
+			exit;
+		}
+
+		// The order IDs to be processed are required.
+		if ( ( empty( $order_ids ) && empty( $_GET['order_id'] ) ) || ! current_user_can( 'edit_shop_orders' ) ) {
+
+			if ( wp_doing_ajax() ) {
+				wp_safe_redirect( $redirect_url );
+				exit;
+			}
+			else {
+				return $changed;
+			}
+
+		}
+
+		$order_ids = ! empty( $order_ids ) ? $order_ids : [ absint( wp_unslash( $_GET['order_id'] ) ) ];
+
+		foreach ( $order_ids as $order_id ) {
+
+			$order = wc_get_order( $order_id );
 
 			if ( $order ) {
 
@@ -333,13 +370,98 @@ class CheckOrderPrices {
 				}
 
 				$order->calculate_totals();
+				$changed++;
 
 			}
 
 		}
 
-		wp_safe_redirect( wp_get_referer() ?: admin_url( 'edit.php?post_type=shop_order&atum_show_mismatching=yes' ) );
-		exit;
+		if ( wp_doing_ajax() ) {
+			wp_safe_redirect( $redirect_url );
+			exit;
+		}
+		else {
+			return $changed;
+		}
+
+	}
+
+	/**
+	 * Add a bulk action to the WC orders list table
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param array $actions
+	 *
+	 * @return array
+	 */
+	public function add_bulk_action( $actions ) {
+
+		$actions['atum_fix_prices'] = __( 'Fix prices', ATUM_TEXT_DOMAIN );
+
+		return $actions;
+	}
+
+	/**
+	 * Handle the bulk action to fix order prices
+	 *
+	 * @since 1.8.7
+	 *
+	 * @param  string $redirect_to URL to redirect to.
+	 * @param  string $action      Action name.
+	 * @param  array  $ids         List of IDs.
+	 *
+	 * @return string
+	 */
+	public function handle_fix_order_prices_bulk_action( $redirect_to, $action, $ids ) {
+
+		if ( 'atum_fix_prices' === $action ) {
+
+			$ids     = array_reverse( array_map( 'absint', $ids ) );
+			$changed = $this->fix_order_prices( $ids );
+
+			if ( $changed ) {
+
+				$redirect_to = add_query_arg(
+					array(
+						'post_type'   => 'shop_order',
+						'bulk_action' => 'prices_fixed',
+						'changed'     => $changed,
+						'ids'         => join( ',', $ids ),
+					),
+					$redirect_to
+				);
+
+			}
+
+		}
+
+		return $redirect_to;
+
+	}
+
+	/**
+	 * Show an admin notice when the prices have been fixed through a bulk action
+	 *
+	 * @since 1.8.7
+	 */
+	public function bulk_admin_notices() {
+
+		global $post_type, $pagenow;
+
+		// Bail out if not on shop order list page.
+		if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
+			return;
+		}
+
+		$number      = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
+		$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
+
+		if ( 'prices_fixed' === $bulk_action ) { // WPCS: input var ok, CSRF ok.
+			/* translators: %d: orders count */
+			$message = _n( 'The prices for the selected order were fixed successfully.', 'The prices for the selected orders were fixed successfully.', $number, ATUM_TEXT_DOMAIN );
+			echo '<div class="updated"><p>' . esc_html( $message ) . '</p></div>';
+		}
 
 	}
 
