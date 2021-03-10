@@ -56,7 +56,7 @@ export default class MenuPopover extends PopoverBase{
 
 		// Add the popover to the menu button.
 		new BsPopover( this.$menuButton.get(0), {
-			title    : this.menu.title,
+			title    : this.menu.title || '',
 			content  : $( '<div />' ).append( $menuHtml ).get( 0 ), // It supports one element only.
 			html     : true,
 			customClass: this.popoverClassName,
