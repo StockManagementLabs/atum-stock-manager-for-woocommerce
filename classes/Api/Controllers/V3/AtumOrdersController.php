@@ -69,7 +69,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			$schema['properties']['date_created']['readonly'],
 			$schema['properties']['date_created_gmt']['readonly'],
 			$schema['properties']['date_completed']['readonly'],
-			$schema['properties']['date_completed_gmt']['readonly'],
+			$schema['properties']['date_completed_gmt']['readonly']
 		);
 
 		return $schema;
