@@ -105,7 +105,7 @@ export default class FileUploader {
 
 						}
 
-						this.wpHooks.doAction( 'atum_fileUploader_selected', uploader );
+						this.wpHooks.doAction( 'atum_fileUploader_selected', uploader, $button );
 
 					} )
 					.open();
