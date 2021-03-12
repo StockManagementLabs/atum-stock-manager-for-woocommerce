@@ -1851,9 +1851,10 @@ final class Helpers {
 
 				}
 
-				$product_ids    = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
-				$product_sql    = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
+				$product_ids = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
+				$product_sql = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
 
+				// phpcs:disable
 				$sql = $wpdb->prepare( "
 					SELECT SUM(omq.meta_value) AS qty 
 					FROM {$wpdb->prefix}woocommerce_order_items oi			
@@ -1865,6 +1866,7 @@ final class Helpers {
 					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value $product_sql ;",
 					$product_id_key
 				);
+				// phpcs:enable
 
 				$stock_on_hold = wc_stock_amount( $wpdb->get_var( $sql ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
