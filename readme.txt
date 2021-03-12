@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.7
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.0.0
-Stable tag: 1.8.6
+WC tested up to: 5.1.0
+Stable tag: 1.8.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,49 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.7`
+
+*2021-03-12*
+
+**Features**
+
+* Added the ability of searching WC orders by inner products' SKU or Supplier SKU.
+* Added new hook to be able to delete order item inventories when deleting an ATUM order.
+* Add helper to get a WC Order status properly formatted.
+* Allow passing ATUM order dates as GMT through ATUM API.
+* Allow handling the increase/decrease stocks in ILs externally.
+* Added low_stock_amount to product_data endpoint in ATUM REST API.
+* Save the WC low_stock_amount through ATUM API.
+* Allow adding items to an IL without having to create the order first.
+* Save the stock_changed meta for ATUM order items when appropriate.
+* Allow the 'stock_changed' prop to be sent in API requests within ATUM order items.
+* Added a security check to avoid changing the stock multiple times for the same PO.
+* Added button to fix order prices.
+* Reapply any discount proportionally when fixing order prices.
+* Added searchable columns to uncontroled List Table.
+* Fix order prices through a bulk action.
+
+**Changes**
+
+* Added global variable for WC_Order statuses that change the stock.
+* Apply to children products the same order than parents in List Tables.
+* Do not change the PO items' stock for any item that has the 'stock_changed' prop set to 'yes'.
+* Removed supplier from the "Search In Column" dropdown as it already has its own filter.
+
+**Fixes**
+
+* Fixed ghost tooltips showing in some cases (possible Bootstrap 5 bug).
+* Fixed icon column names not shown in the export report.
+* Minor CSS fixes.
+* Fixed ATUM control switch not being changed after saving the product.
+* Fixed wrong titles and dates being set to POs when created through API calls.
+* Fixed duplicated results in statistics when existing variations are sold.
+* Fixed gross profit when prices include taxes.
+* Avoid columns misalignment when showing/hiding columns in Stock Central.
+* Fixed menuPopover component's title parameter not optional.
 
 ---
 
