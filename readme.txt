@@ -269,6 +269,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Apply to children products the same order than parents in List Tables.
 * Do not change the PO items' stock for any item that has the 'stock_changed' prop set to 'yes'.
 * Removed supplier from the "Search In Column" dropdown as it already has its own filter.
+* Remove an active addon if it couldn't be bootsrapped.
 
 **Fixes**
 
