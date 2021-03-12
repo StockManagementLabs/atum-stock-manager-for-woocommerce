@@ -161,11 +161,16 @@ class Addons {
 
 		if ( ! empty( self::$addons ) ) {
 
-			foreach ( self::$addons as $addon ) {
+			foreach ( self::$addons as $index => $addon ) {
 
 				// Load the addon. Each addon should have a callback method for bootstraping.
 				if ( ! empty( $addon['bootstrap'] ) && is_callable( $addon['bootstrap'] ) ) {
-					call_user_func( $addon['bootstrap'] );
+
+					$bootstrapped = call_user_func( $addon['bootstrap'] );
+
+					if ( ! $bootstrapped ) {
+						unset( self::$addons[ $index ] );
+					}
 				}
 
 			}
