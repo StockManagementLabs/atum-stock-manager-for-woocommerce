@@ -23,7 +23,9 @@ use Atum\Inc\Helpers;
 
 		<?php if ( $vat_number ) : ?>
 			<br>
-			<?php printf( esc_html__( 'Tax/VAT number: %s' ), $vat_number ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php
+			/* translators: the VAT number */
+			printf( esc_html__( 'Tax/VAT number: %s', ATUM_TEXT_DOMAIN ), $vat_number ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php endif; ?>
 	</div>
 	<div class="float-right">
