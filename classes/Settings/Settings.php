@@ -338,6 +338,14 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
+			'orders_search_by_sku'      => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Orders search by SKU', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, you can search by product SKU or supplier SKU and will return any order containing a product matching the specified term. Please, note that due to the complexity of this query, it could cause a delay in returning the searched results on dbs with many orders.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no',
+			),
 			'delete_data'               => array(
 				'group'   => 'general',
 				'section' => 'general',

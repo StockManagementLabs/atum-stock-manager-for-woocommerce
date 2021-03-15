@@ -140,7 +140,9 @@ class Hooks {
 		add_filter( 'atum/get_simple_product_types', array( $this, 'get_simple_product_types' ) );
 
 		// Allow searching orders by inner products' SKUs.
-		add_filter( 'woocommerce_shop_order_search_results', array( $this, 'search_orders_by_sku' ), 10, 3 );
+		if ( 'yes' === Helpers::get_option( 'orders_search_by_sku', 'no' ) ) {
+			add_filter( 'woocommerce_shop_order_search_results', array( $this, 'search_orders_by_sku' ), 10, 3 );
+		}
 
 	}
 
