@@ -177,11 +177,14 @@ abstract class AtumOrderModel {
 	 */
 	protected function load_post() {
 		
-		$this->post      = get_post( $this->id );
-		$this->db_status = $this->post->post_status;
+		$this->post = get_post( $this->id );
 
-		// Load the order meta data.
-		$this->read_meta();
+		if ( $this->post ) {
+			$this->db_status = $this->post->post_status;
+
+			// Load the order meta data.
+			$this->read_meta();
+		}
 
 	}
 
@@ -1979,6 +1982,15 @@ abstract class AtumOrderModel {
 	 */
 	public function get_block_message() {
 		return $this->block_message;
+	}
+
+	/**
+	 * Check whether the post for the current ATUM order does exist
+	 *
+	 * @since 1.8.8
+	 */
+	public function exists() {
+		return $this->id && $this->post;
 	}
 
 	/**********
