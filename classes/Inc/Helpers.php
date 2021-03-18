@@ -3333,6 +3333,8 @@ final class Helpers {
 	 */
 	public static function get_order_note_ids( $note_data, $searched_texts ) {
 
+		global $wpdb;
+
 		$found      = FALSE;
 		$return_ids = [];
 
@@ -3347,7 +3349,7 @@ final class Helpers {
 		if ( $found ) {
 
 			// Try to determine whether the product being processed has calculated stock.
-			preg_match_all( '#\((\#+[0-9]+)\)#', $note_data['comment_content'], $ids );
+			preg_match_all( '/(?<=\()(.+)(?=\))/is', $note_data['comment_content'], $ids );
 
 			if ( ! empty( $ids ) ) {
 
@@ -3355,7 +3357,26 @@ final class Helpers {
 
 				foreach ( $ids as $id ) {
 
-					$return_ids[] = absint( trim( $id, '()#' ) );
+					if ( 0 === strpos( $id, '#') ) {
+
+						// It's the id because begins with #.
+						$return_ids[] = intval( substr( $id, 1 ) );
+					}
+					else {
+
+						// It's as SKU, so get the product with that SKU.
+						$id_from_sku = $wpdb->get_var( $wpdb->prepare( "
+							SELECT pm.post_id FROM {$wpdb->posts} p
+									INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+									WHERE p.post_status <> 'trash' AND p.post_type IN ('product','product_variation')
+									AND pm.meta_key = '_sku' AND pm.meta_value = %s
+							", $id));
+
+						if ( $id_from_sku ) {
+							$return_ids[] = intval( $id_from_sku );
+						}
+
+					}
 
 				}
 
