@@ -650,49 +650,44 @@ export default class ListTable {
 			let $compoundedCell: JQuery = $( elem ),
 			    $row: JQuery            = $compoundedCell.closest( 'tr' ),
 			    $nextRow: JQuery        = $row.next( '.has-compounded' ),
-			    compoundedAmt: number   = 0;
+				compoundedAmt: number = 0;
 
 			if ( $row.hasClass( 'expandable' ) ) {
 				return;
 			}
 
-			if( $compoundedCell.attr("class").includes('compounded-available') ) {
+			while ( $nextRow.length ) {
+				
+				if ( $compoundedCell.hasClass( 'compounded-available' ) ) {
 
-				while ( $nextRow.length ) {
-
-					const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span'),
+					const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span' ),
 					      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
 
 					compoundedAmt += parseFloat( availableStockValue ) || 0;
-					$nextRow = $nextRow.next( '.has-compounded' );
-
 				}
-
-			}
-			else {
-
-				while ( $nextRow.length ) {
+				else {
 
 					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
 					      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
 
 					compoundedAmt += parseFloat( stockValue ) || 0;
-					$nextRow = $nextRow.next( '.has-compounded' );
 
 				}
 
+				if ( 0 === compoundedAmt && $compoundedCell.attr( 'class' ).includes( 'compounded-available' ) ) {
+					$compoundedCell.text( '-' );
+				}
+				else {
+					$compoundedCell.text( compoundedAmt );
+				}
+
+				$nextRow = $nextRow.next( '.has-compounded' );
+
 			}
 
-			if ( 0 === compoundedAmt && $compoundedCell.attr("class").includes('compounded-available') ) {
-				$compoundedCell.text( '-' );
-			}
-			else {
-				$compoundedCell.text( compoundedAmt );
-			}
-		
-		});
-		
+		} );
+
 	}
-	
+
 }
 
