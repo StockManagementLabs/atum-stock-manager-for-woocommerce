@@ -645,7 +645,7 @@ export default class ListTable {
 	 */
 	calculateCompoundedStocks() {
 
-		this.globals.$atumTable.find( '.compounded' ).each( ( index: number, elem: Element ) => {
+		this.globals.$atumTable.find( '.compounded, .compounded-available' ).each( ( index: number, elem: Element ) => {
 
 			let $compoundedCell: JQuery = $( elem ),
 			    $row: JQuery            = $compoundedCell.closest( 'tr' ),
@@ -656,48 +656,42 @@ export default class ListTable {
 				return;
 			}
 
-			while ( $nextRow.length ) {
+			if( $compoundedCell.attr("class").includes('compounded-available') ) {
 
-				const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
-				      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
+				while ( $nextRow.length ) {
 
-				compoundedAmt += parseFloat( stockValue ) || 0;
-				$nextRow = $nextRow.next( '.has-compounded' );
+					const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span'),
+					      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
+
+					compoundedAmt += parseFloat( availableStockValue ) || 0;
+					$nextRow = $nextRow.next( '.has-compounded' );
+
+				}
+
+			}
+			else {
+
+				while ( $nextRow.length ) {
+
+					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
+					      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
+
+					compoundedAmt += parseFloat( stockValue ) || 0;
+					$nextRow = $nextRow.next( '.has-compounded' );
+
+				}
 
 			}
 
-			$compoundedCell.text( compoundedAmt );
+			if ( 0 === compoundedAmt && $compoundedCell.attr("class").includes('compounded-available') ) {
+				$compoundedCell.text( '-' );
+			}
+			else {
+				$compoundedCell.text( compoundedAmt );
+			}
 		
 		});
-
-		this.globals.$atumTable.find( '.compounded-available' ).each( ( index: number, elem: Element) => {
-
-			let $compoundedCalculated: JQuery = $( elem ),
-			    $row: JQuery                  = $compoundedCalculated.closest( 'tr' ),
-			    $nextRow: JQuery              = $row.next( '.has-compounded' ),
-			    compoundedAmtC: number        = 0;
-
-			if ( $row.hasClass( 'expandable' ) ) {
-				return;
-			}
-
-			while ( $nextRow.length ) {
-
-				const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span'),
-				      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
-
-				compoundedAmtC += parseFloat( availableStockValue ) || 0;
-				$nextRow = $nextRow.next( '.has-compounded' );
-
-			}
-			if (compoundedAmtC > 0){
-				$compoundedCalculated.text( compoundedAmtC );
-			}
-			else{
-				$compoundedCalculated.text( '-' );
-			}
-
-		});
+		
 	}
 	
 }
