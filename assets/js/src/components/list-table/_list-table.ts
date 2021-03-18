@@ -669,7 +669,35 @@ export default class ListTable {
 			$compoundedCell.text( compoundedAmt );
 		
 		});
-		
+
+		this.globals.$atumTable.find( '.compounded-available' ).each( ( index: number, elem: Element) => {
+
+			let $compoundedCalculated: JQuery = $( elem ),
+			    $row: JQuery                  = $compoundedCalculated.closest( 'tr' ),
+			    $nextRow: JQuery              = $row.next( '.has-compounded' ),
+			    compoundedAmtC: number        = 0;
+
+			if ( $row.hasClass( 'expandable' ) ) {
+				return;
+			}
+
+			while ( $nextRow.length ) {
+
+				const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span'),
+				      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
+
+				compoundedAmtC += parseFloat( availableStockValue ) || 0;
+				$nextRow = $nextRow.next( '.has-compounded' );
+
+			}
+			if (compoundedAmtC > 0){
+				$compoundedCalculated.text( compoundedAmtC );
+			}
+			else{
+				$compoundedCalculated.text( '-' );
+			}
+
+		});
 	}
 	
 }
