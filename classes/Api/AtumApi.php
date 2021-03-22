@@ -28,6 +28,12 @@ class AtumApi {
 	private static $instance;
 
 	/**
+	 * The CORS origin coming from the ATUM App
+	 * TODO: CHANGE IT AFTER DEPLOYING THE APP WITH THE NEW NAME.
+	 */
+	const ATUM_APP_ORIGIN = 'capacitor://io.berebel.atum';
+
+	/**
 	 * The ATUM API controllers
 	 *
 	 * @var array
@@ -79,6 +85,9 @@ class AtumApi {
 		// Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3).
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
 
+		// Fix CORS issue when connecting through Ionic's Capacitor to our API.
+		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
+
 		$this->load_extenders();
 
 	}
@@ -115,6 +124,55 @@ class AtumApi {
 
 		// Allow ATUM plugins to load their extenders.
 		do_action( 'atum/api/load_extenders' );
+
+	}
+
+	/**
+	 * Add hooks for fixing CORS rules
+	 *
+	 * @since 1.8.8
+	 */
+	public function add_cors_hooks() {
+
+		remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+		add_filter( 'rest_pre_serve_request', array( $this, 'fix_cors' ), PHP_INT_MAX );
+
+	}
+
+	/**
+	 * Fix CORS issue when connecting through Ionic's Capacitor to our API.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param mixed $value Response data.
+	 *
+	 * @return mixed
+	 */
+	public function fix_cors( $value ) {
+
+		$origin = get_http_origin();
+
+		if ( $origin ) {
+
+			// Requests from file:// and data: URLs send "Origin: null".
+			if ( self::ATUM_APP_ORIGIN !== $origin && 'null' !== $origin ) {
+				$origin = esc_url_raw( $origin );
+			}
+
+			// Allow 3rd parties to add any extra allowed origins.
+			$origin = apply_filters( 'atum/api/cors_origin', $origin );
+
+			header( 'Access-Control-Allow-Origin: ' . $origin );
+			header( 'Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE' );
+			header( 'Access-Control-Allow-Credentials: true' );
+			header( 'Vary: Origin', false );
+
+		}
+		elseif ( ! headers_sent() && 'GET' === $_SERVER['REQUEST_METHOD'] && ! is_user_logged_in() ) {
+			header( 'Vary: Origin', false );
+		}
+
+		return $value;
 
 	}
 
