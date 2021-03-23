@@ -864,6 +864,8 @@ abstract class AtumOrderModel {
 
 				}
 
+				$this->clear_caches();
+
 			}
 
 		}

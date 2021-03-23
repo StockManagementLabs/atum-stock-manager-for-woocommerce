@@ -398,10 +398,9 @@ class AtumProductData {
 				elseif ( is_callable( array( $product, $getter ) ) ) {
 					$data = call_user_func( array( $product, $getter ) );
 				}
+
 				// Allow to handle some fields externally.
-				else {
-					$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $response, $field_name, $product );
-				}
+				$data = apply_filters( 'atum/api/product_data/get_field_value', $data, $response, $field_name, $product );
 
 				$schema = $this->get_extended_product_schema();
 
