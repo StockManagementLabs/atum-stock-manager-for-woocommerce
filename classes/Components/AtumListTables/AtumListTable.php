@@ -4688,7 +4688,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function parse_orderby_args( $args ) {
 
-		if ( ! isset( $_REQUEST['orderby'] ) || empty( $_REQUEST['orderby'] ) ) {
+		if ( ! isset( $_REQUEST['orderby'] ) || empty( $_REQUEST['orderby'] ) || 'date' === $_REQUEST['orderby'] ) {
 			return $args;
 		}
 
