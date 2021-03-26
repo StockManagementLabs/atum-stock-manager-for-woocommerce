@@ -529,7 +529,6 @@ var MenuPopover = (function (_super) {
         _this.popoverClassName = 'menu-popover';
         _this.popoverButtonClassName = 'menu-popover-btn';
         _this.wpHooks = window['wp']['hooks'];
-        console.log($menuButton, _this.getInstance($menuButton));
         if ($menuButton.length && typeof menu.items !== 'undefined' && menu.items.length && !_this.getInstance($menuButton)) {
             _this.$menuButton.addClass(_this.popoverButtonClassName);
             _this.bindPopovers();
