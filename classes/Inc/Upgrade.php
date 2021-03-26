@@ -72,7 +72,7 @@ class Upgrade {
 		}
 
 		// ** version 1.4.6 ** New hidden column: weight.
-		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
+		if ( version_compare( $db_version, '1.4.6', '<' ) && ! $this->is_fresh_install ) {
 			$this->add_default_hidden_columns();
 		}
 
