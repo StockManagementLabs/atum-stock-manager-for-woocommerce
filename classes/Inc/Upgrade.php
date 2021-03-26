@@ -51,7 +51,7 @@ class Upgrade {
 
 		$this->current_atum_version = $db_version;
 
-		if ( ! $db_version || version_compare( $db_version, '0.0.1' ) ) {
+		if ( ! $db_version || version_compare( $db_version, '0.0.1', '<=' ) ) {
 			$this->is_fresh_install = TRUE;
 		}
 
@@ -71,31 +71,18 @@ class Upgrade {
 			add_action( 'admin_init', array( $this, 'create_inventory_log_types' ) );
 		}
 
-		// ** version 1.4.1 ** ATUM now uses its own way to manage the stock of the products.
-		if ( version_compare( $db_version, '1.4.1', '<' ) && $this->is_fresh_install ) {
-			$this->set_individual_manage_stock();
-			$this->add_inheritable_meta();
-		}
-
-		// ** version 1.4.1.2 ** Some inheritable products don't have the ATUM_CONTROL_STOCK_KEY meta.
-		if ( version_compare( $db_version, '1.4.1.2', '<' ) && $this->is_fresh_install ) {
-			$this->add_inheritable_sock_meta();
-		}
-
 		// ** version 1.4.6 ** New hidden column: weight.
 		if ( version_compare( $db_version, '1.4.6', '<' ) ) {
 			$this->add_default_hidden_columns();
 		}
 
-		// ** version 1.4.18.2. Removed date_i18n function.Check if post meta values contains not latins characters.
-		if ( version_compare( $db_version, '1.4.18.2', '<' ) && $this->is_fresh_install ) {
-			$this->check_post_meta_values();
-		}
-
 		// ** version 1.5.0 ** New tables to store ATUM data for products.
 		if ( version_compare( $db_version, '1.5.0', '<' ) ) {
 			$this->create_product_data_table();
-			$this->update_po_status();
+
+			if ( ! $this->is_fresh_install ) {
+				$this->update_po_status();
+			}
 		}
 
 		// ** version 1.5.8 ** New tables to store ATUM data for products.
@@ -109,7 +96,7 @@ class Upgrade {
 		}
 
 		// ** version 1.6.3.2 ** Set the default for atum_controlled and disallow NULL.
-		if ( version_compare( $db_version, '1.6.3.2', '<' ) ) {
+		if ( version_compare( $db_version, '1.6.3.2', '<' ) && ! $this->is_fresh_install ) {
 			$this->alter_atum_controlled_column();
 		}
 
@@ -120,12 +107,12 @@ class Upgrade {
 		}
 
 		// ** version 1.6.8 ** Change the supplier's meta key names.
-		if ( version_compare( $db_version, '1.6.8', '<' ) ) {
+		if ( version_compare( $db_version, '1.6.8', '<' ) && ! $this->is_fresh_install ) {
 			$this->change_supplier_meta_key_names();
 		}
 
 		// ** version 1.7.1 ** Change the POs date_expected's meta key names.
-		if ( version_compare( $db_version, '1.7.1', '<' ) ) {
+		if ( version_compare( $db_version, '1.7.1', '<' ) && ! $this->is_fresh_install ) {
 			$this->change_date_expected_meta_key_names();
 		}
 
@@ -175,23 +162,23 @@ class Upgrade {
 			}
 
 			$sql = "
-			CREATE TABLE $items_table (
-			 	`order_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				`order_item_name` text NOT NULL,
-				`order_item_type` varchar(200) NOT NULL DEFAULT '',
-				`order_id` bigint(20) unsigned NOT NULL,
-				PRIMARY KEY (`order_item_id`),
-				KEY `order_id` (`order_id`)
-			) $collate;
-			CREATE TABLE $itemmeta_table (
-				`meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  				`order_item_id` bigint(20) unsigned NOT NULL,
-				`meta_key` varchar(255) DEFAULT NULL,
-				`meta_value` longtext,
-				PRIMARY KEY (`meta_id`),
-				KEY `meta_key` (`meta_key`(191)),
-				KEY `order_item_id` (`order_item_id`)
-			) $collate;
+				CREATE TABLE $items_table (
+				    `order_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+					`order_item_name` text NOT NULL,
+					`order_item_type` varchar(200) NOT NULL DEFAULT '',
+					`order_id` bigint(20) unsigned NOT NULL,
+					PRIMARY KEY (`order_item_id`),
+					KEY `order_id` (`order_id`)
+				) $collate;
+				CREATE TABLE $itemmeta_table (
+					`meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	                `order_item_id` bigint(20) unsigned NOT NULL,
+					`meta_key` varchar(255) DEFAULT NULL,
+					`meta_value` longtext,
+					PRIMARY KEY (`meta_id`),
+					KEY `meta_key` (`meta_key`(191)),
+					KEY `order_item_id` (`order_item_id`)
+				) $collate;
 			";
 
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -219,84 +206,6 @@ class Upgrade {
 		}
 
 	}
-
-	/**
-	 * Set the ATUM's manage stock meta key to all the products
-	 *
-	 * @since 1.4.1
-	 */
-	private function set_individual_manage_stock() {
-
-		global $wpdb;
-
-		// Ensure that the meta keys were not added previously.
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::ATUM_CONTROL_STOCK_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		if ( $meta_count > 0 ) {
-			return;
-		}
-
-		// Add the meta to all the products that had the WC's manage_stock enabled.
-		$sql = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-				SELECT DISTINCT post_id, '" . Globals::ATUM_CONTROL_STOCK_KEY . "', meta_value FROM $wpdb->postmeta 
-				WHERE meta_key = '_manage_stock' AND meta_value = 'yes'";
-
-		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-	}
-
-	/**
-	 * Set the ATUM's inheritable meta key to all the inheritable products
-	 *
-	 * @since 1.4.1
-	 */
-	private function add_inheritable_meta() {
-
-		global $wpdb;
-
-		// Ensure that the meta keys were not added previously.
-		$meta_count = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		if ( $meta_count > 0 ) {
-			return;
-		}
-
-		foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
-			$term = get_term_by( 'slug', $inheritable_product_type, 'product_type' );
-
-			if ( $term ) {
-
-				// Add the meta to all the products that have the inheritable product type tax term set.
-				$sql = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value)
-				SELECT DISTINCT object_id, '" . Globals::IS_INHERITABLE_KEY . "', 'yes' FROM $wpdb->term_relationships 
-				WHERE term_taxonomy_id = $term->term_taxonomy_id";
-
-				$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Ensure that all inheritable products have set ATUM_CONTROL_STOCK_KEY
-	 *
-	 * @since 1.4.1.2
-	 */
-	private function add_inheritable_sock_meta() {
-
-		global $wpdb;
-
-		$inheritable_ids = $wpdb->get_col( "SELECT DISTINCT post_id FROM $wpdb->postmeta WHERE meta_key = '" . Globals::IS_INHERITABLE_KEY . "'" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		if ( $inheritable_ids ) {
-			foreach ( $inheritable_ids as $id ) {
-				update_post_meta( $id, Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
-			}
-		}
-	}
-
 
 	/**
 	 * Add default_hidden_columns to hidden columns on SC (in all users with hidden columns set)
@@ -336,36 +245,6 @@ class Upgrade {
 	}
 
 	/**
-	 * Check if post meta vualues contains not latins characters.
-	 *
-	 * @since 1.4.18
-	 */
-	private function check_post_meta_values() {
-
-		global $wpdb;
-
-		$sql = "
-			SELECT pm.post_id, pm.meta_value 
-			FROM $wpdb->posts AS p
-			INNER JOIN $wpdb->postmeta AS pm ON p.ID = pm.post_id
-			WHERE pm.meta_key = '" . Globals::OUT_OF_STOCK_DATE_KEY . "' 
-			AND pm.meta_value <> ''AND p.post_type IN ('product', 'product_variation');
-		";
-
-		$post_metas = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		foreach ( $post_metas as $post_meta ) {
-
-			$non_latin_character = preg_match( '/[^\\p{Common}\\p{Latin}]/u', $post_meta->meta_value );
-
-			if ( $non_latin_character ) {
-				delete_post_meta( $post_meta->post_id, Globals::OUT_OF_STOCK_DATE_KEY );
-			}
-
-		}
-
-	}
-
-	/**
 	 * Create the table for the product data related to ATUM
 	 *
 	 * @since 1.5.0
@@ -390,7 +269,7 @@ class Upgrade {
 		  		`purchase_price` DOUBLE NULL DEFAULT NULL,
 			  	`supplier_id` BIGINT(20) NULL DEFAULT NULL,
 			  	`supplier_sku` VARCHAR(100) NULL DEFAULT '',
-			  	`atum_controlled` TINYINT(1) NULL DEFAULT 0,
+			  	`atum_controlled` TINYINT(1) NULL DEFAULT 1,
 			  	`out_stock_date` DATETIME NULL DEFAULT NULL,
 			  	`out_stock_threshold` DOUBLE NULL DEFAULT NULL,
 			  	`inheritable` TINYINT(1) NULL DEFAULT 0,	
@@ -403,7 +282,10 @@ class Upgrade {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
-			$this->migrate_atum_products_data();
+			// We only need to migrate meta keys if is not a fresh install.
+			if ( ! $this->is_fresh_install ) {
+				$this->migrate_atum_products_data();
+			}
 
 		}
 
@@ -507,8 +389,8 @@ class Upgrade {
 
 		global $wpdb;
 
-		$wpdb->update( $wpdb->posts, [ 'post_status' => ATUM_PREFIX . 'received' ], [
-			'post_status' => ATUM_PREFIX . 'completed',
+		$wpdb->update( $wpdb->posts, [ 'post_status' => 'atum_received' ], [
+			'post_status' => 'atum_completed',
 			'post_type'   => PurchaseOrders::get_post_type(),
 		] );
 
@@ -516,7 +398,7 @@ class Upgrade {
 			UPDATE $wpdb->postmeta pm
 			INNER JOIN $wpdb->posts p ON pm.post_id = p.ID
 			SET pm.meta_value = 'received'
-			WHERE p.post_type='atum_purchase_order' AND
+			WHERE p.post_type = 'atum_purchase_order' AND
 			pm.meta_key = '_status' AND pm.meta_value = 'completed'
 		";
 
@@ -878,9 +760,7 @@ class Upgrade {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $wpdb->get_var( $column_exist ) ) {
-
 			$wpdb->query( "ALTER TABLE $atum_data_table ADD `is_bom` TINYINT(1) NULL DEFAULT 0;" ); // phpcs:ignore WordPress.DB.PreparedSQL
-
 		}
 
 	}
