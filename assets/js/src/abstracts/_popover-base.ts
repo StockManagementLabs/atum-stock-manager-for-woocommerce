@@ -36,7 +36,7 @@ export default abstract class PopoverBase {
 					return;
 				}
 
-				const popover: BsPopover = BsPopover.getInstance( $popoverButton.get( 0 ) );
+				const popover: BsPopover = this.getInstance( $popoverButton );
 
 				if ( popover ) {
 					popover.dispose();
@@ -73,7 +73,7 @@ export default abstract class PopoverBase {
 				return;
 			}
 
-			const popover: BsPopover = BsPopover.getInstance( $popoverButton.get( 0 ) );
+			const popover: BsPopover = this.getInstance( $popoverButton );
 
 			if ( popover ) {
 				popover.hide();
@@ -81,6 +81,15 @@ export default abstract class PopoverBase {
 
 		}
 
+	}
+
+	/**
+	 * Get the BsPopover instance for any button
+	 *
+	 * @param {JQuery} $popoverButton
+	 */
+	getInstance( $popoverButton: JQuery ): BsPopover {
+		return BsPopover.getInstance( $popoverButton.get( 0 ) );
 	}
 
 	/**

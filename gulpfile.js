@@ -2,7 +2,6 @@
 var gulp          = require('gulp'),
     plumber       = require('gulp-plumber'),
     gulpif        = require('gulp-if'),
-    watch         = require('gulp-watch'),
     livereload    = require('gulp-livereload'),
     notify        = require('gulp-notify'),
     wrap          = require('gulp-wrap'),
@@ -159,18 +158,15 @@ gulp.task('js::atum', function () {
 				],
 			},
 			
+			optimization: {
+				minimize: config.production
+			},
+			mode: config.production ? 'production' : 'development',
+			cache: !config.production,
+			bail: false,
+			watch: false,
+			
 			plugins: [
-				
-				// Compress JS with UglifyJS
-				new webpack.optimize.UglifyJsPlugin({
-					compress : {
-						warnings: false,
-					},
-					output   : {
-						comments: false,
-					},
-					sourceMap: enabled.maps
-				}),
 				
 				// Fixes warning in moment-with-locales.min.js
 				// Module not found: Error: Can't resolve './locale' in ...
