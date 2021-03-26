@@ -27,7 +27,7 @@ export default abstract class PopoverBase {
 
 			if ( $popoverButton.length > 1 ) {
 				// Recursive call.
-				$popoverButton.each( ( index: number, elem: Element ) => this.destroyPopover( $( elem ) ) );
+				$popoverButton.each( ( index: number, elem: HTMLElement ) => this.destroyPopover( $( elem ) ) );
 			}
 			else {
 
@@ -64,7 +64,7 @@ export default abstract class PopoverBase {
 		}
 		else if ( $popoverButton.length > 1 ) {
 			// Recursive call.
-			$popoverButton.each( ( index: number, elem: Element ) => this.hidePopover( $( elem ) ) );
+			$popoverButton.each( ( index: number, elem: HTMLElement ) => this.hidePopover( $( elem ) ) );
 		}
 		else {
 
