@@ -850,7 +850,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Maybe increase stock Levels
+	 * Maybe decrease stock Levels
 	 *
 	 * @since 1.5.0
 	 *
@@ -874,7 +874,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Maybe decrease stock Levels
+	 * Maybe increase stock Levels
 	 *
 	 * @since 1.5.0
 	 *
