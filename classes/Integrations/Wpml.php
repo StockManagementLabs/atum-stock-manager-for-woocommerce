@@ -153,6 +153,9 @@ class Wpml {
 			add_action( 'atum/product_data_updated', array( $this, 'update_translations_data' ), 10, 2 );
 			add_filter( 'atum/model/product/supplier_sku_found', array( $this, 'skip_translations' ), 10, 3 );
 
+			// Prevent WPML from deleting meta when updating from SC.
+			add_filter( 'atum/ajax/before_update_product_meta', array( $this, 'prevent_deleting_product_translations_meta' ), 2 );
+
 			// Filter current language translations from the unmanaged products query.
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
 			
@@ -1008,6 +1011,22 @@ class Wpml {
 			
 		}
 		
+	}
+
+	/**
+	 * Prevent WPML deleting meta from product translations when saving from Stock Central (it will be deleted by ATUM).
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function prevent_deleting_product_translations_meta( $data ) {
+
+		remove_action( 'deleted_post_meta', array( $this->wpml->sync_product_data, 'delete_empty_post_meta_for_translations' ) );
+
+		return $data;
 	}
 	
 	/**
