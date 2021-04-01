@@ -34,6 +34,10 @@ use Atum\StockCentral\StockCentral;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Suppliers\Suppliers;
 
+// For WC navigation system.
+use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
+use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
+use Automattic\WooCommerce\Admin\Features\Features;
 
 class Main {
 	
@@ -314,6 +318,21 @@ class Main {
 			58 // Add the menu just after the WC Products.
 		);
 
+		// Atum category on wc navigation system.
+		// Check if the WC method are availables.
+		if ( ! method_exists( Menu::class, 'add_plugin_category' ) ) {
+			return;
+		}
+
+		Menu::add_plugin_category(
+			array(
+				'id'     => 'ATUM',
+				'title'  => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
+				'url'    => self::$main_menu_item['slug'],
+				'parent' => 'woocommerce',
+			)
+		);
+
 		// Overwrite the main menu item hook name set by add_menu_page to avoid conflicts with translations.
 		global $admin_page_hooks;
 		$admin_page_hooks[ self::$main_menu_item['slug'] ] = Globals::ATUM_UI_HOOK; // phpcs:ignore WordPress.Variables.GlobalVariables.OverrideProhibited
@@ -337,6 +356,24 @@ class Main {
 					$slug,
 					$menu_item['callback']
 				);
+
+				// Addonds & atum submenú items on wc navigation system.
+				// Check if the WC method are availables.
+				if ( ! method_exists( Menu::class, 'add_plugin_item' ) ) {
+					return;
+				}
+
+				Menu::add_plugin_item(
+					array(
+						'id'         => $menu_item['title'],
+						'title'      => $menu_item['title'],
+						'capability' => 'manage_woocommerce',
+						'url'        => $slug,
+						'order'      => $menu_item['menu_order'],
+						'parent'     => 'ATUM',
+					)
+				);
+
 			}
 
 		}
