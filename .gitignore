@@ -6,7 +6,8 @@ node_modules
 *.map
 .idea
 .vscode
+package-lock.json
+yarn.lock
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*
-/vendor/mcaskill/php-array-group-by

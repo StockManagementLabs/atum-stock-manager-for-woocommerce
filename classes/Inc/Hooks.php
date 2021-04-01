@@ -726,11 +726,7 @@ class Hooks {
 	 * @param int $product_id
 	 */
 	public function add_stock_status_threshold( $product_id = 0 ) {
-
-		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array(
-			$this,
-			'get_custom_out_stock_threshold',
-		), 10, 3 );
+		add_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_out_stock_threshold' ), 10, 3 );
 	}
 
 	/**
@@ -743,11 +739,7 @@ class Hooks {
 	 * @param int $product_id
 	 */
 	public function remove_stock_status_threshold( $product_id = 0 ) {
-
-		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array(
-			$this,
-			'get_custom_out_stock_threshold',
-		) );
+		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_out_stock_threshold' ) );
 	}
 
 	/**
@@ -761,9 +753,7 @@ class Hooks {
 	 * @param \WC_Product $product
 	 */
 	public function check_stock_status_set( $product_id, $stock_status, $product ) {
-
 		$this->maybe_change_out_stock_threshold( $product );
-
 	}
 
 	/**

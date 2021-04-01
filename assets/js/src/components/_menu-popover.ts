@@ -21,7 +21,7 @@ export default class MenuPopover extends PopoverBase{
 
 		super();
 
-		if ( $menuButton.length && typeof menu.items !== 'undefined' && menu.items.length ) {
+		if ( $menuButton.length && typeof menu.items !== 'undefined' && menu.items.length && ! this.getInstance( $menuButton ) ) {
 			this.$menuButton.addClass( this.popoverButtonClassName );
 			this.bindPopovers();
 			this.bindEvents();
