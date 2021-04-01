@@ -1879,25 +1879,22 @@ var ListTable = (function () {
             if ($row.hasClass('expandable')) {
                 return;
             }
-            if ($compoundedCell.attr("class").includes('compounded-available')) {
-                while ($nextRow.length) {
+            while ($nextRow.length) {
+                if ($compoundedCell.hasClass('compounded-available')) {
                     var $availableStockCell = $nextRow.find('.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span'), availableStockValue = !$availableStockCell.length ? '0' : $availableStockCell.text().trim();
                     compoundedAmt += parseFloat(availableStockValue) || 0;
-                    $nextRow = $nextRow.next('.has-compounded');
                 }
-            }
-            else {
-                while ($nextRow.length) {
+                else {
                     var $stockCell = $nextRow.find('._stock .set-meta, ._stock .calculated span'), stockValue = !$stockCell.length ? '0' : $stockCell.text().trim();
                     compoundedAmt += parseFloat(stockValue) || 0;
-                    $nextRow = $nextRow.next('.has-compounded');
                 }
-            }
-            if (0 === compoundedAmt && $compoundedCell.attr("class").includes('compounded-available')) {
-                $compoundedCell.text('-');
-            }
-            else {
-                $compoundedCell.text(compoundedAmt);
+                if (0 === compoundedAmt && $compoundedCell.attr('class').includes('compounded-available')) {
+                    $compoundedCell.text('-');
+                }
+                else {
+                    $compoundedCell.text(compoundedAmt);
+                }
+                $nextRow = $nextRow.next('.has-compounded');
             }
         });
     };
