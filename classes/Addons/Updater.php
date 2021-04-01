@@ -158,6 +158,16 @@ class Updater {
 
 		$version_info = $this->get_version_info_transient();
 
+		$current = $this->get_version_info_transient();
+		if ( false !== $current && is_object( $current ) && isset( $current->new_version ) ) {
+			if ( version_compare( $this->version, $current->new_version, '<' ) ) {
+				$_transient_data->response[ $this->name ] = $current;
+			} else {
+				// Populating the no_update information is required to support auto-updates in WordPress 5.5.
+				$_transient_data->no_update[ $this->name ] = $current;
+			}
+		}
+
 		if ( FALSE === $version_info ) {
 
 			$version_info = $this->api_request( array(
@@ -165,7 +175,9 @@ class Updater {
 				'beta' => $this->beta,
 			) );
 
-			$version_info->plugin = "$this->slug/$this->slug.php";
+			// This is required for your plugin to support auto-updates in WordPress 5.5.
+			$version_info->plugin = $this->name;
+			$version_info->id     = $this->name;
 
 			$this->set_version_info_transient( $version_info );
 
@@ -273,7 +285,7 @@ class Updater {
 			if ( empty( $version_info->download_link ) ) {
 
 				printf(
-					/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
+				/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
 					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', ATUM_TEXT_DOMAIN ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
@@ -285,7 +297,7 @@ class Updater {
 			else {
 
 				printf(
-					/* translators: first is the add-on name, second is the change log link, third is the version, forth is the closing tag for the link, fifth is the plugin update link and sixth is the closing tag for the second link  */
+				/* translators: first is the add-on name, second is the change log link, third is the version, forth is the closing tag for the link, fifth is the plugin update link and sixth is the closing tag for the second link  */
 					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s or %5$supdate now%6$s.', ATUM_TEXT_DOMAIN ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
@@ -376,14 +388,14 @@ class Updater {
 
 			$_data->banners = $new_banners;
 		}
-		
+
 		// Transform contributos array to reach WP required format.
 		if ( isset( $_data->contributors ) ) {
 			$new_contributors = array();
 			foreach ( $_data->contributors as $name => $data ) {
 				$new_contributors[ $name ] = 0;
 			}
-			
+
 			$_data->contributors = $new_contributors;
 		}
 
