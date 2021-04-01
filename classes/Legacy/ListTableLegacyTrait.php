@@ -277,9 +277,11 @@ trait ListTableLegacyTrait {
 			global $wp_query;
 
 			// Pass through the ATUM query data filter.
+			do_action( 'atum/list_table/before_query_data' );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( $args );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			do_action( 'atum/list_table/after_query_data' );
 
 			$posts = $wp_query->posts;
 
@@ -289,9 +291,11 @@ trait ListTableLegacyTrait {
 				$_REQUEST['paged'] = $args['paged'];
 
 				// Pass through the ATUM query data filter.
+				do_action( 'atum/list_table/before_query_data' );
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$wp_query = new \WP_Query( $args );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				do_action( 'atum/list_table/after_query_data' );
 
 				$posts = $wp_query->posts;
 
