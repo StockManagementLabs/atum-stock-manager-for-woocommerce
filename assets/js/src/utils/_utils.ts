@@ -482,6 +482,18 @@ const Utils = {
 	 */
 	convertElemsToString( $elems: JQuery ): string {
 		return $('<div />').append( $elems ).html();
+	},
+
+	/**
+	 * Merge 2 arrays and return the result (this ensures the resulting arrar has no repeated values)
+	 *
+	 * @param {any[]} arr1
+	 * @param {any[]} arr2
+	 *
+	 * @return {any[]}
+	 */
+	mergeArrays( arr1: any[], arr2: any[] ): any[] {
+		return Array.from( new Set([ ...arr1, ...arr2 ]) );
 	}
 	
 }
