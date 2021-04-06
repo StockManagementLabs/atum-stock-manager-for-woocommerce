@@ -427,10 +427,10 @@ class Suppliers {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int          $supplier_id   The supplier ID.
-	 * @param array|string $post_type     Optional. The product post types to get.
-	 * @param bool         $type_filter   Optional. Whether to filter the retrieved suppliers by product type or not.
-	 * @param array        $extra_filters Optional. Any other extra filter needed to reduce the returned results.
+	 * @param int      $supplier_id   The supplier ID.
+	 * @param string[] $post_type     Optional. The product post types to get.
+	 * @param bool     $type_filter   Optional. Whether to filter the retrieved suppliers by product type or not.
+	 * @param array    $extra_filters Optional. Any other extra filter needed to reduce the returned results.
 	 *
 	 * @return array|bool
 	 */
@@ -511,6 +511,29 @@ class Suppliers {
 
 		return FALSE;
 
+	}
+
+	/**
+	 * Get all the product IDs with no supplier assigned
+	 *
+	 * @since 1.8.8
+	 *
+	 * @return array
+	 */
+	public static function get_no_supplier_products() {
+
+		global $wpdb;
+
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$sql = "
+			SELECT product_id FROM $atum_product_data_table	
+		 	WHERE supplier_id = 0 OR supplier_id IS NULL
+		";
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->get_col( $sql );
+		
 	}
 	
 	/**
