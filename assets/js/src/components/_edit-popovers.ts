@@ -253,7 +253,7 @@ export default class EditPopovers extends PopoverBase{
 
 				const $editButton: JQuery = $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` );
 
-				if ( ! $editButton.is( $target ) ) {
+				if ( ! $editButton.is( $target ) && ! $target.closest( $editButton ).length ) {
 					super.hidePopover( $editButton );
 				}
 
