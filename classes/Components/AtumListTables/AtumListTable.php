@@ -2368,11 +2368,13 @@ abstract class AtumListTable extends \WP_List_Table {
 			global $wp_query;
 
 			// Pass through the ATUM query data and WC query data filters.
+			do_action( 'atum/list_table/before_query_data' );
 			add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( $args );
 			remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			do_action( 'atum/list_table/after_query_data' );
 
 			$posts = $wp_query->posts;
 
@@ -2380,11 +2382,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['paged']     = 1;
 				$_REQUEST['paged'] = $args['paged'];
 				// Pass through the ATUM query data filter.
+				do_action( 'atum/list_table/before_query_data' );
 				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$wp_query = new \WP_Query( $args );
 				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				do_action( 'atum/list_table/after_query_data' );
 
 				$posts = $wp_query->posts;
 			}
