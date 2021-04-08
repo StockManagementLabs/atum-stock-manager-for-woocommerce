@@ -6,31 +6,31 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 **With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
-**NEW IMPROVED ATUM 1.8**
+**✨ NEW IMPROVED ATUM 1.8**
 
-**NEW ATUM REST API**
+**💻 NEW ATUM REST API**
 
 ####AVAILABLE PREMIUM ADD-ONS
 
-[Product Levels - Bill Of Materials Management](https://www.stockmanagementlabs.com/addons/atum-product-levels/)
+🚀 [Product Levels - Bill Of Materials Management](https://www.stockmanagementlabs.com/addons/atum-product-levels/)
 
 A bill of materials (also known as a BOM or bill of material) is a broad list of items, product parts, raw materials, assemblies, and other components mandatory to create a product. Even the guidance or direction needed for preparation is understood to be part of BOM. We interpret the bill of materials as the recipe for creating a final product. To start a manufacturing process, every entrepreneur no matter what trade has to start by establishing a bill of materials (BOM).
 
 The current version of Product Levels introduces the first two levels of BOM. ATUM inventory management for WooCommerce lets you set company’s Raw Materials and Product Parts. Retailers, distributors, wholesalers, standard manufacturers, or any other businesses that need to take complete control over their growth will find this premium add-on irreplaceable. Our experienced team of developers and designers bring new features on monthly basis. Many other components of the manufacturing process are still to come. Read the full list of currently included functions below.
 
-[Multi-Inventory for WooCommerce](https://www.stockmanagementlabs.com/addons/atum-multi-inventory/)
+🚀 [Multi-Inventory for WooCommerce](https://www.stockmanagementlabs.com/addons/atum-multi-inventory/)
 
 WooCommerce, as the most popular WordPress e-commerce solution, did not include an option for business selling from different warehouses or using several suppliers. Up until now, shop owners have had a choice to either find a 3rd party solution or to have one built specifically for their site. Neither solution is ideal unless the shop has a significant budget to cover the cost.
 
 ATUM’s Multi-Inventory premium add-on is trying to remove the above issues and brings advanced features for a fracture of the cost charged by 3rd party service. Now you, as a shop owner have the option to add as many inventory records per product as your business needs. What is even better, the system is trying to push the editing boundaries far beyond the usual standard. Scroll below to find out about all existing and soon to come features or even try the demo FREE of charge.
 
-[ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
+🚀 [ATUM Export Pro Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-export-pro/)
 
 Generate manual or automated exports of almost any data in your stores. We believe the most advanced tool of its kind with XML, CSV, and JSON exports to be available at launch. If it was not enough, we are adding an import tool as a bonus.
 
 Exports of data are done automatically instead of copying and pasting manually. The ability to export data has an enormous economic advantage. Such data can then be used in further business controlling systems or in other business software.
 
-[ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+🚀 [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
 
 ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These recordings we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
 
@@ -48,7 +48,7 @@ Stock Management Labs™, creators that have combined over 25 years of experienc
 
 In the preparation process for the development stage, we have tested and tried the most popular WooCommerce inventory management and cloud inventory management plugins in the world. With full confidence, we believe that ATUM will become unrivalled in every category.
 
-**[FOR ANY QUESTIONS OR TUTORIALS VISIT OUR FORUM](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
+**💬 [FOR ANY QUESTIONS OR TUTORIALS VISIT OUR FORUM](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
 
 ####AVAILABLE FEATURES
 
@@ -191,6 +191,47 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 ## Changelog
+
+---
+
+`1.8.8`
+
+*2021-04-08*
+
+**Features**
+
+* Added a new option to ATUM settings to be enable/disable the orders searching by SKU.
+* Added new method to check whether any ATUM order still exists in the database.
+* Added auto-update functionality for ATUM add-ons.
+* Added the ATUM menus to the new WC navigation system.
+* Added new helper to get all the products that have no supplier assigned.
+* Added new utility to merge 2 arrays in javascript (with unique values).
+* Added new utility to restrict allowed values in any input number field.
+* Show an admin notice when a license is expired or disabled.
+
+**Changes**
+
+* get_order_note_ids now also resolves the product SKU.
+* Clear ATUM order caches after deleting items.
+* Apply the filter for product data props in API, always.
+* Avoid sorting children by date in ListTables.
+* Added missing check in upgrade process.
+* Updated dependencies + use WebPack 4.
+* Refactoring.
+* Allow addons adding its own posts_clauses filters.
+
+**Fixes**
+
+* Added missing text domain.
+* Fixed special CORS origin when calling to the API from the ATUM's App.
+* Fixed missed products in listtables when ordering by metadata.
+* Fixed upgrade process when is a fresh install.
+* Removed console.log.
+* Prevent WPML delete meta when updating from Stock Central.
+* Added missing non-legacy actions.
+* Fixed edit popover auto-closing in some cases.
+* Fixed CSS for add-ons with invalid licenses.
+* Fixed invalid license key text not showing on add-ons page.
 
 ---
 
