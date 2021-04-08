@@ -111,7 +111,7 @@ gulp.task('js::atum', function () {
 		//   config: require('./webpack.config.js')
 		// }, webpack))
 		.pipe(webpackStream({
-			devtool: 'source-map',
+			devtool: config.production ? 'no' : 'source-map',
 			
 			entry: {
 				'list-tables'    : config.jsSrcDir + 'list-tables.ts',
