@@ -31,8 +31,10 @@ use Atum\Addons\Addons;
 					$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
 					?>
 
-					<div class="theme <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>"
-						data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>" data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>">
+					<div class="theme <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>
+						<?php if ( $addon_status['key'] ) echo ' with-key' ?>" data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>"
+						data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>"
+					>
 
 						<?php if ( ! empty( $addon['info']['thumbnail'] ) ) : ?>
 						<div class="theme-screenshot" style="background-image: url(<?php echo esc_url( $addon['info']['thumbnail'] ) ?>)">
