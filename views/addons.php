@@ -31,9 +31,8 @@ use Atum\Addons\Addons;
 					$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
 					?>
 
-					<div class="theme <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>
-						<?php if ( $addon_status['key'] ) echo ' with-key' ?>" data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>"
-						data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>"
+					<div class="theme <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?><?php if ( $addon_status['key'] ) echo ' with-key' ?>"
+						data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>" data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>"
 					>
 
 						<?php if ( ! empty( $addon['info']['thumbnail'] ) ) : ?>
@@ -81,7 +80,9 @@ use Atum\Addons\Addons;
 							<div class="theme-actions <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>">
 
 								<?php if ( $is_coming_soon_addon ) : ?>
+
 									<span><?php esc_html_e( 'Coming Soon', ATUM_TEXT_DOMAIN ) ?></span>
+
 								<?php elseif ( 'valid' === $addon_status['status'] ) : ?>
 
 									<?php if ( ! $addon_status['installed'] ) : ?>
@@ -91,9 +92,26 @@ use Atum\Addons\Addons;
 									<?php endif ?>
 
 								<?php elseif ( 'inactive' === $addon_status['status'] ) : ?>
-									<span><?php esc_html_e( 'Inactive Key', ATUM_TEXT_DOMAIN ) ?></span>
+
+									<span>
+										<?php esc_html_e( 'Inactive Key', ATUM_TEXT_DOMAIN ) ?>
+
+										<?php if ( $addon_status['key'] ) : ?>
+											<a href="#" class="remove-key atum-tooltip" title="<?php esc_attr_e( 'Remove Key', ATUM_TEXT_DOMAIN ); ?>" data-bs-placement="top">
+												<i class="atum-icon atmi-cross-circle"></i>
+											</a>
+										<?php endif; ?>
+									</span>
+
 								<?php elseif ( 'invalid' === $addon_status['status'] && $addon_status['key'] ) : ?>
-									<span><?php esc_html_e( 'Invalid Key', ATUM_TEXT_DOMAIN ) ?></span>
+
+									<span>
+										<?php esc_html_e( 'Invalid Key', ATUM_TEXT_DOMAIN ) ?>
+										<a href="#" class="remove-key atum-tooltip" title="<?php esc_attr_e( 'Remove Key', ATUM_TEXT_DOMAIN ); ?>" data-bs-placement="top">
+											<i class="atum-icon atmi-cross-circle"></i>
+										</a>
+									</span>
+
 								<?php endif ?>
 							</div>
 
