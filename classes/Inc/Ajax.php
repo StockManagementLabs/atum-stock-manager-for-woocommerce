@@ -94,6 +94,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_activate_license', array( $this, 'activate_license' ) );
 		add_action( 'wp_ajax_atum_deactivate_license', array( $this, 'deactivate_license' ) );
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
+		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -984,6 +985,32 @@ final class Ajax {
 		}
 
 		wp_send_json_error( $default_error );
+
+	}
+
+	/**
+	 * Remove any invalid license key from the add-ons page
+	 *
+	 * @package Add-ons
+	 *
+	 * @since 1.8.8
+	 */
+	public function remove_license() {
+
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'token' );
+
+		if ( empty( $_POST['addon'] ) ) {
+			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
+		}
+
+		// Clear the key.
+		$addon_name = esc_attr( $_POST['addon'] );
+		Addons::update_key( $addon_name, '' );
+
+		// Delete the transient.
+		Addons::delete_status_transient( $addon_name );
+
+		wp_send_json_success();
 
 	}
 

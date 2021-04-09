@@ -15,7 +15,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.8.7',
+var version = '1.8.8',
     curDate = new Date();
 
 // Global config
@@ -111,7 +111,7 @@ gulp.task('js::atum', function () {
 		//   config: require('./webpack.config.js')
 		// }, webpack))
 		.pipe(webpackStream({
-			devtool: 'source-map',
+			devtool: config.production ? 'no' : 'source-map',
 			
 			entry: {
 				'list-tables'    : config.jsSrcDir + 'list-tables.ts',

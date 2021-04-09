@@ -14,22 +14,23 @@
 		"bg_color"        : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/multi-inventory_icon.svg",
-		"top_left": "https://www.stockmanagementlabs.com/wp-content/uploads/2021/01/label-new-feature@2x.png"
+		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2021/04/illustration.png",
+		"logo_css": "width:76%;margin-bottom:15px",
+		"top_left": ""
 	},
 	"title": {
-		"text"      : "Multi-<strong>Inventory</strong>",
+		"text"      : "",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "v1.4.7",
+		"text"      : "",
 		"text_color": "#FFF",
 		"background": "#69c61d"
 	},
 	"description": {
-		"text"           : "NEW FEATURE!! Create new inventories easily from Stock Central and Manufacturing Central.",
+		"text"           : "Please, celebrate with us this significant managerial change!!!.<br>Our principal investor, EU-based manufacturing company D-Nutrition s.r.o., is taking over the ATUM project. We can expect massive improvement and growth within the FREE ATUM plugin, plus some great additions to the premium add-ons range.<br>Grap code <strong>APRIL10</strong> now and save 10% on any subscription purchased this month.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -38,17 +39,11 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Purchase Now",
-			"url"       : "https://www.stockmanagementlabs.com/addons/atum-multi-inventory/",
-			"class"     : "btn btn-sm btn-success",
-			"css"       : "width:160px;"
-		},
-		{
-			"text"      : "More info",
-			"url"       : "https://forum.stockmanagementlabs.com/d/2445-adding-inventories-from-stock-central-and-manufacturing-central",
-			"class"     : "btn btn-sm btn-outline-success",
-			"css"       : "width:160px;"
+			"text"      : "Take the offer now!",
+			"url"       : "https://www.stockmanagementlabs.com/addons/",
+			"class"     : "btn btn-primary",
+			"css"       : ""
 		}
 	],
-	"transient_key": "add-inventory-from-sc"
+	"transient_key": "atum-moving-home"
 }

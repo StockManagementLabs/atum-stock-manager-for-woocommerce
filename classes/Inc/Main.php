@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
-use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
@@ -36,8 +35,6 @@ use Atum\Suppliers\Suppliers;
 
 // For WC navigation system.
 use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
-use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
-use Automattic\WooCommerce\Admin\Features\Features;
 
 class Main {
 	
@@ -320,18 +317,18 @@ class Main {
 
 		// Atum category on wc navigation system.
 		// Check if the WC method are availables.
-		if ( ! method_exists( Menu::class, 'add_plugin_category' ) ) {
-			return;
-		}
+		if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Menu' ) && method_exists( Menu::class, 'add_plugin_category' ) ) {
 
-		Menu::add_plugin_category(
-			array(
-				'id'     => 'ATUM',
-				'title'  => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
-				'url'    => self::$main_menu_item['slug'],
-				'parent' => 'woocommerce',
-			)
-		);
+			Menu::add_plugin_category(
+				array(
+					'id'     => 'ATUM',
+					'title'  => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
+					'url'    => self::$main_menu_item['slug'],
+					'parent' => 'woocommerce',
+				)
+			);
+
+		}
 
 		// Overwrite the main menu item hook name set by add_menu_page to avoid conflicts with translations.
 		global $admin_page_hooks;
@@ -359,20 +356,20 @@ class Main {
 
 				// Addonds & atum submenú items on wc navigation system.
 				// Check if the WC method are availables.
-				if ( ! method_exists( Menu::class, 'add_plugin_item' ) ) {
-					return;
-				}
+				if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Menu' ) && method_exists( Menu::class, 'add_plugin_item' ) ) {
 
-				Menu::add_plugin_item(
-					array(
-						'id'         => $menu_item['title'],
-						'title'      => $menu_item['title'],
-						'capability' => 'manage_woocommerce',
-						'url'        => $slug,
-						'order'      => $menu_item['menu_order'],
-						'parent'     => 'ATUM',
-					)
-				);
+					Menu::add_plugin_item(
+						array(
+							'id'         => $menu_item['title'],
+							'title'      => $menu_item['title'],
+							'capability' => 'manage_woocommerce',
+							'url'        => $slug,
+							'order'      => $menu_item['menu_order'],
+							'parent'     => 'ATUM',
+						)
+					);
+
+				}
 
 			}
 

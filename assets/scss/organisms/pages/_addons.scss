@@ -60,6 +60,7 @@
 			right: 27px;
 			transform: translate3d(0, -50%, 0);
 			transition: 0.2s ease-in-out;
+			text-align: center;
 			
 			&.valid, &.invalid, &.inactive, &.coming-soon {
 				opacity: 1;
@@ -118,6 +119,21 @@
 				right: 0;
 			}
 			
+			.remove-key {
+				vertical-align: text-top;
+				margin-left: 5px;
+				font-size: 14px;
+				
+				&:focus {
+					box-shadow: none;
+					outline: none;
+				}
+				
+				&:hover {
+					color: $danger;
+				}
+			}
+			
 		}
 		
 		.show-key {
@@ -146,7 +162,7 @@
 		&:hover, &.inactive, &.invalid {
 			
 			.theme-actions {
-				&:not(.coming-soon):not(.inactive):not(.not-installed) {
+				&:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid) {
 					opacity: 0;
 					transform: translate3d(100%, -50%, 0);
 				}
@@ -178,6 +194,10 @@
 				}
 			}
 			
+		}
+		
+		&.invalid.with-key {
+			border-color: $danger;
 		}
 		
 		.more-details {
