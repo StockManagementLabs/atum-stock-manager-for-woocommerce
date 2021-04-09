@@ -2639,9 +2639,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			global $wp_query;
 
 			// Pass through the ATUM query data filter.
+			do_action( 'atum/list_table/set_views_data/before_query_data' );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_products_args', $args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+			do_action( 'atum/list_table/set_views_data/after_query_data' );
 
 			$products = $wp_query->posts;
 
