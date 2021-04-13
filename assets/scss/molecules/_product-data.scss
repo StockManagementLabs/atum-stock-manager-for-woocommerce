@@ -236,6 +236,14 @@
 		}
 	}
 	
+	.form-row-last {
+		+ .form-row {
+			&:not(.form-row-first):not(.form-row-last) {
+				clear: left;
+			}
+		}
+	}
+	
 	.atum-data-panel {
 		border-top: 1px solid $wp-gray-4;
 		padding-top: $grid-gutter-width/2;
