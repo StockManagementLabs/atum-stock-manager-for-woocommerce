@@ -27,6 +27,13 @@ class AtumQueues {
 	private static $instance;
 
 	/**
+	 * The transient key for checking assync queues availability
+	 *
+	 * @var string
+	 */
+	private static $transient_key;
+
+	/**
 	 * Hooks that are executed in a recurring way and including the time when they run + the interval
 	 *
 	 * @var array
@@ -51,6 +58,8 @@ class AtumQueues {
 	 * @since 1.5.8
 	 */
 	private function __construct() {
+
+		self::$transient_key = AtumCache::get_transient_key( 'atum', [], 'queues_' );
 
 		add_action( 'init', array( $this, 'check_queues' ) );
 
@@ -161,7 +170,24 @@ class AtumQueues {
 	 */
 	public static function trigger_async_actions() {
 
-		if ( ! empty( self::$async_hooks ) ) {
+		$remote_available = self::check_assync_request();
+		$assync_hooks     = self::$async_hooks;
+
+		if ( ! empty( $assync_hooks ) ) {
+
+			// Make a synchronous request if checker was not able to make remote request.
+			if ( ! $remote_available ) {
+
+				foreach ( $assync_hooks as $async_hook => $hook_data ) {
+
+					if ( is_callable( $hook_data['callback'] ) ) {
+						call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+					}
+
+				}
+
+				return;
+			}
 
 			$data = [
 				'action' => 'atum_async_hooks',
@@ -204,6 +230,9 @@ class AtumQueues {
 
 		check_ajax_referer( 'atum_async_hooks', 'token' );
 
+		// Refresh available remote post.
+		AtumCache::set_transient( self::$transient_key, 1, DAY_IN_SECONDS, TRUE );
+
 		$hooks = $_POST['hooks'];
 
 		foreach ( $hooks as $async_hook => $hook_data ) {
@@ -217,6 +246,35 @@ class AtumQueues {
 
 		}
 
+	}
+
+	/**
+	 * Check if remote post is available.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @return boolean
+	 */
+	public static function check_assync_request() {
+
+		$transient_key    = self::$transient_key;
+		$remote_available = AtumCache::get_transient( $transient_key, TRUE );
+
+		if ( ! $remote_available ) {
+
+			$ch = curl_init( ATUM_URL . 'includes/marketing-popup-content.json' );
+			curl_setopt( $ch, CURLOPT_HEADER, true );    // we want headers
+			curl_setopt( $ch, CURLOPT_NOBODY, true );    // we don't need body
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+			curl_setopt( $ch, CURLOPT_TIMEOUT,10 );
+			$output = curl_exec( $ch );
+			$httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+			curl_close( $ch );
+
+			$remote_available = 200 === $httpcode;
+		}
+
+		return $remote_available;
 	}
 
 
