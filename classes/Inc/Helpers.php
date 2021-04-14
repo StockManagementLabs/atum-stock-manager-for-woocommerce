@@ -3349,11 +3349,11 @@ final class Helpers {
 		if ( $found ) {
 
 			// Try to determine whether the product being processed has calculated stock.
-			preg_match_all( '/(?<=\()(.+)(?=\))/is', $note_data['comment_content'], $ids );
+			preg_match_all( '/\((\#*[^()]+)\)/is', $note_data['comment_content'], $ids );
 
 			if ( ! empty( $ids ) ) {
 
-				$ids = $ids[0];
+				$ids = $ids[1];
 
 				foreach ( $ids as $id ) {
 
