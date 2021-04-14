@@ -404,6 +404,11 @@ class Suppliers {
 				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [ 'sweetalert2' ], ATUM_VERSION );
 				wp_enqueue_style( 'atum-suppliers' );
 
+				if ( is_rtl() ) {
+					wp_register_style( 'atum-suppliers-rtl', ATUM_URL . 'assets/css/atum-suppliers-rtl.css', [ 'sweetalert2' ], ATUM_VERSION );
+					wp_enqueue_style( 'atum-suppliers-rtl' );
+				}
+
 				// Load the ATUM colors.
 				Helpers::enqueue_atum_colors( 'atum-suppliers' );
 

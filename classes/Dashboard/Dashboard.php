@@ -314,6 +314,11 @@ class Dashboard {
 			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
 			wp_enqueue_style( 'atum-dashboard' );
 
+			if ( is_rtl() ) {
+				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', $style_deps, ATUM_VERSION );
+				wp_enqueue_style( 'atum-dashboard-rtl' );
+			}
+
 			// Load the ATUM colors.
 			Helpers::enqueue_atum_colors( 'atum-dashboard' );
 

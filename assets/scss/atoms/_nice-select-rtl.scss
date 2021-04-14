@@ -1,0 +1,16 @@
+//
+// Nice Select RTL modifications
+// (https://github.com/hernansartorio/jquery-nice-select)
+//--------------------------------------------------------
+
+$ns-dropdown-padding: 18px !default;
+
+.nice-select {
+	padding-right: $ns-dropdown-padding;
+	padding-left: $ns-dropdown-padding + 12;
+	
+	&:after {
+		right: auto;
+		left: 12px;
+	}
+}

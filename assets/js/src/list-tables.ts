@@ -70,7 +70,11 @@ jQuery( ( $ ) => {
 	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 	let dateTimePicker = new DateTimePicker( settings );
 	let popover = new TableCellPopovers( settings, dateTimePicker );
-	new ScrollBar( globals );
+
+	if (!(jQuery("html[dir='rtl']").length > 0)){
+		new ScrollBar( globals );
+	}
+
 	new DragScroll( globals, tooltip, popover );
 	new SearchByColumn( settings, globals );
 	new ColumnGroups( globals, stickyHeader );

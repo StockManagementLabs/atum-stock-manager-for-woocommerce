@@ -1,0 +1,83 @@
+//
+// Atum Dashboard RTL
+//----------------
+
+body{
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
+}
+
+.atum-dashboard {
+	margin-left: 0px;
+	margin-right: -20px;
+	
+	.dash-header {
+		.dash-header-buttons {
+			.restore-defaults {
+				i {
+					margin-right: -5px;
+				}
+			}
+		}
+	}
+	
+	.dash-cards {
+		.dash-card {
+			&:first-child {
+				margin-right: $grid-gutter-width;
+				margin-left: 0px;
+			}
+			
+			&:last-child {
+				margin-left: $grid-gutter-width;
+				margin-right: 0px;
+			}
+			
+			&.dash-marketing-banner {
+				margin: 20px 30px 0;
+				
+				.content {
+					
+					.content-description {
+						h1, p {
+							text-align: right !important;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.atum-widget {
+		.widget-header{
+			text-align: right;
+			
+			&:before{
+				content: '';
+			}
+			
+			&:after {
+				content: '...';
+				color: var(--dash-widget-icon);
+				font-size: 63px;
+				@include vertical-align-absolute;
+				right: -20px;
+				letter-spacing: -4px;
+				transform: rotate(90deg) translateY(-50%);
+				transform-origin: top;
+			}
+			
+			h2 {
+				margin: 10px 15px 9px 10px;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+

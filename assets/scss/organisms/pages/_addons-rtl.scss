@@ -1,0 +1,26 @@
+//
+// Atum add-ons RTL
+//---------------
+
+body{
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
+}
+
+.atum-addons {
+	
+	h1 {
+		display: flex;
+	}
+	
+	.theme {
+		
+		.show-key {
+			right: auto;
+			left: 0;
+		}
+		
+		.theme-actions {
+			right: auto;
+		}
+	}
+}

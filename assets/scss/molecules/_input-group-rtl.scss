@@ -1,0 +1,54 @@
+//
+// Input Groups RTL
+//--------------
+
+.input-group-prepend {
+	border-left: none;
+	border-right: 1px solid;
+}
+
+.input-group-append {
+	border-right: none;
+	border-left: 1px solid;
+	
+}
+
+.input-group > .input-group-prepend > .btn,
+.input-group > .input-group-prepend > .input-group-text,
+.input-group > .input-group-append:not(:last-child) > .btn,
+.input-group > .input-group-append:not(:last-child) > .input-group-text,
+.input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+.input-group > .input-group-append:last-child > .input-group-text:not(:last-child) {
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.input-group > .input-group-append > .btn,
+.input-group > .input-group-append > .input-group-text,
+.input-group > .input-group-prepend:not(:first-child) > .btn,
+.input-group > .input-group-prepend:not(:first-child) > .input-group-text,
+.input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+.input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
+	border-bottom-right-radius: 3px;
+	border-top-right-radius: 3px;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+
+.input-group {
+	
+	> .select2-container{
+		
+		&.atum-enhanced-select {
+			
+			.select2-selection--single{
+				border-bottom-left-radius: $input-border-radius;
+				border-top-left-radius: $input-border-radius;
+				border-bottom-right-radius: 0;
+				border-top-right-radius: 0;
+			}
+		}
+	}
+}

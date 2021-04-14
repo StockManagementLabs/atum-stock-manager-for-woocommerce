@@ -1,0 +1,57 @@
+//
+// Atum Order Meta Boxes RTL
+//-----------------------
+
+//
+// Data meta box RTL
+//---------------
+
+#atum_order_items {
+	
+	.atum-order-totals {
+		float: left;
+		text-align: left;
+	}
+	
+	.atum-order-data-row{
+		text-align: left;
+		
+		p {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+	
+	.atum_order_items_wrapper {
+		
+		table.atum_order_items {
+			
+			.line_cost {
+				text-align: left;
+			}
+			
+			thead {
+				
+				th {
+					text-align: right;
+					
+					&:first-child{
+						padding-right: 2em;
+					}
+				}
+			}
+			
+			tbody th,td{
+				text-align: right;
+				
+				&:first-child {
+					padding-right: 2em;
+					padding-left: 1em;
+				}
+			}
+		}
+	}
+	
+}
+
+
