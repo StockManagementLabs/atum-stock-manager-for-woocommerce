@@ -3357,7 +3357,7 @@ final class Helpers {
 
 				foreach ( $ids as $id ) {
 
-					if ( 0 === strpos( $id, '#') ) {
+					if ( 0 === strpos( $id, '#' ) ) {
 
 						// It's the id because begins with #.
 						$return_ids[] = intval( substr( $id, 1 ) );
@@ -3367,9 +3367,9 @@ final class Helpers {
 						// It's as SKU, so get the product with that SKU.
 						$id_from_sku = $wpdb->get_var( $wpdb->prepare( "
 							SELECT pm.post_id FROM {$wpdb->posts} p
-									INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-									WHERE p.post_status <> 'trash' AND p.post_type IN ('product','product_variation')
-									AND pm.meta_key = '_sku' AND pm.meta_value = %s
+							INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+							WHERE p.post_status <> 'trash' AND p.post_type IN ('product','product_variation')
+							AND pm.meta_key = '_sku' AND pm.meta_value = %s
 							", $id));
 
 						if ( $id_from_sku ) {
