@@ -72,7 +72,7 @@ jQuery( ( $ ) => {
 	let dateTimePicker = new DateTimePicker( settings );
 	let popover = new TableCellPopovers( settings, dateTimePicker );
 
-	if ( !Utils.checkRTL('isRTL')){
+	if ( ! Utils.checkRTL( 'isRTL' ) ) {
 		new ScrollBar( globals );
 	}
 
