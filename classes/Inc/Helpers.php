@@ -3338,6 +3338,10 @@ final class Helpers {
 		$found      = FALSE;
 		$return_ids = [];
 
+		if ( empty( $note_data['comment_content'] ) ) {
+			return $return_ids;
+		}
+
 		foreach ( $searched_texts as $searched_text ) {
 
 			if ( strpos( $note_data['comment_content'], $searched_text ) !== FALSE ) {
@@ -3370,7 +3374,7 @@ final class Helpers {
 							INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
 							WHERE p.post_status <> 'trash' AND p.post_type IN ('product','product_variation')
 							AND pm.meta_key = '_sku' AND pm.meta_value = %s
-							", $id));
+						", $id));
 
 						if ( $id_from_sku ) {
 							$return_ids[] = intval( $id_from_sku );
