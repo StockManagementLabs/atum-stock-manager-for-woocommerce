@@ -1,0 +1,21 @@
+//
+// Select2 Customizations RTL
+//-----------------------
+
+body {
+	
+	.select2-container--default[dir="rtl"] {
+		
+		&.atum-select2, &.atum-enhanced-select {
+			
+			.select2-selection--single {
+				
+				.select2-selection__arrow {
+					left: 10px;
+					right: auto;
+				}
+			}
+		}
+	}
+	
+}

@@ -219,7 +219,7 @@ class Addons {
 		wp_enqueue_style( 'atum-addons' );
 
 		if ( is_rtl() ) {
-			wp_register_style( 'atum-addons-rtl', ATUM_URL . 'assets/css/atum-addons-rtl.css', array( 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'atum-addons-rtl', ATUM_URL . 'assets/css/atum-addons-rtl.css', array( 'atum-addons' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-addons-rtl' );
 		}
 

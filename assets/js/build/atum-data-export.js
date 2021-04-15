@@ -470,6 +470,28 @@ var Utils = {
         else if (qty === '') {
             $input.val(0);
         }
+    },
+    checkRTL: function (value) {
+        var isRTL = false;
+        if ($("html[ dir='rtl' ]").length > 0) {
+            isRTL = true;
+        }
+        switch (value) {
+            case 'isRTL':
+            case 'reverse':
+                return isRTL;
+                break;
+            case 'xSide':
+                if (isRTL) {
+                    return 'right';
+                }
+                else {
+                    return 'left';
+                }
+                break;
+            default:
+                break;
+        }
     }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);

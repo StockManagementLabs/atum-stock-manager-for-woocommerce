@@ -4220,7 +4220,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_enqueue_style( 'atum-list' );
 
 		if ( is_rtl() ) {
-			wp_register_style( 'atum-list-rtl', ATUM_URL . 'assets/css/atum-list-rtl.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
+			wp_register_style( 'atum-list-rtl', ATUM_URL . 'assets/css/atum-list-rtl.css', array( 'atum-list' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-list-rtl' );
 		}
 

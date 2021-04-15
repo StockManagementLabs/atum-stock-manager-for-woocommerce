@@ -10,6 +10,7 @@
 		border-top-right-radius: 4px !important;
 		border-bottom-right-radius: 4px !important;
 	}
+	
 	> .btn:last-child {
 		border-top-left-radius: 4px !important;
 		border-bottom-left-radius: 4px !important;
@@ -47,7 +48,6 @@
 		@include border-right-radius(0);
 		
 	}
-	
 	
 }
 

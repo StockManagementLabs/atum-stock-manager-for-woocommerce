@@ -24,8 +24,9 @@
   margin-right: 14px;
 }
 
-body {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
+.wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
+  margin-right: 14px;
+  margin-left: 0px;
 }
 
 .form-switch {

@@ -4,6 +4,7 @@
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';
+import Utils from '../../../utils/_utils';
 
 export default class StatisticsWidget {
 	
@@ -115,7 +116,7 @@ export default class StatisticsWidget {
                             color          : style.getPropertyValue('--dash-statistics-grid-lines')
 					    },
                         ticks: {
-							reverse: this.checkRTL('reverse'),
+							reverse: Utils.checkRTL('reverse'),
                             fontColor: style.getPropertyValue('--dash-statistics-ticks'),
                         }
 
@@ -131,7 +132,7 @@ export default class StatisticsWidget {
                         ticks: {
                             fontColor: style.getPropertyValue('--dash-statistics-ticks'),
                         },
-                        position: this.checkRTL('xSide'),
+                        position: Utils.checkRTL('xSide'),
 				    }]
 			    },
 			    tooltips           : {
@@ -197,31 +198,6 @@ export default class StatisticsWidget {
 		this.changeChartData();
 		this.doMobileFilterNav();
 	
-	}
-
-	checkRTL(value: string){
-
-		let isRTL = false;
-
-		if (jQuery("html[dir='rtl']").length > 0)
-			isRTL = true;
-
-		switch(value) {
-			case 'reverse':
-				return isRTL;
-				break;
-
-			case 'xSide':
-				if (isRTL)
-					return 'right'
-				else
-					return 'left'
-				break;
-
-			default:
-				break;
-		}
-
 	}
 	
 	getChartLabels(dataPeriod: string): string[] {

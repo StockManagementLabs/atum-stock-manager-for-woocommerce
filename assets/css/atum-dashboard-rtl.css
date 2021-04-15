@@ -20,20 +20,12 @@
   left: 12px;
 }
 
-body {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
-}
-
 .form-switch {
   padding-left: 0px;
 }
 
 .form-switch input.form-check-input {
   margin-left: 0px;
-}
-
-body {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !important;
 }
 
 .atum-dashboard {
@@ -72,15 +64,15 @@ body {
 }
 
 .atum-dashboard .atum-widget .widget-header:after, .atum-dashboard .atum-widget .statistics-widget .chart-legend .legend-switch:after, .statistics-widget .chart-legend .atum-dashboard .atum-widget .legend-switch:after {
-  content: '...';
+  content: '\02022 \02022 \02022';
   color: var(--dash-widget-icon);
-  font-size: 63px;
+  font-size: 22px;
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-  right: -20px;
-  letter-spacing: -4px;
+  right: -5px;
+  letter-spacing: 1px;
   -webkit-transform: rotate(90deg) translateY(-50%);
           transform: rotate(90deg) translateY(-50%);
   -webkit-transform-origin: top;
@@ -92,8 +84,8 @@ body {
 }
 
 .statistics-widget .chart-legend .legend-switch:after {
-  font-size: 50px !important;
-  right: -20px !important;
+  font-size: 22px !important;
+  right: -5px !important;
   cursor: ew-resize;
 }
 

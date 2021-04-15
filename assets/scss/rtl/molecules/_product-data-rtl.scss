@@ -4,13 +4,17 @@
 #woocommerce-product-data {
 	
 	ul{
+		
 		&.wc-tabs{
+			
 			li {
+				
 				 > a {
 					display: flex !important;
 					flex-direction: revert;
 					
 				}
+				
 				a:before {
 					padding-top: 4px;
 				}
@@ -22,6 +26,7 @@
 .product_data {
 	
 	.atum-data-panel {
+		
 		.atum-section-title {
 			
 			padding-right: 10px;
@@ -52,8 +57,8 @@
 				}
 			}
 		}
-		
 	}
+	
 }
 
 

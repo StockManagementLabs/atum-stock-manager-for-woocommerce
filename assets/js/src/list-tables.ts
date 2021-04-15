@@ -42,6 +42,7 @@ import StickyHeader from './components/list-table/_sticky-header';
 import TableButtons from './components/list-table/_table-buttons';
 import Tooltip from './components/_tooltip';
 import RowActions from './components/list-table/_row-actions';
+import Utils from './utils/_utils';
 
 
 // Modules that need to execute when the DOM is ready should go here.
@@ -71,7 +72,7 @@ jQuery( ( $ ) => {
 	let dateTimePicker = new DateTimePicker( settings );
 	let popover = new TableCellPopovers( settings, dateTimePicker );
 
-	if (!(jQuery("html[dir='rtl']").length > 0)){
+	if ( !Utils.checkRTL('isRTL')){
 		new ScrollBar( globals );
 	}
 

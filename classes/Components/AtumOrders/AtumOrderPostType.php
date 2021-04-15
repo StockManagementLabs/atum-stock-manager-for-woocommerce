@@ -932,7 +932,7 @@ abstract class AtumOrderPostType {
 				wp_enqueue_style( 'atum-orders' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', array( 'sweetalert2' ), ATUM_VERSION );
+					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', array( 'atum-orders' ), ATUM_VERSION );
 					wp_enqueue_style( 'atum-orders-rtl' );
 				}
 
@@ -1022,7 +1022,7 @@ abstract class AtumOrderPostType {
 				Helpers::enqueue_atum_colors( 'atum-orders-list' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-orders-list-rtl', ATUM_URL . 'assets/css/atum-orders-list-rtl.css', $css_dependencies, ATUM_VERSION );
+					wp_register_style( 'atum-orders-list-rtl', ATUM_URL . 'assets/css/atum-orders-list-rtl.css', array( 'atum-orders-list' ), ATUM_VERSION );
 					wp_enqueue_style( 'atum-orders-list-rtl' );
 				}
 

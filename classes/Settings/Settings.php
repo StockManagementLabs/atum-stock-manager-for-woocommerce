@@ -244,7 +244,7 @@ class Settings {
 
 
 			if ( is_rtl() ) {
-				wp_register_style( self::UI_SLUG . '-rtl', ATUM_URL . 'assets/css/atum-settings-rtl.css', [ 'sweetalert2' ], ATUM_VERSION );
+				wp_register_style( self::UI_SLUG . '-rtl', ATUM_URL . 'assets/css/atum-settings-rtl.css', array( self::UI_SLUG ), ATUM_VERSION );
 				wp_enqueue_style( self::UI_SLUG . '-rtl' );
 			}
 

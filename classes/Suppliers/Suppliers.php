@@ -405,7 +405,7 @@ class Suppliers {
 				wp_enqueue_style( 'atum-suppliers' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-suppliers-rtl', ATUM_URL . 'assets/css/atum-suppliers-rtl.css', [ 'sweetalert2' ], ATUM_VERSION );
+					wp_register_style( 'atum-suppliers-rtl', ATUM_URL . 'assets/css/atum-suppliers-rtl.css', array( 'atum-suppliers' ), ATUM_VERSION );
 					wp_enqueue_style( 'atum-suppliers-rtl' );
 				}
 

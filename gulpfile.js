@@ -85,6 +85,7 @@ gulp.task('sass::atum', function () {
 	
 	return gulp.src([
 			config.assetsDir + '/scss/*.scss',
+			config.assetsDir + '/scss/rtl/*.scss',
 		])
 		.pipe(plumber({errorHandler: onError}))
 		.pipe(gulpif(enabled.maps, sourcemaps.init()))
@@ -93,6 +94,7 @@ gulp.task('sass::atum', function () {
 		.pipe(wrap(config.decorate.templateCSS))
 		.pipe(gulpif(enabled.maps, sourcemaps.write('.', {
 			sourceRoot: 'assets/scss/',
+			sourceRoot: 'assets/scss/rtl/',
 		})))
 		.pipe(gulp.dest(destDir))
 		//.pipe(notify({message: 'sass task complete'}))

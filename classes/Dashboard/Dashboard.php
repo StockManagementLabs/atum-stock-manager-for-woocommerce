@@ -315,7 +315,7 @@ class Dashboard {
 			wp_enqueue_style( 'atum-dashboard' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', $style_deps, ATUM_VERSION );
+				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', array( 'atum-dashboard' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-dashboard-rtl' );
 			}
 

@@ -260,7 +260,7 @@ class Hooks {
 			wp_enqueue_style( 'atum-product-data' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', [ 'sweetalert2' ], ATUM_VERSION );
+				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', array( 'atum-product-data' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-product-data-rtl' );
 			}
 
