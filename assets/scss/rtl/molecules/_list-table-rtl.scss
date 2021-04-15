@@ -106,3 +106,15 @@ table.atum-list-table {
 	background-image: var(--overflow-opacity-rigth);
 }
 
+.tablenav {
+	
+	&.top {
+		
+		.tablenav-pages-container {
+			
+			.tablenav-pages {
+				margin: 0 auto 0 0;
+			}
+		}
+	}
+}

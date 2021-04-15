@@ -90,6 +90,10 @@ table.atum-list-table th.sortable.numeric a > span:first-child {
   background-image: var(--overflow-opacity-rigth);
 }
 
+.tablenav.top .tablenav-pages-container .tablenav-pages {
+  margin: 0 auto 0 0;
+}
+
 #posts-filter .nav-with-scroll-effect .subsubsub li:first-child {
   padding-left: 0px;
   padding-right: 10px;
