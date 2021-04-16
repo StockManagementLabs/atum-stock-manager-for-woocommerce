@@ -1,0 +1,30 @@
+//
+// Page Title RTL
+//------------
+
+.wrap {
+	
+	h1 {
+		
+		&.wp-heading-inline {
+			margin-left: $grid-gutter-width/2;
+			margin-right: 0px;
+			
+			.page-title-action {
+				&, &:active {
+					margin-left: 4px;
+					margin-right: 14px;
+					
+					&.extend-list-table {
+						margin-right: 14px;
+						margin-left: 0px;
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+
+

@@ -1,0 +1,53 @@
+//
+// Button groups RTL
+//---------------
+
+.btn-group {
+	
+	> .btn:first-child {
+		margin-right: 0;
+		margin-left: auto;
+		border-top-right-radius: 4px !important;
+		border-bottom-right-radius: 4px !important;
+	}
+	
+	> .btn:last-child {
+		border-top-left-radius: 4px !important;
+		border-bottom-left-radius: 4px !important;
+	}
+	
+	.btn + .btn,
+	.btn + .btn-group,
+	.btn-group + .btn,
+	.btn-group + .btn-group {
+		margin-right: -$btn-border-width;
+	}
+	
+	> .btn:first-child {
+		margin-right: 0;
+		margin-left: auto;
+	}
+	
+	.btn-sm, .btn-group-sm > .btn {
+		border-radius: $btn-border-radius-sm !important;
+	}
+	
+	.btn-group .btn{
+		border-radius: $btn-border-radius-sm !important;
+	}
+	
+	// Reset rounded corners
+	> .btn:not(:last-child):not(.dropdown-toggle),
+	> .btn-group:not(:last-child) > .btn {
+		@include border-left-radius(0);
+		
+	}
+	
+	> .btn:not(:first-child),
+	> .btn-group:not(:first-child) > .btn {
+		@include border-right-radius(0);
+		
+	}
+	
+}
+

@@ -1,0 +1,22 @@
+//
+// Atum add-ons RTL
+//---------------
+
+.atum-addons {
+	
+	h1 {
+		display: flex;
+	}
+	
+	.theme {
+		
+		.show-key {
+			right: auto;
+			left: 0;
+		}
+		
+		.theme-actions {
+			right: auto;
+		}
+	}
+}

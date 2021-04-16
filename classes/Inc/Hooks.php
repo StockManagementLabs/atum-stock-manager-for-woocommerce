@@ -261,6 +261,11 @@ class Hooks {
 			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'sweetalert2' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
+			if ( is_rtl() ) {
+				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', array( 'atum-product-data' ), ATUM_VERSION );
+				wp_enqueue_style( 'atum-product-data-rtl' );
+			}
+
 			// Enqueue scripts.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			Helpers::maybe_es6_promise();

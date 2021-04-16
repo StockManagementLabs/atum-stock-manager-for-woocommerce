@@ -1,0 +1,31 @@
+//
+// ATUM Orders list pages RTL
+//------------------------
+
+//
+// List Table RTL
+//-------------
+
+table.wp-list-table {
+	
+	.column-actions{
+		
+		a {
+			float: right;
+		}
+	}
+	
+	.column-status {
+		text-align: right;
+		
+		.order-status {
+			margin: 3px 0 0 5px !important;
+		}
+	}
+	
+}
+
+
+
+
+

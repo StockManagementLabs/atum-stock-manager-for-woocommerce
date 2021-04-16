@@ -1,0 +1,87 @@
+//
+// Atum Dashboard RTL
+//----------------
+
+.atum-dashboard {
+	margin-left: 0px;
+	margin-right: -20px;
+	
+	.dash-header {
+		
+		.dash-header-buttons {
+			
+			.restore-defaults {
+				i {
+					margin-right: -5px;
+				}
+			}
+		}
+	}
+	
+	.dash-cards {
+		
+		.dash-card {
+			
+			&:first-child {
+				margin-right: $grid-gutter-width;
+				margin-left: 0px;
+			}
+			
+			&:last-child {
+				margin-left: $grid-gutter-width;
+				margin-right: 0px;
+			}
+			
+			&.dash-marketing-banner {
+				margin: 20px 30px 0;
+				
+				.content {
+					
+					.content-description {
+						h1, p {
+							text-align: right !important;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.atum-widget {
+		
+		.widget-header{
+			text-align: right;
+			
+			&:before{
+				content: '';
+			}
+			
+			&:after {
+				content: '\02022 \02022 \02022';
+				color: var(--dash-widget-icon);
+				font-size: 22px;
+				@include vertical-align-absolute;
+				right: -5px;
+				letter-spacing: 1px;
+				transform: rotate(90deg) translateY(-50%);
+				transform-origin: top;
+			}
+			
+			h2 {
+				margin: 10px 15px 9px 10px;
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+//
+// "Videos" widget RTL
+//-----------------
+
+.videos-widget {
+	
+	.video-list {
+		
+		article {
+			text-align: right;
+		}
+		
+		.video-thumb {
+			margin-left: $grid-gutter-width/2;
+			margin-right: 0;
+		}
+	}
+	
+	.video-filter {
+		
+		.filter-controls{
+			text-align: right;
+		}
+	}
+	
+	.video-preview {
+		
+		.channel-info {
+			
+			> span {
+				
+				h3 {
+					text-align: right;
+				}
+			}
+		}
+		
+		.video-player{
+			text-align: right;
+		}
+	}
+}
+

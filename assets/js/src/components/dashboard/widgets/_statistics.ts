@@ -4,6 +4,7 @@
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';
+import Utils from '../../../utils/_utils';
 
 export default class StatisticsWidget {
 	
@@ -94,7 +95,8 @@ export default class StatisticsWidget {
 			    maintainAspectRatio: false,
 			    layout             : {
 				    padding: {
-					    top: 10
+					    top: 10,
+					    left: 30
 				    }
 			    },
 			    legend             : {
@@ -114,6 +116,7 @@ export default class StatisticsWidget {
                             color          : style.getPropertyValue('--dash-statistics-grid-lines')
 					    },
                         ticks: {
+							reverse: Utils.checkRTL('reverse'),
                             fontColor: style.getPropertyValue('--dash-statistics-ticks'),
                         }
 
@@ -128,7 +131,8 @@ export default class StatisticsWidget {
 					    },
                         ticks: {
                             fontColor: style.getPropertyValue('--dash-statistics-ticks'),
-                        }
+                        },
+                        position: Utils.checkRTL('xSide'),
 				    }]
 			    },
 			    tooltips           : {

@@ -218,6 +218,11 @@ class Addons {
 		wp_enqueue_style( 'sweetalert2' );
 		wp_enqueue_style( 'atum-addons' );
 
+		if ( is_rtl() ) {
+			wp_register_style( 'atum-addons-rtl', ATUM_URL . 'assets/css/atum-addons-rtl.css', array( 'atum-addons' ), ATUM_VERSION );
+			wp_enqueue_style( 'atum-addons-rtl' );
+		}
+
 		if ( wp_script_is( 'es6-promise', 'registered' ) ) {
 			wp_enqueue_script( 'es6-promise' );
 		}

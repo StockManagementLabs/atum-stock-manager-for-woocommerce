@@ -1,0 +1,23 @@
+//
+// "Statistics" widget RTL
+//-----------------------
+
+.statistics-widget{
+	
+	.chart-legend{
+		
+		.legend-switch{
+			
+			&:before{
+				@extend .widget-header:before;
+			}
+			&:after {
+				@extend .widget-header:after;
+				font-size: 22px !important;
+				right: -5px !important;
+				cursor: ew-resize;
+			}
+		}
+	}
+}
+
