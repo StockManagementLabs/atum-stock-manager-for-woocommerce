@@ -214,7 +214,7 @@ export default class Dashboard {
 								this.saveWidgetsLayout();
 								resolve();
 							},
-							error: () => reject()
+							error: () => resolve()
 						});
 						
 					});

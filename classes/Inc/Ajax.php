@@ -200,8 +200,7 @@ final class Ajax {
 
 		$user_id = get_current_user_id();
 		Dashboard::restore_user_widgets_layout( $user_id );
-
-		wp_die();
+		wp_send_json_success();
 
 	}
 
