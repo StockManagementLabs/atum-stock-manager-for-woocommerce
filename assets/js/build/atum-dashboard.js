@@ -367,7 +367,7 @@ var Dashboard = (function () {
                                 _this.saveWidgetsLayout();
                                 resolve();
                             },
-                            error: function () { return reject(); }
+                            error: function () { return resolve(); }
                         });
                     });
                 }
