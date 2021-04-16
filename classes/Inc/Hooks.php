@@ -225,6 +225,8 @@ class Hooks {
 
 		}
 
+		add_filter( 'upload_dir', array( $this, 'check_url_protocol' ) );
+
 	}
 
 	/**
@@ -1328,6 +1330,37 @@ class Hooks {
 
 		return $order_ids;
 
+	}
+
+	/**
+	 * Fixes the url protocol for the uploads url
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $uploads
+	 *
+	 * @return array
+	 */
+	public function check_url_protocol( $uploads ) {
+
+		if ( is_ssl() ||
+		     ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$current_protocol = 'https';
+		}
+		else {
+			$current_protocol = 'http';
+		}
+		$parsed_url      = parse_url( $uploads['url'] );
+		$parsed_base_url = parse_url( $uploads['baseurl'] );
+
+		if ( $parsed_url['scheme'] !== $current_protocol ) {
+			$uploads['url'] = set_url_scheme( $uploads['url'], $current_protocol );
+		}
+		if ( $parsed_base_url['scheme'] !== $current_protocol ) {
+			$uploads['baseurl'] = set_url_scheme( $uploads['baseurl'], $current_protocol );
+		}
+
+		return $uploads;
 	}
 
 	/********************
