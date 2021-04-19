@@ -244,6 +244,7 @@ class AtumColors {
 			--atum-text-color-var1:$text_color_2;
 			--atum-text-color-var2: $text_color_2;
 			--atum-text-color-var3: $text_color_2;
+			--atum-setting-info: {$this->colors['gray_500']};
 			--atum-version: $text_color_2;
 			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
@@ -382,6 +383,9 @@ class AtumColors {
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color']};
 			--atum-text-color-var3: {$this->colors['text_color']};
+			--atum-checkbox-label: {$this->colors['white']};
+			--atum-setting-info: {$this->colors['gray_500']};
+			--atum-section-field: {$this->colors['gray_600']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']},0.6);
 			--blue-light: $bg_1_color;
 			--danger: {$this->colors['danger_color']};
