@@ -344,6 +344,10 @@
   --atum-text-white: #fff;
   --atum-version: #fff;
   --atum-version-bg: rgba(0, 0, 0, 0.2);
+  --atum-checkbox-label: #000;
+  --atum-input-text: #6c757d;
+  --atum-setting-info: #495057;
+  --atum-section-field: #fff;
   --black-shadow-light: rgba(0, 0, 0, 0.04);
   --blue-light-expanded: #dbf9ff;
   --danger-hover-border: 1px solid transparent;
