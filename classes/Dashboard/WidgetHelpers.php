@@ -932,8 +932,8 @@ final class WidgetHelpers {
 					continue;
 				}
 
-				$product_stock          = (float) $product->get_stock_quantity();
-				$product_purchase_price = (float) $product->get_purchase_price();
+				$product_stock          = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_stock', $product->get_stock_quantity(), $product );
+				$product_purchase_price = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_price', $product->get_purchase_price(), $product );
 
 				if ( $product_stock && $product_stock > 0 ) {
 
@@ -953,7 +953,38 @@ final class WidgetHelpers {
 
 		self::$wc_query_data = $temp_wc_query_data; // Restore the original value.
 
-		return apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters );
+		return self::format_counters_items_in_stock( apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters ) );
+
+	}
+
+	/**
+	 * Format widget counters.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $counters
+	 *
+	 * @return array
+	 */
+	protected static function format_counters_items_in_stock( $counters ) {
+
+		// Format counters.
+		foreach ( $counters as $index => $counter ) {
+			if ( 'items_purchase_price_total' === $index ) {
+				$counters[ $index ] = wc_price( $counter );
+			}
+			else {
+				$num_parts     = explode( '.', $counter );
+				$counters[ $index ] = number_format(
+					$counter,
+					strlen( $num_parts[1] ),
+					wc_get_price_decimal_separator(),
+					wc_get_price_thousand_separator()
+				);
+			}
+		}
+
+		return $counters;
 
 	}
 

@@ -515,7 +515,7 @@ var CurrentStockValueWidget = (function () {
                 success: function (response) {
                     if (typeof response === 'object' && response.success === true) {
                         var itemsWithoutPurchasePrice = response.data.current_stock_values.items_without_purchase_price, $totalPurchasePrice = _this.$currentStockValueWidget.find('.total');
-                        $totalPurchasePrice.html($totalPurchasePrice.data('currency') + ' ' + response.data.current_stock_values.items_purchase_price_total);
+                        $totalPurchasePrice.html(response.data.current_stock_values.items_purchase_price_total);
                         _this.$currentStockValueWidget.find('.items-count .total').html(response.data.current_stock_values.items_stocks_counter);
                         _this.$currentStockValueWidget.find('.items_without_purchase_price').html(itemsWithoutPurchasePrice);
                         _this.$currentStockValueWidget.removeClass('overlay');

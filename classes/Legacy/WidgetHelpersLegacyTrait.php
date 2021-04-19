@@ -324,8 +324,8 @@ trait WidgetHelpersLegacyTrait {
 					continue;
 				}
 
-				$product_stock          = (float) $product->get_stock_quantity();
-				$product_purchase_price = (float) $product->get_purchase_price();
+				$product_stock          = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_stock', $product->get_stock_quantity(), $product );
+				$product_purchase_price = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_price', $product->get_purchase_price(), $product );
 
 				if ( $product_stock > 0 ) {
 
@@ -344,7 +344,7 @@ trait WidgetHelpersLegacyTrait {
 
 		}
 		
-		return apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters );
+		return self::format_counters_items_in_stock( apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters ) );
 		
 	}
 
