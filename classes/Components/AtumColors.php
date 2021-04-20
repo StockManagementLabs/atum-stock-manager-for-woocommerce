@@ -374,11 +374,13 @@ class AtumColors {
 			--atum-table-bg: $bg_1_color;
 			--atum-table-bg2: $bg_2_color;
 			--atum-table-filter-dropdown: {$this->colors['white']};
-			--atum-table-link-text: {$this->colors['text_color_expanded']};
+			--atum-table-link-text: {$this->colors['gray_500']};
 		    --atum-table-row-variation-text: {$this->colors['text_color_2']};
 			--atum-table-search-text-disabled: {$this->colors['text_color_expanded']};
 			--atum-table-views-tabs: {$this->colors['text_color']};
 			--atum-table-views-tabs-active-text: {$this->colors['text_color_2']};
+			--atum-table-text: {$this->colors['gray_200']};
+			--atum-table-text-hover: {$this->colors['dark']};
 			--atum-text-color-dark2: {$this->colors['text_color_2']};
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color']};
