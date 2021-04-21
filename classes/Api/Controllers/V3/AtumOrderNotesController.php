@@ -12,6 +12,7 @@
 
 namespace Atum\Api\Controllers\V3;
 
+use Atum\Inc\Helpers;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
@@ -277,6 +278,11 @@ abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller 
 		if ( ! $note_id ) {
 			return new \WP_Error( 'atum_api_cannot_create_order_note', __( 'Cannot create order note, please try again.', ATUM_TEXT_DOMAIN ), [ 'status' => 500 ] );
 		}
+
+		Helpers::save_order_note_meta( $note_id, [
+			'action'   => 'api_note',
+			'order_id' => $order->get_id(),
+		] );
 
 		$note = get_comment( $note_id );
 		$this->update_additional_fields_for_object( $note, $request );
