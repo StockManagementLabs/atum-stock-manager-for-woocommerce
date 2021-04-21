@@ -187,7 +187,7 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 		}
 
 		if ( ! isset( $schema[ $field_name ] ) ) {
-			$schema[ $field_name ] = $schema;
+			$schema[ $field_name ] = $parent_id_schema;
 		}
 
 		return $schema;
