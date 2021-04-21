@@ -52,12 +52,9 @@ class AtumOrderNotes {
 		foreach ( $fields as $field_name => $field_supports ) {
 
 			$args = array(
-				'schema' => $this->get_order_note_field_schema( $field_name ),
+				'schema'       => $this->get_order_note_field_schema( $field_name ),
+				'get_callback' => array( $this, 'get_order_note_field_value' )
 			);
-
-			if ( in_array( 'get', $field_supports ) ) {
-				$args['get_callback'] = array( $this, 'get_order_note_field_value' );
-			}
 
 			// Add the field to the order notes endpoints.
 			register_rest_field( 'atum_order_note', $field_name, $args );

@@ -60,6 +60,7 @@ class AtumApi {
 		'atum-setting-options'               => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
 		'atum-suppliers'                     => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-tools'                         => __NAMESPACE__ . '\Controllers\V3\ToolsController',
+		'atum-wp-settings'                   => __NAMESPACE__ . '\Controllers\V3\WordpressSettingsController',
 	);
 
 	/**
