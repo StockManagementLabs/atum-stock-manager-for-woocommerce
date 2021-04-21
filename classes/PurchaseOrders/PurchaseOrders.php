@@ -955,7 +955,6 @@ class PurchaseOrders extends AtumOrderPostType {
 					$note_id = $order->add_order_note( apply_filters( 'atum/purchase_orders/add_stock_change_note', $note, $product, $action ) );
 					Helpers::save_order_note_meta( $note_id, [
 						'action'     => "{$action}_stock",
-						'order_id'   => $order_id,
 						'item_name'  => $atum_order_item->get_name(),
 						'product_id' => $product->get_id(),
 						'old_stock'  => $old_stock,

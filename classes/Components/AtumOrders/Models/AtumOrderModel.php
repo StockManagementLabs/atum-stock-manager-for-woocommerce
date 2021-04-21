@@ -903,7 +903,6 @@ abstract class AtumOrderModel {
 				$note_id = $this->add_order_note( $transition_note );
 				Helpers::save_order_note_meta( $note_id, [
 					'action'     => 'order_status_change',
-					'order_id'   => $this->get_id(),
 					'old_status' => $old_status,
 					'new_status' => $new_status
 				] );

@@ -1323,11 +1323,8 @@ final class Ajax {
 
 			if ( ! is_wp_error( $atum_order ) ) {
 
-				$comment_id   = $atum_order->add_order_note( $note, TRUE );
-				Helpers::save_order_note_meta( $comment_id, [
-					'action'     => 'ajax_note',
-					'order_id'   => $atum_order->get_id(),
-				] );
+				$comment_id = $atum_order->add_order_note( $note, TRUE );
+				Helpers::save_order_note_meta( $comment_id, [ 'action'     => 'ajax_note' ] );
 				$note_comment = get_comment( $comment_id );
 
 				do_action( 'atum/ajax/atum_order/note_added', $atum_order, $comment_id );
@@ -1855,7 +1852,6 @@ final class Ajax {
 					$note_id = $atum_order->add_order_note( $note );
 					Helpers::save_order_note_meta( $note_id, [
 						'action'     => "{$action}_stock",
-						'order_id'   => $atum_order_id,
 						'item_name'  => $atum_order_item->get_name(),
 						'product_id' => $product->get_id(),
 						'old_stock'  => $old_stock,
