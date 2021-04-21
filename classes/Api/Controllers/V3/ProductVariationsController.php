@@ -147,9 +147,10 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 		}
 
 		add_filter( 'woocommerce_rest_product_variation_schema', array( $this, 'add_extra_fields' ) );
-		return parent::get_items( $request );
+		$response = parent::get_items( $request );
 		remove_filter( 'woocommerce_rest_product_variation_schema', array( $this, 'add_extra_fields' ) );
 
+		return $response;
 	}
 
 	/**
