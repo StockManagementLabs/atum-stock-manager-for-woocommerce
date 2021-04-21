@@ -13,6 +13,7 @@ namespace Atum\Api;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\Extenders\AtumOrderNotes;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
@@ -118,6 +119,7 @@ class AtumApi {
 	 */
 	public function load_extenders() {
 
+		AtumOrderNotes::get_instance();
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
 		ProductCategories::get_instance();

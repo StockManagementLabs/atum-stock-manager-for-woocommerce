@@ -200,8 +200,7 @@ final class Ajax {
 
 		$user_id = get_current_user_id();
 		Dashboard::restore_user_widgets_layout( $user_id );
-
-		wp_die();
+		wp_send_json_success();
 
 	}
 
@@ -1327,6 +1326,10 @@ final class Ajax {
 			if ( ! is_wp_error( $atum_order ) ) {
 
 				$comment_id   = $atum_order->add_order_note( $note, TRUE );
+				Helpers::save_order_note_meta( $comment_id, [
+					'action'     => 'ajax_note',
+					'order_id'   => $atum_order->get_id(),
+				] );
 				$note_comment = get_comment( $comment_id );
 
 				do_action( 'atum/ajax/atum_order/note_added', $atum_order, $comment_id );
@@ -1851,7 +1854,15 @@ final class Ajax {
 					$note     = apply_filters( 'atum/atum_order/add_stock_change_note', $note, $product, $action, $stock_change );
 					$return[] = $note;
 
-					$atum_order->add_order_note( $note );
+					$note_id = $atum_order->add_order_note( $note );
+					Helpers::save_order_note_meta( $note_id, [
+						'action'     => "{$action}_stock",
+						'order_id'   => $atum_order_id,
+						'item_name'  => $atum_order_item->get_name(),
+						'product_id' => $product->get_id(),
+						'old_stock'  => $old_stock,
+						'new_stock'  => $new_stock,
+					] );
 
 					if ( PurchaseOrders::POST_TYPE === $atum_order->get_post_type() ) {
 						$atum_order_item->set_stock_changed( PurchaseOrders::FINISHED === $atum_order->get_status() );

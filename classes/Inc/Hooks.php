@@ -225,6 +225,8 @@ class Hooks {
 
 		}
 
+		add_filter( 'upload_dir', array( $this, 'check_url_protocol' ) );
+
 	}
 
 	/**
@@ -258,6 +260,11 @@ class Hooks {
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
 			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'sweetalert2' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
+
+			if ( is_rtl() ) {
+				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', array( 'atum-product-data' ), ATUM_VERSION );
+				wp_enqueue_style( 'atum-product-data-rtl' );
+			}
 
 			// Enqueue scripts.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
@@ -1328,6 +1335,37 @@ class Hooks {
 
 		return $order_ids;
 
+	}
+
+	/**
+	 * Fixes the url protocol for the uploads url
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $uploads
+	 *
+	 * @return array
+	 */
+	public function check_url_protocol( $uploads ) {
+
+		if ( is_ssl() ||
+		     ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$current_protocol = 'https';
+		}
+		else {
+			$current_protocol = 'http';
+		}
+		$parsed_url      = parse_url( $uploads['url'] );
+		$parsed_base_url = parse_url( $uploads['baseurl'] );
+
+		if ( $parsed_url['scheme'] !== $current_protocol ) {
+			$uploads['url'] = set_url_scheme( $uploads['url'], $current_protocol );
+		}
+		if ( $parsed_base_url['scheme'] !== $current_protocol ) {
+			$uploads['baseurl'] = set_url_scheme( $uploads['baseurl'], $current_protocol );
+		}
+
+		return $uploads;
 	}
 
 	/********************

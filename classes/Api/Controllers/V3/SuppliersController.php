@@ -1069,8 +1069,8 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		$schema = $this->get_item_schema();
 
-		if ( ! empty( $schema['properties']['image'] ) && isset( $request['image'] ) ) {
-			$this->handle_featured_media( $request['image'], $post_id );
+		if ( ! empty( $schema['properties']['image'] ) && isset( $request['image'], $request['image']['id'] ) ) {
+			$this->handle_featured_media( $request['image']['id'], $post_id );
 		}
 
 		if ( ! empty( $schema['properties']['meta'] ) && isset( $request['meta'] ) ) {
@@ -1153,6 +1153,10 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		$post = $this->get_object( $post_id );
 		$this->update_additional_fields_for_object( $post, $request );
+
+		if ( isset( $request['image'], $request['image']['id'] ) ) {
+			$this->handle_featured_media( $request['image']['id'], $post_id );
+		}
 
 		// Update meta fields.
 		$meta_fields = $this->update_post_meta_fields( $post, $request );

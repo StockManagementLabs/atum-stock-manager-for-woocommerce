@@ -3353,11 +3353,11 @@ final class Helpers {
 		if ( $found ) {
 
 			// Try to determine whether the product being processed has calculated stock.
-			preg_match_all( '/(?<=\()(.+)(?=\))/is', $note_data['comment_content'], $ids );
+			preg_match_all( '/\((\#*[^()]+)\)/is', $note_data['comment_content'], $ids );
 
 			if ( ! empty( $ids ) ) {
 
-				$ids = $ids[0];
+				$ids = $ids[1];
 
 				foreach ( $ids as $id ) {
 
@@ -3499,6 +3499,71 @@ final class Helpers {
 	public static function get_raw_wc_order_status( $status ) {
 
 		return 'wc-' . str_replace( 'wc-', '', $status );
+	}
+
+	/**
+	 * Save order notes additional meta data.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param integer $note_id
+	 * @param array   $params
+	 */
+	public static function save_order_note_meta( $note_id, $params ) {
+
+		if ( ! empty( $params ) && isset( $params['action'] ) ) {
+			switch ( $params['action'] ) {
+				case 'order_status_change':
+					$action = 'changeStatus';
+					break;
+				case 'ajax_note':
+					$action = 'ajaxNote';
+					break;
+				case 'api_note':
+					$action = 'apiNote';
+					break;
+				case 'increase_stock':
+					$action = 'increaseStock';
+					break;
+				case 'decrease_stock':
+					$action = 'decreaseStock';
+					break;
+				case 'added_line_items':
+					$action = 'addedLineItems';
+					break;
+				case 'deleted_line':
+					$action = 'deletedLineItems';
+					break;
+				case 'stock_levels_increased':
+					$action = 'stockLevelsIncreased';
+					break;
+				case 'stock_levels_reduced':
+					$action = 'stockLevelsReduced';
+					break;
+				case 'stock_levels_changed':
+					$action = 'stockLevelsChanged';
+					break;
+				case 'unable_restore':
+					$action = 'unableRestore';
+					break;
+				case 'unable_reduce':
+					$action = 'unableReduce';
+					break;
+				case 'unable_increase_stock':
+					$action = 'unableIncreaseStock';
+					break;
+				case 'unable_decrease_stock':
+					$action = 'unableDecreaseStock';
+					break;
+			}
+
+			unset( $params['action'] );
+
+			update_comment_meta( $note_id, 'note_type', $action );
+			update_comment_meta( $note_id, 'note_params', $params );
+		}
+
+
 	}
 
 }

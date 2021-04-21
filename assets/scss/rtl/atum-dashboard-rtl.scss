@@ -1,0 +1,17 @@
+//
+// ATUM Dashboard RTL
+//---------------
+
+@import "../common/functions";
+@import "../common/variables";
+@import "../common/mixins";
+
+@import "atoms/nice-select-rtl";
+@import "atoms/form-check-rtl";
+
+@import "organisms/pages/dashboard-rtl";
+
+@import "organisms/widgets/statistics-rtl";
+@import "organisms/widgets/stock-control-rtl";
+@import "organisms/widgets/current-stock-value-rtl";
+@import "organisms/widgets/videos-rtl";

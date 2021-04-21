@@ -1,0 +1,17 @@
+//
+// Atum List Tables for Post Types RTL
+//--------------------------------
+
+#posts-filter {
+	@extend .atum-list-wrapper;
+	
+	.nav-with-scroll-effect .subsubsub {
+		li {
+			&:first-child {
+				padding-left: 0px;
+				padding-right: 10px;
+			}
+		}
+	}
+}
+

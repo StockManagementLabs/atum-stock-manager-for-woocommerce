@@ -41,7 +41,7 @@ export default class CurrentStockValueWidget {
 						const itemsWithoutPurchasePrice: string = response.data.current_stock_values.items_without_purchase_price,
 						      $totalPurchasePrice: JQuery       = this.$currentStockValueWidget.find('.total');
 						
-						$totalPurchasePrice.html($totalPurchasePrice.data('currency') + ' ' + response.data.current_stock_values.items_purchase_price_total);
+						$totalPurchasePrice.html(response.data.current_stock_values.items_purchase_price_total);
 						this.$currentStockValueWidget.find('.items-count .total').html(response.data.current_stock_values.items_stocks_counter);
 						this.$currentStockValueWidget.find('.items_without_purchase_price').html(itemsWithoutPurchasePrice);
 						this.$currentStockValueWidget.removeClass('overlay');

@@ -239,7 +239,7 @@
 		margin-bottom: $grid-gutter-width/2;
 		
 		&.setting-checked label {
-			color: var(--black);
+			color: var(--atum-checkbox-label);
 			
 			[type=checkbox] {
 				background-color: var(--success);
@@ -636,7 +636,7 @@
 					
 					&-secondary {
 						background-color: var(--atum-text-color-var1);
-						color: $white;
+						color: var(--atum-section-field);
 					}
 				}
 			}
@@ -709,7 +709,7 @@
 						
 						strong {
 							font-weight: normal;
-							color: var(--gray-700);
+							color: var(--atum-setting-info);
 						}
 					}
 				}
@@ -720,7 +720,7 @@
 				margin: 0;
 				border-radius: 4px;
 				height: 30px;
-				color: var(--atum-text-color-var3);
+				color: var(--atum-input-text);
 				border: 1px solid var(--main-border-alt);
 				box-shadow: none;
 				
@@ -817,6 +817,7 @@
 					margin-bottom: 20px;
 					margin-left: 14px;
 					line-height: 30px;
+					color: var(--atum-checkbox-label);
 				}
 				
 				.tool-fields-wrapper {

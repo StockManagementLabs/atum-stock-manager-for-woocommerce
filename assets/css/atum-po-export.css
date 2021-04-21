@@ -257,6 +257,7 @@
   --atum-table-views-tabs: #6c757d;
   --atum-table-views-tabs-active: #00B8DB;
   --atum-table-views-tabs-active-text: #fff;
+  --atum-table-text: #343a40;
   --atum-text-color-dark2: #6c757d;
   --atum-text-color-var1: #adb5bd;
   --atum-text-color-var2: #adb5bd;
@@ -264,6 +265,10 @@
   --atum-text-white: #fff;
   --atum-version: #fff;
   --atum-version-bg: rgba(0, 0, 0, 0.2);
+  --atum-checkbox-label: #000;
+  --atum-input-text: #6c757d;
+  --atum-setting-info: #495057;
+  --atum-section-field: #fff;
   --black-shadow-light: rgba(0, 0, 0, 0.04);
   --blue-light-expanded: #dbf9ff;
   --danger-hover-border: 1px solid transparent;

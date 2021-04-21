@@ -524,6 +524,44 @@ const Utils = {
 			$input.val( 0 ); // Set to 0.
 		}
 
+	},
+
+	/**
+	 * Check if the RTL mode is active and add some options on some cases
+	 *
+	 * @param {string} value
+	 *
+	 * @return {string | boolean}
+	 */
+	checkRTL( value:string ) {
+
+		let isRTL:boolean = false;
+
+		if ( $( "html[ dir='rtl' ]" ).length > 0 ) {
+			isRTL = true;
+		}
+
+		switch( value ) {
+
+			case 'isRTL':
+			case 'reverse':
+				return isRTL;
+				break;
+
+			case 'xSide':
+				if (isRTL) {
+					return 'right';
+				}
+				else {
+					return 'left';
+				}
+				break;
+
+			default:
+				break;
+
+		}
+
 	}
 	
 }

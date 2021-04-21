@@ -1,0 +1,67 @@
+//
+// Product Data meta box RTL
+//----------------------
+#woocommerce-product-data {
+	
+	ul{
+		
+		&.wc-tabs{
+			
+			li {
+				
+				 > a {
+					display: flex !important;
+					flex-direction: revert;
+					
+				}
+				
+				a:before {
+					padding-top: 4px;
+				}
+			}
+		}
+	}
+}
+
+.product_data {
+	
+	.atum-data-panel {
+		
+		.atum-section-title {
+			
+			padding-right: 10px;
+		}
+	}
+	
+	.atum-field {
+		
+		input[type=text], input[type=number] {
+			@include border-right-radius(0);
+			@include border-left-radius(4px);
+		}
+		
+		.input-group-prepend {
+			@include border-right-radius(4px);
+			@include border-left-radius(0px);
+		}
+		
+		.select2-container {
+			
+			&.atum-enhanced-select {
+				
+				.select2-selection--single {
+					
+					.select2-selection__clear {
+						padding-left: 25px;
+					}
+				}
+			}
+		}
+	}
+	
+}
+
+
+
+
+

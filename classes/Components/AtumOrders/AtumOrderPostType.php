@@ -931,6 +931,11 @@ abstract class AtumOrderPostType {
 				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-orders' );
 
+				if ( is_rtl() ) {
+					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', array( 'atum-orders' ), ATUM_VERSION );
+					wp_enqueue_style( 'atum-orders-rtl' );
+				}
+
 				// Enqueue the script with the required WooCommerce dependencies.
 				$wc_dependencies = (array) apply_filters('atum/order_post_type/scripts/woocommerce_dependencies', array(
 					'wc-enhanced-select',
@@ -1015,6 +1020,11 @@ abstract class AtumOrderPostType {
 
 				// Load the ATUM colors.
 				Helpers::enqueue_atum_colors( 'atum-orders-list' );
+
+				if ( is_rtl() ) {
+					wp_register_style( 'atum-orders-list-rtl', ATUM_URL . 'assets/css/atum-orders-list-rtl.css', array( 'atum-orders-list' ), ATUM_VERSION );
+					wp_enqueue_style( 'atum-orders-list-rtl' );
+				}
 
 			}
 

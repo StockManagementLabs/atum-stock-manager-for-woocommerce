@@ -59,6 +59,26 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 			)
 		);
 
+		// Rest route to get ALL the variations products list.
+		register_rest_route(
+			$this->namespace, '/' . $this->rest_base,
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_items' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'args'                => array(
+						'context' => $this->get_context_param(
+							array(
+								'default' => 'view',
+							)
+						),
+					),
+				),
+				'schema' => array( $this, 'get_public_item_schema' ),
+			)
+		);
+
 	}
 
 	/**
@@ -107,6 +127,90 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 
 		return parent::save_object( $request, $creating );
 
+	}
+
+	/**
+	 * Get every variations.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param \WP_REST_Request $request Request data.
+	 *
+	 * @return array|\WP_Error
+	 */
+	public function get_items( $request ) {
+
+		$this->post_type    = 'product_variation';
+		$request['orderby'] = 'id';
+		if ( ! isset( $request['page'] ) ) {
+			$request['page'] = 1;
+		}
+
+		add_filter( 'woocommerce_rest_product_variation_schema', array( $this, 'add_extra_fields' ) );
+		return parent::get_items( $request );
+		remove_filter( 'woocommerce_rest_product_variation_schema', array( $this, 'add_extra_fields' ) );
+
+	}
+
+	/**
+	 * Add parent_id field.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $schema
+	 *
+	 * @return array
+	 */
+	public function add_extra_fields( $schema ) {
+
+		global $wp_rest_additional_fields;
+
+		$field_name = 'parent_id';
+
+		$parent_id_schema = array(
+			'description' => __( 'Identifier for the parent resource.', ATUM_TEXT_DOMAIN ),
+			'type'        => 'integer',
+			'context'     => array(
+				'view',
+				'edit',
+			),
+			'readonly'    => TRUE,
+		);
+
+		$fields = $wp_rest_additional_fields['product_variation'];
+
+		if ( FALSE === in_array( $field_name, array_keys( $fields ) ) ) {
+			register_rest_field( 'product_variation', $field_name, array(
+				'get_callback'    => array( $this, 'get_parent_id' ),
+				'schema'          => $parent_id_schema,
+			) );
+		}
+
+		if ( ! isset( $schema[ $field_name ] ) ) {
+			$schema[ $field_name ] = $parent_id_schema;
+		}
+
+		return $schema;
+	}
+
+	/**
+	 * Getter for extra field parent_id.
+	 *
+	 * @since 1.8.8
+	 *
+	 * @param array $post
+	 *
+	 * @return integer|null
+	 */
+	public function get_parent_id( $post ) {
+
+		$product = wc_get_product( $post['id'] );
+
+		if ( is_wp_error( $product ) ) {
+			return NULL;
+		}
+
+		return $product->get_parent_id();
 	}
 
 	/**

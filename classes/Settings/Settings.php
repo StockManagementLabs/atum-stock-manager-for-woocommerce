@@ -242,6 +242,12 @@ class Settings {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( self::UI_SLUG );
 
+
+			if ( is_rtl() ) {
+				wp_register_style( self::UI_SLUG . '-rtl', ATUM_URL . 'assets/css/atum-settings-rtl.css', array( self::UI_SLUG ), ATUM_VERSION );
+				wp_enqueue_style( self::UI_SLUG . '-rtl' );
+			}
+
 			// Load the ATUM colors.
 			Helpers::enqueue_atum_colors( self::UI_SLUG );
 
