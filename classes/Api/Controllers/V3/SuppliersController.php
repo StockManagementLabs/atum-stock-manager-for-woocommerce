@@ -396,12 +396,12 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		$params = parent::get_collection_params();
 
 		$supplier_params = array(
-			'slug'        => array(
+			'slug'            => array(
 				'description'       => __( 'Limit result set to suppliers with a specific slug.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'status'      => array(
+			'status'          => array(
 				'default'           => 'any',
 				'description'       => __( 'Limit result set to suppliers assigned a specific status.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
@@ -409,31 +409,41 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'sanitize_callback' => 'sanitize_key',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'currency'    => array(
+			'currency'        => array(
 				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 				'enum'              => array_keys( get_woocommerce_currencies() ),
 			),
-			'country'     => array(
+			'country'         => array(
 				'description'       => __( 'Limit result set to suppliers from the specified country code.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 				'enum'              => array_keys( WC()->countries->get_countries() ),
 			),
-			'assigned_to' => array(
+			'assigned_to'     => array(
 				'description'       => __( 'Limit result set to suppliers assigned to the specified user ID.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
-			'product'     => array(
+			'product'         => array(
 				'description'       => __( 'Limit result set to suppliers assigned to the specific product ID.', ATUM_TEXT_DOMAIN ),
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
 				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'modified_before' => array(
+				'description' => __( 'Limit response to orders modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'string',
+				'format'      => 'date-time',
+			),
+			'modified_after'  => array(
+				'description' => __( 'Limit response to orders modified after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'string',
+				'format'      => 'date-time',
 			),
 		);
 
@@ -644,14 +654,25 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		}
 
 		$args['date_query'] = array();
+
 		// Set before into date query. Date query must be specified as an array of an array.
 		if ( isset( $request['before'] ) ) {
 			$args['date_query'][0]['before'] = $request['before'];
+		}
+		// Before modification date filter.
+		elseif ( isset( $request['modified_before'] ) ) {
+			$args['date_query'][0]['before'] = $request['modified_before'];
+			$args['date_query'][0]['column'] = 'post_modified';
 		}
 
 		// Set after into date query. Date query must be specified as an array of an array.
 		if ( isset( $request['after'] ) ) {
 			$args['date_query'][0]['after'] = $request['after'];
+		}
+		// After modification date filter.
+		elseif ( isset( $request['modified_after'] ) ) {
+			$args['date_query'][0]['after']  = $request['modified_after'];
+			$args['date_query'][0]['column'] = 'post_modified';
 		}
 
 		// Force the post_type argument, since it's not a user input variable.
