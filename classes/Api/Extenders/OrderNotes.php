@@ -14,12 +14,12 @@ namespace Atum\Api\Extenders;
 
 defined( 'ABSPATH' ) || die;
 
-class AtumOrderNotes {
+class OrderNotes {
 
 	/**
 	 * The singleton instance holder
 	 *
-	 * @var AtumOrderNotes
+	 * @var OrderNotes
 	 */
 	private static $instance;
 
@@ -210,7 +210,7 @@ class AtumOrderNotes {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @return AtumOrderNotes instance
+	 * @return OrderNotes instance
 	 */
 	public static function get_instance() {
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
