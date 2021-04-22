@@ -302,7 +302,8 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 			return new \WP_Error( 'atum_rest_setting_group_invalid', __( 'Invalid setting group.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
 		}
 
-		$filtered_settings = array();
+		$filtered_settings = $this->maybe_add_extra_settings( $group_id );
+
 		foreach ( $settings as $setting_id => $setting ) {
 
 			$setting = array_merge( [ 'id' => $setting_id ], $setting );
@@ -321,6 +322,25 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		}
 
 		return $filtered_settings;
+
+	}
+
+	protected function maybe_add_extra_settings( $group_id ) {
+
+		$settings = array();
+
+		if ( 'store_details' === $group_id ) {
+
+			$site_icon_id = get_option( 'site_icon' );
+
+			$settings[] = array(
+				'id'    => 'site_icon',
+				'type'  => 'number',
+				'value' => absint( $site_icon_id ) ?: NULL,
+			);
+		}
+
+		return $settings;
 
 	}
 
