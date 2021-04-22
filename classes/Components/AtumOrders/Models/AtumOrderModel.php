@@ -1323,12 +1323,14 @@ abstract class AtumOrderModel {
 
 		if ( is_callable( array( $item, 'get_total' ) ) ) {
 
+			$qty = ! empty( $item->get_quantity() ) ? $item->get_quantity() : 1;
+
 			if ( $inc_tax ) {
 				/* @noinspection PhpWrongStringConcatenationInspection */
-				$total = ( $item->get_total() + $item->get_total_tax() ) / max( 1, $item->get_quantity() );
+				$total = ( $item->get_total() + $item->get_total_tax() ) / $qty;
 			}
 			else {
-				$total = floatval( $item->get_total() ) / max( 1, $item->get_quantity() );
+				$total = floatval( $item->get_total() ) / $qty;
 			}
 
 			$total = $round ? round( $total, wc_get_price_decimals() ) : $total;
