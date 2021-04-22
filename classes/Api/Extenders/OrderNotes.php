@@ -53,7 +53,7 @@ class OrderNotes {
 
 			$args = array(
 				'schema'       => $this->get_order_note_field_schema( $field_name ),
-				'get_callback' => array( $this, 'get_order_note_field_value' )
+				'get_callback' => array( $this, 'get_order_note_field_value' ),
 			);
 
 			// Add the field to the order notes endpoints.
@@ -91,7 +91,7 @@ class OrderNotes {
 	public function get_extended_order_note_schema() {
 
 		$extended_schema = array(
-			'action'   => array(
+			'action' => array(
 				'description' => __( 'Action described in the note.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
 				'context'     => array( 'view' ),
@@ -159,7 +159,7 @@ class OrderNotes {
 				$schema = $this->get_order_note_field_schema( $field_name );
 				$single = TRUE;
 
-				switch( $field_name ) {
+				switch ( $field_name ) {
 
 					case 'action':
 						$meta_key = 'note_type';
@@ -179,7 +179,7 @@ class OrderNotes {
 				$data = get_comment_meta( $comment->comment_ID, $meta_key, $single );
 
 				// Allow to handle some fields externally.
-				$data = apply_filters( 'atum/api/atum_order_note/get_field_value', $data, $response, $field_name );
+				$data = apply_filters( 'atum/api/order_notes/get_field_value', $data, $response, $field_name );
 
 			}
 
