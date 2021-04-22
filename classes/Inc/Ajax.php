@@ -1099,11 +1099,13 @@ final class Ajax {
 		);
 		// phpcs:enable
 
-		$query_select = apply_filters( 'atum/product_levels/ajax/search_products/select', $query_select );
-		$where_clause = apply_filters( 'atum/product_levels/ajax/search_products/where', $where_clause );
+		$query_select = apply_filters( 'atum/ajax/search_products/query_select', $query_select );
+		$where_clause = apply_filters( 'atum/ajax/search_products/query_where', $where_clause );
 
-		$query = "$query_select $where_clause
-			ORDER BY posts.post_parent ASC, posts.post_title ASC";
+		$query = "
+			$query_select $where_clause
+			ORDER BY posts.post_parent ASC, posts.post_title ASC
+		";
 
 		$product_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
