@@ -182,8 +182,8 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 
 		if ( FALSE === in_array( $field_name, array_keys( $fields ) ) ) {
 			register_rest_field( 'product_variation', $field_name, array(
-				'get_callback'    => array( $this, 'get_parent_id' ),
-				'schema'          => $parent_id_schema,
+				'get_callback' => array( $this, 'get_parent_id' ),
+				'schema'       => $parent_id_schema,
 			) );
 		}
 

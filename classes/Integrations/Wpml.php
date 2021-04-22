@@ -167,8 +167,8 @@ class Wpml {
 			add_action( 'atum/after_upgrade', array( $this, 'upgrade' ) );
 			
 			// Filter original product parts shown in product json search.
-			add_filter( 'atum/product_levels/ajax/search_products/select', array( $this, 'select_add_icl_translations' ), 10, 3 );
-			add_filter( 'atum/product_levels/ajax/search_products/where', array( $this, 'where_add_icl_translations' ), 10, 3 );
+			add_filter( 'atum/ajax/search_products/query_select', array( $this, 'select_add_icl_translations' ), 10, 3 );
+			add_filter( 'atum/ajax/search_products/query_where', array( $this, 'where_add_icl_translations' ), 10, 3 );
 			
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
