@@ -12,13 +12,12 @@
 
 namespace Atum\Api\Controllers\V3;
 
+defined( 'ABSPATH' ) || exit;
+
 use Atum\Inc\Helpers;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
-
-
-defined( 'ABSPATH' ) || exit;
 
 abstract class AtumOrderNotesController extends \WC_REST_Order_Notes_Controller {
 

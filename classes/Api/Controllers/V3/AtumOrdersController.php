@@ -101,6 +101,18 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 
+		$params['modified_before'] = [
+			'description' => __( 'Limit response to orders modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'        => 'string',
+			'format'      => 'date-time',
+		];
+
+		$params['modified_after'] = [
+			'description' => __( 'Limit response to orders modified after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'        => 'string',
+			'format'      => 'date-time',
+		];
+
 		return $params;
 
 	}
@@ -478,6 +490,18 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				$args['post__in'] = array_merge( $order_ids, [ 0 ] );
 			}
 
+		}
+
+		// Before modification date filter.
+		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
+			$args['date_query'][0]['before'] = $request['modified_before'];
+			$args['date_query'][0]['column'] = 'post_modified';
+		}
+
+		// After modification date filter.
+		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
+			$args['date_query'][0]['after']  = $request['modified_after'];
+			$args['date_query'][0]['column'] = 'post_modified';
 		}
 
 		/**
