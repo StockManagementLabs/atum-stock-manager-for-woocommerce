@@ -873,7 +873,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$title       = '';
 		$product_id  = $this->get_current_product_id();
-		$child_arrow = $this->is_child ? '<span class="child-arrow">&#8629;</span>' : '';
+		$child_arrow = $this->is_child ? '<i class="atum-icon atmi-arrow-child"></i>' : '';
 
 		if ( Helpers::is_child_type( $this->product->get_type() ) ) {
 

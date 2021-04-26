@@ -8464,7 +8464,7 @@ table.atum-list-table tr.expandable.bundle.expanded, .floatThead-container tr.ex
   background-color: var(--wc-purple);
 }
 
-table.atum-list-table tr.expandable.bundle td.title .child-arrow, .floatThead-container tr.expandable.bundle td.title .child-arrow, .inbound-stock-list tr.expandable.bundle td.title .child-arrow, table.wp-list-table tr.expandable.bundle td.title .child-arrow {
+table.atum-list-table tr.expandable.bundle td.title .atmi-arrow-child, .floatThead-container tr.expandable.bundle td.title .atmi-arrow-child, .inbound-stock-list tr.expandable.bundle td.title .atmi-arrow-child, table.wp-list-table tr.expandable.bundle td.title .atmi-arrow-child {
   color: var(--wc-purple);
 }
 
@@ -8480,7 +8480,7 @@ table.atum-list-table tr.variation.active-row, .floatThead-container tr.variatio
   background-color: var(--blue-light-expanded);
 }
 
-table.atum-list-table tr.variation td.title .child-arrow, .floatThead-container tr.variation td.title .child-arrow, .inbound-stock-list tr.variation td.title .child-arrow, table.wp-list-table tr.variation td.title .child-arrow {
+table.atum-list-table tr.variation td.title .atmi-arrow-child, .floatThead-container tr.variation td.title .atmi-arrow-child, .inbound-stock-list tr.variation td.title .atmi-arrow-child, table.wp-list-table tr.variation td.title .atmi-arrow-child {
   color: var(--primary);
 }
 
@@ -8504,7 +8504,7 @@ table.atum-list-table tr.bundle-item.active-row:not(.expandable), .floatThead-co
   background-color: var(--wp-pink-darken-expanded);
 }
 
-table.atum-list-table tr.bundle-item td.title .child-arrow, .floatThead-container tr.bundle-item td.title .child-arrow, .inbound-stock-list tr.bundle-item td.title .child-arrow, table.wp-list-table tr.bundle-item td.title .child-arrow {
+table.atum-list-table tr.bundle-item td.title .atmi-arrow-child, .floatThead-container tr.bundle-item td.title .atmi-arrow-child, .inbound-stock-list tr.bundle-item td.title .atmi-arrow-child, table.wp-list-table tr.bundle-item td.title .atmi-arrow-child {
   color: var(--wp-pink-light);
 }
 
@@ -8520,7 +8520,7 @@ table.atum-list-table tr.grouped.active-row, .floatThead-container tr.grouped.ac
   background-color: var(--orange-dark-light);
 }
 
-table.atum-list-table tr.grouped td.title .child-arrow, .floatThead-container tr.grouped td.title .child-arrow, .inbound-stock-list tr.grouped td.title .child-arrow, table.wp-list-table tr.grouped td.title .child-arrow {
+table.atum-list-table tr.grouped td.title .atmi-arrow-child, .floatThead-container tr.grouped td.title .atmi-arrow-child, .inbound-stock-list tr.grouped td.title .atmi-arrow-child, table.wp-list-table tr.grouped td.title .atmi-arrow-child {
   color: var(--secondary-var);
 }
 
@@ -8821,18 +8821,12 @@ body:not(.edit-php) table.atum-list-table td.column-title > span i, body:not(.ed
   margin-right: 4px;
 }
 
-body:not(.edit-php) table.atum-list-table td.column-title .child-arrow, body:not(.edit-php) table.atum-list-table th.column-title .child-arrow, body:not(.edit-php) .floatThead-container td.column-title .child-arrow, body:not(.edit-php) .floatThead-container th.column-title .child-arrow, body:not(.edit-php) .inbound-stock-list td.column-title .child-arrow, body:not(.edit-php) .inbound-stock-list th.column-title .child-arrow, body:not(.edit-php) table.wp-list-table td.column-title .child-arrow, body:not(.edit-php) table.wp-list-table th.column-title .child-arrow {
+body:not(.edit-php) table.atum-list-table td.column-title .atmi-arrow-child, body:not(.edit-php) table.atum-list-table th.column-title .atmi-arrow-child, body:not(.edit-php) .floatThead-container td.column-title .atmi-arrow-child, body:not(.edit-php) .floatThead-container th.column-title .atmi-arrow-child, body:not(.edit-php) .inbound-stock-list td.column-title .atmi-arrow-child, body:not(.edit-php) .inbound-stock-list th.column-title .atmi-arrow-child, body:not(.edit-php) table.wp-list-table td.column-title .atmi-arrow-child, body:not(.edit-php) table.wp-list-table th.column-title .atmi-arrow-child {
   display: inline-block;
-  margin-right: 2px;
+  margin-right: 4px;
   margin-left: 5px;
-  font-weight: bold;
   font-size: 14px;
-  position: relative;
-  top: -2px;
-  -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  vertical-align: 2px;
 }
 
 table.atum-list-table td.column-sku, table.atum-list-table th.column-sku, .floatThead-container td.column-sku, .floatThead-container th.column-sku, .inbound-stock-list td.column-sku, .inbound-stock-list th.column-sku, table.wp-list-table td.column-sku, table.wp-list-table th.column-sku {
@@ -8856,7 +8850,7 @@ table.atum-list-table td.ghost-column, table.atum-list-table th.ghost-column, .f
   border-right: 1px solid var(--main-border);
 }
 
-table.atum-list-table td.column-title .child-arrow, table.atum-list-table td.column-title .atmi-multi-inventory, table.atum-list-table th.column-title .child-arrow, table.atum-list-table th.column-title .atmi-multi-inventory, .floatThead-container td.column-title .child-arrow, .floatThead-container td.column-title .atmi-multi-inventory, .floatThead-container th.column-title .child-arrow, .floatThead-container th.column-title .atmi-multi-inventory, .inbound-stock-list td.column-title .child-arrow, .inbound-stock-list td.column-title .atmi-multi-inventory, .inbound-stock-list th.column-title .child-arrow, .inbound-stock-list th.column-title .atmi-multi-inventory, table.wp-list-table td.column-title .child-arrow, table.wp-list-table td.column-title .atmi-multi-inventory, table.wp-list-table th.column-title .child-arrow, table.wp-list-table th.column-title .atmi-multi-inventory {
+table.atum-list-table td.column-title .atmi-arrow-child, table.atum-list-table td.column-title .atmi-multi-inventory, table.atum-list-table th.column-title .atmi-arrow-child, table.atum-list-table th.column-title .atmi-multi-inventory, .floatThead-container td.column-title .atmi-arrow-child, .floatThead-container td.column-title .atmi-multi-inventory, .floatThead-container th.column-title .atmi-arrow-child, .floatThead-container th.column-title .atmi-multi-inventory, .inbound-stock-list td.column-title .atmi-arrow-child, .inbound-stock-list td.column-title .atmi-multi-inventory, .inbound-stock-list th.column-title .atmi-arrow-child, .inbound-stock-list th.column-title .atmi-multi-inventory, table.wp-list-table td.column-title .atmi-arrow-child, table.wp-list-table td.column-title .atmi-multi-inventory, table.wp-list-table th.column-title .atmi-arrow-child, table.wp-list-table th.column-title .atmi-multi-inventory {
   color: var(--tertiary-var) !important;
 }
 

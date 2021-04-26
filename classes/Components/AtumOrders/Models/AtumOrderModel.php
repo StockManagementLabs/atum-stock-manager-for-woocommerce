@@ -900,11 +900,11 @@ abstract class AtumOrderModel {
 				
 				/* translators: 1: old order status 2: new order status */
 				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
-				$note_id = $this->add_order_note( $transition_note );
+				$note_id         = $this->add_order_note( $transition_note );
 				Helpers::save_order_note_meta( $note_id, [
 					'action'     => 'order_status_change',
 					'old_status' => $old_status,
-					'new_status' => $new_status
+					'new_status' => $new_status,
 				] );
 				
 			}

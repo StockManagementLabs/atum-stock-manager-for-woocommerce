@@ -21,7 +21,7 @@ $title_color             = 'color: #333;';
 		display: table-row !important;
 	}
 
-	.child-arrow {
+	.atmi-arrow-child {
 		display: none;
 	}
 </style>

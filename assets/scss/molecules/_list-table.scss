@@ -2086,7 +2086,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 				
 				td.title {
-					.child-arrow {
+					.atmi-arrow-child {
 						color: var(--wc-purple);
 					}
 				}
@@ -2105,7 +2105,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td.title {
-				.child-arrow {
+				.atmi-arrow-child {
 					color: var(--primary);
 				}
 			}
@@ -2129,7 +2129,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 
 			td.title {
-				.child-arrow {
+				.atmi-arrow-child {
 					color: var(--wp-pink-light);
 				}
 			}
@@ -2147,7 +2147,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			}
 			
 			td.title {
-				.child-arrow {
+				.atmi-arrow-child {
 					color:  var(--secondary-var);
 				}
 			}
@@ -2456,17 +2456,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			.child-arrow {
+			.atmi-arrow-child {
 				display: inline-block;
-				margin-right: 2px;
+				margin-right: 4px;
 				margin-left: 5px;
-				font-weight: bold;
 				font-size: 14px;
-				position: relative;
-				top: -2px;
-				transform: rotate(90deg);
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
+				vertical-align: 2px;
 			}
 		}
 		
@@ -2492,7 +2487,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.column-title {
-			.child-arrow, .atmi-multi-inventory {
+			.atmi-arrow-child, .atmi-multi-inventory {
 				color: var(--tertiary-var) !important;
 			}
 		}
