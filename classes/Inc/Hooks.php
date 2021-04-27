@@ -239,7 +239,7 @@ class Hooks {
 	 */
 	public function remove_order_comment( $comment_id ) {
 
-		remove_action( 'clean_comment_cache', array( $this, 'remove_order_comment' ) );
+		remove_action( 'wp_insert_comment', array( $this, 'remove_order_comment' ), PHP_INT_MAX );
 		wp_delete_comment( $comment_id, TRUE );
 	}
 
