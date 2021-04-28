@@ -90,16 +90,6 @@ class AtumMarketingPopup {
 	protected $loaded = FALSE;
 
 	/**
-	 * The ATUM's addons store URL
-	 */
-	const MARKETING_POPUP_STORE_URL = 'https://www.stockmanagementlabs.com/';
-
-	/**
-	 * The ATUM's addons API endpoint
-	 */
-	const MARKETING_POPUP_API_ENDPOINT = 'marketing-popup-api';
-
-	/**
 	 * The singleton instance holder
 	 *
 	 * @var AtumMarketingPopup
@@ -114,14 +104,15 @@ class AtumMarketingPopup {
 	 */
 	private function __construct() {
 
+		// Only show the popup to users that can install plugins.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return;
+		}
+
 		// Call marketing popup info.
 		$marketing_popup = $this->get_marketing_popup_content();
 
-		if ( ! empty( $marketing_popup ) /*200 === wp_remote_retrieve_response_code( $marketing_popup )*/ ) {
-
-			/*$marketing_popup = json_decode( wp_remote_retrieve_body( $marketing_popup ) );*/
-
-			/*if ( $marketing_popup ) {*/
+		if ( ! empty( $marketing_popup ) && ! empty( $marketing_popup->transient_key ) ) {
 
 			// Check if background params exist.
 			$background_data      = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
@@ -160,8 +151,6 @@ class AtumMarketingPopup {
 			$this->footer_notice = isset( $marketing_popup->footer_notice ) ? $marketing_popup->footer_notice : [];
 			$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
 
-			/*}*/
-
 			$this->loaded = TRUE;
 
 		}
@@ -179,21 +168,6 @@ class AtumMarketingPopup {
 
 		// Until we find a solution for the API calls limit, we will use get the JSON locally.
 		return json_decode( file_get_contents( ATUM_PATH . 'includes/marketing-popup-content.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-
-		/*$request_params = array(
-			'method'      => 'POST',
-			'timeout'     => 15,
-			'redirection' => 1,
-			'httpversion' => '1.0',
-			'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
-			'blocking'    => TRUE,
-			'headers'     => array(),
-			'body'        => array(),
-			'cookies'     => array(),
-		);
-
-		// Call marketing popup info.
-		return wp_remote_post( self::MARKETING_POPUP_STORE_URL . self::MARKETING_POPUP_API_ENDPOINT, $request_params );*/
 
 	}
 
