@@ -530,13 +530,11 @@ final class Helpers {
 			] );
 
 			$format = implode(', ', array_fill(0, count($order_status), '%s'));
+
 			$orders_query = $wpdb->prepare("
-    			SELECT
-					ID
-				FROM
-					$wpdb->posts
-    			$date_where
-    				AND post_type = 'shop_order' AND post_status IN ($format)
+    			SELECT ID FROM $wpdb->posts  
+				$date_where
+				AND post_type = 'shop_order' AND post_status IN ($format)
 			", $order_status );
 
 			$query_columns              = $query_joins = [];
