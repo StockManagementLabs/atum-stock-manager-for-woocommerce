@@ -38,7 +38,7 @@ export default class SettingsPage {
 		this.setupNavigation();
 
 		// Enable DateTimePickers
-		this.initDateTimePicker();
+		this.initRangeDateTimePicker();
 
 		// Enable Tooltips.
 		this.tooltip.addTooltips( this.$form );
@@ -53,18 +53,27 @@ export default class SettingsPage {
 		ButtonGroup.doButtonGroups( this.$form );
 
 		// Enable image uploader with the default options.
-		const uploaderOptions: WPMediaModalOptions = {
-			library: {
-				type: 'image',
-			},
-		};
-		new FileUploader( uploaderOptions, true );
+		this.doFileUploaders();
 
 		// Enable theme selector
         // this.doThemeSelector();
 
 		// Toggle Menu.
 		this.toggleMenu();
+
+		new SmartForm( this.$form, this.settings.get( 'atumPrefix' ) );
+
+		this.bindEvents();
+
+		// Adjust the nav height.
+		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px` );
+	
+	}
+
+	/**
+	 * Bind events
+	 */
+	bindEvents() {
 
 		this.$form
 
@@ -81,17 +90,14 @@ export default class SettingsPage {
 			.on( 'click', '.atum-settings-input[type=checkbox]', ( evt: JQueryEventObject ) => this.clickCheckbox( $( evt.currentTarget ) ) )
 
 			// Default color fields.
-			.on( 'click', '.reset-default-colors', ( evt: JQueryEventObject ) => this.doResetDefault( $( evt.currentTarget ) ) )
+			.on( 'click', '.reset-default-colors', ( evt: JQueryEventObject ) => this.doResetDefaultColors( $( evt.currentTarget ) ) )
 
-			// Switcher multicheckbox.
+			// Switcher multi-checkbox.
 			.on( 'change', '.atum-multi-checkbox-main', ( evt: JQueryEventObject ) => this.toggleMultiCheckboxPanel( $( evt.currentTarget ) ) )
 
-			.on( 'change', '.remove-datepicker-range', ( evt: JQueryEventObject ) => this.toggleRangeRemove( $( evt.currentTarget ) ) )
+			.on( 'change', '.remove-datepicker-range', ( evt: JQueryEventObject ) => this.toggleRangeDateTimeRemove( $( evt.currentTarget ) ) )
 
-			.on( 'change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', () => this.setDateTimeInputs() );
-
-		new SmartForm( this.$form, this.settings.get( 'atumPrefix' ) );
-
+			.on( 'change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', () => this.setRangeDateTimeInputs() );
 
 		// Footer positioning.
 		$( window ).on( 'load', () => {
@@ -103,11 +109,12 @@ export default class SettingsPage {
 
 		} );
 
-		// Adjust the nav height.
-		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px` );
-	
+
 	}
 
+	/**
+	 * Setup the settings navigation
+	 */
 	setupNavigation() {
 
 		// Instantiate the loader to register the jQuery.address and the events.
@@ -153,7 +160,10 @@ export default class SettingsPage {
 			} );
 		
 	}
-	
+
+	/**
+	 * Hide colors
+	 */
 	hideColors() {
 
 		const $tableColorSettings: JQuery = $( '#atum_setting_color_scheme #atum-table-color-settings' );
@@ -191,9 +201,10 @@ export default class SettingsPage {
 		this.$form.load( `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
 
 			ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
-			this.initDateTimePicker();
+			this.initRangeDateTimePicker();
 			this.enhancedSelect.maybeRestoreEnhancedSelect();
 			this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
+			this.doFileUploaders();
 			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
 			this.$form.show();
 
@@ -218,7 +229,10 @@ export default class SettingsPage {
 		} );
 		
 	}
-	
+
+	/**
+	 * Toggle menu
+	 */
 	toggleMenu() {
 
 		const $navList: JQuery = this.$nav.find( '.atum-nav-list' );
@@ -228,7 +242,12 @@ export default class SettingsPage {
 		$( window ).resize( () => $navList.removeClass( 'expand-menu' ) );
 		
 	}
-	
+
+	/**
+	 * Clear Out of Stock Threshold
+	 *
+	 * @param {JQuery} $checkbox
+	 */
 	maybeClearOutStockThreshold( $checkbox: JQuery ) {
 
 		if ( $checkbox.is( ':checked' ) && this.settings.get( 'isAnyOostSet' ) ) {
@@ -314,7 +333,13 @@ export default class SettingsPage {
 		}
 	}
 
-	runSingleScript( $button: JQuery, $scriptRunner ) {
+	/**
+	 * Run single script
+	 *
+	 * @param {JQuery} $button
+	 * @param {JQuery} $scriptRunner
+	 */
+	runSingleScript( $button: JQuery, $scriptRunner: JQuery ) {
 
 		Swal.fire( {
 			title              : this.settings.get( 'areYouSure' ),
@@ -382,7 +407,13 @@ export default class SettingsPage {
 		
 	}
 
-	runRecurrentScript( $button: JQuery, $scriptRunner ) {
+	/**
+	 * Run recurrent script
+	 *
+	 * @param {JQuery} $button
+	 * @param {JQuery} $scriptRunner
+	 */
+	runRecurrentScript( $button: JQuery, $scriptRunner: JQuery ) {
 
 		Swal.fire( {
 			title              : this.settings.get( 'areYouSure' ),
@@ -477,6 +508,11 @@ export default class SettingsPage {
 
 	}
 
+	/**
+	 * Theme selector fields
+	 *
+	 * @param {JQuery} $element
+	 */
     doThemeSelector( $element: JQuery ) {
 
 	    const $formSettingsWrapper: JQuery  = this.$form.find( '.form-settings-wrapper' ),
@@ -535,8 +571,13 @@ export default class SettingsPage {
 	    } );
 
     }
-	
-	doResetDefault( $element: JQuery ) {
+
+	/**
+	 * Reset default colors
+	 *
+	 * @param {JQuery} $element
+	 */
+	doResetDefaultColors( $element: JQuery ) {
 
 		const themeSelectedValue: string    = $element.data( 'value' ),
 		      $colorSettingsWrapper: JQuery = this.$settingsWrapper.find( '#atum_setting_color_scheme' ),
@@ -551,12 +592,22 @@ export default class SettingsPage {
 		
 	}
 
+	/**
+	 * Toggle multi-checkbox panel
+	 *
+	 * @param {JQuery} $switcher
+	 */
 	toggleMultiCheckboxPanel( $switcher: JQuery ) {
 		const $panel: JQuery = $switcher.siblings( '.atum-settings-multi-checkbox' );
 
 		$panel.css( 'display', $switcher.is( ':checked' ) ? 'block' : 'none' );
 	}
 
+	/**
+	 * Multi-checkbox click
+	 *
+	 * @param {JQuery} $checkbox
+	 */
 	clickCheckbox( $checkbox: JQuery ) {
 
 		const $wrapper: JQuery = $checkbox.parents( '.atum-multi-checkbox-option' );
@@ -570,7 +621,10 @@ export default class SettingsPage {
 
 	}
 
-	initDateTimePicker() {
+	/**
+	 * Init range dateTime pickers
+	 */
+	initRangeDateTimePicker() {
 
 		const $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
 		      $dateTo: JQuery   = this.$form.find( '.range-datepicker.range-to' );
@@ -581,7 +635,11 @@ export default class SettingsPage {
 		}
 	}
 
-	setDateTimeInputs() {
+	/**
+	 * Set range dateTime inputs
+	 */
+	setRangeDateTimeInputs() {
+
 		const $dateFrom: JQuery = this.$form.find( '.range-datepicker.range-from' ),
 		      $dateTo: JQuery   = this.$form.find( '.range-datepicker.range-to' ),
 		      $field: JQuery    = this.$form.find( '.range-value' ),
@@ -592,14 +650,37 @@ export default class SettingsPage {
 			dateFrom: $dateFrom.val(),
 			dateTo  : $dateTo.val(),
 		} ) );
+
 	}
 
-	toggleRangeRemove( $checkbox: JQuery ) {
+	/**
+	 * Remove range dateTime picker
+	 *
+	 * @param {JQuery} $checkbox
+	 */
+	toggleRangeDateTimeRemove( $checkbox: JQuery ) {
+
 		const $panel: JQuery  = $checkbox.parent().siblings( '.range-fields-block' ),
 		      $button: JQuery = $checkbox.parent().siblings( '.tool-runner' );
 
 		$panel.css( 'display', $checkbox.is( ':checked' ) ? 'block' : 'none' );
 		$button.text( $checkbox.is( ':checked' ) ? this.settings.get( 'removeRange' ) : this.settings.get( 'removeAll' ) );
+
+	}
+
+	/**
+	 * Prepare the file uploaders
+	 */
+	doFileUploaders() {
+
+		// Enable image uploader with the default options.
+		const uploaderOptions: WPMediaModalOptions = {
+			library: {
+				type: 'image', // We are only using images for now but in the future, perhaps we'll need files also...
+			},
+		};
+		new FileUploader(  this.$settingsWrapper.find( '.atum-file-uploader' ), uploaderOptions, true );
+
 	}
 
 }

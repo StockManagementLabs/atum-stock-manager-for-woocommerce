@@ -39,7 +39,7 @@ export default class FileAttachments {
 		const uploaderOptions: WPMediaModalOptions = {
 			multiple: true,
 		};
-		new FileUploader( uploaderOptions );
+		new FileUploader( $( '#atum_files' ).find( '.atum-file-uploader' ), uploaderOptions );
 
 	}
 

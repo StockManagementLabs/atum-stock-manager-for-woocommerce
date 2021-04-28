@@ -250,8 +250,9 @@ var __assign = (undefined && undefined.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var FileUploader = (function () {
-    function FileUploader(options, preview) {
+    function FileUploader($buttons, options, preview) {
         if (preview === void 0) { preview = false; }
+        this.$buttons = $buttons;
         this.options = options;
         this.preview = preview;
         this.defaultOptions = {
@@ -264,7 +265,7 @@ var FileUploader = (function () {
     FileUploader.prototype.doFileUploaders = function () {
         var _this = this;
         if (window['wp'].hasOwnProperty('media')) {
-            $('body').on('click', '.atum-file-uploader', function (evt) {
+            this.$buttons.click(function (evt) {
                 var $button = $(evt.currentTarget);
                 var modalOptions = __assign(__assign({}, _this.defaultOptions), _this.options);
                 if ($button.data('modal-title')) {
@@ -339,7 +340,7 @@ var FileAttachments = (function () {
         var uploaderOptions = {
             multiple: true,
         };
-        new _file_uploader__WEBPACK_IMPORTED_MODULE_0__["default"](uploaderOptions);
+        new _file_uploader__WEBPACK_IMPORTED_MODULE_0__["default"]($('#atum_files').find('.atum-file-uploader'), uploaderOptions);
     }
     FileAttachments.prototype.addHooks = function () {
         var _this = this;

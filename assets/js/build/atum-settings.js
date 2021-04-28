@@ -461,8 +461,9 @@ var __assign = (undefined && undefined.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var FileUploader = (function () {
-    function FileUploader(options, preview) {
+    function FileUploader($buttons, options, preview) {
         if (preview === void 0) { preview = false; }
+        this.$buttons = $buttons;
         this.options = options;
         this.preview = preview;
         this.defaultOptions = {
@@ -475,7 +476,7 @@ var FileUploader = (function () {
     FileUploader.prototype.doFileUploaders = function () {
         var _this = this;
         if (window['wp'].hasOwnProperty('media')) {
-            $('body').on('click', '.atum-file-uploader', function (evt) {
+            this.$buttons.click(function (evt) {
                 var $button = $(evt.currentTarget);
                 var modalOptions = __assign(__assign({}, _this.defaultOptions), _this.options);
                 if ($button.data('modal-title')) {
@@ -780,7 +781,6 @@ __webpack_require__.r(__webpack_exports__);
 
 var SettingsPage = (function () {
     function SettingsPage(settings, enhancedSelect, tooltip, dateTimePicker) {
-        var _this = this;
         this.settings = settings;
         this.enhancedSelect = enhancedSelect;
         this.tooltip = tooltip;
@@ -791,36 +791,35 @@ var SettingsPage = (function () {
         this.$nav = this.$settingsWrapper.find('.atum-nav');
         this.$form = this.$settingsWrapper.find('#atum-settings');
         this.setupNavigation();
-        this.initDateTimePicker();
+        this.initRangeDateTimePicker();
         this.tooltip.addTooltips(this.$form);
         _color_picker__WEBPACK_IMPORTED_MODULE_1__["default"].doColorPickers(this.settings.get('selectColor'));
         this.enhancedSelect.doSelect2(this.$settingsWrapper.find('select'), {}, true);
         _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(this.$form);
-        var uploaderOptions = {
-            library: {
-                type: 'image',
-            },
-        };
-        new _file_uploader__WEBPACK_IMPORTED_MODULE_2__["default"](uploaderOptions, true);
+        this.doFileUploaders();
         this.toggleMenu();
+        new _smart_form__WEBPACK_IMPORTED_MODULE_3__["default"](this.$form, this.settings.get('atumPrefix'));
+        this.bindEvents();
+        this.$nav.css('min-height', this.$nav.find('.atum-nav-list').outerHeight() + 200 + "px");
+    }
+    SettingsPage.prototype.bindEvents = function () {
+        var _this = this;
         this.$form
             .on('change', '#atum_out_stock_threshold', function (evt) { return _this.maybeClearOutStockThreshold($(evt.currentTarget)); })
             .on('click', '.script-runner .tool-runner', function (evt) { return _this.runScript($(evt.currentTarget)); })
             .on('click', '.selector-box', function (evt) { return _this.doThemeSelector($(evt.currentTarget)); })
             .on('click', '.atum-settings-input[type=checkbox]', function (evt) { return _this.clickCheckbox($(evt.currentTarget)); })
-            .on('click', '.reset-default-colors', function (evt) { return _this.doResetDefault($(evt.currentTarget)); })
+            .on('click', '.reset-default-colors', function (evt) { return _this.doResetDefaultColors($(evt.currentTarget)); })
             .on('change', '.atum-multi-checkbox-main', function (evt) { return _this.toggleMultiCheckboxPanel($(evt.currentTarget)); })
-            .on('change', '.remove-datepicker-range', function (evt) { return _this.toggleRangeRemove($(evt.currentTarget)); })
-            .on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', function () { return _this.setDateTimeInputs(); });
-        new _smart_form__WEBPACK_IMPORTED_MODULE_3__["default"](this.$form, this.settings.get('atumPrefix'));
+            .on('change', '.remove-datepicker-range', function (evt) { return _this.toggleRangeDateTimeRemove($(evt.currentTarget)); })
+            .on('change update blur', '.range-datepicker.range-from, .range-datepicker.range-to, .remove-datepicker-range', function () { return _this.setRangeDateTimeInputs(); });
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
                 $('#wpfooter').css('position', 'relative').show();
                 $('#wpcontent').css('min-height', '95vh');
             }
         });
-        this.$nav.css('min-height', this.$nav.find('.atum-nav-list').outerHeight() + 200 + "px");
-    }
+    };
     SettingsPage.prototype.setupNavigation = function () {
         var _this = this;
         this.tabLoader = new _tab_loader__WEBPACK_IMPORTED_MODULE_5__["default"](this.$settingsWrapper, this.$nav);
@@ -872,9 +871,10 @@ var SettingsPage = (function () {
         $formSettingsWrapper.addClass('overlay');
         this.$form.load($navLink.attr('href') + " .form-settings-wrapper", function () {
             _color_picker__WEBPACK_IMPORTED_MODULE_1__["default"].doColorPickers(_this.settings.get('selectColor'));
-            _this.initDateTimePicker();
+            _this.initRangeDateTimePicker();
             _this.enhancedSelect.maybeRestoreEnhancedSelect();
             _this.enhancedSelect.doSelect2(_this.$settingsWrapper.find('select'), {}, true);
+            _this.doFileUploaders();
             _this.$form.find('[data-dependency]').change().removeClass('dirty');
             _this.$form.show();
             var $inputButton = _this.$form.find('input:submit');
@@ -1128,7 +1128,7 @@ var SettingsPage = (function () {
             },
         });
     };
-    SettingsPage.prototype.doResetDefault = function ($element) {
+    SettingsPage.prototype.doResetDefaultColors = function ($element) {
         var themeSelectedValue = $element.data('value'), $colorSettingsWrapper = this.$settingsWrapper.find('#atum_setting_color_scheme'), $colorInputs = $colorSettingsWrapper.find("input.atum-settings-input[data-display='" + themeSelectedValue + "']");
         $colorInputs.each(function (index, elem) {
             var $elem = $(elem);
@@ -1148,14 +1148,14 @@ var SettingsPage = (function () {
             $wrapper.removeClass('setting-checked');
         }
     };
-    SettingsPage.prototype.initDateTimePicker = function () {
+    SettingsPage.prototype.initRangeDateTimePicker = function () {
         var $dateFrom = this.$form.find('.range-datepicker.range-from'), $dateTo = this.$form.find('.range-datepicker.range-to');
         if ($dateFrom.length && $dateTo.length) {
             this.dateTimePicker.addDateTimePickers($dateFrom, { minDate: false, maxDate: new Date() });
             this.dateTimePicker.addDateTimePickers($dateTo, { minDate: false });
         }
     };
-    SettingsPage.prototype.setDateTimeInputs = function () {
+    SettingsPage.prototype.setRangeDateTimeInputs = function () {
         var $dateFrom = this.$form.find('.range-datepicker.range-from'), $dateTo = this.$form.find('.range-datepicker.range-to'), $field = this.$form.find('.range-value'), $checkbox = this.$form.find('.remove-datepicker-range');
         $field.val(JSON.stringify({
             checked: $checkbox.is(':checked'),
@@ -1163,10 +1163,18 @@ var SettingsPage = (function () {
             dateTo: $dateTo.val(),
         }));
     };
-    SettingsPage.prototype.toggleRangeRemove = function ($checkbox) {
+    SettingsPage.prototype.toggleRangeDateTimeRemove = function ($checkbox) {
         var $panel = $checkbox.parent().siblings('.range-fields-block'), $button = $checkbox.parent().siblings('.tool-runner');
         $panel.css('display', $checkbox.is(':checked') ? 'block' : 'none');
         $button.text($checkbox.is(':checked') ? this.settings.get('removeRange') : this.settings.get('removeAll'));
+    };
+    SettingsPage.prototype.doFileUploaders = function () {
+        var uploaderOptions = {
+            library: {
+                type: 'image',
+            },
+        };
+        new _file_uploader__WEBPACK_IMPORTED_MODULE_2__["default"](this.$settingsWrapper.find('.atum-file-uploader'), uploaderOptions, true);
     };
     return SettingsPage;
 }());
@@ -10747,17 +10755,6 @@ function getTrueOffsetParent(element) {
 
 function getContainingBlock(element) {
   var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-  var isIE = navigator.userAgent.indexOf('Trident') !== -1;
-
-  if (isIE && Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(element)) {
-    // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
-    var elementCss = Object(_getComputedStyle_js__WEBPACK_IMPORTED_MODULE_2__["default"])(element);
-
-    if (elementCss.position === 'fixed') {
-      return null;
-    }
-  }
-
   var currentNode = Object(_getParentNode_js__WEBPACK_IMPORTED_MODULE_5__["default"])(element);
 
   while (Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(currentNode) && ['html', 'body'].indexOf(Object(_getNodeName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(currentNode)) < 0) {
