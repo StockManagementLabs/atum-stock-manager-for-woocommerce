@@ -525,17 +525,19 @@ final class Helpers {
 			}
 
 			$order_status = (array) apply_filters( 'atum/get_sold_last_days/orders_status', [
-    			'wc-processing',
-    			'wc-completed',
+				'wc-processing',
+				'wc-completed',
 			] );
 
-			$format = implode(', ', array_fill(0, count($order_status), '%s'));
+			$format = implode( ', ', array_fill( 0, count( $order_status ), '%s' ) );
 
-			$orders_query = $wpdb->prepare("
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$orders_query = $wpdb->prepare( "
     			SELECT ID FROM $wpdb->posts  
 				$date_where
 				AND post_type = 'shop_order' AND post_status IN ($format)
 			", $order_status );
+			// phpcs:enable
 
 			$query_columns              = $query_joins = [];
 			$use_lookup_table           = FALSE;
@@ -3519,6 +3521,7 @@ final class Helpers {
 	public static function save_order_note_meta( $note_id, $params ) {
 
 		if ( ! empty( $params ) && isset( $params['action'] ) ) {
+
 			switch ( $params['action'] ) {
 				case 'order_status_change':
 					$action = 'changeStatus';
@@ -3566,10 +3569,13 @@ final class Helpers {
 
 			unset( $params['action'] );
 
-			update_comment_meta( $note_id, 'note_type', $action );
-			update_comment_meta( $note_id, 'note_params', $params );
-		}
+			if ( ! empty( $action ) ) {
+				update_comment_meta( $note_id, 'note_type', $action );
+			}
 
+			update_comment_meta( $note_id, 'note_params', $params );
+
+		}
 
 	}
 
