@@ -194,6 +194,47 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.9`
+
+*2021-04-30*
+
+**Features**
+
+* Added hooks to handle the supplier filter at ListTables.
+* Add ATUM post types to the new WC navigation system (work in progress).
+* Added full RTL languages compatibility.
+* Added filters for including only real stock in Stock Value widget.
+* Added new API endpoint to get all product variations.
+* Collect data when creating order notes and save it through a Helper function.
+* Added WC order notes extender to the rest API.
+* Added the site icon to ATUM settings API response.
+* Allow filtering post types by modification date when using the ATUM API.
+
+**Changes**
+
+* Refactoring.
+* Check remote request before making assynchronous request when filling calculated fields.
+* Changes to dark mode colours.
+* Use the ATUM's font icon for child arrows everywhere.
+* Changed ATUM App's CORS origin name.
+* Do not show the marketing popup to users that cannot install plugins.
+* Disabled the marketing popup until we have a new one to display.
+
+**Fixes**
+
+* CSS fix.
+* Fixed regexp to find IDs in order notes.
+* Fixed missing array index error when creating orders through the API.
+* Fixed upload_dir url protocol if siteurl is not properly configurated.
+* Fixed hook names.
+* Fix restoring widgets and layouts to default on ATUM's dashboard.
+* Fix some colors on settings values (dark mode).
+* Fixed Suppliers' API image handling.
+* Fixed error calculating item_total on ATUM order items for decimal quantities.
+* Fixed conflict with AutomateWoo when returning an empty comment.
+
+---
+
 `1.8.8`
 
 *2021-04-08*
