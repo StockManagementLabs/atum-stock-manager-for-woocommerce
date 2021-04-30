@@ -524,11 +524,18 @@ final class Helpers {
 				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
 			}
 
-			$orders_query = "
-				SELECT ID FROM $wpdb->posts  
+			$order_status = (array) apply_filters( 'atum/get_sold_last_days/orders_status', [
+    			'wc-processing',
+    			'wc-completed',
+			] );
+
+			$format = implode(', ', array_fill(0, count($order_status), '%s'));
+
+			$orders_query = $wpdb->prepare("
+    			SELECT ID FROM $wpdb->posts  
 				$date_where
-				AND post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-completed')				  
-			";
+				AND post_type = 'shop_order' AND post_status IN ($format)
+			", $order_status );
 
 			$query_columns              = $query_joins = [];
 			$use_lookup_table           = FALSE;
