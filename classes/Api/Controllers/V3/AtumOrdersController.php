@@ -495,13 +495,13 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		// Before modification date filter.
 		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
 			$args['date_query'][0]['before'] = $request['modified_before'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		// After modification date filter.
 		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
 			$args['date_query'][0]['after']  = $request['modified_after'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		/**

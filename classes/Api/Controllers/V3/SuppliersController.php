@@ -662,7 +662,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		// Before modification date filter.
 		elseif ( isset( $request['modified_before'] ) ) {
 			$args['date_query'][0]['before'] = $request['modified_before'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		// Set after into date query. Date query must be specified as an array of an array.
@@ -672,7 +672,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		// After modification date filter.
 		elseif ( isset( $request['modified_after'] ) ) {
 			$args['date_query'][0]['after']  = $request['modified_after'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		// Force the post_type argument, since it's not a user input variable.

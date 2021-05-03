@@ -605,13 +605,13 @@ class AtumProductData {
 		// Before modification date filter.
 		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
 			$args['date_query'][0]['before'] = $request['modified_before'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		// After modification date filter.
 		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
 			$args['date_query'][0]['after']  = $request['modified_after'];
-			$args['date_query'][0]['column'] = 'post_modified';
+			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		$this->atum_query_data = apply_filters( 'atum/api/product_data/atum_query_args', $this->atum_query_data, $request );
