@@ -30,7 +30,6 @@ class AtumApi {
 
 	/**
 	 * The CORS origin coming from the ATUM App
-	 * TODO: CHANGE IT AFTER DEPLOYING THE APP WITH THE NEW NAME.
 	 */
 	const ATUM_APP_ORIGIN = 'capacitor://com.stockmanagementlabs.atum';
 
