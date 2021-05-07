@@ -194,6 +194,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.8.9.1`
+
+*2021-05-07*
+
+**Changes**
+
+* Use the GMT date to sort posts by modification date through API.
+* Updated capacitor origin name.
+* Trigger events on adding and deleting notes.
+
+**Fixes**
+
+* Fixed add-ons list's page not showing.
+
+---
+
 `1.8.9`
 
 *2021-04-30*
