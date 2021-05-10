@@ -18,16 +18,16 @@ use Atum\Components\AtumCapabilities;
 
 do_action( 'atum/atum_order/before_item_product_html', $item, $atum_order );
 
-$product = Helpers::get_atum_product( $item->get_product() );
+$product    = Helpers::get_atum_product( $item->get_product() );
+$product_id = 0;
 
-if ( ! $product instanceof \WC_Product ) {
-	return;
+if ( $product instanceof \WC_Product ) {
+	$product_id = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
 }
 
 $step         = Helpers::get_input_step();
-$product_id   = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
-$product_link = $product ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
-$thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
+$product_link = $product && $product_id ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
+$thumbnail    = $product && $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
 ?>
 <tr class="item <?php echo esc_attr( apply_filters( 'atum/atum_order/item_class', ! empty( $class ) ? $class : '', $item, $atum_order ) ) ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
 
@@ -39,11 +39,11 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php
 		echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 
-		if ( $product && $product->get_sku() ) : ?>
+		if ( $product && $product_id && $product->get_sku() ) : ?>
 			<div class="atum-order-item-sku"><strong><?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
 		<?php endif;
 
-		if ( $product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
+		if ( $product && $product_id && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 			$supplier_sku = $product->get_supplier_sku();
 
 			if ( $supplier_sku ) : ?>
@@ -72,7 +72,7 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product, $atum_order ) ?>
 
 		<div class="order-item-icons">
-			<?php if ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) : ?>
+			<?php if ( $product && $product_id && ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) ) : ?>
 				<i class="atum-icon atum-icon atmi-question-circle color-primary tips" data-tip="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
@@ -87,15 +87,15 @@ $thumbnail    = $product ? apply_filters( 'atum/atum_order/item_thumbnail', $pro
 	<?php
 	do_action( 'atum/atum_order/item_values', $product, $item, absint( $item_id ) );
 
-	$locations      = wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+	$locations      = $product_id ? wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) ) : FALSE;
 	$locations_list = ! empty( $locations ) ? implode( ', ', $locations ) : '&ndash;';
 	?>
-	<td class="item_location"<?php if ($product) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
+	<td class="item_location"<?php if ( $product && $product_id ) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
 		<?php echo esc_html( $locations_list ) ?>
 	</td>
 
 	<?php
-	$product_tax_rates = wc_prices_include_tax() ? ' data-product-tax-rates="' . htmlspecialchars( wp_json_encode( \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) ) ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
+	$product_tax_rates = $product && $product_id && wc_prices_include_tax() ? ' data-product-tax-rates="' . htmlspecialchars( wp_json_encode( \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) ) ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
 	?>
 
 	<td class="item_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>"<?php echo $product_tax_rates // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
