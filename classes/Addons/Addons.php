@@ -251,7 +251,7 @@ class Addons {
 		if ( ! empty( $license_keys ) ) {
 			foreach ( $license_keys as $addon_name => $license_key ) {
 
-				if ( $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
+				if ( self::is_addon_active( $addon_name ) && $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
 
 					if ( 'valid' === $license_key['status'] ) {
 
