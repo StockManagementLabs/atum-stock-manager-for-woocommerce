@@ -97,6 +97,20 @@ export default class ProductDataMetaBoxes {
 		this.$productDataMetaBox
 			.on( 'focus select2:opening', '.atum-field :input', ( evt: JQueryEventObject ) => $( evt.target ).siblings( '.input-group-prepend' ).addClass( 'focus' ) )
 			.on( 'blur select2:close', '.atum-field :input', ( evt: JQueryEventObject ) => $( evt.target ).siblings( '.input-group-prepend' ).removeClass( 'focus' ) );
+
+		// Block ATUM fields if current product is a translation.
+		if ( typeof this.settings.get( 'lockFields') !== 'undefined' && 'yes' === this.settings.get( 'lockFields') ) {
+
+			$( '.atum-field input' ).each( ( index: number, elem: Element ) => {
+
+				$( elem ).prop( 'readonly', true ).next().after( $( '.wcml_lock_img' ).clone().removeClass( 'wcml_lock_img' ).show() );
+			} );
+			$( '.atum-field select' ).each( ( index: number, elem: Element ) => {
+
+				$( elem ).prop( 'disabled', true ).next().next().after( $( '.wcml_lock_img' ).clone().removeClass( 'wcml_lock_img' ).show() );
+			} );
+
+		}
 		
 	}
 	
