@@ -249,9 +249,17 @@ class Addons {
 		$license_keys = self::get_keys();
 
 		if ( ! empty( $license_keys ) ) {
-			foreach ( $license_keys as $addon_name => $license_key ) {
 
-				if ( self::is_addon_active( $addon_name ) && $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
+			foreach ( $license_keys as $addon_name => $license_key ) {
+				$addon_slug = '';
+
+				foreach ( self::get_installed_addons() as $slug => $addon_data ) {
+					if ( $addon_data['name'] === $addon_name ) {
+						$addon_slug = $slug;
+					}
+				}
+
+				if ( self::is_addon_active( $addon_slug ) && $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
 
 					if ( 'valid' === $license_key['status'] ) {
 
