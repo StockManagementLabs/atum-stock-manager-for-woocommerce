@@ -173,6 +173,9 @@ class Wpml {
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
+
+			// Activate blocking ATUM fields in translations.
+			add_filter( 'wcml_after_load_lock_fields_js', array( $this, 'block_atum_fields' ) );
 			
 		}
 
@@ -1067,6 +1070,31 @@ class Wpml {
 			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 		
+	}
+
+	/**
+	 * Modifies the localized ATUM product data to block the ATUM fields when editing.
+	 *
+	 * @since 1.9.0
+	 */
+	public function block_atum_fields() {
+
+		/**
+		 * Modifies the ATUM product data localized variables.
+		 *
+		 * @dincre 1.9.0
+		 *
+		 * @param array $vars
+		 *
+		 * @return array
+		 */
+		add_filter( 'atum/product_data/localized_vars', function ( $vars ) {
+
+			$vars['lockFields'] = 'yes';
+
+			return $vars;
+		} );
+
 	}
 	
 	/**
