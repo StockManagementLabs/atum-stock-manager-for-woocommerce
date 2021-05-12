@@ -263,7 +263,12 @@ final class AtumCache {
 	 */
 	private static function prepare_key( $name, $args, $prefix = ATUM_PREFIX ) {
 
-		$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
+		if ( NULL === $prefix ) {
+			$key = 0;
+		}
+		else {
+			$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
+		}
 
 		if ( ! empty( $args ) ) {
 
