@@ -104,7 +104,7 @@ final class AtumCache {
 	public static function set_cache( $cache_key, $value, $cache_group = self::CACHE_GROUP, $expire = 30 ) {
 
 		// Save the current key under its own group to be able to delete the entire group later.
-		if ( $cache_group && ( ! isset( self::$cache_groups[ $cache_group ] ) || ! in_array( $cache_key, self::$cache_groups[ $cache_group ] ) ) ) {
+		if ( $cache_group && '' !== $cache_group && ( ! isset( self::$cache_groups[ $cache_group ] ) || ! in_array( $cache_key, self::$cache_groups[ $cache_group ] ) ) ) {
 			self::$cache_groups[ $cache_group ][] = $cache_key;
 		}
 		
@@ -263,12 +263,7 @@ final class AtumCache {
 	 */
 	private static function prepare_key( $name, $args, $prefix = ATUM_PREFIX ) {
 
-		if ( NULL === $prefix ) {
-			$key = 0;
-		}
-		else {
-			$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
-		}
+		$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
 
 		if ( ! empty( $args ) ) {
 
