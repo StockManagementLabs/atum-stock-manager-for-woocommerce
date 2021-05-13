@@ -49,7 +49,8 @@ export default class OrderNotes {
 			$('ul.atum_order_notes').prepend(response);
 			Blocker.unblock(this.$container);
 			this.$textarea.val('');
-			
+			this.$container.trigger('atum_added_note');
+
 		});
 		
 	}
@@ -90,6 +91,7 @@ export default class OrderNotes {
 
 			if ( result.isConfirmed ) {
 				$note.remove();
+				this.$container.trigger('atum_removed_note');
 			}
 
 		} );

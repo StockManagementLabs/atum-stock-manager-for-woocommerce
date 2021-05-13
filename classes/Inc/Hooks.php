@@ -272,7 +272,7 @@ class Hooks {
 
 			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', [ 'jquery', 'sweetalert2', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
-			$vars = array(
+			$vars = apply_filters( 'atum/product_data/localized_vars', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
 				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
@@ -283,7 +283,7 @@ class Hooks {
 				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
 				'attachToEmail'                 => __( 'Attach to email:', ATUM_TEXT_DOMAIN ),
 				'emailNotifications'            => FileAttachment::get_email_notifications(),
-			);
+			), $hook );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', $vars );
 			wp_enqueue_script( 'atum-product-data' );

@@ -47,12 +47,12 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'https://www.stockmanagementlabs.com/';
+	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
 	 */
-	const ADDONS_API_ENDPOINT = 'addons-api';
+	const ADDONS_API_ENDPOINT = 'wp-json/atum/v1/addons';
 
 	/**
 	 * The name used to store the addons keys in db
@@ -249,9 +249,17 @@ class Addons {
 		$license_keys = self::get_keys();
 
 		if ( ! empty( $license_keys ) ) {
-			foreach ( $license_keys as $addon_name => $license_key ) {
 
-				if ( $license_key && is_array( $license_key ) && $license_key['key'] ) {
+			foreach ( $license_keys as $addon_name => $license_key ) {
+				$addon_slug = '';
+
+				foreach ( self::get_installed_addons() as $slug => $addon_data ) {
+					if ( $addon_data['name'] === $addon_name ) {
+						$addon_slug = $slug;
+					}
+				}
+
+				if ( self::is_addon_active( $addon_slug ) && $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
 
 					if ( 'valid' === $license_key['status'] ) {
 
@@ -275,7 +283,7 @@ class Addons {
 					}
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
 						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( "Your ATUM %1\$s add-on's license has expired, %2\$splease renew it asap%3\$s or you won't receive updates anymore.", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+						AtumAdminNotices::add_notice( sprintf( __( "Your ATUM %1\$s add-on's license has expired or is invalid, %2\$splease renew it asap%3\$s or you won't receive updates anymore.", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
 					}
 
 				}
@@ -301,18 +309,12 @@ class Addons {
 		if ( ! $addons ) {
 
 			$args = array(
-				'method'      => 'POST',
 				'timeout'     => 15,
 				'redirection' => 1,
-				'httpversion' => '1.0',
 				'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
-				'blocking'    => TRUE,
-				'headers'     => array(),
-				'body'        => array(),
-				'cookies'     => array(),
 			);
 
-			$response = wp_remote_post( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
+			$response = wp_remote_get( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
 
 			// Admin notification about the error.
 			if ( is_wp_error( $response ) ) {
@@ -324,7 +326,14 @@ class Addons {
 				}
 
 				/* translators: error message displayed */
-				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error' );
+				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error', TRUE, TRUE );
+
+				return FALSE;
+
+			}
+			elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+
+				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
 
 				return FALSE;
 
@@ -334,7 +343,7 @@ class Addons {
 			$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
 
 			if ( empty( $addons ) ) {
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error' );
+				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
 
 				return FALSE;
 			}

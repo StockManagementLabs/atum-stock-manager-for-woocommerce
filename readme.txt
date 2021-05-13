@@ -7,7 +7,7 @@ Tested up to: 5.7.1
 Requires PHP: 5.6
 WC requires at least: 3.6.0
 WC tested up to: 5.2.2
-Stable tag: 1.8.9
+Stable tag: 1.8.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.8.9.1`
+
+*2021-05-07*
+
+**Changes**
+
+* Use the GMT date to sort posts by modification date through API.
+* Updated capacitor origin name.
+* Trigger events on adding and deleting notes.
+
+**Fixes**
+
+* Fixed add-ons list's page not showing.
 
 ---
 

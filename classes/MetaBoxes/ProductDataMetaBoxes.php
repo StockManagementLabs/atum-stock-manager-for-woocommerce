@@ -126,7 +126,7 @@ class ProductDataMetaBoxes {
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array_merge( array( 'show_if_simple', 'show_if_variable' ), Helpers::get_option_group_hidden_classes() ),
+				'class'    => array_merge( array( 'show_if_simple', 'show_if_variable', 'hide_if_bundle' ), Helpers::get_option_group_hidden_classes() ),
 				'priority' => 21,
 			),
 		) );
@@ -145,13 +145,17 @@ class ProductDataMetaBoxes {
 	 */
 	public function add_product_data_tab_panel() {
 
-		$product_id               = get_the_ID();
-		$product                  = Helpers::get_atum_product( $product_id );
-		$product_status           = get_post_status( $product_id );
-		$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple' ] );
-		$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
+		$product_id = get_the_ID();
+		$product    = Helpers::get_atum_product( $product_id );
 
-		Helpers::load_view( 'meta-boxes/product-data/atum-tab-panel', compact( 'product', 'product_status', 'checkbox_wrapper_classes', 'control_button_classes' ) );
+		if ( apply_filters( 'atum/product_data/can_add_atum_panel', TRUE, $product ) ) {
+
+			$product_status           = get_post_status( $product_id );
+			$checkbox_wrapper_classes = (array) apply_filters( 'atum/product_data/atum_switch/classes', [ 'show_if_simple', 'hide_if_bundle' ] );
+			$control_button_classes   = (array) apply_filters( 'atum/product_data/control_button/classes', [ 'show_if_variable' ] );
+
+			Helpers::load_view( 'meta-boxes/product-data/atum-tab-panel', compact( 'product', 'product_status', 'checkbox_wrapper_classes', 'control_button_classes' ) );
+		}
 
 	}
 

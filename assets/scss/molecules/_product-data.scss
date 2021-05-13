@@ -183,6 +183,35 @@
 			
 		}
 	}
+	
+	// Translations panel
+	.translated-atum-product {
+		padding: $grid-gutter-width/2;
+		
+		.alert {
+			display: block;
+			
+			p {
+				padding-left: 20px;
+			}
+		}
+		
+		.woocommerce_variation & {
+			padding-left: 0;
+			
+			.alert p {
+				padding-left: $grid-gutter-width;
+			}
+			
+		}
+		
+	}
+	.woocommerce_options_panel {
+		.alert {
+			width: 90%;
+			margin: 10px auto;
+		}
+	}
 
 }
 

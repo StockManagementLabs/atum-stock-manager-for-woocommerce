@@ -173,6 +173,12 @@ class Wpml {
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
+
+			// Activate blocking ATUM fields in translations.
+			add_filter( 'wcml_after_load_lock_fields_js', array( $this, 'block_atum_fields' ) );
+
+			// replace the BOM Panel.
+			add_filter( 'atum/product_data/can_add_atum_panel', array( $this, 'maybe_remove_atum_panel' ), 10, 2 );
 			
 		}
 
@@ -1067,6 +1073,72 @@ class Wpml {
 			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 		
+	}
+
+	/**
+	 * Modifies the localized ATUM product data to block the ATUM fields when editing.
+	 *
+	 * @since 1.9.0
+	 */
+	public function block_atum_fields() {
+
+		/**
+		 * Modifies the ATUM product data localized variables.
+		 *
+		 * @dincre 1.9.0
+		 *
+		 * @param array $vars
+		 *
+		 * @return array
+		 */
+		add_filter( 'atum/product_data/localized_vars', function ( $vars ) {
+
+			$vars['lockFields'] = 'yes';
+
+			return $vars;
+		} );
+
+	}
+
+	/**
+	 * Prevent ATUM Panel to be shown if the product is a translation
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param bool        $add_panel
+	 * @param \WC_Product $product
+	 *
+	 * @return mixed
+	 */
+	public function maybe_remove_atum_panel( $add_panel, $product ) {
+
+		$product_id = $product->get_id();
+
+		if ( self::get_original_product_id( $product_id ) !== $product_id ) {
+
+			$add_panel = FALSE;
+
+			?>
+			<div id="atum_product_data" class="panel woocommerce_options_panel hidden">
+
+				<div class="options-group translated-atum-product">
+					<div class="alert alert-warning">
+						<h3>
+							<i class="atum-icon atmi-warning"></i>
+							<?php esc_html_e( 'ATUM settings can not be edited within translations', ATUM_TEXT_DOMAIN ) ?>
+						</h3>
+
+						<p><?php esc_html_e( 'You must edit original product instead.', ATUM_TEXT_DOMAIN ) ?></p>
+					</div>
+				</div>
+
+			</div>
+
+			<?php
+		}
+
+		return $add_panel;
+
 	}
 	
 	/**
