@@ -1256,8 +1256,12 @@ abstract class AtumOrderModel {
 			$fee_total += (float) $item->get_total();
 		}
 
+		// Consider ATUM Order models that don't support shipping.
+		$shipping_total = ! is_wp_error( $this->shipping_total ) ? (float) $this->shipping_total : 0;
+		$shipping_tax   = ! is_wp_error( $this->shipping_tax ) ? (float) $this->shipping_tax : 0;
+
 		/* @noinspection PhpWrongStringConcatenationInspection */
-		$grand_total = round( $total + $fee_total + (float) $this->shipping_total + (float) $this->cart_tax + (float) $this->shipping_tax, wc_get_price_decimals() );
+		$grand_total = round( $total + $fee_total + $shipping_total + (float) $this->cart_tax + $shipping_tax, wc_get_price_decimals() );
 
 		$this->set_discount_total( $subtotal - $total );
 		$this->set_discount_tax( $subtotal_tax - $total_tax );
@@ -1542,8 +1546,11 @@ abstract class AtumOrderModel {
 
 			foreach ( $meta_data as $meta_key => $meta_value ) {
 
-				$setter = 'set_' . ltrim( $meta_key, '_' );
-				if ( is_callable( array( $this, $setter ) ) ) {
+				$meta_key_name = ltrim( $meta_key, '_' );
+				$setter        = "set_$meta_key_name";
+
+				// Make sure the setter exists for the current meta and the meta is allowed by the current model.
+				if ( is_callable( array( $this, $setter ) ) && array_key_exists( $meta_key_name, $this->meta ) ) {
 					// When reading the values, make sure there is no change registered.
 					$this->$setter( is_array( $meta_value ) ? current( $meta_value ) : $meta_value, TRUE );
 				}
