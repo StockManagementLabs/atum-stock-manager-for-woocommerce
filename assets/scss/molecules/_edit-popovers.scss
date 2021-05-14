@@ -9,6 +9,19 @@
 			display: flex;
 			flex-wrap: nowrap;
 			min-height: 34px;
+			
+			.edit-popover-content {
+				.input-group {
+					flex-wrap: nowrap;
+				}
+				
+				.input-group-append {
+					.input-group-text {
+						padding-top: 0.51em;
+						padding-bottom: 0.51em;
+					}
+				}
+			}
 		}
 		
 		input, select {
@@ -16,7 +29,7 @@
 			flex-grow: 1;
 			min-width: 120px;
 			border: 1px solid var(--main-border-alt) !important;
-			height: 35px !important;
+			height: 38px !important;
 			color: $wp-gray-dark !important;
 			
 			+ input, + select, + .btn-group {
