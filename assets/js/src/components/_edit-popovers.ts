@@ -150,6 +150,8 @@ export default class EditPopovers extends PopoverBase{
 			// Set the field data when clicking the "Set" button.
 			.on( 'click', `.popover.${ this.popoverClassName } .set`, ( evt: JQueryEventObject ) => {
 
+				evt.preventDefault();
+
 				const $setButton: JQuery      = $( evt.currentTarget ),
 				      popoverId: string       = $setButton.closest( '.popover' ).attr( 'id' ),
 				      $editField: JQuery      = $( `[aria-describedby="${ popoverId }"]` ),
@@ -180,26 +182,26 @@ export default class EditPopovers extends PopoverBase{
 						newLabel = $setMetaInput.find( 'option:selected' ).text().trim();
 					}
 
+					$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
+
+						const $option: JQuery = $( elem );
+
+						if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
+							$option.attr( 'selected', 'selected' );
+						}
+						else {
+							$option.removeAttr( 'selected' );
+						}
+
+					} );
+
 				}
 				else {
 					newLabel = newValue ? newValue : null;
 				}
 
-				$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
-
-					const $option: JQuery = $( elem );
-
-					if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
-						$option.attr( 'selected', 'selected' );
-					}
-					else {
-						$option.removeAttr( 'selected' );
-					}
-
-				} );
-
 				// Set the value to the related hidden input.
-				const $valueInput: JQuery       = $fieldWrapper.find( 'input[type=hidden]' ),
+				const $valueInput: JQuery       = $editField.siblings( 'input[type=hidden]' ),
 				      oldValue: string | number = $valueInput.val();
 
 				$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
