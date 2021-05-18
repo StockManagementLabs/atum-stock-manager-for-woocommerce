@@ -3052,8 +3052,8 @@ final class Helpers {
 				break;
 		}
 
-		// As we are forcing the save, this method should save the product.
-		self::update_atum_product_calc_props( $product, TRUE );
+		$product->save();
+		Hooks::get_instance()->defer_update_atum_sales_calc_props( $product );
 
 	}
 
