@@ -1130,11 +1130,7 @@ class Hooks {
 				$already_queued    = array_merge( $already_queued, $this->{$variable} );
 
 				if ( ! empty( $this->{$variable} ) ) {
-
-					AtumQueues::add_async_action( $hook, array(
-						'\Atum\Inc\Helpers',
-						$hook,
-					), [ $this->{$variable}, TRUE ] );
+					AtumQueues::add_async_action( $hook, array( '\Atum\Inc\Helpers', $hook ), [ $this->{$variable}, TRUE ] );
 				}
 			}
 
