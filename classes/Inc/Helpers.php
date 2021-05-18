@@ -1275,6 +1275,13 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
+		$is_inheritable_product = ! $product->get_parent_id() && Helpers::is_inheritable_type( $product->get_type() );
+
+		// The ATUM's stock control must be always 'yes' for inheritable products.
+		if ( $is_inheritable_product ) {
+			$status = 'enable';
+		}
+
 		$product->set_atum_controlled( ( 'enable' === $status ? 'yes' : 'no' ) );
 		$product->save_atum_data();
 	}
