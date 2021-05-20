@@ -26,6 +26,7 @@ export default class ProductDataMetaBoxes {
 		// Do button groups to variations once are loaded by WC.
 		this.$productDataMetaBox.on( 'woocommerce_variations_loaded woocommerce_variations_added', () => {
 			ButtonGroup.doButtonGroups( this.$productDataMetaBox.find( '.woocommerce_variations' ) );
+			this.maybeBlockFields();
 		} );
 
 		// Toggle the "Out of Stock Threshold" field visibility.
@@ -98,7 +99,14 @@ export default class ProductDataMetaBoxes {
 			.on( 'focus select2:opening', '.atum-field :input', ( evt: JQueryEventObject ) => $( evt.target ).siblings( '.input-group-prepend' ).addClass( 'focus' ) )
 			.on( 'blur select2:close', '.atum-field :input', ( evt: JQueryEventObject ) => $( evt.target ).siblings( '.input-group-prepend' ).removeClass( 'focus' ) );
 
-		// Block ATUM fields if current product is a translation.
+		this.maybeBlockFields();
+	}
+
+	/**
+	 * Block ATUM fields if current product is a translation.
+	 */
+	maybeBlockFields() {
+
 		if ( typeof this.settings.get( 'lockFields') !== 'undefined' && 'yes' === this.settings.get( 'lockFields') ) {
 
 			$( '.atum-field input' ).each( ( index: number, elem: Element ) => {
@@ -111,7 +119,7 @@ export default class ProductDataMetaBoxes {
 			} );
 
 		}
-		
+
 	}
 	
 }

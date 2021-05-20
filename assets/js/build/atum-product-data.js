@@ -411,6 +411,7 @@ var ProductDataMetaBoxes = (function () {
         _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(this.$productDataMetaBox);
         this.$productDataMetaBox.on('woocommerce_variations_loaded woocommerce_variations_added', function () {
             _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(_this.$productDataMetaBox.find('.woocommerce_variations'));
+            _this.maybeBlockFields();
         });
         $('#_manage_stock').change(function (evt) { return $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none'); }).change();
         $('.product-tab-runner').find('.run-script').click(function (evt) {
@@ -461,6 +462,9 @@ var ProductDataMetaBoxes = (function () {
         this.$productDataMetaBox
             .on('focus select2:opening', '.atum-field :input', function (evt) { return $(evt.target).siblings('.input-group-prepend').addClass('focus'); })
             .on('blur select2:close', '.atum-field :input', function (evt) { return $(evt.target).siblings('.input-group-prepend').removeClass('focus'); });
+        this.maybeBlockFields();
+    }
+    ProductDataMetaBoxes.prototype.maybeBlockFields = function () {
         if (typeof this.settings.get('lockFields') !== 'undefined' && 'yes' === this.settings.get('lockFields')) {
             $('.atum-field input').each(function (index, elem) {
                 $(elem).prop('readonly', true).next().after($('.wcml_lock_img').clone().removeClass('wcml_lock_img').show());
@@ -469,7 +473,7 @@ var ProductDataMetaBoxes = (function () {
                 $(elem).prop('disabled', true).next().next().after($('.wcml_lock_img').clone().removeClass('wcml_lock_img').show());
             });
         }
-    }
+    };
     return ProductDataMetaBoxes;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (ProductDataMetaBoxes);
