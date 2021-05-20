@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
@@ -841,7 +842,7 @@ final class Helpers {
 					call_user_func( array( $product, "set_$column_name" ), $qty );
 
 					// If it's a variation, sum up all the variations' log types and save the result to the variable (so it can be used in SC sortings).
-					self::maybe_update_variable_calc_prop( $product, $column_name, $qty );
+					AtumCalculatedProps::maybe_update_variable_calc_prop( $product, $column_name, $qty );
 				}
 
 			}
@@ -1819,7 +1820,7 @@ final class Helpers {
 				$product->set_inbound_stock( $inbound_stock );
 
 				// If it's a variation, sum up all the variations' inbound stocks and save the result as the variable inbound (so it can be used in SC sortings).
-				self::maybe_update_variable_calc_prop( $product, 'inbound_stock', $inbound_stock );
+				AtumCalculatedProps::maybe_update_variable_calc_prop( $product, 'inbound_stock', $inbound_stock );
 
 			}
 
@@ -1890,7 +1891,7 @@ final class Helpers {
 				$product->set_stock_on_hold( $stock_on_hold );
 
 				// If it's a variation, sum up all the variations' stocks on hold and save the result to the variable (so it can be used in SC sortings).
-				self::maybe_update_variable_calc_prop( $product, 'stock_on_hold', $stock_on_hold );
+				AtumCalculatedProps::maybe_update_variable_calc_prop( $product, 'stock_on_hold', $stock_on_hold );
 
 			}
 
@@ -2997,218 +2998,6 @@ final class Helpers {
 	 */
 	public static function enqueue_atum_colors( $handle ) {
 		wp_add_inline_style( $handle, self::get_visual_mode_style() );
-	}
-
-	/**
-	 * Update the expiring data (calculated props) for the specified product when updating an order item.
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param \WC_Product|AtumProductTrait $product
-	 * @param int                          $order_type_id
-	 */
-	public static function update_atum_sales_calc_props( $product, $order_type_id = 1 ) {
-
-		if ( ! $product instanceof \WC_Product ) {
-			return;
-		}
-
-		switch ( $order_type_id ) {
-			// Purchase Orders.
-			case 2:
-				self::get_product_inbound_stock( $product, TRUE ); // This already sets the prop to the column, so we just need to save it later.
-				break;
-
-			// Inventory Logs.
-			case 3:
-				foreach ( Log::get_log_type_columns() as $log_type => $log_type_column ) {
-					self::get_log_item_qty( $log_type, $product, 'pending', TRUE ); // This already sets the prop to the column, so we just need to save it later.
-				}
-
-				break;
-
-			// WC Orders.
-			default:
-				$timestamp    = self::get_current_timestamp();
-				$current_time = self::date_format( $timestamp, TRUE, TRUE );
-				$sale_days    = self::get_sold_last_days_option();
-				$product_id   = $product->get_id();
-
-				// Set stock "On Hold".
-				self::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
-
-				// Set sold today.
-				$sold_today = self::get_sold_last_days( 'today midnight', $current_time, $product_id );
-				$product->set_sold_today( $sold_today );
-				self::maybe_update_variable_calc_prop( $product, 'sold_today', $sold_today );
-
-				// Sales last days.
-				$sales_last_ndays = self::get_sold_last_days( "$current_time -$sale_days days", $current_time, $product_id );
-				$product->set_sales_last_days( $sales_last_ndays );
-				self::maybe_update_variable_calc_prop( $product, 'sales_last_days', $sales_last_ndays );
-
-				// Out stock days.
-				$out_of_stock_days = self::get_product_out_stock_days( $product );
-				$product->set_out_stock_days( $out_of_stock_days );
-
-				// Lost sales.
-				$lost_sales = self::get_product_lost_sales( $product );
-				$product->set_lost_sales( $lost_sales );
-				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
-
-				break;
-		}
-
-		$product->save();
-		Hooks::get_instance()->defer_update_atum_sales_calc_props( $product );
-
-	}
-
-	/**
-	 * Execute de function update sales props when is called deferred
-	 *
-	 * @since 1.8.1
-	 *
-	 * @param int|int[] $product_ids
-	 */
-	public static function update_atum_sales_calc_props_deferred( $product_ids ) {
-
-		$product_ids = is_array( $product_ids ) ? $product_ids : [ $product_ids ];
-
-		foreach ( $product_ids as $product_id ) {
-			$product = self::get_atum_product( $product_id );
-			self::update_atum_sales_calc_props( $product );
-		}
-	}
-
-	/**
-	 * Update ATUM product data calculated fields that not depend exclusively on the sale.
-	 *
-	 * @since 1.7.1
-	 *
-	 * @param \WC_Product|int|int[] $product
-	 * @param bool                  $force_save
-	 */
-	public static function update_atum_product_calc_props( $product, $force_save = FALSE ) {
-
-		remove_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX );
-
-		$products = is_array( $product ) ? $product : [ $product ];
-
-		foreach ( $products as $product ) {
-
-			if ( ! self::is_atum_product( $product ) ) {
-				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
-				$product = apply_filters( 'atum/before_update_product_calc_props', self::get_atum_product( $product ) );
-			}
-
-			if ( $product instanceof \WC_Product ) {
-
-				if ( 'yes' === self::get_option( 'out_stock_threshold', 'no' ) ) {
-
-					$out_of_stock_threshold = $product->get_out_stock_threshold();
-
-					// Allow to be hooked externally.
-					$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product->get_id() );
-
-					if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
-
-						// TODO: Refactory to move the Hooks functions to Helpers.
-						Hooks::get_instance()->current_out_stock_threshold = (int) $out_of_stock_threshold;
-						Hooks::get_instance()->add_stock_status_threshold();
-						$product->save();
-						Hooks::get_instance()->remove_stock_status_threshold();
-
-					}
-
-				}
-
-				$update = FALSE;
-				$bypass = '__return_false';
-
-				if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ), TRUE ) ) {
-
-					add_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
-
-					if ( $product->managing_stock() ) {
-						$bypass = '__return_true';
-					}
-
-					remove_filter( 'atum/multi_inventory/bypass_mi_get_manage_stock', '__return_true' );
-
-				}
-
-				add_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
-				$stock_status = $product->get_stock_status();
-				remove_filter( 'atum/multi_inventory/bypass_mi_get_stock_status', $bypass );
-
-				if ( $product->get_atum_stock_status() !== $stock_status ) {
-					$product->set_atum_stock_status( $stock_status );
-					$update = TRUE;
-				}
-
-				$low = wc_bool_to_string( self::is_product_low_stock( $product ) );
-
-				if ( $product->get_low_stock() !== $low ) {
-					$product->set_low_stock( $low );
-					$update = TRUE;
-				}
-
-				if ( $update || $force_save ) {
-					$product->save_atum_data();
-
-					do_action( 'atum/after_update_product_calc_props', $product );
-				}
-
-			}
-		}
-
-		add_action( 'woocommerce_after_product_object_save', array( Hooks::get_instance(), 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
-
-	}
-
-	/**
-	 * For some ATUM calc props, we need to store the sum of all the variations' calc props in the variable
-	 *
-	 * @since 1.7.2
-	 *
-	 * @param \WC_Product $product The variation product.
-	 * @param string      $prop    The calculated prop name to update.
-	 * @param mixed       $value   The current value for the specified prop on the specified product.
-	 */
-	public static function maybe_update_variable_calc_prop( $product, $prop, $value ) {
-
-		// If it's a variation, sum up all the variations' inbound stocks and save the result as the variable inbound (so it can be used in SC sortings).
-		if ( $product instanceof \WC_Product && $product->is_type( 'variation' ) && is_callable( array( $product, "get_$prop" ) ) ) {
-
-			$product_id       = $product->get_id();
-			$variable_product = self::get_atum_product( $product->get_parent_id() );
-
-			if ( ! $variable_product instanceof \WC_Product || ! is_callable( array( $variable_product, 'get_children' ) ) ) {
-				return;
-			}
-
-			$children       = $variable_product->get_children();
-			$variable_value = $value;
-
-			foreach ( $children as $child_id ) {
-
-				if ( $product_id === $child_id ) {
-					continue;
-				}
-
-				$variation_product = self::get_atum_product( $child_id );
-				$variable_value   += call_user_func( array( $variation_product, "get_$prop" ) );
-
-			}
-
-			if ( is_callable( array( $variable_product, "set_$prop" ) ) ) {
-				call_user_func( array( $variable_product, "set_$prop" ), $variable_value );
-				$variable_product->save_atum_data();
-			}
-
-		}
-
 	}
 
 	/**

@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
@@ -2555,25 +2556,13 @@ final class Ajax {
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 		$total  = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$step   = (int) $_POST['option'] ? (int) $_POST['option'] : 400;
-		$offset = (int) $_POST['offset'] ? (int) $_POST['offset'] : 0;
+		$step   = isset( $_POST['option'] ) ? (int) $_POST['option'] : 400;
+		$offset = isset( $_POST['offset'] ) ? (int) $_POST['offset'] : 0;
 
-		// phpcs:disable
-		$products = $wpdb->get_col( $wpdb->prepare( " 
-			SELECT product_id FROM $atum_product_data_table" . ' LIMIT %1$d, %2$d',
-			$offset,
-			$step
-		) );
-		// phpcs:enable
+		$products = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM $atum_product_data_table LIMIT %d, %d", $offset, $step ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		foreach ( $products as $product_id ) {
-
-			$product = Helpers::get_atum_product( $product_id );
-
-			if ( $product instanceof \WC_Product ) {
-				$product->set_update_date( gmdate( 'Y-m-d H:i:s' ) );
-				Helpers::update_atum_sales_calc_props( $product );
-			}
+			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 		}
 
 		if ( $offset + $step >= $total ) {

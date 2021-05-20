@@ -15,7 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
-use Atum\Components\AtumQueues;
+use Atum\Components\AtumCalculatedProps;
 use Atum\MetaBoxes\FileAttachment;
 use Atum\Settings\Settings;
 
@@ -58,22 +58,6 @@ class Hooks {
 	 * @var array
 	 */
 	private $processed_oost_products = [];
-
-	/**
-	 * Store the products that need to have their calculated properties updated.
-	 *
-	 * @var array
-	 */
-	private $deferred_calc_props_products = [];
-
-	/**
-	 * Store the products that need to have their sales calculated properties updated.
-	 *
-	 * @since 1.8.1
-	 *
-	 * @var array
-	 */
-	private $deferred_sales_calc_props = [];
 
 	/**
 	 * Hooks singleton constructor
@@ -195,14 +179,6 @@ class Hooks {
 		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
-
-		// Update the sales-related calculated props when saving an order or changing the status.
-		add_action( 'woocommerce_after_order_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
-		add_action( 'atum/order/after_object_save', array( $this, 'update_atum_sales_calc_props_after_saving' ), PHP_INT_MAX, 2 );
-
-		// Update atum_stock_status and low_stock if needed.
-		add_action( 'woocommerce_after_product_object_save', array( $this, 'defer_update_atum_product_calc_props' ), PHP_INT_MAX, 2 );
-		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 9 ); // Before the AtumQueues trigger_async_action.
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
@@ -891,8 +867,7 @@ class Hooks {
 			$product    = Helpers::get_atum_product( $product_id );
 
 			if ( $product instanceof \WC_Product ) {
-				Helpers::update_atum_sales_calc_props( $product );
-
+				AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 				do_action( 'atum/after_save_order_item_props', $item, $order->get_id() );
 			}
 
@@ -937,7 +912,7 @@ class Hooks {
 
 		if ( $product instanceof \WC_Product ) {
 
-			Helpers::update_atum_sales_calc_props( $product );
+			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product->get_id() );
 			do_action( 'atum/after_delete_order_item', $order_item_id );
 
 		}
@@ -992,7 +967,7 @@ class Hooks {
 				$product    = Helpers::get_atum_product( $product_id );
 
 				if ( $product instanceof \WC_Product ) {
-					Helpers::update_atum_sales_calc_props( $product );
+					AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 					do_action( 'atum/after_save_order_item_props', $item, $order_id );
 				}
 
@@ -1036,106 +1011,6 @@ class Hooks {
 			$product->save_atum_data();
 		}
 
-	}
-
-	/**
-	 * Add each product in order to the array with the products to be async updated.
-	 *
-	 * @since 1.7.1
-	 *
-	 * @param \WC_Order                $order
-	 * @param \WC_Order_Data_Store_CPT $data_store
-	 */
-	public function update_atum_sales_calc_props_after_saving( $order, $data_store = NULL ) {
-
-		$items = $order->get_items();
-
-		foreach ( $items as $item ) {
-			/**
-			 * Variable definition
-			 *
-			 * @var \WC_Order_Item_Product $item
-			 */
-			$product_id = (int) $item->get_variation_id() ?: $item->get_product_id();
-
-			if ( $product_id ) {
-				$this->defer_update_atum_sales_calc_props( $product_id );
-			}
-
-		}
-
-	}
-
-	/**
-	 * Update ATUM product data calculated sales props.
-	 *
-	 * @since 1.8.1
-	 *
-	 * @param \WC_Product|int $product
-	 */
-	public function defer_update_atum_sales_calc_props( $product ) {
-
-		if ( $product instanceof \WC_Product ) {
-			$product = $product->get_id();
-		}
-
-		if ( ! in_array( $product, $this->deferred_sales_calc_props ) ) {
-			$this->deferred_sales_calc_props[] = $product;
-		}
-
-	}
-
-	/**
-	 * Update ATUM product data calculated props that not depend exclusively on the sale.
-	 *
-	 * @since 1.6.6
-	 *
-	 * @param \WC_Product                $product
-	 * @param \WC_Product_Data_Store_CPT $data_store
-	 */
-	public function defer_update_atum_product_calc_props( $product, $data_store ) {
-
-		if ( $product instanceof \WC_Product ) {
-			$product = $product->get_id();
-		}
-
-		if ( ! in_array( $product, $this->deferred_calc_props_products ) ) {
-			$this->deferred_calc_props_products[] = $product;
-		}
-
-	}
-
-	/**
-	 * Add the asynchronous action for updating calculated product properties if any product has changed.
-	 *
-	 * @since 1.7.8
-	 */
-	public function maybe_create_defer_update_async_action() {
-
-		$hooks = [
-			'update_atum_sales_calc_props_deferred' => 'deferred_sales_calc_props',
-			'update_atum_product_calc_props'        => 'deferred_calc_props_products',
-		];
-
-		// As updating the sales props also updates de product calc props, the products already queued to get the sales updated,
-		// will be removed from the second hook if present.
-		$already_queued = [];
-
-		foreach ( $hooks as $hook => $variable ) {
-
-			if ( ! empty( $this->{$variable} ) ) {
-
-				$this->{$variable} = array_unique( $this->{$variable} );
-				$this->{$variable} = array_diff( $this->{$variable}, $already_queued );
-				$already_queued    = array_merge( $already_queued, $this->{$variable} );
-
-				if ( ! empty( $this->{$variable} ) ) {
-					AtumQueues::add_async_action( $hook, array( '\Atum\Inc\Helpers', $hook ), [ $this->{$variable}, TRUE ] );
-				}
-			}
-
-			$this->{$variable} = [];
-		}
 	}
 
 	/**

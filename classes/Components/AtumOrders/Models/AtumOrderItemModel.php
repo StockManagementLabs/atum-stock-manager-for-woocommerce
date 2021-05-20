@@ -15,6 +15,7 @@ namespace Atum\Components\AtumOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemFee;
@@ -300,7 +301,7 @@ abstract class AtumOrderItemModel {
 
 				if ( $product instanceof \WC_Product ) {
 					$order = $this->atum_order_item->get_order();
-					Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $order->get_post_type() ) );
+					AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_table_id( $order->get_post_type() ) );
 				}
 			}
 

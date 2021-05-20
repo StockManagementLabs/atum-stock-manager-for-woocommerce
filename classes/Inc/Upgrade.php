@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumQueues;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
@@ -730,7 +731,7 @@ class Upgrade {
 					] as $prop
 				) {
 
-					Helpers::maybe_update_variable_calc_prop( $variation_product, $prop, call_user_func( array( $variation_product, "get_$prop" ) ) );
+					AtumCalculatedProps::maybe_update_variable_calc_prop( $variation_product, $prop, call_user_func( array( $variation_product, "get_$prop" ) ) );
 
 				}
 

@@ -15,7 +15,6 @@ namespace Atum\Components;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
-use Atum\Inc\Helpers;
 
 class AtumQueues {
 
@@ -27,11 +26,11 @@ class AtumQueues {
 	private static $instance;
 
 	/**
-	 * The transient key for checking assync queues availability
+	 * The transient key for checking async queues availability
 	 *
 	 * @var string
 	 */
-	private static $transient_key;
+	private static $async_available_transient = 'async_available_atum';
 
 	/**
 	 * Hooks that are executed in a recurring way and including the time when they run + the interval
@@ -58,8 +57,6 @@ class AtumQueues {
 	 * @since 1.5.8
 	 */
 	private function __construct() {
-
-		self::$transient_key = AtumCache::get_transient_key( 'atum', [], 'queues_' );
 
 		add_action( 'init', array( $this, 'check_queues' ) );
 
@@ -126,15 +123,9 @@ class AtumQueues {
 		", $date_max ) );
 		// phpcs:enable
 
+		// TODO: WHAT ABOUT ILs AND PLs PROPS? IS UPDATING THEM ALSO?
 		foreach ( $outdated_products as $product_id ) {
-
-			$product = Helpers::get_atum_product( $product_id );
-
-			if ( $product instanceof \WC_Product ) {
-				$product->set_update_date( gmdate( 'Y-m-d H:i:s' ) );
-				Helpers::update_atum_sales_calc_props( $product );
-			}
-
+			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 		}
 
 	}
@@ -157,8 +148,8 @@ class AtumQueues {
 		);
 
 		// Ensure that we add the action only once.
-		if ( ! has_action( 'shutdown', array( get_class(), 'trigger_async_actions' ) ) ) {
-			add_action( 'shutdown', array( get_class(), 'trigger_async_actions' ) );
+		if ( ! has_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) ) ) {
+			add_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) );
 		}
 
 	}
@@ -168,17 +159,19 @@ class AtumQueues {
 	 *
 	 * @since 1.7.3
 	 */
-	public static function trigger_async_actions() {
+	public function trigger_async_actions() {
 
-		$remote_available = self::check_assync_request();
-		$assync_hooks     = self::$async_hooks;
+		// Avoid unending loops when the current request is already coming from an async action.
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+			return;
+		}
 
-		if ( ! empty( $assync_hooks ) ) {
+		if ( ! empty( self::$async_hooks ) ) {
 
-			// Make a synchronous request if checker was not able to make remote request.
-			if ( ! $remote_available ) {
+			// Make a synchronous request if the checker was not able to make a remote request.
+			if ( ! self::check_async_request() ) {
 
-				foreach ( $assync_hooks as $async_hook => $hook_data ) {
+				foreach ( self::$async_hooks as $hook_data ) {
 
 					if ( is_callable( $hook_data['callback'] ) ) {
 						call_user_func( $hook_data['callback'], ...$hook_data['params'] );
@@ -186,35 +179,37 @@ class AtumQueues {
 
 				}
 
-				return;
 			}
+			else {
 
-			$data = [
-				'action' => 'atum_async_hooks',
-				'token'  => wp_create_nonce( 'atum_async_hooks' ),
-				'hooks'  => self::$async_hooks,
-			];
+				$data = [
+					'action'     => 'atum_async_hooks',
+					'token'      => wp_create_nonce( 'atum_async_hooks' ),
+					'atum_hooks' => self::$async_hooks,
+				];
 
-			if ( ! empty( $data ) ) {
+				if ( ! empty( $data ) ) {
 
-				$cookies = array();
-				foreach ( $_COOKIE as $name => $value ) {
-					$cookies[] = "$name=" . urlencode( is_array( $value ) ? serialize( $value ) : $value );
+					$cookies = array();
+					foreach ( $_COOKIE as $name => $value ) {
+						$cookies[] = "$name=" . rawurlencode( maybe_serialize( $value ) );
+					}
+
+					$request_args = array(
+						'timeout'    => 0.01,
+						'blocking'   => FALSE,
+						'sslverify'  => apply_filters( 'https_local_ssl_verify', TRUE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+						'body'       => $data,
+						'headers'    => array(
+							'cookie' => implode( '; ', $cookies ),
+						),
+						'user-agent' => self::get_async_request_user_agent(),
+					);
+
+					wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
+
 				}
 
-				$request_args = array(
-					'timeout'   => 0.01,
-					'blocking'  => FALSE,
-					'sslverify' => apply_filters( 'https_local_ssl_verify', TRUE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-					'body'      => $data,
-					'headers'   => array(
-						'cookie' => implode( '; ', $cookies ),
-					),
-				);
-
-				$url = admin_url( 'admin-ajax.php' );
-
-				wp_remote_post( $url, $request_args );
 			}
 
 		}
@@ -230,18 +225,22 @@ class AtumQueues {
 
 		check_ajax_referer( 'atum_async_hooks', 'token' );
 
-		// Refresh available remote post.
-		AtumCache::set_transient( self::$transient_key, 1, DAY_IN_SECONDS, TRUE );
+		// Refresh the available async transient.
+		AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );
 
-		$hooks = $_POST['hooks'];
+		if ( ! empty( $_POST['atum_hooks'] ) && is_array( $_POST['atum_hooks'] ) ) {
 
-		foreach ( $hooks as $async_hook => $hook_data ) {
+			foreach ( $_POST['atum_hooks'] as $hook_data ) {
 
-			// The class path comes with double slash.
-			$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
+				// The class path comes with double slashes.
+				if ( is_array( $hook_data['callback'] ) ) {
+					$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
+				}
 
-			if ( is_callable( $hook_data['callback'] ) ) {
-				call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+				if ( is_callable( $hook_data['callback'] ) ) {
+					call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+				}
+
 			}
 
 		}
@@ -250,31 +249,35 @@ class AtumQueues {
 
 	/**
 	 * Check if remote post is available.
+	 * NOTE: sometimes the site can be under a htpassword and we cannot perform async calls.
 	 *
 	 * @since 1.8.8
 	 *
 	 * @return boolean
 	 */
-	public static function check_assync_request() {
+	public static function check_async_request() {
 
-		$transient_key    = self::$transient_key;
-		$remote_available = AtumCache::get_transient( $transient_key, TRUE );
+		$remote_available = AtumCache::get_transient( self::$async_available_transient, TRUE );
 
 		if ( ! $remote_available ) {
-
-			$ch = curl_init( ATUM_URL . 'includes/marketing-popup-content.json' );
-			curl_setopt( $ch, CURLOPT_HEADER, true );    // we want headers
-			curl_setopt( $ch, CURLOPT_NOBODY, true );    // we don't need body
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_TIMEOUT,10 );
-			$output = curl_exec( $ch );
-			$httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-			curl_close( $ch );
-
-			$remote_available = 200 === $httpcode;
+			// Just try to get a simple file to get the response as faster as possible.
+			$response         = wp_remote_get( ATUM_URL . 'includes/marketing-popup-content.json', [ 'timeout' => 20 ] );
+			$remote_available = is_wp_error( $response ) || 200 === wp_remote_retrieve_response_code( $response );
 		}
 
 		return $remote_available;
+
+	}
+
+	/**
+	 * Get the user agent used for async requests
+	 *
+	 * @since 1.9.0
+	 *
+	 * @return string
+	 */
+	public static function get_async_request_user_agent() {
+		return 'ATUM/' . ATUM_VERSION;
 	}
 
 

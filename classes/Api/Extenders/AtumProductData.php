@@ -16,6 +16,7 @@ namespace Atum\Api\Extenders;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -693,7 +694,7 @@ class AtumProductData {
 	 */
 	public function after_rest_product_save( $product, $request, $creating ) {
 
-		Helpers::update_atum_product_calc_props( $product );
+		AtumCalculatedProps::update_atum_product_calc_props( $product );
 
 		// Save low_stock_amount since Woocommerce missed it...
 		if ( ! is_null( $request->get_param( 'low_stock_amount' ) ) ) {

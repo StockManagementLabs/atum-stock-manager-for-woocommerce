@@ -14,9 +14,9 @@ namespace Atum\InventoryLogs\Models;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
-use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
@@ -96,11 +96,7 @@ class Log extends AtumOrderModel {
 			 * @var LogItemProduct $item
 			 */
 			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			$product    = Helpers::get_atum_product( $product_id );
-
-			if ( $product instanceof \WC_Product ) {
-				Helpers::update_atum_sales_calc_props( $product, Globals::get_order_type_table_id( $this->get_post_type() ) );
-			}
+			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_table_id( $this->get_post_type() ) );
 
 		}
 
