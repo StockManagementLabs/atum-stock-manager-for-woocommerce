@@ -88,6 +88,20 @@ abstract class AtumOrderModel {
 	protected $items_to_delete = array();
 
 	/**
+	 * The default line item type
+	 *
+	 * @var string
+	 */
+	protected $line_item_type = 'line_item';
+
+	/**
+	 * The default line item group
+	 *
+	 * @var string
+	 */
+	protected $line_item_group = 'line_items';
+
+	/**
 	 * The WP cache key name
 	 *
 	 * @var string
@@ -279,10 +293,10 @@ abstract class AtumOrderModel {
 	protected function type_to_group( $type ) {
 
 		$type_to_group = (array) apply_filters( 'atum/order/item_type_to_group', array(
-			'line_item' => 'line_items',
-			'tax'       => 'tax_lines',
-			'shipping'  => 'shipping_lines',
-			'fee'       => 'fee_lines',
+			$this->line_item_type => $this->line_item_group,
+			'tax'                 => 'tax_lines',
+			'shipping'            => 'shipping_lines',
+			'fee'                 => 'fee_lines',
 		) );
 
 		return isset( $type_to_group[ $type ] ) ? $type_to_group[ $type ] : '';
@@ -301,10 +315,10 @@ abstract class AtumOrderModel {
 	protected function group_to_type( $group ) {
 
 		$group_to_type = (array) apply_filters( 'atum/order/item_group_to_type', array(
-			'line_items'     => 'line_item',
-			'tax_lines'      => 'tax',
-			'shipping_lines' => 'shipping',
-			'fee_lines'      => 'fee',
+			$this->line_item_group => $this->line_item_type,
+			'tax_lines'            => 'tax',
+			'shipping_lines'       => 'shipping',
+			'fee_lines'            => 'fee',
 		) );
 
 		return isset( $group_to_type[ $group ] ) ? $group_to_type[ $group ] : '';
@@ -409,7 +423,7 @@ abstract class AtumOrderModel {
 		}
 
 		$args       = wp_parse_args( $args, $default_args );
-		$item_class = $this->get_items_class( 'line_items' );
+		$item_class = $this->get_items_class( $this->line_item_group );
 
 		/**
 		 * Variable definition
@@ -732,7 +746,7 @@ abstract class AtumOrderModel {
 		$existing_taxes = $this->get_taxes();
 		$saved_rate_ids = array();
 
-		foreach ( $this->get_items( [ 'line_item', 'fee' ] ) as $item_id => $item ) {
+		foreach ( $this->get_items( [ $this->line_item_type, 'fee' ] ) as $item_id => $item ) {
 
 			$taxes = $item->get_taxes();
 
@@ -1098,7 +1112,7 @@ abstract class AtumOrderModel {
 		}
 
 		// Calc taxes for line items.
-		foreach ( $this->get_items( [ 'line_item', 'fee' ] ) as $item_id => $item ) {
+		foreach ( $this->get_items( [ $this->line_item_type, 'fee' ] ) as $item_id => $item ) {
 
 			$tax_class  = $item->get_tax_class();
 			$tax_status = $item->get_tax_status();
@@ -1116,7 +1130,7 @@ abstract class AtumOrderModel {
 				$total = $item->get_total();
 				$taxes = \WC_Tax::calc_tax( $total, $tax_rates, FALSE );
 
-				if ( $item->is_type( 'line_item' ) ) {
+				if ( $item->is_type( $this->line_item_type ) ) {
 					$subtotal       = $item->get_subtotal();
 					$subtotal_taxes = \WC_Tax::calc_tax( $subtotal, $tax_rates, FALSE );
 					$item->set_taxes( array(
@@ -1806,7 +1820,11 @@ abstract class AtumOrderModel {
 	 *
 	 * @return POItemProduct[]|LogItemProduct[]|POItemFee[]|LogItemFee[]|POItemShipping[]|LogItemShipping[]
 	 */
-	public function get_items( $types = 'line_item' ) {
+	public function get_items( $types = NULL ) {
+
+		if ( ! $types ) {
+			$types = $this->line_item_type;
+		}
 
 		$items = array();
 		$types = array_filter( (array) $types );
@@ -1878,9 +1896,14 @@ abstract class AtumOrderModel {
 	 *
 	 * @return \WC_Order_Item|AtumOrderItemFee|AtumOrderItemProduct|AtumOrderItemShipping|AtumOrderItemTax|bool
 	 */
-	public function get_item( $item_id, $type = 'line_item' ) {
+	public function get_item( $item_id, $type = NULL ) {
+
+		if ( ! $type ) {
+			$type = $this->line_item_type;
+		}
 
 		$type_group = $this->type_to_group( $type );
+
 		if ( ! empty( $this->items ) && isset( $this->items[ $type_group ], $this->items[ $type_group ][ $item_id ] ) ) {
 			return $this->items[ $type_group ][ $item_id ];
 		}
@@ -1998,6 +2021,28 @@ abstract class AtumOrderModel {
 	 */
 	public function get_block_message() {
 		return $this->block_message;
+	}
+
+	/**
+	 * Getter for the line item type prop
+	 *
+	 * @since 1.9.0
+	 *
+	 * @return string
+	 */
+	public function get_line_item_type() {
+		return $this->line_item_type;
+	}
+
+	/**
+	 * Getter for the line item group prop
+	 *
+	 * @since 1.9.0
+	 *
+	 * @return string
+	 */
+	public function get_line_item_group() {
+		return $this->line_item_group;
 	}
 
 	/**
