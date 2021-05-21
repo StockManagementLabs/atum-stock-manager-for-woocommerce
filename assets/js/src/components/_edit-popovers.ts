@@ -231,6 +231,16 @@ export default class EditPopovers extends PopoverBase{
 					this.destroyPopover( $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` ) );
 				}
 
+			} )
+
+			// Switch between percentage and fixed amount when clicking on the input group button.
+			.on( 'click', '.edit-field-popover .input-group-append', ( evt: JQueryEventObject ) => {
+
+				const $elem: JQuery = $( evt.currentTarget );
+
+				$elem.children( '.input-group-text' ).toggleClass( 'active' );
+				$elem.children( 'input' ).val( $elem.children( '.input-group-text.active' ).data( 'value' ) );
+
 			} );
 
 		// Hide any other opened popover before opening a new one.
