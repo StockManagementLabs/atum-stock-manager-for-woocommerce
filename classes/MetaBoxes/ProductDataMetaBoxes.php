@@ -580,7 +580,11 @@ class ProductDataMetaBoxes {
 			if ( is_wp_error( $errors ) ) {
 				\WC_Admin_Meta_Boxes::add_error( $errors->get_error_message() );
 			}
-			
+
+			if ( $this->product->is_type( 'variation' ) && $this->product->get_stock_status() !== $this->product->get_atum_stock_status() ) {
+				$this->product->set_atum_stock_status( $this->product->get_stock_status() );
+			}
+
 			$this->product->save_atum_data();
 
 			if ( isset( $purchase_price ) && $purchase_price['new_purchase_price'] !== $purchase_price['old_purchase_price'] ) {
