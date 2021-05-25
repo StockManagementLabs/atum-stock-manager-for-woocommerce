@@ -533,11 +533,11 @@ const Utils = {
 	 *
 	 * @return {string | boolean}
 	 */
-	checkRTL( value:string ) {
+	checkRTL( value: string ): string|boolean {
 
-		let isRTL:boolean = false;
+		let isRTL: boolean = false;
 
-		if ( $( "html[ dir='rtl' ]" ).length > 0 ) {
+		if ( $( 'html[ dir="rtl" ]' ).length > 0 ) {
 			isRTL = true;
 		}
 
