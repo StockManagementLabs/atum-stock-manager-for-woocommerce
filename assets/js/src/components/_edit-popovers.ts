@@ -134,6 +134,9 @@ export default class EditPopovers extends PopoverBase{
 
 				$popover.find( '.meta-value' ).focus().select();
 
+				// Trigger action after inserting the popover.
+				this.wpHooks.doAction( 'atum_editPopovers_inserted', $popover, $editButton );
+
 			} );
 
 		} );
