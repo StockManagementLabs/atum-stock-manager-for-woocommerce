@@ -691,7 +691,7 @@ trait ListTableLegacyTrait {
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => $parent_type,
+					'terms'    => apply_filters( 'atum/list_table/parent_post_type', $parent_type ),
 				),
 			),
 		);
