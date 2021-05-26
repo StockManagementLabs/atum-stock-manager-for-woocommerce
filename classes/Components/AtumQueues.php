@@ -174,6 +174,9 @@ class AtumQueues {
 			// Make a synchronous request if the checker was not able to make a remote request.
 			if ( ! self::check_async_request() ) {
 
+				// The tasks must be executed with a clean ATUM cache (as if they're executed by a remote post).
+				AtumCache::delete_all_atum_caches();
+
 				foreach ( self::$async_hooks as $priority_group ) {
 
 					foreach ( $priority_group as $hook_data ) {
