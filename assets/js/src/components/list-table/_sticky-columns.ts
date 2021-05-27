@@ -68,7 +68,11 @@ export default class StickyColumns {
 				$row.children().not(columnClasses.join(',')).remove();
 				
 			}
-			
+
+			// Apply the same height than the original table row.
+			let copyStyle: any = getComputedStyle( $table.find('tr')[ index ] );
+			$row.css( 'height', copyStyle['height'] );
+
 		});
 		
 		// Do not add sticky columns with a low columns number.
