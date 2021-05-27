@@ -138,11 +138,12 @@ class AtumQueues {
 	 * @param string   $hook     The hook name to call after shutdown.
 	 * @param callable $callback A callable function or method.
 	 * @param array    $params   Optional. Any params that need to be passed to the async action. These params will be unpacked with the spread operator.
+	 * @param int      $priority Default to 10
 	 */
-	public static function add_async_action( $hook, $callback, $params = array() ) {
+	public static function add_async_action( $hook, $callback, $params = array(), $priority = 10 ) {
 
 		// NOTE: For now we only allow unique calls to the same hook.
-		self::$async_hooks[ $hook ] = array(
+		self::$async_hooks[ $priority ][ $hook ] = array(
 			'callback' => $callback,
 			'params'   => $params,
 		);
@@ -168,13 +169,21 @@ class AtumQueues {
 
 		if ( ! empty( self::$async_hooks ) ) {
 
+			ksort( self::$async_hooks, SORT_NUMERIC );
+
 			// Make a synchronous request if the checker was not able to make a remote request.
 			if ( ! self::check_async_request() ) {
 
-				foreach ( self::$async_hooks as $hook_data ) {
+				// The tasks must be executed with a clean ATUM cache (as if they're executed by a remote post).
+				AtumCache::delete_all_atum_caches();
 
-					if ( is_callable( $hook_data['callback'] ) ) {
-						call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+				foreach ( self::$async_hooks as $priority_group ) {
+
+					foreach ( $priority_group as $hook_data ) {
+
+						if ( is_callable( $hook_data['callback'] ) ) {
+							call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+						}
 					}
 
 				}
@@ -230,15 +239,20 @@ class AtumQueues {
 
 		if ( ! empty( $_POST['atum_hooks'] ) && is_array( $_POST['atum_hooks'] ) ) {
 
-			foreach ( $_POST['atum_hooks'] as $hook_data ) {
+			foreach ( $_POST['atum_hooks'] as $priority_group ) {
 
-				// The class path comes with double slashes.
-				if ( is_array( $hook_data['callback'] ) ) {
-					$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
-				}
+				foreach ( $priority_group as $hook_data ) {
 
-				if ( is_callable( $hook_data['callback'] ) ) {
-					call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+					$ggg = 9;
+
+					// The class path comes with double slashes.
+					if ( is_array( $hook_data['callback'] ) ) {
+						$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
+					}
+
+					if ( is_callable( $hook_data['callback'] ) ) {
+						call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+					}
 				}
 
 			}
