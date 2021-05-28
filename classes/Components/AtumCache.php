@@ -147,7 +147,7 @@ final class AtumCache {
 	}
 
 	/**
-	 * Regenerate all groups names to pretend like the've been erased
+	 * Regenerate all groups names to pretend like they've been erased
 	 *
 	 * @since 1.5.8
 	 */

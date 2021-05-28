@@ -473,7 +473,7 @@ var Utils = {
     },
     checkRTL: function (value) {
         var isRTL = false;
-        if ($("html[ dir='rtl' ]").length > 0) {
+        if ($('html[ dir="rtl" ]').length > 0) {
             isRTL = true;
         }
         switch (value) {

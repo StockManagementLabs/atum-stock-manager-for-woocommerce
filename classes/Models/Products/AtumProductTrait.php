@@ -64,6 +64,7 @@ trait AtumProductTrait {
 		'price_per_inventory'         => NULL, // MI.
 		'selectable_inventories'      => NULL, // MI.
 		'selectable_inventories_mode' => NULL, // MI.
+		'show_write_off_inventories'  => NULL, // MI.
 	);
 
 
@@ -573,6 +574,27 @@ trait AtumProductTrait {
 
 	}
 
+	/**
+	 * Returns the product's show_write_off_inventories prop.
+	 *
+	 * @since   1.8.9.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_show_write_off_inventories( $context = 'view' ) {
+
+		$show_write_off_inventories = $this->get_prop( 'show_write_off_inventories', $context );
+
+		if ( ! is_null( $show_write_off_inventories ) ) {
+			$show_write_off_inventories = wc_bool_to_string( $show_write_off_inventories );
+		}
+
+		return $show_write_off_inventories;
+	}
+
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
@@ -1035,6 +1057,20 @@ trait AtumProductTrait {
 
 		$is_bom = wc_string_to_bool( $is_bom );
 		$this->set_prop( 'is_bom', $is_bom );
+	}
+
+	/**
+	 * Set the Show "Write-Off" inventories option for the current product.
+	 *
+	 * @since   1.7.4
+	 * @package Multi-Inventory
+	 *
+	 * @param string $show_write_off_inventories Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_show_write_off_inventories( $show_write_off_inventories ) {
+
+		$show_write_off_inventories = ! is_null( $show_write_off_inventories ) && 'global' !== $show_write_off_inventories ? wc_string_to_bool( $show_write_off_inventories ) : NULL;
+		$this->set_prop( 'show_write_off_inventories', $show_write_off_inventories );
 	}
 
 
