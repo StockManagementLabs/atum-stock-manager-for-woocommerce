@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, janberebel, danielberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.7.1
+Tested up to: 5.7.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.2.2
-Stable tag: 1.8.9.1
+WC tested up to: 5.3.0
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,6 +238,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 == Changelog ==
+
+---
+
+`1.9.0`
+
+*2021-05-28*
+
+**Features**
+
+* Show PO product items although the product was permanently removed.
+* Performance improvement: save the sales calculated props asynchronously.
+* Allow specifying the keys for line items type and group.
+* Added new JS action after inserting an editPopover.
+* Added filter to allow several post_types on parents list.
+* Added WP-like priority to ATUM queues.
+* Added the new MI's show_write_off_inventories field to ATUM product data model.
+
+**Changes**
+
+* Hide atum controled field and Atum inventory panel for bundle products.
+* Check license only if add-on is active.
+* Changed addons admin notice message.
+* Block ATUM fields in WPML translations.
+* Prevent editing ATUM settings whithin translations.
+* Block ATUM fields in WPML variations translations.
+* Prevent deleting ATUM cache with group parameter = NULL.
+* Updated JS dependencies.
+* Contemplate ATUM Order models not supporting shipping.
+* Avoid setting uncontrolled inheritable products from bulk actions.
+* Refactoring.
+* Deferred calculated props actions refactoring.
+* Clear ATUM caches before excuting synchronously the asynchronous tasks.
+
+**Fixes**
+
+* EditPopover CSS fixes.
+* Fixed EditPopover component.
+* Fixed atum_stock_status for variation products.
+* Apply to the cloned sticky table rows the same height than the original table rows.
 
 ---
 

@@ -194,6 +194,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.0`
+
+*2021-05-28*
+
+**Features**
+
+* Show PO product items although the product was permanently removed.
+* Performance improvement: save the sales calculated props asynchronously.
+* Allow specifying the keys for line items type and group.
+* Added new JS action after inserting an editPopover.
+* Added filter to allow several post_types on parents list.
+* Added WP-like priority to ATUM queues.
+* Added the new MI's show_write_off_inventories field to ATUM product data model.
+
+**Changes**
+
+* Hide atum controled field and Atum inventory panel for bundle products.
+* Check license only if add-on is active.
+* Changed addons admin notice message.
+* Block ATUM fields in WPML translations.
+* Prevent editing ATUM settings whithin translations.
+* Block ATUM fields in WPML variations translations.
+* Prevent deleting ATUM cache with group parameter = NULL.
+* Updated JS dependencies.
+* Contemplate ATUM Order models not supporting shipping.
+* Avoid setting uncontrolled inheritable products from bulk actions.
+* Refactoring.
+* Deferred calculated props actions refactoring.
+* Clear ATUM caches before excuting synchronously the asynchronous tasks.
+
+**Fixes**
+
+* EditPopover CSS fixes.
+* Fixed EditPopover component.
+* Fixed atum_stock_status for variation products.
+* Apply to the cloned sticky table rows the same height than the original table rows.
+
+---
+
 `1.8.9.1`
 
 *2021-05-07*
