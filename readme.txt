@@ -7,7 +7,7 @@ Tested up to: 5.7.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
 WC tested up to: 5.3.0
-Stable tag: 1.9.0
+Stable tag: 1.9.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -241,7 +241,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
-`1.9.0`
+`1.9.0.1`
 
 *2021-05-28*
 
