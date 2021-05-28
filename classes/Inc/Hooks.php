@@ -203,6 +203,9 @@ class Hooks {
 
 		add_filter( 'upload_dir', array( $this, 'check_url_protocol' ) );
 
+		// Parse WC order note to add metadata.
+		add_filter( 'woocommerce_order_note_added', array( $this, 'parse_wc_order_note' ), 10, 2 );
+
 	}
 
 	/**
@@ -1247,6 +1250,61 @@ class Hooks {
 		return $uploads;
 
 	}
+
+	/**
+	 * Parse the added WC order note to try to add metadata.
+	 *
+	 * @since 1.8.9.1
+	 *
+	 * @param int       $note_id
+	 * @param \WC_Order $order
+	 */
+	public function parse_wc_order_note( $note_id, $order ) {
+
+		$note = wc_get_order_note( $note_id );
+
+		if ( is_null( $note ) || $note->customer_note ) {
+			return;
+		}
+
+		$found_data = array();
+		$statuses   = [
+			'pending',
+			'processing',
+			'on-hold',
+			'completed',
+			'cancelled',
+			'refunded',
+			'failed',
+		];
+
+		foreach ( $statuses as $status ) {
+			if ( $note->content === sprintf( __( 'Order status set to %s.', 'woocommerce' ), wc_get_order_status_name( $status ) ) ) {
+				$found_data = [
+					'action' => 'order_status_set',
+					'status' => $status,
+				];
+				break;
+			}
+			foreach ( $statuses as $status_to ) {
+				/* Translators: %1$s status_from, %2$s status_to */
+				if ( $note->content === sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status ), wc_get_order_status_name( $status_to ) ) ) {
+					$found_data = [
+						'action'      => 'order_status_change',
+						'status_from' => $status,
+						'status_to'   => $status_to,
+					];
+					break 2;
+				}
+			}
+		}
+
+		if ( ! empty( $found_data ) ) {
+			Helpers::save_order_note_meta( $note_id, $found_data );
+		}
+
+	}
+
 
 	/********************
 	 * Instance methods

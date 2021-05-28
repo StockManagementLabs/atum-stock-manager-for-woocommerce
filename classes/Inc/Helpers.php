@@ -3319,6 +3319,9 @@ final class Helpers {
 		if ( ! empty( $params ) && isset( $params['action'] ) ) {
 
 			switch ( $params['action'] ) {
+				case 'order_status_set':
+					$action = 'setStatus';
+					break;
 				case 'order_status_change':
 					$action = 'changeStatus';
 					break;
@@ -3334,8 +3337,14 @@ final class Helpers {
 				case 'decrease_stock':
 					$action = 'decreaseStock';
 					break;
+				case 'increase_item_stock':
+					$action = 'increaseItemStock';
+					break;
 				case 'added_line_items':
 					$action = 'addedLineItems';
+					break;
+				case 'deleted_adjusted_line':
+					$action = 'deletedAdjustedLineItems';
 					break;
 				case 'deleted_line':
 					$action = 'deletedLineItems';
@@ -3343,17 +3352,32 @@ final class Helpers {
 				case 'stock_levels_increased':
 					$action = 'stockLevelsIncreased';
 					break;
+				case 'product_stock_levels_increased':
+					$action = 'stockLevelsProductIncreased';
+					break;
 				case 'stock_levels_reduced':
 					$action = 'stockLevelsReduced';
 					break;
 				case 'stock_levels_changed':
 					$action = 'stockLevelsChanged';
 					break;
+				case 'unable_restore_inventory':
+					$action = 'unableRestoreInventory';
+					break;
 				case 'unable_restore':
 					$action = 'unableRestore';
 					break;
+				case 'unable_reduce_inventory':
+					$action = 'unableReduceInventory';
+					break;
 				case 'unable_reduce':
 					$action = 'unableReduce';
+					break;
+				case 'unable_increase_inventory_stock':
+					$action = 'unableIncreaseInventoryStock';
+					break;
+				case 'unable_decrease_inventory_stock':
+					$action = 'unableDecreaseInventoryStock';
 					break;
 				case 'unable_increase_stock':
 					$action = 'unableIncreaseStock';
