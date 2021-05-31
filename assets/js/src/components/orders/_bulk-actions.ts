@@ -153,88 +153,92 @@ export default class OrdersBulkActions {
 	 */
 	bulkChangeStock( action: string ) {
 
-		Blocker.block( this.$container );
+		const $rows: JQuery       = $( 'table.atum_order_items' ).find( 'tr.selected' );
+		const checkItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_checkChangeStock', true, $rows );
 
-		Swal.fire( {
-			title              : this.settings.get( 'are_you_sure' ),
-			text               : this.settings.get( action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg' ),
-			icon               : 'warning',
-			showCancelButton   : true,
-			confirmButtonText  : this.settings.get( 'continue' ),
-			cancelButtonText   : this.settings.get( 'cancel' ),
-			reverseButtons     : true,
-			allowOutsideClick  : false,
-			showLoaderOnConfirm: true,
-			preConfirm         : (): Promise<void> => {
+		if ( checkItems ) {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+			Blocker.block( this.$container );
 
-					const $rows: JQuery = $( 'table.atum_order_items' ).find( 'tr.selected' );
+			Swal.fire( {
+				title              : this.settings.get( 'are_you_sure' ),
+				text               : this.settings.get( action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg' ),
+				icon               : 'warning',
+				showCancelButton   : true,
+				confirmButtonText  : this.settings.get( 'continue' ),
+				cancelButtonText   : this.settings.get( 'cancel' ),
+				reverseButtons     : true,
+				allowOutsideClick  : false,
+				showLoaderOnConfirm: true,
+				preConfirm         : (): Promise<void> => {
 
-					// Allow bypassing the change (MI needs to run its own version).
-					const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStock', true, $rows, action, resolve );
+					return new Promise( ( resolve: Function, reject: Function ) => {
 
-					if ( maybeProcessItems ) {
+						// Allow bypassing the change (MI needs to run its own version).
+						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStock', true, $rows, action, resolve );
 
-						let quantities: any   = {},
-						    itemIds: number[] = [];
+						if ( maybeProcessItems ) {
 
-						$rows.each( ( index: number, elem: Element ) => {
+							let quantities: any   = {},
+							    itemIds: number[] = [];
 
-							const $elem: JQuery = $( elem );
+							$rows.each( ( index: number, elem: Element ) => {
 
-							itemIds.push( parseInt( $elem.data( 'atum_order_item_id' ), 10 ) );
-							if ( $elem.find( 'input.quantity' ).length ) {
-								quantities[ $elem.data( 'atum_order_item_id' ) ] = $elem.find( 'input.quantity' ).val();
-							}
+								const $elem: JQuery = $( elem );
 
-						} );
-
-						$.ajax( {
-							url     : window[ 'ajaxurl' ],
-							data    : {
-								atum_order_id      : this.settings.get( 'post_id' ),
-								atum_order_item_ids: itemIds,
-								quantities         : quantities,
-								action             : `atum_order_${ action }_items_stock`,
-								security           : this.settings.get( 'atum_order_item_nonce' ),
-							},
-							method  : 'POST',
-							dataType: 'json',
-							success : ( response: any ) => {
-
-								if ( response.success !== true ) {
-									Swal.showValidationMessage( response.data );
+								itemIds.push( parseInt( $elem.data( 'atum_order_item_id' ), 10 ) );
+								if ( $elem.find( 'input.quantity' ).length ) {
+									quantities[ $elem.data( 'atum_order_item_id' ) ] = $elem.find( 'input.quantity' ).val();
 								}
 
-								resolve();
+							} );
 
-							},
-						} );
+							$.ajax( {
+								url     : window[ 'ajaxurl' ],
+								data    : {
+									atum_order_id      : this.settings.get( 'post_id' ),
+									atum_order_item_ids: itemIds,
+									quantities         : quantities,
+									action             : `atum_order_${ action }_items_stock`,
+									security           : this.settings.get( 'atum_order_item_nonce' ),
+								},
+								method  : 'POST',
+								dataType: 'json',
+								success : ( response: any ) => {
 
-					}
+									if ( response.success !== true ) {
+										Swal.showValidationMessage( response.data );
+									}
 
-				} );
-				
-			}
-		})
-		.then( ( result: SweetAlertResult ) => {
+									resolve();
 
-			if ( result.isConfirmed ) {
+								},
+							} );
 
-				Swal.fire( {
-					title            : this.settings.get( 'done' ),
-					text             : this.settings.get( action === 'increase' ? 'stock_increased' : 'stock_decreased' ),
-					icon             : 'success',
-					confirmButtonText: this.settings.get( 'ok' ),
-				} );
+						}
 
-			}
+					} );
 
-			Blocker.unblock( this.$container );
-			
-		} );
-		
+				}
+			} )
+			.then( ( result: SweetAlertResult ) => {
+
+				if ( result.isConfirmed ) {
+
+					Swal.fire( {
+						title            : this.settings.get( 'done' ),
+						text             : this.settings.get( action === 'increase' ? 'stock_increased' : 'stock_decreased' ),
+						icon             : 'success',
+						confirmButtonText: this.settings.get( 'ok' ),
+					} );
+
+				}
+
+				Blocker.unblock( this.$container );
+
+			} );
+
+		}
 	}
 	
 }
