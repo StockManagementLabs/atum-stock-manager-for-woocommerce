@@ -463,6 +463,7 @@ var AddItemsPopup = (function () {
         this.$container = $container;
         this.atumOrders = atumOrders;
         this.tooltip = tooltip;
+        this.wpHooks = window['wp']['hooks'];
         $('body')
             .on('wc_backbone_modal_loaded', function (evt, target) { return _this.init(evt, target); })
             .on('wc_backbone_modal_response', function (evt, target, data) { return _this.response(evt, target, data); });
@@ -497,6 +498,7 @@ var AddItemsPopup = (function () {
             $.post(window['ajaxurl'], data, function (response) {
                 if (response.success) {
                     $('#atum_order_line_items').append(response.data.html);
+                    _this.wpHooks.doAction('orderItems_addItem_added', itemIds, _this.settings.get('post_id'));
                 }
                 else {
                     _this.atumOrders.showAlert('error', _this.settings.get('error'), response.data.error);

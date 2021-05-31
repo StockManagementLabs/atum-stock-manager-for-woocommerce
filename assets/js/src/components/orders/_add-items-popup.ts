@@ -6,8 +6,11 @@ import AtumOrders from './_atum-orders';
 import Blocker from '../_blocker';
 import Settings from '../../config/_settings';
 import Tooltip from '../_tooltip';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class AddItemsPopup {
+
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -68,6 +71,7 @@ export default class AddItemsPopup {
 				
 				if ( response.success ) {
 					$('#atum_order_line_items').append( response.data.html );
+					this.wpHooks.doAction( 'orderItems_addItem_added', itemIds, this.settings.get('post_id') );
 				}
 				else {
 					this.atumOrders.showAlert('error', this.settings.get('error'), response.data.error);
