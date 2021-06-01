@@ -36,9 +36,11 @@
 	--atum-bg-white: #{$white};
 	--atum-border-expanded: #{$gray-500};
 	--atum-border-var: #{$gray-200};
+	--atum-cloned-list-table-shadow: #{rgba($black, 0.04)};
 	--atum-column-groups-bg: #{$gray-200};
 	--atum-dark-bg: #{$blue-dark-lighten};
 	--atum-dropdown-toggle-bg: #{$gray-200};
+	--atum-easytree-node: #{$dark};
 	--atum-expanded-bg: #{$white};
 	--atum-footer-title: #{$blue-dark};
 	--atum-footer-link: #{$wp-link};
@@ -157,5 +159,4 @@
 	--wc-purple-expanded: #{$wc-purple};
 	--wp-yiq-text-dark: #{$yiq-text-dark};
 	--wp-yiq-text-light: #{$yiq-text-light};
-	
 }

@@ -38,7 +38,7 @@ export default class StickyColumns {
 		
 		// Remove table header and footer.
 		$stickyCols.addClass('cloned').removeAttr('style').hide().find('colgroup, fthfoot').remove();
-		
+
 		// Remove all the columns that won't be sticky.
 		$stickyCols.find('tr').each( (index: number, elem: Element) => {
 			
@@ -82,6 +82,10 @@ export default class StickyColumns {
 		
 		// Remove the manage-column class to not conflict with the WP's Screen Options functionality.
 		$stickyCols.find('.manage-column').removeClass('manage-column');
+
+		if ($('.no-items').length) {
+			return null;
+		}
 		
 		return $stickyCols;
 		

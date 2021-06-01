@@ -143,6 +143,7 @@ class AtumColors {
 		}
 
 		$this->colors['gray_500_rgb']          = $this->convert_hexadecimal_to_rgb( $this->colors['gray_500'] );
+		$this->colors['gray_600_rgb']          = $this->convert_hexadecimal_to_rgb( $this->colors['gray_600'] );
 		$this->colors['white_rgb']             = $this->convert_hexadecimal_to_rgb( $this->colors['white'] );
 		$this->colors['black_rgb']             = $this->convert_hexadecimal_to_rgb( $this->colors['black'] );
 		$this->colors['primary_color']         = ! empty( $visual_settings[ "{$prefix}primary_color" ] ) ? $visual_settings[ "{$prefix}primary_color" ] : $this->colors['blue'];
@@ -222,6 +223,7 @@ class AtumColors {
 		$scheme = ":root {
 			--atum-border-expanded: $border_color;
 			--atum-border-var: $border_color;
+			--atum-cloned-list-table-shadow: rgba({$this->colors['black_rgb']}, 0.04); 
 			--atum-column-groups-bg: {$this->colors['gray_200']};
 			--atum-dropdown-toggle-bg: {$this->colors['gray_100']};
 			--atum-expanded-bg: $bg_1_color;
@@ -353,8 +355,10 @@ class AtumColors {
 			--atum-add-widget-title: {$this->colors['text_color']};
 		    --atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
+			--atum-cloned-list-table-shadow: rgba({$this->colors['white_rgb']}, 0.04); 
 		    --atum-column-groups-bg: {$this->colors['text_color_expanded']};
 			--atum-dropdown-toggle-bg: $bg_2_color;
+			--atum-easytree-node: {$this->colors['gray_600_rgb']};
 			--atum-expanded-bg: {$this->colors['text_color_expanded']};
 			--atum-footer-link: {$this->colors['primary_color']};
 			--atum-footer-text: {$this->colors['white']};
@@ -483,6 +487,7 @@ class AtumColors {
 		$scheme = ":root {
 			--atum-border-expanded: {$this->colors['border_color']};
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
+			--atum-cloned-list-table-shadow: rgba({$this->colors['black_rgb']}, 0.04); 
 			--atum-column-groups-bg: {$this->colors['gray_200']};
 			--atum-dropdown-toggle-bg: {$this->colors['gray_200']};
 			--atum-expanded-bg: {$this->colors['bg_1_color']};
