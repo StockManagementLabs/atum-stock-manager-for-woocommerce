@@ -207,6 +207,10 @@ We are very sorry, but the current version of the plugin needs PHP 5.6+. Our tea
 
 We do not plan any support for older PHP and version 5.6 is the minimum.
 
+= Which third party plugins are officially compatible with ATUM? =
+
+We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, WooCommerce Bookings and WMPL. Many other plugins can be compatible without any kind of customisation but others can cause conflicts.
+
 
 
 == Screenshots ==
