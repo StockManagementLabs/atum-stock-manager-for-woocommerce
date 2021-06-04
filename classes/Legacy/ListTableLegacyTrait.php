@@ -503,8 +503,9 @@ trait ListTableLegacyTrait {
 
 					$products_unmanaged = array_column( $products_unmanaged_status, 0 );
 
-					$this->id_views['managed']          = array_diff( $products, $products_unmanaged );
-					$this->count_views['count_managed'] = count( $this->id_views['managed'] );
+					$this->id_views['managed'] = array_diff( $products, $products_unmanaged );
+					// Need to substract count unmanaged because group items are not included twice in managed id_views.
+					$this->count_views['count_managed'] = $this->count_views['count_all'] - count( $products_unmanaged );
 
 				}
 
