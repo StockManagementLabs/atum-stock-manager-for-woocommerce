@@ -477,7 +477,7 @@
 		max-width: 110px;
 		font-size: 15px;
 		background-color: var(--atum-table-bg);
-		color: var(--atum-text-color-dark2);
+		color: var(--atum-text-color-var1);
 		
 		@include tablet-max-wp {
 			max-width: inherit;
@@ -1419,7 +1419,7 @@
 		position: absolute;
 		top: 0;
 		border-right: none;
-		box-shadow: var(--black-shadow-light) 5px 1px 10px;
+		box-shadow: var(--atum-cloned-list-table-shadow) 5px 1px 10px;
 	}
 	
 	@include tablet-max-wp {
@@ -1635,6 +1635,18 @@
 		margin-bottom: 0;
 		border-right: none;
 		box-shadow: var(--black-shadow-light) 5px 1px 10px;
+		background-color: var(--atum-table-bg) !important;
+		
+		tr:not(.item-heads) {
+			td, th {
+				
+				&.check-column {
+					width: auto;
+					padding: 11px 0 0 3px;
+				}
+				
+			}
+		}
 		
 		@media all and (max-width: 600px) {
 			display: none !important;
@@ -1929,7 +1941,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			input[type=checkbox] {
 				@include vertical-align-absolute;
-				z-index: 10;
 			}
 		}
 	}
@@ -2130,7 +2141,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 
 			td.title {
 				.atmi-arrow-child {
-					color: var(--wp-pink-light);
+					color: var(--wc-purple);
 				}
 			}
 		}
@@ -2488,7 +2499,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.column-title {
 			.atmi-arrow-child, .atmi-multi-inventory {
-				color: var(--tertiary-var) !important;
+				color: var(--tertiary-var);
 			}
 		}
 		
