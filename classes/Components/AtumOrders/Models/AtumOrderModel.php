@@ -1104,11 +1104,11 @@ abstract class AtumOrderModel {
 
 		// Default to base.
 		if ( 'base' === $tax_based_on || empty( $args['country'] ) ) {
-			$default          = wc_get_base_location();
-			$args['country']  = $default['country'];
-			$args['state']    = $default['state'];
-			$args['postcode'] = '';
-			$args['city']     = '';
+			$default_country  = wc_get_base_location();
+			$args['country']  = $default_country['country'];
+			$args['state']    = $default_country['state'];
+			$args['postcode'] = WC()->countries->get_base_postcode();
+			$args['city']     = WC()->countries->get_base_city();
 		}
 
 		// Calc taxes for line items.
@@ -1131,12 +1131,14 @@ abstract class AtumOrderModel {
 				$taxes = \WC_Tax::calc_tax( $total, $tax_rates, FALSE );
 
 				if ( $item->is_type( $this->line_item_type ) ) {
+
 					$subtotal       = $item->get_subtotal();
 					$subtotal_taxes = \WC_Tax::calc_tax( $subtotal, $tax_rates, FALSE );
 					$item->set_taxes( array(
 						'total'    => $taxes,
 						'subtotal' => $subtotal_taxes,
 					) );
+
 				}
 				else {
 					$item->set_taxes( array( 'total' => $taxes ) );
