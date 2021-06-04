@@ -269,8 +269,13 @@ class Settings {
 	 * @since 0.0.2
 	 */
 	public function register_settings() {
-		
-		$default_country = get_option( 'woocommerce_default_country' );
+
+		$countries         = WC()->countries;
+		$default_country   = $countries->get_base_country();
+		$default_city      = $countries->get_base_city();
+		$default_adress    = $countries->get_base_address();
+		$default_address_2 = $countries->get_base_address_2();
+		$default_postcode  = $countries->get_base_postcode();
 
 		$this->tabs = array(
 			'general'       => array(
@@ -460,7 +465,7 @@ class Settings {
 				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "The company's street address", ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_adress,
 			),
 			'address_2'                 => array(
 				'group'   => 'store_details',
@@ -468,7 +473,7 @@ class Settings {
 				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_address_2,
 			),
 			'city'                      => array(
 				'group'   => 'store_details',
@@ -476,7 +481,7 @@ class Settings {
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where your business is located', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_city,
 			),
 			'country'                   => array(
 				'group'   => 'store_details',
@@ -492,7 +497,7 @@ class Settings {
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your business', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_postcode,
 			),
 			'same_ship_address'         => array(
 				'group'      => 'store_details',
@@ -520,7 +525,7 @@ class Settings {
 				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The shipping street address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_adress,
 			),
 			'ship_address_2'            => array(
 				'group'   => 'store_details',
@@ -528,7 +533,7 @@ class Settings {
 				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Optional additional info for the Shipping Address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_address_2,
 			),
 			'ship_city'                 => array(
 				'group'   => 'store_details',
@@ -536,7 +541,7 @@ class Settings {
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The city where is your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_city,
 			),
 			'ship_country'              => array(
 				'group'   => 'store_details',
@@ -552,7 +557,7 @@ class Settings {
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
-				'default' => '',
+				'default' => $default_postcode,
 			),
 		);
 
