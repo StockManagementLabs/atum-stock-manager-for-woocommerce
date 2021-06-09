@@ -144,6 +144,7 @@ class AtumColors {
 
 		$this->colors['gray_500_rgb']          = $this->convert_hexadecimal_to_rgb( $this->colors['gray_500'] );
 		$this->colors['gray_600_rgb']          = $this->convert_hexadecimal_to_rgb( $this->colors['gray_600'] );
+		$this->colors['blue_dark']             = $this->convert_hexadecimal_to_rgb( $this->colors['blue_dark'] );
 		$this->colors['white_rgb']             = $this->convert_hexadecimal_to_rgb( $this->colors['white'] );
 		$this->colors['black_rgb']             = $this->convert_hexadecimal_to_rgb( $this->colors['black'] );
 		$this->colors['primary_color']         = ! empty( $visual_settings[ "{$prefix}primary_color" ] ) ? $visual_settings[ "{$prefix}primary_color" ] : $this->colors['blue'];
@@ -246,6 +247,7 @@ class AtumColors {
 			--atum-text-color-var1:$text_color_2;
 			--atum-text-color-var2: $text_color_2;
 			--atum-text-color-var3: $text_color_2;
+			--atum-text-modal-title: {$this->colors['blue_dark']};
 			--atum-setting-info: {$this->colors['gray_500']};
 			--atum-version: $text_color_2;
 			--atum-version-bg: rgba({$this->colors['black_rgb']}, 0.1);
@@ -389,6 +391,7 @@ class AtumColors {
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color']};
 			--atum-text-color-var3: {$this->colors['text_color']};
+			--atum-text-modal-title: {$this->colors['text_color']};
 			--atum-checkbox-label: {$this->colors['white']};
 			--atum-setting-info: {$this->colors['gray_500']};
 			--atum-section-field: {$this->colors['gray_600']};
@@ -512,6 +515,7 @@ class AtumColors {
 			--atum-text-color-var1: {$this->colors['text_color']};
 			--atum-text-color-var2: {$this->colors['text_color_2']};
 			--atum-text-color-var3: {$this->colors['text_color']};
+			--atum-text-modal-title: {$this->colors['blue_dark']};
 			--blue-hover: rgba({$this->colors['primary_color_rgb']}, 0.6);
 			--danger: {$this->colors['danger_color']};
 			--danger-hover: rgba({$this->colors['danger_color_rgb']}, 0.6);
