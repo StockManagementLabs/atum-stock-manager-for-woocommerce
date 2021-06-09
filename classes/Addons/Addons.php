@@ -480,7 +480,7 @@ class Addons {
 		) );
 
 		$request_params = array(
-			'timeout'   => 15,
+			'timeout'   => 20,
 			'sslverify' => FALSE,
 			'body'      => $params,
 		);
