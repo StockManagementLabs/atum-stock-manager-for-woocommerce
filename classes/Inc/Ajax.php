@@ -716,25 +716,39 @@ final class Ajax {
 				// Delete status transient.
 				Addons::delete_status_transient( $addon_name );
 
-				if ( $license_data->activations_left < 1 ) {
-					wp_send_json_error( __( "You've reached your license activation limit for this add-on.<br>Please contact the Stock Management Labs support team.", ATUM_TEXT_DOMAIN ) );
+				// The staging sites doesn't compute as a new activation.
+				if ( Addons::is_local_url() ) {
+
+					wp_send_json( array(
+						'success' => 'activate',
+						'data'    => __( "Your license is valid.<br>This site has been recognised as a staging site and won't compute as a new activation.<br>Please, click the button to activate.", ATUM_TEXT_DOMAIN ),
+					) );
+
+				}
+				else {
+
+					if ( $license_data->activations_left < 1 ) {
+						wp_send_json_error( __( "You've reached your license activation limit for this add-on.<br>Please contact the Stock Management Labs support team.", ATUM_TEXT_DOMAIN ) );
+					}
+
+					$licenses_after_activation = $license_data->activations_left - 1;
+
+					wp_send_json( array(
+						'success' => 'activate',
+						'data'    => sprintf(
+							/* translators: the number of remaininig licenses */
+							_n(
+								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate.',
+								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate.',
+								$licenses_after_activation,
+								ATUM_TEXT_DOMAIN
+							),
+							$licenses_after_activation
+						),
+					) );
+
 				}
 
-				$licenses_after_activation = $license_data->activations_left - 1;
-
-				wp_send_json( array(
-					'success' => 'activate',
-					'data'    => sprintf(
-						/* translators: the number of remaininig licenses */
-						_n(
-							'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate.',
-							'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate.',
-							$licenses_after_activation,
-							ATUM_TEXT_DOMAIN
-						),
-						$licenses_after_activation
-					),
-				) );
 				break;
 
 			case 'expired':
