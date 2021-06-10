@@ -138,7 +138,7 @@ class AtumQueues {
 	 * @param string   $hook     The hook name to call after shutdown.
 	 * @param callable $callback A callable function or method.
 	 * @param array    $params   Optional. Any params that need to be passed to the async action. These params will be unpacked with the spread operator.
-	 * @param int      $priority Default to 10
+	 * @param int      $priority Default to 10.
 	 */
 	public static function add_async_action( $hook, $callback, $params = array(), $priority = 10 ) {
 
