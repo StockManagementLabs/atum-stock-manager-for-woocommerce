@@ -309,7 +309,7 @@ class Addons {
 		if ( ! $addons ) {
 
 			$args = array(
-				'timeout'     => 15,
+				'timeout'     => 20,
 				'redirection' => 1,
 				'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
 			);
