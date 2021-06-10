@@ -55,8 +55,8 @@ export default class SettingsPage {
 		// Enable image uploader with the default options.
 		this.doFileUploaders();
 
-		// Enable theme selector
-        // this.doThemeSelector();
+		// Enable image selectors
+        this.doImageSelector();
 
 		// Toggle Menu.
 		this.toggleMenu();
@@ -205,6 +205,7 @@ export default class SettingsPage {
 			this.enhancedSelect.maybeRestoreEnhancedSelect();
 			this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
 			this.doFileUploaders();
+			this.doImageSelector();
 			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
 			this.$form.show();
 
@@ -680,6 +681,22 @@ export default class SettingsPage {
 			},
 		};
 		new FileUploader(  this.$settingsWrapper.find( '.atum-file-uploader' ), uploaderOptions, true );
+
+	}
+
+	/**
+	 * Prepare the image selectors
+	 */
+	doImageSelector() {
+
+		$( '.atum-image-selector' ).on( 'change', 'input', ( evt: JQueryEventObject ) => {
+
+			const $imgRadio: JQuery = $( evt.currentTarget ).closest( '.atum-image-radio' );
+
+			$imgRadio.siblings( '.active' ).removeClass( 'active' );
+			$imgRadio.addClass( 'active' );
+
+		} );
 
 	}
 

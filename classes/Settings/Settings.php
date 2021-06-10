@@ -1218,15 +1218,15 @@ class Settings {
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?><?php if ( ! empty( $args['options']['is_recurrent'] ) ) echo ' recurrent'; ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) {
+			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) :
 				echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"';
-			}
-			if ( ! empty( $args['options']['processing_msg'] ) ) {
+			endif;
+			if ( ! empty( $args['options']['processing_msg'] ) ) :
 				echo 'data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"';
-			}
-			if ( ! empty( $args['options']['processed_msg'] ) ) {
+			endif;
+			if ( ! empty( $args['options']['processed_msg'] ) ) :
 				echo 'data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"';
-			} ?>>
+			endif; ?>>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
@@ -1240,6 +1240,7 @@ class Settings {
 					&nbsp;
 				</div>
 			<?php endif; ?>
+
 			<?php if ( isset( $args['options']['number'] ) ) :
 				$value = isset( $args['options']['number']['default'] ) ? $args['options']['number']['default'] : 1;
 				?>
@@ -1281,7 +1282,7 @@ class Settings {
 		ob_start();
 		?>
 		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
-				type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 
 		<?php
 
@@ -1334,13 +1335,13 @@ class Settings {
 			<?php foreach ( $args['options']['values'] as $option ) : ?>
 
 				<input type="radio" id="<?php echo esc_attr( $option['key'] ); ?>" name="<?php echo esc_attr( $name ); ?>"
-						value="<?php echo esc_attr( $option['key'] ); ?>"
-						<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? 'checked' : ''; ?>>
+					value="<?php echo esc_attr( $option['key'] ); ?>"
+					<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? 'checked' : ''; ?>>
 
 				<div class="selector-container">
 					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>" data-reset="0">
 						<img src="<?php echo esc_attr( ATUM_URL . 'assets/images/settings/' . $option['thumb'] ); ?>" alt=""
-								class="<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? ' active' : ''; ?>">
+							class="<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? ' active' : ''; ?>">
 					</div>
 
 					<div class="selector-description">
@@ -1402,6 +1403,55 @@ class Settings {
 		echo wp_kses_post( $this->get_description( $args ) );
 
 		echo apply_filters( 'atum/settings/display_image_uploader', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
+	 * Get the settings option array and prints an image radio selector.
+	 *
+	 * @since 1.9.1
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_image_selector( $args ) {
+
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->find_option_value( $args['id'] );
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = is_array( $args['default'] ) ? wp_json_encode( $args['default'] ) : $args['default'];
+			$default = " data-default='" . $default . "'";
+		}
+
+		ob_start();
+		?>
+		<div class="atum-image-selector" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+			<?php foreach ( $args['options']['values'] as $option_value => $option_data ) : ?>
+
+				<?php
+				$is_active   = $value === $option_value;
+				$checked_str = checked( $is_active, TRUE, FALSE );
+				?>
+				<label class="atum-image-radio<?php if ( $is_active ) echo ' active' ?>">
+					<img src="<?php echo esc_url( $option_data['img_url'] ) ?>" alt="">
+					<input type="radio" name="<?php echo esc_attr( $name ) ?>"
+						autocomplete="off"<?php echo wp_kses_post( $checked_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
+						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>
+					>
+
+					<div class="atum-image-radio__label">
+						<?php echo esc_attr( $option_data['label'] ) ?>
+					</div>
+				</label>
+
+			<?php endforeach; ?>
+		</div>
+		<?php
+
+		echo wp_kses_post( $this->get_description( $args ) );
+
+		echo apply_filters( 'atum/settings/display_image_selector', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

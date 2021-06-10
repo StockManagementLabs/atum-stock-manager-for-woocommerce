@@ -797,6 +797,7 @@ var SettingsPage = (function () {
         this.enhancedSelect.doSelect2(this.$settingsWrapper.find('select'), {}, true);
         _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(this.$form);
         this.doFileUploaders();
+        this.doImageSelector();
         this.toggleMenu();
         new _smart_form__WEBPACK_IMPORTED_MODULE_3__["default"](this.$form, this.settings.get('atumPrefix'));
         this.bindEvents();
@@ -875,6 +876,7 @@ var SettingsPage = (function () {
             _this.enhancedSelect.maybeRestoreEnhancedSelect();
             _this.enhancedSelect.doSelect2(_this.$settingsWrapper.find('select'), {}, true);
             _this.doFileUploaders();
+            _this.doImageSelector();
             _this.$form.find('[data-dependency]').change().removeClass('dirty');
             _this.$form.show();
             var $inputButton = _this.$form.find('input:submit');
@@ -1175,6 +1177,13 @@ var SettingsPage = (function () {
             },
         };
         new _file_uploader__WEBPACK_IMPORTED_MODULE_2__["default"](this.$settingsWrapper.find('.atum-file-uploader'), uploaderOptions, true);
+    };
+    SettingsPage.prototype.doImageSelector = function () {
+        $('.atum-image-selector').on('change', 'input', function (evt) {
+            var $imgRadio = $(evt.currentTarget).closest('.atum-image-radio');
+            $imgRadio.siblings('.active').removeClass('active');
+            $imgRadio.addClass('active');
+        });
     };
     return SettingsPage;
 }());

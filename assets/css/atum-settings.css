@@ -5984,6 +5984,51 @@ h2 .atum-help-tip {
   }
 }
 
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio {
+  text-align: center;
+  color: #6c757d;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio + .atum-image-radio {
+  margin-left: 15px;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio img {
+  max-width: 108px;
+  height: auto;
+  border: 2px solid #ced4da;
+  border-radius: 5px;
+  overflow: hidden;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio input {
+  display: none;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio:hover img {
+  border-color: #00B8DB;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio.active {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio.active img {
+  border-color: #00B8DB;
+  -webkit-box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
+          box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
+}
+
 .atum-settings-wrapper #atum-settings .submit {
   padding-top: 0;
   text-align: right;
