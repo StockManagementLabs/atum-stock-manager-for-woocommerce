@@ -1,6 +1,6 @@
 <?php
 /**
- * View for the Purchase Order reports
+ * View for the Purchase Orders' PDF
  *
  * @since 1.4.0
  *
@@ -8,6 +8,9 @@
  * @var int                                   $desc_percent
  * @var float                                 $discount
  * @var int                                   $total_text_colspan
+ * @var string                                $currency
+ * @var array                                 $line_items_shipping
+ * @var WP_Post_Type                          $post_type
  */
 
 defined( 'ABSPATH' ) || die;
@@ -194,7 +197,8 @@ use Atum\Inc\Helpers;
 				</tr>
 			<?php endforeach; ?>
 
-			<?php if ( $line_items_shipping ) : ?>
+			<?php if ( ! empty( $line_items_shipping ) ) : ?>
+
 				<?php foreach ( $line_items_shipping as $item_id => $item ) : ?>
 					<tr class="po-line content-shipping">
 						<td class="description"><?php echo esc_html( $item->get_name() ?: __( 'Shipping', ATUM_TEXT_DOMAIN ) ); ?></td>
@@ -223,6 +227,7 @@ use Atum\Inc\Helpers;
 						<td class="total"><?php echo wc_price( $item->get_total(), array( 'currency' => $currency ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 					</tr>
 				<?php endforeach; ?>
+
 			<?php endif; ?>
 
 			<?php if ( ! empty( $line_items_fee ) ) : ?>
