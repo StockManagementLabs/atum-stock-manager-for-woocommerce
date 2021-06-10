@@ -72,6 +72,11 @@
 					color: $white;
 					font-weight: normal;
 				}
+				
+				a {
+					color: $white;
+				}
+				
 			}
 			
 			&.valid {
@@ -276,7 +281,6 @@
 		}
 		
 		.button {
-			
 			border: none;
 			box-shadow: none;
 			text-shadow: none;
@@ -284,13 +288,13 @@
 			background-color: $primary;
 			color: $white;
 			border-radius: 0;
-			transition: all 0.2s ease-in-out;
 			
 			&.install-addon {
 				background-color: $tertiary;
 				height: 100%;
 				width: 100%;
 				margin-left: 0;
+				
 				&:hover {
 					background-color: lighten($tertiary, 10%);
 				}
@@ -316,9 +320,20 @@
 		}
 		
 		.atum-loading {
-			right: 28px;
-			top: 11px;
+			right: 24px;
+			top: 8px;
 			@include loader(18px, $primary, 3px, 1s);
+		}
+		
+		.theme-actions {
+			&.valid {
+				.atum-loading {
+					border-color: rgba($white, 0.25);
+					border-top-color: $white;
+					top: 14px;
+					right: 38px;
+				}
+			}
 		}
 		
 		@include tablet-max-wp {

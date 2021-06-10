@@ -248,7 +248,6 @@ class Main {
 		FileAttachment::get_instance();
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
-		AtumApi::get_instance();
 		CheckOrderPrices::get_instance();
 		
 		//
@@ -261,6 +260,10 @@ class Main {
 		//
 		// Load extra modules
 		// -------------------!
+		if ( ModuleManager::is_module_active( 'api' ) ) {
+			AtumApi::get_instance();
+		}
+
 		if ( ModuleManager::is_module_active( 'dashboard' ) ) {
 			Dashboard::get_instance();
 		}

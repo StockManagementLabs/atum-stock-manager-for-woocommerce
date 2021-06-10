@@ -480,7 +480,7 @@ class Addons {
 		) );
 
 		$request_params = array(
-			'timeout'   => 15,
+			'timeout'   => 20,
 			'sslverify' => FALSE,
 			'body'      => $params,
 		);
@@ -665,13 +665,13 @@ class Addons {
 				$download = $upgrader->download_package( $download_link );
 
 				if ( is_wp_error( $download ) ) {
-					throw new AtumException( 'addon_download_error', $download->get_error_message() );
+					throw new AtumException( 'addon_download_error', $download->get_error_message() ?: $download->get_error_data() );
 				}
 
 				$working_dir = $upgrader->unpack_package( $download, TRUE );
 
 				if ( is_wp_error( $working_dir ) ) {
-					throw new AtumException( 'addon_unpack_error', $working_dir->get_error_message() );
+					throw new AtumException( 'addon_unpack_error', $working_dir->get_error_message() ?: $working_dir->get_error_data() );
 				}
 
 				$result = $upgrader->install_package( array(
@@ -687,7 +687,7 @@ class Addons {
 				) );
 
 				if ( is_wp_error( $result ) ) {
-					throw new AtumException( 'addon_not_installed', $result->get_error_message() );
+					throw new AtumException( 'addon_not_installed', $result->get_error_message() ?: $result->get_error_data() );
 				}
 
 				$activate = TRUE;
@@ -697,10 +697,12 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-					/* translators: first one is the add-on nam and the second the error message */
-						__( 'ATUM %1$s could not be installed (%2$s). Please download it from your account and install it manually.', ATUM_TEXT_DOMAIN ),
+						/* translators: first one is the add-on nam and the second the error message */
+						__( 'ATUM %1$s could not be installed (%2$s).<br>Please, do %3$sopen a ticket%4$s to contact with the ATUM support team.', ATUM_TEXT_DOMAIN ),
 						$addon_name,
-						$e->getMessage()
+						$e->getMessage(),
+						'<a href="https://stockmanagementlabs.ticksy.com/" target="_blank">',
+						'</a>'
 					),
 				);
 
@@ -898,6 +900,82 @@ class Addons {
 		}
 
 		return $links;
+
+	}
+
+	/**
+	 * Check if the current site is considered a local/test/staging site
+	 *
+	 * @since 1.9.1
+	 *
+	 * @return bool If we're considering the URL local or not
+	 */
+	public static function is_local_url() {
+
+		$is_local_url = FALSE;
+
+		// Trim it up.
+		$url = strtolower( trim( home_url() ) );
+
+		// Need to get the host...so let's add the scheme so we can use parse_url.
+		if ( FALSE === strpos( $url, 'http://' ) && FALSE === strpos( $url, 'https://' ) ) {
+			$url = "http://$url";
+		}
+
+		$url_parts = wp_parse_url( $url );
+		$host      = ! empty( $url_parts['host'] ) ? $url_parts['host'] : FALSE;
+
+		if ( ! empty( $url ) && ! empty( $host ) ) {
+
+			if ( FALSE !== ip2long( $host ) ) {
+
+				if ( ! filter_var( $host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+					$is_local_url = TRUE;
+				}
+
+			}
+			elseif ( 'localhost' === $host ) {
+				$is_local_url = TRUE;
+			}
+
+			$tlds_to_check = array(
+				'.local',
+				'.test',
+			);
+
+			foreach ( $tlds_to_check as $tld ) {
+				if ( FALSE !== strpos( $host, $tld ) ) {
+					$is_local_url = TRUE;
+					break;
+				}
+			}
+
+			if ( substr_count( $host, '.' ) > 1 ) {
+
+				$subdomains_to_check = array(
+					'dev.',
+					'test.',
+					'*.staging.',
+					'*.test.',
+					'staging-*.',
+					'*.wpengine.com',
+				);
+
+				foreach ( $subdomains_to_check as $subdomain ) {
+
+					$subdomain = str_replace( '.', '(.)', $subdomain );
+					$subdomain = str_replace( array( '*', '(.)' ), '(.*)', $subdomain );
+
+					if ( preg_match( '/^(' . $subdomain . ')/', $host ) ) {
+						$is_local_url = TRUE;
+						break;
+					}
+				}
+
+			}
+		}
+
+		return $is_local_url;
 
 	}
 

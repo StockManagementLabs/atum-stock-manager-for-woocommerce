@@ -2836,6 +2836,10 @@ input[type="button"].btn-block {
   font-weight: normal;
 }
 
+.atum-addons .theme .theme-actions.valid a, .atum-addons .theme .theme-actions.invalid a, .atum-addons .theme .theme-actions.inactive a, .atum-addons .theme .theme-actions.coming-soon a {
+  color: #fff;
+}
+
 .atum-addons .theme .theme-actions.valid {
   background-color: #69C61D;
 }
@@ -3052,8 +3056,6 @@ input[type="button"].btn-block {
   background-color: #00B8DB;
   color: #fff;
   border-radius: 0;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
 }
 
 .atum-addons .theme .button.install-addon {
@@ -3084,8 +3086,8 @@ input[type="button"].btn-block {
 }
 
 .atum-addons .theme .atum-loading {
-  right: 28px;
-  top: 11px;
+  right: 24px;
+  top: 8px;
   width: 18px;
   height: 18px;
   border: 3px solid rgba(0, 184, 219, 0.25);
@@ -3106,6 +3108,13 @@ input[type="button"].btn-block {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
   }
+}
+
+.atum-addons .theme .theme-actions.valid .atum-loading {
+  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  top: 14px;
+  right: 38px;
 }
 
 @media all and (max-width: 782px) {

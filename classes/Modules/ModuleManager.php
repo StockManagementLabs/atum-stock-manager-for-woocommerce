@@ -31,7 +31,7 @@ class ModuleManager {
 	 *
 	 * @var array
 	 */
-	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'visual_settings' ];
+	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'visual_settings', 'api' ];
 
 	/**
 	 * The current status of each module
@@ -140,6 +140,15 @@ class ModuleManager {
 			'section' => 'module_manager',
 			'name'    => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( 'Enables/Disables the Visual Settings module.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'switcher',
+			'default' => 'yes',
+		);
+
+		$defaults['api'] = array(
+			'group'   => 'module_manager',
+			'section' => 'module_manager',
+			'name'    => __( 'ATUM API', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Enables/Disables the ATUM's REST API. Please note that the API is required if you intend to use the ATUM's mobile APP.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes',
 		);
