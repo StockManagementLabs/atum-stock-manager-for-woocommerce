@@ -665,6 +665,8 @@ class PurchaseOrders extends AtumOrderPostType {
 					$mpdf->WriteHTML( $stylesheet, 1 );
 				}
 
+				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf );
+
 				$mpdf->WriteHTML( $po_export->get_content() );
 
 				// Output a PDF file directly to the browser.
