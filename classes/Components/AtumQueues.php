@@ -207,14 +207,13 @@ class AtumQueues {
 					$request_args = array(
 						'timeout'    => 0.01,
 						'blocking'   => FALSE,
-						'sslverify'  => apply_filters( 'https_local_ssl_verify', TRUE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+						'sslverify'  => FALSE, // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 						'body'       => $data,
 						'headers'    => array(
 							'cookie' => implode( '; ', $cookies ),
 						),
 						'user-agent' => self::get_async_request_user_agent(),
 					);
-
 					wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
 
 				}
@@ -242,8 +241,6 @@ class AtumQueues {
 			foreach ( $_POST['atum_hooks'] as $priority_group ) {
 
 				foreach ( $priority_group as $hook_data ) {
-
-					$ggg = 9;
 
 					// The class path comes with double slashes.
 					if ( is_array( $hook_data['callback'] ) ) {
@@ -274,9 +271,26 @@ class AtumQueues {
 		$remote_available = AtumCache::get_transient( self::$async_available_transient, TRUE );
 
 		if ( ! $remote_available ) {
+
 			// Just try to get a simple file to get the response as faster as possible.
-			$response         = wp_remote_get( ATUM_URL . 'includes/marketing-popup-content.json', [ 'timeout' => 20 ] );
-			$remote_available = is_wp_error( $response ) || 200 === wp_remote_retrieve_response_code( $response );
+			$response = wp_remote_get( ATUM_URL . 'includes/marketing-popup-content.json', [
+				'timeout'   => 20,
+				'sslverify' => FALSE,
+			] );
+
+			if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+
+				AtumCache::set_transient( self::$async_available_transient, 0, DAY_IN_SECONDS, TRUE );
+				$remote_available = false;
+
+			}
+			else {
+
+				AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );
+				$remote_available = true;
+
+			}
+
 		}
 
 		return $remote_available;
