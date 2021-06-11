@@ -45,6 +45,18 @@ class Addons {
 	private $no_activated_licenses = array();
 
 	/**
+	 * The first version of each addon that returned a value when bootstrapping.
+	 *
+	 * @var array
+	 */
+	private $addons_check_bootstrap = array(
+		'export_pro'      => '1.3.4',
+		'multi_inventory' => '1.5.0',
+		'product_levels'  => '1.6.0',
+		'action_logs'     => '1.1.5',
+	);
+
+	/**
 	 * The ATUM's addons store URL
 	 */
 	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
@@ -168,7 +180,8 @@ class Addons {
 
 					$bootstrapped = call_user_func( $addon['bootstrap'] );
 
-					if ( ! $bootstrapped ) {
+					// Check if it's properly bootstrapped only if has an appropriate version.
+					if ( ! $bootstrapped && ! empty( $this->addons_check_bootstrap[ $index ] ) && version_compare( $this->addons_check_bootstrap[ $index ], $addon['version'], '<' ) ) {
 						unset( self::$addons[ $index ] );
 					}
 				}
