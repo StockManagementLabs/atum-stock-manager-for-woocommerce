@@ -1105,7 +1105,7 @@ final class Helpers {
 	 */
 	public static function load_view( $view, $args = [], $allow_theme_override = TRUE ) {
 		
-		$file = apply_filters( "atum/load_view/$view", $view );
+		$file = apply_filters( "atum/load_view/$view", $view, $args );
 		$args = apply_filters( "atum/load_view_args/$view", $args );
 		
 		// Whether or not .php was added.
