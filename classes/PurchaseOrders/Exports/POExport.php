@@ -223,9 +223,7 @@ class POExport extends PurchaseOrder {
 		
 		$prefix = 'url' === $output ? ATUM_URL : ATUM_PATH;
 		
-		return apply_filters( 'atum/purchase_orders/po_export/css', array(
-			$prefix . 'assets/css/atum-po-export.css',
-		), $output, $this );
+		return apply_filters( 'atum/purchase_orders/po_export/css', array( $prefix . 'assets/css/atum-po-export.css' ), $output, $this );
 	}
 
 }

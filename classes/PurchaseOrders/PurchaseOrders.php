@@ -658,14 +658,15 @@ class PurchaseOrders extends AtumOrderPostType {
 
 				$mpdf->default_available_fonts = $mpdf->available_unifonts;
 
+				// Before the stylesheets are added and the output is done. So we can apply any template.
+				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf, $atum_order_id );
+
 				$css = $po_export->get_stylesheets();
 
 				foreach ( $css as $file ) {
 					$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 					$mpdf->WriteHTML( $stylesheet, 1 );
 				}
-
-				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf );
 
 				$mpdf->WriteHTML( $po_export->get_content() );
 
