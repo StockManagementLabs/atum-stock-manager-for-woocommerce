@@ -661,11 +661,24 @@ class PurchaseOrders extends AtumOrderPostType {
 				// Before the stylesheets are added and the output is done. So we can apply any template.
 				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf, $atum_order_id );
 
-				$css = $po_export->get_stylesheets();
+				$debug_html = '';
+				$css        = $po_export->get_stylesheets();
 
 				foreach ( $css as $file ) {
-					$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-					$mpdf->WriteHTML( $stylesheet, 1 );
+
+					if ( TRUE === POExport::DEBUG_MODE ) {
+						$debug_html .= '<link rel="stylesheet" href="' . ATUM_URL . 'assets/css/' . basename( $file ) . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+					}
+					else {
+						$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+						$mpdf->WriteHTML( $stylesheet, 1 );
+					}
+
+				}
+
+				if ( TRUE === POExport::DEBUG_MODE ) {
+					$debug_html .= $po_export->get_content();
+					wp_die( $debug_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				$mpdf->WriteHTML( $po_export->get_content() );

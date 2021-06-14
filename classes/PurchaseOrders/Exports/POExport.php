@@ -35,6 +35,11 @@ class POExport extends PurchaseOrder {
 	 * @var array
 	 */
 	private $shipping_data = [];
+
+	/**
+	 * Only for PDF debugging during development.
+	 */
+	const DEBUG_MODE = FALSE;
 	
 	/**
 	 * POModel constructor
