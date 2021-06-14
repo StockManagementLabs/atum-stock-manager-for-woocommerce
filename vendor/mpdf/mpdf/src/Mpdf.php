@@ -4,24 +4,16 @@ namespace Mpdf;
 
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
-
 use Mpdf\Conversion;
-
 use Mpdf\Css\Border;
 use Mpdf\Css\TextVars;
-
 use Mpdf\Log\Context as LogContext;
-
 use Mpdf\Fonts\MetricsGenerator;
-
 use Mpdf\Output\Destination;
-
 use Mpdf\QrCode;
-
 use Mpdf\Utils\Arrays;
 use Mpdf\Utils\NumericString;
 use Mpdf\Utils\UtfString;
-
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -39,7 +31,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	use Strict;
 	use FpdiTrait;
 
-	const VERSION = '8.0.7';
+	const VERSION = '8.0.11';
 
 	const SCALE = 72 / 25.4;
 
@@ -290,6 +282,8 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	private $fontDir;
 
 	var $tempDir;
+
+	var $cacheCleanupInterval;
 
 	var $allowAnnotationFiles;
 
@@ -673,6 +667,13 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	 * @var int
 	 */
 	var $curlTimeout;
+
+	/**
+	 * Set execution timeout for cURL
+	 *
+	 * @var int
+	 */
+	var $curlExecutionTimeout;
 
 	/**
 	 * Set to true to follow redirects with cURL.
@@ -3165,7 +3166,9 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		}
 
 		// Start new page
+		$pageBeforeNewPage = $this->page;
 		$this->_beginpage($orientation, $mgl, $mgr, $mgt, $mgb, $mgh, $mgf, $ohname, $ehname, $ofname, $efname, $ohvalue, $ehvalue, $ofvalue, $efvalue, $pagesel, $newformat);
+		$isNewPage = $pageBeforeNewPage !== $this->page;
 
 		if ($this->docTemplate) {
 			$currentReaderId = $this->currentReaderId;
@@ -3188,10 +3191,14 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 			$this->useTemplate($this->pageTemplate);
 		}
 
-		// Tiling Patterns
-		$this->writer->write('___PAGE___START' . $this->uniqstr);
-		$this->writer->write('___BACKGROUND___PATTERNS' . $this->uniqstr);
-		$this->writer->write('___HEADER___MARKER' . $this->uniqstr);
+		// Only add the headers if it's a new page
+		if ($isNewPage) {
+			// Tiling Patterns
+			$this->writer->write('___PAGE___START' . $this->uniqstr);
+			$this->writer->write('___BACKGROUND___PATTERNS' . $this->uniqstr);
+			$this->writer->write('___HEADER___MARKER' . $this->uniqstr);
+		}
+
 		$this->pageBackgrounds = [];
 
 		// Set line cap style to square
@@ -4057,13 +4064,15 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 				$style = 'BI';
 			}
 		}
-		if ($size == 0) {
+
+		if (!$size) {
 			$size = $this->FontSizePt;
 		}
 
 		$fontkey = $family . $style;
 
 		$stylekey = $style;
+
 		if (!$stylekey) {
 			$stylekey = "R";
 		}
@@ -9303,15 +9312,18 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		} else {
 			$s = '[] 0 d';
 		}
+
 		if ($this->page > 0 && ((isset($this->pageoutput[$this->page]['Dash']) && $this->pageoutput[$this->page]['Dash'] != $s) || !isset($this->pageoutput[$this->page]['Dash']))) {
 			$this->writer->write($s);
 		}
+
 		$this->pageoutput[$this->page]['Dash'] = $s;
 	}
 
 	function SetDisplayPreferences($preferences)
 	{
 		// String containing any or none of /HideMenubar/HideToolbar/HideWindowUI/DisplayDocTitle/CenterWindow/FitWindow
+
 		$this->DisplayPreferences .= $preferences;
 	}
 
@@ -9319,14 +9331,19 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	{
 		// Added collapsible to allow collapsible top-margin on new page
 		// Line feed; default value is last cell height
-		$this->x = $this->lMargin + $this->blk[$this->blklvl]['outer_left_margin'];
+
+		$margin = isset($this->blk[$this->blklvl]['outer_left_margin']) ? $this->blk[$this->blklvl]['outer_left_margin'] : 0;
+
+		$this->x = $this->lMargin + $margin;
+
 		if ($collapsible && ($this->y == $this->tMargin) && (!$this->ColActive)) {
 			$h = 0;
 		}
+
 		if (is_string($h)) {
-			$this->y+=$this->lasth;
+			$this->y += $this->lasth;
 		} else {
-			$this->y+=$h;
+			$this->y += $h;
 		}
 	}
 
@@ -9655,10 +9672,9 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 				$this->pgwidth = $this->w - $this->lMargin - $this->rMargin;
 				$this->x = $this->lMargin;
 				$this->y = $this->margin_header;
-				$html = str_replace('{PAGENO}', $pnstr, $html);
-				$html = str_replace($this->aliasNbPgGp, $pntstr, $html); // {nbpg}
-				$html = str_replace($this->aliasNbPg, $nb, $html); // {nb}
-				$html = preg_replace_callback('/\{DATE\s+(.*?)\}/', [$this, 'date_callback'], $html); // mPDF 5.7
+
+				// Replace of page number aliases and date format
+				$html = $this->aliasReplace($html, $pnstr, $pntstr, $nb);
 
 				$this->HTMLheaderPageLinks = [];
 				$this->HTMLheaderPageAnnots = [];
@@ -9736,11 +9752,8 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 					$top_y = $this->y = ($this->h + 0.01);
 				}
 
-				$html = str_replace('{PAGENO}', $pnstr, $html);
-				$html = str_replace($this->aliasNbPgGp, $pntstr, $html); // {nbpg}
-				$html = str_replace($this->aliasNbPg, $nb, $html); // {nb}
-				$html = preg_replace_callback('/\{DATE\s+(.*?)\}/', [$this, 'date_callback'], $html); // mPDF 5.7
-
+				// Replace of page number aliases and date format
+				$html = $this->aliasReplace($html, $pnstr, $pntstr, $nb);
 
 				$this->HTMLheaderPageLinks = [];
 				$this->HTMLheaderPageAnnots = [];
@@ -9814,6 +9827,10 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 				}
 				/* -- END FORMS -- */
 			}
+
+			// Customization for https://github.com/mpdf/mpdf/issues/172
+			// Replace of page number aliases and date format
+			$this->pages[$n] = $this->aliasReplace($this->pages[$n], $pnstr, $pntstr, $nb);
 		}
 
 		$this->page = $nb;
@@ -12353,10 +12370,13 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		$save_y = $this->y;
 		$this->x = $this->lMargin;
 		$this->y = $this->margin_header;
-		$html = str_replace('{PAGENO}', $this->pagenumPrefix . $this->docPageNum($this->page) . $this->pagenumSuffix, $html);
-		$html = str_replace($this->aliasNbPgGp, $this->nbpgPrefix . $this->docPageNumTotal($this->page) . $this->nbpgSuffix, $html);
-		$html = str_replace($this->aliasNbPg, $this->page, $html);
-		$html = preg_replace_callback('/\{DATE\s+(.*?)\}/', [$this, 'date_callback'], $html); // mPDF 5.7
+
+		// Replace of page number aliases and date format
+		$pnstr = $this->pagenumPrefix . $this->docPageNum($this->page) . $this->pagenumSuffix;
+		$pntstr = $this->nbpgPrefix . $this->docPageNumTotal($this->page) . $this->nbpgSuffix;
+		$nb = $this->page;
+		$html = $this->aliasReplace($html, $pnstr, $pntstr, $nb);
+
 		$this->HTMLheaderPageLinks = [];
 		$this->HTMLheaderPageAnnots = [];
 		$this->HTMLheaderPageForms = [];
@@ -26886,7 +26906,15 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	function AdjustHTML($html, $tabSpaces = 8)
 	{
 		$limit = ini_get('pcre.backtrack_limit');
-		if (strlen($html) > $limit) {
+
+		if (0 >= (int) $limit) {
+			throw new \Mpdf\MpdfException(sprintf(
+				'mPDF will not process HTML with disabled pcre.backtrack_limit to prevent unexpected behaviours, please set a positive backtrack limit.',
+				$limit
+			));
+		}
+
+		if (strlen($html) > (int) $limit) {
 			throw new \Mpdf\MpdfException(sprintf(
 				'The HTML code size is larger than pcre.backtrack_limit %d. You should use WriteHTML() with smaller string lengths.',
 				$limit
@@ -27327,6 +27355,31 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	public function _out($s)
 	{
 		$this->writer->write($s);
+	}
+
+	/**
+	 * @param string $html
+	 * @param string $PAGENO
+	 * @param string $NbPgGp
+	 * @param string $NbPg
+	 * @return string
+	 */
+	protected function aliasReplace($html, $PAGENO, $NbPgGp, $NbPg)
+	{
+		// Replaces for header and footer
+		$html = str_replace('{PAGENO}', $PAGENO, $html);
+		$html = str_replace($this->aliasNbPgGp, $NbPgGp, $html); // {nbpg}
+		$html = str_replace($this->aliasNbPg, $NbPg, $html); // {nb}
+
+		// Replaces for the body
+		$html = str_replace(mb_convert_encoding('{PAGENO}', 'UTF-16BE', 'UTF-8'), mb_convert_encoding($PAGENO, 'UTF-16BE', 'UTF-8'), $html);
+		$html = str_replace(mb_convert_encoding($this->aliasNbPgGp, 'UTF-16BE', 'UTF-8'), mb_convert_encoding($NbPgGp, 'UTF-16BE', 'UTF-8'), $html); // {nbpg}
+		$html = str_replace(mb_convert_encoding($this->aliasNbPg, 'UTF-16BE', 'UTF-8'), mb_convert_encoding($NbPg, 'UTF-16BE', 'UTF-8'), $html); // {nb}
+
+		// Date replace
+		$html = preg_replace_callback('/\{DATE\s+(.*?)\}/', [$this, 'date_callback'], $html); // mPDF 5.7
+
+		return $html;
 	}
 
 }

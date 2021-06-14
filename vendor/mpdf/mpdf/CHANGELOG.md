@@ -23,6 +23,12 @@ mPDF 8.0.x
 * Fixed CMYK colors in text-shadow (#1115, @lexilya)
 * Skip non supported wrappers when resolving paths (#1204, @MarkVaughn)
 * Fixed SVGs using a style tag, has styles ignored ( Requires ext-dom ) (#450, @antman3351)
+* Allows `{nb}`, `{nbpg}`, `{PAGENO}` and `{DATE ...}` substitution in body (#172 and #267, @Dasc3er)
+* Cache now creates a dedicated subdirectory `/mpdf`.
+* It is possible to disable automatic cache cleanup with `cacheCleanupInterval` config variable
+* PHP 8.0 is supported since 8.0.10 (#1263)
+* Fix: First header of named page is added twice (@antman3351, #1320)
+* Added `curlExecutionTimeout` configuration variable allowing to `CURLOPT_TIMEOUT` when fetching remote content
 
 mPDF 8.0.0
 ===========================

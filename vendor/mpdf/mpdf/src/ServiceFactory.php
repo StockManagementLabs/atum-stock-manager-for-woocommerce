@@ -5,15 +5,11 @@ namespace Mpdf;
 use Mpdf\Color\ColorConverter;
 use Mpdf\Color\ColorModeConverter;
 use Mpdf\Color\ColorSpaceRestrictor;
-
 use Mpdf\Fonts\FontCache;
 use Mpdf\Fonts\FontFileFinder;
-
 use Mpdf\Image\ImageProcessor;
-
 use Mpdf\Pdf\Protection;
 use Mpdf\Pdf\Protection\UniqidGenerator;
-
 use Mpdf\Writer\BaseWriter;
 use Mpdf\Writer\BackgroundWriter;
 use Mpdf\Writer\ColorWriter;
@@ -25,7 +21,6 @@ use Mpdf\Writer\JavaScriptWriter;
 use Mpdf\Writer\MetadataWriter;
 use Mpdf\Writer\OptionalContentWriter;
 use Mpdf\Writer\PageWriter;
-
 use Mpdf\Writer\ResourceWriter;
 use Psr\Log\LoggerInterface;
 
@@ -56,8 +51,10 @@ class ServiceFactory
 
 		$tableOfContents = new TableOfContents($mpdf, $sizeConverter);
 
-		$cache = new Cache($config['tempDir']);
-		$fontCache = new FontCache(new Cache($config['tempDir'] . '/ttfontdata'));
+		$cacheBasePath = $config['tempDir'] . '/mpdf';
+
+		$cache = new Cache($cacheBasePath, $config['cacheCleanupInterval']);
+		$fontCache = new FontCache(new Cache($cacheBasePath . '/ttfontdata', $config['cacheCleanupInterval']));
 
 		$fontFileFinder = new FontFileFinder($config['fontDir']);
 
