@@ -1,0 +1,50 @@
+//
+// Image Selector
+//----------------
+
+.atum-image-selector {
+	display: flex;
+	
+	.atum-image-radio {
+		text-align: center;
+		
+		+ .atum-image-radio {
+			margin-left: $grid-gutter-width/2;
+		}
+		
+		img {
+			max-width: 108px;
+			height: auto;
+			border: 2px solid $gray-400;
+			border-radius: 8px;
+			overflow: hidden;
+			transition: .2s ease-in-out;
+		}
+		
+		input {
+			display: none;
+		}
+		
+		&:hover {
+			img {
+				border-color: $primary;
+			}
+		}
+		
+		&.active {
+			background-color: transparent !important;
+			box-shadow: none !important;
+			
+			img {
+				border-color: $primary;
+				box-shadow: 0 2px 6px 2px rgba($primary, 0.3), 0 -2px 3px 0 rgba($primary, 0.5);
+			}
+		}
+		
+		&__label {
+			color: $gray-600;
+		}
+		
+	}
+	
+}

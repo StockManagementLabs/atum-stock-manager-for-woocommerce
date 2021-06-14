@@ -3578,6 +3578,54 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   vertical-align: -3px;
 }
 
+.atum-image-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.atum-image-selector .atum-image-radio {
+  text-align: center;
+}
+
+.atum-image-selector .atum-image-radio + .atum-image-radio {
+  margin-left: 15px;
+}
+
+.atum-image-selector .atum-image-radio img {
+  max-width: 108px;
+  height: auto;
+  border: 2px solid #ced4da;
+  border-radius: 8px;
+  overflow: hidden;
+  -webkit-transition: .2s ease-in-out;
+  transition: .2s ease-in-out;
+}
+
+.atum-image-selector .atum-image-radio input {
+  display: none;
+}
+
+.atum-image-selector .atum-image-radio:hover img {
+  border-color: #00B8DB;
+}
+
+.atum-image-selector .atum-image-radio.active {
+  background-color: transparent !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.atum-image-selector .atum-image-radio.active img {
+  border-color: #00B8DB;
+  -webkit-box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
+          box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
+}
+
+.atum-image-selector .atum-image-radio__label {
+  color: #6c757d;
+}
+
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -5982,51 +6030,6 @@ h2 .atum-help-tip {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {
     width: 100% !important;
   }
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio {
-  text-align: center;
-  color: #6c757d;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio + .atum-image-radio {
-  margin-left: 15px;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio img {
-  max-width: 108px;
-  height: auto;
-  border: 2px solid #ced4da;
-  border-radius: 5px;
-  overflow: hidden;
-  -webkit-transition: .2s ease-in-out;
-  transition: .2s ease-in-out;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio input {
-  display: none;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio:hover img {
-  border-color: #00B8DB;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio.active {
-  background-color: transparent;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-.atum-settings-wrapper #atum-settings .section-fields .atum-image-selector .atum-image-radio.active img {
-  border-color: #00B8DB;
-  -webkit-box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
-          box-shadow: 0 2px 6px 2px rgba(0, 184, 219, 0.3), 0 -2px 3px 0 rgba(0, 184, 219, 0.5);
 }
 
 .atum-settings-wrapper #atum-settings .submit {
