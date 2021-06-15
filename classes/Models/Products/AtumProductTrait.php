@@ -28,43 +28,44 @@ trait AtumProductTrait {
 	 * @var bool
 	 */
 	protected $atum_data = array(
-		'purchase_price'              => '',
-		'supplier_id'                 => NULL,
-		'supplier_sku'                => '',
-		'atum_controlled'             => TRUE,
+		'purchase_price'                => '',
+		'supplier_id'                   => NULL,
+		'supplier_sku'                  => '',
+		'atum_controlled'               => TRUE,
 		// When a new product is created, the ATUM controlled should be enabled by default.
-		'out_stock_date'              => NULL,
-		'out_stock_threshold'         => '',
-		'inheritable'                 => FALSE,
-		'inbound_stock'               => NULL,
-		'stock_on_hold'               => NULL,
-		'sold_today'                  => NULL,
-		'sales_last_days'             => NULL,
-		'reserved_stock'              => NULL,
-		'customer_returns'            => NULL,
-		'warehouse_damage'            => NULL,
-		'lost_in_post'                => NULL,
-		'other_logs'                  => NULL,
-		'out_stock_days'              => NULL,
-		'lost_sales'                  => NULL,
-		'has_location'                => NULL,
-		'update_date'                 => NULL,
-		'atum_stock_status'           => 'instock',
-		'low_stock'                   => NULL,
+		'out_stock_date'                => NULL,
+		'out_stock_threshold'           => '',
+		'inheritable'                   => FALSE,
+		'inbound_stock'                 => NULL,
+		'stock_on_hold'                 => NULL,
+		'sold_today'                    => NULL,
+		'sales_last_days'               => NULL,
+		'reserved_stock'                => NULL,
+		'customer_returns'              => NULL,
+		'warehouse_damage'              => NULL,
+		'lost_in_post'                  => NULL,
+		'other_logs'                    => NULL,
+		'out_stock_days'                => NULL,
+		'lost_sales'                    => NULL,
+		'has_location'                  => NULL,
+		'update_date'                   => NULL,
+		'atum_stock_status'             => 'instock',
+		'low_stock'                     => NULL,
 		// Extra props (from ATUM add-ons).
-		'minimum_threshold'           => NULL, // PL.
-		'available_to_purchase'       => NULL, // PL.
-		'selling_priority'            => NULL, // PL.
-		'calculated_stock'            => NULL, // PL.
-		'is_bom'                      => 0,    // PL.
-		'multi_inventory'             => NULL, // MI.
-		'inventory_iteration'         => NULL, // MI.
-		'inventory_sorting_mode'      => NULL, // MI.
-		'expirable_inventories'       => NULL, // MI.
-		'price_per_inventory'         => NULL, // MI.
-		'selectable_inventories'      => NULL, // MI.
-		'selectable_inventories_mode' => NULL, // MI.
-		'show_write_off_inventories'  => NULL, // MI.
+		'minimum_threshold'             => NULL, // PL.
+		'available_to_purchase'         => NULL, // PL.
+		'selling_priority'              => NULL, // PL.
+		'calculated_stock'              => NULL, // PL.
+		'is_bom'                        => 0,    // PL.
+		'multi_inventory'               => NULL, // MI.
+		'inventory_iteration'           => NULL, // MI.
+		'inventory_sorting_mode'        => NULL, // MI.
+		'expirable_inventories'         => NULL, // MI.
+		'price_per_inventory'           => NULL, // MI.
+		'selectable_inventories'        => NULL, // MI.
+		'selectable_inventories_mode'   => NULL, // MI.
+		'show_write_off_inventories'    => NULL, // MI.
+		'show_out_of_stock_inventories' => NULL, // MI.
 	);
 
 
@@ -595,6 +596,27 @@ trait AtumProductTrait {
 		return $show_write_off_inventories;
 	}
 
+	/**
+	 * Returns the product's show_out_of_stock_inventories prop.
+	 *
+	 * @since   1.9.0.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_show_out_of_stock_inventories( $context = 'view' ) {
+
+		$show_out_of_stock_inventories = $this->get_prop( 'show_out_of_stock_inventories', $context );
+
+		if ( ! is_null( $show_out_of_stock_inventories ) ) {
+			$show_out_of_stock_inventories = wc_bool_to_string( $show_out_of_stock_inventories );
+		}
+
+		return $show_out_of_stock_inventories;
+	}
+
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
@@ -1071,6 +1093,20 @@ trait AtumProductTrait {
 
 		$show_write_off_inventories = ! is_null( $show_write_off_inventories ) && 'global' !== $show_write_off_inventories ? wc_string_to_bool( $show_write_off_inventories ) : NULL;
 		$this->set_prop( 'show_write_off_inventories', $show_write_off_inventories );
+	}
+
+	/**
+	 * Set the Show "No-Stock" inventories option for the current product.
+	 *
+	 * @since   1.9.0.1
+	 * @package Multi-Inventory
+	 *
+	 * @param string $show_out_of_stock_inventories Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_show_out_of_stock_inventories( $show_out_of_stock_inventories ) {
+
+		$show_out_of_stock_inventories = ! is_null( $show_out_of_stock_inventories ) && 'global' !== $show_out_of_stock_inventories ? wc_string_to_bool( $show_out_of_stock_inventories ) : NULL;
+		$this->set_prop( 'show_out_of_stock_inventories', $show_out_of_stock_inventories );
 	}
 
 
