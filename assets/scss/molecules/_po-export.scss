@@ -48,9 +48,11 @@ body {
 	.float-left {
 		width: 40%;
 	}
+	
 	.float-right {
 		width: 40%;
 	}
+	
 	h4 {
 		font-size: 18px;
 		background-color: $primary;
@@ -77,6 +79,7 @@ body {
 			text-transform: uppercase;
 		}
 	}
+	
 	th, td {
 		font-size: 14px;
 		text-align: right;
@@ -86,15 +89,23 @@ body {
 		padding: 5px 10px;
 		
 	}
+	
 	.description {
 		text-align: left;
 	}
+	
 	.qty {
 		text-align: center;
 	}
+	
 	td.total, .po-lines tr:nth-child(even) td {
 		background-color: transparentize($primary, .9);
 	}
+}
+
+.atum-order-item-sku {
+	color: #888;
+	font-size: 12px;
 }
 
 .content-totals {
@@ -108,8 +119,8 @@ body {
 		border-top: 2px solid $primary;
 		font-weight: bold;
 	}
-	
 }
+
 .content-description {
 	.label {
 		text-transform: uppercase;

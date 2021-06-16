@@ -448,6 +448,11 @@ body {
   background-color: rgba(0, 184, 219, 0.1);
 }
 
+.atum-order-item-sku {
+  color: #888;
+  font-size: 12px;
+}
+
 .content-totals .subtotal td {
   border-top: 2px solid #00B8DB;
   padding-top: 20px;
