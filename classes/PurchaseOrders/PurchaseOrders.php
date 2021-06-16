@@ -20,7 +20,6 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Models\Products\AtumProductTrait;
-use Atum\PurchaseOrders\Exports\POExport;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
@@ -611,9 +610,9 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Generate an Atum order pdf
+	 * Generate an ATUM Order PDF
 	 *
-	 * @since        1.3.9
+	 * @since 1.3.9
 	 */
 	public function generate_order_pdf() {
 
@@ -621,14 +620,20 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		if ( AtumCapabilities::current_user_can( 'export_data' ) && check_admin_referer( 'atum-order-pdf' ) && $atum_order_id ) {
 
-			$po_export = new POExport( $atum_order_id );
+			$po_export_class = apply_filters( 'atum/purchase_orders/export_class', 'Atum\PurchaseOrders\Exports\POExport' );
+
+			if ( ! class_exists( $po_export_class ) ) {
+				return;
+			}
+
+			$po_export = new $po_export_class( $atum_order_id );
 
 			try {
-				
-				$uploads = wp_upload_dir();
-				
-				$temp_dir = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum' );
-				
+
+				$is_debug_mode = TRUE === $po_export->get_debug_mode();
+				$uploads       = wp_upload_dir();
+				$temp_dir      = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum' );
+
 				if ( ! is_dir( $temp_dir ) ) {
 					
 					// Try to create it.
@@ -662,12 +667,12 @@ class PurchaseOrders extends AtumOrderPostType {
 				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf, $atum_order_id );
 
 				$debug_html = '';
-				$css        = $po_export->get_stylesheets();
+				$css        = $po_export->get_stylesheets( $is_debug_mode ? 'url' : 'path' );
 
 				foreach ( $css as $file ) {
 
-					if ( TRUE === POExport::DEBUG_MODE ) {
-						$debug_html .= '<link rel="stylesheet" href="' . ATUM_URL . 'assets/css/' . basename( $file ) . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+					if ( $is_debug_mode ) {
+						$debug_html .= '<link rel="stylesheet" href="' . $file . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
 					}
 					else {
 						$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
@@ -676,7 +681,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 				}
 
-				if ( TRUE === POExport::DEBUG_MODE ) {
+				if ( $is_debug_mode ) {
 					$debug_html .= $po_export->get_content();
 					wp_die( $debug_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}

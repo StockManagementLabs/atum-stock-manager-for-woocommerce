@@ -2,8 +2,8 @@
 /**
  * Extends the Purchase Order Class and exports it as PDF
  *
- * @package         Atum\DataExport
- * @subpackage      Reports
+ * @package         Atum\PurchaseOrders
+ * @subpackage      Exports
  * @author          Be Rebel - https://berebel.io
  * @copyright       ©2021 Stock Management Labs™
  *
@@ -38,11 +38,14 @@ class POExport extends PurchaseOrder {
 
 	/**
 	 * Only for PDF debugging during development.
+	 *
+	 * @var bool
 	 */
-	const DEBUG_MODE = FALSE;
+	private $debug_mode = FALSE;
+
 	
 	/**
-	 * POModel constructor
+	 * POExport constructor
 	 *
 	 * @since 1.3.9
 	 *
@@ -229,6 +232,15 @@ class POExport extends PurchaseOrder {
 		$prefix = 'url' === $output ? ATUM_URL : ATUM_PATH;
 		
 		return apply_filters( 'atum/purchase_orders/po_export/css', array( $prefix . 'assets/css/atum-po-export.css' ), $output, $this );
+	}
+
+	/**
+	 * Getter for the debug mode
+	 *
+	 * @since 1.9.1
+	 */
+	public function get_debug_mode() {
+		return $this->debug_mode;
 	}
 
 }
