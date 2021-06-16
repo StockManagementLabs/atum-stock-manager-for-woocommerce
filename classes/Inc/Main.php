@@ -22,6 +22,7 @@ use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumNotifications;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
@@ -249,7 +250,8 @@ class Main {
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
 		CheckOrderPrices::get_instance();
-		
+		AtumNotifications::get_instance();
+
 		//
 		// Enable WPML module if needed
 		// -----------------------------!
