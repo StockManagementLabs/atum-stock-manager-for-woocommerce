@@ -89,7 +89,6 @@ use Atum\Inc\Helpers;
 		<tbody class="po-lines">
 			<?php foreach ( $po->get_items() as $item ) :
 
-				$show_sku = apply_filters( 'atum/atum_order/report/show_sku', TRUE, $item, $item->get_order() );
 				/**
 				 * Variable definition
 				 *
@@ -104,31 +103,29 @@ use Atum\Inc\Helpers;
 
 						if ( $product instanceof \WC_Product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 
-							$supplier_sku = $product->get_supplier_sku();
-							
-							if ( $supplier_sku && $show_sku ) : ?>
-								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
-								<br>
-									<?php esc_html_e( 'Supplier SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $supplier_sku ) ?>
-								</span>
-							<?php endif;
-							
-							$sku = $product->get_sku();
-							
-							if ( $sku && $show_sku ) : ?>
-								<span class="atum-order-item-sku" style="color: #888; font-size: 12px;">
-								<br>
-									<?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?> <?php echo esc_html( $sku ) ?>
-								</span>
+							$supplier_sku = (array) apply_filters( 'atum/atum_order/po_report/supplier_sku', [ $product->get_supplier_sku() ], $item );
+
+							if ( ! empty( $supplier_sku ) ) : ?>
+								<div class="atum-order-item-sku">
+									<?php echo esc_html( _n( 'Supplier SKU:', 'Supplier SKUs:', count( $supplier_sku ), ATUM_TEXT_DOMAIN ) . ' ' . implode( ', ', $supplier_sku ) ) ?>
+								</div>
 							<?php endif;
 
-							do_action( 'atum/atum_order/after_item_product_report', $item, $item->get_order() );
+							$sku = (array) apply_filters( 'atum/atum_order/po_report/sku', [ $product->get_sku() ], $item );
+
+							if ( ! empty( $sku ) ) : ?>
+								<div class="atum-order-item-sku">
+									<?php echo esc_html( _n( 'SKU:', 'SKUs:', count( $sku ), ATUM_TEXT_DOMAIN ) . ' ' . implode( ', ', $sku ) ) ?>
+								</div>
+							<?php endif;
+
+							do_action( 'atum/atum_order/po_report/after_item_product', $item, $item->get_order() );
 
 						endif;
 
 
 						// Show the custom meta.
-						$hidden_item_meta = apply_filters( 'atum/atum_order/hidden_item_meta', array(
+						$hidden_item_meta = apply_filters( 'atum/atum_order/po_report/hidden_item_meta', array(
 							'_qty',
 							'_tax_class',
 							'_product_id',
