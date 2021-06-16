@@ -18,6 +18,9 @@ use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Supplier;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 
 
 class POExport extends PurchaseOrder {
@@ -241,6 +244,85 @@ class POExport extends PurchaseOrder {
 	 */
 	public function get_debug_mode() {
 		return $this->debug_mode;
+	}
+
+	/**
+	 * Generate the PO PDF
+	 *
+	 * @since 1.9.1
+	 *
+	 * @param Destination $destination_mode
+	 *
+	 * @return string|\WP_Error
+	 *
+	 * @throws \Mpdf\MpdfException
+	 */
+	public function generate_pdf( $destination_mode = Destination::INLINE ) {
+
+		try {
+
+			$is_debug_mode = TRUE === $this->debug_mode;
+			$uploads       = wp_upload_dir();
+			$temp_dir      = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/po_export/temp_pdf_dir', '/atum' );
+
+			if ( ! is_dir( $temp_dir ) ) {
+
+				// Try to create it.
+				$success = mkdir( $temp_dir, 0777, TRUE );
+
+				// If can't create it, use default uploads folder.
+				if ( ! $success || ! is_writable( $temp_dir ) ) {
+					$temp_dir = $uploads['basedir'];
+				}
+
+			}
+
+			do_action( 'atum/purchase_orders/po_export/generate_pdf', $this->id );
+
+			$mpdf = new Mpdf( [
+				'mode'    => 'utf-8',
+				'format'  => 'A4',
+				'tempDir' => $temp_dir,
+			] );
+
+			// Add support for non-Latin languages.
+			$mpdf->useAdobeCJK      = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$mpdf->autoScriptToLang = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$mpdf->autoLangToFont   = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+
+			$mpdf->SetTitle( __( 'Purchase Order', ATUM_TEXT_DOMAIN ) );
+
+			$mpdf->default_available_fonts = $mpdf->available_unifonts;
+
+			$debug_html = '';
+			$css        = $this->get_stylesheets( $is_debug_mode ? 'url' : 'path' );
+
+			foreach ( $css as $file ) {
+
+				if ( $is_debug_mode ) {
+					$debug_html .= '<link rel="stylesheet" href="' . $file . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+				}
+				else {
+					$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+					$mpdf->WriteHTML( $stylesheet, 1 );
+				}
+
+			}
+
+			if ( $is_debug_mode ) {
+				$debug_html .= $this->get_content();
+
+				return $debug_html;
+			}
+
+			$mpdf->WriteHTML( $this->get_content() );
+
+			return $mpdf->Output( "po-{$this->id}.pdf", $destination_mode );
+
+		} catch ( MpdfException $e ) {
+			return new \WP_Error( 'atum_pdf_generation_error', $e->getMessage() );
+		}
+
 	}
 
 }

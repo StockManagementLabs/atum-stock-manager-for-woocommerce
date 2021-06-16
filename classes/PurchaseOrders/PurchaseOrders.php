@@ -22,11 +22,9 @@ use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
+use Atum\PurchaseOrders\Exports\POExport;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\Suppliers\Suppliers;
-use Mpdf\Mpdf;
-use Mpdf\MpdfException;
-use Mpdf\Output\Destination;
 
 class PurchaseOrders extends AtumOrderPostType {
 
@@ -143,7 +141,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_filter( 'atum/' . self::POST_TYPE . '/admin_order_actions', array( $this, 'add_generate_pdf' ), 10, 2 );
 
 		// Generate Purchase Order's PDF.
-		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_order_pdf' ) );
+		add_action( 'wp_ajax_atum_order_pdf', array( $this, 'generate_po_pdf' ) );
 
 		// Add the hooks for the Purchase Price field.
 		ProductDataMetaBoxes::get_instance()->purchase_price_hooks();
@@ -610,11 +608,11 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Generate an ATUM Order PDF
+	 * Generate a PO PDF
 	 *
 	 * @since 1.3.9
 	 */
-	public function generate_order_pdf() {
+	public function generate_po_pdf() {
 
 		$atum_order_id = absint( $_GET['atum_order_id'] );
 
@@ -626,74 +624,15 @@ class PurchaseOrders extends AtumOrderPostType {
 				return;
 			}
 
-			$po_export = new $po_export_class( $atum_order_id );
+			/**
+			 * Variable definition
+			 *
+			 * @var POExport $po_export
+			 */
+			$po_export  = new $po_export_class( $atum_order_id );
+			$pdf_output = $po_export->generate_pdf();
 
-			try {
-
-				$is_debug_mode = TRUE === $po_export->get_debug_mode();
-				$uploads       = wp_upload_dir();
-				$temp_dir      = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/pdf_folder', '/atum' );
-
-				if ( ! is_dir( $temp_dir ) ) {
-					
-					// Try to create it.
-					$success = mkdir( $temp_dir, 0777, TRUE );
-					
-					// If can't create it, use default uploads folder.
-					if ( ! $success || ! is_writable( $temp_dir ) ) {
-						$temp_dir = $uploads['basedir'];
-					}
-					
-				}
-
-				do_action( 'atum/purchase_orders/generate_order_pdf', $atum_order_id );
-
-				$mpdf = new Mpdf( [
-					'mode'    => 'utf-8',
-					'format'  => 'A4',
-					'tempDir' => $temp_dir,
-				] );
-
-				// Add support for non-Latin languages.
-				$mpdf->useAdobeCJK      = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				$mpdf->autoScriptToLang = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				$mpdf->autoLangToFont   = TRUE; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-
-				$mpdf->SetTitle( __( 'Purchase Order', ATUM_TEXT_DOMAIN ) );
-
-				$mpdf->default_available_fonts = $mpdf->available_unifonts;
-
-				// Before the stylesheets are added and the output is done. So we can apply any template.
-				do_action( 'atum/purchase_orders/before_output_pdf', $mpdf, $atum_order_id );
-
-				$debug_html = '';
-				$css        = $po_export->get_stylesheets( $is_debug_mode ? 'url' : 'path' );
-
-				foreach ( $css as $file ) {
-
-					if ( $is_debug_mode ) {
-						$debug_html .= '<link rel="stylesheet" href="' . $file . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-					}
-					else {
-						$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
-						$mpdf->WriteHTML( $stylesheet, 1 );
-					}
-
-				}
-
-				if ( $is_debug_mode ) {
-					$debug_html .= $po_export->get_content();
-					wp_die( $debug_html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				}
-
-				$mpdf->WriteHTML( $po_export->get_content() );
-
-				// Output a PDF file directly to the browser.
-				wp_die( $mpdf->Output( "po-{$po_export->get_id()}.pdf", Destination::INLINE ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
-			} catch ( MpdfException $e ) {
-				wp_die( $e->getMessage() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
+			wp_die( is_wp_error( $pdf_output ) ? $pdf_output->get_error_message() : $pdf_output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		}
 
