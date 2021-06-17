@@ -126,7 +126,7 @@ class ProductDataMetaBoxes {
 			'atum' => array(
 				'label'    => __( 'ATUM Inventory', ATUM_TEXT_DOMAIN ),
 				'target'   => 'atum_product_data',
-				'class'    => array_merge( array( 'show_if_simple', 'show_if_variable', 'hide_if_bundle' ), Helpers::get_option_group_hidden_classes() ),
+				'class'    => array_unique( array_merge( array( 'show_if_simple', 'show_if_variable', 'hide_if_bundle' ), Helpers::get_option_group_hidden_classes() ) ),
 				'priority' => 21,
 			),
 		) );
