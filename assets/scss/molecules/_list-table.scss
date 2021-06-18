@@ -159,8 +159,8 @@
 						color:  var(--white);
 						padding: 0;
 						
-						&.empty, &.tips, &.empty {
-							color:  var(--white);
+						&.empty, &.tips, &.tips:hover, &.empty {
+							color:  var(--white) !important;
 						}
 						
 						.active {
@@ -1171,6 +1171,9 @@
 						padding: 0;
 						&.empty, &.tips, &.empty {
 							color:  var(--atum-table-views-tabs-active-text);
+						}
+						&.tips:hover {
+							color:  var(--atum-table-views-tabs-active-text) !important;
 						}
 						.active {
 							padding: 0;
