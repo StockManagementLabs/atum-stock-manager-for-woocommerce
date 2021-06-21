@@ -30,7 +30,7 @@
 		"background": "#69c61d"
 	},
 	"description": {
-		"text"           : "Please, celebrate with us this significant managerial change!!!.<br>Our principal investor, EU-based manufacturing company D-Nutrition s.r.o., is taking over the ATUM project. We can expect massive improvement and growth within the FREE ATUM plugin, plus some great additions to the premium add-ons range.<br>Grap code <strong>APRIL10</strong> now and save 10% on any subscription purchased this month.",
+		"text"           : "Dear ATUM users,<br><br>We are delighted to announce the newest baby in the ATUM family. Something we have been preparing for all of you for a very long time and that we are sure you'll enjoy very much.<br><br><strong>The first beta of the ATUM APP is here!</strong><br><br>From now you will be able to manage the stock of your e-commerce store from wherever you want quickly and easily through the ATUM APP. Our goal is to make life easier for shop owners, making it simple, familiar, and full of features unavailable in any similar apps.<br>We encourage you to try this first beta version <strong>available for premium users only</strong> and let us know what you think.<br><br>We will be glad to receive your feedback through our forum and have your opinions and reports on possible bugs that you may find.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -39,11 +39,11 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Take the offer now!",
-			"url"       : "https://www.stockmanagementlabs.com/addons/",
+			"text"      : "Leave your feedback",
+			"url"       : "https://forum.stockmanagementlabs.com/t/atum-app-beta-testing",
 			"class"     : "btn btn-primary",
 			"css"       : ""
 		}
 	],
-	"transient_key": ""
+	"transient_key": "atum_app_beta_launch"
 }
