@@ -4119,8 +4119,8 @@ h2 .atum-help-tip {
   padding: 0;
 }
 
-.subsubsub.extend-list-table li span.active a.empty, #posts-filter .subsubsub li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, #posts-filter .subsubsub li span.active a.tips, .subsubsub.extend-list-table li span.active a.empty, #posts-filter .subsubsub li span.active a.empty {
-  color: var(--white);
+.subsubsub.extend-list-table li span.active a.empty, #posts-filter .subsubsub li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, #posts-filter .subsubsub li span.active a.tips, .subsubsub.extend-list-table li span.active a.tips:hover, #posts-filter .subsubsub li span.active a.tips:hover, .subsubsub.extend-list-table li span.active a.empty, #posts-filter .subsubsub li span.active a.empty {
+  color: var(--white) !important;
 }
 
 .subsubsub.extend-list-table li span.active a .active, #posts-filter .subsubsub li span.active a .active {
@@ -5316,6 +5316,10 @@ h2 .atum-help-tip {
 
 .atum-list-wrapper .subsubsub li span.active a.empty, #posts-filter .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, #posts-filter .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty, #posts-filter .subsubsub li span.active a.empty {
   color: var(--atum-table-views-tabs-active-text);
+}
+
+.atum-list-wrapper .subsubsub li span.active a.tips:hover, #posts-filter .subsubsub li span.active a.tips:hover {
+  color: var(--atum-table-views-tabs-active-text) !important;
 }
 
 .atum-list-wrapper .subsubsub li span.active a .active, #posts-filter .subsubsub li span.active a .active {
