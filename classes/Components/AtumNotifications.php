@@ -148,7 +148,7 @@ class AtumNotifications {
 
 				$defaults[ $index ] = array(
 					'group'   => 'notifications',
-					'section' => 'notification_list',
+					'section' => 'atum_notifications',
 					'name'    => $notification['name'],
 					'desc'    => $notification['desc'],
 					'type'    => $notification['type'],
