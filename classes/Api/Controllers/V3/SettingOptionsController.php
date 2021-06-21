@@ -307,11 +307,11 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		foreach ( $settings as $setting_id => $setting ) {
 
 			$setting = array_merge( [ 'id' => $setting_id ], $setting );
-			$setting = $this->filter_setting( $setting );
-			$default = isset( $setting['default'] ) ? $setting['default'] : '';
 
 			// Get the option value.
 			$setting['value'] = Helpers::get_option( $setting_id, $default );
+			$setting          = $this->filter_setting( $setting );
+			$default          = isset( $setting['default'] ) ? $setting['default'] : '';
 
 			if ( 'wc_country' === $setting['type'] ) {
 				$setting['options'] = array( 'values' => $this->get_countries_and_states() );
