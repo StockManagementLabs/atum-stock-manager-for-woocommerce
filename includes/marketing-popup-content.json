@@ -1,22 +1,23 @@
 {
 	"background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
-		"bg_position"     : "bottom",
-		"bg_size"         : "contain",
-		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "white"
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
+		"bg_position": "bottom",
+		"bg_size"    : "contain",
+		"bg_repeat"  : "no-repeat",
+		"bg_color"   : "white"
 	},
 	"dash_background": {
-		"bg_image"        : "url(https://www.stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
-		"bg_position"     : "bottom",
-		"bg_size"         : "cover",
-		"bg_repeat"       : "no-repeat",
-		"bg_color"        : "white"
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
+		"bg_position": "bottom",
+		"bg_size"    : "contain",
+		"bg_repeat"  : "no-repeat",
+		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"    : "https://www.stockmanagementlabs.com/wp-content/uploads/2021/04/illustration.png",
-		"logo_css": "width:76%;margin-bottom:15px",
-		"top_left": ""
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2021/06/atum_asset-wp.svg",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2021/06/atum-asset-dashboard.svg",
+		"logo_css" : "width:87%;margin-bottom:-50px",
+		"top_left" : ""
 	},
 	"title": {
 		"text"      : "",
@@ -30,7 +31,7 @@
 		"background": "#69c61d"
 	},
 	"description": {
-		"text"           : "Dear ATUM users,<br><br>We are delighted to announce the newest baby in the ATUM family. Something we have been preparing for all of you for a very long time and that we are sure you'll enjoy very much.<br><br><strong>The first beta of the ATUM APP is here!</strong><br><br>From now you will be able to manage the stock of your e-commerce store from wherever you want quickly and easily through the ATUM APP. Our goal is to make life easier for shop owners, making it simple, familiar, and full of features unavailable in any similar apps.<br>We encourage you to try this first beta version <strong>available for premium users only</strong> and let us know what you think.<br><br>We will be glad to receive your feedback through our forum and have your opinions and reports on possible bugs that you may find.",
+		"text"           : "Dear ATUM users,<br><br>We are delighted to announce the newest baby in the ATUM family. Something we have been preparing for all of you for a very long time and that we are sure you'll enjoy very much.<br><br>We encourage you to try this first beta version <strong>available for premium users only</strong> and let us know what you think.<br><br>We will be glad to receive your feedback through our forum and have your opinions and reports on possible bugs that you may find.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -39,10 +40,10 @@
 	},
 	"buttons": [
 		{
-			"text"      : "Leave your feedback",
-			"url"       : "https://forum.stockmanagementlabs.com/t/atum-app-beta-testing",
-			"class"     : "btn btn-primary",
-			"css"       : ""
+			"text" : "Leave your feedback",
+			"url"  : "https://forum.stockmanagementlabs.com/t/atum-app-beta-testing",
+			"class": "btn btn-primary",
+			"css"  : ""
 		}
 	],
 	"transient_key": "atum_app_beta_launch"

@@ -294,6 +294,17 @@ class AtumMarketingPopup {
 	}
 
 	/**
+	 * Get the dahboard image
+	 *
+	 * @since 1.9.1
+	 *
+	 * @return array
+	 */
+	public function get_dashboard_image() {
+		return isset( $this->images->dash_logo ) ? $this->images->dash_logo : $this->images->logo;
+	}
+
+	/**
 	 * Getter for the footer notice
 	 *
 	 * @since 1.5.8.7
