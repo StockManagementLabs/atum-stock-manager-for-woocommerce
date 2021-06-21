@@ -194,6 +194,49 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.1`
+
+*2021-06-21*
+
+**Features**
+
+* Added JS hook to check order items before bulk change stock.
+* Added support for the shop base's city and postal code for taxes calculations in ATUM Orders.
+* Added a new module for the REST API, so it can be disabled if wished.
+* Added new action before the PO PDF output.
+* Added new setting field type: Image Selectors.
+* Added extra arg to the load_view filter.
+* Allow debugging HTML before outputing to a PDF.
+* Added a new product prop for hiding the out of stock inventories.
+* Allow extending the PO PDF export class.
+* Added a new ATUM Notifications components for sending ATUM email notifications regarding stock management.
+
+
+**Changes**
+
+* Added the shop base address details to ATUM Settings' store details as defaults.
+* Changed Stock Central's modal text tittle color.
+* Increased the timeout when doing any request to the SML API.
+* Refactoring.
+* Do not check the SSL certificate when doing deferred requests for calculated props.
+* Updated composer dependencies.
+* PO PDF template adjustments.
+* Allow setting a different image for the dashboard logo.
+
+**Fixes**
+
+* Fixes and changes to the SC UI/UX dark and normal mode.
+* Stock Central's managed products counter fixed.
+* Allow activating add-ons on staging sites when a prod site was already activated.
+* Bug fix: when multiple items were added to an async action, only the first was received by the hook trigger and the others were missing.
+* Fix for the oldest add-ons versions that weren't able to update.
+* CSS fixes.
+* Avoid duplicate show/hide classes for product data tab.
+* Fixed undefined index notice in ATUM dashboard.
+* Fixed notice error when updating an ATUM setting through API.
+
+---
+
 `1.9.0`
 
 *2021-05-28*
