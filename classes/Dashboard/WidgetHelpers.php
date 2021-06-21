@@ -970,10 +970,12 @@ final class WidgetHelpers {
 
 		// Format counters.
 		foreach ( $counters as $index => $counter ) {
+
 			if ( 'items_purchase_price_total' === $index ) {
 				$counters[ $index ] = wc_price( $counter );
 			}
 			else {
+
 				$num_parts          = explode( '.', (string) $counter );
 				$counters[ $index ] = number_format(
 					$counter,
@@ -981,7 +983,9 @@ final class WidgetHelpers {
 					wc_get_price_decimal_separator(),
 					wc_get_price_thousand_separator()
 				);
+
 			}
+
 		}
 
 		return $counters;
