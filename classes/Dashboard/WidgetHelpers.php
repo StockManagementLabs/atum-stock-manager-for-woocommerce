@@ -974,10 +974,10 @@ final class WidgetHelpers {
 				$counters[ $index ] = wc_price( $counter );
 			}
 			else {
-				$num_parts     = explode( '.', $counter );
+				$num_parts          = explode( '.', (string) $counter );
 				$counters[ $index ] = number_format(
 					$counter,
-					strlen( $num_parts[1] ),
+					isset( $num_parts[1] ) ? strlen( $num_parts[1] ) : 0,
 					wc_get_price_decimal_separator(),
 					wc_get_price_thousand_separator()
 				);
