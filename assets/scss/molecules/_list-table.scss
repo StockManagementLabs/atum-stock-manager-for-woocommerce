@@ -2459,7 +2459,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		// Where page is not a post type list.
 		body:not(.edit-php) &.column-title {
 			min-width: 171px;
-			display: flex;
 			align-items: center;
 			
 			> span {
