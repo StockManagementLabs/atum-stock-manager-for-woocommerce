@@ -75,7 +75,7 @@ class AtumColors {
 		'dm_text_color'            => '#FFFFFF',
 		'dm_text_color_2'          => '#31324A',
 		'dm_text_color_expanded'   => '#27283B',
-		'dm_border_color'          => '#FFFFFF',
+		'dm_border_color'          => '#ADB5BD',
 		'dm_bg_1_color'            => '#31324A',
 		'dm_bg_2_color'            => '#3B3D5A',
 		'dm_danger_color'          => '#FFAEAE',
@@ -355,7 +355,7 @@ class AtumColors {
 		$scheme = ":root {
 			--atum-add-widget-separator: rgba({$this->colors['border_color_rgb']},0.2);
 			--atum-add-widget-title: {$this->colors['text_color']};
-		    --atum-border-expanded: rgba({$this->colors['border_color_rgb']}, 0.2);
+		    --atum-border-expanded: {$this->colors['border_color']};
 			--atum-border-var: rgba({$this->colors['text_color_rgb']}, 0.5);
 			--atum-cloned-list-table-shadow: rgba({$this->colors['white_rgb']}, 0.04); 
 		    --atum-column-groups-bg: {$this->colors['text_color_expanded']};
