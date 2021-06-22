@@ -6229,7 +6229,7 @@ table.atum-list-table tr.variation.active-row, .floatThead-container tr.variatio
 }
 
 table.atum-list-table tr.variation td.title .atmi-arrow-child, .floatThead-container tr.variation td.title .atmi-arrow-child, .inbound-stock-list tr.variation td.title .atmi-arrow-child, table.wp-list-table tr.variation td.title .atmi-arrow-child {
-  color: var(--primary);
+  color: var(--primary-var-dark);
 }
 
 table.atum-list-table tr.main-bundle, .floatThead-container tr.main-bundle, .inbound-stock-list tr.main-bundle, table.wp-list-table tr.main-bundle {
