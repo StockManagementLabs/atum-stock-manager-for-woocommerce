@@ -4727,20 +4727,21 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 				$args['meta_query']['relation'] = 'OR';
+
 				$args['meta_query'][] = array(
 					'meta_key' => $_REQUEST['orderby'],
 				);
 				$args['meta_query'][] = array(
 					'key'     => $_REQUEST['orderby'],
-					'compare' => 'EXISTS'
+					'compare' => 'EXISTS',
 				);
 				$args['meta_query'][] = array(
 					'key'     => $_REQUEST['orderby'],
-					'compare' => 'NOT EXISTS'
+					'compare' => 'NOT EXISTS',
 				);
 
-				//$args['meta_key'] = $_REQUEST['orderby'];
-				$args['order']    = $order;
+				/*$args['meta_key'] = $_REQUEST['orderby'];*/
+				$args['order'] = $order;
 
 			}
 
