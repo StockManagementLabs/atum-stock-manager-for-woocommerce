@@ -17,7 +17,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 **With an Online Selling Boost Comes [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
-**✨ NEW IMPROVED ATUM 1.8**
+**✨ NEW IMPROVED ATUM 1.9**
 
 **💻 NEW ATUM REST API**
 

@@ -6,7 +6,7 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 **With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
 
-**✨ NEW IMPROVED ATUM 1.8**
+**✨ NEW IMPROVED ATUM 1.9**
 
 **💻 NEW ATUM REST API**
 
