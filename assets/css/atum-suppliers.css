@@ -7059,7 +7059,11 @@ table.atum-list-table .column-groups th.actions, .floatThead-container .column-g
 #posts-filter table.wp-list-table th.check-column input[type=checkbox] {
   -webkit-transform: none;
           transform: none;
-  top: 18%;
+  top: 9px;
+}
+
+#posts-filter table.wp-list-table tbody th, #posts-filter table.wp-list-table tbody td {
+  vertical-align: top;
 }
 
 #posts-filter .tablenav-pages {

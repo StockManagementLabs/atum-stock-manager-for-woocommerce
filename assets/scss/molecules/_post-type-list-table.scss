@@ -9,7 +9,13 @@
 		th.check-column {
 			input[type=checkbox] {
 				transform: none;
-				top: 18%;
+				top: 9px;
+			}
+		}
+		
+		tbody {
+			th, td {
+				vertical-align: top;
 			}
 		}
 	}
