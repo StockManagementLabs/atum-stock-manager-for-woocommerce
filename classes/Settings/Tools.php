@@ -139,6 +139,19 @@ class Tools {
 			),
 		);
 
+		$defaults['clear_out_atum_transients'] = array(
+			'group'   => 'tools',
+			'section' => 'tools',
+			'name'    => __( 'Clear out temporary data', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'desc'    => __( 'Clear all the temporary data saved by ATUM.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'script_runner',
+			'options' => array(
+				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
+				'script_action' => 'atum_tool_clear_out_atum_transients',
+				'confirm_msg'   => esc_attr( __( 'This will clear all the temporary data saved by ATUM', ATUM_TEXT_DOMAIN ) ),
+			),
+		);
+
 		return $defaults;
 
 	}
