@@ -1276,7 +1276,7 @@ final class Helpers {
 			$product = self::get_atum_product( $product );
 		}
 
-		$is_inheritable_product = ! $product->get_parent_id() && Helpers::is_inheritable_type( $product->get_type() );
+		$is_inheritable_product = ! $product->get_parent_id() && self::is_inheritable_type( $product->get_type() );
 
 		// The ATUM's stock control must be always 'yes' for inheritable products.
 		if ( $is_inheritable_product ) {
