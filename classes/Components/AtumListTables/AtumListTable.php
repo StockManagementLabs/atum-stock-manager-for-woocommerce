@@ -818,12 +818,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$product_id = $this->get_current_product_id();
 
-		return sprintf(
+		return apply_filters( 'atum/list_table/column_cb', sprintf(
 			'<input type="checkbox"%s name="%s[]" value="%s">',
 			checked( in_array( $product_id, $this->selected ), TRUE, FALSE ),
 			$this->_args['singular'],
 			$product_id
-		);
+		), $item, $this->product, $this );
 
 	}
 
@@ -3228,7 +3228,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'saveButton'                     => __( 'Save', ATUM_TEXT_DOMAIN ),
 			'searchableColumns'              => $this->searchable_columns,
 			'selectDateRange'                => __( 'Select the date range to filter the products.', ATUM_TEXT_DOMAIN ),
-			'selectItems'                    => __( 'Please, check the boxes for all the products you want to change in bulk', ATUM_TEXT_DOMAIN ),
+			'selectItems'                    => __( 'Please, check the boxes for all the items to which you want to apply this bulk action', ATUM_TEXT_DOMAIN ),
 			'setButton'                      => __( 'Set', ATUM_TEXT_DOMAIN ),
 			'setTimeWindow'                  => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
 			'setValue'                       => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),

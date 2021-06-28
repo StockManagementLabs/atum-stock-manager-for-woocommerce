@@ -118,7 +118,7 @@ class Hooks {
 		add_action( 'woocommerce_product_duplicate', array( $this, 'duplicate_product' ), 10, 2 );
 
 		// Delete transients after bulk changing products from SC.
-		add_action( 'atum/ajax/stock_central_list/bulk_action_applied', array( $this, 'delete_transients' ) );
+		add_action( 'atum/ajax/list_table/bulk_action_applied', array( $this, 'delete_transients' ) );
 
 		// Make simple product types available for every addons.
 		add_filter( 'atum/get_simple_product_types', array( $this, 'get_simple_product_types' ) );
