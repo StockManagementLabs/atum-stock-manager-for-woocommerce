@@ -818,12 +818,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$product_id = $this->get_current_product_id();
 
-		return sprintf(
+		return apply_filters( 'atum/list_table/column_cb', sprintf(
 			'<input type="checkbox"%s name="%s[]" value="%s">',
 			checked( in_array( $product_id, $this->selected ), TRUE, FALSE ),
 			$this->_args['singular'],
 			$product_id
-		);
+		), $item, $this->product, $this );
 
 	}
 
