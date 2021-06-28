@@ -610,33 +610,61 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid bulk action.', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$ids = array_map( 'absint', $_POST['ids'] );
+		$ids = array_unique( array_map( 'absint', $_POST['ids'] ) );
 
 		switch ( $_POST['bulk_action'] ) {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
+
+					// Support non numeric values (for MI items, for example) that will be treated later.
+					if ( ! is_numeric( $id ) ) {
+						continue;
+					}
+
 					Helpers::update_atum_control( $id, 'disable' );
+
 				}
 
 				break;
 
 			case 'control_stock':
 				foreach ( $ids as $id ) {
+
+					// Support non numeric values (for MI items, for example) that will be treated later.
+					if ( ! is_numeric( $id ) ) {
+						continue;
+					}
+
 					Helpers::update_atum_control( $id );
+
 				}
 
 				break;
 
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
+
+					// Support non numeric values (for MI items, for example) that will be treated later.
+					if ( ! is_numeric( $id ) ) {
+						continue;
+					}
+
 					Helpers::update_wc_manage_stock( $id, 'disable' );
+
 				}
 
 				break;
 
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
+
+					// Support non numeric values (for MI items, for example) that will be treated later.
+					if ( ! is_numeric( $id ) ) {
+						continue;
+					}
+
 					Helpers::update_wc_manage_stock( $id );
+
 				}
 
 				break;
