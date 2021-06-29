@@ -610,7 +610,7 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid bulk action.', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$ids = array_unique( array_map( 'absint', $_POST['ids'] ) );
+		$ids = array_unique( $_POST['ids'] );
 
 		switch ( $_POST['bulk_action'] ) {
 			case 'uncontrol_stock':
@@ -621,7 +621,7 @@ final class Ajax {
 						continue;
 					}
 
-					Helpers::update_atum_control( $id, 'disable' );
+					Helpers::update_atum_control( absint( $id ), 'disable' );
 
 				}
 
@@ -635,7 +635,7 @@ final class Ajax {
 						continue;
 					}
 
-					Helpers::update_atum_control( $id );
+					Helpers::update_atum_control( absint( $id ) );
 
 				}
 
@@ -649,7 +649,7 @@ final class Ajax {
 						continue;
 					}
 
-					Helpers::update_wc_manage_stock( $id, 'disable' );
+					Helpers::update_wc_manage_stock( absint( $id ), 'disable' );
 
 				}
 
@@ -663,7 +663,7 @@ final class Ajax {
 						continue;
 					}
 
-					Helpers::update_wc_manage_stock( $id );
+					Helpers::update_wc_manage_stock( absint( $id ) );
 
 				}
 
