@@ -55,12 +55,12 @@ export default class ListTable {
 
 			//
 			// Trigger expanding/collapsing event in inheritable products.
-			// ------------------------------------------
+			// -----------------------------------------------------------
 			.on( 'click', '.calc_type .has-child', ( evt: JQueryEventObject ) => $( evt.currentTarget ).closest( 'tr' ).trigger( 'atum-list-expand-row' ) )
 
 			//
 			// Triggers the expand/collapse row action.
-			//
+			//-----------------------------------------
 			.on( 'atum-list-expand-row', 'tbody tr', ( evt: JQueryEventObject, expandableRowClass: string, stopRowSelector: string, stopPropagation: boolean ) => {
 				this.expandRow( $( evt.currentTarget ), expandableRowClass, stopRowSelector, stopPropagation );
 			} )
@@ -68,28 +68,17 @@ export default class ListTable {
 			//
 			// Expandable rows' checkboxes.
 			// ----------------------------
-			.on( 'change', '.check-column input:checkbox', ( evt: JQueryEventObject ) => this.checkDescendats( $( evt.currentTarget ) ) )
+			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => this.checkDescendats( $( evt.currentTarget ) ) )
+
+			//
+			// Check all the checkboxes.
+			// -------------------------
+			.on( 'click', '.manage-column :checkbox', ( evt: JQueryEventObject ) => this.checkAll( evt ) )
 
 			//
 			// "Control all products" button.
 			// ------------------------------
-			.on( 'click', '#control-all-products', ( evt: JQueryEventObject ) => {
-
-				let $button: JQuery = $( evt.currentTarget );
-
-				$.ajax( {
-					url       : window[ 'ajaxurl' ],
-					method    : 'POST',
-					dataType  : 'json',
-					beforeSend: () => $button.prop( 'disabled', true ).after( '<span class="atum-spinner"><span></span></span>' ),
-					data      : {
-						token : $button.data( 'nonce' ),
-						action: 'atum_control_all_products',
-					},
-					success   : () => location.reload(),
-				} );
-
-			} );
+			.on( 'click', '#control-all-products', ( evt: JQueryEventObject ) => this.controlAllProducts( evt ) );
 		
 		
 		//
@@ -638,6 +627,56 @@ export default class ListTable {
 			
 		}
 		
+	}
+
+	/**
+	 * Check all the checkboxes
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
+	checkAll( evt: JQueryEventObject ) {
+
+		// Prevent the WP default behaviour.
+		evt.stopImmediatePropagation();
+
+		const $checkAll: JQuery  = $( evt.currentTarget ),
+		      isChecked: boolean = $checkAll.is( ':checked' );
+
+		let $checkboxes: JQuery = this.globals.$atumTable.find( 'tbody .check-column :checkbox:visible' );
+
+		if ( isChecked ) {
+			$checkboxes = $checkboxes.not( ':checked' );
+		}
+		else {
+			$checkboxes = $checkboxes.filter( ':checked' );
+		}
+
+		$checkboxes.prop( 'checked', isChecked ).change();
+		this.globals.$atumTable.find( '.manage-column :checkbox' ).not( $checkAll ).prop( 'checked', isChecked );
+
+	}
+
+	/**
+	 * Control all the products using the initial button
+	 *
+	 * @param {JQueryEventObject} evt
+	 */
+	controlAllProducts( evt: JQueryEventObject ) {
+
+		const $button: JQuery = $( evt.currentTarget );
+
+		$.ajax( {
+			url       : window[ 'ajaxurl' ],
+			method    : 'POST',
+			dataType  : 'json',
+			beforeSend: () => $button.prop( 'disabled', true ).after( '<span class="atum-spinner"><span></span></span>' ),
+			data      : {
+				token : $button.data( 'nonce' ),
+				action: 'atum_control_all_products',
+			},
+			success   : () => location.reload(),
+		} );
+
 	}
 	
 	/**
