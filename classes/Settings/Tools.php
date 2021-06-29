@@ -109,8 +109,8 @@ class Tools {
 		$defaults['clear_out_stock_threshold'] = array(
 			'group'   => 'tools',
 			'section' => 'tools',
-			'name'    => __( 'Clear out stock threshold', ATUM_TEXT_DOMAIN ) . $atum_label,
-			'desc'    => __( 'Clear all previously saved Out of Stock Threshold values.', ATUM_TEXT_DOMAIN ),
+			'name'    => __( "Clear ATUM's out of stock threshold", ATUM_TEXT_DOMAIN ) . $atum_label,
+			'desc'    => __( 'Clear all previously saved ATUM Out of Stock Threshold values.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
 				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
@@ -133,7 +133,7 @@ class Tools {
 				'is_recurrent'   => TRUE,
 				'button_text'    => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action'  => 'atum_tool_update_calc_props',
-				'confirm_msg'    => esc_attr( __( 'This will update all products\' calculated properties and it can take a lot of time', ATUM_TEXT_DOMAIN ) ),
+				'confirm_msg'    => esc_attr( __( "This will update all the products' calculated properties and it can take a long time to process", ATUM_TEXT_DOMAIN ) ),
 				'processing_msg' => esc_attr( __( 'Processing {processed} from {total}', ATUM_TEXT_DOMAIN ) ),
 				'processed_msg'  => esc_attr( __( 'Processed {processed} products', ATUM_TEXT_DOMAIN ) ),
 			),
@@ -142,13 +142,13 @@ class Tools {
 		$defaults['clear_out_atum_transients'] = array(
 			'group'   => 'tools',
 			'section' => 'tools',
-			'name'    => __( 'Clear out temporary data', ATUM_TEXT_DOMAIN ) . $atum_label,
-			'desc'    => __( 'Clear all the temporary data saved by ATUM.', ATUM_TEXT_DOMAIN ),
+			'name'    => __( 'Remove ATUM transients', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'desc'    => __( 'Clear all the temporary transients stored by ATUM. This could help in some cases when you are seeing wrong values in Stock Central.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
+				'button_text'   => __( 'Remove Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_clear_out_atum_transients',
-				'confirm_msg'   => esc_attr( __( 'This will clear all the temporary data saved by ATUM', ATUM_TEXT_DOMAIN ) ),
+				'confirm_msg'   => esc_attr( __( 'This will clear all the temporary ATUM transients', ATUM_TEXT_DOMAIN ) ),
 			),
 		);
 
