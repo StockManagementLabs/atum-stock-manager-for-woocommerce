@@ -4690,6 +4690,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Getter for the selected prop
+	 *
+	 * @since 1.9.1
+	 *
+	 * @return array|false|string[]
+	 */
+	public function get_selected() {
+		return $this->selected;
+	}
+
+	/**
 	 * Apply order and orderby args by $_REQUEST options.
 	 *
 	 * @since 1.8.6
@@ -4731,10 +4742,12 @@ abstract class AtumListTable extends \WP_List_Table {
 				$args['meta_query'][] = array(
 					'meta_key' => $_REQUEST['orderby'],
 				);
+
 				$args['meta_query'][] = array(
 					'key'     => $_REQUEST['orderby'],
 					'compare' => 'EXISTS',
 				);
+
 				$args['meta_query'][] = array(
 					'key'     => $_REQUEST['orderby'],
 					'compare' => 'NOT EXISTS',
