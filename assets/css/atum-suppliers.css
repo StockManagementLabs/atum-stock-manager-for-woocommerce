@@ -2070,7 +2070,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 }
 
 .btn.disabled, .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -5530,6 +5530,8 @@ h2 .atum-help-tip {
   line-height: 0;
   text-transform: uppercase;
   font-size: 12px;
+  padding: 15px;
+  margin-left: 0;
 }
 
 @media all and (max-width: 782px) {

@@ -43,7 +43,7 @@
 }
 
 .btn.disabled, .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   -webkit-box-shadow: none;
           box-shadow: none;
 }

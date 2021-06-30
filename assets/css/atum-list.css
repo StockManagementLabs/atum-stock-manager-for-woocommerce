@@ -1511,7 +1511,7 @@
 }
 
 .btn.disabled, .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -7793,6 +7793,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   line-height: 0;
   text-transform: uppercase;
   font-size: 12px;
+  padding: 15px;
+  margin-left: 0;
 }
 
 @media all and (max-width: 782px) {

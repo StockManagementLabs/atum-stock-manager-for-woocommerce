@@ -1380,6 +1380,8 @@
 			line-height: 0;
 			text-transform: uppercase;
 			font-size: 12px;
+			padding: 15px;
+			margin-left: 0;
 			
 			@include tablet-max-wp {
 				font-size: 14px;
