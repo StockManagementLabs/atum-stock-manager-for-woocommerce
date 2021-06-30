@@ -571,7 +571,7 @@ abstract class AtumOrderPostType {
 			unset( $actions['inline hide-if-no-js'] );
 		}
 
-		return $actions;
+		return apply_filters( "atum/$post->post_type/row_actions", $actions, $post );
 	}
 
 	/**
