@@ -3180,7 +3180,8 @@ input[type="button"].btn-block {
 
 @media all and (max-width: 480px) {
   .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 

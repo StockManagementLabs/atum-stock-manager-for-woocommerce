@@ -3391,7 +3391,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 @media all and (max-width: 480px) {
   .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -5927,6 +5928,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
           transform: translateY(-50%);
   font-size: 13px;
   pointer-events: none;
+  background-color: #fff;
 }
 
 .popover.menu-popover .popover-header {

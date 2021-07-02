@@ -3487,7 +3487,8 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 
 @media all and (max-width: 480px) {
   .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -5660,5 +5661,6 @@ div.add_note #add_atum_order_note {
           transform: translateY(-50%);
   font-size: 13px;
   pointer-events: none;
+  background-color: #fff;
 }
 /*# sourceMappingURL=atum-orders.css.map */
