@@ -81,7 +81,7 @@ class Hooks {
 	 *
 	 * @var array
 	 */
-	private $order_products_notification_sended = [];
+	private $order_products_notification_already_sent = [];
 
 	/**
 	 * Register the admin-side hooks
@@ -1339,7 +1339,7 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 * Prevent sending stock email if the product has ATUM out of stock threshold value
 	 *
 	 * @since 1.9.2
 	 *
@@ -1351,7 +1351,7 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 * Prevent sending stock email if the product has ATUM out of stock threshold value
 	 *
 	 * @since 1.9.2
 	 *
@@ -1363,7 +1363,7 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 * Prevent sending stock email if the product has ATUM out of stock threshold value
 	 *
 	 * @since 1.9.2
 	 *
@@ -1387,7 +1387,7 @@ class Hooks {
 
 			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount < $out_stock_threshold || $product->get_stock_quantity() <= $out_stock_threshold ) {
 
-				$this->order_products_notification_sended[ $product_id ] = 'Sended';
+				$this->order_products_notification_already_sent[ $product_id ] = 'Sended';
 				return;
 
 			}
@@ -1396,7 +1396,7 @@ class Hooks {
 
 			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount > $out_stock_threshold ) {
 
-				$this->order_products_notification_sended[ $product_id ] = 'Sended';
+				$this->order_products_notification_already_sent[ $product_id ] = 'Sended';
 				return;
 
 			}
@@ -1442,7 +1442,7 @@ class Hooks {
 				$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
 				$new_stock = $product->get_stock_quantity();
 
-				if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_sended ) ) {
+				if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_already_sent ) ) {
 
 					$changes[] = array(
 						'product' => $product,
