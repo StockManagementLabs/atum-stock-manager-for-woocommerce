@@ -75,6 +75,15 @@ class Hooks {
 	}
 
 	/**
+	 * Store the products with the email notification sended
+	 *
+	 * @since 1.9.2
+	 *
+	 * @var array
+	 */
+	private $order_products_notification_sended = [];
+
+	/**
 	 * Register the admin-side hooks
 	 *
 	 * @since 1.3.8.2
@@ -205,6 +214,10 @@ class Hooks {
 
 		// Parse WC order note to add metadata.
 		add_filter( 'woocommerce_order_note_added', array( $this, 'parse_wc_order_note' ), 10, 2 );
+
+		// Hack WC email notification for use Atum out of stock threshold values.
+		$this->prevent_stock_emails();
+		add_action( 'woocommerce_reduce_order_stock', array( $this, 'maybe_trigger_stock_change_notifications' ) );
 
 	}
 
@@ -1301,6 +1314,192 @@ class Hooks {
 
 		if ( ! empty( $found_data ) ) {
 			Helpers::save_order_note_meta( $note_id, $found_data );
+		}
+
+	}
+
+	/**
+	 * Add the action needed for prevent WC email notifications
+	 *
+	 * @since 1.9.2
+	 */
+	public function prevent_stock_emails() {
+		add_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9, 2 );
+		add_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9, 2 );
+	}
+
+	/**
+	 * Remove the action needed for prevent WC email notifications
+	 *
+	 * @since 1.9.2
+	 */
+	public function allow_stock_emails() {
+		remove_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9, 2 );
+		remove_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9, 2 );
+	}
+
+	/**
+	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param \WC_Product $product
+	 * @param boolean     $avoid
+	 */
+	public function prevent_sending_low_stock_email( $product, $avoid = FALSE ) {
+		$this->maybe_prevent_sending_stock_emails( 'woocommerce_low_stock', $product->get_id(), $avoid );
+	}
+
+	/**
+	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param \WC_Product $product
+	 * @param boolean     $avoid
+	 */
+	public function prevent_sending_no_stock_email( $product, $avoid = FALSE ) {
+		$this->maybe_prevent_sending_stock_emails( 'woocommerce_no_stock', $product->get_id(), $avoid );
+	}
+
+	/**
+	 * Prevent sending stock email if the product has Atum out of stock threshold value
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string  $action
+	 * @param int     $product_id
+	 * @param boolean $avoid
+	 */
+	private function maybe_prevent_sending_stock_emails( $action, $product_id, $avoid ) {
+
+		if ( $avoid ) {
+			return;
+		}
+
+		$function = apply_filters( 'woocommerce_defer_transactional_emails', FALSE ) ? 'queue_transactional_email' : 'send_transactional_email';
+
+		$no_stock_amount     = absint( get_option( 'woocommerce_notify_no_stock_amount', 0 ) );
+		$product             = Helpers::get_atum_product( $product_id );
+		$out_stock_threshold = $product->get_out_stock_threshold();
+
+		if ( 'woocommerce_no_stock' === $action ) {
+
+			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount < $out_stock_threshold || $product->get_stock_quantity() <= $out_stock_threshold ) {
+
+				$this->order_products_notification_sended[ $product_id ] = 'Sended';
+				return;
+
+			}
+		}
+		elseif ( 'woocommerce_low_stock' === $action ) {
+
+			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount > $out_stock_threshold ) {
+
+				$this->order_products_notification_sended[ $product_id ] = 'Sended';
+				return;
+
+			}
+
+		}
+
+		remove_action( $action, array( 'WC_Emails', $function ) );
+
+	}
+
+	/**
+	 * Send a stock email notification if it´s necesary
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param \WC_Order $order_id
+	 */
+	public function maybe_trigger_stock_change_notifications( $order_id ) {
+
+		$function = apply_filters( 'woocommerce_defer_transactional_emails', FALSE ) ? 'queue_transactional_email' : 'send_transactional_email';
+
+		if ( ! has_action( 'woocommerce_no_stock', array( 'WC_Emails', $function ) ) || ! has_action( 'woocommerce_low_stock', array( 'WC_Emails', $function ) ) ) {
+
+			add_action( 'woocommerce_no_stock', array( 'WC_Emails', $function ) );
+			add_action( 'woocommerce_low_stock', array( 'WC_Emails', $function ) );
+
+			if ( is_a( $order_id, 'WC_Order' ) ) {
+				$order = $order_id;
+			} else {
+				$order = wc_get_order( $order_id );
+			}
+			// We need an order, and a store with stock management to continue.
+			if ( ! $order || 'yes' !== get_option( 'woocommerce_manage_stock' ) || ! apply_filters( 'woocommerce_can_reduce_order_stock', true, $order ) ) {
+				return;
+			}
+
+			$changes = array();
+
+			// Loop over all items.
+			foreach ( $order->get_items() as $item ) {
+
+				$product   = $item->get_product();
+				$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
+				$new_stock = $product->get_stock_quantity();
+
+				if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_sended ) ) {
+
+					$changes[] = array(
+						'product' => $product,
+						'from'    => $new_stock + $qty,
+						'to'      => $new_stock,
+					);
+
+				}
+
+			}
+
+			self::trigger_stock_change_notifications( $order, $changes );
+		}
+
+	}
+
+	/**
+	 * Send WooCommerce trigger emails for products
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param \WC_Order $order
+	 * @param array     $changes
+	 */
+	public function trigger_stock_change_notifications( $order, $changes ) {
+
+		self::allow_stock_emails();
+
+		if ( empty( $changes ) ) {
+			return;
+		}
+
+		foreach ( $changes as $change ) {
+
+			$product                = Helpers::get_atum_product( $change['product']->get_id() );
+			$out_of_stock_threshold = $product->get_out_stock_threshold();
+			$low_stock_amount       = absint( wc_get_low_stock_amount( wc_get_product( $change['product']->get_id() ) ) );
+
+			if ( $change['to'] <= $out_of_stock_threshold ) {
+				do_action( 'woocommerce_no_stock', wc_get_product( $change['product']->get_id() ) );
+			} elseif ( $change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount ) {
+				do_action( 'woocommerce_low_stock', wc_get_product( $change['product']->get_id() ) );
+			}
+
+			if ( $change['to'] < 0 ) {
+
+				do_action(
+					'woocommerce_product_on_backorder',
+					array(
+						'product'  => wc_get_product( $change['product']->get_id() ),
+						'order_id' => $order->get_id(),
+						'quantity' => abs( $change['from'] - $change['to'] ),
+					)
+				);
+
+			}
+
 		}
 
 	}
