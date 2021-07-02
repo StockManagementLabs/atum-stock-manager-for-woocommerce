@@ -15,6 +15,7 @@
 			font-size: 36px;
 			line-height: 1.5;
 			position: relative;
+			padding-top: 0;
 			
 			+ .page-title-action {
 				display: none; // Prevent the WP button (with the wrong style) to be shown until we move it inside the h1.
@@ -52,8 +53,8 @@
 					
 					@include tablet-max-wp {
 						font-size: 14px;
-						height: 35px;
-						line-height: 35px;
+						height: 30px;
+						line-height: 30px;
 					}
 					
 					@include mobile-max {

@@ -1546,7 +1546,7 @@
 }
 
 .btn.disabled, .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -4745,6 +4745,7 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   z-index: 100001;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
+  padding-right: 10px;
 }
 
 .swal2-container .swal2-modal .swal2-close:hover {

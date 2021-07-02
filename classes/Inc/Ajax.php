@@ -673,7 +673,7 @@ final class Ajax {
 
 		do_action( 'atum/ajax/list_table/bulk_action_applied', $_POST['bulk_action'], $ids );
 
-		wp_send_json_success( __( 'Action applied to the selected products successfully.', ATUM_TEXT_DOMAIN ) );
+		wp_send_json_success( __( 'Action applied to the selected items successfully.', ATUM_TEXT_DOMAIN ) );
 
 	}
 

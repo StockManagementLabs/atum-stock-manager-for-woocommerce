@@ -1511,7 +1511,7 @@
 }
 
 .btn.disabled, .btn:disabled {
-  opacity: 0.3;
+  opacity: 0.5;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
@@ -3343,6 +3343,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   font-size: 36px;
   line-height: 1.5;
   position: relative;
+  padding-top: 0;
 }
 
 .wrap h1.wp-heading-inline + .page-title-action {
@@ -3383,8 +3384,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 @media all and (max-width: 782px) {
   .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
     font-size: 14px;
-    height: 35px;
-    line-height: 35px;
+    height: 30px;
+    line-height: 30px;
   }
 }
 
@@ -3668,6 +3669,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   z-index: 100001;
   -webkit-transition: .2s ease-in-out;
   transition: .2s ease-in-out;
+  padding-right: 10px;
 }
 
 .swal2-container .swal2-modal .swal2-close:hover {
@@ -7793,6 +7795,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   line-height: 0;
   text-transform: uppercase;
   font-size: 12px;
+  padding: 15px;
+  margin-left: 0;
 }
 
 @media all and (max-width: 782px) {
