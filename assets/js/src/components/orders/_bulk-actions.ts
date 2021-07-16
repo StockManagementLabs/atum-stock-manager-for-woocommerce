@@ -179,6 +179,7 @@ export default class OrdersBulkActions {
 
 						if ( maybeProcessItems ) {
 
+							const modeProcess: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStockMode', false, $rows, action );
 							let quantities: any   = {},
 							    itemIds: number[] = [];
 
@@ -193,12 +194,14 @@ export default class OrdersBulkActions {
 
 							} );
 
+
 							$.ajax( {
 								url     : window[ 'ajaxurl' ],
 								data    : {
 									atum_order_id      : this.settings.get( 'post_id' ),
 									atum_order_item_ids: itemIds,
 									quantities         : quantities,
+									mode               : modeProcess,
 									action             : `atum_order_${ action }_items_stock`,
 									security           : this.settings.get( 'atum_order_item_nonce' ),
 								},
