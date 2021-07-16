@@ -1167,8 +1167,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$regular_price_value = $this->product->get_regular_price();
 			$regular_price_value = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => self::$default_currency,
+				'currency' => self::$default_currency,
 			] ) : $regular_price;
 
 			$args = apply_filters( 'atum/list_table/args_regular_price', array(
@@ -1205,8 +1204,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$sale_price_value = $this->product->get_sale_price();
 			$sale_price_value = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => self::$default_currency,
+				'currency' => self::$default_currency,
 			] ) : $sale_price;
 
 			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
@@ -1270,8 +1268,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$purchase_price_value = $this->product->get_purchase_price();
 			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => self::$default_currency,
+				'currency' => self::$default_currency,
 			] ) : $purchase_price;
 
 			$args = apply_filters( 'atum/list_table/args_purchase_price', array(

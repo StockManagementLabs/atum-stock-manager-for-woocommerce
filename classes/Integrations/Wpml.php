@@ -336,8 +336,7 @@ class Wpml {
 
 			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price'][ Globals::PURCHASE_PRICE_KEY ];
 			$args['value']        = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $this->current_currency,
+				'currency' => $this->current_currency,
 			] ) : $args['value'];
 
 			$args['currency']  = $this->current_currency;
@@ -362,11 +361,10 @@ class Wpml {
 	public function add_custom_regular_price( $args, $product ) {
 		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-			
+
 			$regular_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_regular_price'];
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $this->current_currency,
+				'currency' => $this->current_currency,
 			] ) : $args['value'];
 			
 			$args['currency']  = $this->current_currency;
@@ -375,12 +373,11 @@ class Wpml {
 			
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
-			
+
 			$product             = wc_get_product( $this->original_product_id );
 			$regular_price_value = $product->get_regular_price();
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $args['currency'],
+				'currency' => $args['currency'],
 			] ) : $args['value'];
 			
 		}
@@ -401,12 +398,11 @@ class Wpml {
 	public function add_custom_sale_price( $args, $product ) {
 		
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
-			
+
 			$args['currency'] = $this->current_currency;
 			$sale_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_sale_price'];
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $this->current_currency,
+				'currency' => $this->current_currency,
 			] ) : $args['value'];
 			$args['symbol']   = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
 			
@@ -417,12 +413,11 @@ class Wpml {
 			$args['is_custom'] = 'yes';
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
-			
+
 			$product          = wc_get_product( $this->original_product_id );
 			$sale_price_value = $product->get_sale_price();
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
-				'trim_zeros' => TRUE,
-				'currency'   => $args['currency'],
+				'currency' => $args['currency'],
 			] ) : $args['value'];
 			
 			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );

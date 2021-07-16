@@ -690,7 +690,7 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales, [ 'trim_zeros' => TRUE ] ) : self::EMPTY_COL;
+		$lost_sales = is_numeric( $lost_sales ) ? Helpers::format_price( $lost_sales ) : self::EMPTY_COL;
 		$this->increase_total( '_lost_sales', $lost_sales );
 
 		return apply_filters( 'atum/stock_central_list/column_lost_sales', $lost_sales, $item, $this->product, $this );
