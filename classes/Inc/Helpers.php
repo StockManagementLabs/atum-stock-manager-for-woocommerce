@@ -3059,7 +3059,7 @@ final class Helpers {
 		$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
 		$current_url = wp_parse_url( add_query_arg( [] ) );
 
-		return strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
+		return is_array( $current_url ) && ! empty( $current_url['path'] ) && strpos( $current_url['path'], $rest_url['path'], 0 ) === 0;
 
 	}
 
