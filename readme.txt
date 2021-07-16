@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, janberebel, danielberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.7.2
+Tested up to: 5.8.0
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.4.1
-Stable tag: 1.9.1
+WC tested up to: 5.5.1
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,39 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.2`
+
+*2021-07-16*
+
+**Features**
+
+* Added new filter to be able to alter the list tables checkboxes column.
+* Added compatibility to MI for ListTable bulk actions.
+* Added new ATUM tool to clear out ATUM transients.
+* Added getter for the selected rows in ListTables.
+* Added support for non numeric IDs (MI) to ListTables' bulk actions.
+* Added new filter to be able to edit the ATUM Orders List tables' row actions.
+* Use ATUM's out of stock threshold values for WC stock notifications.
+* Added support for external bulk actions in ATUM list tables.
+
+**Changes**
+
+* Changed default dark mode's table border color.
+* Changed arrow color variable on dark mode.
+* Refactoring.
+* Changed hook name.
+* Format list tables prices like WC.
+* Updated composer's autoload.
+
+**Fixes**
+
+* CSS fixes.
+* Select all the children checkboxes when using the head and footer checkboxes on List Tables.
+* Fixed ATUM Orders list tables buttons' height.
+* Fixed PHP notice on some cases when calling the is_rest_request helper.
 
 ---
 

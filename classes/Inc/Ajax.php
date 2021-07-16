@@ -671,7 +671,13 @@ final class Ajax {
 				break;
 		}
 
-		do_action( 'atum/ajax/list_table/bulk_action_applied', $_POST['bulk_action'], $ids );
+		$args = [ $_POST['bulk_action'], $ids ];
+
+		if ( ! empty( $_POST['extra_data'] ) ) {
+			$args[] = $_POST['extra_data'];
+		}
+
+		do_action_ref_array( 'atum/ajax/list_table/bulk_action_applied', $args );
 
 		wp_send_json_success( __( 'Action applied to the selected items successfully.', ATUM_TEXT_DOMAIN ) );
 

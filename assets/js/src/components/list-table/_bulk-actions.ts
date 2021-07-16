@@ -7,14 +7,20 @@ import ListTable from './_list-table';
 import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
 import Utils from '../../utils/_utils';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class BulkActions {
+
+	$bulkButton: JQuery;
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
 		private globals: Globals,
 		private listTable: ListTable
 	) {
+
+		this.$bulkButton = $( '.apply-bulk-action' );
 		
 		this.globals.$atumList
 		
@@ -22,8 +28,6 @@ export default class BulkActions {
 			// Apply Bulk Actions.
 			// -------------------
 			.on( 'click', '.apply-bulk-action', ( evt: JQueryEventObject ) => {
-
-				const $bulkButton: JQuery = $( evt.currentTarget );
 
 				if ( ! this.globals.$atumList.find( '.check-column input:checked' ).length ) {
 
@@ -37,7 +41,7 @@ export default class BulkActions {
 
 				}
 				else {
-					this.applyBulk( $bulkButton );
+					this.applyBulk();
 				}
 
 			} )
@@ -47,16 +51,15 @@ export default class BulkActions {
 			// ----------------------
 			.on( 'change', '.bulkactions select', ( evt: JQueryEventObject ) => {
 
-				const $select: JQuery     = $( evt.currentTarget ),
-				      $bulkButton: JQuery = $select.siblings( '.apply-bulk-action' );
+				const $select: JQuery = $( evt.currentTarget );
 
-				this.updateBulkButton( $bulkButton );
+				this.updateBulkButton();
 
 				if ( $select.val() !== '-1' ) {
-					$bulkButton.show();
+					this.$bulkButton.show();
 				}
 				else {
-					$bulkButton.hide();
+					this.$bulkButton.hide();
 				}
 
 			} )
@@ -64,16 +67,14 @@ export default class BulkActions {
 			//
 			// Change the Bulk Buttons texts when selecting boxes.
 			// ---------------------------------------------------
-			.on( 'change', '.check-column input:checkbox', () => this.updateBulkButton( $( '.apply-bulk-action' ) ) );
+			.on( 'change', '.check-column input:checkbox', () => this.updateBulkButton() );
 		
 	}
 	
 	/**
 	 * Apply a bulk action for the selected rows
-	 *
-	 * @param {JQuery} $bulkButton
 	 */
-	applyBulk( $bulkButton: JQuery ) {
+	applyBulk() {
 
 		const bulkAction: string    = this.globals.$atumList.find( '.bulkactions select' ).filter(
 			( index: number, elem: Element ) => {
@@ -85,59 +86,81 @@ export default class BulkActions {
 			selectedItems.push( $( elem ).val() );
 		} );
 
+		// Allow processing the bulk action externally.
+		const processBulkAction: boolean = this.wpHooks.applyFilters( 'atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this );
+
+		if ( processBulkAction ) {
+			this.processBulk( bulkAction, selectedItems );
+		}
+		
+	}
+
+	/**
+	 * Process the bulk action via Ajax
+	 *
+	 * @param {string}   bulkAction
+	 * @param {string[]} selectedItems
+	 * @param {any}      extraData
+	 */
+	processBulk( bulkAction: string, selectedItems: string[], extraData: any = null ) {
+
+		const data: any = {
+			token      : this.settings.get( 'nonce' ),
+			action     : 'atum_apply_bulk_action',
+			bulk_action: bulkAction,
+			ids        : selectedItems,
+		};
+
+		if ( extraData ) {
+			data[ 'extra_data' ] = extraData;
+		}
+
 		$.ajax( {
-			url       : window[ 'ajaxurl' ],
-			method    : 'POST',
-			dataType  : 'json',
-			data      : {
-				token      : this.settings.get( 'nonce' ),
-				action     : 'atum_apply_bulk_action',
-				bulk_action: bulkAction,
-				ids        : selectedItems,
-			},
+			url     : window[ 'ajaxurl' ],
+			method  : 'POST',
+			dataType: 'json',
+			data    : data,
 			beforeSend: () => {
-				$bulkButton.prop( 'disabled', true );
+				this.$bulkButton.prop( 'disabled', true );
 				this.listTable.addOverlay();
 			},
-			success   : ( response: any ) => {
+			success : ( response: any ) => {
 
 				if ( typeof response === 'object' ) {
 					const noticeType = response.success ? 'updated' : 'error';
 					Utils.addNotice( noticeType, response.data );
 				}
 
-				$bulkButton.prop( 'disabled', false );
+				this.$bulkButton.prop( 'disabled', false );
 
 				if ( response.success ) {
-					$bulkButton.hide();
+					this.$bulkButton.hide();
 					this.listTable.updateTable();
-					$bulkButton.trigger( 'atum-list-table-bulk-actions-success', [ bulkAction, selectedItems ] );
+					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-success', [ bulkAction, selectedItems ] );
 				}
 				else {
-					$bulkButton.trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
+					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
 				}
 
 			},
-			error     : () => {
-				$bulkButton.prop( 'disabled', false );
+			error   : () => {
+				this.$bulkButton.prop( 'disabled', false );
 				this.listTable.removeOverlay();
-				$bulkButton.trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
+				this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
 			},
 		} );
-		
+
 	}
 	
 	/**
 	 * Update the Bulk Button text depending on the number of checkboxes selected
-	 *
-	 * @param {JQuery} $bulkButton
 	 */
-	updateBulkButton( $bulkButton: JQuery ) {
+	updateBulkButton() {
 
 		const numChecked: number = this.globals.$atumList.find( '.check-column input:checkbox:checked' ).length,
 		      buttonText: string = numChecked > 1 ? this.settings.get( 'applyBulkAction' ) : this.settings.get( 'applyAction' );
 
-		$bulkButton.text( buttonText );
+		this.$bulkButton.text( buttonText );
 		
 	}
 	
