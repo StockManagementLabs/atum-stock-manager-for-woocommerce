@@ -3379,7 +3379,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap base-component.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -3449,33 +3449,45 @@ function within(min, value, max) {
     return null;
   };
 
-  const emulateTransitionEnd = (element, duration) => {
-    let called = false;
-    const durationPadding = 5;
-    const emulatedDuration = duration + durationPadding;
-
-    function listener() {
-      called = true;
-      element.removeEventListener(TRANSITION_END, listener);
-    }
-
-    element.addEventListener(TRANSITION_END, listener);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(element);
-      }
-    }, emulatedDuration);
-  };
-
   const execute = callback => {
     if (typeof callback === 'function') {
       callback();
     }
   };
 
+  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+    if (!waitForTransition) {
+      execute(callback);
+      return;
+    }
+
+    const durationPadding = 5;
+    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
+    let called = false;
+
+    const handler = ({
+      target
+    }) => {
+      if (target !== transitionElement) {
+        return;
+      }
+
+      called = true;
+      transitionElement.removeEventListener(TRANSITION_END, handler);
+      execute(callback);
+    };
+
+    transitionElement.addEventListener(TRANSITION_END, handler);
+    setTimeout(() => {
+      if (!called) {
+        triggerTransitionEnd(transitionElement);
+      }
+    }, emulatedDuration);
+  };
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): base-component.js
+   * Bootstrap (v5.0.2): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3485,7 +3497,7 @@ function within(min, value, max) {
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.0.1';
+  const VERSION = '5.0.2';
 
   class BaseComponent {
     constructor(element) {
@@ -3508,20 +3520,17 @@ function within(min, value, max) {
     }
 
     _queueCallback(callback, element, isAnimated = true) {
-      if (!isAnimated) {
-        execute(callback);
-        return;
-      }
-
-      const transitionDuration = getTransitionDurationFromElement(element);
-      EventHandler__default['default'].one(element, 'transitionend', () => execute(callback));
-      emulateTransitionEnd(element, transitionDuration);
+      executeAfterTransition(callback, element, isAnimated);
     }
     /** Static */
 
 
     static getInstance(element) {
       return Data__default['default'].get(element, this.DATA_KEY);
+    }
+
+    static getOrCreateInstance(element, config = {}) {
+      return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
     }
 
     static get VERSION() {
@@ -3558,7 +3567,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap data.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -3569,7 +3578,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/data.js
+   * Bootstrap (v5.0.2): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3637,7 +3646,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap event-handler.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -3660,7 +3669,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/event-handler.js
+   * Bootstrap (v5.0.2): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3963,7 +3972,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap manipulator.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap manipulator.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -3974,7 +3983,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/manipulator.js
+   * Bootstrap (v5.0.2): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4062,7 +4071,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap selector-engine.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -4073,7 +4082,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/selector-engine.js
+   * Bootstrap (v5.0.2): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4158,7 +4167,7 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap tooltip.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap tooltip.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -4198,7 +4207,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): util/index.js
+   * Bootstrap (v5.0.2): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4301,9 +4310,18 @@ function within(min, value, max) {
     return null;
   };
 
+  const DOMContentLoadedCallbacks = [];
+
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', callback);
+      // add listener on the first call when the document is in loading state
+      if (!DOMContentLoadedCallbacks.length) {
+        document.addEventListener('DOMContentLoaded', () => {
+          DOMContentLoadedCallbacks.forEach(callback => callback());
+        });
+      }
+
+      DOMContentLoadedCallbacks.push(callback);
     } else {
       callback();
     }
@@ -4332,7 +4350,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): util/sanitizer.js
+   * Bootstrap (v5.0.2): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4427,7 +4445,7 @@ function within(min, value, max) {
       const elName = el.nodeName.toLowerCase();
 
       if (!allowlistKeys.includes(elName)) {
-        el.parentNode.removeChild(el);
+        el.remove();
         continue;
       }
 
@@ -4445,7 +4463,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): tooltip.js
+   * Bootstrap (v5.0.2): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4614,8 +4632,8 @@ function within(min, value, max) {
       clearTimeout(this._timeout);
       EventHandler__default['default'].off(this._element.closest(`.${CLASS_NAME_MODAL}`), 'hide.bs.modal', this._hideModalHandler);
 
-      if (this.tip && this.tip.parentNode) {
-        this.tip.parentNode.removeChild(this.tip);
+      if (this.tip) {
+        this.tip.remove();
       }
 
       if (this._popper) {
@@ -4720,8 +4738,8 @@ function within(min, value, max) {
           return;
         }
 
-        if (this._hoverState !== HOVER_STATE_SHOW && tip.parentNode) {
-          tip.parentNode.removeChild(tip);
+        if (this._hoverState !== HOVER_STATE_SHOW) {
+          tip.remove();
         }
 
         this._cleanTipClass();
@@ -5108,17 +5126,7 @@ function within(min, value, max) {
 
     static jQueryInterface(config) {
       return this.each(function () {
-        let data = Data__default['default'].get(this, DATA_KEY);
-
-        const _config = typeof config === 'object' && config;
-
-        if (!data && /dispose|hide/.test(config)) {
-          return;
-        }
-
-        if (!data) {
-          data = new Tooltip(this, _config);
-        }
+        const data = Tooltip.getOrCreateInstance(this, config);
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
