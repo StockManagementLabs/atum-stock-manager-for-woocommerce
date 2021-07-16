@@ -194,6 +194,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.2`
+
+*2021-07-16*
+
+**Features**
+
+* Added new filter to be able to alter the list tables checkboxes column.
+* Added compatibility to MI for ListTable bulk actions.
+* Added new ATUM tool to clear out ATUM transients.
+* Added getter for the selected rows in ListTables.
+* Added support for non numeric IDs (MI) to ListTables' bulk actions.
+* Added new filter to be able to edit the ATUM Orders List tables' row actions.
+* Use ATUM's out of stock threshold values for WC stock notifications.
+* Added support for external bulk actions in ATUM list tables.
+
+**Changes**
+
+* Changed default dark mode's table border color.
+* Changed arrow color variable on dark mode.
+* Refactoring.
+* Changed hook name.
+* Format list tables prices like WC.
+* Updated composer's autoload.
+
+**Fixes**
+
+* CSS fixes.
+* Select all the children checkboxes when using the head and footer checkboxes on List Tables.
+* Fixed ATUM Orders list tables buttons' height.
+* Fixed PHP notice on some cases when calling the is_rest_request helper.
+
+---
+
 `1.9.1`
 
 *2021-06-21*
