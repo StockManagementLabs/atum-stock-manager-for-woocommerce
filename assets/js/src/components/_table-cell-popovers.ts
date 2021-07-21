@@ -113,6 +113,7 @@ export default class TableCellPopovers extends PopoverBase{
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
 		      inputType: string = $metaCell.data( 'input-type' ) || 'number',
+		      realValue: string = $metaCell.data( 'realvalue' ) || '',
 		      value: string     = $metaCell.text().trim(),
 		      inputAtts: any    = {
 			      type : inputType || 'number',
@@ -123,14 +124,20 @@ export default class TableCellPopovers extends PopoverBase{
 		if ( inputType === 'number' || symbol ) {
 
 			let numericValue: number;
+			const numericRealValue: number = parseFloat( realValue );
 
 			// For currency numbers.
 			if ( symbol ) {
-				numericValue = Math.abs( <number> Utils.unformat( value, this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
+				numericValue = Math.abs( <number> Utils.unformat( value.replace('>', '').trim(), this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
 			}
 			// For regular numbers.
 			else {
 				numericValue = parseFloat( value );
+			}
+
+			if ( ! isNaN( numericRealValue) && numericValue !== numericRealValue ) {
+
+				numericValue = numericRealValue;
 			}
 
 			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
