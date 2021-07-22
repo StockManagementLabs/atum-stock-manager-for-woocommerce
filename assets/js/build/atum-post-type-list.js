@@ -474,18 +474,22 @@ var TableCellPopovers = (function (_super) {
         });
     };
     TableCellPopovers.prototype.addPopover = function ($metaCell) {
-        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', value = $metaCell.text().trim(), inputAtts = {
+        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
             class: 'meta-value',
         };
         if (inputType === 'number' || symbol) {
             var numericValue = void 0;
+            var numericRealValue = parseFloat(realValue);
             if (symbol) {
-                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value, this.settings.get('currencyFormatDecimalSeparator')));
+                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
             }
             else {
                 numericValue = parseFloat(value);
+            }
+            if (!isNaN(numericRealValue) && numericValue !== numericRealValue) {
+                numericValue = numericRealValue;
             }
             inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
         }

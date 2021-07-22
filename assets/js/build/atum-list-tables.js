@@ -687,18 +687,22 @@ var TableCellPopovers = (function (_super) {
         });
     };
     TableCellPopovers.prototype.addPopover = function ($metaCell) {
-        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', value = $metaCell.text().trim(), inputAtts = {
+        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
             class: 'meta-value',
         };
         if (inputType === 'number' || symbol) {
             var numericValue = void 0;
+            var numericRealValue = parseFloat(realValue);
             if (symbol) {
-                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value, this.settings.get('currencyFormatDecimalSeparator')));
+                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
             }
             else {
                 numericValue = parseFloat(value);
+            }
+            if (!isNaN(numericRealValue) && numericValue !== numericRealValue) {
+                numericValue = numericRealValue;
             }
             inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
         }
@@ -1658,13 +1662,20 @@ var ListTable = (function () {
     };
     ListTable.prototype.setCellValue = function ($metaCell, value) {
         var symbol = $metaCell.data('symbol') || '', currencyPos = this.globals.$atumTable.data('currency-pos');
+        var existRealValue = typeof $metaCell.data('realvalue') !== 'undefined';
+        if (existRealValue) {
+            $metaCell.data('realvalue', value);
+        }
         if (value === '') {
             value = this.settings.get('emptyCol');
         }
         else if (symbol) {
-            var precision = this.settings.get('currencyFormatNumDecimals'), thousand = '', decimal = this.settings.get('currencyFormatDecimalSeparator'), format = this.settings.get('currencyFormat');
+            var precision = this.settings.get('currencyFormatNumDecimals'), precisionMultiplier = Math.pow(10, precision), thousand = '', decimal = this.settings.get('currencyFormatDecimalSeparator'), format = this.settings.get('currencyFormat');
             var numericValue = parseFloat(value);
             value = _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].formatMoney(numericValue, symbol, precision, thousand, decimal, format);
+            if (existRealValue && 0.0 < numericValue && 0.0 === Math.round(numericValue * precisionMultiplier) / 100) {
+                value = "> " + value;
+            }
         }
         $metaCell.addClass('unsaved').text(value);
     };
