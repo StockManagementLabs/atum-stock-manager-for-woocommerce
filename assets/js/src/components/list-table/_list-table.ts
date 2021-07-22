@@ -239,19 +239,31 @@ export default class ListTable {
 		let symbol: string      = $metaCell.data( 'symbol' ) || '',
 		    currencyPos: string = this.globals.$atumTable.data( 'currency-pos' );
 
+		const existRealValue: boolean = typeof $metaCell.data('realvalue') !== 'undefined';
+
+		if ( existRealValue ) {
+			$metaCell.data( 'realvalue', value );
+		}
+
 		if ( value === '' ) {
 			value = this.settings.get( 'emptyCol' );
 		}
 		else if ( symbol ) {
 
-			const precision: number = this.settings.get( 'currencyFormatNumDecimals' ),
-			      thousand: string  = '',
-			      decimal: string   = this.settings.get( 'currencyFormatDecimalSeparator' ),
-			      format: string    = this.settings.get( 'currencyFormat' );
+			const precision: number           = this.settings.get( 'currencyFormatNumDecimals' ),
+			      precisionMultiplier: number = Math.pow( 10, precision ),
+			      thousand: string            = '',
+			      decimal: string             = this.settings.get( 'currencyFormatDecimalSeparator' ),
+			      format: string              = this.settings.get( 'currencyFormat' );
 
 			let numericValue: number = parseFloat( value );
 
 			value = <string> Utils.formatMoney( numericValue, symbol, precision, thousand, decimal, format );
+
+			// Show > if the shown value is 0 but it has hidden digits
+			if ( existRealValue && 0.0 < numericValue && 0.0 === Math.round( numericValue * precisionMultiplier ) / 100 ) {
+				value = `> ${value}`;
+			}
 
 		}
 
