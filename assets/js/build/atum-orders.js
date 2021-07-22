@@ -930,11 +930,12 @@ var OrdersBulkActions = (function () {
         var _this = this;
         var $rows = $('table.atum_order_items').find('tr.selected');
         var checkItems = this.wpHooks.applyFilters('ordersBulkActions_checkChangeStock', true, $rows);
+        var confirmProcessItems = this.wpHooks.applyFilters('ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action);
         if (checkItems) {
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
             sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                 title: this.settings.get('are_you_sure'),
-                text: this.settings.get(action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg'),
+                html: (this.settings.get(action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg')) + confirmProcessItems,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: this.settings.get('continue'),
@@ -944,9 +945,9 @@ var OrdersBulkActions = (function () {
                 showLoaderOnConfirm: true,
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
-                        var maybeProcessItems = _this.wpHooks.applyFilters('ordersBulkActions_bulkChangeStock', true, $rows, action, resolve);
+                        var modeProcess = $('#bulk-change-stock-mode').length > 0 && $('#bulk-change-stock-mode').is(':checked') ? 'yes' : 'no';
+                        var maybeProcessItems = _this.wpHooks.applyFilters('ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve);
                         if (maybeProcessItems) {
-                            var modeProcess = _this.wpHooks.applyFilters('ordersBulkActions_bulkChangeStockMode', false, $rows, action);
                             var quantities_1 = {}, itemIds_1 = [];
                             $rows.each(function (index, elem) {
                                 var $elem = $(elem);

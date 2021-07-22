@@ -1853,6 +1853,7 @@ final class Ajax {
 		$atum_order_id       = absint( $_POST['atum_order_id'] );
 		$atum_order_item_ids = array_map( 'absint', $_POST['atum_order_item_ids'] );
 		$quantities          = array_map( 'wc_stock_amount', $_POST['quantities'] );
+		$mode                = wc_clean( wp_unslash( $_POST['mode'] ) );
 
 		$atum_order       = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 		$atum_order_items = $atum_order->get_items();
@@ -1922,7 +1923,7 @@ final class Ajax {
 				}
 			}
 
-			do_action( "atum/ajax/{$action}_atum_order_stock", $atum_order );
+			do_action( "atum/ajax/{$action}_atum_order_stock", $atum_order, $mode );
 
 			if ( empty( $return ) ) {
 
