@@ -64,6 +64,7 @@ class AtumCapabilities {
 
 		// Out Stock Threshold caps.
 		'edit_out_stock_threshold',
+		'edit_low_stock_threshold',
 
 		// Suppliers caps.
 		'edit_supplier',

@@ -155,6 +155,7 @@ export default class OrdersBulkActions {
 
 		const $rows: JQuery       = $( 'table.atum_order_items' ).find( 'tr.selected' );
 		const checkItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_checkChangeStock', true, $rows );
+		const confirmProcessItems: string = this.wpHooks.applyFilters( 'ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action );
 
 		if ( checkItems ) {
 
@@ -162,7 +163,7 @@ export default class OrdersBulkActions {
 
 			Swal.fire( {
 				title              : this.settings.get( 'are_you_sure' ),
-				text               : this.settings.get( action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg' ),
+				html               : ( this.settings.get( action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg' ) ) + confirmProcessItems,
 				icon               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get( 'continue' ),
@@ -174,8 +175,9 @@ export default class OrdersBulkActions {
 
 					return new Promise( ( resolve: Function, reject: Function ) => {
 
+						const modeProcess: string = $( '#bulk-change-stock-mode' ).length > 0 && $( '#bulk-change-stock-mode' ).is( ':checked' ) ? 'yes' : 'no';
 						// Allow bypassing the change (MI needs to run its own version).
-						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStock', true, $rows, action, resolve );
+						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve );
 
 						if ( maybeProcessItems ) {
 
@@ -193,12 +195,14 @@ export default class OrdersBulkActions {
 
 							} );
 
+
 							$.ajax( {
 								url     : window[ 'ajaxurl' ],
 								data    : {
 									atum_order_id      : this.settings.get( 'post_id' ),
 									atum_order_item_ids: itemIds,
 									quantities         : quantities,
+									mode               : modeProcess,
 									action             : `atum_order_${ action }_items_stock`,
 									security           : this.settings.get( 'atum_order_item_nonce' ),
 								},

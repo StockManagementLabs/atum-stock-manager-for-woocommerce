@@ -1165,18 +1165,35 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			$regular_price_value = $this->product->get_regular_price();
-			$regular_price_value = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
-				'currency' => self::$default_currency,
-			] ) : $regular_price;
+			$regular_price_orig = $this->product->get_regular_price();
+
+			if ( is_numeric( $regular_price_orig ) ) {
+
+				$regular_price_orig = (float) $regular_price_orig;
+
+				$regular_price_value = Helpers::format_price( $regular_price_orig, [
+					'currency' => self::$default_currency,
+				] );
+
+				if ( 0.0 < $regular_price_orig && 0.0 === round( $regular_price_orig, wc_get_price_decimals() ) ) {
+
+					$regular_price_value = "> $regular_price_value";
+				}
+
+			}
+			else {
+
+				$regular_price_value = $regular_price;
+			}
 
 			$args = apply_filters( 'atum/list_table/args_regular_price', array(
-				'meta_key'  => 'regular_price',
-				'value'     => $regular_price_value,
-				'symbol'    => get_woocommerce_currency_symbol(),
-				'currency'  => self::$default_currency,
-				'tooltip'   => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
-				'cell_name' => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
+				'meta_key'   => 'regular_price',
+				'value'      => $regular_price_value,
+				'symbol'     => get_woocommerce_currency_symbol(),
+				'currency'   => self::$default_currency,
+				'tooltip'    => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
+				'extra_data' => [ 'realValue' => $regular_price_orig ],
 			), $this->product );
 
 			$regular_price = self::get_editable_column( $args );
@@ -1202,10 +1219,21 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			$sale_price_value = $this->product->get_sale_price();
-			$sale_price_value = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
-				'currency' => self::$default_currency,
-			] ) : $sale_price;
+			$sale_price_orig = $this->product->get_sale_price();
+			if ( is_numeric( $sale_price_orig ) ) {
+
+				$sale_price_value = Helpers::format_price( $sale_price_orig, [
+					'currency' => self::$default_currency,
+				] );
+
+				if ( 0.0 < $sale_price_orig && 0.0 === round( $sale_price_orig, wc_get_price_decimals() ) ) {
+
+					$sale_price_value = "> $sale_price_value";
+				}
+			}
+			else {
+				$sale_price_value = $sale_price;
+			}
 
 			$date_on_sale_from = $this->product->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
 			$date_on_sale_to   = $this->product->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->product->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
@@ -1237,6 +1265,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						'class'       => 'atum-datepicker to',
 					),
 				),
+				'extra_data' => [ 'realValue' => $sale_price_orig ],
 			), $this->product );
 
 			$sale_price = self::get_editable_column( $args );
@@ -1266,18 +1295,32 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			$purchase_price_value = $this->product->get_purchase_price();
-			$purchase_price_value = is_numeric( $purchase_price_value ) ? Helpers::format_price( $purchase_price_value, [
-				'currency' => self::$default_currency,
-			] ) : $purchase_price;
+			$purchase_price_orig = $this->product->get_purchase_price();
+			if ( is_numeric( $purchase_price_orig ) ) {
+
+				$purchase_price_orig = (float) $purchase_price_orig;
+
+				$purchase_price_value = Helpers::format_price( $purchase_price_orig, [
+					'currency' => self::$default_currency,
+				] );
+
+				if ( 0.0 < $purchase_price_orig && 0.0 === round( $purchase_price_orig, wc_get_price_decimals() ) ) {
+
+					$purchase_price_value = "> $purchase_price_value";
+				}
+			}
+			else {
+				$purchase_price_value = $purchase_price;
+			}
 
 			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
-				'meta_key'  => 'purchase_price',
-				'value'     => $purchase_price_value,
-				'symbol'    => get_woocommerce_currency_symbol(),
-				'currency'  => self::$default_currency,
-				'tooltip'   => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
-				'cell_name' => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+				'meta_key'   => 'purchase_price',
+				'value'      => $purchase_price_value,
+				'symbol'     => get_woocommerce_currency_symbol(),
+				'currency'   => self::$default_currency,
+				'tooltip'    => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+				'extra_data' => [ 'realValue' => $purchase_price_orig ],
 			) );
 
 			$purchase_price = self::get_editable_column( $args );
