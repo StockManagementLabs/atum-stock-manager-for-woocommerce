@@ -785,6 +785,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	public function use_purchase_price( $price, $qty, $product, $order ) {
 
 		if ( $order instanceof PurchaseOrder ) {
+
 			// Get the purchase price (if set).
 			$price = $product->get_purchase_price();
 

@@ -34,6 +34,8 @@ use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductSimpleTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
 use AtumLevels\Levels\Products\BOMProductVariationTrait;
+use Westsworld\TimeAgo;
+use Westsworld\TimeAgo\Translations\En;
 
 
 final class Helpers {
@@ -3236,11 +3238,11 @@ final class Helpers {
 			$language = new $alt_lang_class();
 		}
 		else {
-			$language = new \Westsworld\TimeAgo\Translations\En();
+			$language = new En();
 		}
 
 		$time_zone = new \DateTimeZone( wp_timezone_string() );
-		$time_ago  = new \Westsworld\TimeAgo( $language );
+		$time_ago  = new TimeAgo( $language );
 
 		return $time_ago->inWords( new \DateTime( $date, $time_zone ), new \DateTime( 'now', $time_zone ) );
 
