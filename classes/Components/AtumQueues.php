@@ -268,7 +268,7 @@ class AtumQueues {
 	 */
 	public static function check_async_request() {
 
-		$remote_available = AtumCache::get_transient( self::$async_available_transient, TRUE );
+		$remote_available = apply_filters( 'atum/queues/check_async_request', AtumCache::get_transient( self::$async_available_transient, TRUE ) );
 
 		if ( ! $remote_available ) {
 
