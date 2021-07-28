@@ -1884,7 +1884,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				}
 			}
 			
-			&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
+			&[class*="column-calc_"], &.numeric {
 				a {
 					justify-content: center;
 					align-items: center;
@@ -2484,7 +2484,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			min-width: 70px;
 		}
 		
-		&[class*="column-calc_"], &.column-_supplier_sku, &.numeric {
+		&[class*="column-calc_"], &.numeric {
 			text-align: center;
 		}
 		
