@@ -1110,6 +1110,10 @@ input[type="button"].btn-block {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-box:before {
+  content: "";
+}
+
 .atmi-featured:before {
   content: "";
 }
@@ -1676,6 +1680,10 @@ input[type="button"].btn-block {
 
 .atmi-lock:before {
   content: "";
+}
+
+.atmi-unlock:before {
+  content: "";
 }
 
 .atmi-magic-wand:before {

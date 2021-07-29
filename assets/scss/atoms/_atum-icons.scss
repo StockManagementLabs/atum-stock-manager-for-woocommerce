@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-box {
+	&:before {
+		content: $atmi-box;
+	}
+}
 .atmi-featured {
 	&:before {
 		content: $atmi-featured;
@@ -732,6 +737,11 @@
 .atmi-lock {
 	&:before {
 		content: $atmi-lock;
+	}
+}
+.atmi-unlock {
+	&:before {
+		content: $atmi-unlock;
 	}
 }
 .atmi-magic-wand {

@@ -2498,6 +2498,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-box:before {
+  content: "";
+}
+
 .atmi-featured:before {
   content: "";
 }
@@ -3064,6 +3068,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 .atmi-lock:before {
   content: "";
+}
+
+.atmi-unlock:before {
+  content: "";
 }
 
 .atmi-magic-wand:before {

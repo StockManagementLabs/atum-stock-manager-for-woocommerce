@@ -616,6 +616,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-box:before {
+  content: "";
+}
+
 .atmi-featured:before {
   content: "";
 }
@@ -1182,6 +1186,10 @@
 
 .atmi-lock:before {
   content: "";
+}
+
+.atmi-unlock:before {
+  content: "";
 }
 
 .atmi-magic-wand:before {
