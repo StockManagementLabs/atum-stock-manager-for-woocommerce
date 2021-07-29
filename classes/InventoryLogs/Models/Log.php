@@ -73,6 +73,16 @@ class Log extends AtumOrderModel {
 			'shipping_company' => '',
 		) ) );
 
+		// Make sure the post is already created before instantiating the ATUM Order model.
+		// When creating the PO from the WP backend, the post is created automatically but there are cases that this doesn't happen.
+		if ( ! $id ) {
+			$id = wp_insert_post( [
+				'post_type'   => InventoryLogs::POST_TYPE,
+				'post_title'  => __( 'Auto Draft', ATUM_TEXT_DOMAIN ),
+				'post_status' => 'auto-draft',
+			] );
+		}
+
 		parent::__construct( $id, $read_items );
 
 	}

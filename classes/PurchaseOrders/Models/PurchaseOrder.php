@@ -67,6 +67,16 @@ class PurchaseOrder extends AtumOrderModel {
 			'date_expected'      => '',
 		) ) );
 
+		// Make sure the post is already created before instantiating the ATUM Order model.
+		// When creating the PO from the WP backend, the post is created automatically but there are cases that this doesn't happen.
+		if ( ! $id ) {
+			$id = wp_insert_post( [
+				'post_type'   => PurchaseOrders::POST_TYPE,
+				'post_title'  => __( 'Auto Draft', ATUM_TEXT_DOMAIN ),
+				'post_status' => 'auto-draft',
+			] );
+		}
+
 		parent::__construct( $id, $read_items );
 
 		// Load the POs supplier.
