@@ -86,7 +86,7 @@ trait AtumOrderItemTrait {
 		// Save the Log Item and its meta data.
 		$atum_order_item_id = $this->atum_order_item_model->save();
 
-		if ( $atum_order_item_id ) {
+		if ( $atum_order_item_id && ! is_wp_error( $atum_order_item_id ) ) {
 			$this->set_id( $this->id );
 			$this->save_item_data();
 			$this->save_meta_data();

@@ -433,6 +433,7 @@ abstract class AtumOrderModel {
 		$item = new $item_class();
 		$item->set_props( $args );
 		$item->set_backorder_meta();
+		$this->check_order_id(); // Make sure the current PO already exists before adding products or it could fail.
 		$item->set_atum_order_id( $this->id );
 		$item->save();
 		$this->add_item( $item );
@@ -460,6 +461,7 @@ abstract class AtumOrderModel {
 		 * @var AtumOrderItemFee $item
 		 */
 		$item = new $item_class();
+		$this->check_order_id(); // Make sure the current PO already exists before adding products or it could fail.
 		$item->set_atum_order_id( $this->id );
 
 		if ( $fee ) {
@@ -497,6 +499,7 @@ abstract class AtumOrderModel {
 		 */
 		$item = new $item_class();
 		$item->set_shipping_rate( new \WC_Shipping_Rate() );
+		$this->check_order_id(); // Make sure the current PO already exists before adding products or it could fail.
 		$item->set_atum_order_id( $this->id );
 
 		if ( $shipping ) {
@@ -547,6 +550,7 @@ abstract class AtumOrderModel {
 		 */
 		$item = new $item_class();
 		$item->set_rate( $values['rate_id'] );
+		$this->check_order_id(); // Make sure the current PO already exists before adding products or it could fail.
 		$item->set_atum_order_id( $this->id );
 
 		if ( $tax ) {
@@ -575,6 +579,17 @@ abstract class AtumOrderModel {
 
 		return $item;
 
+	}
+
+	/**
+	 * When adding items to the ATUM Order, we need to be sure that the post already exists.
+	 *
+	 * @since 1.9.3
+	 */
+	protected function check_order_id() {
+		if ( ! $this->id ) {
+			$this->save();
+		}
 	}
 
 	/**
