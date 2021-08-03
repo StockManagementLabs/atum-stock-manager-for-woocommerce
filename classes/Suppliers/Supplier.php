@@ -39,6 +39,9 @@ defined( 'ABSPATH' ) || die;
  * @property int    $discount
  * @property int    $tax_rate
  * @property int    $lead_time
+ * @property string $delivery_terms
+ * @property int    $days_to_cancel
+ * @property string $cancelation_policy
  */
 class Supplier {
 
@@ -62,28 +65,31 @@ class Supplier {
 	 * @var array
 	 */
 	protected $data = array(
-		'name'           => '',
-		'code'           => '',
-		'tax_number'     => '',
-		'phone'          => '',
-		'fax'            => '',
-		'website'        => '',
-		'ordering_url'   => '',
-		'general_email'  => '',
-		'ordering_email' => '',
-		'description'    => '',
-		'currency'       => '',
-		'address'        => '',
-		'city'           => '',
-		'country'        => '',
-		'state'          => '',
-		'zip_code'       => '',
-		'assigned_to'    => NULL,
-		'location'       => '',
-		'thumbnail_id'   => NULL,
-		'discount'       => NULL,
-		'tax_rate'       => NULL,
-		'lead_time'      => NULL,
+		'name'               => '',
+		'code'               => '',
+		'tax_number'         => '',
+		'phone'              => '',
+		'fax'                => '',
+		'website'            => '',
+		'ordering_url'       => '',
+		'general_email'      => '',
+		'ordering_email'     => '',
+		'description'        => '',
+		'currency'           => '',
+		'address'            => '',
+		'city'               => '',
+		'country'            => '',
+		'state'              => '',
+		'zip_code'           => '',
+		'assigned_to'        => NULL,
+		'location'           => '',
+		'thumbnail_id'       => NULL,
+		'discount'           => NULL,
+		'tax_rate'           => NULL,
+		'lead_time'          => NULL,
+		'delivery_terms'     => '',
+		'days_to_cancel'     => NULL,
+		'cancelation_policy' => '',
 	);
 
 	/**
@@ -115,6 +121,8 @@ class Supplier {
 	 * @since 1.6.8
 	 */
 	public function read_data() {
+
+		$this->data = apply_filters( 'atum/supplier/data', $this->data );
 
 		if ( $this->post ) {
 
@@ -560,6 +568,57 @@ class Supplier {
 		if ( $this->data['lead_time'] !== $lead_time ) {
 			$this->data['lead_time'] = $lead_time;
 			$this->register_change( 'lead_time' );
+		}
+	}
+
+	/**
+	 * Set the payments and delivery terms
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $delivery_terms
+	 */
+	public function set_delivery_terms( $delivery_terms ) {
+
+		$delivery_terms = wp_kses_post( $delivery_terms );
+
+		if ( $this->data['delivery_terms'] !== $delivery_terms ) {
+			$this->data['delivery_terms'] = $delivery_terms;
+			$this->register_change( 'delivery_terms' );
+		}
+	}
+
+	/**
+	 * Set number of days to cancel
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $days_to_cancel
+	 */
+	public function set_days_to_cancel( $days_to_cancel ) {
+
+		$days_to_cancel = absint( $days_to_cancel );
+
+		if ( $this->data['days_to_cancel'] !== $days_to_cancel ) {
+			$this->data['days_to_cancel'] = $days_to_cancel;
+			$this->register_change( 'days_to_cancel' );
+		}
+	}
+
+	/**
+	 * Set the cancelation policy
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $cancelation_policy
+	 */
+	public function set_cancelation_policy( $cancelation_policy ) {
+
+		$cancelation_policy = wp_kses_post( $cancelation_policy );
+
+		if ( $this->data['cancelation_policy'] !== $cancelation_policy ) {
+			$this->data['cancelation_policy'] = $cancelation_policy;
+			$this->register_change( 'cancelation_policy' );
 		}
 	}
 
