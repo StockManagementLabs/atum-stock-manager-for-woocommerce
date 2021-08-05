@@ -6774,7 +6774,7 @@ table.atum-list-table .set-header:hover, .floatThead-container .set-header:hover
 
 table.atum-list-table .highlight-danger, .floatThead-container .highlight-danger, .inbound-stock-list .highlight-danger, table.wp-list-table .highlight-danger {
   background-color: var(--danger);
-  color: var(--white);
+  color: var(--white) !important;
   padding: 2px 3px;
   border-radius: 2px;
 }

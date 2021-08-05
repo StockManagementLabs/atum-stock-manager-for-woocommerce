@@ -2692,7 +2692,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.highlight-danger {
 		background-color: var(--danger);
-		color:  var(--white);
+		color:  var(--white) !important;
 		padding: 2px 3px;
 		border-radius: 2px;
 	}
