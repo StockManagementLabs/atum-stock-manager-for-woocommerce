@@ -1334,8 +1334,8 @@ class Hooks {
 	 * @since 1.9.2
 	 */
 	public function allow_stock_emails() {
-		remove_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9, 2 );
-		remove_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9, 2 );
+		remove_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9 );
+		remove_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9 );
 	}
 
 	/**
