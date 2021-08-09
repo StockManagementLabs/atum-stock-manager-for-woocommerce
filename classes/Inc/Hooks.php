@@ -520,6 +520,9 @@ class Hooks {
 			// Add custom decimal quantities to order add products.
 			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
+			//Change min_qty on quantity field on variable products if its necesary
+			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
+
 		}
 
 	}
@@ -1501,6 +1504,27 @@ class Hooks {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Check if its necesary change the variable min quantity value
+	 *
+	 * @since 1.9.2
+	 *        
+	 * @param array $variation_atts
+	 *
+	 * @return array
+	 */
+	public function maybe_change_variable_min_qty( $variation_atts ) {
+
+		$input_step = Helpers::get_input_step();
+
+		if ( $variation_atts[ min_qty ] !== $input_step ) {
+			$variation_atts[ min_qty ] = $input_step;
+		}
+
+		return $variation_atts;
 
 	}
 
