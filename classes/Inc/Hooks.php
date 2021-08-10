@@ -1518,11 +1518,10 @@ class Hooks {
 	 */
 	public function maybe_change_variable_min_qty( $variation_atts ) {
 
-		if ( ! empty( $variation_atts['min_qty'] ) ) {
+		$input_step = Helpers::get_input_step();
 
-			$input_step = Helpers::get_input_step();
-			$variation_atts['min_qty'] !== $input_step ? $variation_atts['min_qty'] = $input_step : '';
-
+		if ( $input_step ) {
+			$variation_atts['min_qty'] = $input_step;
 		}
 
 		return $variation_atts;
