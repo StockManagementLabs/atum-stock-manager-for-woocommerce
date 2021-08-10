@@ -54,7 +54,7 @@ use Atum\Inc\Helpers;
 
 	<div class="form-field form-field-wide">
 		<label for="delivery_terms"><?php esc_html_e( 'Payments and Delivery Terms', ATUM_TEXT_DOMAIN ) ?></label>
-		<textarea id="delivery_terms" name="supplier_details[delivery_terms]" rows="5"><?php echo esc_textarea( $supplier->delivery_terms ) ?></textarea>
+		<textarea id="delivery_terms" name="default_settings[delivery_terms]" rows="5"><?php echo esc_textarea( $supplier->delivery_terms ) ?></textarea>
 	</div>
 
 	<div class="form-field form-field-wide">
@@ -64,7 +64,7 @@ use Atum\Inc\Helpers;
 
 	<div class="form-field form-field-wide">
 		<label for="cancelation_policy"><?php esc_html_e( 'Cancelation Policy', ATUM_TEXT_DOMAIN ) ?></label>
-		<textarea id="cancelation_policy" name="supplier_details[cancelation_policy]" rows="5"><?php echo esc_textarea( $supplier->cancelation_policy ) ?></textarea>
+		<textarea id="cancelation_policy" name="default_settings[cancelation_policy]" rows="5"><?php echo esc_textarea( $supplier->cancelation_policy ) ?></textarea>
 	</div>
 
 </div>
