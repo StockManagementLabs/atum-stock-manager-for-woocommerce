@@ -1481,13 +1481,25 @@ class Hooks {
 		foreach ( $changes as $change ) {
 
 			$product                = Helpers::get_atum_product( $change['product']->get_id() );
-			$out_of_stock_threshold = $product->get_out_stock_threshold();
+			$out_of_stock_threshold = $product->get_out_stock_threshold() !== '' ? $product->get_out_stock_threshold() : absint( get_option( 'woocommerce_notify_no_stock_amount', 0 ) );
 			$low_stock_amount       = absint( wc_get_low_stock_amount( wc_get_product( $change['product']->get_id() ) ) );
 
 			if ( $change['to'] <= $out_of_stock_threshold ) {
+
+				if ( 'no' === get_option( 'woocommerce_notify_no_stock', 'yes' ) ) {
+					return;
+				}
+
 				do_action( 'woocommerce_no_stock', wc_get_product( $change['product']->get_id() ) );
+
 			} elseif ( $change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount ) {
+
+				if ( 'no' === get_option( 'woocommerce_notify_low_stock', 'yes' ) ) {
+					return;
+				}
+
 				do_action( 'woocommerce_low_stock', wc_get_product( $change['product']->get_id() ) );
+
 			}
 
 			if ( $change['to'] < 0 ) {
