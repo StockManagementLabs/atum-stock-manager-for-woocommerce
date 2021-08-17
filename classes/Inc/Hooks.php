@@ -520,7 +520,7 @@ class Hooks {
 			// Add custom decimal quantities to order add products.
 			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
-			//Change min_qty on quantity field on variable products if its necesary
+			// Change min_qty on quantity field on variable products if its necesary.
 			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
 
 		}
@@ -1295,7 +1295,8 @@ class Hooks {
 		];
 
 		foreach ( $statuses as $status ) {
-			if ( $note->content === sprintf( __( 'Order status set to %s.', 'woocommerce' ), wc_get_order_status_name( $status ) ) ) {
+			/* Translators: %s status_to */
+			if ( sprintf( __( 'Order status set to %s.', 'woocommerce' ) === $note->content, wc_get_order_status_name( $status ) ) ) { // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 				$found_data = [
 					'action' => 'order_status_set',
 					'status' => $status,
@@ -1304,7 +1305,7 @@ class Hooks {
 			}
 			foreach ( $statuses as $status_to ) {
 				/* Translators: %1$s status_from, %2$s status_to */
-				if ( $note->content === sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status ), wc_get_order_status_name( $status_to ) ) ) {
+				if ( sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ) === $note->content, wc_get_order_status_name( $status ), wc_get_order_status_name( $status_to ) ) ) {  // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 					$found_data = [
 						'action'      => 'order_status_change',
 						'status_from' => $status,
