@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.8.0
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.5.1
-Stable tag: 1.9.2
+WC tested up to: 5.5.2
+Stable tag: 1.9.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,34 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.3`
+
+*2021-08-17*
+
+**Features**
+
+* Added script hook to allow/prevent stock changes in order items.
+* Added capability to update low stock threshold at inventory level.
+* Added new filter before checking the async requests availability.
+* Added new fields to suppliers: cancellation policy, days to cancel and payment & delivery terms.
+
+**Changes**
+
+* List tables will show all decimals for prices when editing the values.
+* Ensure that ATUM orders exists before instantiated.
+* Check if an ATUM order is saved before adding items.
+* Updated ATUM icon font
+* Updated composer's autoload.
+
+**Fixes**
+
+* CSS fixes.
+* Fixed wrong shortage column color in Manufacturing Central.
+* Fixed Variable products don't allow to buy quantities less than 1.
+* Fixed email no stock and low stock notification errors.
 
 ---
 
