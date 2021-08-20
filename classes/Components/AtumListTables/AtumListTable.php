@@ -371,7 +371,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->query_filters = $this->get_filters_query_string();
 		$timestamp           = Helpers::get_current_timestamp( TRUE );
 		$this->day           = Helpers::date_format( $timestamp, TRUE, TRUE );
-		self::$sale_days     = Helpers::get_sold_last_days_option();
+
+		self::set_sales_day();
 
 		// Filter the table data results to show specific product types only.
 		$this->set_product_types_query_data();
@@ -4806,5 +4807,36 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Set the sales day value
+	 *
+	 * @since 1.9.3.1
+	 *
+	 * @return int
+	 */
+	public static function set_sales_day() {
+
+		$value_set = FALSE;
+
+		if ( isset( $_REQUEST['sold_last_days'] ) ) {
+
+			// Sanitize.
+			$value = absint( $_REQUEST['sold_last_days'] );
+
+			if ( $value > 0 && $value < 31 ) {
+				self::$sale_days = $value;
+				$value_set       = TRUE;
+			}
+
+		}
+
+		if ( ! $value_set ) {
+			self::$sale_days = Helpers::get_sold_last_days_option();
+		}
+
+		return self::$sale_days;
+
 	}
 }

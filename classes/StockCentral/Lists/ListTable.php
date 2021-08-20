@@ -300,7 +300,7 @@ class ListTable extends AtumListTable {
 	public static function get_table_columns() {
 
 		// Can be called statically so it should need the sale_days before initializing the list.
-		self::$sale_days = Helpers::get_sold_last_days_option();
+		self::set_sales_day();
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
@@ -574,16 +574,21 @@ class ListTable extends AtumListTable {
 
 			$sale_days        = self::$sale_days;
 			$sales_last_ndays = $this->product->get_sales_last_days();
+			$days_queried     = Helpers::get_sold_last_days_option() !== $sale_days; // Is sold_last_days a request?
 
 			if (
-				is_null( $sales_last_ndays ) || Settings::DEFAULT_SALE_DAYS !== $sale_days ||
+				is_null( $sales_last_ndays ) || $days_queried ||
 				Helpers::is_product_data_outdated( $this->product )
 			) {
 
 				$sales_last_ndays = Helpers::get_sold_last_days( "$this->day -$sale_days days", $this->day, $this->product->get_id() );
-				$this->product->set_sales_last_days( $sales_last_ndays );
-				$timestamp = Helpers::get_current_timestamp();
-				$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
+
+				// Only save values if the sale days are the set in options.
+				if ( ! $days_queried ) {
+					$this->product->set_sales_last_days( $sales_last_ndays );
+					$timestamp = Helpers::get_current_timestamp();
+					$this->product->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
+				}
 
 			}
 
