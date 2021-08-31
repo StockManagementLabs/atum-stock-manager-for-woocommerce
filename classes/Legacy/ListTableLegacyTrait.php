@@ -557,7 +557,7 @@ trait ListTableLegacyTrait {
 			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', [ $products_args, $this->wc_query_data, $this->atum_query_data ] );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
-			if ( empty( $products_in_stock ) ) {
+			if ( empty( $products_in_stock ) && ! empty( $products ) ) {
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
@@ -566,7 +566,7 @@ trait ListTableLegacyTrait {
 
 			$this->atum_query_data = $temp_atum_query_data;
 
-			$products_in_stock = $products_in_stock->posts;
+			$products_in_stock = FALSE !== $products_in_stock ? $products_in_stock->posts : 0;
 
 			$this->id_views['in_stock']          = (array) $products_in_stock;
 			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
