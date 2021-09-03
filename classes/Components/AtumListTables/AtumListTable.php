@@ -3058,7 +3058,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$tag   = 'cb' === $column_key ? 'td' : 'th';
 			$scope = 'th' === $tag ? 'scope="col"' : '';
-			$id    = $with_id ? "id='$column_key'" : '';
+			$id    = apply_filters( 'atum/list_table/display_column_id', $with_id ) ? "id='$column_key'" : '';
 
 			if ( ! empty( $class ) ) {
 				$class = "class='" . join( ' ', $class ) . "'";
