@@ -17,7 +17,12 @@ use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\OrderNotes;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
+use Atum\Inc\Globals;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\Modules\ModuleManager;
+use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\Suppliers\Suppliers;
+
 
 class AtumApi {
 
@@ -32,6 +37,11 @@ class AtumApi {
 	 * The CORS origin coming from the ATUM App
 	 */
 	const ATUM_APP_ORIGIN = 'capacitor://com.stockmanagementlabs.atum';
+
+	/**
+	 * Max size limit for the API response pages.
+	 */
+	const PER_PAGE_LIMIT = 500;
 
 	/**
 	 * The ATUM API controllers
@@ -62,6 +72,23 @@ class AtumApi {
 	);
 
 	/**
+	 * Collection of paginable collections to which we need to increase the per_page limit
+	 *
+	 * @var string[]
+	 */
+	private $paginable_collections = [
+		'attachment',
+		'product',
+		'product_variation',
+		'shop_order',
+		'shop_coupon',
+		'shop_order_refund',
+		'product_cat',
+		'product_tag',
+		'comment',
+	];
+
+	/**
 	 * AtumApi constructor
 	 *
 	 * @since 1.6.2
@@ -84,6 +111,32 @@ class AtumApi {
 
 		// Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3).
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
+
+		foreach ( array_keys( $this->api_controllers ) as $endpoint ) {
+
+			switch ( $endpoint ) {
+				case 'atum-inventory-logs':
+					$this->paginable_collections[] = InventoryLogs::POST_TYPE;
+					break;
+
+				case 'atum-locations':
+					$this->paginable_collections[] = Globals::PRODUCT_LOCATION_TAXONOMY;
+					break;
+
+				case 'atum-purchase-orders':
+					$this->paginable_collections[] = PurchaseOrders::POST_TYPE;
+					break;
+
+				case 'atum-suppliers':
+					$this->paginable_collections[] = Suppliers::POST_TYPE;
+					break;
+			}
+
+		}
+
+		foreach ( $this->paginable_collections as $collection ) {
+			add_filter( "rest_{$collection}_collection_params", array( $this, 'increase_posts_per_page' ) );
+		}
 
 		// Fix CORS issue when connecting through Ionic's Capacitor to our API.
 		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
@@ -175,6 +228,31 @@ class AtumApi {
 
 		return $value;
 
+	}
+
+	/**
+	 * Increase the posts per page limit (that is set to 100 by WP) when syncing through the ATUM App
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param array $query_params
+	 *
+	 * @return array
+	 */
+	public function increase_posts_per_page( $query_params ) {
+
+		$origin = get_http_origin();
+
+		// Only alter the limit if the request is coming from the ATUM App.
+		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE ) {
+			return $query_params;
+		}
+
+		if ( is_array( $query_params['per_page'] ) && isset( $query_params['per_page']['maximum'] ) ) {
+			$query_params['per_page']['maximum'] = self::PER_PAGE_LIMIT;
+		}
+
+		return $query_params;
 	}
 
 
