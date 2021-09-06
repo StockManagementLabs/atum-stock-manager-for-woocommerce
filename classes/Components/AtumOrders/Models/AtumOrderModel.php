@@ -469,6 +469,7 @@ abstract class AtumOrderModel {
 			$item->set_taxes( $fee->get_taxes() );
 			$item->set_tax_class( $fee->get_tax_class() );
 			$item->set_total( $fee->get_total() );
+			$item->set_name( $fee->get_name() );
 		}
 
 		$item->save();
