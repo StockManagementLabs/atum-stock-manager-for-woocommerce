@@ -718,7 +718,7 @@ export default class ListTable {
 				}
 				else {
 
-					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
+					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span, ._stock .mi-stock' ),
 					      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
 
 					compoundedAmt += parseFloat( stockValue ) || 0;
