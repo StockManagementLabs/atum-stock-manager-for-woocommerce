@@ -1480,7 +1480,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		$classes_title             = '';
 		$tooltip_warning           = '';
 		$wc_notify_no_stock_amount = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
-		$is_grouped                = 'grouped' === $this->product->get_type();
 		$is_inheritable            = Helpers::is_inheritable_type( $this->product->get_type() );
 		$editable                  = apply_filters( 'atum/list_table/editable_column_stock', $editable, $this->product );
 
@@ -1489,11 +1488,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			return apply_filters( 'atum/list_table/column_stock', $stock, $item, $this->product, $this );
 		}
 
-		if ( ! $is_grouped ) {
-			$stock = wc_stock_amount( $this->product->get_stock_quantity() );
-		}
+		$stock = wc_stock_amount( $this->product->get_stock_quantity() );
 
-		if ( 0 !== $stock && ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) ) {
+		if ( 0 !== $stock && ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) || ! isset( $_REQUEST['view'] ) ) {
 			$this->increase_total( '_stock', $stock );
 		}
 
@@ -1503,7 +1500,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Setings value is enabled?
 			$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
 
-			if ( $is_out_stock_threshold_managed && ! $is_grouped ) {
+			if ( $is_out_stock_threshold_managed ) {
 
 				$out_stock_threshold = $this->product->get_out_stock_threshold();
 
@@ -1549,7 +1546,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( $editable && ! $is_grouped ) {
+		if ( $editable ) {
 
 			$args = array(
 				'meta_key'  => 'stock',

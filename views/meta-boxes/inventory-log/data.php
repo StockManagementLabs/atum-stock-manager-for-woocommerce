@@ -99,7 +99,7 @@ $log_status = $atum_order->get_status();
 				</p>
 
 				<p class="form-field form-field-wide">
-					<label for="customer_user"><?php esc_html_e( 'Order', ATUM_TEXT_DOMAIN ) ?></label>
+					<label for="wc_order"><?php esc_html_e( 'Order', ATUM_TEXT_DOMAIN ) ?></label>
 
 					<select class="wc-product-search atum-enhanced-select" id="wc_order" name="wc_order" data-allow_clear="true" data-action="atum_json_search_orders"
 							data-placeholder="<?php esc_attr_e( 'Search by Order ID&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-multiple="false"

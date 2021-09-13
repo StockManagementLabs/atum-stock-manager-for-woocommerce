@@ -397,7 +397,7 @@ class CheckOrderPrices {
 	 */
 	public function add_bulk_action( $actions ) {
 
-		$actions['atum_fix_prices'] = __( 'Fix prices', ATUM_TEXT_DOMAIN );
+		$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
 
 		return $actions;
 	}
@@ -457,8 +457,7 @@ class CheckOrderPrices {
 		$number      = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 		$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
 
-		if ( 'prices_fixed' === $bulk_action ) { // WPCS: input var ok, CSRF ok.
-			/* translators: %d: orders count */
+		if ( 'prices_fixed' === $bulk_action ) {
 			$message = _n( 'The prices for the selected order were fixed successfully.', 'The prices for the selected orders were fixed successfully.', $number, ATUM_TEXT_DOMAIN );
 			echo '<div class="updated"><p>' . esc_html( $message ) . '</p></div>';
 		}

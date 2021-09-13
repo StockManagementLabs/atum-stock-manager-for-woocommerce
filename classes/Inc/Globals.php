@@ -15,7 +15,6 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
-use Atum\Suppliers\Suppliers;
 
 final class Globals {
 	
