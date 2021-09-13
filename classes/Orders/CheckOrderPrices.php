@@ -397,7 +397,7 @@ class CheckOrderPrices {
 	 */
 	public function add_bulk_action( $actions ) {
 
-		$actions['atum_fix_prices'] = __( 'Fix prices', ATUM_TEXT_DOMAIN );
+		$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
 
 		return $actions;
 	}
