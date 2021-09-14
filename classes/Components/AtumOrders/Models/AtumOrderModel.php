@@ -26,9 +26,11 @@ use Atum\Inc\Helpers;
 use Atum\InventoryLogs\Items\LogItemFee;
 use Atum\InventoryLogs\Items\LogItemProduct;
 use Atum\InventoryLogs\Items\LogItemShipping;
+use Atum\InventoryLogs\Items\LogItemTax;
 use Atum\PurchaseOrders\Items\POItemFee;
 use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\Items\POItemShipping;
+use Atum\PurchaseOrders\Items\POItemTax;
 
 
 /**
@@ -767,7 +769,7 @@ abstract class AtumOrderModel {
 			$taxes = $item->get_taxes();
 
 			foreach ( $taxes['total'] as $tax_rate_id => $tax ) {
-				$cart_taxes[ $tax_rate_id ] = ( isset( $cart_taxes[ $tax_rate_id ] ) ) ? $cart_taxes[ $tax_rate_id ] + (float) $tax : (float) $tax;
+				$cart_taxes[ $tax_rate_id ] = isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] + (float) $tax : (float) $tax;
 			}
 
 		}
@@ -1946,7 +1948,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array|\WC_Order_Item_Product
+	 * @return POItemFee[]|LogItemFee[]
 	 */
 	public function get_fees() {
 		return $this->get_items( 'fee' );
@@ -1973,7 +1975,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array|\WC_Order_Item_Product
+	 * @return POItemTax[]|LogItemTax[]
 	 */
 	public function get_taxes() {
 		return $this->get_items( 'tax' );
@@ -1984,7 +1986,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @return array|\WC_Order_Item_Product
+	 * @return POItemShipping[]|LogItemShipping[]
 	 */
 	public function get_shipping_methods() {
 		return $this->get_items( 'shipping' );
