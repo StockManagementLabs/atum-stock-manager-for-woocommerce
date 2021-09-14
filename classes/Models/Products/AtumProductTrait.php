@@ -66,7 +66,6 @@ trait AtumProductTrait {
 		'selectable_inventories_mode'   => NULL, // MI.
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
-		'expired_stock'                 => NULL, // MI.
 	);
 
 
@@ -618,20 +617,6 @@ trait AtumProductTrait {
 		return $show_out_of_stock_inventories;
 	}
 
-	/**
-	 * Returns the product's expired stock prop.
-	 *
-	 * @since   1.9.3
-	 * @package Multi-Inventory
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string
-	 */
-	public function get_expired_stock( $context = 'view' ) {
-		return $this->get_prop( 'expired_stock', $context );
-	}
-
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
@@ -1122,20 +1107,6 @@ trait AtumProductTrait {
 
 		$show_out_of_stock_inventories = ! is_null( $show_out_of_stock_inventories ) && 'global' !== $show_out_of_stock_inventories ? wc_string_to_bool( $show_out_of_stock_inventories ) : NULL;
 		$this->set_prop( 'show_out_of_stock_inventories', $show_out_of_stock_inventories );
-	}
-
-	/**
-	 * Set the expired stock for the current product.
-	 *
-	 * @since   1.9.3
-	 * @package Multi-Inventory
-	 *
-	 * @param int|float|null $expired_stock
-	 */
-	public function set_expired_stock( $expired_stock ) {
-
-		$expired_stock = is_null( $expired_stock ) || is_numeric( $expired_stock ) ? $expired_stock : NULL;
-		$this->set_prop( 'expired_stock', $expired_stock );
 	}
 
 
