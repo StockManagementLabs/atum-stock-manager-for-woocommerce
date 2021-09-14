@@ -388,11 +388,11 @@ abstract class AtumOrderModel {
 	 *
 	 * @param  \WC_Product $product
 	 * @param  int|float   $qty
-	 * @param  array       $args
+	 * @param  array       $props
 	 *
 	 * @return AtumOrderItemProduct The product item added to ATUM Order
 	 */
-	public function add_product( $product, $qty = NULL, $args = array() ) {
+	public function add_product( $product, $qty = NULL, $props = array() ) {
 
 		if ( $product instanceof \WC_Product ) {
 			
@@ -422,7 +422,7 @@ abstract class AtumOrderModel {
 
 		}
 
-		$args       = wp_parse_args( $args, $default_args );
+		$props      = wp_parse_args( $props, $default_args );
 		$item_class = $this->get_items_class( $this->line_item_group );
 
 		/**
@@ -431,7 +431,7 @@ abstract class AtumOrderModel {
 		 * @var AtumOrderItemProduct $item
 		 */
 		$item = new $item_class();
-		$item->set_props( $args );
+		$item->set_props( $props );
 		$item->set_backorder_meta();
 		$this->check_order_id(); // Make sure the current PO already exists before adding products or it could fail.
 		$item->set_atum_order_id( $this->id );
