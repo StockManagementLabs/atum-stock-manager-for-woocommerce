@@ -764,7 +764,7 @@ abstract class AtumOrderModel {
 		$existing_taxes = $this->get_taxes();
 		$saved_rate_ids = array();
 
-		foreach ( $this->get_items( [ $this->line_item_type, 'fee' ] ) as $item_id => $item ) {
+		foreach ( $this->get_items( [ $this->line_item_type, 'fee' ] ) as $item ) {
 
 			$taxes = $item->get_taxes();
 
@@ -774,9 +774,10 @@ abstract class AtumOrderModel {
 
 		}
 
-		foreach ( $this->get_shipping_methods() as $item_id => $item ) {
+		foreach ( $this->get_shipping_methods() as $item ) {
 
 			$taxes = $item->get_taxes();
+			
 			foreach ( $taxes['total'] as $tax_rate_id => $tax ) {
 				$shipping_taxes[ $tax_rate_id ] = isset( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] + (float) $tax : (float) $tax;
 			}
