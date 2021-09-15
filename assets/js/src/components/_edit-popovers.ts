@@ -244,6 +244,44 @@ export default class EditPopovers extends PopoverBase{
 				$elem.children( '.input-group-text' ).toggleClass( 'active' );
 				$elem.children( 'input' ).val( $elem.children( '.input-group-text.active' ).data( 'value' ) );
 
+			} )
+
+			// Set default value link.
+			.on( 'click', '.set-default-value', ( evt: JQueryEventObject ) => {
+
+				evt.preventDefault();
+
+				const $link: JQuery           = $( evt.currentTarget ),
+				      $popoverContent: JQuery = $link.closest( '.edit-popover-content' ),
+				      dataAtts: any           = $link.data();
+
+				if ( dataAtts && Object.keys( dataAtts ).length ) {
+
+					for ( const dataAtt in dataAtts ) {
+
+						const inputName: string = dataAtt.replace( /_/g, '-' );
+
+						const $relatedInput: JQuery = $popoverContent.find( `:input[name="${ inputName }"]` );
+
+						if ( $relatedInput.length ) {
+
+							// Input group append fields.
+							if ( $relatedInput.parent( '.input-group-append' ).length ) {
+								if ( $relatedInput.val() !== dataAtts[ dataAtt ] ) {
+									$relatedInput.parent( '.input-group-append' ).click(); // Force the change by triggering the event.
+								}
+							}
+							// Any other input.
+							else {
+								$relatedInput.val( dataAtts[ dataAtt ] );
+							}
+
+						}
+
+					}
+
+				}
+
 			} );
 
 		// Hide any other opened popover before opening a new one.
