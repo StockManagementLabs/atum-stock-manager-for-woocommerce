@@ -77,15 +77,6 @@ class AtumCli {
 	}
 
 	/**
-	 * Adds AtumCli atum command to WP_CLI.
-	 *
-	 * @since 1.9.3.1
-	 */
-	public function add_atum_command() {
-		\WP_CLI::add_command( 'atum list', array( $this, 'display_commands_list' ) );
-	}
-
-	/**
 	 * Adds AtumCli commands to WP_CLI.
 	 *
 	 * @since 1.9.3.1
