@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) || die;
 */
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
+use Atum\Cli\AtumCli;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumNotifications;
@@ -251,6 +252,10 @@ class Main {
 		AtumCalculatedProps::get_instance();
 		CheckOrderPrices::get_instance();
 		AtumNotifications::get_instance();
+
+		if ( class_exists( '\WP_CLI', FALSE ) ) {
+			AtumCli::get_instance();
+		}
 
 		//
 		// Enable WPML module if needed

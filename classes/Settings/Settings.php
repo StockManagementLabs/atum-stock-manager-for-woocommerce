@@ -107,6 +107,12 @@ class Settings {
 
 		}
 
+		// Add tools to AtumCli commands.
+		if ( class_exists( '\WP_CLI', FALSE ) ) {
+			$tools = Tools::get_instance();
+			\WP_CLI::do_hook( 'before_add_command:atum', $tools->add_settings_defaults( [] ), __NAMESPACE__ );
+		}
+
 	}
 
 	/**

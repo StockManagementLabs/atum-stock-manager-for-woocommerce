@@ -434,6 +434,20 @@ class AtumCalculatedProps {
 
 	}
 
+	/**
+	 * Calculates product sales properties from CLI call.
+	 *
+	 * @since 1.9.3.1
+	 *
+	 * @param \WC_Product $product
+	 */
+	public static function update_atum_sales_calc_props_cli_call( $product ) {
+
+		if ( 'cli' === php_sapi_name() ) {
+			self::update_atum_sales_calc_props( $product, 1 );
+		}
+	}
+
 
 	/*******************
 	 * Instance methods
