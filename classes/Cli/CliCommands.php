@@ -47,7 +47,6 @@ final class CliCommands {
 				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ) );
 				exit();
 		}
-		// TODO: Logs.
 		do_action( 'atum/cli/tool_change_manage_stock' );
 		$message = Helpers::change_status_meta( '_manage_stock', $manage_status, TRUE );
 		\WP_CLI::success( $message );
@@ -84,7 +83,6 @@ final class CliCommands {
 				\WP_CLI::line( '' );
 				exit();
 		}
-		// TODO: Logs.
 		do_action( 'atum/cli/tool_change_control_stock' );
 		$message = Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, $control_status, TRUE );
 		\WP_CLI::line( '' );
@@ -102,7 +100,6 @@ final class CliCommands {
 
 		\WP_CLI::line( '' );
 		if ( FALSE === Helpers::is_any_out_stock_threshold_set() ) {
-			// TODO: Logs.
 			do_action( 'atum/cli/tool_clear_out_stock_threshold' );
 			\WP_CLI::success( __( 'All your previously saved values were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 			exit();
@@ -134,7 +131,6 @@ final class CliCommands {
 			$progress->tick();
 		}
 		$progress->finish();
-		// TODO: Logs.
 		do_action( 'atum/cli/tool_update_calc_props' );
 		\WP_CLI::line( '' );
 		\WP_CLI::success( __( 'Calculated properties successfully updated', ATUM_TEXT_DOMAIN ) );
@@ -149,7 +145,6 @@ final class CliCommands {
 	public static function atum_tool_clear_out_atum_transients() {
 		AtumCache::delete_transients();
 
-		// TODO: Logs.
 		do_action( 'atum/cli/tool_clear_out_atum_transients' );
 		\WP_CLI::line( '' );
 		\WP_CLI::success( __( 'All your saved temporary data were cleared successfully.', ATUM_TEXT_DOMAIN ) );

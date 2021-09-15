@@ -93,7 +93,6 @@ class AtumCli {
 	public function add_commands() {
 		$parent = 'atum';
 		\WP_CLI::add_command( "$parent list", array( $this, 'display_commands_list' ) );
-		\WP_CLI::add_command( "$parent actions", array( $this, 'display_commands_actions' ) );
 		foreach ( $this->commands as $command => $content ) {
 			// $function = $this->find_hooked_function( 'wp_ajax_' . $content['action'] );
 			$function = array( $content['class'], $content['action'] );
