@@ -31,7 +31,7 @@ final class CliCommands {
 
 		if ( empty( $args ) ) {
 			\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <manage/unmanage>' );
-			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ) );
+			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ), FALSE );
 			exit();
 		}
 
@@ -44,7 +44,7 @@ final class CliCommands {
 				break;
 			default:
 				\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <manage/unmanage>' );
-				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ) );
+				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ), FALSE );
 				exit();
 		}
 		do_action( 'atum/cli/tool_change_manage_stock' );
@@ -64,7 +64,7 @@ final class CliCommands {
 		if ( empty( $args ) ) {
 			\WP_CLI::line( '' );
 			\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <control/uncontrol>' );
-			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ) );
+			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ), FALSE );
 			\WP_CLI::line( '' );
 			exit();
 		}
@@ -79,7 +79,7 @@ final class CliCommands {
 			default:
 				\WP_CLI::line( '' );
 				\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <control/uncontrol>' );
-				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ) );
+				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ), FALSE );
 				\WP_CLI::line( '' );
 				exit();
 		}
@@ -105,7 +105,7 @@ final class CliCommands {
 			exit();
 		}
 
-		\WP_CLI::error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ) );
+		\WP_CLI::error( __( 'Something failed clearing the Out of Stock Threshold values', ATUM_TEXT_DOMAIN ), FALSE );
 		\WP_CLI::line( '' );
 	}
 
