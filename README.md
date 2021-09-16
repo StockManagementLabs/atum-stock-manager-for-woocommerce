@@ -4,8 +4,6 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 ##Description
 
-**With an Online Selling Boost Comes [ATUM Actions Log Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - fill the uncomfortable stock loss and organise the outside factors ATUM is equipped with complete set of recording tools.
-
 **✨ NEW IMPROVED ATUM 1.9**
 
 **💻 NEW ATUM REST API**
@@ -31,6 +29,8 @@ Generate manual or automated exports of almost any data in your stores. We belie
 Exports of data are done automatically instead of copying and pasting manually. The ability to export data has an enormous economic advantage. Such data can then be used in further business controlling systems or in other business software.
 
 🚀 [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+
+Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These recordings we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
 

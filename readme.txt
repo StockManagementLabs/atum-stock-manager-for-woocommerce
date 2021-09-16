@@ -15,8 +15,6 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**With an Online Selling Boost Comes [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
-
 **✨ NEW IMPROVED ATUM 1.9**
 
 **💻 NEW ATUM REST API**
@@ -60,6 +58,8 @@ Exports of data are done automatically instead of copying and pasting manually. 
 In addition, with the import feature of the [Export Pro add-on](https://demo.export-pro.stockmanagementlabs.com/), you will be able to save a lot of time by importing data in a bulk.
 
 🚀 [ATUM Action Logs](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+
+Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These **recordings** we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
 
