@@ -1657,14 +1657,14 @@ final class Ajax {
 		check_ajax_referer( 'atum-order-item', 'security' );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) ) {
-			wp_die( -1 );
+			wp_send_json_error( __( "You aren't allowed to edit shop orders", ATUM_TEXT_DOMAIN ) );
 		}
 
 		$atum_order_id       = absint( $_POST['atum_order_id'] );
 		$atum_order_item_ids = $_POST['atum_order_item_ids'];
 
 		if ( ! is_array( $atum_order_item_ids ) && is_numeric( $atum_order_item_ids ) ) {
-			$atum_order_item_ids = array( $atum_order_item_ids );
+			$atum_order_item_ids = [ $atum_order_item_ids ];
 		}
 
 		$atum_order_item_ids = array_unique( array_filter( array_map( 'absint', $atum_order_item_ids ) ) );
@@ -1674,7 +1674,7 @@ final class Ajax {
 			$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
 			if ( is_wp_error( $atum_order ) ) {
-				wp_die( - 1 );
+				wp_send_json_error( 'Something failed while reading the order. Please, save and try again.', ATUM_TEXT_DOMAIN );
 			}
 
 			do_action( 'atum/ajax/atum_order/before_remove_order_items', $atum_order, $atum_order_item_ids );
@@ -1685,9 +1685,13 @@ final class Ajax {
 			}
 
 			$atum_order->save_items();
+
+		}
+		else {
+			wp_send_json_error( __( "The item couldn't be removed: invalid or missing data", ATUM_TEXT_DOMAIN ) );
 		}
 
-		wp_die();
+		wp_send_json_success();
 
 	}
 

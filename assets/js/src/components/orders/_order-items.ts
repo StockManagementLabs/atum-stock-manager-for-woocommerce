@@ -297,20 +297,29 @@ export default class AtumOrderItems {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
 					Blocker.block( this.$container );
 
 					$.ajax( {
-						url    : window[ 'ajaxurl' ],
-						data   : {
+						url     : window[ 'ajaxurl' ],
+						data    : {
 							atum_order_id      : this.settings.get( 'post_id' ),
 							atum_order_item_ids: atumOrderItemId,
 							action             : 'atum_order_remove_item',
 							security           : this.settings.get( 'atum_order_item_nonce' ),
 						},
-						type   : 'POST',
-						success: () => resolve(),
+						method  : 'POST',
+						dataType: 'json',
+						success : ( response: any ) => {
+
+							if ( ! response.success ) {
+								Swal.showValidationMessage( response.data );
+							}
+
+							resolve();
+
+						},
 					} );
 
 				} );

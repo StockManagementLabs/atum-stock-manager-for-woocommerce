@@ -1180,7 +1180,7 @@ var AtumOrderItems = (function () {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(_this.$container);
                     $.ajax({
                         url: window['ajaxurl'],
@@ -1190,8 +1190,14 @@ var AtumOrderItems = (function () {
                             action: 'atum_order_remove_item',
                             security: _this.settings.get('atum_order_item_nonce'),
                         },
-                        type: 'POST',
-                        success: function () { return resolve(); },
+                        method: 'POST',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (!response.success) {
+                                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
+                            }
+                            resolve();
+                        },
                     });
                 });
             },
