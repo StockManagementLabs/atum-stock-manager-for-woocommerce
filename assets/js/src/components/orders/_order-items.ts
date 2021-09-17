@@ -295,35 +295,7 @@ export default class AtumOrderItems {
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
-			preConfirm         : (): Promise<any> => {
-
-				return new Promise( ( resolve: Function ) => {
-
-					Blocker.block( this.$container );
-
-					$.ajax( {
-						url     : window[ 'ajaxurl' ],
-						data    : {
-							atum_order_id      : this.settings.get( 'post_id' ),
-							atum_order_item_ids: atumOrderItemId,
-							action             : 'atum_order_remove_item',
-							security           : this.settings.get( 'atum_order_item_nonce' ),
-						},
-						method  : 'POST',
-						dataType: 'json',
-						success : ( response: any ) => {
-
-							if ( ! response.success ) {
-								Swal.showValidationMessage( response.data );
-							}
-
-							resolve();
-
-						},
-					} );
-
-				} );
-			},
+			preConfirm         : (): Promise<void> => this.processDeleteItem( atumOrderItemId ),
 		} )
 		.then( ( result: SweetAlertResult ) => {
 
@@ -333,6 +305,44 @@ export default class AtumOrderItems {
 			}
 
 			Blocker.unblock( this.$container );
+
+		} );
+
+	}
+
+	/**
+	 * Used in modals to process the order item removal
+	 *
+	 * @param {number} atumOrderItemId
+	 *
+	 * @return {Promise<void>}
+	 */
+	processDeleteItem( atumOrderItemId ): Promise<void> {
+
+		return new Promise( ( resolve: Function ) => {
+
+			Blocker.block( this.$container );
+
+			$.ajax( {
+				url     : window[ 'ajaxurl' ],
+				data    : {
+					atum_order_id      : this.settings.get( 'post_id' ),
+					atum_order_item_ids: atumOrderItemId,
+					action             : 'atum_order_remove_item',
+					security           : this.settings.get( 'atum_order_item_nonce' ),
+				},
+				method  : 'POST',
+				dataType: 'json',
+				success : ( response: any ) => {
+
+					if ( ! response.success ) {
+						Swal.showValidationMessage( response.data );
+					}
+
+					resolve();
+
+				},
+			} );
 
 		} );
 

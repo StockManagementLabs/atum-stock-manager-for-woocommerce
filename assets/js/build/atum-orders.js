@@ -1179,28 +1179,7 @@ var AtumOrderItems = (function () {
             reverseButtons: true,
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
-            preConfirm: function () {
-                return new Promise(function (resolve) {
-                    _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(_this.$container);
-                    $.ajax({
-                        url: window['ajaxurl'],
-                        data: {
-                            atum_order_id: _this.settings.get('post_id'),
-                            atum_order_item_ids: atumOrderItemId,
-                            action: 'atum_order_remove_item',
-                            security: _this.settings.get('atum_order_item_nonce'),
-                        },
-                        method: 'POST',
-                        dataType: 'json',
-                        success: function (response) {
-                            if (!response.success) {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
-                            }
-                            resolve();
-                        },
-                    });
-                });
-            },
+            preConfirm: function () { return _this.processDeleteItem(atumOrderItemId); },
         })
             .then(function (result) {
             if (result.isConfirmed) {
@@ -1208,6 +1187,29 @@ var AtumOrderItems = (function () {
                 _this.wpHooks.doAction('orderItems_deleteItem_removed', $container, atumOrderItemId);
             }
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
+        });
+    };
+    AtumOrderItems.prototype.processDeleteItem = function (atumOrderItemId) {
+        var _this = this;
+        return new Promise(function (resolve) {
+            _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(_this.$container);
+            $.ajax({
+                url: window['ajaxurl'],
+                data: {
+                    atum_order_id: _this.settings.get('post_id'),
+                    atum_order_item_ids: atumOrderItemId,
+                    action: 'atum_order_remove_item',
+                    security: _this.settings.get('atum_order_item_nonce'),
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    if (!response.success) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
+                    }
+                    resolve();
+                },
+            });
         });
     };
     AtumOrderItems.prototype.saveLineItems = function (evt) {
