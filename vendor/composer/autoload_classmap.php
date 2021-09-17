@@ -37,6 +37,8 @@ return array(
     'Atum\\Api\\Extenders\\ProductAttributes' => $baseDir . '/classes/Api/Extenders/ProductAttributes.php',
     'Atum\\Api\\Extenders\\ProductCategories' => $baseDir . '/classes/Api/Extenders/ProductCategories.php',
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
+    'Atum\\Cli\\AtumCli' => $baseDir . '/classes/Cli/AtumCli.php',
+    'Atum\\Cli\\CliCommands' => $baseDir . '/classes/Cli/CliCommands.php',
     'Atum\\Components\\AtumAdminNotices' => $baseDir . '/classes/Components/AtumAdminNotices.php',
     'Atum\\Components\\AtumCache' => $baseDir . '/classes/Components/AtumCache.php',
     'Atum\\Components\\AtumCalculatedProps' => $baseDir . '/classes/Components/AtumCalculatedProps.php',

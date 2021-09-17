@@ -101,6 +101,8 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Api\\Extenders\\ProductAttributes' => __DIR__ . '/../..' . '/classes/Api/Extenders/ProductAttributes.php',
         'Atum\\Api\\Extenders\\ProductCategories' => __DIR__ . '/../..' . '/classes/Api/Extenders/ProductCategories.php',
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
+        'Atum\\Cli\\AtumCli' => __DIR__ . '/../..' . '/classes/Cli/AtumCli.php',
+        'Atum\\Cli\\CliCommands' => __DIR__ . '/../..' . '/classes/Cli/CliCommands.php',
         'Atum\\Components\\AtumAdminNotices' => __DIR__ . '/../..' . '/classes/Components/AtumAdminNotices.php',
         'Atum\\Components\\AtumCache' => __DIR__ . '/../..' . '/classes/Components/AtumCache.php',
         'Atum\\Components\\AtumCalculatedProps' => __DIR__ . '/../..' . '/classes/Components/AtumCalculatedProps.php',
