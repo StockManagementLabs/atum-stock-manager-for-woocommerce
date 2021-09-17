@@ -194,6 +194,36 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.4`
+
+*2021-09-17*
+
+**Features**
+
+* Added helper method to check if an async action is actually running.
+* Added filter for displaying columns id at ListTables.
+* Allow increasing the items per page limit in ATUM API when the request comes from the ATUM App.
+* Allow setting the fee name directly (PO premium compatibility).
+* Added WP-CLI support for all the ATUM tools.
+* Allow setting default values on editPopover JS component.
+
+**Changes**
+
+* Show grouped products' stock in Stock Central.
+* Refactoring.
+* Handle errors when removing ATUM Order items.
+* Separate the order item removal in 2 steps.
+
+**Fixes**
+
+* Fixed sales last days are always calculated in Stock Central when the sale days are distinct of 14.
+* Prevent increasing stock totalizer in Unmanaged view.
+* Fixed "In stock" and "Out of stock" counters in views counters.
+* Fixed compunded stock on bundled and grouped products when these have MI.
+* Fixed label's for attribute.
+
+---
+
 `1.9.3`
 
 *2021-08-17*
