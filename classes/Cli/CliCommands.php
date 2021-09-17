@@ -30,8 +30,10 @@ final class CliCommands {
 	public static function atum_tool_manage_stock( $args ) {
 
 		if ( empty( $args ) ) {
+			\WP_CLI::line( '' );
 			\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <manage/unmanage>' );
 			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ), FALSE );
+			\WP_CLI::line( '' );
 			exit();
 		}
 
@@ -49,7 +51,9 @@ final class CliCommands {
 		}
 		do_action( 'atum/cli/tool_change_manage_stock' );
 		$message = Helpers::change_status_meta( '_manage_stock', $manage_status, TRUE );
+		\WP_CLI::line( '' );
 		\WP_CLI::success( $message );
+		\WP_CLI::line( '' );
 	}
 
 	/**
