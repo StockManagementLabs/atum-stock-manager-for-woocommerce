@@ -261,6 +261,7 @@ class Settings {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
+			wp_enqueue_editor();
 			wp_enqueue_media();
 			wp_enqueue_script( 'color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
@@ -964,6 +965,33 @@ class Settings {
 		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
+	 * Get the settings option array and print a TinyMCE editor
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param array $args  Field arguments.
+	 */
+	public function display_editor( $args ) {
+
+		// TODO: ALLOW SPECIFYING THE EDITOR OPTIONS FROM THE SETTING CONFIG.
+		$editor_settings = array(
+			'media_buttons' => FALSE,
+			'editor_height' => 225,
+			'name'          => self::OPTION_NAME . "[{$args['id']}]",
+			'tinymce'       => array( 'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,forecolor,undo,redo' ),
+		);
+
+		ob_start();
+
+		echo '<div class="atum-settings-editor" data-tiny-mce=\'' . wp_json_encode( $editor_settings['tinymce'] ) . '\'' . $this->get_dependency( $args ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		wp_editor( $this->find_option_value( $args['id'] ), ATUM_PREFIX . $args['id'], $editor_settings );
+		echo $this->get_description( $args ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		echo apply_filters( 'atum/settings/display_editor', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

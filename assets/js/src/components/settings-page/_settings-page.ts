@@ -58,6 +58,9 @@ export default class SettingsPage {
 		// Enable image selectors
         this.doImageSelector();
 
+		// Enable WP editors.
+		this.doEditors();
+
 		// Toggle Menu.
 		this.toggleMenu();
 
@@ -206,6 +209,7 @@ export default class SettingsPage {
 			this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
 			this.doFileUploaders();
 			this.doImageSelector();
+			this.doEditors();
 			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
 			this.$form.show();
 
@@ -697,6 +701,33 @@ export default class SettingsPage {
 			$imgRadio.addClass( 'active' );
 
 		} );
+
+	}
+
+	/**
+	 * Prepare the TinyMCE editors
+	 */
+	doEditors() {
+
+		if ( window.hasOwnProperty( 'wp' ) && window[ 'wp' ].hasOwnProperty( 'editor' ) ) {
+
+			$( '.atum-settings-editor' ).find( 'textarea' ).each( ( index: number, elem: Element ) => {
+
+				const $textarea: JQuery      = $( elem ),
+				      $editorWrapper: JQuery = $textarea.closest( '.atum-settings-editor' );
+
+				let config: any = window[ 'wp' ].editor.getDefaultSettings();
+
+				if ( typeof $editorWrapper.data( 'tiny-mce' ) !== 'undefined' ) {
+					config = {
+						tinymce: $editorWrapper.data( 'tiny-mce' )
+					}
+				}
+
+				window[ 'wp' ].editor.initialize( $( elem ).attr( 'id' ), config );
+
+			} );
+		}
 
 	}
 

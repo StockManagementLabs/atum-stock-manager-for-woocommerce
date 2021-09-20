@@ -798,6 +798,7 @@ var SettingsPage = (function () {
         _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(this.$form);
         this.doFileUploaders();
         this.doImageSelector();
+        this.doEditors();
         this.toggleMenu();
         new _smart_form__WEBPACK_IMPORTED_MODULE_3__["default"](this.$form, this.settings.get('atumPrefix'));
         this.bindEvents();
@@ -877,6 +878,7 @@ var SettingsPage = (function () {
             _this.enhancedSelect.doSelect2(_this.$settingsWrapper.find('select'), {}, true);
             _this.doFileUploaders();
             _this.doImageSelector();
+            _this.doEditors();
             _this.$form.find('[data-dependency]').change().removeClass('dirty');
             _this.$form.show();
             var $inputButton = _this.$form.find('input:submit');
@@ -1184,6 +1186,20 @@ var SettingsPage = (function () {
             $imgRadio.siblings('.active').removeClass('active');
             $imgRadio.addClass('active');
         });
+    };
+    SettingsPage.prototype.doEditors = function () {
+        if (window.hasOwnProperty('wp') && window['wp'].hasOwnProperty('editor')) {
+            $('.atum-settings-editor').find('textarea').each(function (index, elem) {
+                var $textarea = $(elem), $editorWrapper = $textarea.closest('.atum-settings-editor');
+                var config = window['wp'].editor.getDefaultSettings();
+                if (typeof $editorWrapper.data('tiny-mce') !== 'undefined') {
+                    config = {
+                        tinymce: $editorWrapper.data('tiny-mce')
+                    };
+                }
+                window['wp'].editor.initialize($(elem).attr('id'), config);
+            });
+        }
     };
     return SettingsPage;
 }());
