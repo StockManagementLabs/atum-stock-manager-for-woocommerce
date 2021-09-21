@@ -719,10 +719,32 @@ trait ListTableLegacyTrait {
 					// Get all the children from their corresponding meta key.
 					foreach ( $parents->posts as $parent_id ) {
 						$children = get_post_meta( $parent_id, '_children', TRUE );
-
+						// Unset uncontrolled childrens.
 						if ( ! empty( $children ) && is_array( $children ) ) {
-							$grouped_products     = array_merge( $grouped_products, $children );
-							$parents_with_child[] = $parent_id;
+
+							foreach ( $children as $key => $grouped_children ) {
+								$product_child = Helpers::get_atum_product( $grouped_children );
+
+								if ( $product_child ) {
+
+									if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
+
+										if ( ! $this->show_controlled ) {
+											unset( $children[ $key ] );
+										}
+
+									}
+									elseif ( $this->show_controlled ) {
+										unset( $children[ $key ] );
+									}
+
+								}
+
+							}
+							if ( ! empty( $children ) ) {
+								$grouped_products     = array_merge( $grouped_products, $children );
+								$parents_with_child[] = $parent_id;
+							}
 						}
 					}
 
