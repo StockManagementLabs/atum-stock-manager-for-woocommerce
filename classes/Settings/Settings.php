@@ -1047,9 +1047,11 @@ class Settings {
 		}
 
 		ob_start();
-
 		?>
-		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+			name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>"
+			style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>
+		>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -1110,6 +1112,7 @@ class Settings {
 		$check_defs = $args['default_options'];
 
 		if ( ! empty( $check_defs ) ) {
+
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
 
 			// Check-all checkbox.
@@ -1135,6 +1138,7 @@ class Settings {
 			}
 
 			$output .= '</div>';
+
 		}
 
 		echo apply_filters( 'atum/settings/display_multi_checkbox', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1151,6 +1155,7 @@ class Settings {
 	 */
 	public function display_button_group( $args ) {
 
+		$id             = ATUM_PREFIX . $args['id'];
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
 		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array.
 		$value          = $multiple ? maybe_unserialize( $this->find_option_value( $args['id'] ) ) : $this->find_option_value( $args['id'] );
@@ -1167,30 +1172,27 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" id="<?php echo esc_attr( $id ) ?>">
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 
 				<?php
-				if ( $multiple && is_array( $value ) ) {
+				if ( $multiple && is_array( $value ) ) :
 					$is_active = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
-				}
-				else {
+				else :
 					$is_active = $value === $option_value;
-				}
+				endif;
 				
 				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value.
 				// TODO required_value to required_values array.
-				if ( $option_value === $required_value ) {
+				if ( $option_value === $required_value ) :
 					$checked_str  = checked( TRUE, TRUE, FALSE );
 					$disabled_str = ' disabled="disabled"';
 					$is_active    = TRUE;
-				}
-				else {
+				else :
 					$checked_str = checked( $is_active, TRUE, FALSE );
-				}
-
+				endif;
 				?>
 				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
 					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
@@ -1217,6 +1219,7 @@ class Settings {
 	 */
 	public function display_select( $args ) {
 
+		$id      = ATUM_PREFIX . $args['id'];
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
@@ -1224,7 +1227,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<select name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+		<select name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( $id ) ?>"
 			<?php echo wp_kses_post( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
@@ -1234,7 +1237,6 @@ class Settings {
 		<?php
 
 		echo wp_kses_post( $this->get_description( $args ) );
-
 		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -1307,6 +1309,7 @@ class Settings {
 	 */
 	public function display_color( $args ) {
 
+		$id      = ATUM_PREFIX . $args['id'];
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . esc_attr( $args['options']['style'] ) . '"' : '';
@@ -1315,13 +1318,13 @@ class Settings {
 
 		ob_start();
 		?>
-		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
-			type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-
+		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>"
+			data-alpha="true" name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( $id ) ?>"
+			type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		>
 		<?php
 
 		echo wp_kses_post( $this->get_description( $args ) );
-
 		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -1335,7 +1338,7 @@ class Settings {
 	 */
 	public function display_html( $args ) {
 		
-		$id    = ATUM_PREFIX . "[{$args['id']}]";
+		$id    = ATUM_PREFIX . $args['id'];
 		$value = $this->options[ $args['id'] ];
 		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
 		
@@ -1359,12 +1362,13 @@ class Settings {
 	 */
 	public function display_theme_selector( $args ) {
 
+		$id    = ATUM_PREFIX . $args['id'];
 		$name  = self::OPTION_NAME . "[{$args['id']}]";
 		$theme = AtumColors::get_user_theme();
 
 		ob_start();
 		?>
-		<div class="theme-selector-wrapper">
+		<div class="theme-selector-wrapper" id="<?php echo esc_attr( $id ) ?>">
 
 			<?php foreach ( $args['options']['values'] as $option ) : ?>
 
@@ -1403,6 +1407,7 @@ class Settings {
 	 */
 	public function display_image_uploader( $args ) {
 
+		$id            = ATUM_PREFIX . $args['id'];
 		$name          = self::OPTION_NAME . "[{$args['id']}]";
 		$attachment_id = absint( $this->find_option_value( $args['id'] ) );
 		$data          = '';
@@ -1417,7 +1422,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="atum-file-uploader__wrapper">
+		<div class="atum-file-uploader__wrapper" id="<?php echo esc_attr( $id ) ?>">
 			<button type="button" class="atum-file-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?>
 			</button>
