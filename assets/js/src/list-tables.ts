@@ -70,7 +70,7 @@ jQuery( ( $ ) => {
 	let router = new Router( settings, globals, listTable );
 	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new TableCellPopovers( settings, dateTimePicker );
+	let popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
 
 	if ( ! Utils.checkRTL( 'isRTL' ) ) {
 		new ScrollBar( globals );

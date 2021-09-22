@@ -34,6 +34,14 @@
 			border-style: solid;
 		}
 	}
+	
+	&.with-select {
+		max-width: 400px;
+		
+		.select2-container.atum-enhanced-select {
+			max-width: 317px!important;
+		}
+	}
 }
 
 .bs-popover-top {
@@ -55,6 +63,7 @@
 			border-top-color: $popover-arrow-color;
 		}
 	}
+	
 }
 
 .bs-popover-end {

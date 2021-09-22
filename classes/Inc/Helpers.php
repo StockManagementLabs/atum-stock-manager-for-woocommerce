@@ -112,7 +112,12 @@ final class Helpers {
 	public static function array_to_data( $array, $prefix = '' ) {
 
 		$data_array = array_map( function( $key, $value ) use ( $prefix ) {
-			return "data-{$prefix}{$key}='$value'";
+			if ( is_array( $value ) ) {
+				return "data-{$prefix}{$key}='" . wp_json_encode( $value ) . "'";
+			}
+			else {
+				return "data-{$prefix}{$key}='$value'";
+			}
 		}, array_keys( $array ), $array );
 
 		return implode( ' ', $data_array );

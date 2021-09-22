@@ -637,18 +637,20 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 var TableCellPopovers = (function (_super) {
     __extends(TableCellPopovers, _super);
-    function TableCellPopovers(settings, dateTimePicker) {
+    function TableCellPopovers(settings, dateTimePicker, enhancedSelect) {
         var _this = _super.call(this) || this;
         _this.settings = settings;
         _this.dateTimePicker = dateTimePicker;
+        _this.enhancedSelect = enhancedSelect;
         _this.popoverClassName = 'atum-popover';
         _this.bindPopovers();
         $('body').click(function (evt) {
             if (!$('.popover').length) {
                 return;
             }
-            var $target = $(evt.target);
-            if (!$target.length || $target.is('.popover') || $target.closest('.popover.show').length) {
+            var $target = $(evt.target), $select2 = $target.closest('.select2-container');
+            if (!$target.length || $target.is('.popover') || $target.closest('.popover.show').length
+                || ($select2.length && $select2.find('.select2-search'))) {
                 return;
             }
             var $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
@@ -684,13 +686,17 @@ var TableCellPopovers = (function (_super) {
                     _this.hidePopover($metaCell);
                 }
             });
+            if ($metaInput.hasClass('wc-product-search') && _this.enhancedSelect) {
+                $('body').trigger('wc-enhanced-select-init');
+            }
         });
     };
     TableCellPopovers.prototype.addPopover = function ($metaCell) {
+        var _this = this;
         var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
-            class: 'meta-value',
+            class: $metaCell.data('extraClass') ? "meta-value " + $metaCell.data('extraClass') : 'meta-value',
         };
         if (inputType === 'number' || symbol) {
             var numericValue = void 0;
@@ -706,6 +712,14 @@ var TableCellPopovers = (function (_super) {
             }
             inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
         }
+        else if (inputType === 'select') {
+            var atts = ['allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected'];
+            atts.forEach(function (attr) {
+                if (typeof $metaCell.data(attr) !== 'undefined') {
+                    inputAtts["data-" + attr] = $metaCell.data(attr);
+                }
+            });
+        }
         else if (value === '-') {
             inputAtts.value = '';
         }
@@ -713,7 +727,7 @@ var TableCellPopovers = (function (_super) {
             inputAtts.min = symbol ? '0' : '';
             inputAtts.step = symbol ? '0.1' : '1';
         }
-        var $input = $('<input />', inputAtts), $setButton = $('<button />', {
+        var $input = inputType === 'select' ? $('<select />', inputAtts) : $('<input />', inputAtts), $setButton = $('<button />', {
             type: 'button',
             class: 'set btn btn-primary button-small',
             text: this.settings.get('setButton'),
@@ -730,6 +744,15 @@ var TableCellPopovers = (function (_super) {
                 $input.data('max-date', $metaCell.data('max-date'));
             }
         }
+        if (inputType === 'select') {
+            var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
+            if (selectOptions) {
+                $.each(selectOptions, function (index, value) {
+                    var selected = selectedValue_1.toString() === index ? ' selected' : '';
+                    $input.append("<option value=\"" + index + "\"" + selected + ">\n                                       " + (value === _this.settings.get('emptyCol') ? '' : value) + "\n                                  </option>");
+                });
+            }
+        }
         var popoverClass = this.popoverClassName, $extraFields = null;
         if (typeof extraMeta !== 'undefined') {
             popoverClass += ' with-meta';
@@ -738,6 +761,9 @@ var TableCellPopovers = (function (_super) {
                 $extraFields.append($('<input />', metaAtts));
             });
         }
+        if (inputType === 'select') {
+            popoverClass += ' with-select';
+        }
         var $content = $('<div class="edit-popover-content" />');
         if ($extraFields) {
             $content.append($extraFields).append($setButton);
@@ -745,7 +771,7 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
-        new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
+        var popover = new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
             title: this.settings.get('setValue') ? this.settings.get('setValue').replace('%%', cellName) : cellName,
             content: $content.get(0),
             html: true,
@@ -1708,7 +1734,14 @@ var ListTable = (function () {
     };
     ListTable.prototype.updateEditedColsInput = function ($metaCell, $popover) {
         var editedCols = this.globals.$editInput.val();
-        var itemId = $metaCell.closest('tr').data('id'), meta = $metaCell.data('meta'), newValue = $popover.find('.meta-value').val();
+        var itemId = $metaCell.closest('tr').data('id'), meta = $metaCell.data('meta'), $metaValue = $popover.find('.meta-value'), isSelect = $metaValue.is('select'), newValue = isSelect ? $metaValue.find("option[value=\"" + $metaValue.val() + "\"]").text() : $metaValue.val();
+        if (isSelect) {
+            var selectOptions = $metaCell.data('selectOptions');
+            selectOptions[$metaValue.val()] = newValue;
+            $metaCell.data('realValue', $metaValue.val());
+            $metaCell.data('selectedValue', $metaValue.val());
+            $metaCell.data('selectOptions', selectOptions);
+        }
         this.setCellValue($metaCell, newValue);
         if (editedCols) {
             editedCols = JSON.parse(editedCols);
@@ -1720,7 +1753,7 @@ var ListTable = (function () {
         if (!editedCols[itemId].hasOwnProperty(meta)) {
             editedCols[itemId][meta] = {};
         }
-        editedCols[itemId][meta] = newValue;
+        editedCols[itemId][meta] = isSelect ? $metaValue.val() : newValue;
         if (typeof $metaCell.data('custom') !== 'undefined') {
             editedCols[itemId][meta + "_custom"] = $metaCell.data('custom') || 'no';
         }
@@ -3013,7 +3046,7 @@ jQuery(function ($) {
     var router = new _components_list_table_router__WEBPACK_IMPORTED_MODULE_15__["default"](settings, globals, listTable);
     var stickyHeader = new _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_21__["default"](settings, globals, stickyCols, tooltip);
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
-    var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_14__["default"](settings, dateTimePicker);
+    var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_14__["default"](settings, dateTimePicker, enhancedSelect);
     if (!_utils_utils__WEBPACK_IMPORTED_MODULE_25__["default"].checkRTL('isRTL')) {
         new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_17__["default"](globals);
     }
