@@ -3454,8 +3454,9 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   max-width: 400px;
 }
 
-.popover.with-select .select2-container.atum-enhanced-select {
-  max-width: 317px !important;
+.popover.with-select .meta-value {
+  max-width: 317px;
+  min-width: 200px;
 }
 
 .bs-popover-top, .bs-popover-auto[data-popper-placement^="top"] {

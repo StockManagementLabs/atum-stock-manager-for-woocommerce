@@ -38,8 +38,9 @@
 	&.with-select {
 		max-width: 400px;
 		
-		.select2-container.atum-enhanced-select {
-			max-width: 317px!important;
+		.meta-value {
+			max-width: 317px;
+			min-width: 200px;
 		}
 	}
 }
