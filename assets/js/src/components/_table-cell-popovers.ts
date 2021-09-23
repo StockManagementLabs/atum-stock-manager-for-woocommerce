@@ -247,7 +247,7 @@ export default class TableCellPopovers extends PopoverBase{
 		
 		// Create the meta edit popover.
 		this.addPopover( $metaCell, {
-			title      : titleSetting ? titleSetting.replace( '%%', cellName ) : cellName,
+			title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
 			      content    : $content.get( 0 ), // It supports one element only.
 			      html       : true,
 			      customClass: popoverClass,
