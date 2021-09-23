@@ -400,8 +400,10 @@ var EnhancedSelect = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/popover */ "./node_modules/bootstrap/js/dist/popover.js");
+/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -417,6 +419,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 
 
 var TableCellPopovers = (function (_super) {
@@ -437,7 +440,7 @@ var TableCellPopovers = (function (_super) {
                 || ($select2.length && $select2.find('.select2-search'))) {
                 return;
             }
-            var $metaCell = $target.hasClass('set-meta') ? $('.set-meta[aria-describedby]').not($target) : $('.set-meta[aria-describedby]');
+            var $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
             _this.hidePopover($metaCell);
         });
         return _this;
@@ -448,7 +451,7 @@ var TableCellPopovers = (function (_super) {
             $metaCells = $('.set-meta');
         }
         $metaCells.each(function (index, elem) {
-            _this.doPopovers($(elem));
+            _this.addPopover($(elem));
         });
         $metaCells
             .on('shown.bs.popover', function (evt) {
@@ -475,9 +478,9 @@ var TableCellPopovers = (function (_super) {
             }
         });
     };
-    TableCellPopovers.prototype.doPopovers = function ($metaCell) {
+    TableCellPopovers.prototype.addPopover = function ($metaCell) {
         var _this = this;
-        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
+        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', isSelect = inputType === 'select', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
             class: $metaCell.data('extraClass') ? "meta-value " + $metaCell.data('extraClass') : 'meta-value',
@@ -486,7 +489,7 @@ var TableCellPopovers = (function (_super) {
             var numericValue = void 0;
             var numericRealValue = parseFloat(realValue);
             if (symbol) {
-                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
+                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
             }
             else {
                 numericValue = parseFloat(value);
@@ -496,7 +499,7 @@ var TableCellPopovers = (function (_super) {
             }
             inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
         }
-        else if (inputType === 'select') {
+        else if (isSelect) {
             var atts = ['allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected'];
             atts.forEach(function (attr) {
                 if (typeof $metaCell.data(attr) !== 'undefined') {
@@ -511,7 +514,7 @@ var TableCellPopovers = (function (_super) {
             inputAtts.min = symbol ? '0' : '';
             inputAtts.step = symbol ? '0.1' : '1';
         }
-        var $input = inputType === 'select' ? $('<select />', inputAtts) : $('<input />', inputAtts), $setButton = $('<button />', {
+        var $input = isSelect ? $('<select />', inputAtts) : $('<input />', inputAtts), $setButton = $('<button />', {
             type: 'button',
             class: 'set btn btn-primary button-small',
             text: this.settings.get('setButton'),
@@ -528,7 +531,7 @@ var TableCellPopovers = (function (_super) {
                 $input.data('max-date', $metaCell.data('max-date'));
             }
         }
-        if (inputType === 'select') {
+        if (isSelect) {
             var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
             if (selectOptions) {
                 $.each(selectOptions, function (index, value) {
@@ -545,7 +548,7 @@ var TableCellPopovers = (function (_super) {
                 $extraFields.append($('<input />', metaAtts));
             });
         }
-        if (inputType === 'select') {
+        if (isSelect) {
             popoverClass += ' with-select';
         }
         var $content = $('<div class="edit-popover-content" />');
@@ -555,8 +558,8 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
-        this.addPopover($metaCell, {
-            title: this.settings.get('setValue') ? this.settings.get('setValue').replace('%%', cellName) : cellName,
+        var titleSetting = isSelect ? 'selectSetValue' : 'setValue', popover = new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
+            title: this.settings.get(titleSetting) ? this.settings.get(titleSetting).replace('%%', cellName) : cellName,
             content: $content.get(0),
             html: true,
             customClass: popoverClass,
@@ -577,7 +580,7 @@ var TableCellPopovers = (function (_super) {
         }
     };
     return TableCellPopovers;
-}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__["default"]));
+}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__["default"]));
 /* harmony default export */ __webpack_exports__["default"] = (TableCellPopovers);
 
 

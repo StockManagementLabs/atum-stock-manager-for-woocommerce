@@ -2,6 +2,8 @@
    POPOVER
    ======================================= */
 
+import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
+
 import DateTimePicker from './_date-time-picker';
 import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
@@ -40,7 +42,7 @@ export default class TableCellPopovers extends PopoverBase{
 			}
 
 			// If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta[aria-describedby]' ).not( $target ) : $( '.set-meta[aria-describedby]' );
+			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta' ).not( $target ) : $( '.set-meta' );
 			
 			// Hide all the opened popovers.
 			this.hidePopover( $metaCell );
@@ -60,7 +62,7 @@ export default class TableCellPopovers extends PopoverBase{
 		
 		// Set meta value for listed products.
 		$metaCells.each( ( index: number, elem: Element ) => {
-			this.doPopovers( $( elem ) );
+			this.addPopover( $( elem ) );
 		} );
 		
 		$metaCells
@@ -112,9 +114,9 @@ export default class TableCellPopovers extends PopoverBase{
 	/**
 	 * Bind the editable cell's popovers
 	 *
-	 * @param {JQuery} $metaCell The cell where the popover will be attached.
+	 * @param jQuery $metaCell The cell where the popover will be attached.
 	 */
-	doPopovers( $metaCell: JQuery ) {
+	addPopover( $metaCell: JQuery ) {
 
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
@@ -243,17 +245,17 @@ export default class TableCellPopovers extends PopoverBase{
 			$content.append( $input ).append( $setButton );
 		}
 
-		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
-		
-		// Create the meta edit popover.
-		this.addPopover( $metaCell, {
-			title      : titleSetting ? titleSetting.replace( '%%', cellName ) : cellName,
+		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue',
+		      // Create the meta edit popover.
+		      popover: BsPopover   = new BsPopover( $metaCell.get( 0 ), {
+			      title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
 			      content    : $content.get( 0 ), // It supports one element only.
 			      html       : true,
 			      customClass: popoverClass,
 			      placement  : 'bottom',
 			      trigger    : 'click',
 			      container  : 'body',
+
 		      } );
 		
 	}

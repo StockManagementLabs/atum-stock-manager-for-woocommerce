@@ -242,19 +242,33 @@ export default class TableCellPopovers extends PopoverBase{
 		else {
 			$content.append( $input ).append( $setButton );
 		}
-
-		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
+<<<<<<< HEAD
 		
 		// Create the meta edit popover.
 		this.addPopover( $metaCell, {
-			title      : titleSetting ? titleSetting.replace( '%%', cellName ) : cellName,
+			title      : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
+			content    : $content.get( 0 ), // It supports one element only.
+			html       : true,
+			customClass: popoverClass,
+			placement  : 'bottom',
+			trigger    : 'click',
+			container  : 'body',
+		} );
+=======
+
+		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue',
+		      // Create the meta edit popover.
+		      popover: BsPopover   = new BsPopover( $metaCell.get( 0 ), {
+			      title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
 			      content    : $content.get( 0 ), // It supports one element only.
 			      html       : true,
 			      customClass: popoverClass,
 			      placement  : 'bottom',
 			      trigger    : 'click',
 			      container  : 'body',
+
 		      } );
+>>>>>>> ce1a4d4719bf7f69781f3130306d3c9a4501f7a7
 		
 	}
 	

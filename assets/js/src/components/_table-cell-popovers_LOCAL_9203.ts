@@ -119,7 +119,6 @@ export default class TableCellPopovers extends PopoverBase{
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
 		      inputType: string = $metaCell.data( 'input-type' ) || 'number',
-		      isSelect: boolean = inputType === 'select',
 		      realValue: string = $metaCell.data( 'realvalue' ) || '',
 		      value: string     = $metaCell.text().trim(),
 		      inputAtts: any    = {
@@ -150,7 +149,7 @@ export default class TableCellPopovers extends PopoverBase{
 			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
 
 		}
-		else if ( isSelect ) {
+		else if ( inputType === 'select' ) {
 			const atts: string[] = [ 'allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected' ];
 
 			atts.forEach( ( attr: string ) => {
@@ -169,7 +168,7 @@ export default class TableCellPopovers extends PopoverBase{
 			inputAtts.step = symbol ? '0.1' : '1'; // Allow decimals only for the currency fields for now.
 		}
 
-		const $input: JQuery     = isSelect ? $( '<select />', inputAtts ) : $( '<input />', inputAtts ),
+		const $input: JQuery     = inputType === 'select' ? $( '<select />', inputAtts ) : $( '<input />', inputAtts ),
 		      $setButton: JQuery = $( '<button />', {
 			      type : 'button',
 			      class: 'set btn btn-primary button-small',
@@ -194,7 +193,7 @@ export default class TableCellPopovers extends PopoverBase{
 			}
 		}
 
-		if ( isSelect ) {
+		if ( inputType === 'select' ) {
 
 			const selectedValue: string = $metaCell.data( 'selectedValue' ),
 			      selectOptions: any    = $metaCell.data( 'selectOptions' );
@@ -230,7 +229,7 @@ export default class TableCellPopovers extends PopoverBase{
 		}
 
 		// Add class if has select.
-		if ( isSelect ) {
+		if ( inputType === 'select' ) {
 			popoverClass += ' with-select';
 		}
 
@@ -242,19 +241,17 @@ export default class TableCellPopovers extends PopoverBase{
 		else {
 			$content.append( $input ).append( $setButton );
 		}
-
-		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
 		
 		// Create the meta edit popover.
 		this.addPopover( $metaCell, {
-			title      : titleSetting ? titleSetting.replace( '%%', cellName ) : cellName,
-			      content    : $content.get( 0 ), // It supports one element only.
-			      html       : true,
-			      customClass: popoverClass,
-			      placement  : 'bottom',
-			      trigger    : 'click',
-			      container  : 'body',
-		      } );
+			title      : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
+			content    : $content.get( 0 ), // It supports one element only.
+			html       : true,
+			customClass: popoverClass,
+			placement  : 'bottom',
+			trigger    : 'click',
+			container  : 'body',
+		} );
 		
 	}
 	
