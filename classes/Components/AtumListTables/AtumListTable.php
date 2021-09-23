@@ -950,8 +950,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__supplier( $item, $editable = TRUE ) {
 
-		$supplier    = self::EMPTY_COL;
-		$supplier_id = '';
+		$supplier = self::EMPTY_COL;
 
 		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return $supplier;
