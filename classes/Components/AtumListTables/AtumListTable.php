@@ -4770,6 +4770,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Getter for the parent_type prop
+	 *
+	 * @since 1.9.5
+	 *
+	 * @return string
+	 */
+	public function get_parent_type() {
+		return $this->parent_type;
+	}
+
+	/**
 	 * Apply order and orderby args by $_REQUEST options.
 	 *
 	 * @since 1.8.6
