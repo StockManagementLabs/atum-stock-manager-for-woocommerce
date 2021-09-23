@@ -2,8 +2,6 @@
    MENU POPOVER
    =================== */
 
-import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
-
 import { Menu, MenuItem } from '../interfaces/menu.interface';
 import PopoverBase from '../abstracts/_popover-base';
 import WPHooks from '../interfaces/wp.hooks';
@@ -55,7 +53,7 @@ export default class MenuPopover extends PopoverBase{
 		} );
 
 		// Add the popover to the menu button.
-		new BsPopover( this.$menuButton.get(0), {
+		this.addPopover( this.$menuButton, {
 			title    : this.menu.title || '',
 			content  : $( '<div />' ).append( $menuHtml ).get( 0 ), // It supports one element only.
 			html     : true,

@@ -2,8 +2,6 @@
    EDIT POPOVERS
    =================== */
 
-import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
-
 import ButtonGroup from './_button-group';
 import EnhancedSelect from './_enhanced-select';
 import PopoverBase from '../abstracts/_popover-base';
@@ -45,21 +43,21 @@ export default class EditPopovers extends PopoverBase{
 				content += `<button class="set btn btn-primary btn-sm">${ this.settings.get( 'setButton' ) }</button>`;
 			}
 
-			new BsPopover( $editButton.get( 0 ), {
+			this.addPopover( $editButton, {
 				content    : $( '<div class="edit-popover-content" />' ).append( content ).get( 0 ),
 				html       : true,
 				customClass: this.popoverClassName,
 				placement  : $editButton.data( 'bs-placement' ) || 'bottom',
 				trigger    : 'click',
 				container  : $fieldWrapper,
-			} );
+			} )
 
 			// Prepare the popover's fields when shown.
 			$editButton.on( 'inserted.bs.popover', () => {
 
-				const $popover: JQuery      = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
-				      $sourceInput: JQuery  = $editButton.siblings( 'input[type=hidden]' ),
-				      inputData: any        = $sourceInput.data();
+				const $popover: JQuery     = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
+				      $sourceInput: JQuery = $editButton.siblings( 'input[type=hidden]' ),
+				      inputData: any       = $sourceInput.data();
 
 				let currentValue: string = '';
 
@@ -216,7 +214,8 @@ export default class EditPopovers extends PopoverBase{
 				this.wpHooks.doAction( 'atum_editPopovers_setValue', $valueInput, newValue, oldValue, newLabel, $popoverWrapper.find( ':input' ).serializeArray(), $setButton );
 
 				// Once set, destroy the opened popover.
-				this.destroyPopover( $fieldWrapper.find( '.atum-edit-field' ) );
+				const $editButton: JQuery = $fieldWrapper.find( '.atum-edit-field' );
+				this.destroyPopover( $editButton, () => setTimeout( () => this.bindPopovers( $editButton ), 300 ) ); // Give a small lapse to complete the 'fadeOut' animation before re-binding.
 
 			})
 
@@ -231,7 +230,8 @@ export default class EditPopovers extends PopoverBase{
 				}
 				// Esc key.
 				else if ( evt.keyCode === 27 ) {
-					this.destroyPopover( $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` ) );
+					const $editButton: JQuery = $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` );
+					this.destroyPopover( $editButton, () => setTimeout( () => this.bindPopovers( $editButton ), 300 ) ); // Give a small lapse to complete the 'fadeOut' animation before re-binding.
 				}
 
 			} )
@@ -325,23 +325,6 @@ export default class EditPopovers extends PopoverBase{
 	 */
 	getEditFieldWrapper( $editField: JQuery ) {
 		return  $editField.parent().hasClass( 'atum-tooltip' ) ?  $editField.parent().parent() : $editField.parent();
-	}
-	
-	/**
-	 * Destroy the popovers
-	 *
-	 * @param {JQuery}  $editButton The edit button that holds the popover to destroy.
-	 * @param {boolean} rebind      Optional. Whether to re-bind the popover after destroying it.
-	 */
-	destroyPopover( $editButton: JQuery ) {
-
-		super.destroyPopover( $editButton, () => {
-
-			// Give a small lapse to complete the 'fadeOut' animation before re-binding.
-			setTimeout( () => this.bindPopovers( $editButton ), 300 );
-
-		} );
-		
 	}
 	
 	/**

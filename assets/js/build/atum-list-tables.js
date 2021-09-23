@@ -101,16 +101,16 @@ __webpack_require__.r(__webpack_exports__);
 var PopoverBase = (function () {
     function PopoverBase() {
     }
+    PopoverBase.prototype.addPopover = function ($button, config) {
+        return new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($button.get(0), config);
+    };
     PopoverBase.prototype.destroyPopover = function ($popoverButton, callback) {
         var _this = this;
         if ($popoverButton.length) {
             if ($popoverButton.length > 1) {
-                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem)); });
+                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem), callback); });
             }
             else {
-                if (!this.isValidPopover($popoverButton)) {
-                    return;
-                }
                 var popover = this.getInstance($popoverButton);
                 if (popover) {
                     popover.dispose();
@@ -500,9 +500,7 @@ var LightBox = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/popover */ "./node_modules/bootstrap/js/dist/popover.js");
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
+/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -518,7 +516,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
 
 var MenuPopover = (function (_super) {
     __extends(MenuPopover, _super);
@@ -548,7 +545,7 @@ var MenuPopover = (function (_super) {
             }
             $menuHtml.append($menuItem);
         });
-        new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a(this.$menuButton.get(0), {
+        this.addPopover(this.$menuButton, {
             title: this.menu.title || '',
             content: $('<div />').append($menuHtml).get(0),
             html: true,
@@ -598,7 +595,7 @@ var MenuPopover = (function (_super) {
         });
     };
     return MenuPopover;
-}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__["default"]));
+}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__["default"]));
 /* harmony default export */ __webpack_exports__["default"] = (MenuPopover);
 
 
@@ -613,10 +610,8 @@ var MenuPopover = (function (_super) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/popover */ "./node_modules/bootstrap/js/dist/popover.js");
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -632,7 +627,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
 
 
 var TableCellPopovers = (function (_super) {
@@ -651,7 +645,7 @@ var TableCellPopovers = (function (_super) {
             if (!$target.length || $target.is('.popover') || $target.closest('.popover.show').length) {
                 return;
             }
-            var $metaCell = $target.hasClass('set-meta') ? $('.set-meta').not($target) : $('.set-meta');
+            var $metaCell = $target.hasClass('set-meta') ? $('.set-meta[aria-describedby]').not($target) : $('.set-meta[aria-describedby]');
             _this.hidePopover($metaCell);
         });
         return _this;
@@ -662,7 +656,7 @@ var TableCellPopovers = (function (_super) {
             $metaCells = $('.set-meta');
         }
         $metaCells.each(function (index, elem) {
-            _this.addPopover($(elem));
+            _this.doPopovers($(elem));
         });
         $metaCells
             .on('shown.bs.popover', function (evt) {
@@ -686,7 +680,7 @@ var TableCellPopovers = (function (_super) {
             });
         });
     };
-    TableCellPopovers.prototype.addPopover = function ($metaCell) {
+    TableCellPopovers.prototype.doPopovers = function ($metaCell) {
         var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
@@ -696,7 +690,7 @@ var TableCellPopovers = (function (_super) {
             var numericValue = void 0;
             var numericRealValue = parseFloat(realValue);
             if (symbol) {
-                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
+                numericValue = Math.abs(_utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].unformat(value.replace('>', '').trim(), this.settings.get('currencyFormatDecimalSeparator')));
             }
             else {
                 numericValue = parseFloat(value);
@@ -745,7 +739,7 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
-        new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
+        this.addPopover($metaCell, {
             title: this.settings.get('setValue') ? this.settings.get('setValue').replace('%%', cellName) : cellName,
             content: $content.get(0),
             html: true,
@@ -767,7 +761,7 @@ var TableCellPopovers = (function (_super) {
         }
     };
     return TableCellPopovers;
-}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__["default"]));
+}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__["default"]));
 /* harmony default export */ __webpack_exports__["default"] = (TableCellPopovers);
 
 
