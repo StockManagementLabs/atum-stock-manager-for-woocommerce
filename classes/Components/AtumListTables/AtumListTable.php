@@ -956,6 +956,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $supplier;
 		}
 
+		$supplier_tooltip = '';
+
 		if ( $editable ) {
 
 			$supplier_id = $this->product->get_supplier_id();
@@ -3300,6 +3302,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'setButton'                      => __( 'Set', ATUM_TEXT_DOMAIN ),
 			'setTimeWindow'                  => __( 'Set Time Window', ATUM_TEXT_DOMAIN ),
 			'setValue'                       => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
+			'selectSetValue'                 => __( 'Set %%', ATUM_TEXT_DOMAIN ),
 			'showCb'                         => $this->show_cb,
 			'showFilters'                    => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'stickyColumns'                  => $this->sticky_columns,

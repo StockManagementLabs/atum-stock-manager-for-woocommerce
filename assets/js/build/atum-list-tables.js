@@ -693,7 +693,7 @@ var TableCellPopovers = (function (_super) {
     };
     TableCellPopovers.prototype.addPopover = function ($metaCell) {
         var _this = this;
-        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
+        var symbol = $metaCell.data('symbol') || '', cellName = $metaCell.data('cell-name') || '', inputType = $metaCell.data('input-type') || 'number', isSelect = inputType === 'select', realValue = $metaCell.data('realvalue') || '', value = $metaCell.text().trim(), inputAtts = {
             type: inputType || 'number',
             value: value,
             class: $metaCell.data('extraClass') ? "meta-value " + $metaCell.data('extraClass') : 'meta-value',
@@ -712,7 +712,7 @@ var TableCellPopovers = (function (_super) {
             }
             inputAtts.value = isNaN(numericValue) ? 0 : numericValue;
         }
-        else if (inputType === 'select') {
+        else if (isSelect) {
             var atts = ['allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected'];
             atts.forEach(function (attr) {
                 if (typeof $metaCell.data(attr) !== 'undefined') {
@@ -727,7 +727,7 @@ var TableCellPopovers = (function (_super) {
             inputAtts.min = symbol ? '0' : '';
             inputAtts.step = symbol ? '0.1' : '1';
         }
-        var $input = inputType === 'select' ? $('<select />', inputAtts) : $('<input />', inputAtts), $setButton = $('<button />', {
+        var $input = isSelect ? $('<select />', inputAtts) : $('<input />', inputAtts), $setButton = $('<button />', {
             type: 'button',
             class: 'set btn btn-primary button-small',
             text: this.settings.get('setButton'),
@@ -744,7 +744,7 @@ var TableCellPopovers = (function (_super) {
                 $input.data('max-date', $metaCell.data('max-date'));
             }
         }
-        if (inputType === 'select') {
+        if (isSelect) {
             var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
             if (selectOptions) {
                 $.each(selectOptions, function (index, value) {
@@ -761,7 +761,7 @@ var TableCellPopovers = (function (_super) {
                 $extraFields.append($('<input />', metaAtts));
             });
         }
-        if (inputType === 'select') {
+        if (isSelect) {
             popoverClass += ' with-select';
         }
         var $content = $('<div class="edit-popover-content" />');
@@ -771,8 +771,8 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
-        var popover = new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
-            title: this.settings.get('setValue') ? this.settings.get('setValue').replace('%%', cellName) : cellName,
+        var titleSetting = isSelect ? 'selectSetValue' : 'setValue', popover = new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($metaCell.get(0), {
+            title: this.settings.get(titleSetting) ? this.settings.get(titleSetting).replace('%%', cellName) : cellName,
             content: $content.get(0),
             html: true,
             customClass: popoverClass,
