@@ -767,7 +767,7 @@ var TableCellPopovers = (function (_super) {
         }
         var titleSetting = isSelect ? 'selectSetValue' : 'setValue';
         this.addPopover($metaCell, {
-            title: titleSetting ? titleSetting.replace('%%', cellName) : cellName,
+            title: this.settings.get(titleSetting) ? this.settings.get(titleSetting).replace('%%', cellName) : cellName,
             content: $content.get(0),
             html: true,
             customClass: popoverClass,
