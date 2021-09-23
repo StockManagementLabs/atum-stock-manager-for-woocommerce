@@ -101,16 +101,16 @@ __webpack_require__.r(__webpack_exports__);
 var PopoverBase = (function () {
     function PopoverBase() {
     }
+    PopoverBase.prototype.addPopover = function ($button, config) {
+        return new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($button.get(0), config);
+    };
     PopoverBase.prototype.destroyPopover = function ($popoverButton, callback) {
         var _this = this;
         if ($popoverButton.length) {
             if ($popoverButton.length > 1) {
-                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem)); });
+                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem), callback); });
             }
             else {
-                if (!this.isValidPopover($popoverButton)) {
-                    return;
-                }
                 var popover = this.getInstance($popoverButton);
                 if (popover) {
                     popover.dispose();

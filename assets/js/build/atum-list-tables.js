@@ -101,16 +101,16 @@ __webpack_require__.r(__webpack_exports__);
 var PopoverBase = (function () {
     function PopoverBase() {
     }
+    PopoverBase.prototype.addPopover = function ($button, config) {
+        return new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($button.get(0), config);
+    };
     PopoverBase.prototype.destroyPopover = function ($popoverButton, callback) {
         var _this = this;
         if ($popoverButton.length) {
             if ($popoverButton.length > 1) {
-                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem)); });
+                $popoverButton.each(function (index, elem) { return _this.destroyPopover($(elem), callback); });
             }
             else {
-                if (!this.isValidPopover($popoverButton)) {
-                    return;
-                }
                 var popover = this.getInstance($popoverButton);
                 if (popover) {
                     popover.dispose();
@@ -500,9 +500,7 @@ var LightBox = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/popover */ "./node_modules/bootstrap/js/dist/popover.js");
-/* harmony import */ var bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
+/* harmony import */ var _abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts/_popover-base */ "./assets/js/src/abstracts/_popover-base.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -518,7 +516,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-
 
 var MenuPopover = (function (_super) {
     __extends(MenuPopover, _super);
@@ -548,7 +545,7 @@ var MenuPopover = (function (_super) {
             }
             $menuHtml.append($menuItem);
         });
-        new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a(this.$menuButton.get(0), {
+        this.addPopover(this.$menuButton, {
             title: this.menu.title || '',
             content: $('<div />').append($menuHtml).get(0),
             html: true,
@@ -598,7 +595,7 @@ var MenuPopover = (function (_super) {
         });
     };
     return MenuPopover;
-}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_1__["default"]));
+}(_abstracts_popover_base__WEBPACK_IMPORTED_MODULE_0__["default"]));
 /* harmony default export */ __webpack_exports__["default"] = (MenuPopover);
 
 
