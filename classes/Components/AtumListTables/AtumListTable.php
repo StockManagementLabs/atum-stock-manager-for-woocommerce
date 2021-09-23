@@ -944,35 +944,66 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @since  1.3.1
 	 *
 	 * @param \WP_Post $item The WooCommerce product post.
+	 * @param bool     $editable  Optional. Whether the current column is editable.
 	 *
 	 * @return string
 	 */
-	protected function column__supplier( $item ) {
+	protected function column__supplier( $item, $editable = TRUE ) {
 
-		$supplier = self::EMPTY_COL;
+		$supplier    = self::EMPTY_COL;
+		$supplier_id = '';
 
 		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return $supplier;
 		}
 
-		$supplier_id = $this->product->get_supplier_id();
+		if ( $editable ) {
 
-		if ( $supplier_id ) {
+			$supplier_id = $this->product->get_supplier_id();
 
-			$supplier_post = get_post( $supplier_id );
+			if ( $supplier_id ) {
 
-			if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
+				$supplier_post = get_post( $supplier_id );
 
-				$supplier        = $supplier_post->post_title;
-				$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
-				$supplier_abb    = mb_strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
-				/* translators: first one is the supplier name and second is the supplier's ID */
-				$supplier_tooltip = sprintf( esc_attr__( '%1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
+				if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
 
-				$data_tip = ! self::$is_report ? ' data-tip="' . $supplier_tooltip . '"' : '';
-				$supplier = '<span class="tips"' . $data_tip . '>' . $supplier_abb . '</span><span class="atum-title-small">' . $supplier_tooltip . '</span>';
+					$supplier = $supplier_post->post_title;
 
+					/* translators: first one is the supplier name and second is the supplier's ID */
+					$supplier_tooltip = sprintf( esc_attr__( 'Click to edit %1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
+
+				}
 			}
+
+			if ( self::EMPTY_COL === $supplier ) {
+				$supplier_tooltip = esc_attr__( 'Click to add a supplier', ATUM_TEXT_DOMAIN );
+			}
+
+			$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
+			$supplier_abb    = mb_strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+
+			$args = apply_filters( 'atum/list_table/args_supplier', array(
+				'meta_key'   => 'supplier_id',
+				'value'      => $supplier_abb,
+				'input_type' => 'select',
+				'tooltip'    => $supplier_tooltip,
+				'cell_name'  => esc_attr__( 'Supplier', ATUM_TEXT_DOMAIN ),
+				'extra_data' => [
+					'selected-value'       => $supplier_id,
+					'select-options'       => [
+						(int) $supplier_id => $supplier,
+					],
+					'extra-class'          => 'wc-product-search atum-enhanced-select',
+					'allow_clear'          => 'true',
+					'action'               => 'atum_json_search_suppliers',
+					'placeholder'          => esc_attr__( 'Search Supplier by Name or ID&hellip;', ATUM_TEXT_DOMAIN ),
+					'multiple'             => 'false',
+					'minimum_input_length' => 1,
+					'container-css'        => 'edit-popover-content',
+				],
+			) );
+
+			$supplier = self::get_editable_column( $args );
 
 		}
 
@@ -1005,7 +1036,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			if ( 0 === strlen( $supplier_sku ) ) {
 				$supplier_sku = self::EMPTY_COL;
 			}
-
 			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
@@ -1013,6 +1043,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => esc_attr__( 'Click to edit the supplier SKU', ATUM_TEXT_DOMAIN ),
 				'cell_name'  => esc_attr__( 'Supplier SKU', ATUM_TEXT_DOMAIN ),
 			) );
+
 
 			$supplier_sku = self::get_editable_column( $args );
 
@@ -4736,6 +4767,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function get_selected() {
 		return $this->selected;
+	}
+
+	/**
+	 * Getter for the parent_type prop
+	 *
+	 * @since 1.9.5
+	 *
+	 * @return string
+	 */
+	public function get_parent_type() {
+		return $this->parent_type;
 	}
 
 	/**

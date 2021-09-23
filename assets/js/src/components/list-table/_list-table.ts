@@ -337,9 +337,23 @@ export default class ListTable {
 
 		let editedCols: any  = this.globals.$editInput.val();
 
-		const itemId: number = $metaCell.closest( 'tr' ).data( 'id' ),
-		      meta: string   = $metaCell.data( 'meta' ),
-		      newValue: any  = $popover.find( '.meta-value' ).val();
+		const itemId: number     = $metaCell.closest( 'tr' ).data( 'id' ),
+		      meta: string       = $metaCell.data( 'meta' ),
+		      $metaValue: JQuery = $popover.find( '.meta-value' ),
+		      isSelect: boolean  = $metaValue.is( 'select' ),
+		      newValue: any      = isSelect ? $metaValue.find( `option[value="${$metaValue.val()}"]` ).text() : $metaValue.val();
+
+		if ( isSelect ) {
+
+			const selectOptions: any = $metaCell.data( 'selectOptions' );
+
+			selectOptions[ $metaValue.val() ] = newValue;
+
+			$metaCell.data('realValue', $metaValue.val() );
+			$metaCell.data('selectedValue', $metaValue.val() );
+			$metaCell.data( 'selectOptions', selectOptions );
+
+		}
 
 		// Update the cell value.
 		this.setCellValue( $metaCell, newValue );
@@ -360,7 +374,7 @@ export default class ListTable {
 		}
 
 		// Add the meta value to the object.
-		editedCols[ itemId ][ meta ] = newValue;
+		editedCols[ itemId ][ meta ] = isSelect ? $metaValue.val() : newValue;
 
 		// WPML compatibility.
 		if ( typeof $metaCell.data( 'custom' ) !== 'undefined' ) {
