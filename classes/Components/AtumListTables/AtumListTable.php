@@ -4259,7 +4259,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function increase_total( $column_name, $amount ) {
 
-		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && ! in_array( $this->parent_type, [ 'grouped', 'bundle' ], TRUE ) ) {
+		if ( $this->show_totals && isset( $this->totalizers[ $column_name ] ) && is_numeric( $amount ) && ( ! in_array( $this->parent_type, [ 'grouped', 'bundle' ], TRUE ) || ! $this->is_child ) ) {
 			$this->totalizers[ $column_name ] += floatval( $amount );
 		}
 	}
