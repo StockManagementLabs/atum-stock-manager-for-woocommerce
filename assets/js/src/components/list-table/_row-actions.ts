@@ -4,13 +4,13 @@
 
 import Globals from './_globals';
 import Settings from '../../config/_settings';
-import { Menu, MenuItem } from '../../interfaces/menu.interface';
+import { IMenu, IMenuItem } from '../../interfaces/menu.interface';
 import MenuPopover from '../_menu-popover';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class RowActions {
 
-	rowActions: MenuItem[] = [];
+	rowActions: IMenuItem[] = [];
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -39,8 +39,8 @@ export default class RowActions {
 			const $button: JQuery    = $( elem ),
 			      $titleCell: JQuery = $button.closest( 'tr' ).find( 'td.column-title' );
 
-			// NOTE: we assume that the rowActions comes with the right format (following the MenuItem interface format).
-			const actionsMenu: Menu = {
+			// NOTE: we assume that the rowActions comes with the right format (following the IMenuItem interface format).
+			const actionsMenu: IMenu = {
 				title: ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim(),
 				items: this.rowActions,
 			};

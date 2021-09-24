@@ -2,7 +2,7 @@
    MENU POPOVER
    =================== */
 
-import { Menu, MenuItem } from '../interfaces/menu.interface';
+import { IMenu, IMenuItem } from '../interfaces/menu.interface';
 import PopoverBase from '../abstracts/_popover-base';
 import WPHooks from '../interfaces/wp.hooks';
 
@@ -14,7 +14,7 @@ export default class MenuPopover extends PopoverBase{
 	
 	constructor(
 		private $menuButton: JQuery,
-		private menu: Menu
+		private menu: IMenu
 	) {
 
 		super();
@@ -35,7 +35,7 @@ export default class MenuPopover extends PopoverBase{
 		const $menuHtml: JQuery = $( '<ul />' );
 
 		// Prepare the menu's HTML.
-		this.menu.items.forEach( ( item: MenuItem ) => {
+		this.menu.items.forEach( ( item: IMenuItem ) => {
 
 			const icon: string      = item.icon ? `<i class="atum-icon ${ item.icon }"></i> ` : '',
 			      $menuItem: JQuery = $( `<li><a data-name="${ item.name }" href="${ item.link || '#' }">${ icon }${ item.label }</a></li>` );

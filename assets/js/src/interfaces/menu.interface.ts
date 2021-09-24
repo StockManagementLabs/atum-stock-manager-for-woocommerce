@@ -2,12 +2,12 @@
  * Interfaces for the MenuPopover
  */
 
-export interface Menu {
+export interface IMenu {
 	title?: string;
-	items: MenuItem[];
+	items: IMenuItem[];
 }
 
-export interface MenuItem {
+export interface IMenuItem {
 	name: string;
 	label: string;
 	link?: string;
