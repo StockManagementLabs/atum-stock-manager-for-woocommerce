@@ -317,7 +317,7 @@ export default class AtumOrderItems {
 	 *
 	 * @return {Promise<void>}
 	 */
-	processDeleteItem( atumOrderItemId ): Promise<void> {
+	processDeleteItem( atumOrderItemId: number ): Promise<void> {
 
 		return new Promise( ( resolve: Function ) => {
 
@@ -495,7 +495,7 @@ export default class AtumOrderItems {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
 					$.ajax( {
 						url     : window[ 'ajaxurl' ],
@@ -556,9 +556,10 @@ export default class AtumOrderItems {
 				return true;
 			}
 			taxes.push( price * rate[ 'rate' ] / 100 );
+
 		} );
 
-		preCompoundTaxes = taxes.reduce( ( a, b ) => a + b, 0 );
+		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => a + b, 0 );
 		
 		// Compound taxes.
 		$.each( rates, ( i: number, rate: any ) => {
@@ -575,7 +576,7 @@ export default class AtumOrderItems {
 
 		} );
 
-		return taxes.reduce( ( a, b ) => a + b, 0 );
+		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
 	}
 	
 }
