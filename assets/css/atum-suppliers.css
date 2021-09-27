@@ -631,7 +631,7 @@ body .select2-container--default.atum-select2 .select2-selection--single .select
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__placeholder, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__placeholder {
-  color: var(--atum-text-color-var1);
+  color: var(--atum-text-color-var3);
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__arrow {
