@@ -153,6 +153,7 @@
 				@extend .widget-header:before;
 				font-size: 50px !important;
 				left: 14px !important;
+				transform-origin: 14px 2px !important;
 				cursor: ew-resize;
 			}
 			
