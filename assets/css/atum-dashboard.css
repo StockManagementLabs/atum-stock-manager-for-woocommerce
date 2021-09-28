@@ -5733,12 +5733,12 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-  left: 17px;
+  left: 21px;
   letter-spacing: -4px;
   -webkit-transform: rotate(90deg) translateY(-50%);
           transform: rotate(90deg) translateY(-50%);
-  -webkit-transform-origin: top;
-          transform-origin: top;
+  -webkit-transform-origin: 16px -1px;
+          transform-origin: 16px -1px;
 }
 
 .atum-dashboard .atum-widget .widget-header h2, .atum-dashboard .atum-widget .widget-header i {
@@ -6297,6 +6297,8 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
 .statistics-widget .chart-legend .legend-switch:before {
   font-size: 50px !important;
   left: 14px !important;
+  -webkit-transform-origin: 14px 2px !important;
+          transform-origin: 14px 2px !important;
   cursor: ew-resize;
 }
 

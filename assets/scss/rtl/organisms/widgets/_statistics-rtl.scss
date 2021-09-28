@@ -15,6 +15,7 @@
 				@extend .widget-header:after;
 				font-size: 22px !important;
 				right: -5px !important;
+				transform-origin: 14px 2px !important;
 				cursor: ew-resize;
 			}
 		}

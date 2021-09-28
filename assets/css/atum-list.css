@@ -2847,7 +2847,7 @@ body .select2-container--default.atum-select2 .select2-selection--single .select
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__placeholder, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__placeholder {
-  color: var(--atum-text-color-var1);
+  color: var(--atum-text-color-var3);
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__arrow {
@@ -6091,18 +6091,21 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   height: 31px !important;
 }
 
-.swal2-container.atum-modal .atum-modal-content input[type=text]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-moz-placeholder {
+.swal2-container.atum-modal .atum-modal-content input[type=text]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=number]::-moz-placeholder {
+  text-align: left;
   font-style: italic;
   font-size: 12px;
   opacity: 1;
 }
 
-.swal2-container.atum-modal .atum-modal-content input[type=text]:-ms-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]:-ms-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]:-ms-input-placeholder {
+.swal2-container.atum-modal .atum-modal-content input[type=text]:-ms-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]:-ms-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]:-ms-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=number]:-ms-input-placeholder {
+  text-align: left;
   font-size: 12px;
   font-style: italic;
 }
 
-.swal2-container.atum-modal .atum-modal-content input[type=text]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-webkit-input-placeholder {
+.swal2-container.atum-modal .atum-modal-content input[type=text]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=number]::-webkit-input-placeholder {
+  text-align: left;
   font-size: 12px;
   font-style: italic;
 }
