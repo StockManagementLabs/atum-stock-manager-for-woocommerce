@@ -818,9 +818,18 @@ trait ListTableLegacyTrait {
 
 			}
 
+			// Avoid to duplicate grouped children.
+			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
+				remove_filter( 'posts_search', array( $this, 'product_search' ) );
+			}
+
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+
+			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
+				add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
+			}
 
 			if ( $children->found_posts ) {
 
@@ -905,7 +914,7 @@ trait ListTableLegacyTrait {
 				return $bundle_children;
 
 			}
-			else {
+			elseif ( 'grouped' !== $parent_type || ! $this->is_searching_by_id_column() ) {
 				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );
 			}
 

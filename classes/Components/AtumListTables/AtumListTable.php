@@ -3774,12 +3774,16 @@ abstract class AtumListTable extends \WP_List_Table {
 						// If has children, add them.
 						$product = wc_get_product( $search_term_id->ID );
 
-						// Get an array of the children IDs (if any).
-						$children = $product->get_children();
+						// Exclude grouped products children if searching by id.
+						if ( 'grouped' !== $product->get_type() ) {
 
-						if ( ! empty( $children ) ) {
-							foreach ( $children as $child ) {
-								$search_terms_ids_str .= $child . ',';
+							// Get an array of the children IDs (if any).
+							$children = $product->get_children();
+
+							if ( ! empty( $children ) ) {
+								foreach ( $children as $child ) {
+									$search_terms_ids_str .= $child . ',';
+								}
 							}
 						}
 
@@ -3791,7 +3795,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					}
 
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
-					$where                = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
+					$where                = " AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
 
 				}
 				//
@@ -4879,5 +4883,16 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return self::$sale_days;
 
+	}
+
+	/**
+	 * Check if ListTable is being searched by ID column.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @return bool
+	 */
+	protected function is_searching_by_id_column() {
+		return isset( $_REQUEST['search_column'] ) && 'ID' === esc_attr( stripslashes( $_REQUEST['search_column'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 	}
 }

@@ -902,6 +902,7 @@ final class WidgetHelpers {
 		remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
 		$products_in_stock = $products_in_stock_query->posts;
+		$managed_variables = $managed_variables_stock = [];
 
 		if ( ! empty( $products_in_stock ) ) {
 
@@ -935,18 +936,65 @@ final class WidgetHelpers {
 				$product_stock          = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_stock', $product->get_stock_quantity(), $product );
 				$product_purchase_price = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_price', $product->get_purchase_price(), $product );
 
-				if ( $product_stock && $product_stock > 0 ) {
+				if ( $product_stock > 0 ) {
 
-					$counters['items_stocks_counter'] += $product_stock;
-					if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
-						$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
+					if ( TRUE === $product->managing_stock() ) {
+
+						$counters['items_stocks_counter'] += $product_stock;
+
+						if ( $product_purchase_price && ! empty( $product_purchase_price ) ) {
+							$counters['items_purchase_price_total'] += ( $product_purchase_price * $product_stock );
+						}
+						else {
+							$counters['items_without_purchase_price'] += $product_stock;
+						}
 					}
-					else {
-						$counters['items_without_purchase_price'] += $product_stock;
+					// It's a variation and returns its parent stock.
+					elseif ( 'variation' === $product->get_type() ) {
+
+						$parent_id = $product->get_parent_id();
+
+						if ( $parent_id ) {
+
+							$product = Helpers::get_atum_product( $parent_id );
+
+							if ( $product instanceof \WC_Product && $product->managing_stock() ) {
+
+								if ( ! array_key_exists( $parent_id, $managed_variables ) ) {
+
+									$managed_variables[ $parent_id ] = [];
+
+								}
+								$managed_variables[ $parent_id ][ $product_id ] = $product_purchase_price;
+
+								if ( empty( $managed_variables_stock[ $parent_id ] ) ) {
+									$managed_variables_stock[ $parent_id ] = $product_stock;
+								}
+
+							}
+						}
+
 					}
 
 				}
 
+			}
+
+			if ( ! empty( $managed_variables ) ) {
+
+				foreach ( $managed_variables as $parent_id => $variations ) {
+
+					if ( ! empty( $managed_variables_stock[ $parent_id ] ) ) {
+
+						$variations_pp = 0;
+						foreach ( $variations as $purchase_price ) {
+							$variations_pp += $purchase_price;
+						}
+
+						$counters['items_purchase_price_total'] += ( $variations_pp / count( $variations ) * $managed_variables_stock[ $parent_id ] );
+
+					}
+				}
 			}
 
 		}
