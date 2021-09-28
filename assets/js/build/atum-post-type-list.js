@@ -102,6 +102,7 @@ var PopoverBase = (function () {
     function PopoverBase() {
     }
     PopoverBase.prototype.addPopover = function ($button, config) {
+        $button.data('atum-popover', this);
         return new bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a($button.get(0), config);
     };
     PopoverBase.prototype.destroyPopover = function ($popoverButton, callback) {

@@ -22,7 +22,10 @@ export default abstract class PopoverBase {
 	 * @param {any}    config
 	 */
 	addPopover( $button: JQuery, config: any ): BsPopover {
+
+		$button.data( 'atum-popover', this );
 		return new BsPopover( $button.get( 0 ), config );
+
 	}
 
 	/**

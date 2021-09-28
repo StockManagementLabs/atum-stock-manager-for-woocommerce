@@ -1287,7 +1287,7 @@ var AtumOrderItems = (function () {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     $.ajax({
                         url: window['ajaxurl'],
                         data: data,
