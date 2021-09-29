@@ -1578,18 +1578,42 @@ final class Helpers {
 	 *
 	 * @since 1.3.1
 	 *
-	 * @param string $selected  Optional. The pre-selected option.
-	 * @param bool   $enhanced  Optional. Whether to show an enhanced select.
-	 * @param string $class     Optional. The dropdown class name.
-	 * @param string $name      Optional. The input's name.
+	 * @param array $args {
+	 *  Array of arguments.
+	 *
+	 *  @type string $selected    Optional. The pre-selected option.
+	 *  @type bool   $enhanced    Optional. Whether to show an enhanced select.
+	 *  @type string $class       Optional. The dropdown class name.
+	 *  @type string $name        Optional. The input's name.
+	 *  @type string $placeholder Optional: The select's placeholder.
+	 * }
 	 *
 	 * @return string
 	 */
-	public static function suppliers_dropdown( $selected = '', $enhanced = FALSE, $class = 'dropdown_supplier', $name = 'supplier' ) {
+	public static function suppliers_dropdown( $args ) {
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return '';
 		}
+
+		$default_args = array(
+			'selected'    => '',
+			'enhanced'    => FALSE,
+			'class'       => 'dropdown_supplier',
+			'name'        => 'supplier',
+			'placeholder' => __( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ),
+		);
+
+		/**
+		 * Variables definition
+		 *
+		 * @var string $selected
+		 * @var bool   $enhanced
+		 * @var string $class
+		 * @var string $name
+		 * @var string $placeholder
+		 */
+		extract( wp_parse_args( $args, $default_args ) );
 
 		ob_start();
 
@@ -1621,7 +1645,7 @@ final class Helpers {
 		<?php else : ?>
 
 			<select class="wc-product-search atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
-				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+				data-action="atum_json_search_suppliers" data-placeholder="<?php echo esc_attr( $placeholder ) ?>"
 				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>

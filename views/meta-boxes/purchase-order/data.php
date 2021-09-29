@@ -50,10 +50,15 @@ $po_status = $atum_order->get_status();
 					</span>
 				</p>
 
-				<p class="form-field form-field-wide"<?php if ($has_multiple_suppliers) echo ' style="display:none"' ?>>
+				<p class="form-field form-field-wide"<?php if ( $has_multiple_suppliers ) echo ' style="display:none"' ?>>
 					<label for="customer_user"><?php esc_html_e( 'Supplier', ATUM_TEXT_DOMAIN ) ?></label>
 
-					<?php echo Helpers::suppliers_dropdown( $supplier ? $supplier->id : '', TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo Helpers::suppliers_dropdown( [
+						'selected' => $supplier ? $supplier->id : '',
+						'enhanced' => TRUE,
+					] ); ?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php echo esc_attr( $supplier ? $supplier->id : '' ) ?>">
 				</p>
 

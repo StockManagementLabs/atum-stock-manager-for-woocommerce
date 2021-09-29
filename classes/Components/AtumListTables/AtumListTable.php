@@ -515,7 +515,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type auto-filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Supplier filtering.
-		echo Helpers::suppliers_dropdown( isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '', 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo Helpers::suppliers_dropdown( [
+			'selected' => isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '',
+			'enhanced' => 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ),
+		] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		do_action( 'atum/list_table/after_nav_filters', $this );
 
