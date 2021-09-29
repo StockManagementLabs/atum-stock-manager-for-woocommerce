@@ -1462,6 +1462,8 @@ final class Helpers {
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0
+	 *
+	 * @deprecated IE11 support was removed in WP 5.8 (https://make.wordpress.org/core/handbook/best-practices/browser-support/)
 	 */
 	public static function maybe_es6_promise() {
 		
