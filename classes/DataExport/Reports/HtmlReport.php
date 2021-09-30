@@ -132,13 +132,13 @@ class HtmlReport extends ListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product = Helpers::get_atum_product( $item );
+		$this->list_item = Helpers::get_atum_product( $item );
 
-		if ( ! $this->product instanceof \WC_Product ) {
+		if ( ! $this->list_item instanceof \WC_Product ) {
 			return;
 		}
 
-		$type              = $this->product->get_type();
+		$type              = $this->list_item->get_type();
 		$this->allow_calcs = Helpers::is_inheritable_type( $type ) ? FALSE : TRUE;
 		$row_style         = '';
 
@@ -172,13 +172,13 @@ class HtmlReport extends ListTable {
 		if ( ! $this->allow_calcs ) {
 
 			$product_class  = '\WC_Product_' . ucwords( str_replace( '-', '_', $type ), '_' );
-			$parent_product = new $product_class( $this->product->get_id() );
+			$parent_product = new $product_class( $this->list_item->get_id() );
 
 			if ( 'bundle' === $type ) {
 
 				$child_products = Helpers::get_bundle_items( array(
 					'return'    => 'id=>product_id',
-					'bundle_id' => $this->product->get_id(),
+					'bundle_id' => $this->list_item->get_id(),
 				) );
 
 			}
@@ -209,10 +209,10 @@ class HtmlReport extends ListTable {
 
 					}
 
-					$this->is_child = TRUE;
-					$this->product  = Helpers::get_atum_product( $child_id );
+					$this->is_child  = TRUE;
+					$this->list_item = Helpers::get_atum_product( $child_id );
 
-					if ( $this->product instanceof \WC_Product ) {
+					if ( $this->list_item instanceof \WC_Product ) {
 
 						if ( 'grouped' === $type ) {
 							$return_type = 'grouped';
@@ -224,7 +224,7 @@ class HtmlReport extends ListTable {
 							$return_type = 'variation';
 						}
 
-						$this->single_expandable_row( $this->product, ( $return_type ) );
+						$this->single_expandable_row( $this->list_item, ( $return_type ) );
 
 					}
 				}
@@ -249,9 +249,9 @@ class HtmlReport extends ListTable {
 	protected function column_title( $item ) {
 		
 		$title = '';
-		if ( 'variation' === $this->product->get_type() ) {
+		if ( 'variation' === $this->list_item->get_type() ) {
 			
-			$attributes = wc_get_product_variation_attributes( $this->get_current_product_id() );
+			$attributes = wc_get_product_variation_attributes( $this->get_current_list_item_id() );
 
 			if ( ! empty( $attributes ) ) {
 				$title = ucfirst( implode( ' ', $attributes ) );
@@ -259,7 +259,7 @@ class HtmlReport extends ListTable {
 			
 		}
 		else {
-			$title = $this->product->get_title();
+			$title = $this->list_item->get_title();
 
 			// Limit the title length to 20 characters.
 			if ( $this->title_max_length && mb_strlen( $title ) > $this->title_max_length ) {
@@ -267,7 +267,7 @@ class HtmlReport extends ListTable {
 			}
 		}
 		
-		return apply_filters( 'atum/data_export/html_report/column_title', $title, $item, $this->product );
+		return apply_filters( 'atum/data_export/html_report/column_title', $title, $item, $this->list_item );
 	}
 
 	/**
@@ -275,11 +275,12 @@ class HtmlReport extends ListTable {
 	 *
 	 * @since 1.3.3
 	 *
-	 * @param \WP_Post $item The WooCommerce product post.
+	 * @param \WP_Post $item     The WooCommerce product post.
+	 * @param bool     $editable Optional. Whether the current column is editable.
 	 *
 	 * @return string
 	 */
-	protected function column__supplier( $item ) {
+	protected function column__supplier( $item, $editable = FALSE ) {
 
 		$supplier = self::EMPTY_COL;
 
@@ -287,7 +288,7 @@ class HtmlReport extends ListTable {
 			return $supplier;
 		}
 
-		$supplier_id = $this->product->get_supplier_id();
+		$supplier_id = $this->list_item->get_supplier_id();
 
 		if ( $supplier_id ) {
 
@@ -299,7 +300,7 @@ class HtmlReport extends ListTable {
 
 		}
 
-		return apply_filters( 'atum/data_export/html_report/column_supplier', $supplier, $item, $this->product );
+		return apply_filters( 'atum/data_export/html_report/column_supplier', $supplier, $item, $this->list_item );
 	}
 
 	/**
@@ -313,7 +314,7 @@ class HtmlReport extends ListTable {
 	 */
 	protected function column_calc_type( $item ) {
 
-		$type          = $this->product->get_type();
+		$type          = $this->list_item->get_type();
 		$product_types = wc_get_product_types();
 
 		if ( isset( $product_types[ $type ] ) || $this->is_child ) {
@@ -330,11 +331,11 @@ class HtmlReport extends ListTable {
 						$icon_char = 'e9c2';
 
 					}
-					elseif ( $this->product->is_downloadable() ) {
+					elseif ( $this->list_item->is_downloadable() ) {
 						$type      = 'downloadable';
 						$icon_char = 'e9c1';
 					}
-					elseif ( $this->product->is_virtual() ) {
+					elseif ( $this->list_item->is_virtual() ) {
 						$type      = 'virtual';
 						$icon_char = 'e9c5';
 					}
@@ -348,7 +349,7 @@ class HtmlReport extends ListTable {
 						$type      = 'grouped-item';
 						$icon_char = 'e9c9';
 					}
-					elseif ( $this->product->has_child() ) {
+					elseif ( $this->list_item->has_child() ) {
 						$icon_char = 'grouped' === $type ? 'e9c2' : 'e9c4';
 						$type     .= ' has-child';
 					}
@@ -368,7 +369,7 @@ class HtmlReport extends ListTable {
 
 			}
 
-			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: atum-icon-font; font-size: 20px">&#x' . $icon_char . ';</span>', $item, $this->product );
+			return apply_filters( 'atum/data_export/html_report/column_type', '<span class="product-type ' . $type . '" style="font-family: atum-icon-font; font-size: 20px">&#x' . $icon_char . ';</span>', $item, $this->list_item );
 
 		}
 
@@ -387,7 +388,7 @@ class HtmlReport extends ListTable {
 	 */
 	protected function _column_calc_stock_indicator( $item, $classes, $data, $primary ) {
 		
-		$product_id = $this->product->get_id();
+		$product_id = $this->list_item->get_id();
 		$content    = '';
 		
 		$atum_icons_style = ' style="font-family: atum-icon-font; font-size: 20px;"';
@@ -397,9 +398,9 @@ class HtmlReport extends ListTable {
 			$content = self::EMPTY_COL;
 		}
 		// Stock not managed by WC.
-		elseif ( ! $this->product->managing_stock() || 'parent' === $this->product->managing_stock() ) {
+		elseif ( ! $this->list_item->managing_stock() || 'parent' === $this->list_item->managing_stock() ) {
 			
-			$wc_stock_status = $this->product->get_stock_status();
+			$wc_stock_status = $this->list_item->get_stock_status();
 			$content         = '<span class="atum-icon atmi-question-circle"' . $atum_icons_style . '>&#xe991;</span>';
 			
 			switch ( $wc_stock_status ) {
@@ -420,7 +421,7 @@ class HtmlReport extends ListTable {
 		// Out of stock.
 		elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
 			
-			if ( $this->product->backorders_allowed() ) {
+			if ( $this->list_item->backorders_allowed() ) {
 				$content = '<span class="atum-icon atmi-circle-minus"' . $atum_icons_style . '>&#xe935;</span>';
 			}
 			else {
@@ -442,7 +443,7 @@ class HtmlReport extends ListTable {
 		
 		$classes = $classes ? ' class="' . $classes . '"' : '';
 
-		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->product ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<td ' . esc_attr( $data ) . esc_attr( $classes ) . '>' . apply_filters( 'atum/data_export/html_report/column_stock_indicator', $content, $item, $this->list_item ) . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		
 	}
 
@@ -457,7 +458,7 @@ class HtmlReport extends ListTable {
 	 */
 	protected function column_calc_location( $item ) {
 
-		$location_terms = wp_get_post_terms( $this->get_current_product_id(), Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
+		$location_terms = wp_get_post_terms( $this->get_current_list_item_id(), Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) );
 		$locations_list = ! empty( $location_terms ) ? implode( ', ', $location_terms ) : self::EMPTY_COL;
 
 		return $locations_list;
