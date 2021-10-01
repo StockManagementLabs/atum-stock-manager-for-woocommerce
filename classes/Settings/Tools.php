@@ -124,7 +124,7 @@ class Tools {
 			'section' => 'tools',
 			'default' => 300,
 			'name'    => __( "Update products' calculated properties", ATUM_TEXT_DOMAIN ) . $atum_label,
-			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
 				'number'         => array(
