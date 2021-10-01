@@ -16,6 +16,7 @@ import WPHooks from '../../interfaces/wp.hooks';
 
 export default class DragScroll {
 
+	$navScrollContainers: JQuery = $( '.nav-with-scroll-effect' );
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -27,8 +28,11 @@ export default class DragScroll {
 		// Add horizontal drag-scroll to table filters.
 		this.initHorizontalDragScroll();
 
+		// Add support for mouse wheel scrolling.
+		this.addMouseWheelSupport();
+
 		this.addHooks();
-	
+
 	}
 
 	/**
@@ -82,22 +86,52 @@ export default class DragScroll {
 			} );
 		
 	}
+
+	/**
+	 * Add mouse wheel support to the draggable elements
+	 */
+	addMouseWheelSupport() {
+
+		this.$navScrollContainers.on( 'wheel DOMMouseScroll', ( evt: JQueryEventObject ) => {
+
+			const $nav: JQuery = $( evt.currentTarget );
+
+			// If the navscroll fits in its current container and doesn't need any scroll, just return.
+			if (
+				$nav.find( '.overflow-opacity-effect-right' ).is( ':hidden' ) &&
+				$nav.find( '.overflow-opacity-effect-left' ).is( ':hidden' )
+			) {
+				return;
+			}
+
+			const navEl: Element     = $nav.get( 0 ),
+			      originalEvent: any = evt.originalEvent;
+
+			if ( ( originalEvent.wheelDelta || originalEvent.detail ) > 0 ) {
+				navEl.scrollLeft -= 40;
+			}
+			else {
+				navEl.scrollLeft += 40;
+			}
+
+			return false;
+
+		} );
+
+	}
 	
 	/**
-	 * Init horizontal scroll
+	 * Init horizontal drag scroll
 	 */
 	initHorizontalDragScroll() {
 
-		const $navScrollContainers: JQuery = $( '.nav-with-scroll-effect' );
-
-		$navScrollContainers.each( ( index: number, elem: Element ) => {
+		this.$navScrollContainers.each( ( index: number, elem: Element ) => {
 			this.addHorizontalDragScroll( $( elem ) );
 		} );
 
-
 		$( window ).on( 'resize', () => {
 
-			$navScrollContainers.each( ( index: number, elem: Element ) => {
+			this.$navScrollContainers.each( ( index: number, elem: Element ) => {
 				this.addHorizontalDragScroll( $( elem ) );
 			} );
 
@@ -105,7 +139,7 @@ export default class DragScroll {
 
 		$( '.tablenav.top' ).find( 'input.btn' ).css( 'visibility', 'visible' );
 
-		$navScrollContainers.css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
+		this.$navScrollContainers.css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
 
 			this.addHorizontalDragScroll( $( evt.currentTarget ), true );
 			this.tooltip.destroyTooltips();
@@ -130,24 +164,25 @@ export default class DragScroll {
 			return;
 		}
 
-		let $overflowOpacityRight: JQuery = $nav.find( '.overflow-opacity-effect-right' ),
-		    $overflowOpacityLeft: JQuery  = $nav.find( '.overflow-opacity-effect-left' ),
-		    leftMax: number               = $nav ? $nav.get( 0 ).scrollWidth : 0,
-		    left: number                  = $nav ? $nav.get( 0 ).scrollLeft : 0,
-		    diff: number                  = leftMax - left;
+		const $overflowOpacityRight: JQuery = $nav.find( '.overflow-opacity-effect-right' ),
+		      $overflowOpacityLeft: JQuery  = $nav.find( '.overflow-opacity-effect-left' );
 
 		if ( checkEnhanced ) {
 			( <any> $( '.enhanced' ) ).select2( 'close' );
 		}
 
-		if ( diff === $nav.outerWidth() ) {
+		const navEl: Element = $nav.get( 0 );
+
+		// Show/hide the right opacity element.
+		if ( this.navIsLeft( navEl ) ) {
 			$overflowOpacityRight.hide();
 		}
 		else {
 			$overflowOpacityRight.show();
 		}
 
-		if ( left === 0 ) {
+		// Show/hide the right opacity element.
+		if ( this.navIsRight( navEl ) ) {
 			$overflowOpacityLeft.hide();
 		}
 		else {
@@ -156,6 +191,28 @@ export default class DragScroll {
 
 		$nav.css( 'cursor', $overflowOpacityLeft.is( ':visible' ) || $overflowOpacityRight.is( ':visible' ) ? 'grab' : 'auto' );
 		
+	}
+
+	/**
+	 * Check whether the nav scroll container has reached the left hand side
+	 *
+	 * @param {Element} navEl
+	 *
+	 * @return {boolean}
+	 */
+	navIsLeft( navEl: Element ): boolean {
+		return ( navEl.scrollWidth - navEl.scrollLeft ) === parseInt( $( navEl ).outerWidth().toString() );
+	}
+
+	/**
+	 * Check whether the nav scroll container has reached the right hand side
+	 *
+	 * @param {Element} navEl
+	 *
+	 * @return {boolean}
+	 */
+	navIsRight( navEl: Element ): boolean {
+		return navEl.scrollLeft === 0;
 	}
 	
 }
