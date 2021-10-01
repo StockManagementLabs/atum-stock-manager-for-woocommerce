@@ -108,10 +108,10 @@ export default class DragScroll {
 			      originalEvent: any = evt.originalEvent;
 
 			if ( ( originalEvent.wheelDelta || originalEvent.detail ) > 0 ) {
-				navEl.scrollLeft -= 40;
+				navEl.scrollLeft -= 60;
 			}
 			else {
-				navEl.scrollLeft += 40;
+				navEl.scrollLeft += 60;
 			}
 
 			return false;
