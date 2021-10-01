@@ -743,22 +743,25 @@ var DragScroll = (function () {
     };
     DragScroll.prototype.initHorizontalDragScroll = function () {
         var _this = this;
-        this.addHorizontalDragScroll('stock_central_nav', false);
-        this.addHorizontalDragScroll('filters_container', false);
+        var $navScrollContainers = $('.nav-with-scroll-effect');
+        $navScrollContainers.each(function (index, elem) {
+            _this.addHorizontalDragScroll($(elem));
+        });
         $(window).on('resize', function () {
-            _this.addHorizontalDragScroll('stock_central_nav', false);
-            _this.addHorizontalDragScroll('filters_container', false);
+            $navScrollContainers.each(function (index, elem) {
+                _this.addHorizontalDragScroll($(elem));
+            });
         });
         $('.tablenav.top').find('input.btn').css('visibility', 'visible');
-        $('.nav-with-scroll-effect').css('visibility', 'visible').on('scroll', function (evt) {
-            _this.addHorizontalDragScroll($(evt.currentTarget).attr('id'), true);
+        $navScrollContainers.css('visibility', 'visible').on('scroll', function (evt) {
+            _this.addHorizontalDragScroll($(evt.currentTarget), true);
             _this.tooltip.destroyTooltips();
             _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
         });
         _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default.a.reset();
     };
-    DragScroll.prototype.addHorizontalDragScroll = function (elementId, checkEnhanced) {
-        var $nav = $("#" + elementId);
+    DragScroll.prototype.addHorizontalDragScroll = function ($nav, checkEnhanced) {
+        if (checkEnhanced === void 0) { checkEnhanced = false; }
         if (!$nav.length) {
             return;
         }

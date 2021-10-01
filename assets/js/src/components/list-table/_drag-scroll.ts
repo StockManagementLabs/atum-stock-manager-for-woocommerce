@@ -43,7 +43,10 @@ export default class DragScroll {
 		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.initHorizontalDragScroll() );
 
 	}
-	
+
+	/**
+	 * Load Hammer
+	 */
 	loadHammer() {
 		
 		// Drag and drop scrolling on desktops.
@@ -85,19 +88,26 @@ export default class DragScroll {
 	 */
 	initHorizontalDragScroll() {
 
-		this.addHorizontalDragScroll( 'stock_central_nav', false );
-		this.addHorizontalDragScroll( 'filters_container', false );
+		const $navScrollContainers: JQuery = $( '.nav-with-scroll-effect' );
+
+		$navScrollContainers.each( ( index: number, elem: Element ) => {
+			this.addHorizontalDragScroll( $( elem ) );
+		} );
+
 
 		$( window ).on( 'resize', () => {
-			this.addHorizontalDragScroll( 'stock_central_nav', false );
-			this.addHorizontalDragScroll( 'filters_container', false );
+
+			$navScrollContainers.each( ( index: number, elem: Element ) => {
+				this.addHorizontalDragScroll( $( elem ) );
+			} );
+
 		} );
 
 		$( '.tablenav.top' ).find( 'input.btn' ).css( 'visibility', 'visible' );
 
-		$( '.nav-with-scroll-effect' ).css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
+		$navScrollContainers.css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
 
-			this.addHorizontalDragScroll( $( evt.currentTarget ).attr( 'id' ), true );
+			this.addHorizontalDragScroll( $( evt.currentTarget ), true );
 			this.tooltip.destroyTooltips();
 
 			Utils.delay( () => this.tooltip.addTooltips(), 1000 );
@@ -110,10 +120,11 @@ export default class DragScroll {
 	
 	/**
 	 * Add horizontal scroll effect to menu views
+	 *
+	 * @param {JQuery}  $nav
+	 * @param {boolean} checkEnhanced
 	 */
-	addHorizontalDragScroll(elementId: string, checkEnhanced: boolean) {
-
-		const $nav: JQuery = $( `#${ elementId }` );
+	addHorizontalDragScroll( $nav: JQuery, checkEnhanced: boolean = false ) {
 
 		if ( ! $nav.length ) {
 			return;
