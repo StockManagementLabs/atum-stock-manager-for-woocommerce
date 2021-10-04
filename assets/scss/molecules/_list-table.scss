@@ -2170,8 +2170,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.no-items {
+			background-color: $red-light;
+			
 			td {
 				padding: 10px 24px;
+				
 				.alert {
 					margin-top: $grid-gutter-width/2;
 					flex-wrap: wrap;
@@ -2215,6 +2218,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 							@include loader($color: $secondary);
 						}
 					}
+					
 					@include tablet-max {
 						width: calc( 100vw - 93px);
 						
