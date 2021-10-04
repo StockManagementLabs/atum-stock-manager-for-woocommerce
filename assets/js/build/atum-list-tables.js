@@ -940,9 +940,11 @@ var BulkActions = (function () {
             }
         })
             .on('change', '.bulkactions select', function (evt) {
-            var $select = $(evt.currentTarget);
+            var $select = $(evt.currentTarget), selected = $select.val();
+            _this.$bulkButton = $('.apply-bulk-action');
+            _this.globals.$atumList.find('.bulkactions select').not($select).val(selected).trigger('change.select2');
             _this.updateBulkButton();
-            if ($select.val() !== '-1') {
+            if (selected !== '-1') {
                 _this.$bulkButton.show();
             }
             else {
