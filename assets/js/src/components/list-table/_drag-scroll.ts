@@ -16,7 +16,6 @@ import WPHooks from '../../interfaces/wp.hooks';
 
 export default class DragScroll {
 
-	$navScrollContainers: JQuery = $( '.nav-with-scroll-effect' );
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -27,9 +26,6 @@ export default class DragScroll {
 		
 		// Add horizontal drag-scroll to table filters.
 		this.initHorizontalDragScroll();
-
-		// Add support for mouse wheel scrolling.
-		this.addMouseWheelSupport();
 
 		this.addHooks();
 
@@ -92,7 +88,7 @@ export default class DragScroll {
 	 */
 	addMouseWheelSupport() {
 
-		this.$navScrollContainers.on( 'wheel DOMMouseScroll', ( evt: JQueryEventObject ) => {
+		$( '.nav-with-scroll-effect' ).off( 'wheel DOMMouseScroll' ).on( 'wheel DOMMouseScroll', ( evt: JQueryEventObject ) => {
 
 			const $nav: JQuery = $( evt.currentTarget );
 
@@ -125,21 +121,20 @@ export default class DragScroll {
 	 */
 	initHorizontalDragScroll() {
 
-		this.$navScrollContainers.each( ( index: number, elem: Element ) => {
-			this.addHorizontalDragScroll( $( elem ) );
-		} );
+		const $navScrollContainers: JQuery = $( '.nav-with-scroll-effect' );
 
-		$( window ).on( 'resize', () => {
+		// As we are running this method multiple times, make sure we unbind the namespaced events before rebinding.
+		$( window ).off( 'resize.atum' ).on( 'resize.atum', () => {
 
-			this.$navScrollContainers.each( ( index: number, elem: Element ) => {
+			$navScrollContainers.each( ( index: number, elem: Element ) => {
 				this.addHorizontalDragScroll( $( elem ) );
 			} );
 
-		} );
+		} ).trigger( 'resize.atum' );
 
 		$( '.tablenav.top' ).find( 'input.btn' ).css( 'visibility', 'visible' );
 
-		this.$navScrollContainers.css( 'visibility', 'visible' ).on( 'scroll', ( evt: JQueryEventObject ) => {
+		$navScrollContainers.css( 'visibility', 'visible' ).off( 'scroll.atum' ).on( 'scroll.atum', ( evt: JQueryEventObject ) => {
 
 			this.addHorizontalDragScroll( $( evt.currentTarget ), true );
 			this.tooltip.destroyTooltips();
@@ -148,6 +143,7 @@ export default class DragScroll {
 
 		} );
 
+		this.addMouseWheelSupport();
 		dragscroll.reset();
 
 	}
