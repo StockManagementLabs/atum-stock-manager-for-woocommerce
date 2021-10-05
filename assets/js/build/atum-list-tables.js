@@ -1320,7 +1320,8 @@ var Filters = (function () {
                 _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal); }, 500);
             })
                 .on('change', '.current-page', function (evt) {
-                $.address.parameter('paged', parseInt($(evt.currentTarget).val()));
+                var currentPage = parseInt($(evt.currentTarget).val() || '1');
+                $.address.parameter('paged', 1 === currentPage ? '' : currentPage);
                 _this.keyUp(evt);
             });
             this.globals.$searchColumnBtn.on('atum-search-column-data-changed', function (evt) {
@@ -1641,7 +1642,7 @@ var ListTable = (function () {
         if (this.doingAjax && this.doingAjax.readyState !== 4) {
             this.doingAjax.abort();
         }
-        this.globals.filterData = $.extend(this.globals.filterData, __assign({ view: $.address.parameter('view') || '', paged: $.address.parameter('paged') || 1, order: $.address.parameter('order') || '', orderby: $.address.parameter('orderby') || '', search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', s: $.address.parameter('s') || '' }, this.globals.getAutoFiltersValues(true)));
+        this.globals.filterData = $.extend(this.globals.filterData, __assign({ view: $.address.parameter('view') || '', order: $.address.parameter('order') || '', orderby: $.address.parameter('orderby') || '', search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', s: $.address.parameter('s') || '' }, this.globals.getAutoFiltersValues(true)));
         this.doingAjax = $.ajax({
             url: window['ajaxurl'],
             dataType: 'json',
@@ -1660,7 +1661,7 @@ var ListTable = (function () {
                     _this.globals.$atumList.find('#the-list').html(response.rows);
                     _this.restoreMeta();
                 }
-                if (response.paged > 0) {
+                if (response.paged > 1) {
                     $.address.parameter('paged', response.paged);
                 }
                 if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
@@ -2334,7 +2335,8 @@ var Router = (function () {
         var _this = this;
         this.globals.$atumList.on('keypress', '#current-page-selector', function (evt) {
             if (evt.which === 13) {
-                $.address.parameter('paged', $(evt.currentTarget).data('current'));
+                var currentPage = $(evt.currentTarget).data('current') || '';
+                $.address.parameter('paged', currentPage == '1' ? '' : currentPage);
                 _this.updateHash();
             }
         });
@@ -2342,13 +2344,16 @@ var Router = (function () {
     Router.prototype.updateHash = function () {
         var _this = this;
         var beforeFilters = __assign({}, this.globals.filterData);
-        Object.assign(this.globals.filterData, __assign({ view: $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '', paged: parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged')), s: decodeURIComponent($.address.parameter('s') || ''), search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', orderby: $.address.parameter('orderby') || this.settings.get('orderby'), order: $.address.parameter('order') || this.settings.get('order') }, this.globals.getAutoFiltersValues()));
+        Object.assign(this.globals.filterData, __assign({ view: $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '', paged: parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged') || '1'), s: decodeURIComponent($.address.parameter('s') || ''), search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', orderby: $.address.parameter('orderby') || this.settings.get('orderby'), order: $.address.parameter('order') || this.settings.get('order') }, this.globals.getAutoFiltersValues()));
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
         $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames), function (index, elem) {
             _this.navigationReady = false;
             if (!_this.globals.filterData.hasOwnProperty(elem)) {
+                return true;
+            }
+            if ('paged' === elem && 1 === _this.globals.filterData[elem]) {
                 return true;
             }
             $.address.parameter(elem, _this.globals.filterData[elem]);

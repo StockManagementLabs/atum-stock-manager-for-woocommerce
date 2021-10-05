@@ -135,7 +135,10 @@ export default class Router {
 
 		this.globals.$atumList.on( 'keypress', '#current-page-selector', ( evt: JQueryEventObject ) => {
 			if ( evt.which === 13 ) {
-				$.address.parameter( 'paged', $( evt.currentTarget ).data( 'current' ) );
+
+				const currentPage: string = $( evt.currentTarget ).data( 'current' ) || '';
+
+				$.address.parameter( 'paged', currentPage == '1' ? '' : currentPage );
 				this.updateHash();
 			}
 		} );
@@ -151,7 +154,7 @@ export default class Router {
 
 		Object.assign( this.globals.filterData, {
 			view          : $.address.parameter( 'view' ) || this.globals.$atumList.find( '.subsubsub a.current' ).attr( 'id' ) || '',
-			paged         : parseInt( $.address.parameter( 'paged' ) || this.globals.$atumList.find( '.current-page' ).val() || this.settings.get( 'paged' ) ),
+			paged         : parseInt( $.address.parameter( 'paged' ) || this.globals.$atumList.find( '.current-page' ).val() || this.settings.get( 'paged' ) || '1' ),
 			s             : decodeURIComponent( $.address.parameter( 's' ) || '' ),
 			search_column : $.address.parameter( 'search_column' ) || '',
 			sold_last_days: $.address.parameter( 'sold_last_days' ) || '',
@@ -173,6 +176,11 @@ export default class Router {
 
 			// If it's not saved on the filter data, continue.
 			if ( ! this.globals.filterData.hasOwnProperty( elem ) ) {
+				return true;
+			}
+
+			// There is no need to set the page 1 parameter because is the default.
+			if ( 'paged' === elem && 1 === this.globals.filterData[ elem ] ) {
 				return true;
 			}
 

@@ -75,7 +75,9 @@ export default class Filters {
 				// Pagination input changes.
 				.on( 'change', '.current-page', ( evt: JQueryEventObject ) => {
 
-					$.address.parameter( 'paged', parseInt( $( evt.currentTarget ).val() ) );
+					const currentPage: number = parseInt( $( evt.currentTarget ).val() || '1' );
+
+					$.address.parameter( 'paged', 1 === currentPage ? '' : currentPage );
 					this.keyUp( evt );
 
 				} );

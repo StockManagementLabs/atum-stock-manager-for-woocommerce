@@ -109,7 +109,7 @@ export default class ListTable {
 		// Overwrite the filterData with the URL hash parameters
 		this.globals.filterData = $.extend( this.globals.filterData, {
 			view          : $.address.parameter( 'view' ) || '',
-			paged         : $.address.parameter( 'paged' ) || 1,
+			/*paged         : $.address.parameter( 'paged' ) || 1,*/
 			order         : $.address.parameter( 'order' ) || '',
 			orderby       : $.address.parameter( 'orderby' ) || '',
 			search_column : $.address.parameter( 'search_column' ) || '',
@@ -142,8 +142,8 @@ export default class ListTable {
 					this.restoreMeta();
 				}
 
-				// Change page url parameter.
-				if ( response.paged > 0 ) {
+				// Change page url parameter (only if the page is greater than 1).
+				if ( response.paged > 1 ) {
 					$.address.parameter( 'paged', response.paged );
 				}
 
