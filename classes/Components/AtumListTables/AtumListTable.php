@@ -3665,7 +3665,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		/* @see \WC_Admin_Post_Types::product_search */
 
 		if (
-			! is_admin() ||
+			! is_admin() || 'product' !== $this->post_type ||
 			! in_array( $pagenow, array( 'edit.php', 'admin-ajax.php' ) ) ||
 			! isset( $_REQUEST['s'], $_REQUEST['action'] ) || FALSE === strpos( $_REQUEST['action'], ATUM_PREFIX )
 		) {
@@ -3674,12 +3674,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url)).
 		if ( 0 === strlen( $_REQUEST['s'] ) ) {
-			return 'AND ( 1 = 1 )';
+			return ' AND ( 1 = 1 )';
 		}
 
 		// If we don't get any result looking for a field, we must force an empty result before
 		// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error.
-		$where_without_results = "AND ( {$wpdb->posts}.ID = -1 )";
+		$where_without_results = " AND ( {$wpdb->posts}.ID = -1 )";
 
 		$search_column = esc_attr( stripslashes( $_REQUEST['search_column'] ) );
 		$search_term   = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
@@ -3738,7 +3738,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$search_terms_ids_arr = array_unique( $search_terms_ids_arr );
 			$search_terms_ids_str = implode( ',', $search_terms_ids_arr );
 
-			$where = "AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
+			$where = " AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
 
 		}
 		else {
@@ -3842,7 +3842,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 					}
 
-					$where = "AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
+					$where = " AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
 
 				}
 				//
@@ -4009,7 +4009,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					// Removes last comma.
 					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
 
-					$where = "AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
+					$where = " AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
 				}
 
 			}
