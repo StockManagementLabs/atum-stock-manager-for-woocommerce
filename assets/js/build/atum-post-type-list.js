@@ -741,23 +741,38 @@ var DragScroll = (function () {
             $(window).scrollTop(displacement);
         });
     };
+    DragScroll.prototype.addMouseWheelSupport = function () {
+        $('.nav-with-scroll-effect').off('wheel DOMMouseScroll').on('wheel DOMMouseScroll', function (evt) {
+            var $nav = $(evt.currentTarget);
+            if ($nav.find('.overflow-opacity-effect-right').is(':hidden') &&
+                $nav.find('.overflow-opacity-effect-left').is(':hidden')) {
+                return;
+            }
+            var navEl = $nav.get(0), originalEvent = evt.originalEvent;
+            if ((originalEvent.wheelDelta || originalEvent.detail) > 0) {
+                navEl.scrollLeft -= 60;
+            }
+            else {
+                navEl.scrollLeft += 60;
+            }
+            return false;
+        });
+    };
     DragScroll.prototype.initHorizontalDragScroll = function () {
         var _this = this;
         var $navScrollContainers = $('.nav-with-scroll-effect');
-        $navScrollContainers.each(function (index, elem) {
-            _this.addHorizontalDragScroll($(elem));
-        });
-        $(window).on('resize', function () {
+        $(window).off('resize.atum').on('resize.atum', function () {
             $navScrollContainers.each(function (index, elem) {
                 _this.addHorizontalDragScroll($(elem));
             });
-        });
+        }).trigger('resize.atum');
         $('.tablenav.top').find('input.btn').css('visibility', 'visible');
-        $navScrollContainers.css('visibility', 'visible').on('scroll', function (evt) {
+        $navScrollContainers.css('visibility', 'visible').off('scroll.atum').on('scroll.atum', function (evt) {
             _this.addHorizontalDragScroll($(evt.currentTarget), true);
             _this.tooltip.destroyTooltips();
             _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
         });
+        this.addMouseWheelSupport();
         _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default.a.reset();
     };
     DragScroll.prototype.addHorizontalDragScroll = function ($nav, checkEnhanced) {
@@ -765,23 +780,30 @@ var DragScroll = (function () {
         if (!$nav.length) {
             return;
         }
-        var $overflowOpacityRight = $nav.find('.overflow-opacity-effect-right'), $overflowOpacityLeft = $nav.find('.overflow-opacity-effect-left'), leftMax = $nav ? $nav.get(0).scrollWidth : 0, left = $nav ? $nav.get(0).scrollLeft : 0, diff = leftMax - left;
+        var $overflowOpacityRight = $nav.find('.overflow-opacity-effect-right'), $overflowOpacityLeft = $nav.find('.overflow-opacity-effect-left');
         if (checkEnhanced) {
             $('.enhanced').select2('close');
         }
-        if (diff === $nav.outerWidth()) {
+        var navEl = $nav.get(0);
+        if (this.navIsLeft(navEl)) {
             $overflowOpacityRight.hide();
         }
         else {
             $overflowOpacityRight.show();
         }
-        if (left === 0) {
+        if (this.navIsRight(navEl)) {
             $overflowOpacityLeft.hide();
         }
         else {
             $overflowOpacityLeft.show();
         }
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
+    };
+    DragScroll.prototype.navIsLeft = function (navEl) {
+        return (navEl.scrollWidth - navEl.scrollLeft) === parseInt($(navEl).outerWidth().toString());
+    };
+    DragScroll.prototype.navIsRight = function (navEl) {
+        return navEl.scrollLeft === 0;
     };
     return DragScroll;
 }());

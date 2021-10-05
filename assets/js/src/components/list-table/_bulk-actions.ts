@@ -51,11 +51,16 @@ export default class BulkActions {
 			// ----------------------
 			.on( 'change', '.bulkactions select', ( evt: JQueryEventObject ) => {
 
-				const $select: JQuery = $( evt.currentTarget );
+				const $select: JQuery  = $( evt.currentTarget ),
+				      selected: string = $select.val();
 
+				this.$bulkButton = $( '.apply-bulk-action' ); // If the table's DOM has been updated, we must reassign the bulk button.
+
+				// Sync the top and bottom selects.
+				this.globals.$atumList.find( '.bulkactions select' ).not( $select ).val( selected ).trigger( 'change.select2' );
 				this.updateBulkButton();
 
-				if ( $select.val() !== '-1' ) {
+				if ( selected !== '-1' ) {
 					this.$bulkButton.show();
 				}
 				else {

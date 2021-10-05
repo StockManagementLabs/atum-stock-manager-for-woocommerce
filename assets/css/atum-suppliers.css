@@ -6284,6 +6284,10 @@ table.atum-list-table tr.grouped td.title .atmi-arrow-child, .floatThead-contain
   color: var(--secondary-var);
 }
 
+table.atum-list-table tr.no-items, .floatThead-container tr.no-items, .inbound-stock-list tr.no-items, table.wp-list-table tr.no-items {
+  background-color: #ffe1e1;
+}
+
 table.atum-list-table tr.no-items td, .floatThead-container tr.no-items td, .inbound-stock-list tr.no-items td, table.wp-list-table tr.no-items td {
   padding: 10px 24px;
 }
