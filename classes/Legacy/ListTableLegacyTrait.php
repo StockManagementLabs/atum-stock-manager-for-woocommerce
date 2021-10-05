@@ -820,7 +820,7 @@ trait ListTableLegacyTrait {
 
 			// Avoid to duplicate grouped children.
 			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
-				remove_filter( 'posts_search', array( $this, 'product_search' ) );
+				remove_filter( 'posts_search', array( $this, 'posts_search' ) );
 			}
 
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
@@ -828,7 +828,7 @@ trait ListTableLegacyTrait {
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
-				add_filter( 'posts_search', array( $this, 'product_search' ), 10, 2 );
+				add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
 			}
 
 			if ( $children->found_posts ) {
