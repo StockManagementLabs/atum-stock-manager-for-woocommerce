@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.6.0
-Stable tag: 1.9.4
+WC tested up to: 5.7.1
+Stable tag: 1.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,47 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.5`
+
+*2021-10-07*
+
+**Features**
+
+* Added support for WP Editor fields in Settings.
+* Allow changing Supplier from Stock Central.
+* Enabled stock totalizer increase of a bundle product if has stock control enabled.
+* Added popover instance to button data after enabling an ATUM popover.
+* Added support for mouse wheel scrolling to List Tables' nav filters.
+* Added result data to the API tools response.
+
+**Changes**
+
+* Updated JS dependencies.
+* Refactoring.
+* Improved popover JS components.
+* Changed List Table popup's titles for selects.
+* Marked helper as deprecated.
+* Show (no title) text on suppliers dropdown when any supplier has no title.
+* Show a red background colour when no items are found in List Tables.
+* Sync the top and bottom bulk actions selects in List Tables.
+* Make sure the list tables' query is for products before applying our filter to the 'posts_search'.
+* Do not verify the SML site certificate when retrieving the add-ons list.
+
+**Fixes**
+
+* Fixed grouped product with manage at product level activated displayed in uncontrolled tab in SC.
+* Fixed dependency handler on upload fields.
+* CSS fixes.
+* Fixed Stock Central's stock totalizer when a product from a bundle has MI.
+* Fixed popover title not being shown.
+* Fixed wrong price & stock calcs in the Current Stock Value widget.
+* Avoid duplicating grouped children when searching grouped products by ID column.
+* Unbind dragScroll events before rebinding.
+* Fixed Reset Filter button in List Tables.
+* Fixed non-static function being called statically.
 
 ---
 
