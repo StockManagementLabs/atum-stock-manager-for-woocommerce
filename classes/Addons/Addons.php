@@ -244,7 +244,7 @@ class Addons {
 		wp_enqueue_script( 'atum-addons' );
 
 		$args = array(
-			'addons'      => $this->get_addons_list(),
+			'addons'      => self::get_addons_list(),
 			'addons_keys' => self::get_keys(),
 		);
 
