@@ -135,6 +135,11 @@ class ToolsController extends \WC_REST_Controller {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
+				'result'      => array(
+					'description' => __( 'Data returned in case there were.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'array',
+					'context'     => array( 'edit' ),
+				),
 			),
 		);
 
@@ -335,7 +340,7 @@ class ToolsController extends \WC_REST_Controller {
 		);
 
 		if ( ! empty( $request['config'] ) ) {
-			$tools['config'] = $request['config'];
+			$tool['config'] = $request['config'];
 		}
 
 		$run_return = $this->run_tool( $request['id'], $request );
@@ -462,6 +467,10 @@ class ToolsController extends \WC_REST_Controller {
 						/* translators: %s: callback string */
 						$message = sprintf( __( 'There was an error calling %s', ATUM_TEXT_DOMAIN ), $callback_string );
 					}
+					elseif ( is_array( $return ) ) {
+						$message = $return['message'];
+						$data    = $return['result'];
+					}
 					else {
 						$message = __( 'Tool ran.', ATUM_TEXT_DOMAIN );
 					}
@@ -475,10 +484,16 @@ class ToolsController extends \WC_REST_Controller {
 				break;
 		}
 
-		return array(
+		$result = [
 			'success' => $ran,
 			'message' => $message,
-		);
+		];
+
+		if ( ! empty( $data ) ) {
+			$result['result'] = $data;
+		}
+
+		return $result;
 
 	}
 

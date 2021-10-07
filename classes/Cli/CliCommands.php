@@ -23,19 +23,15 @@ final class CliCommands {
 	/**
 	 * Executes the ATUM tool manage_stock from CLI.
 	 *
+	 * ## OPTIONS
+	 * <option>
+	 * : manage/unmanage Whether to update the option to manage or unmanage stock
+	 *
 	 * @since 1.9.3.1
 	 *
 	 * @param mixed $args
 	 */
 	public static function atum_tool_manage_stock( $args ) {
-
-		if ( empty( $args ) ) {
-			\WP_CLI::line( '' );
-			\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <manage/unmanage>' );
-			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ), FALSE );
-			\WP_CLI::line( '' );
-			exit();
-		}
 
 		switch ( $args[0] ) {
 			case 'manage':
@@ -45,8 +41,10 @@ final class CliCommands {
 				$manage_status = 'no';
 				break;
 			default:
+				\WP_CLI::line( '' );
 				\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <manage/unmanage>' );
 				\WP_CLI::error( __( 'Wrong parameter', ATUM_TEXT_DOMAIN ), FALSE );
+				\WP_CLI::line( '' );
 				exit();
 		}
 		do_action( 'atum/cli/tool_change_manage_stock' );
@@ -59,19 +57,15 @@ final class CliCommands {
 	/**
 	 * Executes the ATUM tool control_stock from CLI.
 	 *
+	 * ## OPTIONS
+	 * <option>
+	 * : control/uncontrol Whether to update the option to control or uncontrol stock
+	 *
 	 * @since 1.9.3.1
 	 *
 	 * @param mixed $args
 	 */
 	public static function atum_tool_control_stock( $args ) {
-
-		if ( empty( $args ) ) {
-			\WP_CLI::line( '' );
-			\WP_CLI::line( __( 'Usage', ATUM_TEXT_DOMAIN ) . ': wp atum ' . __FUNCTION__ . ' <control/uncontrol>' );
-			\WP_CLI::error( __( 'Missing parameter', ATUM_TEXT_DOMAIN ), FALSE );
-			\WP_CLI::line( '' );
-			exit();
-		}
 
 		switch ( $args[0] ) {
 			case 'control':
@@ -123,9 +117,9 @@ final class CliCommands {
 		global $wpdb;
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.NotPreparedSQL
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.NotPreparedSQL,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		$products = $wpdb->get_col( "SELECT product_id FROM $atum_product_data_table" ); // phpcs:ignore WordPress.DB.NotPreparedSQL
+		$products = $wpdb->get_col( "SELECT product_id FROM $atum_product_data_table" ); // phpcs:ignore WordPress.DB.NotPreparedSQL,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		\WP_CLI::line( '' );
 		$progress = \WP_CLI\Utils\make_progress_bar( __( 'Updating calculated properties', ATUM_TEXT_DOMAIN ), $total );
