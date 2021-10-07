@@ -314,7 +314,7 @@ class Addons {
 	 *
 	 * @return array|bool
 	 */
-	private function get_addons_list() {
+	private static function get_addons_list() {
 
 		$transient_name = AtumCache::get_transient_key( 'addons_list' );
 		$addons         = AtumCache::get_transient( $transient_name );
