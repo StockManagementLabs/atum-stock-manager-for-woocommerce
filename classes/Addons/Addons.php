@@ -325,6 +325,7 @@ class Addons {
 				'timeout'     => 20,
 				'redirection' => 1,
 				'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
+				'sslverify'   => FALSE,
 			);
 
 			$response = wp_remote_get( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
