@@ -787,8 +787,8 @@ class ListTable extends AtumListTable {
 
 						} );
 
-						$filtered_products = $product_results + $filtered_products;
-						$sorted            = TRUE;
+						$filtered_products += $product_results;
+						$sorted             = TRUE;
 
 					}
 
