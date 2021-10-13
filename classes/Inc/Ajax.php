@@ -1317,7 +1317,7 @@ final class Ajax {
 
 		}
 		else {
-			wp_die();
+			wp_send_json([]);
 		}
 
 		// Get all the orders with IDs starting with the provided number.
@@ -1339,7 +1339,7 @@ final class Ajax {
 		$suppliers = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $suppliers ) ) {
-			wp_die();
+			wp_send_json([]);
 		}
 
 		$supplier_results = array();
