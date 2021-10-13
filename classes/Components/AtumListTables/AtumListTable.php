@@ -996,7 +996,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				'extra_data' => [
 					'selected-value'       => $supplier_id,
 					'select-options'       => [
-						(int) $supplier_id => $supplier,
+						(int) $supplier_id => esc_attr( $supplier ), // Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
 					],
 					'extra-class'          => 'wc-product-search atum-enhanced-select',
 					'allow_clear'          => 'true',
