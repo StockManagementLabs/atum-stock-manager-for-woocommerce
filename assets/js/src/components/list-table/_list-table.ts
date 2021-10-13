@@ -7,6 +7,7 @@ import BeforeUnload from '../_before-unload';
 import Blocker from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
+import { ITableData } from '../../interfaces/tabledata.interface';
 import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
@@ -136,6 +137,10 @@ export default class ListTable {
 					return false;
 				}
 
+				let tableData: ITableData = {
+
+				};
+
 				// Update table with the coming rows.
 				if ( typeof response.rows !== 'undefined' && response.rows.length ) {
 					this.globals.$atumList.find( '#the-list' ).html( response.rows );
@@ -202,6 +207,75 @@ export default class ListTable {
 			error     : () => this.removeOverlay(),
 		} );
 		
+	}
+
+	/**
+	 * Replace the DOM's table data and components with new elements and rebind events.
+	 */
+	replaceTableData( tableData: ITableData ) {
+
+		// Update table with the coming rows.
+		if ( tableData.rows ) {
+			this.globals.$atumList.find( '#the-list' ).html( tableData.rows );
+			this.restoreMeta();
+		}
+
+		// Change page url parameter (only if the page is greater than 1).
+		if ( tableData.paged > 1 ) {
+			$.address.parameter( 'paged', tableData.paged );
+		}
+
+		// Update column headers for sorting.
+		if ( tableData.column_headers ) {
+			this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( tableData.column_headers );
+		}
+
+		// Update the views filters.
+		if ( tableData.views ) {
+			this.globals.$atumList.find( '.subsubsub' ).replaceWith( tableData.views );
+		}
+
+		// Update table navs.
+		if ( tableData.extra_t_n ) {
+
+			if ( tableData.extra_t_n.top ) {
+				this.globals.$atumList.find( '.tablenav.top' ).replaceWith( tableData.extra_t_n.top );
+			}
+
+			if ( tableData.extra_t_n.bottom ) {
+				this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( tableData.extra_t_n.bottom );
+			}
+
+			// Update the autoFilters prop.
+			this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
+
+		}
+
+		// Update the totals row.
+		if ( tableData.totals ) {
+			this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( tableData.totals );
+		}
+
+		// If there are active filters, show the reset button.
+		if ( $.address.parameterNames().length ) {
+			this.globals.$atumList.find( '.reset-filters' ).removeClass( 'hidden' );
+		}
+
+		// Regenerate the UI.
+		this.toolTip.addTooltips();
+		this.enhancedSelect.maybeRestoreEnhancedSelect();
+		ActiveRow.addActiveClassRow( this.globals.$atumTable );
+		this.removeOverlay();
+		this.calculateCompoundedStocks();
+
+		// Reload stickyColumns if needed.
+		if ( this.globals.enabledStickyColumns ) {
+			this.stickyCols.refreshStickyColumns();
+		}
+
+		// Trigger action after updating.
+		this.wpHooks.doAction( 'atum_listTable_tableUpdated' );
+
 	}
 	
 	/**
@@ -486,6 +560,8 @@ export default class ListTable {
 				this.addOverlay();
 			},
 			success   : ( response: any ) => {
+
+				console.log(response);
 
 				if ( typeof response === 'object' && typeof response.success !== 'undefined' ) {
 					const noticeType = response.success ? 'updated' : 'error';

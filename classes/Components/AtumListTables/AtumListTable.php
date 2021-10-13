@@ -4234,7 +4234,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		);
 
 		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
-			$response['paged'] = $_REQUEST['paged'];
+			$response['paged'] = absint( $_REQUEST['paged'] );
 		}
 
 		if ( $this->show_totals ) {
@@ -4249,7 +4249,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( isset( $total_pages ) ) {
-			$response['total_pages']      = $total_pages;
+			$response['total_pages']      = absint( $total_pages );
 			$response['total_pages_i18n'] = number_format_i18n( $total_pages );
 		}
 
