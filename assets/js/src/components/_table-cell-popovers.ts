@@ -101,7 +101,7 @@ export default class TableCellPopovers extends PopoverBase{
 
 				} );
 
-				if ( $metaInput.hasClass('wc-product-search') && this.enhancedSelect ) {
+				if ( $metaInput.hasClass( 'wc-product-search' ) && this.enhancedSelect ) {
 					$( 'body' ).trigger( 'wc-enhanced-select-init' );
 				}
 
@@ -205,9 +205,12 @@ export default class TableCellPopovers extends PopoverBase{
 
 					const selected: string = selectedValue.toString() === index ? ' selected' : '';
 
-					$input.append(`<option value="${index}"${selected}>
-                                       ${value === this.settings.get( 'emptyCol' ) ? '': value}
-                                  </option>`);
+					$input.append(`
+						<option value="${index}"${selected}>
+                           ${value === this.settings.get( 'emptyCol' ) ? '': value}
+                        </option>
+					`);
+
 				});
 
 			}

@@ -13,7 +13,6 @@
 import '../vendor/jquery.address.min';               // This is not downloading the sources
 import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
 import '../vendor/select2';                          // A fixed version compatible with webpack
-//import '../vendor/sweetalert2'                     // Is not working with our webpack configuration
 
 
 /**
