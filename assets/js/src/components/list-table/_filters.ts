@@ -82,6 +82,7 @@ export default class Filters {
 
 				} );
 
+			// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters.
 			this.globals.$searchColumnBtn.on( 'atum-search-column-data-changed', ( evt: JQueryEventObject ) => {
 				this.pseudoKeyUpAjax( $( evt.currentTarget ).data( 'value' ), decodeURIComponent( this.globals.$searchInput.val() ) );
 			} );
@@ -123,27 +124,6 @@ export default class Filters {
 				}
 				else if ( inputVal ) {
 					$searchSubmitBtn.prop( 'disabled', false );
-				}
-
-			} );
-
-
-			// When a search_column changes, set ?s and ?search_column if s has value. If s is empty, clean this two parameters.
-			// TODO: IS THIS WORKING HERE? IS NOT ONLY FOR AJAX FILTERS?
-			this.globals.$searchColumnBtn.on( 'atum-search-column-data-changed', ( evt: JQueryEventObject ) => {
-
-				const searchInputVal: any        = this.globals.$searchInput.val(),
-				    searchColumnBtnVal: string = $( evt.currentTarget ).data( 'value' );
-
-				if ( searchInputVal.length > 0 ) {
-					$.address.parameter( 's', searchInputVal );
-					$.address.parameter( 'search_column', searchColumnBtnVal );
-					this.keyUp( evt, true );
-				}
-				// Force clean s when required.
-				else {
-					$.address.parameter( 's', '' );
-					$.address.parameter( 'search_column', '' );
 				}
 
 			} );
@@ -255,7 +235,7 @@ export default class Filters {
 	
 	pseudoKeyUpAjax( searchColumnBtnVal: string, searchInputVal: any ) {
 
-		if ( searchInputVal.length === 0 ) {
+		if ( ! searchInputVal.length ) {
 
 			if ( searchInputVal != $.address.parameter( 's' ) ) {
 				$.address.parameter( 's', '' );

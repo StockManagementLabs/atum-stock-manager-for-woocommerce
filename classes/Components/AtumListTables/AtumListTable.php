@@ -3803,8 +3803,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			//
 			// Search by Supplier name.
+			// NOTE: This is commented for now because suppliers have their own filter.
 			// ------------------------!
-			elseif ( Suppliers::SUPPLIER_META_KEY === $search_column ) {
+			/*elseif ( Suppliers::SUPPLIER_META_KEY === $search_column ) {
 
 				$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
@@ -3844,7 +3845,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$search_where = " AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
 
-			}
+			}*/
 			//
 			// Search by title and other calc or meta fields.
 			// ----------------------------------------------!
