@@ -137,9 +137,9 @@ export default class ListTable {
 					return false;
 				}
 
-				let tableData: ITableData = {
+				/*let tableData: ITableData = {
 
-				};
+				};*/
 
 				// Update table with the coming rows.
 				if ( typeof response.rows !== 'undefined' && response.rows.length ) {
