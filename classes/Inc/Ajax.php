@@ -589,9 +589,16 @@ final class Ajax {
 				AtumCache::enable_cache();
 			}
 
+			// If we aren't in SC, we will have to fetch the data from elsewhere.
+			$table_data = apply_filters( 'atum/ajax/update_list_data/fetch_table_data', NULL );
+
+			if ( ! $table_data ) {
+				$table_data = $this->fetch_stock_central_list( TRUE );
+			}
+
 			wp_send_json_success( [
 				'notice'    => __( 'Data saved.', ATUM_TEXT_DOMAIN ),
-				'tableData' => $this->fetch_stock_central_list( TRUE ),
+				'tableData' => $table_data,
 			] );
 
 		} catch ( \Exception $e ) {
