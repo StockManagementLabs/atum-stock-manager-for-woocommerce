@@ -530,8 +530,8 @@ var TableCellPopovers = (function (_super) {
             }
         }
         if (isSelect) {
-            var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
-            if (selectOptions) {
+            var selectedValue_1 = $metaCell.data('selected-value'), selectOptions = $metaCell.data('select-options');
+            if (typeof selectOptions === 'object' && Object.keys(selectOptions).length) {
                 $.each(selectOptions, function (index, value) {
                     var selected = selectedValue_1.toString() === index ? ' selected' : '';
                     $input.append("\n\t\t\t\t\t\t<option value=\"" + index + "\"" + selected + ">\n                           " + (value === _this.settings.get('emptyCol') ? '' : value) + "\n                        </option>\n\t\t\t\t\t");

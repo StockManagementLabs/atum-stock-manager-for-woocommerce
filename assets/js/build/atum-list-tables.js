@@ -740,8 +740,8 @@ var TableCellPopovers = (function (_super) {
             }
         }
         if (isSelect) {
-            var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
-            if (selectOptions) {
+            var selectedValue_1 = $metaCell.data('selected-value'), selectOptions = $metaCell.data('select-options');
+            if (typeof selectOptions === 'object' && Object.keys(selectOptions).length) {
                 $.each(selectOptions, function (index, value) {
                     var selected = selectedValue_1.toString() === index ? ' selected' : '';
                     $input.append("\n\t\t\t\t\t\t<option value=\"" + index + "\"" + selected + ">\n                           " + (value === _this.settings.get('emptyCol') ? '' : value) + "\n                        </option>\n\t\t\t\t\t");
@@ -1657,43 +1657,16 @@ var ListTable = (function () {
                 if (typeof response === 'undefined' || !response) {
                     return false;
                 }
-                if (typeof response.rows !== 'undefined' && response.rows.length) {
-                    _this.globals.$atumList.find('#the-list').html(response.rows);
-                    _this.restoreMeta();
-                }
-                if (response.paged > 1) {
-                    $.address.parameter('paged', response.paged);
-                }
-                if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-                    _this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(response.column_headers);
-                }
-                if (typeof response.views !== 'undefined' && response.views.length) {
-                    _this.globals.$atumList.find('.subsubsub').replaceWith(response.views);
-                }
-                if (typeof response.extra_t_n !== 'undefined') {
-                    if (response.extra_t_n.top.length) {
-                        _this.globals.$atumList.find('.tablenav.top').replaceWith(response.extra_t_n.top);
-                    }
-                    if (response.extra_t_n.bottom.length) {
-                        _this.globals.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
-                    }
-                    _this.globals.$autoFilters = _this.globals.$atumList.find('#filters_container .auto-filter');
-                }
-                if (typeof response.totals !== 'undefined') {
-                    _this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(response.totals);
-                }
-                if ($.address.parameterNames().length) {
-                    _this.globals.$atumList.find('.reset-filters').removeClass('hidden');
-                }
-                _this.toolTip.addTooltips();
-                _this.enhancedSelect.maybeRestoreEnhancedSelect();
-                _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].addActiveClassRow(_this.globals.$atumTable);
-                _this.removeOverlay();
-                _this.calculateCompoundedStocks();
-                if (_this.globals.enabledStickyColumns) {
-                    _this.stickyCols.refreshStickyColumns();
-                }
-                _this.wpHooks.doAction('atum_listTable_tableUpdated');
+                var rows = response.rows, paged = response.paged, column_headers = response.column_headers, views = response.views, extra_t_n = response.extra_t_n, totals = response.totals;
+                var tableData = {
+                    rows: rows || '',
+                    paged: paged || 1,
+                    column_headers: column_headers || '',
+                    views: views || '',
+                    extra_t_n: extra_t_n || '',
+                    totals: totals || '',
+                };
+                _this.replaceTableData(tableData);
             },
             error: function () { return _this.removeOverlay(); },
         });
@@ -1878,21 +1851,20 @@ var ListTable = (function () {
             url: window['ajaxurl'],
             method: 'POST',
             dataType: 'json',
-            data: data,
+            data: __assign(__assign({}, this.globals.filterData), data),
             beforeSend: function () {
                 $button.prop('disabled', true);
                 _this.addOverlay();
             },
             success: function (response) {
-                console.log(response);
                 if (typeof response === 'object' && typeof response.success !== 'undefined') {
-                    var noticeType = response.success ? 'updated' : 'error';
-                    _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, response.data);
+                    var noticeType = response.success ? 'updated' : 'error', notice = response.success ? response.data.notice : response.data;
+                    _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, notice);
                 }
                 if (typeof response.success !== 'undefined' && response.success === true) {
                     $button.remove();
                     _this.globals.$editInput.val('');
-                    _this.updateTable();
+                    _this.replaceTableData(response.data.tableData);
                 }
                 else {
                     $button.prop('disabled', false);

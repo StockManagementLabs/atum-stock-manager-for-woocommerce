@@ -196,22 +196,22 @@ export default class TableCellPopovers extends PopoverBase{
 
 		if ( isSelect ) {
 
-			const selectedValue: string = $metaCell.data( 'selectedValue' ),
-			      selectOptions: any    = $metaCell.data( 'selectOptions' );
+			const selectedValue: string = $metaCell.data( 'selected-value' ),
+			      selectOptions: any    = $metaCell.data( 'select-options' );
 
-			if ( selectOptions ) {
+			if ( typeof selectOptions === 'object' && Object.keys( selectOptions ).length ) {
 
-				$.each( selectOptions, (index: string, value:any) => {
+				$.each( selectOptions, ( index: string, value: any ) => {
 
 					const selected: string = selectedValue.toString() === index ? ' selected' : '';
 
-					$input.append(`
-						<option value="${index}"${selected}>
-                           ${value === this.settings.get( 'emptyCol' ) ? '': value}
+					$input.append( `
+						<option value="${ index }"${ selected }>
+                           ${ value === this.settings.get( 'emptyCol' ) ? '' : value }
                         </option>
-					`);
+					` );
 
-				});
+				} );
 
 			}
 

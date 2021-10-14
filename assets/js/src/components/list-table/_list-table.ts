@@ -137,71 +137,18 @@ export default class ListTable {
 					return false;
 				}
 
-				/*let tableData: ITableData = {
+				const { rows, paged, column_headers, views, extra_t_n, totals } = response;
 
-				};*/
+				const tableData: ITableData = {
+					rows          : rows || '',
+					paged         : paged || 1,
+					column_headers: column_headers || '',
+					views         : views || '',
+					extra_t_n     : extra_t_n || '',
+					totals        : totals || '',
+				};
 
-				// Update table with the coming rows.
-				if ( typeof response.rows !== 'undefined' && response.rows.length ) {
-					this.globals.$atumList.find( '#the-list' ).html( response.rows );
-					this.restoreMeta();
-				}
-
-				// Change page url parameter (only if the page is greater than 1).
-				if ( response.paged > 1 ) {
-					$.address.parameter( 'paged', response.paged );
-				}
-
-				// Update column headers for sorting.
-				if ( typeof response.column_headers !== 'undefined' && response.column_headers.length ) {
-					this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( response.column_headers );
-				}
-
-				// Update the views filters.
-				if ( typeof response.views !== 'undefined' && response.views.length ) {
-					this.globals.$atumList.find( '.subsubsub' ).replaceWith( response.views );
-				}
-
-				// Update table navs.
-				if ( typeof response.extra_t_n !== 'undefined' ) {
-
-					if ( response.extra_t_n.top.length ) {
-						this.globals.$atumList.find( '.tablenav.top' ).replaceWith( response.extra_t_n.top );
-					}
-
-					if ( response.extra_t_n.bottom.length ) {
-						this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( response.extra_t_n.bottom );
-					}
-
-					// Update the autoFilters prop.
-					this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
-
-				}
-
-				// Update the totals row.
-				if ( typeof response.totals !== 'undefined' ) {
-					this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( response.totals );
-				}
-
-				// If there are active filters, show the reset button.
-				if ( $.address.parameterNames().length ) {
-					this.globals.$atumList.find( '.reset-filters' ).removeClass( 'hidden' );
-				}
-
-				// Regenerate the UI.
-				this.toolTip.addTooltips();
-				this.enhancedSelect.maybeRestoreEnhancedSelect();
-				ActiveRow.addActiveClassRow( this.globals.$atumTable );
-				this.removeOverlay();
-				this.calculateCompoundedStocks();
-
-				// Reload stickyColumns if needed.
-				if ( this.globals.enabledStickyColumns ) {
-					this.stickyCols.refreshStickyColumns();
-				}
-
-				// Trigger action after updating.
-				this.wpHooks.doAction( 'atum_listTable_tableUpdated' );
+				this.replaceTableData( tableData );
 
 			},
 			error     : () => this.removeOverlay(),
@@ -554,24 +501,24 @@ export default class ListTable {
 			url       : window[ 'ajaxurl' ],
 			method    : 'POST',
 			dataType  : 'json',
-			data      : data,
+			data      : { ...this.globals.filterData, ...data },
 			beforeSend: () => {
 				$button.prop( 'disabled', true );
 				this.addOverlay();
 			},
 			success   : ( response: any ) => {
 
-				console.log(response);
-
 				if ( typeof response === 'object' && typeof response.success !== 'undefined' ) {
-					const noticeType = response.success ? 'updated' : 'error';
-					Utils.addNotice( noticeType, response.data );
+					const noticeType     = response.success ? 'updated' : 'error',
+					      notice: string = response.success ? response.data.notice : response.data;
+
+					Utils.addNotice( noticeType, notice );
 				}
 
 				if ( typeof response.success !== 'undefined' && response.success === true ) {
 					$button.remove();
 					this.globals.$editInput.val( '' );
-					this.updateTable();
+					this.replaceTableData( response.data.tableData );
 				}
 				else {
 					$button.prop( 'disabled', false );

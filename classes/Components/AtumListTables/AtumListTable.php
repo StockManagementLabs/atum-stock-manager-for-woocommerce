@@ -994,10 +994,6 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => $supplier_tooltip,
 				'cell_name'  => esc_attr__( 'Supplier', ATUM_TEXT_DOMAIN ),
 				'extra_data' => [
-					'selected-value'       => $supplier_id,
-					'select-options'       => [
-						(int) $supplier_id => esc_attr( $supplier ), // Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
-					],
 					'extra-class'          => 'wc-product-search atum-enhanced-select',
 					'allow_clear'          => 'true',
 					'action'               => 'atum_json_search_suppliers',
@@ -1007,6 +1003,13 @@ abstract class AtumListTable extends \WP_List_Table {
 					'container-css'        => 'edit-popover-content',
 				],
 			) );
+
+			if ( $supplier_id ) {
+				$args['extra_data']['selected-value'] = $supplier_id;
+				$args['extra_data']['select-options'] = [
+					(int) $supplier_id => esc_attr( $supplier ), // Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
+				];
+			}
 
 			$supplier = self::get_editable_column( $args );
 
@@ -3673,17 +3676,19 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $search_where;
 		}
 
-		// Prevent keyUp problems (scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url)).
-		if ( 0 === strlen( $_REQUEST['s'] ) ) {
+		// Prevent keyUp problems.
+		// Scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url).
+		if ( empty( trim( $_REQUEST['s'] ) ) ) {
 			return ' AND ( 1 = 1 )';
 		}
 
 		// If we don't get any result looking for a field, we must force an empty result before
 		// WP tries to query {$wpdb->posts}.ID IN ( 'empty value' ), which raises an error.
 		$where_without_results = " AND ( {$wpdb->posts}.ID = -1 )";
+		$post_type_where       = " post_type IN ('product', 'product_variation')";
 
 		$search_column = esc_attr( stripslashes( $_REQUEST['search_column'] ) );
-		$search_term   = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
+		$search_term   = sanitize_text_field( urldecode( stripslashes( trim( $_REQUEST['s'] ) ) ) );
 
 		$cache_key    = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
 		$search_where = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
@@ -3708,310 +3713,298 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$query = "
 				SELECT ID, post_type, post_parent FROM $wpdb->posts
-		        WHERE post_type IN ('product', 'product_variation') 
+		        WHERE $post_type_where 
 		        AND $search_query
 	         ";
 
-			$search_terms_ids = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$search_terms_results = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-			if ( empty( $search_terms_ids ) ) {
+			if ( empty( $search_terms_results ) ) {
 				AtumCache::set_cache( $cache_key, $where_without_results );
-				return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
+				return apply_filters( 'atum/list_table/posts_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 			}
 
-			// Remove duplicate values from a multi-dimensional array.
-			$search_terms_ids = array_map( 'unserialize', array_unique( array_map( 'serialize', $search_terms_ids ) ) );
+			$search_terms_ids = array();
 
-			$search_terms_ids_arr = array();
+			foreach ( $search_terms_results as $product_row ) {
 
-			foreach ( $search_terms_ids as $product ) {
+				array_push( $search_terms_ids, $product_row['ID'] );
 
-				if ( 'product' === $product['post_type'] ) {
-					array_push( $search_terms_ids_arr, $product['ID'] );
+				// For variations: add their parent too.
+				if ( 'product_variation' === $product_row['post_type'] ) {
+					array_push( $search_terms_ids, $product_row['post_parent'] );
+				}
+
+			}
+
+			$search_where = " AND ( {$wpdb->posts}.ID IN (" . implode( ',', array_unique( $search_terms_ids ) ) . ') )';
+
+		}
+		//
+		// Search by column.
+		// ------------------!
+		elseif ( Helpers::in_multi_array( $search_column, $this->searchable_columns ) ) {
+
+			$column_name = ltrim( $search_column, '_' );
+
+			//
+			// Search by ID.
+			// -------------!
+			if ( 'ID' === $search_column ) {
+
+				$search_query = $this->build_search_query( $search_terms, $search_column, 'int' );
+
+				// Get all (parent and variations, and build where).
+				$query = "
+					SELECT ID, post_type, post_parent FROM $wpdb->posts
+				    WHERE $search_query
+				    AND $post_type_where
+			    ";
+
+				$search_term_id = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+				if ( empty( $search_term_id ) ) {
+					AtumCache::set_cache( $cache_key, $where_without_results );
+					return apply_filters( 'atum/list_table/posts_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
+				}
+
+				$search_terms_ids_str = '';
+
+				if ( 'product' === $search_term_id->post_type ) {
+
+					$search_terms_ids_str .= $search_term_id->ID . ',';
+
+					// If has children, add them.
+					$product = wc_get_product( $search_term_id->ID );
+
+					// Exclude grouped products children if searching by id.
+					if ( 'grouped' !== $product->get_type() ) {
+
+						// Get an array of the children IDs (if any).
+						$children = $product->get_children();
+
+						if ( ! empty( $children ) ) {
+							foreach ( $children as $child ) {
+								$search_terms_ids_str .= $child . ',';
+							}
+						}
+					}
+
 				}
 				// Add parent and current.
 				else {
-					array_push( $search_terms_ids_arr, $product['ID'] );
-					array_push( $search_terms_ids_arr, $product['post_parent'] );
+					$search_terms_ids_str .= $search_term_id->post_parent . ',';
+					$search_terms_ids_str .= $search_term_id->ID . ',';
 				}
+
+				$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
+				$search_where         = " AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
+
 			}
+			//
+			// Search by Supplier name.
+			// ------------------------!
+			elseif ( Suppliers::SUPPLIER_META_KEY === $search_column ) {
 
-			$search_terms_ids_arr = array_unique( $search_terms_ids_arr );
-			$search_terms_ids_str = implode( ',', $search_terms_ids_arr );
+				$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
-			$search_where = " AND ( {$wpdb->posts}.ID IN ($search_terms_ids_str) )";
+				// Get suppliers.
+				// phpcs:disable WordPress.DB.PreparedSQL
+				$query = $wpdb->prepare( "
+					SELECT ID FROM $wpdb->posts
+				    WHERE post_type = %s AND $search_query",
+					Suppliers::POST_TYPE
+				);
+				// phpcs:enable
 
-		}
-		else {
+				$search_supplier_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-			if ( Helpers::in_multi_array( $search_column, $this->searchable_columns ) ) {
-
-				$column_name = ltrim( $search_column, '_' );
-
-				//
-				// Search by ID.
-				// -------------!
-				if ( 'ID' === $search_column ) {
-
-					$search_query = $this->build_search_query( $search_terms, $search_column, 'int' );
-
-					// Get all (parent and variations, and build where).
-					$query = "
-						SELECT ID, post_type, post_parent FROM $wpdb->posts
-					    WHERE $search_query
-					    AND post_type IN ('product', 'product_variation')
-				    ";
-
-					$search_term_id = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-					if ( empty( $search_term_id ) ) {
-						AtumCache::set_cache( $cache_key, $where_without_results );
-						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
-					}
-
-					$search_terms_ids_str = '';
-
-					if ( 'product' === $search_term_id->post_type ) {
-
-						$search_terms_ids_str .= $search_term_id->ID . ',';
-
-						// If has children, add them.
-						$product = wc_get_product( $search_term_id->ID );
-
-						// Exclude grouped products children if searching by id.
-						if ( 'grouped' !== $product->get_type() ) {
-
-							// Get an array of the children IDs (if any).
-							$children = $product->get_children();
-
-							if ( ! empty( $children ) ) {
-								foreach ( $children as $child ) {
-									$search_terms_ids_str .= $child . ',';
-								}
-							}
-						}
-
-					}
-					// Add parent and current.
-					else {
-						$search_terms_ids_str .= $search_term_id->post_parent . ',';
-						$search_terms_ids_str .= $search_term_id->ID . ',';
-					}
-
-					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
-					$search_where         = " AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
-
+				if ( empty( $search_supplier_ids ) ) {
+					AtumCache::set_cache( $cache_key, $where_without_results );
+					return apply_filters( 'atum/list_table/posts_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
 				}
-				//
-				// Search by Supplier name.
-				// ------------------------!
-				elseif ( Suppliers::SUPPLIER_META_KEY === $search_column ) {
+
+				$supplier_products = array();
+
+				// Avoid endless loops.
+				remove_filter( 'posts_search', array( $this, 'posts_search' ) );
+
+				foreach ( $search_supplier_ids as $supplier_id ) {
+					$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );
+				}
+
+				add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
+
+				$supplier_products = array_unique( $supplier_products );
+
+				if ( empty( $supplier_products ) ) {
+					AtumCache::set_cache( $cache_key, $where_without_results );
+					return apply_filters( 'atum/list_table/posts_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
+				}
+
+				$search_where = " AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
+
+			}
+			//
+			// Search by title and other calc or meta fields.
+			// ----------------------------------------------!
+			else {
+
+				$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+				// Title field is not in meta.
+				if ( 'title' === $search_column ) {
 
 					$search_query = $this->build_search_query( $search_terms, 'post_title' );
 
-					// Get suppliers.
-					// phpcs:disable WordPress.DB.PreparedSQL
-					$query = $wpdb->prepare( "
-						SELECT ID FROM $wpdb->posts
-					    WHERE post_type = %s AND $search_query",
-						Suppliers::POST_TYPE
-					);
-					// phpcs:enable
-
-					$search_supplier_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-					if ( empty( $search_supplier_ids ) ) {
-						AtumCache::set_cache( $cache_key, $where_without_results );
-						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
-					}
-
-					$supplier_products = array();
-
-					// Avoid endless loops.
-					remove_filter( 'posts_search', array( $this, 'posts_search' ) );
-
-					foreach ( $search_supplier_ids as $supplier_id ) {
-						$supplier_products = array_merge( $supplier_products, Suppliers::get_supplier_products( $supplier_id ) );
-					}
-
-					add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
-
-					$supplier_products = array_unique( $supplier_products );
-
-					if ( empty( $supplier_products ) ) {
-						AtumCache::set_cache( $cache_key, $where_without_results );
-						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
-					}
-
-					$search_where = " AND $wpdb->posts.ID IN (" . implode( ',', $supplier_products ) . ')';
+					$query = "
+						SELECT ID, post_type, post_parent FROM $wpdb->posts
+				        WHERE $search_query 
+				        AND $post_type_where	
+			         ";
 
 				}
-				//
-				// Search by title and other calc or meta fields.
-				// ----------------------------------------------!
-				else {
+				/**
+				 *  Numeric fields.
+				 */
+				elseif ( in_array( $search_column, $this->searchable_columns['numeric'] ) ) {
 
-					$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+					// Search by ATUM product data columns.
+					if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
 
-					// Title field is not in meta.
-					if ( 'title' === $search_column ) {
-
-						$search_query = $this->build_search_query( $search_terms, 'post_title' );
+						$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'apd' );
+						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
 
 						$query = "
-							SELECT ID, post_type, post_parent FROM $wpdb->posts
-					        WHERE $search_query 
-					        AND post_type IN ('product', 'product_variation')	
+							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN $atum_data_table apd ON (p.ID = apd.product_id)
+						    WHERE $post_type_where
+						    AND $meta_where
+					    ";
+
+					}
+					// Search using the new WC tables.
+					elseif ( Helpers::is_using_new_wc_tables() ) {
+
+						// The _stock meta key was renamed to stock_quantity in the new products table.
+						if ( 'stock' === $column_name ) {
+							$column_name = 'stock_quantity';
+						}
+
+						$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'wcd' );
+						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
+
+						$query = "
+							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
+						    WHERE $post_type_where
+						    AND $meta_where
+					    ";
+
+					}
+					// Search using the old way (meta keys).
+					/* @deprecated */
+					else {
+
+						$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
+						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
+
+						$query = "
+							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
+						    WHERE $post_type_where
+						    AND $meta_where
+					    ";
+
+					}
+
+				}
+				/**
+				 * String fields.
+				 */
+				else {
+
+					// Search by supplier SKU (or any other possible ATUM string col).
+					if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
+
+						$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'apd' );
+						$meta_where   = apply_filters( 'atum/list_table/product_search/string_meta_where', $search_query, $search_column, $search_terms );
+
+						$query = "
+							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN $atum_data_table apd ON (p.ID = apd.product_id)
+						    WHERE $post_type_where
+						    AND $meta_where
+					    ";
+
+					}
+					// Search using the new WC tables.
+					elseif ( Helpers::is_using_new_wc_tables() ) {
+
+						// The _stock meta key was renamed to stock_quantity in the new products table.
+						if ( 'stock' === $column_name ) {
+							$column_name = 'stock_quantity';
+						}
+
+						$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'wcd' );
+						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
+
+						$query = "
+							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
+						    WHERE $post_type_where
+						    AND $meta_where
+					    ";
+
+					}
+					// Search using the old way.
+					/* @deprecated */
+					else {
+
+						$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
+						$meta_where   = apply_filters( 'atum/list_table/posts_search/string_meta_where', $search_query, $search_column, $search_terms );
+
+						$query = "SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
+						    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
+						    WHERE $post_type_where
+						    AND $meta_where
 				         ";
 
 					}
-					/**
-					 *  Numeric fields.
-					 */
-					elseif ( in_array( $search_column, $this->searchable_columns['numeric'] ) ) {
 
-						// Search by ATUM product data columns.
-						if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
-
-							$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'apd' );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "
-								SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN $atum_data_table apd ON (p.ID = apd.product_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-						    ";
-
-						}
-						// Search using the new WC tables.
-						elseif ( Helpers::is_using_new_wc_tables() ) {
-
-							// The _stock meta key was renamed to stock_quantity in the new products table.
-							if ( 'stock' === $column_name ) {
-								$column_name = 'stock_quantity';
-							}
-
-							$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'wcd' );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "
-								SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-						    ";
-
-						}
-						// Search using the old way (meta keys).
-						/* @deprecated */
-						else {
-
-							$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "
-								SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-						    ";
-
-						}
-
-					}
-					/**
-					 * String fields.
-					 */
-					else {
-
-						// Search by supplier SKU (or any other possible ATUM string col).
-						if ( in_array( $search_column, $this->get_searchable_atum_columns() ) ) {
-
-							$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'apd' );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/string_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "
-								SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN $atum_data_table apd ON (p.ID = apd.product_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-						    ";
-
-						}
-						// Search using the new WC tables.
-						elseif ( Helpers::is_using_new_wc_tables() ) {
-
-							// The _stock meta key was renamed to stock_quantity in the new products table.
-							if ( 'stock' === $column_name ) {
-								$column_name = 'stock_quantity';
-							}
-
-							$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'wcd' );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "
-								SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-						    ";
-
-						}
-						// Search using the old way.
-						/* @deprecated */
-						else {
-
-							$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
-							$meta_where   = apply_filters( 'atum/list_table/product_search/string_meta_where', $search_query, $search_column, $search_terms );
-
-							$query = "SELECT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-							    LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id)
-							    WHERE p.post_type IN ('product', 'product_variation')
-							    AND $meta_where
-					         ";
-
-						}
-
-					}
-
-					$search_terms_ids = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-					if ( empty( $search_terms_ids ) ) {
-						AtumCache::set_cache( $cache_key, $where_without_results );
-						return apply_filters( 'atum/list_table/product_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
-					}
-
-					$search_terms_ids_str = '';
-
-					foreach ( $search_terms_ids as $term_id ) {
-
-						if ( 'product' === $term_id->post_type ) {
-
-							$search_terms_ids_str .= "$term_id->ID,";
-							$product               = wc_get_product( $term_id->ID );
-							$children              = $product->get_children();
-
-							if ( ! empty( $children ) ) {
-								foreach ( $children as $child ) {
-									$search_terms_ids_str .= $child . ',';
-								}
-							}
-
-						}
-						// Add parent and current.
-						else {
-							$search_terms_ids_str .= "'$term_id->ID',";
-							$search_terms_ids_str .= "'$term_id->post_parent',";
-						}
-
-					}
-
-					// Removes last comma.
-					$search_terms_ids_str = rtrim( $search_terms_ids_str, ',' );
-
-					$search_where = " AND ( $wpdb->posts.ID IN ($search_terms_ids_str) )";
 				}
+
+				$search_terms_results = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+				if ( empty( $search_terms_results ) ) {
+					AtumCache::set_cache( $cache_key, $where_without_results );
+					return apply_filters( 'atum/list_table/posts_search/where', $where_without_results, $search_column, $search_term, $search_terms, $cache_key );
+				}
+
+				$search_terms_ids = [];
+
+				foreach ( $search_terms_results as $term_result ) {
+
+					$search_terms_ids[] = $term_result->ID;
+
+					if ( 'product' === $term_result->post_type ) {
+
+						$product  = wc_get_product( $term_result->ID );
+						$children = $product->get_children();
+
+						if ( ! empty( $children ) ) {
+							$search_terms_ids = array_merge( $search_terms_ids, $children );
+						}
+
+					}
+					// Add parents also.
+					else {
+						$search_terms_ids[] = $term_result->post_parent;
+					}
+
+				}
+
+				$search_where = " AND ( $wpdb->posts.ID IN (" . implode( ',', array_unique( $search_terms_ids ) ) . ') )';
 
 			}
 
@@ -4020,7 +4013,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		// We've to overwrite the cache generated by ATUM to ensure that the right where clause is set.
 		AtumCache::set_cache( $cache_key, $search_where );
 
-		return apply_filters( 'atum/list_table/product_search/where', $search_where, $search_column, $search_term, $search_terms, $cache_key );
+		return apply_filters( 'atum/list_table/posts_search/where', $search_where, $search_column, $search_term, $search_terms, $cache_key );
 
 	}
 
@@ -4114,14 +4107,15 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param string $format            Optional. The format that has that column.
 	 * @param string $table_prefix      Optional. If passed, this prefix will be added as table alias to the column names.
 	 * @param bool   $is_meta_search    Optional. Whether the search is being performed for meta keys.
+	 * @param string $search_op         Optional. Logic operator to use to concat multiple terms in SQL query. Possible values: 'AND', 'OR'.
 	 *
 	 * @return string
 	 */
-	protected function build_search_query( $search_terms, $column = '', $format = 'string', $table_prefix = '', $is_meta_search = FALSE ) {
+	protected function build_search_query( $search_terms, $column = '', $format = 'string', $table_prefix = '', $is_meta_search = FALSE, $search_op = 'AND' ) {
 
 		global $wpdb;
 
-		$search_query = $search_and = '';
+		$search_query = $search_op_str = $meta_search_query = '';
 
 		/**
 		 * Filters the prefix that indicates that a search term should be excluded from results.
@@ -4162,22 +4156,26 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Post meta search.
 			if ( $is_meta_search ) {
-				$meta_key_column   = $table_prefix ? "$table_prefix.meta_key" : 'meta_key';
-				$meta_value_column = $table_prefix ? "$table_prefix.meta_value" : 'meta_value';
-				$search_query     .= "{$search_and}(($meta_key_column = '$column' AND $meta_value_column $operator $term))";
+				$meta_value_column  = $table_prefix ? "$table_prefix.meta_value" : 'meta_value';
+				$meta_search_query .= "{$search_op_str}($meta_value_column $operator $term)";
 			}
 			// Regular search.
 			elseif ( empty( $column ) ) {
-				$search_query .= "{$search_and}(({$wpdb->posts}.post_title $operator $term) $andor_op ({$wpdb->posts}.post_excerpt $operator $term) $andor_op ({$wpdb->posts}.post_content $operator $term))";
+				$search_query .= "{$search_op_str}(({$wpdb->posts}.post_title $operator $term) $andor_op ({$wpdb->posts}.post_excerpt $operator $term) $andor_op ({$wpdb->posts}.post_content $operator $term))";
 			}
 			// Search in column.
 			else {
 				$column        = $table_prefix ? "$table_prefix.$column" : $column;
-				$search_query .= "{$search_and}(($column $operator $term))";
+				$search_query .= "{$search_op_str}(($column $operator $term))";
 			}
 
-			$search_and = ' AND ';
+			$search_op_str = " $search_op ";
 
+		}
+
+		if ( $is_meta_search ) {
+			$meta_key_column = $table_prefix ? "$table_prefix.meta_key" : 'meta_key';
+			$search_query    = " ($meta_search_query) AND $meta_key_column = '$column'";
 		}
 
 		return $search_query;
@@ -4189,8 +4187,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * Called by the \Ajax class
 	 *
 	 * @since 0.0.1
+	 *
+	 * @param bool $return_data Optional. Whether to return the data or send the JSON to the browser.
+	 *
+	 * @return array|void
 	 */
-	public function ajax_response() {
+	public function ajax_response( $return_data = FALSE ) {
 
 		$this->prepare_items();
 		extract( $this->_args );
@@ -4251,6 +4253,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( isset( $total_pages ) ) {
 			$response['total_pages']      = absint( $total_pages );
 			$response['total_pages_i18n'] = number_format_i18n( $total_pages );
+		}
+
+		if ( $return_data ) {
+			return $response;
 		}
 
 		wp_send_json( $response );

@@ -3,7 +3,7 @@
  */
 
 export interface ITableData {
-	rows: any;
+	rows: string;
 	extra_t_n: {
 		top: string;
 		bottom: string;
