@@ -34,7 +34,7 @@ import TableCellPopovers from './components/_table-cell-popovers';
 import Router from './components/list-table/_router';
 import SalesLastDays from './components/list-table/_sales-last-days';
 import ScrollBar from './components/list-table/_scroll-bar';
-import SearchByColumn from './components/list-table/_search-by-column';
+import SearchInColumn from './components/list-table/_search-in-column';
 import Settings from './config/_settings';
 import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
@@ -45,7 +45,7 @@ import Utils from './utils/_utils';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ( $ ) => {
+jQuery( ( $: JQueryStatic ) => {
 	
 	window['$'] = $; // Avoid conflicts.
 	
@@ -76,7 +76,7 @@ jQuery( ( $ ) => {
 	}
 
 	new DragScroll( globals, tooltip, popover );
-	new SearchByColumn( settings, globals );
+	new SearchInColumn( settings, globals );
 	new ColumnGroups( globals, stickyHeader );
 	new Filters( settings, globals, listTable, router, tooltip, dateTimePicker );
 	new EditableCell( globals, popover, listTable );

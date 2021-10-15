@@ -472,8 +472,12 @@ final class Ajax {
 	 * @package Stock Central
 	 *
 	 * @since 0.0.1
+	 *
+	 * @param bool $return_data Optional. Whether to return the data or send the JSON to the browser.
+	 *
+	 * @return array|void
 	 */
-	public function fetch_stock_central_list() {
+	public function fetch_stock_central_list( $return_data = FALSE ) {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
@@ -499,7 +503,8 @@ final class Ajax {
 		 * @var ListTable $list
 		 */
 		$list = new $list_class( $args );
-		$list->ajax_response();
+
+		return $list->ajax_response( $return_data );
 
 	}
 
@@ -584,7 +589,17 @@ final class Ajax {
 				AtumCache::enable_cache();
 			}
 
-			wp_send_json_success( __( 'Data saved.', ATUM_TEXT_DOMAIN ) );
+			// If we aren't in SC, we will have to fetch the data from elsewhere.
+			$table_data = apply_filters( 'atum/ajax/update_list_data/fetch_table_data', NULL );
+
+			if ( ! $table_data ) {
+				$table_data = $this->fetch_stock_central_list( TRUE );
+			}
+
+			wp_send_json_success( [
+				'notice'    => __( 'Data saved.', ATUM_TEXT_DOMAIN ),
+				'tableData' => $table_data,
+			] );
 
 		} catch ( \Exception $e ) {
 			wp_send_json_error( $e->getMessage() );
@@ -1317,7 +1332,7 @@ final class Ajax {
 
 		}
 		else {
-			wp_send_json([]);
+			wp_send_json( [] );
 		}
 
 		// Get all the orders with IDs starting with the provided number.
@@ -1339,7 +1354,7 @@ final class Ajax {
 		$suppliers = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $suppliers ) ) {
-			wp_send_json([]);
+			wp_send_json( [] );
 		}
 
 		$supplier_results = array();

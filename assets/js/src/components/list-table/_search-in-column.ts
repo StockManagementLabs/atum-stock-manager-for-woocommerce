@@ -1,12 +1,12 @@
 /* =======================================
-   SEARCH BY COLUMN FOR LIST TABLES
+   SEARCH IN COLUMN FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings';
 import Globals from './_globals';
+import Settings from '../../config/_settings';
 import Utils from '../../utils/_utils';
 
-export default class SearchByColumn {
+export default class SearchInColumn {
 
 	constructor(
 		private settings: Settings,
@@ -81,7 +81,7 @@ export default class SearchByColumn {
 		
 		this.globals.$searchColumnBtn
 
-			// Bind clicks on search by column button.
+			// Bind clicks on search in column button.
 			.click( ( evt: JQueryEventObject ) => {
 				evt.stopPropagation();
 				$( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();

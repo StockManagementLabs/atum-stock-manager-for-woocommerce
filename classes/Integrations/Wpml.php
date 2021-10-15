@@ -145,7 +145,7 @@ class Wpml {
 			
 			// Hook into AtumListTable Product Search.
 			if ( $this->multicurrency_active ) {
-				add_filter( 'atum/list_table/product_search/numeric_meta_where', array( $this, 'change_multi_currency_meta_where' ), 10, 3 );
+				add_filter( 'atum/list_table/posts_search/numeric_meta_where', array( $this, 'change_multi_currency_meta_where' ), 10, 3 );
 			}
 
 			// Update product meta translations.

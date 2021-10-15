@@ -740,8 +740,8 @@ var TableCellPopovers = (function (_super) {
             }
         }
         if (isSelect) {
-            var selectedValue_1 = $metaCell.data('selectedValue'), selectOptions = $metaCell.data('selectOptions');
-            if (selectOptions) {
+            var selectedValue_1 = $metaCell.data('selected-value'), selectOptions = $metaCell.data('select-options');
+            if (typeof selectOptions === 'object' && Object.keys(selectOptions).length) {
                 $.each(selectOptions, function (index, value) {
                     var selected = selectedValue_1.toString() === index ? ' selected' : '';
                     $input.append("\n\t\t\t\t\t\t<option value=\"" + index + "\"" + selected + ">\n                           " + (value === _this.settings.get('emptyCol') ? '' : value) + "\n                        </option>\n\t\t\t\t\t");
@@ -1350,18 +1350,6 @@ var Filters = (function () {
                     $searchSubmitBtn_1.prop('disabled', false);
                 }
             });
-            this.globals.$searchColumnBtn.on('atum-search-column-data-changed', function (evt) {
-                var searchInputVal = _this.globals.$searchInput.val(), searchColumnBtnVal = $(evt.currentTarget).data('value');
-                if (searchInputVal.length > 0) {
-                    $.address.parameter('s', searchInputVal);
-                    $.address.parameter('search_column', searchColumnBtnVal);
-                    _this.keyUp(evt, true);
-                }
-                else {
-                    $.address.parameter('s', '');
-                    $.address.parameter('search_column', '');
-                }
-            });
             this.globals.$atumList.on('click', '.search-category, .search-submit', function () {
                 var searchInputVal = _this.globals.$searchInput.val(), searchColumnBtnVal = _this.globals.$searchColumnBtn.data('value');
                 $searchSubmitBtn_1.prop('disabled', typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length === 0 ? true : false);
@@ -1413,7 +1401,7 @@ var Filters = (function () {
         }
     };
     Filters.prototype.pseudoKeyUpAjax = function (searchColumnBtnVal, searchInputVal) {
-        if (searchInputVal.length === 0) {
+        if (!searchInputVal.length) {
             if (searchInputVal != $.address.parameter('s')) {
                 $.address.parameter('s', '');
                 $.address.parameter('search_column', '');
@@ -1657,43 +1645,16 @@ var ListTable = (function () {
                 if (typeof response === 'undefined' || !response) {
                     return false;
                 }
-                if (typeof response.rows !== 'undefined' && response.rows.length) {
-                    _this.globals.$atumList.find('#the-list').html(response.rows);
-                    _this.restoreMeta();
-                }
-                if (response.paged > 1) {
-                    $.address.parameter('paged', response.paged);
-                }
-                if (typeof response.column_headers !== 'undefined' && response.column_headers.length) {
-                    _this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(response.column_headers);
-                }
-                if (typeof response.views !== 'undefined' && response.views.length) {
-                    _this.globals.$atumList.find('.subsubsub').replaceWith(response.views);
-                }
-                if (typeof response.extra_t_n !== 'undefined') {
-                    if (response.extra_t_n.top.length) {
-                        _this.globals.$atumList.find('.tablenav.top').replaceWith(response.extra_t_n.top);
-                    }
-                    if (response.extra_t_n.bottom.length) {
-                        _this.globals.$atumList.find('.tablenav.bottom').replaceWith(response.extra_t_n.bottom);
-                    }
-                    _this.globals.$autoFilters = _this.globals.$atumList.find('#filters_container .auto-filter');
-                }
-                if (typeof response.totals !== 'undefined') {
-                    _this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(response.totals);
-                }
-                if ($.address.parameterNames().length) {
-                    _this.globals.$atumList.find('.reset-filters').removeClass('hidden');
-                }
-                _this.toolTip.addTooltips();
-                _this.enhancedSelect.maybeRestoreEnhancedSelect();
-                _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].addActiveClassRow(_this.globals.$atumTable);
-                _this.removeOverlay();
-                _this.calculateCompoundedStocks();
-                if (_this.globals.enabledStickyColumns) {
-                    _this.stickyCols.refreshStickyColumns();
-                }
-                _this.wpHooks.doAction('atum_listTable_tableUpdated');
+                var rows = response.rows, paged = response.paged, column_headers = response.column_headers, views = response.views, extra_t_n = response.extra_t_n, totals = response.totals;
+                var tableData = {
+                    rows: rows || '',
+                    paged: paged || 1,
+                    column_headers: column_headers || '',
+                    views: views || '',
+                    extra_t_n: extra_t_n || '',
+                    totals: totals || '',
+                };
+                _this.replaceTableData(tableData);
             },
             error: function () { return _this.removeOverlay(); },
         });
@@ -1878,21 +1839,20 @@ var ListTable = (function () {
             url: window['ajaxurl'],
             method: 'POST',
             dataType: 'json',
-            data: data,
+            data: __assign(__assign({}, this.globals.filterData), data),
             beforeSend: function () {
                 $button.prop('disabled', true);
                 _this.addOverlay();
             },
             success: function (response) {
-                console.log(response);
                 if (typeof response === 'object' && typeof response.success !== 'undefined') {
-                    var noticeType = response.success ? 'updated' : 'error';
-                    _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, response.data);
+                    var noticeType = response.success ? 'updated' : 'error', notice = response.success ? response.data.notice : response.data;
+                    _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, notice);
                 }
                 if (typeof response.success !== 'undefined' && response.success === true) {
                     $button.remove();
                     _this.globals.$editInput.val('');
-                    _this.updateTable();
+                    _this.replaceTableData(response.data.tableData);
                 }
                 else {
                     $button.prop('disabled', false);
@@ -2385,6 +2345,8 @@ var Router = (function () {
         var _this = this;
         var beforeFilters = __assign({}, this.globals.filterData);
         Object.assign(this.globals.filterData, __assign({ view: $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '', paged: parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged') || '1'), s: decodeURIComponent($.address.parameter('s') || ''), search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', orderby: $.address.parameter('orderby') || this.settings.get('orderby'), order: $.address.parameter('order') || this.settings.get('order') }, this.globals.getAutoFiltersValues()));
+        console.log('before', beforeFilters);
+        console.log('filterData', this.globals.filterData);
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
@@ -2608,9 +2570,9 @@ var ScrollBar = (function () {
 
 /***/ }),
 
-/***/ "./assets/js/src/components/list-table/_search-by-column.ts":
+/***/ "./assets/js/src/components/list-table/_search-in-column.ts":
 /*!******************************************************************!*\
-  !*** ./assets/js/src/components/list-table/_search-by-column.ts ***!
+  !*** ./assets/js/src/components/list-table/_search-in-column.ts ***!
   \******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -2619,8 +2581,8 @@ var ScrollBar = (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
-var SearchByColumn = (function () {
-    function SearchByColumn(settings, globals) {
+var SearchInColumn = (function () {
+    function SearchInColumn(settings, globals) {
         var _this = this;
         this.settings = settings;
         this.globals = globals;
@@ -2630,7 +2592,7 @@ var SearchByColumn = (function () {
             this.events();
         }
     }
-    SearchByColumn.prototype.setup = function () {
+    SearchInColumn.prototype.setup = function () {
         var _this = this;
         var $dropdownItem = $('<a class="dropdown-item" href="#" />');
         this.globals.$searchColumnDropdown.empty();
@@ -2653,7 +2615,7 @@ var SearchByColumn = (function () {
             }
         });
     };
-    SearchByColumn.prototype.events = function () {
+    SearchInColumn.prototype.events = function () {
         var _this = this;
         this.globals.$searchColumnBtn
             .click(function (evt) {
@@ -2684,9 +2646,9 @@ var SearchByColumn = (function () {
         });
         $(document).click(function () { return _this.globals.$searchColumnDropdown.hide(); });
     };
-    return SearchByColumn;
+    return SearchInColumn;
 }());
-/* harmony default export */ __webpack_exports__["default"] = (SearchByColumn);
+/* harmony default export */ __webpack_exports__["default"] = (SearchInColumn);
 
 
 /***/ }),
@@ -3069,7 +3031,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_list_table_router__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/list-table/_router */ "./assets/js/src/components/list-table/_router.ts");
 /* harmony import */ var _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/list-table/_sales-last-days */ "./assets/js/src/components/list-table/_sales-last-days.ts");
 /* harmony import */ var _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/list-table/_scroll-bar */ "./assets/js/src/components/list-table/_scroll-bar.ts");
-/* harmony import */ var _components_list_table_search_by_column__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/list-table/_search-by-column */ "./assets/js/src/components/list-table/_search-by-column.ts");
+/* harmony import */ var _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/list-table/_search-in-column */ "./assets/js/src/components/list-table/_search-in-column.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/list-table/_sticky-columns */ "./assets/js/src/components/list-table/_sticky-columns.ts");
 /* harmony import */ var _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/list-table/_sticky-header */ "./assets/js/src/components/list-table/_sticky-header.ts");
@@ -3125,7 +3087,7 @@ jQuery(function ($) {
         new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_17__["default"](globals);
     }
     new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
-    new _components_list_table_search_by_column__WEBPACK_IMPORTED_MODULE_18__["default"](settings, globals);
+    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_18__["default"](settings, globals);
     new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
     new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
     new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](globals, popover, listTable);
