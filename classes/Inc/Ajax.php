@@ -1115,7 +1115,7 @@ final class Ajax {
 		$post_id = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : 0;
 
 		if ( empty( $term ) ) {
-			wp_die();
+			wp_die( [] );
 		}
 
 		global $wpdb;
@@ -1201,9 +1201,7 @@ final class Ajax {
 		parse_str( $url['query'], $url_query );
 
 		if ( ! empty( $url_query['post'] ) ) {
-
 			$post_id = absint( $url_query['post'] );
-
 		}
 
 		if ( $post_id ) {
@@ -1272,7 +1270,7 @@ final class Ajax {
 		$order_id = absint( $_GET['term'] );
 
 		if ( empty( $order_id ) ) {
-			wp_die();
+			wp_die( [] );
 		}
 
 		// Get all the orders with IDs starting with the provided number.
@@ -1292,7 +1290,7 @@ final class Ajax {
 		$order_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $order_ids ) ) {
-			wp_die();
+			wp_die( [] );
 		}
 
 		$order_results = array();
@@ -1320,19 +1318,15 @@ final class Ajax {
 		$where = '';
 
 		if ( is_numeric( $_GET['term'] ) ) {
-
 			$supplier_id = absint( $_GET['term'] );
 			$where       = "AND ID LIKE $supplier_id";
-
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
-
 			$supplier_name = $wpdb->esc_like( $_GET['term'] );
 			$where         = "AND post_title LIKE '%%{$supplier_name}%%'";
-
 		}
 		else {
-			wp_send_json( [] );
+			wp_die( [] );
 		}
 
 		// Get all the orders with IDs starting with the provided number.
@@ -1354,7 +1348,7 @@ final class Ajax {
 		$suppliers = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( empty( $suppliers ) ) {
-			wp_send_json( [] );
+			wp_die( [] );
 		}
 
 		$supplier_results = array();
