@@ -94,4 +94,15 @@ abstract class AtumListPage {
 
 	}
 
+	/**
+	 * Get the URL for the current List Table page.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @return string
+	 */
+	public function get_list_table_page_url() {
+		return defined( 'static::UI_SLUG' ) ? add_query_arg( 'page', static::UI_SLUG, admin_url( 'admin.php' ) ) : '';
+	}
+
 }
