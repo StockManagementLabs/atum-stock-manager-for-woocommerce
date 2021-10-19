@@ -54,6 +54,7 @@ class Addons {
 		'multi_inventory' => '1.5.0',
 		'product_levels'  => '1.6.0',
 		'action_logs'     => '1.1.5',
+		'purchase_orders' => '0.0.1',
 	);
 
 	/**
