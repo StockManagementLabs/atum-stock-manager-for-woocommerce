@@ -221,7 +221,7 @@ export default class ListTable {
 		}
 
 		// Trigger action after updating.
-		this.wpHooks.doAction( 'atum_listTable_tableUpdated' );
+		this.wpHooks.doAction( 'atum_listTable_tableUpdated', this.globals.filterData );
 
 	}
 	

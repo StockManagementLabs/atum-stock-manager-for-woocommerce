@@ -1696,7 +1696,7 @@ var ListTable = (function () {
         if (this.globals.enabledStickyColumns) {
             this.stickyCols.refreshStickyColumns();
         }
-        this.wpHooks.doAction('atum_listTable_tableUpdated');
+        this.wpHooks.doAction('atum_listTable_tableUpdated', this.globals.filterData);
     };
     ListTable.prototype.addOverlay = function () {
         _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].block($('.atum-table-wrapper'), {
@@ -2345,8 +2345,6 @@ var Router = (function () {
         var _this = this;
         var beforeFilters = __assign({}, this.globals.filterData);
         Object.assign(this.globals.filterData, __assign({ view: $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '', paged: parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged') || '1'), s: decodeURIComponent($.address.parameter('s') || ''), search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', orderby: $.address.parameter('orderby') || this.settings.get('orderby'), order: $.address.parameter('order') || this.settings.get('order') }, this.globals.getAutoFiltersValues()));
-        console.log('before', beforeFilters);
-        console.log('filterData', this.globals.filterData);
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
