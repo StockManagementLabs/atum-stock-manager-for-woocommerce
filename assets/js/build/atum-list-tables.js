@@ -1420,7 +1420,7 @@ var Filters = (function () {
     };
     Filters.prototype.addDateSelectorFilter = function () {
         var _this = this;
-        var linkedFilters = this.settings.get('dateSelectorFilters'), $dateSelector = this.globals.$atumList.find('.date-selector'), dateFromVal = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(), dateToVal = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
+        var dateFromVal = $.address.parameter('date_from') ? $.address.parameter('date_from') : $('.date_from').val(), dateToVal = $.address.parameter('date_to') ? $.address.parameter('date_to') : $('.date_to').val();
         if (!dateToVal) {
             var today = new Date(), dd = today.getDate(), mm = today.getMonth() + 1, yyyy = today.getFullYear();
             if (dd < 10) {
@@ -1431,34 +1431,32 @@ var Filters = (function () {
             }
             dateToVal = yyyy + '-' + mm + '-' + dd;
         }
-        $dateSelector.on('select2:select', function (evt) {
+        this.globals.$atumList.find('select[name="extra_filter"]').on('select2:select', function (evt) {
             var $select = $(evt.currentTarget);
-            if ($.inArray($select.val(), linkedFilters) > -1) {
-                var popupClass_1 = 'filter-range-dates-modal';
+            if ($.inArray($select.val(), _this.settings.get('dateSelectorFilters')) > -1) {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                     customClass: {
-                        popup: popupClass_1
+                        container: 'atum-modal',
+                        popup: 'filter-range-dates-modal',
                     },
                     width: 440,
                     showCloseButton: true,
-                    title: "<h1 class=\"title\">" + _this.settings.get('setTimeWindow') + "</h1><span class=\"sub-title\">" + _this.settings.get('selectDateRange') + "</span>",
-                    html: "\n\t\t\t\t\t\t<div class=\"input-date\">\n\t\t\t\t\t\t\t<label for=\"date_from\">" + _this.settings.get('from') + "</label><br/>\n\t\t\t\t\t\t\t<input type=\"text\" placeholder=\"Beginning\" class=\"atum-datepicker date_from\" name=\"date_from\" id=\"date_from\" maxlength=\"10\" value=\"" + dateFromVal + "\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"input-date\">\n\t\t\t\t\t\t\t<label for=\"date_to\">" + _this.settings.get('to') + "</label><br/>\n\t\t\t\t\t\t\t<input type=\"text\" class=\"atum-datepicker date_to\" name=\"date_to\" id=\"date_to\" maxlength=\"10\" value=\"" + dateToVal + "\">\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<button class=\"btn btn-warning apply\">" + _this.settings.get('apply') + "</button>\n\t\t\t\t\t",
+                    title: _this.settings.get('setTimeWindow'),
+                    html: "\n\t\t\t\t\t\t<div class=\"atum-modal-content\">\n\t\t\t\t\t\t\t<div class=\"note\">" + _this.settings.get('selectDateRange') + "</div>\n\t\t\t\t\t\t\t<hr>\n\t\t\t\t\t\n\t\t\t\t\t\t\t<div class=\"input-group\">\n\t\t\t\t\t\t\t\t<div class=\"input-date\">\n\t\t\t\t\t\t\t\t\t<label for=\"date_from\">" + _this.settings.get('from') + "</label><br/>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" placeholder=\"" + _this.settings.get('beginning') + "\" class=\"atum-datepicker date_from\" name=\"date_from\" id=\"date_from\" maxlength=\"10\" value=\"" + dateFromVal + "\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<div class=\"input-date\">\n\t\t\t\t\t\t\t\t\t<label for=\"date_to\">" + _this.settings.get('to') + "</label><br/>\n\t\t\t\t\t\t\t\t\t<input type=\"text\" class=\"atum-datepicker date_to\" name=\"date_to\" id=\"date_to\" maxlength=\"10\" value=\"" + dateToVal + "\">\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t<button class=\"btn btn-warning apply\">" + _this.settings.get('apply') + "</button>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t",
                     showConfirmButton: false,
-                    didOpen: function () {
-                        var $popup = $('.' + popupClass_1);
-                        _this.dateTimePicker.addDateTimePickers($popup.find('.atum-datepicker'), { minDate: false });
-                        $popup.find('.swal2-content .apply').click(function () {
-                            _this.globals.filterData['date_from'] = $popup.find('.date_from').val();
-                            _this.globals.filterData['date_to'] = $popup.find('.date_to').val();
+                    didOpen: function (modal) {
+                        var $modal = $(modal);
+                        _this.dateTimePicker.addDateTimePickers($modal.find('.atum-datepicker'), { minDate: false });
+                        $modal.find('.swal2-content .apply').click(function () {
+                            _this.globals.filterData['date_from'] = $modal.find('.date_from').val();
+                            _this.globals.filterData['date_to'] = $modal.find('.date_to').val();
                             _this.keyUp(evt, true);
-                            $select.val('');
                             sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.close();
                         });
-                        $popup.find('.swal2-close').click(function () { return $popup.find('.date_to, .date_from').val(''); });
                     },
                     willClose: function () {
                         if (_this.settings.get('ajaxFilter') === 'yes') {
-                            $select.val('');
+                            $select.val('').trigger('change.select2');
                         }
                     },
                 });

@@ -2829,9 +2829,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	min-height: 200px !important;
 
 	.swal2-title {
-		justify-content: flex-start;
-		line-height: 1;
-		flex-wrap: wrap;
 		
 		.title {
 			font-size: 26px;
@@ -2839,19 +2836,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			color:  var(--blue-dark);
 			margin: 0;
 		}
-		
-		.sub-title {
-			font-size: 15px;
-			color: var(--gray-500);
-			font-weight: 400;
-			margin-top: 4px;
-		}
 	}
 	
 	.swal2-html-container {
-		display: flex !important;
-		justify-content: space-evenly;
-		align-items: flex-end;
+		
+		.input-group {
+			display: flex !important;
+			justify-content: space-evenly;
+			align-items: flex-end;
+			flex-wrap: nowrap;
+		}
 		
 		a {
 			color: var(--primary) !important;
@@ -2907,12 +2901,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	@include mobile-max {
-		
 		height: 250px;
-		
-		.swal2-title {
-			margin-bottom: 10px;
-		}
 		
 		.swal2-content {
 			flex-direction: column;
