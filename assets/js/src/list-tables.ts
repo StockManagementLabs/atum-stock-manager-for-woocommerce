@@ -79,7 +79,7 @@ jQuery( ( $: JQueryStatic ) => {
 	new SearchInColumn( settings, globals );
 	new ColumnGroups( globals, stickyHeader );
 	new Filters( settings, globals, listTable, router, tooltip, dateTimePicker );
-	new EditableCell( globals, popover, listTable );
+	new EditableCell( settings, globals, popover, listTable );
 	new LightBox();
 	new TableButtons( globals, tooltip, stickyCols, stickyHeader );
 	new SalesLastDays( globals, router, enhancedSelect );

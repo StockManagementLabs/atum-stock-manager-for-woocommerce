@@ -21,6 +21,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Legacy\ListTableLegacyTrait;
 use Atum\Models\Products\AtumProductTrait;
+use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductTrait;
@@ -964,8 +965,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since  1.3.1
 	 *
-	 * @param \WP_Post $item The WooCommerce product post.
-	 * @param bool     $editable  Optional. Whether the current column is editable.
+	 * @param \WP_Post $item     The WooCommerce product post.
+	 * @param bool     $editable Optional. Whether the current column is editable.
 	 *
 	 * @return string
 	 */
@@ -973,36 +974,35 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$supplier = self::EMPTY_COL;
 
-		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return $supplier;
 		}
 
-		$supplier_tooltip = '';
+		$supplier_id = $this->list_item->get_supplier_id();
 
-		if ( $editable ) {
+		if ( $supplier_id ) {
 
-			$supplier_id = $this->list_item->get_supplier_id();
+			$supplier_post = get_post( $supplier_id );
 
-			if ( $supplier_id ) {
+			if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
 
-				$supplier_post = get_post( $supplier_id );
-
-				if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
-
-					$supplier = $supplier_post->post_title;
-
-					/* translators: first one is the supplier name and second is the supplier's ID */
-					$supplier_tooltip = sprintf( esc_attr__( 'Click to edit %1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
-
-				}
+				$supplier = $supplier_post->post_title;
 			}
+		}
+
+		$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
+		$supplier_abb    = mb_strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+
+		if ( $editable && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
 
 			if ( self::EMPTY_COL === $supplier ) {
 				$supplier_tooltip = esc_attr__( 'Click to add a supplier', ATUM_TEXT_DOMAIN );
 			}
+			else {
+				/* translators: first one is the supplier name and second is the supplier's ID */
+				$supplier_tooltip = sprintf( esc_attr__( 'Click to edit %1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
 
-			$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
-			$supplier_abb    = mb_strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
+			}
 
 			$args = apply_filters( 'atum/list_table/args_supplier', array(
 				'meta_key'   => 'supplier_id',
@@ -1011,6 +1011,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => $supplier_tooltip,
 				'cell_name'  => esc_attr__( 'Supplier', ATUM_TEXT_DOMAIN ),
 				'extra_data' => [
+					'selected-value'       => $supplier_id,
+					'select-options'       => [
+						(int) $supplier_id => esc_attr( $supplier ),
+						// Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
+					],
 					'extra-class'          => 'wc-product-search atum-enhanced-select',
 					'allow_clear'          => 'true',
 					'action'               => 'atum_json_search_suppliers',
@@ -1018,17 +1023,20 @@ abstract class AtumListTable extends \WP_List_Table {
 					'multiple'             => 'false',
 					'minimum_input_length' => 1,
 					'container-css'        => 'edit-popover-content',
+					'footer-content'       => AtumCapabilities::current_user_can( 'create_suppliers' ) ? '<div class="content-footer"><a href="#" class="atum-add-supplier"><i class="atum-icon atmi-plus-circle"></i><span class="footer-text">' . esc_attr__( 'Create new supplier', ATUM_TEXT_DOMAIN ) . '</span></a></div>' : '',
 				],
 			) );
 
-			if ( $supplier_id ) {
-				$args['extra_data']['selected-value'] = $supplier_id;
-				$args['extra_data']['select-options'] = [
-					(int) $supplier_id => esc_attr( $supplier ), // Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
-				];
-			}
-
 			$supplier = self::get_editable_column( $args );
+
+		}
+		else {
+
+			/* translators: first one is the supplier name and second is the supplier's ID when the user can't edit suppliers */
+			$supplier_tooltip = sprintf( esc_attr__( '%1$s (ID: %2$d)', ATUM_TEXT_DOMAIN ), $supplier, $supplier_id );
+
+			$data_tip = ! self::$is_report ? ' data-tip="' . $supplier_tooltip . '"' : '';
+			$supplier = '<span class="tips"' . $data_tip . '>' . $supplier_abb . '</span><span class="atum-title-small">' . $supplier_tooltip . '</span>';
 
 		}
 
@@ -1041,8 +1049,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since  1.2.0
 	 *
-	 * @param \WP_Post $item      The WooCommerce product post to use in calculations.
-	 * @param bool     $editable  Optional. Whether the current column is editable.
+	 * @param \WP_Post $item     The WooCommerce product post to use in calculations.
+	 * @param bool     $editable Optional. Whether the current column is editable.
 	 *
 	 * @return float
 	 */
@@ -1050,17 +1058,18 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$supplier_sku = self::EMPTY_COL;
 
-		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return $supplier_sku;
 		}
 
-		if ( $editable ) {
+		$supplier_sku = $this->list_item->get_supplier_sku();
 
-			$supplier_sku = $this->list_item->get_supplier_sku();
+		if ( 0 === strlen( $supplier_sku ) ) {
+			$supplier_sku = self::EMPTY_COL;
+		}
 
-			if ( 0 === strlen( $supplier_sku ) ) {
-				$supplier_sku = self::EMPTY_COL;
-			}
+		if ( $editable && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
+
 			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
 				'meta_key'   => 'supplier_sku',
 				'value'      => $supplier_sku,
@@ -3332,6 +3341,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			'stickyColumns'                  => $this->sticky_columns,
 			'stickyColumnsNonce'             => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
 			'to'                             => __( 'To', ATUM_TEXT_DOMAIN ),
+			'newSupplier'                    => __( 'New Supplier', ATUM_TEXT_DOMAIN ),
+			'CreateNewSupplier'              => __( 'Create a new supplier', ATUM_TEXT_DOMAIN ),
+			'confirmNewSupplier'             => __( 'create supplier', ATUM_TEXT_DOMAIN ),
+			'createSupplierNonce'            => wp_create_nonce( 'create-supplier-nonce' ),
+			'supplierNameRequired'           => __( 'create supplier', ATUM_TEXT_DOMAIN ),
 		);
 
 		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
@@ -3344,6 +3358,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$vars = apply_filters( 'atum/list_table/js_vars', $vars );
 		wp_localize_script( 'atum-list', 'atumListVars', $vars );
+
+		if ( ModuleManager::is_module_active( 'purchase_orders' ) && AtumCapabilities::current_user_can( 'create_suppliers' ) ) {
+			Helpers::load_view( ATUM_PATH . 'views/js-templates/create-supplier' );
+		}
 
 		do_action( 'atum/list_table/after_display', $this );
 

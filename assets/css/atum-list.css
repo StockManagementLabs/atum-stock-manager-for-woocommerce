@@ -3450,6 +3450,20 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   border-style: solid;
 }
 
+.popover .content-footer {
+  padding-top: 7px;
+  margin-bottom: -12px;
+}
+
+.popover .content-footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.popover .content-footer .footer-text {
+  padding-left: 3px;
+}
+
 .popover.with-select {
   max-width: 400px;
 }
@@ -6198,6 +6212,42 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .swal2-container.atum-modal .swal2-validation-message {
   text-align: left;
   font-size: 13px;
+}
+
+.add-suppliers-modal .swal2-header {
+  display: block;
+  border-bottom: solid 1px #ced4da;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 0 20px !important;
+}
+
+.add-suppliers-modal .swal2-header h2 {
+  display: block !important;
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 15px !important;
+}
+
+.add-suppliers-modal .swal2-header h2 small {
+  display: block;
+  color: #6c757d;
+  font-weight: normal;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.add-suppliers-modal .swal2-actions {
+  -webkit-box-pack: right;
+      -ms-flex-pack: right;
+          justify-content: right;
+  padding: 20px 0 0;
+  margin-top: 0;
+}
+
+.add-suppliers-modal .swal2-actions .swal2-confirm {
+  margin: 0;
+  font-size: 12px;
 }
 
 #wpbody-content {
