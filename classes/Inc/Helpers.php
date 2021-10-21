@@ -1532,7 +1532,7 @@ final class Helpers {
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
 		$output  = '<select name="product_type" class="' . $class . ' atum-tooltip" autocomplete="off">';
-		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types...', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
 
@@ -1603,7 +1603,7 @@ final class Helpers {
 			'enhanced'    => FALSE,
 			'class'       => 'dropdown_supplier',
 			'name'        => 'supplier',
-			'placeholder' => __( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ),
+			'placeholder' => __( 'All suppliers...', ATUM_TEXT_DOMAIN ),
 		);
 
 		/**

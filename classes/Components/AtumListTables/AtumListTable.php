@@ -470,6 +470,11 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		self::$default_currency = get_woocommerce_currency();
 
+		// Filtering with extra filters.
+		if ( ! empty( $_REQUEST['extra_filter'] ) ) {
+			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
+		}
+
 	}
 
 	/**
@@ -506,9 +511,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Category filtering.
 		wc_product_dropdown_categories( array(
-			'show_count' => 0,
-			'selected'   => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
-			'class'      => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip auto-filter',
+			'show_count'       => 0,
+			'selected'         => ! empty( $_REQUEST['product_cat'] ) ? esc_attr( $_REQUEST['product_cat'] ) : '',
+			'class'            => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip auto-filter',
+			'show_option_none' => __( 'All categories...', ATUM_TEXT_DOMAIN ),
 		) );
 
 		// Product type filtering.
@@ -523,6 +529,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/after_nav_filters', $this );
 
+	}
+
+	/**
+	 * Apply an extra filter to the current List Table query
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param \WP_Query $query
+	 */
+	public function do_extra_filter( $query ) {
+		// This should be defined in any children classes using it.
 	}
 
 	/**
@@ -2164,7 +2181,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
 		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select atum-tooltip" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
-			<option value="-1"><?php esc_html_e( 'Bulk Actions', ATUM_TEXT_DOMAIN ) ?></option>
+			<option value="-1"><?php esc_html_e( 'Bulk actions...', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
 				<option value="<?php echo esc_attr( $name ) ?>"<?php if ( 'edit' === $name ) echo ' class="hide-if-no-js"' ?>><?php echo esc_html( $title ) ?></option>
@@ -3279,6 +3296,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'apply'                          => __( 'Apply', ATUM_TEXT_DOMAIN ),
 			'applyAction'                    => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'applyBulkAction'                => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
+			'beginning'                      => __( 'Beginning', ATUM_TEXT_DOMAIN ),
 			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormatNumDecimals'      => wc_get_price_decimals(),

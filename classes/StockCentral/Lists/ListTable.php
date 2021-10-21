@@ -283,11 +283,6 @@ class ListTable extends AtumListTable {
 		// Call the parent class once all the $args are set.
 		parent::__construct( $args );
 
-		// Filtering with extra filters.
-		if ( ! empty( $_REQUEST['extra_filter'] ) ) {
-			add_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
-		}
-
 	}
 
 	/**
@@ -387,8 +382,8 @@ class ListTable extends AtumListTable {
 		);
 
 		?>
-		<select name="extra_filter" class="wc-enhanced-select atum-enhanced-select dropdown_extra_filter auto-filter date-selector" autocomplete="off">
-			<option value=""><?php esc_attr_e( 'Extra Filters', ATUM_TEXT_DOMAIN ) ?></option>
+		<select name="extra_filter" class="wc-enhanced-select atum-enhanced-select dropdown_extra_filter auto-filter" autocomplete="off">
+			<option value=""><?php esc_html_e( 'Extra filters...', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
 				<option value="<?php echo esc_attr( $extra_filter ) ?>"

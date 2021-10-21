@@ -261,10 +261,8 @@ export default class Filters {
 	 */
 	addDateSelectorFilter() {
 
-		let linkedFilters: string[] = this.settings.get( 'dateSelectorFilters' ),
-		    $dateSelector: JQuery   = this.globals.$atumList.find( '.date-selector' ),
-		    dateFromVal: string     = $.address.parameter( 'date_from' ) ? $.address.parameter( 'date_from' ) : $( '.date_from' ).val(),
-		    dateToVal: string       = $.address.parameter( 'date_to' ) ? $.address.parameter( 'date_to' ) : $( '.date_to' ).val();
+		let dateFromVal: string = $.address.parameter( 'date_from' ) ? $.address.parameter( 'date_from' ) : $( '.date_from' ).val(),
+		    dateToVal: string   = $.address.parameter( 'date_to' ) ? $.address.parameter( 'date_to' ) : $( '.date_to' ).val();
 
 		if ( ! dateToVal ) {
 
@@ -284,57 +282,59 @@ export default class Filters {
 			dateToVal = yyyy + '-' + mm + '-' + dd;
 
 		}
-		
-		$dateSelector.on( 'select2:select', ( evt: JQueryEventObject ) => {
+
+		this.globals.$atumList.find( 'select[name="extra_filter"]' ).on( 'select2:select', ( evt: JQueryEventObject ) => {
 
 			const $select: JQuery = $( evt.currentTarget );
 		
-			if ( $.inArray( $select.val(), linkedFilters ) > -1 ) {
-				
-				const popupClass: string = 'filter-range-dates-modal';
+			if ( $.inArray( $select.val(), this.settings.get( 'dateSelectorFilters' ) ) > -1 ) {
 				
 				Swal.fire({
 					customClass    : {
-						popup: popupClass
+						container: 'atum-modal',
+						popup    : 'filter-range-dates-modal',
 					},
 					width          : 440,
 					showCloseButton: true,
-					title          : `<h1 class="title">${ this.settings.get('setTimeWindow') }</h1><span class="sub-title">${ this.settings.get('selectDateRange') }</span>`,
-					html           : `
-						<div class="input-date">
-							<label for="date_from">${ this.settings.get('from') }</label><br/>
-							<input type="text" placeholder="Beginning" class="atum-datepicker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
+					title          : this.settings.get( 'setTimeWindow' ),
+					html: `
+						<div class="atum-modal-content">
+							<div class="note">${ this.settings.get( 'selectDateRange' ) }</div>
+							<hr>
+					
+							<div class="input-group">
+								<div class="input-date">
+									<label for="date_from">${ this.settings.get( 'from' ) }</label><br/>
+									<input type="text" placeholder="${ this.settings.get( 'beginning' ) }" class="atum-datepicker date_from" name="date_from" id="date_from" maxlength="10" value="${ dateFromVal }">
+								</div>
+								<div class="input-date">
+									<label for="date_to">${ this.settings.get( 'to' ) }</label><br/>
+									<input type="text" class="atum-datepicker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
+								</div>
+								<button class="btn btn-warning apply">${ this.settings.get( 'apply' ) }</button>
+							</div>
 						</div>
-						<div class="input-date">
-							<label for="date_to">${ this.settings.get('to') }</label><br/>
-							<input type="text" class="atum-datepicker date_to" name="date_to" id="date_to" maxlength="10" value="${ dateToVal }">
-						</div>
-						<button class="btn btn-warning apply">${ this.settings.get('apply') }</button>
 					`,
 					showConfirmButton: false,
-					didOpen           : () => {
+					didOpen           : ( modal: HTMLElement ) => {
 
-						const $popup: JQuery = $( '.' + popupClass );
-						
+						const $modal: JQuery = $( modal );
+
 						// Init date time pickers.
-						this.dateTimePicker.addDateTimePickers( $popup.find( '.atum-datepicker' ), { minDate: false } );
+						this.dateTimePicker.addDateTimePickers( $modal.find( '.atum-datepicker' ), { minDate: false } );
 
-						$popup.find( '.swal2-content .apply' ).click( () => {
-							this.globals.filterData['date_from'] = $popup.find( '.date_from' ).val();
-							this.globals.filterData['date_to'] = $popup.find( '.date_to' ).val();
+						$modal.find( '.swal2-content .apply' ).click( () => {
+							this.globals.filterData[ 'date_from' ] = $modal.find( '.date_from' ).val();
+							this.globals.filterData[ 'date_to' ] = $modal.find( '.date_to' ).val();
 							this.keyUp( evt, true );
-							$select.val('');
 							Swal.close();
-						});
-
-						$popup.find( '.swal2-close' ).click( () => $popup.find( '.date_to, .date_from' ).val( '' ) );
+						} );
 					
 					},
 					willClose: () => {
 
 						if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
-							//this.keyUp( evt, true );
-							$select.val('');
+							$select.val( '' ).trigger( 'change.select2' );
 						}
 
 					},

@@ -446,7 +446,7 @@ class Main {
 	}
 
 	/**
-	 * Add theme options menu item to Admin Bar
+	 * Add ATUM menu to the Admin Bar
 	 *
 	 * @since 1.2.0
 	 */
