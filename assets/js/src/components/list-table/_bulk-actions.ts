@@ -134,7 +134,6 @@ export default class BulkActions {
 				if ( typeof response === 'object' ) {
 					const noticeType = response.success ? 'updated' : 'error';
 					Utils.addNotice( noticeType, response.data );
-					this.listTable.removeOverlay();
 				}
 
 				this.$bulkButton.prop( 'disabled', false );
@@ -145,6 +144,7 @@ export default class BulkActions {
 					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-success', [ bulkAction, selectedItems ] );
 				}
 				else {
+					this.listTable.removeOverlay();
 					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
 				}
 
