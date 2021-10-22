@@ -1098,6 +1098,7 @@ var BulkActions = (function () {
                 if (typeof response === 'object') {
                     var noticeType = response.success ? 'updated' : 'error';
                     _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice(noticeType, response.data);
+                    _this.listTable.removeOverlay();
                 }
                 _this.$bulkButton.prop('disabled', false);
                 if (response.success) {
@@ -2461,7 +2462,7 @@ var Router = (function () {
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
-        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'mi_batch_tracking', 'date_from', 'date_to'], this.globals.autoFiltersNames), function (index, elem) {
+        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames), function (index, elem) {
             _this.navigationReady = false;
             if (!_this.globals.filterData.hasOwnProperty(elem)) {
                 return true;

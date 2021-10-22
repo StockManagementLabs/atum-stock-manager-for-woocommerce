@@ -134,6 +134,7 @@ export default class BulkActions {
 				if ( typeof response === 'object' ) {
 					const noticeType = response.success ? 'updated' : 'error';
 					Utils.addNotice( noticeType, response.data );
+					this.listTable.removeOverlay();
 				}
 
 				this.$bulkButton.prop( 'disabled', false );
