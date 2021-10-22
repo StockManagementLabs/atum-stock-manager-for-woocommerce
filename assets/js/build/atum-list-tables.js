@@ -766,6 +766,9 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
+        if ($metaCell.data('footerContent')) {
+            $content = $('<div class="edit-popover-wrapper" />').append($content).append($metaCell.data('footerContent'));
+        }
         var titleSetting = isSelect ? 'selectSetValue' : 'setValue';
         this.addPopover($metaCell, {
             title: this.settings.get(titleSetting) ? this.settings.get(titleSetting).replace('%%', cellName) : cellName,
@@ -898,6 +901,111 @@ var ActiveRow = {
     },
 };
 /* harmony default export */ __webpack_exports__["default"] = (ActiveRow);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/list-table/_add_supplier_modal.ts":
+/*!********************************************************************!*\
+  !*** ./assets/js/src/components/list-table/_add_supplier_modal.ts ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+
+var AddSupplierModal = (function () {
+    function AddSupplierModal(settings, globals, listTable, $setMeta) {
+        this.settings = settings;
+        this.globals = globals;
+        this.listTable = listTable;
+        this.$setMeta = $setMeta;
+        this.buttonColor = '#69c61d';
+        this.productId = $setMeta.closest('tr').data('id');
+        this.showModal();
+    }
+    AddSupplierModal.prototype.showModal = function () {
+        var _this = this;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+            title: this.settings.get('newSupplier') + "<small>" + this.settings.get('CreateNewSupplier') + "</small>",
+            html: $('#create-supplier-modal').html(),
+            customClass: {
+                container: 'atum-modal',
+                popup: 'add-suppliers-modal'
+            },
+            showCloseButton: true,
+            confirmButtonText: this.settings.get('confirmNewSupplier'),
+            confirmButtonColor: this.buttonColor,
+            didOpen: function (modal) {
+                _this.$modal = $(modal);
+            },
+            preConfirm: function () { return _this.createSupplier(); },
+        });
+    };
+    AddSupplierModal.prototype.createSupplier = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            var $supplierName = _this.$modal.find('#supplier-name');
+            if (!$supplierName.val()) {
+                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(_this.settings.get('supplierNameRequired'));
+                $supplierName.focus().select();
+                resolve();
+                return;
+            }
+            $.ajax({
+                url: window['ajaxurl'],
+                data: {
+                    action: 'atum_create_supplier',
+                    security: _this.settings.get('createSupplierNonce'),
+                    supplier_data: _this.$modal.find('form').serialize(),
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success === false) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                    }
+                    else {
+                        var successSwalOptions = {
+                            icon: 'success',
+                            title: response.data.message,
+                            html: "<a target=\"_blank\" class=\"atum-link\" style=\"font-size: 10px;\" href=\"" + response.data.supplier_link + "\">" + response.data.text_link + "</a>",
+                            confirmButtonText: _this.settings.get('ok'),
+                            confirmButtonColor: _this.buttonColor,
+                            showCloseButton: true,
+                        }, meta = _this.$setMeta.data('meta'), selectOptions = _this.$setMeta.data('selectOptions');
+                        var editedCols = _this.globals.$editInput.val();
+                        selectOptions[response.data.supplier_id] = response.data.supplier_name;
+                        _this.$setMeta.data('realValue', response.data.supplier_id);
+                        _this.$setMeta.data('selectedValue', response.data.supplier_id);
+                        _this.$setMeta.data('selectOptions', selectOptions);
+                        _this.listTable.setCellValue(_this.$setMeta, response.data.supplier_name);
+                        if (editedCols) {
+                            editedCols = JSON.parse(editedCols);
+                        }
+                        editedCols = editedCols || {};
+                        if (!editedCols.hasOwnProperty(_this.productId)) {
+                            editedCols[_this.productId] = {};
+                        }
+                        if (!editedCols[_this.productId].hasOwnProperty(meta)) {
+                            editedCols[_this.productId][meta] = {};
+                        }
+                        editedCols[_this.productId][meta] = response.data.supplier_id;
+                        _this.globals.$editInput.val(JSON.stringify(editedCols));
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire(successSwalOptions);
+                        _this.listTable.maybeAddSaveButton();
+                    }
+                    resolve();
+                },
+            });
+        });
+    };
+    return AddSupplierModal;
+}());
+/* harmony default export */ __webpack_exports__["default"] = (AddSupplierModal);
 
 
 /***/ }),
@@ -1242,8 +1350,11 @@ var DragScroll = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _add_supplier_modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_add_supplier_modal */ "./assets/js/src/components/list-table/_add_supplier_modal.ts");
+
 var EditableCell = (function () {
-    function EditableCell(globals, popover, listTable) {
+    function EditableCell(settings, globals, popover, listTable) {
+        this.settings = settings;
         this.globals = globals;
         this.popover = popover;
         this.listTable = listTable;
@@ -1262,6 +1373,10 @@ var EditableCell = (function () {
                 _this.listTable.maybeAddSaveButton();
                 _this.listTable.updateEditedColsInput($setMeta, $popover);
             }
+        }).on('click', '.popover .content-footer .atum-add-supplier', function (evt) {
+            var $button = $(evt.currentTarget), $popover = $button.closest('.popover'), popoverId = $popover.attr('id'), $setMeta = $("[aria-describedby=\"" + popoverId + "\"]");
+            _this.popover.destroyPopover($setMeta);
+            new _add_supplier_modal__WEBPACK_IMPORTED_MODULE_0__["default"](_this.settings, _this.globals, _this.listTable, $setMeta);
         });
     };
     EditableCell.prototype.addHooks = function () {
@@ -3086,7 +3201,7 @@ jQuery(function ($) {
     new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_18__["default"](settings, globals);
     new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
     new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
-    new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](globals, popover, listTable);
+    new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);
     new _components_light_box__WEBPACK_IMPORTED_MODULE_11__["default"]();
     new _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_22__["default"](globals, tooltip, stickyCols, stickyHeader);
     new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_16__["default"](globals, router, enhancedSelect);

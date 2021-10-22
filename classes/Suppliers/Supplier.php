@@ -107,11 +107,14 @@ class Supplier {
 	 *
 	 * @param int $id
 	 */
-	public function __construct( $id ) {
+	public function __construct( $id = 0 ) {
 
-		$this->post = get_post( $id );
-		$this->id   = $id;
-		$this->read_data();
+		$this->id = $id;
+
+		if ( $id ) {
+			$this->post = get_post( $id );
+			$this->read_data();
+		}
 
 	}
 
@@ -168,22 +171,55 @@ class Supplier {
 	 * Save the changes to the database
 	 *
 	 * @since 1.6.8
+	 *
+	 * @return int $supplier_id
 	 */
 	public function save() {
 
 		if ( ! empty( $this->changes ) ) {
 
-			foreach ( $this->changes as $changed_prop ) {
+			if ( ! $this->id ) {
+				// Inserting.
+				if ( in_array( 'name', $this->changes ) ) {
 
-				if ( empty( $this->data[ $changed_prop ] ) ) {
-					delete_post_meta( $this->id, "_$changed_prop" );
-				}
-				else {
-					update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
+					$post = [
+						'post_title'  => $this->data['name'],
+						'post_status' => 'publish',
+						'post_type'   => Suppliers::POST_TYPE,
+					];
+
+					$meta_input = [];
+
+					foreach ( $this->changes as $changed_prop ) {
+						if ( 'name' !== $changed_prop && ! empty( $this->data[ $changed_prop ] ) ) {
+							$meta_input[ "_$changed_prop" ] = $this->data[ $changed_prop ];
+						}
+					}
+
+					$post['meta_input'] = $meta_input;
+
+					return wp_insert_post( $post );
+
 				}
 
 			}
+			else {
+				// Updating.
+				foreach ( $this->changes as $changed_prop ) {
+
+					if ( empty( $this->data[ $changed_prop ] ) ) {
+						delete_post_meta( $this->id, "_$changed_prop" );
+					}
+					else {
+						update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
+					}
+
+				}
+			}
+
 		}
+
+		return $this->id;
 
 	}
 
@@ -606,7 +642,7 @@ class Supplier {
 	}
 
 	/**
-	 * Set the cancelation policy
+	 * Set the cancellation policy
 	 *
 	 * @since 1.9.2
 	 *
@@ -619,6 +655,21 @@ class Supplier {
 		if ( $this->data['cancelation_policy'] !== $cancelation_policy ) {
 			$this->data['cancelation_policy'] = $cancelation_policy;
 			$this->register_change( 'cancelation_policy' );
+		}
+	}
+
+	/**
+	 * Set the name
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param string $name
+	 */
+	public function set_name( $name ) {
+
+		if ( ! $this->data['name'] !== $name ) {
+			$this->data['name'] = $name;
+			$this->register_change( 'name' );
 		}
 	}
 

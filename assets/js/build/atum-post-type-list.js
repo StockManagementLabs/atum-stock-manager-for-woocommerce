@@ -556,6 +556,9 @@ var TableCellPopovers = (function (_super) {
         else {
             $content.append($input).append($setButton);
         }
+        if ($metaCell.data('footerContent')) {
+            $content = $('<div class="edit-popover-wrapper" />').append($content).append($metaCell.data('footerContent'));
+        }
         var titleSetting = isSelect ? 'selectSetValue' : 'setValue';
         this.addPopover($metaCell, {
             title: this.settings.get(titleSetting) ? this.settings.get(titleSetting).replace('%%', cellName) : cellName,

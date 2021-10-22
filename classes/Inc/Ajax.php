@@ -27,11 +27,13 @@ use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
 use Atum\Legacy\AjaxLegacyTrait;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
 use Atum\StockCentral\Lists\ListTable;
+use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 final class Ajax {
@@ -167,6 +169,9 @@ final class Ajax {
 
 		// Save PO Multiple Suppliers.
 		add_action( 'wp_ajax_atum_save_po_multiple_supplier', array( $this, 'save_purchase_order_multiple_suppliers' ) );
+
+		// Create a new supplier from the "Create Supplier" modal.
+		add_action( 'wp_ajax_atum_create_supplier', array( $this, 'create_supplier' ) );
 
 	}
 
@@ -2663,6 +2668,51 @@ final class Ajax {
 
 		do_action( 'atum/ajax/tool_clear_out_atum_transients' );
 		wp_send_json_success( __( 'All your saved temporary data were cleared successfully.', ATUM_TEXT_DOMAIN ) );
+
+	}
+
+	/**
+	 * Create a new supplier from the "Create Supplier" modal.
+	 *
+	 * @since 1.9.6
+	 */
+	public function create_supplier() {
+
+		check_ajax_referer( 'create-supplier-nonce', 'security' );
+
+		if ( empty( $_POST['supplier_data'] ) ) {
+			wp_send_json_error( __( 'Invalid data', ATUM_TEXT_DOMAIN ) );
+		}
+
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
+			wp_send_json_error( __( 'Purchase Orders module isn\'t active.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		if ( ! AtumCapabilities::current_user_can( 'create_suppliers' ) ) {
+			wp_send_json_error( __( 'You don\'t have enough privileges.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		parse_str( $_POST['supplier_data'], $posted_data );
+
+		if ( empty( $posted_data['name'] ) ) {
+			wp_send_json_error( __( 'The Supplier name is required', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$supplier = new Supplier();
+		$supplier->set_data( $posted_data );
+		$supplier_id = $supplier->save();
+
+		if ( ! $supplier_id ) {
+			wp_send_json_error( __( 'Something failed when creating the supplier.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		wp_send_json_success( [
+			'message'       => __( 'Supplier Created', ATUM_TEXT_DOMAIN ),
+			'text_link'     => __( 'Complete supplier details', ATUM_TEXT_DOMAIN ),
+			'supplier_link' => get_edit_post_link( $supplier_id ),
+			'supplier_id'   => $supplier_id,
+			'supplier_name' => $supplier->name,
+		] );
 
 	}
 

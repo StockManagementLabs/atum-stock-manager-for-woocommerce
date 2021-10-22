@@ -35,6 +35,18 @@
 		}
 	}
 	
+	.content-footer {
+		padding-top: 7px;
+		margin-bottom: -12px;
+		a {
+			color: var(--primary);
+			text-decoration: none;
+		}
+		.footer-text {
+			padding-left: 3px;
+		}
+	}
+	
 	&.with-select {
 		max-width: 400px;
 		

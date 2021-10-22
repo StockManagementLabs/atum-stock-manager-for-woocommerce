@@ -246,18 +246,22 @@ export default class TableCellPopovers extends PopoverBase{
 			$content.append( $input ).append( $setButton );
 		}
 
+		if ( $metaCell.data( 'footerContent' ) ) {
+			$content = $( '<div class="edit-popover-wrapper" />' ).append( $content ).append( $metaCell.data( 'footerContent' ) );
+		}
+
 		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
-		
+
 		// Create the meta edit popover.
 		this.addPopover( $metaCell, {
 			title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
-			      content    : $content.get( 0 ), // It supports one element only.
-			      html       : true,
-			      customClass: popoverClass,
-			      placement  : 'bottom',
-			      trigger    : 'click',
-			      container  : 'body',
-		      } );
+			content    : $content.get( 0 ), // It supports one element only.
+			html       : true,
+			customClass: popoverClass,
+			placement  : 'bottom',
+			trigger    : 'click',
+			container  : 'body',
+		} );
 		
 	}
 	
