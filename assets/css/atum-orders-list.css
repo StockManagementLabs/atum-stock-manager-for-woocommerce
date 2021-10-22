@@ -5990,6 +5990,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   text-align: left;
   width: 100%;
   padding: 0;
+  max-height: 296px;
+  overflow-y: auto;
 }
 
 .popover.menu-popover ul li {
