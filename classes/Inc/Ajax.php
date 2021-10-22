@@ -623,7 +623,7 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'token' );
 
-		if ( empty( $_POST['ids'] ) ) {
+		if ( empty( $_POST['ids'] ) || ! is_array( $_POST['ids'] ) ) {
 			wp_send_json_error( __( 'No Items Selected.', ATUM_TEXT_DOMAIN ) );
 		}
 
@@ -631,9 +631,10 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid bulk action.', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$ids = array_unique( $_POST['ids'] );
+		$ids         = array_unique( $_POST['ids'] );
+		$bulk_action = esc_attr( $_POST['bulk_action'] );
 
-		switch ( $_POST['bulk_action'] ) {
+		switch ( $bulk_action ) {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
 
@@ -691,7 +692,7 @@ final class Ajax {
 				break;
 		}
 
-		$args = [ $_POST['bulk_action'], $ids ];
+		$args = [ $bulk_action, $ids ];
 
 		if ( ! empty( $_POST['extra_data'] ) ) {
 			$args[] = $_POST['extra_data'];
