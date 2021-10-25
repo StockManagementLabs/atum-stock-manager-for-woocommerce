@@ -2504,6 +2504,7 @@ var RowActions = (function () {
         this.rowActions = [];
         this.wpHooks = window['wp']['hooks'];
         this.rowActions = this.settings.get('rowActions');
+        console.log(this.rowActions);
         if (!this.rowActions.length) {
             return;
         }
@@ -2512,6 +2513,7 @@ var RowActions = (function () {
     }
     RowActions.prototype.prepareActionMenus = function () {
         var _this = this;
+        console.log('preparing action menus');
         this.globals.$atumList.find('.show-actions').each(function (index, elem) {
             var $button = $(elem), $titleCell = $button.closest('tr').find('td.column-title');
             var actionsMenu = {

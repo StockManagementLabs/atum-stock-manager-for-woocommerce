@@ -62,7 +62,7 @@ export default class RowActions {
 		// Add the "no actions" message if there are no menu items. NOTE: A high priority is important here.
 		this.wpHooks.addAction( 'atum_menuPopover_inserted', 'atum', ( $popover: JQuery ) => {
 
-			if ( !$popover.find( 'li' ).length ) {
+			if ( ! $popover.find( 'li' ).length ) {
 				$popover.find( 'ul' ).append( `<li class="no-actions">${ this.settings.get( 'noActions' ) }</li>` );
 			}
 
