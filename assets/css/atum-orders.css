@@ -751,6 +751,7 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
   background-color: #E5E5E5;
+  border-color: rgba(220, 220, 222, 0.75);
   cursor: default;
 }
 
@@ -5670,5 +5671,9 @@ div.add_note #add_atum_order_note {
   font-size: 13px;
   pointer-events: none;
   background-color: #fff;
+}
+
+.date-field.with-icon.disabled:after {
+  color: rgba(73, 80, 87, 0.6);
 }
 /*# sourceMappingURL=atum-orders.css.map */

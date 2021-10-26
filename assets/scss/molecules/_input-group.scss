@@ -246,4 +246,17 @@
 		}
 	}
 	
+	input:disabled {
+		+ .input-group-append {
+			border-color: $input-disabled-border-color;
+			
+			&, &:hover {
+				.input-group-text {
+					color: rgba($input-color, .6);
+				}
+			}
+			
+		}
+	}
+	
 }
