@@ -2795,8 +2795,11 @@ body .select2-container--default.atum-select2.select2-container--focus .select2-
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple {
-  background-color: #E5E5E5;
   cursor: default;
+}
+
+body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple input, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple input {
+  background-color: #E5E5E5;
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection__choice__remove, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection__choice__remove {
