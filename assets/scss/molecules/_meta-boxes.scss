@@ -349,30 +349,3 @@
 	}
 	
 }
-
-//
-// Help tip
-//---------
-
-.atum-help-tip {
-	color: color('gray');
-	display: inline-block;
-	font-size: 1.1em;
-	font-style: normal;
-	height: 16px;
-	line-height: 16px;
-	position: relative;
-	vertical-align: middle;
-	width: 16px;
-	
-	&::after {
-		@include atum-icon-font-family;
-		content: $atmi-question-circle;
-		cursor: help;
-	}
-}
-
-h2 .atum-help-tip {
-	margin-top: -5px;
-	margin-left: 0.25em;
-}

@@ -3640,6 +3640,35 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   color: #6c757d;
 }
 
+.atum-help-tip {
+  color: #adb5bd;
+  display: inline-block;
+  font-size: 1.1em;
+  font-style: normal;
+  height: 16px;
+  line-height: 16px;
+  position: relative;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.atum-help-tip:hover {
+  color: #6c757d;
+}
+
+.atum-help-tip::after {
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "";
+  cursor: help;
+}
+
+h2 .atum-help-tip {
+  margin-top: -5px;
+  margin-left: 0.25em;
+}
+
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -4598,31 +4627,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .select2-container.atum-select2:focus, .select2-container.atum-select2 .selection:focus, .select2-container.atum-select2 .select2-selection--single:focus, .select2-container.atum-enhanced-select:focus, .select2-container.atum-enhanced-select .selection:focus, .select2-container.atum-enhanced-select .select2-selection--single:focus {
   outline: none;
-}
-
-.atum-help-tip {
-  color: #adb5bd;
-  display: inline-block;
-  font-size: 1.1em;
-  font-style: normal;
-  height: 16px;
-  line-height: 16px;
-  position: relative;
-  vertical-align: middle;
-  width: 16px;
-}
-
-.atum-help-tip::after {
-  font-family: "atum-icon-font";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "";
-  cursor: help;
-}
-
-h2 .atum-help-tip {
-  margin-top: -5px;
-  margin-left: 0.25em;
 }
 
 .sr-only, .bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after, .bootstrap-datetimepicker-widget .btn[data-action="incrementMinutes"]::after, .bootstrap-datetimepicker-widget .btn[data-action="decrementHours"]::after, .bootstrap-datetimepicker-widget .btn[data-action="decrementMinutes"]::after, .bootstrap-datetimepicker-widget .btn[data-action="showHours"]::after, .bootstrap-datetimepicker-widget .btn[data-action="showMinutes"]::after, .bootstrap-datetimepicker-widget .btn[data-action="togglePeriod"]::after, .bootstrap-datetimepicker-widget .btn[data-action="clear"]::after, .bootstrap-datetimepicker-widget .btn[data-action="today"]::after, .bootstrap-datetimepicker-widget .picker-switch::after, .bootstrap-datetimepicker-widget table th.prev::after, .bootstrap-datetimepicker-widget table th.next::after {

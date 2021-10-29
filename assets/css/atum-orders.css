@@ -3504,6 +3504,35 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   }
 }
 
+.atum-help-tip {
+  color: #adb5bd;
+  display: inline-block;
+  font-size: 1.1em;
+  font-style: normal;
+  height: 16px;
+  line-height: 16px;
+  position: relative;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.atum-help-tip:hover {
+  color: #6c757d;
+}
+
+.atum-help-tip::after {
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "";
+  cursor: help;
+}
+
+h2 .atum-help-tip {
+  margin-top: -5px;
+  margin-left: 0.25em;
+}
+
 .atum-list-wrapper .displaying-num, #posts-filter .displaying-num {
   color: var(--atum-text-color-var1);
 }
@@ -4224,31 +4253,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 
 .select2-container.atum-select2:focus, .select2-container.atum-select2 .selection:focus, .select2-container.atum-select2 .select2-selection--single:focus, .select2-container.atum-enhanced-select:focus, .select2-container.atum-enhanced-select .selection:focus, .select2-container.atum-enhanced-select .select2-selection--single:focus {
   outline: none;
-}
-
-.atum-help-tip {
-  color: #adb5bd;
-  display: inline-block;
-  font-size: 1.1em;
-  font-style: normal;
-  height: 16px;
-  line-height: 16px;
-  position: relative;
-  vertical-align: middle;
-  width: 16px;
-}
-
-.atum-help-tip::after {
-  font-family: "atum-icon-font";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "";
-  cursor: help;
-}
-
-h2 .atum-help-tip {
-  margin-top: -5px;
-  margin-left: 0.25em;
 }
 
 #atum_order_data .hndle, #atum_order_data .handlediv, #atum_order_data .postbox-header {

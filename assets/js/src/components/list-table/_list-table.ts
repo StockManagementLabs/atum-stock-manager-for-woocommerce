@@ -745,17 +745,18 @@ export default class ListTable {
 			}
 
 			while ( $nextRow.length ) {
-				
+
 				if ( $compoundedCell.hasClass( 'compounded-available' ) ) {
 
-					const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span' ),
+					const $availableStockCell = $nextRow.find( this.wpHooks.applyFilters( 'atum_listTable_add_compounded_cases', '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span' ) ),
 					      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
 
 					compoundedAmt += parseFloat( availableStockValue ) || 0;
+
 				}
 				else {
 
-					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span, ._stock .mi-stock' ),
+					const $stockCell = $nextRow.find( '._stock .set-meta, ._stock .calculated span' ),
 					      stockValue = ! $stockCell.length ? '0' : $stockCell.text().trim();
 
 					compoundedAmt += parseFloat( stockValue ) || 0;
@@ -769,7 +770,7 @@ export default class ListTable {
 					$compoundedCell.text( compoundedAmt );
 				}
 
-				$nextRow = $nextRow.next( '.has-compounded' );
+				$nextRow = $nextRow.next( this.wpHooks.applyFilters( 'atum_listTable_add_rows', '.has-compounded' ) );
 
 			}
 
