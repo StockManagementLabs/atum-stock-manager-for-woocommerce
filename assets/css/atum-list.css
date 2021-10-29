@@ -3408,6 +3408,35 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   }
 }
 
+.atum-help-tip {
+  color: #adb5bd;
+  display: inline-block;
+  font-size: 1.1em;
+  font-style: normal;
+  height: 16px;
+  line-height: 16px;
+  position: relative;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.atum-help-tip:hover {
+  color: #6c757d;
+}
+
+.atum-help-tip::after {
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "";
+  cursor: help;
+}
+
+h2 .atum-help-tip {
+  margin-top: -5px;
+  margin-left: 0.25em;
+}
+
 .popover {
   position: absolute;
   top: 0;
