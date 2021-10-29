@@ -2635,6 +2635,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function add_supplier_variables_to_query( $products, $return_type = 'ids' ) {
 
+		$searching_id = $this->is_searching_by_id_column() ? absint( $_REQUEST['s'] ) : 0;
+
 		foreach ( $this->supplier_variation_products as $index => $variation_id ) {
 
 			$variation_product = Helpers::get_atum_product( $variation_id );
@@ -2654,7 +2656,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$variable_id = $variation_product->get_parent_id();
 			$product_ids = 'ids' === $return_type ? $products : wp_list_pluck( $products, 'ID' );
 
-			if ( ! is_array( $products ) || ! in_array( $variable_id, $product_ids ) ) {
+			if ( ( ! $searching_id || in_array( $searching_id, [ $variation_id, $variable_id ] ) ) && ( ! is_array( $products ) || ! in_array( $variable_id, $product_ids ) ) ) {
 				$this->container_products['all_variable'][] = $this->container_products['variable'][] = $variable_id;
 
 				$products[] = 'posts' === $return_type ? get_post( $variable_id ) : $variable_id;
