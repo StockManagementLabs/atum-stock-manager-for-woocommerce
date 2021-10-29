@@ -32,6 +32,9 @@ export default class ListTable {
 		// Bind events.
 		this.bindEvents();
 
+		// Calculate compounded stocks.
+		setTimeout( () => { this.calculateCompoundedStocks() } , 100 );
+
 		// Add this component to the global scope so can be accessed by other add-ons.
 		if ( ! window.hasOwnProperty( 'atum' ) ) {
 			window[ 'atum' ] = {};
@@ -49,8 +52,6 @@ export default class ListTable {
 		// Bind active class rows.
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );
 
-		// Calculate compounded stocks.
-		this.calculateCompoundedStocks();
 
 		this.globals.$atumList
 

@@ -1709,6 +1709,7 @@ var __assign = (undefined && undefined.__assign) || function () {
 
 var ListTable = (function () {
     function ListTable(settings, globals, toolTip, enhancedSelect, stickyCols) {
+        var _this = this;
         this.settings = settings;
         this.globals = globals;
         this.toolTip = toolTip;
@@ -1718,6 +1719,7 @@ var ListTable = (function () {
         this.isRowExpanding = {};
         this.wpHooks = window['wp']['hooks'];
         this.bindEvents();
+        setTimeout(function () { _this.calculateCompoundedStocks(); }, 100);
         if (!window.hasOwnProperty('atum')) {
             window['atum'] = {};
         }
@@ -1726,7 +1728,6 @@ var ListTable = (function () {
     ListTable.prototype.bindEvents = function () {
         var _this = this;
         _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].addActiveClassRow(this.globals.$atumTable);
-        this.calculateCompoundedStocks();
         this.globals.$atumList
             .on('click', '.calc_type .has-child', function (evt) { return $(evt.currentTarget).closest('tr').trigger('atum-list-expand-row'); })
             .on('atum-list-expand-row', 'tbody tr', function (evt, expandableRowClass, stopRowSelector, stopPropagation) {
