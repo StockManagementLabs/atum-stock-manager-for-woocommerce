@@ -4565,9 +4565,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( ! empty( $this->supplier_variation_products ) ) {
 					$children_args['post__in'] = $this->supplier_variation_products;
 				}
-				else {
-					$children_args['post_parent__in'] = $parents;
-				}
+				$children_args['post_parent__in'] = $parents;
 			}
 
 			// Apply the same order and orderby args than their parent.
