@@ -2635,7 +2635,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function add_supplier_variables_to_query( $products, $return_type = 'ids' ) {
 
-		$searching_id = $this->is_searching_by_id_column() ? absint( $_REQUEST['s'] ) : 0;
+		$search_column = isset( $_REQUEST['search_column'] ) ? esc_attr( stripslashes( $_REQUEST['search_column'] ) ) : FALSE;
+		$search_term   = isset( $_REQUEST['s'] ) ? sanitize_text_field( urldecode( stripslashes( trim( $_REQUEST['s'] ) ) ) ) : FALSE;
+
+		$searching = $search_column || $search_term ? $this->get_search_terms_ids( $search_column, $search_term, FALSE ) : FALSE;
 
 		foreach ( $this->supplier_variation_products as $index => $variation_id ) {
 
@@ -2653,10 +2656,21 @@ abstract class AtumListTable extends \WP_List_Table {
 				continue;
 			}
 
+			if ( FALSE === apply_filters( 'atum/list_table/check_supplier_variation', TRUE, $variation_product ) ) {
+				unset( $this->supplier_variation_products[ $index ] );
+				continue;
+			}
+
 			$variable_id = $variation_product->get_parent_id();
 			$product_ids = 'ids' === $return_type ? $products : wp_list_pluck( $products, 'ID' );
 
-			if ( ( ! $searching_id || in_array( $searching_id, [ $variation_id, $variable_id ] ) ) && ( ! is_array( $products ) || ! in_array( $variable_id, $product_ids ) ) ) {
+			// Ignore variation if is not found searching by column.
+			if ( FALSE !== $searching && empty ( array_intersect( $searching, [ $variation_id, $variable_id ] ) ) ) {
+				unset( $this->supplier_variation_products[ $index ] );
+				continue;
+			}
+
+			if ( ! is_array( $products ) || ! in_array( $variable_id, $product_ids ) ) {
 				$this->container_products['all_variable'][] = $this->container_products['variable'][] = $variable_id;
 
 				$products[] = 'posts' === $return_type ? get_post( $variable_id ) : $variable_id;
@@ -4076,7 +4090,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		return $get_query ? $search_where : $search_terms_ids;
+		return $get_query ? $search_where : array_unique( $search_terms_ids );
 
 	}
 
