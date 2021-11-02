@@ -33,6 +33,8 @@ export default class ListTable {
 		this.bindEvents();
 
 		// Calculate compounded stocks.
+		//In order to calculate the compounded stock in grouped or bundle products containing MI products,
+		//it is necessary to apply this delay to allow time to load the MI class constructors.
 		setTimeout( () => { this.calculateCompoundedStocks() } , 100 );
 
 		// Add this component to the global scope so can be accessed by other add-ons.
