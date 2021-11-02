@@ -166,7 +166,7 @@ var DataExport = (function () {
         this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
     };
     DataExport.prototype.downloadReport = function () {
-        window.open(window['ajaxurl'] + "?action=atum_export_data&page=" + _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page') + "&screen=" + this.settings.get('screen') + "&token=" + this.settings.get('exportNonce') + "&" + this.$exportForm.serialize(), '_blank');
+        window.open(window['ajaxurl'] + "?action=atum_export_data&page=" + _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page') + "&screen=" + this.settings.get('screen') + "&security=" + this.settings.get('exportNonce') + "&" + this.$exportForm.serialize(), '_blank');
     };
     return DataExport;
 }());

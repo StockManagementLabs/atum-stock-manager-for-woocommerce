@@ -26,8 +26,8 @@ export default class CurrentStockValueWidget {
 				url       : window['ajaxurl'],
 				method    : 'POST',
 				data      : {
-					token              : this.$widgetsContainer.data('nonce'),
 					action             : 'atum_current_stock_values',
+					security           : this.$widgetsContainer.data('nonce'),
 					categorySelected   : $('.categories-list').val(),
 					productTypeSelected: $('.product-types-list').val(),
 					writeOff           : $('.write-off-filter').val() || 'no'

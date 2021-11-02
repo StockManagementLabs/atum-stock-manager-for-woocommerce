@@ -92,7 +92,7 @@ export default class LocationsTree {
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : this.settings.get( 'nonce' ),
+				security  : this.settings.get( 'nonce' ),
 				product_id: this.productId,
 			},
 			beforeSend: () => $locationsTreeContainer.append( '<div class="atum-loading" />' ),
@@ -208,7 +208,7 @@ export default class LocationsTree {
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : this.settings.get( 'nonce' ),
+				security  : this.settings.get( 'nonce' ),
 				product_id: -1, // Send -1 to get all the terms.
 			},
 			beforeSend: () => $locationsTreeContainer.append( '<div class="atum-loading" />' ),
@@ -250,7 +250,7 @@ export default class LocationsTree {
 				method  : 'post',
 				data    : {
 					action    : 'atum_set_locations_tree',
-					token     : this.settings.get( 'nonce' ),
+					security  : this.settings.get( 'nonce' ),
 					product_id: this.productId,
 					terms     : toSetTerms,
 				},

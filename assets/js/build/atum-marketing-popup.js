@@ -111,7 +111,7 @@ var MarketingPopup = (function () {
             method: 'post',
             data: {
                 action: 'atum_get_marketing_popup_info',
-                token: this.settings.get('nonce'),
+                security: this.settings.get('nonce'),
             },
             success: function (response) {
                 if (response.success === true) {
@@ -164,7 +164,7 @@ var MarketingPopup = (function () {
             method: 'post',
             data: {
                 action: 'atum_hide_marketing_popup',
-                token: this.settings.get('nonce'),
+                security: this.settings.get('nonce'),
                 transientKey: transientKey,
             },
         });

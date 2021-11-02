@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.7.1
-Stable tag: 1.9.5
+WC tested up to: 5.8.0
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,43 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.6`
+
+*2021-11-02*
+
+**Features**
+
+* Performance improvement: after saving in Stock Central return the updated table data directly without having to perform an extra request to update.
+* Allow returning data externally from other List Tables.
+* Improved Supplier model to allow inserting new suppliers.
+* Added new helper to get the URL of the current List Table page.
+* Added extra filters compatibility to all the List Tables.
+* Use the ATUM modal for the SC's extra filters modals.
+* Allow creating suppliers from an ATUM list table.
+
+**Changes**
+
+* Do not add the no-column and title to the seach by column dropdown when not necessary.
+* Refactoring.
+* Changed hook name 'atum/list_table/product_search/numeric_meta_where'.
+* Return an empty array on ajax JSON search functions when there are no results.
+* Added Purchase Orders Premium' first version to the add-ons list.
+* Added arg to the 'atum_listTable_tableUpdated' JS hook.
+* Set a max height for the menu popovers' list.
+* Changed placeholder text for the out of stock threshold field.
+
+**Fixes**
+
+* Make sure the supplier's name is escaped before adding it to the editable cell's data.
+* Show a "no results found" message when searching for suppliers on the suppliers dropdown.
+* Remove the table overlay when an error is returned after doing a bulk action.
+* Fixed CSS styling for disabled inputs.
+* Fixed disabled BG color for select2 fields.
+* Fixed supplier filter not affecting to children rows in List Tables.
+* Apply the suppliers filter when filtering by ID.
 
 ---
 
