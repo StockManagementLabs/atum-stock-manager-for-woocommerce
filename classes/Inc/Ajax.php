@@ -184,7 +184,7 @@ final class Ajax {
 	 */
 	public function save_dashboard_layout() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		$layout  = ! empty( $_POST['layout'] ) ? $_POST['layout'] : array();
 		$user_id = get_current_user_id();
@@ -203,7 +203,7 @@ final class Ajax {
 	 */
 	public function restore_dashboard_layout() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		$user_id = get_current_user_id();
 		Dashboard::restore_user_widgets_layout( $user_id );
@@ -220,7 +220,7 @@ final class Ajax {
 	 */
 	public function add_new_widget() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		if ( empty( $_POST['widget'] ) ) {
 			wp_send_json_error( __( 'Invalid widget', ATUM_TEXT_DOMAIN ) );
@@ -276,7 +276,7 @@ final class Ajax {
 	 */
 	public function videos_widget_sorting() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		if ( empty( $_POST['sortby'] ) ) {
 			wp_die( - 1 );
@@ -299,7 +299,7 @@ final class Ajax {
 	 */
 	public function current_stock_values() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		$current_stock_values = WidgetHelpers::get_items_in_stock( $_POST['categorySelected'], $_POST['productTypeSelected'] );
 		$current_stock_values = array_map( 'strval', $current_stock_values ); // Avoid issues with decimals when encoding to JSON.
@@ -318,7 +318,7 @@ final class Ajax {
 	 */
 	public function load_sales_data() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		if ( empty( $_POST['widget'] ) || empty( $_POST['filter'] ) ) {
 			wp_send_json_error( __( 'Invalid data', ATUM_TEXT_DOMAIN ) );
@@ -410,7 +410,7 @@ final class Ajax {
 	 */
 	public function statistics_widget_chart() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		if ( empty( $_POST['chart_data'] ) || empty( $_POST['chart_period'] ) ) {
 			wp_send_json_error();
@@ -484,7 +484,7 @@ final class Ajax {
 	 */
 	public function fetch_stock_central_list( $return_data = FALSE ) {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		$args = array(
 			'per_page'        => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
@@ -522,7 +522,7 @@ final class Ajax {
 	 */
 	public function fetch_inbound_stock_list() {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		$args = array(
 			'per_page' => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
@@ -557,7 +557,7 @@ final class Ajax {
 	 */
 	public function update_list_data() {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		if ( empty( $_POST['data'] ) ) {
 			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
@@ -621,7 +621,7 @@ final class Ajax {
 	 */
 	public function apply_bulk_action() {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		if ( empty( $_POST['ids'] ) || ! is_array( $_POST['ids'] ) ) {
 			wp_send_json_error( __( 'No Items Selected.', ATUM_TEXT_DOMAIN ) );
@@ -713,7 +713,7 @@ final class Ajax {
 	 */
 	public function control_all_products() {
 
-		check_ajax_referer( 'atum-control-all-products-nonce', 'token' );
+		check_ajax_referer( 'atum-control-all-products-nonce', 'security' );
 		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 
 	}
@@ -844,7 +844,7 @@ final class Ajax {
 	 */
 	private function check_license_post_data() {
 
-		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'token' );
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
 		if ( empty( $_POST['addon'] ) ) {
 			wp_send_json_error( __( 'No addon name provided', ATUM_TEXT_DOMAIN ) );
@@ -1067,7 +1067,7 @@ final class Ajax {
 	 */
 	public function remove_license() {
 
-		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'token' );
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
 		if ( empty( $_POST['addon'] ) ) {
 			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
@@ -2226,7 +2226,7 @@ final class Ajax {
 	 */
 	public function get_locations_tree() {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		$locations_tree = '';
 
@@ -2286,7 +2286,7 @@ final class Ajax {
 	 */
 	public function set_locations_tree() {
 
-		check_ajax_referer( 'atum-list-table-nonce', 'token' );
+		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
 		if ( empty( $_POST['product_id'] ) ) {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
@@ -2321,7 +2321,7 @@ final class Ajax {
 	 */
 	public function change_manage_stock() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
@@ -2349,7 +2349,7 @@ final class Ajax {
 	 */
 	public function change_control_stock() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
@@ -2377,7 +2377,7 @@ final class Ajax {
 	 */
 	public function clear_out_stock_threshold() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
 		Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
 
@@ -2399,7 +2399,7 @@ final class Ajax {
 	 */
 	public function change_table_style_user_meta() {
 
-		check_ajax_referer( 'atum-list-table-style', 'token' );
+		check_ajax_referer( 'atum-list-table-style', 'security' );
 
 		if ( ! isset( $_POST['enabled'], $_POST['feature'] ) ) {
 			wp_die( -1 );
@@ -2423,7 +2423,7 @@ final class Ajax {
 	 */
 	public function get_marketing_popup_info() {
 
-		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
+		check_ajax_referer( 'atum-marketing-popup-nonce', 'security' );
 
 		if ( Helpers::show_marketing_popup() ) {
 
@@ -2459,7 +2459,7 @@ final class Ajax {
 	 */
 	public function marketing_popup_state() {
 
-		check_ajax_referer( 'atum-marketing-popup-nonce', 'token' );
+		check_ajax_referer( 'atum-marketing-popup-nonce', 'security' );
 
 		if ( ! isset( $_POST['transientKey'] ) ) {
 			wp_die();
@@ -2483,7 +2483,7 @@ final class Ajax {
 	 */
 	public function marketing_dashboard_state() {
 
-		check_ajax_referer( 'atum-dashboard-widgets', 'token' );
+		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
 		if ( ! isset( $_POST['transientKey'] ) ) {
 			wp_die();
@@ -2507,7 +2507,7 @@ final class Ajax {
 	 */
 	public function get_color_scheme() {
 
-		check_ajax_referer( 'atum-color-scheme-nonce', 'token' );
+		check_ajax_referer( 'atum-color-scheme-nonce', 'security' );
 
 		$custom_settings = $settings = [];
 
@@ -2615,7 +2615,7 @@ final class Ajax {
 	 */
 	public function update_calc_props() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please enter the number of products you want to process per AJAX call', ATUM_TEXT_DOMAIN ) );
@@ -2663,7 +2663,7 @@ final class Ajax {
 	 */
 	public function clear_out_atum_transients() {
 
-		check_ajax_referer( 'atum-script-runner-nonce', 'token' );
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
 		AtumCache::delete_transients();
 

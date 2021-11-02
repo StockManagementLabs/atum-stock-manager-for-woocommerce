@@ -193,7 +193,7 @@ class AtumQueues {
 
 				$data = [
 					'action'     => 'atum_async_hooks',
-					'token'      => wp_create_nonce( 'atum_async_hooks' ),
+					'security'   => wp_create_nonce( 'atum_async_hooks' ),
 					'atum_hooks' => self::$async_hooks,
 				];
 
@@ -231,7 +231,7 @@ class AtumQueues {
 	 */
 	public function handle_async_hooks() {
 
-		check_ajax_referer( 'atum_async_hooks', 'token' );
+		check_ajax_referer( 'atum_async_hooks', 'security' );
 
 		// Refresh the available async transient.
 		AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );

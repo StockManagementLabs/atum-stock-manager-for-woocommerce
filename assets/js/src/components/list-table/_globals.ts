@@ -60,8 +60,8 @@ export default class Globals {
 		}
 
 		this.filterData = ( this.defaults && this.defaults.filterData ) || {
-			token          : this.settings.get( 'nonce' ),
 			action         : this.$atumList.data( 'action' ),
+			security       : this.settings.get( 'nonce' ),
 			screen         : this.$atumList.data( 'screen' ),
 			per_page       : perPage,
 			paged          : 1,

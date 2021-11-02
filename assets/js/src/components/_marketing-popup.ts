@@ -63,8 +63,8 @@ export default class MarketingPopup {
 			dataType: 'json',
 			method  : 'post',
 			data    : {
-				action: 'atum_get_marketing_popup_info',
-				token : this.settings.get( 'nonce' ),
+				action  : 'atum_get_marketing_popup_info',
+				security: this.settings.get( 'nonce' ),
 			},
 			success : ( response: any ) => {
 
@@ -153,7 +153,7 @@ export default class MarketingPopup {
 			method  : 'post',
 			data    : {
 				action      : 'atum_hide_marketing_popup',
-				token       : this.settings.get( 'nonce' ),
+				security    : this.settings.get( 'nonce' ),
 				transientKey: transientKey,
 			},
 		} );
