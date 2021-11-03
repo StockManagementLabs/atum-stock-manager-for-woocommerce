@@ -1139,7 +1139,7 @@ var SettingsPage = (function () {
         });
     };
     SettingsPage.prototype.toggleMultiCheckboxPanel = function ($switcher) {
-        var $panel = $switcher.siblings('.atum-settings-multi-checkbox');
+        var $panel = $switcher.closest('td').find('.atum-settings-multi-checkbox');
         $panel.css('display', $switcher.is(':checked') ? 'block' : 'none');
     };
     SettingsPage.prototype.clickCheckbox = function ($checkbox) {

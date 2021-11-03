@@ -602,7 +602,7 @@ export default class SettingsPage {
 	 * @param {JQuery} $switcher
 	 */
 	toggleMultiCheckboxPanel( $switcher: JQuery ) {
-		const $panel: JQuery = $switcher.siblings( '.atum-settings-multi-checkbox' );
+		const $panel: JQuery = $switcher.closest( 'td' ).find( '.atum-settings-multi-checkbox' );
 
 		$panel.css( 'display', $switcher.is( ':checked' ) ? 'block' : 'none' );
 	}
