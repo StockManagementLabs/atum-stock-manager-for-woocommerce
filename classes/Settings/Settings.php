@@ -1098,11 +1098,11 @@ class Settings {
 		$stored_values = $this->find_option_value( $args['id'] );
 
 		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
-		$enabled         = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 
 		if ( isset( $args['main_switcher'] ) && $args['main_switcher'] ) {
 
-			$output = sprintf(
+			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
+			$output  = sprintf(
 				'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
 				ATUM_PREFIX . $args['id'],
 				self::OPTION_NAME . "[{$args['id']}][value]",
@@ -1112,7 +1112,8 @@ class Settings {
 
 		}
 		else {
-			$output = $this->get_description( $args, 'no-padding' );
+			$enabled = TRUE;
+			$output  = $this->get_description( $args, 'no-padding' );
 		}
 
 		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
