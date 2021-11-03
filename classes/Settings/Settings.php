@@ -1100,29 +1100,33 @@ class Settings {
 		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
 		$enabled         = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 
-		$output = sprintf(
-			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
-			ATUM_PREFIX . $args['id'],
-			self::OPTION_NAME . "[{$args['id']}][value]",
-			$enabled,
-			$this->get_dependency( $args ) . $data_default
-		) . $this->get_description( $args );
+		if ( isset( $args['main_switcher'] ) && $args['main_switcher'] ) {
+
+			$output = sprintf(
+				'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
+				ATUM_PREFIX . $args['id'],
+				self::OPTION_NAME . "[{$args['id']}][value]",
+				$enabled,
+				$this->get_dependency( $args ) . $data_default
+			) . $this->get_description( $args );
+
+		}
+		else {
+			$output = $this->get_description( $args, 'no-padding' );
+		}
 
 		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
-		$check_defs = $args['default_options'];
+		$check_defs = isset( $args['default_options'] ) ? $args['default_options'] : [];
 
 		if ( ! empty( $check_defs ) ) {
 
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
 
-			// Check-all checkbox.
-			// $output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
-			// . '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';!
-
 			foreach ( $check_defs as $id => $checkbox ) {
+
 				$default_attr    = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
-				$default_checked = 'yes' === $checkbox['value'] ? 'checked' : '';
-				$checked         = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : $default_checked;
+				$default_checked = ( isset( $checkbox['value'] ) && 'yes' === $checkbox['value'] ) ? 'checked' : '';
+				$checked         = ( ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : $default_checked;
 
 				$output .= '<div class="atum-multi-checkbox-option' . ( $checked ? ' setting-checked' : '' ) . '"><label>';
 				$output .= sprintf(
@@ -1132,8 +1136,12 @@ class Settings {
 					$checked,
 					$default_attr
 				);
-				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
-				$output .= ' <span class="atum-help-tip tips" data-bs-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				$output .= ' ' . esc_html( $checkbox['name'] ) . '</label>';
+
+				if ( ! empty( $checkbox['desc'] ) ) {
+					$output .= ' <span class="atum-help-tip tips" data-bs-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				}
+
 				$output .= '</div>';
 			}
 
@@ -1499,16 +1507,17 @@ class Settings {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args
+	 * @param array  $args
+	 * @param string $extra_class
 	 *
 	 * @return string
 	 */
-	public function get_description( $args ) {
+	public function get_description( $args, $extra_class = '' ) {
 		
 		$label = '';
 		
 		if ( array_key_exists( 'desc', $args ) ) {
-			$label = '<div class="atum-setting-info">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
+			$label = '<div class="atum-setting-info ' . $extra_class . '">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
 		}
 		
 		return $label;
