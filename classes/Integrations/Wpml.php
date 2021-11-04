@@ -23,6 +23,13 @@ use Atum\Suppliers\Suppliers;
 
 
 class Wpml {
+
+	/**
+	 * The singleton instance holder
+	 *
+	 * @var Wpml
+	 */
+	private static $instance;
 	
 	/**
 	 * Searchable MultiCurrency columns and their types
@@ -45,7 +52,7 @@ class Wpml {
 	 *
 	 * @var \woocommerce_wpml
 	 */
-	protected $wpml;
+	public $wpml;
 
 	/* @noinspection PhpUndefinedClassInspection */
 	/**
@@ -53,7 +60,7 @@ class Wpml {
 	 *
 	 * @var \SitePress
 	 */
-	protected static $sitepress;
+	public static $sitepress;
 
 	/**
 	 * Current product and currency custom prices (WPML Multi-currency custom product prices)
@@ -74,7 +81,7 @@ class Wpml {
 	 *
 	 * @var string
 	 */
-	protected $current_language;
+	public $current_language;
 
 	/**
 	 * Current currency symbol
@@ -83,13 +90,22 @@ class Wpml {
 	 */
 	protected $current_currency;
 
+	/**
+	 * If current editing post is a new translation
+	 *
+	 * @since 1.9.7
+	 *
+	 * @var bool
+	 */
+	protected $is_new_translation = FALSE;
+
 
 	/**
 	 * Wpml constructor
 	 *
 	 * @since 1.4.1
 	 */
-	public function __construct() {
+	private function __construct() {
 
 		global $sitepress, $woocommerce_wpml;
 
@@ -107,6 +123,8 @@ class Wpml {
 		else {
 			$this->current_currency = get_woocommerce_currency();
 		}
+
+
 
 		$this->register_hooks();
 
@@ -1005,8 +1023,7 @@ class Wpml {
 				else {
 					
 					// if inserting, it's needed.
-					$data['product_id'] = $translation_id;
-					$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data );
+					self::duplicate_atum_product( $product_id, $translation_id );
 				}
 			}
 			
@@ -1135,7 +1152,7 @@ class Wpml {
 		return $add_panel;
 
 	}
-	
+
 	/**
 	 * Do upgrade tasks after ATUM's updated
 	 *
@@ -1281,5 +1298,39 @@ class Wpml {
 			
 		}
 		
+	}
+
+	/******************
+	 * Instace methods
+	 ******************/
+
+	/**
+	 * Cannot be cloned
+	 */
+	public function __clone() {
+
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_MULTINV_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Cannot be serialized
+	 */
+	public function __sleep() {
+
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_MULTINV_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return Wpml instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }

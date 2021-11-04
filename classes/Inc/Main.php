@@ -261,7 +261,7 @@ class Main {
 		// Enable WPML module if needed
 		// -----------------------------!
 		if ( class_exists( '\SitePress' ) && class_exists( '\woocommerce_wpml' ) ) {
-			new Wpml();
+			Wpml::get_instance();
 		}
 		
 		//
