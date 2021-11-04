@@ -238,10 +238,17 @@
 		display: inline-block;
 		margin-bottom: $grid-gutter-width/2;
 		
+		input[type=checkbox] {
+			&:focus {
+				border-color: var(--success);
+				box-shadow: 0 0 0 1px var(--success);
+			}
+		}
+		
 		&.setting-checked label {
 			color: var(--atum-checkbox-label);
 			
-			[type=checkbox] {
+			input[type=checkbox] {
 				background-color: var(--success);
 				border: 0;
 				
@@ -253,8 +260,10 @@
 					margin: 8px -2px 0;
 					font-weight: bold;
 				}
+				
 			}
 		}
+		
 	}
 	
 	.remove-datepicker-range {
@@ -697,6 +706,10 @@
 				font-style: normal;
 				font-stretch: normal;
 				line-height: 1.47;
+				
+				&.no-padding {
+					padding: 0;
+				}
 				
 				ul {
 					padding-left: $grid-gutter-width/2;

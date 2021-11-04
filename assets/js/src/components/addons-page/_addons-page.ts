@@ -75,11 +75,11 @@ export default class AddonsPage {
 					method    : 'POST',
 					dataType  : 'json',
 					data      : {
-						token : this.$addonsList.data( 'nonce' ),
-						action: 'atum_install_addon',
-						addon : $addonBlock.data( 'addon' ),
-						slug  : $addonBlock.data( 'addon-slug' ),
-						key   : $addonBlock.find( '.addon-key input' ).val(),
+						action  : 'atum_install_addon',
+						security: this.$addonsList.data( 'nonce' ),
+						addon   : $addonBlock.data( 'addon' ),
+						slug    : $addonBlock.data( 'addon-slug' ),
+						key     : $addonBlock.find( '.addon-key input' ).val(),
 					},
 					beforeSend: () => {
 						this.beforeAjax( $button );
@@ -118,10 +118,10 @@ export default class AddonsPage {
 					method    : 'POST',
 					dataType  : 'json',
 					data      : {
-						token : this.$addonsList.data( 'nonce' ),
-						action: 'atum_remove_license',
-						addon : $addonBlock.data( 'addon' ),
-						slug  : $addonBlock.data( 'addon-slug' ),
+						action  : 'atum_remove_license',
+						security: this.$addonsList.data( 'nonce' ),
+						addon   : $addonBlock.data( 'addon' ),
+						slug    : $addonBlock.data( 'addon-slug' ),
 					},
 					beforeSend: () => {
 						$button.prop( 'disabled', true );
@@ -157,10 +157,10 @@ export default class AddonsPage {
 			method    : 'POST',
 			dataType  : 'json',
 			data      : {
-				token : this.$addonsList.data( 'nonce' ),
-				action: $button.data( 'action' ),
-				addon : $button.closest( '.theme' ).data( 'addon' ),
-				key   : key,
+				action  : $button.data( 'action' ),
+				security: this.$addonsList.data( 'nonce' ),
+				addon   : $button.closest( '.theme' ).data( 'addon' ),
+				key     : key,
 			},
 			beforeSend: () => {
 				this.beforeAjax( $button );
@@ -198,10 +198,10 @@ export default class AddonsPage {
 										method  : 'POST',
 										dataType: 'json',
 										data    : {
-											token : this.$addonsList.data( 'nonce' ),
-											action: 'atum_activate_license',
-											addon : $button.closest( '.theme' ).data( 'addon' ),
-											key   : key,
+											action  : 'atum_activate_license',
+											security: this.$addonsList.data( 'nonce' ),
+											addon   : $button.closest( '.theme' ).data( 'addon' ),
+											key     : key,
 										},
 										success : ( response: any ) => {
 

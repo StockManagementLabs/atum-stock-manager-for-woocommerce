@@ -139,7 +139,7 @@ export default class DataExport {
 		
 		$iframe.appendTo('body');*/
 		
-		window.open( `${ window['ajaxurl'] }?action=atum_export_data&page=${ Utils.getUrlParameter('page') }&screen=${ this.settings.get('screen') }&token=${ this.settings.get('exportNonce') }&${ this.$exportForm.serialize() }`, '_blank');
+		window.open( `${ window['ajaxurl'] }?action=atum_export_data&page=${ Utils.getUrlParameter('page') }&screen=${ this.settings.get('screen') }&security=${ this.settings.get('exportNonce') }&${ this.$exportForm.serialize() }`, '_blank');
 		
 	}
 	

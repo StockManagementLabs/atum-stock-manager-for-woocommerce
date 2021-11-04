@@ -490,8 +490,8 @@ export default class ListTable {
 		}
 
 		let data: any = {
-			token         : this.settings.get( 'nonce' ),
 			action        : 'atum_update_data',
+			security      : this.settings.get( 'nonce' ),
 			data          : this.globals.$editInput.val(),
 			first_edit_key: null,
 		};
@@ -723,8 +723,8 @@ export default class ListTable {
 			dataType  : 'json',
 			beforeSend: () => $button.prop( 'disabled', true ).after( '<span class="atum-spinner"><span></span></span>' ),
 			data      : {
-				token : $button.data( 'nonce' ),
-				action: 'atum_control_all_products',
+				action  : 'atum_control_all_products',
+				security: $button.data( 'nonce' ),
 			},
 			success   : () => location.reload(),
 		} );

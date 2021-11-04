@@ -132,9 +132,9 @@ final class AtumAdminNotices {
 										url   : ajaxurl,
 										method: 'POST',
 										data  : {
-											token : '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
-											action: 'atum_dismiss_notice',
-											key   : $notice.data('dismiss-key')
+											action  : 'atum_dismiss_notice',
+											security: '<?php echo wp_create_nonce( 'dismiss-atum-notice' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>',
+											key     : $notice.data('dismiss-key')
 										}
 									});
 								}
@@ -214,7 +214,7 @@ final class AtumAdminNotices {
 	 */
 	public function dismiss_notice_ajax() {
 
-		check_ajax_referer( 'dismiss-atum-notice', 'token' );
+		check_ajax_referer( 'dismiss-atum-notice', 'security' );
 
 		if ( ! empty( $_POST['key'] ) ) {
 			self::dismiss_notice( esc_attr( $_POST['key'] ) );

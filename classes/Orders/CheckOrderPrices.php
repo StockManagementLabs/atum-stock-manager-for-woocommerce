@@ -149,7 +149,7 @@ class CheckOrderPrices {
 	 */
 	public function check_order_prices() {
 
-		check_ajax_referer( 'atum-check-order-prices-nonce', 'token' );
+		check_ajax_referer( 'atum-check-order-prices-nonce', 'security' );
 
 		parse_str( ltrim( $_POST['query_string'], '?' ), $query_args );
 

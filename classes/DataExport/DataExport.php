@@ -104,7 +104,7 @@ class DataExport {
 	 */
 	public function export_data() {
 
-		check_ajax_referer( 'atum-data-export-nonce', 'token' );
+		check_ajax_referer( 'atum-data-export-nonce', 'security' );
 
 		$html_report  = $this->generate_html_report( $_GET );
 		$report_title = apply_filters( 'atum/data_export/report_title', __( 'ATUM Stock Central Report', ATUM_TEXT_DOMAIN ) );

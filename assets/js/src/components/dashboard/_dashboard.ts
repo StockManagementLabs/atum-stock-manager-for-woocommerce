@@ -157,9 +157,9 @@ export default class Dashboard {
 				url       : window['ajaxurl'],
 				method    : 'POST',
 				data      : {
-					token : this.$widgetsContainer.data('nonce'),
-					action: 'atum_dashboard_add_widget',
-					widget: widgetId
+					action  : 'atum_dashboard_add_widget',
+					security: this.$widgetsContainer.data('nonce'),
+					widget  : widgetId
 				},
 				dataType  : 'json',
 				beforeSend: () => $widgetContainer.addClass('overlay'),
@@ -202,8 +202,8 @@ export default class Dashboard {
 							url       : window['ajaxurl'],
 							method    : 'POST',
 							data      : {
-								token : this.$widgetsContainer.data('nonce'),
-								action: 'atum_dashboard_restore_layout'
+								action  : 'atum_dashboard_restore_layout',
+								security: this.$widgetsContainer.data('nonce')
 							},
 							dataType  : 'json',
 							beforeSend: () => {
@@ -326,9 +326,9 @@ export default class Dashboard {
 				dataType  : 'json',
 				method    : 'post',
 				data      : {
-					action       : 'atum_hide_marketing_dashboard',
-					token        : this.$widgetsContainer.data('nonce'),
-					transientKey : transientKey,
+					action      : 'atum_hide_marketing_dashboard',
+					security    : this.$widgetsContainer.data('nonce'),
+					transientKey: transientKey,
 				},
 			});
 
@@ -354,9 +354,9 @@ export default class Dashboard {
 			url    : window['ajaxurl'],
 			method : 'POST',
 			data   : {
-				action: 'atum_dashboard_save_layout',
-				token : this.$widgetsContainer.data('nonce'),
-				layout: this.serializeLayout(this.grid.grid.nodes)
+				action  : 'atum_dashboard_save_layout',
+				security: this.$widgetsContainer.data('nonce'),
+				layout  : this.serializeLayout(this.grid.grid.nodes)
 			}
 		});
 		

@@ -356,8 +356,8 @@ export default class StatisticsWidget {
 				url       : window['ajaxurl'],
 				method    : 'POST',
 				data      : {
-					token       : this.$widgetsContainer.data('nonce'),
 					action      : 'atum_statistics_widget_chart',
+					security    : this.$widgetsContainer.data('nonce'),
 					chart_data  : $chartFilter.find('select.chart-data').val(),
 					chart_period: $chartFilter.find('select.chart-period').val()
 				},

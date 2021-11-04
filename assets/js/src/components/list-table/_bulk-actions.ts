@@ -110,8 +110,8 @@ export default class BulkActions {
 	processBulk( bulkAction: string, selectedItems: string[], extraData: any = null ) {
 
 		const data: any = {
-			token      : this.settings.get( 'nonce' ),
 			action     : 'atum_apply_bulk_action',
+			security   : this.settings.get( 'nonce' ),
 			bulk_action: bulkAction,
 			ids        : selectedItems,
 		};
