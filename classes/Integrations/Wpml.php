@@ -143,6 +143,8 @@ class Wpml {
 		// Get all product translations ids to calculate calculated properties.
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_products_translations_ids' ) );
+
+		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
 		
 		if ( is_admin() ) {
 
@@ -934,6 +936,25 @@ class Wpml {
 				}
 				
 			}
+		}
+	}
+
+	/**
+	 * Saves ATUM data after a translation is completed.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param int $new_post_id
+	 * @param array $fields
+	 * @param \WPML_Translation_Job_Factory|\stdClass $job
+	 */
+	public function new_translation_completed( $new_post_id, $fields, $job ) {
+
+		if ( 'product' === get_post_type( $new_post_id ) ) {
+
+			$master_post_id = $this->wpml->products->get_original_product_id( $new_post_id );
+
+			self::duplicate_atum_product( $master_post_id, $new_post_id );
 		}
 	}
 
