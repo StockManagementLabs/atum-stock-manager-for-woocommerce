@@ -97,7 +97,7 @@ class Wpml {
 	 *
 	 * @var bool
 	 */
-	protected $is_new_translation = FALSE;
+	public $is_translation = FALSE;
 
 
 	/**
@@ -199,6 +199,10 @@ class Wpml {
 
 			// replace the BOM Panel.
 			add_filter( 'atum/product_data/can_add_atum_panel', array( $this, 'maybe_remove_atum_panel' ), 10, 2 );
+
+			// Check if this is a translation
+			add_action( 'post_edit_form_tag', array( $this, 'check_product_if_translation' ) );
+			add_action( 'woocommerce_variation_header', array( $this, 'check_variation_if_translation') );
 			
 		}
 
@@ -1145,14 +1149,20 @@ class Wpml {
 	 */
 	public function maybe_remove_atum_panel( $add_panel, $product ) {
 
-		$product_id = $product->get_id();
-
-		if ( self::get_original_product_id( $product_id ) !== $product_id ) {
+		if ( $this->is_translation ) {
 
 			$add_panel = FALSE;
+			if ( $product instanceof \WC_Product_Variation ) {
+				$id     = "atum_product_data_{$product->get_id()}";
+				$hidden = '';
+			}
+			else {
+				$id     = 'atum_product_data';
+				$hidden = ' hidden';
+			}
 
 			?>
-			<div id="atum_product_data" class="panel woocommerce_options_panel hidden">
+			<div id="<?php esc_attr_e( $id ); ?>" class="panel woocommerce_options_panel<?php esc_attr_e( $hidden );?>">
 
 				<div class="options-group translated-atum-product">
 					<div class="alert alert-warning">
@@ -1172,6 +1182,49 @@ class Wpml {
 
 		return $add_panel;
 
+	}
+
+	/**
+	 * Check whether the current edited post is a translation
+	 *
+	 * @since 1.6.7
+	 *
+	 * @param \WP_Post $post
+	 */
+	public function check_product_if_translation( $post ){
+
+		global $pagenow, $wpml_post_translations;
+
+		if ( 'post-new.php' === $pagenow  ) {
+
+			$source_lang = filter_var( $_GET['source_lang'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$source_lang = 'all' === $source_lang ? self::$sitepress->get_default_language() : $source_lang;
+			$lang        = filter_var( $_GET['lang'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$source_lang = ! $source_lang && isset( $_GET['post'] ) && $lang !== self::$sitepress->get_default_language()
+				? $wpml_post_translations->get_source_lang_code( $post->ID ) : $source_lang;
+
+			$this->is_translation = $source_lang && $source_lang !== $lang;
+		}
+		else {
+
+			$is_edit_product     = 'post.php' === $pagenow && isset( $_GET['post'] ) && 'product' === get_post_type( $_GET['post'] );
+			$is_original_product = isset( $_GET['post'] ) && ! is_array( $_GET['post'] ) && $this->wpml->products->is_original_product( $_GET['post'] );
+
+			$this->is_translation = $is_edit_product && ! $is_original_product;
+		}
+
+	}
+
+	/**
+	 * Check if a variation is a translation
+	 *
+	 * @since 1.6.7
+	 *
+	 * @param \WC_Product_Variation|\WP_Post $variation
+	 */
+	public function check_variation_if_translation( $variation ) {
+
+		$this->is_translation = ! $this->wpml->products->is_original_product( $variation instanceof \WC_Product ? $variation->get_id() : $variation->ID );
 	}
 
 	/**
