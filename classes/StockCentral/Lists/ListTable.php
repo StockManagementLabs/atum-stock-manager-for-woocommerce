@@ -472,7 +472,7 @@ class ListTable extends AtumListTable {
 				$sold_today = Helpers::get_sold_last_days( 'today midnight', $this->day, $this->list_item->get_id() );
 				$this->list_item->set_sold_today( $sold_today );
 				$timestamp = Helpers::get_current_timestamp();
-				$this->list_item->set_update_date( $timestamp ); // This will force the update even when the values didn't chnage.
+				$this->list_item->set_update_date( $timestamp ); // This will force the update even when the values didn't change.
 			}
 
 		}
