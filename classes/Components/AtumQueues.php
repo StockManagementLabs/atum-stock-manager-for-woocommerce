@@ -131,7 +131,7 @@ class AtumQueues {
 	}
 
 	/**
-	 * Defer an action to run one time on the WP's 'shutodown' action.
+	 * Defer an action to run one time on the WP's 'shutdown' action.
 	 *
 	 * @since 1.7.3
 	 *

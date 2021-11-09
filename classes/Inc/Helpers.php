@@ -2949,7 +2949,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Checks if the passed product was not updated recently and requires a new update
+	 * Checks if the sales props of the passed product were not updated recently and require a new update
 	 *
 	 * @since 1.5.8
 	 *
@@ -2960,7 +2960,7 @@ final class Helpers {
 	 */
 	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
 
-		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
+		return is_null( $product->get_sales_update_date() ) || strtotime( $product->get_sales_update_date() ) <= strtotime( $time_frame );
 	}
 
 	/**

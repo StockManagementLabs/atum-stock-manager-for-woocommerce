@@ -60,12 +60,14 @@ trait AtumDataStoreCommonTrait {
 			'update_date',
 			'atum_stock_status',
 			'low_stock',
+			'sales_update_date',
 		) );
 
 		// Columns data need to be converted to datetime.
 		$date_columns = (array) apply_filters( 'atum/data_store/date_columns', array(
 			'out_stock_date',
 			'update_date',
+			'sales_update_date',
 		) );
 
 		// Switches, checkboxes and flags.
@@ -95,6 +97,7 @@ trait AtumDataStoreCommonTrait {
 			'lost_sales',
 			'has_location',
 			'update_date',
+			'sales_update_date',
 		) );
 
 		// We should make an insert if the returning row is empty or has none of the ATUM columns.
