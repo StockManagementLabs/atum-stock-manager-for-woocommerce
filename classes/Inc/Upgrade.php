@@ -138,6 +138,11 @@ class Upgrade {
 			$this->update_atum_stock_status();
 		}
 
+		// ** version 1.9.6.1 ** create sales_update_date in ATUM product data table
+		if ( version_compare( $db_version, '1.9.6.1', '<' ) ) {
+			$this->create_sales_update_date();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -794,6 +799,32 @@ class Upgrade {
 		";
 
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	}
+
+	/**
+	 * Create the sales_update_date in the ATUM Product table
+	 *
+	 * @since 1.9.6.1
+	 */
+	private function create_sales_update_date() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$column_name     = 'sales_update_date';
+
+		$column_exist = $wpdb->prepare( "
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'sales_update_date'
+			", $db_name, $atum_data_table, $column_name );
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `sales_update_date` DATETIME DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
 
 	}
 
