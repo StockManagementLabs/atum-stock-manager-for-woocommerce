@@ -3425,4 +3425,51 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Get the timezone string from the WP settings
+	 *
+	 * @since 1.9.7
+	 *
+	 * @return string
+	 */
+	public static function get_wp_timezone_string() {
+
+		$timezone_string = get_option( 'timezone_string' );
+
+		if ( ! empty( $timezone_string ) ) {
+			return $timezone_string;
+		}
+
+		$offset  = get_option( 'gmt_offset' );
+		$hours   = (int) $offset;
+		$minutes = ( $offset - floor( $offset ) ) * 60;
+		$offset  = '-0.5' === $offset ? str_replace( '+', '-', sprintf( '%+03d:%02d', $hours, $minutes ) ) : sprintf( '%+03d:%02d', $hours, $minutes );
+
+		return $offset;
+	}
+
+	/**
+	 * Returns the UTC time from a given current server timezone time.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param string $time In hh:mm format.
+	 *
+	 * @return string
+	 */
+	public static function get_utc_time( $time ) {
+
+		$timezone_string = self::get_wp_timezone_string();
+		try {
+			$date = new \DateTime( $time, new \DateTimeZone( $timezone_string ) );
+			$date->setTimezone( new \DateTimeZone( 'UTC' ) );
+		}
+		catch ( \Exception $e ) {
+			return $time;
+		}
+
+		return $date->format( 'H:i' );
+
+	}
+
 }
