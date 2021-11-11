@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_check-order-prices */ "./assets/js/src/components/_check-order-prices.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_check-order-prices */ "./assets/js/src/components/_check-order-prices.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
 
@@ -108,6 +108,7 @@ jQuery(function ($) {
     new _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -120,7 +121,7 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var CheckOrderPrices = (function () {
+/* WEBPACK VAR INJECTION */(function($) {var CheckOrderPrices = (function () {
     function CheckOrderPrices(settings, tooltip) {
         this.settings = settings;
         this.tooltip = tooltip;
@@ -164,6 +165,7 @@ var CheckOrderPrices = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (CheckOrderPrices);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -176,7 +178,7 @@ var CheckOrderPrices = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
 /* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__);
 
 var Tooltip = (function () {
@@ -232,6 +234,7 @@ var Tooltip = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (Tooltip);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -5270,6 +5273,17 @@ function within(min, value, max) {
 })));
 //# sourceMappingURL=tooltip.js.map
 
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ })
 

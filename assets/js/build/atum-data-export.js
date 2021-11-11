@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 var DataExport = (function () {
     function DataExport(settings) {
@@ -172,6 +172,7 @@ var DataExport = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (DataExport);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -223,7 +224,7 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_export_export__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/export/_export */ "./assets/js/src/components/export/_export.ts");
 
 
@@ -233,6 +234,7 @@ jQuery(function ($) {
     new _components_export_export__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -245,7 +247,7 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -492,6 +494,18 @@ var Utils = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ })
 

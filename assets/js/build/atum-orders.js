@@ -127,7 +127,7 @@ var Blocker = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _vendor_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../vendor/bootstrap-datetimepicker */ "./assets/js/vendor/bootstrap-datetimepicker.js");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _vendor_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../vendor/bootstrap-datetimepicker */ "./assets/js/vendor/bootstrap-datetimepicker.js");
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -244,6 +244,7 @@ var DateTimePicker = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (DateTimePicker);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -256,7 +257,7 @@ var DateTimePicker = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -349,6 +350,7 @@ var EnhancedSelect = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (EnhancedSelect);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -361,7 +363,7 @@ var EnhancedSelect = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var StupidTable = {
+/* WEBPACK VAR INJECTION */(function($) {var StupidTable = {
     init: function ($table) {
         $table.stupidtable();
         $table.on('aftertablesort', this.addArrows);
@@ -374,6 +376,7 @@ var StupidTable = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (StupidTable);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -386,7 +389,7 @@ var StupidTable = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
 /* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__);
 
 var Tooltip = (function () {
@@ -442,6 +445,7 @@ var Tooltip = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (Tooltip);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -454,7 +458,7 @@ var Tooltip = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 
 var AddItemsPopup = (function () {
     function AddItemsPopup(settings, $container, atumOrders, tooltip) {
@@ -534,6 +538,7 @@ var AddItemsPopup = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AddItemsPopup);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -546,7 +551,7 @@ var AddItemsPopup = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _add_items_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_add-items-popup */ "./assets/js/src/components/orders/_add-items-popup.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _add_items_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_add-items-popup */ "./assets/js/src/components/orders/_add-items-popup.ts");
 /* harmony import */ var _order_items__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_order-items */ "./assets/js/src/components/orders/_order-items.ts");
 /* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var _bulk_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_bulk-actions */ "./assets/js/src/components/orders/_bulk-actions.ts");
@@ -824,6 +829,7 @@ var AtumOrders = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AtumOrders);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -836,7 +842,7 @@ var AtumOrders = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -996,6 +1002,7 @@ var OrdersBulkActions = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (OrdersBulkActions);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1008,7 +1015,7 @@ var OrdersBulkActions = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
@@ -1340,6 +1347,7 @@ var AtumOrderItems = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AtumOrderItems);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1352,7 +1360,7 @@ var AtumOrderItems = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -1423,6 +1431,7 @@ var OrderNotes = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (OrderNotes);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1474,7 +1483,7 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_orders_atum_orders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/orders/_atum-orders */ "./assets/js/src/components/orders/_atum-orders.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_orders_atum_orders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/orders/_atum-orders */ "./assets/js/src/components/orders/_atum-orders.ts");
 /* harmony import */ var _components_date_time_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/_date-time-picker */ "./assets/js/src/components/_date-time-picker.ts");
 /* harmony import */ var _components_enhanced_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
 /* harmony import */ var _components_orders_order_notes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/orders/_order-notes */ "./assets/js/src/components/orders/_order-notes.ts");
@@ -1496,6 +1505,7 @@ jQuery(function ($) {
     new _components_orders_order_notes__WEBPACK_IMPORTED_MODULE_3__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1508,7 +1518,7 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -1755,6 +1765,7 @@ var Utils = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1767,7 +1778,7 @@ var Utils = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment/min/moment-with-locales.min */ "./node_modules/moment/min/moment-with-locales.min.js");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment/min/moment-with-locales.min */ "./node_modules/moment/min/moment-with-locales.min.js");
 /* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__);
 /*! version : 4.17.47
  =========================================================
@@ -4401,6 +4412,7 @@ __webpack_require__.r(__webpack_exports__);
 	return $.fn.bsDatetimepicker;
 	
 }(jQuery, moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0___default.a));
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -9446,6 +9458,17 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ }),
 
