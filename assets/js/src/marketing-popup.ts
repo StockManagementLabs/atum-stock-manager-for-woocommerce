@@ -15,12 +15,10 @@ import Settings from './config/_settings';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-	
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 	
 	// Get the options from the localized var.
-	let settings = new Settings('atumMarketingPopupVars');
-	new MarketingPopup(settings);
+	const settings = new Settings( 'atumMarketingPopupVars' );
+	new MarketingPopup( settings );
 	
 });

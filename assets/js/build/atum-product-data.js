@@ -541,7 +541,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumProductData');
     new _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
     new _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__["default"](settings);

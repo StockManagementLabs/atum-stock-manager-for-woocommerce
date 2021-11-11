@@ -1279,12 +1279,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumSettingsVars');
     var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_1__["default"]();
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"]();
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_5__["default"](settings);
-    var settingsPage = new _components_settings_page_settings_page__WEBPACK_IMPORTED_MODULE_3__["default"](settings, enhancedSelect, tooltip, dateTimePicker);
+    new _components_settings_page_settings_page__WEBPACK_IMPORTED_MODULE_3__["default"](settings, enhancedSelect, tooltip, dateTimePicker);
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))

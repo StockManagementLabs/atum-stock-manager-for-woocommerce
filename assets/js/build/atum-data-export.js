@@ -229,7 +229,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumExport');
     new _components_export_export__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });

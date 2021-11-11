@@ -102,7 +102,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumCheckOrders');
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"](false);
     new _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip);

@@ -47,10 +47,8 @@ import Utils from './utils/_utils';
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 	
-	window['$'] = $; // Avoid conflicts.
-	
 	// Get the settings from localized var.
-	let settings = new Settings( 'atumListVars', {
+	const settings = new Settings( 'atumListVars', {
 		ajaxFilter: 'yes',
 		view      : 'all_stock',
 		order     : 'desc',
@@ -59,17 +57,17 @@ jQuery( ( $: JQueryStatic ) => {
 	} );
 	
 	// Set globals.
-	let globals = new Globals( settings );
+	const globals = new Globals( settings );
 	
 	// Initialize components with dependency injection.
-	let enhancedSelect = new EnhancedSelect();
-	let tooltip = new Tooltip();
-	let stickyCols = new StickyColumns( settings, globals );
-	let listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
-	let router = new Router( settings, globals, listTable );
-	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
-	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
+	const enhancedSelect = new EnhancedSelect();
+	const tooltip = new Tooltip();
+	const stickyCols = new StickyColumns( settings, globals );
+	const listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
+	const router = new Router( settings, globals, listTable );
+	const stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
+	const dateTimePicker = new DateTimePicker( settings );
+	const popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
 
 	if ( ! Utils.checkRTL( 'isRTL' ) ) {
 		new ScrollBar( globals );

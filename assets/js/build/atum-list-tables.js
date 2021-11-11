@@ -3207,7 +3207,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_19__["default"]('atumListVars', {
         ajaxFilter: 'yes',
         view: 'all_stock',

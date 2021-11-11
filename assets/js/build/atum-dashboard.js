@@ -1197,18 +1197,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_4__["default"]('atumDashVars', {
         chartColors: {
-            red: '#ff4848',
-            orange: '#efaf00',
-            green: '#69c61d',
+            red: '#FF4848',
+            orange: '#EFAF00',
+            green: '#69C61D',
             greenTrans: 'rgba(106, 200, 30, 0.79)',
-            greenLight: '#d5f5ba',
+            greenLight: '#D5F5BA',
             greenBlue: 'rgba(30, 200, 149, 0.79)',
-            blue: '#00b8db',
-            blueTrans: 'rgba(0, 183, 219, 0.79)'
-        }
+            blue: '#00B8DB',
+            blueTrans: 'rgba(0, 183, 219, 0.79)',
+        },
     });
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_5__["default"]();
     new _components_dashboard_dashboard__WEBPACK_IMPORTED_MODULE_3__["default"](settings, tooltip);

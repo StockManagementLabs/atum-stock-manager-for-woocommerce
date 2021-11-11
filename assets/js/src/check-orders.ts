@@ -15,9 +15,7 @@ import Settings from './config/_settings';
 import Tooltip from './components/_tooltip';
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ( $) => {
-
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 
 	// Get the settings from localized var.
 	const settings = new Settings('atumCheckOrders');

@@ -18,8 +18,6 @@ import Settings from './config/_settings';
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 
-	window[ '$' ] = $; // Avoid conflicts.
-
 	// Get the settings from localized var.
 	const settings = new Settings( 'atumProductData' );
 	new ProductDataMetaBoxes( settings );

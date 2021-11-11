@@ -16,12 +16,10 @@ import Tooltip from './components/_tooltip';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-
-	window[ '$' ] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
-	let settings = new Settings( 'atumAddons' );
+	const settings = new Settings( 'atumAddons' );
 	new Tooltip();
 	new AddonsPage( settings );
 	

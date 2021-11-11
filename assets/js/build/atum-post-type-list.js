@@ -1154,7 +1154,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_8__["default"]('atumPostTypeListVars');
     var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_4__["default"](settings, {
         $atumTable: $('.wp-list-table'),

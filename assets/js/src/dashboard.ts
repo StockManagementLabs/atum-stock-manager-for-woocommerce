@@ -25,27 +25,23 @@ import Tooltip from './components/_tooltip';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-	
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 	
 	// Get the settings from localized var.
-	let settings = new Settings('atumDashVars', {
+	const settings = new Settings( 'atumDashVars', {
 		chartColors: {
-            red       : '#ff4848',
-			orange    : '#efaf00',
-			green     : '#69c61d',
+			red       : '#FF4848',
+			orange    : '#EFAF00',
+			green     : '#69C61D',
 			greenTrans: 'rgba(106, 200, 30, 0.79)',
-			greenLight: '#d5f5ba',
+			greenLight: '#D5F5BA',
 			greenBlue : 'rgba(30, 200, 149, 0.79)',
-			blue      : '#00b8db',
-			blueTrans : 'rgba(0, 183, 219, 0.79)'
-		}
-	});
-	
-	//greenLight: 'rgba(180, 240, 0, 0.79)',
-	// Initialize components with dependency injection.
-	let tooltip = new Tooltip();
-	new Dashboard(settings, tooltip);
+			blue      : '#00B8DB',
+			blueTrans : 'rgba(0, 183, 219, 0.79)',
+		},
+	} );
+
+	const tooltip = new Tooltip();
+	new Dashboard( settings, tooltip );
 	
 });
