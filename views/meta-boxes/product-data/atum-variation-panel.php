@@ -32,7 +32,7 @@ use Atum\Inc\Globals;
 			<span class="form-switch">
 				<input type="checkbox" name="<?php echo esc_attr( 'variation_atum_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . "][$loop]" ) ?>"
 					id="<?php echo esc_attr( $field_id ) ?>" class="form-check-input variation-atum-controlled"
-					value="<?php echo esc_attr( $field_value ) ?>" <?php checked( $field_value, 'yes' ) ?>
+					value="yes" <?php checked( $field_value, 'yes' ) ?>
 				>
 			</span>
 		</p>

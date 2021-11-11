@@ -23,6 +23,13 @@ use Atum\Suppliers\Suppliers;
 
 
 class Wpml {
+
+	/**
+	 * The singleton instance holder
+	 *
+	 * @var Wpml
+	 */
+	private static $instance;
 	
 	/**
 	 * Searchable MultiCurrency columns and their types
@@ -45,7 +52,7 @@ class Wpml {
 	 *
 	 * @var \woocommerce_wpml
 	 */
-	protected $wpml;
+	public $wpml;
 
 	/* @noinspection PhpUndefinedClassInspection */
 	/**
@@ -53,7 +60,7 @@ class Wpml {
 	 *
 	 * @var \SitePress
 	 */
-	protected static $sitepress;
+	public static $sitepress;
 
 	/**
 	 * Current product and currency custom prices (WPML Multi-currency custom product prices)
@@ -74,7 +81,7 @@ class Wpml {
 	 *
 	 * @var string
 	 */
-	protected $current_language;
+	public $current_language;
 
 	/**
 	 * Current currency symbol
@@ -83,13 +90,22 @@ class Wpml {
 	 */
 	protected $current_currency;
 
+	/**
+	 * If current editing post is a new translation
+	 *
+	 * @since 1.9.7
+	 *
+	 * @var bool
+	 */
+	public $is_translation = FALSE;
+
 
 	/**
 	 * Wpml constructor
 	 *
 	 * @since 1.4.1
 	 */
-	public function __construct() {
+	private function __construct() {
 
 		global $sitepress, $woocommerce_wpml;
 
@@ -108,6 +124,8 @@ class Wpml {
 			$this->current_currency = get_woocommerce_currency();
 		}
 
+
+
 		$this->register_hooks();
 
 	}
@@ -125,6 +143,8 @@ class Wpml {
 		// Get all product translations ids to calculate calculated properties.
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_products_translations_ids' ) );
+
+		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
 		
 		if ( is_admin() ) {
 
@@ -179,6 +199,10 @@ class Wpml {
 
 			// replace the BOM Panel.
 			add_filter( 'atum/product_data/can_add_atum_panel', array( $this, 'maybe_remove_atum_panel' ), 10, 2 );
+
+			// Check if this is a translation
+			add_action( 'post_edit_form_tag', array( $this, 'check_product_if_translation' ) );
+			add_action( 'woocommerce_variation_header', array( $this, 'check_variation_if_translation') );
 			
 		}
 
@@ -920,6 +944,25 @@ class Wpml {
 	}
 
 	/**
+	 * Saves ATUM data after a translation is completed.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param int $new_post_id
+	 * @param array $fields
+	 * @param \WPML_Translation_Job_Factory|\stdClass $job
+	 */
+	public function new_translation_completed( $new_post_id, $fields, $job ) {
+
+		if ( 'product' === get_post_type( $new_post_id ) ) {
+
+			$master_post_id = $this->wpml->products->get_original_product_id( $new_post_id );
+
+			self::duplicate_atum_product( $master_post_id, $new_post_id );
+		}
+	}
+
+	/**
 	 * Duplicates an entry from atum product data table.
 	 * Needs to be updated when the database changes.
 	 *
@@ -1005,8 +1048,7 @@ class Wpml {
 				else {
 					
 					// if inserting, it's needed.
-					$data['product_id'] = $translation_id;
-					$wpdb->insert( $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE, $data );
+					self::duplicate_atum_product( $product_id, $translation_id );
 				}
 			}
 			
@@ -1107,14 +1149,20 @@ class Wpml {
 	 */
 	public function maybe_remove_atum_panel( $add_panel, $product ) {
 
-		$product_id = $product->get_id();
-
-		if ( self::get_original_product_id( $product_id ) !== $product_id ) {
+		if ( $this->is_translation ) {
 
 			$add_panel = FALSE;
+			if ( $product instanceof \WC_Product_Variation ) {
+				$id     = "atum_product_data_{$product->get_id()}";
+				$hidden = '';
+			}
+			else {
+				$id     = 'atum_product_data';
+				$hidden = ' hidden';
+			}
 
 			?>
-			<div id="atum_product_data" class="panel woocommerce_options_panel hidden">
+			<div id="<?php esc_attr_e( $id ); ?>" class="panel woocommerce_options_panel<?php esc_attr_e( $hidden );?>">
 
 				<div class="options-group translated-atum-product">
 					<div class="alert alert-warning">
@@ -1135,7 +1183,50 @@ class Wpml {
 		return $add_panel;
 
 	}
-	
+
+	/**
+	 * Check whether the current edited post is a translation
+	 *
+	 * @since 1.6.7
+	 *
+	 * @param \WP_Post $post
+	 */
+	public function check_product_if_translation( $post ){
+
+		global $pagenow, $wpml_post_translations;
+
+		if ( 'post-new.php' === $pagenow  ) {
+
+			$source_lang = filter_var( $_GET['source_lang'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$source_lang = 'all' === $source_lang ? self::$sitepress->get_default_language() : $source_lang;
+			$lang        = filter_var( $_GET['lang'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$source_lang = ! $source_lang && isset( $_GET['post'] ) && $lang !== self::$sitepress->get_default_language()
+				? $wpml_post_translations->get_source_lang_code( $post->ID ) : $source_lang;
+
+			$this->is_translation = $source_lang && $source_lang !== $lang;
+		}
+		else {
+
+			$is_edit_product     = 'post.php' === $pagenow && isset( $_GET['post'] ) && 'product' === get_post_type( $_GET['post'] );
+			$is_original_product = isset( $_GET['post'] ) && ! is_array( $_GET['post'] ) && $this->wpml->products->is_original_product( $_GET['post'] );
+
+			$this->is_translation = $is_edit_product && ! $is_original_product;
+		}
+
+	}
+
+	/**
+	 * Check if a variation is a translation
+	 *
+	 * @since 1.6.7
+	 *
+	 * @param \WC_Product_Variation|\WP_Post $variation
+	 */
+	public function check_variation_if_translation( $variation ) {
+
+		$this->is_translation = ! $this->wpml->products->is_original_product( $variation instanceof \WC_Product ? $variation->get_id() : $variation->ID );
+	}
+
 	/**
 	 * Do upgrade tasks after ATUM's updated
 	 *
@@ -1281,5 +1372,39 @@ class Wpml {
 			
 		}
 		
+	}
+
+	/******************
+	 * Instace methods
+	 ******************/
+
+	/**
+	 * Cannot be cloned
+	 */
+	public function __clone() {
+
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_MULTINV_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Cannot be serialized
+	 */
+	public function __sleep() {
+
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_MULTINV_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return Wpml instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 }
