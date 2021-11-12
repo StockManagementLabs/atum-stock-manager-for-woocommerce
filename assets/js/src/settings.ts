@@ -24,16 +24,13 @@ import Tooltip from './components/_tooltip';
 import DateTimePicker from './components/_date-time-picker';
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-	
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 	
 	// Get the options from the localized var.
-	let settings = new Settings('atumSettingsVars');
-	let enhancedSelect = new EnhancedSelect();
-	let tooltip = new Tooltip();
-	let dateTimePicker = new DateTimePicker( settings );
-	let settingsPage = new SettingsPage(settings, enhancedSelect, tooltip, dateTimePicker);
+	const settings = new Settings('atumSettingsVars');
+	const enhancedSelect = new EnhancedSelect();
+	const tooltip = new Tooltip();
+	const dateTimePicker = new DateTimePicker( settings );
+	new SettingsPage( settings, enhancedSelect, tooltip, dateTimePicker );
 
 });
-

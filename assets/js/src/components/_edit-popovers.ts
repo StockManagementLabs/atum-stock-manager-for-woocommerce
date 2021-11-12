@@ -46,7 +46,7 @@ export default class EditPopovers extends PopoverBase{
 			this.addPopover( $editButton, {
 				content    : $( '<div class="edit-popover-content" />' ).append( content ).get( 0 ),
 				html       : true,
-				customClass: this.popoverClassName,
+				customClass: $editButton.data( 'bs-custom-class' ) ? `${ this.popoverClassName } ${ $editButton.data( 'bs-custom-class' ) }` : this.popoverClassName,
 				placement  : $editButton.data( 'bs-placement' ) || 'bottom',
 				trigger    : 'click',
 				container  : $fieldWrapper,

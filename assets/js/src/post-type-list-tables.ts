@@ -31,21 +31,19 @@ import Tooltip from './components/_tooltip';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ( $ ) => {
-
-	window[ '$' ] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 
 	// Get the settings from localized var.
-	let settings = new Settings( 'atumPostTypeListVars' );
-	let globals = new Globals( settings, {
+	const settings = new Settings( 'atumPostTypeListVars' );
+	const globals = new Globals( settings, {
 		$atumTable: $( '.wp-list-table' ),
 		$atumList : $( '#posts-filter, .atum-list-wrapper' ),
 		filterData: {},
 	} );
-	let enhancedSelect = new EnhancedSelect();
-	let tooltip = new Tooltip();
-	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new TableCellPopovers( settings, dateTimePicker );
+	const enhancedSelect = new EnhancedSelect();
+	const tooltip = new Tooltip();
+	const dateTimePicker = new DateTimePicker( settings );
+	const popover = new TableCellPopovers( settings, dateTimePicker );
 
 	new PostTypeList( settings, globals, enhancedSelect );
 	new DragScroll( globals, tooltip, popover );

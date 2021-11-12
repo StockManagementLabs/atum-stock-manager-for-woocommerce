@@ -19,16 +19,14 @@ import Tooltip from './components/_tooltip';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ($) => {
-	
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 	
 	// Get the settings from localized var.
-	let settings = new Settings('atumOrder');
-	let tooltip = new Tooltip();
-	let dateTimePicker = new DateTimePicker(settings);
+	const settings = new Settings( 'atumOrder' );
+	const tooltip = new Tooltip();
+	const dateTimePicker = new DateTimePicker( settings );
 	new EnhancedSelect();
-	new AtumOrders(settings, tooltip, dateTimePicker);
-	new OrderNotes(settings);
+	new AtumOrders( settings, tooltip, dateTimePicker );
+	new OrderNotes( settings );
 	
 });

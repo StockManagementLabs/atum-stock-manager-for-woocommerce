@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var ButtonGroup = {
+/* WEBPACK VAR INJECTION */(function($) {var ButtonGroup = {
     doButtonGroups: function ($container) {
         var _this = this;
         $container.on('click', '.btn-group .btn', function (evt) {
@@ -121,6 +121,7 @@ var ButtonGroup = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (ButtonGroup);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -133,7 +134,7 @@ var ButtonGroup = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -226,6 +227,7 @@ var EnhancedSelect = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (EnhancedSelect);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -238,7 +240,7 @@ var EnhancedSelect = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -310,6 +312,7 @@ var FileUploader = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (FileUploader);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -322,7 +325,7 @@ var FileUploader = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _file_uploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_file-uploader */ "./assets/js/src/components/_file-uploader.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _file_uploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_file-uploader */ "./assets/js/src/components/_file-uploader.ts");
 
 var FileAttachments = (function () {
     function FileAttachments(settings) {
@@ -383,6 +386,7 @@ var FileAttachments = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (FileAttachments);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -395,7 +399,7 @@ var FileAttachments = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _button_group__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_button-group */ "./assets/js/src/components/_button-group.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _button_group__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_button-group */ "./assets/js/src/components/_button-group.ts");
 /* harmony import */ var _enhanced_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
@@ -478,6 +482,7 @@ var ProductDataMetaBoxes = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (ProductDataMetaBoxes);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -529,19 +534,30 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/product-data/_file-attachments */ "./assets/js/src/components/product-data/_file-attachments.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/product-data/_file-attachments */ "./assets/js/src/components/product-data/_file-attachments.ts");
 /* harmony import */ var _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/product-data/_product-data-meta-boxes */ "./assets/js/src/components/product-data/_product-data-meta-boxes.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumProductData');
     new _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
     new _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ }),
 
