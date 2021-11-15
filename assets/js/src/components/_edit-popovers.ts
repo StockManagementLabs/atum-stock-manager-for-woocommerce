@@ -364,8 +364,6 @@ export default class EditPopovers extends PopoverBase{
 		const inputData: any = $valueInput.data();
 		let currentValue: string = '';
 
-		console.log('initialising values');
-
 		// Check whether to load the initial values from data attributes.
 		if ( Object.keys( inputData ).length && inputData.fieldValue ) {
 
