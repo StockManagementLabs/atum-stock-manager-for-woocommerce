@@ -611,7 +611,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( Helpers::is_product_data_outdated( $item ) ) {
 
 			// At least, update the calculated dates properties.
-			$timestamp = Helpers::get_current_timestamp();
+			$timestamp = gmdate( 'Y-m-d H:i:s' );
 			$this->list_item->set_sales_update_date( $timestamp );
 			$this->list_item->set_update_date( $timestamp );
 

@@ -107,7 +107,7 @@ class Hooks {
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
-		add_action( 'updated_option', array( $this, 'rebuild_stock_status_on_oost_changes' ), 10, 3 );
+		add_action( 'updated_option', array( $this, 'after_update_options_tasks' ), 10, 3 );
 
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
@@ -585,8 +585,8 @@ class Hooks {
 	}
 
 	/**
-	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
-	 * Then, if we have any out_stock_threshold set, rebuild that product to update the stock_status if required
+	 * Execute tasks after ATUM settings updated.
+	 * Version 1.9.7 -> renamed from rebuild_stock_status_on_oost_changes
 	 *
 	 * @since 1.4.10
 	 *
@@ -594,31 +594,38 @@ class Hooks {
 	 * @param array  $old_value
 	 * @param array  $option_value
 	 */
-	public function rebuild_stock_status_on_oost_changes( $option_name, $old_value, $option_value ) {
+	public function after_update_options_tasks( $option_name, $old_value, $option_value ) {
 
-		if (
-			Settings::OPTION_NAME === $option_name &&
-			isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
-			$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
-			Helpers::is_any_out_stock_threshold_set()
-		) {
-			/*
-			 * TODO: Remove this code if finally not needed.
-			 * // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
-			// changes should be added or removed depending on the new option.
-			if ( 'no' === $option_value['out_stock_threshold'] ) {
-				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-			}
-			else {
-				add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-			}
-			*/
+		if ( Settings::OPTION_NAME === $option_name ) {
 
-			// Ensure the option is up to date.
-			Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
-			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
+			// Rebuild stock status if the out of stock threshold option changed.
+			if ( isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
+				$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
+				Helpers::is_any_out_stock_threshold_set() ) {
+				/*
+				* TODO: Remove this code if finally not needed.
+				* // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
+				// changes should be added or removed depending on the new option.
+				if ( 'no' === $option_value['out_stock_threshold'] ) {
+					remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+					remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+				}
+				else {
+					add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+					add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+				}
+				*/
+
+				// Ensure the option is up to date.
+				Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
+				Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
+			}
+			// Remove control time option when product sales properties cron disabled.
+			if ( isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) && 'yes' === isset( $old_value['calc_prop_cron'] ) &&
+				'no' === isset( $old_value['$option_value'] ) ) {
+
+				delete_option( ATUM_PREFIX . 'last_sales_calc' );
+			}
 
 		}
 

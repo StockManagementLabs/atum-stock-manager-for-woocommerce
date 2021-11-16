@@ -1166,6 +1166,7 @@ var SettingsPage = (function () {
             this.dateTimePicker.addDateTimePickers($dateFrom, { minDate: false, maxDate: new Date() });
             this.dateTimePicker.addDateTimePickers($dateTo, { minDate: false });
         }
+        this.dateTimePicker.addDateTimePickers(this.$form.find('.atum-datepicker'));
     };
     SettingsPage.prototype.setRangeDateTimeInputs = function () {
         var $dateFrom = this.$form.find('.range-datepicker.range-from'), $dateTo = this.$form.find('.range-datepicker.range-to'), $field = this.$form.find('.range-value'), $checkbox = this.$form.find('.remove-datepicker-range');

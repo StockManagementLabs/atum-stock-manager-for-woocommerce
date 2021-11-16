@@ -637,6 +637,9 @@ export default class SettingsPage {
 			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate: false, maxDate: new Date() } );
 			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate: false } );
 		}
+
+		this.dateTimePicker.addDateTimePickers( this.$form.find('.atum-datepicker') );
+
 	}
 
 	/**

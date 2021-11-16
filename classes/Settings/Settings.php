@@ -23,69 +23,59 @@ use Atum\Inc\Helpers;
 
 
 class Settings {
-	
+
 	/**
 	 * The singleton instance holder
 	 *
 	 * @var Settings
 	 */
 	private static $instance;
-	
 	/**
 	 * Tabs (groups) and sections structure
 	 *
 	 * @var array
 	 */
 	private $tabs;
-	
 	/**
 	 * Default active tab
 	 *
 	 * @var string
 	 */
 	private $active_tab = 'general';
-	
 	/**
 	 * Store field structure and default values for the settings page
 	 *
 	 * @var array
 	 */
 	private $defaults;
-
 	/**
 	 * Store the fields that should be stored as user meta
 	 *
 	 * @var array
 	 */
 	private $user_meta_options = [];
-	
 	/**
 	 * Holds the values to be used in the fields callbacks
 	 *
 	 * @var array
 	 */
 	private $options;
-
 	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-settings';
-	
 	/**
 	 * The option key name for the plugin settings
 	 */
 	const OPTION_NAME = ATUM_PREFIX . 'settings';
-
 	/**
 	 * The menu order for this module
 	 */
 	const MENU_ORDER = 80;
-	
 	/**
 	 * The sale days used when no value provided
 	 */
 	const DEFAULT_SALE_DAYS = 14;
-	
 	/**
 	 * The default number of diaplayed posts per page
 	 */
@@ -136,16 +126,16 @@ class Settings {
 		return $menus;
 
 	}
-	
+
 	/**
 	 * Display the settings page view
 	 *
 	 * @since 0.0.2
 	 */
 	public function display() {
-		
+
 		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
-		
+
 		if ( isset( $_GET['tab'] ) ) {
 			$this->active_tab = $_GET['tab'];
 		}
@@ -155,7 +145,7 @@ class Settings {
 			'active' => $this->active_tab,
 		) );
 	}
-	
+
 	/**
 	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
 	 *
@@ -167,13 +157,13 @@ class Settings {
 	 * @return  array       The options array mixed
 	 */
 	public function get_settings( $settings, $defaults ) {
-		
+
 		$options = array();
-		
+
 		if ( ! $settings || ! is_array( $settings ) ) {
 			$settings = array();
 		}
-		
+
 		foreach ( $defaults as $field => $default ) {
 
 			if ( array_key_exists( $field, $settings ) ) {
@@ -188,7 +178,7 @@ class Settings {
 		return apply_filters( 'atum/settings/get_settings', $options );
 
 	}
-	
+
 	/**
 	 * Enqueues scripts and styles needed for the Settings Page
 	 *
@@ -197,7 +187,7 @@ class Settings {
 	 * @param string $hook
 	 */
 	public function enqueue_scripts( $hook ) {
-		
+
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
@@ -243,7 +233,7 @@ class Settings {
 				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
 				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 			) );
-			
+
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( self::UI_SLUG );
@@ -269,7 +259,7 @@ class Settings {
 		}
 
 	}
-	
+
 	/**
 	 * Register the settings using WP's Settings API
 	 *
@@ -363,6 +353,67 @@ class Settings {
 				'desc'    => __( 'When enabled, you can search by product SKU or supplier SKU and will return any order containing a product matching the specified term. Please, note that due to the complexity of this query, it could cause a delay in returning the searched results on dbs with many orders.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no',
+			),
+			'calc_prop_cron'            => array(
+				'group'      => 'general',
+				'section'    => 'general',
+				'name'       => __( 'Calculated Properties Cron', ATUM_TEXT_DOMAIN ),
+				'desc'       => __( "When enabled, the products' calculated sales properties used on some ATUM List Tables columns (like Sales Last Days, Sold Today, etc) will be calculated in a scheduled way instead of calculating them after every order gets processed.
+Make sure your cron system is working before enabling this option or your calculated properties will show wrong values in ATUM List Tables.", ATUM_TEXT_DOMAIN ),
+				'type'       => 'switcher',
+				'default'    => 'no',
+				'dependency' => array(
+					array(
+						'field'    => 'calc_prop_cron_interval',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+					array(
+						'field'    => 'calc_prop_cron_type',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+					array(
+						'field'    => 'calc_prop_cron_start',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+				),
+			),
+			'calc_prop_cron_interval'   => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Cron Interval', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Specify the interval between cron executions. A maximum of 24 hours/60 minutes is allowed.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 1,
+				'options' => array(
+					'min'  => 1,
+					'max'  => 60,
+					'step' => 0.1,
+				),
+			),
+			'calc_prop_cron_type'       => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Cron Interval type', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose the interval type between minutes and hours.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'button_group',
+				'default' => 'hours',
+				'options' => array(
+					'values' => array(
+						'hours'   => __( 'Hours', ATUM_MULTINV_TEXT_DOMAIN ),
+						'minutes' => __( 'Minutes', ATUM_MULTINV_TEXT_DOMAIN ),
+					),
+				),
+			),
+			'calc_prop_cron_start'      => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Cron Start time', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose the time when the cron will be executed for the first time.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'time_picker',
+				'default' => '0:00',
 			),
 			'delete_data'               => array(
 				'group'   => 'general',
@@ -600,7 +651,7 @@ class Settings {
 			}
 
 		}
-		
+
 		// Add the fields.
 		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults );
 		foreach ( $this->defaults as $field => $options ) {
@@ -631,7 +682,7 @@ class Settings {
 		}
 
 	}
-	
+
 	/**
 	 * Sanitize each setting field as needed
 	 *
@@ -642,16 +693,17 @@ class Settings {
 	 * @return array
 	 */
 	public function sanitize( $input ) {
-		
+
 		$this->options = Helpers::get_options();
 
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
 
 			// Remove the settings without defaults.
-			$defaults = array_filter( $this->options, function( $option ) {
+			$defaults = array_filter( $this->options, function ( $option ) {
+
 				return isset( $option['default'] );
-			});
+			} );
 
 			$this->options = wp_list_pluck( $defaults, 'default' );
 
@@ -685,7 +737,7 @@ class Settings {
 
 				Helpers::set_atum_user_meta( $input['settings_section'], $user_options );
 			}
-			
+
 			// Only accept settings defined.
 			foreach ( $this->defaults as $key => $atts ) {
 
@@ -709,11 +761,24 @@ class Settings {
 
 				}
 			}
-			
+
+			if ( 'yes' === $this->options['calc_prop_cron'] ) {
+
+				if ( 'hours' === $this->options['calc_prop_cron_type'] ) {
+
+					if ( 24 < $this->options['calc_prop_cron_interval'] ) {
+						$this->options['calc_prop_cron_interval'] = 24;
+					}
+				}
+				elseif ( 60 < $this->options['calc_prop_cron_interval'] ) {
+					$this->options['calc_prop_cron_interval'] = 60;
+				}
+			}
+
 		}
-		
+
 		return apply_filters( 'atum/settings/sanitize', $this->options );
-		
+
 	}
 
 	/**
@@ -872,10 +937,10 @@ class Settings {
 					array_merge(
 						array(
 							'iframe' => array(
-								'src'   => true,
-								'style' => true,
-								'id'    => true,
-								'class' => true,
+								'src'   => TRUE,
+								'style' => TRUE,
+								'id'    => TRUE,
+								'class' => TRUE,
 							),
 						),
 						wp_kses_allowed_html( 'post' )
@@ -914,13 +979,13 @@ class Settings {
 		return $sanitized_option;
 
 	}
-	
+
 	/**
 	 * Get the settings option array and print a text field
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_text( $args ) {
 
@@ -928,25 +993,24 @@ class Settings {
 		$default     = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			'<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
-			ATUM_PREFIX . $args['id'],
-			self::OPTION_NAME . "[{$args['id']}]",
-			$placeholder,
-			$this->find_option_value( $args['id'] ),
-			$this->get_dependency( $args ) . $default
-		) . $this->get_description( $args );
-		
-		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
-	}
+			          '<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
+			          ATUM_PREFIX . $args['id'],
+			          self::OPTION_NAME . "[{$args['id']}]",
+			          $placeholder,
+			          $this->find_option_value( $args['id'] ),
+			          $this->get_dependency( $args ) . $default
+		          ) . $this->get_description( $args );
 
+		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
 
 	/**
 	 * Get the settings option array and print a textarea
 	 *
 	 * @since 1.4.11
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_textarea( $args ) {
 
@@ -955,14 +1019,14 @@ class Settings {
 		$cols    = isset( $args['cols'] ) ? ' cols="' . absint( $args['cols'] ) . '"' : '';
 
 		$output = sprintf(
-			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d"%3$d name="%4$s" %5$s>%6$s</textarea>',
-			ATUM_PREFIX . $args['id'],
-			$rows,
-			$cols,
-			self::OPTION_NAME . "[{$args['id']}]",
-			$this->get_dependency( $args ) . $default,
-			$this->find_option_value( $args['id'] )
-		) . $this->get_description( $args );
+			          '<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d"%3$d name="%4$s" %5$s>%6$s</textarea>',
+			          ATUM_PREFIX . $args['id'],
+			          $rows,
+			          $cols,
+			          self::OPTION_NAME . "[{$args['id']}]",
+			          $this->get_dependency( $args ) . $default,
+			          $this->find_option_value( $args['id'] )
+		          ) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -973,7 +1037,7 @@ class Settings {
 	 *
 	 * @since 1.9.5
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_editor( $args ) {
 
@@ -1000,7 +1064,7 @@ class Settings {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_number( $args ) {
 
@@ -1010,15 +1074,15 @@ class Settings {
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			'<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
-			$min,
-			$max,
-			$step,
-			ATUM_PREFIX . $args['id'],
-			self::OPTION_NAME . "[{$args['id']}]",
-			$this->find_option_value( $args['id'] ),
-			$this->get_dependency( $args ) . $default
-		) . $this->get_description( $args );
+			          '<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
+			          $min,
+			          $max,
+			          $step,
+			          ATUM_PREFIX . $args['id'],
+			          self::OPTION_NAME . "[{$args['id']}]",
+			          $this->find_option_value( $args['id'] ),
+			          $this->get_dependency( $args ) . $default
+		          ) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1032,10 +1096,10 @@ class Settings {
 	 * @param array $args Field arguments.
 	 */
 	public function display_wc_country( $args ) {
-	
+
 		$country_setting = (string) $this->options[ $args['id'] ];
 		$default         = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
-		
+
 		if ( strstr( $country_setting, ':' ) ) {
 			$country_setting = explode( ':', $country_setting );
 			$country         = current( $country_setting );
@@ -1059,9 +1123,9 @@ class Settings {
 		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
 
 		echo apply_filters( 'atum/settings/display_wc_country', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
+
 	}
-	
+
 	/**
 	 * Get the settings option array and prints a switcher
 	 *
@@ -1074,13 +1138,13 @@ class Settings {
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input" %4$s /></span>',
-			ATUM_PREFIX . $args['id'],
-			self::OPTION_NAME . "[{$args['id']}]",
-			checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
-			$this->get_dependency( $args ) . $default
-		) . $this->get_description( $args );
-		
+			          '<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input" %4$s /></span>',
+			          ATUM_PREFIX . $args['id'],
+			          self::OPTION_NAME . "[{$args['id']}]",
+			          checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
+			          $this->get_dependency( $args ) . $default
+		          ) . $this->get_description( $args );
+
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -1103,12 +1167,12 @@ class Settings {
 
 			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 			$output  = sprintf(
-				'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
-				ATUM_PREFIX . $args['id'],
-				self::OPTION_NAME . "[{$args['id']}][value]",
-				$enabled,
-				$this->get_dependency( $args ) . $data_default
-			) . $this->get_description( $args );
+				           '<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
+				           ATUM_PREFIX . $args['id'],
+				           self::OPTION_NAME . "[{$args['id']}][value]",
+				           $enabled,
+				           $this->get_dependency( $args ) . $data_default
+			           ) . $this->get_description( $args );
 
 		}
 		else {
@@ -1190,7 +1254,7 @@ class Settings {
 				else :
 					$is_active = $value === $option_value;
 				endif;
-				
+
 				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value.
@@ -1203,8 +1267,8 @@ class Settings {
 					$checked_str = checked( $is_active, TRUE, FALSE );
 				endif;
 				?>
-				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
-					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
+				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active )echo ' active' ?>">
+					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ( $multiple )echo '[]' ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
 						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
 				</label>
@@ -1240,7 +1304,7 @@ class Settings {
 			<?php echo wp_kses_post( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
-			<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
+				<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
@@ -1255,7 +1319,7 @@ class Settings {
 	 *
 	 * @since 1.4.5
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_script_runner( $args ) {
 
@@ -1293,7 +1357,8 @@ class Settings {
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-<?php echo esc_attr( isset( $args['options']['button_style'] ) ? $args['options']['button_style'] : 'primary' ) ?> tool-runner"
-				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
+				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] )
+					echo ' disabled="disabled"' ?>>
 				<?php echo esc_attr( $args['options']['button_text'] ) ?>
 			</button>
 
@@ -1306,8 +1371,6 @@ class Settings {
 		echo apply_filters( 'atum/settings/display_script_runner', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
-
-
 
 	/**
 	 * Get the settings option array and prints color picker
@@ -1337,7 +1400,7 @@ class Settings {
 		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
-	
+
 	/**
 	 * Get the settings HTML field
 	 *
@@ -1346,20 +1409,20 @@ class Settings {
 	 * @param array $args Field arguments.
 	 */
 	public function display_html( $args ) {
-		
+
 		$id    = ATUM_PREFIX . $args['id'];
 		$value = $this->options[ $args['id'] ];
 		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
-		
+
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr( $id ) ?>" class="atum-settings-html"<?php echo esc_attr( $style ) ?>>
 			<?php echo $value // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 		<?php
-		
+
 		echo apply_filters( 'atum/settings/display_html', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
+
 	}
 
 	/**
@@ -1481,7 +1544,7 @@ class Settings {
 				$is_active   = $value === $option_value;
 				$checked_str = checked( $is_active, TRUE, FALSE );
 				?>
-				<label class="atum-image-radio<?php if ( $is_active ) echo ' active' ?>">
+				<label class="atum-image-radio<?php if ( $is_active )echo ' active' ?>">
 					<img src="<?php echo esc_url( $option_data['img_url'] ) ?>" alt="">
 					<input type="radio" name="<?php echo esc_attr( $name ) ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
@@ -1514,13 +1577,13 @@ class Settings {
 	 * @return string
 	 */
 	public function get_description( $args, $extra_class = '' ) {
-		
+
 		$label = '';
-		
+
 		if ( array_key_exists( 'desc', $args ) ) {
 			$label = '<div class="atum-setting-info ' . $extra_class . '">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
 		}
-		
+
 		return $label;
 	}
 
@@ -1543,6 +1606,36 @@ class Settings {
 
 	}
 
+
+	/**
+	 * Get the settings option array and prints a time picker.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_time_picker( $args ) {
+
+		$id    = ATUM_PREFIX . $args['id'];
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->find_option_value( $args['id'] );
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = $args['default'];
+			$default = " data-default='" . $default . "'";
+		}
+
+		ob_start();
+		?>
+		<div class="date-wrapper" style="position: relative">
+			<input type="text" id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="atum-datepicker" placeholder="<?php esc_attr_e( 'Select time', ATUM_TEXT_DOMAIN ) ?>"
+				value="<?php echo esc_attr( $this->find_option_value( $args['id'] ) ); ?>" data-format="HH:mm" data-min-date="false">
+		</div>
+		<?php
+		echo apply_filters( 'atum/settings/display_time_picker', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
 	/**
 	 * Getter for the tabs (groups) prop
 	 *
@@ -1551,6 +1644,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_groups() {
+
 		return $this->tabs;
 	}
 
@@ -1562,6 +1656,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_default_settings() {
+
 		return $this->defaults;
 	}
 
@@ -1573,6 +1668,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_user_meta_options() {
+
 		return $this->user_meta_options;
 	}
 
@@ -1584,6 +1680,7 @@ class Settings {
 	 * @param array $user_meta_options
 	 */
 	public function set_user_meta_options( $user_meta_options ) {
+
 		$this->user_meta_options = $user_meta_options;
 	}
 
@@ -1605,6 +1702,7 @@ class Settings {
 
 				if ( in_array( $option_key, $user_meta_options, TRUE ) ) {
 					$user_saved_meta = Helpers::get_atum_user_meta( $user_meta_key );
+
 					return isset( $user_saved_meta[ $option_key ] ) ? $user_saved_meta[ $option_key ] : $this->defaults[ $option_key ]['default'];
 				}
 
@@ -1623,7 +1721,6 @@ class Settings {
 
 	}
 
-	
 	/****************************
 	 * Instance methods
 	 ****************************/
@@ -1643,19 +1740,19 @@ class Settings {
 
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
 	/**
 	 * Get Singleton instance
 	 *
 	 * @return Settings instance
 	 */
 	public static function get_instance() {
-		
+
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
 			self::$instance = new self();
 		}
-		
+
 		return self::$instance;
 	}
-	
+
 }
