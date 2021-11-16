@@ -55,7 +55,7 @@ export default class EditPopovers extends PopoverBase{
 			// Prepare the popover's fields when shown.
 			$editButton.on( 'inserted.bs.popover', () => {
 
-				const $popover: JQuery     = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
+				const $popover: JQuery    = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
 				      $valueInput: JQuery = $editButton.siblings( 'input:hidden' );
 
 				if ( $valueInput.length === 1 ) {
@@ -365,6 +365,7 @@ export default class EditPopovers extends PopoverBase{
 		let currentValue: string = '';
 
 		// Check whether to load the initial values from data attributes.
+		// NOTE: the related value input(s) must have the data-field-value in order to initialize the popover field(s) with such value.
 		if ( Object.keys( inputData ).length && inputData.fieldValue ) {
 
 			for ( const dataKey in inputData ) {
@@ -414,17 +415,32 @@ export default class EditPopovers extends PopoverBase{
 			currentValue = $valueInput.val();
 		}
 
+		// Select multiple.
 		if ( $popover.find( 'select[multiple]' ).length ) {
 
 			if ( currentValue ) {
-				const $select: JQuery = $popover.find( `select[data-input="${ $valueInput.data( 'input' ) }"]` ) || $popover.find( 'select' );
+
+				let $select: JQuery = $popover.find( `select[data-input="${ $valueInput.data( 'input' ) }"]` );
+
+				if ( ! $select.length ) {
+					$select = $popover.find( 'select[multiple]' ).first();
+				}
+
 				$select.val( currentValue.split( ',' ) ).change();
+
 			}
 
 		}
 		else {
-			const $input: JQuery = $popover.find( `.meta-value[data-input="${ $valueInput.data( 'input' ) }"]` ) || $popover.find( '.meta-value' );
+
+			let $input: JQuery = $popover.find( `.meta-value[data-input="${ $valueInput.data( 'input' ) }"]` );
+
+			if ( ! $input.length ) {
+				$input = $popover.find( '.meta-value' ).first();
+			}
+
 			$input.val( currentValue ).change();
+
 		}
 
 	}
