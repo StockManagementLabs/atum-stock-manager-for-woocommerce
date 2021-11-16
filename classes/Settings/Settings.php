@@ -993,13 +993,13 @@ Make sure your cron system is working before enabling this option or your calcul
 		$default     = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			          '<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
-			          ATUM_PREFIX . $args['id'],
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          $placeholder,
-			          $this->find_option_value( $args['id'] ),
-			          $this->get_dependency( $args ) . $default
-		          ) . $this->get_description( $args );
+			'<input class="atum-settings-input regular-text" type="text" id="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" %5$s>',
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
+			$placeholder,
+			$this->find_option_value( $args['id'] ),
+			$this->get_dependency( $args ) . $default
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1019,14 +1019,14 @@ Make sure your cron system is working before enabling this option or your calcul
 		$cols    = isset( $args['cols'] ) ? ' cols="' . absint( $args['cols'] ) . '"' : '';
 
 		$output = sprintf(
-			          '<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d"%3$d name="%4$s" %5$s>%6$s</textarea>',
-			          ATUM_PREFIX . $args['id'],
-			          $rows,
-			          $cols,
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          $this->get_dependency( $args ) . $default,
-			          $this->find_option_value( $args['id'] )
-		          ) . $this->get_description( $args );
+			'<textarea class="atum-settings-input regular-text" type="text" id="%1$s" rows="%2$d"%3$d name="%4$s" %5$s>%6$s</textarea>',
+			ATUM_PREFIX . $args['id'],
+			$rows,
+			$cols,
+			self::OPTION_NAME . "[{$args['id']}]",
+			$this->get_dependency( $args ) . $default,
+			$this->find_option_value( $args['id'] )
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_textarea', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1074,15 +1074,15 @@ Make sure your cron system is working before enabling this option or your calcul
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			          '<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
-			          $min,
-			          $max,
-			          $step,
-			          ATUM_PREFIX . $args['id'],
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          $this->find_option_value( $args['id'] ),
-			          $this->get_dependency( $args ) . $default
-		          ) . $this->get_description( $args );
+			'<input class="atum-settings-input" type="number" min="%1$s" max="%2$s" step="%3$s" id="%4$s" name="%5$s" value="%6$s" %7$s>',
+			$min,
+			$max,
+			$step,
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
+			$this->find_option_value( $args['id'] ),
+			$this->get_dependency( $args ) . $default
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_number', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1138,12 +1138,12 @@ Make sure your cron system is working before enabling this option or your calcul
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
-			          '<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input" %4$s /></span>',
-			          ATUM_PREFIX . $args['id'],
-			          self::OPTION_NAME . "[{$args['id']}]",
-			          checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
-			          $this->get_dependency( $args ) . $default
-		          ) . $this->get_description( $args );
+			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input" %4$s /></span>',
+			ATUM_PREFIX . $args['id'],
+			self::OPTION_NAME . "[{$args['id']}]",
+			checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
+			$this->get_dependency( $args ) . $default
+		) . $this->get_description( $args );
 
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -1167,12 +1167,12 @@ Make sure your cron system is working before enabling this option or your calcul
 
 			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 			$output  = sprintf(
-				           '<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
-				           ATUM_PREFIX . $args['id'],
-				           self::OPTION_NAME . "[{$args['id']}][value]",
-				           $enabled,
-				           $this->get_dependency( $args ) . $data_default
-			           ) . $this->get_description( $args );
+				'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
+				ATUM_PREFIX . $args['id'],
+				self::OPTION_NAME . "[{$args['id']}][value]",
+				$enabled,
+				$this->get_dependency( $args ) . $data_default
+			) . $this->get_description( $args );
 
 		}
 		else {
