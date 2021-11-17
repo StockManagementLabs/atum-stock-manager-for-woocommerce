@@ -5712,6 +5712,10 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   width: 350px;
 }
 
+.atum-settings-wrapper #atum-settings .section-fields th input[type=text].atum-datepicker, .atum-settings-wrapper #atum-settings .section-fields td input[type=text].atum-datepicker {
+  width: 80px;
+}
+
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields th input[type=text], .atum-settings-wrapper #atum-settings .section-fields td input[type=text] {
     width: 80% !important;

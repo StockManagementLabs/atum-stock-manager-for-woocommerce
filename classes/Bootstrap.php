@@ -247,6 +247,13 @@ class Bootstrap {
 
 		}
 
+		// Delete scheduled actions anyway. Can't use the AtumQueues class to get the actions.
+		$actions = [ 'atum/update_expiring_product_props', 'atum/cron_update_sales_calc_props' ];
+
+		foreach ( $actions as $action ) {
+			as_unschedule_all_actions( $action );
+		}
+
 	}
 
 

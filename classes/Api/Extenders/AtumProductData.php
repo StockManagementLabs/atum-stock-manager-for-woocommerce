@@ -69,6 +69,7 @@ class AtumProductData {
 		'atum_stock_status'   => [ 'get', 'update' ],
 		'low_stock'           => [ 'get', 'update' ],
 		'low_stock_amount'    => [ 'get', 'update' ],
+		'sales_update_date'   => [ 'get', 'update' ],
 
 	);
 
@@ -342,6 +343,11 @@ class AtumProductData {
 				'required'    => FALSE,
 				'description' => __( 'Indicates whether the stock will run out before reordered or not.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
+			),
+			'sales_update_date'   => array(
+				'required'    => FALSE,
+				'description' => __( 'Last date when the sales fields on ATUM product data were calculated and saved for the product.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'date-time',
 			),
 		);
 

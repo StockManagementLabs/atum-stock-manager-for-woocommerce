@@ -618,6 +618,10 @@
 					font-size: 14px;
 					width: 350px;
 					
+					&.atum-datepicker {
+						width: 80px;
+					}
+					
 					@include tablet-max {
 						width: 80% !important;
 					}

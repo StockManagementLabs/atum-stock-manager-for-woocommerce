@@ -51,6 +51,7 @@ trait AtumProductTrait {
 		'update_date'                   => NULL,
 		'atum_stock_status'             => 'instock',
 		'low_stock'                     => NULL,
+		'sales_update_date'             => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'             => NULL, // PL.
 		'available_to_purchase'         => NULL, // PL.
@@ -365,6 +366,18 @@ trait AtumProductTrait {
 		return wc_bool_to_string( $low_stock );
 	}
 
+	/**
+	 * Returns the sales props product's update date.
+	 *
+	 * @since 1.9.6.1
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return \WC_DateTime|NULL object if the date is set or null if there is no date.
+	 */
+	public function get_sales_update_date( $context = 'view' ) {
+		return $this->get_prop( 'sales_update_date', $context );
+	}
 
 	/****************************************
 	 * EXTRA GETTERS USED BY PREMIUM ADD-ONS
@@ -893,6 +906,19 @@ trait AtumProductTrait {
 	 */
 	public function set_low_stock( $low_stock ) {
 		$this->set_prop( 'low_stock', wc_string_to_bool( $low_stock ) );
+	}
+
+	/**
+	 * Set sales properties update date for the current product.
+	 *
+	 * @since 1.9.6.1
+	 *
+	 * @param string|integer|null $sales_update_date UTC timestamp, or ISO 8601 DateTime.
+	 *                                               If the DateTime string has no timezone or offset, WordPress site timezone will be assumed.
+	 *                                               Null if there is no date.
+	 */
+	public function set_sales_update_date( $sales_update_date = NULL ) {
+		$this->set_date_prop( 'sales_update_date', $sales_update_date );
 	}
 
 	/****************************************

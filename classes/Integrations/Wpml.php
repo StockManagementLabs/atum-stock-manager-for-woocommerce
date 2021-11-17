@@ -986,11 +986,11 @@ class Wpml {
 				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
 				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,low_stock$fields)
+				lost_sales,has_location,update_date,atum_stock_status,low_stock,sales_update_date$fields)
 			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
 			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,low_stock$fields
+			lost_sales,has_location,update_date,atum_stock_status,low_stock,sales_update_date$fields
 			FROM $atum_product_data_table WHERE product_id = $original_id;
 		" );
 		// phpcs:enable

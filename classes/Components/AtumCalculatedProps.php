@@ -208,6 +208,10 @@ class AtumCalculatedProps {
 	 */
 	public static function defer_update_atum_sales_calc_props( $product_id, $order_type_id = 1 ) {
 
+		if ( 'yes' !== Helpers::get_option( 'calc_prop_cron' ) ) {
+			return;
+		}
+
 		$ids_str = "$product_id:$order_type_id";
 
 		if ( ! in_array( $ids_str, self::$deferred_sales_calc_props ) ) {
@@ -289,6 +293,9 @@ class AtumCalculatedProps {
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
+				$timestamp = Helpers::get_current_timestamp();
+				$product->set_sales_update_date( $timestamp );
+
 				break;
 		}
 
@@ -317,6 +324,12 @@ class AtumCalculatedProps {
 			if ( ! Helpers::is_atum_product( $product ) ) {
 				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
 				$product = apply_filters( 'atum/before_update_product_calc_props', Helpers::get_atum_product( $product ) );
+
+				/**
+				 * It's an ATUM product.
+				 *
+				 * @var AtumProductTrait $product
+				 */
 			}
 
 			if ( $product instanceof \WC_Product ) {
@@ -440,11 +453,13 @@ class AtumCalculatedProps {
 	 * @since 1.9.3.1
 	 *
 	 * @param \WC_Product $product
+	 * @param int         $order_type_id
 	 */
-	public static function update_atum_sales_calc_props_cli_call( $product ) {
+	public static function update_atum_sales_calc_props_cli_call( $product, $order_type_id = 1 ) {
 
-		if ( 'cli' === php_sapi_name() ) {
-			self::update_atum_sales_calc_props( $product, 1 );
+		if ( 'cli' === php_sapi_name() || wp_doing_cron() ||
+			( ! empty( $_REQUEST['page'] ) && ! empty( $_REQUEST['row_action'] ) && 'action-scheduler' === $_REQUEST['page'] && 'run' === $_REQUEST['row_action'] ) ) {
+			self::update_atum_sales_calc_props( $product, $order_type_id );
 		}
 	}
 

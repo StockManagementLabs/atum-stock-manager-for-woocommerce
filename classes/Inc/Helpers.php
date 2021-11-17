@@ -2949,7 +2949,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Checks if the passed product was not updated recently and requires a new update
+	 * Checks if the sales props of the passed product were not updated recently and require a new update
 	 *
 	 * @since 1.5.8
 	 *
@@ -2960,7 +2960,7 @@ final class Helpers {
 	 */
 	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
 
-		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
+		return is_null( $product->get_sales_update_date() ) || strtotime( $product->get_sales_update_date() ) <= strtotime( $time_frame );
 	}
 
 	/**
@@ -3422,6 +3422,53 @@ final class Helpers {
 			update_comment_meta( $note_id, 'note_params', $params );
 
 		}
+
+	}
+
+	/**
+	 * Get the timezone string from the WP settings
+	 *
+	 * @since 1.9.7
+	 *
+	 * @return string
+	 */
+	public static function get_wp_timezone_string() {
+
+		$timezone_string = get_option( 'timezone_string' );
+
+		if ( ! empty( $timezone_string ) ) {
+			return $timezone_string;
+		}
+
+		$offset  = get_option( 'gmt_offset' );
+		$hours   = (int) $offset;
+		$minutes = ( $offset - floor( $offset ) ) * 60;
+		$offset  = '-0.5' === $offset ? str_replace( '+', '-', sprintf( '%+03d:%02d', $hours, $minutes ) ) : sprintf( '%+03d:%02d', $hours, $minutes );
+
+		return $offset;
+	}
+
+	/**
+	 * Returns the UTC time from a given current server timezone time.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param string $time In hh:mm format.
+	 *
+	 * @return string
+	 */
+	public static function get_utc_time( $time ) {
+
+		$timezone_string = self::get_wp_timezone_string();
+		try {
+			$date = new \DateTime( $time, new \DateTimeZone( $timezone_string ) );
+			$date->setTimezone( new \DateTimeZone( 'UTC' ) );
+		}
+		catch ( \Exception $e ) {
+			return $time;
+		}
+
+		return $date->format( 'H:i' );
 
 	}
 
