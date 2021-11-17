@@ -608,7 +608,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		do_action( 'atum/list_table/after_single_row', $item, $this );
 
 		// If the current product has been modified within any of the columns, save it.
-		if ( Helpers::is_product_data_outdated( $item ) ) {
+		if ( Helpers::is_product_data_outdated( $this->list_item ) ) {
 
 			// At least, update the calculated dates properties.
 			$timestamp = gmdate( 'Y-m-d H:i:s' );
