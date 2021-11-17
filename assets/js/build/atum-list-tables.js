@@ -939,7 +939,7 @@ var AddSupplierModal = (function () {
     AddSupplierModal.prototype.showModal = function () {
         var _this = this;
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-            title: this.settings.get('newSupplier') + "<small>" + this.settings.get('CreateNewSupplier') + "</small>",
+            title: this.settings.get('newSupplier') + "<small>" + this.settings.get('createNewSupplier') + "</small>",
             html: $('#create-supplier-modal').html(),
             customClass: {
                 container: 'atum-modal',

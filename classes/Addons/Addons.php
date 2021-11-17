@@ -215,18 +215,18 @@ class Addons {
 		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
-			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
-			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
+			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
 			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
-			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
 			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
-			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'allowedDeactivations' => __( 'You are allowed to deactivate a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
-			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
+			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
 			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
+			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
+			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
 		) );
 
 		wp_enqueue_style( 'sweetalert2' );

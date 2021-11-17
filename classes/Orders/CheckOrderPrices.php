@@ -131,8 +131,8 @@ class CheckOrderPrices {
 			wp_register_script( 'atum-check-orders', ATUM_URL . 'assets/js/build/atum-check-orders.js', [ 'jquery' ], ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-check-orders', 'atumCheckOrders', array(
-				'checkOrderPrices' => __( 'Check order prices', ATUM_TEXT_DOMAIN ),
 				'checkingPrices'   => __( 'Checking prices...', ATUM_TEXT_DOMAIN ),
+				'checkOrderPrices' => __( 'Check order prices', ATUM_TEXT_DOMAIN ),
 				'nonce'            => wp_create_nonce( 'atum-check-order-prices-nonce' ),
 			) );
 

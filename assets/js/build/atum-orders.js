@@ -496,13 +496,13 @@ var AddItemsPopup = (function () {
             var data = {
                 action: 'atum_order_add_item',
                 item_to_add: itemIds,
-                atum_order_id: this.settings.get('post_id'),
-                security: this.settings.get('atum_order_item_nonce'),
+                atum_order_id: this.settings.get('postId'),
+                security: this.settings.get('atumOrderItemNonce'),
             };
             $.post(window['ajaxurl'], data, function (response) {
                 if (response.success) {
                     $('#atum_order_line_items').append(response.data.html);
-                    _this.wpHooks.doAction('orderItems_addItem_added', itemIds, _this.settings.get('post_id'));
+                    _this.wpHooks.doAction('orderItems_addItem_added', itemIds, _this.settings.get('postId'));
                 }
                 else {
                     _this.atumOrders.showAlert('error', _this.settings.get('error'), response.data.error);
@@ -526,12 +526,12 @@ var AddItemsPopup = (function () {
             this.atumOrders.loadItemsTable({
                 action: 'atum_order_add_tax',
                 rate_id: rateId,
-                atum_order_id: this.settings.get('post_id'),
-                security: this.settings.get('atum_order_item_nonce'),
+                atum_order_id: this.settings.get('postId'),
+                security: this.settings.get('atumOrderItemNonce'),
             }, 'json');
         }
         else {
-            this.atumOrders.showAlert('error', this.settings.get('error'), this.settings.get('tax_rate_already_exists'));
+            this.atumOrders.showAlert('error', this.settings.get('error'), this.settings.get('taxRateAlreadyExists'));
         }
     };
     return AddItemsPopup;
@@ -617,13 +617,13 @@ var AtumOrders = (function () {
     };
     AtumOrders.prototype.savePurchaseOrderSupplier = function () {
         var _this = this;
-        var $searcher = $('#add_item_id'), atumOrderId = this.settings.get('post_id'), supplierId = this.$supplierDropdown.val();
+        var $searcher = $('#add_item_id'), atumOrderId = this.settings.get('postId'), supplierId = this.$supplierDropdown.val();
         this.toggleItemsBlocker(!(!supplierId && !this.$multipleSuppliers.is(':checked')));
         $.ajax({
             url: window['ajaxurl'],
             data: {
                 action: 'atum_save_po_supplier',
-                security: this.settings.get('atum_order_item_nonce'),
+                security: this.settings.get('atumOrderItemNonce'),
                 atum_order_id: atumOrderId,
                 supplier: supplierId,
             },
@@ -644,8 +644,8 @@ var AtumOrders = (function () {
             url: window['ajaxurl'],
             data: {
                 action: 'atum_save_po_multiple_supplier',
-                security: this.settings.get('atum_order_item_nonce'),
-                atum_order_id: this.settings.get('post_id'),
+                security: this.settings.get('atumOrderItemNonce'),
+                atum_order_id: this.settings.get('postId'),
                 multiple: val,
             },
             dataType: 'json',
@@ -655,25 +655,25 @@ var AtumOrders = (function () {
     AtumOrders.prototype.quantityChanged = function (evt) {
         var _this = this;
         var $input = $(evt.currentTarget), $row = $input.closest('tr.item'), qty = $input.val(), oQty = $input.data('qty'), $lineTotal = $row.find('input.line_total'), $lineSubtotal = $row.find('input.line_subtotal');
-        var unitTotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotal.data('total'), this.settings.get('mon_decimal_point')) / oQty;
-        $lineTotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotal * qty, this.settings.get('rounding_precision'), ''))
+        var unitTotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotal.data('total'), this.settings.get('priceDecimalSep')) / oQty;
+        $lineTotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotal * qty, this.settings.get('roundingPrecision'), ''))
             .toString()
-            .replace('.', this.settings.get('mon_decimal_point')));
-        var unitSubtotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotal.data('subtotal'), this.settings.get('mon_decimal_point')) / oQty;
-        $lineSubtotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotal * qty, this.settings.get('rounding_precision'), ''))
+            .replace('.', this.settings.get('priceDecimalSep')));
+        var unitSubtotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotal.data('subtotal'), this.settings.get('priceDecimalSep')) / oQty;
+        $lineSubtotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotal * qty, this.settings.get('roundingPrecision'), ''))
             .toString()
-            .replace('.', this.settings.get('mon_decimal_point')));
+            .replace('.', this.settings.get('priceDecimalSep')));
         $row.find('input.line_tax').each(function (index, elem) {
-            var $lineTotalTax = $(elem), taxId = $lineTotalTax.data('tax_id'), unitTotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotalTax.data('total_tax'), _this.settings.get('mon_decimal_point')) / oQty, $lineSubtotalTax = $row.find("input.line_subtotal_tax[data-tax_id=\"" + taxId + "\"]"), unitSubtotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotalTax.data('subtotal_tax'), _this.settings.get('mon_decimal_point')) / oQty;
+            var $lineTotalTax = $(elem), taxId = $lineTotalTax.data('tax_id'), unitTotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotalTax.data('total_tax'), _this.settings.get('priceDecimalSep')) / oQty, $lineSubtotalTax = $row.find("input.line_subtotal_tax[data-tax_id=\"" + taxId + "\"]"), unitSubtotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotalTax.data('subtotal_tax'), _this.settings.get('priceDecimalSep')) / oQty;
             if (0 < unitTotalTax) {
-                $lineTotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotalTax * qty, _this.settings.get('rounding_precision'), ''))
+                $lineTotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotalTax * qty, _this.settings.get('roundingPrecision'), ''))
                     .toString()
-                    .replace('.', _this.settings.get('mon_decimal_point')));
+                    .replace('.', _this.settings.get('priceDecimalSep')));
             }
             if (0 < unitSubtotalTax) {
-                $lineSubtotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotalTax * qty, _this.settings.get('rounding_precision'), ''))
+                $lineSubtotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotalTax * qty, _this.settings.get('roundingPrecision'), ''))
                     .toString()
-                    .replace('.', _this.settings.get('mon_decimal_point')));
+                    .replace('.', _this.settings.get('priceDecimalSep')));
             }
         });
         $input.trigger('quantity_changed');
@@ -707,9 +707,9 @@ var AtumOrders = (function () {
     };
     AtumOrders.prototype.reloadItems = function (callback) {
         this.loadItemsTable({
-            atum_order_id: this.settings.get('post_id'),
+            atum_order_id: this.settings.get('postId'),
             action: 'atum_order_load_items',
-            security: this.settings.get('atum_order_item_nonce'),
+            security: this.settings.get('atumOrderItemNonce'),
         }, 'html', callback);
     };
     AtumOrders.prototype.showAlert = function (type, title, message) {
@@ -806,7 +806,7 @@ var AtumOrders = (function () {
             return false;
         }
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-            text: this.settings.get('import_order_items'),
+            text: this.settings.get('importOrderItems'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('yes'),
@@ -818,8 +818,8 @@ var AtumOrders = (function () {
                     _this.loadItemsTable({
                         action: 'atum_order_import_items',
                         wc_order_id: orderId,
-                        atum_order_id: _this.settings.get('post_id'),
-                        security: _this.settings.get('import_order_items_nonce'),
+                        atum_order_id: _this.settings.get('postId'),
+                        security: _this.settings.get('importOrderItemsNonce'),
                     }, 'json', resolve);
                 });
             },
@@ -874,7 +874,7 @@ var OrdersBulkActions = (function () {
         if ($rows.length) {
             if (this.askRemoval === true) {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                    text: this.settings.get('remove_item_notice'),
+                    text: this.settings.get('removeItemNotice'),
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: this.settings.get('continue'),
@@ -922,10 +922,10 @@ var OrdersBulkActions = (function () {
             deferred.push($.ajax({
                 url: window['ajaxurl'],
                 data: {
-                    atum_order_id: this.settings.get('post_id'),
+                    atum_order_id: this.settings.get('postId'),
                     atum_order_item_ids: deleteItems,
                     action: 'atum_order_remove_item',
-                    security: this.settings.get('atum_order_item_nonce'),
+                    security: this.settings.get('atumOrderItemNonce'),
                 },
                 type: 'POST',
             }));
@@ -940,8 +940,8 @@ var OrdersBulkActions = (function () {
         if (checkItems) {
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
             sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                title: this.settings.get('are_you_sure'),
-                html: (this.settings.get(action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg')) + confirmProcessItems,
+                title: this.settings.get('areYouSure'),
+                html: (this.settings.get(action === 'increase' ? 'increaseStockMsg' : 'decreaseStockMsg')) + confirmProcessItems,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: this.settings.get('continue'),
@@ -965,12 +965,12 @@ var OrdersBulkActions = (function () {
                             $.ajax({
                                 url: window['ajaxurl'],
                                 data: {
-                                    atum_order_id: _this.settings.get('post_id'),
+                                    atum_order_id: _this.settings.get('postId'),
                                     atum_order_item_ids: itemIds_1,
                                     quantities: quantities_1,
                                     mode: modeProcess,
                                     action: "atum_order_" + action + "_items_stock",
-                                    security: _this.settings.get('atum_order_item_nonce'),
+                                    security: _this.settings.get('atumOrderItemNonce'),
                                 },
                                 method: 'POST',
                                 dataType: 'json',
@@ -989,7 +989,7 @@ var OrdersBulkActions = (function () {
                 if (result.isConfirmed) {
                     sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                         title: _this.settings.get('done'),
-                        text: _this.settings.get(action === 'increase' ? 'stock_increased' : 'stock_decreased'),
+                        text: _this.settings.get(action === 'increase' ? 'stockIncreased' : 'stockDecreased'),
                         icon: 'success',
                         confirmButtonText: _this.settings.get('ok'),
                     });
@@ -1075,8 +1075,8 @@ var AtumOrderItems = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_fee',
-            atum_order_id: this.settings.get('post_id'),
-            security: this.settings.get('atum_order_item_nonce'),
+            atum_order_id: this.settings.get('postId'),
+            security: this.settings.get('atumOrderItemNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             if (response.success) {
@@ -1095,8 +1095,8 @@ var AtumOrderItems = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_shipping',
-            atum_order_id: this.settings.get('post_id'),
-            security: this.settings.get('atum_order_item_nonce'),
+            atum_order_id: this.settings.get('postId'),
+            security: this.settings.get('atumOrderItemNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             if (response.success) {
@@ -1120,7 +1120,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget);
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('delete_tax_notice'),
+            text: this.settings.get('deleteTaxNotice'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1133,8 +1133,8 @@ var AtumOrderItems = (function () {
                     _this.atumOrders.loadItemsTable({
                         action: 'atum_order_remove_tax',
                         rate_id: $item.data('rate_id'),
-                        atum_order_id: _this.settings.get('post_id'),
-                        security: _this.settings.get('atum_order_item_nonce'),
+                        atum_order_id: _this.settings.get('postId'),
+                        security: _this.settings.get('atumOrderItemNonce'),
                     }, 'html', resolve);
                 });
             },
@@ -1144,7 +1144,7 @@ var AtumOrderItems = (function () {
         var _this = this;
         evt.preventDefault();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('calc_totals'),
+            text: this.settings.get('calcTotals'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1156,9 +1156,9 @@ var AtumOrderItems = (function () {
                 return new Promise(function (resolve, reject) {
                     _this.atumOrders.loadItemsTable({
                         action: 'atum_order_calc_line_taxes',
-                        atum_order_id: _this.settings.get('post_id'),
+                        atum_order_id: _this.settings.get('postId'),
                         items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-                        security: _this.settings.get('calc_totals_nonce'),
+                        security: _this.settings.get('calcTotalsNonce'),
                     }, 'html', resolve);
                 });
             },
@@ -1178,7 +1178,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('remove_item_notice'),
+            text: this.settings.get('removeItemNotice'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1203,10 +1203,10 @@ var AtumOrderItems = (function () {
             $.ajax({
                 url: window['ajaxurl'],
                 data: {
-                    atum_order_id: _this.settings.get('post_id'),
+                    atum_order_id: _this.settings.get('postId'),
                     atum_order_item_ids: atumOrderItemId,
                     action: 'atum_order_remove_item',
-                    security: _this.settings.get('atum_order_item_nonce'),
+                    security: _this.settings.get('atumOrderItemNonce'),
                 },
                 method: 'POST',
                 dataType: 'json',
@@ -1222,23 +1222,23 @@ var AtumOrderItems = (function () {
     AtumOrderItems.prototype.saveLineItems = function (evt) {
         evt.preventDefault();
         var data = this.wpHooks.applyFilters('orderItems_saveLineItems_data', {
-            atum_order_id: this.settings.get('post_id'),
+            atum_order_id: this.settings.get('postId'),
             items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
             action: 'atum_order_save_items',
-            security: this.settings.get('atum_order_item_nonce'),
+            security: this.settings.get('atumOrderItemNonce'),
         });
         this.atumOrders.loadItemsTable(data);
         this.wpHooks.doAction('orderItems_saveLineItems_itemsSaved');
     };
     AtumOrderItems.prototype.addItemMeta = function (evt) {
         evt.preventDefault();
-        var $button = $(evt.currentTarget), $item = $button.closest('tr.item, tr.shipping'), $items = $item.find('tbody.meta_items'), index = $items.find('tr').length + 1, $row = "\n\t\t\t\t<tr data-meta_id=\"0\">\n\t\t\t        <td>\n\t\t\t            <input type=\"text\" placeholder=\"" + this.settings.get('placeholder_name') + "\" name=\"meta_key[" + $item.data('atum_order_item_id') + "][new-" + index + "]\" />\n\t\t\t            <textarea placeholder=\"" + this.settings.get('placeholder_value') + "\" name=\"meta_value[" + $item.data('atum_order_item_id') + "][new-" + index + "]\"></textarea>\n\t\t\t        </td>\n\t\t\t        <td width=\"1%\"><button class=\"remove-atum-order-item-meta button\">&times;</button></td>\n\t\t\t    </tr>";
+        var $button = $(evt.currentTarget), $item = $button.closest('tr.item, tr.shipping'), $items = $item.find('tbody.meta_items'), index = $items.find('tr').length + 1, $row = "\n\t\t\t\t<tr data-meta_id=\"0\">\n\t\t\t        <td>\n\t\t\t            <input type=\"text\" placeholder=\"" + this.settings.get('metaPlaceholderName') + "\" name=\"meta_key[" + $item.data('atum_order_item_id') + "][new-" + index + "]\" />\n\t\t\t            <textarea placeholder=\"" + this.settings.get('metaPlaceholderValue') + "\" name=\"meta_value[" + $item.data('atum_order_item_id') + "][new-" + index + "]\"></textarea>\n\t\t\t        </td>\n\t\t\t        <td width=\"1%\"><button class=\"remove-atum-order-item-meta button\">&times;</button></td>\n\t\t\t    </tr>";
         $items.append($row);
     };
     AtumOrderItems.prototype.removeItemMeta = function (evt) {
         evt.preventDefault();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('remove_item_meta'),
+            text: this.settings.get('removeItemMeta'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1258,34 +1258,35 @@ var AtumOrderItems = (function () {
     AtumOrderItems.prototype.setPurchasePrice = function (evt, purchasePrice, purchasePriceTxt) {
         var _this = this;
         evt.preventDefault();
-        var $item = $(evt.currentTarget).closest('.item'), $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total'), qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('mon_decimal_point')) : 0, data = {
-            atum_order_id: this.settings.get('post_id'),
+        var $item = $(evt.currentTarget).closest('.item'), $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total'), qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('priceDecimalSep')) : 0, data = {
+            atum_order_id: this.settings.get('postId'),
             atum_order_item_id: $item.data('atum_order_item_id'),
             action: 'atum_order_change_purchase_price',
-            security: this.settings.get('atum_order_item_nonce'),
+            security: this.settings.get('atumOrderItemNonce'),
         }, rates = $item.find('.item_cost').data('productTaxRates');
         var purchasePriceFmt, taxes = 0;
         if (!purchasePrice) {
             purchasePrice = qty !== 0 ? lineTotal / qty : 0;
         }
         if (!purchasePriceTxt) {
-            purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('mon_decimals'), '', this.settings.get('mon_decimal_point')) : purchasePrice.toString();
+            purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : purchasePrice.toString();
             purchasePriceTxt = purchasePriceFmt;
             if (typeof rates === 'object') {
                 taxes = this.calcTaxesFromBase(purchasePrice, rates);
                 if (taxes) {
-                    var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('mon_decimals'), '', this.settings.get('mon_decimal_point')) : (purchasePrice + taxes).toString();
-                    purchasePriceTxt = purchasePriceWithTaxesFmt + " (" + purchasePriceFmt + " + " + taxes + " " + this.settings.get('taxes_name') + ")";
-                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, this.settings.get('mon_decimal_point'));
+                    var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : (purchasePrice + taxes).toString();
+                    purchasePriceTxt = purchasePriceWithTaxesFmt + " (" + purchasePriceFmt + " + " + taxes + " " + this.settings.get('taxesName') + ")";
+                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, this.settings.get('priceDecimalSep'));
                 }
             }
             else {
-                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, this.settings.get('mon_decimal_point'));
+                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, this.settings.get('priceDecimalSep'));
             }
         }
-        data[this.settings.get('purchase_price_field')] = purchasePrice;
+        data[this.settings.get('purchasePriceField')] = purchasePrice;
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            html: this.settings.get('confirm_purchase_price').replace('{{number}}', "<strong>" + purchasePriceTxt + "</strong>"),
+            title: this.settings.get('confirmPurchasePriceTitle'),
+            html: this.settings.get('confirmPurchasePrice').replace('{{number}}', "<br><strong>" + purchasePriceTxt + "</strong>"),
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1316,7 +1317,7 @@ var AtumOrderItems = (function () {
                 $lineSubTotal.data('subtotal', $lineTotal.data('total'));
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                     title: _this.settings.get('done'),
-                    text: _this.settings.get('purchase_price_changed'),
+                    text: _this.settings.get('purchasePriceChanged'),
                     icon: 'success',
                     confirmButtonText: _this.settings.get('ok'),
                 });
@@ -1387,7 +1388,7 @@ var OrderNotes = (function () {
             action: 'atum_order_add_note',
             post_id: $('#post_ID').val(),
             note: note,
-            security: this.settings.get('add_note_nonce'),
+            security: this.settings.get('addNoteNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             $('ul.atum_order_notes').prepend(response);
@@ -1401,7 +1402,7 @@ var OrderNotes = (function () {
         evt.preventDefault();
         var $note = $(evt.currentTarget).closest('li.note');
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('delete_note'),
+            text: this.settings.get('deleteNote'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1414,7 +1415,7 @@ var OrderNotes = (function () {
                     var data = {
                         action: 'atum_order_delete_note',
                         note_id: $note.attr('rel'),
-                        security: _this.settings.get('delete_note_nonce'),
+                        security: _this.settings.get('deleteNoteNonce'),
                     };
                     $.post(window['ajaxurl'], data, function () { return resolve(); });
                 });

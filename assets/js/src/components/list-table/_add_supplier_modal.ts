@@ -31,7 +31,7 @@ export default class AddSupplierModal {
 	showModal() {
 
 		Swal.fire( {
-			title              : `${this.settings.get( 'newSupplier' )}<small>${this.settings.get( 'CreateNewSupplier' )}</small>`,
+			title              : `${this.settings.get( 'newSupplier' )}<small>${this.settings.get( 'createNewSupplier' )}</small>`,
 			html               : $( '#create-supplier-modal' ).html(),
 			customClass        : {
 				container: 'atum-modal',

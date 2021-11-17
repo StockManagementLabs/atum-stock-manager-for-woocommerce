@@ -110,8 +110,8 @@ export default class AtumOrderItems {
 
 		const data: any = {
 			action       : 'atum_order_add_fee',
-			atum_order_id: this.settings.get( 'post_id' ),
-			security     : this.settings.get( 'atum_order_item_nonce' ),
+			atum_order_id: this.settings.get( 'postId' ),
+			security     : this.settings.get( 'atumOrderItemNonce' ),
 		};
 
 		$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
@@ -143,8 +143,8 @@ export default class AtumOrderItems {
 
 		const data: any = {
 			action       : 'atum_order_add_shipping',
-			atum_order_id: this.settings.get( 'post_id' ),
-			security     : this.settings.get( 'atum_order_item_nonce' ),
+			atum_order_id: this.settings.get( 'postId' ),
+			security     : this.settings.get( 'atumOrderItemNonce' ),
 		};
 
 		$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
@@ -191,7 +191,7 @@ export default class AtumOrderItems {
 
 		// Prompt for removal confirmation.
 		Swal.fire( {
-			text               : this.settings.get( 'delete_tax_notice' ),
+			text               : this.settings.get( 'deleteTaxNotice' ),
 			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
@@ -206,8 +206,8 @@ export default class AtumOrderItems {
 					this.atumOrders.loadItemsTable( {
 						action       : 'atum_order_remove_tax',
 						rate_id      : $item.data( 'rate_id' ),
-						atum_order_id: this.settings.get( 'post_id' ),
-						security     : this.settings.get( 'atum_order_item_nonce' ),
+						atum_order_id: this.settings.get( 'postId' ),
+						security     : this.settings.get( 'atumOrderItemNonce' ),
 					}, 'html', resolve );
 
 				} );
@@ -227,7 +227,7 @@ export default class AtumOrderItems {
 		evt.preventDefault();
 
 		Swal.fire( {
-			text               : this.settings.get( 'calc_totals' ),
+			text               : this.settings.get( 'calcTotals' ),
 			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
@@ -241,9 +241,9 @@ export default class AtumOrderItems {
 
 					this.atumOrders.loadItemsTable( {
 						action       : 'atum_order_calc_line_taxes',
-						atum_order_id: this.settings.get( 'post_id' ),
+						atum_order_id: this.settings.get( 'postId' ),
 						items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
-						security     : this.settings.get( 'calc_totals_nonce' ),
+						security     : this.settings.get( 'calcTotalsNonce' ),
 					}, 'html', resolve );
 
 				} );
@@ -287,7 +287,7 @@ export default class AtumOrderItems {
 
 		// Asks for confirmation before proceeding.
 		Swal.fire( {
-			text               : this.settings.get( 'remove_item_notice' ),
+			text               : this.settings.get( 'removeItemNotice' ),
 			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
@@ -326,10 +326,10 @@ export default class AtumOrderItems {
 			$.ajax( {
 				url     : window[ 'ajaxurl' ],
 				data    : {
-					atum_order_id      : this.settings.get( 'post_id' ),
+					atum_order_id      : this.settings.get( 'postId' ),
 					atum_order_item_ids: atumOrderItemId,
 					action             : 'atum_order_remove_item',
-					security           : this.settings.get( 'atum_order_item_nonce' ),
+					security           : this.settings.get( 'atumOrderItemNonce' ),
 				},
 				method  : 'POST',
 				dataType: 'json',
@@ -358,10 +358,10 @@ export default class AtumOrderItems {
 		evt.preventDefault();
 
 		const data: any = this.wpHooks.applyFilters( 'orderItems_saveLineItems_data', {
-			atum_order_id: this.settings.get( 'post_id' ),
+			atum_order_id: this.settings.get( 'postId' ),
 			items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
 			action       : 'atum_order_save_items',
-			security     : this.settings.get( 'atum_order_item_nonce' ),
+			security     : this.settings.get( 'atumOrderItemNonce' ),
 		} );
 
 		this.atumOrders.loadItemsTable( data );
@@ -385,8 +385,8 @@ export default class AtumOrderItems {
 		      $row: string    = `
 				<tr data-meta_id="0">
 			        <td>
-			            <input type="text" placeholder="${ this.settings.get( 'placeholder_name' ) }" name="meta_key[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]" />
-			            <textarea placeholder="${ this.settings.get( 'placeholder_value' ) }" name="meta_value[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]"></textarea>
+			            <input type="text" placeholder="${ this.settings.get( 'metaPlaceholderName' ) }" name="meta_key[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]" />
+			            <textarea placeholder="${ this.settings.get( 'metaPlaceholderValue' ) }" name="meta_value[${ $item.data( 'atum_order_item_id' ) }][new-${ index }]"></textarea>
 			        </td>
 			        <td width="1%"><button class="remove-atum-order-item-meta button">&times;</button></td>
 			    </tr>`;
@@ -406,7 +406,7 @@ export default class AtumOrderItems {
 
 		// Asks for confirmation before removing.
 		Swal.fire( {
-			text             : this.settings.get( 'remove_item_meta' ),
+			text             : this.settings.get( 'removeItemMeta' ),
 			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'continue' ),
@@ -444,12 +444,12 @@ export default class AtumOrderItems {
 		      $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
 		      $lineTotal: JQuery    = $item.find( 'input.line_total' ),
 		      qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		      lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'mon_decimal_point' ) ) : 0,
+		      lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'priceDecimalSep' ) ) : 0,
 		      data: any             = {
-			      atum_order_id     : this.settings.get( 'post_id' ),
+			      atum_order_id     : this.settings.get( 'postId' ),
 			      atum_order_item_id: $item.data( 'atum_order_item_id' ),
 			      action            : 'atum_order_change_purchase_price',
-			      security          : this.settings.get( 'atum_order_item_nonce' ),
+			      security          : this.settings.get( 'atumOrderItemNonce' ),
 		      },
 		      rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' );
 
@@ -462,7 +462,7 @@ export default class AtumOrderItems {
 
 		if ( ! purchasePriceTxt ) {
 
-			purchasePriceFmt = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : purchasePrice.toString();
+			purchasePriceFmt = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : purchasePrice.toString();
 			purchasePriceTxt = purchasePriceFmt;
 
 			if ( typeof rates === 'object' ) {
@@ -470,22 +470,23 @@ export default class AtumOrderItems {
 				taxes = this.calcTaxesFromBase( purchasePrice, rates );
 
 				if ( taxes ) {
-					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'mon_decimals' ), '', this.settings.get( 'mon_decimal_point' ) ) : ( purchasePrice + taxes ).toString();
-					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } (${ purchasePriceFmt } + ${ taxes } ${ this.settings.get( 'taxes_name' ) })`;
-					purchasePrice = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'mon_decimal_point' ) );
+					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : ( purchasePrice + taxes ).toString();
+					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } (${ purchasePriceFmt } + ${ taxes } ${ this.settings.get( 'taxesName' ) })`;
+					purchasePrice = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'priceDecimalSep' ) );
 				}
 
 			}
 			else {
-				purchasePrice = <number> Utils.unformat( purchasePriceFmt, this.settings.get( 'mon_decimal_point' ) );
+				purchasePrice = <number> Utils.unformat( purchasePriceFmt, this.settings.get( 'priceDecimalSep' ) );
 			}
 
 		}
 
-		data[ this.settings.get( 'purchase_price_field' ) ] = purchasePrice;
+		data[ this.settings.get( 'purchasePriceField' ) ] = purchasePrice;
 
 		Swal.fire( {
-			html               : this.settings.get( 'confirm_purchase_price' ).replace( '{{number}}', `<strong>${ purchasePriceTxt }</strong>` ),
+			title              : this.settings.get( 'confirmPurchasePriceTitle' ),
+			html               : this.settings.get( 'confirmPurchasePrice' ).replace( '{{number}}', `<br><strong>${ purchasePriceTxt }</strong>` ),
 			icon               : 'question',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
@@ -526,7 +527,7 @@ export default class AtumOrderItems {
 
 				Swal.fire( {
 					title            : this.settings.get( 'done' ),
-					text             : this.settings.get( 'purchase_price_changed' ),
+					text             : this.settings.get( 'purchasePriceChanged' ),
 					icon             : 'success',
 					confirmButtonText: this.settings.get( 'ok' ),
 				} );

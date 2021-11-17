@@ -73,22 +73,22 @@ class DataExport {
 			$screen             = get_current_screen();
 
 			wp_localize_script( 'atum-data-export', 'atumExport', apply_filters( 'atum/data_export/js_settings', array(
-				'screen'            => $screen->id,
-				'tabTitle'          => __( 'Export Data', ATUM_TEXT_DOMAIN ),
-				'submitTitle'       => __( 'Export', ATUM_TEXT_DOMAIN ),
-				'outputFormatTitle' => __( 'Output Format', ATUM_TEXT_DOMAIN ),
-				'outputFormats'     => array(
-					'pdf' => 'PDF',
-					// TODO: ADD MORE OUTPUT FORMATS.
-				),
-				'productTypesTitle' => __( 'Product Type', ATUM_TEXT_DOMAIN ),
-				'productTypes'      => Helpers::product_types_dropdown(),
-				'categoriesTitle'   => __( 'Product Category', ATUM_TEXT_DOMAIN ),
 				'categories'        => $product_categories,
-				'titleLength'       => __( 'Product Name (number of characters)', ATUM_TEXT_DOMAIN ),
-				'maxLength'         => 20,
+				'categoriesTitle'   => __( 'Product Category', ATUM_TEXT_DOMAIN ),
 				'disableMaxLength'  => __( 'Disable', ATUM_TEXT_DOMAIN ),
 				'exportNonce'       => wp_create_nonce( 'atum-data-export-nonce' ),
+				'maxLength'         => 20,
+				'outputFormats'     => array(
+					// TODO: ADD MORE OUTPUT FORMATS.
+					'pdf' => 'PDF',
+				),
+				'outputFormatTitle' => __( 'Output Format', ATUM_TEXT_DOMAIN ),
+				'productTypes'      => Helpers::product_types_dropdown(),
+				'productTypesTitle' => __( 'Product Type', ATUM_TEXT_DOMAIN ),
+				'screen'            => $screen->id,
+				'submitTitle'       => __( 'Export', ATUM_TEXT_DOMAIN ),
+				'tabTitle'          => __( 'Export Data', ATUM_TEXT_DOMAIN ),
+				'titleLength'       => __( 'Product Name (number of characters)', ATUM_TEXT_DOMAIN ),
 			), $hook ) );
 
 			wp_enqueue_script( 'atum-data-export' );
@@ -341,9 +341,9 @@ class DataExport {
 	 *
 	 * @since 1.8.6
 	 *
-	 * @param $columns
+	 * @param array $columns
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function change_column_names( $columns ) {
 

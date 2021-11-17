@@ -266,15 +266,15 @@ class Hooks {
 
 			$vars = apply_filters( 'atum/product_data/localized_vars', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
-				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
-				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
 				'attachToEmail'                 => __( 'Attach to email:', ATUM_TEXT_DOMAIN ),
+				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
 				'emailNotifications'            => FileAttachment::get_email_notifications(),
+				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
+				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
+				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
 			), $hook );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', $vars );

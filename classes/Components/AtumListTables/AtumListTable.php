@@ -3322,6 +3322,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyAction'                    => __( 'Apply Action', ATUM_TEXT_DOMAIN ),
 			'applyBulkAction'                => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
 			'beginning'                      => __( 'Beginning', ATUM_TEXT_DOMAIN ),
+			'confirmNewSupplier'             => __( 'create supplier', ATUM_TEXT_DOMAIN ),
+			'createNewSupplier'              => __( 'Create a new supplier', ATUM_TEXT_DOMAIN ),
+			'createSupplierNonce'            => wp_create_nonce( 'create-supplier-nonce' ),
 			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormatNumDecimals'      => wc_get_price_decimals(),
@@ -3335,6 +3338,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'hideFilters'                    => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'listUrl'                        => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
 			'locationsSaved'                 => __( 'Locations saved successfully', ATUM_TEXT_DOMAIN ),
+			'newSupplier'                    => __( 'New Supplier', ATUM_TEXT_DOMAIN ),
 			'noItemsSelected'                => __( 'No Items Selected', ATUM_TEXT_DOMAIN ),
 			'noActions'                      => __( 'No actions', ATUM_TEXT_DOMAIN ),
 			'nonce'                          => wp_create_nonce( 'atum-list-table-nonce' ),
@@ -3356,12 +3360,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'showFilters'                    => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'stickyColumns'                  => $this->sticky_columns,
 			'stickyColumnsNonce'             => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
-			'to'                             => __( 'To', ATUM_TEXT_DOMAIN ),
-			'newSupplier'                    => __( 'New Supplier', ATUM_TEXT_DOMAIN ),
-			'CreateNewSupplier'              => __( 'Create a new supplier', ATUM_TEXT_DOMAIN ),
-			'confirmNewSupplier'             => __( 'create supplier', ATUM_TEXT_DOMAIN ),
-			'createSupplierNonce'            => wp_create_nonce( 'create-supplier-nonce' ),
 			'supplierNameRequired'           => __( 'create supplier', ATUM_TEXT_DOMAIN ),
+			'to'                             => __( 'To', ATUM_TEXT_DOMAIN ),
 		);
 
 		$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );

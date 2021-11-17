@@ -53,7 +53,7 @@ export default class OrdersBulkActions {
 			if ( this.askRemoval === true ) {
 
 				Swal.fire( {
-					text               : this.settings.get( 'remove_item_notice' ),
+					text               : this.settings.get( 'removeItemNotice' ),
 					icon               : 'warning',
 					showCancelButton   : true,
 					confirmButtonText  : this.settings.get( 'continue' ),
@@ -132,10 +132,10 @@ export default class OrdersBulkActions {
 			deferred.push( $.ajax( {
 				url : window[ 'ajaxurl' ],
 				data: {
-					atum_order_id      : this.settings.get( 'post_id' ),
+					atum_order_id      : this.settings.get( 'postId' ),
 					atum_order_item_ids: deleteItems,
 					action             : 'atum_order_remove_item',
-					security           : this.settings.get( 'atum_order_item_nonce' ),
+					security           : this.settings.get( 'atumOrderItemNonce' ),
 				},
 				type: 'POST',
 			} ) );
@@ -162,8 +162,8 @@ export default class OrdersBulkActions {
 			Blocker.block( this.$container );
 
 			Swal.fire( {
-				title              : this.settings.get( 'are_you_sure' ),
-				html               : ( this.settings.get( action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg' ) ) + confirmProcessItems,
+				title              : this.settings.get( 'areYouSure' ),
+				html               : ( this.settings.get( action === 'increase' ? 'increaseStockMsg' : 'decreaseStockMsg' ) ) + confirmProcessItems,
 				icon               : 'warning',
 				showCancelButton   : true,
 				confirmButtonText  : this.settings.get( 'continue' ),
@@ -199,12 +199,12 @@ export default class OrdersBulkActions {
 							$.ajax( {
 								url     : window[ 'ajaxurl' ],
 								data    : {
-									atum_order_id      : this.settings.get( 'post_id' ),
+									atum_order_id      : this.settings.get( 'postId' ),
 									atum_order_item_ids: itemIds,
 									quantities         : quantities,
 									mode               : modeProcess,
 									action             : `atum_order_${ action }_items_stock`,
-									security           : this.settings.get( 'atum_order_item_nonce' ),
+									security           : this.settings.get( 'atumOrderItemNonce' ),
 								},
 								method  : 'POST',
 								dataType: 'json',
@@ -231,7 +231,7 @@ export default class OrdersBulkActions {
 
 					Swal.fire( {
 						title            : this.settings.get( 'done' ),
-						text             : this.settings.get( action === 'increase' ? 'stock_increased' : 'stock_decreased' ),
+						text             : this.settings.get( action === 'increase' ? 'stockIncreased' : 'stockDecreased' ),
 						icon             : 'success',
 						confirmButtonText: this.settings.get( 'ok' ),
 					} );

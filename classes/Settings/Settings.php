@@ -228,20 +228,20 @@ class Settings {
 				'isAnyOostSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
 				'selectAll'          => __( 'Select All', ATUM_TEXT_DOMAIN ),
-				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
-				'removeAll'          => __( 'Remove All!', ATUM_TEXT_DOMAIN ),
-				'removeRange'        => __( 'Remove Range!', ATUM_TEXT_DOMAIN ),
 				'oostDisableAction'  => 'atum_disable_out_stock_threshold',
 				'oostDisableNonce'   => wp_create_nonce( 'atum-out-stock-threshold-disable-nonce' ),
 				'oostDisableText'    => __( "We are going to leave your saved values in your database in case you decide to re-enable the ATUM's Out of Stock threshold per product again. From now on, your system will start using the WooCommerce's global Out of Stock threshold value (if set).", ATUM_TEXT_DOMAIN ),
 				'oostSetClearScript' => 'atum_tool_clear_out_stock_threshold',
 				'oostSetClearText'   => __( "We did save all your previous 'Out of stock' values the last time you used this option. Would you like to clear all the saved data and to start fresh? If you've added new products since then, these will just use the global WooCommerce value (if set).", ATUM_TEXT_DOMAIN ),
+				'removeAll'          => __( 'Remove All!', ATUM_TEXT_DOMAIN ),
+				'removeRange'        => __( 'Remove Range!', ATUM_TEXT_DOMAIN ),
 				'run'                => __( 'Run', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'        => wp_create_nonce( 'atum-script-runner-nonce' ),
 				'selectColor'        => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'startFresh'         => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
 				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
 			) );
 			
 			wp_enqueue_style( 'woocommerce_admin_styles' );

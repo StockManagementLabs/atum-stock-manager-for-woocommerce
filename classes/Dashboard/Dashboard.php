@@ -325,11 +325,22 @@ class Dashboard {
 			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum-dashboard.js', $script_deps, ATUM_VERSION, TRUE );
 
 			$dash_vars = array(
+				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'availableWidgets'      => __( 'Available Widgets', ATUM_TEXT_DOMAIN ),
+				'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'continue'              => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),
+				'days'                  => array(
+					__( 'Monday', ATUM_TEXT_DOMAIN ),
+					__( 'Tuesday', ATUM_TEXT_DOMAIN ),
+					__( 'Wednesday', ATUM_TEXT_DOMAIN ),
+					__( 'Thursday', ATUM_TEXT_DOMAIN ),
+					__( 'Friday', ATUM_TEXT_DOMAIN ),
+					__( 'Saturday', ATUM_TEXT_DOMAIN ),
+					__( 'Sunday', ATUM_TEXT_DOMAIN ),
+				),
+				'defaultsWillRestore'   => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
 				'inStockLabel'          => __( 'In Stock', ATUM_TEXT_DOMAIN ),
 				'lowStockLabel'         => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
-				'outStockLabel'         => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
-				'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 				'months'                => array(
 					__( 'January', ATUM_TEXT_DOMAIN ),
 					__( 'February', ATUM_TEXT_DOMAIN ),
@@ -344,22 +355,11 @@ class Dashboard {
 					__( 'November', ATUM_TEXT_DOMAIN ),
 					__( 'December', ATUM_TEXT_DOMAIN ),
 				),
-				'days'                  => array(
-					__( 'Monday', ATUM_TEXT_DOMAIN ),
-					__( 'Tuesday', ATUM_TEXT_DOMAIN ),
-					__( 'Wednesday', ATUM_TEXT_DOMAIN ),
-					__( 'Thursday', ATUM_TEXT_DOMAIN ),
-					__( 'Friday', ATUM_TEXT_DOMAIN ),
-					__( 'Saturday', ATUM_TEXT_DOMAIN ),
-					__( 'Sunday', ATUM_TEXT_DOMAIN ),
-				),
 				'numDaysCurMonth'       => date_i18n( 't' ),
-				'statsValueCurSymbol'   => get_woocommerce_currency_symbol(),
+				'outStockLabel'         => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
 				'statsValueCurPosition' => get_option( 'woocommerce_currency_pos' ),
-				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'defaultsWillRestore'   => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
-				'continue'              => __( 'Yes, restore it!', ATUM_TEXT_DOMAIN ),
-				'cancel'                => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'statsValueCurSymbol'   => get_woocommerce_currency_symbol(),
+				'unmanagedLabel'        => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 			);
 
 			wp_localize_script( 'atum-dashboard', 'atumDashVars', $dash_vars );
