@@ -146,6 +146,7 @@ class Upgrade {
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
+		$this->remove_duplicated_scheduled_actions();
 
 		do_action( 'atum/after_upgrade', $db_version );
 
@@ -824,6 +825,73 @@ class Upgrade {
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $wpdb->get_var( $column_exist ) ) {
 			$wpdb->query( "ALTER TABLE $atum_data_table ADD `sales_update_date` DATETIME DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
+
+	/**
+	 * Remove the ATUM duplicated Scheduled Actions from the Action Scheduler Queue.
+	 *
+	 * @since 1.9.7
+	 */
+	private function remove_duplicated_scheduled_actions() {
+
+		global $wpdb;
+		$wc = WC();
+
+		// Ensure that the current WC version supports queues.
+		if ( ! is_callable( array( $wc, 'queue' ) ) ) {
+			return;
+		}
+
+		$wc_queue = $wc->queue();
+		$actions  = $wc_queue->search( [
+			'status'   => \ActionScheduler_Store::STATUS_PENDING,
+			'per_page' => - 1,
+		] );
+
+		$processed = [];
+
+		foreach ( $actions as $action_id => $action ) {
+
+			/**
+			 * Variable declaration.
+			 *
+			 * @var \ActionScheduler_Action $action
+			 */
+			$hook = $action->get_hook();
+
+			// Only check hooks beginning with 'atum'.
+			if ( 0 !== strpos( $hook, 'atum' ) ) {
+				continue;
+			}
+
+			$next = $action->get_schedule()->next()->format( 'Y-m-d H:i:s' );
+
+			if ( array_key_exists( $hook, $processed ) ) {
+
+				if ( $next > $processed[ $hook ]['next'] ) {
+					$duplicated_id = $action_id;
+				}
+				else {
+
+					$duplicated_id      = $processed[ $hook ]['action_id'];
+					$processed[ $hook ] = [
+						'action_id' => $action_id,
+						'next'      => $next,
+					];
+				}
+
+				// The schedulded actions only can be deleted by id this way.
+				$wpdb->delete( $wpdb->actionscheduler_actions, [ 'action_id' => $duplicated_id ], [ '%d' ] );
+
+			}
+			else {
+				$processed[ $hook ] = [
+					'action_id' => $action_id,
+					'next'      => $next,
+				];
+			}
 		}
 
 	}
