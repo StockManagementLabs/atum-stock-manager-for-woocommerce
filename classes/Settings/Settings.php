@@ -762,7 +762,7 @@ Make sure your cron system is working before enabling this option or your calcul
 				}
 			}
 
-			if ( 'yes' === $this->options['calc_prop_cron'] ) {
+			if ( ! empty( $this->options['calc_prop_cron'] ) && 'yes' === $this->options['calc_prop_cron'] ) {
 
 				if ( 'hours' === $this->options['calc_prop_cron_type'] ) {
 
