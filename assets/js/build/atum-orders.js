@@ -1255,24 +1255,23 @@ var AtumOrderItems = (function () {
             },
         });
     };
-    AtumOrderItems.prototype.setPurchasePrice = function (evt, purchasePrice, purchasePriceTxt) {
+    AtumOrderItems.prototype.setPurchasePrice = function (evt, purchasePrice, purchasePriceTxt, itemName) {
         var _this = this;
         evt.preventDefault();
-        var $item = $(evt.currentTarget).closest('.item'), $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total'), qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('priceDecimalSep')) : 0, data = {
-            atum_order_id: this.settings.get('postId'),
-            atum_order_item_id: $item.data('atum_order_item_id'),
-            action: 'atum_order_change_purchase_price',
-            security: this.settings.get('atumOrderItemNonce'),
-        }, rates = $item.find('.item_cost').data('productTaxRates');
-        var purchasePriceFmt, taxes = 0;
+        var $item = $(evt.currentTarget).closest('.item'), $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total');
+        if (!itemName) {
+            itemName = $item.find('.atum-order-item-name').text().trim();
+        }
         if (!purchasePrice) {
+            var qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('priceDecimalSep')) : 0;
             purchasePrice = qty !== 0 ? lineTotal / qty : 0;
         }
         if (!purchasePriceTxt) {
-            purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : purchasePrice.toString();
+            var purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : purchasePrice.toString();
             purchasePriceTxt = purchasePriceFmt;
+            var rates = $item.find('.item_cost').data('productTaxRates');
             if (typeof rates === 'object') {
-                taxes = this.calcTaxesFromBase(purchasePrice, rates);
+                var taxes = this.calcTaxesFromBase(purchasePrice, rates);
                 if (taxes) {
                     var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : (purchasePrice + taxes).toString();
                     purchasePriceTxt = purchasePriceWithTaxesFmt + " (" + purchasePriceFmt + " + " + taxes + " " + this.settings.get('taxesName') + ")";
@@ -1283,22 +1282,30 @@ var AtumOrderItems = (function () {
                 purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, this.settings.get('priceDecimalSep'));
             }
         }
-        data[this.settings.get('purchasePriceField')] = purchasePrice;
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
             title: this.settings.get('confirmPurchasePriceTitle'),
-            html: this.settings.get('confirmPurchasePrice').replace('{{number}}', "<br><strong>" + purchasePriceTxt + "</strong>"),
+            html: this.settings.get('confirmPurchasePrice').replace('{{number}}', "<code>" + purchasePriceTxt + "</code>").replace('{{name}}', "<code>" + itemName + "</code>"),
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
+            confirmButtonColor: '#00B8DB',
             cancelButtonText: this.settings.get('cancel'),
             reverseButtons: true,
-            allowOutsideClick: false,
+            showCloseButton: true,
             showLoaderOnConfirm: true,
             preConfirm: function () {
                 return new Promise(function (resolve) {
+                    var _a;
                     $.ajax({
                         url: window['ajaxurl'],
-                        data: data,
+                        data: (_a = {
+                                action: 'atum_order_change_purchase_price',
+                                security: _this.settings.get('atumOrderItemNonce'),
+                                atum_order_id: _this.settings.get('postId'),
+                                atum_order_item_id: $item.data('atum_order_item_id')
+                            },
+                            _a[_this.settings.get('purchasePriceField')] = purchasePrice,
+                            _a),
                         type: 'POST',
                         dataType: 'json',
                         success: function (response) {
@@ -1313,8 +1320,10 @@ var AtumOrderItems = (function () {
         })
             .then(function (result) {
             if (result.isConfirmed) {
-                $lineSubTotal.val($lineTotal.val());
-                $lineSubTotal.data('subtotal', $lineTotal.data('total'));
+                if ($lineSubTotal.length && $lineTotal.length) {
+                    $lineSubTotal.val($lineTotal.val());
+                    $lineSubTotal.data('subtotal', $lineTotal.data('total'));
+                }
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                     title: _this.settings.get('done'),
                     text: _this.settings.get('purchasePriceChanged'),

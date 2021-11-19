@@ -1979,7 +1979,7 @@ final class Ajax {
 			wp_send_json_error( __( 'Invalid data provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ), TRUE );
+		$atum_order      = Helpers::get_atum_order_model( absint( $_POST['atum_order_id'] ), TRUE, PurchaseOrders::POST_TYPE );
 		$atum_order_item = $atum_order->get_item( absint( $_POST['atum_order_item_id'] ) );
 
 		/**

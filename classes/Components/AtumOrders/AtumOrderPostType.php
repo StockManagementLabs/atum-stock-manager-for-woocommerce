@@ -955,7 +955,7 @@ abstract class AtumOrderPostType {
 					'calcTotals'                => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
 					'calcTotalsNonce'           => wp_create_nonce( 'calc-totals' ),
 					'cancel'                    => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-					'confirmPurchasePrice'      => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN ),
+					'confirmPurchasePrice'      => __( 'Do you want to set the purchase price of {{name}} to {{number}}?', ATUM_TEXT_DOMAIN ),
 					'confirmPurchasePriceTitle' => __( 'Please, confirm the new purchase price', ATUM_TEXT_DOMAIN ),
 					'continue'                  => __( 'Continue', ATUM_TEXT_DOMAIN ),
 					'deleteNoteNonce'           => wp_create_nonce( 'delete-atum-order-note' ),
