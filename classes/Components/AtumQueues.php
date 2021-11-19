@@ -380,7 +380,7 @@ class AtumQueues {
 		if ( 'atum_settings' === $option_name ) {
 
 			// Cancel anyway.
-			if ( 'no' === $value['calc_prop_cron'] ||
+			if ( empty( $value['calc_prop_cron'] ) || 'no' === $value['calc_prop_cron'] ||
 				$old_value['calc_prop_cron_interval'] !== $value['calc_prop_cron_interval']
 				|| $old_value['calc_prop_cron_type'] !== $value['calc_prop_cron_type']
 				|| $old_value['calc_prop_cron_start'] !== $value['calc_prop_cron_start'] ) {

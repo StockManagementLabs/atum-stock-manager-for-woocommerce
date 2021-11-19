@@ -20,14 +20,14 @@ export default class ShowFilters {
 				button.dataset.action = 'hide';
 				button.innerText = this.settings.get('hideFilters');
 				$parent.next().slideDown()
-					.closest('.filters-container-box ').next().children('.btn').removeClass('hidden-sm');
+					.closest('.filters-container-box').next().children('.btn').removeClass('hidden-sm');
 				
 			}
 			else {
 				button.dataset.action = 'show';
 				button.innerText = this.settings.get('showFilters');
 				$parent.next().slideUp()
-					.closest('.filters-container-box ').next().children('.btn').addClass('hidden-sm');
+					.closest('.filters-container-box').next().children('.btn').addClass('hidden-sm');
 			}
 		})
 	}
