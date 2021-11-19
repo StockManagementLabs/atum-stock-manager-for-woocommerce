@@ -2393,10 +2393,14 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 
 var Router = (function () {
@@ -2482,7 +2486,7 @@ var Router = (function () {
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
-        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames), function (index, elem) {
+        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames, true), function (index, elem) {
             _this.navigationReady = false;
             if (!_this.globals.filterData.hasOwnProperty(elem)) {
                 return true;
@@ -2810,13 +2814,13 @@ __webpack_require__.r(__webpack_exports__);
                 button.dataset.action = 'hide';
                 button.innerText = _this.settings.get('hideFilters');
                 $parent.next().slideDown()
-                    .closest('.filters-container-box ').next().children('.btn').removeClass('hidden-sm');
+                    .closest('.filters-container-box').next().children('.btn').removeClass('hidden-sm');
             }
             else {
                 button.dataset.action = 'show';
                 button.innerText = _this.settings.get('showFilters');
                 $parent.next().slideUp()
-                    .closest('.filters-container-box ').next().children('.btn').addClass('hidden-sm');
+                    .closest('.filters-container-box').next().children('.btn').addClass('hidden-sm');
             }
         });
     }
@@ -3263,10 +3267,14 @@ __webpack_require__.r(__webpack_exports__);
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var Utils = {
     settings: {
@@ -3456,7 +3464,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {
