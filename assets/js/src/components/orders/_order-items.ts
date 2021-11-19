@@ -435,39 +435,39 @@ export default class AtumOrderItems {
 	 * @param {JQueryEventObject} evt
 	 * @param {number} purchasePrice
 	 * @param {string} purchasePriceTxt
+	 * @param {string} itemName
 	 */
-	setPurchasePrice( evt: JQueryEventObject, purchasePrice?: number, purchasePriceTxt?: string ) {
+	setPurchasePrice( evt: JQueryEventObject, purchasePrice?: number, purchasePriceTxt?: string, itemName?: string ) {
 
 		evt.preventDefault();
 
 		const $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
 		      $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
-		      $lineTotal: JQuery    = $item.find( 'input.line_total' ),
-		      qty: number           = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-		      lineTotal: number     = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'priceDecimalSep' ) ) : 0,
-		      data: any             = {
-			      atum_order_id     : this.settings.get( 'postId' ),
-			      atum_order_item_id: $item.data( 'atum_order_item_id' ),
-			      action            : 'atum_order_change_purchase_price',
-			      security          : this.settings.get( 'atumOrderItemNonce' ),
-		      },
-		      rates: any            = $item.find( '.item_cost' ).data( 'productTaxRates' );
+		      $lineTotal: JQuery    = $item.find( 'input.line_total' );
 
-		let purchasePriceFmt: string,
-		    taxes: number = 0;
+		if ( ! itemName ) {
+			itemName = $item.find( '.atum-order-item-name' ).text().trim();
+		}
 
 		if ( ! purchasePrice ) {
+
+			const qty: number       = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
+			      lineTotal: number = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'priceDecimalSep' ) ) : 0;
+
 			purchasePrice = qty !== 0 ? lineTotal / qty : 0;
+
 		}
 
 		if ( ! purchasePriceTxt ) {
 
-			purchasePriceFmt = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : purchasePrice.toString();
+			const purchasePriceFmt: string = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : purchasePrice.toString();
 			purchasePriceTxt = purchasePriceFmt;
+
+			const rates: any = $item.find( '.item_cost' ).data( 'productTaxRates' );
 
 			if ( typeof rates === 'object' ) {
 
-				taxes = this.calcTaxesFromBase( purchasePrice, rates );
+				const taxes: number = this.calcTaxesFromBase( purchasePrice, rates );
 
 				if ( taxes ) {
 					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : ( purchasePrice + taxes ).toString();
@@ -482,25 +482,30 @@ export default class AtumOrderItems {
 
 		}
 
-		data[ this.settings.get( 'purchasePriceField' ) ] = purchasePrice;
-
 		Swal.fire( {
 			title              : this.settings.get( 'confirmPurchasePriceTitle' ),
-			html               : this.settings.get( 'confirmPurchasePrice' ).replace( '{{number}}', `<br><strong>${ purchasePriceTxt }</strong>` ),
+			html               : this.settings.get( 'confirmPurchasePrice' ).replace( '{{number}}', `<code>${ purchasePriceTxt }</code>` ).replace( '{{name}}', `<code>${ itemName }</code>` ),
 			icon               : 'question',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
+			confirmButtonColor : '#00B8DB',
 			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
-			allowOutsideClick  : false,
+			showCloseButton    : true,
 			showLoaderOnConfirm: true,
-			preConfirm         : (): Promise<any> => {
+			preConfirm         : (): Promise<void> => {
 
 				return new Promise( ( resolve: Function ) => {
 
 					$.ajax( {
 						url     : window[ 'ajaxurl' ],
-						data    : data,
+						data    : {
+							action                                       : 'atum_order_change_purchase_price',
+							security                                     : this.settings.get( 'atumOrderItemNonce' ),
+							atum_order_id                                : this.settings.get( 'postId' ),
+							atum_order_item_id                           : $item.data( 'atum_order_item_id' ),
+							[ this.settings.get( 'purchasePriceField' ) ]: purchasePrice,
+						},
 						type    : 'POST',
 						dataType: 'json',
 						success : ( response: any ) => {
@@ -522,8 +527,10 @@ export default class AtumOrderItems {
 
 			if ( result.isConfirmed ) {
 
-				$lineSubTotal.val( $lineTotal.val() );
-				$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
+				if ( $lineSubTotal.length && $lineTotal.length ) {
+					$lineSubTotal.val( $lineTotal.val() );
+					$lineSubTotal.data( 'subtotal', $lineTotal.data( 'total' ) );
+				}
 
 				Swal.fire( {
 					title            : this.settings.get( 'done' ),
