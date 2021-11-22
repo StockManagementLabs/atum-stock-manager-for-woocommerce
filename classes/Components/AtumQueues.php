@@ -179,24 +179,26 @@ class AtumQueues {
 
 		}
 
-		$date_clause = $last_executed ? "AND o.post_modified_gmt >= '%4\$s'" : '';
+		$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
 
 		$str_sql              = "SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
  				FROM `{$wpdb->posts}` o
-					INNER JOIN %1\$s oi ON o.ID = oi.order_id
-					LEFT JOIN %2\$s oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
-					LEFT JOIN %2\$s oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+					INNER JOIN order_item_table oi ON o.ID = oi.order_id
+					LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+					LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
 					INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = APD.product_id			
-				WHERE o.post_type = '%3\$s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+				WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
 					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );";
 
 		$order_items_table    = "{$wpdb->prefix}atum_order_items";
 		$order_itemmeta_table = "{$wpdb->prefix}atum_order_itemmeta";
 
+		$atum_orders_str = str_replace( 'order_itemmeta_table', $order_itemmeta_table, str_replace( 'order_item_table', $order_items_table, $str_sql ) );
+
 		if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
 
 			// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
-			$products = $wpdb->get_col( $wpdb->prepare( $str_sql, $order_items_table, $order_itemmeta_table, PurchaseOrders::POST_TYPE, $last_executed ) );
+			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, PurchaseOrders::POST_TYPE ) );
 
 			foreach ( $products as $product_id ) {
 
@@ -209,7 +211,7 @@ class AtumQueues {
 		if ( ModuleManager::is_module_active( 'inventory_logs' ) ) {
 
 			// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
-			$products = $wpdb->get_col( $wpdb->prepare( $str_sql, $order_items_table, $order_itemmeta_table, InventoryLogs::POST_TYPE, $last_executed ) );
+			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, InventoryLogs::POST_TYPE ) );
 
 			foreach ( $products as $product_id ) {
 
@@ -224,8 +226,10 @@ class AtumQueues {
 		$order_itemmeta_table = "{$wpdb->prefix}woocommerce_order_itemmeta";
 		$post_type            = 'shop_order';
 
+		$str_sql = str_replace( 'order_itemmeta_table', $order_itemmeta_table, str_replace( 'order_item_table', $order_items_table, $str_sql ) );
+
 		// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
-		$products = $wpdb->get_col( $wpdb->prepare( $str_sql, $order_items_table, $order_itemmeta_table, $post_type, $last_executed ) );
+		$products = $wpdb->get_col( $wpdb->prepare( $str_sql, $post_type ) );
 
 		foreach ( $products as $product_id ) {
 			$product = Helpers::get_atum_product( $product_id );
