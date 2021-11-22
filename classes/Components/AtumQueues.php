@@ -144,7 +144,7 @@ class AtumQueues {
 		if ( $time ) {
 			$date_max = gmdate( 'Y-m-d H:i:s', strtotime( $time ) );
 
-			$sql .= $wpdb->prepare(' WHERE update_date <= %s OR update_date IS NULL'. $date_max );
+			$sql .= $wpdb->prepare(' WHERE update_date <= %s OR update_date IS NULL', $date_max );
 		}
 		$sql .= $wpdb->prepare(' ORDER BY update_date' );
 
