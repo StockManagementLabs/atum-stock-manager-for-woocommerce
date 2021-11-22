@@ -124,8 +124,6 @@ class Wpml {
 			$this->current_currency = get_woocommerce_currency();
 		}
 
-
-
 		$this->register_hooks();
 
 	}
@@ -200,9 +198,9 @@ class Wpml {
 			// replace the BOM Panel.
 			add_filter( 'atum/product_data/can_add_atum_panel', array( $this, 'maybe_remove_atum_panel' ), 10, 2 );
 
-			// Check if this is a translation
+			// Check if this is a translation.
 			add_action( 'post_edit_form_tag', array( $this, 'check_product_if_translation' ) );
-			add_action( 'woocommerce_variation_header', array( $this, 'check_variation_if_translation') );
+			add_action( 'woocommerce_variation_header', array( $this, 'check_variation_if_translation' ) );
 			
 		}
 
@@ -217,7 +215,7 @@ class Wpml {
 	 */
 	public function register_atum_order_hooks( $post_type ) {
 
-		add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box' ) );
+		add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box' ), 11 );
 		add_action( 'init', array( $this, 'remove_language_switcher' ), 12 );
 
 		if ( PurchaseOrders::POST_TYPE === $post_type ) {
@@ -237,14 +235,16 @@ class Wpml {
 	}
 
 	/**
-	 * Remove WPML post type content setup box. Moved from AtumOrderPostType.
+	 * Remove WPML multilingual content setup meta box.
 	 *
 	 * @since 1.3.7.1
 	 */
 	public function hide_multilingual_content_setup_box() {
 
-		if ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) {
-			remove_meta_box( 'icl_div_config', convert_to_screen( $_GET['post_type'] ), 'normal' );
+		global $post_type;
+
+		if ( $post_type && in_array( $post_type, Globals::get_order_types() ) ) {
+			remove_meta_box( 'icl_div_config', convert_to_screen( $post_type ), 'normal' );
 		}
 	}
 
