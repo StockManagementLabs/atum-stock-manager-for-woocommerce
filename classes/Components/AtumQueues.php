@@ -146,7 +146,7 @@ class AtumQueues {
 
 			$sql .= $wpdb->prepare(' WHERE update_date <= %s OR update_date IS NULL', $date_max );
 		}
-		$sql .= $wpdb->prepare(' ORDER BY update_date' );
+		$sql .= ' ORDER BY update_date';
 
 		$outdated_products = $wpdb->get_col( $sql );
 		// phpcs:enable
