@@ -113,7 +113,7 @@ export default class ListTable {
 		// Overwrite the filterData with the URL hash parameters
 		this.globals.filterData = $.extend( this.globals.filterData, {
 			view          : $.address.parameter( 'view' ) || '',
-			/*paged         : $.address.parameter( 'paged' ) || 1,*/
+			paged         : $.address.parameter( 'paged' ) || '',
 			order         : $.address.parameter( 'order' ) || '',
 			orderby       : $.address.parameter( 'orderby' ) || '',
 			search_column : $.address.parameter( 'search_column' ) || '',

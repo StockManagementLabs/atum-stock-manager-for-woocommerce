@@ -1761,7 +1761,7 @@ var ListTable = (function () {
         if (this.doingAjax && this.doingAjax.readyState !== 4) {
             this.doingAjax.abort();
         }
-        this.globals.filterData = $.extend(this.globals.filterData, __assign({ view: $.address.parameter('view') || '', order: $.address.parameter('order') || '', orderby: $.address.parameter('orderby') || '', search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', s: $.address.parameter('s') || '' }, this.globals.getAutoFiltersValues(true)));
+        this.globals.filterData = $.extend(this.globals.filterData, __assign({ view: $.address.parameter('view') || '', paged: $.address.parameter('paged') || '', order: $.address.parameter('order') || '', orderby: $.address.parameter('orderby') || '', search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', s: $.address.parameter('s') || '' }, this.globals.getAutoFiltersValues(true)));
         this.doingAjax = $.ajax({
             url: window['ajaxurl'],
             dataType: 'json',
@@ -2393,14 +2393,10 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 
 var Router = (function () {
@@ -2486,7 +2482,7 @@ var Router = (function () {
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;
         }
-        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames, true), function (index, elem) {
+        $.each(__spreadArray(['view', 'paged', 'order', 'orderby', 's', 'search_column', 'sold_last_days', 'date_from', 'date_to'], this.globals.autoFiltersNames), function (index, elem) {
             _this.navigationReady = false;
             if (!_this.globals.filterData.hasOwnProperty(elem)) {
                 return true;
@@ -3267,14 +3263,10 @@ __webpack_require__.r(__webpack_exports__);
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var Utils = {
     settings: {
@@ -3464,7 +3456,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {
