@@ -140,7 +140,7 @@ class AtumQueues {
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 		// phpcs:disable
-		$sql = $wpdb->prepare("SELECT product_id FROM $atum_product_data_table");
+		$sql = "SELECT product_id FROM $atum_product_data_table";
 		if ( $time ) {
 			$date_max = gmdate( 'Y-m-d H:i:s', strtotime( $time ) );
 
