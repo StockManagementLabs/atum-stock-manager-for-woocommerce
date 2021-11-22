@@ -8535,6 +8535,10 @@ table.atum-list-table tr.expanded.variable, table.atum-list-table tr.expanded.va
   background-color: var(--primary);
 }
 
+table.atum-list-table tr.expanded.variable.active-row input[type=checkbox], table.atum-list-table tr.expanded.variable-subscription.active-row input[type=checkbox], .floatThead-container tr.expanded.variable.active-row input[type=checkbox], .floatThead-container tr.expanded.variable-subscription.active-row input[type=checkbox], .inbound-stock-list tr.expanded.variable.active-row input[type=checkbox], .inbound-stock-list tr.expanded.variable-subscription.active-row input[type=checkbox], table.wp-list-table tr.expanded.variable.active-row input[type=checkbox], table.wp-list-table tr.expanded.variable-subscription.active-row input[type=checkbox] {
+  border: 1px solid var(--main-border) !important;
+}
+
 table.atum-list-table tr.expanded.bundle, .floatThead-container tr.expanded.bundle, .inbound-stock-list tr.expanded.bundle, table.wp-list-table tr.expanded.bundle {
   background-color: var(--wc-purple-expanded);
 }

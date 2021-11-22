@@ -2005,12 +2005,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.active-row {
 			background-color: var(--primary-dark);
+			
 			td {
 				color: var(--atum-text-color-dark2) !important;
 				.product-type {
 					color: var(--atum-text-color-dark2);
 				}
 			}
+			
 			.set-meta, .set-date-meta, a {
 				color: var(--primary-var-dark) !important;
 			}
@@ -2018,7 +2020,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		.set-meta, .set-date-meta {
-			
 			cursor: pointer;
 			color: var(--primary);
 			
@@ -2036,6 +2037,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			&.variable, &.variable-subscription {
 				background-color: var(--primary);
+				
+				&.active-row {
+					input[type=checkbox] {
+						border: 1px solid var(--main-border) !important;
+					}
+				}
 			}
 			
 			&.bundle {
