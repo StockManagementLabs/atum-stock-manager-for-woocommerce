@@ -143,12 +143,12 @@ export default class ListTable {
 				const { rows, paged, column_headers, views, extra_t_n, totals } = response;
 
 				const tableData: ITableData = {
-					rows          : rows || '',
-					paged         : paged || 1,
-					column_headers: column_headers || '',
-					views         : views || '',
-					extra_t_n     : extra_t_n || '',
-					totals        : totals || '',
+					rows         : rows || '',
+					paged        : paged || 1,
+					columnHeaders: column_headers || '',
+					views        : views || '',
+					extraTableNav: extra_t_n || '',
+					totals       : totals || '',
 				};
 
 				this.replaceTableData( tableData );
@@ -165,8 +165,8 @@ export default class ListTable {
 	replaceTableData( tableData: ITableData ) {
 
 		// Update table with the coming rows.
+		this.globals.$atumList.find( '#the-list' ).html( tableData.rows );
 		if ( tableData.rows ) {
-			this.globals.$atumList.find( '#the-list' ).html( tableData.rows );
 			this.restoreMeta();
 		}
 
@@ -176,35 +176,38 @@ export default class ListTable {
 		}
 
 		// Update column headers for sorting.
-		if ( tableData.column_headers ) {
-			this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( tableData.column_headers );
-		}
+		this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( tableData.columnHeaders );
 
 		// Update the views filters.
 		if ( tableData.views ) {
 			this.globals.$atumList.find( '.subsubsub' ).replaceWith( tableData.views );
 		}
+		else {
+			this.globals.$atumList.find( '.subsubsub' ).empty();
+		}
 
 		// Update table navs.
-		if ( tableData.extra_t_n ) {
+		if ( tableData.extraTableNav.top ) {
+			this.globals.$atumList.find( '.tablenav.top' ).replaceWith( tableData.extraTableNav.top );
+		}
+		else {
+			this.globals.$atumList.find( '.tablenav.top' ).empty();
+		}
 
-			if ( tableData.extra_t_n.top ) {
-				this.globals.$atumList.find( '.tablenav.top' ).replaceWith( tableData.extra_t_n.top );
-			}
+		if ( tableData.extraTableNav.bottom ) {
+			this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( tableData.extraTableNav.bottom );
+		}
+		else {
+			this.globals.$atumList.find( '.tablenav.bottom' ).empty();
+		}
 
-			if ( tableData.extra_t_n.bottom ) {
-				this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( tableData.extra_t_n.bottom );
-			}
-
-			// Update the autoFilters prop.
+		// Update the autoFilters prop.
+		if ( tableData.extraTableNav ) {
 			this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
-
 		}
 
 		// Update the totals row.
-		if ( tableData.totals ) {
-			this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( tableData.totals );
-		}
+		this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( tableData.totals );
 
 		// If there are active filters, show the reset button.
 		if ( $.address.parameterNames().length ) {

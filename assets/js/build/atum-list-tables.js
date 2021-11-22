@@ -1780,9 +1780,9 @@ var ListTable = (function () {
                 var tableData = {
                     rows: rows || '',
                     paged: paged || 1,
-                    column_headers: column_headers || '',
+                    columnHeaders: column_headers || '',
                     views: views || '',
-                    extra_t_n: extra_t_n || '',
+                    extraTableNav: extra_t_n || '',
                     totals: totals || '',
                 };
                 _this.replaceTableData(tableData);
@@ -1791,31 +1791,36 @@ var ListTable = (function () {
         });
     };
     ListTable.prototype.replaceTableData = function (tableData) {
+        this.globals.$atumList.find('#the-list').html(tableData.rows);
         if (tableData.rows) {
-            this.globals.$atumList.find('#the-list').html(tableData.rows);
             this.restoreMeta();
         }
         if (tableData.paged > 1) {
             $.address.parameter('paged', tableData.paged);
         }
-        if (tableData.column_headers) {
-            this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(tableData.column_headers);
-        }
+        this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(tableData.columnHeaders);
         if (tableData.views) {
             this.globals.$atumList.find('.subsubsub').replaceWith(tableData.views);
         }
-        if (tableData.extra_t_n) {
-            if (tableData.extra_t_n.top) {
-                this.globals.$atumList.find('.tablenav.top').replaceWith(tableData.extra_t_n.top);
-            }
-            if (tableData.extra_t_n.bottom) {
-                this.globals.$atumList.find('.tablenav.bottom').replaceWith(tableData.extra_t_n.bottom);
-            }
+        else {
+            this.globals.$atumList.find('.subsubsub').empty();
+        }
+        if (tableData.extraTableNav.top) {
+            this.globals.$atumList.find('.tablenav.top').replaceWith(tableData.extraTableNav.top);
+        }
+        else {
+            this.globals.$atumList.find('.tablenav.top').empty();
+        }
+        if (tableData.extraTableNav.bottom) {
+            this.globals.$atumList.find('.tablenav.bottom').replaceWith(tableData.extraTableNav.bottom);
+        }
+        else {
+            this.globals.$atumList.find('.tablenav.bottom').empty();
+        }
+        if (tableData.extraTableNav) {
             this.globals.$autoFilters = this.globals.$atumList.find('#filters_container .auto-filter');
         }
-        if (tableData.totals) {
-            this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(tableData.totals);
-        }
+        this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(tableData.totals);
         if ($.address.parameterNames().length) {
             this.globals.$atumList.find('.reset-filters').removeClass('hidden');
         }

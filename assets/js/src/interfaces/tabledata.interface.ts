@@ -4,15 +4,15 @@
 
 export interface ITableData {
 	rows: string;
-	extra_t_n: {
+	extraTableNav: {
 		top: string;
 		bottom: string;
 	};
-	column_headers: string;
+	columnHeaders: string;
 	views: string;
 	paged?: number;
 	totals?: string;
-	total_items_i18n?: string;
-	total_pages?: string;
-	total_pages_i18n?: string;
+	totalItemsI18n?: string;
+	totalPages?: string;
+	totalPagesI18n?: string;
 }
