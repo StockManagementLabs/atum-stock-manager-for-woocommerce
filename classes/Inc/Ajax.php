@@ -594,6 +594,9 @@ final class Ajax {
 				AtumCache::enable_cache();
 			}
 
+			// Ensure all the data is read from the DB after updating.
+			AtumCache::delete_all_atum_caches();
+
 			// If we aren't in SC, we will have to fetch the data from elsewhere.
 			$table_data = apply_filters( 'atum/ajax/update_list_data/fetch_table_data', NULL );
 
