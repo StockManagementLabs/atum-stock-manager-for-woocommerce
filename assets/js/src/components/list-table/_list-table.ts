@@ -524,7 +524,19 @@ export default class ListTable {
 				if ( typeof response.success !== 'undefined' && response.success === true ) {
 					$button.remove();
 					this.globals.$editInput.val( '' );
-					this.replaceTableData( response.data.tableData );
+
+					const { rows, paged, column_headers, views, extra_t_n, totals } = response.data.tableData;
+
+					const tableData: ITableData = {
+						rows         : rows || '',
+						paged        : paged || 1,
+						columnHeaders: column_headers || '',
+						views        : views || '',
+						extraTableNav: extra_t_n || '',
+						totals       : totals || '',
+					};
+
+					this.replaceTableData( tableData );
 				}
 				else {
 					$button.prop( 'disabled', false );

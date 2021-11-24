@@ -4309,13 +4309,13 @@ abstract class AtumListTable extends \WP_List_Table {
 		$views = ob_get_clean();
 
 		$response = array(
-			'rows'          => $rows,
-			'extraTableNav' => array(
+			'rows'           => $rows,
+			'extra_t_n'      => array(
 				'top'    => $extra_tablenav_top,
 				'bottom' => $extra_tablenav_bottom,
 			),
-			'columnHeaders' => $headers,
-			'views'         => $views,
+			'column_headers' => $headers,
+			'views'          => $views,
 		);
 
 		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
