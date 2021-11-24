@@ -129,7 +129,7 @@ abstract class AtumListPage {
 			$user_option   = get_user_meta( get_current_user_id(), $user_meta_key, TRUE );
 		}
 
-		$this->per_page = $user_option ?: Helpers::get_option( $default_option_key, Settings::DEFAULT_POSTS_PER_PAGE );
+		$this->per_page = (int) $user_option ?: Helpers::get_option( $default_option_key, Settings::DEFAULT_POSTS_PER_PAGE );
 
 	}
 
