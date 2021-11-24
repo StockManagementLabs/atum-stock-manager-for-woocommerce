@@ -964,6 +964,10 @@ Make sure your cron system is working before enabling this option or your calcul
 				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], wp_list_pluck( $atts['options']['values'], 'key' ) ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
+			case 'editor':
+				$sanitized_option = isset( $input[ $key ] ) ? wp_kses_post( $input[ $key ] ) : $atts['default'];
+				break;
+
 			case 'text':
 			default:
 				$sanitized_option = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
@@ -1045,7 +1049,7 @@ Make sure your cron system is working before enabling this option or your calcul
 		$editor_settings = array(
 			'media_buttons' => FALSE,
 			'editor_height' => 225,
-			'name'          => self::OPTION_NAME . "[{$args['id']}]",
+			'textarea_name' => self::OPTION_NAME . "[{$args['id']}]",
 			'tinymce'       => array( 'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,forecolor,undo,redo' ),
 		);
 
