@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumQueues;
+use Atum\InboundStock\InboundStock;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -138,16 +139,20 @@ class Upgrade {
 			$this->update_atum_stock_status();
 		}
 
-		// ** version 1.9.6.1 ** create sales_update_date in ATUM product data table
+		// ** version 1.9.6.1 ** Create sales_update_date in ATUM product data table
 		if ( version_compare( $db_version, '1.9.6.1', '<' ) ) {
 			$this->create_sales_update_date();
+		}
+
+		// ** version 1.9.7 ** Changes to the ATUM ListTables "entries per page" meta keys
+		if ( version_compare( $db_version, '1.9.7', '<' ) ) {
+			$this->change_entries_per_page_meta_keys();
 		}
 
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
 		$this->remove_duplicated_scheduled_actions();
-
 		do_action( 'atum/after_upgrade', $db_version );
 
 	}
@@ -892,6 +897,39 @@ class Upgrade {
 				];
 			}
 		}
+
+	}
+
+	/**
+	 * Change the user meta key names for the "entries per page" option in ATUM List Tables
+	 *
+	 * @since 1.9.7
+	 */
+	private function change_entries_per_page_meta_keys() {
+
+		global $wpdb;
+
+		// Stock Central.
+		$wpdb->update(
+			$wpdb->usermeta,
+			[
+				'meta_key' => StockCentral::UI_SLUG . '_entries_per_page',
+			],
+			[
+				'meta_key' => ATUM_PREFIX . 'stock_central_products_per_page',
+			]
+		);
+
+		// Inbound Stock.
+		$wpdb->update(
+			$wpdb->usermeta,
+			[
+				'meta_key' => InboundStock::UI_SLUG . '_entries_per_page',
+			],
+			[
+				'meta_key' => ATUM_PREFIX . 'inbound_stock_products_per_page',
+			]
+		);
 
 	}
 

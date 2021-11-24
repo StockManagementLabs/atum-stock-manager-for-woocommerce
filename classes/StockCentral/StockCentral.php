@@ -52,9 +52,6 @@ class StockCentral extends AtumListPage {
 
 		if ( is_admin() ) {
 
-			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
-			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
-
 			// Initialize on admin page load.
 			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 			add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
@@ -66,7 +63,7 @@ class StockCentral extends AtumListPage {
 			// Register the help pointers.
 			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
-			parent::init_hooks();
+			$this->init_hooks();
 
 		}
 		
@@ -100,7 +97,8 @@ class StockCentral extends AtumListPage {
 	 * @since 0.0.1
 	 */
 	public function display() {
-		
+
+		$this->set_per_page();
 		parent::display();
 
 		$sc_url = add_query_arg( 'page', self::UI_SLUG, admin_url( 'admin.php' ) );
@@ -126,11 +124,13 @@ class StockCentral extends AtumListPage {
 	 */
 	public function screen_options() {
 
+		$this->set_per_page();
+
 		// Add "Products per page" to screen options tab.
 		add_screen_option( 'per_page', array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => ATUM_PREFIX . 'stock_central_products_per_page',
+			'option'  => static::UI_SLUG . '_entries_per_page',
 		) );
 		
 		$help_tabs = array(

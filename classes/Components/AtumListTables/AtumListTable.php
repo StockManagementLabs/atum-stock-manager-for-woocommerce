@@ -2671,7 +2671,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$product_ids = 'ids' === $return_type ? $products : wp_list_pluck( $products, 'ID' );
 
 			// Ignore variation if is not found searching by column.
-			if ( FALSE !== $searching && empty ( array_intersect( $searching, [ $variation_id, $variable_id ] ) ) ) {
+			if ( FALSE !== $searching && empty( array_intersect( $searching, [ $variation_id, $variable_id ] ) ) ) {
 				unset( $this->supplier_variation_products[ $index ] );
 				continue;
 			}
@@ -3771,7 +3771,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return array|string
 	 */
-	public function get_search_terms_ids( $search_column, $search_term, $get_query = TRUE) {
+	public function get_search_terms_ids( $search_column, $search_term, $get_query = TRUE ) {
 
 		global $wpdb;
 

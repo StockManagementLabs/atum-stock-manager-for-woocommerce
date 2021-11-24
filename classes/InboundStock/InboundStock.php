@@ -52,13 +52,10 @@ class InboundStock extends AtumListPage {
 
 		if ( is_admin() ) {
 
-			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'inbound_stock_products_per_page', TRUE );
-			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
-
 			// Initialize on admin page load.
 			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 
-			parent::init_hooks();
+			$this->init_hooks();
 
 		}
 		
@@ -93,7 +90,8 @@ class InboundStock extends AtumListPage {
 	 * @since 1.3.0
 	 */
 	public function display() {
-		
+
+		$this->set_per_page();
 		parent::display();
 
 		Helpers::load_view( 'list-tables/inbound-stock', array(
@@ -110,11 +108,13 @@ class InboundStock extends AtumListPage {
 	 */
 	public function screen_options() {
 
+		$this->set_per_page();
+
 		// Add "Products per page" screen option.
 		$args = array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => ATUM_PREFIX . 'inbound_stock_products_per_page',
+			'option'  => self::UI_SLUG . '_entries_per_page',
 		);
 		
 		add_screen_option( 'per_page', $args );
