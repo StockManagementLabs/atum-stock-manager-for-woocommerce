@@ -176,7 +176,7 @@ abstract class AtumOrderItemModel {
 		} catch ( AtumException $e ) {
 
 			if ( ATUM_DEBUG ) {
-				error_log( __CLASS__ . '::' . __METHOD__ . '::' . $e->getMessage() );
+				error_log( __METHOD__ . '::' . $e->getMessage() );
 			}
 
 		}
