@@ -154,8 +154,8 @@ export default class OrdersBulkActions {
 	bulkChangeStock( action: string ) {
 
 		const $rows: JQuery       = $( 'table.atum_order_items' ).find( 'tr.selected' );
-		const checkItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_checkChangeStock', true, $rows );
-		const confirmProcessItems: string = this.wpHooks.applyFilters( 'ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action );
+		const checkItems: boolean = this.wpHooks.applyFilters( 'atum_ordersBulkActions_checkChangeStock', true, $rows );
+		const confirmProcessItems: string = this.wpHooks.applyFilters( 'atum_ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action );
 
 		if ( checkItems ) {
 
@@ -177,7 +177,7 @@ export default class OrdersBulkActions {
 
 						const modeProcess: string = $( '#bulk-change-stock-mode' ).length > 0 && $( '#bulk-change-stock-mode' ).is( ':checked' ) ? 'yes' : 'no';
 						// Allow bypassing the change (MI needs to run its own version).
-						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve );
+						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'atum_ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve );
 
 						if ( maybeProcessItems ) {
 

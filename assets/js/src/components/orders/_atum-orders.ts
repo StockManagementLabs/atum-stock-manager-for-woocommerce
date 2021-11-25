@@ -264,7 +264,7 @@ export default class AtumOrders {
 					callback();
 				}
 
-				this.wpHooks.doAction( 'atumOrders_afterLoadItemsTable' );
+				this.wpHooks.doAction( 'atum_orders_afterLoadItemsTable' );
 
 			},
 		} );

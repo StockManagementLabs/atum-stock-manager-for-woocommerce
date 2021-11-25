@@ -124,7 +124,7 @@ export default class AtumOrderItems {
 			}
 
 			Blocker.unblock( this.$container );
-			this.wpHooks.doAction( 'orderItems_afterAddingFee' );
+			this.wpHooks.doAction( 'atum_orderItems_afterAddingFee' );
 
 		}, 'json' );
 
@@ -157,7 +157,7 @@ export default class AtumOrderItems {
 			}
 
 			Blocker.unblock( this.$container );
-			this.wpHooks.doAction( 'orderItems_afterAddingShipping' );
+			this.wpHooks.doAction( 'atum_orderItems_afterAddingShipping' );
 
 		}, 'json' );
 
@@ -301,7 +301,7 @@ export default class AtumOrderItems {
 
 			if ( result.isConfirmed ) {
 				$item.remove();
-				this.wpHooks.doAction( 'orderItems_deleteItem_removed', $container, atumOrderItemId );
+				this.wpHooks.doAction( 'atum_orderItems_deleteItem_removed', $container, atumOrderItemId );
 			}
 
 			Blocker.unblock( this.$container );
@@ -357,7 +357,7 @@ export default class AtumOrderItems {
 
 		evt.preventDefault();
 
-		const data: any = this.wpHooks.applyFilters( 'orderItems_saveLineItems_data', {
+		const data: any = this.wpHooks.applyFilters( 'atum_orderItems_saveLineItems_data', {
 			atum_order_id: this.settings.get( 'postId' ),
 			items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
 			action       : 'atum_order_save_items',
@@ -365,7 +365,7 @@ export default class AtumOrderItems {
 		} );
 
 		this.atumOrders.loadItemsTable( data );
-		this.wpHooks.doAction( 'orderItems_saveLineItems_itemsSaved' );
+		this.wpHooks.doAction( 'atum_orderItems_saveLineItems_itemsSaved' );
 
 	}
 

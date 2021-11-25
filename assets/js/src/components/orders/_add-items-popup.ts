@@ -71,7 +71,7 @@ export default class AddItemsPopup {
 
 				if ( response.success ) {
 					$( '#atum_order_line_items' ).append( response.data.html );
-					this.wpHooks.doAction( 'orderItems_addItem_added', itemIds, this.settings.get( 'postId' ) );
+					this.wpHooks.doAction( 'atum_orderItems_addItem_added', itemIds, this.settings.get( 'postId' ) );
 				}
 				else {
 					this.atumOrders.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
