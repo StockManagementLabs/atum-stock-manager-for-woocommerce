@@ -402,8 +402,8 @@ Make sure your cron system is working before enabling this option or your calcul
 				'default' => 'hours',
 				'options' => array(
 					'values' => array(
-						'hours'   => __( 'Hours', ATUM_MULTINV_TEXT_DOMAIN ),
-						'minutes' => __( 'Minutes', ATUM_MULTINV_TEXT_DOMAIN ),
+						'hours'   => __( 'Hours', ATUM_TEXT_DOMAIN ),
+						'minutes' => __( 'Minutes', ATUM_TEXT_DOMAIN ),
 					),
 				),
 			),
