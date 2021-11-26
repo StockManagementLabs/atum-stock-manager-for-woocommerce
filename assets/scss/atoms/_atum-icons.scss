@@ -1,10 +1,10 @@
 @font-face {
 	font-family: '#{$atum-icon-font}';
-	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?rx8gye');
-	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?rx8gye#iefix') format('embedded-opentype'),
-	url('#{$atum-font-path}#{$atum-icon-font}.ttf?rx8gye') format('truetype'),
-	url('#{$atum-font-path}#{$atum-icon-font}.woff?rx8gye') format('woff'),
-	url('#{$atum-font-path}#{$atum-icon-font}.svg?rx8gye##{$atum-icon-font}') format('svg');
+	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?m6mhn6');
+	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?m6mhn6#iefix') format('embedded-opentype'),
+	url('#{$atum-font-path}#{$atum-icon-font}.ttf?m6mhn6') format('truetype'),
+	url('#{$atum-font-path}#{$atum-icon-font}.woff?m6mhn6') format('woff'),
+	url('#{$atum-font-path}#{$atum-icon-font}.svg?m6mhn6##{$atum-icon-font}') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -24,9 +24,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.atmi-box {
+.atmi-po-pro {
 	&:before {
-		content: $atmi-box;
+		content: $atmi-po-pro;
 	}
 }
 .atmi-featured {
@@ -737,11 +737,6 @@
 .atmi-lock {
 	&:before {
 		content: $atmi-lock;
-	}
-}
-.atmi-unlock {
-	&:before {
-		content: $atmi-unlock;
 	}
 }
 .atmi-magic-wand {
