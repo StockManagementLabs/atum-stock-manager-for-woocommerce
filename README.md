@@ -194,6 +194,57 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.7`
+
+*2021-11-26*
+
+**Features**
+
+* Improved multi-checkbox fields in ATUM Settings.
+* Added sales_update_date field to ATUM product data.
+* Added sales_update_date to the ATUM product model and use it in List Tables.
+* Include sales update date when translating a product with WPML.
+* Allow multiple inputs on EditPopovers.
+* Allow setting a cron for updating product sales properties (instead of doing it asynchronously right away).
+* Remove ATUM scheduled actions when uninstalling and/or when updating to a new version (if any was duplicated for some reason).
+* Improved set purchase price modal.
+
+**Changes**
+
+* List Tables search refactoring.
+* Ajax nonce names unification.
+* Always show all the muti-checkboxes when the main switcher isn’t used.
+* Converted the WPML class to singletons.
+* Prevent showing ATUM panels even when creating a translation.
+* Moved UTC functions from ATUM Export.
+* Provide jQuery with Webpack config to avoid conflicts with 3rd party plugins.
+* Refactoring.
+* Updated JS dependencies.
+* Disallow flex-wrap on input-group.
+* Do not set the current date to the PO's expected date if it's empty.
+* When a list is shown with no results, replace all the coming data (so the totalizers row is removed if necessary).
+* Refactoring for the entries per page option in ATUM List Tables.
+* JS hooks renaming to follow the same naming conventions.
+* Destroy the ediPopovers before re-adding them if they had a previous popover linked.
+
+**Fixes**
+
+* Fixed adding supplier variables when searching by column.
+* Fixed multi-checkbox fields' main switchers.
+* Fixed input checkbox styles in ATUM settings.
+* Fixed APD register not created for translations when using WPML editor.
+* Fixed atum_controlled not able to update for variations at product metaboxes.
+* Fixed accessing wrong item variable.
+* Fixed popovers CSS warning.
+* Fixed the WPML's multilingual content setup meta box removal on ATUM orders.
+* Fixed reset filters button in List Tables.
+* Fixed db prepare without parameters notice.
+* Minor CSS fixes.
+* Ensure data is read from the database after updating a List Table.
+* Fixed WP Editor fields saving in ATUM settings.
+
+---
+
 `1.9.6`
 
 *2021-11-02*
