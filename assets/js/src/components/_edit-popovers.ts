@@ -36,6 +36,11 @@ export default class EditPopovers extends PopoverBase{
 			const $editButton: JQuery   = $( elem ),
 			      $fieldWrapper: JQuery = this.getEditFieldWrapper( $editButton );
 
+			// If this button already had a popover linked, destroy it first to not conflict with the new one.
+			if ( this.getInstance( $editButton ) ) {
+				this.destroyPopover( $editButton );
+			}
+
 			// NOTE: the template should be a button's sibling to avoid unexpected issues with possible duplicated IDs.
 		    let content: string = $editButton.parent().find( `#${ $editButton.data( 'content-id' ) }` ).html();
 
