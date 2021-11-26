@@ -194,6 +194,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.7.1`
+
+*2021-11-26*
+
+**Fixes**
+
+* Fixed wrong text domain.
+
+---
+
 `1.9.7`
 
 *2021-11-26*
