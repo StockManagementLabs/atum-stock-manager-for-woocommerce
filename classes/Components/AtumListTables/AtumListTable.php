@@ -1169,7 +1169,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					$children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
-						'bundle_id' => $this->list_item->get_id(),
+						'bundle_id' => [ $this->list_item->get_id() ],
 					) );
 
 					if ( $children ) {
