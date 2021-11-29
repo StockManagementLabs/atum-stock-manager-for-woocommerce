@@ -519,6 +519,14 @@ final class Helpers {
 
 		$items_sold = array();
 
+		// Avoid duplicated queries in List Tables by using cache.
+		$cache_key      = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start, $date_end, $items, $colums ] );
+		$sold_last_days = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache ) {
+			return $sold_last_days;
+		}
+
 		if ( ! empty( $colums ) ) {
 
 			global $wpdb;
@@ -686,6 +694,8 @@ final class Helpers {
 			}
 
 		}
+
+		AtumCache::set_cache( $cache_key, $items_sold );
 
 		return $items_sold;
 
