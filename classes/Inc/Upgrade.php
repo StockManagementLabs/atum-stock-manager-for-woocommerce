@@ -821,9 +821,9 @@ class Upgrade {
 		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 		$column_exist = $wpdb->prepare( "
-				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
-				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'sales_update_date'
-			", $db_name, $atum_data_table );
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'sales_update_date'
+		", $db_name, $atum_data_table );
 
 		// Add the new column to the table.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
