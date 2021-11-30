@@ -961,13 +961,12 @@ abstract class AtumOrderModel {
 			$currency = $this->currency;
 			$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
 			$status       = $this->get_status();
-			$timestamp    = Helpers::get_current_timestamp();
-			$date_created = Helpers::get_wc_time( $this->date_created ?: $timestamp );
+			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp() );
 			$this->set_date_created( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-				'post_date'     => gmdate( 'Y-m-d H:i:s', $date_created->getOffsetTimestamp() ),
-				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $date_created->getTimestamp() ),
+				'post_date'     => Helpers::date_format( $date_created->getTimestamp(), TRUE ),
+				'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 				'post_type'     => $this->get_post_type(),
 				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 				'ping_status'   => 'closed',
@@ -1021,8 +1020,8 @@ abstract class AtumOrderModel {
 		}
 
 		$post_data = array(
-			'post_date'         => gmdate( 'Y-m-d H:i:s', $date_created->getOffsetTimestamp() ),
-			'post_date_gmt'     => gmdate( 'Y-m-d H:i:s', $date_created->getTimestamp() ),
+			'post_date'         => Helpers::date_format( $date_created->getTimestamp() ),
+			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),

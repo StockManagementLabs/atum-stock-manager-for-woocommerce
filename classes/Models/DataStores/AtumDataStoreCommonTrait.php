@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 
 
@@ -115,7 +116,7 @@ trait AtumDataStoreCommonTrait {
 				$value = call_user_func( array( $product, "get_$column" ), 'edit' );
 				
 				if ( in_array( $column, $date_columns, TRUE ) ) {
-					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );
+					$data[ $column ] = empty( $value ) ? NULL : Helpers::date_format( $product->{"get_$column"}( 'edit' )->getTimestamp(), TRUE, TRUE );
 				}
 				elseif ( in_array( $column, $yes_no_columns, TRUE ) ) {
 
@@ -144,7 +145,7 @@ trait AtumDataStoreCommonTrait {
 
 		// If not passing the updated date, add the current date.
 		if ( ! array_key_exists( 'update_date', $changes ) ) {
-			$data['update_date']   = gmdate( 'Y-m-d H:i:s' );
+			$data['update_date']   = Helpers::date_format( '', TRUE, TRUE );
 			$this->updated_props[] = 'update_date';
 		}
 

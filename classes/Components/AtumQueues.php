@@ -141,11 +141,12 @@ class AtumQueues {
 
 		// phpcs:disable
 		$sql = "SELECT product_id FROM $atum_product_data_table";
-		if ( $time ) {
-			$date_max = gmdate( 'Y-m-d H:i:s', strtotime( $time ) );
 
-			$sql .= $wpdb->prepare(' WHERE update_date <= %s OR update_date IS NULL', $date_max );
+		if ( $time ) {
+			$date_max = Helpers::date_format( strtotime( $time ), TRUE, TRUE );
+			$sql     .= $wpdb->prepare( ' WHERE update_date <= %s OR update_date IS NULL', $date_max );
 		}
+
 		$sql .= ' ORDER BY update_date';
 
 		$outdated_products = $wpdb->get_col( $sql );
@@ -169,26 +170,23 @@ class AtumQueues {
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$last_executed           = get_option( ATUM_PREFIX . 'last_sales_calc' );
-		$now                     = gmdate( 'Y-m-d H:i:s' );
 
 		if ( FALSE === $last_executed ) {
-
-			// phpcs:disable
-			$last_executed = $wpdb->get_var( "SELECT MAX(sales_update_date) FROM $atum_product_data_table;");
-			// phpcs:enable
-
+			$last_executed = $wpdb->get_var( "SELECT MAX(sales_update_date) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
 
 		$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
 
-		$str_sql              = "SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+		$str_sql = "
+			SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
  				FROM `{$wpdb->posts}` o
 					INNER JOIN order_item_table oi ON o.ID = oi.order_id
 					LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
 					LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
 					INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
 				WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
-					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );";
+					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+		";
 
 		$order_items_table    = "{$wpdb->prefix}atum_order_items";
 		$order_itemmeta_table = "{$wpdb->prefix}atum_order_itemmeta";
@@ -238,7 +236,7 @@ class AtumQueues {
 		}
 
 		// Wait until finished.
-		update_option( ATUM_PREFIX . 'last_sales_calc', $now );
+		update_option( ATUM_PREFIX . 'last_sales_calc', Helpers::date_format( '', TRUE, TRUE ) );
 
 	}
 

@@ -464,8 +464,7 @@ class Hooks {
 				$out_stock_date = NULL;
 
 				if ( ! $current_stock ) {
-					$timestamp      = Helpers::get_current_timestamp();
-					$out_stock_date = Helpers::date_format( $timestamp, TRUE, TRUE );
+					$out_stock_date = Helpers::date_format( '', TRUE, TRUE );
 				}
 
 				$product->set_out_stock_date( $out_stock_date );
@@ -856,8 +855,7 @@ class Hooks {
 		if ( ! $paid_date ) {
 
 			$order_mod = wc_get_order( $order_id );
-			$timestamp = Helpers::get_current_timestamp();
-			$order_mod->set_date_paid( $timestamp );
+			$order_mod->set_date_paid( Helpers::get_current_timestamp() );
 			$order_mod->save();
 		}
 

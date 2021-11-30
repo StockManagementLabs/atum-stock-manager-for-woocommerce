@@ -267,7 +267,7 @@ class AtumCalculatedProps {
 			// WC Orders.
 			default:
 				$timestamp    = Helpers::get_current_timestamp();
-				$current_time = Helpers::date_format( $timestamp, TRUE, TRUE );
+				$current_date = Helpers::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = Helpers::get_sold_last_days_option();
 				$product_id   = $product->get_id();
 
@@ -275,12 +275,12 @@ class AtumCalculatedProps {
 				Helpers::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
 				// Set sold today.
-				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_time, $product_id );
+				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_date, $product_id );
 				$product->set_sold_today( $sold_today );
 				self::maybe_update_variable_calc_prop( $product, 'sold_today', $sold_today );
 
 				// Sales last days.
-				$sales_last_ndays = Helpers::get_sold_last_days( "$current_time -$sale_days days", $current_time, $product_id );
+				$sales_last_ndays = Helpers::get_sold_last_days( "$current_date -$sale_days days", $current_date, $product_id );
 				$product->set_sales_last_days( $sales_last_ndays );
 				self::maybe_update_variable_calc_prop( $product, 'sales_last_days', $sales_last_ndays );
 
@@ -293,7 +293,7 @@ class AtumCalculatedProps {
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
-				$timestamp = Helpers::get_current_timestamp();
+				// Save the sales update date.
 				$product->set_sales_update_date( $timestamp );
 
 				break;
@@ -389,7 +389,7 @@ class AtumCalculatedProps {
 				}
 
 				if ( $update || $force_save ) {
-					$product->set_update_date( gmdate( 'Y-m-d H:i:s' ) );
+					$product->set_update_date( Helpers::get_current_timestamp() );
 					$product->save_atum_data();
 
 					do_action( 'atum/after_update_product_calc_props', $product );

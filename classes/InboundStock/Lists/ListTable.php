@@ -312,7 +312,7 @@ class ListTable extends AtumListTable {
 		$date_ordered = get_post_meta( $item->po_id, '_date_created', TRUE );
 
 		if ( $date_ordered ) {
-			$date_ordered = Helpers::date_format( $date_ordered );
+			$date_ordered = Helpers::date_format( $date_ordered, FALSE );
 		}
 		
 		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->list_item );
@@ -332,7 +332,7 @@ class ListTable extends AtumListTable {
 		$date_expected = get_post_meta( $item->po_id, '_date_expected', TRUE );
 
 		if ( $date_expected ) {
-			$date_expected = Helpers::date_format( $date_expected );
+			$date_expected = Helpers::date_format( $date_expected, FALSE );
 		}
 
 		return apply_filters( 'atum/inbound_stock_list/column_date_expected', $date_expected, $item, $this->list_item );

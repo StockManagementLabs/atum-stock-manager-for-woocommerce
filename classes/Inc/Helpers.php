@@ -143,26 +143,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Format a date to match the db format
-	 *
-	 * @since 0.1.3
-	 *
-	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true).
-	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
-	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
-	 *
-	 * @return string                   The formatted date
-	 */
-	public static function date_format( $date, $is_timestamp = FALSE, $gmt_date = FALSE ) {
-
-		if ( ! $is_timestamp ) {
-			$date = strtotime( $date );
-		}
-
-		return ! $gmt_date ? date_i18n( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
-	}
-
-	/**
 	 * Decode a JSON object stringified
 	 *
 	 * @since 0.0.3
@@ -532,11 +512,11 @@ final class Helpers {
 			global $wpdb;
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = gmdate( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
 			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
 
 			if ( $date_end ) {
-				$date_end    = gmdate( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_end    = self::date_format( strtotime( $date_end ), TRUE, TRUE );
 				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
 			}
 
@@ -2106,8 +2086,7 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$timestamp = self::get_current_timestamp();
-						$now       = self::get_wc_time( $timestamp );
+						$now       = self::get_wc_time( self::get_current_timestamp() );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
 						$date_to       = $date_to ? self::get_wc_time( $date_to ) : '';
@@ -2715,59 +2694,6 @@ final class Helpers {
 		AtumCache::delete_cache( $cache_key );
 
 	}
-	
-	/**
-	 * Sets a date prop whilst handling formatting and datetime objects.
-	 *
-	 * @since 1.5.0.3
-	 *
-	 * @param string|integer|\WC_DateTime $value
-	 *
-	 * @return \WC_DateTime|null
-	 */
-	public static function get_wc_time( $value ) {
-		
-		$date_time = NULL;
-		
-		try {
-			
-			if ( $value instanceof \WC_DateTime ) {
-				$date_time = $value;
-			}
-			elseif ( is_numeric( $value ) ) {
-				// Timestamps are handled as UTC timestamps in all cases.
-				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
-			}
-			else {
-				
-				// Strings are defined in local WP timezone. Convert to UTC.
-				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
-					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
-					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
-				}
-				else {
-					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
-				}
-				
-				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
-				
-			}
-			
-			// Set local timezone or offset.
-			if ( get_option( 'timezone_string' ) ) {
-				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
-			}
-			else {
-				$date_time->set_utc_offset( wc_timezone_offset() );
-			}
-			
-		} catch ( \Exception $e ) {
-			error_log( __METHOD__ . '::' . $e->getMessage() );
-		}
-		
-		return $date_time;
-		
-	}
 
 	/**
 	 * Use our own custom image placeholder for products without image
@@ -3114,8 +3040,7 @@ final class Helpers {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$timestamp       = self::get_current_timestamp();
-		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
+		$current_time    = self::date_format( '', TRUE, TRUE );
 		$is_low_stock    = FALSE;
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
@@ -3279,21 +3204,101 @@ final class Helpers {
 	}
 
 	/**
-	 * Get the current timestamp
+	 * Get the current UNIX timestamp (as GMT)
+	 *
+	 * NOTE: When the wp_date function is available and used, the timezone returned with wp_date( 'U' ) is always GMT. So a real UNIX timestamp.
+	 * This differs from the old current_time function that returns the timestamp with a timezone applied (if the GMT param not specified).
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param bool $gmt
-	 *
 	 * @return false|int|string
 	 */
-	public static function get_current_timestamp( $gmt = FALSE ) {
+	public static function get_current_timestamp() {
 
-		if ( $gmt ) {
-			return function_exists( 'wp_date' ) ? wp_date( 'U', NULL, new \DateTimeZone( 'GMT' ) ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		if ( ! function_exists( 'wp_date' ) ) {
+			return current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		}
 
-		return function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		return wp_date( 'U' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+
+	}
+
+	/**
+	 * Format a date to match the db format
+	 *
+	 * @since 0.1.3
+	 *
+	 * @param string|int $date         Optional. The date to format. Can be an English date or a timestamp (with second param as true).
+	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
+	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
+	 * @param string     $format       Optional. A valid PHP date format. By default is 'Y-m-d H:i:s'.
+	 *
+	 * @return string                   The formatted date
+	 */
+	public static function date_format( $date = '', $is_timestamp = TRUE, $gmt_date = FALSE, $format = 'Y-m-d H:i:s' ) {
+
+		// If no date is passed, get the current UNIX timestamp.
+		if ( ! $date ) {
+			$date = self::get_current_timestamp();
+		}
+		elseif ( ! $is_timestamp ) {
+			$date = strtotime( $date );
+		}
+
+		return ! $gmt_date ? wp_date( $format, $date ) : gmdate( $format, $date );
+
+	}
+
+	/**
+	 * Sets a date prop whilst handling formatting and datetime objects.
+	 *
+	 * @since 1.5.0.3
+	 *
+	 * @param string|integer|\WC_DateTime $value
+	 *
+	 * @return \WC_DateTime|null
+	 */
+	public static function get_wc_time( $value ) {
+
+		$date_time = NULL;
+
+		try {
+
+			if ( $value instanceof \WC_DateTime ) {
+				$date_time = $value;
+			}
+			elseif ( is_numeric( $value ) ) {
+				// Timestamps are handled as UTC timestamps in all cases.
+				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
+			}
+			else {
+
+				// Strings are defined in local WP timezone. Convert to UTC.
+				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
+					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
+					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
+				}
+				else {
+					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
+				}
+
+				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
+			}
+
+			// Set local timezone or offset.
+			if ( get_option( 'timezone_string' ) ) {
+				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
+			}
+			else {
+				$date_time->set_utc_offset( wc_timezone_offset() );
+			}
+
+		} catch ( \Exception $e ) {
+			error_log( __METHOD__ . '::' . $e->getMessage() );
+		}
+
+		return $date_time;
 
 	}
 

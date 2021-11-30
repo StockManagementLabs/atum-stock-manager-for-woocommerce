@@ -370,8 +370,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters = $this->get_filters_query_string();
-		$timestamp           = Helpers::get_current_timestamp( TRUE );
-		$this->day           = Helpers::date_format( $timestamp, TRUE, TRUE );
+		$this->day           = Helpers::date_format( '', TRUE, TRUE );
 
 		self::set_sales_day();
 
@@ -611,7 +610,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( Helpers::is_product_data_outdated( $this->list_item ) ) {
 
 			// At least, update the calculated dates properties.
-			$timestamp = gmdate( 'Y-m-d H:i:s' );
+			$timestamp = Helpers::get_current_timestamp();
 			$this->list_item->set_sales_update_date( $timestamp );
 			$this->list_item->set_update_date( $timestamp );
 
