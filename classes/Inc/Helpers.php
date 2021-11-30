@@ -2638,8 +2638,8 @@ final class Helpers {
 				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
 					SELECT terms.slug FROM $wpdb->posts posts
 					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
-				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = termrelations.term_taxonomy_id)
-					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)  
+					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
+				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
 					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
 				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
 					)
