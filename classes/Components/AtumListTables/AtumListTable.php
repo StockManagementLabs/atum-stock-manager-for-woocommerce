@@ -604,18 +604,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
+		// After printing the row, save the update dates for the current product (if outdated).
+		$this->maybe_save_update_dates();
+
 		do_action( 'atum/list_table/after_single_row', $item, $this );
-
-		// If the current product has been modified within any of the columns, save it.
-		if ( Helpers::is_product_data_outdated( $this->list_item ) ) {
-
-			// At least, update the calculated dates properties.
-			$timestamp = Helpers::get_current_timestamp();
-			$this->list_item->set_sales_update_date( $timestamp );
-			$this->list_item->set_update_date( $timestamp );
-
-			$this->list_item->save_atum_data();
-		}
 
 		// Add the children products of each inheritable product type.
 		if ( ! $this->allow_calcs || 'bundle' === $type ) {
@@ -707,6 +699,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		echo '<tr data-id="' . absint( $this->get_current_list_item_id() ) . '" class="expandable has-compounded ' . esc_attr( $type ) . '"' . $row_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
+
+		// After printing the row, save the update dates for the child product (if outdated).
+		$this->maybe_save_update_dates();
 
 		do_action( 'atum/list_table/after_single_expandable_row', $item, $this );
 
@@ -4990,4 +4985,25 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function is_searching_by_id_column() {
 		return isset( $_REQUEST['search_column'] ) && 'ID' === esc_attr( stripslashes( $_REQUEST['search_column'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 	}
+
+	/**
+	 * Save the update dates for any outdated product (if necessary)
+	 *
+	 * @since 1.9.8
+	 */
+	protected function maybe_save_update_dates() {
+
+		// If the current product has been modified within any of the columns, save it.
+		if ( Helpers::is_product_data_outdated( $this->list_item ) ) {
+
+			// At least, update the calculated dates properties.
+			$timestamp = Helpers::get_current_timestamp();
+			$this->list_item->set_sales_update_date( $timestamp );
+			$this->list_item->set_update_date( $timestamp );
+
+			$this->list_item->save_atum_data();
+		}
+
+	}
+
 }
