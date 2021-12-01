@@ -13,11 +13,9 @@
 
 namespace Atum\Legacy;
 
-use Atum\Inc\Globals;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Globals;
 
 trait HelpersLegacyTrait {
 
@@ -35,13 +33,17 @@ trait HelpersLegacyTrait {
 
 		global $wpdb;
 
-		$unmng_fields    = array( 'posts.ID' );
+		$unmng_fields    = [ 'posts.ID' ];
 		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$unmng_join      = [ "LEFT JOIN $atum_data_table AS apd ON (posts.ID = apd.product_id)" ];
 
-		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products_legacy/join_query', array(
-			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
-			"LEFT JOIN $atum_data_table AS apd ON (posts.ID = apd.product_id)",
-		) );
+		// Use the lookup tables when possible to improve the performance.
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_join[] = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON (posts.ID = pml.product_id)";
+		}
+		else {
+			$unmng_join[] = "LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')";
+		}
 
 		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
@@ -49,7 +51,6 @@ trait HelpersLegacyTrait {
 		if ( $get_stock_status ) {
 
 			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
-				$unmng_join[]   = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON (posts.ID = pml.product_id)";
 				$unmng_fields[] = 'pml.stock_status';
 			}
 			else {
@@ -58,12 +59,20 @@ trait HelpersLegacyTrait {
 
 		}
 
+		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products_legacy/join_query', $unmng_join );
+
 		$unmng_where = array(
 			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
 			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
-			"AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')",
 			'AND apd.inheritable != 1', // Exclude the inheritable products from query (as are just containers in ATUM List Tables).
 		);
+
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_where[] = 'AND pml.stock_quantity IS NULL';
+		}
+		else {
+			$unmng_where[] = "AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')";
+		}
 
 		$unmng_where = apply_filters( 'atum/get_unmanaged_products_legacy/where_query', $unmng_where );
 
