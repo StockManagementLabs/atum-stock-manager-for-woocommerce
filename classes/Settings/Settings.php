@@ -291,6 +291,13 @@ class Settings {
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN ),
 				),
 			),
+			'advanced'      => array(
+				'label'    => __( 'Advanced', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'atmi-construction',
+				'sections' => array(
+					'advanced' => __( 'Advanced Options', ATUM_TEXT_DOMAIN ),
+				),
+			),
 		);
 
 		$this->defaults = array(
@@ -355,11 +362,11 @@ class Settings {
 				'default' => 'no',
 			),
 			'calc_prop_cron'            => array(
-				'group'      => 'general',
-				'section'    => 'general',
-				'name'       => __( 'Calculated Properties Cron', ATUM_TEXT_DOMAIN ),
+				'group'      => 'advanced',
+				'section'    => 'advanced',
+				'name'       => __( 'Calculated properties CRON', ATUM_TEXT_DOMAIN ),
 				'desc'       => __( "When enabled, the products' calculated sales properties used on some ATUM List Tables columns (like Sales Last Days, Sold Today, etc) will be calculated in a scheduled way instead of calculating them after every order gets processed.
-Make sure your cron system is working before enabling this option or your calculated properties will show wrong values in ATUM List Tables.", ATUM_TEXT_DOMAIN ),
+Make sure your CRON jobs system is working before enabling this option or your calculated properties will show wrong values in ATUM List Tables.", ATUM_TEXT_DOMAIN ),
 				'type'       => 'switcher',
 				'default'    => 'no',
 				'dependency' => array(
@@ -381,9 +388,9 @@ Make sure your cron system is working before enabling this option or your calcul
 				),
 			),
 			'calc_prop_cron_interval'   => array(
-				'group'   => 'general',
-				'section' => 'general',
-				'name'    => __( 'Cron Interval', ATUM_TEXT_DOMAIN ),
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'Cron interval', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Specify the interval between cron executions. A maximum of 24 hours/60 minutes is allowed.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 1,
@@ -394,8 +401,8 @@ Make sure your cron system is working before enabling this option or your calcul
 				),
 			),
 			'calc_prop_cron_type'       => array(
-				'group'   => 'general',
-				'section' => 'general',
+				'group'   => 'advanced',
+				'section' => 'advanced',
 				'name'    => __( 'Cron Interval type', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Choose the interval type between minutes and hours.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'button_group',
@@ -408,16 +415,16 @@ Make sure your cron system is working before enabling this option or your calcul
 				),
 			),
 			'calc_prop_cron_start'      => array(
-				'group'   => 'general',
-				'section' => 'general',
-				'name'    => __( 'Cron Start time', ATUM_TEXT_DOMAIN ),
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'Cron start time', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Choose the time when the cron will be executed for the first time.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'time_picker',
 				'default' => '0:00',
 			),
 			'delete_data'               => array(
-				'group'   => 'general',
-				'section' => 'general',
+				'group'   => 'advanced',
+				'section' => 'advanced',
 				'name'    => __( 'Delete data when uninstalling', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
