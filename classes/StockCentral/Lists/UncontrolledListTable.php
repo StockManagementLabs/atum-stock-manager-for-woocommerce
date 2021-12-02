@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumUncontrolledListTable;
-use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 
 
