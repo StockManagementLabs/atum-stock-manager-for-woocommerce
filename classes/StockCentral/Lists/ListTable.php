@@ -290,9 +290,11 @@ class ListTable extends AtumListTable {
 	 *
 	 * @since 1.4.16
 	 *
+	 * @param bool $force_defaults
+	 *
 	 * @return array
 	 */
-	public static function get_table_columns() {
+	public static function get_table_columns( $force_defaults = FALSE ) {
 
 		// Can be called statically so it should need the sale_days before initializing the list.
 		self::set_sales_day();
@@ -348,7 +350,14 @@ class ListTable extends AtumListTable {
 			unset( $table_columns['_purchase_price'], $table_columns['_inbound_stock'], $table_columns['calc_gross_profit'] );
 		}
 
-		return (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
+		$table_columns = (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
+
+		// Check if the user has disabled any column from settings.
+		if ( ! $force_defaults ) {
+			$table_columns = self::maybe_disable_columns( $table_columns, 'sc_columns' );
+		}
+
+		return $table_columns;
 
 	}
 

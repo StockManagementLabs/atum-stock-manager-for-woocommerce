@@ -19,6 +19,7 @@ use Atum\Components\AtumHelpPointers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
+use Atum\StockCentral\Lists\ListTable;
 
 
 class StockCentral extends AtumListPage {
@@ -229,6 +230,25 @@ class StockCentral extends AtumListPage {
 	 * @return array
 	 */
 	public function add_settings_defaults( $defaults ) {
+		
+		$sc_columns = array();
+
+		foreach ( ListTable::get_table_columns( TRUE ) as $column => $label ) {
+			$sc_columns[ $column ] = array(
+				'value' => 'yes', // All enabled by default.
+				'name'  => wp_strip_all_tags( $label ),
+			);
+		}
+		
+		$defaults['sc_columns'] = array(
+			'group'           => 'stock_central',
+			'section'         => 'stock_central',
+			'name'            => __( 'Available Columns', ATUM_TEXT_DOMAIN ),
+			'desc'            => __( "If there is any column in Stock Central that you don't need, you can remove it from here. Please, note that if you hide the column from Screen Options it will just hide it but disabling it from here, will unload it completely.", ATUM_TEXT_DOMAIN ),
+			'type'            => 'multi_checkbox',
+			'default'         => 'yes',
+			'default_options' => $sc_columns,
+		);
 
 		$defaults['posts_per_page'] = array(
 			'group'   => 'stock_central',

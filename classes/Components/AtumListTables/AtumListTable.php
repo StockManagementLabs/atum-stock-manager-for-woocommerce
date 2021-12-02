@@ -3657,7 +3657,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			foreach ( $group['members'] as $member ) {
 
-				if ( ! in_array( $member, $hidden ) ) {
+				// Check that the current member isn't hidden and the column is enabled.
+				if ( ! in_array( $member, $hidden ) && array_key_exists( $member, self::$table_columns ) ) {
 					$counter ++;
 				}
 
@@ -4410,9 +4411,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.2.5
 	 *
+	 * @param bool $force_defaults
+	 *
 	 * @return array
 	 */
-	public static function get_table_columns() {
+	public static function get_table_columns( $force_defaults = FALSE ) {
 		return self::$table_columns;
 	}
 
@@ -5003,6 +5006,38 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$this->list_item->save_atum_data();
 		}
+
+	}
+
+	/**
+	 * Check whether to disable some List Table columns (if the user has specified it in settings)
+	 *
+	 * @since 1.9.8
+	 *
+	 * @param array  $table_columns The array of default columns for the current List Table.
+	 * @param string $option_key    The option key name from ATUM Settings where the multi-checkbox of available columns is stored.
+	 *
+	 * @return array
+	 */
+	protected static function maybe_disable_columns( $table_columns, $option_key ) {
+
+		$available_columns = Helpers::get_option( $option_key, [] );
+
+		if ( ! empty( $available_columns ) && is_array( $available_columns ) ) {
+
+			$disabled_columns = array_filter( $available_columns['options'], function ( $value ) {
+				return 'no' === $value;
+			} );
+
+			$disabled_column_keys = array_keys( $disabled_columns );
+
+			foreach ( $disabled_column_keys as $disabled_column ) {
+				unset( $table_columns[ $disabled_column ] );
+			}
+
+		}
+
+		return $table_columns;
 
 	}
 
