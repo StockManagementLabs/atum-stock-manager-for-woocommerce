@@ -866,7 +866,7 @@ class Upgrade {
 			$hook = $action->get_hook();
 
 			// Only check hooks beginning with 'atum'.
-			if ( 0 !== strpos( $hook, 'atum' ) ) {
+			if ( 0 !== strpos( $hook, 'atum' ) && 'update_product_expiring_props' !== $hook ) {
 				continue;
 			}
 
@@ -888,6 +888,12 @@ class Upgrade {
 
 				// The schedulded actions only can be deleted by id this way.
 				$wpdb->delete( $wpdb->actionscheduler_actions, [ 'action_id' => $duplicated_id ], [ '%d' ] );
+
+			}
+			elseif ( 'update_product_expiring_props' !== $hook ) {
+
+				// Delete all old tasks.
+				$wpdb->delete( $wpdb->actionscheduler_actions, [ 'action_id' => $action_id ], [ '%d' ] );
 
 			}
 			else {
