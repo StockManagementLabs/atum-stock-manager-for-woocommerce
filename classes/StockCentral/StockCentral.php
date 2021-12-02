@@ -243,7 +243,7 @@ class StockCentral extends AtumListPage {
 		$defaults['sc_columns'] = array(
 			'group'           => 'stock_central',
 			'section'         => 'stock_central',
-			'name'            => __( 'Available Columns', ATUM_TEXT_DOMAIN ),
+			'name'            => __( 'Available columns', ATUM_TEXT_DOMAIN ),
 			'desc'            => __( "If there is any column in Stock Central that you don't need, you can remove it from here. Please, note that if you hide the column from Screen Options it will just hide it but disabling it from here, will unload it completely.", ATUM_TEXT_DOMAIN ),
 			'type'            => 'multi_checkbox',
 			'default'         => 'yes',
