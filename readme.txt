@@ -7,7 +7,7 @@ Tested up to: 5.8.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
 WC tested up to: 5.9.0
-Stable tag: 1.9.7.2
+Stable tag: 1.9.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,32 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.8`
+
+*2021-12-02*
+
+**Features**
+
+* Performance improvement: prevent duplicated ATUM queries in List Tables.
+* Performance improvement: use the product_meta_lokup table to retrieve the unmanaged products (when possible).
+* Added new "Avanced" tab to ATUM Settings and moved some advanced options there.
+* Performance improvement: Re-enabled WC order product lookup tables for queries.
+* Allow disabling Stock Central columns from settings.
+
+**Changes**
+
+* Updated ATUM icons font.
+* ATUM dates refactoring.
+* Remove old scheduled tasks when upgrading.
+
+**Fixes**
+
+* Fixed wrong table alias for CI collations.
+* Fixed possible inconsistencies in taxonomy relations when searching for the parent product type.
+* Save the update dates for children products after they are printed in Stock Central.
 
 ---
 

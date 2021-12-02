@@ -194,6 +194,32 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.8`
+
+*2021-12-02*
+
+**Features**
+
+* Performance improvement: prevent duplicated ATUM queries in List Tables.
+* Performance improvement: use the product_meta_lokup table to retrieve the unmanaged products (when possible).
+* Added new "Avanced" tab to ATUM Settings and moved some advanced options there.
+* Performance improvement: Re-enabled WC order product lookup tables for queries.
+* Allow disabling Stock Central columns from settings.
+
+**Changes**
+
+* Updated ATUM icons font.
+* ATUM dates refactoring.
+* Remove old scheduled tasks when upgrading.
+
+**Fixes**
+
+* Fixed wrong table alias for CI collations.
+* Fixed possible inconsistencies in taxonomy relations when searching for the parent product type.
+* Save the update dates for children products after they are printed in Stock Central.
+
+---
+
 `1.9.7.2`
 
 *2021-11-26*
