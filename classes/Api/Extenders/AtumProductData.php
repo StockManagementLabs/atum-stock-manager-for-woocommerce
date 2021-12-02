@@ -208,7 +208,7 @@ class AtumProductData {
 			'purchase_price'      => array(
 				'required'    => FALSE,
 				'description' => __( "Product's purchase price.", ATUM_TEXT_DOMAIN ),
-				'type'        => 'number',
+				'type'        => 'string',
 			),
 			'supplier_id'         => array(
 				'required'    => FALSE,
