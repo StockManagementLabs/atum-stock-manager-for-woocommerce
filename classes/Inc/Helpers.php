@@ -2889,8 +2889,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product|AtumProductTrait $product    The product to check.
-	 * @param string                       $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param AtumProductTrait $product    The product to check. It must be an ATUM product.
+	 * @param string           $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
 	 *
 	 * @return bool
 	 */
@@ -3064,15 +3064,15 @@ final class Helpers {
 	 */
 	public static function maybe_use_wc_order_product_lookup_table() {
 
-		// FIXME: Temporary disable of use table because it's not populated in every cases.
-		return FALSE;
+		if ( 'no' === self::get_option( 'use_order_product_lookup_table', 'yes' ) ) {
+			return FALSE;
+		}
 
-		// TODO: ENABLE IT FROM SETTINGS.
-		$cache_key  = AtumCache::get_cache_key( 'use_wc_order_product_lookup_table' );
-		$use_lookup = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$transient_key = AtumCache::get_transient_key( 'use_wc_order_product_lookup_table' );
+		$use_lookup    = AtumCache::get_transient( $transient_key, TRUE );
 
-		if ( $has_cache ) {
-			return $use_lookup;
+		if ( FALSE !== $use_lookup ) {
+			return wc_string_to_bool( $use_lookup );
 		}
 
 		global $wpdb;
@@ -3081,7 +3081,7 @@ final class Helpers {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$use_lookup = $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0;
-		AtumCache::set_cache( $cache_key, $use_lookup );
+		AtumCache::set_transient( $transient_key, wc_bool_to_string( $use_lookup ), WEEK_IN_SECONDS, TRUE );
 
 		return $use_lookup;
 
