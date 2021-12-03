@@ -232,6 +232,9 @@ class InventoryLogs extends AtumOrderPostType {
 		// Set the Log description as post content.
 		$log->set_description( $_POST['description'] );
 
+		// In case the user changed any order item and not used the "Save Items" button.
+		$log->save_posted_order_items();
+
 		$log->save();
 
 	}

@@ -242,6 +242,9 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Set the PO description as post content.
 		$po->set_description( $_POST['description'] );
 
+		// In case the user changed any order item and not used the "Save Items" button.
+		$po->save_posted_order_items();
+
 		$po->save();
 
 	}

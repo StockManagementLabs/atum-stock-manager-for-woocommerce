@@ -596,6 +596,55 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Save the order items coming in a POST submission
+	 *
+	 * @since 1.9.8
+	 */
+	public function save_posted_order_items() {
+
+		$items = array();
+
+		// Depending if the post is being submitted by ajax (serialized) or normally (when updating the order)
+		// The data can come differently.
+		if ( wp_doing_ajax() && isset( $_POST['atum_order_id'], $_POST['items'] ) ) {
+			// Parse the jQuery serialized items.
+			parse_str( $_POST['items'], $items );
+		}
+		elseif ( isset( $_POST['atum_order_item_id'] ) ) {
+
+			$data_keys = array(
+				'atum_order_item_id',
+				'atum_order_item_name',
+				'atum_order_item_qty',
+				'atum_order_item_tax_class',
+				'line_subtotal_tax',
+				'line_tax',
+				'line_subtotal',
+				'line_total',
+			);
+
+			foreach ( $data_keys as $key ) {
+
+				if ( isset( $_POST[ $key ] ) ) {
+					$items[ $key ] = $_POST[ $key ];
+				}
+
+			}
+
+		}
+
+		if ( ! empty( $items ) ) {
+
+			do_action( 'atum/orders/before_save_order_items', $this, $items );
+
+			// Save order items.
+			$this->save_order_items( $items );
+
+		}
+
+	}
+
+	/**
 	 * Save ATUM Order items. Uses the CRUD
 	 *
 	 * @since 1.2.9
