@@ -7,7 +7,7 @@ Tested up to: 5.8.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
 WC tested up to: 5.9.0
-Stable tag: 1.9.8
+Stable tag: 1.9.8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,21 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.8.1`
+
+*2021-12-03*
+
+**Fixes**
+
+* Fixed sales calc props not updating in defer mode.
+* Save the posted order items data when updating any ATUM order without clicking on "Save Items" button first.
+
+**Changes**
+
+* Refactoring.
 
 ---
 

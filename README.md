@@ -194,6 +194,21 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.8.1`
+
+*2021-12-03*
+
+**Fixes**
+
+* Fixed sales calc props not updating in defer mode.
+* Save the posted order items data when updating any ATUM order without clicking on "Save Items" button first.
+
+**Changes**
+
+* Refactoring.
+
+---
+
 `1.9.8`
 
 *2021-12-02*
