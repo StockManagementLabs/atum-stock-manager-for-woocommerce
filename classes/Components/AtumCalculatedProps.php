@@ -208,7 +208,7 @@ class AtumCalculatedProps {
 	 */
 	public static function defer_update_atum_sales_calc_props( $product_id, $order_type_id = 1 ) {
 
-		if ( 'yes' !== Helpers::get_option( 'calc_prop_cron' ) ) {
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
 			return;
 		}
 
