@@ -146,6 +146,22 @@ abstract class AtumOrderModel {
 	];
 
 	/**
+	 * Array of data key names used in order items when submitting an ATUM order
+	 *
+	 * @var array
+	 */
+	protected $posted_data_keys = [
+		'atum_order_item_id',
+		'atum_order_item_name',
+		'atum_order_item_qty',
+		'atum_order_item_tax_class',
+		'line_subtotal_tax',
+		'line_tax',
+		'line_subtotal',
+		'line_total',
+	];
+
+	/**
 	 * Changes made to the ATUM Order that should be updated
 	 *
 	 * @var array
@@ -610,20 +626,10 @@ abstract class AtumOrderModel {
 			// Parse the jQuery serialized items.
 			parse_str( $_POST['items'], $items );
 		}
+		// When the form is submitted normally, it must have at least the atum_order_item_id.
 		elseif ( isset( $_POST['atum_order_item_id'] ) ) {
 
-			$data_keys = array(
-				'atum_order_item_id',
-				'atum_order_item_name',
-				'atum_order_item_qty',
-				'atum_order_item_tax_class',
-				'line_subtotal_tax',
-				'line_tax',
-				'line_subtotal',
-				'line_total',
-			);
-
-			foreach ( $data_keys as $key ) {
+			foreach ( $this->posted_data_keys as $key ) {
 
 				if ( isset( $_POST[ $key ] ) ) {
 					$items[ $key ] = $_POST[ $key ];
