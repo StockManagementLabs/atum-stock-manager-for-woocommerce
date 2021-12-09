@@ -176,7 +176,8 @@ abstract class AtumOrderModel {
 	 */
 	public function __construct( $id = 0, $read_items = TRUE ) {
 		
-		$this->block_message = __( 'Click the Create button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->block_message    = __( 'Click the Create button on the top right to add/edit items.', ATUM_TEXT_DOMAIN );
+		$this->posted_data_keys = (array) apply_filters( 'atum/order/posted_data_keys', $this->posted_data_keys, $this );
 
 		if ( $id ) {
 
