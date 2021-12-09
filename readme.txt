@@ -7,7 +7,7 @@ Tested up to: 5.8.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
 WC tested up to: 5.9.0
-Stable tag: 1.9.8.1
+Stable tag: 1.9.8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,22 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.8.2`
+
+*2021-12-09*
+
+**Changes**
+
+* Refactoring.
+* Added new filter to ATUM Order's posted data keys to be able to add more keys externally.
+
+**Fixes**
+
+* Fixed PHP 8.1 compatibility code.
+* Fixed Settings page's CSS issues.
 
 ---
 

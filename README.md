@@ -194,6 +194,22 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.8.2`
+
+*2021-12-09*
+
+**Changes**
+
+* Refactoring.
+* Added new filter to ATUM Order's posted data keys to be able to add more keys externally.
+
+**Fixes**
+
+* Fixed PHP 8.1 compatibility code.
+* Fixed Settings page's CSS issues.
+
+---
+
 `1.9.8.1`
 
 *2021-12-03*
