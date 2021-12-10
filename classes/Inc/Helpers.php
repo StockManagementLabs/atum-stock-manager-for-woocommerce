@@ -488,14 +488,15 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int       $date_start The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
-	 * @param array|int $items      Optional. Array of Product IDs (or single ID) we want to calculate sales from.
-	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
+	 * @param int       $date_start       The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int       $date_end         Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array|int $items            Optional. Array of Product IDs (or single ID) we want to calculate sales from.
+	 * @param array     $colums           Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
+	 * @param bool      $use_lookup_table Optional. Whether to use the WC order product lookup tables (if available).
 	 *
 	 * @return array|int|float
 	 */
-	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ] ) {
+	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ], $use_lookup_table = TRUE ) {
 
 		$items_sold = array();
 
@@ -535,13 +536,12 @@ final class Helpers {
 			", $order_status );
 			// phpcs:enable
 
+			// The lookup tables must be enabled and also available in the actual system.
+			// NOTE: There are some scenarios when the lookup tables are still not updated and we must use regular tables.
+			// Like when a new order is placed (because WC delays the lookup table update a little).
+			$use_lookup_table           = $use_lookup_table && self::maybe_use_wc_order_product_lookup_table();
 			$query_columns              = $query_joins = [];
-			$use_lookup_table           = FALSE;
 			$order_product_lookup_table = $wpdb->prefix . 'wc_order_product_lookup';
-
-			if ( self::maybe_use_wc_order_product_lookup_table() ) {
-				$use_lookup_table = TRUE;
-			}
 
 			// Filter by product IDs.
 			$products_where      = '';
@@ -686,12 +686,13 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int|\WC_Product $product   The product ID or product object to calculate the lost sales.
-	 * @param int             $days      Optional. By default the calculation is made for 7 days average.
+	 * @param int|\WC_Product $product          The product ID or product object to calculate the lost sales.
+	 * @param int             $days             Optional. By default the calculation is made for 7 days average.
+	 * @param bool            $use_lookup_table Optional. Whether to use the WC order lookup table on the get_sold_last_days method.
 	 *
 	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
 	 */
-	public static function get_product_lost_sales( $product, $days = 7 ) {
+	public static function get_product_lost_sales( $product, $days = 7, $use_lookup_table = TRUE ) {
 
 		$lost_sales = FALSE;
 
@@ -714,7 +715,7 @@ final class Helpers {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( "$out_of_stock_date -$days days", $out_of_stock_date, $product->get_id() );
+				$sold_last_days = self::get_sold_last_days( "$out_of_stock_date -$days days", $out_of_stock_date, $product->get_id(), [ 'qty' ], $use_lookup_table );
 				$lost_sales     = 0;
 
 				if ( $sold_last_days > 0 ) {
@@ -3022,10 +3023,11 @@ final class Helpers {
 	 * @since 1.6.6
 	 *
 	 * @param \WC_Product|AtumProductTrait $product
+	 * @param bool                         $use_lookup_table
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public static function is_product_low_stock( $product ) {
+	public static function is_product_low_stock( $product, $use_lookup_table = TRUE ) {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
@@ -3033,11 +3035,8 @@ final class Helpers {
 		$is_low_stock    = FALSE;
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
-
-			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id() ) / 7 * $days_to_reorder;
-
-			$is_low_stock = $expected_sales > $product->get_stock_quantity();
-
+			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id(), [ 'qty' ], $use_lookup_table ) / 7 * $days_to_reorder;
+			$is_low_stock   = $expected_sales > $product->get_stock_quantity();
 		}
 
 		return apply_filters( 'atum/is_product_low_stock', $is_low_stock, $product );

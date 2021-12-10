@@ -275,12 +275,12 @@ class AtumCalculatedProps {
 				Helpers::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
 				// Set sold today.
-				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_date, $product_id );
+				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_date, $product_id, [ 'qty' ], FALSE );
 				$product->set_sold_today( $sold_today );
 				self::maybe_update_variable_calc_prop( $product, 'sold_today', $sold_today );
 
 				// Sales last days.
-				$sales_last_ndays = Helpers::get_sold_last_days( "$current_date -$sale_days days", $current_date, $product_id );
+				$sales_last_ndays = Helpers::get_sold_last_days( "$current_date -$sale_days days", $current_date, $product_id, [ 'qty' ], FALSE );
 				$product->set_sales_last_days( $sales_last_ndays );
 				self::maybe_update_variable_calc_prop( $product, 'sales_last_days', $sales_last_ndays );
 
@@ -289,7 +289,7 @@ class AtumCalculatedProps {
 				$product->set_out_stock_days( $out_of_stock_days );
 
 				// Lost sales.
-				$lost_sales = Helpers::get_product_lost_sales( $product );
+				$lost_sales = Helpers::get_product_lost_sales( $product, 7, FALSE );
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
@@ -381,7 +381,7 @@ class AtumCalculatedProps {
 					$update = TRUE;
 				}
 
-				$low = wc_bool_to_string( Helpers::is_product_low_stock( $product ) );
+				$low = wc_bool_to_string( Helpers::is_product_low_stock( $product, FALSE ) );
 
 				if ( $product->get_low_stock() !== $low ) {
 					$product->set_low_stock( $low );
