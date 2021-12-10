@@ -297,7 +297,7 @@ class Addons {
 					}
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
 						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( "Your ATUM %1\$s add-on's license has expired or is invalid, %2\$splease renew it asap%3\$s or you won't receive updates anymore.", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+						AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sPlease, renew here.%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
 					}
 
 				}
