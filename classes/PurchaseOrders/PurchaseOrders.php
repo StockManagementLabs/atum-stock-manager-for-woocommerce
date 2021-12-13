@@ -224,7 +224,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
 		$po_timestamp   = empty( $_POST['date'] ) ? Helpers::get_current_timestamp() : strtotime( $posted_po_date );
-		$po_date        = Helpers::date_format( $po_timestamp );
+		$po_date        = Helpers::date_format( $po_timestamp, TRUE, TRUE );
 
 		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
 		$date_expected        = $posted_date_expected ? Helpers::date_format( strtotime( $posted_date_expected ) ) : '';
