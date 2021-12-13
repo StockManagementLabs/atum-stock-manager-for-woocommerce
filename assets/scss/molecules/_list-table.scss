@@ -2259,6 +2259,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				text-align: center;
 				
 				&.totals-heading {
+					text-align: left;
+					
 					span {
 						font-size: 14px;
 						font-weight: bold;
