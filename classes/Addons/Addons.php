@@ -372,6 +372,16 @@ class Addons {
 	}
 
 	/**
+	 * Remove the add-ons list transient
+	 *
+	 * @since 1.9.9
+	 */
+	public static function delete_addons_list_transient() {
+
+		$transient_name = AtumCache::get_transient_key( 'addons_list' );
+		AtumCache::delete_transients( $transient_name );
+	}
+	/**
 	 * Retrieves addon folder
 	 *
 	 * @since 1.7.5
