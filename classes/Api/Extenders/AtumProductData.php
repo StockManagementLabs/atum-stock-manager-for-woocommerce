@@ -557,7 +557,7 @@ class AtumProductData {
 			$args['tax_query'][] = array(
 				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
 				'field'    => 'term_id',
-				'terms'    => $request['atum_location'],
+				'terms'    => array_map( 'absint', explode( ',', $request['atum_location'] ) ),
 			);
 
 		}
