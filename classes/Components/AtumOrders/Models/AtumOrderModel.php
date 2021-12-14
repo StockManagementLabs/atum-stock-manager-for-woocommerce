@@ -656,15 +656,15 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param array $items Order items to save.
+	 * @param array $items_data Order items to save.
 	 */
-	public function save_order_items( $items ) {
+	public function save_order_items( $items_data ) {
 
 		// Allow other plugins to check changes in ATUM Order items before they are saved.
-		do_action( 'atum/orders/before_save_items', $this, $items );
+		do_action( 'atum/orders/before_save_items', $this, $items_data );
 
 		// Line items and fees.
-		if ( isset( $items['atum_order_item_id'] ) ) {
+		if ( isset( $items_data['atum_order_item_id'] ) ) {
 
 			$data_keys = array(
 				'line_tax'                  => array(),
@@ -676,7 +676,7 @@ abstract class AtumOrderModel {
 				'line_subtotal'             => NULL,
 			);
 
-			foreach ( $items['atum_order_item_id'] as $item_id ) {
+			foreach ( $items_data['atum_order_item_id'] as $item_id ) {
 
 				/**
 				 * Variable definition
@@ -690,7 +690,7 @@ abstract class AtumOrderModel {
 				$item_data = array();
 
 				foreach ( $data_keys as $key => $default ) {
-					$item_data[ $key ] = isset( $items[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
+					$item_data[ $key ] = isset( $items_data[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items_data[ $key ][ $item_id ] ) ) : $default;
 				}
 
 				if ( '0' === $item_data['atum_order_item_qty'] ) {
@@ -713,8 +713,8 @@ abstract class AtumOrderModel {
 					),
 				) );
 
-				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
-					$this->save_item_meta( $item, $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] );
+				if ( isset( $items_data['meta_key'][ $item_id ], $items_data['meta_value'][ $item_id ] ) ) {
+					$this->save_item_meta( $item, $items_data['meta_key'][ $item_id ], $items_data['meta_value'][ $item_id ] );
 				}
 
 				$this->add_item( $item );
@@ -725,7 +725,7 @@ abstract class AtumOrderModel {
 		}
 
 		// Shipping Rows.
-		if ( isset( $items['shipping_method_id'] ) ) {
+		if ( isset( $items_data['shipping_method_id'] ) ) {
 
 			$data_keys = array(
 				'shipping_method'       => NULL,
@@ -734,7 +734,7 @@ abstract class AtumOrderModel {
 				'shipping_taxes'        => array(),
 			);
 
-			foreach ( $items['shipping_method_id'] as $item_id ) {
+			foreach ( $items_data['shipping_method_id'] as $item_id ) {
 
 				if ( ! $item = $this->get_atum_order_item( absint( $item_id ) ) ) {
 					continue;
@@ -743,7 +743,7 @@ abstract class AtumOrderModel {
 				$item_data = array();
 
 				foreach ( $data_keys as $key => $default ) {
-					$item_data[ $key ] = isset( $items[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items[ $key ][ $item_id ] ) ) : $default;
+					$item_data[ $key ] = isset( $items_data[ $key ][ $item_id ] ) ? wc_clean( wp_unslash( $items_data[ $key ][ $item_id ] ) ) : $default;
 				}
 
 				$item->set_props( array(
@@ -755,8 +755,8 @@ abstract class AtumOrderModel {
 					),
 				) );
 
-				if ( isset( $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] ) ) {
-					$this->save_item_meta( $item, $items['meta_key'][ $item_id ], $items['meta_value'][ $item_id ] );
+				if ( isset( $items_data['meta_key'][ $item_id ], $items_data['meta_value'][ $item_id ] ) ) {
+					$this->save_item_meta( $item, $items_data['meta_key'][ $item_id ], $items_data['meta_value'][ $item_id ] );
 				}
 
 				$this->add_item( $item );
@@ -773,7 +773,7 @@ abstract class AtumOrderModel {
 		$this->calculate_totals( FALSE );
 
 		// Inform other plugins that the items have been saved.
-		do_action( 'atum/orders/after_save_items', $this, $items );
+		do_action( 'atum/orders/after_save_items', $this, $items_data );
 
 	}
 

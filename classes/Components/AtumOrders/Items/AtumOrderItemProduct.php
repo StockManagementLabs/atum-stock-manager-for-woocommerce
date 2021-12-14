@@ -44,7 +44,18 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 	 *
 	 * @var array
 	 */
-	protected $internal_meta_keys = array( '_product_id', '_variation_id', '_qty', '_tax_class', '_line_subtotal', '_line_subtotal_tax', '_line_total', '_line_tax', '_line_tax_data', '_stock_changed' );
+	protected $internal_meta_keys = array(
+		'_product_id',
+		'_variation_id',
+		'_qty',
+		'_tax_class',
+		'_line_subtotal',
+		'_line_subtotal_tax',
+		'_line_total',
+		'_line_tax',
+		'_line_tax_data',
+		'_stock_changed',
+	);
 
 	// Load the shared methods.
 	use AtumOrderItemTrait;
