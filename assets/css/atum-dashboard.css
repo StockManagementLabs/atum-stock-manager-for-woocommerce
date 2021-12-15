@@ -4785,6 +4785,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   letter-spacing: 1px;
 }
 
+.swal2-container .swal2-modal button.swal2-confirm {
+  background-color: var(--primary);
+}
+
 .swal2-container .swal2-modal button.btn-sm {
   padding: 0.25rem 0.5rem;
   font-size: 12px;
@@ -4811,6 +4815,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 
 .swal2-container .swal2-modal a:hover {
   color: var(--wp-link-hover);
+}
+
+.swal2-container .swal2-modal .swal2-loader {
+  border-color: var(--primary) transparent var(--primary) transparent;
 }
 
 .swal2-container .swal2-progress-steps .swal2-progress-step {

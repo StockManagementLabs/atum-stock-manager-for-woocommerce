@@ -83,6 +83,10 @@
 			font-size: 13px;
 			letter-spacing: 1px;
 			
+			&.swal2-confirm {
+				background-color: var(--primary);
+			}
+			
 			&.btn-sm {
 				padding: 0.25rem 0.5rem;
 				font-size: 12px;
@@ -107,10 +111,12 @@
 			color: var(--primary) !important;
 			
 			&:hover {
-				
 				color: var(--wp-link-hover);
-				
 			}
+		}
+		
+		.swal2-loader {
+			border-color: var(--primary) transparent var(--primary) transparent;
 		}
 		
 	}
