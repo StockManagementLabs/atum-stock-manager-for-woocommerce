@@ -1349,9 +1349,10 @@ abstract class AtumOrderModel {
 		// Consider ATUM Order models that don't support shipping.
 		$shipping_total = ! is_wp_error( $this->shipping_total ) ? (float) $this->shipping_total : 0;
 		$shipping_tax   = ! is_wp_error( $this->shipping_tax ) ? (float) $this->shipping_tax : 0;
+		$cart_tax       = ! is_wp_error( $this->cart_tax ) ? (float) $this->cart_tax : 0;
 
 		/* @noinspection PhpWrongStringConcatenationInspection */
-		$grand_total = round( $total + $fee_total + $shipping_total + (float) $this->cart_tax + $shipping_tax, wc_get_price_decimals() );
+		$grand_total = round( $total + $fee_total + $shipping_total + $cart_tax + $shipping_tax, wc_get_price_decimals() );
 
 		$this->set_discount_total( $subtotal - $total );
 		$this->set_discount_tax( $subtotal_tax - $total_tax );
@@ -2331,8 +2332,24 @@ abstract class AtumOrderModel {
 			}
 
 			$this->set_meta( 'shipping_tax', $shipping_tax );
-			$this->set_total_tax( (float) $this->cart_tax + (float) $shipping_tax, $skip_change );
+			$this->recalculate_total_tax( $skip_change );
 		}
+
+	}
+
+	/**
+	 * Recalculate the total tax
+	 *
+	 * @since 1.9.9
+	 *
+	 * @param bool $skip_change
+	 */
+	public function recalculate_total_tax( $skip_change = FALSE ) {
+
+		$cart_tax     = ! is_wp_error( $this->cart_tax ) ? (float) $this->cart_tax : 0;
+		$shipping_tax = ! is_wp_error( $this->shipping_tax ) ? (float) $this->shipping_tax : 0;
+
+		$this->set_total_tax( $cart_tax + $shipping_tax, $skip_change );
 
 	}
 
@@ -2355,7 +2372,7 @@ abstract class AtumOrderModel {
 			}
 
 			$this->set_meta( 'cart_tax', $cart_tax );
-			$this->set_total_tax( (float) $this->shipping_tax + (float) $cart_tax, $skip_change );
+			$this->recalculate_total_tax( $skip_change );
 		}
 
 	}
