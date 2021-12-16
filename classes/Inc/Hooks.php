@@ -1447,17 +1447,22 @@ class Hooks {
 			// Loop over all items.
 			foreach ( $order->get_items() as $item ) {
 
-				$product   = $item->get_product();
-				$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
-				$new_stock = $product->get_stock_quantity();
+				$product = $item->get_product();
 
-				if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_already_sent ) ) {
+				if ( $product->get_manage_stock() ) {
 
-					$changes[] = array(
-						'product' => $product,
-						'from'    => $new_stock + $qty,
-						'to'      => $new_stock,
-					);
+					$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
+					$new_stock = $product->get_stock_quantity();
+
+					if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_already_sent ) ) {
+
+						$changes[] = array(
+							'product' => $product,
+							'from'    => $new_stock + $qty,
+							'to'      => $new_stock,
+						);
+
+					}
 
 				}
 
