@@ -36,7 +36,10 @@ export default class AtumOrderItems {
 			// Meta
 			.on( 'click', 'button.add-atum-order-item-meta', ( evt: JQueryEventObject ) => this.addItemMeta( evt ) )
 			.on( 'click', 'button.remove-atum-order-item-meta', ( evt: JQueryEventObject ) => this.removeItemMeta( evt ) )
-			.on( 'click', 'button.set-purchase-price', ( evt: JQueryEventObject ) => this.setPurchasePrice( evt ) );
+			.on( 'click', 'button.set-purchase-price', ( evt: JQueryEventObject ) => {
+				evt.preventDefault();
+				this.setPurchasePrice( $( evt.currentTarget ).closest( '.item' ) );
+			} );
 
 
 		// Add this component to the global scope so can be accessed by other add-ons.
@@ -432,17 +435,14 @@ export default class AtumOrderItems {
 	/**
 	 * Set the purchase price for an order item product
 	 *
-	 * @param {JQueryEventObject} evt
+	 * @param {JQuery} $item
 	 * @param {number} purchasePrice
 	 * @param {string} purchasePriceTxt
 	 * @param {string} itemName
 	 */
-	setPurchasePrice( evt: JQueryEventObject, purchasePrice?: number, purchasePriceTxt?: string, itemName?: string ) {
+	setPurchasePrice( $item: JQuery, purchasePrice?: number, purchasePriceTxt?: string, itemName?: string ) {
 
-		evt.preventDefault();
-
-		const $item: JQuery         = $( evt.currentTarget ).closest( '.item' ),
-		      $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
+		const $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
 		      $lineTotal: JQuery    = $item.find( 'input.line_total' );
 
 		if ( ! itemName ) {
