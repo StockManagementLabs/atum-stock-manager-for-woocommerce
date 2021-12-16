@@ -1427,7 +1427,7 @@ final class Helpers {
 	 *
 	 * @param string $plugin        The plugin name/slug.
 	 * @param string $folder        The plugin folder.
-	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'.
+	 * @param string $by            Optional. It can be checked by 'slug' or by 'name'.
 	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
