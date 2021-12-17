@@ -194,6 +194,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.9`
+
+*2021-12-17*
+
+**Features**
+
+* Added function to delete the add-ons list transient.
+* Allow filtering products by multiple ATUM Locations through ATUM API.
+
+**Changes**
+
+* Updated notice for expired licenses.
+* Do not use the WC order product lookup tables when recalculating sales props because WC delays its update.
+* Refactoring.
+* Use the default ATUM's blue color for the modal's confirm button.
+* Avoid sending stock notifications of unmanaged products.
+
+**Fixes**
+
+* Avoid to increase one hour when saving a PO.
+* CSS fix.
+
+---
+
 `1.9.8.2`
 
 *2021-12-09*
