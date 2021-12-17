@@ -5373,6 +5373,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   min-height: 200px;
   margin: 20px 30px 0;
   background-color: var(--dash-card-bg) !important;
+  background-size: cover !important;
 }
 
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close {
@@ -5483,8 +5484,8 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   line-height: 20px;
   border-radius: 11.5px;
   position: absolute;
-  top: -16px;
-  right: -22px;
+  top: -14px;
+  right: -15px;
   font-size: 14px;
 }
 
