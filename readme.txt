@@ -6,8 +6,8 @@ Requires at least: 5.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.9.0
-Stable tag: 1.9.8.2
+WC tested up to: 6.0.0
+Stable tag: 1.9.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,30 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.9`
+
+*2021-12-17*
+
+**Features**
+
+* Added function to delete the add-ons list transient.
+* Allow filtering products by multiple ATUM Locations through ATUM API.
+
+**Changes**
+
+* Updated notice for expired licenses.
+* Do not use the WC order product lookup tables when recalculating sales props because WC delays its update.
+* Refactoring.
+* Use the default ATUM's blue color for the modal's confirm button.
+* Avoid sending stock notifications of unmanaged products.
+
+**Fixes**
+
+* Avoid to increase one hour when saving a PO.
+* CSS fix.
 
 ---
 
