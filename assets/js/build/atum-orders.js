@@ -1181,7 +1181,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('removeItemNotice'),
+            html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice')),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
