@@ -290,7 +290,7 @@ export default class AtumOrderItems {
 
 		// Asks for confirmation before proceeding.
 		Swal.fire( {
-			text               : this.settings.get( 'removeItemNotice' ),
+			html               : this.wpHooks.applyFilters( 'atum_ordersItems_deleteItemConfirmMessage', this.settings.get( 'removeItemNotice' ) ),
 			icon               : 'warning',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
