@@ -162,6 +162,77 @@ final class AtumCache {
 		}
 	}
 
+	/**
+	 * Prepare a cache key
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $name   The cache name.
+	 * @param array  $args   The args to hash.
+	 * @param string $prefix Optional. The prefix to use for the key.
+	 *
+	 * @return string
+	 */
+	private static function prepare_key( $name, $args, $prefix = ATUM_PREFIX ) {
+
+		$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
+
+		if ( ! empty( $args ) ) {
+
+			if ( '_' !== substr( $key, -1, 1 ) ) {
+				$key .= '_';
+			}
+
+			// Get md5 hash of the array of args to create unique transient key.
+			$key .= md5( maybe_serialize( $args ) );
+
+		}
+
+		return $key;
+
+	}
+
+	/**
+	 * Whether the ATUM cache is actually disabled
+	 *
+	 * @since 1.5.8
+	 *
+	 * @return bool
+	 */
+	public static function is_cache_disabled() {
+		return self::$disable_cache;
+	}
+
+	/**
+	 * Set the disable cache prop
+	 *
+	 * @since 1.5.8
+	 *
+	 * @param bool $disable_cache
+	 */
+	public static function set_disable_cache( $disable_cache ) {
+		self::$disable_cache = $disable_cache;
+	}
+
+	/**
+	 * Enable the ATUM Cache
+	 *
+	 * @since 1.5.8
+	 */
+	public static function enable_cache() {
+		self::$disable_cache = FALSE;
+	}
+
+	/**
+	 * Disable the ATUM Cache
+	 *
+	 * @since 1.5.8
+	 */
+	public static function disable_cache() {
+		self::$disable_cache = TRUE;
+	}
+
+
 	/********************
 	 * TRANSIENTS HELPERS
 	 ********************/
@@ -237,7 +308,7 @@ final class AtumCache {
 		$transient_id = $type ?: $prefix;
 		$transient    = "_transient_{$transient_id}";
 		$timeout      = "_transient_timeout_{$transient_id}";
-		
+
 		// Ensure the transient isn't in the WP cache.
 		$all_options = wp_cache_get( 'alloptions', 'options', FALSE );
 
@@ -248,76 +319,6 @@ final class AtumCache {
 		}
 
 		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%' OR `option_name` LIKE '$timeout%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	}
-
-	/**
-	 * Prepare a cache key
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param string $name   The cache name.
-	 * @param array  $args   The args to hash.
-	 * @param string $prefix Optional. The prefix to use for the key.
-	 *
-	 * @return string
-	 */
-	private static function prepare_key( $name, $args, $prefix = ATUM_PREFIX ) {
-
-		$key = 0 !== strpos( $name, $prefix ) ? $prefix . $name : $name;
-
-		if ( ! empty( $args ) ) {
-
-			if ( '_' !== substr( $key, -1, 1 ) ) {
-				$key .= '_';
-			}
-
-			// Get md5 hash of the array of args to create unique transient key.
-			$key .= md5( maybe_serialize( $args ) );
-
-		}
-
-		return $key;
-
-	}
-
-	/**
-	 * Whether the ATUM cache is actually disabled
-	 *
-	 * @since 1.5.8
-	 *
-	 * @return bool
-	 */
-	public static function is_cache_disabled() {
-		return self::$disable_cache;
-	}
-
-	/**
-	 * Set the disable cache prop
-	 *
-	 * @since 1.5.8
-	 *
-	 * @param bool $disable_cache
-	 */
-	public static function set_disable_cache( $disable_cache ) {
-		self::$disable_cache = $disable_cache;
-	}
-
-	/**
-	 * Enable the ATUM Cache
-	 *
-	 * @since 1.5.8
-	 */
-	public static function enable_cache() {
-		self::$disable_cache = FALSE;
-	}
-
-	/**
-	 * Disable the ATUM Cache
-	 *
-	 * @since 1.5.8
-	 */
-	public static function disable_cache() {
-		self::$disable_cache = TRUE;
 	}
 
 }
