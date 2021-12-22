@@ -383,8 +383,6 @@ abstract class AtumOrderModel {
 	 * @since 1.2.4
 	 *
 	 * @param int $item_id
-	 *
-	 * @return void
 	 */
 	public function remove_item( $item_id ) {
 
