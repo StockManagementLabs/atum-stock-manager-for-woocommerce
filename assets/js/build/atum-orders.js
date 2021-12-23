@@ -1181,7 +1181,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice')),
+            html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice'), $item, atumOrderItemId),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1540,14 +1540,10 @@ __webpack_require__.r(__webpack_exports__);
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var Utils = {
     settings: {
@@ -1737,7 +1733,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {
