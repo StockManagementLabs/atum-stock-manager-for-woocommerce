@@ -1180,6 +1180,7 @@ var AtumOrderItems = (function () {
         var _this = this;
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
+        var options = [], modal;
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
             html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice'), $item, atumOrderItemId),
             icon: 'warning',
@@ -1189,12 +1190,16 @@ var AtumOrderItems = (function () {
             reverseButtons: true,
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
+            didOpen: function (element) {
+                modal = $(element);
+            },
             preConfirm: function () { return _this.processDeleteItem(atumOrderItemId); },
         })
             .then(function (result) {
+            options = _this.wpHooks.applyFilters('atum_ordersItems_deleteItemOptions', options, modal);
             if (result.isConfirmed) {
                 $item.remove();
-                _this.wpHooks.doAction('atum_orderItems_deleteItem_removed', $container, atumOrderItemId);
+                _this.wpHooks.doAction('atum_orderItems_deleteItem_removed', $container, atumOrderItemId, options);
             }
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
         });
