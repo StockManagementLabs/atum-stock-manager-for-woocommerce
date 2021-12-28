@@ -266,6 +266,8 @@ export default class SettingsPage {
 				cancelButtonText   : this.settings.get( 'useSavedValues' ),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
+				allowEscapeKey     : false,
+				allowEnterKey      : false,
 				showLoaderOnConfirm: true,
 				preConfirm         : (): Promise<any> => {
 
