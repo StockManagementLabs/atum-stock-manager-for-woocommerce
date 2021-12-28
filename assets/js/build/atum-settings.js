@@ -921,6 +921,8 @@ var SettingsPage = (function () {
                 cancelButtonText: this.settings.get('useSavedValues'),
                 reverseButtons: true,
                 allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
                 showLoaderOnConfirm: true,
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
