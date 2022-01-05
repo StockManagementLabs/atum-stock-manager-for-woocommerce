@@ -63,6 +63,10 @@ export default class EditPopovers extends PopoverBase{
 				const $popover: JQuery    = $( `#${ $editButton.attr( 'aria-describedby' ) }` ),
 				      $valueInput: JQuery = $editButton.siblings( 'input:hidden' );
 
+				// Prepare select2.
+				$( `#${ $popover.attr( 'id' ) } .select2` ).remove();
+				this.prepareSelect( $editButton );
+
 				if ( $valueInput.length === 1 ) {
 					this.initPopoverInputValue( $valueInput, $popover );
 				}
@@ -74,10 +78,6 @@ export default class EditPopovers extends PopoverBase{
 					} );
 
 				}
-
-				// Prepare select2.
-				$( `#${ $popover.attr( 'id' ) } .select2` ).remove();
-				this.prepareSelect( $editButton );
 
 				// Prepare the button groups (if any).
 				if ( $popover.find( '.btn-group' ).length ) {
@@ -175,7 +175,8 @@ export default class EditPopovers extends PopoverBase{
 			return;
 		}
 
-		let newValue: any;
+		let newValue: any,
+		    newLabel: string = '';
 
 		// Support multiple meta inputs within the same popover.
 		if ( $setMetaInput.length > 1 ) {
@@ -194,47 +195,7 @@ export default class EditPopovers extends PopoverBase{
 		}
 		else {
 			newValue = $setMetaInput.val();
-		}
-
-		let newLabel: string;
-
-		if ( $setMetaInput.is( 'select' ) ) {
-
-			if ( ! newValue ) {
-				newLabel = null;
-			}
-			// Multi-select.
-			else if ( Array.isArray( newValue ) ) {
-
-				let selectedLabels: string[] = [];
-
-				$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
-					selectedLabels.push( $( elem ).text().trim() );
-				} );
-
-				newLabel = selectedLabels.join( ', ' );
-
-			}
-			else {
-				newLabel = $setMetaInput.find( 'option:selected' ).text().trim();
-			}
-
-			$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
-
-				const $option: JQuery = $( elem );
-
-				if ( $.inArray( $option.val().toString(), newValue ) > -1 ) {
-					$option.attr( 'selected', 'selected' );
-				}
-				else {
-					$option.removeAttr( 'selected' );
-				}
-
-			} );
-
-		}
-		else {
-			newLabel = newValue ? newValue : null;
+			newLabel = this.getInputLabel( $setMetaInput, newValue );
 		}
 
 		// Set the value to the related hidden input(s).
@@ -242,7 +203,7 @@ export default class EditPopovers extends PopoverBase{
 		let oldValue: any;
 
 		// Support multiple data inputs.
-		if ( $valueInput.length > 1 && typeof newValue === 'object' ) {
+		if ( $valueInput.length > 1 ) {
 
 			oldValue = {};
 
@@ -253,7 +214,7 @@ export default class EditPopovers extends PopoverBase{
 
 				oldValue[ inputName ] = $input.val();
 
-				if ( newValue.hasOwnProperty( inputName ) ) {
+				if ( typeof newValue === 'object' && newValue.hasOwnProperty( inputName ) ) {
 					$input.val( newValue[ inputName ] ).change();
 				}
 
@@ -261,12 +222,7 @@ export default class EditPopovers extends PopoverBase{
 
 		}
 		else {
-
-			if ( typeof newValue === 'object' ) {
-				newValue = newValue[ Object.keys( newValue )[ 0 ] ];
-			}
-
-			oldValue = $valueInput.first().val();
+			oldValue = $valueInput.val();
 			$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
 		}
 
@@ -278,6 +234,53 @@ export default class EditPopovers extends PopoverBase{
 
 		// Once set, destroy the opened popover.
 		this.destroyPopover( $editButton, () => setTimeout( () => this.bindPopovers( $editButton ), 300 ) ); // Give a small lapse to complete the 'fadeOut' animation before re-binding.
+
+	}
+
+	getInputLabel( $setMetaInput: JQuery, value: any ) {
+
+		let label: string;
+
+		if ( $setMetaInput.is( 'select' ) ) {
+
+			if ( ! value ) {
+				label = null;
+			}
+			// Multi-select.
+			else if ( Array.isArray( value ) ) {
+
+				let selectedLabels: string[] = [];
+
+				$setMetaInput.find( 'option:selected' ).each( ( index: number, elem: Element ) => {
+					selectedLabels.push( $( elem ).text().trim() );
+				} );
+
+				label = selectedLabels.join( ', ' );
+
+			}
+			else {
+				label = $setMetaInput.find( 'option:selected' ).text().trim();
+			}
+
+			$setMetaInput.find( 'option' ).each( ( index: number, elem: Element ) => {
+
+				const $option: JQuery = $( elem );
+
+				if ( $.inArray( $option.val().toString(), value ) > -1 ) {
+					$option.attr( 'selected', 'selected' );
+				}
+				else {
+					$option.removeAttr( 'selected' );
+				}
+
+			} );
+
+		}
+		else {
+			label = value ? value : null;
+		}
+
+		return label;
 
 	}
 
@@ -441,7 +444,7 @@ export default class EditPopovers extends PopoverBase{
 		}
 		else {
 
-			let $input: JQuery = $popover.find( `.meta-value[data-input="${ $valueInput.data( 'input' ) }"]` );
+			let $input: JQuery = $popover.find( `.meta-value[data-input="${ $valueInput.attr( 'name' ) }"]` );
 
 			if ( ! $input.length ) {
 				$input = $popover.find( '.meta-value' ).first();
