@@ -97,6 +97,10 @@ class PurchaseOrder extends AtumOrderModel {
 	 */
 	public function after_save( $action ) {
 
+		if ( 'update' === $action ) {
+			$this->load_post();
+		}
+
 		$items = $this->get_items();
 
 		foreach ( $items as $item ) {
