@@ -222,7 +222,7 @@ trait AtumDataStoreCommonTrait {
 				remove_action( 'delete_post', array( Hooks::get_instance(), 'before_delete_product' ) );
 
 				do_action( "woocommerce_before_delete_$post_type", $id ); // Default WC action for compatibility.
-				wp_delete_post( $id );
+				wp_delete_post( $id, $args['force_delete'] );
 				$this->clear_caches( $product );
 				$product->set_id( 0 );
 				do_action( "woocommerce_delete_$post_type", $id ); // Default WC action for compatibility.

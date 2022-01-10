@@ -383,8 +383,6 @@ abstract class AtumOrderModel {
 	 * @since 1.2.4
 	 *
 	 * @param int $item_id
-	 *
-	 * @return void
 	 */
 	public function remove_item( $item_id ) {
 
@@ -995,6 +993,12 @@ abstract class AtumOrderModel {
 					'old_status' => $old_status,
 					'new_status' => $new_status,
 				] );
+
+				// When moving any ATUM order to trash, we shouldn't change the status meta to be able to restore it later.
+				if ( 'trash' === $new_status ) {
+					$this->set_meta( 'status', $old_status );
+					$this->save_meta();
+				}
 				
 			}
 		}
@@ -1148,7 +1152,7 @@ abstract class AtumOrderModel {
 			do_action( 'atum/orders/delete_order_items', $this->id );
 			$this->delete_items();
 
-			wp_delete_post( $this->id );
+			wp_delete_post( $this->id, $force_delete );
 			$this->id = 0;
 			do_action( 'atum/orders/delete_order', $this );
 
