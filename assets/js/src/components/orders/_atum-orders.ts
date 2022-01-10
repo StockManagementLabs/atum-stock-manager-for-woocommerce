@@ -90,7 +90,7 @@ export default class AtumOrders {
 		this.$multipleSuppliers.change( () => this.toggleSupplierField() );
 
 		// Ask for importing the order items after linking an order.
-		$( '#wc_order' ).change( () => this.importOrderItems() );
+		$( '#wc_order' ).change( ( evt: JQueryEventObject ) => this.importOrderItems( $( evt.currentTarget ) ) );
 
 		// Change button page-title-action position.
 		$( '.wp-heading-inline' ).append( $( '.page-title-action' ).show() );
@@ -453,10 +453,9 @@ export default class AtumOrders {
 	 *
 	 * @return {boolean}
 	 */
-	importOrderItems() {
+	importOrderItems( $wcOrder: JQuery ) {
 
-		const $wcOrder: JQuery = $( '#wc_order' ),
-		      orderId: number  = $wcOrder.val();
+		const orderId: number  = $wcOrder.val();
 
 		if ( ! orderId || this.isEditable == 'false' ) {
 			return false;

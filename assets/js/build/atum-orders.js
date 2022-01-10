@@ -606,7 +606,7 @@ var AtumOrders = (function () {
         $('#atum_order_type').change(function (evt) { return _this.toggleExtraFields(evt); }).change();
         this.$supplierDropdown.change(function () { return _this.savePurchaseOrderSupplier(); });
         this.$multipleSuppliers.change(function () { return _this.toggleSupplierField(); });
-        $('#wc_order').change(function () { return _this.importOrderItems(); });
+        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget)); });
         $('.wp-heading-inline').append($('.page-title-action').show());
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
@@ -799,9 +799,9 @@ var AtumOrders = (function () {
             this.$itemsBlocker.removeClass('unblocked');
         }
     };
-    AtumOrders.prototype.importOrderItems = function () {
+    AtumOrders.prototype.importOrderItems = function ($wcOrder) {
         var _this = this;
-        var $wcOrder = $('#wc_order'), orderId = $wcOrder.val();
+        var orderId = $wcOrder.val();
         if (!orderId || this.isEditable == 'false') {
             return false;
         }
