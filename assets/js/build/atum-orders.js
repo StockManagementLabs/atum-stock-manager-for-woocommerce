@@ -584,6 +584,10 @@ var AtumOrders = (function () {
         new _add_items_popup__WEBPACK_IMPORTED_MODULE_0__["default"](this.settings, this.$container, this, this.tooltip);
         this.dateTimePicker.addDateTimePickers($('.atum-datepicker'), { minDate: false });
         this.bindEvents();
+        if (!window.hasOwnProperty('atum')) {
+            window['atum'] = {};
+        }
+        window['atum']['AtumOrders'] = this;
     }
     AtumOrders.prototype.bindEvents = function () {
         var _this = this;
@@ -606,7 +610,7 @@ var AtumOrders = (function () {
         $('#atum_order_type').change(function (evt) { return _this.toggleExtraFields(evt); }).change();
         this.$supplierDropdown.change(function () { return _this.savePurchaseOrderSupplier(); });
         this.$multipleSuppliers.change(function () { return _this.toggleSupplierField(); });
-        $('#wc_order').change(function () { return _this.importOrderItems(); });
+        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget), 'IL'); });
         $('.wp-heading-inline').append($('.page-title-action').show());
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
@@ -799,14 +803,14 @@ var AtumOrders = (function () {
             this.$itemsBlocker.removeClass('unblocked');
         }
     };
-    AtumOrders.prototype.importOrderItems = function () {
+    AtumOrders.prototype.importOrderItems = function ($wcOrder, orderType) {
         var _this = this;
-        var $wcOrder = $('#wc_order'), orderId = $wcOrder.val();
+        var orderId = $wcOrder.val();
         if (!orderId || this.isEditable == 'false') {
             return false;
         }
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-            text: this.settings.get('importOrderItems'),
+            text: this.settings.get("importOrderItems" + orderType),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('yes'),

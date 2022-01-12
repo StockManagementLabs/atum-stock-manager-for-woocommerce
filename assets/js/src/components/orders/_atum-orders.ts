@@ -44,7 +44,13 @@ export default class AtumOrders {
 		this.dateTimePicker.addDateTimePickers( $( '.atum-datepicker' ), { minDate: false } );
 
 		this.bindEvents();
-		
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window[ 'atum' ] = {};
+		}
+
+		window[ 'atum' ][ 'AtumOrders' ] = this;
 	}
 	
 	bindEvents() {
@@ -90,7 +96,7 @@ export default class AtumOrders {
 		this.$multipleSuppliers.change( () => this.toggleSupplierField() );
 
 		// Ask for importing the order items after linking an order.
-		$( '#wc_order' ).change( () => this.importOrderItems() );
+		$( '#wc_order' ).change( ( evt: JQueryEventObject ) => this.importOrderItems( $( evt.currentTarget ), 'IL' ) );
 
 		// Change button page-title-action position.
 		$( '.wp-heading-inline' ).append( $( '.page-title-action' ).show() );
@@ -451,19 +457,20 @@ export default class AtumOrders {
 	/**
 	 * Import items from related WC order
 	 *
-	 * @return {boolean}
+	 * @param {JQuery} $wcOrder
+	 * @param {string} orderType
+	 * @returns {boolean}
 	 */
-	importOrderItems() {
+	importOrderItems( $wcOrder: JQuery, orderType: string ) {
 
-		const $wcOrder: JQuery = $( '#wc_order' ),
-		      orderId: number  = $wcOrder.val();
+		const orderId: number  = $wcOrder.val();
 
 		if ( ! orderId || this.isEditable == 'false' ) {
 			return false;
 		}
 
 		Swal.fire( {
-			text             : this.settings.get( 'importOrderItems' ),
+			text             : this.settings.get( `importOrderItems${orderType}` ),
 			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'yes' ),
