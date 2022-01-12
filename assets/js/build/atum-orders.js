@@ -584,6 +584,7 @@ var AtumOrders = (function () {
         new _add_items_popup__WEBPACK_IMPORTED_MODULE_0__["default"](this.settings, this.$container, this, this.tooltip);
         this.dateTimePicker.addDateTimePickers($('.atum-datepicker'), { minDate: false });
         this.bindEvents();
+        window['atum']['AtumOrders'] = this;
     }
     AtumOrders.prototype.bindEvents = function () {
         var _this = this;
@@ -606,7 +607,7 @@ var AtumOrders = (function () {
         $('#atum_order_type').change(function (evt) { return _this.toggleExtraFields(evt); }).change();
         this.$supplierDropdown.change(function () { return _this.savePurchaseOrderSupplier(); });
         this.$multipleSuppliers.change(function () { return _this.toggleSupplierField(); });
-        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget)); });
+        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget), 'IL'); });
         $('.wp-heading-inline').append($('.page-title-action').show());
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
@@ -799,14 +800,14 @@ var AtumOrders = (function () {
             this.$itemsBlocker.removeClass('unblocked');
         }
     };
-    AtumOrders.prototype.importOrderItems = function ($wcOrder) {
+    AtumOrders.prototype.importOrderItems = function ($wcOrder, orderType) {
         var _this = this;
         var orderId = $wcOrder.val();
         if (!orderId || this.isEditable == 'false') {
             return false;
         }
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-            text: this.settings.get('importOrderItems'),
+            text: this.settings.get("importOrderItems" + orderType),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('yes'),
@@ -1545,10 +1546,14 @@ __webpack_require__.r(__webpack_exports__);
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var Utils = {
     settings: {
@@ -1738,7 +1743,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {

@@ -966,7 +966,8 @@ abstract class AtumOrderPostType {
 					// Disable order item selection for only PO when WC version >= 3.5.0.
 					'enableSelectItems'         => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
 					'error'                     => __( 'Error!', ATUM_TEXT_DOMAIN ),
-					'importOrderItems'          => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
+					'importOrderItemsIL'        => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
+					'importOrderItemsPO'        => __( 'Do you want to import all the items within the selected order into this Purchase Order?', ATUM_PO_TEXT_DOMAIN ),
 					'importOrderItemsNonce'     => wp_create_nonce( 'import-order-items' ),
 					'increaseStockMsg'          => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
 					'metaPlaceholderName'       => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
