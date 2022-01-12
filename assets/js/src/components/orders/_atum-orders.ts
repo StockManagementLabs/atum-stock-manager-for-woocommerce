@@ -45,6 +45,11 @@ export default class AtumOrders {
 
 		this.bindEvents();
 
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window[ 'atum' ] = {};
+		}
+
 		window[ 'atum' ][ 'AtumOrders' ] = this;
 	}
 	
