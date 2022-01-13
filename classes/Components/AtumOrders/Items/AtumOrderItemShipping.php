@@ -55,7 +55,7 @@ abstract class AtumOrderItemShipping extends \WC_Order_Item_Shipping {
 			'_cost'      => $this->get_total( 'edit' ),
 			'_total_tax' => $this->get_total_tax( 'edit' ),
 			'_taxes'     => $this->get_taxes( 'edit' ),
-		) );
+		), $this );
 
 		$this->atum_order_item_model->save_meta( $save_values );
 
