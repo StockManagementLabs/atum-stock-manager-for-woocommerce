@@ -140,6 +140,8 @@ use Atum\Inc\Helpers;
 							'_total_tax',
 							'_taxes',
 							'_stock_changed',
+							'_discount_config', // PO PRO compatibility.
+							'_tax_config',      // PO PRO compatibility.
 						) );
 
 						$meta_data = $item->get_formatted_meta_data( '' ); ?>
