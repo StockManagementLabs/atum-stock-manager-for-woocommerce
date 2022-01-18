@@ -210,6 +210,10 @@ export default class OrdersBulkActions {
 								dataType: 'json',
 								success : ( response: any ) => {
 
+									if ( response.data.length ) {
+										// Display notes.
+										$( '#atum_order_notes .inside .atum-meta-box' ).empty().html( response.data );
+									}
 									if ( response.success !== true ) {
 										Swal.showValidationMessage( response.data );
 									}

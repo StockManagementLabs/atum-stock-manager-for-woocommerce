@@ -3,6 +3,8 @@
  * View for the ATUM Order notes meta box
  *
  * @since 1.2.9
+ *
+ * @var int $post_id
  */
 
 defined( 'ABSPATH' ) || die;
@@ -12,7 +14,7 @@ use Atum\Components\AtumOrders\AtumComments;
 global $post;
 
 $args = array(
-	'post_id' => $post->ID,
+	'post_id' => $post_id ?? $post->ID,
 	'orderby' => 'comment_ID',
 	'order'   => 'DESC',
 	'approve' => 'approve',
