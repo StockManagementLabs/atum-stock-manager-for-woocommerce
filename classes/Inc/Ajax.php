@@ -32,6 +32,7 @@ use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\InventoryLogs\Models\Log;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
@@ -1952,7 +1953,13 @@ final class Ajax {
 
 		}
 
-		wp_send_json_success();
+		if ( InventoryLogs::POST_TYPE === $atum_order->get_post_type() ) {
+			$post_id = $atum_order->get_id();
+			wp_send_json_success( Helpers::load_view_to_string( 'meta-boxes/atum-order/notes', compact( 'post_id' ) ) );
+
+		} else {
+			wp_send_json_success();
+		}
 
 	}
 
