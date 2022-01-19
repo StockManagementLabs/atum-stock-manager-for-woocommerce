@@ -33,7 +33,7 @@ export default class TableButtons {
 	/**
 	 * Toggle table style feature from table style buttons
 	 *
-	 * @param String  feature
+	 * @param string  feature
 	 * @param Boolean enabled
 	 */
 	toggleTableStyle(feature: string, enabled: boolean) {
