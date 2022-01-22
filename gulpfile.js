@@ -139,7 +139,7 @@ gulp.task('js::atum', function () {
 			externals: {
 				jquery     : 'jQuery',
 				$          : 'jQuery',
-				sweetalert2: 'Swal'
+				sweetalert2: 'Swal',
 			},
 			
 			module: {
@@ -177,7 +177,7 @@ gulp.task('js::atum', function () {
 				// Provide jQuery globally instead of having to import it everywhere.
 				new webpack.ProvidePlugin({
 					$     : 'jquery',
-					jQuery: 'jquery'
+					jQuery: 'jquery',
 				})
 			
 			],

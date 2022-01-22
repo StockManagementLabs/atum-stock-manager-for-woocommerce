@@ -536,6 +536,30 @@ final class Globals {
 	}
 
 	/**
+	 * Get the JS localization vars for the intro.js library (https://introjs.com/docs/intro/options)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $replace Optional. Only needed if want to modify any default value.
+	 *
+	 * @return array
+	 */
+	public static function get_intro_js_vars( $replace = array() ) {
+
+		$defaults = array(
+			'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
+			'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
+			'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
+			'tooltipClass'       => 'atum-help-guide-tooltip',
+			'disableInteraction' => TRUE,
+			'scrollToElement'    => TRUE,
+		);
+
+		return array_merge( $defaults, $replace );
+
+	}
+
+	/**
 	 * Return max number of decimals for backend ATUM prices (in frontend WC setting will be applied)
 	 *
 	 * @since 1.8.4

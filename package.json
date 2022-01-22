@@ -1,13 +1,13 @@
 {
 	"name": "ATUM",
-	"version": "1.9.7",
+	"version": "2.0.0",
 	"author": "Be Rebel - https://berebel.io",
-	"homepage": "https://www.stockmanagementlabs.com",
+	"homepage": "https://stockmanagementlabs.com",
 	"private": true,
 	"repository": {
 		"type": "git"
 	},
-	"license": "Copyrighted",
+	"license": "GPLv2 or later",
 	"scripts": {
 		"build": "gulp",
 		"watch": "gulp watch",
@@ -45,6 +45,7 @@
 		"bootstrap": "^5.1.3",
 		"chart.js": "^2.9.3",
 		"hammerjs": "^2.0.8",
+		"intro.js": "^4.3.0",
 		"jquery": "^3.5.1",
 		"jquery-nice-select": "^1.1.0",
 		"lightgallery.js": "^1.2.0",
