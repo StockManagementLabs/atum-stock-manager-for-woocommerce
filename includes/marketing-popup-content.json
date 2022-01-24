@@ -1,37 +1,37 @@
 {
 	"background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"dash_background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2019/01/waves-multi-inventory.svg)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2020/05/waves-action-logs.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2021/06/atum_asset-wp.svg",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2021/06/atum-asset-dashboard.svg",
-		"logo_css" : "width:87%;margin-bottom:-50px",
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2020/12/xmas-graphic-popup.svg",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2020/12/xmas-graphic-popup.svg",
+		"logo_css" : "",
 		"top_left" : ""
 	},
 	"title": {
-		"text"      : "",
+		"text"      : "Special <strong>Sale</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version": {
-		"text"      : "",
+		"text"      : "Xmas 🎅🏻",
 		"text_color": "#FFF",
-		"background": "#69c61d"
+		"background": "#ff4848"
 	},
 	"description": {
-		"text"           : "Dear ATUM users,<br><br>We are delighted to announce the newest baby in the ATUM family. Something we have been preparing for all of you for a very long time and that we are sure you'll enjoy very much.<br><br>We encourage you to try this first beta version <strong>available for premium users only</strong> and let us know what you think.<br><br>We will be glad to receive your feedback through our forum and have your opinions and reports on possible bugs that you may find.",
+		"text"           : "Merry Xmas and a Happy New Year!!! Subscribe to any ATUM's premium add-ons before December 31st and take advantage of our 50% off BIG SALE!!!<br><br>Discounts will be automatically applied at checkout.<br>Quarterly subscriptions only.",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -40,11 +40,11 @@
 	},
 	"buttons": [
 		{
-			"text" : "Leave your feedback",
-			"url"  : "https://forum.stockmanagementlabs.com/t/atum-app-beta-testing",
-			"class": "btn btn-primary",
-			"css"  : ""
+			"text" : "Purchase Now!",
+			"url"  : "https://stockmanagementlabs.com/addons",
+			"class": "btn btn-sm btn-danger",
+			"css"  : "width:270px"
 		}
 	],
-	"transient_key": "atum_app_beta_launch"
+	"transient_key": "christmas_sale_2021"
 }

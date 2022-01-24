@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.2 
+ * @version 1.9.9 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -13,8 +13,8 @@
  */
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?rx8gye");
-  src: url("../fonts/atum-icon-font.eot?rx8gye#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?rx8gye") format("truetype"), url("../fonts/atum-icon-font.woff?rx8gye") format("woff"), url("../fonts/atum-icon-font.svg?rx8gye#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?m6mhn6") format("truetype"), url("../fonts/atum-icon-font.woff?m6mhn6") format("woff"), url("../fonts/atum-icon-font.svg?m6mhn6#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -29,6 +29,10 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-po-pro:before {
+  content: "";
 }
 
 .atmi-featured:before {

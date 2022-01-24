@@ -25,33 +25,33 @@ export default class OrderNotes {
 		
 	}
 	
-	addNote(evt: JQueryEventObject) {
-		
+	addNote( evt: JQueryEventObject ) {
+
 		evt.preventDefault();
-		
+
 		const note: string = this.$textarea.val();
-		
-		if (!note) {
+
+		if ( ! note ) {
 			return;
 		}
 		
 		Blocker.block(this.$container);
-		
+
 		const data: any = {
 			action  : 'atum_order_add_note',
-			post_id : $('#post_ID').val(),
+			post_id : $( '#post_ID' ).val(),
 			note    : note,
-			security: this.settings.get('add_note_nonce'),
-		}
-		
-		$.post( window['ajaxurl'], data, (response: any) => {
-			
-			$('ul.atum_order_notes').prepend(response);
-			Blocker.unblock(this.$container);
-			this.$textarea.val('');
-			this.$container.trigger('atum_added_note');
+			security: this.settings.get( 'addNoteNonce' ),
+		};
 
-		});
+		$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
+
+			$( 'ul.atum_order_notes' ).prepend( response );
+			Blocker.unblock( this.$container );
+			this.$textarea.val( '' );
+			this.$container.trigger( 'atum_added_note' );
+
+		} );
 		
 	}
 	
@@ -62,7 +62,7 @@ export default class OrderNotes {
 		const $note: JQuery = $( evt.currentTarget ).closest( 'li.note' );
 
 		Swal.fire( {
-			text             : this.settings.get( 'delete_note' ),
+			text             : this.settings.get( 'deleteNote' ),
 			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'continue' ),
@@ -78,7 +78,7 @@ export default class OrderNotes {
 					const data: any = {
 						action  : 'atum_order_delete_note',
 						note_id : $note.attr( 'rel' ),
-						security: this.settings.get( 'delete_note_nonce' ),
+						security: this.settings.get( 'deleteNoteNonce' ),
 					};
 
 					$.post( window[ 'ajaxurl' ], data, () => resolve() );

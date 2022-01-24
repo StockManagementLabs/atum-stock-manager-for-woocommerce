@@ -5,7 +5,7 @@
  * @package         Atum\Models
  * @subpackage      DataStores
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.5.0
  */
@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 
 
@@ -60,12 +61,14 @@ trait AtumDataStoreCommonTrait {
 			'update_date',
 			'atum_stock_status',
 			'low_stock',
+			'sales_update_date',
 		) );
 
 		// Columns data need to be converted to datetime.
 		$date_columns = (array) apply_filters( 'atum/data_store/date_columns', array(
 			'out_stock_date',
 			'update_date',
+			'sales_update_date',
 		) );
 
 		// Switches, checkboxes and flags.
@@ -95,6 +98,7 @@ trait AtumDataStoreCommonTrait {
 			'lost_sales',
 			'has_location',
 			'update_date',
+			'sales_update_date',
 		) );
 
 		// We should make an insert if the returning row is empty or has none of the ATUM columns.
@@ -112,7 +116,7 @@ trait AtumDataStoreCommonTrait {
 				$value = call_user_func( array( $product, "get_$column" ), 'edit' );
 				
 				if ( in_array( $column, $date_columns, TRUE ) ) {
-					$data[ $column ] = empty( $value ) ? NULL : gmdate( 'Y-m-d H:i:s', $product->{"get_$column"}( 'edit' )->getOffsetTimestamp() );
+					$data[ $column ] = empty( $value ) ? NULL : Helpers::date_format( $product->{"get_$column"}( 'edit' )->getTimestamp(), TRUE, TRUE );
 				}
 				elseif ( in_array( $column, $yes_no_columns, TRUE ) ) {
 
@@ -141,7 +145,7 @@ trait AtumDataStoreCommonTrait {
 
 		// If not passing the updated date, add the current date.
 		if ( ! array_key_exists( 'update_date', $changes ) ) {
-			$data['update_date']   = gmdate( 'Y-m-d H:i:s' );
+			$data['update_date']   = Helpers::date_format( '', TRUE, TRUE );
 			$this->updated_props[] = 'update_date';
 		}
 
@@ -218,7 +222,7 @@ trait AtumDataStoreCommonTrait {
 				remove_action( 'delete_post', array( Hooks::get_instance(), 'before_delete_product' ) );
 
 				do_action( "woocommerce_before_delete_$post_type", $id ); // Default WC action for compatibility.
-				wp_delete_post( $id );
+				wp_delete_post( $id, $args['force_delete'] );
 				$this->clear_caches( $product );
 				$product->set_id( 0 );
 				do_action( "woocommerce_delete_$post_type", $id ); // Default WC action for compatibility.

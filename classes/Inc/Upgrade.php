@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumQueues;
+use Atum\InboundStock\InboundStock;
 use Atum\InventoryLogs\Models\Log;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -138,10 +139,20 @@ class Upgrade {
 			$this->update_atum_stock_status();
 		}
 
+		// ** version 1.9.6.1 ** Create sales_update_date in ATUM product data table
+		if ( version_compare( $db_version, '1.9.6.1', '<' ) ) {
+			$this->create_sales_update_date();
+		}
+
+		// ** version 1.9.7 ** Changes to the ATUM ListTables "entries per page" meta keys
+		if ( version_compare( $db_version, '1.9.7', '<' ) ) {
+			$this->change_entries_per_page_meta_keys();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
-
+		$this->remove_duplicated_scheduled_actions();
 		do_action( 'atum/after_upgrade', $db_version );
 
 	}
@@ -794,6 +805,137 @@ class Upgrade {
 		";
 
 		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	}
+
+	/**
+	 * Create the sales_update_date in the ATUM Product table
+	 *
+	 * @since 1.9.6.1
+	 */
+	private function create_sales_update_date() {
+
+		global $wpdb;
+
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'sales_update_date'
+		", $db_name, $atum_data_table );
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `sales_update_date` DATETIME DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
+
+	/**
+	 * Remove the ATUM duplicated Scheduled Actions from the Action Scheduler Queue.
+	 *
+	 * @since 1.9.7
+	 */
+	private function remove_duplicated_scheduled_actions() {
+
+		global $wpdb;
+		$wc = WC();
+
+		// Ensure that the current WC version supports queues.
+		if ( ! is_callable( array( $wc, 'queue' ) ) ) {
+			return;
+		}
+
+		$wc_queue = $wc->queue();
+		$actions  = $wc_queue->search( [
+			'status'   => \ActionScheduler_Store::STATUS_PENDING,
+			'per_page' => - 1,
+		] );
+
+		$processed = [];
+
+		foreach ( $actions as $action_id => $action ) {
+
+			/**
+			 * Variable declaration.
+			 *
+			 * @var \ActionScheduler_Action $action
+			 */
+			$hook = $action->get_hook();
+
+			// Only check hooks beginning with 'atum'.
+			if ( 0 !== strpos( $hook, 'atum' ) && 'update_product_expiring_props' !== $hook ) {
+				continue;
+			}
+
+			$next = $action->get_schedule()->get_date()->format( 'Y-m-d H:i:s' );
+
+			if ( array_key_exists( $hook, $processed ) ) {
+
+				if ( $next > $processed[ $hook ]['next'] ) {
+					$duplicated_id = $action_id;
+				}
+				else {
+
+					$duplicated_id      = $processed[ $hook ]['action_id'];
+					$processed[ $hook ] = [
+						'action_id' => $action_id,
+						'next'      => $next,
+					];
+				}
+
+				// The schedulded actions only can be deleted by id this way.
+				$wpdb->delete( $wpdb->actionscheduler_actions, [ 'action_id' => $duplicated_id ], [ '%d' ] );
+
+			}
+			elseif ( 'update_product_expiring_props' !== $hook ) {
+
+				// Delete all old tasks.
+				$wpdb->delete( $wpdb->actionscheduler_actions, [ 'action_id' => $action_id ], [ '%d' ] );
+
+			}
+			else {
+				$processed[ $hook ] = [
+					'action_id' => $action_id,
+					'next'      => $next,
+				];
+			}
+		}
+
+	}
+
+	/**
+	 * Change the user meta key names for the "entries per page" option in ATUM List Tables
+	 *
+	 * @since 1.9.7
+	 */
+	private function change_entries_per_page_meta_keys() {
+
+		global $wpdb;
+
+		// Stock Central.
+		$wpdb->update(
+			$wpdb->usermeta,
+			[
+				'meta_key' => StockCentral::UI_SLUG . '_entries_per_page',
+			],
+			[
+				'meta_key' => ATUM_PREFIX . 'stock_central_products_per_page',
+			]
+		);
+
+		// Inbound Stock.
+		$wpdb->update(
+			$wpdb->usermeta,
+			[
+				'meta_key' => InboundStock::UI_SLUG . '_entries_per_page',
+			],
+			[
+				'meta_key' => ATUM_PREFIX . 'inbound_stock_products_per_page',
+			]
+		);
 
 	}
 

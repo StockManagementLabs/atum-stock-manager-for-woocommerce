@@ -5,7 +5,7 @@
  *
  * @package     Components
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @since       1.5.8
  */
@@ -15,6 +15,11 @@ namespace Atum\Components;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\Modules\ModuleManager;
+use Atum\PurchaseOrders\PurchaseOrders;
+
 
 class AtumQueues {
 
@@ -63,9 +68,15 @@ class AtumQueues {
 		// Add the ATUM's recurring hooks.
 		add_action( 'atum/update_expiring_product_props', array( $this, 'update_expiring_product_props_action' ) );
 
+		// Add the sales calc recurring hook.
+		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'update_last_sales_calc_props' ) );
+
 		// Add the ATUM Queues async hooks listeners.
 		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
 		add_action( 'wp_ajax_nopriv_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
+
+		// Cancel the calc sales properties cron if settings changed.
+		add_action( 'update_option', array( $this, 'maybe_cancel_sales_cron' ), 10, 3 );
 
 	}
 
@@ -84,6 +95,18 @@ class AtumQueues {
 		}
 
 		$wc_queue = $wc->queue();
+
+		// Add calculated properties cron if set.
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
+
+			$multiplier = 'hours' === Helpers::get_option( 'calc_prop_cron_type' ) ? 3600 : 60;
+
+			$this->recurring_hooks['atum/cron_update_sales_calc_props'] = [
+				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start' ) ),
+				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval' ) * $multiplier ),
+
+			];
+		}
 
 		// Allow registering queues externally.
 		$this->recurring_hooks = apply_filters( 'atum/queues/recurring_hooks', $this->recurring_hooks );
@@ -105,22 +128,28 @@ class AtumQueues {
 	/**
 	 * Recalculate the expiring props for all the products
 	 *
+	 * @param string $time Optional. Previous dates will be filtered.
+	 *
 	 * @since 1.5.8
 	 */
-	public function update_expiring_product_props_action() {
+	public function update_expiring_product_props_action( $time = '3 hours ago' ) {
 
 		// Get all the products that weren't updated during the last 3 hours.
 		global $wpdb;
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-		$date_max                = gmdate( 'Y-m-d H:i:s', strtotime( '3 hours ago' ) );
 
 		// phpcs:disable
-		$outdated_products = $wpdb->get_col( $wpdb->prepare( "
-			SELECT product_id FROM $atum_product_data_table
-			WHERE update_date <= %s OR update_date IS NULL
-			ORDER BY update_date
-		", $date_max ) );
+		$sql = "SELECT product_id FROM $atum_product_data_table";
+
+		if ( $time ) {
+			$date_max = Helpers::date_format( strtotime( $time ), TRUE, TRUE );
+			$sql     .= $wpdb->prepare( ' WHERE update_date <= %s OR update_date IS NULL', $date_max );
+		}
+
+		$sql .= ' ORDER BY update_date';
+
+		$outdated_products = $wpdb->get_col( $sql );
 		// phpcs:enable
 
 		// TODO: WHAT ABOUT ILs AND PLs PROPS? IS UPDATING THEM ALSO?
@@ -131,7 +160,88 @@ class AtumQueues {
 	}
 
 	/**
-	 * Defer an action to run one time on the WP's 'shutodown' action.
+	 * Update sales calculated product properties for products sold since the last cron execution.
+	 *
+	 * @since 1.9.7
+	 */
+	public function update_last_sales_calc_props() {
+
+		global $wpdb;
+
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$last_executed           = get_option( ATUM_PREFIX . 'last_sales_calc' );
+
+		if ( FALSE === $last_executed ) {
+			$last_executed = $wpdb->get_var( "SELECT MAX(sales_update_date) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
+
+		$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
+
+		$str_sql = "
+			SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+ 				FROM `{$wpdb->posts}` o
+					INNER JOIN order_item_table oi ON o.ID = oi.order_id
+					LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+					LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+					INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
+				WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+		";
+
+		$order_items_table    = "{$wpdb->prefix}atum_order_items";
+		$order_itemmeta_table = "{$wpdb->prefix}atum_order_itemmeta";
+
+		$atum_orders_str = str_replace( 'order_itemmeta_table', $order_itemmeta_table, str_replace( 'order_item_table', $order_items_table, $str_sql ) );
+
+		if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
+
+			// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
+			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, PurchaseOrders::POST_TYPE ) );
+
+			foreach ( $products as $product_id ) {
+
+				$product = Helpers::get_atum_product( $product_id );
+				AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
+
+			}
+		}
+
+		if ( ModuleManager::is_module_active( 'inventory_logs' ) ) {
+
+			// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
+			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, InventoryLogs::POST_TYPE ) );
+
+			foreach ( $products as $product_id ) {
+
+				$product = Helpers::get_atum_product( $product_id );
+				AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
+
+			}
+		}
+
+		// Update wc orders at last to prevent updating sales update data before finishing the process.
+		$order_items_table    = "{$wpdb->prefix}woocommerce_order_items";
+		$order_itemmeta_table = "{$wpdb->prefix}woocommerce_order_itemmeta";
+		$post_type            = 'shop_order';
+
+		$str_sql = str_replace( 'order_itemmeta_table', $order_itemmeta_table, str_replace( 'order_item_table', $order_items_table, $str_sql ) );
+
+		// phpcs:ignore: WordPress.DB.PreparedSQL.NotPrepared
+		$products = $wpdb->get_col( $wpdb->prepare( $str_sql, $post_type ) );
+
+		foreach ( $products as $product_id ) {
+			$product = Helpers::get_atum_product( $product_id );
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 1 );
+
+		}
+
+		// Wait until finished.
+		update_option( ATUM_PREFIX . 'last_sales_calc', Helpers::date_format( '', TRUE, TRUE ) );
+
+	}
+
+	/**
+	 * Defer an action to run one time on the WP's 'shutdown' action.
 	 *
 	 * @since 1.7.3
 	 *
@@ -193,7 +303,7 @@ class AtumQueues {
 
 				$data = [
 					'action'     => 'atum_async_hooks',
-					'token'      => wp_create_nonce( 'atum_async_hooks' ),
+					'security'   => wp_create_nonce( 'atum_async_hooks' ),
 					'atum_hooks' => self::$async_hooks,
 				];
 
@@ -231,7 +341,7 @@ class AtumQueues {
 	 */
 	public function handle_async_hooks() {
 
-		check_ajax_referer( 'atum_async_hooks', 'token' );
+		check_ajax_referer( 'atum_async_hooks', 'security' );
 
 		// Refresh the available async transient.
 		AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );
@@ -259,12 +369,45 @@ class AtumQueues {
 	}
 
 	/**
+	 * Check for ATUM settings and cancel the sales calc properties cron is changed.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param string $option_name   Name of the updated option.
+	 * @param mixed  $old_value     The old option value.
+	 * @param mixed  $value         The new option value.
+	 */
+	public function maybe_cancel_sales_cron( $option_name, $old_value, $value ) {
+
+		if ( 'atum_settings' === $option_name ) {
+
+			// Cancel anyway.
+			if ( empty( $value['calc_prop_cron'] ) || 'no' === $value['calc_prop_cron'] ||
+				$old_value['calc_prop_cron_interval'] !== $value['calc_prop_cron_interval']
+				|| $old_value['calc_prop_cron_type'] !== $value['calc_prop_cron_type']
+				|| $old_value['calc_prop_cron_start'] !== $value['calc_prop_cron_start'] ) {
+
+				$wc = WC();
+
+				// Ensure that the current WC version supports queues.
+				if ( ! is_callable( array( $wc, 'queue' ) ) ) {
+					return;
+				}
+
+				$wc_queue = $wc->queue();
+				$wc_queue->cancel_all( 'atum/cron_update_sales_calc_props' );
+			}
+
+		}
+	}
+
+	/**
 	 * Check if remote post is available.
 	 * NOTE: sometimes the site can be under a htpassword and we cannot perform async calls.
 	 *
 	 * @since 1.8.8
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function check_async_request() {
 
@@ -282,7 +425,7 @@ class AtumQueues {
 
 		}
 
-		return $remote_available;
+		return (bool) $remote_available;
 
 	}
 
@@ -295,6 +438,17 @@ class AtumQueues {
 	 */
 	public static function get_async_request_user_agent() {
 		return 'ATUM/' . ATUM_VERSION;
+	}
+
+	/**
+	 * Check whether an async hook is currently running
+	 *
+	 * @since 1.9.4
+	 *
+	 * @return bool
+	 */
+	public static function is_running_async_hook() {
+		return wp_doing_ajax() && ! empty( $_POST['action'] ) && 'atum_async_hooks' === $_POST['action'];
 	}
 
 

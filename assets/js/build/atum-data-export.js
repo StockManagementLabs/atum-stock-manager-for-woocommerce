@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 var DataExport = (function () {
     function DataExport(settings) {
@@ -166,12 +166,13 @@ var DataExport = (function () {
         this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
     };
     DataExport.prototype.downloadReport = function () {
-        window.open(window['ajaxurl'] + "?action=atum_export_data&page=" + _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page') + "&screen=" + this.settings.get('screen') + "&token=" + this.settings.get('exportNonce') + "&" + this.$exportForm.serialize(), '_blank');
+        window.open(window['ajaxurl'] + "?action=atum_export_data&page=" + _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page') + "&screen=" + this.settings.get('screen') + "&security=" + this.settings.get('exportNonce') + "&" + this.$exportForm.serialize(), '_blank');
     };
     return DataExport;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (DataExport);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -223,16 +224,16 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_export_export__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/export/_export */ "./assets/js/src/components/export/_export.ts");
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumExport');
     new _components_export_export__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -245,7 +246,7 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -256,10 +257,14 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var Utils = {
     settings: {
@@ -276,7 +281,7 @@ var Utils = {
             decimal: '.',
             thousand: ',',
             precision: 2,
-            grouping: 3
+            grouping: 3,
         },
     },
     delay: function (callback, ms) {
@@ -305,7 +310,7 @@ var Utils = {
         });
     },
     addNotice: function (type, msg) {
-        var $notice = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"" + type + " notice is-dismissible\"><p><strong>" + msg + "</strong></p></div>").hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -324,16 +329,12 @@ var Utils = {
             return $.Deferred().resolve().promise();
         }
         var dfds = [];
-        $imgs.each(function () {
+        $imgs.each(function (index, elem) {
             var dfd = $.Deferred(), img = new Image();
             dfds.push(dfd);
-            img.onload = function () {
-                dfd.resolve();
-            };
-            img.onerror = function () {
-                dfd.resolve();
-            };
-            img.src = this.src;
+            img.onload = function () { return dfd.resolve(); };
+            img.onerror = function () { return dfd.resolve(); };
+            img.src = $(elem).attr('src');
         });
         return $.when.apply($, dfds);
     },
@@ -453,7 +454,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {
@@ -496,6 +497,18 @@ var Utils = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ })
 

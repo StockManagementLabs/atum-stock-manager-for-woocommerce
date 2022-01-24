@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2021 Stock Management Labs™
+ * @copyright      ©2022 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -112,7 +112,12 @@ final class Helpers {
 	public static function array_to_data( $array, $prefix = '' ) {
 
 		$data_array = array_map( function( $key, $value ) use ( $prefix ) {
-			return "data-{$prefix}{$key}='$value'";
+			if ( is_array( $value ) ) {
+				return "data-{$prefix}{$key}='" . wp_json_encode( $value ) . "'";
+			}
+			else {
+				return "data-{$prefix}{$key}='$value'";
+			}
 		}, array_keys( $array ), $array );
 
 		return implode( ' ', $data_array );
@@ -135,26 +140,6 @@ final class Helpers {
 		</span>
 		<?php
 
-	}
-
-	/**
-	 * Format a date to match the db format
-	 *
-	 * @since 0.1.3
-	 *
-	 * @param string|int $date         The date to format. Can be an English date or a timestamp (with second param as true).
-	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
-	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
-	 *
-	 * @return string                   The formatted date
-	 */
-	public static function date_format( $date, $is_timestamp = FALSE, $gmt_date = FALSE ) {
-
-		if ( ! $is_timestamp ) {
-			$date = strtotime( $date );
-		}
-
-		return ! $gmt_date ? date_i18n( 'Y-m-d H:i:s', $date ) : gmdate( 'Y-m-d H:i:s', $date );
 	}
 
 	/**
@@ -503,27 +488,36 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int       $date_start The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int       $date_end   Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
-	 * @param array|int $items      Optional. Array of Product IDs (or single ID) we want to calculate sales from.
-	 * @param array     $colums     Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
+	 * @param int       $date_start       The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
+	 * @param int       $date_end         Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param array|int $items            Optional. Array of Product IDs (or single ID) we want to calculate sales from.
+	 * @param array     $colums           Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
+	 * @param bool      $use_lookup_table Optional. Whether to use the WC order product lookup tables (if available).
 	 *
 	 * @return array|int|float
 	 */
-	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ] ) {
+	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ], $use_lookup_table = TRUE ) {
 
 		$items_sold = array();
+
+		// Avoid duplicated queries in List Tables by using cache.
+		$cache_key      = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start, $date_end, $items, $colums ] );
+		$sold_last_days = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+		if ( $has_cache ) {
+			return $sold_last_days;
+		}
 
 		if ( ! empty( $colums ) ) {
 
 			global $wpdb;
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = gmdate( 'Y-m-d H:i:s', strtotime( $date_start ) );
+			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
 			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
 
 			if ( $date_end ) {
-				$date_end    = gmdate( 'Y-m-d H:i:s', strtotime( $date_end ) );
+				$date_end    = self::date_format( strtotime( $date_end ), TRUE, TRUE );
 				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
 			}
 
@@ -542,13 +536,12 @@ final class Helpers {
 			", $order_status );
 			// phpcs:enable
 
+			// The lookup tables must be enabled and also available in the actual system.
+			// NOTE: There are some scenarios when the lookup tables are still not updated and we must use regular tables.
+			// Like when a new order is placed (because WC delays the lookup table update a little).
+			$use_lookup_table           = $use_lookup_table && self::maybe_use_wc_order_product_lookup_table();
 			$query_columns              = $query_joins = [];
-			$use_lookup_table           = FALSE;
 			$order_product_lookup_table = $wpdb->prefix . 'wc_order_product_lookup';
-
-			if ( self::maybe_use_wc_order_product_lookup_table() ) {
-				$use_lookup_table = TRUE;
-			}
 
 			// Filter by product IDs.
 			$products_where      = '';
@@ -682,6 +675,8 @@ final class Helpers {
 
 		}
 
+		AtumCache::set_cache( $cache_key, $items_sold );
+
 		return $items_sold;
 
 	}
@@ -691,12 +686,13 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int|\WC_Product $product   The product ID or product object to calculate the lost sales.
-	 * @param int             $days      Optional. By default the calculation is made for 7 days average.
+	 * @param int|\WC_Product $product          The product ID or product object to calculate the lost sales.
+	 * @param int             $days             Optional. By default the calculation is made for 7 days average.
+	 * @param bool            $use_lookup_table Optional. Whether to use the WC order lookup table on the get_sold_last_days method.
 	 *
 	 * @return bool|float       Returns the lost sales or FALSE if never had lost sales
 	 */
-	public static function get_product_lost_sales( $product, $days = 7 ) {
+	public static function get_product_lost_sales( $product, $days = 7, $use_lookup_table = TRUE ) {
 
 		$lost_sales = FALSE;
 
@@ -719,7 +715,7 @@ final class Helpers {
 
 				// Get the average sales for the past days when in stock.
 				$days           = absint( $days );
-				$sold_last_days = self::get_sold_last_days( "$out_of_stock_date -$days days", $out_of_stock_date, $product->get_id() );
+				$sold_last_days = self::get_sold_last_days( "$out_of_stock_date -$days days", $out_of_stock_date, $product->get_id(), [ 'qty' ], $use_lookup_table );
 				$lost_sales     = 0;
 
 				if ( $sold_last_days > 0 ) {
@@ -991,17 +987,6 @@ final class Helpers {
 	 * @return int days between 1 and 31
 	 */
 	public static function get_sold_last_days_option() {
-
-		if ( isset( $_REQUEST['sold_last_days'] ) ) {
-
-			// Sanitize.
-			$value = absint( $_REQUEST['sold_last_days'] );
-
-			if ( $value > 0 && $value < 31 ) {
-				return $value;
-			}
-
-		}
 
 		return absint( self::get_option( 'sales_last_ndays', Settings::DEFAULT_SALE_DAYS ) );
 
@@ -1442,7 +1427,7 @@ final class Helpers {
 	 *
 	 * @param string $plugin        The plugin name/slug.
 	 * @param string $folder        The plugin folder.
-	 * @param string $by            Optional. It can be cheched by 'slug' or by 'name'.
+	 * @param string $by            Optional. It can be checked by 'slug' or by 'name'.
 	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
@@ -1468,6 +1453,8 @@ final class Helpers {
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0
+	 *
+	 * @deprecated IE11 support was removed in WP 5.8 (https://make.wordpress.org/core/handbook/best-practices/browser-support/)
 	 */
 	public static function maybe_es6_promise() {
 		
@@ -1536,7 +1523,7 @@ final class Helpers {
 		$allowed_types = apply_filters( 'atum/product_types_dropdown/allowed_types', Globals::get_product_types() );
 
 		$output  = '<select name="product_type" class="' . $class . ' atum-tooltip" autocomplete="off">';
-		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types', ATUM_TEXT_DOMAIN ) . '</option>';
+		$output .= '<option value=""' . selected( $selected, '', FALSE ) . '>' . __( 'All product types...', ATUM_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $terms as $term ) {
 
@@ -1584,18 +1571,42 @@ final class Helpers {
 	 *
 	 * @since 1.3.1
 	 *
-	 * @param string $selected  Optional. The pre-selected option.
-	 * @param bool   $enhanced  Optional. Whether to show an enhanced select.
-	 * @param string $class     Optional. The dropdown class name.
-	 * @param string $name      Optional. The input's name.
+	 * @param array $args {
+	 *  Array of arguments.
+	 *
+	 *  @type string $selected    Optional. The pre-selected option.
+	 *  @type bool   $enhanced    Optional. Whether to show an enhanced select.
+	 *  @type string $class       Optional. The dropdown class name.
+	 *  @type string $name        Optional. The input's name.
+	 *  @type string $placeholder Optional: The select's placeholder.
+	 * }
 	 *
 	 * @return string
 	 */
-	public static function suppliers_dropdown( $selected = '', $enhanced = FALSE, $class = 'dropdown_supplier', $name = 'supplier' ) {
+	public static function suppliers_dropdown( $args ) {
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
 			return '';
 		}
+
+		$default_args = array(
+			'selected'    => '',
+			'enhanced'    => FALSE,
+			'class'       => 'dropdown_supplier',
+			'name'        => 'supplier',
+			'placeholder' => __( 'All suppliers...', ATUM_TEXT_DOMAIN ),
+		);
+
+		/**
+		 * Variables definition
+		 *
+		 * @var string $selected
+		 * @var bool   $enhanced
+		 * @var string $class
+		 * @var string $name
+		 * @var string $placeholder
+		 */
+		extract( wp_parse_args( $args, $default_args ) );
 
 		ob_start();
 
@@ -1620,18 +1631,18 @@ final class Helpers {
 				<option value=""<?php selected( $selected, '' ) ?>><?php esc_attr_e( 'Show all suppliers', ATUM_TEXT_DOMAIN ) ?></option>
 
 				<?php foreach ( $suppliers as $supplier ) : ?>
-					<option value="<?php echo esc_attr( $supplier->ID ) ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo esc_attr( $supplier->post_title ) ?></option>
+					<option value="<?php echo esc_attr( $supplier->ID ) ?>"<?php selected( $supplier->ID, $selected ) ?>><?php echo esc_attr( $supplier->post_title ?: __( '(no title)', ATUM_TEXT_DOMAIN ) ) ?></option>
 				<?php endforeach; ?>
 			</select>
 
 		<?php else : ?>
 
 			<select class="wc-product-search atum-enhanced-select atum-tooltip auto-filter <?php echo esc_attr( $class ) ?>" id="supplier" name="supplier" data-allow_clear="true"
-				data-action="atum_json_search_suppliers" data-placeholder="<?php esc_attr_e( 'Filter Supplier&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+				data-action="atum_json_search_suppliers" data-placeholder="<?php echo esc_attr( $placeholder ) ?>"
 				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
-					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ) ?></option>
+					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ?: __( '(no title)', ATUM_TEXT_DOMAIN ) ) ?></option>
 				<?php endif; ?>
 			</select>
 
@@ -2076,8 +2087,7 @@ final class Helpers {
 						
 						$date_from = wc_clean( $product_data['_sale_price_dates_from'] );
 						$date_to   = wc_clean( $product_data['_sale_price_dates_to'] );
-						$timestamp = self::get_current_timestamp();
-						$now       = self::get_wc_time( $timestamp );
+						$now       = self::get_wc_time( self::get_current_timestamp() );
 
 						$date_from     = $date_from ? self::get_wc_time( $date_from ) : '';
 						$date_to       = $date_to ? self::get_wc_time( $date_to ) : '';
@@ -2445,17 +2455,6 @@ final class Helpers {
 			$grouped[ $key ][] = $value;
 		}
 
-		// Recursively build a nested grouping if more parameters are supplied.
-		// Each grouped array value is grouped according to the next sequential key.
-		if ( func_num_args() > 2 ) {
-			$args = func_get_args();
-
-			foreach ( $grouped as $key => $value ) {
-				$params          = array_merge( [ $value ], array_slice( $args, 2, func_num_args() ) );
-				$grouped[ $key ] = call_user_func_array( 'array_group_by', $params );
-			}
-		}
-
 		return $grouped;
 
 	}
@@ -2608,8 +2607,8 @@ final class Helpers {
 				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
 					SELECT terms.slug FROM $wpdb->posts posts
 					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
-				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = termrelations.term_taxonomy_id)
-					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)  
+					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
+				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
 					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
 				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
 					)
@@ -2684,59 +2683,6 @@ final class Helpers {
 		$cache_key = AtumCache::get_cache_key( 'get_atum_user_meta', [ $key, $user_id ] );
 		AtumCache::delete_cache( $cache_key );
 
-	}
-	
-	/**
-	 * Sets a date prop whilst handling formatting and datetime objects.
-	 *
-	 * @since 1.5.0.3
-	 *
-	 * @param string|integer|\WC_DateTime $value
-	 *
-	 * @return \WC_DateTime|null
-	 */
-	public static function get_wc_time( $value ) {
-		
-		$date_time = NULL;
-		
-		try {
-			
-			if ( $value instanceof \WC_DateTime ) {
-				$date_time = $value;
-			}
-			elseif ( is_numeric( $value ) ) {
-				// Timestamps are handled as UTC timestamps in all cases.
-				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
-			}
-			else {
-				
-				// Strings are defined in local WP timezone. Convert to UTC.
-				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
-					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
-					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
-				}
-				else {
-					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
-				}
-				
-				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
-				
-			}
-			
-			// Set local timezone or offset.
-			if ( get_option( 'timezone_string' ) ) {
-				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
-			}
-			else {
-				$date_time->set_utc_offset( wc_timezone_offset() );
-			}
-			
-		} catch ( \Exception $e ) {
-			error_log( __METHOD__ . '::' . $e->getMessage() );
-		}
-		
-		return $date_time;
-		
 	}
 
 	/**
@@ -2929,18 +2875,18 @@ final class Helpers {
 	}
 
 	/**
-	 * Checks if the passed product was not updated recently and requires a new update
+	 * Checks if the sales props of the passed product were not updated recently and require a new update
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product|AtumProductTrait $product    The product to check.
-	 * @param string                       $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param AtumProductTrait $product    The product to check. It must be an ATUM product.
+	 * @param string           $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
 	 *
 	 * @return bool
 	 */
 	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
 
-		return is_null( $product->get_update_date() ) || strtotime( $product->get_update_date() ) <= strtotime( $time_frame );
+		return is_null( $product->get_sales_update_date() ) || strtotime( $product->get_sales_update_date() ) <= strtotime( $time_frame );
 	}
 
 	/**
@@ -3077,23 +3023,20 @@ final class Helpers {
 	 * @since 1.6.6
 	 *
 	 * @param \WC_Product|AtumProductTrait $product
+	 * @param bool                         $use_lookup_table
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public static function is_product_low_stock( $product ) {
+	public static function is_product_low_stock( $product, $use_lookup_table = TRUE ) {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
-		$timestamp       = self::get_current_timestamp();
-		$current_time    = self::date_format( $timestamp, TRUE, TRUE );
+		$current_time    = self::date_format( '', TRUE, TRUE );
 		$is_low_stock    = FALSE;
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
-
-			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id() ) / 7 * $days_to_reorder;
-
-			$is_low_stock = $expected_sales > $product->get_stock_quantity();
-
+			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id(), [ 'qty' ], $use_lookup_table ) / 7 * $days_to_reorder;
+			$is_low_stock   = $expected_sales > $product->get_stock_quantity();
 		}
 
 		return apply_filters( 'atum/is_product_low_stock', $is_low_stock, $product );
@@ -3109,15 +3052,15 @@ final class Helpers {
 	 */
 	public static function maybe_use_wc_order_product_lookup_table() {
 
-		// FIXME: Temporary disable of use table because it's not populated in every cases.
-		return FALSE;
+		if ( 'no' === self::get_option( 'use_order_product_lookup_table', 'yes' ) ) {
+			return FALSE;
+		}
 
-		// TODO: ENABLE IT FROM SETTINGS.
-		$cache_key  = AtumCache::get_cache_key( 'use_wc_order_product_lookup_table' );
-		$use_lookup = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$transient_key = AtumCache::get_transient_key( 'use_wc_order_product_lookup_table' );
+		$use_lookup    = AtumCache::get_transient( $transient_key, TRUE );
 
-		if ( $has_cache ) {
-			return $use_lookup;
+		if ( FALSE !== $use_lookup ) {
+			return wc_string_to_bool( $use_lookup );
 		}
 
 		global $wpdb;
@@ -3126,7 +3069,7 @@ final class Helpers {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$use_lookup = $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0;
-		AtumCache::set_cache( $cache_key, $use_lookup );
+		AtumCache::set_transient( $transient_key, wc_bool_to_string( $use_lookup ), WEEK_IN_SECONDS, TRUE );
 
 		return $use_lookup;
 
@@ -3249,21 +3192,101 @@ final class Helpers {
 	}
 
 	/**
-	 * Get the current timestamp
+	 * Get the current UNIX timestamp (as GMT)
+	 *
+	 * NOTE: When the wp_date function is available and used, the timezone returned with wp_date( 'U' ) is always GMT. So a real UNIX timestamp.
+	 * This differs from the old current_time function that returns the timestamp with a timezone applied (if the GMT param not specified).
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param bool $gmt
-	 *
 	 * @return false|int|string
 	 */
-	public static function get_current_timestamp( $gmt = FALSE ) {
+	public static function get_current_timestamp() {
 
-		if ( $gmt ) {
-			return function_exists( 'wp_date' ) ? wp_date( 'U', NULL, new \DateTimeZone( 'GMT' ) ) : current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		if ( ! function_exists( 'wp_date' ) ) {
+			return current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		}
 
-		return function_exists( 'wp_date' ) ? wp_date( 'U' ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		return wp_date( 'U' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+
+	}
+
+	/**
+	 * Format a date to match the db format
+	 *
+	 * @since 0.1.3
+	 *
+	 * @param string|int $date         Optional. The date to format. Can be an English date or a timestamp (with second param as true).
+	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
+	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
+	 * @param string     $format       Optional. A valid PHP date format. By default is 'Y-m-d H:i:s'.
+	 *
+	 * @return string                   The formatted date
+	 */
+	public static function date_format( $date = '', $is_timestamp = TRUE, $gmt_date = FALSE, $format = 'Y-m-d H:i:s' ) {
+
+		// If no date is passed, get the current UNIX timestamp.
+		if ( ! $date ) {
+			$date = self::get_current_timestamp();
+		}
+		elseif ( ! $is_timestamp ) {
+			$date = strtotime( $date );
+		}
+
+		return ! $gmt_date ? wp_date( $format, $date ) : gmdate( $format, $date );
+
+	}
+
+	/**
+	 * Sets a date prop whilst handling formatting and datetime objects.
+	 *
+	 * @since 1.5.0.3
+	 *
+	 * @param string|integer|\WC_DateTime $value
+	 *
+	 * @return \WC_DateTime|null
+	 */
+	public static function get_wc_time( $value ) {
+
+		$date_time = NULL;
+
+		try {
+
+			if ( $value instanceof \WC_DateTime ) {
+				$date_time = $value;
+			}
+			elseif ( is_numeric( $value ) ) {
+				// Timestamps are handled as UTC timestamps in all cases.
+				$date_time = new \WC_DateTime( "@{$value}", new \DateTimeZone( 'UTC' ) );
+			}
+			else {
+
+				// Strings are defined in local WP timezone. Convert to UTC.
+				if ( 1 === preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|((-|\+)\d{2}:\d{2}))$/', $value, $date_bits ) ) {
+					$offset    = ! empty( $date_bits[7] ) ? iso8601_timezone_to_offset( $date_bits[7] ) : wc_timezone_offset();
+					$timestamp = gmmktime( $date_bits[4], $date_bits[5], $date_bits[6], $date_bits[2], $date_bits[3], $date_bits[1] ) - $offset;
+				}
+				else {
+					$timestamp = wc_string_to_timestamp( get_gmt_from_date( gmdate( 'Y-m-d H:i:s', wc_string_to_timestamp( $value ) ) ) );
+				}
+
+				$date_time = new \WC_DateTime( "@{$timestamp}", new \DateTimeZone( 'UTC' ) );
+
+			}
+
+			// Set local timezone or offset.
+			if ( get_option( 'timezone_string' ) ) {
+				$date_time->setTimezone( new \DateTimeZone( wc_timezone_string() ) );
+			}
+			else {
+				$date_time->set_utc_offset( wc_timezone_offset() );
+			}
+
+		} catch ( \Exception $e ) {
+			error_log( __METHOD__ . '::' . $e->getMessage() );
+		}
+
+		return $date_time;
 
 	}
 
@@ -3402,6 +3425,53 @@ final class Helpers {
 			update_comment_meta( $note_id, 'note_params', $params );
 
 		}
+
+	}
+
+	/**
+	 * Get the timezone string from the WP settings
+	 *
+	 * @since 1.9.7
+	 *
+	 * @return string
+	 */
+	public static function get_wp_timezone_string() {
+
+		$timezone_string = get_option( 'timezone_string' );
+
+		if ( ! empty( $timezone_string ) ) {
+			return $timezone_string;
+		}
+
+		$offset  = get_option( 'gmt_offset' );
+		$hours   = (int) $offset;
+		$minutes = ( $offset - floor( $offset ) ) * 60;
+		$offset  = '-0.5' === $offset ? str_replace( '+', '-', sprintf( '%+03d:%02d', $hours, $minutes ) ) : sprintf( '%+03d:%02d', $hours, $minutes );
+
+		return $offset;
+	}
+
+	/**
+	 * Returns the UTC time from a given current server timezone time.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param string $time In hh:mm format.
+	 *
+	 * @return string
+	 */
+	public static function get_utc_time( $time ) {
+
+		$timezone_string = self::get_wp_timezone_string();
+		try {
+			$date = new \DateTime( $time, new \DateTimeZone( $timezone_string ) );
+			$date->setTimezone( new \DateTimeZone( 'UTC' ) );
+		}
+		catch ( \Exception $e ) {
+			return $time;
+		}
+
+		return $date->format( 'H:i' );
 
 	}
 

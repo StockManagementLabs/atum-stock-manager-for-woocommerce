@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      PurchaseOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -222,14 +222,12 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Avoid maximum function nesting on some cases.
 		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
-		$timestamp      = Helpers::get_current_timestamp();
 		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
-		$po_date        = empty( $_POST['date'] ) ? $timestamp : strtotime( $posted_po_date );
-		$po_date        = date_i18n( 'Y-m-d H:i', $po_date );
+		$po_timestamp   = empty( $_POST['date'] ) ? Helpers::get_current_timestamp() : strtotime( $posted_po_date );
+		$po_date        = Helpers::date_format( $po_timestamp, TRUE, TRUE );
 
 		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
-		$date_expected        = empty( $_POST['date_expected'] ) ? $timestamp : strtotime( $posted_date_expected );
-		$date_expected        = date_i18n( 'Y-m-d H:i', $date_expected );
+		$date_expected        = $posted_date_expected ? Helpers::date_format( strtotime( $posted_date_expected ) ) : '';
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
@@ -243,6 +241,9 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Set the PO description as post content.
 		$po->set_description( $_POST['description'] );
+
+		// In case the user changed any order item and not used the "Save Items" button.
+		$po->save_posted_order_items();
 
 		$po->save();
 
@@ -308,7 +309,7 @@ class PurchaseOrders extends AtumOrderPostType {
 				$date_expected = $po->date_expected;
 
 				if ( $date_expected ) {
-					$date_expected = '<abbr title="' . gmdate( 'Y-m-d H:i', strtotime( $date_expected ) ) . '" class="atum-tooltip">' . gmdate( 'Y-m-d', strtotime( $date_expected ) ) . '</abbr>';
+					$date_expected = '<abbr title="' . Helpers::date_format( strtotime( $date_expected ), TRUE, TRUE ) . '" class="atum-tooltip">' . Helpers::date_format( strtotime( $date_expected ), TRUE, TRUE, 'Y-m-d' ) . '</abbr>';
 				}
 
 				echo $date_expected; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -675,7 +676,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		if ( ! is_numeric( $term ) && strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = gmdate( 'Y-m-d', strtotime( $term ) );
+			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE );
 			$term = "%$date%";
 
 			$ids = $wpdb->get_col( $wpdb->prepare( "

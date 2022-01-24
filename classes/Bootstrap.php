@@ -4,7 +4,7 @@
  *
  * @package     Atum
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @since 0.0.1
  */
@@ -245,6 +245,13 @@ class Bootstrap {
 			// Delete marketing popup transient.
 			delete_transient( 'atum-marketing-popup' );
 
+		}
+
+		// Delete scheduled actions anyway. Can't use the AtumQueues class to get the actions.
+		$actions = [ 'atum/update_expiring_product_props', 'atum/cron_update_sales_calc_props' ];
+
+		foreach ( $actions as $action ) {
+			as_unschedule_all_actions( $action );
 		}
 
 	}

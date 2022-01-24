@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.3.8.2
  */
@@ -107,7 +107,7 @@ class Hooks {
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
-		add_action( 'updated_option', array( $this, 'rebuild_stock_status_on_oost_changes' ), 10, 3 );
+		add_action( 'updated_option', array( $this, 'after_update_options_tasks' ), 10, 3 );
 
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
@@ -266,15 +266,15 @@ class Hooks {
 
 			$vars = apply_filters( 'atum/product_data/localized_vars', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
-				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
-				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
-				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
-				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
-				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
 				'attachToEmail'                 => __( 'Attach to email:', ATUM_TEXT_DOMAIN ),
+				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
 				'emailNotifications'            => FileAttachment::get_email_notifications(),
+				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
+				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
+				'nonce'                         => wp_create_nonce( 'atum-product-data-nonce' ),
+				'outStockThresholdProductTypes' => Globals::get_product_types_with_stock(),
+				'success'                       => __( 'Success!', ATUM_TEXT_DOMAIN ),
 			), $hook );
 
 			wp_localize_script( 'atum-product-data', 'atumProductData', $vars );
@@ -464,8 +464,7 @@ class Hooks {
 				$out_stock_date = NULL;
 
 				if ( ! $current_stock ) {
-					$timestamp      = Helpers::get_current_timestamp();
-					$out_stock_date = Helpers::date_format( $timestamp, TRUE, TRUE );
+					$out_stock_date = Helpers::date_format( '', TRUE, TRUE );
 				}
 
 				$product->set_out_stock_date( $out_stock_date );
@@ -519,6 +518,9 @@ class Hooks {
 
 			// Add custom decimal quantities to order add products.
 			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
+
+			// Change min_qty on quantity field on variable products if its necesary.
+			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
 
 		}
 
@@ -582,8 +584,8 @@ class Hooks {
 	}
 
 	/**
-	 * Hook update_options. If we update atum_settings, we check if out_stock_threshold == no.
-	 * Then, if we have any out_stock_threshold set, rebuild that product to update the stock_status if required
+	 * Execute tasks after ATUM settings updated.
+	 * Version 1.9.7 -> renamed from rebuild_stock_status_on_oost_changes
 	 *
 	 * @since 1.4.10
 	 *
@@ -591,31 +593,38 @@ class Hooks {
 	 * @param array  $old_value
 	 * @param array  $option_value
 	 */
-	public function rebuild_stock_status_on_oost_changes( $option_name, $old_value, $option_value ) {
+	public function after_update_options_tasks( $option_name, $old_value, $option_value ) {
 
-		if (
-			Settings::OPTION_NAME === $option_name &&
-			isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
-			$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
-			Helpers::is_any_out_stock_threshold_set()
-		) {
-			/*
-			 * TODO: Remove this code if finally not needed.
-			 * // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
-			// changes should be added or removed depending on the new option.
-			if ( 'no' === $option_value['out_stock_threshold'] ) {
-				remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-			}
-			else {
-				add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-			}
-			*/
+		if ( Settings::OPTION_NAME === $option_name ) {
 
-			// Ensure the option is up to date.
-			Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
-			Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
+			// Rebuild stock status if the out of stock threshold option changed.
+			if ( isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
+				$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
+				Helpers::is_any_out_stock_threshold_set() ) {
+				/*
+				* TODO: Remove this code if finally not needed.
+				* // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
+				// changes should be added or removed depending on the new option.
+				if ( 'no' === $option_value['out_stock_threshold'] ) {
+					remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+					remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+				}
+				else {
+					add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+					add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
+				}
+				*/
+
+				// Ensure the option is up to date.
+				Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
+				Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
+			}
+			// Remove control time option when product sales properties cron disabled.
+			if ( isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) && 'yes' === isset( $old_value['calc_prop_cron'] ) &&
+				'no' === isset( $old_value['$option_value'] ) ) {
+
+				delete_option( ATUM_PREFIX . 'last_sales_calc' );
+			}
 
 		}
 
@@ -846,8 +855,7 @@ class Hooks {
 		if ( ! $paid_date ) {
 
 			$order_mod = wc_get_order( $order_id );
-			$timestamp = Helpers::get_current_timestamp();
-			$order_mod->set_date_paid( $timestamp );
+			$order_mod->set_date_paid( Helpers::get_current_timestamp() );
 			$order_mod->save();
 		}
 
@@ -1292,7 +1300,8 @@ class Hooks {
 		];
 
 		foreach ( $statuses as $status ) {
-			if ( $note->content === sprintf( __( 'Order status set to %s.', 'woocommerce' ), wc_get_order_status_name( $status ) ) ) {
+			/* Translators: %s status_to */
+			if ( sprintf( __( 'Order status set to %s.', 'woocommerce' ) === $note->content, wc_get_order_status_name( $status ) ) ) { // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 				$found_data = [
 					'action' => 'order_status_set',
 					'status' => $status,
@@ -1301,7 +1310,7 @@ class Hooks {
 			}
 			foreach ( $statuses as $status_to ) {
 				/* Translators: %1$s status_from, %2$s status_to */
-				if ( $note->content === sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ), wc_get_order_status_name( $status ), wc_get_order_status_name( $status_to ) ) ) {
+				if ( sprintf( __( 'Order status changed from %1$s to %2$s.', 'woocommerce' ) === $note->content, wc_get_order_status_name( $status ), wc_get_order_status_name( $status_to ) ) ) {  // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 					$found_data = [
 						'action'      => 'order_status_change',
 						'status_from' => $status,
@@ -1334,8 +1343,8 @@ class Hooks {
 	 * @since 1.9.2
 	 */
 	public function allow_stock_emails() {
-		remove_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9, 2 );
-		remove_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9, 2 );
+		remove_action( 'woocommerce_low_stock', array( $this, 'prevent_sending_low_stock_email' ), 9 );
+		remove_action( 'woocommerce_no_stock', array( $this, 'prevent_sending_no_stock_email' ), 9 );
 	}
 
 	/**
@@ -1438,17 +1447,22 @@ class Hooks {
 			// Loop over all items.
 			foreach ( $order->get_items() as $item ) {
 
-				$product   = $item->get_product();
-				$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
-				$new_stock = $product->get_stock_quantity();
+				$product = $item->get_product();
 
-				if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_already_sent ) ) {
+				if ( $product->get_manage_stock() ) {
 
-					$changes[] = array(
-						'product' => $product,
-						'from'    => $new_stock + $qty,
-						'to'      => $new_stock,
-					);
+					$qty       = apply_filters( 'woocommerce_order_item_quantity', $item->get_quantity(), $order, $item );
+					$new_stock = $product->get_stock_quantity();
+
+					if ( ! array_key_exists( $product->get_id(), $this->order_products_notification_already_sent ) ) {
+
+						$changes[] = array(
+							'product' => $product,
+							'from'    => $new_stock + $qty,
+							'to'      => $new_stock,
+						);
+
+					}
 
 				}
 
@@ -1478,13 +1492,19 @@ class Hooks {
 		foreach ( $changes as $change ) {
 
 			$product                = Helpers::get_atum_product( $change['product']->get_id() );
-			$out_of_stock_threshold = $product->get_out_stock_threshold();
+			$out_of_stock_threshold = $product->get_out_stock_threshold() !== '' ? $product->get_out_stock_threshold() : absint( get_option( 'woocommerce_notify_no_stock_amount', 0 ) );
 			$low_stock_amount       = absint( wc_get_low_stock_amount( wc_get_product( $change['product']->get_id() ) ) );
 
-			if ( $change['to'] <= $out_of_stock_threshold ) {
+			if ( $change['to'] <= $out_of_stock_threshold && 'yes' === get_option( 'woocommerce_notify_no_stock', 'yes' ) ) {
+
 				do_action( 'woocommerce_no_stock', wc_get_product( $change['product']->get_id() ) );
-			} elseif ( $change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount ) {
+
+			}
+			elseif ( $change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount &&
+					'yes' === get_option( 'woocommerce_notify_low_stock', 'yes' ) ) {
+
 				do_action( 'woocommerce_low_stock', wc_get_product( $change['product']->get_id() ) );
+
 			}
 
 			if ( $change['to'] < 0 ) {
@@ -1501,6 +1521,27 @@ class Hooks {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Check if its necesary change the variable min quantity value
+	 *
+	 * @since 1.9.2
+	 *        
+	 * @param array $variation_atts
+	 *
+	 * @return array
+	 */
+	public function maybe_change_variable_min_qty( $variation_atts ) {
+
+		$input_step = Helpers::get_input_step();
+
+		if ( $input_step ) {
+			$variation_atts['min_qty'] = $input_step;
+		}
+
+		return $variation_atts;
 
 	}
 

@@ -4,7 +4,7 @@
  *
  * @since       1.6.8
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @package     Atum\Suppliers
  */
@@ -39,6 +39,9 @@ defined( 'ABSPATH' ) || die;
  * @property int    $discount
  * @property int    $tax_rate
  * @property int    $lead_time
+ * @property string $delivery_terms
+ * @property int    $days_to_cancel
+ * @property string $cancelation_policy
  */
 class Supplier {
 
@@ -62,28 +65,31 @@ class Supplier {
 	 * @var array
 	 */
 	protected $data = array(
-		'name'           => '',
-		'code'           => '',
-		'tax_number'     => '',
-		'phone'          => '',
-		'fax'            => '',
-		'website'        => '',
-		'ordering_url'   => '',
-		'general_email'  => '',
-		'ordering_email' => '',
-		'description'    => '',
-		'currency'       => '',
-		'address'        => '',
-		'city'           => '',
-		'country'        => '',
-		'state'          => '',
-		'zip_code'       => '',
-		'assigned_to'    => NULL,
-		'location'       => '',
-		'thumbnail_id'   => NULL,
-		'discount'       => NULL,
-		'tax_rate'       => NULL,
-		'lead_time'      => NULL,
+		'name'               => '',
+		'code'               => '',
+		'tax_number'         => '',
+		'phone'              => '',
+		'fax'                => '',
+		'website'            => '',
+		'ordering_url'       => '',
+		'general_email'      => '',
+		'ordering_email'     => '',
+		'description'        => '',
+		'currency'           => '',
+		'address'            => '',
+		'city'               => '',
+		'country'            => '',
+		'state'              => '',
+		'zip_code'           => '',
+		'assigned_to'        => NULL,
+		'location'           => '',
+		'thumbnail_id'       => NULL,
+		'discount'           => NULL,
+		'tax_rate'           => NULL,
+		'lead_time'          => NULL,
+		'delivery_terms'     => '',
+		'days_to_cancel'     => NULL,
+		'cancelation_policy' => '',
 	);
 
 	/**
@@ -101,11 +107,14 @@ class Supplier {
 	 *
 	 * @param int $id
 	 */
-	public function __construct( $id ) {
+	public function __construct( $id = 0 ) {
 
-		$this->post = get_post( $id );
-		$this->id   = $id;
-		$this->read_data();
+		$this->id = $id;
+
+		if ( $id ) {
+			$this->post = get_post( $id );
+			$this->read_data();
+		}
 
 	}
 
@@ -115,6 +124,8 @@ class Supplier {
 	 * @since 1.6.8
 	 */
 	public function read_data() {
+
+		$this->data = apply_filters( 'atum/supplier/data', $this->data );
 
 		if ( $this->post ) {
 
@@ -160,22 +171,55 @@ class Supplier {
 	 * Save the changes to the database
 	 *
 	 * @since 1.6.8
+	 *
+	 * @return int $supplier_id
 	 */
 	public function save() {
 
 		if ( ! empty( $this->changes ) ) {
 
-			foreach ( $this->changes as $changed_prop ) {
+			if ( ! $this->id ) {
+				// Inserting.
+				if ( in_array( 'name', $this->changes ) ) {
 
-				if ( empty( $this->data[ $changed_prop ] ) ) {
-					delete_post_meta( $this->id, "_$changed_prop" );
-				}
-				else {
-					update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
+					$post = [
+						'post_title'  => $this->data['name'],
+						'post_status' => 'publish',
+						'post_type'   => Suppliers::POST_TYPE,
+					];
+
+					$meta_input = [];
+
+					foreach ( $this->changes as $changed_prop ) {
+						if ( 'name' !== $changed_prop && ! empty( $this->data[ $changed_prop ] ) ) {
+							$meta_input[ "_$changed_prop" ] = $this->data[ $changed_prop ];
+						}
+					}
+
+					$post['meta_input'] = $meta_input;
+
+					return wp_insert_post( $post );
+
 				}
 
 			}
+			else {
+				// Updating.
+				foreach ( $this->changes as $changed_prop ) {
+
+					if ( empty( $this->data[ $changed_prop ] ) ) {
+						delete_post_meta( $this->id, "_$changed_prop" );
+					}
+					else {
+						update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
+					}
+
+				}
+			}
+
 		}
+
+		return $this->id;
 
 	}
 
@@ -560,6 +604,72 @@ class Supplier {
 		if ( $this->data['lead_time'] !== $lead_time ) {
 			$this->data['lead_time'] = $lead_time;
 			$this->register_change( 'lead_time' );
+		}
+	}
+
+	/**
+	 * Set the payments and delivery terms
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $delivery_terms
+	 */
+	public function set_delivery_terms( $delivery_terms ) {
+
+		$delivery_terms = wp_kses_post( $delivery_terms );
+
+		if ( $this->data['delivery_terms'] !== $delivery_terms ) {
+			$this->data['delivery_terms'] = $delivery_terms;
+			$this->register_change( 'delivery_terms' );
+		}
+	}
+
+	/**
+	 * Set number of days to cancel
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $days_to_cancel
+	 */
+	public function set_days_to_cancel( $days_to_cancel ) {
+
+		$days_to_cancel = absint( $days_to_cancel );
+
+		if ( $this->data['days_to_cancel'] !== $days_to_cancel ) {
+			$this->data['days_to_cancel'] = $days_to_cancel;
+			$this->register_change( 'days_to_cancel' );
+		}
+	}
+
+	/**
+	 * Set the cancellation policy
+	 *
+	 * @since 1.9.2
+	 *
+	 * @param string $cancelation_policy
+	 */
+	public function set_cancelation_policy( $cancelation_policy ) {
+
+		$cancelation_policy = wp_kses_post( $cancelation_policy );
+
+		if ( $this->data['cancelation_policy'] !== $cancelation_policy ) {
+			$this->data['cancelation_policy'] = $cancelation_policy;
+			$this->register_change( 'cancelation_policy' );
+		}
+	}
+
+	/**
+	 * Set the name
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param string $name
+	 */
+	public function set_name( $name ) {
+
+		if ( ! $this->data['name'] !== $name ) {
+			$this->data['name'] = $name;
+			$this->register_change( 'name' );
 		}
 	}
 

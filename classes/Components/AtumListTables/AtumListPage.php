@@ -5,7 +5,7 @@
  * @package         Atum\Components
  * @subpackage      AtumListTables
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.1.2
  */
@@ -14,11 +14,13 @@ namespace Atum\Components\AtumListTables;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
+use Atum\Settings\Settings;
 
 abstract class AtumListPage {
 	
 	/**
-	 * Table rows per page
+	 * Entries per page
 	 *
 	 * @var int
 	 */
@@ -57,6 +59,17 @@ abstract class AtumListPage {
 	}
 
 	/**
+	 * Get the URL for the current List Table page.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @return string
+	 */
+	public function get_list_table_page_url() {
+		return defined( 'static::UI_SLUG' ) ? add_query_arg( 'page', static::UI_SLUG, admin_url( 'admin.php' ) ) : '';
+	}
+
+	/**
 	 * Save products per page option
 	 *
 	 * @since 1.1.2
@@ -91,6 +104,32 @@ abstract class AtumListPage {
 		if ( $list instanceof AtumListTable ) {
 			$this->list = $list;
 		}
+
+	}
+
+	/**
+	 * Setter the entries per page
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param string $default_option_key
+	 */
+	protected function set_per_page( $default_option_key = 'posts_per_page' ) {
+
+		// Already set?
+		if ( ! is_null( $this->per_page ) ) {
+			return;
+		}
+
+		$user_option = 0;
+
+		if ( defined( 'static::UI_SLUG' ) ) {
+			// The screen options is replacing hyphens by underscores before saving the meta key.
+			$user_meta_key = str_replace( '-', '_', static::UI_SLUG . '_entries_per_page' );
+			$user_option   = get_user_meta( get_current_user_id(), $user_meta_key, TRUE );
+		}
+
+		$this->per_page = (int) $user_option ?: Helpers::get_option( $default_option_key, Settings::DEFAULT_POSTS_PER_PAGE );
 
 	}
 

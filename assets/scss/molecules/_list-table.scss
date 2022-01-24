@@ -2005,12 +2005,14 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		
 		&.active-row {
 			background-color: var(--primary-dark);
+			
 			td {
 				color: var(--atum-text-color-dark2) !important;
 				.product-type {
 					color: var(--atum-text-color-dark2);
 				}
 			}
+			
 			.set-meta, .set-date-meta, a {
 				color: var(--primary-var-dark) !important;
 			}
@@ -2018,7 +2020,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		.set-meta, .set-date-meta {
-			
 			cursor: pointer;
 			color: var(--primary);
 			
@@ -2036,6 +2037,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			&.variable, &.variable-subscription {
 				background-color: var(--primary);
+				
+				&.active-row {
+					input[type=checkbox] {
+						border: 1px solid var(--main-border) !important;
+					}
+				}
 			}
 			
 			&.bundle {
@@ -2170,8 +2177,11 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 		}
 		
 		&.no-items {
+			background-color: $red-light;
+			
 			td {
 				padding: 10px 24px;
+				
 				.alert {
 					margin-top: $grid-gutter-width/2;
 					flex-wrap: wrap;
@@ -2215,6 +2225,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 							@include loader($color: $secondary);
 						}
 					}
+					
 					@include tablet-max {
 						width: calc( 100vw - 93px);
 						
@@ -2248,6 +2259,8 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				text-align: center;
 				
 				&.totals-heading {
+					text-align: left;
+					
 					span {
 						font-size: 14px;
 						font-weight: bold;
@@ -2692,7 +2705,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	
 	.highlight-danger {
 		background-color: var(--danger);
-		color:  var(--white);
+		color:  var(--white) !important;
 		padding: 2px 3px;
 		border-radius: 2px;
 	}
@@ -2825,9 +2838,6 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	min-height: 200px !important;
 
 	.swal2-title {
-		justify-content: flex-start;
-		line-height: 1;
-		flex-wrap: wrap;
 		
 		.title {
 			font-size: 26px;
@@ -2835,19 +2845,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			color:  var(--blue-dark);
 			margin: 0;
 		}
-		
-		.sub-title {
-			font-size: 15px;
-			color: var(--gray-500);
-			font-weight: 400;
-			margin-top: 4px;
-		}
 	}
 	
 	.swal2-html-container {
-		display: flex !important;
-		justify-content: space-evenly;
-		align-items: flex-end;
+		
+		.input-group {
+			display: flex !important;
+			justify-content: space-evenly;
+			align-items: flex-end;
+			flex-wrap: nowrap;
+		}
 		
 		a {
 			color: var(--primary) !important;
@@ -2903,12 +2910,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 	}
 	
 	@include mobile-max {
-		
 		height: 250px;
-		
-		.swal2-title {
-			margin-bottom: 10px;
-		}
 		
 		.swal2-content {
 			flex-direction: column;

@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Addons
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.0
  */
@@ -54,6 +54,7 @@ class Addons {
 		'multi_inventory' => '1.5.0',
 		'product_levels'  => '1.6.0',
 		'action_logs'     => '1.1.5',
+		'purchase_orders' => '0.0.1',
 	);
 
 	/**
@@ -214,18 +215,18 @@ class Addons {
 		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
-			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
-			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
+			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
 			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
-			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
 			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
-			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'allowedDeactivations' => __( 'You are allowed to deactivate a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
-			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
+			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
 			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
+			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
+			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
 		) );
 
 		wp_enqueue_style( 'sweetalert2' );
@@ -244,7 +245,7 @@ class Addons {
 		wp_enqueue_script( 'atum-addons' );
 
 		$args = array(
-			'addons'      => $this->get_addons_list(),
+			'addons'      => self::get_addons_list(),
 			'addons_keys' => self::get_keys(),
 		);
 
@@ -296,7 +297,7 @@ class Addons {
 					}
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
 						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( "Your ATUM %1\$s add-on's license has expired or is invalid, %2\$splease renew it asap%3\$s or you won't receive updates anymore.", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+						AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
 					}
 
 				}
@@ -314,7 +315,7 @@ class Addons {
 	 *
 	 * @return array|bool
 	 */
-	private function get_addons_list() {
+	private static function get_addons_list() {
 
 		$transient_name = AtumCache::get_transient_key( 'addons_list' );
 		$addons         = AtumCache::get_transient( $transient_name );
@@ -325,6 +326,7 @@ class Addons {
 				'timeout'     => 20,
 				'redirection' => 1,
 				'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
+				'sslverify'   => FALSE,
 			);
 
 			$response = wp_remote_get( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
@@ -369,6 +371,16 @@ class Addons {
 
 	}
 
+	/**
+	 * Remove the add-ons list transient
+	 *
+	 * @since 1.9.9
+	 */
+	public static function delete_addons_list_transient() {
+
+		$transient_name = AtumCache::get_transient_key( 'addons_list' );
+		AtumCache::delete_transients( $transient_name );
+	}
 	/**
 	 * Retrieves addon folder
 	 *

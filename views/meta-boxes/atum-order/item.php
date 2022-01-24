@@ -26,10 +26,11 @@ if ( $product instanceof \WC_Product ) {
 }
 
 $step         = Helpers::get_input_step();
-$product_link = $product && $product_id ? admin_url( 'post.php?post=' . $item->get_product_id() . '&action=edit' ) : '';
-$thumbnail    = $product && $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
+$product_link = $product_id ? admin_url( "post.php?post={$product_id}&action=edit" ) : '';
+$thumbnail    = $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
 ?>
-<tr class="item <?php echo esc_attr( apply_filters( 'atum/atum_order/item_class', ! empty( $class ) ? $class : '', $item, $atum_order ) ) ?>" data-atum_order_item_id="<?php echo absint( $item_id ); ?>">
+<tr class="item <?php echo esc_attr( apply_filters( 'atum/atum_order/item_class', ! empty( $class ) ? $class : '', $item, $atum_order ) ) ?>"
+	data-atum_order_item_id="<?php echo esc_attr( $item_id ); ?>">
 
 	<td class="thumb">
 		<?php echo '<div class="atum-order-item-thumbnail">' . wp_kses_post( $thumbnail ) . '</div>'; ?>
@@ -39,11 +40,11 @@ $thumbnail    = $product && $product_id ? apply_filters( 'atum/atum_order/item_t
 		<?php
 		echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="atum-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 
-		if ( $product && $product_id && $product->get_sku() ) : ?>
+		if ( $product_id && $product->get_sku() ) : ?>
 			<div class="atum-order-item-sku"><strong><?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
 		<?php endif;
 
-		if ( $product && $product_id && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
+		if ( $product_id && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
 			$supplier_sku = $product->get_supplier_sku();
 
 			if ( $supplier_sku ) : ?>
@@ -72,7 +73,7 @@ $thumbnail    = $product && $product_id ? apply_filters( 'atum/atum_order/item_t
 		<?php do_action( 'atum/atum_order/after_item_meta', $item_id, $item, $product, $atum_order ) ?>
 
 		<div class="order-item-icons">
-			<?php if ( $product && $product_id && ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) ) : ?>
+			<?php if ( $product_id && ( ! $product->managing_stock() || 'parent' === $product->managing_stock() ) ) : ?>
 				<i class="atum-icon atum-icon atmi-question-circle color-primary tips" data-tip="<?php esc_attr_e( "This item's stock is not managed by WooCommerce at product level", ATUM_TEXT_DOMAIN ) ?>"></i>
 			<?php endif; ?>
 
@@ -90,12 +91,12 @@ $thumbnail    = $product && $product_id ? apply_filters( 'atum/atum_order/item_t
 	$locations      = $product_id ? wc_get_product_terms( $product_id, Globals::PRODUCT_LOCATION_TAXONOMY, array( 'fields' => 'names' ) ) : FALSE;
 	$locations_list = ! empty( $locations ) ? implode( ', ', $locations ) : '&ndash;';
 	?>
-	<td class="item_location"<?php if ( $product && $product_id ) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
+	<td class="item_location"<?php if ( $product_id ) echo ' data-sort-value="' . esc_attr( $locations_list ) . '"' ?>>
 		<?php echo esc_html( $locations_list ) ?>
 	</td>
 
 	<?php
-	$product_tax_rates = $product && $product_id && wc_prices_include_tax() ? ' data-product-tax-rates="' . htmlspecialchars( wp_json_encode( \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) ) ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
+	$product_tax_rates = $product_id && wc_prices_include_tax() ? ' data-product-tax-rates="' . htmlspecialchars( wp_json_encode( \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) ) ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
 	?>
 
 	<td class="item_cost" style="width: 1%" data-sort-value="<?php echo esc_attr( $atum_order->get_item_subtotal( $item, FALSE, TRUE ) ); ?>"<?php echo $product_tax_rates // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>

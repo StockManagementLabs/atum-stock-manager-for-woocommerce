@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      StockCentral
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -19,6 +19,7 @@ use Atum\Components\AtumHelpPointers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
+use Atum\StockCentral\Lists\ListTable;
 
 
 class StockCentral extends AtumListPage {
@@ -52,9 +53,6 @@ class StockCentral extends AtumListPage {
 
 		if ( is_admin() ) {
 
-			$user_option    = get_user_meta( get_current_user_id(), ATUM_PREFIX . 'stock_central_products_per_page', TRUE );
-			$this->per_page = $user_option ?: Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
-
 			// Initialize on admin page load.
 			add_action( 'load-' . Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
 			add_action( 'load-toplevel_page_' . self::UI_SLUG, array( $this, 'screen_options' ) );
@@ -66,7 +64,7 @@ class StockCentral extends AtumListPage {
 			// Register the help pointers.
 			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
 
-			parent::init_hooks();
+			$this->init_hooks();
 
 		}
 		
@@ -100,7 +98,8 @@ class StockCentral extends AtumListPage {
 	 * @since 0.0.1
 	 */
 	public function display() {
-		
+
+		$this->set_per_page();
 		parent::display();
 
 		$sc_url = add_query_arg( 'page', self::UI_SLUG, admin_url( 'admin.php' ) );
@@ -126,11 +125,13 @@ class StockCentral extends AtumListPage {
 	 */
 	public function screen_options() {
 
+		$this->set_per_page();
+
 		// Add "Products per page" to screen options tab.
 		add_screen_option( 'per_page', array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => ATUM_PREFIX . 'stock_central_products_per_page',
+			'option'  => static::UI_SLUG . '_entries_per_page',
 		) );
 		
 		$help_tabs = array(
@@ -229,6 +230,25 @@ class StockCentral extends AtumListPage {
 	 * @return array
 	 */
 	public function add_settings_defaults( $defaults ) {
+		
+		$sc_columns = array();
+
+		foreach ( ListTable::get_table_columns( TRUE ) as $column => $label ) {
+			$sc_columns[ $column ] = array(
+				'value' => 'yes', // All enabled by default.
+				'name'  => wp_strip_all_tags( $label ),
+			);
+		}
+		
+		$defaults['sc_columns'] = array(
+			'group'           => 'stock_central',
+			'section'         => 'stock_central',
+			'name'            => __( 'Available columns', ATUM_TEXT_DOMAIN ),
+			'desc'            => __( "If there is any column in Stock Central that you don't need, you can remove it from here. Please, note that if you hide the column from Screen Options it will just hide it but disabling it from here, will unload it completely.", ATUM_TEXT_DOMAIN ),
+			'type'            => 'multi_checkbox',
+			'default'         => 'yes',
+			'default_options' => $sc_columns,
+		);
 
 		$defaults['posts_per_page'] = array(
 			'group'   => 'stock_central',

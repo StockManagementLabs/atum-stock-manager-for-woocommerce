@@ -328,6 +328,7 @@ $input-btn-border-width:                $border-width !default;
 
 $input-bg:                              $white !default;
 $input-disabled-bg:                     $gray-200 !default;
+$input-disabled-border-color:           rgba(220, 220, 222, .75) !default;
 
 $input-padding-y:                       $input-btn-padding-y !default;
 $input-padding-x:                       $input-btn-padding-x !default;
@@ -567,6 +568,7 @@ $widget-danger:                         $danger !default;
 
 $atum-icon-font: "atum-icon-font" !default;
 
+$atmi-po-pro: "\e9d7";
 $atmi-featured: "\e9d4";
 $atmi-logs: "\e9d5";
 $atmi-read: "\e9d6";

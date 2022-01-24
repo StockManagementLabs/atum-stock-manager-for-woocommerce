@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      InventoryLogs
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -196,12 +196,11 @@ class InventoryLogs extends AtumOrderPostType {
 		 * @var string $return_date
 		 * @var string $damage_date
 		 */
-		$timestamp = Helpers::get_current_timestamp();
-		$log_date  = empty( $_POST['date'] ) ? $timestamp : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
-		$log_date  = date_i18n( 'Y-m-d H:i:s', $log_date );
+		$log_timestamp = empty( $_POST['date'] ) ? Helpers::get_current_timestamp() : strtotime( $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] . ':00' );
+		$log_date      = Helpers::date_format( $log_timestamp );
 
 		foreach ( [ 'reservation_date', 'return_date', 'damage_date' ] as $date_field ) {
-			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : date_i18n( 'Y-m-d H:i:s', strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
+			${$date_field} = empty( $_POST[ $date_field ] ) ? '' : Helpers::date_format( strtotime( $_POST[ $date_field ] . ' ' . (int) $_POST[ "{$date_field}_hour" ] . ':' . (int) $_POST[ "{$date_field}_minute" ] . ':00' ) );
 		}
 
 		$log->set_props( array(
@@ -232,6 +231,9 @@ class InventoryLogs extends AtumOrderPostType {
 
 		// Set the Log description as post content.
 		$log->set_description( $_POST['description'] );
+
+		// In case the user changed any order item and not used the "Save Items" button.
+		$log->save_posted_order_items();
 
 		$log->save();
 
@@ -597,7 +599,7 @@ class InventoryLogs extends AtumOrderPostType {
 		if ( strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = gmdate( 'Y-m-d', strtotime( $term ) );
+			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE );
 			$term = "%$date%";
 
 			$ids = $wpdb->get_col( $wpdb->prepare( "

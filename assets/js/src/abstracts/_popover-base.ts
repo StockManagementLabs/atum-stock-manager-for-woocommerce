@@ -16,6 +16,19 @@ export default abstract class PopoverBase {
 	abstract bindPopovers( $popoverButtons: JQuery );
 
 	/**
+	 * Add the popover to any button
+	 *
+	 * @param {JQuery} $button
+	 * @param {any}    config
+	 */
+	addPopover( $button: JQuery, config: any ): BsPopover {
+
+		$button.data( 'atum-popover', this );
+		return new BsPopover( $button.get( 0 ), config );
+
+	}
+
+	/**
 	 * Destroy the popovers
 	 *
 	 * @param {JQuery}   $popoverButton The button that holds the popover to destroy.
@@ -27,14 +40,9 @@ export default abstract class PopoverBase {
 
 			if ( $popoverButton.length > 1 ) {
 				// Recursive call.
-				$popoverButton.each( ( index: number, elem: HTMLElement ) => this.destroyPopover( $( elem ) ) );
+				$popoverButton.each( ( index: number, elem: Element ) => this.destroyPopover( $( elem ), callback ) );
 			}
 			else {
-
-				// Only hide the popovers added by this component.
-				if ( ! this.isValidPopover( $popoverButton ) ) {
-					return;
-				}
 
 				const popover: BsPopover = this.getInstance( $popoverButton );
 
@@ -64,7 +72,7 @@ export default abstract class PopoverBase {
 		}
 		else if ( $popoverButton.length > 1 ) {
 			// Recursive call.
-			$popoverButton.each( ( index: number, elem: HTMLElement ) => this.hidePopover( $( elem ) ) );
+			$popoverButton.each( ( index: number, elem: Element ) => this.hidePopover( $( elem ) ) );
 		}
 		else {
 
@@ -110,5 +118,6 @@ export default abstract class PopoverBase {
 		const $popover: JQuery = $( `#${ popoverId }` );
 
 		return $popover.length && $popover.hasClass( this.popoverClassName );
+
 	}
 }

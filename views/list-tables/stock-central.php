@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || die;
 							<?php esc_html_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>
 						</button>
 
-						<div class="search_column_dropdown dropdown-menu" id="search_column_dropdown"
+						<div class="search-column-dropdown dropdown-menu" id="search_column_dropdown"
 								data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
 								data-no-option="<?php esc_attr_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>"
 								data-no-option-title="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>">

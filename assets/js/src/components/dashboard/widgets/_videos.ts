@@ -82,9 +82,9 @@ export default class VideosWidget {
 				url       : window[ 'ajaxurl' ],
 				method    : 'POST',
 				data      : {
-					token : this.$widgetsContainer.data( 'nonce' ),
-					action: 'atum_videos_widget_sorting',
-					sortby: sortBy,
+					action  : 'atum_videos_widget_sorting',
+					security: this.$widgetsContainer.data( 'nonce' ),
+					sortby  : sortBy,
 				},
 				beforeSend: () => $videosWrapper.addClass( 'overlay' ),
 				success   : ( response: any ) => {

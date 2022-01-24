@@ -399,5 +399,12 @@ $bs-datetimepicker-text-shadow:                     0 -1px 0 rgba($black, 0.25) 
 			pointer-events: none; // Allow the datepicker to show when clicking the icon.
 			background-color: $white;
 		}
+		
+		&.disabled {
+			&:after {
+				color: rgba($input-color, .6);
+			}
+		}
+		
 	}
 }

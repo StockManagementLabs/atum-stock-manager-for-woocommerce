@@ -5,7 +5,7 @@
  * @package         Atum\Components
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -949,44 +949,44 @@ abstract class AtumOrderPostType {
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
 
 				$vars = array(
-					'add_note_nonce'           => wp_create_nonce( 'add-atum-order-note' ),
-					'are_you_sure'             => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
-					'atum_order_item_nonce'    => wp_create_nonce( 'atum-order-item' ),
-					'calc_totals'              => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
-					'calc_totals_nonce'        => wp_create_nonce( 'calc-totals' ),
-					'cancel'                   => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-					'confirm_purchase_price'   => __( 'Do you want to set the purchase price of this product to {{number}}?', ATUM_TEXT_DOMAIN ),
-					'continue'                 => __( 'Continue', ATUM_TEXT_DOMAIN ),
-					'delete_note_nonce'        => wp_create_nonce( 'delete-atum-order-note' ),
-					'delete_note'              => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
-					'decrease_stock_msg'       => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
-					'delete_tax_notice'        => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
-					'done'                     => __( 'Done!', ATUM_TEXT_DOMAIN ),
+					'addNoteNonce'              => wp_create_nonce( 'add-atum-order-note' ),
+					'areYouSure'                => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
+					'atumOrderItemNonce'        => wp_create_nonce( 'atum-order-item' ),
+					'calcTotals'                => __( 'Recalculate totals? This will calculate taxes based on the store base country and update totals.', ATUM_TEXT_DOMAIN ),
+					'calcTotalsNonce'           => wp_create_nonce( 'calc-totals' ),
+					'cancel'                    => __( 'Cancel', ATUM_TEXT_DOMAIN ),
+					'confirmPurchasePrice'      => __( 'Do you want to set the purchase price of {{name}} to {{number}}?', ATUM_TEXT_DOMAIN ),
+					'confirmPurchasePriceTitle' => __( 'Please, confirm the new purchase price', ATUM_TEXT_DOMAIN ),
+					'continue'                  => __( 'Continue', ATUM_TEXT_DOMAIN ),
+					'deleteNoteNonce'           => wp_create_nonce( 'delete-atum-order-note' ),
+					'deleteNote'                => __( 'Are you sure you wish to delete this note? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'decreaseStockMsg'          => __( 'This will decrease the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'deleteTaxNotice'           => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
+					'done'                      => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'        => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
-					'error'                    => __( 'Error!', ATUM_TEXT_DOMAIN ),
-					'import_order_items'       => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
-					'import_order_items_nonce' => wp_create_nonce( 'import-order-items' ),
-					'increase_stock_msg'       => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
-					'mon_decimal_point'        => wc_get_price_decimal_separator(),
-					'mon_decimals'             => wc_get_price_decimals(),
-					'no'                       => __( 'No', ATUM_TEXT_DOMAIN ),
-					'ok'                       => __( 'OK', ATUM_TEXT_DOMAIN ),
-					'placeholder_name'         => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
-					'placeholder_value'        => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
-					'post_id'                  => isset( $post->ID ) ? $post->ID : '',
-					'purchase_price_changed'   => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
-					'purchase_price_field'     => Globals::PURCHASE_PRICE_KEY,
-					'remove_all_items_notice'  => __( 'This will remove all the items previously added to this order', ATUM_TEXT_DOMAIN ),
-					'remove_item_meta'         => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
-					'remove_item_notice'       => __( 'Are you sure you want to remove this item?', ATUM_TEXT_DOMAIN ),
-					'rounding_precision'       => wc_get_rounding_precision(),
-					'stock_decreased'          => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN ),
-					'stock_increased'          => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN ),
-					'taxes_name'               => __( 'VAT', ATUM_TEXT_DOMAIN ),
-					'tax_based_on'             => esc_attr( get_option( 'woocommerce_tax_based_on' ) ),
-					'tax_rate_already_exists'  => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
-					'yes'                      => __( 'Yes', ATUM_TEXT_DOMAIN ),
+					'enableSelectItems'         => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
+					'error'                     => __( 'Error!', ATUM_TEXT_DOMAIN ),
+					'importOrderItemsIL'        => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
+					'importOrderItemsPO'        => __( 'Do you want to import all the items within the selected order into this Purchase Order?', ATUM_TEXT_DOMAIN ),
+					'importOrderItemsNonce'     => wp_create_nonce( 'import-order-items' ),
+					'increaseStockMsg'          => __( 'This will increase the stock of the selected products by their quantity amount.', ATUM_TEXT_DOMAIN ),
+					'metaPlaceholderName'       => esc_attr__( 'Name (required)', ATUM_TEXT_DOMAIN ),
+					'metaPlaceholderValue'      => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
+					'no'                        => __( 'No', ATUM_TEXT_DOMAIN ),
+					'ok'                        => __( 'OK', ATUM_TEXT_DOMAIN ),
+					'postId'                    => isset( $post->ID ) ? $post->ID : '',
+					'priceDecimalSep'           => wc_get_price_decimal_separator(),
+					'priceNumDecimals'          => wc_get_price_decimals(),
+					'purchasePriceChanged'      => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
+					'purchasePriceField'        => Globals::PURCHASE_PRICE_KEY,
+					'removeItemMeta'            => __( 'Remove this item meta?', ATUM_TEXT_DOMAIN ),
+					'removeItemNotice'          => __( 'Are you sure you want to remove this item?', ATUM_TEXT_DOMAIN ),
+					'roundingPrecision'         => wc_get_rounding_precision(),
+					'stockDecreased'            => __( 'The stock was decreased successfully', ATUM_TEXT_DOMAIN ),
+					'stockIncreased'            => __( 'The stock was increased successfully', ATUM_TEXT_DOMAIN ),
+					'taxesName'                 => __( 'VAT', ATUM_TEXT_DOMAIN ),
+					'taxRateAlreadyExists'      => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
+					'yes'                       => __( 'Yes', ATUM_TEXT_DOMAIN ),
 				);
 
 				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
@@ -1009,10 +1009,10 @@ abstract class AtumOrderPostType {
 				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', $js_dependencies, ATUM_VERSION, TRUE );
 
 				wp_localize_script( 'atum-orders-list', 'atumPostTypeListVars', array(
-					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
-					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
-					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
 					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
+					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
+					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
+					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
 				) );
 
 				wp_enqueue_style( 'atum-orders-list' );

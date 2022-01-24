@@ -55,32 +55,32 @@ export default class AddItemsPopup {
 	}
 	
 	addItem( itemIds: string|string[] ) {
-		
+
 		if ( itemIds ) {
-			
-			Blocker.block(this.$container);
-			
+
+			Blocker.block( this.$container );
+
 			const data: any = {
 				action       : 'atum_order_add_item',
 				item_to_add  : itemIds,
-				atum_order_id: this.settings.get('post_id'),
-				security     : this.settings.get('atum_order_item_nonce'),
-			}
-			
-			$.post( window['ajaxurl'], data, (response: any) => {
-				
+				atum_order_id: this.settings.get( 'postId' ),
+				security     : this.settings.get( 'atumOrderItemNonce' ),
+			};
+
+			$.post( window[ 'ajaxurl' ], data, ( response: any ) => {
+
 				if ( response.success ) {
-					$('#atum_order_line_items').append( response.data.html );
-					this.wpHooks.doAction( 'orderItems_addItem_added', itemIds, this.settings.get('post_id') );
+					$( '#atum_order_line_items' ).append( response.data.html );
+					this.wpHooks.doAction( 'atum_orderItems_addItem_added', itemIds, this.settings.get( 'postId' ) );
 				}
 				else {
-					this.atumOrders.showAlert('error', this.settings.get('error'), response.data.error);
+					this.atumOrders.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
 				}
-				
+
 				this.tooltip.addTooltips();
-				Blocker.unblock(this.$container);
-				
-			}, 'json');
+				Blocker.unblock( this.$container );
+
+			}, 'json' );
 		}
 		
 	}
@@ -98,20 +98,20 @@ export default class AddItemsPopup {
 		const rates: any[] = $('.atum-order-tax-id').map( (index: number, elem: Element) => {
 			return $(elem).val();
 		}).get();
-		
+
 		// Test if already exists
 		if ( -1 === $.inArray( rateId, rates ) ) {
-			
-			this.atumOrders.loadItemsTable({
+
+			this.atumOrders.loadItemsTable( {
 				action       : 'atum_order_add_tax',
 				rate_id      : rateId,
-				atum_order_id: this.settings.get('post_id'),
-				security     : this.settings.get('atum_order_item_nonce'),
-			}, 'json');
-			
+				atum_order_id: this.settings.get( 'postId' ),
+				security     : this.settings.get( 'atumOrderItemNonce' ),
+			}, 'json' );
+
 		}
 		else {
-			this.atumOrders.showAlert('error', this.settings.get('error'), this.settings.get('tax_rate_already_exists'));
+			this.atumOrders.showAlert( 'error', this.settings.get( 'error' ), this.settings.get( 'taxRateAlreadyExists' ) );
 		}
 		
 	}

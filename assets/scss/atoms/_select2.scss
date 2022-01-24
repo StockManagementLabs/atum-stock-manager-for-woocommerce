@@ -291,7 +291,7 @@ body {
 				}
 				
 				.select2-selection__placeholder {
-					color: var(--atum-text-color-var1);
+					color: var(--atum-text-color-var3);
 				}
 				
 				.select2-selection__arrow {
@@ -355,6 +355,7 @@ body {
 			&.select2-container--disabled {
 				.select2-selection--single {
 					background-color: $wp-gray-5;
+					border-color: $input-disabled-border-color;
 					cursor: default;
 					
 					.select2-selection__clear {
@@ -488,8 +489,11 @@ body {
 			
 			&.select2-container--disabled {
 				.select2-selection--multiple {
-					background-color: $wp-gray-5;
 					cursor: default;
+					
+					&, input {
+						background-color: $wp-gray-5;
+					}
 				}
 				
 				.select2-selection__choice__remove {

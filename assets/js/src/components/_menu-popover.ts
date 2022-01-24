@@ -2,9 +2,7 @@
    MENU POPOVER
    =================== */
 
-import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
-
-import { Menu, MenuItem } from '../interfaces/menu.interface';
+import { IMenu, IMenuItem } from '../interfaces/menu.interface';
 import PopoverBase from '../abstracts/_popover-base';
 import WPHooks from '../interfaces/wp.hooks';
 
@@ -16,7 +14,7 @@ export default class MenuPopover extends PopoverBase{
 	
 	constructor(
 		private $menuButton: JQuery,
-		private menu: Menu
+		private menu: IMenu
 	) {
 
 		super();
@@ -37,7 +35,7 @@ export default class MenuPopover extends PopoverBase{
 		const $menuHtml: JQuery = $( '<ul />' );
 
 		// Prepare the menu's HTML.
-		this.menu.items.forEach( ( item: MenuItem ) => {
+		this.menu.items.forEach( ( item: IMenuItem ) => {
 
 			const icon: string      = item.icon ? `<i class="atum-icon ${ item.icon }"></i> ` : '',
 			      $menuItem: JQuery = $( `<li><a data-name="${ item.name }" href="${ item.link || '#' }">${ icon }${ item.label }</a></li>` );
@@ -55,7 +53,7 @@ export default class MenuPopover extends PopoverBase{
 		} );
 
 		// Add the popover to the menu button.
-		new BsPopover( this.$menuButton.get(0), {
+		this.addPopover( this.$menuButton, {
 			title    : this.menu.title || '',
 			content  : $( '<div />' ).append( $menuHtml ).get( 0 ), // It supports one element only.
 			html     : true,

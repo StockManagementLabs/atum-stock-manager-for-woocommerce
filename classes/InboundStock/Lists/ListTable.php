@@ -5,7 +5,7 @@
  * @package         Atum\InboundStock
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.3.0
  */
@@ -198,11 +198,11 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_title( $item ) {
 
-		$product_id = $this->get_current_product_id();
+		$product_id = $this->get_current_list_item_id();
 
-		if ( 'variation' === $this->product->get_type() ) {
+		if ( 'variation' === $this->list_item->get_type() ) {
 
-			$parent_data = $this->product->get_parent_data();
+			$parent_data = $this->list_item->get_parent_data();
 			$title       = $parent_data['title'];
 
 			$attributes = wc_get_product_variation_attributes( $product_id );
@@ -211,11 +211,11 @@ class ListTable extends AtumListTable {
 			}
 
 			// Get the variable product ID to get the right link.
-			$product_id = $this->product->get_parent_id();
+			$product_id = $this->list_item->get_parent_id();
 
 		}
 		else {
-			$title = $this->product->get_title();
+			$title = $this->list_item->get_title();
 		}
 
 		$title_length = absint( apply_filters( 'atum/inbound_stock_list/column_title_length', 20 ) );
@@ -227,7 +227,7 @@ class ListTable extends AtumListTable {
 
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
 
-		return apply_filters( 'atum/inbound_stock_list/column_title', $title, $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_title', $title, $item, $this->list_item );
 	}
 
 	/**
@@ -255,7 +255,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column_calc_type( $item ) {
 
-		$type          = $this->product->get_type();
+		$type          = $this->list_item->get_type();
 		$product_types = wc_get_product_types();
 
 		switch ( $type ) {
@@ -275,7 +275,7 @@ class ListTable extends AtumListTable {
 
 		$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr( $product_tip ) . '"' : '';
 
-		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->list_item );
 
 	}
 
@@ -294,7 +294,7 @@ class ListTable extends AtumListTable {
 		$qty = AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' );
 		$this->increase_total( 'calc_inbound_stock', $qty );
 
-		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_inbound_stock', $qty, $item, $this->list_item );
 
 	}
 
@@ -312,10 +312,10 @@ class ListTable extends AtumListTable {
 		$date_ordered = get_post_meta( $item->po_id, '_date_created', TRUE );
 
 		if ( $date_ordered ) {
-			$date_ordered = Helpers::date_format( $date_ordered );
+			$date_ordered = Helpers::date_format( $date_ordered, FALSE );
 		}
 		
-		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->list_item );
 	}
 
 	/**
@@ -332,10 +332,10 @@ class ListTable extends AtumListTable {
 		$date_expected = get_post_meta( $item->po_id, '_date_expected', TRUE );
 
 		if ( $date_expected ) {
-			$date_expected = Helpers::date_format( $date_expected );
+			$date_expected = Helpers::date_format( $date_expected, FALSE );
 		}
 
-		return apply_filters( 'atum/inbound_stock_list/column_date_expected', $date_expected, $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_date_expected', $date_expected, $item, $this->list_item );
 	}
 
 	/**
@@ -350,7 +350,7 @@ class ListTable extends AtumListTable {
 	protected function column__purchase_order( $item ) {
 
 		$po_link = '<a href="' . get_edit_post_link( $item->po_id ) . '" target="_blank">' . $item->po_id . '</a>';
-		return apply_filters( 'atum/inbound_stock_list/column_purchase_order', $po_link, $item, $this->product );
+		return apply_filters( 'atum/inbound_stock_list/column_purchase_order', $po_link, $item, $this->list_item );
 
 	}
 
@@ -463,9 +463,9 @@ class ListTable extends AtumListTable {
 	 */
 	public function single_row( $item ) {
 
-		$this->product = Helpers::get_atum_product( $item );
+		$this->list_item = Helpers::get_atum_product( $item );
 
-		if ( ! $this->product instanceof \WC_Product ) {
+		if ( ! $this->list_item instanceof \WC_Product ) {
 			return;
 		}
 

@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 
 var MarketingPopup = (function () {
@@ -111,7 +111,7 @@ var MarketingPopup = (function () {
             method: 'post',
             data: {
                 action: 'atum_get_marketing_popup_info',
-                token: this.settings.get('nonce'),
+                security: this.settings.get('nonce'),
             },
             success: function (response) {
                 if (response.success === true) {
@@ -164,7 +164,7 @@ var MarketingPopup = (function () {
             method: 'post',
             data: {
                 action: 'atum_hide_marketing_popup',
-                token: this.settings.get('nonce'),
+                security: this.settings.get('nonce'),
                 transientKey: transientKey,
             },
         });
@@ -173,6 +173,7 @@ var MarketingPopup = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (MarketingPopup);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -224,16 +225,27 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_marketing_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_marketing-popup */ "./assets/js/src/components/_marketing-popup.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_marketing_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_marketing-popup */ "./assets/js/src/components/_marketing-popup.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumMarketingPopupVars');
     new _components_marketing_popup__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ }),
 

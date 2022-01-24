@@ -33,7 +33,7 @@ export default class TableButtons {
 	/**
 	 * Toggle table style feature from table style buttons
 	 *
-	 * @param String  feature
+	 * @param string  feature
 	 * @param Boolean enabled
 	 */
 	toggleTableStyle(feature: string, enabled: boolean) {
@@ -73,10 +73,10 @@ export default class TableButtons {
 			url   : window['ajaxurl'],
 			method: 'POST',
 			data  : {
-				token  : $('.table-style-buttons').data('nonce'),
-				action : 'atum_change_table_style_setting',
-				feature: feature,
-				enabled: enabled,
+				action  : 'atum_change_table_style_setting',
+				security: $('.table-style-buttons').data('nonce'),
+				feature : feature,
+				enabled : enabled,
 			},
 		})
 		

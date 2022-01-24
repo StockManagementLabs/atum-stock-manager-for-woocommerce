@@ -13,7 +13,6 @@
 import '../vendor/jquery.address.min';               // This is not downloading the sources
 import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
 import '../vendor/select2';                          // A fixed version compatible with webpack
-//import '../vendor/sweetalert2'                     // Is not working with our webpack configuration
 
 
 /**
@@ -35,7 +34,7 @@ import TableCellPopovers from './components/_table-cell-popovers';
 import Router from './components/list-table/_router';
 import SalesLastDays from './components/list-table/_sales-last-days';
 import ScrollBar from './components/list-table/_scroll-bar';
-import SearchByColumn from './components/list-table/_search-by-column';
+import SearchInColumn from './components/list-table/_search-in-column';
 import Settings from './config/_settings';
 import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
@@ -46,12 +45,10 @@ import Utils from './utils/_utils';
 
 
 // Modules that need to execute when the DOM is ready should go here.
-jQuery( ( $ ) => {
-	
-	window['$'] = $; // Avoid conflicts.
+jQuery( ( $: JQueryStatic ) => {
 	
 	// Get the settings from localized var.
-	let settings = new Settings( 'atumListVars', {
+	const settings = new Settings( 'atumListVars', {
 		ajaxFilter: 'yes',
 		view      : 'all_stock',
 		order     : 'desc',
@@ -60,27 +57,27 @@ jQuery( ( $ ) => {
 	} );
 	
 	// Set globals.
-	let globals = new Globals( settings );
+	const globals = new Globals( settings );
 	
 	// Initialize components with dependency injection.
-	let enhancedSelect = new EnhancedSelect();
-	let tooltip = new Tooltip();
-	let stickyCols = new StickyColumns( settings, globals );
-	let listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
-	let router = new Router( settings, globals, listTable );
-	let stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
-	let dateTimePicker = new DateTimePicker( settings );
-	let popover = new TableCellPopovers( settings, dateTimePicker );
+	const enhancedSelect = new EnhancedSelect();
+	const tooltip = new Tooltip();
+	const stickyCols = new StickyColumns( settings, globals );
+	const listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
+	const router = new Router( settings, globals, listTable );
+	const stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
+	const dateTimePicker = new DateTimePicker( settings );
+	const popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
 
 	if ( ! Utils.checkRTL( 'isRTL' ) ) {
 		new ScrollBar( globals );
 	}
 
 	new DragScroll( globals, tooltip, popover );
-	new SearchByColumn( settings, globals );
+	new SearchInColumn( settings, globals );
 	new ColumnGroups( globals, stickyHeader );
 	new Filters( settings, globals, listTable, router, tooltip, dateTimePicker );
-	new EditableCell( globals, popover, listTable );
+	new EditableCell( settings, globals, popover, listTable );
 	new LightBox();
 	new TableButtons( globals, tooltip, stickyCols, stickyHeader );
 	new SalesLastDays( globals, router, enhancedSelect );

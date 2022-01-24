@@ -51,11 +51,16 @@ export default class BulkActions {
 			// ----------------------
 			.on( 'change', '.bulkactions select', ( evt: JQueryEventObject ) => {
 
-				const $select: JQuery = $( evt.currentTarget );
+				const $select: JQuery  = $( evt.currentTarget ),
+				      selected: string = $select.val();
 
+				this.$bulkButton = $( '.apply-bulk-action' ); // If the table's DOM has been updated, we must reassign the bulk button.
+
+				// Sync the top and bottom selects.
+				this.globals.$atumList.find( '.bulkactions select' ).not( $select ).val( selected ).trigger( 'change.select2' );
 				this.updateBulkButton();
 
-				if ( $select.val() !== '-1' ) {
+				if ( selected !== '-1' ) {
 					this.$bulkButton.show();
 				}
 				else {
@@ -105,8 +110,8 @@ export default class BulkActions {
 	processBulk( bulkAction: string, selectedItems: string[], extraData: any = null ) {
 
 		const data: any = {
-			token      : this.settings.get( 'nonce' ),
 			action     : 'atum_apply_bulk_action',
+			security   : this.settings.get( 'nonce' ),
 			bulk_action: bulkAction,
 			ids        : selectedItems,
 		};
@@ -127,7 +132,7 @@ export default class BulkActions {
 			success : ( response: any ) => {
 
 				if ( typeof response === 'object' ) {
-					const noticeType = response.success ? 'updated' : 'error';
+					const noticeType: string = response.success ? 'updated' : 'error';
 					Utils.addNotice( noticeType, response.data );
 				}
 
@@ -139,6 +144,7 @@ export default class BulkActions {
 					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-success', [ bulkAction, selectedItems ] );
 				}
 				else {
+					this.listTable.removeOverlay();
 					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-error', [ bulkAction, selectedItems ] );
 				}
 

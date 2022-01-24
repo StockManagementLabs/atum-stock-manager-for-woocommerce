@@ -31,22 +31,26 @@ $currency = $atum_order->currency;
 				<optgroup label="<?php esc_attr_e( 'Shipping method', ATUM_TEXT_DOMAIN ); ?>">
 					<option value=""><?php esc_html_e( 'N/A', ATUM_TEXT_DOMAIN ); ?></option>
 					<?php
-					$found_method = false;
+					$found_method = FALSE;
 
-					foreach ( $shipping_methods as $method ) :
-						$current_method = ( 0 === strpos( $item->get_method_id(), $method->id ) ) ? $item->get_method_id() : $method->id;
+					if ( ! empty( $shipping_methods ) ) :
 
-						echo '<option value="' . esc_attr( $current_method ) . '" ' . selected( $item->get_method_id() === $current_method, true, false ) . '>' . esc_html( $method->get_method_title() ) . '</option>';
+						foreach ( $shipping_methods as $method ) :
+							$current_method = ( 0 === strpos( $item->get_method_id(), $method->id ) ) ? $item->get_method_id() : $method->id;
 
-						if ( $item->get_method_id() === $current_method ) :
-							$found_method = true;
+							echo '<option value="' . esc_attr( $current_method ) . '" ' . selected( $item->get_method_id() === $current_method, true, false ) . '>' . esc_html( $method->get_method_title() ) . '</option>';
+
+							if ( $item->get_method_id() === $current_method ) :
+								$found_method = true;
+							endif;
+						endforeach;
+
+						if ( ! $found_method && $item->get_method_id() ) :
+							echo '<option value="' . esc_attr( $item->get_method_id() ) . '" selected="selected">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
+						else :
+							echo '<option value="other">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
 						endif;
-					endforeach;
 
-					if ( ! $found_method && $item->get_method_id() ) :
-						echo '<option value="' . esc_attr( $item->get_method_id() ) . '" selected="selected">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
-					else :
-						echo '<option value="other">' . esc_html__( 'Other', ATUM_TEXT_DOMAIN ) . '</option>';
 					endif;
 					?>
 				</optgroup>

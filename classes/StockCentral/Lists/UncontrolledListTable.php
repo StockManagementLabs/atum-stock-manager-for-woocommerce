@@ -5,7 +5,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.4.1
  */
@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumListTables\AtumUncontrolledListTable;
-use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 
 

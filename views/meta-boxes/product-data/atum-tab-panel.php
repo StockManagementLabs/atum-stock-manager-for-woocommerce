@@ -50,7 +50,7 @@ use Atum\Inc\Helpers;
 
 		<p class="form-field product-tab-runner <?php echo esc_attr( implode( ' ', $control_button_classes ) ) ?>">
 			<label for="variations_supplier"><?php esc_html_e( "Variations' Supplier", ATUM_TEXT_DOMAIN ) ?></label>
-			<?php echo Helpers::suppliers_dropdown( '', TRUE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo Helpers::suppliers_dropdown( [ 'enhanced' => TRUE ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			&nbsp;
 			<button type="button" class="run-script button button-primary" data-action="atum_set_variations_supplier" data-confirm="<?php esc_attr_e( 'This will set the specified supplier for all the variations within this product', ATUM_TEXT_DOMAIN ) ?>">
 				<?php esc_html_e( 'Apply', ATUM_TEXT_DOMAIN ) ?>

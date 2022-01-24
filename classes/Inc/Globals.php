@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           0.1.4
  */
@@ -15,7 +15,6 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
-use Atum\Suppliers\Suppliers;
 
 final class Globals {
 	
@@ -530,6 +529,30 @@ final class Globals {
 			'dateFormat'      => 'YYYY-MM-DD',
 			'dateTimeFormat'  => 'YYYY-MM-DD HH:mm',
 			'calendarLocale'  => substr( get_user_locale(), 0, 2 ),
+		);
+
+		return array_merge( $defaults, $replace );
+
+	}
+
+	/**
+	 * Get the JS localization vars for the intro.js library (https://introjs.com/docs/intro/options)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $replace Optional. Only needed if want to modify any default value.
+	 *
+	 * @return array
+	 */
+	public static function get_intro_js_vars( $replace = array() ) {
+
+		$defaults = array(
+			'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
+			'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
+			'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
+			'tooltipClass'       => 'atum-help-guide-tooltip',
+			'disableInteraction' => TRUE,
+			'scrollToElement'    => TRUE,
 		);
 
 		return array_merge( $defaults, $replace );

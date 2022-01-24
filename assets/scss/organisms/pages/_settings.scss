@@ -238,10 +238,17 @@
 		display: inline-block;
 		margin-bottom: $grid-gutter-width/2;
 		
+		input[type=checkbox] {
+			&:focus {
+				border-color: var(--success);
+				box-shadow: 0 0 0 1px var(--success);
+			}
+		}
+		
 		&.setting-checked label {
 			color: var(--atum-checkbox-label);
 			
-			[type=checkbox] {
+			input[type=checkbox] {
 				background-color: var(--success);
 				border: 0;
 				
@@ -253,8 +260,10 @@
 					margin: 8px -2px 0;
 					font-weight: bold;
 				}
+				
 			}
 		}
+		
 	}
 	
 	.remove-datepicker-range {
@@ -609,6 +618,10 @@
 					font-size: 14px;
 					width: 350px;
 					
+					&.atum-datepicker {
+						width: 80px;
+					}
+					
 					@include tablet-max {
 						width: 80% !important;
 					}
@@ -697,6 +710,10 @@
 				font-style: normal;
 				font-stretch: normal;
 				line-height: 1.47;
+				
+				&.no-padding {
+					padding: 0;
+				}
 				
 				ul {
 					padding-left: $grid-gutter-width/2;
@@ -827,6 +844,7 @@
 					.repeatable-row {
 						display: flex;
 						align-items: center;
+						margin-bottom: $grid-gutter-width/2;
 						
 						> div {
 							margin-right: 10px;
@@ -835,20 +853,10 @@
 						i {
 							cursor: pointer;
 							transition: 0.2s ease-in-out;
-							
-							&:hover {
-								color: var(--primary);
-							}
-							
-							&.remove-row {
-								&:hover {
-									color: var(--danger);
-								}
-							}
 						}
 						
-						.tool-fields-from, .tool-fields-to, .tool-controls {
-							width: 100%;
+						.tool-fields-from, .tool-fields-to {
+							flex-grow: 1;
 							
 							.range-datepicker {
 								width: inherit;
@@ -857,7 +865,7 @@
 								&::after {
 									width: 24px;
 									display: inline-block;
-									background-color: red;
+									background-color: $danger;
 									content: $atmi-calendar-full;
 									@include atum-icon-font-family;
 									padding-right: 15px;
@@ -869,26 +877,43 @@
 								
 							}
 							
+							select {
+								width: 100% !important;
+								padding-top: 0;
+								padding-bottom: 0;
+							}
+							
 							.select2-container {
 								&.atum-select2, &.atum-enhanced-select {
-									width: inherit !important;
+									width: 100% !important;
 								}
 							}
 							
 							.select2-selection__choice {
-								line-height: 24px;
+								font-size: 12px;
 								
 								.select2-selection__choice__remove {
 									color: var(--white);
+									
+									&:after {
+										font-size: 12px;
+									}
 								}
 							}
 						}
 						
-						.add-row {
-							width: 62px;
+						.tool-controls {
+							display: flex;
+							gap: 5px;
+						}
+						
+						.add-row, .remove-row {
 							text-transform: uppercase;
-							height: 30px;
-							font-size: 12px;
+							font-size: 14px;
+							
+							i {
+								vertical-align: middle;
+							}
 						}
 						
 						.tool-fields-to {

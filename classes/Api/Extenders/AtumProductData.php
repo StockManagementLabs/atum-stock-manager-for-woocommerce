@@ -5,7 +5,7 @@
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @package     Atum\Api
  * @subpackage  Extenders
@@ -69,6 +69,7 @@ class AtumProductData {
 		'atum_stock_status'   => [ 'get', 'update' ],
 		'low_stock'           => [ 'get', 'update' ],
 		'low_stock_amount'    => [ 'get', 'update' ],
+		'sales_update_date'   => [ 'get', 'update' ],
 
 	);
 
@@ -343,6 +344,11 @@ class AtumProductData {
 				'description' => __( 'Indicates whether the stock will run out before reordered or not.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 			),
+			'sales_update_date'   => array(
+				'required'    => FALSE,
+				'description' => __( 'Last date when the sales fields on ATUM product data were calculated and saved for the product.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'date-time',
+			),
 		);
 
 		return apply_filters( 'atum/api/product_data/extended_schema', $extended_product_schema );
@@ -551,7 +557,7 @@ class AtumProductData {
 			$args['tax_query'][] = array(
 				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
 				'field'    => 'term_id',
-				'terms'    => $request['atum_location'],
+				'terms'    => array_map( 'absint', explode( ',', $request['atum_location'] ) ),
 			);
 
 		}

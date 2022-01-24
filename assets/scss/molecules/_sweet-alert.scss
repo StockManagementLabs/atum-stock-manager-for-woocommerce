@@ -83,6 +83,10 @@
 			font-size: 13px;
 			letter-spacing: 1px;
 			
+			&.swal2-confirm {
+				background-color: var(--primary);
+			}
+			
 			&.btn-sm {
 				padding: 0.25rem 0.5rem;
 				font-size: 12px;
@@ -111,6 +115,10 @@
 			}
 		}
 		
+		.swal2-loader {
+			border-color: var(--primary) transparent var(--primary) transparent;
+		}
+		
 	}
 	
 	.swal2-progress-steps {
@@ -120,13 +128,10 @@
 	}
 	
 	.atum-loading {
-		@include loader(18px, $primary, 3px, 1s);
+		@include loader($size: 38px, $color: $primary, $border-size: 3px);
 		top: $grid-gutter-width;
 		left: 0;
 		right: 0;
 		margin: auto;
-		width: 40px;
-		height: 40px;
-		border-width: 3px;
 	}
 }

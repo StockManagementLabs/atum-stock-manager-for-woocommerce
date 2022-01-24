@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -95,6 +95,10 @@ class Log extends AtumOrderModel {
 	 * @param string $action
 	 */
 	public function after_save( $action ) {
+
+		if ( 'update' === $action ) {
+			$this->load_post();
+		}
 
 		$items = $this->get_items();
 

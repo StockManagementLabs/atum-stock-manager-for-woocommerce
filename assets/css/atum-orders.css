@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.2 
+ * @version 1.9.9 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -710,7 +710,7 @@ body .select2-container--default.atum-select2 .select2-selection--single .select
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__placeholder, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__placeholder {
-  color: var(--atum-text-color-var1);
+  color: var(--atum-text-color-var3);
 }
 
 body .select2-container--default.atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default.atum-enhanced-select .select2-selection--single .select2-selection__arrow {
@@ -751,6 +751,7 @@ body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--sin
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--single, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--single {
   background-color: #E5E5E5;
+  border-color: rgba(220, 220, 222, 0.75);
   cursor: default;
 }
 
@@ -868,8 +869,11 @@ body .select2-container--default.atum-select2.select2-container--focus .select2-
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple {
-  background-color: #E5E5E5;
   cursor: default;
+}
+
+body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-select2.select2-container--disabled .select2-selection--multiple input, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection--multiple input {
+  background-color: #E5E5E5;
 }
 
 body .select2-container--default.atum-select2.select2-container--disabled .select2-selection__choice__remove, body .select2-container--default.atum-enhanced-select.select2-container--disabled .select2-selection__choice__remove {
@@ -1313,8 +1317,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?rx8gye");
-  src: url("../fonts/atum-icon-font.eot?rx8gye#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?rx8gye") format("truetype"), url("../fonts/atum-icon-font.woff?rx8gye") format("woff"), url("../fonts/atum-icon-font.svg?rx8gye#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?m6mhn6") format("truetype"), url("../fonts/atum-icon-font.woff?m6mhn6") format("woff"), url("../fonts/atum-icon-font.svg?m6mhn6#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -1329,6 +1333,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-po-pro:before {
+  content: "";
 }
 
 .atmi-featured:before {
@@ -3492,6 +3500,35 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   }
 }
 
+.atum-help-tip {
+  color: #adb5bd;
+  display: inline-block;
+  font-size: 1.1em;
+  font-style: normal;
+  height: 16px;
+  line-height: 16px;
+  position: relative;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.atum-help-tip:hover {
+  color: #6c757d;
+}
+
+.atum-help-tip::after {
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "";
+  cursor: help;
+}
+
+h2 .atum-help-tip {
+  margin-top: -5px;
+  margin-left: 0.25em;
+}
+
 .atum-list-wrapper .displaying-num, #posts-filter .displaying-num {
   color: var(--atum-text-color-var1);
 }
@@ -3764,6 +3801,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   letter-spacing: 1px;
 }
 
+.swal2-container .swal2-modal button.swal2-confirm {
+  background-color: var(--primary);
+}
+
 .swal2-container .swal2-modal button.btn-sm {
   padding: 0.25rem 0.5rem;
   font-size: 12px;
@@ -3792,13 +3833,17 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   color: var(--wp-link-hover);
 }
 
+.swal2-container .swal2-modal .swal2-loader {
+  border-color: var(--primary) transparent var(--primary) transparent;
+}
+
 .swal2-container .swal2-progress-steps .swal2-progress-step {
   margin-bottom: 0;
 }
 
 .swal2-container .atum-loading {
-  width: 18px;
-  height: 18px;
+  width: 38px;
+  height: 38px;
   border: 3px solid rgba(0, 184, 219, 0.25);
   border-top-color: #00B8DB;
   border-radius: 50%;
@@ -3810,9 +3855,6 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   left: 0;
   right: 0;
   margin: auto;
-  width: 40px;
-  height: 40px;
-  border-width: 3px;
 }
 
 @-webkit-keyframes loader-rotate {
@@ -4214,31 +4256,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   outline: none;
 }
 
-.atum-help-tip {
-  color: #adb5bd;
-  display: inline-block;
-  font-size: 1.1em;
-  font-style: normal;
-  height: 16px;
-  line-height: 16px;
-  position: relative;
-  vertical-align: middle;
-  width: 16px;
-}
-
-.atum-help-tip::after {
-  font-family: "atum-icon-font";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "";
-  cursor: help;
-}
-
-h2 .atum-help-tip {
-  margin-top: -5px;
-  margin-left: 0.25em;
-}
-
 #atum_order_data .hndle, #atum_order_data .handlediv, #atum_order_data .postbox-header {
   display: none;
 }
@@ -4605,6 +4622,7 @@ div.add_note #add_atum_order_note {
 #atum_order_items .atum_order_items_wrapper table.atum_order_items {
   width: 100%;
   background: #fff;
+  border-collapse: collapse;
 }
 
 #atum_order_items .atum_order_items_wrapper table.atum_order_items thead th {
@@ -5662,5 +5680,9 @@ div.add_note #add_atum_order_note {
   font-size: 13px;
   pointer-events: none;
   background-color: #fff;
+}
+
+.date-field.with-icon.disabled:after {
+  color: rgba(73, 80, 87, 0.6);
 }
 /*# sourceMappingURL=atum-orders.css.map */

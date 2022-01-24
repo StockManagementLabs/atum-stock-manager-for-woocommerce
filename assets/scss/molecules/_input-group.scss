@@ -5,7 +5,7 @@
 .input-group {
 	position: relative;
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-items: center;
 	width: 100%;
 	
@@ -243,6 +243,19 @@
 				background-color: $gray-600;
 				color: $white;
 			}
+		}
+	}
+	
+	input:disabled {
+		+ .input-group-append {
+			border-color: $input-disabled-border-color;
+			
+			&, &:hover {
+				.input-group-text {
+					color: rgba($input-color, .6);
+				}
+			}
+			
 		}
 	}
 	

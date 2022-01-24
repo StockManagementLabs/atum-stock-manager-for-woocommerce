@@ -1,12 +1,12 @@
 /* =======================================
-   SEARCH BY COLUMN FOR LIST TABLES
+   SEARCH IN COLUMN FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings';
 import Globals from './_globals';
+import Settings from '../../config/_settings';
 import Utils from '../../utils/_utils';
 
-export default class SearchByColumn {
+export default class SearchInColumn {
 
 	constructor(
 		private settings: Settings,
@@ -36,12 +36,22 @@ export default class SearchByColumn {
 		this.globals.$searchColumnDropdown.empty();
 
 		// Append the no column and the title items.
-		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', '' ).addClass( 'active' ).text( this.globals.$searchColumnDropdown.data( 'no-option' ) ) );
-		this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', 'title' ).text( this.globals.$searchColumnDropdown.data( 'product-title' ) ) );
+		const noOptionText: string = this.globals.$searchColumnDropdown.data( 'no-option' );
+
+		if ( noOptionText ) {
+			this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', '' ).addClass( 'active' ).text( noOptionText ) );
+		}
+
+		const titleText: string = this.globals.$searchColumnDropdown.data( 'product-title' );
+
+		if ( titleText ) {
+			this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', 'title' ).text( titleText ) );
+		}
 
 		// Reset the button value.
 		this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ '', this.globals.$searchColumnDropdown.data( 'no-option' ) ] );
 
+		// Only list columns that are visible (checked on Screen Options).
 		$( '#adv-settings input:checked' ).each( ( index: number, elem: Element ) => {
 
 			const $elem: JQuery       = $( elem ),
@@ -71,7 +81,7 @@ export default class SearchByColumn {
 		
 		this.globals.$searchColumnBtn
 
-			// Bind clicks on search by column button.
+			// Bind clicks on search in column button.
 			.click( ( evt: JQueryEventObject ) => {
 				evt.stopPropagation();
 				$( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();

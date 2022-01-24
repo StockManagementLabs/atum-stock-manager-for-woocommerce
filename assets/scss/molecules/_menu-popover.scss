@@ -31,6 +31,8 @@
 			text-align: left;
 			width: 100%;
 			padding: 0;
+			max-height: 296px;
+			overflow-y: auto;
 			
 			li {
 				white-space: nowrap;

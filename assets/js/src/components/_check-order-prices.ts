@@ -39,7 +39,7 @@ export default class CheckOrderPrices {
 				dataType  : 'json',
 				data      : {
 					action      : 'atum_check_order_prices',
-					token       : this.settings.get( 'nonce' ),
+					security    : this.settings.get( 'nonce' ),
 					query_string: location.search,
 				},
 				beforeSend: () => {

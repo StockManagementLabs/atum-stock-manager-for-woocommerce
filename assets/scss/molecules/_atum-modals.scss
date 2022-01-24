@@ -45,17 +45,24 @@
 		input[type=text], input[type=email], input[type=search] {
 			width: 100% !important;
 			height: 31px !important;
-			
+		}
+		
+		input[type=text], input[type=email], input[type=search], input[type=number] {
 			&::-moz-placeholder {
+				text-align: left;
 				font-style: italic;
 				font-size: 12px;
 				opacity: 1; // Override Firefox's unusual default opacity
 			}
+			
 			&:-ms-input-placeholder {
+				text-align: left;
 				font-size: 12px;
 				font-style: italic;
 			}
+			
 			&::-webkit-input-placeholder  {
+				text-align: left;
 				font-size: 12px;
 				font-style: italic;
 			}

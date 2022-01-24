@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.2 
+ * @version 1.9.9 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -1092,8 +1092,8 @@ input[type="button"].btn-block {
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?rx8gye");
-  src: url("../fonts/atum-icon-font.eot?rx8gye#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?rx8gye") format("truetype"), url("../fonts/atum-icon-font.woff?rx8gye") format("woff"), url("../fonts/atum-icon-font.svg?rx8gye#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6");
+  src: url("../fonts/atum-icon-font.eot?m6mhn6#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?m6mhn6") format("truetype"), url("../fonts/atum-icon-font.woff?m6mhn6") format("woff"), url("../fonts/atum-icon-font.svg?m6mhn6#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -1108,6 +1108,10 @@ input[type="button"].btn-block {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-po-pro:before {
+  content: "";
 }
 
 .atmi-featured:before {
@@ -2100,6 +2104,10 @@ input[type="button"].btn-block {
   letter-spacing: 1px;
 }
 
+.swal2-container .swal2-modal button.swal2-confirm {
+  background-color: var(--primary);
+}
+
 .swal2-container .swal2-modal button.btn-sm {
   padding: 0.25rem 0.5rem;
   font-size: 12px;
@@ -2128,13 +2136,17 @@ input[type="button"].btn-block {
   color: var(--wp-link-hover);
 }
 
+.swal2-container .swal2-modal .swal2-loader {
+  border-color: var(--primary) transparent var(--primary) transparent;
+}
+
 .swal2-container .swal2-progress-steps .swal2-progress-step {
   margin-bottom: 0;
 }
 
 .swal2-container .atum-loading {
-  width: 18px;
-  height: 18px;
+  width: 38px;
+  height: 38px;
   border: 3px solid rgba(0, 184, 219, 0.25);
   border-top-color: #00B8DB;
   border-radius: 50%;
@@ -2146,9 +2158,6 @@ input[type="button"].btn-block {
   left: 0;
   right: 0;
   margin: auto;
-  width: 40px;
-  height: 40px;
-  border-width: 3px;
 }
 
 @-webkit-keyframes loader-rotate {

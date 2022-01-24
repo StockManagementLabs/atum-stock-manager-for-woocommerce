@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.2 
+ * @version 1.9.9 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -75,8 +75,8 @@
   letter-spacing: 1px;
   -webkit-transform: rotate(90deg) translateY(-50%);
           transform: rotate(90deg) translateY(-50%);
-  -webkit-transform-origin: top;
-          transform-origin: top;
+  -webkit-transform-origin: 16px -1px;
+          transform-origin: 16px -1px;
 }
 
 .atum-dashboard .atum-widget .widget-header h2 {
@@ -86,6 +86,8 @@
 .statistics-widget .chart-legend .legend-switch:after {
   font-size: 22px !important;
   right: -5px !important;
+  -webkit-transform-origin: 14px 2px !important;
+          transform-origin: 14px 2px !important;
   cursor: ew-resize;
 }
 

@@ -34,7 +34,7 @@ export default class Globals {
 	}
 	
 	initProps() {
-		
+
 		// Initialize selectors.
 		this.$atumList = ( this.defaults && this.defaults.$atumList ) || $( '.atum-list-wrapper' );
 		this.$atumTable = ( this.defaults && this.defaults.$atumTable ) || this.$atumList.find( '.atum-list-table' );
@@ -47,34 +47,34 @@ export default class Globals {
 		this.$autoFilters.each( ( index: number, elem: Element ) => {
 			this.autoFiltersNames.push( $( elem ).attr( 'name' ) );
 		} );
-		
-		const inputPerPage: string = this.$atumList.parent().siblings('#screen-meta').find('.screen-per-page').val();
+
+		const inputPerPage: string = this.$atumList.parent().siblings( '#screen-meta' ).find( '.screen-per-page' ).val();
 		let perPage: number;
-		
+
 		// Initialize the filters' data
-		if (!Utils.isNumeric(inputPerPage)) {
-			perPage = this.settings.get('perPage') || 20;
+		if ( ! Utils.isNumeric( inputPerPage ) ) {
+			perPage = this.settings.get( 'perPage' ) || 20;
 		}
 		else {
-			perPage = parseInt(inputPerPage);
+			perPage = parseInt( inputPerPage );
 		}
-		
-		this.filterData = (this.defaults && this.defaults.filterData) || {
-			token          : this.settings.get('nonce'),
-			action         : this.$atumList.data('action'),
-			screen         : this.$atumList.data('screen'),
+
+		this.filterData = ( this.defaults && this.defaults.filterData ) || {
+			action         : this.$atumList.data( 'action' ),
+			security       : this.settings.get( 'nonce' ),
+			screen         : this.$atumList.data( 'screen' ),
 			per_page       : perPage,
 			paged          : 1,
-			show_cb        : this.settings.get('showCb'),
-			show_controlled: (Utils.filterQuery(location.search.substring(1), 'uncontrolled') !== '1' && $.address.parameter('uncontrolled') !== '1') ? 1 : 0,
-			order          : this.settings.get('order'),
-			orderby        : this.settings.get('orderby'),
+			show_cb        : this.settings.get( 'showCb' ),
+			show_controlled: ( Utils.filterQuery( location.search.substring( 1 ), 'uncontrolled' ) !== '1' && $.address.parameter( 'uncontrolled' ) !== '1' ) ? 1 : 0,
+			order          : this.settings.get( 'order' ),
+			orderby        : this.settings.get( 'orderby' ),
 			s              : '',
 			search_column  : '',
 			sold_last_days : '',
 			view           : '',
-			...this.getAutoFiltersValues( false, true )
-		}
+			...this.getAutoFiltersValues( false, true ),
+		};
 		
 	}
 	
@@ -87,27 +87,27 @@ export default class Globals {
 	 * @return {any}
 	 */
 	getAutoFiltersValues( getFromAddress: boolean = false, emptyValues: boolean = false ): any {
-		
+
 		let autoFiltersValues: any = {};
-	
+
 		this.$autoFilters.each( ( index: number, elem: Element ) => {
-			
+
 			const $elem: JQuery = $( elem ),
 			      name: string  = $elem.attr( 'name' );
-			
+
 			let value: string;
-			
+
 			if ( getFromAddress ) {
 				value = $.address.parameter( name ) || '';
 			}
 			else {
 				value = emptyValues ? '' : $elem.val() || '';
 			}
-			
+
 			autoFiltersValues[ name ] = value;
-			
+
 		} );
-		
+
 		return autoFiltersValues;
 	
 	}

@@ -50,7 +50,7 @@ export default class LocationsTree {
 
 		// Open the view popup.
 		Swal.fire( {
-			title             : this.wpHooks.applyFilters( 'atum_LocationsTree_showPopupTitle', this.settings.get( 'productLocations' ), $button ),
+			title             : this.wpHooks.applyFilters( 'atum_locationsTree_showPopupTitle', this.settings.get( 'productLocations' ), $button ),
 			html              : `<div class="atum-modal-content"><div class="note">${ this.getProductTitle( $row ) }</div><hr><div id="atum-locations-tree" class="atum-tree"></div></div>`,
 			showCancelButton  : false,
 			showConfirmButton : true,
@@ -92,7 +92,7 @@ export default class LocationsTree {
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : this.settings.get( 'nonce' ),
+				security  : this.settings.get( 'nonce' ),
 				product_id: this.productId,
 			},
 			beforeSend: () => $locationsTreeContainer.append( '<div class="atum-loading" />' ),
@@ -157,7 +157,7 @@ export default class LocationsTree {
 	openEditPopup( $button: JQuery ) {
 
 		Swal.fire( {
-			title              : this.wpHooks.applyFilters(  'atum_LocationsTree_editPopupTitle', this.settings.get( 'editProductLocations' ), $button ),
+			title              : this.wpHooks.applyFilters(  'atum_locationsTree_editPopupTitle', this.settings.get( 'editProductLocations' ), $button ),
 			html               : `<div class="atum-modal-content"><div class="note">${ this.getProductTitle( $button.closest( 'tr' ) ) }</div><hr><div id="atum-locations-tree" class="atum-tree"></div></div>`,
 			confirmButtonText  : this.settings.get( 'saveButton' ),
 			confirmButtonColor : 'var(--primary)',
@@ -208,7 +208,7 @@ export default class LocationsTree {
 			method    : 'post',
 			data      : {
 				action    : 'atum_get_locations_tree',
-				token     : this.settings.get( 'nonce' ),
+				security  : this.settings.get( 'nonce' ),
 				product_id: -1, // Send -1 to get all the terms.
 			},
 			beforeSend: () => $locationsTreeContainer.append( '<div class="atum-loading" />' ),
@@ -250,7 +250,7 @@ export default class LocationsTree {
 				method  : 'post',
 				data    : {
 					action    : 'atum_set_locations_tree',
-					token     : this.settings.get( 'nonce' ),
+					security  : this.settings.get( 'nonce' ),
 					product_id: this.productId,
 					terms     : toSetTerms,
 				},

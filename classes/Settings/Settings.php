@@ -5,7 +5,7 @@
  * @package     Atum
  * @subpackage  Settings
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @since       0.0.2
  */
@@ -23,69 +23,59 @@ use Atum\Inc\Helpers;
 
 
 class Settings {
-	
+
 	/**
 	 * The singleton instance holder
 	 *
 	 * @var Settings
 	 */
 	private static $instance;
-	
 	/**
 	 * Tabs (groups) and sections structure
 	 *
 	 * @var array
 	 */
 	private $tabs;
-	
 	/**
 	 * Default active tab
 	 *
 	 * @var string
 	 */
 	private $active_tab = 'general';
-	
 	/**
 	 * Store field structure and default values for the settings page
 	 *
 	 * @var array
 	 */
 	private $defaults;
-
 	/**
 	 * Store the fields that should be stored as user meta
 	 *
 	 * @var array
 	 */
 	private $user_meta_options = [];
-	
 	/**
 	 * Holds the values to be used in the fields callbacks
 	 *
 	 * @var array
 	 */
 	private $options;
-
 	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-settings';
-	
 	/**
 	 * The option key name for the plugin settings
 	 */
 	const OPTION_NAME = ATUM_PREFIX . 'settings';
-
 	/**
 	 * The menu order for this module
 	 */
 	const MENU_ORDER = 80;
-	
 	/**
 	 * The sale days used when no value provided
 	 */
 	const DEFAULT_SALE_DAYS = 14;
-	
 	/**
 	 * The default number of diaplayed posts per page
 	 */
@@ -105,6 +95,12 @@ class Settings {
 			// Add the module menu.
 			add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
+		}
+
+		// Add tools to AtumCli commands.
+		if ( class_exists( '\WP_CLI', FALSE ) ) {
+			$tools = Tools::get_instance();
+			\WP_CLI::do_hook( 'before_add_command:atum', $tools->add_settings_defaults( [] ), __NAMESPACE__ );
 		}
 
 	}
@@ -130,16 +126,16 @@ class Settings {
 		return $menus;
 
 	}
-	
+
 	/**
 	 * Display the settings page view
 	 *
 	 * @since 0.0.2
 	 */
 	public function display() {
-		
+
 		$this->options = $this->get_settings( Helpers::get_options(), $this->defaults );
-		
+
 		if ( isset( $_GET['tab'] ) ) {
 			$this->active_tab = $_GET['tab'];
 		}
@@ -149,7 +145,7 @@ class Settings {
 			'active' => $this->active_tab,
 		) );
 	}
-	
+
 	/**
 	 * Get the option settings and merge them with defaults. With parameters in case we need this function in Helpers
 	 *
@@ -161,13 +157,13 @@ class Settings {
 	 * @return  array       The options array mixed
 	 */
 	public function get_settings( $settings, $defaults ) {
-		
+
 		$options = array();
-		
+
 		if ( ! $settings || ! is_array( $settings ) ) {
 			$settings = array();
 		}
-		
+
 		foreach ( $defaults as $field => $default ) {
 
 			if ( array_key_exists( $field, $settings ) ) {
@@ -182,7 +178,7 @@ class Settings {
 		return apply_filters( 'atum/settings/get_settings', $options );
 
 	}
-	
+
 	/**
 	 * Enqueues scripts and styles needed for the Settings Page
 	 *
@@ -191,7 +187,7 @@ class Settings {
 	 * @param string $hook
 	 */
 	public function enqueue_scripts( $hook ) {
-		
+
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
 			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
@@ -222,26 +218,25 @@ class Settings {
 				'isAnyOostSet'       => Helpers::is_any_out_stock_threshold_set(),
 				'ok'                 => __( 'OK', ATUM_TEXT_DOMAIN ),
 				'selectAll'          => __( 'Select All', ATUM_TEXT_DOMAIN ),
-				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
-				'removeAll'          => __( 'Remove All!', ATUM_TEXT_DOMAIN ),
-				'removeRange'        => __( 'Remove Range!', ATUM_TEXT_DOMAIN ),
 				'oostDisableAction'  => 'atum_disable_out_stock_threshold',
 				'oostDisableNonce'   => wp_create_nonce( 'atum-out-stock-threshold-disable-nonce' ),
 				'oostDisableText'    => __( "We are going to leave your saved values in your database in case you decide to re-enable the ATUM's Out of Stock threshold per product again. From now on, your system will start using the WooCommerce's global Out of Stock threshold value (if set).", ATUM_TEXT_DOMAIN ),
 				'oostSetClearScript' => 'atum_tool_clear_out_stock_threshold',
 				'oostSetClearText'   => __( "We did save all your previous 'Out of stock' values the last time you used this option. Would you like to clear all the saved data and to start fresh? If you've added new products since then, these will just use the global WooCommerce value (if set).", ATUM_TEXT_DOMAIN ),
+				'removeAll'          => __( 'Remove All!', ATUM_TEXT_DOMAIN ),
+				'removeRange'        => __( 'Remove Range!', ATUM_TEXT_DOMAIN ),
 				'run'                => __( 'Run', ATUM_TEXT_DOMAIN ),
 				'runnerNonce'        => wp_create_nonce( 'atum-script-runner-nonce' ),
 				'selectColor'        => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'startFresh'         => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
 				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
 				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
+				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
 			) );
-			
+
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( self::UI_SLUG );
-
 
 			if ( is_rtl() ) {
 				wp_register_style( self::UI_SLUG . '-rtl', ATUM_URL . 'assets/css/atum-settings-rtl.css', array( self::UI_SLUG ), ATUM_VERSION );
@@ -255,6 +250,7 @@ class Settings {
 				wp_enqueue_script( 'es6-promise' );
 			}
 
+			wp_enqueue_editor();
 			wp_enqueue_media();
 			wp_enqueue_script( 'color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
@@ -262,7 +258,7 @@ class Settings {
 		}
 
 	}
-	
+
 	/**
 	 * Register the settings using WP's Settings API
 	 *
@@ -294,10 +290,17 @@ class Settings {
 					'shipping' => __( 'Shipping info', ATUM_TEXT_DOMAIN ),
 				),
 			),
+			'advanced'      => array(
+				'label'    => __( 'Advanced', ATUM_TEXT_DOMAIN ),
+				'icon'     => 'atmi-construction',
+				'sections' => array(
+					'advanced' => __( 'Advanced Options', ATUM_TEXT_DOMAIN ),
+				),
+			),
 		);
 
 		$this->defaults = array(
-			'enable_admin_bar_menu'     => array(
+			'enable_admin_bar_menu'          => array(
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Enable admin bar menu', ATUM_TEXT_DOMAIN ),
@@ -305,7 +308,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
-			'out_stock_threshold'       => array(
+			'out_stock_threshold'            => array(
 				'group'       => 'general',
 				'section'     => 'general',
 				'name'        => __( 'Out of stock threshold per product', ATUM_TEXT_DOMAIN ),
@@ -316,7 +319,7 @@ class Settings {
 				'default'     => 'no',
 				'confirm_msg' => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),
 			),
-			'stock_quantity_decimals'   => array(
+			'stock_quantity_decimals'        => array(
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Decimals in stock quantity', ATUM_TEXT_DOMAIN ),
@@ -328,7 +331,7 @@ class Settings {
 					'max' => 8,
 				),
 			),
-			'stock_quantity_step'       => array(
+			'stock_quantity_step'            => array(
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Stock quantity steps', ATUM_TEXT_DOMAIN ),
@@ -341,7 +344,7 @@ class Settings {
 					'step' => 0.01,
 				),
 			),
-			'chg_stock_order_complete'  => array(
+			'chg_stock_order_complete'       => array(
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( "Change stock on 'Completed' status", ATUM_TEXT_DOMAIN ),
@@ -349,7 +352,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
-			'orders_search_by_sku'      => array(
+			'orders_search_by_sku'           => array(
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Orders search by SKU', ATUM_TEXT_DOMAIN ),
@@ -357,15 +360,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
-			'delete_data'               => array(
-				'group'   => 'general',
-				'section' => 'general',
-				'name'    => __( 'Delete data when uninstalling', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
-				'type'    => 'switcher',
-				'default' => 'no',
-			),
-			'enable_ajax_filter'        => array(
+			'enable_ajax_filter'             => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Enable filter autosearch', ATUM_TEXT_DOMAIN ),
@@ -373,7 +368,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
-			'enhanced_suppliers_filter' => array(
+			'enhanced_suppliers_filter'      => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( "Enhanced suppliers' filter", ATUM_TEXT_DOMAIN ),
@@ -381,7 +376,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
-			'show_totals'               => array(
+			'show_totals'                    => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Show totals row', ATUM_TEXT_DOMAIN ),
@@ -389,7 +384,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
-			'gross_profit'              => array(
+			'gross_profit'                   => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Gross profit', ATUM_TEXT_DOMAIN ),
@@ -403,7 +398,7 @@ class Settings {
 					),
 				),
 			),
-			'profit_margin'             => array(
+			'profit_margin'                  => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Profit margin', ATUM_TEXT_DOMAIN ),
@@ -415,7 +410,7 @@ class Settings {
 					'step' => 1,
 				),
 			),
-			'show_variations_stock'     => array(
+			'show_variations_stock'          => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Display stock info for variations', ATUM_TEXT_DOMAIN ),
@@ -423,7 +418,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'yes',
 			),
-			'unmanaged_counters'        => array(
+			'unmanaged_counters'             => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Unmanaged product counters', ATUM_TEXT_DOMAIN ),
@@ -431,7 +426,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
-			'sales_last_ndays'          => array(
+			'sales_last_ndays'               => array(
 				'group'   => 'general',
 				'section' => 'list_tables',
 				'name'    => __( 'Show sales in the last selected days', ATUM_TEXT_DOMAIN ),
@@ -443,7 +438,7 @@ class Settings {
 					'max' => 31,
 				),
 			),
-			'company_name'              => array(
+			'company_name'                   => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Company name', ATUM_TEXT_DOMAIN ),
@@ -451,7 +446,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => '',
 			),
-			'tax_number'                => array(
+			'tax_number'                     => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Tax/VAT number', ATUM_TEXT_DOMAIN ),
@@ -459,7 +454,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => '',
 			),
-			'address_1'                 => array(
+			'address_1'                      => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
@@ -467,7 +462,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_adress,
 			),
-			'address_2'                 => array(
+			'address_2'                      => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
@@ -475,7 +470,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_address_2,
 			),
-			'city'                      => array(
+			'city'                           => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
@@ -483,7 +478,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_city,
 			),
-			'country'                   => array(
+			'country'                        => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
@@ -491,7 +486,7 @@ class Settings {
 				'type'    => 'wc_country',
 				'default' => $default_country,
 			),
-			'zip'                       => array(
+			'zip'                            => array(
 				'group'   => 'store_details',
 				'section' => 'company',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
@@ -499,7 +494,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_postcode,
 			),
-			'same_ship_address'         => array(
+			'same_ship_address'              => array(
 				'group'      => 'store_details',
 				'section'    => 'company',
 				'name'       => __( 'Use as shipping address', ATUM_TEXT_DOMAIN ),
@@ -511,7 +506,7 @@ class Settings {
 					'value'   => 'no',
 				),
 			),
-			'ship_to'                   => array(
+			'ship_to'                        => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Ship to name', ATUM_TEXT_DOMAIN ),
@@ -519,7 +514,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => '',
 			),
-			'ship_address_1'            => array(
+			'ship_address_1'                 => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Address line 1', ATUM_TEXT_DOMAIN ),
@@ -527,7 +522,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_adress,
 			),
-			'ship_address_2'            => array(
+			'ship_address_2'                 => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Address line 2', ATUM_TEXT_DOMAIN ),
@@ -535,7 +530,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_address_2,
 			),
-			'ship_city'                 => array(
+			'ship_city'                      => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'City', ATUM_TEXT_DOMAIN ),
@@ -543,7 +538,7 @@ class Settings {
 				'type'    => 'text',
 				'default' => $default_city,
 			),
-			'ship_country'              => array(
+			'ship_country'                   => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Country/State', ATUM_TEXT_DOMAIN ),
@@ -551,13 +546,89 @@ class Settings {
 				'type'    => 'wc_country',
 				'default' => $default_country,
 			),
-			'ship_zip'                  => array(
+			'ship_zip'                       => array(
 				'group'   => 'store_details',
 				'section' => 'shipping',
 				'name'    => __( 'Postcode/ZIP', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( 'The postal code of your Shipping address', ATUM_TEXT_DOMAIN ),
 				'type'    => 'text',
 				'default' => $default_postcode,
+			),
+			'calc_prop_cron'                 => array(
+				'group'      => 'advanced',
+				'section'    => 'advanced',
+				'name'       => __( 'Calculated properties CRON', ATUM_TEXT_DOMAIN ),
+				'desc'       => __( "When enabled, the products' calculated sales properties used on some ATUM List Tables columns (like Sales Last Days, Sold Today, etc) will be calculated in a scheduled way instead of calculating them after every order gets processed. Make sure your CRON jobs system is working before enabling this option or your calculated properties will show wrong values in ATUM List Tables.", ATUM_TEXT_DOMAIN ),
+				'type'       => 'switcher',
+				'default'    => 'no',
+				'dependency' => array(
+					array(
+						'field'    => 'calc_prop_cron_interval',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+					array(
+						'field'    => 'calc_prop_cron_type',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+					array(
+						'field'    => 'calc_prop_cron_start',
+						'value'    => 'yes',
+						'animated' => FALSE,
+					),
+				),
+			),
+			'calc_prop_cron_interval'        => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'CRON interval', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Specify the interval between cron executions. A maximum of 24 hours/60 minutes is allowed.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'number',
+				'default' => 1,
+				'options' => array(
+					'min'  => 1,
+					'max'  => 60,
+					'step' => 0.1,
+				),
+			),
+			'calc_prop_cron_type'            => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'CRON interval type', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose the interval type between minutes and hours.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'button_group',
+				'default' => 'hours',
+				'options' => array(
+					'values' => array(
+						'hours'   => __( 'Hours', ATUM_TEXT_DOMAIN ),
+						'minutes' => __( 'Minutes', ATUM_TEXT_DOMAIN ),
+					),
+				),
+			),
+			'calc_prop_cron_start'           => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'CRON start time', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose the time when the CRON will be executed for the first time.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'time_picker',
+				'default' => '0:00',
+			),
+			'delete_data'                    => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( 'Delete data when uninstalling', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Enable before uninstalling to remove all the data stored by ATUM in your database. Not recommended if you plan to reinstall ATUM in the future.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'no',
+			),
+			'use_order_product_lookup_table' => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( "Use WooCommerce's order product lookup table", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "We use the WooCommerce's order product lookup table in some queries to improve the performance. If you see any issues of calculated sales props not showing right values, perhaps your lookup tables aren't being updated correctly and you can disable this feature. But, please note that it could affect the ATUM List Tables' loading time.", ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => 'yes',
 			),
 		);
 
@@ -593,7 +664,7 @@ class Settings {
 			}
 
 		}
-		
+
 		// Add the fields.
 		$this->defaults = (array) apply_filters( 'atum/settings/defaults', $this->defaults );
 		foreach ( $this->defaults as $field => $options ) {
@@ -624,7 +695,7 @@ class Settings {
 		}
 
 	}
-	
+
 	/**
 	 * Sanitize each setting field as needed
 	 *
@@ -635,16 +706,17 @@ class Settings {
 	 * @return array
 	 */
 	public function sanitize( $input ) {
-		
+
 		$this->options = Helpers::get_options();
 
 		// If it's the first time the user saves the settings, perhaps he doesn't have any, so save the defaults.
 		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
 
 			// Remove the settings without defaults.
-			$defaults = array_filter( $this->options, function( $option ) {
+			$defaults = array_filter( $this->options, function ( $option ) {
+
 				return isset( $option['default'] );
-			});
+			} );
 
 			$this->options = wp_list_pluck( $defaults, 'default' );
 
@@ -678,7 +750,7 @@ class Settings {
 
 				Helpers::set_atum_user_meta( $input['settings_section'], $user_options );
 			}
-			
+
 			// Only accept settings defined.
 			foreach ( $this->defaults as $key => $atts ) {
 
@@ -702,11 +774,24 @@ class Settings {
 
 				}
 			}
-			
+
+			if ( ! empty( $this->options['calc_prop_cron'] ) && 'yes' === $this->options['calc_prop_cron'] ) {
+
+				if ( 'hours' === $this->options['calc_prop_cron_type'] ) {
+
+					if ( 24 < $this->options['calc_prop_cron_interval'] ) {
+						$this->options['calc_prop_cron_interval'] = 24;
+					}
+				}
+				elseif ( 60 < $this->options['calc_prop_cron_interval'] ) {
+					$this->options['calc_prop_cron_interval'] = 60;
+				}
+			}
+
 		}
-		
+
 		return apply_filters( 'atum/settings/sanitize', $this->options );
-		
+
 	}
 
 	/**
@@ -865,10 +950,10 @@ class Settings {
 					array_merge(
 						array(
 							'iframe' => array(
-								'src'   => true,
-								'style' => true,
-								'id'    => true,
-								'class' => true,
+								'src'   => TRUE,
+								'style' => TRUE,
+								'id'    => TRUE,
+								'class' => TRUE,
 							),
 						),
 						wp_kses_allowed_html( 'post' )
@@ -892,6 +977,10 @@ class Settings {
 				$sanitized_option = ( isset( $input[ $key ] ) && in_array( $input[ $key ], wp_list_pluck( $atts['options']['values'], 'key' ) ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
+			case 'editor':
+				$sanitized_option = isset( $input[ $key ] ) ? wp_kses_post( $input[ $key ] ) : $atts['default'];
+				break;
+
 			case 'text':
 			default:
 				$sanitized_option = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $atts['default'];
@@ -907,13 +996,13 @@ class Settings {
 		return $sanitized_option;
 
 	}
-	
+
 	/**
 	 * Get the settings option array and print a text field
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_text( $args ) {
 
@@ -928,18 +1017,17 @@ class Settings {
 			$this->find_option_value( $args['id'] ),
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
-		
-		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
-	}
 
+		echo apply_filters( 'atum/settings/display_text', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
 
 	/**
 	 * Get the settings option array and print a textarea
 	 *
 	 * @since 1.4.11
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_textarea( $args ) {
 
@@ -962,11 +1050,38 @@ class Settings {
 	}
 
 	/**
+	 * Get the settings option array and print a TinyMCE editor
+	 *
+	 * @since 1.9.5
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_editor( $args ) {
+
+		// TODO: ALLOW SPECIFYING THE EDITOR OPTIONS FROM THE SETTING CONFIG.
+		$editor_settings = array(
+			'media_buttons' => FALSE,
+			'editor_height' => 225,
+			'textarea_name' => self::OPTION_NAME . "[{$args['id']}]",
+			'tinymce'       => array( 'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,forecolor,undo,redo' ),
+		);
+
+		ob_start();
+
+		echo '<div class="atum-settings-editor" data-tiny-mce=\'' . wp_json_encode( $editor_settings['tinymce'] ) . '\'' . $this->get_dependency( $args ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		wp_editor( $this->find_option_value( $args['id'] ), ATUM_PREFIX . $args['id'], $editor_settings );
+		echo $this->get_description( $args ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		echo apply_filters( 'atum/settings/display_editor', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+	}
+
+	/**
 	 * Get the settings option array and print a number field
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_number( $args ) {
 
@@ -998,10 +1113,10 @@ class Settings {
 	 * @param array $args Field arguments.
 	 */
 	public function display_wc_country( $args ) {
-	
+
 		$country_setting = (string) $this->options[ $args['id'] ];
 		$default         = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
-		
+
 		if ( strstr( $country_setting, ':' ) ) {
 			$country_setting = explode( ':', $country_setting );
 			$country         = current( $country_setting );
@@ -1013,9 +1128,11 @@ class Settings {
 		}
 
 		ob_start();
-
 		?>
-		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>" name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>" style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>>
+		<select id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+			name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>"
+			style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>
+		>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -1023,9 +1140,9 @@ class Settings {
 		$output = ob_get_clean() . wp_kses_post( $this->get_description( $args ) );
 
 		echo apply_filters( 'atum/settings/display_wc_country', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
+
 	}
-	
+
 	/**
 	 * Get the settings option array and prints a switcher
 	 *
@@ -1044,7 +1161,7 @@ class Settings {
 			checked( 'yes', $this->find_option_value( $args['id'] ), FALSE ),
 			$this->get_dependency( $args ) . $default
 		) . $this->get_description( $args );
-		
+
 		echo apply_filters( 'atum/settings/display_switcher', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -1062,30 +1179,36 @@ class Settings {
 		$stored_values = $this->find_option_value( $args['id'] );
 
 		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
-		$enabled         = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 
-		$output = sprintf(
-			'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
-			ATUM_PREFIX . $args['id'],
-			self::OPTION_NAME . "[{$args['id']}][value]",
-			$enabled,
-			$this->get_dependency( $args ) . $data_default
-		) . $this->get_description( $args );
+		if ( isset( $args['main_switcher'] ) && $args['main_switcher'] ) {
+
+			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
+			$output  = sprintf(
+				'<span class="form-switch"><input type="checkbox" id="%1$s" name="%2$s" value="yes" %3$s class="form-check-input atum-settings-input atum-multi-checkbox-main" %4$s></span>',
+				ATUM_PREFIX . $args['id'],
+				self::OPTION_NAME . "[{$args['id']}][value]",
+				$enabled,
+				$this->get_dependency( $args ) . $data_default
+			) . $this->get_description( $args );
+
+		}
+		else {
+			$enabled = TRUE;
+			$output  = $this->get_description( $args, 'no-padding' );
+		}
 
 		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
-		$check_defs = $args['default_options'];
+		$check_defs = isset( $args['default_options'] ) ? $args['default_options'] : [];
 
 		if ( ! empty( $check_defs ) ) {
+
 			$output .= '<div class="atum-settings-multi-checkbox" style="display: ' . ( $enabled ? 'block' : 'none' ) . '">';
 
-			// Check-all checkbox.
-			// $output .= '<div class="atum-multi-checkbox-all"><label><input type="checkbox" class="atum-settings-input-all"> '
-			// . '<span>' . esc_attr( __( 'Select All', ATUM_TEXT_DOMAIN ) ) . '</span></label></div>';!
-
 			foreach ( $check_defs as $id => $checkbox ) {
+
 				$default_attr    = isset( $checkbox['value'] ) ? " data-default='" . $checkbox['value'] . "'" : '';
-				$default_checked = 'yes' === $checkbox['value'] ? 'checked' : '';
-				$checked         = ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : $default_checked;
+				$default_checked = ( isset( $checkbox['value'] ) && 'yes' === $checkbox['value'] ) ? 'checked' : '';
+				$checked         = ( ! empty( $checkboxes ) && isset( $checkboxes[ $id ] ) ) ? checked( 'yes', $checkboxes[ $id ], FALSE ) : $default_checked;
 
 				$output .= '<div class="atum-multi-checkbox-option' . ( $checked ? ' setting-checked' : '' ) . '"><label>';
 				$output .= sprintf(
@@ -1095,12 +1218,17 @@ class Settings {
 					$checked,
 					$default_attr
 				);
-				$output .= ' ' . esc_attr( $checkbox['name'] ) . '</label>';
-				$output .= ' <span class="atum-help-tip tips" data-bs-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				$output .= ' ' . esc_html( $checkbox['name'] ) . '</label>';
+
+				if ( ! empty( $checkbox['desc'] ) ) {
+					$output .= ' <span class="atum-help-tip tips" data-bs-placement="top" data-tip="' . esc_attr( $checkbox['desc'] ) . '"></span>';
+				}
+
 				$output .= '</div>';
 			}
 
 			$output .= '</div>';
+
 		}
 
 		echo apply_filters( 'atum/settings/display_multi_checkbox', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1117,6 +1245,7 @@ class Settings {
 	 */
 	public function display_button_group( $args ) {
 
+		$id             = ATUM_PREFIX . $args['id'];
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
 		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array.
 		$value          = $multiple ? maybe_unserialize( $this->find_option_value( $args['id'] ) ) : $this->find_option_value( $args['id'] );
@@ -1133,33 +1262,30 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" id="<?php echo ATUM_PREFIX . $args['id']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+		<div class="btn-group btn-group-<?php echo esc_attr( $size ) ?> btn-group-toggle" id="<?php echo esc_attr( $id ) ?>">
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
 
 				<?php
-				if ( $multiple && is_array( $value ) ) {
+				if ( $multiple && is_array( $value ) ) :
 					$is_active = in_array( $option_value, array_keys( $value ) ) && 'yes' === $value[ $option_value ];
-				}
-				else {
+				else :
 					$is_active = $value === $option_value;
-				}
-				
+				endif;
+
 				$disabled_str = $checked_str = '';
 
 				// Force checked disabled and active on required value.
 				// TODO required_value to required_values array.
-				if ( $option_value === $required_value ) {
+				if ( $option_value === $required_value ) :
 					$checked_str  = checked( TRUE, TRUE, FALSE );
 					$disabled_str = ' disabled="disabled"';
 					$is_active    = TRUE;
-				}
-				else {
+				else :
 					$checked_str = checked( $is_active, TRUE, FALSE );
-				}
-
+				endif;
 				?>
-				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active ) echo ' active' ?>">
-					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ($multiple) echo '[]' ?>"
+				<label class="btn btn-<?php echo esc_attr( $style ) ?><?php if ( $is_active )echo ' active' ?>">
+					<input class="multi-<?php echo esc_attr( $input_type ) ?>" type="<?php echo esc_attr( $input_type ) ?>" name="<?php echo esc_attr( $name ) ?><?php if ( $multiple )echo '[]' ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str . $disabled_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
 						<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>> <?php echo esc_attr( $option_label ) ?>
 				</label>
@@ -1183,6 +1309,7 @@ class Settings {
 	 */
 	public function display_select( $args ) {
 
+		$id      = ATUM_PREFIX . $args['id'];
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
@@ -1190,17 +1317,16 @@ class Settings {
 
 		ob_start();
 		?>
-		<select name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
+		<select name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( $id ) ?>"
 			<?php echo wp_kses_post( $this->get_dependency( $args ) . $default . $style ) ?>>
 
 			<?php foreach ( $args['options']['values'] as $option_value => $option_label ) : ?>
-			<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
+				<option value="<?php echo esc_attr( $option_value ) ?>"<?php selected( $option_value, $value ) ?>><?php echo esc_attr( $option_label ) ?></option>
 			<?php endforeach; ?>
 		</select>
 		<?php
 
 		echo wp_kses_post( $this->get_description( $args ) );
-
 		echo apply_filters( 'atum/settings/display_select', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
@@ -1210,7 +1336,7 @@ class Settings {
 	 *
 	 * @since 1.4.5
 	 *
-	 * @param array $args  Field arguments.
+	 * @param array $args Field arguments.
 	 */
 	public function display_script_runner( $args ) {
 
@@ -1248,7 +1374,8 @@ class Settings {
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-<?php echo esc_attr( isset( $args['options']['button_style'] ) ? $args['options']['button_style'] : 'primary' ) ?> tool-runner"
-				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] ) echo ' disabled="disabled"' ?>>
+				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] )
+					echo ' disabled="disabled"' ?>>
 				<?php echo esc_attr( $args['options']['button_text'] ) ?>
 			</button>
 
@@ -1262,8 +1389,6 @@ class Settings {
 
 	}
 
-
-
 	/**
 	 * Get the settings option array and prints color picker
 	 *
@@ -1273,6 +1398,7 @@ class Settings {
 	 */
 	public function display_color( $args ) {
 
+		$id      = ATUM_PREFIX . $args['id'];
 		$name    = self::OPTION_NAME . "[{$args['id']}]";
 		$value   = $this->find_option_value( $args['id'] );
 		$style   = isset( $args['options']['style'] ) ? ' style="' . esc_attr( $args['options']['style'] ) . '"' : '';
@@ -1281,17 +1407,17 @@ class Settings {
 
 		ob_start();
 		?>
-		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>" data-alpha="true" name="<?php echo esc_attr( $name ) ?>"  id="<?php echo esc_attr( ATUM_PREFIX . $args['id'] ) ?>"
-			type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-
+		<input class="atum-settings-input atum-color" data-display="<?php echo esc_attr( $display ) ?>"
+			data-alpha="true" name="<?php echo esc_attr( $name ) ?>" id="<?php echo esc_attr( $id ) ?>"
+			type="text" value="<?php echo esc_attr( $value ) ?>" <?php echo $default . $style // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		>
 		<?php
 
 		echo wp_kses_post( $this->get_description( $args ) );
-
 		echo apply_filters( 'atum/settings/display_color', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
-	
+
 	/**
 	 * Get the settings HTML field
 	 *
@@ -1300,20 +1426,20 @@ class Settings {
 	 * @param array $args Field arguments.
 	 */
 	public function display_html( $args ) {
-		
-		$id    = ATUM_PREFIX . "[{$args['id']}]";
+
+		$id    = ATUM_PREFIX . $args['id'];
 		$value = $this->options[ $args['id'] ];
 		$style = isset( $args['options']['style'] ) ? ' style="' . $args['options']['style'] . '"' : '';
-		
+
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr( $id ) ?>" class="atum-settings-html"<?php echo esc_attr( $style ) ?>>
 			<?php echo $value // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 		<?php
-		
+
 		echo apply_filters( 'atum/settings/display_html', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		
+
 	}
 
 	/**
@@ -1325,12 +1451,13 @@ class Settings {
 	 */
 	public function display_theme_selector( $args ) {
 
+		$id    = ATUM_PREFIX . $args['id'];
 		$name  = self::OPTION_NAME . "[{$args['id']}]";
 		$theme = AtumColors::get_user_theme();
 
 		ob_start();
 		?>
-		<div class="theme-selector-wrapper">
+		<div class="theme-selector-wrapper" id="<?php echo esc_attr( $id ) ?>">
 
 			<?php foreach ( $args['options']['values'] as $option ) : ?>
 
@@ -1369,6 +1496,7 @@ class Settings {
 	 */
 	public function display_image_uploader( $args ) {
 
+		$id            = ATUM_PREFIX . $args['id'];
 		$name          = self::OPTION_NAME . "[{$args['id']}]";
 		$attachment_id = absint( $this->find_option_value( $args['id'] ) );
 		$data          = '';
@@ -1383,7 +1511,7 @@ class Settings {
 
 		ob_start();
 		?>
-		<div class="atum-file-uploader__wrapper">
+		<div class="atum-file-uploader__wrapper" id="<?php echo esc_attr( $id ) ?>">
 			<button type="button" class="atum-file-uploader btn btn-primary"<?php echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php esc_html_e( 'Upload', ATUM_TEXT_DOMAIN ); ?>
 			</button>
@@ -1433,7 +1561,7 @@ class Settings {
 				$is_active   = $value === $option_value;
 				$checked_str = checked( $is_active, TRUE, FALSE );
 				?>
-				<label class="atum-image-radio<?php if ( $is_active ) echo ' active' ?>">
+				<label class="atum-image-radio<?php if ( $is_active )echo ' active' ?>">
 					<img src="<?php echo esc_url( $option_data['img_url'] ) ?>" alt="">
 					<input type="radio" name="<?php echo esc_attr( $name ) ?>"
 						autocomplete="off"<?php echo wp_kses_post( $checked_str ) ?> value="<?php echo esc_attr( $option_value ) ?>"
@@ -1460,18 +1588,19 @@ class Settings {
 	 *
 	 * @since 0.0.2
 	 *
-	 * @param array $args
+	 * @param array  $args
+	 * @param string $extra_class
 	 *
 	 * @return string
 	 */
-	public function get_description( $args ) {
-		
+	public function get_description( $args, $extra_class = '' ) {
+
 		$label = '';
-		
+
 		if ( array_key_exists( 'desc', $args ) ) {
-			$label = '<div class="atum-setting-info">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
+			$label = '<div class="atum-setting-info ' . $extra_class . '">' . apply_filters( 'atum/settings/print_label', $args['desc'], $args ) . '</div>';
 		}
-		
+
 		return $label;
 	}
 
@@ -1494,6 +1623,36 @@ class Settings {
 
 	}
 
+
+	/**
+	 * Get the settings option array and prints a time picker.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_time_picker( $args ) {
+
+		$id    = ATUM_PREFIX . $args['id'];
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->find_option_value( $args['id'] );
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = $args['default'];
+			$default = " data-default='" . $default . "'";
+		}
+
+		ob_start();
+		?>
+		<div class="date-wrapper" style="position: relative">
+			<input type="text" id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="atum-datepicker" placeholder="<?php esc_attr_e( 'Select time', ATUM_TEXT_DOMAIN ) ?>"
+				value="<?php echo esc_attr( $this->find_option_value( $args['id'] ) ); ?>" data-format="HH:mm" data-min-date="false">
+		</div>
+		<?php
+		echo apply_filters( 'atum/settings/display_time_picker', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
 	/**
 	 * Getter for the tabs (groups) prop
 	 *
@@ -1502,6 +1661,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_groups() {
+
 		return $this->tabs;
 	}
 
@@ -1513,6 +1673,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_default_settings() {
+
 		return $this->defaults;
 	}
 
@@ -1524,6 +1685,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_user_meta_options() {
+
 		return $this->user_meta_options;
 	}
 
@@ -1535,6 +1697,7 @@ class Settings {
 	 * @param array $user_meta_options
 	 */
 	public function set_user_meta_options( $user_meta_options ) {
+
 		$this->user_meta_options = $user_meta_options;
 	}
 
@@ -1556,6 +1719,7 @@ class Settings {
 
 				if ( in_array( $option_key, $user_meta_options, TRUE ) ) {
 					$user_saved_meta = Helpers::get_atum_user_meta( $user_meta_key );
+
 					return isset( $user_saved_meta[ $option_key ] ) ? $user_saved_meta[ $option_key ] : $this->defaults[ $option_key ]['default'];
 				}
 
@@ -1574,7 +1738,6 @@ class Settings {
 
 	}
 
-	
 	/****************************
 	 * Instance methods
 	 ****************************/
@@ -1594,19 +1757,19 @@ class Settings {
 
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
-	
+
 	/**
 	 * Get Singleton instance
 	 *
 	 * @return Settings instance
 	 */
 	public static function get_instance() {
-		
+
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
 			self::$instance = new self();
 		}
-		
+
 		return self::$instance;
 	}
-	
+
 }

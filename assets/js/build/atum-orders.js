@@ -127,7 +127,7 @@ var Blocker = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _vendor_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../vendor/bootstrap-datetimepicker */ "./assets/js/vendor/bootstrap-datetimepicker.js");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _vendor_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../vendor/bootstrap-datetimepicker */ "./assets/js/vendor/bootstrap-datetimepicker.js");
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -244,6 +244,7 @@ var DateTimePicker = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (DateTimePicker);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -256,7 +257,7 @@ var DateTimePicker = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -349,6 +350,7 @@ var EnhancedSelect = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (EnhancedSelect);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -361,7 +363,7 @@ var EnhancedSelect = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var StupidTable = {
+/* WEBPACK VAR INJECTION */(function($) {var StupidTable = {
     init: function ($table) {
         $table.stupidtable();
         $table.on('aftertablesort', this.addArrows);
@@ -374,6 +376,7 @@ var StupidTable = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (StupidTable);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -386,7 +389,7 @@ var StupidTable = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/tooltip */ "./node_modules/bootstrap/js/dist/tooltip.js");
 /* harmony import */ var bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_tooltip__WEBPACK_IMPORTED_MODULE_0__);
 
 var Tooltip = (function () {
@@ -442,6 +445,7 @@ var Tooltip = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (Tooltip);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -454,7 +458,7 @@ var Tooltip = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 
 var AddItemsPopup = (function () {
     function AddItemsPopup(settings, $container, atumOrders, tooltip) {
@@ -492,13 +496,13 @@ var AddItemsPopup = (function () {
             var data = {
                 action: 'atum_order_add_item',
                 item_to_add: itemIds,
-                atum_order_id: this.settings.get('post_id'),
-                security: this.settings.get('atum_order_item_nonce'),
+                atum_order_id: this.settings.get('postId'),
+                security: this.settings.get('atumOrderItemNonce'),
             };
             $.post(window['ajaxurl'], data, function (response) {
                 if (response.success) {
                     $('#atum_order_line_items').append(response.data.html);
-                    _this.wpHooks.doAction('orderItems_addItem_added', itemIds, _this.settings.get('post_id'));
+                    _this.wpHooks.doAction('atum_orderItems_addItem_added', itemIds, _this.settings.get('postId'));
                 }
                 else {
                     _this.atumOrders.showAlert('error', _this.settings.get('error'), response.data.error);
@@ -522,18 +526,19 @@ var AddItemsPopup = (function () {
             this.atumOrders.loadItemsTable({
                 action: 'atum_order_add_tax',
                 rate_id: rateId,
-                atum_order_id: this.settings.get('post_id'),
-                security: this.settings.get('atum_order_item_nonce'),
+                atum_order_id: this.settings.get('postId'),
+                security: this.settings.get('atumOrderItemNonce'),
             }, 'json');
         }
         else {
-            this.atumOrders.showAlert('error', this.settings.get('error'), this.settings.get('tax_rate_already_exists'));
+            this.atumOrders.showAlert('error', this.settings.get('error'), this.settings.get('taxRateAlreadyExists'));
         }
     };
     return AddItemsPopup;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AddItemsPopup);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -546,7 +551,7 @@ var AddItemsPopup = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _add_items_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_add-items-popup */ "./assets/js/src/components/orders/_add-items-popup.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _add_items_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_add-items-popup */ "./assets/js/src/components/orders/_add-items-popup.ts");
 /* harmony import */ var _order_items__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_order-items */ "./assets/js/src/components/orders/_order-items.ts");
 /* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var _bulk_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_bulk-actions */ "./assets/js/src/components/orders/_bulk-actions.ts");
@@ -579,6 +584,10 @@ var AtumOrders = (function () {
         new _add_items_popup__WEBPACK_IMPORTED_MODULE_0__["default"](this.settings, this.$container, this, this.tooltip);
         this.dateTimePicker.addDateTimePickers($('.atum-datepicker'), { minDate: false });
         this.bindEvents();
+        if (!window.hasOwnProperty('atum')) {
+            window['atum'] = {};
+        }
+        window['atum']['AtumOrders'] = this;
     }
     AtumOrders.prototype.bindEvents = function () {
         var _this = this;
@@ -601,7 +610,7 @@ var AtumOrders = (function () {
         $('#atum_order_type').change(function (evt) { return _this.toggleExtraFields(evt); }).change();
         this.$supplierDropdown.change(function () { return _this.savePurchaseOrderSupplier(); });
         this.$multipleSuppliers.change(function () { return _this.toggleSupplierField(); });
-        $('#wc_order').change(function () { return _this.importOrderItems(); });
+        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget), 'IL'); });
         $('.wp-heading-inline').append($('.page-title-action').show());
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
@@ -612,13 +621,13 @@ var AtumOrders = (function () {
     };
     AtumOrders.prototype.savePurchaseOrderSupplier = function () {
         var _this = this;
-        var $searcher = $('#add_item_id'), atumOrderId = this.settings.get('post_id'), supplierId = this.$supplierDropdown.val();
+        var $searcher = $('#add_item_id'), atumOrderId = this.settings.get('postId'), supplierId = this.$supplierDropdown.val();
         this.toggleItemsBlocker(!(!supplierId && !this.$multipleSuppliers.is(':checked')));
         $.ajax({
             url: window['ajaxurl'],
             data: {
                 action: 'atum_save_po_supplier',
-                security: this.settings.get('atum_order_item_nonce'),
+                security: this.settings.get('atumOrderItemNonce'),
                 atum_order_id: atumOrderId,
                 supplier: supplierId,
             },
@@ -639,8 +648,8 @@ var AtumOrders = (function () {
             url: window['ajaxurl'],
             data: {
                 action: 'atum_save_po_multiple_supplier',
-                security: this.settings.get('atum_order_item_nonce'),
-                atum_order_id: this.settings.get('post_id'),
+                security: this.settings.get('atumOrderItemNonce'),
+                atum_order_id: this.settings.get('postId'),
                 multiple: val,
             },
             dataType: 'json',
@@ -650,25 +659,25 @@ var AtumOrders = (function () {
     AtumOrders.prototype.quantityChanged = function (evt) {
         var _this = this;
         var $input = $(evt.currentTarget), $row = $input.closest('tr.item'), qty = $input.val(), oQty = $input.data('qty'), $lineTotal = $row.find('input.line_total'), $lineSubtotal = $row.find('input.line_subtotal');
-        var unitTotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotal.data('total'), this.settings.get('mon_decimal_point')) / oQty;
-        $lineTotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotal * qty, this.settings.get('rounding_precision'), ''))
+        var unitTotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotal.data('total'), this.settings.get('priceDecimalSep')) / oQty;
+        $lineTotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotal * qty, this.settings.get('roundingPrecision'), ''))
             .toString()
-            .replace('.', this.settings.get('mon_decimal_point')));
-        var unitSubtotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotal.data('subtotal'), this.settings.get('mon_decimal_point')) / oQty;
-        $lineSubtotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotal * qty, this.settings.get('rounding_precision'), ''))
+            .replace('.', this.settings.get('priceDecimalSep')));
+        var unitSubtotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotal.data('subtotal'), this.settings.get('priceDecimalSep')) / oQty;
+        $lineSubtotal.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotal * qty, this.settings.get('roundingPrecision'), ''))
             .toString()
-            .replace('.', this.settings.get('mon_decimal_point')));
+            .replace('.', this.settings.get('priceDecimalSep')));
         $row.find('input.line_tax').each(function (index, elem) {
-            var $lineTotalTax = $(elem), taxId = $lineTotalTax.data('tax_id'), unitTotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotalTax.data('total_tax'), _this.settings.get('mon_decimal_point')) / oQty, $lineSubtotalTax = $row.find("input.line_subtotal_tax[data-tax_id=\"" + taxId + "\"]"), unitSubtotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotalTax.data('subtotal_tax'), _this.settings.get('mon_decimal_point')) / oQty;
+            var $lineTotalTax = $(elem), taxId = $lineTotalTax.data('tax_id'), unitTotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotalTax.data('total_tax'), _this.settings.get('priceDecimalSep')) / oQty, $lineSubtotalTax = $row.find("input.line_subtotal_tax[data-tax_id=\"" + taxId + "\"]"), unitSubtotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotalTax.data('subtotal_tax'), _this.settings.get('priceDecimalSep')) / oQty;
             if (0 < unitTotalTax) {
-                $lineTotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotalTax * qty, _this.settings.get('rounding_precision'), ''))
+                $lineTotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitTotalTax * qty, _this.settings.get('roundingPrecision'), ''))
                     .toString()
-                    .replace('.', _this.settings.get('mon_decimal_point')));
+                    .replace('.', _this.settings.get('priceDecimalSep')));
             }
             if (0 < unitSubtotalTax) {
-                $lineSubtotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotalTax * qty, _this.settings.get('rounding_precision'), ''))
+                $lineSubtotalTax.val(parseFloat(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(unitSubtotalTax * qty, _this.settings.get('roundingPrecision'), ''))
                     .toString()
-                    .replace('.', _this.settings.get('mon_decimal_point')));
+                    .replace('.', _this.settings.get('priceDecimalSep')));
             }
         });
         $input.trigger('quantity_changed');
@@ -696,15 +705,15 @@ var AtumOrders = (function () {
                 if (callback) {
                     callback();
                 }
-                _this.wpHooks.doAction('atumOrders_afterLoadItemsTable');
+                _this.wpHooks.doAction('atum_orders_afterLoadItemsTable');
             },
         });
     };
     AtumOrders.prototype.reloadItems = function (callback) {
         this.loadItemsTable({
-            atum_order_id: this.settings.get('post_id'),
+            atum_order_id: this.settings.get('postId'),
             action: 'atum_order_load_items',
-            security: this.settings.get('atum_order_item_nonce'),
+            security: this.settings.get('atumOrderItemNonce'),
         }, 'html', callback);
     };
     AtumOrders.prototype.showAlert = function (type, title, message) {
@@ -794,14 +803,14 @@ var AtumOrders = (function () {
             this.$itemsBlocker.removeClass('unblocked');
         }
     };
-    AtumOrders.prototype.importOrderItems = function () {
+    AtumOrders.prototype.importOrderItems = function ($wcOrder, orderType) {
         var _this = this;
-        var $wcOrder = $('#wc_order'), orderId = $wcOrder.val();
+        var orderId = $wcOrder.val();
         if (!orderId || this.isEditable == 'false') {
             return false;
         }
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
-            text: this.settings.get('import_order_items'),
+            text: this.settings.get("importOrderItems" + orderType),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('yes'),
@@ -813,8 +822,8 @@ var AtumOrders = (function () {
                     _this.loadItemsTable({
                         action: 'atum_order_import_items',
                         wc_order_id: orderId,
-                        atum_order_id: _this.settings.get('post_id'),
-                        security: _this.settings.get('import_order_items_nonce'),
+                        atum_order_id: _this.settings.get('postId'),
+                        security: _this.settings.get('importOrderItemsNonce'),
                     }, 'json', resolve);
                 });
             },
@@ -824,6 +833,7 @@ var AtumOrders = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AtumOrders);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -836,7 +846,7 @@ var AtumOrders = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -868,7 +878,7 @@ var OrdersBulkActions = (function () {
         if ($rows.length) {
             if (this.askRemoval === true) {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                    text: this.settings.get('remove_item_notice'),
+                    text: this.settings.get('removeItemNotice'),
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: this.settings.get('continue'),
@@ -916,10 +926,10 @@ var OrdersBulkActions = (function () {
             deferred.push($.ajax({
                 url: window['ajaxurl'],
                 data: {
-                    atum_order_id: this.settings.get('post_id'),
+                    atum_order_id: this.settings.get('postId'),
                     atum_order_item_ids: deleteItems,
                     action: 'atum_order_remove_item',
-                    security: this.settings.get('atum_order_item_nonce'),
+                    security: this.settings.get('atumOrderItemNonce'),
                 },
                 type: 'POST',
             }));
@@ -929,13 +939,13 @@ var OrdersBulkActions = (function () {
     OrdersBulkActions.prototype.bulkChangeStock = function (action) {
         var _this = this;
         var $rows = $('table.atum_order_items').find('tr.selected');
-        var checkItems = this.wpHooks.applyFilters('ordersBulkActions_checkChangeStock', true, $rows);
-        var confirmProcessItems = this.wpHooks.applyFilters('ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action);
+        var checkItems = this.wpHooks.applyFilters('atum_ordersBulkActions_checkChangeStock', true, $rows);
+        var confirmProcessItems = this.wpHooks.applyFilters('atum_ordersBulkActions_confirmProcessItemsChangeStock', '', $rows, action);
         if (checkItems) {
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
             sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                title: this.settings.get('are_you_sure'),
-                html: (this.settings.get(action === 'increase' ? 'increase_stock_msg' : 'decrease_stock_msg')) + confirmProcessItems,
+                title: this.settings.get('areYouSure'),
+                html: (this.settings.get(action === 'increase' ? 'increaseStockMsg' : 'decreaseStockMsg')) + confirmProcessItems,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: this.settings.get('continue'),
@@ -946,7 +956,7 @@ var OrdersBulkActions = (function () {
                 preConfirm: function () {
                     return new Promise(function (resolve, reject) {
                         var modeProcess = $('#bulk-change-stock-mode').length > 0 && $('#bulk-change-stock-mode').is(':checked') ? 'yes' : 'no';
-                        var maybeProcessItems = _this.wpHooks.applyFilters('ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve);
+                        var maybeProcessItems = _this.wpHooks.applyFilters('atum_ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve);
                         if (maybeProcessItems) {
                             var quantities_1 = {}, itemIds_1 = [];
                             $rows.each(function (index, elem) {
@@ -959,16 +969,19 @@ var OrdersBulkActions = (function () {
                             $.ajax({
                                 url: window['ajaxurl'],
                                 data: {
-                                    atum_order_id: _this.settings.get('post_id'),
+                                    atum_order_id: _this.settings.get('postId'),
                                     atum_order_item_ids: itemIds_1,
                                     quantities: quantities_1,
                                     mode: modeProcess,
                                     action: "atum_order_" + action + "_items_stock",
-                                    security: _this.settings.get('atum_order_item_nonce'),
+                                    security: _this.settings.get('atumOrderItemNonce'),
                                 },
                                 method: 'POST',
                                 dataType: 'json',
                                 success: function (response) {
+                                    if (response.data.length) {
+                                        $('#atum_order_notes .inside .atum-meta-box').empty().html(response.data);
+                                    }
                                     if (response.success !== true) {
                                         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
                                     }
@@ -983,7 +996,7 @@ var OrdersBulkActions = (function () {
                 if (result.isConfirmed) {
                     sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                         title: _this.settings.get('done'),
-                        text: _this.settings.get(action === 'increase' ? 'stock_increased' : 'stock_decreased'),
+                        text: _this.settings.get(action === 'increase' ? 'stockIncreased' : 'stockDecreased'),
                         icon: 'success',
                         confirmButtonText: _this.settings.get('ok'),
                     });
@@ -996,6 +1009,7 @@ var OrdersBulkActions = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (OrdersBulkActions);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1008,7 +1022,7 @@ var OrdersBulkActions = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
@@ -1036,7 +1050,10 @@ var AtumOrderItems = (function () {
             .on('click', 'button.save-action', function (evt) { return _this.saveLineItems(evt); })
             .on('click', 'button.add-atum-order-item-meta', function (evt) { return _this.addItemMeta(evt); })
             .on('click', 'button.remove-atum-order-item-meta', function (evt) { return _this.removeItemMeta(evt); })
-            .on('click', 'button.set-purchase-price', function (evt) { return _this.setPurchasePrice(evt); });
+            .on('click', 'button.set-purchase-price', function (evt) {
+            evt.preventDefault();
+            _this.setPurchasePrice($(evt.currentTarget).closest('.item'));
+        });
         if (!window.hasOwnProperty('atum')) {
             window['atum'] = {};
         }
@@ -1068,8 +1085,8 @@ var AtumOrderItems = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_fee',
-            atum_order_id: this.settings.get('post_id'),
-            security: this.settings.get('atum_order_item_nonce'),
+            atum_order_id: this.settings.get('postId'),
+            security: this.settings.get('atumOrderItemNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             if (response.success) {
@@ -1079,7 +1096,7 @@ var AtumOrderItems = (function () {
                 _this.atumOrders.showAlert('error', _this.settings.get('error'), response.data.error);
             }
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
-            _this.wpHooks.doAction('orderItems_afterAddingFee');
+            _this.wpHooks.doAction('atum_orderItems_afterAddingFee');
         }, 'json');
     };
     AtumOrderItems.prototype.addShipping = function (evt) {
@@ -1088,8 +1105,8 @@ var AtumOrderItems = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_shipping',
-            atum_order_id: this.settings.get('post_id'),
-            security: this.settings.get('atum_order_item_nonce'),
+            atum_order_id: this.settings.get('postId'),
+            security: this.settings.get('atumOrderItemNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             if (response.success) {
@@ -1099,7 +1116,7 @@ var AtumOrderItems = (function () {
                 _this.atumOrders.showAlert('error', _this.settings.get('error'), response.data.error);
             }
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
-            _this.wpHooks.doAction('orderItems_afterAddingShipping');
+            _this.wpHooks.doAction('atum_orderItems_afterAddingShipping');
         }, 'json');
     };
     AtumOrderItems.prototype.addTax = function (evt) {
@@ -1113,7 +1130,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget);
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('delete_tax_notice'),
+            text: this.settings.get('deleteTaxNotice'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1126,8 +1143,8 @@ var AtumOrderItems = (function () {
                     _this.atumOrders.loadItemsTable({
                         action: 'atum_order_remove_tax',
                         rate_id: $item.data('rate_id'),
-                        atum_order_id: _this.settings.get('post_id'),
-                        security: _this.settings.get('atum_order_item_nonce'),
+                        atum_order_id: _this.settings.get('postId'),
+                        security: _this.settings.get('atumOrderItemNonce'),
                     }, 'html', resolve);
                 });
             },
@@ -1137,7 +1154,7 @@ var AtumOrderItems = (function () {
         var _this = this;
         evt.preventDefault();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('calc_totals'),
+            text: this.settings.get('calcTotals'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1149,9 +1166,9 @@ var AtumOrderItems = (function () {
                 return new Promise(function (resolve, reject) {
                     _this.atumOrders.loadItemsTable({
                         action: 'atum_order_calc_line_taxes',
-                        atum_order_id: _this.settings.get('post_id'),
+                        atum_order_id: _this.settings.get('postId'),
                         items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-                        security: _this.settings.get('calc_totals_nonce'),
+                        security: _this.settings.get('calcTotalsNonce'),
                     }, 'html', resolve);
                 });
             },
@@ -1170,8 +1187,9 @@ var AtumOrderItems = (function () {
         var _this = this;
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
+        var options = [], modal;
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('remove_item_notice'),
+            html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice'), $item, atumOrderItemId),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1179,51 +1197,63 @@ var AtumOrderItems = (function () {
             reverseButtons: true,
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
-            preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(_this.$container);
-                    $.ajax({
-                        url: window['ajaxurl'],
-                        data: {
-                            atum_order_id: _this.settings.get('post_id'),
-                            atum_order_item_ids: atumOrderItemId,
-                            action: 'atum_order_remove_item',
-                            security: _this.settings.get('atum_order_item_nonce'),
-                        },
-                        type: 'POST',
-                        success: function () { return resolve(); },
-                    });
-                });
+            didOpen: function (element) {
+                modal = $(element);
             },
+            preConfirm: function () { return _this.processDeleteItem(atumOrderItemId); },
         })
             .then(function (result) {
+            options = _this.wpHooks.applyFilters('atum_ordersItems_deleteItemOptions', options, modal);
             if (result.isConfirmed) {
                 $item.remove();
-                _this.wpHooks.doAction('orderItems_deleteItem_removed', $container, atumOrderItemId);
+                _this.wpHooks.doAction('atum_orderItems_deleteItem_removed', $container, atumOrderItemId, options);
             }
             _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
         });
     };
+    AtumOrderItems.prototype.processDeleteItem = function (atumOrderItemId) {
+        var _this = this;
+        return new Promise(function (resolve) {
+            _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(_this.$container);
+            $.ajax({
+                url: window['ajaxurl'],
+                data: {
+                    atum_order_id: _this.settings.get('postId'),
+                    atum_order_item_ids: atumOrderItemId,
+                    action: 'atum_order_remove_item',
+                    security: _this.settings.get('atumOrderItemNonce'),
+                },
+                method: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    if (!response.success) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
+                    }
+                    resolve();
+                },
+            });
+        });
+    };
     AtumOrderItems.prototype.saveLineItems = function (evt) {
         evt.preventDefault();
-        var data = this.wpHooks.applyFilters('orderItems_saveLineItems_data', {
-            atum_order_id: this.settings.get('post_id'),
+        var data = this.wpHooks.applyFilters('atum_orderItems_saveLineItems_data', {
+            atum_order_id: this.settings.get('postId'),
             items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
             action: 'atum_order_save_items',
-            security: this.settings.get('atum_order_item_nonce'),
+            security: this.settings.get('atumOrderItemNonce'),
         });
         this.atumOrders.loadItemsTable(data);
-        this.wpHooks.doAction('orderItems_saveLineItems_itemsSaved');
+        this.wpHooks.doAction('atum_orderItems_saveLineItems_itemsSaved');
     };
     AtumOrderItems.prototype.addItemMeta = function (evt) {
         evt.preventDefault();
-        var $button = $(evt.currentTarget), $item = $button.closest('tr.item, tr.shipping'), $items = $item.find('tbody.meta_items'), index = $items.find('tr').length + 1, $row = "\n\t\t\t\t<tr data-meta_id=\"0\">\n\t\t\t        <td>\n\t\t\t            <input type=\"text\" placeholder=\"" + this.settings.get('placeholder_name') + "\" name=\"meta_key[" + $item.data('atum_order_item_id') + "][new-" + index + "]\" />\n\t\t\t            <textarea placeholder=\"" + this.settings.get('placeholder_value') + "\" name=\"meta_value[" + $item.data('atum_order_item_id') + "][new-" + index + "]\"></textarea>\n\t\t\t        </td>\n\t\t\t        <td width=\"1%\"><button class=\"remove-atum-order-item-meta button\">&times;</button></td>\n\t\t\t    </tr>";
+        var $button = $(evt.currentTarget), $item = $button.closest('tr.item, tr.shipping'), $items = $item.find('tbody.meta_items'), index = $items.find('tr').length + 1, $row = "\n\t\t\t\t<tr data-meta_id=\"0\">\n\t\t\t        <td>\n\t\t\t            <input type=\"text\" placeholder=\"" + this.settings.get('metaPlaceholderName') + "\" name=\"meta_key[" + $item.data('atum_order_item_id') + "][new-" + index + "]\" />\n\t\t\t            <textarea placeholder=\"" + this.settings.get('metaPlaceholderValue') + "\" name=\"meta_value[" + $item.data('atum_order_item_id') + "][new-" + index + "]\"></textarea>\n\t\t\t        </td>\n\t\t\t        <td width=\"1%\"><button class=\"remove-atum-order-item-meta button\">&times;</button></td>\n\t\t\t    </tr>";
         $items.append($row);
     };
     AtumOrderItems.prototype.removeItemMeta = function (evt) {
         evt.preventDefault();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('remove_item_meta'),
+            text: this.settings.get('removeItemMeta'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1240,49 +1270,56 @@ var AtumOrderItems = (function () {
             },
         });
     };
-    AtumOrderItems.prototype.setPurchasePrice = function (evt, purchasePrice, purchasePriceTxt) {
+    AtumOrderItems.prototype.setPurchasePrice = function ($item, purchasePrice, purchasePriceTxt, itemName) {
         var _this = this;
-        evt.preventDefault();
-        var $item = $(evt.currentTarget).closest('.item'), $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total'), qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('mon_decimal_point')) : 0, data = {
-            atum_order_id: this.settings.get('post_id'),
-            atum_order_item_id: $item.data('atum_order_item_id'),
-            action: 'atum_order_change_purchase_price',
-            security: this.settings.get('atum_order_item_nonce'),
-        }, rates = $item.find('.item_cost').data('productTaxRates');
-        var purchasePriceFmt, taxes = 0;
+        var $lineSubTotal = $item.find('input.line_subtotal'), $lineTotal = $item.find('input.line_total');
+        if (!itemName) {
+            itemName = $item.find('.atum-order-item-name').text().trim();
+        }
         if (!purchasePrice) {
+            var qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, this.settings.get('priceDecimalSep')) : 0;
             purchasePrice = qty !== 0 ? lineTotal / qty : 0;
         }
         if (!purchasePriceTxt) {
-            purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('mon_decimals'), '', this.settings.get('mon_decimal_point')) : purchasePrice.toString();
+            var purchasePriceFmt = purchasePrice % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : purchasePrice.toString();
             purchasePriceTxt = purchasePriceFmt;
+            var rates = $item.find('.item_cost').data('productTaxRates');
             if (typeof rates === 'object') {
-                taxes = this.calcTaxesFromBase(purchasePrice, rates);
+                var taxes = this.calcTaxesFromBase(purchasePrice, rates);
                 if (taxes) {
-                    var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('mon_decimals'), '', this.settings.get('mon_decimal_point')) : (purchasePrice + taxes).toString();
-                    purchasePriceTxt = purchasePriceWithTaxesFmt + " (" + purchasePriceFmt + " + " + taxes + " " + this.settings.get('taxes_name') + ")";
-                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, this.settings.get('mon_decimal_point'));
+                    var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : (purchasePrice + taxes).toString();
+                    purchasePriceTxt = purchasePriceWithTaxesFmt + " (" + purchasePriceFmt + " + " + taxes + " " + this.settings.get('taxesName') + ")";
+                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, this.settings.get('priceDecimalSep'));
                 }
             }
             else {
-                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, this.settings.get('mon_decimal_point'));
+                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, this.settings.get('priceDecimalSep'));
             }
         }
-        data[this.settings.get('purchase_price_field')] = purchasePrice;
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            html: this.settings.get('confirm_purchase_price').replace('{{number}}', "<strong>" + purchasePriceTxt + "</strong>"),
+            title: this.settings.get('confirmPurchasePriceTitle'),
+            html: this.settings.get('confirmPurchasePrice').replace('{{number}}', "<code>" + purchasePriceTxt + "</code>").replace('{{name}}', "<code>" + itemName + "</code>"),
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
+            confirmButtonColor: '#00B8DB',
             cancelButtonText: this.settings.get('cancel'),
             reverseButtons: true,
-            allowOutsideClick: false,
+            showCloseButton: true,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
+                    var _a;
                     $.ajax({
                         url: window['ajaxurl'],
-                        data: data,
+                        data: (_a = {
+                                action: 'atum_order_change_purchase_price',
+                                security: _this.settings.get('atumOrderItemNonce'),
+                                atum_order_id: _this.settings.get('postId'),
+                                atum_order_item_id: $item.data('atum_order_item_id')
+                            },
+                            _a[_this.settings.get('purchasePriceField')] = purchasePrice,
+                            _a),
                         type: 'POST',
                         dataType: 'json',
                         success: function (response) {
@@ -1297,11 +1334,13 @@ var AtumOrderItems = (function () {
         })
             .then(function (result) {
             if (result.isConfirmed) {
-                $lineSubTotal.val($lineTotal.val());
-                $lineSubTotal.data('subtotal', $lineTotal.data('total'));
+                if ($lineSubTotal.length && $lineTotal.length) {
+                    $lineSubTotal.val($lineTotal.val());
+                    $lineSubTotal.data('subtotal', $lineTotal.data('total'));
+                }
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                     title: _this.settings.get('done'),
-                    text: _this.settings.get('purchase_price_changed'),
+                    text: _this.settings.get('purchasePriceChanged'),
                     icon: 'success',
                     confirmButtonText: _this.settings.get('ok'),
                 });
@@ -1332,6 +1371,7 @@ var AtumOrderItems = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AtumOrderItems);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1344,7 +1384,7 @@ var AtumOrderItems = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 
@@ -1371,7 +1411,7 @@ var OrderNotes = (function () {
             action: 'atum_order_add_note',
             post_id: $('#post_ID').val(),
             note: note,
-            security: this.settings.get('add_note_nonce'),
+            security: this.settings.get('addNoteNonce'),
         };
         $.post(window['ajaxurl'], data, function (response) {
             $('ul.atum_order_notes').prepend(response);
@@ -1385,7 +1425,7 @@ var OrderNotes = (function () {
         evt.preventDefault();
         var $note = $(evt.currentTarget).closest('li.note');
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-            text: this.settings.get('delete_note'),
+            text: this.settings.get('deleteNote'),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
@@ -1398,7 +1438,7 @@ var OrderNotes = (function () {
                     var data = {
                         action: 'atum_order_delete_note',
                         note_id: $note.attr('rel'),
-                        security: _this.settings.get('delete_note_nonce'),
+                        security: _this.settings.get('deleteNoteNonce'),
                     };
                     $.post(window['ajaxurl'], data, function () { return resolve(); });
                 });
@@ -1415,6 +1455,7 @@ var OrderNotes = (function () {
 }());
 /* harmony default export */ __webpack_exports__["default"] = (OrderNotes);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1466,7 +1507,7 @@ var Settings = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_orders_atum_orders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/orders/_atum-orders */ "./assets/js/src/components/orders/_atum-orders.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_orders_atum_orders__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/orders/_atum-orders */ "./assets/js/src/components/orders/_atum-orders.ts");
 /* harmony import */ var _components_date_time_picker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/_date-time-picker */ "./assets/js/src/components/_date-time-picker.ts");
 /* harmony import */ var _components_enhanced_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
 /* harmony import */ var _components_orders_order_notes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/orders/_order-notes */ "./assets/js/src/components/orders/_order-notes.ts");
@@ -1479,7 +1520,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    window['$'] = $;
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_4__["default"]('atumOrder');
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_5__["default"]();
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
@@ -1488,6 +1528,7 @@ jQuery(function ($) {
     new _components_orders_order_notes__WEBPACK_IMPORTED_MODULE_3__["default"](settings);
 });
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1500,7 +1541,7 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var __assign = (undefined && undefined.__assign) || function () {
+/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -1511,10 +1552,14 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var Utils = {
     settings: {
@@ -1531,7 +1576,7 @@ var Utils = {
             decimal: '.',
             thousand: ',',
             precision: 2,
-            grouping: 3
+            grouping: 3,
         },
     },
     delay: function (callback, ms) {
@@ -1560,7 +1605,7 @@ var Utils = {
         });
     },
     addNotice: function (type, msg) {
-        var $notice = $('<div class="' + type + ' notice is-dismissible"><p><strong>' + msg + '</strong></p></div>').hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"" + type + " notice is-dismissible\"><p><strong>" + msg + "</strong></p></div>").hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -1579,16 +1624,12 @@ var Utils = {
             return $.Deferred().resolve().promise();
         }
         var dfds = [];
-        $imgs.each(function () {
+        $imgs.each(function (index, elem) {
             var dfd = $.Deferred(), img = new Image();
             dfds.push(dfd);
-            img.onload = function () {
-                dfd.resolve();
-            };
-            img.onerror = function () {
-                dfd.resolve();
-            };
-            img.src = this.src;
+            img.onload = function () { return dfd.resolve(); };
+            img.onerror = function () { return dfd.resolve(); };
+            img.src = $(elem).attr('src');
         });
         return $.when.apply($, dfds);
     },
@@ -1708,7 +1749,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {
@@ -1751,6 +1792,7 @@ var Utils = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -1763,7 +1805,7 @@ var Utils = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment/min/moment-with-locales.min */ "./node_modules/moment/min/moment-with-locales.min.js");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment/min/moment-with-locales.min */ "./node_modules/moment/min/moment-with-locales.min.js");
 /* harmony import */ var moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0__);
 /*! version : 4.17.47
  =========================================================
@@ -4397,6 +4439,7 @@ __webpack_require__.r(__webpack_exports__);
 	return $.fn.bsDatetimepicker;
 	
 }(jQuery, moment_min_moment_with_locales_min__WEBPACK_IMPORTED_MODULE_0___default.a));
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
 /***/ }),
 
@@ -4490,7 +4533,8 @@ function popperGenerator(generatorOptions) {
     var isDestroyed = false;
     var instance = {
       state: state,
-      setOptions: function setOptions(options) {
+      setOptions: function setOptions(setOptionsAction) {
+        var options = typeof setOptionsAction === 'function' ? setOptionsAction(state.options) : setOptionsAction;
         cleanupModifierEffects();
         state.options = Object.assign({}, defaultOptions, state.options, options);
         state.scrollParents = {
@@ -4735,17 +4779,42 @@ function contains(parent, child) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getBoundingClientRect; });
-function getBoundingClientRect(element) {
+// import { isHTMLElement } from './instanceOf';
+function getBoundingClientRect(element, // eslint-disable-next-line unused-imports/no-unused-vars
+includeScale) {
+  if (includeScale === void 0) {
+    includeScale = false;
+  }
+
   var rect = element.getBoundingClientRect();
+  var scaleX = 1;
+  var scaleY = 1; // FIXME:
+  // `offsetWidth` returns an integer while `getBoundingClientRect`
+  // returns a float. This results in `scaleX` or `scaleY` being
+  // non-1 when it should be for elements that aren't a full pixel in
+  // width or height.
+  // if (isHTMLElement(element) && includeScale) {
+  //   const offsetHeight = element.offsetHeight;
+  //   const offsetWidth = element.offsetWidth;
+  //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+  //   // Fallback to 1 in case both values are `0`
+  //   if (offsetWidth > 0) {
+  //     scaleX = rect.width / offsetWidth || 1;
+  //   }
+  //   if (offsetHeight > 0) {
+  //     scaleY = rect.height / offsetHeight || 1;
+  //   }
+  // }
+
   return {
-    width: rect.width,
-    height: rect.height,
-    top: rect.top,
-    right: rect.right,
-    bottom: rect.bottom,
-    left: rect.left,
-    x: rect.left,
-    y: rect.top
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY
   };
 }
 
@@ -4871,17 +4940,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // Returns the composite rect of an element relative to its offsetParent.
+
+
+function isElementScaled(element) {
+  var rect = element.getBoundingClientRect();
+  var scaleX = rect.width / element.offsetWidth || 1;
+  var scaleY = rect.height / element.offsetHeight || 1;
+  return scaleX !== 1 || scaleY !== 1;
+} // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
+
 
 function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
   if (isFixed === void 0) {
     isFixed = false;
   }
 
-  var documentElement = Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(offsetParent);
-  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(elementOrVirtualElement);
   var isOffsetParentAnElement = Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(offsetParent);
+  var offsetParentIsScaled = Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(offsetParent) && isElementScaled(offsetParent);
+  var documentElement = Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(offsetParent);
+  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(elementOrVirtualElement, offsetParentIsScaled);
   var scroll = {
     scrollLeft: 0,
     scrollTop: 0
@@ -4898,7 +4976,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
     }
 
     if (Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(offsetParent)) {
-      offsets = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(offsetParent);
+      offsets = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(offsetParent, true);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
     } else if (documentElement) {
@@ -5917,7 +5995,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../dom-utils/getDocumentElement.js */ "./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js");
 /* harmony import */ var _dom_utils_getComputedStyle_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../dom-utils/getComputedStyle.js */ "./node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js");
 /* harmony import */ var _utils_getBasePlacement_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/getBasePlacement.js */ "./node_modules/@popperjs/core/lib/utils/getBasePlacement.js");
-/* harmony import */ var _utils_math_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/math.js */ "./node_modules/@popperjs/core/lib/utils/math.js");
+/* harmony import */ var _utils_getVariation_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/getVariation.js */ "./node_modules/@popperjs/core/lib/utils/getVariation.js");
+/* harmony import */ var _utils_math_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/math.js */ "./node_modules/@popperjs/core/lib/utils/math.js");
+
 
 
 
@@ -5941,8 +6021,8 @@ function roundOffsetsByDPR(_ref) {
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
-    x: Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_6__["round"])(Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_6__["round"])(x * dpr) / dpr) || 0,
-    y: Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_6__["round"])(Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_6__["round"])(y * dpr) / dpr) || 0
+    x: Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_7__["round"])(Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_7__["round"])(x * dpr) / dpr) || 0,
+    y: Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_7__["round"])(Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_7__["round"])(y * dpr) / dpr) || 0
   };
 }
 
@@ -5952,6 +6032,7 @@ function mapToStyles(_ref2) {
   var popper = _ref2.popper,
       popperRect = _ref2.popperRect,
       placement = _ref2.placement,
+      variation = _ref2.variation,
       offsets = _ref2.offsets,
       position = _ref2.position,
       gpuAcceleration = _ref2.gpuAcceleration,
@@ -5978,7 +6059,7 @@ function mapToStyles(_ref2) {
     if (offsetParent === Object(_dom_utils_getWindow_js__WEBPACK_IMPORTED_MODULE_2__["default"])(popper)) {
       offsetParent = Object(_dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_3__["default"])(popper);
 
-      if (Object(_dom_utils_getComputedStyle_js__WEBPACK_IMPORTED_MODULE_4__["default"])(offsetParent).position !== 'static') {
+      if (Object(_dom_utils_getComputedStyle_js__WEBPACK_IMPORTED_MODULE_4__["default"])(offsetParent).position !== 'static' && position === 'absolute') {
         heightProp = 'scrollHeight';
         widthProp = 'scrollWidth';
       }
@@ -5987,14 +6068,14 @@ function mapToStyles(_ref2) {
 
     offsetParent = offsetParent;
 
-    if (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["top"]) {
+    if (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["top"] || (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["left"] || placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["right"]) && variation === _enums_js__WEBPACK_IMPORTED_MODULE_0__["end"]) {
       sideY = _enums_js__WEBPACK_IMPORTED_MODULE_0__["bottom"]; // $FlowFixMe[prop-missing]
 
       y -= offsetParent[heightProp] - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
-    if (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["left"]) {
+    if (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["left"] || (placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["top"] || placement === _enums_js__WEBPACK_IMPORTED_MODULE_0__["bottom"]) && variation === _enums_js__WEBPACK_IMPORTED_MODULE_0__["end"]) {
       sideX = _enums_js__WEBPACK_IMPORTED_MODULE_0__["right"]; // $FlowFixMe[prop-missing]
 
       x -= offsetParent[widthProp] - popperRect.width;
@@ -6009,7 +6090,7 @@ function mapToStyles(_ref2) {
   if (gpuAcceleration) {
     var _Object$assign;
 
-    return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) < 2 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
+    return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
   }
 
   return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
@@ -6037,6 +6118,7 @@ function computeStyles(_ref4) {
 
   var commonStyles = {
     placement: Object(_utils_getBasePlacement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(state.placement),
+    variation: Object(_utils_getVariation_js__WEBPACK_IMPORTED_MODULE_6__["default"])(state.placement),
     popper: state.elements.popper,
     popperRect: state.rects.popper,
     gpuAcceleration: gpuAcceleration
@@ -6972,9 +7054,9 @@ function debounce(fn) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return detectOverflow; });
-/* harmony import */ var _dom_utils_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom-utils/getBoundingClientRect.js */ "./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js");
-/* harmony import */ var _dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../dom-utils/getClippingRect.js */ "./node_modules/@popperjs/core/lib/dom-utils/getClippingRect.js");
-/* harmony import */ var _dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../dom-utils/getDocumentElement.js */ "./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js");
+/* harmony import */ var _dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom-utils/getClippingRect.js */ "./node_modules/@popperjs/core/lib/dom-utils/getClippingRect.js");
+/* harmony import */ var _dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../dom-utils/getDocumentElement.js */ "./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js");
+/* harmony import */ var _dom_utils_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../dom-utils/getBoundingClientRect.js */ "./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js");
 /* harmony import */ var _computeOffsets_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./computeOffsets.js */ "./node_modules/@popperjs/core/lib/utils/computeOffsets.js");
 /* harmony import */ var _rectToClientRect_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./rectToClientRect.js */ "./node_modules/@popperjs/core/lib/utils/rectToClientRect.js");
 /* harmony import */ var _enums_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../enums.js */ "./node_modules/@popperjs/core/lib/enums.js");
@@ -7011,11 +7093,10 @@ function detectOverflow(state, options) {
       padding = _options$padding === void 0 ? 0 : _options$padding;
   var paddingObject = Object(_mergePaddingObject_js__WEBPACK_IMPORTED_MODULE_7__["default"])(typeof padding !== 'number' ? padding : Object(_expandToHashMap_js__WEBPACK_IMPORTED_MODULE_8__["default"])(padding, _enums_js__WEBPACK_IMPORTED_MODULE_5__["basePlacements"]));
   var altContext = elementContext === _enums_js__WEBPACK_IMPORTED_MODULE_5__["popper"] ? _enums_js__WEBPACK_IMPORTED_MODULE_5__["reference"] : _enums_js__WEBPACK_IMPORTED_MODULE_5__["popper"];
-  var referenceElement = state.elements.reference;
   var popperRect = state.rects.popper;
   var element = state.elements[altBoundary ? altContext : elementContext];
-  var clippingClientRect = Object(_dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_1__["default"])(Object(_dom_utils_instanceOf_js__WEBPACK_IMPORTED_MODULE_6__["isElement"])(element) ? element : element.contextElement || Object(_dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_2__["default"])(state.elements.popper), boundary, rootBoundary);
-  var referenceClientRect = Object(_dom_utils_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(referenceElement);
+  var clippingClientRect = Object(_dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Object(_dom_utils_instanceOf_js__WEBPACK_IMPORTED_MODULE_6__["isElement"])(element) ? element : element.contextElement || Object(_dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__["default"])(state.elements.popper), boundary, rootBoundary);
+  var referenceClientRect = Object(_dom_utils_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_2__["default"])(state.elements.reference);
   var popperOffsets = Object(_computeOffsets_js__WEBPACK_IMPORTED_MODULE_3__["default"])({
     reference: referenceClientRect,
     element: popperRect,
@@ -7407,7 +7488,10 @@ var MISSING_DEPENDENCY_ERROR = 'Popper: modifier "%s" requires "%s", but "%s" mo
 var VALID_PROPERTIES = ['name', 'enabled', 'phase', 'fn', 'effect', 'requires', 'options'];
 function validateModifiers(modifiers) {
   modifiers.forEach(function (modifier) {
-    Object.keys(modifier).forEach(function (key) {
+    [].concat(Object.keys(modifier), VALID_PROPERTIES) // IE11-compatible replacement for `new Set(iterable)`
+    .filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    }).forEach(function (key) {
       switch (key) {
         case 'name':
           if (typeof modifier.name !== 'string') {
@@ -7420,6 +7504,8 @@ function validateModifiers(modifiers) {
           if (typeof modifier.enabled !== 'boolean') {
             console.error(Object(_format_js__WEBPACK_IMPORTED_MODULE_0__["default"])(INVALID_MODIFIER_ERROR, modifier.name, '"enabled"', '"boolean"', "\"" + String(modifier.enabled) + "\""));
           }
+
+          break;
 
         case 'phase':
           if (_enums_js__WEBPACK_IMPORTED_MODULE_1__["modifierPhases"].indexOf(modifier.phase) < 0) {
@@ -7436,14 +7522,14 @@ function validateModifiers(modifiers) {
           break;
 
         case 'effect':
-          if (typeof modifier.effect !== 'function') {
+          if (modifier.effect != null && typeof modifier.effect !== 'function') {
             console.error(Object(_format_js__WEBPACK_IMPORTED_MODULE_0__["default"])(INVALID_MODIFIER_ERROR, modifier.name, '"effect"', '"function"', "\"" + String(modifier.fn) + "\""));
           }
 
           break;
 
         case 'requires':
-          if (!Array.isArray(modifier.requires)) {
+          if (modifier.requires != null && !Array.isArray(modifier.requires)) {
             console.error(Object(_format_js__WEBPACK_IMPORTED_MODULE_0__["default"])(INVALID_MODIFIER_ERROR, modifier.name, '"requires"', '"array"', "\"" + String(modifier.requires) + "\""));
           }
 
@@ -7505,22 +7591,120 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap base-component.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? module.exports = factory(__webpack_require__(/*! ./dom/data.js */ "./node_modules/bootstrap/js/dist/dom/data.js")) :
+   true ? module.exports = factory(__webpack_require__(/*! ./dom/data.js */ "./node_modules/bootstrap/js/dist/dom/data.js"), __webpack_require__(/*! ./dom/event-handler.js */ "./node_modules/bootstrap/js/dist/dom/event-handler.js")) :
   undefined;
-}(this, (function (Data) { 'use strict';
+})(this, (function (Data, EventHandler) { 'use strict';
 
-  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
-  var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): base-component.js
+   * Bootstrap (v5.1.3): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  const MILLISECONDS_MULTIPLIER = 1000;
+  const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+
+  const getTransitionDurationFromElement = element => {
+    if (!element) {
+      return 0;
+    } // Get transition-duration of the element
+
+
+    let {
+      transitionDuration,
+      transitionDelay
+    } = window.getComputedStyle(element);
+    const floatTransitionDuration = Number.parseFloat(transitionDuration);
+    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+
+    if (!floatTransitionDuration && !floatTransitionDelay) {
+      return 0;
+    } // If multiple durations are defined, take the first
+
+
+    transitionDuration = transitionDuration.split(',')[0];
+    transitionDelay = transitionDelay.split(',')[0];
+    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+  };
+
+  const triggerTransitionEnd = element => {
+    element.dispatchEvent(new Event(TRANSITION_END));
+  };
+
+  const isElement = obj => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
+
+    if (typeof obj.jquery !== 'undefined') {
+      obj = obj[0];
+    }
+
+    return typeof obj.nodeType !== 'undefined';
+  };
+
+  const getElement = obj => {
+    if (isElement(obj)) {
+      // it's a jQuery object or a node element
+      return obj.jquery ? obj[0] : obj;
+    }
+
+    if (typeof obj === 'string' && obj.length > 0) {
+      return document.querySelector(obj);
+    }
+
+    return null;
+  };
+
+  const execute = callback => {
+    if (typeof callback === 'function') {
+      callback();
+    }
+  };
+
+  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+    if (!waitForTransition) {
+      execute(callback);
+      return;
+    }
+
+    const durationPadding = 5;
+    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
+    let called = false;
+
+    const handler = ({
+      target
+    }) => {
+      if (target !== transitionElement) {
+        return;
+      }
+
+      called = true;
+      transitionElement.removeEventListener(TRANSITION_END, handler);
+      execute(callback);
+    };
+
+    transitionElement.addEventListener(TRANSITION_END, handler);
+    setTimeout(() => {
+      if (!called) {
+        triggerTransitionEnd(transitionElement);
+      }
+    }, emulatedDuration);
+  };
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.3): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7530,40 +7714,63 @@ function within(min, value, max) {
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.0.0-beta3';
+  const VERSION = '5.1.3';
 
   class BaseComponent {
     constructor(element) {
-      element = typeof element === 'string' ? document.querySelector(element) : element;
+      element = getElement(element);
 
       if (!element) {
         return;
       }
 
       this._element = element;
-      Data__default['default'].set(this._element, this.constructor.DATA_KEY, this);
+      Data__default.default.set(this._element, this.constructor.DATA_KEY, this);
     }
 
     dispose() {
-      Data__default['default'].remove(this._element, this.constructor.DATA_KEY);
-      this._element = null;
+      Data__default.default.remove(this._element, this.constructor.DATA_KEY);
+      EventHandler__default.default.off(this._element, this.constructor.EVENT_KEY);
+      Object.getOwnPropertyNames(this).forEach(propertyName => {
+        this[propertyName] = null;
+      });
+    }
+
+    _queueCallback(callback, element, isAnimated = true) {
+      executeAfterTransition(callback, element, isAnimated);
     }
     /** Static */
 
 
     static getInstance(element) {
-      return Data__default['default'].get(element, this.DATA_KEY);
+      return Data__default.default.get(getElement(element), this.DATA_KEY);
+    }
+
+    static getOrCreateInstance(element, config = {}) {
+      return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
     }
 
     static get VERSION() {
       return VERSION;
     }
 
+    static get NAME() {
+      throw new Error('You have to implement the static method "NAME", for each component!');
+    }
+
+    static get DATA_KEY() {
+      return `bs.${this.NAME}`;
+    }
+
+    static get EVENT_KEY() {
+      return `.${this.DATA_KEY}`;
+    }
+
   }
 
   return BaseComponent;
 
-})));
+}));
 //# sourceMappingURL=base-component.js.map
 
 
@@ -7577,18 +7784,18 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap data.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
    true ? module.exports = factory() :
   undefined;
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): dom/data.js
+   * Bootstrap (v5.1.3): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7599,7 +7806,7 @@ function within(min, value, max) {
    * ------------------------------------------------------------------------
    */
   const elementMap = new Map();
-  var data = {
+  const data = {
     set(element, key, instance) {
       if (!elementMap.has(element)) {
         elementMap.set(element, new Map());
@@ -7642,7 +7849,7 @@ function within(min, value, max) {
 
   return data;
 
-})));
+}));
 //# sourceMappingURL=data.js.map
 
 
@@ -7656,18 +7863,18 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap event-handler.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
    true ? module.exports = factory() :
   undefined;
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7686,7 +7893,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): dom/event-handler.js
+   * Bootstrap (v5.1.3): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7706,6 +7913,7 @@ function within(min, value, max) {
     mouseenter: 'mouseover',
     mouseleave: 'mouseout'
   };
+  const customEventsRegex = /^(mouseenter|mouseleave)/i;
   const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
   /**
    * ------------------------------------------------------------------------
@@ -7748,8 +7956,7 @@ function within(min, value, max) {
             event.delegateTarget = target;
 
             if (handler.oneOff) {
-              // eslint-disable-next-line unicorn/consistent-destructuring
-              EventHandler.off(element, event.type, fn);
+              EventHandler.off(element, event.type, selector, fn);
             }
 
             return fn.apply(target, [event]);
@@ -7778,15 +7985,8 @@ function within(min, value, max) {
 
   function normalizeParams(originalTypeEvent, handler, delegationFn) {
     const delegation = typeof handler === 'string';
-    const originalHandler = delegation ? delegationFn : handler; // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
-
-    let typeEvent = originalTypeEvent.replace(stripNameRegex, '');
-    const custom = customEvents[typeEvent];
-
-    if (custom) {
-      typeEvent = custom;
-    }
-
+    const originalHandler = delegation ? delegationFn : handler;
+    let typeEvent = getTypeEvent(originalTypeEvent);
     const isNative = nativeEvents.has(typeEvent);
 
     if (!isNative) {
@@ -7804,6 +8004,24 @@ function within(min, value, max) {
     if (!handler) {
       handler = delegationFn;
       delegationFn = null;
+    } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
+    // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+
+
+    if (customEventsRegex.test(originalTypeEvent)) {
+      const wrapFn = fn => {
+        return function (event) {
+          if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
+            return fn.call(this, event);
+          }
+        };
+      };
+
+      if (delegationFn) {
+        delegationFn = wrapFn(delegationFn);
+      } else {
+        handler = wrapFn(handler);
+      }
     }
 
     const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
@@ -7845,6 +8063,12 @@ function within(min, value, max) {
         removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
       }
     });
+  }
+
+  function getTypeEvent(event) {
+    // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
+    event = event.replace(stripNameRegex, '');
+    return customEvents[event] || event;
   }
 
   const EventHandler = {
@@ -7899,7 +8123,7 @@ function within(min, value, max) {
       }
 
       const $ = getjQuery();
-      const typeEvent = event.replace(stripNameRegex, '');
+      const typeEvent = getTypeEvent(event);
       const inNamespace = event !== typeEvent;
       const isNative = nativeEvents.has(typeEvent);
       let jQueryEvent;
@@ -7957,7 +8181,7 @@ function within(min, value, max) {
 
   return EventHandler;
 
-})));
+}));
 //# sourceMappingURL=event-handler.js.map
 
 
@@ -7971,18 +8195,18 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap manipulator.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap manipulator.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
    true ? module.exports = factory() :
   undefined;
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): dom/manipulator.js
+   * Bootstrap (v5.1.3): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8040,8 +8264,8 @@ function within(min, value, max) {
     offset(element) {
       const rect = element.getBoundingClientRect();
       return {
-        top: rect.top + document.body.scrollTop,
-        left: rect.left + document.body.scrollLeft
+        top: rect.top + window.pageYOffset,
+        left: rect.left + window.pageXOffset
       };
     },
 
@@ -8056,7 +8280,7 @@ function within(min, value, max) {
 
   return Manipulator;
 
-})));
+}));
 //# sourceMappingURL=manipulator.js.map
 
 
@@ -8070,26 +8294,63 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap selector-engine.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
    true ? module.exports = factory() :
   undefined;
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): dom/selector-engine.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
 
+  const isElement = obj => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
+
+    if (typeof obj.jquery !== 'undefined') {
+      obj = obj[0];
+    }
+
+    return typeof obj.nodeType !== 'undefined';
+  };
+
+  const isVisible = element => {
+    if (!isElement(element) || element.getClientRects().length === 0) {
+      return false;
+    }
+
+    return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
+  };
+
+  const isDisabled = element => {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+
+    if (element.classList.contains('disabled')) {
+      return true;
+    }
+
+    if (typeof element.disabled !== 'undefined') {
+      return element.disabled;
+    }
+
+    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
+  };
+
   /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.3): dom/selector-engine.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
    */
   const NODE_TEXT = 3;
   const SelectorEngine = {
@@ -8146,13 +8407,18 @@ function within(min, value, max) {
       }
 
       return [];
+    },
+
+    focusableChildren(element) {
+      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
+      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
     }
 
   };
 
   return SelectorEngine;
 
-})));
+}));
 //# sourceMappingURL=selector-engine.js.map
 
 
@@ -8166,53 +8432,49 @@ function within(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap tooltip.js v5.0.0-beta3 (https://getbootstrap.com/)
+  * Bootstrap tooltip.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
    true ? module.exports = factory(__webpack_require__(/*! @popperjs/core */ "./node_modules/@popperjs/core/lib/index.js"), __webpack_require__(/*! ./dom/data.js */ "./node_modules/bootstrap/js/dist/dom/data.js"), __webpack_require__(/*! ./dom/event-handler.js */ "./node_modules/bootstrap/js/dist/dom/event-handler.js"), __webpack_require__(/*! ./dom/manipulator.js */ "./node_modules/bootstrap/js/dist/dom/manipulator.js"), __webpack_require__(/*! ./dom/selector-engine.js */ "./node_modules/bootstrap/js/dist/dom/selector-engine.js"), __webpack_require__(/*! ./base-component.js */ "./node_modules/bootstrap/js/dist/base-component.js")) :
   undefined;
-}(this, (function (Popper, Data, EventHandler, Manipulator, SelectorEngine, BaseComponent) { 'use strict';
+})(this, (function (Popper, Data, EventHandler, Manipulator, SelectorEngine, BaseComponent) { 'use strict';
 
-  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
   function _interopNamespace(e) {
     if (e && e.__esModule) return e;
-    var n = Object.create(null);
+    const n = Object.create(null);
     if (e) {
-      Object.keys(e).forEach(function (k) {
+      for (const k in e) {
         if (k !== 'default') {
-          var d = Object.getOwnPropertyDescriptor(e, k);
+          const d = Object.getOwnPropertyDescriptor(e, k);
           Object.defineProperty(n, k, d.get ? d : {
             enumerable: true,
-            get: function () {
-              return e[k];
-            }
+            get: () => e[k]
           });
         }
-      });
+      }
     }
-    n['default'] = e;
+    n.default = e;
     return Object.freeze(n);
   }
 
-  var Popper__namespace = /*#__PURE__*/_interopNamespace(Popper);
-  var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
-  var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
-  var Manipulator__default = /*#__PURE__*/_interopDefaultLegacy(Manipulator);
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
-  var BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+  const Popper__namespace = /*#__PURE__*/_interopNamespace(Popper);
+  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const Manipulator__default = /*#__PURE__*/_interopDefaultLegacy(Manipulator);
+  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   const MAX_UID = 1000000;
-  const MILLISECONDS_MULTIPLIER = 1000;
-  const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
   const toType = obj => {
     if (obj === null || obj === undefined) {
@@ -8236,51 +8498,29 @@ function within(min, value, max) {
     return prefix;
   };
 
-  const getTransitionDurationFromElement = element => {
-    if (!element) {
-      return 0;
-    } // Get transition-duration of the element
-
-
-    let {
-      transitionDuration,
-      transitionDelay
-    } = window.getComputedStyle(element);
-    const floatTransitionDuration = Number.parseFloat(transitionDuration);
-    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
-
-    if (!floatTransitionDuration && !floatTransitionDelay) {
-      return 0;
-    } // If multiple durations are defined, take the first
-
-
-    transitionDuration = transitionDuration.split(',')[0];
-    transitionDelay = transitionDelay.split(',')[0];
-    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
-  };
-
-  const triggerTransitionEnd = element => {
-    element.dispatchEvent(new Event(TRANSITION_END));
-  };
-
-  const isElement = obj => (obj[0] || obj).nodeType;
-
-  const emulateTransitionEnd = (element, duration) => {
-    let called = false;
-    const durationPadding = 5;
-    const emulatedDuration = duration + durationPadding;
-
-    function listener() {
-      called = true;
-      element.removeEventListener(TRANSITION_END, listener);
+  const isElement = obj => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
     }
 
-    element.addEventListener(TRANSITION_END, listener);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(element);
-      }
-    }, emulatedDuration);
+    if (typeof obj.jquery !== 'undefined') {
+      obj = obj[0];
+    }
+
+    return typeof obj.nodeType !== 'undefined';
+  };
+
+  const getElement = obj => {
+    if (isElement(obj)) {
+      // it's a jQuery object or a node element
+      return obj.jquery ? obj[0] : obj;
+    }
+
+    if (typeof obj === 'string' && obj.length > 0) {
+      return document.querySelector(obj);
+    }
+
+    return null;
   };
 
   const typeCheckConfig = (componentName, config, configTypes) => {
@@ -8290,7 +8530,7 @@ function within(min, value, max) {
       const valueType = value && isElement(value) ? 'element' : toType(value);
 
       if (!new RegExp(expectedTypes).test(valueType)) {
-        throw new TypeError(`${componentName.toUpperCase()}: ` + `Option "${property}" provided type "${valueType}" ` + `but expected type "${expectedTypes}".`);
+        throw new TypeError(`${componentName.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
       }
     });
   };
@@ -8318,7 +8558,7 @@ function within(min, value, max) {
     return findShadowRoot(element.parentNode);
   };
 
-  const noop = () => function () {};
+  const noop = () => {};
 
   const getjQuery = () => {
     const {
@@ -8332,9 +8572,18 @@ function within(min, value, max) {
     return null;
   };
 
+  const DOMContentLoadedCallbacks = [];
+
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', callback);
+      // add listener on the first call when the document is in loading state
+      if (!DOMContentLoadedCallbacks.length) {
+        document.addEventListener('DOMContentLoaded', () => {
+          DOMContentLoadedCallbacks.forEach(callback => callback());
+        });
+      }
+
+      DOMContentLoadedCallbacks.push(callback);
     } else {
       callback();
     }
@@ -8342,12 +8591,13 @@ function within(min, value, max) {
 
   const isRTL = () => document.documentElement.dir === 'rtl';
 
-  const defineJQueryPlugin = (name, plugin) => {
+  const defineJQueryPlugin = plugin => {
     onDOMContentLoaded(() => {
       const $ = getjQuery();
       /* istanbul ignore if */
 
       if ($) {
+        const name = plugin.NAME;
         const JQUERY_NO_CONFLICT = $.fn[name];
         $.fn[name] = plugin.jQueryInterface;
         $.fn[name].Constructor = plugin;
@@ -8362,42 +8612,42 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): util/sanitizer.js
+   * Bootstrap (v5.1.3): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
-  const uriAttrs = new Set(['background', 'cite', 'href', 'itemtype', 'longdesc', 'poster', 'src', 'xlink:href']);
+  const uriAttributes = new Set(['background', 'cite', 'href', 'itemtype', 'longdesc', 'poster', 'src', 'xlink:href']);
   const ARIA_ATTRIBUTE_PATTERN = /^aria-[\w-]*$/i;
   /**
    * A pattern that recognizes a commonly useful subset of URLs that are safe.
    *
-   * Shoutout to Angular 7 https://github.com/angular/angular/blob/7.2.4/packages/core/src/sanitization/url_sanitizer.ts
+   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
-  const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^#&/:?]*(?:[#/?]|$))/i;
+  const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i;
   /**
    * A pattern that matches safe data URLs. Only matches image, video and audio types.
    *
-   * Shoutout to Angular 7 https://github.com/angular/angular/blob/7.2.4/packages/core/src/sanitization/url_sanitizer.ts
+   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
   const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
 
-  const allowedAttribute = (attr, allowedAttributeList) => {
-    const attrName = attr.nodeName.toLowerCase();
+  const allowedAttribute = (attribute, allowedAttributeList) => {
+    const attributeName = attribute.nodeName.toLowerCase();
 
-    if (allowedAttributeList.includes(attrName)) {
-      if (uriAttrs.has(attrName)) {
-        return Boolean(SAFE_URL_PATTERN.test(attr.nodeValue) || DATA_URL_PATTERN.test(attr.nodeValue));
+    if (allowedAttributeList.includes(attributeName)) {
+      if (uriAttributes.has(attributeName)) {
+        return Boolean(SAFE_URL_PATTERN.test(attribute.nodeValue) || DATA_URL_PATTERN.test(attribute.nodeValue));
       }
 
       return true;
     }
 
-    const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); // Check if a regular expression validates the attribute.
+    const regExp = allowedAttributeList.filter(attributeRegex => attributeRegex instanceof RegExp); // Check if a regular expression validates the attribute.
 
     for (let i = 0, len = regExp.length; i < len; i++) {
-      if (regExp[i].test(attrName)) {
+      if (regExp[i].test(attributeName)) {
         return true;
       }
     }
@@ -8449,23 +8699,22 @@ function within(min, value, max) {
 
     const domParser = new window.DOMParser();
     const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html');
-    const allowlistKeys = Object.keys(allowList);
     const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
 
     for (let i = 0, len = elements.length; i < len; i++) {
-      const el = elements[i];
-      const elName = el.nodeName.toLowerCase();
+      const element = elements[i];
+      const elementName = element.nodeName.toLowerCase();
 
-      if (!allowlistKeys.includes(elName)) {
-        el.parentNode.removeChild(el);
+      if (!Object.keys(allowList).includes(elementName)) {
+        element.remove();
         continue;
       }
 
-      const attributeList = [].concat(...el.attributes);
-      const allowedAttributes = [].concat(allowList['*'] || [], allowList[elName] || []);
-      attributeList.forEach(attr => {
-        if (!allowedAttribute(attr, allowedAttributes)) {
-          el.removeAttribute(attr.nodeName);
+      const attributeList = [].concat(...element.attributes);
+      const allowedAttributes = [].concat(allowList['*'] || [], allowList[elementName] || []);
+      attributeList.forEach(attribute => {
+        if (!allowedAttribute(attribute, allowedAttributes)) {
+          element.removeAttribute(attribute.nodeName);
         }
       });
     }
@@ -8475,7 +8724,7 @@ function within(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-beta3): tooltip.js
+   * Bootstrap (v5.1.3): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8489,7 +8738,6 @@ function within(min, value, max) {
   const DATA_KEY = 'bs.tooltip';
   const EVENT_KEY = `.${DATA_KEY}`;
   const CLASS_PREFIX = 'bs-tooltip';
-  const BSCLS_PREFIX_REGEX = new RegExp(`(^|\\s)${CLASS_PREFIX}\\S+`, 'g');
   const DISALLOWED_ATTRIBUTES = new Set(['sanitize', 'allowList', 'sanitizeFn']);
   const DefaultType = {
     animation: 'boolean',
@@ -8536,7 +8784,7 @@ function within(min, value, max) {
     allowList: DefaultAllowlist,
     popperConfig: null
   };
-  const Event$1 = {
+  const Event = {
     HIDE: `hide${EVENT_KEY}`,
     HIDDEN: `hidden${EVENT_KEY}`,
     SHOW: `show${EVENT_KEY}`,
@@ -8554,6 +8802,8 @@ function within(min, value, max) {
   const HOVER_STATE_SHOW = 'show';
   const HOVER_STATE_OUT = 'out';
   const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
+  const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
+  const EVENT_MODAL_HIDE = 'hide.bs.modal';
   const TRIGGER_HOVER = 'hover';
   const TRIGGER_FOCUS = 'focus';
   const TRIGGER_CLICK = 'click';
@@ -8564,7 +8814,7 @@ function within(min, value, max) {
    * ------------------------------------------------------------------------
    */
 
-  class Tooltip extends BaseComponent__default['default'] {
+  class Tooltip extends BaseComponent__default.default {
     constructor(element, config) {
       if (typeof Popper__namespace === 'undefined') {
         throw new TypeError('Bootstrap\'s tooltips require Popper (https://popper.js.org)');
@@ -8578,7 +8828,7 @@ function within(min, value, max) {
       this._activeTrigger = {};
       this._popper = null; // Protected
 
-      this.config = this._getConfig(config);
+      this._config = this._getConfig(config);
       this.tip = null;
 
       this._setListeners();
@@ -8593,16 +8843,8 @@ function within(min, value, max) {
       return NAME;
     }
 
-    static get DATA_KEY() {
-      return DATA_KEY;
-    }
-
     static get Event() {
-      return Event$1;
-    }
-
-    static get EVENT_KEY() {
-      return EVENT_KEY;
+      return Event;
     }
 
     static get DefaultType() {
@@ -8650,25 +8892,14 @@ function within(min, value, max) {
 
     dispose() {
       clearTimeout(this._timeout);
-      EventHandler__default['default'].off(this._element, this.constructor.EVENT_KEY);
-      EventHandler__default['default'].off(this._element.closest(`.${CLASS_NAME_MODAL}`), 'hide.bs.modal', this._hideModalHandler);
+      EventHandler__default.default.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
-      if (this.tip && this.tip.parentNode) {
-        this.tip.parentNode.removeChild(this.tip);
+      if (this.tip) {
+        this.tip.remove();
       }
 
-      this._isEnabled = null;
-      this._timeout = null;
-      this._hoverState = null;
-      this._activeTrigger = null;
+      this._disposePopper();
 
-      if (this._popper) {
-        this._popper.destroy();
-      }
-
-      this._popper = null;
-      this.config = null;
-      this.tip = null;
       super.dispose();
     }
 
@@ -8681,12 +8912,21 @@ function within(min, value, max) {
         return;
       }
 
-      const showEvent = EventHandler__default['default'].trigger(this._element, this.constructor.Event.SHOW);
+      const showEvent = EventHandler__default.default.trigger(this._element, this.constructor.Event.SHOW);
       const shadowRoot = findShadowRoot(this._element);
       const isInTheDom = shadowRoot === null ? this._element.ownerDocument.documentElement.contains(this._element) : shadowRoot.contains(this._element);
 
       if (showEvent.defaultPrevented || !isInTheDom) {
         return;
+      } // A trick to recreate a tooltip in case a new title is given by using the NOT documented `data-bs-original-title`
+      // This will be removed later in favor of a `setContent` method
+
+
+      if (this.constructor.NAME === 'tooltip' && this.tip && this.getTitle() !== this.tip.querySelector(SELECTOR_TOOLTIP_INNER).innerHTML) {
+        this._disposePopper();
+
+        this.tip.remove();
+        this.tip = null;
       }
 
       const tip = this.getTipElement();
@@ -8695,25 +8935,24 @@ function within(min, value, max) {
 
       this._element.setAttribute('aria-describedby', tipId);
 
-      this.setContent();
-
-      if (this.config.animation) {
+      if (this._config.animation) {
         tip.classList.add(CLASS_NAME_FADE);
       }
 
-      const placement = typeof this.config.placement === 'function' ? this.config.placement.call(this, tip, this._element) : this.config.placement;
+      const placement = typeof this._config.placement === 'function' ? this._config.placement.call(this, tip, this._element) : this._config.placement;
 
       const attachment = this._getAttachment(placement);
 
       this._addAttachmentClass(attachment);
 
-      const container = this._getContainer();
-
-      Data__default['default'].set(tip, this.constructor.DATA_KEY, this);
+      const {
+        container
+      } = this._config;
+      Data__default.default.set(tip, this.constructor.DATA_KEY, this);
 
       if (!this._element.ownerDocument.documentElement.contains(this.tip)) {
-        container.appendChild(tip);
-        EventHandler__default['default'].trigger(this._element, this.constructor.Event.INSERTED);
+        container.append(tip);
+        EventHandler__default.default.trigger(this._element, this.constructor.Event.INSERTED);
       }
 
       if (this._popper) {
@@ -8723,7 +8962,8 @@ function within(min, value, max) {
       }
 
       tip.classList.add(CLASS_NAME_SHOW);
-      const customClass = typeof this.config.customClass === 'function' ? this.config.customClass() : this.config.customClass;
+
+      const customClass = this._resolvePossibleFunction(this._config.customClass);
 
       if (customClass) {
         tip.classList.add(...customClass.split(' '));
@@ -8735,27 +8975,23 @@ function within(min, value, max) {
 
       if ('ontouchstart' in document.documentElement) {
         [].concat(...document.body.children).forEach(element => {
-          EventHandler__default['default'].on(element, 'mouseover', noop());
+          EventHandler__default.default.on(element, 'mouseover', noop);
         });
       }
 
       const complete = () => {
         const prevHoverState = this._hoverState;
         this._hoverState = null;
-        EventHandler__default['default'].trigger(this._element, this.constructor.Event.SHOWN);
+        EventHandler__default.default.trigger(this._element, this.constructor.Event.SHOWN);
 
         if (prevHoverState === HOVER_STATE_OUT) {
           this._leave(null, this);
         }
       };
 
-      if (this.tip.classList.contains(CLASS_NAME_FADE)) {
-        const transitionDuration = getTransitionDurationFromElement(this.tip);
-        EventHandler__default['default'].one(this.tip, 'transitionend', complete);
-        emulateTransitionEnd(this.tip, transitionDuration);
-      } else {
-        complete();
-      }
+      const isAnimated = this.tip.classList.contains(CLASS_NAME_FADE);
+
+      this._queueCallback(complete, this.tip, isAnimated);
     }
 
     hide() {
@@ -8770,24 +9006,20 @@ function within(min, value, max) {
           return;
         }
 
-        if (this._hoverState !== HOVER_STATE_SHOW && tip.parentNode) {
-          tip.parentNode.removeChild(tip);
+        if (this._hoverState !== HOVER_STATE_SHOW) {
+          tip.remove();
         }
 
         this._cleanTipClass();
 
         this._element.removeAttribute('aria-describedby');
 
-        EventHandler__default['default'].trigger(this._element, this.constructor.Event.HIDDEN);
+        EventHandler__default.default.trigger(this._element, this.constructor.Event.HIDDEN);
 
-        if (this._popper) {
-          this._popper.destroy();
-
-          this._popper = null;
-        }
+        this._disposePopper();
       };
 
-      const hideEvent = EventHandler__default['default'].trigger(this._element, this.constructor.Event.HIDE);
+      const hideEvent = EventHandler__default.default.trigger(this._element, this.constructor.Event.HIDE);
 
       if (hideEvent.defaultPrevented) {
         return;
@@ -8797,20 +9029,15 @@ function within(min, value, max) {
       // empty mouseover listeners we added for iOS support
 
       if ('ontouchstart' in document.documentElement) {
-        [].concat(...document.body.children).forEach(element => EventHandler__default['default'].off(element, 'mouseover', noop));
+        [].concat(...document.body.children).forEach(element => EventHandler__default.default.off(element, 'mouseover', noop));
       }
 
       this._activeTrigger[TRIGGER_CLICK] = false;
       this._activeTrigger[TRIGGER_FOCUS] = false;
       this._activeTrigger[TRIGGER_HOVER] = false;
+      const isAnimated = this.tip.classList.contains(CLASS_NAME_FADE);
 
-      if (this.tip.classList.contains(CLASS_NAME_FADE)) {
-        const transitionDuration = getTransitionDurationFromElement(tip);
-        EventHandler__default['default'].one(tip, 'transitionend', complete);
-        emulateTransitionEnd(tip, transitionDuration);
-      } else {
-        complete();
-      }
+      this._queueCallback(complete, this.tip, isAnimated);
 
       this._hoverState = '';
     }
@@ -8832,15 +9059,28 @@ function within(min, value, max) {
       }
 
       const element = document.createElement('div');
-      element.innerHTML = this.config.template;
-      this.tip = element.children[0];
+      element.innerHTML = this._config.template;
+      const tip = element.children[0];
+      this.setContent(tip);
+      tip.classList.remove(CLASS_NAME_FADE, CLASS_NAME_SHOW);
+      this.tip = tip;
       return this.tip;
     }
 
-    setContent() {
-      const tip = this.getTipElement();
-      this.setElementContent(SelectorEngine__default['default'].findOne(SELECTOR_TOOLTIP_INNER, tip), this.getTitle());
-      tip.classList.remove(CLASS_NAME_FADE, CLASS_NAME_SHOW);
+    setContent(tip) {
+      this._sanitizeAndSetContent(tip, this.getTitle(), SELECTOR_TOOLTIP_INNER);
+    }
+
+    _sanitizeAndSetContent(template, content, selector) {
+      const templateElement = SelectorEngine__default.default.findOne(selector, template);
+
+      if (!content && templateElement) {
+        templateElement.remove();
+        return;
+      } // we use append for html objects to maintain js events
+
+
+      this.setElementContent(templateElement, content);
     }
 
     setElementContent(element, content) {
@@ -8848,16 +9088,13 @@ function within(min, value, max) {
         return;
       }
 
-      if (typeof content === 'object' && isElement(content)) {
-        if (content.jquery) {
-          content = content[0];
-        } // content is a DOM node or a jQuery
+      if (isElement(content)) {
+        content = getElement(content); // content is a DOM node or a jQuery
 
-
-        if (this.config.html) {
+        if (this._config.html) {
           if (content.parentNode !== element) {
             element.innerHTML = '';
-            element.appendChild(content);
+            element.append(content);
           }
         } else {
           element.textContent = content.textContent;
@@ -8866,9 +9103,9 @@ function within(min, value, max) {
         return;
       }
 
-      if (this.config.html) {
-        if (this.config.sanitize) {
-          content = sanitizeHtml(content, this.config.allowList, this.config.sanitizeFn);
+      if (this._config.html) {
+        if (this._config.sanitize) {
+          content = sanitizeHtml(content, this._config.allowList, this._config.sanitizeFn);
         }
 
         element.innerHTML = content;
@@ -8878,13 +9115,9 @@ function within(min, value, max) {
     }
 
     getTitle() {
-      let title = this._element.getAttribute('data-bs-original-title');
+      const title = this._element.getAttribute('data-bs-original-title') || this._config.title;
 
-      if (!title) {
-        title = typeof this.config.title === 'function' ? this.config.title.call(this._element) : this.config.title;
-      }
-
-      return title;
+      return this._resolvePossibleFunction(title);
     }
 
     updateAttachment(attachment) {
@@ -8901,21 +9134,13 @@ function within(min, value, max) {
 
 
     _initializeOnDelegatedTarget(event, context) {
-      const dataKey = this.constructor.DATA_KEY;
-      context = context || Data__default['default'].get(event.delegateTarget, dataKey);
-
-      if (!context) {
-        context = new this.constructor(event.delegateTarget, this._getDelegateConfig());
-        Data__default['default'].set(event.delegateTarget, dataKey, context);
-      }
-
-      return context;
+      return context || this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
     }
 
     _getOffset() {
       const {
         offset
-      } = this.config;
+      } = this._config;
 
       if (typeof offset === 'string') {
         return offset.split(',').map(val => Number.parseInt(val, 10));
@@ -8928,14 +9153,17 @@ function within(min, value, max) {
       return offset;
     }
 
+    _resolvePossibleFunction(content) {
+      return typeof content === 'function' ? content.call(this._element) : content;
+    }
+
     _getPopperConfig(attachment) {
       const defaultBsPopperConfig = {
         placement: attachment,
         modifiers: [{
           name: 'flip',
           options: {
-            altBoundary: true,
-            fallbackPlacements: this.config.fallbackPlacements
+            fallbackPlacements: this._config.fallbackPlacements
           }
         }, {
           name: 'offset',
@@ -8945,7 +9173,7 @@ function within(min, value, max) {
         }, {
           name: 'preventOverflow',
           options: {
-            boundary: this.config.boundary
+            boundary: this._config.boundary
           }
         }, {
           name: 'arrow',
@@ -8965,24 +9193,12 @@ function within(min, value, max) {
         }
       };
       return { ...defaultBsPopperConfig,
-        ...(typeof this.config.popperConfig === 'function' ? this.config.popperConfig(defaultBsPopperConfig) : this.config.popperConfig)
+        ...(typeof this._config.popperConfig === 'function' ? this._config.popperConfig(defaultBsPopperConfig) : this._config.popperConfig)
       };
     }
 
     _addAttachmentClass(attachment) {
-      this.getTipElement().classList.add(`${CLASS_PREFIX}-${this.updateAttachment(attachment)}`);
-    }
-
-    _getContainer() {
-      if (this.config.container === false) {
-        return document.body;
-      }
-
-      if (isElement(this.config.container)) {
-        return this.config.container;
-      }
-
-      return SelectorEngine__default['default'].findOne(this.config.container);
+      this.getTipElement().classList.add(`${this._getBasicClassPrefix()}-${this.updateAttachment(attachment)}`);
     }
 
     _getAttachment(placement) {
@@ -8990,15 +9206,16 @@ function within(min, value, max) {
     }
 
     _setListeners() {
-      const triggers = this.config.trigger.split(' ');
+      const triggers = this._config.trigger.split(' ');
+
       triggers.forEach(trigger => {
         if (trigger === 'click') {
-          EventHandler__default['default'].on(this._element, this.constructor.Event.CLICK, this.config.selector, event => this.toggle(event));
+          EventHandler__default.default.on(this._element, this.constructor.Event.CLICK, this._config.selector, event => this.toggle(event));
         } else if (trigger !== TRIGGER_MANUAL) {
           const eventIn = trigger === TRIGGER_HOVER ? this.constructor.Event.MOUSEENTER : this.constructor.Event.FOCUSIN;
           const eventOut = trigger === TRIGGER_HOVER ? this.constructor.Event.MOUSELEAVE : this.constructor.Event.FOCUSOUT;
-          EventHandler__default['default'].on(this._element, eventIn, this.config.selector, event => this._enter(event));
-          EventHandler__default['default'].on(this._element, eventOut, this.config.selector, event => this._leave(event));
+          EventHandler__default.default.on(this._element, eventIn, this._config.selector, event => this._enter(event));
+          EventHandler__default.default.on(this._element, eventOut, this._config.selector, event => this._leave(event));
         }
       });
 
@@ -9008,10 +9225,10 @@ function within(min, value, max) {
         }
       };
 
-      EventHandler__default['default'].on(this._element.closest(`.${CLASS_NAME_MODAL}`), 'hide.bs.modal', this._hideModalHandler);
+      EventHandler__default.default.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
-      if (this.config.selector) {
-        this.config = { ...this.config,
+      if (this._config.selector) {
+        this._config = { ...this._config,
           trigger: 'manual',
           selector: ''
         };
@@ -9051,7 +9268,7 @@ function within(min, value, max) {
       clearTimeout(context._timeout);
       context._hoverState = HOVER_STATE_SHOW;
 
-      if (!context.config.delay || !context.config.delay.show) {
+      if (!context._config.delay || !context._config.delay.show) {
         context.show();
         return;
       }
@@ -9060,7 +9277,7 @@ function within(min, value, max) {
         if (context._hoverState === HOVER_STATE_SHOW) {
           context.show();
         }
-      }, context.config.delay.show);
+      }, context._config.delay.show);
     }
 
     _leave(event, context) {
@@ -9077,7 +9294,7 @@ function within(min, value, max) {
       clearTimeout(context._timeout);
       context._hoverState = HOVER_STATE_OUT;
 
-      if (!context.config.delay || !context.config.delay.hide) {
+      if (!context._config.delay || !context._config.delay.hide) {
         context.hide();
         return;
       }
@@ -9086,7 +9303,7 @@ function within(min, value, max) {
         if (context._hoverState === HOVER_STATE_OUT) {
           context.hide();
         }
-      }, context.config.delay.hide);
+      }, context._config.delay.hide);
     }
 
     _isWithActiveTrigger() {
@@ -9100,21 +9317,17 @@ function within(min, value, max) {
     }
 
     _getConfig(config) {
-      const dataAttributes = Manipulator__default['default'].getDataAttributes(this._element);
+      const dataAttributes = Manipulator__default.default.getDataAttributes(this._element);
       Object.keys(dataAttributes).forEach(dataAttr => {
         if (DISALLOWED_ATTRIBUTES.has(dataAttr)) {
           delete dataAttributes[dataAttr];
         }
       });
-
-      if (config && typeof config.container === 'object' && config.container.jquery) {
-        config.container = config.container[0];
-      }
-
       config = { ...this.constructor.Default,
         ...dataAttributes,
         ...(typeof config === 'object' && config ? config : {})
       };
+      config.container = config.container === false ? document.body : getElement(config.container);
 
       if (typeof config.delay === 'number') {
         config.delay = {
@@ -9143,24 +9356,30 @@ function within(min, value, max) {
     _getDelegateConfig() {
       const config = {};
 
-      if (this.config) {
-        for (const key in this.config) {
-          if (this.constructor.Default[key] !== this.config[key]) {
-            config[key] = this.config[key];
-          }
+      for (const key in this._config) {
+        if (this.constructor.Default[key] !== this._config[key]) {
+          config[key] = this._config[key];
         }
-      }
+      } // In the future can be replaced with:
+      // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
+      // `Object.fromEntries(keysWithDifferentValues)`
+
 
       return config;
     }
 
     _cleanTipClass() {
       const tip = this.getTipElement();
-      const tabClass = tip.getAttribute('class').match(BSCLS_PREFIX_REGEX);
+      const basicClassPrefixRegex = new RegExp(`(^|\\s)${this._getBasicClassPrefix()}\\S+`, 'g');
+      const tabClass = tip.getAttribute('class').match(basicClassPrefixRegex);
 
       if (tabClass !== null && tabClass.length > 0) {
         tabClass.map(token => token.trim()).forEach(tClass => tip.classList.remove(tClass));
       }
+    }
+
+    _getBasicClassPrefix() {
+      return CLASS_PREFIX;
     }
 
     _handlePopperPlacementChange(popperData) {
@@ -9177,22 +9396,20 @@ function within(min, value, max) {
       this._cleanTipClass();
 
       this._addAttachmentClass(this._getAttachment(state.placement));
+    }
+
+    _disposePopper() {
+      if (this._popper) {
+        this._popper.destroy();
+
+        this._popper = null;
+      }
     } // Static
 
 
     static jQueryInterface(config) {
       return this.each(function () {
-        let data = Data__default['default'].get(this, DATA_KEY);
-
-        const _config = typeof config === 'object' && config;
-
-        if (!data && /dispose|hide/.test(config)) {
-          return;
-        }
-
-        if (!data) {
-          data = new Tooltip(this, _config);
-        }
+        const data = Tooltip.getOrCreateInstance(this, config);
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
@@ -9213,11 +9430,11 @@ function within(min, value, max) {
    */
 
 
-  defineJQueryPlugin(NAME, Tooltip);
+  defineJQueryPlugin(Tooltip);
 
   return Tooltip;
 
-})));
+}));
 //# sourceMappingURL=tooltip.js.map
 
 
@@ -9266,6 +9483,17 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
 
 /***/ }),
 

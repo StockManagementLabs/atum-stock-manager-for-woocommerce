@@ -3,19 +3,17 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, janberebel, danielberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.8.0
+Tested up to: 5.8.2
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 5.5.1
-Stable tag: 1.9.2
+WC tested up to: 6.0.0
+Stable tag: 1.9.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock, Inventory Logs, WooCommerce Sales Statistics and New Updates Weekly.
 
 == Description ==
-
-**With an Online Selling Boost Comes [ATUM Action Logs Premium Add-on](https://www.stockmanagementlabs.com/addons/atum-action-logs/)** - keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 **✨ NEW IMPROVED ATUM 1.9**
 
@@ -60,6 +58,8 @@ Exports of data are done automatically instead of copying and pasting manually. 
 In addition, with the import feature of the [Export Pro add-on](https://demo.export-pro.stockmanagementlabs.com/), you will be able to save a lot of time by importing data in a bulk.
 
 🚀 [ATUM Action Logs](https://www.stockmanagementlabs.com/addons/atum-action-logs/)
+
+Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions.
 
 ATUM Action Logs aims to bring complete control into the WooCommerce inventory management. Every action or everyday task users take within the process needs to be recorded. These **recordings** we call action logs. Lots of outsides and inside factors are involved in fulfilling the inventory management process.
 
@@ -242,6 +242,285 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.9`
+
+*2021-12-17*
+
+**Features**
+
+* Added function to delete the add-ons list transient.
+* Allow filtering products by multiple ATUM Locations through ATUM API.
+
+**Changes**
+
+* Updated notice for expired licenses.
+* Do not use the WC order product lookup tables when recalculating sales props because WC delays its update.
+* Refactoring.
+* Use the default ATUM's blue color for the modal's confirm button.
+* Avoid sending stock notifications of unmanaged products.
+
+**Fixes**
+
+* Avoid to increase one hour when saving a PO.
+* CSS fix.
+
+---
+
+`1.9.8.2`
+
+*2021-12-09*
+
+**Changes**
+
+* Refactoring.
+* Added new filter to ATUM Order's posted data keys to be able to add more keys externally.
+
+**Fixes**
+
+* Fixed PHP 8.1 compatibility code.
+* Fixed Settings page's CSS issues.
+
+---
+
+`1.9.8.1`
+
+*2021-12-03*
+
+**Fixes**
+
+* Fixed sales calc props not updating in defer mode.
+* Save the posted order items data when updating any ATUM order without clicking on "Save Items" button first.
+
+**Changes**
+
+* Refactoring.
+
+---
+
+`1.9.8`
+
+*2021-12-02*
+
+**Features**
+
+* Performance improvement: prevent duplicated ATUM queries in List Tables.
+* Performance improvement: use the product_meta_lokup table to retrieve the unmanaged products (when possible).
+* Added new "Avanced" tab to ATUM Settings and moved some advanced options there.
+* Performance improvement: Re-enabled WC order product lookup tables for queries.
+* Allow disabling Stock Central columns from settings.
+
+**Changes**
+
+* Updated ATUM icons font.
+* ATUM dates refactoring.
+* Remove old scheduled tasks when upgrading.
+
+**Fixes**
+
+* Fixed wrong table alias for CI collations.
+* Fixed possible inconsistencies in taxonomy relations when searching for the parent product type.
+* Save the update dates for children products after they are printed in Stock Central.
+
+---
+
+`1.9.7.2`
+
+*2021-11-26*
+
+**Fixes**
+
+* Fixed wrong text domains.
+
+---
+
+`1.9.7`
+
+*2021-11-26*
+
+**Features**
+
+* Improved multi-checkbox fields in ATUM Settings.
+* Added sales_update_date field to ATUM product data.
+* Added sales_update_date to the ATUM product model and use it in List Tables.
+* Include sales update date when translating a product with WPML.
+* Allow multiple inputs on EditPopovers.
+* Allow setting a cron for updating product sales properties (instead of doing it asynchronously right away).
+* Remove ATUM scheduled actions when uninstalling and/or when updating to a new version (if any was duplicated for some reason).
+* Improved set purchase price modal.
+
+**Changes**
+
+* List Tables search refactoring.
+* Ajax nonce names unification.
+* Always show all the muti-checkboxes when the main switcher isn’t used.
+* Converted the WPML class to singletons.
+* Prevent showing ATUM panels even when creating a translation.
+* Moved UTC functions from ATUM Export.
+* Provide jQuery with Webpack config to avoid conflicts with 3rd party plugins.
+* Refactoring.
+* Updated JS dependencies.
+* Disallow flex-wrap on input-group.
+* Do not set the current date to the PO's expected date if it's empty.
+* When a list is shown with no results, replace all the coming data (so the totalizers row is removed if necessary).
+* Refactoring for the entries per page option in ATUM List Tables.
+* JS hooks renaming to follow the same naming conventions.
+* Destroy the ediPopovers before re-adding them if they had a previous popover linked.
+
+**Fixes**
+
+* Fixed adding supplier variables when searching by column.
+* Fixed multi-checkbox fields' main switchers.
+* Fixed input checkbox styles in ATUM settings.
+* Fixed APD register not created for translations when using WPML editor.
+* Fixed atum_controlled not able to update for variations at product metaboxes.
+* Fixed accessing wrong item variable.
+* Fixed popovers CSS warning.
+* Fixed the WPML's multilingual content setup meta box removal on ATUM orders.
+* Fixed reset filters button in List Tables.
+* Fixed db prepare without parameters notice.
+* Minor CSS fixes.
+* Ensure data is read from the database after updating a List Table.
+* Fixed WP Editor fields saving in ATUM settings.
+
+---
+
+`1.9.6`
+
+*2021-11-02*
+
+**Features**
+
+* Performance improvement: after saving in Stock Central return the updated table data directly without having to perform an extra request to update.
+* Allow returning data externally from other List Tables.
+* Improved Supplier model to allow inserting new suppliers.
+* Added new helper to get the URL of the current List Table page.
+* Added extra filters compatibility to all the List Tables.
+* Use the ATUM modal for the SC's extra filters modals.
+* Allow creating suppliers from an ATUM list table.
+
+**Changes**
+
+* Do not add the no-column and title to the seach by column dropdown when not necessary.
+* Refactoring.
+* Changed hook name 'atum/list_table/product_search/numeric_meta_where'.
+* Return an empty array on ajax JSON search functions when there are no results.
+* Added Purchase Orders Premium' first version to the add-ons list.
+* Added arg to the 'atum_listTable_tableUpdated' JS hook.
+* Set a max height for the menu popovers' list.
+* Changed placeholder text for the out of stock threshold field.
+
+**Fixes**
+
+* Make sure the supplier's name is escaped before adding it to the editable cell's data.
+* Show a "no results found" message when searching for suppliers on the suppliers dropdown.
+* Remove the table overlay when an error is returned after doing a bulk action.
+* Fixed CSS styling for disabled inputs.
+* Fixed disabled BG color for select2 fields.
+* Fixed supplier filter not affecting to children rows in List Tables.
+* Apply the suppliers filter when filtering by ID.
+
+---
+
+`1.9.5`
+
+*2021-10-07*
+
+**Features**
+
+* Added support for WP Editor fields in Settings.
+* Allow changing Supplier from Stock Central.
+* Enabled stock totalizer increase of a bundle product if has stock control enabled.
+* Added popover instance to button data after enabling an ATUM popover.
+* Added support for mouse wheel scrolling to List Tables' nav filters.
+* Added result data to the API tools response.
+
+**Changes**
+
+* Updated JS dependencies.
+* Refactoring.
+* Improved popover JS components.
+* Changed List Table popup's titles for selects.
+* Marked helper as deprecated.
+* Show (no title) text on suppliers dropdown when any supplier has no title.
+* Show a red background colour when no items are found in List Tables.
+* Sync the top and bottom bulk actions selects in List Tables.
+* Make sure the list tables' query is for products before applying our filter to the 'posts_search'.
+* Do not verify the SML site certificate when retrieving the add-ons list.
+
+**Fixes**
+
+* Fixed grouped product with manage at product level activated displayed in uncontrolled tab in SC.
+* Fixed dependency handler on upload fields.
+* CSS fixes.
+* Fixed Stock Central's stock totalizer when a product from a bundle has MI.
+* Fixed popover title not being shown.
+* Fixed wrong price & stock calcs in the Current Stock Value widget.
+* Avoid duplicating grouped children when searching grouped products by ID column.
+* Unbind dragScroll events before rebinding.
+* Fixed Reset Filter button in List Tables.
+* Fixed non-static function being called statically.
+
+---
+
+`1.9.4`
+
+*2021-09-17*
+
+**Features**
+
+* Added helper method to check if an async action is actually running.
+* Added filter for displaying columns id at ListTables.
+* Allow increasing the items per page limit in ATUM API when the request comes from the ATUM App.
+* Allow setting the fee name directly (PO premium compatibility).
+* Added WP-CLI support for all the ATUM tools.
+* Allow setting default values on editPopover JS component.
+
+**Changes**
+
+* Show grouped products' stock in Stock Central.
+* Refactoring.
+* Handle errors when removing ATUM Order items.
+* Separate the order item removal in 2 steps.
+* Regenerated the composer's autoload.
+
+**Fixes**
+
+* Fixed sales last days are always calculated in Stock Central when the sale days are distinct of 14.
+* Prevent increasing stock totalizer in Unmanaged view.
+* Fixed "In stock" and "Out of stock" counters in views counters.
+* Fixed compunded stock on bundled and grouped products when these have MI.
+* Fixed label's for attribute.
+
+---
+
+`1.9.3`
+
+*2021-08-17*
+
+**Features**
+
+* Added script hook to allow/prevent stock changes in order items.
+* Added capability to update low stock threshold at inventory level.
+* Added new filter before checking the async requests availability.
+* Added new fields to suppliers: cancellation policy, days to cancel and payment & delivery terms.
+
+**Changes**
+
+* List tables will show all decimals for prices when editing the values.
+* Ensure that ATUM orders exists before instantiated.
+* Check if an ATUM order is saved before adding items.
+* Updated ATUM icon font
+* Updated composer's autoload.
+
+**Fixes**
+
+* CSS fixes.
+* Fixed wrong shortage column color in Manufacturing Central.
+* Fixed Variable products don't allow to buy quantities less than 1.
+* Fixed email no stock and low stock notification errors.
 
 ---
 

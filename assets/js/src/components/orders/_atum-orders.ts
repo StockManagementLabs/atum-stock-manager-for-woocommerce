@@ -44,7 +44,13 @@ export default class AtumOrders {
 		this.dateTimePicker.addDateTimePickers( $( '.atum-datepicker' ), { minDate: false } );
 
 		this.bindEvents();
-		
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window[ 'atum' ] = {};
+		}
+
+		window[ 'atum' ][ 'AtumOrders' ] = this;
 	}
 	
 	bindEvents() {
@@ -90,7 +96,7 @@ export default class AtumOrders {
 		this.$multipleSuppliers.change( () => this.toggleSupplierField() );
 
 		// Ask for importing the order items after linking an order.
-		$( '#wc_order' ).change( () => this.importOrderItems() );
+		$( '#wc_order' ).change( ( evt: JQueryEventObject ) => this.importOrderItems( $( evt.currentTarget ), 'IL' ) );
 
 		// Change button page-title-action position.
 		$( '.wp-heading-inline' ).append( $( '.page-title-action' ).show() );
@@ -113,7 +119,7 @@ export default class AtumOrders {
 	savePurchaseOrderSupplier() {
 
 		const $searcher: JQuery   = $( '#add_item_id' ),
-		      atumOrderId: number = this.settings.get( 'post_id' ),
+		      atumOrderId: number = this.settings.get( 'postId' ),
 		      supplierId: number  = this.$supplierDropdown.val();
 
 		this.toggleItemsBlocker( !( !supplierId && !this.$multipleSuppliers.is( ':checked' ) ) );
@@ -122,7 +128,7 @@ export default class AtumOrders {
 			url     : window[ 'ajaxurl' ],
 			data    : {
 				action       : 'atum_save_po_supplier',
-				security     : this.settings.get( 'atum_order_item_nonce' ),
+				security     : this.settings.get( 'atumOrderItemNonce' ),
 				atum_order_id: atumOrderId,
 				supplier     : supplierId,
 			},
@@ -154,8 +160,8 @@ export default class AtumOrders {
 			url     : window[ 'ajaxurl' ],
 			data    : {
 				action       : 'atum_save_po_multiple_supplier',
-				security     : this.settings.get( 'atum_order_item_nonce' ),
-				atum_order_id: this.settings.get( 'post_id' ),
+				security     : this.settings.get( 'atumOrderItemNonce' ),
+				atum_order_id: this.settings.get( 'postId' ),
 				multiple     : val,
 			},
 			dataType: 'json',
@@ -179,20 +185,20 @@ export default class AtumOrders {
 		      $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' );
 		
 		// Totals
-		const unitTotal: number = <number> Utils.unformat( $lineTotal.data( 'total' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+		const unitTotal: number = <number> Utils.unformat( $lineTotal.data( 'total' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
 
 		$lineTotal.val(
-			parseFloat( <string> Utils.formatNumber( unitTotal * qty, this.settings.get( 'rounding_precision' ), '' ) )
+			parseFloat( <string> Utils.formatNumber( unitTotal * qty, this.settings.get( 'roundingPrecision' ), '' ) )
 				.toString()
-				.replace( '.', this.settings.get( 'mon_decimal_point' ) ),
+				.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
 		);
 
-		const unitSubtotal: number = <number> Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+		const unitSubtotal: number = <number> Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
 
 		$lineSubtotal.val(
-			parseFloat( <string> Utils.formatNumber( unitSubtotal * qty, this.settings.get( 'rounding_precision' ), '' ) )
+			parseFloat( <string> Utils.formatNumber( unitSubtotal * qty, this.settings.get( 'roundingPrecision' ), '' ) )
 				.toString()
-				.replace( '.', this.settings.get( 'mon_decimal_point' ) ),
+				.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
 		);
 		
 		// Taxes
@@ -200,23 +206,23 @@ export default class AtumOrders {
 
 			const $lineTotalTax: JQuery    = $( elem ),
 			      taxId: string            = $lineTotalTax.data( 'tax_id' ),
-			      unitTotalTax: number     = <number> Utils.unformat( $lineTotalTax.data( 'total_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty,
+			      unitTotalTax: number     = <number> Utils.unformat( $lineTotalTax.data( 'total_tax' ), this.settings.get( 'priceDecimalSep' ) ) / oQty,
 			      $lineSubtotalTax: JQuery = $row.find( `input.line_subtotal_tax[data-tax_id="${ taxId }"]` ),
-			      unitSubtotalTax: number  = <number> Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), this.settings.get( 'mon_decimal_point' ) ) / oQty;
+			      unitSubtotalTax: number  = <number> Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
 
 			if ( 0 < unitTotalTax ) {
 				$lineTotalTax.val(
-					parseFloat( <string> Utils.formatNumber( unitTotalTax * qty, this.settings.get( 'rounding_precision' ), '' ) )
+					parseFloat( <string> Utils.formatNumber( unitTotalTax * qty, this.settings.get( 'roundingPrecision' ), '' ) )
 						.toString()
-						.replace( '.', this.settings.get( 'mon_decimal_point' ) ),
+						.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
 				);
 			}
 
 			if ( 0 < unitSubtotalTax ) {
 				$lineSubtotalTax.val(
-					parseFloat( <string> Utils.formatNumber( unitSubtotalTax * qty, this.settings.get( 'rounding_precision' ), '' ) )
+					parseFloat( <string> Utils.formatNumber( unitSubtotalTax * qty, this.settings.get( 'roundingPrecision' ), '' ) )
 						.toString()
-						.replace( '.', this.settings.get( 'mon_decimal_point' ) ),
+						.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
 				);
 			}
 			
@@ -264,7 +270,7 @@ export default class AtumOrders {
 					callback();
 				}
 
-				this.wpHooks.doAction( 'atumOrders_afterLoadItemsTable' );
+				this.wpHooks.doAction( 'atum_orders_afterLoadItemsTable' );
 
 			},
 		} );
@@ -279,9 +285,9 @@ export default class AtumOrders {
 	reloadItems( callback?: Function ) {
 
 		this.loadItemsTable( {
-			atum_order_id: this.settings.get( 'post_id' ),
+			atum_order_id: this.settings.get( 'postId' ),
 			action       : 'atum_order_load_items',
-			security     : this.settings.get( 'atum_order_item_nonce' ),
+			security     : this.settings.get( 'atumOrderItemNonce' ),
 		}, 'html', callback );
 
 	}
@@ -451,19 +457,20 @@ export default class AtumOrders {
 	/**
 	 * Import items from related WC order
 	 *
-	 * @return {boolean}
+	 * @param {JQuery} $wcOrder
+	 * @param {string} orderType
+	 * @returns {boolean}
 	 */
-	importOrderItems() {
+	importOrderItems( $wcOrder: JQuery, orderType: string ) {
 
-		const $wcOrder: JQuery = $( '#wc_order' ),
-		      orderId: number  = $wcOrder.val();
+		const orderId: number  = $wcOrder.val();
 
 		if ( ! orderId || this.isEditable == 'false' ) {
 			return false;
 		}
 
 		Swal.fire( {
-			text             : this.settings.get( 'import_order_items' ),
+			text             : this.settings.get( `importOrderItems${orderType}` ),
 			icon             : 'warning',
 			showCancelButton : true,
 			confirmButtonText: this.settings.get( 'yes' ),
@@ -477,8 +484,8 @@ export default class AtumOrders {
 					this.loadItemsTable( {
 						action       : 'atum_order_import_items',
 						wc_order_id  : orderId,
-						atum_order_id: this.settings.get( 'post_id' ),
-						security     : this.settings.get( 'import_order_items_nonce' ),
+						atum_order_id: this.settings.get( 'postId' ),
+						security     : this.settings.get( 'importOrderItemsNonce' ),
 					}, 'json', resolve );
 
 				} );

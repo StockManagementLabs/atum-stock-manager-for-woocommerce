@@ -52,4 +52,19 @@ use Atum\Inc\Helpers;
 		<input type="number" step="1" min="0" id="lead_time" name="default_settings[lead_time]" value="<?php echo esc_attr( $supplier->lead_time ) ?>">
 	</div>
 
+	<div class="form-field form-field-wide">
+		<label for="delivery_terms"><?php esc_html_e( 'Payments and Delivery Terms', ATUM_TEXT_DOMAIN ) ?></label>
+		<textarea id="delivery_terms" name="default_settings[delivery_terms]" rows="5"><?php echo esc_textarea( $supplier->delivery_terms ) ?></textarea>
+	</div>
+
+	<div class="form-field form-field-wide">
+		<label for="days_to_cancel"><?php esc_html_e( 'Days to Cancel', ATUM_TEXT_DOMAIN ) ?></label>
+		<input type="number" step="1" min="0" id="days_to_cancel" name="default_settings[days_to_cancel]" value="<?php echo esc_attr( $supplier->days_to_cancel ) ?>">
+	</div>
+
+	<div class="form-field form-field-wide">
+		<label for="cancelation_policy"><?php esc_html_e( 'Cancelation Policy', ATUM_TEXT_DOMAIN ) ?></label>
+		<textarea id="cancelation_policy" name="default_settings[cancelation_policy]" rows="5"><?php echo esc_textarea( $supplier->cancelation_policy ) ?></textarea>
+	</div>
+
 </div>

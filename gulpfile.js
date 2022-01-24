@@ -15,7 +15,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.9.2',
+var version = '1.9.9',
     curDate = new Date();
 
 // Global config
@@ -137,9 +137,9 @@ gulp.task('js::atum', function () {
 			},
 			
 			externals: {
-				'jquery'       : 'jQuery',
-				'$'            : 'window.$',
-				'sweetalert2'  : 'Swal'
+				jquery     : 'jQuery',
+				$          : 'jQuery',
+				sweetalert2: 'Swal',
 			},
 			
 			module: {
@@ -151,9 +151,9 @@ gulp.task('js::atum', function () {
 						use    : 'eslint-loader',
 					}, */
 					{
-						test: /\.ts$/,
+						test   : /\.ts$/,
 						exclude: /node_modules/,
-						use: {
+						use    : {
 							loader: 'ts-loader'
 						}
 					},
@@ -163,16 +163,22 @@ gulp.task('js::atum', function () {
 			optimization: {
 				minimize: config.production
 			},
-			mode: config.production ? 'production' : 'development',
-			cache: !config.production,
-			bail: false,
-			watch: false,
+			mode        : config.production ? 'production' : 'development',
+			cache       : !config.production,
+			bail        : false,
+			watch       : false,
 			
 			plugins: [
 				
 				// Fixes warning in moment-with-locales.min.js
 				// Module not found: Error: Can't resolve './locale' in ...
 				new webpack.IgnorePlugin(/\.\/locale$/),
+				
+				// Provide jQuery globally instead of having to import it everywhere.
+				new webpack.ProvidePlugin({
+					$     : 'jquery',
+					jQuery: 'jquery',
+				})
 			
 			],
 			

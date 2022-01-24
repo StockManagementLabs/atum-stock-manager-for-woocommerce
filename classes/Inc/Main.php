@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) || die;
 */
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
+use Atum\Cli\AtumCli;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumNotifications;
@@ -252,11 +253,15 @@ class Main {
 		CheckOrderPrices::get_instance();
 		AtumNotifications::get_instance();
 
+		if ( class_exists( '\WP_CLI', FALSE ) ) {
+			AtumCli::get_instance();
+		}
+
 		//
 		// Enable WPML module if needed
 		// -----------------------------!
 		if ( class_exists( '\SitePress' ) && class_exists( '\woocommerce_wpml' ) ) {
-			new Wpml();
+			Wpml::get_instance();
 		}
 		
 		//
@@ -441,7 +446,7 @@ class Main {
 	}
 
 	/**
-	 * Add theme options menu item to Admin Bar
+	 * Add ATUM menu to the Admin Bar
 	 *
 	 * @since 1.2.0
 	 */

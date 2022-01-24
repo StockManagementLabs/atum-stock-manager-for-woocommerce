@@ -4,6 +4,7 @@
  *
  * @since 1.2.5
  *
+ * @var int    $columns
  * @var int    $max_columns
  * @var array  $count_views
  * @var string $report

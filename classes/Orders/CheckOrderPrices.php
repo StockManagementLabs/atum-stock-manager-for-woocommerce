@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Orders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2021 Stock Management Labs™
+ * @copyright       ©2022 Stock Management Labs™
  *
  * @since           1.8.6
  */
@@ -131,8 +131,8 @@ class CheckOrderPrices {
 			wp_register_script( 'atum-check-orders', ATUM_URL . 'assets/js/build/atum-check-orders.js', [ 'jquery' ], ATUM_VERSION, TRUE );
 
 			wp_localize_script( 'atum-check-orders', 'atumCheckOrders', array(
-				'checkOrderPrices' => __( 'Check order prices', ATUM_TEXT_DOMAIN ),
 				'checkingPrices'   => __( 'Checking prices...', ATUM_TEXT_DOMAIN ),
+				'checkOrderPrices' => __( 'Check order prices', ATUM_TEXT_DOMAIN ),
 				'nonce'            => wp_create_nonce( 'atum-check-order-prices-nonce' ),
 			) );
 
@@ -149,7 +149,7 @@ class CheckOrderPrices {
 	 */
 	public function check_order_prices() {
 
-		check_ajax_referer( 'atum-check-order-prices-nonce', 'token' );
+		check_ajax_referer( 'atum-check-order-prices-nonce', 'security' );
 
 		parse_str( ltrim( $_POST['query_string'], '?' ), $query_args );
 
@@ -397,7 +397,7 @@ class CheckOrderPrices {
 	 */
 	public function add_bulk_action( $actions ) {
 
-		$actions['atum_fix_prices'] = __( 'Fix prices', ATUM_TEXT_DOMAIN );
+		$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
 
 		return $actions;
 	}
@@ -457,8 +457,7 @@ class CheckOrderPrices {
 		$number      = isset( $_REQUEST['changed'] ) ? absint( $_REQUEST['changed'] ) : 0;
 		$bulk_action = wc_clean( wp_unslash( $_REQUEST['bulk_action'] ) );
 
-		if ( 'prices_fixed' === $bulk_action ) { // WPCS: input var ok, CSRF ok.
-			/* translators: %d: orders count */
+		if ( 'prices_fixed' === $bulk_action ) {
 			$message = _n( 'The prices for the selected order were fixed successfully.', 'The prices for the selected orders were fixed successfully.', $number, ATUM_TEXT_DOMAIN );
 			echo '<div class="updated"><p>' . esc_html( $message ) . '</p></div>';
 		}

@@ -4,7 +4,7 @@
  *
  * @package     Atum\MetaBoxes
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @since       1.5.0
  */
@@ -173,7 +173,9 @@ class ProductDataMetaBoxes {
 		// Get the variation product.
 		$variation = Helpers::get_atum_product( $variation->ID );
 
-		Helpers::load_view( 'meta-boxes/product-data/atum-variation-panel', compact( 'loop', 'variation_data', 'variation' ) );
+		if ( apply_filters( 'atum/product_data/can_add_atum_panel', TRUE, $variation ) ) {
+			Helpers::load_view( 'meta-boxes/product-data/atum-variation-panel', compact( 'loop', 'variation_data', 'variation' ) );
+		}
 
 	}
 

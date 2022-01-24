@@ -7,6 +7,7 @@ import BeforeUnload from '../_before-unload';
 import Blocker from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
 import Globals from './_globals';
+import { ITableData } from '../../interfaces/tabledata.interface';
 import Settings from '../../config/_settings';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
@@ -31,6 +32,11 @@ export default class ListTable {
 		// Bind events.
 		this.bindEvents();
 
+		// Calculate compounded stocks.
+		//In order to calculate the compounded stock in grouped or bundle products containing MI products,
+		//it is necessary to apply this delay to allow time to load the MI class constructors.
+		setTimeout( () => { this.calculateCompoundedStocks() } , 100 );
+
 		// Add this component to the global scope so can be accessed by other add-ons.
 		if ( ! window.hasOwnProperty( 'atum' ) ) {
 			window[ 'atum' ] = {};
@@ -48,8 +54,6 @@ export default class ListTable {
 		// Bind active class rows.
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );
 
-		// Calculate compounded stocks.
-		this.calculateCompoundedStocks();
 
 		this.globals.$atumList
 
@@ -109,7 +113,7 @@ export default class ListTable {
 		// Overwrite the filterData with the URL hash parameters
 		this.globals.filterData = $.extend( this.globals.filterData, {
 			view          : $.address.parameter( 'view' ) || '',
-			paged         : $.address.parameter( 'paged' ) || 1,
+			paged         : $.address.parameter( 'paged' ) || '',
 			order         : $.address.parameter( 'order' ) || '',
 			orderby       : $.address.parameter( 'orderby' ) || '',
 			search_column : $.address.parameter( 'search_column' ) || '',
@@ -136,72 +140,95 @@ export default class ListTable {
 					return false;
 				}
 
-				// Update table with the coming rows.
-				if ( typeof response.rows !== 'undefined' && response.rows.length ) {
-					this.globals.$atumList.find( '#the-list' ).html( response.rows );
-					this.restoreMeta();
-				}
+				const { rows, paged, column_headers, views, extra_t_n, totals } = response;
 
-				// Change page url parameter.
-				if ( response.paged > 0 ) {
-					$.address.parameter( 'paged', response.paged );
-				}
+				const tableData: ITableData = {
+					rows         : rows || '',
+					paged        : paged || 1,
+					columnHeaders: column_headers || '',
+					views        : views || '',
+					extraTableNav: extra_t_n || '',
+					totals       : totals || '',
+				};
 
-				// Update column headers for sorting.
-				if ( typeof response.column_headers !== 'undefined' && response.column_headers.length ) {
-					this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( response.column_headers );
-				}
-
-				// Update the views filters.
-				if ( typeof response.views !== 'undefined' && response.views.length ) {
-					this.globals.$atumList.find( '.subsubsub' ).replaceWith( response.views );
-				}
-
-				// Update table navs.
-				if ( typeof response.extra_t_n !== 'undefined' ) {
-
-					if ( response.extra_t_n.top.length ) {
-						this.globals.$atumList.find( '.tablenav.top' ).replaceWith( response.extra_t_n.top );
-					}
-
-					if ( response.extra_t_n.bottom.length ) {
-						this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( response.extra_t_n.bottom );
-					}
-
-					// Update the autoFilters prop.
-					this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
-
-				}
-
-				// Update the totals row.
-				if ( typeof response.totals !== 'undefined' ) {
-					this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( response.totals );
-				}
-
-				// If there are active filters, show the reset button.
-				if ( $.address.parameterNames().length ) {
-					this.globals.$atumList.find( '.reset-filters' ).removeClass( 'hidden' );
-				}
-
-				// Regenerate the UI.
-				this.toolTip.addTooltips();
-				this.enhancedSelect.maybeRestoreEnhancedSelect();
-				ActiveRow.addActiveClassRow( this.globals.$atumTable );
-				this.removeOverlay();
-				this.calculateCompoundedStocks();
-
-				// Reload stickyColumns if needed.
-				if ( this.globals.enabledStickyColumns ) {
-					this.stickyCols.refreshStickyColumns();
-				}
-
-				// Trigger action after updating.
-				this.wpHooks.doAction( 'atum_listTable_tableUpdated' );
+				this.replaceTableData( tableData );
 
 			},
 			error     : () => this.removeOverlay(),
 		} );
 		
+	}
+
+	/**
+	 * Replace the DOM's table data and components with new elements and rebind events.
+	 */
+	replaceTableData( tableData: ITableData ) {
+
+		// Update table with the coming rows.
+		this.globals.$atumList.find( '#the-list' ).html( tableData.rows );
+		if ( tableData.rows ) {
+			this.restoreMeta();
+		}
+
+		// Change page url parameter (only if the page is greater than 1).
+		if ( tableData.paged > 1 ) {
+			$.address.parameter( 'paged', tableData.paged );
+		}
+
+		// Update column headers for sorting.
+		this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tr.item-heads' ).html( tableData.columnHeaders );
+
+		// Update the views filters.
+		if ( tableData.views ) {
+			this.globals.$atumList.find( '.subsubsub' ).replaceWith( tableData.views );
+		}
+		else {
+			this.globals.$atumList.find( '.subsubsub' ).empty();
+		}
+
+		// Update table navs.
+		if ( tableData.extraTableNav.top ) {
+			this.globals.$atumList.find( '.tablenav.top' ).replaceWith( tableData.extraTableNav.top );
+		}
+		else {
+			this.globals.$atumList.find( '.tablenav.top' ).empty();
+		}
+
+		if ( tableData.extraTableNav.bottom ) {
+			this.globals.$atumList.find( '.tablenav.bottom' ).replaceWith( tableData.extraTableNav.bottom );
+		}
+		else {
+			this.globals.$atumList.find( '.tablenav.bottom' ).empty();
+		}
+
+		// Update the autoFilters prop.
+		if ( tableData.extraTableNav ) {
+			this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
+		}
+
+		// Update the totals row.
+		this.globals.$atumList.find( 'table' ).not( '.cloned' ).find( 'tfoot tr.totals' ).html( tableData.totals );
+
+		// If there are active filters, show the reset button.
+		if ( $.address.parameterNames().length ) {
+			this.globals.$atumList.find( '.reset-filters' ).removeClass( 'hidden' );
+		}
+
+		// Regenerate the UI.
+		this.toolTip.addTooltips();
+		this.enhancedSelect.maybeRestoreEnhancedSelect();
+		ActiveRow.addActiveClassRow( this.globals.$atumTable );
+		this.removeOverlay();
+		this.calculateCompoundedStocks();
+
+		// Reload stickyColumns if needed.
+		if ( this.globals.enabledStickyColumns ) {
+			this.stickyCols.refreshStickyColumns();
+		}
+
+		// Trigger action after updating.
+		this.wpHooks.doAction( 'atum_listTable_tableUpdated', this.globals.filterData );
+
 	}
 	
 	/**
@@ -337,9 +364,23 @@ export default class ListTable {
 
 		let editedCols: any  = this.globals.$editInput.val();
 
-		const itemId: number = $metaCell.closest( 'tr' ).data( 'id' ),
-		      meta: string   = $metaCell.data( 'meta' ),
-		      newValue: any  = $popover.find( '.meta-value' ).val();
+		const itemId: number     = $metaCell.closest( 'tr' ).data( 'id' ),
+		      meta: string       = $metaCell.data( 'meta' ),
+		      $metaValue: JQuery = $popover.find( '.meta-value' ),
+		      isSelect: boolean  = $metaValue.is( 'select' ),
+		      newValue: any      = isSelect ? $metaValue.find( `option[value="${$metaValue.val()}"]` ).text() : $metaValue.val();
+
+		if ( isSelect ) {
+
+			const selectOptions: any = $metaCell.data( 'selectOptions' );
+
+			selectOptions[ $metaValue.val() ] = newValue;
+
+			$metaCell.data('realValue', $metaValue.val() );
+			$metaCell.data('selectedValue', $metaValue.val() );
+			$metaCell.data( 'selectOptions', selectOptions );
+
+		}
 
 		// Update the cell value.
 		this.setCellValue( $metaCell, newValue );
@@ -360,7 +401,7 @@ export default class ListTable {
 		}
 
 		// Add the meta value to the object.
-		editedCols[ itemId ][ meta ] = newValue;
+		editedCols[ itemId ][ meta ] = isSelect ? $metaValue.val() : newValue;
 
 		// WPML compatibility.
 		if ( typeof $metaCell.data( 'custom' ) !== 'undefined' ) {
@@ -452,8 +493,8 @@ export default class ListTable {
 		}
 
 		let data: any = {
-			token         : this.settings.get( 'nonce' ),
 			action        : 'atum_update_data',
+			security      : this.settings.get( 'nonce' ),
 			data          : this.globals.$editInput.val(),
 			first_edit_key: null,
 		};
@@ -466,7 +507,7 @@ export default class ListTable {
 			url       : window[ 'ajaxurl' ],
 			method    : 'POST',
 			dataType  : 'json',
-			data      : data,
+			data      : { ...this.globals.filterData, ...data },
 			beforeSend: () => {
 				$button.prop( 'disabled', true );
 				this.addOverlay();
@@ -474,14 +515,28 @@ export default class ListTable {
 			success   : ( response: any ) => {
 
 				if ( typeof response === 'object' && typeof response.success !== 'undefined' ) {
-					const noticeType = response.success ? 'updated' : 'error';
-					Utils.addNotice( noticeType, response.data );
+					const noticeType     = response.success ? 'updated' : 'error',
+					      notice: string = response.success ? response.data.notice : response.data;
+
+					Utils.addNotice( noticeType, notice );
 				}
 
 				if ( typeof response.success !== 'undefined' && response.success === true ) {
 					$button.remove();
 					this.globals.$editInput.val( '' );
-					this.updateTable();
+
+					const { rows, paged, column_headers, views, extra_t_n, totals } = response.data.tableData;
+
+					const tableData: ITableData = {
+						rows         : rows || '',
+						paged        : paged || 1,
+						columnHeaders: column_headers || '',
+						views        : views || '',
+						extraTableNav: extra_t_n || '',
+						totals       : totals || '',
+					};
+
+					this.replaceTableData( tableData );
 				}
 				else {
 					$button.prop( 'disabled', false );
@@ -683,8 +738,8 @@ export default class ListTable {
 			dataType  : 'json',
 			beforeSend: () => $button.prop( 'disabled', true ).after( '<span class="atum-spinner"><span></span></span>' ),
 			data      : {
-				token : $button.data( 'nonce' ),
-				action: 'atum_control_all_products',
+				action  : 'atum_control_all_products',
+				security: $button.data( 'nonce' ),
 			},
 			success   : () => location.reload(),
 		} );
@@ -708,13 +763,14 @@ export default class ListTable {
 			}
 
 			while ( $nextRow.length ) {
-				
+
 				if ( $compoundedCell.hasClass( 'compounded-available' ) ) {
 
-					const $availableStockCell = $nextRow.find( '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span' ),
+					const $availableStockCell = $nextRow.find( this.wpHooks.applyFilters( 'atum_listTable_addCompoundedCases', '.calc_available_to_produce .set-meta, .calc_available_to_produce .calculated span' ) ),
 					      availableStockValue = ! $availableStockCell.length ? '0' : $availableStockCell.text().trim();
 
 					compoundedAmt += parseFloat( availableStockValue ) || 0;
+
 				}
 				else {
 
@@ -732,7 +788,7 @@ export default class ListTable {
 					$compoundedCell.text( compoundedAmt );
 				}
 
-				$nextRow = $nextRow.next( '.has-compounded' );
+				$nextRow = $nextRow.next( this.wpHooks.applyFilters( 'atum_listTable_addRows', '.has-compounded' ) );
 
 			}
 

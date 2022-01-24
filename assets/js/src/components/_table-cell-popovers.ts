@@ -2,12 +2,11 @@
    POPOVER
    ======================================= */
 
-import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
-
 import DateTimePicker from './_date-time-picker';
 import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
+import EnhancedSelect from './_enhanced-select';
 
 export default class TableCellPopovers extends PopoverBase{
 
@@ -15,7 +14,8 @@ export default class TableCellPopovers extends PopoverBase{
 	
 	constructor(
 		private settings: Settings,
-		private dateTimePicker?: DateTimePicker
+		private dateTimePicker?: DateTimePicker,
+		private enhancedSelect?: EnhancedSelect,
 	) {
 
 		super();
@@ -30,15 +30,17 @@ export default class TableCellPopovers extends PopoverBase{
 				return;
 			}
 
-			const $target: JQuery = $( evt.target );
+			const $target: JQuery = $( evt.target ),
+				  $select2: JQuery = $target.closest( '.select2-container');
 
 			// Do not hide any popover if the click is being performed within one.
-			if ( ! $target.length || $target.is( '.popover' ) || $target.closest( '.popover.show' ).length ) {
+			if ( ! $target.length || $target.is( '.popover' ) || $target.closest( '.popover.show' ).length
+				|| ( $select2.length && $select2.find( '.select2-search' ) ) ) {
 				return;
 			}
 
 			// If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta' ).not( $target ) : $( '.set-meta' );
+			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta[aria-describedby]' ).not( $target ) : $( '.set-meta[aria-describedby]' );
 			
 			// Hide all the opened popovers.
 			this.hidePopover( $metaCell );
@@ -58,7 +60,7 @@ export default class TableCellPopovers extends PopoverBase{
 		
 		// Set meta value for listed products.
 		$metaCells.each( ( index: number, elem: Element ) => {
-			this.addPopover( $( elem ) );
+			this.doPopovers( $( elem ) );
 		} );
 		
 		$metaCells
@@ -99,6 +101,10 @@ export default class TableCellPopovers extends PopoverBase{
 
 				} );
 
+				if ( $metaInput.hasClass( 'wc-product-search' ) && this.enhancedSelect ) {
+					$( 'body' ).trigger( 'wc-enhanced-select-init' );
+				}
+
 			} );
 		
 	}
@@ -106,19 +112,20 @@ export default class TableCellPopovers extends PopoverBase{
 	/**
 	 * Bind the editable cell's popovers
 	 *
-	 * @param jQuery $metaCell The cell where the popover will be attached.
+	 * @param {JQuery} $metaCell The cell where the popover will be attached.
 	 */
-	addPopover( $metaCell: JQuery ) {
+	doPopovers( $metaCell: JQuery ) {
 
 		const symbol: string    = $metaCell.data( 'symbol' ) || '',
 		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
 		      inputType: string = $metaCell.data( 'input-type' ) || 'number',
+		      isSelect: boolean = inputType === 'select',
 		      realValue: string = $metaCell.data( 'realvalue' ) || '',
 		      value: string     = $metaCell.text().trim(),
 		      inputAtts: any    = {
 			      type : inputType || 'number',
 			      value: value,
-			      class: 'meta-value',
+			      class: $metaCell.data( 'extraClass' ) ? `meta-value ${ $metaCell.data( 'extraClass' ) }` : 'meta-value',
 		      };
 
 		if ( inputType === 'number' || symbol ) {
@@ -143,6 +150,16 @@ export default class TableCellPopovers extends PopoverBase{
 			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
 
 		}
+		else if ( isSelect ) {
+			const atts: string[] = [ 'allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected' ];
+
+			atts.forEach( ( attr: string ) => {
+				if ( typeof $metaCell.data( attr ) !== 'undefined' ) {
+					inputAtts[ `data-${attr}` ] = $metaCell.data( attr );
+				}
+			} );
+
+		}
 		else if ( value === '-' ) {
 			inputAtts.value = '';
 		}
@@ -152,7 +169,7 @@ export default class TableCellPopovers extends PopoverBase{
 			inputAtts.step = symbol ? '0.1' : '1'; // Allow decimals only for the currency fields for now.
 		}
 
-		const $input: JQuery     = $( '<input />', inputAtts ),
+		const $input: JQuery     = isSelect ? $( '<select />', inputAtts ) : $( '<input />', inputAtts ),
 		      $setButton: JQuery = $( '<button />', {
 			      type : 'button',
 			      class: 'set btn btn-primary button-small',
@@ -177,6 +194,29 @@ export default class TableCellPopovers extends PopoverBase{
 			}
 		}
 
+		if ( isSelect ) {
+
+			const selectedValue: string = $metaCell.data( 'selected-value' ),
+			      selectOptions: any    = $metaCell.data( 'select-options' );
+
+			if ( typeof selectOptions === 'object' && Object.keys( selectOptions ).length ) {
+
+				$.each( selectOptions, ( index: string, value: any ) => {
+
+					const selected: string = selectedValue.toString() === index ? ' selected' : '';
+
+					$input.append( `
+						<option value="${ index }"${ selected }>
+                           ${ value === this.settings.get( 'emptyCol' ) ? '' : value }
+                        </option>
+					` );
+
+				} );
+
+			}
+
+		}
+
 		let popoverClass: string = this.popoverClassName,
 		    $extraFields: JQuery = null;
 
@@ -192,6 +232,11 @@ export default class TableCellPopovers extends PopoverBase{
 
 		}
 
+		// Add class if has select.
+		if ( isSelect ) {
+			popoverClass += ' with-select';
+		}
+
 		let $content: JQuery = $( '<div class="edit-popover-content" />' );
 
 		if ( $extraFields ) {
@@ -200,10 +245,16 @@ export default class TableCellPopovers extends PopoverBase{
 		else {
 			$content.append( $input ).append( $setButton );
 		}
-		
+
+		if ( $metaCell.data( 'footerContent' ) ) {
+			$content = $( '<div class="edit-popover-wrapper" />' ).append( $content ).append( $metaCell.data( 'footerContent' ) );
+		}
+
+		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
+
 		// Create the meta edit popover.
-		new BsPopover( $metaCell.get( 0 ), {
-			title      : this.settings.get( 'setValue' ) ? this.settings.get( 'setValue' ).replace( '%%', cellName ) : cellName,
+		this.addPopover( $metaCell, {
+			title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
 			content    : $content.get( 0 ), // It supports one element only.
 			html       : true,
 			customClass: popoverClass,

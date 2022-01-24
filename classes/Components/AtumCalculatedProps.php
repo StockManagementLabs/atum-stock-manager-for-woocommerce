@@ -4,7 +4,7 @@
  *
  * @package    Components
  * @author     Be Rebel - https://berebel.io
- * @copyright  ©2021 Stock Management Labs™
+ * @copyright  ©2022 Stock Management Labs™
  *
  * @since      1.9.0
  */
@@ -208,6 +208,10 @@ class AtumCalculatedProps {
 	 */
 	public static function defer_update_atum_sales_calc_props( $product_id, $order_type_id = 1 ) {
 
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
+			return;
+		}
+
 		$ids_str = "$product_id:$order_type_id";
 
 		if ( ! in_array( $ids_str, self::$deferred_sales_calc_props ) ) {
@@ -263,7 +267,7 @@ class AtumCalculatedProps {
 			// WC Orders.
 			default:
 				$timestamp    = Helpers::get_current_timestamp();
-				$current_time = Helpers::date_format( $timestamp, TRUE, TRUE );
+				$current_date = Helpers::date_format( $timestamp, TRUE, TRUE );
 				$sale_days    = Helpers::get_sold_last_days_option();
 				$product_id   = $product->get_id();
 
@@ -271,12 +275,12 @@ class AtumCalculatedProps {
 				Helpers::get_product_stock_on_hold( $product, TRUE ); // This already sets the value to the product.
 
 				// Set sold today.
-				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_time, $product_id );
+				$sold_today = Helpers::get_sold_last_days( 'today midnight', $current_date, $product_id, [ 'qty' ], FALSE );
 				$product->set_sold_today( $sold_today );
 				self::maybe_update_variable_calc_prop( $product, 'sold_today', $sold_today );
 
 				// Sales last days.
-				$sales_last_ndays = Helpers::get_sold_last_days( "$current_time -$sale_days days", $current_time, $product_id );
+				$sales_last_ndays = Helpers::get_sold_last_days( "$current_date -$sale_days days", $current_date, $product_id, [ 'qty' ], FALSE );
 				$product->set_sales_last_days( $sales_last_ndays );
 				self::maybe_update_variable_calc_prop( $product, 'sales_last_days', $sales_last_ndays );
 
@@ -285,9 +289,12 @@ class AtumCalculatedProps {
 				$product->set_out_stock_days( $out_of_stock_days );
 
 				// Lost sales.
-				$lost_sales = Helpers::get_product_lost_sales( $product );
+				$lost_sales = Helpers::get_product_lost_sales( $product, 7, FALSE );
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
+
+				// Save the sales update date.
+				$product->set_sales_update_date( $timestamp );
 
 				break;
 		}
@@ -317,6 +324,12 @@ class AtumCalculatedProps {
 			if ( ! Helpers::is_atum_product( $product ) ) {
 				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
 				$product = apply_filters( 'atum/before_update_product_calc_props', Helpers::get_atum_product( $product ) );
+
+				/**
+				 * It's an ATUM product.
+				 *
+				 * @var AtumProductTrait $product
+				 */
 			}
 
 			if ( $product instanceof \WC_Product ) {
@@ -368,7 +381,7 @@ class AtumCalculatedProps {
 					$update = TRUE;
 				}
 
-				$low = wc_bool_to_string( Helpers::is_product_low_stock( $product ) );
+				$low = wc_bool_to_string( Helpers::is_product_low_stock( $product, FALSE ) );
 
 				if ( $product->get_low_stock() !== $low ) {
 					$product->set_low_stock( $low );
@@ -376,7 +389,7 @@ class AtumCalculatedProps {
 				}
 
 				if ( $update || $force_save ) {
-					$product->set_update_date( gmdate( 'Y-m-d H:i:s' ) );
+					$product->set_update_date( Helpers::get_current_timestamp() );
 					$product->save_atum_data();
 
 					do_action( 'atum/after_update_product_calc_props', $product );
@@ -432,6 +445,22 @@ class AtumCalculatedProps {
 
 		}
 
+	}
+
+	/**
+	 * Calculates product sales properties from CLI call.
+	 *
+	 * @since 1.9.3.1
+	 *
+	 * @param \WC_Product $product
+	 * @param int         $order_type_id
+	 */
+	public static function update_atum_sales_calc_props_cli_call( $product, $order_type_id = 1 ) {
+
+		if ( 'cli' === php_sapi_name() || wp_doing_cron() ||
+			( ! empty( $_REQUEST['page'] ) && ! empty( $_REQUEST['row_action'] ) && 'action-scheduler' === $_REQUEST['page'] && 'run' === $_REQUEST['row_action'] ) ) {
+			self::update_atum_sales_calc_props( $product, $order_type_id );
+		}
 	}
 
 

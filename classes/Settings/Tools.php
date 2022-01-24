@@ -5,7 +5,7 @@
  * @package     Atum
  * @subpackage  Settings
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2021 Stock Management Labs™
+ * @copyright   ©2022 Stock Management Labs™
  *
  * @since       1.4.5
  */
@@ -124,7 +124,7 @@ class Tools {
 			'section' => 'tools',
 			'default' => 300,
 			'name'    => __( "Update products' calculated properties", ATUM_TEXT_DOMAIN ) . $atum_label,
-			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
 				'number'         => array(

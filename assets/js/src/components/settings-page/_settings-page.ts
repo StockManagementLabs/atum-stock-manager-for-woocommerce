@@ -58,6 +58,9 @@ export default class SettingsPage {
 		// Enable image selectors
         this.doImageSelector();
 
+		// Enable WP editors.
+		this.doEditors();
+
 		// Toggle Menu.
 		this.toggleMenu();
 
@@ -206,6 +209,7 @@ export default class SettingsPage {
 			this.enhancedSelect.doSelect2( this.$settingsWrapper.find( 'select' ), {}, true );
 			this.doFileUploaders();
 			this.doImageSelector();
+			this.doEditors();
 			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
 			this.$form.show();
 
@@ -262,6 +266,8 @@ export default class SettingsPage {
 				cancelButtonText   : this.settings.get( 'useSavedValues' ),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
+				allowEscapeKey     : false,
+				allowEnterKey      : false,
 				showLoaderOnConfirm: true,
 				preConfirm         : (): Promise<any> => {
 
@@ -272,8 +278,8 @@ export default class SettingsPage {
 							method  : 'POST',
 							dataType: 'json',
 							data    : {
-								action: this.settings.get( 'oostSetClearScript' ),
-								token : this.settings.get( 'runnerNonce' ),
+								action  : this.settings.get( 'oostSetClearScript' ),
+								security: this.settings.get( 'runnerNonce' ),
 							},
 							success : ( response: any ) => {
 
@@ -358,8 +364,8 @@ export default class SettingsPage {
 
 					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
 					    data: any      = {
-						    action: $scriptRunner.data( 'action' ),
-						    token : this.settings.get( 'runnerNonce' ),
+						    action  : $scriptRunner.data( 'action' ),
+						    security: this.settings.get( 'runnerNonce' ),
 					    };
 
 					if ( $input.length ) {
@@ -441,19 +447,18 @@ export default class SettingsPage {
 
 					const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
 
-						let data: any = {
-							action: action,
-							token : this.settings.get( 'runnerNonce' ),
-							option: option,
-							offset: offset,
-						};
-
 						return $.ajax( {
 							url     : window[ 'ajaxurl' ],
 							method  : 'POST',
 							dataType: 'json',
-							data    : data,
+							data    : {
+								action  : action,
+								security: this.settings.get( 'runnerNonce' ),
+								option  : option,
+								offset  : offset,
+							},
 						} );
+
 					};
 
 					$button.prop( 'disabled', true );
@@ -533,10 +538,10 @@ export default class SettingsPage {
 		    url       : window[ 'ajaxurl' ],
 		    method    : 'POST',
 		    data      : {
-			    token : this.settings.get( 'colorSchemeNonce' ),
-			    action: this.settings.get( 'getColorScheme' ),
-			    theme : themeSelectedValue,
-			    reset : resetDefault,
+			    action  : this.settings.get( 'getColorScheme' ),
+			    security: this.settings.get( 'colorSchemeNonce' ),
+			    theme   : themeSelectedValue,
+			    reset   : resetDefault,
 		    },
 		    beforeSend: () => $formSettingsWrapper.addClass( 'overlay' ),
 		    success   : ( response: any ) => {
@@ -599,7 +604,7 @@ export default class SettingsPage {
 	 * @param {JQuery} $switcher
 	 */
 	toggleMultiCheckboxPanel( $switcher: JQuery ) {
-		const $panel: JQuery = $switcher.siblings( '.atum-settings-multi-checkbox' );
+		const $panel: JQuery = $switcher.closest( 'td' ).find( '.atum-settings-multi-checkbox' );
 
 		$panel.css( 'display', $switcher.is( ':checked' ) ? 'block' : 'none' );
 	}
@@ -634,6 +639,9 @@ export default class SettingsPage {
 			this.dateTimePicker.addDateTimePickers( $dateFrom, { minDate: false, maxDate: new Date() } );
 			this.dateTimePicker.addDateTimePickers( $dateTo, { minDate: false } );
 		}
+
+		this.dateTimePicker.addDateTimePickers( this.$form.find('.atum-datepicker') );
+
 	}
 
 	/**
@@ -697,6 +705,33 @@ export default class SettingsPage {
 			$imgRadio.addClass( 'active' );
 
 		} );
+
+	}
+
+	/**
+	 * Prepare the TinyMCE editors
+	 */
+	doEditors() {
+
+		if ( window.hasOwnProperty( 'wp' ) && window[ 'wp' ].hasOwnProperty( 'editor' ) ) {
+
+			$( '.atum-settings-editor' ).find( 'textarea' ).each( ( index: number, elem: Element ) => {
+
+				const $textarea: JQuery      = $( elem ),
+				      $editorWrapper: JQuery = $textarea.closest( '.atum-settings-editor' );
+
+				let config: any = window[ 'wp' ].editor.getDefaultSettings();
+
+				if ( typeof $editorWrapper.data( 'tiny-mce' ) !== 'undefined' ) {
+					config = {
+						tinymce: $editorWrapper.data( 'tiny-mce' )
+					}
+				}
+
+				window[ 'wp' ].editor.initialize( $( elem ).attr( 'id' ), config );
+
+			} );
+		}
 
 	}
 

@@ -4,13 +4,13 @@
 
 import Globals from './_globals';
 import Settings from '../../config/_settings';
-import { Menu, MenuItem } from '../../interfaces/menu.interface';
+import { IMenu, IMenuItem } from '../../interfaces/menu.interface';
 import MenuPopover from '../_menu-popover';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class RowActions {
 
-	rowActions: MenuItem[] = [];
+	rowActions: IMenuItem[] = [];
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -39,8 +39,8 @@ export default class RowActions {
 			const $button: JQuery    = $( elem ),
 			      $titleCell: JQuery = $button.closest( 'tr' ).find( 'td.column-title' );
 
-			// NOTE: we assume that the rowActions comes with the right format (following the MenuItem interface format).
-			const actionsMenu: Menu = {
+			// NOTE: we assume that the rowActions comes with the right format (following the IMenuItem interface format).
+			const actionsMenu: IMenu = {
 				title: ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim(),
 				items: this.rowActions,
 			};
@@ -62,7 +62,7 @@ export default class RowActions {
 		// Add the "no actions" message if there are no menu items. NOTE: A high priority is important here.
 		this.wpHooks.addAction( 'atum_menuPopover_inserted', 'atum', ( $popover: JQuery ) => {
 
-			if ( !$popover.find( 'li' ).length ) {
+			if ( ! $popover.find( 'li' ).length ) {
 				$popover.find( 'ul' ).append( `<li class="no-actions">${ this.settings.get( 'noActions' ) }</li>` );
 			}
 
