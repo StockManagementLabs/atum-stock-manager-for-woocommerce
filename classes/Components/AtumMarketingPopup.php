@@ -90,6 +90,11 @@ class AtumMarketingPopup {
 	protected $loaded = FALSE;
 
 	/**
+	 * Whether to disable the popup completely
+	 */
+	const IS_DISABLED = TRUE;
+
+	/**
 	 * The singleton instance holder
 	 *
 	 * @var AtumMarketingPopup
@@ -106,6 +111,10 @@ class AtumMarketingPopup {
 
 		// Only show the popup to users that can install plugins.
 		if ( ! current_user_can( 'install_plugins' ) ) {
+			return;
+		}
+
+		if ( apply_filters( 'atum/marketing_popup/is_disabled', self::IS_DISABLED ) ) {
 			return;
 		}
 
