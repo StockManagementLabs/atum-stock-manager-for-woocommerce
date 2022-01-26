@@ -2,7 +2,7 @@
 /**
  * Class AtumHelpGuide
  *
- * @since       2.0.0
+ * @since       1.9.10
  * @author      Be Rebel - https://berebel.io
  * @copyright   ©2022 Stock Management Labs™
  *
@@ -55,6 +55,30 @@ class AtumHelpGuide {
 		}
 
 		return [];
+
+	}
+
+	/**
+	 * Get the JS localization vars for the intro.js library (https://introjs.com/docs/intro/options)
+	 *
+	 * @since 1.9.10
+	 *
+	 * @param array $replace Optional. Only needed if want to modify any default value.
+	 *
+	 * @return array
+	 */
+	public static function get_intro_js_vars( $replace = array() ) {
+
+		$defaults = array(
+			'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
+			'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
+			'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
+			'tooltipClass'       => 'atum-help-guide-tooltip',
+			'disableInteraction' => TRUE,
+			'scrollToElement'    => TRUE,
+		);
+
+		return array_merge( $defaults, $replace );
 
 	}
 

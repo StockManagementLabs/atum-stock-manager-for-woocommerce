@@ -2731,7 +2731,7 @@ final class Ajax {
 	 *
 	 * @package ATUM Help Guides
 	 *
-	 * @since 2.0.0
+	 * @since 1.9.10
 	 */
 	public function get_help_guide_steps() {
 
