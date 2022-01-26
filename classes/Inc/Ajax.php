@@ -20,6 +20,7 @@ use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
+use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\Dashboard;
@@ -173,6 +174,9 @@ final class Ajax {
 
 		// Create a new supplier from the "Create Supplier" modal.
 		add_action( 'wp_ajax_atum_create_supplier', array( $this, 'create_supplier' ) );
+
+		// Ajax action to get any help guide steps.
+		add_action( 'wp_ajax_atum_get_help_guide_steps', array( $this, 'get_help_guide_steps' ) );
 
 	}
 
@@ -2678,6 +2682,8 @@ final class Ajax {
 	/**
 	 * Create a new supplier from the "Create Supplier" modal.
 	 *
+	 * @package Stock Central
+	 *
 	 * @since 1.9.6
 	 */
 	public function create_supplier() {
@@ -2719,6 +2725,34 @@ final class Ajax {
 		] );
 
 	}
+
+	/**
+	 * Get any help guide steps from a JSON file
+	 *
+	 * @package ATUM Help Guides
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_help_guide_steps() {
+
+		check_ajax_referer( 'help-guide-nonce', 'security' );
+
+		if ( empty( $_POST['guide'] ) ) {
+			wp_send_json_error( __( 'The guide name is required', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$guide_path  = apply_filters( 'atum/ajax/get_help_guide_steps', ATUM_PATH . 'help-guides' );
+		$help_guide  = new AtumHelpGuide( $guide_path );
+		$guide_steps = $help_guide->get_guide_steps( esc_attr( $_POST['guide'] ) );
+
+		if ( empty( $guide_steps ) ) {
+			wp_send_json_error( __( 'Guide not found', ATUM_TEXT_DOMAIN ) );
+		}
+
+		wp_send_json_success( $guide_steps );
+
+	}
+
 
 	/*******************
 	 * Instance methods

@@ -27,7 +27,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
-
+/* @deprecated Use the AtumHelpGuide instead */
 class AtumHelpPointers {
 	
 	/**

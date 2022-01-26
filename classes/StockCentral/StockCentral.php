@@ -373,6 +373,7 @@ class StockCentral extends AtumListPage {
 		);
 
 		// Instantiate the class and pass our pointers array to the constructor.
+		/* @deprecated Use the AtumHelpGuide instead */
 		new AtumHelpPointers( $pointers );
 
 	}

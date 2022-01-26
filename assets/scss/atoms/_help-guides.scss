@@ -1,14 +1,6 @@
-$black900: #212121;
-$black800: #424242;
-$black600: #616161;
-$black500: #9e9e9e;
-$black400: #bdbdbd;
-$black300: #e0e0e0;
-$black200: #eeeeee;
-$black100: #f4f4f4;
-
-$background_color_9: #08c;
-$background_color_10: rgba(136, 136, 136, 0.24);
+//
+// Intro.js help guides
+//-----------------------
 
 .introjs-overlay {
 	position: absolute;
@@ -57,7 +49,7 @@ tr.introjs-showElement {
 	z-index: 9999998;
 	border-radius: 4px;
 	transition: all 0.3s ease-out;
-	background-color: rgba($white, .9);
+	background-color: rgba($white, .1);
 	box-shadow: 0 5px 8px -3px rgba($black, .6);
 	
 	* {
@@ -83,7 +75,7 @@ tr.introjs-showElement {
 }
 
 .introjs-helperNumberLayer {
-	color: $black500;
+	color: $gray-500;
 	text-align: center;
 	position: absolute;
 	top: -16px;
@@ -119,14 +111,20 @@ tr.introjs-showElement {
 	&.top-right {
 		top: -10px;
 		right: 10px;
-		border-bottom-color: $white;
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: $gray-100;
+		border-left-color: transparent;
 	}
 	
 	&.top-middle {
 		top: -10px;
 		left: 50%;
 		margin-left: -5px;
-		border-bottom-color: $white;
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: $gray-100;
+		border-left-color: transparent;
 	}
 	
 	&.right {
@@ -141,7 +139,10 @@ tr.introjs-showElement {
 	&.right-bottom {
 		bottom: 10px;
 		right: -10px;
-		border-left-color: $white;
+		border-top-color: transparent;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: $gray-100;
 	}
 	
 	&.bottom {
@@ -156,14 +157,20 @@ tr.introjs-showElement {
 	&.bottom-right {
 		bottom: -10px;
 		right: 10px;
-		border-top-color: $white;
+		border-top-color: $gray-100;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
 	}
 	
 	&.bottom-middle {
 		bottom: -10px;
 		left: 50%;
 		margin-left: -5px;
-		border-top-color: $white;
+		border-top-color: $gray-100;
+		border-right-color: transparent;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
 	}
 	
 	&.left {
@@ -178,7 +185,10 @@ tr.introjs-showElement {
 	&.left-bottom {
 		left: -10px;
 		bottom: 10px;
-		border-right-color: $white;
+		border-top-color: transparent;
+		border-right-color: $gray-100;
+		border-bottom-color: transparent;
+		border-left-color: transparent;
 	}
 	
 }
@@ -188,106 +198,108 @@ tr.introjs-showElement {
 	position: absolute;
 	visibility: visible;
 	background-color: $white;
-	min-width: 250px;
-	max-width: 300px;
+	min-width: 290px;
+	max-width: 90%;
 	border-radius: 5px;
-	box-shadow: 0 3px 30px rgba($black900, 0.3);
+	box-shadow: 0 3px 30px rgba($gray-900, 0.3);
 	transition: opacity 0.1s ease-out;
+	
+	&.introjs-floating {
+		width: 350px;
+		position: fixed;
+		margin: auto !important;
+		transform: translate(-50%, -50%);
+	}
 }
 
 .introjs-tooltiptext {
 	padding: 20px;
-	margin-left: -10px;
-	margin-right: -10px;
 	border-top: 1px solid $white;
-	background: $gray-100;
-	color: $blue-dark-light-2;
-	padding: 5px 10px;
+	color: $gray-600;
 	border-bottom: 1px solid $white;
+	font-size: 14px;
+	line-height: 1.4;
 }
 
 .introjs-tooltip-title {
 	font-size: 18px;
 	margin: 0;
 	padding: 0;
-	font-weight: 700;
+	font-weight: 500;
 	float: left;
 	line-height: 32px;
 }
 
 .introjs-tooltip-header {
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-top: 10px;
-	
-	&:after {
-		content: '.';
-		visibility: hidden;
-		display: block;
-		height: 0;
-		clear: both;
-	}
+	padding: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1px solid $gray-400;
 }
 
 .introjs-tooltipbuttons {
-	border-top: 1px solid $black300;
+	border-top: 1px solid $gray-400;
 	padding: 10px;
 	text-align: center;
 	white-space: nowrap;
-	
-	&:after {
-		content: '';
-		visibility: hidden;
-		display: block;
-		height: 0;
-		clear: both;
-	}
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .introjs-button {
+	display: inline-block;
+	font-weight: $btn-font-weight;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	user-select: none;
+	border: $btn-border-width solid transparent;
+	@include button-size($btn-padding-y, $btn-padding-x, $font-size-base, $btn-line-height, $btn-border-radius);
+	transition: $btn-transition;
 	text-transform: uppercase;
 	color: $white;
 	font-weight: 100;
 	font-size: 12px;
 	text-decoration: none;
 	cursor: pointer;
+	background-color: $primary;
 	
 	&:hover, &:focus {
-		background: $blue-dark-light-2;
-		outline: none;
-		border-color: $black500;
+		color: $white;
 	}
+	
+	&:hover {
+		background-color: rgba($primary, .6);
+	}
+	
+	&:focus {
+		outline: 0;
+		box-shadow: $btn-focus-box-shadow;
+	}
+	
 }
 
 .introjs-skipbutton {
-	color: $blue-dark;
-	float: right;
+	color: $gray-600;
 	font-size: 20px;
 	cursor: pointer;
-	font-weight: bold;
-	line-height: 1;
-	text-align: center;
-}
-
-.introjs-prevbutton {
-	float: left;
-	border-radius: 0.2em 0 0 0.2em;
-	border-right: none;
-}
-
-.introjs-nextbutton {
-	float: right;
-	border-radius: 0 0.2em 0.2em 0;
+	
+	&:hover {
+		color: $blue-dark;
+	}
 }
 
 .introjs-disabled {
-	color: $black500;
-	border-color: $black400;
-	box-shadow: none;
-	cursor: default;
-	background-color: $black100;
-	background-image: none;
-	text-decoration: none;
+	&, &:hover {
+		color: $gray-500;
+		border-color: $gray-400;
+		cursor: not-allowed;
+		background-color: $gray-100;
+		outline: none;
+		box-shadow: none;
+	}
 }
 
 .introjs-hidden {
@@ -318,7 +330,7 @@ tr.introjs-showElement {
 				display: block;
 				width: 6px;
 				height: 6px;
-				background: #ccc;
+				background: $gray-400;
 				border-radius: 10px;
 				text-decoration: none;
 				cursor: pointer;
@@ -326,16 +338,17 @@ tr.introjs-showElement {
 				&:hover,
 				&:focus {
 					width: 15px;
-					background: #999;
+					background: $gray-500;
 					text-decoration: none;
 					outline: none;
 				}
+				
+				&.active {
+					width: 15px;
+					background: $gray-500;
+				}
 			}
 			
-			a.active {
-				width: 15px;
-				background: #999;
-			}
 		}
 	}
 }
@@ -346,7 +359,7 @@ tr.introjs-showElement {
 	height: 10px;
 	margin: 10px;
 	border-radius: 4px;
-	background-color: $black300;
+	background-color: $gray-300;
 }
 
 .introjs-progressbar {
@@ -357,7 +370,7 @@ tr.introjs-showElement {
 	font-size: 10px;
 	line-height: 10px;
 	text-align: center;
-	background-color: $background_color_9;
+	background-color: $primary;
 }
 
 .introjsFloatingElement {
@@ -387,7 +400,7 @@ tr.introjs-showElement {
 	
 	&:hover {
 		> .introjs-hint-pulse {
-			background-color: rgba(60, 60, 60, 0.57);
+			background-color: rgba($gray-800, 0.57);
 		}
 	}
 }
@@ -422,7 +435,7 @@ tr.introjs-showElement {
 	width: 15px;
 	height: 15px;
 	border-radius: 30px;
-	background-color: $background_color_10;
+	background-color: $gray-800;
 	z-index: 10;
 	position: absolute;
 	transition: all 0.2s ease-out;
@@ -446,4 +459,34 @@ tr.introjs-showElement {
 	left: -18px;
 	z-index: 1;
 	opacity: 0;
+}
+
+// ATUM button to show a specific intro guide.
+.show-intro-guide {
+	cursor: help;
+	border-radius: 50%;
+	border: 1px solid $gray-600;
+	color: $gray-600;
+	padding: 5px;
+	font-weight: normal;
+	width: 18px;
+	height: 18px;
+	position: relative;
+	
+	&:not(.loading-guide) {
+		&:hover {
+			background-color: $primary;
+			color: $white;
+			border-color: $primary;
+		}
+	}
+	
+	&.loading-guide {
+		pointer-events: none;
+		
+		&:before {
+			content: '';
+			@include loader(14px, $primary);
+		}
+	}
 }
