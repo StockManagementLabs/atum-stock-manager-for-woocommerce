@@ -2709,7 +2709,7 @@ final class Helpers {
 	 */
 	public static function show_marketing_popup() {
 
-		return self::show_marketing( 'popup' );
+		return self::show_marketing();
 
 	}
 
