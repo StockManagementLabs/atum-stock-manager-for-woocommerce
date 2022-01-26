@@ -4,9 +4,9 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 ##Description
 
-**✨ NEW IMPROVED ATUM 1.9**
+**✨ NEW IMPROVED ATUM v1.9**
 
-**💻 NEW ATUM REST API**
+**💻 NEW [ATUM REST API](https://stockmanagementlabs.github.io/atum-rest-api-docs/)**
 
 ####AVAILABLE PREMIUM ADD-ONS
 
@@ -191,6 +191,43 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 
 ## Changelog
+
+---
+
+`1.9.10`
+
+*2022-01-26*
+
+**Features**
+
+* Allow adding content to deleteOrderItem confirmation Modal.
+* Display notes at Inventory Logs after changing the product's stock.
+* Added new Help Guides component.
+* Allow disabling the marketing popup completely.
+
+**Changes**
+
+* Retrieve extra options when removing order items.
+* Refactoring.
++ Do not allow closing the OOST option change modal with the keyboard.
+* Improved WC order items importing.
+* Added AtumOrders script to global scope.
+* Added extra param to ATUM order item fee's & shipping's save hook.
+* Use the current product price (sale or regular) instead of always using the regular price for the gross profit calculations.
+* Do not show custom PO PRO's items meta when PO PRO is disabled.
+* Added editable param to column method call.
+
+**Fixes**
+
+* Minor CSS fixes.
+* Fixed deleting ATUM orders permanently.
+* Avoid duplicate notes when changing the status of a purchase order.
+* Fixed multi-select fields wtihin edit popovers.
+* Fixed duplicate notes on Inventory Logs.
+* Fixed wrong text domain.
+* Fixed param type.
+
+---
 
 ---
 

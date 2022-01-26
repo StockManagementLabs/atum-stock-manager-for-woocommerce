@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, janberebel, danielberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.0
-Tested up to: 5.8.2
+Tested up to: 5.9.0
 Requires PHP: 5.6
 WC requires at least: 3.6.0
-WC tested up to: 6.0.0
-Stable tag: 1.9.9
+WC tested up to: 6.1.1
+Stable tag: 1.9.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,9 +15,9 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**✨ NEW IMPROVED ATUM 1.9**
+**✨ NEW IMPROVED ATUM v1.9**
 
-**💻 NEW ATUM REST API**
+**💻 NEW [ATUM REST API](https://stockmanagementlabs.github.io/atum-rest-api-docs/)**
 
 = FREE VERSION DESCRIPTION =
 
@@ -242,6 +242,41 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.10`
+
+*2022-01-26*
+
+**Features**
+
+* Allow adding content to deleteOrderItem confirmation Modal.
+* Display notes at Inventory Logs after changing the product's stock.
+* Added new Help Guides component.
+* Allow disabling the marketing popup completely.
+
+**Changes**
+
+* Retrieve extra options when removing order items.
+* Refactoring.
++ Do not allow closing the OOST option change modal with the keyboard.
+* Improved WC order items importing.
+* Added AtumOrders script to global scope.
+* Added extra param to ATUM order item fee's & shipping's save hook.
+* Use the current product price (sale or regular) instead of always using the regular price for the gross profit calculations.
+* Do not show custom PO PRO's items meta when PO PRO is disabled.
+* Added editable param to column method call.
+
+**Fixes**
+
+* Minor CSS fixes.
+* Fixed deleting ATUM orders permanently.
+* Avoid duplicate notes when changing the status of a purchase order.
+* Fixed multi-select fields wtihin edit popovers.
+* Fixed duplicate notes on Inventory Logs.
+* Fixed wrong text domain.
+* Fixed param type.
 
 ---
 
