@@ -289,6 +289,11 @@ tr.introjs-showElement {
 	&:hover {
 		color: $blue-dark;
 	}
+
+	&:focus {
+		outline: none;
+		box-shadow: none;
+	}
 }
 
 .introjs-disabled {
@@ -467,7 +472,7 @@ tr.introjs-showElement {
 	border-radius: 50%;
 	border: 1px solid $gray-600;
 	color: $gray-600;
-	padding: 5px;
+	padding: 3px;
 	font-weight: normal;
 	width: 18px;
 	height: 18px;

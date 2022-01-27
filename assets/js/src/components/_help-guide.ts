@@ -43,6 +43,8 @@ export default class HelpGuide {
 	IntroJs: any = introJs();
 	introOptions: IIntroOptions;
 
+	isAuto: boolean = false;
+
 	constructor(
 		private settings: Settings,
 		private introSteps: IIntroStep[] = [] // Optional. If a guide is needed to run automatically.
@@ -50,6 +52,11 @@ export default class HelpGuide {
 
 		// Get the intro.js options from the localized var.
 		this.introOptions = this.settings.get( 'introJsOptions' ) || {};
+
+		// If it's an automatic guide, prepare it to be dismissed permanently.
+		if ( this.introSteps && this.introSteps.length ) {
+			this.isAuto = true;
+		}
 
 		// If the options are coming at instantiation, run the guide automatically.
 		this.prepareOptions();
@@ -64,7 +71,7 @@ export default class HelpGuide {
 	 */
 	prepareOptions() {
 
-		if ( this.introSteps.length ) {
+		if ( this.introSteps && this.introSteps.length ) {
 			this.introOptions.steps = this.introSteps;
 			this.runGuide();
 		}
@@ -89,6 +96,7 @@ export default class HelpGuide {
 			// First try to find out in the settings option (for quick or one-time guides).
 			if ( this.settings.get( guide ) && Array.isArray( this.settings.get( guide ) ) ) {
 				this.introSteps = this.settings.get( guide );
+				this.isAuto = false;
 				this.prepareOptions();
 			}
 			// Get the guide steps via Ajax.
@@ -120,6 +128,7 @@ export default class HelpGuide {
 
 						if ( response.success ) {
 							this.introSteps	= response.data;
+							this.isAuto = false;
 							this.prepareOptions();
 						}
 
@@ -138,6 +147,24 @@ export default class HelpGuide {
 	runGuide() {
 
 		this.IntroJs.setOptions( this.introOptions ).start();
+
+		this.IntroJs.onexit( () => {
+
+			if ( this.isAuto && this.settings.get( 'screenId' ) ) {
+
+				$.ajax( {
+					url   : window[ 'ajaxurl' ],
+					method: 'post',
+					data  : {
+						action  : 'atum_save_closed_auto_guide',
+						security: this.settings.get( 'helpGuideNonce' ),
+						screen  : this.settings.get( 'screenId' ),
+					},
+				} );
+
+			}
+
+		} );
 
 	}
 
@@ -159,6 +186,15 @@ export default class HelpGuide {
 
 		return `<i class="atum-icon atmi-indent-increase show-intro-guide atum-tooltip" ${ dataAtts } title="${ this.settings.get( 'showHelpGuide' ) }"></i>`;
 
+	}
+
+	/**
+	 * Setter for the introSteps prop
+	 *
+	 * @param {IIntroStep[]} introSteps
+	 */
+	setIntroSteps( introSteps: IIntroStep[] ) {
+		this.introSteps = introSteps;
 	}
 
 }

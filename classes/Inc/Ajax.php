@@ -175,8 +175,11 @@ final class Ajax {
 		// Create a new supplier from the "Create Supplier" modal.
 		add_action( 'wp_ajax_atum_create_supplier', array( $this, 'create_supplier' ) );
 
-		// Ajax action to get any help guide steps.
+		// Get any help guide steps.
 		add_action( 'wp_ajax_atum_get_help_guide_steps', array( $this, 'get_help_guide_steps' ) );
+
+		// Save the closed state for an auto-guide on any screen.
+		add_action( 'wp_ajax_atum_save_closed_auto_guide', array( $this, 'save_closed_auto_guide' ) );
 
 	}
 
@@ -2741,7 +2744,13 @@ final class Ajax {
 			wp_send_json_error( __( 'The guide name is required', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$guide_path  = apply_filters( 'atum/ajax/get_help_guide_steps', ATUM_PATH . 'help-guides' );
+		if ( ! empty( $_POST['path'] ) ) {
+			$guide_path = esc_attr( $_POST['path'] );
+		}
+		else {
+			$guide_path = apply_filters( 'atum/ajax/get_help_guide_steps', ATUM_PATH . 'help-guides' );
+		}
+
 		$help_guide  = new AtumHelpGuide( $guide_path );
 		$guide_steps = $help_guide->get_guide_steps( esc_attr( $_POST['guide'] ) );
 
@@ -2750,6 +2759,25 @@ final class Ajax {
 		}
 
 		wp_send_json_success( $guide_steps );
+
+	}
+
+	/**
+	 * Save the closed state for any auto-guide on any screen
+	 *
+	 * @package ATUM Help Guides
+	 *
+	 * @since 1.9.11
+	 */
+	public function save_closed_auto_guide() {
+
+		check_ajax_referer( 'help-guide-nonce', 'security' );
+
+		if ( ! empty( $_POST['screen'] ) ) {
+			AtumHelpGuide::save_closed_auto_guide( get_current_user_id(), esc_attr( $_POST['screen'] ) );
+		}
+
+		wp_die();
 
 	}
 
