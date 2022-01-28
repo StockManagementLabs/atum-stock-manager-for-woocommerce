@@ -80,31 +80,7 @@ class AtumHelpGuide {
 
 		return '<i class="atum-icon atmi-indent-increase show-intro-guide atum-tooltip" 
 			data-guide="' . $guide . '"' . $path_data . ' 
-			title="' . __( 'Show help guide', ATUM_PO_TEXT_DOMAIN ) . '"></i>';
-
-	}
-
-	/**
-	 * Get the JS localization vars for the intro.js library (https://introjs.com/docs/intro/options)
-	 *
-	 * @since 1.9.10
-	 *
-	 * @param array $replace Optional. Only needed if want to modify any default value.
-	 *
-	 * @return array
-	 */
-	public static function get_intro_js_vars( $replace = array() ) {
-
-		$defaults = array(
-			'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
-			'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
-			'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
-			'tooltipClass'       => 'atum-help-guide-tooltip',
-			'disableInteraction' => TRUE,
-			'scrollToElement'    => TRUE,
-		);
-
-		return array_merge( $defaults, $replace );
+			title="' . __( 'Show help guide', ATUM_TEXT_DOMAIN ) . '"></i>';
 
 	}
 
@@ -146,6 +122,47 @@ class AtumHelpGuide {
 		}
 
 		update_user_meta( $user_id, self::CLOSED_AUTO_GUIDES_KEY, $closed_auto_guides );
+
+	}
+
+	/**
+	 * Prepare the JS vars commonly used for the help guides
+	 *
+	 * @since 1.9.11
+	 *
+	 * @param string $auto_guide Full guide path for the auto guide (if any).
+	 *
+	 * @return array
+	 */
+	public static function get_help_guide_js_vars( $auto_guide_file = '' ) {
+
+		$screen = get_current_screen();
+		$vars   = array(
+			'helpGuideNonce' => wp_create_nonce( 'help-guide-nonce' ),
+			'introJsOptions' => array(
+				'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
+				'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
+				'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
+				'tooltipClass'       => 'atum-help-guide-tooltip',
+				'disableInteraction' => TRUE,
+				'scrollToElement'    => TRUE,
+			),
+			'showHelpGuide'  => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
+			'screenId'       => $screen ? $screen->id : '',
+		);
+
+		// Add the auto help guide if passed and the user has not closed it yet.
+		if ( $auto_guide_file && file_exists( $auto_guide_file ) ) {
+
+			$closed_auto_guides = AtumHelpGuide::get_closed_auto_guides( get_current_user_id() );
+
+			if ( ! is_array( $closed_auto_guides ) || ! in_array( $screen->id, $closed_auto_guides )  ) {
+				$vars['autoHelpGuide'] = json_decode( file_get_contents( $auto_guide_file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			}
+
+		}
+
+		return $vars;
 
 	}
 

@@ -42,27 +42,28 @@ export default class HelpGuide {
 
 	IntroJs: any = introJs();
 	introOptions: IIntroOptions;
+	introSteps: IIntroStep[] = [];
 
 	isAuto: boolean = false;
 
 	constructor(
-		private settings: Settings,
-		private introSteps: IIntroStep[] = [] // Optional. If a guide is needed to run automatically.
+		private settings: Settings
 	) {
 
-		// Get the intro.js options from the localized var.
-		this.introOptions = this.settings.get( 'introJsOptions' ) || {};
-
-		// If it's an automatic guide, prepare it to be dismissed permanently.
-		if ( this.introSteps && this.introSteps.length ) {
-			this.isAuto = true;
+		// Check if there is any auto-guide in the passed settings.
+		const autoGuide: IIntroStep[] = <IIntroStep[]>this.settings.get( 'autoHelpGuide' );
+		if ( autoGuide && Array.isArray( autoGuide ) && autoGuide.length ) {
+			this.introSteps = autoGuide;
+			this.isAuto = true; // Prepare it to be dismissed permanently.
 		}
+
+		// Get the intro.js options from the localized var.
+		this.introOptions = <IIntroOptions>(this.settings.get( 'introJsOptions' ) || {});
 
 		// If the options are coming at instantiation, run the guide automatically.
 		this.prepareOptions();
 
 		this.bindEvents();
-
 
 	}
 
@@ -71,7 +72,7 @@ export default class HelpGuide {
 	 */
 	prepareOptions() {
 
-		if ( this.introSteps && this.introSteps.length ) {
+		if ( this.introSteps && Array.isArray( this.introSteps) && this.introSteps.length ) {
 
 			// There are selectors that introJS doesn't understand, so let's use jQuery here.
 			this.introSteps.forEach( ( step: IIntroStep ) => {
