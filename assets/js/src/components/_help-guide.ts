@@ -72,6 +72,14 @@ export default class HelpGuide {
 	prepareOptions() {
 
 		if ( this.introSteps && this.introSteps.length ) {
+
+			// There are selectors that introJS doesn't understand, so let's use jQuery here.
+			this.introSteps.forEach( ( step: IIntroStep ) => {
+				if ( step.element ) {
+					step.element = $( step.element ).get( 0 );
+				}
+			} );
+
 			this.introOptions.steps = this.introSteps;
 			this.runGuide();
 		}
@@ -146,9 +154,13 @@ export default class HelpGuide {
 	 */
 	runGuide() {
 
+		$( 'body' ).addClass( 'running-atum-help-guide' );
 		this.IntroJs.setOptions( this.introOptions ).start();
 
+		// @ts-ignore
 		this.IntroJs.onexit( () => {
+
+			$( 'body' ).removeClass( 'running-atum-help-guide' );
 
 			if ( this.isAuto && this.settings.get( 'screenId' ) ) {
 

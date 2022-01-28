@@ -474,9 +474,11 @@ tr.introjs-showElement {
 	color: $gray-600;
 	padding: 3px;
 	font-weight: normal;
+	font-size: 18px;
 	width: 18px;
 	height: 18px;
 	position: relative;
+	display: inline-flex;
 	
 	&:not(.loading-guide) {
 		&:hover {
