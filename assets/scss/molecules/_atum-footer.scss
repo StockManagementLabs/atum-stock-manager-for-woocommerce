@@ -114,3 +114,11 @@
 		padding: 10px;
 	}
 }
+
+body {
+	&.post-php, &.post-new-php {
+		#wpfooter {
+			display: block;
+		}
+	}
+}

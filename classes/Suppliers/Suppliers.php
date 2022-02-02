@@ -395,38 +395,40 @@ class Suppliers {
 			if ( in_array( $hook, [ 'post.php', 'post-new.php', 'edit.php' ] ) ) {
 
 				// Sweet Alert 2.
-				wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
-				wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
+				if ( 'edit.php' === $hook ) {
 
-				// ATUM marketing popup.
-				AtumMarketingPopup::maybe_enqueue_scripts();
+					wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+					wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 
-				wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [ 'sweetalert2' ], ATUM_VERSION );
-				wp_enqueue_style( 'atum-suppliers' );
+					wp_register_style( 'atum-suppliers-list', ATUM_URL . 'assets/css/atum-suppliers-list.css', [ 'sweetalert2' ], ATUM_VERSION );
+					wp_enqueue_style( 'atum-suppliers-list' );
 
-				if ( is_rtl() ) {
-					wp_register_style( 'atum-suppliers-rtl', ATUM_URL . 'assets/css/atum-suppliers-rtl.css', array( 'atum-suppliers' ), ATUM_VERSION );
-					wp_enqueue_style( 'atum-suppliers-rtl' );
-				}
+					if ( is_rtl() ) {
+						wp_register_style( 'atum-suppliers-list-rtl', ATUM_URL . 'assets/css/atum-suppliers-list-rtl.css', [ 'atum-suppliers-list' ], ATUM_VERSION );
+						wp_enqueue_style( 'atum-suppliers-list-rtl' );
+					}
 
-				// Load the ATUM colors.
-				Helpers::enqueue_atum_colors( 'atum-suppliers' );
+					// Load the ATUM colors.
+					Helpers::enqueue_atum_colors( 'atum-suppliers-list' );
 
-				if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
-					wp_enqueue_script( 'wc-enhanced-select' );
+					wp_register_script( 'atum-suppliers-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', [ 'jquery', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
-				}
-				elseif ( 'edit.php' === $hook ) {
-
-					wp_register_script( 'atum-suppliers-table', ATUM_URL . 'assets/js/build/atum-post-type-list.js', [ 'jquery', 'wp-hooks' ], ATUM_VERSION, TRUE );
-
-					wp_localize_script( 'atum-suppliers-table', 'atumPostTypeListVars', array(
+					wp_localize_script( 'atum-suppliers-list', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 					) );
 
-					wp_enqueue_script( 'atum-suppliers-table' );
+					wp_enqueue_script( 'atum-suppliers-list' );
 
 				}
+				else {
+
+					wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [], ATUM_VERSION );
+					wp_enqueue_style( 'atum-suppliers' );
+
+				}
+
+				// ATUM marketing popup.
+				AtumMarketingPopup::maybe_enqueue_scripts();
 
 			}
 

@@ -10,11 +10,6 @@
  /*
  * Bootstrap 5
  */
-body .select2-container--default[dir="rtl"].atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default[dir="rtl"].atum-enhanced-select .select2-selection--single .select2-selection__arrow {
-  left: 10px;
-  right: auto;
-}
-
 .wrap h1.wp-heading-inline {
   margin-left: 15px;
   margin-right: 0px;
@@ -98,4 +93,4 @@ table.atum-list-table th.sortable.numeric a > span:first-child {
   padding-left: 0px;
   padding-right: 10px;
 }
-/*# sourceMappingURL=atum-list-rtl.css.map */
+/*# sourceMappingURL=atum-suppliers-list-rtl.css.map */
