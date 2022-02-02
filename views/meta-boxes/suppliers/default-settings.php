@@ -26,9 +26,9 @@ use Atum\Inc\Helpers;
 			'selected'         => $supplier->assigned_to,
 			'name'             => 'default_settings[assigned_to]',
 			'id'               => 'assigned_to',
-			'class'            => 'wc-enhanced-select atum-enhanced-select',
+			'role__in'         => apply_filters( 'atum/suppliers/assigned_to_roles', [ 'administrator', 'shop_manager' ] ),
 		);
-		wp_dropdown_users( $args ); // TODO: THIS CAN CAUSE PERFORMANCE ISSUES IF THERE ARE THOUSANDS USERS.
+		wp_dropdown_users( $args );
 		?>
 	</div>
 

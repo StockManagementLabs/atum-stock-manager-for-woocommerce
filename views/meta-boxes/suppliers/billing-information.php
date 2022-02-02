@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || die;
 	<div class="form-field form-field-wide">
 		<label for="currency"><?php esc_html_e( 'Currency', ATUM_TEXT_DOMAIN ) ?></label>
 
-		<select id="currency" name="billing_information[currency]" style="width:100%;" data-placeholder="<?php esc_attr_e( 'Choose a currency&hellip;', ATUM_TEXT_DOMAIN ); ?>" class="wc-enhanced-select atum-enhanced-select">
+		<select id="currency" name="billing_information[currency]" style="width:100%;">
 			<option value=""><?php esc_html_e( 'Choose a currency&hellip;', ATUM_TEXT_DOMAIN ); ?></option>
 			<?php
 			$currency = $supplier->currency;
@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) || die;
 		<label for="country"><?php esc_html_e( 'Country', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<?php $country = $supplier->country; ?>
-		<select id="country" name="billing_information[country]" style="width:100%;" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', ATUM_TEXT_DOMAIN ); ?>" class="wc-enhanced-select atum-enhanced-select">
+		<select id="country" name="billing_information[country]" style="width:100%;">
 			<option value=""><?php esc_html_e( 'Choose a country&hellip;', ATUM_TEXT_DOMAIN ); ?></option>
 
 			<?php foreach ( $countries as $key => $value ) : ?>
