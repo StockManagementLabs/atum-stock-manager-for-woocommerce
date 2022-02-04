@@ -180,7 +180,15 @@ export default class ListTable {
 
 		// Update the views filters.
 		if ( tableData.views ) {
+
 			this.globals.$atumList.find( '.subsubsub' ).replaceWith( tableData.views );
+
+			// Scroll to the active view.
+			const $viewsNav: JQuery   = this.globals.$atumList.find( '#pos_list_nav' ),
+			      $activeView: JQuery = $viewsNav.find( '.active' ).parent();
+
+			$viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;
+
 		}
 		else {
 			this.globals.$atumList.find( '.subsubsub' ).empty();
