@@ -468,23 +468,23 @@ export default class EditPopovers extends PopoverBase{
 
 		if ( dataAtts && Object.keys( dataAtts ).length ) {
 
-			for ( const dataAtt in dataAtts ) {
+			for ( const dataKey in dataAtts ) {
 
-				const inputName: string = dataAtt.replace( /_/g, '-' );
-
-				const $relatedInput: JQuery = $popoverContent.find( `:input[name="${ inputName }"]` );
+				const inputName: string             = dataKey.replace( /_/g, '-' ),
+				      $relatedInput: JQuery         = $popoverContent.find( `:input[name="${ inputName }"]` ),
+				      defaultValue: string | number = this.wpHooks.applyFilters( 'atum_editPopovers_setDefaultValue_defaultValue', dataAtts[ dataKey ], dataKey );
 
 				if ( $relatedInput.length ) {
 
-					// Input group append fields.
+					// Input group append fields (set the right default value for the type).
 					if ( $relatedInput.parent( '.input-group-append' ).length ) {
-						if ( $relatedInput.val() !== dataAtts[ dataAtt ] ) {
+						if ( $relatedInput.val() !== defaultValue ) {
 							$relatedInput.parent( '.input-group-append' ).click(); // Force the change by triggering the event.
 						}
 					}
-					// Any other input.
+					// Any other input (set the right default value).
 					else {
-						$relatedInput.val( dataAtts[ dataAtt ] );
+						$relatedInput.val( defaultValue );
 					}
 
 				}
