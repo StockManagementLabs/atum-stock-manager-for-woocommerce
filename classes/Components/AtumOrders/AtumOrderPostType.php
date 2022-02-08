@@ -442,7 +442,13 @@ abstract class AtumOrderPostType {
 					$username = 'ATUM';
 				}
 
-				$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
+				if ( 'trash' !== $post->post_status ) {
+					$output = '<a href="' . admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) . '" class="row-title"><strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong></a>';
+				}
+				else {
+					$output = '<strong>#' . esc_attr( $post->ID ) . ' ' . $username . '</strong>';
+				}
+
 				break;
 
 			case 'date_created':
