@@ -1002,9 +1002,7 @@ class PurchaseOrders extends AtumOrderPostType {
 			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$where_clause     = $wpdb->prepare( "
 			post_type = %s AND post_status NOT IN (
-			    '" . implode( "','", array_merge( array_keys( static::get_statuses() ), [ 'auto-draft' ] ) ) . "'
-		    )
-		", self::POST_TYPE );
+			    '" . implode( "','", array_merge( array_keys( static::get_statuses() ), [ 'auto-draft' ] ) ) . "')", self::POST_TYPE );
 			$unknown_statuses = $wpdb->get_col( "SELECT DISTINCT post_status FROM $wpdb->posts WHERE $where_clause" );
 
 			if ( $unknown_statuses ) {
