@@ -413,9 +413,10 @@ abstract class AtumOrderPostType {
 
 				if ( ! is_wp_error( $atum_order ) ) {
 
-					$status       = $atum_order->get_status();
-					$status_name  = isset( $statuses[ $status ] ) ? $statuses[ $status ] : '';
-					$status_color = isset( $status_colors[ $status ] ) ? ' style="background-color: ' . $status_colors[ $status ] . '"' : '';
+					$status        = $atum_order->get_status();
+					$status_name   = isset( $statuses[ $status ] ) ? $statuses[ $status ] : __( '(Unknown)', ATUM_TEXT_DOMAIN );
+					$status_color  = ' style="background-color: ';
+					$status_color .= isset( $status_colors[ $status ] ) ? $status_colors[ $status ] . '"' : 'rgba(255,72,72,.5)"';
 
 					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"' . $status_color . '></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
@@ -1212,6 +1213,9 @@ abstract class AtumOrderPostType {
 
 		?>
 		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="<?php echo esc_attr( $class ) ?>">
+			<?php if ( ! array_key_exists( $value, static::get_statuses() ) ) : ?>
+			<option value="<?php echo esc_attr( $value ) ?>" selected><?php esc_html_e( 'Unknown', ATUM_TEXT_DOMAIN ); ?></option>
+			<?php endif; ?>
 			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
 				<option value="<?php echo esc_attr( $status ) ?>"<?php selected( $status, $value ) ?>><?php echo esc_html( $status_label ) ?></option>
 			<?php endforeach; ?>

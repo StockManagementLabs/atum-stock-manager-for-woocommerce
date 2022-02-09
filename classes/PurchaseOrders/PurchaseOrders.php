@@ -88,6 +88,13 @@ class PurchaseOrders extends AtumOrderPostType {
 		'delete_posts'       => 'delete_purchase_orders',
 		'delete_other_posts' => 'delete_other_purchase_orders',
 	);
+
+	/**
+	 * Number of POs with unknown status
+	 *
+	 * @var int
+	 */
+	protected $unknown_status_pos = 0;
 	
 	/**
 	 * PurchaseOrders singleton constructor
@@ -167,6 +174,11 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Maybe change product stock when order status change.
 		add_action( 'atum/orders/status_atum_received', array( $this, 'maybe_increase_stock_levels' ), 10, 2 );
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
+
+		if ( is_admin() ) {
+			// Add unknown status POs view if any. After Trash.
+			add_filter( 'views_edit-' . self::POST_TYPE, array( $this, 'maybe_add_unknown_view' ), 11 );
+		}
 
 	}
 
@@ -529,7 +541,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Add the help tab to the PO list page
+	 * Add the help tab to the PO list page and allow filtering unknown status POs
 	 *
 	 * @since 1.3.0
 	 */
@@ -547,6 +559,8 @@ class PurchaseOrders extends AtumOrderPostType {
 			);
 
 			Helpers::add_help_tab( $help_tabs, $this );
+
+			add_filter( 'posts_where', array( $this, 'filter_po_unknown_status' ), 10, 2 );
 
 		}
 
@@ -938,6 +952,83 @@ class PurchaseOrders extends AtumOrderPostType {
 
 	}
 
+	/**
+	 * Add an unknown status view if any PO has an unknown status.
+	 *
+	 * @since 1.9.11
+	 *
+	 * @param array $status_views
+	 *
+	 * @return array
+	 */
+	public function maybe_add_unknown_view( $status_views ) {
+
+		// Check if there are POs with unknown statuses.
+		if ( $this->unknown_status_pos ) {
+
+			// Maybe add the current class.
+			$current = ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ? 'class="current" ' : '';
+
+			$status_views['unknown'] = '<a ' . $current . 'href="edit.php?post_status=unknown&#038;post_type=atum_purchase_order">' . esc_html__( 'Unknown', ATUM_TEXT_DOMAIN ) . "<span class='count'>($this->unknown_status_pos)</span></a>";
+		}
+
+		// Ensure publish is not present.
+		unset( $status_views['publish'] );
+
+		return $status_views;
+	}
+
+	/**
+	 * Modify the WP Query to list the POs with unknown status.
+	 *
+	 * @since 1.9.11
+	 *
+	 * @param string    $where
+	 * @param \WP_Query $wp_query
+	 *
+	 * @return string
+	 */
+	public function filter_po_unknown_status( $where, $wp_query ) {
+
+		global $wpdb;
+
+		// Ensure it's the correct WP Query.
+		if ( self::POST_TYPE === $wp_query->query_vars['post_type'] ) {
+
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$where_clause     = $wpdb->prepare( "
+			post_type = %s AND post_status NOT IN (
+			    '" . implode( "','", array_merge( array_keys( static::get_statuses() ), [ 'auto-draft' ] ) ) . "'
+		    )
+		", self::POST_TYPE );
+			$unknown_statuses = $wpdb->get_col( "SELECT DISTINCT post_status FROM $wpdb->posts WHERE $where_clause" );
+
+			if ( $unknown_statuses ) {
+
+				$this->unknown_status_pos = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE $where_clause" );
+
+				// Filter POs with unknown statuses if queried.
+				if ( ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ) {
+
+					// Remove the post_status query used and replace it with the unknown statuses query.
+					$begin           = strpos( $where, "{$wpdb->posts}.post_status" );
+					$last_occurrence = strrpos( $where, "{$wpdb->posts}.post_status" );
+					$end             = strpos( $where, ')', $last_occurrence );
+
+					$post_status_query = "{$wpdb->posts}.post_status IN ('" . implode( "','", $unknown_statuses ) . "')";
+
+					$where = substr_replace( $where, $post_status_query, $begin, $end - $begin );
+
+				}
+
+			}
+			//phpcs:enable
+
+		}
+
+		return $where;
+
+	}
 
 	/****************************
 	 * Instance methods
