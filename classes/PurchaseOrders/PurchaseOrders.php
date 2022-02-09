@@ -14,6 +14,7 @@ namespace Atum\PurchaseOrders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
@@ -178,6 +179,9 @@ class PurchaseOrders extends AtumOrderPostType {
 		if ( is_admin() ) {
 			// Add unknown status POs view if any. After Trash.
 			add_filter( 'views_edit-' . self::POST_TYPE, array( $this, 'maybe_add_unknown_view' ), 11 );
+
+			// Check whether to show an admin notice to the PO.
+			add_action( 'current_screen', array( $this, 'maybe_show_admin_notice' ), 9 );
 		}
 
 	}
@@ -1027,6 +1031,25 @@ class PurchaseOrders extends AtumOrderPostType {
 		}
 
 		return $where;
+
+	}
+
+	/**
+	 * Check whether to show an admin notice on the POs
+	 *
+	 * @since 0.9.27
+	 */
+	public function maybe_show_admin_notice() {
+
+		global $typenow, $pagenow;
+
+		// Add the unknow status notice if necessary.
+		if (
+			'post.php' === $pagenow && self::POST_TYPE === $typenow &&
+			! empty( $_GET['post'] ) && ! array_key_exists( get_post_status( absint( $_GET['post'] ) ), static::get_statuses() )
+		) {
+			AtumAdminNotices::add_notice( __( 'This PO has an unknown status, please change it to any known one and save it to unblock it.', ATUM_TEXT_DOMAIN ), 'error' );
+		}
 
 	}
 
