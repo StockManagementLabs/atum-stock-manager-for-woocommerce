@@ -1217,9 +1217,11 @@ abstract class AtumOrderPostType {
 	 */
 	public static function atum_order_status_dropdown( $id, $name, $value, $class = 'wc-enhanced-select atum-enhanced-select' ) {
 
+		global $pagenow;
+
 		?>
 		<select id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="<?php echo esc_attr( $class ) ?>">
-			<?php if ( ! array_key_exists( $value, static::get_statuses() ) ) : ?>
+			<?php if ( 'post-new.php' !== $pagenow && ! array_key_exists( $value, static::get_statuses() ) ) : ?>
 			<option value="<?php echo esc_attr( $value ) ?>" selected><?php esc_html_e( 'Unknown', ATUM_TEXT_DOMAIN ); ?></option>
 			<?php endif; ?>
 			<?php foreach ( static::get_statuses() as $status => $status_label ) : ?>
