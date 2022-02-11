@@ -184,7 +184,7 @@ export default class ListTable {
 			this.globals.$atumList.find( '.subsubsub' ).replaceWith( tableData.views );
 
 			// Scroll to the active view.
-			const $viewsNav: JQuery   = this.globals.$atumList.find( '#pos_list_nav' ),
+			const $viewsNav: JQuery   = this.globals.$atumList.find( 'nav.dragscroll' ),
 			      $activeView: JQuery = $viewsNav.find( '.active' ).parent();
 
 			$viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;

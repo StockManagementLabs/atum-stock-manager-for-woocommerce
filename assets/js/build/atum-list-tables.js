@@ -1801,7 +1801,7 @@ var ListTable = (function () {
         this.globals.$atumList.find('table').not('.cloned').find('tr.item-heads').html(tableData.columnHeaders);
         if (tableData.views) {
             this.globals.$atumList.find('.subsubsub').replaceWith(tableData.views);
-            var $viewsNav = this.globals.$atumList.find('#pos_list_nav'), $activeView = $viewsNav.find('.active').parent();
+            var $viewsNav = this.globals.$atumList.find('nav.dragscroll'), $activeView = $viewsNav.find('.active').parent();
             $viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;
         }
         else {
