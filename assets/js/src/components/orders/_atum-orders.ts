@@ -488,6 +488,8 @@ export default class AtumOrders {
 						security     : this.settings.get( 'importOrderItemsNonce' ),
 					}, 'json', resolve );
 
+					this.wpHooks.doAction( 'atum_orders_afterImportItems' );
+
 				} );
 
 			},
