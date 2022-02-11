@@ -2040,9 +2040,11 @@ final class Ajax {
 
 				if ( ! empty( $items ) ) {
 
+					$atum_order_type = get_post_type( $atum_order_id );
+
 					// *** NOTE: FOR NOW THIS IS ONLY USED ON LOGS, IF NEEDS TO BE COMPATIBLE WITH OTHER
 					// ATUM ORDERS IN THE FUTURE, THIS WILL NEED REFACTORY ***
-					$atum_order = new Log( $atum_order_id );
+					$atum_order = apply_filters( 'atum/ajax/get_atum_order_import_items', new Log( $atum_order_id ), $atum_order_id );
 
 					try {
 
@@ -2057,6 +2059,24 @@ final class Ajax {
 								 *
 								 * @var \WC_Order_Item_Product $item
 								 */
+								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
+									$imported_item = FALSE;
+
+									foreach ( $atum_order->get_items( 'line_item' ) as $atum_order_item ) {
+										/**
+										 * Variable definition
+										 *
+										 * @var \WC_Order_Item_Product $atum_order_item
+										 */
+										if ( $item->get_product_id() === $atum_order_item->get_product_id() ) {
+											$imported_item = TRUE;
+											break;
+										}
+									}
+									if ( $imported_item ) {
+										continue;
+									}
+								}
 								$product  = Helpers::get_atum_product( $item->get_product() );
 								$log_item = $atum_order->add_product( $product, $item->get_quantity() );
 
@@ -2068,6 +2088,24 @@ final class Ajax {
 								 *
 								 * @var \WC_Order_Item_Fee $item
 								 */
+								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
+									$imported_item = FALSE;
+
+									foreach ( $atum_order->get_items( 'fee' ) as $atum_order_item ) {
+										/**
+										 * Variable definition
+										 *
+										 * @var \WC_Order_Item_Fee $atum_order_item
+										 */
+										if ( $item->get_name() === $atum_order_item->get_name() && $item->get_amount() === $atum_order_item->get_amount() ) {
+											$imported_item = TRUE;
+											break;
+										}
+									}
+									if ( $imported_item ) {
+										continue;
+									}
+								}
 								$log_item = $atum_order->add_fee( $item );
 							}
 							elseif ( $item instanceof \WC_Order_Item_Shipping ) {
@@ -2076,6 +2114,24 @@ final class Ajax {
 								 *
 								 * @var \WC_Order_Item_Shipping $item
 								 */
+								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
+									$imported_item = FALSE;
+
+									foreach ( $atum_order->get_items( 'shipping' ) as $atum_order_item ) {
+										/**
+										 * Variable definition
+										 *
+										 * @var \WC_Order_Item_Shipping $atum_order_item
+										 */
+										if ( $item->get_name() === $atum_order_item->get_name() && $item->get_quantity() === $atum_order_item->get_quantity() ) {
+											$imported_item = TRUE;
+											break;
+										}
+									}
+									if ( $imported_item ) {
+										continue;
+									}
+								}
 								$log_item = $atum_order->add_shipping_cost( $item );
 							}
 							elseif ( empty( $current_tax ) && $item instanceof \WC_Order_Item_Tax ) {
@@ -2084,6 +2140,9 @@ final class Ajax {
 								 *
 								 * @var \WC_Order_Item_Tax $item
 								 */
+								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
+									continue;
+								}
 								$log_item = $atum_order->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
 							}
 
