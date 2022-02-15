@@ -727,13 +727,16 @@ class Settings {
 		}
 
 		// Remove deprecated/removed/unneeded keys.
+		// TODO: Temporary disabled because we're losing all settings from disabled add-ons.
+		// Find a way to preserve disabled settings without keeping in the current settings.
+		/*
 		$valid_keys = array_keys( $this->defaults );
 
 		foreach ( $this->options as $option_key => $option_value ) {
 			if ( ! in_array( $option_key, $valid_keys ) ) {
 				unset( $this->options[ $option_key ] );
 			}
-		}
+		}*/
 
 		if ( isset( $input['settings_section'] ) ) {
 
