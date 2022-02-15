@@ -3502,6 +3502,10 @@ h2 .atum-help-tip {
   min-width: 200px;
 }
 
+.popover input {
+  width: 100%;
+}
+
 .bs-popover-top > .popover-arrow, .bs-popover-auto[data-popper-placement^="top"] > .popover-arrow {
   bottom: calc(-0.5rem - 1px);
 }
