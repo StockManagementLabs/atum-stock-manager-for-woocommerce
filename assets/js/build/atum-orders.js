@@ -706,6 +706,9 @@ var AtumOrders = (function () {
                     callback();
                 }
                 _this.wpHooks.doAction('atum_orders_afterLoadItemsTable');
+                if ('atum_order_import_items' === data.action) {
+                    _this.wpHooks.doAction('atum_orders_afterImportItems');
+                }
             },
         });
     };
@@ -825,7 +828,6 @@ var AtumOrders = (function () {
                         atum_order_id: _this.settings.get('postId'),
                         security: _this.settings.get('importOrderItemsNonce'),
                     }, 'json', resolve);
-                    _this.wpHooks.doAction('atum_orders_afterImportItems');
                 });
             },
         });

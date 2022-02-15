@@ -272,6 +272,9 @@ export default class AtumOrders {
 
 				this.wpHooks.doAction( 'atum_orders_afterLoadItemsTable' );
 
+				if ( 'atum_order_import_items' === data.action ) {
+					this.wpHooks.doAction( 'atum_orders_afterImportItems' );
+				}
 			},
 		} );
 
@@ -487,8 +490,6 @@ export default class AtumOrders {
 						atum_order_id: this.settings.get( 'postId' ),
 						security     : this.settings.get( 'importOrderItemsNonce' ),
 					}, 'json', resolve );
-
-					this.wpHooks.doAction( 'atum_orders_afterImportItems' );
 
 				} );
 
