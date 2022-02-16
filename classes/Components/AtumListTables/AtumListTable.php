@@ -1547,12 +1547,31 @@ abstract class AtumListTable extends \WP_List_Table {
 		$is_inheritable            = Helpers::is_inheritable_type( $this->list_item->get_type() );
 		$editable                  = apply_filters( 'atum/list_table/editable_column_stock', $editable, $this->list_item );
 
+		// Bundle & grouped products.
+		if ( $this->is_packed_item() && ! $this->list_item->get_manage_stock() ) {
+			$editable = FALSE;
+		}
+
 		// Do not show the stock if the product is not managed by WC.
 		if ( ! $is_inheritable && ( ! $this->list_item->managing_stock() || 'parent' === $this->list_item->managing_stock() ) ) {
 			return apply_filters( 'atum/list_table/column_stock', $stock, $item, $this->list_item, $this );
 		}
 
 		$stock = wc_stock_amount( $this->list_item->get_stock_quantity() );
+
+		if ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $this->list_item->get_type() ) {
+			$bundle_product = $this->list_item;
+			/**
+			 * Variable definition
+			 *
+			 * @var $bundle_product '\WC_Product_Bundle
+			 */
+			if ( ! strlen( $bundle_product->get_bundle_stock_quantity() ) ) {
+				$stock = self::EMPTY_COL;
+			} else {
+				$stock = $bundle_product->get_bundle_stock_quantity();
+			}
+		}
 
 		if ( 0 !== $stock && ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) || ! isset( $_REQUEST['view'] ) ) {
 			$this->increase_total( '_stock', $stock );
@@ -1625,7 +1644,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$stock_html = "<span{$classes_title}>{$stock}</span>";
 
-		if ( $is_inheritable ) {
+		if ( $is_inheritable && ! $this->is_packed_item() ) {
 			$tooltip     = esc_attr__( 'Compounded stock quantity', ATUM_TEXT_DOMAIN );
 			$stock_html .= " | <span class='compounded tips' data-tip='$tooltip'>" . self::EMPTY_COL . '</span>';
 		}
@@ -5039,6 +5058,25 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return $table_columns;
 
+	}
+
+	/**
+	 * Check whether the current item is group/bundle.
+	 *
+	 * @since 1.9.10
+	 *
+	 * @return bool
+	 */
+	protected function is_packed_item() {
+
+		if (
+			( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $this->list_item->get_type() ) ||
+			( class_exists( '\WC_Product_Grouped' ) && 'group' === $this->list_item->get_type() )
+		) {
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 }
