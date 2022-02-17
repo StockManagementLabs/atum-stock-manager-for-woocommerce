@@ -201,7 +201,13 @@ class Wpml {
 			// Check if this is a translation.
 			add_action( 'post_edit_form_tag', array( $this, 'check_product_if_translation' ) );
 			add_action( 'woocommerce_variation_header', array( $this, 'check_variation_if_translation' ) );
-			
+
+			// Disable comments translations.
+			add_action( 'atum/comments/disable_translations', array( $this, 'disable_comments_translations' ) );
+
+			// Enable comments translations.
+			add_action( 'atum/comments/enable_translations', array( $this, 'enable_comments_translations' ) );
+
 		}
 
 	}
@@ -1373,6 +1379,26 @@ class Wpml {
 		}
 		
 	}
+
+	/**
+	 * Disable WPML translations for comments
+	 *
+	 * @since 1.9.10
+	 */
+	public function disable_comments_translations() {
+		remove_filter( 'comments_clauses', array( self::$sitepress, 'comments_clauses' ) );
+	}
+
+	/**
+	 * Enable WPML translations for comments
+	 *
+	 * @since 1.9.10
+	 */
+	public function enable_comments_translations() {
+		add_filter( 'comments_clauses', array( self::$sitepress, 'comments_clauses' ), 10, 2 );
+	}
+
+
 
 	/******************
 	 * Instace methods
