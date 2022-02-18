@@ -92,7 +92,7 @@ class AtumMarketingPopup {
 	/**
 	 * Whether to disable the popup completely
 	 */
-	const IS_DISABLED = TRUE;
+	const IS_DISABLED = FALSE;
 
 	/**
 	 * The singleton instance holder

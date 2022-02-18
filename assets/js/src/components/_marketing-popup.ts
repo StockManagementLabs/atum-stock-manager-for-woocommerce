@@ -3,7 +3,7 @@
    ======================================= */
 
 import Settings from '../config/_settings';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 
 // Interfaces.
 interface MPopupText {
@@ -126,17 +126,20 @@ export default class MarketingPopup {
 						showConfirmButton: false,
 						html             : logo + title + description + buttons + footerNotice,
 						imageUrl         : imageTopLeft,
+						allowEscapeKey   : false,
+						allowOutsideClick: false,
+						allowEnterKey    : false,
+					} ).then( () => {
+
+						// Hide popup when click un close button for this user.
+						this.hideMarketingPopup( $( '.swal2-content p' ).data( 'transient-key' ) );
+
 					} );
 
 					// Redirect to button url.
 					$( '.popup-button' ).click( ( evt: JQueryEventObject ) => {
 						evt.preventDefault();
 						window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
-					} );
-
-					// Hide popup when click un close button for this user.
-					$( '.marketing-popup .swal2-close' ).click( () => {
-						this.hideMarketingPopup( $( '.swal2-content p' ).data( 'transient-key' ) );
 					} );
 					
 				}
