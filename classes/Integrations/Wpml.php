@@ -140,7 +140,6 @@ class Wpml {
 
 		// Get all product translations ids to calculate calculated properties.
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
-		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_products_translations_ids' ) );
 
 		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
 		
