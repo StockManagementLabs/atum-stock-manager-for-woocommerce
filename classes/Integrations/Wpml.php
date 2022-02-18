@@ -777,7 +777,7 @@ class Wpml {
 
 		}
 
-		return $translations;
+		return $translations ? $translations : $product_id;
 
 	}
 
