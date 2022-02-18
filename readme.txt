@@ -6,8 +6,8 @@ Requires at least: 5.6
 Tested up to: 5.9.0
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.1.1
-Stable tag: 1.9.10
+WC tested up to: 6.2.0
+Stable tag: 1.9.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,42 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.11`
+
+*2022-02-18*
+
+**Features**
+
+* Improvements for the ATUM Help guides.
+* Auto-scroll to the active view in List Tables after reloading the content.
+* Allow viewing unknown statuses in POs list.
+* Added unknown PO status notice.
+* Added new JS hook after importing ATUM order items.
+* Added actions for being able to disable comments translations for order notes.
+
+**Changes**
+
+* Add class to body while a help guide is running.
+* Refactoring.
+* Separated the suppliers styles in 2 files.
+* Disabled the enhanced selects on the supplier profile.
+* Do not add the ATUM Order link to List Tables if it's a trashed post.
+* Updated minimum versions.
+* Updated ATUM icons font.
+* Avoid removing settings from disabled addons.
+* Removed compounded stock from bundle and grouped products.
+* Remove duplicated filter.
+
+**Fixes**
+
+* Prevent unknown order status when creating a PO.
+* Avoid order items duplication when importing new PO items from a Sale Order.
+* Fixed nav identifier.
+* Fixed wrong input width in SC popovers when using Firefox.
+* Prevent from returning empty translation ids.
 
 ---
 
