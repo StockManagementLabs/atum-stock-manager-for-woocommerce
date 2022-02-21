@@ -69,7 +69,6 @@ class AtumHelpGuide {
 	 * @since 1.9.11
 	 *
 	 * @param string $guide
-	 * @param string $path
 	 *
 	 * @return string
 	 */
@@ -103,8 +102,7 @@ class AtumHelpGuide {
 	 * @since 1.9.11
 	 *
 	 * @param int $user_id
-	 *
-	 * @return string[]|false
+	 * @param int $screen_id
 	 */
 	public static function save_closed_auto_guide( $user_id, $screen_id ) {
 
@@ -130,7 +128,7 @@ class AtumHelpGuide {
 	 *
 	 * @since 1.9.11
 	 *
-	 * @param string $auto_guide Full guide path for the auto guide (if any).
+	 * @param string $auto_guide_file Full guide path for the auto guide (if any).
 	 *
 	 * @return array
 	 */
@@ -154,9 +152,9 @@ class AtumHelpGuide {
 		// Add the auto help guide if passed and the user has not closed it yet.
 		if ( $auto_guide_file && file_exists( $auto_guide_file ) ) {
 
-			$closed_auto_guides = AtumHelpGuide::get_closed_auto_guides( get_current_user_id() );
+			$closed_auto_guides = self::get_closed_auto_guides( get_current_user_id() );
 
-			if ( ! is_array( $closed_auto_guides ) || ! in_array( $screen->id, $closed_auto_guides )  ) {
+			if ( ! is_array( $closed_auto_guides ) || ! in_array( $screen->id, $closed_auto_guides ) ) {
 				$vars['autoHelpGuide'] = json_decode( file_get_contents( $auto_guide_file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			}
 
