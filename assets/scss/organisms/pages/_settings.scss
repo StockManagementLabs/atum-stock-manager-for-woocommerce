@@ -961,6 +961,13 @@
 			
 		}
 		
+		blockquote {
+			border-left: 2px solid $primary;
+			padding-left: 10px;
+			margin-left: 0;
+			color: $gray-600;
+		}
+		
 		.submit {
 			padding-top: 0;
 			text-align: right;
@@ -1028,7 +1035,6 @@
 				}
 				
 			}
-			
 			
 			@include tablet-max {
 				.wp-picker-clear {
