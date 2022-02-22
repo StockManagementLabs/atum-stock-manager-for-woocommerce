@@ -12,6 +12,7 @@ import SmartForm from '../_smart-form';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
+import WPHooks from '../../interfaces/wp.hooks';
 
 export default class SettingsPage {
 	
@@ -21,6 +22,7 @@ export default class SettingsPage {
 	navigationReady: boolean = false;
 	numHashParameters: number = 0;
 	tabLoader: TabLoader;
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
 		private settings: Settings,
@@ -230,6 +232,8 @@ export default class SettingsPage {
 			if ( 'visual_settings' === $navLink.data( 'tab' ) ) {
 				this.hideColors();
 			}
+
+			this.wpHooks.doAction( 'atum_settingsPage_moveToTab', $navLink );
 
 		} );
 		

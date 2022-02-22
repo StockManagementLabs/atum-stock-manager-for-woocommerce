@@ -1,7 +1,7 @@
 /**
  * Atum Dashboard
  *
- * @copyright Stock Management Labs ©2021
+ * @copyright Stock Management Labs ©2022
  *
  * @since 1.4.0
  */
