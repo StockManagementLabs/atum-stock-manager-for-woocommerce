@@ -347,7 +347,7 @@ class Settings {
 			'chg_stock_order_complete'       => array(
 				'group'   => 'general',
 				'section' => 'general',
-				'name'    => __( "Change stock on 'Completed' status", ATUM_TEXT_DOMAIN ),
+				'name'    => __( "Change stock on 'completed' status", ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "When enabling this option, the products' stock will be discounted only when any WooCommerce order's status is changed to 'Completed'. Any other status won't alter the stocks.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no',
