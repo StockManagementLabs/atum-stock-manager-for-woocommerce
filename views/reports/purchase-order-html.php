@@ -62,7 +62,7 @@ use Atum\Inc\Helpers;
 	<div class="spacer" style="clear: both;"></div>
 </div>
 <div class="po-wrapper content-lines">
-	<table class="">
+	<table>
 		<thead>
 			<tr class="po-li-head">
 				<th class="description" style="width:<?php echo esc_attr( $desc_percent ) ?>%"><?php esc_html_e( 'Item', ATUM_TEXT_DOMAIN ) ?></th>
