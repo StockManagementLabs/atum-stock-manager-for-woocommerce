@@ -189,6 +189,9 @@ class Hooks {
 		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
+		// Check if its necesary change the post status on purchase orders and inventory logs.
+		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status'), 10, 3 );
+
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
 		add_action( 'woocommerce_before_shop_loop', array( $this, 'allow_product_caching' ) );
@@ -957,6 +960,29 @@ class Hooks {
 		}
 
 		$this->save_order_items_props( $order_id );
+
+	}
+
+	/**
+	 * When an purchase order or inventory log is moved or restored from trash, restore original status
+	 *
+	 * @param string $new_status      The new status of the post being restored.
+	 * @param int    $post_id         The ID of the post being restored.
+	 * @param string $previous_status The status of the post at the point where it was trashed.
+	 *
+	 * @return string The new status of the post.
+	 *
+	 * @since 1.9.11
+	 */
+	public function maybe_change_post_status( $new_status, $post_id, $previous_status ) {
+
+		$post_type = get_post_type( $post_id );
+
+		if ( 'atum_purchase_order' !== $post_type && 'atum_inventory_log' !== $post_type ) {
+			return;
+		}
+
+		return wp_untrash_post_set_previous_status( $new_status, $post_id, $previous_status );
 
 	}
 
