@@ -21,9 +21,24 @@ export default class BulkActions {
 	) {
 
 		this.$bulkButton = $( '.apply-bulk-action' );
+		this.bindEvents();
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window[ 'atum' ] = {};
+		}
+
+		window[ 'atum' ][ 'BulkActions' ] = this;
 		
+	}
+
+	/**
+	 * Bind events
+	 */
+	bindEvents() {
+
 		this.globals.$atumList
-		
+
 			//
 			// Apply Bulk Actions.
 			// -------------------
@@ -45,7 +60,7 @@ export default class BulkActions {
 				}
 
 			} )
-			
+
 			//
 			// Bulk actions dropdown.
 			// ----------------------
@@ -68,12 +83,12 @@ export default class BulkActions {
 				}
 
 			} )
-			
+
 			//
 			// Change the Bulk Buttons texts when selecting boxes.
 			// ---------------------------------------------------
 			.on( 'change', '.check-column input:checkbox', () => this.updateBulkButton() );
-		
+
 	}
 	
 	/**
