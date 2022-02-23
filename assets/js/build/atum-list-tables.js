@@ -1778,7 +1778,7 @@ var ListTable = (function () {
                 if (typeof response === 'undefined' || !response) {
                     return false;
                 }
-                var rows = response.rows, paged = response.paged, column_headers = response.column_headers, views = response.views, extra_t_n = response.extra_t_n, totals = response.totals;
+                var rows = response.rows, paged = response.paged, column_headers = response.column_headers, views = response.views, extra_t_n = response.extra_t_n, totals = response.totals, row_actions = response.row_actions;
                 var tableData = {
                     rows: rows || '',
                     paged: paged || 1,
@@ -1786,6 +1786,7 @@ var ListTable = (function () {
                     views: views || '',
                     extraTableNav: extra_t_n || '',
                     totals: totals || '',
+                    rowActions: row_actions || [],
                 };
                 _this.replaceTableData(tableData);
             },
@@ -1827,6 +1828,9 @@ var ListTable = (function () {
         this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(tableData.totals);
         if ($.address.parameterNames().length) {
             this.globals.$atumList.find('.reset-filters').removeClass('hidden');
+        }
+        if (tableData.rowActions) {
+            this.wpHooks.doAction('atum_listTable_updateRowActions', tableData.rowActions);
         }
         this.toolTip.addTooltips();
         this.enhancedSelect.maybeRestoreEnhancedSelect();
@@ -1992,7 +1996,7 @@ var ListTable = (function () {
                 if (typeof response.success !== 'undefined' && response.success === true) {
                     $button.remove();
                     _this.globals.$editInput.val('');
-                    var _a = response.data.tableData, rows = _a.rows, paged = _a.paged, column_headers = _a.column_headers, views = _a.views, extra_t_n = _a.extra_t_n, totals = _a.totals;
+                    var _a = response.data.tableData, rows = _a.rows, paged = _a.paged, column_headers = _a.column_headers, views = _a.views, extra_t_n = _a.extra_t_n, totals = _a.totals, row_actions = _a.row_actions;
                     var tableData = {
                         rows: rows || '',
                         paged: paged || 1,
@@ -2000,6 +2004,7 @@ var ListTable = (function () {
                         views: views || '',
                         extraTableNav: extra_t_n || '',
                         totals: totals || '',
+                        rowActions: row_actions || [],
                     };
                     _this.replaceTableData(tableData);
                 }
@@ -2543,18 +2548,20 @@ var RowActions = (function () {
         this.rowActions = [];
         this.wpHooks = window['wp']['hooks'];
         this.rowActions = this.settings.get('rowActions');
-        if (!this.rowActions.length) {
-            return;
-        }
         this.prepareActionMenus();
         this.addHooks();
     }
     RowActions.prototype.prepareActionMenus = function () {
         var _this = this;
         this.globals.$atumList.find('.show-actions').each(function (index, elem) {
-            var $button = $(elem), $titleCell = $button.closest('tr').find('td.column-title');
+            var $button = $(elem);
+            if (!_this.rowActions || !_this.rowActions.length) {
+                $button.hide();
+                return;
+            }
+            var $row = $button.closest('tr'), $titleCell = $row.find('td.column-title').length ? $row.find('td.column-title') : $row.find('.row-title');
             var actionsMenu = {
-                title: ($titleCell.find('.atum-title-small').length ? $titleCell.find('.atum-title-small') : $titleCell).text().replace('↵', '').trim(),
+                title: _this.sanitizeRowTitle($titleCell),
                 items: _this.rowActions,
             };
             new _menu_popover__WEBPACK_IMPORTED_MODULE_0__["default"]($button, actionsMenu, 'body');
@@ -2568,6 +2575,10 @@ var RowActions = (function () {
                 $popover.find('ul').append("<li class=\"no-actions\">" + _this.settings.get('noActions') + "</li>");
             }
         }, 999);
+        this.wpHooks.addAction('atum_listTable_updateRowActions', 'atum', function (rowActions) { return _this.rowActions = rowActions; });
+    };
+    RowActions.prototype.sanitizeRowTitle = function ($titleCell) {
+        return "<span>" + ($titleCell.find('.atum-title-small').length ? $titleCell.find('.atum-title-small') : $titleCell).text().replace('↵', '').trim() + "</span>";
     };
     return RowActions;
 }());

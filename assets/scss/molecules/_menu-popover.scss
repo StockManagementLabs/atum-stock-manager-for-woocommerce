@@ -6,15 +6,19 @@
 	&.menu-popover {
 		
 		.popover-header {
+			margin: 0;
 			padding-bottom: 3px;
 			padding-top: 3px;
-			font-size: 12px;
-			font-weight: 500;
-			color: $blue-dark;
-			line-height: 1;
 			background-color: $gray-200;
-			max-width: 150px;
-			@include text-overflow;
+			
+			> span {
+				font-size: 12px;
+				font-weight: 500;
+				color: $blue-dark;
+				line-height: 1;
+				max-width: 150px;
+				@include text-overflow;
+			}
 		}
 		
 		.popover-body {

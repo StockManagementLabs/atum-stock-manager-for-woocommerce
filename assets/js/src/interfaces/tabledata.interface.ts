@@ -1,3 +1,5 @@
+import { IMenuItem } from './menu.interface';
+
 /**
  * Interfaces for the ListTables data and components' HTML
  */
@@ -15,4 +17,5 @@ export interface ITableData {
 	totalItemsI18n?: string;
 	totalPages?: string;
 	totalPagesI18n?: string;
+	rowActions?: IMenuItem[];
 }

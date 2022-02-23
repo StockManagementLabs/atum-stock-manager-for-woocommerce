@@ -5999,13 +5999,17 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .popover.menu-popover .popover-header {
+  margin: 0;
   padding-bottom: 3px;
   padding-top: 3px;
+  background-color: #e9ecef;
+}
+
+.popover.menu-popover .popover-header > span {
   font-size: 12px;
   font-weight: 500;
   color: #27283B;
   line-height: 1;
-  background-color: #e9ecef;
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;

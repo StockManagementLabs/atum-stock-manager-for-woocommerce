@@ -4330,6 +4330,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			),
 			'column_headers' => $headers,
 			'views'          => $views,
+			'row_actions'    => self::$row_actions,
 		);
 
 		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {

@@ -140,7 +140,7 @@ export default class ListTable {
 					return false;
 				}
 
-				const { rows, paged, column_headers, views, extra_t_n, totals } = response;
+				const { rows, paged, column_headers, views, extra_t_n, totals, row_actions } = response;
 
 				const tableData: ITableData = {
 					rows         : rows || '',
@@ -149,6 +149,7 @@ export default class ListTable {
 					views        : views || '',
 					extraTableNav: extra_t_n || '',
 					totals       : totals || '',
+					rowActions   : row_actions || [],
 				};
 
 				this.replaceTableData( tableData );
@@ -220,6 +221,11 @@ export default class ListTable {
 		// If there are active filters, show the reset button.
 		if ( $.address.parameterNames().length ) {
 			this.globals.$atumList.find( '.reset-filters' ).removeClass( 'hidden' );
+		}
+
+		// Update the row actions for the current view.
+		if ( tableData.rowActions ) {
+			this.wpHooks.doAction( 'atum_listTable_updateRowActions', tableData.rowActions );
 		}
 
 		// Regenerate the UI.
@@ -533,7 +539,7 @@ export default class ListTable {
 					$button.remove();
 					this.globals.$editInput.val( '' );
 
-					const { rows, paged, column_headers, views, extra_t_n, totals } = response.data.tableData;
+					const { rows, paged, column_headers, views, extra_t_n, totals, row_actions } = response.data.tableData;
 
 					const tableData: ITableData = {
 						rows         : rows || '',
@@ -542,6 +548,7 @@ export default class ListTable {
 						views        : views || '',
 						extraTableNav: extra_t_n || '',
 						totals       : totals || '',
+						rowActions   : row_actions || [],
 					};
 
 					this.replaceTableData( tableData );

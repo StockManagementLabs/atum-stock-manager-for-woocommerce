@@ -20,10 +20,6 @@ export default class RowActions {
 
 		this.rowActions = this.settings.get( 'rowActions' );
 
-		if ( ! this.rowActions.length ) {
-			return;
-		}
-
 		this.prepareActionMenus();
 		this.addHooks();
 		
@@ -36,12 +32,20 @@ export default class RowActions {
 
 		this.globals.$atumList.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
 
-			const $button: JQuery    = $( elem ),
-			      $titleCell: JQuery = $button.closest( 'tr' ).find( 'td.column-title' );
+			const $button: JQuery    = $( elem );
+
+			// If there are no row actions, hide the button.
+			if ( ! this.rowActions || ! this.rowActions.length ) {
+				$button.hide();
+				return;
+			}
+
+			const $row: JQuery       = $button.closest( 'tr' ),
+			      $titleCell: JQuery = $row.find( 'td.column-title' ).length ? $row.find( 'td.column-title' ) : $row.find( '.row-title' );
 
 			// NOTE: we assume that the rowActions comes with the right format (following the IMenuItem interface format).
 			const actionsMenu: IMenu = {
-				title: ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim(),
+				title: this.sanitizeRowTitle( $titleCell ),
 				items: this.rowActions,
 			};
 
@@ -67,6 +71,22 @@ export default class RowActions {
 			}
 
 		}, 999 );
+
+		// Allow updating the row actions externally for specific views.
+		this.wpHooks.addAction( 'atum_listTable_updateRowActions', 'atum', ( rowActions: IMenuItem[] ) => this.rowActions = rowActions );
+
+	}
+
+	/**
+	 * Extract the text for the menu popover from the row title
+	 *
+	 * @param {JQuery} $titleCell
+	 *
+	 * @return {string}
+	 */
+	sanitizeRowTitle( $titleCell: JQuery ): string {
+
+		return `<span>${ ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim() }</span>`;
 
 	}
 
