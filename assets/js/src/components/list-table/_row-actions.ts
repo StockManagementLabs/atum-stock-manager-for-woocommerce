@@ -45,7 +45,7 @@ export default class RowActions {
 				items: this.rowActions,
 			};
 
-			new MenuPopover( $button, actionsMenu );
+			new MenuPopover( $button, actionsMenu, 'body' ); // Added the body as container to avoid having problems with the overflow:hidden on tables with few rows.
 
 		} );
 

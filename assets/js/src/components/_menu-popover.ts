@@ -11,10 +11,11 @@ export default class MenuPopover extends PopoverBase{
 	popoverClassName: string = 'menu-popover';
 	popoverButtonClassName: string = 'menu-popover-btn';
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
-	
+
 	constructor(
 		private $menuButton: JQuery,
-		private menu: IMenu
+		private menu: IMenu,
+		private container: string | Element = null,
 	) {
 
 		super();
@@ -60,7 +61,7 @@ export default class MenuPopover extends PopoverBase{
 			customClass: this.popoverClassName,
 			placement: this.$menuButton.data( 'bs-placement' ) || 'top',
 			trigger  : this.$menuButton.data( 'trigger' ) || 'click',
-			container: this.$menuButton.parent().get( 0 ),
+			container: this.container ? this.container : this.$menuButton.parent().get( 0 ),
 		} );
 
 		this.$menuButton

@@ -525,10 +525,12 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 var MenuPopover = (function (_super) {
     __extends(MenuPopover, _super);
-    function MenuPopover($menuButton, menu) {
+    function MenuPopover($menuButton, menu, container) {
+        if (container === void 0) { container = null; }
         var _this = _super.call(this) || this;
         _this.$menuButton = $menuButton;
         _this.menu = menu;
+        _this.container = container;
         _this.popoverClassName = 'menu-popover';
         _this.popoverButtonClassName = 'menu-popover-btn';
         _this.wpHooks = window['wp']['hooks'];
@@ -558,7 +560,7 @@ var MenuPopover = (function (_super) {
             customClass: this.popoverClassName,
             placement: this.$menuButton.data('bs-placement') || 'top',
             trigger: this.$menuButton.data('trigger') || 'click',
-            container: this.$menuButton.parent().get(0),
+            container: this.container ? this.container : this.$menuButton.parent().get(0),
         });
         this.$menuButton
             .on('show.bs.popover', function (evt) {
@@ -2555,7 +2557,7 @@ var RowActions = (function () {
                 title: ($titleCell.find('.atum-title-small').length ? $titleCell.find('.atum-title-small') : $titleCell).text().replace('↵', '').trim(),
                 items: _this.rowActions,
             };
-            new _menu_popover__WEBPACK_IMPORTED_MODULE_0__["default"]($button, actionsMenu);
+            new _menu_popover__WEBPACK_IMPORTED_MODULE_0__["default"]($button, actionsMenu, 'body');
         });
     };
     RowActions.prototype.addHooks = function () {
