@@ -597,9 +597,9 @@ var MenuPopover = (function (_super) {
             .off('click.atumMenuPopover', "." + this.popoverClassName + " a")
             .on('click.atumMenuPopover', "." + this.popoverClassName + " a", function (evt) {
             evt.preventDefault();
-            _this.wpHooks.doAction('atum_menuPopover_clicked', evt);
-            var $popover = $(evt.currentTarget).closest('.popover');
-            _this.hidePopover($("[aria-describedby=\"" + $popover.attr('id') + "\"]"));
+            var $popover = $(evt.currentTarget).closest('.popover'), $popoverButton = $("[aria-describedby=\"" + $popover.attr('id') + "\"]");
+            _this.wpHooks.doAction('atum_menuPopover_clicked', evt, $popoverButton);
+            _this.hidePopover($popoverButton);
         });
     };
     return MenuPopover;
@@ -1038,12 +1038,19 @@ __webpack_require__.r(__webpack_exports__);
 
 var BulkActions = (function () {
     function BulkActions(settings, globals, listTable) {
-        var _this = this;
         this.settings = settings;
         this.globals = globals;
         this.listTable = listTable;
         this.wpHooks = window['wp']['hooks'];
         this.$bulkButton = $('.apply-bulk-action');
+        this.bindEvents();
+        if (!window.hasOwnProperty('atum')) {
+            window['atum'] = {};
+        }
+        window['atum']['BulkActions'] = this;
+    }
+    BulkActions.prototype.bindEvents = function () {
+        var _this = this;
         this.globals.$atumList
             .on('click', '.apply-bulk-action', function (evt) {
             if (!_this.globals.$atumList.find('.check-column input:checked').length) {
@@ -1072,7 +1079,7 @@ var BulkActions = (function () {
             }
         })
             .on('change', '.check-column input:checkbox', function () { return _this.updateBulkButton(); });
-    }
+    };
     BulkActions.prototype.applyBulk = function () {
         var bulkAction = this.globals.$atumList.find('.bulkactions select').filter(function (index, elem) {
             return $(elem).val() !== '-1';

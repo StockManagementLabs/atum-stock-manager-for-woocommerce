@@ -129,11 +129,13 @@ export default class MenuPopover extends PopoverBase{
 
 				evt.preventDefault();
 
-				this.wpHooks.doAction( 'atum_menuPopover_clicked', evt );
+				const $popover: JQuery       = $( evt.currentTarget ).closest( '.popover' ),
+				      $popoverButton: JQuery = $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` );
+
+				this.wpHooks.doAction( 'atum_menuPopover_clicked', evt, $popoverButton );
 
 				// Once a menu item link is clicked, close it automatically.
-				const $popover: JQuery = $( evt.currentTarget ).closest( '.popover' );
-				this.hidePopover( $( `[aria-describedby="${ $popover.attr( 'id' ) }"]` ) );
+				this.hidePopover( $popoverButton );
 
 			} );
 
