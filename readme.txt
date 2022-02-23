@@ -247,7 +247,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.11`
 
-*2022-02-18*
+*2022-02-23*
 
 **Features**
 
