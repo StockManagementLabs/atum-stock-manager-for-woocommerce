@@ -21,6 +21,8 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 **📖 NEW [ATUM's KNOWLEDGE BASE](https://stockmanagementlabs.crunch.help/)**
 
+**💬 [FOR ANY QUESTIONS, VISIT OUR OFFICIAL FORUMS](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
+
 = FREE VERSION DESCRIPTION =
 
 If you have an online store you need ATUM, the most **powerful e-commerce solution** for Woocommerce.
@@ -73,8 +75,6 @@ ATUM Action Logs aims to bring complete control into the WooCommerce inventory m
 
 We equipped the [ATUM Action Logs](https://demo.action-logs.stockmanagementlabs.com/) with a complete set of recording tools to avoid any capital loss. Keeping track of any changes happening in your shop has never been easier. The Action Logs add-on supports all ATUM premium add-ons and all WooCommerce actions. If you want to have your **online business under control**, you need ATUM Action Logs Add-on.
 
-
-**💬 [FOR ANY QUESTIONS, VISIT OUR FORUM](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
 
 = AVAILABLE FEATURES =
 
@@ -158,7 +158,7 @@ Most Advanced FREE WooCommerce Inventory Management - Inventory Statistics (Peri
 
 **Once Activated**
 
-After successful activation of ATUM, you are ready to make your business even more profitable and enjoyable than ever before. The only thing left is to visit our [YouTube Channel](https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA "Visit the Youtube Channel") or read the [DOCUMENTATION](https://forum.stockmanagementlabs.com/t/atum-documentation "Visit the Documentation Site") to let us show you how to take full advantage of the plugin.
+After successful activation of ATUM, you are ready to make your business even more profitable and enjoyable than ever before. The only thing left is to visit our [YouTube Channel](https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA "Visit the Youtube Channel") or read the [DOCUMENTATION](https://stockmanagementlabs.crunch.help/ "Visit the Documentation Site") to let us show you how to take full advantage of the plugin.
 
 **Once Configured**
 
