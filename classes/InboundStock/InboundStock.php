@@ -114,7 +114,7 @@ class InboundStock extends AtumListPage {
 		$args = array(
 			'label'   => __( 'Products per page', ATUM_TEXT_DOMAIN ),
 			'default' => $this->per_page,
-			'option'  => self::UI_SLUG . '_entries_per_page',
+			'option'  => str_replace( '-', '_', self::UI_SLUG . '_entries_per_page' ),
 		);
 		
 		add_screen_option( 'per_page', $args );
