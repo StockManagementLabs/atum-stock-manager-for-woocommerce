@@ -190,6 +190,7 @@ class Wpml {
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
+			add_action( 'wcml_after_sync_product_data', array( $this, 'update_translations_atum_data'), 10, 3 );
 
 			// Activate blocking ATUM fields in translations.
 			add_filter( 'wcml_after_load_lock_fields_js', array( $this, 'block_atum_fields' ) );
@@ -949,12 +950,27 @@ class Wpml {
 	}
 
 	/**
+	 * Insert/update the atum product data every time a translation is updated from the edit translations page.
+	 *
+	 * @since 1.9.12
+	 *
+	 * @param int    $original_product_id
+	 * @param int    $translated_product_id
+	 * @param string $translation_lang
+	 */
+	public function update_translations_atum_data( $original_product_id, $translated_product_id, $translation_lang ) {
+
+		$this->icl_make_duplicate( $original_product_id, $translation_lang, [], $translated_product_id );
+	}
+
+
+	/**
 	 * Saves ATUM data after a translation is completed.
 	 *
 	 * @since 1.9.7
 	 *
-	 * @param int $new_post_id
-	 * @param array $fields
+	 * @param int                                     $new_post_id
+	 * @param array                                   $fields
 	 * @param \WPML_Translation_Job_Factory|\stdClass $job
 	 */
 	public function new_translation_completed( $new_post_id, $fields, $job ) {
@@ -985,9 +1001,38 @@ class Wpml {
 		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
 		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
 
+		$update_clause = '
+				purchase_price = orig_apd.purchase_price,
+				supplier_id = orig_apd.supplier_id,
+				supplier_sku = orig_apd.supplier_sku,
+				atum_controlled = orig_apd.atum_controlled,
+				out_stock_date = orig_apd.out_stock_date,
+				out_stock_threshold = orig_apd.out_stock_threshold,
+				inheritable = orig_apd.inheritable,
+				inbound_stock = orig_apd.inbound_stock,
+				stock_on_hold = orig_apd.stock_on_hold,
+				sold_today = orig_apd.sold_today,
+				sales_last_days = orig_apd.sales_last_days,
+				reserved_stock = orig_apd.reserved_stock,
+				customer_returns = orig_apd.customer_returns,
+				warehouse_damage = orig_apd.warehouse_damage,
+				lost_in_post = orig_apd.lost_in_post,
+				other_logs = orig_apd.other_logs,
+				out_stock_days = orig_apd.out_stock_days,
+				lost_sales = orig_apd.lost_sales,
+				has_location = orig_apd.has_location,
+				update_date = orig_apd.update_date,
+				atum_stock_status = orig_apd.atum_stock_status,
+				low_stock = orig_apd.low_stock,
+				sales_update_date = orig_apd.sales_update_date';
+
+		foreach ( $extra_fields as $extra_field ) {
+			$update_clause .= ", $extra_field = orig_apd.$extra_field";
+		}
+
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$wpdb->query( "
-			INSERT IGNORE INTO $atum_product_data_table (
+			INSERT INTO $atum_product_data_table (
 				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
 				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
@@ -996,7 +1041,10 @@ class Wpml {
 			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
 			lost_sales,has_location,update_date,atum_stock_status,low_stock,sales_update_date$fields
-			FROM $atum_product_data_table WHERE product_id = $original_id;
+			FROM $atum_product_data_table orig_apd WHERE product_id = $original_id
+			ON DUPLICATE KEY
+			UPDATE 
+				$update_clause;
 		" );
 		// phpcs:enable
 	}
