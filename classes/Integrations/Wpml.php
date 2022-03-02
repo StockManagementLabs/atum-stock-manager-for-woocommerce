@@ -190,6 +190,7 @@ class Wpml {
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
+			add_action( 'wcml_after_sync_product_data', array( $this, 'update_translations_atum_data'), 10, 3 );
 
 			// Activate blocking ATUM fields in translations.
 			add_filter( 'wcml_after_load_lock_fields_js', array( $this, 'block_atum_fields' ) );
@@ -949,12 +950,27 @@ class Wpml {
 	}
 
 	/**
+	 * Insert/update the atum product data every time a translation is updated from the edit translations page.
+	 *
+	 * @since 1.9.12
+	 *
+	 * @param int    $original_product_id
+	 * @param int    $translated_product_id
+	 * @param string $translation_lang
+	 */
+	public function update_translations_atum_data( $original_product_id, $translated_product_id, $translation_lang ) {
+
+		$this->icl_make_duplicate( $original_product_id, $translation_lang, [], $translated_product_id );
+	}
+
+
+	/**
 	 * Saves ATUM data after a translation is completed.
 	 *
 	 * @since 1.9.7
 	 *
-	 * @param int $new_post_id
-	 * @param array $fields
+	 * @param int                                     $new_post_id
+	 * @param array                                   $fields
 	 * @param \WPML_Translation_Job_Factory|\stdClass $job
 	 */
 	public function new_translation_completed( $new_post_id, $fields, $job ) {
