@@ -1174,25 +1174,42 @@ final class Helpers {
 		$theme_overrides = array();
 
 		foreach ( $possibilities as $p ) {
-			$theme_overrides[] = Globals::TEMPLATE_DIR . "/$p";
+
+			// Get rid of the plugin's path from any template view.
+			$p = str_replace( trailingslashit( WP_PLUGIN_DIR ), '', $p );
+
+			if ( substr( $p, 0, 1 ) !== DIRECTORY_SEPARATOR ) {
+				$p = DIRECTORY_SEPARATOR . $p;
+			}
+
+			$theme_overrides[] = Globals::TEMPLATE_DIR . $p;
+
 		}
 
 		$found = locate_template( $theme_overrides, FALSE );
+
 		if ( $found ) {
 			return $found;
 		}
 
-		// Check for it in the public directory.
+		// Check for it within the views directory.
 		foreach ( $possibilities as $p ) {
 
-			if ( file_exists( ATUM_PATH . "views/$p" ) ) {
-				return ATUM_PATH . "views/$p";
+			if ( substr( $p, 0, 1 ) !== DIRECTORY_SEPARATOR ) {
+				$p = DIRECTORY_SEPARATOR . $p;
+			}
+
+			$p = ATUM_PATH . "views{$p}";
+
+			if ( file_exists( $p ) ) {
+				return $p;
 			}
 
 		}
 
-		// Not template found.
+		// No template found.
 		return $default;
+
 	}
 
 	/**
