@@ -4400,7 +4400,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
-
 		wp_enqueue_style( 'atum-list' );
 
 		if ( is_rtl() ) {
