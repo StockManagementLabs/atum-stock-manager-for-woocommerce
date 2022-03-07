@@ -511,14 +511,14 @@ const Utils = {
 		      min: number   = parseFloat( $input.attr( 'min' ) || '0' ),
 		      max: number   = parseFloat( $input.attr( 'max' ) || '0' );
 
-		if ( value < min ) {
+		if ( ! $.isNumeric( qty ) ) {
+			$input.val( undefined !== $input.attr( 'min' ) && ! isNaN( min ) && min > 0 ? min : 0 ); // Set to 0 or min (the greater).
+		}
+		else if ( undefined !== $input.attr( 'min' ) && value < min ) {
 			$input.val( min ); // Change to min.
 		}
-		else if ( value > max ) {
+		else if ( undefined !== $input.attr( 'max' ) && value > max ) {
 			$input.val( max ); // Change to max.
-		}
-		else if ( qty === '' ) {
-			$input.val( 0 ); // Set to 0.
 		}
 
 	},
