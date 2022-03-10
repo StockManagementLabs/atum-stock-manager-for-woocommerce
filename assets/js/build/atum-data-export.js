@@ -458,14 +458,14 @@ var Utils = {
         }
         var qty = $input.val();
         var value = parseFloat(qty || '0'), min = parseFloat($input.attr('min') || '0'), max = parseFloat($input.attr('max') || '0');
-        if (value < min) {
+        if (!$.isNumeric(qty)) {
+            $input.val(undefined !== $input.attr('min') && !isNaN(min) && min > 0 ? min : 0);
+        }
+        else if (undefined !== $input.attr('min') && value < min) {
             $input.val(min);
         }
-        else if (value > max) {
+        else if (undefined !== $input.attr('max') && value > max) {
             $input.val(max);
-        }
-        else if (qty === '') {
-            $input.val(0);
         }
     },
     checkRTL: function (value) {

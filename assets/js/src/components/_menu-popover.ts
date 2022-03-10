@@ -88,8 +88,10 @@ export default class MenuPopover extends PopoverBase{
 			// Store the popover ID.
 			.on( 'inserted.bs.popover', ( evt: JQueryEventObject ) => {
 
-				const $popover: JQuery = $( `#${ $ ( evt.currentTarget ).attr( 'aria-describedby' ) }` );
-				this.wpHooks.doAction( 'atum_menuPopover_inserted', $popover );
+				const $popoverButton: JQuery = $( evt.currentTarget ),
+				      $popover: JQuery       = $( `#${ $popoverButton.attr( 'aria-describedby' ) }` );
+
+				this.wpHooks.doAction( 'atum_menuPopover_inserted', $popover, $popoverButton );
 
 			} );
 
