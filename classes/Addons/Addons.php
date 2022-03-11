@@ -268,7 +268,7 @@ class Addons {
 				$addon_slug = '';
 
 				foreach ( self::get_installed_addons() as $slug => $addon_data ) {
-					if ( $addon_data['name'] === $addon_name ) {
+					if ( strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ) {
 						$addon_slug = $slug;
 					}
 				}
