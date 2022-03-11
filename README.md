@@ -194,6 +194,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.12`
+
+*2022-03-11*
+
+**Features**
+
+* Added ATUM product data sync when inserting/updating an WMPL translation from the translations page.
+* Improvements for the restrictNumberInputValues JS utility.
+
+**Changes**
+
+* Rewrite duplicate atum product to update if the row already exists.
+* Refactoring for the template overriding from themes.
+
+**Fixes**
+
+* Fixed the entries per page custom values not being saved on List Tables.
+* Fixed pagination on Inbound Stock list.
+* Fixed action menu popovers on Stock Central.
+* Prevent warning on old versions of WC Product Bundles.
+
+---
+
 `1.9.11`
 
 *2022-02-23*

@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, janberebel, danielberebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 5.9.1
+Tested up to: 5.9.2
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.2.1
-Stable tag: 1.9.11.1
+WC tested up to: 6.3.1
+Stable tag: 1.9.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,29 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.12`
+
+*2022-03-11*
+
+**Features**
+
+* Added ATUM product data sync when inserting/updating an WMPL translation from the translations page.
+* Improvements for the restrictNumberInputValues JS utility.
+
+**Changes**
+
+* Rewrite duplicate atum product to update if the row already exists.
+* Refactoring for the template overriding from themes.
+
+**Fixes**
+
+* Fixed the entries per page custom values not being saved on List Tables.
+* Fixed pagination on Inbound Stock list.
+* Fixed action menu popovers on Stock Central.
+* Prevent warning on old versions of WC Product Bundles.
 
 ---
 
