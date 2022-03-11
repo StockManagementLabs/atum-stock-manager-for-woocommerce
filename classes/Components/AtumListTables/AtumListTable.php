@@ -1559,7 +1559,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$stock = wc_stock_amount( $this->list_item->get_stock_quantity() );
 
-		if ( class_exists( '\WC_Product_Bundle' ) && 'bundle' === $this->list_item->get_type() ) {
+		// Check WC Product Bundle method.
+		if ( class_exists( '\WC_Product_Bundle' ) && method_exists( '\WC_Product_Bundle', 'get_bundle_stock_quantity' ) && 'bundle' === $this->list_item->get_type() ) {
 			$bundle_product = $this->list_item;
 			/**
 			 * Variable definition
