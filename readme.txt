@@ -253,6 +253,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 ---
 
+`1.9.12.1`
+
+*2022-03-11*
+
+**Fixes**
+
+* Fixed issue automatic updates for some premium add-ons.
+
+---
+
 `1.9.12`
 
 *2022-03-11*

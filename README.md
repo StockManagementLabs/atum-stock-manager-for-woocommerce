@@ -194,6 +194,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.12.1`
+
+*2022-03-11*
+
+**Fixes**
+
+* Fixed issue automatic updates for some premium add-ons.
+
+---
+
 `1.9.12`
 
 *2022-03-11*
