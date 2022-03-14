@@ -17,6 +17,7 @@
 				color: $blue-dark;
 				line-height: 1;
 				max-width: 150px;
+				display: inline-block;
 				@include text-overflow;
 			}
 		}
