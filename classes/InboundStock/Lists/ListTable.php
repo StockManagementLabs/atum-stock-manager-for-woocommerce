@@ -394,7 +394,7 @@ class ListTable extends AtumListTable {
 		}
 
 		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
-		$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+		$statuses = apply_filters( 'atum/inbound_stock/due_statuses', array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] ) );
 
 		// phpcs:disable
 		$sql = $wpdb->prepare("

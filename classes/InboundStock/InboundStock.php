@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Settings\Settings;
 use Atum\InboundStock\Lists\ListTable;
 
 
