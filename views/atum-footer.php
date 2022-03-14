@@ -27,8 +27,8 @@
 		<a target="_blank" href="https://forum.stockmanagementlabs.com/all" class="btn btn-primary footer-button">
 			<?php esc_html_e( 'Get Support', ATUM_TEXT_DOMAIN ); ?>
 		</a>
-		<a target="_blank" href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-success footer-button">
-			<?php esc_html_e( 'View Tutorials', ATUM_TEXT_DOMAIN ); ?>
+		<a target="_blank" href="https://stockmanagementlabs.crunch.help/" class="btn btn-success footer-button">
+			<?php esc_html_e( 'Read the Docs', ATUM_TEXT_DOMAIN ); ?>
 		</a>
 	</div>
 </div>

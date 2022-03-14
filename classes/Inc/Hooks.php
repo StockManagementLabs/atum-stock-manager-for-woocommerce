@@ -829,8 +829,9 @@ class Hooks {
 
 		if ( ATUM_BASENAME === $file ) {
 			$row_meta = array(
+				'docs'            => '<a href="https://stockmanagementlabs.crunch.help/" aria-label="' . esc_attr__( "Go to ATUM's knowledgebase", ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Documentation', ATUM_TEXT_DOMAIN ) . '</a>',
 				'video_tutorials' => '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" aria-label="' . esc_attr__( 'View ATUM Video Tutorials', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Videos', ATUM_TEXT_DOMAIN ) . '</a>',
-				'addons'          => '<a href="https://www.stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
+				'addons'          => '<a href="https://stockmanagementlabs.com/addons/" aria-label="' . esc_attr__( 'View ATUM add-ons', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Add-ons', ATUM_TEXT_DOMAIN ) . '</a>',
 				'support'         => '<a href="https://forum.stockmanagementlabs.com/t/atum-free-plugin" aria-label="' . esc_attr__( 'Visit ATUM support forums', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Support', ATUM_TEXT_DOMAIN ) . '</a>',
 				'api_docs'        => '<a href="https://stockmanagementlabs.github.io/atum-rest-api-docs/" aria-label="' . esc_attr__( 'Read the ATUM REST API docs', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'API Docs', ATUM_TEXT_DOMAIN ) . '</a>',
 			);

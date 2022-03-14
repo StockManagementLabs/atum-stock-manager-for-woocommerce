@@ -108,7 +108,7 @@ use Atum\Inc\Helpers;
 
 				<p><?php esc_html_e( "Our team is working daily to document ATUM's fast-growing content. Browse our detailed tutorials, ask questions or share feature requests with our team.", ATUM_TEXT_DOMAIN ) ?></p>
 
-				<a href="https://forum.stockmanagementlabs.com/t/atum-documentation" class="btn btn-primary" target="_blank"><?php esc_html_e( 'View Tutorials', ATUM_TEXT_DOMAIN ) ?></a>
+				<a href="https://stockmanagementlabs.crunch.help/" class="btn btn-primary" target="_blank"><?php esc_html_e( 'Read the Docs', ATUM_TEXT_DOMAIN ) ?></a>
 			</div>
 
 			<div class="card-img">

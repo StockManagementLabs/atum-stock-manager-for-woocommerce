@@ -918,6 +918,7 @@ class Addons {
 		if ( strpos( $file, 'atum-' ) === 0 && 'atum-stock-manager-for-woocommerce/atum-stock-manager-for-woocommerce.php' !== $file ) {
 
 			$row_meta = array(
+				'docs'    => '<a href="https://stockmanagementlabs.crunch.help/" aria-label="' . esc_attr__( "Go to ATUM's knowledgebase", ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Documentation', ATUM_TEXT_DOMAIN ) . '</a>',
 				'support' => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Open a private ticket', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Premium Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
 
