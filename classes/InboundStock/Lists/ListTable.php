@@ -393,8 +393,8 @@ class ListTable extends AtumListTable {
 
 		}
 
-		$order    = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
-		$statuses = apply_filters( 'atum/inbound_stock/due_statuses', array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] ) );
+		$order        = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
+		$due_statuses = PurchaseOrders::get_due_statuses();
 
 		// phpcs:disable
 		$sql = $wpdb->prepare("
@@ -403,7 +403,7 @@ class ListTable extends AtumListTable {
 			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
 			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` IN ('" . implode( "','", $statuses ) . "')
+			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` IN ('" . implode( "','", $due_statuses ) . "')
 			$search_query
 			GROUP BY oi.`order_item_id`
 			$order_by $order;",

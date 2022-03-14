@@ -830,7 +830,7 @@ class ListTable extends AtumListTable {
 					break;
 
 				case 'inbound_stock':
-					$statuses = array_diff( array_keys( PurchaseOrders::get_statuses() ), [ PurchaseOrders::FINISHED ] );
+					$due_statuses = PurchaseOrders::get_due_statuses();
 
 					// Get all the products within pending Purchase Orders.
 					// phpcs:disable WordPress.DB.PreparedSQL
@@ -842,7 +842,7 @@ class ListTable extends AtumListTable {
 							LEFT JOIN `$wpdb->atum_order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
 								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = %s AND 
-								`post_status` IN ('" . implode( "','", $statuses ) . "')
+								`post_status` IN ('" . implode( "','", $due_statuses ) . "')
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item' AND omp.`meta_key` IN ('_product_id', '_variation_id' ) 
 							GROUP BY oi.order_item_id

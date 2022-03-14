@@ -526,6 +526,17 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
+	 * Returns the statuses that are considered "Due" (not received yet).
+	 *
+	 * @since 1.9.13
+	 *
+	 * @return string[]
+	 */
+	public static function get_due_statuses() {
+		return apply_filters( 'atum/purchase_orders/due_statuses', array_diff( array_keys( self::get_statuses() ), [ self::FINISHED ] ) );
+	}
+
+	/**
 	 * Get the colors for every Purchase Order status
 	 *
 	 * @since 1.8.2
