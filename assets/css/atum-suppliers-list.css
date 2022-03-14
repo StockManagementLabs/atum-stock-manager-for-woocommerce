@@ -4081,7 +4081,6 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 
 .search-box.inbound-stock-search, p.search-box.inbound-stock-search {
   border: 1px solid var(--main-border);
-  width: 280px;
   height: 30px;
   border-radius: 5px;
   display: -webkit-box;
@@ -4097,7 +4096,8 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 }
 
 .search-box.inbound-stock-search .atum-post-search, p.search-box.inbound-stock-search .atum-post-search {
-  width: 100%;
+  width: 280px;
+  max-width: 100%;
   border-radius: 5px;
 }
 

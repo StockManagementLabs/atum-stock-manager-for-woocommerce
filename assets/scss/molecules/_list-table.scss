@@ -404,7 +404,6 @@
 	
 	&.inbound-stock-search {
 		border: 1px solid var(--main-border);
-		width: 280px;
 		height: 30px;
 		border-radius: 5px;
 		display: flex;
@@ -413,7 +412,8 @@
 		margin: 10px 20px;
 		
 		.atum-post-search {
-			width: 100%;
+			width: 280px;
+			max-width: 100%;
 			border-radius: 5px;
 			
 			@include tablet-max-wp {
