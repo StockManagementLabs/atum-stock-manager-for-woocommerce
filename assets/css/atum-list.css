@@ -6765,7 +6765,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .search-box.inbound-stock-search, p.search-box.inbound-stock-search {
   border: 1px solid var(--main-border);
   height: 30px;
-  border-radius: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
