@@ -15,9 +15,11 @@ namespace Atum\Integrations;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
 
@@ -144,6 +146,10 @@ class Wpml {
 		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
 		
 		if ( is_admin() ) {
+
+			// Prevent directly updating ATUM data for translations.
+			add_action( 'woocommerce_process_product_meta', array( $this, 'maybe_prevent_save_product_meta_boxes' ), 10, 2 );
+			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_prevent_save_product_variation_meta_boxes' ), 10, 2 );
 
 			// Make Atum orders not translatable.
 			add_action( 'atum/order_post_type/init', array( $this, 'register_atum_order_hooks' ) );
@@ -499,6 +505,45 @@ class Wpml {
 		}
 		
 		return $where;
+	}
+
+	/**
+	 * Hook callback after saving a product
+	 *
+	 * @since 1.9.12
+	 *
+	 * @param int      $product_id The saved product's ID.
+	 * @param \WP_Post $post       The saved post.
+	 */
+	public function maybe_prevent_save_product_meta_boxes( $product_id, $post ) {
+
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! isset( $_POST['product-type'] ) ) {
+			return;
+		}
+
+		// Only save data for original products.
+		if ( ! $this->wpml->products->is_original_product( $product_id ) ) {
+			remove_action( 'woocommerce_process_product_meta', array( ProductDataMetaBoxes::get_instance(), 'save_product_meta_boxes' ), PHP_INT_MAX );
+			remove_action( 'woocommerce_after_product_object_save', array( AtumCalculatedProps::get_instance(), 'after_product_save' ), PHP_INT_MAX );
+		}
+
+	}
+
+	/**
+	 * Hook callback after saving a product
+	 *
+	 * @since 1.9.12
+	 *
+	 * @param int $variation_id
+	 * @param int $loop
+	 */
+	public function maybe_prevent_save_product_variation_meta_boxes( $variation_id, $loop ) {
+
+		// Only save data for original products.
+		if ( ! $this->wpml->products->is_original_product( $variation_id ) ) {
+			remove_action( 'woocommerce_save_product_variation', array( ProductDataMetaBoxes::get_instance(), 'save_product_variation_meta_boxes' ), PHP_INT_MAX );
+			remove_action( 'woocommerce_after_product_object_save', array( AtumCalculatedProps::get_instance(), 'after_product_save' ), PHP_INT_MAX );
+		}
 	}
 
 	/**
@@ -1060,7 +1105,7 @@ class Wpml {
 	public function update_atum_data( $data, $product_id ) {
 		
 		global $wpdb;
-		
+
 		$post_type        = get_post_type( $product_id );
 		$translations_ids = [];
 		
