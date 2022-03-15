@@ -129,8 +129,10 @@ class AddonsController extends \WC_REST_Controller {
 			return rest_ensure_response( array_merge( [ 'name' => $request['name'] ], $registered_addons ) );
 		}
 
-		foreach ( $registered_addons as $name => $addon ) {
-			$formatted_addons[] = array_merge( [ 'name' => $name ], $addon );
+		if ( ! empty( $registered_addons ) && is_array( $registered_addons ) ) {
+			foreach ( $registered_addons as $name => $addon ) {
+				$formatted_addons[] = array_merge( [ 'name' => $name ], $addon );
+			}
 		}
 
 		return rest_ensure_response( $formatted_addons );
