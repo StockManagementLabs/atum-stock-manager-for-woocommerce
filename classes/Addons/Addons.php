@@ -319,10 +319,15 @@ class Addons {
 				$addon_slug = '';
 
 				foreach ( $installed_addons as $slug => $addon_data ) {
-					if ( strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ) {
+
+					if (
+						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ||
+						array_key_exists( $slug, $this->addons_paths )
+					) {
 						$addon_slug = $slug;
 						break;
 					}
+
 				}
 
 				if (
