@@ -47,14 +47,39 @@ class Addons {
 	/**
 	 * The first version of each addon that returned a value when bootstrapping.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private $addons_check_bootstrap = array(
-		'export_pro'      => '1.3.4',
 		'multi_inventory' => '1.5.0',
 		'product_levels'  => '1.6.0',
+		'export_pro'      => '1.3.4',
 		'action_logs'     => '1.1.5',
 		'purchase_orders' => '0.0.1',
+	);
+
+	/**
+	 * Array with paths used for every add-on
+	 * NOTE: The name must match the one used within the ADDON_NAME constant within each add-on.
+	 *
+	 * @var string[]
+	 */
+	private $addons_paths = array(
+		'multi_inventory' => [
+			'name'     => 'Multi-Inventory',
+			'basename' => 'atum-multi-inventory/atum-multi-inventory.php',
+		],
+		'product_levels'  => [
+			'name'     => 'Product Levels',
+			'basename' => 'atum-product-levels/atum-product-levels.php',
+		],
+		'export_pro'      => [
+			'name'     => 'Export PRO',
+			'basename' => 'atum-export-pro/atum-export-pro.php',
+		],
+		'purchase_orders' => [
+			'name'     => 'Purchase Orders PRO',
+			'basename' => 'atum-purchase-orders/atum-purchase-orders.php',
+		],
 	);
 
 	/**
@@ -84,7 +109,7 @@ class Addons {
 	 */
 	private function __construct() {
 
-		// Get all the installed addons.
+		// Get all the registered (installed + enabled) addons.
 		self::$addons = apply_filters( 'atum/addons/setup', self::$addons );
 
 		// Add the module menu.
@@ -107,22 +132,20 @@ class Addons {
 			}
 
 			// Check if there are ATUM add-ons installed that are not activated.
-			$installed_addons = self::get_installed_addons();
+			if ( ! empty( self::$addons ) ) {
 
-			if ( ! empty( $installed_addons ) ) {
-
-				foreach ( $installed_addons as $installed_addon ) {
-					$addon_key = self::get_keys( $installed_addon['name'] );
+				foreach ( self::$addons as $registered_addon ) {
+					$addon_key = self::get_keys( $registered_addon['name'] );
 
 					if ( empty( $addon_key ) || ! $addon_key['key'] || in_array( $addon_key['status'], [ 'invalid', 'expired' ], TRUE ) ) {
-						$this->no_activated_licenses[] = $installed_addon['name'];
+						$this->no_activated_licenses[] = $registered_addon['name'];
 					}
 				}
 
 				if ( ! empty( $this->no_activated_licenses ) ) {
 
 					$message = sprintf(
-						/* translators: opening and closing HTML link to the add-ons page  */
+					/* translators: opening and closing HTML link to the add-ons page  */
 						__( 'Please, activate %1$syour ATUM premium add-ons licenses%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
 						'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 						'</a>'
@@ -264,21 +287,53 @@ class Addons {
 
 		if ( ! empty( $license_keys ) ) {
 
+			$installed_addons = self::$addons;
+
+			// We must check if the are others not enabled that should be updated.
+			foreach ( array_keys( $this->addons_paths ) as $addon_key ) {
+
+				if ( ! array_key_exists( $addon_key, self::$addons ) ) {
+
+					// Check if it really exists.
+					$plugin_file = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->addons_paths[ $addon_key ]['basename'];
+					if ( file_exists( $plugin_file ) ) {
+
+						$file_data = get_file_data( $plugin_file, array(
+							'addon_url'   => 'Plugin URI',
+							'version'     => 'Version',
+							'description' => 'Description',
+						) );
+
+						if ( ! empty( $file_data ) ) {
+							$installed_addons[ $addon_key ] = array_merge( $file_data, $this->addons_paths[ $addon_key ] );
+						}
+
+					}
+
+				}
+
+			}
+
 			foreach ( $license_keys as $addon_name => $license_key ) {
+
 				$addon_slug = '';
 
-				foreach ( self::get_installed_addons() as $slug => $addon_data ) {
+				foreach ( $installed_addons as $slug => $addon_data ) {
 					if ( strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ) {
 						$addon_slug = $slug;
+						break;
 					}
 				}
 
-				if ( self::is_addon_active( $addon_slug ) && $license_key && is_array( $license_key ) && ! empty( $license_key['key'] ) ) {
+				if (
+					$addon_slug && $license_key &&
+					is_array( $license_key ) && ! empty( $license_key['key'] )
+				) {
 
 					if ( 'valid' === $license_key['status'] ) {
 
 						// All the ATUM addons' names should start with 'ATUM'.
-						$addon_info = Helpers::is_plugin_installed( 'ATUM ' . $addon_name, '', 'name', FALSE );
+						$addon_info = Helpers::is_plugin_installed( "ATUM $addon_name", '', 'name', FALSE );
 
 						if ( $addon_info ) {
 
@@ -722,7 +777,7 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-						/* translators: first one is the add-on nam and the second the error message */
+					/* translators: first one is the add-on nam and the second the error message */
 						__( 'ATUM %1$s could not be installed (%2$s).<br>Please, do %3$sopen a ticket%4$s to contact with the ATUM support team.', ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						$e->getMessage(),
@@ -918,7 +973,6 @@ class Addons {
 		if ( strpos( $file, 'atum-' ) === 0 && 'atum-stock-manager-for-woocommerce/atum-stock-manager-for-woocommerce.php' !== $file ) {
 
 			$row_meta = array(
-				'docs'    => '<a href="https://stockmanagementlabs.crunch.help/" aria-label="' . esc_attr__( "Go to ATUM's knowledgebase", ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Documentation', ATUM_TEXT_DOMAIN ) . '</a>',
 				'support' => '<a href="https://stockmanagementlabs.ticksy.com/" aria-label="' . esc_attr__( 'Open a private ticket', ATUM_TEXT_DOMAIN ) . '" target="_blank">' . esc_html__( 'Premium Support', ATUM_TEXT_DOMAIN ) . '</a>',
 			);
 
