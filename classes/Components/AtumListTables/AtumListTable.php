@@ -1112,7 +1112,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'simple':
 					if ( $this->is_child ) {
 						$type        = 'grouped-item';
-						$product_tip = esc_attr__( 'Grouped item', ATUM_TEXT_DOMAIN );
+						$product_tip = 'bundle' === $this->parent_type ? esc_attr__( 'Bundled item', ATUM_TEXT_DOMAIN ) : esc_attr__( 'Grouped item', ATUM_TEXT_DOMAIN );
 					}
 					elseif ( $this->list_item->is_downloadable() ) {
 						$type        = 'downloadable';
@@ -1130,7 +1130,7 @@ abstract class AtumListTable extends \WP_List_Table {
 				case 'variable-subscription': // WC Subscriptions compatibility.
 					if ( $this->is_child ) {
 						$type        = 'grouped-item';
-						$product_tip = esc_attr__( 'Grouped item', ATUM_TEXT_DOMAIN );
+						$product_tip = 'bundle' === $this->parent_type ? esc_attr__( 'Bundled item', ATUM_TEXT_DOMAIN ) : esc_attr__( 'Grouped item', ATUM_TEXT_DOMAIN );
 					}
 					elseif ( $this->list_item->has_child() ) {
 
