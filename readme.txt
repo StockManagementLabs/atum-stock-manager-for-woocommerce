@@ -7,7 +7,7 @@ Tested up to: 5.9.2
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.3.1
-Stable tag: 1.9.12.1
+Stable tag: 1.9.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,31 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.13`
+
+*2022-03-16*
+
+**Features**
+
+* Added filter to Inbound Stock list to be able to alter the statuses allowed.
+
+**Changes**
+
+* Changed outdated links to documentation.
+* Moved the filter for POs' due statuses to the Purchase Orders class.
+* Updated marketing popup content.
+* Refactoring.
+
+**Fixes**
+
+* Fixed non truncatable titles on menu popovers.
+* Minor CSS fixes.
+* Prevent updating ATUM fields when saving translated products (WMPL compatibility).
+* Fixed API error when calling to the add-ons API endpoint when there are no registered add-ons.
+* Show automatic updates even when a premium add-on is installed but disabled.
 
 ---
 
