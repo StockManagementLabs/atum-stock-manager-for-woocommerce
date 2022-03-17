@@ -4,6 +4,7 @@
 
 import introJs from 'intro.js/minified/intro.min';
 import Settings from '../config/_settings';
+import WPHooks from '../interfaces/wp.hooks';
 
 interface IIntroOptions {
 	steps: IIntroStep[];
@@ -45,6 +46,8 @@ export default class HelpGuide {
 	introSteps: IIntroStep[] = [];
 
 	isAuto: boolean = false;
+	guide: string = null;
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
 		private settings: Settings
@@ -58,7 +61,7 @@ export default class HelpGuide {
 		}
 
 		// Get the intro.js options from the localized var.
-		this.introOptions = <IIntroOptions>(this.settings.get( 'introJsOptions' ) || {});
+		this.introOptions = <IIntroOptions> ( this.settings.get( 'introJsOptions' ) || {} );
 
 		// If the options are coming at instantiation, run the guide automatically.
 		this.prepareOptions();
@@ -95,16 +98,16 @@ export default class HelpGuide {
 		// Start any intro guide by clicking the button.
 		$( 'body' ).on( 'click', '.show-intro-guide', ( evt: JQueryEventObject ) => {
 
-			const $button: JQuery = $( evt.currentTarget ),
-			      guide: string   = $button.data( 'guide' );
+			const $button: JQuery = $( evt.currentTarget );
+			this.guide = $button.data( 'guide' );
 
-			if ( ! guide ) {
+			if ( ! this.guide ) {
 				return;
 			}
 
 			// First try to find out in the settings option (for quick or one-time guides).
-			if ( this.settings.get( guide ) && Array.isArray( this.settings.get( guide ) ) ) {
-				this.introSteps = this.settings.get( guide );
+			if ( this.settings.get( this.guide ) && Array.isArray( this.settings.get( this.guide ) ) ) {
+				this.introSteps = this.settings.get( this.guide );
 				this.isAuto = false;
 				this.prepareOptions();
 			}
@@ -114,7 +117,7 @@ export default class HelpGuide {
 				let data: any = {
 					action  : 'atum_get_help_guide_steps',
 					security: this.settings.get( 'helpGuideNonce' ),
-					guide,
+					guide   : this.guide,
 				}
 
 				if ( $button.data( 'guide-path' ) ) {
@@ -164,18 +167,10 @@ export default class HelpGuide {
 			$( 'body' ).removeClass( 'running-atum-help-guide' );
 
 			if ( this.isAuto && this.settings.get( 'screenId' ) ) {
-
-				$.ajax( {
-					url   : window[ 'ajaxurl' ],
-					method: 'post',
-					data  : {
-						action  : 'atum_save_closed_auto_guide',
-						security: this.settings.get( 'helpGuideNonce' ),
-						screen  : this.settings.get( 'screenId' ),
-					},
-				} );
-
+				this.saveClosedAutoGuide( this.settings.get( 'screenId' ) );
 			}
+
+			this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
 
 		} );
 
@@ -208,6 +203,25 @@ export default class HelpGuide {
 	 */
 	setIntroSteps( introSteps: IIntroStep[] ) {
 		this.introSteps = introSteps;
+	}
+
+	/**
+	 * Save the closed auto-guide status
+	 *
+	 * @param {string} screen
+	 */
+	saveClosedAutoGuide( screen: string ) {
+
+		$.ajax( {
+			url   : window[ 'ajaxurl' ],
+			method: 'post',
+			data  : {
+				action  : 'atum_save_closed_auto_guide',
+				security: this.settings.get( 'helpGuideNonce' ),
+				screen
+			},
+		} );
+
 	}
 
 }
