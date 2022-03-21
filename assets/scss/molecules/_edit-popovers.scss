@@ -2,6 +2,12 @@
 // Edit Popovers component
 //----------------------
 
+.atum-edit-field {
+	&__wrapper {
+		position: relative;
+	}
+}
+
 .popover {
 	&.edit-field-popover {
 		
