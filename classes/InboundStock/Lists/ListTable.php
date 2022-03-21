@@ -349,7 +349,7 @@ class ListTable extends AtumListTable {
 	 */
 	protected function column__purchase_order( $item ) {
 
-		$po_link = '<a href="' . get_edit_post_link( $item->po_id ) . '" target="_blank">' . $item->po_id . '</a>';
+		$po_link = '<a href="' . get_edit_post_link( $item->po_id ) . '" target="_blank">#' . $item->po_id . '</a>';
 		return apply_filters( 'atum/inbound_stock_list/column_purchase_order', $po_link, $item, $this->list_item );
 
 	}
