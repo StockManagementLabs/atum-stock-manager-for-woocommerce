@@ -1831,21 +1831,31 @@ final class Helpers {
 				// Calculate the inbound stock from pending purchase orders.
 				global $wpdb;
 
-				// phpcs:disable WordPress.DB.PreparedSQL
-				$sql = $wpdb->prepare( "
+				$joins = array(
+					"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`",
+					"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`",
+					"LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`",
+				);
+
+				$where = array(
+					"oim.`meta_key` IN ('_product_id', '_variation_id')",
+					"`order_item_type` = 'line_item'",
+					$wpdb->prepare( 'p.`post_type` = %s', PurchaseOrders::POST_TYPE ),
+					$wpdb->prepare( 'oim.`meta_value` = %d', $product_id ),
+					"`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
+					"oim2.`meta_key` = '_qty'",
+				);
+
+				$joins_str = implode( "\n", apply_filters( 'atum/product_inbound_stock/sql_joins', $joins, $product ) );
+				$where_str = implode( ' AND ', apply_filters( 'atum/product_inbound_stock/sql_where', $where, $product ) );
+
+				$sql = "
 					SELECT SUM(oim2.`meta_value`) AS quantity 			
 					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-					LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim2 ON oi.`order_item_id` = oim2.`order_item_id`
-					LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
-					WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-					AND p.`post_type` = %s AND oim.`meta_value` = %d AND `post_status` IN ('" . implode( "','", $due_statuses ) . "') 
-					AND oim2.`meta_key` = '_qty'
-					GROUP BY oim.`meta_value`;",
-					PurchaseOrders::POST_TYPE,
-					$product_id
-				);
-				// phpcs:enable
+					$joins_str								
+					WHERE $where_str			
+					GROUP BY oim.`meta_value`;
+				";
 
 				$inbound_stock = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$inbound_stock = $inbound_stock ?: 0;

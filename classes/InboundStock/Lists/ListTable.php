@@ -363,52 +363,64 @@ class ListTable extends AtumListTable {
 
 		global $wpdb;
 
-		$search_query = '';
+		$due_statuses = PurchaseOrders::get_due_statuses();
+
+		$joins = array(
+			"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`",
+			"LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`",
+		);
+
+		$where = array(
+			"`meta_key` IN ('_product_id', '_variation_id')",
+			"`order_item_type` = 'line_item'",
+			$wpdb->prepare( 'p.`post_type` = %s', PurchaseOrders::POST_TYPE ),
+			'`meta_value` > 0',
+			"`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
+		);
+
 		if ( ! empty( $_REQUEST['s'] ) ) {
 
 			$search = esc_attr( $_REQUEST['s'] );
 
 			if ( is_numeric( $search ) ) {
-				$search_query .= 'AND `meta_value` = ' . absint( $_REQUEST['s'] );
+				$where[] = '`meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$search_query .= "AND `order_item_name` LIKE '%{$search}%'";
+				$where[] = "`order_item_name` LIKE '%{$search}%'";
 			}
 
 		}
 
-		$order_by = 'ORDER BY `order_id`';
+		$order_by = '`order_id`';
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
 
 			switch ( $_REQUEST['orderby'] ) {
 				case 'title':
-					$order_by = 'ORDER BY `order_item_name`';
+					$order_by = '`order_item_name`';
 					break;
 
 				case 'ID':
-					$order_by = 'ORDER BY oi.`order_item_id`';
+					$order_by = 'oi.`order_item_id`';
 					break;
 
 			}
 
 		}
 
-		$order        = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
-		$due_statuses = PurchaseOrders::get_due_statuses();
+		$order = ( ! empty( $_REQUEST['order'] ) && in_array( strtoupper( $_REQUEST['order'] ), [ 'ASC', 'DESC' ] ) ) ? strtoupper( $_REQUEST['order'] ) : 'DESC';
 
-		// phpcs:disable
-		$sql = $wpdb->prepare("
+		$joins_str = implode( "\n", apply_filters( 'atum/inbound_stock_list/prepare_items_joins', $joins ) );
+		$where_str = implode( ' AND ', apply_filters( 'atum/inbound_stock_list/prepare_items_where', $where ) );
+
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$sql = "
 			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
 			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-			LEFT JOIN `{$wpdb->atum_order_itemmeta}` AS oim ON oi.`order_item_id` = oim.`order_item_id`
-			LEFT JOIN `{$wpdb->posts}` AS p ON oi.`order_id` = p.`ID`
-			WHERE `meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND `meta_value` > 0 AND `post_status` IN ('" . implode( "','", $due_statuses ) . "')
-			$search_query
+			$joins_str
+			WHERE $where_str
 			GROUP BY oi.`order_item_id`
-			$order_by $order;",
-			PurchaseOrders::POST_TYPE
-		);
+			ORDER BY $order_by $order;
+		";
 		// phpcs:enable
 
 		$po_products = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
