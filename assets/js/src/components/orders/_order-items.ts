@@ -287,8 +287,9 @@ export default class AtumOrderItems {
 		const $item: JQuery           = $( evt.currentTarget ).closest( 'tr.item, tr.fee, tr.shipping' ),
 		      atumOrderItemId: number = $item.data( 'atum_order_item_id' ),
 		      $container: JQuery      = $item.closest( '#atum_order_items' );
-		let options: any[]            = [],
-			modal: JQuery;
+
+		let options: any[] = [],
+		    modal: JQuery;
 
 		// Asks for confirmation before proceeding.
 		Swal.fire( {
@@ -306,6 +307,7 @@ export default class AtumOrderItems {
 			preConfirm         : (): Promise<void> => this.processDeleteItem( atumOrderItemId ),
 		} )
 		.then( ( result: SweetAlertResult ) => {
+
 			options = this.wpHooks.applyFilters( 'atum_ordersItems_deleteItemOptions', options, modal );
 
 			if ( result.isConfirmed ) {
