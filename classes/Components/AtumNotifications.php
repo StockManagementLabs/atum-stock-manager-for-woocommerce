@@ -122,7 +122,7 @@ class AtumNotifications {
 				'label'    => __( 'Notifications', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-alarm',
 				'sections' => array(
-					'atum_notifications' => __( 'ATUM Notifications List', ATUM_TEXT_DOMAIN ),
+					'atum_notifications' => __( 'ATUM Notifications', ATUM_TEXT_DOMAIN ),
 				),
 			);
 
