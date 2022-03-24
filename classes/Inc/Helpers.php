@@ -22,6 +22,7 @@ use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Legacy\HelpersLegacyTrait;
@@ -3499,6 +3500,229 @@ final class Helpers {
 		}
 
 		return $date->format( 'H:i' );
+
+	}
+
+	/**
+	 * Search product data for a term and return ids.
+	 *
+	 * @since 1.9.14
+	 *
+	 * @param string     $term               Search term.
+	 * @param string     $type               Type of product.
+	 * @param bool       $include_variations Include variations in search or not.
+	 * @param bool       $all_statuses       Should we search all statuses or limit to published.
+	 * @param null|int   $limit              Limit returned results.
+	 * @param null|array $include            Keep specific results.
+	 * @param null|array $exclude            Discard specific results.
+	 *
+	 * @based \WC_Product_Data_Store_CPT::search_products()
+	 *
+	 * @return array of ids
+	 */
+	public static function search_products( $term, $type = '', $include_variations = FALSE, $all_statuses = FALSE, $limit = NULL, $include = NULL, $exclude = NULL ) {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . AtumGlobals::ATUM_PRODUCT_DATA_TABLE;
+		$post_types      = $include_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
+		$join_query      = '';
+		$type_where      = '';
+		$status_where    = '';
+		$limit_query     = '';
+		$joins           = [];
+
+		// When searching variations we should include the parent's meta table for use in searches.
+		if ( $include_variations ) {
+			$joins[] = "LEFT JOIN $wpdb->wc_product_meta_lookup parent_wc_product_meta_lookup
+			 ON (posts.post_type = 'product_variation' AND parent_wc_product_meta_lookup.product_id = posts.post_parent)";
+			$joins[] = "LEFT JOIN $atum_data_table parent_apd
+			 ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
+		}
+
+		$post_statuses = apply_filters(
+			'atum/search_products/post_statuses',
+			current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ]
+		);
+
+		// See if search term contains OR keywords.
+		$term_groups    = stristr( $term, ' or ' ) ? preg_split( '/\s+or\s+/i', $term ) : $term_groups = [ $term ];
+		$search_where   = '';
+		$search_queries = [];
+
+		foreach ( $term_groups as $term_group ) {
+
+			// Parse search terms.
+			if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $term_group, $matches ) ) {
+
+				$search_terms = self::get_valid_search_terms( $matches[0] );
+				$count        = count( $search_terms );
+
+				// if the search string has only short terms or stopwords, or is 10+ terms long, match it as sentence.
+				if ( 9 < $count || 0 === $count ) {
+					$search_terms = array( $term_group );
+				}
+
+			}
+			else {
+				$search_terms = array( $term_group );
+			}
+
+			$term_group_query = '';
+			$searchand        = '';
+			$variation_query  = '';
+
+			foreach ( $search_terms as $search_term ) {
+
+				$like = '%' . $wpdb->esc_like( $search_term ) . '%';
+
+				// Variations should also search the parent's meta table for fallback fields.
+				if ( $include_variations ) {
+					$variation_query  = $wpdb->prepare( " OR ( wc_product_meta_lookup.sku = '' AND parent_wc_product_meta_lookup.sku LIKE %s ) ", $like );
+					$variation_query .= $wpdb->prepare( " OR ( apd.supplier_sku = '' AND parent_apd.supplier_sku LIKE %s ) ", $like );
+				}
+
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$term_group_query .= $wpdb->prepare( " 
+					$searchand ( 
+						( posts.post_title LIKE %s) OR ( posts.post_excerpt LIKE %s) OR 
+						( posts.post_content LIKE %s ) OR ( wc_product_meta_lookup.sku LIKE %s ) OR 
+						( apd.supplier_sku LIKE %s ) $variation_query 
+					)
+				", $like, $like, $like, $like, $like );
+				// phpcs:enable
+
+				$searchand = ' AND ';
+
+			}
+
+			if ( $term_group_query ) {
+				$search_queries[] = $term_group_query;
+			}
+
+		}
+
+		if ( ! empty( $joins ) ) {
+			$join_query = implode( "\n", $joins );
+		}
+
+		if ( ! empty( $search_queries ) ) {
+			$search_where = ' AND (' . implode( ') OR (', $search_queries ) . ') ';
+		}
+
+		if ( ! empty( $include ) && is_array( $include ) ) {
+			$search_where .= ' AND posts.ID IN(' . implode( ',', array_map( 'absint', $include ) ) . ') ';
+		}
+
+		if ( ! empty( $exclude ) && is_array( $exclude ) ) {
+			$search_where .= ' AND posts.ID NOT IN(' . implode( ',', array_map( 'absint', $exclude ) ) . ') ';
+		}
+
+		if ( 'virtual' === $type ) {
+			$type_where = ' AND ( wc_product_meta_lookup.virtual = 1 ) ';
+		}
+		elseif ( 'downloadable' === $type ) {
+			$type_where = ' AND ( wc_product_meta_lookup.downloadable = 1 ) ';
+		}
+
+		if ( ! $all_statuses ) {
+			$status_where = " AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
+		}
+
+		if ( $limit ) {
+			$limit_query = $wpdb->prepare( ' LIMIT %d ', $limit );
+		}
+
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$search_results = $wpdb->get_results( "
+			SELECT DISTINCT posts.ID as product_id, posts.post_parent as parent_id FROM $wpdb->posts posts
+			LEFT JOIN $wpdb->wc_product_meta_lookup wc_product_meta_lookup ON posts.ID = wc_product_meta_lookup.product_id
+			LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id
+			$join_query
+			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
+			$search_where
+			$status_where
+			$type_where
+			ORDER BY posts.post_parent ASC, posts.post_title ASC
+			$limit_query
+		" );
+		// phpcs:enable
+
+		$product_ids = wp_parse_id_list( array_merge( wp_list_pluck( $search_results, 'product_id' ), wp_list_pluck( $search_results, 'parent_id' ) ) );
+
+		if ( is_numeric( $term ) ) {
+
+			$post_id   = absint( $term );
+			$post_type = get_post_type( $post_id );
+
+			if ( 'product_variation' === $post_type && $include_variations ) {
+				$product_ids[] = $post_id;
+			}
+			elseif ( 'product' === $post_type ) {
+				$product_ids[] = $post_id;
+			}
+
+			$product_ids[] = wp_get_post_parent_id( $post_id );
+
+		}
+
+		return wp_parse_id_list( $product_ids );
+
+	}
+
+	/**
+	 * Check if the terms are suitable for searching.
+	 *
+	 * Uses an array of stopwords (terms) that are excluded from the separate
+	 * term matching when searching for posts. The list of English stopwords is
+	 * the approximate search engines list, and is translatable.
+	 *
+	 * @since 1.9.14
+	 *
+	 * @param array $terms Terms to check.
+	 *
+	 * @return array Terms that are not stopwords.
+	 */
+	private static function get_valid_search_terms( $terms ) {
+
+		$valid_terms = [];
+		// Translators: This is a comma-separated list of very common words that should be excluded from a search, like a, an, and the. These are usually called "stopwords". You should not simply translate these individual words into your language. Instead, look for and provide commonly accepted stopwords in your language.
+		$stopwords = apply_filters( 'wp_search_stopwords', array_map( 'wc_strtolower', array_map(
+			'trim',
+			explode(
+				',',
+				_x(
+					'about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,what,when,where,who,will,with,www',
+					'Comma-separated list of search stopwords in your language',
+					ATUM_TEXT_DOMAIN
+				)
+			)
+		) ) ); // Using the default WP hook here (for compatibility).
+
+		foreach ( $terms as $term ) {
+
+			// keep before/after spaces when term is for exact match, otherwise trim quotes and spaces.
+			if ( preg_match( '/^".+"$/', $term ) ) {
+				$term = trim( $term, "\"'" );
+			}
+			else {
+				$term = trim( $term, "\"' " );
+			}
+
+			// Avoid single A-Z and single dashes.
+			if ( empty( $term ) || ( 1 === strlen( $term ) && preg_match( '/^[a-z\-]$/i', $term ) ) ) {
+				continue;
+			}
+
+			if ( in_array( wc_strtolower( $term ), $stopwords, true ) ) {
+				continue;
+			}
+
+			$valid_terms[] = $term;
+
+		}
+
+		return $valid_terms;
 
 	}
 
