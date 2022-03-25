@@ -83,7 +83,7 @@ trait AjaxLegacyTrait {
 				}
 
 				// If the PO supplier has no linked products, it must return an empty array.
-				$ids = $supplier_products;
+				$included = $supplier_products;
 
 			}
 
