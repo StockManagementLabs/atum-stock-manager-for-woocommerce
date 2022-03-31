@@ -237,6 +237,14 @@ export default class EditPopovers extends PopoverBase{
 
 	}
 
+	/**
+	 * Get the label for any editable field
+	 *
+	 * @param {JQuery} $setMetaInput
+	 * @param {any}    value
+	 *
+	 * @return {string}
+	 */
 	getInputLabel( $setMetaInput: JQuery, value: any ) {
 
 		let label: string;
