@@ -158,10 +158,11 @@ class Updater {
 
 		$version_info = $this->get_version_info_transient();
 
-		if ( false !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
+		if ( FALSE !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$_transient_data->response[ $this->name ] = $version_info;
-			} else {
+			}
+			else {
 				// Populating the no_update information is required to support auto-updates in WordPress 5.5.
 				$_transient_data->no_update[ $this->name ] = $version_info;
 			}
@@ -174,15 +175,15 @@ class Updater {
 				'beta' => $this->beta,
 			) );
 
-			// This is required for your plugin to support auto-updates in WordPress 5.5.
+		}
+
+		if ( FALSE !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
+
+			// This is required to support auto-updates in WordPress 5.5+.
 			$version_info->plugin = $this->name;
 			$version_info->id     = $this->name;
 
 			$this->set_version_info_transient( $version_info );
-
-		}
-
-		if ( FALSE !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$_transient_data->response[ $this->name ] = $version_info;
