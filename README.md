@@ -194,6 +194,56 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.14`
+
+*2022-04-01*
+
+**Features**
+
+* Display bundled items type tip text in Stock Central.
+* Added new JS hook after closing a help guide.
+* EditPopover JS component improvements.
+* Added new helper for searching products.
+* Improved product searches when adding items to ATUM Orders (multiple terms allowed).
+
+**Changes**
+
+* Updated JS dependency.
+* Refactoring.
+* Changed API post product stock quantity schema to allow decimal numbers.
+
+**Fixes**
+
+* Fixed JSON search products.
+* Prevent triggering error on ATUM's auto-updater when the SML API isn't responsive.
+
+---
+
+`1.9.13`
+
+*2022-03-16*
+
+**Features**
+
+* Added filter to Inbound Stock list to be able to alter the statuses allowed.
+
+**Changes**
+
+* Changed outdated links to documentation.
+* Moved the filter for POs' due statuses to the Purchase Orders class.
+* Updated marketing popup content.
+* Refactoring.
+
+**Fixes**
+
+* Fixed non truncatable titles on menu popovers.
+* Minor CSS fixes.
+* Prevent updating ATUM fields when saving translated products (WMPL compatibility).
+* Fixed API error when calling to the add-ons API endpoint when there are no registered add-ons.
+* Show automatic updates even when a premium add-on is installed but disabled.
+
+---
+
 `1.9.12.1`
 
 *2022-03-11*

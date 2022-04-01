@@ -7,7 +7,7 @@ Tested up to: 5.9.2
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.3.1
-Stable tag: 1.9.13
+Stable tag: 1.9.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,31 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.14`
+
+*2022-04-01*
+
+**Features**
+
+* Display bundled items type tip text in Stock Central.
+* Added new JS hook after closing a help guide.
+* EditPopover JS component improvements.
+* Added new helper for searching products.
+* Improved product searches when adding items to ATUM Orders (multiple terms allowed).
+
+**Changes**
+
+* Updated JS dependency.
+* Refactoring.
+* Changed API post product stock quantity schema to allow decimal numbers.
+
+**Fixes**
+
+* Fixed JSON search products.
+* Prevent triggering error on ATUM's auto-updater when the SML API isn't responsive.
 
 ---
 
