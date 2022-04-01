@@ -150,6 +150,9 @@ class AtumProductData {
 			// Add extra filtering params to products.
 			add_filter( "rest_{$post_type}_collection_params", array( $this, 'add_collection_params' ), 10, 2 );
 
+			// Make stock_quantity property accept decimal numbers.
+			add_filter( "woocommerce_rest_{$post_type}_schema", array( $this, 'change_product_stock_quantity_schema' ) );
+
 		}
 
 		// Alter some of the WC fields before sending the response.
@@ -736,6 +739,24 @@ class AtumProductData {
 
 		return $params;
 
+	}
+
+	/**
+	 * Make stock_quantity product property to accept decimal numbers.
+	 *
+	 * @since 1.9.13
+	 *
+	 * @param array $schema
+	 *
+	 * @return array
+	 */
+	public function change_product_stock_quantity_schema( $schema ) {
+
+		if ( 0 < Helpers::get_option( 'stock_quantity_decimals', 0 ) ) {
+			$schema['stock_quantity']['type'] = 'mixed';
+		}
+
+		return $schema;
 	}
 
 
