@@ -440,7 +440,7 @@ trait ListTableLegacyTrait {
 				$this->count_views['count_all'] = count( $products );
 
 				// The grouped items must count once per group they belongs to and once individually.
-				if ( ! empty( $group_items ) ) {
+				if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
 					$this->count_views['count_all'] += count( $group_items );
 				}
 
