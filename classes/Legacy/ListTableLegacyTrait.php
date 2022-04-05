@@ -840,7 +840,6 @@ trait ListTableLegacyTrait {
 					$parents_with_child = wp_list_pluck( $children->posts, 'post_parent' );
 				}
 
-
 				switch ( $parent_type ) {
 					case 'variable':
 						$this->container_products['variable'] = array_unique( array_merge( $this->container_products['variable'], $parents_with_child ) );
