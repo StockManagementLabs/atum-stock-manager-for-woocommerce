@@ -346,14 +346,13 @@ export default class EditPopovers extends PopoverBase{
 
 		if ( $fieldLabel.length ) {
 
-			let decimals: number = parseInt( $fieldLabel.data( 'decimals-number') || '2' );
+			let decimals: number = parseInt( $fieldLabel.data( 'decimals-number') || '0' );
 
 			$fieldLabel.addClass( 'unsaved' );
 
 			// For numeric labels, adjust the decimal separator if needed.
 			if ( Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
-				// Round only 2??
-				label = <string> Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ) );
+				label = <string> Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ), $fieldLabel.data( 'strip-zeros' ) === 'yes' );
 			}
 
 			// Check if a template exists for the label
