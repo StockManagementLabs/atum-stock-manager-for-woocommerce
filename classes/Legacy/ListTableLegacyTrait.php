@@ -139,23 +139,15 @@ trait ListTableLegacyTrait {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( ! empty( $this->atum_query_data['where'] ) ) {
-				$this->atum_query_data['where']['relation'] = 'AND';
-			}
-
-			$this->atum_query_data['where'][] = apply_filters( 'atum/list_table/supplier_filter_query_data', array(
-				'key'   => 'supplier_id',
-				'value' => $supplier,
-				'type'  => 'NUMERIC',
-			));
-
 			// This query does not get product variations and as each variation may have a distinct supplier,
 			// we have to get them separately and to add their variables to the results.
 			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
 
 			if ( ! empty( $this->supplier_variation_products ) ) {
+				/** TODO: Remove this filters if not needed. Add the supplier products to the results is in conflict with pagination, adding results to each page.
 				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
 				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				*/
 				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
 			}
 

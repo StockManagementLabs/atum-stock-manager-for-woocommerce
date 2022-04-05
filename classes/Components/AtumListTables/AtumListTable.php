@@ -2383,8 +2383,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
 
 			if ( ! empty( $this->supplier_variation_products ) ) {
+				/** TODO: Remove this if not needed. Add the supplier products to the result is in conflict with
+				pagination, adding results to each page.
 				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
 				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+				*/
 				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
 			}
 
@@ -2627,6 +2630,24 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public function atum_product_data_query_clauses( $pieces ) {
+
+		if ( ! empty( $_REQUEST['supplier'] ) && AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			global $wpdb;
+
+			$supplier = absint( $_REQUEST['supplier'] );
+			$pd_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+			$subquery = "SELECT pp.post_parent FROM $wpdb->posts pp
+                LEFT JOIN $pd_table papd ON pp.ID = papd.product_id
+				WHERE (papd.post_status = 'publish' OR papd.post_status = 'private')
+				AND papd.supplier_id = '$supplier'";
+
+			$filter_by_supplier = " AND ( $pd_table.supplier_id = '$supplier' OR $wpdb->posts.ID IN ($subquery) ) ";
+
+			$pieces['where'] .= apply_filters( 'atum/list_table/supplier_filter_query_data', $filter_by_supplier );
+
+		}
+
 		return Helpers::product_data_query_clauses( $this->atum_query_data, $pieces );
 	}
 
@@ -2653,6 +2674,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return array
 	 */
+	/** TODO: Remove if not needed
 	public function add_supplier_variables_to_query( $products, $return_type = 'ids' ) {
 
 		$search_column = isset( $_REQUEST['search_column'] ) ? esc_attr( stripslashes( $_REQUEST['search_column'] ) ) : FALSE;
@@ -2701,6 +2723,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		return $products;
 
 	}
+	*/
 
 	/**
 	 * Add the supplier's variation products to the filtered query
