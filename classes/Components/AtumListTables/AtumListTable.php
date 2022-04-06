@@ -2382,14 +2382,13 @@ abstract class AtumListTable extends \WP_List_Table {
 			// we have to get them separately and to add their variables to the results.
 			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
 
+			/** TODO: Remove this if not needed. Add the supplier products to the result is in conflict with pagination, adding results to each page.
 			if ( ! empty( $this->supplier_variation_products ) ) {
-				/** TODO: Remove this if not needed. Add the supplier products to the result is in conflict with
-				pagination, adding results to each page.
 				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
 				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				*/
 				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
 			}
+			 */
 
 		}
 
@@ -2639,7 +2638,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$subquery = "SELECT pp.post_parent FROM $wpdb->posts pp
                 LEFT JOIN $pd_table papd ON pp.ID = papd.product_id
-				WHERE (papd.post_status = 'publish' OR papd.post_status = 'private')
+				WHERE (pp.post_status = 'publish' OR pp.post_status = 'private')
 				AND papd.supplier_id = '$supplier'";
 
 			$filter_by_supplier = " AND ( $pd_table.supplier_id = '$supplier' OR $wpdb->posts.ID IN ($subquery) ) ";
@@ -2722,8 +2721,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return $products;
 
-	}
-	*/
+	}*/
 
 	/**
 	 * Add the supplier's variation products to the filtered query
@@ -2735,10 +2733,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return array
 	 */
+	/** TODO: Remove if not needed
 	public function add_supplier_variations_to_query( $variations, $products ) {
 
 		return array_merge( $variations, $this->supplier_variation_products );
-	}
+	}*/
 
 	/**
 	 * Set views for table filtering and calculate total value counters for pagination
