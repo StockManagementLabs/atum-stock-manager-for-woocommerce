@@ -738,12 +738,13 @@ final class WidgetHelpers {
 	 *
 	 * @since 1.5.0.3
 	 *
-	 * @param string $selected  The pre-selected option.
-	 * @param string $class     The dropdown class name.
+	 * @param string $selected       The pre-selected option.
+	 * @param string $class          The dropdown class name.
+	 * @param array  $excluded_types Excluded types.
 	 *
 	 * @return string
 	 */
-	public static function product_types_dropdown( $selected = '', $class = 'dropdown_product_type' ) {
+	public static function product_types_dropdown( $selected = '', $class = 'dropdown_product_type', $excluded_types = [] ) {
 
 		$terms = get_terms( array(
 			'taxonomy'   => 'product_type',
@@ -757,7 +758,7 @@ final class WidgetHelpers {
 
 		foreach ( $terms as $term ) {
 
-			if ( ! in_array( $term->slug, $allowed_types ) ) {
+			if ( ! in_array( $term->slug, $allowed_types ) || in_array( $term->slug, $excluded_types ) ) {
 				continue;
 			}
 
