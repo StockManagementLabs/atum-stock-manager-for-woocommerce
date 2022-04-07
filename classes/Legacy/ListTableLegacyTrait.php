@@ -139,25 +139,17 @@ trait ListTableLegacyTrait {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( ! empty( $this->atum_query_data['where'] ) ) {
-				$this->atum_query_data['where']['relation'] = 'AND';
-			}
-
-			$this->atum_query_data['where'][] = apply_filters( 'atum/list_table/supplier_filter_query_data', array(
-				'key'   => 'supplier_id',
-				'value' => $supplier,
-				'type'  => 'NUMERIC',
-			));
-
 			// This query does not get product variations and as each variation may have a distinct supplier,
 			// we have to get them separately and to add their variables to the results.
 			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
 
+			/** TODO: Remove this filters if not needed. Add the supplier products to the results is in conflict with pagination, adding results to each page.
 			if ( ! empty( $this->supplier_variation_products ) ) {
 				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
 				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
 				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
 			}
+			*/
 
 		}
 
@@ -448,7 +440,7 @@ trait ListTableLegacyTrait {
 				$this->count_views['count_all'] = count( $products );
 
 				// The grouped items must count once per group they belongs to and once individually.
-				if ( ! empty( $group_items ) ) {
+				if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
 					$this->count_views['count_all'] += count( $group_items );
 				}
 
@@ -808,18 +800,6 @@ trait ListTableLegacyTrait {
 			 * like the ATUM control switch or the supplier
 			 */
 			$this->set_controlled_query_data();
-
-			if ( ! empty( $this->supplier_variation_products ) && ! empty( $this->atum_query_data['where'] ) && ! empty( wp_list_filter( $this->atum_query_data['where'], [ 'key' => 'supplier_id' ] ) ) ) {
-
-				$this->atum_query_data['where'][] = array(
-					'key'   => 'supplier_id',
-					'value' => absint( $_REQUEST['supplier'] ),
-					'type'  => 'NUMERIC',
-				);
-
-				$this->atum_query_data['where']['relation'] = 'AND';
-
-			}
 
 			// Avoid to duplicate grouped children.
 			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
