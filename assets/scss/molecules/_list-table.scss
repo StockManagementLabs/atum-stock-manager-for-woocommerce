@@ -2479,16 +2479,16 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				white-space: nowrap;
 				
 				i {
-					margin-right: 4px;
+					vertical-align: -2px;
 				}
 			}
 			
 			.atmi-arrow-child {
 				display: inline-block;
 				margin-right: 4px;
-				margin-left: 5px;
+				margin-left: -5px;
 				font-size: 14px;
-				vertical-align: 2px;
+				vertical-align: 1px;
 			}
 		}
 		
