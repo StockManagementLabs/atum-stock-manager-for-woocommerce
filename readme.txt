@@ -15,7 +15,9 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**✨ NEW IMPROVED ATUM v1.9**
+**✨ NEW IMPROVED ATUM v1.9 ✨**
+
+[youtube https://www.youtube.com/watch?v=-ZfA_aY40Vk]
 
 **💻 NEW [ATUM REST API](https://stockmanagementlabs.github.io/atum-rest-api-docs/)**
 
