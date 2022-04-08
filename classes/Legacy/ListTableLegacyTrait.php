@@ -113,12 +113,8 @@ trait ListTableLegacyTrait {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		if ( ! empty( $_REQUEST['orderby'] ) ) {
-
-			// Add the orderby args.
-			$args = $this->parse_orderby_args( $args );
-
-		}
+		// Add the orderby args.
+		$args = $this->parse_orderby_args( $args );
 
 		/**
 		 * Searching

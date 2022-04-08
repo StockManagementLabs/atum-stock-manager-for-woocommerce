@@ -204,7 +204,7 @@ var Tooltip = (function () {
                     container: 'body',
                     delay: {
                         show: 100,
-                        hide: 200
+                        hide: 200,
                     },
                 });
                 $tipEl.on('inserted.bs.tooltip', function (evt) {
