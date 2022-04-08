@@ -230,12 +230,6 @@ trait WidgetHelpersLegacyTrait {
 			),
 		);
 
-		self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_atum_args', array(
-			'key'   => 'atum_stock_status',
-			'value' => [ 'instock', 'onbackorder' ],
-			'type'  => 'CHAR',
-		) );
-
 		// As when we filter by any taxonomy, the variation products are lost,
 		// we need to create another query to get the children.
 		$children_query_needed = FALSE;
@@ -287,6 +281,15 @@ trait WidgetHelpersLegacyTrait {
 			}
 
 		}
+
+		// We need to apply the stock_status criteria to query only if we aren't filtering. Otherwise may exclude unmanaged parents and get no results.
+		if ( ! $children_query_needed ) {
+			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_atum_args', array(
+				'key'   => 'atum_stock_status',
+				'value' => [ 'instock', 'onbackorder' ],
+				'type'  => 'CHAR',
+			) );
+		}
 		
 		// Get products in stock.
 		add_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
@@ -325,7 +328,30 @@ trait WidgetHelpersLegacyTrait {
 					continue;
 				}
 
-				$product_stock          = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_stock', $product->get_stock_quantity(), $product );
+				if ( in_array( $product->get_type(), [ 'grouped', 'bundle' ] ) ) {
+					continue;
+				}
+
+				// Inheritable products stock is only 'real stock' if any of their children is unmanaged.
+				if ( $product->get_stock_quantity() &&
+					in_array( $product->get_type(), Globals::get_inheritable_product_types() ) ) {
+					$product_stock = 0;
+					$children      = $product->get_children();
+
+					foreach ( $children as $child_id ) {
+						$child = Helpers::get_atum_product( $child_id );
+
+						if ( 'parent' === $child->managing_stock() ) {
+							$product_stock = $product->get_stock_quantity();
+							break;
+						}
+					}
+				}
+				else {
+					$product_stock = $product->get_stock_quantity();
+				}
+
+				$product_stock          = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_stock', $product_stock, $product );
 				$product_purchase_price = (float) apply_filters( 'atum/dashboard/get_items_in_stock/product_price', $product->get_purchase_price(), $product );
 
 				if ( $product_stock > 0 ) {
