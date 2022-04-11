@@ -161,6 +161,11 @@ class AtumProductData {
 		// Update ATUM calc properties after saving.
 		add_filter( 'woocommerce_rest_insert_product_object', array( $this, 'after_rest_product_save' ), 10, 3 );
 
+		// Allow API to save out_stock_date as it, no utc/gmt time.
+		add_filter( 'atum/data_store/date_columns', array( $this, 'remove_out_stock_date_column' ) );
+
+		// Force API to save out_stock_date as string.
+		add_filter( 'atum/product_data/maybe_set_out_stock_date_as_string', '__return_true' );
 	}
 
 	/**
@@ -759,6 +764,24 @@ class AtumProductData {
 		return $schema;
 	}
 
+	/**
+	 * Removes out_stock_date from the date fields to avoid pass through wc functions and be converted in gmt date.
+	 *
+	 * @since 1.9.14
+	 *
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	public function remove_out_stock_date_column( $fields ) {
+
+		if ( in_array( 'out_stock_date', $fields ) ) {
+			$index = array_search( 'out_stock_date', $fields );
+			array_splice( $fields, $index, 1 );
+		}
+
+		return $fields;
+	}
 
 	/****************************
 	 * Instance methods
