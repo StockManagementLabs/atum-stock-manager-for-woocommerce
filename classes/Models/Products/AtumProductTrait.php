@@ -707,7 +707,12 @@ trait AtumProductTrait {
 	 *                                  Null if there is no date.
 	 */
 	public function set_out_stock_date( $date = NULL ) {
-		$this->set_date_prop( 'out_stock_date', $date );
+		if ( apply_filters( 'atum/product_data/maybe_set_out_stock_date_as_string', FALSE ) ) {
+			$this->set_prop( 'out_stock_date', $date );
+		}
+		else {
+			$this->set_date_prop( 'out_stock_date', $date );
+		}
 	}
 
 	/**
