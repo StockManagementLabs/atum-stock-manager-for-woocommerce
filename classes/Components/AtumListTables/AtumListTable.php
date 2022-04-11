@@ -4932,45 +4932,42 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $args;
 		}
 
+		$orderby               = esc_attr( $_REQUEST['orderby'] );
 		$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 		$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
 
 		// Columns starting by underscore are based in meta keys, so can be sorted.
-		if ( '_' === substr( $_REQUEST['orderby'], 0, 1 ) ) {
+		if ( '_' === substr( $orderby, 0, 1 ) ) {
 
-			if ( array_key_exists( $_REQUEST['orderby'], $atum_sortable_columns ) ) {
+			// Order ATUM columns.
+			if ( array_key_exists( $orderby, $atum_sortable_columns ) ) {
 
-				$this->atum_query_data['order']          = $atum_sortable_columns[ $_REQUEST['orderby'] ];
+				$this->atum_query_data['order']          = $atum_sortable_columns[ $orderby ];
 				$this->atum_query_data['order']['order'] = $order;
 
 			}
-			// All the meta key based columns are numeric except the SKU.
+			// Order regular meta keys.
 			else {
 
-				if ( '_sku' === $_REQUEST['orderby'] ) {
-					$args['orderby'] = 'meta_value';
-				}
-				else {
-					$args['orderby'] = 'meta_value_num';
-				}
+				// All the meta key based columns are numeric (in ATUM free) except the SKU.
+				// TODO: PERHAPS WE SHOULD MANAGE TYPES FOR ALL SORTABLE META KEYS WITHIN A CLASS PROP.
+				$args['orderby']  = apply_filters( 'atum/list_table/meta_key_orderby', '_sku' === $orderby ? 'meta_value' : 'meta_value_num', $orderby, $this );
+				$args['orderby'] .= ' ID'; // Second ordering for items that have no meta key.
 
 				$args['meta_query']['relation'] = 'OR';
 
+				// NOTE: The "NOT EXISTS" clause must go before the "EXISTS" one or won't do the sorting correctly.
+				// More info: https://wordpress.stackexchange.com/questions/102447/sort-on-meta-value-but-include-posts-that-dont-have-one#comment-471161.
 				$args['meta_query'][] = array(
-					'meta_key' => $_REQUEST['orderby'],
-				);
-
-				$args['meta_query'][] = array(
-					'key'     => $_REQUEST['orderby'],
-					'compare' => 'EXISTS',
-				);
-
-				$args['meta_query'][] = array(
-					'key'     => $_REQUEST['orderby'],
+					'key'     => $orderby,
 					'compare' => 'NOT EXISTS',
 				);
 
-				/*$args['meta_key'] = $_REQUEST['orderby'];*/
+				$args['meta_query'][] = array(
+					'key'     => $orderby,
+					'compare' => 'EXISTS',
+				);
+
 				$args['order'] = $order;
 
 			}
@@ -4978,11 +4975,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 		// Standard Fields.
 		else {
-			$args['orderby'] = $_REQUEST['orderby'];
+			$args['orderby'] = $orderby;
 			$args['order']   = $order;
 		}
 
 		return $args;
+
 	}
 
 	/**
