@@ -2342,12 +2342,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		if ( ! empty( $_REQUEST['orderby'] ) ) {
-
-			// Add the orderby args.
-			$args = $this->parse_orderby_args( $args );
-
-		}
+		// Add the orderby args.
+		$args = $this->parse_orderby_args( $args );
 
 		/**
 		 * Searching
@@ -4932,7 +4928,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function parse_orderby_args( $args ) {
 
-		if ( ! isset( $_REQUEST['orderby'] ) || empty( $_REQUEST['orderby'] ) || 'date' === $_REQUEST['orderby'] ) {
+		if ( empty( $_REQUEST['orderby'] ) || 'date' === $_REQUEST['orderby'] ) {
 			return $args;
 		}
 

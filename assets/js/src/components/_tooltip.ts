@@ -41,9 +41,9 @@ export default class Tooltip {
 				    html     : true,
 				    title    : title,
 				    container: 'body',
-				    delay: {
-				    	show: 100,
-					    hide: 200
+				    delay    : {
+					    show: 100,
+					    hide: 200,
 				    }, // The delay fixes an issue with tooltips breaking on some cases.
 			    } );
 
