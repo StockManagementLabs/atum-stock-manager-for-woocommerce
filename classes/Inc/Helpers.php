@@ -1864,6 +1864,7 @@ final class Helpers {
 
 				// Save it for future quicker access.
 				$product->set_inbound_stock( $inbound_stock );
+				$product->set_sales_update_date();
 
 				// If it's a variation, sum up all the variations' inbound stocks and save the result as the variable inbound (so it can be used in SC sortings).
 				AtumCalculatedProps::maybe_update_variable_calc_prop( $product, 'inbound_stock', $inbound_stock );
