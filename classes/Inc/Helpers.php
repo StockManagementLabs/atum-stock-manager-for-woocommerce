@@ -1840,18 +1840,19 @@ final class Helpers {
 
 				$where = array(
 					"oim.`meta_key` IN ('_product_id', '_variation_id')",
-					"`order_item_type` = 'line_item'",
+					"oi.`order_item_type` = 'line_item'",
 					$wpdb->prepare( 'p.`post_type` = %s', PurchaseOrders::POST_TYPE ),
 					$wpdb->prepare( 'oim.`meta_value` = %d', $product_id ),
 					"`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
 					"oim2.`meta_key` = '_qty'",
 				);
 
-				$joins_str = implode( "\n", apply_filters( 'atum/product_inbound_stock/sql_joins', $joins, $product ) );
-				$where_str = implode( ' AND ', apply_filters( 'atum/product_inbound_stock/sql_where', $where, $product ) );
+				$select_str = apply_filters( 'atum/product_inbound_stock/sql_select', 'SUM(oim2.`meta_value`) AS quantity', $product );
+				$joins_str  = implode( "\n", apply_filters( 'atum/product_inbound_stock/sql_joins', $joins, $product ) );
+				$where_str  = implode( ' AND ', apply_filters( 'atum/product_inbound_stock/sql_where', $where, $product ) );
 
 				$sql = "
-					SELECT SUM(oim2.`meta_value`) AS quantity 			
+					SELECT  $select_str			
 					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 					$joins_str								
 					WHERE $where_str			
