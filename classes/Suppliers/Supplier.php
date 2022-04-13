@@ -29,6 +29,7 @@ defined( 'ABSPATH' ) || die;
  * @property string $description
  * @property string $currency
  * @property string $address
+ * @property string $address_2
  * @property string $city
  * @property string $country
  * @property string $state
@@ -77,6 +78,7 @@ class Supplier {
 		'description'        => '',
 		'currency'           => '',
 		'address'            => '',
+		'address_2'          => '',
 		'city'               => '',
 		'country'            => '',
 		'state'              => '',
@@ -433,6 +435,23 @@ class Supplier {
 		if ( $this->data['address'] !== $address ) {
 			$this->data['address'] = $address;
 			$this->register_change( 'address' );
+		}
+	}
+
+	/**
+	 * Set the address 2
+	 *
+	 * @since 1.6.15
+	 *
+	 * @param string $address_2
+	 */
+	public function set_address_2( $address_2 ) {
+
+		$address_2 = esc_attr( $address_2 );
+
+		if ( $this->data['address_2'] !== $address_2 ) {
+			$this->data['address_2'] = $address_2;
+			$this->register_change( 'address_2' );
 		}
 	}
 

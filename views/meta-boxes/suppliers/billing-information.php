@@ -38,6 +38,11 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="form-field form-field-wide">
+		<label for="address_2"><?php esc_html_e( 'Address 2', ATUM_TEXT_DOMAIN ) ?></label>
+		<input type="text" id="address_" name="billing_information[address_2]" value="<?php echo esc_attr( $supplier->address_2 ) ?>">
+	</div>
+
+	<div class="form-field form-field-wide">
 		<label for="city"><?php esc_html_e( 'City', ATUM_TEXT_DOMAIN ) ?></label>
 		<input type="text" id="city" name="billing_information[city]" value="<?php echo esc_attr( $supplier->city ) ?>">
 	</div>
