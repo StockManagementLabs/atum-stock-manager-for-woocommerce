@@ -92,6 +92,8 @@ trait AtumOrderItemTrait {
 			$this->save_meta_data();
 		}
 
+		do_action( 'atum/atum_order/order_item_saved', $this );
+
 		return $atum_order_item_id;
 	}
 
