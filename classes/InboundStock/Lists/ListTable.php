@@ -59,7 +59,7 @@ class ListTable extends AtumListTable {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
-		
+
 		// Prevent unmanaged counters.
 		$this->show_unmanaged_counters = FALSE;
 
@@ -82,7 +82,7 @@ class ListTable extends AtumListTable {
 		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound_stock' => 0 ) );
 
 		parent::__construct( $args );
-		
+
 	}
 
 	/**
@@ -152,7 +152,7 @@ class ListTable extends AtumListTable {
 			'count_low_stock'  => 0,
 			'count_unmanaged'  => 0,
 		);
-		
+
 	}
 
 	/**
@@ -222,7 +222,7 @@ class ListTable extends AtumListTable {
 
 		if ( mb_strlen( $title ) > $title_length ) {
 			$title = '<span class="tips" data-tip="' . esc_attr( $title ) . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
-					'...</span><span class="atum-title-small">' . $title . '</span>';
+			         '...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
@@ -314,7 +314,7 @@ class ListTable extends AtumListTable {
 		if ( $date_ordered ) {
 			$date_ordered = Helpers::date_format( $date_ordered, FALSE );
 		}
-		
+
 		return apply_filters( 'atum/inbound_stock_list/column_date_ordered', $date_ordered, $item, $this->list_item );
 	}
 
@@ -464,6 +464,8 @@ class ListTable extends AtumListTable {
 
 		}
 
+		do_action( 'atum/inbound_stock_list/after_prepare_items', $po_products );
+
 	}
 
 	/**
@@ -503,5 +505,5 @@ class ListTable extends AtumListTable {
 		// No bulk actions needed for Inbound Stock.
 		return apply_filters( 'atum/inbound_stock_list/bulk_actions', array() );
 	}
-	
+
 }
