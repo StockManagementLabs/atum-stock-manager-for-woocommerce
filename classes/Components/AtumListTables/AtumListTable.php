@@ -1655,7 +1655,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Column for back orders amount: show amount if items pending to serve and without existences
+	 * Column for backorders amount: show amount if items pending to serve and without existences
 	 *
 	 * @since 0.0.1
 	 *
@@ -1753,10 +1753,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
 			}
-			// Back Orders.
+			// Backorders.
 			elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
 				$classes .= ' cell-yellow';
-				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (backorders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
 			}
 			// Restock Status.

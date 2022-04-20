@@ -37,8 +37,8 @@ defined( 'ABSPATH' ) || die;
 			<td><?php esc_html_e( "There are times when the store owner needs to reserve or set aside a small or significant amount of stock. Occasions like special events, customer reservations or quality checks will find this feature very handy. Inventory Logs add-on can automatically deduct the reserved stock value from the 'Current Stock' indicator.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
-			<td><strong><?php esc_html_e( 'Back Orders', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "Every WooCommerce product has an 'Allow Back Orders' option within the product page. It will give customers the opportunity to place an order even when the product is out of stock. The 'Back Orders' indicator will display the amount of items required by customers.", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><strong><?php esc_html_e( 'Backorders', ATUM_TEXT_DOMAIN ) ?></strong></td>
+			<td><?php esc_html_e( "Every WooCommerce product has an 'Allow Backorders' option within the product page. It will give customers the opportunity to place an order even when the product is out of stock. The 'Backorders' indicator will display the amount of items required by customers.", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Sold today', ATUM_TEXT_DOMAIN ) ?></strong></td>
