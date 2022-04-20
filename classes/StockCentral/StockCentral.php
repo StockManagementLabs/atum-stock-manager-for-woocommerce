@@ -267,7 +267,7 @@ class StockCentral extends AtumListPage {
 			'group'   => 'stock_central',
 			'section' => 'stock_central',
 			'name'    => __( 'Days to re-order', ATUM_TEXT_DOMAIN ),
-			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Low Stock' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "This value sets the number of days a user needs to replenish the stock levels. It controls the 'Restock Status' indicator within the 'Stock Central' page.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'number',
 			'default' => Settings::DEFAULT_SALE_DAYS,
 			'options' => array(

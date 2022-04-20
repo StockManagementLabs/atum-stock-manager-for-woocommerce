@@ -1347,15 +1347,10 @@ class Settings {
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?><?php if ( ! empty( $args['options']['is_recurrent'] ) ) echo ' recurrent'; ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) :
-				echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"';
-			endif;
-			if ( ! empty( $args['options']['processing_msg'] ) ) :
-				echo 'data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"';
-			endif;
-			if ( ! empty( $args['options']['processed_msg'] ) ) :
-				echo 'data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"';
-			endif; ?>>
+			<?php echo ! empty( $args['options']['confirm_msg'] ) ? ' data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"' : ''; ?>
+			<?php echo ! empty( $args['options']['processing_msg'] ) ? ' data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"' : ''; ?>
+			<?php echo ! empty( $args['options']['processed_msg'] ) ? ' data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"' : ''; ?>
+		>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 

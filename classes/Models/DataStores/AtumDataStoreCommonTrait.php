@@ -60,7 +60,7 @@ trait AtumDataStoreCommonTrait {
 			'has_location',
 			'update_date',
 			'atum_stock_status',
-			'low_stock',
+			'restock_status',
 			'sales_update_date',
 		) );
 
@@ -76,7 +76,7 @@ trait AtumDataStoreCommonTrait {
 			'atum_controlled',
 			'inheritable',
 			'has_location',
-			'low_stock',
+			'restock_status',
 		) );
 
 		// Values which can be null in the database.

@@ -1375,7 +1375,7 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent sending stock email if the product has ATUM out of stock threshold value
+	 * Prevent sending stock email if the product has low stock threshold value set
 	 *
 	 * @since 1.9.2
 	 *
@@ -1387,7 +1387,7 @@ class Hooks {
 	}
 
 	/**
-	 * Prevent sending stock email if the product has ATUM out of stock threshold value
+	 * Prevent sending stock email if the product has ATUM out of stock threshold value set
 	 *
 	 * @since 1.9.2
 	 *
@@ -1422,19 +1422,16 @@ class Hooks {
 		if ( 'woocommerce_no_stock' === $action ) {
 
 			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount < $out_stock_threshold || $product->get_stock_quantity() <= $out_stock_threshold ) {
-
-				$this->order_products_notification_already_sent[ $product_id ] = 'Sended';
+				$this->order_products_notification_already_sent[ $product_id ] = 'Sent';
 				return;
-
 			}
+
 		}
 		elseif ( 'woocommerce_low_stock' === $action ) {
 
 			if ( $no_stock_amount === $out_stock_threshold || $no_stock_amount > $out_stock_threshold ) {
-
-				$this->order_products_notification_already_sent[ $product_id ] = 'Sended';
+				$this->order_products_notification_already_sent[ $product_id ] = 'Sent';
 				return;
-
 			}
 
 		}
@@ -1523,15 +1520,13 @@ class Hooks {
 			$low_stock_amount       = absint( wc_get_low_stock_amount( wc_get_product( $change['product']->get_id() ) ) );
 
 			if ( $change['to'] <= $out_of_stock_threshold && 'yes' === get_option( 'woocommerce_notify_no_stock', 'yes' ) ) {
-
 				do_action( 'woocommerce_no_stock', wc_get_product( $change['product']->get_id() ) );
-
 			}
-			elseif ( $change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount &&
-					'yes' === get_option( 'woocommerce_notify_low_stock', 'yes' ) ) {
-
+			elseif (
+				$change['to'] > $out_of_stock_threshold && $change['to'] <= $low_stock_amount &&
+				'yes' === get_option( 'woocommerce_notify_low_stock', 'yes' )
+			) {
 				do_action( 'woocommerce_low_stock', wc_get_product( $change['product']->get_id() ) );
-
 			}
 
 			if ( $change['to'] < 0 ) {

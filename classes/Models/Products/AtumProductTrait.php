@@ -50,7 +50,7 @@ trait AtumProductTrait {
 		'has_location'                  => NULL,
 		'update_date'                   => NULL,
 		'atum_stock_status'             => 'instock',
-		'low_stock'                     => NULL,
+		'restock_status'                => NULL,
 		'sales_update_date'             => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'             => NULL, // PL.
@@ -353,17 +353,16 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Returns the Low Stock indicator.
+	 * Returns the Restock Status indicator.
 	 *
 	 * @since 1.6.6
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return boolean
+	 * @return string 'yes' or 'no'
 	 */
-	public function get_low_stock( $context = 'view' ) {
-		$low_stock = $this->get_prop( 'low_stock', $context );
-		return wc_bool_to_string( $low_stock );
+	public function get_restock_status( $context = 'view' ) {
+		return wc_bool_to_string( $this->get_prop( 'restock_status', $context ) );
 	}
 
 	/**
@@ -903,14 +902,14 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Set whether the product has low stock or not.
+	 * Set whether the product is on restock status.
 	 *
 	 * @since 1.6.6
 	 *
-	 * @param string|bool $low_stock
+	 * @param string|bool $restock_status
 	 */
-	public function set_low_stock( $low_stock ) {
-		$this->set_prop( 'low_stock', wc_string_to_bool( $low_stock ) );
+	public function set_restock_status( $restock_status ) {
+		$this->set_prop( 'restock_status', wc_string_to_bool( $restock_status ) );
 	}
 
 	/**

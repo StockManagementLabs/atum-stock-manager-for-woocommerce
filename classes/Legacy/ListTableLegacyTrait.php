@@ -599,27 +599,27 @@ trait ListTableLegacyTrait {
 			}
 
 			/**
-			 * Products with low stock
+			 * Products in restock status
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', [ $args, $this->wc_query_data, $this->atum_query_data ] );
-				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
+				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', [ $args, $this->wc_query_data, $this->atum_query_data ] );
+				$products_restock_status  = AtumCache::get_transient( $restock_status_transient );
 
-				if ( empty( $products_low_stock ) ) {
+				if ( empty( $products_restock_status ) ) {
 
 					$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
-						SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
+					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/restock_status_products', "
+						SELECT product_id FROM $atum_product_data_table WHERE restock_status = 1
 					" );
 
-					$products_low_stock = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
+					$products_restock_status = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					AtumCache::set_transient( $restock_status_transient, $products_restock_status );
 
 				}
 
-				$this->id_views['low_stock']          = (array) $products_low_stock;
-				$this->count_views['count_low_stock'] = is_array( $products_low_stock ) ? count( $products_low_stock ) : 0;
+				$this->id_views['restock_status']          = (array) $products_restock_status;
+				$this->count_views['count_restock_status'] = is_array( $products_restock_status ) ? count( $products_restock_status ) : 0;
 
 			}
 

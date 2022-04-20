@@ -87,8 +87,8 @@ $title_color             = 'color: #333;';
 							printf( esc_html( _n( 'Out of Stock: %d item', 'Out of Stock: %d items', $count_views['count_out_stock'], ATUM_TEXT_DOMAIN ) ), esc_html( $count_views['count_out_stock'] ) ) ?>
 						</span><br>
 						<?php
-						/* translators: the number of items with low stock */
-						printf( esc_html( _n( 'Low Stock: %d item', 'Low Stock: %d items', $count_views['count_low_stock'], ATUM_TEXT_DOMAIN ) ), esc_html( $count_views['count_low_stock'] ) ) ?><br>
+						/* translators: the number of items on restock status */
+						printf( esc_html( _n( 'Restock Status: %d item', 'Restock Status: %d items', $count_views['count_restock_status'], ATUM_TEXT_DOMAIN ) ), esc_html( $count_views['count_restock_status'] ) ) ?><br>
 					</p>
 				</td>
 

@@ -364,7 +364,7 @@ export default class SettingsPage {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
 					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
 					    data: any      = {

@@ -56,7 +56,7 @@ class AtumUncontrolledListTable extends AtumListTable {
 	protected function get_views() {
 
 		$views = parent::get_views();
-		unset( $views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
+		unset( $views['in_stock'], $views['restock_status'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
 
 		return $views;
 	}
