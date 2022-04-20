@@ -618,7 +618,7 @@ class Addons {
 
 			$saved_license = self::get_keys( $addon_name );
 
-			if ( ! empty( $saved_license ) ) {
+			if ( ! empty( $saved_license ) && $addon_status['installed'] ) {
 				$addon_status['key'] = $saved_license['key'];
 
 				// Check the license.

@@ -1856,11 +1856,11 @@ final class Helpers {
 					FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 					$joins_str								
 					WHERE $where_str			
-					GROUP BY oim.`meta_value`;
+					GROUP BY oi.`order_id`;
 				";
 
-				$inbound_stock = $wpdb->get_var( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$inbound_stock = $inbound_stock ?: 0;
+				$result        = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$inbound_stock = $result ? array_sum( $result ) : 0;
 
 				// Save it for future quicker access.
 				$product->set_inbound_stock( $inbound_stock );
