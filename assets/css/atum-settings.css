@@ -4999,6 +4999,10 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   color: rgba(73, 80, 87, 0.6);
 }
 
+#wpwrap {
+  overflow: hidden;
+}
+
 #wpbody-content {
   padding-bottom: 0;
 }
