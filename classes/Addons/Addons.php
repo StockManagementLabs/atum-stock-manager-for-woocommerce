@@ -50,10 +50,10 @@ class Addons {
 	 * @var string[]
 	 */
 	private $addons_check_bootstrap = array(
+		'action_logs'     => '1.1.5',
+		'export_pro'      => '1.3.4',
 		'multi_inventory' => '1.5.0',
 		'product_levels'  => '1.6.0',
-		'export_pro'      => '1.3.4',
-		'action_logs'     => '1.1.5',
 		'purchase_orders' => '0.0.1',
 	);
 
@@ -64,6 +64,14 @@ class Addons {
 	 * @var string[]
 	 */
 	private $addons_paths = array(
+		'action_logs'     => [
+			'name'     => 'Action Logs',
+			'basename' => 'atum-logs/atum-logs.php',
+		],
+		'export_pro'      => [
+			'name'     => 'Export PRO',
+			'basename' => 'atum-export-pro/atum-export-pro.php',
+		],
 		'multi_inventory' => [
 			'name'     => 'Multi-Inventory',
 			'basename' => 'atum-multi-inventory/atum-multi-inventory.php',
@@ -71,10 +79,6 @@ class Addons {
 		'product_levels'  => [
 			'name'     => 'Product Levels',
 			'basename' => 'atum-product-levels/atum-product-levels.php',
-		],
-		'export_pro'      => [
-			'name'     => 'Export PRO',
-			'basename' => 'atum-export-pro/atum-export-pro.php',
 		],
 		'purchase_orders' => [
 			'name'     => 'Purchase Orders PRO',
