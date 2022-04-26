@@ -252,11 +252,8 @@ class AtumQueues {
 	 */
 	public static function add_async_action( $hook, $callback, $params = [], $priority = 10 ) {
 
-		// Avoid unending loops when the current request is already coming from an async action or from the WP cron.
-		if (
-			( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] )
-			|| wp_doing_cron()
-		) {
+		// Avoid unending loops when the current request is already coming from an async action.
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -290,11 +287,8 @@ class AtumQueues {
 	 */
 	public function trigger_async_actions() {
 
-		// Avoid unending loops when the current request is already coming from an async action or from the WP cron.
-		if (
-			( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] )
-			|| wp_doing_cron()
-		) {
+		// Avoid unending loops when the current request is already coming from an async action.
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
