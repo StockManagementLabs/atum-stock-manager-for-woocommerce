@@ -7,7 +7,7 @@ Tested up to: 5.9.3
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.4.1
-Stable tag: 1.9.15
+Stable tag: 1.9.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -252,6 +252,23 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.16`
+
+*2022-04-26*
+
+**Features**
+
+* Improved tools configurations in Settings to allow multiple fields.
+* Added SC's views descriptions to the help tab.
+
+**Fixes**
+
+* Fixed add-ons licenses not saving when activating them.
+* Minor CSS fixes.
+* Added missing addon path for Action Logs.
 
 ---
 

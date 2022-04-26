@@ -194,6 +194,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.16`
+
+*2022-04-26*
+
+**Features**
+
+* Improved tools configurations in Settings to allow multiple fields.
+* Added SC's views descriptions to the help tab.
+
+**Fixes**
+
+* Fixed add-ons licenses not saving when activating them.
+* Minor CSS fixes.
+* Added missing addon path for Action Logs.
+
+---
+
 `1.9.15`
 
 *2022-04-22*
