@@ -51,6 +51,7 @@
 		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
 		<exclude name="Squiz.Commenting.FunctionComment.EmptyThrows" />
+		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.Missing" />
 		<exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace" />
 		<exclude name="Squiz.PHP.DisallowMultipleAssignments" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterOpen" />
