@@ -195,7 +195,10 @@ trait WidgetHelpersLegacyTrait {
 	 * @return array
 	 */
 	private static function get_items_in_stock_legacy( $category, $product_type ) {
-		
+
+		global $wpdb;
+		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
 		// Init values counter.
 		$counters = [
 			'items_stocks_counter'         => 0,
@@ -216,7 +219,7 @@ trait WidgetHelpersLegacyTrait {
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => [ 'grouped' ],
+					'terms'    => [ 'grouped', 'bundle' ],
 					'operator' => 'NOT IN',
 				),
 			),
@@ -296,6 +299,55 @@ trait WidgetHelpersLegacyTrait {
 		$products_in_stock_query = new \WP_Query( apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_args', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
 
+		$products_in_stock_sql = $products_in_stock_query->request;
+
+		if ( $children_query_needed ) {
+
+			$products_in_stock_sql = "SELECT DISTINCT pist.ID FROM ( ( $products_in_stock_sql ) UNION ( SELECT p.ID FROM $wpdb->posts p
+				LEFT JOIN $atum_product_data_table apd ON (p.ID = apd.product_id)
+				WHERE apd.atum_stock_status IN ('instock', 'onbackorder') AND p.post_type = 'product_variation'
+				AND p.post_parent IN ( $products_in_stock_sql ) ) ) pist ";
+		}
+
+		$variation_children = "SELECT COUNT(*) FROM $wpdb->posts pch1
+            WHERE pch1.post_parent = p0.ID AND pch1.post_type = 'product_variation'";
+		$unmanaged_children = "SELECT COUNT(*) FROM $wpdb->posts pch2
+            LEFT JOIN $wpdb->postmeta pmchild2 ON pch2.ID = pmchild2.post_id AND pmchild2.meta_key = '_manage_stock'
+            WHERE pch2.post_parent = p0.ID AND pmchild2.meta_value = 'no'";
+
+		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', 'CAST( st.meta_value AS DECIMAL(10,6) )' );
+		$stock_field                        = "IF( ($variation_children) = 0 OR ($unmanaged_children) > 0, IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
+		$stock_wo_purchase_price_field      = 'IF( ' . apply_filters( 'atum/dashboard/purchase_price_field', 'apd0.purchase_price > 0' ) . ", 0, $base_stock_field )";
+		$stock_without_purchase_price_field = "IF( ($variation_children) = 0 OR ($unmanaged_children) > 0, $stock_wo_purchase_price_field, 0 )";
+
+		$items_in_stock_sql = apply_filters( 'atum/dashboard/current_stock_query_parts', array(
+			'fields' => array(
+				'ID'                           => 'p0.ID',
+				'items_stocks_counter'         => "IFNULL( SUM( $stock_field ), 0 ) items_stocks_counter",
+				'items_purchase_price_total'   => 'IFNULL( SUM( ' . apply_filters( 'atum/dashboard/purchase_price_total', "apd0.purchase_price * $stock_field" ) . ' ), 0 ) items_purchase_price_total',
+				'items_without_purchase_price' => "IFNULL( SUM( $stock_without_purchase_price_field ), 0 ) items_without_purchase_price",
+			),
+			'join'   => array(
+				"LEFT JOIN $wpdb->postmeta st ON p0.ID = st.post_id AND st.meta_key = '_stock'",
+				"LEFT JOIN $atum_product_data_table apd0 ON p0.ID = apd0.product_id",
+			),
+			'where'  => "p0.ID IN ( $products_in_stock_sql )",
+		) );
+
+		$sql_string = 'SELECT ' . implode( ', ', $items_in_stock_sql['fields'] )
+			. " FROM $wpdb->posts p0 " . implode( ' ', $items_in_stock_sql['join'] )
+			. ' WHERE ' . $items_in_stock_sql['where']
+			. ' GROUP BY ' . apply_filters( 'atum/dashboard/current_stock_query_group_by', 'p0.ID' );
+
+		// phpcs:disable WordPress.DB.PreparedSQL
+		$counters = (array) $wpdb->get_row( "SELECT SUM( t.items_stocks_counter ) items_stocks_counter,
+            SUM( t.items_purchase_price_total ) items_purchase_price_total,
+            SUM( t.items_without_purchase_price ) items_without_purchase_price
+			FROM ( $sql_string ) t" );
+
+		return self::format_counters_items_in_stock( $counters );
+
+		/*
 		$products_in_stock = $products_in_stock_query->posts;
 		$managed_variables = $managed_variables_stock = [];
 
@@ -303,7 +355,7 @@ trait WidgetHelpersLegacyTrait {
 
 			if ( $children_query_needed ) {
 
-				global $wpdb;
+				//global $wpdb;
 				$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 				// phpcs:disable WordPress.DB.PreparedSQL
@@ -418,6 +470,7 @@ trait WidgetHelpersLegacyTrait {
 		}
 		
 		return self::format_counters_items_in_stock( apply_filters( 'atum/dashboard/get_items_in_stock/counters', $counters ) );
+		*/
 		
 	}
 
