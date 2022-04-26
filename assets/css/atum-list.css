@@ -6460,14 +6460,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
       -ms-flex-align: center;
           align-items: center;
   margin-left: 3px;
+  border-radius: 5px;
 }
 
 .subsubsub.extend-list-table li span.active, #posts-filter .subsubsub li span.active {
-  border-radius: 5px;
   background-color: var(--primary);
-  font-size: 16px;
-  padding: 0 10px;
-  font-weight: bold;
   letter-spacing: 0.4px;
   color: var(--white);
 }

@@ -2066,13 +2066,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$empty       = 'empty';
 					}
 
-					if ( $man_class ) {
-						$man_class = ' class="' . implode( ' ', $man_class ) . '"';
-					}
-					else {
-						$man_class = '';
-					}
-
+					$man_class       = ! empty( $man_class ) ? ' class="' . implode( ' ', $man_class ) . '"' : '';
 					$man_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['managed'] ) ) );
 					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Managed by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$extra_links    .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '"' . $data_tip . '>' . $man_count . '</a>';
@@ -2113,11 +2107,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
-				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
+				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">
+								  <span' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> 
+								  <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
 
 			}
 			else {
-				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span></a></span>';
+				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">
+								  <span' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span>
+								  </a></span>';
 			}
 
 		}

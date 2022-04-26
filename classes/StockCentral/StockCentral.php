@@ -140,6 +140,10 @@ class StockCentral extends AtumListPage {
 				'title' => __( 'General', ATUM_TEXT_DOMAIN ),
 			),
 			array(
+				'name'  => 'views',
+				'title' => __( 'Views', ATUM_TEXT_DOMAIN ),
+			),
+			array(
 				'name'  => 'product-details',
 				'title' => __( 'Product Details', ATUM_TEXT_DOMAIN ),
 			),
