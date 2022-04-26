@@ -67,10 +67,9 @@ class AtumProductData {
 		'update_date'         => [ 'get', 'update' ],
 		'atum_locations'      => [ 'get', 'update' ],
 		'atum_stock_status'   => [ 'get', 'update' ],
-		'low_stock'           => [ 'get', 'update' ],
-		'low_stock_amount'    => [ 'get', 'update' ],
+		'restock_status'      => [ 'get', 'update' ],
+		'low_stock_amount'    => [ 'get', 'update' ], // The WC's low stock threshold.
 		'sales_update_date'   => [ 'get', 'update' ],
-
 	);
 
 	/**
@@ -347,9 +346,9 @@ class AtumProductData {
 				'description' => __( 'Used to store the stock status (same as WC) but both values may differ for MI enable products.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
 			),
-			'low_stock'           => array(
+			'restock_status'      => array(
 				'required'    => FALSE,
-				'description' => __( 'Indicates whether the stock will run out before reordered or not.', ATUM_TEXT_DOMAIN ),
+				'description' => __( 'Indicates whether the stock will last soon and should be reordered.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'boolean',
 			),
 			'sales_update_date'   => array(
@@ -710,12 +709,12 @@ class AtumProductData {
 
 		AtumCalculatedProps::update_atum_product_calc_props( $product );
 
-		// Save low_stock_amount since Woocommerce missed it...
+		// Save low_stock_amount (WC's low stock threshold) since WC missed it...
 		if ( ! is_null( $request->get_param( 'low_stock_amount' ) ) ) {
-
 			$product->set_low_stock_amount( floatval( $request->get_param( 'low_stock_amount' ) ) );
 			$product->save();
 		}
+
 	}
 
 	/**

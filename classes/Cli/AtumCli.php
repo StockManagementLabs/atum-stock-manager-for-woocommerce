@@ -12,12 +12,6 @@
 
 namespace Atum\Cli;
 
-use Atum\Inc\Ajax;
-use Atum\Settings\Settings;
-use Atum\Inc\Helpers;
-use Atum\Settings\Tools;
-
-
 defined( 'ABSPATH' ) || die;
 
 class AtumCli {
@@ -45,7 +39,9 @@ class AtumCli {
 
 		add_action( 'cli_init', array( $this, 'add_commands' ) );
 
-		\WP_CLI::add_hook( 'before_add_command:atum', array( $this, 'add_tools_to_cli_commands' ) );
+		if ( method_exists( '\WP_CLI', 'add_hook' ) ) {
+			\WP_CLI::add_hook( 'before_add_command:atum', array( $this, 'add_tools_to_cli_commands' ) );
+		}
 
 	}
 
@@ -82,16 +78,23 @@ class AtumCli {
 	 * @since 1.9.3.1
 	 */
 	public function add_commands() {
-		$parent = 'atum';
-		\WP_CLI::add_command( "$parent list", array( $this, 'display_commands_list' ) );
-		foreach ( $this->commands as $command => $content ) {
-			// $function = $this->find_hooked_function( 'wp_ajax_' . $content['action'] );
-			$function = array( $content['class'], $content['action'] );
 
-			if ( class_exists( $content['class'] ) && method_exists( $content['class'], $content['action'] ) ) {
-				\WP_CLI::add_command( "$parent $command", $function );
+		if ( method_exists( '\WP_CLI', 'add_command' ) ) {
+
+			$parent = 'atum';
+			\WP_CLI::add_command( "$parent list", array( $this, 'display_commands_list' ) );
+
+			foreach ( $this->commands as $command => $content ) {
+				// $function = $this->find_hooked_function( 'wp_ajax_' . $content['action'] );
+				$function = array( $content['class'], $content['action'] );
+
+				if ( class_exists( $content['class'] ) && method_exists( $content['class'], $content['action'] ) ) {
+					\WP_CLI::add_command( "$parent $command", $function );
+				}
 			}
+
 		}
+
 	}
 
 	/**

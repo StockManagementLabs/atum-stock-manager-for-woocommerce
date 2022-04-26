@@ -194,6 +194,56 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.16`
+
+*2022-04-26*
+
+**Features**
+
+* Improved tools configurations in Settings to allow multiple fields.
+* Added SC's views descriptions to the help tab.
+
+**Fixes**
+
+* Fixed add-ons licenses not saving when activating them.
+* Minor CSS fixes.
+* Added missing addon path for Action Logs.
+
+---
+
+`1.9.15`
+
+*2022-04-22*
+
+**Features**
+
+* Allow stripping trailing zeros in decimals when formatting numbers via JS utils.
+* Added action after prepare inbound list items.
+* Added SELECT clause filter to inbound stock query.
+* Added "address 2" field to suppliers.
+* Add hook after ATUM order items are saved.
+
+**Changes**
+
+* Filtering by grouped product type mustn't add the count twice.
+* CSS adjustments.
+* Refactoring.
+* Do not make GMT date conversion when set out_stock_date from API call.
+* Ensure product is saved if the inbound stock is calculated.
+* Changed product inbound query.
+* Delete add-ons keys when removing an add-on's directory manually.
+* Changed low stock name to restock status everywhere (for more clarity).
+* Makes sure the WP CLI metods exist before calling them.
+
+**Fixes**
+
+* Fixed argument identifier on expired add-ons notice.
+* Fixed suppliers filter duplicating results in conflict with pagination & offset.
+* Fixed suppliers filter.
+* Fixed current stock value widget with real stock.
+
+---
+
 `1.9.14`
 
 *2022-04-04*

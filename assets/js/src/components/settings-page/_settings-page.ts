@@ -364,15 +364,26 @@ export default class SettingsPage {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
-					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
-					    data: any      = {
-						    action  : $scriptRunner.data( 'action' ),
-						    security: this.settings.get( 'runnerNonce' ),
-					    };
+					const $input: JQuery = $scriptRunner.find( `[data-tool="${ $scriptRunner.data( 'input' ) }"]` );
 
-					if ( $input.length ) {
+					let data: any = {
+						action  : $scriptRunner.data( 'action' ),
+						security: this.settings.get( 'runnerNonce' ),
+					};
+
+					if ( $input.length > 1 ) {
+
+						data.option = {};
+
+						$input.each( ( index: number, elem: Element ) => {
+							const $field: JQuery = $( elem );
+							data.option[ $field.attr( 'name' ) ] = $field.val();
+						} );
+
+					}
+					else if ( $input.length ) {
 						data.option = $input.val();
 					}
 
@@ -380,7 +391,7 @@ export default class SettingsPage {
 						url       : window[ 'ajaxurl' ],
 						method    : 'POST',
 						dataType  : 'json',
-						data      : data,
+						data,
 						beforeSend: () => $button.prop( 'disabled', true ),
 						success   : ( response: any ) => {
 
@@ -438,15 +449,27 @@ export default class SettingsPage {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
-					let $input: JQuery = $scriptRunner.find( '#' + $scriptRunner.data( 'input' ) ),
-					    option: string = '';
+					const $input: JQuery = $scriptRunner.find( `[data-tool="${ $scriptRunner.data( 'input' ) }"]` );
 
-					const action: string = $scriptRunner.data( 'action' );
+					let data: any = {
+						action: $scriptRunner.data( 'action' ),
+						security: this.settings.get( 'runnerNonce' ),
+					};
 
-					if ( $input.length ) {
-						option = $input.val();
+					if ( $input.length > 1 ) {
+
+						data.option = {};
+
+						$input.each( ( index: number, elem: Element ) => {
+							const $field: JQuery = $( elem );
+							data.option[ $field.attr( 'name' ) ] = $field.val();
+						} );
+
+					}
+					else if ( $input.length ) {
+						data.option = $input.val();
 					}
 
 					const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
@@ -455,12 +478,7 @@ export default class SettingsPage {
 							url     : window[ 'ajaxurl' ],
 							method  : 'POST',
 							dataType: 'json',
-							data    : {
-								action  : action,
-								security: this.settings.get( 'runnerNonce' ),
-								option  : option,
-								offset  : offset,
-							},
+							data    : { ...{ data }, offset },
 						} );
 
 					};

@@ -50,10 +50,10 @@ class Addons {
 	 * @var string[]
 	 */
 	private $addons_check_bootstrap = array(
+		'action_logs'     => '1.1.5',
+		'export_pro'      => '1.3.4',
 		'multi_inventory' => '1.5.0',
 		'product_levels'  => '1.6.0',
-		'export_pro'      => '1.3.4',
-		'action_logs'     => '1.1.5',
 		'purchase_orders' => '0.0.1',
 	);
 
@@ -64,6 +64,14 @@ class Addons {
 	 * @var string[]
 	 */
 	private $addons_paths = array(
+		'action_logs'     => [
+			'name'     => 'Action Logs',
+			'basename' => 'atum-logs/atum-logs.php',
+		],
+		'export_pro'      => [
+			'name'     => 'Export PRO',
+			'basename' => 'atum-export-pro/atum-export-pro.php',
+		],
 		'multi_inventory' => [
 			'name'     => 'Multi-Inventory',
 			'basename' => 'atum-multi-inventory/atum-multi-inventory.php',
@@ -71,10 +79,6 @@ class Addons {
 		'product_levels'  => [
 			'name'     => 'Product Levels',
 			'basename' => 'atum-product-levels/atum-product-levels.php',
-		],
-		'export_pro'      => [
-			'name'     => 'Export PRO',
-			'basename' => 'atum-export-pro/atum-export-pro.php',
 		],
 		'purchase_orders' => [
 			'name'     => 'Purchase Orders PRO',
@@ -145,7 +149,7 @@ class Addons {
 				if ( ! empty( $this->no_activated_licenses ) ) {
 
 					$message = sprintf(
-					/* translators: opening and closing HTML link to the add-ons page  */
+						/* translators: opening and closing HTML link to the add-ons page  */
 						__( 'Please, activate %1$syour ATUM premium add-ons licenses%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
 						'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
 						'</a>'
@@ -441,6 +445,7 @@ class Addons {
 		$transient_name = AtumCache::get_transient_key( 'addons_list' );
 		AtumCache::delete_transients( $transient_name );
 	}
+
 	/**
 	 * Retrieves addon folder
 	 *
@@ -603,42 +608,26 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug, $addon_folder ) {
 
-		// TODO: CLEAR TRANSIENTS WHEN AN ADD-ON IS DISABLED.
 		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
 		$addon_status   = AtumCache::get_transient( $transient_name, TRUE );
+		$is_installed   = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
 
-		if ( empty( $addon_status ) ) {
+		if ( empty( $addon_status ) || $is_installed !== $addon_status['installed'] ) {
 
 			// Status defaults.
 			$addon_status = array(
-				'installed' => Helpers::is_plugin_installed( $addon_slug, $addon_folder ),
+				'installed' => $is_installed,
 				'status'    => 'invalid',
 				'key'       => '',
 			);
 
 			$saved_license = self::get_keys( $addon_name );
 
-			if ( ! empty( $saved_license ) && $addon_status['installed'] ) {
-				$addon_status['key'] = $saved_license['key'];
-
-				// Check the license.
-				$status = self::check_license( $addon_name, $addon_status['key'] );
-
-				if ( ! is_wp_error( $status ) ) {
-					$license_data = json_decode( wp_remote_retrieve_body( $status ) );
-
-					if ( $license_data ) {
-						$addon_status['status'] = $license_data->license;
-
-						if ( $license_data->license !== $saved_license['status'] ) {
-							$saved_license['status'] = $license_data->license;
-							self::update_key( $addon_name, $saved_license );
-						}
-					}
-				}
-
-			}
-			else {
+			if (
+				empty( $saved_license ) ||
+				// When any add-on was previously activated but is no longer installed and the license is not valid, get rid of it.
+				( ! empty( $saved_license ) && 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
+			) {
 
 				self::update_key( $addon_name, [
 					'key'    => '',
@@ -646,9 +635,33 @@ class Addons {
 				] );
 
 			}
+			else {
+
+				$addon_status['key'] = $saved_license['key'];
+
+				// Check the license.
+				$status = self::check_license( $addon_name, $addon_status['key'] );
+
+				if ( ! is_wp_error( $status ) ) {
+
+					$license_data = json_decode( wp_remote_retrieve_body( $status ) );
+
+					if ( $license_data ) {
+
+						$addon_status['status'] = $license_data->license;
+
+						if ( $license_data->license !== $saved_license['status'] ) {
+							$saved_license['status'] = $license_data->license;
+							self::update_key( $addon_name, $saved_license );
+						}
+
+					}
+
+				}
+
+			}
 
 			switch ( $addon_status['status'] ) {
-
 				case 'invalid':
 				case 'disabled':
 				case 'expired':

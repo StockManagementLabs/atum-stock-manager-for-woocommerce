@@ -3047,7 +3047,7 @@ final class Helpers {
 
 
 	/**
-	 * Get if a product is low of stock: There's insufficient stock to fulfill the next "days to reorder" days expected sales.
+	 * Get if a product is on restock status: There's insufficient stock to fulfill the next "days to reorder" days expected sales.
 	 * TODO: Perhaps change the static 7 days sales average by a setting.
 	 *
 	 * @since 1.6.6
@@ -3057,19 +3057,19 @@ final class Helpers {
 	 *
 	 * @return bool
 	 */
-	public static function is_product_low_stock( $product, $use_lookup_table = TRUE ) {
+	public static function is_product_restock_status( $product, $use_lookup_table = TRUE ) {
 
 		// sale_day option means actually Days to reorder.
 		$days_to_reorder = absint( self::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 		$current_time    = self::date_format( '', TRUE, TRUE );
-		$is_low_stock    = FALSE;
+		$restock_needed  = FALSE;
 
 		if ( $product->managing_stock() && 'instock' === $product->get_stock_status() ) {
 			$expected_sales = self::get_sold_last_days( "$current_time -7 days", $current_time, $product->get_id(), [ 'qty' ], $use_lookup_table ) / 7 * $days_to_reorder;
-			$is_low_stock   = $expected_sales > $product->get_stock_quantity();
+			$restock_needed = $expected_sales > $product->get_stock_quantity();
 		}
 
-		return apply_filters( 'atum/is_product_low_stock', $is_low_stock, $product );
+		return apply_filters( 'atum/is_product_restock_status', $restock_needed, $product );
 
 	}
 

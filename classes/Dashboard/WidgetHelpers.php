@@ -488,11 +488,11 @@ final class WidgetHelpers {
 		global $wpdb;
 
 		$stock_counters = array(
-			'count_in_stock'  => 0,
-			'count_out_stock' => 0,
-			'count_low_stock' => 0,
-			'count_all'       => 0,
-			'count_unmanaged' => 0,
+			'count_in_stock'       => 0,
+			'count_out_stock'      => 0,
+			'count_restock_status' => 0,
+			'count_all'            => 0,
+			'count_unmanaged'      => 0,
 		);
 
 		$products = Helpers::get_all_products();
@@ -622,17 +622,17 @@ final class WidgetHelpers {
 			remove_filter( 'posts_clauses', array( __CLASS__, 'wc_product_data_query_clauses' ) );
 
 			/*
-			 * Products with low stock
+			 * Products in restock status
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
 				$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-				$str_sql                 = apply_filters( 'atum/dashboard/get_stock_levels/low_stock_products', "
-					SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
+				$str_sql                 = apply_filters( 'atum/dashboard/get_stock_levels/restock_status_products', "
+					SELECT product_id FROM $atum_product_data_table WHERE restock_status = 1
 				" );
 
-				$products_low_stock                = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$stock_counters['count_low_stock'] = count( $products_low_stock );
+				$products_restock_status                = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$stock_counters['count_restock_status'] = count( $products_restock_status );
 
 			}
 			

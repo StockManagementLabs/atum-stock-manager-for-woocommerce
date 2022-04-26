@@ -48,31 +48,31 @@ class DashboardStockControlController extends DashboardWidgetController {
 					'items'       => array(
 						'type'       => 'object',
 						'properties' => array(
-							'count_in_stock'  => array(
+							'count_in_stock'       => array(
 								'description' => __( 'The total amount of products in stock.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view' ),
 								'readonly'    => TRUE,
 							),
-							'count_out_stock' => array(
+							'count_out_stock'      => array(
 								'description' => __( 'The total amount of products out of stock.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view' ),
 								'readonly'    => TRUE,
 							),
-							'count_low_stock' => array(
-								'description' => __( 'The total amount of products in low stock.', ATUM_TEXT_DOMAIN ),
+							'count_restock_status' => array(
+								'description' => __( 'The total amount of products in restock status.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view' ),
 								'readonly'    => TRUE,
 							),
-							'count_all'       => array(
+							'count_all'            => array(
 								'description' => __( 'The total amount of products.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view' ),
 								'readonly'    => TRUE,
 							),
-							'count_unmanaged' => array(
+							'count_unmanaged'      => array(
 								'description' => __( 'The total amount of products that are not being managed by WooCommerce.', ATUM_TEXT_DOMAIN ),
 								'type'        => 'integer',
 								'context'     => array( 'view' ),

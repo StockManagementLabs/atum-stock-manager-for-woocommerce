@@ -106,6 +106,17 @@
 }
 
 .subsubsub {
+	background-color:  var(--atum-table-bg);
+	width: 100%;
+	position: relative;
+	font-size: 16px;
+	letter-spacing: 0.4px;
+	font-weight: bold;
+	text-transform: capitalize;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	
 	&.extend-list-table {
 		width: inherit;
 		margin: 10px 0 !important;
@@ -123,13 +134,10 @@
 				justify-content: center;
 				align-items: center;
 				margin-left: 3px;
+				border-radius: 5px;
 				
 				&.active {
-					border-radius: 5px;
 					background-color: var(--primary);
-					font-size: 16px;
-					padding: 0 10px;
-					font-weight: bold;
 					letter-spacing: 0.4px;
 					color:  var(--white);
 					
@@ -248,6 +256,7 @@
 					}
 				}
 			}
+			
 		}
 		
 		@include mobile-max {
@@ -263,17 +272,6 @@
 			}
 		}
 	}
-	
-	background-color:  var(--atum-table-bg);
-	width: 100%;
-	position: relative;
-	font-size: 16px;
-	letter-spacing: 0.4px;
-	font-weight: bold;
-	text-transform: capitalize;
-	display: flex;
-	align-items: center;
-	margin: 0;
 	
 	@include tablet-max-wp{
 		margin: 10px 10px;

@@ -340,7 +340,7 @@ class Dashboard {
 				),
 				'defaultsWillRestore'   => __( 'This will restore the default layout and widgets', ATUM_TEXT_DOMAIN ),
 				'inStockLabel'          => __( 'In Stock', ATUM_TEXT_DOMAIN ),
-				'lowStockLabel'         => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
+				'restockStatusLabel'    => __( 'Restock Status', ATUM_TEXT_DOMAIN ),
 				'months'                => array(
 					__( 'January', ATUM_TEXT_DOMAIN ),
 					__( 'February', ATUM_TEXT_DOMAIN ),

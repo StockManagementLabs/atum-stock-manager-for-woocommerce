@@ -2,6 +2,10 @@
 // Atum Settings
 //---------------
 
+#wpwrap {
+	overflow: hidden;
+}
+
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -912,7 +916,7 @@
 							font-size: 14px;
 							
 							i {
-								vertical-align: middle;
+								vertical-align: -1px;
 							}
 						}
 						

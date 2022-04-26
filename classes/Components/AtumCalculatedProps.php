@@ -53,7 +53,7 @@ class AtumCalculatedProps {
 		// We must run this before the AtumQueues' "trigger_async_action" because we are using the same hook to register the async actions (when needed).
 		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 1 );
 
-		// Update atum_stock_status and low_stock if needed.
+		// Update atum_stock_status and restock_status if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'after_product_save' ), PHP_INT_MAX, 2 );
 
 		// Update the sales-related calculated props when saving an order or changing its status.
@@ -381,10 +381,10 @@ class AtumCalculatedProps {
 					$update = TRUE;
 				}
 
-				$low = wc_bool_to_string( Helpers::is_product_low_stock( $product, FALSE ) );
+				$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
 
-				if ( $product->get_low_stock() !== $low ) {
-					$product->set_low_stock( $low );
+				if ( $product->get_restock_status() !== $restock ) {
+					$product->set_restock_status( $restock );
 					$update = TRUE;
 				}
 

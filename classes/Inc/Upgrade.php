@@ -149,6 +149,11 @@ class Upgrade {
 			$this->change_entries_per_page_meta_keys();
 		}
 
+		// ** version 1.9.15 ** Alter the low_stock column on product data table
+		if ( version_compare( $db_version, '1.9.15', '<' ) ) {
+			$this->alter_low_stock_column();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -580,7 +585,7 @@ class Upgrade {
 				'type'    => 'VARCHAR(15)',
 				'default' => "'instock'",
 			),
-			'low_stock'         => array(
+			'restock_status'    => array(
 				'type'    => 'TINYINT(1)',
 				'default' => '0',
 			),
@@ -622,29 +627,41 @@ class Upgrade {
 			'instock'     => [],
 			'outofstock'  => [],
 			'onbackorder' => [],
-
 		);
 
 		$ids = $wpdb->get_col( "SELECT product_id FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		if ( $ids ) {
+
 			foreach ( $ids as $id ) {
 
 				$product = Helpers::get_atum_product( $id );
 
 				if ( $product instanceof \WC_Product ) {
+
 					$product_statuses[ $product->get_stock_status() ][] = $id;
 
-					$low_stock = Helpers::is_product_low_stock( $product );
+					$restock_status = Helpers::is_product_restock_status( $product );
 
-					// phpcs:disable WordPress.DB
-					$wpdb->query( $wpdb->prepare(
-						'UPDATE ' . $atum_product_data_table . ' SET low_stock = %1$d
-						WHERE product_id = %2$d', $low_stock, $product->get_id()
-					) );
-					// phpcs:enable
+					$wpdb->update(
+						$atum_product_data_table,
+						array(
+							'restock_status' => $restock_status,
+						),
+						array(
+							'product_id' => $id,
+						),
+						array(
+							'%d',
+						),
+						array(
+							'%d',
+						)
+					);
+
 				}
 			}
+
 		}
 
 		foreach ( $product_statuses as $status => $products_ids ) {
@@ -936,6 +953,31 @@ class Upgrade {
 				'meta_key' => ATUM_PREFIX . 'inbound_stock_products_per_page',
 			]
 		);
+
+	}
+
+	/**
+	 * Alter the product data table to change the low_stock column name
+	 *
+	 * @since 1.9.15
+	 */
+	public function alter_low_stock_column() {
+
+		global $wpdb;
+
+		// Avoid changing the column if was already changed.
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'low_stock'
+		", $db_name, $atum_data_table );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table CHANGE `low_stock` `restock_status` TINYINT(1) NOT NULL DEFAULT 0;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
 
 	}
 

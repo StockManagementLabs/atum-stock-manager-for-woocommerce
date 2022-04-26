@@ -321,7 +321,7 @@ class ListTable extends AtumListTable {
 			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'_stock_on_hold'       => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'_reserved_stock'      => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'     => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'calc_back_orders'     => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'_sold_today'          => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'_customer_returns'    => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'_warehouse_damage'    => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
@@ -375,7 +375,7 @@ class ListTable extends AtumListTable {
 			'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'back_orders'       => __( 'Back Orders', ATUM_TEXT_DOMAIN ),
+			'back_orders'       => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
@@ -947,7 +947,7 @@ class ListTable extends AtumListTable {
 					// Avoid infinite loop of recalls.
 					remove_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 
-					// Get all the products that allow back orders.
+					// Get all the products that allow backorders.
 					$args     = array(
 						'post_type'      => [ 'product', 'product_variation' ],
 						'posts_per_page' => - 1,

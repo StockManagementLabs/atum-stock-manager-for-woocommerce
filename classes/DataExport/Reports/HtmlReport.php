@@ -430,8 +430,8 @@ class HtmlReport extends ListTable {
 			}
 			
 		}
-		// Low Stock.
-		elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
+		// Restock Status.
+		elseif ( in_array( $product_id, $this->id_views['restock_status'] ) ) {
 			$classes .= ' cell-yellow';
 			$content  = '<span class="atum-icon atmi-arrow-down-circle"' . $atum_icons_style . '>&#xe915;</span>';
 		}

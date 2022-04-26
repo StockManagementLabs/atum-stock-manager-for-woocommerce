@@ -79,9 +79,14 @@ class Tools {
 			'desc'    => __( "Update the WooCommerce's manage stock at product level for all the products at once.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'select'        => array(
-					'manage'   => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
-					'unmanage' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN ),
+				'fields'        => array(
+					array(
+						'type'    => 'select',
+						'options' => array(
+							'manage'   => __( 'Manage Stock', ATUM_TEXT_DOMAIN ),
+							'unmanage' => __( 'Unmanage Stock', ATUM_TEXT_DOMAIN ),
+						),
+					),
 				),
 				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_manage_stock',
@@ -96,9 +101,14 @@ class Tools {
 			'desc'    => __( "Update the ATUM's stock control option for all the products at once.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'select'        => array(
-					'control'   => __( 'Control Stock', ATUM_TEXT_DOMAIN ),
-					'uncontrol' => __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN ),
+				'fields'        => array(
+					array(
+						'type'    => 'select',
+						'options' => array(
+							'control'   => __( 'Control Stock', ATUM_TEXT_DOMAIN ),
+							'uncontrol' => __( 'Uncontrol Stock', ATUM_TEXT_DOMAIN ),
+						),
+					),
 				),
 				'button_text'   => __( 'Update Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_control_stock',
@@ -127,8 +137,13 @@ class Tools {
 			'desc'    => __( 'Update the calculated product and sales properties for all the products.<br>The input field specifies the quantity of products to process per Ajax call, if it fails, try setting a lower value.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'number'         => array(
-					'default' => 400,
+				'fields'         => array(
+					array(
+						'type'  => 'number',
+						'min'   => 0,
+						'max'   => 10000,
+						'value' => 400,
+					),
 				),
 				'is_recurrent'   => TRUE,
 				'button_text'    => __( 'Update Now!', ATUM_TEXT_DOMAIN ),

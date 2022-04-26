@@ -98,7 +98,7 @@ class Settings {
 		}
 
 		// Add tools to AtumCli commands.
-		if ( class_exists( '\WP_CLI', FALSE ) ) {
+		if ( class_exists( '\WP_CLI', FALSE ) && method_exists( '\WP_CLI', 'do_hook' ) ) {
 			$tools = Tools::get_instance();
 			\WP_CLI::do_hook( 'before_add_command:atum', $tools->add_settings_defaults( [] ), __NAMESPACE__ );
 		}
@@ -1347,38 +1347,50 @@ class Settings {
 		?>
 		<div class="script-runner<?php if ( ! empty( $args['options']['wrapper_class'] ) ) echo esc_attr( " {$args['options']['wrapper_class']}" ) ?><?php if ( ! empty( $args['options']['is_recurrent'] ) ) echo ' recurrent'; ?>"
 			data-action="<?php echo esc_attr( $args['options']['script_action'] ) ?>" data-input="<?php echo esc_attr( $args['id'] ) ?>"
-			<?php if ( ! empty( $args['options']['confirm_msg'] ) ) :
-				echo 'data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"';
-			endif;
-			if ( ! empty( $args['options']['processing_msg'] ) ) :
-				echo 'data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"';
-			endif;
-			if ( ! empty( $args['options']['processed_msg'] ) ) :
-				echo 'data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"';
-			endif; ?>>
+			<?php echo ! empty( $args['options']['confirm_msg'] ) ? ' data-confirm="' . esc_attr( $args['options']['confirm_msg'] ) . '"' : ''; ?>
+			<?php echo ! empty( $args['options']['processing_msg'] ) ? ' data-processing="' . esc_attr( $args['options']['processing_msg'] ) . '"' : ''; ?>
+			<?php echo ! empty( $args['options']['processed_msg'] ) ? ' data-processed="' . esc_attr( $args['options']['processed_msg'] ) . '"' : ''; ?>
+		>
 
 			<?php do_action( 'atum/settings/before_script_runner_field', $args ) ?>
 
-			<?php if ( isset( $args['options']['select'] ) ) : ?>
-				<div class="atum-select2-container">
-					<select style="width: 12em" id="<?php echo esc_attr( $args['id'] ) ?>">
-						<?php foreach ( $args['options']['select'] as $key => $label ) : ?>
-							<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_attr( $label ) ?></option>
-						<?php endforeach ?>
-					</select>
-					&nbsp;
-				</div>
-			<?php endif; ?>
+			<?php if ( ! empty( $args['options']['fields'] ) ) : ?>
 
-			<?php if ( isset( $args['options']['number'] ) ) :
-				$value = isset( $args['options']['number']['default'] ) ? $args['options']['number']['default'] : 1;
-				?>
-				<input class="atum-settings-input" type="number" min="1" max="100000" step="1" id="<?php echo esc_attr( $args['id'] ) ?>" value="<?php echo (int) $value ?>">
+				<?php foreach ( $args['options']['fields'] as $field ) : ?>
+
+					<?php if ( 'select' === $field['type'] ) : ?>
+
+						<div class="atum-select2-container">
+							<select style="width: 12em" data-tool="<?php echo esc_attr( $args['id'] ) ?>"
+								<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
+							>
+								<?php foreach ( $field['options'] as $key => $label ) : ?>
+									<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_html( $label ) ?></option>
+								<?php endforeach ?>
+							</select>
+							&nbsp;
+						</div>
+
+					<?php elseif ( 'number' === $field['type'] ) : ?>
+
+						<input class="atum-settings-input" type="number"
+							min="<?php echo esc_attr( $field['min'] ?? 0 ) ?>"
+							<?php echo ! empty( $field['max'] ) ? ' max="' . esc_attr( $field['max'] ) . '"' : '' ?>
+							step="<?php echo esc_attr( $field['step'] ?? 1 ) ?>"
+							value="<?php echo esc_attr( $field['value'] ?? 0 ) ?>"
+							data-tool="<?php echo esc_attr( $args['id'] ) ?>"
+							<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
+						>
+
+					<?php endif; ?>
+
+				<?php endforeach; ?>
+
 			<?php endif; ?>
 
 			<button type="button" class="btn btn-<?php echo esc_attr( isset( $args['options']['button_style'] ) ? $args['options']['button_style'] : 'primary' ) ?> tool-runner"
-				<?php if ( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'] )
-					echo ' disabled="disabled"' ?>>
+				<?php disabled( isset( $args['options']['button_status'] ) && 'disabled' === $args['options']['button_status'], TRUE ) ?>
+			>
 				<?php echo esc_attr( $args['options']['button_text'] ) ?>
 			</button>
 

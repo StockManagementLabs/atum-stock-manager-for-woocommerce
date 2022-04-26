@@ -187,11 +187,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $id_views = array(
-		'in_stock'   => [],
-		'out_stock'  => [],
-		'back_order' => [],
-		'low_stock'  => [],
-		'unmanaged'  => [],
+		'in_stock'       => [],
+		'out_stock'      => [],
+		'back_order'     => [],
+		'restock_status' => [],
+		'unmanaged'      => [],
 	);
 
 	/**
@@ -200,12 +200,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @var array
 	 */
 	protected $count_views = array(
-		'count_in_stock'   => 0,
-		'count_out_stock'  => 0,
-		'count_back_order' => 0,
-		'count_low_stock'  => 0,
-		'count_unmanaged'  => 0,
-		'count_all'        => 0,
+		'count_in_stock'       => 0,
+		'count_out_stock'      => 0,
+		'count_back_order'     => 0,
+		'count_restock_status' => 0,
+		'count_unmanaged'      => 0,
+		'count_all'            => 0,
 	);
 
 	/**
@@ -1655,7 +1655,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Column for back orders amount: show amount if items pending to serve and without existences
+	 * Column for backorders amount: show amount if items pending to serve and without existences
 	 *
 	 * @since 0.0.1
 	 *
@@ -1753,16 +1753,16 @@ abstract class AtumListTable extends \WP_List_Table {
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
 			}
-			// Back Orders.
+			// Backorders.
 			elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
 				$classes .= ' cell-yellow';
-				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (back orders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (backorders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
 			}
-			// Low Stock.
-			elseif ( in_array( $product_id, $this->id_views['low_stock'] ) ) {
+			// Restock Status.
+			elseif ( in_array( $product_id, $this->id_views['restock_status'] ) ) {
 				$classes .= ' cell-blue';
-				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Low Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
+				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Restock Status', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-arrow-down-circle tips"' . $data_tip . '></span>';
 			}
 			// In Stock.
@@ -1950,12 +1950,12 @@ abstract class AtumListTable extends \WP_List_Table {
 		$view  = ! empty( $_REQUEST['view'] ) ? esc_attr( $_REQUEST['view'] ) : 'all_stock';
 
 		$views_name = array(
-			'all_stock'  => __( 'All', ATUM_TEXT_DOMAIN ),
-			'in_stock'   => __( 'In Stock', ATUM_TEXT_DOMAIN ),
-			'out_stock'  => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
-			'back_order' => __( 'Backorder', ATUM_TEXT_DOMAIN ),
-			'low_stock'  => __( 'Low Stock', ATUM_TEXT_DOMAIN ),
-			'unmanaged'  => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
+			'all_stock'      => __( 'All', ATUM_TEXT_DOMAIN ),
+			'in_stock'       => __( 'In Stock', ATUM_TEXT_DOMAIN ),
+			'out_stock'      => __( 'Out of Stock', ATUM_TEXT_DOMAIN ),
+			'back_order'     => __( 'Backorder', ATUM_TEXT_DOMAIN ),
+			'restock_status' => __( 'Restock Status', ATUM_TEXT_DOMAIN ),
+			'unmanaged'      => __( 'Unmanaged by WC', ATUM_TEXT_DOMAIN ),
 		);
 
 		if ( $this->show_unmanaged_counters ) {
@@ -2066,13 +2066,7 @@ abstract class AtumListTable extends \WP_List_Table {
 						$empty       = 'empty';
 					}
 
-					if ( $man_class ) {
-						$man_class = ' class="' . implode( ' ', $man_class ) . '"';
-					}
-					else {
-						$man_class = '';
-					}
-
+					$man_class       = ! empty( $man_class ) ? ' class="' . implode( ' ', $man_class ) . '"' : '';
 					$man_hash_params = http_build_query( array_merge( $query_filters, array( 'view' => $views[ $key ]['managed'] ) ) );
 					$data_tip        = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Managed by WC', ATUM_TEXT_DOMAIN ) . '"' : '';
 					$extra_links    .= '<a' . $man_id . $man_class . ' href="' . $man_url . '" rel="address:/?' . $man_hash_params . '"' . $data_tip . '>' . $man_count . '</a>';
@@ -2113,11 +2107,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
-				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
+				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">
+								  <span' . $active . '>' . $text . ' <span class="count ' . $empty . '">' . $count . '</span></span></a> 
+								  <span class="extra-links-container ' . $empty . '">(' . $extra_links . ')</span></span>';
 
 			}
 			else {
-				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '"><span' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span></a></span>';
+				$views[ $key ] = '<span' . $active . '><a' . $id . $class . ' href="' . $view_url . '" rel="address:/?' . $hash_params . '">
+								  <span' . $active . '>' . $text . ' <span class="count extra-links-container ' . $empty . '">(' . $count . ')</span></span>
+								  </a></span>';
 			}
 
 		}
@@ -3037,27 +3035,27 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			/**
-			 * Products with low stock
+			 * Products in restock status
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$low_stock_transient = AtumCache::get_transient_key( 'list_table_low_stock', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
-				$products_low_stock  = AtumCache::get_transient( $low_stock_transient );
+				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
+				$products_restock_status  = AtumCache::get_transient( $restock_status_transient );
 
-				if ( empty( $products_low_stock ) ) {
+				if ( empty( $products_restock_status ) ) {
 
 					$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/low_stock_products', "
-						SELECT product_id FROM $atum_product_data_table WHERE low_stock = 1
+					$str_sql                 = apply_filters( 'atum/list_table/set_views_data/restock_status_products', "
+						SELECT product_id FROM $atum_product_data_table WHERE restock_status = 1
 					" );
 
-					$products_low_stock = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-					AtumCache::set_transient( $low_stock_transient, $products_low_stock );
+					$products_restock_status = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					AtumCache::set_transient( $restock_status_transient, $products_restock_status );
 
 				}
 
-				$this->id_views['low_stock']          = (array) $products_low_stock;
-				$this->count_views['count_low_stock'] = count( $products_low_stock );
+				$this->id_views['restock_status']          = (array) $products_restock_status;
+				$this->count_views['count_restock_status'] = count( $products_restock_status );
 
 			}
 

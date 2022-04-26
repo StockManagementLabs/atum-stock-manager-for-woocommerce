@@ -95,7 +95,7 @@ class ListTable extends AtumListTable {
 	protected function get_views() {
 
 		$views = parent::get_views();
-		unset( $views['in_stock'], $views['low_stock'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
+		unset( $views['in_stock'], $views['restock_status'], $views['out_stock'], $views['unmanaged'], $views['back_order'] );
 
 		return $views;
 	}
@@ -146,11 +146,11 @@ class ListTable extends AtumListTable {
 	protected function set_views_data( $args = array() ) {
 
 		$this->count_views = array(
-			'count_in_stock'   => 0,
-			'count_out_stock'  => 0,
-			'count_back_order' => 0,
-			'count_low_stock'  => 0,
-			'count_unmanaged'  => 0,
+			'count_in_stock'       => 0,
+			'count_out_stock'      => 0,
+			'count_back_order'     => 0,
+			'count_restock_status' => 0,
+			'count_unmanaged'      => 0,
 		);
 
 	}
