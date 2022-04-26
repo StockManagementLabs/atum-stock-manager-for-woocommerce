@@ -246,21 +246,39 @@ class AtumQueues {
 	 * @since 1.7.3
 	 *
 	 * @param string   $hook     The hook name to call after shutdown.
-	 * @param callable $callback A callable function or method.
+	 * @param callable $callback A callable function or method. IMPORTANT: It must be a static method called through the class name or it won't work.
 	 * @param array    $params   Optional. Any params that need to be passed to the async action. These params will be unpacked with the spread operator.
 	 * @param int      $priority Default to 10.
 	 */
-	public static function add_async_action( $hook, $callback, $params = array(), $priority = 10 ) {
+	public static function add_async_action( $hook, $callback, $params = [], $priority = 10 ) {
 
-		// NOTE: For now we only allow unique calls to the same hook.
-		self::$async_hooks[ $priority ][ $hook ] = array(
-			'callback' => $callback,
-			'params'   => $params,
-		);
+		// Avoid unending loops when the current request is already coming from an async action or from the WP cron.
+		if (
+			( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] )
+			|| wp_doing_cron()
+		) {
+			return;
+		}
 
-		// Ensure that we add the action only once.
-		if ( ! has_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) ) ) {
-			add_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) );
+		try {
+
+			if ( ! is_string( $callback ) && ! ( is_array( $callback ) && is_string( $callback[0] ) ) ) {
+				throw new AtumException( 'invalid_callback', __METHOD__ . ' :: ' . __( "The callback must be called statically, \$this isn't allowed within async actions.", ATUM_TEXT_DOMAIN ) );
+			}
+
+			// NOTE: For now we only allow unique calls to the same hook.
+			self::$async_hooks[ $priority ][ $hook ] = array(
+				'callback' => $callback,
+				'params'   => $params,
+			);
+
+			// Ensure that we add the action only once.
+			if ( ! has_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) ) ) {
+				add_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) );
+			}
+
+		} catch ( AtumException $e ) {
+			error_log( $e->getMessage() );
 		}
 
 	}
@@ -272,8 +290,11 @@ class AtumQueues {
 	 */
 	public function trigger_async_actions() {
 
-		// Avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		// Avoid unending loops when the current request is already coming from an async action or from the WP cron.
+		if (
+			( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] )
+			|| wp_doing_cron()
+		) {
 			return;
 		}
 
@@ -291,8 +312,15 @@ class AtumQueues {
 
 					foreach ( $priority_group as $hook_data ) {
 
-						if ( is_callable( $hook_data['callback'] ) ) {
-							call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+						if ( ! empty( $hook_data['callback'] ) && is_callable( $hook_data['callback'] ) ) {
+
+							if ( isset( $hook_data['params'] ) && is_array( $hook_data['params'] ) ) {
+								call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+							}
+							else {
+								call_user_func( $hook_data['callback'] );
+							}
+
 						}
 					}
 
@@ -352,14 +380,26 @@ class AtumQueues {
 
 				foreach ( $priority_group as $hook_data ) {
 
+					if ( empty( $hook_data['callback'] ) ) {
+						continue;
+					}
+
 					// The class path comes with double slashes.
-					if ( is_array( $hook_data['callback'] ) ) {
+					if ( is_array( $hook_data['callback'] ) && is_string( $hook_data['callback'][0] ) ) {
 						$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
 					}
 
 					if ( is_callable( $hook_data['callback'] ) ) {
-						call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+
+						if ( isset( $hook_data['params'] ) && is_array( $hook_data['params'] ) ) {
+							call_user_func( $hook_data['callback'], ...$hook_data['params'] );
+						}
+						else {
+							call_user_func( $hook_data['callback'] );
+						}
+
 					}
+
 				}
 
 			}

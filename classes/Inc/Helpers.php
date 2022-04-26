@@ -1320,11 +1320,11 @@ final class Helpers {
 	 *
 	 * @since 1.4.5
 	 *
-	 * @param string $meta_key
-	 * @param string $status
-	 * @param bool   $return_message
+	 * @param string $meta_key       The meta key name.
+	 * @param string $status         'yes' (enable) or 'no' (disable).
+	 * @param bool   $return_message Whether to return a message or just terminate the process.
 	 *
-	 * @return void|string
+	 * @return void|string Only will return a string with the message if the 3rd param is true.
 	 */
 	public static function change_status_meta( $meta_key, $status, $return_message = FALSE ) {
 

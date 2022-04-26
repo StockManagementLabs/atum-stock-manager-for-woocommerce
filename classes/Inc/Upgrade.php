@@ -121,7 +121,7 @@ class Upgrade {
 		// ** version 1.7.2 ** Update the calculated props for variable products.
 		if ( version_compare( $db_version, '1.7.2', '<' ) && ! $this->is_fresh_install ) {
 			// Run the method asynchronously.
-			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( $this, 'update_variable_calc_props' ) );
+			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( get_class(), 'update_variable_calc_props' ) );
 		}
 
 		// ** version 1.7.3 ** Delete the comments count transient, so the unapproved and spam comments are counted.
@@ -152,6 +152,11 @@ class Upgrade {
 		// ** version 1.9.15 ** Alter the low_stock column on product data table
 		if ( version_compare( $db_version, '1.9.15', '<' ) ) {
 			$this->alter_low_stock_column();
+		}
+
+		// Control all the products by default when installing ATUM for the first time.
+		if ( $this->is_fresh_install ) {
+			$this->maybe_control_all_products();
 		}
 
 		/**********************
@@ -729,7 +734,7 @@ class Upgrade {
 	 *
 	 * @since 1.7.2
 	 */
-	public function update_variable_calc_props() {
+	public static function update_variable_calc_props() {
 
 		$variation_products = get_posts( array(
 			'posts_per_page' => - 1,
@@ -980,5 +985,33 @@ class Upgrade {
 		}
 
 	}
+
+	/**
+	 * Fill in the ATUM product data table and control all the products by default when installing ATUM for the first time
+	 *
+	 * @since 1.9.17
+	 */
+	public function maybe_control_all_products() {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Run this only if the product data table is empty.
+		if ( ! $wpdb->get_var( "SELECT COUNT(*) FROM $atum_data_table" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			AtumQueues::add_async_action( 'control_all_products_initial_setup', array( get_class(), 'control_all_products_deferred' ) );
+		}
+
+	}
+
+	/**
+	 * Deferred action to control all your products by default when installing ATUM for the first time
+	 *
+	 * @since 1.9.16
+	 */
+	public static function control_all_products_deferred() {
+		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes', TRUE );
+	}
+
 
 }
