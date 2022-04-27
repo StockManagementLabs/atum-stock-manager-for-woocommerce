@@ -3688,7 +3688,9 @@ final class Helpers {
 	private static function get_valid_search_terms( $terms ) {
 
 		$valid_terms = [];
+
 		// Translators: This is a comma-separated list of very common words that should be excluded from a search, like a, an, and the. These are usually called "stopwords". You should not simply translate these individual words into your language. Instead, look for and provide commonly accepted stopwords in your language.
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$stopwords = apply_filters( 'wp_search_stopwords', array_map( 'wc_strtolower', array_map(
 			'trim',
 			explode(
