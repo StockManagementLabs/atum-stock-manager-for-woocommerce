@@ -368,30 +368,30 @@ export default class SettingsPage {
 
 					const $input: JQuery = $scriptRunner.find( `[data-tool="${ $scriptRunner.data( 'input' ) }"]` );
 
-					let data: any = {
+					let postData: any = {
 						action  : $scriptRunner.data( 'action' ),
 						security: this.settings.get( 'runnerNonce' ),
 					};
 
 					if ( $input.length > 1 ) {
 
-						data.option = {};
+						postData.option = {};
 
 						$input.each( ( index: number, elem: Element ) => {
 							const $field: JQuery = $( elem );
-							data.option[ $field.attr( 'name' ) ] = $field.val();
+							postData.option[ $field.attr( 'name' ) ] = $field.val();
 						} );
 
 					}
 					else if ( $input.length ) {
-						data.option = $input.val();
+						postData.option = $input.val();
 					}
 
 					$.ajax( {
 						url       : window[ 'ajaxurl' ],
 						method    : 'POST',
 						dataType  : 'json',
-						data,
+						data      : postData,
 						beforeSend: () => $button.prop( 'disabled', true ),
 						success   : ( response: any ) => {
 
@@ -404,6 +404,7 @@ export default class SettingsPage {
 							resolve( response.data );
 
 						},
+						error : () => Swal.showValidationMessage( this.settings.get( 'unexpectedError' ) )
 					} );
 
 				} );
@@ -415,14 +416,14 @@ export default class SettingsPage {
 
 			if ( result.isConfirmed ) {
 				Swal.fire( {
-						title            : this.settings.get( 'done' ),
-						icon             : 'success',
-						text             : result.value,
-						confirmButtonText: this.settings.get( 'ok' ),
-					} )
-					.then( () => {
-						this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
-					} );
+					title            : this.settings.get( 'done' ),
+					icon             : 'success',
+					text             : result.value,
+					confirmButtonText: this.settings.get( 'ok' ),
+				} )
+				.then( () => {
+					this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+				} );
 			}
 
 		} );
@@ -454,7 +455,7 @@ export default class SettingsPage {
 					const $input: JQuery = $scriptRunner.find( `[data-tool="${ $scriptRunner.data( 'input' ) }"]` );
 
 					let data: any = {
-						action: $scriptRunner.data( 'action' ),
+						action  : $scriptRunner.data( 'action' ),
 						security: this.settings.get( 'runnerNonce' ),
 					};
 
@@ -472,22 +473,24 @@ export default class SettingsPage {
 						data.option = $input.val();
 					}
 
-					const doRecurrentAjaxCall: any = ( offset: number = 0 ) => {
+					const doRecurrentAjaxCall: Function = ( offset: number = 0 ): JQueryXHR => {
 
 						return $.ajax( {
 							url     : window[ 'ajaxurl' ],
 							method  : 'POST',
 							dataType: 'json',
-							data    : { ...{ data }, offset },
+							data    : { ...data, offset },
+							error   : () => Swal.showValidationMessage( this.settings.get( 'unexpectedError' ) ),
 						} );
 
 					};
 
 					$button.prop( 'disabled', true );
 
-					const recurrentCall = ( offset: number = 0 ) =>
+					const recurrentCall: Function = ( offset: number = 0 ) =>
 
 						doRecurrentAjaxCall( offset ).done( ( response: any ) => {
+
 							if ( response.success === true ) {
 
 								Swal.update( {
@@ -509,6 +512,7 @@ export default class SettingsPage {
 								Swal.showValidationMessage( response.data );
 								resolve( response.data );
 							}
+
 						} );
 
 					recurrentCall();
@@ -522,14 +526,14 @@ export default class SettingsPage {
 
 			if ( result.isConfirmed ) {
 				Swal.fire( {
-						title            : this.settings.get( 'done' ),
-						icon             : 'success',
-						text             : $scriptRunner.data( 'processed' ).replace( '{processed}', result.value.total ),
-						confirmButtonText: this.settings.get( 'ok' ),
-					} )
-					.then( () => {
-						this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
-					} );
+					title            : this.settings.get( 'done' ),
+					icon             : 'success',
+					text             : $scriptRunner.data( 'processed' ).replace( '{processed}', result.value.total ),
+					confirmButtonText: this.settings.get( 'ok' ),
+				} )
+				.then( () => {
+					this.$settingsWrapper.trigger( 'atum-settings-script-runner-done', [ $scriptRunner ] );
+				} );
 			}
 
 		} );

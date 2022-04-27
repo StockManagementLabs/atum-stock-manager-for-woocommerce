@@ -229,9 +229,10 @@ class Settings {
 				'runnerNonce'        => wp_create_nonce( 'atum-script-runner-nonce' ),
 				'selectColor'        => __( 'Select Color', ATUM_TEXT_DOMAIN ),
 				'startFresh'         => __( 'Start Fresh', ATUM_TEXT_DOMAIN ),
-				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
+				'unexpectedError'    => __( 'An unexpected error occurred', ATUM_TEXT_DOMAIN ),
 				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
+				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
 			) );
 
 			wp_enqueue_style( 'woocommerce_admin_styles' );
