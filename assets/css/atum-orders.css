@@ -1317,8 +1317,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?olimxt");
-  src: url("../fonts/atum-icon-font.eot?olimxt#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?olimxt") format("truetype"), url("../fonts/atum-icon-font.woff?olimxt") format("woff"), url("../fonts/atum-icon-font.svg?olimxt#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?4b0unb");
+  src: url("../fonts/atum-icon-font.eot?4b0unb#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?4b0unb") format("truetype"), url("../fonts/atum-icon-font.woff?4b0unb") format("woff"), url("../fonts/atum-icon-font.svg?4b0unb#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -1333,6 +1333,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-ok:before {
+  content: "";
 }
 
 .atmi-po-pro:before {
@@ -5445,9 +5449,23 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding: 0;
 }
 
+.bootstrap-datetimepicker-widget a[data-action] > span {
+  color: #00B8DB;
+}
+
 .bootstrap-datetimepicker-widget a[data-action]:active {
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+
+.bootstrap-datetimepicker-widget a[data-action="close"] > span {
+  border: 1px solid #00B8DB;
+  background-color: transparent;
+}
+
+.bootstrap-datetimepicker-widget a[data-action="close"] > span:hover {
+  background-color: #00B8DB;
+  color: #fff;
 }
 
 .bootstrap-datetimepicker-widget .timepicker-hour, .bootstrap-datetimepicker-widget .timepicker-minute, .bootstrap-datetimepicker-widget .timepicker-second {

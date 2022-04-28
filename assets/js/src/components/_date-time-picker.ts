@@ -33,7 +33,7 @@ export default class DateTimePicker {
 				next    : 'atum-icon atmi-chevron-right',
 				today   : 'atum-icon atmi-frame-expand',
 				clear   : 'atum-icon atmi-trash',
-				close   : 'atum-icon atmi-cross',
+				close   : 'atum-icon atmi-ok',
 			},
 			minDate          : new Date(), // By default, we are not allowing to select dates before today
 			showClear        : true,

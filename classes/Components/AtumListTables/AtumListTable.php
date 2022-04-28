@@ -3267,10 +3267,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
 				$total          = $this->totalizers[ $column_key ];
 				$total_class    = $total < 0 ? ' class="danger"' : '';
-				$column_display = "<span{$total_class}>" . $total . '</span>';
+				$column_display = "<span{$total_class}>" . round( $total, 2 ) . '</span>';
 			}
 			else {
-				$column_display = self::EMPTY_COL;
+				$column_display = '';
 			}
 
 			if ( $column_key === $primary ) {
