@@ -8773,7 +8773,7 @@ table.atum-list-table tr.totals td.totals-heading span, table.atum-list-table tr
   background-color: transparent;
 }
 
-table.atum-list-table tr.totals td span, table.atum-list-table tr.totals th span, .floatThead-container tr.totals td span, .floatThead-container tr.totals th span, .inbound-stock-list tr.totals td span, .inbound-stock-list tr.totals th span, table.wp-list-table tr.totals td span, table.wp-list-table tr.totals th span {
+table.atum-list-table tr.totals td > span, table.atum-list-table tr.totals th > span, .floatThead-container tr.totals td > span, .floatThead-container tr.totals th > span, .inbound-stock-list tr.totals td > span, .inbound-stock-list tr.totals th > span, table.wp-list-table tr.totals td > span, table.wp-list-table tr.totals th > span {
   display: inline-block;
   font-size: 16px;
   font-weight: bold;
@@ -8785,7 +8785,7 @@ table.atum-list-table tr.totals td span, table.atum-list-table tr.totals th span
   padding: 4px;
 }
 
-table.atum-list-table tr.totals td span.danger, table.atum-list-table tr.totals th span.danger, .floatThead-container tr.totals td span.danger, .floatThead-container tr.totals th span.danger, .inbound-stock-list tr.totals td span.danger, .inbound-stock-list tr.totals th span.danger, table.wp-list-table tr.totals td span.danger, table.wp-list-table tr.totals th span.danger {
+table.atum-list-table tr.totals td > span.danger, table.atum-list-table tr.totals th > span.danger, .floatThead-container tr.totals td > span.danger, .floatThead-container tr.totals th > span.danger, .inbound-stock-list tr.totals td > span.danger, .inbound-stock-list tr.totals th > span.danger, table.wp-list-table tr.totals td > span.danger, table.wp-list-table tr.totals th > span.danger {
   background-color: var(--danger);
 }
 
