@@ -135,8 +135,24 @@ $bs-datetimepicker-text-shadow:                     0 -1px 0 rgba($black, 0.25) 
 		&[data-action] {
 			padding: 0;
 			
+			> span {
+				color: $primary;
+			}
+			
 			&:active {
 				box-shadow: none;
+			}
+		}
+		
+		&[data-action="close"] {
+			> span {
+				border: 1px solid $primary;
+				background-color: transparent;
+				
+				&:hover {
+					background-color: $primary;
+					color: $white;
+				}
 			}
 		}
 		

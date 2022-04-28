@@ -159,7 +159,7 @@ var DateTimePicker = (function () {
                 next: 'atum-icon atmi-chevron-right',
                 today: 'atum-icon atmi-frame-expand',
                 clear: 'atum-icon atmi-trash',
-                close: 'atum-icon atmi-cross',
+                close: 'atum-icon atmi-ok',
             },
             minDate: new Date(),
             showClear: true,

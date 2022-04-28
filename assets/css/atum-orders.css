@@ -5449,9 +5449,23 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding: 0;
 }
 
+.bootstrap-datetimepicker-widget a[data-action] > span {
+  color: #00B8DB;
+}
+
 .bootstrap-datetimepicker-widget a[data-action]:active {
   -webkit-box-shadow: none;
           box-shadow: none;
+}
+
+.bootstrap-datetimepicker-widget a[data-action="close"] > span {
+  border: 1px solid #00B8DB;
+  background-color: transparent;
+}
+
+.bootstrap-datetimepicker-widget a[data-action="close"] > span:hover {
+  background-color: #00B8DB;
+  color: #fff;
 }
 
 .bootstrap-datetimepicker-widget .timepicker-hour, .bootstrap-datetimepicker-widget .timepicker-minute, .bootstrap-datetimepicker-widget .timepicker-second {
