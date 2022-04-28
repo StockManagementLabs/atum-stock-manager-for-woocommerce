@@ -14,6 +14,7 @@ export default class CurrentStockValueWidget {
 		
 		if (this.$currentStockValueWidget.length) {
 			this.onChange();
+			this.$currentStockValueWidget.find('select').first().change();
 		}
 		
 	}

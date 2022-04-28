@@ -71,7 +71,17 @@ class CurrentStockValue extends AtumWidget {
 		}
 		else {
 
-			$current_stock_values = WidgetHelpers::get_items_in_stock();
+			/**
+			 * If too many products exist, the dashboard loading may spend too mucho time.
+			 * $current_stock_values = WidgetHelpers::get_items_in_stock();
+			 */
+
+			// Initialice empty data and load by Ajax later.
+			$current_stock_values = $counters = [
+				'items_stocks_counter'         => 0,
+				'items_purchase_price_total'   => 0,
+				'items_without_purchase_price' => 0,
+			];
 			$config               = $this->get_config();
 
 			Helpers::load_view( 'widgets/current-stock-value', compact( 'config', 'current_stock_values' ) );
