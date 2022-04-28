@@ -1126,8 +1126,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?olimxt");
-  src: url("../fonts/atum-icon-font.eot?olimxt#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?olimxt") format("truetype"), url("../fonts/atum-icon-font.woff?olimxt") format("woff"), url("../fonts/atum-icon-font.svg?olimxt#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?4b0unb");
+  src: url("../fonts/atum-icon-font.eot?4b0unb#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?4b0unb") format("truetype"), url("../fonts/atum-icon-font.woff?4b0unb") format("woff"), url("../fonts/atum-icon-font.svg?4b0unb#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -1142,6 +1142,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-ok:before {
+  content: "";
 }
 
 .atmi-po-pro:before {
