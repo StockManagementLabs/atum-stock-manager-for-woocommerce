@@ -309,16 +309,16 @@ trait WidgetHelpersLegacyTrait {
 				AND p.post_parent IN ( $products_in_stock_sql ) ) ) pist ";
 		}
 
-		$variation_children = "SELECT COUNT(*) FROM $wpdb->posts pch1
+		$variation_children = "SELECT pch1.ID FROM $wpdb->posts pch1
             WHERE pch1.post_parent = p0.ID AND pch1.post_type = 'product_variation'";
-		$unmanaged_children = "SELECT COUNT(*) FROM $wpdb->posts pch2
+		$unmanaged_children = "SELECT pch2.ID FROM $wpdb->posts pch2
             LEFT JOIN $wpdb->postmeta pmchild2 ON pch2.ID = pmchild2.post_id AND pmchild2.meta_key = '_manage_stock'
             WHERE pch2.post_parent = p0.ID AND pmchild2.meta_value = 'no'";
 
 		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', 'CAST( st.meta_value AS DECIMAL(10,6) )' );
-		$stock_field                        = "IF( ($variation_children) = 0 OR ($unmanaged_children) > 0, IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
+		$stock_field                        = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
 		$stock_wo_purchase_price_field      = 'IF( ' . apply_filters( 'atum/dashboard/purchase_price_field', 'apd0.purchase_price > 0' ) . ", 0, $base_stock_field )";
-		$stock_without_purchase_price_field = "IF( ($variation_children) = 0 OR ($unmanaged_children) > 0, $stock_wo_purchase_price_field, 0 )";
+		$stock_without_purchase_price_field = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), $stock_wo_purchase_price_field, 0 )";
 
 		$items_in_stock_sql = apply_filters( 'atum/dashboard/current_stock_query_parts', array(
 			'fields' => array(
@@ -334,10 +334,10 @@ trait WidgetHelpersLegacyTrait {
 			'where'  => "p0.ID IN ( $products_in_stock_sql )",
 		) );
 
-		$sql_string = 'SELECT ' . implode( ', ', $items_in_stock_sql['fields'] )
-			. " FROM $wpdb->posts p0 " . implode( ' ', $items_in_stock_sql['join'] )
-			. ' WHERE ' . $items_in_stock_sql['where']
-			. ' GROUP BY ' . apply_filters( 'atum/dashboard/current_stock_query_group_by', 'p0.ID' );
+		$sql_string = 'SELECT ' . implode( ",\n", $items_in_stock_sql['fields'] )
+			. "\n\nFROM $wpdb->posts p0 " . implode( "\n\t", $items_in_stock_sql['join'] )
+			. "\n\nWHERE " . $items_in_stock_sql['where']
+			. "\n\nGROUP BY " . apply_filters( 'atum/dashboard/current_stock_query_group_by', 'p0.ID' );
 
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$counters = (array) $wpdb->get_row( "SELECT SUM( t.items_stocks_counter ) items_stocks_counter,
