@@ -125,8 +125,10 @@ export default class DateTimePicker {
 		} )
 		.on( 'dp.show', ( evt: any ) => {
 
+			const $input: JQuery = $( evt.currentTarget );
+
 			// Hide others opened.
-			$selector.not( $( evt.currentTarget ) ).filter( ( index: number, elem: Element ) => {
+			$selector.not( $input ).filter( ( index: number, elem: Element ) => {
 
 				if ( $( elem ).children( '.bootstrap-datetimepicker-widget' ).length ) {
 					return true;
@@ -137,6 +139,11 @@ export default class DateTimePicker {
 			} ).each( ( index: number, elem: Element ) => {
 				$( elem ).data( 'DateTimePicker' ).hide();
 			} );
+
+			// Check the min and max dates when it's a range field.
+			if ( $input.data( 'range-max' ) || $input.data( 'range-min' ) ) {
+				this.checkRange( $input );
+			}
 
 		} );
 		
@@ -159,6 +166,40 @@ export default class DateTimePicker {
 
 		} );
 		
+	}
+
+	/**
+	 * Check the min and max dates when it's a range field.
+	 *
+	 * @param {JQuery} $dpInput
+	 */
+	checkRange( $dpInput: JQuery ) {
+
+		const dp: any = $dpInput.data( 'DateTimePicker' );
+
+		// If the range min field has been changed.
+		if ( $dpInput.data( 'range-max' ) ) {
+
+			const $rangeMaxField: JQuery = $( $dpInput.data( 'range-max' ) );
+
+			if ( $rangeMaxField.length ) {
+				const rangeMaxDp = $rangeMaxField.data( 'DateTimePicker' );
+				dp.maxDate( rangeMaxDp.date() || false );
+			}
+
+		}
+		// If the range max field has been changed.
+		else if ( $dpInput.data( 'range-min' ) ) {
+
+			const $rangeMinField: JQuery = $( $dpInput.data( 'range-min' ) );
+
+			if ( $rangeMinField.length ) {
+				const rangeMinDp = $rangeMinField.data( 'DateTimePicker' );
+				dp.minDate( rangeMinDp.date() || false );
+			}
+
+		}
+
 	}
 	
 }
