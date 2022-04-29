@@ -5904,7 +5904,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   font-size: .8em;
   height: 20px;
   line-height: 20px;
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td.day {
@@ -5919,7 +5919,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .bootstrap-datetimepicker-widget table td.old, .bootstrap-datetimepicker-widget table td.new {
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td.today {
@@ -5975,7 +5975,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 
 .bootstrap-datetimepicker-widget table td span.old, .bootstrap-datetimepicker-widget table td i.old {
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td span.disabled, .bootstrap-datetimepicker-widget table td span.disabled:hover, .bootstrap-datetimepicker-widget table td i.disabled, .bootstrap-datetimepicker-widget table td i.disabled:hover {

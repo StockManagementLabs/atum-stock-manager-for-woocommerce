@@ -5596,7 +5596,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   font-size: .8em;
   height: 20px;
   line-height: 20px;
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td.day {
@@ -5611,7 +5611,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 }
 
 .bootstrap-datetimepicker-widget table td.old, .bootstrap-datetimepicker-widget table td.new {
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td.today {
@@ -5667,7 +5667,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 }
 
 .bootstrap-datetimepicker-widget table td span.old, .bootstrap-datetimepicker-widget table td i.old {
-  color: #dee2e6;
+  color: #adb5bd;
 }
 
 .bootstrap-datetimepicker-widget table td span.disabled, .bootstrap-datetimepicker-widget table td span.disabled:hover, .bootstrap-datetimepicker-widget table td i.disabled, .bootstrap-datetimepicker-widget table td i.disabled:hover {
