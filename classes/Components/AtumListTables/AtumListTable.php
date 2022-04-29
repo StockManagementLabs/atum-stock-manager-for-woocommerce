@@ -3434,7 +3434,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 				<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
-					<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : ''; ?>">
+					<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : '' ?>">
 
 						<div class="alignleft actions bulkactions">
 							<?php $this->bulk_actions( $which ); ?>

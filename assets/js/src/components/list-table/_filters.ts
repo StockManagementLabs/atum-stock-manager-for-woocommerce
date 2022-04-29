@@ -2,14 +2,14 @@
    FILTERS FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings';
+import DateTimePicker from '../_date-time-picker';
 import Globals from './_globals';
 import ListTable from './_list-table';
 import Router from './_router';
-import Tooltip from '../_tooltip';
-import DateTimePicker from '../_date-time-picker';
+import Settings from '../../config/_settings';
 import ShowFilters from './_show-filters';
 import Swal from 'sweetalert2';
+import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 

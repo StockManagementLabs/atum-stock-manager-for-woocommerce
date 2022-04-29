@@ -3208,15 +3208,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/list-table/_locations-tree */ "./assets/js/src/components/list-table/_locations-tree.ts");
 /* harmony import */ var _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/_table-cell-popovers */ "./assets/js/src/components/_table-cell-popovers.ts");
 /* harmony import */ var _components_list_table_router__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/list-table/_router */ "./assets/js/src/components/list-table/_router.ts");
-/* harmony import */ var _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/list-table/_sales-last-days */ "./assets/js/src/components/list-table/_sales-last-days.ts");
-/* harmony import */ var _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/list-table/_scroll-bar */ "./assets/js/src/components/list-table/_scroll-bar.ts");
-/* harmony import */ var _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/list-table/_search-in-column */ "./assets/js/src/components/list-table/_search-in-column.ts");
-/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* harmony import */ var _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/list-table/_sticky-columns */ "./assets/js/src/components/list-table/_sticky-columns.ts");
-/* harmony import */ var _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/list-table/_sticky-header */ "./assets/js/src/components/list-table/_sticky-header.ts");
-/* harmony import */ var _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/list-table/_table-buttons */ "./assets/js/src/components/list-table/_table-buttons.ts");
-/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
-/* harmony import */ var _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/list-table/_row-actions */ "./assets/js/src/components/list-table/_row-actions.ts");
+/* harmony import */ var _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/list-table/_row-actions */ "./assets/js/src/components/list-table/_row-actions.ts");
+/* harmony import */ var _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/list-table/_sales-last-days */ "./assets/js/src/components/list-table/_sales-last-days.ts");
+/* harmony import */ var _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/list-table/_scroll-bar */ "./assets/js/src/components/list-table/_scroll-bar.ts");
+/* harmony import */ var _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/list-table/_search-in-column */ "./assets/js/src/components/list-table/_search-in-column.ts");
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* harmony import */ var _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/list-table/_sticky-columns */ "./assets/js/src/components/list-table/_sticky-columns.ts");
+/* harmony import */ var _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/list-table/_sticky-header */ "./assets/js/src/components/list-table/_sticky-header.ts");
+/* harmony import */ var _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/list-table/_table-buttons */ "./assets/js/src/components/list-table/_table-buttons.ts");
+/* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 
@@ -3245,7 +3245,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_19__["default"]('atumListVars', {
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_20__["default"]('atumListVars', {
         ajaxFilter: 'yes',
         view: 'all_stock',
         order: 'desc',
@@ -3254,27 +3254,27 @@ jQuery(function ($) {
     });
     var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_10__["default"](settings);
     var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_8__["default"]();
-    var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_23__["default"]();
-    var stickyCols = new _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_20__["default"](settings, globals);
+    var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_24__["default"]();
+    var stickyCols = new _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_21__["default"](settings, globals);
     var listTable = new _components_list_table_list_table__WEBPACK_IMPORTED_MODULE_12__["default"](settings, globals, tooltip, enhancedSelect, stickyCols);
     var router = new _components_list_table_router__WEBPACK_IMPORTED_MODULE_15__["default"](settings, globals, listTable);
-    var stickyHeader = new _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_21__["default"](settings, globals, stickyCols, tooltip);
+    var stickyHeader = new _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_22__["default"](settings, globals, stickyCols, tooltip);
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
     var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_14__["default"](settings, dateTimePicker, enhancedSelect);
     if (!_utils_utils__WEBPACK_IMPORTED_MODULE_25__["default"].checkRTL('isRTL')) {
-        new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_17__["default"](globals);
+        new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_18__["default"](globals);
     }
     new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
-    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_18__["default"](settings, globals);
+    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__["default"](settings, globals);
     new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
     new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
     new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);
     new _components_light_box__WEBPACK_IMPORTED_MODULE_11__["default"]();
-    new _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_22__["default"](globals, tooltip, stickyCols, stickyHeader);
-    new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_16__["default"](globals, router, enhancedSelect);
+    new _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_23__["default"](globals, tooltip, stickyCols, stickyHeader);
+    new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_17__["default"](globals, router, enhancedSelect);
     new _components_list_table_bulk_actions__WEBPACK_IMPORTED_MODULE_3__["default"](settings, globals, listTable);
     new _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_13__["default"](settings, globals, tooltip);
-    new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_24__["default"](settings, globals);
+    new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_16__["default"](settings, globals);
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))

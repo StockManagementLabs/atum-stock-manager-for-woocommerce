@@ -32,6 +32,7 @@ import ListTable from './components/list-table/_list-table';
 import LocationsTree from './components/list-table/_locations-tree';
 import TableCellPopovers from './components/_table-cell-popovers';
 import Router from './components/list-table/_router';
+import RowActions from './components/list-table/_row-actions';
 import SalesLastDays from './components/list-table/_sales-last-days';
 import ScrollBar from './components/list-table/_scroll-bar';
 import SearchInColumn from './components/list-table/_search-in-column';
@@ -40,7 +41,6 @@ import StickyColumns from './components/list-table/_sticky-columns';
 import StickyHeader from './components/list-table/_sticky-header';
 import TableButtons from './components/list-table/_table-buttons';
 import Tooltip from './components/_tooltip';
-import RowActions from './components/list-table/_row-actions';
 import Utils from './utils/_utils';
 
 

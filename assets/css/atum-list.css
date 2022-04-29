@@ -7351,6 +7351,16 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   position: relative;
 }
 
+.tablenav.top .filters-container-box #filters_container, .tablenav.top .filters-container-box .actions-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+}
+
 @media screen and (max-width: 1400px) {
   .tablenav.top .filters-container-box.no-pagination.no-submit {
     width: calc(100% - 100px);
@@ -7884,9 +7894,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
   height: 30px;
-  margin: 0 0 0 5px;
   float: none;
-  vertical-align: middle;
 }
 
 .atum-list-wrapper .actions input .select2-selection__arrow, #posts-filter .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection__arrow, #posts-filter .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection__arrow, #posts-filter .actions .select2-container .select2-selection__arrow {
@@ -8074,7 +8082,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
       flex-wrap: nowrap;
   cursor: -webkit-grab;
   cursor: grab;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
@@ -8093,6 +8102,10 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 .nav-with-scroll-effect.dragging a {
   pointer-events: none;
+}
+
+.nav-with-scroll-effect .input-group {
+  position: static;
 }
 
 .overflow-opacity-effect-right, .overflow-opacity-effect-left {
