@@ -2,9 +2,9 @@
    ROUTER FOR LIST TABLES
    ======================================= */
 
-import Settings from '../../config/_settings';
 import Globals from './_globals';
 import ListTable from './_list-table';
+import Settings from '../../config/_settings';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
@@ -92,6 +92,13 @@ export default class Router {
 		
 		this.bindEvents();
 		this.addHooks();
+
+		// Add this component to the global scope so can be accessed by other add-ons.
+		if ( ! window.hasOwnProperty( 'atum' ) ) {
+			window[ 'atum' ] = {};
+		}
+
+		window[ 'atum' ][ 'Router' ] = this;
 	
 	}
 
