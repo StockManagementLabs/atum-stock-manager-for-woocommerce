@@ -50,9 +50,7 @@ export default class ScrollBar {
 
 		// Reload the scroll bar after the List Table is updated.
 		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => {
-			if ( this.globals.$collapsedGroups === null ) {
-				this.reloadScrollbar();
-			}
+			this.reloadScrollbar();
 		} );
 
 		// Reload the scroll bar when the column groups are restored.
