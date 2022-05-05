@@ -1495,6 +1495,37 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Column low_stock_threshold column
+	 *
+	 * @since 1.9.16
+	 *
+	 * @param \WP_Post $item      The WooCommerce product post.
+	 * @param bool     $editable  Optional. Whether the current column is editable.
+	 *
+	 * @return double
+	 */
+	protected function column_calc_low_stock_threshold( $item, $editable = TRUE ) {
+
+		$low_stock_threshold = $this->list_item->get_low_stock_amount();
+		$low_stock_threshold = $low_stock_threshold ?: self::EMPTY_COL;
+
+		// Check type and managed stock at product level (override $low_stock_threshold value if set and not allowed).
+		$product_type = $this->list_item->get_type();
+		if ( ! in_array( $product_type, Globals::get_product_types_with_stock() ) ) {
+			$low_stock_threshold = self::EMPTY_COL;
+		}
+
+		$manage_stock = $this->list_item->get_manage_stock();
+
+		if ( 'no' === $manage_stock ) {
+			$low_stock_threshold = self::EMPTY_COL;
+		}
+
+		return apply_filters( 'atum/list_table/column_low_stock_threshold', $low_stock_threshold, $item, $this->list_item, $this );
+
+	}
+
+	/**
 	 * Column Weight column
 	 *
 	 * @since 1.4.6
