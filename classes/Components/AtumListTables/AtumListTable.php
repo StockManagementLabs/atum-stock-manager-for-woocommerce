@@ -1512,13 +1512,29 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Check type and managed stock at product level (override $low_stock_threshold value if set and not allowed).
 		$product_type = $this->list_item->get_type();
 		if ( ! in_array( $product_type, Globals::get_product_types_with_stock() ) ) {
+			$editable            = FALSE;
 			$low_stock_threshold = self::EMPTY_COL;
 		}
 
 		$manage_stock = $this->list_item->get_manage_stock();
 
 		if ( 'no' === $manage_stock ) {
+			$editable            = FALSE;
 			$low_stock_threshold = self::EMPTY_COL;
+		}
+
+		if ( $editable ) {
+
+			$args = array(
+				'meta_key'   => 'low_stock_threshold',
+				'value'      => $low_stock_threshold,
+				'input_type' => 'number',
+				'tooltip'    => esc_attr__( 'Click to edit the low stock threshold', ATUM_TEXT_DOMAIN ),
+				'cell_name'  => esc_attr__( 'Low Stock Threshold', ATUM_TEXT_DOMAIN ),
+			);
+
+			$low_stock_threshold = self::get_editable_column( $args );
+
 		}
 
 		return apply_filters( 'atum/list_table/column_low_stock_threshold', $low_stock_threshold, $item, $this->list_item, $this );
