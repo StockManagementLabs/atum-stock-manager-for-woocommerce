@@ -1504,7 +1504,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return double
 	 */
-	protected function column_calc_low_stock_threshold( $item, $editable = TRUE ) {
+	protected function column__low_stock_threshold( $item, $editable = TRUE ) {
 
 		$low_stock_threshold = $this->list_item->get_low_stock_amount();
 		$low_stock_threshold = $low_stock_threshold ?: self::EMPTY_COL;
