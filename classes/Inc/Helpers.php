@@ -2159,7 +2159,11 @@ final class Helpers {
 				case substr( Globals::PURCHASE_PRICE_KEY, 1 ):
 					$product->set_purchase_price( $meta_value );
 					break;
-				
+
+				case 'low_stock_threshold':
+					$product->set_low_stock_amount( $meta_value );
+					break;
+
 				// Any other text meta.
 				default:
 					// These fields are only needed for WPML compatibility.

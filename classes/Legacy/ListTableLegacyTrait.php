@@ -113,9 +113,6 @@ trait ListTableLegacyTrait {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		// Add the orderby args.
-		$args = $this->parse_orderby_args( $args );
-
 		/**
 		 * Searching
 		 */
@@ -154,6 +151,9 @@ trait ListTableLegacyTrait {
 
 		// Build "Views Filters" and calculate totals.
 		$this->set_views_data_legacy( $args );
+
+		// Add the orderby args.
+		$args = $this->parse_orderby_args( $args );
 
 		$allow_query = TRUE;
 

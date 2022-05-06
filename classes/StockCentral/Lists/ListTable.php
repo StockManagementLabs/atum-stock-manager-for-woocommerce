@@ -73,6 +73,7 @@ class ListTable extends AtumListTable {
 			'_weight',
 			'_stock',
 			'_out_stock_threshold',
+			'_low_stock_threshold',
 			'_inbound_stock',
 			'_stock_on_hold',
 			'_reserved_stock',
@@ -210,6 +211,7 @@ class ListTable extends AtumListTable {
 				'members' => array(
 					'_stock',
 					'_out_stock_threshold',
+					'_low_stock_threshold',
 					'_inbound_stock',
 					'_stock_on_hold',
 					'_reserved_stock',
@@ -318,6 +320,7 @@ class ListTable extends AtumListTable {
 			'_weight'              => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
 			'_out_stock_threshold' => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
+			'_low_stock_threshold' => __( 'Low Stock Threshold', ATUM_TEXT_DOMAIN ),
 			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'_stock_on_hold'       => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'_reserved_stock'      => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),

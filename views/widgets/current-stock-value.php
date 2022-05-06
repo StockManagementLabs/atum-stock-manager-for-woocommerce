@@ -55,7 +55,7 @@ use Atum\Dashboard\WidgetHelpers;
 			</div>
 		</div>
 
-		<div class="items-without-purchase-price" <?php echo esc_html( ( 0 !== $current_stock_values['items_without_purchase_price'] ) ? '' : 'style="display: none;"' ); ?>>
+		<div class="items-without-purchase-price" style="display: none;">
 			<i class="atmi-warning"></i>
 			<span class="items_without_purchase_price">
 				<?php echo esc_html( $current_stock_values['items_without_purchase_price'] ); ?>

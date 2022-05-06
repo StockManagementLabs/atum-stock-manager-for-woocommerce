@@ -219,7 +219,7 @@ trait WidgetHelpersLegacyTrait {
 				array(
 					'taxonomy' => 'product_type',
 					'field'    => 'slug',
-					'terms'    => [ 'grouped', 'bundle' ],
+					'terms'    => [ 'grouped', 'bundle', 'composite' ],
 					'operator' => 'NOT IN',
 				),
 			),
@@ -314,11 +314,14 @@ trait WidgetHelpersLegacyTrait {
 		$unmanaged_children = "SELECT pch2.ID FROM $wpdb->posts pch2
             LEFT JOIN $wpdb->postmeta pmchild2 ON pch2.ID = pmchild2.post_id AND pmchild2.meta_key = '_manage_stock'
             WHERE pch2.post_parent = p0.ID AND pmchild2.meta_value = 'no'";
+		$children_with_pp   = "SELECT pch3.ID FROM $wpdb->posts pch3
+			LEFT JOIN $atum_product_data_table apd3 ON pch3.ID = apd3.product_id
+            WHERE pch3.post_parent = p0.ID AND apd3.purchase_price IS NOT NULL AND apd3.purchase_price > 0";
 
 		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', 'CAST( st.meta_value AS DECIMAL(10,6) )' );
 		$stock_field                        = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
 		$stock_wo_purchase_price_field      = 'IF( ' . apply_filters( 'atum/dashboard/purchase_price_field', 'apd0.purchase_price > 0' ) . ", 0, $base_stock_field )";
-		$stock_without_purchase_price_field = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), $stock_wo_purchase_price_field, 0 )";
+		$stock_without_purchase_price_field = "IF( NOT EXISTS($children_with_pp) AND (NOT EXISTS($variation_children) OR EXISTS($unmanaged_children)), $stock_wo_purchase_price_field, 0 )";
 
 		$items_in_stock_sql = apply_filters( 'atum/dashboard/current_stock_query_parts', array(
 			'fields' => array(

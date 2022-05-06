@@ -2717,9 +2717,7 @@ var ScrollBar = (function () {
     ScrollBar.prototype.addHooks = function () {
         var _this = this;
         this.wpHooks.addAction('atum_listTable_tableUpdated', 'atum', function () {
-            if (_this.globals.$collapsedGroups === null) {
-                _this.reloadScrollbar();
-            }
+            _this.reloadScrollbar();
         });
         this.wpHooks.addAction('atum_columnGroups_groupsRestored', 'atum', function () { return _this.reloadScrollbar(); });
     };
