@@ -194,6 +194,45 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.17`
+
+*2022-05-06*
+
+**Features**
+
+* Calculate values in CurrentStockValue widget by query to improve performance.
+* Control all the products by default when installing ATUM for the first time.
+* Improved the datetimepicker to allow range pickers.
+* Added low stock threshold column to Stock Central.
+* Sortable low stock threshold column.
+* Editable low stock threshold column at ATUM ListTables.
+
+**Changes**
+
+* Excluded PHPCS rule.
+* Refactoring.
+* Check if a WP_CLI is callable before using its add_hook method.
+* CSS adjustments.
+* Do not show the empty col char within the totals row in SC.
+* Round totals in SC with 2 decimals max.
+* Updated ATUM icons font.
+* Changed the close icon on detepickers to an OK button.
+* Current Stock Value widget data loaded by ajax.
+* Set the "old" days color on datepickers darken.
+* Exclude managed variables having children with purchase price when calculating stock without purchase price.
+* Hide notice by default in Current Stock Value widget.
+* Removed premium add-ons from readme.
+
+**Fixes**
+
+* Fixed recurring tools in ATUM Settings.
+* Fixed datepickers not showing on List Tables' filters bar.
+* Fixed LIST table's height not refresehd in some cases.
+* Fixed number formatting for the current stock value widget.
+* Fixed meta key when sorting by low stock threshold column.
+
+---
+
 `1.9.16`
 
 *2022-04-26*
