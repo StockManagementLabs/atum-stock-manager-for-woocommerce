@@ -4994,6 +4994,12 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Order regular meta keys.
 			else {
 
+				switch ( $orderby ) {
+					case '_low_stock_threshold':
+						$orderby = '_low_stock_amount';
+						break;
+				}
+
 				// All the meta key based columns are numeric (in ATUM free) except the SKU.
 				// TODO: PERHAPS WE SHOULD MANAGE TYPES FOR ALL SORTABLE META KEYS WITHIN A CLASS PROP.
 				$args['orderby']  = apply_filters( 'atum/list_table/meta_key_orderby', '_sku' === $orderby ? 'meta_value' : 'meta_value_num', $orderby, $this );
