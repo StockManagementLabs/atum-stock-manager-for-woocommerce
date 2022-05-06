@@ -6147,6 +6147,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   z-index: unset;
 }
 
+.swal2-container.atum-modal .atum-modal-content {
+  position: relative;
+  min-height: 75px;
+}
+
 .swal2-container.atum-modal .atum-modal-content .note {
   text-align: left;
   font-size: 12px;

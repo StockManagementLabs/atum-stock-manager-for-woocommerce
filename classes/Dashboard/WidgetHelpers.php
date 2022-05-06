@@ -1018,20 +1018,31 @@ final class WidgetHelpers {
 	protected static function format_counters_items_in_stock( $counters ) {
 
 		// Format counters.
-		foreach ( $counters as $index => $counter ) {
+		foreach ( $counters as $key => $counter ) {
 
-			if ( 'items_purchase_price_total' === $index ) {
-				$counters[ $index ] = wc_price( $counter );
+			if ( 'items_purchase_price_total' === $key ) {
+				$counters[ $key ] = wc_price( $counter );
 			}
 			else {
 
-				$num_parts          = explode( '.', (string) $counter );
-				$counters[ $index ] = number_format(
-					$counter,
-					isset( $num_parts[1] ) ? strlen( $num_parts[1] ) : 0,
-					wc_get_price_decimal_separator(),
-					wc_get_price_thousand_separator()
-				);
+				$stock_decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
+
+				if ( $stock_decimals <= 0 ) {
+					$counters[ $key ] = absint( $counter );
+				}
+				else {
+
+					$counters[ $key ] = number_format(
+						$counter * 1.02,
+						$stock_decimals,
+						wc_get_price_decimal_separator(),
+						wc_get_price_thousand_separator()
+					);
+
+					// Trim trailing zeros.
+					$counters[ $key ] = rtrim( rtrim( $counters[ $key ], '0' ), '.' );
+
+				}
 
 			}
 
