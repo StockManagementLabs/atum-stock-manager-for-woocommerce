@@ -625,16 +625,25 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Get the direct link for the PO's PDF generation
+	 * Get the direct link for the PO's PDF/HTML generation
 	 *
 	 * @since 1.6.6
 	 *
-	 * @param int $po_id
+	 * @param int  $po_id
+	 * @param bool $return_html
 	 *
 	 * @return string
 	 */
-	public static function get_pdf_generation_link( $po_id ) {
-		return wp_nonce_url( admin_url( "admin-ajax.php?action=atum_order_pdf&atum_order_id={$po_id}" ), 'atum-order-pdf' );
+	public static function get_pdf_generation_link( $po_id, $return_html = FALSE ) {
+
+		$url = admin_url( "admin-ajax.php?action=atum_order_pdf&atum_order_id={$po_id}" );
+
+		if ( $return_html ) {
+			$url = add_query_arg( 'return_html', 1, $url );
+		}
+
+		return wp_nonce_url( $url, 'atum-order-pdf' );
+
 	}
 
 	/**
@@ -659,8 +668,8 @@ class PurchaseOrders extends AtumOrderPostType {
 			 *
 			 * @var POExport $po_export
 			 */
-			$po_export  = new $po_export_class( $atum_order_id );
-			$pdf_output = $po_export->generate_pdf();
+			$po_export  = new $po_export_class( $atum_order_id, isset( $_GET['return_html'] ) && 1 === absint( $_GET['return_html'] ) );
+			$pdf_output = $po_export->generate();
 
 			wp_die( is_wp_error( $pdf_output ) ? $pdf_output->get_error_message() : $pdf_output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 

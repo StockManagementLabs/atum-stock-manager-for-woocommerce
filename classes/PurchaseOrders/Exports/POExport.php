@@ -46,17 +46,26 @@ class POExport extends PurchaseOrder {
 	 */
 	private $debug_mode = FALSE;
 
+	/**
+	 * Whether to return the HTML code instead of a PDF
+	 *
+	 * @var bool
+	 */
+	private $return_html;
+
 	
 	/**
 	 * POExport constructor
 	 *
 	 * @since 1.3.9
 	 *
-	 * @param int $id
+	 * @param int  $id   The PO ID.
+	 * @param bool $html Optional. Whether to return the HTML code instead of a PDF.
 	 */
-	public function __construct( $id = 0 ) {
-		
-		$post_type = get_post_type( $id );
+	public function __construct( $id = 0, bool $html = FALSE ) {
+
+		$post_type         = get_post_type( $id );
+		$this->return_html = $html;
 		
 		if ( PurchaseOrders::get_post_type() !== $post_type ) {
 			/* translators: the post ID */
@@ -243,11 +252,11 @@ class POExport extends PurchaseOrder {
 	 * @since 1.9.1
 	 */
 	public function get_debug_mode() {
-		return $this->debug_mode;
+		return $this->debug_mode || ( ! empty( $_GET['debug'] ) && 1 === absint( $_GET['debug'] ) );
 	}
 
 	/**
-	 * Generate the PO PDF
+	 * Generate the PO PDF/HTML
 	 *
 	 * @since 1.9.1
 	 *
@@ -257,13 +266,13 @@ class POExport extends PurchaseOrder {
 	 *
 	 * @throws \Mpdf\MpdfException
 	 */
-	public function generate_pdf( $destination_mode = Destination::INLINE ) {
+	public function generate( $destination_mode = Destination::INLINE ) {
 
 		try {
 
-			$is_debug_mode = TRUE === $this->debug_mode;
-			$uploads       = wp_upload_dir();
-			$temp_dir      = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/po_export/temp_pdf_dir', '/atum' );
+			$return_html = TRUE === $this->debug_mode || TRUE === $this->return_html;
+			$uploads     = wp_upload_dir();
+			$temp_dir    = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/po_export/temp_pdf_dir', '/atum' );
 
 			if ( ! is_dir( $temp_dir ) ) {
 
@@ -277,7 +286,7 @@ class POExport extends PurchaseOrder {
 
 			}
 
-			do_action( 'atum/purchase_orders/po_export/generate_pdf', $this->id );
+			do_action( 'atum/purchase_orders/po_export/generate', $this->id );
 
 			$mpdf = new Mpdf( [
 				'mode'    => 'utf-8',
@@ -294,13 +303,13 @@ class POExport extends PurchaseOrder {
 
 			$mpdf->default_available_fonts = $mpdf->available_unifonts;
 
-			$debug_html = '';
-			$css        = $this->get_stylesheets( $is_debug_mode ? 'url' : 'path' );
+			$html = '';
+			$css  = $this->get_stylesheets( $return_html ? 'url' : 'path' );
 
 			foreach ( $css as $file ) {
 
-				if ( $is_debug_mode ) {
-					$debug_html .= '<link rel="stylesheet" href="' . $file . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+				if ( $return_html ) {
+					$html .= '<link rel="stylesheet" href="' . $file . '" media="all">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
 				}
 				else {
 					$stylesheet = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
@@ -309,10 +318,10 @@ class POExport extends PurchaseOrder {
 
 			}
 
-			if ( $is_debug_mode ) {
-				$debug_html .= $this->get_content();
+			if ( $return_html ) {
+				$html .= $this->get_content();
 
-				return $debug_html;
+				return $html;
 			}
 
 			$mpdf->WriteHTML( $this->get_content() );

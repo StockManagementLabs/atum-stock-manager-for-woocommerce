@@ -27,6 +27,8 @@
 	}
 	
 	.atum-modal-content {
+		position: relative;
+		min-height: 75px;
 		
 		.note {
 			text-align: left;
