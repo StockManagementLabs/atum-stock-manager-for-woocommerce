@@ -181,6 +181,10 @@ export default class TableCellPopovers extends PopoverBase{
 		if ( $metaCell.data( 'has-datepicker' ) === 'yes' ) {
 			$input.addClass( 'atum-datepicker' );
 
+			if ( typeof $metaCell.data( 'value-in-placeholder' ) !== 'undefined' ) {
+				$input.attr( 'placeholder', value );
+			}
+
 			if ( typeof $metaCell.data( 'date-format' ) !== 'undefined' ) {
 				$input.data( 'date-format', $metaCell.data( 'date-format' ) );
 			}
