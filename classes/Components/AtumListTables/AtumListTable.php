@@ -5147,4 +5147,20 @@ abstract class AtumListTable extends \WP_List_Table {
 		return FALSE;
 	}
 
+	/**
+	 * Prepare the transient args used within List Tables for the table results
+	 *
+	 * @since 1.9.18
+	 *
+	 * @return array
+	 */
+	protected function get_transient_args() {
+
+		$request_params = $_GET;
+		unset( $request_params['security'], $request_params['action'] );
+
+		return $request_params;
+
+	}
+
 }

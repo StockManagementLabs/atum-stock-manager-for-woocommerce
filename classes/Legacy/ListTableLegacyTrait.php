@@ -357,7 +357,7 @@ trait ListTableLegacyTrait {
 		unset( $args['paged'] );
 
 		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERALLY TO AVOID REPETITIVE WORK.
-		$all_transient = AtumCache::get_transient_key( 'list_table_all', [ $args, $this->wc_query_data, $this->atum_query_data ] );
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', $this->get_transient_args() );
 		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
@@ -542,7 +542,7 @@ trait ListTableLegacyTrait {
 				'type'  => 'CHAR',
 			);
 
-			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', [ $products_args, $this->wc_query_data, $this->atum_query_data ] );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $this->get_transient_args() );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
 			if ( empty( $products_in_stock ) && ! empty( $products ) ) {
@@ -576,7 +576,7 @@ trait ListTableLegacyTrait {
 				'type'  => 'CHAR',
 			);
 
-			$backorders_transient = AtumCache::get_transient_key( 'list_table_backorders', [ $products_args, $this->wc_query_data, $this->atum_query_data ] );
+			$backorders_transient = AtumCache::get_transient_key( 'list_table_backorders', $this->get_transient_args() );
 			$products_backorders  = AtumCache::get_transient( $backorders_transient );
 
 			if ( empty( $products_backorders ) && ! empty( $products_not_stock ) ) {
@@ -603,7 +603,7 @@ trait ListTableLegacyTrait {
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', [ $args, $this->wc_query_data, $this->atum_query_data ] );
+				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', $this->get_transient_args() );
 				$products_restock_status  = AtumCache::get_transient( $restock_status_transient );
 
 				if ( empty( $products_restock_status ) ) {
