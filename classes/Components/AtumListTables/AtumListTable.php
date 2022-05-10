@@ -1921,6 +1921,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * @var string $tooltip_position
 		 * @var string $cell_name
 		 * @var array  $extra_data
+		 * @var string $extra_classes
 		 */
 		extract( wp_parse_args( $args, array(
 			'meta_key'         => '',
@@ -1932,6 +1933,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'tooltip_position' => 'top',
 			'cell_name'        => '',
 			'extra_data'       => array(),
+			'extra_classes'    => '',
 		) ) );
 
 		$extra_meta_data = ! empty( $extra_meta ) ? ' data-extra-meta="' . htmlspecialchars( wp_json_encode( $extra_meta ), ENT_QUOTES, 'UTF-8' ) . '"' : '';
@@ -1940,7 +1942,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// phpcs:disable Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed
 		ob_start(); ?>
-		<span class="atum-tooltip" title="<?php echo esc_attr( $tooltip ) ?>" data-bs-placement="<?php echo esc_attr( $tooltip_position ) ?>">
+		<span class="atum-tooltip<?php echo esc_attr( $extra_classes ) ?>" title="<?php echo esc_attr( $tooltip ) ?>" data-bs-placement="<?php echo esc_attr( $tooltip_position ) ?>">
 			<span class="set-meta" data-meta="<?php echo esc_attr( $meta_key ) ?>"
 				<?php echo $symbol_data . $extra_meta_data . $extra_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				data-input-type="<?php echo esc_attr( $input_type ) ?>" data-cell-name="<?php echo esc_attr( $cell_name ) ?>"
@@ -3814,7 +3816,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Prevent keyUp problems.
 		// Scenario: do a search with s and search_column, clean s, change search_column... and you will get nothing (s still set on url).
-		if ( empty( trim( $_REQUEST['s'] ) ) ) {
+		if ( empty( trim( $_REQUEST['s'] ) ) && '0' !== trim( $_REQUEST['s'] ) ) {
 			return ' AND ( 1 = 1 )';
 		}
 
