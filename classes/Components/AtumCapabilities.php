@@ -101,6 +101,10 @@ class AtumCapabilities {
 		'delete_location_terms',
 		'assign_location_terms',
 
+		// Barcode caps.
+		'edit_barcode',
+		'view_barcode',
+
 		// Other caps.
 		'export_data',
 		'view_statistics',

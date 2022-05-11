@@ -62,6 +62,7 @@ trait AtumDataStoreCommonTrait {
 			'atum_stock_status',
 			'restock_status',
 			'sales_update_date',
+			'barcode',
 		) );
 
 		// Columns data need to be converted to datetime.
@@ -99,6 +100,7 @@ trait AtumDataStoreCommonTrait {
 			'has_location',
 			'update_date',
 			'sales_update_date',
+			'barcode',
 		) );
 
 		// We should make an insert if the returning row is empty or has none of the ATUM columns.

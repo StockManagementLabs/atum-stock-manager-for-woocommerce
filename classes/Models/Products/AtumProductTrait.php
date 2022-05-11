@@ -52,6 +52,7 @@ trait AtumProductTrait {
 		'atum_stock_status'             => 'instock',
 		'restock_status'                => NULL,
 		'sales_update_date'             => NULL,
+		'barcode'                       => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'             => NULL, // PL.
 		'available_to_purchase'         => NULL, // PL.
@@ -377,6 +378,20 @@ trait AtumProductTrait {
 	public function get_sales_update_date( $context = 'view' ) {
 		return $this->get_prop( 'sales_update_date', $context );
 	}
+
+	/**
+	 * Returns the barcode.
+	 *
+	 * @since 1.9.18
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string|NULL the barcode or null if it isn't set.
+	 */
+	public function get_barcode( $context = 'view' ) {
+		return $this->get_prop( 'barcode', $context );
+	}
+
 
 	/****************************************
 	 * EXTRA GETTERS USED BY PREMIUM ADD-ONS
@@ -924,6 +939,18 @@ trait AtumProductTrait {
 	public function set_sales_update_date( $sales_update_date = NULL ) {
 		$this->set_date_prop( 'sales_update_date', $sales_update_date );
 	}
+
+	/**
+	 * Set the product's barcode.
+	 *
+	 * @since 1.9.18
+	 *
+	 * @param string $barcode
+	 */
+	public function set_barcode( $barcode ) {
+		$this->set_prop( 'barcode', sanitize_text_field( $barcode ) );
+	}
+
 
 	/****************************************
 	 * EXTRA SETTERS USED BY PREMIUM ADD-ONS

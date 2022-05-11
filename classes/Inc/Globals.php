@@ -121,22 +121,22 @@ final class Globals {
 	const ATUM_CONTROL_STOCK_KEY = '_atum_manage_stock';
 
 	/**
-	 * The meta key where is stored the purchase price
+	 * The purchase price field key
 	 */
 	const PURCHASE_PRICE_KEY = '_purchase_price';
 
 	/**
-	 * The meta key where is stored the out of stock date
+	 * The out of stock date field key
 	 */
 	const OUT_OF_STOCK_DATE_KEY = '_out_of_stock_date';
 
 	/**
-	 * The meta key where is stored the out of stock threshold
+	 * The out of stock threshold field key
 	 */
 	const OUT_STOCK_THRESHOLD_KEY = '_out_stock_threshold';
 
 	/**
-	 * The meta key name used for inheritable products (Grouped, Variables...)
+	 * The field key used for inheritable products (Grouped, Variables...)
 	 */
 	const IS_INHERITABLE_KEY = '_inheritable';
 

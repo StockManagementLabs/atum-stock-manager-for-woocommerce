@@ -241,7 +241,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var bool
 	 */
-	protected $allow_calcs = TRUE;
+	public $allow_calcs = TRUE;
 
 	/**
 	 * Default currency symbol
@@ -440,6 +440,9 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( ! $post_type_obj ) {
 			return;
 		}
+
+		// Allow filtering the ATUM sortable columns.
+		$this->atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
 
 		// Set \WP_List_Table defaults.
 		$args = array_merge( array(
@@ -4979,17 +4982,16 @@ abstract class AtumListTable extends \WP_List_Table {
 			return $args;
 		}
 
-		$orderby               = esc_attr( $_REQUEST['orderby'] );
-		$order                 = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
-		$atum_sortable_columns = apply_filters( 'atum/list_table/atum_sortable_columns', $this->atum_sortable_columns );
+		$orderby = esc_attr( $_REQUEST['orderby'] );
+		$order   = ( isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
 		// Columns starting by underscore are based in meta keys, so can be sorted.
 		if ( '_' === substr( $orderby, 0, 1 ) ) {
 
 			// Order ATUM columns.
-			if ( array_key_exists( $orderby, $atum_sortable_columns ) ) {
+			if ( array_key_exists( $orderby, $this->atum_sortable_columns ) ) {
 
-				$this->atum_query_data['order']          = $atum_sortable_columns[ $orderby ];
+				$this->atum_query_data['order']          = $this->atum_sortable_columns [ $orderby ];
 				$this->atum_query_data['order']['order'] = $order;
 
 			}

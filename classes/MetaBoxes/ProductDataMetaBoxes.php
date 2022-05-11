@@ -79,7 +79,7 @@ class ProductDataMetaBoxes {
 
 		// Add out_stock_threshold field if required.
 		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9, 3 );
+			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_out_stock_threshold_field' ), 9 );
 			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_out_stock_threshold_field' ), 11, 3 );
 		}
 
@@ -409,8 +409,8 @@ class ProductDataMetaBoxes {
 		}
 
 		// Save the meta keys on a variable (some sites were experiencing weird issues when accessing to these constants directly).
-		$supplier_meta     = Suppliers::SUPPLIER_META_KEY;
-		$supplier_sku_meta = Suppliers::SUPPLIER_SKU_META_KEY;
+		$supplier_meta     = Suppliers::SUPPLIER_FIELD_KEY;
+		$supplier_sku_meta = Suppliers::SUPPLIER_SKU_FIELD_KEY;
 		$supplier_id       = $product->get_supplier_id();
 		$supplier_sku      = $product->get_supplier_sku();
 		$supplier          = $supplier_id ? get_post( $supplier_id ) : NULL;
@@ -448,12 +448,12 @@ class ProductDataMetaBoxes {
 		}
 
 		if ( $this->is_variation ) {
-			$this->product_data['supplier_id']  = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_META_KEY ][ $this->loop ] : NULL;
-			$this->product_data['supplier_sku'] = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_META_KEY ][ $this->loop ] : NULL;
+			$this->product_data['supplier_id']  = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_FIELD_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_FIELD_KEY ][ $this->loop ] : NULL;
+			$this->product_data['supplier_sku'] = isset( $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_FIELD_KEY ][ $this->loop ] ) ? $_POST[ 'variation' . Suppliers::SUPPLIER_SKU_FIELD_KEY ][ $this->loop ] : NULL;
 		}
 		else {
-			$this->product_data['supplier_id']  = isset( $_POST[ Suppliers::SUPPLIER_META_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_META_KEY ] : NULL;
-			$this->product_data['supplier_sku'] = isset( $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_SKU_META_KEY ] : NULL;
+			$this->product_data['supplier_id']  = isset( $_POST[ Suppliers::SUPPLIER_FIELD_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_FIELD_KEY ] : NULL;
+			$this->product_data['supplier_sku'] = isset( $_POST[ Suppliers::SUPPLIER_SKU_FIELD_KEY ] ) ? $_POST[ Suppliers::SUPPLIER_SKU_FIELD_KEY ] : NULL;
 		}
 
 	}
@@ -573,7 +573,7 @@ class ProductDataMetaBoxes {
 		// Save extra data (out of stock date, has_location, etc).
 		$this->save_extra_data();
 
-		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data );
+		$this->product_data = (array) apply_filters( 'atum/product_data/data_to_save', $this->product_data, $this->product, $this->loop );
 
 		if ( ! empty( $this->product_data ) ) {
 

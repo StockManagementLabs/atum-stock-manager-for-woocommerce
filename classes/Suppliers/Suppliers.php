@@ -63,14 +63,14 @@ class Suppliers {
 	const MENU_ORDER = 4;
 
 	/**
-	 * The Supplier meta key
+	 * The Supplier field key
 	 */
-	const SUPPLIER_META_KEY = '_supplier';
+	const SUPPLIER_FIELD_KEY = '_supplier';
 
 	/**
-	 * The Supplier SKU meta key
+	 * The Supplier SKU field key
 	 */
-	const SUPPLIER_SKU_META_KEY = '_supplier_sku';
+	const SUPPLIER_SKU_FIELD_KEY = '_supplier_sku';
 	
 	
 	/**

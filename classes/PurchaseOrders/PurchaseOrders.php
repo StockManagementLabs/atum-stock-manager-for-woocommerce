@@ -736,7 +736,7 @@ class PurchaseOrders extends AtumOrderPostType {
 					WHERE post_title LIKE %s AND post_type = %s
 				)	
 				AND post_type = %s",
-				Suppliers::SUPPLIER_META_KEY,
+				Suppliers::SUPPLIER_FIELD_KEY,
 				'%' . $wpdb->esc_like( $term ) . '%',
 				Suppliers::POST_TYPE,
 				self::POST_TYPE

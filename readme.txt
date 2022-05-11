@@ -7,7 +7,7 @@ Tested up to: 6.0
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.4.1
-Stable tag: 1.9.17
+Stable tag: 1.9.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,9 +25,9 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 **💬 [FOR ANY QUESTIONS, VISIT OUR OFFICIAL FORUMS](https://forum.stockmanagementlabs.com "Visit the official ATUM forum")**
 
-= FREE VERSION DESCRIPTION =
+= DESCRIPTION =
 
-If you have an online store you need ATUM, the most **powerful e-commerce solution** for Woocommerce.
+If you have an online store you need ATUM, the most **powerful stock management solution** for Woocommerce.
 
 ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress plugins repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quickly edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and **user-friendly**.
 

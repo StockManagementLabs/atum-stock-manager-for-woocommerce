@@ -1389,7 +1389,7 @@ class Wpml {
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_delete = $wpdb->get_results( "
 				SELECT DISTINCT tr.element_id FROM $wpdb->postmeta pm LEFT JOIN {$wpdb->prefix}icl_translations tr
- 				ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "') AND
+ 				ON pm.post_id = tr.element_id WHERE pm.meta_key IN ('" . Suppliers::SUPPLIER_FIELD_KEY . "', '" . Suppliers::SUPPLIER_SKU_FIELD_KEY . "') AND
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
             ", ARRAY_N );
 			// phpcs:enable
@@ -1399,7 +1399,7 @@ class Wpml {
 				$ids_to_delete = implode( ',', wp_list_pluck( $ids_to_delete, 0 ) );
 				// phpcs:disable WordPress.DB.PreparedSQL
 				$wpdb->query( "
-					DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . Suppliers::SUPPLIER_META_KEY . "', '" . Suppliers::SUPPLIER_SKU_META_KEY . "')
+					DELETE FROM $wpdb->postmeta WHERE meta_key IN ('" . Suppliers::SUPPLIER_FIELD_KEY . "', '" . Suppliers::SUPPLIER_SKU_FIELD_KEY . "')
  					AND post_id IN($ids_to_delete);
                 " );
 				// phpcs:enable
@@ -1418,9 +1418,9 @@ class Wpml {
 				foreach ( $ids_to_refresh as $id ) {
 					$original_id = self::get_original_product_id( $id );
 					/* @noinspection PhpUndefinedMethodInspection */
-					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_META_KEY );
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_FIELD_KEY );
 					/* @noinspection PhpUndefinedMethodInspection */
-					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_META_KEY );
+					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_FIELD_KEY );
 				}
 			}
 			

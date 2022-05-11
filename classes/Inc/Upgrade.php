@@ -159,6 +159,11 @@ class Upgrade {
 			$this->maybe_control_all_products();
 		}
 
+		// ** version 1.9.18 ** Add the new barcodes field to the product data table
+		if ( version_compare( $db_version, '1.9.18', '<' ) ) {
+			$this->add_barcode_column();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1013,5 +1018,29 @@ class Upgrade {
 		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes', TRUE );
 	}
 
+	/**
+	 * Add the barcode column to the product data table
+	 *
+	 * @since 1.9.18
+	 */
+	public function add_barcode_column() {
+
+		global $wpdb;
+
+		// Avoid changing the column if was already changed.
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'barcode'
+		", $db_name, $atum_data_table );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `barcode` VARCHAR(256) DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
 
 }

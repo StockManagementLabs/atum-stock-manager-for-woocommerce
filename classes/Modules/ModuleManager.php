@@ -31,7 +31,7 @@ class ModuleManager {
 	 *
 	 * @var array
 	 */
-	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'visual_settings', 'api' ];
+	private $modules = [ 'dashboard', 'stock_central', 'inventory_logs', 'purchase_orders', 'data_export', 'visual_settings', 'api', 'barcodes' ];
 
 	/**
 	 * The current status of each module
@@ -149,6 +149,15 @@ class ModuleManager {
 			'section' => 'module_manager',
 			'name'    => __( 'ATUM API', ATUM_TEXT_DOMAIN ),
 			'desc'    => __( "Enables/Disables the ATUM's REST API. Please note that the API is required if you intend to use the ATUM's mobile APP.", ATUM_TEXT_DOMAIN ),
+			'type'    => 'switcher',
+			'default' => 'yes',
+		);
+
+		$defaults['barcodes'] = array(
+			'group'   => 'module_manager',
+			'section' => 'module_manager',
+			'name'    => __( 'Barcodes', ATUM_TEXT_DOMAIN ),
+			'desc'    => __( "Enables/Disables the ATUM's Barcodes fields in WordPress. Please note that if this module is disabled you won't be able to sync them through the ATUM's mobile APP.", ATUM_TEXT_DOMAIN ),
 			'type'    => 'switcher',
 			'default' => 'yes',
 		);

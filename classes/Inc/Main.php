@@ -21,6 +21,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
 use Atum\Cli\AtumCli;
+use Atum\Components\AtumBarcodes;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumNotifications;
@@ -309,6 +310,10 @@ class Main {
 			AtumColors::get_instance();
 		}
 
+		if ( ModuleManager::is_module_active( 'barcodes' ) ) {
+			AtumBarcodes::get_instance();
+		}
+
 	}
 
 	/**
@@ -329,7 +334,7 @@ class Main {
 			58 // Add the menu just after the WC Products.
 		);
 
-		// Atum category on wc navigation system.
+		// ATUM category on WC navigation system.
 		// Check if the WC method are availables.
 		/** Next
 		if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Menu' ) && method_exists( Menu::class, 'add_plugin_category' ) ) {

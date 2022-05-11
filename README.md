@@ -40,6 +40,8 @@ Keeping track of any changes happening in your shop has never been easier. The A
 
 ####FREE VERSION DESCRIPTION
 
+If you have an online store you need ATUM, the most **powerful stock management solution** for Woocommerce.
+
 ATUM is now the most advanced FREE WooCommerce inventory management tool in the WordPress plugins repository. Good WooCommerce inventory solution is an absolute must for every serious shop owner. The Dashboard Statistics or the breath-taking Stock Central, the heart of ATUM, gives you the full control of your WooCommerce stock. Get the ability to quick edit every aspect of your WooCommerce inventory, suppliers, SKUs, locations, weight or even prices. Beautifully carved into the WordPress interface, the system feels very familiar and user-friendly.
 
 ATUM Dashboard creates an entirely new and we felt a necessary connection between the creators and users. The dashboard aims to become everyday screen with a quick link to support, documentation and most importantly business stats. We have developed brand new widget section that can be personalised from every corner.
