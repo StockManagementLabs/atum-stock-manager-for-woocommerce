@@ -378,7 +378,7 @@ class ListTable extends AtumListTable {
 			"`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
 		);
 
-		if ( ! empty( $_REQUEST['s'] ) ) {
+		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 
 			$search = esc_attr( $_REQUEST['s'] );
 

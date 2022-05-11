@@ -120,7 +120,7 @@ trait ListTableLegacyTrait {
 			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
 		}
 
-		if ( ! empty( $_REQUEST['s'] ) ) {
+		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
 

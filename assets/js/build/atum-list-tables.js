@@ -1493,12 +1493,12 @@ var Filters = (function () {
         }
         else {
             var $searchSubmitBtn_1 = this.globals.$searchInput.siblings('.search-submit');
-            if (!this.globals.$searchInput.val()) {
+            if (!this.globals.$searchInput.val().length) {
                 $searchSubmitBtn_1.prop('disabled', true);
             }
             this.globals.$searchInput.on('input', function (evt) {
                 var searchColumnBtnVal = _this.globals.$searchColumnBtn.data('value'), inputVal = $(evt.currentTarget).val();
-                if (!inputVal) {
+                if (!inputVal.length) {
                     $searchSubmitBtn_1.prop('disabled', true);
                     if (inputVal != $.address.parameter('s')) {
                         $.address.parameter('s', '');
@@ -1509,7 +1509,7 @@ var Filters = (function () {
                 else if (typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0) {
                     $searchSubmitBtn_1.prop('disabled', false);
                 }
-                else if (inputVal) {
+                else if (inputVal.length) {
                     $searchSubmitBtn_1.prop('disabled', false);
                 }
             });
@@ -2485,7 +2485,7 @@ var Router = (function () {
             .init(function () {
             if ($.address.parameterNames().length) {
                 var s = decodeURIComponent($.address.parameter('s') || ''), searchColumn_1 = $.address.parameter('search_column') || '', optionVal_1 = '';
-                if (s) {
+                if (s.length) {
                     _this.globals.$searchInput.val(s);
                 }
                 if (searchColumn_1) {
@@ -2539,9 +2539,15 @@ var Router = (function () {
             }
         });
     };
+    Router.prototype.checkSearchInput = function () {
+        if (undefined === $.address.parameter('s') && this.globals.$searchInput.val()) {
+            $.address.parameter('s', this.globals.$searchInput.val());
+        }
+    };
     Router.prototype.updateHash = function () {
         var _this = this;
         var beforeFilters = __assign({}, this.globals.filterData);
+        this.checkSearchInput();
         Object.assign(this.globals.filterData, __assign({ view: $.address.parameter('view') || this.globals.$atumList.find('.subsubsub a.current').attr('id') || '', paged: parseInt($.address.parameter('paged') || this.globals.$atumList.find('.current-page').val() || this.settings.get('paged') || '1'), s: decodeURIComponent($.address.parameter('s') || ''), search_column: $.address.parameter('search_column') || '', sold_last_days: $.address.parameter('sold_last_days') || '', orderby: $.address.parameter('orderby') || this.settings.get('orderby'), order: $.address.parameter('order') || this.settings.get('order') }, this.globals.getAutoFiltersValues()));
         if (_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].areEquivalent(beforeFilters, this.globals.filterData)) {
             return;

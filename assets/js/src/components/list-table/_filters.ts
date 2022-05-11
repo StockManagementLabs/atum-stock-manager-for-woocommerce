@@ -96,7 +96,7 @@ export default class Filters {
 
 			const $searchSubmitBtn: JQuery = this.globals.$searchInput.siblings( '.search-submit' );
 
-			if ( ! this.globals.$searchInput.val() ) {
+			if ( ! this.globals.$searchInput.val().length ) {
 				$searchSubmitBtn.prop( 'disabled', true );
 			}
 
@@ -107,7 +107,7 @@ export default class Filters {
 				const searchColumnBtnVal: string = this.globals.$searchColumnBtn.data( 'value' ),
 				      inputVal: any              = $( evt.currentTarget ).val();
 
-				if ( ! inputVal ) {
+				if ( ! inputVal.length ) {
 
 					$searchSubmitBtn.prop( 'disabled', true );
 
@@ -122,7 +122,7 @@ export default class Filters {
 				else if ( typeof searchColumnBtnVal !== 'undefined' && searchColumnBtnVal.length > 0 ) {
 					$searchSubmitBtn.prop( 'disabled', false );
 				}
-				else if ( inputVal ) {
+				else if ( inputVal.length ) {
 					$searchSubmitBtn.prop( 'disabled', false );
 				}
 
