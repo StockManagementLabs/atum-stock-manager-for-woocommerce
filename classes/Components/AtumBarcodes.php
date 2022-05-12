@@ -50,10 +50,13 @@ class AtumBarcodes {
 			// Save the barcode field when saving the ATUM's meta boxes.
 			add_action( 'atum/product_data/data_to_save', array( $this, 'save_barcode_field' ), 10, 3 );
 
-			// Add the barcode columnn to SC.
+			// Add the barcode columnn to SC and MC.
 			add_filter( 'atum/stock_central_list/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
+			add_filter( 'atum/product_levels/manufacturing_list_table/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
 			add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
+			add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ) );
 			add_filter( 'atum/stock_central_list/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
+			add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_columns' ) );
 			add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
 			add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
 
