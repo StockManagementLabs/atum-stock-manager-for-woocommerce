@@ -60,6 +60,12 @@ class AtumBarcodes {
 			add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
 			add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
 
+			// Add the barcode field to some product terms.
+			foreach ( [ Globals::PRODUCT_LOCATION_TAXONOMY, 'product_cat' ] as $taxonomy ) {
+				add_action( "{$taxonomy}_edit_form_fields", array( $this, 'add_barcode_term_meta' ), 11, 2 );
+				add_action( "edited_$taxonomy", array( $this, 'save_barcode_term_meta' ), 10, 2 );
+			}
+
 		}
 
 	}
@@ -269,6 +275,53 @@ class AtumBarcodes {
 		}
 
 		return apply_filters( 'atum/barcodes/list_table/column_barcode', $barcode, $item, $product, $list_table );
+
+	}
+
+	/**
+	 * Add the barcode field to some terms
+	 *
+	 * @since 1.9.18
+	 *
+	 * @param \WP_Term $term
+	 */
+	public function add_barcode_term_meta( $term ) {
+
+		$barcode = get_term_meta( $term->term_id, 'barcode', TRUE );
+
+		?>
+		<tr class="form-field">
+			<th scope="row">
+				<label for="barcode_term_meta">
+					<?php Helpers::atum_field_label(); ?>
+					<?php esc_html_e( 'Barcode', ATUM_TEXT_DOMAIN ); ?>
+				</label>
+			</th>
+			<td>
+				<input type="text" name="barcode_term_meta" id="barcode_term_meta" value="<?php echo esc_attr( $barcode ) ?>">
+				<p class="description">
+					<?php esc_html_e( 'The barcode for all the products linked to this term.', ATUM_TEXT_DOMAIN ) ?>
+				</p>
+			</td>
+		</tr>
+		<?php
+
+	}
+
+	/**
+	 * Save the barcode field for terms.
+	 *
+	 * @since 1.9.18
+	 *
+	 * @param int $term_id Term ID.
+	 * @param int $tt_id   Term taxonomy ID.
+	 */
+	public function save_barcode_term_meta( $term_id, $tt_id ) {
+
+		if ( isset( $_POST['barcode_term_meta'] ) ) {
+			$field_value = esc_attr( stripslashes( $_POST['barcode_term_meta'] ) );
+			update_term_meta( $term_id, 'barcode', $field_value );
+		}
 
 	}
 

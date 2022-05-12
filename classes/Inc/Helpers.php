@@ -144,6 +144,17 @@ final class Helpers {
 	}
 
 	/**
+	 * Outputs a label-style span to be able to identify ATUM fields (where the append/prepend logo above isn't applicable)
+	 *
+	 * @since 1.9.18
+	 */
+	public static function atum_field_label() {
+		?>
+		<span style="background: #00B8DB;color: white;padding: 0 5px;border-radius: 3px;display: inline-block;margin-right: 3px;font-size: 11px;vertical-align: middle">ATUM</span>
+		<?php
+	}
+
+	/**
 	 * Decode a JSON object stringified
 	 *
 	 * @since 0.0.3
