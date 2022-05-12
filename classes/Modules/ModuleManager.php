@@ -41,6 +41,11 @@ class ModuleManager {
 	private static $module_status = array();
 
 	/**
+	 * Suffix added to all the module options
+	 */
+	const OPTION_SUFFIX = '_module';
+
+	/**
 	 * Singleton constructor
 	 *
 	 * @since 1.3.6
@@ -51,8 +56,10 @@ class ModuleManager {
 		add_filter( 'atum/settings/tabs', array( $this, 'add_settings_tab' ), 1 );
 		add_filter( 'atum/settings/defaults', array( $this, 'add_settings_defaults' ), 1 );
 
+		$this->modules = apply_filters( 'atum/module_manager/modules', $this->modules );
+
 		foreach ( $this->modules as $module ) {
-			self::$module_status[ $module ] = Helpers::get_option( "{$module}_module", 'yes' );
+			self::$module_status[ $module ] = Helpers::get_option( $module . self::OPTION_SUFFIX, 'yes' );
 		}
 
 	}
@@ -90,7 +97,12 @@ class ModuleManager {
 	 */
 	public function add_settings_defaults( $defaults ) {
 
-		$defaults['dashboard_module'] = array(
+		/**
+		 * IMPORTANT!!
+		 * All the module option names MUST have the "_module" suffix or won't work.
+		 */
+
+		$defaults[ 'dashboard' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Dashboard', ATUM_TEXT_DOMAIN ),
@@ -99,7 +111,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['stock_central_module'] = array(
+		$defaults[ 'stock_central' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Stock Central', ATUM_TEXT_DOMAIN ),
@@ -108,7 +120,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['inventory_logs_module'] = array(
+		$defaults[ 'inventory_logs' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Inventory Logs', ATUM_TEXT_DOMAIN ),
@@ -117,7 +129,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['purchase_orders_module'] = array(
+		$defaults[ 'purchase_orders' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
@@ -126,7 +138,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['data_export_module'] = array(
+		$defaults[ 'data_export' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Data Export', ATUM_TEXT_DOMAIN ),
@@ -135,7 +147,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['visual_settings_module'] = array(
+		$defaults[ 'visual_settings' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Visual Settings', ATUM_TEXT_DOMAIN ),
@@ -144,7 +156,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['api'] = array(
+		$defaults[ 'api' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'ATUM API', ATUM_TEXT_DOMAIN ),
@@ -153,7 +165,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		$defaults['barcodes'] = array(
+		$defaults[ 'barcodes' . self::OPTION_SUFFIX ] = array(
 			'group'   => 'module_manager',
 			'section' => 'module_manager',
 			'name'    => __( 'Barcodes', ATUM_TEXT_DOMAIN ),
@@ -162,7 +174,7 @@ class ModuleManager {
 			'default' => 'yes',
 		);
 
-		return $defaults;
+		return apply_filters( 'atum/module_manager/modules_settings', $defaults );
 
 	}
 
