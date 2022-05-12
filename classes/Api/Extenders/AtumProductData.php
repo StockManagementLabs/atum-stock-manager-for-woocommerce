@@ -48,6 +48,7 @@ class AtumProductData {
 		'purchase_price'      => [ 'get', 'update' ],
 		'supplier_id'         => [ 'get', 'update' ],
 		'supplier_sku'        => [ 'get', 'update' ],
+		'barcode'             => [ 'get', 'update' ],
 		'atum_controlled'     => [ 'get', 'update' ],
 		'out_stock_date'      => [ 'get', 'update' ],
 		'out_stock_threshold' => [ 'get', 'update' ],
@@ -131,6 +132,10 @@ class AtumProductData {
 				$this->product_fields['lost_in_post'],
 				$this->product_fields['other_logs']
 			);
+		}
+
+		if ( ! ModuleManager::is_module_active( 'barcodes' ) ) {
+			unset( $this->product_fields['barcode'] );
 		}
 
 		/**
@@ -225,6 +230,11 @@ class AtumProductData {
 			'supplier_sku'        => array(
 				'required'    => FALSE,
 				'description' => __( "The Supplier's SKU for the product.", ATUM_TEXT_DOMAIN ),
+				'type'        => 'string',
+			),
+			'barcode'             => array(
+				'required'    => FALSE,
+				'description' => __( "The product's barcode.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
 			),
 			'atum_controlled'     => array(
@@ -612,6 +622,16 @@ class AtumProductData {
 			$this->atum_query_data['where'][] = array(
 				'key'   => 'supplier_sku',
 				'value' => esc_attr( $request['supplier_sku'] ),
+			);
+
+		}
+
+		// Barcode filter.
+		if ( ! empty( $request['barcode'] ) ) {
+
+			$this->atum_query_data['where'][] = array(
+				'key'   => 'barcode',
+				'value' => esc_attr( $request['barcode'] ),
 			);
 
 		}
