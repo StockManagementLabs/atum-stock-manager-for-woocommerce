@@ -51,7 +51,7 @@ export default class Router {
 				    searchColumn: string = $.address.parameter( 'search_column' ) || '',
 				    optionVal: string    = '';
 
-				if ( s ) {
+				if ( s.length ) {
 					this.globals.$searchInput.val( s );
 				}
 
@@ -151,13 +151,23 @@ export default class Router {
 		} );
 		
 	}
-	
+
+	/**
+	 * Check for search input value and put in address parameter.
+	 */
+	checkSearchInput() {
+		if ( undefined === $.address.parameter( 's' ) && this.globals.$searchInput.val() ) {
+			$.address.parameter( 's', this.globals.$searchInput.val() );
+		}
+	}
 	/**
 	 * Update the URL hash with the current filters
 	 */
 	updateHash() {
 
 		const beforeFilters: any = { ...this.globals.filterData }; // Deconstruct the object.
+
+		this.checkSearchInput();
 
 		Object.assign( this.globals.filterData, {
 			view          : $.address.parameter( 'view' ) || this.globals.$atumList.find( '.subsubsub a.current' ).attr( 'id' ) || '',

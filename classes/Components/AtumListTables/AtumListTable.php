@@ -368,7 +368,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->is_filtering  = ! empty( $_REQUEST['s'] ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->is_filtering  = ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
 		$this->query_filters = $this->get_filters_query_string();
 		$this->day           = Helpers::date_format( '', TRUE, TRUE );
 
@@ -2402,7 +2402,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args['search_column'] = esc_attr( $_REQUEST['search_column'] );
 		}
 
-		if ( ! empty( $_REQUEST['s'] ) ) {
+		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 			$args['s'] = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
 		}
 
@@ -3533,7 +3533,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$post_type_obj = get_post_type_object( $this->post_type );
 		echo $post_type_obj->labels->not_found; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( ! empty( $_REQUEST['s'] ) ) {
+		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 			/* translators: the search query */
 			printf( __( " with query '%s'", ATUM_TEXT_DOMAIN ), stripslashes( esc_attr( $_REQUEST['s'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
