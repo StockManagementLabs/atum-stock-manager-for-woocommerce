@@ -3383,6 +3383,8 @@ final class Helpers {
 	 */
 	public static function save_order_note_meta( $note_id, $params ) {
 
+		$params = apply_filters( 'atum/order_note_meta_params', $params, $note_id );
+
 		if ( ! empty( $params ) && isset( $params['action'] ) ) {
 
 			switch ( $params['action'] ) {
