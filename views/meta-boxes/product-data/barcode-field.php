@@ -14,6 +14,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 
 $classes = ' ' . implode( ' ', $barcode_field_classes );
@@ -22,7 +23,7 @@ if ( empty( $variation ) ) : ?>
 <div class="options_group<?php echo esc_attr( $classes ) ?>">
 <?php endif; ?>
 
-	<p class="form-field _supplier_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?><?php echo esc_attr( $classes ) ?>">
+	<p class="form-field _barcode_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?><?php echo esc_attr( $classes ) ?>">
 		<label for="<?php echo esc_attr( $barcode_field_id ) ?>"><?php esc_html_e( 'Barcode', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<span class="atum-field input-group">
@@ -30,6 +31,7 @@ if ( empty( $variation ) ) : ?>
 
 			<input type="text" class="short" name="<?php echo esc_attr( $barcode_field_name ) ?>"
 				id="<?php echo esc_attr( $barcode_field_id ) ?>" value="<?php echo esc_attr( $barcode ) ?>"
+				<?php disabled( AtumCapabilities::current_user_can( 'edit_barcode' ), FALSE ) ?>
 				<?php echo apply_filters( 'atum/views/meta_boxes/barcode_field/barcode_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			>
 		</span>
