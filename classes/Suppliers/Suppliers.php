@@ -547,14 +547,17 @@ class Suppliers {
 		global $wpdb;
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$product_statuses        = Globals::get_queryable_product_statuses();
 
 		$sql = "
-			SELECT product_id FROM $atum_product_data_table	
-		 	WHERE supplier_id = 0 OR supplier_id IS NULL
+			SELECT product_id FROM $atum_product_data_table apd
+			LEFT JOIN $wpdb->posts p ON (apd.product_id = p.ID)                 
+		 	WHERE p.post_status IN('" . implode( "','", $product_statuses ) . "') 
+		 	AND (supplier_id = 0 OR supplier_id IS NULL)
 		";
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		return $wpdb->get_col( $sql );
+		return apply_filters( 'atum/suppliers/no_supplier_products', $wpdb->get_col( $sql ) );
 		
 	}
 	

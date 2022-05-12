@@ -22,35 +22,35 @@ final class Globals {
 	 * The product types allowed
 	 * For now the "external" products are excluded as WC doesn't add stock control fields to them
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $product_types = [ 'simple', 'variable', 'grouped' ];
 
 	/**
 	 * The product types that allow children
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $inheritable_product_types = [ 'variable', 'grouped' ];
 
 	/**
 	 * The product types that allow children
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $simple_product_types = [ 'simple' ];
 
 	/**
 	 * The child product types
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $child_product_types = [ 'variation' ];
 	
 	/**
 	 * ATUM order types
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $order_types = [
 		ATUM_PREFIX . 'purchase_order',
@@ -60,14 +60,23 @@ final class Globals {
 	/**
 	 * WC_Order statuses that allow changing the product stock
 	 *
-	 * @since 1.8.7
-	 *
-	 * @var array
+	 * @var string[]
 	 */
 	private static $order_statuses_change_stock = [
 		'wc-completed',
 		'wc-processing',
 		'wc-on-hold',
+	];
+
+	/**
+	 * Product statuses that are supported on ATUM queries
+	 *
+	 * @var string[]
+	 */
+	private static $queryable_product_statuses = [
+		'publish',
+		'private',
+		'future',
 	];
 
 	/**
@@ -268,26 +277,28 @@ final class Globals {
 		}
 
 		return (array) apply_filters( 'atum/allowed_child_product_types', self::$child_product_types );
+
 	}
 
 	/**
 	 * Get all ATUM compatible product types
 	 *
 	 * @since 1.5.8.3
+	 *
+	 * @return array
 	 */
 	public static function get_all_compatible_products() {
-
 		return (array) apply_filters( 'atum/compatible_product_types', array_unique( array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() ) ) );
-
 	}
 
 	/**
 	 * Get all the product types that allow stock management
 	 *
 	 * @since 1.4.11
+	 *
+	 * @return array
 	 */
 	public static function get_product_types_with_stock() {
-
 		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( self::get_all_compatible_products(), [ 'grouped' ] ) );
 
 	}
@@ -296,11 +307,11 @@ final class Globals {
 	 * Get all product types installed but not compatible with ATUM
 	 *
 	 * @since 1.5.8.3
+	 *
+	 * @return array
 	 */
 	public static function get_incompatible_products() {
-
 		return (array) apply_filters( 'atum/incompatible_product_types', array_diff( array_keys( wc_get_product_types() ), self::get_all_compatible_products() ) );
-
 	}
 
 	/**
@@ -311,7 +322,6 @@ final class Globals {
 	 * @return array
 	 */
 	public static function get_order_types() {
-		
 		return (array) apply_filters( 'atum/order_types', self::$order_types );
 	}
 
@@ -320,11 +330,23 @@ final class Globals {
 	 *
 	 * @since 1.8.7
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public static function get_order_statuses_change_stock() {
-
 		return (array) apply_filters( 'atum/order_statuses_allow_change_stock', self::$order_statuses_change_stock );
+	}
+
+	/**
+	 * Get the product statuses that are allowed on ATUM queries everywhere
+	 *
+	 * @since 1.9.18
+	 *
+	 * @param bool $use_cap
+	 *
+	 * @return string[]
+	 */
+	public static function get_queryable_product_statuses( $use_cap = TRUE ) {
+		return (array) apply_filters( 'atum/queryable_product_statuses', ! $use_cap || current_user_can( 'edit_private_products' ) ? self::$queryable_product_statuses : [ 'publish' ] );
 	}
 
 	/**

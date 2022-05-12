@@ -45,7 +45,7 @@ trait HelpersLegacyTrait {
 			$unmng_join[] = "LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')";
 		}
 
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$post_statuses = Globals::get_queryable_product_statuses();
 
 		// TODO: Change the query to remove the subquery and get the values with joins.
 		if ( $get_stock_status ) {

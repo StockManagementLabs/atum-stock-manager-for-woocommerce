@@ -557,8 +557,7 @@ final class WidgetHelpers {
 
 			$products_unmanaged                = array_column( $products_unmanaged_status, 0 );
 			$stock_counters['count_unmanaged'] = count( $products_unmanaged );
-
-			$product_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+			$product_statuses                  = Globals::get_queryable_product_statuses();
 
 			/*
 			 * Products In Stock
@@ -670,7 +669,7 @@ final class WidgetHelpers {
 		global $wpdb;
 
 		// Get the published parents first.
-		$products_visibility = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$products_visibility = Globals::get_queryable_product_statuses();
 		$parent_product_type = get_term_by( 'slug', $parent_type, 'product_type' );
 
 		if ( ! $parent_product_type ) {
@@ -833,7 +832,7 @@ final class WidgetHelpers {
 		$args = array(
 			'post_type'      => [ 'product', 'product_variation' ],
 			'posts_per_page' => - 1,
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => Globals::get_queryable_product_statuses(),
 			'fields'         => 'ids',
 			'tax_query'      => array(
 				'relation' => 'AND',

@@ -51,10 +51,11 @@ trait SuppliersLegacyTrait {
 			
 			$atum_data_table           = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			self::$current_supplier_id = $supplier_id;
+			$statuses                  = Globals::get_queryable_product_statuses();
 			
 			$args = array(
 				'post_type'      => $post_type,
-				'post_status'    => [ 'publish', 'private' ],
+				'post_status'    => $statuses,
 				'posts_per_page' => - 1,
 				'fields'         => 'ids',
 				'tax_query'      => array(),
@@ -124,13 +125,13 @@ trait SuppliersLegacyTrait {
 	                $term_join
 	                WHERE p.post_type = 'product'
 	                $term_where
-	                AND p.post_status IN ('publish', 'private')              
+	                AND p.post_status IN('" . implode( "','", $statuses ) . "')              
 	                AND p.ID IN (	            
 	                    SELECT DISTINCT sp.post_parent FROM $wpdb->posts sp
 	                    INNER JOIN $atum_data_table AS apd ON (sp.ID = apd.product_id)
 	                    WHERE sp.post_type = 'product_variation'
 	                    AND apd.supplier_id = %d
-	                    AND sp.post_status IN ('publish', 'private')	                      
+	                    AND sp.post_status IN('" . implode( "','", $statuses ) . "')	                      
 	                )", $supplier_id );
 				// phpcs:enable
 
@@ -145,8 +146,8 @@ trait SuppliersLegacyTrait {
 		                INNER JOIN $atum_data_table AS apd ON (p.ID = apd.product_id)
 		                WHERE p.post_type = 'product_variation'
 		                AND apd.supplier_id = %d
-		                AND p.post_parent IN ( " . implode( ',', $parent_ids ) . " )
-		                AND p.post_status IN ('publish', 'private')
+		                AND p.post_parent IN( " . implode( ',', $parent_ids ) . " )
+		                AND p.post_status IN('" . implode( "','", $statuses ) . "')
 	                ", $supplier_id );
 					// phpcs:enable
 

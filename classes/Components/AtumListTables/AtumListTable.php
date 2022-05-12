@@ -2325,7 +2325,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$args = array(
 			'post_type'      => $this->post_type,
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => Globals::get_queryable_product_statuses(),
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum(),
 		);
@@ -2682,10 +2682,14 @@ abstract class AtumListTable extends \WP_List_Table {
 			$supplier = absint( $_REQUEST['supplier'] );
 			$pd_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-			$subquery = "SELECT pp.post_parent FROM $wpdb->posts pp
+			$statuses = Globals::get_queryable_product_statuses();
+
+			$subquery = "
+				SELECT pp.post_parent FROM $wpdb->posts pp
                 LEFT JOIN $pd_table papd ON pp.ID = papd.product_id
-				WHERE (pp.post_status = 'publish' OR pp.post_status = 'private')
-				AND papd.supplier_id = '$supplier'";
+				WHERE pp.post_status IN('" . implode( "','", $statuses ) . "')
+				AND papd.supplier_id = '$supplier'
+			";
 
 			$filter_by_supplier = " AND ( $pd_table.supplier_id = '$supplier' OR $wpdb->posts.ID IN ($subquery) ) ";
 
@@ -2694,6 +2698,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		return Helpers::product_data_query_clauses( $this->atum_query_data, $pieces );
+
 	}
 
 	/**
@@ -4611,7 +4616,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		global $wpdb;
 
 		// Get all the published Variables first.
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$post_statuses = Globals::get_queryable_product_statuses();
 		$where         = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $post_statuses ) . "')";
 
 		if ( ! empty( $post_in ) ) {

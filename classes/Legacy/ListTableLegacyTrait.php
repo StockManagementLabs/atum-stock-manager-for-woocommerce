@@ -47,7 +47,7 @@ trait ListTableLegacyTrait {
 
 		$args = array(
 			'post_type'      => $this->post_type,
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => Globals::get_queryable_product_statuses(),
 			'posts_per_page' => $this->per_page,
 			'paged'          => $this->get_pagenum(),
 		);
@@ -664,7 +664,7 @@ trait ListTableLegacyTrait {
 	 */
 	protected function get_children_legacy( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$post_statuses = Globals::get_queryable_product_statuses();
 
 		// Get the published products of the same type first.
 		$parent_args = array(

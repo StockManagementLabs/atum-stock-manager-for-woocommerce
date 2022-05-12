@@ -1139,7 +1139,7 @@ final class Ajax {
 
 		$like_term     = '%%' . $wpdb->esc_like( $term ) . '%%';
 		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', [ 'product', 'product_variation' ] );
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$post_statuses = Globals::get_queryable_product_statuses();
 		$meta_join     = $meta_where = array();
 		$type_where    = '';
 

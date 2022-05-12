@@ -221,7 +221,7 @@ final class Helpers {
 
 		$defaults = array(
 			'post_type'      => 'product',
-			'post_status'    => current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ],
+			'post_status'    => Globals::get_queryable_product_statuses(),
 			'posts_per_page' => - 1,
 			'fields'         => 'ids',
 		);
@@ -1032,7 +1032,7 @@ final class Helpers {
 			"LEFT JOIN {$wpdb->prefix}wc_products wpd ON (posts.ID = wpd.product_id)",
 		);
 		
-		$post_statuses = current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ];
+		$post_statuses = Globals::get_queryable_product_statuses();
 		
 		if ( $get_stock_status ) {
 			$unmng_fields[] = 'wpd.stock_status';
@@ -2274,12 +2274,14 @@ final class Helpers {
 
 			global $wpdb;
 
+			$statuses = Globals::get_queryable_product_statuses( FALSE );
+
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_rebuild_stock_status = $wpdb->get_col( "
                 SELECT DISTINCT ID FROM $wpdb->posts p
                 LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id
                 LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND pm.meta_key = '_stock')
-                WHERE p.post_status IN ('publish', 'future', 'private')
+                WHERE p.post_status IN ('" . implode( "','", $statuses ) . "')
                 AND ap.out_stock_threshold IS NOT NULL
                 AND p.post_type IN ('product', 'product_variation');
             " );
@@ -2331,11 +2333,13 @@ final class Helpers {
 
 		global $wpdb;
 
+		$statuses = Globals::get_queryable_product_statuses( FALSE );
+
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$row_count = $wpdb->get_var( "
 			SELECT COUNT(*) FROM $wpdb->posts p
             LEFT JOIN $wpdb->prefix" . Globals::ATUM_PRODUCT_DATA_TABLE . " ap ON p.ID = ap.product_id    
-            WHERE p.post_status IN ('publish', 'future', 'private') AND p.post_type IN ('product', 'product_variation')
+            WHERE p.post_status IN('" . implode( "','", $statuses ) . "') AND p.post_type IN ('product', 'product_variation')
             AND ap.out_stock_threshold IS NOT NULL;
 		" );
 		// phpcs:enable
@@ -3546,13 +3550,10 @@ final class Helpers {
 			 ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
 		}
 
-		$post_statuses = apply_filters(
-			'atum/search_products/post_statuses',
-			current_user_can( 'edit_private_products' ) ? [ 'private', 'publish' ] : [ 'publish' ]
-		);
+		$post_statuses = apply_filters( 'atum/search_products/post_statuses', Globals::get_queryable_product_statuses() );
 
 		// See if search term contains OR keywords.
-		$term_groups    = stristr( $term, ' or ' ) ? preg_split( '/\s+or\s+/i', $term ) : $term_groups = [ $term ];
+		$term_groups    = stristr( $term, ' or ' ) ? preg_split( '/\s+or\s+/i', $term ) : [ $term ];
 		$search_where   = '';
 		$search_queries = [];
 
