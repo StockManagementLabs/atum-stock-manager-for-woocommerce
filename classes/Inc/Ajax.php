@@ -1927,11 +1927,12 @@ final class Ajax {
 
 					$note_id = $atum_order->add_order_note( $note );
 					Helpers::save_order_note_meta( $note_id, [
-						'action'     => "{$action}_stock",
-						'item_name'  => $atum_order_item->get_name(),
-						'product_id' => $product->get_id(),
-						'old_stock'  => $old_stock,
-						'new_stock'  => $new_stock,
+						'action'       => "{$action}_stock",
+						'item_name'    => $atum_order_item->get_name(),
+						'product_id'   => $product->get_id(),
+						'old_stock'    => $old_stock,
+						'new_stock'    => $new_stock,
+						'stock_change' => $stock_change,
 					] );
 
 					if ( PurchaseOrders::POST_TYPE === $atum_order->get_post_type() ) {
