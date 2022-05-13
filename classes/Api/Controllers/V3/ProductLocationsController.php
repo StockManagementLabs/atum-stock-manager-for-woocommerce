@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
+use Atum\Modules\ModuleManager;
 
 
 class ProductLocationsController extends \WC_REST_Product_Categories_Controller {
@@ -74,6 +75,16 @@ class ProductLocationsController extends \WC_REST_Product_Categories_Controller 
 			if ( ! in_array( $key, $this->rest_data_keys, TRUE ) ) {
 				unset( $schema['properties'][ $key ] );
 			}
+
+		}
+
+		if ( ModuleManager::is_module_active( 'barcodes' ) && AtumCapabilities::current_user_can( 'view_barcode' ) ) {
+
+			$schema['properties']['barcode'] = array(
+				'description' => __( 'The barcode used for all the products linked to this location.', ATUM_TEXT_DOMAIN ),
+				'type'        => 'string',
+				'context'     => array( 'view', 'edit' ),
+			);
 
 		}
 
@@ -146,6 +157,10 @@ class ProductLocationsController extends \WC_REST_Product_Categories_Controller 
 			'count'       => (int) $item->count,
 		);
 
+		if ( ModuleManager::is_module_active( 'barcodes' ) && AtumCapabilities::current_user_can( 'view_barcode' ) ) {
+			$data['barcode'] = get_term_meta( $item->term_id, 'barcode', TRUE );
+		}
+
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
 		$data    = $this->add_additional_fields_to_object( $data, $request );
 		$data    = $this->filter_response_by_context( $data, $context );
@@ -179,7 +194,10 @@ class ProductLocationsController extends \WC_REST_Product_Categories_Controller 
 	 */
 	protected function update_term_meta_fields( $term, $request ) {
 
-		// We don't have term meta fields for ATUM Locations actually.
+		if ( isset( $request['barcode'] ) && ModuleManager::is_module_active( 'barcodes' ) && AtumCapabilities::current_user_can( 'edit_barcode' ) ) {
+			update_term_meta( $term->term_id, 'barcode', $request['barcode'] );
+		}
+
 		return TRUE;
 
 	}

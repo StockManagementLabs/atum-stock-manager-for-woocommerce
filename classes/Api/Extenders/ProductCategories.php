@@ -12,6 +12,10 @@
 
 namespace Atum\Api\Extenders;
 
+use Atum\Components\AtumCapabilities;
+use Atum\Modules\ModuleManager;
+
+
 defined( 'ABSPATH' ) || die;
 
 class ProductCategories {
@@ -61,10 +65,16 @@ class ProductCategories {
 
 		if ( $response_data['id'] === $this->default_product_cat ) {
 			$response_data['is_default'] = 'yes';
-			$response->set_data( $response_data );
 		}
 
+		if ( ModuleManager::is_module_active( 'barcodes' ) && AtumCapabilities::current_user_can( 'view_barcode' ) ) {
+			$response_data['barcode'] = get_term_meta( $item->term_id, 'barcode', TRUE );
+		}
+
+		$response->set_data( $response_data );
+
 		return $response;
+
 	}
 
 
