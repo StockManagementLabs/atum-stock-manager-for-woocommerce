@@ -56,7 +56,7 @@ class AtumBarcodes {
 			add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
 			add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ) );
 			add_filter( 'atum/stock_central_list/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
-			add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_columns' ) );
+			add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
 			add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
 			add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
 
