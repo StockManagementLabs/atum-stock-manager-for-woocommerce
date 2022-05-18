@@ -196,6 +196,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.18`
+
+*2022-05-18*
+
+**Features**
+
+* Accept extra classes for editable columns.
+* Display value in placeholder for datepicker fields in List Tables.
+* Added new Barcodes module.
+* Added filters to the ModuleManager class.
+* Disable barcode editing when the user has no permission.
+* Added the barcodes prop to the ATUM's API.
+* Added filter to order note meta params.
+* Added filters to be able to alter allowed product statuses.
+* Added the barcode field to product locations and categories.
+* Added support for barcodes in ATUM Locations' and Product Categories' API endpoints.
+
+**Changes**
+
+* Allow to search by column with value 0.
+* Include stock change in order note meta.
+* Handle the queryable product statuses globally.
+* Removed unused class.
+* Refactoring.
+
+**Fixes**
+
+* Fixed List Tables' counters after filtering.
+* Fixed missing search input value when searching by 0.
+* Avoid to duplicate atum scheduled actions.
+
+---
+
 `1.9.17`
 
 *2022-05-06*
