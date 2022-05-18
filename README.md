@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.18.1`
+
+*2022-05-18*
+
+**Fixes**
+
+* Fixed filter callback function name.
+
+---
+
 `1.9.18`
 
 *2022-05-18*

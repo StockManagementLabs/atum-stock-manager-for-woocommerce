@@ -7,7 +7,7 @@ Tested up to: 6.0
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.5.1
-Stable tag: 1.9.18
+Stable tag: 1.9.18.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.18.1`
+
+*2022-05-18*
+
+**Fixes**
+
+* Fixed filter callback function name.
 
 ---
 
