@@ -113,7 +113,25 @@ class AtumQueues {
 
 		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
 
-			$schedule_args       = isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ? $hook_data['args'] : [];
+			// Search for duplicated actions.
+			$actions       = $wc_queue->search( [ 'hook' => $hook_name ] );
+			$schedule_args = isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ? $hook_data['args'] : [];
+
+			foreach ( $actions as $index => $action ) {
+				/**
+				 * Variable definition
+				 *
+				 * @var \ActionScheduler_Action $action
+				 */
+				if ( $action->is_finished() ) {
+					unset( $actions[ $index ] );
+				}
+			}
+			if ( count( $actions ) > 1 ) {
+				// Remove actions if duplicated.
+				$wc_queue->cancel_all( $hook_name );
+			}
+
 			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );
 
 			if ( is_null( $next_scheduled_date ) && ! as_next_scheduled_action( $hook_name, $schedule_args ) ) {
