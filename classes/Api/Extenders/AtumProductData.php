@@ -568,6 +568,10 @@ class AtumProductData {
 	 */
 	public function prepare_objects_query( $args, $request ) {
 
+		/**
+		 * NOTE: We must prefix all the ATUM props to avoid conflicts with 3rd party plugins.
+		 */
+
 		// ATUM Locations filter.
 		if ( ! empty( $request['atum_location'] ) ) {
 
@@ -591,10 +595,10 @@ class AtumProductData {
 		}
 
 		// Price filter.
-		if ( isset( $request['min_purchase_price'] ) || isset( $request['max_purchase_price'] ) ) {
+		if ( isset( $request['atum_min_purchase_price'] ) || isset( $request['atum_max_purchase_price'] ) ) {
 
-			$current_min_price = isset( $request['min_purchase_price'] ) ? floatval( $request['min_purchase_price'] ) : 0;
-			$current_max_price = isset( $request['max_purchase_price'] ) ? floatval( $request['max_purchase_price'] ) : PHP_INT_MAX;
+			$current_min_price = isset( $request['atum_min_purchase_price'] ) ? floatval( $request['atum_min_purchase_price'] ) : 0;
+			$current_max_price = isset( $request['atum_max_purchase_price'] ) ? floatval( $request['atum_max_purchase_price'] ) : PHP_INT_MAX;
 
 			$this->atum_query_data['where'][] = array(
 				'key'     => 'purchase_price',
@@ -606,32 +610,32 @@ class AtumProductData {
 		}
 
 		// Supplier filter.
-		if ( ! empty( $request['supplier'] ) ) {
+		if ( ! empty( $request['atum_supplier'] ) ) {
 
 			$this->atum_query_data['where'][] = array(
 				'key'   => 'supplier_id',
-				'value' => absint( $request['supplier'] ),
+				'value' => absint( $request['atum_supplier'] ),
 				'type'  => 'NUMERIC',
 			);
 
 		}
 
 		// Supplier SKU filter.
-		if ( ! empty( $request['supplier_sku'] ) ) {
+		if ( ! empty( $request['atum_supplier_sku'] ) ) {
 
 			$this->atum_query_data['where'][] = array(
 				'key'   => 'supplier_sku',
-				'value' => esc_attr( $request['supplier_sku'] ),
+				'value' => esc_attr( $request['atum_supplier_sku'] ),
 			);
 
 		}
 
 		// Barcode filter.
-		if ( ! empty( $request['barcode'] ) ) {
+		if ( ! empty( $request['atum_barcode'] ) ) {
 
 			$this->atum_query_data['where'][] = array(
 				'key'   => 'barcode',
-				'value' => esc_attr( $request['barcode'] ),
+				'value' => esc_attr( $request['atum_barcode'] ),
 			);
 
 		}
