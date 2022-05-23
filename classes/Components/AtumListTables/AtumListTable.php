@@ -512,7 +512,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function table_nav_filters() {
 
-		add_filter( 'get_terms', array( $this, 'get_terms_categories' ), 10, 4 );
+		add_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
 		// Category filtering.
 		wc_product_dropdown_categories( array(
 			'show_count'       => 0,
@@ -5186,17 +5186,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return array
 	 */
-	public function get_terms_categories( $terms, $taxonomies, $args, $term_query ) {
+	public function get_terms_categories() {
 
 		global $wpdb;
 
-		$sql = "SELECT  t.term_id FROM wp_terms AS t  INNER JOIN wp_term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_cat') 
+		$sql = "SELECT  t.term_id FROM $wpdb->terms AS t  INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_cat') 
 			AND ( t.term_id IN (
-			    	SELECT DISTINCT tr.term_taxonomy_id FROM wp_term_relationships tr INNER JOIN wp_posts p ON tr.object_id = p.ID
+			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->posts p ON tr.object_id = p.ID
 			    	WHERE p.post_type IN( 'product_variation', 'product' ) AND p.post_status IN ( 'publish', 'private' )
 			    )
 				OR tt.count > 0
-				OR t.term_id IN ( SELECT parent FROM wp_term_taxonomy WHERE count > 0 )
+				OR t.term_id IN ( SELECT parent FROM $wpdb->term_taxonomy WHERE count > 0 )
 			)
 			ORDER BY t.name ASC";
 
