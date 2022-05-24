@@ -108,6 +108,12 @@ $active_sections = [];
 										</div>
 									<?php endif; ?>
 
+									<?php if ( 'atum_setting_tools' === $section['id'] ) : ?>
+										<div class="alert alert-warning">
+											<?php esc_html_e( 'IMPORTANT: before running any tool from this section, we strongly recommend you take a backup of your database, so you can roll back the changes if any error happpens during the process.', ATUM_TEXT_DOMAIN ); ?>
+										</div>
+									<?php endif; ?>
+
 									<?php if ( $section['title'] ) : ?>
 										<div class="section-title">
 											<h2>

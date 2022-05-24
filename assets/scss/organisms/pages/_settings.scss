@@ -470,6 +470,10 @@
 			align-items: center;
 			justify-content: space-between;
 			
+			+ .alert {
+				margin-top: $grid-gutter-width/2;
+			}
+			
 			.submit {
 				margin: 0;
 				padding: 0;
