@@ -1928,13 +1928,17 @@ final class Ajax {
 					$return[] = $note;
 
 					$note_id = $atum_order->add_order_note( $note );
+
+					// Only inventory logs should execute this function.
 					Helpers::save_order_note_meta( $note_id, [
-						'action'       => "{$action}_stock",
-						'item_name'    => $atum_order_item->get_name(),
-						'product_id'   => $product->get_id(),
-						'old_stock'    => $old_stock,
-						'new_stock'    => $new_stock,
-						'stock_change' => $stock_change,
+						'action'        => "{$action}_stock",
+						'item_name'     => $atum_order_item->get_name(),
+						'product_id'    => $product->get_id(),
+						'old_stock'     => $old_stock,
+						'new_stock'     => $new_stock,
+						'stock_change'  => $stock_change,
+						'order_type'    => 3,
+						'order_item_id' => $item_id,
 					] );
 
 					$atum_order_item->set_stock_changed( TRUE );
