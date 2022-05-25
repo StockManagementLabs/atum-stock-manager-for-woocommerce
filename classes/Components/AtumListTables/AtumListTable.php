@@ -512,6 +512,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function table_nav_filters() {
 
+		add_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
 		// Category filtering.
 		wc_product_dropdown_categories( array(
 			'show_count'       => 0,
@@ -519,6 +520,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'class'            => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip auto-filter',
 			'show_option_none' => __( 'All categories...', ATUM_TEXT_DOMAIN ),
 		) );
+		remove_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
 
 		// Product type filtering.
 		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type auto-filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -5169,6 +5171,44 @@ abstract class AtumListTable extends \WP_List_Table {
 		unset( $request_params['security'], $request_params['action'] );
 
 		return $request_params;
+
+	}
+
+	/**
+	 * Filters the found terms for the categories dropdown.
+	 *
+	 * @since 1.9.18.1
+	 *
+	 * @param array          $terms      Array of found terms.
+	 * @param array|null     $taxonomies An array of taxonomies if known.
+	 * @param array          $args       An array of get_terms() arguments.
+	 * @param \WP_Term_Query $term_query The WP_Term_Query object.
+	 *
+	 * @return array
+	 */
+	public function get_terms_categories() {
+
+		global $wpdb;
+
+		$sql = "SELECT  t.term_id FROM $wpdb->terms AS t  INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_cat') 
+			AND ( t.term_id IN (
+			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->posts p ON tr.object_id = p.ID
+			    	WHERE p.post_type IN( 'product_variation', 'product' ) AND p.post_status IN ( 'publish', 'private' )
+			    )
+				OR tt.count > 0
+				OR t.term_id IN ( SELECT parent FROM $wpdb->term_taxonomy WHERE count > 0 )
+			)
+			ORDER BY t.name ASC";
+
+		$term_ids   = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$terms_list = [];
+
+		foreach ( $term_ids as $term_id ) {
+			$term         = get_term( $term_id );
+			$terms_list[] = $term;
+		}
+
+		return $terms_list;
 
 	}
 

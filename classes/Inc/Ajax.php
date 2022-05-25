@@ -124,9 +124,11 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_order_remove_tax', array( $this, 'remove_atum_order_tax' ) );
 		add_action( 'wp_ajax_atum_order_calc_line_taxes', array( $this, 'calc_atum_order_line_taxes' ) );
 		add_action( 'wp_ajax_atum_order_save_items', array( $this, 'save_atum_order_items' ) );
+		add_action( 'wp_ajax_atum_order_change_purchase_price', array( $this, 'change_atum_order_item_purchase_price' ) );
+
+		// Only for Inventory Logs.
 		add_action( 'wp_ajax_atum_order_increase_items_stock', array( $this, 'increase_atum_order_items_stock' ) );
 		add_action( 'wp_ajax_atum_order_decrease_items_stock', array( $this, 'decrease_atum_order_items_stock' ) );
-		add_action( 'wp_ajax_atum_order_change_purchase_price', array( $this, 'change_atum_order_item_purchase_price' ) );
 
 		// Update the ATUM Order status.
 		add_action( 'wp_ajax_atum_order_mark_status', array( $this, 'mark_atum_order_status' ) );
@@ -1831,7 +1833,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Increase the ATUM order products' stock by their quantity amount
+	 * Increase the ATUM Inventory Logs order products' stock by their quantity amount
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1842,7 +1844,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Decrease the ATUM order products' stock by their quantity amount
+	 * Decrease the ATUM Inventory Logs order products' stock by their quantity amount
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1853,7 +1855,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Change the ATUM order products' stock by their quantity amount
+	 * Change the ATUM order products' stock by their quantity amount. Only used for IL
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1926,22 +1928,20 @@ final class Ajax {
 					$return[] = $note;
 
 					$note_id = $atum_order->add_order_note( $note );
+
+					// Only inventory logs should execute this function.
 					Helpers::save_order_note_meta( $note_id, [
-						'action'       => "{$action}_stock",
-						'item_name'    => $atum_order_item->get_name(),
-						'product_id'   => $product->get_id(),
-						'old_stock'    => $old_stock,
-						'new_stock'    => $new_stock,
-						'stock_change' => $stock_change,
+						'action'        => "{$action}_stock",
+						'item_name'     => $atum_order_item->get_name(),
+						'product_id'    => $product->get_id(),
+						'old_stock'     => $old_stock,
+						'new_stock'     => $new_stock,
+						'stock_change'  => $stock_change,
+						'order_type'    => 3,
+						'order_item_id' => $item_id,
 					] );
 
-					if ( PurchaseOrders::POST_TYPE === $atum_order->get_post_type() ) {
-						$atum_order_item->set_stock_changed( PurchaseOrders::FINISHED === $atum_order->get_status() );
-					}
-					else {
-						$atum_order_item->set_stock_changed( TRUE );
-					}
-
+					$atum_order_item->set_stock_changed( TRUE );
 					$atum_order_item->save();
 
 				}

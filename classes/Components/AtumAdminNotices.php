@@ -102,9 +102,13 @@ final class AtumAdminNotices {
 						data-dismiss-key="<?php echo esc_attr( $notice['dismiss_key'] ) ?>"
 					>
 						<p>
+							<?php if ( ! isset( $notice['bold'] ) || TRUE === $notice['bold'] ) : ?>
 							<strong>
+							<?php endif; ?>
 								<?php echo wp_kses_post( $notice['message'] ); ?>
+							<?php if ( ! isset( $notice['bold'] ) || TRUE === $notice['bold'] ) : ?>
 							</strong>
+							<?php endif; ?>
 
 							<?php if ( $notice['dismissible'] ) : ?>
 								<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', ATUM_TEXT_DOMAIN ); ?></span></button>
@@ -168,8 +172,9 @@ final class AtumAdminNotices {
 	 * @param bool   $is_dismissible Optional. Whether to add a button for closing the notice.
 	 * @param bool   $persistent     Optional. In some cases (like a post edit screen), we need to save the notice on a transient for showing it later.
 	 * @param string $dismiss_key    Optional. Only for dismissible notices that we don't want to show again after dismissed.
+	 * @param bool   $bold           Optional. Whether to display the entire notice into a <strong></strong>.
 	 */
-	public static function add_notice( $message, $type, $is_dismissible = FALSE, $persistent = FALSE, $dismiss_key = '' ) {
+	public static function add_notice( $message, $type, $is_dismissible = FALSE, $persistent = FALSE, $dismiss_key = '', $bold = TRUE ) {
 
 		if ( $persistent ) {
 
@@ -187,6 +192,7 @@ final class AtumAdminNotices {
 				'type'        => $type,
 				'dismissible' => $is_dismissible,
 				'dismiss_key' => $dismiss_key,
+				'bold'        => $bold,
 			);
 
 			AtumCache::set_transient( $transient_key_notices, $persistent_notices, HOUR_IN_SECONDS, TRUE );
@@ -199,6 +205,7 @@ final class AtumAdminNotices {
 				'type'        => $type,
 				'dismissible' => $is_dismissible,
 				'dismiss_key' => $dismiss_key,
+				'bold'        => $bold,
 			);
 
 		}
