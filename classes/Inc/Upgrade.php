@@ -164,6 +164,11 @@ class Upgrade {
 			$this->add_barcode_column();
 		}
 
+		// ** version 1.9.19 ** Regenerate WC product lookup tables to ensure our queries work correctly.
+		if ( version_compare( $db_version, '1.9.19', '<' ) ) {
+			$this->regenerate_lookup_tables();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1039,6 +1044,19 @@ class Upgrade {
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $wpdb->get_var( $column_exist ) ) {
 			$wpdb->query( "ALTER TABLE $atum_data_table ADD `barcode` VARCHAR(256) DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
+
+	/**
+	 * Regenerate WC product lookup tables to ensure our queries work correctly
+	 *
+	 * @since 1.9.19
+	 */
+	public function regenerate_lookup_tables() {
+
+		if ( ! wc_update_product_lookup_tables_is_running() ) {
+			wc_update_product_lookup_tables();
 		}
 
 	}
