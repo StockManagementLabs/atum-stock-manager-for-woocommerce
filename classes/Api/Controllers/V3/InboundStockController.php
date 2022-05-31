@@ -578,7 +578,12 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	protected function get_product_data( $item, $context = 'view' ) {
 
 		$product = Helpers::get_atum_product( $item );
-		$po_id   = absint( $item->po_id );
+
+		if ( ! $product instanceof \WC_Product ) {
+			return [];
+		}
+
+		$po_id = absint( $item->po_id );
 
 		/**
 		 * Variable definition
@@ -587,17 +592,21 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		 */
 		$po = Helpers::get_atum_order_model( $po_id, FALSE, PurchaseOrders::POST_TYPE );
 
+		if ( ! $po->exists() ) {
+			return [];
+		}
+
 		return array(
-			'id'                    => $product->get_id(),
-			'name'                  => $product->get_name( $context ),
-			'type'                  => $product->get_type(),
-			'sku'                   => $product->get_sku( $context ),
-			'inbound_stock'         => (float) AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' ),
-			'date_ordered'          => wc_rest_prepare_date_response( $po->date_created, FALSE ),
-			'date_on_sale_from_gmt' => wc_rest_prepare_date_response( $po->date_created ),
-			'date_expected'         => wc_rest_prepare_date_response( $po->date_expected, FALSE ),
-			'date_expected_gmt'     => wc_rest_prepare_date_response( $po->date_expected ),
-			'purchase_order'        => $po_id,
+			'id'                => $product->get_id(),
+			'name'              => $product->get_name( $context ),
+			'type'              => $product->get_type(),
+			'sku'               => $product->get_sku( $context ),
+			'inbound_stock'     => (float) AtumOrderItemModel::get_item_meta( $item->po_item_id, '_qty' ),
+			'date_ordered'      => wc_rest_prepare_date_response( $item->post_date, FALSE ),
+			'date_ordered_gmt'  => wc_rest_prepare_date_response( $item->post_date ),
+			'date_expected'     => $po->date_expected ? wc_rest_prepare_date_response( $po->date_expected, FALSE ) : '',
+			'date_expected_gmt' => $po->date_expected ? wc_rest_prepare_date_response( $po->date_expected ) : '',
+			'purchase_order'    => $po_id,
 		);
 
 	}
