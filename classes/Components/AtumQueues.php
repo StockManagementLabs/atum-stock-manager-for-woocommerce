@@ -104,7 +104,6 @@ class AtumQueues {
 			$this->recurring_hooks['atum/cron_update_sales_calc_props'] = [
 				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start' ) ),
 				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval' ) * $multiplier ),
-
 			];
 		}
 
@@ -343,30 +342,56 @@ class AtumQueues {
 
 				$data = [
 					'action'     => 'atum_async_hooks',
-					'security'   => wp_create_nonce( 'atum_async_hooks' ),
 					'atum_hooks' => self::$async_hooks,
 				];
 
-				if ( ! empty( $data ) ) {
+				$headers = $cookies = array();
 
-					$cookies = array();
-					foreach ( $_COOKIE as $name => $value ) {
-						$cookies[] = "$name=" . rawurlencode( maybe_serialize( $value ) );
-					}
+				// When doing an async action during an API request, make sure we add the logged in cookie header to preserve the auth, etc.
+				if ( Helpers::is_rest_request() && is_user_logged_in() ) {
 
-					$request_args = array(
-						'timeout'    => 0.01,
-						'blocking'   => FALSE,
-						'sslverify'  => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-						'body'       => $data,
-						'headers'    => array(
-							'cookie' => implode( '; ', $cookies ),
-						),
-						'user-agent' => self::get_async_request_user_agent(),
-					);
-					wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
+					$user_id    = get_current_user_id();
+					$expiration = time() + ( 2 * DAY_IN_SECONDS );
+					$_COOKIE    = array();
+
+					$logged_in_cookie          = new \WP_Http_Cookie( LOGGED_IN_COOKIE );
+					$logged_in_cookie->name    = LOGGED_IN_COOKIE;
+					$logged_in_cookie->value   = wp_generate_auth_cookie( $user_id, $expiration, 'logged_in' );
+					$logged_in_cookie->expires = $expiration;
+					$logged_in_cookie->path    = COOKIEPATH;
+					$logged_in_cookie->domain  = COOKIE_DOMAIN;
+
+					$cookies[]                   = $logged_in_cookie->getHeaderValue();
+					$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie->value;
 
 				}
+				else {
+
+					// Pass any possible cookie coming on the current request through the new request.
+					if ( isset( $_COOKIE ) ) {
+						foreach ( $_COOKIE as $name => $value ) {
+							$cookies[] = "$name=" . rawurlencode( maybe_serialize( $value ) );
+						}
+					}
+
+				}
+
+				if ( ! empty( $cookies ) ) {
+					$headers['cookie'] = implode( '; ', $cookies );
+				}
+
+				// NOTE: The nonce must be added after the logged in cookie has been set.
+				$data['security'] = wp_create_nonce( 'atum_async_hooks' );
+
+				$request_args = array(
+					'timeout'    => 0.01,
+					'blocking'   => FALSE,
+					'sslverify'  => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+					'body'       => $data,
+					'headers'    => $headers,
+					'user-agent' => self::get_async_request_user_agent(),
+				);
+				wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
 
 			}
 

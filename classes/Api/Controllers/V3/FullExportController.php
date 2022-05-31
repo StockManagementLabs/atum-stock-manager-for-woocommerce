@@ -285,7 +285,8 @@ class FullExportController extends \WC_REST_Controller {
 			$hook_name = "atum_api_export_endpoint_$index";
 
 			if ( ! as_next_scheduled_action( $hook_name ) ) {
-				as_schedule_single_action( gmdate( 'U' ) + 10, $hook_name, [ $endpoint ] );
+				$this->delete_old_export( $endpoint );
+				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint ] );
 			}
 
 		}
@@ -353,12 +354,12 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		$json = $page_suffix = '';
+		$json_results = $page_suffix = '';
 
-		$was_user_logged = get_current_user_id();
+		$logged_in_user = get_current_user_id();
 
 		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
-		if ( ! $was_user_logged || ! current_user_can( 'read_private_posts' ) ) {
+		if ( ! $logged_in_user || ! current_user_can( 'read_private_posts' ) ) {
 
 			global $wpdb;
 
@@ -374,49 +375,56 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		switch ( $endpoint ) {
-			case '/wc/v3/products':
-				$request = new \WP_REST_Request( 'GET', $endpoint );
-				$request->set_query_params( [
-					'per_page' => apply_filters( 'atum/api/full_export_conmtroller/records_per_page', 100 ),
-					'page'     => $page,
-				] );
+		$per_page = apply_filters( 'atum/api/full_export_controller/records_per_page', 100 );
 
-				$response = rest_do_request( $request );
+		// Do the request to the endpoint internally.
+		$request = new \WP_REST_Request( 'GET', $endpoint );
+		$request->set_query_params( [
+			'per_page' => $per_page,
+			'page'     => $page,
+		] );
 
-				if ( 200 === $response->status ) {
+		$server   = rest_get_server();
+		$response = rest_do_request( $request );
+		$data     = $server->response_to_data( $response, FALSE );
 
-					$server = rest_get_server();
-					$data   = $server->response_to_data( $response, FALSE );
+		if ( 200 === $response->status ) {
 
-					if ( isset( $response->headers['X-WP-TotalPages'] ) ) {
+			if ( isset( $response->headers['X-WP-TotalPages'] ) ) {
 
-						$total_pages = $response->headers['X-WP-TotalPages'];
-						$page_suffix = "-{$page}_{$total_pages}";
+				$total_pages = absint( $response->headers['X-WP-TotalPages'] );
 
-						if ( $total_pages > $page ) {
-							as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $page + 1 ] );
+				if ( $total_pages > 1 ) {
 
-							// Re-add the endpoint transient again because is not fully exported yet.
-							$exported_endpoints[] = $endpoint;
-							AtumCache::set_transient( $exported_endpoints_transient_key, $exported_endpoints, DAY_IN_SECONDS, TRUE );
-						}
+					$page_suffix = "-{$page}_{$total_pages}";
 
+					if ( $total_pages > $page ) {
+						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $page + 1 ] );
+
+						// Re-add the endpoint transient again because is not fully exported yet.
+						$exported_endpoints[] = $endpoint;
+						AtumCache::set_transient( $exported_endpoints_transient_key, $exported_endpoints, DAY_IN_SECONDS, TRUE );
 					}
 
-					$json = wp_json_encode( $data );
-
 				}
-				break;
 
-			default:
+			}
 
-				break;
+			$results = array(
+				'endpoint'    => $endpoint,
+				'total_pages' => ! empty( $total_pages ) ? $total_pages : 1,
+				'page'        => $page,
+				'per_page'    => $per_page,
+				'date'        => wc_rest_prepare_date_response( gmdate( 'Y-m-d H:i:s' ) ),
+				'results'     => $data,
+			);
+
+			$json_results = wp_json_encode( $results );
+
 		}
-
-		// If, for some instance, the current user was logged in with another user, restore their log in.
-		if ( $was_user_logged && get_current_user_id() !== $was_user_logged ) {
-			wp_set_current_user( $was_user_logged );
+		else {
+			$json_results = wp_json_encode( $data );
+			$page_suffix  = '-error';
 		}
 
 		$upload_dir = self::get_full_export_upload_dir();
@@ -430,7 +438,47 @@ class FullExportController extends \WC_REST_Controller {
 			}
 
 			// Save the file.
-			file_put_contents( $file_path, $json ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			file_put_contents( $file_path, $json_results ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+
+		}
+
+		if ( empty( $exported_endpoints ) ) {
+
+			// If, for some instance, the current user was logged in with another user, restore their log in.
+			if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
+				wp_set_current_user( $logged_in_user );
+			}
+			// Or if wasn't logged in, close the session for security reasons.
+			elseif ( ! $logged_in_user && is_user_logged_in() ) {
+				wp_logout();
+			}
+
+			AtumCache::delete_transients( $exported_endpoints_transient_key );
+
+		}
+
+	}
+
+	/**
+	 * Delete an old export
+	 *
+	 * @since 1.9.19
+	 *
+	 * @param string $endpoint
+	 */
+	public function delete_old_export( $endpoint = '' ) {
+
+		$upload_dir = self::get_full_export_upload_dir();
+
+		if ( ! is_wp_error( $upload_dir ) ) {
+
+			$files = glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) );
+
+			foreach ( $files as $file ) {
+				if ( is_file( $file ) ) {
+					unlink( $file );
+				}
+			}
 
 		}
 

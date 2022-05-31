@@ -69,6 +69,7 @@ class AtumApi {
 		'atum-setting-options'               => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
 		'atum-suppliers'                     => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-tools'                         => __NAMESPACE__ . '\Controllers\V3\ToolsController',
+		'atum-full-export'                   => __NAMESPACE__ . '\Controllers\V3\FullExportController',
 	);
 
 	/**
@@ -87,6 +88,22 @@ class AtumApi {
 		'product_tag',
 		'comment',
 	];
+
+	/**
+	 * All the exportable endpoint paths
+	 *
+	 * @var string[]
+	 */
+	private static $exportable_endpoints = array(
+		'/wc/v3/products',                 // Products.
+		'/wc/v3/atum/product-variations',  // Variations.
+		'/wc/v3/products/atum-locations',  // ATUM Locations.
+		'/wc/v3/orders',                   // Orders.
+		'/wc/v3/atum/inbound-stock',       // Inbound Stock products.
+		'/wc/v3/atum/inventory-logs',      // Inventory Logs.
+		'/wc/v3/atum/purchase-orders',     // Purchase Orders.
+		'/wc/v3/atum/suppliers',           // Suppliers.
+	);
 
 	/**
 	 * AtumApi constructor
@@ -140,6 +157,9 @@ class AtumApi {
 
 		// Fix CORS issue when connecting through Ionic's Capacitor to our API.
 		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
+
+		// Add the exportable endpoint hooks.
+		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 1 );
 
 		$this->load_extenders();
 
@@ -253,6 +273,31 @@ class AtumApi {
 		}
 
 		return $query_params;
+	}
+
+	/**
+	 * Add the hooks for the exportable endpoints
+	 *
+	 * @since 1.9.19
+	 */
+	public function add_exportable_endpoints_hooks() {
+
+		// Exportable endpoints hooks.
+		foreach ( self::get_exportable_endpoints() as $index => $exportable_endpoint ) {
+			add_action( "atum_api_export_endpoint_$index", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 2 );
+		}
+
+	}
+
+	/**
+	 * Getter for the exportable endpoints
+	 *
+	 * @since 1.9.19
+	 *
+	 * @return string[]
+	 */
+	public static function get_exportable_endpoints() {
+		return apply_filters( 'atum/api/exportable_endpoints', self::$exportable_endpoints );
 	}
 
 
