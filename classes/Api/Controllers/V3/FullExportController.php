@@ -342,10 +342,6 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public static function run_export( $endpoint, $user_id, $page = 1 ) {
 
-		if ( ! Helpers::is_rest_request() ) {
-			error_log( "Exporting endpoint: $endpoint" );
-		}
-
 		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ '' ] );
 		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
 
