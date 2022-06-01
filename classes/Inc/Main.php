@@ -295,6 +295,7 @@ class Main {
 
 				// The Suppliers is a dependency for Purchase Orders.
 				if ( AtumCapabilities::current_user_can( 'read_purchase_order' ) ) {
+
 					PurchaseOrders::get_instance();
 
 					// The Purchase Orders is a dependency for Inbound Stock.

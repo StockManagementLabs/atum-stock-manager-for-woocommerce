@@ -159,7 +159,7 @@ class AtumApi {
 		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
 
 		// Add the exportable endpoint hooks.
-		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 1 );
+		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
 
 		$this->load_extenders();
 

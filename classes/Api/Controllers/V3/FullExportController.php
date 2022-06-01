@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Inc\Helpers;
 
 
 class FullExportController extends \WC_REST_Controller {
@@ -286,7 +287,7 @@ class FullExportController extends \WC_REST_Controller {
 
 			if ( ! as_next_scheduled_action( $hook_name ) ) {
 				$this->delete_old_export( $endpoint );
-				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint ] );
+				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint, get_current_user_id() ] );
 			}
 
 		}
@@ -336,11 +337,14 @@ class FullExportController extends \WC_REST_Controller {
 	 * @since 1.9.19
 	 *
 	 * @param string $endpoint The endpoint that is being exported.
+	 * @param int    $user_id  The user ID doing that initialized the export.
 	 * @param int    $page     Optional. If passed, will export the specified page of results.
 	 */
-	public static function run_export( $endpoint, $page = 1 ) {
+	public static function run_export( $endpoint, $user_id, $page = 1 ) {
 
-		error_log( "Exporting endpoint: $endpoint" );
+		if ( ! Helpers::is_rest_request() ) {
+			error_log( "Exporting endpoint: $endpoint" );
+		}
 
 		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ '' ] );
 		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
@@ -354,25 +358,12 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		$json_results = $page_suffix = '';
-
+		$page_suffix    = '';
 		$logged_in_user = get_current_user_id();
 
 		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
-		if ( ! $logged_in_user || ! current_user_can( 'read_private_posts' ) ) {
-
-			global $wpdb;
-
-			$admin_id = $wpdb->get_var( "
-				SELECT MIN(ID) FROM $wpdb->users u
-				LEFT JOIN $wpdb->usermeta um ON(u.ID = um.user_id AND um.meta_key = 'wp_capabilities')
-				WHERE um.meta_value LIKE '%\"administrator\"%'
-			" );
-
-			if ( $admin_id ) {
-				wp_set_current_user( $admin_id );
-			}
-
+		if ( ! $logged_in_user || $logged_in_user !== $user_id ) {
+			wp_set_current_user( $user_id );
 		}
 
 		$per_page = apply_filters( 'atum/api/full_export_controller/records_per_page', 100 );
@@ -399,7 +390,7 @@ class FullExportController extends \WC_REST_Controller {
 					$page_suffix = "-{$page}_{$total_pages}";
 
 					if ( $total_pages > $page ) {
-						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $page + 1 ] );
+						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
 						$exported_endpoints[] = $endpoint;

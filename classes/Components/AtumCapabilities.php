@@ -155,7 +155,8 @@ class AtumCapabilities {
 	 * @return bool
 	 */
 	public static function current_user_can( $capability, $object_id = NULL ) {
-		return $object_id ? current_user_can( ATUM_PREFIX . $capability, $object_id ) : current_user_can( ATUM_PREFIX . $capability );
+		// NOTE: allow the WP cron to bypass this to avoid problems when running internal background jobs when not logged in.
+		return ( defined( 'DOING_CRON' ) && DOING_CRON ) || ( $object_id ? current_user_can( ATUM_PREFIX . $capability, $object_id ) : current_user_can( ATUM_PREFIX . $capability ) );
 	}
 
 

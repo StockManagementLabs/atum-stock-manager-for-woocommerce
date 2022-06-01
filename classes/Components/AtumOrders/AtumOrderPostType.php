@@ -25,7 +25,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
-use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -93,7 +92,7 @@ abstract class AtumOrderPostType {
 		}
 
 		// Register the post type.
-		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_post_type' ), 1 );
 		$post_type = static::POST_TYPE;
 
 		if ( is_admin() ) {
@@ -171,6 +170,7 @@ abstract class AtumOrderPostType {
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
+
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
