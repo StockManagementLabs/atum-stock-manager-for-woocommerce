@@ -144,7 +144,7 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view the full export status.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
@@ -163,7 +163,7 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public function update_item_permissions_check( $request ) {
 
-		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_update', __( 'Sorry, you are not allowed to run a full export.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 
