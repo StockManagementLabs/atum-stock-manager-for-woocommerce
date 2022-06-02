@@ -18,7 +18,6 @@ defined( 'ABSPATH' ) || exit;
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
-use Atum\Inc\Helpers;
 
 
 class FullExportController extends \WC_REST_Controller {
@@ -101,6 +100,11 @@ class FullExportController extends \WC_REST_Controller {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
+				'data'    => array(
+					'description' => __( 'Exported data.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'array',
+					'context'     => array( 'view' ),
+				),
 			),
 		);
 
@@ -178,15 +182,81 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public function get_item( $request ) {
 
-		return rest_ensure_response(
-			$this->prepare_item_for_response(
-				array(
-					'success' => FALSE, // TODO...
-					'message' => 'The full export is still running, try later, please.', // TODO...
-				),
-				$request
-			)
-		);
+		$endpoint = $request['endpoint'] ?? '';
+
+		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ $endpoint ] );
+		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
+
+		if ( ! empty( $exported_endpoints ) ) {
+
+			$response = array(
+				'success' => FALSE,
+				'code'    => 'running',
+				'message' => __( 'The export is still running. Please try again later.', ATUM_TEXT_DOMAIN ),
+			);
+
+		}
+		else {
+
+			$upload_dir = self::get_full_export_upload_dir();
+
+			if ( ! is_wp_error( $upload_dir ) ) {
+
+				$files = glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) );
+
+				if ( ! empty( $files ) ) {
+
+					$data = [];
+
+					foreach ( $files as $file ) {
+
+						if ( is_file( $file ) ) {
+
+							// Get the exported files for this endpoint only.
+							if ( $endpoint && strpos( $file, str_replace( '/', '_', $endpoint ) ) === FALSE ) {
+								continue;
+							}
+
+							$json = wp_json_file_decode( $file );
+
+							if ( $json ) {
+								$data[ basename( $file ) ] = $json;
+							}
+
+						}
+
+					}
+
+					$response = array(
+						'success' => TRUE,
+						'data'    => $data,
+					);
+
+				}
+				else {
+
+					$response = array(
+						'success' => FALSE,
+						'code'    => 'running',
+						'message' => __( 'No exported files found. Please do run a new full export.', ATUM_TEXT_DOMAIN ),
+					);
+
+				}
+
+			}
+			else {
+
+				$response = array(
+					'success' => FALSE,
+					'code'    => 'running',
+					'message' => __( 'The export upload dir was not found.', ATUM_TEXT_DOMAIN ),
+				);
+
+			}
+
+		}
+
+		return rest_ensure_response( $this->prepare_item_for_response( $response, $request ) );
 
 	}
 
