@@ -14,6 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\Controllers\V3\FullExportController;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
@@ -47,6 +48,10 @@ class AtumQueues {
 			'time'     => 'midnight tomorrow',
 			'interval' => DAY_IN_SECONDS,
 		],
+		'atum/clean_up_tmp_folders'          => [
+			'time'     => 'now',
+			'interval' => WEEK_IN_SECONDS,
+		],
 	);
 
 	/**
@@ -70,6 +75,9 @@ class AtumQueues {
 
 		// Add the sales calc recurring hook.
 		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'update_last_sales_calc_props' ) );
+
+		// Add the tmp folders clean up hook.
+		add_action( 'atum/clean_up_tmp_folders', array( $this, 'clean_up_tmp_folders' ) );
 
 		// Add the ATUM Queues async hooks listeners.
 		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
@@ -254,6 +262,36 @@ class AtumQueues {
 
 		// Wait until finished.
 		update_option( ATUM_PREFIX . 'last_sales_calc', Helpers::date_format( '', TRUE, TRUE ) );
+
+	}
+
+	/**
+	 * Clean up ATUM temporary folders
+	 *
+	 * @since 1.9.19
+	 */
+	public function clean_up_tmp_folders() {
+
+		// Clean up any old full API exportation older than 7 days.
+		$full_export_dir = FullExportController::get_full_export_upload_dir();
+
+		if ( ! is_wp_error( $full_export_dir ) ) {
+
+			$files = glob( $full_export_dir . '*' );
+
+			foreach ( $files as $file ) {
+				if ( is_file( $file ) ) {
+
+					$file_time = filemtime( $file );
+
+					if ( $file_time + WEEK_IN_SECONDS < time() ) {
+						unlink( $file );
+					}
+
+				}
+			}
+
+		}
 
 	}
 
@@ -459,10 +497,12 @@ class AtumQueues {
 		if ( 'atum_settings' === $option_name ) {
 
 			// Cancel anyway.
-			if ( empty( $value['calc_prop_cron'] ) || 'no' === $value['calc_prop_cron'] ||
-				$old_value['calc_prop_cron_interval'] !== $value['calc_prop_cron_interval']
-				|| $old_value['calc_prop_cron_type'] !== $value['calc_prop_cron_type']
-				|| $old_value['calc_prop_cron_start'] !== $value['calc_prop_cron_start'] ) {
+			if (
+				empty( $value['calc_prop_cron'] ) || 'no' === $value['calc_prop_cron'] ||
+				$old_value['calc_prop_cron_interval'] !== $value['calc_prop_cron_interval'] ||
+				$old_value['calc_prop_cron_type'] !== $value['calc_prop_cron_type'] ||
+				$old_value['calc_prop_cron_start'] !== $value['calc_prop_cron_start']
+			) {
 
 				$wc = WC();
 
