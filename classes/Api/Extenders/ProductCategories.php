@@ -12,11 +12,10 @@
 
 namespace Atum\Api\Extenders;
 
+defined( 'ABSPATH' ) || die;
+
 use Atum\Components\AtumCapabilities;
 use Atum\Modules\ModuleManager;
-
-
-defined( 'ABSPATH' ) || die;
 
 class ProductCategories {
 

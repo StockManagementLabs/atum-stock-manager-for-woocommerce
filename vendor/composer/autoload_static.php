@@ -98,6 +98,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Api\\Controllers\\V3\\SuppliersController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/SuppliersController.php',
         'Atum\\Api\\Controllers\\V3\\ToolsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/ToolsController.php',
         'Atum\\Api\\Extenders\\AtumProductData' => __DIR__ . '/../..' . '/classes/Api/Extenders/AtumProductData.php',
+        'Atum\\Api\\Extenders\\Media' => __DIR__ . '/../..' . '/classes/Api/Extenders/Media.php',
         'Atum\\Api\\Extenders\\OrderNotes' => __DIR__ . '/../..' . '/classes/Api/Extenders/OrderNotes.php',
         'Atum\\Api\\Extenders\\ProductAttributes' => __DIR__ . '/../..' . '/classes/Api/Extenders/ProductAttributes.php',
         'Atum\\Api\\Extenders\\ProductCategories' => __DIR__ . '/../..' . '/classes/Api/Extenders/ProductCategories.php',

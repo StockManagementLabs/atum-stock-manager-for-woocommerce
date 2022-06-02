@@ -34,6 +34,7 @@ return array(
     'Atum\\Api\\Controllers\\V3\\SuppliersController' => $baseDir . '/classes/Api/Controllers/V3/SuppliersController.php',
     'Atum\\Api\\Controllers\\V3\\ToolsController' => $baseDir . '/classes/Api/Controllers/V3/ToolsController.php',
     'Atum\\Api\\Extenders\\AtumProductData' => $baseDir . '/classes/Api/Extenders/AtumProductData.php',
+    'Atum\\Api\\Extenders\\Media' => $baseDir . '/classes/Api/Extenders/Media.php',
     'Atum\\Api\\Extenders\\OrderNotes' => $baseDir . '/classes/Api/Extenders/OrderNotes.php',
     'Atum\\Api\\Extenders\\ProductAttributes' => $baseDir . '/classes/Api/Extenders/ProductAttributes.php',
     'Atum\\Api\\Extenders\\ProductCategories' => $baseDir . '/classes/Api/Extenders/ProductCategories.php',

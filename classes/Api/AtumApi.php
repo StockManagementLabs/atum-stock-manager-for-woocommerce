@@ -14,6 +14,7 @@ namespace Atum\Api;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Api\Extenders\AtumProductData;
+use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
@@ -195,6 +196,7 @@ class AtumApi {
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
 		ProductCategories::get_instance();
+		Media::get_instance();
 
 		// Allow ATUM plugins to load their extenders.
 		do_action( 'atum/api/load_extenders' );
