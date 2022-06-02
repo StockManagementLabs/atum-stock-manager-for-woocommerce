@@ -59,7 +59,6 @@ class Media {
 			'default'     => NULL,
 			'description' => __( 'Limit result set to attachments linked to a particular post type.', ATUM_TEXT_DOMAIN ),
 			'type'        => 'string',
-			'enum'        => array_diff( get_post_types(), [ 'attachment' => 'attachment' ] ),
 		);
 
 		return $query_params;
@@ -111,11 +110,18 @@ class Media {
 
 		if ( $this->linked_post_type ) {
 
-			$where_clause = $wpdb->prepare( "
+			if ( strpos( $this->linked_post_type, ',' ) !== FALSE ) {
+				$linked_post_types = array_map( 'trim', explode( ',', $this->linked_post_type ) );
+			}
+			else {
+				$linked_post_types = [ $this->linked_post_type ];
+			}
+
+			$where_clause = "
 				SELECT DISTINCT pm.meta_value FROM $wpdb->posts p
 				LEFT JOIN $wpdb->postmeta pm ON (pm.post_id = p.ID AND pm.meta_key = '_thumbnail_id')
-				WHERE p.post_type = %s
-			", $this->linked_post_type );
+				WHERE p.post_type IN ('" . implode( "','", $linked_post_types ) . "')
+			";
 
 			$clauses['where'] .= " AND $wpdb->posts.ID IN ($where_clause)";
 
