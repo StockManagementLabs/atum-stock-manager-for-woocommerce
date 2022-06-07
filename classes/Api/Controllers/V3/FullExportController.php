@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || exit;
 
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
-use Atum\Components\AtumCapabilities;
 
 
 class FullExportController extends \WC_REST_Controller {
@@ -40,6 +39,11 @@ class FullExportController extends \WC_REST_Controller {
 	 * Transient key name for exported endpoints.
 	 */
 	const EXPORTED_ENDPOINTS_TRANSIENT = 'api_run_full_export_endpoints';
+
+	/**
+	 * Cloud function to send notification to the App user when the full export is completed.
+	 */
+	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
 
 	/**
 	 * Register the routes for tools
@@ -511,6 +515,13 @@ class FullExportController extends \WC_REST_Controller {
 			}
 
 			AtumCache::delete_transients( $exported_endpoints_transient_key );
+
+			// Send a notification to the customer once the full export is completed.
+			wp_remote_get( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
+				'timeout'   => 0.01,
+				'blocking'  => FALSE,
+				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			] );
 
 		}
 
