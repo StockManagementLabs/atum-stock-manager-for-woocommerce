@@ -137,7 +137,7 @@ $thumbnail    = $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $
 		<div class="edit" style="display: none;">
 			<div class="split-input">
 				<div class="input">
-					<label><?php esc_attr_e( 'Pre-discount:', ATUM_TEXT_DOMAIN ); ?></label>
+					<label><?php esc_attr_e( 'Before discount:', ATUM_TEXT_DOMAIN ); ?></label>
 					<input type="text" name="line_subtotal[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" class="line_subtotal wc_input_price" data-subtotal="<?php echo esc_attr( wc_format_localized_price( $item->get_subtotal() ) ); ?>" />
 				</div>
 
@@ -186,7 +186,7 @@ $thumbnail    = $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $
 				<div class="edit" style="display: none;">
 					<div class="split-input">
 						<div class="input">
-							<label><?php esc_attr_e( 'Pre-discount:', ATUM_TEXT_DOMAIN ); ?></label>
+							<label><?php esc_attr_e( 'Before discount:', ATUM_TEXT_DOMAIN ); ?></label>
 							<input type="text" name="line_subtotal_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo esc_attr( wc_format_localized_price( 0 ) ) ?>" value="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" class="line_subtotal_tax wc_input_price" data-subtotal_tax="<?php echo esc_attr( wc_format_localized_price( $tax_item_subtotal ) ); ?>" data-tax_id="<?php echo esc_attr( $tax_item_id ); ?>" />
 						</div>
 
