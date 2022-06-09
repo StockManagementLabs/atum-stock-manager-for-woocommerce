@@ -3282,7 +3282,7 @@ final class Helpers {
 			$date = strtotime( $date );
 		}
 
-		return ! $gmt_date ? wp_date( $format, $date ) : gmdate( $format, $date );
+		return ! $gmt_date ? date_i18n( $format, $date ) : gmdate( $format, $date );
 
 	}
 
