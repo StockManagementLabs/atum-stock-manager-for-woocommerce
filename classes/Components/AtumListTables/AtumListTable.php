@@ -1721,7 +1721,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			$back_orders = '--';
 			if ( $this->list_item->backorders_allowed() && 'onbackorder' === $this->list_item->get_atum_stock_status() ) {
 				$back_orders = $this->list_item->get_stock_quantity();
 			}
