@@ -624,6 +624,7 @@ class ListTable extends AtumListTable {
 		$will_last = self::EMPTY_COL;
 
 		if ( $this->allow_calcs ) {
+
 			$sales = $this->column__sales_last_days( $item, FALSE );
 			$stock = $this->list_item->get_stock_quantity();
 
@@ -631,9 +632,13 @@ class ListTable extends AtumListTable {
 				$sale_days = max( 1, self::$sale_days );
 				$will_last = ceil( $stock / ( $sales / $sale_days ) );
 			}
-			elseif ( $stock > 0 ) {
+			elseif ( $stock > 0 || $this->list_item->backorders_allowed() ) {
 				$will_last = '>30';
 			}
+			elseif ( $stock <= 0 ) {
+				$will_last = 0;
+			}
+
 		}
 		
 		return apply_filters( 'atum/stock_central_list/column_stock_will_last_days', $will_last, $item, $this->list_item, $this );
