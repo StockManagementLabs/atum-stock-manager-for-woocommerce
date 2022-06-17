@@ -423,7 +423,7 @@ class ListTable extends AtumListTable {
 		";
 		// phpcs:enable
 
-		$po_products = $wpdb->get_results( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$po_products = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! empty( $po_products ) ) {
 
@@ -439,11 +439,11 @@ class ListTable extends AtumListTable {
 
 			foreach ( $po_products as $po_product ) {
 
-				$post = get_post( $po_product->product_id );
+				$post = get_post( $po_product['product_id'] );
 
 				if ( $post ) {
-					$post->po_id      = $po_product->order_id;
-					$post->po_item_id = $po_product->order_item_id;
+					$post->po_id      = $po_product['order_id'];
+					$post->po_item_id = $po_product['order_item_id'];
 					$this->items[]    = $post;
 				}
 				// In case there are some products still added to POs but not exists on the shop anymore.
