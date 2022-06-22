@@ -23,11 +23,11 @@ use Atum\Suppliers\Suppliers;
 trait AtumProductTrait {
 
 	/**
-	 * Add the ATUM data to the ATUM
+	 * Add the ATUM data to the ATUM Product Trait
 	 *
 	 * @var bool
 	 */
-	protected $atum_data = array(
+	protected static $atum_data = array(
 		'purchase_price'                => '',
 		'supplier_id'                   => NULL,
 		'supplier_sku'                  => '',

@@ -28,7 +28,7 @@ class AtumProductVariable extends \WC_Product_Variable {
 	 */
 	public function __construct( $product = 0 ) {
 
-		$this->data = apply_filters( 'atum/model/product_variable/data', array_merge( $this->data, $this->atum_data ) );
+		$this->data = apply_filters( 'atum/model/product_variable/data', array_merge( $this->data, self::$atum_data ) );
 		parent::__construct( $product );
 
 		do_action( 'atum/model/product_variable', $product );
