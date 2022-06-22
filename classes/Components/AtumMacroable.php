@@ -102,7 +102,7 @@ trait AtumMacroable {
 	public function __call( $method, $parameters ) {
 
 		if ( ! static::has_macro( $method ) ) {
-			throw new BadMethodCallException( "Method {$method} does not exist." );
+			return FALSE;
 		}
 
 		$macro = static::$macros[ $method ];
