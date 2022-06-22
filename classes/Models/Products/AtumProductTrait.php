@@ -23,7 +23,7 @@ use Atum\Suppliers\Suppliers;
 trait AtumProductTrait {
 
 	/**
-	 * Add the ATUM data to the ATUM
+	 * Add the ATUM data to the ATUM Product Trait
 	 *
 	 * @var bool
 	 */
