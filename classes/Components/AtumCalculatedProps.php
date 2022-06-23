@@ -250,6 +250,8 @@ class AtumCalculatedProps {
 			return;
 		}
 
+		do_action_ref_array( 'atum/update_atum_sales_calc_props', [ &$product, $order_type_id ] );
+
 		switch ( $order_type_id ) {
 			// Purchase Orders.
 			case 2:

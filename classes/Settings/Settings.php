@@ -356,8 +356,8 @@ class Settings {
 			'orders_search_by_sku'           => array(
 				'group'   => 'general',
 				'section' => 'general',
-				'name'    => __( 'Orders search by SKU', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'When enabled, you can search by product SKU or supplier SKU and will return any order containing a product matching the specified term. Please, note that due to the complexity of this query, it could cause a delay in returning the searched results on dbs with many orders.', ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Search WC orders by SKU', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'When enabled, you can search on the WC orders list by product SKU or supplier SKU and will return any WC order containing a product matching the specified term. Please, note that due to the complexity of this query, it could cause a delay in returning the searched results on dbs with many orders.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no',
 			),
