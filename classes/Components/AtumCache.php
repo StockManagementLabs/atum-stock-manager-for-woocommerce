@@ -318,6 +318,11 @@ final class AtumCache {
 			wp_cache_add( 'alloptions', $all_options, 'options' );
 		}
 
+		// When using external caching systems, the transients aren't stored in the database.
+		if ( wp_using_ext_object_cache() ) {
+			wp_cache_delete( $transient_id, 'transient' );
+		}
+
 		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%' OR `option_name` LIKE '$timeout%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
