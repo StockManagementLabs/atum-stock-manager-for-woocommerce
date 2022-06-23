@@ -69,15 +69,16 @@ class AtumHelpGuide {
 	 * @since 1.9.11
 	 *
 	 * @param string $guide
+	 * @param string $icon
 	 *
 	 * @return string
 	 */
-	public function get_help_guide_button( $guide ) {
+	public function get_help_guide_button( $guide, $icon = 'indent-increase' ) {
 
 		$default_path = ATUM_PATH . 'help-guides';
 		$path_data    = $this->guides_path && $this->guides_path !== $default_path ? ' data-path="' . $this->guides_path . '"' : '';
 
-		return '<i class="atum-icon atmi-indent-increase show-intro-guide atum-tooltip" 
+		return '<i class="atum-icon atmi-' . $icon . ' show-intro-guide atum-tooltip" 
 			data-guide="' . $guide . '"' . $path_data . ' 
 			title="' . __( 'Show help guide', ATUM_TEXT_DOMAIN ) . '"></i>';
 

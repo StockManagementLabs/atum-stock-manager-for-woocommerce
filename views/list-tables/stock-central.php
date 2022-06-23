@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || die;
 			<?php esc_html_e( '(Uncontrolled)', ATUM_TEXT_DOMAIN ) ?>
 		<?php endif; ?>
 
-		<a href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
+		<a id="atum-stock-central-lists-button" href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
 		<?php do_action( 'atum/stock_central_list/page_title_buttons' ) ?>
 	</h1>
 
