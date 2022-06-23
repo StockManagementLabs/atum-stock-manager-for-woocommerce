@@ -15,6 +15,7 @@ namespace Atum\StockCentral;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListPage;
+use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumHelpPointers;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -63,6 +64,9 @@ class StockCentral extends AtumListPage {
 
 			// Register the help pointers.
 			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
+
+			// Setup help guides.
+			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_guides' ) );
 
 			$this->init_hooks();
 
@@ -380,6 +384,23 @@ class StockCentral extends AtumListPage {
 		/* @deprecated Use the AtumHelpGuide instead */
 		new AtumHelpPointers( $pointers );
 
+	}
+
+	/**
+	 * Load scripts for Stock Central help guides.
+	 *
+	 * @since 1.9.19
+	 */
+	public function setup_help_guides() {
+
+		wp_register_script( 'atum-stock-central-knowledge-base', ATUM_URL . 'assets/js/build/atum-stock-central-kb.js', [], ATUM_VERSION, TRUE );
+
+		$vars = [];
+		$vars = array_merge( $vars, AtumHelpGuide::get_help_guide_js_vars( ATUM_PATH . 'help-guides/stock-central.json' ) );
+
+		wp_localize_script( 'atum-stock-central-knowledge-base', 'atumStockCentralKB', $vars );
+
+		wp_enqueue_script( 'atum-stock-central-knowledge-base' );
 	}
 
 	

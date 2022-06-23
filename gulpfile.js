@@ -116,17 +116,17 @@ gulp.task('js::atum', function () {
 			devtool: config.production ? 'no' : 'source-map',
 			
 			entry: {
-				'addons'         : config.jsSrcDir + 'addons.ts',
-				'check-orders'   : config.jsSrcDir + 'check-orders.ts',
-				'dashboard'      : config.jsSrcDir + 'dashboard.ts',
-				'data-export'    : config.jsSrcDir + 'data-export.ts',
-				'list-tables'    : config.jsSrcDir + 'list-tables.ts',
-				'marketing-popup': config.jsSrcDir + 'marketing-popup.ts',
-				'orders'         : config.jsSrcDir + 'orders.ts',
-				'post-type-list' : config.jsSrcDir + 'post-type-list-tables.ts',
-				'product-data'   : config.jsSrcDir + 'product-data.ts',
-				'settings'       : config.jsSrcDir + 'settings.ts',
-				'suppliers'      : config.jsSrcDir + 'suppliers.ts',
+				'list-tables'     : config.jsSrcDir + 'list-tables.ts',
+				'post-type-list'  : config.jsSrcDir + 'post-type-list-tables.ts',
+				'product-data'    : config.jsSrcDir + 'product-data.ts',
+				'settings'        : config.jsSrcDir + 'settings.ts',
+				'orders'          : config.jsSrcDir + 'orders.ts',
+				'data-export'     : config.jsSrcDir + 'data-export.ts',
+				'addons'          : config.jsSrcDir + 'addons.ts',
+				'marketing-popup' : config.jsSrcDir + 'marketing-popup.ts',
+				'dashboard'       : config.jsSrcDir + 'dashboard.ts',
+				'check-orders'    : config.jsSrcDir + 'check-orders.ts',
+				'stock-central-kb': config.jsSrcDir + 'stock-central-kb.ts',
 			},
 			
 			output: {

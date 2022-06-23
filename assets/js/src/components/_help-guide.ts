@@ -45,6 +45,7 @@ export default class HelpGuide {
 	introOptions: IIntroOptions;
 	introSteps: IIntroStep[] = [];
 
+	step: number = 0;
 	isAuto: boolean = false;
 	guide: string = null;
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
@@ -105,6 +106,10 @@ export default class HelpGuide {
 				return;
 			}
 
+			if ( $button.data( 'guide-step' ) ) {
+				this.step = parseInt( $button.data('guide-step') );
+			}
+
 			// First try to find out in the settings option (for quick or one-time guides).
 			if ( this.settings.get( this.guide ) && Array.isArray( this.settings.get( this.guide ) ) ) {
 				this.introSteps = this.settings.get( this.guide );
@@ -159,7 +164,11 @@ export default class HelpGuide {
 	runGuide() {
 
 		$( 'body' ).addClass( 'running-atum-help-guide' );
-		this.IntroJs.setOptions( this.introOptions ).start();
+		this.IntroJs.setOptions( this.introOptions );
+		if ( this.step ) {
+			this.IntroJs._currentStepNumber = this.step;
+		}
+		this.IntroJs.start();
 
 		// @ts-ignore
 		this.IntroJs.onexit( () => {
@@ -184,15 +193,18 @@ export default class HelpGuide {
 	 *
 	 * @return {string}
 	 */
-	getHelpGuideButton( guide: string, path: string = '' ) {
+	getHelpGuideButton( guide: string, path: string = '', icon: string = 'indent-increase', step: number = 0 ) {
 
 		let dataAtts: string = `data-guide="${ guide }"`;
 
 		if ( path ) {
 			dataAtts += ` data-path="${ path }"`;
 		}
+		if ( step ) {
+			dataAtts += ` data-guide-step="${ step }"`;
+		}
 
-		return `<i class="atum-icon atmi-indent-increase show-intro-guide atum-tooltip" ${ dataAtts } title="${ this.settings.get( 'showHelpGuide' ) }"></i>`;
+		return `<i class="atum-icon atmi-${ icon } show-intro-guide atum-tooltip" ${ dataAtts } title="${ this.settings.get( 'showHelpGuide' ) }"></i>`;
 
 	}
 

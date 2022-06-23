@@ -219,6 +219,10 @@ tr.introjs-showElement {
 	border-bottom: 1px solid $white;
 	font-size: 14px;
 	line-height: 1.4;
+	
+	img {
+		max-width: 100%;
+	}
 }
 
 .introjs-tooltip-title {
@@ -495,5 +499,39 @@ tr.introjs-showElement {
 			content: '';
 			@include loader(14px, $primary);
 		}
+	}
+	
+	&.atum-kb, &.atum-kb:active, &.atum-kb:hover {
+		background-color: $red;
+		text-align: center;
+		position: relative;
+		overflow: hidden;
+		border: 1px solid $white;
+		box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+		width: 12px;
+		height: 12px;
+		left: -12px;
+		top: -12px;
+		
+		&.loading-guide {
+			&:before {
+				font-size: 14px;
+				content: $atmi-hourglass;
+				left: -2px;
+				top: -4px;
+			}
+		}
+	}
+	
+	&.atum-kb:before, &.atum-kb:active:before, &.atum-kb:hover:before {
+		color: $white;
+		border-radius: 50%;
+		height: 21px;
+		width: 19px;
+		font-size: 20px;
+		display: inline-block;
+		position: absolute;
+		left: 0px;
+		top: -2px;
 	}
 }

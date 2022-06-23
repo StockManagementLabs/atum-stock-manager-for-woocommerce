@@ -1,0 +1,32 @@
+[
+	{
+		"title": "Stock Central products lists",
+		"element": "#atum-stock-central-lists-button",
+		"intro": "In Stock Central, you will find two different products lists:<br>Controlled = You are thoroughly monitoring all your products by ATUM.<br>Uncontrolled = Product in this list are not monitored and only show essential data."
+	},
+	{
+		"title": "Restock Status",
+		"element": "#restock_status",
+		"intro": "<strong>Restock Status:</strong><span>&nbsp;</span>The system uses this formula to display the products on Restock Status within Stock Central: <strong>The average sales per day for the last week * Days to reorder</strong>. We calculate the average sales by adding the sales of the product of the last week and dividing by 7."
+	},
+	{
+		"title": "Search feature",
+		"element": ".list-table-header .search-box .input-group",
+		"intro": "<p>You can use the search feature to <strong>search for any products</strong> within Stock Central.</p><p>To search for products:</p><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\" title=\"\" alt=\"\"></div>"
+	},
+	{
+		"title": "Sticky Columns",
+		"element": ".list-table-header .sticky-columns-button",
+		"intro": "You can <strong>enable the sticky columns</strong> by clicking on the <em>Toggle Sticky Columns Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-15.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-17.jpg\" title=\"\" alt=\"\">"
+	},
+	{
+		"title": "Sticky Header",
+		"element": ".list-table-header .sticky-header-button",
+		"intro": "You can <strong>enable the sticky header</strong> by clicking on the <em>Toggle Sticky Header Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-14.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-16.jpg\" title=\"\" alt=\"\">"
+	},
+	{
+		"title": "Bulk Actions",
+		"element": ".top #filters_container .bulkactions",
+		"intro": "<p>You can change the Stock Manager (WooCommerce or ATUM) for each product with bulk actions. To apply bulk actions:</p><ul><li><p><strong>Select the products</strong> you wish.</p></li><li><p><strong>Select the action</strong> in the Bulk Actions dropdown.</p></li></ul><p><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfilters-02.jpg\" title=\"\" alt=\"\"></p><p>Available bulk actions (Controlled List):</p><ul><li><p><strong>Enable WC's Manage Stock:</strong><span>&nbsp;</span>To enable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable WC's Manage Stock:</strong><span>&nbsp;</span>To disable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable ATUM's Stock Control:</strong> To disable the <em>ATUM's Stock Control</em> option in selected products. These products will go to the <strong>Uncontrolled List</strong>.</p></li></ul><p>Available bulk actions (Uncontrolled List):</p><ul><li><p><strong>Enable WC's Manage Stock:</strong> To enable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable WC's Manage Stock:</strong> To disable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Enable ATUM's Stock Control:</strong> To Enable the <em>ATUM's Stock Control</em> option in selected products. These products will go to the<strong>Controlled List</strong>.</p></li></ul>"
+	}
+]
