@@ -372,7 +372,17 @@ class Suppliers {
 		$supplier = new Supplier( $supplier_id );
 
 		foreach ( [ 'supplier_details', 'billing_information', 'default_settings' ] as $metabox_key ) {
+
+			// Add unchecked checkboxes values.
+			if ( 'supplier_details' === $metabox_key && ! isset( $_POST[ $metabox_key ]['use_default_description'] ) ) {
+				$_POST[ $metabox_key ]['use_default_description'] = 'no';
+			}
+			elseif ( 'default_settings' === $metabox_key && ! isset( $_POST[ $metabox_key ]['use_default_terms'] ) ) {
+				$_POST[ $metabox_key ]['use_default_terms'] = 'no';
+			}
+
 			$supplier->set_data( $_POST[ $metabox_key ] );
+
 		}
 
 		$supplier->save();
