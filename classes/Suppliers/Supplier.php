@@ -27,6 +27,7 @@ defined( 'ABSPATH' ) || die;
  * @property string $general_email
  * @property string $ordering_email
  * @property string $description
+ * @property string $use_default_description
  * @property string $currency
  * @property string $address
  * @property string $address_2
@@ -41,6 +42,7 @@ defined( 'ABSPATH' ) || die;
  * @property int    $tax_rate
  * @property int    $lead_time
  * @property string $delivery_terms
+ * @property string $use_default_terms
  * @property int    $days_to_cancel
  * @property string $cancelation_policy
  */
@@ -66,32 +68,34 @@ class Supplier {
 	 * @var array
 	 */
 	protected $data = array(
-		'name'               => '',
-		'code'               => '',
-		'tax_number'         => '',
-		'phone'              => '',
-		'fax'                => '',
-		'website'            => '',
-		'ordering_url'       => '',
-		'general_email'      => '',
-		'ordering_email'     => '',
-		'description'        => '',
-		'currency'           => '',
-		'address'            => '',
-		'address_2'          => '',
-		'city'               => '',
-		'country'            => '',
-		'state'              => '',
-		'zip_code'           => '',
-		'assigned_to'        => NULL,
-		'location'           => '',
-		'thumbnail_id'       => NULL,
-		'discount'           => NULL,
-		'tax_rate'           => NULL,
-		'lead_time'          => NULL,
-		'delivery_terms'     => '',
-		'days_to_cancel'     => NULL,
-		'cancelation_policy' => '',
+		'name'                    => '',
+		'code'                    => '',
+		'tax_number'              => '',
+		'phone'                   => '',
+		'fax'                     => '',
+		'website'                 => '',
+		'ordering_url'            => '',
+		'general_email'           => '',
+		'ordering_email'          => '',
+		'description'             => '',
+		'use_default_description' => 'yes',
+		'currency'                => '',
+		'address'                 => '',
+		'address_2'               => '',
+		'city'                    => '',
+		'country'                 => '',
+		'state'                   => '',
+		'zip_code'                => '',
+		'assigned_to'             => NULL,
+		'location'                => '',
+		'thumbnail_id'            => NULL,
+		'discount'                => NULL,
+		'tax_rate'                => NULL,
+		'lead_time'               => NULL,
+		'delivery_terms'          => '',
+		'use_default_terms'       => 'yes',
+		'days_to_cancel'          => NULL,
+		'cancelation_policy'      => '',
 	);
 
 	/**
@@ -405,6 +409,23 @@ class Supplier {
 	}
 
 	/**
+	 * Set the use default description
+	 *
+	 * @since 1.9.19
+	 *
+	 * @param string|bool $use_default_description
+	 */
+	public function set_use_default_description( $use_default_description ) {
+
+		$use_default_description = wc_bool_to_string( $use_default_description );
+
+		if ( $this->data['use_default_description'] !== $use_default_description ) {
+			$this->data['use_default_description'] = $use_default_description;
+			$this->register_change( 'use_default_description' );
+		}
+	}
+
+	/**
 	 * Set the currency
 	 *
 	 * @since 1.6.8
@@ -640,6 +661,23 @@ class Supplier {
 		if ( $this->data['delivery_terms'] !== $delivery_terms ) {
 			$this->data['delivery_terms'] = $delivery_terms;
 			$this->register_change( 'delivery_terms' );
+		}
+	}
+
+	/**
+	 * Set the use default terms
+	 *
+	 * @since 1.9.19
+	 *
+	 * @param string|bool $use_default_terms
+	 */
+	public function set_use_default_terms( $use_default_terms ) {
+
+		$use_default_terms = wc_bool_to_string( $use_default_terms );
+
+		if ( $this->data['use_default_terms'] !== $use_default_terms ) {
+			$this->data['use_default_terms'] = $use_default_terms;
+			$this->register_change( 'use_default_terms' );
 		}
 	}
 

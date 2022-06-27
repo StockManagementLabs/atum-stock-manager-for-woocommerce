@@ -9,8 +9,6 @@
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Helpers;
-
 ?>
 
 <div class="atum-meta-box supplier">
@@ -54,7 +52,12 @@ use Atum\Inc\Helpers;
 
 	<div class="form-field form-field-wide">
 		<label for="delivery_terms"><?php esc_html_e( 'Payments and Delivery Terms', ATUM_TEXT_DOMAIN ) ?></label>
-		<textarea id="delivery_terms" name="default_settings[delivery_terms]" rows="5"><?php echo esc_textarea( $supplier->delivery_terms ) ?></textarea>
+
+		<p>
+			<input type="checkbox" class="form-check-input default-checkbox" name="default_settings[use_default_terms]" value="yes"<?php checked( 'no' !== $supplier->use_default_terms, TRUE ) ?>> <?php esc_html_e( 'Use default payments and delivery terms', ATUM_TEXT_DOMAIN ); ?><br>
+		</p>
+
+		<textarea id="delivery_terms" name="default_settings[delivery_terms]" rows="5"<?php echo 'no' !== $supplier->use_default_terms ? ' style="display:none"' : '' ?>><?php echo esc_textarea( $supplier->delivery_terms ) ?></textarea>
 	</div>
 
 	<div class="form-field form-field-wide">

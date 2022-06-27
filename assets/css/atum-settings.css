@@ -4341,7 +4341,8 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding: 0 0 3px;
 }
 
-.atum-meta-box .form-field > input, .atum-meta-box .form-field > select, .atum-meta-box .form-field > textarea {
+.atum-meta-box .form-field > input[type=text], .atum-meta-box .form-field > input[type=email], .atum-meta-box .form-field > input[type=password], .atum-meta-box .form-field > input[type=number], .atum-meta-box .form-field > input[type=tel],
+.atum-meta-box .form-field > select, .atum-meta-box .form-field > textarea {
   width: 100%;
 }
 
@@ -4373,7 +4374,8 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   clear: both;
 }
 
-.atum-meta-box .form-field.form-field-wide > .wc-customer-search, .atum-meta-box .form-field.form-field-wide > .wc-enhanced-select, .atum-meta-box .form-field.form-field-wide > input, .atum-meta-box .form-field.form-field-wide > select, .atum-meta-box .form-field.form-field-wide > textarea, .atum-meta-box .form-field.form-field-wide .select2-container {
+.atum-meta-box .form-field.form-field-wide > .wc-customer-search, .atum-meta-box .form-field.form-field-wide > .wc-enhanced-select, .atum-meta-box .form-field.form-field-wide > input[type=text], .atum-meta-box .form-field.form-field-wide > input[type=email], .atum-meta-box .form-field.form-field-wide > input[type=password],
+.atum-meta-box .form-field.form-field-wide > input[type=number], .atum-meta-box .form-field.form-field-wide > input[type=tel], .atum-meta-box .form-field.form-field-wide > select, .atum-meta-box .form-field.form-field-wide > textarea, .atum-meta-box .form-field.form-field-wide .select2-container {
   width: 100%;
   max-width: 100%;
   height: 32px;

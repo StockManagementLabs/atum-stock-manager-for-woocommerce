@@ -23,6 +23,7 @@ use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\StockCentral;
 use Atum\StockCentral\Lists\ListTable;
+use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 
@@ -167,6 +168,11 @@ class Upgrade {
 		// ** version 1.9.19 ** Regenerate WC product lookup tables to ensure our queries work correctly.
 		if ( version_compare( $db_version, '1.9.19', '<' ) ) {
 			$this->regenerate_lookup_tables();
+		}
+
+		// ** version 1.9.19.1 ** Set the use default checkbox values to the right suppliers.
+		if ( version_compare( $db_version, '1.9.19.1', '<' ) ) {
+			$this->set_supplier_default_checkboxes();
 		}
 
 		/**********************
@@ -1057,6 +1063,29 @@ class Upgrade {
 
 		if ( ! wc_update_product_lookup_tables_is_running() ) {
 			wc_update_product_lookup_tables();
+		}
+
+	}
+
+	/**
+	 * Set the supplier's default checkboxes to the existing suppliers (if needed)
+	 *
+	 * @since 1.9.19.1
+	 */
+	public function set_supplier_default_checkboxes() {
+
+		global $wpdb;
+
+		$supplier_ids = $wpdb->get_col( "
+			SELECT ID FROM $wpdb->posts 
+            WHERE post_type = 'atum_supplier'
+			AND post_status NOT IN ( 'auto-draft', 'trash' ) 
+		" );
+
+		foreach ( $supplier_ids as $supplier_id ) {
+			$supplier = new Supplier( $supplier_id );
+			update_post_meta( $supplier_id, '_use_default_description', ! $supplier->description ? 'yes' : 'no' );
+			update_post_meta( $supplier_id, '_use_default_terms', ! $supplier->delivery_terms ? 'yes' : 'no' );
 		}
 
 	}

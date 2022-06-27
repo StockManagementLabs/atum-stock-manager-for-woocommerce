@@ -425,6 +425,8 @@ class Suppliers {
 					wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [], ATUM_VERSION );
 					wp_enqueue_style( 'atum-suppliers' );
 
+					wp_enqueue_script( 'atum-suppliers', ATUM_URL . 'assets/js/build/atum-suppliers.js', [ 'jquery' ], ATUM_VERSION, TRUE );
+
 				}
 
 				// ATUM marketing popup.

@@ -56,7 +56,12 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="form-field form-field-wide">
 		<label for="description"><?php esc_html_e( 'Description', ATUM_TEXT_DOMAIN ) ?></label>
-		<textarea id="description" name="supplier_details[description]" rows="5"><?php echo esc_textarea( $supplier->description ) ?></textarea>
+
+		<p>
+			<input type="checkbox" class="form-check-input default-checkbox" name="supplier_details[use_default_description]" value="yes"<?php checked( 'no' !== $supplier->use_default_description, TRUE ) ?>> <?php esc_html_e( 'Use default description', ATUM_TEXT_DOMAIN ); ?><br>
+		</p>
+
+		<textarea id="description" name="supplier_details[description]" rows="5"<?php echo 'no' !== $supplier->use_default_description ? ' style="display:none"' : '' ?>><?php echo esc_textarea( $supplier->description ) ?></textarea>
 	</div>
 
 </div>
