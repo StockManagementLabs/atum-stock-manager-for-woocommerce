@@ -196,6 +196,49 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.19.1`
+
+*2022-06-28*
+
+**Features**
+
+* Added warning notice to the tools section in ATUM Settings.
+* Added order type and order item id to order notes metas for IL.
+* Regenerate lookup tables on the next upgrade to make sure our queries work correctly.
+* Added aditional checks before returning a product in the inbound stock list.
+* Added cron to clean up tmp folders once a week.
+* Added new API extender to be able to filter attachments per linked post type.
+* Allow adding external criteria to the categories dropdown in SC.
+* Added action hook before update sales calc props.
+* Added AtumMacroable class.
+* Added fields to suppliers to be able to set default description and terms in PO PRO.
+
+**Changes**
+
+* Renamed all the ATUM params used on queries to the products' API endpoint.
+* Include categories with only private products in SC's categories dropdown filter.
+* Remove unneeded code references to PO.
+* Added param to AtumAdminNotices to avoid displaying the message in bold text.
+* Text changes.
+* Removed error logging.
+* Refactoring.
+* Changed pre-discount labels in atum order items template.
+* Use date_i18n instead of wp_date to avoid wrong time zone conversion issues.
+* Adjustments for the "stock will last" logic.
+* Convert ATUM Product trait "atum_data" prop to static.
+* Improved setting description.
+* Set Atum Product Trait as Macroable.
+
+**Fixes**
+
+* Remove and prevent duplicated scheduled actions.
+* Fixed tables in query.
+* Fixed number of args for action.
+* Prevent Macroable to throw Exceptions if the function doesn't exist.
+* Delete ATUM transients correctly when using external caching systems.
+
+---
+
 `1.9.18.1`
 
 *2022-05-18*
