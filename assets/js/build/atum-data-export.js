@@ -132,25 +132,25 @@ var DataExport = (function () {
         $tabContent.find('#screenoptionnonce').remove();
         if (typeof this.settings.get('productTypes') !== 'undefined') {
             var $typeFieldset = $('<fieldset class="product-type" />');
-            $typeFieldset.append("<legend>" + this.settings.get('productTypesTitle') + "</legend>");
+            $typeFieldset.append("<legend>".concat(this.settings.get('productTypesTitle'), "</legend>"));
             $typeFieldset.append(this.settings.get('productTypes'));
             $typeFieldset.insertAfter($tabContent.find('fieldset').last());
         }
         if (typeof this.settings.get('categories') !== 'undefined') {
             var $catFieldset = $('<fieldset class="product-category" />');
-            $catFieldset.append("<legend>" + this.settings.get('categoriesTitle') + "</legend>");
+            $catFieldset.append("<legend>".concat(this.settings.get('categoriesTitle'), "</legend>"));
             $catFieldset.append(this.settings.get('categories'));
             $catFieldset.insertAfter($tabContent.find('fieldset').last());
         }
         var $titleLengthFieldset = $('<fieldset class="title-length" />');
-        $titleLengthFieldset.append("<legend>" + this.settings.get('titleLength') + "</legend>");
-        $titleLengthFieldset.append("<input type=\"number\" step=\"1\" min=\"0\" name=\"title_max_length\" value=\"" + this.settings.get('maxLength') + "\"> ");
-        $titleLengthFieldset.append("<label><input type=\"checkbox\" id=\"disableMaxLength\" value=\"yes\">" + this.settings.get('disableMaxLength') + "</label>");
+        $titleLengthFieldset.append("<legend>".concat(this.settings.get('titleLength'), "</legend>"));
+        $titleLengthFieldset.append("<input type=\"number\" step=\"1\" min=\"0\" name=\"title_max_length\" value=\"".concat(this.settings.get('maxLength'), "\"> "));
+        $titleLengthFieldset.append("<label><input type=\"checkbox\" id=\"disableMaxLength\" value=\"yes\">".concat(this.settings.get('disableMaxLength'), "</label>"));
         $titleLengthFieldset.insertAfter($tabContent.find('fieldset').last());
         var $formatFieldset = $('<fieldset class="output-format" />');
-        $formatFieldset.append("<legend>" + this.settings.get('outputFormatTitle') + "</legend>");
+        $formatFieldset.append("<legend>".concat(this.settings.get('outputFormatTitle'), "</legend>"));
         $.each(this.settings.get('outputFormats'), function (key, value) {
-            $formatFieldset.append("<label><input type=\"radio\" name=\"output-format\" value=\"" + key + "\">" + value + "</label>");
+            $formatFieldset.append("<label><input type=\"radio\" name=\"output-format\" value=\"".concat(key, "\">").concat(value, "</label>"));
         });
         $formatFieldset.find('input[name=output-format]').first().prop('checked', true);
         $formatFieldset.insertAfter($tabContent.find('fieldset').last());
@@ -166,7 +166,7 @@ var DataExport = (function () {
         this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
     };
     DataExport.prototype.downloadReport = function () {
-        window.open(window['ajaxurl'] + "?action=atum_export_data&page=" + _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page') + "&screen=" + this.settings.get('screen') + "&security=" + this.settings.get('exportNonce') + "&" + this.$exportForm.serialize(), '_blank');
+        window.open("".concat(window['ajaxurl'], "?action=atum_export_data&page=").concat(_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page'), "&screen=").concat(this.settings.get('screen'), "&security=").concat(this.settings.get('exportNonce'), "&").concat(this.$exportForm.serialize()), '_blank');
     };
     return DataExport;
 }());
@@ -310,7 +310,7 @@ var Utils = {
         });
     },
     addNotice: function (type, msg) {
-        var $notice = $("<div class=\"" + type + " notice is-dismissible\"><p><strong>" + msg + "</strong></p></div>").hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -418,7 +418,7 @@ var Utils = {
             return value;
         }
         decimal = decimal || this.settings.number.decimal;
-        var regex = new RegExp("[^0-9-" + decimal + "]", 'g'), unformatted = parseFloat(('' + value)
+        var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
             .replace(/\((.*)\)/, '-$1')
             .replace(regex, '')
             .replace(decimal, '.'));

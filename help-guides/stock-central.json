@@ -28,5 +28,10 @@
 		"title": "Bulk Actions",
 		"element": ".top #filters_container .bulkactions",
 		"intro": "<p>You can change the Stock Manager (WooCommerce or ATUM) for each product with bulk actions. To apply bulk actions:</p><ul><li><p><strong>Select the products</strong> you wish.</p></li><li><p><strong>Select the action</strong> in the Bulk Actions dropdown.</p></li></ul><p><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfilters-02.jpg\" title=\"\" alt=\"\"></p><p>Available bulk actions (Controlled List):</p><ul><li><p><strong>Enable WC's Manage Stock:</strong><span>&nbsp;</span>To enable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable WC's Manage Stock:</strong><span>&nbsp;</span>To disable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable ATUM's Stock Control:</strong> To disable the <em>ATUM's Stock Control</em> option in selected products. These products will go to the <strong>Uncontrolled List</strong>.</p></li></ul><p>Available bulk actions (Uncontrolled List):</p><ul><li><p><strong>Enable WC's Manage Stock:</strong> To enable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Disable WC's Manage Stock:</strong> To disable the <em>WooCommerce Manage Stock</em> option in selected products.</p></li><li><p><strong>Enable ATUM's Stock Control:</strong> To Enable the <em>ATUM's Stock Control</em> option in selected products. These products will go to the<strong>Controlled List</strong>.</p></li></ul>"
+	},
+	{
+		"title": "Filter by Category",
+		"element": "#product_cat + .select2",
+		"intro": "<p>You can filter the Stock Central products by category</p>"
 	}
 ]
