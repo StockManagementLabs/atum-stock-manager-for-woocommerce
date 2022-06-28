@@ -48,6 +48,7 @@ export class StockCentralKnowledgeBase {
 	addRefreshedHelpGuides() {
 		this.globals.$atumList.find( '#restock_status' ).data( 'step', 2 ).after( this.addButton( 2 ) );
 		this.globals.$atumList.find( '.top #filters_container .bulkactions' ).data( 'step', 6 ).after( this.addButton( 6 ) );
+		this.globals.$atumList.find( '#product_cat + .select2' ).data( 'step', 7 ).after( this.addButton( 7 ) );
 	}
 
 	addButton( step: number = 0 ) {
