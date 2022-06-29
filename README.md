@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.19.2`
+
+*2022-06-29*
+
+**Fixes**
+
+* Fixed typed prop (not supported until PHP 7.4).
+
+---
+
 `1.9.19.1`
 
 *2022-06-28*

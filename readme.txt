@@ -7,7 +7,7 @@ Tested up to: 6.0
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 6.6.1
-Stable tag: 1.9.19.1
+Stable tag: 1.9.19.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.19.2`
+
+*2022-06-29*
+
+**Fixes**
+
+* Fixed typed prop (not supported until PHP 7.4).
 
 ---
 
