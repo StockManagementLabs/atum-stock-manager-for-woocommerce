@@ -93,7 +93,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected array $group_columns = array();
+	protected $group_columns = array();
 
 	/**
 	 * Group members
