@@ -313,9 +313,9 @@ class Settings {
 				'group'       => 'general',
 				'section'     => 'general',
 				'name'        => __( 'Out of stock threshold per product', ATUM_TEXT_DOMAIN ),
-				'desc'        => __( "Activate the switch to disable WooCommerce's global out of stock threshold setting and enable ATUM's out of stock threshold per product. All products will inherit the WooCommerce's global value by default (if set).<br><br>
-			                          Deactivate the switch to disable ATUM's out of stock threshold per product and re-enable the WooCommerce's global out of stock threshold. All your saved individual values will remain untouched in your database and ready for a future use, in case you decide to return to the individual control.<br><br>
-				                      We have a specific tool to clear all the individual out of stock threshold values in the 'Tools' section.", ATUM_TEXT_DOMAIN ),
+				'desc'        => __( "Activate the switch to enable the ATUM's out of stock threshold field per product. All products will use the product-level value (if any) or will inherit the WooCommerce's global value (if set) when you leave the product-level field empty.<br><br>
+			                          Deactivate the switch to disable ATUM's out of stock threshold field per product and continue using the WooCommerce's global out of stock threshold. When you disable this option, you will be asked whether to leave all the current product-level values untouched in your database and ready for a future use in case you decide to return to the product-level control or to get rid of all the values.<br><br>
+				                      We also have a specific tool to clear all the individual out of stock threshold values in the 'Tools' section.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'switcher',
 				'default'     => 'no',
 				'confirm_msg' => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),
