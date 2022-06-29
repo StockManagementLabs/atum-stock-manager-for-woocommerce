@@ -69,7 +69,7 @@ class Addons {
 			'basename' => 'atum-logs/atum-logs.php',
 		],
 		'export_pro'      => [
-			'name'     => 'Export PRO',
+			'name'     => 'Export Pro',
 			'basename' => 'atum-export-pro/atum-export-pro.php',
 		],
 		'multi_inventory' => [
@@ -536,10 +536,18 @@ class Addons {
 
 		$keys = get_option( self::ADDONS_KEY_OPTION );
 
+		$lower_keys = array();
+		$addon_name = strtolower( $addon_name );
+
+		foreach ( $keys as $key_name => $key_value ) {
+			$lower_key                = strtolower( $key_name );
+			$lower_keys[ $lower_key ] = $key_value;
+		}
+
 		if ( $addon_name ) {
 
-			if ( ! empty( $keys ) && is_array( $keys ) && isset( $keys[ $addon_name ] ) ) {
-				return $keys[ $addon_name ];
+			if ( ! empty( $keys ) && is_array( $keys ) && in_array( $addon_name, array_keys( $lower_keys ) ) ) {
+				return $lower_keys[ $addon_name ];
 			}
 
 			return '';
@@ -547,7 +555,6 @@ class Addons {
 		}
 
 		return $keys;
-
 	}
 
 	/**
