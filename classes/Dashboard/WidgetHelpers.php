@@ -1032,7 +1032,7 @@ final class WidgetHelpers {
 				else {
 
 					$counters[ $key ] = number_format(
-						$counter * 1.02,
+						$counter,
 						$stock_decimals,
 						wc_get_price_decimal_separator(),
 						wc_get_price_thousand_separator()

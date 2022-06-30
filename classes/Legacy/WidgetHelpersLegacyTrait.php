@@ -318,7 +318,7 @@ trait WidgetHelpersLegacyTrait {
 			LEFT JOIN $atum_product_data_table apd3 ON pch3.ID = apd3.product_id
             WHERE pch3.post_parent = p0.ID AND apd3.purchase_price IS NOT NULL AND apd3.purchase_price > 0";
 
-		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', 'CAST( st.meta_value AS DECIMAL(10,6) )' );
+		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', "IF( ms.meta_value = 'yes', CAST( st.meta_value AS DECIMAL(10,6) ), 0 )" );
 		$stock_field                        = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
 		$stock_wo_purchase_price_field      = 'IF( ' . apply_filters( 'atum/dashboard/purchase_price_field', 'apd0.purchase_price > 0' ) . ", 0, $base_stock_field )";
 		$stock_without_purchase_price_field = "IF( NOT EXISTS($children_with_pp) AND (NOT EXISTS($variation_children) OR EXISTS($unmanaged_children)), $stock_wo_purchase_price_field, 0 )";
@@ -332,6 +332,7 @@ trait WidgetHelpersLegacyTrait {
 			),
 			'join'   => array(
 				"LEFT JOIN $wpdb->postmeta st ON p0.ID = st.post_id AND st.meta_key = '_stock'",
+				"LEFT JOIN $wpdb->postmeta ms ON p0.ID = ms.post_id AND ms.meta_key = '_manage_stock'",
 				"LEFT JOIN $atum_product_data_table apd0 ON p0.ID = apd0.product_id",
 			),
 			'where'  => "p0.ID IN ( $products_in_stock_sql )",
