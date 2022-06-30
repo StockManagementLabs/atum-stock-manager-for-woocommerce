@@ -21,6 +21,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\PurchaseOrders\PurchaseOrders;
+use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
 
 
@@ -196,7 +197,7 @@ class Wpml {
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
-			add_action( 'wcml_after_sync_product_data', array( $this, 'update_translations_atum_data'), 10, 3 );
+			add_action( 'wcml_after_sync_product_data', array( $this, 'update_translations_atum_data' ), 10, 3 );
 
 			// Activate blocking ATUM fields in translations.
 			add_filter( 'wcml_after_load_lock_fields_js', array( $this, 'block_atum_fields' ) );
@@ -214,6 +215,8 @@ class Wpml {
 			// Enable comments translations.
 			add_action( 'atum/comments/enable_translations', array( $this, 'enable_comments_translations' ) );
 
+			// Exclude duplicated categories at SC categories dropdown.
+			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
 		}
 
 	}
@@ -1491,6 +1494,23 @@ class Wpml {
 		add_filter( 'comments_clauses', array( self::$sitepress, 'comments_clauses' ), 10, 2 );
 	}
 
+	/**
+	 *
+	 *
+	 * @param string    $criteria
+	 * @param ListTable $listtable
+	 *
+	 * @return string
+	 */
+	public function exclude_duplicated_categories( $criteria, $listtable ) {
+		global $wpdb;
+
+		if ( $listtable instanceof ListTable ) {
+			$criteria .= ' AND t.term_id IN ( SELECT element_id FROM ' . $wpdb->prefix . "icl_translations WHERE element_type = 'tax_product_cat' AND source_language_code IS NULL )";
+		}
+
+		return $criteria;
+	}
 
 
 	/******************
