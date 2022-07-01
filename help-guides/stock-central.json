@@ -33,5 +33,160 @@
 		"title": "Filter by Category",
 		"element": "#product_cat + .select2",
 		"intro": "<p>You can filter the Stock Central products by category</p>"
+	},
+	{
+		"title": "Filter by Product Type",
+		"element": ".dropdown_product_type + .select2",
+		"intro": "<p>You can also filter the Stock Central products by product type</p>"
+	},
+	{
+		"title": "Filter by Supplier",
+		"element": "select#supplier + .select2",
+		"intro": "<p>You can filter the Stock Central products by Supplier</p>"
+	},
+	{
+		"title": "Extra Filters",
+		"element": "select[name=extra_filter] + .select2",
+		"intro": "<p>You can filter the Stock Central products by other criterion such as Inbound Stock, Stock on Hold, Reserved Stock, Backorders, Sold Today, Customer Returns, Warehouse Damages, Lost in Post, Best/Worst Sellers and others.</p>"
+	},
+	{
+		"title": "Image column",
+		"element": "thead th#thumb .col-product-details",
+		"intro": "<p>Product small image preview.</p>"
+	},
+	{
+		"title": "ID column",
+		"element": "thead th#ID .col-product-details",
+		"intro": "<p>A WooCommerce Product ID is sometimes needed when using shortcodes, widgets, and links. ATUM's stock central page will display the appropriate ID of the product in this column.</p>"
+	},
+	{
+		"title": "Product Name column",
+		"element": "thead th#title .col-product-details",
+		"intro": "<p>The first twenty characters of the product name. Hover your mouse over the name to see the full content.</p>"
+	},
+	{
+		"title": "Product Type column",
+		"element": "thead th#calc_type .col-product-details",
+		"intro": "<p>This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.</p>"
+	},
+	{
+		"title": "Supplier column",
+		"element": "thead th#_supplier .col-product-details",
+		"intro": "<p>This is the name of a supplier that supplies the products for your store.</p>"
+	},
+	{
+		"title": "Supplier SKU column",
+		"element": "thead th#_supplier_sku .col-product-details",
+		"intro": "<p>The stock-keeping unit code of the product within your supplier's product list must be unique.\u2028 You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.</p>"
+	},
+	{
+		"title": "Location column",
+		"element": "thead th#calc_location .col-product-details",
+		"intro": "<p>Shows the product's location hierarchy. The grey icon means that there are no locations set and the blue icon means that there. Click the icon to view and edit the locations hierarchy in a popup.</p>"
+	},
+	{
+		"title": "Regular Price column",
+		"element": "thead th#_regular_price .col-product-details",
+		"intro": "<p>You can configure the product price in this column. After you click the 'Set' button and 'Save Data', the product price will update automatically in your store.</p>"
+	},
+	{
+		"title": "Sale Price column",
+		"element": "thead th#_sale_price .col-product-details",
+		"intro": "<p>You can configure the sale price of your product. Enter the date range for your sale or leave the date empty for a continuous sale price. After clicking the 'Set' button and 'Save Data', the change will automatically update your store.</p>"
+	},
+	{
+		"title": "Purchase Price column",
+		"element": "thead th#_purchase_price .col-product-details",
+		"intro": "<p>You can configure the purchase price of the product. After you click the 'Set' button and 'Save Data', the product purchase price will update automatically in your store.</p>"
+	},
+	{
+		"title": "Gross Profit column",
+		"element": "thead th#calc_gross_profit .col-product-details",
+		"intro": "<p>The Gross Profit column displays the difference between the regular price and the purchase price. From ATUM general settings you can choose to display it as a percentage or as a monetary value; but when you hover the value in Stock Central, it will display the non-selected format as well in a tooltip. Also, in ATUM general settings you can set a percentage to the profit margin. We’ll use this value to mark in red all the gross profit values that fall below this margin and in green all the values equal or greater than this margin. If you install our premium add-on Product Levels, the Gross Profit column will be displayed in Manufacturing Central too.</p>"
+	},
+	{
+		"title": "Weight column",
+		"element": "thead th#_weight .col-product-details",
+		"intro": "<p>You can configure the product weight in this column. After you click the 'Set' button and 'Save Data', the product weight will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Current Stock column",
+		"element": "thead th#_stock .col-stock-counters",
+		"intro": "<p>The current stock represents the number of products available to order (values updated on the Stock Central refresh). If the WC’s manage stock option is enabled, you can set the current stock in this column. After you click the 'Set' button and 'Save Data', the current stock will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Out of stock threshold column",
+		"element": "thead th#_out_stock_threshold .col-stock-counters",
+		"intro": "<p>When stock quantity reaches the Out of Stock Threshold the stock status will change to 'Out of Stock'. You can set the Out of Stock Threshold in this column. After you click the 'Set' button and 'Save Data', the Out of Stock Threshold will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Inbound Stock column",
+		"element": "thead th#_inbound_stock .col-stock-counters",
+		"intro": "<p>Inbound stock counter represents the volume of products that have been ordered, using the Purchase Order feature, and are pending delivery.</p>"
+	},
+	{
+		"title": "Stock on Hold column",
+		"element": "thead th#_stock_on_hold .col-stock-counters",
+		"intro": "<p>All products within paid orders that are still in the warehouse but not yet shipped (order status processing or on hold).</p>"
+	},
+	{
+		"title": "Reserved Stock column",
+		"element": "thead th#_reserved_stock .col-stock-counters",
+		"intro": "<p>There are times when the store owner needs to reserve or set aside a small or significant amount of stock. Occasions like special events, customer reservations, or quality checks will find this feature very handy. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Reserved Stock'.</p>"
+	},
+	{
+		"title": "Back Orders column",
+		"element": "thead th#calc_back_orders .col-stock-counters",
+		"intro": "<p>Every WooCommerce product has an 'Allow Back Orders' option on the product page. It will give customers the opportunity to place an order even when the product is out of stock. The 'Back Orders' indicator will display the number of items required by customers.</p>"
+	},
+	{
+		"title": "Sold today column",
+		"element": "thead th#_sold_today .col-stock-counters",
+		"intro": "<p>The value represents the number of products sold during the day. Sold products are items included in 'completed' and 'processing' orders only. Ordered items, but pending payment will show in the 'Stock on Hold' column instead.</p>"
+	},
+	{
+		"title": "Customer Returns column",
+		"element": "thead th#_customer_returns .col-stock-negatives",
+		"intro": "<p>We don't think there is a store owner that wants to see products returning to the warehouse. However, in case there is an item coming back from the customer store owner can use the Inventory Logs to create a log entry with the 'Customer Returns' type. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Customer Returns'.</p>"
+	},
+	{
+		"title": "Warehouse Damages column",
+		"element": "thead th#_warehouse_damage .col-stock-negatives",
+		"intro": "<p>In the unlikely event of warehouse or in-house damages, the Inventory Logs have the option to create an entry with the 'Warehouse Damage' type. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Warehouse Damage'.</p>"
+	},
+	{
+		"title": "Lost in Post column",
+		"element": "thead th#_lost_in_post .col-stock-negatives",
+		"intro": "<p>Inventory Logs add-on can create a log entry under the 'Lost in Post' tab within the 'Inventory Log' menu for all items that have gone missing on the route to the customer. This indicator helps to control the performance of postal carriers as well as the work of dispatch departments.</p>"
+	},
+	{
+		"title": "Other Logs column",
+		"element": "thead th#_other_logs .col-stock-negatives",
+		"intro": "<p>Within the Inventory Log tab you can create a log with the ‘Other’ type in cases when the log doesn’t match with ‘Customer Returns’, ‘Warehouse Damages’, or ‘Lost in Post’ options.</p>"
+	},
+	{
+		"title": "Sales Last Days column",
+		"element": "thead th#_sales_last_days .col-stock-selling-manager",
+		"intro": "<p>Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last X days (sold products are items included in 'completed' and 'processing' orders only. Ordered items, but pending payment will show in the 'Stock on Hold' column instead). You can change the number of days by simply clicking on its blue number.</p>"
+	},
+	{
+		"title": "Stock will Last (Days) column",
+		"element": "thead th#calc_will_last .col-stock-selling-manager",
+		"intro": "<p>A feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the past seven days (we do not include the current day sales).</p>"
+	},
+	{
+		"title": "Out of Stock for (Days) column",
+		"element": "thead th#_out_stock_days .col-stock-selling-manager",
+		"intro": "<p>This indicator shows the number of days an item has the 'Out of Stock' status. Store owners can more accurately monitor the effectiveness of their ordering. Please, note that ATUM will only calculate products that go out of stock after the initial plugin install.</p>"
+	},
+	{
+		"title": "Lost Sales column",
+		"element": "thead th#_lost_sales .col-stock-selling-manager",
+		"intro": "<p>Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that the store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock.</p>"
+	},
+	{
+		"title": "Stock Indicator column",
+		"element": "thead th#calc_stock_indicator .col-stock-selling-manager",
+		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\" title=\"\" alt=\"\"></p>"
 	}
 ]
