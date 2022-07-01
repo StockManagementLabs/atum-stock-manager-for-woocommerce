@@ -1553,7 +1553,7 @@ fieldset:disabled a.btn {
 
 .btn-sm {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -4032,15 +4032,16 @@ tr.introjs-showElement > th {
 .show-intro-guide.atum-kb, .show-intro-guide.atum-kb:active, .show-intro-guide.atum-kb:hover {
   background-color: #ff4848;
   text-align: center;
-  position: relative;
+  position: absolute !important;
   overflow: hidden;
   border: 1px solid #fff;
   -webkit-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
           box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-  width: 12px;
-  height: 12px;
-  left: -12px;
-  top: -12px;
+  width: 6px !important;
+  height: 6px !important;
+  right: -5px !important;
+  top: -6px !important;
+  left: unset !important;
 }
 
 .show-intro-guide.atum-kb.loading-guide:before, .show-intro-guide.atum-kb:active.loading-guide:before, .show-intro-guide.atum-kb:hover.loading-guide:before {
@@ -4053,13 +4054,19 @@ tr.introjs-showElement > th {
 .show-intro-guide.atum-kb:before, .show-intro-guide.atum-kb:active:before, .show-intro-guide.atum-kb:hover:before {
   color: #fff;
   border-radius: 50%;
-  height: 21px;
-  width: 19px;
-  font-size: 20px;
+  height: 12px;
+  width: 12px;
+  font-size: 14px;
   display: inline-block;
   position: absolute;
-  left: 0px;
-  top: -2px;
+  right: 0px;
+  left: unset !important;
+  top: -1px;
+}
+
+.akb-wrapper {
+  position: relative;
+  display: inherit;
 }
 
 .popover {
@@ -4082,7 +4089,7 @@ tr.introjs-showElement > th {
   word-spacing: normal;
   white-space: normal;
   line-break: auto;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   word-wrap: break-word;
   background-color: var(--atum-table-bg);
   background-clip: padding-box;
@@ -5054,7 +5061,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .input-group-sm > .input-group-prepend > .btn,
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -5422,7 +5429,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
   display: block;
   padding: 0.5rem 1.5rem;
   margin-bottom: 0;
-  font-size: 0.76562rem;
+  font-size: 0.76563rem;
   color: #6c757d;
   white-space: nowrap;
 }
