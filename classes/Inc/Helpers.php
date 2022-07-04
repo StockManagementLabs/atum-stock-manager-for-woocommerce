@@ -1417,8 +1417,8 @@ final class Helpers {
 						UPDATE $wpdb->postmeta SET meta_value = '0'
 		                WHERE meta_key = '_stock'
 		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta 
+		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes' ) pm
 		                )
 		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
