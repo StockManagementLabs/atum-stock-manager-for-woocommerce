@@ -322,6 +322,9 @@ var StockCentralKnowledgeBase = (function () {
         this.addWrapper(this.globals.$atumList.find('.list-table-header .search-box .input-group'), 3);
         this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-columns-button'), 4);
         this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-header-button'), 5);
+        this.addWrapper($('#screen-options-link-wrap #show-settings-link'), 39);
+        this.addWrapper($('#contextual-help-link-wrap #contextual-help-link'), 40);
+        this.addWrapper($('#atum-export-link-wrap #show-export-settings-link'), 41);
         this.addRefreshedHelpGuides();
     };
     StockCentralKnowledgeBase.prototype.addRefreshedHelpGuides = function () {
