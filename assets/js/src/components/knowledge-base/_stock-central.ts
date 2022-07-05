@@ -135,7 +135,7 @@ export class StockCentralKnowledgeBase {
 	 * @returns {string}
 	 */
 	addButton( step: number = 0 ) {
-		return this.helpGuide.getHelpGuideButton( 'stock-central', '', 'question-circle atum-kb', step );
+		return this.helpGuide.getHelpGuideButton( 'stock-central', '', 'question atum-kb', step );
 	}
 
 	/**

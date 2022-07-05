@@ -889,6 +889,11 @@
 		content: $atmi-pushpin;
 	}
 }
+.atmi-question {
+	&:before {
+		content: $atmi-question;
+	}
+}
 .atmi-question-circle {
 	&:before {
 		content: $atmi-question-circle;

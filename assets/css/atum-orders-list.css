@@ -1161,6 +1161,10 @@
   content: "";
 }
 
+.atmi-question:before {
+  content: "";
+}
+
 .atmi-question-circle:before {
   content: "";
 }
@@ -4056,13 +4060,12 @@ tr.introjs-showElement > th {
   border-radius: 50%;
   height: 10px;
   width: 10px;
-  font-size: 14px;
+  font-size: 9px;
   display: inline-block;
-  position: absolute;
-  right: 2px;
+  position: absolute !important;
+  right: 1.2px !important;
   left: unset !important;
-  top: -1px;
-  overflow: hidden;
+  top: 2px !important;
 }
 
 .akb-buttons-wrapper {

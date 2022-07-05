@@ -388,7 +388,7 @@ var StockCentralKnowledgeBase = (function () {
     };
     StockCentralKnowledgeBase.prototype.addButton = function (step) {
         if (step === void 0) { step = 0; }
-        return this.helpGuide.getHelpGuideButton('stock-central', '', 'question-circle atum-kb', step);
+        return this.helpGuide.getHelpGuideButton('stock-central', '', 'question atum-kb', step);
     };
     StockCentralKnowledgeBase.prototype.checkKnowledgeVisibility = function () {
         var $akb = $('.atum-kb');

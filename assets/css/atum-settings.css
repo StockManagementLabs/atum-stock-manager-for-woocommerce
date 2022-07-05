@@ -3194,6 +3194,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   content: "";
 }
 
+.atmi-question:before {
+  content: "";
+}
+
 .atmi-question-circle:before {
   content: "";
 }

@@ -1802,6 +1802,10 @@ input[type="button"].btn-block {
   content: "";
 }
 
+.atmi-question:before {
+  content: "";
+}
+
 .atmi-question-circle:before {
   content: "";
 }
