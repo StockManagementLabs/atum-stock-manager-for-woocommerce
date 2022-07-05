@@ -527,14 +527,34 @@ tr.introjs-showElement {
 	&.atum-kb:before, &.atum-kb:active:before, &.atum-kb:hover:before {
 		color: $white;
 		border-radius: 50%;
-		height: 12px;
-		width: 12px;
+		height: 10px;
+		width: 10px;
 		font-size: 14px;
 		display: inline-block;
 		position: absolute;
-		right: 0px;
+		right: 2px;
 		left: unset !important;
 		top: -1px;
+		overflow: hidden;
+	}
+}
+
+.akb-buttons-wrapper {
+	float: right;
+	margin-left: auto;
+	order: 3;
+	
+	button {
+		margin-left: 5px;
+		
+		&.show-intro-guide.help-guide-button {
+			border-radius: 0.2rem;
+			width: auto;
+			height: auto;
+			color: $white;
+			border: solid 1px $primary;
+			padding: 4px;
+		}
 	}
 }
 

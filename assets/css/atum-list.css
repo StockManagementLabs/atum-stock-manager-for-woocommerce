@@ -4054,14 +4054,36 @@ tr.introjs-showElement > th {
 .show-intro-guide.atum-kb:before, .show-intro-guide.atum-kb:active:before, .show-intro-guide.atum-kb:hover:before {
   color: #fff;
   border-radius: 50%;
-  height: 12px;
-  width: 12px;
+  height: 10px;
+  width: 10px;
   font-size: 14px;
   display: inline-block;
   position: absolute;
-  right: 0px;
+  right: 2px;
   left: unset !important;
   top: -1px;
+  overflow: hidden;
+}
+
+.akb-buttons-wrapper {
+  float: right;
+  margin-left: auto;
+  -webkit-box-ordinal-group: 4;
+      -ms-flex-order: 3;
+          order: 3;
+}
+
+.akb-buttons-wrapper button {
+  margin-left: 5px;
+}
+
+.akb-buttons-wrapper button.show-intro-guide.help-guide-button {
+  border-radius: 0.2rem;
+  width: auto;
+  height: auto;
+  color: #fff;
+  border: solid 1px #00B8DB;
+  padding: 4px;
 }
 
 .akb-wrapper {

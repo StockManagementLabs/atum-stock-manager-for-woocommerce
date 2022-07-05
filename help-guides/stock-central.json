@@ -70,6 +70,11 @@
 		"intro": "<p>This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.</p>"
 	},
 	{
+		"title": "SKU column",
+		"element": "thead th#_sku .col-product-details",
+		"intro": "<p>An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options, and manufacturer of the merchandise. An SKU is used to track inventory in your retail store and must be unique. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take full advantage of ATUM's features. You can set the SKU in this column. After you click the 'Set' button and 'Save Data', the SKU will update automatically in your store.</p>"
+	},
+	{
 		"title": "Supplier column",
 		"element": "thead th#_supplier .col-product-details",
 		"intro": "<p>This is the name of a supplier that supplies the products for your store.</p>"
@@ -77,7 +82,7 @@
 	{
 		"title": "Supplier SKU column",
 		"element": "thead th#_supplier_sku .col-product-details",
-		"intro": "<p>The stock-keeping unit code of the product within your supplier's product list must be unique.\u2028 You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.</p>"
+		"intro": "<p>The stock-keeping unit code of the product within your supplier's product list must be unique. You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.</p>"
 	},
 	{
 		"title": "Location column",

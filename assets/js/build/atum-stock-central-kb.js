@@ -309,10 +309,22 @@ var StockCentralKnowledgeBase = (function () {
         this.settings = settings;
         this.toolTip = toolTip;
         this.helpGuide = helpGuide;
+        this.knowledgeEnabled = false;
         this.wpHooks = window['wp']['hooks'];
+        this.$akbButtonsWrapper = $(document).find('.akb-buttons-wrapper');
+        this.bindEvents();
         this.addHooks();
         this.addHelpGuides();
+        this.checkKnowledgeVisibility();
     }
+    StockCentralKnowledgeBase.prototype.bindEvents = function () {
+        var _this = this;
+        this.$akbButtonsWrapper
+            .on('click', '.display-akb-button', function () {
+            _this.knowledgeEnabled = !_this.knowledgeEnabled;
+            _this.checkKnowledgeVisibility();
+        });
+    };
     StockCentralKnowledgeBase.prototype.addHooks = function () {
         var _this = this;
         this.wpHooks.addAction('atum_listTable_tableUpdated', 'atum', function () { return _this.addRefreshedHelpGuides(); });
@@ -322,9 +334,9 @@ var StockCentralKnowledgeBase = (function () {
         this.addWrapper(this.globals.$atumList.find('.list-table-header .search-box .input-group'), 3);
         this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-columns-button'), 4);
         this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-header-button'), 5);
-        this.addWrapper($('#screen-options-link-wrap #show-settings-link'), 39);
-        this.addWrapper($('#contextual-help-link-wrap #contextual-help-link'), 40);
-        this.addWrapper($('#atum-export-link-wrap #show-export-settings-link'), 41);
+        this.addWrapper($('#screen-options-link-wrap #show-settings-link'), 40);
+        this.addWrapper($('#contextual-help-link-wrap #contextual-help-link'), 41);
+        this.addWrapper($('#atum-export-link-wrap #show-export-settings-link'), 42);
         this.addRefreshedHelpGuides();
     };
     StockCentralKnowledgeBase.prototype.addRefreshedHelpGuides = function () {
@@ -338,30 +350,31 @@ var StockCentralKnowledgeBase = (function () {
         this.addWrapper(this.globals.$atumList.find('thead th#ID .col-product-details'), 12);
         this.addWrapper(this.globals.$atumList.find('thead th#title .col-product-details'), 13);
         this.addWrapper(this.globals.$atumList.find('thead th#calc_type .col-product-details'), 14);
-        this.addWrapper(this.globals.$atumList.find('thead th#_supplier .col-product-details'), 15);
-        this.addWrapper(this.globals.$atumList.find('thead th#_supplier_sku .col-product-details'), 16);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_location .col-product-details'), 17);
-        this.addWrapper(this.globals.$atumList.find('thead th#_regular_price .col-product-details'), 18);
-        this.addWrapper(this.globals.$atumList.find('thead th#_sale_price .col-product-details'), 19);
-        this.addWrapper(this.globals.$atumList.find('thead th#_purchase_price .col-product-details'), 20);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_gross_profit .col-product-details'), 21);
-        this.addWrapper(this.globals.$atumList.find('thead th#_weight .col-product-details'), 22);
-        this.addWrapper(this.globals.$atumList.find('thead th#_stock .col-stock-counters'), 23);
-        this.addWrapper(this.globals.$atumList.find('thead th#_out_stock_threshold .col-stock-counters'), 24);
-        this.addWrapper(this.globals.$atumList.find('thead th#_inbound_stock .col-stock-counters'), 25);
-        this.addWrapper(this.globals.$atumList.find('thead th#_stock_on_hold .col-stock-counters'), 26);
-        this.addWrapper(this.globals.$atumList.find('thead th#_reserved_stock .col-stock-counters'), 27);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_back_orders .col-stock-counters'), 28);
-        this.addWrapper(this.globals.$atumList.find('thead th#_sold_today .col-stock-counters'), 29);
-        this.addWrapper(this.globals.$atumList.find('thead th#_customer_returns .col-stock-negatives'), 30);
-        this.addWrapper(this.globals.$atumList.find('thead th#_warehouse_damage .col-stock-negatives'), 31);
-        this.addWrapper(this.globals.$atumList.find('thead th#_lost_in_post .col-stock-negatives'), 32);
-        this.addWrapper(this.globals.$atumList.find('thead th#_other_logs .col-stock-negatives'), 33);
-        this.addWrapper(this.globals.$atumList.find('thead th#_sales_last_days .col-stock-selling-manager'), 34);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_will_last .col-stock-selling-manager'), 35);
-        this.addWrapper(this.globals.$atumList.find('thead th#_out_stock_days .col-stock-selling-manager'), 36);
-        this.addWrapper(this.globals.$atumList.find('thead th#_lost_sales .col-stock-selling-manager'), 37);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_stock_indicator .col-stock-selling-manager'), 38);
+        this.addWrapper(this.globals.$atumList.find('thead th#_sku .col-product-details'), 15);
+        this.addWrapper(this.globals.$atumList.find('thead th#_supplier .col-product-details'), 16);
+        this.addWrapper(this.globals.$atumList.find('thead th#_supplier_sku .col-product-details'), 17);
+        this.addWrapper(this.globals.$atumList.find('thead th#calc_location .col-product-details'), 18);
+        this.addWrapper(this.globals.$atumList.find('thead th#_regular_price .col-product-details'), 19);
+        this.addWrapper(this.globals.$atumList.find('thead th#_sale_price .col-product-details'), 20);
+        this.addWrapper(this.globals.$atumList.find('thead th#_purchase_price .col-product-details'), 21);
+        this.addWrapper(this.globals.$atumList.find('thead th#calc_gross_profit .col-product-details'), 22);
+        this.addWrapper(this.globals.$atumList.find('thead th#_weight .col-product-details'), 23);
+        this.addWrapper(this.globals.$atumList.find('thead th#_stock .col-stock-counters'), 24);
+        this.addWrapper(this.globals.$atumList.find('thead th#_out_stock_threshold .col-stock-counters'), 25);
+        this.addWrapper(this.globals.$atumList.find('thead th#_inbound_stock .col-stock-counters'), 26);
+        this.addWrapper(this.globals.$atumList.find('thead th#_stock_on_hold .col-stock-counters'), 27);
+        this.addWrapper(this.globals.$atumList.find('thead th#_reserved_stock .col-stock-counters'), 28);
+        this.addWrapper(this.globals.$atumList.find('thead th#calc_back_orders .col-stock-counters'), 29);
+        this.addWrapper(this.globals.$atumList.find('thead th#_sold_today .col-stock-counters'), 30);
+        this.addWrapper(this.globals.$atumList.find('thead th#_customer_returns .col-stock-negatives'), 31);
+        this.addWrapper(this.globals.$atumList.find('thead th#_warehouse_damage .col-stock-negatives'), 32);
+        this.addWrapper(this.globals.$atumList.find('thead th#_lost_in_post .col-stock-negatives'), 33);
+        this.addWrapper(this.globals.$atumList.find('thead th#_other_logs .col-stock-negatives'), 34);
+        this.addWrapper(this.globals.$atumList.find('thead th#_sales_last_days .col-stock-selling-manager'), 35);
+        this.addWrapper(this.globals.$atumList.find('thead th#calc_will_last .col-stock-selling-manager'), 36);
+        this.addWrapper(this.globals.$atumList.find('thead th#_out_stock_days .col-stock-selling-manager'), 37);
+        this.addWrapper(this.globals.$atumList.find('thead th#_lost_sales .col-stock-selling-manager'), 38);
+        this.addWrapper(this.globals.$atumList.find('thead th#calc_stock_indicator .col-stock-selling-manager'), 39);
     };
     StockCentralKnowledgeBase.prototype.addWrapper = function ($elem, step) {
         if (!$elem.length) {
@@ -376,6 +389,15 @@ var StockCentralKnowledgeBase = (function () {
     StockCentralKnowledgeBase.prototype.addButton = function (step) {
         if (step === void 0) { step = 0; }
         return this.helpGuide.getHelpGuideButton('stock-central', '', 'question-circle atum-kb', step);
+    };
+    StockCentralKnowledgeBase.prototype.checkKnowledgeVisibility = function () {
+        var $akb = $('.atum-kb');
+        if (this.knowledgeEnabled) {
+            $akb.show();
+        }
+        else {
+            $akb.hide();
+        }
     };
     return StockCentralKnowledgeBase;
 }());
