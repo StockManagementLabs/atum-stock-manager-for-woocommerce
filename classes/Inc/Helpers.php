@@ -1417,11 +1417,16 @@ final class Helpers {
 						UPDATE $wpdb->postmeta SET meta_value = '0'
 		                WHERE meta_key = '_stock'
 		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
+		                    SELECT DISTINCT post_id FROM (SELECT ms.post_id FROM $wpdb->postmeta ms
+		                    	LEFT JOIN $wpdb->postmeta sq ON ms.post_id = sq.post_id AND sq.meta_key = '_stock' 
+		                    WHERE ms.meta_key = '_manage_stock' AND ms.meta_value = 'yes' AND sq.meta_value IS NULL ) pm
 		                )
 		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
+				}
+
+				if ( $stock_success ) {
+					wc_update_product_lookup_tables_column( 'stock_quantity' );
 				}
 
 			}
