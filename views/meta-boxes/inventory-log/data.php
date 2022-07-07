@@ -52,7 +52,7 @@ $log_status = $atum_order->get_status();
 					</select>
 				</p>
 
-				<p class="form-field form-field-wide">
+				<p class="form-field">
 					<label for="date"><?php esc_html_e( 'Log date', ATUM_TEXT_DOMAIN ) ?></label>
 					<input type="text" class="atum-datepicker" name="date" id="date" maxlength="10" value="<?php echo esc_attr( date_i18n( 'Y-m-d', strtotime( $atum_order_post->post_date ) ) ) ?>" pattern="<?php echo esc_attr( apply_filters( 'atum/inventory_logs/date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" />@
 					<input type="number" class="hour" placeholder="<?php esc_attr_e( 'h', ATUM_TEXT_DOMAIN ) ?>" name="date_hour" id="date_hour" min="0" max="23" step="1" value="<?php echo esc_attr( date_i18n( 'H', strtotime( $atum_order_post->post_date ) ) ) ?>" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
