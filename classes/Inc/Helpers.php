@@ -513,8 +513,11 @@ final class Helpers {
 		$items_sold = array();
 
 		// Avoid duplicated queries in List Tables by using cache.
-		$cache_key      = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start, $date_end, $items, $colums ] );
-		$sold_last_days = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		// NOTE: As the dates may change between calls to this function (mainly the seconds or minutes), to ensure we use the cache and not calculate again, we must reformat them.
+		$date_start_cache = self::validate_mysql_date( $date_start ) ? self::date_format( $date_start, FALSE, TRUE, 'Y-m-d H' ) : $date_start;
+		$date_end_cache   = self::validate_mysql_date( $date_end ) ? self::date_format( $date_end, FALSE, TRUE, 'Y-m-d H' ) : $date_end;
+		$cache_key        = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start_cache, $date_end_cache, $items, $colums ] );
+		$sold_last_days   = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( $has_cache ) {
 			return $sold_last_days;
@@ -3288,6 +3291,27 @@ final class Helpers {
 		}
 
 		return ! $gmt_date ? date_i18n( $format, $date ) : gmdate( $format, $date );
+
+	}
+
+	/**
+	 * Validates a mySQL date (Y-m-d H:i:s)
+	 *
+	 * @since 1.9.20
+	 *
+	 * @param string $date
+	 *
+	 * @return bool
+	 */
+	public static function validate_mysql_date( $date ) {
+
+		if ( preg_match( '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/', $date, $matches ) ) {
+			if ( checkdate( $matches[2], $matches[3], $matches[1] ) ) {
+				return TRUE;
+			}
+		}
+
+		return FALSE;
 
 	}
 
