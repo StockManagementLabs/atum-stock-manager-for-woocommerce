@@ -79,7 +79,7 @@ class AtumCalculatedProps {
 		$already_queued = [];
 
 		// Add the async action for the sales prop first.
-		if ( ! empty( self::$deferred_sales_calc_props ) ) {
+		if ( ! empty( self::$deferred_sales_calc_props ) && 'yes' !== Helpers::get_option( 'calc_prop_cron' ) ) {
 
 			$already_queued = array_map( function( $id_str ) {
 
