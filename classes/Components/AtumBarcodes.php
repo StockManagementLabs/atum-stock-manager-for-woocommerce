@@ -188,7 +188,7 @@ class AtumBarcodes {
 
 			// Add the barcode col.
 			if ( '_supplier_sku' === $column_key ) {
-				$new_table_colums[ self::BARCODE_FIELD_KEY ] = '<span class="tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Barcode field is currently informational only. We want our users to start filling it in to be ready for the Mobile App scanning feature when released', ATUM_TEXT_DOMAIN ) . ' "> ' . __( 'Barcode', ATUM_TEXT_DOMAIN ) . '</span>';
+				$new_table_colums[ self::BARCODE_FIELD_KEY ] = __( 'Barcode', ATUM_TEXT_DOMAIN );
 			}
 
 		}
