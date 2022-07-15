@@ -24,7 +24,7 @@ if ( empty( $variation ) ) : ?>
 <?php endif; ?>
 
 	<p class="form-field _barcode_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?><?php echo esc_attr( $classes ) ?>">
-		<label for="<?php echo esc_attr( $barcode_field_id ) ?>"><?php esc_html_e( 'Barcode', ATUM_TEXT_DOMAIN ) ?></label>
+		<label for="<?php echo esc_attr( $barcode_field_id ) ?>" class="tips" data-tip="<?php esc_attr_e( 'Barcode field is currently informational only. We want our users to start filling it in to be ready for the Mobile App scanning feature when released', ATUM_TEXT_DOMAIN ) ?>"><?php esc_html_e( 'Barcode', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<span class="atum-field input-group">
 			<?php Helpers::atum_field_input_addon() ?>
