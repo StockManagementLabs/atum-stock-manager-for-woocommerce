@@ -383,11 +383,16 @@ class AtumCalculatedProps {
 					$update = TRUE;
 				}
 
-				$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
+				// Update the restock status only when the cron isn't active or when executing it.
+				if ( 'yes' !== Helpers::get_option( 'calc_prop_cron' ) || wp_doing_cron() ) {
 
-				if ( $product->get_restock_status() !== $restock ) {
-					$product->set_restock_status( $restock );
-					$update = TRUE;
+					$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
+
+					if ( $product->get_restock_status() !== $restock ) {
+						$product->set_restock_status( $restock );
+						$update = TRUE;
+					}
+
 				}
 
 				if ( $update || $force_save ) {
