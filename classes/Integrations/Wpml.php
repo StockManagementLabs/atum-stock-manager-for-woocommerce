@@ -1508,7 +1508,11 @@ class Wpml {
 		global $wpdb;
 
 		if ( $listtable instanceof ListTable ) {
-			$criteria .= ' AND t.term_id IN ( SELECT element_id FROM ' . $wpdb->prefix . "icl_translations WHERE element_type = 'tax_product_cat' AND source_language_code IS NULL )";
+			$criteria .= "
+				AND t.term_id IN (
+					SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type = 'tax_product_cat' AND language_code = '{$this->current_language}'
+				)
+			";
 		}
 
 		return $criteria;
