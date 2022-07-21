@@ -1495,7 +1495,9 @@ class Wpml {
 	}
 
 	/**
+	 * Exclude WPML translations in the SC categories filter dropdown.
 	 *
+	 * @since 1.9.18.1
 	 *
 	 * @param string    $criteria
 	 * @param ListTable $listtable
