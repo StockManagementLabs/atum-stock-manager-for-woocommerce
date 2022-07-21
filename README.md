@@ -196,6 +196,31 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.20`
+
+*2022-07-21*
+
+**Features**
+
+* Added description tooltip to the barcode field.
+
+**Changes**
+
+* Removed CSS class.
+* Make sure the sold_last_days cache key doesn't change when it has some date time keys on it.
+* Only calculate the restock status if the calculate sales prop CRON is disabled or it's running.
+
+**Fixes**
+
+* Fixed search addon keys for case insensitive names.
+* Exclude WPML translations in the SC categories filter dropdown.
+* Fixed unmanaged variations in current stock widget values.
+* Fixed wrong SQL when updating stock in tools.
+* Fixed date fields in Inventory Logs data meta box.
+* Fixed async sales calc launched despite of the cron setting is active.
+
+---
+
 `1.9.19.2`
 
 *2022-06-29*

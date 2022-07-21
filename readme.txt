@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.0
+Tested up to: 6.0.1
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.6.1
-Stable tag: 1.9.19.2
+WC tested up to: 6.7.0
+Stable tag: 1.9.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,31 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.20`
+
+*2022-07-21*
+
+**Features**
+
+* Added description tooltip to the barcode field.
+
+**Changes**
+
+* Removed CSS class.
+* Make sure the sold_last_days cache key doesn't change when it has some date time keys on it.
+* Only calculate the restock status if the calculate sales prop CRON is disabled or it's running.
+
+**Fixes**
+
+* Fixed search addon keys for case insensitive names.
+* Exclude WPML translations in the SC categories filter dropdown.
+* Fixed unmanaged variations in current stock widget values.
+* Fixed wrong SQL when updating stock in tools.
+* Fixed date fields in Inventory Logs data meta box.
+* Fixed async sales calc launched despite of the cron setting is active.
 
 ---
 
