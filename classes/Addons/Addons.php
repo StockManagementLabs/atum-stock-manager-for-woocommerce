@@ -539,9 +539,11 @@ class Addons {
 		$lower_keys = array();
 		$addon_name = strtolower( $addon_name );
 
-		foreach ( $keys as $key_name => $key_value ) {
-			$lower_key                = strtolower( $key_name );
-			$lower_keys[ $lower_key ] = $key_value;
+		if ( ! empty( $keys ) ) {
+			foreach ( $keys as $key_name => $key_value ) {
+				$lower_key                = strtolower( $key_name );
+				$lower_keys[ $lower_key ] = $key_value;
+			}
 		}
 
 		if ( $addon_name ) {
