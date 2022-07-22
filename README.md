@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.20.1`
+
+*2022-07-22*
+
+**Fixes**
+
+* Fixed warning if no addons installed.
+
+---
+
 `1.9.20`
 
 *2022-07-21*

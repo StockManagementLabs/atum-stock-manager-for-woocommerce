@@ -216,6 +216,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 ---
 
+`1.9.20.1`
+
+*2022-07-22*
+
+**Fixes**
+
+* Fixed warning if no addons installed.
+
+---
+
 `1.9.20`
 
 *2022-07-21*
