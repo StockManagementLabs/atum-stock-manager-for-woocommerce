@@ -156,7 +156,7 @@ var Tooltip = (function () {
             $wrapper = $('body');
         }
         $wrapper.find('.tips, .atum-tooltip').each(function (index, elem) {
-            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title');
+            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title') || $tipEl.attr('data-bs-original-title');
             if (title) {
                 if (_this.getInstance($tipEl)) {
                     return;
@@ -172,7 +172,7 @@ var Tooltip = (function () {
                 });
                 $tipEl.on('inserted.bs.tooltip', function (evt) {
                     var tooltipId = $(evt.currentTarget).attr('aria-describedby');
-                    $('.tooltip[class*="bs-tooltip-"]').not("#".concat(tooltipId)).remove();
+                    $('.tooltip[class*="bs-tooltip-"]').not("#" + tooltipId).remove();
                 });
             }
         });
@@ -561,7 +561,7 @@ __webpack_require__.r(__webpack_exports__);
         });
     }
     SalesStatsWidget.prototype.loadSales = function ($widget, filter) {
-        var $salesData = $widget.find("[data-value=\"".concat(filter, "\"]"));
+        var $salesData = $widget.find("[data-value=\"" + filter + "\"]");
         if ('yes' === $salesData.data('updated')) {
             $widget.find('.data').not('.hidden').addClass('hidden');
             $salesData.fadeIn('fast');
@@ -583,8 +583,8 @@ __webpack_require__.r(__webpack_exports__);
                         var data = response.data;
                         if (Object.keys(data).length) {
                             $.each(data, function (key, value) {
-                                if ($salesData.find("[data-prop=\"".concat(key, "\"]")).length) {
-                                    $salesData.find("[data-prop=\"".concat(key, "\"]")).html(value);
+                                if ($salesData.find("[data-prop=\"" + key + "\"]").length) {
+                                    $salesData.find("[data-prop=\"" + key + "\"]").html(value);
                                 }
                             });
                             $widget.find('.data').not('.hidden').addClass('hidden');
@@ -748,7 +748,7 @@ var StatisticsWidget = (function () {
                                         dataPoint.yLabel += curSymbol;
                                     }
                                 }
-                                var content = dataPoint.yLabel, $tooltip = $("#stats-chart-tooltip-".concat(dataPoint.datasetIndex));
+                                var content = dataPoint.yLabel, $tooltip = $("#stats-chart-tooltip-" + dataPoint.datasetIndex);
                                 $tooltip.html(content);
                                 $tooltip.css({
                                     opacity: 1,
@@ -1020,8 +1020,8 @@ var StockControlWidget = (function () {
                             });
                             innerHtml_1 += '</thead><tbody>';
                             bodyLines.forEach(function (body, i) {
-                                var colors = tooltip.labelColors[i], style = "background:".concat(colors.backgroundColor, "; border-color:").concat(colors.borderColor, "; border-width: 2px"), span = "<span class=\"stock-chart-tooltip-key\" style=\"".concat(style, "\"></span>");
-                                innerHtml_1 += "<tr><td>".concat(span + body, "</td></tr>");
+                                var colors = tooltip.labelColors[i], style = "background:" + colors.backgroundColor + "; border-color:" + colors.borderColor + "; border-width: 2px", span = "<span class=\"stock-chart-tooltip-key\" style=\"" + style + "\"></span>";
+                                innerHtml_1 += "<tr><td>" + (span + body) + "</td></tr>";
                             });
                             innerHtml_1 += '</tbody>';
                             tooltipEl.querySelector('table').innerHTML = innerHtml_1;
@@ -1071,7 +1071,7 @@ var VideosWidget = (function () {
             var $videoItem = $(evt.currentTarget).closest('article'), $videoPlayer = _this.$videosWidget.find('.video-player'), videoId = $videoItem.data('video');
             $videoItem.siblings('.active').removeClass('active');
             $videoItem.addClass('active');
-            $videoPlayer.find('iframe').attr('src', "//www.youtube.com/embed/".concat(videoId, "?rel=0&modestbranding=1"));
+            $videoPlayer.find('iframe').attr('src', "//www.youtube.com/embed/" + videoId + "?rel=0&modestbranding=1");
             $videoPlayer.find('.video-title').text($videoItem.find('.video-title').text().trim());
             $videoPlayer.find('.video-meta').html($videoItem.find('.video-meta').html());
             $videoPlayer.find('.video-desc').text($videoItem.find('.video-desc').text().trim());
@@ -1238,14 +1238,10 @@ __webpack_require__.r(__webpack_exports__);
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var Utils = {
     settings: {
@@ -1291,7 +1287,7 @@ var Utils = {
         });
     },
     addNotice: function (type, msg) {
-        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"" + type + " notice is-dismissible\"><p><strong>" + msg + "</strong></p></div>").hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -1399,7 +1395,7 @@ var Utils = {
             return value;
         }
         decimal = decimal || this.settings.number.decimal;
-        var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
+        var regex = new RegExp("[^0-9-" + decimal + "]", 'g'), unformatted = parseFloat(('' + value)
             .replace(/\((.*)\)/, '-$1')
             .replace(regex, '')
             .replace(decimal, '.'));
@@ -1443,7 +1439,7 @@ var Utils = {
         return $('<div />').append($elems).html();
     },
     mergeArrays: function (arr1, arr2) {
-        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1), arr2)));
     },
     restrictNumberInputValues: function ($input) {
         if ($input.attr('type') !== 'number') {

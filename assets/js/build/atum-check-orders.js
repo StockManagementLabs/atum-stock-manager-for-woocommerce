@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
     function CheckOrderPrices(settings, tooltip) {
         this.settings = settings;
         this.tooltip = tooltip;
-        this.$checkPricesButton = $("<button id=\"atum-check-order-prices\" class=\"page-title-action\">".concat(this.settings.get('checkOrderPrices'), "</button>"));
+        this.$checkPricesButton = $("<button id=\"atum-check-order-prices\" class=\"page-title-action\">" + this.settings.get('checkOrderPrices') + "</button>");
         this.$checkingResultWrapper = $('<span id="atum-checking-result" />');
         this.$checkPricesButton.insertAfter($('.page-title-action').last());
         this.$checkingResultWrapper.insertAfter(this.$checkPricesButton);
@@ -193,7 +193,7 @@ var Tooltip = (function () {
             $wrapper = $('body');
         }
         $wrapper.find('.tips, .atum-tooltip').each(function (index, elem) {
-            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title');
+            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title') || $tipEl.attr('data-bs-original-title');
             if (title) {
                 if (_this.getInstance($tipEl)) {
                     return;
@@ -209,7 +209,7 @@ var Tooltip = (function () {
                 });
                 $tipEl.on('inserted.bs.tooltip', function (evt) {
                     var tooltipId = $(evt.currentTarget).attr('aria-describedby');
-                    $('.tooltip[class*="bs-tooltip-"]').not("#".concat(tooltipId)).remove();
+                    $('.tooltip[class*="bs-tooltip-"]').not("#" + tooltipId).remove();
                 });
             }
         });

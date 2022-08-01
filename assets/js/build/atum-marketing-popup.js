@@ -115,23 +115,23 @@ var MarketingPopup = (function () {
             },
             success: function (response) {
                 if (response.success === true) {
-                    var popupSettings = response.data, descriptionColor = popupSettings.description.text_color ? "color:".concat(popupSettings.description.text_color, ";") : '', descriptionFontSize = popupSettings.description.text_size ? "font-size:".concat(popupSettings.description.text_size, ";") : '', descriptionAlign = popupSettings.description.text_align ? "text-align:".concat(popupSettings.description.text_align, ";") : '', descriptionPadding = popupSettings.description.padding ? "padding:".concat(popupSettings.description.padding, ";") : '', description = "<p data-transient-key=\"".concat(popupSettings.transient_key, "\" style=\"").concat(descriptionColor + descriptionFontSize + descriptionAlign + descriptionPadding, "\">").concat(popupSettings.description.text, "</p>"), titleColor = popupSettings.title.text_color ? "color:".concat(popupSettings.title.text_color, ";") : '', titleFontSize = popupSettings.title.text_size ? "font-size:".concat(popupSettings.title.text_size, ";") : '', titleAlign = popupSettings.title.text_align ? "text-align:".concat(popupSettings.title.text_align, ";") : '', hoverButtons = popupSettings.hoverButtons || '', imageTopLeft = popupSettings.images.top_left, footerNoticeStyle = popupSettings.footerNotice.bg_color ? " style=\"background-color:".concat(popupSettings.footerNotice.bg_color, ";\"") : '', footerNotice = popupSettings.footerNotice.text ? "<div class=\"footer-notice\"".concat(footerNoticeStyle, ">").concat(popupSettings.footerNotice.text, "</div>") : '';
-                    var logo = "<img class=\"mp-logo\" src=\"".concat(popupSettings.images.logo, "\">"), versionColor = '', versionBackground = '', version = '', buttons_1 = '';
+                    var popupSettings = response.data, descriptionColor = popupSettings.description.text_color ? "color:" + popupSettings.description.text_color + ";" : '', descriptionFontSize = popupSettings.description.text_size ? "font-size:" + popupSettings.description.text_size + ";" : '', descriptionAlign = popupSettings.description.text_align ? "text-align:" + popupSettings.description.text_align + ";" : '', descriptionPadding = popupSettings.description.padding ? "padding:" + popupSettings.description.padding + ";" : '', description = "<p data-transient-key=\"" + popupSettings.transient_key + "\" style=\"" + (descriptionColor + descriptionFontSize + descriptionAlign + descriptionPadding) + "\">" + popupSettings.description.text + "</p>", titleColor = popupSettings.title.text_color ? "color:" + popupSettings.title.text_color + ";" : '', titleFontSize = popupSettings.title.text_size ? "font-size:" + popupSettings.title.text_size + ";" : '', titleAlign = popupSettings.title.text_align ? "text-align:" + popupSettings.title.text_align + ";" : '', hoverButtons = popupSettings.hoverButtons || '', imageTopLeft = popupSettings.images.top_left, footerNoticeStyle = popupSettings.footerNotice.bg_color ? " style=\"background-color:" + popupSettings.footerNotice.bg_color + ";\"" : '', footerNotice = popupSettings.footerNotice.text ? "<div class=\"footer-notice\"" + footerNoticeStyle + ">" + popupSettings.footerNotice.text + "</div>" : '';
+                    var logo = "<img class=\"mp-logo\" src=\"" + popupSettings.images.logo + "\">", versionColor = '', versionBackground = '', version = '', buttons_1 = '';
                     if (popupSettings.images.hasOwnProperty('logo_css') && popupSettings.images.logo_css) {
-                        logo = logo.replace('>', " style=\"".concat(popupSettings.images.logo_css, "\">"));
+                        logo = logo.replace('>', " style=\"" + popupSettings.images.logo_css + "\">");
                     }
                     if (popupSettings.version && Object.keys(popupSettings.version).length) {
-                        versionColor = popupSettings.version.text_color ? "color:".concat(popupSettings.version.text_color, ";") : '';
-                        versionBackground = popupSettings.version.background ? "background:".concat(popupSettings.version.background, ";") : '';
-                        version = "<span class=\"version\" style=\"".concat(versionBackground + versionColor, "\">").concat(popupSettings.version.text, "</span>");
+                        versionColor = popupSettings.version.text_color ? "color:" + popupSettings.version.text_color + ";" : '';
+                        versionBackground = popupSettings.version.background ? "background:" + popupSettings.version.background + ";" : '';
+                        version = "<span class=\"version\" style=\"" + (versionBackground + versionColor) + "\">" + popupSettings.version.text + "</span>";
                     }
-                    var title = popupSettings.title.text ? "<h1 style=\"".concat(titleColor + titleFontSize + titleAlign, "\"><span>").concat(popupSettings.title.text + version, "</span></h1>") : '';
+                    var title = popupSettings.title.text ? "<h1 style=\"" + (titleColor + titleFontSize + titleAlign) + "\"><span>" + (popupSettings.title.text + version) + "</span></h1>" : '';
                     if (popupSettings.buttons && popupSettings.buttons.length) {
                         if (hoverButtons) {
                             $(hoverButtons).appendTo('body');
                         }
                         popupSettings.buttons.forEach(function (button) {
-                            buttons_1 += "<button data-url=\"".concat(button.url, "\" class=\"").concat(button.class, " popup-button\" style=\"").concat(button.css, "\">").concat(button.text, "</button>");
+                            buttons_1 += "<button data-url=\"" + button.url + "\" class=\"" + button.class + " popup-button\" style=\"" + button.css + "\">" + button.text + "</button>";
                         });
                     }
                     sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
