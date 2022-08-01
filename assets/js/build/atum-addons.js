@@ -136,7 +136,7 @@ var Tooltip = (function () {
             $wrapper = $('body');
         }
         $wrapper.find('.tips, .atum-tooltip').each(function (index, elem) {
-            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title') || $tipEl.attr('data-bs-original-title');
+            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title');
             if (title) {
                 if (_this.getInstance($tipEl)) {
                     return;
@@ -152,7 +152,7 @@ var Tooltip = (function () {
                 });
                 $tipEl.on('inserted.bs.tooltip', function (evt) {
                     var tooltipId = $(evt.currentTarget).attr('aria-describedby');
-                    $('.tooltip[class*="bs-tooltip-"]').not("#" + tooltipId).remove();
+                    $('.tooltip[class*="bs-tooltip-"]').not("#".concat(tooltipId)).remove();
                 });
             }
         });
