@@ -508,7 +508,7 @@ var TableCellPopovers = (function (_super) {
             value: value,
             class: $metaCell.data('extraClass') ? "meta-value ".concat($metaCell.data('extraClass')) : 'meta-value',
         };
-        if (inputType === 'selectiveNumber') {
+        if (inputType === 'selective_number') {
             this.wpHooks.doAction('atum_tableCellPopovers_selectiveNumberType', $metaCell);
             return;
         }

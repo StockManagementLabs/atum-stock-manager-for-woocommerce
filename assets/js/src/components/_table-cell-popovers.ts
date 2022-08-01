@@ -130,7 +130,7 @@ export default class TableCellPopovers extends PopoverBase{
 			      class: $metaCell.data( 'extraClass' ) ? `meta-value ${ $metaCell.data( 'extraClass' ) }` : 'meta-value',
 		      };
 
-		if ( inputType === 'selectiveNumber' ) {
+		if ( inputType === 'selective_number' ) {
 			this.wpHooks.doAction( 'atum_tableCellPopovers_selectiveNumberType', $metaCell );
 			return;
 		}
