@@ -1687,6 +1687,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args = array(
 				'meta_key'  => 'stock',
 				'value'     => $stock,
+				'product'   => $this->list_item,
 				'tooltip'   => $tooltip_warning ?: esc_attr__( 'Click to edit the stock quantity', ATUM_TEXT_DOMAIN ),
 				'cell_name' => esc_attr__( 'Stock Quantity', ATUM_TEXT_DOMAIN ),
 			);
