@@ -14,7 +14,6 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumMacroable;
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
 use Atum\Models\DataStores\AtumDataStoreCustomTableTrait;
@@ -23,14 +22,12 @@ use Atum\Suppliers\Suppliers;
 
 trait AtumProductTrait {
 
-	use AtumMacroable;
-
 	/**
 	 * Add the ATUM data to the ATUM Product Trait
 	 *
 	 * @var bool
 	 */
-	protected static $atum_data = array(
+	protected $atum_data = array(
 		'purchase_price'                => '',
 		'supplier_id'                   => NULL,
 		'supplier_sku'                  => '',
