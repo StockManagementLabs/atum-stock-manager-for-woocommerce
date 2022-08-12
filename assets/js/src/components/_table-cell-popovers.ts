@@ -131,7 +131,7 @@ export default class TableCellPopovers extends PopoverBase{
 		      };
 
 		if ( inputType === 'selective_number' ) {
-			this.wpHooks.doAction( 'atum_tableCellPopovers_selectiveNumberType', $metaCell );
+			this.wpHooks.doAction( 'atum_tableCellPopovers_selectiveNumberType', $metaCell, this );
 			return;
 		}
 		else if ( inputType === 'number' || symbol ) {

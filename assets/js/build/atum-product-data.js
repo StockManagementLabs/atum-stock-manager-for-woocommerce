@@ -295,11 +295,11 @@ var FileUploader = (function () {
                         $button.siblings('img').remove();
                         if (modalOptions.multiple) {
                             attachment.forEach(function (att) {
-                                $button.after("<img class=\"atum-file-uploader__preview\" src=\"" + att.url + "\">");
+                                $button.after("<img class=\"atum-file-uploader__preview\" src=\"".concat(att.url, "\">"));
                             });
                         }
                         else {
-                            $button.after("<img class=\"atum-file-uploader__preview\" src=\"" + attachment.url + "\">");
+                            $button.after("<img class=\"atum-file-uploader__preview\" src=\"".concat(attachment.url, "\">"));
                         }
                     }
                     _this.wpHooks.doAction('atum_fileUploader_selected', uploader, $button);
@@ -336,7 +336,7 @@ var FileAttachments = (function () {
         this.$attachmentsList = $('.atum-attachments-list');
         this.$input = $('#atum-attachments');
         $.each(this.settings.get('emailNotifications'), function (key, title) {
-            _this.$emailSelector.append("\n\t\t\t\t<option value=\"" + key + "\">" + title + "</option>\n\t\t\t");
+            _this.$emailSelector.append("\n\t\t\t\t<option value=\"".concat(key, "\">").concat(title, "</option>\n\t\t\t"));
         });
         this.addHooks();
         this.bindEvents();
@@ -352,9 +352,9 @@ var FileAttachments = (function () {
             attachments.forEach(function (attachment) {
                 var $listItem = $('<li>').data('id', attachment.id), url = attachment.hasOwnProperty('url') ? attachment.url : attachment.sizes.full.url;
                 $listItem
-                    .append("<label>" + _this.settings.get('attachToEmail') + "</label>")
+                    .append("<label>".concat(_this.settings.get('attachToEmail'), "</label>"))
                     .append(_this.$emailSelector.clone());
-                $listItem.append("\n\t\t\t\t\t<a href=\"" + url + "\" target=\"_blank\" title=\"" + attachment.title + "\">\n\t\t\t\t\t\t<img src=\"" + attachment.sizes.medium.url + "\" alt=\"" + attachment.title + "\">\n\t\t\t\t\t</a>\n\t\t\t\t");
+                $listItem.append("\n\t\t\t\t\t<a href=\"".concat(url, "\" target=\"_blank\" title=\"").concat(attachment.title, "\">\n\t\t\t\t\t\t<img src=\"").concat(attachment.sizes.medium.url, "\" alt=\"").concat(attachment.title, "\">\n\t\t\t\t\t</a>\n\t\t\t\t"));
                 _this.$attachmentsList.append($listItem);
             });
             _this.updateInput();
@@ -367,7 +367,7 @@ var FileAttachments = (function () {
             .on('click', '.delete-attachment', function (evt) {
             var $button = $(evt.currentTarget), tooltipId = $button.attr('aria-describedby');
             $button.closest('li').remove();
-            $("#" + tooltipId).remove();
+            $("#".concat(tooltipId)).remove();
             _this.updateInput();
         });
     };
@@ -422,7 +422,7 @@ var ProductDataMetaBoxes = (function () {
             var $button = $(evt.currentTarget), value = $button.siblings('select').val();
             sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
                 title: _this.settings.get('areYouSure'),
-                text: $button.data('confirm').replace('%s', "\"" + value + "\""),
+                text: $button.data('confirm').replace('%s', "\"".concat(value, "\"")),
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: _this.settings.get('continue'),

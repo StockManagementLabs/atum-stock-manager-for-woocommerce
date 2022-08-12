@@ -152,7 +152,7 @@ var Tooltip = (function () {
                 });
                 $tipEl.on('inserted.bs.tooltip', function (evt) {
                     var tooltipId = $(evt.currentTarget).attr('aria-describedby');
-                    $('.tooltip[class*="bs-tooltip-"]').not("#" + tooltipId).remove();
+                    $('.tooltip[class*="bs-tooltip-"]').not("#".concat(tooltipId)).remove();
                 });
             }
         });
