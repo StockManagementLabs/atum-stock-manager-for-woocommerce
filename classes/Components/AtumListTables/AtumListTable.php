@@ -3583,6 +3583,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$disable_first = $disable_last = $disable_prev = $disable_next = FALSE;
 
+		$total_pages = (int)$total_pages;
 
 		if ( 1 === $current ) {
 			$disable_first = TRUE;
@@ -3593,11 +3594,11 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 
-		if ( $current == $total_pages ) {
+		if ( $current === $total_pages ) {
 			$disable_last = TRUE;
 			$disable_next = TRUE;
 		}
-		elseif ( $current == $total_pages - 1 ) {
+		elseif ( $current === $total_pages - 1 ) {
 			$disable_last = TRUE;
 		}
 
