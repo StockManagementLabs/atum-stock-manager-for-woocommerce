@@ -3583,6 +3583,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$disable_first = $disable_last = $disable_prev = $disable_next = FALSE;
 
+
 		if ( 1 === $current ) {
 			$disable_first = TRUE;
 			$disable_prev  = TRUE;
@@ -3591,16 +3592,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			$disable_first = TRUE;
 		}
 
-		if ( $current === $total_pages ) {
+
+		if ( $current == $total_pages ) {
 			$disable_last = TRUE;
 			$disable_next = TRUE;
 		}
-		elseif ( $current === $total_pages - 1 ) {
+		elseif ( $current == $total_pages - 1 ) {
 			$disable_last = TRUE;
 		}
 
 		if ( $disable_first ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>';
+			$page_links[] = '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&laquo;</span>';
 		}
 		else {
 
@@ -3615,7 +3617,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( $disable_prev ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>';
+			$page_links[] = '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&lsaquo;</span>';
 		}
 		else {
 
@@ -3650,7 +3652,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$page_links[] = $total_pages_before . sprintf( _x( '%1$s of %2$s', 'paging', ATUM_TEXT_DOMAIN ), '<span class="' . esc_attr( $current_page_style ) . '">' . $html_current_page . '</span>', $html_total_pages ) . $total_pages_after;
 
 		if ( $disable_next ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>';
+			$page_links[] = '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&rsaquo;</span>';
 		}
 		else {
 
@@ -3665,7 +3667,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( $disable_last ) {
-			$page_links[] = '<span class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>';
+			$page_links[] = '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">&raquo;</span>';
 		}
 		else {
 
