@@ -175,6 +175,11 @@ class Upgrade {
 			$this->set_supplier_default_checkboxes();
 		}
 
+		// ** version 1.9.20.3 ** Add the committed to WC Orders field to APD.
+		if ( version_compare( $db_version, '1.9.20.3', '<' ) ) {
+			$this->add_committed_stock_to_wc_orders_fields();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1086,6 +1091,41 @@ class Upgrade {
 			$supplier = new Supplier( $supplier_id );
 			update_post_meta( $supplier_id, '_use_default_description', ! $supplier->description ? 'yes' : 'no' );
 			update_post_meta( $supplier_id, '_use_default_terms', ! $supplier->delivery_terms ? 'yes' : 'no' );
+		}
+
+	}
+
+	/**
+	 * Add committed to WC Orders field to ATUM Product data
+	 *
+	 * @since 0.2.2
+	 */
+	public function add_committed_stock_to_wc_orders_fields() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$db_name         = DB_NAME;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		$columns = array(
+			'committed_to_wc' => 'DOUBLE',
+		);
+
+		foreach ( array_keys( $columns ) as $column_name ) {
+
+			// Avoid adding the column if was already added.
+			$column_exist = $wpdb->prepare( '
+				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
+			', $db_name, $atum_data_table, $column_name );
+
+			// Add the new column to the table.
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			if ( ! $wpdb->get_var( $column_exist ) ) {
+				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			}
+
 		}
 
 	}
