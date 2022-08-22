@@ -68,6 +68,7 @@ trait AtumProductTrait {
 		'selectable_inventories_mode'   => NULL, // MI.
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
+		'committed_to_wc'               => NULL, // SOnly.
 	);
 
 
@@ -644,6 +645,21 @@ trait AtumProductTrait {
 		return $show_out_of_stock_inventories;
 	}
 
+	/**
+	 * Returns the product's committed_to_wc prop.
+	 *
+	 * @since   1.9.20.3
+	 * @package SOnly
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_committed_to_wc( $context = 'view' ) {
+
+		return $this->get_prop( 'committed_to_wc', $context );
+	}
+
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
@@ -1164,6 +1180,18 @@ trait AtumProductTrait {
 
 		$show_out_of_stock_inventories = ! is_null( $show_out_of_stock_inventories ) && 'global' !== $show_out_of_stock_inventories ? wc_string_to_bool( $show_out_of_stock_inventories ) : NULL;
 		$this->set_prop( 'show_out_of_stock_inventories', $show_out_of_stock_inventories );
+	}
+
+	/**
+	 * Set committed stock to WC Orders fpr the current product
+	 *
+	 * @since 1.9.20.3
+	 *
+	 * @param int|float|string|NULL $committed_to_wc
+	 */
+	public function set_committed_to_wc( $committed_to_wc ) {
+
+		$this->set_prop( 'committed_to_wc', is_null( $committed_to_wc ) || '' === $committed_to_wc ? NULL : wc_stock_amount( $committed_to_wc ) );
 	}
 
 
