@@ -1645,11 +1645,11 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
 
 						if ( ! $editable ) {
-							$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
+							$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
 						}
 						else {
 							$classes_title   = ' class="cell-yellow"';
-							$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
+							$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
 						}
 
 					}
@@ -1658,11 +1658,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
 					if ( ! $editable ) {
-						$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
+						$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
 					}
 					else {
 						$classes_title   = ' class="cell-yellow"';
-						$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
+						$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
 					}
 
 				}
@@ -1671,11 +1671,11 @@ abstract class AtumListTable extends \WP_List_Table {
 			elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
 				if ( ! $editable ) {
-					$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock is below the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
+					$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
 				}
 				else {
 					$classes_title   = ' class="cell-yellow"';
-					$tooltip_warning = esc_attr__( "Click to edit the stock quantity (it's below the Out of Stock Threshold)", ATUM_TEXT_DOMAIN );
+					$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
 				}
 
 			}
