@@ -2439,6 +2439,12 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					}
 				}
 				
+				&.column-_stock {
+					.calculated {
+						color: $purple;
+					}
+				}
+				
 				&.calc_purchase_order {
 					a {
 						color:  var(--primary);
