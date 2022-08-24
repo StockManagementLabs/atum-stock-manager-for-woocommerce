@@ -3349,6 +3349,7 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 .btn-group-toggle > .btn,
 .btn-group-toggle > .btn-group > .btn {
   margin-bottom: 0;
+  margin-right: 2px;
 }
 
 .btn-group-toggle > .btn input[type="radio"],
@@ -3358,6 +3359,23 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
+}
+
+.btn-group-toggle > .btn.btn-gray,
+.btn-group-toggle > .btn-group > .btn.btn-gray {
+  background-color: #adb5bd;
+  border: none;
+}
+
+.btn-group-toggle > .btn.btn-gray:hover,
+.btn-group-toggle > .btn-group > .btn.btn-gray:hover {
+  background-color: #6c757d;
+}
+
+.btn-group-toggle > .btn.btn-gray.active,
+.btn-group-toggle > .btn-group > .btn.btn-gray.active {
+  background-color: #69C61D;
+  color: #fff;
 }
 
 .input-group {

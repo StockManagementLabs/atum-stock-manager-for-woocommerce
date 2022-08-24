@@ -131,12 +131,28 @@
 	> .btn,
 	> .btn-group > .btn {
 		margin-bottom: 0; // Override default `<label>` value
+		margin-right: 2px;
 		
 		input[type="radio"],
 		input[type="checkbox"] {
 			position: absolute;
 			clip: rect(0, 0, 0, 0);
 			pointer-events: none;
+		}
+		
+		&.btn-gray {
+			background-color: $gray-500;
+			border: none;
+			
+			&:hover {
+				background-color: $gray-600;
+			}
+			
+			&.active {
+				background-color: $success;
+				color: $white;
+			}
+			
 		}
 	}
 }

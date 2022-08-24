@@ -3995,6 +3995,7 @@ h2 .atum-help-tip {
 .btn-group-toggle > .btn,
 .btn-group-toggle > .btn-group > .btn {
   margin-bottom: 0;
+  margin-right: 2px;
 }
 
 .btn-group-toggle > .btn input[type="radio"],
@@ -4004,6 +4005,23 @@ h2 .atum-help-tip {
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
+}
+
+.btn-group-toggle > .btn.btn-gray,
+.btn-group-toggle > .btn-group > .btn.btn-gray {
+  background-color: #adb5bd;
+  border: none;
+}
+
+.btn-group-toggle > .btn.btn-gray:hover,
+.btn-group-toggle > .btn-group > .btn.btn-gray:hover {
+  background-color: #6c757d;
+}
+
+.btn-group-toggle > .btn.btn-gray.active,
+.btn-group-toggle > .btn-group > .btn.btn-gray.active {
+  background-color: #69C61D;
+  color: #fff;
 }
 
 .swal2-container {
@@ -5470,13 +5488,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   margin-left: 20px;
 }
 
-.atum-settings-wrapper #atum-settings .btn-group {
-  height: 30px;
-}
-
 .atum-settings-wrapper #atum-settings .btn-group label {
-  margin-left: 1px;
-  margin-right: 1px;
   line-height: 1.5;
   font-size: 14px;
 }
