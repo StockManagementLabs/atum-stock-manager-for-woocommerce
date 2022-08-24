@@ -3,10 +3,10 @@
    ======================================= */
 
 import DateTimePicker from './_date-time-picker';
+import EnhancedSelect from './_enhanced-select';
 import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
-import EnhancedSelect from './_enhanced-select';
 import WPHooks from '../interfaces/wp.hooks';
 
 export default class TableCellPopovers extends PopoverBase{
