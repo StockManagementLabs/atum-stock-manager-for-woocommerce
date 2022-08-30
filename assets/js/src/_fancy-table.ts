@@ -1,6 +1,6 @@
 /* =============================================================
-   FANCY TABLE (https://github.com/myspace-nu/jquery.fancyTable)
-   ============================================================= */
+ FANCY TABLE (https://github.com/myspace-nu/jquery.fancyTable)
+ ============================================================= */
 
 import 'jquery.fancytable/dist/fancyTable.min';   // From node_modules
 
@@ -30,25 +30,20 @@ const FancyTable = {
 
 	init( $table: JQuery, options: FTOptions = {} ) {
 
+		// Don't add pagiation nor search when there aren't enough rows on the table.
+		const perPage: number            = options.perPage || 10,
+		      paginationAllowed: boolean = $table.find( 'tbody tr' ).length > perPage;
+
 		const defaults: FTOptions = {
-			pagination     : true,
+			pagination     : paginationAllowed,
+			searchable     : paginationAllowed,
 			paginationClass: 'btn',
 			globalSearch   : true,
-			onInit         : ( elem: JQuery ) => {
-
-				// Hide the pagination if there is just one page.
-				const $paginationWrapper: JQuery = $( elem ).find( 'tfoot .pag' );
-
-				if ( $paginationWrapper.find( 'a' ).length <= 1 ) {
-					$paginationWrapper.hide();
-				}
-
-			}
 		};
 
 		( <any> $table ).fancyTable( { ...defaults, ...options } );
 	}
-	
+
 }
 
 export default FancyTable;
