@@ -324,7 +324,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Decimals in stock quantity', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Enter the number of decimal places your shop needs in stock quantity fields. Set 0 to keep or 1 and higher to override the default WooCommerce's NO decimal setting.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Enter the number of decimal places your shop needs in stock quantity fields. Set 0 to disable decimals or 1 and higher to override the default WooCommerce's NO decimal setting. Example: 2 would allow 2 decimals (1.00).", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
@@ -336,7 +336,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Stock quantity steps', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Tell WooCommerce how much to increase/decrease the stock quantity value in frontend with each arrow click. Example: If set to '0.5'; the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Tells WooCommerce how much to increase/decrease the stock quantity value in frontend number inputs with each arrow click. Example: If set to '0.5', the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
