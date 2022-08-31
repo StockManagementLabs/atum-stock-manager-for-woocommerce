@@ -2626,9 +2626,24 @@ final class Helpers {
 	 * @return float|int
 	 */
 	public static function get_input_step() {
+
+		$stock_decimals = Globals::get_stock_decimals();
+
+		if ( ! $stock_decimals ) {
+			return 1;
+		}
 		
 		$step = self::get_option( 'stock_quantity_step' );
-		return $step ? $step : 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+
+		if ( ! is_numeric( $step ) || ! $step ) {
+			return 'any';
+		}
+
+		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
+
+		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
+		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+
 	}
 
 	/**
