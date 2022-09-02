@@ -69,6 +69,7 @@ trait AtumProductTrait {
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
 		'committed_to_wc'               => NULL, // SOnly.
+		'calc_backorders'               => NULL, // SOnly.
 	);
 
 
@@ -586,6 +587,7 @@ trait AtumProductTrait {
 	 * Returns the product is BOM prop.
 	 *
 	 * @since 1.7.8
+	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
@@ -653,11 +655,24 @@ trait AtumProductTrait {
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
-	 * @return string
+	 * @return int|float|null
 	 */
 	public function get_committed_to_wc( $context = 'view' ) {
-
 		return $this->get_prop( 'committed_to_wc', $context );
+	}
+
+	/**
+	 * Returns the product's calculated backorders prop.
+	 *
+	 * @since   1.9.20.4
+	 * @package SOnly
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|float|null
+	 */
+	public function get_calc_backorders( $context = 'view' ) {
+		return $this->get_prop( 'calc_backorders', $context );
 	}
 
 	/*
@@ -1192,6 +1207,18 @@ trait AtumProductTrait {
 	public function set_committed_to_wc( $committed_to_wc ) {
 
 		$this->set_prop( 'committed_to_wc', is_null( $committed_to_wc ) || '' === $committed_to_wc ? NULL : wc_stock_amount( $committed_to_wc ) );
+	}
+
+	/**
+	 * Set calculated backorders for the current product
+	 *
+	 * @since 1.9.20.4
+	 *
+	 * @param int|float|string|NULL $calc_backorders
+	 */
+	public function set_calc_backorders( $calc_backorders ) {
+
+		$this->set_prop( 'calc_backorders', is_null( $calc_backorders ) || '' === $calc_backorders ? NULL : wc_stock_amount( $calc_backorders ) );
 	}
 
 

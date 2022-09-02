@@ -175,9 +175,14 @@ class Upgrade {
 			$this->set_supplier_default_checkboxes();
 		}
 
-		// ** version 1.9.20.3 ** Add the committed to WC Orders field to APD.
+		// ** version 1.9.20.3 ** Add the committed to WC Orders column to APD.
 		if ( version_compare( $db_version, '1.9.20.3', '<' ) ) {
-			$this->add_committed_stock_to_wc_orders_fields();
+			$this->add_committed_stock_to_wc_orders_column();
+		}
+
+		// ** version 1.9.20.4 ** Add the calc_backorders column to APD.
+		if ( version_compare( $db_version, '1.9.20.4', '<' ) ) {
+			$this->add_calc_backorders_column();
 		}
 
 		/**********************
@@ -1096,36 +1101,53 @@ class Upgrade {
 	}
 
 	/**
-	 * Add committed to WC Orders field to ATUM Product data
+	 * Add committed to WC Orders column to ATUM Product data
 	 *
-	 * @since 0.2.2
+	 * @since 1.9.20.3
 	 */
-	public function add_committed_stock_to_wc_orders_fields() {
+	public function add_committed_stock_to_wc_orders_column() {
 
 		global $wpdb;
 
 		// Avoid adding the column if was already added.
-		$db_name         = DB_NAME;
 		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$columns = array(
-			'committed_to_wc' => 'DOUBLE',
-		);
+		// Avoid adding the column if was already added.
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'committed_to_wc'
+		", DB_NAME, $atum_data_table );
 
-		foreach ( array_keys( $columns ) as $column_name ) {
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `committed_to_wc` DOUBLE DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
 
-			// Avoid adding the column if was already added.
-			$column_exist = $wpdb->prepare( '
-				SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
-				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = %s
-			', $db_name, $atum_data_table, $column_name );
+	}
 
-			// Add the new column to the table.
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			if ( ! $wpdb->get_var( $column_exist ) ) {
-				$wpdb->query( "ALTER TABLE $atum_data_table ADD `$column_name` {$columns[ $column_name ]} DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
-			}
+	/**
+	 * Add the calculated backorders column to ATUM Product data
+	 *
+	 * @since 1.9.20.4
+	 */
+	public function add_calc_backorders_column() {
 
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Avoid adding the column if was already added.
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'calc_backorders'
+		", DB_NAME, $atum_data_table );
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `calc_backorders` DOUBLE DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 
 	}
