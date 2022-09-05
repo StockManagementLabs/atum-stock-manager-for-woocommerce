@@ -6255,6 +6255,17 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   display: none;
 }
 
+.swal2-container.atum-modal .atum-modal-content form .input-group .atum-enhanced-select .select2-selection--multiple .select2-selection__rendered {
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+}
+
+.swal2-container.atum-modal .atum-modal-content form .input-group .atum-enhanced-select .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+  height: 16px;
+}
+
 .swal2-container.atum-modal .atum-modal-content form .input-group .alert {
   text-align: left;
   display: block;

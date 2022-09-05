@@ -131,6 +131,18 @@
 							display: none;
 						}
 					}
+					
+					.select2-selection--multiple {
+						.select2-selection__rendered {
+							padding-left: 10px;
+							padding-right: 10px;
+							box-sizing: content-box;
+							
+							.select2-selection__choice {
+								height: 16px;
+							}
+						}
+					}
 				}
 				
 				.alert {
