@@ -60,6 +60,10 @@
 				box-shadow: 0 0 0 1px $input-focus;
 				border-color: $input-focus;
 			}
+			
+			&:disabled {
+				background-color: $gray-100;
+			}
 		}
 		
 		.select2-container, .select2-selection--single, .select2-selection__rendered {

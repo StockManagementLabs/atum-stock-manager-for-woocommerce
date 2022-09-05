@@ -3671,6 +3671,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   border-color: #007CBA;
 }
 
+.product_data .atum-field input[type=text]:disabled, .product_data .atum-field input[type=number]:disabled {
+  background-color: #f8f9fa;
+}
+
 .product_data .atum-field .select2-container, .product_data .atum-field .select2-selection--single, .product_data .atum-field .select2-selection__rendered {
   font-size: 14px !important;
   color: #32373C !important;
