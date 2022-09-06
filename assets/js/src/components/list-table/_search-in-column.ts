@@ -59,7 +59,7 @@ export default class SearchInColumn {
 			      columnLabel: string = $elem.parent().text().trim();
 
 			// Calc values are not searchable, also we can't search on thumb and supplier has its own filter.
-			if ( optionVal.search( 'calc_' ) < 0 && optionVal !== 'thumb' && optionVal !== '_supplier' ) {
+			if ( ! optionVal.startsWith( 'calc_' ) && optionVal !== 'thumb' && optionVal !== '_supplier' ) {
 
 				this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', optionVal ).text( columnLabel ) );
 

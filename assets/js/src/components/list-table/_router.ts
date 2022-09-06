@@ -69,7 +69,7 @@ export default class Router {
 						optionVal = $( elem ).val();
 
 						// Calc values are not searchable, also we can't search on thumb.
-						if ( optionVal.search( 'calc_' ) < 0 && optionVal !== 'thumb' && optionVal == searchColumn ) {
+						if ( ! optionVal.startsWith( 'calc_' ) && optionVal !== 'thumb' && optionVal === searchColumn ) {
 							this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, $( elem ).parent().text().trim() ] );
 							return false;
 						}

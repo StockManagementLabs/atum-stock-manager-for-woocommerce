@@ -2497,7 +2497,7 @@ var Router = (function () {
                     _this.globals.$searchColumnBtn.attr('data-original-title', $selectedSearchColumn.text().trim()).text($selectedSearchColumn.text().trim());
                     $('#adv-settings :checkbox').each(function (index, elem) {
                         optionVal_1 = $(elem).val();
-                        if (optionVal_1.search('calc_') < 0 && optionVal_1 !== 'thumb' && optionVal_1 == searchColumn_1) {
+                        if (!optionVal_1.startsWith('calc_') && optionVal_1 !== 'thumb' && optionVal_1 === searchColumn_1) {
                             _this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal_1, $(elem).parent().text().trim()]);
                             return false;
                         }
@@ -2819,7 +2819,7 @@ var SearchInColumn = (function () {
         this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', ['', this.globals.$searchColumnDropdown.data('no-option')]);
         $('#adv-settings input:checked').each(function (index, elem) {
             var $elem = $(elem), optionVal = $elem.val(), columnLabel = $elem.parent().text().trim();
-            if (optionVal.search('calc_') < 0 && optionVal !== 'thumb' && optionVal !== '_supplier') {
+            if (!optionVal.startsWith('calc_') && optionVal !== 'thumb' && optionVal !== '_supplier') {
                 _this.globals.$searchColumnDropdown.append($dropdownItem.clone().data('value', optionVal).text(columnLabel));
                 if ($.address.parameter('search_column') !== _this.globals.$searchColumnBtn.data('value') && _this.globals.$searchColumnBtn.data('value') === optionVal) {
                     _this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [optionVal, columnLabel]);
