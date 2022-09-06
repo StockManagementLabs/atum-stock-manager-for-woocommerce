@@ -3588,17 +3588,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			$disable_first = TRUE;
 			$disable_prev  = TRUE;
 		}
-		elseif ( 2 === $current ) {
-			$disable_first = TRUE;
-		}
-
 
 		if ( $current === $total_pages ) {
 			$disable_last = TRUE;
 			$disable_next = TRUE;
-		}
-		elseif ( $current === $total_pages - 1 ) {
-			$disable_last = TRUE;
 		}
 
 		if ( $disable_first ) {
