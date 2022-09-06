@@ -185,6 +185,11 @@ class Upgrade {
 			$this->add_calc_backorders_column();
 		}
 
+		// ** version 1.9.20.5 ** Update the calc_backorders column data.
+		if ( version_compare( $db_version, '1.9.20.4', '<' ) ) {
+			$this->update_calc_backorders();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1149,6 +1154,29 @@ class Upgrade {
 		if ( ! $wpdb->get_var( $column_exist ) ) {
 			$wpdb->query( "ALTER TABLE $atum_data_table ADD `calc_backorders` DOUBLE DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
+
+	}
+
+	/**
+	 * Update the calculated backorders data when necessary
+	 *
+	 * @since 1.9.20.5
+	 */
+	public function update_calc_backorders() {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "
+			UPDATE $atum_data_table apd
+			INNER JOIN $wpdb->postmeta pms ON (apd.product_id = pms.post_id AND pms.meta_key = '_stock')
+			INNER JOIN $wpdb->postmeta pmb ON (apd.product_id = pmb.post_id AND pmb.meta_key = '_backorders')
+			SET apd.calc_backorders = pms.meta_value
+			WHERE pmb.meta_value != 'no' AND pms.meta_value <= 0 
+		" );
+		// phpcs:enable
 
 	}
 

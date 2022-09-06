@@ -53,6 +53,7 @@ trait AtumProductTrait {
 		'restock_status'                => NULL,
 		'sales_update_date'             => NULL,
 		'barcode'                       => NULL,
+		'calc_backorders'               => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'             => NULL, // PL.
 		'available_to_purchase'         => NULL, // PL.
@@ -69,7 +70,6 @@ trait AtumProductTrait {
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
 		'committed_to_wc'               => NULL, // SOnly.
-		'calc_backorders'               => NULL, // SOnly.
 	);
 
 
@@ -776,7 +776,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|bool $inheritable Whether or not the product is inheritable by others.
+	 * @param string|bool $inheritable Whether the product is inheritable by others or not.
 	 */
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );

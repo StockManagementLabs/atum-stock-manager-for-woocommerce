@@ -1613,17 +1613,21 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Check WC Product Bundle method.
 		if ( class_exists( '\WC_Product_Bundle' ) && method_exists( '\WC_Product_Bundle', 'get_bundle_stock_quantity' ) && 'bundle' === $this->list_item->get_type() ) {
+
 			$bundle_product = $this->list_item;
+
 			/**
 			 * Variable definition
 			 *
-			 * @var $bundle_product '\WC_Product_Bundle
+			 * @var \WC_Product_Bundle $bundle_product
 			 */
 			if ( ! strlen( $bundle_product->get_bundle_stock_quantity() ) ) {
 				$stock = self::EMPTY_COL;
-			} else {
+			}
+			else {
 				$stock = $bundle_product->get_bundle_stock_quantity();
 			}
+
 		}
 
 		if ( 0 !== $stock && ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) || ! isset( $_REQUEST['view'] ) ) {
@@ -1716,21 +1720,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return int|string
 	 */
-	protected function column_calc_back_orders( $item ) {
+	protected function column__calc_backorders( $item ) {
 
-		$back_orders = self::EMPTY_COL;
+		$calc_backorders = self::EMPTY_COL;
 
-		if ( $this->allow_calcs ) {
-
-			if ( $this->list_item->backorders_allowed() && 'onbackorder' === $this->list_item->get_atum_stock_status() ) {
-				$back_orders = $this->list_item->get_stock_quantity();
-			}
-
-			$this->increase_total( 'calc_back_orders', $back_orders );
-
+		if ( $this->allow_calcs && $this->list_item->backorders_allowed() ) {
+			$calc_backorders = $this->list_item->get_calc_backorders();
+			$this->increase_total( '_calc_backorders', $calc_backorders );
 		}
 
-		return apply_filters( 'atum/list_table/column_back_orders', $back_orders, $item, $this->list_item, $this );
+		return apply_filters( 'atum/list_table/column_calc_backorders', $calc_backorders, $item, $this->list_item, $this );
 
 	}
 

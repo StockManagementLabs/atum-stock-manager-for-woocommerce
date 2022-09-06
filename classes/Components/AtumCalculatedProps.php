@@ -295,6 +295,17 @@ class AtumCalculatedProps {
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
+				// Calculated backorders.
+				if ( $product->backorders_allowed() ) {
+					$stock           = $product->get_stock_quantity();
+					$calc_backorders = $stock < 0 ? $stock : 0; // Only negative values are allowed as backorders.
+				}
+				else {
+					$calc_backorders = NULL; // Backorders disabled.
+				}
+
+				$product->set_calc_backorders( $calc_backorders );
+
 				// Save the sales update date.
 				$product->set_sales_update_date( $timestamp );
 

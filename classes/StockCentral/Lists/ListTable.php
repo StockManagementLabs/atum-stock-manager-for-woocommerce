@@ -40,7 +40,7 @@ class ListTable extends AtumListTable {
 		'_inbound_stock',
 		'_stock_on_hold',
 		'_reserved_stock',
-		'calc_back_orders',
+		'_calc_backorders',
 		'_sold_today',
 		'_customer_returns',
 		'_warehouse_damage',
@@ -85,6 +85,7 @@ class ListTable extends AtumListTable {
 			'_sales_last_days',
 			'_out_stock_days',
 			'_lost_sales',
+			'_calc_backorders',
 		),
 	);
 
@@ -154,6 +155,10 @@ class ListTable extends AtumListTable {
 			'type'  => 'NUMERIC',
 			'field' => 'lost_sales',
 		),
+		'_calc_backorders'     => array(
+			'type'  => 'NUMERIC',
+			'field' => 'calc_backorders',
+		),
 	);
 
 	/**
@@ -215,7 +220,7 @@ class ListTable extends AtumListTable {
 					'_inbound_stock',
 					'_stock_on_hold',
 					'_reserved_stock',
-					'calc_back_orders',
+					'_calc_backorders',
 					'_sold_today',
 				),
 			),
@@ -261,7 +266,7 @@ class ListTable extends AtumListTable {
 			'_inbound_stock'    => 0,
 			'_stock_on_hold'    => 0,
 			'_reserved_stock'   => 0,
-			'calc_back_orders'  => 0,
+			'_calc_backorders'  => 0,
 			'_sold_today'       => 0,
 			'_customer_returns' => 0,
 			'_warehouse_damage' => 0,
@@ -319,7 +324,7 @@ class ListTable extends AtumListTable {
 			'calc_gross_profit'    => __( 'Gross Profit', ATUM_TEXT_DOMAIN ),
 			'_weight'              => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'     => __( 'Backorders', ATUM_TEXT_DOMAIN ),
+			'_calc_backorders'     => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'_out_stock_threshold' => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			'_low_stock_threshold' => __( 'Low Stock Threshold', ATUM_TEXT_DOMAIN ),
@@ -378,7 +383,7 @@ class ListTable extends AtumListTable {
 			'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'back_orders'       => __( 'Backorders', ATUM_TEXT_DOMAIN ),
+			'backorders'        => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
@@ -951,7 +956,7 @@ class ListTable extends AtumListTable {
 					$filtered_products = $this->get_log_products( 'reserved-stock', 'pending' );
 					break;
 
-				case 'back_orders':
+				case 'backorders':
 					// Avoid infinite loop of recalls.
 					remove_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 
