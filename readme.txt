@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.0.1
+Tested up to: 6.0.2
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.7.0
-Stable tag: 1.9.20.2
+WC tested up to: 6.8.2
+Stable tag: 1.9.21
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -216,9 +216,44 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 ---
 
-`1.9.20.2`
+`1.9.21`
 
-*2022-07-22*
+*2022-09-07*
+
+**Features**
+
+* Added filter to stock value in list table column.
+* Added wpHooks to table cell popovers component.
+* Added committed to WC orders field to ATUM product data table.
+* Add committed to WC orders field to ATUM product model.
+* Added new FancyTables JS component.
+* Added calc backorders column the ATUM product data table.
+* Added new helper to convert PHP date formats to moment.js formats.
+* Added support for special date formats to datetimepicker labels.
+* Added calculated backorders prop to allow sorting in List Table column, etc.
+* Added the backorders column to the search in column dropdown.
+* Save the calculated backorders every time a product is saved (if needed).
+
+**Changes**
+
+* Send product argument to editable column.
+* Reverted ATUM macroable class.
+* Send TableCellPopovers argument when creating a cell popover.
+* Added color to calculated stock values in List Tables.
+* Adjusted button groups CSS.
+* Reordered some Stock Central columns.
+* Refactoring.
+* Improved description readability.
+* Improved the input number step helper.
+* Various CSS adjustments.
+
+**Fixes**
+
+* Fixed table cell popover input type value.
+* Fixed tooltips not showing in SC when you expand the inventories.
+* Fixed next/prev buttons disabled status when you paginate in any ListTable to the last page or the first page.
+* Allow decimals in OOT fields when configured in ATUM settings.
+* URL decode product variations' title in SC (thanks @behzadbx).
 
 ---
 
