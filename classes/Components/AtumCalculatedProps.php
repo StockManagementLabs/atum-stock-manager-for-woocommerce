@@ -334,15 +334,14 @@ class AtumCalculatedProps {
 
 		foreach ( $products as $product ) {
 
+			/**
+			 * Variable definition.
+			 *
+			 * @var AtumProductTrait $product
+			 */
 			if ( ! Helpers::is_atum_product( $product ) ) {
 				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
 				$product = apply_filters( 'atum/before_update_product_calc_props', Helpers::get_atum_product( $product ) );
-
-				/**
-				 * It's an ATUM product.
-				 *
-				 * @var AtumProductTrait $product
-				 */
 			}
 
 			if ( $product instanceof \WC_Product ) {
@@ -391,6 +390,27 @@ class AtumCalculatedProps {
 
 				if ( $product->get_atum_stock_status() !== $stock_status ) {
 					$product->set_atum_stock_status( $stock_status );
+					$update = TRUE;
+				}
+
+				// Update the calc backorders if necessary (perhaps the stock was adjusted manually to a negative number).
+				$calc_backorders = $product->get_calc_backorders();
+				if ( $product->backorders_allowed() ) {
+					$stock = $product->get_stock_quantity();
+
+					if ( $stock < 0 && $stock !== $calc_backorders ) {
+						$product->set_calc_backorders( $stock );
+					}
+					elseif ( $stock > 0 && $calc_backorders ) {
+						$product->set_calc_backorders( 0 );
+					}
+
+					$update = TRUE;
+
+				}
+				// When backorders is disabled for this product, it should have no value.
+				elseif ( ! is_null( $calc_backorders ) ) {
+					$product->set_calc_backorders( NULL );
 					$update = TRUE;
 				}
 

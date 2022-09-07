@@ -176,7 +176,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Return a the full export status (if running)
+	 * Return the full export status (if running)
 	 *
 	 * @since 1.9.19
 	 *

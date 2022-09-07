@@ -71,6 +71,7 @@ class AtumProductData {
 		'restock_status'      => [ 'get', 'update' ],
 		'low_stock_amount'    => [ 'get', 'update' ], // The WC's low stock threshold.
 		'sales_update_date'   => [ 'get', 'update' ],
+		'calc_backorders'     => [ 'get', 'update' ],
 	);
 
 	/**
@@ -365,6 +366,11 @@ class AtumProductData {
 				'required'    => FALSE,
 				'description' => __( 'Last date when the sales fields on ATUM product data were calculated and saved for the product.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'date-time',
+			),
+			'calc_backorders'     => array(
+				'required'    => FALSE,
+				'description' => __( 'Backordered items (if backorders is enabled and it has a negative stock value).', ATUM_TEXT_DOMAIN ),
+				'type'        => 'number',
 			),
 		);
 
@@ -725,9 +731,9 @@ class AtumProductData {
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param \WC_Product      $product      Post data.
+	 * @param \WC_Product      $product   Post data.
 	 * @param \WP_REST_Request $request   Request object.
-	 * @param boolean          $creating  True when creating item, false when updating.
+	 * @param bool             $creating  True when creating item, false when updating.
 	 */
 	public function after_rest_product_save( $product, $request, $creating ) {
 
