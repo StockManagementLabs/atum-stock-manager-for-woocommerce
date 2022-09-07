@@ -908,7 +908,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$attributes = $this->list_item->get_attributes();
 
 			if ( ! empty( $attributes ) ) {
-				$title = ucfirst( implode( ' ', $attributes ) );
+				$title = rawurldecode( ucfirst( implode( ' ', $attributes ) ) );
 			}
 
 			// Get the variable product ID to get the right link.
