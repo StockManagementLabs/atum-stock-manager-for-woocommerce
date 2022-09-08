@@ -150,7 +150,6 @@ export default class TableCellPopovers extends PopoverBase{
 			}
 
 			if ( ! isNaN( numericRealValue) && numericValue !== numericRealValue ) {
-
 				numericValue = numericRealValue;
 			}
 
