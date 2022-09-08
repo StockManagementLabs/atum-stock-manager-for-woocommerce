@@ -2405,8 +2405,13 @@ final class Helpers {
 
 			// If it's a numeric column, the NULL values should display at the end.
 			if ( 'NUMERIC' === $query_data['order']['type'] ) {
-				$compare_value = 'DESC' === strtoupper( $query_data['order']['order'] ) ? ( - 1 * PHP_INT_MAX ) : PHP_INT_MAX;
-				$column        = "IFNULL($column, $compare_value)";
+				if ( in_array( $query_data['order']['field'], [ '_stock', 'calc_backorders' ] ) ) {
+					$compare_value = 0;
+				}
+				else {
+					$compare_value = 'DESC' === strtoupper( $query_data['order']['order'] ) ? ( - 1 * PHP_INT_MAX ) : PHP_INT_MAX;
+				}
+				$column = "IFNULL($column, $compare_value)";
 			}
 			
 			$pieces['orderby'] = "$column {$query_data['order']['order']}";
