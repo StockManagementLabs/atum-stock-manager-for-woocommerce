@@ -1727,6 +1727,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->allow_calcs && $this->list_item->backorders_allowed() ) {
 			$calc_backorders = $this->list_item->get_calc_backorders();
 			$this->increase_total( '_calc_backorders', $calc_backorders );
+
+			if ( $calc_backorders < 0 ) {
+				$calc_backorders = '<span class="cell-red">' . $calc_backorders . '</span>';
+			}
 		}
 
 		return apply_filters( 'atum/list_table/column_calc_backorders', $calc_backorders, $item, $this->list_item, $this );
