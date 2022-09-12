@@ -2701,7 +2701,14 @@ final class Ajax {
 		$products = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM $atum_product_data_table LIMIT %d, %d", $offset, $step ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		foreach ( $products as $product_id ) {
-			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
+
+			$product = Helpers::get_atum_product( $product_id);
+
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product );
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
+
+			do_action( 'atum/ajax/tool_update_calc_props/product_updated', $product );
 		}
 
 		if ( $offset + $step >= $total ) {
