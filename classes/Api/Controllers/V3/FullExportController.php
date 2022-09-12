@@ -186,12 +186,9 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public function get_item( $request ) {
 
-		$endpoint = $request['endpoint'] ?? '';
+		$requested_endpoint = $request['endpoint'] ?? '';
 
-		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ $endpoint ] );
-		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
-
-		if ( ! empty( $exported_endpoints ) ) {
+		if ( ! empty( $this->get_pending_exports( $requested_endpoint ) ) ) {
 
 			$response = array(
 				'success' => FALSE,
@@ -206,20 +203,21 @@ class FullExportController extends \WC_REST_Controller {
 
 			if ( ! is_wp_error( $upload_dir ) ) {
 
-				$files = glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) );
+				// Check if there are multiple endpoints separated by commas.
+				$endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
+				$files     = array();
+
+				foreach ( $endpoints as $endpoint ) {
+					$files = array_merge( $files, glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) ) );
+				}
 
 				if ( ! empty( $files ) ) {
 
 					$data = [];
 
-					foreach ( $files as $file ) {
+					foreach ( array_unique( $files ) as $file ) {
 
 						if ( is_file( $file ) ) {
-
-							// Get the exported files for this endpoint only.
-							if ( $endpoint && strpos( $file, str_replace( '/', '_', $endpoint ) ) === FALSE ) {
-								continue;
-							}
 
 							$json = wp_json_file_decode( $file );
 
@@ -265,6 +263,33 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
+	 * Get all the pending exports
+	 *
+	 * @param string|NULL $requested_endpoint
+	 *
+	 * @return string|NULL
+	 */
+	private function get_pending_exports( $requested_endpoint = NULL ) {
+
+		// Create one transient per endpoint, so we can handle them separately.
+		$requested_endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : AtumApi::get_exportable_endpoints();
+
+		foreach ( $requested_endpoints as $endpoint ) {
+
+			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+			$pending_export                   = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
+
+			if ( ! empty( $pending_export ) ) {
+				return $pending_export; // If any of them is still pending, do not need to continue checking the rest.
+			}
+
+		}
+
+		return NULL;
+
+	}
+
+	/**
 	 * Update (run) a full export
 	 *
 	 * @since 1.9.19
@@ -278,6 +303,11 @@ class FullExportController extends \WC_REST_Controller {
 		$endpoint = $request['endpoint'] ?? '';
 
 		$status = $this->schedule_export_queue( $endpoint, $request );
+
+		if ( is_wp_error( $status ) ) {
+			return $status;
+		}
+
 		$request->set_param( 'context', 'edit' );
 		$response = $this->prepare_item_for_response( $status, $request );
 
@@ -331,31 +361,50 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @since 1.9.19
 	 *
-	 * @param string           $endpoint The endpoint to export. Should be empty or NULL to export all the ATUM endpoints.
-	 * @param \WP_REST_Request $request  The request.
+	 * @param string|NULL      $requested_endpoint The endpoint to export. Should be empty or NULL to export all the ATUM endpoints.
+	 * @param \WP_REST_Request $request            The request.
 	 *
-	 * @return array
+	 * @return array|\WP_Error
 	 */
-	public function schedule_export_queue( $endpoint, $request ) {
-
-		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ $endpoint ] );
-		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
-
-		if ( ! empty( $exported_endpoints ) ) {
-
-			return array(
-				'success' => FALSE,
-				'code'    => 'running',
-				'message' => __( 'The export is still running. Please try again later.', ATUM_TEXT_DOMAIN ),
-			);
-
-		}
+	public function schedule_export_queue( $requested_endpoint, $request ) {
 
 		$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
-		AtumCache::set_transient( $exported_endpoints_transient_key, $exportable_endpoints, DAY_IN_SECONDS, TRUE );
+		// Check if there are multiple endpoints separated by commas.
+		$endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : $exportable_endpoints;
+
+		$exported_endpoint_transient_keys = [];
+
+		foreach ( $endpoints as $endpoint ) {
+
+			// Check that all the endpoints passed (if any) are valid.
+			if ( $endpoint && ! in_array( $endpoint, $exportable_endpoints ) ) {
+				/* translators: the endpoint path */
+				return new \WP_Error( 'atum_rest_endpoint_not_found', sprintf( __( "The endpoint '%s' wasn't found.", ATUM_TEXT_DOMAIN ), $endpoint ) );
+			}
+
+			$exported_endpoint_transient_keys[ $endpoint ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+			$exported_endpoint                             = AtumCache::get_transient( $exported_endpoint_transient_keys[ $endpoint ], TRUE );
+
+			if ( ! empty( $exported_endpoint ) ) {
+
+				return array(
+					'success' => FALSE,
+					'code'    => 'running',
+					'message' => __( 'The export is still running. Please try again later.', ATUM_TEXT_DOMAIN ),
+				);
+
+			}
+
+		}
 
 		foreach ( $exportable_endpoints as $index => $endpoint ) {
+
+			if ( ! in_array( $endpoint, $endpoints ) ) {
+				continue;
+			}
+
+			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, DAY_IN_SECONDS, TRUE );
 
 			$hook_name = "atum_api_export_endpoint_$index";
 
@@ -397,7 +446,7 @@ class FullExportController extends \WC_REST_Controller {
 			$created_dir = mkdir( $upload_dir, 0777, TRUE );
 
 			if ( ! $created_dir ) {
-				return new \WP_Error( __( 'Something failed when creating a temporary directory under the uploads folder, please check that you have the right permissions', ATUM_TEXT_DOMAIN ) );
+				return new \WP_Error( 'atum_rest_file_system_error', __( 'Something failed when creating a temporary directory under the uploads folder, please check that you have the right permissions', ATUM_TEXT_DOMAIN ) );
 			}
 		}
 
@@ -416,16 +465,11 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public static function run_export( $endpoint, $user_id, $page = 1 ) {
 
-		$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT, [ '' ] );
-		$exported_endpoints               = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
+		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+		$pending_endpoint               = AtumCache::get_transient( $pending_endpoint_transient_key, TRUE );
 
-		if ( $exported_endpoints ) {
-
-			$exported_endpoints = array_diff( $exported_endpoints, [ $endpoint ] );
-
-			// Save the new transient after the current endpoint is removed.
-			AtumCache::set_transient( $exported_endpoints_transient_key, $exported_endpoints, DAY_IN_SECONDS, TRUE );
-
+		if ( $pending_endpoint ) {
+			AtumCache::delete_transients( $pending_endpoint_transient_key );
 		}
 
 		$page_suffix    = '';
@@ -463,8 +507,7 @@ class FullExportController extends \WC_REST_Controller {
 						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
-						$exported_endpoints[] = $endpoint;
-						AtumCache::set_transient( $exported_endpoints_transient_key, $exported_endpoints, DAY_IN_SECONDS, TRUE );
+						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
 					}
 
 				}
@@ -503,7 +546,9 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		if ( empty( $exported_endpoints ) ) {
+		AtumCache::delete_transients( $pending_endpoint_transient_key );
+
+		if ( empty( $pending_endpoint ) ) {
 
 			// If, for some instance, the current user was logged in with another user, restore their log in.
 			if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
@@ -513,8 +558,6 @@ class FullExportController extends \WC_REST_Controller {
 			elseif ( ! $logged_in_user && is_user_logged_in() ) {
 				wp_logout();
 			}
-
-			AtumCache::delete_transients( $exported_endpoints_transient_key );
 
 			// Send a notification to the customer once the full export is completed.
 			wp_remote_get( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
