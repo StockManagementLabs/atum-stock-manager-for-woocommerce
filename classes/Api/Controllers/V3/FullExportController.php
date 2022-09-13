@@ -480,14 +480,41 @@ class FullExportController extends \WC_REST_Controller {
 			wp_set_current_user( $user_id );
 		}
 
-		$per_page = apply_filters( 'atum/api/full_export_controller/records_per_page', 100 );
+		// The /atum-order-notes endpoint is fake, so change the path to comments first.
+		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
+		$query_params  = [
+			'page' => $page,
+		];
+
+		// Add extra params for some endpoints.
+		switch ( $endpoint ) {
+			case '/wp/v2/comments':
+				$query_params['type']     = 'order_note';
+				$query_params['per_page'] = 300;
+				break;
+
+			case '/wc/v3/atum/atum-order-notes':
+				$query_params['type']     = 'atum_order_note';
+				$query_params['per_page'] = 300;
+				break;
+
+			case '/wp/v2/media':
+				$query_params['linked_post_type'] = 'atum_supplier,product';
+				$query_params['per_page']         = 200;
+				break;
+
+			case '/wc/v3/customers':
+				$query_params['role']     = 'all';
+				$query_params['per_page'] = 100;
+				break;
+
+			default:
+				$query_params['per_page'] = 100;
+		}
 
 		// Do the request to the endpoint internally.
-		$request = new \WP_REST_Request( 'GET', $endpoint );
-		$request->set_query_params( [
-			'per_page' => $per_page,
-			'page'     => $page,
-		] );
+		$request = new \WP_REST_Request( 'GET', $endpoint_path );
+		$request->set_query_params( $query_params );
 
 		$server   = rest_get_server();
 		$response = rest_do_request( $request );
