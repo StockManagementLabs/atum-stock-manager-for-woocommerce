@@ -52,7 +52,7 @@ class AtumComments {
 		if ( apply_filters( 'atum/wc_order_notes/show_in_comments_api',
 			! empty( $_REQUEST['type'] ) && 'order_note' === $_REQUEST['type'] && Helpers::is_rest_request()
 		) ) {
-			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+			remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) );
 		}
 
 		// Recount comments. Priority must be higher than the \WC_Comments filter (10).
