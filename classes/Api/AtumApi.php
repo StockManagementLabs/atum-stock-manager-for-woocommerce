@@ -103,23 +103,21 @@ class AtumApi {
 		'/wc/v3/orders',                        // Orders.
 		'/wc/v3/atum/inbound-stock',            // Inbound Stock products.
 		'/wc/v3/atum/inventory-logs',           // Inventory Logs.
-		'/wc/v3/atum/inventory-logs/notes',     // Inventory Logs notes.
 		'/wc/v3/atum/purchase-orders',          // Purchase Orders.
-		'/wc/v3/atum/purchase-orders/notes',    // Purchase Orders notes.
 		'/wc/v3/atum/suppliers',                // Suppliers.
 		'/wc/v3/atum/dashboard',                // Dashboard.
-		'/wp/v2/comments',                      // WC Order notes, IL notes & PO notes.
-		'/wc/v3/atum/atum-order-notes',         // IL notes & PO notes. This endpoint is fake but will return the ATUM order notes.
 		'/wc/v3/products/attributes',           // Product attributes.
 		'/wc/v3/products/categories',           // Product categories.
 		'/wc/v3/products/tags',                 // Product tags.
 		'/wc/v3/taxes/classes',                 // Tax classes.
 		'/wc/v3/taxes',                         // Tax rates.
 		'/wc/v3/settings',                      // WC settings.
-		'/wp/v2/media',                         // Media.
 		'/wc/v3/customers',                     // Customers.
 		'/wc/v3/coupons',                       // Coupons.
 		'/wc/v3/atum/order-refunds',            // All order refunds.
+		'/wp/v2/comments',                      // WC Order notes.
+		'/wc/v3/atum/atum-order-notes',         // IL notes & PO notes. This endpoint is fake but will return the ATUM order notes.
+		'/wp/v2/media',                         // Media.
 	);
 
 	/**

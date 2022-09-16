@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
+use Atum\Components\AtumOrders\AtumComments;
 
 
 class FullExportController extends \WC_REST_Controller {
@@ -404,7 +405,7 @@ class FullExportController extends \WC_REST_Controller {
 				continue;
 			}
 
-			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, DAY_IN_SECONDS, TRUE );
+			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, HOUR_IN_SECONDS * 3, TRUE );
 
 			$hook_name = "atum_api_export_endpoint_$index";
 
@@ -491,11 +492,14 @@ class FullExportController extends \WC_REST_Controller {
 			case '/wp/v2/comments':
 				$query_params['type']     = 'order_note';
 				$query_params['per_page'] = 300;
+				remove_filter( 'comments_clauses', array( AtumComments::get_instance(), 'exclude_atum_order_notes' ) ); // Do not add ATUM Orders type exclusions.
+				remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) ); // Show the WC order notes in the WP comments API endpoint.
 				break;
 
 			case '/wc/v3/atum/atum-order-notes':
-				$query_params['type']     = 'atum_order_note';
+				$query_params['type']     = AtumComments::NOTES_KEY;
 				$query_params['per_page'] = 300;
+				remove_filter( 'comments_clauses', array( AtumComments::get_instance(), 'exclude_atum_order_notes' ) ); // Do not add ATUM Orders type exclusions.
 				break;
 
 			case '/wp/v2/media':
@@ -511,6 +515,9 @@ class FullExportController extends \WC_REST_Controller {
 			default:
 				$query_params['per_page'] = 100;
 		}
+
+		// Trick to be able to increase the posts per page limit (check \Atum\Api\AtumApi::increase_posts_per_page).
+		$_SERVER['HTTP_ORIGIN'] = 'com.stockmanagementlabs.atum';
 
 		// Do the request to the endpoint internally.
 		$request = new \WP_REST_Request( 'GET', $endpoint_path );
@@ -534,7 +541,7 @@ class FullExportController extends \WC_REST_Controller {
 						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
-						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
+						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS * 3, TRUE );
 					}
 
 				}
@@ -545,7 +552,7 @@ class FullExportController extends \WC_REST_Controller {
 				'endpoint'    => $endpoint,
 				'total_pages' => ! empty( $total_pages ) ? $total_pages : 1,
 				'page'        => $page,
-				'per_page'    => $per_page,
+				'per_page'    => $query_params['per_page'],
 				'date'        => wc_rest_prepare_date_response( gmdate( 'Y-m-d H:i:s' ) ),
 				'results'     => $data,
 			);
