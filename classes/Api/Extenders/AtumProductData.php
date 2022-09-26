@@ -40,6 +40,13 @@ class AtumProductData {
 	protected $atum_query_data = array();
 
 	/**
+	 * The passed atum_post_status param (if any)
+	 *
+	 * @var null|string[]
+	 */
+	protected $atum_post_status_param = NULL;
+
+	/**
 	 * Custom ATUM API's product field names, indicating support for getting/updating.
 	 *
 	 * @var array
@@ -648,14 +655,26 @@ class AtumProductData {
 
 		// Before modification date filter.
 		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
-			$args['date_query'][0]['before'] = $request['modified_before'];
+			$args['date_query'][0]['before'] = esc_attr( $request['modified_before'] );
 			$args['date_query'][0]['column'] = 'post_modified_gmt';
 		}
 
 		// After modification date filter.
 		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
-			$args['date_query'][0]['after']  = $request['modified_after'];
+			$args['date_query'][0]['after']  = esc_attr( $request['modified_after'] );
 			$args['date_query'][0]['column'] = 'post_modified_gmt';
+		}
+
+		// Post status filter.
+		if ( ! empty( $request['atum_post_status'] ) ) {
+
+			$statuses = array_map( 'esc_attr', array_map( 'trim', explode( ',', $request['atum_post_status'] ) ) );
+
+			if ( ! in_array( 'private', $statuses ) || ( in_array( 'private', $statuses ) && current_user_can( 'read_private_posts' ) ) ) {
+				add_filter( 'posts_where', array( $this, 'add_search_criteria_to_wp_query_where' ) );
+				$this->atum_post_status_param = $statuses;
+			}
+
 		}
 
 		$this->atum_query_data = apply_filters( 'atum/api/product_data/atum_query_args', $this->atum_query_data, $request );
@@ -771,6 +790,12 @@ class AtumProductData {
 			'format'      => 'date-time',
 		];
 
+		$params['atum_post_status'] = [
+			'description'       => __( 'Limit response to products to the specified statuses. This param supports multiple statuses separated by commas.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'validate_callback' => array( $this, 'validate_status_param' ),
+		];
+
 		return $params;
 
 	}
@@ -810,7 +835,89 @@ class AtumProductData {
 		}
 
 		return $fields;
+
 	}
+
+	/**
+	 * Add a where clause for being able to filter by the atum_post_status param.
+	 *
+	 * @param string $where Where clause used to search posts.
+	 *
+	 * @since 1.9.22
+	 *
+	 * @return string
+	 */
+	public function add_search_criteria_to_wp_query_where( $where ) {
+
+		if ( empty( $this->atum_post_status_param ) ) {
+			return $where;
+		}
+
+		global $wpdb;
+
+		// Try to find the post status clause.
+		$where_parts = explode( 'AND', $where );
+		$added       = FALSE;
+
+		foreach ( $where_parts as $index => $part ) {
+
+			if ( strpos( $part, "{$wpdb->posts}.post_status" ) !== FALSE ) {
+
+				if ( ! $added ) {
+					$where_parts[ $index ] = "$wpdb->posts.post_status IN ('" . implode( "','", $this->atum_post_status_param ) . "')";
+					$added                 = TRUE;
+				}
+				else {
+					unset( $where_parts[ $index ] );
+				}
+
+			}
+
+		}
+
+		return implode( ' AND ', $where_parts );
+
+	}
+
+	/**
+	 * Special validation for the status param (allowing multiple statuses at once)
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param mixed            $value
+	 * @param \WP_REST_Request $request
+	 * @param string           $param
+	 *
+	 * @return true|\WP_Error
+	 */
+	public function validate_status_param( $value, $request, $param ) {
+
+		if ( strpos( $value, ',' ) === FALSE ) {
+			return rest_validate_request_arg( $value, $request, $param );
+		}
+
+		$attributes = $request->get_attributes();
+		if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
+			return TRUE;
+		}
+		$args = $attributes['args'][ $param ];
+
+		$statuses = explode( ',', $value );
+
+		foreach ( $statuses as $status ) {
+
+			$valid_status = rest_validate_value_from_schema( $status, $args, $param );
+
+			if ( ! $valid_status || is_wp_error( $valid_status ) ) {
+				return $valid_status;
+			}
+
+		}
+
+		return TRUE;
+
+	}
+
 
 	/****************************
 	 * Instance methods
