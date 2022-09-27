@@ -1509,7 +1509,7 @@ class Wpml {
 
 		if ( $listtable instanceof ListTable ) {
 			$criteria .= "
-				AND t.term_id IN (
+				AND tt.term_taxonomy_id IN (
 					SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type = 'tax_product_cat' AND language_code = '{$this->current_language}'
 				)
 			";

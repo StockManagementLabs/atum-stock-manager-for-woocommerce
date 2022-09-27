@@ -246,6 +246,10 @@ abstract class AtumOrderModel {
 
 		}
 
+		if ( empty( $items ) ) {
+			return;
+		}
+
 		if ( $type ) {
 			$items = wp_list_filter( $items, array( 'order_item_type' => $type ) );
 		}
