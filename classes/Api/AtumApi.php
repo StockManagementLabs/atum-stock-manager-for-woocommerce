@@ -97,27 +97,27 @@ class AtumApi {
 	 * @var string[]
 	 */
 	private static $exportable_endpoints = array(
-		'/wc/v3/products',                      // Products.
-		'/wc/v3/atum/product-variations',       // Variations.
-		'/wc/v3/products/atum-locations',       // ATUM Locations.
-		'/wc/v3/orders',                        // Orders.
-		'/wc/v3/atum/inbound-stock',            // Inbound Stock products.
-		'/wc/v3/atum/inventory-logs',           // Inventory Logs.
-		'/wc/v3/atum/purchase-orders',          // Purchase Orders.
-		'/wc/v3/atum/suppliers',                // Suppliers.
-		'/wc/v3/atum/dashboard',                // Dashboard.
-		'/wc/v3/products/attributes',           // Product attributes.
-		'/wc/v3/products/categories',           // Product categories.
-		'/wc/v3/products/tags',                 // Product tags.
-		'/wc/v3/taxes/classes',                 // Tax classes.
-		'/wc/v3/taxes',                         // Tax rates.
-		'/wc/v3/settings',                      // WC settings.
-		'/wc/v3/customers',                     // Customers.
-		'/wc/v3/coupons',                       // Coupons.
-		'/wc/v3/atum/order-refunds',            // All order refunds.
-		'/wp/v2/comments',                      // WC Order notes.
-		'/wc/v3/atum/atum-order-notes',         // IL notes & PO notes. This endpoint is fake but will return the ATUM order notes.
-		'/wp/v2/media',                         // Media.
+		'attributes'         => '/wc/v3/products/attributes',
+		'atum-locations'     => '/wc/v3/products/atum-locations',
+		'atum-order-notes'   => '/wc/v3/atum/atum-order-notes',
+		'categories'         => '/wc/v3/products/categories',
+		'classes'            => '/wc/v3/taxes/classes',
+		'comments'           => '/wp/v2/comments',
+		'coupons'            => '/wc/v3/coupons',
+		'customers'          => '/wc/v3/customers',
+		'dashboard'          => '/wc/v3/atum/dashboard',
+		'inbound-stock'      => '/wc/v3/atum/inbound-stock',
+		'inventory-logs'     => '/wc/v3/atum/inventory-logs',
+		'media'              => '/wp/v2/media',
+		'orders'             => '/wc/v3/orders',
+		'order-refunds'      => '/wc/v3/atum/order-refunds',
+		'products'           => '/wc/v3/products',
+		'product-variations' => '/wc/v3/atum/product-variations',
+		'purchase-orders'    => '/wc/v3/atum/purchase-orders',
+		'settings'           => '/wc/v3/settings',
+		'suppliers'          => '/wc/v3/atum/suppliers',
+		'tags'               => '/wc/v3/products/tags',
+		'taxes'              => '/wc/v3/taxes',
 	);
 
 	/**
@@ -303,8 +303,8 @@ class AtumApi {
 	public function add_exportable_endpoints_hooks() {
 
 		// Exportable endpoints hooks.
-		foreach ( self::get_exportable_endpoints() as $index => $exportable_endpoint ) {
-			add_action( "atum_api_export_endpoint_$index", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 3 );
+		foreach ( self::get_exportable_endpoints() as $key => $exportable_endpoint ) {
+			add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 3 );
 		}
 
 	}

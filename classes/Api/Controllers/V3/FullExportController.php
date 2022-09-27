@@ -189,7 +189,7 @@ class FullExportController extends \WC_REST_Controller {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 
-		if ( ! empty( $this->get_pending_exports( $requested_endpoint ) ) ) {
+		if ( ! empty( $this->get_pending_exports( $requested_endpoint, $request ) ) ) {
 
 			$response = array(
 				'success' => FALSE,
@@ -205,35 +205,82 @@ class FullExportController extends \WC_REST_Controller {
 			if ( ! is_wp_error( $upload_dir ) ) {
 
 				// Check if there are multiple endpoints separated by commas.
-				$endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
-				$files     = array();
+				$endpoints            = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
+				$files                = array();
+				$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
 				foreach ( $endpoints as $endpoint ) {
-					$files = array_merge( $files, glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) ) );
+
+					if ( $endpoint ) {
+						$files[ array_search( $endpoint, $exportable_endpoints ) ] = glob( $upload_dir . str_replace( '/', '_', $endpoint ) . '*' );
+					}
+					else {
+						$files = array_merge( $files, glob( $upload_dir . '*' ) );
+					}
+
 				}
 
 				if ( ! empty( $files ) ) {
 
 					$data = [];
 
-					foreach ( array_unique( $files ) as $file ) {
+					foreach ( $files as $endpoint_key => $file ) {
 
-						if ( is_file( $file ) ) {
+						// In the case there are multiple exports of the same endpoint with distinct filters.
+						$file = is_array( $file ) ? $file : [ $file ];
 
-							$json = wp_json_file_decode( $file );
+						foreach ( $file as $f ) {
 
-							if ( $json ) {
-								$data[ basename( $file ) ] = $json;
+							if ( is_file( $f ) ) {
+
+								$json = wp_json_file_decode( $f );
+
+								if ( $json ) {
+
+									$params = ! empty( $request[ $endpoint_key ] ) ? $request[ $endpoint_key ] : '';
+
+									// If the file was created with a filter, require the same filter here too.
+									if ( ! $params && ! empty( $json->params ) ) {
+										continue;
+									}
+
+									// If a filtered file is being requested, don't return an unfiltered full export file.
+									if ( $params && empty( $json->params ) ) {
+										continue;
+									}
+
+									// If a filtered file is being requested, only return the file with the same exact filter.
+									if ( $params && ! empty( $json->params ) && $params !== $json->params ) {
+										continue;
+									}
+
+									$data[ basename( $f ) ] = $json;
+
+								}
+
 							}
 
 						}
 
 					}
 
-					$response = array(
-						'success' => TRUE,
-						'data'    => $data,
-					);
+					if ( empty( $data ) ) {
+
+						$response = array(
+							'success' => FALSE,
+							'code'    => 'running',
+							'message' => __( 'No exported files found with the specified criteria. Please do run a new full export or try to change filters.', ATUM_TEXT_DOMAIN ),
+						);
+
+					}
+					else {
+
+						$response = array(
+							'success' => TRUE,
+							'data'    => $data,
+						);
+
+					}
 
 				}
 				else {
@@ -266,18 +313,20 @@ class FullExportController extends \WC_REST_Controller {
 	/**
 	 * Get all the pending exports
 	 *
-	 * @param string|NULL $requested_endpoint
+	 * @param string|NULL      $requested_endpoint
+	 * @param \WP_REST_Request $request
 	 *
 	 * @return string|NULL
 	 */
-	private function get_pending_exports( $requested_endpoint = NULL ) {
+	private function get_pending_exports( $requested_endpoint = NULL, $request ) {
 
 		// Create one transient per endpoint, so we can handle them separately.
 		$requested_endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : AtumApi::get_exportable_endpoints();
 
-		foreach ( $requested_endpoints as $endpoint ) {
+		foreach ( $requested_endpoints as $key => $endpoint ) {
 
-			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+			$params                           = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
+			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
 			$pending_export                   = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
 
 			if ( ! empty( $pending_export ) ) {
@@ -384,7 +433,10 @@ class FullExportController extends \WC_REST_Controller {
 				return new \WP_Error( 'atum_rest_endpoint_not_found', sprintf( __( "The endpoint '%s' wasn't found.", ATUM_TEXT_DOMAIN ), $endpoint ) );
 			}
 
-			$exported_endpoint_transient_keys[ $endpoint ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+			$endpoint_key = array_search( $endpoint, $exportable_endpoints );
+			$params       = ! empty( $request[ $endpoint_key ] ) ? $request[ $endpoint_key ] : '';
+
+			$exported_endpoint_transient_keys[ $endpoint ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
 			$exported_endpoint                             = AtumCache::get_transient( $exported_endpoint_transient_keys[ $endpoint ], TRUE );
 
 			if ( ! empty( $exported_endpoint ) ) {
@@ -399,7 +451,7 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		foreach ( $exportable_endpoints as $index => $endpoint ) {
+		foreach ( $exportable_endpoints as $key => $endpoint ) {
 
 			if ( ! in_array( $endpoint, $endpoints ) ) {
 				continue;
@@ -407,11 +459,12 @@ class FullExportController extends \WC_REST_Controller {
 
 			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, HOUR_IN_SECONDS * 3, TRUE );
 
-			$hook_name = "atum_api_export_endpoint_$index";
+			$hook_name = "atum_api_export_endpoint_$key";
 
 			if ( ! as_next_scheduled_action( $hook_name ) ) {
 				$this->delete_old_export( $endpoint );
-				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint, get_current_user_id() ] );
+				$params = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
+				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint, get_current_user_id(), $params ] );
 			}
 
 		}
@@ -462,11 +515,12 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @param string $endpoint The endpoint that is being exported.
 	 * @param int    $user_id  The user ID doing that initialized the export.
+	 * @param string $params   Any other params passed to the endpoint.
 	 * @param int    $page     Optional. If passed, will export the specified page of results.
 	 */
-	public static function run_export( $endpoint, $user_id, $page = 1 ) {
+	public static function run_export( $endpoint, $user_id, $params, $page = 1 ) {
 
-		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) );
+		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
 		$pending_endpoint               = AtumCache::get_transient( $pending_endpoint_transient_key, TRUE );
 
 		if ( $pending_endpoint ) {
@@ -484,7 +538,8 @@ class FullExportController extends \WC_REST_Controller {
 		// The /atum-order-notes endpoint is fake, so change the path to comments first.
 		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
 		$query_params  = [
-			'page' => $page,
+			'page'     => $page,
+			'per_page' => 100,
 		];
 
 		// Add extra params for some endpoints.
@@ -492,6 +547,12 @@ class FullExportController extends \WC_REST_Controller {
 			case '/wp/v2/comments':
 				$query_params['type']     = 'order_note';
 				$query_params['per_page'] = 300;
+
+				// Export only notes after a given date?
+				if ( $params ) {
+					$query_params['after'] = $params;
+				}
+
 				remove_filter( 'comments_clauses', array( AtumComments::get_instance(), 'exclude_atum_order_notes' ) ); // Do not add ATUM Orders type exclusions.
 				remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ) ); // Show the WC order notes in the WP comments API endpoint.
 				break;
@@ -499,6 +560,12 @@ class FullExportController extends \WC_REST_Controller {
 			case '/wc/v3/atum/atum-order-notes':
 				$query_params['type']     = AtumComments::NOTES_KEY;
 				$query_params['per_page'] = 300;
+
+				// Export only notes after a given date?
+				if ( $params ) {
+					$query_params['after'] = $params;
+				}
+
 				remove_filter( 'comments_clauses', array( AtumComments::get_instance(), 'exclude_atum_order_notes' ) ); // Do not add ATUM Orders type exclusions.
 				break;
 
@@ -508,12 +575,39 @@ class FullExportController extends \WC_REST_Controller {
 				break;
 
 			case '/wc/v3/customers':
-				$query_params['role']     = 'all';
-				$query_params['per_page'] = 100;
+				$query_params['role'] = 'all';
 				break;
 
-			default:
-				$query_params['per_page'] = 100;
+			case '/wc/v3/products/categories':
+			case '/wc/v3/products/tags':
+				$query_params['hide_empty'] = TRUE;
+				break;
+
+			case '/wc/v3/products':
+				// Allow exporting products of given status(es).
+				if ( $params ) {
+					$query_params['atum_post_status'] = $params; // Special param.
+				}
+				break;
+
+			case '/wc/v3/atum/suppliers':
+			case '/wc/v3/atum/product-variations':
+				// Allow exporting suppliers of given status(es).
+				if ( $params ) {
+					$query_params['status'] = $params;
+				}
+				break;
+
+			case '/wc/v3/atum/inventory-logs':
+			case '/wc/v3/orders':
+			case '/wc/v3/atum/order-refunds':
+			case '/wc/v3/atum/purchase-orders':
+				// Allow exporting only orders after a given date?
+				if ( $params ) {
+					$query_params['after'] = wc_rest_prepare_date_response( $params );
+				}
+				break;
+
 		}
 
 		// Trick to be able to increase the posts per page limit (check \Atum\Api\AtumApi::increase_posts_per_page).
@@ -538,7 +632,7 @@ class FullExportController extends \WC_REST_Controller {
 					$page_suffix = "-{$page}_{$total_pages}";
 
 					if ( $total_pages > $page ) {
-						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $page + 1 ] );
+						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $params, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
 						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS * 3, TRUE );
@@ -553,6 +647,7 @@ class FullExportController extends \WC_REST_Controller {
 				'total_pages' => ! empty( $total_pages ) ? $total_pages : 1,
 				'page'        => $page,
 				'per_page'    => $query_params['per_page'],
+				'params'      => $params,
 				'date'        => wc_rest_prepare_date_response( gmdate( 'Y-m-d H:i:s' ) ),
 				'results'     => $data,
 			);
@@ -566,7 +661,7 @@ class FullExportController extends \WC_REST_Controller {
 		}
 
 		$upload_dir = self::get_full_export_upload_dir();
-		$file_path  = $upload_dir . str_replace( '/', '_', $endpoint ) . "$page_suffix.json";
+		$file_path  = $upload_dir . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',', ':' ], '_', $params ) . "$page_suffix.json";
 
 		if ( ! is_wp_error( $upload_dir ) ) {
 
