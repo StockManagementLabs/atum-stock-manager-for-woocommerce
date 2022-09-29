@@ -3858,4 +3858,27 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Do some adjustments to the system to avoid problems in long-time processes
+	 *
+	 * @since 1.9.22
+	 */
+	public static function adjust_long_process_settings() {
+
+		// phpcs:disable
+		// Set whether a client disconnect should abort script execution.
+		@ignore_user_abort( TRUE );
+
+		// Set maximum execution time.
+		@set_time_limit( 0 );
+
+		// Set maximum time in seconds a script is allowed to parse input data.
+		@ini_set( 'max_input_time', '-1' );
+
+		// Set maximum backtracking steps.
+		@ini_set( 'pcre.backtrack_limit', PHP_INT_MAX );
+		// phpcs:enable
+
+	}
+
 }

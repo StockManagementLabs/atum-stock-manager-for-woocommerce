@@ -304,7 +304,7 @@ class AtumApi {
 
 		// Exportable endpoints hooks.
 		foreach ( self::get_exportable_endpoints() as $key => $exportable_endpoint ) {
-			add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 3 );
+			add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
 		}
 
 	}

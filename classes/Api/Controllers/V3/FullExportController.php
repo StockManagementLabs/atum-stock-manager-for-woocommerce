@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumOrders\AtumComments;
+use Atum\Inc\Helpers;
 
 
 class FullExportController extends \WC_REST_Controller {
@@ -200,19 +201,19 @@ class FullExportController extends \WC_REST_Controller {
 		}
 		else {
 
+			// Check if there are multiple endpoints separated by commas.
+			$endpoints  = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
 			$upload_dir = self::get_full_export_upload_dir();
 
 			if ( ! is_wp_error( $upload_dir ) ) {
 
-				// Check if there are multiple endpoints separated by commas.
-				$endpoints            = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
 				$files                = array();
 				$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
 				foreach ( $endpoints as $endpoint ) {
 
 					if ( $endpoint ) {
-						$files[ array_search( $endpoint, $exportable_endpoints ) ] = glob( $upload_dir . str_replace( '/', '_', $endpoint ) . '*' );
+						$files[ array_search( $endpoint, $exportable_endpoints ) ] = glob( $upload_dir . self::get_file_name( $endpoint ) . '*' );
 					}
 					else {
 						$files = array_merge( $files, glob( $upload_dir . '*' ) );
@@ -236,6 +237,11 @@ class FullExportController extends \WC_REST_Controller {
 								$json = wp_json_file_decode( $f );
 
 								if ( $json ) {
+
+									// If some specific endpoints were requested, make sure, the file was exported from any of those endpoints.
+									if ( ! empty( $endpoints ) && ! empty( $json->endpoint ) && ! in_array( $json->endpoint, $endpoints ) ) {
+										continue;
+									}
 
 									$params = ! empty( $request[ $endpoint_key ] ) ? $request[ $endpoint_key ] : '';
 
@@ -326,7 +332,7 @@ class FullExportController extends \WC_REST_Controller {
 		foreach ( $requested_endpoints as $key => $endpoint ) {
 
 			$params                           = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
-			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
+			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $params ) );
 			$pending_export                   = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
 
 			if ( ! empty( $pending_export ) ) {
@@ -436,7 +442,7 @@ class FullExportController extends \WC_REST_Controller {
 			$endpoint_key = array_search( $endpoint, $exportable_endpoints );
 			$params       = ! empty( $request[ $endpoint_key ] ) ? $request[ $endpoint_key ] : '';
 
-			$exported_endpoint_transient_keys[ $endpoint ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
+			$exported_endpoint_transient_keys[ $endpoint ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $params ) );
 			$exported_endpoint                             = AtumCache::get_transient( $exported_endpoint_transient_keys[ $endpoint ], TRUE );
 
 			if ( ! empty( $exported_endpoint ) ) {
@@ -457,13 +463,13 @@ class FullExportController extends \WC_REST_Controller {
 				continue;
 			}
 
-			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, HOUR_IN_SECONDS * 3, TRUE );
+			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, HOUR_IN_SECONDS, TRUE );
 
 			$hook_name = "atum_api_export_endpoint_$key";
 
 			if ( ! as_next_scheduled_action( $hook_name ) ) {
-				$this->delete_old_export( $endpoint );
 				$params = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
+				$this->delete_old_export( $endpoint, $params );
 				as_schedule_single_action( gmdate( 'U' ), $hook_name, [ $endpoint, get_current_user_id(), $params ] );
 			}
 
@@ -515,13 +521,15 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @param string $endpoint The endpoint that is being exported.
 	 * @param int    $user_id  The user ID doing that initialized the export.
-	 * @param string $params   Any other params passed to the endpoint.
+	 * @param string $params   Optional. Any other params passed to the endpoint.
 	 * @param int    $page     Optional. If passed, will export the specified page of results.
 	 */
-	public static function run_export( $endpoint, $user_id, $params, $page = 1 ) {
+	public static function run_export( $endpoint, $user_id, $params = '', $page = 1 ) {
 
-		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',' ], '_', $params ) );
+		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $params ) );
 		$pending_endpoint               = AtumCache::get_transient( $pending_endpoint_transient_key, TRUE );
+
+		Helpers::adjust_long_process_settings();
 
 		if ( $pending_endpoint ) {
 			AtumCache::delete_transients( $pending_endpoint_transient_key );
@@ -635,7 +643,7 @@ class FullExportController extends \WC_REST_Controller {
 						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $params, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
-						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS * 3, TRUE );
+						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS, TRUE );
 					}
 
 				}
@@ -661,7 +669,7 @@ class FullExportController extends \WC_REST_Controller {
 		}
 
 		$upload_dir = self::get_full_export_upload_dir();
-		$file_path  = $upload_dir . str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',', ':' ], '_', $params ) . "$page_suffix.json";
+		$file_path  = $upload_dir . self::get_file_name( $endpoint, $params ) . "$page_suffix.json";
 
 		if ( ! is_wp_error( $upload_dir ) ) {
 
@@ -705,23 +713,40 @@ class FullExportController extends \WC_REST_Controller {
 	 * @since 1.9.19
 	 *
 	 * @param string $endpoint
+	 * @param string $params
 	 */
-	public function delete_old_export( $endpoint = '' ) {
+	public function delete_old_export( $endpoint = '', $params = '' ) {
 
 		$upload_dir = self::get_full_export_upload_dir();
 
 		if ( ! is_wp_error( $upload_dir ) ) {
 
-			$files = glob( $upload_dir . ( $endpoint ? str_replace( '/', '_', $endpoint ) . '*' : '*' ) );
+			$name_pattern = self::get_file_name( $endpoint, $params );
+			$files        = glob( $upload_dir . ( $endpoint ? $name_pattern . '*' : '*' ) );
 
 			foreach ( $files as $file ) {
-				if ( is_file( $file ) ) {
+				// As there can be endpoints that share a part of the name pattern, make sure we remove the right ones.
+				if ( is_file( $file ) && preg_match( '/' . $name_pattern . '(-\d+_\d+)?.json/', $file ) ) {
 					unlink( $file );
 				}
 			}
 
 		}
 
+	}
+
+	/**
+	 * Generate a file name based on the passed endpoint and params
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param string $endpoint
+	 * @param string $params
+	 *
+	 * @return string
+	 */
+	private static function get_file_name( $endpoint = '', $params = '' ) {
+		return str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',', ':' ], '_', $params );
 	}
 
 }
