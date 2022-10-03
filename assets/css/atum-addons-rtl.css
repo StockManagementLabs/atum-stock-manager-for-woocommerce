@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.21 
+ * @version 1.9.22 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -12,12 +12,10 @@
   display: -ms-flexbox;
   display: flex;
 }
-
 .atum-addons .theme .show-key {
   right: auto;
   left: 0;
 }
-
 .atum-addons .theme .theme-actions {
   right: auto;
 }

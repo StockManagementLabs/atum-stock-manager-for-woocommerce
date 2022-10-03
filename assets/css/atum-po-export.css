@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.21 
+ * @version 1.9.22 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -286,7 +286,7 @@
   --dash-green-trans: rgba(106, 200, 30, 0.79);
   --dash-input-group-bg: rgba(255, 255, 255, 0.66);
   --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
-  --dash-next-text:  #e9ecef;
+  --dash-next-text: #e9ecef;
   --dash-nice-select-bg: #fff;
   --dash-nice-select-disabled: #eff1f3;
   --dash-nice-select-disabled-after: #e6e8ea;
@@ -375,11 +375,9 @@ body {
   text-align: right;
   width: 250px;
 }
-
 .content-header .float-left {
   width: 60%;
 }
-
 .content-header strong {
   font-size: 20px;
 }
@@ -395,11 +393,9 @@ body {
 .content-address .float-left {
   width: 40%;
 }
-
 .content-address .float-right {
   width: 40%;
 }
-
 .content-address h4 {
   font-size: 18px;
   background-color: #00B8DB;
@@ -412,21 +408,17 @@ body {
 .content-lines {
   padding: 0 20px;
 }
-
 .content-lines table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .content-lines .po-li-head {
   background-color: #00B8DB;
 }
-
 .content-lines .po-li-head th {
   color: #fff;
   text-transform: uppercase;
 }
-
 .content-lines th, .content-lines td {
   font-size: 14px;
   text-align: right;
@@ -435,15 +427,12 @@ body {
   vertical-align: top;
   padding: 5px 10px;
 }
-
 .content-lines .description {
   text-align: left;
 }
-
 .content-lines .qty {
   text-align: center;
 }
-
 .content-lines td.total, .content-lines .po-lines tr:nth-child(even) td {
   background-color: rgba(0, 184, 219, 0.1);
 }

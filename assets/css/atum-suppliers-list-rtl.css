@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.21 
+ * @version 1.9.22 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -14,12 +14,10 @@
   margin-left: 15px;
   margin-right: 0px;
 }
-
 .wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
   margin-left: 4px;
   margin-right: 14px;
 }
-
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   margin-right: 14px;
   margin-left: 0px;
@@ -30,7 +28,6 @@
   padding-right: 0px;
   margin: 20px auto 20px 10px;
 }
-
 .search-box #search_column_btn, p.search-box #search_column_btn {
   border-left: 1px solid var(--main-border-alt);
   border-right: none;
@@ -39,7 +36,6 @@
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-
 .search-box .input-group, p.search-box .input-group {
   padding-right: 0px;
 }
@@ -48,7 +44,6 @@
   margin-right: 0px;
   margin-left: 15px;
 }
-
 .atum-list-wrapper .subsubsub li span, #posts-filter .subsubsub li span {
   margin-left: 0px;
   margin-right: 3px;
@@ -66,7 +61,6 @@ table.atum-list-table th.sortable.numeric a > span:first-child {
 .atum-table-wrapper {
   overflow-x: auto;
 }
-
 .atum-table-wrapper .subsubsub.extend-list-table li span {
   margin-left: 0;
   margin-right: 3px;
