@@ -2,6 +2,8 @@
 // "Stats Data" widgets
 //-----------------------
 
+@use "sass:math";
+
 .stats-data-widget {
 	display: flex;
 	flex-wrap: wrap;
@@ -13,7 +15,7 @@
 		flex-grow: 1;
 		
 		@include tablet-max {
-			margin-top: $grid-gutter-width/2;
+			margin-top:  math.div($grid-gutter-width, 2);
 		}
 	}
 	

@@ -2,6 +2,8 @@
 // Atum List Tables
 //------------------
 
+@use "sass:math";
+
 #wpbody-content {
 	padding-bottom: 100px;
 }
@@ -24,7 +26,7 @@
 		
 		&.extend-list-table {
 			line-height: 1;
-			margin-bottom: $grid-gutter-width/2;
+			margin-bottom: math.div($grid-gutter-width, 2);
 			position: relative;
 			font-size: 36px;
 			font-weight: bold;
@@ -2188,7 +2190,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 				padding: 10px 24px;
 				
 				.alert {
-					margin-top: $grid-gutter-width/2;
+					margin-top: math.div($grid-gutter-width, 2);
 					flex-wrap: wrap;
 					
 					h3, p {
@@ -2196,7 +2198,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 					}
 					
 					h3 {
-						margin-bottom: $grid-gutter-width/2;
+						margin-bottom: math.div($grid-gutter-width, 2);
 					}
 					
 					i {

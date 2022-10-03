@@ -2,6 +2,8 @@
 // "Statistics" widget
 //-----------------------
 
+@use "sass:math";
+
 .statistics-widget {
 	height: 322px;
 	display: flex;
@@ -9,8 +11,8 @@
 	
 	.mobile-filter-nav {
 		display: none;
-		margin-left: -$grid-gutter-width/2;
-		margin-right: -$grid-gutter-width/2;
+		margin-left: math.div($grid-gutter-width, -2);
+		margin-right:  math.div($grid-gutter-width, -2);
 		margin-top: -$grid-gutter-width;
 		
 		@include mobile-max {
@@ -23,7 +25,7 @@
 			
 			li {
 				display: inline-block;
-				padding: $grid-gutter-width/2 10px;
+				padding:  math.div($grid-gutter-width, 2) 10px;
 				color: var(--atum-text-color-var1);
 				font-size: 15px;
 				font-weight: 100;
@@ -50,10 +52,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom:  math.div($grid-gutter-width, 2);
 		
 		@include tablet-max {
-			margin-bottom: $grid-gutter-width/2;
+			margin-bottom:  math.div($grid-gutter-width, 2);
 		}
 	}
 	
@@ -150,7 +152,7 @@
 			display: flex;
 			
 			&:before {
-				@extend .widget-header:before;
+				@include dash-widget-header-before;
 				font-size: 50px !important;
 				left: 14px !important;
 				transform-origin: 14px 2px !important;

@@ -2,9 +2,11 @@
 // Atum Meta Boxes
 //------------------
 
+@use "sass:math";
+
 // Common styles
 .atum-meta-box {
-	padding: $grid-gutter-width/2 10px;
+	padding: math.div($grid-gutter-width, 2) 10px;
 	@include clearfix;
 	
 	.form-field {
@@ -44,7 +46,7 @@
 		}
 		
 		&.atum-editor {
-			margin-top: $grid-gutter-width/2;
+			margin-top: math.div($grid-gutter-width, 2);
 			
 			label {
 				margin-bottom: -$grid-gutter-width;

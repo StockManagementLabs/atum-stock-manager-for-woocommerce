@@ -2,6 +2,8 @@
 // Image Selector
 //----------------
 
+@use "sass:math";
+
 .atum-image-selector {
 	display: flex;
 	
@@ -9,7 +11,7 @@
 		text-align: center;
 		
 		+ .atum-image-radio {
-			margin-left: $grid-gutter-width/2;
+			margin-left: math.div($grid-gutter-width, 2);
 		}
 		
 		img {
