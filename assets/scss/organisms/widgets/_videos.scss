@@ -2,6 +2,8 @@
 // "Videos" widget
 //-----------------
 
+@use "sass:math";
+
 .atum_videos_widget {
 	.grid-stack-item-content {
 		overflow: hidden !important;
@@ -60,11 +62,11 @@
 			}
 			
 			.carousel-nav-prev {
-				left: -$grid-gutter-width/2;
+				left: math.div($grid-gutter-width, -2);
 			}
 			
 			.carousel-nav-next {
-				right: -$grid-gutter-width/2;
+				right: math.div($grid-gutter-width, -2);
 			}
 			
 		}
@@ -133,7 +135,7 @@
 		
 		.video-thumb {
 			position: relative;
-			margin-right: $grid-gutter-width/2;
+			margin-right: math.div($grid-gutter-width, 2);
 			transition: 0.2s ease-in-out;
 			
 			img {
@@ -259,7 +261,7 @@
 	.video-filter {
 		display: flex;
 		align-items: center;
-		margin: $grid-gutter-width/2 auto 23px;
+		margin: math.div($grid-gutter-width, 2) auto 23px;
 		
 		@include tablet-max {
 			margin-top: 8px;

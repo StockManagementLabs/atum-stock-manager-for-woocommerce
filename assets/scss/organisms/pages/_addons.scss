@@ -2,6 +2,8 @@
 // Atum add-ons
 //---------------
 
+@use "sass:math";
+
 #wpbody-content {
 	padding-bottom: 0;
 }
@@ -9,7 +11,7 @@
 .atum-addons {
 	
 	h1 {
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom: math.div($grid-gutter-width, 2);
 	}
 	
 	a {
@@ -36,7 +38,7 @@
 			.label {
 				background-color: $secondary;
 				float: right;
-				margin: $grid-gutter-width/3;
+				margin: math.div($grid-gutter-width, 3);
 				border-radius: 15px;
 				padding: 2px 9px;
 				color: $white;

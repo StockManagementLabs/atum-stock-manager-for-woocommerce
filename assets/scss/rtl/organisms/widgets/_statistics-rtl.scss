@@ -9,10 +9,11 @@
 		.legend-switch{
 			
 			&:before{
-				@extend .widget-header:before;
+				content: '';
 			}
+			
 			&:after {
-				@extend .widget-header:after;
+				@include dash-rtl-widget-header-after;
 				font-size: 22px !important;
 				right: -5px !important;
 				transform-origin: 14px 2px !important;

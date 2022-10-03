@@ -2,6 +2,8 @@
 // ATUM Modals
 //------------
 
+@use "sass:math";
+
 .swal2-container.atum-modal {
 	text-align: left;
 	
@@ -59,7 +61,7 @@
 			text-align: left;
 			font-size: 12px;
 			color: var(--atum-table-link-text)!important;
-			margin-bottom: $grid-gutter-width/2;
+			margin-bottom: math.div($grid-gutter-width, 2);
 		}
 		
 		hr {

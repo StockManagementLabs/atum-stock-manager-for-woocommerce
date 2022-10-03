@@ -2,6 +2,8 @@
 // Atum Dashboard
 //----------------
 
+@use "sass:math";
+
 $header-bg:                 var(--blue-light);
 $header-height:             300px;
 $card-border:               var(--wp-gray-5);
@@ -13,12 +15,23 @@ $widget-icon:               var(--wp-gray-5);
 $widget-controls:           $card-text;
 $widget-controls-hover:     var(--primary);
 
+@mixin dash-widget-header-before() {
+	content: '...';
+	color: var(--dash-widget-icon);
+	font-size: 63px;
+	@include vertical-align-absolute;
+	left: 21px;
+	letter-spacing: -4px;
+	transform: rotate(90deg) translateY(-50%);
+	transform-origin: 16px -1px;
+}
+
 // Style the WP notices
 body.toplevel_page_atum-dashboard {
 	#wpbody-content {
 		padding-bottom: 0;
 		> .notice-error, > .notice-info, > .notice-success, > .notice-warning, > .error, > .updated, > .notice{
-			margin: ($grid-gutter-width/2) ($grid-gutter-width/2) ($grid-gutter-width/2) 0;
+			margin: math.div($grid-gutter-width, 2) math.div($grid-gutter-width, 2) math.div($grid-gutter-width, 2) 0;
 		}
 	}
 }
@@ -70,7 +83,7 @@ body.toplevel_page_atum-dashboard {
 			left: 0;
 			right: 0;
 			top: 0;
-			padding: $grid-gutter-width/2;
+			padding: math.div($grid-gutter-width, 2);
 			text-align: left;
 			
 			@include tablet-max {
@@ -80,7 +93,7 @@ body.toplevel_page_atum-dashboard {
 			.restore-defaults {
 				position: absolute;
 				top:  8px;
-				right: $grid-gutter-width/2;
+				right: math.div($grid-gutter-width, 2);
 				border-radius: 50%;
 				width: 36px;
 				height: 36px;
@@ -127,7 +140,7 @@ body.toplevel_page_atum-dashboard {
 			position: absolute;
 			bottom: 0;
 			left: 0;
-			padding-left: $grid-gutter-width/2;
+			padding-left: math.div($grid-gutter-width, 2);
 			padding-bottom: 5px;
 			font-size: 11px;
 			color: var(--main-title);
@@ -163,7 +176,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.dash-card {
-			margin: $grid-gutter-width $grid-gutter-width/4;
+			margin: $grid-gutter-width math.div($grid-gutter-width, 4);
 			width: 33.3333%;
 			border: 1px solid var(--gray-400);
 			border-radius: 5px;
@@ -182,8 +195,8 @@ body.toplevel_page_atum-dashboard {
 			}
 			
 			@include tablet-max {
-				margin-top: $grid-gutter-width/2;
-				margin-bottom: $grid-gutter-width/2;
+				margin-top: math.div($grid-gutter-width, 2);
+				margin-bottom: math.div($grid-gutter-width, 2);
 			}
 			
 			@include mobile-max {
@@ -196,7 +209,7 @@ body.toplevel_page_atum-dashboard {
 				width: 60%;
 				float: left;
 				text-align: left;
-				padding: $grid-gutter-width/2;
+				padding: math.div($grid-gutter-width, 2);
 				position: relative;
 				z-index: 1;
 				
@@ -235,7 +248,7 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 				.btn {
-					margin-top: $grid-gutter-width/2;
+					margin-top: math.div($grid-gutter-width, 2);
 					display: inline-block;
 					padding: 4px 10px;
 					font-size: 10px;
@@ -370,7 +383,7 @@ body.toplevel_page_atum-dashboard {
 							border-radius: 5px;
 							padding: 5px 10px;
 							max-width: 445px;
-							margin-left: $grid-gutter-width/2;
+							margin-left: math.div($grid-gutter-width, 2);
 						}
 						
 					}
@@ -510,7 +523,7 @@ body.toplevel_page_atum-dashboard {
 					}
 					
 					@include mobile-max {
-						margin-bottom: $grid-gutter-width/2;
+						margin-bottom: math.div($grid-gutter-width, 2);
 					}
 					
 				}
@@ -560,7 +573,7 @@ body.toplevel_page_atum-dashboard {
 	
 	// Widgets
 	.atum-widgets {
-		padding: 0 $grid-gutter-width/2;
+		padding: 0 math.div($grid-gutter-width, 2);
 	}
 	
 	.atum-widget {
@@ -586,14 +599,7 @@ body.toplevel_page_atum-dashboard {
 			align-items: center;
 			
 			&:before {
-				content: '...';
-				color: var(--dash-widget-icon);
-				font-size: 63px;
-				@include vertical-align-absolute;
-				left: 21px;
-				letter-spacing: -4px;
-				transform: rotate(90deg) translateY(-50%);
-				transform-origin: 16px -1px;
+				@include dash-widget-header-before;
 			}
 			
 			h2, i {
@@ -669,7 +675,7 @@ body.toplevel_page_atum-dashboard {
 			display: none;
 			
 			.form-field {
-				margin: $grid-gutter-width/2 auto;
+				margin: math.div($grid-gutter-width, 2) auto;
 				
 				label {
 					display: block;
@@ -685,7 +691,7 @@ body.toplevel_page_atum-dashboard {
 			
 			.config-controls {
 				border-top: 1px solid var(--light);
-				padding-top: $grid-gutter-width/2;
+				padding-top: math.div($grid-gutter-width, 2);
 			}
 		}
 		
@@ -706,7 +712,7 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		@include tablet-max {
-			margin-bottom: $grid-gutter-width/2 !important;
+			margin-bottom: math.div($grid-gutter-width, 2) !important;
 		}
 		
 		@include mobile-max {
@@ -730,7 +736,7 @@ body.toplevel_page_atum-dashboard {
 	// Owl carousel styling
 	.owl-dots {
 		margin-top: -10px !important;
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom: math.div($grid-gutter-width, 2);
 		
 		.owl-dot {
 			span {
@@ -806,7 +812,7 @@ body.toplevel_page_atum-dashboard {
 		color: var(--atum-add-widget-title);
 		border-bottom: 1px solid var(--atum-add-widget-separator);
 		padding: 20px;
-		margin: -$grid-gutter-width/2 0 0;
+		margin: math.div($grid-gutter-width, -2) 0 0;
 	}
 	
 	h3 {
@@ -920,7 +926,7 @@ body.toplevel_page_atum-dashboard {
 .swal2-container {
 	.nicescroll-rails {
 		border-radius: 3px;
-		margin-left: -$grid-gutter-width/2;
+		margin-left: math.div($grid-gutter-width, -2);
 		margin-top: 7px;
 	}
 }

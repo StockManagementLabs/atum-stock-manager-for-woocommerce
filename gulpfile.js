@@ -6,7 +6,7 @@ var gulp          = require('gulp'),
     notify        = require('gulp-notify'),
     wrap          = require('gulp-wrap'),
     autoprefix    = require('gulp-autoprefixer'),
-    sass          = require('gulp-sass'),
+    sass          = require('gulp-sass')(require('sass')),
     sourcemaps    = require('gulp-sourcemaps'),
     composer      = require('gulp-composer'),
     filter        = require('gulp-filter'),
@@ -15,7 +15,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.9.21',
+var version = '1.9.22',
     curDate = new Date();
 
 // Global config

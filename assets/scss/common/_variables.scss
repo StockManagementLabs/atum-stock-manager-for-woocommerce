@@ -2,6 +2,8 @@
 // Global Variables
 //------------------
 
+@use "sass:math";
+
 // Paths
 $atum-assets-path:                      "../" !default;
 $atum-font-path:                        "#{$atum-assets-path}fonts/" !default;
@@ -490,7 +492,7 @@ $zindex-tooltip:                        1000070 !default;
 // Navs
 
 $nav-divider-color:                     $gray-200 !default;
-$nav-divider-margin-y:                  ($spacer / 2) !default;
+$nav-divider-margin-y:                  math.div($spacer, 2) !default;
 
 
 // Tooltips
@@ -502,8 +504,8 @@ $tooltip-bg:                            $white !default;
 $tooltip-opacity:                       1 !default;
 $tooltip-box-shadow:                    0 1px 5px 0 rgba($black, .15) !default;
 $tooltip-margin:                        0 !default;
-$tooltip-padding-y:                     $spacer / 4 !default;
-$tooltip-padding-x:                     $spacer / 2 !default;
+$tooltip-padding-y:                     math.div($spacer, 4) !default;
+$tooltip-padding-x:                     math.div($spacer, 2) !default;
 $tooltip-border-radius:                 $border-radius !default;
 
 $tooltip-arrow-width:                   5px !default;
