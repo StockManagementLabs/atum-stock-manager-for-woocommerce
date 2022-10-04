@@ -325,7 +325,7 @@ class Addons {
 				foreach ( $installed_addons as $slug => $addon_data ) {
 
 					if (
-						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ||
+						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) &&
 						array_key_exists( $slug, $this->addons_paths )
 					) {
 						$addon_slug = $slug;
@@ -336,7 +336,8 @@ class Addons {
 
 				if (
 					$addon_slug && $license_key &&
-					is_array( $license_key ) && ! empty( $license_key['key'] )
+					is_array( $license_key ) && ! empty( $license_key['key'] ) &&
+					self::is_addon_active( $addon_slug )
 				) {
 
 					if ( 'valid' === $license_key['status'] ) {
