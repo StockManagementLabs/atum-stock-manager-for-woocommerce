@@ -1307,12 +1307,9 @@ class Wpml {
 
 			$this->is_translation = $source_lang && $source_lang !== $lang;
 		}
-		else {
+		elseif ( 'post.php' === $pagenow && ! empty( $_GET['post'] ) && 'product' === get_post_type( $_GET['post'] ) ) {
 
-			$is_edit_product     = 'post.php' === $pagenow && isset( $_GET['post'] ) && 'product' === get_post_type( $_GET['post'] );
-			$is_original_product = isset( $_GET['post'] ) && ! is_array( $_GET['post'] ) && $this->wpml->products->is_original_product( $_GET['post'] );
-
-			$this->is_translation = $is_edit_product && ! $is_original_product;
+			$this->is_translation = ! $this->wpml->products->is_original_product( $_GET['post'] );
 		}
 
 	}
