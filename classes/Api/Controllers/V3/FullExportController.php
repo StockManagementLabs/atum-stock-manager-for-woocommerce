@@ -201,14 +201,15 @@ class FullExportController extends \WC_REST_Controller {
 		}
 		else {
 
+			$exportable_endpoints = AtumApi::get_exportable_endpoints();
+
 			// Check if there are multiple endpoints separated by commas.
-			$endpoints  = $requested_endpoint ? explode( ',', $requested_endpoint ) : [ '' ]; // An empty array means all the endpoints.
+			$endpoints  = $requested_endpoint ? explode( ',', $requested_endpoint ) : $exportable_endpoints;
 			$upload_dir = self::get_full_export_upload_dir();
 
 			if ( ! is_wp_error( $upload_dir ) ) {
 
-				$files                = array();
-				$exportable_endpoints = AtumApi::get_exportable_endpoints();
+				$files = array();
 
 				foreach ( $endpoints as $endpoint ) {
 
