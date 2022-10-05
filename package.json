@@ -49,6 +49,7 @@
 		"intro.js": "^4.3.0",
 		"jquery": "^3.6.1",
 		"jquery-nice-select": "^1.1.0",
+		"js-big-decimal" : "^1.3.10",
 		"lightgallery.js": "^1.4.0",
 		"moment": "^2.29.4",
 		"owl.carousel": "^2.3.4",

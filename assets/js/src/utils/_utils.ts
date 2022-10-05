@@ -2,6 +2,8 @@
    UTILS
    ==================== */
 
+import bigDecimal from 'js-big-decimal';
+
 const Utils = {
 	
 	/**
@@ -164,7 +166,7 @@ const Utils = {
 			return urlParams.get( name );
 
 		}
-		// Deprecated: Only for old browsers non supporting URLSearchParams.
+		// Deprecated: Only for old browsers non-supporting URLSearchParams.
 		else {
 
 			name = name.replace( /[\[]/, '\\[' ).replace( /[\]]/, '\\]' );
@@ -572,7 +574,32 @@ const Utils = {
 
 		}
 
-	}
+	},
+
+	/**
+	 * Multiply a decimal number and return the right value
+	 *
+	 * @param {number} multiplicand
+	 * @param {number} multiplier
+	 *
+	 * @returns {number}
+	 */
+	multiplyDecimal( multiplicand: number, multiplier: number ): number {
+		return parseFloat( bigDecimal.multiply( multiplicand.toString(), multiplier.toString() ) );
+	},
+
+	/**
+	 * Divide a decimal number and return the right value
+	 *
+	 * @param {string} dividend
+	 * @param {string} divisor
+	 * @param {number} precision
+	 *
+	 * @returns {number}
+	 */
+	divideDecimal( dividend: string, divisor: string, precision: number ): number {
+		return parseFloat( bigDecimal.divide( dividend, divisor, precision ) );
+	},
 	
 }
 
