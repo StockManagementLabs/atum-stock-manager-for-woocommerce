@@ -591,14 +591,14 @@ const Utils = {
 	/**
 	 * Divide a decimal number and return the right value
 	 *
-	 * @param {string} dividend
-	 * @param {string} divisor
+	 * @param {number} dividend
+	 * @param {number} divisor
 	 * @param {number} precision
 	 *
 	 * @returns {number}
 	 */
-	divideDecimal( dividend: string, divisor: string, precision: number ): number {
-		return parseFloat( bigDecimal.divide( dividend, divisor, precision ) );
+	divideDecimal( dividend: number, divisor: number, precision: number ): number {
+		return parseFloat( bigDecimal.divide( dividend.toString(), divisor.toString(), precision ) );
 	},
 	
 }

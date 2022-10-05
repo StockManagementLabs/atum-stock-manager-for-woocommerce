@@ -1829,7 +1829,7 @@ var Utils = {
         return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.multiply(multiplicand.toString(), multiplier.toString()));
     },
     divideDecimal: function (dividend, divisor, precision) {
-        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.divide(dividend, divisor, precision));
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.divide(dividend.toString(), divisor.toString(), precision));
     },
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
