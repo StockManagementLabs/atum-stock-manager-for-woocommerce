@@ -245,6 +245,11 @@ class PurchaseOrdersController extends AtumOrdersController {
 			}
 		}
 
+		$db_status = $object->get_db_status();
+		if ( ! empty( $db_status ) && $db_status !== $formatted_data['status'] ) {
+			$formatted_data['db_status'] = $db_status;
+		}
+
 		return $formatted_data;
 
 	}

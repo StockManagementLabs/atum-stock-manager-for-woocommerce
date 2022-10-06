@@ -1897,6 +1897,17 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Getter for the db status (not always matches the order status)
+	 *
+	 * @since 1.9.22
+	 *
+	 * @return string
+	 */
+	public function get_db_status() {
+		return $this->db_status;
+	}
+
+	/**
 	 * Return an array of items within this ATUM Order
 	 *
 	 * @since 1.2.9
