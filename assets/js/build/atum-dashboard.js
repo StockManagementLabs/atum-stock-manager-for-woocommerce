@@ -1492,6 +1492,12 @@ var Utils = {
     divideDecimal: function (dividend, divisor, precision) {
         return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.divide(dividend.toString(), divisor.toString(), precision));
     },
+    sumDecimal: function (summand1, summand2) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.add(summand1.toString(), summand2.toString()));
+    },
+    subtractDecimal: function (minuend, subtrahend) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.subtract(minuend.toString(), subtrahend.toString()));
+    },
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 

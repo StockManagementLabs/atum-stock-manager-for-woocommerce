@@ -600,7 +600,31 @@ const Utils = {
 	divideDecimal( dividend: number, divisor: number, precision: number ): number {
 		return parseFloat( bigDecimal.divide( dividend.toString(), divisor.toString(), precision ) );
 	},
+
+	/**
+	 * Sum two decimal numbers and return the right value
+	 *
+	 * @param {number} summand1
+	 * @param {number} summand2
+	 *
+	 * @returns {number}
+	 */
+	sumDecimal( summand1: number, summand2: number ): number {
+		return parseFloat( bigDecimal.add( summand1.toString(), summand2.toString() ) );
+	},
+
+	/**
+	 * Subtract a decimal number to another and return the right value
+	 *
+	 * @param {number} minuend
+	 * @param {number} subtrahend
+	 *
+	 * @returns {number}
+	 */
+	subtractDecimal( minuend: number, subtrahend: number ): number {
+		return parseFloat( bigDecimal.subtract( minuend.toString(), subtrahend.toString() ) );
+	},
 	
-}
+};
 
 export default Utils;
