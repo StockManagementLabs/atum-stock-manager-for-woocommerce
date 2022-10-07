@@ -407,7 +407,12 @@ abstract class AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'status':
-				$statuses      = static::get_statuses();
+				$statuses = static::get_statuses();
+
+				if ( ! array_key_exists( 'trash', $statuses ) ) {
+					$statuses['trash'] = __( 'Trash', ATUM_TEXT_DOMAIN );
+				}
+
 				$status_colors = static::get_status_colors();
 				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 

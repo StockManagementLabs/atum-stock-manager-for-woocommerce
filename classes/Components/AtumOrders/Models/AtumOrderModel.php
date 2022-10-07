@@ -977,9 +977,13 @@ abstract class AtumOrderModel {
 			
 			$old_status = $this->db_status;
 			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->get_post_type() );
+
+			if ( ! array_key_exists( 'trash', $statuses ) ) {
+				$statuses['trash'] = __( 'Trash', ATUM_TEXT_DOMAIN );
+			}
 			
-			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
+			// If the old status is set but unknown (e.g. draft) assume it's pending for action usage.
+			if ( ! $old_status || ( ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
 				$old_status = 'atum_pending';
 			}
 			
@@ -988,9 +992,12 @@ abstract class AtumOrderModel {
 				do_action( "atum/orders/status_$new_status", $this->id, $this );
 				do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
 				do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
-				
+
+				$old_status_label = array_key_exists( $old_status, $statuses ) ? $statuses[ $old_status ] : __( 'Unknown', ATUM_TEXT_DOMAIN );
+				$new_status_label = array_key_exists( $new_status, $statuses ) ? $statuses[ $new_status ] : __( 'Unknown', ATUM_TEXT_DOMAIN );
+
 				/* translators: 1: old order status 2: new order status */
-				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $old_status_label, $new_status_label );
 				$note_id         = $this->add_order_note( $transition_note );
 				Helpers::save_order_note_meta( $note_id, [
 					'action'     => 'order_status_change',
@@ -1029,15 +1036,15 @@ abstract class AtumOrderModel {
 			$this->set_date_created( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-				'post_date'     => Helpers::date_format( $date_created->getTimestamp(), TRUE ),
+				'post_date'     => Helpers::date_format( $date_created->getTimestamp() ),
 				'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 				'post_type'     => $this->get_post_type(),
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : 'atum_pending',
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
 				'post_content'  => $this->get_description(),
-				'post_password' => uniqid( ATUM_PREFIX . 'order_' ),
+				'post_password' => uniqid( 'atum_order_' ),
 			) ), TRUE );
 
 			if ( $id && ! is_wp_error( $id ) ) {
@@ -1083,10 +1090,12 @@ abstract class AtumOrderModel {
 			$this->post->post_title = '';
 		}
 
+		$allowed_statusses = array_merge( [ 'trash' ], array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) );
+
 		$post_data = array(
 			'post_date'         => Helpers::date_format( $date_created->getTimestamp() ),
 			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
-			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
+			'post_status'       => in_array( $status, $allowed_statusses ) ? $status : 'atum_pending',
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
