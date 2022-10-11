@@ -171,7 +171,6 @@ abstract class AtumOrderPostType {
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
 
-
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
 			'description'         => __( 'This is where ATUM orders are stored.', ATUM_TEXT_DOMAIN ),
