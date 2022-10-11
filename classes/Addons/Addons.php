@@ -337,7 +337,7 @@ class Addons {
 				if (
 					$addon_slug && $license_key &&
 					is_array( $license_key ) && ! empty( $license_key['key'] ) &&
-					self::is_addon_active( $addon_slug )
+					Helpers::is_plugin_installed( $addon_slug, self::get_addon_folder( $addon_slug ) )
 				) {
 
 					if ( 'valid' === $license_key['status'] ) {
@@ -537,13 +537,19 @@ class Addons {
 
 		$keys = get_option( self::ADDONS_KEY_OPTION );
 
+		if ( empty( $addon_name ) ) {
+			$keys = self::check_addons_keys( $keys );
+		}
+
 		$lower_keys = array();
 		$addon_name = strtolower( $addon_name );
 
 		if ( ! empty( $keys ) ) {
 			foreach ( $keys as $key_name => $key_value ) {
-				$lower_key                = strtolower( $key_name );
-				$lower_keys[ $lower_key ] = $key_value;
+				if ( FALSE === in_array( $key_name, array_keys( $lower_keys ) ) ) {
+					$lower_key                = strtolower( $key_name );
+					$lower_keys[ $lower_key ] = $key_value;
+				}
 			}
 		}
 
@@ -558,6 +564,99 @@ class Addons {
 		}
 
 		return $keys;
+	}
+
+	/**
+	 * Check the registered addons in database and update them.
+	 *
+	 * @since 1.9.21
+	 *
+	 * @param array $keys
+	 *
+	 * @return array
+	 */
+	private static function check_addons_keys( $keys ) {
+
+		$result  = array();
+		$checked = array();
+
+		foreach ( $keys as $addon => $license ) {
+
+			if ( in_array( $addon, $checked ) ) {
+				continue;
+			}
+
+			$sensitive_name = '';
+
+			// Get addon slug.
+			foreach ( self::$addons as $addon_data ) {
+
+				if ( $addon === $addon_data['name'] ) {
+					$sensitive_name = $addon_data['name'];
+				}
+
+			}
+
+			$duplicated = [];
+
+			// Find duplicated.
+			foreach ( $keys as $addon2 => $license2 ) {
+
+				if ( strtolower( $addon ) === strtolower( $addon2 ) ) {
+					$checked[] = $addon2;
+
+					$duplicated[] = [
+						'index' => $addon2,
+						'data'  => $license2,
+					];
+
+				}
+			}
+
+			if ( count( $duplicated ) > 1 ) {
+
+				$selected = FALSE;
+
+				foreach ( $duplicated as $dup ) {
+
+					if ( $dup['data']['key'] && 'valid' === $dup['data']['status'] ) {
+						if ( ! $selected || 'valid' !== $selected['status'] ) {
+							$selected = $dup['data'];
+						}
+						elseif ( $dup['index'] === $sensitive_name ) {
+							$selected = $dup['data'];
+						}
+					}
+					else {
+
+						if ( $selected && ! $selected['key'] && $dup['data']['key'] ) {
+							$selected = $dup['data'];
+						}
+						elseif ( ! $selected ) {
+							$selected = $dup['data'];
+						}
+					}
+
+				}
+
+				$result[ $addon ] = $selected;
+
+			} elseif ( 1 === count( $duplicated ) ) {
+
+				$result[ $addon ] = $duplicated[0]['data'];
+
+			}
+
+		}
+
+		if ( $keys !== $result ) {
+
+			update_option( self::ADDONS_KEY_OPTION, $result );
+
+		}
+
+		return $result;
+
 	}
 
 	/**
