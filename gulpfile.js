@@ -191,31 +191,34 @@ gulp.task('js::atum', function () {
 // Composer packages installation
 // ------------------------------
 
-gulp.task('composer::install', function () {
+gulp.task('composer::install', function ( done ) {
 	// Installation + optimization
 	composer({
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
 	});
+	done();
 });
 
-gulp.task('composer::update', function () {
+gulp.task('composer::update', function ( done ) {
 	// Update + optinmization
 	composer('update', {
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
 	});
+	done();
 });
 
-gulp.task('composer::optimize', function () {
+gulp.task('composer::optimize', function ( done ) {
 	// Just optimization (classmap autoloader array generation)
 	composer('dumpautoload', {
 		cwd     : '.',
 		optimize: true,
 		bin     : '/usr/local/bin/composer',
 	});
+	done();
 });
 
 
