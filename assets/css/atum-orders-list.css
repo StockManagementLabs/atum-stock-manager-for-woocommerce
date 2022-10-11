@@ -7329,7 +7329,7 @@ table.wp-list-table thead th, table.wp-list-table tfoot th {
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.3px;
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
 }
 table.wp-list-table td a {
   color: var(--primary);
@@ -7476,7 +7476,7 @@ table.wp-list-table th.sortable a, table.wp-list-table th.sorted a, .floatThead-
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  color: var(--atum-text-color-var2);
+  color: var(--atum-text-color-var3);
   overflow: visible;
 }
 table.wp-list-table th.sortable a:hover, table.wp-list-table th.sortable a span:hover, table.wp-list-table th.sorted a:hover, table.wp-list-table th.sorted a span:hover, .floatThead-container th.sortable a:hover, .floatThead-container th.sortable a span:hover, .floatThead-container th.sorted a:hover, .floatThead-container th.sorted a span:hover {
@@ -7689,6 +7689,7 @@ table.wp-list-table tr.no-items, .floatThead-container tr.no-items {
 }
 table.wp-list-table tr.no-items td, .floatThead-container tr.no-items td {
   padding: 10px 24px;
+  vertical-align: middle !important;
 }
 table.wp-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert {
   margin-top: 15px;

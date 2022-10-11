@@ -979,6 +979,7 @@ var PostTypeList = (function () {
         $('#doaction, #doaction2').attr('class', 'btn btn-warning action');
         this.$tableContainer.append(this.globals.$atumTable);
         this.globals.$atumTable.attr('id', 'list-table');
+        this.globals.$atumTable.find('thead > tr, tfoot > tr').addClass('item-heads');
         _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].addActiveClassRow(this.globals.$atumTable);
         $(window).on('load', function () { return $('#wpfooter').show(); });
         this.enhancedSelect.doSelect2($('select'));
