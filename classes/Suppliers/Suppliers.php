@@ -103,6 +103,9 @@ class Suppliers {
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
 				add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'render_columns' ), 2 );
 
+				// Disable the dates filter on the suppliers list table.
+				add_filter( 'months_dropdown_results', array( $this, 'disable_dates_filter' ), 10, 2 );
+
 			}
 
 			if ( AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
@@ -272,6 +275,26 @@ class Suppliers {
 		}
 
 		return $rendered;
+
+	}
+
+	/**
+	 * Disable the dates filter on the Suppliers List Table
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param string[] $months
+	 * @param string   $post_type
+	 *
+	 * @return string[]
+	 */
+	public function disable_dates_filter( $months, $post_type ) {
+
+		if ( self::POST_TYPE === $post_type ) {
+			return [];
+		}
+
+		return $months;
 
 	}
 
