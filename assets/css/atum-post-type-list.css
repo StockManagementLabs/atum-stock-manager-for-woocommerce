@@ -5936,6 +5936,18 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
 #posts-filter table.wp-list-table tbody th, #posts-filter table.wp-list-table tbody td {
   vertical-align: top;
 }
+#posts-filter .tablenav.top > .actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+}
+#posts-filter .tablenav.top > .actions input[type=submit] {
+  margin-left: -5px;
+}
 #posts-filter .tablenav-pages {
   float: none;
   -webkit-box-flex: 1;
