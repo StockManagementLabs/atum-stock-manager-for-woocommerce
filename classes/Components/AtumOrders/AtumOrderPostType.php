@@ -1058,12 +1058,14 @@ abstract class AtumOrderPostType {
 			<script type="text/javascript">
 				jQuery(function($){
 
-					$('.tips').tipTip({
-						'attribute': 'data-tip',
-						'fadeIn'   : 50,
-						'fadeOut'  : 50,
-						'delay'    : 200
-					});
+					if ( typeof $.fn.hasOwnProperty('tipTip') ) {
+						$( '.tips' ).tipTip( {
+							'attribute': 'data-tip',
+							'fadeIn'   : 50,
+							'fadeOut'  : 50,
+							'delay'    : 200
+						} );
+					}
 
 				});
 			</script>
