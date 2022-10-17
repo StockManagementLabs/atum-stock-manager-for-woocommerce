@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
+use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
 use Atum\Inc\Globals;
@@ -215,6 +216,7 @@ class AtumApi {
 	 */
 	public function load_extenders() {
 
+		Orders::get_instance();
 		OrderNotes::get_instance();
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
