@@ -167,6 +167,20 @@ abstract class AtumOrderModel {
 	 * @var array
 	 */
 	protected $changes = array();
+
+	/**
+	 * List of allowed WP statuses for ATUM Orders
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_wp_statuses = array(
+		'trash',
+		'any',
+		'auto-draft',
+		'draft',
+		'publish',
+		'private',
+	);
 	
 	/**
 	 * AtumOrderModel constructor
@@ -1896,7 +1910,7 @@ abstract class AtumOrderModel {
 	public function get_status() {
 
 		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
-		$status = ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
+		$status = ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, $this->allowed_wp_statuses, TRUE ) ) ? ATUM_PREFIX . $status : $status;
 
 		if ( ! $status && ! empty( $this->post->post_status ) ) {
 			$status = $this->post->post_status;
@@ -2439,7 +2453,8 @@ abstract class AtumOrderModel {
 	 */
 	public function set_status( $status, $skip_change = FALSE ) {
 
-		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) {
+		// Add our prefix when the status coming is a custom status.
+		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, $this->allowed_wp_statuses, TRUE ) ) {
 			$status = ATUM_PREFIX . $status;
 		}
 
