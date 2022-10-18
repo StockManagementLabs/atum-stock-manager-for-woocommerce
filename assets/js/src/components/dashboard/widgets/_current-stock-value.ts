@@ -1,6 +1,10 @@
-/* =======================================
-   DASHBOARD CURRENT STOCK VALUE WIDGET
-   ======================================= */
+/*
+   ┌──────────────────────────────────────┐
+   │                                      │
+   │ DASHBOARD CURRENT STOCK VALUE WIDGET │
+   │                                      │
+   └──────────────────────────────────────┘
+*/
 
 export default class CurrentStockValueWidget {
 	

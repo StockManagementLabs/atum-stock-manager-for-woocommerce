@@ -1,6 +1,10 @@
-/* =======================================
-   DASHBOARD STOCK CONTROL WIDGET
-   ======================================= */
+/*
+   ┌────────────────────────────────┐
+   │                                │
+   │ DASHBOARD STOCK CONTROL WIDGET │
+   │                                │
+   └────────────────────────────────┘
+*/
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';

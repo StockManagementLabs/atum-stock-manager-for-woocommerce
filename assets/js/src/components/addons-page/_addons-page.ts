@@ -1,6 +1,10 @@
-/* =======================================
-   ADD-ONS PAGE
-   ======================================= */
+/*
+   ┌──────────────┐
+   │              │
+   │ ADD-ONS PAGE │
+   │              │
+   └──────────────┘
+*/
 
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';

@@ -1,6 +1,10 @@
-/* =======================================
- POPOVER BASE
- ======================================= */
+/*
+ ┌──────────────┐
+ │              │
+ │ POPOVER BASE │
+ │              │
+ └──────────────┘
+ */
 
 import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
