@@ -512,7 +512,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function table_nav_filters() {
 
-		add_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
+		add_filter( 'get_terms', array( $this, 'get_terms_categories' ), 10, 4 );
 
 		// Category filtering.
 		wc_product_dropdown_categories( array(
