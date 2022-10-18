@@ -10,6 +10,7 @@ var gulp          = require('gulp'),
     sourcemaps    = require('gulp-sourcemaps'),
     composer      = require('gulp-composer'),
     filter        = require('gulp-filter'),
+    cleanDir      = require('gulp-clean-dir'),
     webpack       = require('webpack'),
     webpackStream = require('webpack-stream'),
 	path          = require('path');
@@ -96,6 +97,7 @@ gulp.task('sass::atum', function () {
 			sourceRoot: 'assets/scss/',
 			sourceRoot: 'assets/scss/rtl/',
 		})))
+		.pipe(cleanDir(destDir))
 		.pipe(gulp.dest(destDir))
 		//.pipe(notify({message: 'sass task complete'}))
 		.pipe(filter("**/*.css"))
@@ -184,6 +186,7 @@ gulp.task('js::atum', function () {
 			],
 			
 		}, webpack))
+		.pipe(cleanDir(config.assetsDir + '/js/build/'))
 		.pipe(gulp.dest(config.assetsDir + '/js/build/'));
 });
 

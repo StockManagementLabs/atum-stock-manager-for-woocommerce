@@ -25,6 +25,7 @@
 		"eslint-webpack-plugin": "^2.7.0",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^8.0.0",
+		"gulp-clean-dir" : "^1.0.2",
 		"gulp-composer": "^0.4.5",
 		"gulp-filter": "^7.0.0",
 		"gulp-if": "^3.0.0",
