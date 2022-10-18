@@ -5198,9 +5198,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$sql = "
 			SELECT DISTINCT t.term_id FROM $wpdb->terms AS t  
-		    INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_cat') 
-			AND ( tt.term_taxonomy_id IN (
-			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->posts scp ON tr.object_id = scp.ID
+		    INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id 
+          	WHERE tt.taxonomy = 'product_cat' 
+			AND ( 
+			    tt.term_taxonomy_id IN (
+			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr 
+		            INNER JOIN $wpdb->posts scp ON tr.object_id = scp.ID
 			    	WHERE scp.post_type IN( 'product_variation', 'product' ) AND scp.post_status IN ( 'publish', 'private' )
 			        AND $extra_criteria
 			    )
