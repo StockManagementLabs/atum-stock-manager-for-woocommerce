@@ -460,13 +460,18 @@ class Addons {
 
 		$addons = self::get_addons_list();
 
-		foreach ( $addons as $addon ) {
-			if ( $addon_slug === $addon['info']['slug'] ) {
-				return $addon['info']['folder'];
+		if ( ! empty( $addons ) ) {
+
+			foreach ( $addons as $addon ) {
+				if ( $addon_slug === $addon['info']['slug'] ) {
+					return $addon['info']['folder'];
+				}
 			}
+
 		}
 
 		return FALSE;
+
 	}
 
 	/**
@@ -481,7 +486,7 @@ class Addons {
 	 */
 	public function http_request_args( $args, $url ) {
 
-		// If it is an https request and we are performing a package download, disable ssl verification.
+		// If it is a https request, and we are performing a package download, disable ssl verification.
 		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && strpos( $url, self::ADDONS_STORE_URL ) !== FALSE ) {
 			$args['sslverify'] = FALSE;
 		}
