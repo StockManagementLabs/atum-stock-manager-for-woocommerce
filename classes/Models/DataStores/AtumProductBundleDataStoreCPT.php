@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Bundle Product data store: using legacy tables
+ * WC Bundle Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores

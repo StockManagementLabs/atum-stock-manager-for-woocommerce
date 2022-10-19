@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Grouped Product data store: using legacy tables
+ * WC Grouped Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores

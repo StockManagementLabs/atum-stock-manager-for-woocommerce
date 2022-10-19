@@ -368,17 +368,9 @@ class Upgrade {
 			'_inheritable'         => 'inheritable',
 		);
 
-		$products = array();
-
-		if ( Helpers::is_using_new_wc_tables() ) {
-			$products = $wpdb->get_results( "SELECT `product_id` AS ID, `type` FROM {$wpdb->prefix}wc_products ORDER BY `product_id`" );
-		}
-
-		if ( empty( $products ) ) {
-			$products = $wpdb->get_results(
-				"SELECT `ID`, `post_type` AS type FROM {$wpdb->posts} WHERE `post_type` IN ('product', 'product_variation') ORDER BY `ID`"
-			);
-		}
+		$products = $wpdb->get_results(
+			"SELECT `ID`, `post_type` AS type FROM {$wpdb->posts} WHERE `post_type` IN ('product', 'product_variation') ORDER BY `ID`"
+		);
 
 		foreach ( $products as $product ) {
 

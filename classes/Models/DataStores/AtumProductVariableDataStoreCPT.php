@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Variable Product data store: using legacy tables
+ * WC Variable Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores

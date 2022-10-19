@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
-use Atum\Models\DataStores\AtumDataStoreCustomTableTrait;
 use Atum\Suppliers\Suppliers;
 
 
@@ -1234,7 +1233,7 @@ trait AtumProductTrait {
 		/**
 		 * Variable definition
 		 *
-		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait $data_store
 		 */
 		$data_store->update_atum_product_data( $this );
 
@@ -1252,7 +1251,7 @@ trait AtumProductTrait {
 		/**
 		 * Variable definition
 		 *
-		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait $data_store
 		 */
 		$data_store->delete( $this, [
 			'force_delete'   => TRUE,

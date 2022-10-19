@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Booking Product data store: using legacy tables
+ * WC Booking Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores

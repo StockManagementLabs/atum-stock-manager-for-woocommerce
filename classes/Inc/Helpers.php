@@ -25,7 +25,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
-use Atum\Legacy\HelpersLegacyTrait;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -1008,14 +1007,6 @@ final class Helpers {
 	}
 
 	/**
-	 * If the site is not using the new tables, use the legacy methods
-	 *
-	 * @since 1.5.0
-	 * @deprecated Only for backwards compatibility and will be removed in a future version.
-	 */
-	use HelpersLegacyTrait;
-
-	/**
 	 * Get an array of products that are not managed by WC
 	 *
 	 * @since 1.4.1
@@ -1027,47 +1018,53 @@ final class Helpers {
 	 */
 	public static function get_unmanaged_products( $post_types, $get_stock_status = FALSE ) {
 
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! self::is_using_new_wc_tables() ) {
-			return self::get_unmanaged_products_legacy( $post_types, $get_stock_status );
-		}
-		
 		global $wpdb;
 
-		$unmng_fields = array( 'posts.ID' );
-		
-		$unmng_join = array(
-			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
-			"LEFT JOIN {$wpdb->prefix}wc_products wpd ON (posts.ID = wpd.product_id)",
-		);
-		
+		$unmng_fields    = [ 'posts.ID' ];
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$unmng_join      = [ "LEFT JOIN $atum_data_table AS apd ON (posts.ID = apd.product_id)" ];
+
+		// Use the lookup tables when possible to improve the performance.
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_join[] = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON (posts.ID = pml.product_id)";
+		}
+		else {
+			$unmng_join[] = "LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')";
+		}
+
 		$post_statuses = Globals::get_queryable_product_statuses();
-		
+
+		// TODO: Change the query to remove the subquery and get the values with joins.
 		if ( $get_stock_status ) {
-			$unmng_fields[] = 'wpd.stock_status';
+
+			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+				$unmng_fields[] = 'pml.stock_status';
+			}
+			else {
+				$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
+			}
+
 		}
 
 		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products/join_query', $unmng_join );
-		
-		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
-		$excluded_types = Globals::get_inheritable_product_types();
 
 		$unmng_where = array(
 			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
 			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
-			"AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')",
-			"AND wpd.type NOT IN ('" . implode( "','", $excluded_types ) . "')",
+			'AND apd.inheritable != 1', // Exclude the inheritable products from query (as are just containers in ATUM List Tables).
 		);
-		
-		$unmng_where = (array) apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
-		
+
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_where[] = 'AND pml.stock_quantity IS NULL';
+		}
+		else {
+			$unmng_where[] = "AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')";
+		}
+
+		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
+
 		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
-		
+
 		return $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		
 	}
@@ -1403,30 +1400,15 @@ final class Helpers {
 			// Ensure there is no _stock set to 0 for managed products.
 			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
 
-				if ( self::is_using_new_wc_tables() ) {
-
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
-		                WHERE stock_quantity IS NULL
-		                AND product_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				}
-				else {
-
-					$stock_success = $wpdb->query( "
-						UPDATE $wpdb->postmeta SET meta_value = '0'
-		                WHERE meta_key = '_stock'
-		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT ms.post_id FROM $wpdb->postmeta ms
-		                    	LEFT JOIN $wpdb->postmeta sq ON ms.post_id = sq.post_id AND sq.meta_key = '_stock' 
-		                    WHERE ms.meta_key = '_manage_stock' AND ms.meta_value = 'yes' AND sq.meta_value IS NULL ) pm
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-				}
+				$stock_success = $wpdb->query( "
+					UPDATE $wpdb->postmeta SET meta_value = '0'
+	                WHERE meta_key = '_stock'
+	                AND post_id IN (
+	                    SELECT DISTINCT post_id FROM (SELECT ms.post_id FROM $wpdb->postmeta ms
+	                        LEFT JOIN $wpdb->postmeta sq ON ms.post_id = sq.post_id AND sq.meta_key = '_stock' 
+	                    WHERE ms.meta_key = '_manage_stock' AND ms.meta_value = 'yes' AND sq.meta_value IS NULL ) pm
+	                )
+	            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 				if ( $stock_success ) {
 					wc_update_product_lookup_tables_column( 'stock_quantity' );
@@ -1967,17 +1949,6 @@ final class Helpers {
 
 		return $stock_on_hold;
 
-	}
-
-	/**
-	 * Check whether WooCommerce is using the new tables
-	 *
-	 * @since 1.5.0
-	 *
-	 * @return bool
-	 */
-	public static function is_using_new_wc_tables() {
-		return class_exists( '\WC_Product_Data_Store_Custom_Table' );
 	}
 	
 	/**
@@ -2669,29 +2640,15 @@ final class Helpers {
 
 			global $wpdb;
 
-			if ( self::is_using_new_wc_tables() ) {
-
-				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
-					SELECT `type` FROM {$wpdb->prefix}wc_products			  
-					WHERE product_id IN (
-				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
-					)
-				", $child_id ) );
-
-			}
-			else {
-
-				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
-					SELECT terms.slug FROM $wpdb->posts posts
-					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
-					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
-				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
-					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
-				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
-					)
-				", $child_id ) );
-
-			}
+			$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+				SELECT terms.slug FROM $wpdb->posts posts
+				LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
+				LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
+			    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
+				WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
+			        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+				)
+			", $child_id ) );
 
 			if ( $parent_product_type ) {
 				AtumCache::set_cache( $cache_key, $parent_product_type );

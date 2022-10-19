@@ -439,54 +439,26 @@ final class Globals {
 
 		$data_stores_namespace = '\Atum\Models\DataStores';
 
-		// Check if we have to use the new custom tables or the old ones.
-		// TODO: WHEN WC MOVE THE NEW TABLES FROM THE FEATURE PLUGIN TO THE CORE, WE SHOULD CHANGE THE CLASS NAMES.
-		if ( Helpers::is_using_new_wc_tables() ) {
+		$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCPT";
+		$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCPT";
+		$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
+		$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
 
-			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCustomTable";
-			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCustomTable";
-			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCustomTable";
-			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCustomTable";
-
-			// WC Bookings compatibility.
-			if ( array_key_exists( 'product-booking', $data_stores ) ) {
-				$data_stores['product-booking'] = "{$data_stores_namespace}\AtumProductBookingDataStoreCPT"; // For now WC Bookings does not support the new tables.
-			}
-
-			// WC Subscriptions compatibility.
-			if ( array_key_exists( 'subscription', $data_stores ) ) {
-				$data_stores['subscription']                   = "{$data_stores_namespace}\AtumProductSubscriptionDataStoreCPT"; // For now WC Subscriptions does not support the new tables.
-				$data_stores['product-variable-subscription']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCustomTable";
-				$data_stores['product_subscription_variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCustomTable";
-			}
-
+		// WC Bookings compatibility.
+		if ( array_key_exists( 'product-booking', $data_stores ) ) {
+			$data_stores['product-booking'] = "{$data_stores_namespace}\AtumProductBookingDataStoreCPT";
 		}
-		else {
 
-			$data_stores['product']           = "{$data_stores_namespace}\AtumProductDataStoreCPT";
-			$data_stores['product-grouped']   = "{$data_stores_namespace}\AtumProductGroupedDataStoreCPT";
-			$data_stores['product-variable']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
-			$data_stores['product-variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
+		// WC Subscriptions compatibility.
+		if ( array_key_exists( 'subscription', $data_stores ) ) {
+			$data_stores['subscription']                   = "{$data_stores_namespace}\AtumProductSubscriptionDataStoreCPT";
+			$data_stores['product-variable-subscription']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
+			$data_stores['product_subscription_variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
+		}
 
-			// WC Bookings compatibility.
-			if ( array_key_exists( 'product-booking', $data_stores ) ) {
-				$data_stores['product-booking'] = "{$data_stores_namespace}\AtumProductBookingDataStoreCPT";
-			}
-
-			// WC Subscriptions compatibility.
-			if ( array_key_exists( 'subscription', $data_stores ) ) {
-				$data_stores['subscription']                   = "{$data_stores_namespace}\AtumProductSubscriptionDataStoreCPT";
-				$data_stores['product-variable-subscription']  = "{$data_stores_namespace}\AtumProductVariableDataStoreCPT";
-				$data_stores['product_subscription_variation'] = "{$data_stores_namespace}\AtumProductVariationDataStoreCPT";
-			}
-			
-			// WC product bundles compatibility.
-			if ( class_exists( '\WC_Product_Bundle' ) ) {
-
-				$data_stores['product-bundle'] = "{$data_stores_namespace}\AtumProductBundleDataStoreCPT";
-
-			}
-
+		// WC product bundles compatibility.
+		if ( class_exists( '\WC_Product_Bundle' ) ) {
+			$data_stores['product-bundle'] = "{$data_stores_namespace}\AtumProductBundleDataStoreCPT";
 		}
 
 		return $data_stores;
