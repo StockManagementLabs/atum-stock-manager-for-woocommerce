@@ -6,8 +6,8 @@ Requires at least: 5.6
 Tested up to: 6.0.2
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.8.2
-Stable tag: 1.9.21
+WC tested up to: 6.9.4
+Stable tag: 1.9.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,44 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.22`
+
+*2022-10-11*
+
+**Features**
+
+* Show negative values in red on the backorders column in SC.
+* Added hook to allow third parties playing after updating product calc props.
+* Add PO and IL sales calc properties calc to the update products props tool.
+* Improved full export endpoint to allow passing multiple endpoints as param.
+* Added new API endpoint to list all the available refunds.
+* Added extra endpoints as "exportable" to the full export API endpoint.
+* Allow passing mutiple statuses to get products or suppliers in ATUM API.
+* Allow doing initial exports with filters.
+* Added JS utilities to be able to add, substract, multiply and divide big decimal values.
+* Allow retrieving the db_status on ATUM orders via API.
+
+**Changes**
+
+* Cumulative fields must not use INT_MAX values for sorting.
+* Calculate sales calc synchronously when executing the calculated props tool.
+* Refactoring.
+* Updated JS dependencies and require node 16.
+
+**Fixes**
+
+* Fixed order notes, atum order notes and media endpoints on the full export.
+* Fixed translations categories for SC dropdown when WPML is active.
+* Fixed wrong field in query for categories dropdown
+* Fixed warning when adding a new purchase order in some cases.
+* Fixed paginated exports on the full export API.
+* Fixed popups styling with Dark Mode in SC and MC.
+* Fixed addons licenses checking.
+* Fix WPML's is_product_translation wrong logic.
+* Fixed trash status not applying to some ATUM Orders through API correctly in some cases.
 
 ---
 
