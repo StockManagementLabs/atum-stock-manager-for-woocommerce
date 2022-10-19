@@ -1084,7 +1084,7 @@ abstract class AtumOrderModel {
 		}
 
 		$post_data = array(
-			'post_date'         => Helpers::date_format( $date_created->getTimestamp() ),
+			'post_date'         => Helpers::date_format( strtotime( $date ), TRUE, TRUE ),
 			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
 			'post_modified'     => current_time( 'mysql' ),
@@ -2176,6 +2176,9 @@ abstract class AtumOrderModel {
 	public function set_date_created( $date_created, $skip_change = FALSE ) {
 
 		$date_created = $date_created instanceof \WC_DateTime ? $date_created->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_created );
+
+		$a1 = $this->date_created;
+		$a2 = $this->post ? $this->post->post_date : FALSE;
 
 		// Only register the change if it was manually changed.
 		if ( $date_created !== $this->date_created || ( $this->post && $this->post->post_date !== $date_created ) ) {
