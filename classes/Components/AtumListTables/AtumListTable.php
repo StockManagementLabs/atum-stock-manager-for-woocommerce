@@ -512,7 +512,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function table_nav_filters() {
 
-		add_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
+		add_filter( 'get_terms', array( $this, 'get_terms_categories' ), 10, 4 );
+
 		// Category filtering.
 		wc_product_dropdown_categories( array(
 			'show_count'       => 0,
@@ -520,6 +521,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'class'            => 'wc-enhanced-select atum-enhanced-select dropdown_product_cat atum-tooltip auto-filter',
 			'show_option_none' => __( 'All categories...', ATUM_TEXT_DOMAIN ),
 		) );
+
 		remove_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
 
 		// Product type filtering.
@@ -5177,7 +5179,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Filters the found terms for the categories dropdown.
+	 * Filters the found terms for the categories' dropdown.
 	 *
 	 * @since 1.9.18.1
 	 *
@@ -5186,17 +5188,22 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param array          $args       An array of get_terms() arguments.
 	 * @param \WP_Term_Query $term_query The WP_Term_Query object.
 	 *
-	 * @return array
+	 * @return \WP_Term[]
 	 */
-	public function get_terms_categories() {
+	public function get_terms_categories( $terms, $taxonomies, $args, $term_query ) {
 
 		global $wpdb;
 
 		$extra_criteria = apply_filters( 'atum/list_table/get_terms_categories_extra_criteria', '1', $this );
 
-		$sql = "SELECT DISTINCT t.term_id FROM $wpdb->terms AS t  INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy IN ('product_cat') 
-			AND ( tt.term_taxonomy_id IN (
-			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->posts scp ON tr.object_id = scp.ID
+		$sql = "
+			SELECT DISTINCT t.term_id FROM $wpdb->terms AS t  
+		    INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id 
+          	WHERE tt.taxonomy = 'product_cat' 
+			AND ( 
+			    tt.term_taxonomy_id IN (
+			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr 
+		            INNER JOIN $wpdb->posts scp ON tr.object_id = scp.ID
 			    	WHERE scp.post_type IN( 'product_variation', 'product' ) AND scp.post_status IN ( 'publish', 'private' )
 			        AND $extra_criteria
 			    )
@@ -5205,17 +5212,12 @@ abstract class AtumListTable extends \WP_List_Table {
 					OR t.term_id IN ( SELECT parent FROM $wpdb->term_taxonomy WHERE count > 0 )
                 )
 			)
-			ORDER BY t.name ASC";
+			ORDER BY t.name ASC
+		";
 
-		$term_ids   = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$terms_list = [];
+		$term_ids = $wpdb->get_col( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		foreach ( $term_ids as $term_id ) {
-			$term         = get_term( $term_id );
-			$terms_list[] = $term;
-		}
-
-		return $terms_list;
+		return array_map( 'get_term', $term_ids );
 
 	}
 

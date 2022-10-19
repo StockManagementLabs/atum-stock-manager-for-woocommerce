@@ -1,6 +1,10 @@
-/* =======================================
-   DASHBOARD STATISTICS WIDGET
-   ======================================= */
+/*
+   ┌─────────────────────────────┐
+   │                             │
+   │ DASHBOARD STATISTICS WIDGET │
+   │                             │
+   └─────────────────────────────┘
+*/
 
 import Chart from 'chart.js/dist/Chart.bundle.min';
 import Settings from '../../../config/_settings';

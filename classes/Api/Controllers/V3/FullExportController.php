@@ -43,6 +43,11 @@ class FullExportController extends \WC_REST_Controller {
 	const EXPORTED_ENDPOINTS_TRANSIENT = 'api_run_full_export_endpoints';
 
 	/**
+	 * Transient key name for the list of App subscribers that initiated a full export.
+	 */
+	const SUBSCRIBER_IDS_TRANSIENT = 'api_run_full_export_subscribers';
+
+	/**
 	 * Cloud function to send notification to the App user when the full export is completed.
 	 */
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
@@ -62,11 +67,13 @@ class FullExportController extends \WC_REST_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
 				),
 				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
@@ -128,9 +135,76 @@ class FullExportController extends \WC_REST_Controller {
 	public function get_collection_params() {
 
 		return array(
-			'context'  => $this->get_context_param( [ 'default' => 'view' ] ),
-			'endpoint' => array(
+			'context'            => $this->get_context_param( [ 'default' => 'view' ] ),
+			'subscriber_id'      => array(
+				'description'       => __( 'Firebase subscriber ID to notify after a successful export.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'required'          => TRUE,
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'endpoint'           => array(
 				'description'       => __( 'Do the export only for the specified ATUM endpoint.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'orders'             => array(
+				'description'       => __( 'Filter the WC orders to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'order-refunds'      => array(
+				'description'       => __( 'Filter the WC order refunds to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'inventory-logs'     => array(
+				'description'       => __( 'Filter the inventory logs to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'purchase-orders'    => array(
+				'description'       => __( 'Filter the purchase orders to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'comments'           => array(
+				'description'       => __( 'Filter the WC order notes to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'atum-order-notes'   => array(
+				'description'       => __( 'Filter the ATUM order notes to export after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'products'           => array(
+				'description'       => __( 'Filter the products to export of a given status (or statuses separated by commas).', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'product-variations' => array(
+				'description'       => __( 'Filter the variation products to export of a given status (or statuses separated by commas).', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'suppliers'          => array(
+				'description'       => __( 'Filter the suppliers to export of a given status (or statuses separated by commas).', ATUM_TEXT_DOMAIN ),
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
@@ -365,6 +439,8 @@ class FullExportController extends \WC_REST_Controller {
 			return $status;
 		}
 
+		$this->maybe_save_subscriber_id( $request['subscriber_id'] );
+
 		$request->set_param( 'context', 'edit' );
 		$response = $this->prepare_item_for_response( $status, $request );
 
@@ -536,8 +612,9 @@ class FullExportController extends \WC_REST_Controller {
 			AtumCache::delete_transients( $pending_endpoint_transient_key );
 		}
 
-		$page_suffix    = '';
-		$logged_in_user = get_current_user_id();
+		$page_suffix      = '';
+		$logged_in_user   = get_current_user_id();
+		$delete_transient = TRUE;
 
 		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
 		if ( ! $logged_in_user || $logged_in_user !== $user_id ) {
@@ -645,6 +722,7 @@ class FullExportController extends \WC_REST_Controller {
 
 						// Re-add the endpoint transient again because is not fully exported yet.
 						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS, TRUE );
+						$delete_transient = FALSE; // Avoid removing the transient below.
 					}
 
 				}
@@ -684,11 +762,14 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		AtumCache::delete_transients( $pending_endpoint_transient_key );
+		// TODO: DO WE NEED THIS DELETE TRANSIENT HERE? WE'VE ALREADY DELETED TRANSIENTS ABOVE...
+		if ( $delete_transient ) {
+			AtumCache::delete_transients( $pending_endpoint_transient_key );
+		}
 
 		if ( empty( $pending_endpoint ) ) {
 
-			// If, for some instance, the current user was logged in with another user, restore their log in.
+			// If, for some instance, the current user was logged in with another user, restore their log-in.
 			if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
 				wp_set_current_user( $logged_in_user );
 			}
@@ -697,12 +778,22 @@ class FullExportController extends \WC_REST_Controller {
 				wp_logout();
 			}
 
-			// Send a notification to the customer once the full export is completed.
-			wp_remote_get( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
+			$subscribers_transient_key = AtumCache::get_transient_key( self::SUBSCRIBER_IDS_TRANSIENT );
+			$saved_subscribers         = AtumCache::get_transient( $subscribers_transient_key, TRUE );
+
+			// Send a notification to the user(s) once the full export is completed.
+			$response = wp_remote_post( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
 				'timeout'   => 0.01,
 				'blocking'  => FALSE,
 				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				'body'      => array(
+					'subscribers' => $saved_subscribers,
+				),
 			] );
+
+			if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
+				AtumCache::delete_transients( $subscribers_transient_key );
+			}
 
 		}
 
@@ -748,6 +839,30 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	private static function get_file_name( $endpoint = '', $params = '' ) {
 		return str_replace( '/', '_', $endpoint ) . str_replace( [ '-', ',', ':' ], '_', $params );
+	}
+
+	/**
+	 * Save the subscriber ID that initiated a full export
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param string $subscriber_id
+	 */
+	private function maybe_save_subscriber_id( $subscriber_id ) {
+
+		$transient_key     = AtumCache::get_transient_key( self::SUBSCRIBER_IDS_TRANSIENT );
+		$saved_subscribers = AtumCache::get_transient( $transient_key, TRUE );
+
+		if ( ! is_array( $saved_subscribers ) ) {
+			$saved_subscribers = [];
+		}
+
+		if ( ! in_array( $subscriber_id, $saved_subscribers ) ) {
+			$saved_subscribers[] = $subscriber_id;
+		}
+
+		AtumCache::set_transient( $transient_key, $saved_subscribers, 0, TRUE );
+
 	}
 
 }

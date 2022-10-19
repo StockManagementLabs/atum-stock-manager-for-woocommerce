@@ -171,7 +171,6 @@ abstract class AtumOrderPostType {
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
 
-
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
 			'description'         => __( 'This is where ATUM orders are stored.', ATUM_TEXT_DOMAIN ),
@@ -407,7 +406,12 @@ abstract class AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'status':
-				$statuses      = static::get_statuses();
+				$statuses = static::get_statuses();
+
+				if ( ! array_key_exists( 'trash', $statuses ) ) {
+					$statuses['trash'] = __( 'Trash', ATUM_TEXT_DOMAIN );
+				}
+
 				$status_colors = static::get_status_colors();
 				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
@@ -1054,12 +1058,14 @@ abstract class AtumOrderPostType {
 			<script type="text/javascript">
 				jQuery(function($){
 
-					$('.tips').tipTip({
-						'attribute': 'data-tip',
-						'fadeIn'   : 50,
-						'fadeOut'  : 50,
-						'delay'    : 200
-					});
+					if ( $.fn.hasOwnProperty('tipTip') ) {
+						$( '.tips' ).tipTip( {
+							'attribute': 'data-tip',
+							'fadeIn'   : 50,
+							'fadeOut'  : 50,
+							'delay'    : 200
+						} );
+					}
 
 				});
 			</script>

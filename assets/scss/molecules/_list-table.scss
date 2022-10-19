@@ -1677,8 +1677,9 @@
 table.wp-list-table {
 	border: none;
 	border-top: 1px solid var(--main-border);
+	
 	&:not(.cloned) {
-	min-width: 1200px;
+		min-width: 1200px;
 	}
 	
 	thead, tfoot {
@@ -1687,16 +1688,16 @@ table.wp-list-table {
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: 0.3px;
-			color: var(--atum-text-color-var2);
+			color: var(--atum-text-color-var3);
 		}
 	}
 	
 	td {
 		a {
-			color:  var(--primary);
+			color: var(--primary);
 			
 			&:hover, &:focus, &:active {
-				color:  var(--primary);
+				color: var(--primary);
 			}
 		}
 	}
@@ -1707,12 +1708,13 @@ table.wp-list-table {
 			
 		}
 	}
+	
 	.hidden {
 		display: none !important;
 	}
 }
 
-table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list-table  {
+table.wp-list-table, .floatThead-container {
 	margin-bottom: 15px;
 	border-collapse: collapse;
 	
@@ -1881,7 +1883,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			a {
 				padding: 0;
 				display: flex;
-				color: var(--atum-text-color-var2);
+				color: var(--atum-text-color-var3);
 				overflow: visible;
 				
 				&, span {
@@ -2188,6 +2190,7 @@ table.atum-list-table, .floatThead-container, .inbound-stock-list, table.wp-list
 			
 			td {
 				padding: 10px 24px;
+				vertical-align: middle !important;
 				
 				.alert {
 					margin-top: math.div($grid-gutter-width, 2);

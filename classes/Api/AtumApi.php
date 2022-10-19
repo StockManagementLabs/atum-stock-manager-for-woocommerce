@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
+use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
 use Atum\Inc\Globals;
@@ -38,6 +39,11 @@ class AtumApi {
 	 * The CORS origin coming from the ATUM App
 	 */
 	const ATUM_APP_ORIGIN = 'capacitor://com.stockmanagementlabs.atum';
+
+	/**
+	 * The CORS origin coming from the ATUM QA App
+	 */
+	const ATUM_QA_APP_ORIGIN = 'capacitor://qa.stockmanagementlabs.atum';
 
 	/**
 	 * Max size limit for the API response pages.
@@ -210,6 +216,7 @@ class AtumApi {
 	 */
 	public function load_extenders() {
 
+		Orders::get_instance();
 		OrderNotes::get_instance();
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
@@ -249,7 +256,7 @@ class AtumApi {
 		if ( $origin ) {
 
 			// Requests from file:// and data: URLs send "Origin: null".
-			if ( self::ATUM_APP_ORIGIN !== $origin && 'null' !== $origin ) {
+			if ( self::ATUM_APP_ORIGIN !== $origin && self::ATUM_QA_APP_ORIGIN !== $origin && 'null' !== $origin ) {
 				$origin = esc_url_raw( $origin );
 			}
 
@@ -284,7 +291,7 @@ class AtumApi {
 		$origin = get_http_origin();
 
 		// Only alter the limit if the request is coming from the ATUM App.
-		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE ) {
+		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE && strpos( $origin, 'qa.stockmanagementlabs.atum' ) === FALSE ) {
 			return $query_params;
 		}
 
