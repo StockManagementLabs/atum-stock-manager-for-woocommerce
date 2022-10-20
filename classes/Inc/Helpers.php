@@ -34,6 +34,8 @@ use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductSimpleTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
 use AtumLevels\Levels\Products\BOMProductVariationTrait;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 use Westsworld\TimeAgo;
 use Westsworld\TimeAgo\Translations\En;
@@ -336,7 +338,7 @@ final class Helpers {
 			'type'         => 'shop_order',
 			'status'       => '',
 			'orders_in'    => '',
-			'number'       => - 1,
+			'number'       => -1,
 			'meta_key'     => '',
 			'meta_value'   => '',
 			'meta_type'    => '',
@@ -373,6 +375,8 @@ final class Helpers {
 		 * @var string        $fields
 		 */
 		extract( $atts );
+
+		// TODO: WHEN USING HPOS TABLES, THE DATES MUST BE IN GMT FORMAT.
 		
 		// WP_Query arguments.
 		$args = array(
@@ -380,7 +384,7 @@ final class Helpers {
 		);
 		
 		// Post Type.
-		$wc_order_types    = wc_get_order_types();
+		$wc_order_types    = wc_get_order_types( 'view-orders' );
 		$order_types       = (array) $type;
 		$valid_order_types = array();
 		
@@ -471,22 +475,46 @@ final class Helpers {
 		if ( $fields ) {
 			$args['fields'] = $fields;
 		}
-		
-		$orders = array();
-		$query  = new \WP_Query( $args );
-		
-		if ( $query->post_count > 0 ) {
-			
-			if ( $fields ) {
-				$orders = $query->posts;
-			}
-			else {
-				foreach ( $query->posts as $post ) {
-					// We need the WooCommerce order, not the post.
-					$orders[] = new \WC_Order( $post->ID );
+
+		$is_using_pos_tables = self::is_using_hpos_tables();
+		$orders              = array();
+		$query               = $is_using_pos_tables ? new OrdersTableQuery( $args ) : new \WP_Query( $args );
+
+		if ( $is_using_pos_tables ) {
+
+			if ( $query->found_orders ) {
+
+				if ( $fields ) {
+					$orders = $query->orders;
 				}
+				else {
+
+					foreach ( $query->orders as $order_id ) {
+						// We need the WooCommerce order, not the post.
+						$orders[] = wc_get_order( $order_id );
+					}
+
+				}
+
 			}
-			
+
+		}
+		else {
+
+			if ( $query->found_posts ) {
+
+				if ( $fields ) {
+					$orders = $query->posts;
+				}
+				else {
+					foreach ( $query->posts as $post ) {
+						// We need the WooCommerce order, not the post.
+						$orders[] = wc_get_order( $post->ID );
+					}
+				}
+
+			}
+
 		}
 
 		AtumCache::set_cache( $cache_key, $orders );
@@ -531,11 +559,23 @@ final class Helpers {
 
 			// Prepare the SQL query to get the orders in the specified time window.
 			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
-			$date_where = $wpdb->prepare( $is_using_hpos_tables ? 'WHERE date_created_gmt >= %s' : 'WHERE post_date_gmt >= %s', $date_start );
+
+			if ( $is_using_hpos_tables ) {
+				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', $date_start );
+			}
+			else {
+				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
+			}
 
 			if ( $date_end ) {
-				$date_end    = self::date_format( strtotime( $date_end ), TRUE, TRUE );
-				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
+				$date_end = self::date_format( strtotime( $date_end ), TRUE, TRUE );
+
+				if ( $is_using_hpos_tables ) {
+					$date_where .= $wpdb->prepare( ' AND date_created_gmt <= %s', $date_end );
+				}
+				else {
+					$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
+				}
 			}
 
 			$order_status = (array) apply_filters( 'atum/get_sold_last_days/orders_status', [
@@ -545,13 +585,13 @@ final class Helpers {
 
 			$format = implode( ', ', array_fill( 0, count( $order_status ), '%s' ) );
 
-			if ( Helpers::is_using_hpos_tables() ) {
+			if ( $is_using_hpos_tables ) {
 
 				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				$orders_query = $wpdb->prepare( "
 	                SELECT id FROM {$wpdb->prefix}wc_orders  
 					$date_where
-					AND post_type = 'shop_order' AND post_status IN ($format)
+					AND type = 'shop_order' AND status IN ($format)
 				", $order_status );
 				// phpcs:enable
 
@@ -569,7 +609,7 @@ final class Helpers {
 			}
 
 			// The lookup tables must be enabled and also available in the actual system.
-			// NOTE: There are some scenarios when the lookup tables are still not updated and we must use regular tables.
+			// NOTE: There are some scenarios when the lookup tables are still not updated, and we must use regular tables.
 			// Like when a new order is placed (because WC delays the lookup table update a little).
 			$use_lookup_table           = $use_lookup_table && self::maybe_use_wc_order_product_lookup_table();
 			$query_columns              = $query_joins = [];
@@ -649,32 +689,70 @@ final class Helpers {
 
 			if ( $use_lookup_table ) {
 
-				$query = "
-					SELECT $query_columns_str
-					FROM `$wpdb->posts` AS `orders`
-				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
-				    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
-			        $query_joins_str
-					WHERE `orders`.`ID` IN ($orders_query)
-			        $products_where
-					GROUP BY `opl`.`variation_id`, `opl`.`product_id`
-					HAVING (`QTY` IS NOT NULL);
-				";
+				if ( $is_using_hpos_tables ) {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `{$wpdb->prefix}wc_orders` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`id` = `items`.`order_id`)		
+					    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
+				        $query_joins_str
+						WHERE `orders`.`id` IN ($orders_query)
+				        $products_where
+						GROUP BY `opl`.`variation_id`, `opl`.`product_id`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
+				else {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `$wpdb->posts` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
+					    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
+				        $query_joins_str
+						WHERE `orders`.`ID` IN ($orders_query)
+				        $products_where
+						GROUP BY `opl`.`variation_id`, `opl`.`product_id`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
 
 			}
 			else {
 
-				$query = "
-					SELECT $query_columns_str
-					FROM `$wpdb->posts` AS `orders`
-				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
-				    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
-			        $query_joins_str
-					WHERE `orders`.`ID` IN ($orders_query) $products_type_where
-			        $products_where
-					GROUP BY `mt_id`.`meta_value`
-					HAVING (`QTY` IS NOT NULL);
-				";
+				if ( $is_using_hpos_tables ) {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `{$wpdb->prefix}wc_orders` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`id` = `items`.`order_id`)
+					    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
+				        $query_joins_str
+						WHERE `orders`.`id` IN ($orders_query) $products_type_where
+				        $products_where
+						GROUP BY `mt_id`.`meta_value`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
+				else {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `$wpdb->posts` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
+					    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
+				        $query_joins_str
+						WHERE `orders`.`ID` IN ($orders_query) $products_type_where
+				        $products_where
+						GROUP BY `mt_id`.`meta_value`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
 
 			}
 
@@ -1937,6 +2015,13 @@ final class Helpers {
 				$product_ids = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
 				$product_sql = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
 
+				if ( self::is_using_hpos_tables() ) {
+					$orders_sql = "SELECT id FROM {$wpdb->prefix}wc_orders WHERE type = 'shop_order' AND status IN ('wc-processing', 'wc-on-hold')";
+				}
+				else {
+					$orders_sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')";
+				}
+
 				// phpcs:disable
 				$sql = $wpdb->prepare( "
 					SELECT SUM(omq.meta_value) AS qty 
@@ -1944,7 +2029,7 @@ final class Helpers {
 					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
 					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
 					WHERE order_id IN (
-						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')
+						$orders_sql
 					)
 					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value $product_sql ;",
 					$product_id_key
@@ -3857,7 +3942,7 @@ final class Helpers {
 	}
 
 	/**
-	 * Check whether the current system is using the HPOS tables
+	 * Check whether the current WC is using the HPOS tables
 	 *
 	 * @since 1.9.23
 	 *
@@ -3865,6 +3950,17 @@ final class Helpers {
 	 */
 	public static function is_using_hpos_tables() {
 		return class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled();
+	}
+
+	/**
+	 * Check whether the current WC is using the HPOS orders for the orders list table
+	 *
+	 * @since 1.9.23
+	 *
+	 * @return bool
+	 */
+	public static function is_using_cot_list() {
+		return wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled();
 	}
 
 }

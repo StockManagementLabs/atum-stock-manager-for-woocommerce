@@ -14,7 +14,9 @@ namespace Atum\Orders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers;
 use Atum\Inc\Helpers as AtumHelpers;
+
 
 class CheckOrderPrices {
 
@@ -61,6 +63,7 @@ class CheckOrderPrices {
 
 				// Filter the orders query before running it.
 				add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
+				add_filter( 'woocommerce_order_list_table_prepare_items_query_args', array( $this, 'filter_mismatching_hpos_orders' ) );
 
 				// Add the action button to the filtered mismatching orders.
 				add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
@@ -118,7 +121,10 @@ class CheckOrderPrices {
 
 		global $post_type;
 
-		if ( 'edit.php' === $hook_suffix && 'shop_order' === $post_type ) {
+		if (
+			( Helpers::is_using_cot_list() && wc_get_page_screen_id( 'shop-order' ) === $hook_suffix ) ||
+			( 'edit.php' === $hook_suffix && 'shop_order' === $post_type )
+		) {
 
 			// Do not add the button when filtering by any non-editable status.
 			if ( ! empty( $_GET['post_status'] ) && ! in_array( $_GET['post_status'], $this->editable_order_statuses ) ) {
@@ -186,8 +192,15 @@ class CheckOrderPrices {
 
 		global $wpdb;
 
+		if ( Helpers::is_using_hpos_tables() ) {
+			$orders_sql = "SELECT id FROM `{$wpdb->prefix}wc_orders` WHERE type = 'shop_order' AND status IN ( '" . implode( "','", $editable_statuses ) . "' )";
+		}
+		else {
+			$orders_sql = "SELECT ID FROM `{$wpdb->posts}` WHERE post_type = 'shop_order' AND post_status IN ( '" . implode( "','", $editable_statuses ) . "' )";
+		}
+
 		// Search for all the editable orders with mismatching prices.
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$editable_order_items = $wpdb->get_results( "
 			SELECT DISTINCT oimp.meta_value AS product_id, oimv.meta_value AS variation_id, oimq.meta_value AS qty, oimt.meta_value AS subtotal, oi.order_id 
 			FROM `{$wpdb->prefix}woocommerce_order_items` oi
@@ -196,7 +209,7 @@ class CheckOrderPrices {
 		    LEFT JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` oimq ON ( oimq.order_item_id = oi.order_item_id AND oimq.meta_key = '_qty' )
 		    LEFT JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` oimt ON ( oimt.order_item_id = oi.order_item_id AND oimt.meta_key = '_line_subtotal' )
 			WHERE oi.`order_id` IN (
-				SELECT ID FROM `{$wpdb->posts}` WHERE post_type = 'shop_order' AND post_status IN ( '" . implode( "','", $editable_statuses ) . "' )
+				$orders_sql
 			)
 			AND oimp.meta_value IS NOT NULL;
 		" );
@@ -240,6 +253,8 @@ class CheckOrderPrices {
 	 *
 	 * @since 1.8.6
 	 *
+	 * TODO: THIS IS GOING TO NEED A NEW HOOK AND METHOD FOR THE NEW ORDERS TABLE. PERHAPS THE 'woocommerce_order_list_table_prepare_items_query_args' FILTER.
+	 *
 	 * @param \WP_Query $query
 	 */
 	public function filter_mismatching_orders( $query ) {
@@ -261,6 +276,53 @@ class CheckOrderPrices {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Filters the WC HPOS orders list before querying them
+	 *
+	 * @since 1.9.23
+	 *
+	 * @param array $order_query_args
+	 *
+	 * @return array
+	 */
+	public function filter_mismatching_hpos_orders( $order_query_args ) {
+
+		if ( ! empty( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] ) {
+
+			$queried_statuses          = (array) $order_query_args['status'] ?? [];
+			$queried_editable_statuses = array_intersect( $queried_statuses, $this->editable_order_statuses );
+
+			if ( ! empty( $queried_editable_statuses ) ) {
+				$mismatching_orders = $this->get_mismatching_orders( $queried_editable_statuses );
+
+				if ( ! empty( $mismatching_orders ) ) {
+
+					$order_query_args['field_query'] = array(
+						array(
+							'field' => 'id',
+							'value' => $mismatching_orders,
+						),
+					);
+
+				}
+				else {
+
+					$order_query_args['field_query'] = array(
+						array(
+							'field' => 'id',
+							'value' => [ '-1' ], // Do not return any order.
+						),
+					);
+
+				}
+			}
+
+		}
+
+		return $order_query_args;
 
 	}
 
@@ -301,8 +363,9 @@ class CheckOrderPrices {
 	 */
 	public function fix_order_prices( $order_ids = [] ) {
 
-		$changed      = 0;
-		$redirect_url = wp_get_referer() ?: admin_url( 'edit.php?post_type=shop_order&atum_show_mismatching=yes' );
+		$changed         = 0;
+		$orders_list_url = Helpers::is_using_cot_list() ? 'admin.php?page=wc_orders&atum_show_mismatching=yes' : 'edit.php?post_type=shop_order&atum_show_mismatching=yes';
+		$redirect_url    = wp_get_referer() ?: admin_url( $orders_list_url );
 
 		// For ajax requests, check the nonce first.
 		if ( wp_doing_ajax() && ! check_admin_referer( 'atum-fix-order-prices-nonce' ) ) {

@@ -110,9 +110,9 @@ class AllOrderRefundsController extends \WC_REST_Order_Refunds_Controller {
 			return new \WP_Error( 'atum_rest_invalid_order_refund_id', __( 'Invalid order refund ID.', ATUM_TEXT_DOMAIN ), 404 );
 		}
 
-		$object_post_type = Helpers::is_using_hpos_tables() ? OrderUtil::get_order_type( $object->get_parent_id() ) : get_post_type( $object->get_parent_id() );
+		$object_type = Helpers::is_using_hpos_tables() ? OrderUtil::get_order_type( $object->get_parent_id() ) : get_post_type( $object->get_parent_id() );
 
-		if ( 'shop_order' !== $object_post_type ) {
+		if ( 'shop_order' !== $object_type ) {
 			return new \WP_Error( 'atum_rest_invalid_order_refund_id', __( 'Invalid order refund.', ATUM_TEXT_DOMAIN ), 404 );
 		}
 

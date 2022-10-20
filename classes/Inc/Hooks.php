@@ -18,6 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\MetaBoxes\FileAttachment;
 use Atum\Settings\Settings;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 
 
 class Hooks {
@@ -956,7 +957,13 @@ class Hooks {
 	 */
 	public function maybe_save_order_items_props( $order_id ) {
 
-		if ( 'shop_order' !== get_post_type( $order_id ) ) {
+		$is_using_hpos_tables = Helpers::is_using_hpos_tables();
+
+		if ( $is_using_hpos_tables && 'shop_order' !== OrderUtil::get_order_type( $order_id ) ) {
+			return;
+		}
+
+		if ( ! $is_using_hpos_tables && 'shop_order' !== get_post_type( $order_id ) ) {
 			return;
 		}
 
