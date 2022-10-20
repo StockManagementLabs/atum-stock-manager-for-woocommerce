@@ -187,7 +187,7 @@ class AtumQueues {
 	}
 
 	/**
-	 * Update sales calculated product properties for products sold since the last cron execution.
+	 * Update sales calculated product properties for products sold since the last CRON execution.
 	 *
 	 * @since 1.9.7
 	 */
@@ -202,18 +202,40 @@ class AtumQueues {
 			$last_executed = $wpdb->get_var( "SELECT MAX(sales_update_date) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
 
-		$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
+		$is_using_hpos_tables = Helpers::is_using_hpos_tables();
 
-		$str_sql = "
-			SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
- 				FROM `{$wpdb->posts}` o
-					INNER JOIN order_item_table oi ON o.ID = oi.order_id
-					LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
-					LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
-					INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
-				WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
-					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
-		";
+		if ( $is_using_hpos_tables ) {
+
+			$date_clause = $last_executed ? $wpdb->prepare( 'AND o.date_updated_gmt >= %s', $last_executed ) : '';
+
+			$str_sql = "
+				SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+	                FROM `{$wpdb->prefix}wc_orders` o
+						INNER JOIN order_item_table oi ON o.id = oi.order_id
+						LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+						LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+						INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
+					WHERE o.type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+						$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+			";
+
+		}
+		else {
+
+			$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
+
+			$str_sql = "
+				SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+	                FROM `{$wpdb->posts}` o
+						INNER JOIN order_item_table oi ON o.ID = oi.order_id
+						LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+						LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+						INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
+					WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+						$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+			";
+
+		}
 
 		$order_items_table    = "{$wpdb->prefix}atum_order_items";
 		$order_itemmeta_table = "{$wpdb->prefix}atum_order_itemmeta";

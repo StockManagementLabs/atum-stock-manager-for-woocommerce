@@ -15,6 +15,9 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Inc\Helpers;
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
 class AllOrderRefundsController extends \WC_REST_Order_Refunds_Controller {
 
 	/**
@@ -103,8 +106,14 @@ class AllOrderRefundsController extends \WC_REST_Order_Refunds_Controller {
 		$this->request       = $request;
 		$this->request['dp'] = is_null( $this->request['dp'] ) ? wc_get_price_decimals() : absint( $this->request['dp'] );
 
-		if ( ! $object || ! $object->get_parent_id() || 'shop_order' !== get_post_type( $object->get_parent_id() ) ) {
+		if ( ! $object || ! $object->get_parent_id() ) {
 			return new \WP_Error( 'atum_rest_invalid_order_refund_id', __( 'Invalid order refund ID.', ATUM_TEXT_DOMAIN ), 404 );
+		}
+
+		$object_post_type = Helpers::is_using_hpos_tables() ? OrderUtil::get_order_type( $object->get_parent_id() ) : get_post_type( $object->get_parent_id() );
+
+		if ( 'shop_order' !== $object_post_type ) {
+			return new \WP_Error( 'atum_rest_invalid_order_refund_id', __( 'Invalid order refund.', ATUM_TEXT_DOMAIN ), 404 );
 		}
 
 		$data    = $this->get_formatted_item_data( $object );

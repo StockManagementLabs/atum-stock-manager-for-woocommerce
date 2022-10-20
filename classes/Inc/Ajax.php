@@ -1228,15 +1228,34 @@ final class Ajax {
 		global $wpdb;
 		$max_results = absint( apply_filters( 'atum/ajax/search_wc_orders/max_results', 10 ) );
 
-		// phpcs:disable
-		$query = $wpdb->prepare(
-			"SELECT DISTINCT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
-			AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
-			AND ID LIKE %s LIMIT %d",
-			"$order_id%",
-			$max_results
-		);
-		// phpcs:enable
+		if ( Helpers::is_using_hpos_tables() ) {
+
+			// phpcs:disable
+			$query = $wpdb->prepare( "
+				SELECT DISTINCT id FROM {$wpdb->prefix}wc_orders 
+                WHERE type = 'shop_order' 
+				AND status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
+				AND id LIKE %s LIMIT %d",
+				"$order_id%",
+				$max_results
+			);
+			// phpcs:enable
+
+		}
+		else {
+
+			// phpcs:disable
+			$query = $wpdb->prepare( "
+				SELECT DISTINCT ID FROM {$wpdb->posts} 
+               	WHERE post_type = 'shop_order' 
+				AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
+				AND ID LIKE %s LIMIT %d",
+				"$order_id%",
+				$max_results
+			);
+			// phpcs:enable
+
+		}
 
 		$order_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 

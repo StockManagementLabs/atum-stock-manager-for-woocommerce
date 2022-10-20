@@ -34,6 +34,7 @@ use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductSimpleTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
 use AtumLevels\Levels\Products\BOMProductVariationTrait;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 use Westsworld\TimeAgo;
 use Westsworld\TimeAgo\Translations\En;
 
@@ -316,14 +317,14 @@ final class Helpers {
 	 *      @type array|string  $status            Order status(es).
 	 *      @type array         $orders_in         Array of order's IDs we want to get.
 	 *      @type int           $number            Max number of orders (-1 gets all).
-	 *      @type string        $meta_key          Key of the meta field to filter/order (depending of orderby value).
-	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending of orderby value).
+	 *      @type string        $meta_key          Key of the meta field to filter/order (depending on orderby value).
+	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending on orderby value).
 	 *      @type string        $meta_type         Meta key type. Default value is 'CHAR'.
 	 *      @type string        $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query ).
 	 *      @type string        $order             ASC/DESC, default to DESC.
 	 *      @type string        $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date).
-	 *      @type int           $date_start        If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime).
-	 *      @type int           $date_end          Requires $date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now.
+	 *      @type int           $date_start        If it as value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime).
+	 *      @type int           $date_end          Requires $date_start. If it has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now.
 	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'.
 	 * }
 	 *
@@ -416,7 +417,7 @@ final class Helpers {
 			$args['post__in'] = array_map( 'absint', $orders_in );
 		}
 		
-		$args['posts_per_page'] = intval( $number );
+		$args['posts_per_page'] = (int) $number;
 		
 		// Filter/Order by meta key.
 		if ( $meta_key ) {
@@ -526,9 +527,11 @@ final class Helpers {
 
 			global $wpdb;
 
+			$is_using_hpos_tables = self::is_using_hpos_tables();
+
 			// Prepare the SQL query to get the orders in the specified time window.
 			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
-			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
+			$date_where = $wpdb->prepare( $is_using_hpos_tables ? 'WHERE date_created_gmt >= %s' : 'WHERE post_date_gmt >= %s', $date_start );
 
 			if ( $date_end ) {
 				$date_end    = self::date_format( strtotime( $date_end ), TRUE, TRUE );
@@ -542,13 +545,28 @@ final class Helpers {
 
 			$format = implode( ', ', array_fill( 0, count( $order_status ), '%s' ) );
 
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-			$orders_query = $wpdb->prepare( "
-    			SELECT ID FROM $wpdb->posts  
-				$date_where
-				AND post_type = 'shop_order' AND post_status IN ($format)
-			", $order_status );
-			// phpcs:enable
+			if ( Helpers::is_using_hpos_tables() ) {
+
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+				$orders_query = $wpdb->prepare( "
+	                SELECT id FROM {$wpdb->prefix}wc_orders  
+					$date_where
+					AND post_type = 'shop_order' AND post_status IN ($format)
+				", $order_status );
+				// phpcs:enable
+
+			}
+			else {
+
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+				$orders_query = $wpdb->prepare( "
+	                SELECT ID FROM $wpdb->posts  
+					$date_where
+					AND post_type = 'shop_order' AND post_status IN ($format)
+				", $order_status );
+				// phpcs:enable
+
+			}
 
 			// The lookup tables must be enabled and also available in the actual system.
 			// NOTE: There are some scenarios when the lookup tables are still not updated and we must use regular tables.
@@ -3836,6 +3854,17 @@ final class Helpers {
 		@ini_set( 'pcre.backtrack_limit', PHP_INT_MAX );
 		// phpcs:enable
 
+	}
+
+	/**
+	 * Check whether the current system is using the HPOS tables
+	 *
+	 * @since 1.9.23
+	 *
+	 * @return bool
+	 */
+	public static function is_using_hpos_tables() {
+		return class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled();
 	}
 
 }
