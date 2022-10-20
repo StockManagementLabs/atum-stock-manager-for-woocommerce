@@ -909,9 +909,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			$attributes = $this->list_item->get_attributes();
 
 			if ( ! empty( $attributes ) ) {
+
 				foreach ( $attributes as $tax => $attribute ) {
 					$term   = get_term_by( 'slug', $attribute, $tax );
-					$title .= ( strlen( $title ) > 0 ? ' ' : '' ) . $term->name;
+					$title .= ( strlen( $title ) > 0 ? ' ' : '' ) . ( $term instanceof \WP_Term ) ? $term->name : ucfirst( $attribute );
 				}
 			}
 

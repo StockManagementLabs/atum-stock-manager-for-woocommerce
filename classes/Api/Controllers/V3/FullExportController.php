@@ -349,7 +349,7 @@ class FullExportController extends \WC_REST_Controller {
 
 						$response = array(
 							'success' => FALSE,
-							'code'    => 'running',
+							'code'    => 'no_results',
 							'message' => __( 'No exported files found with the specified criteria. Please do run a new full export or try to change filters.', ATUM_TEXT_DOMAIN ),
 						);
 
@@ -368,7 +368,7 @@ class FullExportController extends \WC_REST_Controller {
 
 					$response = array(
 						'success' => FALSE,
-						'code'    => 'running',
+						'code'    => 'no_results',
 						'message' => __( 'No exported files found. Please do run a new full export.', ATUM_TEXT_DOMAIN ),
 					);
 
@@ -379,7 +379,7 @@ class FullExportController extends \WC_REST_Controller {
 
 				$response = array(
 					'success' => FALSE,
-					'code'    => 'running',
+					'code'    => 'error',
 					'message' => __( 'The export upload dir was not found.', ATUM_TEXT_DOMAIN ),
 				);
 
