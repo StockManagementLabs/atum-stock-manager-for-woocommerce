@@ -3,10 +3,10 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.0.2
+Tested up to: 6.0.3
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 6.9.4
+WC tested up to: 7.0.0
 Stable tag: 1.9.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.22`
 
-*2022-10-11*
+*2022-10-20*
 
 **Features**
 
@@ -232,6 +232,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Allow doing initial exports with filters.
 * Added JS utilities to be able to add, substract, multiply and divide big decimal values.
 * Allow retrieving the db_status on ATUM orders via API.
+* Allow updating the orders creation and modification date through the REST API
 
 **Changes**
 
@@ -239,6 +240,10 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Calculate sales calc synchronously when executing the calculated props tool.
 * Refactoring.
 * Updated JS dependencies and require node 16.
+* Get rid of the dates filter on the Suppliers List Table.
+* CSS adjustments.
+* Clean assets dir before compiling.
+* Adjusted error codes on the full export endpoint responses.
 
 **Fixes**
 
@@ -251,6 +256,12 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed addons licenses checking.
 * Fix WPML's is_product_translation wrong logic.
 * Fixed trash status not applying to some ATUM Orders through API correctly in some cases.
+* Fixed number of args for the get_terms filter.
+* Remove duplicated registered addons.
+* Fixed JS error when the jQuery.tipTip library is not loaded on some pages.
+* Do not loop the addons list if is not an array.
+* Fixed wrong creation date_created when saving ATUM Orders.
+* Fixed display variation name for non-term attributes.
 
 ---
 

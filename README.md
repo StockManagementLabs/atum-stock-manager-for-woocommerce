@@ -198,7 +198,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.9.22`
 
-*2022-10-11*
+*2022-10-20*
 
 **Features**
 
@@ -212,6 +212,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Allow doing initial exports with filters.
 * Added JS utilities to be able to add, substract, multiply and divide big decimal values.
 * Allow retrieving the db_status on ATUM orders via API.
+* Allow updating the orders creation and modification date through the REST API
 
 **Changes**
 
@@ -219,6 +220,10 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Calculate sales calc synchronously when executing the calculated props tool.
 * Refactoring.
 * Updated JS dependencies and require node 16.
+* Get rid of the dates filter on the Suppliers List Table.
+* CSS adjustments.
+* Clean assets dir before compiling.
+* Adjusted error codes on the full export endpoint responses.
 
 **Fixes**
 
@@ -231,6 +236,12 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed addons licenses checking.
 * Fix WPML's is_product_translation wrong logic.
 * Fixed trash status not applying to some ATUM Orders through API correctly in some cases.
+* Fixed number of args for the get_terms filter.
+* Remove duplicated registered addons.
+* Fixed JS error when the jQuery.tipTip library is not loaded on some pages.
+* Do not loop the addons list if is not an array.
+* Fixed wrong creation date_created when saving ATUM Orders.
+* Fixed display variation name for non-term attributes.
 
 ---
 
