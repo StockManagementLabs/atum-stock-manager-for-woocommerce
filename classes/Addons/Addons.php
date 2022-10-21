@@ -397,8 +397,9 @@ class Addons {
 				return $addons;
 			}
 
+			/* @deprecated No further calls will be made to the SML API for the addons list */
 			// Avoid doing requests to the API too many times if for some reason is down.
-			if ( FALSE !== self::get_last_api_access() ) {
+			/*if ( FALSE !== self::get_last_api_access() ) {
 				return FALSE;
 			}
 
@@ -420,7 +421,6 @@ class Addons {
 					error_log( __METHOD__ . ": $error_message" );
 				}
 
-				/* translators: error message displayed */
 				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error', TRUE, TRUE );
 
 				$addons = FALSE;
@@ -450,7 +450,7 @@ class Addons {
 			}
 			else {
 				self::set_last_api_access();
-			}
+			}*/
 
 		}
 
@@ -1210,44 +1210,6 @@ class Addons {
 		}
 
 		return $is_local_url;
-
-	}
-
-	/**
-	 * Get the last API access transient in order to check if the limits are reached
-	 *
-	 * @since 1.9.23
-	 *
-	 * @return bool|mixed
-	 */
-	public static function get_last_api_access() {
-
-		// Avoid doing requests to the API too many times if for some reason is down.
-		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
-
-		return AtumCache::get_transient( $limit_requests_transient, TRUE );
-
-	}
-
-	/**
-	 * Set or deletes the last API access transient, so we can do a new request
-	 *
-	 * @since 1.9.23
-	 *
-	 * @param bool $delete
-	 */
-	public static function set_last_api_access( $delete = FALSE ) {
-
-		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
-
-		if ( $delete ) {
-			// Remove the access blocking transient.
-			AtumCache::delete_transients( $limit_requests_transient );
-		}
-		else {
-			// Block access for 15 minutes.
-			AtumCache::set_transient( $limit_requests_transient, time(), 15 * MINUTE_IN_SECONDS, TRUE );
-		}
 
 	}
 
