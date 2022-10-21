@@ -3,6 +3,8 @@
  * View for the Addons page
  *
  * @since 1.2.0
+ *
+ * @var array|bool $addons
  */
 
 defined( 'ABSPATH' ) || die;
@@ -18,7 +20,7 @@ use Atum\Addons\Addons;
 		<a href="<?php echo esc_url( Addons::ADDONS_STORE_URL ) ?>addons/" class="page-title-action" target="_blank"><?php esc_html_e( 'Visit Add-ons Store', ATUM_TEXT_DOMAIN ) ?></a>
 	</h1>
 
-	<?php if ( ! empty( $addons ) ) : ?>
+	<?php if ( ! empty( $addons ) && is_array( $addons ) ) : ?>
 
 		<div class="theme-browser rendered" data-nonce="<?php echo esc_attr( wp_create_nonce( 'atum-addon-action' ) ) ?>">
 			<div class="themes wp-clearfix">
