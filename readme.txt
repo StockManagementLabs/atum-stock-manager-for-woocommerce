@@ -7,7 +7,7 @@ Tested up to: 6.0.3
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 7.0.0
-Stable tag: 1.9.22.2
+Stable tag: 1.9.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,17 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.23`
+
+*2022-10-21*
+
+**Fixes**
+
+* Reduce the number of requests made to the addons API.
+* Place the addons list within a JSON file to reduce the number of requests to the addons API.
 
 ---
 
