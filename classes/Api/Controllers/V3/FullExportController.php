@@ -264,7 +264,7 @@ class FullExportController extends \WC_REST_Controller {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 
-		if ( ! empty( $this->get_pending_exports( $requested_endpoint, $request ) ) ) {
+		if ( self::are_there_pending_exports() ) {
 
 			$response = array(
 				'success' => FALSE,
@@ -392,31 +392,19 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Get all the pending exports
+	 * Check whether there are pending exports
 	 *
-	 * @param string|NULL      $requested_endpoint
-	 * @param \WP_REST_Request $request
+	 * @since 1.9.23
 	 *
-	 * @return string|NULL
+	 * @return bool
 	 */
-	private function get_pending_exports( $requested_endpoint = NULL, $request ) {
+	private static function are_there_pending_exports() {
 
-		// Create one transient per endpoint, so we can handle them separately.
-		$requested_endpoints = $requested_endpoint ? explode( ',', $requested_endpoint ) : AtumApi::get_exportable_endpoints();
+		global $wpdb;
 
-		foreach ( $requested_endpoints as $key => $endpoint ) {
-
-			$params                           = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
-			$exported_endpoints_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $params ) );
-			$pending_export                   = AtumCache::get_transient( $exported_endpoints_transient_key, TRUE );
-
-			if ( ! empty( $pending_export ) ) {
-				return $pending_export; // If any of them is still pending, do not need to continue checking the rest.
-			}
-
-		}
-
-		return NULL;
+		$transient_name = '_transient_' . AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return ! empty( $wpdb->get_col( "SELECT option_id FROM $wpdb->options WHERE option_name LIKE '{$transient_name}%'" ) );
 
 	}
 
@@ -540,7 +528,7 @@ class FullExportController extends \WC_REST_Controller {
 				continue;
 			}
 
-			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, HOUR_IN_SECONDS, TRUE );
+			AtumCache::set_transient( $exported_endpoint_transient_keys[ $endpoint ], $endpoint, DAY_IN_SECONDS, TRUE );
 
 			$hook_name = "atum_api_export_endpoint_$key";
 
@@ -767,7 +755,8 @@ class FullExportController extends \WC_REST_Controller {
 			AtumCache::delete_transients( $pending_endpoint_transient_key );
 		}
 
-		if ( empty( $pending_endpoint ) ) {
+		// Send the completed export notification once all the export tasks have been completed.
+		if ( ! self::are_there_pending_exports() ) {
 
 			// If, for some instance, the current user was logged in with another user, restore their log-in.
 			if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
@@ -786,6 +775,9 @@ class FullExportController extends \WC_REST_Controller {
 				'timeout'   => 0.01,
 				'blocking'  => FALSE,
 				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				'headers'   => array(
+					'Origin' => home_url( '/' ),
+				),
 				'body'      => array(
 					'subscribers' => $saved_subscribers,
 				),
