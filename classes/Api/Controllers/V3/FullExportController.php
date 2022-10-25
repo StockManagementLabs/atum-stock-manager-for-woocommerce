@@ -471,7 +471,7 @@ class FullExportController extends \WC_REST_Controller {
 		return array(
 			'item' => array(
 				'href'       => rest_url( trailingslashit( $base ) . $id ),
-				'embeddable' => true,
+				'embeddable' => TRUE,
 			),
 		);
 
@@ -709,7 +709,7 @@ class FullExportController extends \WC_REST_Controller {
 						as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $params, $page + 1 ] );
 
 						// Re-add the endpoint transient again because is not fully exported yet.
-						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, HOUR_IN_SECONDS, TRUE );
+						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
 						$delete_transient = FALSE; // Avoid removing the transient below.
 					}
 
@@ -750,7 +750,6 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		// TODO: DO WE NEED THIS DELETE TRANSIENT HERE? WE'VE ALREADY DELETED TRANSIENTS ABOVE...
 		if ( $delete_transient ) {
 			AtumCache::delete_transients( $pending_endpoint_transient_key );
 		}
@@ -758,33 +757,38 @@ class FullExportController extends \WC_REST_Controller {
 		// Send the completed export notification once all the export tasks have been completed.
 		if ( ! self::are_there_pending_exports() ) {
 
-			// If, for some instance, the current user was logged in with another user, restore their log-in.
-			if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
-				wp_set_current_user( $logged_in_user );
-			}
-			// Or if wasn't logged in, close the session for security reasons.
-			elseif ( ! $logged_in_user && is_user_logged_in() ) {
-				wp_logout();
-			}
-
 			$subscribers_transient_key = AtumCache::get_transient_key( self::SUBSCRIBER_IDS_TRANSIENT );
 			$saved_subscribers         = AtumCache::get_transient( $subscribers_transient_key, TRUE );
 
-			// Send a notification to the user(s) once the full export is completed.
-			$response = wp_remote_post( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
-				'timeout'   => 0.01,
-				'blocking'  => FALSE,
-				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-				'headers'   => array(
-					'Origin' => home_url( '/' ),
-				),
-				'body'      => array(
-					'subscribers' => $saved_subscribers,
-				),
-			] );
+			// If, for some instance, there are no subscribers saved, do not send the notification.
+			if ( ! empty( $saved_subscribers ) ) {
 
-			if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
-				AtumCache::delete_transients( $subscribers_transient_key );
+				// If, for some instance, the current user was logged in with another user, restore their log-in.
+				if ( $logged_in_user && get_current_user_id() !== $logged_in_user ) {
+					wp_set_current_user( $logged_in_user );
+				}
+				// Or if wasn't logged in, close the session for security reasons.
+				elseif ( ! $logged_in_user && is_user_logged_in() ) {
+					wp_logout();
+				}
+
+				// Send a notification to the user(s) once the full export is completed.
+				$response = wp_remote_post( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
+					'timeout'   => 0.01,
+					'blocking'  => FALSE,
+					'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+					'headers'   => array(
+						'Origin' => home_url( '/' ),
+					),
+					'body'      => array(
+						'subscribers' => $saved_subscribers,
+					),
+				] );
+
+				if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
+					AtumCache::delete_transients( $subscribers_transient_key );
+				}
+
 			}
 
 		}
