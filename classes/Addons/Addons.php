@@ -293,7 +293,7 @@ class Addons {
 
 			$installed_addons = self::$addons;
 
-			// We must check if the are others not enabled that should be updated.
+			// We must check if there are others not enabled that should be updated.
 			foreach ( array_keys( $this->addons_paths ) as $addon_key ) {
 
 				if ( ! array_key_exists( $addon_key, self::$addons ) ) {
@@ -347,7 +347,7 @@ class Addons {
 
 						if ( $addon_info ) {
 
-							// Setup the updater.
+							// Set up the updater.
 							$addon_file = key( $addon_info );
 
 							new Updater( $addon_file, array(
@@ -383,9 +383,25 @@ class Addons {
 	private static function get_addons_list() {
 
 		$transient_name = AtumCache::get_transient_key( 'addons_list' );
-		$addons         = AtumCache::get_transient( $transient_name );
+		$addons         = AtumCache::get_transient( $transient_name, TRUE );
 
-		if ( ! $addons ) {
+		if ( empty( $addons ) ) {
+
+			// Get the addons list from the JSON file.
+			$addons = @file_get_contents( ATUM_PATH . 'includes/add-ons.json' ); //phpcs:disable
+
+			if ( $addons ) {
+				$addons = json_decode( $addons, TRUE );
+				AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS, TRUE );
+
+				return $addons;
+			}
+
+			/* @deprecated No further calls will be made to the SML API for the addons list */
+			// Avoid doing requests to the API too many times if for some reason is down.
+			/*if ( FALSE !== self::get_last_api_access() ) {
+				return FALSE;
+			}
 
 			$args = array(
 				'timeout'     => 20,
@@ -405,30 +421,36 @@ class Addons {
 					error_log( __METHOD__ . ": $error_message" );
 				}
 
-				/* translators: error message displayed */
 				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error', TRUE, TRUE );
 
-				return FALSE;
+				$addons = FALSE;
 
 			}
 			elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list.  Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+				$addons = FALSE;
 
-				return FALSE;
+			}
+			else {
+
+				$response_body = wp_remote_retrieve_body( $response );
+				$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
+
+				if ( empty( $addons ) ) {
+					AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+					$addons = FALSE;
+				}
 
 			}
 
-			$response_body = wp_remote_retrieve_body( $response );
-			$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
-
-			if ( empty( $addons ) ) {
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
-
-				return FALSE;
+			if ( ! empty( $addons ) ) {
+				self::set_last_api_access( TRUE );
+				AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS, TRUE );
 			}
-
-			AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS );
+			else {
+				self::set_last_api_access();
+			}*/
 
 		}
 
