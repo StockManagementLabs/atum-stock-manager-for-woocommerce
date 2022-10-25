@@ -336,8 +336,7 @@ class Addons {
 
 				if (
 					$addon_slug && $license_key &&
-					is_array( $license_key ) && ! empty( $license_key['key'] ) &&
-					Helpers::is_plugin_installed( $addon_slug, self::get_addon_folder( $addon_slug ) )
+					is_array( $license_key ) && ! empty( $license_key['key'] )
 				) {
 
 					if ( 'valid' === $license_key['status'] ) {
