@@ -49,39 +49,36 @@ class CheckOrderPrices {
 			'wc-on-hold',
 		) );
 
-		if ( is_admin() ) {
+		// Only load this feature if the option is enabled in ATUM settings.
+		if ( is_admin() && 'yes' === Helpers::get_option( 'enable_check_order_prices', 'no' ) ) {
 
-			// Only load this feature if the option is enabled in ATUM settings.
-			if ( 'yes' === Helpers::get_option( 'enable_check_order_prices', 'no' ) ) {
+			// Enqueue scripts.
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-				// Enqueue scripts.
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			// Check order pricess via Ajax.
+			add_action( 'wp_ajax_atum_check_order_prices', array( $this, 'check_order_prices' ) );
 
-				// Check order pricess via Ajax.
-				add_action( 'wp_ajax_atum_check_order_prices', array( $this, 'check_order_prices' ) );
+			// Filter the orders query before running it.
+			add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
+			add_filter( 'woocommerce_order_list_table_prepare_items_query_args', array( $this, 'filter_mismatching_hpos_orders' ) );
 
-				// Filter the orders query before running it.
-				add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
-				add_filter( 'woocommerce_order_list_table_prepare_items_query_args', array( $this, 'filter_mismatching_hpos_orders' ) );
+			// Add the action button to the filtered mismatching orders.
+			add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
 
-				// Add the action button to the filtered mismatching orders.
-				add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
+			// Fix the prices for the specified orders.
+			add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
 
-				// Fix the prices for the specified orders.
-				add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
+			// Add a bulk action to the orders list table.
+			add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
+			add_filter( 'bulk_actions-woocommerce_page_wc-orders', array( $this, 'add_bulk_action' ) );
 
-				// Add a bulk action to the orders list table.
-				add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
-				add_filter( 'bulk_actions-woocommerce_page_wc-orders', array( $this, 'add_bulk_action' ) );
+			// Process the bulk action for fixing prices.
+			add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
+			// TODO HPOS: THIS IS NOT WORKING FOR THE COT LIST.
+			add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
 
-				// Process the bulk action for fixing prices.
-				add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
-				add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
-
-				// Show and admin notice after the prices have been changed.
-				add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
-
-			}
+			// Show and admin notice after the prices have been changed.
+			add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
 
 		}
 
