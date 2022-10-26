@@ -375,8 +375,6 @@ final class Helpers {
 		 * @var string        $fields
 		 */
 		extract( $atts );
-
-		// TODO: WHEN USING HPOS TABLES, THE DATES MUST BE IN GMT FORMAT.
 		
 		// WP_Query arguments.
 		$args = array(

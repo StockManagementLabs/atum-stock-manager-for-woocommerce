@@ -972,7 +972,7 @@ class Hooks {
 	}
 
 	/**
-	 * When an purchase order or inventory log is moved or restored from trash, restore original status
+	 * When a purchase order or inventory log is moved or restored from trash, restore original status
 	 *
 	 * @param string $new_status      The new status of the post being restored.
 	 * @param int    $post_id         The ID of the post being restored.

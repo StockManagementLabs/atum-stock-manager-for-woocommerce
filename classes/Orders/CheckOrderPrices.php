@@ -15,7 +15,6 @@ namespace Atum\Orders;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
-use Atum\Inc\Helpers as AtumHelpers;
 
 
 class CheckOrderPrices {
@@ -53,7 +52,7 @@ class CheckOrderPrices {
 		if ( is_admin() ) {
 
 			// Only load this feature if the option is enabled in ATUM settings.
-			if ( 'yes' === AtumHelpers::get_option( 'enable_check_order_prices', 'no' ) ) {
+			if ( 'yes' === Helpers::get_option( 'enable_check_order_prices', 'no' ) ) {
 
 				// Enqueue scripts.
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -510,10 +509,19 @@ class CheckOrderPrices {
 	 */
 	public function bulk_admin_notices() {
 
-		global $post_type, $pagenow;
+		global $post_type, $pagenow, $page_hook;
+
+		$is_using_cot_list = Helpers::is_using_cot_list();
 
 		// Bail out if not on shop order list page.
-		if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
+		if ( ! isset( $_REQUEST['bulk_action'] ) ) {
+			return;
+		}
+
+		if ( $is_using_cot_list && wc_get_page_screen_id( 'shop-order' ) !== $page_hook ) {
+			return;
+		}
+		elseif ( ! $is_using_cot_list && ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type ) ) {
 			return;
 		}
 
