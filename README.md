@@ -196,6 +196,35 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.23.1`
+
+*2022-10-26*
+
+**Changes**
+
+* Get the updated addons list from the SML API.
+
+**Fixes**
+
+* Fixed the full export API push notifications.
+* Remove the deleted transient from cache to be able to regenerate it immediatly.
+* Only send the export push notification once.
+* Removed redundant installed addons check.
+* Fixed color for remove addon key button.
+
+---
+
+`1.9.23`
+
+*2022-10-21*
+
+**Fixes**
+
+* Reduce the number of requests made to the addons API.
+* Place the addons list within a JSON file to reduce the number of requests to the addons API.
+
+---
+
 `1.9.22.2`
 
 *2022-10-21*
