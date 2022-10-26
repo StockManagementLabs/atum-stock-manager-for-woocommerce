@@ -72,9 +72,11 @@ class CheckOrderPrices {
 
 				// Add a bulk action to the orders list table.
 				add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
+				add_filter( 'bulk_actions-woocommerce_page_wc-orders', array( $this, 'add_bulk_action' ) );
 
 				// Process the bulk action for fixing prices.
 				add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
+				add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
 
 				// Show and admin notice after the prices have been changed.
 				add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
@@ -459,7 +461,9 @@ class CheckOrderPrices {
 	 */
 	public function add_bulk_action( $actions ) {
 
-		$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
+		if ( ! empty( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] ) {
+			$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
+		}
 
 		return $actions;
 	}
@@ -484,15 +488,20 @@ class CheckOrderPrices {
 
 			if ( $changed ) {
 
-				$redirect_to = add_query_arg(
-					array(
-						'post_type'   => 'shop_order',
-						'bulk_action' => 'prices_fixed',
-						'changed'     => $changed,
-						'ids'         => join( ',', $ids ),
-					),
-					$redirect_to
+				$args = array(
+					'bulk_action' => 'prices_fixed',
+					'changed'     => $changed,
+					'ids'         => join( ',', $ids ),
 				);
+
+				if ( Helpers::is_using_cot_list() ) {
+					$args['page'] = 'wc_orders';
+				}
+				else {
+					$args['post_type'] = 'shop_order';
+				}
+
+				$redirect_to = add_query_arg( $args, $redirect_to );
 
 			}
 
