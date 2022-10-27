@@ -517,12 +517,12 @@ class CheckOrderPrices {
 
 		global $post_type, $pagenow, $page_hook;
 
-		$is_using_cot_list = Helpers::is_using_cot_list();
-
 		// Bail out if not on shop order list page.
 		if ( ! isset( $_REQUEST['bulk_action'] ) ) {
 			return;
 		}
+
+		$is_using_cot_list = Helpers::is_using_cot_list();
 
 		if ( $is_using_cot_list && wc_get_page_screen_id( 'shop-order' ) !== $page_hook ) {
 			return;

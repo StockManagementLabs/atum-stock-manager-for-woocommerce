@@ -258,7 +258,7 @@ class Wpml {
 
 		global $post_type;
 
-		if ( $post_type && in_array( $post_type, Globals::get_order_types() ) ) {
+		if ( $post_type && in_array( $post_type, Globals::get_atum_order_types() ) ) {
 			remove_meta_box( 'icl_div_config', convert_to_screen( $post_type ), 'normal' );
 		}
 	}
@@ -272,9 +272,9 @@ class Wpml {
 
 		global $pagenow;
 
-		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_order_types() ) ) ? TRUE : FALSE;
+		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_atum_order_types() ) ) ? TRUE : FALSE;
 		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE;
-		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), Globals::get_order_types() );
+		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), Globals::get_atum_order_types() );
 
 		if ( $is_order_post_type || $is_order_edit ) {
 			remove_action( 'wp_before_admin_bar_render', array( self::$sitepress, 'admin_language_switcher' ) );
@@ -768,6 +768,7 @@ class Wpml {
 		$original_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( ! $has_cache ) {
+
 			$return_array = is_array( $product_id );
 			$results      = array( 0 );
 
@@ -777,14 +778,15 @@ class Wpml {
 
 				$product_id = (array) $product_id;
 				$post_type  = $post_type ? (array) $post_type : (array) get_post_type( $product_id[0] );
+
 				// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
 				$str_sql = "
-				SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
-				LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
-  				WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
-  				AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
-  				AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL
-            ";
+					SELECT ori.element_id FROM {$wpdb->prefix}icl_translations tra
+					LEFT OUTER JOIN {$wpdb->prefix}icl_translations ori ON tra.trid = ori.trid
+	                WHERE tra.element_id IN (" . implode( ',', $product_id ) . ")
+	                AND tra.element_type IN ( 'post_" . implode( "','post_", $post_type ) . "')
+	                AND ori.`source_language_code` IS NULL AND ori.`trid` IS NOT NULL
+	            ";
 
 				$results = $wpdb->get_col( $str_sql ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -792,8 +794,8 @@ class Wpml {
 			}
 
 			$original_id = $return_array ? $results : $results[0];
-
 			AtumCache::set_cache( $cache_key, $original_id, ATUM_TEXT_DOMAIN );
+
 		}
 
 		return $original_id;
@@ -816,7 +818,7 @@ class Wpml {
 
 		if ( $product_id ) {
 
-			$post_type = $post_type ? $post_type : get_post_type( $product_id );
+			$post_type = $post_type ?: get_post_type( $product_id );
 
 			/* @noinspection PhpUndefinedMethodInspection */
 			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
@@ -826,7 +828,7 @@ class Wpml {
 
 		}
 
-		return $translations ? $translations : $product_id;
+		return $translations ?: $product_id;
 
 	}
 
@@ -849,8 +851,7 @@ class Wpml {
 		}
 
 		foreach ( $product_ids as $product_id ) {
-
-			$translations = $translations + self::get_product_translations_ids( $product_id, $post_type );
+			$translations += self::get_product_translations_ids( $product_id, $post_type );
 		}
 
 		return array_unique( $translations );
@@ -957,9 +958,11 @@ class Wpml {
 			if ( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ) === self::$sitepress->get_element_trid( $product->get_id(), 'post_' . $post_type ) ) {
 				return FALSE;
 			}
+
 		}
 		
 		return $product_id;
+
 	}
 	
 	/**
@@ -1024,11 +1027,10 @@ class Wpml {
 	public function new_translation_completed( $new_post_id, $fields, $job ) {
 
 		if ( 'product' === get_post_type( $new_post_id ) ) {
-
 			$master_post_id = $this->wpml->products->get_original_product_id( $new_post_id );
-
 			self::duplicate_atum_product( $master_post_id, $new_post_id );
 		}
+
 	}
 
 	/**
@@ -1096,6 +1098,7 @@ class Wpml {
 				$update_clause;
 		" );
 		// phpcs:enable
+
 	}
 	
 	/**
@@ -1127,7 +1130,7 @@ class Wpml {
 		}
 		
 		if ( $translations_ids ) {
-			// Don't need prepare, all are integers.
+			// Don't need to prepare, all are integers.
 			$translations_ids_str = implode( ',', $translations_ids );
 			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			$in_atum              = $wpdb->get_col( "SELECT product_id FROM $table WHERE product_id IN( $translations_ids_str )" ); // phpcs:ignore WordPress.DB.PreparedSQL
@@ -1146,10 +1149,10 @@ class Wpml {
 							'product_id' => $translation_id,
 						)
 					);
+
 				}
 				else {
-					
-					// if inserting, it's needed.
+					// If inserting, it's needed.
 					self::duplicate_atum_product( $product_id, $translation_id );
 				}
 			}
@@ -1205,11 +1208,12 @@ class Wpml {
 
 		if ( $translations_ids ) {
 
-			// Don't need prepare, all are integers.
+			// Don't need to prepare, all are integers.
 			$translations_ids_str = implode( ',', $translations_ids );
 			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
 			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
+
 		}
 		
 	}
@@ -1264,7 +1268,7 @@ class Wpml {
 			}
 
 			?>
-			<div id="<?php esc_attr_e( $id ); ?>" class="panel woocommerce_options_panel<?php esc_attr_e( $hidden );?>">
+			<div id="<?php echo esc_attr( $id ) ?>" class="panel woocommerce_options_panel<?php echo esc_attr( $hidden ) ?>">
 
 				<div class="options-group translated-atum-product">
 					<div class="alert alert-warning">
@@ -1293,11 +1297,11 @@ class Wpml {
 	 *
 	 * @param \WP_Post $post
 	 */
-	public function check_product_if_translation( $post ){
+	public function check_product_if_translation( $post ) {
 
 		global $pagenow, $wpml_post_translations;
 
-		if ( 'post-new.php' === $pagenow  ) {
+		if ( 'post-new.php' === $pagenow ) {
 
 			$source_lang = filter_var( $_GET['source_lang'] ?? '', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			$source_lang = 'all' === $source_lang ? self::$sitepress->get_default_language() : $source_lang;
@@ -1306,9 +1310,9 @@ class Wpml {
 				? $wpml_post_translations->get_source_lang_code( $post->ID ) : $source_lang;
 
 			$this->is_translation = $source_lang && $source_lang !== $lang;
+
 		}
 		elseif ( 'post.php' === $pagenow && ! empty( $_GET['post'] ) && 'product' === get_post_type( $_GET['post'] ) ) {
-
 			$this->is_translation = ! $this->wpml->products->is_original_product( $_GET['post'] );
 		}
 

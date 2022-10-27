@@ -16,7 +16,9 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\MetaBoxes\FileAttachment;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
@@ -986,7 +988,7 @@ class Hooks {
 
 		$post_type = get_post_type( $post_id );
 
-		if ( 'atum_purchase_order' !== $post_type && 'atum_inventory_log' !== $post_type ) {
+		if ( PurchaseOrders::POST_TYPE !== $post_type && InventoryLogs::POST_TYPE !== $post_type ) {
 			return;
 		}
 

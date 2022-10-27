@@ -52,7 +52,7 @@ final class Globals {
 	 *
 	 * @var string[]
 	 */
-	private static $order_types = [
+	private static $atum_order_types = [
 		ATUM_PREFIX . 'purchase_order',
 		ATUM_PREFIX . 'inventory_log',
 	];
@@ -321,8 +321,8 @@ final class Globals {
 	 *
 	 * @return array
 	 */
-	public static function get_order_types() {
-		return (array) apply_filters( 'atum/order_types', self::$order_types );
+	public static function get_atum_order_types() {
+		return (array) apply_filters( 'atum/atum_order_types', self::$atum_order_types );
 	}
 
 	/**

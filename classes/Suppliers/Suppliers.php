@@ -767,6 +767,7 @@ class Suppliers {
 	 * @since 1.8.9
 	 */
 	public function add_supplier_post_type_wcmenu() {
+
 		$post_type_items = Menu::get_post_type_items(
 			'atum_supplier',
 			array(
@@ -776,6 +777,7 @@ class Suppliers {
 		);
 
 		Menu::add_plugin_item( $post_type_items['all'] );
+
 	}
 
 
