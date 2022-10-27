@@ -193,7 +193,7 @@ class Hooks {
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
 		// Check if its necesary change the post status on purchase orders and inventory logs.
-		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status'), 10, 3 );
+		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status' ), 10, 3 );
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
