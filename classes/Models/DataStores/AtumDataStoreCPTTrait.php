@@ -1,6 +1,6 @@
 <?php
 /**
- * Shared trait for Atum Data Legacy Stores (using legacy tables)
+ * Shared trait for Atum Data Stores
  *
  * @package         Atum\Models
  * @subpackage      DataStores

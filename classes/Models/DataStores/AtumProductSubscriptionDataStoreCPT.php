@@ -1,6 +1,6 @@
 <?php
 /**
- * WC Subscription Product data store: using legacy tables
+ * WC Subscription Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores

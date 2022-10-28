@@ -19,7 +19,6 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Legacy\ListTableLegacyTrait;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
@@ -2295,30 +2294,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * If the site is not using the new tables, use the legacy method
-	 *
-	 * @since 1.5.0
-	 * @deprecated Only for backwards compatibility and will be removed in a future version.
-	 */
-	use ListTableLegacyTrait;
-
-	/**
 	 * Prepare the table data
 	 *
 	 * @since 0.0.1
 	 */
 	public function prepare_items() {
-
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-			$this->prepare_items_legacy();
-			return;
-		}
 
 		/**
 		 * Define our column headers
@@ -2362,27 +2342,26 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Change the product type tax query (initialized in constructor) to the current queried type.
-		if ( ! empty( $_REQUEST['product_type'] ) && ! empty( $this->wc_query_data['where'] ) ) {
+		if ( ! empty( $_REQUEST['product_type'] ) ) {
 
 			$type = esc_attr( $_REQUEST['product_type'] );
 
-			foreach ( $this->wc_query_data['where'] as $index => $query_arg ) {
+			foreach ( $this->taxonomies as $index => $taxonomy ) {
 
-				if ( isset( $query_arg['key'] ) && 'type' === $query_arg['key'] ) {
+				if ( 'product_type' === $taxonomy['taxonomy'] ) {
 
 					if ( in_array( $type, [ 'downloadable', 'virtual' ] ) ) {
 
-						$this->wc_query_data['where'][ $index ]['value'] = 'simple';
+						$this->taxonomies[ $index ]['terms'] = 'simple';
 
-						$this->wc_query_data['where'][] = array(
-							'key'   => $type,
-							'value' => 1,
-							'type'  => 'NUMERIC',
+						$this->extra_meta = array(
+							'key'   => "_$type",
+							'value' => 'yes',
 						);
 
 					}
 					else {
-						$this->wc_query_data['where'][ $index ]['value'] = $type;
+						$this->taxonomies[ $index ]['terms'] = $type;
 					}
 
 					break;
@@ -2403,9 +2382,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			$args['meta_query'][] = $this->extra_meta;
 		}
 
-		// Add the orderby args.
-		$args = $this->parse_orderby_args( $args );
-
 		/**
 		 * Searching
 		 */
@@ -2414,7 +2390,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
-			$args['s'] = sanitize_text_field( urldecode( stripslashes( $_REQUEST['s'] ) ) );
+			$args['s'] = esc_attr( $_REQUEST['s'] );
 		}
 
 		/**
@@ -2425,25 +2401,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( ! empty( $this->atum_query_data['where'] ) ) {
-				$this->atum_query_data['where']['relation'] = 'AND';
-			}
-
-			$this->atum_query_data['where'][] = array(
-				'key'   => 'supplier_id',
-				'value' => $supplier,
-				'type'  => 'NUMERIC',
-			);
-
 			// This query does not get product variations and as each variation may have a distinct supplier,
 			// we have to get them separately and to add their variables to the results.
 			$this->supplier_variation_products = Suppliers::get_supplier_products( $supplier, [ 'product_variation' ], TRUE, $args );
 
-			/** TODO: Remove this if not needed. Add the supplier products to the result is in conflict with pagination, adding results to each page.
+			/** TODO: Remove this filters if not needed. Add the supplier products to the results is in conflict with pagination, adding results to each page.
 			if ( ! empty( $this->supplier_variation_products ) ) {
-				add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
-				add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
+			add_filter( 'atum/list_table/views_data_products', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+			add_filter( 'atum/list_table/items', array( $this, 'add_supplier_variables_to_query' ), 10, 2 );
+			add_filter( 'atum/list_table/views_data_variations', array( $this, 'add_supplier_variations_to_query' ), 10, 2 );
 			}
 			 */
 
@@ -2454,6 +2420,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Build "Views Filters" and calculate totals.
 		$this->set_views_data( $args );
+
+		// Add the orderby args.
+		$args = $this->parse_orderby_args( $args );
 
 		$allow_query = TRUE;
 
@@ -2476,17 +2445,16 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( ! empty( $post_ids ) ) {
 
 						$get_parents = FALSE;
-						$parents     = array();
-
 						foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
 
-							if ( ! empty( $this->container_products[ $inheritable_product_type ] ) ) {
+							if ( ! empty( $this->container_products[ str_replace( '-', '_', $inheritable_product_type ) ] ) ) {
 								$get_parents = TRUE;
 								break;
 							}
 
 						}
 
+						// Add the parent products again to the query.
 						if ( $get_parents ) {
 
 							$parents = $this->get_variation_parents( $post_ids );
@@ -2494,12 +2462,26 @@ abstract class AtumListTable extends \WP_List_Table {
 							// Exclude the parents with no children.
 							// For example: the current list may have the "Out of stock" filter applied and a variable product
 							// may have all of its variations in stock, but its own stock could be 0. It shouldn't appear empty.
-							$empty_variables = array_diff( $this->container_products['variable'], $parents );
+							foreach ( Globals::get_inheritable_product_types() as $inheritable_product_type ) {
 
-							foreach ( $empty_variables as $empty_variable ) {
-								if ( in_array( $empty_variable, $post_ids ) ) {
-									unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+								$inheritable_product_type = str_replace( '-', '_', $inheritable_product_type );
+
+								if ( strpos( $inheritable_product_type, 'variable' ) !== 0 ) {
+									continue;
 								}
+
+								if ( ! isset( $this->container_products[ $inheritable_product_type ] ) ) {
+									continue;
+								}
+
+								$empty_variables = array_diff( $this->container_products[ $inheritable_product_type ], $parents );
+
+								foreach ( $empty_variables as $empty_variable ) {
+									if ( in_array( $empty_variable, $post_ids ) ) {
+										unset( $post_ids[ array_search( $empty_variable, $post_ids ) ] );
+									}
+								}
+
 							}
 
 							// Get the Grouped parents.
@@ -2519,12 +2501,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 							}
 
+							$args['post__in'] = array_merge( $parents, $post_ids );
+
+						}
+						else {
+							$args['post__in'] = $post_ids;
 						}
 
-						// Add the parent products again to the query.
-						$args['post__in'] = array_merge( $parents, $post_ids );
-						$allow_query      = TRUE;
-						$found_posts      = $this->count_views[ "count_$key" ];
+						$allow_query = TRUE;
+						$found_posts = $this->count_views[ "count_$key" ];
 					}
 
 				}
@@ -2548,30 +2533,29 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Setup the WP query.
 			global $wp_query;
 
-			// Pass through the ATUM query data and WC query data filters.
+			// Pass through the ATUM query data filter.
 			do_action( 'atum/list_table/before_query_data' );
-			add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$wp_query = new \WP_Query( $args );
-			remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			do_action( 'atum/list_table/after_query_data' );
 
 			$posts = $wp_query->posts;
 
 			if ( $found_posts > 0 && empty( $posts ) ) {
+
 				$args['paged']     = 1;
 				$_REQUEST['paged'] = $args['paged'];
+
 				// Pass through the ATUM query data filter.
 				do_action( 'atum/list_table/before_query_data' );
-				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$wp_query = new \WP_Query( $args );
-				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				do_action( 'atum/list_table/after_query_data' );
 
 				$posts = $wp_query->posts;
+
 			}
 
 			$product_ids = wp_list_pluck( $posts, 'ID' );
@@ -2649,30 +2633,11 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function set_product_types_query_data() {
 
-		/**
-		 * If the site is not using the new tables, use the legacy way
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-
-			$this->taxonomies[] = array(
-				'taxonomy' => 'product_type',
-				'field'    => 'slug',
-				'terms'    => Globals::get_product_types(),
-			);
-
-		}
-		else {
-
-			$this->wc_query_data['where'][] = array(
-				'key'     => 'type',
-				'value'   => Globals::get_product_types(),
-				'compare' => 'IN',
-			);
-
-		}
+		$this->taxonomies[] = array(
+			'taxonomy' => 'product_type',
+			'field'    => 'slug',
+			'terms'    => Globals::get_product_types(),
+		);
 
 	}
 
@@ -2810,17 +2775,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function set_views_data( $args ) {
 
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-			$this->set_views_data_legacy( $args );
-			return;
-		}
-
 		global $wpdb;
 
 		if ( $this->show_unmanaged_counters ) {
@@ -2852,8 +2806,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$args['posts_per_page'] = - 1;
 		unset( $args['paged'] );
 
-		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERICALLY TO AVOID REPETITIVE WORK.
-		$all_transient = AtumCache::get_transient_key( 'list_table_all', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
+		// TODO: PERHAPS THE TRANSIENT CAN BE USED MORE GENERALLY TO AVOID REPETITIVE WORK.
+		$all_transient = AtumCache::get_transient_key( 'list_table_all', $this->get_transient_args() );
 		$products      = AtumCache::get_transient( $all_transient );
 
 		if ( ! $products ) {
@@ -2863,7 +2817,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			// Pass through the ATUM query data filter.
 			do_action( 'atum/list_table/set_views_data/before_query_data' );
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_products_args', $args ) );
+			$wp_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/all_args', $args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			do_action( 'atum/list_table/set_views_data/after_query_data' );
 
@@ -2886,57 +2840,59 @@ abstract class AtumListTable extends \WP_List_Table {
 		// If it's a search or a product filtering, include only the filtered items to search for children.
 		$post_in = $this->is_filtering ? $products : array();
 
-		// Loop all the registered product types.
-		if ( ! empty( $this->wc_query_data['where'] ) ) {
+		foreach ( $this->taxonomies as $index => $taxonomy ) {
 
-			foreach ( $this->wc_query_data['where'] as $wc_query_arg ) {
+			if ( 'product_type' === $taxonomy['taxonomy'] ) {
 
-				if ( isset( $wc_query_arg['key'] ) && 'type' === $wc_query_arg['key'] ) {
+				if ( in_array( 'variable', (array) $taxonomy['terms'] ) ) {
 
-					$types = (array) $wc_query_arg['value'];
+					$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
 
-					if ( in_array( 'variable', $types, TRUE ) ) {
-
-						$variations = apply_filters( 'atum/list_table/views_data_variations', $this->get_children( 'variable', $post_in, 'product_variation' ), $post_in );
-
-						// Remove the variable containers from the array and add the variations.
-						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
-
-					}
-
-					if ( in_array( 'grouped', $types, TRUE ) ) {
-
-						$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
-
-						// Remove the grouped containers from the array and add the group items.
-						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
-
-					}
-
-					// WC Subscriptions compatibility.
-					if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', $types, TRUE ) ) {
-
-						$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
-
-						// Remove the variable subscription containers from the array and add the subscription variations.
-						$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
-
-					}
-
-					// Re-count the resulting products.
-					$this->count_views['count_all'] = count( $products );
-
-					// The grouped items must count once per group they belongs to and once individually.
-					if ( ! empty( $group_items ) ) {
-						$this->count_views['count_all'] += count( $group_items );
-					}
-
-					do_action( 'atum/list_table/after_children_count', $types, $this );
-
-					break;
+					// Remove the variable containers from the array and add the variations.
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable'] ), $variations ) );
 
 				}
 
+				if ( in_array( 'grouped', (array) $taxonomy['terms'] ) ) {
+
+					$group_items = apply_filters( 'atum/list_table/views_data_grouped', $this->get_children( 'grouped', $post_in ), $post_in );
+
+					// Remove the grouped containers from the array and add the group items.
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_grouped'] ), $group_items ) );
+
+				}
+
+				// WC Subscriptions compatibility.
+				if ( class_exists( '\WC_Subscriptions' ) && in_array( 'variable-subscription', (array) $taxonomy['terms'] ) ) {
+
+					$sc_variations = apply_filters( 'atum/list_table/views_data_sc_variations', $this->get_children( 'variable-subscription', $post_in, 'product_variation' ), $post_in );
+
+					// Remove the variable subscription containers from the array and add the subscription variations.
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_variable_subscription'] ), $sc_variations ) );
+
+				}
+
+				// WC Product Bundle compatibility.
+				if ( class_exists( '\WC_Product_Bundle' ) && in_array( 'bundle', (array) $taxonomy['terms'] ) ) {
+
+					$sc_bundles = apply_filters( 'atum/list_table/views_data_bundle', $this->get_children( 'bundle', $post_in ), $post_in );
+
+					// Remove the bundle containers from the array and add the subscription variations.
+					$products = array_unique( array_merge( array_diff( $products, $this->container_products['all_bundle'] ), $sc_bundles ) );
+
+				}
+
+				// Re-count the resulting products.
+				$this->count_views['count_all'] = count( $products );
+
+				// The grouped items must count once per group they belongs to and once individually.
+				if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
+					$this->count_views['count_all'] += count( $group_items );
+				}
+
+				do_action( 'atum/list_table/after_children_count', $taxonomy['terms'], $this );
+
+				break;
 			}
 
 		}
@@ -3011,8 +2967,6 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			$products = (array) $products;
-
 			/*
 			 * Products args.
 			 */
@@ -3038,30 +2992,27 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'CHAR',
 			);
 
-			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', array_merge( $products_args, $this->wc_query_data, $this->atum_query_data ) );
+			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $this->get_transient_args() );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
-			if ( empty( $products_in_stock ) ) {
-
-				// Pass through the WC query data filter (new tables).
-				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
+			if ( empty( $products_in_stock ) && ! empty( $products ) ) {
+				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_products_args', $products_args ) );
-				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-
+				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
-
 			}
 
-			$products_in_stock     = (array) $products_in_stock->posts;
-			$this->atum_query_data = $temp_atum_query_data; // Restore the original value.
+			$this->atum_query_data = $temp_atum_query_data;
 
-			$this->id_views['in_stock']          = $products_in_stock;
-			$this->count_views['count_in_stock'] = count( $products_in_stock );
+			$products_in_stock = FALSE !== $products_in_stock ? $products_in_stock->posts : 0;
 
-			$products_not_stock = array_diff( $products, $products_in_stock, $products_unmanaged );
+			$this->id_views['in_stock']          = (array) $products_in_stock;
+			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
+
+			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
 
 			/**
-			 * Products on Back Order.
+			 * Products on Backorder.
 			 */
 			$products_args['post__in'] = $products_not_stock;
 
@@ -3075,31 +3026,26 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'CHAR',
 			);
 
-			$back_order_transient = AtumCache::get_transient_key( 'list_table_back_order', array_merge( $products_args, $this->wc_query_data, $this->atum_query_data ) );
-			$products_back_order  = AtumCache::get_transient( $back_order_transient );
+			$backorders_transient = AtumCache::get_transient_key( 'list_table_backorders', $this->get_transient_args() );
+			$products_backorders  = AtumCache::get_transient( $backorders_transient );
 
-			if ( empty( $products_back_order ) && ! empty( $products_not_stock ) ) {
-
-				// Pass through the WC query data filter (new tables).
-				add_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-				$products_back_order = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
-				remove_filter( 'posts_clauses', array( $this, 'wc_product_data_query_clauses' ) );
-
-				AtumCache::set_transient( $back_order_transient, $products_back_order );
-
+			if ( empty( $products_backorders ) && ! empty( $products_not_stock ) ) {
+				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				$products_backorders = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
+				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+				$products_backorders = $products_backorders->posts;
+				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
-			$products_back_order   = (array) $products_back_order->posts;
 			$this->atum_query_data = $temp_atum_query_data;
 
-			$this->id_views['back_order']          = $products_back_order;
-			$this->count_views['count_back_order'] = count( $products_back_order );
+			$this->id_views['back_order']          = (array) $products_backorders;
+			$this->count_views['count_back_order'] = is_array( $products_backorders ) ? count( $products_backorders ) : 0;
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
-				$this->count_views['count_in_stock']   += count( array_intersect( $group_items, $products_in_stock ) );
-				$this->count_views['count_back_order'] += count( array_intersect( $group_items, $products_back_order ) );
-
+				$this->count_views['count_in_stock']   += count( array_intersect( $group_items, (array) $products_in_stock ) );
+				$this->count_views['count_back_order'] += count( array_intersect( $group_items, (array) $products_backorders ) );
 			}
 
 			/**
@@ -3107,7 +3053,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			if ( ! empty( $products_in_stock ) ) {
 
-				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', array_merge( $args, $this->wc_query_data, $this->atum_query_data ) );
+				$restock_status_transient = AtumCache::get_transient_key( 'list_table_restock_status', $this->get_transient_args() );
 				$products_restock_status  = AtumCache::get_transient( $restock_status_transient );
 
 				if ( empty( $products_restock_status ) ) {
@@ -3123,22 +3069,23 @@ abstract class AtumListTable extends \WP_List_Table {
 				}
 
 				$this->id_views['restock_status']          = (array) $products_restock_status;
-				$this->count_views['count_restock_status'] = count( $products_restock_status );
+				$this->count_views['count_restock_status'] = is_array( $products_restock_status ) ? count( $products_restock_status ) : 0;
 
 			}
 
 			/**
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( $products_not_stock, $products_back_order );
+			$products_out_stock = array_diff( (array) $products_not_stock, (array) $products_backorders );
 
 			$this->id_views['out_stock']          = $products_out_stock;
-			$this->count_views['count_out_stock'] = max( 0, $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'] );
+			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
 
+			/**
+			 * Calculate totals
+			 */
 			if ( $this->show_unmanaged_counters ) {
-				/**
-				 * Calculate totals
-				 */
+
 				$this->id_views['all_in_stock']          = array_merge( $this->id_views['in_stock'], $this->id_views['unm_in_stock'] );
 				$this->count_views['count_all_in_stock'] = $this->count_views['count_in_stock'] + $this->count_views['count_unm_in_stock'];
 
@@ -4064,27 +4011,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					    ";
 
 					}
-					// Search using the new WC tables.
-					elseif ( Helpers::is_using_new_wc_tables() ) {
-
-						// The _stock meta key was renamed to stock_quantity in the new products table.
-						if ( 'stock' === $column_name ) {
-							$column_name = 'stock_quantity';
-						}
-
-						$search_query = $this->build_search_query( $search_terms, $column_name, 'float', 'wcd' );
-						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-						$query = "
-							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-						    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
-						    WHERE $post_type_where
-						    AND $meta_where
-					    ";
-
-					}
 					// Search using the old way (meta keys).
-					/* @deprecated */
 					else {
 
 						$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
@@ -4119,27 +4046,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					    ";
 
 					}
-					// Search using the new WC tables.
-					elseif ( Helpers::is_using_new_wc_tables() ) {
-
-						// The _stock meta key was renamed to stock_quantity in the new products table.
-						if ( 'stock' === $column_name ) {
-							$column_name = 'stock_quantity';
-						}
-
-						$search_query = $this->build_search_query( $search_terms, $column_name, 'string', 'wcd' );
-						$meta_where   = apply_filters( 'atum/list_table/posts_search/numeric_meta_where', $search_query, $search_column, $search_terms );
-
-						$query = "
-							SELECT DISTINCT p.ID, p.post_type, p.post_parent FROM $wpdb->posts p
-						    LEFT JOIN {$wpdb->prefix}wc_products wcd ON (p.ID = wcd.product_id)
-						    WHERE $post_type_where
-						    AND $meta_where
-					    ";
-
-					}
 					// Search using the old way.
-					/* @deprecated */
 					else {
 
 						$search_query = $this->build_search_query( $search_terms, $search_column, 'string', 'pm', TRUE );
@@ -4601,63 +4508,75 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function get_children( $parent_type, $post_in = array(), $post_type = 'product' ) {
 
-		$cache_key    = AtumCache::get_cache_key( 'get_children', [ $parent_type, $post_in, $post_type ] );
-		$children_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
-
-		if ( $has_cache ) {
-			return $children_ids;
-		}
-
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-			$children_ids = $this->get_children_legacy( $parent_type, $post_in, $post_type );
-			AtumCache::set_cache( $cache_key, $children_ids );
-			return $children_ids;
-		}
-
-		global $wpdb;
-
-		// Get all the published Variables first.
 		$post_statuses = Globals::get_queryable_product_statuses();
-		$where         = " p.post_type = 'product' AND p.post_status IN('" . implode( "','", $post_statuses ) . "')";
+
+		// Get the published products of the same type first.
+		$parent_args = array(
+			'post_type'      => 'product',
+			'post_status'    => $post_statuses,
+			'posts_per_page' => - 1,
+			'fields'         => 'ids',
+			'orderby'        => array(
+				'menu_order' => 'ASC',
+				'date'       => 'DESC',
+			),
+			'tax_query'      => array(
+				array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => apply_filters( 'atum/list_table/parent_post_type', $parent_type ),
+				),
+			),
+		);
 
 		if ( ! empty( $post_in ) ) {
-			$where .= ' AND p.ID IN (' . implode( ',', $post_in ) . ')';
+			$parent_args['post__in'] = $post_in;
 		}
 
-		// phpcs:disable WordPress.DB.PreparedSQL
-		$parents = $wpdb->get_col( $wpdb->prepare( "
-			SELECT p.ID FROM $wpdb->posts p  
-			LEFT JOIN {$wpdb->prefix}wc_products pr ON p.ID = pr.product_id  
-			WHERE $where AND pr.type = %s
-			GROUP BY p.ID
-		", $parent_type ) );
-		// phpcs:enable
+		// As this query does not contain ATUM params, doesn't need the filters.
+		$parents = new \WP_Query( apply_filters( 'atum/list_table/get_children/parent_args', $parent_args ) );
 
 		$parents_with_child = $grouped_products = $bundle_children = array();
 
-		if ( ! empty( $parents ) ) {
+		if ( $parents->found_posts ) {
 
 			switch ( $parent_type ) {
 				case 'variable':
-					$this->container_products['all_variable'] = array_unique( array_merge( $this->container_products['all_variable'], $parents ) );
+					$this->container_products['all_variable'] = array_unique( array_merge( $this->container_products['all_variable'], $parents->posts ) );
 					break;
 
 				case 'grouped':
-					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents ) );
+					$this->container_products['all_grouped'] = array_unique( array_merge( $this->container_products['all_grouped'], $parents->posts ) );
 
 					// Get all the children from their corresponding meta key.
-					foreach ( $parents as $parent_id ) {
+					foreach ( $parents->posts as $parent_id ) {
 						$children = get_post_meta( $parent_id, '_children', TRUE );
-
+						// Unset uncontrolled childrens.
 						if ( ! empty( $children ) && is_array( $children ) ) {
-							$grouped_products     = array_merge( $grouped_products, $children );
-							$parents_with_child[] = $parent_id;
+
+							foreach ( $children as $key => $grouped_children ) {
+								$product_child = Helpers::get_atum_product( $grouped_children );
+
+								if ( $product_child ) {
+
+									if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
+
+										if ( ! $this->show_controlled ) {
+											unset( $children[ $key ] );
+										}
+
+									}
+									elseif ( $this->show_controlled ) {
+										unset( $children[ $key ] );
+									}
+
+								}
+
+							}
+							if ( ! empty( $children ) ) {
+								$grouped_products     = array_merge( $grouped_products, $children );
+								$parents_with_child[] = $parent_id;
+							}
 						}
 					}
 
@@ -4665,32 +4584,26 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				// WC Subscriptions compatibility.
 				case 'variable-subscription':
-					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents ) );
+					$this->container_products['all_variable_subscription'] = array_unique( array_merge( $this->container_products['all_variable_subscription'], $parents->posts ) );
 					break;
 
-				// WC Products Bundle compatibility.
+				// WC Bundle Producs compatibility.
 				case 'bundle':
-					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents ) );
+					$this->container_products['all_bundle'] = array_unique( array_merge( $this->container_products['all_bundle'], $parents->posts ) );
 
 					$bundle_children = Helpers::get_bundle_items( array(
 						'return'    => 'id=>product_id',
-						'bundle_id' => $parents,
+						'bundle_id' => $parents->posts,
 					) );
 
-					foreach ( $parents as $parent_id ) {
+					foreach ( $parents->posts as $parent_id ) {
 
 						if ( ! empty( $bundle_children ) && is_array( $bundle_children ) ) {
 							$parents_with_child[] = $parent_id;
 						}
-
 					}
-
 					break;
-
 			}
-
-			// Store the main query data to not lose when returning back.
-			$temp_query_data = $this->atum_query_data;
 
 			$children_args = array(
 				'post_type'      => $post_type,
@@ -4708,15 +4621,15 @@ abstract class AtumListTable extends \WP_List_Table {
 				if ( ! empty( $this->supplier_variation_products ) ) {
 					$children_args['post__in'] = $this->supplier_variation_products;
 				}
-				$children_args['post_parent__in'] = $parents;
+				$children_args['post_parent__in'] = $parents->posts;
 			}
 
 			// Apply the same order and orderby args than their parent.
 			$children_args = $this->parse_orderby_args( $children_args );
 
 			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
-			$query_cache_key = AtumCache::get_cache_key( 'get_children_query', $children_args );
-			$children_ids    = AtumCache::get_cache( $query_cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+			$cache_key    = AtumCache::get_cache_key( 'get_children_query', $children_args );
+			$children_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 			if ( $has_cache ) {
 				return $children_ids;
@@ -4728,25 +4641,18 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			$this->set_controlled_query_data();
 
-			if ( ! empty( $this->supplier_variation_products ) ) {
-
-				$this->atum_query_data['where'][] = array(
-					'key'   => 'supplier_id',
-					'value' => absint( $_REQUEST['supplier'] ),
-					'type'  => 'NUMERIC',
-				);
-
-				$this->atum_query_data['where']['relation'] = 'AND';
-
+			// Avoid to duplicate grouped children.
+			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
+				remove_filter( 'posts_search', array( $this, 'posts_search' ) );
 			}
 
-			// Pass through the ATUM query data filter.
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
-			// Restore the original query_data.
-			$this->atum_query_data = $temp_query_data;
+			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
+				add_filter( 'posts_search', array( $this, 'posts_search' ), 10, 2 );
+			}
 
 			if ( $children->found_posts ) {
 
@@ -4779,9 +4685,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$children_ids            = wp_list_pluck( $children->posts, 'ID' );
 				$this->children_products = array_unique( array_merge( $this->children_products, $children_ids ) );
-
 				AtumCache::set_cache( $cache_key, $children_ids );
-				AtumCache::set_cache( $query_cache_key, $children_ids );
 
 				return $children_ids;
 
@@ -4790,10 +4694,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				foreach ( $bundle_children as $key => $bundle_child ) {
 
-					$product_children = Helpers::get_atum_product( $bundle_child );
+					$product_child = Helpers::get_atum_product( $bundle_child );
 
-					if ( $product_children ) {
-						if ( 'yes' === Helpers::get_atum_control_status( $product_children ) ) {
+					if ( $product_child ) {
+						if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
 
 							if ( ! $this->show_controlled ) {
 								unset( $bundle_children[ $key ] );
@@ -4827,14 +4731,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_bundle'], $this->container_products['bundle'] ) ) );
 
 				$this->children_products = array_unique( array_merge( $this->children_products, array_map( 'intval', $bundle_children ) ) );
-				AtumCache::set_cache( $cache_key, $children_ids );
-				AtumCache::set_cache( $query_cache_key, $bundle_children );
+				AtumCache::set_cache( $cache_key, $bundle_children );
 
 				return $bundle_children;
 
 			}
-			else {
-				$this->excluded = array_unique( array_merge( $this->excluded, $parents ) );
+			elseif ( 'grouped' !== $parent_type || ! $this->is_searching_by_id_column() ) {
+				$this->excluded = array_unique( array_merge( $this->excluded, $parents->posts ) );
 			}
 
 		}
