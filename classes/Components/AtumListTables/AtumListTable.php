@@ -3440,18 +3440,23 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function display_tablenav( $which ) {
 
+		ob_start();
+		$this->extra_tablenav( $which );
+		$extra_table_nav = ob_get_clean();
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
-			<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
+			<?php if ( ! empty( $this->get_bulk_actions() ) || $extra_table_nav ) : ?>
 				<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
 					<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : '' ?>">
 
+						<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 						<div class="alignleft actions bulkactions">
 							<?php $this->bulk_actions( $which ); ?>
 						</div>
+						<?php endif; ?>
 
-						<?php $this->extra_tablenav( $which ); ?>
+						<?php echo $extra_table_nav; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 						<?php if ( 'top' === $which ) : ?>
 							<div class="overflow-opacity-effect-right"></div>
