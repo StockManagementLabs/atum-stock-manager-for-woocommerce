@@ -72,7 +72,11 @@ export default class ListTable {
 			//
 			// Expandable rows' checkboxes.
 			// ----------------------------
-			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => this.checkDescendats( $( evt.currentTarget ) ) )
+			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => {
+				const $checkbox: JQuery = $( evt.currentTarget );
+				this.checkDescendats( $checkbox );
+				this.wpHooks.doAction( 'atum_listTable_afterCheckColumn', $checkbox );
+			} )
 
 			//
 			// Check all the checkboxes.
