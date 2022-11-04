@@ -1790,8 +1790,8 @@ var ListTable = (function () {
         })
             .on('change', '.check-column :checkbox', function (evt) {
             var $checkbox = $(evt.currentTarget);
+            _this.wpHooks.doAction('atum_listTable_afterCheckRow', $checkbox);
             _this.checkDescendats($checkbox);
-            _this.wpHooks.doAction('atum_listTable_afterCheckColumn', $checkbox);
         })
             .on('click', '.manage-column :checkbox', function (evt) { return _this.checkAll(evt); })
             .on('click', '#control-all-products', function (evt) { return _this.controlAllProducts(evt); });
@@ -2128,6 +2128,7 @@ var ListTable = (function () {
                 var $checkbox = $nextRow.find('.check-column input:checkbox');
                 $checkbox.prop('checked', isChecked);
                 _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].switchActiveClass($checkbox);
+                this.wpHooks.doAction('atum_listTable_afterCheckRow', $checkbox);
                 if (isChecked) {
                     $nextRow.find('.has-child').click();
                 }

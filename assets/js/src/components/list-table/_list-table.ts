@@ -74,8 +74,8 @@ export default class ListTable {
 			// ----------------------------
 			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => {
 				const $checkbox: JQuery = $( evt.currentTarget );
+				this.wpHooks.doAction( 'atum_listTable_afterCheckRow', $checkbox );
 				this.checkDescendats( $checkbox );
-				this.wpHooks.doAction( 'atum_listTable_afterCheckColumn', $checkbox );
 			} )
 
 			//
@@ -700,6 +700,7 @@ export default class ListTable {
 
 				$checkbox.prop( 'checked', isChecked );
 				ActiveRow.switchActiveClass( $checkbox );
+				this.wpHooks.doAction( 'atum_listTable_afterCheckRow', $checkbox );
 
 				if ( isChecked ) {
 					$nextRow.find( '.has-child' ).click();
