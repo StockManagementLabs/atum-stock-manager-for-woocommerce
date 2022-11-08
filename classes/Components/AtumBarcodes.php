@@ -260,7 +260,7 @@ class AtumBarcodes {
 			$barcode = AtumListTable::EMPTY_COL;
 		}
 
-		if ( AtumCapabilities::current_user_can( 'edit_barcode' ) ) {
+		if ( $list_table->allow_edit && AtumCapabilities::current_user_can( 'edit_barcode' ) ) {
 
 			$args = apply_filters( 'atum/barcodes/list_table/editable_args', array(
 				'meta_key'   => 'barcode',

@@ -342,6 +342,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected static $row_actions = [];
 
 	/**
+	 * Whether the current List Table allow editing cells or not.
+	 *
+	 * @var bool
+	 */
+	public $allow_edit = TRUE;
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&#45;';
@@ -909,7 +916,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$attributes = $this->list_item->get_attributes();
 
 			if ( ! empty( $attributes ) ) {
-				$title = rawurldecode( ucfirst( implode( ' ', $attributes ) ) );
+				$title = rawurldecode( implode( ' ', array_map( 'ucfirst', $attributes ) ) );
 			}
 
 			// Get the variable product ID to get the right link.
@@ -948,7 +955,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$sku = $this->list_item->get_sku();
 		$sku = $sku ?: self::EMPTY_COL;
 
-		if ( $editable ) {
+		if ( $editable && $this->allow_edit ) {
 
 			$args = array(
 				'meta_key'   => 'sku',
@@ -999,7 +1006,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
 		$supplier_abb    = mb_strlen( $supplier ) > $supplier_length ? trim( mb_substr( $supplier, 0, $supplier_length ) ) . '...' : $supplier;
 
-		if ( $editable && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
+		if ( $editable && $this->allow_edit && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
 
 			if ( self::EMPTY_COL === $supplier ) {
 				$supplier_tooltip = esc_attr__( 'Click to add a supplier', ATUM_TEXT_DOMAIN );
@@ -1074,7 +1081,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$supplier_sku = self::EMPTY_COL;
 		}
 
-		if ( $editable && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
+		if ( $editable && $this->allow_edit && AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
 
 			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
 				'meta_key'   => 'supplier_sku',
@@ -1253,21 +1260,27 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 			else {
-
 				$regular_price_value = $regular_price;
 			}
 
-			$args = apply_filters( 'atum/list_table/args_regular_price', array(
-				'meta_key'   => 'regular_price',
-				'value'      => $regular_price_value,
-				'symbol'     => get_woocommerce_currency_symbol(),
-				'currency'   => self::$default_currency,
-				'tooltip'    => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
-				'cell_name'  => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
-				'extra_data' => [ 'realValue' => $regular_price_orig ],
-			), $this->list_item );
+			if ( $this->allow_edit ) {
 
-			$regular_price = self::get_editable_column( $args );
+				$args = apply_filters( 'atum/list_table/args_regular_price', array(
+					'meta_key'   => 'regular_price',
+					'value'      => $regular_price_value,
+					'symbol'     => get_woocommerce_currency_symbol(),
+					'currency'   => self::$default_currency,
+					'tooltip'    => esc_attr__( 'Click to edit the regular price', ATUM_TEXT_DOMAIN ),
+					'cell_name'  => esc_attr__( 'Regular Price', ATUM_TEXT_DOMAIN ),
+					'extra_data' => [ 'realValue' => $regular_price_orig ],
+				), $this->list_item );
+
+				$regular_price = self::get_editable_column( $args );
+
+			}
+			else {
+				$regular_price = $regular_price_value;
+			}
 
 		}
 
@@ -1306,40 +1319,47 @@ abstract class AtumListTable extends \WP_List_Table {
 				$sale_price_value = $sale_price;
 			}
 
-			$date_on_sale_from = $this->list_item->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->list_item->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
-			$date_on_sale_to   = $this->list_item->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->list_item->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
+			if ( $this->allow_edit ) {
 
-			$args = apply_filters( 'atum/list_table/args_sale_price', array(
-				'meta_key'   => 'sale_price',
-				'value'      => $sale_price_value,
-				'symbol'     => get_woocommerce_currency_symbol(),
-				'currency'   => self::$default_currency,
-				'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
-				'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
-				'extra_meta' => array(
-					array(
-						'name'        => '_sale_price_dates_from',
-						'type'        => 'text',
-						'placeholder' => esc_attr_x( 'Sale date from...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
-						'value'       => $date_on_sale_from,
-						'maxlength'   => 10,
-						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'atum-datepicker from',
-					),
-					array(
-						'name'        => '_sale_price_dates_to',
-						'type'        => 'text',
-						'placeholder' => esc_attr_x( 'Sale date to...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
-						'value'       => $date_on_sale_to,
-						'maxlength'   => 10,
-						'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-						'class'       => 'atum-datepicker to',
-					),
-				),
-				'extra_data' => [ 'realValue' => $sale_price_orig ],
-			), $this->list_item );
+				$date_on_sale_from = $this->list_item->get_date_on_sale_from( 'edit' ) ? date_i18n( 'Y-m-d', $this->list_item->get_date_on_sale_from( 'edit' )->getOffsetTimestamp() ) : '';
+				$date_on_sale_to   = $this->list_item->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->list_item->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
 
-			$sale_price = self::get_editable_column( $args );
+				$args = apply_filters( 'atum/list_table/args_sale_price', array(
+					'meta_key'   => 'sale_price',
+					'value'      => $sale_price_value,
+					'symbol'     => get_woocommerce_currency_symbol(),
+					'currency'   => self::$default_currency,
+					'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+					'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
+					'extra_meta' => array(
+						array(
+							'name'        => '_sale_price_dates_from',
+							'type'        => 'text',
+							'placeholder' => esc_attr_x( 'Sale date from...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
+							'value'       => $date_on_sale_from,
+							'maxlength'   => 10,
+							'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+							'class'       => 'atum-datepicker from',
+						),
+						array(
+							'name'        => '_sale_price_dates_to',
+							'type'        => 'text',
+							'placeholder' => esc_attr_x( 'Sale date to...(YYYY-MM-DD)', 'placeholder', ATUM_TEXT_DOMAIN ),
+							'value'       => $date_on_sale_to,
+							'maxlength'   => 10,
+							'pattern'     => '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
+							'class'       => 'atum-datepicker to',
+						),
+					),
+					'extra_data' => [ 'realValue' => $sale_price_orig ],
+				), $this->list_item );
+
+				$sale_price = self::get_editable_column( $args );
+
+			}
+			else {
+				$sale_price = $sale_price_value;
+			}
 
 		}
 
@@ -1369,32 +1389,39 @@ abstract class AtumListTable extends \WP_List_Table {
 			$purchase_price_orig = $this->list_item->get_purchase_price();
 			if ( is_numeric( $purchase_price_orig ) ) {
 
-				$purchase_price_orig = (float) $purchase_price_orig;
-
+				$purchase_price_orig  = (float) $purchase_price_orig;
 				$purchase_price_value = Helpers::format_price( $purchase_price_orig, [
 					'currency' => self::$default_currency,
 				] );
 
 				if ( 0.0 < $purchase_price_orig && 0.0 === round( $purchase_price_orig, wc_get_price_decimals() ) ) {
-
 					$purchase_price_value = "> $purchase_price_value";
 				}
+
 			}
 			else {
 				$purchase_price_value = $purchase_price;
 			}
 
-			$args = apply_filters( 'atum/list_table/args_purchase_price', array(
-				'meta_key'   => 'purchase_price',
-				'value'      => $purchase_price_value,
-				'symbol'     => get_woocommerce_currency_symbol(),
-				'currency'   => self::$default_currency,
-				'tooltip'    => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
-				'cell_name'  => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
-				'extra_data' => [ 'realValue' => $purchase_price_orig ],
-			) );
+			if ( $this->allow_edit && AtumCapabilities::current_user_can( 'edit_purchase_price' ) ) {
 
-			$purchase_price = self::get_editable_column( $args );
+				$args = apply_filters( 'atum/list_table/args_purchase_price', array(
+					'meta_key'   => 'purchase_price',
+					'value'      => $purchase_price_value,
+					'symbol'     => get_woocommerce_currency_symbol(),
+					'currency'   => self::$default_currency,
+					'tooltip'    => esc_attr__( 'Click to edit the purchase price', ATUM_TEXT_DOMAIN ),
+					'cell_name'  => esc_attr__( 'Purchase Price', ATUM_TEXT_DOMAIN ),
+					'extra_data' => [ 'realValue' => $purchase_price_orig ],
+				) );
+
+				$purchase_price = self::get_editable_column( $args );
+
+			}
+			else {
+				$purchase_price = $purchase_price_value;
+			}
+
 		}
 
 		return apply_filters( 'atum/list_table/column_purchase_price', $purchase_price, $item, $this->list_item, $this );
@@ -1482,7 +1509,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$out_stock_threshold = self::EMPTY_COL;
 		}
 
-		if ( $editable ) {
+		if ( $editable && $this->allow_edit ) {
 
 			$args = array(
 				'meta_key'   => 'out_stock_threshold',
@@ -1529,7 +1556,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$low_stock_threshold = self::EMPTY_COL;
 		}
 
-		if ( $editable ) {
+		if ( $editable && $this->allow_edit ) {
 
 			$args = array(
 				'meta_key'   => 'low_stock_threshold',
@@ -1562,7 +1589,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$weight = $this->list_item->get_weight();
 		$weight = $weight ?: self::EMPTY_COL;
 
-		if ( $editable ) {
+		if ( $editable && $this->allow_edit ) {
 
 			$args = array(
 				'meta_key'   => 'weight',
@@ -1622,12 +1649,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 *
 			 * @var \WC_Product_Bundle $bundle_product
 			 */
-			if ( ! strlen( $bundle_product->get_bundle_stock_quantity() ) ) {
-				$stock = self::EMPTY_COL;
-			}
-			else {
-				$stock = $bundle_product->get_bundle_stock_quantity();
-			}
+			$stock = ! strlen( $bundle_product->get_bundle_stock_quantity() ) ? self::EMPTY_COL : $bundle_product->get_bundle_stock_quantity();
 
 		}
 
@@ -1687,7 +1709,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( $editable ) {
+		if ( $editable && $this->allow_edit ) {
 
 			$args = array(
 				'meta_key'  => 'stock',
@@ -2367,7 +2389,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( $this->taxonomies ) {
+		if ( ! empty( $this->taxonomies ) ) {
 			$args['tax_query'] = (array) apply_filters( 'atum/list_table/taxonomies', $this->taxonomies );
 		}
 
@@ -2506,6 +2528,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 						$allow_query = TRUE;
 						$found_posts = $this->count_views[ "count_$key" ];
+						break;
+
 					}
 
 				}
@@ -2526,7 +2550,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 
-			// Setup the WP query.
+			// Set up the WP query.
 			global $wp_query;
 
 			// Pass through the ATUM query data filter.
@@ -2567,7 +2591,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		/**
 		 * REQUIRED!!!
-		 * Save the sorted data to the items property, where can be used by the rest of the class.
+		 * Save the sorted data to the items' property, where can be used by the rest of the class.
 		 */
 		$this->items = apply_filters( 'atum/list_table/items', $posts, 'posts' );
 
@@ -2999,11 +3023,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
-
-			$products_in_stock = FALSE !== $products_in_stock ? $products_in_stock->posts : 0;
+			$products_in_stock     = ! empty( $products_in_stock ) ? $products_in_stock->posts : [];
 
 			$this->id_views['in_stock']          = (array) $products_in_stock;
-			$this->count_views['count_in_stock'] = is_array( $products_in_stock ) ? count( $products_in_stock ) : 0;
+			$this->count_views['count_in_stock'] = count( $products_in_stock );
 
 			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
 
@@ -3029,14 +3052,14 @@ abstract class AtumListTable extends \WP_List_Table {
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 				$products_backorders = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-				$products_backorders = $products_backorders->posts;
 				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
+			$products_backorders   = ! empty( $products_backorders ) ? $products_backorders->posts : [];
 
 			$this->id_views['back_order']          = (array) $products_backorders;
-			$this->count_views['count_back_order'] = is_array( $products_backorders ) ? count( $products_backorders ) : 0;
+			$this->count_views['count_back_order'] = count( $products_backorders );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
 			if ( ! empty( $group_items ) && ( empty( $_REQUEST['product_type'] ) || 'grouped' !== $_REQUEST['product_type'] ) ) {
@@ -3064,15 +3087,17 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				}
 
+				$products_restock_status = ! empty( $products_restock_status ) ? $products_restock_status : [];
+
 				$this->id_views['restock_status']          = (array) $products_restock_status;
-				$this->count_views['count_restock_status'] = is_array( $products_restock_status ) ? count( $products_restock_status ) : 0;
+				$this->count_views['count_restock_status'] = count( $products_restock_status );
 
 			}
 
 			/**
 			 * Products out of stock
 			 */
-			$products_out_stock = array_diff( (array) $products_not_stock, (array) $products_backorders );
+			$products_out_stock = array_diff( $products_not_stock, (array) $products_backorders );
 
 			$this->id_views['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
@@ -4551,33 +4576,34 @@ abstract class AtumListTable extends \WP_List_Table {
 
 					// Get all the children from their corresponding meta key.
 					foreach ( $parents->posts as $parent_id ) {
+
 						$children = get_post_meta( $parent_id, '_children', TRUE );
+
 						// Unset uncontrolled childrens.
 						if ( ! empty( $children ) && is_array( $children ) ) {
 
 							foreach ( $children as $key => $grouped_children ) {
+
 								$product_child = Helpers::get_atum_product( $grouped_children );
 
 								if ( $product_child ) {
 
-									if ( 'yes' === Helpers::get_atum_control_status( $product_child ) ) {
+									$atum_control_status = Helpers::get_atum_control_status( $product_child );
 
-										if ( ! $this->show_controlled ) {
-											unset( $children[ $key ] );
-										}
-
-									}
-									elseif ( $this->show_controlled ) {
+									if (
+										( ! $this->show_controlled && 'yes' === $atum_control_status ) ||
+										( $this->show_controlled && 'no' === $atum_control_status )
+									) {
 										unset( $children[ $key ] );
 									}
 
 								}
 
 							}
-							if ( ! empty( $children ) ) {
-								$grouped_products     = array_merge( $grouped_products, $children );
-								$parents_with_child[] = $parent_id;
-							}
+
+							$grouped_products     = array_merge( $grouped_products, $children );
+							$parents_with_child[] = $parent_id;
+
 						}
 					}
 
@@ -4619,10 +4645,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				$children_args['post__in'] = $grouped_products;
 			}
 			else {
+
 				if ( ! empty( $this->supplier_variation_products ) ) {
 					$children_args['post__in'] = $this->supplier_variation_products;
 				}
+
 				$children_args['post_parent__in'] = $parents->posts;
+
 			}
 
 			// Apply the same order and orderby args than their parent.
