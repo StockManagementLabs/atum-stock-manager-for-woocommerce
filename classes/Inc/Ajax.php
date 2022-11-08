@@ -511,8 +511,10 @@ final class Ajax {
 		$namespace  = '\Atum\StockCentral\Lists';
 		$list_class = $args['show_controlled'] ? "$namespace\ListTable" : "$namespace\UncontrolledListTable";
 
+		$list_class = apply_filters( 'atum/ajax/stock_central_list/list_table_class', $list_class, $args );
+
 		/**
-		 * Variable deifinition
+		 * Variable definition
 		 *
 		 * @var ListTable $list
 		 */
@@ -664,7 +666,7 @@ final class Ajax {
 			case 'control_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -678,7 +680,7 @@ final class Ajax {
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -692,7 +694,7 @@ final class Ajax {
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
