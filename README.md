@@ -196,6 +196,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.24`
+
+*2022-11-09*
+
+**Features**
+
+* Add full compatibility with the new WooCommerce's HPOS tables.
+* Add JS hook after selecting items in SC.
+* Allow disable editing on some List Tables.
+
+**Changes**
+
+* Refactoring.
+* Show the List Table filters even if the table has no bulk actions.
+
+**Fixes**
+
+* Show all attribute names for variations in List Tables.
+
+---
+
 `1.9.23.1`
 
 *2022-10-26*

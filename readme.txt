@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.0.3
+Tested up to: 6.1
 Requires PHP: 7.1
 WC requires at least: 3.6.0
-WC tested up to: 7.0.0
-Stable tag: 1.9.23.1
+WC tested up to: 7.1.0
+Stable tag: 1.9.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,27 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.24`
+
+*2022-11-09*
+
+**Features**
+
+* Add full compatibility with the new WooCommerce's HPOS tables.
+* Add JS hook after selecting items in SC.
+* Allow disable editing on some List Tables.
+
+**Changes**
+
+* Refactoring.
+* Show the List Table filters even if the table has no bulk actions.
+
+**Fixes**
+
+* Show all attribute names for variations in List Tables.
 
 ---
 
