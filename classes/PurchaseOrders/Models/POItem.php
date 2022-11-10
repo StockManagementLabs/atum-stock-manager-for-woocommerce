@@ -20,13 +20,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 class POItem extends AtumOrderItemModel {
 
 	/**
-	 * The WP cache key name
-	 *
-	 * @var string
-	 */
-	protected $cache_key = 'po-item';
-
-	/**
 	 * POItem constructor
 	 *
 	 * @param \WC_Order_Item $po_item The factory object for initialization.

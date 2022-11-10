@@ -256,6 +256,13 @@ abstract class AtumOrderModel {
 				return;
 			}
 
+			// Set the cache for the independent order items, so they aren't queried when instantiated with the AtumOrderItemModel class.
+			foreach ( $items as $item ) {
+				$item_cache_key = AtumCache::get_cache_key( 'atum-order-item', $item->order_item_id );
+				AtumCache::set_cache( $item_cache_key, $item );
+			}
+
+			// Set the cache for the order items array.
 			AtumCache::set_cache( $cache_key, $items );
 
 		}

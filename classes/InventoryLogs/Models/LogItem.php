@@ -20,13 +20,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 class LogItem extends AtumOrderItemModel {
 
 	/**
-	 * The WP cache key name
-	 *
-	 * @var string
-	 */
-	protected $cache_key = 'inventory-log-item';
-
-	/**
 	 * LogItem constructor
 	 *
 	 * @param \WC_Order_Item $log_item The factory object for initialization.

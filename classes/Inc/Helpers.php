@@ -1831,7 +1831,7 @@ final class Helpers {
 	 *
 	 * @param int $order_id   The ATUM Order ID.
 	 *
-	 * @return object|null
+	 * @return \stdClass[]|null
 	 */
 	public static function get_order_items( $order_id ) {
 
