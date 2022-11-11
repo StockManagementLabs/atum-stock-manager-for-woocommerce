@@ -1051,7 +1051,10 @@ abstract class AtumOrderModel {
 		try {
 
 			$currency = $this->currency;
-			$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
+			if ( ! is_wp_error( $currency ) ) {
+				$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
+			}
+
 			$status       = $this->get_status();
 			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp() );
 			$this->set_date_created( $date_created );
