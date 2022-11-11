@@ -76,6 +76,13 @@ abstract class AtumOrderModel {
 	protected $db_status;
 
 	/**
+	 * The default ATUM Order status
+	 *
+	 * @var string
+	 */
+	protected $default_status = 'atum_pending';
+
+	/**
 	 * The array of items belonging to this Order
 	 *
 	 * @var array
@@ -1005,7 +1012,7 @@ abstract class AtumOrderModel {
 			
 			// If the old status is set but unknown (e.g. draft) assume it's pending for action usage.
 			if ( ! $old_status || ( ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
-				$old_status = 'atum_pending';
+				$old_status = $this->default_status;
 			}
 			
 			if ( $new_status !== $old_status ) {
@@ -1063,7 +1070,7 @@ abstract class AtumOrderModel {
 				'post_date'     => Helpers::date_format( $date_created->getTimestamp() ),
 				'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 				'post_type'     => $this->get_post_type(),
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : 'atum_pending',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : $this->default_status,
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
@@ -1119,7 +1126,7 @@ abstract class AtumOrderModel {
 		$post_data = array(
 			'post_date'         => Helpers::date_format( strtotime( $date ), TRUE, TRUE ),
 			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
-			'post_status'       => in_array( $status, $allowed_statusses ) ? $status : 'atum_pending',
+			'post_status'       => in_array( $status, $allowed_statusses ) ? $status : $this->default_status,
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -1158,7 +1165,7 @@ abstract class AtumOrderModel {
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
-			$new_status = 'atum_pending';
+			$new_status = $this->default_status;
 		}
 
 		do_action( 'atum/atum_order_model/update_status', $this, $new_status );
