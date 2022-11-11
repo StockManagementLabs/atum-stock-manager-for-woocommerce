@@ -1125,6 +1125,14 @@ final class Ajax {
 
 		$ids = Helpers::search_products( $term, '', TRUE, FALSE, $limit, $include_ids, $exclude_ids );
 
+		foreach ( $ids as $key => $id ) {
+			$product = Helpers::get_atum_product( $id );
+
+			if ( $product && $product->is_type( 'variation' ) && 'private' === $product->get_status() ) {
+				unset( $ids[ $key ] );
+			}
+		}
+
 		$post_id = ! empty( $_GET['id'] ) ? absint( $_GET['id'] ) : NULL;
 
 		if ( ! $post_id ) {
