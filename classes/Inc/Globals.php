@@ -326,6 +326,18 @@ final class Globals {
 	}
 
 	/**
+	 * This is just an alias of get_atum_order_types left here for compatibility
+	 *
+	 * @since 1.9.24.1
+	 *
+	 * @return array
+	 * @deprecated since 1.9.24
+	 */
+	public static function get_order_types() {
+		return self::get_atum_order_types();
+	}
+
+	/**
 	 * Get the WC_Order statuses that allow changing the stock
 	 *
 	 * @since 1.8.7
