@@ -196,6 +196,24 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.24.1`
+
+*2022-11-14*
+
+**Features**
+
+* Performance improvement: prevent querying for the nex scheduled action twice.
+
+**Changes**
+
+* Check if the recurring hooks are queued only on the admin side.
+* Exclude adding to PO and IL variation products if they are disabled.
+* Refactoring.
+* Dashboard widgets: do not show a comma if there are no decimals, show whole number.
+* Readded renamed function as deprecated for compatibility with old versions.
+
+---
+
 `1.9.24`
 
 *2022-11-09*

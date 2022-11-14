@@ -7,7 +7,7 @@ Tested up to: 6.1
 Requires PHP: 7.1
 WC requires at least: 3.6.0
 WC tested up to: 7.1.0
-Stable tag: 1.9.24
+Stable tag: 1.9.24.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,24 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.24.1`
+
+*2022-11-14*
+
+**Features**
+
+* Performance improvement: prevent querying for the nex scheduled action twice.
+
+**Changes**
+
+* Check if the recurring hooks are queued only on the admin side.
+* Exclude adding to PO and IL variation products if they are disabled.
+* Refactoring.
+* Dashboard widgets: do not show a comma if there are no decimals, show whole number.
+* Readded renamed function as deprecated for compatibility with old versions.
 
 ---
 
