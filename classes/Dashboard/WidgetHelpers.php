@@ -972,9 +972,13 @@ final class WidgetHelpers {
 			if ( 'items_purchase_price_total' === $key ) {
 				$counters[ $key ] = wc_price( $counter );
 			}
+
 			else {
 
-				$stock_decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
+				// Do not show a comma if there are no decimals, show whole number.
+				if ( strpos( $counter, '.' ) !== false ) {
+					$stock_decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
+				}
 
 				if ( $stock_decimals <= 0 ) {
 					$counters[ $key ] = absint( $counter );
