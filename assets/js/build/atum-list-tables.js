@@ -1778,7 +1778,10 @@ var ListTable = (function () {
         if (!window.hasOwnProperty('atum')) {
             window['atum'] = {};
         }
-        window['atum']['ListTable'] = this;
+        if (!window['atum'].hasOwnProperty('ListTable')) {
+            window['atum']['ListTable'] = [];
+        }
+        window['atum']['ListTable'].push(this);
     }
     ListTable.prototype.bindEvents = function () {
         var _this = this;
@@ -3381,7 +3384,6 @@ var Utils = {
     delay: function (callback, ms) {
         clearTimeout(this.settings.delayTimer);
         this.settings.delayTimer = setTimeout(callback, ms);
-        return this.settings.delayTimer;
     },
     filterQuery: function (query, variable) {
         var vars = query.split('&');
