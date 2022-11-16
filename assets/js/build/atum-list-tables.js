@@ -3384,6 +3384,7 @@ var Utils = {
     delay: function (callback, ms) {
         clearTimeout(this.settings.delayTimer);
         this.settings.delayTimer = setTimeout(callback, ms);
+        return this.settings.delayTimer;
     },
     filterQuery: function (query, variable) {
         var vars = query.split('&');
