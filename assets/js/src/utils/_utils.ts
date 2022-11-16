@@ -34,12 +34,17 @@ const Utils = {
 	/**
 	 * Apply a delay
 	 *
+	 * @param {Function} callback
+	 * @param {number}   ms
+	 *
 	 * @return {Function}
 	 */
 	delay( callback: Function, ms: number ) {
 		
 		clearTimeout( this.settings.delayTimer );
 		this.settings.delayTimer = setTimeout( callback, ms );
+
+		return this.settings.delayTimer;
 		
 	},
 	

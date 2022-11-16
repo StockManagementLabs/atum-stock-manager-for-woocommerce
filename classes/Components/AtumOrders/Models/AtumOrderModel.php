@@ -1970,7 +1970,7 @@ abstract class AtumOrderModel {
 			if ( $group = $this->type_to_group( $type ) ) {
 
 				// Don't use array_merge here because keys are numeric.
-				$items = ( isset( $this->items[ $group ] ) ) ? array_filter( $items + $this->items[ $group ] ) : $items;
+				$items = isset( $this->items[ $group ] ) ? array_filter( $items + $this->items[ $group ] ) : $items;
 			}
 
 		}
