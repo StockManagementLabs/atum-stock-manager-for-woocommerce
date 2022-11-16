@@ -42,7 +42,11 @@ export default class ListTable {
 			window[ 'atum' ] = {};
 		}
 
-		window[ 'atum' ][ 'ListTable' ] = this;
+		if ( ! window[ 'atum' ].hasOwnProperty( 'ListTable' ) ) {
+			window[ 'atum' ][ 'ListTable' ] = [];
+		}
+
+		window[ 'atum' ][ 'ListTable' ].push( this );
 		
 	}
 	
