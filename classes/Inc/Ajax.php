@@ -837,10 +837,13 @@ final class Ajax {
 
 		}
 
-		Addons::update_key( $addon_name, array(
-			'key'    => $key,
-			'status' => 'invalid',
-		) );
+		// Don't save the key if invalid.
+		if ( ! 'invalid' === $license_data->license ) {
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => 'invalid',
+			) );
+		}
 
 		// Delete status transient.
 		Addons::delete_status_transient( $addon_name );
