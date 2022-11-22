@@ -120,7 +120,7 @@ class CheckOrderPrices {
 		global $post_type;
 
 		if (
-			( Helpers::is_using_cot_list() && wc_get_page_screen_id( 'shop-order' ) === $hook_suffix ) ||
+			( Helpers::is_using_cot_list() && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) === $hook_suffix ) ||
 			( 'edit.php' === $hook_suffix && 'shop_order' === $post_type )
 		) {
 
@@ -524,7 +524,7 @@ class CheckOrderPrices {
 
 		$is_using_cot_list = Helpers::is_using_cot_list();
 
-		if ( $is_using_cot_list && wc_get_page_screen_id( 'shop-order' ) !== $page_hook ) {
+		if ( $is_using_cot_list && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) !== $page_hook ) {
 			return;
 		}
 		elseif ( ! $is_using_cot_list && ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type ) ) {

@@ -1857,6 +1857,8 @@ abstract class AtumOrderModel {
 	 */
 	public function get_data() {
 
+		$meta_data = get_metadata( 'post', $this->id );
+
 		// Prepare the data array based on the \WC_Order_Data structure (some unneeded data was excluded).
 		$data = array(
 			'id'                 => $this->id,
