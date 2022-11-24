@@ -2689,7 +2689,8 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$filter_by_supplier = " AND ( $pd_table.supplier_id = '$supplier' OR $wpdb->posts.ID IN ($subquery) ) ";
 
-			$pieces['where'] .= apply_filters( 'atum/list_table/supplier_filter_query_data', $filter_by_supplier );
+			$pieces['where']   .= apply_filters( 'atum/list_table/supplier_filter_query_data', $filter_by_supplier );
+			$pieces['distinct'] = 'distinct';
 
 		}
 

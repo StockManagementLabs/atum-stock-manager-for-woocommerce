@@ -1889,7 +1889,7 @@ var ListTable = (function () {
         this.wpHooks.doAction('atum_listTable_tableUpdated', this.globals.filterData);
     };
     ListTable.prototype.addOverlay = function () {
-        _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].block($('.atum-table-wrapper'), {
+        _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].block(this.globals.$atumList, {
             message: null,
             overlayCSS: {
                 background: '#000',
@@ -1898,7 +1898,7 @@ var ListTable = (function () {
         });
     };
     ListTable.prototype.removeOverlay = function () {
-        _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].unblock($('.atum-table-wrapper'));
+        _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].unblock(this.globals.$atumList);
     };
     ListTable.prototype.setCellValue = function ($metaCell, value) {
         var symbol = $metaCell.data('symbol') || '', currencyPos = this.globals.$atumTable.data('currency-pos');
@@ -2194,6 +2194,12 @@ var ListTable = (function () {
                 $nextRow = $nextRow.next(_this.wpHooks.applyFilters('atum_listTable_addRows', '.has-compounded'));
             }
         });
+    };
+    ListTable.prototype.getFilterData = function () {
+        return this.globals.filterData;
+    };
+    ListTable.prototype.addToFilterData = function (filter, value) {
+        this.globals.filterData[filter] = value;
     };
     return ListTable;
 }());

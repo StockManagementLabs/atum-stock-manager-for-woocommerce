@@ -598,6 +598,8 @@ class Addons {
 
 		foreach ( $keys as $addon => $license ) {
 
+			$addon = strtolower( $addon );
+
 			if ( in_array( $addon, $checked ) ) {
 				continue;
 			}
@@ -607,8 +609,8 @@ class Addons {
 			// Get addon slug.
 			foreach ( self::$addons as $addon_data ) {
 
-				if ( $addon === $addon_data['name'] ) {
-					$sensitive_name = $addon_data['name'];
+				if ( $addon === strtolower( $addon_data['name'] ) ) {
+					$sensitive_name = strtolower( $addon_data['name'] );
 				}
 
 			}
@@ -618,7 +620,9 @@ class Addons {
 			// Find duplicated.
 			foreach ( $keys as $addon2 => $license2 ) {
 
-				if ( strtolower( $addon ) === strtolower( $addon2 ) ) {
+				$addon2 = strtolower( $addon2 );
+
+				if ( $addon === strtolower( $addon2 ) ) {
 					$checked[] = $addon2;
 
 					$duplicated[] = [
@@ -716,7 +720,7 @@ class Addons {
 	public static function update_key( $addon_name, $key ) {
 
 		$keys                = get_option( self::ADDONS_KEY_OPTION );
-		$keys[ $addon_name ] = $key;
+		$keys[ strtolower( $addon_name ) ] = $key;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
 	}
 

@@ -1880,6 +1880,26 @@ abstract class AtumOrderModel {
 			'description'        => $this->post->post_content,
 		);
 
+		// Check if there are any custom meta keys.
+		$meta_data          = get_metadata( 'post', $this->id );
+		$internal_meta_keys = array_merge( array_keys( $this->meta ), [ 'edit_lock', 'edit_last' ] );
+		$custom_meta        = [];
+
+		foreach ( $meta_data as $meta_key => $meta_value ) {
+
+			$no_prefix_key = substr( $meta_key, 0, 1 ) === '_' ? substr( $meta_key, 1 ) : $meta_key;
+
+			if ( ! in_array( $no_prefix_key, $internal_meta_keys ) ) {
+				$custom_meta[] = new \WC_Meta_Data( array(
+					'key'   => $meta_key,
+					'value' => current( $meta_value ),
+				) );
+			}
+
+		}
+
+		$data['meta_data'] = $custom_meta;
+
 		return apply_filters( 'atum/orders/data', $data, $this->get_post_type() );
 
 	}
