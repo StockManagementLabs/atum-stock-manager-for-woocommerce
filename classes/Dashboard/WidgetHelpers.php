@@ -975,9 +975,11 @@ final class WidgetHelpers {
 
 			else {
 
+				$stock_decimals = 0;
+
 				// Do not show a comma if there are no decimals, show whole number.
-				if ( strpos( $counter, '.' ) !== false ) {
-					$stock_decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
+				if ( strpos( $counter, wc_get_price_decimal_separator() ) !== FALSE ) {
+					$stock_decimals = Globals::get_stock_decimals();
 				}
 
 				if ( $stock_decimals <= 0 ) {
