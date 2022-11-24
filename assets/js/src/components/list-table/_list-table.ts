@@ -260,7 +260,7 @@ export default class ListTable {
 	 */
 	addOverlay() {
 
-		Blocker.block( $( '.atum-table-wrapper' ), {
+		Blocker.block( this.globals.$atumList, {
 			message   : null,
 			overlayCSS: {
 				background: '#000',
@@ -275,7 +275,7 @@ export default class ListTable {
 	 */
 	removeOverlay() {
 
-		Blocker.unblock( $( '.atum-table-wrapper' ) );
+		Blocker.unblock( this.globals.$atumList );
 		
 	}
 	
@@ -820,6 +820,23 @@ export default class ListTable {
 
 		} );
 
+	}
+
+	/**
+	 * Get FilterData
+	 */
+	getFilterData() {
+		return this.globals.filterData;
+	}
+
+	/**
+	 * Externally add value
+	 *
+	 * @param {string} filter
+	 * @param value
+	 */
+	addToFilterData( filter: string, value: any ) {
+		this.globals.filterData[ filter ] = value;
 	}
 
 }
