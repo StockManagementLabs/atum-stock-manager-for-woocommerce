@@ -235,6 +235,7 @@ const Utils = {
 		
 		// If we made it this far, objects are considered equivalent.
 		return true;
+
 	},
 	
 	/**
@@ -243,19 +244,19 @@ const Utils = {
 	 * @param {any[]}  nodes
 	 * @param {string} openOrClose
 	 */
-	toggleNodes(nodes: any[], openOrClose: string){
-		
-		for (let i: number = 0; i < nodes.length; i++) {
-			
-			nodes[i].isExpanded = openOrClose == 'open'; // Either expand node or don't
-			
+	toggleNodes( nodes: any[], openOrClose: string ) {
+
+		for ( let i: number = 0; i < nodes.length; i++ ) {
+
+			nodes[ i ].isExpanded = openOrClose == 'open'; // Either expand node or don't
+
 			// If has children open/close those as well.
-			if (nodes[i].children && nodes[i].children.length > 0) {
-				this.toggleNodes(nodes[i].children, openOrClose);
+			if ( nodes[ i ].children && nodes[ i ].children.length > 0 ) {
+				this.toggleNodes( nodes[ i ].children, openOrClose );
 			}
-			
+
 		}
-		
+
 	},
 	
 	/**
@@ -272,7 +273,13 @@ const Utils = {
 	 *
 	 * @return {string[] | string}
 	 */
-	formatNumber( number: number[] | number, precision?: number, thousand?: string, decimal?: string, stripZeros?: boolean ): string[] | string {
+	formatNumber(
+		number: number[] | number,
+		precision: number = this.settings.number.precision,
+		thousand: string  = this.settings.number.thousand,
+		decimal: string   = this.settings.number.decimal,
+		stripZeros: boolean = false,
+	): string[] | string {
 		
 		// Resursively format arrays.
 		if ( Array.isArray( number ) ) {
@@ -281,17 +288,11 @@ const Utils = {
 		
 		// Clean up number.
 		number = this.unformat( number );
-		
-		const defaults: any = { ...this.settings.number },
-		      // Prevent undefined decimals.
-		      paramOpts: any = typeof decimal === 'undefined' ? { precision: precision, thousand: thousand } : { precision: precision, thousand: thousand, decimal: decimal },
-		      opts: any     = { ...defaults, ...paramOpts },
-		      // Clean up precision.
-		      usePrecision  = this.checkPrecision( opts.precision ),
-		      // Do some calc.
-		      negative      = number < 0 ? '-' : '',
-		      base          = parseInt( this.toFixed( Math.abs( <number>number || 0 ), usePrecision ), 10 ) + '',
-		      mod           = base.length > 3 ? base.length % 3 : 0;
+
+		const usePrecision = this.checkPrecision( precision ), // Clean up precision.
+		      negative     = number < 0 ? '-' : '', // Do some calc.
+		      base         = parseInt( this.toFixed( Math.abs( <number> number || 0 ), usePrecision ), 10 ) + '',
+		      mod          = base.length > 3 ? base.length % 3 : 0;
 
 		let decimalsPart: string = '';
 
@@ -304,12 +305,12 @@ const Utils = {
 				decimalsPart = Number( decimalsPart ).toString();
 			}
 
-			decimalsPart = decimalsPart.includes( '.' ) ? opts.decimal + decimalsPart.split( '.' )[1] : '';
+			decimalsPart = decimalsPart.includes( '.' ) ? decimal + decimalsPart.split( '.' )[1] : '';
 
 		}
 
 		// Format the number.
-		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + decimalsPart;
+		return negative + ( mod ? base.substr( 0, mod ) + thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + thousand ) + decimalsPart;
 		
 	},
 	
@@ -323,7 +324,14 @@ const Utils = {
 	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
 	 * Second param can be an object matching `settings.currency` which is the easiest way.
 	 */
-	formatMoney( number: number[] | number, symbol?: string, precision?: number, thousand?: string, decimal?: string, format?: string ) : string[] | string {
+	formatMoney(
+		number: number[] | number,
+		symbol: string    = this.settings.currency.symbol,
+		precision: number = this.settings.currency.precision,
+		thousand: string  = this.settings.currency.thousand,
+		decimal: string   = this.settings.currency.decimal,
+		format: string    = this.settings.currency.format,
+	): string[] | string {
 		
 		// Resursively format arrays.
 		if ( Array.isArray( number ) ) {
@@ -331,26 +339,13 @@ const Utils = {
 		}
 		
 		// Clean up number.
-		number = this.unformat(number);
-		
-		const defaults: any = { ...this.settings.currency },
-		      opts: any     = {
-			      defaults,
-			      ...{
-				      symbol: symbol,
-				      precision: precision,
-				      thousand: thousand,
-				      decimal: decimal,
-				      format: format,
-			      },
-		      },
-		      // Check format (returns object with pos, neg and zero).
-		      formats       = this.checkCurrencyFormat( opts.format ),
-		      // Choose which format to use for this value.
-		      useFormat     = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
-		
+		number = this.unformat( number );
+
+		const formats   = this.checkCurrencyFormat( format ), // Check format (returns object with pos, neg and zero).
+		      useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero; // Choose which format to use for this value.
+
 		// Return with currency symbol added.
-		return useFormat.replace( '%s', opts.symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( opts.precision ), opts.thousand, opts.decimal ) );
+		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( precision ), thousand, decimal ) );
 		
 	},
 	
@@ -371,7 +366,7 @@ const Utils = {
 	 *
 	 * @return {number | number[]}
 	 */
-	unformat( value: number | string, decimal?: string ): number[] | number {
+	unformat( value: number | string, decimal: string = this.settings.number.decimal ): number[] | number {
 		
 		// Recursively unformat arrays:
 		if ( Array.isArray( value ) ) {
@@ -385,9 +380,6 @@ const Utils = {
 		if ( typeof value === 'number' ) {
 			return value;
 		}
-		
-		// Default decimal point comes from settings, but could be set to eg. "," in opts.
-		decimal = decimal || this.settings.number.decimal;
 		
 		// Build regex to strip out everything except digits, decimal point and minus sign.
 		const regex: RegExp       = new RegExp( `[^0-9-${ decimal }]`, 'g' ),
@@ -579,6 +571,7 @@ const Utils = {
 				break;
 
 			default:
+				return false;
 				break;
 
 		}

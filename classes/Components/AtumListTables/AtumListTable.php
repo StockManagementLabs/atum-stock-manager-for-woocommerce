@@ -1374,7 +1374,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
 	 *
-	 * @return float
+	 * @return string
 	 */
 	protected function column__purchase_price( $item ) {
 
