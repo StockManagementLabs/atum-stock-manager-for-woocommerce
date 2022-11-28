@@ -84,7 +84,7 @@ final class Globals {
 	 *
 	 * @var int
 	 */
-	private static $stock_decimals;
+	private static $stock_decimals = 0;
 
 	/**
 	 * The ATUM fields within the WC's Product Data meta box (ATUM Inventory tab)

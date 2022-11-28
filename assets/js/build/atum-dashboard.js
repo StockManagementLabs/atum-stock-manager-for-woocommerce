@@ -1229,17 +1229,6 @@ jQuery(function ($) {
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-big-decimal */ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js");
 /* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_big_decimal__WEBPACK_IMPORTED_MODULE_0__);
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1363,38 +1352,42 @@ var Utils = {
     },
     formatNumber: function (number, precision, thousand, decimal, stripZeros) {
         var _this = this;
+        if (precision === void 0) { precision = this.settings.number.precision; }
+        if (thousand === void 0) { thousand = this.settings.number.thousand; }
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
+        if (stripZeros === void 0) { stripZeros = false; }
         if (Array.isArray(number)) {
             return $.map(number, function (val) { return _this.formatNumber(val, precision, thousand, decimal, stripZeros); });
         }
         number = this.unformat(number);
-        var defaults = __assign({}, this.settings.number), paramOpts = typeof decimal === 'undefined' ? { precision: precision, thousand: thousand } : { precision: precision, thousand: thousand, decimal: decimal }, opts = __assign(__assign({}, defaults), paramOpts), usePrecision = this.checkPrecision(opts.precision), negative = number < 0 ? '-' : '', base = parseInt(this.toFixed(Math.abs(number || 0), usePrecision), 10) + '', mod = base.length > 3 ? base.length % 3 : 0;
+        var usePrecision = this.checkPrecision(precision), negative = number < 0 ? '-' : '', base = parseInt(this.toFixed(Math.abs(number || 0), usePrecision), 10) + '', mod = base.length > 3 ? base.length % 3 : 0;
         var decimalsPart = '';
         if (usePrecision) {
             decimalsPart = this.toFixed(Math.abs(number), usePrecision);
             if (stripZeros) {
                 decimalsPart = Number(decimalsPart).toString();
             }
-            decimalsPart = decimalsPart.includes('.') ? opts.decimal + decimalsPart.split('.')[1] : '';
+            decimalsPart = decimalsPart.includes('.') ? decimal + decimalsPart.split('.')[1] : '';
         }
-        return negative + (mod ? base.substr(0, mod) + opts.thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) + decimalsPart;
+        return negative + (mod ? base.substr(0, mod) + thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + thousand) + decimalsPart;
     },
     formatMoney: function (number, symbol, precision, thousand, decimal, format) {
         var _this = this;
+        if (symbol === void 0) { symbol = this.settings.currency.symbol; }
+        if (precision === void 0) { precision = this.settings.currency.precision; }
+        if (thousand === void 0) { thousand = this.settings.currency.thousand; }
+        if (decimal === void 0) { decimal = this.settings.currency.decimal; }
+        if (format === void 0) { format = this.settings.currency.format; }
         if (Array.isArray(number)) {
             return $.map(number, function (val) { return _this.formatMoney(val, symbol, precision, thousand, decimal, format); });
         }
         number = this.unformat(number);
-        var defaults = __assign({}, this.settings.currency), opts = __assign({ defaults: defaults }, {
-            symbol: symbol,
-            precision: precision,
-            thousand: thousand,
-            decimal: decimal,
-            format: format,
-        }), formats = this.checkCurrencyFormat(opts.format), useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
-        return useFormat.replace('%s', opts.symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(opts.precision), opts.thousand, opts.decimal));
+        var formats = this.checkCurrencyFormat(format), useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
+        return useFormat.replace('%s', symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(precision), thousand, decimal));
     },
     unformat: function (value, decimal) {
         var _this = this;
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
         if (Array.isArray(value)) {
             return $.map(value, function (val) { return _this.unformat(val, decimal); });
         }
@@ -1402,7 +1395,6 @@ var Utils = {
         if (typeof value === 'number') {
             return value;
         }
-        decimal = decimal || this.settings.number.decimal;
         var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
             .replace(/\((.*)\)/, '-$1')
             .replace(regex, '')
@@ -1484,6 +1476,7 @@ var Utils = {
                 }
                 break;
             default:
+                return false;
                 break;
         }
     },
