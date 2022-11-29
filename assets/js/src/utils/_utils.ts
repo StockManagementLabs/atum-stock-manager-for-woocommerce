@@ -7,6 +7,7 @@
 */
 
 import bigDecimal from 'js-big-decimal';
+import * as inspector from 'inspector';
 
 const Utils = {
 	
@@ -94,10 +95,12 @@ const Utils = {
 	/**
 	 * Add a notice on top identical to the WordPress' admin notices
 	 *
-	 * @param {string} type The notice type. Can be "updated" or "error".
-	 * @param {string} msg  The message.
+	 * @param {string}  type           The notice type. Can be "updated" or "error".
+	 * @param {string}  msg            The message.
+	 * @param {boolean} autoDismiss    Optional. Dismiss the notice automatically after some seconds. False by default
+	 * @param {int}     dismissSeconds Optional. The number of seconds after the auto-dismiss is triggered. 5 by default.
 	 */
-	addNotice( type: string, msg: string ) {
+	addNotice( type: string, msg: string, autoDismiss: boolean = false, dismissSeconds: number = 5 ) {
 
 		const $notice: JQuery        = $( `<div class="${ type } notice is-dismissible"><p><strong>${ msg }</strong></p></div>` ).hide(),
 		      $dismissButton: JQuery = $( '<button />', { type: 'button', class: 'notice-dismiss' } ),
@@ -118,6 +121,12 @@ const Utils = {
 			} );
 
 		} );
+
+		if ( autoDismiss ) {
+			setTimeout( () => {
+				$dismissButton.trigger( 'click.wp-dismiss-notice' );
+			}, dismissSeconds * 1000 );
+		}
 		
 	},
 	
