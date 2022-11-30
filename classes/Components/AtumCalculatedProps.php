@@ -147,6 +147,10 @@ class AtumCalculatedProps {
 			 *
 			 * @var \WC_Order_Item_Product $item
 			 */
+			if ( ! $item instanceof \WC_Order_Item_Product ) {
+				continue;
+			}
+
 			$product_id = (int) $item->get_variation_id() ?: $item->get_product_id();
 
 			if ( $product_id ) {

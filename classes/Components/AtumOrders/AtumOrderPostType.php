@@ -138,7 +138,7 @@ abstract class AtumOrderPostType {
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
 
 			// Move the 'trash' status to the end of the list.
-			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status_view' ) );
+			add_filter( "views_edit-$post_type", array( $this, 'edit_list_table_views' ) );
 			
 		}
 
@@ -1275,23 +1275,24 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
-	 * Send the trash status to the end of the status views list on ATUM Orders' List Tables
+	 * Edit the List Table views
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param array $status_views
+	 * @param array $views
 	 *
 	 * @return array
 	 */
-	public function reorder_trash_status_view( $status_views ) {
+	public function edit_list_table_views( $views ) {
 
-		if ( array_key_exists( 'trash', $status_views ) ) {
-			$trash_status = $status_views['trash'];
-			unset( $status_views['trash'] );
-			$status_views['trash'] = $trash_status;
+		// Send the trash status to the end of the status views list on ATUM Orders' List Tables.
+		if ( array_key_exists( 'trash', $views ) ) {
+			$trash_status = $views['trash'];
+			unset( $views['trash'] );
+			$views['trash'] = $trash_status;
 		}
 
-		return $status_views;
+		return $views;
 
 	}
 
