@@ -1366,13 +1366,13 @@ var DragScroll = (function () {
             $('.enhanced').select2('close');
         }
         var navEl = $nav.get(0);
-        if (this.navIsLeft(navEl)) {
+        if (this.navIsRight(navEl)) {
             $overflowOpacityRight.hide();
         }
         else {
             $overflowOpacityRight.show();
         }
-        if (this.navIsRight(navEl)) {
+        if (this.navIsLeft(navEl)) {
             $overflowOpacityLeft.hide();
         }
         else {
@@ -1381,10 +1381,19 @@ var DragScroll = (function () {
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
     };
     DragScroll.prototype.navIsLeft = function (navEl) {
-        return (navEl.scrollWidth - navEl.scrollLeft) === parseInt($(navEl).outerWidth().toString());
+        return navEl.scrollLeft === 0;
     };
     DragScroll.prototype.navIsRight = function (navEl) {
-        return navEl.scrollLeft === 0;
+        var compensate = !Number.isInteger(navEl.scrollWidth) || !Number.isInteger(navEl.scrollLeft), scrollDifference = Math.ceil(navEl.scrollWidth - navEl.scrollLeft), navWidth = Math.ceil(parseFloat($(navEl).outerWidth().toString()));
+        if (!compensate) {
+            return scrollDifference <= navWidth;
+        }
+        else if (scrollDifference > navWidth) {
+            return (scrollDifference - 1) <= navWidth;
+        }
+        else {
+            return true;
+        }
     };
     return DragScroll;
 }());
