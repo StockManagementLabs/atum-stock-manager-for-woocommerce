@@ -3160,42 +3160,56 @@ __webpack_require__.r(__webpack_exports__);
         this.stickyCols = stickyCols;
         this.stickyHeader = stickyHeader;
         this.globals.$atumList.on('click', '.table-style-buttons button', function (evt) {
-            var $button = $(evt.currentTarget), feature = $button.hasClass('sticky-columns-button') ? 'sticky-columns' : 'sticky-header';
+            var $button = $(evt.currentTarget);
             $button.toggleClass('active');
-            _this.toggleTableStyle(feature, $button.hasClass('active'));
+            _this.toggleTableStyle($button.data('feature'), $button.hasClass('active'), $button.data('save-meta') === 1);
         });
     }
-    TableButtons.prototype.toggleTableStyle = function (feature, enabled) {
+    TableButtons.prototype.toggleTableStyle = function (feature, enabled, saveMeta) {
         this.tooltip.destroyTooltips();
-        if ('sticky-columns' === feature) {
-            this.globals.enabledStickyColumns = enabled;
-            if (enabled) {
-                this.globals.$stickyCols = this.stickyCols.createStickyColumns(this.globals.$atumTable);
-                this.globals.$scrollPane.trigger('jsp-initialised');
-            }
-            else {
-                this.stickyCols.destroyStickyColumns();
-            }
+        switch (feature) {
+            case 'sticky-columns':
+                this.globals.enabledStickyColumns = enabled;
+                if (enabled) {
+                    this.globals.$stickyCols = this.stickyCols.createStickyColumns(this.globals.$atumTable);
+                    this.globals.$scrollPane.trigger('jsp-initialised');
+                }
+                else {
+                    this.stickyCols.destroyStickyColumns();
+                }
+                break;
+            case 'sticky-header':
+                this.globals.enabledStickyHeader = enabled;
+                if (enabled) {
+                    this.stickyHeader.addFloatThead();
+                }
+                else {
+                    this.stickyHeader.destroyFloatThead();
+                }
+                break;
+            case 'expand':
+                if (enabled) {
+                    this.globals.$atumTable.find('tr').not('.expanded')
+                        .find('.has-child').click();
+                }
+                else {
+                    this.globals.$atumTable.find('tr.expanded')
+                        .find('.has-child').click();
+                }
+                break;
         }
-        else {
-            this.globals.enabledStickyHeader = enabled;
-            if (enabled) {
-                this.stickyHeader.addFloatThead();
-            }
-            else {
-                this.stickyHeader.destroyFloatThead();
-            }
+        if (saveMeta) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                data: {
+                    action: 'atum_change_table_style_setting',
+                    security: $('.table-style-buttons').data('nonce'),
+                    feature: feature,
+                    enabled: enabled,
+                },
+            });
         }
-        $.ajax({
-            url: window['ajaxurl'],
-            method: 'POST',
-            data: {
-                action: 'atum_change_table_style_setting',
-                security: $('.table-style-buttons').data('nonce'),
-                feature: feature,
-                enabled: enabled,
-            },
-        });
         this.tooltip.addTooltips();
     };
     return TableButtons;
