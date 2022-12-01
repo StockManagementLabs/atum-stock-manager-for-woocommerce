@@ -1057,7 +1057,15 @@
 			
 			&:first-child {
 				margin-left: 9px;
-				margin-right: 5px;
+			}
+			
+			+ button {
+				margin-left: 5px;
+			}
+			
+			.atmi-wc-expand {
+				font-size: 18px;
+				line-height: 1.6;
 			}
 			
 			&:focus {

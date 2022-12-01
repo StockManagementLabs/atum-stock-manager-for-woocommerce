@@ -824,13 +824,13 @@ var DragScroll = (function () {
             $('.enhanced').select2('close');
         }
         var navEl = $nav.get(0);
-        if (this.navIsLeft(navEl)) {
+        if (this.navIsRight(navEl)) {
             $overflowOpacityRight.hide();
         }
         else {
             $overflowOpacityRight.show();
         }
-        if (this.navIsRight(navEl)) {
+        if (this.navIsLeft(navEl)) {
             $overflowOpacityLeft.hide();
         }
         else {
@@ -839,10 +839,19 @@ var DragScroll = (function () {
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
     };
     DragScroll.prototype.navIsLeft = function (navEl) {
-        return (navEl.scrollWidth - navEl.scrollLeft) === parseInt($(navEl).outerWidth().toString());
+        return navEl.scrollLeft === 0;
     };
     DragScroll.prototype.navIsRight = function (navEl) {
-        return navEl.scrollLeft === 0;
+        var compensate = !Number.isInteger(navEl.scrollWidth) || !Number.isInteger(navEl.scrollLeft), scrollDifference = Math.ceil(navEl.scrollWidth - navEl.scrollLeft), navWidth = Math.ceil(parseFloat($(navEl).outerWidth().toString()));
+        if (!compensate) {
+            return scrollDifference <= navWidth;
+        }
+        else if (scrollDifference > navWidth) {
+            return (scrollDifference - 1) <= navWidth;
+        }
+        else {
+            return true;
+        }
     };
     return DragScroll;
 }());
@@ -1267,7 +1276,9 @@ var Utils = {
             return $(elem).data(prop) == val;
         });
     },
-    addNotice: function (type, msg) {
+    addNotice: function (type, msg, autoDismiss, dismissSeconds) {
+        if (autoDismiss === void 0) { autoDismiss = false; }
+        if (dismissSeconds === void 0) { dismissSeconds = 5; }
         var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
@@ -1280,6 +1291,11 @@ var Utils = {
                 });
             });
         });
+        if (autoDismiss) {
+            setTimeout(function () {
+                $dismissButton.trigger('click.wp-dismiss-notice');
+            }, dismissSeconds * 1000);
+        }
     },
     imagesLoaded: function ($wrapper) {
         var $imgs = $wrapper.find('img[src!=""]');
