@@ -3024,7 +3024,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
-			$products_in_stock     = ! empty( $products_in_stock ) ? $products_in_stock->posts : [];
+			$products_in_stock     = $products_in_stock instanceof \WP_Query && $products_in_stock->found_posts ?
+				$products_in_stock->posts : [];
 
 			$this->id_views['in_stock']          = (array) $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
@@ -3056,8 +3057,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
+			$products_backorders->posts = NULL;
+
 			$this->atum_query_data = $temp_atum_query_data;
-			$products_backorders   = ! empty( $products_backorders ) ? $products_backorders->posts : [];
+			$products_backorders   = $products_backorders instanceof \WP_Query && $products_backorders->found_posts ?
+				$products_backorders->posts : [];
 
 			$this->id_views['back_order']          = (array) $products_backorders;
 			$this->count_views['count_back_order'] = count( $products_backorders );
