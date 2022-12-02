@@ -7,7 +7,6 @@
 */
 
 import bigDecimal from 'js-big-decimal';
-import * as inspector from 'inspector';
 
 const Utils = {
 	
