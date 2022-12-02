@@ -3057,8 +3057,6 @@ abstract class AtumListTable extends \WP_List_Table {
 				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
-			$products_backorders->posts = NULL;
-
 			$this->atum_query_data = $temp_atum_query_data;
 			$products_backorders   = $products_backorders instanceof \WP_Query && $products_backorders->found_posts ?
 				$products_backorders->posts : [];
