@@ -3958,7 +3958,7 @@ final class Helpers {
 	 * @return bool
 	 */
 	public static function is_using_cot_list() {
-		return wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled();
+		return class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) && wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled();
 	}
 
 }
