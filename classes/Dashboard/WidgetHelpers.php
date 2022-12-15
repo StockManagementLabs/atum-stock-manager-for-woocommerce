@@ -972,15 +972,9 @@ final class WidgetHelpers {
 			if ( 'items_purchase_price_total' === $key ) {
 				$counters[ $key ] = wc_price( $counter );
 			}
-
 			else {
 
-				$stock_decimals = 0;
-
-				// Do not show a comma if there are no decimals, show whole number.
-				if ( strpos( $counter, wc_get_price_decimal_separator() ) !== FALSE ) {
-					$stock_decimals = Globals::get_stock_decimals();
-				}
+				$stock_decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
 
 				if ( $stock_decimals <= 0 ) {
 					$counters[ $key ] = absint( $counter );
@@ -997,6 +991,10 @@ final class WidgetHelpers {
 					// Trim trailing zeros.
 					$counters[ $key ] = rtrim( rtrim( $counters[ $key ], '0' ), '.' );
 
+					// If there are no decimals, the comma is removed.
+					if ( substr( $counters['items_stocks_counter'], -1 ) === ',' ) {
+						$counters['items_stocks_counter'] = substr( $counters['items_stocks_counter'], 0, -1 );
+					}
 				}
 
 			}
