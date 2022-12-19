@@ -2699,19 +2699,6 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Customize the WP_Query to handle WC product data from the new tables
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $pieces
-	 *
-	 * @return array
-	 */
-	public function wc_product_data_query_clauses( $pieces ) {
-		return Helpers::product_data_query_clauses( $this->wc_query_data, $pieces, 'wc_products' );
-	}
-
-	/**
 	 * Add the supplier's variable products to the filtered query
 	 *
 	 * @since 1.4.1.1

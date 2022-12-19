@@ -699,19 +699,6 @@ final class WidgetHelpers {
 	}
 
 	/**
-	 * Customize the WP_Query to handle WC product data from the new tables
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $pieces
-	 *
-	 * @return array
-	 */
-	public static function wc_product_data_query_clauses( $pieces ) {
-		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
-	}
-
-	/**
 	 * Builds a product type dowpdown for current stock value widget
 	 *
 	 * @since 1.5.0.3
