@@ -978,8 +978,12 @@ final class WidgetHelpers {
 					// Trim trailing zeros.
 					$counters[ $key ] = rtrim( rtrim( $counters[ $key ], '0' ), '.' );
 
+					$price_decimal_separator  = wc_get_price_decimal_separator();
+					$price_thousand_separator = wc_get_price_thousand_separator();
+					$last_char                = substr( $counters['items_stocks_counter'], -1 );
+
 					// If there are no decimals, the comma is removed.
-					if ( substr( $counters['items_stocks_counter'], -1 ) === ',' ) {
+					if ( $last_char === $price_decimal_separator || $last_char === $price_thousand_separator ) {
 						$counters['items_stocks_counter'] = substr( $counters['items_stocks_counter'], 0, -1 );
 					}
 				}
