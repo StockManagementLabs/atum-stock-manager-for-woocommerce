@@ -499,11 +499,14 @@ class AtumCalculatedProps {
 	 */
 	public static function update_atum_sales_calc_props_cli_call( $product, $order_type_id = 1 ) {
 
-		if ( 'cli' === php_sapi_name() || wp_doing_cron() ||
+		if (
+			'cli' === php_sapi_name() || wp_doing_cron() ||
 			( ! empty( $_REQUEST['page'] ) && ! empty( $_REQUEST['row_action'] ) && 'action-scheduler' === $_REQUEST['page'] && 'run' === $_REQUEST['row_action'] ) ||
-			( wp_doing_ajax() && 'atum_tool_update_calc_props' === $_REQUEST['action'] ) ) {
+			( wp_doing_ajax() && 'atum_tool_update_calc_props' === $_REQUEST['action'] )
+		) {
 			self::update_atum_sales_calc_props( $product, $order_type_id );
 		}
+
 	}
 
 
