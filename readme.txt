@@ -5,7 +5,7 @@ Tags: woocommerce inventory management, suppliers, purchase orders, inbound stoc
 Requires at least: 5.6
 Tested up to: 6.1.1
 Requires PHP: 7.1
-WC requires at least: 3.6.0
+WC requires at least: 5.0
 WC tested up to: 7.2.1
 Stable tag: 1.9.25
 License: GPLv2 or later
