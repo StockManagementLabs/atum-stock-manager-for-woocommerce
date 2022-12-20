@@ -699,19 +699,6 @@ final class WidgetHelpers {
 	}
 
 	/**
-	 * Customize the WP_Query to handle WC product data from the new tables
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $pieces
-	 *
-	 * @return array
-	 */
-	public static function wc_product_data_query_clauses( $pieces ) {
-		return Helpers::product_data_query_clauses( self::$wc_query_data, $pieces, 'wc_products' );
-	}
-
-	/**
 	 * Builds a product type dowpdown for current stock value widget
 	 *
 	 * @since 1.5.0.3
@@ -991,8 +978,12 @@ final class WidgetHelpers {
 					// Trim trailing zeros.
 					$counters[ $key ] = rtrim( rtrim( $counters[ $key ], '0' ), '.' );
 
+					$price_decimal_separator  = wc_get_price_decimal_separator();
+					$price_thousand_separator = wc_get_price_thousand_separator();
+					$last_char                = substr( $counters['items_stocks_counter'], -1 );
+
 					// If there are no decimals, the comma is removed.
-					if ( substr( $counters['items_stocks_counter'], -1 ) === ',' ) {
+					if ( $last_char === $price_decimal_separator || $last_char === $price_thousand_separator ) {
 						$counters['items_stocks_counter'] = substr( $counters['items_stocks_counter'], 0, -1 );
 					}
 				}
