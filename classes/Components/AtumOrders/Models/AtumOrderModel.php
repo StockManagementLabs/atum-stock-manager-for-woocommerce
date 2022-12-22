@@ -2591,7 +2591,10 @@ abstract class AtumOrderModel {
 			'li'     => [],
 		) );
 
-		$this->post->post_content = wp_kses( $value, $allowed_html );
+		if ( $this->post ) {
+			$this->post->post_content = wp_kses( $value, $allowed_html );
+		}
+
 	}
 
 
