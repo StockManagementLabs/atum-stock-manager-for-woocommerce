@@ -196,6 +196,56 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.25.1`
+
+*2022-12-22*
+
+**Fixes**
+
+* Make sure the post is already existing before assigning the ATUM Order description.
+
+---
+
+`1.9.25`
+
+*2022-12-20*
+
+**Features**
+
+* Add isotope layout dependencies.
+* Added support for custom meta data to the ATUM Orders API endpoints.
+* Allow auto-dismissing admin notices shown via JS.
+* Added a expand/collapse all rows button to List Tables.
+
+**Changes**
+
+* Refactory ListTable array in scripts.
+* Prevent saving an invalid addon license.
+* Allow accessing to filterData at list-table scripts.
+* Updated composer files.
+* Ensure all atum addon names are stored lower case in the licenses setting.
+* Refactoring.
+* Pass an extra param to external columns calling in List Tables.
+* Ensure WP_Query objects are set.
+* Removed unused import.
+* Removed debugging code.
+* Make sure the new HPOS class exists before checking it.
+* Updated minimum WC version.
+* Added link to the ATUM’s Youtube channel when the videos couldn’t be loaded.
+* Do not auto-create a Log or PO when instantating the model.
+* Remove non-legacy unnused functions.
+
+**Fixes**
+
+* Check if function exists before calling it.
+* When applying filters, controlled products appear in the uncontrolled products view and they appear repeated.
+* Fixed the dragScroll opacity blocks visibility under some scenarios.
+* Fixed wrong initial date created on ATUM Orders.
+* Dashboard widget fix: if there are no decimals, the comma is removed.
+* Fixed ATUM Orders API endpoints after WC HPOS.
+
+---
+
 `1.9.24.1`
 
 *2022-11-14*
