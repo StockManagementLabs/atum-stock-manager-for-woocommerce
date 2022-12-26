@@ -1199,7 +1199,7 @@ class Upgrade {
 		// Add the new column to the table.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! $wpdb->get_var( $column_exist ) ) {
-			$wpdb->query( "ALTER TABLE $atum_data_table ADD 'bom_deduction' TINYINT(1) DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `bom_deduction` TINYINT(1) DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
 		}
 	}
 
