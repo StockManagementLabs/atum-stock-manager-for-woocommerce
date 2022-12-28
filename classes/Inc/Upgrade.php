@@ -190,6 +190,11 @@ class Upgrade {
 			$this->update_calc_backorders();
 		}
 
+		// ** version 1.9.25.2 ** Add the bom_deduction colymn.
+		if ( version_compare( $db_version, '1.9.25.2', '<' ) ) {
+			$this->add_bom_deduction();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1170,6 +1175,32 @@ class Upgrade {
 		" );
 		// phpcs:enable
 
+	}
+
+	/**
+	 * Add the BOM deduction column to APD. Whether order processing would update linked BOMs stock.
+	 *
+	 * @since 1.9.25.2
+	 */
+	public function add_bom_deduction() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Avoid adding the column if was already added.
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'bom_deduction'
+		", DB_NAME, $atum_data_table );
+
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `bom_deduction` TINYINT(1) DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
 	}
 
 }

@@ -69,6 +69,7 @@ trait AtumProductTrait {
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
 		'committed_to_wc'               => NULL, // SOnly.
+		'bom_deduction'                 => NULL, // Sonly
 	);
 
 
@@ -674,6 +675,27 @@ trait AtumProductTrait {
 		return $this->get_prop( 'calc_backorders', $context );
 	}
 
+	/**
+	 * Returns the product's bom deduction prop. Whether the product's linked BOMs will change their stock when an order changes its status
+	 *
+	 * @since   1.9.25.2
+	 * @package SOnly
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string|null
+	 */
+	public function get_bom_deduction( $context = 'view' ) {
+
+		$bom_deduction = $this->get_prop( 'bom_deduction', $context );
+
+		if ( ! is_null( $bom_deduction ) ) {
+			$bom_deduction = wc_bool_to_string( $bom_deduction );
+		}
+
+		return $bom_deduction;
+	}
+
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
@@ -1200,6 +1222,7 @@ trait AtumProductTrait {
 	 * Set committed stock to WC Orders fpr the current product
 	 *
 	 * @since 1.9.20.3
+	 * @package SOnly
 	 *
 	 * @param int|float|string|NULL $committed_to_wc
 	 */
@@ -1220,6 +1243,20 @@ trait AtumProductTrait {
 		$this->set_prop( 'calc_backorders', is_null( $calc_backorders ) || '' === $calc_backorders ? NULL : wc_stock_amount( $calc_backorders ) );
 	}
 
+	/**
+	 * Set the product's bom deduction prop for this product.
+	 *
+	 * @since   1.9.25.2
+	 * @package $Only
+	 *
+	 * @param string $bom_deduction Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_bom_deduction( $bom_deduction ) {
+
+		$bom_deduction = ! is_null( $bom_deduction ) && 'global' !== $bom_deduction ? wc_string_to_bool( $bom_deduction ) : NULL;
+		$this->set_prop( 'bom_deduction', $bom_deduction );
+
+	}
 
 	/**
 	 * Save the ATUM product data
