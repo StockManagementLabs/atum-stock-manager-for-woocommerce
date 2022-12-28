@@ -1,23 +1,23 @@
 {
 	"background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2022/02/waves-1.svg)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"dash_background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2022/02/waves-1.svg)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2022/02/po-pro-logo.png",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2022/02/po-pro-logo.png",
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2022/12/launch-prices-1.gif",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2022/12/launch-prices-1.gif",
 		"logo_css" : "width:238px;margin-bottom:15px;",
-		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2022/02/label-new.svg"
+		"top_left" : ""
 	},
 	"title": {
 		"text"      : "",
@@ -31,7 +31,7 @@
 		"background": "#ff4848"
 	},
 	"description": {
-		"text"           : "The day is finally here! Purchase Order PRO is officially ready for launch!",
+		"text"           : "<strong>Welcome to 2023!</strong><br><br>Subscribe now to take advantage and run cheap forever. Launch prices of all our add-ons will end at the end of January. Some great new features are coming in 2023, so do not hesitate to click below!",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -40,17 +40,11 @@
 	},
 	"buttons": [
 		{
-			"text" : "Purchase Now!",
-			"url"  : "https://stockmanagementlabs.com/addons/atum-purchase-orders-pro/",
-			"class": "btn btn-sm btn-primary",
-			"css"  : "width: 165px; background-image: linear-gradient(to right, #eb33c3 0%, #6293e9 99%);border-color:#eb33c3;"
-		},
-		{
-			"text" : "Try the demo",
-			"url"  : "https://demo.purchase-orders.stockmanagementlabs.com/",
-			"class": "btn btn-sm btn-outline-success purple",
-			"css"  : "width:165px"
+			"text" : "View add-ons",
+			"url"  : "https://stockmanagementlabs.com/addons/",
+			"class": "btn btn-primary",
+			"css"  : "width: 270px;"
 		}
 	],
-	"transient_key": "atum_po_pro_launch"
+	"transient_key": "atum_launch_prices_2023"
 }
