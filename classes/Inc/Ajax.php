@@ -973,7 +973,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Deactivate an addon license key through API
+	 * Deactivate and remove an addon license key through API
 	 *
 	 * @package Add-ons
 	 *
@@ -1005,16 +1005,13 @@ final class Ajax {
 		// $license_data->license will be either "deactivated" or "failed" or "limit_reached".
 		if ( 'deactivated' === $license_data->license ) {
 
-			// Update the key status.
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => 'inactive',
-			) );
+			// Remove the key.
+			Addons::update_key( $addon_name, [ 'key' => '' ] );
 
 			// Delete status transient.
 			Addons::delete_status_transient( $addon_name );
 
-			wp_send_json_success( __( 'Your license has been deactivated.', ATUM_TEXT_DOMAIN ) );
+			wp_send_json_success( __( 'Your license has been deactivated and removed.', ATUM_TEXT_DOMAIN ) );
 
 		}
 		elseif ( 'limit_reached' === $license_data->license ) {
@@ -1066,9 +1063,19 @@ final class Ajax {
 		if ( $license_data->download_link ) {
 
 			Addons::delete_status_transient( $addon_name );
+
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => $license_data->license,
+			) );
+
 			/* @noinspection PhpUnhandledExceptionInspection */
 			$result = Addons::install_addon( $addon_name, $addon_slug, $license_data->download_link );
 			wp_send_json( $result );
+		}
+
+		if ( $license_data->msg ) {
+			wp_send_json_error( $license_data->msg );
 		}
 
 		wp_send_json_error( $default_error );

@@ -2533,11 +2533,192 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding-bottom: 0;
 }
 
+.atum-addons {
+  margin-bottom: 60px;
+}
 .atum-addons h1 {
   margin-bottom: 15px;
 }
 .atum-addons a {
   text-decoration: none;
+}
+.atum-addons .atum-addon {
+  margin-top: 20px;
+  background-color: var(--dash-card-bg);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  height: 222px;
+  border-radius: 8px;
+}
+.atum-addons .atum-addon > .more-details {
+  position: relative;
+  width: 300px;
+  min-width: 300px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: hidden;
+}
+.atum-addons .atum-addon > .more-details:hover .addon-thumb {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+.atum-addons .atum-addon > .more-details .label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 9px;
+  color: #fff;
+  border-radius: 4px;
+  z-index: 1;
+  text-transform: uppercase;
+}
+.atum-addons .atum-addon > .more-details .label.coming-soon {
+  background: #EFAF00;
+}
+.atum-addons .atum-addon > .more-details .label.not-installed {
+  background: #00B8DB;
+}
+.atum-addons .atum-addon > .more-details .label.valid {
+  background: #69C61D;
+}
+.atum-addons .atum-addon > .more-details .label.inactive, .atum-addons .atum-addon > .more-details .label.invalid, .atum-addons .atum-addon > .more-details .label.disabled, .atum-addons .atum-addon > .more-details .label.expired, .atum-addons .atum-addon > .more-details .label.no-key {
+  background: #ff4848;
+}
+.atum-addons .atum-addon .atum-loading {
+  right: 152px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+.atum-addons .addon-thumb {
+  width: 100%;
+  background-size: cover;
+  background-position: top center;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+}
+.atum-addons .addon-details {
+  padding: 30px 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.atum-addons .addon-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.atum-addons .addon-header h2 {
+  font-size: 18px;
+  color: var(--bm_text_color);
+  margin: 0 10px 10px 0;
+}
+.atum-addons .addon-header .label {
+  background-color: #EFAF00;
+  border-radius: 15px;
+  padding: 2px 9px;
+  color: #fff;
+  font-size: 11px;
+  line-height: 24px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.atum-addons .addon-header .label.label-warning {
+  background-color: #EFAF00;
+}
+.atum-addons .addon-description, .atum-addons p {
+  margin: 0;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  font-size: 15px;
+  color: var(--bm_text_color);
+}
+.atum-addons .addon-footer .actions .btn {
+  font-size: 0.75rem;
+  padding: 0.313rem 0;
+  width: 144px;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+.atum-addons .addon-footer .actions .btn.install {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  width: auto;
+}
+.atum-addons .addon-footer .actions input {
+  font-size: 0.75rem;
+}
+.atum-addons .addon-footer .actions .cancel-action {
+  background-color: transparent;
+  width: 80px;
+}
+.atum-addons .addon-footer .actions .cancel-action:hover {
+  background-color: buttonface;
+}
+.atum-addons .addon-footer .addon-key {
+  display: none;
+}
+.atum-addons .addon-footer .addon-key > .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  position: relative;
+}
+.atum-addons .addon-footer .license-key {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin-right: 10px;
+}
+.atum-addons .addon-footer .license-info {
+  margin-right: 10px;
+}
+.atum-addons .addon-footer .license-info:first-child {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.atum-addons .addon-footer .license-info .license-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.atum-addons .addon-footer .license-info .license-key, .atum-addons .addon-footer .license-info .expires {
+  background-color: var(--atum-table-bg2);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.47;
+  padding: 4px 13px;
+  border-radius: 5px;
 }
 @media all and (min-width: 481px) {
   .atum-addons .themes {

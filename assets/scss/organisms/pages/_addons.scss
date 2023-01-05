@@ -10,6 +10,8 @@
 
 .atum-addons {
 	
+	margin-bottom: 60px;
+	
 	h1 {
 		margin-bottom: math.div($grid-gutter-width, 2);
 	}
@@ -17,6 +19,171 @@
 	a {
 		text-decoration: none;
 	}
+	
+	.atum-addon {
+		margin-top: math.div($grid-gutter-width, 3) * 2;
+		background-color: var(--dash-card-bg);
+		display: flex;
+		align-items: stretch;
+		height: 222px;
+		border-radius: 8px;
+		
+		> .more-details {
+			position: relative;
+			width: 300px;
+			min-width: 300px;
+			display: flex;
+			overflow: hidden;
+			
+			&:hover .addon-thumb {
+				transform: scale(1.1);
+			}
+			
+			.label {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+				padding: 3px 9px;
+				color: $white;
+				border-radius: 4px;
+				z-index: 1;
+				text-transform: uppercase;
+				
+				&.coming-soon {
+					background: $secondary;
+				}
+				
+				&.not-installed {
+					background: $primary;
+				}
+				&.valid {
+					background: $tertiary;
+				}
+				&.inactive, &.invalid, &.disabled, &.expired, &.no-key {
+					background: $danger;
+				}
+			}
+		}
+		
+		.atum-loading {
+			right: 152px;
+			top: 3px;
+			@include loader(18px, $primary, 3px, 1s);
+		}
+		
+	}
+	
+	.addon-thumb {
+		width: 100%;
+		background-size: cover;
+		background-position: top center;
+		border-bottom-left-radius: 8px;
+		border-top-left-radius: 8px;
+	}
+	
+	.addon-details {
+		padding: 30px 20px;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.addon-header {
+		display: flex;
+		
+		h2 {
+			font-size: 18px;
+			color: var(--bm_text_color);
+			margin: 0 10px 10px 0;
+		}
+		
+		.label {
+			background-color: $secondary;
+			border-radius: 15px;
+			padding: 2px 9px;
+			color: $white;
+			font-size: 11px;
+			line-height: 24px;
+			text-align: center;
+			text-transform: uppercase;
+			
+			&.label-warning {
+				background-color: $warning;
+			}
+		}
+	}
+	
+	.addon-description , & p{
+		margin: 0;
+		flex-grow: 1;
+		font-size: 15px;
+		color: var(--bm_text_color);
+	}
+	
+	.addon-footer {
+		.actions {
+			
+			.btn {
+				font-size: .75rem;
+				padding: 0.313rem 0;
+				width: 144px;
+				margin-right: 10px;
+				text-transform: uppercase;
+				&.install {
+					padding-left: .7rem;
+					padding-right: .7rem;
+					width: auto;
+				}
+			}
+			input {
+				font-size: .75rem;
+			}
+			.cancel-action {
+				background-color: transparent;
+				width: 80px;
+				&:hover {
+					background-color: buttonface;
+				}
+			}
+		}
+		
+		.addon-key{
+			
+			display: none;
+			> .wrapper {
+				display: flex;
+				align-items: flex-end;
+				position: relative;
+			}
+		}
+		.license-key {
+			flex-grow: 1;
+			margin-right: 10px;
+		}
+		.license-info {
+			margin-right: 10px;
+			
+			&:first-child {
+				flex-grow: 1;
+			}
+			
+			.license-label {
+				font-size: .75rem;
+				font-weight: 600;
+			}
+			
+			.license-key, .expires {
+				background-color: var(--atum-table-bg2);
+				font-size: 15px;
+				font-weight: 400;
+				line-height: 1.47;
+				padding: 4px 13px;
+				border-radius: 5px;
+			}
+		}
+		
+	}
+	
+	
 	
 	@media all and (min-width: 481px) {
 		.themes {

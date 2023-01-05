@@ -29,22 +29,19 @@ export default class AddonsPage {
 
 		this.$addonsList
 
-			// Validate, Activate and Deactivate buttons.
+			// Do key actions.
 			.on( 'click', '.addon-key button', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
 
-				const $button: JQuery = $( evt.currentTarget ),
-				      key: string     = $button.siblings( 'input' ).val();
+				const $button: JQuery = $( evt.currentTarget );
+				let key: string;
 
-				// If no key is present, show the error directly
-				if ( ! key ) {
-					this.showErrorAlert( this.settings.get( 'invalidKey' ) );
-					return false;
+				if ( $button.hasClass( 'cancel-action' ) ) {
+					$button.closest( '.actions' ).children().slideToggle( 'fast' );
 				}
-
-				// Ask the user to confirm the deactivation
-				if ( $button.hasClass( 'deactivate-key' ) ) {
+				else if ( $button.hasClass( 'remove-license' ) ) {
+					key = $button.closest( '.addon-key' ).find('.license-key').text();
 
 					Swal.fire( {
 						title            : this.settings.get( 'limitedDeactivations' ),
@@ -60,53 +57,43 @@ export default class AddonsPage {
 						}
 
 					} );
-
 				}
 				else {
-					this.requestLicenseChange( $button, key );
+
+					key = $button.siblings( 'input' ).val()
+
+					// If no key is present, show the error directly
+					if ( ! key ) {
+						this.showErrorAlert( this.settings.get( 'invalidKey' ) );
+						return false;
+					}
+
+					if ( $button.hasClass( 'install-addon' ) ) {
+						this.installAddon( $button );
+					}
+					// Ask the user to confirm the deactivation
+					else if ( $button.hasClass( 'deactivate-key' ) ) {
+
+
+
+					}
+					else {
+						this.requestLicenseChange( $button, key );
+					}
 				}
 
-			})
-
-			// Install addon button.
-			.on( 'click', '.install-addon', ( evt: JQueryEventObject ) => {
-
-				const $button: JQuery     = $( evt.currentTarget ),
-				      $addonBlock: JQuery = $button.closest( '.theme' );
-
-				$.ajax( {
-					url       : window[ 'ajaxurl' ],
-					method    : 'POST',
-					dataType  : 'json',
-					data      : {
-						action  : 'atum_install_addon',
-						security: this.$addonsList.data( 'nonce' ),
-						addon   : $addonBlock.data( 'addon' ),
-						slug    : $addonBlock.data( 'addon-slug' ),
-						key     : $addonBlock.find( '.addon-key input' ).val(),
-					},
-					beforeSend: () => {
-						this.beforeAjax( $button );
-					},
-					success   : ( response: any ) => {
-
-						this.afterAjax( $button );
-
-						if ( response.success === true ) {
-							this.showSuccessAlert( response.data );
-						}
-						else {
-							this.showErrorAlert( response.data );
-						}
-
-					},
-				} );
 
 			})
+
 
 			// Show the key fields.
 			.on( 'click', '.show-key', ( evt: JQueryEventObject ) => {
-				$( evt.currentTarget ).closest( '.theme' ).find( '.addon-key' ).slideToggle( 'fast' );
+
+				evt.preventDefault();
+
+				const $button: JQuery     = $( evt.currentTarget );
+
+				$button.closest( '.actions' ).children().slideToggle( 'fast' );
 			} )
 
 			// Remove an invalid key.
@@ -147,6 +134,44 @@ export default class AddonsPage {
 
 
 	}
+
+	/**
+	 * Install addon
+	 *
+	 * @param {JQuery} $button
+	 */
+	installAddon( $button: JQuery ) {
+
+		const $addonBlock: JQuery = $button.closest( '.atum-addon' );
+
+		$.ajax( {
+			url       : window[ 'ajaxurl' ],
+			method    : 'POST',
+			dataType  : 'json',
+			data      : {
+				action  : 'atum_install_addon',
+				security: this.$addonsList.data( 'nonce' ),
+				addon   : $addonBlock.data( 'addon' ),
+				slug    : $addonBlock.data( 'addon-slug' ),
+				key     : $addonBlock.find( '.addon-key input' ).val(),
+			},
+			beforeSend: () => {
+				this.beforeAjax( $button );
+			},
+			success   : ( response: any ) => {
+
+				this.afterAjax( $button );
+
+				if ( response.success === true ) {
+					this.showSuccessAlert( response.data );
+				}
+				else {
+					this.showErrorAlert( response.data );
+				}
+
+			},
+		} );
+	}
 	
 	/**
 	 * Send the Ajax request to change a license status
@@ -163,7 +188,7 @@ export default class AddonsPage {
 			data      : {
 				action  : $button.data( 'action' ),
 				security: this.$addonsList.data( 'nonce' ),
-				addon   : $button.closest( '.theme' ).data( 'addon' ),
+				addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
 				key     : key,
 			},
 			beforeSend: () => {
@@ -284,7 +309,7 @@ export default class AddonsPage {
 	 */
 	beforeAjax( $button: JQuery ) {
 
-		$( '.theme' ).find( '.button' ).prop( 'disabled', true );
+		$button.parent().find( '.button, button' ).prop( 'disabled', true );
 		$button.css( 'visibility', 'hidden' ).after( '<div class="atum-loading"></div>' );
 
 	}
@@ -296,8 +321,8 @@ export default class AddonsPage {
 	 */
 	afterAjax( $button: JQuery ) {
 
-		$( '.atum-loading' ).remove();
-		$( '.theme' ).find( '.button' ).prop( 'disabled', false );
+		$button.siblings( '.atum-loading' ).remove();
+		$button.parent().find( '.button, button' ).prop( 'disabled', false );
 		$button.css( 'visibility', 'visible' );
 
 	}
