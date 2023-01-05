@@ -211,3 +211,37 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
+
+@mixin atum-order-status() {
+	
+	.order-status-container {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		gap: 5px;
+		
+		.atum-order-status {
+			
+			> mark {
+				background-color: var(--light);
+				border-radius: 4px;
+				cursor: default;
+				width: 16px;
+				height: 16px;
+				display: block;
+				
+				&.status-atum_failed, &.status-atum_trash {
+					background-color: $danger;
+				}
+			}
+			
+		}
+		
+		span {
+			line-height: 1.2;
+		}
+		
+	}
+	
+}

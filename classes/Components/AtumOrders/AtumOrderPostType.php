@@ -422,7 +422,7 @@ abstract class AtumOrderPostType {
 					$status_color  = ' style="background-color: ';
 					$status_color .= isset( $status_colors[ $status ] ) ? $status_colors[ $status ] . '"' : 'rgba(255,72,72,.5)"';
 
-					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"' . $status_color . '></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					$output = sprintf( '<div class="order-status-container"><div class="atum-order-status"><mark class="status-%s tips" data-tip="%s"' . $status_color . '></mark></div><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
