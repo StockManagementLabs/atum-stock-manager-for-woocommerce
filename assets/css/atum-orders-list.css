@@ -4,7 +4,7 @@
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2022 Stock Management Labs 
+ * License : ©2023 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -6130,32 +6130,29 @@ table.wp-list-table .column-status .order-status-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  gap: 5px;
 }
-table.wp-list-table .column-status .order-status-container .order-status {
-  color: var(--secondary);
-  background: var(--light);
+table.wp-list-table .column-status .order-status-container .atum-order-status > mark {
+  background-color: var(--light);
   border-radius: 4px;
   cursor: default;
-  max-width: 100%;
   width: 16px;
   height: 16px;
-  margin: 3px 5px 0 0;
+  display: block;
 }
-table.wp-list-table .column-status .order-status-container .order-status.status-atum_failed, table.wp-list-table .column-status .order-status-container .order-status.status-atum_trash {
-  background: #761919;
+table.wp-list-table .column-status .order-status-container .atum-order-status > mark.status-atum_failed, table.wp-list-table .column-status .order-status-container .atum-order-status > mark.status-atum_trash {
+  background-color: #ff4848;
 }
-table.wp-list-table .column-status .order-status-container .order-status > span {
-  margin: 0 1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+table.wp-list-table .column-status .order-status-container span {
+  line-height: 1.2;
 }
 table.wp-list-table tbody > :nth-child(odd), table.wp-list-table ul.striped > :nth-child(odd), table.wp-list-table .alternate {
   background-color: var(--atum-table-row-odd);

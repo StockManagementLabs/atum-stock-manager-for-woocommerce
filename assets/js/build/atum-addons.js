@@ -203,6 +203,7 @@ var AddonsPage = (function () {
         this.$addonsList
             .on('click', '.addon-key button', function (evt) {
             evt.preventDefault();
+<<<<<<< HEAD
             var $button = $(evt.currentTarget);
             var key;
             if ($button.hasClass('cancel-action')) {
@@ -210,6 +211,14 @@ var AddonsPage = (function () {
             }
             else if ($button.hasClass('remove-license')) {
                 key = $button.closest('.addon-key').find('.license-key').text();
+=======
+            var $button = $(evt.currentTarget), key = $button.siblings('input').val();
+            if (!key) {
+                _this.showErrorAlert(_this.settings.get('invalidKey'));
+                return false;
+            }
+            if ($button.hasClass('deactivate-key')) {
+>>>>>>> master
                 sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                     title: _this.settings.get('limitedDeactivations'),
                     html: _this.settings.get('allowedDeactivations'),
@@ -224,6 +233,7 @@ var AddonsPage = (function () {
                 });
             }
             else {
+<<<<<<< HEAD
                 key = $button.siblings('input').val();
                 if (!key) {
                     _this.showErrorAlert(_this.settings.get('invalidKey'));
@@ -243,6 +253,40 @@ var AddonsPage = (function () {
             evt.preventDefault();
             var $button = $(evt.currentTarget);
             $button.closest('.actions').children().slideToggle('fast');
+=======
+                _this.requestLicenseChange($button, key);
+            }
+        })
+            .on('click', '.install-addon', function (evt) {
+            var $button = $(evt.currentTarget), $addonBlock = $button.closest('.theme');
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'atum_install_addon',
+                    security: _this.$addonsList.data('nonce'),
+                    addon: $addonBlock.data('addon'),
+                    slug: $addonBlock.data('addon-slug'),
+                    key: $addonBlock.find('.addon-key input').val(),
+                },
+                beforeSend: function () {
+                    _this.beforeAjax($button);
+                },
+                success: function (response) {
+                    _this.afterAjax($button);
+                    if (response.success === true) {
+                        _this.showSuccessAlert(response.data);
+                    }
+                    else {
+                        _this.showErrorAlert(response.data);
+                    }
+                },
+            });
+        })
+            .on('click', '.show-key', function (evt) {
+            $(evt.currentTarget).closest('.theme').find('.addon-key').slideToggle('fast');
+>>>>>>> master
         })
             .on('click', '.remove-key', function (evt) {
             evt.preventDefault();
@@ -272,6 +316,7 @@ var AddonsPage = (function () {
             });
         });
     };
+<<<<<<< HEAD
     AddonsPage.prototype.installAddon = function ($button) {
         var _this = this;
         var $addonBlock = $button.closest('.atum-addon');
@@ -300,6 +345,8 @@ var AddonsPage = (function () {
             },
         });
     };
+=======
+>>>>>>> master
     AddonsPage.prototype.requestLicenseChange = function ($button, key) {
         var _this = this;
         $.ajax({
@@ -309,7 +356,11 @@ var AddonsPage = (function () {
             data: {
                 action: $button.data('action'),
                 security: this.$addonsList.data('nonce'),
+<<<<<<< HEAD
                 addon: $button.closest('.atum-addon').data('addon'),
+=======
+                addon: $button.closest('.theme').data('addon'),
+>>>>>>> master
                 key: key,
             },
             beforeSend: function () {
@@ -386,12 +437,21 @@ var AddonsPage = (function () {
         });
     };
     AddonsPage.prototype.beforeAjax = function ($button) {
+<<<<<<< HEAD
         $button.parent().find('.button, button').prop('disabled', true);
         $button.css('visibility', 'hidden').after('<div class="atum-loading"></div>');
     };
     AddonsPage.prototype.afterAjax = function ($button) {
         $button.siblings('.atum-loading').remove();
         $button.parent().find('.button, button').prop('disabled', false);
+=======
+        $('.theme').find('.button').prop('disabled', true);
+        $button.css('visibility', 'hidden').after('<div class="atum-loading"></div>');
+    };
+    AddonsPage.prototype.afterAjax = function ($button) {
+        $('.atum-loading').remove();
+        $('.theme').find('.button').prop('disabled', false);
+>>>>>>> master
         $button.css('visibility', 'visible');
     };
     return AddonsPage;

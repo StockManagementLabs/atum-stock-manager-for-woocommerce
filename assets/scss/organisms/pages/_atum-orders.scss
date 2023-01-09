@@ -35,35 +35,7 @@ table.wp-list-table {
 	.column-status {
 		text-align: left;
 		
-		.order-status-container {
-			display: flex;
-			flex-wrap: nowrap;
-			align-items: flex-start;
-			justify-content: flex-start;
-			
-			.order-status {
-				color: var(--secondary);
-				background: var(--light);
-				border-radius: 4px;
-				cursor: default;
-				max-width: 100%;
-				width: 16px;
-				height: 16px;
-				margin: 3px 5px 0 0;
-				
-				&.status-atum_failed, &.status-atum_trash {
-					background: #761919;
-				}
-				
-				> span {
-					margin: 0 1em;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-				
-			}
-		}
-		
+		@include atum-order-status;
 	}
 	
 	tbody > :nth-child(odd), ul.striped > :nth-child(odd), .alternate {
