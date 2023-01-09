@@ -57,7 +57,7 @@ class News_DISABLED extends AtumWidget {
 	public function render() {
 
 		add_filter( 'wp_feed_cache_transient_lifetime', array( $this, 'limit_feed_cache' ) );
-		$sml_feed = fetch_feed( 'https://www.stockmanagementlabs.com/feed/' );
+		$sml_feed = fetch_feed( 'https://stockmanagementlabs.com/feed/' );
 		remove_filter( 'wp_feed_cache_transient_lifetime', array( $this, 'limit_feed_cache' ) );
 
 		$max_items = 0;

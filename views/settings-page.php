@@ -28,7 +28,7 @@ $active_sections = [];
 			<nav class="atum-nav">
 
 				<div class="atum-nav-header">
-					<a class="atum-brand-link" href="https://www.stockmanagementlabs.com" target="_blank">
+					<a class="atum-brand-link" href="https://stockmanagementlabs.com" target="_blank">
 						<div class="atum-brand">
 							<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php echo esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>" alt="">
 							<span><?php esc_html_e( 'ATUM', ATUM_TEXT_DOMAIN ) ?></span>
