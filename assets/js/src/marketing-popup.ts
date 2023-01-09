@@ -1,7 +1,7 @@
 /**
  * Atum Marketing Popup
  *
- * @copyright Stock Management Labs ©2022
+ * @copyright Stock Management Labs ©2023
  *
  * @since 1.5.2
  */
