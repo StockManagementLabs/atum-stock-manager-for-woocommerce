@@ -2846,9 +2846,6 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 .atum-addons .addon-header .label.label-warning {
   background-color: #EFAF00;
 }
-.atum-addons .addon-description {
-  overflow-y: auto;
-}
 .atum-addons .addon-description, .atum-addons p {
   margin: 0;
   -webkit-box-flex: 1;
@@ -2856,6 +2853,10 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
           flex-grow: 1;
   font-size: 15px;
   color: var(--bm_text_color);
+}
+.atum-addons .addon-description {
+  overflow-y: auto;
+  margin-bottom: 0.3rem;
 }
 .atum-addons .alert {
   font-size: 12px;
@@ -2922,317 +2923,41 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding: 4px 13px;
   border-radius: 5px;
 }
-@media all and (min-width: 481px) {
-  .atum-addons .themes {
+@media all and (max-width: 782px) {
+  .atum-addons .atum-addon {
+    height: 300px;
+  }
+  .atum-addons .alert {
+    display: block;
+  }
+  .atum-addons .addon-footer .actions {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    -webkit-box-align: start;
-        -ms-flex-align: start;
-            align-items: flex-start;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
-}
-.atum-addons .theme .theme-screenshot {
-  position: relative;
-  cursor: default;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-.atum-addons .theme .theme-screenshot .label {
-  background-color: #EFAF00;
-  float: right;
-  margin: 10px;
-  border-radius: 15px;
-  padding: 2px 9px;
-  color: #fff;
-  font-size: 11px;
-  text-align: center;
-  text-transform: uppercase;
-}
-.atum-addons .theme .theme-screenshot .label.label-warning {
-  background-color: #EFAF00;
-}
-.atum-addons .theme .theme-name {
-  position: relative;
-  cursor: default;
-}
-.atum-addons .theme .theme-actions {
-  height: 39px;
-  right: 27px;
-  -webkit-transform: translate3d(0, -50%, 0);
-          transform: translate3d(0, -50%, 0);
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  text-align: center;
-}
-.atum-addons .theme .theme-actions.valid, .atum-addons .theme .theme-actions.invalid, .atum-addons .theme .theme-actions.inactive, .atum-addons .theme .theme-actions.coming-soon {
-  opacity: 1;
-}
-.atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span, .atum-addons .theme .theme-actions.coming-soon span {
-  display: inline-block;
-  margin-top: 11px;
-  font-size: 12px;
-  color: #fff;
-  font-weight: normal;
-}
-.atum-addons .theme .theme-actions.valid a, .atum-addons .theme .theme-actions.invalid a, .atum-addons .theme .theme-actions.inactive a, .atum-addons .theme .theme-actions.coming-soon a {
-  color: #fff;
-}
-.atum-addons .theme .theme-actions.valid {
-  background-color: #69C61D;
-}
-.atum-addons .theme .theme-actions.valid + .show-key {
-  opacity: 0;
-}
-.atum-addons .theme .theme-actions.valid.not-installed {
-  background-color: #69C61D;
-  right: 0;
-  width: 105px;
-  height: 50px;
-  padding: 0;
-  border: none;
-}
-.atum-addons .theme .theme-actions.valid:not(.not-installed) + .show-key i {
-  color: #69C61D;
-}
-.atum-addons .theme .theme-actions.invalid span {
-  color: #ff4848;
-}
-.atum-addons .theme .theme-actions.inactive {
-  background-color: #EFAF00;
-}
-.atum-addons .theme .theme-actions.not-installed {
-  background-color: transparent;
-}
-.atum-addons .theme .theme-actions.coming-soon {
-  background-color: #0fd9ff;
-  right: 0;
-}
-.atum-addons .theme .theme-actions .remove-key {
-  vertical-align: text-top;
-  margin-left: 5px;
-  font-size: 14px;
-  color: #ff4848 !important;
-}
-.atum-addons .theme .theme-actions .remove-key:focus {
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  outline: none;
-}
-.atum-addons .theme .theme-actions .remove-key:hover {
-  color: #ff4848;
-}
-.atum-addons .theme .show-key {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  height: 49px;
-  padding: 0 3px;
-  border-left: 1px solid rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  -webkit-transform: translateX(100%);
-          transform: translateX(100%);
-}
-.atum-addons .theme .show-key, .atum-addons .theme .show-key i {
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-.atum-addons .theme .show-key i {
-  position: relative;
-  font-size: 17px;
-  top: 17px;
-  color: #00B8DB;
-}
-.atum-addons .theme:hover .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid), .atum-addons .theme.inactive .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid), .atum-addons .theme.invalid .theme-actions:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid) {
-  opacity: 0;
-  -webkit-transform: translate3d(100%, -50%, 0);
-          transform: translate3d(100%, -50%, 0);
-}
-.atum-addons .theme:hover .more-details, .atum-addons .theme.inactive .more-details, .atum-addons .theme.invalid .more-details {
-  opacity: 0 !important;
-}
-.atum-addons .theme:hover .theme-screenshot:hover .addon-details, .atum-addons .theme.inactive .theme-screenshot:hover .addon-details, .atum-addons .theme.invalid .theme-screenshot:hover .addon-details {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-}
-.atum-addons .theme:hover .theme-screenshot:hover .more-details, .atum-addons .theme.inactive .theme-screenshot:hover .more-details, .atum-addons .theme.invalid .theme-screenshot:hover .more-details {
-  opacity: 1 !important;
-}
-.atum-addons .theme:hover .show-key, .atum-addons .theme.inactive .show-key, .atum-addons .theme.invalid .show-key {
-  opacity: 1 !important;
-  background-color: #0fd9ff;
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
-}
-.atum-addons .theme:hover .show-key i, .atum-addons .theme.inactive .show-key i, .atum-addons .theme.invalid .show-key i {
-  color: #fff !important;
-}
-.atum-addons .theme.invalid.with-key {
-  border-color: #ff4848;
-}
-.atum-addons .theme .more-details {
-  border-radius: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  -webkit-transition: opacity 0.3s ease-in-out;
-  transition: opacity 0.3s ease-in-out;
-}
-.atum-addons .theme .addon-details {
-  top: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  position: absolute;
-  color: #fff;
-  padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-transform: translateY(-101%);
-          transform: translateY(-101%);
-  -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  transition: -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-  transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955), -webkit-transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-.atum-addons .theme .addon-details > p {
-  height: 65%;
-  overflow: hidden;
-}
-.atum-addons .theme .addon-details .more-details {
-  position: static;
-  -webkit-transform: none;
-          transform: none;
-  -webkit-transition-delay: 0.2s;
-          transition-delay: 0.2s;
-  display: block;
-  font-size: 12px;
-  padding: 10px 14px;
-}
-.atum-addons .theme .addon-key {
-  display: none;
-}
-.atum-addons .theme .addon-key .wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 5px;
-  border-top: 1px solid #DDD;
-  position: relative;
-}
-.atum-addons .theme .addon-key input[type=text] {
-  width: 80%;
-  margin-right: 4px;
-  height: 28px;
-  border-radius: 3px;
-  font-size: 12px;
-  border-radius: 0;
-}
-.atum-addons .theme .addon-key input[type=text]:focus {
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.atum-addons .theme .addon-key input[type=text].valid {
-  border-color: #69C61D;
-}
-.atum-addons .theme .addon-key input[type=text].inactive {
-  border-color: #EFAF00;
-}
-.atum-addons .theme .addon-key input[type=text].invalid {
-  border-color: #ff4848;
-}
-.atum-addons .theme .button {
-  border: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  text-shadow: none;
-  font-weight: normal;
-  background-color: #00B8DB;
-  color: #fff;
-  border-radius: 0;
-}
-.atum-addons .theme .button.install-addon {
-  background-color: #69C61D;
-  height: 100%;
-  width: 100%;
-  margin-left: 0;
-}
-.atum-addons .theme .button.install-addon:hover {
-  background-color: #82e135;
-}
-.atum-addons .theme .button:disabled {
-  background-color: #00B8DB !important;
-  text-shadow: none !important;
-  color: #fff !important;
-  opacity: 0.6;
-}
-.atum-addons .theme .button:hover {
-  background-color: #0fd9ff;
-}
-.atum-addons .theme.active .addon-key {
-  background-color: #27283B;
-  border-top-color: #5a5c88;
-}
-.atum-addons .theme .atum-loading {
-  right: 24px;
-  top: 8px;
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 50;
-  -webkit-animation: loader-rotate 1s linear infinite;
-          animation: loader-rotate 1s linear infinite;
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+  .atum-addons .addon-footer .actions .btn {
+    width: 100%;
+    margin-bottom: 0.3rem;
   }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+  .atum-addons .addon-footer .actions .addon-key > .wrapper {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
-}
-.atum-addons .theme .theme-actions.valid .atum-loading {
-  border-color: rgba(255, 255, 255, 0.25);
-  border-top-color: #fff;
-  top: 14px;
-  right: 38px;
-}
-@media all and (max-width: 782px) {
-  .atum-addons .theme .button {
-    margin-bottom: 0;
+  .atum-addons .addon-footer .actions .addon-key > .wrapper .license-info {
+    width: 100%;
   }
-  .atum-addons .theme input[type=text] {
-    height: 29px;
+  .atum-addons .addon-footer .actions .addon-key > .wrapper .license-info > div {
+    display: inline-block;
   }
-  .atum-addons .theme .theme-actions {
-    display: block;
-  }
-  .atum-addons .theme .theme-actions.valid span, .atum-addons .theme .theme-actions.invalid span, .atum-addons .theme .theme-actions.inactive span {
-    margin-top: 10px;
-  }
-  .atum-addons .theme .theme-actions .button {
-    margin: 5px 0 0;
+  .atum-addons .addon-footer .actions .addon-key > .wrapper input.license-key {
+    width: 100%;
+    margin-bottom: 0.3rem;
   }
 }
 /*# sourceMappingURL=atum-addons.css.map */

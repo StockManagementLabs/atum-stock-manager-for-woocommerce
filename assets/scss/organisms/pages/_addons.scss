@@ -112,15 +112,17 @@
 		}
 	}
 	
-	.addon-description {
-		overflow-y: auto;
-	}
 	
 	.addon-description , & p{
 		margin: 0;
 		flex-grow: 1;
 		font-size: 15px;
 		color: var(--bm_text_color);
+	}
+	
+	.addon-description {
+		overflow-y: auto;
+		margin-bottom: .3rem;
 	}
 	
 	.alert {
@@ -193,355 +195,39 @@
 		
 	}
 	
-	
-	
-	@media all and (min-width: 481px) {
-		.themes {
+	@include tablet-max-wp {
+		
+		.atum-addon {
+			height: 300px;
+		}
+		
+		.alert {
+			display: block;
+		}
+		.addon-footer .actions {
 			display: flex;
-			flex-wrap: wrap;
-			align-items: flex-start;
-		}
-	}
-	
-	.theme {
-		
-		.theme-screenshot {
-			position: relative;
-			cursor: default;
-			background-size: cover !important;
-			background-position: center !important;
-			background-repeat: no-repeat !important;
-			
-			.label {
-				background-color: $secondary;
-				float: right;
-				margin: math.div($grid-gutter-width, 3);
-				border-radius: 15px;
-				padding: 2px 9px;
-				color: $white;
-				font-size: 11px;
-				text-align: center;
-				text-transform: uppercase;
-				
-				&.label-warning {
-					background-color: $warning;
-				}
-			}
-		}
-		
-		.theme-name {
-			position: relative;
-			cursor: default;
-		}
-		
-		.theme-actions {
-			height: 39px;
-			right: 27px;
-			transform: translate3d(0, -50%, 0);
-			transition: 0.2s ease-in-out;
-			text-align: center;
-			
-			&.valid, &.invalid, &.inactive, &.coming-soon {
-				opacity: 1;
-				
-				span {
-					display: inline-block;
-					margin-top: 11px;
-					font-size: 12px;
-					color: $white;
-					font-weight: normal;
-				}
-				
-				a {
-					color: $white;
-				}
-				
-			}
-			
-			&.valid {
-				background-color: $tertiary;
-				
-				+ .show-key {
-					opacity: 0;
-				}
-				
-				&.not-installed {
-					
-					background-color: $tertiary;
-					right: 0;
-					width: 105px;
-					height: 50px;
-					padding: 0;
-					border: none;
-				}
-				
-				&:not(.not-installed) {
-					+ .show-key {
-						i {
-							color: $tertiary;
-						}
-					}
-				}
-			}
-			
-			&.invalid {
-				span {
-					color: $danger;
-				}
-			}
-			
-			&.inactive {
-				background-color: $secondary;
-			}
-			
-			&.not-installed {
-				background-color: transparent;
-			}
-			
-			&.coming-soon {
-				background-color: lighten($primary, 10%);
-				right: 0;
-			}
-			
-			.remove-key {
-				vertical-align: text-top;
-				margin-left: 5px;
-				font-size: 14px;
-				color: $danger !important;
-				
-				&:focus {
-					box-shadow: none;
-					outline: none;
-				}
-				
-				&:hover {
-					color: $danger;
-				}
-			}
-			
-		}
-		
-		.show-key {
-			position: absolute;
-			right: 0;
-			bottom: 0;
-			height: 49px;
-			padding: 0 3px;
-			border-left: 1px solid rgba($black, 0.05);
-			cursor: pointer;
-			transform: translateX(100%);
-			
-			&, i {
-				transition: all 0.2s ease-in-out;
-			}
-			
-			i {
-				position: relative;
-				font-size: 17px;
-				top: 17px;
-				color: $primary;
-			}
-			
-		}
-		
-		&:hover, &.inactive, &.invalid {
-			
-			.theme-actions {
-				&:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid) {
-					opacity: 0;
-					transform: translate3d(100%, -50%, 0);
-				}
-			}
-			
-			.more-details {
-				opacity: 0 !important;
-			}
-			
-			.theme-screenshot {
-				&:hover {
-					.addon-details {
-						transform: translateY(0);
-					}
-					
-					.more-details {
-						opacity: 1 !important;
-					}
-				}
-			}
-			
-			.show-key {
-				opacity: 1 !important;
-				background-color: lighten($primary, 10%);
-				transform: translateX(0);
-				
-				i {
-					color: $white !important;
-				}
-			}
-			
-		}
-		
-		&.invalid.with-key {
-			border-color: $danger;
-		}
-		
-		.more-details {
-			border-radius: 0;
-			top: 50%;
-			transform: translateY(-50%);
-			transition: opacity 0.3s ease-in-out;
-		}
-		
-		.addon-details {
-			top: 0;
-			bottom: 0;
-			background-color: rgba($black, 0.7);
-			position: absolute;
-			color: $white;
-			padding: 10px;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			align-items: center;
-			transform: translateY(-101%);
-			transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
-			
-			> p {
-				height: 65%;
-				overflow: hidden;
-			}
-			
-			.more-details {
-				position: static;
-				transform: none;
-				transition-delay: 0.2s;
-				display: block;
-				font-size: 12px;
-				padding: 10px 14px;
-			}
-		}
-		
-		.addon-key {
-			display: none;
-			
-			.wrapper {
-				display: flex;
-				flex-wrap: nowrap;
-				align-items: center;
-				padding: 5px;
-				border-top: 1px solid $wp-gray-4;
-				position: relative;
-			}
-			
-			input[type=text] {
-				width: 80%;
-				margin-right: 4px;
-				height: 28px;
-				border-radius: 3px;
-				font-size: 12px;
-				border-radius: 0;
-				
-				&:focus {
-					box-shadow: none;
-				}
-				
-				&.valid {
-					border-color: $tertiary;
-				}
-				
-				&.inactive {
-					border-color: $secondary;
-				}
-				
-				&.invalid {
-					border-color: $danger;
-				}
-			}
-			
-		}
-		
-		.button {
-			border: none;
-			box-shadow: none;
-			text-shadow: none;
-			font-weight: normal;
-			background-color: $primary;
-			color: $white;
-			border-radius: 0;
-			
-			&.install-addon {
-				background-color: $tertiary;
-				height: 100%;
+			flex-direction: column;
+			.btn {
 				width: 100%;
-				margin-left: 0;
+				margin-bottom: .3rem;
+			}
+			.addon-key > .wrapper {
+				flex-direction: column;
 				
-				&:hover {
-					background-color: lighten($tertiary, 10%);
-				}
-			}
-			
-			&:disabled {
-				background-color: $primary !important;
-				text-shadow: none !important;
-				color: $white !important;
-				opacity: 0.6;
-			}
-			
-			&:hover {
-				background-color: lighten($primary, 10%);
-			}
-		}
-		
-		&.active {
-			.addon-key {
-				background-color: $blue-dark;
-				border-top-color: lighten($blue-dark, 25%);
-			}
-		}
-		
-		.atum-loading {
-			right: 24px;
-			top: 8px;
-			@include loader(18px, $primary, 3px, 1s);
-		}
-		
-		.theme-actions {
-			&.valid {
-				.atum-loading {
-					border-color: rgba($white, 0.25);
-					border-top-color: $white;
-					top: 14px;
-					right: 38px;
-				}
-			}
-		}
-		
-		@include tablet-max-wp {
-			
-			.button {
-				margin-bottom: 0;
-			}
-			
-			input[type=text] {
-				height: 29px;
-			}
-			
-			.theme-actions {
-				display: block;
-				
-				&.valid, &.invalid, &.inactive {
-					span {
-						margin-top: 10px;
+				.license-info {
+					width: 100%;
+					> div {
+						display: inline-block;
 					}
+					
 				}
 				
-				.button {
-					margin: 5px 0 0;
+				input.license-key {
+					width: 100%;
+					margin-bottom: 0.3rem;
 				}
 			}
-			
 		}
-		
 	}
 	
 }

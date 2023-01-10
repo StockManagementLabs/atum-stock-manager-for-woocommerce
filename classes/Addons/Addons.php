@@ -89,7 +89,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
+	const ADDONS_STORE_URL = 'http://sml.loc/';
 
 	/**
 	 * The ATUM's addons API endpoint
