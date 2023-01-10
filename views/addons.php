@@ -32,6 +32,8 @@ use Atum\Addons\Addons;
 					$is_coming_soon_addon = isset( $addon['info']['coming_soon'] ) && $addon['info']['coming_soon'];
 					$is_beta = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
 					$pill_style = isset( $addon['info']['primary_color'] ) ? " style='background-color:{$addon['info']['primary_color']}';" : '';
+					$notice = '';
+					$notice_type = 'info';
 
 
 					$addon_classes = array();
@@ -64,6 +66,8 @@ use Atum\Addons\Addons;
 							case 'expired':
 								$addon_classes[] = 'expired';
 								$status_text     = __( 'Expired', ATUM_TEXT_DOMAIN );
+								$notice          = __( "If you already renewed the license, please click&nbsp;<a class='alert-link refresh-status' href='#'>here</a>", ATUM_TEXT_DOMAIN );
+								$notice_type     = 'warning';
 								break;
 
 						}
@@ -109,12 +113,19 @@ use Atum\Addons\Addons;
 							</div>
 							<div class="addon-footer">
 
+								<?php if ( ! empty( $notice ) ) :?>
+									<div class="alert alert-<?php echo esc_attr( $notice_type ); ?>">
+										<i class="atum-icon atmi-warning"></i>
+										<?php echo $notice; ?>
+									</div>
+
+								<?php endif; ?>
 								<div class="actions <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>">
 
 
 									<?php if ( $is_coming_soon_addon ) : ?>
 
-										<span><?php esc_html_e( 'Coming Soon', ATUM_TEXT_DOMAIN ) ?></span>
+										<a class="more-details btn btn-outline-primary" href="<?php echo $addon['info']['link'] ?>" target="_blank"><?php esc_attr_e( 'More info', ATUM_TEXT_DOMAIN ); ?></a>
 
 									<?php else : // ! $is_coming_soon_addon ?>
 
@@ -137,7 +148,7 @@ use Atum\Addons\Addons;
 
 										<div class="addon-key">
 											<div class="wrapper">
-												<?php if ( ! $addon_status['installed'] || in_array( $addon_status['status'], [ 'inactive', 'site_inactive' ] ) ) : ?>
+												<?php if ( ! $addon_status['installed'] || empty( $addon_status['key'] ) ) : ?>
 													<input type="text" autocomplete="false" spellcheck="false" class="license-key <?php if ( $addon_status['key'] )
 														echo esc_attr( $addon_status['status'] ) ?>"
 														value="" placeholder="<?php esc_attr_e( 'Enter the add-on license key...', ATUM_TEXT_DOMAIN ) ?>">
@@ -154,7 +165,7 @@ use Atum\Addons\Addons;
 														<div class="license-label"><?php esc_attr_e( 'Expiration date', ATUM_TEXT_DOMAIN ); ?></div>
 														<div class="expires"><?php echo esc_attr( $addon_status['expires'] ) ?></div>
 													</div>
-													<button type="button" class="btn btn-outline-danger remove-license"><?php esc_attr_e( 'Remove license', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
+													<button type="button" class="btn btn-outline-danger remove-license" data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"><?php esc_attr_e( 'Remove license', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
 													<button type="button" class="btn cancel-action"><?php esc_attr_e( 'Cancel', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
 												<?php endif; ?>
 

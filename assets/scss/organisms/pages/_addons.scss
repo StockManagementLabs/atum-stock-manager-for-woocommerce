@@ -67,7 +67,7 @@
 		
 		.atum-loading {
 			right: 152px;
-			top: 3px;
+			bottom: 3px;
 			@include loader(18px, $primary, 3px, 1s);
 		}
 		
@@ -112,11 +112,21 @@
 		}
 	}
 	
+	.addon-description {
+		overflow-y: auto;
+	}
+	
 	.addon-description , & p{
 		margin: 0;
 		flex-grow: 1;
 		font-size: 15px;
 		color: var(--bm_text_color);
+	}
+	
+	.alert {
+		font-size: 12px;
+		padding: 0.3rem calc( 0.75rem + 8px );
+		margin-bottom: .3rem;
 	}
 	
 	.addon-footer {
@@ -173,7 +183,7 @@
 			
 			.license-key, .expires {
 				background-color: var(--atum-table-bg2);
-				font-size: 15px;
+				font-size: 13px;
 				font-weight: 400;
 				line-height: 1.47;
 				padding: 4px 13px;

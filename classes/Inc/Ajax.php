@@ -99,6 +99,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array( $this, 'deactivate_license' ) );
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
+		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -1109,7 +1110,31 @@ final class Ajax {
 	}
 
 	/**
-	 * Seach for products from enhanced selects
+	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
+	 *
+	 * @since 1.9.26
+	 *
+	 */
+	public function refresh_license_status() {
+
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( empty( $_POST['addon'] ) ) {
+			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$addon_name = esc_attr( $_POST['addon'] );
+
+		// Delete the transient.
+		Addons::delete_status_transient( $addon_name );
+
+		wp_send_json_success();
+
+	}
+
+
+	/**
+	 * Search for products from enhanced selects
 	 *
 	 * @package ATUM Orders
 	 *
@@ -2818,7 +2843,6 @@ final class Ajax {
 		wp_die();
 
 	}
-
 
 	/*******************
 	 * Instance methods

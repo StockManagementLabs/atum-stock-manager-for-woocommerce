@@ -7571,11 +7571,7 @@ function roundOff(input, n, mode) {
             return (neg ? '-' : '') + increment(partInt, parseInt(partDec[0])) + '.' + partDec.substring(1);
         }
     }
-<<<<<<< HEAD
     return (neg && (parseInt(partInt) || parseInt(partDec)) ? '-' : '') + partInt + '.' + partDec;
-=======
-    return (neg && parseInt(partInt) ? '-' : '') + partInt + '.' + partDec;
->>>>>>> master
 }
 exports.roundOff = roundOff;
 function greaterThanFive(part, pre, neg, mode) {

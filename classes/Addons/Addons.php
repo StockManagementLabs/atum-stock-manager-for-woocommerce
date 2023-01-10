@@ -89,7 +89,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'http://sml.loc/';
+	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -599,9 +599,9 @@ class Addons {
 		foreach ( $keys as $addon => $license ) {
 
 			// Remove inactive licenses.
-			/*if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
+			if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
 				continue;
-			}*/
+			}
 
 			$addon = strtolower( $addon );
 
@@ -626,9 +626,9 @@ class Addons {
 			foreach ( $keys as $addon2 => $license2 ) {
 
 				// Remove inactive licenses.
-				/*if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
+				if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
 					continue;
-				}*/
+				}
 
 				$addon2 = strtolower( $addon2 );
 
@@ -681,8 +681,12 @@ class Addons {
 
 		if ( $keys !== $result ) {
 
+			// If the addons keys changed, update the option and delete transients.
 			update_option( self::ADDONS_KEY_OPTION, $result );
 
+			foreach ( self::$addons as $slug => $registered_addon ) {
+				self::delete_status_transient( $registered_addon['name'] );
+			}
 		}
 
 		return $result;
@@ -818,9 +822,9 @@ class Addons {
 						break;
 					case 'expired':
 						$addon_status['status']        = 'expired';
-						$addon_status['button_text']   = __( 'Validate', ATUM_TEXT_DOMAIN );
-						$addon_status['button_class']  = 'validate-key';
-						$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
+						$addon_status['button_text']   = '';
+						$addon_status['button_class']  = '';
+						$addon_status['button_action'] = ATUM_PREFIX . 'remove_license';
 						break;
 
 					case 'inactive':
@@ -832,8 +836,8 @@ class Addons {
 						break;
 
 					case 'valid':
-						$addon_status['button_text']   = __( 'Deactivate', ATUM_TEXT_DOMAIN );
-						$addon_status['button_class']  = 'deactivate-key';
+						$addon_status['button_text']   = '';
+						$addon_status['button_class']  = '';
 						$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
 						break;
 				}

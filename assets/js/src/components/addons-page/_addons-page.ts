@@ -96,41 +96,41 @@ export default class AddonsPage {
 				$button.closest( '.actions' ).children().slideToggle( 'fast' );
 			} )
 
-			// Remove an invalid key.
-			.on( 'click', '.remove-key', ( evt: JQueryEventObject ) => {
+			// Refresh license for expired keys
+			.on( 'click', '.expired .refresh-status', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
 
-				const $button: JQuery     = $( evt.currentTarget ),
-				      $addonBlock: JQuery = $button.closest( '.theme' );
+				const $link: JQuery = $( evt.currentTarget );
 
 				$.ajax( {
 					url       : window[ 'ajaxurl' ],
 					method    : 'POST',
 					dataType  : 'json',
 					data      : {
-						action  : 'atum_remove_license',
+						action  : 'atum_refresh_license',
 						security: this.$addonsList.data( 'nonce' ),
-						addon   : $addonBlock.data( 'addon' ),
-						slug    : $addonBlock.data( 'addon-slug' ),
+						addon   : $link.closest( '.atum-addon' ).data( 'addon' ),
 					},
 					beforeSend: () => {
-						$button.prop( 'disabled', true );
+						this.beforeAjax( $link );
 					},
 					success   : ( response: any ) => {
+
+						this.afterAjax( $link );
 
 						if ( response.success === true ) {
 							location.reload();
 						}
 						else {
 							this.showErrorAlert( response.data );
-							$button.prop( 'disabled', false );
 						}
 
-					},
-				} );
+					}
 
-			} );
+				});
+
+			} )
 
 
 	}
@@ -229,7 +229,7 @@ export default class AddonsPage {
 										data    : {
 											action  : 'atum_activate_license',
 											security: this.$addonsList.data( 'nonce' ),
-											addon   : $button.closest( '.theme' ).data( 'addon' ),
+											addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
 											key     : key,
 										},
 										success : ( response: any ) => {
