@@ -23,7 +23,27 @@ use Atum\Addons\Addons;
 	<?php if ( ! empty( $addons ) && is_array( $addons ) ) : ?>
 
 		<div class="atum-addons-wrap" data-nonce="<?php echo esc_attr( wp_create_nonce( 'atum-addon-action' ) ) ?>">
-			<div class=" wp-clearfix">
+
+			<div class="list-table-header">
+				<div class="nav-container-box">
+					<nav class="nav-with-scroll-effect dragscroll">
+						<ul class="subsubsub extend-list-table">
+							<li class="all" data-status="all"><span class="active"><?php esc_attr_e( 'All', ATUM_TEXT_DOMAIN) ?></span></li>
+							<li class="activated" data-status="valid"><span><?php esc_attr_e( 'Activated', ATUM_TEXT_DOMAIN) ?></span></li>
+							<li class="not-activated" data-status="not-activated"><span><?php esc_attr_e( 'Not activated', ATUM_TEXT_DOMAIN) ?></span></li>
+							<li class="expired" data-status="expired"><span><?php esc_attr_e( 'Expired', ATUM_TEXT_DOMAIN) ?></span></li>
+							<li class="not-installed" data-status="not-installed"><span><?php esc_attr_e( 'Not installed', ATUM_TEXT_DOMAIN) ?></span></li>
+							<li class="invalid" data-status="invalid"><span><?php esc_attr_e( 'Invalid', ATUM_TEXT_DOMAIN) ?></span></li>
+						</ul>
+
+						<div class="overflow-opacity-effect-right"></div>
+						<div class="overflow-opacity-effect-left"></div>
+					</nav>
+				</div>
+			</div>
+
+
+			<div class="wp-clearfix">
 				<?php foreach ( $addons as $addon ) :
 
 					$addon_folder = isset( $addon['info']['folder'] ) ? $addon['info']['folder'] : '';
@@ -40,8 +60,8 @@ use Atum\Addons\Addons;
 					$status_text = '';
 
 					if ( $is_coming_soon_addon ) :
-						$addon_classes[] = 'coming-soon';
-						$status_text     = __( 'Coming Soon', ATUM_TEXT_DOMAIN );
+						$addon_status['status'] = $addon_classes[] = 'coming-soon';
+						$status_text            = __( 'Coming Soon', ATUM_TEXT_DOMAIN );
 					elseif ( ! $addon_status['installed'] ) :
 						$addon_classes[] = 'not-installed';
 						$status_text     = __( 'Not Installed', ATUM_TEXT_DOMAIN );

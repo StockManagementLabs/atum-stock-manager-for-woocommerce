@@ -2960,4 +2960,189 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
     margin-bottom: 0.3rem;
   }
 }
+
+.list-table-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0;
+  background-color: var(--atum-table-bg);
+  border-bottom: 1px solid var(--gray-400);
+  border-radius: 8px;
+  padding-left: 10px;
+}
+@media all and (max-width: 782px) {
+  .list-table-header {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    margin-bottom: 15px;
+    border-bottom: none;
+  }
+}
+@media all and (max-width: 480px) {
+  .list-table-header {
+    margin: 0 11px 15px;
+  }
+  .list-table-header.no-margin {
+    margin: 0 11px 15px;
+  }
+}
+.list-table-header .nav-container-box {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-with-scroll-effect {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  cursor: -webkit-grab;
+  cursor: grab;
+  overflow-x: hidden;
+  overflow-y: visible;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  width: 100%;
+  float: left;
+  margin: 0 11px 0 0;
+}
+.nav-with-scroll-effect::-webkit-scrollbar {
+  display: none;
+}
+.nav-with-scroll-effect .subsubsub {
+  margin: 0;
+}
+.nav-with-scroll-effect.dragging a {
+  pointer-events: none;
+}
+.nav-with-scroll-effect .input-group {
+  position: static;
+}
+
+.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+  width: 100px;
+  position: absolute;
+  z-index: 998;
+  height: 49px;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.overflow-opacity-effect-right {
+  right: 0;
+  background-image: var(--overflow-opacity-rigth);
+}
+
+.overflow-opacity-effect-left {
+  display: none;
+  left: 0;
+  background-image: var(--overflow-opacity-left);
+}
+
+.subsubsub {
+  background-color: var(--atum-table-bg);
+  width: 100%;
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  font-weight: bold;
+  text-transform: capitalize;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0;
+}
+.subsubsub.extend-list-table {
+  width: inherit;
+  margin: 10px 0 !important;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  border-radius: 0;
+  border-bottom: 0;
+}
+.subsubsub.extend-list-table li {
+  margin-right: 15px;
+  color: var(--atum-table-views-tabs);
+  text-transform: uppercase;
+  padding: 0;
+}
+.subsubsub.extend-list-table li span {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 3px;
+  border-radius: 5px;
+  line-height: 32px;
+}
+.subsubsub.extend-list-table li span.active {
+  border-radius: 5px;
+  background-color: var(--primary);
+  font-size: 16px;
+  padding: 0 10px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: var(--atum-table-views-tabs-active-text);
+}
+.subsubsub.extend-list-table li span.active:hover {
+  color: var(--atum-table-views-tabs-active-text);
+}
+.subsubsub.extend-list-table li span:hover {
+  color: var(--primary);
+}
+@media all and (max-width: 480px) {
+  .subsubsub.extend-list-table:first-child li span, .subsubsub.extend-list-table:first-child li span:active {
+    margin-left: 0;
+  }
+}
+@media all and (max-width: 782px) {
+  .subsubsub {
+    margin: 10px 10px;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    border-bottom: none;
+  }
+}
+@media all and (max-width: 480px) {
+  .subsubsub {
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+  }
+}
 /*# sourceMappingURL=atum-addons.css.map */

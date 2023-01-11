@@ -89,7 +89,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'http://sml.loc/';
+	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -769,7 +769,7 @@ class Addons {
 			if (
 				empty( $saved_license ) ||
 				// When any add-on was previously activated but is no longer installed and the license is not valid, get rid of it.
-				( ! empty( $saved_license ) && 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
+				( 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
 			) {
 
 				self::update_key( $addon_name, [
@@ -782,30 +782,36 @@ class Addons {
 
 				$addon_status['key'] = $saved_license['key'];
 
-				// Check the license.
-				$status = self::check_license( $addon_name, $addon_status['key'] );
+				if ( ! empty( $addon_status['key'] ) ) {
 
-				if ( ! is_wp_error( $status ) ) {
+					// Check the license.
+					$status = self::check_license( $addon_name, $addon_status['key'] );
 
-					$license_data = json_decode( wp_remote_retrieve_body( $status ) );
+					if ( ! is_wp_error( $status ) ) {
 
-					if ( $license_data ) {
+						$license_data = json_decode( wp_remote_retrieve_body( $status ) );
 
-						$addon_status['status']  = $license_data->license;
-						$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d') : $license_data->expires;
+						if ( $license_data ) {
 
-						if ( $license_data->license !== $saved_license['status'] ) {
-							$saved_license['status'] = $license_data->license;
-							self::update_key( $addon_name, $saved_license );
+							$addon_status['status']  = $license_data->license;
+							$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d') : $license_data->expires;
+
+							if ( $license_data->license !== $saved_license['status'] ) {
+								$saved_license['status'] = $license_data->license;
+								self::update_key( $addon_name, $saved_license );
+							}
+
 						}
 
 					}
-
+				}
+				else {
+					$addon_status['status']  = 'not-activated';
 				}
 
 			}
 			if ( ! $is_installed ) {
-				$addon_status['status']        = '';
+				$addon_status['status']        = 'not-installed';
 				$addon_status['button_text']   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
 				$addon_status['button_class']  = 'install-addon';
 				$addon_status['button_action'] = ATUM_PREFIX . 'install';
@@ -827,6 +833,7 @@ class Addons {
 						$addon_status['button_action'] = ATUM_PREFIX . 'remove_license';
 						break;
 
+					// Not possible??
 					case 'inactive':
 					case 'site_inactive':
 						$addon_status['status']        = 'inactive';
@@ -839,6 +846,12 @@ class Addons {
 						$addon_status['button_text']   = '';
 						$addon_status['button_class']  = '';
 						$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
+						break;
+
+					case 'not-activated':
+						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
+						$addon_status['button_class']  = 'activate-key';
+						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
 						break;
 				}
 			}
