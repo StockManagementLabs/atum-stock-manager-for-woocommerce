@@ -189,7 +189,7 @@ class Bootstrap {
 	 */
 	public function register_hpos_compatibility() {
 		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-			FeaturesUtil::declare_compatibility( 'custom_order_tables', ATUM_PATH . 'atum-stock-manager-for-woocommerce.php' );
+			FeaturesUtil::declare_compatibility( 'custom_order_tables', ATUM_BASENAME );
 		}
 	}
 
