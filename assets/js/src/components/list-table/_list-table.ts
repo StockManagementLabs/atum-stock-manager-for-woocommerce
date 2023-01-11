@@ -196,7 +196,7 @@ export default class ListTable {
 			const $viewsNav: JQuery   = this.globals.$atumList.find( 'nav.dragscroll' ),
 			      $activeView: JQuery = $viewsNav.find( '.active' ).parent();
 
-			if ( $viewsNav.length ) {
+			if ( $viewsNav.length && $activeView.length ) {
 				$viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;
 			}
 
