@@ -4,20 +4,116 @@
 
 @use "sass:math";
 
+$header-bg:                 var(--blue-light);
+$header-height:             300px;
+
+html {
+	scroll-behavior: smooth;
+}
+
 #wpbody-content {
 	padding-bottom: 0;
 }
 
 .atum-addons {
-	
 	margin-bottom: 60px;
 	
-	h1 {
-		margin-bottom: math.div($grid-gutter-width, 2);
+	&-wrap {
+		padding-right: 20px;
 	}
 	
 	a {
 		text-decoration: none;
+	}
+	
+	// Dashboard Header
+	&__header {
+		position: relative;
+		height: $header-height;
+		background: $header-bg url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
+		background-size: cover;
+		@include vertical-align-flex();
+		flex-wrap: wrap;
+		text-align: center;
+		margin-bottom: math.div($grid-gutter-width, 2);
+		margin-left: -20px;
+		
+		&-logo {
+			flex-grow: 1;
+			width: 100%;
+		}
+		
+		h3 {
+			color: var(--main-title);
+			width: 734px;
+			max-width: 90%;
+			margin: auto;
+			line-height: 1.2;
+			font-weight: 200;
+		}
+		
+		&-buttons {
+			padding: math.div($grid-gutter-width, 2);
+			text-align: center;
+			
+			.btn {
+				text-transform: uppercase;
+				font-size: 12px;
+			}
+			
+			.btn-outline-primary {
+				background-color: $white;
+				
+				&:hover {
+					color: $primary;
+					background-color: rgba($white, .3);
+				}
+			}
+			
+			@include tablet-max {
+				right: 0;
+			}
+		}
+		
+		img {
+			max-width: 320px;
+			margin-bottom: 5px;
+			
+			@include mobile-max {
+				max-width: 220px;
+			}
+		}
+		
+		&-notice {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding-left: math.div($grid-gutter-width, 2);
+			padding-bottom: 5px;
+			font-size: 11px;
+			color: var(--main-title);
+			font-weight: 300;
+			
+			span {
+				color: var(--primary);
+				margin-right: 5px;
+			}
+			
+			.wc-rating-link {
+				color: var(--primary);
+			}
+			
+			@include tablet-max {
+				right: 0;
+			}
+			
+			@include mobile-max {
+				font-size: 10px;
+				line-height: 1.3;
+			}
+			
+		}
+		
 	}
 	
 	.atum-addon {
@@ -25,8 +121,9 @@
 		background-color: var(--dash-card-bg);
 		display: flex;
 		align-items: stretch;
-		height: 222px;
+		min-height: 222px;
 		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
 		
 		> .more-details {
 			position: relative;
@@ -48,6 +145,8 @@
 				border-radius: 4px;
 				z-index: 1;
 				text-transform: uppercase;
+				font-size: 12px;
+				font-weight: 300;
 				
 				&.coming-soon {
 					background: $secondary;
@@ -79,21 +178,25 @@
 		background-position: top center;
 		border-bottom-left-radius: 8px;
 		border-top-left-radius: 8px;
+		transition: .2s ease-in-out;
 	}
 	
 	.addon-details {
-		padding: 30px 20px;
+		padding: 15px 20px;
 		display: flex;
 		flex-direction: column;
 	}
 	
 	.addon-header {
 		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 10px 0;
 		
 		h2 {
 			font-size: 18px;
 			color: var(--bm_text_color);
-			margin: 0 10px 10px 0;
+			margin: 0;
 		}
 		
 		.label {
@@ -104,7 +207,6 @@
 			font-size: 11px;
 			line-height: 24px;
 			text-align: center;
-			text-transform: uppercase;
 			
 			&.label-warning {
 				background-color: $warning;
@@ -112,17 +214,16 @@
 		}
 	}
 	
-	
-	.addon-description , & p{
-		margin: 0;
-		flex-grow: 1;
-		font-size: 15px;
-		color: var(--bm_text_color);
-	}
-	
 	.addon-description {
-		overflow-y: auto;
-		margin-bottom: .3rem;
+		margin-bottom: math.div($grid-gutter-width, 2);
+		flex-grow: 1;
+		
+		p {
+			margin: 0;
+			flex-grow: 1;
+			font-size: 15px;
+			color: var(--bm_text_color);
+		}
 	}
 	
 	.alert {
@@ -238,7 +339,7 @@
 	align-items: center;
 	margin: 0;
 	background-color:  var(--atum-table-bg);
-	border-bottom: 1px solid var(--gray-400);
+	box-shadow: 0 4px 0 0 $gray-200;
 	border-radius: 8px;
 	padding-left: 10px;
 	
@@ -355,6 +456,7 @@
 				margin-left: 3px;
 				border-radius: 5px;
 				line-height: 32px;
+				cursor: pointer;
 				
 				&.active {
 					border-radius: 5px;
@@ -364,6 +466,7 @@
 					font-weight: bold;
 					letter-spacing: 0.4px;
 					color:  var(--atum-table-views-tabs-active-text);
+					cursor: default;
 					
 					&:hover {
 						color:  var(--atum-table-views-tabs-active-text);
