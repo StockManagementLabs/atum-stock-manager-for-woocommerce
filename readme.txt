@@ -6,8 +6,8 @@ Requires at least: 5.6
 Tested up to: 6.1.1
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.2.1
-Stable tag: 1.9.25.1
+WC tested up to: 7.2.3
+Stable tag: 1.9.26
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,28 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.26`
+
+*2023-01-12*
+
+**Features**
+
+* Added global order type table id for pick & pack orders.
+* New styling for the add-ons page.
+
+**Changes**
+
+* Updated marketing popup.
+* Refactoring.
+
+**Fixes**
+
+* Fixed wrong SQL delimeter.
+* Fixed SML link.
+* Avoid script error when multiple listtables are loaded.
 
 ---
 

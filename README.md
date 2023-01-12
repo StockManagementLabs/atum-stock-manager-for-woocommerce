@@ -196,6 +196,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.26`
+
+*2023-01-12*
+
+**Features**
+
+* Added global order type table id for pick & pack orders.
+* New styling for the add-ons page.
+
+**Changes**
+
+* Updated marketing popup.
+* Refactoring.
+
+**Fixes**
+
+* Fixed wrong SQL delimeter.
+* Fixed SML link.
+* Avoid script error when multiple listtables are loaded.
+
+---
+
 `1.9.25.1`
 
 *2022-12-22*

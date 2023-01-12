@@ -99,6 +99,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array( $this, 'deactivate_license' ) );
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
+		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -973,7 +974,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Deactivate an addon license key through API
+	 * Deactivate and remove an addon license key through API
 	 *
 	 * @package Add-ons
 	 *
@@ -1005,16 +1006,13 @@ final class Ajax {
 		// $license_data->license will be either "deactivated" or "failed" or "limit_reached".
 		if ( 'deactivated' === $license_data->license ) {
 
-			// Update the key status.
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => 'inactive',
-			) );
+			// Remove the key.
+			Addons::update_key( $addon_name, [ 'key' => '' ] );
 
 			// Delete status transient.
 			Addons::delete_status_transient( $addon_name );
 
-			wp_send_json_success( __( 'Your license has been deactivated.', ATUM_TEXT_DOMAIN ) );
+			wp_send_json_success( __( 'Your license has been deactivated and removed.', ATUM_TEXT_DOMAIN ) );
 
 		}
 		elseif ( 'limit_reached' === $license_data->license ) {
@@ -1066,9 +1064,19 @@ final class Ajax {
 		if ( $license_data->download_link ) {
 
 			Addons::delete_status_transient( $addon_name );
+
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => $license_data->license,
+			) );
+
 			/* @noinspection PhpUnhandledExceptionInspection */
 			$result = Addons::install_addon( $addon_name, $addon_slug, $license_data->download_link );
 			wp_send_json( $result );
+		}
+
+		if ( $license_data->msg ) {
+			wp_send_json_error( $license_data->msg );
 		}
 
 		wp_send_json_error( $default_error );
@@ -1102,7 +1110,31 @@ final class Ajax {
 	}
 
 	/**
-	 * Seach for products from enhanced selects
+	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
+	 *
+	 * @since 1.9.26
+	 *
+	 */
+	public function refresh_license_status() {
+
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( empty( $_POST['addon'] ) ) {
+			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$addon_name = esc_attr( $_POST['addon'] );
+
+		// Delete the transient.
+		Addons::delete_status_transient( $addon_name );
+
+		wp_send_json_success();
+
+	}
+
+
+	/**
+	 * Search for products from enhanced selects
 	 *
 	 * @package ATUM Orders
 	 *
@@ -2811,7 +2843,6 @@ final class Ajax {
 		wp_die();
 
 	}
-
 
 	/*******************
 	 * Instance methods
