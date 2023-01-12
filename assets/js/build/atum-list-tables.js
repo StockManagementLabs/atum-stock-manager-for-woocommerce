@@ -1858,7 +1858,7 @@ var ListTable = (function () {
         if (tableData.views) {
             this.globals.$atumList.find('.subsubsub').replaceWith(tableData.views);
             var $viewsNav = this.globals.$atumList.find('nav.dragscroll'), $activeView = $viewsNav.find('.active').parent();
-            if ($viewsNav.length) {
+            if ($viewsNav.length && $activeView.length) {
                 $viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;
             }
         }
@@ -22552,7 +22552,7 @@ function roundOff(input, n, mode) {
             return (neg ? '-' : '') + increment(partInt, parseInt(partDec[0])) + '.' + partDec.substring(1);
         }
     }
-    return (neg && (parseInt(partInt) || parseInt(partDec)) ? '-' : '') + partInt + '.' + partDec;
+    return (neg && parseInt(partInt) ? '-' : '') + partInt + '.' + partDec;
 }
 exports.roundOff = roundOff;
 function greaterThanFive(part, pre, neg, mode) {
