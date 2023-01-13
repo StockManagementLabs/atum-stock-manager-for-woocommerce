@@ -475,12 +475,13 @@ export default class AtumOrderItems {
 
 			if ( typeof rates === 'object' ) {
 
-				const taxes: number = this.calcTaxesFromBase( purchasePrice, rates );
+				const taxes: number    = Utils.calcTaxesFromBase( purchasePrice, rates );
+				const taxesTxt: string = Utils.formatNumber( taxes, this.settings.get( 'priceNumDecimals' ) ).toString();
 
 				if ( taxes ) {
 					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : ( purchasePrice + taxes ).toString();
-					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } (${ purchasePriceFmt } + ${ taxes } ${ this.settings.get( 'taxesName' ) })`;
-					purchasePrice = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'priceDecimalSep' ) );
+					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } ( ${ purchasePriceFmt } + ${ taxesTxt } ${ this.settings.get( 'taxesName' ) } )`;
+					purchasePrice    = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'priceDecimalSep' ) );
 				}
 
 			}
@@ -551,48 +552,6 @@ export default class AtumOrderItems {
 
 		} );
 
-	}
-
-	/**
-	 * Calc a base price taxes. Based on WC_Tax::calc_exclusive_tax as we have a price without applied taxes.
-	 *
-	 * @param {number} price
-	 * @param {any[]} rates
-	 *
-	 * @return {number}
-	 */
-	calcTaxesFromBase( price: number, rates: any[] ): number {
-
-		let taxes: number[] = [ 0 ],
-		    preCompoundTaxes: number;
-
-		$.each( rates, ( i: number, rate: any ) => {
-
-			if ( 'yes' === rate[ 'compound' ] ) {
-				return true;
-			}
-			taxes.push( price * rate[ 'rate' ] / 100 );
-
-		} );
-
-		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => a + b, 0 );
-		
-		// Compound taxes.
-		$.each( rates, ( i: number, rate: any ) => {
-
-			let currentTax: number;
-
-			if ( 'no' === rate[ 'compound' ] ) {
-				return true;
-			}
-
-			currentTax = ( price + preCompoundTaxes ) * rate[ 'rate' ] / 100;
-			taxes.push( currentTax );
-			preCompoundTaxes += currentTax;
-
-		} );
-
-		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
 	}
 	
 }

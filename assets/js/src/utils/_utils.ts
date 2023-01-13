@@ -634,6 +634,48 @@ const Utils = {
 	subtractDecimal( minuend: number, subtrahend: number ): number {
 		return parseFloat( bigDecimal.subtract( minuend.toString(), subtrahend.toString() ) );
 	},
+
+	/**
+	 * Calc a base price taxes. Based on WC_Tax::calc_exclusive_tax as we have a price without applied taxes.
+	 *
+	 * @param {number} price
+	 * @param {any[]} rates
+	 *
+	 * @return {number}
+	 */
+	calcTaxesFromBase( price: number, rates: any[] ): number {
+
+		let taxes: number[] = [ 0 ],
+		    preCompoundTaxes: number;
+
+		$.each( rates, ( i: number, rate: any ) => {
+
+			if ( 'yes' === rate[ 'compound' ] ) {
+				return true;
+			}
+			taxes.push( price * rate[ 'rate' ] / 100 );
+
+		} );
+
+		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+
+		// Compound taxes.
+		$.each( rates, ( i: number, rate: any ) => {
+
+			let currentTax: number;
+
+			if ( 'no' === rate[ 'compound' ] ) {
+				return true;
+			}
+
+			currentTax = ( price + preCompoundTaxes ) * rate[ 'rate' ] / 100;
+			taxes.push( currentTax );
+			preCompoundTaxes += currentTax;
+
+		} );
+
+		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+	}
 	
 };
 
