@@ -256,7 +256,7 @@ class Addons {
 			'addons_keys' => self::get_keys(),
 		);
 
-		Helpers::load_view( 'addons', $args );
+		Helpers::load_view( 'add-ons/list', $args );
 
 	}
 
@@ -774,7 +774,7 @@ class Addons {
 						if ( $license_data ) {
 
 							$addon_status['status']  = $license_data->license;
-							$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d') : $license_data->expires;
+							$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
 
 							if ( $license_data->license !== $saved_license['status'] ) {
 								$saved_license['status'] = $license_data->license;
@@ -790,6 +790,7 @@ class Addons {
 				}
 
 			}
+
 			if ( ! $is_installed ) {
 				$addon_status['status']        = 'not-installed';
 				$addon_status['button_text']   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
@@ -835,8 +836,6 @@ class Addons {
 						break;
 				}
 			}
-
-
 
 			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
 
@@ -1110,8 +1109,7 @@ class Addons {
 	 * @return bool
 	 */
 	public static function is_addon_active( $addon_name ) {
-
-		return isset( self::$addons[ $addon_name ] );
+		return isset( self::$addons[ $addon_name ] ) || isset( self::$addons[ "{$addon_name}_trial'" ] );
 	}
 
 	/**
