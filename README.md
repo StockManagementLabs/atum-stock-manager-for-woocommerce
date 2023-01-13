@@ -196,6 +196,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.26.1`
+
+*2023-01-13*
+
+**Changes**
+
+* Script router prepared for managing multiple list tables.
+
+**Fixes**
+
+* Fixed trying to access empty license properties.
+
+---
+
 `1.9.26`
 
 *2023-01-12*
