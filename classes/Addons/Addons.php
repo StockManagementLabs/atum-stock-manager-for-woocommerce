@@ -754,7 +754,7 @@ class Addons {
 
 				self::update_key( $addon_name, [
 					'key'    => '',
-					'status' => 'expired' === $saved_license['status'] ? 'expired' : 'invalid',
+					'status' => ! empty( $saved_license ) && 'expired' === $saved_license['status'] ? 'expired' : 'invalid',
 				] );
 
 			}
