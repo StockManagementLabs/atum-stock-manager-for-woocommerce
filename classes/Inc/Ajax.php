@@ -2491,9 +2491,9 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'security' );
 
-		if ( Helpers::show_marketing_popup() ) {
+		$marketing_popup = AtumMarketingPopup::get_instance();
 
-			$marketing_popup = AtumMarketingPopup::get_instance();
+		if ( $marketing_popup->show() ) {
 
 			$marketing_popup_data = [
 				'background'    => $marketing_popup->get_background(),
@@ -2504,7 +2504,7 @@ final class Ajax {
 				'hoverButtons'  => $marketing_popup->get_buttons_hover_style_block(),
 				'images'        => $marketing_popup->get_images(),
 				'footerNotice'  => $marketing_popup->get_footer_notice(),
-				'transient_key' => $marketing_popup->get_transient_key(),
+				'transient_key' => AtumMarketingPopup::get_transient_key(),
 			];
 
 			// Send marketing popup content.

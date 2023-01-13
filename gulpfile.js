@@ -119,6 +119,7 @@ gulp.task('js::atum', function () {
 			
 			entry: {
 				'addons'         : config.jsSrcDir + 'addons.ts',
+				'admin-modals'   : config.jsSrcDir + 'admin-modals.ts',
 				'check-orders'   : config.jsSrcDir + 'check-orders.ts',
 				'dashboard'      : config.jsSrcDir + 'dashboard.ts',
 				'data-export'    : config.jsSrcDir + 'data-export.ts',

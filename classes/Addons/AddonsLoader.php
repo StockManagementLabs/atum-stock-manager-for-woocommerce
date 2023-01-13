@@ -1,0 +1,7 @@
+<?php
+/** @noinspection ALL */
+/**
+  * @author      Be Rebel - https://berebel.io
+  * @copyright   ©2023 Stock Management Labs™
+ */
+ namespace Atum\Addons; defined('ABSPATH') || die; final class AddonsLoader { private $ZeQoD = array('action_logs' => '1.1.5', 'export_pro' => '1.3.4', 'multi_inventory' => '1.5.0', 'product_levels' => '1.6.0', 'purchase_orders' => '0.0.1', 'stock_takes' => '0.0.1', 'pick_pack' => '0.0.1'); public function __construct() { add_action('after_setup_theme', array($this, 'load_addons'), 99); } public function load_addons() { goto npNLy; oNYc_: foreach ($r8ekx as $Am3oq => $OhvC_) { goto xP0PE; TjGKg: AUj2m: goto lAFXQ; jF__g: if (!(!$nOST5 && !empty($this->ZeQoD[$Am3oq]) && version_compare($this->ZeQoD[$Am3oq], $OhvC_['version'], '<'))) { goto o3aDP; } goto E8frq; isAZA: $nOST5 = call_user_func($OhvC_['bootstrap']); goto jF__g; l5YsU: $HmGlP++; goto TP35a; E8frq: unset($r8ekx[$Am3oq]); goto l5YsU; TP35a: o3aDP: goto bx9JE; bx9JE: u1GB3: goto TjGKg; xP0PE: if (!(!empty($OhvC_['bootstrap']) && is_callable($OhvC_['bootstrap']))) { goto u1GB3; } goto isAZA; lAFXQ: } goto jeh08; cLqM_: H2K73: goto Bp7WB; HA18a: NEkgi: goto cLqM_; V0CI8: if (empty($r8ekx)) { goto H2K73; } goto Y6LVl; jeh08: gYvZN: goto nOqru; nOqru: if (!($HmGlP > 0)) { goto NEkgi; } goto VNrZL; npNLy: $r8ekx = Addons::get_installed_addons(); goto V0CI8; Y6LVl: $HmGlP = 0; goto oNYc_; VNrZL: Addons::set_installed_addons($r8ekx); goto HA18a; Bp7WB: } }

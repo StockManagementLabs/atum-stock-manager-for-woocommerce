@@ -1,6 +1,6 @@
 <?php
 /**
- * ATUM add-ons loader
+ * ATUM add-ons manager
  *
  * @package         Atum
  * @subpackage      Addons
@@ -43,19 +43,6 @@ class Addons {
 	 * @var array
 	 */
 	private $no_activated_licenses = array();
-
-	/**
-	 * The first version of each addon that returned a value when bootstrapping.
-	 *
-	 * @var string[]
-	 */
-	private $addons_check_bootstrap = array(
-		'action_logs'     => '1.1.5',
-		'export_pro'      => '1.3.4',
-		'multi_inventory' => '1.5.0',
-		'product_levels'  => '1.6.0',
-		'purchase_orders' => '0.0.1',
-	);
 
 	/**
 	 * Array with paths used for every add-on
@@ -120,7 +107,15 @@ class Addons {
 		add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
 		// Initialize the addons.
-		add_action( 'after_setup_theme', array( $this, 'init_addons' ), 99 );
+		add_action( 'after_setup_theme', array( $this, 'init_addons' ), 100 );
+
+		// Load addons.
+		if ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG && class_exists( '\Atum\Addons\AddonsLoaderDev' ) ) {
+			new AddonsLoaderDev();
+		}
+		else {
+			new AddonsLoader();
+		}
 
 		if ( is_admin() ) {
 
@@ -171,6 +166,22 @@ class Addons {
 	}
 
 	/**
+	 * Initialize the installed ATUM's addons
+	 *
+	 * @since 1.2.0
+	 */
+	public function init_addons() {
+
+		if ( ! empty( self::$addons ) ) {
+
+			// Add extra links to the plugin desc row.
+			add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+
+		}
+
+	}
+
+	/**
 	 * Add the Add-ons menu
 	 *
 	 * @since 1.3.6
@@ -193,37 +204,6 @@ class Addons {
 	}
 
 	/**
-	 * Initialize the installed ATUM's addons
-	 *
-	 * @since 1.2.0
-	 */
-	public function init_addons() {
-
-		if ( ! empty( self::$addons ) ) {
-
-			foreach ( self::$addons as $index => $addon ) {
-
-				// Load the addon. Each addon should have a callback method for bootstraping.
-				if ( ! empty( $addon['bootstrap'] ) && is_callable( $addon['bootstrap'] ) ) {
-
-					$bootstrapped = call_user_func( $addon['bootstrap'] );
-
-					// Check if it's properly bootstrapped only if has an appropriate version.
-					if ( ! $bootstrapped && ! empty( $this->addons_check_bootstrap[ $index ] ) && version_compare( $this->addons_check_bootstrap[ $index ], $addon['version'], '<' ) ) {
-						unset( self::$addons[ $index ] );
-					}
-				}
-
-			}
-
-			// Add extra links to the plugin desc row.
-			add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
-
-		}
-
-	}
-
-	/**
 	 * Load the Addons page
 	 *
 	 * @since 1.2.0
@@ -237,7 +217,7 @@ class Addons {
 		Helpers::maybe_es6_promise();
 
 		// ATUM marketing popup.
-		AtumMarketingPopup::maybe_enqueue_scripts();
+		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
@@ -614,7 +594,7 @@ class Addons {
 			// Get addon slug.
 			foreach ( self::$addons as $addon_data ) {
 
-				if ( $addon === strtolower( $addon_data['name'] ) ) {
+				if ( strtolower( $addon_data['name'] ) === $addon ) {
 					$sensitive_name = strtolower( $addon_data['name'] );
 				}
 
@@ -632,7 +612,7 @@ class Addons {
 
 				$addon2 = strtolower( $addon2 );
 
-				if ( $addon === strtolower( $addon2 ) ) {
+				if ( strtolower( $addon2 ) === $addon ) {
 					$checked[] = $addon2;
 
 					$duplicated[] = [
@@ -1099,15 +1079,25 @@ class Addons {
 	}
 
 	/**
-	 * Getter for the installed addons arrray
+	 * Getter for the installed addons array
 	 *
 	 * @since 1.2.0
 	 *
 	 * @return array
 	 */
 	public static function get_installed_addons() {
-
 		return self::$addons;
+	}
+
+	/**
+	 * Setter for the installed addons array
+	 *
+	 * @since 1.9.26
+	 *
+	 * @param array $addons
+	 */
+	public static function set_installed_addons( $addons ) {
+		self::$addons = $addons;
 	}
 
 	/**

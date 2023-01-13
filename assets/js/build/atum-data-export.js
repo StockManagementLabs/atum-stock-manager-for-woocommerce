@@ -1,1 +1,1424 @@
-!function(t){var e={};function n(r){if(e[r])return e[r].exports;var i=e[r]={i:r,l:!1,exports:{}};return t[r].call(i.exports,i,i.exports,n),i.l=!0,i.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)n.d(r,i,function(e){return t[e]}.bind(null,i));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=89)}({0:function(t,e){t.exports=jQuery},19:function(t,e){var n;n=function(){return this}();try{n=n||new Function("return this")()}catch(t){"object"==typeof window&&(n=window)}t.exports=n},2:function(t,e,n){"use strict";(function(t){var r=n(4),i=n.n(r),o=function(t,e,n){if(n||2===arguments.length)for(var r,i=0,o=e.length;i<o;i++)!r&&i in e||(r||(r=Array.prototype.slice.call(e,0,i)),r[i]=e[i]);return t.concat(r||Array.prototype.slice.call(e))},a={settings:{delayTimer:0,number:{precision:0,grouping:3,thousand:",",decimal:"."},currency:{symbol:"$",format:"%s%v",decimal:".",thousand:",",precision:2,grouping:3}},delay:function(t,e){return clearTimeout(this.settings.delayTimer),this.settings.delayTimer=setTimeout(t,e),this.settings.delayTimer},filterQuery:function(t,e){for(var n=t.split("&"),r=0;r<n.length;r++){var i=n[r].split("=");if(i[0]===e)return i[1]}return!1},filterByData:function(e,n,r){return void 0===r?e.filter((function(e,r){return void 0!==t(r).data(n)})):e.filter((function(e,i){return t(i).data(n)==r}))},addNotice:function(e,n,r,i){void 0===r&&(r=!1),void 0===i&&(i=5);var o=t('<div class="'.concat(e,' notice is-dismissible"><p><strong>').concat(n,"</strong></p></div>")).hide(),a=t("<button />",{type:"button",class:"notice-dismiss"}),s=t(".wp-header-end");s.siblings(".notice").remove(),s.before(o.append(a)),o.slideDown(100),a.on("click.wp-dismiss-notice",(function(t){t.preventDefault(),o.fadeTo(100,0,(function(){o.slideUp(100,(function(){o.remove()}))}))})),r&&setTimeout((function(){a.trigger("click.wp-dismiss-notice")}),1e3*i)},imagesLoaded:function(e){var n=e.find('img[src!=""]');if(!n.length)return t.Deferred().resolve().promise();var r=[];return n.each((function(e,n){var i=t.Deferred(),o=new Image;r.push(i),o.onload=function(){return i.resolve()},o.onerror=function(){return i.resolve()},o.src=t(n).attr("src")})),t.when.apply(t,r)},getUrlParameter:function(t){if("undefined"!=typeof URLSearchParams)return new URLSearchParams(window.location.search).get(t);t=t.replace(/[\[]/,"\\[").replace(/[\]]/,"\\]");var e=new RegExp("[\\?&]"+t+"=([^&#]*)").exec(window.location.search);return null===e?"":decodeURIComponent(e[1].replace(/\+/g," "))},htmlDecode:function(t){var e=document.createElement("div");return e.innerHTML=t,e.childNodes[0].nodeValue},areEquivalent:function(t,e,n){void 0===n&&(n=!1);var r=Object.getOwnPropertyNames(t),i=Object.getOwnPropertyNames(e);if(r.length!=i.length)return!1;for(var o=0;o<r.length;o++){var a=r[o];if(n&&t[a]!==e[a]||!n&&t[a]!=e[a])return!1}return!0},toggleNodes:function(t,e){for(var n=0;n<t.length;n++)t[n].isExpanded="open"==e,t[n].children&&t[n].children.length>0&&this.toggleNodes(t[n].children,e)},formatNumber:function(e,n,r,i,o){var a=this;if(void 0===n&&(n=this.settings.number.precision),void 0===r&&(r=this.settings.number.thousand),void 0===i&&(i=this.settings.number.decimal),void 0===o&&(o=!1),Array.isArray(e))return t.map(e,(function(t){return a.formatNumber(t,n,r,i,o)}));e=this.unformat(e);var s=this.checkPrecision(n),u=e<0?"-":"",l=parseInt(this.toFixed(Math.abs(e||0),s),10)+"",c=l.length>3?l.length%3:0,d="";return s&&(d=this.toFixed(Math.abs(e),s),o&&(d=Number(d).toString()),d=d.includes(".")?i+d.split(".")[1]:""),u+(c?l.substr(0,c)+r:"")+l.substr(c).replace(/(\d{3})(?=\d)/g,"$1"+r)+d},formatMoney:function(e,n,r,i,o,a){var s=this;if(void 0===n&&(n=this.settings.currency.symbol),void 0===r&&(r=this.settings.currency.precision),void 0===i&&(i=this.settings.currency.thousand),void 0===o&&(o=this.settings.currency.decimal),void 0===a&&(a=this.settings.currency.format),Array.isArray(e))return t.map(e,(function(t){return s.formatMoney(t,n,r,i,o,a)}));e=this.unformat(e);var u=this.checkCurrencyFormat(a);return(e>0?u.pos:e<0?u.neg:u.zero).replace("%s",n).replace("%v",this.formatNumber(Math.abs(e),this.checkPrecision(r),i,o))},unformat:function(e,n){var r=this;if(void 0===n&&(n=this.settings.number.decimal),Array.isArray(e))return t.map(e,(function(t){return r.unformat(t,n)}));if("number"==typeof(e=e||0))return e;var i=new RegExp("[^0-9-".concat(n,"]"),"g"),o=parseFloat((""+e).replace(/\((.*)\)/,"-$1").replace(i,"").replace(n,"."));return isNaN(o)?0:o},checkPrecision:function(t,e){return void 0===e&&(e=0),t=Math.round(Math.abs(t)),isNaN(t)?e:t},toFixed:function(t,e){e=this.checkPrecision(e,this.settings.number.precision);var n=Math.pow(10,e);return(Math.round(this.unformat(t)*n)/n).toFixed(e)},checkCurrencyFormat:function(t){var e=this.settings.currency.format;if("function"==typeof t)t=t();else{if("string"==typeof t&&t.match("%v"))return{pos:t,neg:t.replace("-","").replace("%v","-%v"),zero:t};if(!t||!t.pos||!t.pos.match("%v"))return"string"!=typeof e?e:this.settings.currency.format={pos:e,neg:e.replace("%v","-%v"),zero:e}}return t},isNumeric:function(t){return!isNaN(parseFloat(t))&&isFinite(t)},convertElemsToString:function(e){return t("<div />").append(e).html()},mergeArrays:function(t,e){return Array.from(new Set(o(o([],t,!0),e,!0)))},restrictNumberInputValues:function(e){if("number"===e.attr("type")){var n=e.val(),r=parseFloat(n||"0"),i=parseFloat(e.attr("min")||"0"),o=parseFloat(e.attr("max")||"0");t.isNumeric(n)?void 0!==e.attr("min")&&r<i?e.val(i):void 0!==e.attr("max")&&r>o&&e.val(o):e.val(void 0!==e.attr("min")&&!isNaN(i)&&i>0?i:0)}},checkRTL:function(e){var n=!1;switch(t('html[ dir="rtl" ]').length>0&&(n=!0),e){case"isRTL":case"reverse":return n;case"xSide":return n?"right":"left";default:return!1}},multiplyDecimal:function(t,e){return parseFloat(i.a.multiply(t.toString(),e.toString()))},divideDecimal:function(t,e,n){return parseFloat(i.a.divide(t.toString(),e.toString(),n))},sumDecimal:function(t,e){return parseFloat(i.a.add(t.toString(),e.toString()))},subtractDecimal:function(t,e){return parseFloat(i.a.subtract(t.toString(),e.toString()))}};e.a=a}).call(this,n(0))},4:function(t,e,n){(function(e){var n;n=function(){return function(){"use strict";var t={217:function(t,e){function n(t){for(var e="",n=t.length,r=t.split(".")[1],i=r?r.length:0,a=0;a<n;a++)t[a]>="0"&&t[a]<="9"?e+=9-parseInt(t[a]):e+=t[a];return o(e,i>0?"0."+new Array(i).join("0")+"1":"1")}function r(t){var e=t.split(".");for(e[0]||(e[0]="0");"0"==e[0][0]&&e[0].length>1;)e[0]=e[0].substring(1);return e[0]+(e[1]?"."+e[1]:"")}function i(t,e){var n=t.split("."),r=e.split("."),i=n[0].length,o=r[0].length;return i>o?r[0]=new Array(Math.abs(i-o)+1).join("0")+(r[0]?r[0]:""):n[0]=new Array(Math.abs(i-o)+1).join("0")+(n[0]?n[0]:""),i=n[1]?n[1].length:0,o=r[1]?r[1].length:0,(i||o)&&(i>o?r[1]=(r[1]?r[1]:"")+new Array(Math.abs(i-o)+1).join("0"):n[1]=(n[1]?n[1]:"")+new Array(Math.abs(i-o)+1).join("0")),[t=n[0]+(n[1]?"."+n[1]:""),e=r[0]+(r[1]?"."+r[1]:"")]}function o(t,e){var n;t=(n=i(t,e))[0],e=n[1];for(var r="",o=0,a=t.length-1;a>=0;a--)if("."!==t[a]){var s=parseInt(t[a])+parseInt(e[a])+o;r=s%10+r,o=Math.floor(s/10)}else r="."+r;return o?o.toString()+r:r}Object.defineProperty(e,"__esModule",{value:!0}),e.pad=e.trim=e.add=void 0,e.add=function(t,e){var a;void 0===e&&(e="0");var s=0,u=-1;"-"==t[0]&&(s++,u=1,(t=t.substring(1)).length),"-"==e[0]&&(s++,u=2,(e=e.substring(1)).length),t=r(t),e=r(e),t=(a=i(r(t),r(e)))[0],e=a[1],1==s&&(1==u?t=n(t):e=n(e));var l=o(t,e);return s?2==s?"-"+r(l):t.length<l.length?r(l.substring(1)):"-"+r(n(l)):r(l)},e.trim=r,e.pad=i},423:function(t,e,n){var r=n(217),i=n(350),o=n(182),a=n(415),s=n(213),u=n(664),l=n(26),c=n(916),d=function(){function t(e){void 0===e&&(e="0"),this.value=t.validate(e)}return t.validate=function(t){if(t){if(t=t.toString(),isNaN(t))throw Error("Parameter is not a number: "+t);"+"==t[0]&&(t=t.substring(1))}else t="0";if(t.startsWith(".")?t="0"+t:t.startsWith("-.")&&(t="-0"+t.substr(1)),/e/i.test(t)){var e=t.split(/[eE]/),n=e[0],i=e[1],o="";"-"==(n=(0,r.trim)(n))[0]&&(o="-",n=n.substring(1)),n.indexOf(".")>=0?(i=parseInt(i)+n.indexOf("."),n=n.replace(".","")):i=parseInt(i)+n.length,t=n.length<i?o+n+new Array(i-n.length+1).join("0"):n.length>=i&&i>0?o+(0,r.trim)(n.substring(0,i))+(n.length>i?"."+n.substring(i):""):o+"0."+new Array(1-i).join("0")+n}return t},t.prototype.getValue=function(){return this.value},t.getPrettyValue=function(e,n,r){if(n||r){if(!n||!r)throw Error("Illegal Arguments. Should pass both digits and separator or pass none")}else n=3,r=",";var i="-"==(e=t.validate(e)).charAt(0);i&&(e=e.substring(1));for(var o=e.indexOf("."),a="",s=o=o>0?o:e.length;s>0;)s<n?(n=s,s=0):s-=n,a=e.substring(s,s+n)+(s<o-n&&s>=0?r:"")+a;return(i?"-":"")+a+e.substring(o)},t.prototype.getPrettyValue=function(e,n){return t.getPrettyValue(this.value,e,n)},t.round=function(e,n,r){if(void 0===n&&(n=0),void 0===r&&(r=c.RoundingModes.HALF_EVEN),e=t.validate(e),isNaN(n))throw Error("Precision is not a number: "+n);return(0,i.roundOff)(e,n,r)},t.prototype.round=function(e,n){if(void 0===e&&(e=0),void 0===n&&(n=c.RoundingModes.HALF_EVEN),isNaN(e))throw Error("Precision is not a number: "+e);return new t((0,i.roundOff)(this.value,e,n))},t.floor=function(e){return-1===(e=t.validate(e)).indexOf(".")?e:t.round(e,0,c.RoundingModes.FLOOR)},t.prototype.floor=function(){return-1===this.value.indexOf(".")?new t(this.value):new t(this.value).round(0,c.RoundingModes.FLOOR)},t.ceil=function(e){return-1===(e=t.validate(e)).indexOf(".")?e:t.round(e,0,c.RoundingModes.CEILING)},t.prototype.ceil=function(){return-1===this.value.indexOf(".")?new t(this.value):new t(this.value).round(0,c.RoundingModes.CEILING)},t.add=function(e,n){return e=t.validate(e),n=t.validate(n),(0,r.add)(e,n)},t.prototype.add=function(e){return new t((0,r.add)(this.value,e.getValue()))},t.subtract=function(e,n){return e=t.validate(e),n=t.validate(n),(0,l.subtract)(e,n)},t.prototype.subtract=function(e){return new t((0,l.subtract)(this.value,e.getValue()))},t.multiply=function(e,n){return e=t.validate(e),n=t.validate(n),(0,o.multiply)(e,n)},t.prototype.multiply=function(e){return new t((0,o.multiply)(this.value,e.getValue()))},t.divide=function(e,n,r){return e=t.validate(e),n=t.validate(n),(0,a.divide)(e,n,r)},t.prototype.divide=function(e,n){return new t((0,a.divide)(this.value,e.getValue(),n))},t.modulus=function(e,n){return e=t.validate(e),n=t.validate(n),(0,s.modulus)(e,n)},t.prototype.modulus=function(e){return new t((0,s.modulus)(this.value,e.getValue()))},t.compareTo=function(e,n){return e=t.validate(e),n=t.validate(n),(0,u.compareTo)(e,n)},t.prototype.compareTo=function(t){return(0,u.compareTo)(this.value,t.getValue())},t.negate=function(e){return e=t.validate(e),(0,l.negate)(e)},t.prototype.negate=function(){return new t((0,l.negate)(this.value))},t.RoundingModes=c.RoundingModes,t}();t.exports=d},664:function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.compareTo=void 0;var r=n(217);e.compareTo=function(t,e){var n,i=!1;if("-"==t[0]&&"-"!=e[0])return-1;if("-"!=t[0]&&"-"==e[0])return 1;if("-"==t[0]&&"-"==e[0]&&(t=t.substr(1),e=e.substr(1),i=!0),t=(n=(0,r.pad)(t,e))[0],e=n[1],0==t.localeCompare(e))return 0;for(var o=0;o<t.length;o++)if(t[o]!=e[o])return t[o]>e[o]?i?-1:1:i?1:-1;return 0}},415:function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.divide=void 0;var r=n(217),i=n(350);e.divide=function(t,e,n){if(void 0===n&&(n=8),0==e)throw new Error("Cannot divide by 0");if(t=t.toString(),e=e.toString(),t=t.replace(/(\.\d*?[1-9])0+$/g,"$1").replace(/\.0+$/,""),e=e.replace(/(\.\d*?[1-9])0+$/g,"$1").replace(/\.0+$/,""),0==t)return"0";var o=0;"-"==e[0]&&(e=e.substring(1),o++),"-"==t[0]&&(t=t.substring(1),o++);var a=e.indexOf(".")>0?e.length-e.indexOf(".")-1:-1;if(e=(0,r.trim)(e.replace(".","")),a>=0){var s=t.indexOf(".")>0?t.length-t.indexOf(".")-1:-1;if(-1==s)t=(0,r.trim)(t+new Array(a+1).join("0"));else if(a>s)t=t.replace(".",""),t=(0,r.trim)(t+new Array(a-s+1).join("0"));else if(a<s){var u=(t=t.replace(".","")).length-s+a;t=(0,r.trim)(t.substring(0,u)+"."+t.substring(u))}else a==s&&(t=(0,r.trim)(t.replace(".","")))}var l=0,c=e.length,d="",f=t.indexOf(".")>-1&&t.indexOf(".")<c?t.substring(0,c+1):t.substring(0,c);if(t=t.indexOf(".")>-1&&t.indexOf(".")<c?t.substring(c+1):t.substring(c),f.indexOf(".")>-1){var p=f.length-f.indexOf(".")-1;c>(f=f.replace(".","")).length&&(p+=c-f.length,f+=new Array(c-f.length+1).join("0")),l=p,d="0."+new Array(p).join("0")}for(n+=2;l<=n;){for(var g=0;parseInt(f)>=parseInt(e);)f=(0,r.add)(f,"-"+e),g++;d+=g,t?("."==t[0]&&(d+=".",l++,t=t.substring(1)),f+=t.substring(0,1),t=t.substring(1)):(l||(d+="."),l++,f+="0")}return(1==o?"-":"")+(0,r.trim)((0,i.roundOff)(d,n-2))}},213:function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.modulus=void 0;var r=n(415),i=n(350),o=n(182),a=n(26),s=n(916);function u(t){if(-1!=t.indexOf("."))throw new Error("Modulus of non-integers not supported")}e.modulus=function(t,e){if(0==e)throw new Error("Cannot divide by 0");t=t.toString(),e=e.toString(),u(t),u(e);var n="";return"-"==t[0]&&(n="-",t=t.substr(1)),"-"==e[0]&&(e=e.substr(1)),n+(0,a.subtract)(t,(0,o.multiply)(e,(0,i.roundOff)((0,r.divide)(t,e),0,s.RoundingModes.FLOOR)))}},182:function(t,e){function n(t){for(;"0"==t[0];)t=t.substr(1);if(-1!=t.indexOf("."))for(;"0"==t[t.length-1];)t=t.substr(0,t.length-1);return""==t||"."==t?t="0":"."==t[t.length-1]&&(t=t.substr(0,t.length-1)),"."==t[0]&&(t="0"+t),t}Object.defineProperty(e,"__esModule",{value:!0}),e.multiply=void 0,e.multiply=function(t,e){t=t.toString(),e=e.toString();var r=0;"-"==t[0]&&(r++,t=t.substr(1)),"-"==e[0]&&(r++,e=e.substr(1)),t=n(t),e=n(e);var i=0,o=0;-1!=t.indexOf(".")&&(i=t.length-t.indexOf(".")-1),-1!=e.indexOf(".")&&(o=e.length-e.indexOf(".")-1);var a=i+o;if(t=n(t.replace(".","")),e=n(e.replace(".","")),t.length<e.length){var s=t;t=e,e=s}if("0"==e)return"0";for(var u,l,c=e.length,d=0,f=[],p=c-1,g="",h=0;h<c;h++)f[h]=t.length-1;for(h=0;h<2*t.length;h++){for(var v=0,m=e.length-1;m>=p&&m>=0;m--)f[m]>-1&&f[m]<t.length&&(v+=parseInt(t[f[m]--])*parseInt(e[m]));v+=d,d=Math.floor(v/10),g=v%10+g,p--}return g=n((u=g,0==(l=a)?u:(u=l>=u.length?new Array(l-u.length+1).join("0")+u:u).substr(0,u.length-l)+"."+u.substr(u.length-l,l))),1==r&&(g="-"+g),g}},350:function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.roundOff=void 0;var r=n(916);function i(t,e,n,i){if(!t||t===new Array(t.length+1).join("0"))return!1;if(i===r.RoundingModes.DOWN||!n&&i===r.RoundingModes.FLOOR||n&&i===r.RoundingModes.CEILING)return!1;if(i===r.RoundingModes.UP||n&&i===r.RoundingModes.FLOOR||!n&&i===r.RoundingModes.CEILING)return!0;var o="5"+new Array(t.length).join("0");if(t>o)return!0;if(t<o)return!1;switch(i){case r.RoundingModes.HALF_DOWN:return!1;case r.RoundingModes.HALF_UP:return!0;case r.RoundingModes.HALF_EVEN:default:return parseInt(e[e.length-1])%2==1}}function o(t,e){void 0===e&&(e=0),e||(e=1),"number"==typeof t&&t.toString();for(var n="",r=t.length-1;r>=0;r--){var i=parseInt(t[r])+e;10==i?(e=1,i=0):e=0,n+=i}return e&&(n+=e),n.split("").reverse().join("")}e.roundOff=function t(e,n,a){if(void 0===n&&(n=0),void 0===a&&(a=r.RoundingModes.HALF_EVEN),a===r.RoundingModes.UNNECESSARY)throw new Error("UNNECESSARY Rounding Mode has not yet been implemented");"number"!=typeof e&&"bigint"!=typeof e||(e=e.toString());var s=!1;"-"===e[0]&&(s=!0,e=e.substring(1));var u=e.split("."),l=u[0],c=u[1];if(n<0){if(n=-n,l.length<=n)return"0";var d=l.substr(0,l.length-n);return(s?"-":"")+(d=t(e=d+"."+l.substr(l.length-n)+c,0,a))+new Array(n+1).join("0")}if(0==n)return l.length,i(u[1],l,s,a)&&(l=o(l)),(s&&parseInt(l)?"-":"")+l;if(!u[1])return(s?"-":"")+l+"."+new Array(n+1).join("0");if(u[1].length<n)return(s?"-":"")+l+"."+u[1]+new Array(n-u[1].length+1).join("0");c=u[1].substring(0,n);var f=u[1].substring(n);return f&&i(f,c,s,a)&&(c=o(c)).length>n?(s?"-":"")+o(l,parseInt(c[0]))+"."+c.substring(1):(s&&parseInt(l)?"-":"")+l+"."+c}},916:function(t,e){Object.defineProperty(e,"__esModule",{value:!0}),e.RoundingModes=void 0,function(t){t[t.CEILING=0]="CEILING",t[t.DOWN=1]="DOWN",t[t.FLOOR=2]="FLOOR",t[t.HALF_DOWN=3]="HALF_DOWN",t[t.HALF_EVEN=4]="HALF_EVEN",t[t.HALF_UP=5]="HALF_UP",t[t.UNNECESSARY=6]="UNNECESSARY",t[t.UP=7]="UP"}(e.RoundingModes||(e.RoundingModes={}))},26:function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.negate=e.subtract=void 0;var r=n(217);function i(t){return t="-"==t[0]?t.substr(1):"-"+t}e.subtract=function(t,e){return t=t.toString(),e=i(e=e.toString()),(0,r.add)(t,e)},e.negate=i}},e={};return function n(r){var i=e[r];if(void 0!==i)return i.exports;var o=e[r]={exports:{}};return t[r](o,o.exports,n),o.exports}(423)}()},t.exports=n()}).call(this,n(19))},5:function(t,e,n){"use strict";var r=function(){function t(t,e){void 0===e&&(e={}),this.varName=t,this.defaults=e,this.settings={};var n=void 0!==window[t]?window[t]:{};Object.assign(this.settings,e,n)}return t.prototype.get=function(t){if(void 0!==this.settings[t])return this.settings[t]},t.prototype.getAll=function(){return this.settings},t.prototype.delete=function(t){this.settings.hasOwnProperty(t)&&delete this.settings[t]},t}();e.a=r},54:function(t,e,n){"use strict";(function(t){var r=n(2),i=function(){function e(e){var n=this;this.settings=e,this.$pageWrapper=t("#wpbody-content"),this.$tabContentWrapper=t("#screen-meta"),this.$tabsWrapper=t("#screen-meta-links"),this.createExportTab(),this.$pageWrapper.on("submit","#atum-export-settings",(function(t){t.preventDefault(),n.downloadReport()})).on("change","#disableMaxLength",(function(e){var n=t(e.currentTarget),r=n.parent().siblings("input[type=number]");n.is(":checked")?r.prop("disabled",!0):r.prop("disabled",!1)}))}return e.prototype.createExportTab=function(){var e=this.$tabsWrapper.find("#screen-options-link-wrap").clone(),n=this.$tabContentWrapper.find("#screen-options-wrap").clone();if(n.attr({id:"atum-export-wrap","aria-label":this.settings.get("tabTitle")}),n.find("form").attr("id","atum-export-settings").find("input").removeAttr("id"),n.find(".screen-options").remove(),n.find("input[type=submit]").val(this.settings.get("submitTitle")),n.find("#screenoptionnonce").remove(),void 0!==this.settings.get("productTypes")){var r=t('<fieldset class="product-type" />');r.append("<legend>".concat(this.settings.get("productTypesTitle"),"</legend>")),r.append(this.settings.get("productTypes")),r.insertAfter(n.find("fieldset").last())}if(void 0!==this.settings.get("categories")){var i=t('<fieldset class="product-category" />');i.append("<legend>".concat(this.settings.get("categoriesTitle"),"</legend>")),i.append(this.settings.get("categories")),i.insertAfter(n.find("fieldset").last())}var o=t('<fieldset class="title-length" />');o.append("<legend>".concat(this.settings.get("titleLength"),"</legend>")),o.append('<input type="number" step="1" min="0" name="title_max_length" value="'.concat(this.settings.get("maxLength"),'"> ')),o.append('<label><input type="checkbox" id="disableMaxLength" value="yes">'.concat(this.settings.get("disableMaxLength"),"</label>")),o.insertAfter(n.find("fieldset").last());var a=t('<fieldset class="output-format" />');a.append("<legend>".concat(this.settings.get("outputFormatTitle"),"</legend>")),t.each(this.settings.get("outputFormats"),(function(t,e){a.append('<label><input type="radio" name="output-format" value="'.concat(t,'">').concat(e,"</label>"))})),a.find("input[name=output-format]").first().prop("checked",!0),a.insertAfter(n.find("fieldset").last()),n.find(".submit").before('<div class="clear"></div>'),e.attr("id","atum-export-link-wrap").find("button").attr({id:"show-export-settings-link","aria-controls":"atum-export-wrap"}).text(this.settings.get("tabTitle")),this.$tabContentWrapper.append(n),this.$tabsWrapper.prepend(e),t("#show-export-settings-link").click(window.screenMeta.toggleEvent),this.$exportForm=this.$pageWrapper.find("#atum-export-settings")},e.prototype.downloadReport=function(){window.open("".concat(window.ajaxurl,"?action=atum_export_data&page=").concat(r.a.getUrlParameter("page"),"&screen=").concat(this.settings.get("screen"),"&security=").concat(this.settings.get("exportNonce"),"&").concat(this.$exportForm.serialize()),"_blank")},e}();e.a=i}).call(this,n(0))},89:function(t,e,n){"use strict";n.r(e),function(t){var e=n(5),r=n(54);t((function(t){var n=new e.a("atumExport");new r.a(n)}))}.call(this,n(0))}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/src/data-export.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./assets/js/src/components/export/_export.ts":
+/*!****************************************************!*\
+  !*** ./assets/js/src/components/export/_export.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+
+var DataExport = (function () {
+    function DataExport(settings) {
+        var _this = this;
+        this.settings = settings;
+        this.$pageWrapper = $('#wpbody-content');
+        this.$tabContentWrapper = $('#screen-meta');
+        this.$tabsWrapper = $('#screen-meta-links');
+        this.createExportTab();
+        this.$pageWrapper
+            .on('submit', '#atum-export-settings', function (evt) {
+            evt.preventDefault();
+            _this.downloadReport();
+        })
+            .on('change', '#disableMaxLength', function (evt) {
+            var $checkbox = $(evt.currentTarget), $input = $checkbox.parent().siblings('input[type=number]');
+            if ($checkbox.is(':checked')) {
+                $input.prop('disabled', true);
+            }
+            else {
+                $input.prop('disabled', false);
+            }
+        });
+    }
+    DataExport.prototype.createExportTab = function () {
+        var $tab = this.$tabsWrapper.find('#screen-options-link-wrap').clone(), $tabContent = this.$tabContentWrapper.find('#screen-options-wrap').clone();
+        $tabContent.attr({
+            'id': 'atum-export-wrap',
+            'aria-label': this.settings.get('tabTitle'),
+        });
+        $tabContent.find('form').attr('id', 'atum-export-settings').find('input').removeAttr('id');
+        $tabContent.find('.screen-options').remove();
+        $tabContent.find('input[type=submit]').val(this.settings.get('submitTitle'));
+        $tabContent.find('#screenoptionnonce').remove();
+        if (typeof this.settings.get('productTypes') !== 'undefined') {
+            var $typeFieldset = $('<fieldset class="product-type" />');
+            $typeFieldset.append("<legend>".concat(this.settings.get('productTypesTitle'), "</legend>"));
+            $typeFieldset.append(this.settings.get('productTypes'));
+            $typeFieldset.insertAfter($tabContent.find('fieldset').last());
+        }
+        if (typeof this.settings.get('categories') !== 'undefined') {
+            var $catFieldset = $('<fieldset class="product-category" />');
+            $catFieldset.append("<legend>".concat(this.settings.get('categoriesTitle'), "</legend>"));
+            $catFieldset.append(this.settings.get('categories'));
+            $catFieldset.insertAfter($tabContent.find('fieldset').last());
+        }
+        var $titleLengthFieldset = $('<fieldset class="title-length" />');
+        $titleLengthFieldset.append("<legend>".concat(this.settings.get('titleLength'), "</legend>"));
+        $titleLengthFieldset.append("<input type=\"number\" step=\"1\" min=\"0\" name=\"title_max_length\" value=\"".concat(this.settings.get('maxLength'), "\"> "));
+        $titleLengthFieldset.append("<label><input type=\"checkbox\" id=\"disableMaxLength\" value=\"yes\">".concat(this.settings.get('disableMaxLength'), "</label>"));
+        $titleLengthFieldset.insertAfter($tabContent.find('fieldset').last());
+        var $formatFieldset = $('<fieldset class="output-format" />');
+        $formatFieldset.append("<legend>".concat(this.settings.get('outputFormatTitle'), "</legend>"));
+        $.each(this.settings.get('outputFormats'), function (key, value) {
+            $formatFieldset.append("<label><input type=\"radio\" name=\"output-format\" value=\"".concat(key, "\">").concat(value, "</label>"));
+        });
+        $formatFieldset.find('input[name=output-format]').first().prop('checked', true);
+        $formatFieldset.insertAfter($tabContent.find('fieldset').last());
+        $tabContent.find('.submit').before('<div class="clear"></div>');
+        $tab.attr('id', 'atum-export-link-wrap')
+            .find('button').attr({
+            'id': 'show-export-settings-link',
+            'aria-controls': 'atum-export-wrap'
+        }).text(this.settings.get('tabTitle'));
+        this.$tabContentWrapper.append($tabContent);
+        this.$tabsWrapper.prepend($tab);
+        $('#show-export-settings-link').click(window['screenMeta'].toggleEvent);
+        this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
+    };
+    DataExport.prototype.downloadReport = function () {
+        window.open("".concat(window['ajaxurl'], "?action=atum_export_data&page=").concat(_utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('page'), "&screen=").concat(this.settings.get('screen'), "&security=").concat(this.settings.get('exportNonce'), "&").concat(this.$exportForm.serialize()), '_blank');
+    };
+    return DataExport;
+}());
+/* harmony default export */ __webpack_exports__["default"] = (DataExport);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_settings.ts":
+/*!*******************************************!*\
+  !*** ./assets/js/src/config/_settings.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Settings = (function () {
+    function Settings(varName, defaults) {
+        if (defaults === void 0) { defaults = {}; }
+        this.varName = varName;
+        this.defaults = defaults;
+        this.settings = {};
+        var localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
+        Object.assign(this.settings, defaults, localizedOpts);
+    }
+    Settings.prototype.get = function (prop) {
+        if (typeof this.settings[prop] !== 'undefined') {
+            return this.settings[prop];
+        }
+        return undefined;
+    };
+    Settings.prototype.getAll = function () {
+        return this.settings;
+    };
+    Settings.prototype.delete = function (prop) {
+        if (this.settings.hasOwnProperty(prop)) {
+            delete this.settings[prop];
+        }
+    };
+    return Settings;
+}());
+/* harmony default export */ __webpack_exports__["default"] = (Settings);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/data-export.ts":
+/*!**************************************!*\
+  !*** ./assets/js/src/data-export.ts ***!
+  \**************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* harmony import */ var _components_export_export__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/export/_export */ "./assets/js/src/components/export/_export.ts");
+
+
+jQuery(function ($) {
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumExport');
+    new _components_export_export__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
+});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/src/utils/_utils.ts":
+/*!***************************************!*\
+  !*** ./assets/js/src/utils/_utils.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-big-decimal */ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js");
+/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_big_decimal__WEBPACK_IMPORTED_MODULE_0__);
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+
+var Utils = {
+    settings: {
+        delayTimer: 0,
+        number: {
+            precision: 0,
+            grouping: 3,
+            thousand: ',',
+            decimal: '.',
+        },
+        currency: {
+            symbol: '$',
+            format: '%s%v',
+            decimal: '.',
+            thousand: ',',
+            precision: 2,
+            grouping: 3,
+        },
+    },
+    delay: function (callback, ms) {
+        clearTimeout(this.settings.delayTimer);
+        this.settings.delayTimer = setTimeout(callback, ms);
+        return this.settings.delayTimer;
+    },
+    filterQuery: function (query, variable) {
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (pair[0] === variable) {
+                return pair[1];
+            }
+        }
+        return false;
+    },
+    filterByData: function ($elem, prop, val) {
+        if (typeof val === 'undefined') {
+            return $elem.filter(function (index, elem) {
+                return typeof $(elem).data(prop) !== 'undefined';
+            });
+        }
+        ;
+        return $elem.filter(function (index, elem) {
+            return $(elem).data(prop) == val;
+        });
+    },
+    addNotice: function (type, msg, autoDismiss, dismissSeconds) {
+        if (autoDismiss === void 0) { autoDismiss = false; }
+        if (dismissSeconds === void 0) { dismissSeconds = 5; }
+        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        $headerEnd.siblings('.notice').remove();
+        $headerEnd.before($notice.append($dismissButton));
+        $notice.slideDown(100);
+        $dismissButton.on('click.wp-dismiss-notice', function (evt) {
+            evt.preventDefault();
+            $notice.fadeTo(100, 0, function () {
+                $notice.slideUp(100, function () {
+                    $notice.remove();
+                });
+            });
+        });
+        if (autoDismiss) {
+            setTimeout(function () {
+                $dismissButton.trigger('click.wp-dismiss-notice');
+            }, dismissSeconds * 1000);
+        }
+    },
+    imagesLoaded: function ($wrapper) {
+        var $imgs = $wrapper.find('img[src!=""]');
+        if (!$imgs.length) {
+            return $.Deferred().resolve().promise();
+        }
+        var dfds = [];
+        $imgs.each(function (index, elem) {
+            var dfd = $.Deferred(), img = new Image();
+            dfds.push(dfd);
+            img.onload = function () { return dfd.resolve(); };
+            img.onerror = function () { return dfd.resolve(); };
+            img.src = $(elem).attr('src');
+        });
+        return $.when.apply($, dfds);
+    },
+    getUrlParameter: function (name) {
+        if (typeof URLSearchParams !== 'undefined') {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        else {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(window.location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+    },
+    htmlDecode: function (input) {
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes[0].nodeValue;
+    },
+    areEquivalent: function (a, b, strict) {
+        if (strict === void 0) { strict = false; }
+        var aProps = Object.getOwnPropertyNames(a), bProps = Object.getOwnPropertyNames(b);
+        if (aProps.length != bProps.length) {
+            return false;
+        }
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+            if ((strict && a[propName] !== b[propName]) || (!strict && a[propName] != b[propName])) {
+                return false;
+            }
+        }
+        return true;
+    },
+    toggleNodes: function (nodes, openOrClose) {
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].isExpanded = openOrClose == 'open';
+            if (nodes[i].children && nodes[i].children.length > 0) {
+                this.toggleNodes(nodes[i].children, openOrClose);
+            }
+        }
+    },
+    formatNumber: function (number, precision, thousand, decimal, stripZeros) {
+        var _this = this;
+        if (precision === void 0) { precision = this.settings.number.precision; }
+        if (thousand === void 0) { thousand = this.settings.number.thousand; }
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
+        if (stripZeros === void 0) { stripZeros = false; }
+        if (Array.isArray(number)) {
+            return $.map(number, function (val) { return _this.formatNumber(val, precision, thousand, decimal, stripZeros); });
+        }
+        number = this.unformat(number);
+        var usePrecision = this.checkPrecision(precision), negative = number < 0 ? '-' : '', base = parseInt(this.toFixed(Math.abs(number || 0), usePrecision), 10) + '', mod = base.length > 3 ? base.length % 3 : 0;
+        var decimalsPart = '';
+        if (usePrecision) {
+            decimalsPart = this.toFixed(Math.abs(number), usePrecision);
+            if (stripZeros) {
+                decimalsPart = Number(decimalsPart).toString();
+            }
+            decimalsPart = decimalsPart.includes('.') ? decimal + decimalsPart.split('.')[1] : '';
+        }
+        return negative + (mod ? base.substr(0, mod) + thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + thousand) + decimalsPart;
+    },
+    formatMoney: function (number, symbol, precision, thousand, decimal, format) {
+        var _this = this;
+        if (symbol === void 0) { symbol = this.settings.currency.symbol; }
+        if (precision === void 0) { precision = this.settings.currency.precision; }
+        if (thousand === void 0) { thousand = this.settings.currency.thousand; }
+        if (decimal === void 0) { decimal = this.settings.currency.decimal; }
+        if (format === void 0) { format = this.settings.currency.format; }
+        if (Array.isArray(number)) {
+            return $.map(number, function (val) { return _this.formatMoney(val, symbol, precision, thousand, decimal, format); });
+        }
+        number = this.unformat(number);
+        var formats = this.checkCurrencyFormat(format), useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
+        return useFormat.replace('%s', symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(precision), thousand, decimal));
+    },
+    unformat: function (value, decimal) {
+        var _this = this;
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
+        if (Array.isArray(value)) {
+            return $.map(value, function (val) { return _this.unformat(val, decimal); });
+        }
+        value = value || 0;
+        if (typeof value === 'number') {
+            return value;
+        }
+        var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
+            .replace(/\((.*)\)/, '-$1')
+            .replace(regex, '')
+            .replace(decimal, '.'));
+        return !isNaN(unformatted) ? unformatted : 0;
+    },
+    checkPrecision: function (val, base) {
+        if (base === void 0) { base = 0; }
+        val = Math.round(Math.abs(val));
+        return isNaN(val) ? base : val;
+    },
+    toFixed: function (value, precision) {
+        precision = this.checkPrecision(precision, this.settings.number.precision);
+        var power = Math.pow(10, precision);
+        return (Math.round(this.unformat(value) * power) / power).toFixed(precision);
+    },
+    checkCurrencyFormat: function (format) {
+        var defaults = this.settings.currency.format;
+        if (typeof format === 'function') {
+            format = format();
+        }
+        else if (typeof format === 'string' && format.match('%v')) {
+            return {
+                pos: format,
+                neg: format.replace('-', '').replace('%v', '-%v'),
+                zero: format,
+            };
+        }
+        else if (!format || !format.pos || !format.pos.match('%v')) {
+            return (typeof defaults !== 'string') ? defaults : this.settings.currency.format = {
+                pos: defaults,
+                neg: defaults.replace('%v', '-%v'),
+                zero: defaults,
+            };
+        }
+        return format;
+    },
+    isNumeric: function (n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    },
+    convertElemsToString: function ($elems) {
+        return $('<div />').append($elems).html();
+    },
+    mergeArrays: function (arr1, arr2) {
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
+    },
+    restrictNumberInputValues: function ($input) {
+        if ($input.attr('type') !== 'number') {
+            return;
+        }
+        var qty = $input.val();
+        var value = parseFloat(qty || '0'), min = parseFloat($input.attr('min') || '0'), max = parseFloat($input.attr('max') || '0');
+        if (!$.isNumeric(qty)) {
+            $input.val(undefined !== $input.attr('min') && !isNaN(min) && min > 0 ? min : 0);
+        }
+        else if (undefined !== $input.attr('min') && value < min) {
+            $input.val(min);
+        }
+        else if (undefined !== $input.attr('max') && value > max) {
+            $input.val(max);
+        }
+    },
+    checkRTL: function (value) {
+        var isRTL = false;
+        if ($('html[ dir="rtl" ]').length > 0) {
+            isRTL = true;
+        }
+        switch (value) {
+            case 'isRTL':
+            case 'reverse':
+                return isRTL;
+                break;
+            case 'xSide':
+                if (isRTL) {
+                    return 'right';
+                }
+                else {
+                    return 'left';
+                }
+                break;
+            default:
+                return false;
+                break;
+        }
+    },
+    multiplyDecimal: function (multiplicand, multiplier) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.multiply(multiplicand.toString(), multiplier.toString()));
+    },
+    divideDecimal: function (dividend, divisor, precision) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.divide(dividend.toString(), divisor.toString(), precision));
+    },
+    sumDecimal: function (summand1, summand2) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.add(summand1.toString(), summand2.toString()));
+    },
+    subtractDecimal: function (minuend, subtrahend) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.subtract(minuend.toString(), subtrahend.toString()));
+    },
+};
+/* harmony default export */ __webpack_exports__["default"] = (Utils);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/js-big-decimal/dist/node/js-big-decimal.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(global, function() {
+return /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 217:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pad = exports.trim = exports.add = void 0;
+//function add {
+function add(number1, number2) {
+    var _a;
+    if (number2 === void 0) { number2 = "0"; }
+    var neg = 0, ind = -1, neg_len;
+    //check for negatives
+    if (number1[0] == '-') {
+        neg++;
+        ind = 1;
+        number1 = number1.substring(1);
+        neg_len = number1.length;
+    }
+    if (number2[0] == '-') {
+        neg++;
+        ind = 2;
+        number2 = number2.substring(1);
+        neg_len = number2.length;
+    }
+    number1 = trim(number1);
+    number2 = trim(number2);
+    _a = pad(trim(number1), trim(number2)), number1 = _a[0], number2 = _a[1];
+    if (neg == 1) {
+        if (ind == 1)
+            number1 = compliment(number1);
+        else
+            number2 = compliment(number2);
+    }
+    var res = addCore(number1, number2);
+    if (!neg)
+        return trim(res);
+    else if (neg == 2)
+        return ('-' + trim(res));
+    else {
+        if (number1.length < (res.length))
+            return trim(res.substring(1));
+        else
+            return ('-' + trim(compliment(res)));
+    }
+}
+exports.add = add;
+function compliment(number) {
+    var s = '', l = number.length, dec = number.split('.')[1], ld = dec ? dec.length : 0;
+    for (var i = 0; i < l; i++) {
+        if (number[i] >= '0' && number[i] <= '9')
+            s += (9 - parseInt(number[i]));
+        else
+            s += number[i];
+    }
+    var one = (ld > 0) ? ('0.' + (new Array(ld)).join('0') + '1') : '1';
+    return addCore(s, one);
+}
+function trim(number) {
+    var parts = number.split('.');
+    if (!parts[0])
+        parts[0] = '0';
+    while (parts[0][0] == '0' && parts[0].length > 1)
+        parts[0] = parts[0].substring(1);
+    return parts[0] + (parts[1] ? ('.' + parts[1]) : '');
+}
+exports.trim = trim;
+function pad(number1, number2) {
+    var parts1 = number1.split('.'), parts2 = number2.split('.');
+    //pad integral part
+    var length1 = parts1[0].length, length2 = parts2[0].length;
+    if (length1 > length2) {
+        parts2[0] = (new Array(Math.abs(length1 - length2) + 1)).join('0') + (parts2[0] ? parts2[0] : '');
+    }
+    else {
+        parts1[0] = (new Array(Math.abs(length1 - length2) + 1)).join('0') + (parts1[0] ? parts1[0] : '');
+    }
+    //pad fractional part
+    length1 = parts1[1] ? parts1[1].length : 0,
+        length2 = parts2[1] ? parts2[1].length : 0;
+    if (length1 || length2) {
+        if (length1 > length2) {
+            parts2[1] = (parts2[1] ? parts2[1] : '') + (new Array(Math.abs(length1 - length2) + 1)).join('0');
+        }
+        else {
+            parts1[1] = (parts1[1] ? parts1[1] : '') + (new Array(Math.abs(length1 - length2) + 1)).join('0');
+        }
+    }
+    number1 = parts1[0] + ((parts1[1]) ? ('.' + parts1[1]) : '');
+    number2 = parts2[0] + ((parts2[1]) ? ('.' + parts2[1]) : '');
+    return [number1, number2];
+}
+exports.pad = pad;
+function addCore(number1, number2) {
+    var _a;
+    _a = pad(number1, number2), number1 = _a[0], number2 = _a[1];
+    var sum = '', carry = 0;
+    for (var i = number1.length - 1; i >= 0; i--) {
+        if (number1[i] === '.') {
+            sum = '.' + sum;
+            continue;
+        }
+        var temp = parseInt(number1[i]) + parseInt(number2[i]) + carry;
+        sum = (temp % 10) + sum;
+        carry = Math.floor(temp / 10);
+    }
+    return carry ? (carry.toString() + sum) : sum;
+}
+
+
+/***/ }),
+
+/***/ 423:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var add_1 = __webpack_require__(217);
+var round_1 = __webpack_require__(350);
+var multiply_1 = __webpack_require__(182);
+var divide_1 = __webpack_require__(415);
+var modulus_1 = __webpack_require__(213);
+var compareTo_1 = __webpack_require__(664);
+var subtract_1 = __webpack_require__(26);
+var roundingModes_1 = __webpack_require__(916);
+var bigDecimal = /** @class */ (function () {
+    function bigDecimal(number) {
+        if (number === void 0) { number = '0'; }
+        this.value = bigDecimal.validate(number);
+    }
+    bigDecimal.validate = function (number) {
+        if (number) {
+            number = number.toString();
+            if (isNaN(number))
+                throw Error("Parameter is not a number: " + number);
+            if (number[0] == '+')
+                number = number.substring(1);
+        }
+        else
+            number = '0';
+        //handle missing leading zero
+        if (number.startsWith('.'))
+            number = '0' + number;
+        else if (number.startsWith('-.'))
+            number = '-0' + number.substr(1);
+        //handle exponentiation
+        if (/e/i.test(number)) {
+            var _a = number.split(/[eE]/), mantisa = _a[0], exponent = _a[1];
+            mantisa = (0, add_1.trim)(mantisa);
+            var sign = '';
+            if (mantisa[0] == '-') {
+                sign = '-';
+                mantisa = mantisa.substring(1);
+            }
+            if (mantisa.indexOf('.') >= 0) {
+                exponent = parseInt(exponent) + mantisa.indexOf('.');
+                mantisa = mantisa.replace('.', '');
+            }
+            else {
+                exponent = parseInt(exponent) + mantisa.length;
+            }
+            if (mantisa.length < exponent) {
+                number = sign + mantisa + (new Array(exponent - mantisa.length + 1)).join('0');
+            }
+            else if (mantisa.length >= exponent && exponent > 0) {
+                number = sign + (0, add_1.trim)(mantisa.substring(0, exponent)) +
+                    ((mantisa.length > exponent) ? ('.' + mantisa.substring(exponent)) : '');
+            }
+            else {
+                number = sign + '0.' + (new Array(-exponent + 1)).join('0') + mantisa;
+            }
+        }
+        return number;
+    };
+    bigDecimal.prototype.getValue = function () {
+        return this.value;
+    };
+    bigDecimal.getPrettyValue = function (number, digits, separator) {
+        if (!(digits || separator)) {
+            digits = 3;
+            separator = ',';
+        }
+        else if (!(digits && separator)) {
+            throw Error('Illegal Arguments. Should pass both digits and separator or pass none');
+        }
+        number = bigDecimal.validate(number);
+        var neg = number.charAt(0) == '-';
+        if (neg)
+            number = number.substring(1);
+        var len = number.indexOf('.');
+        len = len > 0 ? len : (number.length);
+        var temp = '';
+        for (var i = len; i > 0;) {
+            if (i < digits) {
+                digits = i;
+                i = 0;
+            }
+            else
+                i -= digits;
+            temp = number.substring(i, i + digits) + ((i < (len - digits) && i >= 0) ? separator : '') + temp;
+        }
+        return (neg ? '-' : '') + temp + number.substring(len);
+    };
+    bigDecimal.prototype.getPrettyValue = function (digits, separator) {
+        return bigDecimal.getPrettyValue(this.value, digits, separator);
+    };
+    bigDecimal.round = function (number, precision, mode) {
+        if (precision === void 0) { precision = 0; }
+        if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+        number = bigDecimal.validate(number);
+        // console.log(number)
+        if (isNaN(precision))
+            throw Error("Precision is not a number: " + precision);
+        return (0, round_1.roundOff)(number, precision, mode);
+    };
+    bigDecimal.prototype.round = function (precision, mode) {
+        if (precision === void 0) { precision = 0; }
+        if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+        if (isNaN(precision))
+            throw Error("Precision is not a number: " + precision);
+        return new bigDecimal((0, round_1.roundOff)(this.value, precision, mode));
+    };
+    bigDecimal.floor = function (number) {
+        number = bigDecimal.validate(number);
+        if (number.indexOf('.') === -1)
+            return number;
+        return bigDecimal.round(number, 0, roundingModes_1.RoundingModes.FLOOR);
+    };
+    bigDecimal.prototype.floor = function () {
+        if (this.value.indexOf('.') === -1)
+            return new bigDecimal(this.value);
+        return new bigDecimal(this.value).round(0, roundingModes_1.RoundingModes.FLOOR);
+    };
+    bigDecimal.ceil = function (number) {
+        number = bigDecimal.validate(number);
+        if (number.indexOf('.') === -1)
+            return number;
+        return bigDecimal.round(number, 0, roundingModes_1.RoundingModes.CEILING);
+    };
+    bigDecimal.prototype.ceil = function () {
+        if (this.value.indexOf('.') === -1)
+            return new bigDecimal(this.value);
+        return new bigDecimal(this.value).round(0, roundingModes_1.RoundingModes.CEILING);
+    };
+    bigDecimal.add = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, add_1.add)(number1, number2);
+    };
+    bigDecimal.prototype.add = function (number) {
+        return new bigDecimal((0, add_1.add)(this.value, number.getValue()));
+    };
+    bigDecimal.subtract = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, subtract_1.subtract)(number1, number2);
+    };
+    bigDecimal.prototype.subtract = function (number) {
+        return new bigDecimal((0, subtract_1.subtract)(this.value, number.getValue()));
+    };
+    bigDecimal.multiply = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, multiply_1.multiply)(number1, number2);
+    };
+    bigDecimal.prototype.multiply = function (number) {
+        return new bigDecimal((0, multiply_1.multiply)(this.value, number.getValue()));
+    };
+    bigDecimal.divide = function (number1, number2, precision) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, divide_1.divide)(number1, number2, precision);
+    };
+    bigDecimal.prototype.divide = function (number, precision) {
+        return new bigDecimal((0, divide_1.divide)(this.value, number.getValue(), precision));
+    };
+    bigDecimal.modulus = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, modulus_1.modulus)(number1, number2);
+    };
+    bigDecimal.prototype.modulus = function (number) {
+        return new bigDecimal((0, modulus_1.modulus)(this.value, number.getValue()));
+    };
+    bigDecimal.compareTo = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, compareTo_1.compareTo)(number1, number2);
+    };
+    bigDecimal.prototype.compareTo = function (number) {
+        return (0, compareTo_1.compareTo)(this.value, number.getValue());
+    };
+    bigDecimal.negate = function (number) {
+        number = bigDecimal.validate(number);
+        return (0, subtract_1.negate)(number);
+    };
+    bigDecimal.prototype.negate = function () {
+        return new bigDecimal((0, subtract_1.negate)(this.value));
+    };
+    bigDecimal.RoundingModes = roundingModes_1.RoundingModes;
+    return bigDecimal;
+}());
+module.exports = bigDecimal;
+
+
+/***/ }),
+
+/***/ 664:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.compareTo = void 0;
+var add_1 = __webpack_require__(217);
+function compareTo(number1, number2) {
+    var _a;
+    var negative = false;
+    if (number1[0] == '-' && number2[0] != "-") {
+        return -1;
+    }
+    else if (number1[0] != '-' && number2[0] == '-') {
+        return 1;
+    }
+    else if (number1[0] == '-' && number2[0] == '-') {
+        number1 = number1.substr(1);
+        number2 = number2.substr(1);
+        negative = true;
+    }
+    _a = (0, add_1.pad)(number1, number2), number1 = _a[0], number2 = _a[1];
+    if (number1.localeCompare(number2) == 0) {
+        return 0;
+    }
+    for (var i = 0; i < number1.length; i++) {
+        if (number1[i] == number2[i]) {
+            continue;
+        }
+        else if (number1[i] > number2[i]) {
+            if (negative) {
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+            if (negative) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
+exports.compareTo = compareTo;
+
+
+/***/ }),
+
+/***/ 415:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.divide = void 0;
+var add_1 = __webpack_require__(217);
+var round_1 = __webpack_require__(350);
+function divide(dividend, divisor, precission) {
+    if (precission === void 0) { precission = 8; }
+    if (divisor == 0) {
+        throw new Error('Cannot divide by 0');
+    }
+    dividend = dividend.toString();
+    divisor = divisor.toString();
+    // remove trailing zeros in decimal ISSUE#18
+    dividend = dividend.replace(/(\.\d*?[1-9])0+$/g, "$1").replace(/\.0+$/, "");
+    divisor = divisor.replace(/(\.\d*?[1-9])0+$/g, "$1").replace(/\.0+$/, "");
+    if (dividend == 0)
+        return '0';
+    var neg = 0;
+    if (divisor[0] == '-') {
+        divisor = divisor.substring(1);
+        neg++;
+    }
+    if (dividend[0] == '-') {
+        dividend = dividend.substring(1);
+        neg++;
+    }
+    var pt_dvsr = divisor.indexOf('.') > 0 ? divisor.length - divisor.indexOf('.') - 1 : -1;
+    divisor = (0, add_1.trim)(divisor.replace('.', ''));
+    if (pt_dvsr >= 0) {
+        var pt_dvnd = dividend.indexOf('.') > 0 ? dividend.length - dividend.indexOf('.') - 1 : -1;
+        if (pt_dvnd == -1) {
+            dividend = (0, add_1.trim)(dividend + (new Array(pt_dvsr + 1)).join('0'));
+        }
+        else {
+            if (pt_dvsr > pt_dvnd) {
+                dividend = dividend.replace('.', '');
+                dividend = (0, add_1.trim)(dividend + (new Array(pt_dvsr - pt_dvnd + 1)).join('0'));
+            }
+            else if (pt_dvsr < pt_dvnd) {
+                dividend = dividend.replace('.', '');
+                var loc = dividend.length - pt_dvnd + pt_dvsr;
+                dividend = (0, add_1.trim)(dividend.substring(0, loc) + '.' + dividend.substring(loc));
+            }
+            else if (pt_dvsr == pt_dvnd) {
+                dividend = (0, add_1.trim)(dividend.replace('.', ''));
+            }
+        }
+    }
+    var prec = 0, dl = divisor.length, rem = '0', quotent = '';
+    var dvnd = (dividend.indexOf('.') > -1 && dividend.indexOf('.') < dl) ? dividend.substring(0, dl + 1) : dividend.substring(0, dl);
+    dividend = (dividend.indexOf('.') > -1 && dividend.indexOf('.') < dl) ? dividend.substring(dl + 1) : dividend.substring(dl);
+    if (dvnd.indexOf('.') > -1) {
+        var shift = dvnd.length - dvnd.indexOf('.') - 1;
+        dvnd = dvnd.replace('.', '');
+        if (dl > dvnd.length) {
+            shift += dl - dvnd.length;
+            dvnd = dvnd + (new Array(dl - dvnd.length + 1)).join('0');
+        }
+        prec = shift;
+        quotent = '0.' + (new Array(shift)).join('0');
+    }
+    precission = precission + 2;
+    while (prec <= precission) {
+        var qt = 0;
+        while (parseInt(dvnd) >= parseInt(divisor)) {
+            dvnd = (0, add_1.add)(dvnd, '-' + divisor);
+            qt++;
+        }
+        quotent += qt;
+        if (!dividend) {
+            if (!prec)
+                quotent += '.';
+            prec++;
+            dvnd = dvnd + '0';
+        }
+        else {
+            if (dividend[0] == '.') {
+                quotent += '.';
+                prec++;
+                dividend = dividend.substring(1);
+            }
+            dvnd = dvnd + dividend.substring(0, 1);
+            dividend = dividend.substring(1);
+        }
+    }
+    return ((neg == 1) ? '-' : '') + (0, add_1.trim)((0, round_1.roundOff)(quotent, precission - 2));
+}
+exports.divide = divide;
+
+
+/***/ }),
+
+/***/ 213:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.modulus = void 0;
+var divide_1 = __webpack_require__(415);
+var round_1 = __webpack_require__(350);
+var multiply_1 = __webpack_require__(182);
+var subtract_1 = __webpack_require__(26);
+var roundingModes_1 = __webpack_require__(916);
+function modulus(dividend, divisor) {
+    if (divisor == 0) {
+        throw new Error('Cannot divide by 0');
+    }
+    dividend = dividend.toString();
+    divisor = divisor.toString();
+    validate(dividend);
+    validate(divisor);
+    var sign = '';
+    if (dividend[0] == '-') {
+        sign = '-';
+        dividend = dividend.substr(1);
+    }
+    if (divisor[0] == '-') {
+        divisor = divisor.substr(1);
+    }
+    var result = (0, subtract_1.subtract)(dividend, (0, multiply_1.multiply)(divisor, (0, round_1.roundOff)((0, divide_1.divide)(dividend, divisor), 0, roundingModes_1.RoundingModes.FLOOR)));
+    return sign + result;
+}
+exports.modulus = modulus;
+function validate(oparand) {
+    if (oparand.indexOf('.') != -1) {
+        throw new Error('Modulus of non-integers not supported');
+    }
+}
+
+
+/***/ }),
+
+/***/ 182:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.multiply = void 0;
+function multiply(number1, number2) {
+    number1 = number1.toString();
+    number2 = number2.toString();
+    /*Filter numbers*/
+    var negative = 0;
+    if (number1[0] == '-') {
+        negative++;
+        number1 = number1.substr(1);
+    }
+    if (number2[0] == '-') {
+        negative++;
+        number2 = number2.substr(1);
+    }
+    number1 = trailZero(number1);
+    number2 = trailZero(number2);
+    var decimalLength1 = 0;
+    var decimalLength2 = 0;
+    if (number1.indexOf('.') != -1) {
+        decimalLength1 = number1.length - number1.indexOf('.') - 1;
+    }
+    if (number2.indexOf('.') != -1) {
+        decimalLength2 = number2.length - number2.indexOf('.') - 1;
+    }
+    var decimalLength = decimalLength1 + decimalLength2;
+    number1 = trailZero(number1.replace('.', ''));
+    number2 = trailZero(number2.replace('.', ''));
+    if (number1.length < number2.length) {
+        var temp = number1;
+        number1 = number2;
+        number2 = temp;
+    }
+    if (number2 == '0') {
+        return '0';
+    }
+    /*
+    * Core multiplication
+    */
+    var length = number2.length;
+    var carry = 0;
+    var positionVector = [];
+    var currentPosition = length - 1;
+    var result = "";
+    for (var i = 0; i < length; i++) {
+        positionVector[i] = number1.length - 1;
+    }
+    for (var i = 0; i < 2 * number1.length; i++) {
+        var sum = 0;
+        for (var j = number2.length - 1; j >= currentPosition && j >= 0; j--) {
+            if (positionVector[j] > -1 && positionVector[j] < number1.length) {
+                sum += parseInt(number1[positionVector[j]--]) * parseInt(number2[j]);
+            }
+        }
+        sum += carry;
+        carry = Math.floor(sum / 10);
+        result = sum % 10 + result;
+        currentPosition--;
+    }
+    /*
+    * Formatting result
+    */
+    result = trailZero(adjustDecimal(result, decimalLength));
+    if (negative == 1) {
+        result = '-' + result;
+    }
+    return result;
+}
+exports.multiply = multiply;
+/*
+* Add decimal point
+*/
+function adjustDecimal(number, decimal) {
+    if (decimal == 0)
+        return number;
+    else {
+        number = (decimal >= number.length) ? ((new Array(decimal - number.length + 1)).join('0') + number) : number;
+        return number.substr(0, number.length - decimal) + '.' + number.substr(number.length - decimal, decimal);
+    }
+}
+/*
+* Removes zero from front and back*/
+function trailZero(number) {
+    while (number[0] == '0') {
+        number = number.substr(1);
+    }
+    if (number.indexOf('.') != -1) {
+        while (number[number.length - 1] == '0') {
+            number = number.substr(0, number.length - 1);
+        }
+    }
+    if (number == "" || number == ".") {
+        number = '0';
+    }
+    else if (number[number.length - 1] == '.') {
+        number = number.substr(0, number.length - 1);
+    }
+    if (number[0] == '.') {
+        number = '0' + number;
+    }
+    return number;
+}
+
+
+/***/ }),
+
+/***/ 350:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.roundOff = void 0;
+var roundingModes_1 = __webpack_require__(916);
+/**
+ *
+ * @param input the number to round
+ * @param n precision
+ * @param mode Rounding Mode
+ */
+function roundOff(input, n, mode) {
+    if (n === void 0) { n = 0; }
+    if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+    if (mode === roundingModes_1.RoundingModes.UNNECESSARY) {
+        throw new Error("UNNECESSARY Rounding Mode has not yet been implemented");
+    }
+    if (typeof (input) == 'number' || typeof (input) == 'bigint')
+        input = input.toString();
+    var neg = false;
+    if (input[0] === '-') {
+        neg = true;
+        input = input.substring(1);
+    }
+    var parts = input.split('.'), partInt = parts[0], partDec = parts[1];
+    //handle case of -ve n: roundOff(12564,-2)=12600
+    if (n < 0) {
+        n = -n;
+        if (partInt.length <= n)
+            return '0';
+        else {
+            var prefix = partInt.substr(0, partInt.length - n);
+            input = prefix + '.' + partInt.substr(partInt.length - n) + partDec;
+            prefix = roundOff(input, 0, mode);
+            return (neg ? '-' : '') + prefix + (new Array(n + 1).join('0'));
+        }
+    }
+    // handle case when integer output is desired
+    if (n == 0) {
+        var l = partInt.length;
+        if (greaterThanFive(parts[1], partInt, neg, mode)) {
+            partInt = increment(partInt);
+        }
+        return (neg && parseInt(partInt) ? '-' : '') + partInt;
+    }
+    // handle case when n>0
+    if (!parts[1]) {
+        return (neg ? '-' : '') + partInt + '.' + (new Array(n + 1).join('0'));
+    }
+    else if (parts[1].length < n) {
+        return (neg ? '-' : '') + partInt + '.' + parts[1] + (new Array(n - parts[1].length + 1).join('0'));
+    }
+    partDec = parts[1].substring(0, n);
+    var rem = parts[1].substring(n);
+    if (rem && greaterThanFive(rem, partDec, neg, mode)) {
+        partDec = increment(partDec);
+        if (partDec.length > n) {
+            return (neg ? '-' : '') + increment(partInt, parseInt(partDec[0])) + '.' + partDec.substring(1);
+        }
+    }
+    return (neg && parseInt(partInt) ? '-' : '') + partInt + '.' + partDec;
+}
+exports.roundOff = roundOff;
+function greaterThanFive(part, pre, neg, mode) {
+    if (!part || part === new Array(part.length + 1).join('0'))
+        return false;
+    // #region UP, DOWN, CEILING, FLOOR 
+    if (mode === roundingModes_1.RoundingModes.DOWN || (!neg && mode === roundingModes_1.RoundingModes.FLOOR) ||
+        (neg && mode === roundingModes_1.RoundingModes.CEILING))
+        return false;
+    if (mode === roundingModes_1.RoundingModes.UP || (neg && mode === roundingModes_1.RoundingModes.FLOOR) ||
+        (!neg && mode === roundingModes_1.RoundingModes.CEILING))
+        return true;
+    // #endregion
+    // case when part !== five
+    var five = '5' + (new Array(part.length).join('0'));
+    if (part > five)
+        return true;
+    else if (part < five)
+        return false;
+    // case when part === five
+    switch (mode) {
+        case roundingModes_1.RoundingModes.HALF_DOWN: return false;
+        case roundingModes_1.RoundingModes.HALF_UP: return true;
+        case roundingModes_1.RoundingModes.HALF_EVEN:
+        default: return (parseInt(pre[pre.length - 1]) % 2 == 1);
+    }
+}
+function increment(part, c) {
+    if (c === void 0) { c = 0; }
+    if (!c)
+        c = 1;
+    if (typeof (part) == 'number')
+        part.toString();
+    var l = part.length - 1, s = '';
+    for (var i = l; i >= 0; i--) {
+        var x = parseInt(part[i]) + c;
+        if (x == 10) {
+            c = 1;
+            x = 0;
+        }
+        else {
+            c = 0;
+        }
+        s += x;
+    }
+    if (c)
+        s += c;
+    return s.split('').reverse().join('');
+}
+
+
+/***/ }),
+
+/***/ 916:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RoundingModes = void 0;
+var RoundingModes;
+(function (RoundingModes) {
+    /**
+     * Rounding mode to round towards positive infinity.
+     */
+    RoundingModes[RoundingModes["CEILING"] = 0] = "CEILING";
+    /**
+     * Rounding mode to round towards zero.
+     */
+    RoundingModes[RoundingModes["DOWN"] = 1] = "DOWN";
+    /**
+     * Rounding mode to round towards negative infinity.
+     */
+    RoundingModes[RoundingModes["FLOOR"] = 2] = "FLOOR";
+    /**
+     * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant,
+     * in which case round down.
+     */
+    RoundingModes[RoundingModes["HALF_DOWN"] = 3] = "HALF_DOWN";
+    /**
+     * Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant,
+     * in which case, round towards the even neighbor.
+     */
+    RoundingModes[RoundingModes["HALF_EVEN"] = 4] = "HALF_EVEN";
+    /**
+     * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant,
+     * in which case round up.
+     */
+    RoundingModes[RoundingModes["HALF_UP"] = 5] = "HALF_UP";
+    /**
+     * Rounding mode to assert that the requested operation has an exact result, hence no rounding is necessary.
+     * UNIMPLEMENTED
+     */
+    RoundingModes[RoundingModes["UNNECESSARY"] = 6] = "UNNECESSARY";
+    /**
+     * Rounding mode to round away from zero.
+     */
+    RoundingModes[RoundingModes["UP"] = 7] = "UP";
+})(RoundingModes = exports.RoundingModes || (exports.RoundingModes = {}));
+
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.negate = exports.subtract = void 0;
+var add_1 = __webpack_require__(217);
+function subtract(number1, number2) {
+    number1 = number1.toString();
+    number2 = number2.toString();
+    number2 = negate(number2);
+    return (0, add_1.add)(number1, number2);
+}
+exports.subtract = subtract;
+function negate(number) {
+    if (number[0] == '-') {
+        number = number.substr(1);
+    }
+    else {
+        number = '-' + number;
+    }
+    return number;
+}
+exports.negate = negate;
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(423);
+/******/ 	
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/global.js":
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ });
+//# sourceMappingURL=atum-data-export.js.map

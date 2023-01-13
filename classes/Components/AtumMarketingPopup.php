@@ -1,6 +1,6 @@
 <?php
 /**
- * Add Marketing Popup
+ * ATUM Marketing Popup
  *
  * @package        Atum
  * @subpackage     Components
@@ -13,8 +13,6 @@
 namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
-
-use Atum\Inc\Helpers;
 
 
 class AtumMarketingPopup {
@@ -80,7 +78,7 @@ class AtumMarketingPopup {
 	 *
 	 * @var string
 	 */
-	protected $transient_key = '';
+	protected static $transient_key = '';
 
 	/**
 	 * Was the marketing popup content loaded?
@@ -109,31 +107,22 @@ class AtumMarketingPopup {
 	 */
 	private function __construct() {
 
-		// Only show the popup to users that can install plugins.
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return;
-		}
-
-		if ( apply_filters( 'atum/marketing_popup/is_disabled', self::IS_DISABLED ) ) {
-			return;
-		}
-
 		// Call marketing popup info.
 		$marketing_popup = $this->get_marketing_popup_content();
 
 		if ( ! empty( $marketing_popup ) && ! empty( $marketing_popup->transient_key ) ) {
 
 			// Check if background params exist.
-			$background_data      = isset( $marketing_popup->background ) ? $marketing_popup->background : [];
-			$dash_background_data = isset( $marketing_popup->dash_background ) ? $marketing_popup->dash_background : [];
+			$background_data      = $marketing_popup->background ?? [];
+			$dash_background_data = $marketing_popup->dash_background ?? [];
 
 			if ( ! empty( $background_data ) ) {
 
-				$background_color    = isset( $background_data->bg_color ) ? $background_data->bg_color : '';
-				$background_image    = isset( $background_data->bg_image ) ? $background_data->bg_image : '';
-				$background_position = isset( $background_data->bg_position ) ? $background_data->bg_position : '';
-				$background_size     = isset( $background_data->bg_size ) ? $background_data->bg_size : '';
-				$background_repeat   = isset( $background_data->bg_repeat ) ? $background_data->bg_repeat : '';
+				$background_color    = $background_data->bg_color ?? '';
+				$background_image    = $background_data->bg_image ?? '';
+				$background_position = $background_data->bg_position ?? '';
+				$background_size     = $background_data->bg_size ?? '';
+				$background_repeat   = $background_data->bg_repeat ?? '';
 
 				$this->background = "$background_color $background_image $background_position/$background_size $background_repeat";
 
@@ -141,24 +130,24 @@ class AtumMarketingPopup {
 
 			if ( ! empty( $dash_background_data ) ) {
 
-				$background_color    = isset( $dash_background_data->bg_color ) ? $dash_background_data->bg_color : '';
-				$background_image    = isset( $dash_background_data->bg_image ) ? $dash_background_data->bg_image : '';
-				$background_position = isset( $dash_background_data->bg_position ) ? $dash_background_data->bg_position : '';
-				$background_size     = isset( $dash_background_data->bg_size ) ? $dash_background_data->bg_size : '';
-				$background_repeat   = isset( $dash_background_data->bg_repeat ) ? $dash_background_data->bg_repeat : '';
+				$background_color    = $dash_background_data->bg_color ?? '';
+				$background_image    = $dash_background_data->bg_image ?? '';
+				$background_position = $dash_background_data->bg_position ?? '';
+				$background_size     = $dash_background_data->bg_size ?? '';
+				$background_repeat   = $dash_background_data->bg_repeat ?? '';
 
 				$this->dash_background = "$background_color $background_image $background_position/$background_size $background_repeat;";
 
 			}
 
 			// Add attributes to marketing popup.
-			$this->images        = isset( $marketing_popup->images ) ? $marketing_popup->images : [];
-			$this->title         = isset( $marketing_popup->title ) ? $marketing_popup->title : '';
-			$this->description   = isset( $marketing_popup->description ) ? $marketing_popup->description : [];
-			$this->version       = isset( $marketing_popup->version ) ? $marketing_popup->version : [];
-			$this->buttons       = isset( $marketing_popup->buttons ) ? $marketing_popup->buttons : [];
-			$this->footer_notice = isset( $marketing_popup->footer_notice ) ? $marketing_popup->footer_notice : [];
-			$this->transient_key = isset( $marketing_popup->transient_key ) ? $marketing_popup->transient_key : '';
+			$this->images        = $marketing_popup->images ?? [];
+			$this->title         = $marketing_popup->title ?? '';
+			$this->description   = $marketing_popup->description ?? [];
+			$this->version       = $marketing_popup->version ?? [];
+			$this->buttons       = $marketing_popup->buttons ?? [];
+			$this->footer_notice = $marketing_popup->footer_notice ?? [];
+			self::$transient_key = $marketing_popup->transient_key;
 
 			$this->loaded = TRUE;
 
@@ -187,9 +176,9 @@ class AtumMarketingPopup {
 	 *
 	 * @return bool
 	 */
-	public static function maybe_enqueue_scripts() {
+	public function maybe_enqueue_scripts() {
 
-		if ( Helpers::show_marketing_popup() ) {
+		if ( $this->show() ) {
 
 			$marketing_popup_vars = array(
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
@@ -211,6 +200,54 @@ class AtumMarketingPopup {
 	}
 
 	/**
+	 * Check if it shows the marketing widget at popup or dashboard.
+	 *
+	 * @since 1.7.6
+	 *
+	 * @param string $which
+	 *
+	 * @return bool
+	 */
+	public function show( $which = 'popup' ) {
+
+		// Only show the popup to users that can install plugins.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return FALSE;
+		}
+
+		if ( apply_filters( 'atum/marketing_popup/is_disabled', self::IS_DISABLED ) ) {
+			return FALSE;
+		}
+
+		if ( FALSE === in_array( $which, array( 'popup', 'dash' ) ) ) {
+			return FALSE;
+		}
+
+		$transient_key = AtumCache::get_transient( 'atum-marketing-' . $which, TRUE );
+
+		if ( ! $transient_key || self::get_transient_key() !== $transient_key ) {
+
+			if ( ! $this->is_loaded() ) {
+				return FALSE;
+			}
+
+			$transient_key = self::get_transient_key();
+			AtumCache::set_transient( 'atum-marketing-' . $which, $transient_key, WEEK_IN_SECONDS, TRUE );
+
+		}
+
+		// Get marketing popup user meta.
+		$marketing_popup_user_meta = get_user_meta( get_current_user_id(), 'atum-marketing-' . $which, TRUE );
+
+		if ( $marketing_popup_user_meta && $marketing_popup_user_meta === $transient_key ) {
+			return FALSE;
+		}
+
+		return TRUE;
+
+	}
+
+	/**
 	 * Getter for the title
 	 *
 	 * @since 1.5.3
@@ -218,7 +255,6 @@ class AtumMarketingPopup {
 	 * @return object
 	 */
 	public function get_title() {
-
 		return $this->title;
 	}
 
@@ -230,7 +266,6 @@ class AtumMarketingPopup {
 	 * @return object
 	 */
 	public function get_description() {
-
 		return $this->description;
 	}
 
@@ -242,7 +277,6 @@ class AtumMarketingPopup {
 	 * @return object
 	 */
 	public function get_version() {
-
 		return $this->version;
 	}
 
@@ -254,7 +288,6 @@ class AtumMarketingPopup {
 	 * @return array
 	 */
 	public function get_buttons() {
-
 		return $this->buttons;
 	}
 
@@ -285,9 +318,11 @@ class AtumMarketingPopup {
 			}
 
 			$css .= '</style>';
+
 		}
 
 		return $css;
+
 	}
 
 	/**
@@ -298,7 +333,6 @@ class AtumMarketingPopup {
 	 * @return array
 	 */
 	public function get_images() {
-
 		return $this->images;
 	}
 
@@ -310,7 +344,7 @@ class AtumMarketingPopup {
 	 * @return array
 	 */
 	public function get_dashboard_image() {
-		return isset( $this->images->dash_logo ) ? $this->images->dash_logo : $this->images->logo;
+		return $this->images->dash_logo ?? $this->images->logo;
 	}
 
 	/**
@@ -321,7 +355,6 @@ class AtumMarketingPopup {
 	 * @return string
 	 */
 	public function get_footer_notice() {
-
 		return $this->footer_notice;
 	}
 
@@ -333,9 +366,7 @@ class AtumMarketingPopup {
 	 * @return object
 	 */
 	public function get_background() {
-
 		return $this->background;
-
 	}
 
 	/**
@@ -346,9 +377,7 @@ class AtumMarketingPopup {
 	 * @return object
 	 */
 	public function get_dash_background() {
-
 		return $this->dash_background;
-
 	}
 
 	/**
@@ -358,10 +387,8 @@ class AtumMarketingPopup {
 	 *
 	 * @return string
 	 */
-	public function get_transient_key() {
-
-		return $this->transient_key;
-
+	public static function get_transient_key() {
+		return self::$transient_key;
 	}
 
 	/**

@@ -199,7 +199,7 @@ class Settings {
 			Helpers::maybe_es6_promise();
 
 			// ATUM marketing popup.
-			AtumMarketingPopup::maybe_enqueue_scripts();
+			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
