@@ -196,6 +196,20 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.26.2`
+
+*2023-01-16*
+
+**Changes**
+
+* Refactoring and changes in tax calculations.
+
+**Fixes**
+
+* Fixed wrong text domain.
+
+---
+
 `1.9.26.1`
 
 *2023-01-13*
