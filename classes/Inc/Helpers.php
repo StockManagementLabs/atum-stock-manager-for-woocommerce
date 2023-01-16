@@ -3961,4 +3961,25 @@ final class Helpers {
 		return class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) && wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled();
 	}
 
+	/**
+	 * Convert objects to arrays recursively.
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param stdClass $data
+	 *
+	 * @return array
+	 */
+	public static function convert_object_to_array( $data ) {
+		$new_data = array();
+
+		if ( is_object( $data ) || is_array( $data ) ) {
+			foreach ( $data as $key => $value ) {
+				$new_data[ $key ] = is_object( $value ) ? self::convert_object_to_array( $value ) : $value;
+			}
+		}
+
+		return $new_data;
+	}
+
 }

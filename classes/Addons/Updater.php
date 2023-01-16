@@ -233,7 +233,6 @@ class Updater {
 		remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ), 10 );
 
 		$update_cache = get_site_transient( 'update_plugins' );
-
 		$update_cache = is_object( $update_cache ) ? $update_cache : new \stdClass();
 
 		if ( empty( $update_cache->response ) || empty( $update_cache->response[ $this->name ] ) ) {
@@ -371,32 +370,17 @@ class Updater {
 
 		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
-			$new_sections = array();
-			foreach ( $_data->sections as $key => $value ) {
-				$new_sections[ $key ] = $value;
-			}
-
-			$_data->sections = $new_sections;
+			$_data->sections = Helpers::convert_object_to_array( $_data->sections );
 		}
 
 		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
-			$new_banners = array();
-			foreach ( $_data->banners as $key => $value ) {
-				$new_banners[ $key ] = $value;
-			}
-
-			$_data->banners = $new_banners;
+			$_data->banners = Helpers::convert_object_to_array( $_data->banners );
 		}
 
 		// Transform contributos array to reach WP required format.
-		if ( isset( $_data->contributors ) ) {
-			$new_contributors = array();
-			foreach ( $_data->contributors as $name => $data ) {
-				$new_contributors[ $name ] = 0;
-			}
-
-			$_data->contributors = $new_contributors;
+		if ( isset( $_data->contributors ) && ! is_array( $_data->contributors ) ) {
+			$_data->contributors = Helpers::convert_object_to_array( $_data->contributors );
 		}
 
 		return $_data;
@@ -556,5 +540,6 @@ class Updater {
 		AtumCache::set_transient( $transient_key, wp_json_encode( $value ), 3 * HOUR_IN_SECONDS, TRUE );
 
 	}
+
 
 }
