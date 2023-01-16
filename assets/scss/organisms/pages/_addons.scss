@@ -13,6 +13,14 @@ html {
 
 #wpbody-content {
 	padding-bottom: 0;
+	
+	> .notice {
+		margin-left: 0;
+		
+		~ .atum-addons {
+			margin-top: 10px;
+		}
+	}
 }
 
 .atum-addons {
@@ -155,12 +163,19 @@ html {
 				&.not-installed {
 					background: $primary;
 				}
+				
 				&.valid {
 					background: $tertiary;
 				}
+				
 				&.inactive, &.invalid, &.disabled, &.expired, &.no-key {
 					background: $danger;
 				}
+				
+				&.trial {
+					background: $purple;
+				}
+				
 			}
 		}
 		
@@ -268,10 +283,12 @@ html {
 				position: relative;
 			}
 		}
+		
 		.license-key {
 			flex-grow: 1;
 			margin-right: 10px;
 		}
+		
 		.license-info {
 			margin-right: 10px;
 			
@@ -292,6 +309,16 @@ html {
 				padding: 4px 13px;
 				border-radius: 5px;
 			}
+		}
+		
+		.alert {
+			margin-bottom: 10px;
+		}
+		
+		.alert-warning {
+			border-color: $gray-200;
+			background-color: $gray-200;
+			color: $blue-dark;
 		}
 		
 	}

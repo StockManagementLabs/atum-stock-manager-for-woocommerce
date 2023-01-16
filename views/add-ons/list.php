@@ -5,6 +5,7 @@
  * @since 1.9.27
  *
  * @var array|bool $addons
+ * @var array      $installed_addons
  */
 
 defined( 'ABSPATH' ) || die;

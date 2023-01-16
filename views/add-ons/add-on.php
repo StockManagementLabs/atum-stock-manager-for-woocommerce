@@ -5,28 +5,34 @@
  * @since 1.9.27
  *
  * @var array $addon
+ * @var array $installed_addons
  */
 
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Westsworld\TimeAgo;
 
-$addon_folder = isset( $addon['info']['folder'] ) ? $addon['info']['folder'] : '';
-$addon_status = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'], $addon_folder );
-$more_details_link = '<a href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
+
+$addon_folder         = isset( $addon['info']['folder'] ) ?? '';
+$addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'], $addon_folder );
+$more_details_link    = '<a href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
 $is_coming_soon_addon = isset( $addon['info']['coming_soon'] ) && $addon['info']['coming_soon'];
-$is_beta = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
-$pill_style = isset( $addon['info']['primary_color'] ) ? " style='background-color:{$addon['info']['primary_color']}';" : '';
-$notice = '';
-$notice_type = 'info';
-
+$is_beta              = isset( $addon['info']['is_beta'] ) && $addon['info']['is_beta'];
+$is_trial             = ! empty( $addon_status['is_trial'] ) && TRUE === $addon_status['is_trial'];
+$pill_style           = isset( $addon['info']['primary_color'] ) ? " style='background-color:{$addon['info']['primary_color']}';" : '';
+$notice               = '';
+$notice_type          = 'info';
 
 $addon_classes = array();
-$status_text = '';
+$status_text   = '';
 
 if ( $is_coming_soon_addon ) :
 	$addon_status['status'] = $addon_classes[] = 'coming-soon';
 	$status_text            = __( 'Coming Soon', ATUM_TEXT_DOMAIN );
+elseif ( $is_trial ) :
+	$addon_classes[] = 'trial';
+	$status_text     = __( 'Trial', ATUM_TEXT_DOMAIN );
 elseif ( ! $addon_status['installed'] ) :
 	$addon_classes[] = 'not-installed';
 	$status_text     = __( 'Not Installed', ATUM_TEXT_DOMAIN );
@@ -63,20 +69,18 @@ else :
 
 endif; ?>
 
-<div class="atum-addon <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?><?php if ( $addon_status['key'] ) echo ' with-key' ?>"
-	data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>" data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>">
+<div class="atum-addon <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>
+	<?php if ( $addon_status['key'] ) echo ' with-key' ?>" data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>"
+	data-addon-slug="<?php echo esc_attr( $addon['info']['slug'] ) ?>"
+>
 
 	<a class="more-details" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank">
 
 		<span class="label <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>"><?php echo esc_attr( $status_text ); ?></span>
 
-		<?php if ( ! empty( $addon['info']['thumbnail'] ) ) : ?>
-		<div class="addon-thumb" style="background-image: url(<?php echo esc_url( $addon['info']['thumbnail'] ) ?>)">
-			<?php else : ?>
-			<div class="addon-thumb blank">
-				<?php endif; ?>
-
-			</div>
+		<div class="addon-thumb<?php echo empty( $addon['info']['thumbnail'] ) ? ' blank' : '' ?>"
+			<?php echo ! empty( $addon['info']['thumbnail'] ) ? 'style="background-image: url(' . esc_url( $addon['info']['thumbnail'] ) . ')"' : '' ?>
+		></div>
 
 	</a>
 
@@ -90,7 +94,7 @@ endif; ?>
 			<?php if ( $is_beta ) : ?>
 				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
-				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?></span>
+				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?><?php if ( $is_trial ) echo ' &ndash; ' . __( 'Trial', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php endif; ?>
 		</div>
 		<div class="addon-description">
@@ -111,17 +115,34 @@ endif; ?>
 			<?php endif; ?>
 			<div class="actions <?php echo esc_attr( implode( ' ', $addon_classes ) ) ?>">
 
-
 				<?php if ( $is_coming_soon_addon ) : ?>
 
 					<a class="more-details btn btn-outline-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'More info', ATUM_TEXT_DOMAIN ); ?></a>
 
-				<?php else : // ! $is_coming_soon_addon ?>
+				<?php elseif ( $is_trial ) : ?>
 
-					<?php /*// Disabled until Trials are available. ?>
+					<div class="alert alert-warning">
+						<i class="atum-icon atmi-warning"></i>
+
+						<?php // TODO: ADD LOGIC... ?>
+						<?php if ( TRUE ) : ?>
+							<?php
+							$time_ago = new TimeAgo();
+							/* translators: the time remaining */
+							printf( esc_html__( 'Trial period: %s ', ATUM_TEXT_DOMAIN ), str_replace( 'ago', esc_html__( 'remaining', ATUM_TEXT_DOMAIN ), $time_ago->inWordsFromStrings( '2023-01-30 12:55' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php else : ?>
+							<?php esc_html_e( 'Trial period ended. Purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN ) ?>
+						<?php endif; ?>
+
+					</div>
+
+					<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
+
+				<?php else : ?>
+
 					<?php if ( ! $addon_status['installed'] ) : ?>
-						<a class="more-details btn btn-primary" href="<?php echo $addon['info']['link'] ?>" target="_blank"><?php esc_html_e( 'Install trial', ATUM_TEXT_DOMAIN ); ?></a>
-					<?php endif;*/ ?>
+						<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Install trial', ATUM_TEXT_DOMAIN ); ?></a>
+					<?php endif; ?>
 
 					<?php if ( ! $addon_status['installed'] || empty( $addon_status['key'] ) ) : ?>
 						<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
@@ -140,7 +161,7 @@ endif; ?>
 							<?php if ( ! $addon_status['installed'] || empty( $addon_status['key'] ) ) : ?>
 
 								<input type="text" autocomplete="false" spellcheck="false" class="license-key
-														<?php echo $addon_status['key'] ? esc_attr( $addon_status['status'] ) : '' ?>"
+									<?php echo $addon_status['key'] ? esc_attr( $addon_status['status'] ) : '' ?>"
 									value="" placeholder="<?php esc_attr_e( 'Enter the add-on license key...', ATUM_TEXT_DOMAIN ) ?>"
 								>
 

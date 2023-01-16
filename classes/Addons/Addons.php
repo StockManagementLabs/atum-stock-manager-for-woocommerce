@@ -252,8 +252,8 @@ class Addons {
 		wp_enqueue_script( 'atum-addons' );
 
 		$args = array(
-			'addons'      => self::get_addons_list(),
-			'addons_keys' => self::get_keys(),
+			'addons'           => self::get_addons_list(),
+			'installed_addons' => self::get_installed_addons(),
 		);
 
 		Helpers::load_view( 'add-ons/list', $args );
@@ -733,7 +733,19 @@ class Addons {
 
 		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
 		$addon_status   = AtumCache::get_transient( $transient_name, TRUE );
-		$is_installed   = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
+
+		foreach ( self::$addons as $addon_key => $installed_addon ) {
+
+			if ( strtolower( $installed_addon['name'] ) === strtolower( $addon_name ) ) {
+				if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
+					$addon_status['is_trial'] = TRUE;
+				}
+				break;
+			}
+
+		}
+
+		$is_installed = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
 
 		if ( empty( $addon_status ) || $is_installed !== $addon_status['installed'] ) {
 
@@ -786,7 +798,7 @@ class Addons {
 					}
 				}
 				else {
-					$addon_status['status']  = 'not-activated';
+					$addon_status['status'] = 'not-activated';
 				}
 
 			}
