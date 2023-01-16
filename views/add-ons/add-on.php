@@ -169,7 +169,7 @@ endif; ?>
 									data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"
 								><?php echo esc_html( $addon_status['button_text'] ) ?></button>
 
-								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
+								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>
 
 							<?php else : ?>
 
@@ -185,8 +185,8 @@ endif; ?>
 
 								<button type="button" class="btn btn-outline-danger remove-license"
 									data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"
-								><?php esc_html_e( 'Remove license', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
-								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_EXPORT_TEXT_DOMAIN ); ?></button>
+								><?php esc_html_e( 'Remove license', ATUM_TEXT_DOMAIN ); ?></button>
+								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>
 
 							<?php endif; ?>
 
