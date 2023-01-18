@@ -518,6 +518,26 @@ var Utils = {
     subtractDecimal: function (minuend, subtrahend) {
         return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.subtract(minuend.toString(), subtrahend.toString()));
     },
+    calcTaxesFromBase: function (price, rates) {
+        var taxes = [0], preCompoundTaxes;
+        $.each(rates, function (i, rate) {
+            if ('yes' === rate['compound']) {
+                return true;
+            }
+            taxes.push(price * rate['rate'] / 100);
+        });
+        preCompoundTaxes = taxes.reduce(function (a, b) { return a + b; }, 0);
+        $.each(rates, function (i, rate) {
+            var currentTax;
+            if ('no' === rate['compound']) {
+                return true;
+            }
+            currentTax = (price + preCompoundTaxes) * rate['rate'] / 100;
+            taxes.push(currentTax);
+            preCompoundTaxes += currentTax;
+        });
+        return taxes.reduce(function (a, b) { return a + b; }, 0);
+    }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 

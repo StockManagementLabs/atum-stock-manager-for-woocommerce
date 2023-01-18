@@ -3,7 +3,7 @@
    ======================================= */
 
 import Settings from '../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 // Interfaces.
 interface MPopupText {
@@ -47,13 +47,21 @@ interface MPopupSettings {
 
 
 export default class MarketingPopup {
+
+	key: string = '';
 	
 	constructor(
 		private settings: Settings
 	) {
-	
-		this.getPopupInfo();
-		
+
+		// Do not show the marketing modal if there are ATUM admin modals to show.
+		if (
+			! window.hasOwnProperty( 'atum' ) ||
+			( window.hasOwnProperty( 'atum' ) && ! window[ 'atum' ].hasOwnProperty( 'AdminModal' ) )
+		) {
+			this.getPopupInfo();
+		}
+
 	}
 	
 	getPopupInfo() {
@@ -66,7 +74,7 @@ export default class MarketingPopup {
 				action  : 'atum_get_marketing_popup_info',
 				security: this.settings.get( 'nonce' ),
 			},
-			success : ( response: any ) => {
+			success : async ( response: any ) => {
 
 				if ( response.success === true ) {
 
@@ -75,7 +83,7 @@ export default class MarketingPopup {
 					      descriptionFontSize: string   = popupSettings.description.text_size ? `font-size:${ popupSettings.description.text_size };` : '',
 					      descriptionAlign: string      = popupSettings.description.text_align ? `text-align:${ popupSettings.description.text_align };` : '',
 					      descriptionPadding: string    = popupSettings.description.padding ? `padding:${ popupSettings.description.padding };` : '',
-					      description: string           = `<p data-transient-key="${ popupSettings.transient_key }" style="${ descriptionColor + descriptionFontSize + descriptionAlign + descriptionPadding }">${ popupSettings.description.text }</p>`,
+					      description: string           = `<p style="${ descriptionColor + descriptionFontSize + descriptionAlign + descriptionPadding }">${ popupSettings.description.text }</p>`,
 					      titleColor: string            = popupSettings.title.text_color ? `color:${ popupSettings.title.text_color };` : '',
 					      titleFontSize: string         = popupSettings.title.text_size ? `font-size:${ popupSettings.title.text_size };` : '',
 					      titleAlign: string            = popupSettings.title.text_align ? `text-align:${ popupSettings.title.text_align };` : '',
@@ -83,6 +91,8 @@ export default class MarketingPopup {
 					      imageTopLeft: string          = popupSettings.images.top_left,
 					      footerNoticeStyle: string     = popupSettings.footerNotice.bg_color ? ` style="background-color:${ popupSettings.footerNotice.bg_color };"` : '',
 					      footerNotice: string          = popupSettings.footerNotice.text ? `<div class="footer-notice"${ footerNoticeStyle }>${ popupSettings.footerNotice.text }</div>` : '';
+
+					this.key = popupSettings.transient_key;
 
 					let logo: string              = `<img class="mp-logo" src="${ popupSettings.images.logo }">`,
 					    versionColor: string      = '',
@@ -115,7 +125,8 @@ export default class MarketingPopup {
 
 					}
 
-					Swal.fire( {
+					// By using await, we can queue multiple Swals on the same page.
+					await Swal.fire( {
 						width            : 520,
 						padding          : null,
 						customClass      : {
@@ -131,13 +142,13 @@ export default class MarketingPopup {
 						allowEnterKey    : false,
 					} ).then( () => {
 
-						// Hide popup when click un close button for this user.
-						this.hideMarketingPopup( $( '.swal2-content p' ).data( 'transient-key' ) );
+						// Hide popup for this user when clicking the close button.
+						this.hideMarketingPopup();
 
 					} );
 
-					// Redirect to button url.
-					$( '.popup-button' ).click( ( evt: JQueryEventObject ) => {
+					// Redirect to button URL.
+					$( '.swal2-container button[data-url]' ).click( ( evt: JQueryEventObject ) => {
 						evt.preventDefault();
 						window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
 					} );
@@ -148,7 +159,10 @@ export default class MarketingPopup {
 		
 	}
 
-	hideMarketingPopup( transientKey: string ) {
+	/**
+	 * Hide the modal and save the closed state for the current user
+	 */
+	hideMarketingPopup() {
 
 		$.ajax( {
 			url     : window[ 'ajaxurl' ],
@@ -157,7 +171,7 @@ export default class MarketingPopup {
 			data    : {
 				action      : 'atum_hide_marketing_popup',
 				security    : this.settings.get( 'nonce' ),
-				transientKey: transientKey,
+				transientKey: this.key,
 			},
 		} );
 

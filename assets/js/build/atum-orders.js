@@ -1310,10 +1310,11 @@ var AtumOrderItems = (function () {
             purchasePriceTxt = purchasePriceFmt;
             var rates = $item.find('.item_cost').data('productTaxRates');
             if (typeof rates === 'object') {
-                var taxes = this.calcTaxesFromBase(purchasePrice, rates);
+                var taxes = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].calcTaxesFromBase(purchasePrice, rates);
+                var taxesTxt = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(taxes, this.settings.get('priceNumDecimals')).toString();
                 if (taxes) {
                     var purchasePriceWithTaxesFmt = (purchasePrice + taxes) % 1 !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice + taxes, this.settings.get('priceNumDecimals'), '', this.settings.get('priceDecimalSep')) : (purchasePrice + taxes).toString();
-                    purchasePriceTxt = "".concat(purchasePriceWithTaxesFmt, " (").concat(purchasePriceFmt, " + ").concat(taxes, " ").concat(this.settings.get('taxesName'), ")");
+                    purchasePriceTxt = "".concat(purchasePriceWithTaxesFmt, " ( ").concat(purchasePriceFmt, " + ").concat(taxesTxt, " ").concat(this.settings.get('taxesName'), " )");
                     purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, this.settings.get('priceDecimalSep'));
                 }
             }
@@ -1371,26 +1372,6 @@ var AtumOrderItems = (function () {
                 });
             }
         });
-    };
-    AtumOrderItems.prototype.calcTaxesFromBase = function (price, rates) {
-        var taxes = [0], preCompoundTaxes;
-        $.each(rates, function (i, rate) {
-            if ('yes' === rate['compound']) {
-                return true;
-            }
-            taxes.push(price * rate['rate'] / 100);
-        });
-        preCompoundTaxes = taxes.reduce(function (a, b) { return a + b; }, 0);
-        $.each(rates, function (i, rate) {
-            var currentTax;
-            if ('no' === rate['compound']) {
-                return true;
-            }
-            currentTax = (price + preCompoundTaxes) * rate['rate'] / 100;
-            taxes.push(currentTax);
-            preCompoundTaxes += currentTax;
-        });
-        return taxes.reduce(function (a, b) { return a + b; }, 0);
     };
     return AtumOrderItems;
 }());
@@ -1838,6 +1819,26 @@ var Utils = {
     subtractDecimal: function (minuend, subtrahend) {
         return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.subtract(minuend.toString(), subtrahend.toString()));
     },
+    calcTaxesFromBase: function (price, rates) {
+        var taxes = [0], preCompoundTaxes;
+        $.each(rates, function (i, rate) {
+            if ('yes' === rate['compound']) {
+                return true;
+            }
+            taxes.push(price * rate['rate'] / 100);
+        });
+        preCompoundTaxes = taxes.reduce(function (a, b) { return a + b; }, 0);
+        $.each(rates, function (i, rate) {
+            var currentTax;
+            if ('no' === rate['compound']) {
+                return true;
+            }
+            currentTax = (price + preCompoundTaxes) * rate['rate'] / 100;
+            taxes.push(currentTax);
+            preCompoundTaxes += currentTax;
+        });
+        return taxes.reduce(function (a, b) { return a + b; }, 0);
+    }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 
