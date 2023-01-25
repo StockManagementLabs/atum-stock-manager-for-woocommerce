@@ -13,7 +13,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Westsworld\TimeAgo;
 
-
 $addon_folder         = isset( $addon['info']['folder'] ) ?? '';
 $addon_status         = Addons::get_addon_status( $addon['info']['title'], $addon['info']['slug'], $addon_folder );
 $more_details_link    = '<a href="' . $addon['info']['link'] . '" target="_blank">' . __( 'Add-on Details', ATUM_TEXT_DOMAIN ) . '</a>';
@@ -136,12 +135,25 @@ endif; ?>
 
 					</div>
 
-					<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
+					<?php
+					$purchase_url = add_query_arg( [
+						'edd_action'  => 'add_to_cart',
+						'download_id' => $addon['info']['id'],
+					], Addons::ADDONS_STORE_URL ) ?>
+					<a class="more-details btn btn-primary" href="<?php echo esc_url( $purchase_url ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
 
 				<?php else : ?>
 
 					<?php if ( ! $addon_status['installed'] ) : ?>
-						<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Install trial', ATUM_TEXT_DOMAIN ); ?></a>
+						<?php
+						$add_trial_to_cart_url = add_query_arg( [
+							'edd_action'         => 'add_to_cart',
+							'download_id'        => $addon['info']['id'],
+							'edd_options[trial]' => 1,
+						], Addons::ADDONS_STORE_URL ) ?>
+						<a class="more-details btn btn-primary" href="<?php echo $add_trial_to_cart_url // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>" target="_blank">
+							<?php esc_html_e( 'Start free trial', ATUM_TEXT_DOMAIN ); ?>
+						</a>
 					<?php endif; ?>
 
 					<?php if ( ! $addon_status['installed'] || empty( $addon_status['key'] ) ) : ?>
@@ -151,9 +163,9 @@ endif; ?>
 					<?php endif; ?>
 
 					<?php if ( empty( $addon_status['key'] ) || 'inactive' === $addon_status['status'] ) : ?>
-						<a class="more-details btn btn-tertiary show-key" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Enter License', ATUM_TEXT_DOMAIN ); ?></a>
+						<button type="button" class="more-details btn btn-tertiary show-key"><?php esc_html_e( 'Enter License', ATUM_TEXT_DOMAIN ); ?></button>
 					<?php else : ?>
-						<a class="more-details btn btn-outline-tertiary show-key" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'View License', ATUM_TEXT_DOMAIN ); ?></a>
+						<button type="button" class="more-details btn btn-outline-tertiary show-key"><?php esc_html_e( 'View License', ATUM_TEXT_DOMAIN ); ?></button>
 					<?php endif; ?>
 
 					<div class="addon-key">

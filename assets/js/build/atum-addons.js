@@ -264,7 +264,8 @@ var AddonsPage = (function () {
             .on('click', '.show-key', function (evt) {
             evt.preventDefault();
             var $button = $(evt.currentTarget);
-            $button.closest('.actions').children().slideToggle('fast');
+            $button.hide();
+            $button.siblings().slideToggle('fast');
         })
             .on('click', '.expired .refresh-status', function (evt) {
             evt.preventDefault();

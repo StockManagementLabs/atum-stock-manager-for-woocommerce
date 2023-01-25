@@ -2990,10 +2990,12 @@ html {
   margin-right: 10px;
   text-transform: uppercase;
 }
-.atum-addons .addon-footer .actions .btn.install {
+.atum-addons .addon-footer .actions .btn.install-addon {
   padding-left: 0.7rem;
   padding-right: 0.7rem;
   width: auto;
+  background-color: #69C61D;
+  border-color: #69C61D;
 }
 .atum-addons .addon-footer .actions input {
   font-size: 0.75rem;

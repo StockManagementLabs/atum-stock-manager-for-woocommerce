@@ -72,7 +72,7 @@ class AtumAdminModal {
 	 */
 	public function add_modal( $key, $swal_config, $template = NULL ) {
 
-		if ( isset( $this->swal_configs[ $key ] ) ) {
+		if ( isset( $this->swal_configs[ $key ] ) || wp_doing_ajax() || Helpers::is_rest_request() ) {
 			return;
 		}
 

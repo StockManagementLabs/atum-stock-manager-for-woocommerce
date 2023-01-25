@@ -76,6 +76,7 @@ export default class AddonsPage {
 					$button.closest( '.actions' ).children().slideToggle( 'fast' );
 				}
 				else if ( $button.hasClass( 'remove-license' ) ) {
+
 					key = $button.closest( '.addon-key' ).find('.license-key').text();
 
 					Swal.fire( {
@@ -92,6 +93,7 @@ export default class AddonsPage {
 						}
 
 					} );
+
 				}
 				else {
 
@@ -120,15 +122,15 @@ export default class AddonsPage {
 
 			})
 
-
 			// Show the key fields.
 			.on( 'click', '.show-key', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
+				const $button: JQuery = $( evt.currentTarget );
 
-				const $button: JQuery     = $( evt.currentTarget );
+				$button.hide();
+				$button.siblings().slideToggle( 'fast' );
 
-				$button.closest( '.actions' ).children().slideToggle( 'fast' );
 			} )
 
 			// Refresh license for expired keys
