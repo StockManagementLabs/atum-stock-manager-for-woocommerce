@@ -96,9 +96,14 @@ class AtumNotifications {
 			foreach ( $this->notifications as $notification ) {
 				$index = $notification['id'];
 
-				if ( 'yes' === AtumHelpers::get_option( $index, 'yes' ) ) {
-					$class                    = $notification['class'];
-					$emails_classes[ $index ] = new $class();
+				if ( ! empty( $notification['class'] ) && 'yes' === AtumHelpers::get_option( $index, 'yes' ) ) {
+					$class = $notification['class'];
+					if ( ! empty( $notification['access'] ) && 'static' === $notification['access'] ) {
+						$emails_classes[ $index ] = $class::get_instance();
+					}
+					else {
+						$emails_classes[ $index ] = new $class();
+					}
 				}
 			}
 		}
@@ -154,6 +159,12 @@ class AtumNotifications {
 					'type'    => $notification['type'],
 					'default' => $notification['default'],
 				);
+
+				foreach ( [ 'dependency', 'options' ] as $option ) {
+					if ( ! empty( $notification[ $option ] ) ) {
+						$defaults[ $index ][ $option ] = $notification[ $option ];
+					}
+				}
 			}
 
 		}
