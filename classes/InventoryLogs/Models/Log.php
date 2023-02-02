@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -73,16 +73,6 @@ class Log extends AtumOrderModel {
 			'shipping_company' => '',
 		) ) );
 
-		// Make sure the post is already created before instantiating the ATUM Order model.
-		// When creating the PO from the WP backend, the post is created automatically but there are cases that this doesn't happen.
-		if ( ! $id ) {
-			$id = wp_insert_post( [
-				'post_type'   => InventoryLogs::POST_TYPE,
-				'post_title'  => __( 'Auto Draft', ATUM_TEXT_DOMAIN ),
-				'post_status' => 'auto-draft',
-			] );
-		}
-
 		parent::__construct( $id, $read_items );
 
 	}
@@ -136,7 +126,7 @@ class Log extends AtumOrderModel {
 		}
 		else {
 			/* translators: the log name */
-			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Log date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Log date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
 		}
 
 		return apply_filters( 'atum/inventory_logs/log/title', $post_title );

@@ -1,6 +1,10 @@
-/* =======================================
-   ATUM DASHBOARD
-   ======================================= */
+/*
+   ┌────────────────┐
+   │                │
+   │ ATUM DASHBOARD │
+   │                │
+   └────────────────┘
+*/
 
 import CurrentStockValueWidget from './widgets/_current-stock-value';
 import NiceScroll from '../_nice-scroll';

@@ -1,7 +1,7 @@
 /**
  * Atum Settings
  *
- * @copyright Stock Management Labs ©2022
+ * @copyright Stock Management Labs ©2023
  *
  * @since 0.0.2
  */

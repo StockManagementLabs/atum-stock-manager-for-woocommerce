@@ -1,6 +1,12 @@
-/* ====================
-   UTILS
-   ==================== */
+/*
+   ┌───────┐
+   │       │
+   │ UTILS │
+   │       │
+   └───────┘
+*/
+
+import bigDecimal from 'js-big-decimal';
 
 const Utils = {
 	
@@ -28,12 +34,17 @@ const Utils = {
 	/**
 	 * Apply a delay
 	 *
+	 * @param {Function} callback
+	 * @param {number}   ms
+	 *
 	 * @return {Function}
 	 */
 	delay( callback: Function, ms: number ) {
 		
 		clearTimeout( this.settings.delayTimer );
 		this.settings.delayTimer = setTimeout( callback, ms );
+
+		return this.settings.delayTimer;
 		
 	},
 	
@@ -83,10 +94,12 @@ const Utils = {
 	/**
 	 * Add a notice on top identical to the WordPress' admin notices
 	 *
-	 * @param {string} type The notice type. Can be "updated" or "error".
-	 * @param {string} msg  The message.
+	 * @param {string}  type           The notice type. Can be "updated" or "error".
+	 * @param {string}  msg            The message.
+	 * @param {boolean} autoDismiss    Optional. Dismiss the notice automatically after some seconds. False by default
+	 * @param {int}     dismissSeconds Optional. The number of seconds after the auto-dismiss is triggered. 5 by default.
 	 */
-	addNotice( type: string, msg: string ) {
+	addNotice( type: string, msg: string, autoDismiss: boolean = false, dismissSeconds: number = 5 ) {
 
 		const $notice: JQuery        = $( `<div class="${ type } notice is-dismissible"><p><strong>${ msg }</strong></p></div>` ).hide(),
 		      $dismissButton: JQuery = $( '<button />', { type: 'button', class: 'notice-dismiss' } ),
@@ -107,6 +120,12 @@ const Utils = {
 			} );
 
 		} );
+
+		if ( autoDismiss ) {
+			setTimeout( () => {
+				$dismissButton.trigger( 'click.wp-dismiss-notice' );
+			}, dismissSeconds * 1000 );
+		}
 		
 	},
 	
@@ -164,7 +183,7 @@ const Utils = {
 			return urlParams.get( name );
 
 		}
-		// Deprecated: Only for old browsers non supporting URLSearchParams.
+		// Deprecated: Only for old browsers non-supporting URLSearchParams.
 		else {
 
 			name = name.replace( /[\[]/, '\\[' ).replace( /[\]]/, '\\]' );
@@ -224,6 +243,7 @@ const Utils = {
 		
 		// If we made it this far, objects are considered equivalent.
 		return true;
+
 	},
 	
 	/**
@@ -232,19 +252,19 @@ const Utils = {
 	 * @param {any[]}  nodes
 	 * @param {string} openOrClose
 	 */
-	toggleNodes(nodes: any[], openOrClose: string){
-		
-		for (let i: number = 0; i < nodes.length; i++) {
-			
-			nodes[i].isExpanded = openOrClose == 'open'; // Either expand node or don't
-			
+	toggleNodes( nodes: any[], openOrClose: string ) {
+
+		for ( let i: number = 0; i < nodes.length; i++ ) {
+
+			nodes[ i ].isExpanded = openOrClose == 'open'; // Either expand node or don't
+
 			// If has children open/close those as well.
-			if (nodes[i].children && nodes[i].children.length > 0) {
-				this.toggleNodes(nodes[i].children, openOrClose);
+			if ( nodes[ i ].children && nodes[ i ].children.length > 0 ) {
+				this.toggleNodes( nodes[ i ].children, openOrClose );
 			}
-			
+
 		}
-		
+
 	},
 	
 	/**
@@ -261,7 +281,13 @@ const Utils = {
 	 *
 	 * @return {string[] | string}
 	 */
-	formatNumber( number: number[] | number, precision?: number, thousand?: string, decimal?: string, stripZeros?: boolean ): string[] | string {
+	formatNumber(
+		number: number[] | number,
+		precision: number = this.settings.number.precision,
+		thousand: string  = this.settings.number.thousand,
+		decimal: string   = this.settings.number.decimal,
+		stripZeros: boolean = false,
+	): string[] | string {
 		
 		// Resursively format arrays.
 		if ( Array.isArray( number ) ) {
@@ -270,17 +296,11 @@ const Utils = {
 		
 		// Clean up number.
 		number = this.unformat( number );
-		
-		const defaults: any = { ...this.settings.number },
-		      // Prevent undefined decimals.
-		      paramOpts: any = typeof decimal === 'undefined' ? { precision: precision, thousand: thousand } : { precision: precision, thousand: thousand, decimal: decimal },
-		      opts: any     = { ...defaults, ...paramOpts },
-		      // Clean up precision.
-		      usePrecision  = this.checkPrecision( opts.precision ),
-		      // Do some calc.
-		      negative      = number < 0 ? '-' : '',
-		      base          = parseInt( this.toFixed( Math.abs( <number>number || 0 ), usePrecision ), 10 ) + '',
-		      mod           = base.length > 3 ? base.length % 3 : 0;
+
+		const usePrecision = this.checkPrecision( precision ), // Clean up precision.
+		      negative     = number < 0 ? '-' : '', // Do some calc.
+		      base         = parseInt( this.toFixed( Math.abs( <number> number || 0 ), usePrecision ), 10 ) + '',
+		      mod          = base.length > 3 ? base.length % 3 : 0;
 
 		let decimalsPart: string = '';
 
@@ -293,12 +313,12 @@ const Utils = {
 				decimalsPart = Number( decimalsPart ).toString();
 			}
 
-			decimalsPart = decimalsPart.includes( '.' ) ? opts.decimal + decimalsPart.split( '.' )[1] : '';
+			decimalsPart = decimalsPart.includes( '.' ) ? decimal + decimalsPart.split( '.' )[1] : '';
 
 		}
 
 		// Format the number.
-		return negative + ( mod ? base.substr( 0, mod ) + opts.thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + opts.thousand ) + decimalsPart;
+		return negative + ( mod ? base.substr( 0, mod ) + thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + thousand ) + decimalsPart;
 		
 	},
 	
@@ -312,7 +332,14 @@ const Utils = {
 	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
 	 * Second param can be an object matching `settings.currency` which is the easiest way.
 	 */
-	formatMoney( number: number[] | number, symbol?: string, precision?: number, thousand?: string, decimal?: string, format?: string ) : string[] | string {
+	formatMoney(
+		number: number[] | number,
+		symbol: string    = this.settings.currency.symbol,
+		precision: number = this.settings.currency.precision,
+		thousand: string  = this.settings.currency.thousand,
+		decimal: string   = this.settings.currency.decimal,
+		format: string    = this.settings.currency.format,
+	): string[] | string {
 		
 		// Resursively format arrays.
 		if ( Array.isArray( number ) ) {
@@ -320,26 +347,13 @@ const Utils = {
 		}
 		
 		// Clean up number.
-		number = this.unformat(number);
-		
-		const defaults: any = { ...this.settings.currency },
-		      opts: any     = {
-			      defaults,
-			      ...{
-				      symbol: symbol,
-				      precision: precision,
-				      thousand: thousand,
-				      decimal: decimal,
-				      format: format,
-			      },
-		      },
-		      // Check format (returns object with pos, neg and zero).
-		      formats       = this.checkCurrencyFormat( opts.format ),
-		      // Choose which format to use for this value.
-		      useFormat     = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
-		
+		number = this.unformat( number );
+
+		const formats   = this.checkCurrencyFormat( format ), // Check format (returns object with pos, neg and zero).
+		      useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero; // Choose which format to use for this value.
+
 		// Return with currency symbol added.
-		return useFormat.replace( '%s', opts.symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( opts.precision ), opts.thousand, opts.decimal ) );
+		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( precision ), thousand, decimal ) );
 		
 	},
 	
@@ -360,7 +374,7 @@ const Utils = {
 	 *
 	 * @return {number | number[]}
 	 */
-	unformat( value: number | string, decimal?: string ): number[] | number {
+	unformat( value: number | string, decimal: string = this.settings.number.decimal ): number[] | number {
 		
 		// Recursively unformat arrays:
 		if ( Array.isArray( value ) ) {
@@ -374,9 +388,6 @@ const Utils = {
 		if ( typeof value === 'number' ) {
 			return value;
 		}
-		
-		// Default decimal point comes from settings, but could be set to eg. "," in opts.
-		decimal = decimal || this.settings.number.decimal;
 		
 		// Build regex to strip out everything except digits, decimal point and minus sign.
 		const regex: RegExp       = new RegExp( `[^0-9-${ decimal }]`, 'g' ),
@@ -568,12 +579,104 @@ const Utils = {
 				break;
 
 			default:
+				return false;
 				break;
 
 		}
 
+	},
+
+	/**
+	 * Multiply a decimal number and return the right value
+	 *
+	 * @param {number} multiplicand
+	 * @param {number} multiplier
+	 *
+	 * @returns {number}
+	 */
+	multiplyDecimal( multiplicand: number, multiplier: number ): number {
+		return parseFloat( bigDecimal.multiply( multiplicand.toString(), multiplier.toString() ) );
+	},
+
+	/**
+	 * Divide a decimal number and return the right value
+	 *
+	 * @param {number} dividend
+	 * @param {number} divisor
+	 * @param {number} precision
+	 *
+	 * @returns {number}
+	 */
+	divideDecimal( dividend: number, divisor: number, precision: number ): number {
+		return parseFloat( bigDecimal.divide( dividend.toString(), divisor.toString(), precision ) );
+	},
+
+	/**
+	 * Sum two decimal numbers and return the right value
+	 *
+	 * @param {number} summand1
+	 * @param {number} summand2
+	 *
+	 * @returns {number}
+	 */
+	sumDecimal( summand1: number, summand2: number ): number {
+		return parseFloat( bigDecimal.add( summand1.toString(), summand2.toString() ) );
+	},
+
+	/**
+	 * Subtract a decimal number to another and return the right value
+	 *
+	 * @param {number} minuend
+	 * @param {number} subtrahend
+	 *
+	 * @returns {number}
+	 */
+	subtractDecimal( minuend: number, subtrahend: number ): number {
+		return parseFloat( bigDecimal.subtract( minuend.toString(), subtrahend.toString() ) );
+	},
+
+	/**
+	 * Calc a base price taxes. Based on WC_Tax::calc_exclusive_tax as we have a price without applied taxes.
+	 *
+	 * @param {number} price
+	 * @param {any[]} rates
+	 *
+	 * @return {number}
+	 */
+	calcTaxesFromBase( price: number, rates: any[] ): number {
+
+		let taxes: number[] = [ 0 ],
+		    preCompoundTaxes: number;
+
+		$.each( rates, ( i: number, rate: any ) => {
+
+			if ( 'yes' === rate[ 'compound' ] ) {
+				return true;
+			}
+			taxes.push( price * rate[ 'rate' ] / 100 );
+
+		} );
+
+		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+
+		// Compound taxes.
+		$.each( rates, ( i: number, rate: any ) => {
+
+			let currentTax: number;
+
+			if ( 'no' === rate[ 'compound' ] ) {
+				return true;
+			}
+
+			currentTax = ( price + preCompoundTaxes ) * rate[ 'rate' ] / 100;
+			taxes.push( currentTax );
+			preCompoundTaxes += currentTax;
+
+		} );
+
+		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
 	}
 	
-}
+};
 
 export default Utils;

@@ -22,7 +22,7 @@ export default class Globals {
 	$scrollPane: any = null;
 	jScrollApi: any = null;
 	$collapsedGroups: JQuery = null;
-	filterData = {};
+	filterData: any = {};
 	
 	constructor(
 		protected settings: Settings,

@@ -156,7 +156,11 @@ use Atum\Inc\Helpers;
 
 		</div>
 	<?php else : ?>
-		<p class="error"><?php esc_html_e( "The ATUM's Youtube videos could not be loaded. Please try again later.", ATUM_TEXT_DOMAIN ) ?></p>
+		<p class="error">
+			<?php
+			/* translators: opening and closing anchor tags */
+			printf( esc_html__( "The ATUM's YouTube videos could not be loaded at this time. You can browse the YouTube channel %1\$shere%2\$s.", ATUM_TEXT_DOMAIN ), '<a href="https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA" target="_blank">', '</a>' ) ?>
+		</p>
 	<?php endif; ?>
 
 </div>

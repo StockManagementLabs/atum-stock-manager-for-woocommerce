@@ -2,6 +2,8 @@
 // Product Data meta box
 //----------------------
 
+@use "sass:math";
+
 .product_data {
 	
 	input[type=text], input[type=number], textarea {
@@ -59,6 +61,10 @@
 			&:focus {
 				box-shadow: 0 0 0 1px $input-focus;
 				border-color: $input-focus;
+			}
+			
+			&:disabled {
+				background-color: $gray-100;
 			}
 		}
 		
@@ -186,7 +192,7 @@
 	
 	// Translations panel
 	.translated-atum-product {
-		padding: $grid-gutter-width/2;
+		padding: math.div($grid-gutter-width, 2);
 		
 		.alert {
 			display: block;
@@ -275,7 +281,7 @@
 	
 	.atum-data-panel {
 		border-top: 1px solid $wp-gray-4;
-		padding-top: $grid-gutter-width/2;
+		padding-top: math.div($grid-gutter-width, 2);
 		clear: both;
 		
 		.form-field {
@@ -299,7 +305,7 @@
 		color: $wp-gray-2;
 		text-transform: uppercase;
 		cursor: default !important;
-		margin: ($grid-gutter-width/2) (-$grid-gutter-width)  !important;
+		margin: math.div($grid-gutter-width, 2) (-$grid-gutter-width)  !important;
 		padding: 1.1em !important;
 		text-align: center;
 		font-weight: 600;

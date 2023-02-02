@@ -2,6 +2,17 @@
 // Atum Dashboard RTL
 //----------------
 
+@mixin dash-rtl-widget-header-after() {
+	content: '\02022 \02022 \02022';
+	color: var(--dash-widget-icon);
+	font-size: 22px;
+	@include vertical-align-absolute;
+	right: -5px;
+	letter-spacing: 1px;
+	transform: rotate(90deg) translateY(-50%);
+	transform-origin: 16px -1px;
+}
+
 .atum-dashboard {
 	margin-left: 0px;
 	margin-right: -20px;

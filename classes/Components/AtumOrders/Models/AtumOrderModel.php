@@ -5,7 +5,7 @@
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -74,6 +74,13 @@ abstract class AtumOrderModel {
 	 * @var string
 	 */
 	protected $db_status;
+
+	/**
+	 * The default ATUM Order status
+	 *
+	 * @var string
+	 */
+	protected $default_status = 'atum_pending';
 
 	/**
 	 * The array of items belonging to this Order
@@ -167,6 +174,20 @@ abstract class AtumOrderModel {
 	 * @var array
 	 */
 	protected $changes = array();
+
+	/**
+	 * List of allowed WP statuses for ATUM Orders
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_wp_statuses = array(
+		'trash',
+		'any',
+		'auto-draft',
+		'draft',
+		'publish',
+		'private',
+	);
 	
 	/**
 	 * AtumOrderModel constructor
@@ -242,8 +263,19 @@ abstract class AtumOrderModel {
 				return;
 			}
 
+			// Set the cache for the independent order items, so they aren't queried when instantiated with the AtumOrderItemModel class.
+			foreach ( $items as $item ) {
+				$item_cache_key = AtumCache::get_cache_key( 'atum-order-item', $item->order_item_id );
+				AtumCache::set_cache( $item_cache_key, $item );
+			}
+
+			// Set the cache for the order items array.
 			AtumCache::set_cache( $cache_key, $items );
 
+		}
+
+		if ( empty( $items ) ) {
+			return;
 		}
 
 		if ( $type ) {
@@ -973,10 +1005,14 @@ abstract class AtumOrderModel {
 			
 			$old_status = $this->db_status;
 			$statuses   = Helpers::get_atum_order_post_type_statuses( $this->get_post_type() );
+
+			if ( ! array_key_exists( 'trash', $statuses ) ) {
+				$statuses['trash'] = __( 'Trash', ATUM_TEXT_DOMAIN );
+			}
 			
-			// If the old status is set but unknown (e.g. draft) assume its pending for action usage.
-			if ( ! $old_status || ( $old_status && ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
-				$old_status = 'atum_pending';
+			// If the old status is set but unknown (e.g. draft) assume it's pending for action usage.
+			if ( ! $old_status || ( ! in_array( $old_status, array_keys( $statuses ) ) && ! in_array( $old_status, [ 'trash', 'any', 'auto-draft' ] ) ) ) {
+				$old_status = $this->default_status;
 			}
 			
 			if ( $new_status !== $old_status ) {
@@ -984,9 +1020,12 @@ abstract class AtumOrderModel {
 				do_action( "atum/orders/status_$new_status", $this->id, $this );
 				do_action( "atum/orders/status_{$old_status}_to_$new_status", $this->get_id(), $this );
 				do_action( 'atum/orders/status_changed', $this->id, $old_status, $new_status, $this );
-				
+
+				$old_status_label = array_key_exists( $old_status, $statuses ) ? $statuses[ $old_status ] : __( 'Unknown', ATUM_TEXT_DOMAIN );
+				$new_status_label = array_key_exists( $new_status, $statuses ) ? $statuses[ $new_status ] : __( 'Unknown', ATUM_TEXT_DOMAIN );
+
 				/* translators: 1: old order status 2: new order status */
-				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $statuses[ $old_status ], $statuses[ $new_status ] );
+				$transition_note = sprintf( __( 'Order status changed from %1$s to %2$s.', ATUM_TEXT_DOMAIN ), $old_status_label, $new_status_label );
 				$note_id         = $this->add_order_note( $transition_note );
 				Helpers::save_order_note_meta( $note_id, [
 					'action'     => 'order_status_change',
@@ -1019,21 +1058,24 @@ abstract class AtumOrderModel {
 		try {
 
 			$currency = $this->currency;
-			$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
+			if ( ! is_wp_error( $currency ) ) {
+				$this->set_currency( $currency && ! is_wp_error( $currency ) ? $currency : get_woocommerce_currency() );
+			}
+
 			$status       = $this->get_status();
 			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp() );
 			$this->set_date_created( $date_created );
 
 			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-				'post_date'     => Helpers::date_format( $date_created->getTimestamp(), TRUE ),
+				'post_date'     => Helpers::date_format( $date_created->getTimestamp() ),
 				'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
 				'post_type'     => $this->get_post_type(),
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
+				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : $this->default_status,
 				'ping_status'   => 'closed',
 				'post_author'   => get_current_user_id(),
 				'post_title'    => $this->get_title(),
 				'post_content'  => $this->get_description(),
-				'post_password' => uniqid( ATUM_PREFIX . 'order_' ),
+				'post_password' => uniqid( 'atum_order_' ),
 			) ), TRUE );
 
 			if ( $id && ! is_wp_error( $id ) ) {
@@ -1079,10 +1121,12 @@ abstract class AtumOrderModel {
 			$this->post->post_title = '';
 		}
 
+		$allowed_statusses = array_merge( [ 'trash' ], array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) );
+
 		$post_data = array(
-			'post_date'         => Helpers::date_format( $date_created->getTimestamp() ),
+			'post_date'         => Helpers::date_format( strtotime( $date ), TRUE, TRUE ),
 			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
-			'post_status'       => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : ATUM_PREFIX . 'pending',
+			'post_status'       => in_array( $status, $allowed_statusses ) ? $status : $this->default_status,
 			'post_modified'     => current_time( 'mysql' ),
 			'post_modified_gmt' => current_time( 'mysql', 1 ),
 			'post_title'        => $this->get_title(),
@@ -1121,7 +1165,7 @@ abstract class AtumOrderModel {
 
 		// Only allow valid new status.
 		if ( ! in_array( $new_status, array_keys( $statuses ) ) && 'trash' !== $new_status ) {
-			$new_status = 'atum_pending';
+			$new_status = $this->default_status;
 		}
 
 		do_action( 'atum/atum_order_model/update_status', $this, $new_status );
@@ -1836,6 +1880,26 @@ abstract class AtumOrderModel {
 			'description'        => $this->post->post_content,
 		);
 
+		// Check if there are any custom meta keys.
+		$meta_data          = get_metadata( 'post', $this->id );
+		$internal_meta_keys = array_merge( array_keys( $this->meta ), [ 'edit_lock', 'edit_last' ] );
+		$custom_meta        = [];
+
+		foreach ( $meta_data as $meta_key => $meta_value ) {
+
+			$no_prefix_key = substr( $meta_key, 0, 1 ) === '_' ? substr( $meta_key, 1 ) : $meta_key;
+
+			if ( ! in_array( $no_prefix_key, $internal_meta_keys ) ) {
+				$custom_meta[] = new \WC_Meta_Data( array(
+					'key'   => $meta_key,
+					'value' => current( $meta_value ),
+				) );
+			}
+
+		}
+
+		$data['meta_data'] = $custom_meta;
+
 		return apply_filters( 'atum/orders/data', $data, $this->get_post_type() );
 
 	}
@@ -1854,7 +1918,7 @@ abstract class AtumOrderModel {
 		}
 		else {
 			/* translators: the order date */
-			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
 		}
 
 		return apply_filters( 'atum/orders/title', $post_title );
@@ -1883,13 +1947,24 @@ abstract class AtumOrderModel {
 	public function get_status() {
 
 		$status = $this->get_meta( 'status' ); // NOTE: Using the __get magic method within a getter is not allowed.
-		$status = ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) ? ATUM_PREFIX . $status : $status;
+		$status = ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, $this->allowed_wp_statuses, TRUE ) ) ? ATUM_PREFIX . $status : $status;
 
 		if ( ! $status && ! empty( $this->post->post_status ) ) {
 			$status = $this->post->post_status;
 		}
 
 		return $status;
+	}
+
+	/**
+	 * Getter for the db status (not always matches the order status)
+	 *
+	 * @since 1.9.22
+	 *
+	 * @return string
+	 */
+	public function get_db_status() {
+		return $this->db_status;
 	}
 
 	/**
@@ -1915,7 +1990,7 @@ abstract class AtumOrderModel {
 			if ( $group = $this->type_to_group( $type ) ) {
 
 				// Don't use array_merge here because keys are numeric.
-				$items = ( isset( $this->items[ $group ] ) ) ? array_filter( $items + $this->items[ $group ] ) : $items;
+				$items = isset( $this->items[ $group ] ) ? array_filter( $items + $this->items[ $group ] ) : $items;
 			}
 
 		}
@@ -2161,6 +2236,9 @@ abstract class AtumOrderModel {
 	public function set_date_created( $date_created, $skip_change = FALSE ) {
 
 		$date_created = $date_created instanceof \WC_DateTime ? $date_created->date_i18n( 'Y-m-d H:i:s' ) : wc_clean( $date_created );
+
+		$a1 = $this->date_created;
+		$a2 = $this->post ? $this->post->post_date : FALSE;
 
 		// Only register the change if it was manually changed.
 		if ( $date_created !== $this->date_created || ( $this->post && $this->post->post_date !== $date_created ) ) {
@@ -2415,7 +2493,8 @@ abstract class AtumOrderModel {
 	 */
 	public function set_status( $status, $skip_change = FALSE ) {
 
-		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, [ 'trash', 'any', 'auto-draft' ], TRUE ) ) {
+		// Add our prefix when the status coming is a custom status.
+		if ( $status && strpos( $status, ATUM_PREFIX ) !== 0 && ! in_array( $status, $this->allowed_wp_statuses, TRUE ) ) {
 			$status = ATUM_PREFIX . $status;
 		}
 
@@ -2512,7 +2591,10 @@ abstract class AtumOrderModel {
 			'li'     => [],
 		) );
 
-		$this->post->post_content = wp_kses( $value, $allowed_html );
+		if ( $this->post ) {
+			$this->post->post_content = wp_kses( $value, $allowed_html );
+		}
+
 	}
 
 

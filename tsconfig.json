@@ -10,7 +10,8 @@
 		"moduleResolution": "node",
 		"typeRoots": [ "./assets/js/src/types", "./node_modules/@types"],
 		"incremental": true,
-		"tsBuildInfoFile": "./assets/js/build/buildcache"
+		"tsBuildInfoFile": "./assets/js/build/buildcache",
+		"esModuleInterop": true,
 	},
 	"exclude": [
 		"node_modules",

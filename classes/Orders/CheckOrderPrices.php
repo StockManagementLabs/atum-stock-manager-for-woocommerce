@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Orders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.8.6
  */
@@ -14,7 +14,8 @@ namespace Atum\Orders;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Helpers as AtumHelpers;
+use Atum\Inc\Helpers;
+
 
 class CheckOrderPrices {
 
@@ -48,36 +49,36 @@ class CheckOrderPrices {
 			'wc-on-hold',
 		) );
 
-		if ( is_admin() ) {
+		// Only load this feature if the option is enabled in ATUM settings.
+		if ( is_admin() && 'yes' === Helpers::get_option( 'enable_check_order_prices', 'no' ) ) {
 
-			// Only load this feature if the option is enabled in ATUM settings.
-			if ( 'yes' === AtumHelpers::get_option( 'enable_check_order_prices', 'no' ) ) {
+			// Enqueue scripts.
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-				// Enqueue scripts.
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			// Check order pricess via Ajax.
+			add_action( 'wp_ajax_atum_check_order_prices', array( $this, 'check_order_prices' ) );
 
-				// Check order pricess via Ajax.
-				add_action( 'wp_ajax_atum_check_order_prices', array( $this, 'check_order_prices' ) );
+			// Filter the orders query before running it.
+			add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
+			add_filter( 'woocommerce_order_list_table_prepare_items_query_args', array( $this, 'filter_mismatching_hpos_orders' ) );
 
-				// Filter the orders query before running it.
-				add_action( 'pre_get_posts', array( $this, 'filter_mismatching_orders' ) );
+			// Add the action button to the filtered mismatching orders.
+			add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
 
-				// Add the action button to the filtered mismatching orders.
-				add_filter( 'woocommerce_admin_order_actions', array( $this, 'add_fix_prices_button' ), 10, 2 );
+			// Fix the prices for the specified orders.
+			add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
 
-				// Fix the prices for the specified orders.
-				add_action( 'wp_ajax_atum_fix_order_prices', array( $this, 'fix_order_prices' ) );
+			// Add a bulk action to the orders list table.
+			add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
+			add_filter( 'bulk_actions-woocommerce_page_wc-orders', array( $this, 'add_bulk_action' ) );
 
-				// Add a bulk action to the orders list table.
-				add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_action' ) );
+			// Process the bulk action for fixing prices.
+			add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
+			// TODO HPOS: THIS IS NOT WORKING FOR THE COT LIST.
+			add_filter( 'handle_bulk_actions-woocommerce_page_wc-orders', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
 
-				// Process the bulk action for fixing prices.
-				add_filter( 'handle_bulk_actions-edit-shop_order', array( $this, 'handle_fix_order_prices_bulk_action' ), 10, 3 );
-
-				// Show and admin notice after the prices have been changed.
-				add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
-
-			}
+			// Show and admin notice after the prices have been changed.
+			add_action( 'admin_notices', array( $this, 'bulk_admin_notices' ) );
 
 		}
 
@@ -118,7 +119,10 @@ class CheckOrderPrices {
 
 		global $post_type;
 
-		if ( 'edit.php' === $hook_suffix && 'shop_order' === $post_type ) {
+		if (
+			( Helpers::is_using_cot_list() && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) === $hook_suffix ) ||
+			( 'edit.php' === $hook_suffix && 'shop_order' === $post_type )
+		) {
 
 			// Do not add the button when filtering by any non-editable status.
 			if ( ! empty( $_GET['post_status'] ) && ! in_array( $_GET['post_status'], $this->editable_order_statuses ) ) {
@@ -186,8 +190,15 @@ class CheckOrderPrices {
 
 		global $wpdb;
 
+		if ( Helpers::is_using_hpos_tables() ) {
+			$orders_sql = "SELECT id FROM `{$wpdb->prefix}wc_orders` WHERE type = 'shop_order' AND status IN ( '" . implode( "','", $editable_statuses ) . "' )";
+		}
+		else {
+			$orders_sql = "SELECT ID FROM `{$wpdb->posts}` WHERE post_type = 'shop_order' AND post_status IN ( '" . implode( "','", $editable_statuses ) . "' )";
+		}
+
 		// Search for all the editable orders with mismatching prices.
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$editable_order_items = $wpdb->get_results( "
 			SELECT DISTINCT oimp.meta_value AS product_id, oimv.meta_value AS variation_id, oimq.meta_value AS qty, oimt.meta_value AS subtotal, oi.order_id 
 			FROM `{$wpdb->prefix}woocommerce_order_items` oi
@@ -196,7 +207,7 @@ class CheckOrderPrices {
 		    LEFT JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` oimq ON ( oimq.order_item_id = oi.order_item_id AND oimq.meta_key = '_qty' )
 		    LEFT JOIN `{$wpdb->prefix}woocommerce_order_itemmeta` oimt ON ( oimt.order_item_id = oi.order_item_id AND oimt.meta_key = '_line_subtotal' )
 			WHERE oi.`order_id` IN (
-				SELECT ID FROM `{$wpdb->posts}` WHERE post_type = 'shop_order' AND post_status IN ( '" . implode( "','", $editable_statuses ) . "' )
+				$orders_sql
 			)
 			AND oimp.meta_value IS NOT NULL;
 		" );
@@ -240,6 +251,8 @@ class CheckOrderPrices {
 	 *
 	 * @since 1.8.6
 	 *
+	 * TODO: THIS IS GOING TO NEED A NEW HOOK AND METHOD FOR THE NEW ORDERS TABLE. PERHAPS THE 'woocommerce_order_list_table_prepare_items_query_args' FILTER.
+	 *
 	 * @param \WP_Query $query
 	 */
 	public function filter_mismatching_orders( $query ) {
@@ -261,6 +274,53 @@ class CheckOrderPrices {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Filters the WC HPOS orders list before querying them
+	 *
+	 * @since 1.9.23
+	 *
+	 * @param array $order_query_args
+	 *
+	 * @return array
+	 */
+	public function filter_mismatching_hpos_orders( $order_query_args ) {
+
+		if ( ! empty( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] ) {
+
+			$queried_statuses          = (array) $order_query_args['status'] ?? [];
+			$queried_editable_statuses = array_intersect( $queried_statuses, $this->editable_order_statuses );
+
+			if ( ! empty( $queried_editable_statuses ) ) {
+				$mismatching_orders = $this->get_mismatching_orders( $queried_editable_statuses );
+
+				if ( ! empty( $mismatching_orders ) ) {
+
+					$order_query_args['field_query'] = array(
+						array(
+							'field' => 'id',
+							'value' => $mismatching_orders,
+						),
+					);
+
+				}
+				else {
+
+					$order_query_args['field_query'] = array(
+						array(
+							'field' => 'id',
+							'value' => [ '-1' ], // Do not return any order.
+						),
+					);
+
+				}
+			}
+
+		}
+
+		return $order_query_args;
 
 	}
 
@@ -301,8 +361,9 @@ class CheckOrderPrices {
 	 */
 	public function fix_order_prices( $order_ids = [] ) {
 
-		$changed      = 0;
-		$redirect_url = wp_get_referer() ?: admin_url( 'edit.php?post_type=shop_order&atum_show_mismatching=yes' );
+		$changed         = 0;
+		$orders_list_url = Helpers::is_using_cot_list() ? 'admin.php?page=wc_orders&atum_show_mismatching=yes' : 'edit.php?post_type=shop_order&atum_show_mismatching=yes';
+		$redirect_url    = wp_get_referer() ?: admin_url( $orders_list_url );
 
 		// For ajax requests, check the nonce first.
 		if ( wp_doing_ajax() && ! check_admin_referer( 'atum-fix-order-prices-nonce' ) ) {
@@ -397,7 +458,9 @@ class CheckOrderPrices {
 	 */
 	public function add_bulk_action( $actions ) {
 
-		$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
+		if ( ! empty( $_GET['atum_show_mismatching'] ) && 'yes' === $_GET['atum_show_mismatching'] ) {
+			$actions['atum_fix_prices'] = __( '[ATUM] Fix prices', ATUM_TEXT_DOMAIN );
+		}
 
 		return $actions;
 	}
@@ -422,15 +485,20 @@ class CheckOrderPrices {
 
 			if ( $changed ) {
 
-				$redirect_to = add_query_arg(
-					array(
-						'post_type'   => 'shop_order',
-						'bulk_action' => 'prices_fixed',
-						'changed'     => $changed,
-						'ids'         => join( ',', $ids ),
-					),
-					$redirect_to
+				$args = array(
+					'bulk_action' => 'prices_fixed',
+					'changed'     => $changed,
+					'ids'         => join( ',', $ids ),
 				);
+
+				if ( Helpers::is_using_cot_list() ) {
+					$args['page'] = 'wc_orders';
+				}
+				else {
+					$args['post_type'] = 'shop_order';
+				}
+
+				$redirect_to = add_query_arg( $args, $redirect_to );
 
 			}
 
@@ -447,10 +515,19 @@ class CheckOrderPrices {
 	 */
 	public function bulk_admin_notices() {
 
-		global $post_type, $pagenow;
+		global $post_type, $pagenow, $page_hook;
 
 		// Bail out if not on shop order list page.
-		if ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type || ! isset( $_REQUEST['bulk_action'] ) ) {
+		if ( ! isset( $_REQUEST['bulk_action'] ) ) {
+			return;
+		}
+
+		$is_using_cot_list = Helpers::is_using_cot_list();
+
+		if ( $is_using_cot_list && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) !== $page_hook ) {
+			return;
+		}
+		elseif ( ! $is_using_cot_list && ( 'edit.php' !== $pagenow || 'shop_order' !== $post_type ) ) {
 			return;
 		}
 

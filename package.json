@@ -15,41 +15,47 @@
 		"lint:scripts:fix": "eslint --fix assets/js/src assets/js/build"
 	},
 	"engines": {
-		"node": "14"
+		"node": "16"
 	},
 	"devDependencies": {
-		"@types/es6-shim": "^0.31.41",
+		"@types/es6-shim": "^0.31.42",
 		"@types/jquery": "^2.0.46",
-		"autoprefixer": "^10.2.5",
-		"eslint": "^7.26.0",
-		"eslint-webpack-plugin": "^2.5.4",
+		"@types/isotope-layout": "^3.0.9",
+		"autoprefixer": "10.4.5",
+		"eslint": "^8.24.0",
+		"eslint-webpack-plugin": "^2.7.0",
 		"gulp": "^4.0.2",
-		"gulp-autoprefixer": "^7.0.1",
+		"gulp-autoprefixer": "^8.0.0",
+		"gulp-clean-dir": "^1.0.2",
 		"gulp-composer": "^0.4.5",
 		"gulp-filter": "^7.0.0",
 		"gulp-if": "^3.0.0",
 		"gulp-livereload": "^4.0.2",
 		"gulp-notify": "^4.0.0",
 		"gulp-plumber": "^1.2.1",
-		"gulp-sass": "^4.1.0",
+		"gulp-sass": "^5.1.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-wrap": "^0.15.0",
-		"sweetalert2": "^10.16.7",
+		"sass": "^1.55.0",
 		"ts-loader": "^8.2.0",
-		"typescript": "^4.2.4",
+		"typescript": "^4.8.4",
 		"webpack": "^4.46.0",
 		"webpack-stream": "^6.1.2"
 	},
 	"dependencies": {
-		"@popperjs/core": "^2.11.4",
-		"bootstrap": "^5.1.3",
+		"@popperjs/core": "^2.11.6",
+		"bootstrap": "^5.2.2",
 		"chart.js": "^2.9.3",
 		"hammerjs": "^2.0.8",
 		"intro.js": "^4.3.0",
-		"jquery": "^3.5.1",
+		"jquery": "^3.6.1",
 		"jquery-nice-select": "^1.1.0",
-		"lightgallery.js": "^1.2.0",
-		"moment": "^2.27.0",
-		"owl.carousel": "^2.3.4"
+		"jquery.fancytable": "^1.0.32",
+		"js-big-decimal": "^1.3.10",
+		"lightgallery.js": "^1.4.0",
+		"moment": "^2.29.4",
+		"owl.carousel": "^2.3.4",
+		"sweetalert2": "^10.16.7",
+		"isotope-layout": "^3.0.6"
 	}
 }

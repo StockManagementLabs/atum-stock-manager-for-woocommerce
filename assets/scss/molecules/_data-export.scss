@@ -2,6 +2,8 @@
 // Atum Data Export
 //-----------------
 
+@use "sass:math";
+
 // Export Tab
 #atum-export-link-wrap {
 	float: right;
@@ -52,16 +54,16 @@
 
 // Reports
 .atum-report {
-	padding-top: $grid-gutter-width/2;
+	padding-top: math.div($grid-gutter-width, 2);
 	
 	.report-header {
 		width: 100%;
 		border-collapse: collapse;
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom: math.div($grid-gutter-width, 2);
 		vertical-align: top;
 		
 		.report-data, .report-details {
-			padding: $grid-gutter-width/2;
+			padding: math.div($grid-gutter-width, 2);
 			border-top: 2px solid $secondary;
 			border-bottom: 2px solid $secondary;
 		}
@@ -80,7 +82,7 @@
 		}
 		
 		.inventory-resume {
-			padding: $grid-gutter-width/2;
+			padding: math.div($grid-gutter-width, 2);
 			border: 2px solid $warning;
 		}
 		

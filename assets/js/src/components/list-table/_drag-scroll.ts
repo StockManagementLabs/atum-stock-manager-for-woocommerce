@@ -170,15 +170,15 @@ export default class DragScroll {
 		const navEl: Element = $nav.get( 0 );
 
 		// Show/hide the right opacity element.
-		if ( this.navIsLeft( navEl ) ) {
+		if ( this.navIsRight( navEl ) ) {
 			$overflowOpacityRight.hide();
 		}
 		else {
 			$overflowOpacityRight.show();
 		}
 
-		// Show/hide the right opacity element.
-		if ( this.navIsRight( navEl ) ) {
+		// Show/hide the left opacity element.
+		if ( this.navIsLeft( navEl ) ) {
 			$overflowOpacityLeft.hide();
 		}
 		else {
@@ -197,7 +197,7 @@ export default class DragScroll {
 	 * @return {boolean}
 	 */
 	navIsLeft( navEl: Element ): boolean {
-		return ( navEl.scrollWidth - navEl.scrollLeft ) === parseInt( $( navEl ).outerWidth().toString() );
+		return navEl.scrollLeft === 0;
 	}
 
 	/**
@@ -208,7 +208,22 @@ export default class DragScroll {
 	 * @return {boolean}
 	 */
 	navIsRight( navEl: Element ): boolean {
-		return navEl.scrollLeft === 0;
+
+		// Sometimes the scroll values can have decimals, and it needs to be compensated or the right side won't be reached.
+		const compensate: boolean      = ! Number.isInteger( navEl.scrollWidth ) || ! Number.isInteger( navEl.scrollLeft ),
+		      scrollDifference: number = Math.ceil( navEl.scrollWidth - navEl.scrollLeft ),
+		      navWidth: number         = Math.ceil( parseFloat( $( navEl ).outerWidth().toString() ) );
+
+		if ( ! compensate ) {
+			return scrollDifference <= navWidth;
+		}
+		else if ( scrollDifference > navWidth ) {
+			return ( scrollDifference - 1 ) <= navWidth;
+		}
+		else {
+			return true;
+		}
+
 	}
 	
 }

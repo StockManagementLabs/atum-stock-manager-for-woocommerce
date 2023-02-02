@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      DataExport
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.5
  *
@@ -57,10 +57,12 @@ class DataExport {
 	 */
 	public function enqueue_scripts( $hook ) {
 
+		global $post_type;
+
 		// Load the script on the "Stock Central" page by default.
 		$allowed_pages = (array) apply_filters( 'atum/data_export/allowed_pages', [ 'toplevel_page_' . StockCentral::UI_SLUG, Globals::ATUM_UI_HOOK . '_page_' . StockCentral::UI_SLUG ] );
 
-		if ( in_array( $hook, $allowed_pages, TRUE ) ) {
+		if ( in_array( $hook, $allowed_pages, TRUE ) || ( 'post.php' === $hook && in_array( $post_type, apply_filters( 'atum/data_export/allowed_post_types', [] ) ) ) ) {
 
 			wp_register_script( 'atum-data-export', ATUM_URL . 'assets/js/build/atum-data-export.js', [ 'jquery', 'wp-hooks' ], ATUM_VERSION, TRUE );
 

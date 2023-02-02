@@ -9,7 +9,9 @@ import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class Router {
-	
+
+	$atumList: JQuery;
+	navigationLocked: boolean = false;
 	navigationReady: boolean = false;
 	numHashParameters: number = 0;
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
@@ -23,18 +25,24 @@ export default class Router {
 		if ( typeof $.address === 'undefined' ) {
 			return;
 		}
-		
+
+		this.$atumList = this.globals.$atumList;
+
 		// Hash history navigation.
 		$.address.externalChange( () => {
+
+			if ( ! this.checkCurrentTab() ) {
+				return;
+			}
 
 			if ( this.settings.get( 'ajaxFilter' ) !== 'yes' ) {
 				// Force enabled or disabled search button.
 				const searchInputVal: any = this.globals.$searchInput.val();
-				$( '.search-submit' ).prop( 'disabled', searchInputVal.length > 0 ? false : true );
+				this.$atumList.find( '.search-submit' ).prop( 'disabled', searchInputVal.length > 0 ? false : true );
 			}
 
 			const numCurrentParams: number = $.address.parameterNames().length;
-			if ( this.navigationReady === true && ( numCurrentParams || this.numHashParameters !== numCurrentParams ) ) {
+			if ( ! this.navigationLocked && this.navigationReady === true && ( numCurrentParams || this.numHashParameters !== numCurrentParams ) ) {
 				this.listTable.updateTable();
 			}
 
@@ -69,7 +77,7 @@ export default class Router {
 						optionVal = $( elem ).val();
 
 						// Calc values are not searchable, also we can't search on thumb.
-						if ( optionVal.search( 'calc_' ) < 0 && optionVal !== 'thumb' && optionVal == searchColumn ) {
+						if ( ! optionVal.startsWith( 'calc_' ) && optionVal !== 'thumb' && optionVal === searchColumn ) {
 							this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, $( elem ).parent().text().trim() ] );
 							return false;
 						}
@@ -77,9 +85,11 @@ export default class Router {
 					} );
 
 				}
-				
-				this.listTable.updateTable();
-				
+
+				if ( this.checkCurrentTab() && ! this.navigationLocked ) {
+					this.listTable.updateTable();
+				}
+
 			}
 			
 		});
@@ -97,8 +107,10 @@ export default class Router {
 		if ( ! window.hasOwnProperty( 'atum' ) ) {
 			window[ 'atum' ] = {};
 		}
-
-		window[ 'atum' ][ 'Router' ] = this;
+		if ( ! window[ 'atum' ].hasOwnProperty( 'Router' ) ) {
+			window[ 'atum' ][ 'Router' ] = [];
+		}
+		window[ 'atum' ][ 'Router' ].push( this );
 	
 	}
 
@@ -157,6 +169,7 @@ export default class Router {
 	 */
 	checkSearchInput() {
 		if ( undefined === $.address.parameter( 's' ) && this.globals.$searchInput.val() ) {
+			this.navigationReady = false;
 			$.address.parameter( 's', this.globals.$searchInput.val() );
 		}
 	}
@@ -166,6 +179,10 @@ export default class Router {
 	updateHash() {
 
 		const beforeFilters: any = { ...this.globals.filterData }; // Deconstruct the object.
+
+		if ( ! this.checkCurrentTab() ) {
+			return;
+		}
 
 		this.checkSearchInput();
 
@@ -207,13 +224,25 @@ export default class Router {
 
 		// Restore navigation and update if needed.
 		const numCurrentParams: number = $.address.parameterNames().length;
-		if ( numCurrentParams || this.numHashParameters !== numCurrentParams ) {
+		if ( ! this.navigationLocked && ( numCurrentParams || this.numHashParameters !== numCurrentParams ) ) {
 			this.listTable.updateTable();
 		}
 
 		this.navigationReady = true;
 		this.numHashParameters = numCurrentParams;
 		
+	}
+
+	checkCurrentTab() {
+		if ( $.address.parameter( 'tab' ) ) {
+
+			if ( this.$atumList.data( 'screen' ).indexOf( $.address.parameter( 'tab' ) ) < 0 ) {
+				return false;
+			}
+
+		}
+
+		return true;
 	}
 	
 }

@@ -2,6 +2,8 @@
 // Atum Settings
 //---------------
 
+@use "sass:math";
+
 #wpwrap {
 	overflow: hidden;
 }
@@ -16,7 +18,7 @@
 
 	h1 {
 		text-transform: capitalize;
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom: math.div($grid-gutter-width, 2);
 		font-weight: bold;
 		color: var(--blue-dark);
 		font-size: 36px;
@@ -240,7 +242,7 @@
 	.atum-multi-checkbox-option, .atum-multi-checkbox-all {
 		width: 50%;
 		display: inline-block;
-		margin-bottom: $grid-gutter-width/2;
+		margin-bottom: math.div($grid-gutter-width, 2);
 		
 		input[type=checkbox] {
 			&:focus {
@@ -408,11 +410,7 @@
 		margin-left: 20px;
 		
 		.btn-group {
-			height: 30px;
-			
 			label {
-				margin-left: 1px;
-				margin-right: 1px;
 				line-height: 1.5;
 				font-size: 14px;
 			}
@@ -471,7 +469,7 @@
 			justify-content: space-between;
 			
 			+ .alert {
-				margin-top: $grid-gutter-width/2;
+				margin-top: math.div($grid-gutter-width, 2);
 			}
 			
 			.submit {
@@ -711,7 +709,7 @@
 			
 			.atum-setting-info {
 				color: var(--atum-text-color-var2);
-				margin-bottom: $grid-gutter-width/2;
+				margin-bottom: math.div($grid-gutter-width, 2);
 				padding-top: 12px;
 				font-size: 15px;
 				font-weight: normal;
@@ -724,7 +722,7 @@
 				}
 				
 				ul {
-					padding-left: $grid-gutter-width/2;
+					padding-left: math.div($grid-gutter-width, 2);
 					
 					li {
 						list-style: disc;
@@ -852,7 +850,7 @@
 					.repeatable-row {
 						display: flex;
 						align-items: center;
-						margin-bottom: $grid-gutter-width/2;
+						margin-bottom: math.div($grid-gutter-width, 2);
 						
 						> div {
 							margin-right: 10px;
@@ -936,7 +934,7 @@
 					.error-message {
 						display: block;
 						color: var(--danger);
-						margin-top: $grid-gutter-width/2;
+						margin-top: math.div($grid-gutter-width, 2);
 						font-weight: normal;
 						font-size: 12px;
 					}
@@ -1145,7 +1143,7 @@
 		
 		.atum-settings-html {
 			color: var(--gray-500);
-			margin-bottom: $grid-gutter-width/2;
+			margin-bottom: math.div($grid-gutter-width, 2);
 			padding-top: 12px;
 			font-size: 15px;
 			font-weight: normal;

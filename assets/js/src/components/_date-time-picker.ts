@@ -108,7 +108,8 @@ export default class DateTimePicker {
 			if ( $fieldLabel.length ) {
 
 				const currentLabel: string = $fieldLabel.text().trim(),
-				      newLabel: string     = typeof evt.date === 'object' ? evt.date.format( this.settings.get( 'dateFormat' ) ) : this.settings.get( 'none' );
+				      dateTimePicker: any  = $dpField.data( 'DateTimePicker' ),
+				      newLabel: string     = typeof evt.date === 'object' ? evt.date.format( dateTimePicker?.options()?.format || this.settings.get( 'dateFormat' ) ) : this.settings.get( 'none' );
 
 				// Only update it if changed.
 				if ( newLabel !== currentLabel ) {

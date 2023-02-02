@@ -3,14 +3,16 @@
    ======================================= */
 
 import DateTimePicker from './_date-time-picker';
+import EnhancedSelect from './_enhanced-select';
 import PopoverBase from '../abstracts/_popover-base';
 import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
-import EnhancedSelect from './_enhanced-select';
+import WPHooks from '../interfaces/wp.hooks';
 
 export default class TableCellPopovers extends PopoverBase{
 
 	popoverClassName: string = 'atum-popover';
+	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
 		private settings: Settings,
@@ -128,7 +130,12 @@ export default class TableCellPopovers extends PopoverBase{
 			      class: $metaCell.data( 'extraClass' ) ? `meta-value ${ $metaCell.data( 'extraClass' ) }` : 'meta-value',
 		      };
 
-		if ( inputType === 'number' || symbol ) {
+		// Handle the popover externally?
+		if ( inputType === 'externalAction' ) {
+			this.wpHooks.doAction( 'atum_tableCellPopovers_externalActionType', $metaCell, this );
+			return;
+		}
+		else if ( inputType === 'number' || symbol ) {
 
 			let numericValue: number;
 			const numericRealValue: number = parseFloat( realValue );
@@ -143,7 +150,6 @@ export default class TableCellPopovers extends PopoverBase{
 			}
 
 			if ( ! isNaN( numericRealValue) && numericValue !== numericRealValue ) {
-
 				numericValue = numericRealValue;
 			}
 

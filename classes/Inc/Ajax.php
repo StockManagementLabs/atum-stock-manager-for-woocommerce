@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2022 Stock Management Labs™
+ * @copyright      ©2023 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -27,7 +27,6 @@ use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
 use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
-use Atum\Legacy\AjaxLegacyTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -100,6 +99,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_deactivate_license', array( $this, 'deactivate_license' ) );
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
+		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -512,8 +512,10 @@ final class Ajax {
 		$namespace  = '\Atum\StockCentral\Lists';
 		$list_class = $args['show_controlled'] ? "$namespace\ListTable" : "$namespace\UncontrolledListTable";
 
+		$list_class = apply_filters( 'atum/ajax/stock_central_list/list_table_class', $list_class, $args );
+
 		/**
-		 * Variable deifinition
+		 * Variable definition
 		 *
 		 * @var ListTable $list
 		 */
@@ -665,7 +667,7 @@ final class Ajax {
 			case 'control_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -679,7 +681,7 @@ final class Ajax {
 			case 'unmanage_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -693,7 +695,7 @@ final class Ajax {
 			case 'manage_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -836,10 +838,13 @@ final class Ajax {
 
 		}
 
-		Addons::update_key( $addon_name, array(
-			'key'    => $key,
-			'status' => 'invalid',
-		) );
+		// Don't save the key if invalid.
+		if ( ! 'invalid' === $license_data->license ) {
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => 'invalid',
+			) );
+		}
 
 		// Delete status transient.
 		Addons::delete_status_transient( $addon_name );
@@ -969,7 +974,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Deactivate an addon license key through API
+	 * Deactivate and remove an addon license key through API
 	 *
 	 * @package Add-ons
 	 *
@@ -1001,16 +1006,13 @@ final class Ajax {
 		// $license_data->license will be either "deactivated" or "failed" or "limit_reached".
 		if ( 'deactivated' === $license_data->license ) {
 
-			// Update the key status.
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => 'inactive',
-			) );
+			// Remove the key.
+			Addons::update_key( $addon_name, [ 'key' => '' ] );
 
 			// Delete status transient.
 			Addons::delete_status_transient( $addon_name );
 
-			wp_send_json_success( __( 'Your license has been deactivated.', ATUM_TEXT_DOMAIN ) );
+			wp_send_json_success( __( 'Your license has been deactivated and removed.', ATUM_TEXT_DOMAIN ) );
 
 		}
 		elseif ( 'limit_reached' === $license_data->license ) {
@@ -1062,9 +1064,19 @@ final class Ajax {
 		if ( $license_data->download_link ) {
 
 			Addons::delete_status_transient( $addon_name );
+
+			Addons::update_key( $addon_name, array(
+				'key'    => $key,
+				'status' => $license_data->license,
+			) );
+
 			/* @noinspection PhpUnhandledExceptionInspection */
 			$result = Addons::install_addon( $addon_name, $addon_slug, $license_data->download_link );
 			wp_send_json( $result );
+		}
+
+		if ( $license_data->msg ) {
+			wp_send_json_error( $license_data->msg );
 		}
 
 		wp_send_json_error( $default_error );
@@ -1098,15 +1110,31 @@ final class Ajax {
 	}
 
 	/**
-	 * If the site is not using the new tables, use the legacy methods
+	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
 	 *
-	 * @since 1.5.0
-	 * @deprecated Only for backwards compatibility and will be removed in a future version.
+	 * @since 1.9.26
+	 *
 	 */
-	use AjaxLegacyTrait;
+	public function refresh_license_status() {
+
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( empty( $_POST['addon'] ) ) {
+			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$addon_name = esc_attr( $_POST['addon'] );
+
+		// Delete the transient.
+		Addons::delete_status_transient( $addon_name );
+
+		wp_send_json_success();
+
+	}
+
 
 	/**
-	 * Seach for products from enhanced selects
+	 * Search for products from enhanced selects
 	 *
 	 * @package ATUM Orders
 	 *
@@ -1114,136 +1142,65 @@ final class Ajax {
 	 */
 	public function search_products() {
 
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! Helpers::is_using_new_wc_tables() ) {
-			$this->search_products_legacy();
-			return;
-		}
-
 		check_ajax_referer( 'search-products', 'security' );
 
-		ob_start();
+		if ( empty( $_GET['term'] ) ) {
+			wp_die( [] );
+		}
 
-		$term = stripslashes( $_GET['term'] );
-
-		$post_id = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : 0;
+		$term = (string) wc_clean( wp_unslash( $_GET['term'] ) );
 
 		if ( empty( $term ) ) {
 			wp_die( [] );
 		}
 
-		global $wpdb;
+		$limit       = ! empty( $_GET['limit'] ) ? absint( $_GET['limit'] ) : absint( apply_filters( 'atum/ajax/search_products/json_search_limit', 30 ) );
+		$include_ids = ! empty( $_GET['include'] ) ? array_map( 'absint', (array) wp_unslash( $_GET['include'] ) ) : [];
+		$exclude_ids = ! empty( $_GET['exclude'] ) ? array_map( 'absint', (array) wp_unslash( $_GET['exclude'] ) ) : [];
 
-		$like_term     = '%%' . $wpdb->esc_like( $term ) . '%%';
-		$post_types    = apply_filters( 'atum/ajax/search_products/searched_post_types', [ 'product', 'product_variation' ] );
-		$post_statuses = Globals::get_queryable_product_statuses();
-		$meta_join     = $meta_where = array();
-		$type_where    = '';
+		$ids = Helpers::search_products( $term, '', TRUE, FALSE, $limit, $include_ids, $exclude_ids );
 
-		// Search by SKU.
-		$meta_join[]  = "LEFT JOIN {$wpdb->prefix}wc_products wcd ON posts.ID = wcd.product_id";
-		$meta_where[] = $wpdb->prepare( 'OR wcd.sku LIKE %s', $like_term );
+		foreach ( $ids as $key => $id ) {
+			$product = Helpers::get_atum_product( $id );
 
-		// Search by Supplier SKU.
-		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-		$meta_join[]     = "LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id";
-		$meta_where[]    = $wpdb->prepare( 'OR apd.supplier_sku LIKE %s', $like_term );
-
-		// Exclude variable products from results.
-		$excluded_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ) );
-
-		if ( ! empty( $excluded_types ) ) {
-
-			$type_where = "AND posts.ID NOT IN (
-				SELECT wpd1.product_id FROM {$wpdb->prefix}wc_products wpd1		
-				WHERE wpd1.type IN ('" . implode( "','", $excluded_types ) . "')
-			)";
-
+			if ( $product && $product->is_type( 'variation' ) && 'private' === $product->get_status() ) {
+				unset( $ids[ $key ] );
+			}
 		}
 
-		$query_select = "SELECT DISTINCT posts.ID FROM $wpdb->posts posts " . implode( "\n", $meta_join ) . ' ';
+		$post_id = ! empty( $_GET['id'] ) ? absint( $_GET['id'] ) : NULL;
 
-		// phpcs:disable
-		$where_clause = $wpdb->prepare( '
-			WHERE (
-				posts.post_title LIKE %s
-				OR posts.post_content LIKE %s
-				' . implode( "\n", $meta_where ) . "
-			)
-			AND posts.post_type IN ('" . implode( "','", $post_types ) . "')
-			AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')
-			" . $type_where . ' ',
-			$like_term,
-			$like_term
-		);
-		// phpcs:enable
+		if ( ! $post_id ) {
 
-		$query_select = apply_filters( 'atum/ajax/search_products/query_select', $query_select );
-		$where_clause = apply_filters( 'atum/ajax/search_products/query_where', $where_clause );
+			$url = wp_parse_url( wp_get_referer() );
+			parse_str( $url['query'], $url_query );
 
-		$query = "
-			$query_select $where_clause
-			ORDER BY posts.post_parent ASC, posts.post_title ASC
-		";
-
-		$product_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		if ( is_numeric( $term ) ) {
-
-			$post_id   = absint( $term );
-			$post_type = get_post_type( $post_id );
-
-			if ( 'product_variation' === $post_type ) {
-				$product_ids[] = $post_id;
-			}
-			elseif ( 'product' === $post_type ) {
-				$product_ids[] = $post_id;
+			if ( ! empty( $url_query['post'] ) ) {
+				$post_id = absint( $url_query['post'] );
 			}
 
-			$product_ids[] = wp_get_post_parent_id( $post_id );
-
 		}
 
-		$ids = wp_parse_id_list( $product_ids );
-
-		if ( ! empty( $_GET['exclude'] ) ) {
-			$ids = array_diff( $ids, (array) $_GET['exclude'] );
-		}
-
-		$included = ! empty( $_GET['include'] ) ? array_map( 'absint', (array) $_GET['include'] ) : array();
-		$url      = wp_parse_url( wp_get_referer() );
-		parse_str( $url['query'], $url_query );
-
-		if ( ! empty( $url_query['post'] ) ) {
-			$post_id = absint( $url_query['post'] );
-		}
+		$included = [];
 
 		if ( $post_id ) {
 
-			/**
-			 * Variable definition
-			 *
-			 * @var PurchaseOrder $po
-			 */
-			$po = Helpers::get_atum_order_model( $post_id, FALSE );
+			$atum_order = Helpers::get_atum_order_model( $post_id, FALSE );
 
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
-			if ( $po instanceof PurchaseOrder && ! $po->has_multiple_suppliers() ) {
+			if ( $atum_order instanceof PurchaseOrder && ! $atum_order->has_multiple_suppliers() ) {
 
-				$supplier_products = apply_filters( 'atum/ajax/search_products/included_search_products', Suppliers::get_supplier_products( $po->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE ) );
+				$supplier_products    = Suppliers::get_supplier_products( $atum_order->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE );
+				$no_supplier_products = Suppliers::get_no_supplier_products();
+				$supplier_products    = is_array( $supplier_products ) ? array_map( 'absint', $supplier_products ) : [];
+
+				if ( is_array( $no_supplier_products ) ) {
+					$no_supplier_products = array_map( 'absint', $no_supplier_products );
+					$supplier_products    = array_merge( $supplier_products, $no_supplier_products );
+				}
 
 				// If the PO supplier has no linked products, it must return an empty array.
-				if ( empty( $supplier_products ) ) {
-					$ids = $included = array();
-				}
-				else {
-					$included = array_merge( $included, $supplier_products );
-				}
+				$included = $supplier_products;
 
 			}
 
@@ -1253,23 +1210,43 @@ final class Ajax {
 			$ids = array_intersect( $ids, $included );
 		}
 
-		if ( ! empty( $_GET['limit'] ) ) {
-			$ids = array_slice( $ids, 0, absint( $_GET['limit'] ) );
+		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $this->prepare_json_search_products( $ids, $atum_order ?? NULL ) ) );
+
+	}
+
+	/**
+	 * Prepare the list of products to be returned to the ajax search
+	 *
+	 * @since 1.9.14
+	 *
+	 * @param int[]             $ids
+	 * @param PurchaseOrder|Log $atum_order
+	 *
+	 * @return array
+	 */
+	private function prepare_json_search_products( $ids, $atum_order = NULL ) {
+
+		// Exclude variable products from results.
+		$exclude_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ) );
+		$products      = [];
+
+		foreach ( $ids as $id ) {
+
+			$product = Helpers::get_atum_product( $id );
+
+			if ( ! wc_products_array_filter_readable( $product ) ) {
+				continue;
+			}
+
+			if ( in_array( $product->get_type(), $exclude_types, TRUE ) ) {
+				continue;
+			}
+
+			$products[ $product->get_id() ] = rawurldecode( wp_strip_all_tags( $product->get_formatted_name() ) );
+
 		}
 
-		$product_objects = array_filter( array_map( 'wc_get_product', $ids ), 'wc_products_array_filter_editable' );
-		$products        = array();
-
-		foreach ( $product_objects as $product_object ) {
-			/**
-			 * Variable definition
-			 *
-			 * @var \WC_Product $product_object
-			 */
-			$products[ $product_object->get_id() ] = rawurldecode( $product_object->get_formatted_name() );
-		}
-
-		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $products ) );
+		return array_filter( $products );
 
 	}
 
@@ -1296,15 +1273,34 @@ final class Ajax {
 		global $wpdb;
 		$max_results = absint( apply_filters( 'atum/ajax/search_wc_orders/max_results', 10 ) );
 
-		// phpcs:disable
-		$query = $wpdb->prepare(
-			"SELECT DISTINCT ID from {$wpdb->posts} WHERE post_type = 'shop_order' 
-			AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
-			AND ID LIKE %s LIMIT %d",
-			"$order_id%",
-			$max_results
-		);
-		// phpcs:enable
+		if ( Helpers::is_using_hpos_tables() ) {
+
+			// phpcs:disable
+			$query = $wpdb->prepare( "
+				SELECT DISTINCT id FROM {$wpdb->prefix}wc_orders 
+                WHERE type = 'shop_order' 
+				AND status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
+				AND id LIKE %s LIMIT %d",
+				"$order_id%",
+				$max_results
+			);
+			// phpcs:enable
+
+		}
+		else {
+
+			// phpcs:disable
+			$query = $wpdb->prepare( "
+				SELECT DISTINCT ID FROM {$wpdb->posts} 
+               	WHERE post_type = 'shop_order' 
+				AND post_status IN ('" . implode( "','", array_keys( wc_get_order_statuses() ) ) . "') 
+				AND ID LIKE %s LIMIT %d",
+				"$order_id%",
+				$max_results
+			);
+			// phpcs:enable
+
+		}
 
 		$order_ids = $wpdb->get_col( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -2701,7 +2697,14 @@ final class Ajax {
 		$products = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM $atum_product_data_table LIMIT %d, %d", $offset, $step ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		foreach ( $products as $product_id ) {
-			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
+
+			$product = Helpers::get_atum_product( $product_id);
+
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product );
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
+
+			do_action( 'atum/ajax/tool_update_calc_props/product_updated', $product );
 		}
 
 		if ( $offset + $step >= $total ) {
@@ -2840,7 +2843,6 @@ final class Ajax {
 		wp_die();
 
 	}
-
 
 	/*******************
 	 * Instance methods

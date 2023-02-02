@@ -102,9 +102,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAddons');
-    new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    new _components_addons_page_addons_page__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    new _components_addons_page_addons_page__WEBPACK_IMPORTED_MODULE_1__["default"](settings, tooltip);
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
@@ -136,7 +135,7 @@ var Tooltip = (function () {
             $wrapper = $('body');
         }
         $wrapper.find('.tips, .atum-tooltip').each(function (index, elem) {
-            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title');
+            var $tipEl = $(elem), title = $tipEl.data('tip') || $tipEl.attr('title') || $tipEl.attr('data-bs-original-title');
             if (title) {
                 if (_this.getInstance($tipEl)) {
                     return;
@@ -191,24 +190,48 @@ var Tooltip = (function () {
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../vendor/dragscroll */ "./assets/js/vendor/dragscroll.js");
+/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+
+
 
 var AddonsPage = (function () {
-    function AddonsPage(settings) {
+    function AddonsPage(settings, tooltip) {
         this.settings = settings;
+        this.tooltip = tooltip;
         this.$addonsList = $('.atum-addons');
+        this.initHorizontalDragScroll();
         this.bindEvents();
     }
     AddonsPage.prototype.bindEvents = function () {
         var _this = this;
         this.$addonsList
+            .on('click', '.nav-container-box li', function (evt) {
+            var $li = $(evt.currentTarget), $span = $li.find('span'), status = $li.data('status');
+            if (!$span.is('.active')) {
+                $li.siblings().find('span').removeClass('active');
+                $span.addClass('active');
+                _this.$addonsList.find('.atum-addon').each(function (index, elem) {
+                    var $addon = $(elem);
+                    if ('all' === status || $addon.hasClass(status)) {
+                        $addon.show();
+                    }
+                    else {
+                        $addon.hide();
+                    }
+                });
+            }
+        })
             .on('click', '.addon-key button', function (evt) {
             evt.preventDefault();
-            var $button = $(evt.currentTarget), key = $button.siblings('input').val();
-            if (!key) {
-                _this.showErrorAlert(_this.settings.get('invalidKey'));
-                return false;
+            var $button = $(evt.currentTarget);
+            var key;
+            if ($button.hasClass('cancel-action')) {
+                $button.closest('.actions').children().slideToggle('fast');
             }
-            if ($button.hasClass('deactivate-key')) {
+            else if ($button.hasClass('remove-license')) {
+                key = $button.closest('.addon-key').find('.license-key').text();
                 sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                     title: _this.settings.get('limitedDeactivations'),
                     html: _this.settings.get('allowedDeactivations'),
@@ -223,65 +246,79 @@ var AddonsPage = (function () {
                 });
             }
             else {
-                _this.requestLicenseChange($button, key);
+                key = $button.siblings('input').val();
+                if (!key) {
+                    _this.showErrorAlert(_this.settings.get('invalidKey'));
+                    return false;
+                }
+                if ($button.hasClass('install-addon')) {
+                    _this.installAddon($button);
+                }
+                else if ($button.hasClass('deactivate-key')) {
+                }
+                else {
+                    _this.requestLicenseChange($button, key);
+                }
             }
         })
-            .on('click', '.install-addon', function (evt) {
-            var $button = $(evt.currentTarget), $addonBlock = $button.closest('.theme');
-            $.ajax({
-                url: window['ajaxurl'],
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    action: 'atum_install_addon',
-                    security: _this.$addonsList.data('nonce'),
-                    addon: $addonBlock.data('addon'),
-                    slug: $addonBlock.data('addon-slug'),
-                    key: $addonBlock.find('.addon-key input').val(),
-                },
-                beforeSend: function () {
-                    _this.beforeAjax($button);
-                },
-                success: function (response) {
-                    _this.afterAjax($button);
-                    if (response.success === true) {
-                        _this.showSuccessAlert(response.data);
-                    }
-                    else {
-                        _this.showErrorAlert(response.data);
-                    }
-                },
-            });
-        })
             .on('click', '.show-key', function (evt) {
-            $(evt.currentTarget).closest('.theme').find('.addon-key').slideToggle('fast');
-        })
-            .on('click', '.remove-key', function (evt) {
             evt.preventDefault();
-            var $button = $(evt.currentTarget), $addonBlock = $button.closest('.theme');
+            var $button = $(evt.currentTarget);
+            $button.closest('.actions').children().slideToggle('fast');
+        })
+            .on('click', '.expired .refresh-status', function (evt) {
+            evt.preventDefault();
+            var $link = $(evt.currentTarget);
             $.ajax({
                 url: window['ajaxurl'],
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    action: 'atum_remove_license',
+                    action: 'atum_refresh_license',
                     security: _this.$addonsList.data('nonce'),
-                    addon: $addonBlock.data('addon'),
-                    slug: $addonBlock.data('addon-slug'),
+                    addon: $link.closest('.atum-addon').data('addon'),
                 },
                 beforeSend: function () {
-                    $button.prop('disabled', true);
+                    _this.beforeAjax($link);
                 },
                 success: function (response) {
+                    _this.afterAjax($link);
                     if (response.success === true) {
                         location.reload();
                     }
                     else {
                         _this.showErrorAlert(response.data);
-                        $button.prop('disabled', false);
                     }
-                },
+                }
             });
+        });
+    };
+    AddonsPage.prototype.installAddon = function ($button) {
+        var _this = this;
+        var $addonBlock = $button.closest('.atum-addon');
+        $.ajax({
+            url: window['ajaxurl'],
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'atum_install_addon',
+                security: this.$addonsList.data('nonce'),
+                addon: $addonBlock.data('addon'),
+                slug: $addonBlock.data('addon-slug'),
+                key: $addonBlock.find('.addon-key input').val(),
+            },
+            beforeSend: function () {
+                _this.beforeAjax($button);
+            },
+            success: function (response) {
+                _this.afterAjax($button);
+                if (response.success === true) {
+                    _this.showSuccessAlert(response.data);
+                }
+                else {
+                    _this.showErrorAlert(response.data);
+                }
+            },
         });
     };
     AddonsPage.prototype.requestLicenseChange = function ($button, key) {
@@ -293,7 +330,7 @@ var AddonsPage = (function () {
             data: {
                 action: $button.data('action'),
                 security: this.$addonsList.data('nonce'),
-                addon: $button.closest('.theme').data('addon'),
+                addon: $button.closest('.atum-addon').data('addon'),
                 key: key,
             },
             beforeSend: function () {
@@ -326,7 +363,7 @@ var AddonsPage = (function () {
                                         data: {
                                             action: 'atum_activate_license',
                                             security: _this.$addonsList.data('nonce'),
-                                            addon: $button.closest('.theme').data('addon'),
+                                            addon: $button.closest('.atum-addon').data('addon'),
                                             key: key,
                                         },
                                         success: function (response) {
@@ -370,13 +407,86 @@ var AddonsPage = (function () {
         });
     };
     AddonsPage.prototype.beforeAjax = function ($button) {
-        $('.theme').find('.button').prop('disabled', true);
+        $button.parent().find('.button, button').prop('disabled', true);
         $button.css('visibility', 'hidden').after('<div class="atum-loading"></div>');
     };
     AddonsPage.prototype.afterAjax = function ($button) {
-        $('.atum-loading').remove();
-        $('.theme').find('.button').prop('disabled', false);
+        $button.siblings('.atum-loading').remove();
+        $button.parent().find('.button, button').prop('disabled', false);
         $button.css('visibility', 'visible');
+    };
+    AddonsPage.prototype.addMouseWheelSupport = function () {
+        $('.nav-with-scroll-effect').off('wheel DOMMouseScroll').on('wheel DOMMouseScroll', function (evt) {
+            var $nav = $(evt.currentTarget);
+            if ($nav.find('.overflow-opacity-effect-right').is(':hidden') &&
+                $nav.find('.overflow-opacity-effect-left').is(':hidden')) {
+                return;
+            }
+            var navEl = $nav.get(0), originalEvent = evt.originalEvent;
+            if ((originalEvent.wheelDelta || originalEvent.detail) > 0) {
+                navEl.scrollLeft -= 60;
+            }
+            else {
+                navEl.scrollLeft += 60;
+            }
+            return false;
+        });
+    };
+    AddonsPage.prototype.initHorizontalDragScroll = function () {
+        var _this = this;
+        var $navScrollContainers = $('.nav-with-scroll-effect');
+        $(window).off('resize.atum').on('resize.atum', function () {
+            $navScrollContainers.each(function (index, elem) {
+                _this.addHorizontalDragScroll($(elem));
+            });
+        }).trigger('resize.atum');
+        $('.tablenav.top').find('input.btn').css('visibility', 'visible');
+        $navScrollContainers.css('visibility', 'visible').off('scroll.atum').on('scroll.atum', function (evt) {
+            _this.addHorizontalDragScroll($(evt.currentTarget), true);
+            _this.tooltip.destroyTooltips();
+            _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
+        });
+        this.addMouseWheelSupport();
+        _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default.a.reset();
+    };
+    AddonsPage.prototype.addHorizontalDragScroll = function ($nav, checkEnhanced) {
+        if (checkEnhanced === void 0) { checkEnhanced = false; }
+        if (!$nav.length) {
+            return;
+        }
+        var $overflowOpacityRight = $nav.find('.overflow-opacity-effect-right'), $overflowOpacityLeft = $nav.find('.overflow-opacity-effect-left');
+        if (checkEnhanced) {
+            $('.enhanced').select2('close');
+        }
+        var navEl = $nav.get(0);
+        if (this.navIsRight(navEl)) {
+            $overflowOpacityRight.hide();
+        }
+        else {
+            $overflowOpacityRight.show();
+        }
+        if (this.navIsLeft(navEl)) {
+            $overflowOpacityLeft.hide();
+        }
+        else {
+            $overflowOpacityLeft.show();
+        }
+        $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
+    };
+    AddonsPage.prototype.navIsLeft = function (navEl) {
+        return navEl.scrollLeft === 0;
+    };
+    AddonsPage.prototype.navIsRight = function (navEl) {
+        var compensate = !Number.isInteger(navEl.scrollWidth) || !Number.isInteger(navEl.scrollLeft), scrollDifference = Math.ceil(navEl.scrollWidth - navEl.scrollLeft), navWidth = Math.ceil(parseFloat($(navEl).outerWidth().toString()));
+        if (!compensate) {
+            return scrollDifference <= navWidth;
+        }
+        else if (scrollDifference > navWidth) {
+            return (scrollDifference - 1) <= navWidth;
+        }
+        else {
+            return true;
+        }
     };
     return AddonsPage;
 }());
@@ -421,6 +531,484 @@ var Settings = (function () {
     return Settings;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (Settings);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/utils/_utils.ts":
+/*!***************************************!*\
+  !*** ./assets/js/src/utils/_utils.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-big-decimal */ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js");
+/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_big_decimal__WEBPACK_IMPORTED_MODULE_0__);
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+
+var Utils = {
+    settings: {
+        delayTimer: 0,
+        number: {
+            precision: 0,
+            grouping: 3,
+            thousand: ',',
+            decimal: '.',
+        },
+        currency: {
+            symbol: '$',
+            format: '%s%v',
+            decimal: '.',
+            thousand: ',',
+            precision: 2,
+            grouping: 3,
+        },
+    },
+    delay: function (callback, ms) {
+        clearTimeout(this.settings.delayTimer);
+        this.settings.delayTimer = setTimeout(callback, ms);
+        return this.settings.delayTimer;
+    },
+    filterQuery: function (query, variable) {
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (pair[0] === variable) {
+                return pair[1];
+            }
+        }
+        return false;
+    },
+    filterByData: function ($elem, prop, val) {
+        if (typeof val === 'undefined') {
+            return $elem.filter(function (index, elem) {
+                return typeof $(elem).data(prop) !== 'undefined';
+            });
+        }
+        ;
+        return $elem.filter(function (index, elem) {
+            return $(elem).data(prop) == val;
+        });
+    },
+    addNotice: function (type, msg, autoDismiss, dismissSeconds) {
+        if (autoDismiss === void 0) { autoDismiss = false; }
+        if (dismissSeconds === void 0) { dismissSeconds = 5; }
+        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        $headerEnd.siblings('.notice').remove();
+        $headerEnd.before($notice.append($dismissButton));
+        $notice.slideDown(100);
+        $dismissButton.on('click.wp-dismiss-notice', function (evt) {
+            evt.preventDefault();
+            $notice.fadeTo(100, 0, function () {
+                $notice.slideUp(100, function () {
+                    $notice.remove();
+                });
+            });
+        });
+        if (autoDismiss) {
+            setTimeout(function () {
+                $dismissButton.trigger('click.wp-dismiss-notice');
+            }, dismissSeconds * 1000);
+        }
+    },
+    imagesLoaded: function ($wrapper) {
+        var $imgs = $wrapper.find('img[src!=""]');
+        if (!$imgs.length) {
+            return $.Deferred().resolve().promise();
+        }
+        var dfds = [];
+        $imgs.each(function (index, elem) {
+            var dfd = $.Deferred(), img = new Image();
+            dfds.push(dfd);
+            img.onload = function () { return dfd.resolve(); };
+            img.onerror = function () { return dfd.resolve(); };
+            img.src = $(elem).attr('src');
+        });
+        return $.when.apply($, dfds);
+    },
+    getUrlParameter: function (name) {
+        if (typeof URLSearchParams !== 'undefined') {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        else {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(window.location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+    },
+    htmlDecode: function (input) {
+        var e = document.createElement('div');
+        e.innerHTML = input;
+        return e.childNodes[0].nodeValue;
+    },
+    areEquivalent: function (a, b, strict) {
+        if (strict === void 0) { strict = false; }
+        var aProps = Object.getOwnPropertyNames(a), bProps = Object.getOwnPropertyNames(b);
+        if (aProps.length != bProps.length) {
+            return false;
+        }
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+            if ((strict && a[propName] !== b[propName]) || (!strict && a[propName] != b[propName])) {
+                return false;
+            }
+        }
+        return true;
+    },
+    toggleNodes: function (nodes, openOrClose) {
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].isExpanded = openOrClose == 'open';
+            if (nodes[i].children && nodes[i].children.length > 0) {
+                this.toggleNodes(nodes[i].children, openOrClose);
+            }
+        }
+    },
+    formatNumber: function (number, precision, thousand, decimal, stripZeros) {
+        var _this = this;
+        if (precision === void 0) { precision = this.settings.number.precision; }
+        if (thousand === void 0) { thousand = this.settings.number.thousand; }
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
+        if (stripZeros === void 0) { stripZeros = false; }
+        if (Array.isArray(number)) {
+            return $.map(number, function (val) { return _this.formatNumber(val, precision, thousand, decimal, stripZeros); });
+        }
+        number = this.unformat(number);
+        var usePrecision = this.checkPrecision(precision), negative = number < 0 ? '-' : '', base = parseInt(this.toFixed(Math.abs(number || 0), usePrecision), 10) + '', mod = base.length > 3 ? base.length % 3 : 0;
+        var decimalsPart = '';
+        if (usePrecision) {
+            decimalsPart = this.toFixed(Math.abs(number), usePrecision);
+            if (stripZeros) {
+                decimalsPart = Number(decimalsPart).toString();
+            }
+            decimalsPart = decimalsPart.includes('.') ? decimal + decimalsPart.split('.')[1] : '';
+        }
+        return negative + (mod ? base.substr(0, mod) + thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + thousand) + decimalsPart;
+    },
+    formatMoney: function (number, symbol, precision, thousand, decimal, format) {
+        var _this = this;
+        if (symbol === void 0) { symbol = this.settings.currency.symbol; }
+        if (precision === void 0) { precision = this.settings.currency.precision; }
+        if (thousand === void 0) { thousand = this.settings.currency.thousand; }
+        if (decimal === void 0) { decimal = this.settings.currency.decimal; }
+        if (format === void 0) { format = this.settings.currency.format; }
+        if (Array.isArray(number)) {
+            return $.map(number, function (val) { return _this.formatMoney(val, symbol, precision, thousand, decimal, format); });
+        }
+        number = this.unformat(number);
+        var formats = this.checkCurrencyFormat(format), useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero;
+        return useFormat.replace('%s', symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(precision), thousand, decimal));
+    },
+    unformat: function (value, decimal) {
+        var _this = this;
+        if (decimal === void 0) { decimal = this.settings.number.decimal; }
+        if (Array.isArray(value)) {
+            return $.map(value, function (val) { return _this.unformat(val, decimal); });
+        }
+        value = value || 0;
+        if (typeof value === 'number') {
+            return value;
+        }
+        var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
+            .replace(/\((.*)\)/, '-$1')
+            .replace(regex, '')
+            .replace(decimal, '.'));
+        return !isNaN(unformatted) ? unformatted : 0;
+    },
+    checkPrecision: function (val, base) {
+        if (base === void 0) { base = 0; }
+        val = Math.round(Math.abs(val));
+        return isNaN(val) ? base : val;
+    },
+    toFixed: function (value, precision) {
+        precision = this.checkPrecision(precision, this.settings.number.precision);
+        var power = Math.pow(10, precision);
+        return (Math.round(this.unformat(value) * power) / power).toFixed(precision);
+    },
+    checkCurrencyFormat: function (format) {
+        var defaults = this.settings.currency.format;
+        if (typeof format === 'function') {
+            format = format();
+        }
+        else if (typeof format === 'string' && format.match('%v')) {
+            return {
+                pos: format,
+                neg: format.replace('-', '').replace('%v', '-%v'),
+                zero: format,
+            };
+        }
+        else if (!format || !format.pos || !format.pos.match('%v')) {
+            return (typeof defaults !== 'string') ? defaults : this.settings.currency.format = {
+                pos: defaults,
+                neg: defaults.replace('%v', '-%v'),
+                zero: defaults,
+            };
+        }
+        return format;
+    },
+    isNumeric: function (n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    },
+    convertElemsToString: function ($elems) {
+        return $('<div />').append($elems).html();
+    },
+    mergeArrays: function (arr1, arr2) {
+        return Array.from(new Set(__spreadArray(__spreadArray([], arr1, true), arr2, true)));
+    },
+    restrictNumberInputValues: function ($input) {
+        if ($input.attr('type') !== 'number') {
+            return;
+        }
+        var qty = $input.val();
+        var value = parseFloat(qty || '0'), min = parseFloat($input.attr('min') || '0'), max = parseFloat($input.attr('max') || '0');
+        if (!$.isNumeric(qty)) {
+            $input.val(undefined !== $input.attr('min') && !isNaN(min) && min > 0 ? min : 0);
+        }
+        else if (undefined !== $input.attr('min') && value < min) {
+            $input.val(min);
+        }
+        else if (undefined !== $input.attr('max') && value > max) {
+            $input.val(max);
+        }
+    },
+    checkRTL: function (value) {
+        var isRTL = false;
+        if ($('html[ dir="rtl" ]').length > 0) {
+            isRTL = true;
+        }
+        switch (value) {
+            case 'isRTL':
+            case 'reverse':
+                return isRTL;
+                break;
+            case 'xSide':
+                if (isRTL) {
+                    return 'right';
+                }
+                else {
+                    return 'left';
+                }
+                break;
+            default:
+                return false;
+                break;
+        }
+    },
+    multiplyDecimal: function (multiplicand, multiplier) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.multiply(multiplicand.toString(), multiplier.toString()));
+    },
+    divideDecimal: function (dividend, divisor, precision) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.divide(dividend.toString(), divisor.toString(), precision));
+    },
+    sumDecimal: function (summand1, summand2) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.add(summand1.toString(), summand2.toString()));
+    },
+    subtractDecimal: function (minuend, subtrahend) {
+        return parseFloat(js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default.a.subtract(minuend.toString(), subtrahend.toString()));
+    },
+    calcTaxesFromBase: function (price, rates) {
+        var taxes = [0], preCompoundTaxes;
+        $.each(rates, function (i, rate) {
+            if ('yes' === rate['compound']) {
+                return true;
+            }
+            taxes.push(price * rate['rate'] / 100);
+        });
+        preCompoundTaxes = taxes.reduce(function (a, b) { return a + b; }, 0);
+        $.each(rates, function (i, rate) {
+            var currentTax;
+            if ('no' === rate['compound']) {
+                return true;
+            }
+            currentTax = (price + preCompoundTaxes) * rate['rate'] / 100;
+            taxes.push(currentTax);
+            preCompoundTaxes += currentTax;
+        });
+        return taxes.reduce(function (a, b) { return a + b; }, 0);
+    }
+};
+/* harmony default export */ __webpack_exports__["default"] = (Utils);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/vendor/dragscroll.js":
+/*!****************************************!*\
+  !*** ./assets/js/vendor/dragscroll.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * @fileoverview dragscroll - scroll area by dragging
+ * @version 0.0.8
+ *
+ * This is a modified version result of using:
+ * https://github.com/iluhaua/dragscroll/commit/910dd9e43c0bc419f37162a668c779d35a341995 (adds touch events)
+ * mixed up with
+ * https://github.com/iluhaua/dragscroll/tree/patch-1 (Adds dragging class when dragging)
+ * and allow a child element to bwe not draggable
+ *
+ * @license MIT, see http://github.com/asvd/dragscroll
+ * @copyright 2015 asvd <heliosframework@gmail.com>
+ */
+!(function (root, factory) {
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {}
+}(this, function (exports) {
+	var _window = window;
+	var _document = document;
+	var mousemove = 'mousemove touchmove';
+	var mouseup = 'mouseup touchend';
+	var mousedown = 'mousedown touchstart';
+	var mouseenter = 'mouseenter';
+	var click = 'click';
+	var EventListener = 'EventListener';
+	var addEventListener = 'add'+EventListener;
+	var removeEventListener = 'remove'+EventListener;
+	var newScrollX, newScrollY;
+	var moveThreshold = 4;
+	
+	var dragged = [];
+	var reset = function(i, el) {
+		for (i = 0; i < dragged.length;) {
+			el = dragged[i++];
+			el = el.container || el;
+			mousedown.split(' ').forEach(function(ev,index) {
+				el[removeEventListener](ev, el['md'+index], 0);
+			});
+			el[removeEventListener](click, el.mc, 1 );
+			mouseup.split(' ').forEach(function(ev,index) {
+				_window[removeEventListener](ev, el['mu'+index], 0);
+			});
+			mousemove.split(' ').forEach(function(ev,index) {
+				_window[removeEventListener](ev, el['mm'+index], 0);
+			});
+			_document[removeEventListener](mouseenter, el.me, 0);
+		}
+		
+		// cloning into array since HTMLCollection is updated dynamically
+		dragged = [].slice.call(_document.getElementsByClassName('dragscroll'));
+		for (i = 0; i < dragged.length;) {
+			(function(el, lastClientX, lastClientY, startX, startY, moved, pushed, scroller, cont){
+				mousedown.split(' ').forEach(function(ev, index) {
+					(cont = el.container || el)[addEventListener](
+						ev,
+						cont['md' +index] = function(e) {
+							if ( !e.target.classList.contains('no-drag') && ( !el.hasAttribute('nochilddrag') ||
+								_document.elementFromPoint(
+									e.pageX, e.pageY
+								) == cont )
+							) {
+								fixTouches(e);
+								pushed = 1;
+								moved = 0;
+								startX = lastClientX = e.clientX;
+								startY = lastClientY = e.clientY;
+								
+								if ('mousedown' === ev) {
+									e.preventDefault();
+									e.stopPropagation();
+								}
+							}
+						}, 0
+					);
+				});
+				(cont = el.container || el)[addEventListener](
+					click,
+					cont.mc = function(e) {
+						if (moved) {
+							e.preventDefault();
+							e.stopPropagation();
+							moved = 0; pushed = 0;
+						}
+						else {
+							var child = e.target.children[0];
+							if (undefined !== child) {
+								child.click();
+							}
+						}
+					}, 1
+				);
+				
+				mouseup.split(' ').forEach(function(ev,index) {
+					_window[addEventListener](
+						ev, cont['mu'+index] = function(e) {
+							setTimeout(function() {
+								el.classList.remove('dragging')
+							}, 100);
+							pushed = 0;
+						}, 0
+					);
+				});
+				_document[addEventListener](
+					mouseenter, cont.me = function(e) {if (!e.buttonsPressed) pushed = 0;}, 0
+				);
+				mousemove.split(' ').forEach(function(ev, index) {
+					_window[addEventListener](
+						ev,
+						cont['mm'+index] = function(e) {
+							if (pushed) {
+								
+								fixTouches(e);
+								el.classList.add('dragging');
+								
+								if (!moved &&
+									(Math.abs(e.clientX - startX) > moveThreshold ||
+										Math.abs(e.clientY - startY) > moveThreshold)) {
+									moved = true;
+								}
+								if (moved) {
+									
+									(scroller = el.scroller || el).scrollLeft -=
+										newScrollX = (-lastClientX + (lastClientX = e.clientX));
+									scroller.scrollTop -=
+										newScrollY = (-lastClientY + (lastClientY = e.clientY));
+									if (el == _document.body) {
+										(scroller = _document.documentElement).scrollLeft -= newScrollX;
+										scroller.scrollTop -= newScrollY;
+									}
+								}
+							}
+						}, 0
+					);
+				});
+			})(dragged[i++]);
+		}
+	}
+	
+	
+	if (_document.readyState == 'complete') {
+		reset();
+	} else {
+		_window[addEventListener]('load', reset, 0);
+	}
+	
+	exports.reset = reset;
+	
+	function fixTouches(e) {
+		if(e.touches) {
+			e.clientX = e.touches[0].clientX;
+			e.clientY = e.touches[0].clientY;
+		}
+	}
+}));
+
 
 
 /***/ }),
@@ -763,40 +1351,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getBoundingClientRect; });
 /* harmony import */ var _instanceOf_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./instanceOf.js */ "./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js");
 /* harmony import */ var _utils_math_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/math.js */ "./node_modules/@popperjs/core/lib/utils/math.js");
+/* harmony import */ var _getWindow_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getWindow.js */ "./node_modules/@popperjs/core/lib/dom-utils/getWindow.js");
+/* harmony import */ var _isLayoutViewport_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isLayoutViewport.js */ "./node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js");
 
 
-function getBoundingClientRect(element, includeScale) {
+
+
+function getBoundingClientRect(element, includeScale, isFixedStrategy) {
   if (includeScale === void 0) {
     includeScale = false;
   }
 
-  var rect = element.getBoundingClientRect();
+  if (isFixedStrategy === void 0) {
+    isFixedStrategy = false;
+  }
+
+  var clientRect = element.getBoundingClientRect();
   var scaleX = 1;
   var scaleY = 1;
 
-  if (Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_0__["isHTMLElement"])(element) && includeScale) {
-    var offsetHeight = element.offsetHeight;
-    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-    // Fallback to 1 in case both values are `0`
-
-    if (offsetWidth > 0) {
-      scaleX = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_1__["round"])(rect.width) / offsetWidth || 1;
-    }
-
-    if (offsetHeight > 0) {
-      scaleY = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_1__["round"])(rect.height) / offsetHeight || 1;
-    }
+  if (includeScale && Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_0__["isHTMLElement"])(element)) {
+    scaleX = element.offsetWidth > 0 ? Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_1__["round"])(clientRect.width) / element.offsetWidth || 1 : 1;
+    scaleY = element.offsetHeight > 0 ? Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_1__["round"])(clientRect.height) / element.offsetHeight || 1 : 1;
   }
 
+  var _ref = Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_0__["isElement"])(element) ? Object(_getWindow_js__WEBPACK_IMPORTED_MODULE_2__["default"])(element) : window,
+      visualViewport = _ref.visualViewport;
+
+  var addVisualOffsets = !Object(_isLayoutViewport_js__WEBPACK_IMPORTED_MODULE_3__["default"])() && isFixedStrategy;
+  var x = (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) / scaleX;
+  var y = (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) / scaleY;
+  var width = clientRect.width / scaleX;
+  var height = clientRect.height / scaleY;
   return {
-    width: rect.width / scaleX,
-    height: rect.height / scaleY,
-    top: rect.top / scaleY,
-    right: rect.right / scaleX,
-    bottom: rect.bottom / scaleY,
-    left: rect.left / scaleX,
-    x: rect.left / scaleX,
-    y: rect.top / scaleY
+    width: width,
+    height: height,
+    top: y,
+    right: x + width,
+    bottom: y + height,
+    left: x,
+    x: x,
+    y: y
   };
 }
 
@@ -841,8 +1436,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function getInnerBoundingClientRect(element) {
-  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_8__["default"])(element);
+function getInnerBoundingClientRect(element, strategy) {
+  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_8__["default"])(element, false, strategy === 'fixed');
   rect.top = rect.top + element.clientTop;
   rect.left = rect.left + element.clientLeft;
   rect.bottom = rect.top + element.clientHeight;
@@ -854,8 +1449,8 @@ function getInnerBoundingClientRect(element) {
   return rect;
 }
 
-function getClientRectFromMixedType(element, clippingParent) {
-  return clippingParent === _enums_js__WEBPACK_IMPORTED_MODULE_0__["viewport"] ? Object(_utils_rectToClientRect_js__WEBPACK_IMPORTED_MODULE_12__["default"])(Object(_getViewportRect_js__WEBPACK_IMPORTED_MODULE_1__["default"])(element)) : Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_7__["isElement"])(clippingParent) ? getInnerBoundingClientRect(clippingParent) : Object(_utils_rectToClientRect_js__WEBPACK_IMPORTED_MODULE_12__["default"])(Object(_getDocumentRect_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(element)));
+function getClientRectFromMixedType(element, clippingParent, strategy) {
+  return clippingParent === _enums_js__WEBPACK_IMPORTED_MODULE_0__["viewport"] ? Object(_utils_rectToClientRect_js__WEBPACK_IMPORTED_MODULE_12__["default"])(Object(_getViewportRect_js__WEBPACK_IMPORTED_MODULE_1__["default"])(element, strategy)) : Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_7__["isElement"])(clippingParent) ? getInnerBoundingClientRect(clippingParent, strategy) : Object(_utils_rectToClientRect_js__WEBPACK_IMPORTED_MODULE_12__["default"])(Object(_getDocumentRect_js__WEBPACK_IMPORTED_MODULE_2__["default"])(Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(element)));
 } // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
@@ -878,18 +1473,18 @@ function getClippingParents(element) {
 // clipping parents
 
 
-function getClippingRect(element, boundary, rootBoundary) {
+function getClippingRect(element, boundary, rootBoundary, strategy) {
   var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
   var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
   var firstClippingParent = clippingParents[0];
   var clippingRect = clippingParents.reduce(function (accRect, clippingParent) {
-    var rect = getClientRectFromMixedType(element, clippingParent);
+    var rect = getClientRectFromMixedType(element, clippingParent, strategy);
     accRect.top = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_13__["max"])(rect.top, accRect.top);
     accRect.right = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_13__["min"])(rect.right, accRect.right);
     accRect.bottom = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_13__["min"])(rect.bottom, accRect.bottom);
     accRect.left = Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_13__["max"])(rect.left, accRect.left);
     return accRect;
-  }, getClientRectFromMixedType(element, firstClippingParent));
+  }, getClientRectFromMixedType(element, firstClippingParent, strategy));
   clippingRect.width = clippingRect.right - clippingRect.left;
   clippingRect.height = clippingRect.bottom - clippingRect.top;
   clippingRect.x = clippingRect.left;
@@ -943,7 +1538,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
   var isOffsetParentAnElement = Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(offsetParent);
   var offsetParentIsScaled = Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(offsetParent) && isElementScaled(offsetParent);
   var documentElement = Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_5__["default"])(offsetParent);
-  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(elementOrVirtualElement, offsetParentIsScaled);
+  var rect = Object(_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(elementOrVirtualElement, offsetParentIsScaled, isFixed);
   var scroll = {
     scrollLeft: 0,
     scrollTop: 0
@@ -1181,6 +1776,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _instanceOf_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./instanceOf.js */ "./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js");
 /* harmony import */ var _isTableElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./isTableElement.js */ "./node_modules/@popperjs/core/lib/dom-utils/isTableElement.js");
 /* harmony import */ var _getParentNode_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./getParentNode.js */ "./node_modules/@popperjs/core/lib/dom-utils/getParentNode.js");
+/* harmony import */ var _utils_userAgent_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/userAgent.js */ "./node_modules/@popperjs/core/lib/utils/userAgent.js");
+
 
 
 
@@ -1200,8 +1797,8 @@ function getTrueOffsetParent(element) {
 
 
 function getContainingBlock(element) {
-  var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-  var isIE = navigator.userAgent.indexOf('Trident') !== -1;
+  var isFirefox = /firefox/i.test(Object(_utils_userAgent_js__WEBPACK_IMPORTED_MODULE_6__["default"])());
+  var isIE = /Trident/i.test(Object(_utils_userAgent_js__WEBPACK_IMPORTED_MODULE_6__["default"])());
 
   if (isIE && Object(_instanceOf_js__WEBPACK_IMPORTED_MODULE_3__["isHTMLElement"])(element)) {
     // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
@@ -1333,34 +1930,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _getWindow_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getWindow.js */ "./node_modules/@popperjs/core/lib/dom-utils/getWindow.js");
 /* harmony import */ var _getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getDocumentElement.js */ "./node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js");
 /* harmony import */ var _getWindowScrollBarX_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getWindowScrollBarX.js */ "./node_modules/@popperjs/core/lib/dom-utils/getWindowScrollBarX.js");
+/* harmony import */ var _isLayoutViewport_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./isLayoutViewport.js */ "./node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js");
 
 
 
-function getViewportRect(element) {
+
+function getViewportRect(element, strategy) {
   var win = Object(_getWindow_js__WEBPACK_IMPORTED_MODULE_0__["default"])(element);
   var html = Object(_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__["default"])(element);
   var visualViewport = win.visualViewport;
   var width = html.clientWidth;
   var height = html.clientHeight;
   var x = 0;
-  var y = 0; // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
-  // can be obscured underneath it.
-  // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
-  // if it isn't open, so if this isn't available, the popper will be detected
-  // to overflow the bottom of the screen too early.
+  var y = 0;
 
   if (visualViewport) {
     width = visualViewport.width;
-    height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
-    // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
-    // errors due to floating point numbers, so we need to check precision.
-    // Safari returns a number <= 0, usually < -1 when pinch-zoomed
-    // Feature detection fails in mobile emulation mode in Chrome.
-    // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
-    // 0.001
-    // Fallback here: "Not Safari" userAgent
+    height = visualViewport.height;
+    var layoutViewport = Object(_isLayoutViewport_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
 
-    if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+    if (layoutViewport || !layoutViewport && strategy === 'fixed') {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
@@ -1490,6 +2079,24 @@ function isShadowRoot(node) {
 }
 
 
+
+/***/ }),
+
+/***/ "./node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return isLayoutViewport; });
+/* harmony import */ var _utils_userAgent_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/userAgent.js */ "./node_modules/@popperjs/core/lib/utils/userAgent.js");
+
+function isLayoutViewport() {
+  return !/^((?!chrome|android).)*safari/i.test(Object(_utils_userAgent_js__WEBPACK_IMPORTED_MODULE_0__["default"])());
+}
 
 /***/ }),
 
@@ -3112,6 +3719,8 @@ function detectOverflow(state, options) {
   var _options = options,
       _options$placement = _options.placement,
       placement = _options$placement === void 0 ? state.placement : _options$placement,
+      _options$strategy = _options.strategy,
+      strategy = _options$strategy === void 0 ? state.strategy : _options$strategy,
       _options$boundary = _options.boundary,
       boundary = _options$boundary === void 0 ? _enums_js__WEBPACK_IMPORTED_MODULE_5__["clippingParents"] : _options$boundary,
       _options$rootBoundary = _options.rootBoundary,
@@ -3126,7 +3735,7 @@ function detectOverflow(state, options) {
   var altContext = elementContext === _enums_js__WEBPACK_IMPORTED_MODULE_5__["popper"] ? _enums_js__WEBPACK_IMPORTED_MODULE_5__["reference"] : _enums_js__WEBPACK_IMPORTED_MODULE_5__["popper"];
   var popperRect = state.rects.popper;
   var element = state.elements[altBoundary ? altContext : elementContext];
-  var clippingClientRect = Object(_dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Object(_dom_utils_instanceOf_js__WEBPACK_IMPORTED_MODULE_6__["isElement"])(element) ? element : element.contextElement || Object(_dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__["default"])(state.elements.popper), boundary, rootBoundary);
+  var clippingClientRect = Object(_dom_utils_getClippingRect_js__WEBPACK_IMPORTED_MODULE_0__["default"])(Object(_dom_utils_instanceOf_js__WEBPACK_IMPORTED_MODULE_6__["isElement"])(element) ? element : element.contextElement || Object(_dom_utils_getDocumentElement_js__WEBPACK_IMPORTED_MODULE_1__["default"])(state.elements.popper), boundary, rootBoundary, strategy);
   var referenceClientRect = Object(_dom_utils_getBoundingClientRect_js__WEBPACK_IMPORTED_MODULE_2__["default"])(state.elements.reference);
   var popperOffsets = Object(_computeOffsets_js__WEBPACK_IMPORTED_MODULE_3__["default"])({
     reference: referenceClientRect,
@@ -3500,6 +4109,30 @@ function uniqueBy(arr, fn) {
 
 /***/ }),
 
+/***/ "./node_modules/@popperjs/core/lib/utils/userAgent.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@popperjs/core/lib/utils/userAgent.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return getUAString; });
+function getUAString() {
+  var uaData = navigator.userAgentData;
+
+  if (uaData != null && uaData.brands) {
+    return uaData.brands.map(function (item) {
+      return item.brand + "/" + item.version;
+    }).join(' ');
+  }
+
+  return navigator.userAgent;
+}
+
+/***/ }),
+
 /***/ "./node_modules/@popperjs/core/lib/utils/validateModifiers.js":
 /*!********************************************************************!*\
   !*** ./node_modules/@popperjs/core/lib/utils/validateModifiers.js ***!
@@ -3627,159 +4260,76 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap base-component.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap base-component.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? module.exports = factory(__webpack_require__(/*! ./dom/data.js */ "./node_modules/bootstrap/js/dist/dom/data.js"), __webpack_require__(/*! ./dom/event-handler.js */ "./node_modules/bootstrap/js/dist/dom/event-handler.js")) :
+   true ? module.exports = factory(__webpack_require__(/*! ./dom/data */ "./node_modules/bootstrap/js/dist/dom/data.js"), __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/dist/util/index.js"), __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/dist/dom/event-handler.js"), __webpack_require__(/*! ./util/config */ "./node_modules/bootstrap/js/dist/util/config.js")) :
   undefined;
-})(this, (function (Data, EventHandler) { 'use strict';
+})(this, (function (Data, index, EventHandler, Config) { 'use strict';
 
   const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
   const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
   const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const Config__default = /*#__PURE__*/_interopDefaultLegacy(Config);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const MILLISECONDS_MULTIPLIER = 1000;
-  const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
-
-  const getTransitionDurationFromElement = element => {
-    if (!element) {
-      return 0;
-    } // Get transition-duration of the element
-
-
-    let {
-      transitionDuration,
-      transitionDelay
-    } = window.getComputedStyle(element);
-    const floatTransitionDuration = Number.parseFloat(transitionDuration);
-    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
-
-    if (!floatTransitionDuration && !floatTransitionDelay) {
-      return 0;
-    } // If multiple durations are defined, take the first
-
-
-    transitionDuration = transitionDuration.split(',')[0];
-    transitionDelay = transitionDelay.split(',')[0];
-    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
-  };
-
-  const triggerTransitionEnd = element => {
-    element.dispatchEvent(new Event(TRANSITION_END));
-  };
-
-  const isElement = obj => {
-    if (!obj || typeof obj !== 'object') {
-      return false;
-    }
-
-    if (typeof obj.jquery !== 'undefined') {
-      obj = obj[0];
-    }
-
-    return typeof obj.nodeType !== 'undefined';
-  };
-
-  const getElement = obj => {
-    if (isElement(obj)) {
-      // it's a jQuery object or a node element
-      return obj.jquery ? obj[0] : obj;
-    }
-
-    if (typeof obj === 'string' && obj.length > 0) {
-      return document.querySelector(obj);
-    }
-
-    return null;
-  };
-
-  const execute = callback => {
-    if (typeof callback === 'function') {
-      callback();
-    }
-  };
-
-  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
-    if (!waitForTransition) {
-      execute(callback);
-      return;
-    }
-
-    const durationPadding = 5;
-    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
-    let called = false;
-
-    const handler = ({
-      target
-    }) => {
-      if (target !== transitionElement) {
-        return;
-      }
-
-      called = true;
-      transitionElement.removeEventListener(TRANSITION_END, handler);
-      execute(callback);
-    };
-
-    transitionElement.addEventListener(TRANSITION_END, handler);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(transitionElement);
-      }
-    }, emulatedDuration);
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): base-component.js
+   * Bootstrap (v5.2.2): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
-   * ------------------------------------------------------------------------
    * Constants
-   * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.1.3';
+  const VERSION = '5.2.2';
+  /**
+   * Class definition
+   */
 
-  class BaseComponent {
-    constructor(element) {
-      element = getElement(element);
+  class BaseComponent extends Config__default.default {
+    constructor(element, config) {
+      super();
+      element = index.getElement(element);
 
       if (!element) {
         return;
       }
 
       this._element = element;
+      this._config = this._getConfig(config);
       Data__default.default.set(this._element, this.constructor.DATA_KEY, this);
-    }
+    } // Public
+
 
     dispose() {
       Data__default.default.remove(this._element, this.constructor.DATA_KEY);
       EventHandler__default.default.off(this._element, this.constructor.EVENT_KEY);
-      Object.getOwnPropertyNames(this).forEach(propertyName => {
+
+      for (const propertyName of Object.getOwnPropertyNames(this)) {
         this[propertyName] = null;
-      });
+      }
     }
 
     _queueCallback(callback, element, isAnimated = true) {
-      executeAfterTransition(callback, element, isAnimated);
+      index.executeAfterTransition(callback, element, isAnimated);
     }
-    /** Static */
+
+    _getConfig(config) {
+      config = this._mergeConfigObj(config, this._element);
+      config = this._configAfterMerge(config);
+
+      this._typeCheckConfig(config);
+
+      return config;
+    } // Static
 
 
     static getInstance(element) {
-      return Data__default.default.get(getElement(element), this.DATA_KEY);
+      return Data__default.default.get(index.getElement(element), this.DATA_KEY);
     }
 
     static getOrCreateInstance(element, config = {}) {
@@ -3790,16 +4340,16 @@ function withinMaxClamp(min, value, max) {
       return VERSION;
     }
 
-    static get NAME() {
-      throw new Error('You have to implement the static method "NAME", for each component!');
-    }
-
     static get DATA_KEY() {
       return `bs.${this.NAME}`;
     }
 
     static get EVENT_KEY() {
       return `.${this.DATA_KEY}`;
+    }
+
+    static eventName(name) {
+      return `${name}${this.EVENT_KEY}`;
     }
 
   }
@@ -3820,8 +4370,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap data.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap data.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -3831,15 +4381,13 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/data.js
+   * Bootstrap (v5.2.2): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
 
   /**
-   * ------------------------------------------------------------------------
    * Constants
-   * ------------------------------------------------------------------------
    */
   const elementMap = new Map();
   const data = {
@@ -3899,44 +4447,23 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap event-handler.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap event-handler.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? module.exports = factory() :
+   true ? module.exports = factory(__webpack_require__(/*! ../util/index */ "./node_modules/bootstrap/js/dist/util/index.js")) :
   undefined;
-})(this, (function () { 'use strict';
+})(this, (function (index) { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  const getjQuery = () => {
-    const {
-      jQuery
-    } = window;
-
-    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
-      return jQuery;
-    }
-
-    return null;
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/event-handler.js
+   * Bootstrap (v5.2.2): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
-   * ------------------------------------------------------------------------
    * Constants
-   * ------------------------------------------------------------------------
    */
 
   const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
@@ -3949,20 +4476,17 @@ function withinMaxClamp(min, value, max) {
     mouseenter: 'mouseover',
     mouseleave: 'mouseout'
   };
-  const customEventsRegex = /^(mouseenter|mouseleave)/i;
   const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
   /**
-   * ------------------------------------------------------------------------
    * Private methods
-   * ------------------------------------------------------------------------
    */
 
-  function getUidEvent(element, uid) {
+  function makeEventUid(element, uid) {
     return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
   }
 
-  function getEvent(element) {
-    const uid = getUidEvent(element);
+  function getElementEvents(element) {
+    const uid = makeEventUid(element);
     element.uidEvent = uid;
     eventRegistry[uid] = eventRegistry[uid] || {};
     return eventRegistry[uid];
@@ -3970,7 +4494,9 @@ function withinMaxClamp(min, value, max) {
 
   function bootstrapHandler(element, fn) {
     return function handler(event) {
-      event.delegateTarget = element;
+      hydrateObj(event, {
+        delegateTarget: element
+      });
 
       if (handler.oneOff) {
         EventHandler.off(element, event.type, fn);
@@ -3987,65 +4513,52 @@ function withinMaxClamp(min, value, max) {
       for (let {
         target
       } = event; target && target !== this; target = target.parentNode) {
-        for (let i = domElements.length; i--;) {
-          if (domElements[i] === target) {
-            event.delegateTarget = target;
-
-            if (handler.oneOff) {
-              EventHandler.off(element, event.type, selector, fn);
-            }
-
-            return fn.apply(target, [event]);
+        for (const domElement of domElements) {
+          if (domElement !== target) {
+            continue;
           }
+
+          hydrateObj(event, {
+            delegateTarget: target
+          });
+
+          if (handler.oneOff) {
+            EventHandler.off(element, event.type, selector, fn);
+          }
+
+          return fn.apply(target, [event]);
         }
-      } // To please ESLint
-
-
-      return null;
+      }
     };
   }
 
-  function findHandler(events, handler, delegationSelector = null) {
-    const uidEventList = Object.keys(events);
-
-    for (let i = 0, len = uidEventList.length; i < len; i++) {
-      const event = events[uidEventList[i]];
-
-      if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
-        return event;
-      }
-    }
-
-    return null;
+  function findHandler(events, callable, delegationSelector = null) {
+    return Object.values(events).find(event => event.callable === callable && event.delegationSelector === delegationSelector);
   }
 
-  function normalizeParams(originalTypeEvent, handler, delegationFn) {
-    const delegation = typeof handler === 'string';
-    const originalHandler = delegation ? delegationFn : handler;
-    let typeEvent = getTypeEvent(originalTypeEvent);
-    const isNative = nativeEvents.has(typeEvent);
+  function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
+    const isDelegated = typeof handler === 'string'; // todo: tooltip passes `false` instead of selector, so we need to check
 
-    if (!isNative) {
+    const callable = isDelegated ? delegationFunction : handler || delegationFunction;
+    let typeEvent = getTypeEvent(originalTypeEvent);
+
+    if (!nativeEvents.has(typeEvent)) {
       typeEvent = originalTypeEvent;
     }
 
-    return [delegation, originalHandler, typeEvent];
+    return [isDelegated, callable, typeEvent];
   }
 
-  function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
+  function addHandler(element, originalTypeEvent, handler, delegationFunction, oneOff) {
     if (typeof originalTypeEvent !== 'string' || !element) {
       return;
     }
 
-    if (!handler) {
-      handler = delegationFn;
-      delegationFn = null;
-    } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
+    let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction); // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
     // this prevents the handler from being dispatched the same way as mouseover or mouseout does
 
-
-    if (customEventsRegex.test(originalTypeEvent)) {
-      const wrapFn = fn => {
+    if (originalTypeEvent in customEvents) {
+      const wrapFunction = fn => {
         return function (event) {
           if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
             return fn.call(this, event);
@@ -4053,31 +4566,26 @@ function withinMaxClamp(min, value, max) {
         };
       };
 
-      if (delegationFn) {
-        delegationFn = wrapFn(delegationFn);
-      } else {
-        handler = wrapFn(handler);
-      }
+      callable = wrapFunction(callable);
     }
 
-    const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
-    const events = getEvent(element);
+    const events = getElementEvents(element);
     const handlers = events[typeEvent] || (events[typeEvent] = {});
-    const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null);
+    const previousFunction = findHandler(handlers, callable, isDelegated ? handler : null);
 
-    if (previousFn) {
-      previousFn.oneOff = previousFn.oneOff && oneOff;
+    if (previousFunction) {
+      previousFunction.oneOff = previousFunction.oneOff && oneOff;
       return;
     }
 
-    const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''));
-    const fn = delegation ? bootstrapDelegationHandler(element, handler, delegationFn) : bootstrapHandler(element, handler);
-    fn.delegationSelector = delegation ? handler : null;
-    fn.originalHandler = originalHandler;
+    const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ''));
+    const fn = isDelegated ? bootstrapDelegationHandler(element, handler, callable) : bootstrapHandler(element, callable);
+    fn.delegationSelector = isDelegated ? handler : null;
+    fn.callable = callable;
     fn.oneOff = oneOff;
     fn.uidEvent = uid;
     handlers[uid] = fn;
-    element.addEventListener(typeEvent, fn, delegation);
+    element.addEventListener(typeEvent, fn, isDelegated);
   }
 
   function removeHandler(element, events, typeEvent, handler, delegationSelector) {
@@ -4093,12 +4601,13 @@ function withinMaxClamp(min, value, max) {
 
   function removeNamespacedHandlers(element, events, typeEvent, namespace) {
     const storeElementEvent = events[typeEvent] || {};
-    Object.keys(storeElementEvent).forEach(handlerKey => {
+
+    for (const handlerKey of Object.keys(storeElementEvent)) {
       if (handlerKey.includes(namespace)) {
         const event = storeElementEvent[handlerKey];
-        removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+        removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
       }
-    });
+    }
   }
 
   function getTypeEvent(event) {
@@ -4108,49 +4617,49 @@ function withinMaxClamp(min, value, max) {
   }
 
   const EventHandler = {
-    on(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, false);
+    on(element, event, handler, delegationFunction) {
+      addHandler(element, event, handler, delegationFunction, false);
     },
 
-    one(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, true);
+    one(element, event, handler, delegationFunction) {
+      addHandler(element, event, handler, delegationFunction, true);
     },
 
-    off(element, originalTypeEvent, handler, delegationFn) {
+    off(element, originalTypeEvent, handler, delegationFunction) {
       if (typeof originalTypeEvent !== 'string' || !element) {
         return;
       }
 
-      const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
+      const [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
       const inNamespace = typeEvent !== originalTypeEvent;
-      const events = getEvent(element);
+      const events = getElementEvents(element);
+      const storeElementEvent = events[typeEvent] || {};
       const isNamespace = originalTypeEvent.startsWith('.');
 
-      if (typeof originalHandler !== 'undefined') {
+      if (typeof callable !== 'undefined') {
         // Simplest case: handler is passed, remove that listener ONLY.
-        if (!events || !events[typeEvent]) {
+        if (!Object.keys(storeElementEvent).length) {
           return;
         }
 
-        removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null);
+        removeHandler(element, events, typeEvent, callable, isDelegated ? handler : null);
         return;
       }
 
       if (isNamespace) {
-        Object.keys(events).forEach(elementEvent => {
+        for (const elementEvent of Object.keys(events)) {
           removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
-        });
+        }
       }
 
-      const storeElementEvent = events[typeEvent] || {};
-      Object.keys(storeElementEvent).forEach(keyHandlers => {
+      for (const keyHandlers of Object.keys(storeElementEvent)) {
         const handlerKey = keyHandlers.replace(stripUidRegex, '');
 
         if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
           const event = storeElementEvent[keyHandlers];
-          removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+          removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
         }
-      });
+      }
     },
 
     trigger(element, event, args) {
@@ -4158,15 +4667,13 @@ function withinMaxClamp(min, value, max) {
         return null;
       }
 
-      const $ = getjQuery();
+      const $ = index.getjQuery();
       const typeEvent = getTypeEvent(event);
       const inNamespace = event !== typeEvent;
-      const isNative = nativeEvents.has(typeEvent);
-      let jQueryEvent;
+      let jQueryEvent = null;
       let bubbles = true;
       let nativeDispatch = true;
       let defaultPrevented = false;
-      let evt = null;
 
       if (inNamespace && $) {
         jQueryEvent = $.Event(event, args);
@@ -4176,27 +4683,11 @@ function withinMaxClamp(min, value, max) {
         defaultPrevented = jQueryEvent.isDefaultPrevented();
       }
 
-      if (isNative) {
-        evt = document.createEvent('HTMLEvents');
-        evt.initEvent(typeEvent, bubbles, true);
-      } else {
-        evt = new CustomEvent(event, {
-          bubbles,
-          cancelable: true
-        });
-      } // merge custom information in our event
-
-
-      if (typeof args !== 'undefined') {
-        Object.keys(args).forEach(key => {
-          Object.defineProperty(evt, key, {
-            get() {
-              return args[key];
-            }
-
-          });
-        });
-      }
+      let evt = new Event(event, {
+        bubbles,
+        cancelable: true
+      });
+      evt = hydrateObj(evt, args);
 
       if (defaultPrevented) {
         evt.preventDefault();
@@ -4206,7 +4697,7 @@ function withinMaxClamp(min, value, max) {
         element.dispatchEvent(evt);
       }
 
-      if (evt.defaultPrevented && typeof jQueryEvent !== 'undefined') {
+      if (evt.defaultPrevented && jQueryEvent) {
         jQueryEvent.preventDefault();
       }
 
@@ -4214,6 +4705,25 @@ function withinMaxClamp(min, value, max) {
     }
 
   };
+
+  function hydrateObj(obj, meta) {
+    for (const [key, value] of Object.entries(meta || {})) {
+      try {
+        obj[key] = value;
+      } catch (_unused) {
+        Object.defineProperty(obj, key, {
+          configurable: true,
+
+          get() {
+            return value;
+          }
+
+        });
+      }
+    }
+
+    return obj;
+  }
 
   return EventHandler;
 
@@ -4231,8 +4741,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap manipulator.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap manipulator.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -4242,28 +4752,36 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/manipulator.js
+   * Bootstrap (v5.2.2): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
-  function normalizeData(val) {
-    if (val === 'true') {
+  function normalizeData(value) {
+    if (value === 'true') {
       return true;
     }
 
-    if (val === 'false') {
+    if (value === 'false') {
       return false;
     }
 
-    if (val === Number(val).toString()) {
-      return Number(val);
+    if (value === Number(value).toString()) {
+      return Number(value);
     }
 
-    if (val === '' || val === 'null') {
+    if (value === '' || value === 'null') {
       return null;
     }
 
-    return val;
+    if (typeof value !== 'string') {
+      return value;
+    }
+
+    try {
+      return JSON.parse(decodeURIComponent(value));
+    } catch (_unused) {
+      return value;
+    }
   }
 
   function normalizeDataKey(key) {
@@ -4285,31 +4803,19 @@ function withinMaxClamp(min, value, max) {
       }
 
       const attributes = {};
-      Object.keys(element.dataset).filter(key => key.startsWith('bs')).forEach(key => {
+      const bsKeys = Object.keys(element.dataset).filter(key => key.startsWith('bs') && !key.startsWith('bsConfig'));
+
+      for (const key of bsKeys) {
         let pureKey = key.replace(/^bs/, '');
         pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
         attributes[pureKey] = normalizeData(element.dataset[key]);
-      });
+      }
+
       return attributes;
     },
 
     getDataAttribute(element, key) {
       return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`));
-    },
-
-    offset(element) {
-      const rect = element.getBoundingClientRect();
-      return {
-        top: rect.top + window.pageYOffset,
-        left: rect.left + window.pageXOffset
-      };
-    },
-
-    position(element) {
-      return {
-        top: element.offsetTop,
-        left: element.offsetLeft
-      };
     }
 
   };
@@ -4330,65 +4836,25 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap selector-engine.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap selector-engine.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? module.exports = factory() :
+   true ? module.exports = factory(__webpack_require__(/*! ../util/index */ "./node_modules/bootstrap/js/dist/util/index.js")) :
   undefined;
-})(this, (function () { 'use strict';
+})(this, (function (index) { 'use strict';
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
+   * Bootstrap (v5.2.2): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
-
-  const isElement = obj => {
-    if (!obj || typeof obj !== 'object') {
-      return false;
-    }
-
-    if (typeof obj.jquery !== 'undefined') {
-      obj = obj[0];
-    }
-
-    return typeof obj.nodeType !== 'undefined';
-  };
-
-  const isVisible = element => {
-    if (!isElement(element) || element.getClientRects().length === 0) {
-      return false;
-    }
-
-    return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
-  };
-
-  const isDisabled = element => {
-    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
-      return true;
-    }
-
-    if (element.classList.contains('disabled')) {
-      return true;
-    }
-
-    if (typeof element.disabled !== 'undefined') {
-      return element.disabled;
-    }
-
-    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
-  };
-
   /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/selector-engine.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
+   * Constants
    */
-  const NODE_TEXT = 3;
+
   const SelectorEngine = {
     find(selector, element = document.documentElement) {
       return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
@@ -4404,14 +4870,11 @@ function withinMaxClamp(min, value, max) {
 
     parents(element, selector) {
       const parents = [];
-      let ancestor = element.parentNode;
+      let ancestor = element.parentNode.closest(selector);
 
-      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
-        if (ancestor.matches(selector)) {
-          parents.push(ancestor);
-        }
-
-        ancestor = ancestor.parentNode;
+      while (ancestor) {
+        parents.push(ancestor);
+        ancestor = ancestor.parentNode.closest(selector);
       }
 
       return parents;
@@ -4431,6 +4894,7 @@ function withinMaxClamp(min, value, max) {
       return [];
     },
 
+    // TODO: this is now unused; remove later along with prev()
     next(element, selector) {
       let next = element.nextElementSibling;
 
@@ -4446,8 +4910,8 @@ function withinMaxClamp(min, value, max) {
     },
 
     focusableChildren(element) {
-      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
-      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
+      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(',');
+      return this.find(focusables, element).filter(el => !index.isDisabled(el) && index.isVisible(el));
     }
 
   };
@@ -4468,20 +4932,20 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap tooltip.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap tooltip.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
-   true ? module.exports = factory(__webpack_require__(/*! @popperjs/core */ "./node_modules/@popperjs/core/lib/index.js"), __webpack_require__(/*! ./dom/data.js */ "./node_modules/bootstrap/js/dist/dom/data.js"), __webpack_require__(/*! ./dom/event-handler.js */ "./node_modules/bootstrap/js/dist/dom/event-handler.js"), __webpack_require__(/*! ./dom/manipulator.js */ "./node_modules/bootstrap/js/dist/dom/manipulator.js"), __webpack_require__(/*! ./dom/selector-engine.js */ "./node_modules/bootstrap/js/dist/dom/selector-engine.js"), __webpack_require__(/*! ./base-component.js */ "./node_modules/bootstrap/js/dist/base-component.js")) :
+   true ? module.exports = factory(__webpack_require__(/*! @popperjs/core */ "./node_modules/@popperjs/core/lib/index.js"), __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/dist/util/index.js"), __webpack_require__(/*! ./util/sanitizer */ "./node_modules/bootstrap/js/dist/util/sanitizer.js"), __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/dist/dom/event-handler.js"), __webpack_require__(/*! ./dom/manipulator */ "./node_modules/bootstrap/js/dist/dom/manipulator.js"), __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/dist/base-component.js"), __webpack_require__(/*! ./util/template-factory */ "./node_modules/bootstrap/js/dist/util/template-factory.js")) :
   undefined;
-})(this, (function (Popper, Data, EventHandler, Manipulator, SelectorEngine, BaseComponent) { 'use strict';
+})(this, (function (Popper, index, sanitizer, EventHandler, Manipulator, BaseComponent, TemplateFactory) { 'use strict';
 
   const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
   function _interopNamespace(e) {
     if (e && e.__esModule) return e;
-    const n = Object.create(null);
+    const n = Object.create(null, { [Symbol.toStringTag]: { value: 'Module' } });
     if (e) {
       for (const k in e) {
         if (k !== 'default') {
@@ -4498,31 +4962,761 @@ function withinMaxClamp(min, value, max) {
   }
 
   const Popper__namespace = /*#__PURE__*/_interopNamespace(Popper);
-  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
   const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
   const Manipulator__default = /*#__PURE__*/_interopDefaultLegacy(Manipulator);
-  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+  const TemplateFactory__default = /*#__PURE__*/_interopDefaultLegacy(TemplateFactory);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
+   * Bootstrap (v5.2.2): tooltip.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  /**
+   * Constants
+   */
+
+  const NAME = 'tooltip';
+  const DISALLOWED_ATTRIBUTES = new Set(['sanitize', 'allowList', 'sanitizeFn']);
+  const CLASS_NAME_FADE = 'fade';
+  const CLASS_NAME_MODAL = 'modal';
+  const CLASS_NAME_SHOW = 'show';
+  const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
+  const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
+  const EVENT_MODAL_HIDE = 'hide.bs.modal';
+  const TRIGGER_HOVER = 'hover';
+  const TRIGGER_FOCUS = 'focus';
+  const TRIGGER_CLICK = 'click';
+  const TRIGGER_MANUAL = 'manual';
+  const EVENT_HIDE = 'hide';
+  const EVENT_HIDDEN = 'hidden';
+  const EVENT_SHOW = 'show';
+  const EVENT_SHOWN = 'shown';
+  const EVENT_INSERTED = 'inserted';
+  const EVENT_CLICK = 'click';
+  const EVENT_FOCUSIN = 'focusin';
+  const EVENT_FOCUSOUT = 'focusout';
+  const EVENT_MOUSEENTER = 'mouseenter';
+  const EVENT_MOUSELEAVE = 'mouseleave';
+  const AttachmentMap = {
+    AUTO: 'auto',
+    TOP: 'top',
+    RIGHT: index.isRTL() ? 'left' : 'right',
+    BOTTOM: 'bottom',
+    LEFT: index.isRTL() ? 'right' : 'left'
+  };
+  const Default = {
+    allowList: sanitizer.DefaultAllowlist,
+    animation: true,
+    boundary: 'clippingParents',
+    container: false,
+    customClass: '',
+    delay: 0,
+    fallbackPlacements: ['top', 'right', 'bottom', 'left'],
+    html: false,
+    offset: [0, 0],
+    placement: 'top',
+    popperConfig: null,
+    sanitize: true,
+    sanitizeFn: null,
+    selector: false,
+    template: '<div class="tooltip" role="tooltip">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner"></div>' + '</div>',
+    title: '',
+    trigger: 'hover focus'
+  };
+  const DefaultType = {
+    allowList: 'object',
+    animation: 'boolean',
+    boundary: '(string|element)',
+    container: '(string|element|boolean)',
+    customClass: '(string|function)',
+    delay: '(number|object)',
+    fallbackPlacements: 'array',
+    html: 'boolean',
+    offset: '(array|string|function)',
+    placement: '(string|function)',
+    popperConfig: '(null|object|function)',
+    sanitize: 'boolean',
+    sanitizeFn: '(null|function)',
+    selector: '(string|boolean)',
+    template: 'string',
+    title: '(string|element|function)',
+    trigger: 'string'
+  };
+  /**
+   * Class definition
+   */
+
+  class Tooltip extends BaseComponent__default.default {
+    constructor(element, config) {
+      if (typeof Popper__namespace === 'undefined') {
+        throw new TypeError('Bootstrap\'s tooltips require Popper (https://popper.js.org)');
+      }
+
+      super(element, config); // Private
+
+      this._isEnabled = true;
+      this._timeout = 0;
+      this._isHovered = null;
+      this._activeTrigger = {};
+      this._popper = null;
+      this._templateFactory = null;
+      this._newContent = null; // Protected
+
+      this.tip = null;
+
+      this._setListeners();
+
+      if (!this._config.selector) {
+        this._fixTitle();
+      }
+    } // Getters
+
+
+    static get Default() {
+      return Default;
+    }
+
+    static get DefaultType() {
+      return DefaultType;
+    }
+
+    static get NAME() {
+      return NAME;
+    } // Public
+
+
+    enable() {
+      this._isEnabled = true;
+    }
+
+    disable() {
+      this._isEnabled = false;
+    }
+
+    toggleEnabled() {
+      this._isEnabled = !this._isEnabled;
+    }
+
+    toggle() {
+      if (!this._isEnabled) {
+        return;
+      }
+
+      this._activeTrigger.click = !this._activeTrigger.click;
+
+      if (this._isShown()) {
+        this._leave();
+
+        return;
+      }
+
+      this._enter();
+    }
+
+    dispose() {
+      clearTimeout(this._timeout);
+      EventHandler__default.default.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
+
+      if (this.tip) {
+        this.tip.remove();
+      }
+
+      if (this._element.getAttribute('data-bs-original-title')) {
+        this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
+      }
+
+      this._disposePopper();
+
+      super.dispose();
+    }
+
+    show() {
+      if (this._element.style.display === 'none') {
+        throw new Error('Please use show on visible elements');
+      }
+
+      if (!(this._isWithContent() && this._isEnabled)) {
+        return;
+      }
+
+      const showEvent = EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_SHOW));
+      const shadowRoot = index.findShadowRoot(this._element);
+
+      const isInTheDom = (shadowRoot || this._element.ownerDocument.documentElement).contains(this._element);
+
+      if (showEvent.defaultPrevented || !isInTheDom) {
+        return;
+      } // todo v6 remove this OR make it optional
+
+
+      if (this.tip) {
+        this.tip.remove();
+        this.tip = null;
+      }
+
+      const tip = this._getTipElement();
+
+      this._element.setAttribute('aria-describedby', tip.getAttribute('id'));
+
+      const {
+        container
+      } = this._config;
+
+      if (!this._element.ownerDocument.documentElement.contains(this.tip)) {
+        container.append(tip);
+        EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
+      }
+
+      if (this._popper) {
+        this._popper.update();
+      } else {
+        this._popper = this._createPopper(tip);
+      }
+
+      tip.classList.add(CLASS_NAME_SHOW); // If this is a touch-enabled device we add extra
+      // empty mouseover listeners to the body's immediate children;
+      // only needed because of broken event delegation on iOS
+      // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
+
+      if ('ontouchstart' in document.documentElement) {
+        for (const element of [].concat(...document.body.children)) {
+          EventHandler__default.default.on(element, 'mouseover', index.noop);
+        }
+      }
+
+      const complete = () => {
+        EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_SHOWN));
+
+        if (this._isHovered === false) {
+          this._leave();
+        }
+
+        this._isHovered = false;
+      };
+
+      this._queueCallback(complete, this.tip, this._isAnimated());
+    }
+
+    hide() {
+      if (!this._isShown()) {
+        return;
+      }
+
+      const hideEvent = EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_HIDE));
+
+      if (hideEvent.defaultPrevented) {
+        return;
+      }
+
+      const tip = this._getTipElement();
+
+      tip.classList.remove(CLASS_NAME_SHOW); // If this is a touch-enabled device we remove the extra
+      // empty mouseover listeners we added for iOS support
+
+      if ('ontouchstart' in document.documentElement) {
+        for (const element of [].concat(...document.body.children)) {
+          EventHandler__default.default.off(element, 'mouseover', index.noop);
+        }
+      }
+
+      this._activeTrigger[TRIGGER_CLICK] = false;
+      this._activeTrigger[TRIGGER_FOCUS] = false;
+      this._activeTrigger[TRIGGER_HOVER] = false;
+      this._isHovered = null; // it is a trick to support manual triggering
+
+      const complete = () => {
+        if (this._isWithActiveTrigger()) {
+          return;
+        }
+
+        if (!this._isHovered) {
+          tip.remove();
+        }
+
+        this._element.removeAttribute('aria-describedby');
+
+        EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN));
+
+        this._disposePopper();
+      };
+
+      this._queueCallback(complete, this.tip, this._isAnimated());
+    }
+
+    update() {
+      if (this._popper) {
+        this._popper.update();
+      }
+    } // Protected
+
+
+    _isWithContent() {
+      return Boolean(this._getTitle());
+    }
+
+    _getTipElement() {
+      if (!this.tip) {
+        this.tip = this._createTipElement(this._newContent || this._getContentForTemplate());
+      }
+
+      return this.tip;
+    }
+
+    _createTipElement(content) {
+      const tip = this._getTemplateFactory(content).toHtml(); // todo: remove this check on v6
+
+
+      if (!tip) {
+        return null;
+      }
+
+      tip.classList.remove(CLASS_NAME_FADE, CLASS_NAME_SHOW); // todo: on v6 the following can be achieved with CSS only
+
+      tip.classList.add(`bs-${this.constructor.NAME}-auto`);
+      const tipId = index.getUID(this.constructor.NAME).toString();
+      tip.setAttribute('id', tipId);
+
+      if (this._isAnimated()) {
+        tip.classList.add(CLASS_NAME_FADE);
+      }
+
+      return tip;
+    }
+
+    setContent(content) {
+      this._newContent = content;
+
+      if (this._isShown()) {
+        this._disposePopper();
+
+        this.show();
+      }
+    }
+
+    _getTemplateFactory(content) {
+      if (this._templateFactory) {
+        this._templateFactory.changeContent(content);
+      } else {
+        this._templateFactory = new TemplateFactory__default.default({ ...this._config,
+          // the `content` var has to be after `this._config`
+          // to override config.content in case of popover
+          content,
+          extraClass: this._resolvePossibleFunction(this._config.customClass)
+        });
+      }
+
+      return this._templateFactory;
+    }
+
+    _getContentForTemplate() {
+      return {
+        [SELECTOR_TOOLTIP_INNER]: this._getTitle()
+      };
+    }
+
+    _getTitle() {
+      return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute('data-bs-original-title');
+    } // Private
+
+
+    _initializeOnDelegatedTarget(event) {
+      return this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
+    }
+
+    _isAnimated() {
+      return this._config.animation || this.tip && this.tip.classList.contains(CLASS_NAME_FADE);
+    }
+
+    _isShown() {
+      return this.tip && this.tip.classList.contains(CLASS_NAME_SHOW);
+    }
+
+    _createPopper(tip) {
+      const placement = typeof this._config.placement === 'function' ? this._config.placement.call(this, tip, this._element) : this._config.placement;
+      const attachment = AttachmentMap[placement.toUpperCase()];
+      return Popper__namespace.createPopper(this._element, tip, this._getPopperConfig(attachment));
+    }
+
+    _getOffset() {
+      const {
+        offset
+      } = this._config;
+
+      if (typeof offset === 'string') {
+        return offset.split(',').map(value => Number.parseInt(value, 10));
+      }
+
+      if (typeof offset === 'function') {
+        return popperData => offset(popperData, this._element);
+      }
+
+      return offset;
+    }
+
+    _resolvePossibleFunction(arg) {
+      return typeof arg === 'function' ? arg.call(this._element) : arg;
+    }
+
+    _getPopperConfig(attachment) {
+      const defaultBsPopperConfig = {
+        placement: attachment,
+        modifiers: [{
+          name: 'flip',
+          options: {
+            fallbackPlacements: this._config.fallbackPlacements
+          }
+        }, {
+          name: 'offset',
+          options: {
+            offset: this._getOffset()
+          }
+        }, {
+          name: 'preventOverflow',
+          options: {
+            boundary: this._config.boundary
+          }
+        }, {
+          name: 'arrow',
+          options: {
+            element: `.${this.constructor.NAME}-arrow`
+          }
+        }, {
+          name: 'preSetPlacement',
+          enabled: true,
+          phase: 'beforeMain',
+          fn: data => {
+            // Pre-set Popper's placement attribute in order to read the arrow sizes properly.
+            // Otherwise, Popper mixes up the width and height dimensions since the initial arrow style is for top placement
+            this._getTipElement().setAttribute('data-popper-placement', data.state.placement);
+          }
+        }]
+      };
+      return { ...defaultBsPopperConfig,
+        ...(typeof this._config.popperConfig === 'function' ? this._config.popperConfig(defaultBsPopperConfig) : this._config.popperConfig)
+      };
+    }
+
+    _setListeners() {
+      const triggers = this._config.trigger.split(' ');
+
+      for (const trigger of triggers) {
+        if (trigger === 'click') {
+          EventHandler__default.default.on(this._element, this.constructor.eventName(EVENT_CLICK), this._config.selector, event => {
+            const context = this._initializeOnDelegatedTarget(event);
+
+            context.toggle();
+          });
+        } else if (trigger !== TRIGGER_MANUAL) {
+          const eventIn = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN);
+          const eventOut = trigger === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT);
+          EventHandler__default.default.on(this._element, eventIn, this._config.selector, event => {
+            const context = this._initializeOnDelegatedTarget(event);
+
+            context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
+
+            context._enter();
+          });
+          EventHandler__default.default.on(this._element, eventOut, this._config.selector, event => {
+            const context = this._initializeOnDelegatedTarget(event);
+
+            context._activeTrigger[event.type === 'focusout' ? TRIGGER_FOCUS : TRIGGER_HOVER] = context._element.contains(event.relatedTarget);
+
+            context._leave();
+          });
+        }
+      }
+
+      this._hideModalHandler = () => {
+        if (this._element) {
+          this.hide();
+        }
+      };
+
+      EventHandler__default.default.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
+    }
+
+    _fixTitle() {
+      const title = this._element.getAttribute('title');
+
+      if (!title) {
+        return;
+      }
+
+      if (!this._element.getAttribute('aria-label') && !this._element.textContent.trim()) {
+        this._element.setAttribute('aria-label', title);
+      }
+
+      this._element.setAttribute('data-bs-original-title', title); // DO NOT USE IT. Is only for backwards compatibility
+
+
+      this._element.removeAttribute('title');
+    }
+
+    _enter() {
+      if (this._isShown() || this._isHovered) {
+        this._isHovered = true;
+        return;
+      }
+
+      this._isHovered = true;
+
+      this._setTimeout(() => {
+        if (this._isHovered) {
+          this.show();
+        }
+      }, this._config.delay.show);
+    }
+
+    _leave() {
+      if (this._isWithActiveTrigger()) {
+        return;
+      }
+
+      this._isHovered = false;
+
+      this._setTimeout(() => {
+        if (!this._isHovered) {
+          this.hide();
+        }
+      }, this._config.delay.hide);
+    }
+
+    _setTimeout(handler, timeout) {
+      clearTimeout(this._timeout);
+      this._timeout = setTimeout(handler, timeout);
+    }
+
+    _isWithActiveTrigger() {
+      return Object.values(this._activeTrigger).includes(true);
+    }
+
+    _getConfig(config) {
+      const dataAttributes = Manipulator__default.default.getDataAttributes(this._element);
+
+      for (const dataAttribute of Object.keys(dataAttributes)) {
+        if (DISALLOWED_ATTRIBUTES.has(dataAttribute)) {
+          delete dataAttributes[dataAttribute];
+        }
+      }
+
+      config = { ...dataAttributes,
+        ...(typeof config === 'object' && config ? config : {})
+      };
+      config = this._mergeConfigObj(config);
+      config = this._configAfterMerge(config);
+
+      this._typeCheckConfig(config);
+
+      return config;
+    }
+
+    _configAfterMerge(config) {
+      config.container = config.container === false ? document.body : index.getElement(config.container);
+
+      if (typeof config.delay === 'number') {
+        config.delay = {
+          show: config.delay,
+          hide: config.delay
+        };
+      }
+
+      if (typeof config.title === 'number') {
+        config.title = config.title.toString();
+      }
+
+      if (typeof config.content === 'number') {
+        config.content = config.content.toString();
+      }
+
+      return config;
+    }
+
+    _getDelegateConfig() {
+      const config = {};
+
+      for (const key in this._config) {
+        if (this.constructor.Default[key] !== this._config[key]) {
+          config[key] = this._config[key];
+        }
+      }
+
+      config.selector = false;
+      config.trigger = 'manual'; // In the future can be replaced with:
+      // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
+      // `Object.fromEntries(keysWithDifferentValues)`
+
+      return config;
+    }
+
+    _disposePopper() {
+      if (this._popper) {
+        this._popper.destroy();
+
+        this._popper = null;
+      }
+    } // Static
+
+
+    static jQueryInterface(config) {
+      return this.each(function () {
+        const data = Tooltip.getOrCreateInstance(this, config);
+
+        if (typeof config !== 'string') {
+          return;
+        }
+
+        if (typeof data[config] === 'undefined') {
+          throw new TypeError(`No method named "${config}"`);
+        }
+
+        data[config]();
+      });
+    }
+
+  }
+  /**
+   * jQuery
+   */
+
+
+  index.defineJQueryPlugin(Tooltip);
+
+  return Tooltip;
+
+}));
+//# sourceMappingURL=tooltip.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/dist/util/config.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/bootstrap/js/dist/util/config.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * Bootstrap config.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+(function (global, factory) {
+   true ? module.exports = factory(__webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/dist/util/index.js"), __webpack_require__(/*! ../dom/manipulator */ "./node_modules/bootstrap/js/dist/dom/manipulator.js")) :
+  undefined;
+})(this, (function (index, Manipulator) { 'use strict';
+
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+  const Manipulator__default = /*#__PURE__*/_interopDefaultLegacy(Manipulator);
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.2.2): util/config.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  /**
+   * Class definition
+   */
+
+  class Config {
+    // Getters
+    static get Default() {
+      return {};
+    }
+
+    static get DefaultType() {
+      return {};
+    }
+
+    static get NAME() {
+      throw new Error('You have to implement the static method "NAME", for each component!');
+    }
+
+    _getConfig(config) {
+      config = this._mergeConfigObj(config);
+      config = this._configAfterMerge(config);
+
+      this._typeCheckConfig(config);
+
+      return config;
+    }
+
+    _configAfterMerge(config) {
+      return config;
+    }
+
+    _mergeConfigObj(config, element) {
+      const jsonConfig = index.isElement(element) ? Manipulator__default.default.getDataAttribute(element, 'config') : {}; // try to parse
+
+      return { ...this.constructor.Default,
+        ...(typeof jsonConfig === 'object' ? jsonConfig : {}),
+        ...(index.isElement(element) ? Manipulator__default.default.getDataAttributes(element) : {}),
+        ...(typeof config === 'object' ? config : {})
+      };
+    }
+
+    _typeCheckConfig(config, configTypes = this.constructor.DefaultType) {
+      for (const property of Object.keys(configTypes)) {
+        const expectedTypes = configTypes[property];
+        const value = config[property];
+        const valueType = index.isElement(value) ? 'element' : index.toType(value);
+
+        if (!new RegExp(expectedTypes).test(valueType)) {
+          throw new TypeError(`${this.constructor.NAME.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
+        }
+      }
+    }
+
+  }
+
+  return Config;
+
+}));
+//# sourceMappingURL=config.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/dist/util/index.js":
+/*!******************************************************!*\
+  !*** ./node_modules/bootstrap/js/dist/util/index.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * Bootstrap index.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+(function (global, factory) {
+   true ? factory(exports) :
+  undefined;
+})(this, (function (exports) { 'use strict';
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.2.2): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   const MAX_UID = 1000000;
+  const MILLISECONDS_MULTIPLIER = 1000;
+  const TRANSITION_END = 'transitionend'; // Shout-out Angus Croll (https://goo.gl/pxwQGp)
 
-  const toType = obj => {
-    if (obj === null || obj === undefined) {
-      return `${obj}`;
+  const toType = object => {
+    if (object === null || object === undefined) {
+      return `${object}`;
     }
 
-    return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase();
+    return Object.prototype.toString.call(object).match(/\s([a-z]+)/i)[1].toLowerCase();
   };
   /**
-   * --------------------------------------------------------------------------
-   * Public Util Api
-   * --------------------------------------------------------------------------
+   * Public Util API
    */
 
 
@@ -4534,41 +5728,139 @@ function withinMaxClamp(min, value, max) {
     return prefix;
   };
 
-  const isElement = obj => {
-    if (!obj || typeof obj !== 'object') {
-      return false;
+  const getSelector = element => {
+    let selector = element.getAttribute('data-bs-target');
+
+    if (!selector || selector === '#') {
+      let hrefAttribute = element.getAttribute('href'); // The only valid content that could double as a selector are IDs or classes,
+      // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
+      // `document.querySelector` will rightfully complain it is invalid.
+      // See https://github.com/twbs/bootstrap/issues/32273
+
+      if (!hrefAttribute || !hrefAttribute.includes('#') && !hrefAttribute.startsWith('.')) {
+        return null;
+      } // Just in case some CMS puts out a full URL with the anchor appended
+
+
+      if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) {
+        hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
+      }
+
+      selector = hrefAttribute && hrefAttribute !== '#' ? hrefAttribute.trim() : null;
     }
 
-    if (typeof obj.jquery !== 'undefined') {
-      obj = obj[0];
-    }
-
-    return typeof obj.nodeType !== 'undefined';
+    return selector;
   };
 
-  const getElement = obj => {
-    if (isElement(obj)) {
-      // it's a jQuery object or a node element
-      return obj.jquery ? obj[0] : obj;
-    }
+  const getSelectorFromElement = element => {
+    const selector = getSelector(element);
 
-    if (typeof obj === 'string' && obj.length > 0) {
-      return document.querySelector(obj);
+    if (selector) {
+      return document.querySelector(selector) ? selector : null;
     }
 
     return null;
   };
 
-  const typeCheckConfig = (componentName, config, configTypes) => {
-    Object.keys(configTypes).forEach(property => {
-      const expectedTypes = configTypes[property];
-      const value = config[property];
-      const valueType = value && isElement(value) ? 'element' : toType(value);
+  const getElementFromSelector = element => {
+    const selector = getSelector(element);
+    return selector ? document.querySelector(selector) : null;
+  };
 
-      if (!new RegExp(expectedTypes).test(valueType)) {
-        throw new TypeError(`${componentName.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
+  const getTransitionDurationFromElement = element => {
+    if (!element) {
+      return 0;
+    } // Get transition-duration of the element
+
+
+    let {
+      transitionDuration,
+      transitionDelay
+    } = window.getComputedStyle(element);
+    const floatTransitionDuration = Number.parseFloat(transitionDuration);
+    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+
+    if (!floatTransitionDuration && !floatTransitionDelay) {
+      return 0;
+    } // If multiple durations are defined, take the first
+
+
+    transitionDuration = transitionDuration.split(',')[0];
+    transitionDelay = transitionDelay.split(',')[0];
+    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+  };
+
+  const triggerTransitionEnd = element => {
+    element.dispatchEvent(new Event(TRANSITION_END));
+  };
+
+  const isElement = object => {
+    if (!object || typeof object !== 'object') {
+      return false;
+    }
+
+    if (typeof object.jquery !== 'undefined') {
+      object = object[0];
+    }
+
+    return typeof object.nodeType !== 'undefined';
+  };
+
+  const getElement = object => {
+    // it's a jQuery object or a node element
+    if (isElement(object)) {
+      return object.jquery ? object[0] : object;
+    }
+
+    if (typeof object === 'string' && object.length > 0) {
+      return document.querySelector(object);
+    }
+
+    return null;
+  };
+
+  const isVisible = element => {
+    if (!isElement(element) || element.getClientRects().length === 0) {
+      return false;
+    }
+
+    const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible'; // Handle `details` element as its content may falsie appear visible when it is closed
+
+    const closedDetails = element.closest('details:not([open])');
+
+    if (!closedDetails) {
+      return elementIsVisible;
+    }
+
+    if (closedDetails !== element) {
+      const summary = element.closest('summary');
+
+      if (summary && summary.parentNode !== closedDetails) {
+        return false;
       }
-    });
+
+      if (summary === null) {
+        return false;
+      }
+    }
+
+    return elementIsVisible;
+  };
+
+  const isDisabled = element => {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+
+    if (element.classList.contains('disabled')) {
+      return true;
+    }
+
+    if (typeof element.disabled !== 'undefined') {
+      return element.disabled;
+    }
+
+    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
   };
 
   const findShadowRoot = element => {
@@ -4595,14 +5887,23 @@ function withinMaxClamp(min, value, max) {
   };
 
   const noop = () => {};
+  /**
+   * Trick to restart an element's animation
+   *
+   * @param {HTMLElement} element
+   * @return void
+   *
+   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
+   */
+
+
+  const reflow = element => {
+    element.offsetHeight; // eslint-disable-line no-unused-expressions
+  };
 
   const getjQuery = () => {
-    const {
-      jQuery
-    } = window;
-
-    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
-      return jQuery;
+    if (window.jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
+      return window.jQuery;
     }
 
     return null;
@@ -4615,7 +5916,9 @@ function withinMaxClamp(min, value, max) {
       // add listener on the first call when the document is in loading state
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
-          DOMContentLoadedCallbacks.forEach(callback => callback());
+          for (const callback of DOMContentLoadedCallbacks) {
+            callback();
+          }
         });
       }
 
@@ -4646,9 +5949,119 @@ function withinMaxClamp(min, value, max) {
     });
   };
 
+  const execute = callback => {
+    if (typeof callback === 'function') {
+      callback();
+    }
+  };
+
+  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+    if (!waitForTransition) {
+      execute(callback);
+      return;
+    }
+
+    const durationPadding = 5;
+    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
+    let called = false;
+
+    const handler = ({
+      target
+    }) => {
+      if (target !== transitionElement) {
+        return;
+      }
+
+      called = true;
+      transitionElement.removeEventListener(TRANSITION_END, handler);
+      execute(callback);
+    };
+
+    transitionElement.addEventListener(TRANSITION_END, handler);
+    setTimeout(() => {
+      if (!called) {
+        triggerTransitionEnd(transitionElement);
+      }
+    }, emulatedDuration);
+  };
+  /**
+   * Return the previous/next element of a list.
+   *
+   * @param {array} list    The list of elements
+   * @param activeElement   The active element
+   * @param shouldGetNext   Choose to get next or previous element
+   * @param isCycleAllowed
+   * @return {Element|elem} The proper element
+   */
+
+
+  const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed) => {
+    const listLength = list.length;
+    let index = list.indexOf(activeElement); // if the element does not exist in the list return an element
+    // depending on the direction and if cycle is allowed
+
+    if (index === -1) {
+      return !shouldGetNext && isCycleAllowed ? list[listLength - 1] : list[0];
+    }
+
+    index += shouldGetNext ? 1 : -1;
+
+    if (isCycleAllowed) {
+      index = (index + listLength) % listLength;
+    }
+
+    return list[Math.max(0, Math.min(index, listLength - 1))];
+  };
+
+  exports.defineJQueryPlugin = defineJQueryPlugin;
+  exports.execute = execute;
+  exports.executeAfterTransition = executeAfterTransition;
+  exports.findShadowRoot = findShadowRoot;
+  exports.getElement = getElement;
+  exports.getElementFromSelector = getElementFromSelector;
+  exports.getNextActiveElement = getNextActiveElement;
+  exports.getSelectorFromElement = getSelectorFromElement;
+  exports.getTransitionDurationFromElement = getTransitionDurationFromElement;
+  exports.getUID = getUID;
+  exports.getjQuery = getjQuery;
+  exports.isDisabled = isDisabled;
+  exports.isElement = isElement;
+  exports.isRTL = isRTL;
+  exports.isVisible = isVisible;
+  exports.noop = noop;
+  exports.onDOMContentLoaded = onDOMContentLoaded;
+  exports.reflow = reflow;
+  exports.toType = toType;
+  exports.triggerTransitionEnd = triggerTransitionEnd;
+
+  Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
+
+}));
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/dist/util/sanitizer.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/bootstrap/js/dist/util/sanitizer.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * Bootstrap sanitizer.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+(function (global, factory) {
+   true ? factory(exports) :
+  undefined;
+})(this, (function (exports) { 'use strict';
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/sanitizer.js
+   * Bootstrap (v5.2.2): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -4657,14 +6070,14 @@ function withinMaxClamp(min, value, max) {
   /**
    * A pattern that recognizes a commonly useful subset of URLs that are safe.
    *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
+   * Shout-out to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
   const SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i;
   /**
    * A pattern that matches safe data URLs. Only matches image, video and audio types.
    *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
+   * Shout-out to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
    */
 
   const DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
@@ -4678,17 +6091,10 @@ function withinMaxClamp(min, value, max) {
       }
 
       return true;
-    }
+    } // Check if a regular expression validates the attribute.
 
-    const regExp = allowedAttributeList.filter(attributeRegex => attributeRegex instanceof RegExp); // Check if a regular expression validates the attribute.
 
-    for (let i = 0, len = regExp.length; i < len; i++) {
-      if (regExp[i].test(attributeName)) {
-        return true;
-      }
-    }
-
-    return false;
+    return allowedAttributeList.filter(attributeRegex => attributeRegex instanceof RegExp).some(regex => regex.test(attributeName));
   };
 
   const DefaultAllowlist = {
@@ -4724,21 +6130,20 @@ function withinMaxClamp(min, value, max) {
     u: [],
     ul: []
   };
-  function sanitizeHtml(unsafeHtml, allowList, sanitizeFn) {
+  function sanitizeHtml(unsafeHtml, allowList, sanitizeFunction) {
     if (!unsafeHtml.length) {
       return unsafeHtml;
     }
 
-    if (sanitizeFn && typeof sanitizeFn === 'function') {
-      return sanitizeFn(unsafeHtml);
+    if (sanitizeFunction && typeof sanitizeFunction === 'function') {
+      return sanitizeFunction(unsafeHtml);
     }
 
     const domParser = new window.DOMParser();
     const createdDocument = domParser.parseFromString(unsafeHtml, 'text/html');
     const elements = [].concat(...createdDocument.body.querySelectorAll('*'));
 
-    for (let i = 0, len = elements.length; i < len; i++) {
-      const element = elements[i];
+    for (const element of elements) {
       const elementName = element.nodeName.toLowerCase();
 
       if (!Object.keys(allowList).includes(elementName)) {
@@ -4748,126 +6153,92 @@ function withinMaxClamp(min, value, max) {
 
       const attributeList = [].concat(...element.attributes);
       const allowedAttributes = [].concat(allowList['*'] || [], allowList[elementName] || []);
-      attributeList.forEach(attribute => {
+
+      for (const attribute of attributeList) {
         if (!allowedAttribute(attribute, allowedAttributes)) {
           element.removeAttribute(attribute.nodeName);
         }
-      });
+      }
     }
 
     return createdDocument.body.innerHTML;
   }
 
+  exports.DefaultAllowlist = DefaultAllowlist;
+  exports.sanitizeHtml = sanitizeHtml;
+
+  Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
+
+}));
+//# sourceMappingURL=sanitizer.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/dist/util/template-factory.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/bootstrap/js/dist/util/template-factory.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+  * Bootstrap template-factory.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+(function (global, factory) {
+   true ? module.exports = factory(__webpack_require__(/*! ./sanitizer */ "./node_modules/bootstrap/js/dist/util/sanitizer.js"), __webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/dist/util/index.js"), __webpack_require__(/*! ../dom/selector-engine */ "./node_modules/bootstrap/js/dist/dom/selector-engine.js"), __webpack_require__(/*! ./config */ "./node_modules/bootstrap/js/dist/util/config.js")) :
+  undefined;
+})(this, (function (sanitizer, index, SelectorEngine, Config) { 'use strict';
+
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  const Config__default = /*#__PURE__*/_interopDefaultLegacy(Config);
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): tooltip.js
+   * Bootstrap (v5.2.2): util/template-factory.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
   /**
-   * ------------------------------------------------------------------------
    * Constants
-   * ------------------------------------------------------------------------
    */
 
-  const NAME = 'tooltip';
-  const DATA_KEY = 'bs.tooltip';
-  const EVENT_KEY = `.${DATA_KEY}`;
-  const CLASS_PREFIX = 'bs-tooltip';
-  const DISALLOWED_ATTRIBUTES = new Set(['sanitize', 'allowList', 'sanitizeFn']);
-  const DefaultType = {
-    animation: 'boolean',
-    template: 'string',
-    title: '(string|element|function)',
-    trigger: 'string',
-    delay: '(number|object)',
-    html: 'boolean',
-    selector: '(string|boolean)',
-    placement: '(string|function)',
-    offset: '(array|string|function)',
-    container: '(string|element|boolean)',
-    fallbackPlacements: 'array',
-    boundary: '(string|element)',
-    customClass: '(string|function)',
-    sanitize: 'boolean',
-    sanitizeFn: '(null|function)',
-    allowList: 'object',
-    popperConfig: '(null|object|function)'
-  };
-  const AttachmentMap = {
-    AUTO: 'auto',
-    TOP: 'top',
-    RIGHT: isRTL() ? 'left' : 'right',
-    BOTTOM: 'bottom',
-    LEFT: isRTL() ? 'right' : 'left'
-  };
+  const NAME = 'TemplateFactory';
   const Default = {
-    animation: true,
-    template: '<div class="tooltip" role="tooltip">' + '<div class="tooltip-arrow"></div>' + '<div class="tooltip-inner"></div>' + '</div>',
-    trigger: 'hover focus',
-    title: '',
-    delay: 0,
+    allowList: sanitizer.DefaultAllowlist,
+    content: {},
+    // { selector : text ,  selector2 : text2 , }
+    extraClass: '',
     html: false,
-    selector: false,
-    placement: 'top',
-    offset: [0, 0],
-    container: false,
-    fallbackPlacements: ['top', 'right', 'bottom', 'left'],
-    boundary: 'clippingParents',
-    customClass: '',
     sanitize: true,
     sanitizeFn: null,
-    allowList: DefaultAllowlist,
-    popperConfig: null
+    template: '<div></div>'
   };
-  const Event = {
-    HIDE: `hide${EVENT_KEY}`,
-    HIDDEN: `hidden${EVENT_KEY}`,
-    SHOW: `show${EVENT_KEY}`,
-    SHOWN: `shown${EVENT_KEY}`,
-    INSERTED: `inserted${EVENT_KEY}`,
-    CLICK: `click${EVENT_KEY}`,
-    FOCUSIN: `focusin${EVENT_KEY}`,
-    FOCUSOUT: `focusout${EVENT_KEY}`,
-    MOUSEENTER: `mouseenter${EVENT_KEY}`,
-    MOUSELEAVE: `mouseleave${EVENT_KEY}`
+  const DefaultType = {
+    allowList: 'object',
+    content: 'object',
+    extraClass: '(string|function)',
+    html: 'boolean',
+    sanitize: 'boolean',
+    sanitizeFn: '(null|function)',
+    template: 'string'
   };
-  const CLASS_NAME_FADE = 'fade';
-  const CLASS_NAME_MODAL = 'modal';
-  const CLASS_NAME_SHOW = 'show';
-  const HOVER_STATE_SHOW = 'show';
-  const HOVER_STATE_OUT = 'out';
-  const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
-  const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
-  const EVENT_MODAL_HIDE = 'hide.bs.modal';
-  const TRIGGER_HOVER = 'hover';
-  const TRIGGER_FOCUS = 'focus';
-  const TRIGGER_CLICK = 'click';
-  const TRIGGER_MANUAL = 'manual';
+  const DefaultContentType = {
+    entry: '(string|element|function|null)',
+    selector: '(string|element)'
+  };
   /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
+   * Class definition
    */
 
-  class Tooltip extends BaseComponent__default.default {
-    constructor(element, config) {
-      if (typeof Popper__namespace === 'undefined') {
-        throw new TypeError('Bootstrap\'s tooltips require Popper (https://popper.js.org)');
-      }
-
-      super(element); // private
-
-      this._isEnabled = true;
-      this._timeout = 0;
-      this._hoverState = '';
-      this._activeTrigger = {};
-      this._popper = null; // Protected
-
+  class TemplateFactory extends Config__default.default {
+    constructor(config) {
+      super();
       this._config = this._getConfig(config);
-      this.tip = null;
-
-      this._setListeners();
     } // Getters
 
 
@@ -4875,603 +6246,1003 @@ function withinMaxClamp(min, value, max) {
       return Default;
     }
 
-    static get NAME() {
-      return NAME;
-    }
-
-    static get Event() {
-      return Event;
-    }
-
     static get DefaultType() {
       return DefaultType;
+    }
+
+    static get NAME() {
+      return NAME;
     } // Public
 
 
-    enable() {
-      this._isEnabled = true;
+    getContent() {
+      return Object.values(this._config.content).map(config => this._resolvePossibleFunction(config)).filter(Boolean);
     }
 
-    disable() {
-      this._isEnabled = false;
+    hasContent() {
+      return this.getContent().length > 0;
     }
 
-    toggleEnabled() {
-      this._isEnabled = !this._isEnabled;
-    }
+    changeContent(content) {
+      this._checkContent(content);
 
-    toggle(event) {
-      if (!this._isEnabled) {
-        return;
-      }
-
-      if (event) {
-        const context = this._initializeOnDelegatedTarget(event);
-
-        context._activeTrigger.click = !context._activeTrigger.click;
-
-        if (context._isWithActiveTrigger()) {
-          context._enter(null, context);
-        } else {
-          context._leave(null, context);
-        }
-      } else {
-        if (this.getTipElement().classList.contains(CLASS_NAME_SHOW)) {
-          this._leave(null, this);
-
-          return;
-        }
-
-        this._enter(null, this);
-      }
-    }
-
-    dispose() {
-      clearTimeout(this._timeout);
-      EventHandler__default.default.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-      if (this.tip) {
-        this.tip.remove();
-      }
-
-      this._disposePopper();
-
-      super.dispose();
-    }
-
-    show() {
-      if (this._element.style.display === 'none') {
-        throw new Error('Please use show on visible elements');
-      }
-
-      if (!(this.isWithContent() && this._isEnabled)) {
-        return;
-      }
-
-      const showEvent = EventHandler__default.default.trigger(this._element, this.constructor.Event.SHOW);
-      const shadowRoot = findShadowRoot(this._element);
-      const isInTheDom = shadowRoot === null ? this._element.ownerDocument.documentElement.contains(this._element) : shadowRoot.contains(this._element);
-
-      if (showEvent.defaultPrevented || !isInTheDom) {
-        return;
-      } // A trick to recreate a tooltip in case a new title is given by using the NOT documented `data-bs-original-title`
-      // This will be removed later in favor of a `setContent` method
-
-
-      if (this.constructor.NAME === 'tooltip' && this.tip && this.getTitle() !== this.tip.querySelector(SELECTOR_TOOLTIP_INNER).innerHTML) {
-        this._disposePopper();
-
-        this.tip.remove();
-        this.tip = null;
-      }
-
-      const tip = this.getTipElement();
-      const tipId = getUID(this.constructor.NAME);
-      tip.setAttribute('id', tipId);
-
-      this._element.setAttribute('aria-describedby', tipId);
-
-      if (this._config.animation) {
-        tip.classList.add(CLASS_NAME_FADE);
-      }
-
-      const placement = typeof this._config.placement === 'function' ? this._config.placement.call(this, tip, this._element) : this._config.placement;
-
-      const attachment = this._getAttachment(placement);
-
-      this._addAttachmentClass(attachment);
-
-      const {
-        container
-      } = this._config;
-      Data__default.default.set(tip, this.constructor.DATA_KEY, this);
-
-      if (!this._element.ownerDocument.documentElement.contains(this.tip)) {
-        container.append(tip);
-        EventHandler__default.default.trigger(this._element, this.constructor.Event.INSERTED);
-      }
-
-      if (this._popper) {
-        this._popper.update();
-      } else {
-        this._popper = Popper__namespace.createPopper(this._element, tip, this._getPopperConfig(attachment));
-      }
-
-      tip.classList.add(CLASS_NAME_SHOW);
-
-      const customClass = this._resolvePossibleFunction(this._config.customClass);
-
-      if (customClass) {
-        tip.classList.add(...customClass.split(' '));
-      } // If this is a touch-enabled device we add extra
-      // empty mouseover listeners to the body's immediate children;
-      // only needed because of broken event delegation on iOS
-      // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-
-
-      if ('ontouchstart' in document.documentElement) {
-        [].concat(...document.body.children).forEach(element => {
-          EventHandler__default.default.on(element, 'mouseover', noop);
-        });
-      }
-
-      const complete = () => {
-        const prevHoverState = this._hoverState;
-        this._hoverState = null;
-        EventHandler__default.default.trigger(this._element, this.constructor.Event.SHOWN);
-
-        if (prevHoverState === HOVER_STATE_OUT) {
-          this._leave(null, this);
-        }
+      this._config.content = { ...this._config.content,
+        ...content
       };
-
-      const isAnimated = this.tip.classList.contains(CLASS_NAME_FADE);
-
-      this._queueCallback(complete, this.tip, isAnimated);
+      return this;
     }
 
-    hide() {
-      if (!this._popper) {
-        return;
+    toHtml() {
+      const templateWrapper = document.createElement('div');
+      templateWrapper.innerHTML = this._maybeSanitize(this._config.template);
+
+      for (const [selector, text] of Object.entries(this._config.content)) {
+        this._setContent(templateWrapper, text, selector);
       }
 
-      const tip = this.getTipElement();
+      const template = templateWrapper.children[0];
 
-      const complete = () => {
-        if (this._isWithActiveTrigger()) {
-          return;
-        }
+      const extraClass = this._resolvePossibleFunction(this._config.extraClass);
 
-        if (this._hoverState !== HOVER_STATE_SHOW) {
-          tip.remove();
-        }
-
-        this._cleanTipClass();
-
-        this._element.removeAttribute('aria-describedby');
-
-        EventHandler__default.default.trigger(this._element, this.constructor.Event.HIDDEN);
-
-        this._disposePopper();
-      };
-
-      const hideEvent = EventHandler__default.default.trigger(this._element, this.constructor.Event.HIDE);
-
-      if (hideEvent.defaultPrevented) {
-        return;
+      if (extraClass) {
+        template.classList.add(...extraClass.split(' '));
       }
 
-      tip.classList.remove(CLASS_NAME_SHOW); // If this is a touch-enabled device we remove the extra
-      // empty mouseover listeners we added for iOS support
+      return template;
+    } // Private
 
-      if ('ontouchstart' in document.documentElement) {
-        [].concat(...document.body.children).forEach(element => EventHandler__default.default.off(element, 'mouseover', noop));
-      }
 
-      this._activeTrigger[TRIGGER_CLICK] = false;
-      this._activeTrigger[TRIGGER_FOCUS] = false;
-      this._activeTrigger[TRIGGER_HOVER] = false;
-      const isAnimated = this.tip.classList.contains(CLASS_NAME_FADE);
+    _typeCheckConfig(config) {
+      super._typeCheckConfig(config);
 
-      this._queueCallback(complete, this.tip, isAnimated);
-
-      this._hoverState = '';
+      this._checkContent(config.content);
     }
 
-    update() {
-      if (this._popper !== null) {
-        this._popper.update();
+    _checkContent(arg) {
+      for (const [selector, content] of Object.entries(arg)) {
+        super._typeCheckConfig({
+          selector,
+          entry: content
+        }, DefaultContentType);
       }
-    } // Protected
-
-
-    isWithContent() {
-      return Boolean(this.getTitle());
     }
 
-    getTipElement() {
-      if (this.tip) {
-        return this.tip;
-      }
-
-      const element = document.createElement('div');
-      element.innerHTML = this._config.template;
-      const tip = element.children[0];
-      this.setContent(tip);
-      tip.classList.remove(CLASS_NAME_FADE, CLASS_NAME_SHOW);
-      this.tip = tip;
-      return this.tip;
-    }
-
-    setContent(tip) {
-      this._sanitizeAndSetContent(tip, this.getTitle(), SELECTOR_TOOLTIP_INNER);
-    }
-
-    _sanitizeAndSetContent(template, content, selector) {
+    _setContent(template, content, selector) {
       const templateElement = SelectorEngine__default.default.findOne(selector, template);
 
-      if (!content && templateElement) {
-        templateElement.remove();
-        return;
-      } // we use append for html objects to maintain js events
-
-
-      this.setElementContent(templateElement, content);
-    }
-
-    setElementContent(element, content) {
-      if (element === null) {
+      if (!templateElement) {
         return;
       }
 
-      if (isElement(content)) {
-        content = getElement(content); // content is a DOM node or a jQuery
+      content = this._resolvePossibleFunction(content);
 
-        if (this._config.html) {
-          if (content.parentNode !== element) {
-            element.innerHTML = '';
-            element.append(content);
-          }
-        } else {
-          element.textContent = content.textContent;
-        }
+      if (!content) {
+        templateElement.remove();
+        return;
+      }
+
+      if (index.isElement(content)) {
+        this._putElementInTemplate(index.getElement(content), templateElement);
 
         return;
       }
 
       if (this._config.html) {
-        if (this._config.sanitize) {
-          content = sanitizeHtml(content, this._config.allowList, this._config.sanitizeFn);
-        }
-
-        element.innerHTML = content;
-      } else {
-        element.textContent = content;
-      }
-    }
-
-    getTitle() {
-      const title = this._element.getAttribute('data-bs-original-title') || this._config.title;
-
-      return this._resolvePossibleFunction(title);
-    }
-
-    updateAttachment(attachment) {
-      if (attachment === 'right') {
-        return 'end';
-      }
-
-      if (attachment === 'left') {
-        return 'start';
-      }
-
-      return attachment;
-    } // Private
-
-
-    _initializeOnDelegatedTarget(event, context) {
-      return context || this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
-    }
-
-    _getOffset() {
-      const {
-        offset
-      } = this._config;
-
-      if (typeof offset === 'string') {
-        return offset.split(',').map(val => Number.parseInt(val, 10));
-      }
-
-      if (typeof offset === 'function') {
-        return popperData => offset(popperData, this._element);
-      }
-
-      return offset;
-    }
-
-    _resolvePossibleFunction(content) {
-      return typeof content === 'function' ? content.call(this._element) : content;
-    }
-
-    _getPopperConfig(attachment) {
-      const defaultBsPopperConfig = {
-        placement: attachment,
-        modifiers: [{
-          name: 'flip',
-          options: {
-            fallbackPlacements: this._config.fallbackPlacements
-          }
-        }, {
-          name: 'offset',
-          options: {
-            offset: this._getOffset()
-          }
-        }, {
-          name: 'preventOverflow',
-          options: {
-            boundary: this._config.boundary
-          }
-        }, {
-          name: 'arrow',
-          options: {
-            element: `.${this.constructor.NAME}-arrow`
-          }
-        }, {
-          name: 'onChange',
-          enabled: true,
-          phase: 'afterWrite',
-          fn: data => this._handlePopperPlacementChange(data)
-        }],
-        onFirstUpdate: data => {
-          if (data.options.placement !== data.placement) {
-            this._handlePopperPlacementChange(data);
-          }
-        }
-      };
-      return { ...defaultBsPopperConfig,
-        ...(typeof this._config.popperConfig === 'function' ? this._config.popperConfig(defaultBsPopperConfig) : this._config.popperConfig)
-      };
-    }
-
-    _addAttachmentClass(attachment) {
-      this.getTipElement().classList.add(`${this._getBasicClassPrefix()}-${this.updateAttachment(attachment)}`);
-    }
-
-    _getAttachment(placement) {
-      return AttachmentMap[placement.toUpperCase()];
-    }
-
-    _setListeners() {
-      const triggers = this._config.trigger.split(' ');
-
-      triggers.forEach(trigger => {
-        if (trigger === 'click') {
-          EventHandler__default.default.on(this._element, this.constructor.Event.CLICK, this._config.selector, event => this.toggle(event));
-        } else if (trigger !== TRIGGER_MANUAL) {
-          const eventIn = trigger === TRIGGER_HOVER ? this.constructor.Event.MOUSEENTER : this.constructor.Event.FOCUSIN;
-          const eventOut = trigger === TRIGGER_HOVER ? this.constructor.Event.MOUSELEAVE : this.constructor.Event.FOCUSOUT;
-          EventHandler__default.default.on(this._element, eventIn, this._config.selector, event => this._enter(event));
-          EventHandler__default.default.on(this._element, eventOut, this._config.selector, event => this._leave(event));
-        }
-      });
-
-      this._hideModalHandler = () => {
-        if (this._element) {
-          this.hide();
-        }
-      };
-
-      EventHandler__default.default.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-
-      if (this._config.selector) {
-        this._config = { ...this._config,
-          trigger: 'manual',
-          selector: ''
-        };
-      } else {
-        this._fixTitle();
-      }
-    }
-
-    _fixTitle() {
-      const title = this._element.getAttribute('title');
-
-      const originalTitleType = typeof this._element.getAttribute('data-bs-original-title');
-
-      if (title || originalTitleType !== 'string') {
-        this._element.setAttribute('data-bs-original-title', title || '');
-
-        if (title && !this._element.getAttribute('aria-label') && !this._element.textContent) {
-          this._element.setAttribute('aria-label', title);
-        }
-
-        this._element.setAttribute('title', '');
-      }
-    }
-
-    _enter(event, context) {
-      context = this._initializeOnDelegatedTarget(event, context);
-
-      if (event) {
-        context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
-      }
-
-      if (context.getTipElement().classList.contains(CLASS_NAME_SHOW) || context._hoverState === HOVER_STATE_SHOW) {
-        context._hoverState = HOVER_STATE_SHOW;
+        templateElement.innerHTML = this._maybeSanitize(content);
         return;
       }
 
-      clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_SHOW;
+      templateElement.textContent = content;
+    }
 
-      if (!context._config.delay || !context._config.delay.show) {
-        context.show();
+    _maybeSanitize(arg) {
+      return this._config.sanitize ? sanitizer.sanitizeHtml(arg, this._config.allowList, this._config.sanitizeFn) : arg;
+    }
+
+    _resolvePossibleFunction(arg) {
+      return typeof arg === 'function' ? arg(this) : arg;
+    }
+
+    _putElementInTemplate(element, templateElement) {
+      if (this._config.html) {
+        templateElement.innerHTML = '';
+        templateElement.append(element);
         return;
       }
 
-      context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_SHOW) {
-          context.show();
-        }
-      }, context._config.delay.show);
-    }
-
-    _leave(event, context) {
-      context = this._initializeOnDelegatedTarget(event, context);
-
-      if (event) {
-        context._activeTrigger[event.type === 'focusout' ? TRIGGER_FOCUS : TRIGGER_HOVER] = context._element.contains(event.relatedTarget);
-      }
-
-      if (context._isWithActiveTrigger()) {
-        return;
-      }
-
-      clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_OUT;
-
-      if (!context._config.delay || !context._config.delay.hide) {
-        context.hide();
-        return;
-      }
-
-      context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_OUT) {
-          context.hide();
-        }
-      }, context._config.delay.hide);
-    }
-
-    _isWithActiveTrigger() {
-      for (const trigger in this._activeTrigger) {
-        if (this._activeTrigger[trigger]) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    _getConfig(config) {
-      const dataAttributes = Manipulator__default.default.getDataAttributes(this._element);
-      Object.keys(dataAttributes).forEach(dataAttr => {
-        if (DISALLOWED_ATTRIBUTES.has(dataAttr)) {
-          delete dataAttributes[dataAttr];
-        }
-      });
-      config = { ...this.constructor.Default,
-        ...dataAttributes,
-        ...(typeof config === 'object' && config ? config : {})
-      };
-      config.container = config.container === false ? document.body : getElement(config.container);
-
-      if (typeof config.delay === 'number') {
-        config.delay = {
-          show: config.delay,
-          hide: config.delay
-        };
-      }
-
-      if (typeof config.title === 'number') {
-        config.title = config.title.toString();
-      }
-
-      if (typeof config.content === 'number') {
-        config.content = config.content.toString();
-      }
-
-      typeCheckConfig(NAME, config, this.constructor.DefaultType);
-
-      if (config.sanitize) {
-        config.template = sanitizeHtml(config.template, config.allowList, config.sanitizeFn);
-      }
-
-      return config;
-    }
-
-    _getDelegateConfig() {
-      const config = {};
-
-      for (const key in this._config) {
-        if (this.constructor.Default[key] !== this._config[key]) {
-          config[key] = this._config[key];
-        }
-      } // In the future can be replaced with:
-      // const keysWithDifferentValues = Object.entries(this._config).filter(entry => this.constructor.Default[entry[0]] !== this._config[entry[0]])
-      // `Object.fromEntries(keysWithDifferentValues)`
-
-
-      return config;
-    }
-
-    _cleanTipClass() {
-      const tip = this.getTipElement();
-      const basicClassPrefixRegex = new RegExp(`(^|\\s)${this._getBasicClassPrefix()}\\S+`, 'g');
-      const tabClass = tip.getAttribute('class').match(basicClassPrefixRegex);
-
-      if (tabClass !== null && tabClass.length > 0) {
-        tabClass.map(token => token.trim()).forEach(tClass => tip.classList.remove(tClass));
-      }
-    }
-
-    _getBasicClassPrefix() {
-      return CLASS_PREFIX;
-    }
-
-    _handlePopperPlacementChange(popperData) {
-      const {
-        state
-      } = popperData;
-
-      if (!state) {
-        return;
-      }
-
-      this.tip = state.elements.popper;
-
-      this._cleanTipClass();
-
-      this._addAttachmentClass(this._getAttachment(state.placement));
-    }
-
-    _disposePopper() {
-      if (this._popper) {
-        this._popper.destroy();
-
-        this._popper = null;
-      }
-    } // Static
-
-
-    static jQueryInterface(config) {
-      return this.each(function () {
-        const data = Tooltip.getOrCreateInstance(this, config);
-
-        if (typeof config === 'string') {
-          if (typeof data[config] === 'undefined') {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config]();
-        }
-      });
+      templateElement.textContent = element.textContent;
     }
 
   }
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Tooltip to jQuery only if jQuery is present
-   */
 
-
-  defineJQueryPlugin(Tooltip);
-
-  return Tooltip;
+  return TemplateFactory;
 
 }));
-//# sourceMappingURL=tooltip.js.map
+//# sourceMappingURL=template-factory.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/js-big-decimal/dist/node/js-big-decimal.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(global, function() {
+return /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 217:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pad = exports.trim = exports.add = void 0;
+//function add {
+function add(number1, number2) {
+    var _a;
+    if (number2 === void 0) { number2 = "0"; }
+    var neg = 0, ind = -1, neg_len;
+    //check for negatives
+    if (number1[0] == '-') {
+        neg++;
+        ind = 1;
+        number1 = number1.substring(1);
+        neg_len = number1.length;
+    }
+    if (number2[0] == '-') {
+        neg++;
+        ind = 2;
+        number2 = number2.substring(1);
+        neg_len = number2.length;
+    }
+    number1 = trim(number1);
+    number2 = trim(number2);
+    _a = pad(trim(number1), trim(number2)), number1 = _a[0], number2 = _a[1];
+    if (neg == 1) {
+        if (ind == 1)
+            number1 = compliment(number1);
+        else
+            number2 = compliment(number2);
+    }
+    var res = addCore(number1, number2);
+    if (!neg)
+        return trim(res);
+    else if (neg == 2)
+        return ('-' + trim(res));
+    else {
+        if (number1.length < (res.length))
+            return trim(res.substring(1));
+        else
+            return ('-' + trim(compliment(res)));
+    }
+}
+exports.add = add;
+function compliment(number) {
+    var s = '', l = number.length, dec = number.split('.')[1], ld = dec ? dec.length : 0;
+    for (var i = 0; i < l; i++) {
+        if (number[i] >= '0' && number[i] <= '9')
+            s += (9 - parseInt(number[i]));
+        else
+            s += number[i];
+    }
+    var one = (ld > 0) ? ('0.' + (new Array(ld)).join('0') + '1') : '1';
+    return addCore(s, one);
+}
+function trim(number) {
+    var parts = number.split('.');
+    if (!parts[0])
+        parts[0] = '0';
+    while (parts[0][0] == '0' && parts[0].length > 1)
+        parts[0] = parts[0].substring(1);
+    return parts[0] + (parts[1] ? ('.' + parts[1]) : '');
+}
+exports.trim = trim;
+function pad(number1, number2) {
+    var parts1 = number1.split('.'), parts2 = number2.split('.');
+    //pad integral part
+    var length1 = parts1[0].length, length2 = parts2[0].length;
+    if (length1 > length2) {
+        parts2[0] = (new Array(Math.abs(length1 - length2) + 1)).join('0') + (parts2[0] ? parts2[0] : '');
+    }
+    else {
+        parts1[0] = (new Array(Math.abs(length1 - length2) + 1)).join('0') + (parts1[0] ? parts1[0] : '');
+    }
+    //pad fractional part
+    length1 = parts1[1] ? parts1[1].length : 0,
+        length2 = parts2[1] ? parts2[1].length : 0;
+    if (length1 || length2) {
+        if (length1 > length2) {
+            parts2[1] = (parts2[1] ? parts2[1] : '') + (new Array(Math.abs(length1 - length2) + 1)).join('0');
+        }
+        else {
+            parts1[1] = (parts1[1] ? parts1[1] : '') + (new Array(Math.abs(length1 - length2) + 1)).join('0');
+        }
+    }
+    number1 = parts1[0] + ((parts1[1]) ? ('.' + parts1[1]) : '');
+    number2 = parts2[0] + ((parts2[1]) ? ('.' + parts2[1]) : '');
+    return [number1, number2];
+}
+exports.pad = pad;
+function addCore(number1, number2) {
+    var _a;
+    _a = pad(number1, number2), number1 = _a[0], number2 = _a[1];
+    var sum = '', carry = 0;
+    for (var i = number1.length - 1; i >= 0; i--) {
+        if (number1[i] === '.') {
+            sum = '.' + sum;
+            continue;
+        }
+        var temp = parseInt(number1[i]) + parseInt(number2[i]) + carry;
+        sum = (temp % 10) + sum;
+        carry = Math.floor(temp / 10);
+    }
+    return carry ? (carry.toString() + sum) : sum;
+}
+
+
+/***/ }),
+
+/***/ 423:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var add_1 = __webpack_require__(217);
+var round_1 = __webpack_require__(350);
+var multiply_1 = __webpack_require__(182);
+var divide_1 = __webpack_require__(415);
+var modulus_1 = __webpack_require__(213);
+var compareTo_1 = __webpack_require__(664);
+var subtract_1 = __webpack_require__(26);
+var roundingModes_1 = __webpack_require__(916);
+var bigDecimal = /** @class */ (function () {
+    function bigDecimal(number) {
+        if (number === void 0) { number = '0'; }
+        this.value = bigDecimal.validate(number);
+    }
+    bigDecimal.validate = function (number) {
+        if (number) {
+            number = number.toString();
+            if (isNaN(number))
+                throw Error("Parameter is not a number: " + number);
+            if (number[0] == '+')
+                number = number.substring(1);
+        }
+        else
+            number = '0';
+        //handle missing leading zero
+        if (number.startsWith('.'))
+            number = '0' + number;
+        else if (number.startsWith('-.'))
+            number = '-0' + number.substr(1);
+        //handle exponentiation
+        if (/e/i.test(number)) {
+            var _a = number.split(/[eE]/), mantisa = _a[0], exponent = _a[1];
+            mantisa = (0, add_1.trim)(mantisa);
+            var sign = '';
+            if (mantisa[0] == '-') {
+                sign = '-';
+                mantisa = mantisa.substring(1);
+            }
+            if (mantisa.indexOf('.') >= 0) {
+                exponent = parseInt(exponent) + mantisa.indexOf('.');
+                mantisa = mantisa.replace('.', '');
+            }
+            else {
+                exponent = parseInt(exponent) + mantisa.length;
+            }
+            if (mantisa.length < exponent) {
+                number = sign + mantisa + (new Array(exponent - mantisa.length + 1)).join('0');
+            }
+            else if (mantisa.length >= exponent && exponent > 0) {
+                number = sign + (0, add_1.trim)(mantisa.substring(0, exponent)) +
+                    ((mantisa.length > exponent) ? ('.' + mantisa.substring(exponent)) : '');
+            }
+            else {
+                number = sign + '0.' + (new Array(-exponent + 1)).join('0') + mantisa;
+            }
+        }
+        return number;
+    };
+    bigDecimal.prototype.getValue = function () {
+        return this.value;
+    };
+    bigDecimal.getPrettyValue = function (number, digits, separator) {
+        if (!(digits || separator)) {
+            digits = 3;
+            separator = ',';
+        }
+        else if (!(digits && separator)) {
+            throw Error('Illegal Arguments. Should pass both digits and separator or pass none');
+        }
+        number = bigDecimal.validate(number);
+        var neg = number.charAt(0) == '-';
+        if (neg)
+            number = number.substring(1);
+        var len = number.indexOf('.');
+        len = len > 0 ? len : (number.length);
+        var temp = '';
+        for (var i = len; i > 0;) {
+            if (i < digits) {
+                digits = i;
+                i = 0;
+            }
+            else
+                i -= digits;
+            temp = number.substring(i, i + digits) + ((i < (len - digits) && i >= 0) ? separator : '') + temp;
+        }
+        return (neg ? '-' : '') + temp + number.substring(len);
+    };
+    bigDecimal.prototype.getPrettyValue = function (digits, separator) {
+        return bigDecimal.getPrettyValue(this.value, digits, separator);
+    };
+    bigDecimal.round = function (number, precision, mode) {
+        if (precision === void 0) { precision = 0; }
+        if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+        number = bigDecimal.validate(number);
+        // console.log(number)
+        if (isNaN(precision))
+            throw Error("Precision is not a number: " + precision);
+        return (0, round_1.roundOff)(number, precision, mode);
+    };
+    bigDecimal.prototype.round = function (precision, mode) {
+        if (precision === void 0) { precision = 0; }
+        if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+        if (isNaN(precision))
+            throw Error("Precision is not a number: " + precision);
+        return new bigDecimal((0, round_1.roundOff)(this.value, precision, mode));
+    };
+    bigDecimal.floor = function (number) {
+        number = bigDecimal.validate(number);
+        if (number.indexOf('.') === -1)
+            return number;
+        return bigDecimal.round(number, 0, roundingModes_1.RoundingModes.FLOOR);
+    };
+    bigDecimal.prototype.floor = function () {
+        if (this.value.indexOf('.') === -1)
+            return new bigDecimal(this.value);
+        return new bigDecimal(this.value).round(0, roundingModes_1.RoundingModes.FLOOR);
+    };
+    bigDecimal.ceil = function (number) {
+        number = bigDecimal.validate(number);
+        if (number.indexOf('.') === -1)
+            return number;
+        return bigDecimal.round(number, 0, roundingModes_1.RoundingModes.CEILING);
+    };
+    bigDecimal.prototype.ceil = function () {
+        if (this.value.indexOf('.') === -1)
+            return new bigDecimal(this.value);
+        return new bigDecimal(this.value).round(0, roundingModes_1.RoundingModes.CEILING);
+    };
+    bigDecimal.add = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, add_1.add)(number1, number2);
+    };
+    bigDecimal.prototype.add = function (number) {
+        return new bigDecimal((0, add_1.add)(this.value, number.getValue()));
+    };
+    bigDecimal.subtract = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, subtract_1.subtract)(number1, number2);
+    };
+    bigDecimal.prototype.subtract = function (number) {
+        return new bigDecimal((0, subtract_1.subtract)(this.value, number.getValue()));
+    };
+    bigDecimal.multiply = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, multiply_1.multiply)(number1, number2);
+    };
+    bigDecimal.prototype.multiply = function (number) {
+        return new bigDecimal((0, multiply_1.multiply)(this.value, number.getValue()));
+    };
+    bigDecimal.divide = function (number1, number2, precision) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, divide_1.divide)(number1, number2, precision);
+    };
+    bigDecimal.prototype.divide = function (number, precision) {
+        return new bigDecimal((0, divide_1.divide)(this.value, number.getValue(), precision));
+    };
+    bigDecimal.modulus = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, modulus_1.modulus)(number1, number2);
+    };
+    bigDecimal.prototype.modulus = function (number) {
+        return new bigDecimal((0, modulus_1.modulus)(this.value, number.getValue()));
+    };
+    bigDecimal.compareTo = function (number1, number2) {
+        number1 = bigDecimal.validate(number1);
+        number2 = bigDecimal.validate(number2);
+        return (0, compareTo_1.compareTo)(number1, number2);
+    };
+    bigDecimal.prototype.compareTo = function (number) {
+        return (0, compareTo_1.compareTo)(this.value, number.getValue());
+    };
+    bigDecimal.negate = function (number) {
+        number = bigDecimal.validate(number);
+        return (0, subtract_1.negate)(number);
+    };
+    bigDecimal.prototype.negate = function () {
+        return new bigDecimal((0, subtract_1.negate)(this.value));
+    };
+    bigDecimal.RoundingModes = roundingModes_1.RoundingModes;
+    return bigDecimal;
+}());
+module.exports = bigDecimal;
+
+
+/***/ }),
+
+/***/ 664:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.compareTo = void 0;
+var add_1 = __webpack_require__(217);
+function compareTo(number1, number2) {
+    var _a;
+    var negative = false;
+    if (number1[0] == '-' && number2[0] != "-") {
+        return -1;
+    }
+    else if (number1[0] != '-' && number2[0] == '-') {
+        return 1;
+    }
+    else if (number1[0] == '-' && number2[0] == '-') {
+        number1 = number1.substr(1);
+        number2 = number2.substr(1);
+        negative = true;
+    }
+    _a = (0, add_1.pad)(number1, number2), number1 = _a[0], number2 = _a[1];
+    if (number1.localeCompare(number2) == 0) {
+        return 0;
+    }
+    for (var i = 0; i < number1.length; i++) {
+        if (number1[i] == number2[i]) {
+            continue;
+        }
+        else if (number1[i] > number2[i]) {
+            if (negative) {
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+            if (negative) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
+exports.compareTo = compareTo;
+
+
+/***/ }),
+
+/***/ 415:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.divide = void 0;
+var add_1 = __webpack_require__(217);
+var round_1 = __webpack_require__(350);
+function divide(dividend, divisor, precission) {
+    if (precission === void 0) { precission = 8; }
+    if (divisor == 0) {
+        throw new Error('Cannot divide by 0');
+    }
+    dividend = dividend.toString();
+    divisor = divisor.toString();
+    // remove trailing zeros in decimal ISSUE#18
+    dividend = dividend.replace(/(\.\d*?[1-9])0+$/g, "$1").replace(/\.0+$/, "");
+    divisor = divisor.replace(/(\.\d*?[1-9])0+$/g, "$1").replace(/\.0+$/, "");
+    if (dividend == 0)
+        return '0';
+    var neg = 0;
+    if (divisor[0] == '-') {
+        divisor = divisor.substring(1);
+        neg++;
+    }
+    if (dividend[0] == '-') {
+        dividend = dividend.substring(1);
+        neg++;
+    }
+    var pt_dvsr = divisor.indexOf('.') > 0 ? divisor.length - divisor.indexOf('.') - 1 : -1;
+    divisor = (0, add_1.trim)(divisor.replace('.', ''));
+    if (pt_dvsr >= 0) {
+        var pt_dvnd = dividend.indexOf('.') > 0 ? dividend.length - dividend.indexOf('.') - 1 : -1;
+        if (pt_dvnd == -1) {
+            dividend = (0, add_1.trim)(dividend + (new Array(pt_dvsr + 1)).join('0'));
+        }
+        else {
+            if (pt_dvsr > pt_dvnd) {
+                dividend = dividend.replace('.', '');
+                dividend = (0, add_1.trim)(dividend + (new Array(pt_dvsr - pt_dvnd + 1)).join('0'));
+            }
+            else if (pt_dvsr < pt_dvnd) {
+                dividend = dividend.replace('.', '');
+                var loc = dividend.length - pt_dvnd + pt_dvsr;
+                dividend = (0, add_1.trim)(dividend.substring(0, loc) + '.' + dividend.substring(loc));
+            }
+            else if (pt_dvsr == pt_dvnd) {
+                dividend = (0, add_1.trim)(dividend.replace('.', ''));
+            }
+        }
+    }
+    var prec = 0, dl = divisor.length, rem = '0', quotent = '';
+    var dvnd = (dividend.indexOf('.') > -1 && dividend.indexOf('.') < dl) ? dividend.substring(0, dl + 1) : dividend.substring(0, dl);
+    dividend = (dividend.indexOf('.') > -1 && dividend.indexOf('.') < dl) ? dividend.substring(dl + 1) : dividend.substring(dl);
+    if (dvnd.indexOf('.') > -1) {
+        var shift = dvnd.length - dvnd.indexOf('.') - 1;
+        dvnd = dvnd.replace('.', '');
+        if (dl > dvnd.length) {
+            shift += dl - dvnd.length;
+            dvnd = dvnd + (new Array(dl - dvnd.length + 1)).join('0');
+        }
+        prec = shift;
+        quotent = '0.' + (new Array(shift)).join('0');
+    }
+    precission = precission + 2;
+    while (prec <= precission) {
+        var qt = 0;
+        while (parseInt(dvnd) >= parseInt(divisor)) {
+            dvnd = (0, add_1.add)(dvnd, '-' + divisor);
+            qt++;
+        }
+        quotent += qt;
+        if (!dividend) {
+            if (!prec)
+                quotent += '.';
+            prec++;
+            dvnd = dvnd + '0';
+        }
+        else {
+            if (dividend[0] == '.') {
+                quotent += '.';
+                prec++;
+                dividend = dividend.substring(1);
+            }
+            dvnd = dvnd + dividend.substring(0, 1);
+            dividend = dividend.substring(1);
+        }
+    }
+    return ((neg == 1) ? '-' : '') + (0, add_1.trim)((0, round_1.roundOff)(quotent, precission - 2));
+}
+exports.divide = divide;
+
+
+/***/ }),
+
+/***/ 213:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.modulus = void 0;
+var divide_1 = __webpack_require__(415);
+var round_1 = __webpack_require__(350);
+var multiply_1 = __webpack_require__(182);
+var subtract_1 = __webpack_require__(26);
+var roundingModes_1 = __webpack_require__(916);
+function modulus(dividend, divisor) {
+    if (divisor == 0) {
+        throw new Error('Cannot divide by 0');
+    }
+    dividend = dividend.toString();
+    divisor = divisor.toString();
+    validate(dividend);
+    validate(divisor);
+    var sign = '';
+    if (dividend[0] == '-') {
+        sign = '-';
+        dividend = dividend.substr(1);
+    }
+    if (divisor[0] == '-') {
+        divisor = divisor.substr(1);
+    }
+    var result = (0, subtract_1.subtract)(dividend, (0, multiply_1.multiply)(divisor, (0, round_1.roundOff)((0, divide_1.divide)(dividend, divisor), 0, roundingModes_1.RoundingModes.FLOOR)));
+    return sign + result;
+}
+exports.modulus = modulus;
+function validate(oparand) {
+    if (oparand.indexOf('.') != -1) {
+        throw new Error('Modulus of non-integers not supported');
+    }
+}
+
+
+/***/ }),
+
+/***/ 182:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.multiply = void 0;
+function multiply(number1, number2) {
+    number1 = number1.toString();
+    number2 = number2.toString();
+    /*Filter numbers*/
+    var negative = 0;
+    if (number1[0] == '-') {
+        negative++;
+        number1 = number1.substr(1);
+    }
+    if (number2[0] == '-') {
+        negative++;
+        number2 = number2.substr(1);
+    }
+    number1 = trailZero(number1);
+    number2 = trailZero(number2);
+    var decimalLength1 = 0;
+    var decimalLength2 = 0;
+    if (number1.indexOf('.') != -1) {
+        decimalLength1 = number1.length - number1.indexOf('.') - 1;
+    }
+    if (number2.indexOf('.') != -1) {
+        decimalLength2 = number2.length - number2.indexOf('.') - 1;
+    }
+    var decimalLength = decimalLength1 + decimalLength2;
+    number1 = trailZero(number1.replace('.', ''));
+    number2 = trailZero(number2.replace('.', ''));
+    if (number1.length < number2.length) {
+        var temp = number1;
+        number1 = number2;
+        number2 = temp;
+    }
+    if (number2 == '0') {
+        return '0';
+    }
+    /*
+    * Core multiplication
+    */
+    var length = number2.length;
+    var carry = 0;
+    var positionVector = [];
+    var currentPosition = length - 1;
+    var result = "";
+    for (var i = 0; i < length; i++) {
+        positionVector[i] = number1.length - 1;
+    }
+    for (var i = 0; i < 2 * number1.length; i++) {
+        var sum = 0;
+        for (var j = number2.length - 1; j >= currentPosition && j >= 0; j--) {
+            if (positionVector[j] > -1 && positionVector[j] < number1.length) {
+                sum += parseInt(number1[positionVector[j]--]) * parseInt(number2[j]);
+            }
+        }
+        sum += carry;
+        carry = Math.floor(sum / 10);
+        result = sum % 10 + result;
+        currentPosition--;
+    }
+    /*
+    * Formatting result
+    */
+    result = trailZero(adjustDecimal(result, decimalLength));
+    if (negative == 1) {
+        result = '-' + result;
+    }
+    return result;
+}
+exports.multiply = multiply;
+/*
+* Add decimal point
+*/
+function adjustDecimal(number, decimal) {
+    if (decimal == 0)
+        return number;
+    else {
+        number = (decimal >= number.length) ? ((new Array(decimal - number.length + 1)).join('0') + number) : number;
+        return number.substr(0, number.length - decimal) + '.' + number.substr(number.length - decimal, decimal);
+    }
+}
+/*
+* Removes zero from front and back*/
+function trailZero(number) {
+    while (number[0] == '0') {
+        number = number.substr(1);
+    }
+    if (number.indexOf('.') != -1) {
+        while (number[number.length - 1] == '0') {
+            number = number.substr(0, number.length - 1);
+        }
+    }
+    if (number == "" || number == ".") {
+        number = '0';
+    }
+    else if (number[number.length - 1] == '.') {
+        number = number.substr(0, number.length - 1);
+    }
+    if (number[0] == '.') {
+        number = '0' + number;
+    }
+    return number;
+}
+
+
+/***/ }),
+
+/***/ 350:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.roundOff = void 0;
+var roundingModes_1 = __webpack_require__(916);
+/**
+ *
+ * @param input the number to round
+ * @param n precision
+ * @param mode Rounding Mode
+ */
+function roundOff(input, n, mode) {
+    if (n === void 0) { n = 0; }
+    if (mode === void 0) { mode = roundingModes_1.RoundingModes.HALF_EVEN; }
+    if (mode === roundingModes_1.RoundingModes.UNNECESSARY) {
+        throw new Error("UNNECESSARY Rounding Mode has not yet been implemented");
+    }
+    if (typeof (input) == 'number' || typeof (input) == 'bigint')
+        input = input.toString();
+    var neg = false;
+    if (input[0] === '-') {
+        neg = true;
+        input = input.substring(1);
+    }
+    var parts = input.split('.'), partInt = parts[0], partDec = parts[1];
+    //handle case of -ve n: roundOff(12564,-2)=12600
+    if (n < 0) {
+        n = -n;
+        if (partInt.length <= n)
+            return '0';
+        else {
+            var prefix = partInt.substr(0, partInt.length - n);
+            input = prefix + '.' + partInt.substr(partInt.length - n) + partDec;
+            prefix = roundOff(input, 0, mode);
+            return (neg ? '-' : '') + prefix + (new Array(n + 1).join('0'));
+        }
+    }
+    // handle case when integer output is desired
+    if (n == 0) {
+        var l = partInt.length;
+        if (greaterThanFive(parts[1], partInt, neg, mode)) {
+            partInt = increment(partInt);
+        }
+        return (neg && parseInt(partInt) ? '-' : '') + partInt;
+    }
+    // handle case when n>0
+    if (!parts[1]) {
+        return (neg ? '-' : '') + partInt + '.' + (new Array(n + 1).join('0'));
+    }
+    else if (parts[1].length < n) {
+        return (neg ? '-' : '') + partInt + '.' + parts[1] + (new Array(n - parts[1].length + 1).join('0'));
+    }
+    partDec = parts[1].substring(0, n);
+    var rem = parts[1].substring(n);
+    if (rem && greaterThanFive(rem, partDec, neg, mode)) {
+        partDec = increment(partDec);
+        if (partDec.length > n) {
+            return (neg ? '-' : '') + increment(partInt, parseInt(partDec[0])) + '.' + partDec.substring(1);
+        }
+    }
+    return (neg && parseInt(partInt) ? '-' : '') + partInt + '.' + partDec;
+}
+exports.roundOff = roundOff;
+function greaterThanFive(part, pre, neg, mode) {
+    if (!part || part === new Array(part.length + 1).join('0'))
+        return false;
+    // #region UP, DOWN, CEILING, FLOOR 
+    if (mode === roundingModes_1.RoundingModes.DOWN || (!neg && mode === roundingModes_1.RoundingModes.FLOOR) ||
+        (neg && mode === roundingModes_1.RoundingModes.CEILING))
+        return false;
+    if (mode === roundingModes_1.RoundingModes.UP || (neg && mode === roundingModes_1.RoundingModes.FLOOR) ||
+        (!neg && mode === roundingModes_1.RoundingModes.CEILING))
+        return true;
+    // #endregion
+    // case when part !== five
+    var five = '5' + (new Array(part.length).join('0'));
+    if (part > five)
+        return true;
+    else if (part < five)
+        return false;
+    // case when part === five
+    switch (mode) {
+        case roundingModes_1.RoundingModes.HALF_DOWN: return false;
+        case roundingModes_1.RoundingModes.HALF_UP: return true;
+        case roundingModes_1.RoundingModes.HALF_EVEN:
+        default: return (parseInt(pre[pre.length - 1]) % 2 == 1);
+    }
+}
+function increment(part, c) {
+    if (c === void 0) { c = 0; }
+    if (!c)
+        c = 1;
+    if (typeof (part) == 'number')
+        part.toString();
+    var l = part.length - 1, s = '';
+    for (var i = l; i >= 0; i--) {
+        var x = parseInt(part[i]) + c;
+        if (x == 10) {
+            c = 1;
+            x = 0;
+        }
+        else {
+            c = 0;
+        }
+        s += x;
+    }
+    if (c)
+        s += c;
+    return s.split('').reverse().join('');
+}
+
+
+/***/ }),
+
+/***/ 916:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RoundingModes = void 0;
+var RoundingModes;
+(function (RoundingModes) {
+    /**
+     * Rounding mode to round towards positive infinity.
+     */
+    RoundingModes[RoundingModes["CEILING"] = 0] = "CEILING";
+    /**
+     * Rounding mode to round towards zero.
+     */
+    RoundingModes[RoundingModes["DOWN"] = 1] = "DOWN";
+    /**
+     * Rounding mode to round towards negative infinity.
+     */
+    RoundingModes[RoundingModes["FLOOR"] = 2] = "FLOOR";
+    /**
+     * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant,
+     * in which case round down.
+     */
+    RoundingModes[RoundingModes["HALF_DOWN"] = 3] = "HALF_DOWN";
+    /**
+     * Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant,
+     * in which case, round towards the even neighbor.
+     */
+    RoundingModes[RoundingModes["HALF_EVEN"] = 4] = "HALF_EVEN";
+    /**
+     * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant,
+     * in which case round up.
+     */
+    RoundingModes[RoundingModes["HALF_UP"] = 5] = "HALF_UP";
+    /**
+     * Rounding mode to assert that the requested operation has an exact result, hence no rounding is necessary.
+     * UNIMPLEMENTED
+     */
+    RoundingModes[RoundingModes["UNNECESSARY"] = 6] = "UNNECESSARY";
+    /**
+     * Rounding mode to round away from zero.
+     */
+    RoundingModes[RoundingModes["UP"] = 7] = "UP";
+})(RoundingModes = exports.RoundingModes || (exports.RoundingModes = {}));
+
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.negate = exports.subtract = void 0;
+var add_1 = __webpack_require__(217);
+function subtract(number1, number2) {
+    number1 = number1.toString();
+    number2 = number2.toString();
+    number2 = negate(number2);
+    return (0, add_1.add)(number1, number2);
+}
+exports.subtract = subtract;
+function negate(number) {
+    if (number[0] == '-') {
+        number = number.substr(1);
+    }
+    else {
+        number = '-' + number;
+    }
+    return number;
+}
+exports.negate = negate;
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(423);
+/******/ 	
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/global.js":
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),

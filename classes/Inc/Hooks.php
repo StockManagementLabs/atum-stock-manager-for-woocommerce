@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.3.8.2
  */
@@ -16,8 +16,11 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
+use Atum\InventoryLogs\InventoryLogs;
 use Atum\MetaBoxes\FileAttachment;
+use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 
 
 class Hooks {
@@ -190,7 +193,7 @@ class Hooks {
 		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
 
 		// Check if its necesary change the post status on purchase orders and inventory logs.
-		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status'), 10, 3 );
+		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status' ), 10, 3 );
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
@@ -956,7 +959,13 @@ class Hooks {
 	 */
 	public function maybe_save_order_items_props( $order_id ) {
 
-		if ( 'shop_order' !== get_post_type( $order_id ) ) {
+		$is_using_hpos_tables = Helpers::is_using_hpos_tables();
+
+		if ( $is_using_hpos_tables && 'shop_order' !== OrderUtil::get_order_type( $order_id ) ) {
+			return;
+		}
+
+		if ( ! $is_using_hpos_tables && 'shop_order' !== get_post_type( $order_id ) ) {
 			return;
 		}
 
@@ -965,7 +974,7 @@ class Hooks {
 	}
 
 	/**
-	 * When an purchase order or inventory log is moved or restored from trash, restore original status
+	 * When a purchase order or inventory log is moved or restored from trash, restore original status
 	 *
 	 * @param string $new_status      The new status of the post being restored.
 	 * @param int    $post_id         The ID of the post being restored.
@@ -979,7 +988,7 @@ class Hooks {
 
 		$post_type = get_post_type( $post_id );
 
-		if ( 'atum_purchase_order' !== $post_type && 'atum_inventory_log' !== $post_type ) {
+		if ( PurchaseOrders::POST_TYPE !== $post_type && InventoryLogs::POST_TYPE !== $post_type ) {
 			return;
 		}
 

@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Addons
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.0
  */
@@ -69,7 +69,7 @@ class Addons {
 			'basename' => 'atum-logs/atum-logs.php',
 		],
 		'export_pro'      => [
-			'name'     => 'Export PRO',
+			'name'     => 'Export Pro',
 			'basename' => 'atum-export-pro/atum-export-pro.php',
 		],
 		'multi_inventory' => [
@@ -246,7 +246,7 @@ class Addons {
 			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
 			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
-			'allowedDeactivations' => __( 'You are allowed to deactivate a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
+			'allowedDeactivations' => __( 'You are allowed to remove a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
@@ -293,7 +293,7 @@ class Addons {
 
 			$installed_addons = self::$addons;
 
-			// We must check if the are others not enabled that should be updated.
+			// We must check if there are others not enabled that should be updated.
 			foreach ( array_keys( $this->addons_paths ) as $addon_key ) {
 
 				if ( ! array_key_exists( $addon_key, self::$addons ) ) {
@@ -325,7 +325,7 @@ class Addons {
 				foreach ( $installed_addons as $slug => $addon_data ) {
 
 					if (
-						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) ||
+						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) &&
 						array_key_exists( $slug, $this->addons_paths )
 					) {
 						$addon_slug = $slug;
@@ -346,7 +346,7 @@ class Addons {
 
 						if ( $addon_info ) {
 
-							// Setup the updater.
+							// Set up the updater.
 							$addon_file = key( $addon_info );
 
 							new Updater( $addon_file, array(
@@ -361,7 +361,7 @@ class Addons {
 					}
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
 						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://www.stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+						AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
 					}
 
 				}
@@ -382,9 +382,14 @@ class Addons {
 	private static function get_addons_list() {
 
 		$transient_name = AtumCache::get_transient_key( 'addons_list' );
-		$addons         = AtumCache::get_transient( $transient_name );
+		$addons         = AtumCache::get_transient( $transient_name, TRUE );
 
-		if ( ! $addons ) {
+		if ( empty( $addons ) ) {
+
+			// Avoid doing requests to the API too many times if for some reason is down.
+			if ( FALSE !== self::get_last_api_access() ) {
+				return FALSE;
+			}
 
 			$args = array(
 				'timeout'     => 20,
@@ -404,30 +409,37 @@ class Addons {
 					error_log( __METHOD__ . ": $error_message" );
 				}
 
-				/* translators: error message displayed */
+				/* translators: the error message */
 				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error', TRUE, TRUE );
 
-				return FALSE;
+				$addons = FALSE;
 
 			}
 			elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+				$addons = FALSE;
 
-				return FALSE;
+			}
+			else {
+
+				$response_body = wp_remote_retrieve_body( $response );
+				$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
+
+				if ( empty( $addons ) ) {
+					AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+					$addons = FALSE;
+				}
 
 			}
 
-			$response_body = wp_remote_retrieve_body( $response );
-			$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
-
-			if ( empty( $addons ) ) {
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
-
-				return FALSE;
+			if ( ! empty( $addons ) ) {
+				self::set_last_api_access( TRUE );
+				AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS, TRUE );
 			}
-
-			AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS );
+			else {
+				self::set_last_api_access();
+			}
 
 		}
 
@@ -459,13 +471,18 @@ class Addons {
 
 		$addons = self::get_addons_list();
 
-		foreach ( $addons as $addon ) {
-			if ( $addon_slug === $addon['info']['slug'] ) {
-				return $addon['info']['folder'];
+		if ( ! empty( $addons ) ) {
+
+			foreach ( $addons as $addon ) {
+				if ( $addon_slug === $addon['info']['slug'] ) {
+					return $addon['info']['folder'];
+				}
 			}
+
 		}
 
 		return FALSE;
+
 	}
 
 	/**
@@ -480,7 +497,7 @@ class Addons {
 	 */
 	public function http_request_args( $args, $url ) {
 
-		// If it is an https request and we are performing a package download, disable ssl verification.
+		// If it is a https request, and we are performing a package download, disable ssl verification.
 		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && strpos( $url, self::ADDONS_STORE_URL ) !== FALSE ) {
 			$args['sslverify'] = FALSE;
 		}
@@ -536,10 +553,26 @@ class Addons {
 
 		$keys = get_option( self::ADDONS_KEY_OPTION );
 
+		if ( empty( $addon_name ) ) {
+			$keys = self::check_addons_keys( $keys );
+		}
+
+		$lower_keys = array();
+		$addon_name = strtolower( $addon_name );
+
+		if ( ! empty( $keys ) ) {
+			foreach ( $keys as $key_name => $key_value ) {
+				if ( FALSE === in_array( $key_name, array_keys( $lower_keys ) ) ) {
+					$lower_key                = strtolower( $key_name );
+					$lower_keys[ $lower_key ] = $key_value;
+				}
+			}
+		}
+
 		if ( $addon_name ) {
 
-			if ( ! empty( $keys ) && is_array( $keys ) && isset( $keys[ $addon_name ] ) ) {
-				return $keys[ $addon_name ];
+			if ( ! empty( $keys ) && is_array( $keys ) && in_array( $addon_name, array_keys( $lower_keys ) ) ) {
+				return $lower_keys[ $addon_name ];
 			}
 
 			return '';
@@ -547,6 +580,116 @@ class Addons {
 		}
 
 		return $keys;
+	}
+
+	/**
+	 * Check the registered addons in database and update them.
+	 *
+	 * @since 1.9.21
+	 *
+	 * @param array $keys
+	 *
+	 * @return array
+	 */
+	private static function check_addons_keys( $keys ) {
+
+		$result  = array();
+		$checked = array();
+
+		foreach ( $keys as $addon => $license ) {
+
+			// Remove inactive licenses.
+			if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
+				continue;
+			}
+
+			$addon = strtolower( $addon );
+
+			if ( in_array( $addon, $checked ) ) {
+				continue;
+			}
+
+			$sensitive_name = '';
+
+			// Get addon slug.
+			foreach ( self::$addons as $addon_data ) {
+
+				if ( $addon === strtolower( $addon_data['name'] ) ) {
+					$sensitive_name = strtolower( $addon_data['name'] );
+				}
+
+			}
+
+			$duplicated = [];
+
+			// Find duplicated.
+			foreach ( $keys as $addon2 => $license2 ) {
+
+				// Remove inactive licenses.
+				if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
+					continue;
+				}
+
+				$addon2 = strtolower( $addon2 );
+
+				if ( $addon === strtolower( $addon2 ) ) {
+					$checked[] = $addon2;
+
+					$duplicated[] = [
+						'index' => $addon2,
+						'data'  => $license2,
+					];
+
+				}
+			}
+
+			if ( count( $duplicated ) > 1 ) {
+
+				$selected = FALSE;
+
+				foreach ( $duplicated as $dup ) {
+
+					if ( $dup['data']['key'] && 'valid' === $dup['data']['status'] ) {
+						if ( ! $selected || 'valid' !== $selected['status'] ) {
+							$selected = $dup['data'];
+						}
+						elseif ( $dup['index'] === $sensitive_name ) {
+							$selected = $dup['data'];
+						}
+					}
+					else {
+
+						if ( $selected && ! $selected['key'] && $dup['data']['key'] ) {
+							$selected = $dup['data'];
+						}
+						elseif ( ! $selected ) {
+							$selected = $dup['data'];
+						}
+					}
+
+				}
+
+				$result[ $addon ] = $selected;
+
+			} elseif ( 1 === count( $duplicated ) ) {
+
+				$result[ $addon ] = $duplicated[0]['data'];
+
+			}
+
+		}
+
+		if ( $keys !== $result ) {
+
+			// If the addons keys changed, update the option and delete transients.
+			update_option( self::ADDONS_KEY_OPTION, $result );
+
+			foreach ( self::$addons as $slug => $registered_addon ) {
+				self::delete_status_transient( $registered_addon['name'] );
+			}
+		}
+
+		return $result;
 
 	}
 
@@ -591,7 +734,7 @@ class Addons {
 	public static function update_key( $addon_name, $key ) {
 
 		$keys                = get_option( self::ADDONS_KEY_OPTION );
-		$keys[ $addon_name ] = $key;
+		$keys[ strtolower( $addon_name ) ] = $key;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
 	}
 
@@ -626,12 +769,12 @@ class Addons {
 			if (
 				empty( $saved_license ) ||
 				// When any add-on was previously activated but is no longer installed and the license is not valid, get rid of it.
-				( ! empty( $saved_license ) && 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
+				( 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
 			) {
 
 				self::update_key( $addon_name, [
 					'key'    => '',
-					'status' => 'invalid',
+					'status' => ! empty( $saved_license ) && 'expired' === $saved_license['status'] ? 'expired' : 'invalid',
 				] );
 
 			}
@@ -639,53 +782,81 @@ class Addons {
 
 				$addon_status['key'] = $saved_license['key'];
 
-				// Check the license.
-				$status = self::check_license( $addon_name, $addon_status['key'] );
+				if ( ! empty( $addon_status['key'] ) ) {
 
-				if ( ! is_wp_error( $status ) ) {
+					// Check the license.
+					$status = self::check_license( $addon_name, $addon_status['key'] );
 
-					$license_data = json_decode( wp_remote_retrieve_body( $status ) );
+					if ( ! is_wp_error( $status ) ) {
 
-					if ( $license_data ) {
+						$license_data = json_decode( wp_remote_retrieve_body( $status ) );
 
-						$addon_status['status'] = $license_data->license;
+						if ( $license_data ) {
 
-						if ( $license_data->license !== $saved_license['status'] ) {
-							$saved_license['status'] = $license_data->license;
-							self::update_key( $addon_name, $saved_license );
+							$addon_status['status']  = $license_data->license;
+							$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d') : $license_data->expires;
+
+							if ( $license_data->license !== $saved_license['status'] ) {
+								$saved_license['status'] = $license_data->license;
+								self::update_key( $addon_name, $saved_license );
+							}
+
 						}
 
 					}
-
+				}
+				else {
+					$addon_status['status']  = 'not-activated';
 				}
 
 			}
-
-			switch ( $addon_status['status'] ) {
-				case 'invalid':
-				case 'disabled':
-				case 'expired':
-				case 'item_name_mismatch':
-					$addon_status['status']        = 'invalid';
-					$addon_status['button_text']   = __( 'Validate', ATUM_TEXT_DOMAIN );
-					$addon_status['button_class']  = 'validate-key';
-					$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
-					break;
-
-				case 'inactive':
-				case 'site_inactive':
-					$addon_status['status']        = 'inactive';
-					$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
-					$addon_status['button_class']  = 'activate-key';
-					$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
-					break;
-
-				case 'valid':
-					$addon_status['button_text']   = __( 'Deactivate', ATUM_TEXT_DOMAIN );
-					$addon_status['button_class']  = 'deactivate-key';
-					$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
-					break;
+			if ( ! $is_installed ) {
+				$addon_status['status']        = 'not-installed';
+				$addon_status['button_text']   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
+				$addon_status['button_class']  = 'install-addon';
+				$addon_status['button_action'] = ATUM_PREFIX . 'install';
 			}
+			else {
+				switch ( $addon_status['status'] ) {
+					case 'invalid':
+					case 'disabled':
+					case 'item_name_mismatch':
+						$addon_status['status']        = 'invalid';
+						$addon_status['button_text']   = __( 'Validate', ATUM_TEXT_DOMAIN );
+						$addon_status['button_class']  = 'validate-key';
+						$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
+						break;
+					case 'expired':
+						$addon_status['status']        = 'expired';
+						$addon_status['button_text']   = '';
+						$addon_status['button_class']  = '';
+						$addon_status['button_action'] = ATUM_PREFIX . 'remove_license';
+						break;
+
+					// Not possible??
+					case 'inactive':
+					case 'site_inactive':
+						$addon_status['status']        = 'inactive';
+						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
+						$addon_status['button_class']  = 'activate-key';
+						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
+						break;
+
+					case 'valid':
+						$addon_status['button_text']   = '';
+						$addon_status['button_class']  = '';
+						$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
+						break;
+
+					case 'not-activated':
+						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
+						$addon_status['button_class']  = 'activate-key';
+						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
+						break;
+				}
+			}
+
+
 
 			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
 
@@ -1074,6 +1245,43 @@ class Addons {
 		}
 
 		return $is_local_url;
+
+	}
+
+	/**
+	 * Get the last API access transient in order to check if the limits are reached
+	 *
+	 * @since 1.9.23.1
+	 *
+	 * @return bool|mixed
+	 */
+	public static function get_last_api_access() {
+
+		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
+
+		return AtumCache::get_transient( $limit_requests_transient, TRUE );
+
+	}
+
+	/**
+	 * Set or deletes the last API access transient, so we can do a new request
+	 *
+	 * @since 1.9.23.1
+	 *
+	 * @param bool $delete
+	 */
+	public static function set_last_api_access( $delete = FALSE ) {
+
+		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
+
+		if ( $delete ) {
+			// Remove the access blocking transient.
+			AtumCache::delete_transients( $limit_requests_transient );
+		}
+		else {
+			// Block access for 15 minutes.
+			AtumCache::set_transient( $limit_requests_transient, time(), 15 * MINUTE_IN_SECONDS, TRUE );
+		}
 
 	}
 

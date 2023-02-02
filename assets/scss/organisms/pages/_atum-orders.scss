@@ -2,101 +2,6 @@
 // ATUM Orders list pages
 //------------------------
 
-//
-// Tooltips
-//---------
-
-.tips {
-	cursor: help;
-	text-decoration: none;
-}
-
-img.tips {
-	padding: 5px 0 0;
-}
-
-#tiptip_holder {
-	display: none;
-	z-index: 8675309;
-	position: absolute;
-	top: 0;
-	left: 0;
-	
-	
-	&.tip_top {
-		padding-bottom: 5px;
-		
-		#tiptip_arrow_inner {
-			margin-top: -7px;
-			margin-left: -6px;
-			border-top-color: var(--white);
-		}
-	}
-	
-	&.tip_bottom {
-		padding-top: 5px;
-		
-		#tiptip_arrow_inner {
-			margin-top: -5px;
-			margin-left: -6px;
-			border-bottom-color: var(--white);
-		}
-	}
-	
-	&.tip_right {
-		padding-left: 5px;
-		
-		#tiptip_arrow_inner {
-			margin-top: -6px;
-			margin-left: -5px;
-			border-right-color: var(--white);
-		}
-	}
-	
-	&.tip_left {
-		padding-right: 5px;
-		
-		#tiptip_arrow_inner {
-			margin-top: -6px;
-			margin-left: -7px;
-			border-left-color: var(--white);
-		}
-	}
-}
-
-.swal2-in #tiptip_holder {
-	z-index: 100000001;
-}
-
-#tiptip_content {
-	color: var(--gray-600);
-	font-size: 0.8em;
-	max-width: 150px;
-	background: var(--white);
-	text-align: center;
-	border-radius: 3px;
-	padding: 0.618em 1em;
-	box-shadow: 0 1px 3px var(--black-shadow);
-	
-	code {
-		padding: 1px;
-		background: var(--wp-gray-7);
-	}
-}
-
-#tiptip_arrow, #tiptip_arrow_inner {
-	position: absolute;
-	border-color: transparent;
-	border-style: solid;
-	border-width: 6px;
-	height: 0;
-	width: 0;
-}
-
-//
-// List Table
-//-------------
-
 table.wp-list-table {
 	
 	.column-notes {
@@ -130,35 +35,7 @@ table.wp-list-table {
 	.column-status {
 		text-align: left;
 		
-		.order-status-container {
-			display: flex;
-			flex-wrap: nowrap;
-			align-items: flex-start;
-			justify-content: flex-start;
-			
-			.order-status {
-				color: var(--secondary);
-				background: var(--light);
-				border-radius: 4px;
-				cursor: default;
-				max-width: 100%;
-				width: 16px;
-				height: 16px;
-				margin: 3px 5px 0 0;
-				
-				&.status-atum_failed, &.status-atum_trash {
-					background: #761919;
-				}
-				
-				> span {
-					margin: 0 1em;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-				
-			}
-		}
-		
+		@include atum-order-status;
 	}
 	
 	tbody > :nth-child(odd), ul.striped > :nth-child(odd), .alternate {

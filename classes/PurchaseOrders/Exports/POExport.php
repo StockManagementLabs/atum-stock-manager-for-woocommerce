@@ -5,7 +5,7 @@
  * @package         Atum\PurchaseOrders
  * @subpackage      Exports
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.3.9
  */

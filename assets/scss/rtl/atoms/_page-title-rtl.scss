@@ -2,12 +2,14 @@
 // Page Title RTL
 //------------
 
+@use "sass:math";
+
 .wrap {
 	
 	h1 {
 		
 		&.wp-heading-inline {
-			margin-left: $grid-gutter-width/2;
+			margin-left: math.div($grid-gutter-width, 2);
 			margin-right: 0px;
 			
 			.page-title-action {

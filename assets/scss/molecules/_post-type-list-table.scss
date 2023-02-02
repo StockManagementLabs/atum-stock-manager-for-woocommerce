@@ -20,6 +20,20 @@
 		}
 	}
 	
+	.tablenav {
+		&.top {
+			> .actions {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				
+				input[type=submit] {
+					margin-left: -5px;
+				}
+			}
+		}
+	}
+	
 	.tablenav-pages {
 		float: none;
 		flex-grow: 1;

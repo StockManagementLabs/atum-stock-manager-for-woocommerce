@@ -1,7 +1,7 @@
 /**
  * Atum Addons
  *
- * @copyright Stock Management Labs ©2022
+ * @copyright Stock Management Labs ©2023
  *
  * @since 1.2.0
  */
@@ -19,8 +19,8 @@ import Tooltip from './components/_tooltip';
 jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
-	const settings = new Settings( 'atumAddons' );
-	new Tooltip();
-	new AddonsPage( settings );
+	const settings = new Settings( 'atumAddons' ),
+	      tooltip  = new Tooltip();
+	new AddonsPage( settings, tooltip );
 	
 });

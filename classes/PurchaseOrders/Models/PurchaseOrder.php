@@ -5,7 +5,7 @@
  * @package         Atum\PurchaseOrders
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -67,16 +67,6 @@ class PurchaseOrder extends AtumOrderModel {
 			'date_expected'      => '',
 		) ) );
 
-		// Make sure the post is already created before instantiating the ATUM Order model.
-		// When creating the PO from the WP backend, the post is created automatically but there are cases that this doesn't happen.
-		if ( ! $id ) {
-			$id = wp_insert_post( [
-				'post_type'   => PurchaseOrders::POST_TYPE,
-				'post_title'  => __( 'Auto Draft', ATUM_TEXT_DOMAIN ),
-				'post_status' => 'auto-draft',
-			] );
-		}
-
 		parent::__construct( $id, $read_items );
 
 		// Load the POs supplier.
@@ -137,7 +127,7 @@ class PurchaseOrder extends AtumOrderModel {
 		}
 		else {
 			/* translators: the purchase order date */
-			$post_title = sprintf( __( 'PO &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'PO date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'PO &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'PO date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
 		}
 
 		return apply_filters( 'atum/purchase_orders/po/title', $post_title );

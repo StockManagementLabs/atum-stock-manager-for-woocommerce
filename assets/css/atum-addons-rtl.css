@@ -1,24 +1,10 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.18 
+ * @version 1.9.26.2 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
- * License : ©2022 Stock Management Labs 
+ * License : ©2023 Stock Management Labs 
  */
 
- .atum-addons h1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.atum-addons .theme .show-key {
-  right: auto;
-  left: 0;
-}
-
-.atum-addons .theme .theme-actions {
-  right: auto;
-}
-/*# sourceMappingURL=atum-addons-rtl.css.map */
+ .atum-addons h1{display:-webkit-box;display:-ms-flexbox;display:flex}.atum-addons .theme .show-key{right:auto;left:0}.atum-addons .theme .theme-actions{right:auto}

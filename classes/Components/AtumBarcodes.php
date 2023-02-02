@@ -6,7 +6,7 @@
  * @subpackage  Components
  * @since       1.9.18
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  */
 
 namespace Atum\Components;
@@ -260,7 +260,7 @@ class AtumBarcodes {
 			$barcode = AtumListTable::EMPTY_COL;
 		}
 
-		if ( AtumCapabilities::current_user_can( 'edit_barcode' ) ) {
+		if ( $list_table->allow_edit && AtumCapabilities::current_user_can( 'edit_barcode' ) ) {
 
 			$args = apply_filters( 'atum/barcodes/list_table/editable_args', array(
 				'meta_key'   => 'barcode',

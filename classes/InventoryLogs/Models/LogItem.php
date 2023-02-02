@@ -5,7 +5,7 @@
  * @package         Atum\InventoryLogs
  * @subpackage      Models
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -18,13 +18,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderItemModel;
 
 
 class LogItem extends AtumOrderItemModel {
-
-	/**
-	 * The WP cache key name
-	 *
-	 * @var string
-	 */
-	protected $cache_key = 'inventory-log-item';
 
 	/**
 	 * LogItem constructor

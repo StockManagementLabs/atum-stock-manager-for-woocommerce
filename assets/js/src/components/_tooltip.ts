@@ -28,7 +28,7 @@ export default class Tooltip {
 	    $wrapper.find( '.tips, .atum-tooltip' ).each( ( index: number, elem: Element ) => {
 
 		    const $tipEl: JQuery = $( elem ),
-		          title: string  = $tipEl.data( 'tip' ) || $tipEl.attr( 'title' );
+		          title: string  = $tipEl.data( 'tip' ) || $tipEl.attr( 'title' ) || $tipEl.attr('data-bs-original-title');
 
 		    if ( title ) {
 
@@ -46,6 +46,7 @@ export default class Tooltip {
 					    hide: 200,
 				    }, // The delay fixes an issue with tooltips breaking on some cases.
 			    } );
+
 
 			    /**
 			     * NOTE: for some reason (probably a Boostrap bug), after destroying a tooltip and recreating it,

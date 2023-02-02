@@ -5,7 +5,7 @@
  * @package     Atum
  * @subpackage  Settings
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @since       0.0.2
  */
@@ -313,9 +313,9 @@ class Settings {
 				'group'       => 'general',
 				'section'     => 'general',
 				'name'        => __( 'Out of stock threshold per product', ATUM_TEXT_DOMAIN ),
-				'desc'        => __( "Activate the switch to disable WooCommerce's global out of stock threshold setting and enable ATUM's out of stock threshold per product. All products will inherit the WooCommerce's global value by default (if set).<br><br>
-			                          Deactivate the switch to disable ATUM's out of stock threshold per product and re-enable the WooCommerce's global out of stock threshold. All your saved individual values will remain untouched in your database and ready for a future use, in case you decide to return to the individual control.<br><br>
-				                      We have a specific tool to clear all the individual out of stock threshold values in the 'Tools' section.", ATUM_TEXT_DOMAIN ),
+				'desc'        => __( "Activate the switch to enable the ATUM's out of stock threshold field per product. All products will use the product-level value (if any) or will inherit the WooCommerce's global value (if set) when you leave the product-level field empty.<br><br>
+			                          Deactivate the switch to disable ATUM's out of stock threshold field per product and continue using the WooCommerce's global out of stock threshold. When you disable this option, you will be asked whether to leave all the current product-level values untouched in your database and ready for a future use in case you decide to return to the product-level control or to get rid of all the values.<br><br>
+				                      We also have a specific tool to clear all the individual out of stock threshold values in the 'Tools' section.", ATUM_TEXT_DOMAIN ),
 				'type'        => 'switcher',
 				'default'     => 'no',
 				'confirm_msg' => esc_attr( __( 'This will clear all the Out Stock Threshold values that have been set in all products', ATUM_TEXT_DOMAIN ) ),
@@ -324,7 +324,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Decimals in stock quantity', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Enter the number of decimal places your shop needs in stock quantity fields. Set 0 to keep or 1 and higher to override the default WooCommerce's NO decimal setting.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Enter the number of decimal places your shop needs in stock quantity fields. Set 0 to disable decimals or 1 and higher to override the default WooCommerce's NO decimal setting. Example: 2 would allow 2 decimals (1.00).", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(
@@ -336,7 +336,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Stock quantity steps', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Tell WooCommerce how much to increase/decrease the stock quantity value in frontend with each arrow click. Example: If set to '0.5'; the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Tells WooCommerce how much to increase/decrease the stock quantity value in frontend number inputs with each arrow click. Example: If set to '0.5', the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(

@@ -5,7 +5,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Lists
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           0.0.1
  */
@@ -40,7 +40,7 @@ class ListTable extends AtumListTable {
 		'_inbound_stock',
 		'_stock_on_hold',
 		'_reserved_stock',
-		'calc_back_orders',
+		'_calc_backorders',
 		'_sold_today',
 		'_customer_returns',
 		'_warehouse_damage',
@@ -85,6 +85,7 @@ class ListTable extends AtumListTable {
 			'_sales_last_days',
 			'_out_stock_days',
 			'_lost_sales',
+			'_calc_backorders',
 		),
 	);
 
@@ -154,6 +155,10 @@ class ListTable extends AtumListTable {
 			'type'  => 'NUMERIC',
 			'field' => 'lost_sales',
 		),
+		'_calc_backorders'     => array(
+			'type'  => 'NUMERIC',
+			'field' => 'calc_backorders',
+		),
 	);
 
 	/**
@@ -215,7 +220,7 @@ class ListTable extends AtumListTable {
 					'_inbound_stock',
 					'_stock_on_hold',
 					'_reserved_stock',
-					'calc_back_orders',
+					'_calc_backorders',
 					'_sold_today',
 				),
 			),
@@ -261,7 +266,7 @@ class ListTable extends AtumListTable {
 			'_inbound_stock'    => 0,
 			'_stock_on_hold'    => 0,
 			'_reserved_stock'   => 0,
-			'calc_back_orders'  => 0,
+			'_calc_backorders'  => 0,
 			'_sold_today'       => 0,
 			'_customer_returns' => 0,
 			'_warehouse_damage' => 0,
@@ -319,12 +324,12 @@ class ListTable extends AtumListTable {
 			'calc_gross_profit'    => __( 'Gross Profit', ATUM_TEXT_DOMAIN ),
 			'_weight'              => __( 'Weight', ATUM_TEXT_DOMAIN ),
 			'_stock'               => __( 'Current Stock', ATUM_TEXT_DOMAIN ),
+			'_calc_backorders'     => __( 'Backorders', ATUM_TEXT_DOMAIN ),
+			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'_out_stock_threshold' => __( 'Out of Stock Threshold', ATUM_TEXT_DOMAIN ),
 			'_low_stock_threshold' => __( 'Low Stock Threshold', ATUM_TEXT_DOMAIN ),
-			'_inbound_stock'       => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'_stock_on_hold'       => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'_reserved_stock'      => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'calc_back_orders'     => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'_sold_today'          => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'_customer_returns'    => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'_warehouse_damage'    => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
@@ -378,7 +383,7 @@ class ListTable extends AtumListTable {
 			'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
 			'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
 			'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'back_orders'       => __( 'Backorders', ATUM_TEXT_DOMAIN ),
+			'backorders'        => __( 'Backorders', ATUM_TEXT_DOMAIN ),
 			'sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
 			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
 			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
@@ -752,27 +757,56 @@ class ListTable extends AtumListTable {
 				case 'best_seller':
 					$dates_where = '';
 
-					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= " AND posts.post_date >= '" . $_REQUEST['date_from'] . "' ";
-					}
+					if ( Helpers::is_using_hpos_tables() ) {
 
-					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= " AND posts.post_date < '" . $_REQUEST['date_to'] . "' ";
-					}
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= " AND orders.date_created_gmt >= '" . $_REQUEST['date_from'] . "' ";
+						}
 
-					$sql = "
-						SELECT order_item_meta__product_id.meta_value as product_id, order_item_meta__variation_id.meta_value as variation_id,
-						SUM( order_item_meta__qty.meta_value) as order_item_qty
-						FROM $wpdb->posts AS posts 
-						INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
-						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = '_product_id') 
-						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__variation_id ON (order_items.order_item_id = order_item_meta__variation_id.order_item_id)  AND (order_item_meta__variation_id.meta_key = '_variation_id') 
-						INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
-						WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
-						AND posts.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
-						$dates_where
-						GROUP BY variation_id, product_id ORDER BY order_item_qty DESC
-					";
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= " AND orders.date_created_gmt < '" . $_REQUEST['date_to'] . "' ";
+						}
+
+						$sql = "
+							SELECT order_item_meta__product_id.meta_value as product_id, order_item_meta__variation_id.meta_value as variation_id,
+							SUM( order_item_meta__qty.meta_value) as order_item_qty
+							FROM {$wpdb->prefix}wc_orders AS orders 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (orders.id = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id) AND (order_item_meta__product_id.meta_key = '_product_id') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__variation_id ON (order_items.order_item_id = order_item_meta__variation_id.order_item_id) AND (order_item_meta__variation_id.meta_key = '_variation_id') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id) AND (order_item_meta__qty.meta_key = '_qty') 
+							WHERE orders.type IN ( 'shop_order', 'shop_order_refund' )
+							AND orders.status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
+							$dates_where
+							GROUP BY variation_id, product_id ORDER BY order_item_qty DESC
+						";
+
+					}
+					else {
+
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= " AND posts.post_date >= '" . $_REQUEST['date_from'] . "' ";
+						}
+
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= " AND posts.post_date < '" . $_REQUEST['date_to'] . "' ";
+						}
+
+						$sql = "
+							SELECT order_item_meta__product_id.meta_value as product_id, order_item_meta__variation_id.meta_value as variation_id,
+							SUM( order_item_meta__qty.meta_value) as order_item_qty
+							FROM $wpdb->posts AS posts 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON (posts.ID = order_items.order_id) AND (order_items.order_item_type = 'line_item') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__product_id ON (order_items.order_item_id = order_item_meta__product_id.order_item_id)  AND (order_item_meta__product_id.meta_key = '_product_id') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__variation_id ON (order_items.order_item_id = order_item_meta__variation_id.order_item_id)  AND (order_item_meta__variation_id.meta_key = '_variation_id') 
+							INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_item_meta__qty ON (order_items.order_item_id = order_item_meta__qty.order_item_id)  AND (order_item_meta__qty.meta_key = '_qty') 
+							WHERE posts.post_type IN ( 'shop_order', 'shop_order_refund' )
+							AND posts.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
+							$dates_where
+							GROUP BY variation_id, product_id ORDER BY order_item_qty DESC
+						";
+
+					}
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -801,26 +835,54 @@ class ListTable extends AtumListTable {
 				case 'worst_seller':
 					$dates_where = '';
 
-					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= ' AND ord.post_date >= "' . esc_attr( $_REQUEST['date_from'] ) . '" ';
-					}
+					if ( Helpers::is_using_hpos_tables() ) {
 
-					if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
-						$dates_where .= ' AND ord.post_date < "' . esc_attr( $_REQUEST['date_to'] ) . '" ';
-					}
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= ' AND ord.date_created_gmt >= "' . esc_attr( $_REQUEST['date_from'] ) . '" ';
+						}
 
-					$sql = "
-						SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
-						FROM $wpdb->posts pr 
-						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
-						LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
-						LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-						LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
-						WHERE (pr.post_type IN ('product', 'product_variation')
-						AND ord.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
-						$dates_where ) OR ord.post_date IS NULL
-						GROUP BY product_id order by qty ASC;
-					";
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= ' AND ord.date_created_gmt < "' . esc_attr( $_REQUEST['date_to'] ) . '" ';
+						}
+
+						$sql = "
+							SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+							FROM $wpdb->posts pr 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+							LEFT JOIN {$wpdb->prefix}wc_orders ord ON (order_items.order_id = ord.id)
+							WHERE (pr.post_type IN ('product', 'product_variation')
+							AND ord.status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
+							$dates_where ) OR ord.date_created_gmt IS NULL
+							GROUP BY product_id ORDER BY qty ASC;
+						";
+
+					}
+					else {
+
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= ' AND ord.post_date >= "' . esc_attr( $_REQUEST['date_from'] ) . '" ';
+						}
+
+						if ( isset( $_REQUEST['date_from'] ) && ! empty( $_REQUEST['date_from'] ) ) {
+							$dates_where .= ' AND ord.post_date < "' . esc_attr( $_REQUEST['date_to'] ) . '" ';
+						}
+
+						$sql = "
+							SELECT pr.ID product_id, SUM(meta_qty.meta_value) qty
+							FROM $wpdb->posts pr 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
+							LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
+							LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
+							WHERE (pr.post_type IN ('product', 'product_variation')
+							AND ord.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
+							$dates_where ) OR ord.post_date IS NULL
+							GROUP BY product_id order by qty ASC;
+						";
+
+					}
 
 					$product_results = $wpdb->get_results( $sql, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -896,13 +958,20 @@ class ListTable extends AtumListTable {
 					break;
 
 				case 'stock_on_hold':
+					if ( Helpers::is_using_hpos_tables() ) {
+						$orders_sql = "SELECT `id` FROM `{$wpdb->prefix}wc_orders` WHERE `type` = 'shop_order' AND `status` IN ('wc-pending', 'wc-on-hold')";
+					}
+					else {
+						$orders_sql = "SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')";
+					}
+
 					$sql = "
 						SELECT product_id, SUM(qty) AS qty FROM (
 							SELECT  MAX(CAST(omp.`meta_value` AS SIGNED)) AS product_id, omq.`meta_value` AS qty FROM `{$wpdb->prefix}woocommerce_order_items` oi			
 							LEFT JOIN `$wpdb->order_itemmeta` omq ON omq.`order_item_id` = oi.`order_item_id`
 							LEFT JOIN `$wpdb->order_itemmeta` omp ON omp.`order_item_id` = oi.`order_item_id`			  
 							WHERE `order_id` IN (
-								SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-pending', 'wc-on-hold')
+								$orders_sql
 							)
 							AND omq.`meta_key` = '_qty' AND `order_item_type` = 'line_item'
 							AND (omp.`meta_key` IN ('_product_id', '_variation_id' )) 
@@ -951,7 +1020,7 @@ class ListTable extends AtumListTable {
 					$filtered_products = $this->get_log_products( 'reserved-stock', 'pending' );
 					break;
 
-				case 'back_orders':
+				case 'backorders':
 					// Avoid infinite loop of recalls.
 					remove_action( 'pre_get_posts', array( $this, 'do_extra_filter' ) );
 

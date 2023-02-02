@@ -4,7 +4,7 @@
  *
  * @package     Atum
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @since 0.0.1
  */
@@ -23,6 +23,7 @@ use Atum\Inc\Main;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Suppliers\Suppliers;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 
 
 class Bootstrap {
@@ -60,6 +61,9 @@ class Bootstrap {
 
 		// Check all the requirements before bootstraping.
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
+
+		// Register compatibility with HPOS.
+		add_action( 'before_woocommerce_init', array( $this, 'register_hpos_compatibility' ) );
 
 		// Uninstallation tasks.
 		register_uninstall_hook( ATUM_PATH . 'atum-stock-manager-for-woocommerce.php', array( __CLASS__, 'uninstall' ) );
@@ -176,6 +180,17 @@ class Bootstrap {
 			throw new AtumException( 'woocommerce_min_version_required', sprintf( __( 'ATUM requires WooCommerce version ' . ATUM_WC_MINIMUM_VERSION . ' or greater. Please, %1$supdate now%2$s.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php?force-check=1' ) ) . '">', '</a>' ), self::DEPENDENCIES_UNSATISFIED ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 		}
 
+	}
+
+	/**
+	 * Register ATUM's compatibility with HPOS.
+	 *
+	 * @since 1.9.23
+	 */
+	public function register_hpos_compatibility() {
+		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			FeaturesUtil::declare_compatibility( 'custom_order_tables', ATUM_PATH . 'atum-stock-manager-for-woocommerce.php' );
+		}
 	}
 
 	/**

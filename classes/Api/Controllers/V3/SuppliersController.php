@@ -5,7 +5,7 @@
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3
@@ -407,7 +407,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'type'              => 'string',
 				'enum'              => $this->get_supplier_post_statuses(),
 				'sanitize_callback' => 'sanitize_key',
-				'validate_callback' => 'rest_validate_request_arg',
+				'validate_callback' => array( $this, 'validate_status_param' ),
 			),
 			'currency'        => array(
 				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
@@ -610,7 +610,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		$args['post_parent__in']     = $request['parent'];
 		$args['post_parent__not_in'] = $request['parent_exclude'];
 		$args['s']                   = $request['search'];
-		$args['post_status']         = $request['status'];
+		$args['post_status']         = explode( ',', $request['status'] ); // Allow passing mutiple statuses separated by commas.
 
 		// When filtering by currency, get all the suppliers that are using the specified currency.
 		if ( ! empty( $request['currency'] ) ) {
@@ -1394,6 +1394,45 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	 */
 	private function get_supplier_post_statuses() {
 		return apply_filters( 'atum/api/suppliers/statuses', array_merge( array_keys( get_post_statuses() ), [ 'any', 'trash' ] ) );
+	}
+
+	/**
+	 * Special validation for the status param (allowing multiple statuses at once)
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param mixed            $value
+	 * @param \WP_REST_Request $request
+	 * @param string           $param
+	 *
+	 * @return true|\WP_Error
+	 */
+	public function validate_status_param( $value, $request, $param ) {
+
+		if ( strpos( $value, ',' ) === FALSE ) {
+			return rest_validate_request_arg( $value, $request, $param );
+		}
+
+		$attributes = $request->get_attributes();
+		if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
+			return TRUE;
+		}
+		$args = $attributes['args'][ $param ];
+
+		$statuses = explode( ',', $value );
+
+		foreach ( $statuses as $status ) {
+
+			$valid_status = rest_validate_value_from_schema( $status, $args, $param );
+
+			if ( ! $valid_status || is_wp_error( $valid_status ) ) {
+				return $valid_status;
+			}
+
+		}
+
+		return TRUE;
+
 	}
 
 }

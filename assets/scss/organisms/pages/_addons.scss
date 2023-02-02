@@ -2,367 +2,511 @@
 // Atum add-ons
 //---------------
 
+@use "sass:math";
+
+$header-bg:                 var(--blue-light);
+$header-height:             300px;
+
+html {
+	scroll-behavior: smooth;
+}
+
 #wpbody-content {
 	padding-bottom: 0;
 }
 
 .atum-addons {
+	margin-bottom: 60px;
 	
-	h1 {
-		margin-bottom: $grid-gutter-width/2;
+	&-wrap {
+		padding-right: 20px;
 	}
 	
 	a {
 		text-decoration: none;
 	}
 	
-	@media all and (min-width: 481px) {
-		.themes {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: flex-start;
-		}
-	}
-	
-	.theme {
+	// Dashboard Header
+	&__header {
+		position: relative;
+		height: $header-height;
+		background: $header-bg url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
+		background-size: cover;
+		@include vertical-align-flex();
+		flex-wrap: wrap;
+		text-align: center;
+		margin-bottom: math.div($grid-gutter-width, 2);
+		margin-left: -20px;
 		
-		.theme-screenshot {
-			position: relative;
-			cursor: default;
-			background-size: cover !important;
-			background-position: center !important;
-			background-repeat: no-repeat !important;
-			
-			.label {
-				background-color: $secondary;
-				float: right;
-				margin: $grid-gutter-width/3;
-				border-radius: 15px;
-				padding: 2px 9px;
-				color: $white;
-				font-size: 11px;
-				text-align: center;
-				text-transform: uppercase;
-				
-				&.label-warning {
-					background-color: $warning;
-				}
-			}
+		&-logo {
+			flex-grow: 1;
+			width: 100%;
 		}
 		
-		.theme-name {
-			position: relative;
-			cursor: default;
+		h3 {
+			color: var(--main-title);
+			width: 734px;
+			max-width: 90%;
+			margin: auto;
+			line-height: 1.2;
+			font-weight: 200;
 		}
 		
-		.theme-actions {
-			height: 39px;
-			right: 27px;
-			transform: translate3d(0, -50%, 0);
-			transition: 0.2s ease-in-out;
+		&-buttons {
+			padding: math.div($grid-gutter-width, 2);
 			text-align: center;
 			
-			&.valid, &.invalid, &.inactive, &.coming-soon {
-				opacity: 1;
-				
-				span {
-					display: inline-block;
-					margin-top: 11px;
-					font-size: 12px;
-					color: $white;
-					font-weight: normal;
-				}
-				
-				a {
-					color: $white;
-				}
-				
+			.btn {
+				text-transform: uppercase;
+				font-size: 12px;
 			}
 			
-			&.valid {
-				background-color: $tertiary;
+			.btn-outline-primary {
+				background-color: $white;
 				
-				+ .show-key {
-					opacity: 0;
-				}
-				
-				&.not-installed {
-					
-					background-color: $tertiary;
-					right: 0;
-					width: 105px;
-					height: 50px;
-					padding: 0;
-					border: none;
-				}
-				
-				&:not(.not-installed) {
-					+ .show-key {
-						i {
-							color: $tertiary;
-						}
-					}
+				&:hover {
+					color: $primary;
+					background-color: rgba($white, .3);
 				}
 			}
 			
-			&.invalid {
-				span {
-					color: $danger;
-				}
+			@include tablet-max {
+				right: 0;
+			}
+		}
+		
+		img {
+			max-width: 320px;
+			margin-bottom: 5px;
+			
+			@include mobile-max {
+				max-width: 220px;
+			}
+		}
+		
+		&-notice {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			padding-left: math.div($grid-gutter-width, 2);
+			padding-bottom: 5px;
+			font-size: 11px;
+			color: var(--main-title);
+			font-weight: 300;
+			
+			span {
+				color: var(--primary);
+				margin-right: 5px;
 			}
 			
-			&.inactive {
-				background-color: $secondary;
+			.wc-rating-link {
+				color: var(--primary);
 			}
 			
-			&.not-installed {
-				background-color: transparent;
-			}
-			
-			&.coming-soon {
-				background-color: lighten($primary, 10%);
+			@include tablet-max {
 				right: 0;
 			}
 			
-			.remove-key {
-				vertical-align: text-top;
-				margin-left: 5px;
-				font-size: 14px;
-				
-				&:focus {
-					box-shadow: none;
-					outline: none;
-				}
-				
-				&:hover {
-					color: $danger;
-				}
+			@include mobile-max {
+				font-size: 10px;
+				line-height: 1.3;
 			}
 			
 		}
 		
-		.show-key {
-			position: absolute;
-			right: 0;
-			bottom: 0;
-			height: 49px;
-			padding: 0 3px;
-			border-left: 1px solid rgba($black, 0.05);
-			cursor: pointer;
-			transform: translateX(100%);
-			
-			&, i {
-				transition: all 0.2s ease-in-out;
-			}
-			
-			i {
-				position: relative;
-				font-size: 17px;
-				top: 17px;
-				color: $primary;
-			}
-			
-		}
+	}
+	
+	.atum-addon {
+		margin-top: math.div($grid-gutter-width, 3) * 2;
+		background-color: var(--dash-card-bg);
+		display: flex;
+		align-items: stretch;
+		min-height: 222px;
+		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
 		
-		&:hover, &.inactive, &.invalid {
-			
-			.theme-actions {
-				&:not(.coming-soon):not(.inactive):not(.not-installed):not(.invalid) {
-					opacity: 0;
-					transform: translate3d(100%, -50%, 0);
-				}
-			}
-			
-			.more-details {
-				opacity: 0 !important;
-			}
-			
-			.theme-screenshot {
-				&:hover {
-					.addon-details {
-						transform: translateY(0);
-					}
-					
-					.more-details {
-						opacity: 1 !important;
-					}
-				}
-			}
-			
-			.show-key {
-				opacity: 1 !important;
-				background-color: lighten($primary, 10%);
-				transform: translateX(0);
-				
-				i {
-					color: $white !important;
-				}
-			}
-			
-		}
-		
-		&.invalid.with-key {
-			border-color: $danger;
-		}
-		
-		.more-details {
-			border-radius: 0;
-			top: 50%;
-			transform: translateY(-50%);
-			transition: opacity 0.3s ease-in-out;
-		}
-		
-		.addon-details {
-			top: 0;
-			bottom: 0;
-			background-color: rgba($black, 0.7);
-			position: absolute;
-			color: $white;
-			padding: 10px;
+		> .more-details {
+			position: relative;
+			width: 300px;
+			min-width: 300px;
 			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			align-items: center;
-			transform: translateY(-101%);
-			transition: transform 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+			overflow: hidden;
 			
-			> p {
-				height: 65%;
-				overflow: hidden;
+			&:hover .addon-thumb {
+				transform: scale(1.1);
 			}
 			
-			.more-details {
-				position: static;
-				transform: none;
-				transition-delay: 0.2s;
-				display: block;
+			.label {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+				padding: 3px 9px;
+				color: $white;
+				border-radius: 4px;
+				z-index: 1;
+				text-transform: uppercase;
 				font-size: 12px;
-				padding: 10px 14px;
-			}
-		}
-		
-		.addon-key {
-			display: none;
-			
-			.wrapper {
-				display: flex;
-				flex-wrap: nowrap;
-				align-items: center;
-				padding: 5px;
-				border-top: 1px solid $wp-gray-4;
-				position: relative;
-			}
-			
-			input[type=text] {
-				width: 80%;
-				margin-right: 4px;
-				height: 28px;
-				border-radius: 3px;
-				font-size: 12px;
-				border-radius: 0;
+				font-weight: 300;
 				
-				&:focus {
-					box-shadow: none;
+				&.coming-soon {
+					background: $secondary;
 				}
 				
+				&.not-installed {
+					background: $primary;
+				}
 				&.valid {
-					border-color: $tertiary;
+					background: $tertiary;
 				}
-				
-				&.inactive {
-					border-color: $secondary;
+				&.inactive, &.invalid, &.disabled, &.expired, &.no-key {
+					background: $danger;
 				}
-				
-				&.invalid {
-					border-color: $danger;
-				}
-			}
-			
-		}
-		
-		.button {
-			border: none;
-			box-shadow: none;
-			text-shadow: none;
-			font-weight: normal;
-			background-color: $primary;
-			color: $white;
-			border-radius: 0;
-			
-			&.install-addon {
-				background-color: $tertiary;
-				height: 100%;
-				width: 100%;
-				margin-left: 0;
-				
-				&:hover {
-					background-color: lighten($tertiary, 10%);
-				}
-			}
-			
-			&:disabled {
-				background-color: $primary !important;
-				text-shadow: none !important;
-				color: $white !important;
-				opacity: 0.6;
-			}
-			
-			&:hover {
-				background-color: lighten($primary, 10%);
-			}
-		}
-		
-		&.active {
-			.addon-key {
-				background-color: $blue-dark;
-				border-top-color: lighten($blue-dark, 25%);
 			}
 		}
 		
 		.atum-loading {
-			right: 24px;
-			top: 8px;
+			right: 152px;
+			bottom: 3px;
 			@include loader(18px, $primary, 3px, 1s);
 		}
 		
-		.theme-actions {
-			&.valid {
-				.atum-loading {
-					border-color: rgba($white, 0.25);
-					border-top-color: $white;
-					top: 14px;
-					right: 38px;
+	}
+	
+	.addon-thumb {
+		width: 100%;
+		background-size: cover;
+		background-position: top center;
+		border-bottom-left-radius: 8px;
+		border-top-left-radius: 8px;
+		transition: .2s ease-in-out;
+	}
+	
+	.addon-details {
+		padding: 15px 20px;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	.addon-header {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 10px 0;
+		
+		h2 {
+			font-size: 18px;
+			color: var(--bm_text_color);
+			margin: 0;
+		}
+		
+		.label {
+			background-color: $secondary;
+			border-radius: 15px;
+			padding: 2px 9px;
+			color: $white;
+			font-size: 11px;
+			line-height: 24px;
+			text-align: center;
+			
+			&.label-warning {
+				background-color: $warning;
+			}
+		}
+	}
+	
+	.addon-description {
+		margin-bottom: math.div($grid-gutter-width, 2);
+		flex-grow: 1;
+		
+		p {
+			margin: 0;
+			flex-grow: 1;
+			font-size: 15px;
+			color: var(--bm_text_color);
+		}
+	}
+	
+	.alert {
+		font-size: 12px;
+		padding: 0.3rem calc( 0.75rem + 8px );
+		margin-bottom: .3rem;
+	}
+	
+	.addon-footer {
+		.actions {
+			
+			.btn {
+				font-size: .75rem;
+				padding: 0.313rem 0;
+				width: 144px;
+				margin-right: 10px;
+				text-transform: uppercase;
+				&.install {
+					padding-left: .7rem;
+					padding-right: .7rem;
+					width: auto;
+				}
+			}
+			input {
+				font-size: .75rem;
+			}
+			.cancel-action {
+				background-color: transparent;
+				width: 80px;
+				&:hover {
+					background-color: buttonface;
 				}
 			}
 		}
 		
-		@include tablet-max-wp {
+		.addon-key{
 			
-			.button {
-				margin-bottom: 0;
+			display: none;
+			> .wrapper {
+				display: flex;
+				align-items: flex-end;
+				position: relative;
+			}
+		}
+		.license-key {
+			flex-grow: 1;
+			margin-right: 10px;
+		}
+		.license-info {
+			margin-right: 10px;
+			
+			&:first-child {
+				flex-grow: 1;
 			}
 			
-			input[type=text] {
-				height: 29px;
+			.license-label {
+				font-size: .75rem;
+				font-weight: 600;
 			}
 			
-			.theme-actions {
-				display: block;
-				
-				&.valid, &.invalid, &.inactive {
-					span {
-						margin-top: 10px;
-					}
-				}
-				
-				.button {
-					margin: 5px 0 0;
-				}
+			.license-key, .expires {
+				background-color: var(--atum-table-bg2);
+				font-size: 13px;
+				font-weight: 400;
+				line-height: 1.47;
+				padding: 4px 13px;
+				border-radius: 5px;
 			}
-			
 		}
 		
 	}
+	
+	@include tablet-max-wp {
+		
+		.atum-addon {
+			height: 300px;
+		}
+		
+		.alert {
+			display: block;
+		}
+		.addon-footer .actions {
+			display: flex;
+			flex-direction: column;
+			.btn {
+				width: 100%;
+				margin-bottom: .3rem;
+			}
+			.addon-key > .wrapper {
+				flex-direction: column;
+				
+				.license-info {
+					width: 100%;
+					> div {
+						display: inline-block;
+					}
+					
+				}
+				
+				input.license-key {
+					width: 100%;
+					margin-bottom: 0.3rem;
+				}
+			}
+		}
+	}
+	
+}
+
+.list-table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0;
+	background-color:  var(--atum-table-bg);
+	box-shadow: 0 4px 0 0 $gray-200;
+	border-radius: 8px;
+	padding-left: 10px;
+	
+	
+	@include tablet-max-wp {
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-bottom: 15px;
+		border-bottom: none;
+	}
+	
+	@include mobile-max {
+		margin: 0 11px 15px;
+		
+		&.no-margin {
+			margin: 0 11px 15px;
+		}
+	}
+	
+	.nav-container-box {
+		flex-grow: 1;
+		position: relative;
+		overflow: hidden;
+	}
+	
+}
+
+.nav-with-scroll-effect {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	cursor: grab;
+	overflow-x: hidden;
+	overflow-y: visible;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	-webkit-overflow-scrolling: touch;
+	white-space: nowrap;
+	width: 100%;
+	float: left;
+	margin: 0 11px 0 0;
+	
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	
+	.subsubsub {
+		margin: 0;
+	}
+	
+	&.dragging {
+		a {
+			pointer-events: none;
+		}
+	}
+	
+	.input-group {
+		position: static;
+	}
+	
+}
+
+.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+	width: 100px;
+	position: absolute;
+	z-index: 998;
+	height: 49px;
+	pointer-events: none;
+	background-repeat: no-repeat;
+}
+
+.overflow-opacity-effect-right {
+	right: 0;
+	background-image: var(--overflow-opacity-rigth);
+}
+
+.overflow-opacity-effect-left {
+	display: none;
+	left: 0;
+	background-image: var(--overflow-opacity-left);
+}
+
+
+.subsubsub {
+	background-color:  var(--atum-table-bg);
+	width: 100%;
+	position: relative;
+	font-size: 16px;
+	letter-spacing: 0.4px;
+	font-weight: bold;
+	text-transform: capitalize;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	
+	&.extend-list-table {
+		width: inherit;
+		margin: 10px 0 !important;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		border-radius: 0;
+		border-bottom: 0;
+		
+		li {
+			margin-right: 15px;
+			color: var(--atum-table-views-tabs);
+			text-transform: uppercase;
+			padding: 0;
+			
+			span {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-left: 3px;
+				border-radius: 5px;
+				line-height: 32px;
+				cursor: pointer;
+				
+				&.active {
+					border-radius: 5px;
+					background-color: var(--primary);
+					font-size: 16px;
+					padding: 0 10px;
+					font-weight: bold;
+					letter-spacing: 0.4px;
+					color:  var(--atum-table-views-tabs-active-text);
+					cursor: default;
+					
+					&:hover {
+						color:  var(--atum-table-views-tabs-active-text);
+					}
+					
+				}
+				
+				&:hover {
+					color: var(--primary);
+				}
+				
+			}
+			
+		}
+		
+		@include mobile-max {
+			
+			&:first-child {
+				
+				li {
+					
+					span, span:active {
+						margin-left: 0;
+					}
+				}
+			}
+		}
+	}
+	
+	@include tablet-max-wp{
+		margin: 10px 10px;
+		flex-wrap: wrap;
+		justify-content: center;
+		border-bottom: none;
+	}
+	
+	@include mobile-max{
+		justify-content: flex-start;
+	}
+	
 	
 }
 

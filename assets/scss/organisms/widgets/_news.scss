@@ -2,6 +2,8 @@
 // "News" widget
 //-----------------
 
+@use "sass:math";
+
 .atum_news_widget {
 	.widget-wrapper {
 		overflow: hidden !important;
@@ -39,7 +41,7 @@
 	
 	.post-thumb {
 		position: relative;
-		margin-right: $grid-gutter-width/2;
+		margin-right: math.div($grid-gutter-width, 2);
 		
 		.thumb {
 			overflow: hidden;

@@ -79,14 +79,26 @@ defined( 'ABSPATH' ) || die;
 
 					<?php $enabled_sticky_columns = Helpers::get_atum_user_meta( 'enabled_sc_sticky_columns' ); ?>
 					<button type="button" class="sticky-columns-button atum-tooltip <?php echo esc_attr( 'yes' === $enabled_sticky_columns ? 'active' : '' ); ?>"
-						title="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom">
-						<i class="atmi-view-sidebar-left"></i>
+						title="<?php esc_attr_e( 'Toggle Sticky Columns', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom"
+						data-feature="sticky-columns" data-save-meta="1"
+					>
+						<i class="atum-icon atmi-view-sidebar-left"></i>
 					</button>
 
 					<?php $enabled_sticky_header = Helpers::get_atum_user_meta( 'enabled_sc_sticky_header' ); ?>
 					<button type="button" class="sticky-header-button atum-tooltip <?php echo esc_attr( 'yes' === $enabled_sticky_header ? 'active' : '' ); ?>"
-						title="<?php esc_attr_e( 'Toggle Sticky Header', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom">
-						<i class="atmi-view-sticky-header"></i>
+						title="<?php esc_attr_e( 'Toggle Sticky Header', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom"
+						data-feature="sticky-header" data-save-meta="1"
+					>
+						<i class="atum-icon atmi-view-sticky-header"></i>
+					</button>
+
+					<?php $expandable_rows = Helpers::get_option( 'expandable_rows', 'no' ); ?>
+					<button type="button" class="expand-button atum-tooltip <?php echo esc_attr( 'yes' === $expandable_rows ? 'active' : '' ); ?>"
+						title="<?php esc_attr_e( 'Expand/Collapse all the rows', ATUM_TEXT_DOMAIN ) ?>" data-bs-placement="bottom"
+						data-feature="expand"
+					>
+						<i class="atum-icon atmi-wc-expand"></i>
 					</button>
 
 				</div>

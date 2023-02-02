@@ -34,6 +34,7 @@ if ( empty( $variation ) ) : ?>
 				<?php disabled( AtumCapabilities::current_user_can( 'edit_barcode' ), FALSE ) ?>
 				<?php echo apply_filters( 'atum/views/meta_boxes/barcode_field/barcode_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			>
+			<?php echo wc_help_tip( esc_attr__( 'Barcode field is currently informational only. We want our users to start filling it in to be ready for the Mobile App scanning feature when released', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</span>
 	</p>
 

@@ -5,7 +5,7 @@
  *
  * @package     Components
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @since       1.5.8
  */
@@ -68,16 +68,16 @@ class AtumQueues {
 	 */
 	private function __construct() {
 
-		add_action( 'init', array( $this, 'check_queues' ), PHP_INT_MAX );
+		add_action( 'admin_init', array( $this, 'check_queues' ), PHP_INT_MAX );
 
 		// Add the ATUM's recurring hooks.
-		add_action( 'atum/update_expiring_product_props', array( $this, 'update_expiring_product_props_action' ) );
+		add_action( 'atum/update_expiring_product_props', array( $this, 'action_update_expiring_product_props' ) );
 
 		// Add the sales calc recurring hook.
-		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'update_last_sales_calc_props' ) );
+		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'action_update_last_sales_calc_props' ) );
 
 		// Add the tmp folders clean up hook.
-		add_action( 'atum/clean_up_tmp_folders', array( $this, 'clean_up_tmp_folders' ) );
+		add_action( 'atum/clean_up_tmp_folders', array( $this, 'action_clean_up_tmp_folders' ) );
 
 		// Add the ATUM Queues async hooks listeners.
 		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
@@ -141,7 +141,7 @@ class AtumQueues {
 
 			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );
 
-			if ( is_null( $next_scheduled_date ) && ! as_next_scheduled_action( $hook_name, $schedule_args ) ) {
+			if ( is_null( $next_scheduled_date ) ) {
 				$wc_queue->cancel_all( $hook_name, $schedule_args ); // Ensure all the actions are cancelled before adding a new one.
 				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args );
 			}
@@ -157,7 +157,7 @@ class AtumQueues {
 	 *
 	 * @since 1.5.8
 	 */
-	public function update_expiring_product_props_action( $time = '3 hours ago' ) {
+	public function action_update_expiring_product_props( $time = '3 hours ago' ) {
 
 		// Get all the products that weren't updated during the last 3 hours.
 		global $wpdb;
@@ -177,6 +177,8 @@ class AtumQueues {
 		$outdated_products = $wpdb->get_col( $sql );
 		// phpcs:enable
 
+		Helpers::adjust_long_process_settings(); // Try to avoid timeout issues.
+
 		// TODO: WHAT ABOUT ILs AND PLs PROPS? IS UPDATING THEM ALSO?
 		foreach ( $outdated_products as $product_id ) {
 			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
@@ -185,11 +187,11 @@ class AtumQueues {
 	}
 
 	/**
-	 * Update sales calculated product properties for products sold since the last cron execution.
+	 * Update sales calculated product properties for products sold since the last CRON execution.
 	 *
 	 * @since 1.9.7
 	 */
-	public function update_last_sales_calc_props() {
+	public function action_update_last_sales_calc_props() {
 
 		global $wpdb;
 
@@ -200,23 +202,47 @@ class AtumQueues {
 			$last_executed = $wpdb->get_var( "SELECT MAX(sales_update_date) FROM $atum_product_data_table;" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
 
-		$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
+		$is_using_hpos_tables = Helpers::is_using_hpos_tables();
 
-		$str_sql = "
-			SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
- 				FROM `{$wpdb->posts}` o
-					INNER JOIN order_item_table oi ON o.ID = oi.order_id
-					LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
-					LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
-					INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
-				WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
-					$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
-		";
+		if ( $is_using_hpos_tables ) {
+
+			$date_clause = $last_executed ? $wpdb->prepare( 'AND o.date_updated_gmt >= %s', $last_executed ) : '';
+
+			$str_sql = "
+				SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+	                FROM `{$wpdb->prefix}wc_orders` o
+						INNER JOIN order_item_table oi ON o.id = oi.order_id
+						LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+						LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+						INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
+					WHERE o.type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+						$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+			";
+
+		}
+		else {
+
+			$date_clause = $last_executed ? $wpdb->prepare( 'AND o.post_modified_gmt >= %s', $last_executed ) : '';
+
+			$str_sql = "
+				SELECT DISTINCT IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) product_id
+	                FROM `{$wpdb->posts}` o
+						INNER JOIN order_item_table oi ON o.ID = oi.order_id
+						LEFT JOIN order_itemmeta_table oimp ON oi.order_item_id = oimp.order_item_id AND oimp.meta_key = '_product_id'
+						LEFT JOIN order_itemmeta_table oimv ON oi.order_item_id = oimv.order_item_id AND oimv.meta_key = '_variation_id'
+						INNER JOIN $atum_product_data_table apd ON 	IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) = apd.product_id			
+					WHERE o.post_type = '%s' AND IF( 0 = IFNULL( oimv.meta_value, 0), oimp.meta_value, oimv.meta_value) IS NOT NULL
+						$date_clause AND ( apd.sales_update_date < '$last_executed' OR apd.sales_update_date IS NULL );
+			";
+
+		}
 
 		$order_items_table    = "{$wpdb->prefix}atum_order_items";
 		$order_itemmeta_table = "{$wpdb->prefix}atum_order_itemmeta";
 
 		$atum_orders_str = str_replace( 'order_itemmeta_table', $order_itemmeta_table, str_replace( 'order_item_table', $order_items_table, $str_sql ) );
+
+		Helpers::adjust_long_process_settings(); // Try to avoid timeout issues.
 
 		if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
 
@@ -224,10 +250,8 @@ class AtumQueues {
 			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, PurchaseOrders::POST_TYPE ) );
 
 			foreach ( $products as $product_id ) {
-
 				$product = Helpers::get_atum_product( $product_id );
 				AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
-
 			}
 		}
 
@@ -237,11 +261,10 @@ class AtumQueues {
 			$products = $wpdb->get_col( $wpdb->prepare( $atum_orders_str, InventoryLogs::POST_TYPE ) );
 
 			foreach ( $products as $product_id ) {
-
 				$product = Helpers::get_atum_product( $product_id );
 				AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
-
 			}
+
 		}
 
 		// Update wc orders at last to prevent updating sales update data before finishing the process.
@@ -256,8 +279,7 @@ class AtumQueues {
 
 		foreach ( $products as $product_id ) {
 			$product = Helpers::get_atum_product( $product_id );
-			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 1 );
-
+			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product );
 		}
 
 		// Wait until finished.
@@ -270,7 +292,7 @@ class AtumQueues {
 	 *
 	 * @since 1.9.19
 	 */
-	public function clean_up_tmp_folders() {
+	public function action_clean_up_tmp_folders() {
 
 		// Clean up any old full API exportation older than 7 days.
 		$full_export_dir = FullExportController::get_full_export_upload_dir();

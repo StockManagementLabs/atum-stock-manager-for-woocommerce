@@ -1,11 +1,11 @@
 <?php
 /**
- * WC Grouped Product data store: using legacy tables
+ * WC Grouped Product data store
  *
  * @package         Atum\Models
  * @subpackage      DataStores
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.5.0
  */

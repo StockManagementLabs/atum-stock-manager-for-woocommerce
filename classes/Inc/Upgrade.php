@@ -5,7 +5,7 @@
  * @package         Atum
  * @subpackage      Inc
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -173,6 +173,21 @@ class Upgrade {
 		// ** version 1.9.19.1 ** Set the use default checkbox values to the right suppliers.
 		if ( version_compare( $db_version, '1.9.19.1', '<' ) ) {
 			$this->set_supplier_default_checkboxes();
+		}
+
+		// ** version 1.9.20.3 ** Add the committed to WC Orders column to APD.
+		if ( version_compare( $db_version, '1.9.20.3', '<' ) ) {
+			$this->add_committed_stock_to_wc_orders_column();
+		}
+
+		// ** version 1.9.20.4 ** Add the calc_backorders column to APD.
+		if ( version_compare( $db_version, '1.9.20.4', '<' ) ) {
+			$this->add_calc_backorders_column();
+		}
+
+		// ** version 1.9.20.5 ** Update the calc_backorders column data.
+		if ( version_compare( $db_version, '1.9.20.4', '<' ) ) {
+			$this->update_calc_backorders();
 		}
 
 		/**********************
@@ -353,17 +368,9 @@ class Upgrade {
 			'_inheritable'         => 'inheritable',
 		);
 
-		$products = array();
-
-		if ( Helpers::is_using_new_wc_tables() ) {
-			$products = $wpdb->get_results( "SELECT `product_id` AS ID, `type` FROM {$wpdb->prefix}wc_products ORDER BY `product_id`" );
-		}
-
-		if ( empty( $products ) ) {
-			$products = $wpdb->get_results(
-				"SELECT `ID`, `post_type` AS type FROM {$wpdb->posts} WHERE `post_type` IN ('product', 'product_variation') ORDER BY `ID`"
-			);
-		}
+		$products = $wpdb->get_results(
+			"SELECT `ID`, `post_type` AS type FROM {$wpdb->posts} WHERE `post_type` IN ('product', 'product_variation') ORDER BY `ID`"
+		);
 
 		foreach ( $products as $product ) {
 
@@ -1087,6 +1094,81 @@ class Upgrade {
 			update_post_meta( $supplier_id, '_use_default_description', ! $supplier->description ? 'yes' : 'no' );
 			update_post_meta( $supplier_id, '_use_default_terms', ! $supplier->delivery_terms ? 'yes' : 'no' );
 		}
+
+	}
+
+	/**
+	 * Add committed to WC Orders column to ATUM Product data
+	 *
+	 * @since 1.9.20.3
+	 */
+	public function add_committed_stock_to_wc_orders_column() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Avoid adding the column if was already added.
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'committed_to_wc'
+		", DB_NAME, $atum_data_table );
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `committed_to_wc` DOUBLE DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
+
+	/**
+	 * Add the calculated backorders column to ATUM Product data
+	 *
+	 * @since 1.9.20.4
+	 */
+	public function add_calc_backorders_column() {
+
+		global $wpdb;
+
+		// Avoid adding the column if was already added.
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// Avoid adding the column if was already added.
+		$column_exist = $wpdb->prepare( "
+			SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND column_name = 'calc_backorders'
+		", DB_NAME, $atum_data_table );
+
+		// Add the new column to the table.
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $wpdb->get_var( $column_exist ) ) {
+			$wpdb->query( "ALTER TABLE $atum_data_table ADD `calc_backorders` DOUBLE DEFAULT NULL;" ); // phpcs:ignore WordPress.DB.PreparedSQL
+		}
+
+	}
+
+	/**
+	 * Update the calculated backorders data when necessary
+	 *
+	 * @since 1.9.20.5
+	 */
+	public function update_calc_backorders() {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "
+			UPDATE $atum_data_table apd
+			INNER JOIN $wpdb->postmeta pms ON (apd.product_id = pms.post_id AND pms.meta_key = '_stock')
+			INNER JOIN $wpdb->postmeta pmb ON (apd.product_id = pmb.post_id AND pmb.meta_key = '_backorders')
+			SET apd.calc_backorders = pms.meta_value
+			WHERE pmb.meta_value != 'no' AND pms.meta_value <= 0 
+		" );
+		// phpcs:enable
 
 	}
 

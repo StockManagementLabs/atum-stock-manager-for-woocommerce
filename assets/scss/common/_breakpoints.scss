@@ -7,21 +7,17 @@ $bp-retina:     (min-resolution: 150dpi);
 
 
 // Device Widths
-$bp-sm-min:     (min-width: $screen-sm-min);
-$bp-md-min:     (min-width: $screen-md-min);
-$bp-md-min-wp:  (min-width: $screen-md-min-wp);
-$bp-lg-min:     (min-width: $screen-lg-min);
-$bp-xl-min:     (min-width: $screen-xl-min);
+$bp-sm-min:     "(min-width: #{$screen-sm-min})";
+$bp-md-min:     "(min-width: #{$screen-md-min})";
+$bp-md-min-wp:  "(min-width: #{$screen-md-min-wp})";
+$bp-lg-min:     "(min-width: #{$screen-lg-min})";
+$bp-xl-min:     "(min-width: #{$screen-xl-min})";
 
-$bp-xs-max:     (max-width: $screen-xs-max);
-$bp-sm-max:     (max-width: $screen-sm-max);
-$bp-sm-max-wp:  (max-width: $screen-sm-max-wp);
-$bp-md-max:     (max-width: $screen-md-max);
-$bp-lg-max:     (max-width: $screen-lg-max);
-
-$bp-sm-only:    #{$bp-sm-min} and #{$bp-sm-max};
-$bp-md-only:    #{$bp-md-min} and #{$bp-md-max};
-$bp-lg-only:    #{$bp-lg-min} and #{$bp-lg-max};
+$bp-xs-max:     "(max-width: #{$screen-xs-max})";
+$bp-sm-max:     "(max-width: #{$screen-sm-max})";
+$bp-sm-max-wp:  "(max-width: #{$screen-sm-max-wp})";
+$bp-md-max:     "(max-width: #{$screen-md-max})";
+$bp-lg-max:     "(max-width: #{$screen-lg-max})";
 
 
 // Media Mixins
@@ -50,7 +46,7 @@ $bp-lg-only:    #{$bp-lg-min} and #{$bp-lg-max};
 }
 
 @mixin tablet-only {
-	@media all and #{$bp-sm-only} {
+	@media all and #{$bp-sm-min} and #{$bp-sm-max} {
 		@content;
 	}
 }
@@ -74,7 +70,7 @@ $bp-lg-only:    #{$bp-lg-min} and #{$bp-lg-max};
 }
 
 @mixin desktop-only {
-	@media all and #{$bp-md-only} {
+	@media all and #{$bp-md-min} and #{$bp-md-max} {
 		@content;
 	}
 }

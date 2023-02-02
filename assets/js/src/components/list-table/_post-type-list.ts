@@ -63,6 +63,8 @@ export default class PostTypeList {
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
 		this.globals.$atumTable.attr('id', 'list-table');
+
+		this.globals.$atumTable.find( 'thead > tr, tfoot > tr' ).addClass( 'item-heads' );
 		
 		// Add active class row function.
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );

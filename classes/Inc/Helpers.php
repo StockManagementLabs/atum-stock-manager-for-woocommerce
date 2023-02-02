@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Inc
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2022 Stock Management Labs™
+ * @copyright      ©2023 Stock Management Labs™
  *
  * @since          0.0.1
  */
@@ -25,7 +25,6 @@ use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
-use Atum\Legacy\HelpersLegacyTrait;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -35,6 +34,9 @@ use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductSimpleTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
 use AtumLevels\Levels\Products\BOMProductVariationTrait;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery;
+use Automattic\WooCommerce\Utilities\OrderUtil;
 use Westsworld\TimeAgo;
 use Westsworld\TimeAgo\Translations\En;
 
@@ -317,14 +319,14 @@ final class Helpers {
 	 *      @type array|string  $status            Order status(es).
 	 *      @type array         $orders_in         Array of order's IDs we want to get.
 	 *      @type int           $number            Max number of orders (-1 gets all).
-	 *      @type string        $meta_key          Key of the meta field to filter/order (depending of orderby value).
-	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending of orderby value).
+	 *      @type string        $meta_key          Key of the meta field to filter/order (depending on orderby value).
+	 *      @type mixed         $meta_value        Value of the meta field to filter/order(depending on orderby value).
 	 *      @type string        $meta_type         Meta key type. Default value is 'CHAR'.
 	 *      @type string        $meta_compare      Operator to test the meta value when filtering (See possible values: https://codex.wordpress.org/Class_Reference/WP_Meta_Query ).
 	 *      @type string        $order             ASC/DESC, default to DESC.
 	 *      @type string        $orderby           Field used to sort results (see WP_QUERY). Default to date (post_date).
-	 *      @type int           $date_start        If has value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime).
-	 *      @type int           $date_end          Requires $date_start. If has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now.
+	 *      @type int           $date_start        If it as value, filters the orders between this and the $order_date_end (must be a string format convertible with strtotime).
+	 *      @type int           $date_end          Requires $date_start. If it has value, filters the orders completed/processed before this date (must be a string format convertible with strtotime). Default: Now.
 	 *      @type string        $fields            If empty will return all the order posts. For returning only IDs the value must be 'ids'.
 	 * }
 	 *
@@ -336,7 +338,7 @@ final class Helpers {
 			'type'         => 'shop_order',
 			'status'       => '',
 			'orders_in'    => '',
-			'number'       => - 1,
+			'number'       => -1,
 			'meta_key'     => '',
 			'meta_value'   => '',
 			'meta_type'    => '',
@@ -380,7 +382,7 @@ final class Helpers {
 		);
 		
 		// Post Type.
-		$wc_order_types    = wc_get_order_types();
+		$wc_order_types    = wc_get_order_types( 'view-orders' );
 		$order_types       = (array) $type;
 		$valid_order_types = array();
 		
@@ -417,7 +419,7 @@ final class Helpers {
 			$args['post__in'] = array_map( 'absint', $orders_in );
 		}
 		
-		$args['posts_per_page'] = intval( $number );
+		$args['posts_per_page'] = (int) $number;
 		
 		// Filter/Order by meta key.
 		if ( $meta_key ) {
@@ -471,22 +473,46 @@ final class Helpers {
 		if ( $fields ) {
 			$args['fields'] = $fields;
 		}
-		
-		$orders = array();
-		$query  = new \WP_Query( $args );
-		
-		if ( $query->post_count > 0 ) {
-			
-			if ( $fields ) {
-				$orders = $query->posts;
-			}
-			else {
-				foreach ( $query->posts as $post ) {
-					// We need the WooCommerce order, not the post.
-					$orders[] = new \WC_Order( $post->ID );
+
+		$is_using_pos_tables = self::is_using_hpos_tables();
+		$orders              = array();
+		$query               = $is_using_pos_tables ? new OrdersTableQuery( $args ) : new \WP_Query( $args );
+
+		if ( $is_using_pos_tables ) {
+
+			if ( $query->found_orders ) {
+
+				if ( $fields ) {
+					$orders = $query->orders;
 				}
+				else {
+
+					foreach ( $query->orders as $order_id ) {
+						// We need the WooCommerce order, not the post.
+						$orders[] = wc_get_order( $order_id );
+					}
+
+				}
+
 			}
-			
+
+		}
+		else {
+
+			if ( $query->found_posts ) {
+
+				if ( $fields ) {
+					$orders = $query->posts;
+				}
+				else {
+					foreach ( $query->posts as $post ) {
+						// We need the WooCommerce order, not the post.
+						$orders[] = wc_get_order( $post->ID );
+					}
+				}
+
+			}
+
 		}
 
 		AtumCache::set_cache( $cache_key, $orders );
@@ -513,8 +539,11 @@ final class Helpers {
 		$items_sold = array();
 
 		// Avoid duplicated queries in List Tables by using cache.
-		$cache_key      = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start, $date_end, $items, $colums ] );
-		$sold_last_days = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		// NOTE: As the dates may change between calls to this function (mainly the seconds or minutes), to ensure we use the cache and not calculate again, we must reformat them.
+		$date_start_cache = self::validate_mysql_date( $date_start ) ? self::date_format( $date_start, FALSE, TRUE, 'Y-m-d H' ) : $date_start;
+		$date_end_cache   = self::validate_mysql_date( $date_end ) ? self::date_format( $date_end, FALSE, TRUE, 'Y-m-d H' ) : $date_end;
+		$cache_key        = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start_cache, $date_end_cache, $items, $colums ] );
+		$sold_last_days   = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 		if ( $has_cache ) {
 			return $sold_last_days;
@@ -524,13 +553,27 @@ final class Helpers {
 
 			global $wpdb;
 
+			$is_using_hpos_tables = self::is_using_hpos_tables();
+
 			// Prepare the SQL query to get the orders in the specified time window.
 			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
-			$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
+
+			if ( $is_using_hpos_tables ) {
+				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', $date_start );
+			}
+			else {
+				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
+			}
 
 			if ( $date_end ) {
-				$date_end    = self::date_format( strtotime( $date_end ), TRUE, TRUE );
-				$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
+				$date_end = self::date_format( strtotime( $date_end ), TRUE, TRUE );
+
+				if ( $is_using_hpos_tables ) {
+					$date_where .= $wpdb->prepare( ' AND date_created_gmt <= %s', $date_end );
+				}
+				else {
+					$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
+				}
 			}
 
 			$order_status = (array) apply_filters( 'atum/get_sold_last_days/orders_status', [
@@ -540,16 +583,31 @@ final class Helpers {
 
 			$format = implode( ', ', array_fill( 0, count( $order_status ), '%s' ) );
 
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-			$orders_query = $wpdb->prepare( "
-    			SELECT ID FROM $wpdb->posts  
-				$date_where
-				AND post_type = 'shop_order' AND post_status IN ($format)
-			", $order_status );
-			// phpcs:enable
+			if ( $is_using_hpos_tables ) {
+
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+				$orders_query = $wpdb->prepare( "
+	                SELECT id FROM {$wpdb->prefix}wc_orders  
+					$date_where
+					AND type = 'shop_order' AND status IN ($format)
+				", $order_status );
+				// phpcs:enable
+
+			}
+			else {
+
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+				$orders_query = $wpdb->prepare( "
+	                SELECT ID FROM $wpdb->posts  
+					$date_where
+					AND post_type = 'shop_order' AND post_status IN ($format)
+				", $order_status );
+				// phpcs:enable
+
+			}
 
 			// The lookup tables must be enabled and also available in the actual system.
-			// NOTE: There are some scenarios when the lookup tables are still not updated and we must use regular tables.
+			// NOTE: There are some scenarios when the lookup tables are still not updated, and we must use regular tables.
 			// Like when a new order is placed (because WC delays the lookup table update a little).
 			$use_lookup_table           = $use_lookup_table && self::maybe_use_wc_order_product_lookup_table();
 			$query_columns              = $query_joins = [];
@@ -629,32 +687,70 @@ final class Helpers {
 
 			if ( $use_lookup_table ) {
 
-				$query = "
-					SELECT $query_columns_str
-					FROM `$wpdb->posts` AS `orders`
-				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
-				    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
-			        $query_joins_str
-					WHERE `orders`.`ID` IN ($orders_query)
-			        $products_where
-					GROUP BY `opl`.`variation_id`, `opl`.`product_id`
-					HAVING (`QTY` IS NOT NULL);
-				";
+				if ( $is_using_hpos_tables ) {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `{$wpdb->prefix}wc_orders` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`id` = `items`.`order_id`)		
+					    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
+				        $query_joins_str
+						WHERE `orders`.`id` IN ($orders_query)
+				        $products_where
+						GROUP BY `opl`.`variation_id`, `opl`.`product_id`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
+				else {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `$wpdb->posts` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)		
+					    LEFT JOIN `$order_product_lookup_table` opl ON `items`.`order_item_id` = `opl`.`order_item_id`	    
+				        $query_joins_str
+						WHERE `orders`.`ID` IN ($orders_query)
+				        $products_where
+						GROUP BY `opl`.`variation_id`, `opl`.`product_id`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
 
 			}
 			else {
 
-				$query = "
-					SELECT $query_columns_str
-					FROM `$wpdb->posts` AS `orders`
-				    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
-				    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
-			        $query_joins_str
-					WHERE `orders`.`ID` IN ($orders_query) $products_type_where
-			        $products_where
-					GROUP BY `mt_id`.`meta_value`
-					HAVING (`QTY` IS NOT NULL);
-				";
+				if ( $is_using_hpos_tables ) {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `{$wpdb->prefix}wc_orders` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`id` = `items`.`order_id`)
+					    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
+				        $query_joins_str
+						WHERE `orders`.`id` IN ($orders_query) $products_type_where
+				        $products_where
+						GROUP BY `mt_id`.`meta_value`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
+				else {
+
+					$query = "
+						SELECT $query_columns_str
+						FROM `$wpdb->posts` AS `orders`
+					    LEFT JOIN `{$wpdb->prefix}woocommerce_order_items` AS `items` ON (`orders`.`ID` = `items`.`order_id`)
+					    LEFT JOIN `$wpdb->order_itemmeta` AS `mt_id` ON (`items`.`order_item_id` = `mt_id`.`order_item_id`)
+				        $query_joins_str
+						WHERE `orders`.`ID` IN ($orders_query) $products_type_where
+				        $products_where
+						GROUP BY `mt_id`.`meta_value`
+						HAVING (`QTY` IS NOT NULL);
+					";
+
+				}
 
 			}
 
@@ -1005,14 +1101,6 @@ final class Helpers {
 	}
 
 	/**
-	 * If the site is not using the new tables, use the legacy methods
-	 *
-	 * @since 1.5.0
-	 * @deprecated Only for backwards compatibility and will be removed in a future version.
-	 */
-	use HelpersLegacyTrait;
-
-	/**
 	 * Get an array of products that are not managed by WC
 	 *
 	 * @since 1.4.1
@@ -1024,47 +1112,53 @@ final class Helpers {
 	 */
 	public static function get_unmanaged_products( $post_types, $get_stock_status = FALSE ) {
 
-		/**
-		 * If the site is not using the new tables, use the legacy method
-		 *
-		 * @since 1.5.0
-		 * @deprecated Only for backwards compatibility and will be removed in a future version.
-		 */
-		if ( ! self::is_using_new_wc_tables() ) {
-			return self::get_unmanaged_products_legacy( $post_types, $get_stock_status );
-		}
-		
 		global $wpdb;
 
-		$unmng_fields = array( 'posts.ID' );
-		
-		$unmng_join = array(
-			"LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')",
-			"LEFT JOIN {$wpdb->prefix}wc_products wpd ON (posts.ID = wpd.product_id)",
-		);
-		
+		$unmng_fields    = [ 'posts.ID' ];
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$unmng_join      = [ "LEFT JOIN $atum_data_table AS apd ON (posts.ID = apd.product_id)" ];
+
+		// Use the lookup tables when possible to improve the performance.
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_join[] = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON (posts.ID = pml.product_id)";
+		}
+		else {
+			$unmng_join[] = "LEFT JOIN $wpdb->postmeta AS mt1 ON (posts.ID = mt1.post_id AND mt1.meta_key = '_manage_stock')";
+		}
+
 		$post_statuses = Globals::get_queryable_product_statuses();
-		
+
+		// TODO: Change the query to remove the subquery and get the values with joins.
 		if ( $get_stock_status ) {
-			$unmng_fields[] = 'wpd.stock_status';
+
+			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+				$unmng_fields[] = 'pml.stock_status';
+			}
+			else {
+				$unmng_fields[] = "(SELECT meta_value FROM $wpdb->postmeta WHERE post_id = posts.ID AND meta_key = '_stock_status' ) AS stock_status";
+			}
+
 		}
 
 		$unmng_join = (array) apply_filters( 'atum/get_unmanaged_products/join_query', $unmng_join );
-		
-		// Exclude the inheritable products from query (as are just containers in ATUM List Tables).
-		$excluded_types = Globals::get_inheritable_product_types();
 
 		$unmng_where = array(
 			"WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')",
 			"AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "')",
-			"AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')",
-			"AND wpd.type NOT IN ('" . implode( "','", $excluded_types ) . "')",
+			'AND apd.inheritable != 1', // Exclude the inheritable products from query (as are just containers in ATUM List Tables).
 		);
-		
-		$unmng_where = (array) apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
-		
+
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$unmng_where[] = 'AND pml.stock_quantity IS NULL';
+		}
+		else {
+			$unmng_where[] = "AND (mt1.post_id IS NULL OR mt1.meta_value = 'no')";
+		}
+
+		$unmng_where = apply_filters( 'atum/get_unmanaged_products/where_query', $unmng_where );
+
 		$sql = 'SELECT DISTINCT ' . implode( ',', $unmng_fields ) . "\n FROM $wpdb->posts posts \n" . implode( "\n", $unmng_join ) . "\n" . implode( "\n", $unmng_where );
-		
+
 		return $wpdb->get_results( $sql, ARRAY_N ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		
 	}
@@ -1400,28 +1494,18 @@ final class Helpers {
 			// Ensure there is no _stock set to 0 for managed products.
 			if ( '_manage_stock' === $meta_key && 'yes' === $status ) {
 
-				if ( self::is_using_new_wc_tables() ) {
+				$stock_success = $wpdb->query( "
+					UPDATE $wpdb->postmeta SET meta_value = '0'
+	                WHERE meta_key = '_stock'
+	                AND post_id IN (
+	                    SELECT DISTINCT post_id FROM (SELECT ms.post_id FROM $wpdb->postmeta ms
+	                        LEFT JOIN $wpdb->postmeta sq ON ms.post_id = sq.post_id AND sq.meta_key = '_stock' 
+	                    WHERE ms.meta_key = '_manage_stock' AND ms.meta_value = 'yes' AND sq.meta_value IS NULL ) pm
+	                )
+	            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-					$stock_success = $wpdb->query( "
-						UPDATE {$wpdb->prefix}wc_products SET stock_quantity = 0
-		                WHERE stock_quantity IS NULL
-		                AND product_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				}
-				else {
-
-					$stock_success = $wpdb->query( "
-						UPDATE $wpdb->postmeta SET meta_value = '0'
-		                WHERE meta_key = '_stock'
-		                AND post_id IN (
-		                    SELECT DISTINCT post_id FROM (SELECT post_id FROM $wpdb->postmeta) AS pm
-		                    WHERE meta_key = '_manage_stock' AND meta_value = 'yes'
-		                )
-		            " ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
+				if ( $stock_success ) {
+					wc_update_product_lookup_tables_column( 'stock_quantity' );
 				}
 
 			}
@@ -1466,7 +1550,7 @@ final class Helpers {
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
 			// Get the plugin slug from its path.
-			$installed_plugin_key = 'slug' === $by ? explode( DIRECTORY_SEPARATOR, $plugin_file )[0] : $plugin_data['Title'];
+			$installed_plugin_key = 'slug' === $by ? explode( '/', $plugin_file )[0] : $plugin_data['Title'];
 
 			if ( in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
 				return $return_bool ? TRUE : array( $plugin_file => $plugin_data );
@@ -1747,7 +1831,7 @@ final class Helpers {
 	 *
 	 * @param int $order_id   The ATUM Order ID.
 	 *
-	 * @return object|null
+	 * @return \stdClass[]|null
 	 */
 	public static function get_order_items( $order_id ) {
 
@@ -1929,6 +2013,13 @@ final class Helpers {
 				$product_ids = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
 				$product_sql = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
 
+				if ( self::is_using_hpos_tables() ) {
+					$orders_sql = "SELECT id FROM {$wpdb->prefix}wc_orders WHERE type = 'shop_order' AND status IN ('wc-processing', 'wc-on-hold')";
+				}
+				else {
+					$orders_sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')";
+				}
+
 				// phpcs:disable
 				$sql = $wpdb->prepare( "
 					SELECT SUM(omq.meta_value) AS qty 
@@ -1936,7 +2027,7 @@ final class Helpers {
 					LEFT JOIN $wpdb->order_itemmeta omq ON omq.`order_item_id` = oi.`order_item_id`
 					LEFT JOIN $wpdb->order_itemmeta omp ON omp.`order_item_id` = oi.`order_item_id`			  
 					WHERE order_id IN (
-						SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')
+						$orders_sql
 					)
 					AND omq.meta_key = '_qty' AND order_item_type = 'line_item' AND omp.meta_key = %s AND omp.meta_value $product_sql ;",
 					$product_id_key
@@ -1959,17 +2050,6 @@ final class Helpers {
 
 		return $stock_on_hold;
 
-	}
-
-	/**
-	 * Check whether WooCommerce is using the new tables
-	 *
-	 * @since 1.5.0
-	 *
-	 * @return bool
-	 */
-	public static function is_using_new_wc_tables() {
-		return class_exists( '\WC_Product_Data_Store_Custom_Table' );
 	}
 	
 	/**
@@ -2397,8 +2477,13 @@ final class Helpers {
 
 			// If it's a numeric column, the NULL values should display at the end.
 			if ( 'NUMERIC' === $query_data['order']['type'] ) {
-				$compare_value = 'DESC' === strtoupper( $query_data['order']['order'] ) ? ( - 1 * PHP_INT_MAX ) : PHP_INT_MAX;
-				$column        = "IFNULL($column, $compare_value)";
+				if ( in_array( $query_data['order']['field'], [ '_stock', 'calc_backorders' ] ) ) {
+					$compare_value = 0;
+				}
+				else {
+					$compare_value = 'DESC' === strtoupper( $query_data['order']['order'] ) ? ( - 1 * PHP_INT_MAX ) : PHP_INT_MAX;
+				}
+				$column = "IFNULL($column, $compare_value)";
 			}
 			
 			$pieces['orderby'] = "$column {$query_data['order']['order']}";
@@ -2618,9 +2703,24 @@ final class Helpers {
 	 * @return float|int
 	 */
 	public static function get_input_step() {
+
+		$stock_decimals = Globals::get_stock_decimals();
+
+		if ( ! $stock_decimals ) {
+			return 1;
+		}
 		
 		$step = self::get_option( 'stock_quantity_step' );
-		return $step ? $step : 10 / pow( 10, Globals::get_stock_decimals() + 1 );
+
+		if ( ! is_numeric( $step ) || ! $step ) {
+			return 'any';
+		}
+
+		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
+
+		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
+		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+
 	}
 
 	/**
@@ -2641,29 +2741,15 @@ final class Helpers {
 
 			global $wpdb;
 
-			if ( self::is_using_new_wc_tables() ) {
-
-				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
-					SELECT `type` FROM {$wpdb->prefix}wc_products			  
-					WHERE product_id IN (
-				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
-					)
-				", $child_id ) );
-
-			}
-			else {
-
-				$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
-					SELECT terms.slug FROM $wpdb->posts posts
-					LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
-					LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
-				    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
-					WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
-				        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
-					)
-				", $child_id ) );
-
-			}
+			$parent_product_type = $wpdb->get_var( $wpdb->prepare( "
+				SELECT terms.slug FROM $wpdb->posts posts
+				LEFT JOIN $wpdb->term_relationships as termrelations ON (posts.ID = termrelations.object_id)
+				LEFT JOIN $wpdb->term_taxonomy as taxonomies ON (taxonomies.term_taxonomy_id = termrelations.term_taxonomy_id)
+			    LEFT JOIN $wpdb->terms as terms ON (terms.term_id = taxonomies.term_id) 
+				WHERE taxonomies.taxonomy = 'product_type' AND posts.ID IN (
+			        SELECT DISTINCT post_parent FROM $wpdb->posts WHERE ID = %d
+				)
+			", $child_id ) );
 
 			if ( $parent_product_type ) {
 				AtumCache::set_cache( $cache_key, $parent_product_type );
@@ -3287,6 +3373,27 @@ final class Helpers {
 	}
 
 	/**
+	 * Validates a mySQL date (Y-m-d H:i:s)
+	 *
+	 * @since 1.9.20
+	 *
+	 * @param string $date
+	 *
+	 * @return bool
+	 */
+	public static function validate_mysql_date( $date ) {
+
+		if ( preg_match( '/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/', $date, $matches ) ) {
+			if ( checkdate( $matches[2], $matches[3], $matches[1] ) ) {
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+
+	}
+
+	/**
 	 * Sets a date prop whilst handling formatting and datetime objects.
 	 *
 	 * @since 1.5.0.3
@@ -3746,6 +3853,133 @@ final class Helpers {
 
 		return $valid_terms;
 
+	}
+
+	/**
+	 * Convert a PHP date format to a compatible moment.js date format
+	 *
+	 * @since 1.9.21
+	 *
+	 * @param string $php_date_format
+	 *
+	 * @return string
+	 */
+	public static function convert_php_date_format_to_moment( $php_date_format ) {
+
+		$replacements = [
+			'A' => 'A',      // for the sake of escaping below.
+			'a' => 'a',      // for the sake of escaping below.
+			'B' => '',       // Swatch internet time (.beats), no equivalent.
+			'c' => 'YYYY-MM-DD[T]HH:mm:ssZ', // ISO 8601.
+			'D' => 'ddd',
+			'd' => 'DD',
+			'e' => 'zz',     // deprecated since version 1.6.0 of moment.js.
+			'F' => 'MMMM',
+			'G' => 'H',
+			'g' => 'h',
+			'H' => 'HH',
+			'h' => 'hh',
+			'I' => '',       // Daylight Saving Time? => moment().isDST().
+			'i' => 'mm',
+			'j' => 'D',
+			'L' => '',       // Leap year? => moment().isLeapYear().
+			'l' => 'dddd',
+			'M' => 'MMM',
+			'm' => 'MM',
+			'N' => 'E',
+			'n' => 'M',
+			'O' => 'ZZ',
+			'o' => 'YYYY',
+			'P' => 'Z',
+			'r' => 'ddd, DD MMM YYYY HH:mm:ss ZZ', // RFC 2822.
+			'S' => 'o',
+			's' => 'ss',
+			'T' => 'z',      // deprecated since version 1.6.0 of moment.js.
+			't' => '',       // days in the month => moment().daysInMonth().
+			'U' => 'X',
+			'u' => 'SSSSSS', // microseconds.
+			'v' => 'SSS',    // milliseconds (from PHP 7.0.0).
+			'W' => 'W',      // for the sake of escaping below.
+			'w' => 'e',
+			'Y' => 'YYYY',
+			'y' => 'YY',
+			'Z' => '',       // time zone offset in minutes => moment().zone();.
+			'z' => 'DDD',
+		];
+
+		// Converts escaped characters.
+		foreach ( $replacements as $from => $to ) {
+			$replacements[ '\\' . $from ] = '[' . $from . ']';
+		}
+
+		return strtr( $php_date_format, $replacements );
+
+	}
+
+	/**
+	 * Do some adjustments to the system to avoid problems in long-time processes
+	 *
+	 * @since 1.9.22
+	 */
+	public static function adjust_long_process_settings() {
+
+		// phpcs:disable
+		// Set whether a client disconnect should abort script execution.
+		@ignore_user_abort( TRUE );
+
+		// Set maximum execution time.
+		@set_time_limit( 0 );
+
+		// Set maximum time in seconds a script is allowed to parse input data.
+		@ini_set( 'max_input_time', '-1' );
+
+		// Set maximum backtracking steps.
+		@ini_set( 'pcre.backtrack_limit', PHP_INT_MAX );
+		// phpcs:enable
+
+	}
+
+	/**
+	 * Check whether the current WC is using the HPOS tables
+	 *
+	 * @since 1.9.23
+	 *
+	 * @return bool
+	 */
+	public static function is_using_hpos_tables() {
+		return class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled();
+	}
+
+	/**
+	 * Check whether the current WC is using the HPOS orders for the orders list table
+	 *
+	 * @since 1.9.23
+	 *
+	 * @return bool
+	 */
+	public static function is_using_cot_list() {
+		return class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) && wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled();
+	}
+
+	/**
+	 * Convert objects to arrays recursively.
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param stdClass $data
+	 *
+	 * @return array
+	 */
+	public static function convert_object_to_array( $data ) {
+		$new_data = array();
+
+		if ( is_object( $data ) || is_array( $data ) ) {
+			foreach ( $data as $key => $value ) {
+				$new_data[ $key ] = is_object( $value ) ? self::convert_object_to_array( $value ) : $value;
+			}
+		}
+
+		return $new_data;
 	}
 
 }

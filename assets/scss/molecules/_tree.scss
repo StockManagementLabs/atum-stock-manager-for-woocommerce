@@ -2,12 +2,14 @@
 // ATUM Tree
 //-----------
 
+@use "sass:math";
+
 .atum-tree {
 	position: relative;
 	min-height: 100px;
 	
 	.alert {
-		margin-top: $grid-gutter-width/2;
+		margin-top: math.div($grid-gutter-width, 2);
 		font-size: 12px;
 		text-align: left;
 		i {
@@ -45,7 +47,7 @@ ul.easytree-container {
 		}
 		
 		&:not(:first-child) {
-			padding: $grid-gutter-width/2 0;
+			padding: math.div($grid-gutter-width, 2) 0;
 			border-top: 1px solid var(--gray-200);
 		}
 		

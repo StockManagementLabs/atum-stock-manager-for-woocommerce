@@ -1,6 +1,10 @@
-/* =======================================
-   DASHBOARD SALES STATS WIDGET
-   ======================================= */
+/*
+   ┌──────────────────────────────┐
+   │                              │
+   │ DASHBOARD SALES STATS WIDGET │
+   │                              │
+   └──────────────────────────────┘
+*/
 
 export default class SalesStatsWidget {
 	

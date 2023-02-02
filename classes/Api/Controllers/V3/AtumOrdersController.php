@@ -4,7 +4,7 @@
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3
@@ -205,6 +205,27 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	}
 
 	/**
+	 * Check if a given request has access to delete an item
+	 *
+	 * @since 1.9.25
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function create_item_permissions_check( $request ) {
+
+		$object = $this->get_object( (int) $request['id'] );
+		$cap    = PurchaseOrders::POST_TYPE === $this->post_type ? 'create_purchase_orders' : 'create_inventory_logs';
+
+		if ( $object && 0 !== $object->get_id() && ! AtumCapabilities::current_user_can( $cap, $object->get_id() ) ) {
+			return new \WP_Error( 'atum_rest_cannot_delete', __( 'Sorry, you are not allowed to create this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
+		}
+
+		return TRUE;
+	}
+
+	/**
 	 * Check if a given request has access batch create, update and delete items
 	 *
 	 * @since 1.6.2
@@ -223,6 +244,20 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		return TRUE;
 
+	}
+
+	/**
+	 * Get objects.
+	 * NOTE: Since WC is using the HPOS tables, we must override the \WC_REST_CRUD_Controller::get_objects method here to avoid failure
+	 *
+	 * @since 1.9.25
+	 *
+	 * @param array $query_args Query args.
+	 *
+	 * @return array
+	 */
+	protected function get_objects( $query_args ) {
+		return \WC_REST_CRUD_Controller::get_objects( $query_args );
 	}
 
 	/**

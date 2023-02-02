@@ -4,7 +4,7 @@
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @package     Atum\Api
  */
@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
+use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
 use Atum\Inc\Globals;
@@ -38,6 +39,11 @@ class AtumApi {
 	 * The CORS origin coming from the ATUM App
 	 */
 	const ATUM_APP_ORIGIN = 'capacitor://com.stockmanagementlabs.atum';
+
+	/**
+	 * The CORS origin coming from the ATUM QA App
+	 */
+	const ATUM_QA_APP_ORIGIN = 'capacitor://qa.stockmanagementlabs.atum';
 
 	/**
 	 * Max size limit for the API response pages.
@@ -71,6 +77,7 @@ class AtumApi {
 		'atum-suppliers'                     => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-tools'                         => __NAMESPACE__ . '\Controllers\V3\ToolsController',
 		'atum-full-export'                   => __NAMESPACE__ . '\Controllers\V3\FullExportController',
+		'atum-order-refunds'                 => __NAMESPACE__ . '\Controllers\V3\AllOrderRefundsController',
 	);
 
 	/**
@@ -96,14 +103,27 @@ class AtumApi {
 	 * @var string[]
 	 */
 	private static $exportable_endpoints = array(
-		'/wc/v3/products',                 // Products.
-		'/wc/v3/atum/product-variations',  // Variations.
-		'/wc/v3/products/atum-locations',  // ATUM Locations.
-		'/wc/v3/orders',                   // Orders.
-		'/wc/v3/atum/inbound-stock',       // Inbound Stock products.
-		'/wc/v3/atum/inventory-logs',      // Inventory Logs.
-		'/wc/v3/atum/purchase-orders',     // Purchase Orders.
-		'/wc/v3/atum/suppliers',           // Suppliers.
+		'attributes'         => '/wc/v3/products/attributes',
+		'atum-locations'     => '/wc/v3/products/atum-locations',
+		'atum-order-notes'   => '/wc/v3/atum/atum-order-notes',
+		'categories'         => '/wc/v3/products/categories',
+		'classes'            => '/wc/v3/taxes/classes',
+		'comments'           => '/wp/v2/comments',
+		'coupons'            => '/wc/v3/coupons',
+		'customers'          => '/wc/v3/customers',
+		'dashboard'          => '/wc/v3/atum/dashboard',
+		'inbound-stock'      => '/wc/v3/atum/inbound-stock',
+		'inventory-logs'     => '/wc/v3/atum/inventory-logs',
+		'media'              => '/wp/v2/media',
+		'orders'             => '/wc/v3/orders',
+		'order-refunds'      => '/wc/v3/atum/order-refunds',
+		'products'           => '/wc/v3/products',
+		'product-variations' => '/wc/v3/atum/product-variations',
+		'purchase-orders'    => '/wc/v3/atum/purchase-orders',
+		'settings'           => '/wc/v3/settings',
+		'suppliers'          => '/wc/v3/atum/suppliers',
+		'tags'               => '/wc/v3/products/tags',
+		'taxes'              => '/wc/v3/taxes',
 	);
 
 	/**
@@ -115,12 +135,16 @@ class AtumApi {
 
 		// Pre-filter the available endpoints according to currently-enabled modules.
 		if ( ! ModuleManager::is_module_active( 'inventory_logs' ) ) {
-			unset( $this->api_controllers['atum-inventory-logs'] );
+			unset(
+				$this->api_controllers['atum-inventory-logs'],
+				$this->api_controllers['atum-inventory-log-notes']
+			);
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
 			unset(
 				$this->api_controllers['atum-purchase-orders'],
+				$this->api_controllers['atum-purchase-order-notes'],
 				$this->api_controllers['atum-suppliers'],
 				$this->api_controllers['atum-locations'],
 				$this->api_controllers['atum-inbound-stock']
@@ -192,6 +216,7 @@ class AtumApi {
 	 */
 	public function load_extenders() {
 
+		Orders::get_instance();
 		OrderNotes::get_instance();
 		AtumProductData::get_instance();
 		ProductAttributes::get_instance();
@@ -231,7 +256,7 @@ class AtumApi {
 		if ( $origin ) {
 
 			// Requests from file:// and data: URLs send "Origin: null".
-			if ( self::ATUM_APP_ORIGIN !== $origin && 'null' !== $origin ) {
+			if ( self::ATUM_APP_ORIGIN !== $origin && self::ATUM_QA_APP_ORIGIN !== $origin && 'null' !== $origin ) {
 				$origin = esc_url_raw( $origin );
 			}
 
@@ -266,7 +291,7 @@ class AtumApi {
 		$origin = get_http_origin();
 
 		// Only alter the limit if the request is coming from the ATUM App.
-		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE ) {
+		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE && strpos( $origin, 'qa.stockmanagementlabs.atum' ) === FALSE ) {
 			return $query_params;
 		}
 
@@ -285,8 +310,8 @@ class AtumApi {
 	public function add_exportable_endpoints_hooks() {
 
 		// Exportable endpoints hooks.
-		foreach ( self::get_exportable_endpoints() as $index => $exportable_endpoint ) {
-			add_action( "atum_api_export_endpoint_$index", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 3 );
+		foreach ( self::get_exportable_endpoints() as $key => $exportable_endpoint ) {
+			add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
 		}
 
 	}

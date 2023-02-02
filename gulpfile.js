@@ -6,16 +6,17 @@ var gulp          = require('gulp'),
     notify        = require('gulp-notify'),
     wrap          = require('gulp-wrap'),
     autoprefix    = require('gulp-autoprefixer'),
-    sass          = require('gulp-sass'),
+    sass          = require('gulp-sass')(require('sass')),
     sourcemaps    = require('gulp-sourcemaps'),
     composer      = require('gulp-composer'),
     filter        = require('gulp-filter'),
+    cleanDir      = require('gulp-clean-dir'),
     webpack       = require('webpack'),
     webpackStream = require('webpack-stream'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.9.18',
+var version = '1.9.26.2',
     curDate = new Date();
 
 // Global config
@@ -96,6 +97,7 @@ gulp.task('sass::atum', function () {
 			sourceRoot: 'assets/scss/',
 			sourceRoot: 'assets/scss/rtl/',
 		})))
+		.pipe(cleanDir(destDir))
 		.pipe(gulp.dest(destDir))
 		//.pipe(notify({message: 'sass task complete'}))
 		.pipe(filter("**/*.css"))
@@ -184,6 +186,7 @@ gulp.task('js::atum', function () {
 			],
 			
 		}, webpack))
+		.pipe(cleanDir(config.assetsDir + '/js/build/'))
 		.pipe(gulp.dest(config.assetsDir + '/js/build/'));
 });
 
@@ -191,31 +194,34 @@ gulp.task('js::atum', function () {
 // Composer packages installation
 // ------------------------------
 
-gulp.task('composer::install', function () {
+gulp.task('composer::install', function ( done ) {
 	// Installation + optimization
 	composer({
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
 	});
+	done();
 });
 
-gulp.task('composer::update', function () {
+gulp.task('composer::update', function ( done ) {
 	// Update + optinmization
 	composer('update', {
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
 	});
+	done();
 });
 
-gulp.task('composer::optimize', function () {
+gulp.task('composer::optimize', function ( done ) {
 	// Just optimization (classmap autoloader array generation)
 	composer('dumpautoload', {
 		cwd     : '.',
 		optimize: true,
 		bin     : '/usr/local/bin/composer',
 	});
+	done();
 });
 
 

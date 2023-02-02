@@ -42,7 +42,11 @@ export default class ListTable {
 			window[ 'atum' ] = {};
 		}
 
-		window[ 'atum' ][ 'ListTable' ] = this;
+		if ( ! window[ 'atum' ].hasOwnProperty( 'ListTable' ) ) {
+			window[ 'atum' ][ 'ListTable' ] = [];
+		}
+
+		window[ 'atum' ][ 'ListTable' ].push( this );
 		
 	}
 	
@@ -72,7 +76,11 @@ export default class ListTable {
 			//
 			// Expandable rows' checkboxes.
 			// ----------------------------
-			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => this.checkDescendats( $( evt.currentTarget ) ) )
+			.on( 'change', '.check-column :checkbox', ( evt: JQueryEventObject ) => {
+				const $checkbox: JQuery = $( evt.currentTarget );
+				this.wpHooks.doAction( 'atum_listTable_afterCheckRow', $checkbox );
+				this.checkDescendats( $checkbox );
+			} )
 
 			//
 			// Check all the checkboxes.
@@ -188,7 +196,7 @@ export default class ListTable {
 			const $viewsNav: JQuery   = this.globals.$atumList.find( 'nav.dragscroll' ),
 			      $activeView: JQuery = $viewsNav.find( '.active' ).parent();
 
-			if ( $viewsNav.length ) {
+			if ( $viewsNav.length && $activeView.length ) {
 				$viewsNav.get(0).scrollLeft = $activeView.position().left + $activeView.outerWidth() - $viewsNav.outerWidth() + 100;
 			}
 
@@ -252,7 +260,7 @@ export default class ListTable {
 	 */
 	addOverlay() {
 
-		Blocker.block( $( '.atum-table-wrapper' ), {
+		Blocker.block( this.globals.$atumList, {
 			message   : null,
 			overlayCSS: {
 				background: '#000',
@@ -267,7 +275,7 @@ export default class ListTable {
 	 */
 	removeOverlay() {
 
-		Blocker.unblock( $( '.atum-table-wrapper' ) );
+		Blocker.unblock( this.globals.$atumList );
 		
 	}
 	
@@ -696,6 +704,7 @@ export default class ListTable {
 
 				$checkbox.prop( 'checked', isChecked );
 				ActiveRow.switchActiveClass( $checkbox );
+				this.wpHooks.doAction( 'atum_listTable_afterCheckRow', $checkbox );
 
 				if ( isChecked ) {
 					$nextRow.find( '.has-child' ).click();
@@ -811,6 +820,23 @@ export default class ListTable {
 
 		} );
 
+	}
+
+	/**
+	 * Get FilterData
+	 */
+	getFilterData() {
+		return this.globals.filterData;
+	}
+
+	/**
+	 * Externally add value
+	 *
+	 * @param {string} filter
+	 * @param value
+	 */
+	addToFilterData( filter: string, value: any ) {
+		this.globals.filterData[ filter ] = value;
 	}
 
 }

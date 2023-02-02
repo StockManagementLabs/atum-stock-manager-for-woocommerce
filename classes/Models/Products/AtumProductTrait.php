@@ -5,7 +5,7 @@
  * @package         Atum\Models
  * @subpackage      Products
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.5.0
  */
@@ -14,23 +14,19 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumMacroable;
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
-use Atum\Models\DataStores\AtumDataStoreCustomTableTrait;
 use Atum\Suppliers\Suppliers;
 
 
 trait AtumProductTrait {
-
-	use AtumMacroable;
 
 	/**
 	 * Add the ATUM data to the ATUM Product Trait
 	 *
 	 * @var bool
 	 */
-	protected static $atum_data = array(
+	protected $atum_data = array(
 		'purchase_price'                => '',
 		'supplier_id'                   => NULL,
 		'supplier_sku'                  => '',
@@ -56,6 +52,7 @@ trait AtumProductTrait {
 		'restock_status'                => NULL,
 		'sales_update_date'             => NULL,
 		'barcode'                       => NULL,
+		'calc_backorders'               => NULL,
 		// Extra props (from ATUM add-ons).
 		'minimum_threshold'             => NULL, // PL.
 		'available_to_purchase'         => NULL, // PL.
@@ -71,6 +68,7 @@ trait AtumProductTrait {
 		'selectable_inventories_mode'   => NULL, // MI.
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
+		'committed_to_wc'               => NULL, // SOnly.
 	);
 
 
@@ -588,6 +586,7 @@ trait AtumProductTrait {
 	 * Returns the product is BOM prop.
 	 *
 	 * @since 1.7.8
+	 * @package Product Levels
 	 *
 	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
@@ -645,6 +644,34 @@ trait AtumProductTrait {
 		}
 
 		return $show_out_of_stock_inventories;
+	}
+
+	/**
+	 * Returns the product's committed_to_wc prop.
+	 *
+	 * @since   1.9.20.3
+	 * @package SOnly
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|float|null
+	 */
+	public function get_committed_to_wc( $context = 'view' ) {
+		return $this->get_prop( 'committed_to_wc', $context );
+	}
+
+	/**
+	 * Returns the product's calculated backorders prop.
+	 *
+	 * @since   1.9.20.4
+	 * @package SOnly
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return int|float|null
+	 */
+	public function get_calc_backorders( $context = 'view' ) {
+		return $this->get_prop( 'calc_backorders', $context );
 	}
 
 	/*
@@ -748,7 +775,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|bool $inheritable Whether or not the product is inheritable by others.
+	 * @param string|bool $inheritable Whether the product is inheritable by others or not.
 	 */
 	public function set_inheritable( $inheritable ) {
 		$this->set_prop( 'inheritable', wc_string_to_bool( $inheritable ) );
@@ -1169,6 +1196,30 @@ trait AtumProductTrait {
 		$this->set_prop( 'show_out_of_stock_inventories', $show_out_of_stock_inventories );
 	}
 
+	/**
+	 * Set committed stock to WC Orders fpr the current product
+	 *
+	 * @since 1.9.20.3
+	 * @package SOnly
+	 *
+	 * @param int|float|string|NULL $committed_to_wc
+	 */
+	public function set_committed_to_wc( $committed_to_wc ) {
+
+		$this->set_prop( 'committed_to_wc', is_null( $committed_to_wc ) || '' === $committed_to_wc ? NULL : wc_stock_amount( $committed_to_wc ) );
+	}
+
+	/**
+	 * Set calculated backorders for the current product
+	 *
+	 * @since 1.9.20.4
+	 *
+	 * @param int|float|string|NULL $calc_backorders
+	 */
+	public function set_calc_backorders( $calc_backorders ) {
+
+		$this->set_prop( 'calc_backorders', is_null( $calc_backorders ) || '' === $calc_backorders ? NULL : wc_stock_amount( $calc_backorders ) );
+	}
 
 	/**
 	 * Save the ATUM product data
@@ -1182,7 +1233,7 @@ trait AtumProductTrait {
 		/**
 		 * Variable definition
 		 *
-		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait $data_store
 		 */
 		$data_store->update_atum_product_data( $this );
 
@@ -1200,7 +1251,7 @@ trait AtumProductTrait {
 		/**
 		 * Variable definition
 		 *
-		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait|AtumDataStoreCustomTableTrait $data_store
+		 * @var AtumDataStoreCommonTrait|AtumDataStoreCPTTrait $data_store
 		 */
 		$data_store->delete( $this, [
 			'force_delete'   => TRUE,

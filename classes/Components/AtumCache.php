@@ -5,7 +5,7 @@
  * @package        Atum
  * @subpackage     Components
  * @author         Be Rebel - https://berebel.io
- * @copyright      ©2022 Stock Management Labs™
+ * @copyright      ©2023 Stock Management Labs™
  *
  * @since          1.5.0
  */
@@ -310,7 +310,7 @@ final class AtumCache {
 		$timeout      = "_transient_timeout_{$transient_id}";
 
 		// Ensure the transient isn't in the WP cache.
-		$all_options = wp_cache_get( 'alloptions', 'options', FALSE );
+		$all_options = wp_cache_get( 'alloptions', 'options' );
 
 		if ( isset( $all_options[ $transient ] ) ) {
 			unset( $all_options[ $transient ] );
@@ -322,6 +322,9 @@ final class AtumCache {
 		if ( wp_using_ext_object_cache() ) {
 			wp_cache_delete( $transient_id, 'transient' );
 		}
+
+		// Make sure there is no option still saved for the transient or will fail if we try to regenerate the transient on the same request.
+		wp_cache_delete( $transient, 'options' );
 
 		return $wpdb->query( "DELETE FROM $wpdb->options WHERE `option_name` LIKE '$transient%' OR `option_name` LIKE '$timeout%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}

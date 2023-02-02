@@ -3,6 +3,8 @@
 // (https://github.com/hernansartorio/jquery-nice-select)
 //--------------------------------------------------------
 
+@use "sass:math";
+
 // Scoped variables
 $ns-font-size:                     14px !default;
 $ns-font-size-small:               12px !default;
@@ -11,10 +13,10 @@ $ns-dropdown-border-radius:        5px !default;
 $ns-list-border-radius:            5px !default;
 $ns-dropdown-height:               35px !default;
 $ns-dropdown-height-small:         26px !default;
-$ns-dropdown-padding:              18px !default
+$ns-dropdown-padding:              18px !default;
 
 $ns-arrow-color:                   var(--main-text) !default;
-$ns-arrow-size:                    5px !default;;
+$ns-arrow-size:                    5px !default;
 
 
 // Style the dropdown
@@ -66,7 +68,7 @@ $ns-arrow-size:                    5px !default;;
 	}
 	
 	&.open {
-		@extend .nice-select:active;
+		border-color: var(--dash-nice-select-hover);
 		
 		&:after {
 			transform: rotate(-135deg);
@@ -147,7 +149,7 @@ $ns-arrow-size:                    5px !default;;
 		position: absolute;
 		top: 100%; left: 0;
 		transform-origin: 50% 0;
-		transform: scale(.75) translateY(- $ns-dropdown-height / 2);
+		transform: scale(.75) translateY(math.div($ns-dropdown-height, -2));
 		transition: all .2s cubic-bezier(0.5, 0, 0, 1.25), opacity .15s ease-out;
 		z-index: 9;
 		

@@ -2,6 +2,8 @@
 // "Stock Control" widget
 //-----------------------
 
+@use "sass:math";
+
 .atum-widget.atum_stock_control_widget {
 	.widget-body {
 		@include tablet-max {
@@ -50,15 +52,15 @@
 	}
 	
 	@include tablet-max {
-		padding-top: $grid-gutter-width/2;
+		padding-top:  math.div($grid-gutter-width, 2);
 	}
 	
 	> div {
 		width: 50%;
-		padding: 10px $grid-gutter-width/2;
+		padding: 10px  math.div($grid-gutter-width, 2);
 		
 		@include tablet-max {
-			padding: $grid-gutter-width/2;
+			padding:  math.div($grid-gutter-width, 2);
 		}
 	}
 	
@@ -129,11 +131,11 @@
 	hr {
 		border-top: 1px solid var(--gray-400);
 		border-bottom: none;
-		margin: $grid-gutter-width/2 0;
+		margin:  math.div($grid-gutter-width, 2) 0;
 		
 		@include tablet-max {
 			clear: both;
-			padding: $grid-gutter-width/3 0;
+			padding:  math.div($grid-gutter-width, 3) 0;
 			border-top: none;
 			border-bottom: 1px solid var(--gray-400);
 		}

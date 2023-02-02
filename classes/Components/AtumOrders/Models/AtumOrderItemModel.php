@@ -5,7 +5,7 @@
  * @package         Atum\Components\AtumOrders
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.4
  */
@@ -57,13 +57,6 @@ abstract class AtumOrderItemModel {
 	protected $atum_order_item;
 
 	/**
-	 * The WP cache key name
-	 *
-	 * @var string
-	 */
-	protected $cache_key = 'atum-order-item';
-
-	/**
 	 * AtumOrderItemModel constructor
 	 *
 	 * @param int $id   Optional. The object ID to initialize.
@@ -98,7 +91,7 @@ abstract class AtumOrderItemModel {
 		try {
 
 			// Get from cache if available.
-			$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+			$cache_key = AtumCache::get_cache_key( 'atum-order-item', $this->id );
 			$data      = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
 			if ( ! $has_cache ) {
@@ -352,7 +345,7 @@ abstract class AtumOrderItemModel {
 	 * @since 1.2.9
 	 */
 	public function clear_cache() {
-		$cache_key = AtumCache::get_cache_key( $this->cache_key, $this->id );
+		$cache_key = AtumCache::get_cache_key( 'atum-order-item', $this->id );
 		AtumCache::delete_cache( $cache_key );
 	}
 

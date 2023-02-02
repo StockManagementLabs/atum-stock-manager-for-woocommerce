@@ -5,7 +5,7 @@
  *
  * @since       1.6.2
  * @author      Be Rebel - https://berebel.io
- * @copyright   ©2022 Stock Management Labs™
+ * @copyright   ©2023 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3
@@ -448,9 +448,12 @@ class InventoryLogsController extends AtumOrdersController {
 			$formatted_data['order'] = $formatted_data['order']->get_id();
 		}
 
-		$formatted_data = array_intersect_key( $formatted_data, array_flip( $object_rest_data_keys ) );
+		$db_status = $object->get_db_status();
+		if ( ! empty( $db_status ) && $db_status !== $formatted_data['status'] ) {
+			$formatted_data['db_status'] = $db_status;
+		}
 
-		return $formatted_data;
+		return array_intersect_key( $formatted_data, array_flip( $object_rest_data_keys ) );
 
 	}
 

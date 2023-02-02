@@ -4,7 +4,7 @@
  *
  * @package    Components
  * @author     Be Rebel - https://berebel.io
- * @copyright  ©2022 Stock Management Labs™
+ * @copyright  ©2023 Stock Management Labs™
  *
  * @since      1.9.0
  */
@@ -79,7 +79,7 @@ class AtumCalculatedProps {
 		$already_queued = [];
 
 		// Add the async action for the sales prop first.
-		if ( ! empty( self::$deferred_sales_calc_props ) ) {
+		if ( ! empty( self::$deferred_sales_calc_props ) && 'yes' !== Helpers::get_option( 'calc_prop_cron' ) ) {
 
 			$already_queued = array_map( function( $id_str ) {
 
@@ -147,6 +147,10 @@ class AtumCalculatedProps {
 			 *
 			 * @var \WC_Order_Item_Product $item
 			 */
+			if ( ! $item instanceof \WC_Order_Item_Product ) {
+				continue;
+			}
+
 			$product_id = (int) $item->get_variation_id() ?: $item->get_product_id();
 
 			if ( $product_id ) {
@@ -295,6 +299,17 @@ class AtumCalculatedProps {
 				$product->set_lost_sales( $lost_sales );
 				self::maybe_update_variable_calc_prop( $product, 'lost_sales', $lost_sales );
 
+				// Calculated backorders.
+				if ( $product->backorders_allowed() ) {
+					$stock           = $product->get_stock_quantity();
+					$calc_backorders = $stock < 0 ? $stock : 0; // Only negative values are allowed as backorders.
+				}
+				else {
+					$calc_backorders = NULL; // Backorders disabled.
+				}
+
+				$product->set_calc_backorders( $calc_backorders );
+
 				// Save the sales update date.
 				$product->set_sales_update_date( $timestamp );
 
@@ -323,15 +338,14 @@ class AtumCalculatedProps {
 
 		foreach ( $products as $product ) {
 
+			/**
+			 * Variable definition.
+			 *
+			 * @var AtumProductTrait $product
+			 */
 			if ( ! Helpers::is_atum_product( $product ) ) {
 				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.
 				$product = apply_filters( 'atum/before_update_product_calc_props', Helpers::get_atum_product( $product ) );
-
-				/**
-				 * It's an ATUM product.
-				 *
-				 * @var AtumProductTrait $product
-				 */
 			}
 
 			if ( $product instanceof \WC_Product ) {
@@ -383,11 +397,37 @@ class AtumCalculatedProps {
 					$update = TRUE;
 				}
 
-				$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
+				// Update the calc backorders if necessary (perhaps the stock was adjusted manually to a negative number).
+				$calc_backorders = $product->get_calc_backorders();
+				if ( $product->backorders_allowed() ) {
+					$stock = $product->get_stock_quantity();
 
-				if ( $product->get_restock_status() !== $restock ) {
-					$product->set_restock_status( $restock );
+					if ( $stock < 0 && $stock !== $calc_backorders ) {
+						$product->set_calc_backorders( $stock );
+					}
+					elseif ( $stock > 0 && $calc_backorders ) {
+						$product->set_calc_backorders( 0 );
+					}
+
 					$update = TRUE;
+
+				}
+				// When backorders is disabled for this product, it should have no value.
+				elseif ( ! is_null( $calc_backorders ) ) {
+					$product->set_calc_backorders( NULL );
+					$update = TRUE;
+				}
+
+				// Update the restock status only when the cron isn't active or when executing it.
+				if ( 'yes' !== Helpers::get_option( 'calc_prop_cron' ) || wp_doing_cron() ) {
+
+					$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
+
+					if ( $product->get_restock_status() !== $restock ) {
+						$product->set_restock_status( $restock );
+						$update = TRUE;
+					}
+
 				}
 
 				if ( $update || $force_save ) {
@@ -459,10 +499,14 @@ class AtumCalculatedProps {
 	 */
 	public static function update_atum_sales_calc_props_cli_call( $product, $order_type_id = 1 ) {
 
-		if ( 'cli' === php_sapi_name() || wp_doing_cron() ||
-			( ! empty( $_REQUEST['page'] ) && ! empty( $_REQUEST['row_action'] ) && 'action-scheduler' === $_REQUEST['page'] && 'run' === $_REQUEST['row_action'] ) ) {
+		if (
+			'cli' === php_sapi_name() || wp_doing_cron() ||
+			( ! empty( $_REQUEST['page'] ) && ! empty( $_REQUEST['row_action'] ) && 'action-scheduler' === $_REQUEST['page'] && 'run' === $_REQUEST['row_action'] ) ||
+			( wp_doing_ajax() && 'atum_tool_update_calc_props' === $_REQUEST['action'] )
+		) {
 			self::update_atum_sales_calc_props( $product, $order_type_id );
 		}
+
 	}
 
 

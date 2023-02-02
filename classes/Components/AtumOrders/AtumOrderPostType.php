@@ -5,7 +5,7 @@
  * @package         Atum\Components
  * @subpackage      AtumOrders
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.2.9
  */
@@ -138,7 +138,7 @@ abstract class AtumOrderPostType {
 			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
 
 			// Move the 'trash' status to the end of the list.
-			add_filter( "views_edit-$post_type", array( $this, 'reorder_trash_status_view' ) );
+			add_filter( "views_edit-$post_type", array( $this, 'edit_list_table_views' ) );
 			
 		}
 
@@ -170,7 +170,6 @@ abstract class AtumOrderPostType {
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
-
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
@@ -407,7 +406,12 @@ abstract class AtumOrderPostType {
 		switch ( $column ) {
 
 			case 'status':
-				$statuses      = static::get_statuses();
+				$statuses = static::get_statuses();
+
+				if ( ! array_key_exists( 'trash', $statuses ) ) {
+					$statuses['trash'] = __( 'Trash', ATUM_TEXT_DOMAIN );
+				}
+
 				$status_colors = static::get_status_colors();
 				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
@@ -418,7 +422,7 @@ abstract class AtumOrderPostType {
 					$status_color  = ' style="background-color: ';
 					$status_color .= isset( $status_colors[ $status ] ) ? $status_colors[ $status ] . '"' : 'rgba(255,72,72,.5)"';
 
-					$output = sprintf( '<div class="order-status-container"><mark class="order-status status-%s tips" data-tip="%s"' . $status_color . '></mark><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
+					$output = sprintf( '<div class="order-status-container"><div class="atum-order-status"><mark class="status-%s tips" data-tip="%s"' . $status_color . '></mark></div><span>%s</span></div>', esc_attr( sanitize_html_class( $status ) ), esc_attr( $status_name ), esc_html( $status_name ) );
 
 				}
 
@@ -1054,12 +1058,14 @@ abstract class AtumOrderPostType {
 			<script type="text/javascript">
 				jQuery(function($){
 
-					$('.tips').tipTip({
-						'attribute': 'data-tip',
-						'fadeIn'   : 50,
-						'fadeOut'  : 50,
-						'delay'    : 200
-					});
+					if ( $.fn.hasOwnProperty('tipTip') ) {
+						$( '.tips' ).tipTip( {
+							'attribute': 'data-tip',
+							'fadeIn'   : 50,
+							'fadeOut'  : 50,
+							'delay'    : 200
+						} );
+					}
 
 				});
 			</script>
@@ -1269,23 +1275,24 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
-	 * Send the trash status to the end of the status views list on ATUM Orders' List Tables
+	 * Edit the List Table views
 	 *
 	 * @since 1.8.2
 	 *
-	 * @param array $status_views
+	 * @param array $views
 	 *
 	 * @return array
 	 */
-	public function reorder_trash_status_view( $status_views ) {
+	public function edit_list_table_views( $views ) {
 
-		if ( array_key_exists( 'trash', $status_views ) ) {
-			$trash_status = $status_views['trash'];
-			unset( $status_views['trash'] );
-			$status_views['trash'] = $trash_status;
+		// Send the trash status to the end of the status views list on ATUM Orders' List Tables.
+		if ( array_key_exists( 'trash', $views ) ) {
+			$trash_status = $views['trash'];
+			unset( $views['trash'] );
+			$views['trash'] = $trash_status;
 		}
 
-		return $status_views;
+		return $views;
 
 	}
 

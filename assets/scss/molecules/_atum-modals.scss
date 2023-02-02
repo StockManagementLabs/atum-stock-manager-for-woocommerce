@@ -2,11 +2,21 @@
 // ATUM Modals
 //------------
 
+@use "sass:math";
+
 .swal2-container.atum-modal {
 	text-align: left;
 	
+	.swal2-popup {
+		background-color: var(--atum-table-bg);
+	}
+	
 	.swal2-header {
 		align-items: flex-start;
+		
+		h2.swal2-title small {
+			color: var(--atum-table-link-text);
+		}
 	}
 	
 	.swal2-actions {
@@ -24,6 +34,23 @@
 	
 	.swal2-content {
 		z-index: unset;
+		
+		.files-modal-header {
+			color: var(--atum-table-link-text);
+			
+			.inventory-file-upload {
+				color: var(--atum-text-color-var3);
+			}
+			
+			#inventory-file-span {
+				background-color: var(--atum-table-bg)!important;
+				border: 1px solid #8c8f94;
+			}
+		}
+		
+		.files-modal-body {
+			color: var(--atum-text-modal-title);
+		}
 	}
 	
 	.atum-modal-content {
@@ -33,8 +60,8 @@
 		.note {
 			text-align: left;
 			font-size: 12px;
-			color: $gray-600;
-			margin-bottom: $grid-gutter-width/2;
+			color: var(--atum-table-link-text)!important;
+			margin-bottom: math.div($grid-gutter-width, 2);
 		}
 		
 		hr {
@@ -50,23 +77,30 @@
 		}
 		
 		input[type=text], input[type=email], input[type=search], input[type=number] {
+			background-color: var(--atum-table-bg);
+			color: var(--atum-text-color-var3);
+			border-color: var(--main-border-alt);
+			
 			&::-moz-placeholder {
 				text-align: left;
 				font-style: italic;
 				font-size: 12px;
 				opacity: 1; // Override Firefox's unusual default opacity
+				color: var(--atum-table-link-text);
 			}
 			
 			&:-ms-input-placeholder {
 				text-align: left;
 				font-size: 12px;
 				font-style: italic;
+				color: var(--atum-table-link-text);
 			}
 			
 			&::-webkit-input-placeholder  {
 				text-align: left;
 				font-size: 12px;
 				font-style: italic;
+				color: var(--atum-table-link-text);
 			}
 		}
 		
@@ -89,7 +123,7 @@
 					text-align: left;
 					padding-left: 20px;
 					font-size: 14px;
-					color: $blue-dark;
+					color: var(--atum-text-modal-title)!important;
 					margin-bottom: 10px;
 				}
 			}
@@ -103,11 +137,15 @@
 				
 				label {
 					font-size: 13px;
+					color: var(--atum-table-link-text);
 				}
 				
 				input[type=text], input[type=email], input[type=search], select, .atum-enhanced-select {
 					width: 230px !important;
 					max-width: 100%;
+					background-color: var(--atum-table-bg);
+					color: var(--atum-text-color-var3);
+					border-color: var(--main-border-alt);
 				}
 				
 				.atum-enhanced-select {
@@ -119,16 +157,43 @@
 					.select2-selection__placeholder {
 						font-size: 12px;
 						font-style: italic;
+						color: var(--atum-table-link-text);
 					}
 					
 					.select2-selection__rendered {
-						color: $wp-gray-dark;
+						color: var(--atum-text-color-var3)!important;
 						font-size: 14px;
+						
+						li.select2-search.select2-search--inline {
+							display: flex;
+							
+							input.select2-search__field {
+								max-width: 85%;
+							}
+						}
+						
+						li.select2-selection__choice {
+							color: var(--atum-text-color-var3);
+						}
 					}
 					
 					.select2-selection__arrow {
 						&:after {
 							display: none;
+						}
+					}
+					
+					.select2-selection--multiple {
+						background-color: var(--atum-table-bg);
+						border-color: var(--main-border-alt);
+						.select2-selection__rendered {
+							padding-left: 10px;
+							padding-right: 10px;
+							box-sizing: content-box;
+							
+							.select2-selection__choice {
+								height: 16px;
+							}
 						}
 					}
 				}
@@ -155,6 +220,11 @@
 		width: auto;
 		padding-right: 20px;
 		padding-top: 10px;
+		
+		button.swal2-confirm.swal2-styled {
+			background-color: var(--success)!important;
+			color: var(--wp-yiq-text-light);
+		}
 	}
 	
 	.swal2-validation-message {

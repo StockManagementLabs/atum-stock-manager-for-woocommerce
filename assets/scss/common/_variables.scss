@@ -2,6 +2,8 @@
 // Global Variables
 //------------------
 
+@use "sass:math";
+
 // Paths
 $atum-assets-path:                      "../" !default;
 $atum-font-path:                        "#{$atum-assets-path}fonts/" !default;
@@ -28,17 +30,17 @@ $sidebar-sm-columns:                    4 !default;
 $grid-gutter-width:                     30px !default;
 $grid-columns:                          12 !default;
 $grid-breakpoints: (
-	xs: 0,
-	sm: 576px,
-	md: 768px,
-	lg: 992px,
-	xl: 1200px
+		xs: 0,
+		sm: 576px,
+		md: 768px,
+		lg: 992px,
+		xl: 1200px
 ) !default;
 $container-max-widths: (
-	sm: 540px,
-	md: 720px,
-	lg: 960px,
-	xl: 1140px
+		sm: 540px,
+		md: 720px,
+		lg: 960px,
+		xl: 1140px
 ) !default;
 
 
@@ -59,15 +61,15 @@ $black:                                 #000 !default;
 
 $grays: () !default;
 $grays: map-merge((
-	"100": $gray-100,
-	"200": $gray-200,
-	"300": $gray-300,
-	"400": $gray-400,
-	"500": $gray-500,
-	"600": $gray-600,
-	"700": $gray-700,
-	"800": $gray-800,
-	"900": $gray-900
+		"100": $gray-100,
+		"200": $gray-200,
+		"300": $gray-300,
+		"400": $gray-400,
+		"500": $gray-500,
+		"600": $gray-600,
+		"700": $gray-700,
+		"800": $gray-800,
+		"900": $gray-900
 ), $grays);
 
 $blue:                                  #00B8DB !default;
@@ -96,26 +98,26 @@ $green-blue:                            rgba(30, 200, 149, 0.79);
 
 $colors: () !default;
 $colors: map-merge((
-	"blue":              $blue,
-	"blue-gray-light":   $blue-gray-light,
-	"orange":            $orange,
-	"red":               $red,
-	"red-light":         $red-light,
-	"red-light-2":       $red-light-2,
-	"green":             $green,
-	"green-light":       $green-light,
-	"blue-light":        $blue-light,
-	"blue-dark":         $blue-dark,
-	"blue-dark-lighten": $blue-dark-lighten,
-	"blue-dark-light-2": $blue-dark-light-2,
-	"white":             $white,
-	"gray":              $gray-500,
-	"gray-light":        $gray-200,
-	"gray-dark":         $gray-800,
-	"purple":            $purple,
-	"purple-light":      $purple-light,
-	"purple-pl":         $purple-pl,
-	"black":             $black,
+		"blue":              $blue,
+		"blue-gray-light":   $blue-gray-light,
+		"orange":            $orange,
+		"red":               $red,
+		"red-light":         $red-light,
+		"red-light-2":       $red-light-2,
+		"green":             $green,
+		"green-light":       $green-light,
+		"blue-light":        $blue-light,
+		"blue-dark":         $blue-dark,
+		"blue-dark-lighten": $blue-dark-lighten,
+		"blue-dark-light-2": $blue-dark-light-2,
+		"white":             $white,
+		"gray":              $gray-500,
+		"gray-light":        $gray-200,
+		"gray-dark":         $gray-800,
+		"purple":            $purple,
+		"purple-light":      $purple-light,
+		"purple-pl":         $purple-pl,
+		"black":             $black,
 ), $colors);
 
 $primary:                               $blue !default;
@@ -132,19 +134,19 @@ $dark:                                  $gray-800 !default;
 
 $theme-colors: () !default;
 $theme-colors: map-merge((
-	"primary":    $primary,
-	"secondary":  $secondary,
-	"tertiary":   $tertiary,
-	"success":    $success,
-	"main":       $main,
-	"info":       $info,
-	"warning":    $warning,
-	"danger":     $danger,
-	"light":      $light,
-	"dark":       $dark,
-	"purple-pl":  $purple-pl,
-	"gray":       $gray-600,
-	"default":    $gray-500
+		"primary":    $primary,
+		"secondary":  $secondary,
+		"tertiary":   $tertiary,
+		"success":    $success,
+		"main":       $main,
+		"info":       $info,
+		"warning":    $warning,
+		"danger":     $danger,
+		"light":      $light,
+		"dark":       $dark,
+		"purple-pl":  $purple-pl,
+		"gray":       $gray-600,
+		"default":    $gray-500
 ), $theme-colors);
 
 // WP Colors
@@ -163,23 +165,24 @@ $wp-gray-4:                             #DDD    !default;
 $wp-gray-5:                             #E5E5E5 !default;
 $wp-gray-6:                             #f9f9f9 !default;
 $wp-gray-7:                             #888 !default;
+$wp-gray-8:                             #F0F0F1 !default;
 $wp-red:                                #A00 !default;
 
 $wp-colors: () !default;
 $wp-colors: map-merge((
-	"wp-link":         $wp-link,
-	"wp-link-hover":   $wp-link-hover,
-	"wp-input-focus":  $wp-input-focus,
-	"wp-pink":         $wp-pink,
-	"wp-pink-light":   $wp-pink-light,
-	"wp-pink-lighter": $wp-pink-lighter,
-	"wp-gray-dark":    $wp-gray-dark,
-	"wp-gray-1":       $wp-gray-1,
-	"wp-gray-3":       $wp-gray-3,
-	"wp-gray-4":       $wp-gray-4,
-	"wp-gray-5":       $wp-gray-5,
-	"wp-gray-6":       $wp-gray-6,
-	"wp-gray-7":       $wp-gray-7
+		"wp-link":         $wp-link,
+		"wp-link-hover":   $wp-link-hover,
+		"wp-input-focus":  $wp-input-focus,
+		"wp-pink":         $wp-pink,
+		"wp-pink-light":   $wp-pink-light,
+		"wp-pink-lighter": $wp-pink-lighter,
+		"wp-gray-dark":    $wp-gray-dark,
+		"wp-gray-1":       $wp-gray-1,
+		"wp-gray-3":       $wp-gray-3,
+		"wp-gray-4":       $wp-gray-4,
+		"wp-gray-5":       $wp-gray-5,
+		"wp-gray-6":       $wp-gray-6,
+		"wp-gray-7":       $wp-gray-7
 ), $wp-colors);
 
 // WC Colors
@@ -197,17 +200,24 @@ $wc-disabled:                           #CCC !default;
 
 $wc-colors: () !default;
 $wc-colors: map-merge((
-	"wc-blue-gray":       $wc-blue-gray,
-	"wc-blue-gray-light": $wc-blue-gray-light,
-	"wc-green":           $wc-green,
-	"wc-green-light":     $wc-green-light,
-	"wc-orange":          $wc-orange,
-	"wc-orange-light":    $wc-orange-light,
-	"orange-light-2":     $orange-light-2,
-	"wc-red":             $wc-red,
-	"wc-red-light":       $wc-red-light,
-	"wc-purple":          $wc-purple,
+		"wc-blue-gray":       $wc-blue-gray,
+		"wc-blue-gray-light": $wc-blue-gray-light,
+		"wc-green":           $wc-green,
+		"wc-green-light":     $wc-green-light,
+		"wc-orange":          $wc-orange,
+		"wc-orange-light":    $wc-orange-light,
+		"orange-light-2":     $orange-light-2,
+		"wc-red":             $wc-red,
+		"wc-red-light":       $wc-red-light,
+		"wc-purple":          $wc-purple,
 ), $wc-colors);
+
+$wc-order-status-bg: #e5e5e5;
+$wc-order-status-color: #777;
+$wc-order-status-processing-bg: #c6e1c6;
+$wc-order-status-processing-color: #5b841b;
+$wc-order-status-on-hold-bg: #f8dda7;
+$wc-order-status-on-hold-color: #94660c;
 
 
 // Body
@@ -256,22 +266,22 @@ $yiq-text-light:                        $white !default;
 $spacer: 1rem !default;
 $spacers: () !default;
 $spacers: map-merge((
-	0: 0,
-	1: ($spacer * .25),
-	2: ($spacer * .5),
-	3: $spacer,
-	4: ($spacer * 1.5),
-	5: ($spacer * 3)
+		0: 0,
+		1: ($spacer * .25),
+		2: ($spacer * .5),
+		3: $spacer,
+		4: ($spacer * 1.5),
+		5: ($spacer * 3)
 ), $spacers);
 
 // This variable affects the `.h-*` and `.w-*` classes.
 $sizes: () !default;
 $sizes: map-merge((
-	25: 25%,
-	50: 50%,
-	75: 75%,
-	100: 100%,
-	auto: auto
+		25: 25%,
+		50: 50%,
+		75: 75%,
+		100: 100%,
+		auto: auto
 ), $sizes);
 // stylelint-enable
 
@@ -483,7 +493,7 @@ $zindex-tooltip:                        1000070 !default;
 // Navs
 
 $nav-divider-color:                     $gray-200 !default;
-$nav-divider-margin-y:                  ($spacer / 2) !default;
+$nav-divider-margin-y:                  math.div($spacer, 2) !default;
 
 
 // Tooltips
@@ -495,8 +505,8 @@ $tooltip-bg:                            $white !default;
 $tooltip-opacity:                       1 !default;
 $tooltip-box-shadow:                    0 1px 5px 0 rgba($black, .15) !default;
 $tooltip-margin:                        0 !default;
-$tooltip-padding-y:                     $spacer / 4 !default;
-$tooltip-padding-x:                     $spacer / 2 !default;
+$tooltip-padding-y:                     math.div($spacer, 4) !default;
+$tooltip-padding-x:                     math.div($spacer, 2) !default;
 $tooltip-border-radius:                 $border-radius !default;
 
 $tooltip-arrow-width:                   5px !default;
@@ -881,9 +891,9 @@ $easing: (
 
 // Characters which are escaped by the escape-svg function
 $escaped-characters: (
-	("<", "%3c"),
-	(">", "%3e"),
-	("#", "%23"),
-	("(", "%28"),
-	(")", "%29"),
+				("<", "%3c"),
+				(">", "%3e"),
+				("#", "%23"),
+				("(", "%28"),
+				(")", "%29"),
 ) !default;

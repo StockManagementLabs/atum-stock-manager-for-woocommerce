@@ -1,13 +1,13 @@
 === ATUM WooCommerce Inventory Management and Stock Tracking ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, danielberebel
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.0
+Tested up to: 6.1.1
 Requires PHP: 7.1
-WC requires at least: 3.6.0
-WC tested up to: 6.5.1
-Stable tag: 1.9.18.1
+WC requires at least: 5.0
+WC tested up to: 7.3.0
+Stable tag: 1.9.26.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,362 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.26.2`
+
+*2023-01-16*
+
+**Changes**
+
+* Refactoring and changes in tax calculations.
+
+**Fixes**
+
+* Fixed wrong text domain.
+
+---
+
+`1.9.26.1`
+
+*2023-01-13*
+
+**Changes**
+
+* Script router prepared for managing multiple list tables.
+
+**Fixes**
+
+* Fixed trying to access empty license properties.
+
+---
+
+`1.9.26`
+
+*2023-01-12*
+
+**Features**
+
+* Added global order type table id for pick & pack orders.
+* New styling for the add-ons page.
+
+**Changes**
+
+* Updated marketing popup.
+* Refactoring.
+
+**Fixes**
+
+* Fixed wrong SQL delimeter.
+* Fixed SML link.
+* Avoid script error when multiple listtables are loaded.
+
+---
+
+`1.9.25.1`
+
+*2022-12-22*
+
+**Fixes**
+
+* Make sure the post is already existing before assigning the ATUM Order description.
+
+---
+
+`1.9.25`
+
+*2022-12-20*
+
+**Features**
+
+* Add isotope layout dependencies.
+* Added support for custom meta data to the ATUM Orders API endpoints.
+* Allow auto-dismissing admin notices shown via JS.
+* Added a expand/collapse all rows button to List Tables.
+
+**Changes**
+
+* Refactory ListTable array in scripts.
+* Prevent saving an invalid addon license.
+* Allow accessing to filterData at list-table scripts.
+* Updated composer files.
+* Ensure all atum addon names are stored lower case in the licenses setting.
+* Refactoring.
+* Pass an extra param to external columns calling in List Tables.
+* Ensure WP_Query objects are set.
+* Removed unused import.
+* Removed debugging code.
+* Make sure the new HPOS class exists before checking it.
+* Updated minimum WC version.
+* Added link to the ATUM’s Youtube channel when the videos couldn’t be loaded.
+* Do not auto-create a Log or PO when instantating the model.
+* Remove non-legacy unnused functions.
+
+**Fixes**
+
+* Check if function exists before calling it.
+* When applying filters, controlled products appear in the uncontrolled products view and they appear repeated.
+* Fixed the dragScroll opacity blocks visibility under some scenarios.
+* Fixed wrong initial date created on ATUM Orders.
+* Dashboard widget fix: if there are no decimals, the comma is removed.
+* Fixed ATUM Orders API endpoints after WC HPOS.
+
+---
+
+`1.9.24.1`
+
+*2022-11-14*
+
+**Features**
+
+* Performance improvement: prevent querying for the nex scheduled action twice.
+
+**Changes**
+
+* Check if the recurring hooks are queued only on the admin side.
+* Exclude adding to PO and IL variation products if they are disabled.
+* Refactoring.
+* Dashboard widgets: do not show a comma if there are no decimals, show whole number.
+* Readded renamed function as deprecated for compatibility with old versions.
+
+---
+
+`1.9.24`
+
+*2022-11-09*
+
+**Features**
+
+* Add full compatibility with the new WooCommerce's HPOS tables.
+* Add JS hook after selecting items in SC.
+* Allow disable editing on some List Tables.
+
+**Changes**
+
+* Refactoring.
+* Show the List Table filters even if the table has no bulk actions.
+
+**Fixes**
+
+* Show all attribute names for variations in List Tables.
+
+---
+
+`1.9.23.1`
+
+*2022-10-26*
+
+**Changes**
+
+* Get the updated addons list from the SML API.
+
+**Fixes**
+
+* Fixed the full export API push notifications.
+* Remove the deleted transient from cache to be able to regenerate it immediatly.
+* Only send the export push notification once.
+* Removed redundant installed addons check.
+* Fixed color for remove addon key button.
+
+---
+
+`1.9.23`
+
+*2022-10-21*
+
+**Fixes**
+
+* Reduce the number of requests made to the addons API.
+* Place the addons list within a JSON file to reduce the number of requests to the addons API.
+
+---
+
+`1.9.22.2`
+
+*2022-10-21*
+
+**Fixes**
+
+* Fixed some files missing on last update due to a SVN commit error.
+
+---
+
+`1.9.22.1`
+
+*2022-10-20*
+
+**Features**
+
+* Show negative values in red on the backorders column in SC.
+* Added hook to allow third parties playing after updating product calc props.
+* Add PO and IL sales calc properties calc to the update products props tool.
+* Improved full export endpoint to allow passing multiple endpoints as param.
+* Added new API endpoint to list all the available refunds.
+* Added extra endpoints as "exportable" to the full export API endpoint.
+* Allow passing mutiple statuses to get products or suppliers in ATUM API.
+* Allow doing initial exports with filters.
+* Added JS utilities to be able to add, substract, multiply and divide big decimal values.
+* Allow retrieving the db_status on ATUM orders via API.
+* Allow updating the orders creation and modification date through the REST API
+
+**Changes**
+
+* Cumulative fields must not use INT_MAX values for sorting.
+* Calculate sales calc synchronously when executing the calculated props tool.
+* Refactoring.
+* Updated JS dependencies and require node 16.
+* Get rid of the dates filter on the Suppliers List Table.
+* CSS adjustments.
+* Clean assets dir before compiling.
+* Adjusted error codes on the full export endpoint responses.
+
+**Fixes**
+
+* Fixed order notes, atum order notes and media endpoints on the full export.
+* Fixed translations categories for SC dropdown when WPML is active.
+* Fixed wrong field in query for categories dropdown
+* Fixed warning when adding a new purchase order in some cases.
+* Fixed paginated exports on the full export API.
+* Fixed popups styling with Dark Mode in SC and MC.
+* Fixed addons licenses checking.
+* Fix WPML's is_product_translation wrong logic.
+* Fixed trash status not applying to some ATUM Orders through API correctly in some cases.
+* Fixed number of args for the get_terms filter.
+* Remove duplicated registered addons.
+* Fixed JS error when the jQuery.tipTip library is not loaded on some pages.
+* Do not loop the addons list if is not an array.
+* Fixed wrong creation date_created when saving ATUM Orders.
+* Fixed display variation name for non-term attributes.
+
+---
+
+`1.9.21`
+
+*2022-09-07*
+
+**Features**
+
+* Added filter to stock value in list table column.
+* Added wpHooks to table cell popovers component.
+* Added committed to WC orders field to ATUM product data table.
+* Add committed to WC orders field to ATUM product model.
+* Added new FancyTables JS component.
+* Added calc backorders column the ATUM product data table.
+* Added new helper to convert PHP date formats to moment.js formats.
+* Added support for special date formats to datetimepicker labels.
+* Added calculated backorders prop to allow sorting in List Table column, etc.
+* Added the backorders column to the search in column dropdown.
+* Save the calculated backorders every time a product is saved (if needed).
+
+**Changes**
+
+* Send product argument to editable column.
+* Reverted ATUM macroable class.
+* Send TableCellPopovers argument when creating a cell popover.
+* Added color to calculated stock values in List Tables.
+* Adjusted button groups CSS.
+* Reordered some Stock Central columns.
+* Refactoring.
+* Improved description readability.
+* Improved the input number step helper.
+* Various CSS adjustments.
+
+**Fixes**
+
+* Fixed table cell popover input type value.
+* Fixed tooltips not showing in SC when you expand the inventories.
+* Fixed next/prev buttons disabled status when you paginate in any ListTable to the last page or the first page.
+* Allow decimals in OOT fields when configured in ATUM settings.
+* URL decode product variations' title in SC (thanks @behzadbx).
+
+---
+
+`1.9.20.1`
+
+*2022-07-22*
+
+**Fixes**
+
+* Fixed warning if no addons installed.
+
+---
+
+`1.9.20`
+
+*2022-07-21*
+
+**Features**
+
+* Added description tooltip to the barcode field.
+
+**Changes**
+
+* Removed CSS class.
+* Make sure the sold_last_days cache key doesn't change when it has some date time keys on it.
+* Only calculate the restock status if the calculate sales prop CRON is disabled or it's running.
+
+**Fixes**
+
+* Fixed search addon keys for case insensitive names.
+* Exclude WPML translations in the SC categories filter dropdown.
+* Fixed unmanaged variations in current stock widget values.
+* Fixed wrong SQL when updating stock in tools.
+* Fixed date fields in Inventory Logs data meta box.
+* Fixed async sales calc launched despite of the cron setting is active.
+
+---
+
+`1.9.19.2`
+
+*2022-06-29*
+
+**Fixes**
+
+* Fixed typed prop (not supported until PHP 7.4).
+
+---
+
+`1.9.19.1`
+
+*2022-06-28*
+
+**Features**
+
+* Added warning notice to the tools section in ATUM Settings.
+* Added order type and order item id to order notes metas for IL.
+* Regenerate lookup tables on the next upgrade to make sure our queries work correctly.
+* Added aditional checks before returning a product in the inbound stock list.
+* Added cron to clean up tmp folders once a week.
+* Added new API extender to be able to filter attachments per linked post type.
+* Allow adding external criteria to the categories dropdown in SC.
+* Added action hook before update sales calc props.
+* Added AtumMacroable class.
+* Added fields to suppliers to be able to set default description and terms in PO PRO.
+
+**Changes**
+
+* Renamed all the ATUM params used on queries to the products' API endpoint.
+* Include categories with only private products in SC's categories dropdown filter.
+* Remove unneeded code references to PO.
+* Added param to AtumAdminNotices to avoid displaying the message in bold text.
+* Text changes.
+* Removed error logging.
+* Refactoring.
+* Changed pre-discount labels in atum order items template.
+* Use date_i18n instead of wp_date to avoid wrong time zone conversion issues.
+* Adjustments for the "stock will last" logic.
+* Convert ATUM Product trait "atum_data" prop to static.
+* Improved setting description.
+* Set Atum Product Trait as Macroable.
+
+**Fixes**
+
+* Remove and prevent duplicated scheduled actions.
+* Fixed tables in query.
+* Fixed number of args for action.
+* Prevent Macroable to throw Exceptions if the function doesn't exist.
+* Delete ATUM transients correctly when using external caching systems.
 
 ---
 

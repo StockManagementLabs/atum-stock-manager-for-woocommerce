@@ -1,11 +1,11 @@
 <?php
 /**
- * Shared trait for Atum Data Legacy Stores (using legacy tables)
+ * Shared trait for Atum Data Stores
  *
  * @package         Atum\Models
  * @subpackage      DataStores
  * @author          Be Rebel - https://berebel.io
- * @copyright       ©2022 Stock Management Labs™
+ * @copyright       ©2023 Stock Management Labs™
  *
  * @since           1.5.0
  */
