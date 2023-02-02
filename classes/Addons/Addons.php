@@ -76,7 +76,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
+	const ADDONS_STORE_URL = 'http://stockmanagementlabs.loc/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -234,6 +234,8 @@ class Addons {
 			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
+			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
+			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
 		) );
 
 		wp_enqueue_style( 'sweetalert2' );
@@ -531,7 +533,11 @@ class Addons {
 	 */
 	public static function get_keys( $addon_name = '' ) {
 
-		$keys = get_option( self::ADDONS_KEY_OPTION );
+		$keys = get_option( self::ADDONS_KEY_OPTION, [] );
+
+		if ( ! is_array( $keys ) ) {
+			$keys = [];
+		}
 
 		if ( empty( $addon_name ) ) {
 			$keys = self::check_addons_keys( $keys );
@@ -573,8 +579,7 @@ class Addons {
 	 */
 	private static function check_addons_keys( $keys ) {
 
-		$result  = array();
-		$checked = array();
+		$result = $checked = array();
 
 		foreach ( $keys as $addon => $license ) {
 
@@ -664,7 +669,7 @@ class Addons {
 			// If the addons keys changed, update the option and delete transients.
 			update_option( self::ADDONS_KEY_OPTION, $result );
 
-			foreach ( self::$addons as $slug => $registered_addon ) {
+			foreach ( self::$addons as $registered_addon ) {
 				self::delete_status_transient( $registered_addon['name'] );
 			}
 		}
@@ -713,9 +718,28 @@ class Addons {
 	 */
 	public static function update_key( $addon_name, $key ) {
 
-		$keys                = get_option( self::ADDONS_KEY_OPTION );
-		$keys[ strtolower( $addon_name ) ] = $key;
+		$addon_name = strtolower( $addon_name );
+		$is_trial   = FALSE;
+
+		// Strip the 'trial' word from the addon name and use the same name for both.
+		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
+			$is_trial   = TRUE;
+		}
+
+		$keys = get_option( self::ADDONS_KEY_OPTION, [] );
+
+		if ( ! is_array( $keys ) ) {
+			$keys = [];
+		}
+
+		if ( $is_trial ) {
+			$key['trial'] = TRUE;
+		}
+
+		$keys[ $addon_name ] = $key;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
+
 	}
 
 	/**
@@ -732,29 +756,35 @@ class Addons {
 	public static function get_addon_status( $addon_name, $addon_slug, $addon_folder ) {
 
 		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
-		$addon_status   = AtumCache::get_transient( $transient_name, TRUE );
+		$addon_status   = AtumCache::get_transient( $transient_name/*TODO: REENABLE, TRUE*/ );
 
-		foreach ( self::$addons as $addon_key => $installed_addon ) {
+		if ( empty( $addon_status ) ) {
 
-			if ( strtolower( $installed_addon['name'] ) === strtolower( $addon_name ) ) {
-				if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
-					$addon_status['is_trial'] = TRUE;
-				}
-				break;
-			}
-
-		}
-
-		$is_installed = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
-
-		if ( empty( $addon_status ) || $is_installed !== $addon_status['installed'] ) {
+			$is_installed       = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
+			$is_trial_installed = Helpers::is_plugin_installed( $addon_slug, "$addon_folder-trial" );
 
 			// Status defaults.
 			$addon_status = array(
-				'installed' => $is_installed,
+				'installed' => $is_installed || $is_trial_installed,
 				'status'    => 'invalid',
 				'key'       => '',
 			);
+
+			if ( $is_trial_installed && ! $is_installed ) {
+				$addon_status['is_trial'] = TRUE;
+			}
+			else {
+
+				foreach ( self::$addons as $addon_key => $installed_addon ) {
+					if ( strtolower( $installed_addon['name'] ) === strtolower( $addon_name ) ) {
+						if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
+							$addon_status['is_trial'] = TRUE;
+						}
+						break;
+					}
+				}
+
+			}
 
 			$saved_license = self::get_keys( $addon_name );
 
@@ -764,10 +794,16 @@ class Addons {
 				( 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
 			) {
 
-				self::update_key( $addon_name, [
+				$key_info = array(
 					'key'    => '',
-					'status' => ! empty( $saved_license ) && 'expired' === $saved_license['status'] ? 'expired' : 'invalid',
-				] );
+					'status' => ( ! empty( $saved_license ) && 'expired' === $saved_license['status'] ) ? 'expired' : 'invalid',
+				);
+
+				if ( ! empty( $saved_license['expires'] ) ) {
+					$key_info['expires'] = $saved_license['expires'];
+				}
+
+				self::update_key( $addon_name, $key_info );
 
 			}
 			else {
@@ -786,7 +822,7 @@ class Addons {
 						if ( $license_data ) {
 
 							$addon_status['status']  = $license_data->license;
-							$addon_status['expires'] = Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
+							$addon_status['expires'] = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
 
 							if ( $license_data->license !== $saved_license['status'] ) {
 								$saved_license['status'] = $license_data->license;
@@ -796,6 +832,7 @@ class Addons {
 						}
 
 					}
+
 				}
 				else {
 					$addon_status['status'] = 'not-activated';
@@ -803,13 +840,14 @@ class Addons {
 
 			}
 
-			if ( ! $is_installed ) {
+			if ( ! $is_installed && ! $is_trial_installed ) {
 				$addon_status['status']        = 'not-installed';
 				$addon_status['button_text']   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
 				$addon_status['button_class']  = 'install-addon';
 				$addon_status['button_action'] = ATUM_PREFIX . 'install';
 			}
 			else {
+
 				switch ( $addon_status['status'] ) {
 					case 'invalid':
 					case 'disabled':
@@ -819,6 +857,7 @@ class Addons {
 						$addon_status['button_class']  = 'validate-key';
 						$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
 						break;
+
 					case 'expired':
 						$addon_status['status']        = 'expired';
 						$addon_status['button_text']   = '';
@@ -847,6 +886,11 @@ class Addons {
 						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
 						break;
 				}
+
+			}
+
+			if ( ! empty( $saved_license['expires'] ) ) {
+				$addon_status['expires'] = $saved_license['expires'];
 			}
 
 			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
@@ -868,6 +912,13 @@ class Addons {
 
 		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
 		AtumCache::delete_transients( $transient_name );
+
+		// Delete the trial status transient too.
+		if ( $addon_name ) {
+			$trial_transient_name = AtumCache::get_transient_key( 'addon_status', "$addon_name Trial" );
+			AtumCache::delete_transients( $trial_transient_name );
+		}
+
 	}
 
 	/* @noinspection PhpDocRedundantThrowsInspection */
@@ -1209,6 +1260,7 @@ class Addons {
 
 			$tlds_to_check = array(
 				'.local',
+				'.localhost',
 				'.test',
 			);
 
@@ -1223,11 +1275,33 @@ class Addons {
 
 				$subdomains_to_check = array(
 					'dev.',
+					'www.dev.',
 					'test.',
 					'*.staging.',
 					'*.test.',
-					'staging-*.',
+					'staging*.',
 					'*.wpengine.com',
+					'*.cloudwaysapps.com',
+					'*.wpenginepowered.com',
+					'*.pantheonsite.io',
+					'*.flywheelsites.com',
+					'*.flywheelstaging.com',
+					'*.kinsta.com',
+					'*.kinsta.cloud',
+					'*.azurewebsites.net',
+					'*.wpserveur.net',
+					'*-liquidwebsites.com',
+					'*.myftpupload.com',
+					'*.dream.press',
+					'*.sg-host.com',
+					'*.platformsh.site',
+					'*.wpstage.net',
+					'*.bigscoots-staging.com',
+					'*.wpsc.site',
+					'*.runcloud.link',
+					'*.onrocket.site',
+					'*.singlestaging.com',
+					'*.nxcli.net',
 				);
 
 				foreach ( $subdomains_to_check as $subdomain ) {

@@ -761,14 +761,19 @@ final class Ajax {
 		}
 
 		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+		$is_trial     = isset( $license_data->trial ) && TRUE === $license_data->trial;
+
+		if ( $is_trial && Helpers::is_plugin_installed( "ATUM $addon_name", '', 'name' ) ) {
+			wp_send_json_error( __( 'This is a trial license and cannot be used for your full version.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		switch ( $license_data->license ) {
-
 			case 'valid':
 				// Save the valid license.
 				Addons::update_key( $addon_name, array(
-					'key'    => $key,
-					'status' => 'valid',
+					'key'     => $key,
+					'status'  => 'valid',
+					'expires' => $license_data->expires,
 				) );
 
 				// Delete status transient.
@@ -779,10 +784,12 @@ final class Ajax {
 
 			case 'inactive':
 			case 'site_inactive':
-				Addons::update_key( $addon_name, array(
-					'key'    => $key,
-					'status' => 'inactive',
-				) );
+				if ( $is_trial ) {
+					wp_send_json( array(
+						'success' => 'trial',
+						'data'    => __( "This is a trial license.<br>You'll be able to trial this add-on for free for 14 days until it's blocked.<br>If you agree, please click the button to activate and install.", ATUM_TEXT_DOMAIN ),
+					) );
+				}
 
 				// Delete status transient.
 				Addons::delete_status_transient( $addon_name );
@@ -792,7 +799,7 @@ final class Ajax {
 
 					wp_send_json( array(
 						'success' => 'activate',
-						'data'    => __( "Your license is valid.<br>This site has been recognised as a staging site and won't compute as a new activation.<br>Please, click the button to activate.", ATUM_TEXT_DOMAIN ),
+						'data'    => __( "Your license is valid.<br>This site has been recognised as a staging site and won't compute as a new activation.<br>Please, click the button to activate and install.", ATUM_TEXT_DOMAIN ),
 					) );
 
 				}
@@ -809,8 +816,8 @@ final class Ajax {
 						'data'    => sprintf(
 							/* translators: the number of remaininig licenses */
 							_n(
-								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate.',
-								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate.',
+								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate and install.',
+								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate and install.',
 								$licenses_after_activation,
 								ATUM_TEXT_DOMAIN
 							),
@@ -839,10 +846,11 @@ final class Ajax {
 		}
 
 		// Don't save the key if invalid.
-		if ( ! 'invalid' === $license_data->license ) {
+		if ( ! in_array( $license_data->license, [ 'invalid', 'disabled', 'expired' ] ) ) {
 			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => 'invalid',
+				'key'     => $key,
+				'status'  => 'invalid',
+				'expires' => $license_data->expires,
 			) );
 		}
 
@@ -955,10 +963,18 @@ final class Ajax {
 		// Update the key in database.
 		if ( ! empty( $license_data ) ) {
 
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => $license_data->license,
-			) );
+			$key_info = array(
+				'key'     => $key,
+				'status'  => $license_data->license,
+				'expires' => $license_data->expires,
+			);
+
+			if ( ! empty( $license_data->trial ) && TRUE === $license_data->trial && $addon_name !== $license_data->item_name ) {
+				$addon_name        = $license_data->item_name;
+				$key_info['trial'] = TRUE;
+			}
+
+			Addons::update_key( $addon_name, $key_info );
 
 			// Delete status transient.
 			Addons::delete_status_transient( $addon_name );
@@ -1066,13 +1082,15 @@ final class Ajax {
 			Addons::delete_status_transient( $addon_name );
 
 			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => $license_data->license,
+				'key'     => $key,
+				'status'  => $license_data->license,
+				'expires' => $license_data->expires,
 			) );
 
 			/* @noinspection PhpUnhandledExceptionInspection */
 			$result = Addons::install_addon( $addon_name, $addon_slug, $license_data->download_link );
 			wp_send_json( $result );
+
 		}
 
 		if ( $license_data->msg ) {
@@ -1100,7 +1118,7 @@ final class Ajax {
 
 		// Clear the key.
 		$addon_name = esc_attr( $_POST['addon'] );
-		Addons::update_key( $addon_name, '' );
+		Addons::update_key( $addon_name, [] );
 
 		// Delete the transient.
 		Addons::delete_status_transient( $addon_name );
@@ -1113,7 +1131,6 @@ final class Ajax {
 	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
 	 *
 	 * @since 1.9.26
-	 *
 	 */
 	public function refresh_license_status() {
 

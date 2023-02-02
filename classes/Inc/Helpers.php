@@ -1552,8 +1552,9 @@ final class Helpers {
 			// Get the plugin slug from its path.
 			$installed_plugin_key = 'slug' === $by ? explode( '/', $plugin_file )[0] : $plugin_data['Title'];
 
-			if ( in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
-				return $return_bool ? TRUE : array( $plugin_file => $plugin_data );
+			if (
+				in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
+				return $return_bool ? TRUE : [ $plugin_file => $plugin_data ];
 			}
 		}
 

@@ -15,6 +15,7 @@ import Tooltip from '../_tooltip';
 export default class AddonsPage {
 	
 	$addonsList: JQuery;
+	$noResults: JQuery;
 	
 	constructor(
 		private settings: Settings,
@@ -22,10 +23,38 @@ export default class AddonsPage {
 	) {
 
 		this.$addonsList = $( '.atum-addons' );
+		this.$noResults = this.$addonsList.find( '.no-results' );
 
+		this.prepareMenu();
 		this.initHorizontalDragScroll();
 		this.bindEvents();
 		
+	}
+
+	/**
+	 * Prepare the top menu items
+	 */
+	prepareMenu() {
+
+		const $addonsMenu: JQuery = this.$addonsList.find( '.nav-container-box' );
+
+		$addonsMenu.find( 'li' ).each( ( index: number, elem: Element ) => {
+
+			const $elem: JQuery  = $( elem ),
+			      status: string = $elem.data( 'status' );
+
+			if ( 'all' === status ) {
+				return;
+			}
+
+			if ( ! this.$addonsList.find( `.atum-addon.${ status }` ).length && ! this.$addonsList.find( `.atum-addon .actions.${ status }` ).length ) {
+				$elem.hide();
+			}
+
+		} );
+
+		$addonsMenu.removeAttr( 'style' );
+
 	}
 
 	/**
@@ -38,28 +67,36 @@ export default class AddonsPage {
 			// Apply filters
 			.on( 'click', '.nav-container-box li', ( evt: JQueryEventObject ) => {
 
-				const $li: JQuery   = $( evt.currentTarget ),
-				      $span: JQuery = $li.find( 'span' ),
-					  status: string = $li.data('status');
+				const $li: JQuery          = $( evt.currentTarget ),
+				      $span: JQuery        = $li.find( 'span' ),
+				      status: string       = $li.data( 'status' ),
+				      $searchInput: JQuery = $( '#addons-search' );
 
-				if ( ! $span.is( '.active') ) {
+				// Only show the search on the "All" view.
+				if ( 'all' === status ) {
+					$searchInput.parent().show();
+				}
+				else {
+					$searchInput.val( '' ).parent().removeClass( 'is-searching' ).hide();
+				}
+
+				if ( ! $span.hasClass( 'active') ) {
 
 					$li.siblings().find( 'span' ).removeClass( 'active' );
 					$span.addClass( 'active' );
 
-					this.$addonsList.find('.atum-addon').each( ( index, elem ) => {
+					this.$addonsList.find( '.atum-addon' ).each( ( index: number, elem: Element ) => {
 
-						const $addon = $( elem );
+						const $addon: JQuery = $( elem );
 
-						if ( 'all' === status || $addon.hasClass( status ) ) {
+						if ( 'all' === status || $addon.hasClass( status ) || $addon.find( '.actions' ).hasClass( status ) ) {
 							$addon.show();
-
 						}
 						else {
 							$addon.hide();
 						}
 
-					});
+					} );
 
 				}
 			})
@@ -106,13 +143,11 @@ export default class AddonsPage {
 					}
 
 					if ( $button.hasClass( 'install-addon' ) ) {
-						this.installAddon( $button );
+						this.maybeInstallAddon( $button );
 					}
 					// Ask the user to confirm the deactivation
 					else if ( $button.hasClass( 'deactivate-key' ) ) {
-
-
-
+						// TODO...
 					}
 					else {
 						this.requestLicenseChange( $button, key );
@@ -126,10 +161,7 @@ export default class AddonsPage {
 			.on( 'click', '.show-key', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
-				const $button: JQuery = $( evt.currentTarget );
-
-				$button.hide();
-				$button.siblings().slideToggle( 'fast' );
+				$( evt.currentTarget ).closest( '.actions' ).children().slideToggle( 'fast' );
 
 			} )
 
@@ -169,17 +201,122 @@ export default class AddonsPage {
 
 			} )
 
+			// Search addons.
+			.on( 'keyup paste search', '#addons-search', ( evt: JQueryEventObject ) => {
+
+				const $input: JQuery  = $( evt.currentTarget ),
+				      term: string    = $input.val().toLowerCase(),
+				      $addons: JQuery = this.$addonsList.find( '.atum-addon' );
+
+				this.$noResults.find( '.no-results__term' ).text( term );
+
+				if ( ! term ) {
+					this.$noResults.hide();
+					this.$addonsList.find( '.nav-container-box .all' ).click();
+					$addons.show();
+					$input.parent().removeClass( 'is-searching' );
+				}
+				else {
+
+					$input.parent().addClass( 'is-searching' );
+
+					let numHidden: number = 0;
+
+					$addons.each( ( index: number, elem: Element ) => {
+
+						const $addon: JQuery = $( elem );
+
+						if ( $addon.text().toLowerCase().includes( term ) ) {
+							$addon.show();
+						}
+						else {
+							$addon.hide();
+							numHidden++;
+						}
+
+					} );
+
+					if ( numHidden >= $addons.length ) {
+						this.$noResults.show();
+					}
+					else {
+						this.$noResults.hide();
+					}
+
+				}
+
+			} )
+
 
 	}
 
 	/**
-	 * Install addon
+	 * Validate license before installing addon
 	 *
 	 * @param {JQuery} $button
 	 */
-	installAddon( $button: JQuery ) {
+	maybeInstallAddon( $button: JQuery ) {
 
-		const $addonBlock: JQuery = $button.closest( '.atum-addon' );
+		const $addonBlock: JQuery = $button.closest( '.atum-addon' ),
+		      addon: string       = $addonBlock.data( 'addon' ),
+		      slug: string        = $addonBlock.data( 'addon-slug' ),
+		      key: string         = $addonBlock.find( '.addon-key input' ).val();
+
+		// First check if it is a trial license.
+		$.ajax( {
+			url       : window[ 'ajaxurl' ],
+			method    : 'POST',
+			dataType  : 'json',
+			data      : {
+				action  : 'atum_validate_license',
+				security: this.$addonsList.data( 'nonce' ),
+				addon,
+				slug,
+				key,
+			},
+			beforeSend: () => {
+				this.beforeAjax( $button );
+			},
+			success: ( response: any ) => {
+
+				console.log(response);
+
+				switch ( response.success ) {
+					case true:
+						//this.installAddon( addon, slug, key );
+						break;
+
+					case false:
+						this.showErrorAlert( response.data );
+						break;
+
+					case 'activate':
+						Swal.fire( {
+							icon : 'info',
+							title: this.settings.get( 'activation' ),
+							html : response.data,
+						} );
+
+						break;
+
+					case 'trial':
+						Swal.fire( {
+							icon : 'info',
+							title: this.settings.get( 'trial' ),
+							html : response.data,
+						} );
+
+						break;
+				}
+
+				this.afterAjax( $button );
+
+			}
+		} );
+
+	}
+
+	installAddon( addon: string, slug: string, key: string ) {
 
 		$.ajax( {
 			url       : window[ 'ajaxurl' ],
@@ -188,16 +325,11 @@ export default class AddonsPage {
 			data      : {
 				action  : 'atum_install_addon',
 				security: this.$addonsList.data( 'nonce' ),
-				addon   : $addonBlock.data( 'addon' ),
-				slug    : $addonBlock.data( 'addon-slug' ),
-				key     : $addonBlock.find( '.addon-key input' ).val(),
-			},
-			beforeSend: () => {
-				this.beforeAjax( $button );
+				addon   : addon,
+				slug    : slug,
+				key     : key,
 			},
 			success   : ( response: any ) => {
-
-				this.afterAjax( $button );
 
 				if ( response.success === true ) {
 					this.showSuccessAlert( response.data );
@@ -208,6 +340,7 @@ export default class AddonsPage {
 
 			},
 		} );
+
 	}
 	
 	/**
@@ -257,7 +390,7 @@ export default class AddonsPage {
 							allowOutsideClick  : false,
 							preConfirm         : (): Promise<any> => {
 
-								return new Promise( ( resolve: Function, reject: Function ) => {
+								return new Promise( ( resolve: Function ) => {
 
 									$.ajax( {
 										url     : window[ 'ajaxurl' ],
