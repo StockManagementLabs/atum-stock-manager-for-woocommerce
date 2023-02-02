@@ -1235,19 +1235,6 @@ var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
         }
-<<<<<<< HEAD
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-=======
->>>>>>> master
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
@@ -1296,13 +1283,9 @@ var Utils = {
             return $(elem).data(prop) == val;
         });
     },
-<<<<<<< HEAD
-    addNotice: function (type, msg) {
-=======
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
->>>>>>> master
         var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
@@ -1419,10 +1402,6 @@ var Utils = {
         if (typeof value === 'number') {
             return value;
         }
-<<<<<<< HEAD
-        decimal = decimal || this.settings.number.decimal;
-=======
->>>>>>> master
         var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
             .replace(/\((.*)\)/, '-$1')
             .replace(regex, '')

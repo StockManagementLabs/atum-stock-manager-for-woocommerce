@@ -246,22 +246,8 @@ jQuery(function ($) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< HEAD
-/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-=======
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! js-big-decimal */ "./node_modules/js-big-decimal/dist/node/js-big-decimal.js");
 /* harmony import */ var js_big_decimal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_big_decimal__WEBPACK_IMPORTED_MODULE_0__);
->>>>>>> master
 var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -316,13 +302,9 @@ var Utils = {
             return $(elem).data(prop) == val;
         });
     },
-<<<<<<< HEAD
-    addNotice: function (type, msg) {
-=======
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
->>>>>>> master
         var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
@@ -439,10 +421,6 @@ var Utils = {
         if (typeof value === 'number') {
             return value;
         }
-<<<<<<< HEAD
-        decimal = decimal || this.settings.number.decimal;
-=======
->>>>>>> master
         var regex = new RegExp("[^0-9-".concat(decimal, "]"), 'g'), unformatted = parseFloat(('' + value)
             .replace(/\((.*)\)/, '-$1')
             .replace(regex, '')
