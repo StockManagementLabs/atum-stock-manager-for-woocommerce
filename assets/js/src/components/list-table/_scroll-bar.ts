@@ -70,7 +70,7 @@ export default class ScrollBar {
 		}
 
 		// Wait until the thumbs are loaded and enable JScrollpane.
-		let $tableWrapper: any = $( '.atum-table-wrapper' ),
+		let $tableWrapper: any = this.globals.$atumList.find( '.atum-table-wrapper' ),
 		    scrollOpts: any    = {
 			    horizontalGutter: 0,
 			    verticalGutter  : 0,

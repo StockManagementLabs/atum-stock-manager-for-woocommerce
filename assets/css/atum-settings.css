@@ -5407,6 +5407,9 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 .atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
   margin-right: 15px;
 }
+.atum-settings-wrapper #atum-settings .section-fields .script-runner.template-reset .tool-runner {
+  width: 140px;
+}
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {
     width: 80% !important;

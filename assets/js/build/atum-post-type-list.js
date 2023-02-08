@@ -1044,7 +1044,7 @@ var ScrollBar = (function () {
             this.reloadScrollbar();
             return;
         }
-        var $tableWrapper = $('.atum-table-wrapper'), scrollOpts = {
+        var $tableWrapper = this.globals.$atumList.find('.atum-table-wrapper'), scrollOpts = {
             horizontalGutter: 0,
             verticalGutter: 0,
         };
