@@ -843,6 +843,10 @@ final class Ajax {
 				$error_message = __( 'This license has been disabled', ATUM_TEXT_DOMAIN );
 				break;
 
+			case 'trial_used':
+				$error_message = __( 'This trial key has already been activated on another site and is for single use only.', ATUM_TEXT_DOMAIN );
+				break;
+
 		}
 
 		// Don't save the key if invalid.
@@ -904,9 +908,7 @@ final class Ajax {
 
 		// Make sure the response came back okay.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-
 			$message = is_wp_error( $response ) ? $response->get_error_message() : $default_error;
-
 		}
 		else {
 
@@ -915,7 +917,6 @@ final class Ajax {
 			if ( FALSE === $license_data->success ) {
 
 				switch ( $license_data->error ) {
-
 					case 'expired':
 						$timestamp = Helpers::get_current_timestamp();
 						$message   = sprintf(
@@ -925,19 +926,25 @@ final class Ajax {
 						);
 						break;
 
+					case 'disabled':
 					case 'revoked':
 						$message = __( 'Your license key has been disabled.', ATUM_TEXT_DOMAIN );
 						break;
 
+					case 'invalid':
 					case 'missing':
 						$message = __( 'Invalid license.', ATUM_TEXT_DOMAIN );
 						break;
 
-					case 'invalid':
-					case 'site_inactive':
-						$message = __( 'Your license is not active for this URL.', ATUM_TEXT_DOMAIN );
+					case 'missing_url':
+						$message = __( 'The site URL is required to activate a license.', ATUM_TEXT_DOMAIN );
 						break;
 
+					case 'site_inactive':
+						$message = __( 'Your license is not active for this site.', ATUM_TEXT_DOMAIN );
+						break;
+
+					case 'key_mismatch':
 					case 'item_name_mismatch':
 						/* translators: the add-on name */
 						$message = sprintf( __( 'This appears to be an invalid license key for %s.', ATUM_TEXT_DOMAIN ), $addon_name );
@@ -945,6 +952,10 @@ final class Ajax {
 
 					case 'no_activations_left':
 						$message = __( 'Your license key has reached its activation limit.', ATUM_TEXT_DOMAIN );
+						break;
+
+					case 'trial_used':
+						$message = __( 'This trial key has already been activated on another site and is for single use only.', ATUM_TEXT_DOMAIN );
 						break;
 
 					default:

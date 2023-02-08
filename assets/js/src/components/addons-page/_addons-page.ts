@@ -114,21 +114,19 @@ export default class AddonsPage {
 				}
 				else if ( $button.hasClass( 'remove-license' ) ) {
 
-					key = $button.closest( '.addon-key' ).find('.license-key').text();
+					key = $button.closest( '.addon-key' ).find( '.license-key' ).text();
+
+					const isTrial: boolean = $button.closest( '.actions' ).hasClass( 'trial' );
 
 					Swal.fire( {
-						title            : this.settings.get( 'limitedDeactivations' ),
-						html             : this.settings.get( 'allowedDeactivations' ),
-						icon             : 'warning',
-						confirmButtonText: this.settings.get( 'continue' ),
-						cancelButtonText : this.settings.get( 'cancel' ),
-						showCancelButton : true,
-					} ).then( ( result: SweetAlertResult ) => {
-
-						if ( result.isConfirmed ) {
-							this.requestLicenseChange( $button, key );
-						}
-
+						title              : this.settings.get( isTrial ? 'trialDeactivation' : 'limitedDeactivations' ),
+						html               : this.settings.get( isTrial ? 'trialWillDisable' : 'allowedDeactivations' ),
+						icon               : 'warning',
+						confirmButtonText  : this.settings.get( 'continue' ),
+						cancelButtonText   : this.settings.get( 'cancel' ),
+						showCancelButton   : true,
+						showLoaderOnConfirm: true,
+						preConfirm         : (): Promise<void> => this.requestLicenseChange( $button, key, true ),
 					} );
 
 				}
@@ -144,10 +142,6 @@ export default class AddonsPage {
 
 					if ( $button.hasClass( 'install-addon' ) ) {
 						this.maybeInstallAddon( $button );
-					}
-					// Ask the user to confirm the deactivation
-					else if ( $button.hasClass( 'deactivate-key' ) ) {
-						// TODO...
 					}
 					else {
 						this.requestLicenseChange( $button, key );
@@ -348,88 +342,99 @@ export default class AddonsPage {
 	 *
 	 * @param {JQuery} $button
 	 * @param {string} key
+	 * @param {boolean} isSwal
+	 *
+	 * @return {Promise<void>}
 	 */
-	requestLicenseChange( $button: JQuery, key: string ) {
+	requestLicenseChange( $button: JQuery, key: string, isSwal: boolean = false ): Promise<void> {
 
-		$.ajax( {
-			url       : window[ 'ajaxurl' ],
-			method    : 'POST',
-			dataType  : 'json',
-			data      : {
-				action  : $button.data( 'action' ),
-				security: this.$addonsList.data( 'nonce' ),
-				addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
-				key     : key,
-			},
-			beforeSend: () => {
-				this.beforeAjax( $button );
-			},
-			success   : ( response: any ) => {
+		return new Promise( ( resolve: Function ) => {
 
-				this.afterAjax( $button );
+			$.ajax( {
+				url       : window[ 'ajaxurl' ],
+				method    : 'POST',
+				dataType  : 'json',
+				data      : {
+					action  : $button.data( 'action' ),
+					security: this.$addonsList.data( 'nonce' ),
+					addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
+					key     : key,
+				},
+				beforeSend: () => this.beforeAjax( $button ),
+				success   : ( response: any ) => {
 
-				switch ( response.success ) {
+					this.afterAjax( $button );
 
-					case false:
-						this.showErrorAlert( response.data );
-						break;
+					switch ( response.success ) {
 
-					case true:
-						this.showSuccessAlert( response.data );
-						break;
+						case false:
+							if ( isSwal ) {
+								Swal.showValidationMessage( response.data );
+							}
+							else {
+								this.showErrorAlert( response.data );
+							}
+							break;
 
-					case 'activate':
+						case true:
+							this.showSuccessAlert( response.data );
+							break;
 
-						Swal.fire( {
-							title              : this.settings.get( 'activation' ),
-							html               : response.data,
-							icon               : 'info',
-							showCancelButton   : true,
-							showLoaderOnConfirm: true,
-							confirmButtonText  : this.settings.get( 'activate' ),
-							allowOutsideClick  : false,
-							preConfirm         : (): Promise<any> => {
+						case 'activate':
+							Swal.fire( {
+								title              : this.settings.get( 'activation' ),
+								html               : response.data,
+								icon               : 'info',
+								showCancelButton   : true,
+								showLoaderOnConfirm: true,
+								confirmButtonText  : this.settings.get( 'activate' ),
+								allowOutsideClick  : false,
+								preConfirm         : (): Promise<void> => {
 
-								return new Promise( ( resolve: Function ) => {
+									return new Promise( ( res: Function ) => {
 
-									$.ajax( {
-										url     : window[ 'ajaxurl' ],
-										method  : 'POST',
-										dataType: 'json',
-										data    : {
-											action  : 'atum_activate_license',
-											security: this.$addonsList.data( 'nonce' ),
-											addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
-											key     : key,
-										},
-										success : ( response: any ) => {
+										$.ajax( {
+											url     : window[ 'ajaxurl' ],
+											method  : 'POST',
+											dataType: 'json',
+											data    : {
+												action  : 'atum_activate_license',
+												security: this.$addonsList.data( 'nonce' ),
+												addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
+												key     : key,
+											},
+											success : ( r: any ) => {
 
-											if ( response.success !== true ) {
-												Swal.showValidationMessage( response.data );
-											}
+												if ( r.success !== true ) {
+													Swal.showValidationMessage( r.data );
+												}
 
-											resolve();
+												res();
 
-										},
+											},
+										} );
+
 									} );
 
-								} );
+								},
+							} )
+							.then( ( result: SweetAlertResult ) => {
 
-							},
-						} )
-						.then( ( result: SweetAlertResult ) => {
+								if ( result.isConfirmed ) {
+									this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
+								}
 
-							if ( result.isConfirmed ) {
-								this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
-							}
+							} );
 
-						} );
+							break;
 
-						break;
+					}
 
-				}
+					resolve();
 
-			},
+				},
+			} );
+
 		} );
 		
 	}

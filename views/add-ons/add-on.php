@@ -22,8 +22,10 @@ $is_trial             = ! empty( $addon_status['is_trial'] ) && TRUE === $addon_
 $pill_style           = isset( $addon['info']['primary_color'] ) ? " style='background-color:{$addon['info']['primary_color']}';" : '';
 $notice               = '';
 $notice_type          = 'info';
-$actual_date          = date_i18n( 'Y-m-d H:i:s', strtotime( 'now' ) );
-$expiration_date      = date_i18n( 'Y-m-d H:i:s', strtotime( $addon_status['expires'] ?? 'now' ) );
+$actual_timestamp     = strtotime( 'now' );
+$actual_date          = date_i18n( 'Y-m-d H:i:s', $actual_timestamp );
+$expiration_timestamp = strtotime( $addon_status['expires'] ?? 'now' );
+$expiration_date      = date_i18n( 'Y-m-d H:i:s', $expiration_timestamp );
 
 $addon_classes = array();
 $status_text   = '';
@@ -32,11 +34,15 @@ if ( $is_coming_soon_addon ) :
 	$addon_status['status'] = $addon_classes[] = 'coming-soon';
 	$status_text            = __( 'Coming Soon', ATUM_TEXT_DOMAIN );
 elseif ( $is_trial ) :
+
 	$addon_classes[] = 'trial';
 	$status_text     = __( 'Trial', ATUM_TEXT_DOMAIN );
 
-	// TODO: ADD LOGIC...
-	if ( $expiration_date < $actual_date ) :
+	if ( empty( $addon_status['key'] ) && $addon_status['installed'] ) :
+		$notice = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+	elseif ( 'trial_used' === $addon_status['status'] ) :
+		$notice = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
+	elseif ( $expiration_timestamp > $actual_timestamp ) :
 		$time_ago = new TimeAgo();
 		/* translators: the time remaining */
 		$notice = sprintf( esc_html__( 'Trial period: %s ', ATUM_TEXT_DOMAIN ), str_replace( 'ago', esc_html__( 'remaining', ATUM_TEXT_DOMAIN ), $time_ago->inWordsFromStrings( $expiration_date ) ) );
@@ -61,6 +67,8 @@ else :
 			break;
 
 		case 'inactive':
+		case 'site_inactive':
+		case 'not-activated':
 			$addon_classes[] = 'inactive';
 			$status_text     = __( 'Not Activated', ATUM_TEXT_DOMAIN );
 			break;
@@ -184,9 +192,11 @@ endif; ?>
 									value="" placeholder="<?php esc_attr_e( 'Enter the add-on license key...', ATUM_TEXT_DOMAIN ) ?>"
 								>
 
-								<button type="button" class="btn btn-primary <?php echo esc_attr( $addon_status['button_class'] ) ?>"
-									data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"
-								><?php echo esc_html( $addon_status['button_text'] ) ?></button>
+								<?php if ( ! empty( $addon_status['button_text'] ) && ! empty( $addon_status['button_action'] ) ) : ?>
+									<button type="button" class="btn btn-primary <?php echo esc_attr( $addon_status['button_class'] ?? '' ) ?>"
+										data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"
+									><?php echo esc_html( $addon_status['button_text'] ) ?></button>
+								<?php endif; ?>
 
 								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>
 
@@ -205,7 +215,7 @@ endif; ?>
 								<?php endif; ?>
 
 								<button type="button" class="btn btn-outline-danger remove-license"
-									data-action="<?php echo esc_attr( $addon_status['button_action'] ) ?>"
+									data-action="atum_remove_license"
 								><?php esc_html_e( 'Remove license', ATUM_TEXT_DOMAIN ); ?></button>
 
 								<button type="button" class="btn cancel-action"><?php esc_html_e( 'Cancel', ATUM_TEXT_DOMAIN ); ?></button>

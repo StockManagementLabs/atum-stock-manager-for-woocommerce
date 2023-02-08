@@ -236,6 +236,8 @@ class Addons {
 			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
 			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
 			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
+			'trialDeactivation'    => __( 'Trial deactivation notice!', ATUM_TEXT_DOMAIN ),
+			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or activate a full version license.', ATUM_TEXT_DOMAIN ),
 		) );
 
 		wp_enqueue_style( 'sweetalert2' );
@@ -835,7 +837,7 @@ class Addons {
 
 				}
 				else {
-					$addon_status['status'] = 'not-activated';
+					$addon_status['status'] = 'not_activated';
 				}
 
 			}
@@ -859,16 +861,15 @@ class Addons {
 						break;
 
 					case 'expired':
-						$addon_status['status']        = 'expired';
 						$addon_status['button_text']   = '';
 						$addon_status['button_class']  = '';
 						$addon_status['button_action'] = ATUM_PREFIX . 'remove_license';
 						break;
 
-					// Not possible??
 					case 'inactive':
 					case 'site_inactive':
-						$addon_status['status']        = 'inactive';
+					case 'trial_used':
+					case 'not_activated':
 						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
 						$addon_status['button_class']  = 'activate-key';
 						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
@@ -880,11 +881,6 @@ class Addons {
 						$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
 						break;
 
-					case 'not-activated':
-						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
-						$addon_status['button_class']  = 'activate-key';
-						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
-						break;
 				}
 
 			}

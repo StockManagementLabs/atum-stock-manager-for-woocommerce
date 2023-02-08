@@ -31,10 +31,15 @@ defined( 'ABSPATH' ) || die;
 				<span class="atum-trial-list__item-name">
 					<?php echo esc_html( $expired_trial['name'] ) ?> <i class="atum-icon atmi-lock"></i><br>
 					<small>
-						<?php
-						$time_ago = new \Westsworld\TimeAgo();
-						/* translators: the expiration date */
-						printf( esc_html__( 'Trial has expired %s', ATUM_TEXT_DOMAIN ), esc_html( $time_ago->inWordsFromStrings( '2023-01-30 12:55' ) ) ); ?>
+						<?php if ( empty( $expired_trial['expires'] ) || 'now' === $expired_trial['expires'] ) :
+							esc_html_e( 'Trial expired!', ATUM_TEXT_DOMAIN );
+						else :
+
+							$time_ago = new \Westsworld\TimeAgo();
+							/* translators: the expiration date */
+							printf( esc_html__( 'Trial expired %s', ATUM_TEXT_DOMAIN ), esc_html( $time_ago->inWordsFromStrings( $expired_trial['expires'] ) ) );
+
+						endif; ?>
 					</small>
 				</span>
 
@@ -42,7 +47,7 @@ defined( 'ABSPATH' ) || die;
 
 			<span class="atum-trial-list__item-buttons">
 				<a href="<?php echo esc_url( $expired_trial['addon_url'] ) ?>" class="btn btn-primary" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
-				<button type="button" class="btn btn-outline-primary"><?php esc_html_e( 'Extend Trial', ATUM_TEXT_DOMAIN ); ?></button>
+				<button type="button" class="btn btn-outline-primary" data-key="<?php echo esc_attr( $expired_trial['key'] ) ?>"><?php esc_html_e( 'Extend Trial', ATUM_TEXT_DOMAIN ); ?></button>
 			</span>
 
 		</li>
