@@ -6,11 +6,11 @@
    └──────────────┘
 */
 
+import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import dragscroll from '../../../vendor/dragscroll';
-import Utils from '../../utils/_utils';
 import Tooltip from '../_tooltip';
+import Utils from '../../utils/_utils';
 
 export default class AddonsPage {
 	
@@ -172,7 +172,7 @@ export default class AddonsPage {
 					dataType  : 'json',
 					data      : {
 						action  : 'atum_refresh_license',
-						security: this.$addonsList.data( 'nonce' ),
+						security: this.settings.get( 'nonce' ),
 						addon   : $link.closest( '.atum-addon' ).data( 'addon' ),
 					},
 					beforeSend: () => {
@@ -261,12 +261,12 @@ export default class AddonsPage {
 			url       : window[ 'ajaxurl' ],
 			method    : 'POST',
 			dataType  : 'json',
-			data      : {
+			data: {
 				action  : 'atum_validate_license',
-				security: this.$addonsList.data( 'nonce' ),
-				addon,
-				slug,
-				key,
+				security: this.settings.get( 'nonce' ),
+				addon   : addon,
+				slug    : slug,
+				key     : key,
 			},
 			beforeSend: () => {
 				this.beforeAjax( $button );
@@ -316,9 +316,9 @@ export default class AddonsPage {
 			url       : window[ 'ajaxurl' ],
 			method    : 'POST',
 			dataType  : 'json',
-			data      : {
+			data: {
 				action  : 'atum_install_addon',
-				security: this.$addonsList.data( 'nonce' ),
+				security: this.settings.get( 'nonce' ),
 				addon   : addon,
 				slug    : slug,
 				key     : key,
@@ -356,7 +356,7 @@ export default class AddonsPage {
 				dataType  : 'json',
 				data      : {
 					action  : $button.data( 'action' ),
-					security: this.$addonsList.data( 'nonce' ),
+					security: this.settings.get( 'nonce' ),
 					addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
 					key     : key,
 				},
@@ -397,9 +397,9 @@ export default class AddonsPage {
 											url     : window[ 'ajaxurl' ],
 											method  : 'POST',
 											dataType: 'json',
-											data    : {
+											data: {
 												action  : 'atum_activate_license',
-												security: this.$addonsList.data( 'nonce' ),
+												security: this.settings.get( 'nonce' ),
 												addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
 												key     : key,
 											},

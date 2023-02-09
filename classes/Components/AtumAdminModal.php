@@ -46,18 +46,29 @@ class AtumAdminModal {
 	 */
 	protected $swal_configs = [];
 
+	/**
+	 * Pages where the modal will be excluded
+	 *
+	 * @var string[]
+	 */
+	protected $exclusions = [];
+
 
 	/**
 	 * AtumAdminModals singleton constructor
 	 *
 	 * @since 1.9.27
+	 *
+	 * @param string[] $exclusions
 	 */
-	private function __construct() {
+	private function __construct( $exclusions = [] ) {
 
 		$this->default_swal_config = array(
 			'confirmButtonText' => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'cancelButtonText'  => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 		);
+
+		$this->exclusions = $exclusions;
 
 	}
 
@@ -72,7 +83,10 @@ class AtumAdminModal {
 	 */
 	public function add_modal( $key, $swal_config, $template = NULL ) {
 
-		if ( isset( $this->swal_configs[ $key ] ) || wp_doing_ajax() || Helpers::is_rest_request() ) {
+		if (
+			isset( $this->swal_configs[ $key ] ) || ! is_admin() || wp_doing_ajax() ||
+			Helpers::is_rest_request() || ! current_user_can( 'administrator' )
+		) {
 			return;
 		}
 
@@ -82,7 +96,7 @@ class AtumAdminModal {
 			$this->swal_configs[ $key ]['html'] = $template;
 		}
 
-		if ( is_admin() && ! has_action( 'wp_loaded', array( $this, 'show' ) ) ) {
+		if ( ! has_action( 'wp_loaded', array( $this, 'show' ) ) ) {
 			add_action( 'wp_loaded', array( $this, 'show' ), PHP_INT_MAX );
 		}
 
@@ -92,13 +106,25 @@ class AtumAdminModal {
 	 * Enqueue the modal scripts if needed
 	 *
 	 * @since 1.9.27
+	 *
+	 * @param string $hook
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts( $hook ) {
 
 		$admin_modal_vars = [
 			'swal_configs' => $this->swal_configs,
 			'nonce'        => wp_create_nonce( 'atum-admin-modals-nonce' ),
 		];
+
+		if ( ! empty( $this->exclusions ) ) {
+			foreach ( $this->exclusions as $exclusion ) {
+
+				if ( strpos( $hook, $exclusion ) !== FALSE ) {
+					return;
+				}
+
+			}
+		}
 
 		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
@@ -187,12 +213,14 @@ class AtumAdminModal {
 	/**
 	 * Get Singleton instance
 	 *
+	 * @param string[] $exclusions
+	 *
 	 * @return AtumAdminModal
 	 */
-	public static function get_instance() {
+	public static function get_instance( $exclusions = [] ) {
 
 		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
-			self::$instance = new self();
+			self::$instance = new self( $exclusions );
 		}
 
 		return self::$instance;

@@ -95,15 +95,18 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* harmony import */ var _components_addons_page_addons_page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/addons-page/_addons-page */ "./assets/js/src/components/addons-page/_addons-page.ts");
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/addons/_addons-page */ "./assets/js/src/components/addons/_addons-page.ts");
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
+/* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
+
 
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    new _components_addons_page_addons_page__WEBPACK_IMPORTED_MODULE_1__["default"](settings, tooltip);
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip);
+    new _components_addons_trials__WEBPACK_IMPORTED_MODULE_3__["default"](settings, function () { return location.reload(); });
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
@@ -179,19 +182,19 @@ var Tooltip = (function () {
 
 /***/ }),
 
-/***/ "./assets/js/src/components/addons-page/_addons-page.ts":
-/*!**************************************************************!*\
-  !*** ./assets/js/src/components/addons-page/_addons-page.ts ***!
-  \**************************************************************/
+/***/ "./assets/js/src/components/addons/_addons-page.ts":
+/*!*********************************************************!*\
+  !*** ./assets/js/src/components/addons/_addons-page.ts ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../vendor/dragscroll */ "./assets/js/vendor/dragscroll.js");
-/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../vendor/dragscroll */ "./assets/js/vendor/dragscroll.js");
+/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 
@@ -201,20 +204,42 @@ var AddonsPage = (function () {
         this.settings = settings;
         this.tooltip = tooltip;
         this.$addonsList = $('.atum-addons');
+        this.$noResults = this.$addonsList.find('.no-results');
+        this.prepareMenu();
         this.initHorizontalDragScroll();
         this.bindEvents();
     }
+    AddonsPage.prototype.prepareMenu = function () {
+        var _this = this;
+        var $addonsMenu = this.$addonsList.find('.nav-container-box');
+        $addonsMenu.find('li').each(function (index, elem) {
+            var $elem = $(elem), status = $elem.data('status');
+            if ('all' === status) {
+                return;
+            }
+            if (!_this.$addonsList.find(".atum-addon.".concat(status)).length && !_this.$addonsList.find(".atum-addon .actions.".concat(status)).length) {
+                $elem.hide();
+            }
+        });
+        $addonsMenu.removeAttr('style');
+    };
     AddonsPage.prototype.bindEvents = function () {
         var _this = this;
         this.$addonsList
             .on('click', '.nav-container-box li', function (evt) {
-            var $li = $(evt.currentTarget), $span = $li.find('span'), status = $li.data('status');
-            if (!$span.is('.active')) {
+            var $li = $(evt.currentTarget), $span = $li.find('span'), status = $li.data('status'), $searchInput = $('#addons-search');
+            if ('all' === status) {
+                $searchInput.parent().show();
+            }
+            else {
+                $searchInput.val('').parent().removeClass('is-searching').hide();
+            }
+            if (!$span.hasClass('active')) {
                 $li.siblings().find('span').removeClass('active');
                 $span.addClass('active');
                 _this.$addonsList.find('.atum-addon').each(function (index, elem) {
                     var $addon = $(elem);
-                    if ('all' === status || $addon.hasClass(status)) {
+                    if ('all' === status || $addon.hasClass(status) || $addon.find('.actions').hasClass(status)) {
                         $addon.show();
                     }
                     else {
@@ -232,17 +257,16 @@ var AddonsPage = (function () {
             }
             else if ($button.hasClass('remove-license')) {
                 key = $button.closest('.addon-key').find('.license-key').text();
-                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-                    title: _this.settings.get('limitedDeactivations'),
-                    html: _this.settings.get('allowedDeactivations'),
+                var isTrial = $button.closest('.actions').hasClass('trial');
+                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                    title: _this.settings.get(isTrial ? 'trialDeactivation' : 'limitedDeactivations'),
+                    html: _this.settings.get(isTrial ? 'trialWillDisable' : 'allowedDeactivations'),
                     icon: 'warning',
                     confirmButtonText: _this.settings.get('continue'),
                     cancelButtonText: _this.settings.get('cancel'),
                     showCancelButton: true,
-                }).then(function (result) {
-                    if (result.isConfirmed) {
-                        _this.requestLicenseChange($button, key);
-                    }
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () { return _this.requestLicenseChange($button, key, true); },
                 });
             }
             else {
@@ -252,9 +276,7 @@ var AddonsPage = (function () {
                     return false;
                 }
                 if ($button.hasClass('install-addon')) {
-                    _this.installAddon($button);
-                }
-                else if ($button.hasClass('deactivate-key')) {
+                    _this.maybeInstallAddon($button);
                 }
                 else {
                     _this.requestLicenseChange($button, key);
@@ -263,8 +285,7 @@ var AddonsPage = (function () {
         })
             .on('click', '.show-key', function (evt) {
             evt.preventDefault();
-            var $button = $(evt.currentTarget);
-            $button.closest('.actions').children().slideToggle('fast');
+            $(evt.currentTarget).closest('.actions').children().slideToggle('fast');
         })
             .on('click', '.expired .refresh-status', function (evt) {
             evt.preventDefault();
@@ -275,7 +296,7 @@ var AddonsPage = (function () {
                 dataType: 'json',
                 data: {
                     action: 'atum_refresh_license',
-                    security: _this.$addonsList.data('nonce'),
+                    security: _this.settings.get('nonce'),
                     addon: $link.closest('.atum-addon').data('addon'),
                 },
                 beforeSend: function () {
@@ -291,27 +312,96 @@ var AddonsPage = (function () {
                     }
                 }
             });
+        })
+            .on('keyup paste search', '#addons-search', function (evt) {
+            var $input = $(evt.currentTarget), term = $input.val().toLowerCase(), $addons = _this.$addonsList.find('.atum-addon');
+            _this.$noResults.find('.no-results__term').text(term);
+            if (!term) {
+                _this.$noResults.hide();
+                _this.$addonsList.find('.nav-container-box .all').click();
+                $addons.show();
+                $input.parent().removeClass('is-searching');
+            }
+            else {
+                $input.parent().addClass('is-searching');
+                var numHidden_1 = 0;
+                $addons.each(function (index, elem) {
+                    var $addon = $(elem);
+                    if ($addon.text().toLowerCase().includes(term)) {
+                        $addon.show();
+                    }
+                    else {
+                        $addon.hide();
+                        numHidden_1++;
+                    }
+                });
+                if (numHidden_1 >= $addons.length) {
+                    _this.$noResults.show();
+                }
+                else {
+                    _this.$noResults.hide();
+                }
+            }
         });
     };
-    AddonsPage.prototype.installAddon = function ($button) {
+    AddonsPage.prototype.maybeInstallAddon = function ($button) {
         var _this = this;
-        var $addonBlock = $button.closest('.atum-addon');
+        var $addonBlock = $button.closest('.atum-addon'), addon = $addonBlock.data('addon'), slug = $addonBlock.data('addon-slug'), key = $addonBlock.find('.addon-key input').val();
+        $.ajax({
+            url: window['ajaxurl'],
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'atum_validate_license',
+                security: this.settings.get('nonce'),
+                addon: addon,
+                slug: slug,
+                key: key,
+            },
+            beforeSend: function () {
+                _this.beforeAjax($button);
+            },
+            success: function (response) {
+                console.log(response);
+                switch (response.success) {
+                    case true:
+                        break;
+                    case false:
+                        _this.showErrorAlert(response.data);
+                        break;
+                    case 'activate':
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                            icon: 'info',
+                            title: _this.settings.get('activation'),
+                            html: response.data,
+                        });
+                        break;
+                    case 'trial':
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                            icon: 'info',
+                            title: _this.settings.get('trial'),
+                            html: response.data,
+                        });
+                        break;
+                }
+                _this.afterAjax($button);
+            }
+        });
+    };
+    AddonsPage.prototype.installAddon = function (addon, slug, key) {
+        var _this = this;
         $.ajax({
             url: window['ajaxurl'],
             method: 'POST',
             dataType: 'json',
             data: {
                 action: 'atum_install_addon',
-                security: this.$addonsList.data('nonce'),
-                addon: $addonBlock.data('addon'),
-                slug: $addonBlock.data('addon-slug'),
-                key: $addonBlock.find('.addon-key input').val(),
-            },
-            beforeSend: function () {
-                _this.beforeAjax($button);
+                security: this.settings.get('nonce'),
+                addon: addon,
+                slug: slug,
+                key: key,
             },
             success: function (response) {
-                _this.afterAjax($button);
                 if (response.success === true) {
                     _this.showSuccessAlert(response.data);
                 }
@@ -321,76 +411,83 @@ var AddonsPage = (function () {
             },
         });
     };
-    AddonsPage.prototype.requestLicenseChange = function ($button, key) {
+    AddonsPage.prototype.requestLicenseChange = function ($button, key, isSwal) {
         var _this = this;
-        $.ajax({
-            url: window['ajaxurl'],
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                action: $button.data('action'),
-                security: this.$addonsList.data('nonce'),
-                addon: $button.closest('.atum-addon').data('addon'),
-                key: key,
-            },
-            beforeSend: function () {
-                _this.beforeAjax($button);
-            },
-            success: function (response) {
-                _this.afterAjax($button);
-                switch (response.success) {
-                    case false:
-                        _this.showErrorAlert(response.data);
-                        break;
-                    case true:
-                        _this.showSuccessAlert(response.data);
-                        break;
-                    case 'activate':
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-                            title: _this.settings.get('activation'),
-                            html: response.data,
-                            icon: 'info',
-                            showCancelButton: true,
-                            showLoaderOnConfirm: true,
-                            confirmButtonText: _this.settings.get('activate'),
-                            allowOutsideClick: false,
-                            preConfirm: function () {
-                                return new Promise(function (resolve, reject) {
-                                    $.ajax({
-                                        url: window['ajaxurl'],
-                                        method: 'POST',
-                                        dataType: 'json',
-                                        data: {
-                                            action: 'atum_activate_license',
-                                            security: _this.$addonsList.data('nonce'),
-                                            addon: $button.closest('.atum-addon').data('addon'),
-                                            key: key,
-                                        },
-                                        success: function (response) {
-                                            if (response.success !== true) {
-                                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
-                                            }
-                                            resolve();
-                                        },
-                                    });
-                                });
-                            },
-                        })
-                            .then(function (result) {
-                            if (result.isConfirmed) {
-                                _this.showSuccessAlert(_this.settings.get('addonActivated'), _this.settings.get('activated'));
+        if (isSwal === void 0) { isSwal = false; }
+        return new Promise(function (resolve) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: $button.data('action'),
+                    security: _this.settings.get('nonce'),
+                    addon: $button.closest('.atum-addon').data('addon'),
+                    key: key,
+                },
+                beforeSend: function () { return _this.beforeAjax($button); },
+                success: function (response) {
+                    _this.afterAjax($button);
+                    switch (response.success) {
+                        case false:
+                            if (isSwal) {
+                                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
                             }
-                        });
-                        break;
-                }
-            },
+                            else {
+                                _this.showErrorAlert(response.data);
+                            }
+                            break;
+                        case true:
+                            _this.showSuccessAlert(response.data);
+                            break;
+                        case 'activate':
+                            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                                title: _this.settings.get('activation'),
+                                html: response.data,
+                                icon: 'info',
+                                showCancelButton: true,
+                                showLoaderOnConfirm: true,
+                                confirmButtonText: _this.settings.get('activate'),
+                                allowOutsideClick: false,
+                                preConfirm: function () {
+                                    return new Promise(function (res) {
+                                        $.ajax({
+                                            url: window['ajaxurl'],
+                                            method: 'POST',
+                                            dataType: 'json',
+                                            data: {
+                                                action: 'atum_activate_license',
+                                                security: _this.settings.get('nonce'),
+                                                addon: $button.closest('.atum-addon').data('addon'),
+                                                key: key,
+                                            },
+                                            success: function (r) {
+                                                if (r.success !== true) {
+                                                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(r.data);
+                                                }
+                                                res();
+                                            },
+                                        });
+                                    });
+                                },
+                            })
+                                .then(function (result) {
+                                if (result.isConfirmed) {
+                                    _this.showSuccessAlert(_this.settings.get('addonActivated'), _this.settings.get('activated'));
+                                }
+                            });
+                            break;
+                    }
+                    resolve();
+                },
+            });
         });
     };
     AddonsPage.prototype.showSuccessAlert = function (message, title) {
         if (!title) {
             title = this.settings.get('success');
         }
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
             title: title,
             html: message,
             icon: 'success',
@@ -399,7 +496,7 @@ var AddonsPage = (function () {
             .then(function () { return location.reload(); });
     };
     AddonsPage.prototype.showErrorAlert = function (message) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
             title: this.settings.get('error'),
             html: message,
             icon: 'error',
@@ -447,7 +544,7 @@ var AddonsPage = (function () {
             _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
         });
         this.addMouseWheelSupport();
-        _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default.a.reset();
+        _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default.a.reset();
     };
     AddonsPage.prototype.addHorizontalDragScroll = function ($nav, checkEnhanced) {
         if (checkEnhanced === void 0) { checkEnhanced = false; }
@@ -491,6 +588,89 @@ var AddonsPage = (function () {
     return AddonsPage;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (AddonsPage);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/src/components/addons/_trials.ts":
+/*!****************************************************!*\
+  !*** ./assets/js/src/components/addons/_trials.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+
+var Trials = (function () {
+    function Trials(settings, successCallback) {
+        this.settings = settings;
+        this.successCallback = successCallback;
+        this.bindEvents();
+    }
+    Trials.prototype.bindEvents = function () {
+        var _this = this;
+        $('body').on('click', '.extend-atum-trial', function (evt) {
+            evt.preventDefault();
+            evt.stopImmediatePropagation();
+            var $button = $(evt.currentTarget);
+            _this.extendTrial($button.data('key'));
+        });
+    };
+    Trials.prototype.extendTrial = function (key) {
+        var _this = this;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+            title: this.settings.get('trialExtension'),
+            text: this.settings.get('trialWillExtend'),
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: this.settings.get('extend'),
+            cancelButtonText: this.settings.get('cancel'),
+            showCloseButton: true,
+            allowEnterKey: false,
+            reverseButtons: true,
+            showLoaderOnConfirm: true,
+            preConfirm: function () {
+                return new Promise(function (resolve) {
+                    $.ajax({
+                        url: window['ajaxurl'],
+                        method: 'post',
+                        dataType: 'json',
+                        data: {
+                            action: 'atum_extend_trial',
+                            security: _this.settings.get('nonce'),
+                            key: key,
+                        },
+                        success: function (response) {
+                            if (!response.success) {
+                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                            }
+                            else {
+                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+                                    title: _this.settings.get('success'),
+                                    html: response.data,
+                                    icon: 'success',
+                                    confirmButtonText: _this.settings.get('ok'),
+                                })
+                                    .then(function (result) {
+                                    if (_this.successCallback && result.isConfirmed) {
+                                        _this.successCallback();
+                                    }
+                                });
+                            }
+                            resolve();
+                        },
+                    });
+                });
+            },
+        });
+    };
+    return Trials;
+}());
+/* harmony default export */ __webpack_exports__["default"] = (Trials);
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 

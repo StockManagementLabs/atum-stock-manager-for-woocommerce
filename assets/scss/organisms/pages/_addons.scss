@@ -4,9 +4,6 @@
 
 @use "sass:math";
 
-$header-bg:                 var(--blue-light);
-$header-height:             300px;
-
 html {
 	scroll-behavior: smooth;
 }
@@ -37,8 +34,8 @@ html {
 	// Dashboard Header
 	&__header {
 		position: relative;
-		height: $header-height;
-		background: $header-bg url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
+		height: 300px;
+		background: $blue-light url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
 		background-size: cover;
 		@include vertical-align-flex();
 		flex-wrap: wrap;
@@ -52,7 +49,7 @@ html {
 		}
 		
 		h3 {
-			color: var(--main-title);
+			color: $blue-dark;
 			width: 734px;
 			max-width: 90%;
 			margin: auto;
@@ -99,16 +96,16 @@ html {
 			padding-left: math.div($grid-gutter-width, 2);
 			padding-bottom: 5px;
 			font-size: 11px;
-			color: var(--main-title);
+			color: $blue-dark;
 			font-weight: 300;
 			
 			span {
-				color: var(--primary);
+				color: $primary;
 				margin-right: 5px;
 			}
 			
 			.wc-rating-link {
-				color: var(--primary);
+				color: $primary;
 			}
 			
 			@include tablet-max {
@@ -126,7 +123,7 @@ html {
 	
 	.atum-addon {
 		margin-top: math.div($grid-gutter-width, 3) * 2;
-		background-color: var(--dash-card-bg);
+		background-color: $white;
 		display: flex;
 		align-items: stretch;
 		min-height: 222px;
@@ -170,7 +167,7 @@ html {
 				}
 				
 				&.valid {
-					background: $tertiary;
+					background: $success;
 				}
 				
 				&.inactive, &.invalid, &.disabled, &.expired, &.no-key {
@@ -216,7 +213,7 @@ html {
 		
 		h2 {
 			font-size: 18px;
-			color: var(--bm_text_color);
+			color: $gray-700;
 			margin: 0;
 		}
 		
@@ -243,7 +240,7 @@ html {
 			margin: 0;
 			flex-grow: 1;
 			font-size: 15px;
-			color: var(--bm_text_color);
+			color: $gray-600;
 		}
 	}
 	
@@ -315,12 +312,16 @@ html {
 			}
 			
 			.license-key, .expires {
-				background-color: var(--atum-table-bg2);
+				background-color: $gray-200;
 				font-size: 13px;
 				font-weight: 400;
 				line-height: 1.47;
 				padding: 4px 13px;
 				border-radius: 5px;
+			}
+			
+			.expires.expired {
+				color: $danger;
 			}
 		}
 		
@@ -392,7 +393,7 @@ html {
 	justify-content: space-between;
 	align-items: center;
 	margin: 0;
-	background-color:  var(--atum-table-bg);
+	background-color: $white;
 	box-shadow: 0 4px 0 0 $gray-200;
 	border-radius: 8px;
 	padding: 0 10px;
@@ -502,7 +503,6 @@ html {
 
 
 .subsubsub {
-	background-color:  var(--atum-table-bg);
 	width: 100%;
 	position: relative;
 	font-size: 16px;
@@ -523,7 +523,7 @@ html {
 		
 		li {
 			margin-right: 15px;
-			color: var(--atum-table-views-tabs);
+			color: $gray-600;
 			text-transform: uppercase;
 			padding: 0;
 			
@@ -539,22 +539,22 @@ html {
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--primary);
+					background-color: $primary;
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color:  var(--atum-table-views-tabs-active-text);
+					color: $white;
 					cursor: default;
 					
 					&:hover {
-						color:  var(--atum-table-views-tabs-active-text);
+						color: $white;
 					}
 					
 				}
 				
 				&:hover {
-					color: var(--primary);
+					color: $primary;
 				}
 				
 			}

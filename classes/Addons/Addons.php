@@ -63,6 +63,10 @@ class Addons {
 			'name'     => 'Multi-Inventory',
 			'basename' => 'atum-multi-inventory/atum-multi-inventory.php',
 		],
+		'pick_pack' => [
+			'name'     => 'Pick & Pack',
+			'basename' => 'atum-pick-pack/atum-pick-pack.php',
+		],
 		'product_levels'  => [
 			'name'     => 'Product Levels',
 			'basename' => 'atum-product-levels/atum-product-levels.php',
@@ -71,12 +75,16 @@ class Addons {
 			'name'     => 'Purchase Orders PRO',
 			'basename' => 'atum-purchase-orders/atum-purchase-orders.php',
 		],
+		'stock_takes' => [
+			'name'     => 'Stock Takes',
+			'basename' => 'atum-stock-takes/atum-stock-takes.php',
+		],
 	);
 
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'http://stockmanagementlabs.loc/';
+	const ADDONS_STORE_URL = 'http://stockmanagementlabs.loc/'; // TODO: CHANGE....
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -229,15 +237,19 @@ class Addons {
 			'allowedDeactivations' => __( 'You are allowed to remove a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
+			'extend'               => __( 'Yes, Extend it!', ATUM_TEXT_DOMAIN ),
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
 			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
 			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'nonce'                => wp_create_nonce( ATUM_PREFIX . 'manage_license' ),
 			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
 			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
 			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
 			'trialDeactivation'    => __( 'Trial deactivation notice!', ATUM_TEXT_DOMAIN ),
+			'trialExtension'       => __( 'Trial extension', ATUM_TEXT_DOMAIN ),
 			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or activate a full version license.', ATUM_TEXT_DOMAIN ),
+			'trialWillExtend'      => __( 'You are going to extend this trial for 7 days more', ATUM_TEXT_DOMAIN ),
 		) );
 
 		wp_enqueue_style( 'sweetalert2' );
@@ -375,14 +387,7 @@ class Addons {
 				return FALSE;
 			}
 
-			$args = array(
-				'timeout'     => 20,
-				'redirection' => 1,
-				'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
-				'sslverify'   => FALSE,
-			);
-
-			$response = wp_remote_get( self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT, $args );
+			$response = self::atum_api_request();
 
 			// Admin notification about the error.
 			if ( is_wp_error( $response ) ) {
@@ -681,7 +686,7 @@ class Addons {
 	}
 
 	/**
-	 * Generate a license API request
+	 * Generate a license manager API request
 	 *
 	 * @param string $addon_name   The addon name (must match to the ATUM store's addon name).
 	 * @param string $key          The license key.
@@ -690,7 +695,7 @@ class Addons {
 	 *
 	 * @return array|\WP_Error
 	 */
-	private static function api_request( $addon_name, $key, $endpoint, $extra_params = array() ) {
+	private static function lm_api_request( $addon_name, $key, $endpoint, $extra_params = array() ) {
 
 		$params = array_merge( $extra_params, array(
 			'edd_action' => $endpoint,
@@ -707,6 +712,43 @@ class Addons {
 
 		// Call the license manager API.
 		return wp_remote_post( self::ADDONS_STORE_URL, $request_params );
+
+	}
+
+	/**
+	 * Generate a SML ATUM API request
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $method
+	 * @param string $endpoint
+	 *
+	 * @return array|\WP_Error
+	 */
+	private static function atum_api_request( $method = 'GET', $endpoint = '' ) {
+
+		$args = array(
+			'timeout'     => 20,
+			'redirection' => 1,
+			'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
+			'sslverify'   => FALSE,
+		);
+
+		$function = 'wp_remote_get';
+
+		if ( 'POST' === strtoupper( $method ) ) {
+			$function = 'wp_remote_post';
+		}
+
+		$response  = call_user_func( $function, self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT . $endpoint, $args );
+		$resp_body = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			$error = $resp_body->message ?? __( "Unexpected error. Please contact ATUM's support", ATUM_TEXT_DOMAIN );
+			return new \WP_Error( 'unexpected_error', $error );
+		}
+
+		return $response;
 
 	}
 
@@ -1077,7 +1119,7 @@ class Addons {
 	 */
 	public static function check_license( $addon_name, $key ) {
 
-		return self::api_request( $addon_name, $key, 'check_license' );
+		return self::lm_api_request( $addon_name, $key, 'check_license' );
 	}
 
 	/**
@@ -1092,7 +1134,7 @@ class Addons {
 	 */
 	public static function activate_license( $addon_name, $key ) {
 
-		$result = self::api_request( $addon_name, $key, 'activate_license' );
+		$result = self::lm_api_request( $addon_name, $key, 'activate_license' );
 		do_action( 'atum/addons/activate_license', $result );
 
 		return $result;
@@ -1110,8 +1152,25 @@ class Addons {
 	 */
 	public static function deactivate_license( $addon_name, $key ) {
 
-		$result = self::api_request( $addon_name, $key, 'deactivate_license' );
+		$result = self::lm_api_request( $addon_name, $key, 'deactivate_license' );
 		do_action( 'atum/addons/deactivate_license', $result );
+
+		return $result;
+	}
+
+	/**
+	 * Call to the SML ATUM API to extend an extendable trial license
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $key        The license key.
+	 *
+	 * @return array|\WP_Error
+	 */
+	public static function extend_trial( $key ) {
+
+		$result = self::atum_api_request( 'POST', "/extend-trial?key=$key" );
+		do_action( 'atum/addons/extend_trial', $result );
 
 		return $result;
 	}
@@ -1130,7 +1189,7 @@ class Addons {
 	 */
 	public static function get_version( $addon_name, $key, $version, $beta = FALSE ) {
 
-		return self::api_request( $addon_name, $key, 'get_version', array(
+		return self::lm_api_request( $addon_name, $key, 'get_version', array(
 			'version' => $version,
 			'beta'    => $beta,
 		) );

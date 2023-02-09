@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.27 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2215,7 +2215,15 @@ input[type=button].btn-block {
   color: var(--gray-800);
 }
 .swal2-container .swal2-modal .swal2-validation-message {
-  margin: 0.625em -1.25rem -0.625em;
+  margin: 1.625em -1.25rem -1.625em;
+  font-size: 14px;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .swal2-container .swal2-modal p {
   font-size: 15px;

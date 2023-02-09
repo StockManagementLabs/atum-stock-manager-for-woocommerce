@@ -11,7 +11,7 @@
 defined( 'ABSPATH' ) || die;
 
 ?>
-<div class="atum-addons" data-nonce="<?php echo esc_attr( wp_create_nonce( ATUM_PREFIX . 'manage_license' ) ) ?>">
+<div class="atum-addons">
 
 	<?php require 'header.php' ?>
 

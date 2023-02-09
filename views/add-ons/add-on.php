@@ -22,10 +22,11 @@ $is_trial             = ! empty( $addon_status['is_trial'] ) && TRUE === $addon_
 $pill_style           = isset( $addon['info']['primary_color'] ) ? " style='background-color:{$addon['info']['primary_color']}';" : '';
 $notice               = '';
 $notice_type          = 'info';
-$actual_timestamp     = strtotime( 'now' );
+$actual_timestamp     = time();
 $actual_date          = date_i18n( 'Y-m-d H:i:s', $actual_timestamp );
 $expiration_timestamp = strtotime( $addon_status['expires'] ?? 'now' );
 $expiration_date      = date_i18n( 'Y-m-d H:i:s', $expiration_timestamp );
+$is_expired           = 'expired' === $addon_status['status'] || $expiration_timestamp <= $actual_timestamp;
 
 $addon_classes = array();
 $status_text   = '';
@@ -42,12 +43,12 @@ elseif ( $is_trial ) :
 		$notice = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
 	elseif ( 'trial_used' === $addon_status['status'] ) :
 		$notice = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
-	elseif ( $expiration_timestamp > $actual_timestamp ) :
+	elseif ( ! $is_expired ) :
 		$time_ago = new TimeAgo();
 		/* translators: the time remaining */
 		$notice = sprintf( esc_html__( 'Trial period: %s ', ATUM_TEXT_DOMAIN ), str_replace( 'ago', esc_html__( 'remaining', ATUM_TEXT_DOMAIN ), $time_ago->inWordsFromStrings( $expiration_date ) ) );
 	else :
-		$notice = esc_html__( 'Trial period ended. Purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+		$notice = esc_html__( 'Trial period expired. Purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
 	endif;
 
 	$notice_type = 'warning';
@@ -83,7 +84,7 @@ else :
 			$addon_classes[] = 'expired';
 			$status_text     = __( 'Expired', ATUM_TEXT_DOMAIN );
 			/* translators: opening and closing link tags */
-			$notice      = sprintf( __( 'If you already renewed the license, please click %1$shere%2$s', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+			$notice      = sprintf( __( 'If you already have renewed the license, please click %1$shere%2$s', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
 			$notice_type = 'warning';
 			break;
 	endswitch;
@@ -150,6 +151,10 @@ endif; ?>
 						], Addons::ADDONS_STORE_URL . 'checkout/' ) ?>
 						<a class="more-details btn btn-primary" href="<?php echo esc_url( $purchase_url ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
 
+						<?php if ( $is_expired && empty( $addon_status['extended'] ) && ! empty( $addon_status['key'] ) ) : ?>
+							<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $addon_status['key'] ) ?>"><?php esc_html_e( 'Extend trial', ATUM_TEXT_DOMAIN ); ?></button>
+						<?php endif; ?>
+
 					<?php else : ?>
 
 						<?php if ( ! $addon_status['installed'] ) :
@@ -166,7 +171,7 @@ endif; ?>
 						<?php if ( ! $addon_status['installed'] || empty( $addon_status['key'] ) ) : ?>
 							<a class="more-details btn btn-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
 						<?php elseif ( ( 'invalid' === $addon_status['status'] && $addon_status['installed'] ) || in_array( $addon_status['status'], [ 'disabled', 'expired' ] ) ) : ?>
-							<a class="more-details btn btn-tertiary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Renew License', ATUM_TEXT_DOMAIN ); ?></a>
+							<a class="more-details btn btn-success" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'Renew License', ATUM_TEXT_DOMAIN ); ?></a>
 						<?php endif; ?>
 
 					<?php endif; ?>
@@ -174,9 +179,9 @@ endif; ?>
 					<?php if ( ! $is_coming_soon_addon ) : ?>
 
 						<?php if ( empty( $addon_status['key'] ) || 'inactive' === $addon_status['status'] ) : ?>
-							<button type="button" class="more-details btn btn-tertiary show-key"><?php esc_html_e( 'Enter License', ATUM_TEXT_DOMAIN ); ?></button>
+							<button type="button" class="more-details btn btn-success show-key"><?php esc_html_e( 'Enter License', ATUM_TEXT_DOMAIN ); ?></button>
 						<?php else : ?>
-							<button type="button" class="more-details btn btn-outline-tertiary show-key"><?php esc_html_e( 'View License', ATUM_TEXT_DOMAIN ); ?></button>
+							<button type="button" class="more-details btn btn-outline-success show-key"><?php esc_html_e( 'View License', ATUM_TEXT_DOMAIN ); ?></button>
 						<?php endif; ?>
 
 					<?php endif; ?>
@@ -210,7 +215,7 @@ endif; ?>
 								<?php if ( ! empty( $addon_status['expires'] ) ) : ?>
 									<div class="license-info">
 										<div class="license-label"><?php esc_html_e( 'Expiration date', ATUM_TEXT_DOMAIN ); ?></div>
-										<div class="expires"><?php echo esc_html( $addon_status['expires'] ) ?></div>
+										<div class="expires<?php echo $is_expired ? esc_attr( ' expired' ) : '' ?>"><?php echo esc_html( $addon_status['expires'] ) ?></div>
 									</div>
 								<?php endif; ?>
 

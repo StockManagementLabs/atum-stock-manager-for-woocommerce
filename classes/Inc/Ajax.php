@@ -100,6 +100,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
 		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
+		add_action( 'wp_ajax_atum_extend_trial', array( $this, 'extend_trial' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -877,11 +878,11 @@ final class Ajax {
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
 		if ( empty( $_POST['addon'] ) ) {
-			wp_send_json_error( __( 'No addon name provided', ATUM_TEXT_DOMAIN ) );
+			wp_send_json_error( __( 'No add-on name provided', ATUM_TEXT_DOMAIN ) );
 		}
 
 		if ( empty( $_POST['key'] ) ) {
-			wp_send_json_error( __( 'Please enter a valid addon license key', ATUM_TEXT_DOMAIN ) );
+			wp_send_json_error( __( 'Please enter a valid add-on license key', ATUM_TEXT_DOMAIN ) );
 		}
 	}
 
@@ -1141,6 +1142,8 @@ final class Ajax {
 	/**
 	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
 	 *
+	 * @package Add-ons
+	 *
 	 * @since 1.9.26
 	 */
 	public function refresh_license_status() {
@@ -1157,6 +1160,32 @@ final class Ajax {
 		Addons::delete_status_transient( $addon_name );
 
 		wp_send_json_success();
+
+	}
+
+	/**
+	 * Extend a trial add-on license.
+	 *
+	 * @package Add-ons
+	 *
+	 * @since 1.9.27
+	 */
+	public function extend_trial() {
+
+		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( empty( $_POST['key'] ) ) {
+			wp_send_json_error( __( 'Missing trial key', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$result = Addons::extend_trial( esc_attr( $_POST['key'] ) );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+
+		/* translators: the expiration date */
+		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), $result['expires'] ) );
 
 	}
 

@@ -1,18 +1,16 @@
 /**
- * ATUM Addons
+ * ATUM Trials Expiration Modal
  *
  * @copyright Stock Management Labs ©2023
  *
- * @since 1.2.0
+ * @since 1.9.27
  */
 
 /**
  * Components
  */
 
-import AddonsPage from './components/addons/_addons-page';
 import Settings from './config/_settings';
-import Tooltip from './components/_tooltip';
 import Trials from './components/addons/_trials';
 
 
@@ -20,10 +18,7 @@ import Trials from './components/addons/_trials';
 jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
-	const settings = new Settings( 'atumAddons' ),
-	      tooltip  = new Tooltip();
-
-	new AddonsPage( settings, tooltip );
-	new Trials( settings, () => location.reload() );
+	const settings = new Settings( 'atumAddons' );
+	new Trials( settings );
 	
 });
