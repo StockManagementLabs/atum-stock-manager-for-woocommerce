@@ -86,7 +86,22 @@ export default class DataExport {
 			$catFieldset.insertAfter( $tabContent.find('fieldset').last() );
 			
 		}
-		
+
+		// Allow adding extra fieldsets for other purpossing.
+		if (typeof this.settings.get('extraFields') === 'object') {
+
+			this.settings.get('extraFields').forEach( ( extraField ) => {
+				let $extraFieldset: JQuery = extraField.title === 'hidden' ? $('<span>') : $('<fieldset class="extra" />');
+
+				if ( 'hidden' !== extraField.title ) {
+					$extraFieldset.append( `<legend>${ extraField.title }</legend>` );
+				}
+				$extraFieldset.append( extraField.content );
+				$extraFieldset.insertAfter( $tabContent.find('fieldset').last() );
+			} );
+
+		}
+
 		// Add a fieldset for title length setup.
 		const $titleLengthFieldset: JQuery = $('<fieldset class="title-length" />');
 		

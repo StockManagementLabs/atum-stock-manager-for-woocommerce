@@ -142,6 +142,16 @@ var DataExport = (function () {
             $catFieldset.append(this.settings.get('categories'));
             $catFieldset.insertAfter($tabContent.find('fieldset').last());
         }
+        if (typeof this.settings.get('extraFields') === 'object') {
+            this.settings.get('extraFields').forEach(function (extraField) {
+                var $extraFieldset = extraField.title === 'hidden' ? $('<span>') : $('<fieldset class="extra" />');
+                if ('hidden' !== extraField.title) {
+                    $extraFieldset.append("<legend>".concat(extraField.title, "</legend>"));
+                }
+                $extraFieldset.append(extraField.content);
+                $extraFieldset.insertAfter($tabContent.find('fieldset').last());
+            });
+        }
         var $titleLengthFieldset = $('<fieldset class="title-length" />');
         $titleLengthFieldset.append("<legend>".concat(this.settings.get('titleLength'), "</legend>"));
         $titleLengthFieldset.append("<input type=\"number\" step=\"1\" min=\"0\" name=\"title_max_length\" value=\"".concat(this.settings.get('maxLength'), "\"> "));
