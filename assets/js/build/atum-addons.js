@@ -346,7 +346,7 @@ var AddonsPage = (function () {
     };
     AddonsPage.prototype.maybeInstallAddon = function ($button) {
         var _this = this;
-        var $addonBlock = $button.closest('.atum-addon'), addon = $addonBlock.data('addon'), slug = $addonBlock.data('addon-slug'), key = $addonBlock.find('.addon-key input').val();
+        var $addonBlock = $button.closest('.atum-addon'), addon = $addonBlock.data('addon'), key = $addonBlock.find('.addon-key input').val();
         $.ajax({
             url: window['ajaxurl'],
             method: 'POST',
@@ -355,63 +355,23 @@ var AddonsPage = (function () {
                 action: 'atum_validate_license',
                 security: this.settings.get('nonce'),
                 addon: addon,
-                slug: slug,
                 key: key,
             },
             beforeSend: function () {
                 _this.beforeAjax($button);
             },
             success: function (response) {
-                console.log(response);
-                switch (response.success) {
-                    case true:
-                        break;
-                    case false:
-                        _this.showErrorAlert(response.data);
-                        break;
-                    case 'activate':
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                            icon: 'info',
-                            title: _this.settings.get('activation'),
-                            html: response.data,
-                        });
-                        break;
-                    case 'trial':
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                            icon: 'info',
-                            title: _this.settings.get('trial'),
-                            html: response.data,
-                        });
-                        break;
+                if (true === response.success) {
+                    _this.installAddon(addon, key);
+                }
+                else {
+                    _this.licenseChangeResponse(response.success, response.data, addon, key);
                 }
                 _this.afterAjax($button);
             }
         });
     };
-    AddonsPage.prototype.installAddon = function (addon, slug, key) {
-        var _this = this;
-        $.ajax({
-            url: window['ajaxurl'],
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                action: 'atum_install_addon',
-                security: this.settings.get('nonce'),
-                addon: addon,
-                slug: slug,
-                key: key,
-            },
-            success: function (response) {
-                if (response.success === true) {
-                    _this.showSuccessAlert(response.data);
-                }
-                else {
-                    _this.showErrorAlert(response.data);
-                }
-            },
-        });
-    };
-    AddonsPage.prototype.requestLicenseChange = function ($button, key, isSwal) {
+    AddonsPage.prototype.installAddon = function (addon, key, isSwal) {
         var _this = this;
         if (isSwal === void 0) { isSwal = false; }
         return new Promise(function (resolve) {
@@ -420,68 +380,152 @@ var AddonsPage = (function () {
                 method: 'POST',
                 dataType: 'json',
                 data: {
-                    action: $button.data('action'),
+                    action: 'atum_install_addon',
                     security: _this.settings.get('nonce'),
-                    addon: $button.closest('.atum-addon').data('addon'),
+                    addon: addon,
                     key: key,
                 },
-                beforeSend: function () { return _this.beforeAjax($button); },
                 success: function (response) {
-                    _this.afterAjax($button);
-                    switch (response.success) {
-                        case false:
-                            if (isSwal) {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(response.data);
-                            }
-                            else {
-                                _this.showErrorAlert(response.data);
-                            }
-                            break;
-                        case true:
-                            _this.showSuccessAlert(response.data);
-                            break;
-                        case 'activate':
-                            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                                title: _this.settings.get('activation'),
-                                html: response.data,
-                                icon: 'info',
-                                showCancelButton: true,
-                                showLoaderOnConfirm: true,
-                                confirmButtonText: _this.settings.get('activate'),
-                                allowOutsideClick: false,
-                                preConfirm: function () {
-                                    return new Promise(function (res) {
-                                        $.ajax({
-                                            url: window['ajaxurl'],
-                                            method: 'POST',
-                                            dataType: 'json',
-                                            data: {
-                                                action: 'atum_activate_license',
-                                                security: _this.settings.get('nonce'),
-                                                addon: $button.closest('.atum-addon').data('addon'),
-                                                key: key,
-                                            },
-                                            success: function (r) {
-                                                if (r.success !== true) {
-                                                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage(r.data);
-                                                }
-                                                res();
-                                            },
-                                        });
-                                    });
-                                },
-                            })
-                                .then(function (result) {
-                                if (result.isConfirmed) {
-                                    _this.showSuccessAlert(_this.settings.get('addonActivated'), _this.settings.get('activated'));
-                                }
-                            });
-                            break;
+                    if (response.success === true) {
+                        _this.showSuccessAlert(response.data);
+                    }
+                    else if (isSwal) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(response.data, "</span>"));
+                    }
+                    else {
+                        _this.showErrorAlert(response.data);
                     }
                     resolve();
                 },
             });
         });
+    };
+    AddonsPage.prototype.extendTrial = function (addon, key, isSwal) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        return new Promise(function (resolve) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'atum_extend_trial',
+                    security: _this.settings.get('nonce'),
+                    addon: addon,
+                    key: key,
+                },
+                success: function (response) {
+                    _this.licenseChangeResponse(response.success, response.data, addon, key, isSwal);
+                    resolve();
+                },
+            });
+        });
+    };
+    AddonsPage.prototype.requestLicenseChange = function ($button, key, isSwal) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        return new Promise(function (resolve) {
+            var addon = $button.closest('.atum-addon').data('addon');
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: $button.data('action'),
+                    security: _this.settings.get('nonce'),
+                    addon: addon,
+                    key: key,
+                },
+                beforeSend: function () { return _this.beforeAjax($button); },
+                success: function (response) {
+                    _this.afterAjax($button);
+                    _this.licenseChangeResponse(response.success, response.data, addon, key, isSwal);
+                    resolve();
+                },
+            });
+        });
+    };
+    AddonsPage.prototype.licenseChangeResponse = function (resp, message, addon, key, isSwal) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        switch (resp) {
+            case false:
+                if (isSwal) {
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(message, "</span>"));
+                }
+                else {
+                    this.showErrorAlert(message);
+                }
+                break;
+            case true:
+                this.showSuccessAlert(message);
+                break;
+            case 'activate':
+                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                    title: this.settings.get('activation'),
+                    html: message,
+                    icon: 'info',
+                    showCancelButton: true,
+                    showLoaderOnConfirm: true,
+                    confirmButtonText: this.settings.get('activate'),
+                    allowOutsideClick: false,
+                    preConfirm: function () {
+                        return new Promise(function (res) {
+                            $.ajax({
+                                url: window['ajaxurl'],
+                                method: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    action: 'atum_activate_license',
+                                    security: _this.settings.get('nonce'),
+                                    addon: addon,
+                                    key: key,
+                                },
+                                success: function (r) {
+                                    if (r.success !== true) {
+                                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(r.data, "</span>"));
+                                    }
+                                    res();
+                                },
+                            });
+                        });
+                    },
+                })
+                    .then(function (result) {
+                    if (result.isConfirmed) {
+                        _this.showSuccessAlert(_this.settings.get('addonActivated'), _this.settings.get('activated'));
+                    }
+                });
+                break;
+            case 'trial':
+                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                    icon: 'info',
+                    title: this.settings.get('trial'),
+                    html: message,
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonText: this.settings.get('agree'),
+                    cancelButtonText: this.settings.get('cancel'),
+                    reverseButtons: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () { return _this.installAddon(addon, key, true); },
+                });
+                break;
+            case 'extend':
+                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                    icon: 'info',
+                    title: this.settings.get('trialExpired'),
+                    html: message,
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    confirmButtonText: this.settings.get('extend'),
+                    cancelButtonText: this.settings.get('cancel'),
+                    reverseButtons: true,
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () { return _this.extendTrial(addon, key, true); },
+                });
+                break;
+        }
     };
     AddonsPage.prototype.showSuccessAlert = function (message, title) {
         if (!title) {

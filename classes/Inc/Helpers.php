@@ -1552,10 +1552,10 @@ final class Helpers {
 			// Get the plugin slug from its path.
 			$installed_plugin_key = 'slug' === $by ? explode( '/', $plugin_file )[0] : $plugin_data['Title'];
 
-			if (
-				in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
+			if ( in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
 				return $return_bool ? TRUE : [ $plugin_file => $plugin_data ];
 			}
+
 		}
 
 		return FALSE;
@@ -1563,7 +1563,7 @@ final class Helpers {
 	}
 	
 	/**
-	 * Check whether or not register the ES6 promise polyfill
+	 * Check whether to register the ES6 promise polyfill
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0

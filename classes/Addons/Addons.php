@@ -48,9 +48,9 @@ class Addons {
 	 * Array with paths used for every add-on
 	 * NOTE: The name must match the one used within the ADDON_NAME constant within each add-on.
 	 *
-	 * @var string[]
+	 * @var array
 	 */
-	private $addons_paths = array(
+	private static $addons_paths = array(
 		'action_logs'     => [
 			'name'     => 'Action Logs',
 			'basename' => 'atum-logs/atum-logs.php',
@@ -234,6 +234,7 @@ class Addons {
 			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
 			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
+			'agree'                => __( 'Yes, I agree!', ATUM_TEXT_DOMAIN ),
 			'allowedDeactivations' => __( 'You are allowed to remove a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
@@ -247,8 +248,9 @@ class Addons {
 			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
 			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
 			'trialDeactivation'    => __( 'Trial deactivation notice!', ATUM_TEXT_DOMAIN ),
+			'trialExpired'         => __( 'Trial expired!', ATUM_TEXT_DOMAIN ),
 			'trialExtension'       => __( 'Trial extension', ATUM_TEXT_DOMAIN ),
-			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or activate a full version license.', ATUM_TEXT_DOMAIN ),
+			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or replace it by a full version license key.', ATUM_TEXT_DOMAIN ),
 			'trialWillExtend'      => __( 'You are going to extend this trial for 7 days more', ATUM_TEXT_DOMAIN ),
 		) );
 
@@ -290,12 +292,12 @@ class Addons {
 			$installed_addons = self::$addons;
 
 			// We must check if there are others not enabled that should be updated.
-			foreach ( array_keys( $this->addons_paths ) as $addon_key ) {
+			foreach ( array_keys( self::$addons_paths ) as $addon_key ) {
 
 				if ( ! array_key_exists( $addon_key, self::$addons ) ) {
 
 					// Check if it really exists.
-					$plugin_file = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->addons_paths[ $addon_key ]['basename'];
+					$plugin_file = WP_PLUGIN_DIR . '/' . self::$addons_paths[ $addon_key ]['basename'];
 					if ( file_exists( $plugin_file ) ) {
 
 						$file_data = get_file_data( $plugin_file, array(
@@ -305,7 +307,7 @@ class Addons {
 						) );
 
 						if ( ! empty( $file_data ) ) {
-							$installed_addons[ $addon_key ] = array_merge( $file_data, $this->addons_paths[ $addon_key ] );
+							$installed_addons[ $addon_key ] = array_merge( $file_data, self::$addons_paths[ $addon_key ] );
 						}
 
 					}
@@ -322,7 +324,7 @@ class Addons {
 
 					if (
 						strtolower( $addon_data['name'] ) === strtolower( $addon_name ) &&
-						array_key_exists( $slug, $this->addons_paths )
+						array_key_exists( $slug, self::$addons_paths )
 					) {
 						$addon_slug = $slug;
 						break;
@@ -591,7 +593,7 @@ class Addons {
 		foreach ( $keys as $addon => $license ) {
 
 			// Remove inactive licenses.
-			if ( in_array( $license['status'], [ 'inactive', 'site_inactive' ] ) ) {
+			if ( empty( $license['status'] ) || in_array( $license['status'], [ 'inactive', 'site_inactive', 'disabled' ] ) ) {
 				continue;
 			}
 
@@ -1017,7 +1019,7 @@ class Addons {
 					throw new AtumException( 'addon_download_error', $download->get_error_message() ?: $download->get_error_data() );
 				}
 
-				$working_dir = $upgrader->unpack_package( $download, TRUE );
+				$working_dir = $upgrader->unpack_package( $download );
 
 				if ( is_wp_error( $working_dir ) ) {
 					throw new AtumException( 'addon_unpack_error', $working_dir->get_error_message() ?: $working_dir->get_error_data() );
@@ -1046,12 +1048,10 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-					/* translators: first one is the add-on nam and the second the error message */
-						__( 'ATUM %1$s could not be installed (%2$s).<br>Please, do %3$sopen a ticket%4$s to contact with the ATUM support team.', ATUM_TEXT_DOMAIN ),
+						/* translators: first one is the add-on nam and the second the error message */
+						__( "ATUM %1\$s could not be installed (reason: %2\$s). Please, contact with ATUM's support.", ATUM_TEXT_DOMAIN ),
 						$addon_name,
-						$e->getMessage(),
-						'<a href="https://stockmanagementlabs.ticksy.com/" target="_blank">',
-						'</a>'
+						lcfirst( $e->getMessage() )
 					),
 				);
 
@@ -1163,7 +1163,7 @@ class Addons {
 	 *
 	 * @since 1.9.27
 	 *
-	 * @param string $key        The license key.
+	 * @param string $key The trial license key.
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -1412,6 +1412,17 @@ class Addons {
 			AtumCache::set_transient( $limit_requests_transient, time(), 15 * MINUTE_IN_SECONDS, TRUE );
 		}
 
+	}
+
+	/**
+	 * Getter for the addons path prop
+	 *
+	 * @since 1.9.27
+	 *
+	 * @return array
+	 */
+	public static function get_addons_paths() {
+		return self::$addons_paths;
 	}
 
 

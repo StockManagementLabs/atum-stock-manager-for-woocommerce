@@ -245,7 +245,7 @@ export default class AddonsPage {
 	}
 
 	/**
-	 * Validate license before installing addon
+	 * Validate license before installing an addon
 	 *
 	 * @param {JQuery} $button
 	 */
@@ -253,7 +253,6 @@ export default class AddonsPage {
 
 		const $addonBlock: JQuery = $button.closest( '.atum-addon' ),
 		      addon: string       = $addonBlock.data( 'addon' ),
-		      slug: string        = $addonBlock.data( 'addon-slug' ),
 		      key: string         = $addonBlock.find( '.addon-key input' ).val();
 
 		// First check if it is a trial license.
@@ -265,7 +264,6 @@ export default class AddonsPage {
 				action  : 'atum_validate_license',
 				security: this.settings.get( 'nonce' ),
 				addon   : addon,
-				slug    : slug,
 				key     : key,
 			},
 			beforeSend: () => {
@@ -273,34 +271,11 @@ export default class AddonsPage {
 			},
 			success: ( response: any ) => {
 
-				console.log(response);
-
-				switch ( response.success ) {
-					case true:
-						//this.installAddon( addon, slug, key );
-						break;
-
-					case false:
-						this.showErrorAlert( response.data );
-						break;
-
-					case 'activate':
-						Swal.fire( {
-							icon : 'info',
-							title: this.settings.get( 'activation' ),
-							html : response.data,
-						} );
-
-						break;
-
-					case 'trial':
-						Swal.fire( {
-							icon : 'info',
-							title: this.settings.get( 'trial' ),
-							html : response.data,
-						} );
-
-						break;
+				if ( true === response.success ) {
+					this.installAddon( addon, key );
+				}
+				else {
+					this.licenseChangeResponse( response.success, response.data, addon, key );
 				}
 
 				this.afterAjax( $button );
@@ -310,43 +285,14 @@ export default class AddonsPage {
 
 	}
 
-	installAddon( addon: string, slug: string, key: string ) {
-
-		$.ajax( {
-			url       : window[ 'ajaxurl' ],
-			method    : 'POST',
-			dataType  : 'json',
-			data: {
-				action  : 'atum_install_addon',
-				security: this.settings.get( 'nonce' ),
-				addon   : addon,
-				slug    : slug,
-				key     : key,
-			},
-			success   : ( response: any ) => {
-
-				if ( response.success === true ) {
-					this.showSuccessAlert( response.data );
-				}
-				else {
-					this.showErrorAlert( response.data );
-				}
-
-			},
-		} );
-
-	}
-	
 	/**
-	 * Send the Ajax request to change a license status
+	 * Install an add-on
 	 *
-	 * @param {JQuery} $button
-	 * @param {string} key
+	 * @param {string}  addon
+	 * @param {string}  key
 	 * @param {boolean} isSwal
-	 *
-	 * @return {Promise<void>}
 	 */
-	requestLicenseChange( $button: JQuery, key: string, isSwal: boolean = false ): Promise<void> {
+	installAddon( addon: string, key: string, isSwal: boolean = false ): Promise<void> {
 
 		return new Promise( ( resolve: Function ) => {
 
@@ -354,80 +300,22 @@ export default class AddonsPage {
 				url       : window[ 'ajaxurl' ],
 				method    : 'POST',
 				dataType  : 'json',
-				data      : {
-					action  : $button.data( 'action' ),
+				data: {
+					action  : 'atum_install_addon',
 					security: this.settings.get( 'nonce' ),
-					addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
+					addon   : addon,
 					key     : key,
 				},
-				beforeSend: () => this.beforeAjax( $button ),
 				success   : ( response: any ) => {
 
-					this.afterAjax( $button );
-
-					switch ( response.success ) {
-
-						case false:
-							if ( isSwal ) {
-								Swal.showValidationMessage( response.data );
-							}
-							else {
-								this.showErrorAlert( response.data );
-							}
-							break;
-
-						case true:
-							this.showSuccessAlert( response.data );
-							break;
-
-						case 'activate':
-							Swal.fire( {
-								title              : this.settings.get( 'activation' ),
-								html               : response.data,
-								icon               : 'info',
-								showCancelButton   : true,
-								showLoaderOnConfirm: true,
-								confirmButtonText  : this.settings.get( 'activate' ),
-								allowOutsideClick  : false,
-								preConfirm         : (): Promise<void> => {
-
-									return new Promise( ( res: Function ) => {
-
-										$.ajax( {
-											url     : window[ 'ajaxurl' ],
-											method  : 'POST',
-											dataType: 'json',
-											data: {
-												action  : 'atum_activate_license',
-												security: this.settings.get( 'nonce' ),
-												addon   : $button.closest( '.atum-addon' ).data( 'addon' ),
-												key     : key,
-											},
-											success : ( r: any ) => {
-
-												if ( r.success !== true ) {
-													Swal.showValidationMessage( r.data );
-												}
-
-												res();
-
-											},
-										} );
-
-									} );
-
-								},
-							} )
-							.then( ( result: SweetAlertResult ) => {
-
-								if ( result.isConfirmed ) {
-									this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
-								}
-
-							} );
-
-							break;
-
+					if ( response.success === true ) {
+						this.showSuccessAlert( response.data );
+					}
+					else if ( isSwal ) {
+						Swal.showValidationMessage( `<span>${ response.data }</span>` );
+					}
+					else {
+						this.showErrorAlert( response.data );
 					}
 
 					resolve();
@@ -436,7 +324,191 @@ export default class AddonsPage {
 			} );
 
 		} );
+
+	}
+
+	/**
+	 * Extend a trial license (if possible)
+	 *
+	 * @param {string}  addon
+	 * @param {string}  key
+	 * @param {boolean} isSwal
+	 *
+	 * @return {Promise<void>}
+	 */
+	extendTrial( addon: string, key: string, isSwal: boolean = false ): Promise<void> {
+
+		return new Promise( ( resolve: Function ) => {
+
+			$.ajax( {
+				url     : window[ 'ajaxurl' ],
+				method  : 'POST',
+				dataType: 'json',
+				data    : {
+					action  : 'atum_extend_trial',
+					security: this.settings.get( 'nonce' ),
+					addon   : addon,
+					key     : key,
+				},
+				success : ( response: any ) => {
+
+					this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+					resolve();
+
+				},
+			} );
+
+		} );
+
+	}
+	
+	/**
+	 * Send the Ajax request to change a license status
+	 *
+	 * @param {JQuery}  $button
+	 * @param {string}  key
+	 * @param {boolean} isSwal
+	 *
+	 * @return {Promise<void>}
+	 */
+	requestLicenseChange( $button: JQuery, key: string, isSwal: boolean = false ): Promise<void> {
+
+		return new Promise( ( resolve: Function ) => {
+
+			const addon: string = $button.closest( '.atum-addon' ).data( 'addon' );
+
+			$.ajax( {
+				url       : window[ 'ajaxurl' ],
+				method    : 'POST',
+				dataType  : 'json',
+				data      : {
+					action  : $button.data( 'action' ),
+					security: this.settings.get( 'nonce' ),
+					addon   : addon,
+					key     : key,
+				},
+				beforeSend: () => this.beforeAjax( $button ),
+				success   : ( response: any ) => {
+
+					this.afterAjax( $button );
+					this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+					resolve();
+
+				},
+			} );
+
+		} );
 		
+	}
+
+	/**
+	 * Handle the responses of a license change request
+	 *
+	 * @param {boolean | string} resp
+	 * @param {string}           message
+	 * @param {string}           addon
+	 * @param {string}           key
+	 * @param {boolean}          isSwal
+	 */
+	licenseChangeResponse( resp: boolean|string, message: string, addon: string, key: string, isSwal: boolean = false ) {
+
+		switch ( resp ) {
+
+			case false:
+				if ( isSwal ) {
+					Swal.showValidationMessage( `<span>${ message }</span>` );
+				}
+				else {
+					this.showErrorAlert( message );
+				}
+				break;
+
+			case true:
+				this.showSuccessAlert( message );
+				break;
+
+			case 'activate':
+				Swal.fire( {
+					title              : this.settings.get( 'activation' ),
+					html               : message,
+					icon               : 'info',
+					showCancelButton   : true,
+					showLoaderOnConfirm: true,
+					confirmButtonText  : this.settings.get( 'activate' ),
+					allowOutsideClick  : false,
+					preConfirm         : (): Promise<void> => {
+
+						return new Promise( ( res: Function ) => {
+
+							$.ajax( {
+								url     : window[ 'ajaxurl' ],
+								method  : 'POST',
+								dataType: 'json',
+								data: {
+									action  : 'atum_activate_license',
+									security: this.settings.get( 'nonce' ),
+									addon   : addon,
+									key     : key,
+								},
+								success : ( r: any ) => {
+
+									if ( r.success !== true ) {
+										Swal.showValidationMessage( `<span>${ r.data }</span>` );
+									}
+
+									res();
+
+								},
+							} );
+
+						} );
+
+					},
+				} )
+				.then( ( result: SweetAlertResult ) => {
+
+					if ( result.isConfirmed ) {
+						this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
+					}
+
+				} );
+
+				break;
+
+			case 'trial':
+				Swal.fire( {
+					icon               : 'info',
+					title              : this.settings.get( 'trial' ),
+					html               : message,
+					showCancelButton   : true,
+					showCloseButton    : true,
+					confirmButtonText  : this.settings.get( 'agree' ),
+					cancelButtonText   : this.settings.get( 'cancel' ),
+					reverseButtons     : true,
+					showLoaderOnConfirm: true,
+					preConfirm         : (): Promise<void> => this.installAddon( addon, key, true ),
+				} );
+
+				break;
+
+			case 'extend':
+				Swal.fire( {
+					icon               : 'info',
+					title              : this.settings.get( 'trialExpired' ),
+					html               : message,
+					showCancelButton   : true,
+					showCloseButton    : true,
+					confirmButtonText  : this.settings.get( 'extend' ),
+					cancelButtonText   : this.settings.get( 'cancel' ),
+					reverseButtons     : true,
+					showLoaderOnConfirm: true,
+					preConfirm         : (): Promise<void> => this.extendTrial( addon, key, true ),
+				} );
+
+				break;
+
+		}
+
 	}
 	
 	/**

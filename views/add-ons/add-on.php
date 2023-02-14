@@ -215,7 +215,9 @@ endif; ?>
 								<?php if ( ! empty( $addon_status['expires'] ) ) : ?>
 									<div class="license-info">
 										<div class="license-label"><?php esc_html_e( 'Expiration date', ATUM_TEXT_DOMAIN ); ?></div>
-										<div class="expires<?php echo $is_expired ? esc_attr( ' expired' ) : '' ?>"><?php echo esc_html( $addon_status['expires'] ) ?></div>
+										<div class="expires<?php echo ( ( $is_trial && $is_expired ) || ( ! $is_expired && $is_expired && 'valid' !== $addon_status['status'] ) ) ? esc_attr( ' expired' ) : '' ?>">
+											<?php echo esc_html( $addon_status['expires'] ) ?>
+										</div>
 									</div>
 								<?php endif; ?>
 
