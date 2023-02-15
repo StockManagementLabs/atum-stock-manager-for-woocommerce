@@ -194,7 +194,8 @@ endif; ?>
 
 								<input type="text" autocomplete="false" spellcheck="false" class="license-key
 									<?php echo $addon_status['key'] ? esc_attr( $addon_status['status'] ) : '' ?>"
-									value="" placeholder="<?php esc_attr_e( 'Enter the add-on license key...', ATUM_TEXT_DOMAIN ) ?>"
+									value="<?php echo esc_attr( $addon_status['key'] ?? '' ) ?>"
+									placeholder="<?php esc_attr_e( 'Enter the add-on license key...', ATUM_TEXT_DOMAIN ) ?>"
 								>
 
 								<?php if ( ! empty( $addon_status['button_text'] ) && ! empty( $addon_status['button_action'] ) ) : ?>

@@ -272,13 +272,12 @@ export default class AddonsPage {
 			success: ( response: any ) => {
 
 				if ( true === response.success ) {
-					this.installAddon( addon, key );
+					this.installAddon( addon, key ).then( () => this.afterAjax( $button ) );
 				}
 				else {
 					this.licenseChangeResponse( response.success, response.data, addon, key );
+					this.afterAjax( $button );
 				}
-
-				this.afterAjax( $button );
 
 			}
 		} );

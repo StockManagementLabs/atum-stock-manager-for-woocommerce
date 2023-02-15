@@ -362,12 +362,12 @@ var AddonsPage = (function () {
             },
             success: function (response) {
                 if (true === response.success) {
-                    _this.installAddon(addon, key);
+                    _this.installAddon(addon, key).then(function () { return _this.afterAjax($button); });
                 }
                 else {
                     _this.licenseChangeResponse(response.success, response.data, addon, key);
+                    _this.afterAjax($button);
                 }
-                _this.afterAjax($button);
             }
         });
     };

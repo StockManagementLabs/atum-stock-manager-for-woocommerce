@@ -748,10 +748,6 @@ final class Ajax {
 		$addon_name = esc_attr( $_POST['addon'] );
 		$key        = esc_attr( $_POST['key'] );
 
-		if ( ! $addon_name || ! $key ) {
-			wp_send_json_error( __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN ) );
-		}
-
 		$error_message = __( 'This license is not valid.', ATUM_TEXT_DOMAIN );
 
 		// Validate the license through API.
@@ -791,6 +787,9 @@ final class Ajax {
 
 			case 'inactive':
 			case 'site_inactive':
+				// Delete status transient.
+				Addons::delete_status_transient( $addon_name );
+
 				if ( $is_trial ) {
 					wp_send_json( array(
 						'success' => 'trial',
@@ -798,9 +797,6 @@ final class Ajax {
 						'data'    => sprintf( __( "This is an ATUM %s trial license, and you'll be able to trial this add-on for free for 14 days until it's blocked.<br>If you agree, please click the button to activate and install.", ATUM_TEXT_DOMAIN ), $addon_name ),
 					) );
 				}
-
-				// Delete status transient.
-				Addons::delete_status_transient( $addon_name );
 
 				// The staging sites doesn't compute as a new activation.
 				if ( Addons::is_local_url() ) {
@@ -1127,11 +1123,14 @@ final class Ajax {
 					'expires' => $license_data->expires,
 				);
 
-				if ( isset( $license_data->trial ) ) {
+				if ( isset( $license_data->slug ) && strpos( $license_data->slug, 'trial' ) !== FALSE ) {
 					$key_data['trial'] = TRUE;
 				}
 
 				Addons::update_key( $addon_name, $key_data );
+
+				// Delete status transient.
+				Addons::delete_status_transient( $addon_name );
 
 				/* @noinspection PhpUnhandledExceptionInspection */
 				$result = Addons::install_addon( $license_data->name, $license_data->slug, $license_data->download_link );
@@ -1224,6 +1223,9 @@ final class Ajax {
 			'status'  => 'valid',
 			'expires' => $result->expires,
 		) );
+
+		// Delete the transient.
+		Addons::delete_status_transient( $addon_name );
 
 		/* translators: the expiration date */
 		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), $result->expires ) );

@@ -84,7 +84,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'http://stockmanagementlabs.loc/'; // TODO: CHANGE....
+	const ADDONS_STORE_URL = 'https://stockmanagementlabs.loc/'; // TODO: CHANGE....
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -464,9 +464,16 @@ class Addons {
 
 		if ( ! empty( $addons ) ) {
 
+			$is_trial = FALSE;
+
+			if ( strpos( $addon_slug, 'trial' ) ) {
+				$addon_slug = str_replace( '-trial', '', $addon_slug );
+				$is_trial = TRUE;
+			}
+
 			foreach ( $addons as $addon ) {
 				if ( $addon_slug === $addon['info']['slug'] ) {
-					return $addon['info']['folder'];
+					return ! $is_trial ? $addon['info']['folder'] : "{$addon['info']['folder']}-trial";
 				}
 			}
 
@@ -1028,7 +1035,7 @@ class Addons {
 				$result = $upgrader->install_package( array(
 					'source'                      => $working_dir,
 					'destination'                 => WP_PLUGIN_DIR,
-					'clear_destination'           => FALSE,
+					'clear_destination'           => TRUE,
 					'abort_if_destination_exists' => FALSE,
 					'clear_working'               => TRUE,
 					'hook_extra'                  => array(
@@ -1064,7 +1071,7 @@ class Addons {
 
 		wp_clean_plugins_cache();
 
-		// Activate this thing.
+		// Activate the add-on.
 		if ( $activate ) {
 
 			try {
@@ -1079,8 +1086,8 @@ class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-					/* translators: first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page */
-						__( 'ATUM %1$s was installed but could not be activated. %2$sPlease activate it manually by clicking here.%3$s', ATUM_TEXT_DOMAIN ),
+						/* translators: first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page */
+						__( 'ATUM %1$s was installed but could not be activated.<br>Please, activate it manually from the %2$splugins page.%3$s', ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						'<a href="' . admin_url( 'plugins.php' ) . '">',
 						'</a>'
