@@ -130,14 +130,6 @@ class Addons {
 			// Automatic updates for addons.
 			add_action( 'admin_init', array( $this, 'check_addons_updates' ), 0 );
 
-			// Disable SSL verification in order to prevent addon download failures.
-			add_filter( 'http_request_args', array( $this, 'http_request_args' ), 10, 2 );
-
-			// Allow downloading files from local servers while developing.
-			if ( ATUM_DEBUG ) {
-				add_filter( 'http_request_host_is_external', '__return_true' );
-			}
-
 			// Check if there are ATUM add-ons installed that are not activated.
 			if ( ! empty( self::$addons ) ) {
 
@@ -484,26 +476,6 @@ class Addons {
 	}
 
 	/**
-	 * Disable SSL verification in order to prevent download update failures
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param array  $args
-	 * @param string $url
-	 *
-	 * @return array
-	 */
-	public function http_request_args( $args, $url ) {
-
-		// If it is a https request, and we are performing a package download, disable ssl verification.
-		if ( strpos( $url, 'https://' ) !== FALSE && strpos( $url, 'package_download' ) !== FALSE && strpos( $url, self::ADDONS_STORE_URL ) !== FALSE ) {
-			$args['sslverify'] = FALSE;
-		}
-
-		return $args;
-	}
-
-	/**
 	 * Add the ATUM add-ons suggestions to the WC's product data tab
 	 *
 	 * @since 1.6.7
@@ -563,12 +535,14 @@ class Addons {
 		$addon_name = strtolower( $addon_name );
 
 		if ( ! empty( $keys ) ) {
+
 			foreach ( $keys as $key_name => $key_value ) {
-				if ( FALSE === in_array( $key_name, array_keys( $lower_keys ) ) ) {
+				if ( ! in_array( $key_name, array_keys( $lower_keys ) ) ) {
 					$lower_key                = strtolower( $key_name );
 					$lower_keys[ $lower_key ] = $key_value;
 				}
 			}
+
 		}
 
 		if ( $addon_name ) {
