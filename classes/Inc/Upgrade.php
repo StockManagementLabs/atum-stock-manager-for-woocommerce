@@ -1196,12 +1196,16 @@ class Upgrade {
 
 				$found = FALSE;
 
-				foreach ( $addons_paths as $addon_path ) {
+				if ( ! empty( $key_data['key'] ) ) {
 
-					// Correct key.
-					if ( strtolower( $addon_path['name'] ) === $addon_name ) {
-						$found = TRUE;
-						break;
+					foreach ( $addons_paths as $addon_path ) {
+
+						// Correct key.
+						if ( strtolower( $addon_path['name'] ) === $addon_name ) {
+							$found = TRUE;
+							break;
+						}
+
 					}
 
 				}
