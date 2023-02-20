@@ -1717,10 +1717,6 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   content: "\e990";
 }
 
-.atmi-question:before {
-  content: "\e9d9";
-}
-
 .atmi-question-circle:before {
   content: "\e991";
 }

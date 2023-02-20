@@ -68,7 +68,7 @@ class AtumQueues {
 	 */
 	private function __construct() {
 
-		add_action( 'admin_init', array( $this, 'check_queues' ), PHP_INT_MAX );
+		add_action( 'init', array( $this, 'check_queues' ), PHP_INT_MAX );
 
 		// Add the ATUM's recurring hooks.
 		add_action( 'atum/update_expiring_product_props', array( $this, 'action_update_expiring_product_props' ) );
