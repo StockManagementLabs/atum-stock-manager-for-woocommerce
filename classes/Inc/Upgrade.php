@@ -1219,12 +1219,13 @@ class Upgrade {
 			// Only need to resave the keys if we removed any.
 			if ( count( $addons_keys ) !== $num_keys ) {
 				update_option( Addons::ADDONS_KEY_OPTION, $addons_keys );
-
-				foreach ( Addons::get_installed_addons() as $registered_addon ) {
-					Addons::delete_status_transient( $registered_addon['name'] );
-				}
 			}
 
+		}
+
+		// Remove the old addon status transients.
+		foreach ( Addons::get_installed_addons() as $registered_addon ) {
+			Addons::delete_status_transient( $registered_addon['name'] );
 		}
 
 	}

@@ -19,6 +19,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
+use Westsworld\TimeAgo;
 
 
 class Addons {
@@ -814,7 +815,7 @@ class Addons {
 	 * @param string $addon_slug   The addon slug (may match with the plugin directory name).
 	 * @param string $addon_folder The addon slug (may match with the plugin directory name).
 	 *
-	 * @return array  The addon status info.
+	 * @return object  The addon status info.
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug, $addon_folder ) {
 
@@ -827,21 +828,23 @@ class Addons {
 			$is_trial_installed = Helpers::is_plugin_installed( $addon_slug, "$addon_folder-trial" );
 
 			// Status defaults.
-			$addon_status = array(
-				'installed' => $is_installed || $is_trial_installed,
-				'status'    => 'invalid',
-				'key'       => '',
+			$addon_status = (object) array(
+				'installed'   => $is_installed || $is_trial_installed,
+				'status'      => 'invalid',
+				'key'         => '',
+				'classes'     => [],
+				'notice_type' => 'info',
 			);
 
 			if ( $is_trial_installed && ! $is_installed ) {
-				$addon_status['is_trial'] = TRUE;
+				$addon_status->is_trial = TRUE;
 			}
 			else {
 
 				foreach ( self::$addons as $addon_key => $installed_addon ) {
 					if ( strtolower( $installed_addon['name'] ) === strtolower( $addon_name ) ) {
 						if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
-							$addon_status['is_trial'] = TRUE;
+							$addon_status->is_trial = TRUE;
 						}
 						break;
 					}
@@ -854,7 +857,7 @@ class Addons {
 			if (
 				empty( $saved_license ) ||
 				// When any add-on was previously activated but is no longer installed and the license is not valid, get rid of it.
-				( 'valid' !== $saved_license['status'] && ! $addon_status['installed'] )
+				( 'valid' !== $saved_license['status'] && ! $addon_status->installed )
 			) {
 
 				$key_info = array(
@@ -871,12 +874,12 @@ class Addons {
 			}
 			else {
 
-				$addon_status['key'] = $saved_license['key'];
+				$addon_status->key = $saved_license['key'];
 
-				if ( ! empty( $addon_status['key'] ) ) {
+				if ( ! empty( $addon_status->key ) ) {
 
 					// Check the license.
-					$license_status = self::check_license( $addon_name, $addon_status['key'] );
+					$license_status = self::check_license( $addon_name, $addon_status->key );
 
 					if ( ! is_wp_error( $license_status ) ) {
 
@@ -885,20 +888,23 @@ class Addons {
 						if ( $license_data ) {
 
 							// Confirm that the license belongs to the installed add-on.
-							if ( ! empty( $installed_addon['name'] ) && $installed_addon['name'] !== $license_data->item_name ) {
-								$addon_status['status'] = $saved_license['status'] = 'invalid';
+							if ( ! empty( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && strpos( strtolower( $license_data->item_name ), 'trial' ) === FALSE ) {
+								$addon_status->status = $saved_license['status'] = 'invalid';
+							}
+							elseif ( empty( $addon_status->is_trial ) && strpos( strtolower( $license_data->item_name ), 'trial' ) !== FALSE ) {
+								$addon_status->status = $saved_license['status'] = 'invalid';
 							}
 							else {
 
-								$addon_status['status']  = $license_data->license;
-								$addon_status['expires'] = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
+								$addon_status->status  = $license_data->license;
+								$addon_status->expires = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
 
 								if (
-									$addon_status['status'] !== $saved_license['status'] ||
-									( ( $saved_license['expires'] ?? NULL ) !== $addon_status['expires'] )
+									$addon_status->status !== $saved_license['status'] ||
+									( ( $saved_license['expires'] ?? NULL ) !== $addon_status->expires )
 								) {
-									$saved_license['status']  = $addon_status['status'];
-									$saved_license['expires'] = $addon_status['expires'];
+									$saved_license['status']  = $addon_status->status;
+									$saved_license['expires'] = $addon_status->expires;
 								}
 
 							}
@@ -911,56 +917,118 @@ class Addons {
 
 				}
 				else {
-					$addon_status['status'] = 'not_activated';
+					$addon_status->status     = 'no_key';
+					$addon_status->classes[]  = 'no-key';
+					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
+				}
+
+			}
+
+			$is_expired = FALSE;
+
+			if ( ! empty( $saved_license['expires'] ) ) {
+
+				$addon_status->expires = $saved_license['expires'];
+
+				$actual_timestamp     = time();
+				$expiration_timestamp = strtotime( $addon_status->expires ?? 'now' );
+				$is_expired           = 'expired' === $addon_status->status || $expiration_timestamp <= $actual_timestamp;
+
+				if ( $is_expired ) {
+					$addon_status->is_expired = TRUE;
 				}
 
 			}
 
 			if ( ! $is_installed && ! $is_trial_installed ) {
-				$addon_status['status']        = 'not-installed';
-				$addon_status['button_text']   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
-				$addon_status['button_class']  = 'install-addon';
-				$addon_status['button_action'] = ATUM_PREFIX . 'install';
+				$addon_status->status        = 'not-installed';
+				$addon_status->button_text   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
+				$addon_status->button_class  = 'install-addon';
+				$addon_status->button_action = ATUM_PREFIX . 'install';
+				$addon_status->label_text    = __( 'Not Installed', ATUM_TEXT_DOMAIN );
+				$addon_status->classes[]     = 'not-installed';
+			}
+			elseif ( ! empty( $addon_status->is_trial ) ) {
+
+				$addon_status->classes[]  = 'trial';
+				$addon_status->label_text = __( 'Trial', ATUM_TEXT_DOMAIN );
+				$addon_status->extended   = ! isset( $license_data->trial_extendable ) || TRUE !== $license_data->trial_extendable;
+
+				if ( empty( $addon_status->key ) && $addon_status->installed ) {
+					$addon_status->notice = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+				}
+				elseif ( 'trial_used' === $addon_status->status ) {
+					$addon_status->notice = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
+				}
+				elseif ( ! $is_expired && ! empty( $addon_status->expires ) ) {
+					$time_ago        = new TimeAgo();
+					$expiration_date = date_i18n( 'Y-m-d H:i:s', $expiration_timestamp );
+					/* translators: the time remaining */
+					$addon_status->notice = sprintf( esc_html__( 'Trial period: %s ', ATUM_TEXT_DOMAIN ), str_replace( 'ago', esc_html__( 'remaining', ATUM_TEXT_DOMAIN ), $time_ago->inWordsFromStrings( $expiration_date ) ) );
+				}
+				else {
+
+					if ( ! $addon_status->extended ) {
+						$addon_status->notice = esc_html__( 'Trial period expired. You can extend it for 7 days more or purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+					}
+					else {
+						$addon_status->notice = esc_html__( 'Trial period expired. Purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+					}
+				}
+
+				$addon_status->notice_type = 'warning';
+
 			}
 			else {
 
-				switch ( $addon_status['status'] ) {
+				switch ( $addon_status->status ) {
 					case 'invalid':
 					case 'disabled':
 					case 'item_name_mismatch':
-						$addon_status['status']        = 'invalid';
-						$addon_status['button_text']   = __( 'Validate', ATUM_TEXT_DOMAIN );
-						$addon_status['button_class']  = 'validate-key';
-						$addon_status['button_action'] = ATUM_PREFIX . 'validate_license';
+						$addon_status->status        = 'invalid';
+						$addon_status->button_text   = __( 'Validate', ATUM_TEXT_DOMAIN );
+						$addon_status->button_class  = 'validate-key';
+						$addon_status->button_action = ATUM_PREFIX . 'validate_license';
+						$addon_status->classes[]     = 'invalid';
+						$addon_status->label_text    = __( 'Invalid License', ATUM_TEXT_DOMAIN );
+						$addon_status->notice        = __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice_type   = 'warning';
 						break;
 
 					case 'expired':
-						$addon_status['button_text']   = '';
-						$addon_status['button_class']  = '';
-						$addon_status['button_action'] = ATUM_PREFIX . 'remove_license';
+						$addon_status->button_text   = '';
+						$addon_status->button_class  = '';
+						$addon_status->button_action = ATUM_PREFIX . 'remove_license';
+						$addon_status->classes[]     = 'expired';
+						$addon_status->label_text    = __( 'Expired', ATUM_TEXT_DOMAIN );
+						/* translators: opening and closing link tags */
+						$addon_status->notice      = sprintf( __( 'If you already have renewed the license, please click&nbsp; %1$shere%2$s &nbsp;to recheck.', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+						$addon_status->notice_type = 'warning';
 						break;
 
 					case 'inactive':
 					case 'site_inactive':
-					case 'trial_used':
-					case 'not_activated':
-						$addon_status['button_text']   = __( 'Activate', ATUM_TEXT_DOMAIN );
-						$addon_status['button_class']  = 'activate-key';
-						$addon_status['button_action'] = ATUM_PREFIX . 'activate_license';
+					case 'no_key':
+						$addon_status->button_text   = __( 'Activate', ATUM_TEXT_DOMAIN );
+						$addon_status->button_class  = 'activate-key';
+						$addon_status->button_action = ATUM_PREFIX . 'activate_license';
+
+						if ( 'no_key' !== $addon_status->status ) :
+							$addon_status->classes[]  = 'inactive';
+							$addon_status->label_text = __( 'Not Activated', ATUM_TEXT_DOMAIN );
+						endif;
 						break;
 
 					case 'valid':
-						$addon_status['button_text']   = '';
-						$addon_status['button_class']  = '';
-						$addon_status['button_action'] = ATUM_PREFIX . 'deactivate_license';
+						$addon_status->button_text   = '';
+						$addon_status->button_class  = '';
+						$addon_status->button_action = ATUM_PREFIX . 'deactivate_license';
+						$addon_status->classes[]     = 'valid';
+						$addon_status->label_text    = __( 'Activated', ATUM_TEXT_DOMAIN );
 						break;
 
 				}
 
-			}
-
-			if ( ! empty( $saved_license['expires'] ) ) {
-				$addon_status['expires'] = $saved_license['expires'];
 			}
 
 			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
