@@ -3712,6 +3712,14 @@ tr.introjs-showElement > th {
   display: inherit;
 }
 
+td .akb-wrapper {
+  display: inline;
+}
+
+.introjs-tooltip .introjs-bullets {
+  display: none;
+}
+
 .popover {
   position: absolute;
   top: 0;

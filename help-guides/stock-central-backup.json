@@ -1,0 +1,222 @@
+[
+	{
+		"title": "Show Uncontrolled/Show Controlled",
+		"element": "#atum-stock-central-lists-button",
+		"intro": "ATUM plugin lets you separate products within the stock central screen as there may be items you no longer wish to monitor, for example, items no longer for sale but still required to keep in the report books. Our team has created two lists of products; one the default is called \"Controlled\" and the other \"Uncontrolled\". You can set the product either by editing the product itself or using the ATUM \"tool\" to edit your whole store in bulk. We have located all ATUM tools within the ATUM Settings - Tools menu."
+	},
+	{
+		"title": "Stock Central Views",
+		"element": ".subsubsub .all_stock a",
+		"intro": "Our team designed filters by the Product Stock Status.<br/><b>ALL</b> - List of all products within the \"Controlled\" or \"Uncontrolled\" filter.<br/><b>In Stock</b> or <b>Out of Stock</b> - List of all products with at least some or no inventory.<br/><b>Backorder</b> - List of products you marked as \"Allow Backorders\" in Woocommerce."
+	},
+	{
+		"title": "Restock Status View",
+		"element": "#restock_status",
+		"intro": "<strong>Restock Status:</strong><span>&nbsp;</span>a feature of ATUM that helps you to know when is the ideal time to place a purchase order. Please, read in detail about how this works here.<br/><a target=\"_blank\" href=\"https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula\">https://woocommerce.com/document/managing-products/</a>"
+	},
+	{
+		"title": "Unmanaged by WC View",
+		"element": ".subsubsub .unmanaged a",
+		"intro": "<strong>Unmanaged by WC</strong>: Feature of Woocommerce that gives you an option to either control the stock of your products at the product level (<a href=\"https://woocommerce.com/document/managing-products/\" target=\"_blank\">https://woocommerce.com/document/managing-products/</a>). If you do, the inventory of your product could be monitored, decreased or increased, either manually or automatically via sales, for example. Our team has added two filters to Stock Central, called \"Controlled\" and the other \"Uncontrolled.\" If you want to activate in bulk the Woocommerce option to control all your products at the product level, please, navigate to the ATUM Menu - Settings - Tools and use the feature we have built for you. Do not forget to take a backup of your store before you do so to avoid any issues and to allow you to revert if something fails."
+	},
+	{
+		"title": "Search feature",
+		"element": ".list-table-header .search-box .input-group",
+		"intro": "<p>You can use the search feature to <strong>search for any products</strong> within Stock Central.</p><p>To search for products:</p><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\" title=\"\" alt=\"\"></div>"
+	},
+	{
+		"title": "Sticky Columns",
+		"element": ".list-table-header .sticky-columns-button",
+		"intro": "You can <strong>enable the sticky columns</strong> by clicking on the <em>Toggle Sticky Columns Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-15.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-17.jpg\" title=\"\" alt=\"\">"
+	},
+	{
+		"title": "Sticky Header",
+		"element": ".list-table-header .sticky-header-button",
+		"intro": "You can <strong>enable the sticky header</strong> by clicking on the <em>Toggle Sticky Header Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-14.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-16.jpg\" title=\"\" alt=\"\">"
+	},
+	{
+		"title": "Bulk Actions",
+		"element": ".top #filters_container .bulkactions",
+		"intro": "<p>Using the checkbox located at the start of each row select the products you wish and apply the following bulk actions:</p><ul><li><p>Enable WC's Manage Stock</p></li><li><p>Disable WC's Manage Stock</p></li><li><p>Disable ATUM's Stock Control: This action will move the selected products to the Uncontrolled List.</p></li><li><p>Add to Purchase Order</p></li></ul>"
+	},
+	{
+		"title": "Filter by Category",
+		"element": "#product_cat + .select2",
+		"intro": "<p>You can filter the Stock Central products by category</p>"
+	},
+	{
+		"title": "Filter by Product Type",
+		"element": ".dropdown_product_type + .select2",
+		"intro": "<p>You can also filter the Stock Central products by product type</p>"
+	},
+	{
+		"title": "Filter by Supplier",
+		"element": "select#supplier + .select2",
+		"intro": "<p>You can filter the Stock Central products by Supplier</p>"
+	},
+	{
+		"title": "Extra Filters",
+		"element": "select[name=extra_filter] + .select2",
+		"intro": "<p>You can filter the Stock Central products by other criterion such as Inbound Stock, Stock on Hold, Reserved Stock, Backorders, Sold Today, Customer Returns, Warehouse Damages, Lost in Post, Best/Worst Sellers and BOM Related.</p>"
+	},
+	{
+		"title": "Image column",
+		"element": "thead th#thumb .col-product-details",
+		"intro": "<p>Product small image preview.</p>"
+	},
+	{
+		"title": "ID column",
+		"element": "thead th#ID .col-product-details",
+		"intro": "<p>A WooCommerce Product ID is sometimes needed when using shortcodes, widgets, and links. ATUM's stock central page will display the appropriate ID of the product in this column.</p>"
+	},
+	{
+		"title": "Product Name column",
+		"element": "thead th#title .col-product-details",
+		"intro": "<p>The first twenty characters of the product name. Hover your mouse over the name to see the full content.</p>"
+	},
+	{
+		"title": "Product Type column",
+		"element": "thead th#calc_type .col-product-details",
+		"intro": "<p>This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.</p>"
+	},
+	{
+		"title": "SKU column",
+		"element": "thead th#_sku .col-product-details",
+		"intro": "<p>An SKU, or Stock Keeping Unit, is a code assigned to a product by the store admin to identify the price, product options, and manufacturer of the merchandise. An SKU is used to track inventory in your retail store and must be unique. They are critical in helping you maintain a profitable retail business. We recommend the introduction of SKUs in your store to take full advantage of ATUM's features. You can set the SKU in this column. After you click the 'Set' button and 'Save Data', the SKU will update automatically in your store.</p>"
+	},
+	{
+		"title": "Supplier column",
+		"element": "thead th#_supplier .col-product-details",
+		"intro": "<p>This is the name of a supplier that supplies the products for your store.</p>"
+	},
+	{
+		"title": "Supplier SKU column",
+		"element": "thead th#_supplier_sku .col-product-details",
+		"intro": "<p>The stock-keeping unit code of the product within your supplier's product list must be unique. You can set the Supplier SKU in this column. After you click the 'Set' button and 'Save Data', the Supplier SKU will update automatically in your store.</p>"
+	},
+	{
+		"title": "Location column",
+		"element": "thead th#calc_location .col-product-details",
+		"intro": "<p>Shows the product's location hierarchy. The grey icon means that there are no locations set and the blue icon means that there. Click the icon to view and edit the locations hierarchy in a popup.</p>"
+	},
+	{
+		"title": "Regular Price column",
+		"element": "thead th#_regular_price .col-product-details",
+		"intro": "<p>You can configure the product price in this column. After you click the 'Set' button and 'Save Data', the product price will update automatically in your store.</p>"
+	},
+	{
+		"title": "Sale Price column",
+		"element": "thead th#_sale_price .col-product-details",
+		"intro": "<p>You can configure the sale price of your product. Enter the date range for your sale or leave the date empty for a continuous sale price. After clicking the 'Set' button and 'Save Data', the change will automatically update your store.</p>"
+	},
+	{
+		"title": "Purchase Price column",
+		"element": "thead th#_purchase_price .col-product-details",
+		"intro": "<p>You can configure the purchase price of the product. After you click the 'Set' button and 'Save Data', the product purchase price will update automatically in your store.</p>"
+	},
+	{
+		"title": "Gross Profit column",
+		"element": "thead th#calc_gross_profit .col-product-details",
+		"intro": "<p>The Gross Profit column displays the difference between the regular price and the purchase price. From ATUM general settings you can choose to display it as a percentage or as a monetary value; but when you hover the value in Stock Central, it will display the non-selected format as well in a tooltip. Also, in ATUM general settings you can set a percentage to the profit margin. We’ll use this value to mark in red all the gross profit values that fall below this margin and in green all the values equal or greater than this margin. If you install our premium add-on Product Levels, the Gross Profit column will be displayed in Manufacturing Central too.</p>"
+	},
+	{
+		"title": "Weight column",
+		"element": "thead th#_weight .col-product-details",
+		"intro": "<p>You can configure the product weight in this column. After you click the 'Set' button and 'Save Data', the product weight will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Current Stock column",
+		"element": "thead th#_stock .col-stock-counters",
+		"intro": "<p>The current stock represents the number of products available to order (values updated on the Stock Central refresh). If the WC’s manage stock option is enabled, you can set the current stock in this column. After you click the 'Set' button and 'Save Data', the current stock will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Out of stock threshold column",
+		"element": "thead th#_out_stock_threshold .col-stock-counters",
+		"intro": "<p>When stock quantity reaches the Out of Stock Threshold the stock status will change to 'Out of Stock'. You can set the Out of Stock Threshold in this column. After you click the 'Set' button and 'Save Data', the Out of Stock Threshold will be updated automatically in your store.</p>"
+	},
+	{
+		"title": "Inbound Stock column",
+		"element": "thead th#_inbound_stock .col-stock-counters",
+		"intro": "<p>Inbound stock counter represents the volume of products that have been ordered, using the Purchase Order feature, and are pending delivery.</p>"
+	},
+	{
+		"title": "Stock on Hold column",
+		"element": "thead th#_stock_on_hold .col-stock-counters",
+		"intro": "<p>All products within paid orders that are still in the warehouse but not yet shipped (order status processing or on hold).</p>"
+	},
+	{
+		"title": "Reserved Stock column",
+		"element": "thead th#_reserved_stock .col-stock-counters",
+		"intro": "<p>There are times when the store owner needs to reserve or set aside a small or significant amount of stock. Occasions like special events, customer reservations, or quality checks will find this feature very handy. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Reserved Stock'.</p>"
+	},
+	{
+		"title": "Back Orders column",
+		"element": "thead th#calc_back_orders .col-stock-counters",
+		"intro": "<p>Every WooCommerce product has an 'Allow Back Orders' option on the product page. It will give customers the opportunity to place an order even when the product is out of stock. The 'Back Orders' indicator will display the number of items required by customers.</p>"
+	},
+	{
+		"title": "Sold today column",
+		"element": "thead th#_sold_today .col-stock-counters",
+		"intro": "<p>The value represents the number of products sold during the day. Sold products are items included in 'completed' and 'processing' orders only. Ordered items, but pending payment will show in the 'Stock on Hold' column instead.</p>"
+	},
+	{
+		"title": "Customer Returns column",
+		"element": "thead th#_customer_returns .col-stock-negatives",
+		"intro": "<p>We don't think there is a store owner that wants to see products returning to the warehouse. However, in case there is an item coming back from the customer store owner can use the Inventory Logs to create a log entry with the 'Customer Returns' type. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Customer Returns'.</p>"
+	},
+	{
+		"title": "Warehouse Damages column",
+		"element": "thead th#_warehouse_damage .col-stock-negatives",
+		"intro": "<p>In the unlikely event of warehouse or in-house damages, the Inventory Logs have the option to create an entry with the 'Warehouse Damage' type. This value is the sum of the total amount of items that are part of pending Inventory Logs with the type set as 'Warehouse Damage'.</p>"
+	},
+	{
+		"title": "Lost in Post column",
+		"element": "thead th#_lost_in_post .col-stock-negatives",
+		"intro": "<p>Inventory Logs add-on can create a log entry under the 'Lost in Post' tab within the 'Inventory Log' menu for all items that have gone missing on the route to the customer. This indicator helps to control the performance of postal carriers as well as the work of dispatch departments.</p>"
+	},
+	{
+		"title": "Other Logs column",
+		"element": "thead th#_other_logs .col-stock-negatives",
+		"intro": "<p>Within the Inventory Log tab you can create a log with the ‘Other’ type in cases when the log doesn’t match with ‘Customer Returns’, ‘Warehouse Damages’, or ‘Lost in Post’ options.</p>"
+	},
+	{
+		"title": "Sales Last Days column",
+		"element": "thead th#_sales_last_days .col-stock-selling-manager",
+		"intro": "<p>Users will value this performance indicator as a tool that allows them to see the actual sales of the product within the last X days (sold products are items included in 'completed' and 'processing' orders only. Ordered items, but pending payment will show in the 'Stock on Hold' column instead). You can change the number of days by simply clicking on its blue number.</p>"
+	},
+	{
+		"title": "Stock will Last (Days) column",
+		"element": "thead th#calc_will_last .col-stock-selling-manager",
+		"intro": "<p>A feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the past seven days (we do not include the current day sales).</p>"
+	},
+	{
+		"title": "Out of Stock for (Days) column",
+		"element": "thead th#_out_stock_days .col-stock-selling-manager",
+		"intro": "<p>This indicator shows the number of days an item has the 'Out of Stock' status. Store owners can more accurately monitor the effectiveness of their ordering. Please, note that ATUM will only calculate products that go out of stock after the initial plugin install.</p>"
+	},
+	{
+		"title": "Lost Sales column",
+		"element": "thead th#_lost_sales .col-stock-selling-manager",
+		"intro": "<p>Our users will want to see this figure as close to zero as possible. The formula calculates the volume of products that the store owner would sell if the item stayed in stock. By default, we take the average sales for the last seven days the item was in stock. We time the result by the number of days the item is out of stock.</p>"
+	},
+	{
+		"title": "Stock Indicator column",
+		"element": "thead th#calc_stock_indicator .col-stock-selling-manager",
+		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\" title=\"\" alt=\"\"></p>"
+	},
+	{
+		"title": "Stock Central Screen Options",
+		"element": "#screen-options-link-wrap #show-settings-link",
+		"intro": "<p>ATUM Stock Central allows you to hide columns you do need. This feature is handy as it will remove unnecessary clatter and improve your workflow. Click the \"Screen Options\" menu, and select/deselect the relevant column names.</p><p>You can as well amend the number of products you see per page. If your shop is large with a long history, it may be helpful for you to decrease the number of products to reduce the processed data.</p>"
+	},
+	{
+		"title": "Help Tab",
+		"element": "#contextual-help-link-wrap #contextual-help-link",
+		"intro": "<p>To access the help content, click <b>Help</b> at the top of the screen.<br/>The help content contains the following sections:</p><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li>Visit our Website for More: <a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">https://stockmanagementlabs.com/</a></li><li>Read the Docs: <a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">https://stockmanagementlabs.crunch.help/en/</a></li><li>Watch our Videos: A link to our Youtube channel</li><li>Get Support: <a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">https://forum.stockmanagementlabs.com/</a></li></ul>"
+	},
+	{
+		"title": "Export Data",
+		"element": "#atum-export-link-wrap #show-export-settings-link",
+		"intro": "<p>The Export Data feature allows you to <strong>export selected data</strong> from Stock Central as a pre-formatted .pdf file.</p><p>To export data as a .pdf:</p><ul><li>From Stock Central, click<span>&nbsp;</span><strong>Export Data</strong>.</li><li>In the Columns section, <strong>enable the columns</strong> you want to be included in the export.</li><li>Use the <strong>Product Type</strong> menu if you want to only include a specific product type.</li><li>Use the<span>&nbsp;</span><strong>Product Category</strong><span>&nbsp;</span>menu if you want to only include a specific product category.</li><li>Enter the maximum width of the product names displayed in the report in the <strong>Title Max Length field</strong>.</li>\n</ul>"
+	}
+]
