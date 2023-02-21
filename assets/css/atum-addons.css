@@ -3071,6 +3071,9 @@ html {
   background-color: #e9ecef;
   color: #27283B;
 }
+.atum-addons .addon-footer .alert-warning a {
+  color: #00B8DB;
+}
 .atum-addons .no-results {
   margin-top: 15px;
   padding-top: 20px;

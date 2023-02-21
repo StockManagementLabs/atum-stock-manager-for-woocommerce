@@ -10,6 +10,7 @@ import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import Tooltip from '../_tooltip';
+import Trials from './_trials';
 import Utils from '../../utils/_utils';
 
 export default class AddonsPage {
@@ -19,7 +20,8 @@ export default class AddonsPage {
 	
 	constructor(
 		private settings: Settings,
-		private tooltip: Tooltip
+		private tooltip: Tooltip,
+		private trials: Trials
 	) {
 
 		this.$addonsList = $( '.atum-addons' );
@@ -325,41 +327,6 @@ export default class AddonsPage {
 		} );
 
 	}
-
-	/**
-	 * Extend a trial license (if possible)
-	 *
-	 * @param {string}  addon
-	 * @param {string}  key
-	 * @param {boolean} isSwal
-	 *
-	 * @return {Promise<void>}
-	 */
-	extendTrial( addon: string, key: string, isSwal: boolean = false ): Promise<void> {
-
-		return new Promise( ( resolve: Function ) => {
-
-			$.ajax( {
-				url     : window[ 'ajaxurl' ],
-				method  : 'POST',
-				dataType: 'json',
-				data    : {
-					action  : 'atum_extend_trial',
-					security: this.settings.get( 'nonce' ),
-					addon   : addon,
-					key     : key,
-				},
-				success : ( response: any ) => {
-
-					this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
-					resolve();
-
-				},
-			} );
-
-		} );
-
-	}
 	
 	/**
 	 * Send the Ajax request to change a license status
@@ -501,7 +468,11 @@ export default class AddonsPage {
 					cancelButtonText   : this.settings.get( 'cancel' ),
 					reverseButtons     : true,
 					showLoaderOnConfirm: true,
-					preConfirm         : (): Promise<void> => this.extendTrial( addon, key, true ),
+					preConfirm         : (): Promise<void> => {
+						return this.trials.extendTrial( addon, key, true, ( response: any ) => {
+							this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+						} );
+					},
 				} );
 
 				break;

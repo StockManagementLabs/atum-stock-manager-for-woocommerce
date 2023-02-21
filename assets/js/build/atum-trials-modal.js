@@ -110,10 +110,10 @@ var Trials = (function () {
             evt.preventDefault();
             evt.stopImmediatePropagation();
             var $button = $(evt.currentTarget);
-            _this.extendTrial($button.data('key'));
+            _this.extendTrialConfirmation($button.closest('.atum-addon').data('addon'), $button.data('key'));
         });
     };
-    Trials.prototype.extendTrial = function (key) {
+    Trials.prototype.extendTrialConfirmation = function (addon, key) {
         var _this = this;
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
             title: this.settings.get('trialExtension'),
@@ -127,38 +127,49 @@ var Trials = (function () {
             reverseButtons: true,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve) {
-                    $.ajax({
-                        url: window['ajaxurl'],
-                        method: 'post',
-                        dataType: 'json',
-                        data: {
-                            action: 'atum_extend_trial',
-                            security: _this.settings.get('nonce'),
-                            key: key,
-                        },
-                        success: function (response) {
-                            if (!response.success) {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                return _this.extendTrial(addon, key, true, function (response) {
+                    if (!response.success) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                    }
+                    else {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+                            title: _this.settings.get('success'),
+                            html: response.data,
+                            icon: 'success',
+                            confirmButtonText: _this.settings.get('ok'),
+                        })
+                            .then(function (result) {
+                            if (_this.successCallback && result.isConfirmed) {
+                                _this.successCallback();
                             }
-                            else {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-                                    title: _this.settings.get('success'),
-                                    html: response.data,
-                                    icon: 'success',
-                                    confirmButtonText: _this.settings.get('ok'),
-                                })
-                                    .then(function (result) {
-                                    if (_this.successCallback && result.isConfirmed) {
-                                        _this.successCallback();
-                                    }
-                                });
-                            }
-                            resolve();
-                        },
-                    });
+                        });
+                    }
                 });
             },
+        });
+    };
+    Trials.prototype.extendTrial = function (addon, key, isSwal, callback) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        if (callback === void 0) { callback = null; }
+        return new Promise(function (resolve) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'atum_extend_trial',
+                    security: _this.settings.get('nonce'),
+                    addon: addon,
+                    key: key,
+                },
+                success: function (response) {
+                    if (callback) {
+                        callback(response);
+                    }
+                    resolve();
+                },
+            });
         });
     };
     return Trials;

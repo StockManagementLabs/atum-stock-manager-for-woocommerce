@@ -78,18 +78,25 @@ else :
 		case 'disabled':
 			$addon_classes[] = 'invalid';
 			$status_text     = __( 'Invalid License', ATUM_TEXT_DOMAIN );
+			$notice          = __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates.', ATUM_TEXT_DOMAIN );
+			$notice_type     = 'warning';
 			break;
 
 		case 'expired':
 			$addon_classes[] = 'expired';
 			$status_text     = __( 'Expired', ATUM_TEXT_DOMAIN );
 			/* translators: opening and closing link tags */
-			$notice      = sprintf( __( 'If you already have renewed the license, please click %1$shere%2$s', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+			$notice      = sprintf( __( 'If you already have renewed the license, please click&nbsp; %1$shere%2$s &nbsp;to recheck.', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
 			$notice_type = 'warning';
 			break;
 	endswitch;
 
-endif; ?>
+endif;
+
+if ( $addon_status['installed'] ) :
+	$current_version = Addons::get_installed_version( $addon['info']['title'] );
+endif;
+?>
 
 <div class="atum-addon <?php echo esc_attr( $addon_status['status'] ) ?><?php if ( $addon_status['installed'] && 'valid' === $addon_status['status'] ) echo ' active' ?>
 	<?php if ( $addon_status['key'] ) echo ' with-key' ?>" data-addon="<?php echo esc_attr( $addon['info']['title'] ) ?>"
@@ -132,6 +139,15 @@ endif; ?>
 				<div class="alert alert-<?php echo esc_attr( $notice_type ); ?>">
 					<i class="atum-icon atmi-warning"></i>
 					<?php echo $notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+			<?php endif; ?>
+
+			<?php if ( ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
+				<div class="alert alert-primary">
+					<i class="atum-icon atmi-info"></i>
+					<?php
+					/* translators: open and closing link tags */
+					printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="">', '</a>' ); ?>
 				</div>
 			<?php endif; ?>
 
@@ -216,7 +232,7 @@ endif; ?>
 								<?php if ( ! empty( $addon_status['expires'] ) ) : ?>
 									<div class="license-info">
 										<div class="license-label"><?php esc_html_e( 'Expiration date', ATUM_TEXT_DOMAIN ); ?></div>
-										<div class="expires<?php echo ( ( $is_trial && $is_expired ) || ( ! $is_expired && $is_expired && 'valid' !== $addon_status['status'] ) ) ? esc_attr( ' expired' ) : '' ?>">
+										<div class="expires<?php echo ( ( $is_trial && $is_expired ) || ( ! $is_trial && $is_expired && 'valid' !== $addon_status['status'] ) ) ? esc_attr( ' expired' ) : '' ?>">
 											<?php echo esc_html( $addon_status['expires'] ) ?>
 										</div>
 									</div>

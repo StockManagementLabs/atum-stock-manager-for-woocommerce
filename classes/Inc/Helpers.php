@@ -3917,4 +3917,15 @@ final class Helpers {
 		return $new_data;
 	}
 
+	/**
+	 * Check whether WP is running its heartbeat checking.
+	 *
+	 * @since 1.9.27
+	 *
+	 * @return bool
+	 */
+	public static function doing_heartbeat() {
+		return isset( $_POST['action'] ) && 'heartbeat' === $_POST['action'];
+	}
+
 }

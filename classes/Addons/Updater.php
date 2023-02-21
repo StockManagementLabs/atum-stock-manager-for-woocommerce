@@ -25,56 +25,63 @@ class Updater {
 	 *
 	 * @var string
 	 */
-	private $api_url = '';
+	private $api_url;
 
 	/**
 	 * The data passed in the API request
 	 *
 	 * @var array
 	 */
-	private $api_data = array();
+	private $api_data;
 
 	/**
 	 * The addon's directory name
 	 *
 	 * @var string
 	 */
-	private $name = '';
+	private $name;
 
 	/**
 	 * The addon's slug
 	 *
 	 * @var string
 	 */
-	private $slug = '';
+	private $slug;
 
 	/**
 	 * The current version of the installed addon
 	 *
 	 * @var string
 	 */
-	private $version = '';
+	private $version;
 
 	/**
 	 * Whether to force an API request instead of getting the cached info
 	 *
 	 * @var bool
 	 */
-	private $wp_override = FALSE;
+	private $wp_override;
 
 	/**
 	 * The key used for caching the data retrieved by the API
 	 *
 	 * @var string
 	 */
-	private $transient_key = '';
+	private $transient_key;
 
 	/**
 	 * If we want to download a beta version
 	 *
 	 * @var string
 	 */
-	private $beta = '';
+	private $beta;
+
+	/**
+	 * Enable for debugging the updater only
+	 *
+	 * @var bool
+	 */
+	private $debug = FALSE;
 
 
 	/**
@@ -95,7 +102,7 @@ class Updater {
 		$this->slug          = basename( $addon_file, '.php' );
 		$this->version       = $api_data['version'];
 		$this->wp_override   = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
-		$this->beta          = ! empty( $this->api_data['beta'] ) ? TRUE : FALSE;
+		$this->beta          = ! empty( $this->api_data['beta'] );
 		$this->transient_key = AtumCache::get_transient_key( 'updater_' . $this->slug, [ $this->api_data['license'], $this->beta ] );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
@@ -114,7 +121,7 @@ class Updater {
 
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
 		add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
-		remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row', 10 );
+		remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row' );
 		add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'show_changelog' ) );
 
@@ -159,6 +166,7 @@ class Updater {
 		$version_info = $this->get_version_info_transient();
 
 		if ( FALSE !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
+
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
 				$_transient_data->response[ $this->name ] = $version_info;
 			}
@@ -166,6 +174,7 @@ class Updater {
 				// Populating the no_update information is required to support auto-updates in WordPress 5.5.
 				$_transient_data->no_update[ $this->name ] = $version_info;
 			}
+
 		}
 
 		if ( FALSE === $version_info ) {
@@ -230,7 +239,7 @@ class Updater {
 		}
 
 		// Remove our filter on the site transient.
-		remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ), 10 );
+		remove_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_update' ) );
 
 		$update_cache = get_site_transient( 'update_plugins' );
 		$update_cache = is_object( $update_cache ) ? $update_cache : new \stdClass();
@@ -284,7 +293,7 @@ class Updater {
 			if ( empty( $version_info->download_link ) ) {
 
 				printf(
-				/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
+					/* translators: first is the add-on name, second is the change log link, third is the version and forth is the closing tag for the link  */
 					__( 'There is a new version of %1$s available. %2$sView version %3$s details%4$s.', ATUM_TEXT_DOMAIN ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					esc_html( $version_info->name ),
 					'<a target="_blank" class="thickbox" href="' . esc_url( $changelog_link ) . '">',
@@ -329,11 +338,14 @@ class Updater {
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
-		if ( 'plugin_information' !== $_action ) {
+		if ( 'plugin_information' !== $_action || ! isset( $_args->slug ) ) {
 			return $_data;
 		}
 
-		if ( ! isset( $_args->slug ) || ( $_args->slug !== $this->slug ) ) {
+		// Always get info from the full versions.
+		$addon_slug = str_replace( '-trial', '', $_args->slug );
+
+		if ( strpos( $addon_slug, $this->slug ) === FALSE ) {
 			return $_data;
 		}
 
@@ -414,10 +426,15 @@ class Updater {
 		}
 
 		$version = isset( $data['version'] ) ? $data['version'] : FALSE;
-		$request = Addons::get_version( $data['item_name'], $data['license'], $version, ! empty( $data['beta'] ) );
+		$request = Addons::get_latest_version( $data['item_name'], $data['license'], $version, ! empty( $data['beta'] ) );
 
 		if ( ! is_wp_error( $request ) ) {
 			$request = json_decode( wp_remote_retrieve_body( $request ) );
+		}
+
+		// Confirm that the correct update is retrieved.
+		if ( $request->slug !== $this->slug ) {
+			return FALSE;
 		}
 
 		if ( $request && isset( $request->sections ) ) {
@@ -450,6 +467,10 @@ class Updater {
 
 		global $edd_plugin_data;
 
+		if ( Helpers::doing_heartbeat() ) {
+			return;
+		}
+
 		if ( empty( $_REQUEST['edd_sl_action'] ) || 'view_plugin_changelog' !== $_REQUEST['edd_sl_action'] ) {
 			return;
 		}
@@ -463,14 +484,14 @@ class Updater {
 		}
 
 		$data          = $edd_plugin_data[ $_REQUEST['slug'] ];
-		$beta          = ! empty( $data['beta'] ) ? TRUE : FALSE;
+		$beta          = ! empty( $data['beta'] );
 		$transient_key = AtumCache::get_transient_key( 'plugin_' . sanitize_key( $_REQUEST['plugin'] ) . '_version_info', [ $beta ] );
 		$version_info  = $this->get_version_info_transient( $transient_key );
 
 		if ( FALSE === $version_info ) {
 
 			$version = isset( $data['version'] ) ? $data['version'] : FALSE;
-			$request = Addons::get_version( $data['item_name'], $data['license'], $version, $beta );
+			$request = Addons::get_latest_version( $data['item_name'], $data['license'], $version, $beta );
 
 			if ( ! is_wp_error( $request ) ) {
 				$version_info = json_decode( wp_remote_retrieve_body( $request ) );
@@ -516,9 +537,9 @@ class Updater {
 			$transient_key = $this->transient_key;
 		}
 
-		$transient = AtumCache::get_transient( $transient_key, TRUE );
+		$transient = AtumCache::get_transient( $transient_key, ! $this->debug );
 
-		return FALSE !== $transient ? json_decode( $transient ) : $transient;
+		return FALSE !== $transient ? json_decode( $transient ) : FALSE;
 
 	}
 
@@ -537,7 +558,7 @@ class Updater {
 		}
 
 		// Set the transient to expire on 3 hours.
-		AtumCache::set_transient( $transient_key, wp_json_encode( $value ), 3 * HOUR_IN_SECONDS, TRUE );
+		AtumCache::set_transient( $transient_key, wp_json_encode( $value ), 3 * HOUR_IN_SECONDS, ! $this->debug );
 
 	}
 

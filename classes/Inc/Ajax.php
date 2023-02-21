@@ -866,7 +866,7 @@ final class Ajax {
 		}
 
 		// Don't save the key if invalid.
-		if ( ! in_array( $license_data->license, [ 'invalid', 'disabled', 'expired' ] ) ) {
+		if ( ! in_array( $license_data->license, [ 'invalid', 'disabled', 'expired', 'trial_used' ] ) ) {
 
 			$key_data = array(
 				'key'     => $key,
@@ -1100,7 +1100,7 @@ final class Ajax {
 			wp_send_json_error( $default_error );
 		}
 
-		$response = Addons::get_version( $addon_name, $key, '0.0' );
+		$response = Addons::get_latest_version( $addon_name, $key, '0.0' );
 
 		// Make sure the response came back okay.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {

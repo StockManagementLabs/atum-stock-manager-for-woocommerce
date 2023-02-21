@@ -267,6 +267,10 @@ class Settings {
 	 */
 	public function register_settings() {
 
+		if ( Helpers::doing_heartbeat() ) {
+			return;
+		}
+
 		$countries         = WC()->countries;
 		$default_country   = $countries->get_base_country();
 		$default_city      = $countries->get_base_city();

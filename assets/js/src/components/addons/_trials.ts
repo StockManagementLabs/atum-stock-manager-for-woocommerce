@@ -31,7 +31,7 @@ export default class Trials {
 			evt.stopImmediatePropagation();
 
 			const $button: JQuery = $( evt.currentTarget );
-			this.extendTrial( $button.data( 'key' ) );
+			this.extendTrialConfirmation( $button.closest( '.atum-addon' ).data( 'addon' ), $button.data( 'key' ) );
 		} );
 
 	}
@@ -39,9 +39,10 @@ export default class Trials {
 	/**
 	 * Extend a trial license
 	 *
+	 * @param {string} addon
 	 * @param {string} key
 	 */
-	extendTrial( key: string ) {
+	extendTrialConfirmation( addon: string, key: string ) {
 
 		Swal.fire( {
 			title              : this.settings.get( 'trialExtension' ),
@@ -56,48 +57,69 @@ export default class Trials {
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<void> => {
 
-				return new Promise( ( resolve: Function ) => {
+				return this.extendTrial( addon, key, true, ( response: any ) => {
 
-					$.ajax( {
-						url     : window[ 'ajaxurl' ],
-						method  : 'post',
-						dataType: 'json',
-						data    : {
-							action  : 'atum_extend_trial',
-							security: this.settings.get( 'nonce' ),
-							key     : key,
-						},
-						success : ( response: any ) => {
+					if ( ! response.success ) {
+						Swal.showValidationMessage( response.data );
+					}
+					else {
 
-							if ( ! response.success ) {
-								Swal.showValidationMessage( response.data );
-							}
-							else {
+						Swal.fire( {
+							title            : this.settings.get( 'success' ),
+							html             : response.data,
+							icon             : 'success',
+							confirmButtonText: this.settings.get( 'ok' ),
+						} )
+						.then( ( result: SweetAlertResult ) => {
 
-								Swal.fire( {
-									title            : this.settings.get( 'success' ),
-									html             : response.data,
-									icon             : 'success',
-									confirmButtonText: this.settings.get( 'ok' ),
-								} )
-								.then( ( result: SweetAlertResult ) => {
-
-									if ( this.successCallback && result.isConfirmed ) {
-										this.successCallback();
-									}
-
-								} )
-
+							if ( this.successCallback && result.isConfirmed ) {
+								this.successCallback();
 							}
 
-							resolve();
+						} );
 
-						},
-					} );
+					}
 
 				} );
 
 			},
+		} );
+
+	}
+
+	/**
+	 * Extend a trial license (if possible)
+	 *
+	 * @param {string}  addon
+	 * @param {string}  key
+	 * @param {boolean} isSwal
+	 *
+	 * @return {Promise<void>}
+	 */
+	extendTrial( addon: string, key: string, isSwal: boolean = false, callback: Function = null ): Promise<void> {
+
+		return new Promise( ( resolve: Function ) => {
+
+			$.ajax( {
+				url     : window[ 'ajaxurl' ],
+				method  : 'POST',
+				dataType: 'json',
+				data    : {
+					action  : 'atum_extend_trial',
+					security: this.settings.get( 'nonce' ),
+					addon   : addon,
+					key     : key,
+				},
+				success : ( response: any ) => {
+
+					if ( callback ) {
+						callback( response );
+					}
+					resolve();
+
+				},
+			} );
+
 		} );
 
 	}

@@ -333,6 +333,10 @@ html {
 			border-color: $gray-200;
 			background-color: $gray-200;
 			color: $blue-dark;
+			
+			a {
+				color: $primary;
+			}
 		}
 		
 	}

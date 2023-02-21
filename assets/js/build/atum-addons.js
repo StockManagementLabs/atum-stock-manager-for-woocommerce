@@ -104,9 +104,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip);
-    new _components_addons_trials__WEBPACK_IMPORTED_MODULE_3__["default"](settings, function () { return location.reload(); });
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"](), trials = new _components_addons_trials__WEBPACK_IMPORTED_MODULE_3__["default"](settings, function () { return location.reload(); });
+    new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip, trials);
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
@@ -200,9 +199,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var AddonsPage = (function () {
-    function AddonsPage(settings, tooltip) {
+    function AddonsPage(settings, tooltip, trials) {
         this.settings = settings;
         this.tooltip = tooltip;
+        this.trials = trials;
         this.$addonsList = $('.atum-addons');
         this.$noResults = this.$addonsList.find('.no-results');
         this.prepareMenu();
@@ -400,27 +400,6 @@ var AddonsPage = (function () {
             });
         });
     };
-    AddonsPage.prototype.extendTrial = function (addon, key, isSwal) {
-        var _this = this;
-        if (isSwal === void 0) { isSwal = false; }
-        return new Promise(function (resolve) {
-            $.ajax({
-                url: window['ajaxurl'],
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    action: 'atum_extend_trial',
-                    security: _this.settings.get('nonce'),
-                    addon: addon,
-                    key: key,
-                },
-                success: function (response) {
-                    _this.licenseChangeResponse(response.success, response.data, addon, key, isSwal);
-                    resolve();
-                },
-            });
-        });
-    };
     AddonsPage.prototype.requestLicenseChange = function ($button, key, isSwal) {
         var _this = this;
         if (isSwal === void 0) { isSwal = false; }
@@ -522,7 +501,11 @@ var AddonsPage = (function () {
                     cancelButtonText: this.settings.get('cancel'),
                     reverseButtons: true,
                     showLoaderOnConfirm: true,
-                    preConfirm: function () { return _this.extendTrial(addon, key, true); },
+                    preConfirm: function () {
+                        return _this.trials.extendTrial(addon, key, true, function (response) {
+                            _this.licenseChangeResponse(response.success, response.data, addon, key, isSwal);
+                        });
+                    },
                 });
                 break;
         }
@@ -661,10 +644,10 @@ var Trials = (function () {
             evt.preventDefault();
             evt.stopImmediatePropagation();
             var $button = $(evt.currentTarget);
-            _this.extendTrial($button.data('key'));
+            _this.extendTrialConfirmation($button.closest('.atum-addon').data('addon'), $button.data('key'));
         });
     };
-    Trials.prototype.extendTrial = function (key) {
+    Trials.prototype.extendTrialConfirmation = function (addon, key) {
         var _this = this;
         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
             title: this.settings.get('trialExtension'),
@@ -678,38 +661,49 @@ var Trials = (function () {
             reverseButtons: true,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve) {
-                    $.ajax({
-                        url: window['ajaxurl'],
-                        method: 'post',
-                        dataType: 'json',
-                        data: {
-                            action: 'atum_extend_trial',
-                            security: _this.settings.get('nonce'),
-                            key: key,
-                        },
-                        success: function (response) {
-                            if (!response.success) {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                return _this.extendTrial(addon, key, true, function (response) {
+                    if (!response.success) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.showValidationMessage(response.data);
+                    }
+                    else {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
+                            title: _this.settings.get('success'),
+                            html: response.data,
+                            icon: 'success',
+                            confirmButtonText: _this.settings.get('ok'),
+                        })
+                            .then(function (result) {
+                            if (_this.successCallback && result.isConfirmed) {
+                                _this.successCallback();
                             }
-                            else {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
-                                    title: _this.settings.get('success'),
-                                    html: response.data,
-                                    icon: 'success',
-                                    confirmButtonText: _this.settings.get('ok'),
-                                })
-                                    .then(function (result) {
-                                    if (_this.successCallback && result.isConfirmed) {
-                                        _this.successCallback();
-                                    }
-                                });
-                            }
-                            resolve();
-                        },
-                    });
+                        });
+                    }
                 });
             },
+        });
+    };
+    Trials.prototype.extendTrial = function (addon, key, isSwal, callback) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        if (callback === void 0) { callback = null; }
+        return new Promise(function (resolve) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'atum_extend_trial',
+                    security: _this.settings.get('nonce'),
+                    addon: addon,
+                    key: key,
+                },
+                success: function (response) {
+                    if (callback) {
+                        callback(response);
+                    }
+                    resolve();
+                },
+            });
         });
     };
     return Trials;
