@@ -112,6 +112,38 @@ jQuery(function ($) {
 
 /***/ }),
 
+/***/ "./assets/js/src/components/_blocker.ts":
+/*!**********************************************!*\
+  !*** ./assets/js/src/components/_blocker.ts ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Blocker = {
+    block: function ($selector, opts) {
+        opts = Object.assign({
+            message: null,
+            overlayCSS: {
+                background: '#000',
+                opacity: 0.5,
+            },
+        }, opts);
+        $selector.block(opts);
+    },
+    unblock: function ($selector) {
+        $selector.unblock();
+        if ($selector.find('.blockUI').length) {
+            $selector.find('.blockUI').remove();
+        }
+    },
+};
+/* harmony default export */ __webpack_exports__["default"] = (Blocker);
+
+
+/***/ }),
+
 /***/ "./assets/js/src/components/_tooltip.ts":
 /*!**********************************************!*\
   !*** ./assets/js/src/components/_tooltip.ts ***!
@@ -195,6 +227,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+
 
 
 
@@ -287,9 +321,9 @@ var AddonsPage = (function () {
             evt.preventDefault();
             $(evt.currentTarget).closest('.actions').children().slideToggle('fast');
         })
-            .on('click', '.expired .refresh-status', function (evt) {
+            .on('click', '.alert .refresh-status', function (evt) {
             evt.preventDefault();
-            var $link = $(evt.currentTarget);
+            var $addon = $(evt.currentTarget).closest('.atum-addon');
             $.ajax({
                 url: window['ajaxurl'],
                 method: 'POST',
@@ -297,17 +331,15 @@ var AddonsPage = (function () {
                 data: {
                     action: 'atum_refresh_license',
                     security: _this.settings.get('nonce'),
-                    addon: $link.closest('.atum-addon').data('addon'),
+                    addon: $addon.data('addon'),
                 },
-                beforeSend: function () {
-                    _this.beforeAjax($link);
-                },
+                beforeSend: function () { return _blocker__WEBPACK_IMPORTED_MODULE_3__["default"].block($addon); },
                 success: function (response) {
-                    _this.afterAjax($link);
                     if (response.success === true) {
                         location.reload();
                     }
                     else {
+                        _blocker__WEBPACK_IMPORTED_MODULE_3__["default"].unblock($addon);
                         _this.showErrorAlert(response.data);
                     }
                 }
@@ -357,9 +389,7 @@ var AddonsPage = (function () {
                 addon: addon,
                 key: key,
             },
-            beforeSend: function () {
-                _this.beforeAjax($button);
-            },
+            beforeSend: function () { return _this.beforeAjax($button); },
             success: function (response) {
                 if (true === response.success) {
                     _this.installAddon(addon, key).then(function () { return _this.afterAjax($button); });

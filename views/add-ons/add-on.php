@@ -69,17 +69,19 @@ endif;
 
 			<?php if ( ! empty( $addon_status->notice ) ) : ?>
 				<div class="alert alert-<?php echo esc_attr( $addon_status->notice_type ); ?>">
-					<i class="atum-icon atmi-warning"></i>
-					<?php echo $addon_status->notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<i class="atum-icon atmi-<?php echo esc_attr( 'warning' === $addon_status->notice_type ? 'warning' : 'info' ) ?>"></i>
+					<span><?php echo $addon_status->notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 				</div>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
 				<div class="alert alert-primary">
 					<i class="atum-icon atmi-info"></i>
-					<?php
-					/* translators: open and closing link tags */
-					printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="">', '</a>' ); ?>
+					<span>
+						<?php
+						/* translators: open and closing link tags */
+						printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="">', '</a>' ); ?>
+					</span>
 				</div>
 			<?php endif; ?>
 

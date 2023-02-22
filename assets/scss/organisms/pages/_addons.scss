@@ -327,6 +327,13 @@ html {
 		
 		.alert {
 			margin-bottom: 10px;
+			
+			a {
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
 		}
 		
 		.alert-warning {

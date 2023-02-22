@@ -433,7 +433,7 @@ class Updater {
 		}
 
 		// Confirm that the correct update is retrieved.
-		if ( $request->slug !== $this->slug ) {
+		if ( isset( $request->slug ) && $request->slug !== $this->slug ) {
 			return FALSE;
 		}
 

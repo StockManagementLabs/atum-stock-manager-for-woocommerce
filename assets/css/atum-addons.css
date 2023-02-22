@@ -2262,159 +2262,6 @@ input[type=button].btn-block {
           box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
 }
 
-.swal2-container {
-  z-index: 100000 !important;
-}
-.swal2-container .swal2-header, .swal2-container .swal2-content {
-  padding: 0;
-}
-.swal2-container .swal2-content, .swal2-container .swal2-title {
-  margin-bottom: 30px;
-}
-.swal2-container .swal2-content input[type=text] {
-  margin: 0;
-  border-radius: 4px;
-  height: 45px;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.swal2-container .swal2-content .atum-link {
-  text-decoration: underline;
-}
-.swal2-container .swal2-title {
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  line-height: 1.3;
-  font-size: 23px;
-  color: var(--main-text);
-}
-.swal2-container .swal2-title small {
-  -ms-flex-preferred-size: 100%;
-      flex-basis: 100%;
-}
-.swal2-container .swal2-modal {
-  font-family: inherit;
-}
-.swal2-container .swal2-modal .swal2-close {
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  font-weight: 100;
-  font-family: inherit;
-  font-size: 30px;
-  line-height: 30px;
-  color: var(--gray-500);
-  z-index: 100001;
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  padding-right: 10px;
-}
-.swal2-container .swal2-modal .swal2-close:hover {
-  color: var(--gray-800);
-}
-.swal2-container .swal2-modal .swal2-validation-message {
-  margin: 1.625em -1.25rem -1.625em;
-  font-size: 14px;
-  text-align: left;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-}
-.swal2-container .swal2-modal p {
-  font-size: 15px;
-  text-align: center;
-}
-.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
-  -webkit-transition: background-color 0.2s ease-in-out;
-  transition: background-color 0.2s ease-in-out;
-}
-.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
-  outline: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.swal2-container .swal2-modal button {
-  border-radius: 5px;
-  text-transform: uppercase;
-  font-weight: 400;
-  padding: 9px 19px;
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-.swal2-container .swal2-modal button.swal2-confirm {
-  background-color: var(--primary);
-}
-.swal2-container .swal2-modal button.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 12px;
-}
-.swal2-container .swal2-modal button .atum-icon {
-  position: relative;
-  font-size: 1.15em;
-  top: 0.15em;
-  padding-right: 3px;
-}
-@media all and (max-width: 480px) {
-  .swal2-container .swal2-modal button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-.swal2-container .swal2-modal a {
-  text-decoration: none;
-  color: var(--primary) !important;
-}
-.swal2-container .swal2-modal a:hover {
-  color: var(--wp-link-hover);
-}
-.swal2-container .swal2-modal .swal2-loader {
-  border-color: var(--primary) transparent var(--primary) transparent;
-}
-.swal2-container .swal2-progress-steps .swal2-progress-step {
-  margin-bottom: 0;
-}
-.swal2-container .atum-loading {
-  width: 38px;
-  height: 38px;
-  border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 50;
-  -webkit-animation: loader-rotate 1s linear infinite;
-          animation: loader-rotate 1s linear infinite;
-  top: 30px;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -2607,6 +2454,211 @@ input[type=button].btn-block {
 }
 .alert-default .alert-link {
   color: #424547;
+}
+
+.blockUI.blockOverlay:before {
+  display: none;
+}
+.blockUI.blockOverlay:after {
+  content: "";
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+.note .blockUI.blockOverlay:after {
+  top: 38%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.swal2-container {
+  z-index: 100000 !important;
+}
+.swal2-container .swal2-header, .swal2-container .swal2-content {
+  padding: 0;
+}
+.swal2-container .swal2-content, .swal2-container .swal2-title {
+  margin-bottom: 30px;
+}
+.swal2-container .swal2-content input[type=text] {
+  margin: 0;
+  border-radius: 4px;
+  height: 45px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.swal2-container .swal2-content .atum-link {
+  text-decoration: underline;
+}
+.swal2-container .swal2-title {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  line-height: 1.3;
+  font-size: 23px;
+  color: var(--main-text);
+}
+.swal2-container .swal2-title small {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+}
+.swal2-container .swal2-modal {
+  font-family: inherit;
+}
+.swal2-container .swal2-modal .swal2-close {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  font-weight: 100;
+  font-family: inherit;
+  font-size: 30px;
+  line-height: 30px;
+  color: var(--gray-500);
+  z-index: 100001;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  padding-right: 10px;
+}
+.swal2-container .swal2-modal .swal2-close:hover {
+  color: var(--gray-800);
+}
+.swal2-container .swal2-modal .swal2-validation-message {
+  margin: 1.625em -1.25rem -1.625em;
+  font-size: 14px;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.swal2-container .swal2-modal p {
+  font-size: 15px;
+  text-align: center;
+}
+.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
+  -webkit-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+}
+.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.swal2-container .swal2-modal button {
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding: 9px 19px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.swal2-container .swal2-modal button.swal2-confirm {
+  background-color: var(--primary);
+}
+.swal2-container .swal2-modal button.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
+}
+.swal2-container .swal2-modal button .atum-icon {
+  position: relative;
+  font-size: 1.15em;
+  top: 0.15em;
+  padding-right: 3px;
+}
+@media all and (max-width: 480px) {
+  .swal2-container .swal2-modal button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.swal2-container .swal2-modal a {
+  text-decoration: none;
+  color: var(--primary) !important;
+}
+.swal2-container .swal2-modal a:hover {
+  color: var(--wp-link-hover);
+}
+.swal2-container .swal2-modal .swal2-loader {
+  border-color: var(--primary) transparent var(--primary) transparent;
+}
+.swal2-container .swal2-progress-steps .swal2-progress-step {
+  margin-bottom: 0;
+}
+.swal2-container .atum-loading {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 
 #wpfooter {
@@ -3065,6 +3117,11 @@ html {
 }
 .atum-addons .addon-footer .alert {
   margin-bottom: 10px;
+}
+.atum-addons .addon-footer .alert a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .atum-addons .addon-footer .alert-warning {
   border-color: #e9ecef;

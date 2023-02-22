@@ -1004,8 +1004,7 @@ final class Ajax {
 				'expires' => $license_data->expires,
 			);
 
-			if ( ! empty( $license_data->trial ) && TRUE === $license_data->trial && $addon_name !== $license_data->item_name ) {
-				$addon_name        = $license_data->item_name;
+			if ( ! empty( $license_data->trial ) && TRUE === $license_data->trial ) {
 				$key_data['trial'] = TRUE;
 			}
 
@@ -1191,8 +1190,40 @@ final class Ajax {
 
 		$addon_name = esc_attr( $_POST['addon'] );
 
-		// Delete the transient.
-		Addons::delete_status_transient( $addon_name );
+		$key_info = Addons::get_keys( $addon_name );
+
+		if ( ! $key_info ) {
+			wp_send_json_error( 'Invalid key saved. Please try to remove the license and entering it again', ATUM_TEXT_DOMAIN );
+		}
+
+		if ( 'valid' === $key_info['status'] ) {
+			wp_send_json_success( __( 'License refreshed successfully', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$response = Addons::check_license( $addon_name, $key_info['key'] );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response->get_error_message() );
+		}
+
+		$response = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( 'valid' === $response->license ) {
+
+			$key_data = array(
+				'key'     => $key_info['key'],
+				'status'  => 'valid',
+				'expires' => $response->expires,
+			);
+
+			if ( ! empty( $response->trial ) ) {
+				$key_data['trial'] = TRUE;
+			}
+
+			Addons::update_key( $addon_name, $key_data );
+			Addons::delete_status_transient( $addon_name );
+
+		}
 
 		wp_send_json_success( __( 'License refreshed successfully', ATUM_TEXT_DOMAIN ) );
 
@@ -2798,13 +2829,14 @@ final class Ajax {
 
 		foreach ( $products as $product_id ) {
 
-			$product = Helpers::get_atum_product( $product_id);
+			$product = Helpers::get_atum_product( $product_id );
 
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product );
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
 
 			do_action( 'atum/ajax/tool_update_calc_props/product_updated', $product );
+
 		}
 
 		if ( $offset + $step >= $total ) {

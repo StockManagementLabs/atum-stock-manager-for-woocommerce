@@ -6,6 +6,7 @@
    └──────────────┘
 */
 
+import Blocker from '../_blocker';
 import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
@@ -162,11 +163,11 @@ export default class AddonsPage {
 			} )
 
 			// Refresh license for expired keys
-			.on( 'click', '.expired .refresh-status', ( evt: JQueryEventObject ) => {
+			.on( 'click', '.alert .refresh-status', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
 
-				const $link: JQuery = $( evt.currentTarget );
+				const $addon: JQuery = $( evt.currentTarget ).closest( '.atum-addon' );
 
 				$.ajax( {
 					url       : window[ 'ajaxurl' ],
@@ -175,19 +176,16 @@ export default class AddonsPage {
 					data      : {
 						action  : 'atum_refresh_license',
 						security: this.settings.get( 'nonce' ),
-						addon   : $link.closest( '.atum-addon' ).data( 'addon' ),
+						addon   : $addon.data( 'addon' ),
 					},
-					beforeSend: () => {
-						this.beforeAjax( $link );
-					},
+					beforeSend: () => Blocker.block( $addon ),
 					success   : ( response: any ) => {
-
-						this.afterAjax( $link );
 
 						if ( response.success === true ) {
 							location.reload();
 						}
 						else {
+							Blocker.unblock( $addon );
 							this.showErrorAlert( response.data );
 						}
 
@@ -268,9 +266,7 @@ export default class AddonsPage {
 				addon   : addon,
 				key     : key,
 			},
-			beforeSend: () => {
-				this.beforeAjax( $button );
-			},
+			beforeSend: () => this.beforeAjax( $button ),
 			success: ( response: any ) => {
 
 				if ( true === response.success ) {

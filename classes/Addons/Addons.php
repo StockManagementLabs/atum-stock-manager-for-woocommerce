@@ -220,7 +220,7 @@ class Addons {
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'jquery-blockui', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
 		wp_localize_script( 'atum-addons', 'atumAddons', array(
 			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
@@ -316,17 +316,24 @@ class Addons {
 
 			foreach ( $license_keys as $addon => $license_key ) {
 
-				$addon_slug = $addon_name = '';
+				$addon_slug       = $addon_name = '';
+				$is_trial_license = ! empty( $license_key['trial'] );
 
-				foreach ( $installed_addons as $slug => $addon_data ) {
+				foreach ( $installed_addons as $addon_key => $addon_data ) {
 
-					if (
-						strtolower( $addon_data['name'] ) === strtolower( $addon ) &&
-						array_key_exists( $slug, $addons_paths )
-					) {
-						$addon_slug = $slug;
+					if ( strpos( strtolower( $addon_data['name'] ), strtolower( $addon ) ) !== FALSE ) {
+
+						$is_trial_addon = strpos( $addon_key, 'trial' ) !== FALSE;
+
+						// Avoid getting the wrong installed add-on (full or trial).
+						if ( ( $is_trial_license && ! $is_trial_addon ) || ( ! $is_trial_license && $is_trial_addon ) ) {
+							continue;
+						}
+
+						$addon_slug = $addon_key;
 						$addon_name = $addon_data['name'];
 						break;
+
 					}
 
 				}
@@ -336,15 +343,14 @@ class Addons {
 					is_array( $license_key ) && ! empty( $license_key['key'] )
 				) {
 
+					$is_trial_addon = strpos( $addon_slug, 'trial' ) !== FALSE;
+
 					if ( 'valid' === $license_key['status'] ) {
 
 						// All the ATUM addons' names should start with 'ATUM'.
 						$addon_info = Helpers::is_plugin_installed( "ATUM $addon_name", '', 'name', FALSE );
 
 						if ( $addon_info ) {
-
-							$is_trial_addon   = strpos( $addon_slug, 'trial' ) !== FALSE;
-							$is_trial_license = ! empty( $license_key['trial'] ) && TRUE === $license_key['trial'];
 
 							// Check if is a trial license.
 							if ( $is_trial_addon && ! $is_trial_license ) {
@@ -374,8 +380,15 @@ class Addons {
 
 					}
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
-						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+
+						if ( $is_trial_addon ) {
+							/* translators: the add-on name */
+							AtumAdminNotices::add_notice( sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page%3$s or purchase the full version.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ), 'warning', TRUE, TRUE );
+						}
+						else {
+							/* translators: the add-on name */
+							AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+						}
 					}
 					elseif ( 'trial_used' === $license_key['status'] && strpos( $addon_slug, 'trial' ) !== FALSE ) {
 						/* translators: the add-on name */
@@ -824,8 +837,8 @@ class Addons {
 
 		if ( empty( $addon_status ) ) {
 
-			$is_installed       = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
-			$is_trial_installed = Helpers::is_plugin_installed( $addon_slug, "$addon_folder-trial" );
+			$is_installed       = Helpers::is_plugin_installed( $addon_slug, $addon_folder, 'slug', FALSE );
+			$is_trial_installed = Helpers::is_plugin_installed( $addon_slug, "$addon_folder-trial", 'slug', FALSE );
 
 			// Status defaults.
 			$addon_status = (object) array(
@@ -833,16 +846,18 @@ class Addons {
 				'status'      => 'invalid',
 				'key'         => '',
 				'classes'     => [],
-				'notice_type' => 'info',
+				'notice_type' => 'primary',
 			);
 
-			if ( $is_trial_installed && ! $is_installed ) {
+			if ( ( $is_trial_installed && ! $is_installed ) || ( $is_trial_installed && is_plugin_active( key( $is_trial_installed ) ) ) ) {
 				$addon_status->is_trial = TRUE;
 			}
 			else {
 
+				$trial_name = strtolower( strpos( $addon_name, 'Trial' ) === FALSE ? "$addon_name Trial" : $addon_name );
+
 				foreach ( self::$addons as $addon_key => $installed_addon ) {
-					if ( strtolower( $installed_addon['name'] ) === strtolower( $addon_name ) ) {
+					if ( strtolower( $installed_addon['name'] ) === $trial_name ) {
 						if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
 							$addon_status->is_trial = TRUE;
 						}
@@ -955,7 +970,17 @@ class Addons {
 				$addon_status->extended   = ! isset( $license_data->trial_extendable ) || TRUE !== $license_data->trial_extendable;
 
 				if ( empty( $addon_status->key ) && $addon_status->installed ) {
-					$addon_status->notice = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+
+					$addon_status->button_text   = __( 'Activate', ATUM_TEXT_DOMAIN );
+					$addon_status->button_class  = 'activate-key';
+					$addon_status->button_action = ATUM_PREFIX . 'activate_license';
+					$addon_status->notice        = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+
+					if ( 'no_key' !== $addon_status->status ) {
+						$addon_status->classes[]  = 'inactive';
+						$addon_status->label_text = __( 'Not Activated', ATUM_TEXT_DOMAIN );
+					}
+
 				}
 				elseif ( 'trial_used' === $addon_status->status ) {
 					$addon_status->notice = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
@@ -991,8 +1016,9 @@ class Addons {
 						$addon_status->button_action = ATUM_PREFIX . 'validate_license';
 						$addon_status->classes[]     = 'invalid';
 						$addon_status->label_text    = __( 'Invalid License', ATUM_TEXT_DOMAIN );
-						$addon_status->notice        = __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates.', ATUM_TEXT_DOMAIN );
-						$addon_status->notice_type   = 'warning';
+						/* translators: opening and closing link tags */
+						$addon_status->notice      = sprintf( __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates. If you already have reactivated it, click %1$shere%2$s to recheck', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+						$addon_status->notice_type = 'warning';
 						break;
 
 					case 'expired':
