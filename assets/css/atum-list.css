@@ -3698,6 +3698,9 @@ tr.introjs-showElement > th {
 .akb-buttons-wrapper button {
   margin-left: 5px;
 }
+.akb-buttons-wrapper button.display-akb-button:not(.btn-success) {
+  border: solid 1px #6c757d;
+}
 .akb-buttons-wrapper button.show-intro-guide.help-guide-button {
   border-radius: 0.2rem;
   width: auto;
@@ -3716,6 +3719,12 @@ td .akb-wrapper {
   display: inline;
 }
 
+.introjs-tooltip .introjs-tooltiptext a {
+  word-wrap: break-word;
+}
+.introjs-tooltip .introjs-tooltiptext ul {
+  list-style: outside;
+}
 .introjs-tooltip .introjs-bullets {
   display: none;
 }

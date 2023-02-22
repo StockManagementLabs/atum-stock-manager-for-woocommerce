@@ -546,6 +546,10 @@ tr.introjs-showElement {
 	button {
 		margin-left: 5px;
 		
+		&.display-akb-button:not(.btn-success) {
+			border: solid 1px $gray-600;
+		}
+		
 		&.show-intro-guide.help-guide-button {
 			border-radius: 0.2rem;
 			width: auto;
@@ -566,6 +570,18 @@ td .akb-wrapper {
 	display: inline;
 }
 
-.introjs-tooltip .introjs-bullets {
-	display: none;
+.introjs-tooltip {
+	.introjs-tooltiptext {
+		
+		a {
+			word-wrap: break-word;
+		}
+		
+		ul {
+			list-style: outside;
+		}
+	}
+	.introjs-bullets {
+		display: none;
+	}
 }
