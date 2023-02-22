@@ -399,8 +399,11 @@ class StockCentral extends AtumListPage {
 
 			wp_register_script( 'atum-stock-central-knowledge-base', ATUM_URL . 'assets/js/build/atum-stock-central-kb.js', [], ATUM_VERSION, TRUE );
 
-			$vars = [];
-			$vars = array_merge( $vars, AtumHelpGuide::get_help_guide_js_vars( ATUM_PATH . 'help-guides/stock-central.json' ) );
+			$auto_guide_file   = ATUM_PATH . 'help-guides/stock-central.json';
+			$akb_guides        = json_decode( file_get_contents( $auto_guide_file ) );
+			$vars              = [];
+			$vars              = array_merge( $vars, AtumHelpGuide::get_help_guide_js_vars( $auto_guide_file ) );
+			$vars['AKBGuides'] = $akb_guides;
 
 			wp_localize_script( 'atum-stock-central-knowledge-base', 'atumStockCentralKB', $vars );
 

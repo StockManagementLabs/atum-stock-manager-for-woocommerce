@@ -311,6 +311,7 @@ var StockCentralKnowledgeBase = (function () {
         this.helpGuide = helpGuide;
         this.knowledgeEnabled = false;
         this.wpHooks = window['wp']['hooks'];
+        this.guides = this.settings.get('AKBGuides');
         this.$akbButtonsWrapper = $(document).find('.akb-buttons-wrapper');
         this.bindEvents();
         this.addHooks();
@@ -320,8 +321,10 @@ var StockCentralKnowledgeBase = (function () {
     StockCentralKnowledgeBase.prototype.bindEvents = function () {
         var _this = this;
         this.$akbButtonsWrapper
-            .on('click', '.display-akb-button', function () {
+            .on('click', '.display-akb-button', function (e) {
+            var $btn = $(e.currentTarget);
             _this.knowledgeEnabled = !_this.knowledgeEnabled;
+            $btn.toggleClass('btn-success', _this.knowledgeEnabled);
             _this.checkKnowledgeVisibility();
         });
     };
@@ -330,31 +333,30 @@ var StockCentralKnowledgeBase = (function () {
         this.wpHooks.addAction('atum_listTable_tableUpdated', 'atum', function () { return _this.addRefreshedHelpGuides(); });
     };
     StockCentralKnowledgeBase.prototype.addHelpGuides = function () {
-        this.addWrapper($('#atum-stock-central-lists-button'), 1);
-        this.addWrapper(this.globals.$atumList.find('.list-table-header .search-box .input-group'), 5);
-        this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-columns-button'), 6);
-        this.addWrapper(this.globals.$atumList.find('.list-table-header .sticky-header-button'), 7);
-        this.addWrapper($('#screen-options-link-wrap #show-settings-link'), 20);
-        this.addWrapper($('#contextual-help-link-wrap #contextual-help-link'), 21);
-        this.addWrapper($('#atum-export-link-wrap #show-export-settings-link'), 22);
+        var _this = this;
+        this.guides.forEach(function (guide, index) {
+            if ('init' === guide.load) {
+                var $elem = guide.absolute ? $(guide.element) : _this.globals.$atumList.find(guide.element);
+                if (guide.first) {
+                    $elem = $elem.first();
+                }
+                _this.addWrapper($elem, index + 1);
+            }
+        });
         this.addRefreshedHelpGuides();
     };
     StockCentralKnowledgeBase.prototype.addRefreshedHelpGuides = function () {
-        this.addWrapper(this.globals.$atumList.find('.subsubsub .all_stock a'), 2);
-        this.addWrapper(this.globals.$atumList.find('#restock_status'), 3);
-        this.addWrapper(this.globals.$atumList.find('.subsubsub .unmanaged a'), 4);
-        this.addWrapper(this.globals.$atumList.find('.top #filters_container .bulkactions'), 8);
-        this.addWrapper(this.globals.$atumList.find('#product_cat + .select2'), 9);
-        this.addWrapper(this.globals.$atumList.find('.dropdown_product_type + .select2'), 10);
-        this.addWrapper(this.globals.$atumList.find('select#supplier + .select2'), 11);
-        this.addWrapper(this.globals.$atumList.find('select[name="extra_filter"] + .select2'), 12);
-        this.addWrapper(this.globals.$atumList.find('thead th#thumb .col-product-details'), 13);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_type .col-product-details'), 14);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_location .col-product-details'), 15);
-        this.addWrapper(this.globals.$atumList.find('thead th#calc_stock_indicator .col-stock-selling-manager'), 16);
-        this.addWrapper(this.globals.$atumList.find('.atum-list-table td .set-meta').first(), 17);
-        this.addWrapper(this.globals.$atumList.find('.atum-list-table td .compounded').first(), 18);
-        this.addWrapper(this.globals.$atumList.find('tr.totals td.column-cb span'), 19);
+        var _this = this;
+        this.guides.forEach(function (guide, index) {
+            if ('lazzy' === guide.load) {
+                var $elem = guide.absolute ? $(guide.element) : _this.globals.$atumList.find(guide.element);
+                if (guide.first) {
+                    $elem = $elem.first();
+                }
+                _this.addWrapper($elem, index + 1);
+            }
+        });
+        this.checkKnowledgeVisibility();
     };
     StockCentralKnowledgeBase.prototype.addWrapper = function ($elem, step) {
         if (!$elem.length) {
