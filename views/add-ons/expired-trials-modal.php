@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || die;
 					<img src="<?php echo esc_url( ATUM_URL . 'assets/images/add-ons/icon-' . $addon_slug . '.svg' ) ?>" alt="<?php echo esc_html( $expired_trial['name'] ) ?>">
 				</span>
 				<span class="atum-trial-list__item-name">
-					<?php echo esc_html( $expired_trial['name'] ) ?> <i class="atum-icon atmi-lock"></i><br>
+					<?php echo esc_html( trim( str_replace( 'Trial', '', $expired_trial['name'] ) ) ) ?> <i class="atum-icon atmi-lock"></i><br>
 					<small>
 						<?php if ( empty( $expired_trial['expires'] ) || 'now' === $expired_trial['expires'] ) :
 							esc_html_e( 'Trial expired!', ATUM_TEXT_DOMAIN );

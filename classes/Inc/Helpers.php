@@ -1538,21 +1538,32 @@ final class Helpers {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $plugin        The plugin name/slug.
-	 * @param string $folder        The plugin folder.
-	 * @param string $by            Optional. It can be checked by 'slug' or by 'name'.
+	 * @param string $plugin        The plugin name|slug|file.
+	 * @param string $by            Optional. It can be checked by 'slug', 'name' or 'file'.
 	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
 	 */
-	public static function is_plugin_installed( $plugin, $folder = '', $by = 'slug', $return_bool = TRUE ) {
+	public static function is_plugin_installed( $plugin, $by = 'slug', $return_bool = TRUE ) {
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
 			// Get the plugin slug from its path.
-			$installed_plugin_key = 'slug' === $by ? explode( '/', $plugin_file )[0] : $plugin_data['Title'];
+			switch ( $by ) {
+				case 'slug':
+					$installed_plugin_key = explode( '/', $plugin_file )[0];
+					break;
 
-			if ( in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
+				case 'name':
+					$installed_plugin_key = $plugin_data['Title'];
+					break;
+
+				default:
+					$installed_plugin_key = $plugin_file;
+					break;
+			}
+
+			if ( strtolower( $installed_plugin_key ) === strtolower( $plugin ) ) {
 				return $return_bool ? TRUE : [ $plugin_file => $plugin_data ];
 			}
 

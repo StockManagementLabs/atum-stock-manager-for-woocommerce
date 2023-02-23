@@ -2573,6 +2573,7 @@ input[type=button].btn-block {
 .atum-trial-modal .atum-trial-list__item small {
   font-size: 11px;
   display: block;
+  margin-top: 4px;
 }
 .atum-trial-modal .atum-trial-list__item-thumb {
   display: -webkit-box;

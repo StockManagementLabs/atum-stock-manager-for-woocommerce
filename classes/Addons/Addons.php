@@ -348,7 +348,7 @@ class Addons {
 					if ( 'valid' === $license_key['status'] ) {
 
 						// All the ATUM addons' names should start with 'ATUM'.
-						$addon_info = Helpers::is_plugin_installed( "ATUM $addon_name", '', 'name', FALSE );
+						$addon_info = Helpers::is_plugin_installed( "ATUM $addon_name", 'name', FALSE );
 
 						if ( $addon_info ) {
 
@@ -837,8 +837,8 @@ class Addons {
 
 		if ( empty( $addon_status ) ) {
 
-			$is_installed       = Helpers::is_plugin_installed( $addon_slug, $addon_folder, 'slug', FALSE );
-			$is_trial_installed = Helpers::is_plugin_installed( $addon_slug, "$addon_folder-trial", 'slug', FALSE );
+			$is_installed       = Helpers::is_plugin_installed( "ATUM $addon_name", 'name', FALSE );
+			$is_trial_installed = Helpers::is_plugin_installed( "ATUM $addon_name Trial", 'name', FALSE );
 
 			// Status defaults.
 			$addon_status = (object) array(
@@ -1126,7 +1126,7 @@ class Addons {
 		$upgrader     = new \WP_Upgrader( $skin );
 		$addon_folder = self::get_addon_folder( $addon_slug );
 		$plugin       = $addon_folder && $addon_folder !== $addon_slug ? "$addon_folder/$addon_folder.php" : "$addon_slug/$addon_slug.php";
-		$installed    = Helpers::is_plugin_installed( $addon_slug, $addon_folder );
+		$installed    = Helpers::is_plugin_installed( $plugin, 'file' );
 		$activate     = $installed ? ! is_plugin_active( $plugin ) : FALSE;
 
 		// Install this new addon.
