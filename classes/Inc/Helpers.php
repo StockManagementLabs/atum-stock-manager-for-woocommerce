@@ -1555,7 +1555,7 @@ final class Helpers {
 					break;
 
 				case 'name':
-					$installed_plugin_key = $plugin_data['Title'];
+					$installed_plugin_key = $plugin_data['Name'];
 					break;
 
 				default:

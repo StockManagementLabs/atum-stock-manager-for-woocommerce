@@ -290,23 +290,36 @@ class Addons {
 			$addons_paths     = self::$addons_paths;
 
 			// We must check if there are others not enabled that should be updated.
-			foreach ( array_keys( $addons_paths ) as $addon_key ) {
+			$installed_plugins = get_plugins();
 
-				if ( ! array_key_exists( $addon_key, $installed_addons ) ) {
+			foreach ( $installed_plugins as $plugin_file => $plugin_data ) {
 
-					// Check if it really exists.
-					$plugin_file = WP_PLUGIN_DIR . '/' . $addons_paths[ $addon_key ]['basename'];
-					if ( file_exists( $plugin_file ) ) {
+				if ( strpos( $plugin_file, 'atum-' ) === 0 && empty( wp_list_filter( $installed_addons, [ 'basename' => $plugin_file ] ) ) ) {
 
-						$file_data = get_file_data( $plugin_file, array(
-							'addon_url'   => 'Plugin URI',
-							'version'     => 'Version',
-							'description' => 'Description',
-						) );
+					// Get the plugin slug from the URL.
+					$plugin_url_paths  = parse_url( $plugin_data['PluginURI'] ?? '' );
 
-						if ( ! empty( $file_data ) ) {
-							$installed_addons[ $addon_key ] = array_merge( $file_data, $addons_paths[ $addon_key ] );
+					// Bypass the ATUM free plugin.
+					if ( ! empty( $plugin_url_paths['path'] ) && '/' !== $plugin_url_paths['path'] ) {
+
+						$plugin_url_paths  = explode( '/', untrailingslashit( $plugin_url_paths['path'] ) );
+						$full_version_slug = str_replace( '-', '_', str_replace( 'atum-', '', last( $plugin_url_paths ) ) );
+						$is_trial_addon    = strpos( strtolower( $plugin_data['Name'] ), 'trial' ) !== FALSE;
+						$addon_slug        = $is_trial_addon ? "{$full_version_slug}_trial" : $full_version_slug;
+						$addon_path        = [];
+
+						if ( array_key_exists( $full_version_slug, $addons_paths ) ) {
+							$addon_path             = $addons_paths[ $full_version_slug ];
+							$addon_path['name']     = $is_trial_addon ? "{$addon_path['name']} Trial" : $addon_path['name']; // The addon name doesn't always match with the name added to the WP plugin.
+							$addon_path['basename'] = $plugin_file;
 						}
+
+						$installed_addons[ $addon_slug ] = array_merge( array(
+							'name'        => $plugin_data['Name'],
+							'description' => $plugin_data['Description'],
+							'addon_url'   => $plugin_data['PluginURI'],
+							'basename'    => $plugin_file,
+						), $addon_path );
 
 					}
 
@@ -348,7 +361,8 @@ class Addons {
 					if ( 'valid' === $license_key['status'] ) {
 
 						// All the ATUM addons' names should start with 'ATUM'.
-						$addon_info = Helpers::is_plugin_installed( "ATUM $addon_name", 'name', FALSE );
+						$plugin_name = $is_trial_addon ? "ATUM $addon (Trial version)" : "ATUM $addon";
+						$addon_info  = Helpers::is_plugin_installed( $plugin_name, 'name', FALSE );
 
 						if ( $addon_info ) {
 
@@ -371,7 +385,6 @@ class Addons {
 									'version'   => $addon_info[ $addon_file ]['Version'],
 									'license'   => $license_key['key'],
 									'item_name' => $addon_name,
-									'beta'      => FALSE,
 								) );
 
 							}
@@ -817,6 +830,9 @@ class Addons {
 		$keys[ $addon_name ] = $key;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
 
+		// Delete any possible wrong persistent notice.
+		AtumAdminNotices::clear_permament_notices();
+
 	}
 
 	/**
@@ -838,7 +854,7 @@ class Addons {
 		if ( empty( $addon_status ) ) {
 
 			$is_installed       = Helpers::is_plugin_installed( "ATUM $addon_name", 'name', FALSE );
-			$is_trial_installed = Helpers::is_plugin_installed( "ATUM $addon_name Trial", 'name', FALSE );
+			$is_trial_installed = Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name', FALSE );
 
 			// Status defaults.
 			$addon_status = (object) array(
@@ -932,9 +948,16 @@ class Addons {
 
 				}
 				else {
+
 					$addon_status->status     = 'no_key';
 					$addon_status->classes[]  = 'no-key';
 					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
+
+					if ( $is_installed ) {
+						$addon_status->notice = esc_html__( 'License key is missing! Please add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice_type = 'warning';
+					}
+
 				}
 
 			}

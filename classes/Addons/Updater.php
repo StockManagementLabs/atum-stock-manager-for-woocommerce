@@ -89,8 +89,8 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $addon_file    Path to the plugin file.
-	 * @param array  $api_data      Optional. Data to send with API calls.
+	 * @param string $addon_file Path to the plugin file.
+	 * @param array  $api_data   Optional. Data to send with API calls.
 	 */
 	public function __construct( $addon_file, $api_data = array() ) {
 
@@ -137,30 +137,30 @@ class Updater {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param array $_transient_data Update array build by WordPress.
+	 * @param array $transient_data Update array built by WordPress.
 	 *
 	 * @return array Modified update array with custom plugin data.
 	 */
-	public function check_update( $_transient_data ) {
+	public function check_update( $transient_data ) {
 
 		global $pagenow;
 
-		if ( ! is_object( $_transient_data ) ) {
-			$_transient_data = new \stdClass();
+		if ( ! is_object( $transient_data ) ) {
+			$transient_data = new \stdClass();
 		}
 
 		if ( 'plugins.php' === $pagenow && is_multisite() ) {
-			return $_transient_data;
+			return $transient_data;
 		}
 
-		if ( ! empty( $_transient_data->response ) && ! empty( $_transient_data->response[ $this->name ] ) && FALSE === $this->wp_override ) {
+		if ( ! empty( $transient_data->response ) && ! empty( $transient_data->response[ $this->name ] ) && FALSE === $this->wp_override ) {
 
 			// Unserialize plugin icons.
-			if ( isset( $_transient_data->response[ $this->name ]->icons ) && is_string( $_transient_data->response[ $this->name ]->icons ) ) {
-				$_transient_data->response[ $this->name ]->icons = maybe_unserialize( $_transient_data->response[ $this->name ]->icons );
+			if ( isset( $transient_data->response[ $this->name ]->icons ) && is_string( $transient_data->response[ $this->name ]->icons ) ) {
+				$transient_data->response[ $this->name ]->icons = maybe_unserialize( $transient_data->response[ $this->name ]->icons );
 			}
 
-			return $_transient_data;
+			return $transient_data;
 		}
 
 		$version_info = $this->get_version_info_transient();
@@ -168,11 +168,11 @@ class Updater {
 		if ( FALSE !== $version_info && is_object( $version_info ) && isset( $version_info->new_version ) ) {
 
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$_transient_data->response[ $this->name ] = $version_info;
+				$transient_data->response[ $this->name ] = $version_info;
 			}
 			else {
 				// Populating the no_update information is required to support auto-updates in WordPress 5.5.
-				$_transient_data->no_update[ $this->name ] = $version_info;
+				$transient_data->no_update[ $this->name ] = $version_info;
 			}
 
 		}
@@ -195,20 +195,20 @@ class Updater {
 			$this->set_version_info_transient( $version_info );
 
 			if ( version_compare( $this->version, $version_info->new_version, '<' ) ) {
-				$_transient_data->response[ $this->name ] = $version_info;
+				$transient_data->response[ $this->name ] = $version_info;
 			}
 
 			// Unserialize plugin icons.
-			if ( isset( $_transient_data->response[ $this->name ]->icons ) && is_string( $_transient_data->response[ $this->name ]->icons ) ) {
-				$_transient_data->response[ $this->name ]->icons = maybe_unserialize( $_transient_data->response[ $this->name ]->icons );
+			if ( isset( $transient_data->response[ $this->name ]->icons ) && is_string( $transient_data->response[ $this->name ]->icons ) ) {
+				$transient_data->response[ $this->name ]->icons = maybe_unserialize( $transient_data->response[ $this->name ]->icons );
 			}
 
-			$_transient_data->last_checked           = Helpers::get_current_timestamp();
-			$_transient_data->checked[ $this->name ] = $this->version;
+			$transient_data->last_checked           = Helpers::get_current_timestamp();
+			$transient_data->checked[ $this->name ] = $this->version;
 
 		}
 
-		return $_transient_data;
+		return $transient_data;
 
 	}
 
@@ -342,15 +342,15 @@ class Updater {
 			return $_data;
 		}
 
-		// Always get info from the full versions.
-		$addon_slug = str_replace( '-trial', '', $_args->slug );
-
-		if ( strpos( $addon_slug, $this->slug ) === FALSE ) {
+		if ( strpos( $_args->slug, sanitize_title( $this->api_data['item_name'] ) ) === FALSE ) {
 			return $_data;
 		}
 
+		// Always get info from the full versions.
+		$full_version_slug = str_replace( '-trial', '', $_args->slug );
+
 		$to_send = array(
-			'slug'   => $this->slug,
+			'slug'   => $full_version_slug,
 			'is_ssl' => is_ssl(),
 			'fields' => array(
 				'banners' => array(),
@@ -358,7 +358,7 @@ class Updater {
 			),
 		);
 
-		$transient_key = AtumCache::get_transient_key( 'addons_api_request_' . $this->slug, [ $this->api_data['license'], $this->beta ] );
+		$transient_key = AtumCache::get_transient_key( "addons_api_request_$full_version_slug", [ $this->api_data['license'], $this->beta ] );
 
 		// Get the transient where we store the api request for this plugin for 24 hours.
 		$api_request_transient = $this->get_version_info_transient( $transient_key );
@@ -412,7 +412,7 @@ class Updater {
 
 		$data = array_merge( $this->api_data, $data );
 
-		if ( $data['slug'] !== $this->slug ) {
+		if ( strpos( sanitize_title( "ATUM {$this->api_data['item_name']}" ), $data['slug'] ) === FALSE ) {
 			return FALSE;
 		}
 
@@ -433,7 +433,10 @@ class Updater {
 		}
 
 		// Confirm that the correct update is retrieved.
-		if ( isset( $request->slug ) && $request->slug !== $this->slug ) {
+		if (
+			isset( $request->name, $this->api_data['item_name'] ) &&
+			strtolower( $request->name ) !== strtolower( $this->api_data['item_name'] )
+		) {
 			return FALSE;
 		}
 
