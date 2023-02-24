@@ -281,6 +281,17 @@ final class AtumAdminNotices {
 		$user_dismissed_notices = self::get_dismissed_notices( $current_user_id );
 
 		return isset( $user_dismissed_notices[ $key ] ) && 'yes' === $user_dismissed_notices[ $key ];
+
+	}
+
+	/**
+	 * Clear all the permanent notices
+	 *
+	 * @since 1.9.27
+	 */
+	public static function clear_permament_notices() {
+		$notice_transient_key = AtumCache::get_transient_key( self::NOTICES_TRANSIENT_KEY );
+		AtumCache::delete_transients( $notice_transient_key );
 	}
 
 
