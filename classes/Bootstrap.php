@@ -202,7 +202,7 @@ class Bootstrap {
 
 		global $wpdb;
 
-		if ( 'yes' === Helpers::get_option( 'delete_data' ) ) {
+		if ( 'yes' === Helpers::get_option( 'delete_data', 'no' ) ) {
 
 			$product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			$items_table        = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
@@ -245,17 +245,7 @@ class Bootstrap {
 
 			// Delete the ATUM options.
 			delete_option( ATUM_PREFIX . 'version' );
-
-			$settings = get_option( ATUM_PREFIX . 'settings' );
-
-			// Save delete data setting.
-			if ( $settings && ! empty( $settings ) ) {
-				$delete_data_setting = [
-					'delete_data' => $settings['delete_data'],
-				];
-
-				update_option( ATUM_PREFIX . 'settings', $delete_data_setting );
-			}
+			delete_option( ATUM_PREFIX . 'settings' );
 
 			// Delete marketing popup transient.
 			delete_transient( 'atum-marketing-popup' );
@@ -263,7 +253,7 @@ class Bootstrap {
 		}
 
 		// Delete scheduled actions anyway. Can't use the AtumQueues class to get the actions.
-		$actions = [ 'atum/update_expiring_product_props', 'atum/cron_update_sales_calc_props' ];
+		$actions = [ 'atum/update_expiring_product_props', 'atum/cron_update_sales_calc_props', 'atum/clean_up_tmp_folders', 'atum/check_trials' ];
 
 		foreach ( $actions as $action ) {
 			as_unschedule_all_actions( $action );

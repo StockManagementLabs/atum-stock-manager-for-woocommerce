@@ -969,19 +969,19 @@ final class Helpers {
 	 * @since   0.0.2
 	 *
 	 * @param string $name    The option key to retrieve.
-	 * @param mixed  $default Optional. The default value returned if the option was not found.
+	 * @param mixed  $default The default value returned if the option was not found. It should be equal to the default value registered in settings.
 	 * @param bool   $echo    Optional. If the option has to be returned or printed.
 	 * @param bool   $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
-	public static function get_option( $name, $default = FALSE, $echo = FALSE, $force = FALSE ) {
+	public static function get_option( $name, $default, $echo = FALSE, $force = FALSE ) {
 
 		// Save it as a global variable to not get the value each time.
 		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$atum_global_options = empty( $atum_global_options ) || $force ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
+		$atum_global_options = empty( $atum_global_options ) || $force ? get_option( Settings::OPTION_NAME, [] ) : $atum_global_options;
 		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
@@ -2722,10 +2722,14 @@ final class Helpers {
 			return 1;
 		}
 		
-		$step = self::get_option( 'stock_quantity_step' );
+		$step = self::get_option( 'stock_quantity_step', 0 );
 
-		if ( ! is_numeric( $step ) || ! $step ) {
+		if ( ! is_numeric( $step ) ) {
 			return 'any';
+		}
+
+		if ( 0 === $step ) {
+			return 1;
 		}
 
 		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
