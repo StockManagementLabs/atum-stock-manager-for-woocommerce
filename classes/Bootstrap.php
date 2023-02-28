@@ -103,7 +103,7 @@ class Bootstrap {
 		} catch ( AtumException $e ) {
 
 			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
-				AtumAdminNotices::add_notice( $e->getMessage(), 'error' );
+				AtumAdminNotices::add_notice( $e->getMessage(), $e->getErrorCode(), 'error' );
 			}
 
 		}

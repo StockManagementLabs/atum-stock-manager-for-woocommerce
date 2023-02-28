@@ -1067,7 +1067,11 @@ class PurchaseOrders extends AtumOrderPostType {
 			'post.php' === $pagenow && self::POST_TYPE === $typenow &&
 			! empty( $_GET['post'] ) && ! array_key_exists( get_post_status( absint( $_GET['post'] ) ), static::get_statuses() )
 		) {
-			AtumAdminNotices::add_notice( __( 'This PO has an unknown status, please change it to any known one and save it to unblock it.', ATUM_TEXT_DOMAIN ), 'error' );
+			AtumAdminNotices::add_notice(
+				__( 'This PO has an unknown status, please change it to any known one and save it to unblock it.', ATUM_TEXT_DOMAIN ),
+				'purchase_orders_pro_unknown_po_status',
+				'error'
+			);
 		}
 
 	}

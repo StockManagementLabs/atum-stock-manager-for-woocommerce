@@ -168,13 +168,14 @@ final class AtumAdminNotices {
 	 * @since 1.8.2
 	 *
 	 * @param string $message        The message to be shown in the notice.
+	 * @param string $notice_key     A unique key for the notice. If multiple notices with the same key are registered, only the first one will be shown.
 	 * @param string $type           One of: 'error', 'warning', 'success' or 'info'.
 	 * @param bool   $is_dismissible Optional. Whether to add a button for closing the notice.
 	 * @param bool   $persistent     Optional. In some cases (like a post edit screen), we need to save the notice on a transient for showing it later.
 	 * @param string $dismiss_key    Optional. Only for dismissible notices that we don't want to show again after dismissed.
 	 * @param bool   $bold           Optional. Whether to display the entire notice into a <strong></strong>.
 	 */
-	public static function add_notice( $message, $type, $is_dismissible = FALSE, $persistent = FALSE, $dismiss_key = '', $bold = TRUE ) {
+	public static function add_notice( $message, $notice_key, $type, $is_dismissible = FALSE, $persistent = FALSE, $dismiss_key = '', $bold = TRUE ) {
 
 		if ( $persistent ) {
 
@@ -183,11 +184,11 @@ final class AtumAdminNotices {
 			$persistent_notices    = is_array( $persistent_notices ) ? $persistent_notices : [];
 
 			// Ensure that the same notices are not added more than once.
-			if ( ! empty( $persistent_notices ) && ! empty( wp_list_filter( $persistent_notices, [ 'message' => $message ] ) ) ) {
+			if ( ! empty( $persistent_notices[ $notice_key ] ) ) {
 				return;
 			}
 
-			$persistent_notices[] = array(
+			$persistent_notices[ $notice_key ] = array(
 				'message'     => $message,
 				'type'        => $type,
 				'dismissible' => $is_dismissible,
@@ -200,7 +201,12 @@ final class AtumAdminNotices {
 		}
 		else {
 
-			self::$notices[] = array(
+			// Ensure that the same notices are not added more than once.
+			if ( ! empty( self::$notices[ $notice_key ] ) ) {
+				return;
+			}
+
+			self::$notices[ $notice_key ] = array(
 				'message'     => $message,
 				'type'        => $type,
 				'dismissible' => $is_dismissible,

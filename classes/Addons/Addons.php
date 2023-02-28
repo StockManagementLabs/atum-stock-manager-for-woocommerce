@@ -151,7 +151,7 @@ class Addons {
 						'</a>'
 					);
 
-					AtumAdminNotices::add_notice( $message, 'info', TRUE, FALSE, 'activate-addons' );
+					AtumAdminNotices::add_notice( $message, 'activate_addons_licenses', 'info', TRUE, FALSE, 'activate-addons' );
 
 				}
 
@@ -368,12 +368,28 @@ class Addons {
 
 							// Check if is a trial license.
 							if ( $is_trial_addon && ! $is_trial_license ) {
-								/* translators: the add-on name and the open and closing link tags */
-								AtumAdminNotices::add_notice( sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ), 'warning', TRUE, TRUE );
+
+								AtumAdminNotices::add_notice(
+									/* translators: the add-on name and the open and closing link tags */
+									sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
+									strtolower( $addon_name ),
+									'warning',
+									TRUE,
+									TRUE
+								);
+
 							}
 							elseif ( ! $is_trial_addon && $is_trial_license ) {
-								/* translators: the add-on name and the open and closing link tags */
-								AtumAdminNotices::add_notice( sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid full version license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ), 'warning', TRUE, TRUE );
+
+								AtumAdminNotices::add_notice(
+									/* translators: the add-on name and the open and closing link tags */
+									sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid full version license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
+									strtolower( $addon_name ),
+									'warning',
+									TRUE,
+									TRUE
+								);
+
 							}
 							else {
 
@@ -395,17 +411,41 @@ class Addons {
 					elseif ( in_array( $license_key['status'], [ 'disabled', 'expired', 'invalid' ] ) ) {
 
 						if ( $is_trial_addon ) {
-							/* translators: the add-on name */
-							AtumAdminNotices::add_notice( sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page%3$s or purchase the full version.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ), 'warning', TRUE, TRUE );
+
+							AtumAdminNotices::add_notice(
+								/* translators: the add-on name */
+								sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page%3$s or purchase the full version.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
+								strtolower( $addon_name ),
+								'warning',
+								TRUE,
+								TRUE
+							);
+
 						}
 						else {
-							/* translators: the add-on name */
-							AtumAdminNotices::add_notice( sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ), 'warning', TRUE, TRUE );
+
+							AtumAdminNotices::add_notice(
+								/* translators: the add-on name */
+								sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ),
+								strtolower( $addon_name ),
+								'warning',
+								TRUE,
+								TRUE
+							);
+
 						}
 					}
 					elseif ( 'trial_used' === $license_key['status'] && strpos( $addon_slug, 'trial' ) !== FALSE ) {
-						/* translators: the add-on name */
-						AtumAdminNotices::add_notice( sprintf( __( 'ATUM %1$s license is being used on another site and is for a single use only. Please, remove it from the %2$sadd-ons page%3$s.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ), 'warning', TRUE, TRUE );
+
+						AtumAdminNotices::add_notice(
+							/* translators: the add-on name */
+							sprintf( __( 'ATUM %1$s license is being used on another site and is for a single use only. Please, remove it from the %2$sadd-ons page%3$s.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
+							strtolower( $addon_name ),
+							'warning',
+							TRUE,
+							TRUE
+						);
+
 					}
 
 				}
@@ -446,15 +486,27 @@ class Addons {
 					error_log( __METHOD__ . ": $error_message" );
 				}
 
-				/* translators: the error message */
-				AtumAdminNotices::add_notice( sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ), 'error', TRUE, TRUE );
+				AtumAdminNotices::add_notice(
+					/* translators: the error message */
+					sprintf( __( "Something failed getting the ATUM's add-ons list: %s", ATUM_TEXT_DOMAIN ), $error_message ),
+					'addons_list',
+					'error',
+					TRUE,
+					TRUE
+				);
 
 				$addons = FALSE;
 
 			}
 			elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 
-				AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+				AtumAdminNotices::add_notice(
+					__( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ),
+					'addons_list',
+					'error',
+					TRUE,
+					TRUE
+				);
 				$addons = FALSE;
 
 			}
@@ -464,8 +516,16 @@ class Addons {
 				$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
 
 				if ( empty( $addons ) ) {
-					AtumAdminNotices::add_notice( __( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ), 'error', TRUE, TRUE );
+
+					AtumAdminNotices::add_notice(
+						__( "Something failed getting the ATUM's add-ons list. Please retry after some minutes.", ATUM_TEXT_DOMAIN ),
+						'addons_list',
+						'error',
+						TRUE,
+						TRUE
+					);
 					$addons = FALSE;
+
 				}
 
 			}
@@ -804,9 +864,9 @@ class Addons {
 	 * @since 1.2.0
 	 *
 	 * @param string $addon_name The addon name.
-	 * @param array  $key        The license key.
+	 * @param array  $key_info   The license key info.
 	 */
-	public static function update_key( $addon_name, $key ) {
+	public static function update_key( $addon_name, $key_info ) {
 
 		$addon_name = strtolower( $addon_name );
 		$is_trial   = FALSE;
@@ -824,14 +884,42 @@ class Addons {
 		}
 
 		if ( $is_trial ) {
-			$key['trial'] = TRUE;
+			$key_info['trial'] = TRUE;
 		}
 
-		$keys[ $addon_name ] = $key;
+		$keys[ $addon_name ] = $key_info;
 		update_option( self::ADDONS_KEY_OPTION, $keys );
+
+		// Delete the status transient.
+		self::delete_status_transient( $addon_name );
 
 		// Delete any possible wrong persistent notice.
 		AtumAdminNotices::clear_permament_notices();
+
+	}
+
+	/**
+	 * Remove an addon key from the database.
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $addon_name
+	 */
+	public static function remove_key( $addon_name ) {
+
+		$addon_name = strtolower( $addon_name );
+
+		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
+		}
+
+		$saved_keys = self::get_keys();
+
+		if ( ! empty( $saved_keys ) && array_key_exists( $addon_name, $saved_keys ) ) {
+			unset( $saved_keys[ $addon_name ] );
+			self::delete_status_transient( $addon_name );
+			update_option( self::ADDONS_KEY_OPTION, $saved_keys );
+		}
 
 	}
 
@@ -848,8 +936,8 @@ class Addons {
 	 */
 	public static function get_addon_status( $addon_name, $addon_slug, $addon_folder ) {
 
-		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
-		$addon_status   = AtumCache::get_transient( $transient_name/*TODO: REENABLE, TRUE*/ );
+		$transient_key = AtumCache::get_transient_key( 'addon_status', strtolower( $addon_name ) );
+		$addon_status  = AtumCache::get_transient( $transient_key/*TODO: REENABLE, TRUE*/ );
 
 		if ( empty( $addon_status ) ) {
 
@@ -930,14 +1018,22 @@ class Addons {
 								$addon_status->status  = $license_data->license;
 								$addon_status->expires = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
 
-								if (
-									$addon_status->status !== $saved_license['status'] ||
-									( ( $saved_license['expires'] ?? NULL ) !== $addon_status->expires )
-								) {
+								if ( $addon_status->status !== $saved_license['status'] ) {
 									$saved_license['status']  = $addon_status->status;
-									$saved_license['expires'] = $addon_status->expires;
 								}
 
+							}
+
+							if ( empty( $saved_license['expires'] ) || $saved_license['expires'] !== $license_data->expires ) {
+								$addon_status->expires = $saved_license['expires'] = $license_data->expires;
+							}
+
+							if ( ! empty( $license_data->trial ) ) {
+								$addon_status->is_trial = $saved_license['trial'] = TRUE;
+
+								if ( empty( $license_data->trial_extendable ) ) {
+									$saved_license['extended'] = TRUE;
+								}
 							}
 
 							self::update_key( $addon_name, $saved_license );
@@ -1080,7 +1176,7 @@ class Addons {
 
 			}
 
-			AtumCache::set_transient( $transient_name, $addon_status, DAY_IN_SECONDS, TRUE );
+			AtumCache::set_transient( $transient_key, $addon_status, DAY_IN_SECONDS, TRUE );
 
 		}
 
@@ -1097,12 +1193,12 @@ class Addons {
 	 */
 	public static function delete_status_transient( $addon_name ) {
 
-		$transient_name = AtumCache::get_transient_key( 'addon_status', $addon_name );
+		$transient_name = AtumCache::get_transient_key( 'addon_status', strtolower( $addon_name ) );
 		AtumCache::delete_transients( $transient_name );
 
 		// Delete the trial status transient too.
 		if ( $addon_name ) {
-			$trial_transient_name = AtumCache::get_transient_key( 'addon_status', "$addon_name Trial" );
+			$trial_transient_name = AtumCache::get_transient_key( 'addon_status', strtolower( "$addon_name Trial" ) );
 			AtumCache::delete_transients( $trial_transient_name );
 		}
 
