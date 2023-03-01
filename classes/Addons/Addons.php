@@ -85,7 +85,7 @@ class Addons {
 	/**
 	 * The ATUM's addons store URL
 	 */
-	const ADDONS_STORE_URL = 'https://stockmanagementlabs.loc/'; // TODO: CHANGE....
+	const ADDONS_STORE_URL = 'https://stockmanagementlabs.com/';
 
 	/**
 	 * The ATUM's addons API endpoint
@@ -937,7 +937,7 @@ class Addons {
 	public static function get_addon_status( $addon_name, $addon_slug, $addon_folder ) {
 
 		$transient_key = AtumCache::get_transient_key( 'addon_status', strtolower( $addon_name ) );
-		$addon_status  = AtumCache::get_transient( $transient_key/*TODO: REENABLE, TRUE*/ );
+		$addon_status  = AtumCache::get_transient( $transient_key, TRUE );
 
 		if ( empty( $addon_status ) ) {
 
@@ -1050,7 +1050,7 @@ class Addons {
 					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
 
 					if ( $is_installed ) {
-						$addon_status->notice = esc_html__( 'License key is missing! Please add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice = esc_html__( 'License key is missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
 						$addon_status->notice_type = 'warning';
 					}
 
@@ -1093,7 +1093,7 @@ class Addons {
 					$addon_status->button_text   = __( 'Activate', ATUM_TEXT_DOMAIN );
 					$addon_status->button_class  = 'activate-key';
 					$addon_status->button_action = ATUM_PREFIX . 'activate_license';
-					$addon_status->notice        = esc_html__( 'License key is missing! Please add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice        = esc_html__( 'License key is missing! Please, add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
 
 					if ( 'no_key' !== $addon_status->status ) {
 						$addon_status->classes[]  = 'inactive';
@@ -1116,7 +1116,7 @@ class Addons {
 						$addon_status->notice = esc_html__( 'Trial period expired. You can extend it for 7 days more or purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
 					}
 					else {
-						$addon_status->notice = esc_html__( 'Trial period expired. Purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice = esc_html__( 'Trial period expired. Please, purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
 					}
 				}
 
@@ -1193,13 +1193,13 @@ class Addons {
 	 */
 	public static function delete_status_transient( $addon_name ) {
 
-		$transient_name = AtumCache::get_transient_key( 'addon_status', strtolower( $addon_name ) );
-		AtumCache::delete_transients( $transient_name );
+		$transient_key = AtumCache::get_transient_key( 'addon_status', strtolower( $addon_name ) );
+		AtumCache::delete_transients( $transient_key );
 
 		// Delete the trial status transient too.
 		if ( $addon_name ) {
-			$trial_transient_name = AtumCache::get_transient_key( 'addon_status', strtolower( "$addon_name Trial" ) );
-			AtumCache::delete_transients( $trial_transient_name );
+			$trial_transient_key = AtumCache::get_transient_key( 'addon_status', strtolower( "$addon_name Trial" ) );
+			AtumCache::delete_transients( $trial_transient_key );
 		}
 
 	}
