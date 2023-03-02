@@ -29,16 +29,13 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 	protected $searchable_columns = array(
 		'string'  => array(
 			'title',
-			'_supplier',
 			'_sku',
-			'_supplier_sku',
 			'IDs', // ID as string to allow the use of commas ex: s = '12, 13, 89'.
 		),
 		'numeric' => array(
 			'ID',
 			'_regular_price',
 			'_sale_price',
-			'_purchase_price',
 		),
 	);
 
@@ -76,6 +73,10 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 			'_sale_price'     => __( 'Sale Price', ATUM_TEXT_DOMAIN ),
 			'_purchase_price' => __( 'Purchase Price', ATUM_TEXT_DOMAIN ),
 		);
+
+		if ( $this->show_controlled ) {
+			unset( self::$table_columns['_supplier'], self::$table_columns['_supplier_sku'], self::$table_columns['_purchase_price'] );
+		}
 
 		// By default, we have no actions for SC but we have to add the ability to add them externally.
 		self::$row_actions = (array) apply_filters( 'atum/uncontrolled_stock_central_list/row_actions', [] );
