@@ -56,7 +56,11 @@ use Atum\Inc\Helpers;
 	<div class="float-right">
 		<h4><?php esc_html_e( 'Ship To', ATUM_TEXT_DOMAIN ) ?></h4>
 		<p class="address">
-			<?php echo wp_kses_post( $po->get_shipping_address() ) ?>
+			<?php
+			add_filter( 'woocommerce_formatted_address_force_country_display', '__return_true' );
+			echo wp_kses_post( $po->get_shipping_address() );
+			remove_filter( 'woocommerce_formatted_address_force_country_display', '__return_true' );
+			?>
 		</p>
 	</div>
 	<div class="spacer" style="clear: both;"></div>
