@@ -19,7 +19,6 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
-use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals as AtumGlobals;
