@@ -222,7 +222,7 @@ class ListTable extends AtumListTable {
 
 		if ( mb_strlen( $title ) > $title_length ) {
 			$title = '<span class="tips" data-tip="' . esc_attr( $title ) . '">' . trim( mb_substr( $title, 0, $title_length ) ) .
-			         '...</span><span class="atum-title-small">' . $title . '</span>';
+				'...</span><span class="atum-title-small">' . $title . '</span>';
 		}
 
 		$title = '<a href="' . get_edit_post_link( $product_id ) . '" target="_blank">' . $title . '</a>';
@@ -368,26 +368,33 @@ class ListTable extends AtumListTable {
 		$joins = array(
 			"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`",
 			"LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`",
+			"LEFT JOIN `$wpdb->posts` AS pr ON oim.`meta_value` = pr.`ID`",
+			"LEFT JOIN `$wpdb->postmeta` AS prm ON prm.`post_id` = pr.`ID` AND prm.`meta_key` = '_sku'",
 		);
 
 		$where = array(
-			"`meta_key` IN ('_product_id', '_variation_id')",
-			"`order_item_type` = 'line_item'",
+			"oim.`meta_key` IN ('_product_id', '_variation_id')",
+			"oi.`order_item_type` = 'line_item'",
 			$wpdb->prepare( 'p.`post_type` = %s', PurchaseOrders::POST_TYPE ),
-			'`meta_value` > 0',
-			"`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
+			'oim.`meta_value` > 0',
+			"p.`post_status` IN ('" . implode( "','", $due_statuses ) . "')",
 		);
 
 		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 
-			$search = esc_attr( $_REQUEST['s'] );
+			$search    = esc_attr( $_REQUEST['s'] );
+			$sub_where = array();
 
 			if ( is_numeric( $search ) ) {
-				$where[] = '`meta_value` = ' . absint( $_REQUEST['s'] );
+				$sub_where[] = 'oim.`meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$where[] = "`order_item_name` LIKE '%{$search}%'";
+				$sub_where[] = "oi.`order_item_name` LIKE '%{$search}%'";
 			}
+
+			$sub_where[] = "prm.`meta_value` LIKE '%{$search}%'";
+
+			$where[] = '(' . implode( ' OR ', apply_filters( 'atum/inbound_stock_list/prepare_fields_where', $sub_where, $search ) ) . ')';
 
 		}
 
@@ -396,7 +403,7 @@ class ListTable extends AtumListTable {
 
 			switch ( $_REQUEST['orderby'] ) {
 				case 'title':
-					$order_by = '`order_item_name`';
+					$order_by = 'oi.`order_item_name`';
 					break;
 
 				case 'ID':
@@ -414,7 +421,7 @@ class ListTable extends AtumListTable {
 
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$sql = "
-			SELECT MAX(CAST( `meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
+			SELECT MAX(CAST( oim.`meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, oi.`order_id`, oi.`order_item_name` 			
 			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
 			$joins_str
 			WHERE $where_str
