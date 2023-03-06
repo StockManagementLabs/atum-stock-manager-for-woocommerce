@@ -232,7 +232,7 @@ var AdminModal = (function () {
             dataType: 'json',
             method: 'post',
             data: {
-                action: 'atum_hide_atum_modal',
+                action: 'atum_hide_atum_admin_modal',
                 security: this.settings.get('nonce'),
                 transientKey: this.settings.get('key'),
             },

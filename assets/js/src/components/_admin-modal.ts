@@ -4,8 +4,6 @@
 
 import Settings from '../config/_settings';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-
-
 export default class AdminModal {
 
 	defaultSwalOptions: SweetAlertOptions = {
@@ -77,7 +75,7 @@ export default class AdminModal {
 			dataType: 'json',
 			method  : 'post',
 			data    : {
-				action      : 'atum_hide_atum_modal',
+				action      : 'atum_hide_atum_admin_modal',
 				security    : this.settings.get( 'nonce' ),
 				transientKey: this.settings.get( 'key' ),
 			},

@@ -332,10 +332,11 @@ __webpack_require__.r(__webpack_exports__);
     return __assign.apply(this, arguments);
 };
 var EnhancedSelect = (function () {
-    function EnhancedSelect() {
+    function EnhancedSelect($selects) {
+        if ($selects === void 0) { $selects = null; }
         var _this = this;
-        this.addAtumClasses();
-        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses(); });
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
     EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
         $('.select2-container--open').remove();
@@ -991,7 +992,7 @@ var PostTypeList = (function () {
         this.globals.$atumTable.find('thead > tr, tfoot > tr').addClass('item-heads');
         _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].addActiveClassRow(this.globals.$atumTable);
         $(window).on('load', function () { return $('#wpfooter').show(); });
-        this.enhancedSelect.doSelect2($('select'));
+        this.enhancedSelect.doSelect2($('#wpbody-content select'));
     }
     return PostTypeList;
 }());
@@ -1198,7 +1199,7 @@ jQuery(function ($) {
         $atumList: $('#posts-filter, .atum-list-wrapper'),
         filterData: {},
     });
-    var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]($('#wpbody-content select'));
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_9__["default"]();
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
     var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_5__["default"](settings, dateTimePicker);

@@ -40,7 +40,7 @@ jQuery( ( $: JQueryStatic ) => {
 		$atumList : $( '#posts-filter, .atum-list-wrapper' ),
 		filterData: {},
 	} );
-	const enhancedSelect = new EnhancedSelect();
+	const enhancedSelect = new EnhancedSelect( $( '#wpbody-content select' ) );
 	const tooltip = new Tooltip();
 	const dateTimePicker = new DateTimePicker( settings );
 	const popover = new TableCellPopovers( settings, dateTimePicker );

@@ -222,12 +222,12 @@ var Tooltip = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../vendor/dragscroll */ "./assets/js/vendor/dragscroll.js");
-/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
-/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
+/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../vendor/dragscroll */ "./assets/js/vendor/dragscroll.js");
+/* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 
 
@@ -292,7 +292,7 @@ var AddonsPage = (function () {
             else if ($button.hasClass('remove-license')) {
                 key = $button.closest('.addon-key').find('.license-key').text();
                 var isTrial = $button.closest('.actions').hasClass('trial');
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
                     title: _this.settings.get(isTrial ? 'trialDeactivation' : 'limitedDeactivations'),
                     html: _this.settings.get(isTrial ? 'trialWillDisable' : 'allowedDeactivations'),
                     icon: 'warning',
@@ -333,13 +333,13 @@ var AddonsPage = (function () {
                     security: _this.settings.get('nonce'),
                     addon: $addon.data('addon'),
                 },
-                beforeSend: function () { return _blocker__WEBPACK_IMPORTED_MODULE_3__["default"].block($addon); },
+                beforeSend: function () { return _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block($addon); },
                 success: function (response) {
                     if (response.success === true) {
                         location.reload();
                     }
                     else {
-                        _blocker__WEBPACK_IMPORTED_MODULE_3__["default"].unblock($addon);
+                        _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock($addon);
                         _this.showErrorAlert(response.data);
                     }
                 }
@@ -420,7 +420,7 @@ var AddonsPage = (function () {
                         _this.showSuccessAlert(response.data);
                     }
                     else if (isSwal) {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(response.data, "</span>"));
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.showValidationMessage("<span>".concat(response.data, "</span>"));
                     }
                     else {
                         _this.showErrorAlert(response.data);
@@ -460,7 +460,7 @@ var AddonsPage = (function () {
         switch (resp) {
             case false:
                 if (isSwal) {
-                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(message, "</span>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.showValidationMessage("<span>".concat(message, "</span>"));
                 }
                 else {
                     this.showErrorAlert(message);
@@ -470,7 +470,7 @@ var AddonsPage = (function () {
                 this.showSuccessAlert(message);
                 break;
             case 'activate':
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
                     title: this.settings.get('activation'),
                     html: message,
                     icon: 'info',
@@ -492,7 +492,7 @@ var AddonsPage = (function () {
                                 },
                                 success: function (r) {
                                     if (r.success !== true) {
-                                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showValidationMessage("<span>".concat(r.data, "</span>"));
+                                        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.showValidationMessage("<span>".concat(r.data, "</span>"));
                                     }
                                     res();
                                 },
@@ -507,7 +507,7 @@ var AddonsPage = (function () {
                 });
                 break;
             case 'trial':
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
                     icon: 'info',
                     title: this.settings.get('trial'),
                     html: message,
@@ -521,7 +521,7 @@ var AddonsPage = (function () {
                 });
                 break;
             case 'extend':
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
                     icon: 'info',
                     title: this.settings.get('trialExpired'),
                     html: message,
@@ -544,7 +544,7 @@ var AddonsPage = (function () {
         if (!title) {
             title = this.settings.get('success');
         }
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
             title: title,
             html: message,
             icon: 'success',
@@ -553,7 +553,7 @@ var AddonsPage = (function () {
             .then(function () { return location.reload(); });
     };
     AddonsPage.prototype.showErrorAlert = function (message) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
             title: this.settings.get('error'),
             html: message,
             icon: 'error',
@@ -598,10 +598,10 @@ var AddonsPage = (function () {
         $navScrollContainers.css('visibility', 'visible').off('scroll.atum').on('scroll.atum', function (evt) {
             _this.addHorizontalDragScroll($(evt.currentTarget), true);
             _this.tooltip.destroyTooltips();
-            _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
+            _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].delay(function () { return _this.tooltip.addTooltips(); }, 1000);
         });
         this.addMouseWheelSupport();
-        _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_0___default.a.reset();
+        _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default.a.reset();
     };
     AddonsPage.prototype.addHorizontalDragScroll = function ($nav, checkEnhanced) {
         if (checkEnhanced === void 0) { checkEnhanced = false; }
