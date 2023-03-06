@@ -4512,6 +4512,11 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
         flex-wrap: wrap;
   }
 }
+.atum-settings-wrapper .atum-settings-container > .alert {
+  width: 100%;
+  height: 26px;
+  margin-left: 10px;
+}
 .atum-settings-wrapper .switch-interface-style {
   float: right;
   width: 165px;
