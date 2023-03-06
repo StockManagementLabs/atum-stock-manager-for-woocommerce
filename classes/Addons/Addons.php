@@ -303,7 +303,7 @@ class Addons {
 					if ( ! empty( $plugin_url_paths['path'] ) && '/' !== $plugin_url_paths['path'] ) {
 
 						$plugin_url_paths  = explode( '/', untrailingslashit( $plugin_url_paths['path'] ) );
-						$full_version_slug = str_replace( '-', '_', str_replace( 'atum-', '', last( $plugin_url_paths ) ) );
+						$full_version_slug = str_replace( '-', '_', str_replace( 'atum-', '', end( $plugin_url_paths ) ) );
 						$is_trial_addon    = strpos( strtolower( $plugin_data['Name'] ), 'trial' ) !== FALSE;
 						$addon_slug        = $is_trial_addon ? "{$full_version_slug}_trial" : $full_version_slug;
 						$addon_path        = [];
