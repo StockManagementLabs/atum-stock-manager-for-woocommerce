@@ -429,6 +429,7 @@ body {
 }
 .content-lines .description {
   text-align: left;
+  white-space: unset !important;
 }
 .content-lines .qty {
   text-align: center;
