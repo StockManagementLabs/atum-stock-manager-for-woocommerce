@@ -62,7 +62,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @var array
 	 */
-	protected $capabilities = array(
+	protected static $capabilities = array(
 		'edit_post'          => 'edit_inventory_log',
 		'read_post'          => 'read_inventory_log',
 		'delete_post'        => 'delete_inventory_log',

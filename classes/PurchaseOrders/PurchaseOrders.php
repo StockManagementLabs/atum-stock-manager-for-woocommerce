@@ -77,7 +77,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @var array
 	 */
-	protected $capabilities = array(
+	protected static $capabilities = array(
 		'edit_post'          => 'edit_purchase_order',
 		'read_post'          => 'read_purchase_order',
 		'delete_post'        => 'delete_purchase_order',
