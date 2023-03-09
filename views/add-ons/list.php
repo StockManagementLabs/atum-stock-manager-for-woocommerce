@@ -30,6 +30,7 @@ defined( 'ABSPATH' ) || die;
 							<li class="not-installed" data-status="not-installed"><span><?php esc_html_e( 'Not installed', ATUM_TEXT_DOMAIN ) ?></span></li>
 							<li class="invalid" data-status="invalid"><span><?php esc_html_e( 'Invalid', ATUM_TEXT_DOMAIN ) ?></span></li>
 							<li class="trial" data-status="trial"><span><?php esc_html_e( 'Trial', ATUM_TEXT_DOMAIN ) ?></span></li>
+							<li class="coming-soon" data-status="coming-soon"><span><?php esc_html_e( 'Coming soon', ATUM_TEXT_DOMAIN ) ?></span></li>
 						</ul>
 
 						<div class="overflow-opacity-effect-right"></div>
