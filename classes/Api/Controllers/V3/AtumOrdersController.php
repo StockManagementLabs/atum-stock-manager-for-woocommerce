@@ -432,6 +432,11 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				$object->set_status( $request['status'] );
 			}
 
+			// Set description.
+			if ( ! empty( $request['description'] ) ) {
+				$object->set_description( $request['description'] );
+			}
+
 			do_action( 'atum/api/before_save_atum_order', $object, $request, $creating );
 
 			$object->save();
