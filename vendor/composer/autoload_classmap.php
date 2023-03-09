@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Atum\\Addons\\AddonBootstrap' => $baseDir . '/classes/Addons/AddonBootstrap.php',
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
     'Atum\\Addons\\AddonsLoader' => $baseDir . '/classes/Addons/AddonsLoader.php',
     'Atum\\Addons\\AddonsLoaderDev' => $baseDir . '/classes/Addons/AddonsLoaderDev.php',

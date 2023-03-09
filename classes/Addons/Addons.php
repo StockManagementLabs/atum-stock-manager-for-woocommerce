@@ -22,7 +22,7 @@ use Atum\Inc\Helpers;
 use Westsworld\TimeAgo;
 
 
-class Addons {
+final class Addons {
 
 	/**
 	 * The singleton instance holder
@@ -119,12 +119,8 @@ class Addons {
 		add_action( 'after_setup_theme', array( $this, 'init_addons' ), 100 );
 
 		// Load addons.
-		if ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG && class_exists( '\Atum\Addons\AddonsLoaderDev' ) ) {
-			new AddonsLoaderDev();
-		}
-		else {
-			new AddonsLoader();
-		}
+		$addons_loader = self::get_addons_loader_class();
+		new $addons_loader();
 
 		if ( is_admin() ) {
 
@@ -1690,6 +1686,31 @@ class Addons {
 	 */
 	public static function get_addons_paths() {
 		return self::$addons_paths;
+	}
+
+	/**
+	 * Get class name for the addons loader
+	 *
+	 * @since 1.9.27
+	 *
+	 * @return string
+	 */
+	public static function get_addons_loader_class() {
+		return ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG && class_exists( '\Atum\Addons\AddonsLoaderDev' ) ) ?
+			'\Atum\Addons\AddonsLoaderDev' : '\Atum\Addons\AddonsLoader';
+	}
+
+	/**
+	 * Check whether an addon is bootstrapped
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $addon
+	 *
+	 * @return bool
+	 */
+	public static function is_addon_bootstrapped( $addon ) {
+		return in_array( $addon, self::get_addons_loader_class()::get_bootstrapped_addons() );
 	}
 
 

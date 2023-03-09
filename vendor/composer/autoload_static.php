@@ -70,6 +70,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
     );
 
     public static $classMap = array (
+        'Atum\\Addons\\AddonBootstrap' => __DIR__ . '/../..' . '/classes/Addons/AddonBootstrap.php',
         'Atum\\Addons\\Addons' => __DIR__ . '/../..' . '/classes/Addons/Addons.php',
         'Atum\\Addons\\AddonsLoader' => __DIR__ . '/../..' . '/classes/Addons/AddonsLoader.php',
         'Atum\\Addons\\AddonsLoaderDev' => __DIR__ . '/../..' . '/classes/Addons/AddonsLoaderDev.php',
