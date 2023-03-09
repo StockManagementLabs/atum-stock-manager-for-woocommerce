@@ -241,7 +241,7 @@ class ListTable extends AtumListTable {
 	 * @return string
 	 */
 	protected function column__sku( $item, $editable = FALSE ) {
-		return parent::column__sku( $item, $editable );
+		return parent::column__sku( $item, FALSE );
 	}
 
 	/**
