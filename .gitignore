@@ -12,5 +12,5 @@ yarn.lock
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*
 
-# obfuscated dev files
+# Dev files
 *Dev.php
