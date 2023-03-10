@@ -49,7 +49,7 @@ abstract class AtumOrderPostType {
 	 *
 	 * @var array
 	 */
-	protected static $capabilities = array();
+	protected $capabilities = array();
 
 	/**
 	 * The query var name used in list searches
@@ -81,7 +81,7 @@ abstract class AtumOrderPostType {
 	protected function init() {
 
 		// Add the ATUM prefix to all the capabilities.
-		self::$capabilities = preg_filter( '/^/', ATUM_PREFIX, self::$capabilities );
+		$this->capabilities = preg_filter( '/^/', ATUM_PREFIX, $this->capabilities );
 
 		// Add the ATUM Orders' meta table to wpdb.
 		global $wpdb;
@@ -166,7 +166,7 @@ abstract class AtumOrderPostType {
 	public function register_post_type( $args = array() ) {
 
 		// Minimum capability required.
-		$read_capability = isset( self::$capabilities['read_post'] ) ? self::$capabilities['read_post'] : 'manage_woocommerce';
+		$read_capability = isset( $this->capabilities['read_post'] ) ? $this->capabilities['read_post'] : 'manage_woocommerce';
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
@@ -185,7 +185,7 @@ abstract class AtumOrderPostType {
 			'query_var'           => is_admin(),
 			'supports'            => array( 'title', 'comments', 'custom-fields' ),
 			'has_archive'         => FALSE,
-			'capabilities'        => self::$capabilities,
+			'capabilities'        => $this->capabilities,
 		), $args ), $post_type );
 
 		// Register the ATUM Order post type.
@@ -1346,17 +1346,6 @@ abstract class AtumOrderPostType {
 	 */
 	public static function get_type_taxonomy() {
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
-	}
-
-	/**
-	 * Getter for the capabilities prop
-	 *
-	 * @since 1.9.27
-	 *
-	 * @return array
-	 */
-	public static function get_capabilities() {
-		return self::$capabilities;
 	}
 
 }
