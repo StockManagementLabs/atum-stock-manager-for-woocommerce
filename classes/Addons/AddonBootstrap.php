@@ -16,13 +16,6 @@ defined( 'ABSPATH' ) || die;
 abstract class AddonBootstrap {
 
 	/**
-	 * The singleton instance holder
-	 *
-	 * @var AddonBootstrap
-	 */
-	private static $instance;
-
-	/**
 	 * The addon key. It must match with the key used when registering the add-on.
 	 *
 	 * @var string
@@ -39,7 +32,7 @@ abstract class AddonBootstrap {
 	/**
 	 * Addons generic constructor
 	 */
-	protected function __construct() {
+	public function __construct() {
 
 		// Do not allow to load the add-on if it was not correctly bootstrapped.
 		if ( $this->addon_key && Addons::is_addon_bootstrapped( $this->addon_key ) ) {
@@ -75,38 +68,6 @@ abstract class AddonBootstrap {
 	 */
 	public static function is_bootstrapped() {
 		return self::$bootstrapped;
-	}
-
-
-	/*******************
-	 * Instance methods
-	 *******************/
-
-	/**
-	 * Cannot be cloned
-	 */
-	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
-	}
-
-	/**
-	 * Cannot be serialized
-	 */
-	public function __sleep() {
-		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
-	}
-
-	/**
-	 * Get Singleton instance
-	 *
-	 * @return AddonBootstrap instance
-	 */
-	public static function get_instance() {
-		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
-			self::$instance = new static();
-		}
-
-		return self::$instance;
 	}
 
 }

@@ -1485,12 +1485,12 @@ final class Addons {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @param string $addon_name
+	 * @param string $addon_key
 	 *
 	 * @return bool
 	 */
-	public static function is_addon_active( $addon_name ) {
-		return isset( self::$addons[ $addon_name ] ) || isset( self::$addons[ "{$addon_name}_trial'" ] );
+	public static function is_addon_active( $addon_key ) {
+		return ( ! empty( self::$addons[ $addon_key ] ) || ! empty( self::$addons[ "{$addon_key}_trial" ] ) ) && ( self::is_addon_bootstrapped( $addon_key ) || self::is_addon_bootstrapped( "{$addon_key}_trial" ) );
 	}
 
 	/**
