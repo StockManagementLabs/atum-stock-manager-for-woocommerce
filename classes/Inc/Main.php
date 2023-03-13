@@ -24,7 +24,7 @@ use Atum\Cli\AtumCli;
 use Atum\Components\AtumBarcodes;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumNotifications;
+use Atum\Components\AtumEmailNotifications;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
@@ -252,7 +252,7 @@ class Main {
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
 		CheckOrderPrices::get_instance();
-		AtumNotifications::get_instance();
+		AtumEmailNotifications::get_instance();
 
 		if ( class_exists( '\WP_CLI', FALSE ) ) {
 			AtumCli::get_instance();

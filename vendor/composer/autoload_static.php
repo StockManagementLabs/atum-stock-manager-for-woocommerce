@@ -70,7 +70,10 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
     );
 
     public static $classMap = array (
+        'Atum\\Addons\\AddonBootstrap' => __DIR__ . '/../..' . '/classes/Addons/AddonBootstrap.php',
         'Atum\\Addons\\Addons' => __DIR__ . '/../..' . '/classes/Addons/Addons.php',
+        'Atum\\Addons\\AddonsLoader' => __DIR__ . '/../..' . '/classes/Addons/AddonsLoader.php',
+        'Atum\\Addons\\AddonsLoaderDev' => __DIR__ . '/../..' . '/classes/Addons/AddonsLoaderDev.php',
         'Atum\\Addons\\Updater' => __DIR__ . '/../..' . '/classes/Addons/Updater.php',
         'Atum\\Api\\AtumApi' => __DIR__ . '/../..' . '/classes/Api/AtumApi.php',
         'Atum\\Api\\Controllers\\V3\\AddonsController' => __DIR__ . '/../..' . '/classes/Api/Controllers/V3/AddonsController.php',
@@ -107,12 +110,14 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
         'Atum\\Cli\\AtumCli' => __DIR__ . '/../..' . '/classes/Cli/AtumCli.php',
         'Atum\\Cli\\CliCommands' => __DIR__ . '/../..' . '/classes/Cli/CliCommands.php',
+        'Atum\\Components\\AtumAdminModal' => __DIR__ . '/../..' . '/classes/Components/AtumAdminModal.php',
         'Atum\\Components\\AtumAdminNotices' => __DIR__ . '/../..' . '/classes/Components/AtumAdminNotices.php',
         'Atum\\Components\\AtumBarcodes' => __DIR__ . '/../..' . '/classes/Components/AtumBarcodes.php',
         'Atum\\Components\\AtumCache' => __DIR__ . '/../..' . '/classes/Components/AtumCache.php',
         'Atum\\Components\\AtumCalculatedProps' => __DIR__ . '/../..' . '/classes/Components/AtumCalculatedProps.php',
         'Atum\\Components\\AtumCapabilities' => __DIR__ . '/../..' . '/classes/Components/AtumCapabilities.php',
         'Atum\\Components\\AtumColors' => __DIR__ . '/../..' . '/classes/Components/AtumColors.php',
+        'Atum\\Components\\AtumEmailNotifications' => __DIR__ . '/../..' . '/classes/Components/AtumEmailNotifications.php',
         'Atum\\Components\\AtumException' => __DIR__ . '/../..' . '/classes/Components/AtumException.php',
         'Atum\\Components\\AtumHelpGuide' => __DIR__ . '/../..' . '/classes/Components/AtumHelpGuide.php',
         'Atum\\Components\\AtumHelpPointers' => __DIR__ . '/../..' . '/classes/Components/AtumHelpPointers.php',
@@ -120,7 +125,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\AtumListTables\\AtumListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumListTable.php',
         'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',
         'Atum\\Components\\AtumMarketingPopup' => __DIR__ . '/../..' . '/classes/Components/AtumMarketingPopup.php',
-        'Atum\\Components\\AtumNotifications' => __DIR__ . '/../..' . '/classes/Components/AtumNotifications.php',
         'Atum\\Components\\AtumOrders\\AtumComments' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/AtumComments.php',
         'Atum\\Components\\AtumOrders\\AtumOrderPostType' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/AtumOrderPostType.php',
         'Atum\\Components\\AtumOrders\\Items\\AtumOrderItemFee' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Items/AtumOrderItemFee.php',

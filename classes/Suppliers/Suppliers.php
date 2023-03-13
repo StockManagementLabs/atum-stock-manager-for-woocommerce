@@ -471,7 +471,7 @@ class Suppliers {
 				}
 
 				// ATUM marketing popup.
-				AtumMarketingPopup::maybe_enqueue_scripts();
+				AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			}
 

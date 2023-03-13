@@ -1,5 +1,5 @@
 /**
- * Atum Addons
+ * ATUM Addons
  *
  * @copyright Stock Management Labs ©2023
  *
@@ -10,9 +10,10 @@
  * Components
  */
 
+import AddonsPage from './components/addons/_addons-page';
 import Settings from './config/_settings';
-import AddonsPage from './components/addons-page/_addons-page';
 import Tooltip from './components/_tooltip';
+import Trials from './components/addons/_trials';
 
 
 // Modules that need to execute when the DOM is ready should go here.
@@ -20,7 +21,9 @@ jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
 	const settings = new Settings( 'atumAddons' ),
-	      tooltip  = new Tooltip();
-	new AddonsPage( settings, tooltip );
+	      tooltip  = new Tooltip(),
+	      trials   = new Trials( settings, () => location.reload() );
+
+	new AddonsPage( settings, tooltip, trials );
 	
 });

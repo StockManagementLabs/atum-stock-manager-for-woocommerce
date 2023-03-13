@@ -14,6 +14,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
 
 ?>
@@ -39,25 +40,25 @@ use Atum\Inc\Helpers;
 		</div>
 	</section>
 
-	<?php if ( Helpers::show_marketing_dashboard() ) : ?>
+	<?php if ( $marketing_popup->show( 'dash' ) ) : ?>
 
 	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
 
-		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ); ?>;">
+		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ) ?>;">
 
-			<span class="atmi-cross marketing-close" data-transient-key="<?php echo esc_attr( $marketing_popup->get_transient_key() ); ?>"></span>
+			<span class="atmi-cross marketing-close" data-transient-key="<?php echo esc_attr( AtumMarketingPopup::get_transient_key() ) ?>"></span>
 
-			<?php if ( $marketing_popup->get_images()->top_left ) : ?>
-				<img src="<?php echo esc_url( $marketing_popup->get_images()->top_left ); ?>" class="image" alt="">
+			<?php if ( $marketing_popup->get_images()->top_left ?? FALSE ) : ?>
+				<img src="<?php echo esc_url( $marketing_popup->get_images()->top_left ) ?>" class="image" alt="">
 			<?php endif; ?>
 
-			<div class="content<?php if ( $marketing_popup->get_images()->top_left ) echo esc_attr( ' with-top-image' ) ?>">
-				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_dashboard_image() ); ?>" alt="">
+			<div class="content<?php if ( $marketing_popup->get_images()->top_left ?? FALSE ) echo esc_attr( ' with-top-image' ) ?>">
+				<img class="mp-logo" src="<?php echo esc_attr( $marketing_popup->get_dashboard_image() ) ?>" alt="">
 
 				<div class="content-description">
 
-					<?php $version = $marketing_popup->get_version(); ?>
-					<?php $title = $marketing_popup->get_title(); ?>
+					<?php $version = $marketing_popup->get_version() ?>
+					<?php $title = $marketing_popup->get_title() ?>
 					<?php if ( ! empty( $title->text ) ) : ?>
 						<h1 style="<?php echo esc_attr( isset( $title->text_color ) && '' !== $title->text_color ? "color:{$title->text_color};" : '' ) ?><?php echo esc_attr( isset( $title->text_size ) && '' !== $title->text_size ? "font-size:{$title->text_size};" : '' ) ?><?php echo esc_attr( isset( $title->text_align ) && '' !== $title->text_align ? "text-align:{$title->text_align};" : '' ) ?>">
 							<span>
@@ -70,7 +71,7 @@ use Atum\Inc\Helpers;
 						</h1>
 					<?php endif; ?>
 
-					<?php $description = $marketing_popup->get_description(); ?>
+					<?php $description = $marketing_popup->get_description() ?>
 					<?php if ( ! empty( $description->text ) ) : ?>
 						<p style="<?php echo esc_attr( isset( $description->text_color ) && '' !== $description->text_color ? "color:{$description->text_color};" : '' ) ?><?php echo esc_attr( isset( $description->text_size ) && '' !== $description->text_size ? "font-size:{$description->text_size};" : '' ) ?><?php echo esc_attr( isset( $description->text_align ) && '' !== $description->text_align ? "text-align:{$description->text_align};" : '' ) ?>"><?php echo $description->text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					<?php endif; ?>
@@ -83,7 +84,7 @@ use Atum\Inc\Helpers;
 					<?php endif; ?>
 				</div>
 				<div class="content-buttons">
-					<?php $buttons = $marketing_popup->get_buttons(); ?>
+					<?php $buttons = $marketing_popup->get_buttons() ?>
 					<?php if ( ! empty( $buttons ) ) :
 						echo $marketing_popup->get_buttons_hover_style_block(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						foreach ( $buttons as $button ) : ?>

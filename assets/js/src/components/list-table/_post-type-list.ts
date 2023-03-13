@@ -21,17 +21,17 @@ export default class PostTypeList {
 		private globals: Globals,
 		private enhancedSelect: EnhancedSelect
 	) {
-		
-		this.$topTableNav = $('.tablenav.top');
-		this.$tableContainer = $('<div class="atum-table-wrapper" />');
-		
-		this.$topTableNav.after( this.$tableContainer );
-		
-		// Add placeholder to input search.
-		$('#post-search-input').attr('placeholder', this.settings.get('placeholderSearch'));
 
-        // Add nav with dragging functionality.
-        $('.subsubsub').after( `
+		this.$topTableNav = $( '.tablenav.top' );
+		this.$tableContainer = $( '<div class="atum-table-wrapper" />' );
+
+		this.$topTableNav.after( this.$tableContainer );
+
+		// Add placeholder to input search.
+		$( '#post-search-input' ).attr( 'placeholder', this.settings.get( 'placeholderSearch' ) );
+
+		// Add nav with dragging functionality.
+		$( '.subsubsub' ).after( `
 			<div class="list-table-header">
                 <div id="scroll-stock_central_nav" class="nav-container-box">
                     <nav id="stock_central_nav" class="nav-with-scroll-effect dragscroll">
@@ -39,40 +39,40 @@ export default class PostTypeList {
                         <div class="overflow-opacity-effect-left"></div>
                     </nav>
                 </div>
-            </div>`);
+            </div>` );
 
-        $('.nav-with-scroll-effect').prepend($('.subsubsub'));
-        $('.list-table-header')
-            .append($('.search-box'))
-            .addClass('no-margin')
-	        .prependTo($('form#posts-filter'));
-        
-        // Add show filters button for mobile screens.
-		this.$topTableNav.find('.bulkactions').after(this.settings.get('showFiltersButton'));
-		this.showFilters = new ShowFilters(this.$topTableNav, this.settings);
+		$( '.nav-with-scroll-effect' ).prepend( $( '.subsubsub' ) );
+		$( '.list-table-header' )
+			.append( $( '.search-box' ) )
+			.addClass( 'no-margin' )
+			.prependTo( $( 'form#posts-filter' ) );
 
-        // Show add button in head.
-        $('.wp-heading-inline').append( $('.page-title-action').show() );
+		// Add show filters button for mobile screens.
+		this.$topTableNav.find( '.bulkactions' ).after( this.settings.get( 'showFiltersButton' ) );
+		this.showFilters = new ShowFilters( this.$topTableNav, this.settings );
 
-        // Add list-table-header inside form.
-        $('#posts-filter').prepend($('.list-table-header'));
+		// Show add button in head.
+		$( '.wp-heading-inline' ).append( $( '.page-title-action' ).show() );
 
-        $('#post-query-submit').attr('class', 'btn btn-warning');
-        $('#doaction, #doaction2').attr('class', 'btn btn-warning action');
-		
+		// Add list-table-header inside form.
+		$( '#posts-filter' ).prepend( $( '.list-table-header' ) );
+
+		$( '#post-query-submit' ).attr( 'class', 'btn btn-warning' );
+		$( '#doaction, #doaction2' ).attr( 'class', 'btn btn-warning action' );
+
 		// Table position and id.
 		this.$tableContainer.append( this.globals.$atumTable );
-		this.globals.$atumTable.attr('id', 'list-table');
+		this.globals.$atumTable.attr( 'id', 'list-table' );
 
 		this.globals.$atumTable.find( 'thead > tr, tfoot > tr' ).addClass( 'item-heads' );
-		
+
 		// Add active class row function.
 		ActiveRow.addActiveClassRow( this.globals.$atumTable );
-		
+
 		// Footer position.
-		$(window).on('load', () => $('#wpfooter').show() );
-		
-		this.enhancedSelect.doSelect2( $('select') );
+		$( window ).on( 'load', () => $( '#wpfooter' ).show() );
+
+		this.enhancedSelect.doSelect2( $( '#wpbody-content select' ) );
 		
 	}
 	

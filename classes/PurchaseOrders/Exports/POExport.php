@@ -87,23 +87,28 @@ class POExport extends PurchaseOrder {
 	 * @since 1.3.9
 	 */
 	private function load_extra_data() {
-		
-		$default_country = get_option( 'woocommerce_default_country' );
-		$country_state   = wc_format_country_state_string( Helpers::get_option( 'country', $default_country ) );
+
+		$default_country   = get_option( 'woocommerce_default_country', '' );
+		$country_state     = wc_format_country_state_string( Helpers::get_option( 'country', $default_country ) );
+		$countries         = WC()->countries;
+		$default_city      = $countries->get_base_city();
+		$default_adress    = $countries->get_base_address();
+		$default_address_2 = $countries->get_base_address_2();
+		$default_postcode  = $countries->get_base_postcode();
 
 		// Company data.
 		$this->company_data = array(
-			'company'    => Helpers::get_option( 'company_name' ),
-			'address_1'  => Helpers::get_option( 'address_1' ),
-			'address_2'  => Helpers::get_option( 'address_2' ),
-			'city'       => Helpers::get_option( 'city' ),
-			'state'      => $country_state['state'],
-			'postcode'   => Helpers::get_option( 'zip' ),
-			'country'    => $country_state['country'],
-			'tax_number' => Helpers::get_option( 'tax_number' ),
+			'company'    => Helpers::get_option( 'company_name', '' ),
+			'address_1'  => Helpers::get_option( 'address_1', $default_adress ),
+			'address_2'  => Helpers::get_option( 'address_2', $default_address_2 ),
+			'city'       => Helpers::get_option( 'city', $default_city ),
+			'state'      => $country_state['state'] ?? '',
+			'postcode'   => Helpers::get_option( 'zip', $default_postcode ),
+			'country'    => $country_state['country'] ?? '',
+			'tax_number' => Helpers::get_option( 'tax_number', '' ),
 		);
 		
-		if ( 'yes' === Helpers::get_option( 'same_ship_address' ) ) {
+		if ( 'yes' === Helpers::get_option( 'same_ship_address', 'yes' ) ) {
 			$this->shipping_data = $this->company_data;
 		}
 		else {
@@ -112,13 +117,13 @@ class POExport extends PurchaseOrder {
 			$country_state = wc_format_country_state_string( Helpers::get_option( 'ship_country', $default_country ) );
 			
 			$this->shipping_data = array(
-				'company'   => Helpers::get_option( 'ship_to' ),
-				'address_1' => Helpers::get_option( 'ship_address_1' ),
-				'address_2' => Helpers::get_option( 'ship_address_2' ),
-				'city'      => Helpers::get_option( 'ship_city' ),
-				'state'     => $country_state['state'],
-				'postcode'  => Helpers::get_option( 'ship_zip' ),
-				'country'   => $country_state['country'],
+				'company'   => Helpers::get_option( 'ship_to', '' ),
+				'address_1' => Helpers::get_option( 'ship_address_1', $default_adress ),
+				'address_2' => Helpers::get_option( 'ship_address_2', $default_address_2 ),
+				'city'      => Helpers::get_option( 'ship_city', $default_city ),
+				'state'     => $country_state['state'] ?? '',
+				'postcode'  => Helpers::get_option( 'ship_zip', $default_postcode ),
+				'country'   => $country_state['country'] ?? '',
 			);
 
 		}

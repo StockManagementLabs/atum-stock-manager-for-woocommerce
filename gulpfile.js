@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.9.26.2',
+var version = '1.9.27',
     curDate = new Date();
 
 // Global config
@@ -119,6 +119,7 @@ gulp.task('js::atum', function () {
 			
 			entry: {
 				'addons'         : config.jsSrcDir + 'addons.ts',
+				'admin-modals'   : config.jsSrcDir + 'admin-modals.ts',
 				'check-orders'   : config.jsSrcDir + 'check-orders.ts',
 				'dashboard'      : config.jsSrcDir + 'dashboard.ts',
 				'data-export'    : config.jsSrcDir + 'data-export.ts',
@@ -129,6 +130,7 @@ gulp.task('js::atum', function () {
 				'product-data'   : config.jsSrcDir + 'product-data.ts',
 				'settings'       : config.jsSrcDir + 'settings.ts',
 				'suppliers'      : config.jsSrcDir + 'suppliers.ts',
+				'trials-modal'   : config.jsSrcDir + 'trials-modal.ts',
 			},
 			
 			output: {

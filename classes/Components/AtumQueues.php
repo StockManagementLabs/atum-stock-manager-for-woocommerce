@@ -105,13 +105,13 @@ class AtumQueues {
 		$wc_queue = $wc->queue();
 
 		// Add calculated properties cron if set.
-		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron', 'no' ) ) {
 
-			$multiplier = 'hours' === Helpers::get_option( 'calc_prop_cron_type' ) ? 3600 : 60;
+			$multiplier = 'hours' === Helpers::get_option( 'calc_prop_cron_type', 'hours' ) ? 3600 : 60;
 
 			$this->recurring_hooks['atum/cron_update_sales_calc_props'] = [
-				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start' ) ),
-				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval' ) * $multiplier ),
+				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start', '0:00' ) ),
+				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval', 1 ) * $multiplier ),
 			];
 		}
 
@@ -120,23 +120,31 @@ class AtumQueues {
 
 		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
 
-			// Search for duplicated actions.
-			$actions       = $wc_queue->search( [ 'hook' => $hook_name ] );
-			$schedule_args = isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ? $hook_data['args'] : [];
+			// Search for any orphan actions that may exist with outdated args.
+			$actions = $wc_queue->search( array(
+				'hook'   => $hook_name,
+				'status' => \ActionScheduler_Store::STATUS_PENDING,
+			) );
 
-			foreach ( $actions as $index => $action ) {
-				/**
-				 * Variable definition
-				 *
-				 * @var \ActionScheduler_Action $action
-				 */
-				if ( $action->is_finished() ) {
-					unset( $actions[ $index ] );
+			$schedule_args = ( isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ) ? $hook_data['args'] : [];
+
+			// Remove any "legacy" actions that were registered in previous versions with distinct parameters.
+			if ( ! empty( $actions ) ) {
+
+				foreach ( $actions as $action ) {
+
+					$action_args = $action->get_args();
+
+					if (
+						( empty( $action_args ) && ! empty( $schedule_args ) ) ||
+						( ! empty( $action_args ) && empty( $schedule_args ) ) ||
+						! empty( array_diff( $action_args, $schedule_args ) )
+					) {
+						$wc_queue->cancel( $hook_name, $action_args );
+					}
+
 				}
-			}
-			if ( count( $actions ) > 1 ) {
-				// Remove actions if duplicated.
-				$wc_queue->cancel_all( $hook_name );
+
 			}
 
 			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );

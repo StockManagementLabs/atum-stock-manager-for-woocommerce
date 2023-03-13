@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.27 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2262,151 +2262,6 @@ input[type=button].btn-block {
           box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
 }
 
-.swal2-container {
-  z-index: 100000 !important;
-}
-.swal2-container .swal2-header, .swal2-container .swal2-content {
-  padding: 0;
-}
-.swal2-container .swal2-content, .swal2-container .swal2-title {
-  margin-bottom: 30px;
-}
-.swal2-container .swal2-content input[type=text] {
-  margin: 0;
-  border-radius: 4px;
-  height: 45px;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.swal2-container .swal2-content .atum-link {
-  text-decoration: underline;
-}
-.swal2-container .swal2-title {
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  line-height: 1.3;
-  font-size: 23px;
-  color: var(--main-text);
-}
-.swal2-container .swal2-title small {
-  -ms-flex-preferred-size: 100%;
-      flex-basis: 100%;
-}
-.swal2-container .swal2-modal {
-  font-family: inherit;
-}
-.swal2-container .swal2-modal .swal2-close {
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  font-weight: 100;
-  font-family: inherit;
-  font-size: 30px;
-  line-height: 30px;
-  color: var(--gray-500);
-  z-index: 100001;
-  -webkit-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  padding-right: 10px;
-}
-.swal2-container .swal2-modal .swal2-close:hover {
-  color: var(--gray-800);
-}
-.swal2-container .swal2-modal .swal2-validation-message {
-  margin: 0.625em -1.25rem -0.625em;
-}
-.swal2-container .swal2-modal p {
-  font-size: 15px;
-  text-align: center;
-}
-.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
-  -webkit-transition: background-color 0.2s ease-in-out;
-  transition: background-color 0.2s ease-in-out;
-}
-.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
-  outline: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-.swal2-container .swal2-modal button {
-  border-radius: 5px;
-  text-transform: uppercase;
-  font-weight: 400;
-  padding: 9px 19px;
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-.swal2-container .swal2-modal button.swal2-confirm {
-  background-color: var(--primary);
-}
-.swal2-container .swal2-modal button.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 12px;
-}
-.swal2-container .swal2-modal button .atum-icon {
-  position: relative;
-  font-size: 1.15em;
-  top: 0.15em;
-  padding-right: 3px;
-}
-@media all and (max-width: 480px) {
-  .swal2-container .swal2-modal button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-.swal2-container .swal2-modal a {
-  text-decoration: none;
-  color: var(--primary) !important;
-}
-.swal2-container .swal2-modal a:hover {
-  color: var(--wp-link-hover);
-}
-.swal2-container .swal2-modal .swal2-loader {
-  border-color: var(--primary) transparent var(--primary) transparent;
-}
-.swal2-container .swal2-progress-steps .swal2-progress-step {
-  margin-bottom: 0;
-}
-.swal2-container .atum-loading {
-  width: 38px;
-  height: 38px;
-  border: 3px solid rgba(0, 184, 219, 0.25);
-  border-top-color: #00B8DB;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 50;
-  -webkit-animation: loader-rotate 1s linear infinite;
-          animation: loader-rotate 1s linear infinite;
-  top: 30px;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -2601,6 +2456,211 @@ input[type=button].btn-block {
   color: #424547;
 }
 
+.blockUI.blockOverlay:before {
+  display: none;
+}
+.blockUI.blockOverlay:after {
+  content: "";
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+.note .blockUI.blockOverlay:after {
+  top: 38%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid rgba(227, 232, 245, 0.25);
+  border-top-color: #E3E8F5;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.swal2-container {
+  z-index: 100000 !important;
+}
+.swal2-container .swal2-header, .swal2-container .swal2-content {
+  padding: 0;
+}
+.swal2-container .swal2-content, .swal2-container .swal2-title {
+  margin-bottom: 30px;
+}
+.swal2-container .swal2-content input[type=text] {
+  margin: 0;
+  border-radius: 4px;
+  height: 45px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.swal2-container .swal2-content .atum-link {
+  text-decoration: underline;
+}
+.swal2-container .swal2-title {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  line-height: 1.3;
+  font-size: 23px;
+  color: var(--main-text);
+}
+.swal2-container .swal2-title small {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+}
+.swal2-container .swal2-modal {
+  font-family: inherit;
+}
+.swal2-container .swal2-modal .swal2-close {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  font-weight: 100;
+  font-family: inherit;
+  font-size: 30px;
+  line-height: 30px;
+  color: var(--gray-500);
+  z-index: 100001;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  padding-right: 10px;
+}
+.swal2-container .swal2-modal .swal2-close:hover {
+  color: var(--gray-800);
+}
+.swal2-container .swal2-modal .swal2-validation-message {
+  margin: 1.625em -1.25rem -1.625em;
+  font-size: 14px;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.swal2-container .swal2-modal p {
+  font-size: 15px;
+  text-align: center;
+}
+.swal2-container .swal2-modal button, .swal2-container .swal2-modal a {
+  -webkit-transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+}
+.swal2-container .swal2-modal button:focus, .swal2-container .swal2-modal a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.swal2-container .swal2-modal button {
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding: 9px 19px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.swal2-container .swal2-modal button.swal2-confirm {
+  background-color: var(--primary);
+}
+.swal2-container .swal2-modal button.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
+}
+.swal2-container .swal2-modal button .atum-icon {
+  position: relative;
+  font-size: 1.15em;
+  top: 0.15em;
+  padding-right: 3px;
+}
+@media all and (max-width: 480px) {
+  .swal2-container .swal2-modal button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.swal2-container .swal2-modal a {
+  text-decoration: none;
+  color: var(--primary) !important;
+}
+.swal2-container .swal2-modal a:hover {
+  color: var(--wp-link-hover);
+}
+.swal2-container .swal2-modal .swal2-loader {
+  border-color: var(--primary) transparent var(--primary) transparent;
+}
+.swal2-container .swal2-progress-steps .swal2-progress-step {
+  margin-bottom: 0;
+}
+.swal2-container .atum-loading {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(0, 184, 219, 0.25);
+  border-top-color: #00B8DB;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 50;
+  -webkit-animation: loader-rotate 1s linear infinite;
+          animation: loader-rotate 1s linear infinite;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
 #wpfooter {
   padding-top: 0;
   display: none;
@@ -2730,6 +2790,12 @@ html {
 #wpbody-content {
   padding-bottom: 0;
 }
+#wpbody-content > .notice {
+  margin-left: 0;
+}
+#wpbody-content > .notice ~ .atum-addons {
+  margin-top: 10px;
+}
 
 .atum-addons {
   margin-bottom: 60px;
@@ -2743,7 +2809,7 @@ html {
 .atum-addons__header {
   position: relative;
   height: 300px;
-  background: var(--blue-light) url("../images/dashboard/header-bg.png") center bottom;
+  background: #dbf9ff url("../images/dashboard/header-bg.png") center bottom;
   background-size: cover;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2771,7 +2837,7 @@ html {
   width: 100%;
 }
 .atum-addons__header h3 {
-  color: var(--main-title);
+  color: #27283B;
   width: 734px;
   max-width: 90%;
   margin: auto;
@@ -2814,15 +2880,15 @@ html {
   padding-left: 15px;
   padding-bottom: 5px;
   font-size: 11px;
-  color: var(--main-title);
+  color: #27283B;
   font-weight: 300;
 }
 .atum-addons__header-notice span {
-  color: var(--primary);
+  color: #00B8DB;
   margin-right: 5px;
 }
 .atum-addons__header-notice .wc-rating-link {
-  color: var(--primary);
+  color: #00B8DB;
 }
 @media all and (max-width: 768px) {
   .atum-addons__header-notice {
@@ -2837,7 +2903,7 @@ html {
 }
 .atum-addons .atum-addon {
   margin-top: 20px;
-  background-color: var(--dash-card-bg);
+  background-color: #fff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2862,6 +2928,11 @@ html {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
 }
+.atum-addons .atum-addon > .more-details:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
 .atum-addons .atum-addon > .more-details .label {
   position: absolute;
   top: 10px;
@@ -2885,6 +2956,9 @@ html {
 }
 .atum-addons .atum-addon > .more-details .label.inactive, .atum-addons .atum-addon > .more-details .label.invalid, .atum-addons .atum-addon > .more-details .label.disabled, .atum-addons .atum-addon > .more-details .label.expired, .atum-addons .atum-addon > .more-details .label.no-key {
   background: #ff4848;
+}
+.atum-addons .atum-addon > .more-details .label.trial {
+  background: #BA7DF7;
 }
 .atum-addons .atum-addon .atum-loading {
   right: 152px;
@@ -2927,6 +3001,8 @@ html {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
 }
 .atum-addons .addon-header {
   display: -webkit-box;
@@ -2940,7 +3016,7 @@ html {
 }
 .atum-addons .addon-header h2 {
   font-size: 18px;
-  color: var(--bm_text_color);
+  color: #495057;
   margin: 0;
 }
 .atum-addons .addon-header .label {
@@ -2967,7 +3043,7 @@ html {
       -ms-flex-positive: 1;
           flex-grow: 1;
   font-size: 15px;
-  color: var(--bm_text_color);
+  color: #6c757d;
 }
 .atum-addons .alert {
   font-size: 12px;
@@ -2981,10 +3057,12 @@ html {
   margin-right: 10px;
   text-transform: uppercase;
 }
-.atum-addons .addon-footer .actions .btn.install {
+.atum-addons .addon-footer .actions .btn.install-addon {
   padding-left: 0.7rem;
   padding-right: 0.7rem;
   width: auto;
+  background-color: #69C61D;
+  border-color: #69C61D;
 }
 .atum-addons .addon-footer .actions input {
   font-size: 0.75rem;
@@ -3027,12 +3105,40 @@ html {
   font-weight: 600;
 }
 .atum-addons .addon-footer .license-info .license-key, .atum-addons .addon-footer .license-info .expires {
-  background-color: var(--atum-table-bg2);
+  background-color: #e9ecef;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.47;
   padding: 4px 13px;
   border-radius: 5px;
+}
+.atum-addons .addon-footer .license-info .expires.expired {
+  color: #ff4848;
+}
+.atum-addons .addon-footer .alert {
+  margin-bottom: 10px;
+}
+.atum-addons .addon-footer .alert a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.atum-addons .addon-footer .alert-warning {
+  border-color: #e9ecef;
+  background-color: #e9ecef;
+  color: #27283B;
+}
+.atum-addons .addon-footer .alert-warning a {
+  color: #00B8DB;
+}
+.atum-addons .no-results {
+  margin-top: 15px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 1.2em;
+}
+.atum-addons .no-results i {
+  font-size: 1.3em;
 }
 @media all and (max-width: 782px) {
   .atum-addons .atum-addon {
@@ -3083,11 +3189,11 @@ html {
       -ms-flex-align: center;
           align-items: center;
   margin: 0;
-  background-color: var(--atum-table-bg);
+  background-color: #fff;
   -webkit-box-shadow: 0 4px 0 0 #e9ecef;
           box-shadow: 0 4px 0 0 #e9ecef;
   border-radius: 8px;
-  padding-left: 10px;
+  padding: 0 10px;
 }
 @media all and (max-width: 782px) {
   .list-table-header {
@@ -3114,6 +3220,31 @@ html {
           flex-grow: 1;
   position: relative;
   overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.list-table-header .addons-search-wrapper:not(.is-searching):after {
+  content: "\e974";
+  font-family: "atum-icon-font";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  color: #6c757d;
+}
+.list-table-header #addons-search {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  color: #6c757d;
+  font-size: 12px;
 }
 
 .nav-with-scroll-effect {
@@ -3173,7 +3304,6 @@ html {
 }
 
 .subsubsub {
-  background-color: var(--atum-table-bg);
   width: 100%;
   position: relative;
   font-size: 16px;
@@ -3201,7 +3331,7 @@ html {
 }
 .subsubsub.extend-list-table li {
   margin-right: 15px;
-  color: var(--atum-table-views-tabs);
+  color: #6c757d;
   text-transform: uppercase;
   padding: 0;
 }
@@ -3219,22 +3349,24 @@ html {
   border-radius: 5px;
   line-height: 32px;
   cursor: pointer;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 .subsubsub.extend-list-table li span.active {
   border-radius: 5px;
-  background-color: var(--primary);
+  background-color: #00B8DB;
   font-size: 16px;
   padding: 0 10px;
   font-weight: bold;
   letter-spacing: 0.4px;
-  color: var(--atum-table-views-tabs-active-text);
+  color: #fff;
   cursor: default;
 }
 .subsubsub.extend-list-table li span.active:hover {
-  color: var(--atum-table-views-tabs-active-text);
+  color: #fff;
 }
 .subsubsub.extend-list-table li span:hover {
-  color: var(--primary);
+  color: #00B8DB;
 }
 @media all and (max-width: 480px) {
   .subsubsub.extend-list-table:first-child li span, .subsubsub.extend-list-table:first-child li span:active {

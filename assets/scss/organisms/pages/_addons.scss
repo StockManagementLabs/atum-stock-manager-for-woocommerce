@@ -4,15 +4,20 @@
 
 @use "sass:math";
 
-$header-bg:                 var(--blue-light);
-$header-height:             300px;
-
 html {
 	scroll-behavior: smooth;
 }
 
 #wpbody-content {
 	padding-bottom: 0;
+	
+	> .notice {
+		margin-left: 0;
+		
+		~ .atum-addons {
+			margin-top: 10px;
+		}
+	}
 }
 
 .atum-addons {
@@ -29,8 +34,8 @@ html {
 	// Dashboard Header
 	&__header {
 		position: relative;
-		height: $header-height;
-		background: $header-bg url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
+		height: 300px;
+		background: $blue-light url('#{$atum-img-path}dashboard/header-bg.png') center bottom;
 		background-size: cover;
 		@include vertical-align-flex();
 		flex-wrap: wrap;
@@ -44,7 +49,7 @@ html {
 		}
 		
 		h3 {
-			color: var(--main-title);
+			color: $blue-dark;
 			width: 734px;
 			max-width: 90%;
 			margin: auto;
@@ -91,16 +96,16 @@ html {
 			padding-left: math.div($grid-gutter-width, 2);
 			padding-bottom: 5px;
 			font-size: 11px;
-			color: var(--main-title);
+			color: $blue-dark;
 			font-weight: 300;
 			
 			span {
-				color: var(--primary);
+				color: $primary;
 				margin-right: 5px;
 			}
 			
 			.wc-rating-link {
-				color: var(--primary);
+				color: $primary;
 			}
 			
 			@include tablet-max {
@@ -118,7 +123,7 @@ html {
 	
 	.atum-addon {
 		margin-top: math.div($grid-gutter-width, 3) * 2;
-		background-color: var(--dash-card-bg);
+		background-color: $white;
 		display: flex;
 		align-items: stretch;
 		min-height: 222px;
@@ -134,6 +139,11 @@ html {
 			
 			&:hover .addon-thumb {
 				transform: scale(1.1);
+			}
+			
+			&:focus {
+				outline: none;
+				box-shadow: none;
 			}
 			
 			.label {
@@ -155,12 +165,19 @@ html {
 				&.not-installed {
 					background: $primary;
 				}
+				
 				&.valid {
-					background: $tertiary;
+					background: $success;
 				}
+				
 				&.inactive, &.invalid, &.disabled, &.expired, &.no-key {
 					background: $danger;
 				}
+				
+				&.trial {
+					background: $purple;
+				}
+				
 			}
 		}
 		
@@ -185,6 +202,7 @@ html {
 		padding: 15px 20px;
 		display: flex;
 		flex-direction: column;
+		flex-basis: 100%;
 	}
 	
 	.addon-header {
@@ -195,7 +213,7 @@ html {
 		
 		h2 {
 			font-size: 18px;
-			color: var(--bm_text_color);
+			color: $gray-700;
 			margin: 0;
 		}
 		
@@ -222,7 +240,7 @@ html {
 			margin: 0;
 			flex-grow: 1;
 			font-size: 15px;
-			color: var(--bm_text_color);
+			color: $gray-600;
 		}
 	}
 	
@@ -241,22 +259,29 @@ html {
 				width: 144px;
 				margin-right: 10px;
 				text-transform: uppercase;
-				&.install {
+				
+				&.install-addon {
 					padding-left: .7rem;
 					padding-right: .7rem;
 					width: auto;
+					background-color: $success;
+					border-color: $success;
 				}
 			}
+			
 			input {
 				font-size: .75rem;
 			}
+			
 			.cancel-action {
 				background-color: transparent;
 				width: 80px;
+				
 				&:hover {
 					background-color: buttonface;
 				}
 			}
+			
 		}
 		
 		.addon-key{
@@ -268,10 +293,12 @@ html {
 				position: relative;
 			}
 		}
+		
 		.license-key {
 			flex-grow: 1;
 			margin-right: 10px;
 		}
+		
 		.license-info {
 			margin-right: 10px;
 			
@@ -285,15 +312,51 @@ html {
 			}
 			
 			.license-key, .expires {
-				background-color: var(--atum-table-bg2);
+				background-color: $gray-200;
 				font-size: 13px;
 				font-weight: 400;
 				line-height: 1.47;
 				padding: 4px 13px;
 				border-radius: 5px;
 			}
+			
+			.expires.expired {
+				color: $danger;
+			}
 		}
 		
+		.alert {
+			margin-bottom: 10px;
+			
+			a {
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+		
+		.alert-warning {
+			border-color: $gray-200;
+			background-color: $gray-200;
+			color: $blue-dark;
+			
+			a {
+				color: $primary;
+			}
+		}
+		
+	}
+	
+	.no-results {
+		margin-top: math.div($grid-gutter-width, 2);
+		padding-top: 20px;
+		padding-bottom: 20px;
+		font-size: 1.2em;
+		
+		i {
+			font-size: 1.3em;
+		}
 	}
 	
 	@include tablet-max-wp {
@@ -305,13 +368,16 @@ html {
 		.alert {
 			display: block;
 		}
+		
 		.addon-footer .actions {
 			display: flex;
 			flex-direction: column;
+			
 			.btn {
 				width: 100%;
 				margin-bottom: .3rem;
 			}
+			
 			.addon-key > .wrapper {
 				flex-direction: column;
 				
@@ -338,10 +404,10 @@ html {
 	justify-content: space-between;
 	align-items: center;
 	margin: 0;
-	background-color:  var(--atum-table-bg);
+	background-color: $white;
 	box-shadow: 0 4px 0 0 $gray-200;
 	border-radius: 8px;
-	padding-left: 10px;
+	padding: 0 10px;
 	
 	
 	@include tablet-max-wp {
@@ -363,6 +429,30 @@ html {
 		flex-grow: 1;
 		position: relative;
 		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.addons-search-wrapper {
+		&:not(.is-searching) {
+			&:after {
+				content: $atmi-magnifier;
+				font-family: $atum-icon-font;
+				position: absolute;
+				right: 10px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: $gray-600;
+			}
+		}
+	}
+	
+	#addons-search {
+		border: 1px solid $gray-300;
+		border-radius: 5px;
+		color: $gray-600;
+		font-size: 12px;
 	}
 	
 }
@@ -424,7 +514,6 @@ html {
 
 
 .subsubsub {
-	background-color:  var(--atum-table-bg);
 	width: 100%;
 	position: relative;
 	font-size: 16px;
@@ -445,7 +534,7 @@ html {
 		
 		li {
 			margin-right: 15px;
-			color: var(--atum-table-views-tabs);
+			color: $gray-600;
 			text-transform: uppercase;
 			padding: 0;
 			
@@ -457,25 +546,26 @@ html {
 				border-radius: 5px;
 				line-height: 32px;
 				cursor: pointer;
+				transition: .2s ease-in-out;
 				
 				&.active {
 					border-radius: 5px;
-					background-color: var(--primary);
+					background-color: $primary;
 					font-size: 16px;
 					padding: 0 10px;
 					font-weight: bold;
 					letter-spacing: 0.4px;
-					color:  var(--atum-table-views-tabs-active-text);
+					color: $white;
 					cursor: default;
 					
 					&:hover {
-						color:  var(--atum-table-views-tabs-active-text);
+						color: $white;
 					}
 					
 				}
 				
 				&:hover {
-					color: var(--primary);
+					color: $primary;
 				}
 				
 			}

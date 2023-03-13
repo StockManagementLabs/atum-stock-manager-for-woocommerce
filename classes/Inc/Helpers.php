@@ -19,7 +19,6 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
-use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals as AtumGlobals;
@@ -969,19 +968,19 @@ final class Helpers {
 	 * @since   0.0.2
 	 *
 	 * @param string $name    The option key to retrieve.
-	 * @param mixed  $default Optional. The default value returned if the option was not found.
+	 * @param mixed  $default The default value returned if the option was not found. It should be equal to the default value registered in settings.
 	 * @param bool   $echo    Optional. If the option has to be returned or printed.
 	 * @param bool   $force   Optional. Whether to get the option from db instead of using the cached value.
 	 *
 	 * @return mixed
 	 */
-	public static function get_option( $name, $default = FALSE, $echo = FALSE, $force = FALSE ) {
+	public static function get_option( $name, $default, $echo = FALSE, $force = FALSE ) {
 
 		// Save it as a global variable to not get the value each time.
 		global $atum_global_options;
 
 		// The option key it's built using ADP_PREFIX and theme slug to avoid overwrites.
-		$atum_global_options = empty( $atum_global_options ) || $force ? get_option( Settings::OPTION_NAME ) : $atum_global_options;
+		$atum_global_options = empty( $atum_global_options ) || $force ? get_option( Settings::OPTION_NAME, [] ) : $atum_global_options;
 		$option              = isset( $atum_global_options[ $name ] ) ? $atum_global_options[ $name ] : $default;
 
 		if ( $echo ) {
@@ -1538,23 +1537,35 @@ final class Helpers {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $plugin        The plugin name/slug.
-	 * @param string $folder        The plugin folder.
-	 * @param string $by            Optional. It can be checked by 'slug' or by 'name'.
+	 * @param string $plugin        The plugin name|slug|file.
+	 * @param string $by            Optional. It can be checked by 'slug', 'name' or 'file'.
 	 * @param bool   $return_bool   Optional. May return a boolean (true/false) or an associative array with the plugin data.
 	 *
 	 * @return bool|array
 	 */
-	public static function is_plugin_installed( $plugin, $folder = '', $by = 'slug', $return_bool = TRUE ) {
+	public static function is_plugin_installed( $plugin, $by = 'slug', $return_bool = TRUE ) {
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 
 			// Get the plugin slug from its path.
-			$installed_plugin_key = 'slug' === $by ? explode( '/', $plugin_file )[0] : $plugin_data['Title'];
+			switch ( $by ) {
+				case 'slug':
+					$installed_plugin_key = explode( '/', $plugin_file )[0];
+					break;
 
-			if ( in_array( strtolower( $installed_plugin_key ), array_map( 'strtolower', [ $plugin, $folder ] ) ) ) {
-				return $return_bool ? TRUE : array( $plugin_file => $plugin_data );
+				case 'name':
+					$installed_plugin_key = $plugin_data['Name'];
+					break;
+
+				default:
+					$installed_plugin_key = $plugin_file;
+					break;
 			}
+
+			if ( strtolower( $installed_plugin_key ) === strtolower( $plugin ) ) {
+				return $return_bool ? TRUE : [ $plugin_file => $plugin_data ];
+			}
+
 		}
 
 		return FALSE;
@@ -1562,7 +1573,7 @@ final class Helpers {
 	}
 	
 	/**
-	 * Check whether or not register the ES6 promise polyfill
+	 * Check whether to register the ES6 promise polyfill
 	 * This is only required for SweetAlert2 on IE<12
 	 *
 	 * @since 1.2.0
@@ -2710,10 +2721,14 @@ final class Helpers {
 			return 1;
 		}
 		
-		$step = self::get_option( 'stock_quantity_step' );
+		$step = self::get_option( 'stock_quantity_step', 0 );
 
-		if ( ! is_numeric( $step ) || ! $step ) {
+		if ( ! is_numeric( $step ) ) {
 			return 'any';
+		}
+
+		if ( 0 === $step ) {
+			return 1;
 		}
 
 		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
@@ -2833,72 +2848,6 @@ final class Helpers {
 	 */
 	public static function image_placeholder( $image = '', $size = '', $dimensions = [] ) {
 		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
-	}
-
-	/**
-	 * Check if it shows the marketing popup.
-	 *
-	 * @since 1.5.3
-	 *
-	 * @return bool
-	 */
-	public static function show_marketing_popup() {
-
-		return self::show_marketing();
-
-	}
-
-	/**
-	 * Check if it shows the marketing dashboard.
-	 *
-	 * @since 1.7.6
-	 *
-	 * @return bool
-	 */
-	public static function show_marketing_dashboard() {
-
-		return self::show_marketing( 'dash' );
-
-	}
-
-	/**
-	 * Check if it shows the marketing widget at popup or dashboard.
-	 *
-	 * @since 1.7.6
-	 *
-	 * @param string $wich
-	 *
-	 * @return bool
-	 */
-	private static function show_marketing( $wich = 'popup' ) {
-
-		if ( FALSE === in_array( $wich, array( 'popup', 'dash' ) ) ) {
-			return FALSE;
-		}
-
-		$marketing_popup = AtumMarketingPopup::get_instance();
-		$transient_key   = AtumCache::get_transient( 'atum-marketing-' . $wich, TRUE );
-
-		if ( ! $transient_key || $marketing_popup->get_transient_key() !== $transient_key ) {
-
-			if ( ! $marketing_popup->is_loaded() ) {
-				return FALSE;
-			}
-
-			$transient_key = $marketing_popup->get_transient_key();
-			AtumCache::set_transient( 'atum-marketing-' . $wich, $transient_key, WEEK_IN_SECONDS, TRUE );
-
-		}
-
-		// Get marketing popup user meta.
-		$marketing_popup_user_meta = get_user_meta( get_current_user_id(), 'atum-marketing-' . $wich, TRUE );
-
-		if ( $marketing_popup_user_meta && $marketing_popup_user_meta === $transient_key ) {
-			return FALSE;
-		}
-
-		return TRUE;
-
 	}
 
 	/**
@@ -3980,6 +3929,17 @@ final class Helpers {
 		}
 
 		return $new_data;
+	}
+
+	/**
+	 * Check whether WP is running its heartbeat checking.
+	 *
+	 * @since 1.9.27
+	 *
+	 * @return bool
+	 */
+	public static function doing_heartbeat() {
+		return isset( $_POST['action'] ) && 'heartbeat' === $_POST['action'];
 	}
 
 }

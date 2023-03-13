@@ -127,6 +127,18 @@ class AtumCapabilities {
 	 */
 	private function __construct() {
 
+		// Delay adding the capabilities, so we give time to ATUM add-ons to load.
+		add_action( 'after_setup_theme', array( $this, 'register_atum_capabilities' ), 100 );
+
+	}
+
+	/**
+	 * Register all the ATUM capabilities
+	 *
+	 * @since 1.9.27
+	 */
+	public function register_atum_capabilities() {
+
 		// Add the ATUM prefix to all the capabilities.
 		$this->capabilities = array_merge( preg_filter( '/^/', ATUM_PREFIX, $this->capabilities ), $this->wp_capabilities, apply_filters( 'atum/capabilities', [] ) );
 

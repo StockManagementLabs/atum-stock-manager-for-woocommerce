@@ -4401,7 +4401,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
 		// ATUM marketing popup.
-		AtumMarketingPopup::maybe_enqueue_scripts();
+		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 		Helpers::maybe_es6_promise();
 

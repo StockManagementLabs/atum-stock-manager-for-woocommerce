@@ -14,6 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumQueues;
@@ -188,6 +189,11 @@ class Upgrade {
 		// ** version 1.9.20.5 ** Update the calc_backorders column data.
 		if ( version_compare( $db_version, '1.9.20.4', '<' ) ) {
 			$this->update_calc_backorders();
+		}
+
+		// ** version 1.9.27 ** Clean up any possible wrong addons keys.
+		if ( version_compare( $db_version, '1.9.27', '<' ) ) {
+			$this->clean_up_addons_keys();
 		}
 
 		/**********************
@@ -989,7 +995,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.15
 	 */
-	public function alter_low_stock_column() {
+	private function alter_low_stock_column() {
 
 		global $wpdb;
 
@@ -1014,7 +1020,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.17
 	 */
-	public function maybe_control_all_products() {
+	private function maybe_control_all_products() {
 
 		global $wpdb;
 
@@ -1041,7 +1047,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.18
 	 */
-	public function add_barcode_column() {
+	private function add_barcode_column() {
 
 		global $wpdb;
 
@@ -1066,7 +1072,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.19
 	 */
-	public function regenerate_lookup_tables() {
+	private function regenerate_lookup_tables() {
 
 		if ( ! wc_update_product_lookup_tables_is_running() ) {
 			wc_update_product_lookup_tables();
@@ -1079,7 +1085,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.19.1
 	 */
-	public function set_supplier_default_checkboxes() {
+	private function set_supplier_default_checkboxes() {
 
 		global $wpdb;
 
@@ -1102,7 +1108,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.20.3
 	 */
-	public function add_committed_stock_to_wc_orders_column() {
+	private function add_committed_stock_to_wc_orders_column() {
 
 		global $wpdb;
 
@@ -1128,7 +1134,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.20.4
 	 */
-	public function add_calc_backorders_column() {
+	private function add_calc_backorders_column() {
 
 		global $wpdb;
 
@@ -1154,7 +1160,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.20.5
 	 */
-	public function update_calc_backorders() {
+	private function update_calc_backorders() {
 
 		global $wpdb;
 
@@ -1169,6 +1175,58 @@ class Upgrade {
 			WHERE pmb.meta_value != 'no' AND pms.meta_value <= 0 
 		" );
 		// phpcs:enable
+
+	}
+
+	/**
+	 * Clean up any possible addon key saved
+	 *
+	 * @since 1.9.27
+	 */
+	private function clean_up_addons_keys() {
+
+		$addons_keys = Addons::get_keys();
+
+		if ( ! empty( $addons_keys ) ) {
+
+			$addons_paths = Addons::get_addons_paths();
+			$num_keys     = count( $addons_keys );
+
+			foreach ( $addons_keys as $addon_name => $key_data ) {
+
+				$found = FALSE;
+
+				if ( ! empty( $key_data['key'] ) ) {
+
+					foreach ( $addons_paths as $addon_path ) {
+
+						// Correct key.
+						if ( strtolower( $addon_path['name'] ) === $addon_name ) {
+							$found = TRUE;
+							break;
+						}
+
+					}
+
+				}
+
+				if ( ! $found ) {
+					unset( $addons_keys[ $addon_name ] );
+				}
+
+			}
+
+			// Only need to resave the keys if we removed any.
+			if ( count( $addons_keys ) !== $num_keys ) {
+				update_option( Addons::ADDONS_KEY_OPTION, $addons_keys );
+			}
+
+		}
+
+		// Remove the old addon status transients.
+		foreach ( Addons::get_installed_addons() as $registered_addon ) {
+			Addons::delete_status_transient( $registered_addon['name'] );
+		}
 
 	}
 

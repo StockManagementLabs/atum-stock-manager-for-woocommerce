@@ -6,7 +6,10 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Atum\\Addons\\AddonBootstrap' => $baseDir . '/classes/Addons/AddonBootstrap.php',
     'Atum\\Addons\\Addons' => $baseDir . '/classes/Addons/Addons.php',
+    'Atum\\Addons\\AddonsLoader' => $baseDir . '/classes/Addons/AddonsLoader.php',
+    'Atum\\Addons\\AddonsLoaderDev' => $baseDir . '/classes/Addons/AddonsLoaderDev.php',
     'Atum\\Addons\\Updater' => $baseDir . '/classes/Addons/Updater.php',
     'Atum\\Api\\AtumApi' => $baseDir . '/classes/Api/AtumApi.php',
     'Atum\\Api\\Controllers\\V3\\AddonsController' => $baseDir . '/classes/Api/Controllers/V3/AddonsController.php',
@@ -43,12 +46,14 @@ return array(
     'Atum\\Bootstrap' => $baseDir . '/classes/Bootstrap.php',
     'Atum\\Cli\\AtumCli' => $baseDir . '/classes/Cli/AtumCli.php',
     'Atum\\Cli\\CliCommands' => $baseDir . '/classes/Cli/CliCommands.php',
+    'Atum\\Components\\AtumAdminModal' => $baseDir . '/classes/Components/AtumAdminModal.php',
     'Atum\\Components\\AtumAdminNotices' => $baseDir . '/classes/Components/AtumAdminNotices.php',
     'Atum\\Components\\AtumBarcodes' => $baseDir . '/classes/Components/AtumBarcodes.php',
     'Atum\\Components\\AtumCache' => $baseDir . '/classes/Components/AtumCache.php',
     'Atum\\Components\\AtumCalculatedProps' => $baseDir . '/classes/Components/AtumCalculatedProps.php',
     'Atum\\Components\\AtumCapabilities' => $baseDir . '/classes/Components/AtumCapabilities.php',
     'Atum\\Components\\AtumColors' => $baseDir . '/classes/Components/AtumColors.php',
+    'Atum\\Components\\AtumEmailNotifications' => $baseDir . '/classes/Components/AtumEmailNotifications.php',
     'Atum\\Components\\AtumException' => $baseDir . '/classes/Components/AtumException.php',
     'Atum\\Components\\AtumHelpGuide' => $baseDir . '/classes/Components/AtumHelpGuide.php',
     'Atum\\Components\\AtumHelpPointers' => $baseDir . '/classes/Components/AtumHelpPointers.php',
@@ -56,7 +61,6 @@ return array(
     'Atum\\Components\\AtumListTables\\AtumListTable' => $baseDir . '/classes/Components/AtumListTables/AtumListTable.php',
     'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => $baseDir . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',
     'Atum\\Components\\AtumMarketingPopup' => $baseDir . '/classes/Components/AtumMarketingPopup.php',
-    'Atum\\Components\\AtumNotifications' => $baseDir . '/classes/Components/AtumNotifications.php',
     'Atum\\Components\\AtumOrders\\AtumComments' => $baseDir . '/classes/Components/AtumOrders/AtumComments.php',
     'Atum\\Components\\AtumOrders\\AtumOrderPostType' => $baseDir . '/classes/Components/AtumOrders/AtumOrderPostType.php',
     'Atum\\Components\\AtumOrders\\Items\\AtumOrderItemFee' => $baseDir . '/classes/Components/AtumOrders/Items/AtumOrderItemFee.php',

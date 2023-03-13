@@ -58,7 +58,11 @@
 		}
 		
 		.swal2-validation-message {
-			margin: .625em -1.25rem -.625em;
+			margin: 1.625em -1.25rem -1.625em;
+			font-size: 14px;
+			text-align: left;
+			align-items: center;
+			justify-content: flex-start;
 		}
 	
 		p {

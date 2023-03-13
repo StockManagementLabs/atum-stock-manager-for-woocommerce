@@ -1,13 +1,13 @@
 === ATUM WooCommerce Inventory Management and Stock Tracking ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
 Tested up to: 6.1.1
 Requires PHP: 7.1
 WC requires at least: 5.0
 WC tested up to: 7.3.0
-Stable tag: 1.9.26.2
+Stable tag: 1.9.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 

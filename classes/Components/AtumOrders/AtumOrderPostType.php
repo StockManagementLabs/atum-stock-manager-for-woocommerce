@@ -929,7 +929,7 @@ abstract class AtumOrderPostType {
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
 
 			// ATUM marketing popup.
-			$show_marketing_popup = AtumMarketingPopup::maybe_enqueue_scripts();
+			$show_marketing_popup = AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 

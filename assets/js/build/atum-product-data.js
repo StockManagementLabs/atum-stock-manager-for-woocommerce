@@ -146,10 +146,11 @@ __webpack_require__.r(__webpack_exports__);
     return __assign.apply(this, arguments);
 };
 var EnhancedSelect = (function () {
-    function EnhancedSelect() {
+    function EnhancedSelect($selects) {
+        if ($selects === void 0) { $selects = null; }
         var _this = this;
-        this.addAtumClasses();
-        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses(); });
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
     EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
         $('.select2-container--open').remove();
