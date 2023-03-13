@@ -177,7 +177,6 @@ var AdminModal = (function () {
             showCloseButton: true,
         };
         this.swalConfigs = {};
-        this.currentStepKey = '';
         this.swalConfigs = this.settings.get('swal_configs');
         if (!window.hasOwnProperty('atum')) {
             window['atum'] = {};
@@ -208,8 +207,8 @@ var AdminModal = (function () {
                         _loop_1 = function (key) {
                             return __generator(this, function (_d) {
                                 switch (_d.label) {
-                                    case 0: return [4, swalMixin.fire(__assign(__assign({ currentProgressStep: counter.toString() }, this_1.swalConfigs[key]), { didOpen: function () { return _this.currentStepKey = key; } }))
-                                            .then(function () { return _this.hideModal(); })];
+                                    case 0: return [4, swalMixin.fire(__assign({ currentProgressStep: counter.toString() }, this_1.swalConfigs[key]))
+                                            .then(function () { return _this.hideModal(key); })];
                                     case 1:
                                         _d.sent();
                                         counter++;
@@ -238,7 +237,7 @@ var AdminModal = (function () {
             });
         });
     };
-    AdminModal.prototype.hideModal = function () {
+    AdminModal.prototype.hideModal = function (key) {
         $.ajax({
             url: window['ajaxurl'],
             dataType: 'json',
@@ -246,7 +245,7 @@ var AdminModal = (function () {
             data: {
                 action: 'atum_hide_atum_admin_modal',
                 security: this.settings.get('nonce'),
-                key: this.currentStepKey,
+                key: key,
             },
         });
     };

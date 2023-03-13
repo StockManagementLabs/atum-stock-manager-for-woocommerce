@@ -15,7 +15,6 @@ export default class AdminModal {
 	};
 
 	swalConfigs: any = {};
-	currentStepKey: string = '';
 	
 	constructor(
 		private settings: Settings
@@ -59,10 +58,9 @@ export default class AdminModal {
 		// By using await, we can queue multiple Swals on the same page.
 		for ( const key in this.swalConfigs ) {
 			await swalMixin.fire( {
-				...{ currentProgressStep: counter.toString() }, ...( <SweetAlertOptions>this.swalConfigs[ key ] ),
-				didOpen: () => this.currentStepKey = key
+				...{ currentProgressStep: counter.toString() }, ...( <SweetAlertOptions>this.swalConfigs[ key ] )
 				} )
-			.then( () => this.hideModal() );
+			.then( () => this.hideModal( key ) );
 			counter++;
 		}
 
@@ -70,8 +68,10 @@ export default class AdminModal {
 
 	/**
 	 * Hide the modal and save the closed state for the current user
+	 *
+	 * @param {string} key
 	 */
-	hideModal() {
+	hideModal( key: string ) {
 
 		$.ajax( {
 			url     : window[ 'ajaxurl' ],
@@ -80,7 +80,7 @@ export default class AdminModal {
 			data    : {
 				action  : 'atum_hide_atum_admin_modal',
 				security: this.settings.get( 'nonce' ),
-				key     : this.currentStepKey,
+				key     : key,
 			},
 		} );
 
