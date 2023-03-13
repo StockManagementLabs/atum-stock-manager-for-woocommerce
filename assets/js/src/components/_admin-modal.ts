@@ -4,6 +4,7 @@
 
 import Settings from '../config/_settings';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+
 export default class AdminModal {
 
 	defaultSwalOptions: SweetAlertOptions = {
@@ -14,6 +15,7 @@ export default class AdminModal {
 	};
 
 	swalConfigs: any = {};
+	currentStepKey: string = '';
 	
 	constructor(
 		private settings: Settings
@@ -57,8 +59,9 @@ export default class AdminModal {
 		// By using await, we can queue multiple Swals on the same page.
 		for ( const key in this.swalConfigs ) {
 			await swalMixin.fire( {
-				...{ currentProgressStep: counter.toString() }, ...( <SweetAlertOptions>this.swalConfigs[ key ] )
-			} )
+				...{ currentProgressStep: counter.toString() }, ...( <SweetAlertOptions>this.swalConfigs[ key ] ),
+				didOpen: () => this.currentStepKey = key
+				} )
 			.then( () => this.hideModal() );
 			counter++;
 		}
@@ -75,9 +78,9 @@ export default class AdminModal {
 			dataType: 'json',
 			method  : 'post',
 			data    : {
-				action      : 'atum_hide_atum_admin_modal',
-				security    : this.settings.get( 'nonce' ),
-				transientKey: this.settings.get( 'key' ),
+				action  : 'atum_hide_atum_admin_modal',
+				security: this.settings.get( 'nonce' ),
+				key     : this.currentStepKey,
 			},
 		} );
 

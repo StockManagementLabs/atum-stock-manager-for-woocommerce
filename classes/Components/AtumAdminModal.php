@@ -90,6 +90,13 @@ class AtumAdminModal {
 			return;
 		}
 
+		// Check if the modal was already closed by the user.
+		$closed_transient_key = AtumCache::get_transient_key( 'closed_admin_modal', $key );
+
+		if ( AtumCache::get_transient( $closed_transient_key, TRUE ) ) {
+			return;
+		}
+
 		$this->swal_configs[ $key ] = array_merge( $this->default_swal_config, $swal_config );
 
 		if ( $template ) {
@@ -175,6 +182,20 @@ class AtumAdminModal {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		return TRUE;
+
+	}
+
+	/**
+	 * Add a transient to hide an admin modal temporarily
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $key
+	 */
+	public static function hide_modal( $key ) {
+
+		$transient_key = AtumCache::get_transient_key( 'closed_admin_modal', $key );
+		AtumCache::set_transient( $transient_key, 1, DAY_IN_SECONDS, TRUE );
 
 	}
 

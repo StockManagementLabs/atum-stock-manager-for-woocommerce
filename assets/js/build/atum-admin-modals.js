@@ -177,6 +177,7 @@ var AdminModal = (function () {
             showCloseButton: true,
         };
         this.swalConfigs = {};
+        this.currentStepKey = '';
         this.swalConfigs = this.settings.get('swal_configs');
         if (!window.hasOwnProperty('atum')) {
             window['atum'] = {};
@@ -186,7 +187,7 @@ var AdminModal = (function () {
     }
     AdminModal.prototype.showModal = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var swalOpts, steps, stepNumbers, step, swalMixin, counter, _a, _b, _i, key;
+            var swalOpts, steps, stepNumbers, step, swalMixin, counter, _loop_1, this_1, _a, _b, _i, key;
             var _this = this;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -204,6 +205,19 @@ var AdminModal = (function () {
                         }
                         swalMixin = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(this.defaultSwalOptions);
                         counter = 1;
+                        _loop_1 = function (key) {
+                            return __generator(this, function (_d) {
+                                switch (_d.label) {
+                                    case 0: return [4, swalMixin.fire(__assign(__assign({ currentProgressStep: counter.toString() }, this_1.swalConfigs[key]), { didOpen: function () { return _this.currentStepKey = key; } }))
+                                            .then(function () { return _this.hideModal(); })];
+                                    case 1:
+                                        _d.sent();
+                                        counter++;
+                                        return [2];
+                                }
+                            });
+                        };
+                        this_1 = this;
                         _a = [];
                         for (_b in this.swalConfigs)
                             _a.push(_b);
@@ -212,11 +226,9 @@ var AdminModal = (function () {
                     case 1:
                         if (!(_i < _a.length)) return [3, 4];
                         key = _a[_i];
-                        return [4, swalMixin.fire(__assign({ currentProgressStep: counter.toString() }, this.swalConfigs[key]))
-                                .then(function () { return _this.hideModal(); })];
+                        return [5, _loop_1(key)];
                     case 2:
                         _c.sent();
-                        counter++;
                         _c.label = 3;
                     case 3:
                         _i++;
@@ -234,7 +246,7 @@ var AdminModal = (function () {
             data: {
                 action: 'atum_hide_atum_admin_modal',
                 security: this.settings.get('nonce'),
-                transientKey: this.settings.get('key'),
+                key: this.currentStepKey,
             },
         });
     };

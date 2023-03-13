@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumAdminModal;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
@@ -183,6 +184,9 @@ final class Ajax {
 
 		// Save the closed state for an auto-guide on any screen.
 		add_action( 'wp_ajax_atum_save_closed_auto_guide', array( $this, 'save_closed_auto_guide' ) );
+
+		// Save the closed state for the ATUM admin modals.
+		add_action( 'wp_ajax_atum_hide_atum_admin_modal', array( $this, 'hide_atum_admin_modal' ) );
 
 	}
 
@@ -2973,6 +2977,26 @@ final class Ajax {
 		wp_die();
 
 	}
+
+	/**
+	 * Save the closed state for any ATUM admin modal
+	 *
+	 * @package ATUM Admin Modals
+	 *
+	 * @since 1.9.27
+	 */
+	public function hide_atum_admin_modal() {
+
+		check_ajax_referer( 'atum-admin-modals-nonce', 'security' );
+
+		if ( ! empty( $_POST['key'] ) ) {
+			AtumAdminModal::hide_modal( esc_attr( $_POST['key'] ) );
+		}
+
+		wp_die();
+
+	}
+
 
 	/*******************
 	 * Instance methods
