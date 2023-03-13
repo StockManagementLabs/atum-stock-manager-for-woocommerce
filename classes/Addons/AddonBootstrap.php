@@ -31,8 +31,12 @@ abstract class AddonBootstrap {
 
 	/**
 	 * Addons generic constructor
+	 *
+	 * @param string $addon_key The add-on key to be registered.
 	 */
-	public function __construct() {
+	public function __construct( $addon_key ) {
+
+		$this->addon_key = $addon_key;
 
 		// Do not allow to load the add-on if it was not correctly bootstrapped.
 		if ( $this->addon_key && Addons::is_addon_bootstrapped( $this->addon_key ) ) {
