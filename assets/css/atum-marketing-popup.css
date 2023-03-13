@@ -1999,6 +1999,7 @@ input[type=button].btn-block {
   font-size: 40px;
   margin: -3px 0 10px;
   letter-spacing: 1px;
+  line-height: 1;
 }
 .swal2-container .marketing-popup .swal2-content h1 > span {
   position: relative;

@@ -63,7 +63,10 @@ export default class MarketingPopup {
 		}
 
 	}
-	
+
+	/**
+	 * Get the marketing popup info via Ajax
+	 */
 	getPopupInfo() {
 		
 		$.ajax({
@@ -125,7 +128,14 @@ export default class MarketingPopup {
 
 					}
 
+					// Redirect to button URL.
+					$( 'body' ).on( 'click', '.swal2-container button[data-url]', ( evt: JQueryEventObject ) => {
+						evt.preventDefault();
+						window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
+					} );
+
 					// By using await, we can queue multiple Swals on the same page.
+					// NOTE: Make sure to not add any other code after this or won't be executed until the swal is closed.
 					await Swal.fire( {
 						width            : 520,
 						padding          : null,
@@ -145,12 +155,6 @@ export default class MarketingPopup {
 						// Hide popup for this user when clicking the close button.
 						this.hideMarketingPopup();
 
-					} );
-
-					// Redirect to button URL.
-					$( '.swal2-container button[data-url]' ).click( ( evt: JQueryEventObject ) => {
-						evt.preventDefault();
-						window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
 					} );
 					
 				}

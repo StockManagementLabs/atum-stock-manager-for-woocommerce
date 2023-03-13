@@ -14,15 +14,15 @@
 		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2022/12/launch-prices-1.gif",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2022/12/launch-prices-1.gif",
-		"logo_css" : "width:238px;margin-bottom:15px;",
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
+		"logo_css" : "width:213px;margin-bottom:10px",
 		"top_left" : ""
 	},
 	"title": {
-		"text"      : "",
+		"text"      : "Trial our premium add-ons for free!",
 		"text_color": "black",
-		"text_size" : "",
+		"text_size" : "28px",
 		"text_align": "center"
 	},
 	"version": {
@@ -31,7 +31,7 @@
 		"background": "#ff4848"
 	},
 	"description": {
-		"text"           : "<strong>Welcome to 2023!</strong><br><br>Subscribe now to take advantage and run cheap forever. Launch prices of all our add-ons will end at the end of January. Some great new features are coming in 2023, so do not hesitate to click below!",
+		"text"           : "Now you can trial any of our premium add-ons for 14 days on your own site free of charge and decide whether they suit your needs. Don't miss this opportunity!",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -40,11 +40,11 @@
 	},
 	"buttons": [
 		{
-			"text" : "View add-ons",
+			"text" : "Get Started!",
 			"url"  : "https://stockmanagementlabs.com/addons/",
 			"class": "btn btn-primary",
 			"css"  : "width: 270px;"
 		}
 	],
-	"transient_key": "atum_launch_prices_2023"
+	"transient_key": "atum_trials"
 }

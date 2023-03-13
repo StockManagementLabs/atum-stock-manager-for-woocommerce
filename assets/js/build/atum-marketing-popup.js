@@ -180,6 +180,10 @@ var MarketingPopup = (function () {
                                     buttons_1 += "<button data-url=\"".concat(button.url, "\" class=\"").concat(button.class, " popup-button\" style=\"").concat(button.css, "\">").concat(button.text, "</button>");
                                 });
                             }
+                            $('body').on('click', '.swal2-container button[data-url]', function (evt) {
+                                evt.preventDefault();
+                                window.open($(evt.currentTarget).data('url'), '_blank');
+                            });
                             return [4, sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                                     width: 520,
                                     padding: null,
@@ -199,10 +203,6 @@ var MarketingPopup = (function () {
                                 })];
                         case 1:
                             _a.sent();
-                            $('.swal2-container button[data-url]').click(function (evt) {
-                                evt.preventDefault();
-                                window.open($(evt.currentTarget).data('url'), '_blank');
-                            });
                             _a.label = 2;
                         case 2: return [2];
                     }
