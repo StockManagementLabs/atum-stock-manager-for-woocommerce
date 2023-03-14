@@ -1447,10 +1447,18 @@ final class Addons {
 	public static function get_installed_version( $addon_name ) {
 
 		$update_cache = get_site_transient( 'update_plugins' );
-		$version      = NULL;
-		$addon_path   = wp_list_filter( self::$addons_paths, [ 'name' => $addon_name ] );
 
-		if ( ! empty( $addon_path ) && ! empty( $update_cache ) && array_key_exists( current( $addon_path )['basename'], $update_cache->checked ) ) {
+		if ( empty( $update_cache ) ) {
+			return NULL;
+		}
+
+		$version    = NULL;
+		$addon_path = wp_list_filter( self::$addons_paths, [ 'name' => $addon_name ] );
+
+		if (
+			! empty( $addon_path ) && ! empty( $update_cache->checked ) &&
+			is_array( $update_cache->checked ) && array_key_exists( current( $addon_path )['basename'], $update_cache->checked )
+		) {
 			$version = $update_cache->checked[ current( $addon_path )['basename'] ];
 		}
 
