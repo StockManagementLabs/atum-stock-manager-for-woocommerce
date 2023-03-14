@@ -713,8 +713,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function single_expandable_row( $item, $type ) {
 
 		$row_style = 'yes' !== Helpers::get_option( 'expandable_rows', 'no' ) ? ' style="display: none"' : '';
-		$row_class   = '" class="expandable has-compounded ' . esc_attr( $type ) . '"';
-		$row_data    = apply_filters( 'atum/list_table/expandable_row_data', ' data-id="' . absint( $this->get_current_list_item_id() ) . '"', $item, $this );
+		$row_class = '" class="expandable has-compounded ' . esc_attr( $type ) . '"';
+		$row_data  = apply_filters( 'atum/list_table/expandable_row_data', ' data-id="' . absint( $this->get_current_list_item_id() ) . '"', $item, $this );
 
 		do_action( 'atum/list_table/before_single_expandable_row', $item, $this );
 
