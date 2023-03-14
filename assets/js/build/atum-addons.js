@@ -237,21 +237,21 @@ var AddonsPage = (function () {
         this.settings = settings;
         this.tooltip = tooltip;
         this.trials = trials;
-        this.$addonsList = $('.atum-addons');
-        this.$noResults = this.$addonsList.find('.no-results');
+        this.$addonsPage = $('.atum-addons');
+        this.$noResults = this.$addonsPage.find('.no-results');
         this.prepareMenu();
         this.initHorizontalDragScroll();
         this.bindEvents();
     }
     AddonsPage.prototype.prepareMenu = function () {
         var _this = this;
-        var $addonsMenu = this.$addonsList.find('.nav-container-box');
+        var $addonsMenu = this.$addonsPage.find('.nav-container-box');
         $addonsMenu.find('li').each(function (index, elem) {
             var $elem = $(elem), status = $elem.data('status');
             if ('all' === status) {
                 return;
             }
-            if (!_this.$addonsList.find(".atum-addon.".concat(status)).length && !_this.$addonsList.find(".atum-addon .actions.".concat(status)).length) {
+            if (!_this.$addonsPage.find(".atum-addon.".concat(status)).length && !_this.$addonsPage.find(".atum-addon .actions.".concat(status)).length) {
                 $elem.hide();
             }
         });
@@ -259,7 +259,7 @@ var AddonsPage = (function () {
     };
     AddonsPage.prototype.bindEvents = function () {
         var _this = this;
-        this.$addonsList
+        this.$addonsPage
             .on('click', '.nav-container-box li', function (evt) {
             var $li = $(evt.currentTarget), $span = $li.find('span'), status = $li.data('status'), $searchInput = $('#addons-search');
             if ('all' === status) {
@@ -271,7 +271,7 @@ var AddonsPage = (function () {
             if (!$span.hasClass('active')) {
                 $li.siblings().find('span').removeClass('active');
                 $span.addClass('active');
-                _this.$addonsList.find('.atum-addon').each(function (index, elem) {
+                _this.$addonsPage.find('.atum-addon').each(function (index, elem) {
                     var $addon = $(elem);
                     if ('all' === status || $addon.hasClass(status) || $addon.find('.actions').hasClass(status)) {
                         $addon.show();
@@ -346,11 +346,11 @@ var AddonsPage = (function () {
             });
         })
             .on('keyup paste search', '#addons-search', function (evt) {
-            var $input = $(evt.currentTarget), term = $input.val().toLowerCase(), $addons = _this.$addonsList.find('.atum-addon');
+            var $input = $(evt.currentTarget), term = $input.val().toLowerCase(), $addons = _this.$addonsPage.find('.atum-addon');
             _this.$noResults.find('.no-results__term').text(term);
             if (!term) {
                 _this.$noResults.hide();
-                _this.$addonsList.find('.nav-container-box .all').click();
+                _this.$addonsPage.find('.nav-container-box .all').click();
                 $addons.show();
                 $input.parent().removeClass('is-searching');
             }
@@ -373,6 +373,19 @@ var AddonsPage = (function () {
                 else {
                     _this.$noResults.hide();
                 }
+            }
+        })
+            .on('click', '.atum-addons-sidebar__toggle', function (evt) {
+            evt.preventDefault();
+            var $link = $(evt.currentTarget);
+            $link.closest('.atum-addons-sidebar').toggleClass('collapsed')
+                .closest('.atum-addons__wrap').toggleClass('with-collapsed');
+            var $linkText = $link.find('span');
+            if ($linkText.text().trim() === _this.settings.get('show')) {
+                $linkText.text(_this.settings.get('hide'));
+            }
+            else {
+                $linkText.text(_this.settings.get('show'));
             }
         });
     };

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || die;
 
 	<?php if ( ! empty( $addons ) && is_array( $addons ) ) : ?>
 
-		<div class="atum-addons-wrap" data-nonce="<?php echo esc_attr( wp_create_nonce( 'atum-addon-action' ) ) ?>">
+		<div class="atum-addons__wrap" data-nonce="<?php echo esc_attr( wp_create_nonce( 'atum-addon-action' ) ) ?>">
 
 			<div class="list-table-header">
 				<div class="nav-container-box" style="visibility:hidden">
@@ -55,6 +55,8 @@ defined( 'ABSPATH' ) || die;
 					printf( esc_html__( "No add-ons found with term '%s'", ATUM_TEXT_DOMAIN ), '<span class="no-results__term"></span>' ) ?>
 				</div>
 			</div>
+
+			<?php require 'sidebar.php' ?>
 		</div>
 
 	<?php endif; ?>

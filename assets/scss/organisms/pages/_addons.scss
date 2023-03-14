@@ -23,15 +23,38 @@ html {
 .atum-addons {
 	margin-bottom: 60px;
 	
-	&-wrap {
+	&__wrap {
 		padding-right: 20px;
+		transition: .3s ease-in-out;
+		display: grid;
+		grid-gap: 20px;
+		grid-template-columns: 4fr 1.5fr;
+		grid-template-rows: 52px 1fr 1fr;
+		grid-template-areas:
+			"header  sidebar"
+			"content sidebar";
+		
+		&.with-collapsed {
+			grid-template-columns: 4fr 40px;
+		}
+		
+		@include tablet-max {
+			grid-template-columns: 4fr;
+			grid-template-areas:
+                "header"
+                "content"
+                "sidebar";
+			
+			&.with-collapsed {
+				display: none;
+			}
+		}
 	}
 	
 	a {
 		text-decoration: none;
 	}
 	
-	// Dashboard Header
 	&__header {
 		position: relative;
 		height: 300px;
@@ -117,6 +140,92 @@ html {
 				line-height: 1.3;
 			}
 			
+		}
+		
+	}
+	
+	#atum-addons-list {
+		margin-top: -20px;
+		grid-area: content;
+	}
+	
+	.atum-addons-sidebar {
+		grid-area: sidebar;
+		background-color: $white;
+		padding: math.div($grid-gutter-width, 2);
+		border-radius: 8px;
+		box-shadow: 0 4px 0 0 $gray-200;
+		
+		header {
+			margin-bottom: math.div($grid-gutter-width, 2);
+			
+			a {
+				color: $gray-500;
+				text-decoration: none;
+				transition: .2s ease-in-out;
+				
+				&:hover {
+					color: $primary;
+				}
+				
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+		
+		.dash-card {
+			width: 100%;
+			margin: 0 0 math.div($grid-gutter-width, 2);
+			border: none;
+			
+			img {
+				opacity: .8;
+			}
+			
+			.card-content {
+				p {
+					color: $gray-600;
+					font-weight: normal;
+				}
+			}
+			
+			&.docs {
+				img {
+					right: -30px;
+				}
+			}
+			
+			&.add-ons {
+				img {
+					right: -20px;
+				}
+			}
+			
+			&.support {
+				img {
+					right: -10px;
+				}
+			}
+		}
+		
+		&.collapsed {
+			width: math.div($grid-gutter-width, 2);
+			
+			header {
+				writing-mode: vertical-lr;
+				
+				.atum-icon {
+					&:before {
+						content: $atmi-arrow-left-circle;
+					}
+				}
+			}
+			
+			.dash-card {
+				display: none;
+			}
 		}
 		
 	}
@@ -408,7 +517,7 @@ html {
 	box-shadow: 0 4px 0 0 $gray-200;
 	border-radius: 8px;
 	padding: 0 10px;
-	
+	grid-area: header;
 	
 	@include tablet-max-wp {
 		flex-wrap: wrap;

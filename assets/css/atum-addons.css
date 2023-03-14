@@ -280,8 +280,8 @@
   --dash-add-widget-color-dark: #00B8DB;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-card-bg: #fff;
-  --dash-card-text: #adb5bd;
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-trans: rgba(106, 200, 30, 0.79);
@@ -2262,6 +2262,203 @@ input[type=button].btn-block {
           box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
 }
 
+.dash-card {
+  margin: 15px 7.5px;
+  width: 33.3333%;
+  border: 1px solid var(--gray-400);
+  border-radius: 5px;
+  background: var(--dash-card-bg) center 1px no-repeat;
+  background-position: bottom;
+  background-size: contain;
+  position: relative;
+  overflow: hidden;
+}
+.dash-card:first-child {
+  margin-left: 30px;
+}
+.dash-card:last-child {
+  margin-right: 30px;
+}
+@media all and (max-width: 768px) {
+  .dash-card {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
+@media all and (max-width: 480px) {
+  .dash-card {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+.dash-card .card-content {
+  width: 60%;
+  float: left;
+  text-align: left;
+  padding: 15px;
+  position: relative;
+  z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  height: calc(100% - 30px);
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.dash-card .card-content h5, .dash-card .card-content h2 {
+  margin: 5px 0;
+  color: var(--main-title) !important;
+}
+.dash-card .card-content h5.h5-primary, .dash-card .card-content h2.h5-primary {
+  color: var(--primary);
+}
+.dash-card .card-content h5.h5-secondary, .dash-card .card-content h2.h5-secondary {
+  color: var(--tertiary);
+}
+.dash-card .card-content h5.h5-tertiary, .dash-card .card-content h2.h5-tertiary {
+  color: var(--secondary);
+}
+.dash-card .card-content h2, .dash-card .card-content p {
+  color: var(--dash-card-text);
+  font-weight: 200;
+}
+.dash-card .card-content h5 {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0;
+}
+.dash-card .card-content h2 {
+  font-size: 21px;
+  line-height: 1.1;
+  margin-top: 0;
+}
+.dash-card .card-content p {
+  font-size: 10px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.dash-card .card-content .btn {
+  margin-top: 15px;
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+@media all and (max-width: 768px) {
+  .dash-card .card-content {
+    width: 91%;
+  }
+}
+.dash-card .card-img {
+  width: 30%;
+}
+.dash-card .card-img img {
+  position: absolute;
+}
+@media all and (max-width: 768px) {
+  .dash-card .card-img {
+    display: none;
+  }
+}
+.dash-card.docs {
+  background-image: url("../images/dashboard/card-docs-bg.png");
+}
+.dash-card.docs .card-img img {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  right: 0;
+  max-width: 280px;
+}
+.dash-card.add-ons {
+  background-image: url("../images/dashboard/card-add-ons-bg.png");
+}
+.dash-card.add-ons .card-img img {
+  max-width: 120px;
+  bottom: 0;
+  right: 10px;
+}
+.dash-card.support {
+  background-image: url("../images/dashboard/card-subscription-bg.png");
+}
+.dash-card.support .card-img img {
+  max-width: 120px;
+  bottom: 0;
+  right: 10px;
+}
+.dash-card.subscription {
+  background-image: url("../images/dashboard/card-subscription-bg.png");
+}
+.dash-card.subscription .card-img img {
+  max-width: 80px;
+  top: 30px;
+  right: 30px;
+}
+.dash-card.subscription .card-content {
+  padding-bottom: 5px;
+}
+.dash-card.subscription form {
+  clear: both;
+  width: 90%;
+  margin: auto;
+}
+.dash-card.subscription form .input-group {
+  background-color: var(--dash-input-group-bg);
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
+          box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.dash-card.subscription form input[type=email] {
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  background: var(--dash-subscription-input);
+  padding: 7px 15px;
+  font-size: 10px;
+  font-weight: 300;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  color: var(--atum-text-color-var1);
+}
+.dash-card.subscription form input[type=email]::-moz-placeholder {
+  color: var(----main-text);
+  opacity: 1;
+}
+.dash-card.subscription form input[type=email]:-ms-input-placeholder {
+  color: var(----main-text);
+}
+.dash-card.subscription form input[type=email]::-webkit-input-placeholder {
+  color: var(----main-text);
+}
+@media all and (max-width: 768px) {
+  .dash-card.subscription form input[type=email] {
+    padding: 6px 10px;
+  }
+}
+.dash-card.subscription form button {
+  font-size: 10px;
+}
+@media all and (max-width: 480px) {
+  .dash-card.subscription form {
+    margin-bottom: 15px;
+  }
+}
+
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -2800,8 +2997,27 @@ html {
 .atum-addons {
   margin-bottom: 60px;
 }
-.atum-addons-wrap {
+.atum-addons__wrap {
   padding-right: 20px;
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 4fr 1.5fr;
+  grid-template-rows: 52px 1fr 1fr;
+  grid-template-areas: "header  sidebar" "content sidebar";
+}
+.atum-addons__wrap.with-collapsed {
+  grid-template-columns: 4fr 40px;
+}
+@media all and (max-width: 768px) {
+  .atum-addons__wrap {
+    grid-template-columns: 4fr;
+    grid-template-areas: "header" "content" "sidebar";
+  }
+  .atum-addons__wrap.with-collapsed {
+    display: none;
+  }
 }
 .atum-addons a {
   text-decoration: none;
@@ -2900,6 +3116,70 @@ html {
     font-size: 10px;
     line-height: 1.3;
   }
+}
+.atum-addons #atum-addons-list {
+  margin-top: -20px;
+  grid-area: content;
+}
+.atum-addons .atum-addons-sidebar {
+  grid-area: sidebar;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 4px 0 0 #e9ecef;
+          box-shadow: 0 4px 0 0 #e9ecef;
+}
+.atum-addons .atum-addons-sidebar header {
+  margin-bottom: 15px;
+}
+.atum-addons .atum-addons-sidebar header a {
+  color: #adb5bd;
+  text-decoration: none;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+.atum-addons .atum-addons-sidebar header a:hover {
+  color: #00B8DB;
+}
+.atum-addons .atum-addons-sidebar header a:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.atum-addons .atum-addons-sidebar .dash-card {
+  width: 100%;
+  margin: 0 0 15px;
+  border: none;
+}
+.atum-addons .atum-addons-sidebar .dash-card img {
+  opacity: 0.8;
+}
+.atum-addons .atum-addons-sidebar .dash-card .card-content p {
+  color: #6c757d;
+  font-weight: normal;
+}
+.atum-addons .atum-addons-sidebar .dash-card.docs img {
+  right: -30px;
+}
+.atum-addons .atum-addons-sidebar .dash-card.add-ons img {
+  right: -20px;
+}
+.atum-addons .atum-addons-sidebar .dash-card.support img {
+  right: -10px;
+}
+.atum-addons .atum-addons-sidebar.collapsed {
+  width: 15px;
+}
+.atum-addons .atum-addons-sidebar.collapsed header {
+  -webkit-writing-mode: vertical-lr;
+      -ms-writing-mode: tb-lr;
+          writing-mode: vertical-lr;
+}
+.atum-addons .atum-addons-sidebar.collapsed header .atum-icon:before {
+  content: "\e917";
+}
+.atum-addons .atum-addons-sidebar.collapsed .dash-card {
+  display: none;
 }
 .atum-addons .atum-addon {
   margin-top: 20px;
@@ -3194,6 +3474,7 @@ html {
           box-shadow: 0 4px 0 0 #e9ecef;
   border-radius: 8px;
   padding: 0 10px;
+  grid-area: header;
 }
 @media all and (max-width: 782px) {
   .list-table-header {

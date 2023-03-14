@@ -69,7 +69,7 @@ endif;
 
 			<?php if ( ! empty( $addon_status->notice ) ) : ?>
 				<div class="alert alert-<?php echo esc_attr( $addon_status->notice_type ); ?>">
-					<i class="atum-icon atmi-<?php echo esc_attr( 'warning' === $addon_status->notice_type ? 'warning' : 'info' ) ?>"></i>
+					<i class="atum-icon atmi-<?php echo esc_attr( in_array( $addon_status->notice_type, [ 'warning', 'danger' ] ) ? 'warning' : 'info' ) ?>"></i>
 					<span><?php echo $addon_status->notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 				</div>
 			<?php endif; ?>

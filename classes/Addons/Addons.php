@@ -229,10 +229,12 @@ final class Addons {
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
 			'extend'               => __( 'Yes, Extend it!', ATUM_TEXT_DOMAIN ),
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
+			'hide'                 => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
 			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'nonce'                => wp_create_nonce( ATUM_PREFIX . 'manage_license' ),
+			'show'                 => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
 			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
 			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
@@ -1047,7 +1049,7 @@ final class Addons {
 
 					if ( $is_installed ) {
 						$addon_status->notice = esc_html__( 'License key is missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
-						$addon_status->notice_type = 'warning';
+						$addon_status->notice_type = 'danger';
 					}
 
 				}
@@ -1080,9 +1082,10 @@ final class Addons {
 			}
 			elseif ( ! empty( $addon_status->is_trial ) ) {
 
-				$addon_status->classes[]  = 'trial';
-				$addon_status->label_text = __( 'Trial', ATUM_TEXT_DOMAIN );
-				$addon_status->extended   = ! isset( $license_data->trial_extendable ) || TRUE !== $license_data->trial_extendable;
+				$addon_status->classes[]   = 'trial';
+				$addon_status->label_text  = __( 'Trial', ATUM_TEXT_DOMAIN );
+				$addon_status->extended    = ! isset( $license_data->trial_extendable ) || TRUE !== $license_data->trial_extendable;
+				$addon_status->notice_type = 'warning';
 
 				if ( empty( $addon_status->key ) && $addon_status->installed ) {
 
@@ -1090,6 +1093,7 @@ final class Addons {
 					$addon_status->button_class  = 'activate-key';
 					$addon_status->button_action = ATUM_PREFIX . 'activate_license';
 					$addon_status->notice        = esc_html__( 'License key is missing! Please, add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice_type   = 'danger';
 
 					if ( 'no_key' !== $addon_status->status ) {
 						$addon_status->classes[]  = 'inactive';
@@ -1098,7 +1102,8 @@ final class Addons {
 
 				}
 				elseif ( 'trial_used' === $addon_status->status ) {
-					$addon_status->notice = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice      = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice_type = 'danger';
 				}
 				elseif ( ! $is_expired && ! empty( $addon_status->expires ) ) {
 					$time_ago        = new TimeAgo();
@@ -1109,14 +1114,13 @@ final class Addons {
 				else {
 
 					if ( ! $addon_status->extended ) {
-						$addon_status->notice = esc_html__( 'Trial period expired. You can extend it for 7 days more or purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice = esc_html__( 'Trial period expired. You can extend it for 7 days more or unlock the full version by purchasing a license.', ATUM_TEXT_DOMAIN );
 					}
 					else {
-						$addon_status->notice = esc_html__( 'Trial period expired. Please, purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice      = esc_html__( 'Trial period expired. Please, purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice_type = 'danger';
 					}
 				}
-
-				$addon_status->notice_type = 'warning';
 
 			}
 			else {
@@ -1133,7 +1137,7 @@ final class Addons {
 						$addon_status->label_text    = __( 'Invalid License', ATUM_TEXT_DOMAIN );
 						/* translators: opening and closing link tags */
 						$addon_status->notice      = sprintf( __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates. If you already have reactivated it, click %1$shere%2$s to recheck', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
-						$addon_status->notice_type = 'warning';
+						$addon_status->notice_type = 'danger';
 						break;
 
 					case 'expired':

@@ -101,61 +101,11 @@ use Atum\Inc\Helpers;
 
 	<section class="dash-cards owl-carousel owl-theme">
 
-		<div class="dash-card docs">
+		<?php Helpers::load_view( 'dash-cards/docs' ); ?>
 
-			<div class="card-content">
-				<h5 class="h5-primary"><?php esc_html_e( 'Documentation', ATUM_TEXT_DOMAIN ) ?></h5>
-				<h2><?php esc_html_e( 'Complete Tutorials', ATUM_TEXT_DOMAIN ) ?></h2>
+		<?php Helpers::load_view( 'dash-cards/add-ons' ); ?>
 
-				<p><?php esc_html_e( "Our team is working daily to document ATUM's fast-growing content. Browse our detailed tutorials, ask questions or share feature requests with our team.", ATUM_TEXT_DOMAIN ) ?></p>
-
-				<a href="https://stockmanagementlabs.crunch.help/" class="btn btn-primary" target="_blank"><?php esc_html_e( 'Read the Docs', ATUM_TEXT_DOMAIN ) ?></a>
-			</div>
-
-			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-docs-img.png" alt="">
-			</div>
-
-		</div>
-
-		<div class="dash-card add-ons">
-
-			<div class="card-content">
-				<h5 class="h5-secondary"><?php esc_html_e( 'Add-ons', ATUM_TEXT_DOMAIN ) ?></h5>
-				<h2><?php esc_html_e( 'Endless Possibilities', ATUM_TEXT_DOMAIN ) ?></h2>
-
-				<p><?php esc_html_e( 'Expand your inventory control with our premium add-ons. No storage is left unattended, no item uncounted and no production line inefficient.', ATUM_TEXT_DOMAIN ) ?></p>
-
-				<a href="https://stockmanagementlabs.com/addons/" class="btn btn-tertiary" target="_blank"><?php esc_html_e( 'View Add-ons', ATUM_TEXT_DOMAIN ) ?></a>
-			</div>
-
-			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-add-ons-img.png" alt="">
-			</div>
-
-		</div>
-
-		<div class="dash-card subscription">
-
-			<div class="card-content">
-				<h5 class="h5-tertiary"><?php esc_html_e( 'Newsletter', ATUM_TEXT_DOMAIN ) ?></h5>
-				<h2><?php esc_html_e( 'Earn Regular Rewards', ATUM_TEXT_DOMAIN ) ?></h2>
-
-				<p><?php esc_html_e( 'Thank you very much for choosing ATUM as your inventory manager. Please, subscribe to receive news and updates and earn regular rewards.', ATUM_TEXT_DOMAIN ) ?></p>
-			</div>
-
-			<div class="card-img">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-subscription-img.png" alt="">
-			</div>
-
-			<form action="https://stockmanagementlabs.us12.list-manage.com/subscribe/post?u=bc146f9acefd460717d243671&id=b0263fe4a6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-				<div class="input-group">
-					<input type="email" name="EMAIL" id="mce-EMAIL"  placeholder="<?php esc_attr_e( 'Enter your email address', ATUM_TEXT_DOMAIN ) ?>" required>
-					<button type="submit" class="btn btn-secondary" name="subscribe" id="mc-embedded-subscribe"><?php esc_html_e( 'Subscribe', ATUM_TEXT_DOMAIN ) ?></button>
-				</div>
-			</form>
-
-		</div>
+		<?php Helpers::load_view( 'dash-cards/support' ); ?>
 
 	</section>
 

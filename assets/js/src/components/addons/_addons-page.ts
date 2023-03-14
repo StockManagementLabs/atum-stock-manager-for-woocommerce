@@ -16,7 +16,7 @@ import Utils from '../../utils/_utils';
 
 export default class AddonsPage {
 	
-	$addonsList: JQuery;
+	$addonsPage: JQuery;
 	$noResults: JQuery;
 	
 	constructor(
@@ -25,8 +25,8 @@ export default class AddonsPage {
 		private trials: Trials
 	) {
 
-		this.$addonsList = $( '.atum-addons' );
-		this.$noResults = this.$addonsList.find( '.no-results' );
+		this.$addonsPage = $( '.atum-addons' );
+		this.$noResults = this.$addonsPage.find( '.no-results' );
 
 		this.prepareMenu();
 		this.initHorizontalDragScroll();
@@ -39,7 +39,7 @@ export default class AddonsPage {
 	 */
 	prepareMenu() {
 
-		const $addonsMenu: JQuery = this.$addonsList.find( '.nav-container-box' );
+		const $addonsMenu: JQuery = this.$addonsPage.find( '.nav-container-box' );
 
 		$addonsMenu.find( 'li' ).each( ( index: number, elem: Element ) => {
 
@@ -50,7 +50,7 @@ export default class AddonsPage {
 				return;
 			}
 
-			if ( ! this.$addonsList.find( `.atum-addon.${ status }` ).length && ! this.$addonsList.find( `.atum-addon .actions.${ status }` ).length ) {
+			if ( ! this.$addonsPage.find( `.atum-addon.${ status }` ).length && ! this.$addonsPage.find( `.atum-addon .actions.${ status }` ).length ) {
 				$elem.hide();
 			}
 
@@ -65,7 +65,7 @@ export default class AddonsPage {
 	 */
 	bindEvents() {
 
-		this.$addonsList
+		this.$addonsPage
 
 			// Apply filters
 			.on( 'click', '.nav-container-box li', ( evt: JQueryEventObject ) => {
@@ -88,7 +88,7 @@ export default class AddonsPage {
 					$li.siblings().find( 'span' ).removeClass( 'active' );
 					$span.addClass( 'active' );
 
-					this.$addonsList.find( '.atum-addon' ).each( ( index: number, elem: Element ) => {
+					this.$addonsPage.find( '.atum-addon' ).each( ( index: number, elem: Element ) => {
 
 						const $addon: JQuery = $( elem );
 
@@ -200,13 +200,13 @@ export default class AddonsPage {
 
 				const $input: JQuery  = $( evt.currentTarget ),
 				      term: string    = $input.val().toLowerCase(),
-				      $addons: JQuery = this.$addonsList.find( '.atum-addon' );
+				      $addons: JQuery = this.$addonsPage.find( '.atum-addon' );
 
 				this.$noResults.find( '.no-results__term' ).text( term );
 
 				if ( ! term ) {
 					this.$noResults.hide();
-					this.$addonsList.find( '.nav-container-box .all' ).click();
+					this.$addonsPage.find( '.nav-container-box .all' ).click();
 					$addons.show();
 					$input.parent().removeClass( 'is-searching' );
 				}
@@ -241,6 +241,26 @@ export default class AddonsPage {
 
 			} )
 
+			// Expand/Collapse sidebar.
+			.on( 'click', '.atum-addons-sidebar__toggle', ( evt: JQueryEventObject ) => {
+
+				evt.preventDefault();
+
+				const $link: JQuery = $( evt.currentTarget );
+
+				$link.closest( '.atum-addons-sidebar' ).toggleClass( 'collapsed' )
+					.closest( '.atum-addons__wrap' ).toggleClass( 'with-collapsed' );
+
+				const $linkText: JQuery = $link.find( 'span' );
+
+				if ( $linkText.text().trim() === this.settings.get( 'show' ) ) {
+					$linkText.text( this.settings.get( 'hide' ) );
+				}
+				else {
+					$linkText.text( this.settings.get( 'show' ) );
+				}
+
+			} )
 
 	}
 
