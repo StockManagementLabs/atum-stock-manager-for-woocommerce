@@ -1696,7 +1696,7 @@ final class Addons {
 	 * @return string
 	 */
 	public static function get_addons_loader_class() {
-		return ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG && class_exists( '\Atum\Addons\AddonsLoaderDev' ) ) ?
+		return ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG && file_exists( ATUM_PATH . 'classes/Addons/AddonsLoaderDev.php' ) ) ?
 			'\Atum\Addons\AddonsLoaderDev' : '\Atum\Addons\AddonsLoader';
 	}
 
