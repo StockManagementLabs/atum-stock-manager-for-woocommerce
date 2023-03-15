@@ -1014,7 +1014,10 @@ final class Addons {
 							else {
 
 								$addon_status->status  = $license_data->license;
-								$addon_status->expires = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
+
+								if ( ! empty( $license_data->expires ) ) {
+									$addon_status->expires = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
+								}
 
 								if ( $addon_status->status !== $saved_license['status'] ) {
 									$saved_license['status']  = $addon_status->status;
@@ -1022,7 +1025,7 @@ final class Addons {
 
 							}
 
-							if ( empty( $saved_license['expires'] ) || $saved_license['expires'] !== $license_data->expires ) {
+							if ( empty( $saved_license['expires'] ) || ( ! empty( $license_data->expires ) && $saved_license['expires'] !== $license_data->expires ) ) {
 								$addon_status->expires = $saved_license['expires'] = $license_data->expires;
 							}
 
