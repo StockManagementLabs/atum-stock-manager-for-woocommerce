@@ -3012,11 +3012,10 @@ html {
 }
 @media all and (max-width: 768px) {
   .atum-addons__wrap {
-    grid-template-columns: 4fr;
-    grid-template-areas: "header" "content" "sidebar" "footer";
-  }
-  .atum-addons__wrap.with-collapsed {
-    display: none;
+    grid-template-columns: 4fr !important;
+    grid-template-rows: auto;
+    padding-right: 10px;
+    grid-template-areas: "sidebar" "header" "content" "footer";
   }
 }
 .atum-addons a {
@@ -3192,6 +3191,22 @@ html {
   width: 100%;
   float: left;
   margin: 0 11px 0 0;
+  position: relative;
+}
+@media all and (max-width: 768px) {
+  .atum-addons__nav .nav-with-scroll-effect {
+    max-width: 430px;
+  }
+}
+@media screen and (max-width: 648px) {
+  .atum-addons__nav .nav-with-scroll-effect {
+    max-width: 330px;
+  }
+}
+@media all and (max-width: 480px) {
+  .atum-addons__nav .nav-with-scroll-effect {
+    max-width: 250px;
+  }
 }
 .atum-addons__nav .nav-with-scroll-effect::-webkit-scrollbar {
   display: none;
@@ -3343,6 +3358,8 @@ html {
   border-radius: 5px;
   color: #6c757d;
   font-size: 12px;
+  min-height: auto;
+  height: auto;
 }
 .atum-addons #atum-addons-list {
   margin-top: -20px;
@@ -3373,6 +3390,11 @@ html {
   -webkit-box-shadow: none;
           box-shadow: none;
 }
+@media all and (max-width: 768px) {
+  .atum-addons__sidebar header .atum-icon:before {
+    content: "\e91b";
+  }
+}
 .atum-addons__sidebar .dash-card {
   width: 100%;
   margin: 0 0 15px;
@@ -3394,6 +3416,11 @@ html {
 .atum-addons__sidebar .dash-card.support img {
   right: -10px;
 }
+@media all and (max-width: 768px) {
+  .atum-addons__sidebar .dash-card .card-img {
+    display: block;
+  }
+}
 .atum-addons__sidebar.collapsed {
   width: 15px;
 }
@@ -3407,6 +3434,20 @@ html {
 }
 .atum-addons__sidebar.collapsed .dash-card {
   display: none;
+}
+@media all and (max-width: 768px) {
+  .atum-addons__sidebar.collapsed {
+    width: calc(100% - 30px);
+    height: 15px;
+  }
+  .atum-addons__sidebar.collapsed header {
+    -webkit-writing-mode: unset;
+        -ms-writing-mode: unset;
+            writing-mode: unset;
+  }
+  .atum-addons__sidebar.collapsed header .atum-icon:before {
+    content: "\e915";
+  }
 }
 .atum-addons .atum-addon {
   margin-top: 20px;
@@ -3466,6 +3507,11 @@ html {
 }
 .atum-addons .atum-addon > .more-details .label.trial {
   background: #BA7DF7;
+}
+@media screen and (max-width: 1082px) {
+  .atum-addons .atum-addon > .more-details {
+    min-width: unset;
+  }
 }
 .atum-addons .atum-addon .atum-loading {
   right: 152px;
@@ -3698,12 +3744,6 @@ html {
   font-size: 1.3em;
 }
 @media all and (max-width: 782px) {
-  .atum-addons .atum-addon {
-    height: 300px;
-  }
-  .atum-addons .alert {
-    display: block;
-  }
   .atum-addons .addon-footer .actions {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -3722,12 +3762,26 @@ html {
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    gap: 10px;
   }
   .atum-addons .addon-footer .actions .addon-key > .wrapper .license-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    gap: 5px;
     width: 100%;
   }
-  .atum-addons .addon-footer .actions .addon-key > .wrapper .license-info > div {
-    display: inline-block;
+  .atum-addons .addon-footer .actions .addon-key > .wrapper .license-info .license-key {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    margin: 0;
   }
   .atum-addons .addon-footer .actions .addon-key > .wrapper input.license-key {
     width: 100%;

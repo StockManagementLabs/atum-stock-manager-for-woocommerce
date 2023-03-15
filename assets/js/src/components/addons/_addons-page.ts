@@ -628,15 +628,8 @@ export default class AddonsPage {
 
 		} ).trigger( 'resize.atum' );
 
-		$( '.tablenav.top' ).find( 'input.btn' ).css( 'visibility', 'visible' );
-
 		$navScrollContainers.css( 'visibility', 'visible' ).off( 'scroll.atum' ).on( 'scroll.atum', ( evt: JQueryEventObject ) => {
-
-			this.addHorizontalDragScroll( $( evt.currentTarget ), true );
-			this.tooltip.destroyTooltips();
-
-			Utils.delay( () => this.tooltip.addTooltips(), 1000 );
-
+			this.addHorizontalDragScroll( $( evt.currentTarget ) );
 		} );
 
 		this.addMouseWheelSupport();
@@ -650,7 +643,7 @@ export default class AddonsPage {
 	 * @param {JQuery}  $nav
 	 * @param {boolean} checkEnhanced
 	 */
-	addHorizontalDragScroll( $nav: JQuery, checkEnhanced: boolean = false ) {
+	addHorizontalDragScroll( $nav: JQuery ) {
 
 		if ( ! $nav.length ) {
 			return;
@@ -658,10 +651,6 @@ export default class AddonsPage {
 
 		const $overflowOpacityRight: JQuery = $nav.find( '.overflow-opacity-effect-right' ),
 		      $overflowOpacityLeft: JQuery  = $nav.find( '.overflow-opacity-effect-left' );
-
-		if ( checkEnhanced ) {
-			( <any> $( '.enhanced' ) ).select2( 'close' );
-		}
 
 		const navEl: Element = $nav.get( 0 );
 

@@ -40,16 +40,14 @@ html {
 		}
 		
 		@include tablet-max {
-			grid-template-columns: 4fr;
+			grid-template-columns: 4fr !important;
+			grid-template-rows: auto;
+			padding-right: 10px;
 			grid-template-areas:
+                "sidebar"
                 "header"
                 "content"
-                "sidebar"
 				"footer";
-			
-			&.with-collapsed {
-				display: none;
-			}
 		}
 	}
 	
@@ -195,6 +193,19 @@ html {
 			width: 100%;
 			float: left;
 			margin: 0 11px 0 0;
+			position: relative;
+			
+			@include tablet-max {
+				max-width: 430px;
+			}
+			
+			@media screen and (max-width: 648px) {
+				max-width: 330px;
+			}
+			
+			@include mobile-max {
+				max-width: 250px;
+			}
 			
 			&::-webkit-scrollbar {
 				display: none;
@@ -357,6 +368,8 @@ html {
 			border-radius: 5px;
 			color: $gray-600;
 			font-size: 12px;
+			min-height: auto;
+			height: auto;
 		}
 	}
 	
@@ -387,6 +400,14 @@ html {
 				&:focus {
 					outline: none;
 					box-shadow: none;
+				}
+			}
+			
+			@include tablet-max {
+				.atum-icon {
+					&:before {
+						content: $atmi-arrow-up-circle;
+					}
 				}
 			}
 		}
@@ -424,6 +445,12 @@ html {
 					right: -10px;
 				}
 			}
+			
+			@include tablet-max {
+				.card-img {
+					display: block;
+				}
+			};
 		}
 		
 		&.collapsed {
@@ -441,6 +468,21 @@ html {
 			
 			.dash-card {
 				display: none;
+			}
+			
+			@include tablet-max {
+				width: calc(100% - 30px);
+				height: math.div($grid-gutter-width, 2);
+				
+				header {
+					writing-mode: unset;
+					
+					.atum-icon {
+						&:before {
+							content: $atmi-arrow-down-circle;
+						}
+					}
+				}
 			}
 		}
 		
@@ -504,6 +546,11 @@ html {
 				}
 				
 			}
+			
+			@media screen and (max-width: 1082px) {
+				min-width: unset;
+			}
+			
 		}
 		
 		.atum-loading {
@@ -740,14 +787,6 @@ html {
 	
 	@include tablet-max-wp {
 		
-		.atum-addon {
-			height: 300px;
-		}
-		
-		.alert {
-			display: block;
-		}
-		
 		.addon-footer .actions {
 			display: flex;
 			flex-direction: column;
@@ -759,11 +798,18 @@ html {
 			
 			.addon-key > .wrapper {
 				flex-direction: column;
+				align-items: flex-start;
+				gap: 10px;
 				
 				.license-info {
+					display: flex;
+					align-items: center;
+					gap: 5px;
 					width: 100%;
-					> div {
-						display: inline-block;
+					
+					.license-key {
+						flex-grow: 1;
+						margin: 0;
 					}
 					
 				}
