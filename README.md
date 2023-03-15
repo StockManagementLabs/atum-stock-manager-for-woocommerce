@@ -196,6 +196,47 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.27`
+
+*2023-03-16*
+
+**Features**
+
+* New ATUM premium add-ons trials available.
+* New style and features for the add-ons page.
+* Added trial licenses support.
+* Added trials expiration modals and notices.
+* New addons loader system.
+* Added filter to allow adding the Export Data tab to post type tables.
+* Added AtumNotifications extra params for settings display.
+* Allow adding extra fieldsets to export data script.
+* Added method to clear permanent ATUM admin notices.
+* Include SKU field when searching in the Inbound Stock list.
+* Add description to the PO when it is created via API.
+
+**Changes**
+
+* Return check queues action to the frontend.
+* Clean up wrong ATUM keys when updating.
+* Refactoring.
+* Remove addons with no key from the keys option.
+* Get rid of legacy recurring actions still scheduled.
+* Filter out select fields to enhance on post type lists.
+* Force display country in PO ship-to info.
+* SKU shouldn't be editable on the Inbound Stock list.
+* Delay the ATUM capabilities registration.
+* Include data atts filter for expandable rows.
+* Check whether the WP transient exists before cehcking versions.
+
+**Fixes**
+
+* Fixed contributors data within the premim add-ons' view details popup.
+* Fixed wrong text domains.
+* Fixed alert style on settings page when the settings cannot be displayed.
+* Fixed large product names in PO PDF template.
+
+---
+
 `1.9.26.2`
 
 *2023-01-16*
