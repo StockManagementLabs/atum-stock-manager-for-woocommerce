@@ -1048,8 +1048,8 @@ final class Addons {
 					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
 
 					if ( $is_installed ) {
-						$addon_status->notice = esc_html__( 'License key is missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
-						$addon_status->notice_type = 'danger';
+						$addon_status->notice = esc_html__( 'License key missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice_type = 'warning';
 					}
 
 				}
@@ -1092,7 +1092,7 @@ final class Addons {
 					$addon_status->button_text   = __( 'Activate', ATUM_TEXT_DOMAIN );
 					$addon_status->button_class  = 'activate-key';
 					$addon_status->button_action = ATUM_PREFIX . 'activate_license';
-					$addon_status->notice        = esc_html__( 'License key is missing! Please, add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice        = esc_html__( 'License key missing! Please, add your key to continue using this trial.', ATUM_TEXT_DOMAIN );
 					$addon_status->notice_type   = 'danger';
 
 					if ( 'no_key' !== $addon_status->status ) {
@@ -1102,7 +1102,7 @@ final class Addons {
 
 				}
 				elseif ( 'trial_used' === $addon_status->status ) {
-					$addon_status->notice      = esc_html__( 'This trial has been already used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice      = esc_html__( 'This trial has already been used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
 					$addon_status->notice_type = 'danger';
 				}
 				elseif ( ! $is_expired && ! empty( $addon_status->expires ) ) {
@@ -1136,8 +1136,8 @@ final class Addons {
 						$addon_status->classes[]     = 'invalid';
 						$addon_status->label_text    = __( 'Invalid License', ATUM_TEXT_DOMAIN );
 						/* translators: opening and closing link tags */
-						$addon_status->notice      = sprintf( __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates. If you already have reactivated it, click %1$shere%2$s to recheck', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
-						$addon_status->notice_type = 'danger';
+						$addon_status->notice      = sprintf( __( 'Your license is invalid. Please, remove it or reactivate your subscription to continue receiving updates. If you have already reactivated it, click %1$shere%2$s to recheck', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+						$addon_status->notice_type = 'warning';
 						break;
 
 					case 'expired':
@@ -1147,7 +1147,7 @@ final class Addons {
 						$addon_status->classes[]     = 'expired';
 						$addon_status->label_text    = __( 'Expired', ATUM_TEXT_DOMAIN );
 						/* translators: opening and closing link tags */
-						$addon_status->notice      = sprintf( __( 'If you already have renewed the license, please click&nbsp; %1$shere%2$s &nbsp;to recheck.', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
+						$addon_status->notice      = sprintf( __( 'Your license has expired. If you have already renewed the license, please click&nbsp; %1$shere%2$s &nbsp;to recheck.', ATUM_TEXT_DOMAIN ), '<a class="alert-link refresh-status" href="#">', '</a>' );
 						$addon_status->notice_type = 'warning';
 						break;
 
