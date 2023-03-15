@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Inc\Helpers;
 
 ?>
-<aside class="atum-addons-sidebar">
+<aside class="atum-addons__sidebar">
 
 	<header>
 		<a href="#" class="atum-addons-sidebar__toggle">

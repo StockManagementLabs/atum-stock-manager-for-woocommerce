@@ -387,6 +387,16 @@ var AddonsPage = (function () {
             else {
                 $linkText.text(_this.settings.get('show'));
             }
+        })
+            .on('click', '.atum-addons__nav-buttons .btn', function (evt) {
+            var $button = $(evt.currentTarget), $addonsList = $('#atum-addons-list');
+            $button.add($button.siblings()).toggleClass('btn-primary btn-outline-primary');
+            if ($button.hasClass('grid-view')) {
+                $addonsList.addClass('atum-addons__grid-view');
+            }
+            else {
+                $addonsList.removeClass('atum-addons__grid-view');
+            }
         });
     };
     AddonsPage.prototype.maybeInstallAddon = function ($button) {

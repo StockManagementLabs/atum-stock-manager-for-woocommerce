@@ -144,12 +144,226 @@ html {
 		
 	}
 	
+	&__nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 0;
+		background-color: $white;
+		box-shadow: 0 4px 0 0 $gray-200;
+		border-radius: 8px;
+		padding: 0 10px;
+		grid-area: header;
+		
+		@include tablet-max-wp {
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-bottom: 15px;
+			border-bottom: none;
+		}
+		
+		@include mobile-max {
+			margin: 0 11px 15px;
+			
+			&.no-margin {
+				margin: 0 11px 15px;
+			}
+		}
+		
+		.nav-container-box {
+			flex-grow: 1;
+			position: relative;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		
+		.nav-with-scroll-effect {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: nowrap;
+			cursor: grab;
+			overflow-x: hidden;
+			overflow-y: visible;
+			-ms-overflow-style: -ms-autohiding-scrollbar;
+			-webkit-overflow-scrolling: touch;
+			white-space: nowrap;
+			width: 100%;
+			float: left;
+			margin: 0 11px 0 0;
+			
+			&::-webkit-scrollbar {
+				display: none;
+			}
+			
+			.subsubsub {
+				margin: 0;
+			}
+			
+			&.dragging {
+				a {
+					pointer-events: none;
+				}
+			}
+			
+			.input-group {
+				position: static;
+			}
+			
+		}
+		
+		.overflow-opacity-effect-right, .overflow-opacity-effect-left {
+			width: 100px;
+			position: absolute;
+			z-index: 998;
+			height: 49px;
+			pointer-events: none;
+			background-repeat: no-repeat;
+		}
+		
+		.overflow-opacity-effect-right {
+			right: 0;
+			background-image: var(--overflow-opacity-rigth);
+		}
+		
+		.overflow-opacity-effect-left {
+			display: none;
+			left: 0;
+			background-image: var(--overflow-opacity-left);
+		}
+		
+		.subsubsub {
+			width: 100%;
+			position: relative;
+			font-size: 16px;
+			letter-spacing: 0.4px;
+			font-weight: bold;
+			text-transform: capitalize;
+			display: flex;
+			align-items: center;
+			margin: 0;
+			
+			&.extend-list-table {
+				width: inherit;
+				margin: 10px 0 !important;
+				flex-wrap: nowrap;
+				justify-content: flex-start;
+				border-radius: 0;
+				border-bottom: 0;
+				
+				li {
+					margin-right: 15px;
+					color: $gray-600;
+					text-transform: uppercase;
+					padding: 0;
+					
+					span {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						margin-left: 3px;
+						border-radius: 5px;
+						line-height: 32px;
+						cursor: pointer;
+						transition: .2s ease-in-out;
+						
+						&.active {
+							border-radius: 5px;
+							background-color: $primary;
+							font-size: 16px;
+							padding: 0 10px;
+							font-weight: bold;
+							letter-spacing: 0.4px;
+							color: $white;
+							cursor: default;
+							
+							&:hover {
+								color: $white;
+							}
+							
+						}
+						
+						&:hover {
+							color: $primary;
+						}
+						
+					}
+					
+				}
+				
+				@include mobile-max {
+					
+					&:first-child {
+						li {
+							
+							span, span:active {
+								margin-left: 0;
+							}
+						}
+					}
+				}
+			}
+			
+			@include tablet-max-wp{
+				margin: 10px 10px;
+				flex-wrap: wrap;
+				justify-content: center;
+				border-bottom: none;
+			}
+			
+			@include mobile-max{
+				justify-content: flex-start;
+			}
+			
+		}
+		
+		&-buttons {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			margin-left: math.div($grid-gutter-width, 2);
+			
+			.btn {
+				&:hover, &:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+		
+	}
+	
+	&__search {
+		position: relative;
+
+		&:not(.is-searching) {
+			&:after {
+				content: $atmi-magnifier;
+				font-family: $atum-icon-font;
+				position: absolute;
+				right: 10px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: $gray-600;
+			}
+		}
+		
+		#addons-search {
+			border: 1px solid $gray-300;
+			border-radius: 5px;
+			color: $gray-600;
+			font-size: 12px;
+		}
+	}
+	
 	#atum-addons-list {
 		margin-top: -20px;
 		grid-area: content;
 	}
 	
-	.atum-addons-sidebar {
+	&__sidebar {
 		grid-area: sidebar;
 		background-color: $white;
 		padding: math.div($grid-gutter-width, 2);
@@ -457,6 +671,60 @@ html {
 		
 	}
 	
+	&__grid-view {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: math.div($grid-gutter-width, 2);
+		margin-top: 0 !important;
+		
+		.atum-addon {
+			display: block;
+			min-height: auto;
+			margin: 0;
+			
+			.addon-details {
+				min-height: 300px;
+			}
+			
+			> .more-details {
+				height: 200px;
+				width: 100%;
+			}
+			
+			.addon-thumb {
+				border-radius: 8px 8px 0 0;
+			}
+			
+			.actions__buttons {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				
+				a, button {
+					margin: 0 !important;
+				}
+			}
+			
+			.addon-key {
+				.wrapper {
+					flex-wrap: wrap;
+					justify-content: space-between;
+					gap: 10px;
+				}
+				
+				.license-info {
+					margin-right: 0;
+				}
+				
+				.license-key {
+					margin-right: 0;
+					width: 100%;
+				}
+				
+			}
+		}
+	}
+	
 	.no-results {
 		margin-top: math.div($grid-gutter-width, 2);
 		padding-top: 20px;
@@ -505,207 +773,6 @@ html {
 			}
 		}
 	}
-	
-}
-
-.list-table-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin: 0;
-	background-color: $white;
-	box-shadow: 0 4px 0 0 $gray-200;
-	border-radius: 8px;
-	padding: 0 10px;
-	grid-area: header;
-	
-	@include tablet-max-wp {
-		flex-wrap: wrap;
-		justify-content: center;
-		margin-bottom: 15px;
-		border-bottom: none;
-	}
-	
-	@include mobile-max {
-		margin: 0 11px 15px;
-		
-		&.no-margin {
-			margin: 0 11px 15px;
-		}
-	}
-	
-	.nav-container-box {
-		flex-grow: 1;
-		position: relative;
-		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	
-	.addons-search-wrapper {
-		&:not(.is-searching) {
-			&:after {
-				content: $atmi-magnifier;
-				font-family: $atum-icon-font;
-				position: absolute;
-				right: 10px;
-				top: 50%;
-				transform: translateY(-50%);
-				color: $gray-600;
-			}
-		}
-	}
-	
-	#addons-search {
-		border: 1px solid $gray-300;
-		border-radius: 5px;
-		color: $gray-600;
-		font-size: 12px;
-	}
-	
-}
-
-.nav-with-scroll-effect {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: nowrap;
-	cursor: grab;
-	overflow-x: hidden;
-	overflow-y: visible;
-	-ms-overflow-style: -ms-autohiding-scrollbar;
-	-webkit-overflow-scrolling: touch;
-	white-space: nowrap;
-	width: 100%;
-	float: left;
-	margin: 0 11px 0 0;
-	
-	&::-webkit-scrollbar {
-		display: none;
-	}
-	
-	.subsubsub {
-		margin: 0;
-	}
-	
-	&.dragging {
-		a {
-			pointer-events: none;
-		}
-	}
-	
-	.input-group {
-		position: static;
-	}
-	
-}
-
-.overflow-opacity-effect-right, .overflow-opacity-effect-left {
-	width: 100px;
-	position: absolute;
-	z-index: 998;
-	height: 49px;
-	pointer-events: none;
-	background-repeat: no-repeat;
-}
-
-.overflow-opacity-effect-right {
-	right: 0;
-	background-image: var(--overflow-opacity-rigth);
-}
-
-.overflow-opacity-effect-left {
-	display: none;
-	left: 0;
-	background-image: var(--overflow-opacity-left);
-}
-
-
-.subsubsub {
-	width: 100%;
-	position: relative;
-	font-size: 16px;
-	letter-spacing: 0.4px;
-	font-weight: bold;
-	text-transform: capitalize;
-	display: flex;
-	align-items: center;
-	margin: 0;
-	
-	&.extend-list-table {
-		width: inherit;
-		margin: 10px 0 !important;
-		flex-wrap: nowrap;
-		justify-content: flex-start;
-		border-radius: 0;
-		border-bottom: 0;
-		
-		li {
-			margin-right: 15px;
-			color: $gray-600;
-			text-transform: uppercase;
-			padding: 0;
-			
-			span {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-left: 3px;
-				border-radius: 5px;
-				line-height: 32px;
-				cursor: pointer;
-				transition: .2s ease-in-out;
-				
-				&.active {
-					border-radius: 5px;
-					background-color: $primary;
-					font-size: 16px;
-					padding: 0 10px;
-					font-weight: bold;
-					letter-spacing: 0.4px;
-					color: $white;
-					cursor: default;
-					
-					&:hover {
-						color: $white;
-					}
-					
-				}
-				
-				&:hover {
-					color: $primary;
-				}
-				
-			}
-			
-		}
-		
-		@include mobile-max {
-			
-			&:first-child {
-				
-				li {
-					
-					span, span:active {
-						margin-left: 0;
-					}
-				}
-			}
-		}
-	}
-	
-	@include tablet-max-wp{
-		margin: 10px 10px;
-		flex-wrap: wrap;
-		justify-content: center;
-		border-bottom: none;
-	}
-	
-	@include mobile-max{
-		justify-content: flex-start;
-	}
-	
 	
 }
 

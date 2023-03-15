@@ -262,6 +262,24 @@ export default class AddonsPage {
 
 			} )
 
+			// Toggle between list and grid views.
+			.on( 'click', '.atum-addons__nav-buttons .btn', ( evt: JQueryEventObject ) => {
+
+				const $button: JQuery     = $( evt.currentTarget ),
+				      $addonsList: JQuery = $( '#atum-addons-list' );
+
+				$button.add( $button.siblings() ).toggleClass( 'btn-primary btn-outline-primary' );
+
+				if ( $button.hasClass( 'grid-view' ) ) {
+					$addonsList.addClass( 'atum-addons__grid-view' );
+				}
+				else {
+					$addonsList.removeClass( 'atum-addons__grid-view' );
+				}
+
+
+			} )
+
 	}
 
 	/**
