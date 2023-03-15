@@ -248,7 +248,7 @@ export default class AddonsPage {
 
 				const $link: JQuery = $( evt.currentTarget );
 
-				$link.closest( '.atum-addons-sidebar' ).toggleClass( 'collapsed' )
+				$link.closest( '.atum-addons__sidebar' ).toggleClass( 'collapsed' )
 					.closest( '.atum-addons__wrap' ).toggleClass( 'with-collapsed' );
 
 				const $linkText: JQuery = $link.find( 'span' );

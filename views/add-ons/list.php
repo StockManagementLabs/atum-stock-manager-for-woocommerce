@@ -35,7 +35,10 @@ defined( 'ABSPATH' ) || die;
 			</div>
 
 			<?php require 'sidebar.php' ?>
+
+			<footer></footer>
 		</div>
 
 	<?php endif; ?>
+
 </div>

@@ -29,10 +29,11 @@ html {
 		display: grid;
 		grid-gap: 20px;
 		grid-template-columns: 4fr 1.5fr;
-		grid-template-rows: 52px 1fr 1fr;
+		grid-template-rows: 52px 1fr auto;
 		grid-template-areas:
 			"header  sidebar"
-			"content sidebar";
+			"content sidebar"
+			"footer footer";
 		
 		&.with-collapsed {
 			grid-template-columns: 4fr 40px;
@@ -43,7 +44,8 @@ html {
 			grid-template-areas:
                 "header"
                 "content"
-                "sidebar";
+                "sidebar"
+				"footer";
 			
 			&.with-collapsed {
 				display: none;
@@ -772,6 +774,11 @@ html {
 				}
 			}
 		}
+	}
+	
+	// Fix empty space at the bottom.
+	footer {
+		grid-area: footer;
 	}
 	
 }

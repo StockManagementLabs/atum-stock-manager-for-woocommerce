@@ -378,7 +378,7 @@ var AddonsPage = (function () {
             .on('click', '.atum-addons-sidebar__toggle', function (evt) {
             evt.preventDefault();
             var $link = $(evt.currentTarget);
-            $link.closest('.atum-addons-sidebar').toggleClass('collapsed')
+            $link.closest('.atum-addons__sidebar').toggleClass('collapsed')
                 .closest('.atum-addons__wrap').toggleClass('with-collapsed');
             var $linkText = $link.find('span');
             if ($linkText.text().trim() === _this.settings.get('show')) {

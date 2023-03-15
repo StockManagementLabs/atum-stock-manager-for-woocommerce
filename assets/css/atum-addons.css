@@ -3004,8 +3004,8 @@ html {
   display: grid;
   grid-gap: 20px;
   grid-template-columns: 4fr 1.5fr;
-  grid-template-rows: 52px 1fr 1fr;
-  grid-template-areas: "header  sidebar" "content sidebar";
+  grid-template-rows: 52px 1fr auto;
+  grid-template-areas: "header  sidebar" "content sidebar" "footer footer";
 }
 .atum-addons__wrap.with-collapsed {
   grid-template-columns: 4fr 40px;
@@ -3013,7 +3013,7 @@ html {
 @media all and (max-width: 768px) {
   .atum-addons__wrap {
     grid-template-columns: 4fr;
-    grid-template-areas: "header" "content" "sidebar";
+    grid-template-areas: "header" "content" "sidebar" "footer";
   }
   .atum-addons__wrap.with-collapsed {
     display: none;
@@ -3733,5 +3733,8 @@ html {
     width: 100%;
     margin-bottom: 0.3rem;
   }
+}
+.atum-addons footer {
+  grid-area: footer;
 }
 /*# sourceMappingURL=atum-addons.css.map */
