@@ -62,7 +62,7 @@ class Upgrade {
 		// Update the db version to the current ATUM version before upgrade to prevent various executions.
 		update_option( 'atum_version', ATUM_VERSION );
 
-		// Delete transients if there after every version change.
+		// Delete transients if after every version change.
 		AtumCache::delete_transients();
 
 		/************************
