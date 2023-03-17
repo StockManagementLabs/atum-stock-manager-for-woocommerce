@@ -616,6 +616,12 @@ html {
 		}
 	}
 	
+	.actions__buttons {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
 	.alert {
 		font-size: 12px;
 		padding: 0.3rem calc( 0.75rem + 8px );
@@ -745,10 +751,6 @@ html {
 			}
 			
 			.actions__buttons {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				
 				a, button {
 					margin: 0 !important;
 				}

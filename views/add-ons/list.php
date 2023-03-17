@@ -39,6 +39,12 @@ defined( 'ABSPATH' ) || die;
 			<footer></footer>
 		</div>
 
+	<?php else : ?>
+
+		<div class="alert alert-warning">
+			<p><i class="atum-icon atmi-warning"></i> <?php esc_html_e( 'We are experiencing some technical problems to load the add-ons list now. Please, try again after some minutes.', ATUM_TEXT_DOMAIN ); ?></p>
+		</div>
+
 	<?php endif; ?>
 
 </div>

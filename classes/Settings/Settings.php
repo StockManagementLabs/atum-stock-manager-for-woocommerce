@@ -825,17 +825,20 @@ class Settings {
 				if ( $is_api_request && ! is_array( $input[ $key ] ) ) {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 				}
-				$option = $input[ $key ];
 
-				$option['value'] = ( isset( $option['value'] ) && 'yes' === $option['value'] ) ? 'yes' : 'no';
+				foreach ( $atts['default_options'] as $setting_key => $value ) {
 
-				if ( isset( $atts['default_options'] ) ) {
-					foreach ( $atts['default_options'] as $index => $value ) {
-						$option['options'][ $index ] = ( isset( $option['options'][ $index ] ) && 'yes' === $option['options'][ $index ] ) ? 'yes' : 'no';
+					// All the checkboxes unchecked (so no values retrieved from the form submission).
+					if ( ! isset( $input[ $key ] ) ) {
+						$option['options'][ $setting_key ] = 'no';
 					}
+					elseif ( isset( $input[ $key ], $input[ $key ]['options'] ) ) {
+						$option['options'][ $setting_key ] = ( isset( $input[ $key ]['options'][ $setting_key ] ) && 'yes' === $input[ $key ]['options'][ $setting_key ] ) ? 'yes' : 'no';
+					}
+
 				}
 
-				$sanitized_option = $option;
+				$sanitized_option = $option ?? [];
 
 				break;
 			case 'switcher':
