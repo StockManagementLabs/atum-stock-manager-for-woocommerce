@@ -1141,6 +1141,7 @@ class Settings {
 			name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>"
 			style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>
 		>
+			<option <?php echo empty( $country ) ? ' selected="selected"' : ''; ?> value=""><?php esc_attr_e( '--- Select a country ---', ATUM_TEXT_DOMAIN ); ?></option>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
