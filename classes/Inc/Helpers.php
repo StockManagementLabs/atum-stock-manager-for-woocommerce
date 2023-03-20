@@ -3099,6 +3099,17 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Helper for the ATUM user agent
+	 *
+	 * @since 1.9.27.1
+	 *
+	 * @return string
+	 */
+	public static function get_atum_user_agent() {
+		return 'ATUM/' . ATUM_VERSION . ';' . home_url();
+	}
+
 
 	/**
 	 * Get if a product is on restock status: There's insufficient stock to fulfill the next "days to reorder" days expected sales.

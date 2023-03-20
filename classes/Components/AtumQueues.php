@@ -338,7 +338,7 @@ class AtumQueues {
 	public static function add_async_action( $hook, $callback, $params = [], $priority = 10 ) {
 
 		// Avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -373,7 +373,7 @@ class AtumQueues {
 	public function trigger_async_actions() {
 
 		// Avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -457,7 +457,7 @@ class AtumQueues {
 					'sslverify'  => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 					'body'       => $data,
 					'headers'    => $headers,
-					'user-agent' => self::get_async_request_user_agent(),
+					'user-agent' => Helpers::get_atum_user_agent(),
 				);
 				wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
 
@@ -574,17 +574,6 @@ class AtumQueues {
 
 		return (bool) $remote_available;
 
-	}
-
-	/**
-	 * Get the user agent used for async requests
-	 *
-	 * @since 1.9.0
-	 *
-	 * @return string
-	 */
-	public static function get_async_request_user_agent() {
-		return 'ATUM/' . ATUM_VERSION;
 	}
 
 	/**

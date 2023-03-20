@@ -805,7 +805,7 @@ final class Addons {
 			'redirection' => 1,
 			'sslverify'   => FALSE,
 			'body'        => $params,
-			'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
+			'user-agent'  => Helpers::get_atum_user_agent(),
 		);
 
 		$function = 'wp_remote_post';
@@ -834,7 +834,7 @@ final class Addons {
 		$args = array(
 			'timeout'     => 20,
 			'redirection' => 1,
-			'user-agent'  => 'ATUM/' . ATUM_VERSION . ';' . home_url(),
+			'user-agent'  => Helpers::get_atum_user_agent(),
 			'sslverify'   => FALSE,
 		);
 

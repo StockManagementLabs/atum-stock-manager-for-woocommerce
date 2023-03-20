@@ -70,7 +70,7 @@ class AtumCalculatedProps {
 	public function maybe_create_defer_update_async_action() {
 
 		// Security check to avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && AtumQueues::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
