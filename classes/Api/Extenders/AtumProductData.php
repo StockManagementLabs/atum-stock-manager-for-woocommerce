@@ -419,7 +419,7 @@ class AtumProductData {
 
 		if ( ! empty( $response['id'] ) ) {
 
-			$product = Helpers::get_atum_product( $response['id'] );
+			$product = Helpers::get_atum_product( $response['id'], TRUE );
 			$getter  = "get_$field_name";
 
 			if ( $product instanceof \WC_Product ) {

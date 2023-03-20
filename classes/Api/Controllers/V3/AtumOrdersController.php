@@ -649,7 +649,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 */
 	protected function prepare_item_product( $posted, $action, $item ) {
 
-		$product = Helpers::get_atum_product( $this->get_product_id( $posted ) );
+		$product = Helpers::get_atum_product( $this->get_product_id( $posted ), TRUE );
 
 		if ( $product instanceof \WC_Product && $product !== $item->get_product() ) {
 

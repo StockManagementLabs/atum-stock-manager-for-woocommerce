@@ -594,7 +594,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		if ( ! empty( $request['product'] ) ) {
 
 			$product_id = $request['product'];
-			$product    = Helpers::get_atum_product( $product_id );
+			$product    = Helpers::get_atum_product( $product_id, TRUE );
 
 			if ( $product instanceof \WC_Product ) {
 				$supplier_id = $product->get_supplier_id();
@@ -1247,7 +1247,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 			foreach ( $supplier_products as $product_id ) {
 
-				$product = Helpers::get_atum_product( $product_id );
+				$product = Helpers::get_atum_product( $product_id, TRUE );
 
 				if ( $product instanceof \WC_Product ) {
 					$product->set_supplier_id( NULL );

@@ -577,7 +577,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 	 */
 	protected function get_product_data( $item, $context = 'view' ) {
 
-		$product = Helpers::get_atum_product( $item );
+		$product = Helpers::get_atum_product( $item, TRUE );
 
 		if ( ! $product instanceof \WC_Product ) {
 			return [];
