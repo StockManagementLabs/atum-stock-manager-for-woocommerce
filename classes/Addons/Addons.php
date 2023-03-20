@@ -644,7 +644,6 @@ final class Addons {
 		}
 
 		$lower_keys = array();
-		$addon_name = strtolower( $addon_name );
 
 		if ( ! empty( $keys ) ) {
 
@@ -655,6 +654,13 @@ final class Addons {
 				}
 			}
 
+		}
+
+		$addon_name = strtolower( $addon_name );
+
+		// Make sure the full-version names are used for keys.
+		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
 		}
 
 		if ( $addon_name ) {
