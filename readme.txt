@@ -3,10 +3,10 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.5.0
+WC tested up to: 7.5.1
 Stable tag: 1.9.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.27`
 
-*2023-03-16*
+*2023-03-29*
 
 **Features**
 
@@ -233,6 +233,11 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Added method to clear permanent ATUM admin notices.
 * Include SKU field when searching in the Inbound Stock list.
 * Add description to the PO when it is created via API.
+* Added sidebar to the addons page.
+* Added grid view mode to addons page.
+* Added alert when the addons list couldn't be retrieved.
+* Performance improvement.
+* Added add-ons auto-installer component.
 
 **Changes**
 
@@ -247,6 +252,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Delay the ATUM capabilities registration.
 * Include data atts filter for expandable rows.
 * Check whether the WP transient exists before cehcking versions.
+* Allow setting empty value for wc_country settings fields.
 
 **Fixes**
 
@@ -254,6 +260,10 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed wrong text domains.
 * Fixed alert style on settings page when the settings cannot be displayed.
 * Fixed large product names in PO PDF template.
+* CSS fixes.
+* Fixed multi-checkbox field when no checkboxes are checked.
+* Fixed get_keys method when a trial name is passed.
+* Fixed barcode length checking.
 
 ---
 
