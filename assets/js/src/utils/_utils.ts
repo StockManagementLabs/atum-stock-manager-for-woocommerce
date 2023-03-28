@@ -172,16 +172,13 @@ const Utils = {
 	 *
 	 * @param {string} name
 	 *
-	 * @return {string}
+	 * @return {string|string[]}
 	 */
-	getUrlParameter( name: string ): string {
+	getUrlParameter( name: string ): string|string[] {
 
 		if ( typeof URLSearchParams !== 'undefined' ) {
-
 			const urlParams = new URLSearchParams( window.location.search );
-
 			return urlParams.get( name );
-
 		}
 		// Deprecated: Only for old browsers non-supporting URLSearchParams.
 		else {
@@ -193,6 +190,39 @@ const Utils = {
 			return results === null ? '' : decodeURIComponent( results[ 1 ].replace( /\+/g, ' ' ) );
 
 		}
+
+	},
+
+	/**
+	 * Converts a query string to an object of params
+	 *
+	 * @param {string} query
+	 *
+	 * @return {any}
+	 */
+	getQueryParams( query: string ): any {
+
+		let params: any = {};
+
+		new URLSearchParams( query ).forEach( ( value: string, key: string ) => {
+
+			let decodedKey: string = decodeURIComponent( key );
+			let decodedValue: string = decodeURIComponent( value );
+
+			// This key is part of an array
+			if ( decodedKey.endsWith( '[]' ) ) {
+				decodedKey = decodedKey.replace( '[]', '' );
+				params[ decodedKey ] || ( params[ decodedKey ] = [] );
+				params[ decodedKey ].push( decodedValue );
+			}
+			// Just a regular parameter
+			else {
+				params[ decodedKey ] = decodedValue;
+			}
+
+		} );
+
+		return params;
 
 	},
 	

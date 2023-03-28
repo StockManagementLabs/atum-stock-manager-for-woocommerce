@@ -95,11 +95,15 @@ endif;
 					<?php elseif ( $is_trial ) : ?>
 
 						<?php
-						$purchase_url = add_query_arg( [
-							'edd_action'  => 'add_to_cart',
-							'download_id' => $addon['info']['id'],
-						], Addons::ADDONS_STORE_URL . 'checkout/' ) ?>
-						<a class="more-details btn btn-primary" href="<?php echo esc_url( $purchase_url ) ?>" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
+						$query_args = array(
+							'key' => $addon_status->key,
+							'url' => home_url(),
+						);
+
+						$purchase_url = add_query_arg( $query_args, Addons::ADDONS_STORE_URL . 'my-upgrades/' ) ?>
+						<a class="more-details btn btn-primary" href="<?php echo esc_url( $purchase_url ) ?>" target="_blank">
+							<?php esc_html_e( 'Upgrade', ATUM_TEXT_DOMAIN ) ?>
+						</a>
 
 						<?php if ( $is_expired && empty( $addon_status->extended ) && ! empty( $addon_status->key ) ) : ?>
 							<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $addon_status->key ) ?>"><?php esc_html_e( 'Extend trial', ATUM_TEXT_DOMAIN ); ?></button>

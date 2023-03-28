@@ -3953,4 +3953,23 @@ final class Helpers {
 		return isset( $_POST['action'] ) && 'heartbeat' === $_POST['action'];
 	}
 
+	/**
+	 * Unobfuscate the token parameter obfuscated by SML
+	 *
+	 * @since 1.9.27
+	 *
+	 * @param string $token
+	 *
+	 * @return string
+	 */
+	public static function unrot_token( $token ) {
+
+		return urldecode( strtr(
+			$token,
+			'./-:?=&%# ZQXJKVWPY abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHILMNORSTU',
+			'ZQXJKVWPY ./-:?=&%# 123456789ABCDEFGHILMNORSTUabcdefghijklmnopqrstuvwxyz'
+		) );
+
+	}
+
 }

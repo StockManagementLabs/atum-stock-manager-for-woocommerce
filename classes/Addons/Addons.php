@@ -218,24 +218,33 @@ final class Addons {
 
 		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', array( 'jquery', 'jquery-blockui', 'sweetalert2' ), ATUM_VERSION, TRUE );
 
-		wp_localize_script( 'atum-addons', 'atumAddons', array(
+		$addons_vars = array(
 			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
 			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
 			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
+			'addonInstalled'       => __( 'Add-on installed successfully', ATUM_TEXT_DOMAIN ),
+			'addonsPageUrl'        => add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ),
+			'addonNotInstalled'    => __( 'Add-on not installed', ATUM_TEXT_DOMAIN ),
 			'agree'                => __( 'Yes, I agree!', ATUM_TEXT_DOMAIN ),
+			'allAddonsInstalled'   => __( 'All the add-ons were installed successfully', ATUM_TEXT_DOMAIN ),
 			'allowedDeactivations' => __( 'You are allowed to remove a license a max of 2 times.', ATUM_TEXT_DOMAIN ),
+			'autoInstaller'        => __( 'ATUM Add-ons Auto-Installer', ATUM_TEXT_DOMAIN ),
 			'cancel'               => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 			'continue'             => __( 'Continue', ATUM_TEXT_DOMAIN ),
 			'extend'               => __( 'Yes, Extend it!', ATUM_TEXT_DOMAIN ),
 			'error'                => __( 'Error!', ATUM_TEXT_DOMAIN ),
 			'hide'                 => __( 'Hide', ATUM_TEXT_DOMAIN ),
+			'install'              => __( 'Install', ATUM_TEXT_DOMAIN ),
+			'installing'           => __( 'Installing...', ATUM_TEXT_DOMAIN ),
 			'invalidKey'           => __( 'Please enter a valid add-on license key.', ATUM_TEXT_DOMAIN ),
+			'key'                  => __( 'key', ATUM_TEXT_DOMAIN ),
 			'limitedDeactivations' => __( 'Limited Deactivations!', ATUM_TEXT_DOMAIN ),
 			'ok'                   => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'nonce'                => wp_create_nonce( ATUM_PREFIX . 'manage_license' ),
 			'show'                 => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'success'              => __( 'Success!', ATUM_TEXT_DOMAIN ),
+			'toBeInstalled'        => __( 'The following add-ons are going to be installed', ATUM_TEXT_DOMAIN ),
 			'trial'                => __( 'Trial License!', ATUM_TEXT_DOMAIN ),
 			'trialActivated'       => __( 'Your trial add-on license has been activated.', ATUM_TEXT_DOMAIN ),
 			'trialDeactivation'    => __( 'Trial deactivation notice!', ATUM_TEXT_DOMAIN ),
@@ -243,7 +252,13 @@ final class Addons {
 			'trialExtension'       => __( 'Trial extension', ATUM_TEXT_DOMAIN ),
 			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or replace it by a full version license key.', ATUM_TEXT_DOMAIN ),
 			'trialWillExtend'      => __( 'You are going to extend this trial for 7 days more', ATUM_TEXT_DOMAIN ),
-		) );
+		);
+
+		if ( isset( $_GET['auto-install'], $_GET['token'] ) && '1' === $_GET['auto-install'] ) {
+			$addons_vars['autoInstallData'] = Helpers::unrot_token( $_GET['token'] );
+		}
+
+		wp_localize_script( 'atum-addons', 'atumAddons', $addons_vars );
 
 		wp_enqueue_style( 'sweetalert2' );
 		wp_enqueue_style( 'atum-addons' );
@@ -1255,7 +1270,7 @@ final class Addons {
 		$addon_folder = self::get_addon_folder( $addon_slug );
 		$plugin       = $addon_folder && $addon_folder !== $addon_slug ? "$addon_folder/$addon_folder.php" : "$addon_slug/$addon_slug.php";
 		$installed    = Helpers::is_plugin_installed( $plugin, 'file' );
-		$activate     = $installed ? ! is_plugin_active( $plugin ) : FALSE;
+		$activate     = $installed && ! is_plugin_active( $plugin );
 
 		// Install this new addon.
 		if ( ! $installed ) {
@@ -1288,6 +1303,14 @@ final class Addons {
 						'action' => 'install',
 					),
 				) );
+
+				// If the user is upgrading a trial to full, uninstall the trial and block any uninstallation hooks.
+				$is_trial_addon = strpos( strtolower( $addon_name ), 'trial' ) !== FALSE;
+				if ( ! $is_trial_addon && Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name' ) ) {
+					add_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' ); // Do not trigger the uninstall hook in this case.
+					delete_plugins( [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ] );
+					remove_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
+				}
 
 				if ( is_wp_error( $result ) ) {
 					throw new AtumException( 'addon_not_installed', $result->get_error_message() ?: $result->get_error_data() );

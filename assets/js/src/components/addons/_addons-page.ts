@@ -10,9 +10,7 @@ import Blocker from '../_blocker';
 import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
-import Tooltip from '../_tooltip';
 import Trials from './_trials';
-import Utils from '../../utils/_utils';
 
 export default class AddonsPage {
 	
@@ -21,7 +19,6 @@ export default class AddonsPage {
 	
 	constructor(
 		private settings: Settings,
-		private tooltip: Tooltip,
 		private trials: Trials
 	) {
 
@@ -308,7 +305,12 @@ export default class AddonsPage {
 			success: ( response: any ) => {
 
 				if ( true === response.success ) {
-					this.installAddon( addon, key ).then( () => this.afterAjax( $button ) );
+
+					this.installAddon( addon, key )
+						.then( ( message: string ) => this.showSuccessAlert( message ) )
+						.catch( ( error: string ) => this.showErrorAlert( error ) )
+						.finally( () => this.afterAjax( $button ) );
+
 				}
 				else {
 					this.licenseChangeResponse( response.success, response.data, addon, key );
@@ -325,11 +327,12 @@ export default class AddonsPage {
 	 *
 	 * @param {string}  addon
 	 * @param {string}  key
-	 * @param {boolean} isSwal
+	 *
+	 * @return {Promise<string>}
 	 */
-	installAddon( addon: string, key: string, isSwal: boolean = false ): Promise<void> {
+	installAddon( addon: string, key: string ): Promise<string> {
 
-		return new Promise( ( resolve: Function ) => {
+		return new Promise( ( resolve: Function, reject: Function ) => {
 
 			$.ajax( {
 				url       : window[ 'ajaxurl' ],
@@ -344,16 +347,11 @@ export default class AddonsPage {
 				success   : ( response: any ) => {
 
 					if ( response.success === true ) {
-						this.showSuccessAlert( response.data );
-					}
-					else if ( isSwal ) {
-						Swal.showValidationMessage( `<span>${ response.data }</span>` );
+						resolve( response.data );
 					}
 					else {
-						this.showErrorAlert( response.data );
+						reject( response.data );
 					}
-
-					resolve();
 
 				},
 			} );
@@ -486,7 +484,13 @@ export default class AddonsPage {
 					cancelButtonText   : this.settings.get( 'cancel' ),
 					reverseButtons     : true,
 					showLoaderOnConfirm: true,
-					preConfirm         : (): Promise<void> => this.installAddon( addon, key, true ),
+					preConfirm         : (): Promise<void> => {
+
+						return this.installAddon( addon, key )
+							.then( ( message: string ) => this.showSuccessAlert( message ) )
+							.catch( ( error: string ) => Swal.showValidationMessage( `<span>${ error }</span>` ) );
+
+					},
 				} );
 
 				break;

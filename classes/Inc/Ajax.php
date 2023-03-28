@@ -906,11 +906,11 @@ final class Ajax {
 
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
-		if ( empty( $_POST['addon'] ) ) {
+		if ( empty( $_REQUEST['addon'] ) ) {
 			wp_send_json_error( __( 'No add-on name provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['key'] ) ) {
+		if ( empty( $_REQUEST['key'] ) ) {
 			wp_send_json_error( __( 'Please enter a valid add-on license key', ATUM_TEXT_DOMAIN ) );
 		}
 	}
@@ -1094,8 +1094,8 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] );
-		$key           = esc_attr( $_POST['key'] );
+		$addon_name    = esc_attr( $_REQUEST['addon'] );
+		$key           = esc_attr( $_REQUEST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
 		if ( ! $addon_name || ! $key ) {

@@ -831,3 +831,41 @@ html {
 	
 }
 
+// Auto-Installer.
+.auto-installer-modal {
+	
+	.swal2-content {
+		margin-bottom: math.div($grid-gutter-width, 2);
+	}
+	
+	.auto-install-list {
+		padding: 0;
+		margin-top: $grid-gutter-width;
+		
+		li {
+			font-weight: bold;
+			text-align: left;
+			font-size: 15px;
+			line-height: 1.5;
+			
+			i {
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 18px;
+				margin-right: 2px;
+			}
+		}
+		
+		code {
+			font-weight: normal;
+			font-size: 10px;
+			padding: 3px 5px;
+			border-radius: 4px;
+		}
+	}
+	
+	.swal2-validation-message {
+		margin-bottom: -1.2em !important;
+	}
+}
+

@@ -6,6 +6,7 @@
 @import "common/variables";
 @import "common/mixins";
 @import "common/breakpoints";
+@import "common/utilities";
 @import "common/root";
 
 @import "atoms/buttons";
@@ -16,6 +17,7 @@
 @import "molecules/alert";
 @import "molecules/block-ui";
 @import "molecules/sweet-alert";
+@import "molecules/atum-modals";
 @import "molecules/atum-footer";
 
 @import "organisms/pages/addons";

@@ -11,6 +11,7 @@
  */
 
 import AddonsPage from './components/addons/_addons-page';
+import AutoInstaller from './components/addons/_auto-installer';
 import Settings from './config/_settings';
 import Tooltip from './components/_tooltip';
 import Trials from './components/addons/_trials';
@@ -24,6 +25,8 @@ jQuery( ( $: JQueryStatic ) => {
 	      tooltip  = new Tooltip(),
 	      trials   = new Trials( settings, () => location.reload() );
 
-	new AddonsPage( settings, tooltip, trials );
+	const addonsPage = new AddonsPage( settings, trials );
+
+	new AutoInstaller( settings, addonsPage, tooltip );
 	
 });
