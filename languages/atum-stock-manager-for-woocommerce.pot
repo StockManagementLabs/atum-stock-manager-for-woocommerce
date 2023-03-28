@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2023-03-15 13:36+0100\n"
+"POT-Creation-Date: 2023-03-28 12:31+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Be Rebel <web@stockmanagementlabs.com>\n"
@@ -39,8 +39,8 @@ msgstr ""
 msgid "Add-ons"
 msgstr ""
 
-#: classes/Addons/Addons.php:222 classes/Addons/Addons.php:1092
-#: classes/Addons/Addons.php:1157
+#: classes/Addons/Addons.php:222 classes/Addons/Addons.php:1116
+#: classes/Addons/Addons.php:1181
 msgid "Activate"
 msgstr ""
 
@@ -57,123 +57,155 @@ msgid "Your add-on license has been activated."
 msgstr ""
 
 #: classes/Addons/Addons.php:226
+msgid "Add-on installed successfully"
+msgstr ""
+
+#: classes/Addons/Addons.php:228
+msgid "Add-on not installed"
+msgstr ""
+
+#: classes/Addons/Addons.php:229
 msgid "Yes, I agree!"
 msgstr ""
 
-#: classes/Addons/Addons.php:227
+#: classes/Addons/Addons.php:230
+msgid "All the add-ons were installed successfully"
+msgstr ""
+
+#: classes/Addons/Addons.php:231
 msgid "You are allowed to remove a license a max of 2 times."
 msgstr ""
 
-#: classes/Addons/Addons.php:228 classes/Components/AtumAdminModal.php:68
+#: classes/Addons/Addons.php:232
+msgid "ATUM Add-ons Auto-Installer"
+msgstr ""
+
+#: classes/Addons/Addons.php:233 classes/Components/AtumAdminModal.php:68
 #: classes/Components/AtumOrders/AtumOrderPostType.php:968
 #: classes/Dashboard/Dashboard.php:330 classes/Inc/Hooks.php:276
-#: classes/Settings/Settings.php:210 views/add-ons/add-on.php:157
-#: views/add-ons/add-on.php:179 views/meta-boxes/atum-order/items.php:254
+#: classes/Settings/Settings.php:210 views/add-ons/add-on.php:161
+#: views/add-ons/add-on.php:183 views/meta-boxes/atum-order/items.php:254
 #: views/widgets/lost-sales-config.php:24
 msgid "Cancel"
 msgstr ""
 
-#: classes/Addons/Addons.php:229
+#: classes/Addons/Addons.php:234
 #: classes/Components/AtumOrders/AtumOrderPostType.php:971
 msgid "Continue"
 msgstr ""
 
-#: classes/Addons/Addons.php:230
+#: classes/Addons/Addons.php:235
 msgid "Yes, Extend it!"
 msgstr ""
 
-#: classes/Addons/Addons.php:231
+#: classes/Addons/Addons.php:236
 #: classes/Components/AtumOrders/AtumOrderPostType.php:979
 #: classes/Inc/Hooks.php:279 classes/Settings/Settings.php:215
 msgid "Error!"
 msgstr ""
 
-#: classes/Addons/Addons.php:232
+#: classes/Addons/Addons.php:237
 #: classes/Components/AtumListTables/AtumListTable.php:3409
 #: classes/Components/AtumOrders/AtumOrderPostType.php:1023
 #: views/add-ons/sidebar.php:17
 msgid "Hide"
 msgstr ""
 
-#: classes/Addons/Addons.php:233
+#: classes/Addons/Addons.php:238
+msgid "Install"
+msgstr ""
+
+#: classes/Addons/Addons.php:239
+msgid "Installing..."
+msgstr ""
+
+#: classes/Addons/Addons.php:240
 msgid "Please enter a valid add-on license key."
 msgstr ""
 
-#: classes/Addons/Addons.php:234
+#: classes/Addons/Addons.php:241
+msgid "key"
+msgstr ""
+
+#: classes/Addons/Addons.php:242
 msgid "Limited Deactivations!"
 msgstr ""
 
-#: classes/Addons/Addons.php:235 classes/Components/AtumAdminModal.php:67
+#: classes/Addons/Addons.php:243 classes/Components/AtumAdminModal.php:67
 #: classes/Components/AtumListTables/AtumListTable.php:3416
 #: classes/Components/AtumOrders/AtumOrderPostType.php:987
 #: classes/Settings/Settings.php:219
 msgid "OK"
 msgstr ""
 
-#: classes/Addons/Addons.php:237
+#: classes/Addons/Addons.php:245
 #: classes/Components/AtumListTables/AtumListTable.php:3431
 #: classes/Components/AtumOrders/AtumOrderPostType.php:1025
 #: views/list-tables/show-filters-button.php:12
 msgid "Show"
 msgstr ""
 
-#: classes/Addons/Addons.php:238 classes/Inc/Hooks.php:283
+#: classes/Addons/Addons.php:246 classes/Inc/Hooks.php:283
 msgid "Success!"
 msgstr ""
 
-#: classes/Addons/Addons.php:239
+#: classes/Addons/Addons.php:247
+msgid "The following add-ons are going to be installed"
+msgstr ""
+
+#: classes/Addons/Addons.php:248
 msgid "Trial License!"
 msgstr ""
 
-#: classes/Addons/Addons.php:240
+#: classes/Addons/Addons.php:249
 msgid "Your trial add-on license has been activated."
 msgstr ""
 
-#: classes/Addons/Addons.php:241
+#: classes/Addons/Addons.php:250
 msgid "Trial deactivation notice!"
 msgstr ""
 
-#: classes/Addons/Addons.php:242 views/add-ons/expired-trials-modal.php:35
+#: classes/Addons/Addons.php:251 views/add-ons/expired-trials-modal.php:35
 msgid "Trial expired!"
 msgstr ""
 
-#: classes/Addons/Addons.php:243
+#: classes/Addons/Addons.php:252
 msgid "Trial extension"
 msgstr ""
 
-#: classes/Addons/Addons.php:244
+#: classes/Addons/Addons.php:253
 msgid ""
 "If you remove a trial license, your installed add-on will be disabled. Please, "
 "only remove this trial license if you are going to uninstall the add-on or "
 "replace it by a full version license key."
 msgstr ""
 
-#: classes/Addons/Addons.php:245
+#: classes/Addons/Addons.php:254
 msgid "You are going to extend this trial for 7 days more"
 msgstr ""
 
-#: classes/Addons/Addons.php:372
+#: classes/Addons/Addons.php:387
 #, php-format
 msgid ""
 "The ATUM %1$s license is invalid. Please, enter a valid trial license on the "
 "%2$sadd-ons page.%3$s"
 msgstr ""
 
-#: classes/Addons/Addons.php:384
+#: classes/Addons/Addons.php:399
 #, php-format
 msgid ""
 "The ATUM %1$s license is invalid. Please, enter a valid full version license on "
 "the %2$sadd-ons page.%3$s"
 msgstr ""
 
-#: classes/Addons/Addons.php:415
+#: classes/Addons/Addons.php:430
 #, php-format
 msgid ""
 "The ATUM %1$s license is invalid. Please, enter a valid trial license on the "
 "%2$sadd-ons page%3$s or purchase the full version."
 msgstr ""
 
-#: classes/Addons/Addons.php:427
+#: classes/Addons/Addons.php:442
 #, php-format
 msgid ""
 "ATUM %1$s license has expired or is invalid. You can no longer update or take "
@@ -182,97 +214,97 @@ msgid ""
 "for 15%% OFF now (valid 14 days after the license expires).%3$s"
 msgstr ""
 
-#: classes/Addons/Addons.php:440
+#: classes/Addons/Addons.php:455
 #, php-format
 msgid ""
 "ATUM %1$s license is being used on another site and is for a single use only. "
 "Please, remove it from the %2$sadd-ons page%3$s."
 msgstr ""
 
-#: classes/Addons/Addons.php:489
+#: classes/Addons/Addons.php:504
 #, php-format
 msgid "Something failed getting the ATUM's add-ons list: %s"
 msgstr ""
 
-#: classes/Addons/Addons.php:502 classes/Addons/Addons.php:519
+#: classes/Addons/Addons.php:517 classes/Addons/Addons.php:534
 msgid ""
 "Something failed getting the ATUM's add-ons list. Please retry after some "
 "minutes."
 msgstr ""
 
-#: classes/Addons/Addons.php:615
+#: classes/Addons/Addons.php:630
 msgid "Learn More"
 msgstr ""
 
-#: classes/Addons/Addons.php:851
+#: classes/Addons/Addons.php:872
 msgid "Unexpected error. Please contact ATUM's support"
 msgstr ""
 
-#: classes/Addons/Addons.php:1048
+#: classes/Addons/Addons.php:1072
 msgid "Missing License!"
 msgstr ""
 
-#: classes/Addons/Addons.php:1051
+#: classes/Addons/Addons.php:1075
 msgid ""
 "License key missing! Please, add your key to continue receiving automatic "
 "updates."
 msgstr ""
 
-#: classes/Addons/Addons.php:1077
+#: classes/Addons/Addons.php:1101
 msgid "Activate and Install"
 msgstr ""
 
-#: classes/Addons/Addons.php:1080
+#: classes/Addons/Addons.php:1104
 msgid "Not Installed"
 msgstr ""
 
-#: classes/Addons/Addons.php:1086 views/add-ons/add-on.php:58
+#: classes/Addons/Addons.php:1110 views/add-ons/add-on.php:58
 #: views/add-ons/nav.php:24
 msgid "Trial"
 msgstr ""
 
-#: classes/Addons/Addons.php:1095
+#: classes/Addons/Addons.php:1119
 msgid "License key missing! Please, add your key to continue using this trial."
 msgstr ""
 
-#: classes/Addons/Addons.php:1100 classes/Addons/Addons.php:1163
+#: classes/Addons/Addons.php:1124 classes/Addons/Addons.php:1187
 msgid "Not Activated"
 msgstr ""
 
-#: classes/Addons/Addons.php:1105
+#: classes/Addons/Addons.php:1129
 msgid ""
 "This trial has already been used on another site and is for a single use only."
 msgstr ""
 
-#: classes/Addons/Addons.php:1112
+#: classes/Addons/Addons.php:1136
 #, php-format
 msgid "Trial period: %s "
 msgstr ""
 
-#: classes/Addons/Addons.php:1112
+#: classes/Addons/Addons.php:1136
 msgid "remaining"
 msgstr ""
 
-#: classes/Addons/Addons.php:1117
+#: classes/Addons/Addons.php:1141
 msgid ""
 "Trial period expired. You can extend it for 7 days more or unlock the full "
 "version by purchasing a license."
 msgstr ""
 
-#: classes/Addons/Addons.php:1120
+#: classes/Addons/Addons.php:1144
 msgid ""
 "Trial period expired. Please, purchase a license to unlock the full version."
 msgstr ""
 
-#: classes/Addons/Addons.php:1133
+#: classes/Addons/Addons.php:1157
 msgid "Validate"
 msgstr ""
 
-#: classes/Addons/Addons.php:1137
+#: classes/Addons/Addons.php:1161
 msgid "Invalid License"
 msgstr ""
 
-#: classes/Addons/Addons.php:1139
+#: classes/Addons/Addons.php:1163
 #, php-format
 msgid ""
 "Your license is invalid. Please, remove it or reactivate your subscription to "
@@ -280,58 +312,58 @@ msgid ""
 "%1$shere%2$s to recheck"
 msgstr ""
 
-#: classes/Addons/Addons.php:1148 views/add-ons/nav.php:21
+#: classes/Addons/Addons.php:1172 views/add-ons/nav.php:21
 msgid "Expired"
 msgstr ""
 
-#: classes/Addons/Addons.php:1150
+#: classes/Addons/Addons.php:1174
 #, php-format
 msgid ""
 "Your license has expired. If you have already renewed the license, please "
 "click&nbsp; %1$shere%2$s &nbsp;to recheck."
 msgstr ""
 
-#: classes/Addons/Addons.php:1172 views/add-ons/nav.php:19
+#: classes/Addons/Addons.php:1196 views/add-ons/nav.php:19
 msgid "Activated"
 msgstr ""
 
-#: classes/Addons/Addons.php:1231
+#: classes/Addons/Addons.php:1255
 msgid "The download link is not valid"
 msgstr ""
 
-#: classes/Addons/Addons.php:1295
+#: classes/Addons/Addons.php:1327
 #, php-format
 msgid ""
 "ATUM %1$s could not be installed (reason: %2$s). Please, contact with ATUM's "
 "support."
 msgstr ""
 
-#: classes/Addons/Addons.php:1326
+#: classes/Addons/Addons.php:1358
 #, php-format
 msgid ""
 "ATUM %1$s was installed but could not be activated.<br>Please, activate it "
 "manually from the %2$splugins page.%3$s"
 msgstr ""
 
-#: classes/Addons/Addons.php:1339
+#: classes/Addons/Addons.php:1371
 #, php-format
 msgid "The ATUM %s addon was installed and activated successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:1348
+#: classes/Addons/Addons.php:1380
 #, php-format
 msgid "The ATUM %s addon was installed successfully."
 msgstr ""
 
-#: classes/Addons/Addons.php:1546
+#: classes/Addons/Addons.php:1578
 msgid "Open a private ticket"
 msgstr ""
 
-#: classes/Addons/Addons.php:1546
+#: classes/Addons/Addons.php:1578
 msgid "Premium Support"
 msgstr ""
 
-#: classes/Addons/Addons.php:1738 classes/Addons/Addons.php:1746
+#: classes/Addons/Addons.php:1770 classes/Addons/Addons.php:1778
 #: classes/Api/AtumApi.php:339 classes/Api/AtumApi.php:346
 #: classes/Api/Extenders/AtumProductData.php:930
 #: classes/Api/Extenders/AtumProductData.php:937
@@ -360,7 +392,7 @@ msgstr ""
 #: classes/Components/AtumMarketingPopup.php:420
 #: classes/Components/AtumOrders/AtumComments.php:201
 #: classes/Components/AtumOrders/AtumComments.php:208
-#: classes/Components/AtumQueues.php:612 classes/Components/AtumQueues.php:621
+#: classes/Components/AtumQueues.php:601 classes/Components/AtumQueues.php:610
 #: classes/Dashboard/Dashboard.php:482 classes/Dashboard/Dashboard.php:489
 #: classes/InboundStock/InboundStock.php:159
 #: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3009
@@ -377,7 +409,7 @@ msgstr ""
 #: classes/Orders/CheckOrderPrices.php:553 classes/Orders/CheckOrderPrices.php:560
 #: classes/PurchaseOrders/PurchaseOrders.php:1087
 #: classes/PurchaseOrders/PurchaseOrders.php:1094
-#: classes/Settings/Settings.php:1770 classes/Settings/Settings.php:1778
+#: classes/Settings/Settings.php:1774 classes/Settings/Settings.php:1782
 #: classes/Settings/Tools.php:184 classes/Settings/Tools.php:192
 #: classes/StockCentral/StockCentral.php:394
 #: classes/StockCentral/StockCentral.php:401 classes/Suppliers/Suppliers.php:792
@@ -2436,7 +2468,7 @@ msgid "Last page"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:4152
-#: classes/Inc/Helpers.php:3773
+#: classes/Inc/Helpers.php:3784
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,"
@@ -3494,22 +3526,22 @@ msgstr ""
 msgid "Get Support"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3409
+#: classes/Inc/Helpers.php:3420
 msgid "HELP US TO IMPROVE!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3412
+#: classes/Inc/Helpers.php:3423
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%2$s rating. Huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3412
+#: classes/Inc/Helpers.php:3423
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3422
+#: classes/Inc/Helpers.php:3433
 msgid "Thank you for trusting <strong>ATUM</strong> to manage your inventory 🙌"
 msgstr ""
 
@@ -4708,18 +4740,22 @@ msgid ""
 "Tables' loading time."
 msgstr ""
 
-#: classes/Settings/Settings.php:826 classes/Settings/Settings.php:843
-#: classes/Settings/Settings.php:861 classes/Settings/Settings.php:877
-#: classes/Settings/Settings.php:928 classes/Settings/Settings.php:946
-#: classes/Settings/Settings.php:974 classes/Settings/Settings.php:982
+#: classes/Settings/Settings.php:826 classes/Settings/Settings.php:846
+#: classes/Settings/Settings.php:864 classes/Settings/Settings.php:880
+#: classes/Settings/Settings.php:931 classes/Settings/Settings.php:949
+#: classes/Settings/Settings.php:977 classes/Settings/Settings.php:985
 msgid "An invalid setting value was passed."
 msgstr ""
 
-#: classes/Settings/Settings.php:1536
+#: classes/Settings/Settings.php:1147
+msgid "--- Select a country ---"
+msgstr ""
+
+#: classes/Settings/Settings.php:1540
 msgid "Upload"
 msgstr ""
 
-#: classes/Settings/Settings.php:1669
+#: classes/Settings/Settings.php:1673
 msgid "Select time"
 msgstr ""
 
@@ -5163,44 +5199,47 @@ msgstr ""
 msgid "More info"
 msgstr ""
 
-#: views/add-ons/add-on.php:102 views/add-ons/add-on.php:122
-#: views/add-ons/expired-trials-modal.php:49
-msgid "Purchase"
+#: views/add-ons/add-on.php:105
+msgid "Upgrade"
 msgstr ""
 
-#: views/add-ons/add-on.php:105
+#: views/add-ons/add-on.php:109
 msgid "Extend trial"
 msgstr ""
 
-#: views/add-ons/add-on.php:117
+#: views/add-ons/add-on.php:121
 msgid "Start free trial"
 msgstr ""
 
-#: views/add-ons/add-on.php:124
+#: views/add-ons/add-on.php:126 views/add-ons/expired-trials-modal.php:49
+msgid "Purchase"
+msgstr ""
+
+#: views/add-ons/add-on.php:128
 msgid "Renew License"
 msgstr ""
 
-#: views/add-ons/add-on.php:132
+#: views/add-ons/add-on.php:136
 msgid "Enter License"
 msgstr ""
 
-#: views/add-ons/add-on.php:134
+#: views/add-ons/add-on.php:138
 msgid "View License"
 msgstr ""
 
-#: views/add-ons/add-on.php:148
+#: views/add-ons/add-on.php:152
 msgid "Enter the add-on license key..."
 msgstr ""
 
-#: views/add-ons/add-on.php:162
+#: views/add-ons/add-on.php:166
 msgid "License key"
 msgstr ""
 
-#: views/add-ons/add-on.php:168
+#: views/add-ons/add-on.php:172
 msgid "Expiration date"
 msgstr ""
 
-#: views/add-ons/add-on.php:177
+#: views/add-ons/add-on.php:181
 msgid "Remove license"
 msgstr ""
 
@@ -5240,6 +5279,12 @@ msgstr ""
 #: views/add-ons/list.php:33
 #, php-format
 msgid "No add-ons found with term '%s'"
+msgstr ""
+
+#: views/add-ons/list.php:45
+msgid ""
+"We are experiencing some technical problems to load the add-ons list now. "
+"Please, try again after some minutes."
 msgstr ""
 
 #: views/add-ons/nav.php:20
