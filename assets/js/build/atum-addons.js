@@ -748,6 +748,8 @@ var AutoInstaller = (function () {
             showCancelButton: true,
             showCloseButton: true,
             reverseButtons: true,
+            allowOutsideClick: function () { return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.isLoading(); },
+            allowEscapeKey: function () { return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.isLoading(); },
             showLoaderOnConfirm: true,
             preConfirm: function () {
                 return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {

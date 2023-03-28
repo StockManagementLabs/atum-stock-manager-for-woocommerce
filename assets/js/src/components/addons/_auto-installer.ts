@@ -71,6 +71,8 @@ export default class AutoInstaller {
 			showCancelButton   : true,
 			showCloseButton    : true,
 			reverseButtons     : true,
+			allowOutsideClick  : () => !Swal.isLoading(),
+			allowEscapeKey     : () => !Swal.isLoading(),
 			showLoaderOnConfirm: true,
 			preConfirm         : (): Promise<void> => {
 
