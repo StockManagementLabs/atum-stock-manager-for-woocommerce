@@ -256,7 +256,7 @@ class AtumBarcodes {
 
 		$barcode = $product->get_barcode();
 
-		if ( 0 === strlen( $barcode ) ) {
+		if ( ! $barcode ) {
 			$barcode = AtumListTable::EMPTY_COL;
 		}
 
