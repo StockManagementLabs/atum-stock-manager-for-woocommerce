@@ -233,7 +233,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAddons');
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumTrialAddons');
     new _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
 

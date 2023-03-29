@@ -18,7 +18,7 @@ import Trials from './components/addons/_trials';
 jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
-	const settings = new Settings( 'atumAddons' );
+	const settings = new Settings( 'atumTrialAddons' );
 	new Trials( settings );
 	
 });

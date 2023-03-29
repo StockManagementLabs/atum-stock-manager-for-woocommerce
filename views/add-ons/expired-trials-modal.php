@@ -45,11 +45,11 @@ defined( 'ABSPATH' ) || die;
 
 			</span>
 
-			<span class="atum-trial-list__item-buttons">
+			<span class="atum-trial-list__item-buttons atum-addon" data-addon="<?php echo esc_attr( $expired_trial['name'] ) ?>">
 				<a href="<?php echo esc_url( $expired_trial['addon_url'] ) ?>" class="btn btn-primary" target="_blank"><?php esc_html_e( 'Purchase', ATUM_TEXT_DOMAIN ); ?></a>
 
 				<?php if ( ! $expired_trial['extended'] ) : ?>
-					<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $expired_trial['key'] ?? '' ) ?>"><?php esc_html_e( 'Extend Trial', ATUM_TEXT_DOMAIN ); ?></button>
+					<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $expired_trial['key'] ?? '' ) ?>" ><?php esc_html_e( 'Extend Trial', ATUM_TEXT_DOMAIN ); ?></button>
 				<?php endif; ?>
 			</span>
 

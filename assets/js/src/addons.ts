@@ -22,10 +22,9 @@ jQuery( ( $: JQueryStatic ) => {
 
 	// Get the options from the localized var.
 	const settings = new Settings( 'atumAddons' ),
-	      tooltip  = new Tooltip(),
-	      trials   = new Trials( settings, () => location.reload() );
+	      tooltip  = new Tooltip();
 
-	const addonsPage = new AddonsPage( settings, trials );
+	const addonsPage = new AddonsPage( settings );
 
 	new AutoInstaller( settings, addonsPage, tooltip );
 	

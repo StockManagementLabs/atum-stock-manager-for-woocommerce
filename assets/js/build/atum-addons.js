@@ -99,15 +99,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_addons_auto_installer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/addons/_auto-installer */ "./assets/js/src/components/addons/_auto-installer.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
-/* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
-
 
 
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_3__["default"](), trials = new _components_addons_trials__WEBPACK_IMPORTED_MODULE_4__["default"](settings, function () { return location.reload(); });
-    var addonsPage = new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings, trials);
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    var addonsPage = new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
     new _components_addons_auto_installer__WEBPACK_IMPORTED_MODULE_1__["default"](settings, addonsPage, tooltip);
 });
 
@@ -230,13 +228,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_vendor_dragscroll__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _trials__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./_trials */ "./assets/js/src/components/addons/_trials.ts");
+
 
 
 
 var AddonsPage = (function () {
-    function AddonsPage(settings, trials) {
+    function AddonsPage(settings) {
         this.settings = settings;
-        this.trials = trials;
         this.$addonsPage = $('.atum-addons');
         this.$noResults = this.$addonsPage.find('.no-results');
         this.prepareMenu();
@@ -557,7 +556,7 @@ var AddonsPage = (function () {
                     reverseButtons: true,
                     showLoaderOnConfirm: true,
                     preConfirm: function () {
-                        return _this.trials.extendTrial(addon, key, true, function (response) {
+                        return _trials__WEBPACK_IMPORTED_MODULE_3__["default"].prototype.extendTrial(addon, key, true, function (response) {
                             _this.licenseChangeResponse(response.success, response.data, addon, key, isSwal);
                         });
                     },
