@@ -99,7 +99,7 @@ class Updater {
 		$this->api_url       = Addons::ADDONS_STORE_URL;
 		$this->api_data      = $api_data;
 		$this->name          = plugin_basename( $addon_file );
-		$this->slug          = basename( $addon_file, '.php' );
+		$this->slug          = $api_data['slug'];
 		$this->version       = $api_data['version'];
 		$this->wp_override   = isset( $api_data['wp_override'] ) ? (bool) $api_data['wp_override'] : FALSE;
 		$this->beta          = ! empty( $this->api_data['beta'] );
