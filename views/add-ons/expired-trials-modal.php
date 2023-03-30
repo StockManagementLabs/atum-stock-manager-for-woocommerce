@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || die;
 <p>
 	<?php
 	echo esc_html( _n(
-		'The following add-on with a expired trial license has been blocked. Please check its status below.',
-		'The following add-ons with a expired trial license have been blocked. Please check their status below.',
+		'The following add-on has an expired trial license. ATUM has blocked their use but did not delete the work progress.',
+		'The following add-ons have an expired trial license. ATUM has blocked their use but did not delete the work progress.',
 		count( $expired_trials ),
 		ATUM_TEXT_DOMAIN
 	) ) ?>
