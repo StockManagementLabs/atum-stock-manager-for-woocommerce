@@ -337,7 +337,7 @@ final class Addons {
 				if ( strpos( $plugin_file, 'atum-' ) === 0 && empty( wp_list_filter( $installed_addons, [ 'basename' => $plugin_file ] ) ) ) {
 
 					// Get the plugin slug from the URL.
-					$plugin_url_paths  = parse_url( $plugin_data['PluginURI'] ?? '' );
+					$plugin_url_paths = parse_url( $plugin_data['PluginURI'] ?? '' );
 
 					// Bypass the ATUM free plugin.
 					if ( ! empty( $plugin_url_paths['path'] ) && '/' !== $plugin_url_paths['path'] ) {
@@ -441,6 +441,7 @@ final class Addons {
 									'version'   => $addon_info[ $addon_file ]['Version'],
 									'license'   => $license_key['key'],
 									'item_name' => $addon_name,
+									'slug'      => str_replace( '_', '-', ATUM_PREFIX . $addon_slug ),
 								) );
 
 							}
@@ -614,7 +615,7 @@ final class Addons {
 
 			if ( strpos( $addon_slug, 'trial' ) ) {
 				$addon_slug = str_replace( '-trial', '', $addon_slug );
-				$is_trial = TRUE;
+				$is_trial   = TRUE;
 			}
 
 			foreach ( $addons as $addon ) {
@@ -1061,14 +1062,14 @@ final class Addons {
 							}
 							else {
 
-								$addon_status->status  = $license_data->license;
+								$addon_status->status = $license_data->license;
 
 								if ( ! empty( $license_data->expires ) ) {
 									$addon_status->expires = ! Helpers::validate_mysql_date( $license_data->expires ) ? Helpers::date_format( $license_data->expires, FALSE, FALSE, 'Y-m-d' ) : $license_data->expires;
 								}
 
 								if ( $addon_status->status !== $saved_license['status'] ) {
-									$saved_license['status']  = $addon_status->status;
+									$saved_license['status'] = $addon_status->status;
 								}
 
 							}
@@ -1099,7 +1100,7 @@ final class Addons {
 					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
 
 					if ( $is_installed ) {
-						$addon_status->notice = esc_html__( 'License key missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice      = esc_html__( 'License key missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
 						$addon_status->notice_type = 'warning';
 					}
 
