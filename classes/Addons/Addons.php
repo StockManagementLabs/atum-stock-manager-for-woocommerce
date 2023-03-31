@@ -122,9 +122,6 @@ final class Addons {
 		$addons_loader = self::get_addons_loader_class();
 		new $addons_loader();
 
-		// Load extend trial.
-		add_action( 'admin_enqueue_scripts', array( $this, 'load_extend_trial' ) );
-
 		if ( is_admin() ) {
 
 			// Automatic updates for addons.
@@ -162,30 +159,6 @@ final class Addons {
 			}
 
 		}
-
-	}
-
-	/**
-	 * Load extend trial
-	 *
-	 * @param string $hook
-	 */
-	public function load_extend_trial( string $hook ): void {
-
-		wp_register_script( 'atum-trials-modal', ATUM_URL . 'assets/js/build/atum-trials-modal.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
-
-		wp_localize_script( 'atum-trials-modal', 'atumTrialAddons', array(
-			'cancel'          => __( 'Cancel', ATUM_TEXT_DOMAIN ),
-			'extend'          => __( 'Yes, Extend it!', ATUM_TEXT_DOMAIN ),
-			'ok'              => __( 'OK', ATUM_TEXT_DOMAIN ),
-			'nonce'           => wp_create_nonce( ATUM_PREFIX . 'manage_license' ),
-			'success'         => __( 'Success!', ATUM_TEXT_DOMAIN ),
-			'trialExtension'  => __( 'Trial extension', ATUM_TEXT_DOMAIN ),
-			'trialWillExtend' => __( 'You are going to extend this trial for 7 days more', ATUM_TEXT_DOMAIN ),
-
-		) );
-
-		wp_enqueue_script( 'atum-trials-modal' );
 
 	}
 
