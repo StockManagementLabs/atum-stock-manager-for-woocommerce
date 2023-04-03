@@ -53,6 +53,13 @@ class AtumAdminModal {
 	 */
 	protected $exclusions = [];
 
+	/**
+	 * Any extra JS dependencies required for the modal
+	 *
+	 * @var string[]
+	 */
+	protected $js_dependencies = [];
+
 
 	/**
 	 * AtumAdminModals singleton constructor
@@ -133,12 +140,15 @@ class AtumAdminModal {
 			}
 		}
 
-		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 		Helpers::maybe_es6_promise();
 
-		wp_register_style( 'atum-admin-modals', ATUM_URL . 'assets/css/atum-admin-modals.css', array( 'sweetalert2' ), ATUM_VERSION );
-		wp_register_script( 'atum-admin-modals', ATUM_URL . 'assets/js/build/atum-admin-modals.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+		wp_register_style( 'atum-admin-modals', ATUM_URL . 'assets/css/atum-admin-modals.css', [ 'sweetalert2' ], ATUM_VERSION );
+
+		$js_deps = array_merge( [ 'jquery', 'sweetalert2' ], $this->js_dependencies );
+
+		wp_register_script( 'atum-admin-modals', ATUM_URL . 'assets/js/build/atum-admin-modals.js', $js_deps, ATUM_VERSION, TRUE );
 		wp_localize_script( 'atum-admin-modals', 'atumAdminModalVars', $admin_modal_vars );
 
 		wp_enqueue_style( 'atum-admin-modals' );
@@ -210,6 +220,16 @@ class AtumAdminModal {
 		return $this->key;
 	}
 
+	/**
+	 * Setter for the modal's JS dependencies
+	 *
+	 * @since 1.9.27.1
+	 *
+	 * @param string[] $deps
+	 */
+	public function set_js_dependencies( array $deps ) {
+		$this->js_dependencies = $deps;
+	}
 
 	/****************************
 	 * Instance methods
