@@ -762,7 +762,12 @@ final class Ajax {
 		}
 
 		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-		$is_trial     = ! empty( $license_data->trial );
+
+		if ( isset( $license_data->success ) && FALSE === $license_data->success && ! empty( $license_data->message ) ) {
+			wp_send_json_error( $license_data->message );
+		}
+
+		$is_trial = ! empty( $license_data->trial );
 
 		if ( $is_trial && Helpers::is_plugin_installed( "ATUM $addon_name", 'name' ) ) {
 			wp_send_json_error( __( 'This is a trial license and cannot be used for your full version.', ATUM_TEXT_DOMAIN ) );
