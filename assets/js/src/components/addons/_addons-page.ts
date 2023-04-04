@@ -19,6 +19,7 @@ export default class AddonsPage {
 	
 	constructor(
 		private settings: Settings,
+		private trials: Trials
 	) {
 
 		this.$addonsPage = $( '.atum-addons' );
@@ -506,9 +507,11 @@ export default class AddonsPage {
 					reverseButtons     : true,
 					showLoaderOnConfirm: true,
 					preConfirm         : (): Promise<void> => {
-						return Trials.prototype.extendTrial( addon, key, true, ( response: any ) => {
-							this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+
+						return this.trials.extendTrial( addon, key, true, ( response: any ) => {
+							this.licenseChangeResponse( response.success, response.data, addon, key, true );
 						} );
+
 					},
 				} );
 

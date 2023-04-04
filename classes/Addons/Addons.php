@@ -1321,14 +1321,25 @@ final class Addons {
 
 			} catch ( AtumException $e ) {
 
-				return array(
-					'success' => FALSE,
-					'data'    => sprintf(
-						/* translators: first one is the add-on nam and the second the error message */
+				if ( $e->getMessage() ) {
+					$message = sprintf(
+						/* translators: first one is the add-on name and the second the error message */
 						__( "ATUM %1\$s could not be installed (reason: %2\$s). Please, contact with ATUM's support.", ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						lcfirst( $e->getMessage() )
-					),
+					);
+				}
+				else {
+					$message = sprintf(
+						/* translators: the add-on name */
+						__( "ATUM %s could not be installed. Please, contact with ATUM's support.", ATUM_TEXT_DOMAIN ),
+						$addon_name
+					);
+				}
+
+				return array(
+					'success' => FALSE,
+					'data'    => $message,
 				);
 
 			}
