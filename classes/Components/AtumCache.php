@@ -306,8 +306,13 @@ final class AtumCache {
 
 		$type         = esc_attr( $type );
 		$transient_id = $type ?: $prefix;
-		$transient    = "_transient_{$transient_id}";
-		$timeout      = "_transient_timeout_{$transient_id}";
+
+		if ( $prefix && strpos( $transient_id, $prefix ) !== 0 ) {
+			$transient_id = $prefix . $transient_id;
+		}
+
+		$transient = "_transient_{$transient_id}";
+		$timeout   = "_transient_timeout_{$transient_id}";
 
 		// Ensure the transient isn't in the WP cache.
 		$all_options = wp_cache_get( 'alloptions', 'options' );
