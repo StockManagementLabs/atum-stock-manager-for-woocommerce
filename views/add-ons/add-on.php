@@ -130,7 +130,7 @@ endif;
 
 					<?php endif; ?>
 
-					<?php if ( ! $is_coming_soon_addon ) : ?>
+					<?php if ( ! $is_coming_soon_addon && current_user_can( 'install_plugins' ) ) : ?>
 
 						<?php if ( empty( $addon_status->key ) || 'inactive' === $addon_status->status ) : ?>
 							<button type="button" class="more-details btn btn-success show-key"><?php esc_html_e( 'Enter License', ATUM_TEXT_DOMAIN ); ?></button>
@@ -141,7 +141,7 @@ endif;
 					<?php endif; ?>
 				</div>
 
-				<?php if ( ! $is_coming_soon_addon ) : ?>
+				<?php if ( ! $is_coming_soon_addon && current_user_can( 'install_plugins' ) ) : ?>
 					<div class="addon-key"<?php echo ( ! $addon_status->installed && ! empty( $addon_status->key ) ) ? ' style="display:block"' : '' ?>>
 						<div class="wrapper">
 							<?php if ( ! $addon_status->installed || empty( $addon_status->key ) ) : ?>
