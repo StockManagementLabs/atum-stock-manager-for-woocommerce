@@ -74,7 +74,7 @@ endif;
 				</div>
 			<?php endif; ?>
 
-			<?php if ( ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
+			<?php if ( $addon_status->installed && ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
 				<div class="alert alert-primary">
 					<i class="atum-icon atmi-info"></i>
 					<span>
