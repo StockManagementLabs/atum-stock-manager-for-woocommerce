@@ -527,7 +527,7 @@ final class Addons {
 			else {
 
 				$response_body = wp_remote_retrieve_body( $response );
-				$addons        = $response_body ? json_decode( $response_body, TRUE ) : array();
+				$addons        = $response_body ? json_decode( $response_body, TRUE ) : [];
 
 				if ( empty( $addons ) ) {
 
@@ -866,15 +866,7 @@ final class Addons {
 			$function = 'wp_remote_post';
 		}
 
-		$response  = call_user_func( $function, self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT . $endpoint, $args );
-		$resp_body = json_decode( wp_remote_retrieve_body( $response ) );
-
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$error = $resp_body->message ?? __( "Unexpected error. Please contact ATUM's support", ATUM_TEXT_DOMAIN );
-			return new \WP_Error( 'unexpected_error', $error );
-		}
-
-		return $response;
+		return call_user_func( $function, self::ADDONS_STORE_URL . self::ADDONS_API_ENDPOINT . $endpoint, $args );
 
 	}
 
@@ -1457,9 +1449,34 @@ final class Addons {
 	public static function extend_trial( $key ) {
 
 		$result = self::atum_api_request( 'POST', "/extend-trial?key=$key" );
-		do_action( 'atum/addons/extend_trial', $result );
+
+		if ( is_wp_error( $result ) ) {
+
+			$error_message = $result->get_error_message();
+
+			if ( TRUE === ATUM_DEBUG ) {
+				error_log( __METHOD__ . ": $error_message" );
+			}
+
+		}
+		elseif ( 200 !== wp_remote_retrieve_response_code( $result ) ) {
+
+			$error  = $resp_body->message ?? __( "Unexpected error. Please contact ATUM's support", ATUM_TEXT_DOMAIN );
+
+			if ( TRUE === ATUM_DEBUG ) {
+				error_log( __METHOD__ . ": $error" );
+			}
+
+			$result = new \WP_Error( 'unexpected_error', $error );
+
+		}
+		else {
+			$response_body = wp_remote_retrieve_body( $result );
+			$result        = $response_body ? json_decode( $response_body, TRUE ) : [];
+		}
 
 		return $result;
+
 	}
 
 	/**
