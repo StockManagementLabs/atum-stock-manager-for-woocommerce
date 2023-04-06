@@ -804,7 +804,7 @@ final class Ajax {
 					wp_send_json( array(
 						'success' => 'trial',
 						/* translators: the add-on name */
-						'data'    => sprintf( __( "This is an ATUM %s trial license, and you'll be able to trial this add-on for free for 14 days until it's blocked.<br>If you agree, please click the button to activate and install.", ATUM_TEXT_DOMAIN ), $addon_name ),
+						'data'    => sprintf( __( "This is an 'ATUM %s trial' license, and you'll be able to try out this add-on for 14 days until it's blocked and asked to purchase the full version.<br>If you agree, please click the button to activate and install.", ATUM_TEXT_DOMAIN ), $addon_name ),
 					) );
 				}
 
