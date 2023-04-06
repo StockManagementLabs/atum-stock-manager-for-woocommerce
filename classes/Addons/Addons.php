@@ -1300,8 +1300,10 @@ final class Addons {
 				// If the user is upgrading a trial to full, uninstall the trial and block any uninstallation hooks.
 				$is_trial_addon = strpos( strtolower( $addon_name ), 'trial' ) !== FALSE;
 				if ( ! $is_trial_addon && Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name' ) ) {
-					add_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' ); // Do not trigger the uninstall hook in this case.
-					delete_plugins( [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ] );
+					add_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
+					$plugin = [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ];
+					deactivate_plugins( $plugin, TRUE );
+					delete_plugins( $plugin );
 					remove_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
 				}
 
