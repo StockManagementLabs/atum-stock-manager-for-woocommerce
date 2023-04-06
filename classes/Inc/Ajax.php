@@ -1257,16 +1257,18 @@ final class Ajax {
 			wp_send_json_error( $result->get_error_message() );
 		}
 
+		$expires = $result['expires'] ?? date_i18n( 'Y-m-d H:i:s', strtotime( '+7 days' ) );
+
 		Addons::update_key( $addon_name, array(
 			'key'      => $key,
 			'status'   => 'valid',
-			'expires'  => $result->expires,
+			'expires'  => $expires,
 			'trial'    => TRUE,
 			'extended' => TRUE,
 		) );
 
 		/* translators: the expiration date */
-		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), $result->expires ) );
+		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), date_i18n( 'Y-m-d', strtotime( $expires ) ) ) );
 
 	}
 
