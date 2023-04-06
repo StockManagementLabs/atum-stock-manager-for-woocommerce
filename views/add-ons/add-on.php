@@ -87,7 +87,7 @@ endif;
 
 			<div class="actions <?php echo esc_attr( implode( ' ', $addon_status->classes ) ) ?>">
 
-				<div class="actions__buttons">
+				<div class="actions__buttons"<?php echo ( ! $addon_status->installed && ! empty( $addon_status->key ) ) ? ' style="display:none"' : '' ?>>
 					<?php if ( $is_coming_soon_addon ) : ?>
 
 						<a class="more-details btn btn-outline-primary" href="<?php echo esc_url( $addon['info']['link'] ) ?>" target="_blank"><?php esc_html_e( 'More info', ATUM_TEXT_DOMAIN ); ?></a>
@@ -142,7 +142,7 @@ endif;
 				</div>
 
 				<?php if ( ! $is_coming_soon_addon ) : ?>
-					<div class="addon-key">
+					<div class="addon-key"<?php echo ( ! $addon_status->installed && ! empty( $addon_status->key ) ) ? ' style="display:block"' : '' ?>>
 						<div class="wrapper">
 							<?php if ( ! $addon_status->installed || empty( $addon_status->key ) ) : ?>
 
