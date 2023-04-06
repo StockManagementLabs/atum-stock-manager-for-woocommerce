@@ -196,6 +196,37 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.28`
+
+*2023-04-06*
+
+**Features**
+
+* Allow loading JS dependencies to AtumAdminModals.
+* Show the install button if a license is saved but the addon not installed yet.
+* Do not show install buttons to users with no permissions.
+
+**Changes**
+
+* Send addon slug to the Updater.
+* Refactoring.
+* Check for errors returned from the activation API.
+* Make sure the as_unschedule_all_actions function exists before using it.
+* Addons loader modifications.
+* Disable the license key input on ajax requests.
+* Do not show an update message on the addons page when is not installed.
+* Deactivate the addons before uninstalling them with the auto-installer.
+
+**Fixes**
+
+* Fixed expired trials modal.
+* Fixed trial extension on the addons page.
+* Handle the API response correctly when extending a trial.
+* Fixed auto-installer success URL redirection.
+* Fixed expiration date when extending a trial.
+
+---
+
 `1.9.27`
 
 *2023-03-16*
