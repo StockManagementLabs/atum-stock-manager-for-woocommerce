@@ -565,7 +565,7 @@ var AddonsPage = (function () {
                 break;
         }
     };
-    AddonsPage.prototype.showSuccessAlert = function (message, title) {
+    AddonsPage.prototype.showSuccessAlert = function (message, title, callback) {
         if (!title) {
             title = this.settings.get('success');
         }
@@ -575,7 +575,7 @@ var AddonsPage = (function () {
             icon: 'success',
             confirmButtonText: this.settings.get('ok'),
         })
-            .then(function () { return location.reload(); });
+            .then(function () { return callback ? callback() : location.reload(); });
     };
     AddonsPage.prototype.showErrorAlert = function (message) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
@@ -764,7 +764,7 @@ var AutoInstaller = (function () {
                         }
                         Promise.all(promises)
                             .then(function () {
-                            _this.addonsPage.showSuccessAlert(_this.settings.get(promises.length > 1 ? 'allAddonsInstalled' : 'addonInstalled'));
+                            _this.addonsPage.showSuccessAlert(_this.settings.get(promises.length > 1 ? 'allAddonsInstalled' : 'addonInstalled'), '', function () { location.href = _this.settings.get('addonsPageUrl'); });
                             resolve();
                         })
                             .catch(function () { return reject(); });

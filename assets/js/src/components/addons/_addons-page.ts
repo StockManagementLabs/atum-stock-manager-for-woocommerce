@@ -527,7 +527,7 @@ export default class AddonsPage {
 	 * @param {string} message
 	 * @param {string} title
 	 */
-	showSuccessAlert( message: string, title?: string ) {
+	showSuccessAlert( message: string, title?: string, callback?: Function ) {
 
 		if ( ! title ) {
 			title = this.settings.get( 'success' );
@@ -539,7 +539,7 @@ export default class AddonsPage {
 			icon             : 'success',
 			confirmButtonText: this.settings.get( 'ok' ),
 		} )
-		.then( () => location.reload() );
+		.then( () => callback ? callback() : location.reload() );
 
 	}
 	

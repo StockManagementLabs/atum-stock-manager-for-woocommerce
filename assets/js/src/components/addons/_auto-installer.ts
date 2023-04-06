@@ -87,7 +87,11 @@ export default class AutoInstaller {
 					Promise.all( promises )
 						.then( () => {
 
-							this.addonsPage.showSuccessAlert( this.settings.get(  promises.length > 1 ? 'allAddonsInstalled' : 'addonInstalled' ) );
+							this.addonsPage.showSuccessAlert(
+								this.settings.get(  promises.length > 1 ? 'allAddonsInstalled' : 'addonInstalled' ),
+								'',
+								() => { location.href = this.settings.get( 'addonsPageUrl' ) }
+							);
 							resolve();
 
 						} )
