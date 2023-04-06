@@ -588,11 +588,13 @@ var AddonsPage = (function () {
     AddonsPage.prototype.beforeAjax = function ($button) {
         $button.parent().find('.button, button').prop('disabled', true);
         $button.css('visibility', 'hidden').after('<div class="atum-loading"></div>');
+        $button.siblings(':input').prop('disabled', true);
     };
     AddonsPage.prototype.afterAjax = function ($button) {
         $button.siblings('.atum-loading').remove();
         $button.parent().find('.button, button').prop('disabled', false);
         $button.css('visibility', 'visible');
+        $button.siblings(':input').prop('disabled', false);
     };
     AddonsPage.prototype.addMouseWheelSupport = function () {
         $('.nav-with-scroll-effect').off('wheel DOMMouseScroll').on('wheel DOMMouseScroll', function (evt) {

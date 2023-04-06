@@ -568,6 +568,7 @@ export default class AddonsPage {
 
 		$button.parent().find( '.button, button' ).prop( 'disabled', true );
 		$button.css( 'visibility', 'hidden' ).after( '<div class="atum-loading"></div>' );
+		$button.siblings( ':input' ).prop( 'disabled', true );
 
 	}
 	
@@ -581,6 +582,7 @@ export default class AddonsPage {
 		$button.siblings( '.atum-loading' ).remove();
 		$button.parent().find( '.button, button' ).prop( 'disabled', false );
 		$button.css( 'visibility', 'visible' );
+		$button.siblings( ':input' ).prop( 'disabled', false );
 
 	}
 
