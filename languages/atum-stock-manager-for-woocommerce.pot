@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2023-04-06 12:26+0200\n"
+"POT-Creation-Date: 2023-04-12 11:59+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: Be Rebel <web@stockmanagementlabs.com>\n"
@@ -428,17 +428,6 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:242
-msgid "ATUM trial license expired!"
-msgid_plural "ATUM trial licenses expired!"
-msgstr[0] ""
-msgstr[1] ""
-
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:247
-#, php-format
-msgid "Why are these add-ons expired and blocked? %1$sREAD INFO%2$s"
-msgstr ""
-
 #: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:152
 #, php-format
 msgid ""
@@ -446,16 +435,14 @@ msgid ""
 "the trial, uninstall the full version first."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:181
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:185
 #, php-format
-msgid "Your ATUM %1$s has expired and it has been disabled."
+msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:136
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:126
 #, php-format
-msgid ""
-"The ATUM %1$s add-on requires at least version %2$s to work with the current "
-"ATUM version. Please, update it."
+msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:164
@@ -470,14 +457,27 @@ msgstr ""
 msgid "Click %1$shere%2$s to purchase the full version."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:126
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:136
 #, php-format
-msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
+msgid ""
+"The ATUM %1$s add-on requires at least version %2$s to work with the current "
+"ATUM version. Please, update it."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:185
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:181
 #, php-format
-msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
+msgid "Your ATUM %1$s has expired and it has been disabled."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:242
+msgid "ATUM trial license expired!"
+msgid_plural "ATUM trial licenses expired!"
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:247
+#, php-format
+msgid "Why are these add-ons expired and blocked? %1$sREAD INFO%2$s"
 msgstr ""
 
 #: classes/Addons/Updater.php:297
