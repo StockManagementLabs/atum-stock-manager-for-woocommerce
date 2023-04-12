@@ -216,6 +216,21 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 ---
 
+`1.9.29`
+
+*2023-04-12*
+
+**Features**
+
+* Added new ATUM icons font.
+
+**Fixes**
+
+* Removed wrong quote in expandable rows that was causing the PDF export to fail.
+* Fixed trial licenses being removed automatically.
+
+---
+
 `1.9.28`
 
 *2023-04-06*
