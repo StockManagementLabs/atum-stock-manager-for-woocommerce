@@ -2,6 +2,8 @@
 // Atum Attachments meta box
 //--------------------------
 
+@use "sass:math";
+
 .atum-attachments-list {
 	
 	li {
@@ -39,9 +41,24 @@
 		margin-bottom: 3px;
 	}
 	
+	a {
+		text-decoration: none;
+	}
+	
 	img {
 		max-width: 100%;
 		margin-top: 10px;
+	}
+	
+	.atum-attachment-icon {
+		text-align: center;
+		background-color: $gray-100;
+		padding: math.div($grid-gutter-width, 2);
+		margin-top: 10px;
+		
+		i {
+			font-size: 6rem;
+		}
 	}
 	
 }
