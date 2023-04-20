@@ -21,7 +21,6 @@ use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
-
 class Settings {
 
 	/**
@@ -678,11 +677,11 @@ class Settings {
 
 			if ( ! Helpers::is_rest_request() && AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 				add_settings_field(
-					$field,                                             // ID.
-					$options['name'],                                   // Title.
-					array( $this, "display_{$options['type']}" ),      // Callback.
-					ATUM_PREFIX . "setting_{$options['section']}",     // Page.
-					ATUM_PREFIX . "setting_{$options['section']}",     // Section.
+					$field,                                         // ID.
+					$options['name'],                               // Title.
+					array( $this, "display_{$options['type']}" ),   // Callback.
+					ATUM_PREFIX . "setting_{$options['section']}",  // Page.
+					ATUM_PREFIX . "setting_{$options['section']}",  // Section.
 					$options
 				);
 			}
