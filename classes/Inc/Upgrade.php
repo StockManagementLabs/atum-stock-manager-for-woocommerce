@@ -196,6 +196,11 @@ class Upgrade {
 			$this->clean_up_addons_keys();
 		}
 
+		// ** version 1.9.29.1 ** Get rid of deprecated async actions.
+		if ( version_compare( $db_version, '1.9.29..1', '<' ) ) {
+			$this->remove_deprecated_queues();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1226,6 +1231,40 @@ class Upgrade {
 		// Remove the old addon status transients.
 		foreach ( Addons::get_installed_addons() as $registered_addon ) {
 			Addons::delete_status_transient( $registered_addon['name'] );
+		}
+
+	}
+
+	/**
+	 * Remove all the deprecated ATUM queues
+	 *
+	 * @since 1.9.29.1
+	 */
+	public function remove_deprecated_queues() {
+
+		$wc = WC();
+
+		// Ensure that the current WC version supports queues.
+		if ( ! is_callable( array( $wc, 'queue' ) ) ) {
+			return;
+		}
+
+		$wc_queue = $wc->queue();
+		$pending_actions  = $wc_queue->search( [
+			'status'   => \ActionScheduler_Store::STATUS_PENDING,
+		] );
+
+		foreach ( $pending_actions as $pending_action ) {
+			/**
+			 * Variable definition.
+			 *
+			 * @var \ActionScheduler_Action $pending_action
+			 */
+			$hook_name = $pending_action->get_hook();
+
+			if ( strpos( $hook_name, 'atum' ) !== FALSE ) {
+				$wc_queue->cancel( $hook_name, $pending_action->get_args(), $pending_action->get_group() );
+			}
 		}
 
 	}
