@@ -196,6 +196,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.29.1`
+
+*2023-04-20*
+
+**Features**
+
+* Added support for the new ATUM Barcodes PRO add-on.
+
+**Changes**
+
+* Updated composer dependencies.
+* Refactoring.
+* Remove deprecated ATUM CRON jobs.
+* Get rid of deprecated ATUM queues when cheking them.
+
+**Fixes**
+
+* Fixed attachment thumb for non-image files.
+* Show the correct tab title on the settings page.
+
+---
+
 `1.9.29`
 
 *2023-04-12*
