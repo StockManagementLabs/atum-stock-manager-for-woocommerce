@@ -179,7 +179,7 @@ class ModuleManager {
 	}
 
 	/**
-	 * Getter for the module_status prop (or one of it's inner values)
+	 * Getter for the module_status prop (or one of its inner values)
 	 *
 	 * @since 1.3.6
 	 *

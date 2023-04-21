@@ -62,6 +62,11 @@ class AtumQueues {
 	private static $async_hooks = array();
 
 	/**
+	 * Group used for the ATUM queues
+	 */
+	const QUEUES_GROUP = 'ATUM';
+
+	/**
 	 * AtumQueues singleton constructor
 	 *
 	 * @since 1.5.8
@@ -95,6 +100,14 @@ class AtumQueues {
 	 */
 	public function check_queues() {
 
+		$check_queues_key       = AtumCache::get_transient_key( 'check_queues' );
+		$check_queues_transient = AtumCache::get_transient( $check_queues_key, TRUE );
+
+		// Do not need to run this process on every page load.
+		if ( $check_queues_transient ) {
+			return;
+		}
+
 		$wc = WC();
 
 		// Ensure that the current WC version supports queues.
@@ -118,6 +131,27 @@ class AtumQueues {
 		// Allow registering queues externally.
 		$this->recurring_hooks = apply_filters( 'atum/queues/recurring_hooks', $this->recurring_hooks );
 
+		// Search for any orphan actions that may exist with old names.
+		$actions = $wc_queue->search( array(
+			'group'   => self::QUEUES_GROUP,
+			'status' => \ActionScheduler_Store::STATUS_PENDING,
+		) );
+
+		if ( ! empty( $actions ) ) {
+
+			foreach ( $actions as $action ) {
+				/**
+				 * Variable definition.
+				 *
+				 * @var \ActionScheduler_Action $action
+				 */
+				if ( ! array_key_exists( $action->get_hook(), $this->recurring_hooks ) ) {
+					$wc_queue->cancel( $action->get_hook(), $action->get_args(), $action->get_group() );
+				}
+			}
+
+		}
+
 		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
 
 			// Search for any orphan actions that may exist with outdated args.
@@ -128,33 +162,42 @@ class AtumQueues {
 
 			$schedule_args = ( isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ) ? $hook_data['args'] : [];
 
-			// Remove any "legacy" actions that were registered in previous versions with distinct parameters.
+			// Remove any "legacy" actions that were registered in previous versions with distinct parameters or group.
 			if ( ! empty( $actions ) ) {
 
+				/**
+				 * Variable definition.
+				 *
+				 * @var \ActionScheduler_Action $action
+				 */
 				foreach ( $actions as $action ) {
 
-					$action_args = $action->get_args();
+					$action_args  = $action->get_args();
+					$action_group = $action->get_group();
 
 					if (
 						( empty( $action_args ) && ! empty( $schedule_args ) ) ||
 						( ! empty( $action_args ) && empty( $schedule_args ) ) ||
-						! empty( array_diff( $action_args, $schedule_args ) )
+						! empty( array_diff( $action_args, $schedule_args ) ) ||
+						( $action_group !== self::QUEUES_GROUP )
 					) {
-						$wc_queue->cancel( $hook_name, $action_args );
+						$wc_queue->cancel( $hook_name, $action_args, $action_group );
 					}
 
 				}
 
 			}
 
-			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );
+			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args, self::QUEUES_GROUP );
 
 			if ( is_null( $next_scheduled_date ) ) {
-				$wc_queue->cancel_all( $hook_name, $schedule_args ); // Ensure all the actions are cancelled before adding a new one.
-				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args );
+				$wc_queue->cancel_all( $hook_name, $schedule_args, self::QUEUES_GROUP ); // Ensure all the actions are canceled before adding a new one.
+				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args, self::QUEUES_GROUP );
 			}
 
 		}
+
+		AtumCache::set_transient( $check_queues_key, 'checked', DAY_IN_SECONDS, TRUE );
 
 	}
 
@@ -187,7 +230,7 @@ class AtumQueues {
 
 		Helpers::adjust_long_process_settings(); // Try to avoid timeout issues.
 
-		// TODO: WHAT ABOUT ILs AND PLs PROPS? IS UPDATING THEM ALSO?
+		// TODO: WHAT ABOUT ILs AND POs PROPS? IS UPDATING THEM ALSO?
 		foreach ( $outdated_products as $product_id ) {
 			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 		}
@@ -542,7 +585,7 @@ class AtumQueues {
 				}
 
 				$wc_queue = $wc->queue();
-				$wc_queue->cancel_all( 'atum/cron_update_sales_calc_props' );
+				$wc_queue->cancel_all( 'atum/cron_update_sales_calc_props', [], self::QUEUES_GROUP );
 			}
 
 		}

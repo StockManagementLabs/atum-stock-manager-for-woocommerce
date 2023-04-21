@@ -7,7 +7,7 @@ Tested up to: 6.2
 Requires PHP: 7.1
 WC requires at least: 5.0
 WC tested up to: 7.5.1
-Stable tag: 1.9.29
+Stable tag: 1.9.29.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,28 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.29.1`
+
+*2023-04-20*
+
+**Features**
+
+* Added support for the new ATUM Barcodes PRO add-on.
+
+**Changes**
+
+* Updated composer dependencies.
+* Refactoring.
+* Remove deprecated ATUM CRON jobs.
+* Get rid of deprecated ATUM queues when cheking them.
+
+**Fixes**
+
+* Fixed attachment thumb for non-image files.
+* Show the correct tab title on the settings page.
 
 ---
 

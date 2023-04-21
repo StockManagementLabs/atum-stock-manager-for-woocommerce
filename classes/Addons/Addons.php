@@ -485,7 +485,7 @@ final class Addons {
 		if ( empty( $addons ) ) {
 
 			// Avoid doing requests to the API too many times if for some reason is down.
-			if ( FALSE !== self::get_last_api_access() ) {
+			if ( FALSE !== self::get_last_api_access( 'addons_list' ) ) {
 				return FALSE;
 			}
 
@@ -1720,11 +1720,13 @@ final class Addons {
 	 *
 	 * @since 1.9.23.1
 	 *
+	 * @param string $key
+	 *
 	 * @return bool|mixed
 	 */
-	public static function get_last_api_access() {
+	public static function get_last_api_access( $key ) {
 
-		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
+		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit', $key );
 
 		return AtumCache::get_transient( $limit_requests_transient, TRUE );
 
@@ -1735,11 +1737,12 @@ final class Addons {
 	 *
 	 * @since 1.9.23.1
 	 *
-	 * @param bool $delete
+	 * @param string $key
+	 * @param bool   $delete
 	 */
-	public static function set_last_api_access( $delete = FALSE ) {
+	public static function set_last_api_access( $key, $delete = FALSE ) {
 
-		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit' );
+		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit', $key );
 
 		if ( $delete ) {
 			// Remove the access blocking transient.

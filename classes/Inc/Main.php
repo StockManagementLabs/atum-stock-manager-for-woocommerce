@@ -184,7 +184,7 @@ class Main {
 		// Register the Locations taxonomy and link it to products
 		// --------------------------------------------------------!
 		$labels = array(
-			'name'              => _x( 'Product Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
+			'name'              => _x( 'ATUM Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
 			'singular_name'     => _x( 'Location', 'taxonomy singular name', ATUM_TEXT_DOMAIN ),
 			'search_items'      => __( 'Search locations', ATUM_TEXT_DOMAIN ),
 			'all_items'         => __( 'All locations', ATUM_TEXT_DOMAIN ),
