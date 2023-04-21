@@ -1048,56 +1048,22 @@ class Wpml {
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
-		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
+		$product      = Helpers::get_atum_product( $original_id );
+		$update_terms = array();
 
-		$update_clause = '
-			purchase_price = orig_apd.purchase_price,
-			supplier_id = orig_apd.supplier_id,
-			supplier_sku = orig_apd.supplier_sku,
-			barcode = orig_apd.barcode,
-			atum_controlled = orig_apd.atum_controlled,
-			out_stock_date = orig_apd.out_stock_date,
-			out_stock_threshold = orig_apd.out_stock_threshold,
-			inheritable = orig_apd.inheritable,
-			inbound_stock = orig_apd.inbound_stock,
-			stock_on_hold = orig_apd.stock_on_hold,
-			sold_today = orig_apd.sold_today,
-			sales_last_days = orig_apd.sales_last_days,
-			reserved_stock = orig_apd.reserved_stock,
-			customer_returns = orig_apd.customer_returns,
-			warehouse_damage = orig_apd.warehouse_damage,
-			lost_in_post = orig_apd.lost_in_post,
-			other_logs = orig_apd.other_logs,
-			out_stock_days = orig_apd.out_stock_days,
-			lost_sales = orig_apd.lost_sales,
-			has_location = orig_apd.has_location,
-			update_date = orig_apd.update_date,
-			atum_stock_status = orig_apd.atum_stock_status,
-			restock_status = orig_apd.restock_status,
-			low_stock_amount = orig_apd.low_stock_amount,
-			sales_update_date = orig_apd.sales_update_date,
-			calc_backorders = orig_apd.calc_backorders
-		';
-
-		foreach ( $extra_fields as $extra_field ) {
-			$update_clause .= ", $extra_field = orig_apd.$extra_field";
+		$product_fields = $product->get_atum_data_column_names();
+		foreach ( $product_fields as $prop ) {
+			$update_terms[] = $prop . ' = orig_apd.' . $prop;
 		}
+		$select_fields = ' ' . implode( ', ', $product_fields ) . ' ';
+		$update_clause = ' ' . implode( ', ', $update_terms ) . ' ';
 
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$wpdb->query( "
-			INSERT INTO $atum_product_data_table (
-				product_id,purchase_price,supplier_id,supplier_sku,barcode,atum_controlled,out_stock_date,
-				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,restock_status,low_stock_amount,
-                sales_update_date,calc_backorders$fields)
-			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,barcode,atum_controlled,out_stock_date,
-			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,restock_status,low_stock_amount,
-			sales_update_date,calc_backorders$fields
-			FROM $atum_product_data_table orig_apd WHERE product_id = $original_id
+			INSERT INTO $atum_product_data_table ( product_id, $select_fields )
+			SELECT $destination_id, $select_fields
+			FROM $atum_product_data_table orig_apd
+			WHERE product_id = $original_id
 			ON DUPLICATE KEY
 			UPDATE 
 				$update_clause;
