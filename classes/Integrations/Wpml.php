@@ -1055,6 +1055,7 @@ class Wpml {
 			purchase_price = orig_apd.purchase_price,
 			supplier_id = orig_apd.supplier_id,
 			supplier_sku = orig_apd.supplier_sku,
+			barcode = orig_apd.barcode,
 			atum_controlled = orig_apd.atum_controlled,
 			out_stock_date = orig_apd.out_stock_date,
 			out_stock_threshold = orig_apd.out_stock_threshold,
@@ -1074,7 +1075,9 @@ class Wpml {
 			update_date = orig_apd.update_date,
 			atum_stock_status = orig_apd.atum_stock_status,
 			restock_status = orig_apd.restock_status,
-			sales_update_date = orig_apd.sales_update_date
+			low_stock_amount = orig_apd.low_stock_amount,
+			sales_update_date = orig_apd.sales_update_date,
+			calc_backorders = orig_apd.calc_backorders
 		';
 
 		foreach ( $extra_fields as $extra_field ) {
@@ -1084,14 +1087,16 @@ class Wpml {
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$wpdb->query( "
 			INSERT INTO $atum_product_data_table (
-				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+				product_id,purchase_price,supplier_id,supplier_sku,barcode,atum_controlled,out_stock_date,
 				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,restock_status,sales_update_date$fields)
-			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
+				lost_sales,has_location,update_date,atum_stock_status,restock_status,low_stock_amount,
+                sales_update_date,calc_backorders$fields)
+			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,barcode,atum_controlled,out_stock_date,
 			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
 			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,restock_status,sales_update_date$fields
+			lost_sales,has_location,update_date,atum_stock_status,restock_status,low_stock_amount,
+			sales_update_date,calc_backorders$fields
 			FROM $atum_product_data_table orig_apd WHERE product_id = $original_id
 			ON DUPLICATE KEY
 			UPDATE 
