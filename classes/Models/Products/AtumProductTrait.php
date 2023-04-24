@@ -690,6 +690,18 @@ trait AtumProductTrait {
 		return $this->get_prop( 'calc_backorders', $context );
 	}
 
+	/**
+	 * Returns the fields names in atum data.
+	 *
+	 * @since 1.9.29.1
+	 * @package Integrations\WPML
+	 *
+	 * @return string[]
+	 */
+	public function get_atum_data_column_names() {
+		return array_keys( $this->atum_data );
+	}
+
 	/*
 	|----------------------------------------------------------------------------
 	| SETTERS
