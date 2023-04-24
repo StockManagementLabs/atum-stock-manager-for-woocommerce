@@ -69,6 +69,7 @@ trait AtumProductTrait {
 		'selectable_inventories_mode'   => NULL, // MI.
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
+		'barcode_type'                  => NULL, // BP.
 		'committed_to_wc'               => NULL, // SOnly.
 	);
 
