@@ -1257,11 +1257,11 @@ trait AtumProductTrait {
 	 * @since   1.9.30
 	 * @package Barcodes PRO
 	 *
-	 * @param string $barcode_type
+	 * @param string|NULL $barcode_type For "global", set it to NULL.
 	 */
 	public function set_barcode_type( $barcode_type ) {
 
-		if ( 'global' === $barcode_type || array_key_exists( $barcode_type, Globals::get_allowed_barcodes() ) ) {
+		if ( is_null( $barcode_type ) || array_key_exists( $barcode_type, Globals::get_allowed_barcodes() ) ) {
 			$this->set_prop( 'barcode_type', $barcode_type );
 		}
 
