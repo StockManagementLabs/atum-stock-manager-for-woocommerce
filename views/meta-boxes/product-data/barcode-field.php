@@ -14,6 +14,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Addons\Addons;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 
@@ -34,9 +35,14 @@ if ( empty( $variation ) ) : ?>
 				<?php disabled( AtumCapabilities::current_user_can( 'edit_barcode' ), FALSE ) ?>
 				<?php echo apply_filters( 'atum/views/meta_boxes/barcode_field/barcode_extra_atts', '', $variation, $loop ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			>
-			<?php echo wc_help_tip( esc_attr__( 'Barcode field is currently informational only. We want our users to start filling it in to be ready for the Mobile App scanning feature when released', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
+			<?php if ( ! Addons::is_addon_active( 'barcodes_pro' ) ) : ?>
+				<?php echo wc_help_tip( esc_attr__( 'If you want more functionalities for barcodes, try out the ATUM Barcodes PRO add-on', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php endif; ?>
 		</span>
 	</p>
+
+	<?php do_action( 'atum/barcodes/after_barcode_field', $variation, $barcode ) ?>
 
 <?php if ( empty( $variation ) ) : ?>
 </div>
