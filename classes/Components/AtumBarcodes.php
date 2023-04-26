@@ -61,7 +61,7 @@ class AtumBarcodes {
 			add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
 
 			// Add the barcode field to some product terms.
-			foreach ( [ Globals::PRODUCT_LOCATION_TAXONOMY, 'product_cat' ] as $taxonomy ) {
+			foreach ( apply_filters( 'atum/barcodes/allowed_taxonomies', [ Globals::PRODUCT_LOCATION_TAXONOMY, 'product_cat', 'product_tag' ] ) as $taxonomy ) {
 				add_action( "{$taxonomy}_edit_form_fields", array( $this, 'add_barcode_term_meta' ), 11, 2 );
 				add_action( "edited_$taxonomy", array( $this, 'save_barcode_term_meta' ), 10, 2 );
 			}
@@ -299,6 +299,9 @@ class AtumBarcodes {
 			</th>
 			<td>
 				<input type="text" name="barcode_term_meta" id="barcode_term_meta" value="<?php echo esc_attr( $barcode ) ?>">
+
+				<?php do_action( 'atum/barcodes/after_barcode_term_meta_input', $term, $barcode ) ?>
+
 				<p class="description">
 					<?php esc_html_e( 'The barcode for all the products linked to this term.', ATUM_TEXT_DOMAIN ) ?>
 				</p>
