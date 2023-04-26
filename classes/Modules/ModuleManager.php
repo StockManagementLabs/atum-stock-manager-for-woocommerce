@@ -213,7 +213,7 @@ class ModuleManager {
 	 * @return bool
 	 */
 	public static function is_module_active( $module ) {
-		return 'yes' === self::get_module_status( $module );
+		return apply_filters( "atum/module_manager/is_module_active_$module", 'yes' === self::get_module_status( $module ) );
 	}
 
 
