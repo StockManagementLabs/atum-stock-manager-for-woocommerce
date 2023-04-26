@@ -19,8 +19,8 @@
 	},
 	"devDependencies": {
 		"@types/es6-shim": "^0.31.42",
-		"@types/jquery": "^2.0.46",
 		"@types/isotope-layout": "^3.0.9",
+		"@types/jquery": "^2.0.46",
 		"autoprefixer": "10.4.5",
 		"eslint": "^8.24.0",
 		"eslint-webpack-plugin": "^2.7.0",
@@ -48,6 +48,7 @@
 		"chart.js": "^2.9.3",
 		"hammerjs": "^2.0.8",
 		"intro.js": "^4.3.0",
+		"isotope-layout": "^3.0.6",
 		"jquery": "^3.6.1",
 		"jquery-nice-select": "^1.1.0",
 		"jquery.fancytable": "^1.0.32",
@@ -55,7 +56,6 @@
 		"lightgallery.js": "^1.4.0",
 		"moment": "^2.29.4",
 		"owl.carousel": "^2.3.4",
-		"sweetalert2": "^10.16.7",
-		"isotope-layout": "^3.0.6"
+		"sweetalert2": "^10.16.7"
 	}
 }
