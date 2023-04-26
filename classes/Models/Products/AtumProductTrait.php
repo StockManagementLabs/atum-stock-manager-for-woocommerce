@@ -730,7 +730,7 @@ trait AtumProductTrait {
 	 * @param int $supplier_id
 	 */
 	public function set_supplier_id( $supplier_id ) {
-		$this->set_prop( 'supplier_id', absint( $supplier_id ) ? absint( $supplier_id ) : NULL );
+		$this->set_prop( 'supplier_id', absint( $supplier_id ) ?: NULL );
 	}
 
 	/**

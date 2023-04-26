@@ -2400,17 +2400,13 @@ final class Ajax {
 			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['value'] ) ) {
-			wp_send_json_error( __( 'Please specify a valid supplier', ATUM_TEXT_DOMAIN ) );
-		}
-
 		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
-		if ( ! $product instanceof \WC_Product ) {
+		if ( ! $product instanceof \WC_Product_Variable ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$supplier_id = absint( $_POST['value'] );
+		$supplier_id = $_POST['value'] ?: NULL;
 		$variations  = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
