@@ -51,6 +51,10 @@
 		.input-group-text {
 			padding: 4px 7px;
 			height: 20px;
+			
+			@media all and #{$bp-sm-max-wp} {
+				height: 30px; // The WC fields are higher for smaller screens.
+			}
 		}
 		
 		input[type=text], input[type=number] {
@@ -93,8 +97,17 @@
 					font-size: $font-size-base;
 					border: 1px solid var(--main-border-alt);
 					
+					@media all and #{$bp-sm-max-wp} {
+						height: 40px; // The WC fields are higher for smaller screens.
+					}
+					
 					.select2-selection__rendered {
 						line-height: 2;
+						
+						@media all and #{$bp-sm-max-wp} {
+							line-height: 2.4;
+							font-size: 16px !important;
+						}
 					}
 					
 					.select2-selection__clear {
@@ -106,6 +119,10 @@
 						background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
 						background-size: 16px 16px;
 						width: 28px;
+						
+						@media all and #{$bp-sm-max-wp} {
+							top: 7px;
+						}
 						
 						&:after {
 							display: none;
