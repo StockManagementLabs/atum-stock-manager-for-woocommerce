@@ -2431,10 +2431,17 @@ table.wp-list-table, .floatThead-container {
 				//color: var(--atum-text-color-var3);
 				
 				&.column-title, &.atum_order_title {
-					a, .row-title {
+					> a, > .row-title {
 						font-size: 14px;
 						font-weight: 500;
 						color: var(--primary);
+					}
+					
+					.row-actions {
+						a {
+							font-size: 13px !important;
+							font-weight: 400;
+						}
 					}
 				}
 				
