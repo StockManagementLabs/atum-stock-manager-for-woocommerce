@@ -350,7 +350,7 @@ html {
 	
 	&__search {
 		position: relative;
-
+		
 		&:not(.is-searching) {
 			&:after {
 				content: $atmi-magnifier;
@@ -370,6 +370,7 @@ html {
 			font-size: 12px;
 			min-height: auto;
 			height: auto;
+			padding: 0.11rem 0.6rem;
 		}
 	}
 	
@@ -597,6 +598,7 @@ html {
 			font-size: 11px;
 			line-height: 24px;
 			text-align: center;
+			cursor: default;
 			
 			&.label-warning {
 				background-color: $warning;
@@ -620,6 +622,11 @@ html {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 10px;
+		
+		> a, > button {
+			flex-grow: 1;
+		}
 	}
 	
 	.alert {
@@ -633,27 +640,32 @@ html {
 			
 			.btn {
 				font-size: .75rem;
-				padding: 0.313rem 0;
-				width: 144px;
-				margin-right: 10px;
+				padding: 0.313rem 0.6rem;
 				text-transform: uppercase;
 				
+				&.cancel-action, &.remove-license {
+					font-size: .65rem;
+					padding: 0.313rem 0.2rem;
+				}
+				
 				&.install-addon {
-					padding-left: .7rem;
-					padding-right: .7rem;
-					width: auto;
 					background-color: $success;
 					border-color: $success;
+					
+					+ .cancel-action {
+						font-size: .75rem;
+						padding: 0.313rem 0.6rem;
+					}
 				}
+				
 			}
 			
 			input {
-				font-size: .75rem;
+				font-size: .65rem;
 			}
 			
 			.cancel-action {
 				background-color: transparent;
-				width: 80px;
 				
 				&:hover {
 					background-color: buttonface;
@@ -663,39 +675,39 @@ html {
 		}
 		
 		.addon-key{
-			
 			display: none;
+			
 			> .wrapper {
 				display: flex;
 				align-items: flex-end;
 				position: relative;
+				gap: 10px;
 			}
 		}
 		
 		.license-key {
 			flex-grow: 1;
-			margin-right: 10px;
 		}
 		
 		.license-info {
-			margin-right: 10px;
 			
 			&:first-child {
 				flex-grow: 1;
 			}
 			
 			.license-label {
-				font-size: .75rem;
+				font-size: .70rem;
 				font-weight: 600;
+				white-space: nowrap;
 			}
 			
 			.license-key, .expires {
 				background-color: $gray-200;
-				font-size: 13px;
+				font-size: .65rem;
 				font-weight: 400;
-				line-height: 1.47;
-				padding: 4px 13px;
+				padding: 4px 10px;
 				border-radius: 5px;
+				@include text-overflow;
 			}
 			
 			.expires.expired {
@@ -761,15 +773,6 @@ html {
 					flex-wrap: wrap;
 					justify-content: space-between;
 					gap: 10px;
-				}
-				
-				.license-info {
-					margin-right: 0;
-				}
-				
-				.license-key {
-					margin-right: 0;
-					width: 100%;
 				}
 				
 			}
@@ -868,4 +871,3 @@ html {
 		margin-bottom: -1.2em !important;
 	}
 }
-

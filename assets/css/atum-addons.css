@@ -3637,6 +3637,7 @@ html {
   font-size: 12px;
   min-height: auto;
   height: auto;
+  padding: 0.11rem 0.6rem;
 }
 .atum-addons #atum-addons-list {
   margin-top: -20px;
@@ -3857,6 +3858,7 @@ html {
   font-size: 11px;
   line-height: 24px;
   text-align: center;
+  cursor: default;
 }
 .atum-addons .addon-header .label.label-warning {
   background-color: #EFAF00;
@@ -3885,6 +3887,12 @@ html {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  gap: 10px;
+}
+.atum-addons .actions__buttons > a, .atum-addons .actions__buttons > button {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 .atum-addons .alert {
   font-size: 12px;
@@ -3893,24 +3901,26 @@ html {
 }
 .atum-addons .addon-footer .actions .btn {
   font-size: 0.75rem;
-  padding: 0.313rem 0;
-  width: 144px;
-  margin-right: 10px;
+  padding: 0.313rem 0.6rem;
   text-transform: uppercase;
 }
+.atum-addons .addon-footer .actions .btn.cancel-action, .atum-addons .addon-footer .actions .btn.remove-license {
+  font-size: 0.65rem;
+  padding: 0.313rem 0.2rem;
+}
 .atum-addons .addon-footer .actions .btn.install-addon {
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-  width: auto;
   background-color: #69C61D;
   border-color: #69C61D;
 }
-.atum-addons .addon-footer .actions input {
+.atum-addons .addon-footer .actions .btn.install-addon + .cancel-action {
   font-size: 0.75rem;
+  padding: 0.313rem 0.6rem;
+}
+.atum-addons .addon-footer .actions input {
+  font-size: 0.65rem;
 }
 .atum-addons .addon-footer .actions .cancel-action {
   background-color: transparent;
-  width: 80px;
 }
 .atum-addons .addon-footer .actions .cancel-action:hover {
   background-color: buttonface;
@@ -3926,15 +3936,12 @@ html {
       -ms-flex-align: end;
           align-items: flex-end;
   position: relative;
+  gap: 10px;
 }
 .atum-addons .addon-footer .license-key {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  margin-right: 10px;
-}
-.atum-addons .addon-footer .license-info {
-  margin-right: 10px;
 }
 .atum-addons .addon-footer .license-info:first-child {
   -webkit-box-flex: 1;
@@ -3942,16 +3949,19 @@ html {
           flex-grow: 1;
 }
 .atum-addons .addon-footer .license-info .license-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 .atum-addons .addon-footer .license-info .license-key, .atum-addons .addon-footer .license-info .expires {
   background-color: #e9ecef;
-  font-size: 13px;
+  font-size: 0.65rem;
   font-weight: 400;
-  line-height: 1.47;
-  padding: 4px 13px;
+  padding: 4px 10px;
   border-radius: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .atum-addons .addon-footer .license-info .expires.expired {
   color: #ff4848;
@@ -4003,13 +4013,6 @@ html {
       -ms-flex-pack: justify;
           justify-content: space-between;
   gap: 10px;
-}
-.atum-addons__grid-view .atum-addon .addon-key .license-info {
-  margin-right: 0;
-}
-.atum-addons__grid-view .atum-addon .addon-key .license-key {
-  margin-right: 0;
-  width: 100%;
 }
 .atum-addons .no-results {
   margin-top: 15px;

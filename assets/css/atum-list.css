@@ -7915,7 +7915,7 @@ table.wp-list-table tbody tr td.column-title > a, table.wp-list-table tbody tr t
   color: var(--primary);
 }
 table.wp-list-table tbody tr td.column-title .row-actions a, table.wp-list-table tbody tr td.atum_order_title .row-actions a, table.wp-list-table #the-list tr td.column-title .row-actions a, table.wp-list-table #the-list tr td.atum_order_title .row-actions a, .floatThead-container tbody tr td.column-title .row-actions a, .floatThead-container tbody tr td.atum_order_title .row-actions a, .floatThead-container #the-list tr td.column-title .row-actions a, .floatThead-container #the-list tr td.atum_order_title .row-actions a {
-  font-size: 13px;
+  font-size: 13px !important;
   font-weight: 400;
 }
 table.wp-list-table tbody tr td.column-calc_mi_status > span, table.wp-list-table #the-list tr td.column-calc_mi_status > span, .floatThead-container tbody tr td.column-calc_mi_status > span, .floatThead-container #the-list tr td.column-calc_mi_status > span {
