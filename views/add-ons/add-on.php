@@ -55,7 +55,7 @@ endif;
 			<?php if ( $is_beta ) : ?>
 				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
-				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?><?php if ( $is_trial ) echo ' &ndash; ' . __( 'Trial', ATUM_TEXT_DOMAIN ) ?></span>
+				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> title="<?php esc_attr_e( 'Latest Version', ATUM_TEXT_DOMAIN ) ?>"><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?><?php if ( $is_trial ) echo ' &ndash; ' . __( 'Trial', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -171,7 +171,7 @@ endif;
 									<div class="license-info">
 										<div class="license-label"><?php esc_html_e( 'Expiration date', ATUM_TEXT_DOMAIN ); ?></div>
 										<div class="expires<?php echo ( ( $is_trial && $is_expired ) || ( ! $is_trial && $is_expired && 'valid' !== $addon_status->status ) ) ? esc_attr( ' expired' ) : '' ?>">
-											<?php echo esc_html( $addon_status->expires ) ?>
+											<?php echo esc_html( date_i18n( 'Y-m-d', strtotime( $addon_status->expires ) ) ) ?>
 										</div>
 									</div>
 								<?php endif; ?>
