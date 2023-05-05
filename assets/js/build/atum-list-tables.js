@@ -6448,7 +6448,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 							e.stopPropagation();
 							moved = 0; pushed = 0;
 						}
-						else {
+						else if (e.target.href) {
 							var child = e.target.children[0];
 							if (undefined !== child) {
 								child.click();

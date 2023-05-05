@@ -86,7 +86,7 @@
 							e.stopPropagation();
 							moved = 0; pushed = 0;
 						}
-						else {
+						else if (e.target.href) {
 							var child = e.target.children[0];
 							if (undefined !== child) {
 								child.click();
