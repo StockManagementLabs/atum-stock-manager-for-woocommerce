@@ -61,6 +61,12 @@
 			
 			a {
 				padding: 0 10px;
+				
+				&:not(.current) {
+					&:hover {
+						color: $primary;
+					}
+				}
 			}
 			
 			@include mobile-max {

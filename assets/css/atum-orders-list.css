@@ -6095,6 +6095,9 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
 #posts-filter .nav-with-scroll-effect .subsubsub li a {
   padding: 0 10px;
 }
+#posts-filter .nav-with-scroll-effect .subsubsub li a:not(.current):hover {
+  color: #00B8DB;
+}
 @media all and (max-width: 480px) {
   #posts-filter .nav-with-scroll-effect .subsubsub li, #posts-filter .nav-with-scroll-effect .subsubsub li:first-child {
     padding: 0;
