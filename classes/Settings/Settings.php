@@ -1189,9 +1189,9 @@ class Settings {
 		$data_default  = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 		$stored_values = $this->find_option_value( $args['id'] );
 
-		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
-
 		if ( isset( $args['main_switcher'] ) && $args['main_switcher'] ) {
+
+			$default_checked = 'yes' === $args['default'] ? 'checked' : '';
 
 			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 			$output  = sprintf(
