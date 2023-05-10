@@ -539,7 +539,7 @@ export default class ListTable {
 			success   : ( response: any ) => {
 
 				if ( typeof response === 'object' && typeof response.success !== 'undefined' ) {
-					const noticeType     = response.success ? 'updated' : 'error',
+					const noticeType     = response.success ? 'success' : 'error',
 					      notice: string = response.success ? response.data.notice : response.data;
 
 					Utils.addNotice( noticeType, notice );

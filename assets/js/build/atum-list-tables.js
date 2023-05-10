@@ -205,8 +205,8 @@ var Blocker = {
         opts = Object.assign({
             message: null,
             overlayCSS: {
-                background: '#000',
-                opacity: 0.5,
+                background: 'rgba(0, 0, 0, 0.5)',
+                opacity: 1,
             },
         }, opts);
         $selector.block(opts);
@@ -1146,7 +1146,7 @@ var BulkActions = (function () {
             },
             success: function (response) {
                 if (typeof response === 'object') {
-                    var noticeType = response.success ? 'updated' : 'error';
+                    var noticeType = response.success ? 'success' : 'error';
                     _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice(noticeType, response.data);
                 }
                 _this.$bulkButton.prop('disabled', false);
@@ -2046,7 +2046,7 @@ var ListTable = (function () {
             },
             success: function (response) {
                 if (typeof response === 'object' && typeof response.success !== 'undefined') {
-                    var noticeType = response.success ? 'updated' : 'error', notice = response.success ? response.data.notice : response.data;
+                    var noticeType = response.success ? 'success' : 'error', notice = response.success ? response.data.notice : response.data;
                     _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, notice);
                 }
                 if (typeof response.success !== 'undefined' && response.success === true) {
@@ -3451,7 +3451,7 @@ var Utils = {
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
-        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"notice-".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
