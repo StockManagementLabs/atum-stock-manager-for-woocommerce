@@ -43,25 +43,31 @@ class AtumBarcodes {
 
 		if ( is_admin() ) {
 
-			// Add the barcode field to WC products.
-			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_barcode_field_to_products' ), 10, 3 );
-			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_barcode_field_to_products' ) );
+			// Allow removing barcode support externally.
+			if ( apply_filters( 'atum/barcodes/barcode_support/product', TRUE ) ) {
 
-			// Save the barcode field when saving the ATUM's meta boxes.
-			add_action( 'atum/product_data/data_to_save', array( $this, 'save_barcode_field' ), 10, 3 );
+				// Add the barcode field to WC products.
+				add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_barcode_field_to_products' ), 10, 3 );
+				add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_barcode_field_to_products' ) );
 
-			// Add the barcode columnn to SC and MC.
-			add_filter( 'atum/stock_central_list/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
-			add_filter( 'atum/product_levels/manufacturing_list_table/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
-			add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
-			add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ) );
-			add_filter( 'atum/stock_central_list/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
-			add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
-			add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
-			add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
+				// Save the barcode field when saving the ATUM's meta boxes.
+				add_action( 'atum/product_data/data_to_save', array( $this, 'save_barcode_field' ), 10, 3 );
+
+				// Add the barcode columnn to SC and MC.
+				add_filter( 'atum/stock_central_list/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
+				add_filter( 'atum/product_levels/manufacturing_list_table/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
+				add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
+				add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ) );
+				add_filter( 'atum/stock_central_list/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
+				add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
+				add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
+				add_filter( 'atum/list_table/column_default__barcode', array( $this, 'column__barcode' ), 10, 4 );
+
+			}
 
 			// Add the barcode field to some product terms.
-			foreach ( apply_filters( 'atum/barcodes/allowed_taxonomies', [ Globals::PRODUCT_LOCATION_TAXONOMY, 'product_cat', 'product_tag' ] ) as $taxonomy ) {
+			$taxonomies = apply_filters( 'atum/barcodes/allowed_taxonomies', [ Globals::PRODUCT_LOCATION_TAXONOMY, 'product_cat', 'product_tag' ] );
+			foreach ( $taxonomies as $taxonomy ) {
 				add_action( "{$taxonomy}_edit_form_fields", array( $this, 'add_barcode_term_meta' ), 11, 2 );
 				add_action( "edited_$taxonomy", array( $this, 'save_barcode_term_meta' ), 10, 2 );
 			}
