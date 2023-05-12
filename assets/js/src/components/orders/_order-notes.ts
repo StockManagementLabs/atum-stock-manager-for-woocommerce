@@ -10,6 +10,7 @@ export default class OrderNotes {
 	
 	$container: JQuery;
 	$textarea: JQuery;
+	wcAdminMetaBoxes: any = window[ 'woocommerce_admin_meta_boxes' ]; // WC's global variable.
 	
 	constructor(
 		private settings: Settings
@@ -39,7 +40,7 @@ export default class OrderNotes {
 
 		const data: any = {
 			action  : 'atum_order_add_note',
-			post_id : $( '#post_ID' ).val(),
+			post_id : $( '#post_ID' ).length ? $( '#post_ID' ).val() : this.wcAdminMetaBoxes.post_id,
 			note    : note,
 			security: this.settings.get( 'addNoteNonce' ),
 		};
@@ -71,7 +72,7 @@ export default class OrderNotes {
 			allowOutsideClick: false,
 			preConfirm       : (): Promise<any> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
+				return new Promise( ( resolve: Function ) => {
 
 					Blocker.block( $note );
 

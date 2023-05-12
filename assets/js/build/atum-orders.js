@@ -1400,6 +1400,7 @@ var OrderNotes = (function () {
     function OrderNotes(settings) {
         var _this = this;
         this.settings = settings;
+        this.wcAdminMetaBoxes = window['woocommerce_admin_meta_boxes'];
         this.$container = $('#atum_order_notes');
         this.$textarea = $('textarea#add_atum_order_note');
         this.$container
@@ -1416,7 +1417,7 @@ var OrderNotes = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_note',
-            post_id: $('#post_ID').val(),
+            post_id: $('#post_ID').length ? $('#post_ID').val() : this.wcAdminMetaBoxes.post_id,
             note: note,
             security: this.settings.get('addNoteNonce'),
         };
@@ -1440,7 +1441,7 @@ var OrderNotes = (function () {
             reverseButtons: true,
             allowOutsideClick: false,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block($note);
                     var data = {
                         action: 'atum_order_delete_note',
