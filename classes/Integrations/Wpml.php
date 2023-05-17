@@ -1504,12 +1504,19 @@ class Wpml {
 	 */
 	public function exclude_atum_data_attributes( $column_names ) {
 
-		$excluded_columns = array(
-			'barcode_type',
-			'committed_to_wc',
-		);
+		global $wpdb;
 
-		return array_diff( $column_names, $excluded_columns );
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$db_name         = DB_NAME;
+
+		$columns = $wpdb->prepare( '
+				SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
+			', $db_name, $atum_data_table );
+
+		$valid_columns = $wpdb->get_col( $columns ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return array_intersect( $column_names, $valid_columns );
 	}
 
 
