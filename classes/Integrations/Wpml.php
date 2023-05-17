@@ -145,7 +145,10 @@ class Wpml {
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
 
 		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
-		
+
+		// Exclude ATUM Product Data attributes for translation queries.
+		add_filter( 'atum/product_data/data_column_names', array( $this, 'exclude_atum_data_attributes' ) );
+
 		if ( is_admin() ) {
 
 			// Prevent directly updating ATUM data for translations.
@@ -218,8 +221,6 @@ class Wpml {
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
 
-			// Exclude ATUM Product Data attributes for translation queries.
-			add_filter( 'atum/product_data/data_column_names', array( $this, 'exclude_atum_data_attributes' ) );
 		}
 
 	}
