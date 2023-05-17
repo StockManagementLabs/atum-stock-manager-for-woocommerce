@@ -35,6 +35,7 @@ use Atum\MetaBoxes\FileAttachment;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\Orders\CheckOrderPrices;
+use Atum\Orders\SearchOrdersByColumn;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
@@ -80,7 +81,7 @@ class Main {
 	 */
 	private function __construct() {
 
-		// Make the ATUM cache group, non persistent.
+		// Make the ATUM cache group, non-persistent.
 		wp_cache_add_non_persistent_groups( ATUM_TEXT_DOMAIN );
 		
 		if ( is_admin() ) {
@@ -252,6 +253,7 @@ class Main {
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
 		CheckOrderPrices::get_instance();
+		SearchOrdersByColumn::get_instance();
 		AtumEmailNotifications::get_instance();
 
 		if ( class_exists( '\WP_CLI', FALSE ) ) {

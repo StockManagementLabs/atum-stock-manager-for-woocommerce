@@ -460,6 +460,7 @@
 	
 	#search_column_btn{
 		border-right: 1px solid var(--main-border-alt);
+		
 		@if $enable-rounded {
 			border-top-left-radius : $border-radius;
 			border-bottom-left-radius: $border-radius;
