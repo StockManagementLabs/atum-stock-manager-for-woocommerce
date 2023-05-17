@@ -2524,10 +2524,8 @@ var Router = (function () {
                     _this.globals.$searchInput.val(s);
                 }
                 if (searchColumn_1) {
-                    var $selectedSearchColumn = _this.globals.$searchColumnDropdown.find('.dropdown-item').filter(function (index, elem) {
-                        return $(elem).data('value') === searchColumn_1;
-                    }).addClass('active');
-                    _this.globals.$searchColumnBtn.attr('data-original-title', $selectedSearchColumn.text().trim()).text($selectedSearchColumn.text().trim());
+                    var $selectedSearchColumn = _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData(_this.globals.$searchColumnDropdown.find('.dropdown-item'), 'value', searchColumn_1).addClass('active'), label = $selectedSearchColumn.text().trim();
+                    _this.globals.$searchColumnBtn.attr('data-bs-original-title', label).text(label);
                     $('#adv-settings :checkbox').each(function (index, elem) {
                         optionVal_1 = $(elem).val();
                         if (!optionVal_1.startsWith('calc_') && optionVal_1 !== 'thumb' && optionVal_1 === searchColumn_1) {
@@ -2844,9 +2842,10 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 var SearchInColumn = (function () {
-    function SearchInColumn(settings, globals) {
+    function SearchInColumn(settings, tooltip, globals) {
         var _this = this;
         this.settings = settings;
+        this.tooltip = tooltip;
         this.globals = globals;
         if ($('.atum-post-search-with-dropdown').length) {
             this.setup();
@@ -2885,10 +2884,12 @@ var SearchInColumn = (function () {
             $(evt.currentTarget).parent().find('.dropdown-menu').toggle();
         })
             .on('atum-search-column-set-data', function (evt, value, label) {
-            var $searchColBtn = $(evt.currentTarget), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a');
+            var $searchColBtn = $(evt.currentTarget), $wrapper = $searchColBtn.parent(), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a');
             $searchColBtn.text(label);
             $searchColBtn.data('value', value);
-            $searchColBtn.attr('data-original-title', label === _this.globals.$searchColumnDropdown.data('no-option') ? _this.globals.$searchColumnDropdown.data('no-option-title') : label);
+            $searchColBtn.attr('data-bs-original-title', label === _this.globals.$searchColumnDropdown.data('no-option') ? _this.globals.$searchColumnDropdown.data('no-option-title') : label);
+            _this.tooltip.destroyTooltips($wrapper);
+            _this.tooltip.addTooltips($wrapper);
             $dropDownLinks.filter('.active').removeClass('active');
             _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData($dropDownLinks, 'value', value).addClass('active');
         });
@@ -2904,7 +2905,7 @@ var SearchInColumn = (function () {
             if (_this.settings.get('ajaxFilter') === 'yes') {
                 _this.globals.$searchColumnBtn.trigger('atum-search-column-data-changed');
             }
-            _this.globals.$searchColumnBtn.attr('data-original-title', $item.html());
+            _this.globals.$searchColumnBtn.attr('data-bs-original-title', $item.html());
         });
         $(document).click(function () { return _this.globals.$searchColumnDropdown.hide(); });
     };
@@ -3367,7 +3368,7 @@ jQuery(function ($) {
         new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_18__["default"](globals);
     }
     new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
-    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__["default"](settings, globals);
+    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__["default"](settings, tooltip, globals);
     new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
     new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
     new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);

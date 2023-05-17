@@ -44,7 +44,10 @@ defined( 'ABSPATH' ) || die;
 			<div class="search-box extend-list-table">
 				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="atum-icon atmi-undo"></i></button>
 
-				<?php Helpers::load_view( 'list-tables/search-by-column-field', compact( 'ajax' ) ); ?>
+				<?php
+				$show_atum_icon = FALSE;
+				Helpers::load_view( 'list-tables/search-by-column-field', compact( 'ajax', 'show_atum_icon' ) );
+				?>
 
 				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 
