@@ -1407,8 +1407,8 @@ input[type=button].btn-block {
 
 #search_column_btn {
   border-right: 1px solid var(--main-border-alt);
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
 input.atum-post-search {
@@ -1418,9 +1418,10 @@ input.atum-post-search {
           box-shadow: none;
   width: 110px;
   max-width: 110px;
-  font-size: 15px;
-  background-color: var(--atum-table-bg);
-  color: var(--atum-text-color-var1);
+  font-size: 14px !important;
+  background-color: #fff;
+  color: #27283B;
+  height: 29px !important;
 }
 @media all and (max-width: 782px) {
   input.atum-post-search {
@@ -1465,8 +1466,8 @@ input.atum-post-search:focus, input.atum-post-search:active {
           box-shadow: none;
 }
 
-#atum-search-orders.input-group {
-  border-radius: 5px;
+#atum-search-by-column.input-group {
+  border-radius: 3px;
   border: solid 1px var(--main-border-alt);
   background-color: var(--atum-table-bg);
   margin-left: 10px;
@@ -1478,30 +1479,34 @@ input.atum-post-search:focus, input.atum-post-search:active {
       flex-wrap: nowrap;
   width: auto;
 }
+#atum-search-by-column.input-group .input-group-text {
+  padding: 0.27rem 0.375rem;
+  border-radius: 0;
+}
 @media all and (max-width: 480px) {
-  #atum-search-orders.input-group {
+  #atum-search-by-column.input-group {
     width: 100%;
     margin-left: 0;
   }
 }
-#atum-search-orders input[type=submit] {
+#atum-search-by-column input[type=submit] {
   height: 29px !important;
   color: var(--main-text-expanded) !important;
   background-color: var(--atum-table-search-submit-bg);
 }
-#atum-search-orders input[type=submit]:disabled {
+#atum-search-by-column input[type=submit]:disabled {
   color: var(--atum-table-search-text-disabled) !important;
 }
-#atum-search-orders .input-group-append {
+#atum-search-by-column .input-group-append {
   border: none;
-  height: 31px;
+  height: 30px;
 }
 @media all and (max-width: 782px) {
-  #atum-search-orders .input-group-append {
+  #atum-search-by-column .input-group-append {
     height: 42px;
   }
 }
-#atum-search-orders .dropdown-toggle {
+#atum-search-by-column .dropdown-toggle {
   width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1509,13 +1514,13 @@ input.atum-post-search:focus, input.atum-post-search:active {
   text-align: left;
   padding-left: 7px !important;
   padding-right: 25px !important;
-  font-size: 15px !important;
-  line-height: 15px !important;
+  font-size: 14px !important;
+  line-height: 14px !important;
   border: none;
-  background-color: var(--atum-dropdown-toggle-bg);
-  color: var(--atum-text-color-var1);
+  background-color: #e9ecef;
+  color: #27283B;
 }
-#atum-search-orders .dropdown-toggle:after {
+#atum-search-by-column .dropdown-toggle:after {
   content: "";
   height: 24px;
   background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
@@ -1523,44 +1528,43 @@ input.atum-post-search:focus, input.atum-post-search:active {
   width: 28px;
   position: absolute;
   right: 0;
-  top: 5px;
+  top: 4px;
 }
 @media all and (max-width: 782px) {
-  #atum-search-orders .dropdown-toggle:after {
+  #atum-search-by-column .dropdown-toggle:after {
     top: 9px;
   }
 }
-#atum-search-orders .dropdown-toggle:focus, #atum-search-orders .dropdown-toggle:active, #atum-search-orders .dropdown-toggle:hover {
+#atum-search-by-column .dropdown-toggle:focus, #atum-search-by-column .dropdown-toggle:active, #atum-search-by-column .dropdown-toggle:hover {
   outline: 0;
   -webkit-box-shadow: none;
           box-shadow: none;
-  background-color: var(--atum-dropdown-toggle-bg);
-  color: var(--atum-text-color-var1);
+  color: #6c757d;
 }
-#atum-search-orders .dropdown-menu {
+#atum-search-by-column .dropdown-menu {
   margin-top: 1px;
   right: 0px;
   -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
   background-color: var(--atum-table-bg);
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   max-height: 300px;
   overflow-y: auto;
 }
-#atum-search-orders .dropdown-item {
+#atum-search-by-column .dropdown-item {
   width: auto;
   color: var(--atum-text-color-var1);
 }
-#atum-search-orders .dropdown-item:first-child {
+#atum-search-by-column .dropdown-item:first-child {
   margin-top: -8px;
   padding-top: 8px;
 }
-#atum-search-orders .dropdown-item:last-child {
+#atum-search-by-column .dropdown-item:last-child {
   margin-bottom: -8px;
   padding-bottom: 8px;
 }
-#atum-search-orders .dropdown-item:hover, #atum-search-orders .dropdown-item.active, #atum-search-orders .dropdown-item:focus, #atum-search-orders .dropdown-item:active {
+#atum-search-by-column .dropdown-item:hover, #atum-search-by-column .dropdown-item.active, #atum-search-by-column .dropdown-item:focus, #atum-search-by-column .dropdown-item:active {
   background-color: var(--primary-dark);
   color: var(--primary-var-dark);
 }

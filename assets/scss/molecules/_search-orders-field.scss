@@ -3,8 +3,8 @@
 	border-right: 1px solid var(--main-border-alt);
 	
 	@if $enable-rounded {
-		border-top-left-radius : $border-radius;
-		border-bottom-left-radius: $border-radius;
+		border-top-left-radius : 3px;
+		border-bottom-left-radius: 3px;
 	} @else {
 		border-radius: 0;
 	}
@@ -16,9 +16,10 @@ input.atum-post-search {
 	box-shadow: none;
 	width: 110px;
 	max-width: 110px;
-	font-size: 15px;
-	background-color: var(--atum-table-bg);
-	color: var(--atum-text-color-var1);
+	font-size: 14px !important;
+	background-color: $white;
+	color: $blue-dark;
+	height: 29px !important;
 	
 	@include tablet-max-wp {
 		max-width: inherit;
@@ -40,10 +41,10 @@ input.atum-post-search {
 	}
 }
 
-#atum-search-orders {
+#atum-search-by-column {
 	
 	&.input-group {
-		border-radius: 5px;
+		border-radius: 3px;
 		border: solid 1px var(--main-border-alt);
 		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
@@ -51,6 +52,11 @@ input.atum-post-search {
 		display: inline-flex;
 		flex-wrap: nowrap;
 		width: auto;
+		
+		.input-group-text {
+			padding: 0.27rem 0.375rem;
+			border-radius: 0;
+		}
 		
 		@include mobile-max {
 			width: 100%;
@@ -72,7 +78,7 @@ input.atum-post-search {
 	
 	.input-group-append {
 		border: none;
-		height: 31px;
+		height: 30px;
 		
 		@include tablet-max-wp{
 			height: 42px;
@@ -85,18 +91,18 @@ input.atum-post-search {
 		text-align: left;
 		padding-left: 7px !important;
 		padding-right: 25px !important;
-		font-size: 15px !important;
-		line-height: 15px !important;
+		font-size: 14px !important;
+		line-height: 14px !important;
 		border: none;
-		background-color: var(--atum-dropdown-toggle-bg);
-		color: var(--atum-text-color-var1);
+		background-color: $gray-200;
+		color: $blue-dark;
 		
 		&:after {
 			content: '';
 			@include dropdown-arrow;
 			position: absolute;
 			right: 0;
-			top: 5px;
+			top: 4px;
 			
 			@include tablet-max-wp{
 				top: 9px;
@@ -106,8 +112,7 @@ input.atum-post-search {
 		&:focus, &:active, &:hover {
 			outline: 0;
 			box-shadow: none;
-			background-color: var(--atum-dropdown-toggle-bg);
-			color: var(--atum-text-color-var1);
+			color: $gray-600;
 		}
 	}
 	
@@ -117,7 +122,7 @@ input.atum-post-search {
 		box-shadow: $dropdown-box-shadow;
 		background-color:  var(--atum-table-bg);
 		border: none;
-		border-radius: 5px;
+		border-radius: 3px;
 		max-height: 300px;
 		overflow-y: auto;
 	}

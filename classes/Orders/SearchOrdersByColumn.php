@@ -32,8 +32,8 @@ class SearchOrdersByColumn {
 	 * @var string[]
 	 */
 	private $search_columns = [
-		'mi_batch',
-		'barcode',
+		'mi_batch' => 'Batch/LOT number',
+		'barcode'  => 'Barcode',
 	];
 
 	/**
@@ -89,8 +89,17 @@ class SearchOrdersByColumn {
 	public function add_search_by_column_field( $post_type ) {
 
 		if ( ! empty( $this->search_columns ) && in_array( $post_type, array_keys( $this->order_types_ids ), TRUE ) ) {
-			$ajax = Helpers::get_option( 'enable_ajax_filter', 'yes' );
-			Helpers::load_view( 'list-tables/search-by-column-field', compact( 'ajax' ) );
+
+			$args = array(
+				'ajax'            => FALSE,
+				'show_atum_icon'  => TRUE,
+				'menu_items'      => $this->search_columns,
+				'no_option'       => __( 'Search By', ATUM_TEXT_DOMAIN ),
+				'no_option_title' => __( 'Search By', ATUM_TEXT_DOMAIN ),
+			);
+
+			Helpers::load_view( 'list-tables/search-by-column-field', $args );
+
 		}
 
 	}
