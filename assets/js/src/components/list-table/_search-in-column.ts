@@ -4,12 +4,14 @@
 
 import Globals from './_globals';
 import Settings from '../../config/_settings';
+import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 
 export default class SearchInColumn {
 
 	constructor(
 		private settings: Settings,
+		private tooltip: Tooltip,
 		private globals: Globals
 	) {
 
@@ -91,11 +93,15 @@ export default class SearchInColumn {
 			.on( 'atum-search-column-set-data', ( evt: JQueryEventObject, value: string, label: string ) => {
 
 				const $searchColBtn: JQuery  = $( evt.currentTarget ),
+				      $wrapper: JQuery       = $searchColBtn.parent(),
 				      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children( 'a' );
 
 				$searchColBtn.text( label );
 				$searchColBtn.data( 'value', value );
-				$searchColBtn.attr( 'data-original-title', label === this.globals.$searchColumnDropdown.data( 'no-option' ) ? this.globals.$searchColumnDropdown.data( 'no-option-title' ) : label );
+				$searchColBtn.attr( 'data-bs-original-title', label === this.globals.$searchColumnDropdown.data( 'no-option' ) ? this.globals.$searchColumnDropdown.data( 'no-option-title' ) : label );
+
+				this.tooltip.destroyTooltips( $wrapper );
+				this.tooltip.addTooltips( $wrapper );
 
 				$dropDownLinks.filter( '.active' ).removeClass( 'active' );
 				Utils.filterByData( $dropDownLinks, 'value', value ).addClass( 'active' );
@@ -122,7 +128,7 @@ export default class SearchInColumn {
 				this.globals.$searchColumnBtn.trigger( 'atum-search-column-data-changed' );
 			}
 
-			this.globals.$searchColumnBtn.attr( 'data-original-title', $item.html() );
+			this.globals.$searchColumnBtn.attr( 'data-bs-original-title', $item.html() );
 
 		} );
 
