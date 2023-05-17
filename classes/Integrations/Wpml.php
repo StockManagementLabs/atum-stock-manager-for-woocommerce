@@ -217,6 +217,9 @@ class Wpml {
 
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
+
+			// Exclude ATUM Product Data attributes for translation queries.
+			add_filter( 'atum/product_data/data_column_names', array( $this, 'exclude_atum_data_attributes' ) );
 		}
 
 	}
@@ -1488,6 +1491,24 @@ class Wpml {
 		}
 
 		return $criteria;
+	}
+
+	/**
+	 * Exclude ATUM Product Data properties.
+	 *
+	 * @since 1.9.29.1
+	 *
+	 * @param array $column_names
+	 * @return array
+	 */
+	public function exclude_atum_data_attributes( $column_names ) {
+
+		$excluded_columns = array(
+			'barcode_type',
+			'committed_to_wc',
+		);
+
+		return array_diff( $column_names, $excluded_columns );
 	}
 
 
