@@ -157,11 +157,11 @@ class Tools {
 		$defaults['clear_out_atum_transients'] = array(
 			'group'   => 'tools',
 			'section' => 'tools',
-			'name'    => __( 'Remove ATUM transients', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'name'    => __( 'Delete ATUM transients', ATUM_TEXT_DOMAIN ) . $atum_label,
 			'desc'    => __( 'Clear all the temporary transients stored by ATUM. This could help in some cases when you are seeing wrong values in Stock Central.', ATUM_TEXT_DOMAIN ),
 			'type'    => 'script_runner',
 			'options' => array(
-				'button_text'   => __( 'Remove Now!', ATUM_TEXT_DOMAIN ),
+				'button_text'   => __( 'Clear Now!', ATUM_TEXT_DOMAIN ),
 				'script_action' => 'atum_tool_clear_out_atum_transients',
 				'confirm_msg'   => esc_attr( __( 'This will clear all the temporary ATUM transients', ATUM_TEXT_DOMAIN ) ),
 			),
