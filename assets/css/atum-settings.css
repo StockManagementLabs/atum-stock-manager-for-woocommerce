@@ -5339,6 +5339,19 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   margin-left: 14px;
   line-height: 30px;
   color: var(--atum-checkbox-label);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper > input[type=checkbox] {
+  margin: 0;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper label {
+  font-size: 13px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper {
   width: 100%;
@@ -5351,9 +5364,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
       -ms-flex-align: center;
           align-items: center;
   margin-bottom: 15px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row > div {
-  margin-right: 10px;
+  gap: 15px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row i {
   cursor: pointer;
@@ -5361,27 +5372,21 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   transition: 0.2s ease-in-out;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker {
-  width: inherit;
   position: relative;
 }
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker::after {
-  width: 24px;
-  display: inline-block;
-  background-color: #ff4848;
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to::after {
   content: "\e926";
   font-family: "atum-icon-font";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-right: 15px;
   font-size: 12px;
-  top: 13px;
-  right: 0;
+  top: 7px;
+  right: 6px;
   position: absolute;
+  pointer-events: none;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker {
+  width: inherit;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from select, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to select {
   width: 100% !important;
@@ -5431,9 +5436,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
   margin-right: 15px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner.template-reset .tool-runner {
-  width: 140px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {
