@@ -29,12 +29,9 @@ class SearchOrdersByColumn {
 	/**
 	 * Searchable columns
 	 *
-	 * @var string[]
+	 * @var array
 	 */
-	private $search_columns = [
-		'mi_batch' => 'Batch/LOT number',
-		'barcode'  => 'Barcode',
-	];
+	private $search_columns = [];
 
 	/**
 	 * The available order types IDs
@@ -113,7 +110,14 @@ class SearchOrdersByColumn {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		if ( ! empty( $this->search_columns ) && 'woocommerce_page_wc-orders' === $hook ) {
+		global $post_type;
+
+		if (
+			! empty( $this->search_columns ) && (
+				( Helpers::is_using_cot_list() && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) === $hook && ! isset( $_GET['id'] ) ) ||
+				( 'edit.php' === $hook && 'shop_order' === $post_type ) || 'woocommerce_page_wc-orders' === $hook
+			)
+		) {
 
 			wp_register_style( 'atum-search-orders', ATUM_URL . 'assets/css/atum-search-orders.css', [], ATUM_VERSION );
 			wp_register_script( 'atum-search-orders', ATUM_URL . 'assets/js/build/atum-search-orders.js', [ 'jquery' ], ATUM_VERSION, TRUE );

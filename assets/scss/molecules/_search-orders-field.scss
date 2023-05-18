@@ -80,14 +80,24 @@ input.atum-post-search {
 		border: none;
 		height: 30px;
 		
+		.input-group-text {
+			background-color: $gray-200;
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+			color: $blue-dark;
+			font-size: 14px;
+			width: 100px;
+			@include text-overflow();
+			display: inline-block;
+			cursor: default;
+		}
+		
 		@include tablet-max-wp{
 			height: 42px;
 		}
 	}
 	
 	.dropdown-toggle {
-		width: 100px;
-		@include text-overflow();
 		text-align: left;
 		padding-left: 7px !important;
 		padding-right: 25px !important;
@@ -120,7 +130,7 @@ input.atum-post-search {
 		margin-top: 1px;
 		right: 0px;
 		box-shadow: $dropdown-box-shadow;
-		background-color:  var(--atum-table-bg);
+		background-color: var(--atum-table-bg);
 		border: none;
 		border-radius: 3px;
 		max-height: 300px;

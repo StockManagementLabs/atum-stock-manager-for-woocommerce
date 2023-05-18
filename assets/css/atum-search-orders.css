@@ -1501,16 +1501,25 @@ input.atum-post-search:focus, input.atum-post-search:active {
   border: none;
   height: 30px;
 }
+#atum-search-by-column .input-group-append .input-group-text {
+  background-color: #e9ecef;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  color: #27283B;
+  font-size: 14px;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  cursor: default;
+}
 @media all and (max-width: 782px) {
   #atum-search-by-column .input-group-append {
     height: 42px;
   }
 }
 #atum-search-by-column .dropdown-toggle {
-  width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   text-align: left;
   padding-left: 7px !important;
   padding-right: 25px !important;

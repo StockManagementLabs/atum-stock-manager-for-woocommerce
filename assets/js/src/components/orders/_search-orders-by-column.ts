@@ -7,6 +7,7 @@
  */
 
 import Tooltip from '../_tooltip';
+import Utils from '../../utils/_utils';
 
 export default class SearchOrdersByColumn {
 
@@ -20,6 +21,18 @@ export default class SearchOrdersByColumn {
 
 		this.bindEvents();
 		this.tooltip.addTooltips( this.$searchColumnWrapper );
+
+		// Check whether we have to initialize the column.
+		const activeSearchCol: string = <string>Utils.getUrlParameter( 'atum_search_column' ),
+		      $dropdownLinks: JQuery  = this.$searchColumnDropdown.children( 'a' );
+
+		if ( activeSearchCol ) {
+			Utils.filterByData( $dropdownLinks, 'value', activeSearchCol ).click();
+		}
+		// If there is only one column available, pre-select it.
+		else if ( $dropdownLinks.length < 3 ) {
+			$dropdownLinks.eq( 1 ).click();
+		}
 
 	}
 
