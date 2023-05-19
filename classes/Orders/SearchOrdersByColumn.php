@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
+use Atum\InventoryLogs\InventoryLogs;
+use Atum\PurchaseOrders\PurchaseOrders;
 
 
 class SearchOrdersByColumn {
@@ -89,7 +91,7 @@ class SearchOrdersByColumn {
 
 			$args = array(
 				'ajax'            => FALSE,
-				'show_atum_icon'  => TRUE,
+				'show_atum_icon'  => 'shop_order' === $post_type,
 				'menu_items'      => $this->search_columns,
 				'no_option'       => __( 'Search By', ATUM_TEXT_DOMAIN ),
 				'no_option_title' => __( 'Search By', ATUM_TEXT_DOMAIN ),
@@ -112,10 +114,12 @@ class SearchOrdersByColumn {
 
 		global $post_type;
 
+		$supported_order_types = apply_filters( 'atum/orders/search_by_column/supported_types', [ 'shop_order', PurchaseOrders::POST_TYPE, InventoryLogs::POST_TYPE ] );
+
 		if (
 			! empty( $this->search_columns ) && (
 				( Helpers::is_using_cot_list() && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) === $hook && ! isset( $_GET['id'] ) ) ||
-				( 'edit.php' === $hook && 'shop_order' === $post_type ) || 'woocommerce_page_wc-orders' === $hook
+				( 'edit.php' === $hook && in_array( $post_type, $supported_order_types ) ) || 'woocommerce_page_wc-orders' === $hook
 			)
 		) {
 
