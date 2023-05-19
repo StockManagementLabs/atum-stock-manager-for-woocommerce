@@ -59,7 +59,8 @@ export default class SearchOrdersByColumn {
 
 				const $item: JQuery = $( evt.currentTarget ),
 				      value: string = $item.data( 'value' ),
-				      label: string = $item.text().trim();
+				      label: string = $item.text().trim(),
+				      noOptionLabel: string = this.$searchColumnDropdown.data( 'no-option' );
 
 				this.$searchColumnDropdown.children( 'input' ).val( value );
 
@@ -67,7 +68,7 @@ export default class SearchOrdersByColumn {
 					.children( 'a.active' ).removeClass( 'active' );
 				$item.addClass( 'active' );
 
-				this.$searchColumnBtn.attr( 'data-bs-original-title', label );
+				this.$searchColumnBtn.attr( 'data-bs-original-title', noOptionLabel !== label ? `${ noOptionLabel } ${ label }` : label );
 				this.$searchColumnBtn.text( label );
 				this.$searchColumnBtn.data( 'value', value );
 

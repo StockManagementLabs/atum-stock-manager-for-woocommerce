@@ -19,7 +19,7 @@ $dropdown_required = empty( $menu_items ) || count( $menu_items ) > 1;
 
 			<button class="btn btn-outline-secondary dropdown-toggle atum-tooltip" id="search_column_btn"
 				title="<?php echo esc_attr( $no_option_title ?? __( 'Search in Column', ATUM_TEXT_DOMAIN ) ) ?>" data-value=""
-				type="button" data-toggle="dropdown" data-bs-placement="left" aria-haspopup="true" aria-expanded="false"
+				type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 			>
 				<?php if ( empty( $_REQUEST['atum_search_column'] ) ) : ?>
 					<?php echo esc_html( $no_option ?? __( 'Search In', ATUM_TEXT_DOMAIN ) ) ?>

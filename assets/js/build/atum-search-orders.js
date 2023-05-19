@@ -193,12 +193,12 @@ var SearchOrdersByColumn = (function () {
         this.$searchColumnDropdown
             .on('click', 'a', function (evt) {
             evt.preventDefault();
-            var $item = $(evt.currentTarget), value = $item.data('value'), label = $item.text().trim();
+            var $item = $(evt.currentTarget), value = $item.data('value'), label = $item.text().trim(), noOptionLabel = _this.$searchColumnDropdown.data('no-option');
             _this.$searchColumnDropdown.children('input').val(value);
             _this.$searchColumnDropdown.hide()
                 .children('a.active').removeClass('active');
             $item.addClass('active');
-            _this.$searchColumnBtn.attr('data-bs-original-title', label);
+            _this.$searchColumnBtn.attr('data-bs-original-title', noOptionLabel !== label ? "".concat(noOptionLabel, " ").concat(label) : label);
             _this.$searchColumnBtn.text(label);
             _this.$searchColumnBtn.data('value', value);
             _this.tooltip.destroyTooltips(_this.$searchColumnWrapper);

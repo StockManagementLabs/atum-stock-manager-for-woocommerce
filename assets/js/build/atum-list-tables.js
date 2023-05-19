@@ -2524,8 +2524,10 @@ var Router = (function () {
                     _this.globals.$searchInput.val(s);
                 }
                 if (searchColumn_1) {
-                    var $selectedSearchColumn = _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData(_this.globals.$searchColumnDropdown.find('.dropdown-item'), 'value', searchColumn_1).addClass('active'), label = $selectedSearchColumn.text().trim();
-                    _this.globals.$searchColumnBtn.attr('data-bs-original-title', label).text(label);
+                    var $selectedSearchColumn = _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData(_this.globals.$searchColumnDropdown.find('.dropdown-item'), 'value', searchColumn_1).addClass('active'), label = $selectedSearchColumn.text().trim(), noOptionLabel = _this.globals.$searchColumnDropdown.data('no-option');
+                    if (noOptionLabel !== label) {
+                        _this.globals.$searchColumnBtn.attr('data-bs-original-title', "".concat(noOptionLabel, " ").concat(label)).text(label);
+                    }
                     $('#adv-settings :checkbox').each(function (index, elem) {
                         optionVal_1 = $(elem).val();
                         if (!optionVal_1.startsWith('calc_') && optionVal_1 !== 'thumb' && optionVal_1 === searchColumn_1) {
@@ -2884,10 +2886,10 @@ var SearchInColumn = (function () {
             $(evt.currentTarget).parent().find('.dropdown-menu').toggle();
         })
             .on('atum-search-column-set-data', function (evt, value, label) {
-            var $searchColBtn = $(evt.currentTarget), $wrapper = $searchColBtn.parent(), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a');
+            var $searchColBtn = $(evt.currentTarget), $wrapper = $searchColBtn.parent(), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a'), noOptionLabel = _this.globals.$searchColumnDropdown.data('no-option');
             $searchColBtn.text(label);
             $searchColBtn.data('value', value);
-            $searchColBtn.attr('data-bs-original-title', label === _this.globals.$searchColumnDropdown.data('no-option') ? _this.globals.$searchColumnDropdown.data('no-option-title') : label);
+            $searchColBtn.attr('data-bs-original-title', label !== noOptionLabel ? "".concat(noOptionLabel, " ").concat(label) : label);
             _this.tooltip.destroyTooltips($wrapper);
             _this.tooltip.addTooltips($wrapper);
             $dropDownLinks.filter('.active').removeClass('active');
@@ -2897,15 +2899,12 @@ var SearchInColumn = (function () {
             evt.preventDefault();
             var $item = $(evt.currentTarget);
             _this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$item.data('value'), $item.text().trim()]);
-            $item.parents().find('.dropdown-menu').hide();
-            _this.globals.$searchColumnDropdown.children('a.active').removeClass('active');
-            $item.addClass('active');
+            $item.closest('.dropdown-menu').hide();
             var fieldType = $.inArray($item.data('value'), _this.settings.get('searchableColumns').numeric) > -1 ? 'number' : 'search';
             _this.globals.$searchInput.attr('type', fieldType);
             if (_this.settings.get('ajaxFilter') === 'yes') {
                 _this.globals.$searchColumnBtn.trigger('atum-search-column-data-changed');
             }
-            _this.globals.$searchColumnBtn.attr('data-bs-original-title', $item.html());
         });
         $(document).click(function () { return _this.globals.$searchColumnDropdown.hide(); });
     };

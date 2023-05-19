@@ -6059,6 +6059,9 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
 #posts-filter table.wp-list-table tbody th, #posts-filter table.wp-list-table tbody td {
   vertical-align: top;
 }
+#posts-filter .tablenav {
+  gap: 10px;
+}
 #posts-filter .tablenav.top > .actions {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -6068,8 +6071,26 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
           align-items: center;
   gap: 10px;
 }
+#posts-filter .tablenav.top > .actions.bulkactions {
+  margin-right: 5px;
+}
 #posts-filter .tablenav.top > .actions input[type=submit] {
   margin-left: -5px;
+  margin-right: 0;
+  padding: 16px;
+  height: auto;
+}
+#posts-filter .tablenav.top .select2 {
+  height: inherit;
+}
+#posts-filter .tablenav.top .select2 .select2-selection {
+  height: 32px;
+}
+#posts-filter .tablenav.top .select2 .select2-selection .select2-selection__rendered {
+  line-height: 29px;
+}
+#posts-filter .tablenav.top #atum-search-by-column {
+  margin-left: 0;
 }
 #posts-filter .tablenav-pages {
   float: none;
