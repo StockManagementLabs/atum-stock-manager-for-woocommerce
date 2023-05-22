@@ -222,6 +222,9 @@ class Wpml {
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
 
+			// Add translations to inboud stock where clause
+			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
+
 		}
 
 	}
@@ -1526,6 +1529,35 @@ class Wpml {
 		return array_intersect( $column_names, $valid_columns );
 	}
 
+	/**
+	 * Include translations in the inbound stock where clause.
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array                        $where
+	 * @param \WC_Product|AtumProductTrait $product
+	 *
+	 * @return array
+	 */
+	public function include_translations_inbound_where( $where, $product ) {
+
+		$product_id   = $product->get_id();
+		$translations = $this->get_product_translations_ids( $product_id );
+
+		if ( is_array( $translations ) ) {
+
+			global $wpdb;
+
+			$original_clause = $wpdb->prepare( 'oim.`meta_value` = %d', $product_id );
+
+			$index = array_search( $original_clause, $where );
+
+			$where[ $index ] = 'oim.`meta_value` IN (' . implode( ',', $translations ) . ')';
+
+		}
+
+		return $where;
+	}
 
 	/******************
 	 * Instace methods
