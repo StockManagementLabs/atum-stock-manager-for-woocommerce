@@ -699,7 +699,7 @@ trait AtumProductTrait {
 	 * @return string[]
 	 */
 	public function get_atum_data_column_names() {
-		return array_keys( $this->atum_data );
+		return apply_filters( 'atum/product_data/data_column_names', array_keys( $this->atum_data ) );
 	}
 
 	/*

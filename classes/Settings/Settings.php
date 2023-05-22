@@ -797,7 +797,7 @@ class Settings {
 
 		}
 
-		return apply_filters( 'atum/settings/sanitize', $this->options );
+		return apply_filters( 'atum/settings/sanitize', $this->options, $input );
 
 	}
 

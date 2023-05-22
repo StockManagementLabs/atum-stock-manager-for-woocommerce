@@ -66,10 +66,13 @@ export default class Router {
 				if ( searchColumn ) {
 
 					// Activate the dropdown item coming from the hash.
-					const $selectedSearchColumn: JQuery = this.globals.$searchColumnDropdown.find( '.dropdown-item' ).filter( ( index: number, elem: Element ) => {
-						return $( elem ).data( 'value' ) === searchColumn;
-					} ).addClass( 'active' );
-					this.globals.$searchColumnBtn.attr( 'data-original-title', $selectedSearchColumn.text().trim() ).text( $selectedSearchColumn.text().trim() );
+					const $selectedSearchColumn: JQuery = Utils.filterByData( this.globals.$searchColumnDropdown.find( '.dropdown-item' ), 'value', searchColumn ).addClass( 'active' ),
+					      label: string                 = $selectedSearchColumn.text().trim(),
+					      noOptionLabel: string         = this.globals.$searchColumnDropdown.data( 'no-option' );
+
+					if ( noOptionLabel !== label ) {
+						this.globals.$searchColumnBtn.attr( 'data-bs-original-title', `${ noOptionLabel } ${ label }` ).text( label );
+					}
 
 					// Update the Screen Options' checkboxes.
 					$( '#adv-settings :checkbox' ).each( ( index: number, elem: Element ) => {

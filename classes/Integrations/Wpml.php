@@ -146,7 +146,10 @@ class Wpml {
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
 
 		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
-		
+
+		// Exclude ATUM Product Data attributes for translation queries.
+		add_filter( 'atum/product_data/data_column_names', array( $this, 'exclude_atum_data_attributes' ) );
+
 		if ( is_admin() ) {
 
 			// Prevent directly updating ATUM data for translations.
@@ -1497,6 +1500,32 @@ class Wpml {
 
 		return $criteria;
 	}
+
+	/**
+	 * Exclude ATUM Product Data properties.
+	 *
+	 * @since 1.9.29.1
+	 *
+	 * @param array $column_names
+	 * @return array
+	 */
+	public function exclude_atum_data_attributes( $column_names ) {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$db_name         = DB_NAME;
+
+		$columns = $wpdb->prepare( '
+				SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
+			', $db_name, $atum_data_table );
+
+		$valid_columns = $wpdb->get_col( $columns ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return array_intersect( $column_names, $valid_columns );
+	}
+
 
 	/******************
 	 * Instace methods

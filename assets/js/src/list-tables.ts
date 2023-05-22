@@ -74,7 +74,7 @@ jQuery( ( $: JQueryStatic ) => {
 	}
 
 	new DragScroll( globals, tooltip, popover );
-	new SearchInColumn( settings, globals );
+	new SearchInColumn( settings, tooltip, globals );
 	new ColumnGroups( globals, stickyHeader );
 	new Filters( settings, globals, listTable, router, tooltip, dateTimePicker );
 	new EditableCell( settings, globals, popover, listTable );

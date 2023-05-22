@@ -4,12 +4,14 @@
 
 import Globals from './_globals';
 import Settings from '../../config/_settings';
+import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 
 export default class SearchInColumn {
 
 	constructor(
 		private settings: Settings,
+		private tooltip: Tooltip,
 		private globals: Globals
 	) {
 
@@ -91,11 +93,16 @@ export default class SearchInColumn {
 			.on( 'atum-search-column-set-data', ( evt: JQueryEventObject, value: string, label: string ) => {
 
 				const $searchColBtn: JQuery  = $( evt.currentTarget ),
-				      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children( 'a' );
+				      $wrapper: JQuery       = $searchColBtn.parent(),
+				      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children( 'a' ),
+				      noOptionLabel: string  = this.globals.$searchColumnDropdown.data( 'no-option' );
 
 				$searchColBtn.text( label );
 				$searchColBtn.data( 'value', value );
-				$searchColBtn.attr( 'data-original-title', label === this.globals.$searchColumnDropdown.data( 'no-option' ) ? this.globals.$searchColumnDropdown.data( 'no-option-title' ) : label );
+				$searchColBtn.attr( 'data-bs-original-title', label !== noOptionLabel ? `${ noOptionLabel } ${ label }` : label );
+
+				this.tooltip.destroyTooltips( $wrapper );
+				this.tooltip.addTooltips( $wrapper );
 
 				$dropDownLinks.filter( '.active' ).removeClass( 'active' );
 				Utils.filterByData( $dropDownLinks, 'value', value ).addClass( 'active' );
@@ -111,9 +118,7 @@ export default class SearchInColumn {
 
 			this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ $item.data( 'value' ), $item.text().trim() ] );
 
-			$item.parents().find( '.dropdown-menu' ).hide();
-			this.globals.$searchColumnDropdown.children( 'a.active' ).removeClass( 'active' );
-			$item.addClass( 'active' );
+			$item.closest( '.dropdown-menu' ).hide();
 
 			const fieldType: string = $.inArray( $item.data( 'value' ), this.settings.get( 'searchableColumns' ).numeric ) > -1 ? 'number' : 'search';
 			this.globals.$searchInput.attr( 'type', fieldType );
@@ -121,8 +126,6 @@ export default class SearchInColumn {
 			if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
 				this.globals.$searchColumnBtn.trigger( 'atum-search-column-data-changed' );
 			}
-
-			this.globals.$searchColumnBtn.attr( 'data-original-title', $item.html() );
 
 		} );
 

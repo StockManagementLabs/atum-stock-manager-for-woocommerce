@@ -16,7 +16,7 @@ var gulp          = require('gulp'),
 	path          = require('path');
 
 // Plugin version
-var version = '1.9.29.1',
+var version = '1.9.30',
     curDate = new Date();
 
 // Global config
@@ -128,6 +128,7 @@ gulp.task('js::atum', function () {
 				'orders'         : config.jsSrcDir + 'orders.ts',
 				'post-type-list' : config.jsSrcDir + 'post-type-list-tables.ts',
 				'product-data'   : config.jsSrcDir + 'product-data.ts',
+				'search-orders'  : config.jsSrcDir + 'search-orders.ts',
 				'settings'       : config.jsSrcDir + 'settings.ts',
 				'suppliers'      : config.jsSrcDir + 'suppliers.ts',
 				'trials-modal'   : config.jsSrcDir + 'trials-modal.ts',
