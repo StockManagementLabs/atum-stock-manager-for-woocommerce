@@ -20,6 +20,7 @@ use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
@@ -217,6 +218,7 @@ class Wpml {
 
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
+
 		}
 
 	}
@@ -803,14 +805,14 @@ class Wpml {
 	}
 
 	/**
-	 * Get the product translation's ids
+	 * Get the product translation's ids. If no translations found, returns the product id
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param int    $product_id
 	 * @param string $post_type
 	 *
-	 * @return array
+	 * @return array|int
 	 */
 	public static function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
 
@@ -851,7 +853,13 @@ class Wpml {
 		}
 
 		foreach ( $product_ids as $product_id ) {
-			$translations += self::get_product_translations_ids( $product_id, $post_type );
+
+			$product_translations = self::get_product_translations_ids( $product_id, $post_type );
+
+			if ( is_array( $product_translations ) ) {
+				$translations += $product_translations;
+			}
+
 		}
 
 		return array_unique( $translations );
@@ -1489,7 +1497,6 @@ class Wpml {
 
 		return $criteria;
 	}
-
 
 	/******************
 	 * Instace methods
