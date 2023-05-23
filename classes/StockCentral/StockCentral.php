@@ -393,6 +393,7 @@ class StockCentral extends AtumListPage {
 	 */
 	public function setup_help_guides( $hook ) {
 
+		/* TODO: Temporary disabled. Do not display AKB at SC yet.
 		$screen_id = Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG;
 
 		if ( $screen_id === $hook ) {
@@ -410,6 +411,7 @@ class StockCentral extends AtumListPage {
 			wp_enqueue_script( 'atum-stock-central-knowledge-base' );
 
 		}
+		*/
 	}
 
 	
