@@ -480,7 +480,7 @@ final class WidgetHelpers {
 
 		if ( ! empty( $products ) ) {
 
-			$show_unmanaged_counter      = 'yes' === Helpers::get_option( 'unmanaged_counters' );
+			$show_unmanaged_counter      = 'yes' === Helpers::get_option( 'unmanaged_counters', 'no' );
 			$stock_counters['count_all'] = count( $products );
 
 			$variations = self::get_children( 'variable', 'product_variation' );

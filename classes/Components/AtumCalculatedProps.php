@@ -70,7 +70,7 @@ class AtumCalculatedProps {
 	public function maybe_create_defer_update_async_action() {
 
 		// Security check to avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && AtumQueues::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -79,7 +79,7 @@ class AtumCalculatedProps {
 		$already_queued = [];
 
 		// Add the async action for the sales prop first.
-		if ( ! empty( self::$deferred_sales_calc_props ) && 'yes' !== Helpers::get_option( 'calc_prop_cron' ) ) {
+		if ( ! empty( self::$deferred_sales_calc_props ) && 'yes' !== Helpers::get_option( 'calc_prop_cron', 'no' ) ) {
 
 			$already_queued = array_map( function( $id_str ) {
 
@@ -212,7 +212,7 @@ class AtumCalculatedProps {
 	 */
 	public static function defer_update_atum_sales_calc_props( $product_id, $order_type_id = 1 ) {
 
-		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron', 'no' ) ) {
 			return;
 		}
 
@@ -419,7 +419,7 @@ class AtumCalculatedProps {
 				}
 
 				// Update the restock status only when the cron isn't active or when executing it.
-				if ( 'yes' !== Helpers::get_option( 'calc_prop_cron' ) || wp_doing_cron() ) {
+				if ( 'yes' !== Helpers::get_option( 'calc_prop_cron', 'no' ) || wp_doing_cron() ) {
 
 					$restock = wc_bool_to_string( Helpers::is_product_restock_status( $product, FALSE ) );
 

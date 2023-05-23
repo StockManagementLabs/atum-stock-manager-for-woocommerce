@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.30 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -434,8 +434,8 @@
   --dash-add-widget-color-dark: #00B8DB;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-card-bg: #fff;
-  --dash-card-text: #adb5bd;
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-trans: rgba(106, 200, 30, 0.79);
@@ -2167,6 +2167,18 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pick-pack:before {
+  content: "\e9da";
+}
+
+.atmi-stock-takes:before {
+  content: "\e9db";
+}
+
+.atmi-question:before {
+  content: "\e9d9";
+}
+
 .atmi-ok:before {
   content: "\e9d8";
 }
@@ -3669,7 +3681,15 @@ h2 .atum-help-tip {
   color: var(--gray-800);
 }
 .swal2-container .swal2-modal .swal2-validation-message {
-  margin: 0.625em -1.25rem -0.625em;
+  margin: 1.625em -1.25rem -1.625em;
+  font-size: 14px;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .swal2-container .swal2-modal p {
   font-size: 15px;
@@ -4508,6 +4528,11 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
         flex-wrap: wrap;
   }
 }
+.atum-settings-wrapper .atum-settings-container > .alert {
+  width: 100%;
+  height: 26px;
+  margin-left: 10px;
+}
 .atum-settings-wrapper .switch-interface-style {
   float: right;
   width: 165px;
@@ -5318,6 +5343,19 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   margin-left: 14px;
   line-height: 30px;
   color: var(--atum-checkbox-label);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper > input[type=checkbox] {
+  margin: 0;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper label {
+  font-size: 13px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper {
   width: 100%;
@@ -5330,9 +5368,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
       -ms-flex-align: center;
           align-items: center;
   margin-bottom: 15px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row > div {
-  margin-right: 10px;
+  gap: 15px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row i {
   cursor: pointer;
@@ -5340,27 +5376,21 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   transition: 0.2s ease-in-out;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker {
-  width: inherit;
   position: relative;
 }
-.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker::after {
-  width: 24px;
-  display: inline-block;
-  background-color: #ff4848;
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from::after, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to::after {
   content: "\e926";
   font-family: "atum-icon-font";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-right: 15px;
   font-size: 12px;
-  top: 13px;
-  right: 0;
+  top: 7px;
+  right: 6px;
   position: absolute;
+  pointer-events: none;
+}
+.atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from .range-datepicker, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to .range-datepicker {
+  width: inherit;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-from select, .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-fields-wrapper .repeatable-row .tool-fields-to select {
   width: 100% !important;
@@ -5410,9 +5440,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
   margin-right: 15px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner.template-reset .tool-runner {
-  width: 140px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {

@@ -202,7 +202,7 @@ class Hooks {
 			add_action( "woocommerce_shortcode_before_{$type}_loop", array( $this, 'allow_product_caching' ) );
 		}
 
-		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete' ) ) {
+		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete', 'no' ) ) {
 
 			// Prevent stock changes when items are modified.
 			add_filter( 'woocommerce_prevent_adjust_line_item_product_stock', array( $this, 'prevent_item_stock_changing' ), 10, 3 );

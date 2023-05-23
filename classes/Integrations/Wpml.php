@@ -20,6 +20,7 @@ use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Suppliers;
@@ -145,7 +146,10 @@ class Wpml {
 		add_filter( 'atum/product_calc_stock_on_hold/product_ids', array( $this, 'get_product_translations_ids' ), 10, 2 );
 
 		add_action( 'wpml_pro_translation_completed', array( $this, 'new_translation_completed' ), 111, 3 );
-		
+
+		// Exclude ATUM Product Data attributes for translation queries.
+		add_filter( 'atum/product_data/data_column_names', array( $this, 'exclude_atum_data_attributes' ) );
+
 		if ( is_admin() ) {
 
 			// Prevent directly updating ATUM data for translations.
@@ -217,6 +221,10 @@ class Wpml {
 
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
+
+			// Add translations to inboud stock where clause
+			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
+
 		}
 
 	}
@@ -803,14 +811,14 @@ class Wpml {
 	}
 
 	/**
-	 * Get the product translation's ids
+	 * Get the product translation's ids. If no translations found, returns the product id
 	 *
 	 * @since 1.4.1
 	 *
 	 * @param int    $product_id
 	 * @param string $post_type
 	 *
-	 * @return array
+	 * @return array|int
 	 */
 	public static function get_product_translations_ids( $product_id = 0, $post_type = '' ) {
 
@@ -851,7 +859,13 @@ class Wpml {
 		}
 
 		foreach ( $product_ids as $product_id ) {
-			$translations += self::get_product_translations_ids( $product_id, $post_type );
+
+			$product_translations = self::get_product_translations_ids( $product_id, $post_type );
+
+			if ( is_array( $product_translations ) ) {
+				$translations += $product_translations;
+			}
+
 		}
 
 		return array_unique( $translations );
@@ -1048,51 +1062,22 @@ class Wpml {
 
 		$atum_product_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 
-		$extra_fields = apply_filters( 'atum/duplicate_atum_product/add_fields', [] );
-		$fields       = empty( $extra_fields ) ? '' : ',' . implode( ',', $extra_fields );
+		$product      = Helpers::get_atum_product( $original_id );
+		$update_terms = array();
 
-		$update_clause = '
-			purchase_price = orig_apd.purchase_price,
-			supplier_id = orig_apd.supplier_id,
-			supplier_sku = orig_apd.supplier_sku,
-			atum_controlled = orig_apd.atum_controlled,
-			out_stock_date = orig_apd.out_stock_date,
-			out_stock_threshold = orig_apd.out_stock_threshold,
-			inheritable = orig_apd.inheritable,
-			inbound_stock = orig_apd.inbound_stock,
-			stock_on_hold = orig_apd.stock_on_hold,
-			sold_today = orig_apd.sold_today,
-			sales_last_days = orig_apd.sales_last_days,
-			reserved_stock = orig_apd.reserved_stock,
-			customer_returns = orig_apd.customer_returns,
-			warehouse_damage = orig_apd.warehouse_damage,
-			lost_in_post = orig_apd.lost_in_post,
-			other_logs = orig_apd.other_logs,
-			out_stock_days = orig_apd.out_stock_days,
-			lost_sales = orig_apd.lost_sales,
-			has_location = orig_apd.has_location,
-			update_date = orig_apd.update_date,
-			atum_stock_status = orig_apd.atum_stock_status,
-			restock_status = orig_apd.restock_status,
-			sales_update_date = orig_apd.sales_update_date
-		';
-
-		foreach ( $extra_fields as $extra_field ) {
-			$update_clause .= ", $extra_field = orig_apd.$extra_field";
+		$product_fields = $product->get_atum_data_column_names();
+		foreach ( $product_fields as $prop ) {
+			$update_terms[] = $prop . ' = orig_apd.' . $prop;
 		}
+		$select_fields = ' ' . implode( ', ', $product_fields ) . ' ';
+		$update_clause = ' ' . implode( ', ', $update_terms ) . ' ';
 
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$wpdb->query( "
-			INSERT INTO $atum_product_data_table (
-				product_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-				out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-				reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-				lost_sales,has_location,update_date,atum_stock_status,restock_status,sales_update_date$fields)
-			SELECT $destination_id,purchase_price,supplier_id,supplier_sku,atum_controlled,out_stock_date,
-			out_stock_threshold,inheritable,inbound_stock,stock_on_hold,sold_today,sales_last_days,
-			reserved_stock,customer_returns,warehouse_damage,lost_in_post,other_logs,out_stock_days,
-			lost_sales,has_location,update_date,atum_stock_status,restock_status,sales_update_date$fields
-			FROM $atum_product_data_table orig_apd WHERE product_id = $original_id
+			INSERT INTO $atum_product_data_table ( product_id, $select_fields )
+			SELECT $destination_id, $select_fields
+			FROM $atum_product_data_table orig_apd
+			WHERE product_id = $original_id
 			ON DUPLICATE KEY
 			UPDATE 
 				$update_clause;
@@ -1519,6 +1504,60 @@ class Wpml {
 		return $criteria;
 	}
 
+	/**
+	 * Exclude ATUM Product Data properties.
+	 *
+	 * @since 1.9.29.1
+	 *
+	 * @param array $column_names
+	 * @return array
+	 */
+	public function exclude_atum_data_attributes( $column_names ) {
+
+		global $wpdb;
+
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+		$db_name         = DB_NAME;
+
+		$columns = $wpdb->prepare( '
+				SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
+			', $db_name, $atum_data_table );
+
+		$valid_columns = $wpdb->get_col( $columns ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return array_intersect( $column_names, $valid_columns );
+	}
+
+	/**
+	 * Include translations in the inbound stock where clause.
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array                        $where
+	 * @param \WC_Product|AtumProductTrait $product
+	 *
+	 * @return array
+	 */
+	public function include_translations_inbound_where( $where, $product ) {
+
+		$product_id   = $product->get_id();
+		$translations = $this->get_product_translations_ids( $product_id );
+
+		if ( is_array( $translations ) ) {
+
+			global $wpdb;
+
+			$original_clause = $wpdb->prepare( 'oim.`meta_value` = %d', $product_id );
+
+			$index = array_search( $original_clause, $where );
+
+			$where[ $index ] = 'oim.`meta_value` IN (' . implode( ',', $translations ) . ')';
+
+		}
+
+		return $where;
+	}
 
 	/******************
 	 * Instace methods

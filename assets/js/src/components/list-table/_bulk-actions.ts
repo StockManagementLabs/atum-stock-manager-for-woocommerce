@@ -147,7 +147,7 @@ export default class BulkActions {
 			success : ( response: any ) => {
 
 				if ( typeof response === 'object' ) {
-					const noticeType: string = response.success ? 'updated' : 'error';
+					const noticeType: string = response.success ? 'success' : 'error';
 					Utils.addNotice( noticeType, response.data );
 				}
 

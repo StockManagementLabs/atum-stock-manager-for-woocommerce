@@ -100,8 +100,8 @@ var Blocker = {
         opts = Object.assign({
             message: null,
             overlayCSS: {
-                background: '#000',
-                opacity: 0.5,
+                background: 'rgba(0, 0, 0, 0.5)',
+                opacity: 1,
             },
         }, opts);
         $selector.block(opts);
@@ -291,10 +291,11 @@ __webpack_require__.r(__webpack_exports__);
     return __assign.apply(this, arguments);
 };
 var EnhancedSelect = (function () {
-    function EnhancedSelect() {
+    function EnhancedSelect($selects) {
+        if ($selects === void 0) { $selects = null; }
         var _this = this;
-        this.addAtumClasses();
-        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses(); });
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
     EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
         $('.select2-container--open').remove();
@@ -1399,6 +1400,7 @@ var OrderNotes = (function () {
     function OrderNotes(settings) {
         var _this = this;
         this.settings = settings;
+        this.wcAdminMetaBoxes = window['woocommerce_admin_meta_boxes'];
         this.$container = $('#atum_order_notes');
         this.$textarea = $('textarea#add_atum_order_note');
         this.$container
@@ -1415,7 +1417,7 @@ var OrderNotes = (function () {
         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block(this.$container);
         var data = {
             action: 'atum_order_add_note',
-            post_id: $('#post_ID').val(),
+            post_id: $('#post_ID').length ? $('#post_ID').val() : this.wcAdminMetaBoxes.post_id,
             note: note,
             security: this.settings.get('addNoteNonce'),
         };
@@ -1439,7 +1441,7 @@ var OrderNotes = (function () {
             reverseButtons: true,
             allowOutsideClick: false,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
+                return new Promise(function (resolve) {
                     _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].block($note);
                     var data = {
                         action: 'atum_order_delete_note',
@@ -1606,7 +1608,7 @@ var Utils = {
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
-        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"notice-".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -1649,6 +1651,22 @@ var Utils = {
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(window.location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
+    },
+    getQueryParams: function (query) {
+        var params = {};
+        new URLSearchParams(query).forEach(function (value, key) {
+            var decodedKey = decodeURIComponent(key);
+            var decodedValue = decodeURIComponent(value);
+            if (decodedKey.endsWith('[]')) {
+                decodedKey = decodedKey.replace('[]', '');
+                params[decodedKey] || (params[decodedKey] = []);
+                params[decodedKey].push(decodedValue);
+            }
+            else {
+                params[decodedKey] = decodedValue;
+            }
+        });
+        return params;
     },
     htmlDecode: function (input) {
         var e = document.createElement('div');

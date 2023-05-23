@@ -21,7 +21,6 @@ use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
-
 class Settings {
 
 	/**
@@ -199,7 +198,7 @@ class Settings {
 			Helpers::maybe_es6_promise();
 
 			// ATUM marketing popup.
-			AtumMarketingPopup::maybe_enqueue_scripts();
+			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
@@ -266,6 +265,10 @@ class Settings {
 	 * @since 0.0.2
 	 */
 	public function register_settings() {
+
+		if ( Helpers::doing_heartbeat() ) {
+			return;
+		}
 
 		$countries         = WC()->countries;
 		$default_country   = $countries->get_base_country();
@@ -674,11 +677,11 @@ class Settings {
 
 			if ( ! Helpers::is_rest_request() && AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 				add_settings_field(
-					$field,                                             // ID.
-					$options['name'],                                   // Title.
-					array( $this, "display_{$options['type']}" ),      // Callback.
-					ATUM_PREFIX . "setting_{$options['section']}",     // Page.
-					ATUM_PREFIX . "setting_{$options['section']}",     // Section.
+					$field,                                         // ID.
+					$options['name'],                               // Title.
+					array( $this, "display_{$options['type']}" ),   // Callback.
+					ATUM_PREFIX . "setting_{$options['section']}",  // Page.
+					ATUM_PREFIX . "setting_{$options['section']}",  // Section.
 					$options
 				);
 			}
@@ -794,7 +797,7 @@ class Settings {
 
 		}
 
-		return apply_filters( 'atum/settings/sanitize', $this->options );
+		return apply_filters( 'atum/settings/sanitize', $this->options, $input );
 
 	}
 
@@ -821,17 +824,20 @@ class Settings {
 				if ( $is_api_request && ! is_array( $input[ $key ] ) ) {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 				}
-				$option = $input[ $key ];
 
-				$option['value'] = ( isset( $option['value'] ) && 'yes' === $option['value'] ) ? 'yes' : 'no';
+				foreach ( $atts['default_options'] as $setting_key => $value ) {
 
-				if ( isset( $atts['default_options'] ) ) {
-					foreach ( $atts['default_options'] as $index => $value ) {
-						$option['options'][ $index ] = ( isset( $option['options'][ $index ] ) && 'yes' === $option['options'][ $index ] ) ? 'yes' : 'no';
+					// All the checkboxes unchecked (so no values retrieved from the form submission).
+					if ( ! isset( $input[ $key ] ) ) {
+						$option['options'][ $setting_key ] = 'no';
 					}
+					elseif ( isset( $input[ $key ], $input[ $key ]['options'] ) ) {
+						$option['options'][ $setting_key ] = ( isset( $input[ $key ]['options'][ $setting_key ] ) && 'yes' === $input[ $key ]['options'][ $setting_key ] ) ? 'yes' : 'no';
+					}
+
 				}
 
-				$sanitized_option = $option;
+				$sanitized_option = $option ?? [];
 
 				break;
 			case 'switcher':
@@ -1137,6 +1143,7 @@ class Settings {
 			name="<?php echo esc_attr( self::OPTION_NAME . "[{$args['id']}]" ) ?>"
 			style="width: 25em"<?php echo wp_kses_post( $this->get_dependency( $args ) . $default ) ?>
 		>
+			<option <?php echo empty( $country ) ? ' selected="selected"' : ''; ?> value=""><?php esc_attr_e( '--- Select a country ---', ATUM_TEXT_DOMAIN ); ?></option>
 			<?php WC()->countries->country_dropdown_options( $country, $state ); ?>
 		</select>
 		<?php
@@ -1182,9 +1189,9 @@ class Settings {
 		$data_default  = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 		$stored_values = $this->find_option_value( $args['id'] );
 
-		$default_checked = 'yes' === $args['default'] ? 'checked' : '';
-
 		if ( isset( $args['main_switcher'] ) && $args['main_switcher'] ) {
+
+			$default_checked = 'yes' === $args['default'] ? 'checked' : '';
 
 			$enabled = ! empty( $stored_values['value'] ) ? checked( 'yes', $stored_values['value'], FALSE ) : $default_checked;
 			$output  = sprintf(

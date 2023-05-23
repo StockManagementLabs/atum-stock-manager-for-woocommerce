@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.30 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -349,8 +349,8 @@
   --dash-add-widget-color-dark: #00B8DB;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-card-bg: #fff;
-  --dash-card-text: #adb5bd;
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-trans: rgba(106, 200, 30, 0.79);
@@ -1193,6 +1193,18 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-pick-pack:before {
+  content: "\e9da";
+}
+
+.atmi-stock-takes:before {
+  content: "\e9db";
+}
+
+.atmi-question:before {
+  content: "\e9d9";
 }
 
 .atmi-ok:before {
@@ -3394,7 +3406,15 @@ h2 .atum-help-tip {
   color: var(--gray-800);
 }
 .swal2-container .swal2-modal .swal2-validation-message {
-  margin: 0.625em -1.25rem -0.625em;
+  margin: 1.625em -1.25rem -1.625em;
+  font-size: 14px;
+  text-align: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .swal2-container .swal2-modal p {
   font-size: 15px;

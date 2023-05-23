@@ -50,28 +50,10 @@ defined( 'ABSPATH' ) || die;
 			<div class="search-box extend-list-table">
 				<button type="button" class="reset-filters hidden tips" data-tip="<?php esc_attr_e( 'Reset Filters', ATUM_TEXT_DOMAIN ) ?>"><i class="atum-icon atmi-undo"></i></button>
 
-				<div class="input-group input-group-sm">
-					<div class="input-group-append">
-						<button class="btn btn-outline-secondary dropdown-toggle atum-tooltip" id="search_column_btn"
-								title="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>" data-value=""
-								type="button" data-toggle="dropdown" data-bs-placement="left" aria-haspopup="true" aria-expanded="false">
-							<?php esc_html_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>
-						</button>
-
-						<div class="search-column-dropdown dropdown-menu" id="search_column_dropdown"
-								data-product-title="<?php esc_attr_e( 'Product Name', ATUM_TEXT_DOMAIN ) ?>"
-								data-no-option="<?php esc_attr_e( 'Search In', ATUM_TEXT_DOMAIN ) ?>"
-								data-no-option-title="<?php esc_attr_e( 'Search in Column', ATUM_TEXT_DOMAIN ) ?>">
-						</div>
-					</div>
-
-					<input type="search" class="form-control atum-post-search atum-post-search-with-dropdown" data-value=""
-							placeholder="<?php esc_attr_e( 'Search...', ATUM_TEXT_DOMAIN ) ?>" autocomplete="off">
-
-					<?php if ( 'no' === $ajax ) : ?>
-						<input type="submit" class="button search-submit" value="<?php esc_attr_e( 'Search', ATUM_TEXT_DOMAIN ) ?>" disabled>
-					<?php endif; ?>
-				</div>
+				<?php
+				$show_atum_icon = FALSE;
+				Helpers::load_view( 'list-tables/search-by-column-field', compact( 'ajax', 'show_atum_icon' ) );
+				?>
 
 				<div class="table-style-buttons" data-nonce="<?php echo wp_create_nonce( 'atum-list-table-style' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 

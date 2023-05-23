@@ -4,11 +4,11 @@
 
 export default class EnhancedSelect {
 	
-	constructor() {
+	constructor( $selects: JQuery = null ) {
 		
-		this.addAtumClasses();
+		this.addAtumClasses( $selects );
 		
-		$( 'body' ).on( 'wc-enhanced-select-init', () => this.addAtumClasses() );
+		$( 'body' ).on( 'wc-enhanced-select-init', () => this.addAtumClasses( $selects ) );
 		
 	}
 	
@@ -50,7 +50,7 @@ export default class EnhancedSelect {
 
 			// Add the classes for not well-prepared selects.
 			if ( ! $select.hasClass( 'atum-select2') ) {
-				$select.addClass('atum-select2');
+				$select.addClass( 'atum-select2' );
 				this.addAtumClasses( $select );
 			}
 			

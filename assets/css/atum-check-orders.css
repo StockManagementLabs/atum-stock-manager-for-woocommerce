@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.30 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -28,6 +28,18 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-pick-pack:before {
+  content: "\e9da";
+}
+
+.atmi-stock-takes:before {
+  content: "\e9db";
+}
+
+.atmi-question:before {
+  content: "\e9d9";
 }
 
 .atmi-ok:before {

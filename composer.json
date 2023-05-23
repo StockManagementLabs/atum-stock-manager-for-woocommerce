@@ -9,9 +9,9 @@
 	},
 	"require": {
 		"php": ">=7.1",
-		"mpdf/mpdf": "^8.0.0",
-		"madcoda/php-youtube-api": "^1.2",
-		"jimmiw/php-time-ago": "^3.2"
+		"mpdf/mpdf": "^v8.1.5",
+		"madcoda/php-youtube-api": "^v1.2.6",
+		"jimmiw/php-time-ago": "^3.2.4"
 	},
 	"require-dev": {
 	},

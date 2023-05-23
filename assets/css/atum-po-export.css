@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.30 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -279,8 +279,8 @@
   --dash-add-widget-color-dark: #00B8DB;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-card-bg: #fff;
-  --dash-card-text: #adb5bd;
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-trans: rgba(106, 200, 30, 0.79);
@@ -429,6 +429,7 @@ body {
 }
 .content-lines .description {
   text-align: left;
+  white-space: unset !important;
 }
 .content-lines .qty {
   text-align: center;

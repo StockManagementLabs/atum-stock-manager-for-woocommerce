@@ -62,6 +62,11 @@ class AtumQueues {
 	private static $async_hooks = array();
 
 	/**
+	 * Group used for the ATUM queues
+	 */
+	const QUEUES_GROUP = 'ATUM';
+
+	/**
 	 * AtumQueues singleton constructor
 	 *
 	 * @since 1.5.8
@@ -95,6 +100,14 @@ class AtumQueues {
 	 */
 	public function check_queues() {
 
+		$check_queues_key       = AtumCache::get_transient_key( 'check_queues' );
+		$check_queues_transient = AtumCache::get_transient( $check_queues_key, TRUE );
+
+		// Do not need to run this process on every page load.
+		if ( $check_queues_transient ) {
+			return;
+		}
+
 		$wc = WC();
 
 		// Ensure that the current WC version supports queues.
@@ -105,48 +118,86 @@ class AtumQueues {
 		$wc_queue = $wc->queue();
 
 		// Add calculated properties cron if set.
-		if ( 'yes' === Helpers::get_option( 'calc_prop_cron' ) ) {
+		if ( 'yes' === Helpers::get_option( 'calc_prop_cron', 'no' ) ) {
 
-			$multiplier = 'hours' === Helpers::get_option( 'calc_prop_cron_type' ) ? 3600 : 60;
+			$multiplier = 'hours' === Helpers::get_option( 'calc_prop_cron_type', 'hours' ) ? 3600 : 60;
 
 			$this->recurring_hooks['atum/cron_update_sales_calc_props'] = [
-				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start' ) ),
-				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval' ) * $multiplier ),
+				'time'     => Helpers::get_utc_time( Helpers::get_option( 'calc_prop_cron_start', '0:00' ) ),
+				'interval' => round( Helpers::get_option( 'calc_prop_cron_interval', 1 ) * $multiplier ),
 			];
 		}
 
 		// Allow registering queues externally.
 		$this->recurring_hooks = apply_filters( 'atum/queues/recurring_hooks', $this->recurring_hooks );
 
-		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
+		// Search for any orphan actions that may exist with old names.
+		$actions = $wc_queue->search( array(
+			'group'   => self::QUEUES_GROUP,
+			'status' => \ActionScheduler_Store::STATUS_PENDING,
+		) );
 
-			// Search for duplicated actions.
-			$actions       = $wc_queue->search( [ 'hook' => $hook_name ] );
-			$schedule_args = isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ? $hook_data['args'] : [];
+		if ( ! empty( $actions ) ) {
 
-			foreach ( $actions as $index => $action ) {
+			foreach ( $actions as $action ) {
 				/**
-				 * Variable definition
+				 * Variable definition.
 				 *
 				 * @var \ActionScheduler_Action $action
 				 */
-				if ( $action->is_finished() ) {
-					unset( $actions[ $index ] );
+				if ( ! array_key_exists( $action->get_hook(), $this->recurring_hooks ) ) {
+					$wc_queue->cancel( $action->get_hook(), $action->get_args(), $action->get_group() );
 				}
-			}
-			if ( count( $actions ) > 1 ) {
-				// Remove actions if duplicated.
-				$wc_queue->cancel_all( $hook_name );
-			}
-
-			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args );
-
-			if ( is_null( $next_scheduled_date ) ) {
-				$wc_queue->cancel_all( $hook_name, $schedule_args ); // Ensure all the actions are cancelled before adding a new one.
-				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args );
 			}
 
 		}
+
+		foreach ( $this->recurring_hooks as $hook_name => $hook_data ) {
+
+			// Search for any orphan actions that may exist with outdated args.
+			$actions = $wc_queue->search( array(
+				'hook'   => $hook_name,
+				'status' => \ActionScheduler_Store::STATUS_PENDING,
+			) );
+
+			$schedule_args = ( isset( $hook_data['args'] ) && is_array( $hook_data['args'] ) ) ? $hook_data['args'] : [];
+
+			// Remove any "legacy" actions that were registered in previous versions with distinct parameters or group.
+			if ( ! empty( $actions ) ) {
+
+				/**
+				 * Variable definition.
+				 *
+				 * @var \ActionScheduler_Action $action
+				 */
+				foreach ( $actions as $action ) {
+
+					$action_args  = $action->get_args();
+					$action_group = $action->get_group();
+
+					if (
+						( empty( $action_args ) && ! empty( $schedule_args ) ) ||
+						( ! empty( $action_args ) && empty( $schedule_args ) ) ||
+						! empty( array_diff( $action_args, $schedule_args ) ) ||
+						( $action_group !== self::QUEUES_GROUP )
+					) {
+						$wc_queue->cancel( $hook_name, $action_args, $action_group );
+					}
+
+				}
+
+			}
+
+			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args, self::QUEUES_GROUP );
+
+			if ( is_null( $next_scheduled_date ) ) {
+				$wc_queue->cancel_all( $hook_name, $schedule_args, self::QUEUES_GROUP ); // Ensure all the actions are canceled before adding a new one.
+				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args, self::QUEUES_GROUP );
+			}
+
+		}
+
+		AtumCache::set_transient( $check_queues_key, 'checked', DAY_IN_SECONDS, TRUE );
 
 	}
 
@@ -179,7 +230,7 @@ class AtumQueues {
 
 		Helpers::adjust_long_process_settings(); // Try to avoid timeout issues.
 
-		// TODO: WHAT ABOUT ILs AND PLs PROPS? IS UPDATING THEM ALSO?
+		// TODO: WHAT ABOUT ILs AND POs PROPS? IS UPDATING THEM ALSO?
 		foreach ( $outdated_products as $product_id ) {
 			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id );
 		}
@@ -330,7 +381,7 @@ class AtumQueues {
 	public static function add_async_action( $hook, $callback, $params = [], $priority = 10 ) {
 
 		// Avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -365,7 +416,7 @@ class AtumQueues {
 	public function trigger_async_actions() {
 
 		// Avoid unending loops when the current request is already coming from an async action.
-		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && self::get_async_request_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
+		if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) && Helpers::get_atum_user_agent() === $_SERVER['HTTP_USER_AGENT'] ) {
 			return;
 		}
 
@@ -449,7 +500,7 @@ class AtumQueues {
 					'sslverify'  => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 					'body'       => $data,
 					'headers'    => $headers,
-					'user-agent' => self::get_async_request_user_agent(),
+					'user-agent' => Helpers::get_atum_user_agent(),
 				);
 				wp_remote_post( admin_url( 'admin-ajax.php' ), $request_args );
 
@@ -534,7 +585,7 @@ class AtumQueues {
 				}
 
 				$wc_queue = $wc->queue();
-				$wc_queue->cancel_all( 'atum/cron_update_sales_calc_props' );
+				$wc_queue->cancel_all( 'atum/cron_update_sales_calc_props', [], self::QUEUES_GROUP );
 			}
 
 		}
@@ -566,17 +617,6 @@ class AtumQueues {
 
 		return (bool) $remote_available;
 
-	}
-
-	/**
-	 * Get the user agent used for async requests
-	 *
-	 * @since 1.9.0
-	 *
-	 * @return string
-	 */
-	public static function get_async_request_user_agent() {
-		return 'ATUM/' . ATUM_VERSION;
 	}
 
 	/**

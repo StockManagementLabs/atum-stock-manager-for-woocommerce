@@ -6,13 +6,10 @@
 
 $header-bg:                 var(--blue-light);
 $header-height:             300px;
-$card-border:               var(--wp-gray-5);
-$card-bg:                   var(--dash-card-bg);
-$card-text:                 var(--dash-card-text);
 $add-widget-color:          var(--gray-500);
-$widget-bg:                 $card-bg;
+$widget-bg:                 var(--dash-card-bg);
 $widget-icon:               var(--wp-gray-5);
-$widget-controls:           $card-text;
+$widget-controls:           var(--dash-card-text);
 $widget-controls-hover:     var(--primary);
 
 @mixin dash-widget-header-before() {
@@ -176,101 +173,6 @@ body.toplevel_page_atum-dashboard {
 		}
 		
 		.dash-card {
-			margin: $grid-gutter-width math.div($grid-gutter-width, 4);
-			width: 33.3333%;
-			border: 1px solid var(--gray-400);
-			border-radius: 5px;
-			background: $card-bg center 1px no-repeat;
-			background-position: bottom;
-			background-size: contain;
-			position: relative;
-			overflow: hidden;
-			
-			&:first-child {
-				margin-left: $grid-gutter-width;
-			}
-			
-			&:last-child {
-				margin-right: $grid-gutter-width;
-			}
-			
-			@include tablet-max {
-				margin-top: math.div($grid-gutter-width, 2);
-				margin-bottom: math.div($grid-gutter-width, 2);
-			}
-			
-			@include mobile-max {
-				width: 100%;
-				margin-left: 0 !important;
-				margin-right: 0 !important;
-			}
-			
-			.card-content {
-				width: 60%;
-				float: left;
-				text-align: left;
-				padding: math.div($grid-gutter-width, 2);
-				position: relative;
-				z-index: 1;
-				
-				h5, h2 {
-					margin: 5px 0;
-					color: var(--main-title) !important;
-					
-					&.h5-primary {
-						color: var(--primary);
-					}
-					&.h5-secondary {
-						color: var(--tertiary);
-					}
-					&.h5-tertiary {
-						color: var(--secondary);
-					}
-				}
-				
-				
-				h2, p {
-					color: $card-text;
-					font-weight: 200;
-				}
-				
-				h5 {
-					font-size: 13px;
-					font-weight: bold;
-				}
-				
-				h2 {
-					font-size: 21px;
-				}
-				
-				p {
-					font-size: 10px;
-				}
-				
-				.btn {
-					margin-top: math.div($grid-gutter-width, 2);
-					display: inline-block;
-					padding: 4px 10px;
-					font-size: 10px;
-				}
-				
-				@include tablet-max {
-					width: 91%;
-				}
-			}
-			
-			.card-img {
-				float: left;
-				width: 30%;
-				
-				img {
-					position: absolute;
-				}
-				
-				@include tablet-max {
-					display: none;
-				}
-			}
 			
 			&.dash-marketing-banner {
 				width: 100%;
@@ -326,7 +228,7 @@ body.toplevel_page_atum-dashboard {
 					.content-description {
 						width: 59%;
 						
-						@include tablet-max{
+						@include tablet-max {
 							width: 100%;
 						}
 						
@@ -353,6 +255,7 @@ body.toplevel_page_atum-dashboard {
 						h1 {
 							color: var(--main-title) !important;
 						}
+						
 						p {
 							color: var(--dash-card-text) !important;
 						}
@@ -361,7 +264,7 @@ body.toplevel_page_atum-dashboard {
 							text-align: left !important;
 							padding: 0 15px;
 							
-							@include tablet-max{
+							@include tablet-max {
 								text-align: center !important;
 							}
 							
@@ -394,7 +297,7 @@ body.toplevel_page_atum-dashboard {
 						float: right;
 						margin-left: auto;
 						
-						@include tablet-max{
+						@include tablet-max {
 							float: none;
 							margin: 0;
 						}
@@ -447,88 +350,6 @@ body.toplevel_page_atum-dashboard {
 				}
 				
 			}
-			
-			&.docs {
-				background-image: url('#{$atum-img-path}dashboard/card-docs-bg.png');
-				
-				.card-img {
-					img {
-						@include vertical-align-absolute;
-						right: 0;
-						max-width: 280px;
-					}
-				}
-			}
-			
-			&.add-ons {
-				background-image: url('#{$atum-img-path}dashboard/card-add-ons-bg.png');
-				
-				.card-img {
-					img {
-						max-width: 120px;
-						bottom: 0;
-						right: 10px;
-					}
-				}
-			}
-			
-			&.subscription {
-				background-image: url('#{$atum-img-path}dashboard/card-subscription-bg.png');
-				
-				.card-img {
-					img {
-						max-width: 80px;
-						top: $grid-gutter-width;
-						right: $grid-gutter-width;
-					}
-				}
-				
-				.card-content {
-					padding-bottom: 5px;
-				}
-				
-				form {
-					clear: both;
-					width: 90%;
-					margin: auto;
-					
-					.input-group {
-						background-color: var(--dash-input-group-bg);
-						border-radius: 5px;
-						box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
-						display: flex;
-					}
-					
-					input[type=email] {
-						border: none;
-						box-shadow: none;
-						background: var(--dash-subscription-input);
-						padding: 7px 15px;
-						font-size: 10px;
-						font-weight: 300;
-						@include border-right-radius(0);
-						@include border-left-radius(5px);
-						flex-grow: 1;
-						color: var(--atum-text-color-var1);
-						
-						@include placeholder(--main-text);
-						
-						@include tablet-max {
-							padding: 6px 10px;
-						}
-					}
-					
-					button {
-						font-size: 10px;
-					}
-					
-					@include mobile-max {
-						margin-bottom: math.div($grid-gutter-width, 2);
-					}
-					
-				}
-			}
-			
 		}
 		
 	}

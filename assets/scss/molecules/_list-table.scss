@@ -460,6 +460,7 @@
 	
 	#search_column_btn{
 		border-right: 1px solid var(--main-border-alt);
+		
 		@if $enable-rounded {
 			border-top-left-radius : $border-radius;
 			border-bottom-left-radius: $border-radius;
@@ -2431,10 +2432,17 @@ table.wp-list-table, .floatThead-container {
 				//color: var(--atum-text-color-var3);
 				
 				&.column-title, &.atum_order_title {
-					a, .row-title {
+					> a, > .row-title {
 						font-size: 14px;
 						font-weight: 500;
 						color: var(--primary);
+					}
+					
+					.row-actions {
+						a {
+							font-size: 13px !important;
+							font-weight: 400;
+						}
 					}
 				}
 				

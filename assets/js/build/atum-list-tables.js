@@ -205,8 +205,8 @@ var Blocker = {
         opts = Object.assign({
             message: null,
             overlayCSS: {
-                background: '#000',
-                opacity: 0.5,
+                background: 'rgba(0, 0, 0, 0.5)',
+                opacity: 1,
             },
         }, opts);
         $selector.block(opts);
@@ -396,10 +396,11 @@ __webpack_require__.r(__webpack_exports__);
     return __assign.apply(this, arguments);
 };
 var EnhancedSelect = (function () {
-    function EnhancedSelect() {
+    function EnhancedSelect($selects) {
+        if ($selects === void 0) { $selects = null; }
         var _this = this;
-        this.addAtumClasses();
-        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses(); });
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
     EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
         $('.select2-container--open').remove();
@@ -1145,7 +1146,7 @@ var BulkActions = (function () {
             },
             success: function (response) {
                 if (typeof response === 'object') {
-                    var noticeType = response.success ? 'updated' : 'error';
+                    var noticeType = response.success ? 'success' : 'error';
                     _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice(noticeType, response.data);
                 }
                 _this.$bulkButton.prop('disabled', false);
@@ -2045,7 +2046,7 @@ var ListTable = (function () {
             },
             success: function (response) {
                 if (typeof response === 'object' && typeof response.success !== 'undefined') {
-                    var noticeType = response.success ? 'updated' : 'error', notice = response.success ? response.data.notice : response.data;
+                    var noticeType = response.success ? 'success' : 'error', notice = response.success ? response.data.notice : response.data;
                     _utils_utils__WEBPACK_IMPORTED_MODULE_4__["default"].addNotice(noticeType, notice);
                 }
                 if (typeof response.success !== 'undefined' && response.success === true) {
@@ -2523,10 +2524,10 @@ var Router = (function () {
                     _this.globals.$searchInput.val(s);
                 }
                 if (searchColumn_1) {
-                    var $selectedSearchColumn = _this.globals.$searchColumnDropdown.find('.dropdown-item').filter(function (index, elem) {
-                        return $(elem).data('value') === searchColumn_1;
-                    }).addClass('active');
-                    _this.globals.$searchColumnBtn.attr('data-original-title', $selectedSearchColumn.text().trim()).text($selectedSearchColumn.text().trim());
+                    var $selectedSearchColumn = _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData(_this.globals.$searchColumnDropdown.find('.dropdown-item'), 'value', searchColumn_1).addClass('active'), label = $selectedSearchColumn.text().trim(), noOptionLabel = _this.globals.$searchColumnDropdown.data('no-option');
+                    if (noOptionLabel !== label) {
+                        _this.globals.$searchColumnBtn.attr('data-bs-original-title', "".concat(noOptionLabel, " ").concat(label)).text(label);
+                    }
                     $('#adv-settings :checkbox').each(function (index, elem) {
                         optionVal_1 = $(elem).val();
                         if (!optionVal_1.startsWith('calc_') && optionVal_1 !== 'thumb' && optionVal_1 === searchColumn_1) {
@@ -2843,9 +2844,10 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 var SearchInColumn = (function () {
-    function SearchInColumn(settings, globals) {
+    function SearchInColumn(settings, tooltip, globals) {
         var _this = this;
         this.settings = settings;
+        this.tooltip = tooltip;
         this.globals = globals;
         if ($('.atum-post-search-with-dropdown').length) {
             this.setup();
@@ -2884,10 +2886,12 @@ var SearchInColumn = (function () {
             $(evt.currentTarget).parent().find('.dropdown-menu').toggle();
         })
             .on('atum-search-column-set-data', function (evt, value, label) {
-            var $searchColBtn = $(evt.currentTarget), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a');
+            var $searchColBtn = $(evt.currentTarget), $wrapper = $searchColBtn.parent(), $dropDownLinks = _this.globals.$searchColumnDropdown.children('a'), noOptionLabel = _this.globals.$searchColumnDropdown.data('no-option');
             $searchColBtn.text(label);
             $searchColBtn.data('value', value);
-            $searchColBtn.attr('data-original-title', label === _this.globals.$searchColumnDropdown.data('no-option') ? _this.globals.$searchColumnDropdown.data('no-option-title') : label);
+            $searchColBtn.attr('data-bs-original-title', label !== noOptionLabel ? "".concat(noOptionLabel, " ").concat(label) : label);
+            _this.tooltip.destroyTooltips($wrapper);
+            _this.tooltip.addTooltips($wrapper);
             $dropDownLinks.filter('.active').removeClass('active');
             _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData($dropDownLinks, 'value', value).addClass('active');
         });
@@ -2895,15 +2899,12 @@ var SearchInColumn = (function () {
             evt.preventDefault();
             var $item = $(evt.currentTarget);
             _this.globals.$searchColumnBtn.trigger('atum-search-column-set-data', [$item.data('value'), $item.text().trim()]);
-            $item.parents().find('.dropdown-menu').hide();
-            _this.globals.$searchColumnDropdown.children('a.active').removeClass('active');
-            $item.addClass('active');
+            $item.closest('.dropdown-menu').hide();
             var fieldType = $.inArray($item.data('value'), _this.settings.get('searchableColumns').numeric) > -1 ? 'number' : 'search';
             _this.globals.$searchInput.attr('type', fieldType);
             if (_this.settings.get('ajaxFilter') === 'yes') {
                 _this.globals.$searchColumnBtn.trigger('atum-search-column-data-changed');
             }
-            _this.globals.$searchColumnBtn.attr('data-original-title', $item.html());
         });
         $(document).click(function () { return _this.globals.$searchColumnDropdown.hide(); });
     };
@@ -3366,7 +3367,7 @@ jQuery(function ($) {
         new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_18__["default"](globals);
     }
     new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
-    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__["default"](settings, globals);
+    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_19__["default"](settings, tooltip, globals);
     new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
     new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
     new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);
@@ -3450,7 +3451,7 @@ var Utils = {
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
-        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"notice-".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -3493,6 +3494,22 @@ var Utils = {
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(window.location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
+    },
+    getQueryParams: function (query) {
+        var params = {};
+        new URLSearchParams(query).forEach(function (value, key) {
+            var decodedKey = decodeURIComponent(key);
+            var decodedValue = decodeURIComponent(value);
+            if (decodedKey.endsWith('[]')) {
+                decodedKey = decodedKey.replace('[]', '');
+                params[decodedKey] || (params[decodedKey] = []);
+                params[decodedKey].push(decodedValue);
+            }
+            else {
+                params[decodedKey] = decodedValue;
+            }
+        });
+        return params;
     },
     htmlDecode: function (input) {
         var e = document.createElement('div');
@@ -6431,7 +6448,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 							e.stopPropagation();
 							moved = 0; pushed = 0;
 						}
-						else {
+						else if (e.target.href) {
 							var child = e.target.children[0];
 							if (undefined !== child) {
 								child.click();

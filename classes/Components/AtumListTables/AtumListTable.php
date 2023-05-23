@@ -530,15 +530,22 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		remove_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
 
+		do_action( 'atum/list_table/before_product_types_dropdown', $this->show_controlled );
+
 		// Product type filtering.
 		echo Helpers::product_types_dropdown( isset( $_REQUEST['product_type'] ) ? esc_attr( $_REQUEST['product_type'] ) : '', 'wc-enhanced-select atum-enhanced-select dropdown_product_type auto-filter' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
+		do_action( 'atum/list_table/after_product_types_dropdown', $this->show_controlled );
+
+
 		// Supplier filtering.
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo Helpers::suppliers_dropdown( [
-			'selected' => isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '',
-			'enhanced' => 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ),
-		] );
+		if ( $this->show_controlled ) {
+			echo Helpers::suppliers_dropdown( [
+				'selected' => isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '',
+				'enhanced' => 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ),
+			] );
+		}
 
 		do_action( 'atum/list_table/after_nav_filters', $this );
 
@@ -706,10 +713,12 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function single_expandable_row( $item, $type ) {
 
 		$row_style = 'yes' !== Helpers::get_option( 'expandable_rows', 'no' ) ? ' style="display: none"' : '';
+		$row_class = ' class="expandable has-compounded ' . esc_attr( $type ) . '"';
+		$row_data  = apply_filters( 'atum/list_table/expandable_row_data', ' data-id="' . absint( $this->get_current_list_item_id() ) . '"', $item, $this );
 
 		do_action( 'atum/list_table/before_single_expandable_row', $item, $this );
 
-		echo '<tr data-id="' . absint( $this->get_current_list_item_id() ) . '" class="expandable has-compounded ' . esc_attr( $type ) . '"' . $row_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<tr' . $row_data . $row_class . $row_style . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$this->single_row_columns( $item );
 		echo '</tr>';
 
@@ -4394,7 +4403,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
 
 		// ATUM marketing popup.
-		AtumMarketingPopup::maybe_enqueue_scripts();
+		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 		Helpers::maybe_es6_promise();
 

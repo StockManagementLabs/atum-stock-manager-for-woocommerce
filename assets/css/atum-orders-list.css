@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.26.2 
+ * @version 1.9.30 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -280,8 +280,8 @@
   --dash-add-widget-color-dark: #00B8DB;
   --dash-atum-version: rgba(0, 0, 0, 0.1);
   --dash-blue-trans: rgba(0, 183, 219, 0.79);
-  --dash-card-bg: #fff;
-  --dash-card-text: #adb5bd;
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
   --dash-green-blue: rgba(30, 200, 149, 0.79);
   --dash-green-light: #d5f5ba;
   --dash-green-trans: rgba(106, 200, 30, 0.79);
@@ -1023,6 +1023,18 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-pick-pack:before {
+  content: "\e9da";
+}
+
+.atmi-stock-takes:before {
+  content: "\e9db";
+}
+
+.atmi-question:before {
+  content: "\e9d9";
 }
 
 .atmi-ok:before {
@@ -5581,10 +5593,14 @@ table.wp-list-table tbody tr.expandable td.column-calc_location a:before, table.
   content: "-";
   color: var(--atum-text-color-var1);
 }
-table.wp-list-table tbody tr td.column-title a, table.wp-list-table tbody tr td.column-title .row-title, table.wp-list-table tbody tr td.atum_order_title a, table.wp-list-table tbody tr td.atum_order_title .row-title, table.wp-list-table #the-list tr td.column-title a, table.wp-list-table #the-list tr td.column-title .row-title, table.wp-list-table #the-list tr td.atum_order_title a, table.wp-list-table #the-list tr td.atum_order_title .row-title, .floatThead-container tbody tr td.column-title a, .floatThead-container tbody tr td.column-title .row-title, .floatThead-container tbody tr td.atum_order_title a, .floatThead-container tbody tr td.atum_order_title .row-title, .floatThead-container #the-list tr td.column-title a, .floatThead-container #the-list tr td.column-title .row-title, .floatThead-container #the-list tr td.atum_order_title a, .floatThead-container #the-list tr td.atum_order_title .row-title {
+table.wp-list-table tbody tr td.column-title > a, table.wp-list-table tbody tr td.column-title > .row-title, table.wp-list-table tbody tr td.atum_order_title > a, table.wp-list-table tbody tr td.atum_order_title > .row-title, table.wp-list-table #the-list tr td.column-title > a, table.wp-list-table #the-list tr td.column-title > .row-title, table.wp-list-table #the-list tr td.atum_order_title > a, table.wp-list-table #the-list tr td.atum_order_title > .row-title, .floatThead-container tbody tr td.column-title > a, .floatThead-container tbody tr td.column-title > .row-title, .floatThead-container tbody tr td.atum_order_title > a, .floatThead-container tbody tr td.atum_order_title > .row-title, .floatThead-container #the-list tr td.column-title > a, .floatThead-container #the-list tr td.column-title > .row-title, .floatThead-container #the-list tr td.atum_order_title > a, .floatThead-container #the-list tr td.atum_order_title > .row-title {
   font-size: 14px;
   font-weight: 500;
   color: var(--primary);
+}
+table.wp-list-table tbody tr td.column-title .row-actions a, table.wp-list-table tbody tr td.atum_order_title .row-actions a, table.wp-list-table #the-list tr td.column-title .row-actions a, table.wp-list-table #the-list tr td.atum_order_title .row-actions a, .floatThead-container tbody tr td.column-title .row-actions a, .floatThead-container tbody tr td.atum_order_title .row-actions a, .floatThead-container #the-list tr td.column-title .row-actions a, .floatThead-container #the-list tr td.atum_order_title .row-actions a {
+  font-size: 13px !important;
+  font-weight: 400;
 }
 table.wp-list-table tbody tr td.column-calc_mi_status > span, table.wp-list-table #the-list tr td.column-calc_mi_status > span, .floatThead-container tbody tr td.column-calc_mi_status > span, .floatThead-container #the-list tr td.column-calc_mi_status > span {
   font-size: 22px;
@@ -6047,6 +6063,9 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
 #posts-filter table.wp-list-table tbody th, #posts-filter table.wp-list-table tbody td {
   vertical-align: top;
 }
+#posts-filter .tablenav {
+  gap: 10px;
+}
 #posts-filter .tablenav.top > .actions {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -6056,8 +6075,26 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
           align-items: center;
   gap: 10px;
 }
+#posts-filter .tablenav.top > .actions.bulkactions {
+  margin-right: 5px;
+}
 #posts-filter .tablenav.top > .actions input[type=submit] {
   margin-left: -5px;
+  margin-right: 0;
+  padding: 16px;
+  height: auto;
+}
+#posts-filter .tablenav.top .select2 {
+  height: inherit;
+}
+#posts-filter .tablenav.top .select2 .select2-selection {
+  height: 32px;
+}
+#posts-filter .tablenav.top .select2 .select2-selection .select2-selection__rendered {
+  line-height: 29px;
+}
+#posts-filter .tablenav.top #atum-search-by-column {
+  margin-left: 0;
 }
 #posts-filter .tablenav-pages {
   float: none;
@@ -6082,6 +6119,9 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
 }
 #posts-filter .nav-with-scroll-effect .subsubsub li a {
   padding: 0 10px;
+}
+#posts-filter .nav-with-scroll-effect .subsubsub li a:not(.current):hover {
+  color: #00B8DB;
 }
 @media all and (max-width: 480px) {
   #posts-filter .nav-with-scroll-effect .subsubsub li, #posts-filter .nav-with-scroll-effect .subsubsub li:first-child {

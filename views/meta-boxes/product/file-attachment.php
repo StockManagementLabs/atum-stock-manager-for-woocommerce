@@ -22,7 +22,20 @@
 			</select>
 
 			<a href="<?php echo esc_url( wp_get_attachment_url( $attachment->id ) ) ?>" target="_blank">
-				<?php echo wp_get_attachment_image( $attachment->id, 'medium' ) ?>
+
+				<?php
+				$is_image = FALSE;
+				$check    = wp_check_filetype( wp_get_original_image_path( $attachment->id ) );
+
+				if ( ! empty( $check['ext'] ) ) :
+					$is_image = in_array( $check['ext'], [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ] );
+				endif;
+
+				if ( $is_image ) : ?>
+					<?php echo wp_get_attachment_image( $attachment->id, 'medium' ) ?>
+				<?php else : ?>
+					<div class="atum-attachment-icon"><i class="atum-icon atmi-file-empty"></i></div>
+				<?php endif; ?>
 			</a>
 			<i class="delete-attachment dashicons dashicons-dismiss atum-tooltip" title="<?php esc_attr_e( 'Delete attachment', ATUM_TEXT_DOMAIN ); ?>"></i>
 		</li>

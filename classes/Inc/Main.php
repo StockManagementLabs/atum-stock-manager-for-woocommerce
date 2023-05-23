@@ -24,7 +24,7 @@ use Atum\Cli\AtumCli;
 use Atum\Components\AtumBarcodes;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
-use Atum\Components\AtumNotifications;
+use Atum\Components\AtumEmailNotifications;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
@@ -35,6 +35,7 @@ use Atum\MetaBoxes\FileAttachment;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Modules\ModuleManager;
 use Atum\Orders\CheckOrderPrices;
+use Atum\Orders\SearchOrdersByColumn;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Atum\StockCentral\StockCentral;
@@ -80,7 +81,7 @@ class Main {
 	 */
 	private function __construct() {
 
-		// Make the ATUM cache group, non persistent.
+		// Make the ATUM cache group, non-persistent.
 		wp_cache_add_non_persistent_groups( ATUM_TEXT_DOMAIN );
 		
 		if ( is_admin() ) {
@@ -184,7 +185,7 @@ class Main {
 		// Register the Locations taxonomy and link it to products
 		// --------------------------------------------------------!
 		$labels = array(
-			'name'              => _x( 'Product Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
+			'name'              => _x( 'ATUM Locations', 'taxonomy general name', ATUM_TEXT_DOMAIN ),
 			'singular_name'     => _x( 'Location', 'taxonomy singular name', ATUM_TEXT_DOMAIN ),
 			'search_items'      => __( 'Search locations', ATUM_TEXT_DOMAIN ),
 			'all_items'         => __( 'All locations', ATUM_TEXT_DOMAIN ),
@@ -252,7 +253,8 @@ class Main {
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
 		CheckOrderPrices::get_instance();
-		AtumNotifications::get_instance();
+		SearchOrdersByColumn::get_instance();
+		AtumEmailNotifications::get_instance();
 
 		if ( class_exists( '\WP_CLI', FALSE ) ) {
 			AtumCli::get_instance();

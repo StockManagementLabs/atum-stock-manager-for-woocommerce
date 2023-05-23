@@ -1,0 +1,211 @@
+//
+// Dash Cards
+//-------------
+
+@use "sass:math";
+
+$card-border:           var(--wp-gray-5);
+$card-bg:               var(--dash-card-bg);
+$card-text:             var(--dash-card-text);
+
+.dash-card {
+	margin: math.div($grid-gutter-width, 2) math.div($grid-gutter-width, 4);
+	width: 33.3333%;
+	border: 1px solid var(--gray-400);
+	border-radius: 5px;
+	background: $card-bg center 1px no-repeat;
+	background-position: bottom;
+	background-size: contain;
+	position: relative;
+	overflow: hidden;
+	
+	&:first-child {
+		margin-left: $grid-gutter-width;
+	}
+	
+	&:last-child {
+		margin-right: $grid-gutter-width;
+	}
+	
+	@include tablet-max {
+		margin-top: math.div($grid-gutter-width, 2);
+		margin-bottom: math.div($grid-gutter-width, 2);
+	}
+	
+	@include mobile-max {
+		width: 100%;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+	
+	.card-content {
+		width: 60%;
+		float: left;
+		text-align: left;
+		padding: math.div($grid-gutter-width, 2);
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-wrap: wrap;
+		height: calc(100% - $grid-gutter-width);
+		flex-direction: column;
+		
+		h5, h2 {
+			margin: 5px 0;
+			color: var(--main-title) !important;
+			
+			&.h5-primary {
+				color: var(--primary);
+			}
+			
+			&.h5-secondary {
+				color: var(--tertiary);
+			}
+			
+			&.h5-tertiary {
+				color: var(--secondary);
+			}
+		}
+		
+		
+		h2, p {
+			color: $card-text;
+			font-weight: 200;
+		}
+		
+		h5 {
+			font-size: 13px;
+			font-weight: bold;
+			margin: 0;
+		}
+		
+		h2 {
+			font-size: 21px;
+			line-height: 1.1;
+			margin-top: 0;
+		}
+		
+		p {
+			font-size: 10px;
+			flex-grow: 1;
+		}
+		
+		.btn {
+			margin-top: math.div($grid-gutter-width, 2);
+			display: inline-block;
+			padding: 4px 10px;
+			font-size: 10px;
+			text-transform: uppercase;
+		}
+		
+		@include tablet-max {
+			width: 91%;
+		}
+	}
+	
+	.card-img {
+		width: 30%;
+		
+		img {
+			position: absolute;
+		}
+		
+		@include tablet-max {
+			display: none;
+		}
+	}
+	
+	&.docs {
+		background-image: url('#{$atum-img-path}dashboard/card-docs-bg.png');
+		
+		.card-img {
+			img {
+				@include vertical-align-absolute;
+				right: 0;
+				max-width: 280px;
+			}
+		}
+	}
+	
+	&.add-ons {
+		background-image: url('#{$atum-img-path}dashboard/card-add-ons-bg.png');
+		
+		.card-img {
+			img {
+				max-width: 120px;
+				bottom: 0;
+				right: 10px;
+			}
+		}
+	}
+	
+	&.support {
+		background-image: url('#{$atum-img-path}dashboard/card-subscription-bg.png');
+		
+		.card-img {
+			img {
+				max-width: 120px;
+				bottom: 0;
+				right: 10px;
+			}
+		}
+	}
+	
+	&.subscription {
+		background-image: url('#{$atum-img-path}dashboard/card-subscription-bg.png');
+		
+		.card-img {
+			img {
+				max-width: 80px;
+				top: $grid-gutter-width;
+				right: $grid-gutter-width;
+			}
+		}
+		
+		.card-content {
+			padding-bottom: 5px;
+		}
+		
+		form {
+			clear: both;
+			width: 90%;
+			margin: auto;
+			
+			.input-group {
+				background-color: var(--dash-input-group-bg);
+				border-radius: 5px;
+				box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
+				display: flex;
+			}
+			
+			input[type=email] {
+				border: none;
+				box-shadow: none;
+				background: var(--dash-subscription-input);
+				padding: 7px 15px;
+				font-size: 10px;
+				font-weight: 300;
+				@include border-right-radius(0);
+				@include border-left-radius(5px);
+				flex-grow: 1;
+				color: var(--atum-text-color-var1);
+				
+				@include placeholder(--main-text);
+				
+				@include tablet-max {
+					padding: 6px 10px;
+				}
+			}
+			
+			button {
+				font-size: 10px;
+			}
+			
+			@include mobile-max {
+				margin-bottom: math.div($grid-gutter-width, 2);
+			}
+			
+		}
+	}
+	
+}

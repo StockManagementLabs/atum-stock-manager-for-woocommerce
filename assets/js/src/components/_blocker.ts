@@ -9,8 +9,8 @@ const Blocker = {
 		opts = Object.assign( {
 			message   : null,
 			overlayCSS: {
-				background: '#000',
-				opacity   : 0.5,
+				background: 'rgba(0, 0, 0, 0.5)',
+				opacity   : 1,
 			},
 		}, opts );
 
@@ -22,7 +22,7 @@ const Blocker = {
 
 		$selector.unblock();
 
-		// In case there were some changes on the DOM and it's not able to completely remove the block UI, do it manually
+		// In case there were some changes on the DOM, and it's not able to completely remove the block UI, do it manually
 		if ( $selector.find( '.blockUI' ).length ) {
 			$selector.find( '.blockUI' ).remove();
 		}

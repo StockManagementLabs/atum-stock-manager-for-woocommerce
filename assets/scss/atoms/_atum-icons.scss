@@ -24,6 +24,21 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-pick-pack {
+	&:before {
+		content: $atmi-pick-pack;
+	}
+}
+.atmi-stock-takes {
+	&:before {
+		content: $atmi-stock-takes;
+	}
+}
+.atmi-question {
+	&:before {
+		content: $atmi-question;
+	}
+}
 .atmi-ok {
 	&:before {
 		content: $atmi-ok;

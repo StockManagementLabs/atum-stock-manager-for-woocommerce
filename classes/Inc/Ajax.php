@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
+use Atum\Components\AtumAdminModal;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
@@ -100,6 +101,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_install_addon', array( $this, 'install_addon' ) );
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
 		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
+		add_action( 'wp_ajax_atum_extend_trial', array( $this, 'extend_trial' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -182,6 +184,9 @@ final class Ajax {
 
 		// Save the closed state for an auto-guide on any screen.
 		add_action( 'wp_ajax_atum_save_closed_auto_guide', array( $this, 'save_closed_auto_guide' ) );
+
+		// Save the closed state for the ATUM admin modals.
+		add_action( 'wp_ajax_atum_hide_atum_admin_modal', array( $this, 'hide_atum_admin_modal' ) );
 
 	}
 
@@ -747,10 +752,6 @@ final class Ajax {
 		$addon_name = esc_attr( $_POST['addon'] );
 		$key        = esc_attr( $_POST['key'] );
 
-		if ( ! $addon_name || ! $key ) {
-			wp_send_json_error( __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN ) );
-		}
-
 		$error_message = __( 'This license is not valid.', ATUM_TEXT_DOMAIN );
 
 		// Validate the license through API.
@@ -762,37 +763,57 @@ final class Ajax {
 
 		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-		switch ( $license_data->license ) {
+		if ( isset( $license_data->success ) && FALSE === $license_data->success && ! empty( $license_data->message ) ) {
+			wp_send_json_error( $license_data->message );
+		}
 
+		$is_trial = ! empty( $license_data->trial );
+
+		if ( $is_trial && Helpers::is_plugin_installed( "ATUM $addon_name", 'name' ) ) {
+			wp_send_json_error( __( 'This is a trial license and cannot be used for your full version.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		switch ( $license_data->license ) {
 			case 'valid':
 				// Save the valid license.
-				Addons::update_key( $addon_name, array(
-					'key'    => $key,
-					'status' => 'valid',
-				) );
+				$key_info = array(
+					'key'     => $key,
+					'status'  => 'valid',
+					'expires' => $license_data->expires,
+				);
 
-				// Delete status transient.
-				Addons::delete_status_transient( $addon_name );
+				if ( $is_trial ) {
+					$key_info['trial'] = TRUE;
+
+					if ( empty( $license_data->trial_extendable ) ) {
+						$key_info['extended'] = TRUE;
+					}
+				}
+
+				Addons::update_key( $addon_name, $key_info );
 
 				wp_send_json_success( __( 'Your add-on license was saved.', ATUM_TEXT_DOMAIN ) );
 				break;
 
 			case 'inactive':
 			case 'site_inactive':
-				Addons::update_key( $addon_name, array(
-					'key'    => $key,
-					'status' => 'inactive',
-				) );
-
 				// Delete status transient.
 				Addons::delete_status_transient( $addon_name );
+
+				if ( $is_trial ) {
+					wp_send_json( array(
+						'success' => 'trial',
+						/* translators: the add-on name */
+						'data'    => sprintf( __( "This is an 'ATUM %s trial' license, and you'll be able to try out this add-on for 14 days until it's blocked and asked to purchase the full version.<br>If you agree, please click the button to activate and install.", ATUM_TEXT_DOMAIN ), $addon_name ),
+					) );
+				}
 
 				// The staging sites doesn't compute as a new activation.
 				if ( Addons::is_local_url() ) {
 
 					wp_send_json( array(
 						'success' => 'activate',
-						'data'    => __( "Your license is valid.<br>This site has been recognised as a staging site and won't compute as a new activation.<br>Please, click the button to activate.", ATUM_TEXT_DOMAIN ),
+						'data'    => __( "Your license is valid.<br>This site has been recognised as a staging site and won't compute as a new activation.<br>Please, click the button to activate and install.", ATUM_TEXT_DOMAIN ),
 					) );
 
 				}
@@ -809,8 +830,8 @@ final class Ajax {
 						'data'    => sprintf(
 							/* translators: the number of remaininig licenses */
 							_n(
-								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate.',
-								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate.',
+								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate and install.',
+								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate and install.',
 								$licenses_after_activation,
 								ATUM_TEXT_DOMAIN
 							),
@@ -823,12 +844,24 @@ final class Ajax {
 				break;
 
 			case 'expired':
-				$timestamp     = Helpers::get_current_timestamp();
-				$error_message = sprintf(
-					/* translators: the expiration date */
-					__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
-					date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, $timestamp ) )
-				);
+				if ( $is_trial && isset( $license_data->trial_extendable ) && TRUE === $license_data->trial_extendable ) {
+
+					wp_send_json( array(
+						'success' => 'extend',
+						'data'    => __( 'This trial license has expired.<br>Do you want to extend it for 7 days more?', ATUM_TEXT_DOMAIN ),
+					) );
+
+				}
+				else {
+
+					$timestamp     = Helpers::get_current_timestamp();
+					$error_message = sprintf(
+						/* translators: the expiration date */
+						__( 'Your license key expired on %s.', ATUM_TEXT_DOMAIN ),
+						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, $timestamp ) )
+					);
+
+				}
 
 				break;
 
@@ -836,18 +869,32 @@ final class Ajax {
 				$error_message = __( 'This license has been disabled', ATUM_TEXT_DOMAIN );
 				break;
 
+			case 'trial_used':
+				$error_message = __( 'This trial key has already been activated on another site and is for single use only.', ATUM_TEXT_DOMAIN );
+				break;
+
 		}
 
 		// Don't save the key if invalid.
-		if ( ! 'invalid' === $license_data->license ) {
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => 'invalid',
-			) );
-		}
+		if ( ! in_array( $license_data->license, [ 'invalid', 'disabled', 'expired', 'trial_used' ] ) ) {
 
-		// Delete status transient.
-		Addons::delete_status_transient( $addon_name );
+			$key_info = array(
+				'key'     => $key,
+				'status'  => 'invalid',
+				'expires' => $license_data->expires,
+			);
+
+			if ( $is_trial ) {
+				$key_info['trial'] = TRUE;
+
+				if ( empty( $license_data->trial_extendable ) ) {
+					$key_info['extended'] = TRUE;
+				}
+			}
+
+			Addons::update_key( $addon_name, $key_info );
+
+		}
 
 		wp_send_json_error( $error_message );
 
@@ -864,12 +911,12 @@ final class Ajax {
 
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
-		if ( empty( $_POST['addon'] ) ) {
-			wp_send_json_error( __( 'No addon name provided', ATUM_TEXT_DOMAIN ) );
+		if ( empty( $_REQUEST['addon'] ) ) {
+			wp_send_json_error( __( 'No add-on name provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['key'] ) ) {
-			wp_send_json_error( __( 'Please enter a valid addon license key', ATUM_TEXT_DOMAIN ) );
+		if ( empty( $_REQUEST['key'] ) ) {
+			wp_send_json_error( __( 'Please enter a valid add-on license key', ATUM_TEXT_DOMAIN ) );
 		}
 	}
 
@@ -896,9 +943,7 @@ final class Ajax {
 
 		// Make sure the response came back okay.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-
 			$message = is_wp_error( $response ) ? $response->get_error_message() : $default_error;
-
 		}
 		else {
 
@@ -907,7 +952,6 @@ final class Ajax {
 			if ( FALSE === $license_data->success ) {
 
 				switch ( $license_data->error ) {
-
 					case 'expired':
 						$timestamp = Helpers::get_current_timestamp();
 						$message   = sprintf(
@@ -917,19 +961,25 @@ final class Ajax {
 						);
 						break;
 
+					case 'disabled':
 					case 'revoked':
 						$message = __( 'Your license key has been disabled.', ATUM_TEXT_DOMAIN );
 						break;
 
+					case 'invalid':
 					case 'missing':
 						$message = __( 'Invalid license.', ATUM_TEXT_DOMAIN );
 						break;
 
-					case 'invalid':
-					case 'site_inactive':
-						$message = __( 'Your license is not active for this URL.', ATUM_TEXT_DOMAIN );
+					case 'missing_url':
+						$message = __( 'The site URL is required to activate a license.', ATUM_TEXT_DOMAIN );
 						break;
 
+					case 'site_inactive':
+						$message = __( 'Your license is not active for this site.', ATUM_TEXT_DOMAIN );
+						break;
+
+					case 'key_mismatch':
 					case 'item_name_mismatch':
 						/* translators: the add-on name */
 						$message = sprintf( __( 'This appears to be an invalid license key for %s.', ATUM_TEXT_DOMAIN ), $addon_name );
@@ -937,6 +987,10 @@ final class Ajax {
 
 					case 'no_activations_left':
 						$message = __( 'Your license key has reached its activation limit.', ATUM_TEXT_DOMAIN );
+						break;
+
+					case 'trial_used':
+						$message = __( 'This trial key has already been activated on another site and is for single use only.', ATUM_TEXT_DOMAIN );
 						break;
 
 					default:
@@ -955,13 +1009,21 @@ final class Ajax {
 		// Update the key in database.
 		if ( ! empty( $license_data ) ) {
 
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => $license_data->license,
-			) );
+			$key_info = array(
+				'key'     => $key,
+				'status'  => $license_data->license,
+				'expires' => $license_data->expires,
+			);
 
-			// Delete status transient.
-			Addons::delete_status_transient( $addon_name );
+			if ( ! empty( $license_data->trial ) && TRUE === $license_data->trial ) {
+				$key_info['trial'] = TRUE;
+
+				if ( empty( $license_data->trial_extendable ) ) {
+					$key_info['extended'] = TRUE;
+				}
+			}
+
+			Addons::update_key( $addon_name, $key_info );
 
 			if ( 'valid' === $license_data->license ) {
 				wp_send_json_success( __( 'Your license has been activated.', ATUM_TEXT_DOMAIN ) );
@@ -1007,11 +1069,7 @@ final class Ajax {
 		if ( 'deactivated' === $license_data->license ) {
 
 			// Remove the key.
-			Addons::update_key( $addon_name, [ 'key' => '' ] );
-
-			// Delete status transient.
-			Addons::delete_status_transient( $addon_name );
-
+			Addons::remove_key( $addon_name );
 			wp_send_json_success( __( 'Your license has been deactivated and removed.', ATUM_TEXT_DOMAIN ) );
 
 		}
@@ -1041,42 +1099,57 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
-		$addon_name    = esc_attr( $_POST['addon'] );
-		$addon_slug    = esc_attr( $_POST['slug'] );
-		$key           = esc_attr( $_POST['key'] );
+		$addon_name    = esc_attr( $_REQUEST['addon'] );
+		$key           = esc_attr( $_REQUEST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
 
-		if ( ! $addon_name || ! $addon_slug || ! $key ) {
+		if ( ! $addon_name || ! $key ) {
 			wp_send_json_error( $default_error );
 		}
 
-		$response = Addons::get_version( $addon_name, $key, '0.0' );
+		$response = Addons::get_latest_version( $addon_name, $key, '0.0' );
 
 		// Make sure the response came back okay.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$message = ( is_wp_error( $response ) ) ? $response->get_error_message() : $default_error;
+			$message = is_wp_error( $response ) ? $response->get_error_message() : $default_error;
 			wp_send_json_error( $message );
 		}
 
 		// Decode the license data.
 		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-		if ( $license_data->download_link ) {
+		if ( $license_data ) {
 
-			Addons::delete_status_transient( $addon_name );
+			if ( $license_data->download_link ) {
 
-			Addons::update_key( $addon_name, array(
-				'key'    => $key,
-				'status' => $license_data->license,
-			) );
+				Addons::delete_status_transient( $addon_name );
 
-			/* @noinspection PhpUnhandledExceptionInspection */
-			$result = Addons::install_addon( $addon_name, $addon_slug, $license_data->download_link );
-			wp_send_json( $result );
-		}
+				$key_info = array(
+					'key'     => $key,
+					'status'  => $license_data->license,
+					'expires' => $license_data->expires,
+				);
 
-		if ( $license_data->msg ) {
-			wp_send_json_error( $license_data->msg );
+				if ( isset( $license_data->slug ) && strpos( $license_data->slug, 'trial' ) !== FALSE ) {
+					$key_info['trial'] = TRUE;
+
+					if ( empty( $license_data->trial_extendable ) ) {
+						$key_info['extended'] = TRUE;
+					}
+				}
+
+				Addons::update_key( $addon_name, $key_info );
+
+				/* @noinspection PhpUnhandledExceptionInspection */
+				$result = Addons::install_addon( $license_data->name, $license_data->slug, $license_data->download_link );
+				wp_send_json( $result );
+
+			}
+
+			if ( $license_data->msg ) {
+				wp_send_json_error( $license_data->msg );
+			}
+
 		}
 
 		wp_send_json_error( $default_error );
@@ -1100,20 +1173,18 @@ final class Ajax {
 
 		// Clear the key.
 		$addon_name = esc_attr( $_POST['addon'] );
-		Addons::update_key( $addon_name, '' );
+		Addons::remove_key( $addon_name );
 
-		// Delete the transient.
-		Addons::delete_status_transient( $addon_name );
-
-		wp_send_json_success();
+		wp_send_json_success( __( 'Your license was deactivated successfully', ATUM_TEXT_DOMAIN ) );
 
 	}
 
 	/**
 	 * Remove an addon transient so the info will be refreshed the next time the page is accessed.
 	 *
-	 * @since 1.9.26
+	 * @package Add-ons
 	 *
+	 * @since 1.9.26
 	 */
 	public function refresh_license_status() {
 
@@ -1123,12 +1194,81 @@ final class Ajax {
 			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
 		}
 
+		$addon_name    = esc_attr( $_POST['addon'] );
+		$saved_license = Addons::get_keys( $addon_name );
+
+		if ( ! $saved_license ) {
+			wp_send_json_error( 'Invalid key saved. Please try to remove the license and entering it again', ATUM_TEXT_DOMAIN );
+		}
+
+		if ( 'valid' === $saved_license['status'] ) {
+			wp_send_json_success( __( 'License refreshed successfully', ATUM_TEXT_DOMAIN ) );
+		}
+
+		$response = Addons::check_license( $addon_name, $saved_license['key'] );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response->get_error_message() );
+		}
+
+		$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( 'valid' === $license_data->license ) {
+
+			$key_info = array(
+				'key'     => $saved_license['key'],
+				'status'  => 'valid',
+				'expires' => $license_data->expires,
+			);
+
+			if ( ! empty( $license_data->trial ) ) {
+				$key_info['trial'] = TRUE;
+
+				if ( empty( $license_data->trial_extendable ) ) {
+					$key_info['extended'] = TRUE;
+				}
+			}
+
+			Addons::update_key( $addon_name, $key_info );
+
+		}
+
+		wp_send_json_success( __( 'License refreshed successfully', ATUM_TEXT_DOMAIN ) );
+
+	}
+
+	/**
+	 * Extend a trial add-on license.
+	 *
+	 * @package Add-ons
+	 *
+	 * @since 1.9.27
+	 */
+	public function extend_trial() {
+
+		$this->check_license_post_data();
+
+		$key        = esc_attr( $_POST['key'] );
 		$addon_name = esc_attr( $_POST['addon'] );
 
-		// Delete the transient.
-		Addons::delete_status_transient( $addon_name );
+		$result = Addons::extend_trial( $key );
 
-		wp_send_json_success();
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+
+		$expires = $result['expires'] ?? date_i18n( 'Y-m-d H:i:s', strtotime( '+7 days' ) );
+
+		Addons::update_key( $addon_name, array(
+			'key'      => $key,
+			'status'   => 'valid',
+			'expires'  => $expires,
+			'trial'    => TRUE,
+			'extended' => TRUE,
+		) );
+
+		/* translators: the expiration date */
+		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), date_i18n( 'Y-m-d', strtotime( $expires ) ) ) );
 
 	}
 
@@ -2260,17 +2400,13 @@ final class Ajax {
 			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( empty( $_POST['value'] ) ) {
-			wp_send_json_error( __( 'Please specify a valid supplier', ATUM_TEXT_DOMAIN ) );
-		}
-
 		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
-		if ( ! $product instanceof \WC_Product ) {
+		if ( ! $product instanceof \WC_Product_Variable ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$supplier_id = absint( $_POST['value'] );
+		$supplier_id = $_POST['value'] ?: NULL;
 		$variations  = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
@@ -2491,9 +2627,9 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-marketing-popup-nonce', 'security' );
 
-		if ( Helpers::show_marketing_popup() ) {
+		$marketing_popup = AtumMarketingPopup::get_instance();
 
-			$marketing_popup = AtumMarketingPopup::get_instance();
+		if ( $marketing_popup->show() ) {
 
 			$marketing_popup_data = [
 				'background'    => $marketing_popup->get_background(),
@@ -2504,7 +2640,7 @@ final class Ajax {
 				'hoverButtons'  => $marketing_popup->get_buttons_hover_style_block(),
 				'images'        => $marketing_popup->get_images(),
 				'footerNotice'  => $marketing_popup->get_footer_notice(),
-				'transient_key' => $marketing_popup->get_transient_key(),
+				'transient_key' => AtumMarketingPopup::get_transient_key(),
 			];
 
 			// Send marketing popup content.
@@ -2698,13 +2834,14 @@ final class Ajax {
 
 		foreach ( $products as $product_id ) {
 
-			$product = Helpers::get_atum_product( $product_id);
+			$product = Helpers::get_atum_product( $product_id );
 
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product );
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 2 );
 			AtumCalculatedProps::update_atum_sales_calc_props_cli_call( $product, 3 );
 
 			do_action( 'atum/ajax/tool_update_calc_props/product_updated', $product );
+
 		}
 
 		if ( $offset + $step >= $total ) {
@@ -2843,6 +2980,26 @@ final class Ajax {
 		wp_die();
 
 	}
+
+	/**
+	 * Save the closed state for any ATUM admin modal
+	 *
+	 * @package ATUM Admin Modals
+	 *
+	 * @since 1.9.27
+	 */
+	public function hide_atum_admin_modal() {
+
+		check_ajax_referer( 'atum-admin-modals-nonce', 'security' );
+
+		if ( ! empty( $_POST['key'] ) ) {
+			AtumAdminModal::hide_modal( esc_attr( $_POST['key'] ) );
+		}
+
+		wp_die();
+
+	}
+
 
 	/*******************
 	 * Instance methods

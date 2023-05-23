@@ -51,6 +51,7 @@ use Atum\PurchaseOrders\Items\POItemTax;
  * @property string $created_via
  * @property string $prices_include_tax
  * @property string $date_completed
+ * @property string $atum_barcode
  */
 abstract class AtumOrderModel {
 
@@ -150,6 +151,7 @@ abstract class AtumOrderModel {
 		'created_via'        => '',
 		'prices_include_tax' => 'no',
 		'date_completed'     => '',
+		'atum_barcode'       => '',
 	];
 
 	/**
@@ -2593,6 +2595,30 @@ abstract class AtumOrderModel {
 
 		if ( $this->post ) {
 			$this->post->post_content = wp_kses( $value, $allowed_html );
+		}
+
+	}
+
+	/**
+	 * Set atum_barcode meta
+	 * NOTE: This must be compatible with the Metaboxes::ATUM_BARCODE_META_KEY. That's why we need the atum prefix here.
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param string $atum_barcode
+	 * @param bool   $skip_change
+	 */
+	public function set_atum_barcode( $atum_barcode, $skip_change = FALSE ) {
+
+		$atum_barcode = wc_clean( $atum_barcode );
+
+		if ( $atum_barcode !== $this->atum_barcode ) {
+
+			if ( ! $skip_change ) {
+				$this->register_change( 'atum_barcode' );
+			}
+
+			$this->set_meta( 'atum_barcode', $atum_barcode );
 		}
 
 	}

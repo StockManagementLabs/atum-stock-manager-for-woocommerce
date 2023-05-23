@@ -1,8 +1,9 @@
 <?php
 /**
- * Handles the ATUM Notifications
+ * Handles the ATUM Email Notifications
  *
- * @oackage     Notifications
+ * @package     Atum
+ * @subpackage  Components
  * @author      Be Rebel - https://berebel.io
  * @copyright   ©2023 Stock Management Labs™
  *
@@ -11,18 +12,16 @@
 
 namespace Atum\Components;
 
-use Atum\Inc\Helpers as AtumHelpers;
-
-
 defined( 'ABSPATH' ) || die;
 
+use Atum\Inc\Helpers as AtumHelpers;
 
-class AtumNotifications {
+class AtumEmailNotifications {
 
 	/**
 	 * The singleton instance holder.
 	 *
-	 * @var AtumNotifications
+	 * @var AtumEmailNotifications
 	 */
 	private static $instance;
 
@@ -82,7 +81,7 @@ class AtumNotifications {
 	}
 
 	/**
-	 * Add AtumNotifications classes to WC Emails classes list.
+	 * Add AtumEmailNotifications classes to WC Emails classes list.
 	 *
 	 * @since 1.9.1
 	 *
@@ -127,7 +126,7 @@ class AtumNotifications {
 				'label'    => __( 'Notifications', ATUM_TEXT_DOMAIN ),
 				'icon'     => 'atmi-alarm',
 				'sections' => array(
-					'atum_notifications' => __( 'ATUM Notifications', ATUM_TEXT_DOMAIN ),
+					'atum_notifications' => __( 'Email Notifications', ATUM_TEXT_DOMAIN ),
 				),
 			);
 
@@ -193,7 +192,7 @@ class AtumNotifications {
 	/**
 	 * Get Singleton instance
 	 *
-	 * @return AtumNotifications instance
+	 * @return AtumEmailNotifications instance
 	 */
 	public static function get_instance() {
 

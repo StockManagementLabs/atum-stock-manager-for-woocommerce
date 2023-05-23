@@ -135,7 +135,7 @@ $active_sections = [];
 													</span>
 												<?php endif; ?>
 
-												<?php echo esc_html( $section['title'] ) ?>
+												<?php echo esc_html( $active_sections[ $active_section ] ?? $section['title'] ) ?>
 											</h2>
 										</div>
 								<?php endif; ?>

@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
 use Atum\Suppliers\Suppliers;
+use AtumBarcodes\Inc\Globals;
 
 
 trait AtumProductTrait {
@@ -68,6 +69,7 @@ trait AtumProductTrait {
 		'selectable_inventories_mode'   => NULL, // MI.
 		'show_write_off_inventories'    => NULL, // MI.
 		'show_out_of_stock_inventories' => NULL, // MI.
+		'barcode_type'                  => NULL, // BP.
 		'committed_to_wc'               => NULL, // SOnly.
 	);
 
@@ -661,6 +663,20 @@ trait AtumProductTrait {
 	}
 
 	/**
+	 * Returns the product's barcode type prop.
+	 *
+	 * @since   1.9.30
+	 * @package Barcodes PRO
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_barcode_type( $context = 'view' ) {
+		return $this->get_prop( 'barcode_type', $context );
+	}
+
+	/**
 	 * Returns the product's calculated backorders prop.
 	 *
 	 * @since   1.9.20.4
@@ -672,6 +688,18 @@ trait AtumProductTrait {
 	 */
 	public function get_calc_backorders( $context = 'view' ) {
 		return $this->get_prop( 'calc_backorders', $context );
+	}
+
+	/**
+	 * Returns the fields names in atum data.
+	 *
+	 * @since 1.9.29.1
+	 * @package Integrations\WPML
+	 *
+	 * @return string[]
+	 */
+	public function get_atum_data_column_names() {
+		return apply_filters( 'atum/product_data/data_column_names', array_keys( $this->atum_data ) );
 	}
 
 	/*
@@ -702,7 +730,7 @@ trait AtumProductTrait {
 	 * @param int $supplier_id
 	 */
 	public function set_supplier_id( $supplier_id ) {
-		$this->set_prop( 'supplier_id', absint( $supplier_id ) ? absint( $supplier_id ) : NULL );
+		$this->set_prop( 'supplier_id', absint( $supplier_id ) ?: NULL );
 	}
 
 	/**
@@ -907,7 +935,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param string|bool $has_location Whether or not the product is inheritable by others.
+	 * @param string|bool $has_location Whether the product is inheritable by others.
 	 */
 	public function set_has_location( $has_location ) {
 		$this->set_prop( 'has_location', wc_string_to_bool( $has_location ) );
@@ -1035,6 +1063,20 @@ trait AtumProductTrait {
 	}
 
 	/**
+	 * Set the product is BOM prop.
+	 *
+	 * @since 1.7.8
+	 * @package Product Levels
+	 *
+	 * @param string|bool $is_bom Whether the product is a BOM.
+	 */
+	public function set_is_bom( $is_bom ) {
+
+		$is_bom = wc_string_to_bool( $is_bom );
+		$this->set_prop( 'is_bom', $is_bom );
+	}
+
+	/**
 	 * Set the inventory iteration for the current product.
 	 *
 	 * @since   1.7.1
@@ -1156,19 +1198,6 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Set the product is BOM prop.
-	 *
-	 * @since 1.7.8
-	 *
-	 * @param string|bool $is_bom Whether or not the product is a BOM.
-	 */
-	public function set_is_bom( $is_bom ) {
-
-		$is_bom = wc_string_to_bool( $is_bom );
-		$this->set_prop( 'is_bom', $is_bom );
-	}
-
-	/**
 	 * Set the Show "Write-Off" inventories option for the current product.
 	 *
 	 * @since   1.7.4
@@ -1199,7 +1228,7 @@ trait AtumProductTrait {
 	/**
 	 * Set committed stock to WC Orders fpr the current product
 	 *
-	 * @since 1.9.20.3
+	 * @since   1.9.20.3
 	 * @package SOnly
 	 *
 	 * @param int|float|string|NULL $committed_to_wc
@@ -1212,13 +1241,30 @@ trait AtumProductTrait {
 	/**
 	 * Set calculated backorders for the current product
 	 *
-	 * @since 1.9.20.4
+	 * @since   1.9.20.4
+	 * @package Product Levels
 	 *
 	 * @param int|float|string|NULL $calc_backorders
 	 */
 	public function set_calc_backorders( $calc_backorders ) {
 
 		$this->set_prop( 'calc_backorders', is_null( $calc_backorders ) || '' === $calc_backorders ? NULL : wc_stock_amount( $calc_backorders ) );
+	}
+
+	/**
+	 * Set barcode type for the current product
+	 *
+	 * @since   1.9.30
+	 * @package Barcodes PRO
+	 *
+	 * @param string|NULL $barcode_type For "global", set it to NULL.
+	 */
+	public function set_barcode_type( $barcode_type ) {
+
+		if ( is_null( $barcode_type ) || array_key_exists( $barcode_type, Globals::get_allowed_barcodes() ) ) {
+			$this->set_prop( 'barcode_type', $barcode_type );
+		}
+
 	}
 
 	/**

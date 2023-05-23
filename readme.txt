@@ -1,13 +1,13 @@
 === ATUM WooCommerce Inventory Management and Stock Tracking ===
 
-Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, maxberebel, josecmrebel
+Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.3.0
-Stable tag: 1.9.26.2
+WC tested up to: 7.5.1
+Stable tag: 1.9.29.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,125 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.29.1`
+
+*2023-04-20*
+
+**Features**
+
+* Added support for the new ATUM Barcodes PRO add-on.
+
+**Changes**
+
+* Updated composer dependencies.
+* Refactoring.
+* Remove deprecated ATUM CRON jobs.
+* Get rid of deprecated ATUM queues when cheking them.
+
+**Fixes**
+
+* Fixed attachment thumb for non-image files.
+* Show the correct tab title on the settings page.
+
+---
+
+`1.9.29`
+
+*2023-04-12*
+
+**Features**
+
+* Added new ATUM icons font.
+
+**Fixes**
+
+* Removed wrong quote in expandable rows that was causing the PDF export to fail.
+* Fixed trial licenses being removed automatically.
+
+---
+
+`1.9.28`
+
+*2023-04-06*
+
+**Features**
+
+* Allow loading JS dependencies to AtumAdminModals.
+* Show the install button if a license is saved but the addon not installed yet.
+* Do not show install buttons to users with no permissions.
+
+**Changes**
+
+* Send addon slug to the Updater.
+* Refactoring.
+* Check for errors returned from the activation API.
+* Make sure the as_unschedule_all_actions function exists before using it.
+* Addons loader modifications.
+* Disable the license key input on ajax requests.
+* Do not show an update message on the addons page when is not installed.
+* Deactivate the addons before uninstalling them with the auto-installer.
+
+**Fixes**
+
+* Fixed expired trials modal.
+* Fixed trial extension on the addons page.
+* Handle the API response correctly when extending a trial.
+* Fixed auto-installer success URL redirection.
+* Fixed expiration date when extending a trial.
+
+---
+
+`1.9.27`
+
+*2023-03-29*
+
+**Features**
+
+* New ATUM premium add-ons trials available.
+* New style and features for the add-ons page.
+* Added trial licenses support.
+* Added trials expiration modals and notices.
+* New addons loader system.
+* Added filter to allow adding the Export Data tab to post type tables.
+* Added AtumNotifications extra params for settings display.
+* Allow adding extra fieldsets to export data script.
+* Added method to clear permanent ATUM admin notices.
+* Include SKU field when searching in the Inbound Stock list.
+* Add description to the PO when it is created via API.
+* Added sidebar to the addons page.
+* Added grid view mode to addons page.
+* Added alert when the addons list couldn't be retrieved.
+* Performance improvement.
+* Added add-ons auto-installer component.
+
+**Changes**
+
+* Return check queues action to the frontend.
+* Clean up wrong ATUM keys when updating.
+* Refactoring.
+* Remove addons with no key from the keys option.
+* Get rid of legacy recurring actions still scheduled.
+* Filter out select fields to enhance on post type lists.
+* Force display country in PO ship-to info.
+* SKU shouldn't be editable on the Inbound Stock list.
+* Delay the ATUM capabilities registration.
+* Include data atts filter for expandable rows.
+* Check whether the WP transient exists before cehcking versions.
+* Allow setting empty value for wc_country settings fields.
+
+**Fixes**
+
+* Fixed contributors data within the premim add-ons' view details popup.
+* Fixed wrong text domains.
+* Fixed alert style on settings page when the settings cannot be displayed.
+* Fixed large product names in PO PDF template.
+* CSS fixes.
+* Fixed multi-checkbox field when no checkboxes are checked.
+* Fixed get_keys method when a trial name is passed.
+* Fixed barcode length checking.
 
 ---
 

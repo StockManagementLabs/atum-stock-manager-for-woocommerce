@@ -181,7 +181,7 @@ class ListTable extends AtumListTable {
 	public function __construct( $args = array() ) {
 		
 		// Activate managed/unmanaged counters separation.
-		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters' );
+		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters', 'no' );
 
 		$this->days_to_reorder = absint( Helpers::get_option( 'sale_days', Settings::DEFAULT_SALE_DAYS ) );
 

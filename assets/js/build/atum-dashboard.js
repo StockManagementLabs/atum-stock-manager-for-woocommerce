@@ -1286,7 +1286,7 @@ var Utils = {
     addNotice: function (type, msg, autoDismiss, dismissSeconds) {
         if (autoDismiss === void 0) { autoDismiss = false; }
         if (dismissSeconds === void 0) { dismissSeconds = 5; }
-        var $notice = $("<div class=\"".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
+        var $notice = $("<div class=\"notice-".concat(type, " notice is-dismissible\"><p><strong>").concat(msg, "</strong></p></div>")).hide(), $dismissButton = $('<button />', { type: 'button', class: 'notice-dismiss' }), $headerEnd = $('.wp-header-end');
         $headerEnd.siblings('.notice').remove();
         $headerEnd.before($notice.append($dismissButton));
         $notice.slideDown(100);
@@ -1329,6 +1329,22 @@ var Utils = {
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'), results = regex.exec(window.location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
+    },
+    getQueryParams: function (query) {
+        var params = {};
+        new URLSearchParams(query).forEach(function (value, key) {
+            var decodedKey = decodeURIComponent(key);
+            var decodedValue = decodeURIComponent(value);
+            if (decodedKey.endsWith('[]')) {
+                decodedKey = decodedKey.replace('[]', '');
+                params[decodedKey] || (params[decodedKey] = []);
+                params[decodedKey].push(decodedValue);
+            }
+            else {
+                params[decodedKey] = decodedValue;
+            }
+        });
+        return params;
     },
     htmlDecode: function (input) {
         var e = document.createElement('div');
