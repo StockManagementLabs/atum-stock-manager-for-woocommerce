@@ -222,7 +222,7 @@ class Wpml {
 			// Exclude duplicated categories at SC categories dropdown.
 			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
 
-			// Add translations to inboud stock where clause
+			// Add translations to inboud stock where clause.
 			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
 
 		}
