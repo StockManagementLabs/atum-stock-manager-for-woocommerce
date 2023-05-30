@@ -1044,6 +1044,8 @@
 	.table-style-buttons {
 		display: flex;
 		align-items: center;
+		gap: 4px;
+		margin-left: 5px;
 		
 		button {
 			width: 33px;
@@ -1056,17 +1058,11 @@
 			transition: all 0.2s ease-in-out;
 			line-height: 2.4;
 			
-			&:first-child {
-				margin-left: 9px;
-			}
-			
-			+ button {
-				margin-left: 5px;
-			}
-			
 			.atmi-wc-expand {
 				font-size: 18px;
 				line-height: 1.6;
+				position: relative;
+				right: -0.4px;
 			}
 			
 			&:focus {

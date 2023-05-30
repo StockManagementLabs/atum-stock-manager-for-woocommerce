@@ -27,6 +27,7 @@ import EditableCell from './components/list-table/_editable-cell';
 import EnhancedSelect from './components/_enhanced-select';
 import Filters from './components/list-table/_filters';
 import Globals from './components/list-table/_globals';
+import HelpGuide from './components/_help-guide';
 import LightBox from './components/_light-box';
 import ListTable from './components/list-table/_list-table';
 import LocationsTree from './components/list-table/_locations-tree';
@@ -62,8 +63,9 @@ jQuery( ( $: JQueryStatic ) => {
 	// Initialize components with dependency injection.
 	const enhancedSelect = new EnhancedSelect();
 	const tooltip = new Tooltip();
+	const helpGuide = new HelpGuide( settings );
 	const stickyCols = new StickyColumns( settings, globals );
-	const listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols );
+	const listTable = new ListTable( settings, globals, tooltip, enhancedSelect, stickyCols, helpGuide );
 	const router = new Router( settings, globals, listTable );
 	const stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 	const dateTimePicker = new DateTimePicker( settings );
@@ -84,5 +86,14 @@ jQuery( ( $: JQueryStatic ) => {
 	new BulkActions( settings, globals, listTable );
 	new LocationsTree( settings, globals, tooltip );
 	new RowActions( settings, globals );
+
+	if ( settings.get( 'hgMainGuide' ) ) {
+
+		// Add the PO general help guide button to the PO.
+		const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
+		$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
+		tooltip.addTooltips( $tableTitle );
+
+	}
 	
 });

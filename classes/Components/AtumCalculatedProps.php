@@ -476,7 +476,10 @@ class AtumCalculatedProps {
 				}
 
 				$variation_product = Helpers::get_atum_product( $child_id );
-				$variable_value   += call_user_func( array( $variation_product, "get_$prop" ) );
+
+				if ( $variation_product instanceof \WC_Product && is_callable( array( $variation_product, "get_$prop" ) ) ) {
+					$variable_value += call_user_func( array( $variation_product, "get_$prop" ) );
+				}
 
 			}
 

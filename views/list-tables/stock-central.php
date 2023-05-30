@@ -10,9 +10,9 @@
  * @var string                             $ajax
  */
 
-use Atum\Inc\Helpers;
-
 defined( 'ABSPATH' ) || die;
+
+use Atum\Inc\Helpers;
 
 ?>
 <div class="wrap">
@@ -25,13 +25,6 @@ defined( 'ABSPATH' ) || die;
 
 		<a id="atum-stock-central-lists-button" href="<?php echo esc_url( $sc_url ) ?>" class="toggle-managed page-title-action extend-list-table"><?php echo esc_html( $is_uncontrolled_list ? __( 'Show Controlled', ATUM_TEXT_DOMAIN ) : __( 'Show Uncontrolled', ATUM_TEXT_DOMAIN ) ) ?></a>
 
-		<span class="akb-buttons-wrapper">
-			<?php /* TODO: Temporary disabled. Do not display AKB at SC yet.
-			<button type="button" class="btn btn-sm display-akb-button atum-tooltip " title="" data-bs-placement="bottom" data-bs-original-title="<?php echo __( 'Display Atum Knowledge Base buttons', ATUM_TEXT_DOMAIN ) ?>">
-				<i class="atmi-question"></i>
-			</button>
-            */ ?>
-		</span>
 		<?php do_action( 'atum/stock_central_list/page_title_buttons' ) ?>
 	</h1>
 

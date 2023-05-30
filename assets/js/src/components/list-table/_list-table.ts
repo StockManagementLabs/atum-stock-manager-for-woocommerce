@@ -14,6 +14,7 @@ import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 import StickyColumns from './_sticky-columns';
+import HelpGuide from '../_help-guide';
 
 export default class ListTable {
 	
@@ -26,11 +27,15 @@ export default class ListTable {
 		private globals: Globals,
 		private toolTip: Tooltip,
 		private enhancedSelect: EnhancedSelect,
-		private stickyCols: StickyColumns
+		private stickyCols: StickyColumns,
+		private helpGuide: HelpGuide = null
 	) {
 
 		// Bind events.
 		this.bindEvents();
+
+		// Add hooks
+		this.addHooks();
 
 		// Calculate compounded stocks.
 		//In order to calculate the compounded stock in grouped or bundle products containing MI products,
@@ -107,6 +112,18 @@ export default class ListTable {
 		// Display hidden footer.
 		$( window ).on( 'load', () => $( '#wpfooter' ).show() );
 		
+	}
+
+	/**
+	 * Add hooks
+	 */
+	addHooks() {
+
+		// Add the lost help markers after refreshing table.
+		if ( this.helpGuide ) {
+			this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.helpGuide.addLazyHelpMarkers() );
+		}
+
 	}
 	
 	/**

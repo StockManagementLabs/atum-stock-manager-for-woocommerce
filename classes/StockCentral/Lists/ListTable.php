@@ -162,6 +162,13 @@ class ListTable extends AtumListTable {
 	);
 
 	/**
+	 * The Stock Central's help guide
+	 *
+	 * @var string
+	 */
+	protected $help_guide = 'atum_stock_central';
+
+	/**
 	 * ListTable Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args

@@ -705,8 +705,69 @@ const Utils = {
 		} );
 
 		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+	},
+
+	/**
+	 * Detect clicks on pseudo-elements
+	 *
+	 * @param {JQueryEventObject}       evt
+	 * @param {HTMLElement}             parentElem
+	 * @param {'before'|'after'|'both'} pseudoElement
+	 *
+	 * @return {{before: boolean, after: boolean} | boolean}
+	 */
+	pseudoClick( evt: JQueryEventObject, parentElem: HTMLElement, pseudoElement: 'before'|'after'|'both' = 'both' ) {
+
+		let beforeClicked: boolean = false,
+		    afterClicked: boolean  = false;
+
+		const parentLeft: number = parseInt( parentElem.getBoundingClientRect().left.toString(), 10 ),
+		      parentTop: number  = parseInt( parentElem.getBoundingClientRect().top.toString(), 10 );
+
+		const mouseX: number = evt.clientX,
+		      mouseY: number = evt.clientY;
+
+		if ( [ 'before', 'both' ].includes( pseudoElement ) ) {
+
+			const before: CSSStyleDeclaration = window.getComputedStyle( parentElem, ':before' ),
+			      beforeStart: number         = parentLeft + ( parseInt( before.getPropertyValue( 'left' ), 10 ) ),
+			      beforeEnd: number           = beforeStart + parseInt( before.width, 10 ),
+			      beforeYStart: number        = parentTop + ( parseInt( before.getPropertyValue( 'top' ), 10 ) ),
+			      beforeYEnd: number          = beforeYStart + parseInt( before.height, 10 );
+
+			beforeClicked = mouseX >= beforeStart && mouseX <= beforeEnd && mouseY >= beforeYStart && mouseY <= beforeYEnd;
+
+		}
+
+		if ( [ 'after', 'both' ].includes( pseudoElement ) ) {
+
+			const after: CSSStyleDeclaration = window.getComputedStyle( parentElem, ':after' ),
+			      afterStart: number         = parentLeft + ( parseInt( after.getPropertyValue( 'left' ), 10 ) ),
+			      afterEnd: number           = afterStart + parseInt( after.width, 10 ),
+			      afterYStart: number        = parentTop + ( parseInt( after.getPropertyValue( 'top' ), 10 ) ),
+			      afterYEnd: number          = afterYStart + parseInt( after.height, 10 );
+
+			afterClicked = mouseX >= afterStart && mouseX <= afterEnd && mouseY >= afterYStart && mouseY <= afterYEnd;
+
+		}
+
+		switch ( pseudoElement ) {
+			case 'after':
+				return afterClicked;
+
+			case 'before':
+				return beforeClicked;
+
+			default:
+				return {
+					before: beforeClicked,
+					after : afterClicked,
+				};
+		}
+
 	}
-	
+
+
 };
 
 export default Utils;

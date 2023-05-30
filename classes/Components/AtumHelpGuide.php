@@ -16,11 +16,18 @@ defined( 'ABSPATH' ) || die;
 class AtumHelpGuide {
 
 	/**
+	 * The singleton instance holder
+	 *
+	 * @var AtumHelpGuide
+	 */
+	private static $instance;
+
+	/**
 	 * Path where the JSON file guides are located
 	 *
-	 * @var string
+	 * @var string[]
 	 */
-	protected $guides_path;
+	protected $guides_paths = [];
 
 	/**
 	 * User meta key name where the closed auto guides will be saved
@@ -28,13 +35,13 @@ class AtumHelpGuide {
 	const CLOSED_AUTO_GUIDES_KEY = '_atum_closed_auto_guides';
 
 	/**
-	 * AtumHelpGuide constructor.
-	 *
-	 * @param string $guides_path
+	 * AtumHelpGuide singleton constructor
 	 */
-	public function __construct( $guides_path ) {
+	private function __construct() {
 
-		$this->guides_path = $guides_path;
+		$this->guides_paths = apply_filters( 'atum/help_guides/guides_paths', array(
+			'atum_stock_central' => ATUM_PATH . 'help-guides/stock-central',
+		) );
 
 	}
 
@@ -43,13 +50,13 @@ class AtumHelpGuide {
 	 *
 	 * @since 1.9.10
 	 *
-	 * @param string $guide_name
+	 * @param string $guide_file
 	 *
 	 * @return array
 	 */
-	public function get_guide_steps( $guide_name ) {
+	public function get_guide_steps( $guide_file ) {
 
-		$guide_file = trailingslashit( $this->guides_path ) . $guide_name . '.json';
+		$guide_file .= '.json';
 
 		if ( file_exists( $guide_file ) ) {
 			$guide_steps = json_decode( file_get_contents( $guide_file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
@@ -69,18 +76,24 @@ class AtumHelpGuide {
 	 * @since 1.9.11
 	 *
 	 * @param string $guide
-	 * @param string $icon
-	 *
-	 * @return string
 	 */
-	public function get_help_guide_button( $guide, $icon = 'indent-increase' ) {
+	public function show_help_guide_buttons( $guide ) {
 
-		$default_path = ATUM_PATH . 'help-guides';
-		$path_data    = $this->guides_path && $this->guides_path !== $default_path ? ' data-path="' . $this->guides_path . '"' : '';
+		if ( ! $guide || ! array_key_exists( $guide, $this->guides_paths ) ) {
+			return;
+		}
 
-		return '<i class="atum-icon atmi-' . $icon . ' show-intro-guide atum-tooltip" 
-			data-guide="' . $guide . '"' . $path_data . ' 
-			title="' . __( 'Show help guide', ATUM_TEXT_DOMAIN ) . '"></i>';
+		?>
+		<span class="help-guide-buttons" data-guide="<?php echo esc_attr( $this->guides_paths[ $guide ] ) ?>">
+			<i class="show-help-markers atum-icon atmi-flag atum-tooltip"
+			   title="<?php esc_attr_e( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ) ?>">
+			</i>
+
+			<i class="show-intro-guide atum-icon atmi-indent-increase atum-tooltip"
+			   title="<?php esc_attr_e( 'Show help guide', ATUM_TEXT_DOMAIN ) ?>">
+			</i>
+		</span>
+		<?php
 
 	}
 
@@ -129,16 +142,16 @@ class AtumHelpGuide {
 	 *
 	 * @since 1.9.11
 	 *
-	 * @param string $auto_guide_file Full guide path for the auto guide (if any).
+	 * @param string $auto_guide Key for the auto-guide (if any).
 	 *
 	 * @return array
 	 */
-	public static function get_help_guide_js_vars( $auto_guide_file = '' ) {
+	public function get_help_guide_js_vars( $auto_guide = '' ) {
 
 		$screen = get_current_screen();
 		$vars   = array(
-			'helpGuideNonce' => wp_create_nonce( 'help-guide-nonce' ),
-			'introJsOptions' => array(
+			'hgError'           => __( 'Error!', ATUM_TEXT_DOMAIN ),
+			'hgIntroJsOptions'  => array(
 				'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
 				'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
 				'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
@@ -146,23 +159,70 @@ class AtumHelpGuide {
 				'disableInteraction' => TRUE,
 				'scrollToElement'    => TRUE,
 			),
-			'showHelpGuide'  => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
-			'screenId'       => $screen ? $screen->id : '',
+			'hgNonce'           => wp_create_nonce( 'help-guide-nonce' ),
+			'hgOk'              => __( 'OK', ATUM_TEXT_DOMAIN ),
+			'hgShowHelpGuide'   => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
+			'hgShowHelpMarkers' => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
+			'hgScreenId'        => $screen ? $screen->id : '',
 		);
 
 		// Add the auto help guide if passed and the user has not closed it yet.
-		if ( $auto_guide_file && file_exists( $auto_guide_file ) ) {
+		if ( $auto_guide && array_key_exists( $auto_guide, $this->guides_paths ) && file_exists( $this->guides_paths[ $auto_guide ] . '.json' ) ) {
 
 			$closed_auto_guides = self::get_closed_auto_guides( get_current_user_id() );
 
 			if ( ! is_array( $closed_auto_guides ) || ! in_array( $screen->id, $closed_auto_guides ) ) {
-				$vars['autoHelpGuide'] = json_decode( file_get_contents( $auto_guide_file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+				$vars['hgAutoGuide'] = json_decode( file_get_contents( $this->guides_paths[ $auto_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			}
 
 		}
 
 		return $vars;
 
+	}
+
+	/**
+	 * Getter for the guides_paths prop
+	 *
+	 * @since 1.9.30
+	 *
+	 * @return string[]
+	 */
+	public function get_guides_paths() {
+		return $this->guides_paths;
+	}
+
+
+	/*******************
+	 * Instance methods
+	 *******************/
+
+	/**
+	 * Cannot be cloned
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Cannot be serialized
+	 */
+	public function __sleep() {
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
+	}
+
+	/**
+	 * Get Singleton instance
+	 *
+	 * @return AtumHelpGuide instance
+	 */
+	public static function get_instance() {
+
+		if ( ! ( self::$instance && is_a( self::$instance, __CLASS__ ) ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 }

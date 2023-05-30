@@ -4453,6 +4453,8 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  gap: 4px;
+  margin-left: 5px;
 }
 .atum-list-wrapper .table-style-buttons button, #posts-filter .table-style-buttons button {
   width: 33px;
@@ -4466,15 +4468,11 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   transition: all 0.2s ease-in-out;
   line-height: 2.4;
 }
-.atum-list-wrapper .table-style-buttons button:first-child, #posts-filter .table-style-buttons button:first-child {
-  margin-left: 9px;
-}
-.atum-list-wrapper .table-style-buttons button + button, #posts-filter .table-style-buttons button + button {
-  margin-left: 5px;
-}
 .atum-list-wrapper .table-style-buttons button .atmi-wc-expand, #posts-filter .table-style-buttons button .atmi-wc-expand {
   font-size: 18px;
   line-height: 1.6;
+  position: relative;
+  right: -0.4px;
 }
 .atum-list-wrapper .table-style-buttons button:focus, #posts-filter .table-style-buttons button:focus {
   outline: 0;

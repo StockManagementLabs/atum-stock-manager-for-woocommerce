@@ -133,7 +133,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\AtumEmailNotifications' => __DIR__ . '/../..' . '/classes/Components/AtumEmailNotifications.php',
         'Atum\\Components\\AtumException' => __DIR__ . '/../..' . '/classes/Components/AtumException.php',
         'Atum\\Components\\AtumHelpGuide' => __DIR__ . '/../..' . '/classes/Components/AtumHelpGuide.php',
-        'Atum\\Components\\AtumHelpPointers' => __DIR__ . '/../..' . '/classes/Components/AtumHelpPointers.php',
         'Atum\\Components\\AtumListTables\\AtumListPage' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumListPage.php',
         'Atum\\Components\\AtumListTables\\AtumListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumListTable.php',
         'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => __DIR__ . '/../..' . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',

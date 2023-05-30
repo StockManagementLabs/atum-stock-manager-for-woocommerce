@@ -2944,15 +2944,12 @@ final class Ajax {
 			wp_send_json_error( __( 'The guide name is required', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( ! empty( $_POST['path'] ) ) {
-			$guide_path = esc_attr( $_POST['path'] );
-		}
-		else {
-			$guide_path = apply_filters( 'atum/ajax/get_help_guide_steps', ATUM_PATH . 'help-guides' );
-		}
+		$help_guide  = AtumHelpGuide::get_instance();
+		$guide_paths = $help_guide->get_guides_paths();
 
-		$help_guide  = new AtumHelpGuide( $guide_path );
-		$guide_steps = $help_guide->get_guide_steps( esc_attr( $_POST['guide'] ) );
+		if ( array_key_exists( $_POST['guide'], $guide_paths ) ) {
+			$guide_steps = $help_guide->get_guide_steps( $guide_paths[ $_POST['guide'] ] );
+		}
 
 		if ( empty( $guide_steps ) ) {
 			wp_send_json_error( __( 'Guide not found', ATUM_TEXT_DOMAIN ) );

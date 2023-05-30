@@ -3330,11 +3330,11 @@ tr.introjs-showElement > th {
 
 .introjs-tooltip-title {
   font-size: 18px;
+  line-height: 1.3;
   margin: 0;
   padding: 0;
   font-weight: 500;
-  float: left;
-  line-height: 32px;
+  text-align: left;
 }
 
 .introjs-tooltip-header {
@@ -3612,30 +3612,61 @@ tr.introjs-showElement > th {
   opacity: 0;
 }
 
-.show-intro-guide {
+.introjs-tooltip .introjs-tooltiptext a {
+  word-wrap: break-word;
+}
+.introjs-tooltip .introjs-tooltiptext ul {
+  list-style: outside;
+}
+.introjs-tooltip .introjs-bullets {
+  display: none;
+}
+
+.help-guide-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  gap: 5px;
+  margin-top: 7px;
+}
+.help-guide-buttons i {
+  border-radius: 5px;
+  padding: 5px;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
   cursor: help;
-  border-radius: 50%;
+  border-radius: 5px;
   border: 1px solid #6c757d;
   color: #6c757d;
-  padding: 3px;
+  background-color: #fff;
   font-weight: normal;
   font-size: 18px;
-  width: 18px;
-  height: 18px;
-  position: relative;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  position: relative;
 }
-.show-intro-guide:not(.loading-guide):hover {
+.help-guide-buttons i.show-intro-guide:not(.loading-guide):hover {
   background-color: #00B8DB;
   color: #fff;
   border-color: #00B8DB;
 }
-.show-intro-guide.loading-guide {
+.help-guide-buttons i.show-intro-guide.loading-guide {
   pointer-events: none;
 }
-.show-intro-guide.loading-guide:before {
+.help-guide-buttons i.show-intro-guide.loading-guide:before {
+  color: transparent;
+}
+.help-guide-buttons i.show-intro-guide.loading-guide:after {
   content: "";
   width: 14px;
   height: 14px;
@@ -3667,78 +3698,82 @@ tr.introjs-showElement > th {
             transform: rotate(360deg);
   }
 }
-.show-intro-guide.atum-kb, .show-intro-guide.atum-kb:active, .show-intro-guide.atum-kb:hover {
-  background-color: #ff4848;
-  text-align: center;
-  position: absolute !important;
-  overflow: hidden;
-  border: 1px solid #fff;
-  -webkit-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-  width: 6px !important;
-  height: 6px !important;
-  right: -5px !important;
-  top: -6px !important;
-  left: unset !important;
+.help-guide-buttons i.show-help-markers.active, .help-guide-buttons i.show-help-markers:hover {
+  background-color: #69C61D;
+  color: #fff;
+  border-color: #69C61D;
 }
-.show-intro-guide.atum-kb.loading-guide:before, .show-intro-guide.atum-kb:active.loading-guide:before, .show-intro-guide.atum-kb:hover.loading-guide:before {
+
+.atum-help-marker {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+.atum-help-marker:before, .atum-help-marker:hover:before, .atum-help-marker:active:before {
+  display: none !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  -webkit-box-pack: center !important;
+      -ms-flex-pack: center !important;
+          justify-content: center !important;
+  content: "\e9d9";
+  font-family: "atum-icon-font";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgba(255, 72, 72, 0.8) !important;
+  border: 1px solid #fff !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  vertical-align: 5px !important;
+  text-align: center !important;
+  position: absolute !important;
+  overflow: hidden !important;
+  -webkit-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3) !important;
+          box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3) !important;
+  width: 16px !important;
+  height: 16px !important;
+  right: -8px !important;
+  top: -8px !important;
+  z-index: 99998 !important;
+  border-radius: 50px !important;
+  text-indent: unset !important;
+  cursor: help !important;
+}
+body.atum-show-help-markers .atum-help-marker:before, body.atum-show-help-markers .atum-help-marker:hover:before, body.atum-show-help-markers .atum-help-marker:active:before {
+  display: -webkit-inline-box !important;
+  display: -ms-inline-flexbox !important;
+  display: inline-flex !important;
+}
+.atum-help-marker[data-marker-position=top-left]:before, .atum-help-marker:hover[data-marker-position=top-left]:before, .atum-help-marker:active[data-marker-position=top-left]:before {
+  right: unset !important;
+  left: -8px !important;
+}
+.atum-help-marker[data-marker-position=bottom-right]:before, .atum-help-marker:hover[data-marker-position=bottom-right]:before, .atum-help-marker:active[data-marker-position=bottom-right]:before {
+  top: unset !important;
+  bottom: -8px !important;
+}
+.atum-help-marker[data-marker-position=bottom-left]:before, .atum-help-marker:hover[data-marker-position=bottom-left]:before, .atum-help-marker:active[data-marker-position=bottom-left]:before {
+  top: unset !important;
+  right: unset !important;
+  bottom: -8px !important;
+  left: -8px !important;
+}
+.atum-help-marker:hover:before {
+  background-color: #ff4848 !important;
+}
+.atum-help-marker.loading-guide:before {
   font-size: 14px;
   content: "\e961";
   left: -2px;
   top: -4px;
 }
-.show-intro-guide.atum-kb:before, .show-intro-guide.atum-kb:active:before, .show-intro-guide.atum-kb:hover:before {
-  color: #fff;
-  border-radius: 50%;
-  height: 10px;
-  width: 10px;
-  font-size: 8px;
-  display: inline-block;
-  position: absolute !important;
-  right: 0.6px !important;
-  left: unset !important;
-  top: 2px !important;
-}
 
-.akb-buttons-wrapper {
-  float: right;
-  margin-left: auto;
-  -webkit-box-ordinal-group: 4;
-      -ms-flex-order: 3;
-          order: 3;
-}
-.akb-buttons-wrapper button {
-  margin-left: 5px;
-}
-.akb-buttons-wrapper button.display-akb-button:not(.btn-success) {
-  border: solid 1px #6c757d;
-}
-.akb-buttons-wrapper button.show-intro-guide.help-guide-button {
-  border-radius: 0.2rem;
-  width: auto;
-  height: auto;
-  color: #fff;
-  border: solid 1px #00B8DB;
-  padding: 4px;
-}
-
-.akb-wrapper {
-  position: relative;
-  display: inherit;
-}
-
-td .akb-wrapper {
-  display: inline;
-}
-
-.introjs-tooltip .introjs-tooltiptext a {
-  word-wrap: break-word;
-}
-.introjs-tooltip .introjs-tooltiptext ul {
-  list-style: outside;
-}
-.introjs-tooltip .introjs-bullets {
-  display: none;
+body.running-atum-help-guide .atum-help-marker:before {
+  display: none !important;
 }
 
 .popover {
@@ -7394,6 +7429,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  gap: 4px;
+  margin-left: 5px;
 }
 .atum-list-wrapper .table-style-buttons button, #posts-filter .table-style-buttons button {
   width: 33px;
@@ -7407,15 +7444,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   transition: all 0.2s ease-in-out;
   line-height: 2.4;
 }
-.atum-list-wrapper .table-style-buttons button:first-child, #posts-filter .table-style-buttons button:first-child {
-  margin-left: 9px;
-}
-.atum-list-wrapper .table-style-buttons button + button, #posts-filter .table-style-buttons button + button {
-  margin-left: 5px;
-}
 .atum-list-wrapper .table-style-buttons button .atmi-wc-expand, #posts-filter .table-style-buttons button .atmi-wc-expand {
   font-size: 18px;
   line-height: 1.6;
+  position: relative;
+  right: -0.4px;
 }
 .atum-list-wrapper .table-style-buttons button:focus, #posts-filter .table-style-buttons button:focus {
   outline: 0;

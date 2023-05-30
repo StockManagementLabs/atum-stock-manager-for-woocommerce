@@ -3,26 +3,25 @@
 		"title": "Show Uncontrolled/Show Controlled",
 		"element": "#atum-stock-central-lists-button",
 		"intro": "ATUM plugin lets you separate products within the stock central screen as there may be items you no longer wish to monitor, for example, items no longer for sale but still required to keep in the report books. Our team has created two lists of products; one the default is called \"Controlled\" and the other \"Uncontrolled\". You can set the product either by editing the product itself or using the ATUM \"tool\" to edit your whole store in bulk. We have located all ATUM tools within the ATUM Settings - Tools menu.",
-		"load": "init",
-		"absolute": true
+		"load": "init"
 	},
 	{
 		"title": "Stock Central Views",
 		"element": ".subsubsub .all_stock a",
 		"intro": "Our team designed filters by the Product Stock Status.<br/><br/>\"ALL\" - List of all products within the \"Controlled\" or \"Uncontrolled\" filter.<br/>\"In Stock\" - \"Out of Stock\" - List of all products with at least some or no inventory.<br/>\"Backorder\" - List of products you marked as \"Allow Backorders\" in Woocommerce.",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Restock Status View",
 		"element": "#restock_status",
 		"intro": "\"Restock Status\" - a feature of ATUM that helps you to know when is the ideal time to place a purchase order. Please, read in detail about how this works here.<br/><a href=\"https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula\" target=\"_blank\">https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula</a>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Unmanaged by WC View",
 		"element": ".subsubsub .unmanaged a",
 		"intro": "\"Unmanaged by WC\"<br/>Feature of Woocommerce that gives you an option to either control the stock of your products at the product level (<a href=\"https://woocommerce.com/document/managing-products/\" target=\"_blank\">https://woocommerce.com/document/managing-products/</a>). If you do, the inventory of your product could be monitored, decreased or increased, either manually or automatically via sales, for example. Our team has added two filters to Stock Central, called \"Controlled\" and the other \"Uncontrolled.\"<br/>If you want to activate in bulk the Woocommerce option to control all your products at the product level, please, navigate to the ATUM Menu - Settings - Tools and use the feature we have built for you. Do not forget to take a backup of your store before you do so to avoid any issues and to allow you to revert if something fails.",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Search feature",
@@ -46,72 +45,72 @@
 		"title": "Bulk Actions & Filters",
 		"element": ".top #filters_container .bulkactions",
 		"intro": "Apply bulk actions or filters to the Stock Central products.<br/><br/><ol><li>BULK ACTIONS: Using the checkbox located at the start of each row select the products you wish and apply the following bulk actions:<ul><li>Enable WC's Manage Stock.</li><li>Disable WC's Manage Stock.</li><li>Disable ATUM's Stock Control: This action will move the selected products to the Uncontrolled List.</li><li>Add to Purchase Order.</li></ul></li><li>FILTERS: This feature allows you to filter the Stock Central products. You can apply several filters at the same time. Available filters:<ul><li>PRODUCT CATEGORY.</li><li>PRODUCT TYPE.</li><li>SUPPLIER.</li><li>EXTRA FILTERS: You can filter the Stock Central products by other criteria such as: Inbound Stock, Stock on Hold, Reserved Stock, Backorders, Sold Today, Customer Returns, Warehouse Damages, Lost in Post, Best/Worst Sellers and BOM Related.</li></ul></li></ol>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Image column",
 		"element": "thead th#thumb .col-product-details",
 		"intro": "<p>Product small image preview.</p>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Product Type column",
 		"element": "thead th#calc_type .col-product-details",
 		"intro": "<p>This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.</p>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Location column",
 		"element": "thead th#calc_location .col-product-details",
 		"intro": "<p>Shows the product's location hierarchy. The grey icon means that there are no locations set and the blue icon means that there. Click the icon to view and edit the locations hierarchy in a popup.</p>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Stock Indicator column",
 		"element": "thead th#calc_stock_indicator .col-stock-selling-manager",
 		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\" title=\"\" alt=\"\"></p>",
-		"load": "lazzy"
+		"load": "lazy"
 	},
 	{
 		"title": "Editable Cells (blue)",
 		"element": ".atum-list-table td .set-meta",
 		"intro": "<p>Blue items on the Stock Central table means that the item is editable. When you click on the value, a popup will open to edit the value. To save the changes after setting the new values you have to click the 'Save' button located at the top of the screen.</p>",
-		"load": "lazzy",
+		"load": "lazy",
 		"first": true
 	},
 	{
 		"title": "Double values",
 		"element": ".atum-list-table td .compounded",
 		"intro": "<p>When a product is made up of others (such as variable products, bundles, etc.), a pair of values are displayed, separated by a ‘|’ symbol. The value on the left is related to the product itself. The value on the right side is the compounded stock from its components.</p>",
-		"load": "lazzy",
+		"load": "lazy",
 		"first": true
 	},
 	{
 		"title": "Totals",
 		"element": "tr.totals th.stock-counters span",
 		"intro": "Totals values are the sum of all the visible values (current page) in each column.",
-		"load": "lazzy",
+		"load": "lazy",
 		"first": true
 	},
 	{
 		"title": "Stock Central Screen Options",
-		"element": "#screen-options-link-wrap #show-settings-link",
+		"element": "#screen-options-link-wrap",
 		"intro": "ATUM Stock Central allows you to hide columns you do need. This feature is handy as it will remove unnecessary clatter and improve your workflow.<br/>Click the \"Screen Options\" menu, and select/deselect the relevant column names.<br/><br/>You can as well amend the number of products you see per page. If your shop is large with a long history, it may be helpful for you to decrease the number of products to reduce the processed data.",
 		"load": "init",
-		"absolute": true
+		"markerPosition": "bottom-left"
 	},
 	{
 		"title": "Help Tab",
-		"element": "#contextual-help-link-wrap #contextual-help-link",
+		"element": "#contextual-help-link-wrap",
 		"intro": "<p>To access the help content, click <b>Help</b> at the top of the screen.<br/>The help content contains the following sections:</p><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li>Visit our Website for More: <a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">https://stockmanagementlabs.com/</a></li><li>Read the Docs: <a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">https://stockmanagementlabs.crunch.help/en/</a></li><li>Watch our Videos: A link to our Youtube channel</li><li>Get Support: <a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">https://forum.stockmanagementlabs.com/</a></li></ul>",
 		"load": "init",
-		"absolute": true
+		"markerPosition": "bottom-left"
 	},
 	{
 		"title": "Export Data",
-		"element": "#atum-export-link-wrap #show-export-settings-link",
+		"element": "#atum-export-link-wrap",
 		"intro": "<p>The Export Data feature allows you to <strong>export selected data</strong> from Stock Central as a pre-formatted .pdf file.</p><p>To export data as a .pdf:</p><ul><li>From Stock Central, click<span>&nbsp;</span><strong>Export Data</strong>.</li><li>In the Columns section, <strong>enable the columns</strong> you want to be included in the export.</li><li>Use the <strong>Product Type</strong> menu if you want to only include a specific product type.</li><li>Use the<span>&nbsp;</span><strong>Product Category</strong><span>&nbsp;</span>menu if you want to only include a specific product category.</li><li>Enter the maximum width of the product names displayed in the report in the <strong>Title Max Length field</strong>.</li>\n</ul>",
 		"load": "init",
-		"absolute": true
+		"markerPosition": "bottom-left"
 	}
 ]

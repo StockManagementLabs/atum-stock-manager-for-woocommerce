@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium, josecmrebel
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.2
+Tested up to: 6.2.2
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.5.1
-Stable tag: 1.9.29.1
+WC tested up to: 7.7.0
+Stable tag: 1.9.30
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,50 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.30`
+
+*2023-05-25*
+
+**Features**
+
+* Added barcode_type prop support to products.
+* Added new action after the barcode field.
+* Allow clearing the supplier for all the variations at once through the utility.
+* Added barcode support to product tags.
+* Added new filter to the is_module_active function.
+* Added tooltip to addons versions badges.
+* Show notices on plugins rows within the plugins list table.
+* Added filters before loading AtumBarcodes hooks.
+* Allow more notice types on the addNotice JS utility.
+* Added new SearchOrdersByColumn component.
+* Added searchOrders script.
+* Added new component for ATUM help guides.
+
+**Changes**
+
+* Read the atum product data column names for the WPML product duplication.
+* Refactoring.
+* Do not require the "default" option on multi_checkbox settings fields.
+* Exclude columns from product data when inserting WPML translation in database.
+* Ensure product data columns exist before insert WPML translation.
+* Include translations when calculating the inbound stock.
+
+**Fixes**
+
+* Added missing fields to queries when duplicating product for translation.
+* Fixed atum fields sizing on mobiles.
+* Fixed row actions styling on ATUM list tables.
+* Fixed date format on the add-ons page.
+* CSS fixes for the addons page layout.
+* Prevent the check order prices button from loading on single order page when HPOS is enabled.
+* Fixed dragscroll clicks working when no link is directly clicked.
+* Fixed order id retrieval when HPOS is enabled.
+* Fixed searchInColumn field tooltip not updating when changing column.
+* Fixed settings page CSS.
+* Fixed unsupported get_product_translations_ids integer.
 
 ---
 

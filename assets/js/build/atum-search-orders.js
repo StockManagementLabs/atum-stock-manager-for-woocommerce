@@ -552,6 +552,31 @@ var Utils = {
             preCompoundTaxes += currentTax;
         });
         return taxes.reduce(function (a, b) { return a + b; }, 0);
+    },
+    pseudoClick: function (evt, parentElem, pseudoElement) {
+        if (pseudoElement === void 0) { pseudoElement = 'both'; }
+        var beforeClicked = false, afterClicked = false;
+        var parentLeft = parseInt(parentElem.getBoundingClientRect().left.toString(), 10), parentTop = parseInt(parentElem.getBoundingClientRect().top.toString(), 10);
+        var mouseX = evt.clientX, mouseY = evt.clientY;
+        if (['before', 'both'].includes(pseudoElement)) {
+            var before = window.getComputedStyle(parentElem, ':before'), beforeStart = parentLeft + (parseInt(before.getPropertyValue('left'), 10)), beforeEnd = beforeStart + parseInt(before.width, 10), beforeYStart = parentTop + (parseInt(before.getPropertyValue('top'), 10)), beforeYEnd = beforeYStart + parseInt(before.height, 10);
+            beforeClicked = mouseX >= beforeStart && mouseX <= beforeEnd && mouseY >= beforeYStart && mouseY <= beforeYEnd;
+        }
+        if (['after', 'both'].includes(pseudoElement)) {
+            var after = window.getComputedStyle(parentElem, ':after'), afterStart = parentLeft + (parseInt(after.getPropertyValue('left'), 10)), afterEnd = afterStart + parseInt(after.width, 10), afterYStart = parentTop + (parseInt(after.getPropertyValue('top'), 10)), afterYEnd = afterYStart + parseInt(after.height, 10);
+            afterClicked = mouseX >= afterStart && mouseX <= afterEnd && mouseY >= afterYStart && mouseY <= afterYEnd;
+        }
+        switch (pseudoElement) {
+            case 'after':
+                return afterClicked;
+            case 'before':
+                return beforeClicked;
+            default:
+                return {
+                    before: beforeClicked,
+                    after: afterClicked,
+                };
+        }
     }
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);

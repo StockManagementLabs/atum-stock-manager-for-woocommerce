@@ -14,9 +14,8 @@ namespace Atum\StockCentral;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Components\AtumHelpGuide;
-use Atum\Components\AtumHelpPointers;
+use Atum\Components\AtumListTables\AtumListPage;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Settings\Settings;
@@ -61,12 +60,6 @@ class StockCentral extends AtumListPage {
 			// Add the Stock Central settings.
 			add_filter( 'atum/settings/tabs', array( $this, 'add_settings_tab' ) );
 			add_filter( 'atum/settings/defaults', array( $this, 'add_settings_defaults' ) );
-
-			// Register the help pointers.
-			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_pointers' ) );
-
-			// Setup help guides.
-			add_action( 'admin_enqueue_scripts', array( $this, 'setup_help_guides' ) );
 
 			$this->init_hooks();
 
@@ -337,81 +330,6 @@ class StockCentral extends AtumListPage {
 
 		return $defaults;
 
-	}
-
-	/**
-	 * Setup help pointers for some Atum screens
-	 *
-	 * @since 1.4.10
-	 */
-	public function setup_help_pointers() {
-
-		$screen_id = Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG;
-
-		$pointers = array(
-			array(
-				'id'             => self::UI_SLUG . '-screen-tab',  // Unique id for this pointer.
-				'screen'         => $screen_id,                     // This is the page hook we want our pointer to show on.
-				'target'         => '#screen-options-link-wrap',    // The css selector for the pointer to be tied to, best to use ID's.
-				'next'           => '#contextual-help-link-wrap',   // The help tip that will be displayed next.
-				'title'          => __( 'ATUM Stock Central Screen Options', ATUM_TEXT_DOMAIN ),
-				'content'        => __( "Click the 'Screen Options' tab to add/hide/show columns within the Stock Central view.", ATUM_TEXT_DOMAIN ),
-				'position'       => array(
-					'edge'  => 'top',                               // Top, bottom, left, right.
-					'align' => 'left',                              // Top, bottom, left, right, middle.
-				),
-				'arrow_position' => array(
-					'right' => '32px',
-				),
-			),
-			array(
-				'id'             => self::UI_SLUG . '-help-tab',
-				'screen'         => $screen_id,
-				'target'         => '#contextual-help-link-wrap',
-				'title'          => __( 'ATUM Quick Help', ATUM_TEXT_DOMAIN ),
-				'content'        => __( "Click the 'Help' tab to learn more about the ATUM's Stock Central.", ATUM_TEXT_DOMAIN ),
-				'position'       => array(
-					'edge'  => 'top',
-					'align' => 'right',
-				),
-				'arrow_position' => array(
-					'left' => '84%',
-				),
-			),
-		);
-
-		// Instantiate the class and pass our pointers array to the constructor.
-		/* @deprecated Use the AtumHelpGuide instead */
-		new AtumHelpPointers( $pointers );
-
-	}
-
-	/**
-	 * Load scripts for Stock Central help guides.
-	 *
-	 * @since 1.9.19
-	 */
-	public function setup_help_guides( $hook ) {
-
-		/* TODO: Temporary disabled. Do not display AKB at SC yet.
-		$screen_id = Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG;
-
-		if ( $screen_id === $hook ) {
-
-			wp_register_script( 'atum-stock-central-knowledge-base', ATUM_URL . 'assets/js/build/atum-stock-central-kb.js', [], ATUM_VERSION, TRUE );
-
-			$auto_guide_file   = ATUM_PATH . 'help-guides/stock-central.json';
-			$akb_guides        = json_decode( file_get_contents( $auto_guide_file ) );
-			$vars              = [];
-			$vars              = array_merge( $vars, AtumHelpGuide::get_help_guide_js_vars( $auto_guide_file ) );
-			$vars['AKBGuides'] = $akb_guides;
-
-			wp_localize_script( 'atum-stock-central-knowledge-base', 'atumStockCentralKB', $vars );
-
-			wp_enqueue_script( 'atum-stock-central-knowledge-base' );
-
-		}
-		*/
 	}
 
 	

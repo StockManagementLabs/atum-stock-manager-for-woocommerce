@@ -56,7 +56,6 @@ return array(
     'Atum\\Components\\AtumEmailNotifications' => $baseDir . '/classes/Components/AtumEmailNotifications.php',
     'Atum\\Components\\AtumException' => $baseDir . '/classes/Components/AtumException.php',
     'Atum\\Components\\AtumHelpGuide' => $baseDir . '/classes/Components/AtumHelpGuide.php',
-    'Atum\\Components\\AtumHelpPointers' => $baseDir . '/classes/Components/AtumHelpPointers.php',
     'Atum\\Components\\AtumListTables\\AtumListPage' => $baseDir . '/classes/Components/AtumListTables/AtumListPage.php',
     'Atum\\Components\\AtumListTables\\AtumListTable' => $baseDir . '/classes/Components/AtumListTables/AtumListTable.php',
     'Atum\\Components\\AtumListTables\\AtumUncontrolledListTable' => $baseDir . '/classes/Components/AtumListTables/AtumUncontrolledListTable.php',

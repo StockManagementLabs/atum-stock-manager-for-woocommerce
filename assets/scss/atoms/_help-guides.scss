@@ -227,11 +227,11 @@ tr.introjs-showElement {
 
 .introjs-tooltip-title {
 	font-size: 18px;
+	line-height: 1.3;
 	margin: 0;
 	padding: 0;
 	font-weight: 500;
-	float: left;
-	line-height: 32px;
+	text-align: left;
 }
 
 .introjs-tooltip-header {
@@ -470,106 +470,6 @@ tr.introjs-showElement {
 	opacity: 0;
 }
 
-// ATUM button to show a specific intro guide.
-.show-intro-guide {
-	cursor: help;
-	border-radius: 50%;
-	border: 1px solid $gray-600;
-	color: $gray-600;
-	padding: 3px;
-	font-weight: normal;
-	font-size: 18px;
-	width: 18px;
-	height: 18px;
-	position: relative;
-	display: inline-flex;
-	
-	&:not(.loading-guide) {
-		&:hover {
-			background-color: $primary;
-			color: $white;
-			border-color: $primary;
-		}
-	}
-	
-	&.loading-guide {
-		pointer-events: none;
-		
-		&:before {
-			content: '';
-			@include loader(14px, $primary);
-		}
-	}
-	
-	&.atum-kb, &.atum-kb:active, &.atum-kb:hover {
-		background-color: $red;
-		text-align: center;
-		position: absolute !important;
-		overflow: hidden;
-		border: 1px solid $white;
-		box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-		width: 6px !important;
-		height: 6px !important;
-		right: -5px !important;
-		top: -6px !important;
-		left: unset !important;
-		
-		&.loading-guide {
-			&:before {
-				font-size: 14px;
-				content: $atmi-hourglass;
-				left: -2px;
-				top: -4px;
-			}
-		}
-	}
-	
-	&.atum-kb:before, &.atum-kb:active:before, &.atum-kb:hover:before {
-		color: $white;
-		border-radius: 50%;
-		height: 10px;
-		width: 10px;
-		font-size: 8px;
-		display: inline-block;
-		position: absolute !important;
-		right: 0.6px !important;
-		left: unset !important;
-		top: 2px !important;
-	}
-}
-
-.akb-buttons-wrapper {
-	float: right;
-	margin-left: auto;
-	order: 3;
-	
-	button {
-		margin-left: 5px;
-		
-		&.display-akb-button:not(.btn-success) {
-			border: solid 1px $gray-600;
-		}
-		
-		&.show-intro-guide.help-guide-button {
-			border-radius: 0.2rem;
-			width: auto;
-			height: auto;
-			color: $white;
-			border: solid 1px $primary;
-			padding: 4px;
-		}
-	}
-}
-
-.akb-wrapper {
-	position: relative;
-	display: inherit;
-}
-
-td .akb-wrapper {
-	display: inline;
-}
-
 .introjs-tooltip {
 	.introjs-tooltiptext {
 		
@@ -580,8 +480,155 @@ td .akb-wrapper {
 		ul {
 			list-style: outside;
 		}
+		
 	}
+	
 	.introjs-bullets {
 		display: none;
+	}
+}
+
+// ATUM buttons to show a specific intro guide or the help markers.
+.help-guide-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-grow: 1;
+	gap: 5px;
+	margin-top: 7px;
+	
+	i {
+		border-radius: 5px;
+		padding: 5px;
+		transition: .2s ease-in-out;
+		cursor: help;
+		border-radius: 5px;
+		border: 1px solid $gray-600;
+		color: $gray-600;
+		background-color: $white;
+		font-weight: normal;
+		font-size: 18px;
+		display: inline-flex;
+		position: relative;
+		
+		&.show-intro-guide {
+			
+			&:not(.loading-guide) {
+				&:hover {
+					background-color: $primary;
+					color: $white;
+					border-color: $primary;
+				}
+			}
+			
+			&.loading-guide {
+				pointer-events: none;
+				
+				&:before {
+					color: transparent;
+				}
+				
+				&:after {
+					content: '';
+					@include loader(14px, $primary);
+				}
+			}
+			
+		}
+		
+		&.show-help-markers {
+			&.active, &:hover {
+				background-color: $success;
+				color: $white;
+				border-color: $success;
+			}
+		}
+		
+	}
+}
+
+.atum-help-marker {
+	position: relative;
+	display: inline-flex;
+	
+	&, &:hover, &:active {
+		
+		&:before {
+			display: none !important;
+			align-items: center !important;
+			justify-content: center !important;
+			content: $atmi-question;
+			@include atum-icon-font-family;
+			background-color: rgba($red, .8) !important;
+			border: 1px solid $white !important;
+			color: $white !important;
+			font-size: 9px !important;
+			font-weight: normal !important;
+			font-style: normal !important;
+			vertical-align: 5px !important;
+			text-align: center !important;
+			position: absolute !important;
+			overflow: hidden !important;
+			box-shadow: 0 2px 8px 0 rgba($black, 0.3) !important;
+			width: 16px !important;
+			height: 16px !important;
+			right: -8px !important;
+			top: -8px !important;
+			z-index: 99998 !important;
+			border-radius: 50px !important;
+			text-indent: unset !important;
+			cursor: help !important;
+			
+			body.atum-show-help-markers & {
+				display: inline-flex !important;
+			}
+		}
+		
+		&[data-marker-position="top-left"] {
+			&:before {
+				right: unset !important;
+				left: -8px !important;
+			}
+		}
+		
+		&[data-marker-position="bottom-right"] {
+			&:before {
+				top: unset !important;
+				bottom: -8px !important;
+			}
+		}
+		
+		&[data-marker-position="bottom-left"] {
+			&:before {
+				top: unset !important;
+				right: unset !important;
+				bottom: -8px !important;
+				left: -8px !important;
+			}
+		}
+		
+	}
+	
+	&:hover {
+		&:before {
+			background-color: $red !important;
+		}
+	}
+	
+	&.loading-guide {
+		&:before {
+			font-size: 14px;
+			content: $atmi-hourglass;
+			left: -2px;
+			top: -4px;
+		}
+	}
+}
+
+body.running-atum-help-guide {
+	.atum-help-marker {
+		&:before {
+			display: none !important;
+		}
 	}
 }

@@ -26,6 +26,7 @@ use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumEmailNotifications;
 use Atum\Components\AtumColors;
+use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumQueues;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
@@ -217,6 +218,11 @@ class Main {
 		register_taxonomy( Globals::PRODUCT_LOCATION_TAXONOMY, 'product', $args );
 
 		do_action( 'atum/after_init' );
+
+		/**
+		 * NOTE: Dependencies that require all the ATUM add-ons to be fully loaded must be placed here
+		 */
+		AtumHelpGuide::get_instance();
 
 	}
 	

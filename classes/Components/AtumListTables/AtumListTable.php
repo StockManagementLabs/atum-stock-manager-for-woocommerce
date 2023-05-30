@@ -16,12 +16,14 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
+use Atum\StockCentral\Lists\ListTable as StockCentralList;
 use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductTrait;
 
@@ -349,6 +351,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	public $allow_edit = TRUE;
 
 	/**
+	 * If the current List Table has a help guide, it will hold its name
+	 *
+	 * @var string
+	 */
+	protected $help_guide = '';
+
+	/**
 	 * Value for empty columns
 	 */
 	const EMPTY_COL = '&#45;';
@@ -539,13 +548,14 @@ abstract class AtumListTable extends \WP_List_Table {
 
 
 		// Supplier filtering.
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( $this->show_controlled ) {
 			echo Helpers::suppliers_dropdown( [
 				'selected' => isset( $_REQUEST['supplier'] ) ? esc_attr( $_REQUEST['supplier'] ) : '',
 				'enhanced' => 'yes' === Helpers::get_option( 'enhanced_suppliers_filter', 'no' ),
 			] );
 		}
+		// phpcs:enable
 
 		do_action( 'atum/list_table/after_nav_filters', $this );
 
@@ -3441,6 +3451,27 @@ abstract class AtumListTable extends \WP_List_Table {
 			$vars['firstEditKey']      = $this->first_edit_key;
 			$vars['important']         = __( 'Important!', ATUM_TEXT_DOMAIN );
 			$vars['preventLossNotice'] = __( "To prevent any loss of data, please, hit the blue 'Save Data' button at the top left after completing edits.", ATUM_TEXT_DOMAIN );
+		}
+
+		// Add the help guide vars if needed.
+		if ( $this->help_guide ) {
+
+			$vars                = array_merge( $vars, AtumHelpGuide::get_instance()->get_help_guide_js_vars( $this->help_guide ) );
+			$vars['hgMainGuide'] = $this->help_guide;
+
+			$atum_help_guide = AtumHelpGuide::get_instance();
+			$help_guides     = $atum_help_guide->get_guides_paths();
+
+			if ( array_key_exists( $this->help_guide, $help_guides ) ) {
+
+				$list_table_guide_file = $help_guides[ $this->help_guide ] . '.json';
+
+				if ( file_exists( $list_table_guide_file ) ) {
+					$vars['hgHelpMarkers'] = json_decode( file_get_contents( $list_table_guide_file ) );
+				}
+
+			}
+
 		}
 
 		$vars = apply_filters( 'atum/list_table/js_vars', $vars );
