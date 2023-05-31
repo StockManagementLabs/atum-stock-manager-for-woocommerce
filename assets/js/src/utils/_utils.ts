@@ -765,8 +765,27 @@ const Utils = {
 				};
 		}
 
-	}
+	},
 
+	/**
+	 * Check whether the passed element is visible in the viewport
+	 *
+	 * @param {HTMLElement} el
+	 *
+	 * @return {boolean}
+	 */
+	isElementInViewport( el: HTMLElement ) {
+
+		const rect: DOMRect = el.getBoundingClientRect();
+
+		return (
+			rect.top >= 0 &&
+			rect.left >= 0 &&
+			rect.bottom + 80 <= window.innerHeight && // add 80 to get the text right
+			rect.right <= window.innerWidth
+		);
+
+	},
 
 };
 

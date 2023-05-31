@@ -1559,7 +1559,14 @@ var Utils = {
                     after: afterClicked,
                 };
         }
-    }
+    },
+    isElementInViewport: function (el) {
+        var rect = el.getBoundingClientRect();
+        return (rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom + 80 <= window.innerHeight &&
+            rect.right <= window.innerWidth);
+    },
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 

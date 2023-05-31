@@ -653,14 +653,16 @@ var HelpGuide = (function () {
         if (this.step) {
             this.IntroJs._currentStepNumber = this.step;
         }
-        this.IntroJs.start();
-        this.IntroJs.onexit(function () {
+        this.IntroJs
+            .onexit(function () {
             $('body').removeClass('running-atum-help-guide');
             if (_this.isAuto && _this.settings.get('hgScreenId')) {
                 _this.saveClosedAutoGuide(_this.settings.get('hgScreenId'));
             }
             _this.wpHooks.doAction('atum_helpGuide_onExit', _this.guide);
-        });
+        })
+            .onchange(function (targetElem) { return _this.wpHooks.doAction('atum_helpGuide_onChange', _this.guide, targetElem); })
+            .start();
     };
     HelpGuide.prototype.getHelpGuideButtons = function (guide) {
         if (!guide) {
@@ -714,7 +716,7 @@ var HelpGuide = (function () {
         if (step.first) {
             $elem = $elem.first();
         }
-        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker\" \n\t\t\t\tdata-step=\"".concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\t\t\t  \n\t\t\t/>\n\t\t"));
+        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker\" \n\t\t\t\tdata-step=\"".concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\t\t  \n\t\t\t/>\n\t\t"));
         if ($elem.is('td,th,tr')) {
             $elem.wrapInner($helpMarker);
         }
@@ -4000,7 +4002,14 @@ var Utils = {
                     after: afterClicked,
                 };
         }
-    }
+    },
+    isElementInViewport: function (el) {
+        var rect = el.getBoundingClientRect();
+        return (rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom + 80 <= window.innerHeight &&
+            rect.right <= window.innerWidth);
+    },
 };
 /* harmony default export */ __webpack_exports__["default"] = (Utils);
 

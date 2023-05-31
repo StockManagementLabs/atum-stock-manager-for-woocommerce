@@ -41,6 +41,7 @@ interface IGuideStep {
 	elementSelector?: string;
 	load: 'init'|'lazy';
 	first?: boolean;
+	position?: 'auto|top|left|right|bottom|bottom-middle-aligned|bottom-right-aligned';
 	markerPosition?: 'top-right|bottom-right|bottom-left|top-left';
 }
 
@@ -290,20 +291,23 @@ export default class HelpGuide {
 			this.IntroJs._currentStepNumber = this.step;
 		}
 
-		this.IntroJs.start();
-
 		// @ts-ignore
-		this.IntroJs.onexit( () => {
+		this.IntroJs
 
-			$( 'body' ).removeClass( 'running-atum-help-guide' );
+			.onexit( () => {
 
-			if ( this.isAuto && this.settings.get( 'hgScreenId' ) ) {
-				this.saveClosedAutoGuide( this.settings.get( 'hgScreenId' ) );
-			}
+				$( 'body' ).removeClass( 'running-atum-help-guide' );
 
-			this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
+				if ( this.isAuto && this.settings.get( 'hgScreenId' ) ) {
+					this.saveClosedAutoGuide( this.settings.get( 'hgScreenId' ) );
+				}
 
-		} );
+				this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
+
+			} )
+			// Run a hook when the guide step changes, so we can adjust the UI externally if needed.
+			.onchange( ( targetElem: HTMLElement ) => this.wpHooks.doAction( 'atum_helpGuide_onChange', this.guide, targetElem ) )
+			.start();
 
 	}
 
@@ -423,7 +427,8 @@ export default class HelpGuide {
 		const $helpMarker: JQuery = $( `
 			<atum-help-marker class="atum-help-marker" 
 				data-step="${ index + 1  }"
-				data-marker-position="${ step.markerPosition || 'top-right' }"			  
+				data-marker-position="${ step.markerPosition || 'top-right' }"
+				data-position="${ step.position || 'auto' }"			  
 			/>
 		` );
 

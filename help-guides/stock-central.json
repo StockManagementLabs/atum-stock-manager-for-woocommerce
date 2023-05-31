@@ -7,38 +7,38 @@
 	},
 	{
 		"title": "Stock Central Views",
-		"element": ".subsubsub .all_stock a",
+		"element": "#stock_central_nav",
 		"intro": "Our team designed filters by the Product Stock Status.<br/><br/>\"ALL\" - List of all products within the \"Controlled\" or \"Uncontrolled\" filter.<br/>\"In Stock\" - \"Out of Stock\" - List of all products with at least some or no inventory.<br/>\"Backorder\" - List of products you marked as \"Allow Backorders\" in Woocommerce.",
 		"load": "lazy"
 	},
 	{
 		"title": "Restock Status View",
 		"element": "#restock_status",
-		"intro": "\"Restock Status\" - a feature of ATUM that helps you to know when is the ideal time to place a purchase order. Please, read in detail about how this works here.<br/><a href=\"https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula\" target=\"_blank\">https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula</a>",
+		"intro": "\"Restock Status\" - a feature of ATUM that helps you to know when is the ideal time to place a purchase order. Please, read in detail about how this works <a href=\"https://stockmanagementlabs.crunch.help/atum-core/restock-status-formula\" target=\"_blank\">here</a>.",
 		"load": "lazy"
 	},
 	{
 		"title": "Unmanaged by WC View",
 		"element": ".subsubsub .unmanaged a",
-		"intro": "\"Unmanaged by WC\"<br/>Feature of Woocommerce that gives you an option to either control the stock of your products at the product level (<a href=\"https://woocommerce.com/document/managing-products/\" target=\"_blank\">https://woocommerce.com/document/managing-products/</a>). If you do, the inventory of your product could be monitored, decreased or increased, either manually or automatically via sales, for example. Our team has added two filters to Stock Central, called \"Controlled\" and the other \"Uncontrolled.\"<br/>If you want to activate in bulk the Woocommerce option to control all your products at the product level, please, navigate to the ATUM Menu - Settings - Tools and use the feature we have built for you. Do not forget to take a backup of your store before you do so to avoid any issues and to allow you to revert if something fails.",
+		"intro": "\"Unmanaged by WC\"<br/>Feature of Woocommerce that gives you an option to either <a href=\"https://woocommerce.com/document/managing-products/\" target=\"_blank\">control the stock of your products at the product level</a>. If you do, the inventory of your product could be monitored, decreased or increased, either manually or automatically via sales, for example. Our team has added two filters to Stock Central, called \"Controlled\" and the other \"Uncontrolled.\"<br/>If you want to activate in bulk the Woocommerce option to control all your products at the product level, please, navigate to the ATUM Menu - Settings - Tools and use the feature we have built for you. Do not forget to take a backup of your store before you do so to avoid any issues and to allow you to revert if something fails.",
 		"load": "lazy"
 	},
 	{
 		"title": "Search feature",
 		"element": ".list-table-header .search-box .input-group",
-		"intro": "<p>You can use the search feature to <strong>search for any products</strong> within Stock Central.</p><p>To search for products:</p><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\" title=\"\" alt=\"\"></div>",
+		"intro": "<p>You can use the search feature to <strong>search for any products</strong> within Stock Central.</p><p>To search for products:</p><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\"></div>",
 		"load": "init"
 	},
 	{
 		"title": "Sticky Columns",
 		"element": ".list-table-header .sticky-columns-button",
-		"intro": "You can <strong>enable the sticky columns</strong> by clicking on the <em>Toggle Sticky Columns Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-15.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-17.jpg\" title=\"\" alt=\"\">",
+		"intro": "You can <strong>enable the sticky columns</strong> by clicking on the <em>Toggle Sticky Columns Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-15.jpg\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-17.jpg\">",
 		"load": "init"
 	},
 	{
 		"title": "Sticky Header",
 		"element": ".list-table-header .sticky-header-button",
-		"intro": "You can <strong>enable the sticky header</strong> by clicking on the <em>Toggle Sticky Header Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-14.jpg\" title=\"\" alt=\"\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-16.jpg\" title=\"\" alt=\"\">",
+		"intro": "You can <strong>enable the sticky header</strong> by clicking on the <em>Toggle Sticky Header Icon</em> at the top right of the table.<img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-14.jpg\"><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-scfeatures-16.jpg\">",
 		"load": "init"
 	},
 	{
@@ -68,7 +68,7 @@
 	{
 		"title": "Stock Indicator column",
 		"element": "thead th#calc_stock_indicator .col-stock-selling-manager",
-		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\" title=\"\" alt=\"\"></p>",
+		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\"></p>",
 		"load": "lazy"
 	},
 	{
@@ -102,9 +102,10 @@
 	{
 		"title": "Help Tab",
 		"element": "#contextual-help-link-wrap",
-		"intro": "<p>To access the help content, click <b>Help</b> at the top of the screen.<br/>The help content contains the following sections:</p><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li>Visit our Website for More: <a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">https://stockmanagementlabs.com/</a></li><li>Read the Docs: <a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">https://stockmanagementlabs.crunch.help/en/</a></li><li>Watch our Videos: A link to our Youtube channel</li><li>Get Support: <a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">https://forum.stockmanagementlabs.com/</a></li></ul>",
+		"intro": "<p>To access the help content, click <b>Help</b> at the top of the screen.<br/>The help content contains the following sections:</p><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li><a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">Visit our Website for more</a></li><li><a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">Read the Docs</a></li><li><a href=\"https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA\" target=\"_blank\">Watch our Videos</a></li><li><a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">Get Support</a></li></ul>",
 		"load": "init",
-		"markerPosition": "bottom-left"
+		"markerPosition": "bottom-left",
+		"position": "bottom"
 	},
 	{
 		"title": "Export Data",
