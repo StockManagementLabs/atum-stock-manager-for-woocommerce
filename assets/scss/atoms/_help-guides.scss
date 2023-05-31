@@ -547,88 +547,92 @@ tr.introjs-showElement {
 	}
 }
 
-.atum-help-marker {
-	position: relative;
-	display: inline-flex;
+body {
 	
-	&, &:hover, &:active {
+	&.atum-show-help-markers {
 		
-		&:before {
-			display: none !important;
-			align-items: center !important;
-			justify-content: center !important;
-			content: $atmi-question;
-			@include atum-icon-font-family;
-			background-color: rgba($red, .8) !important;
-			border: 1px solid $white !important;
-			color: $white !important;
-			font-size: 9px !important;
-			font-weight: normal !important;
-			font-style: normal !important;
-			vertical-align: 5px !important;
-			text-align: center !important;
-			position: absolute !important;
-			overflow: hidden !important;
-			box-shadow: 0 2px 8px 0 rgba($black, 0.3) !important;
-			width: 16px !important;
-			height: 16px !important;
-			right: -8px !important;
-			top: -8px !important;
-			z-index: 99998 !important;
-			border-radius: 50px !important;
-			text-indent: unset !important;
-			cursor: help !important;
+		.atum-help-marker {
+			position: relative;
+			display: inline-flex;
 			
-			body.atum-show-help-markers & {
-				display: inline-flex !important;
+			&, &:hover, &:active {
+				
+				&:before {
+					display: inline-flex !important;
+					align-items: center !important;
+					justify-content: center !important;
+					content: $atmi-question;
+					@include atum-icon-font-family;
+					background-color: rgba($red, .8) !important;
+					border: 1px solid $white !important;
+					color: $white !important;
+					font-size: 9px !important;
+					font-weight: normal !important;
+					font-style: normal !important;
+					vertical-align: 5px !important;
+					text-align: center !important;
+					position: absolute !important;
+					overflow: hidden !important;
+					box-shadow: 0 2px 8px 0 rgba($black, 0.3) !important;
+					width: 16px !important;
+					height: 16px !important;
+					right: -8px !important;
+					top: -8px !important;
+					z-index: 99998 !important;
+					border-radius: 50px !important;
+					text-indent: unset !important;
+					cursor: help !important;
+				}
+				
+				&[data-marker-position="top-left"] {
+					&:before {
+						right: unset !important;
+						left: -8px !important;
+					}
+				}
+				
+				&[data-marker-position="bottom-right"] {
+					&:before {
+						top: unset !important;
+						bottom: -8px !important;
+					}
+				}
+				
+				&[data-marker-position="bottom-left"] {
+					&:before {
+						top: unset !important;
+						right: unset !important;
+						bottom: -8px !important;
+						left: -8px !important;
+					}
+				}
+				
 			}
-		}
-		
-		&[data-marker-position="top-left"] {
-			&:before {
-				right: unset !important;
-				left: -8px !important;
+			
+			&:hover {
+				&:before {
+					background-color: $red !important;
+				}
 			}
-		}
-		
-		&[data-marker-position="bottom-right"] {
-			&:before {
-				top: unset !important;
-				bottom: -8px !important;
-			}
-		}
-		
-		&[data-marker-position="bottom-left"] {
-			&:before {
-				top: unset !important;
-				right: unset !important;
-				bottom: -8px !important;
-				left: -8px !important;
+			
+			&.loading-guide {
+				&:before {
+					font-size: 14px;
+					content: $atmi-hourglass;
+					left: -2px;
+					top: -4px;
+				}
 			}
 		}
 		
 	}
 	
-	&:hover {
-		&:before {
-			background-color: $red !important;
+	&.running-atum-help-guide {
+		.atum-help-marker {
+			&:before {
+				display: none !important;
+			}
 		}
 	}
 	
-	&.loading-guide {
-		&:before {
-			font-size: 14px;
-			content: $atmi-hourglass;
-			left: -2px;
-			top: -4px;
-		}
-	}
-}
-
-body.running-atum-help-guide {
-	.atum-help-marker {
-		&:before {
-			display: none !important;
-		}
-	}
 }

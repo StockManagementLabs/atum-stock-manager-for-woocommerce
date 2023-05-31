@@ -3704,14 +3704,16 @@ tr.introjs-showElement > th {
   border-color: #69C61D;
 }
 
-.atum-help-marker {
+body.atum-show-help-markers .atum-help-marker {
   position: relative;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-.atum-help-marker:before, .atum-help-marker:hover:before, .atum-help-marker:active:before {
-  display: none !important;
+body.atum-show-help-markers .atum-help-marker:before, body.atum-show-help-markers .atum-help-marker:hover:before, body.atum-show-help-markers .atum-help-marker:active:before {
+  display: -webkit-inline-box !important;
+  display: -ms-inline-flexbox !important;
+  display: inline-flex !important;
   -webkit-box-align: center !important;
       -ms-flex-align: center !important;
           align-items: center !important;
@@ -3743,29 +3745,24 @@ tr.introjs-showElement > th {
   text-indent: unset !important;
   cursor: help !important;
 }
-body.atum-show-help-markers .atum-help-marker:before, body.atum-show-help-markers .atum-help-marker:hover:before, body.atum-show-help-markers .atum-help-marker:active:before {
-  display: -webkit-inline-box !important;
-  display: -ms-inline-flexbox !important;
-  display: inline-flex !important;
-}
-.atum-help-marker[data-marker-position=top-left]:before, .atum-help-marker:hover[data-marker-position=top-left]:before, .atum-help-marker:active[data-marker-position=top-left]:before {
+body.atum-show-help-markers .atum-help-marker[data-marker-position=top-left]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=top-left]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=top-left]:before {
   right: unset !important;
   left: -8px !important;
 }
-.atum-help-marker[data-marker-position=bottom-right]:before, .atum-help-marker:hover[data-marker-position=bottom-right]:before, .atum-help-marker:active[data-marker-position=bottom-right]:before {
+body.atum-show-help-markers .atum-help-marker[data-marker-position=bottom-right]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=bottom-right]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=bottom-right]:before {
   top: unset !important;
   bottom: -8px !important;
 }
-.atum-help-marker[data-marker-position=bottom-left]:before, .atum-help-marker:hover[data-marker-position=bottom-left]:before, .atum-help-marker:active[data-marker-position=bottom-left]:before {
+body.atum-show-help-markers .atum-help-marker[data-marker-position=bottom-left]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=bottom-left]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=bottom-left]:before {
   top: unset !important;
   right: unset !important;
   bottom: -8px !important;
   left: -8px !important;
 }
-.atum-help-marker:hover:before {
+body.atum-show-help-markers .atum-help-marker:hover:before {
   background-color: #ff4848 !important;
 }
-.atum-help-marker.loading-guide:before {
+body.atum-show-help-markers .atum-help-marker.loading-guide:before {
   font-size: 14px;
   content: "\e961";
   left: -2px;
