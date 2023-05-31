@@ -142,11 +142,12 @@ class AtumHelpGuide {
 	 *
 	 * @since 1.9.11
 	 *
-	 * @param string $auto_guide Key for the auto-guide (if any).
+	 * @param string $auto_guide Optional. Key for the auto-guide (if any).
+	 * @param string $main_guide Optional. Key for the main guide (used for help markers and the show intro buttons).
 	 *
 	 * @return array
 	 */
-	public function get_help_guide_js_vars( $auto_guide = '' ) {
+	public function get_help_guide_js_vars( $auto_guide = '', $main_guide = '' ) {
 
 		$screen = get_current_screen();
 		$vars   = array(
@@ -175,6 +176,12 @@ class AtumHelpGuide {
 				$vars['hgAutoGuide'] = json_decode( file_get_contents( $this->guides_paths[ $auto_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			}
 
+		}
+
+		// Add the help markers and main guide vars (if requested).
+		if ( $main_guide && array_key_exists( $main_guide, $this->guides_paths ) && file_exists( $this->guides_paths[ $main_guide ] . '.json' ) ) {
+			$vars['hgMainGuide']   = $main_guide;
+			$vars['hgHelpMarkers'] = json_decode( file_get_contents( $this->guides_paths[ $main_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		}
 
 		return $vars;

@@ -510,9 +510,7 @@ var HelpGuide = (function () {
         this.isAuto = false;
         this.guide = null;
         this.markersEnabled = false;
-        this.$markersWrapper = $('<div class="atum-help-markers" />');
         this.wpHooks = window['wp']['hooks'];
-        this.$markersWrapper.appendTo($('body'));
         var autoGuide = this.settings.get('hgAutoGuide');
         if (autoGuide && Array.isArray(autoGuide) && autoGuide.length) {
             this.guideSteps = autoGuide;
@@ -708,6 +706,9 @@ var HelpGuide = (function () {
         }
     };
     HelpGuide.prototype.prepareHelpMarker = function (step, index) {
+        if (!step.element && !step.elementSelector) {
+            return;
+        }
         var $elem = $(step.element || step.elementSelector);
         if (!$elem.length) {
             console.warn('Guide element not found', $elem);

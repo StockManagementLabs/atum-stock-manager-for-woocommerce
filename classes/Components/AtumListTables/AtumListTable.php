@@ -3455,23 +3455,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		// Add the help guide vars if needed.
 		if ( $this->help_guide ) {
-
-			$vars                = array_merge( $vars, AtumHelpGuide::get_instance()->get_help_guide_js_vars( $this->help_guide ) );
-			$vars['hgMainGuide'] = $this->help_guide;
-
-			$atum_help_guide = AtumHelpGuide::get_instance();
-			$help_guides     = $atum_help_guide->get_guides_paths();
-
-			if ( array_key_exists( $this->help_guide, $help_guides ) ) {
-
-				$list_table_guide_file = $help_guides[ $this->help_guide ] . '.json';
-
-				if ( file_exists( $list_table_guide_file ) ) {
-					$vars['hgHelpMarkers'] = json_decode( file_get_contents( $list_table_guide_file ) );
-				}
-
-			}
-
+			$vars = array_merge( $vars, AtumHelpGuide::get_instance()->get_help_guide_js_vars( $this->help_guide, $this->help_guide ) );
 		}
 
 		$vars = apply_filters( 'atum/list_table/js_vars', $vars );

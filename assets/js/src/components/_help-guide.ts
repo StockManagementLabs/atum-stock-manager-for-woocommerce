@@ -57,15 +57,11 @@ export default class HelpGuide {
 	isAuto: boolean = false;
 	guide: string = null;
 	markersEnabled: boolean = false;
-	$markersWrapper: JQuery = $( '<div class="atum-help-markers" />' );
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 
 	constructor(
 		private settings: Settings
 	) {
-
-		// Add the help markers wrapper to the DOM.
-		this.$markersWrapper.appendTo( $( 'body' ) );
 
 		// Check if there is any auto-guide within the passed settings.
 		const autoGuide: IGuideStep[] = <IGuideStep[]>this.settings.get( 'hgAutoGuide' );
@@ -410,6 +406,10 @@ export default class HelpGuide {
 	 * @param {number} index
 	 */
 	prepareHelpMarker( step: IGuideStep, index: number ) {
+
+		if ( ! step.element && ! step.elementSelector ) {
+			return;
+		}
 
 		let $elem: JQuery = $( step.element || step.elementSelector );
 
