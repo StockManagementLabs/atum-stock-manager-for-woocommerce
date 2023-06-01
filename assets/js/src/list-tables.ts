@@ -87,13 +87,11 @@ jQuery( ( $: JQueryStatic ) => {
 	new LocationsTree( settings, globals, tooltip );
 	new RowActions( settings, globals );
 
+	// Add the list table help guide (if available).
 	if ( settings.get( 'hgMainGuide' ) ) {
-
-		// Add the PO general help guide button to the PO.
 		const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
 		$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
 		tooltip.addTooltips( $tableTitle );
-
 	}
 	
 });

@@ -40,7 +40,7 @@ class AtumHelpGuide {
 	private function __construct() {
 
 		$this->guides_paths = apply_filters( 'atum/help_guides/guides_paths', array(
-			'atum_stock_central' => ATUM_PATH . 'help-guides/stock-central',
+			//'atum_stock_central' => ATUM_PATH . 'help-guides/stock-central', // NOTE: DISABLED UNTIL COMPLETE.
 		) );
 
 	}
@@ -151,7 +151,6 @@ class AtumHelpGuide {
 
 		$screen = get_current_screen();
 		$vars   = array(
-			'hgError'           => __( 'Error!', ATUM_TEXT_DOMAIN ),
 			'hgIntroJsOptions'  => array(
 				'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
 				'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
@@ -161,7 +160,6 @@ class AtumHelpGuide {
 				'scrollToElement'    => TRUE,
 			),
 			'hgNonce'           => wp_create_nonce( 'help-guide-nonce' ),
-			'hgOk'              => __( 'OK', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpGuide'   => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpMarkers' => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
 			'hgScreenId'        => $screen ? $screen->id : '',

@@ -20,6 +20,7 @@ defined( 'ABSPATH' ) || die;
  * use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
  */
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Globals;
@@ -57,6 +58,13 @@ abstract class AtumOrderPostType {
 	 * @var string
 	 */
 	protected $search_label = 'atum_order';
+
+	/**
+	 * The help guide for the list table page
+	 *
+	 * @var string
+	 */
+	protected $help_guide = '';
 	
 	/**
 	 * Status that means an ATUM Order is finished
@@ -1019,12 +1027,18 @@ abstract class AtumOrderPostType {
 				wp_register_style( 'atum-orders-list', ATUM_URL . 'assets/css/atum-orders-list.css', $css_dependencies, ATUM_VERSION );
 				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', $js_dependencies, ATUM_VERSION, TRUE );
 
-				wp_localize_script( 'atum-orders-list', 'atumPostTypeListVars', array(
+				$vars = array(
 					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
 					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
-				) );
+				);
+
+				if ( $this->help_guide ) {
+					$vars = array_merge( $vars, AtumHelpGuide::get_instance()->get_help_guide_js_vars( $this->help_guide, $this->help_guide ) );
+				}
+
+				wp_localize_script( 'atum-orders-list', 'atumPostTypeListVars', $vars );
 
 				wp_enqueue_style( 'atum-orders-list' );
 				wp_enqueue_script( 'atum-orders-list' );

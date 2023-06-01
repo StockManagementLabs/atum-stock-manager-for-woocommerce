@@ -23,6 +23,7 @@ import DateTimePicker from "./components/_date-time-picker";
 import DragScroll from "./components/list-table/_drag-scroll";
 import EnhancedSelect from './components/_enhanced-select';
 import Globals from './components/list-table/_globals';
+import HelpGuide from './components/_help-guide';
 import TableCellPopovers from './components/_table-cell-popovers';
 import PostTypeList from './components/list-table/_post-type-list';
 import ScrollBar from './components/list-table/_scroll-bar';
@@ -48,5 +49,13 @@ jQuery( ( $: JQueryStatic ) => {
 	new PostTypeList( settings, globals, enhancedSelect );
 	new DragScroll( globals, tooltip, popover );
 	new ScrollBar( globals );
+
+	// Add the list table help guide (if available).
+	if ( settings.get( 'hgMainGuide' ) ) {
+		const helpGuide = new HelpGuide( settings );
+		const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
+		$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
+		tooltip.addTooltips( $tableTitle );
+	}
 
 } );

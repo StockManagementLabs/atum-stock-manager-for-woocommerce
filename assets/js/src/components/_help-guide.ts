@@ -4,7 +4,6 @@
 
 import introJs from 'intro.js/minified/intro.min';
 import Settings from '../config/_settings';
-import Swal from 'sweetalert2';
 import Utils from '../utils/_utils';
 import WPHooks from '../interfaces/wp.hooks';
 
@@ -201,6 +200,10 @@ export default class HelpGuide {
 	 */
 	getGuide( success: Function, $button: JQuery = null ) {
 
+		if ( ! this.guide ) {
+			return;
+		}
+
 		// If already cached, load it instead of retrieving it again via Ajax.
 		if ( this.cachedGuides.hasOwnProperty( this.guide ) ) {
 			this.setGuideSteps( this.cachedGuides[ this.guide ] );
@@ -223,13 +226,7 @@ export default class HelpGuide {
 					$button && $button.removeClass( 'loading-guide' );
 
 					if ( error ) {
-						Swal.fire( {
-							icon             : 'error',
-							title            : this.settings.get( 'hgError' ),
-							text             : error,
-							confirmButtonText: this.settings.get( 'hgOk' ),
-							showCloseButton  : true,
-						} );
+						Utils.addNotice( 'error', error, true );
 					}
 
 				} );

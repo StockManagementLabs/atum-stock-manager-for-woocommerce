@@ -493,10 +493,7 @@ var EnhancedSelect = (function () {
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var intro_js_minified_intro_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! intro.js/minified/intro.min */ "./node_modules/intro.js/minified/intro.min.js");
 /* harmony import */ var intro_js_minified_intro_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(intro_js_minified_intro_min__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
-
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 
 var HelpGuide = (function () {
@@ -568,7 +565,7 @@ var HelpGuide = (function () {
                 return;
             }
             var $elem = $(evt.currentTarget), elem = $elem.get(0);
-            if (!_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].pseudoClick(evt, elem, 'before')) {
+            if (!_utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].pseudoClick(evt, elem, 'before')) {
                 return;
             }
             _this.step = parseInt($elem.data('step') || '0');
@@ -584,8 +581,10 @@ var HelpGuide = (function () {
         });
     };
     HelpGuide.prototype.getGuide = function (success, $button) {
-        var _this = this;
         if ($button === void 0) { $button = null; }
+        if (!this.guide) {
+            return;
+        }
         if (this.cachedGuides.hasOwnProperty(this.guide)) {
             this.setGuideSteps(this.cachedGuides[this.guide]);
             success();
@@ -600,13 +599,7 @@ var HelpGuide = (function () {
                 .catch(function (error) {
                 $button && $button.removeClass('loading-guide');
                 if (error) {
-                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                        icon: 'error',
-                        title: _this.settings.get('hgError'),
-                        text: error,
-                        confirmButtonText: _this.settings.get('hgOk'),
-                        showCloseButton: true,
-                    });
+                    _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice('error', error, true);
                 }
             });
         }
@@ -1411,8 +1404,7 @@ var BulkActions = (function () {
             },
             success: function (response) {
                 if (typeof response === 'object') {
-                    var noticeType = response.success ? 'success' : 'error';
-                    _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice(noticeType, response.data);
+                    _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].addNotice(response.success ? 'success' : 'error', response.data);
                 }
                 _this.$bulkButton.prop('disabled', false);
                 if (response.success) {

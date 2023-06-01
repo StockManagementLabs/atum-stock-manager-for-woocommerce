@@ -147,8 +147,7 @@ export default class BulkActions {
 			success : ( response: any ) => {
 
 				if ( typeof response === 'object' ) {
-					const noticeType: string = response.success ? 'success' : 'error';
-					Utils.addNotice( noticeType, response.data );
+					Utils.addNotice( response.success ? 'success' : 'error', response.data );
 				}
 
 				this.$bulkButton.prop( 'disabled', false );
