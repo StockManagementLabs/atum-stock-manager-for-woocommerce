@@ -5,8 +5,8 @@
 import introJs from 'intro.js/minified/intro.min';
 import Settings from '../config/_settings';
 import Swal from 'sweetalert2';
-import WPHooks from '../interfaces/wp.hooks';
 import Utils from '../utils/_utils';
+import WPHooks from '../interfaces/wp.hooks';
 
 interface IIntroOptions {
 	steps: IGuideStep[];
@@ -50,10 +50,9 @@ export default class HelpGuide {
 	IntroJs: any = introJs();
 	introOptions: IIntroOptions;
 	guideSteps: IGuideStep[] = [];
-	helpMarkers: IGuideStep[] = [];
 	cachedGuides: { string?: IGuideStep[] } = {};
 
-	step: number = 0;
+	step: number = null;
 	isAuto: boolean = false;
 	guide: string = null;
 	markersEnabled: boolean = false;
@@ -66,19 +65,15 @@ export default class HelpGuide {
 		// Check if there is any auto-guide within the passed settings.
 		const autoGuide: IGuideStep[] = <IGuideStep[]>this.settings.get( 'hgAutoGuide' );
 		if ( autoGuide && Array.isArray( autoGuide ) && autoGuide.length ) {
+
 			this.guideSteps = autoGuide;
 			this.isAuto = true; // Prepare it to be dismissed permanently.
 
 			if ( this.settings.get( 'hgMainGuide' ) ) {
 				this.guide = this.settings.get( 'hgMainGuide' );
+				this.maybeCacheGuide();
 			}
-		}
 
-		// Check if there are help markers to add.
-		const hMarkers: IGuideStep[] = <IGuideStep[]>this.settings.get( 'hgHelpMarkers' );
-		if ( hMarkers && Array.isArray( hMarkers ) && hMarkers.length ) {
-			this.helpMarkers = hMarkers;
-			this.addHelpMarkers();
 		}
 
 		// Get the intro.js options from the localized var.
@@ -134,72 +129,33 @@ export default class HelpGuide {
 				const $button: JQuery = $( evt.currentTarget );
 				this.guide = $button.parent().data( 'guide' );
 
-				if ( ! this.guide ) {
-					return;
-				}
-
-				if ( $button.data( 'guide-step' ) ) {
-					this.step = parseInt( $button.data( 'guide-step' ) );
-				}
-
-				// First try to find out in the settings option (for quick or one-time guides).
-				if ( this.settings.get( this.guide ) && Array.isArray( this.settings.get( this.guide ) ) ) {
-
-					this.guideSteps = this.settings.get( this.guide );
-					this.isAuto = false;
+				this.getGuide( () => {
 
 					if ( this.prepareIntroOptions() ) {
 						this.runGuide();
 					}
 
-				}
-				// If already cached, load it instead of retrieving it again via Ajax.
-				else if ( this.cachedGuides.hasOwnProperty( this.guide ) ) {
-
-					if ( this.prepareIntroOptions() ) {
-						this.runGuide();
-					}
-
-				}
-				// Get the guide steps via Ajax.
-				else {
-
-					$button.addClass( 'loading-guide' );
-
-					this.loadGuideSteps()
-						.then( () => {
-
-							$button.removeClass( 'loading-guide' );
-							if ( this.prepareIntroOptions() ) {
-								this.runGuide();
-							}
-
-						} )
-						.catch( ( error: string ) => {
-
-							$button.removeClass( 'loading-guide' );
-
-							if ( error ) {
-								Swal.fire( {
-									icon             : 'error',
-									title            : this.settings.get( 'hgError' ),
-									text             : error,
-									confirmButtonText: this.settings.get( 'hgOk' ),
-									showCloseButton  : true,
-								} );
-							}
-
-						} );
-
-				}
+				}, $button );
 
 			} )
 
 			// Show the help markers when clicking the button.
 			.on( 'click', '.show-help-markers', ( evt: JQueryEventObject ) => {
+
+				const $button: JQuery             = $( evt.currentTarget ),
+				      $otherActiveButtons: JQuery = $( '.show-help-markers.active' ).not( $button );
+
+				if ( $otherActiveButtons.length ) {
+					$otherActiveButtons.removeClass( 'active' );
+					this.markersEnabled = false;
+					this.toggleHelpMarkers();
+				}
+
 				this.markersEnabled = ! this.markersEnabled;
-				$( evt.currentTarget ).toggleClass( 'active', this.markersEnabled );
-				this.toggleHelpMarkers();
+				this.guide = $button.parent().data( 'guide' );
+				this.getGuide( () => this.toggleHelpMarkers(), $button );
+				$button.toggleClass( 'active', this.markersEnabled );
+
 			} )
 
 			// Open a specific step when clicking a help marker.
@@ -220,15 +176,65 @@ export default class HelpGuide {
 				this.step = parseInt( $elem.data( 'step' ) || '0' );
 
 				if ( this.step ) {
-					this.guideSteps = this.settings.get( 'hgHelpMarkers' );
-					this.isAuto = false;
 
-					if ( this.prepareIntroOptions() ) {
-						this.runGuide();
-					}
+					this.isAuto = false;
+					this.getGuide( () => {
+
+						if ( this.prepareIntroOptions() ) {
+							this.runGuide();
+							this.step = null;
+						}
+
+					} );
+
 				}
 
 			} );
+
+	}
+
+	/**
+	 * Load the guide set to the "guide" prop.
+	 *
+	 * @param {Function} success
+	 * @param {JQuery}   $button
+	 */
+	getGuide( success: Function, $button: JQuery = null ) {
+
+		// If already cached, load it instead of retrieving it again via Ajax.
+		if ( this.cachedGuides.hasOwnProperty( this.guide ) ) {
+			this.setGuideSteps( this.cachedGuides[ this.guide ] );
+			success();
+		}
+		// Get the guide steps via Ajax.
+		else {
+
+			$button && $button.addClass( 'loading-guide' );
+
+			this.loadGuideSteps()
+				.then( () => {
+
+					$button && $button.removeClass( 'loading-guide' );
+					success();
+
+				} )
+				.catch( ( error: string ) => {
+
+					$button && $button.removeClass( 'loading-guide' );
+
+					if ( error ) {
+						Swal.fire( {
+							icon             : 'error',
+							title            : this.settings.get( 'hgError' ),
+							text             : error,
+							confirmButtonText: this.settings.get( 'hgOk' ),
+							showCloseButton  : true,
+						} );
+					}
+
+				} );
+
+		}
 
 	}
 
@@ -259,7 +265,7 @@ export default class HelpGuide {
 				success   : ( response: any ) => {
 
 					if ( response.success ) {
-						this.guideSteps	= response.data;
+						this.setGuideSteps( response.data );
 						this.isAuto = false;
 						resolve();
 					}
@@ -320,11 +326,9 @@ export default class HelpGuide {
 			return '';
 		}
 
-		const helpMarkersButton: string = ( Array.isArray( this.helpMarkers ) && this.helpMarkers.length > 0 ) ? `<i class="show-help-markers atum-icon atmi-flag atum-tooltip" title="${ this.settings.get( 'hgShowHelpMarkers' ) }"></i>` : '';
-
 		return `
 			<span class="help-guide-buttons" data-guide="${ guide }">
-				${ helpMarkersButton }
+				<i class="show-help-markers atum-icon atmi-flag atum-tooltip" title="${ this.settings.get( 'hgShowHelpMarkers' ) }"></i>
 				<i class="show-intro-guide atum-icon atmi-indent-increase atum-tooltip" title="${ this.settings.get( 'hgShowHelpGuide' ) }"></i>					
 			</span>
 		`;
@@ -337,7 +341,16 @@ export default class HelpGuide {
 	 * @param {IGuideStep[]} guideSteps
 	 */
 	setGuideSteps( guideSteps: IGuideStep[] ) {
+
 		this.guideSteps = guideSteps;
+
+		// Only add the help markers if weren't added yet.
+		if ( ! this.cachedGuides.hasOwnProperty( this.guide ) ) {
+			this.addHelpMarkers();
+		}
+
+		this.maybeCacheGuide();
+
 	}
 
 	/**
@@ -364,10 +377,10 @@ export default class HelpGuide {
 	 */
 	addHelpMarkers() {
 
-		if ( Array.isArray( this.helpMarkers ) && this.helpMarkers.length ) {
+		if ( Array.isArray( this.guideSteps ) && this.guideSteps.length ) {
 
 			// Get all the steps that must be initialized.
-			this.helpMarkers.forEach( ( step: IGuideStep, index: number ) => {
+			this.guideSteps.forEach( ( step: IGuideStep, index: number ) => {
 				if ( ! step.load || 'init' === step.load ) {
 					this.prepareHelpMarker( step, index );
 				}
@@ -385,9 +398,9 @@ export default class HelpGuide {
 	 */
 	addLazyHelpMarkers() {
 
-		if ( Array.isArray( this.helpMarkers ) && this.helpMarkers.length ) {
+		if ( Array.isArray( this.guideSteps ) && this.guideSteps.length ) {
 
-			this.helpMarkers.forEach( ( step: IGuideStep, index: number ) => {
+			this.guideSteps.forEach( ( step: IGuideStep, index: number ) => {
 				if ( 'lazy' === step.load ) {
 					this.prepareHelpMarker( step, index );
 				}
@@ -425,10 +438,11 @@ export default class HelpGuide {
 		// Using a "custom" HTML element to avoid CSS issues.
 		// The step number must be 1 or greater.
 		const $helpMarker: JQuery = $( `
-			<atum-help-marker class="atum-help-marker" 
+			<atum-help-marker class="atum-help-marker active" 
+				data-guide="${ this.guide }"
 				data-step="${ index + 1  }"
 				data-marker-position="${ step.markerPosition || 'top-right' }"
-				data-position="${ step.position || 'auto' }"			  
+				data-position="${ step.position || 'auto' }"			
 			/>
 		` );
 
@@ -451,7 +465,13 @@ export default class HelpGuide {
 	 * Toggle help markers visibility.
 	 */
 	toggleHelpMarkers() {
+
+		const $helpMarkers: JQuery = $( '.atum-help-marker' );
+
 		$( 'body' ).toggleClass( 'atum-show-help-markers', this.markersEnabled );
+		$helpMarkers.not( `[data-guide="${ this.guide }"]` ).removeClass( 'active' );
+		$helpMarkers.filter( `[data-guide="${ this.guide }"]` ).toggleClass( 'active', this.markersEnabled );
+
 	}
 
 	/**

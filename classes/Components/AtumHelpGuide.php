@@ -180,8 +180,7 @@ class AtumHelpGuide {
 
 		// Add the help markers and main guide vars (if requested).
 		if ( $main_guide && array_key_exists( $main_guide, $this->guides_paths ) && file_exists( $this->guides_paths[ $main_guide ] . '.json' ) ) {
-			$vars['hgMainGuide']   = $main_guide;
-			$vars['hgHelpMarkers'] = json_decode( file_get_contents( $this->guides_paths[ $main_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$vars['hgMainGuide'] = $main_guide;
 		}
 
 		return $vars;

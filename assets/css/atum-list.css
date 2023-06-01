@@ -3660,13 +3660,28 @@ tr.introjs-showElement > th {
   color: #fff;
   border-color: #00B8DB;
 }
-.help-guide-buttons i.show-intro-guide.loading-guide {
+.help-guide-buttons i.show-help-markers:not(.loading-guide) {
+  font-size: 14px;
+  padding: 7px;
+}
+.help-guide-buttons i.show-help-markers:not(.loading-guide).active, .help-guide-buttons i.show-help-markers:not(.loading-guide):hover {
+  color: #fff;
+}
+.help-guide-buttons i.show-help-markers:not(.loading-guide).active {
+  background-color: #69C61D;
+  border-color: #69C61D;
+}
+.help-guide-buttons i.show-help-markers:not(.loading-guide):hover {
+  background-color: rgba(105, 198, 29, 0.8);
+  border-color: rgba(105, 198, 29, 0.8);
+}
+.help-guide-buttons i.loading-guide {
   pointer-events: none;
 }
-.help-guide-buttons i.show-intro-guide.loading-guide:before {
+.help-guide-buttons i.loading-guide:before {
   color: transparent;
 }
-.help-guide-buttons i.show-intro-guide.loading-guide:after {
+.help-guide-buttons i.loading-guide:after {
   content: "";
   width: 14px;
   height: 14px;
@@ -3698,11 +3713,6 @@ tr.introjs-showElement > th {
             transform: rotate(360deg);
   }
 }
-.help-guide-buttons i.show-help-markers.active, .help-guide-buttons i.show-help-markers:hover {
-  background-color: #69C61D;
-  color: #fff;
-  border-color: #69C61D;
-}
 
 body.atum-show-help-markers .atum-help-marker {
   position: relative;
@@ -3710,7 +3720,7 @@ body.atum-show-help-markers .atum-help-marker {
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-body.atum-show-help-markers .atum-help-marker:before, body.atum-show-help-markers .atum-help-marker:hover:before, body.atum-show-help-markers .atum-help-marker:active:before {
+body.atum-show-help-markers .atum-help-marker.active:before, body.atum-show-help-markers .atum-help-marker.active:hover:before {
   display: -webkit-inline-box !important;
   display: -ms-inline-flexbox !important;
   display: inline-flex !important;
@@ -3745,30 +3755,23 @@ body.atum-show-help-markers .atum-help-marker:before, body.atum-show-help-marker
   text-indent: unset !important;
   cursor: help !important;
 }
-body.atum-show-help-markers .atum-help-marker[data-marker-position=top-left]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=top-left]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=top-left]:before {
+body.atum-show-help-markers .atum-help-marker.active[data-marker-position=top-left]:before, body.atum-show-help-markers .atum-help-marker.active:hover[data-marker-position=top-left]:before {
   right: unset !important;
   left: -8px !important;
 }
-body.atum-show-help-markers .atum-help-marker[data-marker-position=bottom-right]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=bottom-right]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=bottom-right]:before {
+body.atum-show-help-markers .atum-help-marker.active[data-marker-position=bottom-right]:before, body.atum-show-help-markers .atum-help-marker.active:hover[data-marker-position=bottom-right]:before {
   top: unset !important;
   bottom: -8px !important;
 }
-body.atum-show-help-markers .atum-help-marker[data-marker-position=bottom-left]:before, body.atum-show-help-markers .atum-help-marker:hover[data-marker-position=bottom-left]:before, body.atum-show-help-markers .atum-help-marker:active[data-marker-position=bottom-left]:before {
+body.atum-show-help-markers .atum-help-marker.active[data-marker-position=bottom-left]:before, body.atum-show-help-markers .atum-help-marker.active:hover[data-marker-position=bottom-left]:before {
   top: unset !important;
   right: unset !important;
   bottom: -8px !important;
   left: -8px !important;
 }
-body.atum-show-help-markers .atum-help-marker:hover:before {
+body.atum-show-help-markers .atum-help-marker.active:hover:before {
   background-color: #ff4848 !important;
 }
-body.atum-show-help-markers .atum-help-marker.loading-guide:before {
-  font-size: 14px;
-  content: "\e961";
-  left: -2px;
-  top: -4px;
-}
-
 body.running-atum-help-guide .atum-help-marker:before {
   display: none !important;
 }

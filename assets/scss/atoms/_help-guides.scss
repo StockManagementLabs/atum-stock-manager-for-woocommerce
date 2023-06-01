@@ -512,7 +512,6 @@ tr.introjs-showElement {
 		position: relative;
 		
 		&.show-intro-guide {
-			
 			&:not(.loading-guide) {
 				&:hover {
 					background-color: $primary;
@@ -521,26 +520,39 @@ tr.introjs-showElement {
 				}
 			}
 			
-			&.loading-guide {
-				pointer-events: none;
-				
-				&:before {
-					color: transparent;
-				}
-				
-				&:after {
-					content: '';
-					@include loader(14px, $primary);
-				}
-			}
-			
 		}
 		
 		&.show-help-markers {
-			&.active, &:hover {
-				background-color: $success;
-				color: $white;
-				border-color: $success;
+			&:not(.loading-guide) {
+				font-size: 14px;
+				padding: 7px;
+				
+				&.active, &:hover {
+					color: $white;
+				}
+				
+				&.active {
+					background-color: $success;
+					border-color: $success;
+				}
+				
+				&:hover {
+					background-color: rgba($success, .8);
+					border-color: rgba($success, .8);
+				}
+			}
+		}
+		
+		&.loading-guide {
+			pointer-events: none;
+			
+			&:before {
+				color: transparent;
+			}
+			
+			&:after {
+				content: '';
+				@include loader(14px, $primary);
 			}
 		}
 		
@@ -555,74 +567,70 @@ body {
 			position: relative;
 			display: inline-flex;
 			
-			&, &:hover, &:active {
+			&.active {
 				
-				&:before {
-					display: inline-flex !important;
-					align-items: center !important;
-					justify-content: center !important;
-					content: $atmi-question;
-					@include atum-icon-font-family;
-					background-color: rgba($red, .8) !important;
-					border: 1px solid $white !important;
-					color: $white !important;
-					font-size: 9px !important;
-					font-weight: normal !important;
-					font-style: normal !important;
-					vertical-align: 5px !important;
-					text-align: center !important;
-					position: absolute !important;
-					overflow: hidden !important;
-					box-shadow: 0 2px 8px 0 rgba($black, 0.3) !important;
-					width: 16px !important;
-					height: 16px !important;
-					right: -8px !important;
-					top: -8px !important;
-					z-index: 99998 !important;
-					border-radius: 50px !important;
-					text-indent: unset !important;
-					cursor: help !important;
-				}
-				
-				&[data-marker-position="top-left"] {
+				&, &:hover {
+					
 					&:before {
-						right: unset !important;
-						left: -8px !important;
+						display: inline-flex !important;
+						align-items: center !important;
+						justify-content: center !important;
+						content: $atmi-question;
+						@include atum-icon-font-family;
+						background-color: rgba($red, .8) !important;
+						border: 1px solid $white !important;
+						color: $white !important;
+						font-size: 9px !important;
+						font-weight: normal !important;
+						font-style: normal !important;
+						vertical-align: 5px !important;
+						text-align: center !important;
+						position: absolute !important;
+						overflow: hidden !important;
+						box-shadow: 0 2px 8px 0 rgba($black, 0.3) !important;
+						width: 16px !important;
+						height: 16px !important;
+						right: -8px !important;
+						top: -8px !important;
+						z-index: 99998 !important;
+						border-radius: 50px !important;
+						text-indent: unset !important;
+						cursor: help !important;
 					}
-				}
-				
-				&[data-marker-position="bottom-right"] {
-					&:before {
-						top: unset !important;
-						bottom: -8px !important;
+					
+					&[data-marker-position="top-left"] {
+						&:before {
+							right: unset !important;
+							left: -8px !important;
+						}
 					}
+					
+					&[data-marker-position="bottom-right"] {
+						&:before {
+							top: unset !important;
+							bottom: -8px !important;
+						}
+					}
+					
+					&[data-marker-position="bottom-left"] {
+						&:before {
+							top: unset !important;
+							right: unset !important;
+							bottom: -8px !important;
+							left: -8px !important;
+						}
+					}
+					
 				}
 				
-				&[data-marker-position="bottom-left"] {
+				&:hover {
 					&:before {
-						top: unset !important;
-						right: unset !important;
-						bottom: -8px !important;
-						left: -8px !important;
+						background-color: $red !important;
 					}
 				}
 				
 			}
 			
-			&:hover {
-				&:before {
-					background-color: $red !important;
-				}
-			}
-			
-			&.loading-guide {
-				&:before {
-					font-size: 14px;
-					content: $atmi-hourglass;
-					left: -2px;
-					top: -4px;
-				}
-			}
 		}
 		
 	}

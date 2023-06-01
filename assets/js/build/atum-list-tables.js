@@ -504,9 +504,8 @@ var HelpGuide = (function () {
         this.settings = settings;
         this.IntroJs = intro_js_minified_intro_min__WEBPACK_IMPORTED_MODULE_0___default()();
         this.guideSteps = [];
-        this.helpMarkers = [];
         this.cachedGuides = {};
-        this.step = 0;
+        this.step = null;
         this.isAuto = false;
         this.guide = null;
         this.markersEnabled = false;
@@ -517,12 +516,8 @@ var HelpGuide = (function () {
             this.isAuto = true;
             if (this.settings.get('hgMainGuide')) {
                 this.guide = this.settings.get('hgMainGuide');
+                this.maybeCacheGuide();
             }
-        }
-        var hMarkers = this.settings.get('hgHelpMarkers');
-        if (hMarkers && Array.isArray(hMarkers) && hMarkers.length) {
-            this.helpMarkers = hMarkers;
-            this.addHelpMarkers();
         }
         this.introOptions = (this.settings.get('hgIntroJsOptions') || {});
         if (this.prepareIntroOptions()) {
@@ -550,51 +545,23 @@ var HelpGuide = (function () {
             .on('click', '.show-intro-guide', function (evt) {
             var $button = $(evt.currentTarget);
             _this.guide = $button.parent().data('guide');
-            if (!_this.guide) {
-                return;
-            }
-            if ($button.data('guide-step')) {
-                _this.step = parseInt($button.data('guide-step'));
-            }
-            if (_this.settings.get(_this.guide) && Array.isArray(_this.settings.get(_this.guide))) {
-                _this.guideSteps = _this.settings.get(_this.guide);
-                _this.isAuto = false;
+            _this.getGuide(function () {
                 if (_this.prepareIntroOptions()) {
                     _this.runGuide();
                 }
-            }
-            else if (_this.cachedGuides.hasOwnProperty(_this.guide)) {
-                if (_this.prepareIntroOptions()) {
-                    _this.runGuide();
-                }
-            }
-            else {
-                $button.addClass('loading-guide');
-                _this.loadGuideSteps()
-                    .then(function () {
-                    $button.removeClass('loading-guide');
-                    if (_this.prepareIntroOptions()) {
-                        _this.runGuide();
-                    }
-                })
-                    .catch(function (error) {
-                    $button.removeClass('loading-guide');
-                    if (error) {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
-                            icon: 'error',
-                            title: _this.settings.get('hgError'),
-                            text: error,
-                            confirmButtonText: _this.settings.get('hgOk'),
-                            showCloseButton: true,
-                        });
-                    }
-                });
-            }
+            }, $button);
         })
             .on('click', '.show-help-markers', function (evt) {
+            var $button = $(evt.currentTarget), $otherActiveButtons = $('.show-help-markers.active').not($button);
+            if ($otherActiveButtons.length) {
+                $otherActiveButtons.removeClass('active');
+                _this.markersEnabled = false;
+                _this.toggleHelpMarkers();
+            }
             _this.markersEnabled = !_this.markersEnabled;
-            $(evt.currentTarget).toggleClass('active', _this.markersEnabled);
-            _this.toggleHelpMarkers();
+            _this.guide = $button.parent().data('guide');
+            _this.getGuide(function () { return _this.toggleHelpMarkers(); }, $button);
+            $button.toggleClass('active', _this.markersEnabled);
         })
             .on('click', '.atum-help-marker', function (evt) {
             if (!$body.hasClass('atum-show-help-markers')) {
@@ -606,13 +573,43 @@ var HelpGuide = (function () {
             }
             _this.step = parseInt($elem.data('step') || '0');
             if (_this.step) {
-                _this.guideSteps = _this.settings.get('hgHelpMarkers');
                 _this.isAuto = false;
-                if (_this.prepareIntroOptions()) {
-                    _this.runGuide();
-                }
+                _this.getGuide(function () {
+                    if (_this.prepareIntroOptions()) {
+                        _this.runGuide();
+                        _this.step = null;
+                    }
+                });
             }
         });
+    };
+    HelpGuide.prototype.getGuide = function (success, $button) {
+        var _this = this;
+        if ($button === void 0) { $button = null; }
+        if (this.cachedGuides.hasOwnProperty(this.guide)) {
+            this.setGuideSteps(this.cachedGuides[this.guide]);
+            success();
+        }
+        else {
+            $button && $button.addClass('loading-guide');
+            this.loadGuideSteps()
+                .then(function () {
+                $button && $button.removeClass('loading-guide');
+                success();
+            })
+                .catch(function (error) {
+                $button && $button.removeClass('loading-guide');
+                if (error) {
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                        icon: 'error',
+                        title: _this.settings.get('hgError'),
+                        text: error,
+                        confirmButtonText: _this.settings.get('hgOk'),
+                        showCloseButton: true,
+                    });
+                }
+            });
+        }
     };
     HelpGuide.prototype.loadGuideSteps = function () {
         var _this = this;
@@ -632,7 +629,7 @@ var HelpGuide = (function () {
                 data: data,
                 success: function (response) {
                     if (response.success) {
-                        _this.guideSteps = response.data;
+                        _this.setGuideSteps(response.data);
                         _this.isAuto = false;
                         resolve();
                     }
@@ -666,11 +663,14 @@ var HelpGuide = (function () {
         if (!guide) {
             return '';
         }
-        var helpMarkersButton = (Array.isArray(this.helpMarkers) && this.helpMarkers.length > 0) ? "<i class=\"show-help-markers atum-icon atmi-flag atum-tooltip\" title=\"".concat(this.settings.get('hgShowHelpMarkers'), "\"></i>") : '';
-        return "\n\t\t\t<span class=\"help-guide-buttons\" data-guide=\"".concat(guide, "\">\n\t\t\t\t").concat(helpMarkersButton, "\n\t\t\t\t<i class=\"show-intro-guide atum-icon atmi-indent-increase atum-tooltip\" title=\"").concat(this.settings.get('hgShowHelpGuide'), "\"></i>\t\t\t\t\t\n\t\t\t</span>\n\t\t");
+        return "\n\t\t\t<span class=\"help-guide-buttons\" data-guide=\"".concat(guide, "\">\n\t\t\t\t<i class=\"show-help-markers atum-icon atmi-flag atum-tooltip\" title=\"").concat(this.settings.get('hgShowHelpMarkers'), "\"></i>\n\t\t\t\t<i class=\"show-intro-guide atum-icon atmi-indent-increase atum-tooltip\" title=\"").concat(this.settings.get('hgShowHelpGuide'), "\"></i>\t\t\t\t\t\n\t\t\t</span>\n\t\t");
     };
     HelpGuide.prototype.setGuideSteps = function (guideSteps) {
         this.guideSteps = guideSteps;
+        if (!this.cachedGuides.hasOwnProperty(this.guide)) {
+            this.addHelpMarkers();
+        }
+        this.maybeCacheGuide();
     };
     HelpGuide.prototype.saveClosedAutoGuide = function (screen) {
         $.ajax({
@@ -685,8 +685,8 @@ var HelpGuide = (function () {
     };
     HelpGuide.prototype.addHelpMarkers = function () {
         var _this = this;
-        if (Array.isArray(this.helpMarkers) && this.helpMarkers.length) {
-            this.helpMarkers.forEach(function (step, index) {
+        if (Array.isArray(this.guideSteps) && this.guideSteps.length) {
+            this.guideSteps.forEach(function (step, index) {
                 if (!step.load || 'init' === step.load) {
                     _this.prepareHelpMarker(step, index);
                 }
@@ -696,8 +696,8 @@ var HelpGuide = (function () {
     };
     HelpGuide.prototype.addLazyHelpMarkers = function () {
         var _this = this;
-        if (Array.isArray(this.helpMarkers) && this.helpMarkers.length) {
-            this.helpMarkers.forEach(function (step, index) {
+        if (Array.isArray(this.guideSteps) && this.guideSteps.length) {
+            this.guideSteps.forEach(function (step, index) {
                 if ('lazy' === step.load) {
                     _this.prepareHelpMarker(step, index);
                 }
@@ -717,7 +717,7 @@ var HelpGuide = (function () {
         if (step.first) {
             $elem = $elem.first();
         }
-        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker\" \n\t\t\t\tdata-step=\"".concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\t\t  \n\t\t\t/>\n\t\t"));
+        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\t\t\n\t\t\t/>\n\t\t"));
         if ($elem.is('td,th,tr')) {
             $elem.wrapInner($helpMarker);
         }
@@ -729,7 +729,10 @@ var HelpGuide = (function () {
         }
     };
     HelpGuide.prototype.toggleHelpMarkers = function () {
+        var $helpMarkers = $('.atum-help-marker');
         $('body').toggleClass('atum-show-help-markers', this.markersEnabled);
+        $helpMarkers.not("[data-guide=\"".concat(this.guide, "\"]")).removeClass('active');
+        $helpMarkers.filter("[data-guide=\"".concat(this.guide, "\"]")).toggleClass('active', this.markersEnabled);
     };
     HelpGuide.prototype.maybeCacheGuide = function () {
         if (!this.cachedGuides.hasOwnProperty(this.guide)) {
