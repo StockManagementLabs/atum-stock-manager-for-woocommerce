@@ -1321,8 +1321,6 @@ final class Ajax {
 
 		}
 
-		$included = [];
-
 		if ( $post_id ) {
 
 			$atum_order = Helpers::get_atum_order_model( $post_id, FALSE );
@@ -1330,24 +1328,14 @@ final class Ajax {
 			// The Purchase Orders only should allow products from the current PO's supplier (if such PO only allows 1 supplier).
 			if ( $atum_order instanceof PurchaseOrder && ! $atum_order->has_multiple_suppliers() ) {
 
-				$supplier_products    = Suppliers::get_supplier_products( $atum_order->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE );
-				$no_supplier_products = Suppliers::get_no_supplier_products();
-				$supplier_products    = is_array( $supplier_products ) ? array_map( 'absint', $supplier_products ) : [];
+				$supplier_products = Suppliers::get_supplier_products( $atum_order->get_supplier( 'id' ), [ 'product', 'product_variation' ], FALSE );
+				$included          = is_array( $supplier_products ) ? array_map( 'absint', $supplier_products ) : [];
 
-				if ( is_array( $no_supplier_products ) ) {
-					$no_supplier_products = array_map( 'absint', $no_supplier_products );
-					$supplier_products    = array_merge( $supplier_products, $no_supplier_products );
-				}
-
-				// If the PO supplier has no linked products, it must return an empty array.
-				$included = $supplier_products;
+				// Will be empty if $included is empty.
+				$ids = array_intersect( $ids, $included );
 
 			}
 
-		}
-
-		if ( ! empty( $included ) ) {
-			$ids = array_intersect( $ids, $included );
 		}
 
 		wp_send_json( apply_filters( 'atum/ajax/search_products/json_search_found_products', $this->prepare_json_search_products( $ids, $atum_order ?? NULL ) ) );
