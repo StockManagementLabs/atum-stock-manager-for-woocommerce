@@ -116,21 +116,21 @@ class AtumHelpGuide {
 	 * @since 1.9.11
 	 *
 	 * @param int $user_id
-	 * @param int $screen_id
+	 * @param int $guide
 	 */
-	public static function save_closed_auto_guide( $user_id, $screen_id ) {
+	public static function save_closed_auto_guide( $user_id, $guide ) {
 
 		$closed_auto_guides = self::get_closed_auto_guides( $user_id );
 
 		if ( is_array( $closed_auto_guides ) ) {
 
-			if ( ! in_array( $screen_id, $closed_auto_guides ) ) {
-				$closed_auto_guides[] = $screen_id;
+			if ( ! in_array( $guide, $closed_auto_guides ) ) {
+				$closed_auto_guides[] = $guide;
 			}
 
 		}
 		else {
-			$closed_auto_guides = [ $screen_id ];
+			$closed_auto_guides = [ $guide ];
 		}
 
 		update_user_meta( $user_id, self::CLOSED_AUTO_GUIDES_KEY, $closed_auto_guides );
@@ -149,8 +149,7 @@ class AtumHelpGuide {
 	 */
 	public function get_help_guide_js_vars( $auto_guide = '', $main_guide = '' ) {
 
-		$screen = get_current_screen();
-		$vars   = array(
+		$vars = array(
 			'hgIntroJsOptions'  => array(
 				'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
 				'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
@@ -162,7 +161,6 @@ class AtumHelpGuide {
 			'hgNonce'           => wp_create_nonce( 'help-guide-nonce' ),
 			'hgShowHelpGuide'   => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpMarkers' => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
-			'hgScreenId'        => $screen ? $screen->id : '',
 		);
 
 		// Add the auto help guide if passed and the user has not closed it yet.
@@ -170,7 +168,7 @@ class AtumHelpGuide {
 
 			$closed_auto_guides = self::get_closed_auto_guides( get_current_user_id() );
 
-			if ( ! is_array( $closed_auto_guides ) || ! in_array( $screen->id, $closed_auto_guides ) ) {
+			if ( ! is_array( $closed_auto_guides ) || ! in_array( $auto_guide, $closed_auto_guides ) ) {
 				$vars['hgAutoGuide'] = json_decode( file_get_contents( $this->guides_paths[ $auto_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			}
 

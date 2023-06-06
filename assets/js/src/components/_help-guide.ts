@@ -171,6 +171,9 @@ export default class HelpGuide {
 					return;
 				}
 
+				evt.stopImmediatePropagation();
+				evt.stopPropagation();
+
 				this.step = parseInt( $elem.data( 'step' ) || '0' );
 
 				if ( this.step ) {
@@ -219,6 +222,8 @@ export default class HelpGuide {
 					$button && $button.removeClass( 'loading-guide' );
 					success();
 
+					this.wpHooks.doAction( 'atum_helpGuide_loaded', this.guide );
+
 				} )
 				.catch( ( error: string ) => {
 
@@ -243,21 +248,15 @@ export default class HelpGuide {
 
 		return new Promise( ( resolve: Function, reject: Function ) => {
 
-			const data: any = {
-				action  : 'atum_get_help_guide_steps',
-				security: this.settings.get( 'hgNonce' ),
-				guide   : this.guide,
-			}
-
-			if ( this.settings.get( 'hgScreenId' ) ) {
-				data.screen = this.settings.get( 'hgScreenId' );
-			}
-
 			$.ajax( {
 				url       : window[ 'ajaxurl' ],
 				method    : 'post',
 				dataType  : 'json',
-				data,
+				data      : {
+					action  : 'atum_get_help_guide_steps',
+					security: this.settings.get( 'hgNonce' ),
+					guide   : this.guide,
+				},
 				success   : ( response: any ) => {
 
 					if ( response.success ) {
@@ -296,8 +295,10 @@ export default class HelpGuide {
 
 				$( 'body' ).removeClass( 'running-atum-help-guide' );
 
-				if ( this.isAuto && this.settings.get( 'hgScreenId' ) ) {
-					this.saveClosedAutoGuide( this.settings.get( 'hgScreenId' ) );
+				// Save the closed auto-guide as user meta to not load again.
+				if ( this.isAuto && this.guide ) {
+					this.isAuto = false;
+					this.saveClosedAutoGuide();
 				}
 
 				this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
@@ -351,10 +352,8 @@ export default class HelpGuide {
 
 	/**
 	 * Save the closed auto-guide status
-	 *
-	 * @param {string} screen
 	 */
-	saveClosedAutoGuide( screen: string ) {
+	saveClosedAutoGuide() {
 
 		$.ajax( {
 			url   : window[ 'ajaxurl' ],
@@ -362,7 +361,7 @@ export default class HelpGuide {
 			data  : {
 				action  : 'atum_save_closed_auto_guide',
 				security: this.settings.get( 'hgNonce' ),
-				screen
+				guide   : this.guide
 			},
 		} );
 
@@ -438,7 +437,7 @@ export default class HelpGuide {
 				data-guide="${ this.guide }"
 				data-step="${ index + 1  }"
 				data-marker-position="${ step.markerPosition || 'top-right' }"
-				data-position="${ step.position || 'auto' }"			
+				data-position="${ step.position || 'auto' }"	
 			/>
 		` );
 
@@ -467,6 +466,8 @@ export default class HelpGuide {
 		$( 'body' ).toggleClass( 'atum-show-help-markers', this.markersEnabled );
 		$helpMarkers.not( `[data-guide="${ this.guide }"]` ).removeClass( 'active' );
 		$helpMarkers.filter( `[data-guide="${ this.guide }"]` ).toggleClass( 'active', this.markersEnabled );
+
+		this.wpHooks.doAction( 'atum_helpGuide_toggleHelpMarkers', this.markersEnabled, this.guide );
 
 	}
 

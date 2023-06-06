@@ -145,7 +145,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+        while (_) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -186,10 +186,10 @@ var AdminModal = (function () {
     }
     AdminModal.prototype.showModal = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var swalOpts, steps, stepNumbers, step, swalMixin, counter, _loop_1, this_1, _a, _b, _c, _i, key;
+            var swalOpts, steps, stepNumbers, step, swalMixin, counter, _loop_1, this_1, _a, _b, _i, key;
             var _this = this;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         swalOpts = __assign({}, this.defaultSwalOptions);
                         steps = Object.keys(this.swalConfigs).length;
@@ -205,33 +205,30 @@ var AdminModal = (function () {
                         swalMixin = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(this.defaultSwalOptions);
                         counter = 1;
                         _loop_1 = function (key) {
-                            return __generator(this, function (_e) {
-                                switch (_e.label) {
+                            return __generator(this, function (_d) {
+                                switch (_d.label) {
                                     case 0: return [4, swalMixin.fire(__assign({ currentProgressStep: counter.toString() }, this_1.swalConfigs[key]))
                                             .then(function () { return _this.hideModal(key); })];
                                     case 1:
-                                        _e.sent();
+                                        _d.sent();
                                         counter++;
                                         return [2];
                                 }
                             });
                         };
                         this_1 = this;
-                        _a = this.swalConfigs;
-                        _b = [];
-                        for (_c in _a)
-                            _b.push(_c);
+                        _a = [];
+                        for (_b in this.swalConfigs)
+                            _a.push(_b);
                         _i = 0;
-                        _d.label = 1;
+                        _c.label = 1;
                     case 1:
-                        if (!(_i < _b.length)) return [3, 4];
-                        _c = _b[_i];
-                        if (!(_c in _a)) return [3, 3];
-                        key = _c;
+                        if (!(_i < _a.length)) return [3, 4];
+                        key = _a[_i];
                         return [5, _loop_1(key)];
                     case 2:
-                        _d.sent();
-                        _d.label = 3;
+                        _c.sent();
+                        _c.label = 3;
                     case 3:
                         _i++;
                         return [3, 1];

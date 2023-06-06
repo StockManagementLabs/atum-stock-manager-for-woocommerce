@@ -1590,6 +1590,10 @@ class Wpml {
 	 */
 	public function add_lang_dropdown( $post_id ) {
 
+		if ( PurchaseOrders::POST_TYPE !== get_post_type( $post_id ) ) {
+			return;
+		}
+
 		$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
 
 		if ( $lang ) {

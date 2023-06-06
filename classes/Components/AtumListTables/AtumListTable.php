@@ -23,7 +23,6 @@ use Atum\Inc\Helpers;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
-use Atum\StockCentral\Lists\ListTable as StockCentralList;
 use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Products\BOMProductTrait;
 
