@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumListTables\AtumListTable;
+use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
@@ -156,8 +157,13 @@ class Wpml {
 			add_action( 'woocommerce_process_product_meta', array( $this, 'maybe_prevent_save_product_meta_boxes' ), 10, 2 );
 			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_prevent_save_product_variation_meta_boxes' ), 10, 2 );
 
-			// Make Atum orders not translatable.
+			// Make Atum orders not translatable, but set a single lang for the order.
 			add_action( 'atum/order_post_type/init', array( $this, 'register_atum_order_hooks' ) );
+			add_filter( 'wpml_ls_directories_to_scan', array( $this, 'add_wpml_templates' ) );
+			add_action( 'atum/atum_order/actions_meta_box_start', array( $this, 'add_lang_dropdown' ) );
+			add_filter( 'atum/order_post_type/js_vars', array( $this, 'add_wpml_active_var' ) );
+			add_filter( 'atum/purchase_orders/save_meta_boxes_props', array( $this, 'save_wpml_lang_order_prop' ), 10, 2 );
+			add_filter( 'wp_ajax_atum_json_search_products', array( $this, 'add_po_filter_search' ), 9 );
 
 			// Load product data in AtumListTable.
 			add_action( 'atum/list_table/before_single_row', array( $this, 'load_wpml_product' ), 10, 2 );
@@ -1559,8 +1565,182 @@ class Wpml {
 		return $where;
 	}
 
+	/**
+	 * Add ATUM WPML twig templates folder to the folders to scan
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array $dirs_to_scan
+	 *
+	 * @return array
+	 */
+	public function add_wpml_templates( $dirs_to_scan ) {
+
+		$dirs_to_scan[] = ATUM_PATH . 'views/wpml/language-switchers';
+
+		return $dirs_to_scan;
+	}
+
+	/**
+	 * Add the language dropdown to ATUM Orders.
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param int $post_id
+	 */
+	public function add_lang_dropdown( $post_id ) {
+
+		$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
+
+		if ( $lang ) {
+			self::$sitepress->switch_lang( $lang );
+		}
+
+		?>
+
+		<li class="wide">
+
+			<p>
+				<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				do_action( 'wpml_add_language_selector', [
+					'display_flags'                => 1,
+					'display_names_in_native_lang' => 0, // Options won't work from the twig template settings.
+					'template'                     => 'atum-inventory-management-for-woocommerce-atum-order-language-dropdown',
+				] ); ?>
+			</p>
+		</li>
+
+		<?php
+
+		if ( $lang ) {
+			self::$sitepress->switch_lang( $this->current_language );
+		}
+
+	}
+
+	/**
+	 * Add the WPML is active js var to ATUM orders' localized variables
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array $js_vars
+	 *
+	 * @return array
+	 */
+	public function add_wpml_active_var( $js_vars ) {
+
+		$js_vars['wpmlActive'] = 1;
+
+		return $js_vars;
+	}
+
+	/**
+	 * Save the WPML lang property
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array             $atum_order_props
+	 * @param AtumOrderPostType $atum_order
+	 *
+	 * @return array
+	 */
+	public function save_wpml_lang_order_prop( $atum_order_props, $atum_order ) {
+
+		$atum_order_props['wpml_lang'] = isset( $_POST['wpml_lang'] ) ? esc_attr( $_POST['wpml_lang'] ) : $this->current_language;
+
+		return $atum_order_props;
+	}
+
+	/**
+	 * Add filtering to the product query when searching from a PO
+	 *
+	 * @since 1.9.30
+	 */
+	public function add_po_filter_search() {
+
+		check_ajax_referer( 'search-products', 'security' );
+
+		$post_id = ! empty( $_GET['id'] ) ? absint( $_GET['id'] ) : NULL;
+
+		if ( ! $post_id ) {
+
+			$url = wp_parse_url( wp_get_referer() );
+			parse_str( $url['query'], $url_query );
+
+			if ( ! empty( $url_query['post'] ) ) {
+				$post_id = absint( $url_query['post'] );
+			}
+
+			if ( $post_id && PurchaseOrders::POST_TYPE === get_post_type( $post_id ) ) {
+
+				$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
+
+				if ( $lang ) {
+					$this->current_language = $lang;
+
+					add_filter( 'atum/search_products/join_clauses', array( $this, 'add_po_join_clause' ), 10, 8 );
+					add_filter( 'atum/search_products/where_clauses', array( $this, 'add_po_where_clause' ), 10, 8 );
+				}
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Add the translations table to the SQL query if searching products from a PO
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array      $join_clauses
+	 * @param string     $term               Search term.
+	 * @param string     $type               Type of product.
+	 * @param bool       $include_variations Include variations in search or not.
+	 * @param bool       $all_statuses       Should we search all statuses or limit to published.
+	 * @param null|int   $limit              Limit returned results.
+	 * @param null|array $include            Keep specific results.
+	 * @param null|array $exclude            Discard specific results.
+	 *
+	 * @return array
+	 */
+	public function add_po_join_clause( $join_clauses, $term, $type, $include_variations, $all_statuses, $limit, $include, $exclude ) {
+
+		global $wpdb;
+
+		$join_clauses[] = "LEFT JOIN {$wpdb->prefix}icl_translations AS trans
+		ON posts.ID = trans.element_id AND trans.element_type = 'post_product' ";
+
+		return $join_clauses;
+	}
+
+	/**
+	 * Add the translations table to the SQL query if searching products from a PO
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param array      $where_clauses
+	 * @param string     $term               Search term.
+	 * @param string     $type               Type of product.
+	 * @param bool       $include_variations Include variations in search or not.
+	 * @param bool       $all_statuses       Should we search all statuses or limit to published.
+	 * @param null|int   $limit              Limit returned results.
+	 * @param null|array $include            Keep specific results.
+	 * @param null|array $exclude            Discard specific results.
+	 *
+	 * @return array
+	 */
+	public function add_po_where_clause( $where_clauses, $term, $type, $include_variations, $all_statuses, $limit, $include, $exclude ) {
+
+		global $wpdb;
+
+		$where_clauses[] = "trans.language_code = '{$this->current_language}' ";
+
+		return $where_clauses;
+	}
+
 	/******************
-	 * Instace methods
+	 * Instance methods
 	 ******************/
 
 	/**
