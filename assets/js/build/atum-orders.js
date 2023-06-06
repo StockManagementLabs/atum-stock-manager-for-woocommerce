@@ -1888,20 +1888,20 @@ var Utils = {
         });
         return taxes.reduce(function (a, b) { return a + b; }, 0);
     },
-    pseudoClick: function (evt, parentElem, pseudoElement) {
-        if (pseudoElement === void 0) { pseudoElement = 'both'; }
+    pseudoClick: function (evt, $parentElem, pseudoElem) {
+        if (pseudoElem === void 0) { pseudoElem = 'both'; }
         var beforeClicked = false, afterClicked = false;
-        var parentLeft = parseInt(parentElem.getBoundingClientRect().left.toString(), 10), parentTop = parseInt(parentElem.getBoundingClientRect().top.toString(), 10);
+        var parentElem = $parentElem.get(0), parentLeft = parseInt(parentElem.getBoundingClientRect().left.toString(), 10), parentTop = parseInt(parentElem.getBoundingClientRect().top.toString(), 10);
         var mouseX = evt.clientX, mouseY = evt.clientY;
-        if (['before', 'both'].includes(pseudoElement)) {
+        if (['before', 'both'].includes(pseudoElem)) {
             var before = window.getComputedStyle(parentElem, ':before'), beforeStart = parentLeft + (parseInt(before.getPropertyValue('left'), 10)), beforeEnd = beforeStart + parseInt(before.width, 10), beforeYStart = parentTop + (parseInt(before.getPropertyValue('top'), 10)), beforeYEnd = beforeYStart + parseInt(before.height, 10);
             beforeClicked = mouseX >= beforeStart && mouseX <= beforeEnd && mouseY >= beforeYStart && mouseY <= beforeYEnd;
         }
-        if (['after', 'both'].includes(pseudoElement)) {
+        if (['after', 'both'].includes(pseudoElem)) {
             var after = window.getComputedStyle(parentElem, ':after'), afterStart = parentLeft + (parseInt(after.getPropertyValue('left'), 10)), afterEnd = afterStart + parseInt(after.width, 10), afterYStart = parentTop + (parseInt(after.getPropertyValue('top'), 10)), afterYEnd = afterYStart + parseInt(after.height, 10);
             afterClicked = mouseX >= afterStart && mouseX <= afterEnd && mouseY >= afterYStart && mouseY <= afterYEnd;
         }
-        switch (pseudoElement) {
+        switch (pseudoElem) {
             case 'after':
                 return afterClicked;
             case 'before':
