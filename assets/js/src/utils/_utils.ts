@@ -710,24 +710,25 @@ const Utils = {
 	/**
 	 * Detect clicks on pseudo-elements
 	 *
-	 * @param {JQueryEventObject}       evt
-	 * @param {HTMLElement}             parentElem
-	 * @param {'before'|'after'|'both'} pseudoElement
+	 * @param {JQueryEventObject}       evt         The click event fired on the parent element.
+	 * @param {JQuery}                  $parentElem The parent element to which the pseudo-element belongs.
+	 * @param {'before'|'after'|'both'} pseudoElem  Which pseudo-element to check.
 	 *
 	 * @return {{before: boolean, after: boolean} | boolean}
 	 */
-	pseudoClick( evt: JQueryEventObject, parentElem: HTMLElement, pseudoElement: 'before'|'after'|'both' = 'both' ) {
+	pseudoClick( evt: JQueryEventObject, $parentElem: JQuery, pseudoElem: 'before'|'after'|'both' = 'both' ): { before: boolean, after: boolean } | boolean {
 
 		let beforeClicked: boolean = false,
 		    afterClicked: boolean  = false;
 
-		const parentLeft: number = parseInt( parentElem.getBoundingClientRect().left.toString(), 10 ),
-		      parentTop: number  = parseInt( parentElem.getBoundingClientRect().top.toString(), 10 );
+		const parentElem: HTMLElement = <HTMLElement>$parentElem.get( 0 ),
+		      parentLeft: number      = parseInt( parentElem.getBoundingClientRect().left.toString(), 10 ),
+		      parentTop: number       = parseInt( parentElem.getBoundingClientRect().top.toString(), 10 );
 
 		const mouseX: number = evt.clientX,
 		      mouseY: number = evt.clientY;
 
-		if ( [ 'before', 'both' ].includes( pseudoElement ) ) {
+		if ( [ 'before', 'both' ].includes( pseudoElem ) ) {
 
 			const before: CSSStyleDeclaration = window.getComputedStyle( parentElem, ':before' ),
 			      beforeStart: number         = parentLeft + ( parseInt( before.getPropertyValue( 'left' ), 10 ) ),
@@ -739,7 +740,7 @@ const Utils = {
 
 		}
 
-		if ( [ 'after', 'both' ].includes( pseudoElement ) ) {
+		if ( [ 'after', 'both' ].includes( pseudoElem ) ) {
 
 			const after: CSSStyleDeclaration = window.getComputedStyle( parentElem, ':after' ),
 			      afterStart: number         = parentLeft + ( parseInt( after.getPropertyValue( 'left' ), 10 ) ),
@@ -751,7 +752,7 @@ const Utils = {
 
 		}
 
-		switch ( pseudoElement ) {
+		switch ( pseudoElem ) {
 			case 'after':
 				return afterClicked;
 

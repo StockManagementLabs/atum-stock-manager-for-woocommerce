@@ -1672,7 +1672,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		if ( 0 !== $stock && ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) || ! isset( $_REQUEST['view'] ) ) {
+		if ( 0 !== $stock && ( ( isset( $_REQUEST['view'] ) && 'unmanaged' !== $_REQUEST['view'] ) || ! isset( $_REQUEST['view'] ) ) && apply_filters( 'atum/list_table/column_stock_increase_total', TRUE, $this->list_item ) ) {
 			$this->increase_total( '_stock', $stock );
 		}
 

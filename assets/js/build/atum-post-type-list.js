@@ -640,7 +640,7 @@ var HelpGuide = (function () {
         }
         var $elem = $(step.element || step.elementSelector);
         if (!$elem.length) {
-            console.warn('Guide element not found', $elem);
+            console.warn('Guide element not found', step);
             return;
         }
         if (step.first) {

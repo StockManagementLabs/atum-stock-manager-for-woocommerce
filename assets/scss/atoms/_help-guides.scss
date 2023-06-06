@@ -2,6 +2,8 @@
 // Intro.js help guides
 //-----------------------
 
+@use "sass:math";
+
 .introjs-overlay {
 	position: absolute;
 	box-sizing: content-box;
@@ -213,7 +215,7 @@ tr.introjs-showElement {
 }
 
 .introjs-tooltiptext {
-	padding: 20px;
+	padding: math.div($grid-gutter-width, 2);
 	border-top: 1px solid $white;
 	color: $gray-600;
 	border-bottom: 1px solid $white;
@@ -478,6 +480,7 @@ tr.introjs-showElement {
 		}
 		
 		ul {
+			padding-left: math.div($grid-gutter-width, 2);
 			list-style: outside;
 		}
 		
@@ -638,7 +641,7 @@ body {
 	&.running-atum-help-guide {
 		.atum-help-marker {
 			&:before {
-				display: none !important;
+				visibility: hidden !important;
 			}
 		}
 	}

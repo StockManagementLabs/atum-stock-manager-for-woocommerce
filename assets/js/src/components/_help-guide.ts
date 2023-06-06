@@ -164,11 +164,10 @@ export default class HelpGuide {
 					return;
 				}
 
-				const $elem: JQuery     = $( evt.currentTarget ),
-				      elem: HTMLElement = <HTMLElement> $elem.get( 0 );
+				const $elem: JQuery = $( evt.currentTarget );
 
 				// Only open the guide step if the user clicked on the help marker icon (the pseudo-element).
-				if ( ! Utils.pseudoClick( evt, elem, 'before' ) ) {
+				if ( ! Utils.pseudoClick( evt, $elem, 'before' ) ) {
 					return;
 				}
 
@@ -424,7 +423,7 @@ export default class HelpGuide {
 		let $elem: JQuery = $( step.element || step.elementSelector );
 
 		if ( ! $elem.length ) {
-			console.warn( 'Guide element not found', $elem );
+			console.warn( 'Guide element not found', step );
 			return;
 		}
 
