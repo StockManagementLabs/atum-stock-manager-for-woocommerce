@@ -3616,17 +3616,16 @@ final class Helpers {
 
 		$atum_data_table = $wpdb->prefix . AtumGlobals::ATUM_PRODUCT_DATA_TABLE;
 		$post_types      = $include_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
-		$join_query      = '';
-		$type_where      = '';
-		$status_where    = '';
+		$where_clauses   = [ "posts.post_type IN ('" . implode( "','", $post_types ) . "')" ];
 		$limit_query     = '';
-		$joins           = [];
+		$join_query      = '';
+		$join_clauses    = [];
 
 		// When searching variations we should include the parent's meta table for use in searches.
 		if ( $include_variations ) {
-			$joins[] = "LEFT JOIN $wpdb->wc_product_meta_lookup parent_wc_product_meta_lookup
+			$join_clauses[] = "LEFT JOIN $wpdb->wc_product_meta_lookup parent_wc_product_meta_lookup
 			 ON (posts.post_type = 'product_variation' AND parent_wc_product_meta_lookup.product_id = posts.post_parent)";
-			$joins[] = "LEFT JOIN $atum_data_table parent_apd
+			$join_clauses[] = "LEFT JOIN $atum_data_table parent_apd
 			 ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
 		}
 
@@ -3634,7 +3633,6 @@ final class Helpers {
 
 		// See if search term contains OR keywords.
 		$term_groups    = stristr( $term, ' or ' ) ? preg_split( '/\s+or\s+/i', $term ) : [ $term ];
-		$search_where   = '';
 		$search_queries = [];
 
 		foreach ( $term_groups as $term_group ) {
@@ -3689,32 +3687,35 @@ final class Helpers {
 
 		}
 
-		if ( ! empty( $joins ) ) {
-			$join_query = implode( "\n", $joins );
+		if ( ! empty( $join_clauses ) ) {
+
+			$join_query = implode( "\n", apply_filters( 'atum/search_products/join_clauses', $join_clauses, $term, $type = '', $include_variations, $all_statuses, $limit, $include, $exclude ) );
 		}
 
 		if ( ! empty( $search_queries ) ) {
-			$search_where = ' AND (' . implode( ') OR (', $search_queries ) . ') ';
+			$where_clauses[] = '(' . implode( ') OR (', $search_queries ) . ') ';
 		}
 
 		if ( ! empty( $include ) && is_array( $include ) ) {
-			$search_where .= ' AND posts.ID IN(' . implode( ',', array_map( 'absint', $include ) ) . ') ';
+			$where_clauses[] = 'posts.ID IN(' . implode( ',', array_map( 'absint', $include ) ) . ') ';
 		}
 
 		if ( ! empty( $exclude ) && is_array( $exclude ) ) {
-			$search_where .= ' AND posts.ID NOT IN(' . implode( ',', array_map( 'absint', $exclude ) ) . ') ';
+			$where_clauses[] = 'posts.ID NOT IN(' . implode( ',', array_map( 'absint', $exclude ) ) . ') ';
 		}
 
 		if ( 'virtual' === $type ) {
-			$type_where = ' AND ( wc_product_meta_lookup.virtual = 1 ) ';
+			$where_clauses[] = '( wc_product_meta_lookup.virtual = 1 ) ';
 		}
 		elseif ( 'downloadable' === $type ) {
-			$type_where = ' AND ( wc_product_meta_lookup.downloadable = 1 ) ';
+			$where_clauses[] = '( wc_product_meta_lookup.downloadable = 1 ) ';
 		}
 
 		if ( ! $all_statuses ) {
-			$status_where = " AND posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
+			$where_clauses[] = "posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
 		}
+
+		$where_query = implode( ' AND ', apply_filters( 'atum/search_products/where_clauses', $where_clauses, $term, $type = '', $include_variations, $all_statuses, $limit, $include, $exclude ) );
 
 		if ( $limit ) {
 			$limit_query = $wpdb->prepare( ' LIMIT %d ', $limit );
@@ -3726,10 +3727,8 @@ final class Helpers {
 			LEFT JOIN $wpdb->wc_product_meta_lookup wc_product_meta_lookup ON posts.ID = wc_product_meta_lookup.product_id
 			LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id
 			$join_query
-			WHERE posts.post_type IN ('" . implode( "','", $post_types ) . "')
-			$search_where
-			$status_where
-			$type_where
+			WHERE 
+			$where_query
 			ORDER BY posts.post_parent ASC, posts.post_title ASC
 			$limit_query
 		" );
