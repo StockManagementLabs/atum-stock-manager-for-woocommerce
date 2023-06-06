@@ -160,9 +160,9 @@ class AtumHelpGuide {
 				'scrollToElement'    => TRUE,
 			),
 			'hgNonce'           => wp_create_nonce( 'help-guide-nonce' ),
+			'hgScreenId'        => $screen ? $screen->id : '',
 			'hgShowHelpGuide'   => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpMarkers' => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
-			'hgScreenId'        => $screen ? $screen->id : '',
 		);
 
 		// Add the auto help guide if passed and the user has not closed it yet.

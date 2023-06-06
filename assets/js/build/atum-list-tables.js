@@ -714,7 +714,7 @@ var HelpGuide = (function () {
         if (step.first) {
             $elem = $elem.first();
         }
-        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active atum-tooltip\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\n\t\t\t\ttitle=\"").concat(this.settings.get('hgShowHelpGuide'), "\"\t\t\n\t\t\t/>\n\t\t"));
+        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\n\t\t\t/>\n\t\t"));
         if ($elem.is('td,th,tr')) {
             $elem.wrapInner($helpMarker);
         }

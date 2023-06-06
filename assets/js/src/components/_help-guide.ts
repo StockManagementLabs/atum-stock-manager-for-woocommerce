@@ -439,12 +439,11 @@ export default class HelpGuide {
 		// Using a "custom" HTML element to avoid CSS issues.
 		// The step number must be 1 or greater.
 		const $helpMarker: JQuery = $( `
-			<atum-help-marker class="atum-help-marker active atum-tooltip" 
+			<atum-help-marker class="atum-help-marker active" 
 				data-guide="${ this.guide }"
 				data-step="${ index + 1  }"
 				data-marker-position="${ step.markerPosition || 'top-right' }"
 				data-position="${ step.position || 'auto' }"	
-				title="${ this.settings.get( 'hgShowHelpGuide' ) }"		
 			/>
 		` );
 
