@@ -52,6 +52,7 @@ use Atum\PurchaseOrders\Items\POItemTax;
  * @property string $prices_include_tax
  * @property string $date_completed
  * @property string $atum_barcode
+ * @property string $wpml_lang
  */
 abstract class AtumOrderModel {
 
@@ -152,6 +153,7 @@ abstract class AtumOrderModel {
 		'prices_include_tax' => 'no',
 		'date_completed'     => '',
 		'atum_barcode'       => '',
+		'wpml_lang'          => '',
 	];
 
 	/**
@@ -2204,6 +2206,18 @@ abstract class AtumOrderModel {
 	}
 
 	/**
+	 * Getter for the WPML order's lang. Only if WPML is active
+	 *
+	 * @since 1.9.30
+	 *
+	 * @return string
+	 */
+	public function get_wpml_lang() {
+
+		return apply_filters( 'atum/orders/wpml_lang', $this->get_meta( 'wpml_lang' ), $this );
+	}
+
+	/**
 	 * Check whether the post for the current ATUM order does exist
 	 *
 	 * @since 1.8.8
@@ -2621,6 +2635,25 @@ abstract class AtumOrderModel {
 			$this->set_meta( 'atum_barcode', $atum_barcode );
 		}
 
+	}
+
+	/**
+	 * Set WPML lang. Only when WPML is active
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param string $wpml_lang
+	 * @param bool   $skip_change
+	 */
+	public function set_wpml_lang( $wpml_lang, $skip_change = FALSE ) {
+
+		$wpml_lang = wc_clean( $wpml_lang );
+
+		if ( ! $skip_change ) {
+			$this->register_change( 'wpml_lang' );
+		}
+
+		$this->set_meta( 'wpml_lang', $wpml_lang );
 	}
 
 
