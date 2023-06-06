@@ -15,9 +15,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\InventoryLogs\InventoryLogs;
-use Atum\PurchaseOrders\PurchaseOrders;
-
 
 class SearchOrdersByColumn {
 
