@@ -500,10 +500,12 @@ var HelpGuide = (function () {
             if (!$body.hasClass('atum-show-help-markers')) {
                 return;
             }
-            var $elem = $(evt.currentTarget), elem = $elem.get(0);
-            if (!_utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].pseudoClick(evt, elem, 'before')) {
+            var $elem = $(evt.currentTarget);
+            if (!_utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].pseudoClick(evt, $elem, 'before')) {
                 return;
             }
+            evt.stopImmediatePropagation();
+            evt.stopPropagation();
             _this.step = parseInt($elem.data('step') || '0');
             if (_this.step) {
                 _this.isAuto = false;
@@ -517,6 +519,7 @@ var HelpGuide = (function () {
         });
     };
     HelpGuide.prototype.getGuide = function (success, $button) {
+        var _this = this;
         if ($button === void 0) { $button = null; }
         if (!this.guide) {
             return;
@@ -531,6 +534,7 @@ var HelpGuide = (function () {
                 .then(function () {
                 $button && $button.removeClass('loading-guide');
                 success();
+                _this.wpHooks.doAction('atum_helpGuide_loaded', _this.guide);
             })
                 .catch(function (error) {
                 $button && $button.removeClass('loading-guide');
@@ -646,7 +650,7 @@ var HelpGuide = (function () {
         if (step.first) {
             $elem = $elem.first();
         }
-        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\t\t\n\t\t\t/>\n\t\t"));
+        var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active atum-tooltip\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\n\t\t\t\ttitle=\"").concat(this.settings.get('hgShowHelpGuide'), "\"\t\t\n\t\t\t/>\n\t\t"));
         if ($elem.is('td,th,tr')) {
             $elem.wrapInner($helpMarker);
         }
@@ -662,6 +666,7 @@ var HelpGuide = (function () {
         $('body').toggleClass('atum-show-help-markers', this.markersEnabled);
         $helpMarkers.not("[data-guide=\"".concat(this.guide, "\"]")).removeClass('active');
         $helpMarkers.filter("[data-guide=\"".concat(this.guide, "\"]")).toggleClass('active', this.markersEnabled);
+        this.wpHooks.doAction('atum_helpGuide_toggleHelpMarkers', this.markersEnabled, this.guide);
     };
     HelpGuide.prototype.maybeCacheGuide = function () {
         if (!this.cachedGuides.hasOwnProperty(this.guide)) {
@@ -1795,20 +1800,20 @@ var Utils = {
         });
         return taxes.reduce(function (a, b) { return a + b; }, 0);
     },
-    pseudoClick: function (evt, parentElem, pseudoElement) {
-        if (pseudoElement === void 0) { pseudoElement = 'both'; }
+    pseudoClick: function (evt, $parentElem, pseudoElem) {
+        if (pseudoElem === void 0) { pseudoElem = 'both'; }
         var beforeClicked = false, afterClicked = false;
-        var parentLeft = parseInt(parentElem.getBoundingClientRect().left.toString(), 10), parentTop = parseInt(parentElem.getBoundingClientRect().top.toString(), 10);
+        var parentElem = $parentElem.get(0), parentLeft = parseInt(parentElem.getBoundingClientRect().left.toString(), 10), parentTop = parseInt(parentElem.getBoundingClientRect().top.toString(), 10);
         var mouseX = evt.clientX, mouseY = evt.clientY;
-        if (['before', 'both'].includes(pseudoElement)) {
+        if (['before', 'both'].includes(pseudoElem)) {
             var before = window.getComputedStyle(parentElem, ':before'), beforeStart = parentLeft + (parseInt(before.getPropertyValue('left'), 10)), beforeEnd = beforeStart + parseInt(before.width, 10), beforeYStart = parentTop + (parseInt(before.getPropertyValue('top'), 10)), beforeYEnd = beforeYStart + parseInt(before.height, 10);
             beforeClicked = mouseX >= beforeStart && mouseX <= beforeEnd && mouseY >= beforeYStart && mouseY <= beforeYEnd;
         }
-        if (['after', 'both'].includes(pseudoElement)) {
+        if (['after', 'both'].includes(pseudoElem)) {
             var after = window.getComputedStyle(parentElem, ':after'), afterStart = parentLeft + (parseInt(after.getPropertyValue('left'), 10)), afterEnd = afterStart + parseInt(after.width, 10), afterYStart = parentTop + (parseInt(after.getPropertyValue('top'), 10)), afterYEnd = afterYStart + parseInt(after.height, 10);
             afterClicked = mouseX >= afterStart && mouseX <= afterEnd && mouseY >= afterYStart && mouseY <= afterYEnd;
         }
-        switch (pseudoElement) {
+        switch (pseudoElem) {
             case 'after':
                 return afterClicked;
             case 'before':

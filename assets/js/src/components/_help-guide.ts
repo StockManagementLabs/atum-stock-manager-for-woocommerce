@@ -171,6 +171,9 @@ export default class HelpGuide {
 					return;
 				}
 
+				evt.stopImmediatePropagation();
+				evt.stopPropagation();
+
 				this.step = parseInt( $elem.data( 'step' ) || '0' );
 
 				if ( this.step ) {
@@ -218,6 +221,8 @@ export default class HelpGuide {
 
 					$button && $button.removeClass( 'loading-guide' );
 					success();
+
+					this.wpHooks.doAction( 'atum_helpGuide_loaded', this.guide );
 
 				} )
 				.catch( ( error: string ) => {
@@ -434,11 +439,12 @@ export default class HelpGuide {
 		// Using a "custom" HTML element to avoid CSS issues.
 		// The step number must be 1 or greater.
 		const $helpMarker: JQuery = $( `
-			<atum-help-marker class="atum-help-marker active" 
+			<atum-help-marker class="atum-help-marker active atum-tooltip" 
 				data-guide="${ this.guide }"
 				data-step="${ index + 1  }"
 				data-marker-position="${ step.markerPosition || 'top-right' }"
-				data-position="${ step.position || 'auto' }"			
+				data-position="${ step.position || 'auto' }"	
+				title="${ this.settings.get( 'hgShowHelpGuide' ) }"		
 			/>
 		` );
 
@@ -467,6 +473,8 @@ export default class HelpGuide {
 		$( 'body' ).toggleClass( 'atum-show-help-markers', this.markersEnabled );
 		$helpMarkers.not( `[data-guide="${ this.guide }"]` ).removeClass( 'active' );
 		$helpMarkers.filter( `[data-guide="${ this.guide }"]` ).toggleClass( 'active', this.markersEnabled );
+
+		this.wpHooks.doAction( 'atum_helpGuide_toggleHelpMarkers', this.markersEnabled, this.guide );
 
 	}
 
