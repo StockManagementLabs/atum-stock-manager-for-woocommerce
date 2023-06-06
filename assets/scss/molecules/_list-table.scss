@@ -1808,6 +1808,10 @@ table.wp-list-table, .floatThead-container {
 		tr.totals {
 			th, td {
 				border-top: none;
+				&.column-title {
+					border-top: 1px solid var(--main-border);
+					border-bottom: 1px solid var(--main-border);
+				}
 			}
 		}
 		
