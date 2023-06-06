@@ -177,6 +177,10 @@
 			}
 		}
 	}
+	// WMPL lang dropdown compatibility
+	.wpml-ls .select2-container {
+		width: auto !important;
+	}
 }
 
 //

@@ -25,8 +25,8 @@ jQuery( ( $: JQueryStatic ) => {
 	const settings = new Settings( 'atumOrder' );
 	const tooltip = new Tooltip();
 	const dateTimePicker = new DateTimePicker( settings );
-	new EnhancedSelect();
-	new AtumOrders( settings, tooltip, dateTimePicker );
+	const enhancedSelect : EnhancedSelect = new EnhancedSelect();
+	new AtumOrders( settings, tooltip, dateTimePicker, enhancedSelect );
 	new OrderNotes( settings );
 	
 });
