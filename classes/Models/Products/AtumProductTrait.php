@@ -17,7 +17,6 @@ defined( 'ABSPATH' ) || die;
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
 use Atum\Suppliers\Suppliers;
-use AtumBarcodes\Inc\Globals;
 
 
 trait AtumProductTrait {
@@ -1261,7 +1260,7 @@ trait AtumProductTrait {
 	 */
 	public function set_barcode_type( $barcode_type ) {
 
-		if ( is_null( $barcode_type ) || array_key_exists( $barcode_type, Globals::get_allowed_barcodes() ) ) {
+		if ( is_null( $barcode_type ) ) {
 			$this->set_prop( 'barcode_type', $barcode_type );
 		}
 
