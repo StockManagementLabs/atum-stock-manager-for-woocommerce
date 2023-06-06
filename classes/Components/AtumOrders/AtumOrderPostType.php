@@ -967,7 +967,7 @@ abstract class AtumOrderPostType {
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
 
-				$vars = array(
+				$vars = apply_filters( 'atum/order_post_type/js_vars', array(
 					'addNoteNonce'              => wp_create_nonce( 'add-atum-order-note' ),
 					'areYouSure'                => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 					'atumOrderItemNonce'        => wp_create_nonce( 'atum-order-item' ),
@@ -1006,7 +1006,7 @@ abstract class AtumOrderPostType {
 					'taxesName'                 => __( 'VAT', ATUM_TEXT_DOMAIN ),
 					'taxRateAlreadyExists'      => __( 'You cannot add the same tax rate twice!', ATUM_TEXT_DOMAIN ),
 					'yes'                       => __( 'Yes', ATUM_TEXT_DOMAIN ),
-				);
+				) );
 
 				$vars = array_merge( $vars, Globals::get_date_time_picker_js_vars() );
 
