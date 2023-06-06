@@ -3121,6 +3121,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   top: 0;
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
+  display: inline-block;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;

@@ -3054,6 +3054,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   top: 0;
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
+  display: inline-block;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3751,7 +3752,7 @@ body.atum-show-help-markers .atum-help-marker.active:before, body.atum-show-help
   height: 16px !important;
   right: -8px !important;
   top: -8px !important;
-  z-index: 99998 !important;
+  z-index: 9989 !important;
   border-radius: 50px !important;
   text-indent: unset !important;
   cursor: help !important;
