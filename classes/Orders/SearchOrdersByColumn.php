@@ -114,12 +114,10 @@ class SearchOrdersByColumn {
 
 		global $post_type;
 
-		$supported_order_types = apply_filters( 'atum/orders/search_by_column/supported_types', [ 'shop_order', PurchaseOrders::POST_TYPE, InventoryLogs::POST_TYPE ] );
-
 		if (
 			! empty( $this->search_columns ) && (
 				( Helpers::is_using_cot_list() && function_exists( 'wc_get_page_screen_id' ) && wc_get_page_screen_id( 'shop-order' ) === $hook && ! isset( $_GET['id'] ) ) ||
-				( 'edit.php' === $hook && in_array( $post_type, $supported_order_types ) ) || 'woocommerce_page_wc-orders' === $hook
+				( 'edit.php' === $hook && in_array( $post_type, array_keys( $this->order_types_ids ) ) ) || 'woocommerce_page_wc-orders' === $hook
 			)
 		) {
 
