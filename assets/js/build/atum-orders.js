@@ -6171,9 +6171,10 @@ var unsetSides = {
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
 
-function roundOffsetsByDPR(_ref, win) {
+function roundOffsetsByDPR(_ref) {
   var x = _ref.x,
       y = _ref.y;
+  var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
     x: Object(_utils_math_js__WEBPACK_IMPORTED_MODULE_7__["round"])(x * dpr) / dpr || 0,
@@ -6256,7 +6257,7 @@ function mapToStyles(_ref2) {
   var _ref4 = roundOffsets === true ? roundOffsetsByDPR({
     x: x,
     y: y
-  }, Object(_dom_utils_getWindow_js__WEBPACK_IMPORTED_MODULE_2__["default"])(popper)) : {
+  }) : {
     x: x,
     y: y
   };
@@ -7682,7 +7683,7 @@ __webpack_require__.r(__webpack_exports__);
 function getUAString() {
   var uaData = navigator.userAgentData;
 
-  if (uaData != null && uaData.brands && Array.isArray(uaData.brands)) {
+  if (uaData != null && uaData.brands) {
     return uaData.brands.map(function (item) {
       return item.brand + "/" + item.version;
     }).join(' ');
@@ -7820,7 +7821,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap base-component.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -7837,7 +7838,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): base-component.js
+   * Bootstrap (v5.2.2): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -7845,7 +7846,7 @@ function withinMaxClamp(min, value, max) {
    * Constants
    */
 
-  const VERSION = '5.2.3';
+  const VERSION = '5.2.2';
   /**
    * Class definition
    */
@@ -7930,7 +7931,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap data.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -7941,7 +7942,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): dom/data.js
+   * Bootstrap (v5.2.2): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8007,7 +8008,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap event-handler.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -8018,7 +8019,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): dom/event-handler.js
+   * Bootstrap (v5.2.2): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8301,7 +8302,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap manipulator.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap manipulator.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -8312,7 +8313,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): dom/manipulator.js
+   * Bootstrap (v5.2.2): dom/manipulator.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8396,7 +8397,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap selector-engine.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -8407,7 +8408,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): dom/selector-engine.js
+   * Bootstrap (v5.2.2): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8492,7 +8493,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap tooltip.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap tooltip.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -8529,7 +8530,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): tooltip.js
+   * Bootstrap (v5.2.2): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -8679,6 +8680,10 @@ function withinMaxClamp(min, value, max) {
       clearTimeout(this._timeout);
       EventHandler__default.default.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
 
+      if (this.tip) {
+        this.tip.remove();
+      }
+
       if (this._element.getAttribute('data-bs-original-title')) {
         this._element.setAttribute('title', this._element.getAttribute('data-bs-original-title'));
       }
@@ -8707,7 +8712,10 @@ function withinMaxClamp(min, value, max) {
       } // todo v6 remove this OR make it optional
 
 
-      this._disposePopper();
+      if (this.tip) {
+        this.tip.remove();
+        this.tip = null;
+      }
 
       const tip = this._getTipElement();
 
@@ -8722,7 +8730,12 @@ function withinMaxClamp(min, value, max) {
         EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
       }
 
-      this._popper = this._createPopper(tip);
+      if (this._popper) {
+        this._popper.update();
+      } else {
+        this._popper = this._createPopper(tip);
+      }
+
       tip.classList.add(CLASS_NAME_SHOW); // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
@@ -8780,12 +8793,14 @@ function withinMaxClamp(min, value, max) {
         }
 
         if (!this._isHovered) {
-          this._disposePopper();
+          tip.remove();
         }
 
         this._element.removeAttribute('aria-describedby');
 
         EventHandler__default.default.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN));
+
+        this._disposePopper();
       };
 
       this._queueCallback(complete, this.tip, this._isAnimated());
@@ -9102,11 +9117,6 @@ function withinMaxClamp(min, value, max) {
 
         this._popper = null;
       }
-
-      if (this.tip) {
-        this.tip.remove();
-        this.tip = null;
-      }
     } // Static
 
 
@@ -9150,7 +9160,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap config.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap config.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -9165,7 +9175,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): util/config.js
+   * Bootstrap (v5.2.2): util/config.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9240,7 +9250,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap index.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap index.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -9251,7 +9261,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): util/index.js
+   * Bootstrap (v5.2.2): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9601,7 +9611,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap sanitizer.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap sanitizer.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -9612,7 +9622,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): util/sanitizer.js
+   * Bootstrap (v5.2.2): util/sanitizer.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9734,7 +9744,7 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap template-factory.js v5.2.3 (https://getbootstrap.com/)
+  * Bootstrap template-factory.js v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -9750,7 +9760,7 @@ function withinMaxClamp(min, value, max) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.2.3): util/template-factory.js
+   * Bootstrap (v5.2.2): util/template-factory.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -9930,24 +9940,6 @@ return /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 165:
-/***/ (function(__unused_webpack_module, exports) {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.abs = void 0;
-function abs(n) {
-    if (typeof n == 'number' || typeof n == 'bigint')
-        n = n.toString();
-    if (n[0] == '-')
-        return n.substring(1);
-    return n;
-}
-exports.abs = abs;
-
-
-/***/ }),
-
 /***/ 217:
 /***/ (function(__unused_webpack_module, exports) {
 
@@ -9961,28 +9953,24 @@ function add(number1, number2) {
     var neg = 0, ind = -1, neg_len;
     //check for negatives
     if (number1[0] == '-') {
+        neg++;
+        ind = 1;
         number1 = number1.substring(1);
-        if (!testZero(number1)) {
-            neg++;
-            ind = 1;
-            neg_len = number1.length;
-        }
+        neg_len = number1.length;
     }
     if (number2[0] == '-') {
+        neg++;
+        ind = 2;
         number2 = number2.substring(1);
-        if (!testZero(number2)) {
-            neg++;
-            ind = 2;
-            neg_len = number2.length;
-        }
+        neg_len = number2.length;
     }
     number1 = trim(number1);
     number2 = trim(number2);
     _a = pad(trim(number1), trim(number2)), number1 = _a[0], number2 = _a[1];
     if (neg == 1) {
-        if (ind === 1)
+        if (ind == 1)
             number1 = compliment(number1);
-        else if (ind === 2)
+        else
             number2 = compliment(number2);
     }
     var res = addCore(number1, number2);
@@ -9999,9 +9987,6 @@ function add(number1, number2) {
 }
 exports.add = add;
 function compliment(number) {
-    if (testZero(number)) {
-        return number;
-    }
     var s = '', l = number.length, dec = number.split('.')[1], ld = dec ? dec.length : 0;
     for (var i = 0; i < l; i++) {
         if (number[i] >= '0' && number[i] <= '9')
@@ -10062,9 +10047,6 @@ function addCore(number1, number2) {
     }
     return carry ? (carry.toString() + sum) : sum;
 }
-function testZero(number) {
-    return (/^0[0]*[.]{0,1}[0]*$/.test(number));
-}
 
 
 /***/ }),
@@ -10074,7 +10056,6 @@ function testZero(number) {
 
 
 var add_1 = __webpack_require__(217);
-var abs_1 = __webpack_require__(165);
 var round_1 = __webpack_require__(350);
 var multiply_1 = __webpack_require__(182);
 var divide_1 = __webpack_require__(415);
@@ -10134,9 +10115,6 @@ var bigDecimal = /** @class */ (function () {
     bigDecimal.prototype.getValue = function () {
         return this.value;
     };
-    bigDecimal.prototype.setValue = function (num) {
-        this.value = bigDecimal.validate(num);
-    };
     bigDecimal.getPrettyValue = function (number, digits, separator) {
         if (!(digits || separator)) {
             digits = 3;
@@ -10181,13 +10159,6 @@ var bigDecimal = /** @class */ (function () {
         if (isNaN(precision))
             throw Error("Precision is not a number: " + precision);
         return new bigDecimal((0, round_1.roundOff)(this.value, precision, mode));
-    };
-    bigDecimal.abs = function (number) {
-        number = bigDecimal.validate(number);
-        return (0, abs_1.abs)(number);
-    };
-    bigDecimal.prototype.abs = function () {
-        return new bigDecimal((0, abs_1.abs)(this.value));
     };
     bigDecimal.floor = function (number) {
         number = bigDecimal.validate(number);
@@ -10634,7 +10605,7 @@ function roundOff(input, n, mode) {
             return (neg ? '-' : '') + increment(partInt, parseInt(partDec[0])) + '.' + partDec.substring(1);
         }
     }
-    return (neg && (parseInt(partInt) || parseInt(partDec)) ? '-' : '') + partInt + '.' + partDec;
+    return (neg && parseInt(partInt) ? '-' : '') + partInt + '.' + partDec;
 }
 exports.roundOff = roundOff;
 function greaterThanFive(part, pre, neg, mode) {

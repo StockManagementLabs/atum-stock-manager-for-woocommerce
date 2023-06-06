@@ -248,21 +248,15 @@ export default class HelpGuide {
 
 		return new Promise( ( resolve: Function, reject: Function ) => {
 
-			const data: any = {
-				action  : 'atum_get_help_guide_steps',
-				security: this.settings.get( 'hgNonce' ),
-				guide   : this.guide,
-			}
-
-			if ( this.settings.get( 'hgScreenId' ) ) {
-				data.screen = this.settings.get( 'hgScreenId' );
-			}
-
 			$.ajax( {
 				url       : window[ 'ajaxurl' ],
 				method    : 'post',
 				dataType  : 'json',
-				data,
+				data      : {
+					action  : 'atum_get_help_guide_steps',
+					security: this.settings.get( 'hgNonce' ),
+					guide   : this.guide,
+				},
 				success   : ( response: any ) => {
 
 					if ( response.success ) {
@@ -301,8 +295,10 @@ export default class HelpGuide {
 
 				$( 'body' ).removeClass( 'running-atum-help-guide' );
 
-				if ( this.isAuto && this.settings.get( 'hgScreenId' ) ) {
-					this.saveClosedAutoGuide( this.settings.get( 'hgScreenId' ) );
+				// Save the closed auto-guide as user meta to not load again.
+				if ( this.isAuto && this.guide ) {
+					this.isAuto = false;
+					this.saveClosedAutoGuide();
 				}
 
 				this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
@@ -356,10 +352,8 @@ export default class HelpGuide {
 
 	/**
 	 * Save the closed auto-guide status
-	 *
-	 * @param {string} screen
 	 */
-	saveClosedAutoGuide( screen: string ) {
+	saveClosedAutoGuide() {
 
 		$.ajax( {
 			url   : window[ 'ajaxurl' ],
@@ -367,7 +361,7 @@ export default class HelpGuide {
 			data  : {
 				action  : 'atum_save_closed_auto_guide',
 				security: this.settings.get( 'hgNonce' ),
-				screen
+				guide   : this.guide
 			},
 		} );
 

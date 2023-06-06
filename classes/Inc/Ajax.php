@@ -182,7 +182,7 @@ final class Ajax {
 		// Get any help guide steps.
 		add_action( 'wp_ajax_atum_get_help_guide_steps', array( $this, 'get_help_guide_steps' ) );
 
-		// Save the closed state for an auto-guide on any screen.
+		// Save the closed state for an auto-guide.
 		add_action( 'wp_ajax_atum_save_closed_auto_guide', array( $this, 'save_closed_auto_guide' ) );
 
 		// Save the closed state for the ATUM admin modals.
@@ -2948,7 +2948,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Save the closed state for any auto-guide on any screen
+	 * Save the closed state for any auto-guide as a user meta
 	 *
 	 * @package ATUM Help Guides
 	 *
@@ -2958,8 +2958,8 @@ final class Ajax {
 
 		check_ajax_referer( 'help-guide-nonce', 'security' );
 
-		if ( ! empty( $_POST['screen'] ) ) {
-			AtumHelpGuide::save_closed_auto_guide( get_current_user_id(), esc_attr( $_POST['screen'] ) );
+		if ( ! empty( $_POST['guide'] ) ) {
+			AtumHelpGuide::save_closed_auto_guide( get_current_user_id(), esc_attr( $_POST['guide'] ) );
 		}
 
 		wp_die();
