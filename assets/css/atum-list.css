@@ -3318,7 +3318,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltiptext {
-  padding: 15px;
+  padding: 20px;
   border-top: 1px solid #fff;
   color: #6c757d;
   border-bottom: 1px solid #fff;
@@ -3617,7 +3617,6 @@ tr.introjs-showElement > th {
   word-wrap: break-word;
 }
 .introjs-tooltip .introjs-tooltiptext ul {
-  padding-left: 15px;
   list-style: outside;
 }
 .introjs-tooltip .introjs-bullets {
@@ -3775,7 +3774,7 @@ body.atum-show-help-markers .atum-help-marker.active:hover:before {
   background-color: #ff4848 !important;
 }
 body.running-atum-help-guide .atum-help-marker:before {
-  visibility: hidden !important;
+  display: none !important;
 }
 
 .popover {
@@ -8102,6 +8101,10 @@ table.wp-list-table tfoot .item-heads th, .floatThead-container tfoot .item-head
 }
 table.wp-list-table tfoot tr.totals th, table.wp-list-table tfoot tr.totals td, table.wp-list-table thead tr.totals th, table.wp-list-table thead tr.totals td, .floatThead-container tfoot tr.totals th, .floatThead-container tfoot tr.totals td, .floatThead-container thead tr.totals th, .floatThead-container thead tr.totals td {
   border-top: none;
+}
+table.wp-list-table tfoot tr.totals th.column-title, table.wp-list-table tfoot tr.totals td.column-title, table.wp-list-table thead tr.totals th.column-title, table.wp-list-table thead tr.totals td.column-title, .floatThead-container tfoot tr.totals th.column-title, .floatThead-container tfoot tr.totals td.column-title, .floatThead-container thead tr.totals th.column-title, .floatThead-container thead tr.totals td.column-title {
+  border-top: 1px solid var(--main-border);
+  border-bottom: 1px solid var(--main-border);
 }
 table.wp-list-table tfoot .item-heads td, table.wp-list-table tfoot .item-heads th, table.wp-list-table thead .item-heads td, table.wp-list-table thead .item-heads th, .floatThead-container tfoot .item-heads td, .floatThead-container tfoot .item-heads th, .floatThead-container thead .item-heads td, .floatThead-container thead .item-heads th {
   -webkit-box-shadow: 0 1px 0 0 var(--main-border);

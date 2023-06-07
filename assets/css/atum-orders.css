@@ -3958,9 +3958,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
           box-sizing: border-box;
   float: left;
 }
-.atum_order_actions .wpml-ls .select2-container {
-  width: auto !important;
-}
 
 #atum_order_notes .inside, #atum_order_notes .atum-meta-box {
   margin: 0;
