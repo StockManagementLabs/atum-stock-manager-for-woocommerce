@@ -90,7 +90,7 @@ class AtumHelpGuide {
 			</i>
 
 			<i class="show-intro-guide atum-icon atmi-indent-increase atum-tooltip"
-			   title="<?php esc_attr_e( 'Show help guide', ATUM_TEXT_DOMAIN ) ?>">
+			   title="<?php esc_attr_e( 'Show ATUM help guide', ATUM_TEXT_DOMAIN ) ?>">
 			</i>
 		</span>
 		<?php
