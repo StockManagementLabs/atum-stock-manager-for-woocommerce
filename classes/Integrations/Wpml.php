@@ -1675,17 +1675,17 @@ class Wpml {
 				$post_id = absint( $url_query['post'] );
 			}
 
-			if ( $post_id && PurchaseOrders::POST_TYPE === get_post_type( $post_id ) ) {
+		}
 
-				$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
+		if ( $post_id && PurchaseOrders::POST_TYPE === get_post_type( $post_id ) ) {
 
-				if ( $lang ) {
-					$this->current_language = $lang;
+			$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
 
-					add_filter( 'atum/search_products/join_clauses', array( $this, 'add_po_join_clause' ), 10, 8 );
-					add_filter( 'atum/search_products/where_clauses', array( $this, 'add_po_where_clause' ), 10, 8 );
-				}
+			if ( $lang ) {
+				$this->current_language = $lang;
 
+				add_filter( 'atum/search_products/join_clauses', array( $this, 'add_po_join_clause' ), 10, 8 );
+				add_filter( 'atum/search_products/where_clauses', array( $this, 'add_po_where_clause' ), 10, 8 );
 			}
 
 		}
