@@ -26,7 +26,7 @@
 	{
 		"title": "Search feature",
 		"element": ".list-table-header .search-box .input-group",
-		"intro": "<p>You can use the search feature to <strong>search for any products</strong> within Stock Central.</p><p>To search for products:</p><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\"></div>",
+		"intro": "You can use the search feature to <strong>search for any products</strong> within Stock Central.<br><br>To search for products:<br><ul>\n<li><strong>Select the column</strong><span>&nbsp;</span>you want to search in the dropdown.</li>\n<li>Enter the product<span>&nbsp;</span><strong>name, SKU, or product ID</strong>. All products containing the search text automatically appear.</li>\n</ul><div class=\"infobox info\">If you want results to only appear after you press<span>&nbsp;</span><strong>Search</strong>, you can turn off auto-search by going to<span>&nbsp;</span><strong>Settings</strong><span>&nbsp;</span>&gt;<span>&nbsp;</span><strong>General</strong><span>&nbsp;</span>and then disabling the<span>&nbsp;</span><em>Enable Filter Autosearch option</em>. Click<span>&nbsp;</span><strong>Update Settings</strong><span>&nbsp;</span>to activate the changes.<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-gsettings-03.jpg\"></div>",
 		"load": "init"
 	},
 	{
@@ -50,38 +50,38 @@
 	{
 		"title": "Image column",
 		"element": "thead th#thumb .col-product-details",
-		"intro": "<p>Product small image preview.</p>",
+		"intro": "Product small image preview.",
 		"load": "lazy"
 	},
 	{
 		"title": "Product Type column",
 		"element": "thead th#calc_type .col-product-details",
-		"intro": "<p>This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.</p>",
+		"intro": "This column displays the classification of individual products in WooCommerce. We specify product types by icons with a tooltip on hover. For products with children (variables, grouped, etc), these icons work as a button to expand/collapse their children.",
 		"load": "lazy"
 	},
 	{
 		"title": "Location column",
 		"element": "thead th#calc_location .col-product-details",
-		"intro": "<p>Shows the product's location hierarchy. The grey icon means that there are no locations set and the blue icon means that there. Click the icon to view and edit the locations hierarchy in a popup.</p>",
+		"intro": "Shows the product's location hierarchy. The grey icon means that there are no locations set and the blue icon means that there. Click the icon to view and edit the locations hierarchy in a popup.",
 		"load": "lazy"
 	},
 	{
 		"title": "Stock Indicator column",
 		"element": "thead th#calc_stock_indicator .col-stock-selling-manager",
-		"intro": "<p>The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\"></p>",
+		"intro": "The product's stock status, and can be one of:<br><br><img src=\"https://forum.stockmanagementlabs.com/uploads/ss-sccolumn-05.png\">",
 		"load": "lazy"
 	},
 	{
 		"title": "Editable Cells (blue)",
 		"element": ".atum-list-table td .set-meta",
-		"intro": "<p>Blue items on the Stock Central table means that the item is editable. When you click on the value, a popup will open to edit the value. To save the changes after setting the new values you have to click the 'Save' button located at the top of the screen.</p>",
+		"intro": "Blue items on the Stock Central table means that the item is editable. When you click on the value, a popup will open to edit the value. To save the changes after setting the new values you have to click the 'Save' button located at the top of the screen.",
 		"load": "lazy",
 		"first": true
 	},
 	{
 		"title": "Double values",
 		"element": ".atum-list-table td .compounded",
-		"intro": "<p>When a product is made up of others (such as variable products, bundles, etc.), a pair of values are displayed, separated by a ‘|’ symbol. The value on the left is related to the product itself. The value on the right side is the compounded stock from its components.</p>",
+		"intro": "When a product is made up of others (such as variable products, bundles, etc.), a pair of values are displayed, separated by a ‘|’ symbol. The value on the left is related to the product itself. The value on the right side is the compounded stock from its components.",
 		"load": "lazy",
 		"first": true
 	},
@@ -102,7 +102,7 @@
 	{
 		"title": "Help Tab",
 		"element": "#contextual-help-link-wrap",
-		"intro": "<p>To access the help content, click <b>Help</b> at the top of the screen.<br/>The help content contains the following sections:</p><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li><a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">Visit our Website for more</a></li><li><a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">Read the Docs</a></li><li><a href=\"https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA\" target=\"_blank\">Watch our Videos</a></li><li><a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">Get Support</a></li></ul>",
+		"intro": "To access the help content, click <b>Help</b> at the top of the screen.<br>The help content contains the following sections:<br><ul><li>Product Details: Definitions for all the columns which appear in the Product Details section.</li><li>Stock Counters: Definitions for all the columns which appear in the Stock Counters section.</li><li>Stock Negatives: Definitions for all the columns which appear in the Stock Negatives section.</li>Stock Selling Manager: Definitions for all the columns which appear in the Stock Selling section.</li><li><a href=\"https://stockmanagementlabs.com/\" target=\"_blank\">Visit our Website for more</a></li><li><a href=\"https://stockmanagementlabs.crunch.help/en/\" target=\"_blank\">Read the Docs</a></li><li><a href=\"https://www.youtube.com/channel/UCcTNwTCU4X_UrIj_5TUkweA\" target=\"_blank\">Watch our Videos</a></li><li><a href=\"https://forum.stockmanagementlabs.com/\" target=\"_blank\">Get Support</a></li></ul>",
 		"load": "init",
 		"markerPosition": "bottom-left",
 		"position": "bottom"
@@ -110,7 +110,7 @@
 	{
 		"title": "Export Data",
 		"element": "#atum-export-link-wrap",
-		"intro": "<p>The Export Data feature allows you to <strong>export selected data</strong> from Stock Central as a pre-formatted .pdf file.</p><p>To export data as a .pdf:</p><ul><li>From Stock Central, click<span>&nbsp;</span><strong>Export Data</strong>.</li><li>In the Columns section, <strong>enable the columns</strong> you want to be included in the export.</li><li>Use the <strong>Product Type</strong> menu if you want to only include a specific product type.</li><li>Use the<span>&nbsp;</span><strong>Product Category</strong><span>&nbsp;</span>menu if you want to only include a specific product category.</li><li>Enter the maximum width of the product names displayed in the report in the <strong>Title Max Length field</strong>.</li>\n</ul>",
+		"intro": "The Export Data feature allows you to <strong>export selected data</strong> from Stock Central as a pre-formatted .pdf file.<br><br>To export data as a .pdf:<br><ul><li>From Stock Central, click<span>&nbsp;</span><strong>Export Data</strong>.</li><li>In the Columns section, <strong>enable the columns</strong> you want to be included in the export.</li><li>Use the <strong>Product Type</strong> menu if you want to only include a specific product type.</li><li>Use the<span>&nbsp;</span><strong>Product Category</strong><span>&nbsp;</span>menu if you want to only include a specific product category.</li><li>Enter the maximum width of the product names displayed in the report in the <strong>Title Max Length field</strong>.</li>\n</ul>",
 		"load": "init",
 		"markerPosition": "bottom-left"
 	}
