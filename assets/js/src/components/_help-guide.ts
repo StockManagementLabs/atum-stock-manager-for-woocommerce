@@ -430,6 +430,11 @@ export default class HelpGuide {
 			$elem = $elem.first();
 		}
 
+		if ( $elem.is( 'tr, thead, tbody' ) ) {
+			console.warn( 'tr, thead and tbody elements are not allowed', step );
+			return;
+		}
+
 		// Using a "custom" HTML element to avoid CSS issues.
 		// The step number must be 1 or greater.
 		const $helpMarker: JQuery = $( `
@@ -441,16 +446,26 @@ export default class HelpGuide {
 			/>
 		` );
 
-		if ( $elem.is( 'td,th,tr' ) ) {
-			$elem.wrapInner( $helpMarker );
+		// Special cases to not break tables.
+		if ( $elem.is( 'td,th' ) ) {
+
+			// Do not readd the marker if for some reason was already there.
+			if ( ! $elem.children( '.atum-help-marker' ).length ) {
+				$elem.wrapInner( $helpMarker );
+			}
+
 		}
 		else {
 
+			// If there is a tooltip on the elem parent, get this one to avoid conflicts.
 			if ( $elem.parent().hasClass( 'atum-tooltip' ) ) {
 				$elem = $elem.parent();
 			}
 
-			$elem.wrap( $helpMarker );
+			// Do not readd the marker if for some reason was already there.
+			if ( ! $elem.parent( '.atum-help-marker' ).length ) {
+				$elem.wrap( $helpMarker );
+			}
 
 		}
 

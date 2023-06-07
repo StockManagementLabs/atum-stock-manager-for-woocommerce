@@ -711,15 +711,23 @@ var HelpGuide = (function () {
         if (step.first) {
             $elem = $elem.first();
         }
+        if ($elem.is('tr, thead, tbody')) {
+            console.warn('tr, thead and tbody elements are not allowed', step);
+            return;
+        }
         var $helpMarker = $("\n\t\t\t<atum-help-marker class=\"atum-help-marker active\" \n\t\t\t\tdata-guide=\"".concat(this.guide, "\"\n\t\t\t\tdata-step=\"").concat(index + 1, "\"\n\t\t\t\tdata-marker-position=\"").concat(step.markerPosition || 'top-right', "\"\n\t\t\t\tdata-position=\"").concat(step.position || 'auto', "\"\t\n\t\t\t/>\n\t\t"));
-        if ($elem.is('td,th,tr')) {
-            $elem.wrapInner($helpMarker);
+        if ($elem.is('td,th')) {
+            if (!$elem.children('.atum-help-marker').length) {
+                $elem.wrapInner($helpMarker);
+            }
         }
         else {
             if ($elem.parent().hasClass('atum-tooltip')) {
                 $elem = $elem.parent();
             }
-            $elem.wrap($helpMarker);
+            if (!$elem.parent('.atum-help-marker').length) {
+                $elem.wrap($helpMarker);
+            }
         }
     };
     HelpGuide.prototype.toggleHelpMarkers = function () {
