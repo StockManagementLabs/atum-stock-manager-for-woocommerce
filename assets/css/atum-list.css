@@ -3318,7 +3318,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltiptext {
-  padding: 20px;
+  padding: 15px;
   border-top: 1px solid #fff;
   color: #6c757d;
   border-bottom: 1px solid #fff;
@@ -3617,6 +3617,7 @@ tr.introjs-showElement > th {
   word-wrap: break-word;
 }
 .introjs-tooltip .introjs-tooltiptext ul {
+  padding-left: 15px;
   list-style: outside;
 }
 .introjs-tooltip .introjs-bullets {
@@ -3773,8 +3774,8 @@ body.atum-show-help-markers .atum-help-marker.active[data-marker-position=bottom
 body.atum-show-help-markers .atum-help-marker.active:hover:before {
   background-color: #ff4848 !important;
 }
-body.running-atum-help-guide .atum-help-marker:before {
-  display: none !important;
+body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-help-guide .atum-help-marker.active:hover:before {
+  visibility: hidden !important;
 }
 
 .popover {

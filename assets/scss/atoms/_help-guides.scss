@@ -639,9 +639,11 @@ body {
 	}
 	
 	&.running-atum-help-guide {
-		.atum-help-marker {
-			&:before {
-				visibility: hidden !important;
+		.atum-help-marker.active {
+			&, &:hover {
+				&:before {
+					visibility: hidden !important;
+				}
 			}
 		}
 	}

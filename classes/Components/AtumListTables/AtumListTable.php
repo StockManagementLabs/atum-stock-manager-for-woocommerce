@@ -3361,28 +3361,28 @@ abstract class AtumListTable extends \WP_List_Table {
 				data-currency-pos="<?php echo esc_attr( get_option( 'woocommerce_currency_pos', 'left' ) ) ?>">
 
 				<thead>
-				<?php $this->print_group_columns(); ?>
+					<?php $this->print_group_columns(); ?>
 
-				<tr class="item-heads">
-					<?php $this->print_column_headers(); ?>
-				</tr>
+					<tr class="item-heads">
+						<?php $this->print_column_headers(); ?>
+					</tr>
 				</thead>
 
 				<tbody id="the-list"<?php if ( $singular ) echo esc_attr( " data-wp-lists='list:$singular'" ); ?>>
-				<?php $this->display_rows_or_placeholder(); ?>
+					<?php $this->display_rows_or_placeholder(); ?>
 				</tbody>
 
 				<tfoot>
 
-				<?php if ( $this->show_totals ) : ?>
-					<tr class="totals">
-						<?php $this->print_totals_columns(); ?>
-					</tr>
-				<?php endif ?>
+					<?php if ( $this->show_totals ) : ?>
+						<tr class="totals">
+							<?php $this->print_totals_columns(); ?>
+						</tr>
+					<?php endif ?>
 
-				<tr class="item-heads">
-					<?php $this->print_column_headers( FALSE ); ?>
-				</tr>
+					<tr class="item-heads">
+						<?php $this->print_column_headers( FALSE ); ?>
+					</tr>
 
 				</tfoot>
 
