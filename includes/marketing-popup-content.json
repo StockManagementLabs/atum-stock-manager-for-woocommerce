@@ -14,9 +14,9 @@
 		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-and-pp.jpg",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-and-pp.jpg",
-		"logo_css" : "width:344px;margin-bottom:10px",
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
+		"logo_css" : "width:361px;margin-bottom:10px",
 		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/label-new-stz@4x.png"
 	},
 	"title": {
