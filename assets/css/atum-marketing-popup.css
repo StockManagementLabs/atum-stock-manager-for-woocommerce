@@ -2002,6 +2002,7 @@ input[type=button].btn-block {
   top: 0;
   left: 10px;
   margin: 10px 0;
+  z-index: 10;
 }
 .swal2-container .marketing-popup .swal2-content {
   font-size: 14px;

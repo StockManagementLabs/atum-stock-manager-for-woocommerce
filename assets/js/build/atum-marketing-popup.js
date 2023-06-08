@@ -166,7 +166,7 @@ var MarketingPopup = (function () {
                             if (popupSettings.images.hasOwnProperty('logo_css') && popupSettings.images.logo_css) {
                                 logo = logo.replace('>', " style=\"".concat(popupSettings.images.logo_css, "\">"));
                             }
-                            if (popupSettings.version && Object.keys(popupSettings.version).length) {
+                            if (popupSettings.version && Object.keys(popupSettings.version).length && popupSettings.version.text) {
                                 versionColor = popupSettings.version.text_color ? "color:".concat(popupSettings.version.text_color, ";") : '';
                                 versionBackground = popupSettings.version.background ? "background:".concat(popupSettings.version.background, ";") : '';
                                 version = "<span class=\"version\" style=\"".concat(versionBackground + versionColor, "\">").concat(popupSettings.version.text, "</span>");

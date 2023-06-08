@@ -107,7 +107,7 @@ export default class MarketingPopup {
 						logo = logo.replace( '>', ` style="${ popupSettings.images.logo_css }">` );
 					}
 
-					if ( popupSettings.version && Object.keys( popupSettings.version ).length ) {
+					if ( popupSettings.version && Object.keys( popupSettings.version ).length && popupSettings.version.text ) {
 						versionColor = popupSettings.version.text_color ? `color:${ popupSettings.version.text_color };` : '';
 						versionBackground = popupSettings.version.background ? `background:${ popupSettings.version.background };` : '';
 						version = `<span class="version" style="${ versionBackground + versionColor }">${ popupSettings.version.text }</span>`;
