@@ -16,11 +16,11 @@
 	"images": {
 		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
 		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
-		"logo_css" : "width:361px;margin-bottom:10px",
+		"logo_css" : "width:361px;margin-bottom:10px;margin-top:30px;",
 		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/label-new-stz@4x.png"
 	},
 	"title": {
-		"text"      : "New ATUM add-ons available!",
+		"text"      : "New ATUM premium add-ons available!",
 		"text_color": "black",
 		"text_size" : "28px",
 		"text_align": "center"
