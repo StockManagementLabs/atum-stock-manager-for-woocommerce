@@ -133,7 +133,7 @@ class AtumQueues {
 
 		// Search for any orphan actions that may exist with old names.
 		$actions = $wc_queue->search( array(
-			'group'   => self::QUEUES_GROUP,
+			'group'  => self::QUEUES_GROUP,
 			'status' => \ActionScheduler_Store::STATUS_PENDING,
 		) );
 
@@ -179,7 +179,7 @@ class AtumQueues {
 						( empty( $action_args ) && ! empty( $schedule_args ) ) ||
 						( ! empty( $action_args ) && empty( $schedule_args ) ) ||
 						! empty( array_diff( $action_args, $schedule_args ) ) ||
-						( $action_group !== self::QUEUES_GROUP )
+						( self::QUEUES_GROUP !== $action_group )
 					) {
 						$wc_queue->cancel( $hook_name, $action_args, $action_group );
 					}
