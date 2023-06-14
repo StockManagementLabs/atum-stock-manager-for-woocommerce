@@ -327,6 +327,45 @@ class AtumApi {
 		return apply_filters( 'atum/api/exportable_endpoints', self::$exportable_endpoints );
 	}
 
+	/**
+	 * Special validation for the post status param (allowing multiple statuses at once)
+	 *
+	 * @since 1.9.22
+	 *
+	 * @param mixed            $value
+	 * @param \WP_REST_Request $request
+	 * @param string           $param
+	 *
+	 * @return true|\WP_Error
+	 */
+	public function validate_status_param( $value, $request, $param ) {
+
+		if ( strpos( $value, ',' ) === FALSE ) {
+			return rest_validate_request_arg( $value, $request, $param );
+		}
+
+		$attributes = $request->get_attributes();
+		if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
+			return TRUE;
+		}
+		$args = $attributes['args'][ $param ];
+
+		$statuses = explode( ',', $value );
+
+		foreach ( $statuses as $status ) {
+
+			$valid_status = rest_validate_value_from_schema( $status, $args, $param );
+
+			if ( ! $valid_status || is_wp_error( $valid_status ) ) {
+				return $valid_status;
+			}
+
+		}
+
+		return TRUE;
+
+	}
+
 
 	/****************************
 	 * Instance methods

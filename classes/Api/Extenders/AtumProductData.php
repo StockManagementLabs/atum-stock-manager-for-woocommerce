@@ -15,6 +15,7 @@ namespace Atum\Api\Extenders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\AtumApi;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
@@ -793,7 +794,7 @@ class AtumProductData {
 		$params['atum_post_status'] = [
 			'description'       => __( 'Limit response to products to the specified statuses. This param supports multiple statuses separated by commas.', ATUM_TEXT_DOMAIN ),
 			'type'              => 'string',
-			'validate_callback' => array( $this, 'validate_status_param' ),
+			'validate_callback' => array( AtumApi::get_instance(), 'validate_status_param' ),
 		];
 
 		return $params;
@@ -876,45 +877,6 @@ class AtumProductData {
 		}
 
 		return implode( ' AND ', $where_parts );
-
-	}
-
-	/**
-	 * Special validation for the status param (allowing multiple statuses at once)
-	 *
-	 * @since 1.9.22
-	 *
-	 * @param mixed            $value
-	 * @param \WP_REST_Request $request
-	 * @param string           $param
-	 *
-	 * @return true|\WP_Error
-	 */
-	public function validate_status_param( $value, $request, $param ) {
-
-		if ( strpos( $value, ',' ) === FALSE ) {
-			return rest_validate_request_arg( $value, $request, $param );
-		}
-
-		$attributes = $request->get_attributes();
-		if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
-			return TRUE;
-		}
-		$args = $attributes['args'][ $param ];
-
-		$statuses = explode( ',', $value );
-
-		foreach ( $statuses as $status ) {
-
-			$valid_status = rest_validate_value_from_schema( $status, $args, $param );
-
-			if ( ! $valid_status || is_wp_error( $valid_status ) ) {
-				return $valid_status;
-			}
-
-		}
-
-		return TRUE;
 
 	}
 
