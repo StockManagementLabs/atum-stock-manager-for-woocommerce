@@ -4368,6 +4368,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 .swal2-container .swal2-modal a:hover {
   color: var(--wp-link-hover);
 }
+.swal2-container .swal2-modal .alert p {
+  text-align: left;
+  margin: 0;
+}
 .swal2-container .swal2-modal .swal2-loader {
   border-color: var(--primary) transparent var(--primary) transparent;
 }

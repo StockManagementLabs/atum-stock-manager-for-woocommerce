@@ -4091,6 +4091,10 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
 .swal2-container .swal2-modal a:hover {
   color: var(--wp-link-hover);
 }
+.swal2-container .swal2-modal .alert p {
+  text-align: left;
+  margin: 0;
+}
 .swal2-container .swal2-modal .swal2-loader {
   border-color: var(--primary) transparent var(--primary) transparent;
 }

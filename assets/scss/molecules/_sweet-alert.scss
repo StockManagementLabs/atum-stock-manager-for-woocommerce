@@ -119,6 +119,13 @@
 			}
 		}
 		
+		.alert {
+			p {
+				text-align: left;
+				margin: 0;
+			}
+		}
+		
 		.swal2-loader {
 			border-color: var(--primary) transparent var(--primary) transparent;
 		}
