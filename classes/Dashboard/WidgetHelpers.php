@@ -895,14 +895,17 @@ final class WidgetHelpers {
 			$bundle_query   = new \WP_Tax_Query( $bundle_args );
 			$bundle_clauses = $bundle_query->get_sql( 'sbp', 'ID' );
 
-			$stock_bundles_sql = "SELECT sbp.ID FROM $wpdb->posts sbp\n\t
+			$stock_bundles_sql = "OR p0.ID IN ( SELECT sbp.ID FROM $wpdb->posts sbp\n\t
 				{$bundle_clauses['join']}\n\t
 				LEFT JOIN {$wpdb->prefix}woocommerce_bundled_items wbi ON sbp.ID = wbi.bundle_id
 				LEFT JOIN {$wpdb->prefix}woocommerce_bundled_itemmeta wbm ON wbi.bundled_item_id = wbm.bundled_item_id AND wbm.meta_key = 'optional' AND wbm.meta_value = 'no'
 				WHERE sbp.post_status IN ('" . implode( "', '", Globals::get_queryable_product_statuses() ) . "')\n\t" .
-				$bundle_clauses['where'] . ' AND wbm.meta_id IS NULL';
+				$bundle_clauses['where'] . ' AND wbm.meta_id IS NULL )';
 
-			$products_in_stock_sql = "( ( $products_in_stock_sql ) UNION ( $stock_bundles_sql ) )";
+			//$products_in_stock_sql = "( ( $products_in_stock_sql ) UNION ( $stock_bundles_sql ) )";
+		}
+		else {
+			$stock_bundles_sql = '';
 		}
 
 		if ( $children_query_needed ) {
@@ -945,7 +948,7 @@ final class WidgetHelpers {
 				"LEFT JOIN $wpdb->postmeta ms ON p0.ID = ms.post_id AND ms.meta_key = '_manage_stock'",
 				"LEFT JOIN $atum_product_data_table apd0 ON p0.ID = apd0.product_id",
 			),
-			'where'  => "p0.ID IN ( $products_in_stock_sql )",
+			'where'  => "p0.ID IN ( $products_in_stock_sql ) $stock_bundles_sql",
 		) );
 
 		// phpcs:disable
