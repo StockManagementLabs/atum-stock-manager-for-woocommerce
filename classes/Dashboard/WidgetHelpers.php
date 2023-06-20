@@ -897,10 +897,13 @@ final class WidgetHelpers {
 
 			$stock_bundles_sql = "OR p0.ID IN ( SELECT sbp.ID FROM $wpdb->posts sbp\n\t
 				{$bundle_clauses['join']}\n\t
-				LEFT JOIN {$wpdb->prefix}woocommerce_bundled_items wbi ON sbp.ID = wbi.bundle_id
-				LEFT JOIN {$wpdb->prefix}woocommerce_bundled_itemmeta wbm ON wbi.bundled_item_id = wbm.bundled_item_id AND wbm.meta_key = 'optional' AND wbm.meta_value = 'no'
 				WHERE sbp.post_status IN ('" . implode( "', '", Globals::get_queryable_product_statuses() ) . "')\n\t" .
-				$bundle_clauses['where'] . ' AND wbm.meta_id IS NULL )';
+				"AND sbp.ID NOT IN (
+					SELECT wbi.bundle_id FROM {$wpdb->prefix}woocommerce_bundled_items wbi
+					LEFT JOIN {$wpdb->prefix}woocommerce_bundled_itemmeta wbm ON wbi.bundled_item_id = wbm.bundled_item_id AND wbm.meta_key = 'optional'
+					WHERE wbm.meta_value = 'no'
+				)" .
+				$bundle_clauses['where'] . ' )';
 
 			//$products_in_stock_sql = "( ( $products_in_stock_sql ) UNION ( $stock_bundles_sql ) )";
 		}
