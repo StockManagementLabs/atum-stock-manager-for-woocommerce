@@ -13,4 +13,5 @@ export interface IMenuItem {
 	link?: string;
 	icon?: string;
 	data?: any;
+	conditional?: any;
 }

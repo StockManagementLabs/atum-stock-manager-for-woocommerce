@@ -855,10 +855,10 @@ var MenuPopover = (function (_super) {
         });
         this.$menuButton
             .on('show.bs.popover', function (evt) {
-            var $shownPopover = $(evt.currentTarget);
+            var $showPopoverBtn = $(evt.currentTarget);
             $(".".concat(_this.popoverClassName)).each(function (index, elem) {
                 var $currentButton = $("[aria-describedby=\"".concat($(elem).attr('id'), "\"]"));
-                if ($currentButton.is($shownPopover)) {
+                if ($currentButton.is($showPopoverBtn)) {
                     return;
                 }
                 _this.hidePopover($currentButton);
@@ -866,6 +866,9 @@ var MenuPopover = (function (_super) {
         })
             .on('inserted.bs.popover', function (evt) {
             var $popoverButton = $(evt.currentTarget), $popover = $("#".concat($popoverButton.attr('aria-describedby')));
+            if ($popover.length && !$popover.find('.popover-header').text().trim()) {
+                $popover.find('.popover-header').hide();
+            }
             _this.wpHooks.doAction('atum_menuPopover_inserted', $popover, $popoverButton);
         });
     };
@@ -2917,9 +2920,9 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _menu_popover__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_menu-popover */ "./assets/js/src/components/_menu-popover.ts");
 
 var RowActions = (function () {
-    function RowActions(settings, globals) {
+    function RowActions(settings, $listTable) {
         this.settings = settings;
-        this.globals = globals;
+        this.$listTable = $listTable;
         this.rowActions = [];
         this.wpHooks = window['wp']['hooks'];
         this.rowActions = this.settings.get('rowActions');
@@ -2928,16 +2931,20 @@ var RowActions = (function () {
     }
     RowActions.prototype.prepareActionMenus = function () {
         var _this = this;
-        this.globals.$atumList.find('.show-actions').each(function (index, elem) {
+        this.$listTable.find('.show-actions').each(function (index, elem) {
             var $button = $(elem);
             if (!_this.rowActions || !_this.rowActions.length) {
                 $button.hide();
                 return;
             }
-            var $row = $button.closest('tr'), $titleCell = $row.find('td.column-title').length ? $row.find('td.column-title') : $row.find('.row-title');
+            var $row = $button.closest('tr'), $titleCell = $row.find('td.column-title, td.column-name').length ? $row.find('td.column-title, td.column-name').first() : $row.find('.row-title'), filteredActions = _this.filterRowActions($row);
+            if (!filteredActions.length) {
+                $button.hide();
+                return;
+            }
             var actionsMenu = {
                 title: _this.sanitizeRowTitle($titleCell),
-                items: _this.rowActions,
+                items: filteredActions,
             };
             new _menu_popover__WEBPACK_IMPORTED_MODULE_0__["default"]($button, actionsMenu, 'body');
         });
@@ -2945,15 +2952,48 @@ var RowActions = (function () {
     RowActions.prototype.addHooks = function () {
         var _this = this;
         this.wpHooks.addAction('atum_listTable_tableUpdated', 'atum', function () { return _this.prepareActionMenus(); });
-        this.wpHooks.addAction('atum_menuPopover_inserted', 'atum', function ($popover) {
-            if (!$popover.find('li').length) {
-                $popover.find('ul').append("<li class=\"no-actions\">".concat(_this.settings.get('noActions'), "</li>"));
-            }
-        }, 999);
         this.wpHooks.addAction('atum_listTable_updateRowActions', 'atum', function (rowActions) { return _this.rowActions = rowActions; });
     };
     RowActions.prototype.sanitizeRowTitle = function ($titleCell) {
         return "<span>".concat(($titleCell.find('.atum-title-small').length ? $titleCell.find('.atum-title-small') : $titleCell).text().replace('↵', '').trim(), "</span>");
+    };
+    RowActions.prototype.filterRowActions = function ($row) {
+        return this.rowActions.filter(function (rowAction) {
+            if (!rowAction.conditional) {
+                return rowAction;
+            }
+            else {
+                var value = void 0;
+                if (rowAction.conditional.hasOwnProperty('class')) {
+                    switch (typeof rowAction.conditional.class) {
+                        case 'undefined':
+                            return rowAction;
+                        case 'object':
+                            value = Array.isArray(rowAction.conditional.class) ? rowAction.conditional.class : Object.values(rowAction.conditional.class);
+                            break;
+                        default:
+                            value = rowAction.conditional.class;
+                            break;
+                    }
+                    var rowClasses_1 = $row.attr('class');
+                    return Array.isArray(value) ? value.some(function (subst) { return rowClasses_1.includes(subst); }) : $row.hasClass(value);
+                }
+                else if (rowAction.conditional.hasOwnProperty('data')) {
+                    switch (typeof rowAction.conditional.data.value) {
+                        case 'undefined':
+                            return rowAction;
+                        case 'object':
+                            value = Array.isArray(rowAction.conditional.data.value) ? rowAction.conditional.data.value : Object.values(rowAction.conditional.data.value);
+                            break;
+                        default:
+                            value = rowAction.conditional.data.value;
+                            break;
+                    }
+                    var rowData_1 = $row.data(rowAction.conditional.data.key);
+                    return Array.isArray(value) ? value.some(function (value) { return rowData_1 == value; }) : rowData_1 == value;
+                }
+            }
+        });
     };
     return RowActions;
 }());
@@ -3655,7 +3695,7 @@ jQuery(function ($) {
     new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_18__["default"](globals, router, enhancedSelect);
     new _components_list_table_bulk_actions__WEBPACK_IMPORTED_MODULE_3__["default"](settings, globals, listTable);
     new _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_14__["default"](settings, globals, tooltip);
-    new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_17__["default"](settings, globals);
+    new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_17__["default"](settings, globals.$atumList);
     if (settings.get('hgMainGuide')) {
         var $tableTitle = $('h1.wp-heading-inline');
         $tableTitle.append(helpGuide.getHelpGuideButtons(settings.get('hgMainGuide')));
