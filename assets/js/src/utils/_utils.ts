@@ -562,17 +562,19 @@ const Utils = {
 		const qty: string = $input.val();
 
 		// Make sure the value entered is within the allowed range.
-		const value: number = parseFloat( qty || '0' ),
-		      min: number   = parseFloat( $input.attr( 'min' ) || '0' ),
-		      max: number   = parseFloat( $input.attr( 'max' ) || '0' );
+		const value: number              = parseFloat( qty || '0' ),
+		      minAtt: string | undefined = $input.attr( 'min' ),
+		      maxAtt: string | undefined = $input.attr( 'max' ),
+		      min: number                = parseFloat( minAtt || '0' ),
+		      max: number                = parseFloat( maxAtt || '0' );
 
 		if ( ! $.isNumeric( qty ) ) {
-			$input.val( undefined !== $input.attr( 'min' ) && ! isNaN( min ) && min > 0 ? min : 0 ); // Set to 0 or min (the greater).
+			$input.val( undefined !== minAtt && ! isNaN( min ) && min > 0 ? min : 0 ); // Set to 0 or min (the greater).
 		}
-		else if ( undefined !== $input.attr( 'min' ) && value < min ) {
+		else if ( undefined !== minAtt && value < min ) {
 			$input.val( min ); // Change to min.
 		}
-		else if ( undefined !== $input.attr( 'max' ) && value > max ) {
+		else if ( undefined !== maxAtt && value > max ) {
 			$input.val( max ); // Change to max.
 		}
 
