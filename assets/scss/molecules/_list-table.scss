@@ -1958,7 +1958,6 @@ table.wp-list-table, .floatThead-container {
 			max-width: 71px;
 		}
 		
-		
 		&.check-column {
 			padding: 11px 20px 0 3px;
 			
@@ -2463,6 +2462,15 @@ table.wp-list-table, .floatThead-container {
 				&.column-_stock {
 					.calculated {
 						color: $purple;
+					}
+				}
+				
+				// Barcodes PRO support.
+				&.column-_barcode {
+					svg {
+						g, text {
+							fill: var(--primary);
+						}
 					}
 				}
 				

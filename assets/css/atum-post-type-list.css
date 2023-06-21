@@ -5616,6 +5616,9 @@ table.wp-list-table tbody tr td.column-_sku span, table.wp-list-table #the-list 
 table.wp-list-table tbody tr td.column-_stock .calculated, table.wp-list-table #the-list tr td.column-_stock .calculated, .floatThead-container tbody tr td.column-_stock .calculated, .floatThead-container #the-list tr td.column-_stock .calculated {
   color: #BA7DF7;
 }
+table.wp-list-table tbody tr td.column-_barcode svg g, table.wp-list-table tbody tr td.column-_barcode svg text, table.wp-list-table #the-list tr td.column-_barcode svg g, table.wp-list-table #the-list tr td.column-_barcode svg text, .floatThead-container tbody tr td.column-_barcode svg g, .floatThead-container tbody tr td.column-_barcode svg text, .floatThead-container #the-list tr td.column-_barcode svg g, .floatThead-container #the-list tr td.column-_barcode svg text {
+  fill: var(--primary);
+}
 table.wp-list-table tbody tr td.calc_purchase_order a, table.wp-list-table #the-list tr td.calc_purchase_order a, .floatThead-container tbody tr td.calc_purchase_order a, .floatThead-container #the-list tr td.calc_purchase_order a {
   color: var(--primary);
   font-weight: bold;

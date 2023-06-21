@@ -237,7 +237,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected $is_child = FALSE;
 
 	/**
-	 * Whether or not the current product should do the calculations for the columns
+	 * Whether the current product should do the calculations for the columns
 	 *
 	 * @var bool
 	 */
@@ -3579,7 +3579,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$disable_first = $disable_last = $disable_prev = $disable_next = FALSE;
 
-		$total_pages = (int)$total_pages;
+		$total_pages = (int) $total_pages;
 
 		if ( 1 === $current ) {
 			$disable_first = TRUE;
