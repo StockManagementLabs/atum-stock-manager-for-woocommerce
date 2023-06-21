@@ -867,7 +867,7 @@ final class WidgetHelpers {
 
 		}
 
-		// We need to apply the stock_status criteria to query only if we aren't filtering. Otherwise may exclude unmanaged parents and get no results.
+		// We need to apply the stock_status criteria to query only if we aren't filtering. Otherwise, may exclude unmanaged parents and get no results.
 		if ( ! $children_query_needed ) {
 			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_atum_args', array(
 				'key'   => 'atum_stock_status',
@@ -882,6 +882,34 @@ final class WidgetHelpers {
 		remove_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
 
 		$products_in_stock_sql = $products_in_stock_query->request;
+
+		if ( ! $product_type || 'bundle' === $product_type ) {
+			$bundle_args = array(
+				array(
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => 'bundle',
+					'operator' => 'IN',
+				),
+			);
+			$bundle_query   = new \WP_Tax_Query( $bundle_args );
+			$bundle_clauses = $bundle_query->get_sql( 'sbp', 'ID' );
+
+			$stock_bundles_sql = "OR p0.ID IN ( SELECT sbp.ID FROM $wpdb->posts sbp\n\t
+				{$bundle_clauses['join']}\n\t
+				WHERE sbp.post_status IN ('" . implode( "', '", Globals::get_queryable_product_statuses() ) . "')\n\t" .
+				"AND sbp.ID NOT IN (
+					SELECT wbi.bundle_id FROM {$wpdb->prefix}woocommerce_bundled_items wbi
+					LEFT JOIN {$wpdb->prefix}woocommerce_bundled_itemmeta wbm ON wbi.bundled_item_id = wbm.bundled_item_id AND wbm.meta_key = 'optional'
+					WHERE wbm.meta_value = 'no'
+				)" .
+				$bundle_clauses['where'] . ' )';
+
+			//$products_in_stock_sql = "( ( $products_in_stock_sql ) UNION ( $stock_bundles_sql ) )";
+		}
+		else {
+			$stock_bundles_sql = '';
+		}
 
 		if ( $children_query_needed ) {
 
@@ -923,7 +951,7 @@ final class WidgetHelpers {
 				"LEFT JOIN $wpdb->postmeta ms ON p0.ID = ms.post_id AND ms.meta_key = '_manage_stock'",
 				"LEFT JOIN $atum_product_data_table apd0 ON p0.ID = apd0.product_id",
 			),
-			'where'  => "p0.ID IN ( $products_in_stock_sql )",
+			'where'  => "p0.ID IN ( $products_in_stock_sql ) $stock_bundles_sql",
 		) );
 
 		// phpcs:disable
