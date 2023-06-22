@@ -160,7 +160,7 @@ class Wpml {
 			// Make Atum orders not translatable, but set a single lang for the order.
 			add_action( 'atum/order_post_type/init', array( $this, 'register_atum_order_hooks' ) );
 			add_filter( 'wpml_ls_directories_to_scan', array( $this, 'add_wpml_templates' ) );
-			add_action( 'atum/atum_order/actions_meta_box_start', array( $this, 'add_lang_dropdown' ) );
+			add_action( 'atum/atum_order/actions_meta_box_start', array( $this, 'add_lang_dropdown_to_po' ) );
 			add_filter( 'atum/order_post_type/js_vars', array( $this, 'add_wpml_active_var' ) );
 			add_filter( 'atum/purchase_orders/save_meta_boxes_props', array( $this, 'save_wpml_lang_order_prop' ), 10, 2 );
 			add_filter( 'wp_ajax_atum_json_search_products', array( $this, 'add_po_filter_search' ), 9 );
@@ -1588,7 +1588,7 @@ class Wpml {
 	 *
 	 * @param int $post_id
 	 */
-	public function add_lang_dropdown( $post_id ) {
+	public function add_lang_dropdown_to_po( $post_id ) {
 
 		if ( PurchaseOrders::POST_TYPE !== get_post_type( $post_id ) ) {
 			return;
