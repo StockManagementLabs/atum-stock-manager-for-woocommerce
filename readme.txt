@@ -6,7 +6,7 @@ Requires at least: 5.6
 Tested up to: 6.2.2
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.7.0
+WC tested up to: 7.8.0
 Stable tag: 1.9.30
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.30`
 
-*2023-05-25*
+*2023-06-21*
 
 **Features**
 
@@ -234,6 +234,12 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Added new SearchOrdersByColumn component.
 * Added searchOrders script.
 * Added new component for ATUM help guides.
+* Added filter to avoid adding stock to totals in ListTables.
+* Added filter for join and where clauses in search products function.
+* Added wpml_lang meta to ATUM Orders.
+* Added filter to ATUM Orders' localized vars.
+* Added lang dropdown to PO (full WPML compatibility).
+* RowActions JS component improvements.
 
 **Changes**
 
@@ -243,6 +249,12 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Exclude columns from product data when inserting WPML translation in database.
 * Ensure product data columns exist before insert WPML translation.
 * Include translations when calculating the inbound stock.
+* Refactoring.
+* Removed searching product with no supplier assigned from PO free.
+* Removed unneeded HTML element.
+* Added new marketing popup.
+* Removed paragraphs from help guide texts.
+* Hide the row actions button when no actions are available.
 
 **Fixes**
 
@@ -257,6 +269,14 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed searchInColumn field tooltip not updating when changing column.
 * Fixed settings page CSS.
 * Fixed unsupported get_product_translations_ids integer.
+* CSS fixes.
+* Fixed non existing method.
+* Fixed SearchOrdersByColumn script not loading when necessary.
+* Fixed wrong margin in export tables reports.
+* Fixed filters that weren't added in some cases.
+* Fixed current stock value widget including bundled optional items only.
+* Fixed query incompatible with mysql/mariadb.
+* Fixed bundled optional products' query in stock widget.
 
 ---
 
