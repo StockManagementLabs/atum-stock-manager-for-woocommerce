@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.30`
 
-*2023-06-21*
+*2023-06-26*
 
 **Features**
 
@@ -240,6 +240,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Added filter to ATUM Orders' localized vars.
 * Added lang dropdown to PO (full WPML compatibility).
 * RowActions JS component improvements.
+* Added restrictions to input numbers within edit popovers.
 
 **Changes**
 
@@ -270,7 +271,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed settings page CSS.
 * Fixed unsupported get_product_translations_ids integer.
 * CSS fixes.
-* Fixed non existing method.
+* Fixed non-existing method.
 * Fixed SearchOrdersByColumn script not loading when necessary.
 * Fixed wrong margin in export tables reports.
 * Fixed filters that weren't added in some cases.

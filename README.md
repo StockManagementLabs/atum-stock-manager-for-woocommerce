@@ -196,6 +196,71 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.30`
+
+*2023-06-26*
+
+**Features**
+
+* Added barcode_type prop support to products.
+* Added new action after the barcode field.
+* Allow clearing the supplier for all the variations at once through the utility.
+* Added barcode support to product tags.
+* Added new filter to the is_module_active function.
+* Added tooltip to addons versions badges.
+* Show notices on plugins rows within the plugins list table.
+* Added filters before loading AtumBarcodes hooks.
+* Allow more notice types on the addNotice JS utility.
+* Added new SearchOrdersByColumn component.
+* Added searchOrders script.
+* Added new component for ATUM help guides.
+* Added filter to avoid adding stock to totals in ListTables.
+* Added filter for join and where clauses in search products function.
+* Added wpml_lang meta to ATUM Orders.
+* Added filter to ATUM Orders' localized vars.
+* Added lang dropdown to PO (full WPML compatibility).
+* RowActions JS component improvements.
+* Added restrictions to input numbers within edit popovers.
+
+**Changes**
+
+* Read the atum product data column names for the WPML product duplication.
+* Refactoring.
+* Do not require the "default" option on multi_checkbox settings fields.
+* Exclude columns from product data when inserting WPML translation in database.
+* Ensure product data columns exist before insert WPML translation.
+* Include translations when calculating the inbound stock.
+* Refactoring.
+* Removed searching product with no supplier assigned from PO free.
+* Removed unneeded HTML element.
+* Added new marketing popup.
+* Removed paragraphs from help guide texts.
+* Hide the row actions button when no actions are available.
+
+**Fixes**
+
+* Added missing fields to queries when duplicating product for translation.
+* Fixed atum fields sizing on mobiles.
+* Fixed row actions styling on ATUM list tables.
+* Fixed date format on the add-ons page.
+* CSS fixes for the addons page layout.
+* Prevent the check order prices button from loading on single order page when HPOS is enabled.
+* Fixed dragscroll clicks working when no link is directly clicked.
+* Fixed order id retrieval when HPOS is enabled.
+* Fixed searchInColumn field tooltip not updating when changing column.
+* Fixed settings page CSS.
+* Fixed unsupported get_product_translations_ids integer.
+* CSS fixes.
+* Fixed non-existing method.
+* Fixed SearchOrdersByColumn script not loading when necessary.
+* Fixed wrong margin in export tables reports.
+* Fixed filters that weren't added in some cases.
+* Fixed current stock value widget including bundled optional items only.
+* Fixed query incompatible with mysql/mariadb.
+* Fixed bundled optional products' query in stock widget.
+
+---
+
 `1.9.29.1`
 
 *2023-04-20*
