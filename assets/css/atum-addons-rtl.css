@@ -7,16 +7,4 @@
  * License : ©2023 Stock Management Labs 
  */
 
- .atum-addons h1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-.atum-addons .theme .show-key {
-  right: auto;
-  left: 0;
-}
-.atum-addons .theme .theme-actions {
-  right: auto;
-}
-/*# sourceMappingURL=atum-addons-rtl.css.map */
+ .atum-addons h1{display:-webkit-box;display:-ms-flexbox;display:flex}.atum-addons .theme .show-key{right:auto;left:0}.atum-addons .theme .theme-actions{right:auto}
