@@ -1,10 +1,10 @@
 @font-face {
 	font-family: '#{$atum-icon-font}';
-	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?4b0unb');
-	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?4b0unb#iefix') format('embedded-opentype'),
-	url('#{$atum-font-path}#{$atum-icon-font}.ttf?4b0unb') format('truetype'),
-	url('#{$atum-font-path}#{$atum-icon-font}.woff?4b0unb') format('woff'),
-	url('#{$atum-font-path}#{$atum-icon-font}.svg?4b0unb##{$atum-icon-font}') format('svg');
+	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?h88pav');
+	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?h88pav#iefix') format('embedded-opentype'),
+	url('#{$atum-font-path}#{$atum-icon-font}.ttf?h88pav') format('truetype'),
+	url('#{$atum-font-path}#{$atum-icon-font}.woff?h88pav') format('woff'),
+	url('#{$atum-font-path}#{$atum-icon-font}.svg?h88pav##{$atum-icon-font}') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -24,6 +24,11 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.atmi-barcodes-pro {
+	&:before {
+		content: $atmi-barcodes-pro;
+	}
+}
 .atmi-pick-pack {
 	&:before {
 		content: $atmi-pick-pack;
@@ -902,11 +907,6 @@
 .atmi-pushpin {
 	&:before {
 		content: $atmi-pushpin;
-	}
-}
-.atmi-question {
-	&:before {
-		content: $atmi-question;
 	}
 }
 .atmi-question-circle {
