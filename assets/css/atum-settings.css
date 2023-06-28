@@ -4810,10 +4810,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   padding-top: 10px;
   height: 0.68rem;
 }
-.atum-settings-wrapper .btn.btn-danger.tool-runner {
-  padding-left: initial;
-  padding-right: initial;
-}
 .atum-settings-wrapper .atum-multi-checkbox-all {
   display: block;
   width: 100%;
@@ -5275,6 +5271,9 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 .atum-settings-wrapper #atum-settings .section-fields input[type=number]::-webkit-inner-spin-button, .atum-settings-wrapper #atum-settings .section-fields input[type=number]::-webkit-outer-spin-button {
   opacity: 1;
 }
+.atum-settings-wrapper #atum-settings .section-fields input[type=text] {
+  max-width: 260px;
+}
 .atum-settings-wrapper #atum-settings .section-fields .region-switcher, .atum-settings-wrapper #atum-settings .section-fields .range-remover {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -5291,18 +5290,17 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   display: flex;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+  gap: 10px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-runner {
   text-transform: uppercase;
   font-size: 12px;
-  width: 110px;
   height: 30px;
   line-height: 1;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .atum-select2-container {
   height: 30px;
   padding-bottom: 8px;
-  margin-right: 5px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .script-runner .atum-select2-container {
@@ -5344,7 +5342,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   }
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper {
-  margin-bottom: 20px;
   margin-left: 14px;
   line-height: 30px;
   color: var(--atum-checkbox-label);
@@ -5442,9 +5439,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner button {
   border-radius: 4px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
-  margin-right: 15px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {
