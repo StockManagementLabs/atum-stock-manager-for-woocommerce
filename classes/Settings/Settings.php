@@ -1376,7 +1376,6 @@ class Settings {
 									<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_html( $label ) ?></option>
 								<?php endforeach ?>
 							</select>
-							&nbsp;
 						</div>
 
 					<?php elseif ( 'number' === $field['type'] ) : ?>
@@ -1385,6 +1384,15 @@ class Settings {
 							min="<?php echo esc_attr( $field['min'] ?? 0 ) ?>"
 							<?php echo ! empty( $field['max'] ) ? ' max="' . esc_attr( $field['max'] ) . '"' : '' ?>
 							step="<?php echo esc_attr( $field['step'] ?? 1 ) ?>"
+							value="<?php echo esc_attr( $field['value'] ?? 0 ) ?>"
+							data-tool="<?php echo esc_attr( $args['id'] ) ?>"
+							<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
+						>
+
+					<?php elseif ( 'text' === $field['type'] ) : ?>
+
+						<input class="atum-settings-input" type="text"
+							<?php echo ! empty( $field['placeholder'] ) ? ' placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '' ?>
 							value="<?php echo esc_attr( $field['value'] ?? 0 ) ?>"
 							data-tool="<?php echo esc_attr( $args['id'] ) ?>"
 							<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
