@@ -196,6 +196,30 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.31`
+
+*2023-06-29*
+
+**Features**
+
+* Allow text inputs on tools.
+* Added hook in calculated props tool.
+* Performance improvement: added cache to get_atum_order_model helper.
+
+**Changes**
+
+* Updated addons loader.
+* Updated ATUM icons font.
+* Changed minimum PO PRO version required.
+
+**Fixes**
+
+* Fixed stock values widget query.
+* CSS fixes.
+* Fixed link on update message shown on addons page.
+
+---
+
 `1.9.30`
 
 *2023-06-26*

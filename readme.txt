@@ -7,7 +7,7 @@ Tested up to: 6.2.2
 Requires PHP: 7.1
 WC requires at least: 5.0
 WC tested up to: 7.8.0
-Stable tag: 1.9.30
+Stable tag: 1.9.31
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,30 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.31`
+
+*2023-06-29*
+
+**Features**
+
+* Allow text inputs on tools.
+* Added hook in calculated props tool.
+* Performance improvement: added cache to get_atum_order_model helper.
+
+**Changes**
+
+* Updated addons loader.
+* Updated ATUM icons font.
+* Changed minimum PO PRO version required.
+
+**Fixes**
+
+* Fixed stock values widget query.
+* CSS fixes.
+* Fixed link on update message shown on addons page.
 
 ---
 
