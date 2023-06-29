@@ -1463,7 +1463,7 @@ final class Addons {
 		}
 		elseif ( 200 !== wp_remote_retrieve_response_code( $result ) ) {
 
-			$error  = $resp_body->message ?? __( "Unexpected error. Please contact ATUM's support", ATUM_TEXT_DOMAIN );
+			$error = $resp_body->message ?? __( "Unexpected error. Please contact ATUM's support", ATUM_TEXT_DOMAIN );
 
 			if ( TRUE === ATUM_DEBUG ) {
 				error_log( __METHOD__ . ": $error" );
