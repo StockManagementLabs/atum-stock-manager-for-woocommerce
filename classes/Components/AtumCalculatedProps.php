@@ -350,6 +350,8 @@ class AtumCalculatedProps {
 
 			if ( $product instanceof \WC_Product ) {
 
+				do_action( 'atum/before_process_product_calc_props', $product );
+
 				if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
 
 					$out_of_stock_threshold = $product->get_out_stock_threshold();
