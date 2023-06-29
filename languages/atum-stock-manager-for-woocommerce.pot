@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2023-06-26 12:15+0200\n"
+"POT-Creation-Date: 2023-06-29 12:43+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "ATUM Add-ons Auto-Installer"
 msgstr ""
 
-#: classes/Addons/Addons.php:233 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:233 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:241 classes/Components/AtumAdminModal.php:75
 #: classes/Components/AtumOrders/AtumOrderPostType.php:976
 #: classes/Dashboard/Dashboard.php:330 classes/Inc/Hooks.php:276
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: classes/Addons/Addons.php:235 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:235 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:242
 msgid "Yes, Extend it!"
 msgstr ""
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Limited Deactivations!"
 msgstr ""
 
-#: classes/Addons/Addons.php:243 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:243 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:244 classes/Components/AtumAdminModal.php:74
 #: classes/Components/AtumListTables/AtumListTable.php:3426
 #: classes/Components/AtumOrders/AtumOrderPostType.php:995
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: classes/Addons/Addons.php:246 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:246 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:245 classes/Inc/Hooks.php:283
 msgid "Success!"
 msgstr ""
@@ -175,7 +175,7 @@ msgstr ""
 msgid "Trial expired!"
 msgstr ""
 
-#: classes/Addons/Addons.php:252 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:252 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:246
 msgid "Trial extension"
 msgstr ""
@@ -187,7 +187,7 @@ msgid ""
 "replace it by a full version license key."
 msgstr ""
 
-#: classes/Addons/Addons.php:254 classes/Addons/AddonsLoader.php:7
+#: classes/Addons/Addons.php:254 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:247
 msgid "You are going to extend this trial for 7 days more"
 msgstr ""
@@ -394,8 +394,8 @@ msgstr ""
 #: classes/Components/AtumAdminNotices.php:312
 #: classes/Components/AtumAdminNotices.php:319
 #: classes/Components/AtumBarcodes.php:346 classes/Components/AtumBarcodes.php:353
-#: classes/Components/AtumCalculatedProps.php:526
-#: classes/Components/AtumCalculatedProps.php:535
+#: classes/Components/AtumCalculatedProps.php:528
+#: classes/Components/AtumCalculatedProps.php:537
 #: classes/Components/AtumCapabilities.php:183
 #: classes/Components/AtumCapabilities.php:190
 #: classes/Components/AtumColors.php:1042 classes/Components/AtumColors.php:1049
@@ -426,7 +426,7 @@ msgstr ""
 #: classes/Orders/SearchOrdersByColumn.php:147
 #: classes/PurchaseOrders/PurchaseOrders.php:1099
 #: classes/PurchaseOrders/PurchaseOrders.php:1106
-#: classes/Settings/Settings.php:1773 classes/Settings/Settings.php:1781
+#: classes/Settings/Settings.php:1781 classes/Settings/Settings.php:1789
 #: classes/Settings/Tools.php:184 classes/Settings/Tools.php:192
 #: classes/StockCentral/StockCentral.php:344
 #: classes/StockCentral/StockCentral.php:351 classes/Suppliers/Suppliers.php:792
@@ -434,63 +434,63 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:137
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:255
+msgid "ATUM trial license expired!"
+msgid_plural "ATUM trial licenses expired!"
+msgstr[0] ""
+msgstr[1] ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:260
 #, php-format
-msgid ""
-"The ATUM %1$s add-on requires at least version %2$s to work with the current "
-"ATUM version. Please, update it."
+msgid "Why are these add-ons expired and blocked? %1$sREAD INFO%2$s"
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:165
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:205
 #, php-format
-msgid ""
-"The ATUM %1$s could not be loaded because its license is missing. Please, "
-"activate your trial from the %2$sadd-ons%3$s page."
+msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:153
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:210
+#, php-format
+msgid "Click %1$shere%2$s to purchase the full version."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:153
 #, php-format
 msgid ""
 "The ATUM %s could not be loaded because the full version is installed. To use "
 "the trial, uninstall the full version first."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:210
-#, php-format
-msgid "Click %1$shere%2$s to purchase the full version."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:127
-#, php-format
-msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:205
-#, php-format
-msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:183
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:183
 #, php-format
 msgid ""
 "The ATUM %1$s could not be loaded because it has already been used on another "
 "site. Please, %2$supgrade to the full version%3$s."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:201
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:201
 #, php-format
 msgid "Your ATUM %1$s has expired and it has been disabled."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:255
-msgid "ATUM trial license expired!"
-msgid_plural "ATUM trial licenses expired!"
-msgstr[0] ""
-msgstr[1] ""
-
-#: classes/Addons/AddonsLoader.php:7 classes/Addons/AddonsLoaderDev.php:260
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:165
 #, php-format
-msgid "Why are these add-ons expired and blocked? %1$sREAD INFO%2$s"
+msgid ""
+"The ATUM %1$s could not be loaded because its license is missing. Please, "
+"activate your trial from the %2$sadd-ons%3$s page."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:127
+#, php-format
+msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:137
+#, php-format
+msgid ""
+"The ATUM %1$s add-on requires at least version %2$s to work with the current "
+"ATUM version. Please, update it."
 msgstr ""
 
 #: classes/Addons/Updater.php:297
@@ -2496,7 +2496,7 @@ msgid "Last page"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:4167
-#: classes/Inc/Helpers.php:3783
+#: classes/Inc/Helpers.php:3805
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,"
@@ -3538,35 +3538,35 @@ msgstr ""
 msgid "(no title)"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1888
+#: classes/Inc/Helpers.php:1905
 msgid "No valid ID provided"
 msgstr ""
 
-#: classes/Inc/Helpers.php:2315
+#: classes/Inc/Helpers.php:2337
 msgid "Get Premium Support"
 msgstr ""
 
-#: classes/Inc/Helpers.php:2319 views/atum-footer.php:28
+#: classes/Inc/Helpers.php:2341 views/atum-footer.php:28
 #: views/help-tabs/help-sidebar.php:17
 msgid "Get Support"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3420
+#: classes/Inc/Helpers.php:3442
 msgid "HELP US TO IMPROVE!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3423
+#: classes/Inc/Helpers.php:3445
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%2$s rating. Huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3423
+#: classes/Inc/Helpers.php:3445
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3433
+#: classes/Inc/Helpers.php:3455
 msgid "Thank you for trusting <strong>ATUM</strong> to manage your inventory 🙌"
 msgstr ""
 
@@ -4781,11 +4781,11 @@ msgstr ""
 msgid "--- Select a country ---"
 msgstr ""
 
-#: classes/Settings/Settings.php:1539
+#: classes/Settings/Settings.php:1547
 msgid "Upload"
 msgstr ""
 
-#: classes/Settings/Settings.php:1672
+#: classes/Settings/Settings.php:1680
 msgid "Select time"
 msgstr ""
 
