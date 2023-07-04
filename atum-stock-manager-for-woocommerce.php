@@ -10,7 +10,7 @@
  * Plugin Name:          ATUM Inventory Management for WooCommerce
  * Plugin URI:           https://stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
- * Version:              1.9.31
+ * Version:              1.9.31.1
  * Author:               Stock Management Labs™
  * Author URI:           https://stockmanagementlabs.com/
  * Contributors:         Be Rebel Studio - https://berebel.io
@@ -18,7 +18,7 @@
  * Tested up to:         6.2.2
  * Requires PHP:         7.1
  * WC requires at least: 5.0
- * WC tested up to:      7.8.0
+ * WC tested up to:      7.8.2
  * Text Domain:          atum-stock-manager-for-woocommerce
  * Domain Path:          /languages
  * License:              GPLv2 or later
@@ -28,7 +28,7 @@
 defined( 'ABSPATH' ) || die;
 
 if ( ! defined( 'ATUM_VERSION' ) ) {
-	define( 'ATUM_VERSION', '1.9.31' );
+	define( 'ATUM_VERSION', '1.9.31.1' );
 }
 
 if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
