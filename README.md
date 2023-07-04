@@ -196,6 +196,21 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.31.1`
+
+*2023-07-04*
+
+**Changes**
+
+* Refactoring: code style.
+
+**Fixes**
+
+* Fixed occasional cache issue when saving ATUM Settings.
+* Fixed wrong array_key_exists params on AddonsLoader class.
+
+---
+
 `1.9.31`
 
 *2023-06-29*
