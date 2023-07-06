@@ -42,6 +42,8 @@ use Atum\Inc\Helpers;
 				<span class="label"><?php esc_html_e( 'P.O. #:', ATUM_TEXT_DOMAIN ) ?>&nbsp;&nbsp;</span>
 				<span class="field"><?php echo esc_html( $po->get_id() ) ?></span>
 			</div>
+
+			<?php do_action( 'atum/atum_order/po_report/after_header', $po ); ?>
 		</div>
 	</div>
 	<div class="spacer" style="clear: both;"></div>
@@ -123,7 +125,7 @@ use Atum\Inc\Helpers;
 								</div>
 							<?php endif;
 
-							do_action( 'atum/atum_order/po_report/after_item_product', $item, $item->get_order() );
+							do_action( 'atum/atum_order/po_report/after_item_product', $item->get_id(), $item, $item->get_order() );
 
 						endif;
 
