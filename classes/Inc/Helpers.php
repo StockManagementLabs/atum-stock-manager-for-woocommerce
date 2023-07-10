@@ -3745,7 +3745,7 @@ final class Helpers {
 
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$search_results = $wpdb->get_results( "
-			SELECT DISTINCT posts.ID as product_id, posts.post_parent as parent_id FROM $wpdb->posts posts
+			SELECT DISTINCT posts.ID as product_id, posts.post_parent as parent_id, posts.post_title FROM $wpdb->posts posts
 			LEFT JOIN $wpdb->wc_product_meta_lookup wc_product_meta_lookup ON posts.ID = wc_product_meta_lookup.product_id
 			LEFT JOIN $atum_data_table apd ON posts.ID = apd.product_id
 			$join_query
