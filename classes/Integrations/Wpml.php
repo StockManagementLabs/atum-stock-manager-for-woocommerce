@@ -1713,7 +1713,7 @@ class Wpml {
 		global $wpdb;
 
 		$join_clauses[] = "LEFT JOIN {$wpdb->prefix}icl_translations AS trans
-		ON posts.ID = trans.element_id AND trans.element_type = 'post_product' ";
+		ON posts.ID = trans.element_id AND trans.element_type IN ( 'post_product', 'post_product_variation' ) ";
 
 		return $join_clauses;
 	}
