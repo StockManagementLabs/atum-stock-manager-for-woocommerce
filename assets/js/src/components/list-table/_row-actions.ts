@@ -2,10 +2,9 @@
    ROW ACTIONS FOR LIST TABLES
    ======================================= */
 
-import Globals from './_globals';
-import Settings from '../../config/_settings';
 import { IMenu, IMenuItem } from '../../interfaces/menu.interface';
 import MenuPopover from '../_menu-popover';
+import Settings from '../../config/_settings';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class RowActions {
@@ -15,7 +14,7 @@ export default class RowActions {
 	
 	constructor(
 		private settings: Settings,
-		private globals: Globals,
+		private $listTable: JQuery,
 	) {
 
 		this.rowActions = this.settings.get( 'rowActions' );
@@ -30,9 +29,9 @@ export default class RowActions {
 	 */
 	prepareActionMenus() {
 
-		this.globals.$atumList.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
+		this.$listTable.find( '.show-actions' ).each( ( index: number, elem: Element ) => {
 
-			const $button: JQuery    = $( elem );
+			const $button: JQuery = $( elem );
 
 			// If there are no row actions, hide the button.
 			if ( ! this.rowActions || ! this.rowActions.length ) {
@@ -40,13 +39,19 @@ export default class RowActions {
 				return;
 			}
 
-			const $row: JQuery       = $button.closest( 'tr' ),
-			      $titleCell: JQuery = $row.find( 'td.column-title' ).length ? $row.find( 'td.column-title' ) : $row.find( '.row-title' );
+			const $row: JQuery                 = $button.closest( 'tr' ),
+			      $titleCell: JQuery           = $row.find( 'td.column-title, td.column-name' ).length ? $row.find( 'td.column-title, td.column-name' ).first() : $row.find( '.row-title' ),
+			      filteredActions: IMenuItem[] = this.filterRowActions( $row );
+
+			if ( ! filteredActions.length ) {
+				$button.hide();
+				return;
+			}
 
 			// NOTE: we assume that the rowActions comes with the right format (following the IMenuItem interface format).
 			const actionsMenu: IMenu = {
 				title: this.sanitizeRowTitle( $titleCell ),
-				items: this.rowActions,
+				items: filteredActions,
 			};
 
 			new MenuPopover( $button, actionsMenu, 'body' ); // Added the body as container to avoid having problems with the overflow:hidden on tables with few rows.
@@ -63,15 +68,6 @@ export default class RowActions {
 		// Re-add the action menus after the list table is updaded.
 		this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.prepareActionMenus() );
 
-		// Add the "no actions" message if there are no menu items. NOTE: A high priority is important here.
-		this.wpHooks.addAction( 'atum_menuPopover_inserted', 'atum', ( $popover: JQuery ) => {
-
-			if ( ! $popover.find( 'li' ).length ) {
-				$popover.find( 'ul' ).append( `<li class="no-actions">${ this.settings.get( 'noActions' ) }</li>` );
-			}
-
-		}, 999 );
-
 		// Allow updating the row actions externally for specific views.
 		this.wpHooks.addAction( 'atum_listTable_updateRowActions', 'atum', ( rowActions: IMenuItem[] ) => this.rowActions = rowActions );
 
@@ -87,6 +83,75 @@ export default class RowActions {
 	sanitizeRowTitle( $titleCell: JQuery ): string {
 
 		return `<span>${ ( $titleCell.find( '.atum-title-small' ).length ? $titleCell.find( '.atum-title-small' ) : $titleCell ).text().replace( '↵', '' ).trim() }</span>`;
+
+	}
+
+	/**
+	 * Filter some actions where there is a conditional clause
+	 *
+	 * @param {JQuery} $row
+	 *
+	 * @return {IMenuItem[]}
+	 */
+	filterRowActions( $row: JQuery ): IMenuItem[] {
+
+		return this.rowActions.filter( ( rowAction: IMenuItem ): IMenuItem|boolean => {
+
+			if ( !rowAction.conditional ) {
+				return rowAction;
+			}
+			else {
+
+				let value: any;
+
+				// Filter the rows by CSS class name(s).
+				if ( rowAction.conditional.hasOwnProperty( 'class' ) ) {
+
+					switch ( typeof rowAction.conditional.class ) {
+						case 'undefined':
+							return rowAction;
+
+						case 'object':
+							// Make sure it isn't an associative array that JS interpreted as an object.
+							value = Array.isArray( rowAction.conditional.class ) ? rowAction.conditional.class : Object.values( rowAction.conditional.class );
+							break;
+
+						default:
+							value = rowAction.conditional.class;
+							break;
+					}
+
+					const rowClasses: string = $row.attr( 'class' );
+
+					return Array.isArray( value ) ? value.some( ( subst: string ) => rowClasses.includes( subst ) ) : $row.hasClass( value );
+
+				}
+				// Filter the rows by data key/value(s).
+				else if ( rowAction.conditional.hasOwnProperty( 'data' ) ) {
+
+					switch ( typeof rowAction.conditional.data.value ) {
+						case 'undefined':
+							return rowAction;
+
+						case 'object':
+							// Make sure it isn't an associative array that JS interpreted as an object.
+							value = Array.isArray( rowAction.conditional.data.value ) ? rowAction.conditional.data.value : Object.values( rowAction.conditional.data.value );
+							break;
+
+						default:
+							value = rowAction.conditional.data.value;
+							break;
+					}
+
+					const rowData: any = $row.data( rowAction.conditional.data.key );
+
+					return Array.isArray( value ) ? value.some( ( value: any ) => rowData == value ) : rowData == value;
+
+				}
+
+			}
+
+		} );
 
 	}
 

@@ -238,25 +238,37 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Avoid maximum function nesting on some cases.
 		remove_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_meta_boxes' ) );
 
-		$posted_po_date = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
-		$po_timestamp   = empty( $_POST['date'] ) ? Helpers::get_current_timestamp() : strtotime( $posted_po_date );
-		$po_date        = Helpers::date_format( $po_timestamp, TRUE, TRUE );
-
-		$posted_date_expected = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
-		$date_expected        = $posted_date_expected ? Helpers::date_format( strtotime( $posted_date_expected ) ) : '';
+		$props = array(
+			'status' => esc_attr( $_POST['status'] ),
+		);
 
 		$multiple_suppliers = ( isset( $_POST['multiple_suppliers'] ) && 'yes' === $_POST['multiple_suppliers'] ) ? 'yes' : 'no';
 
-		$po->set_props( apply_filters( 'atum/purchase_orders/save_meta_boxes_props', array(
-			'status'             => $_POST['status'],
-			'date_created'       => $po_date,
-			'supplier'           => 'no' === $multiple_suppliers && isset( $_POST['supplier'] ) ? $_POST['supplier'] : '',
-			'multiple_suppliers' => $multiple_suppliers,
-			'date_expected'      => $date_expected,
-		), $po ) );
+		if ( isset( $_POST['multiple_suppliers'] ) ) {
+			$props['multiple_suppliers'] = $multiple_suppliers;
+		}
+
+		if ( isset( $_POST['supplier'] ) ) {
+			$props['supplier'] = 'no' === $multiple_suppliers ? $_POST['supplier'] : '';
+		}
+
+		if ( isset( $_POST['date'] ) ) {
+			$posted_po_date        = isset( $_POST['date_hour'] ) ? $_POST['date'] . ' ' . (int) $_POST['date_hour'] . ':' . (int) $_POST['date_minute'] : $_POST['date'];
+			$po_timestamp          = empty( $_POST['date'] ) ? Helpers::get_current_timestamp() : strtotime( $posted_po_date );
+			$props['date_created'] = Helpers::date_format( $po_timestamp, TRUE, TRUE );
+		}
+
+		if ( isset( $_POST['date_expected'] ) ) {
+			$posted_date_expected   = isset( $_POST['date_expected_hour'] ) ? $_POST['date_expected'] . ' ' . (int) $_POST['date_expected_hour'] . ':' . (int) $_POST['date_expected_minute'] : $_POST['date_expected'];
+			$props['date_expected'] = $posted_date_expected ? Helpers::date_format( strtotime( $posted_date_expected ) ) : '';
+		}
+
+		$po->set_props( apply_filters( 'atum/purchase_orders/save_meta_boxes_props', $props, $po ) );
 
 		// Set the PO description as post content.
-		$po->set_description( $_POST['description'] );
+		if ( isset( $_POST['description'] ) ) {
+			$po->set_description( $_POST['description'] );
+		}
 
 		// In case the user changed any order item and not used the "Save Items" button.
 		$po->save_posted_order_items();

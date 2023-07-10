@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.30 
+ * @version 1.9.31 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -575,8 +575,8 @@
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?4b0unb");
-  src: url("../fonts/atum-icon-font.eot?4b0unb#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?4b0unb") format("truetype"), url("../fonts/atum-icon-font.woff?4b0unb") format("woff"), url("../fonts/atum-icon-font.svg?4b0unb#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?h88pav");
+  src: url("../fonts/atum-icon-font.eot?h88pav#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?h88pav") format("truetype"), url("../fonts/atum-icon-font.woff?h88pav") format("woff"), url("../fonts/atum-icon-font.svg?h88pav#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -590,6 +590,10 @@
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-barcodes-pro:before {
+  content: "\e9dc";
 }
 
 .atmi-pick-pack:before {
@@ -1294,10 +1298,6 @@
 
 .atmi-pushpin:before {
   content: "\e990";
-}
-
-.atmi-question:before {
-  content: "\e9d9";
 }
 
 .atmi-question-circle:before {
@@ -4367,6 +4367,10 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 }
 .swal2-container .swal2-modal a:hover {
   color: var(--wp-link-hover);
+}
+.swal2-container .swal2-modal .alert p {
+  text-align: left;
+  margin: 0;
 }
 .swal2-container .swal2-modal .swal2-loader {
   border-color: var(--primary) transparent var(--primary) transparent;

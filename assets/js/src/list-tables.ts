@@ -85,7 +85,7 @@ jQuery( ( $: JQueryStatic ) => {
 	new SalesLastDays( globals, router, enhancedSelect );
 	new BulkActions( settings, globals, listTable );
 	new LocationsTree( settings, globals, tooltip );
-	new RowActions( settings, globals );
+	new RowActions( settings, globals.$atumList );
 
 	// Add the list table help guide (if available).
 	if ( settings.get( 'hgMainGuide' ) ) {

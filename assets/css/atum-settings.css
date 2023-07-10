@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.30 
+ * @version 1.9.31 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -2150,8 +2150,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 @font-face {
   font-family: "atum-icon-font";
-  src: url("../fonts/atum-icon-font.eot?4b0unb");
-  src: url("../fonts/atum-icon-font.eot?4b0unb#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?4b0unb") format("truetype"), url("../fonts/atum-icon-font.woff?4b0unb") format("woff"), url("../fonts/atum-icon-font.svg?4b0unb#atum-icon-font") format("svg");
+  src: url("../fonts/atum-icon-font.eot?h88pav");
+  src: url("../fonts/atum-icon-font.eot?h88pav#iefix") format("embedded-opentype"), url("../fonts/atum-icon-font.ttf?h88pav") format("truetype"), url("../fonts/atum-icon-font.woff?h88pav") format("woff"), url("../fonts/atum-icon-font.svg?h88pav#atum-icon-font") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -2165,6 +2165,10 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.atmi-barcodes-pro:before {
+  content: "\e9dc";
 }
 
 .atmi-pick-pack:before {
@@ -2869,10 +2873,6 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
 
 .atmi-pushpin:before {
   content: "\e990";
-}
-
-.atmi-question:before {
-  content: "\e9d9";
 }
 
 .atmi-question-circle:before {
@@ -3738,6 +3738,10 @@ h2 .atum-help-tip {
 }
 .swal2-container .swal2-modal a:hover {
   color: var(--wp-link-hover);
+}
+.swal2-container .swal2-modal .alert p {
+  text-align: left;
+  margin: 0;
 }
 .swal2-container .swal2-modal .swal2-loader {
   border-color: var(--primary) transparent var(--primary) transparent;
@@ -4806,10 +4810,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   padding-top: 10px;
   height: 0.68rem;
 }
-.atum-settings-wrapper .btn.btn-danger.tool-runner {
-  padding-left: initial;
-  padding-right: initial;
-}
 .atum-settings-wrapper .atum-multi-checkbox-all {
   display: block;
   width: 100%;
@@ -5271,6 +5271,9 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 .atum-settings-wrapper #atum-settings .section-fields input[type=number]::-webkit-inner-spin-button, .atum-settings-wrapper #atum-settings .section-fields input[type=number]::-webkit-outer-spin-button {
   opacity: 1;
 }
+.atum-settings-wrapper #atum-settings .section-fields input[type=text] {
+  max-width: 260px;
+}
 .atum-settings-wrapper #atum-settings .section-fields .region-switcher, .atum-settings-wrapper #atum-settings .section-fields .range-remover {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -5287,18 +5290,17 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   display: flex;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+  gap: 10px;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .tool-runner {
   text-transform: uppercase;
   font-size: 12px;
-  width: 110px;
   height: 30px;
   line-height: 1;
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .atum-select2-container {
   height: 30px;
   padding-bottom: 8px;
-  margin-right: 5px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .script-runner .atum-select2-container {
@@ -5340,7 +5342,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   }
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner .checkbox-wrapper {
-  margin-bottom: 20px;
   margin-left: 14px;
   line-height: 30px;
   color: var(--atum-checkbox-label);
@@ -5438,9 +5439,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 .atum-settings-wrapper #atum-settings .section-fields .script-runner button {
   border-radius: 4px;
-}
-.atum-settings-wrapper #atum-settings .section-fields .script-runner input[type=number] {
-  margin-right: 15px;
 }
 @media all and (max-width: 768px) {
   .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-select2, .atum-settings-wrapper #atum-settings .section-fields .select2-container.atum-enhanced-select {

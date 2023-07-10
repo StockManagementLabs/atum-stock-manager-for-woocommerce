@@ -80,7 +80,7 @@ endif;
 					<span>
 						<?php
 						/* translators: open and closing link tags */
-						printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="">', '</a>' ); ?>
+						printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php' ) ) . '">', '</a>' ); ?>
 					</span>
 				</div>
 			<?php endif; ?>

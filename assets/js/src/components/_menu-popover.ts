@@ -69,13 +69,13 @@ export default class MenuPopover extends PopoverBase{
 			// Hide any other menu popover opened before opening a new one.
 			.on( 'show.bs.popover', ( evt: JQueryEventObject ) => {
 
-				const $shownPopover: JQuery = $( evt.currentTarget );
+				const $showPopoverBtn: JQuery = $( evt.currentTarget );
 
 				$( `.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
 
 					const $currentButton: JQuery = $( `[aria-describedby="${ $( elem ).attr('id') }"]` );
 
-					if ( $currentButton.is( $shownPopover ) ) {
+					if ( $currentButton.is( $showPopoverBtn ) ) {
 						return;
 					}
 
@@ -90,6 +90,10 @@ export default class MenuPopover extends PopoverBase{
 
 				const $popoverButton: JQuery = $( evt.currentTarget ),
 				      $popover: JQuery       = $( `#${ $popoverButton.attr( 'aria-describedby' ) }` );
+
+				if ( $popover.length && ! $popover.find( '.popover-header' ).text().trim() ) {
+					$popover.find( '.popover-header' ).hide();
+				}
 
 				this.wpHooks.doAction( 'atum_menuPopover_inserted', $popover, $popoverButton );
 

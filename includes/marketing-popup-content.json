@@ -1,26 +1,26 @@
 {
 	"background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2023/06/waves-new-addons.png)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"dash_background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2023/06/waves-new-addons.png)",
+		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
 		"bg_position": "bottom",
 		"bg_size"    : "contain",
 		"bg_repeat"  : "no-repeat",
 		"bg_color"   : "white"
 	},
 	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
-		"logo_css" : "width:361px;margin-bottom:10px",
-		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/label-new-stz@4x.png"
+		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
+		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
+		"logo_css" : "width:213px;margin-bottom:10px",
+		"top_left" : ""
 	},
 	"title": {
-		"text"      : "New ATUM add-ons available!",
+		"text"      : "Trial our premium add-ons for free!",
 		"text_color": "black",
 		"text_size" : "28px",
 		"text_align": "center"
@@ -31,7 +31,7 @@
 		"background": "#ff4848"
 	},
 	"description": {
-		"text"           : "Take complete control over your stock with the Stock Takes add-on and organize your picking and packing processes with the Pick & Pack add-on!",
+		"text"           : "We have listened to all that found it difficult to use our Demos.<br>You can try the full version of all our premium add-ons free of charge for 14 days.<br><strong>What are you waiting for?!</strong>",
 		"text_color"     : "#6c757d",
 		"text_size"      : "14px",
 		"text_align"     : "center",
@@ -40,17 +40,17 @@
 	},
 	"buttons": [
 		{
-			"text" : "Try them now!",
+			"text" : "Get Started!",
 			"url"  : "https://stockmanagementlabs.com/addons/",
 			"class": "btn btn-primary",
 			"css"  : ""
 		},
 		{
 			"text" : "Read Documentation",
-			"url"  : "https://stockmanagementlabs.crunch.help/",
+			"url"  : "https://stockmanagementlabs.crunch.help/en/atum-core/atum-trials",
 			"class": "btn btn-outline-primary",
 			"css"  : ""
 		}
 	],
-	"transient_key": "st_and_pp_launch"
+	"transient_key":  "atum_trials"
 }

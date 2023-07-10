@@ -883,7 +883,7 @@ final class WidgetHelpers {
 
 		$products_in_stock_sql = $products_in_stock_query->request;
 
-		if ( ! $product_type || 'bundle' === $product_type ) {
+		if ( class_exists( '\WC_Product_Bundle' ) && ( ! $product_type || 'bundle' === $product_type ) ) {
 			$bundle_args = array(
 				array(
 					'taxonomy' => 'product_type',

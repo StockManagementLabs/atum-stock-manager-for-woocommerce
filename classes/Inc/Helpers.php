@@ -1870,25 +1870,47 @@ final class Helpers {
 			$post_type = get_post_type( $atum_order_id );
 		}
 
-		$model_class = NULL;
+		// Use cache to avoid reading order data every time.
+		// TODO: THIS NEEDS TO BE TESTED DEEPLY AS IT COULD CAUSE ISSUES.
+		$cache_key  = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, $read_items, $post_type ] );
+		$atum_order = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-		switch ( $post_type ) {
-			case InventoryLogs::POST_TYPE:
-				$model_class = '\Atum\InventoryLogs\Models\Log';
-				break;
+		// If the read items is set to false, but we have an order cached with items, return that one instead of getting it again.
+		if ( ! $read_items && ! $has_cache ) {
+			$cache_key_alt = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, TRUE, $post_type ] );
+			$atum_order    = AtumCache::get_cache( $cache_key_alt, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-			case PurchaseOrders::POST_TYPE:
-				$model_class = '\Atum\PurchaseOrders\Models\PurchaseOrder';
-				break;
+			if ( $has_cache ) {
+				$cache_key = $cache_key_alt;
+			}
 		}
 
-		$model_class = apply_filters( 'atum/order_model_class', $model_class, $post_type );
+		if ( ! $has_cache ) {
 
-		if ( ! $model_class || ! class_exists( $model_class ) ) {
-			return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
+			$model_class = NULL;
+
+			switch ( $post_type ) {
+				case InventoryLogs::POST_TYPE:
+					$model_class = '\Atum\InventoryLogs\Models\Log';
+					break;
+
+				case PurchaseOrders::POST_TYPE:
+					$model_class = '\Atum\PurchaseOrders\Models\PurchaseOrder';
+					break;
+			}
+
+			$model_class = apply_filters( 'atum/order_model_class', $model_class, $post_type );
+
+			if ( ! $model_class || ! class_exists( $model_class ) ) {
+				return new \WP_Error( 'invalid_post_type', __( 'No valid ID provided', ATUM_TEXT_DOMAIN ) );
+			}
+
+			$atum_order = new $model_class( $atum_order_id, $read_items );
+			AtumCache::set_cache( $cache_key, $atum_order );
+
 		}
 
-		return new $model_class( $atum_order_id, $read_items );
+		return $atum_order;
 
 	}
 

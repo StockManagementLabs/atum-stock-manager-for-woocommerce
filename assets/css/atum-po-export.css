@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.30 
+ * @version 1.9.31 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -380,6 +380,9 @@ body {
 }
 .content-header strong {
   font-size: 20px;
+}
+.content-header-po-data svg {
+  margin-top: 10px;
 }
 
 .po-title {

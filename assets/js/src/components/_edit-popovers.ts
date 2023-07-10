@@ -461,6 +461,13 @@ export default class EditPopovers extends PopoverBase{
 
 		}
 
+		// Input number restrictions.
+		if ( $popover.find( 'input[type=number]' ).length ) {
+			$popover.find( 'input[type=number]' ).change( 'change paste', ( evt: JQueryEventObject ) => {
+				Utils.restrictNumberInputValues( $( evt.currentTarget ) );
+			} );
+		}
+
 	}
 
 	/**

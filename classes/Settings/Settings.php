@@ -731,7 +731,7 @@ class Settings {
 		}
 
 		// Remove deprecated/removed/unneeded keys.
-		// TODO: Temporary disabled because we're losing all settings from disabled add-ons.
+		// TODO: Disabled because we're losing all the settings from temporarily disabled add-ons.
 		// Find a way to preserve disabled settings without keeping in the current settings.
 		/*
 		$valid_keys = array_keys( $this->defaults );
@@ -744,7 +744,7 @@ class Settings {
 
 		if ( isset( $input['settings_section'] ) ) {
 
-			// Save the the user meta options and exclude them from global settings.
+			// Save the user meta options and exclude them from global settings.
 			if ( ! empty( $this->user_meta_options[ $input['settings_section'] ] ) ) {
 
 				$user_meta_options = $this->user_meta_options[ $input['settings_section'] ];
@@ -796,6 +796,9 @@ class Settings {
 			}
 
 		}
+
+		// Avoid issues with cached values when saving settings.
+		wp_cache_delete( 'alloptions', 'options' );
 
 		return apply_filters( 'atum/settings/sanitize', $this->options, $input );
 
@@ -1376,7 +1379,6 @@ class Settings {
 									<option value="<?php echo esc_attr( $key ) ?>"><?php echo esc_html( $label ) ?></option>
 								<?php endforeach ?>
 							</select>
-							&nbsp;
 						</div>
 
 					<?php elseif ( 'number' === $field['type'] ) : ?>
@@ -1385,6 +1387,15 @@ class Settings {
 							min="<?php echo esc_attr( $field['min'] ?? 0 ) ?>"
 							<?php echo ! empty( $field['max'] ) ? ' max="' . esc_attr( $field['max'] ) . '"' : '' ?>
 							step="<?php echo esc_attr( $field['step'] ?? 1 ) ?>"
+							value="<?php echo esc_attr( $field['value'] ?? 0 ) ?>"
+							data-tool="<?php echo esc_attr( $args['id'] ) ?>"
+							<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
+						>
+
+					<?php elseif ( 'text' === $field['type'] ) : ?>
+
+						<input class="atum-settings-input" type="text"
+							<?php echo ! empty( $field['placeholder'] ) ? ' placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '' ?>
 							value="<?php echo esc_attr( $field['value'] ?? 0 ) ?>"
 							data-tool="<?php echo esc_attr( $args['id'] ) ?>"
 							<?php echo ! empty( $field['name'] ) ? ' name="' . esc_attr( $field['name'] ) . '"' : '' ?>
@@ -1743,7 +1754,7 @@ class Settings {
 				if ( in_array( $option_key, $user_meta_options, TRUE ) ) {
 					$user_saved_meta = Helpers::get_atum_user_meta( $user_meta_key );
 
-					return isset( $user_saved_meta[ $option_key ] ) ? $user_saved_meta[ $option_key ] : $this->defaults[ $option_key ]['default'];
+					return $user_saved_meta[ $option_key ] ?? $this->defaults[ $option_key ]['default'];
 				}
 
 			}

@@ -15,6 +15,7 @@ namespace Atum\Api\Controllers\V3;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\AtumApi;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 use Atum\Suppliers\Suppliers;
@@ -407,7 +408,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'type'              => 'string',
 				'enum'              => $this->get_supplier_post_statuses(),
 				'sanitize_callback' => 'sanitize_key',
-				'validate_callback' => array( $this, 'validate_status_param' ),
+				'validate_callback' => array( AtumApi::get_instance(), 'validate_status_param' ),
 			),
 			'currency'        => array(
 				'description'       => __( 'Limit result set to suppliers using the specified currency code.', ATUM_TEXT_DOMAIN ),
@@ -1394,45 +1395,6 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 	 */
 	private function get_supplier_post_statuses() {
 		return apply_filters( 'atum/api/suppliers/statuses', array_merge( array_keys( get_post_statuses() ), [ 'any', 'trash' ] ) );
-	}
-
-	/**
-	 * Special validation for the status param (allowing multiple statuses at once)
-	 *
-	 * @since 1.9.22
-	 *
-	 * @param mixed            $value
-	 * @param \WP_REST_Request $request
-	 * @param string           $param
-	 *
-	 * @return true|\WP_Error
-	 */
-	public function validate_status_param( $value, $request, $param ) {
-
-		if ( strpos( $value, ',' ) === FALSE ) {
-			return rest_validate_request_arg( $value, $request, $param );
-		}
-
-		$attributes = $request->get_attributes();
-		if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
-			return TRUE;
-		}
-		$args = $attributes['args'][ $param ];
-
-		$statuses = explode( ',', $value );
-
-		foreach ( $statuses as $status ) {
-
-			$valid_status = rest_validate_value_from_schema( $status, $args, $param );
-
-			if ( ! $valid_status || is_wp_error( $valid_status ) ) {
-				return $valid_status;
-			}
-
-		}
-
-		return TRUE;
-
 	}
 
 }
