@@ -1568,7 +1568,7 @@ final class Helpers {
 
 		}
 
-		return FALSE;
+		return $return_bool ? FALSE : [];
 
 	}
 	

@@ -958,14 +958,17 @@ final class Addons {
 
 			// Status defaults.
 			$addon_status = (object) array(
-				'installed'   => $is_installed || $is_trial_installed,
+				'installed'   => ! empty( $is_installed ) || ! empty( $is_trial_installed ),
 				'status'      => 'invalid',
 				'key'         => '',
 				'classes'     => [],
 				'notice_type' => 'primary',
 			);
 
-			if ( ( $is_trial_installed && ! $is_installed ) || ( $is_trial_installed && is_plugin_active( key( $is_trial_installed ) ) ) ) {
+			if (
+				! empty( $is_trial_installed ) &&
+				( empty( $is_installed ) || ( is_array( $is_trial_installed ) && is_plugin_active( key( $is_trial_installed ) ) ) )
+			) {
 				$addon_status->is_trial = TRUE;
 			}
 			else {
@@ -1019,8 +1022,17 @@ final class Addons {
 						if ( $license_data ) {
 
 							// Confirm that the license belongs to the installed add-on.
-							if ( ! empty( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && strpos( strtolower( $license_data->item_name ), 'trial' ) === FALSE ) {
-								$addon_status->status = $saved_license['status'] = 'invalid';
+							if ( isset( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && strpos( strtolower( $license_data->item_name ), 'trial' ) === FALSE ) {
+
+								// Is the user upgrading?
+								if ( 'valid' === $license_data->license && strtolower( $license_data->item_name ) === strtolower( $addon_name ) ) {
+									$addon_status->status           = $license_data->license;
+									$addon_status->upgrade_required = TRUE;
+								}
+								else {
+									$addon_status->status = $saved_license['status'] = 'invalid';
+								}
+
 							}
 							elseif ( empty( $addon_status->is_trial ) && strpos( strtolower( $license_data->item_name ), 'trial' ) !== FALSE ) {
 								$addon_status->status = $saved_license['status'] = 'invalid';
@@ -1064,7 +1076,7 @@ final class Addons {
 					$addon_status->classes[]  = 'no-key';
 					$addon_status->label_text = __( 'Missing License!', ATUM_TEXT_DOMAIN );
 
-					if ( $is_installed ) {
+					if ( ! empty( $is_installed ) ) {
 						$addon_status->notice      = esc_html__( 'License key missing! Please, add your key to continue receiving automatic updates.', ATUM_TEXT_DOMAIN );
 						$addon_status->notice_type = 'warning';
 					}
@@ -1089,7 +1101,7 @@ final class Addons {
 
 			}
 
-			if ( ! $is_installed && ! $is_trial_installed ) {
+			if ( empty( $is_installed ) && empty( $is_trial_installed ) ) {
 				$addon_status->status        = 'not-installed';
 				$addon_status->button_text   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
 				$addon_status->button_class  = 'install-addon';
@@ -1122,9 +1134,13 @@ final class Addons {
 					$addon_status->notice      = esc_html__( 'This trial has already been used on another site and is for a single use only.', ATUM_TEXT_DOMAIN );
 					$addon_status->notice_type = 'danger';
 				}
+				elseif ( ! empty( $addon_status->upgrade_required ) ) {
+					$addon_status->notice      = esc_html__( 'You are still using a trial and your license is for a full version. Please, uninstall the trial and reinstall from here to get the full version.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice_type = 'danger';
+				}
 				elseif ( ! $is_expired && ! empty( $addon_status->expires ) ) {
 					$time_ago        = new TimeAgo();
-					$expiration_date = date_i18n( 'Y-m-d H:i:s', $expiration_timestamp );
+					$expiration_date = date_i18n( 'Y-m-d H:i:s', $expiration_timestamp ?? time() );
 					/* translators: the time remaining */
 					$addon_status->notice = sprintf( esc_html__( 'Trial period: %s ', ATUM_TEXT_DOMAIN ), str_replace( 'ago', esc_html__( 'remaining', ATUM_TEXT_DOMAIN ), $time_ago->inWordsFromStrings( $expiration_date ) ) );
 				}
