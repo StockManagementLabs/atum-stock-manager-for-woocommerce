@@ -377,13 +377,13 @@ final class Addons {
 						$plugin_name = $is_trial_addon ? "ATUM $addon (Trial version)" : "ATUM $addon";
 						$addon_info  = Helpers::is_plugin_installed( $plugin_name, 'name', FALSE );
 
-						if ( $addon_info ) {
+						if ( ! empty( $addon_info ) ) {
 
 							// Check if is a trial license.
 							if ( $is_trial_addon && ! $is_trial_license ) {
 
 								AtumAdminNotices::add_notice(
-									/* translators: the add-on name and the open and closing link tags */
+								/* translators: the add-on name and the open and closing link tags */
 									sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
 									strtolower( $addon_name ),
 									'warning',
@@ -395,7 +395,7 @@ final class Addons {
 							elseif ( ! $is_trial_addon && $is_trial_license ) {
 
 								AtumAdminNotices::add_notice(
-									/* translators: the add-on name and the open and closing link tags */
+								/* translators: the add-on name and the open and closing link tags */
 									sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid full version license on the %2$sadd-ons page.%3$s', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
 									strtolower( $addon_name ),
 									'warning',
@@ -427,8 +427,8 @@ final class Addons {
 						if ( $is_trial_addon ) {
 
 							AtumAdminNotices::add_notice(
-								/* translators: the add-on name */
-								sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page%3$s or purchase the full version.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
+							/* translators: the add-on name */
+								sprintf( __( 'The ATUM %1$s license is invalid. Please, enter a valid trial license on the %2$sadd-ons page%3$s or purchase the full version.<br>If you already have upgraded to full, please uninstall the trial and reinstall the full version from the ATUM add-ons page.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
 								strtolower( $addon_name ),
 								'warning',
 								TRUE,
@@ -439,7 +439,7 @@ final class Addons {
 						else {
 
 							AtumAdminNotices::add_notice(
-								/* translators: the add-on name */
+							/* translators: the add-on name */
 								sprintf( __( "ATUM %1\$s license has expired or is invalid. You can no longer update or take advantage of support. Running outdated plugins may cause functionality issues and compromise your site's security and data. %2\$sYou can extend your license for 15%% OFF now (valid 14 days after the license expires).%3\$s", ATUM_TEXT_DOMAIN ), $addon_name, '<a href="https://stockmanagementlabs.com/login" target="_blank">', '</a>' ),
 								strtolower( $addon_name ),
 								'warning',
@@ -452,7 +452,7 @@ final class Addons {
 					elseif ( 'trial_used' === $license_key['status'] && strpos( $addon_slug, 'trial' ) !== FALSE ) {
 
 						AtumAdminNotices::add_notice(
-							/* translators: the add-on name */
+						/* translators: the add-on name */
 							sprintf( __( 'ATUM %1$s license is being used on another site and is for a single use only. Please, remove it from the %2$sadd-ons page%3$s.', ATUM_TEXT_DOMAIN ), $addon_name, '<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">', '</a>' ),
 							strtolower( $addon_name ),
 							'warning',
@@ -1147,10 +1147,10 @@ final class Addons {
 				else {
 
 					if ( ! $addon_status->extended ) {
-						$addon_status->notice = esc_html__( 'Trial period expired. You can extend it for 7 days more or unlock the full version by purchasing a license.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice = __( 'Trial period expired. You can extend it for 7 days more or unlock the full version by purchasing a license.<br>If you have already upgraded your license, uninstall the trial and reinstall the full version.', ATUM_TEXT_DOMAIN );
 					}
 					else {
-						$addon_status->notice      = esc_html__( 'Trial period expired. Please, purchase a license to unlock the full version.', ATUM_TEXT_DOMAIN );
+						$addon_status->notice      = __( 'Trial period expired. Please, purchase a license to unlock the full version.<br>If you have already upgraded your license, uninstall the trial and reinstall the full version.', ATUM_TEXT_DOMAIN );
 						$addon_status->notice_type = 'danger';
 					}
 				}
