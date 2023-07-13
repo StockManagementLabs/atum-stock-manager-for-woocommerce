@@ -105,7 +105,7 @@ endif;
 							<?php esc_html_e( 'Upgrade', ATUM_TEXT_DOMAIN ) ?>
 						</a>
 
-						<?php if ( $is_expired && empty( $addon_status->extended ) && ! empty( $addon_status->key ) ) : ?>
+						<?php if ( $is_expired && empty( $addon_status->extended ) && ! empty( $addon_status->key ) && 'trial_used' !== $addon_status->status ) : ?>
 							<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $addon_status->key ) ?>"><?php esc_html_e( 'Extend trial', ATUM_TEXT_DOMAIN ); ?></button>
 						<?php endif; ?>
 
