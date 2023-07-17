@@ -55,7 +55,7 @@ endif;
 			<?php if ( $is_beta ) : ?>
 				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Beta', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php elseif ( ! $is_coming_soon_addon && ! empty( $addon['licensing']['version'] ) ) : ?>
-				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> title="<?php esc_attr_e( 'Latest Version', ATUM_TEXT_DOMAIN ) ?>"><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?><?php if ( $is_trial ) echo ' &ndash; ' . __( 'Trial', ATUM_TEXT_DOMAIN ) ?></span>
+				<span class="label"<?php echo $pill_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> title="<?php esc_attr_e( 'Latest Version Available', ATUM_TEXT_DOMAIN ) ?>"><?php echo 'v' . esc_attr( $addon['licensing']['version'] ) ?><?php if ( $is_trial ) echo ' &ndash; ' . __( 'Trial', ATUM_TEXT_DOMAIN ) ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -105,7 +105,7 @@ endif;
 							<?php esc_html_e( 'Upgrade', ATUM_TEXT_DOMAIN ) ?>
 						</a>
 
-						<?php if ( $is_expired && empty( $addon_status->extended ) && ! empty( $addon_status->key ) ) : ?>
+						<?php if ( $is_expired && empty( $addon_status->extended ) && ! empty( $addon_status->key ) && 'trial_used' !== $addon_status->status ) : ?>
 							<button type="button" class="btn btn-outline-primary extend-atum-trial" data-key="<?php echo esc_attr( $addon_status->key ) ?>"><?php esc_html_e( 'Extend trial', ATUM_TEXT_DOMAIN ); ?></button>
 						<?php endif; ?>
 
