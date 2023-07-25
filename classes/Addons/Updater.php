@@ -203,7 +203,7 @@ class Updater {
 				$transient_data->response[ $this->name ]->icons = maybe_unserialize( $transient_data->response[ $this->name ]->icons );
 			}
 
-			$transient_data->last_checked           = Helpers::get_current_timestamp();
+			$transient_data->last_checked           = (int) Helpers::get_current_timestamp();
 			$transient_data->checked[ $this->name ] = $this->version;
 
 		}
