@@ -545,11 +545,11 @@ final class Addons {
 			}
 
 			if ( ! empty( $addons ) ) {
-				self::set_last_api_access( TRUE );
+				self::set_last_api_access( 'addons_list', TRUE );
 				AtumCache::set_transient( $transient_name, $addons, DAY_IN_SECONDS, TRUE );
 			}
 			else {
-				self::set_last_api_access();
+				self::set_last_api_access( 'addons_list' );
 			}
 
 		}
