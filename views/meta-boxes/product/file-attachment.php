@@ -28,7 +28,7 @@
 				$check    = wp_check_filetype( wp_get_original_image_path( $attachment->id ) );
 
 				if ( ! empty( $check['ext'] ) ) :
-					$is_image = in_array( $check['ext'], [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ] );
+					$is_image = in_array( $check['ext'], [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg' ] );
 				endif;
 
 				if ( $is_image ) : ?>
