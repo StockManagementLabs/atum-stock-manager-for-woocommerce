@@ -6,8 +6,8 @@ Requires at least: 5.6
 Tested up to: 6.2.2
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.8.2
-Stable tag: 1.9.31.1
+WC tested up to: 7.9.0
+Stable tag: 1.9.32
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,34 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.32`
+
+*2023-08-01*
+
+**Features**
+
+* Added new hooks to PO PDF template.
+* Added extra param to increase totals filter.
+
+**Changes**
+
+* CSS adjustments.
+* Show warning when the user has upgraded to full and still has the trial installed.
+* Refactoring.
+* Do not show the extend trial button on the "trial_used" error.
+* Adjusted layout for the addons page.
+
+**Fixes**
+
+* Prevent SQL notice in PO search products query.
+* Fixed variations not returned in PO products search query.
+* Fixed wrong method calling params.
+* Ensure the timestamp is an integer.
+* Fixed trial licenses disappearing occasionally.
+* Fixed delete attachment button not being added until the product is saved.
 
 ---
 
