@@ -1806,7 +1806,7 @@ class Wpml {
 				do_action( 'wpml_add_language_selector', [
 					'display_flags'                => 1,
 					'display_names_in_native_lang' => 0, // Options won't work from the twig template settings.
-					'template'                     => 'atum-inventory-management-for-woocommerce-atum-order-language-dropdown',
+					'template'                     => 'atum-inventory-management-for-woocommerce-atum-suppliers-language-dropdown',
 				] ); ?>
 			</p>
 		</div>
