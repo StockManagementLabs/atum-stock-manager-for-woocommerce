@@ -62,10 +62,20 @@ export default class FileAttachments {
 					.append( `<label>${ this.settings.get( 'attachToEmail' ) }</label>` )
 					.append( this.$emailSelector.clone() );
 
+				let thumb: string = '';
+
+				if ( [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg' ].includes( attachment.subtype ) && attachment.sizes.medium.url ) {
+					thumb = `<img src="${ attachment.sizes.medium.url }" alt="${ attachment.title }">`;
+				}
+				else {
+					thumb = `<div class="atum-attachment-icon"><i class="atum-icon atmi-file-empty" title="${ attachment.title }"></i></div>`;
+				}
+
 				$listItem.append( `
 					<a href="${ url }" target="_blank" title="${ attachment.title }">
-						<img src="${ attachment.sizes.medium.url }" alt="${ attachment.title }">
+						${ thumb }
 					</a>
+					<i class="delete-attachment dashicons dashicons-dismiss atum-tooltip" title="${ this.settings.get( 'deleteAttachment' ) }"></i>
 				` );
 
 				this.$attachmentsList.append( $listItem );

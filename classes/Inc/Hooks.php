@@ -275,6 +275,7 @@ class Hooks {
 				'attachToEmail'                 => __( 'Attach to email:', ATUM_TEXT_DOMAIN ),
 				'cancel'                        => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'continue'                      => __( 'Yes, Continue', ATUM_TEXT_DOMAIN ),
+				'deleteAttachment'              => __( 'Delete attachment', ATUM_TEXT_DOMAIN ),
 				'emailNotifications'            => FileAttachment::get_email_notifications(),
 				'error'                         => __( 'Error!', ATUM_TEXT_DOMAIN ),
 				'isOutStockThresholdEnabled'    => Helpers::get_option( 'out_stock_threshold', 'no' ),
