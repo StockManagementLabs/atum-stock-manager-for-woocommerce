@@ -22,8 +22,10 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
 use Atum\Models\Products\AtumProductTrait;
+use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\Lists\ListTable;
+use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 
@@ -35,7 +37,7 @@ class Wpml {
 	 * @var Wpml
 	 */
 	private static $instance;
-	
+
 	/**
 	 * Searchable MultiCurrency columns and their types
 	 */
@@ -43,7 +45,7 @@ class Wpml {
 		'_regular_price',
 		'_sale_price',
 	);
-	
+
 	/**
 	 * Whether the WC multicurrency option is active or not
 	 *
@@ -104,6 +106,15 @@ class Wpml {
 	 */
 	public $is_translation = FALSE;
 
+	/**
+	 * Non translatable post types
+	 *
+	 * @since 1.9.30
+	 *
+	 * @var array
+	 */
+	public $nt_post_types = [];
+
 
 	/**
 	 * Wpml constructor
@@ -129,8 +140,20 @@ class Wpml {
 			$this->current_currency = get_woocommerce_currency();
 		}
 
+		$this->set_non_translatable_post_types();
 		$this->register_hooks();
 
+	}
+
+	/**
+	 * Set the non-translatable post types
+	 *
+	 * @since 1.9.7
+	 */
+	public function set_non_translatable_post_types() {
+
+		$this->nt_post_types   = Globals::get_atum_order_types();
+		$this->nt_post_types[] = Suppliers::POST_TYPE;
 	}
 
 	/**
@@ -172,11 +195,11 @@ class Wpml {
 			// Hook into AtumListTable columns.
 			add_filter( 'atum/list_table/editable_column', array( $this, 'add_custom_prices_arg' ), 10, 2 );
 			add_filter( 'atum/list_table/args_purchase_price', array( $this, 'add_custom_purchase_price' ) );
-			
+
 			// Hook into Controlled and UnControlled Stock Central ListTables columns.
 			add_filter( 'atum/list_table/args_regular_price', array( $this, 'add_custom_regular_price' ), 10, 2 );
 			add_filter( 'atum/list_table/args_sale_price', array( $this, 'add_custom_sale_price' ), 10, 2 );
-			
+
 			// Hook into AtumListTable Product Search.
 			if ( $this->multicurrency_active ) {
 				add_filter( 'atum/list_table/posts_search/numeric_meta_where', array( $this, 'change_multi_currency_meta_where' ), 10, 3 );
@@ -192,18 +215,18 @@ class Wpml {
 
 			// Filter current language translations from the unmanaged products query.
 			add_filter( 'atum/get_unmanaged_products/where_query', array( $this, 'unmanaged_products_where' ) );
-			
+
 			// Add WPML filters to get_posts in Helpers::get_all_products and for Suppliers::get_supplier_products.
 			//add_filter( 'atum/get_all_products/args', array( $this, 'filter_get_all_products' ) );
 			add_filter( 'atum/suppliers/supplier_products_args', array( $this, 'filter_get_all_products' ) );
-			
+
 			// Add upgrade ATUM tasks.
 			add_action( 'atum/after_upgrade', array( $this, 'upgrade' ) );
-			
+
 			// Filter original product parts shown in product json search.
 			add_filter( 'atum/ajax/search_products/query_select', array( $this, 'select_add_icl_translations' ), 10, 3 );
 			add_filter( 'atum/ajax/search_products/query_where', array( $this, 'where_add_icl_translations' ), 10, 3 );
-			
+
 			// Add Atum data rows when translations are created.
 			// The priority 111 is because the Atum data must be inserted after WCML created the variations.
 			add_action( 'icl_make_duplicate', array( $this, 'icl_make_duplicate' ), 111, 4 );
@@ -231,6 +254,14 @@ class Wpml {
 			// Add translations to inboud stock where clause.
 			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
 
+			if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
+
+				// Add supplier lang dropdown field nad remove standard WPML fields.
+				add_action( 'atum/suppliers/init', array( $this, 'remove_multilingual_fields' ) );
+				add_action( 'atum/suppliers/after_supplier_details', array( $this, 'add_lang_dropdown_to_supplier' ) );
+				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
+			}
+
 		}
 
 	}
@@ -244,8 +275,7 @@ class Wpml {
 	 */
 	public function register_atum_order_hooks( $post_type ) {
 
-		add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box' ), 11 );
-		add_action( 'init', array( $this, 'remove_language_switcher' ), 12 );
+		$this->remove_multilingual_fields();
 
 		if ( PurchaseOrders::POST_TYPE === $post_type ) {
 
@@ -264,6 +294,17 @@ class Wpml {
 	}
 
 	/**
+	 * Remove current page WPML fields
+	 *
+	 * @since 1.9.30
+	 */
+	public function remove_multilingual_fields() {
+
+		add_action( 'admin_head', array( $this, 'hide_multilingual_content_setup_box' ), 11 );
+		add_action( 'init', array( $this, 'remove_language_switcher' ), 12 );
+	}
+
+	/**
 	 * Remove WPML multilingual content setup meta box.
 	 *
 	 * @since 1.3.7.1
@@ -272,7 +313,7 @@ class Wpml {
 
 		global $post_type;
 
-		if ( $post_type && in_array( $post_type, Globals::get_atum_order_types() ) ) {
+		if ( $post_type && in_array( $post_type, $this->nt_post_types ) ) {
 			remove_meta_box( 'icl_div_config', convert_to_screen( $post_type ), 'normal' );
 		}
 	}
@@ -286,9 +327,9 @@ class Wpml {
 
 		global $pagenow;
 
-		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], Globals::get_atum_order_types() ) ) ? TRUE : FALSE;
+		$is_order_post_type = ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $this->nt_post_types ) ) ? TRUE : FALSE;
 		$get_post           = isset( $_GET['post'] ) ? $_GET['post'] : FALSE;
-		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), Globals::get_atum_order_types() );
+		$is_order_edit      = $get_post && 'post.php' === $pagenow && in_array( get_post_type( $get_post ), $this->nt_post_types );
 
 		if ( $is_order_post_type || $is_order_edit ) {
 			remove_action( 'wp_before_admin_bar_render', array( self::$sitepress, 'admin_language_switcher' ) );
@@ -384,7 +425,7 @@ class Wpml {
 	 * @return array
 	 */
 	public function add_custom_purchase_price( $args ) {
-		
+
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 
 			$purchase_price_value = $this->custom_prices[ $this->current_currency ]['custom_price'][ Globals::PURCHASE_PRICE_KEY ];
@@ -400,7 +441,7 @@ class Wpml {
 
 		return $args;
 	}
-	
+
 	/**
 	 * Add custom prices to regular price
 	 *
@@ -412,18 +453,18 @@ class Wpml {
 	 * @return array
 	 */
 	public function add_custom_regular_price( $args, $product ) {
-		
+
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 
 			$regular_price_value = $this->custom_prices[ $this->current_currency ]['custom_price']['_regular_price'];
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'currency' => $this->current_currency,
 			] ) : $args['value'];
-			
+
 			$args['currency']  = $this->current_currency;
 			$args['symbol']    = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
 			$args['is_custom'] = 'yes';
-			
+
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
 
@@ -432,9 +473,9 @@ class Wpml {
 			$args['value']       = is_numeric( $regular_price_value ) ? Helpers::format_price( $regular_price_value, [
 				'currency' => $args['currency'],
 			] ) : $args['value'];
-			
+
 		}
-		
+
 		return $args;
 	}
 
@@ -449,7 +490,7 @@ class Wpml {
 	 * @return array
 	 */
 	public function add_custom_sale_price( $args, $product ) {
-		
+
 		if ( ! empty( $this->custom_prices[ $this->current_currency ] ) ) {
 
 			$args['currency'] = $this->current_currency;
@@ -458,11 +499,11 @@ class Wpml {
 				'currency' => $this->current_currency,
 			] ) : $args['value'];
 			$args['symbol']   = $this->custom_prices[ $this->current_currency ]['currency_symbol'];
-			
+
 			// Dates come already formatted.
 			$args['extra_meta'][0]['value'] = $this->custom_prices[ $this->current_currency ]['sale_price_dates_from'];
 			$args['extra_meta'][1]['value'] = $this->custom_prices[ $this->current_currency ]['sale_price_dates_to'];
-			
+
 			$args['is_custom'] = 'yes';
 		}
 		elseif ( $this->multicurrency_active && $this->original_product_id !== $product->get_id() ) {
@@ -472,18 +513,18 @@ class Wpml {
 			$args['value']    = is_numeric( $sale_price_value ) ? Helpers::format_price( $sale_price_value, [
 				'currency' => $args['currency'],
 			] ) : $args['value'];
-			
+
 			$date_from = get_post_meta( $this->original_product_id, '_sale_price_dates_from', TRUE );
 			$date_to   = get_post_meta( $this->original_product_id, '_sale_price_dates_to', TRUE );
-			
+
 			$args['extra_meta'][0]['value'] = $date_from ? date_i18n( 'Y-m-d', $date_from ) : '';
 			$args['extra_meta'][1]['value'] = $date_to ? date_i18n( 'Y-m-d', $date_to ) : '';
-			
+
 		}
-		
+
 		return $args;
 	}
-	
+
 	/**
 	 * Change meta where for values with custom multicurrency set
 	 *
@@ -498,10 +539,10 @@ class Wpml {
 	public function change_multi_currency_meta_where( $where, $search_column, $value ) {
 
 		if ( in_array( $search_column, self::MULTICURRENCY_COLUMNS ) ) {
-			
+
 			$translated_meta = "{$search_column}_{$this->current_currency}";
 			global $wpdb;
-			
+
 			// Basically: if the original translation has set _wcml_custom_prices_status to 1,
 			// then took specific currency meta from original translation,
 			// else took current post meta value.
@@ -518,9 +559,9 @@ class Wpml {
 							AND trans1.element_id = p.ID AND trans2.source_language_code IS NULL
 							AND pmtrans.meta_key = '$translated_meta'),
 				        (SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = p.ID AND meta_key = '$search_column')) = '{$value}';";
-			
+
 		}
-		
+
 		return $where;
 	}
 
@@ -765,7 +806,7 @@ class Wpml {
 		}
 
 	}
-	
+
 	/**
 	 * Get the original product id from a translation, . If there are not translations, it's the original one
 	 *
@@ -813,7 +854,7 @@ class Wpml {
 		}
 
 		return $original_id;
-		
+
 	}
 
 	/**
@@ -877,7 +918,7 @@ class Wpml {
 		return array_unique( $translations );
 
 	}
-	
+
 	/**
 	 * Filter for the Unmanaged products query (where part) to only exclude WPML translations
 	 *
@@ -888,18 +929,18 @@ class Wpml {
 	 * @return array
 	 */
 	public function unmanaged_products_where( $unmng_where ) {
-		
+
 		global $wpdb;
-		
+
 		$unmng_where[] = "
 			AND posts.ID IN (
 				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('post_product', 'post_product_variation') AND language_code = '{$this->current_language}'
 			)
 		";
-		
+
 		return $unmng_where;
 	}
-	
+
 	/**
 	 * Set suppress_filters to 0 to add WPML filters to get_posts functions
 	 *
@@ -910,12 +951,12 @@ class Wpml {
 	 * @return array
 	 */
 	public function filter_get_all_products( $args ) {
-		
+
 		$args['suppress_filters'] = 0;
-		
+
 		return $args;
 	}
-	
+
 	/**
 	 * Add ICL_TRANSLATIONS table to the Select clause
 	 *
@@ -928,16 +969,16 @@ class Wpml {
 	 * @return string
 	 */
 	public function select_add_icl_translations( $query_select, $product_type = '', $post_types = [] ) {
-		
+
 		global $wpdb;
-		
+
 		$query_select .= " LEFT JOIN {$wpdb->prefix}icl_translations tr ON (posts.ID = tr.element_id AND
 						   CONCAT('post_', posts.post_type) = tr.element_type)";
-		
+
 		return $query_select;
-		
+
 	}
-	
+
 	/**
 	 * Add ICL_TRANSLATIONS where to sect default language (WC shows not translatable product data in the default language)
 	 *
@@ -950,13 +991,13 @@ class Wpml {
 	 * @return string
 	 */
 	public function where_add_icl_translations( $where_clause, $product_type = '', $post_types = [] ) {
-		
+
 		$where_clause .= ' AND tr.source_language_code IS NULL';
-		
+
 		return $where_clause;
-		
+
 	}
-	
+
 	/**
 	 * Returns false if the product found is a translation of the current product
 	 *
@@ -969,9 +1010,9 @@ class Wpml {
 	 * @return integer|bool
 	 */
 	public function skip_translations( $product_id, $supplier_sku, $product ) {
-		
+
 		if ( $product_id ) {
-			
+
 			$post_type = get_post_type( $product_id );
 
 			/* @noinspection PhpUndefinedMethodInspection */
@@ -980,11 +1021,11 @@ class Wpml {
 			}
 
 		}
-		
+
 		return $product_id;
 
 	}
-	
+
 	/**
 	 * Duplicate the ATUM data
 	 *
@@ -996,26 +1037,26 @@ class Wpml {
 	 * @param integer $id             New post id.
 	 */
 	public function icl_make_duplicate( $master_post_id, $lang, $postarr, $id ) {
-		
+
 		if ( 'product' === get_post_type( $master_post_id ) ) {
-			
+
 			$master_post_id = $this->wpml->products->get_original_product_id( $master_post_id );
-			
+
 			$this->duplicate_atum_product( $master_post_id, $id );
-			
+
 			$product = wc_get_product( $id );
-			
+
 			if ( in_array( $product->get_type(), array_diff( Globals::get_inheritable_product_types(), [ 'grouped' ] ) ) ) {
-			
+
 				$childs = $product->get_children();
-				
+
 				foreach ( $childs as $child_id ) {
-					
+
 					$original_product_id = $this->wpml->products->get_original_product_id( $child_id );
-					
+
 					$this->duplicate_atum_product( $original_product_id, $child_id );
 				}
-				
+
 			}
 		}
 	}
@@ -1091,7 +1132,7 @@ class Wpml {
 		// phpcs:enable
 
 	}
-	
+
 	/**
 	 * Ensure all translations have the same data
 	 *
@@ -1101,38 +1142,38 @@ class Wpml {
 	 * @param integer $product_id
 	 */
 	public function update_atum_data( $data, $product_id ) {
-		
+
 		global $wpdb;
 
 		$post_type        = get_post_type( $product_id );
 		$translations_ids = [];
-		
+
 		/* @noinspection PhpUndefinedMethodInspection */
 		$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, "post_$post_type" ), "post_$post_type" );
-		
+
 		foreach ( $product_translations as $translation ) {
-			
+
 			$translation_id = (int) $translation->element_id;
 			if ( $product_id !== $translation_id ) {
-				
+
 				$translations_ids[] = $translation_id;
 			}
-			
+
 		}
-		
+
 		if ( $translations_ids ) {
 			// Don't need to prepare, all are integers.
 			$translations_ids_str = implode( ',', $translations_ids );
 			$table                = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 			$in_atum              = $wpdb->get_col( "SELECT product_id FROM $table WHERE product_id IN( $translations_ids_str )" ); // phpcs:ignore WordPress.DB.PreparedSQL
-			
+
 			foreach ( $translations_ids as $translation_id ) {
-				
+
 				if ( in_array( $translation_id, $in_atum ) ) {
-					
+
 					// If present it's not needed.
 					unset( $data['product_id'] );
-					
+
 					$wpdb->update(
 						$wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE,
 						$data,
@@ -1147,9 +1188,9 @@ class Wpml {
 					self::duplicate_atum_product( $product_id, $translation_id );
 				}
 			}
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -1167,7 +1208,7 @@ class Wpml {
 
 		return $data;
 	}
-	
+
 	/**
 	 * Ensure all translation ATUM data is removed when removing a product
 	 *
@@ -1176,9 +1217,9 @@ class Wpml {
 	 * @param \WC_Product $product The product object.
 	 */
 	public function delete_atum_data( $product ) {
-		
+
 		global $wpdb;
-		
+
 		// Delete the ATUM data for this product.
 		$product_id       = $product->get_id();
 		$post_type        = get_post_type( $product_id );
@@ -1206,7 +1247,7 @@ class Wpml {
 			$wpdb->query( "DELETE FROM $table WHERE product_id IN( $translations_ids_str)" ); // phpcs:ignore WordPress.DB.PreparedSQL
 
 		}
-		
+
 	}
 
 	/**
@@ -1329,11 +1370,11 @@ class Wpml {
 	 * @param string $old_version Version before the upgrade tasks.
 	 */
 	public function upgrade( $old_version ) {
-		
+
 		global $wpdb;
-		
+
 		if ( version_compare( $old_version, '1.4.1.2', '<' ) ) {
-			
+
 			// Delete previous existent metas in translations to prevent duplicates.
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_delete = $wpdb->get_results( "
@@ -1342,9 +1383,9 @@ class Wpml {
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
             ", ARRAY_N );
 			// phpcs:enable
-			
+
 			if ( $ids_to_delete ) {
-				
+
 				$ids_to_delete = implode( ',', wp_list_pluck( $ids_to_delete, 0 ) );
 				// phpcs:disable WordPress.DB.PreparedSQL
 				$wpdb->query( "
@@ -1352,9 +1393,9 @@ class Wpml {
  					AND post_id IN({$ids_to_delete});
                 " );
 				// phpcs:enable
-				
+
 			}
-			
+
 			$ids_to_refresh = $wpdb->get_results("
 				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
 				WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN ('post_product', 'post_product_variation');
@@ -1375,11 +1416,11 @@ class Wpml {
 				}
 
 			}
-			
+
 		}
-		
+
 		if ( version_compare( $old_version, '1.4.4', '<' ) ) {
-			
+
 			// Delete previous existent metas in translations to prevent duplicates.
 			// phpcs:disable WordPress.DB.PreparedSQL
 			$ids_to_delete = $wpdb->get_results( "
@@ -1388,9 +1429,9 @@ class Wpml {
  				NULLIF(tr.source_language_code, '') IS NOT NULL AND tr.element_type IN ('post_product', 'post_product_variation');
             ", ARRAY_N );
 			// phpcs:enable
-			
+
 			if ( $ids_to_delete ) {
-				
+
 				$ids_to_delete = implode( ',', wp_list_pluck( $ids_to_delete, 0 ) );
 				// phpcs:disable WordPress.DB.PreparedSQL
 				$wpdb->query( "
@@ -1398,9 +1439,9 @@ class Wpml {
  					AND post_id IN($ids_to_delete);
                 " );
 				// phpcs:enable
-				
+
 			}
-			
+
 			$ids_to_refresh = $wpdb->get_results("
 				SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations
 				WHERE NULLIF(source_language_code, '') IS NOT NULL AND element_type IN ('post_product', 'post_product_variation');
@@ -1418,30 +1459,30 @@ class Wpml {
 					self::$sitepress->sync_custom_field( $original_id, $id, Suppliers::SUPPLIER_SKU_FIELD_KEY );
 				}
 			}
-			
+
 		}
-		
+
 		if ( version_compare( $old_version, '1.5.0', '<' ) ) {
-			
+
 			// Ensure all meta data in the ATUM table is properly copied to all translations.
 			$product_meta_table = $wpdb->prefix . ATUM_PREFIX . 'product_data';
 
 			// phpcs:disable WordPress.DB.PreparedSQL
-			$results = $wpdb->get_results("
+			$results = $wpdb->get_results( "
 				SELECT DISTINCT t.trid, apd.* FROM {$wpdb->prefix}icl_translations t
 				INNER JOIN $product_meta_table apd ON (t.element_id = apd.product_id)
 				WHERE NULLIF(t.source_language_code, '') IS NULL AND t.element_type IN ('post_product', 'post_product_variation');
-			");
+			" );
 			// phpcs:enable
-			
+
 			if ( $results ) {
-				
+
 				foreach ( $results as $result ) {
-					
+
 					$ids = $wpdb->get_col( $wpdb->prepare( "SELECT element_id FROM {$wpdb->prefix}icl_translations WHERE trid = %d", $result->trid ) );
-					
+
 					if ( $ids ) {
-						
+
 						if ( ( $key = array_search( $result->product_id, $ids ) ) !== FALSE ) {
 							unset( $ids[ $key ] );
 						}
@@ -1457,15 +1498,15 @@ class Wpml {
 							inheritable = ' . ( is_null( $result->inheritable ) ? 'NULL' : $result->inheritable ) . "
 							WHERE product_id IN ('" . implode( ',', $ids ) . "');
 						";
-						
+
 						$wpdb->query( $update ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-						
+
 					}
 				}
 			}
-			
+
 		}
-		
+
 	}
 
 	/**
@@ -1741,6 +1782,60 @@ class Wpml {
 		$where_clauses[] = "trans.language_code = '{$this->current_language}' ";
 
 		return $where_clauses;
+	}
+
+	/**
+	 * Add tha lang dropdown filed to ATUM suppliers
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param Supplier $supplier
+	 */
+	public function add_lang_dropdown_to_supplier( $supplier ) {
+
+		if ( $supplier->wpml_lang ) {
+			self::$sitepress->switch_lang( $supplier->wpml_lang );
+		}
+		?>
+
+		<div class="form-field form-field-wide">
+
+			<label for="wpml-lang"><?php esc_html_e( "Supplier's language", ATUM_TEXT_DOMAIN ) ?></label>
+			<p>
+				<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				do_action( 'wpml_add_language_selector', [
+					'display_flags'                => 1,
+					'display_names_in_native_lang' => 0, // Options won't work from the twig template settings.
+					'template'                     => 'atum-inventory-management-for-woocommerce-atum-suppliers-language-dropdown',
+				] ); ?>
+			</p>
+		</div>
+
+		<?php
+
+
+		if ( $supplier->wpml_lang ) {
+			self::$sitepress->switch_lang( $this->current_language );
+		}
+	}
+
+	/**
+	 * Enqueue the scripts/localized var if needed for WPML
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param string $hook
+	 */
+	public function enqueue_scripts( $hook ) {
+
+		global $post_type;
+
+		// Suppliers edit page.
+		if ( Suppliers::POST_TYPE === $post_type && in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			wp_localize_script( 'atum-suppliers', 'atumSupplierVars', array(
+				'wpmlActive' => 1,
+			));
+		}
 	}
 
 	/******************
