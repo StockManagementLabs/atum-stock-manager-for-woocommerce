@@ -1104,7 +1104,7 @@ final class Addons {
 			if ( empty( $is_installed ) && empty( $is_trial_installed ) ) {
 				$addon_status->status        = 'not-installed';
 				$addon_status->button_text   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
-				$addon_status->button_class  = 'install-addon';
+				$addon_status->button_class  = 'install-atum-addon';
 				$addon_status->button_action = ATUM_PREFIX . 'install';
 				$addon_status->label_text    = __( 'Not Installed', ATUM_TEXT_DOMAIN );
 				$addon_status->classes[]     = 'not-installed';
