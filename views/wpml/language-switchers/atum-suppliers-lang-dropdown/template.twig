@@ -1,0 +1,31 @@
+{% set current_language    = languages[ current_language_code ] %}
+{% set css_classes_flag    = ('wpml-ls-flag ' ~ backward_compatibility.css_classes_flag)|trim %}
+{% set css_classes_native  = ('wpml-ls-native ' ~ backward_compatibility.css_classes_native)|trim %}
+{% set css_classes_display = ('wpml-ls-display ' ~ backward_compatibility.css_classes_display)|trim %}
+{% set css_classes_bracket = ('wpml-ls-bracket ' ~ backward_compatibility.css_classes_bracket)|trim %}
+
+<div class="{{ css_classes }}"{% if backward_compatibility.css_id %} id="{{ backward_compatibility.css_id }}"{% endif %}>
+
+        <select class="atum-select2" name="supplier_details[wpml_lang]" id="wpml_lang">
+
+            {% for language in languages %}
+                <option data-flag="{{ language|json_encode()}}"  data-flag-classes="{{ css_classes_flag }}" value="{{ language.code }}"
+                       {%- if language.code == current_language.code -%} selected {%- endif -%}>
+
+                    {%- if language.native_name -%}
+                        <span class="{{ css_classes_native }}" lang="{{ language.code }}">{{ language.native_name }}</span>
+                    {%- endif -%}
+                    {%- if language.display_name and (language.display_name != language.native_name) -%}
+                        <span class="{{ css_classes_display }}">
+									{%- if language.native_name -%}<span class="{{ css_classes_bracket }}"> (</span>{%- endif -%}
+                            {{- language.display_name -}}
+                            {%- if language.native_name -%}<span class="{{ css_classes_bracket }}">)</span>{%- endif -%}
+								</span>
+                    {%- endif -%}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+</div>

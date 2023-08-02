@@ -36,7 +36,7 @@ class Suppliers {
 	 * @var Suppliers
 	 */
 	private static $instance;
-	
+
 	/**
 	 * The post type labels
 	 *
@@ -57,12 +57,12 @@ class Suppliers {
 	 * @var int
 	 */
 	private static $current_supplier_id;
-	
+
 	/**
 	 * The Supplier post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'supplier';
-	
+
 	/**
 	 * The menu order
 	 */
@@ -77,8 +77,8 @@ class Suppliers {
 	 * The Supplier SKU field key
 	 */
 	const SUPPLIER_SKU_FIELD_KEY = '_supplier_sku';
-	
-	
+
+
 	/**
 	 * Suppliers singleton constructor
 	 *
@@ -128,6 +128,8 @@ class Suppliers {
 			}
 
 		}
+
+		do_action( 'atum/suppliers/init' );
 
 	}
 
@@ -204,10 +206,10 @@ class Suppliers {
 		// Add suppliers post type on wc navigation system.
 		// Check if the WC method are availables.
 		if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Screen' ) && method_exists( Screen::class, 'register_post_type' ) ) {
-			Screen::register_post_type( self::POST_TYPE );
-			add_action( 'atum/after_adding_menu', array( $this, 'add_supplier_post_type_wcmenu' ), 10, 0 );
+		Screen::register_post_type( self::POST_TYPE );
+		add_action( 'atum/after_adding_menu', array( $this, 'add_supplier_post_type_wcmenu' ), 10, 0 );
 		}
-		*/
+		 */
 
 	}
 
@@ -678,9 +680,9 @@ class Suppliers {
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		return apply_filters( 'atum/suppliers/no_supplier_products', $wpdb->get_col( $sql ) );
-		
+
 	}
-	
+
 	/**
 	 * Add the Suppliuers link to the ATUM's admin bar menu
 	 *
@@ -701,7 +703,7 @@ class Suppliers {
 
 		return $atum_menus;
 	}
-	
+
 	/**
 	 * Add the current item menu order
 	 *
@@ -715,9 +717,9 @@ class Suppliers {
 			'slug'       => 'edit.php?post_type=' . self::POST_TYPE,
 			'menu_order' => self::MENU_ORDER,
 		);
-		
+
 		return $items_order;
-		
+
 	}
 
 	/**

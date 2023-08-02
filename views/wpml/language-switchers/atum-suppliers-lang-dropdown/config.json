@@ -1,0 +1,12 @@
+{
+	"name" : "ATUM Suppliers Language Dropdown",
+	"slug" : "atum-suppliers-lang-dropdown",
+	"for" : [
+		"shortcode_actions"
+	],
+	"settings" : {
+		"display_flags" : 1,
+		"display_names_in_current_lang" : 1,
+		"display_names_in_native_lang" : 0
+	}
+}
