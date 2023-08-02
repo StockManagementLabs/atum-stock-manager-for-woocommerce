@@ -45,6 +45,7 @@ defined( 'ABSPATH' ) || die;
  * @property string $use_default_terms
  * @property int    $days_to_cancel
  * @property string $cancelation_policy
+ * @property string $wpml_lang
  */
 class Supplier {
 
@@ -96,6 +97,7 @@ class Supplier {
 		'use_default_terms'       => 'yes',
 		'days_to_cancel'          => NULL,
 		'cancelation_policy'      => '',
+		'wpml_lang'               => '',
 	);
 
 	/**
@@ -727,6 +729,21 @@ class Supplier {
 		if ( ! $this->data['name'] !== $name ) {
 			$this->data['name'] = $name;
 			$this->register_change( 'name' );
+		}
+	}
+
+	/**
+	 * Set WPML lang. Only when WPML is active
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param string $wpml_lang
+	 */
+	public function set_wpml_lang( $wpml_lang ) {
+
+		if ( ! $this->data['wpml_lang'] !== $wpml_lang ) {
+			$this->data['wpml_lang'] = $wpml_lang;
+			$this->register_change( 'wpml_lang' );
 		}
 	}
 

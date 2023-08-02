@@ -64,4 +64,6 @@ defined( 'ABSPATH' ) || die;
 		<textarea id="description" name="supplier_details[description]" rows="5"<?php echo 'no' !== $supplier->use_default_description ? ' style="display:none"' : '' ?>><?php echo esc_textarea( $supplier->description ) ?></textarea>
 	</div>
 
+	<?php do_action( 'atum/suppliers/after_supplier_details', $supplier ); ?>
+
 </div>
