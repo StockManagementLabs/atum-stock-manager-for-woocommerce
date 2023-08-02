@@ -1019,7 +1019,7 @@ final class Addons {
 
 						$license_data = json_decode( wp_remote_retrieve_body( $license_status ) );
 
-						if ( $license_data ) {
+						if ( $license_data && TRUE === $license_data->success ) {
 
 							// Confirm that the license belongs to the installed add-on.
 							if ( isset( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && strpos( strtolower( $license_data->item_name ), 'trial' ) === FALSE ) {
@@ -1104,7 +1104,7 @@ final class Addons {
 			if ( empty( $is_installed ) && empty( $is_trial_installed ) ) {
 				$addon_status->status        = 'not-installed';
 				$addon_status->button_text   = __( 'Activate and Install', ATUM_TEXT_DOMAIN );
-				$addon_status->button_class  = 'install-addon';
+				$addon_status->button_class  = 'install-atum-addon';
 				$addon_status->button_action = ATUM_PREFIX . 'install';
 				$addon_status->label_text    = __( 'Not Installed', ATUM_TEXT_DOMAIN );
 				$addon_status->classes[]     = 'not-installed';
@@ -1136,6 +1136,10 @@ final class Addons {
 				}
 				elseif ( ! empty( $addon_status->upgrade_required ) ) {
 					$addon_status->notice      = esc_html__( 'You are still using a trial and your license is for a full version. Please, uninstall the trial and reinstall from here to get the full version.', ATUM_TEXT_DOMAIN );
+					$addon_status->notice_type = 'danger';
+				}
+				elseif ( ! empty( $license_data ) && TRUE !== $license_data->success && ! empty( $license_data->message ) ) {
+					$addon_status->notice      = esc_html( $license_data->message );
 					$addon_status->notice_type = 'danger';
 				}
 				elseif ( ! $is_expired && ! empty( $addon_status->expires ) ) {

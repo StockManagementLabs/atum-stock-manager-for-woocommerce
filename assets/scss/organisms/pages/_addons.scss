@@ -28,7 +28,7 @@ html {
 		transition: .3s ease-in-out;
 		display: grid;
 		grid-gap: 20px;
-		grid-template-columns: 4fr 1.5fr;
+		grid-template-columns: auto 250px;
 		grid-template-rows: 52px 1fr auto;
 		grid-template-areas:
 			"header  sidebar"
@@ -36,7 +36,7 @@ html {
 			"footer footer";
 		
 		&.with-collapsed {
-			grid-template-columns: 4fr 40px;
+			grid-template-columns: auto 40px;
 		}
 		
 		@include tablet-max {
@@ -177,6 +177,7 @@ html {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+			gap: 5px;
 		}
 		
 		.nav-with-scroll-effect {
@@ -191,8 +192,8 @@ html {
 			-webkit-overflow-scrolling: touch;
 			white-space: nowrap;
 			width: 100%;
-			float: left;
-			margin: 0 11px 0 0;
+			max-width: 536px;
+			margin: 0;
 			position: relative;
 			
 			@include tablet-max {
@@ -336,7 +337,6 @@ html {
 			display: inline-flex;
 			align-items: center;
 			gap: 5px;
-			margin-left: math.div($grid-gutter-width, 2);
 			
 			.btn {
 				&:hover, &:focus {
@@ -419,7 +419,7 @@ html {
 			border: none;
 			
 			img {
-				opacity: .8;
+				opacity: .65;
 			}
 			
 			.card-content {
@@ -648,7 +648,7 @@ html {
 					padding: 0.313rem 0.2rem;
 				}
 				
-				&.install-addon {
+				&.install-atum-addon {
 					background-color: $success;
 					border-color: $success;
 					

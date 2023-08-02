@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.31 
+ * @version 1.9.32 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -3288,12 +3288,12 @@ html {
   transition: 0.3s ease-in-out;
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 4fr 1.5fr;
+  grid-template-columns: auto 250px;
   grid-template-rows: 52px 1fr auto;
   grid-template-areas: "header  sidebar" "content sidebar" "footer footer";
 }
 .atum-addons__wrap.with-collapsed {
-  grid-template-columns: 4fr 40px;
+  grid-template-columns: auto 40px;
 }
 @media all and (max-width: 768px) {
   .atum-addons__wrap {
@@ -3453,6 +3453,7 @@ html {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  gap: 5px;
 }
 .atum-addons__nav .nav-with-scroll-effect {
   display: -webkit-box;
@@ -3474,8 +3475,8 @@ html {
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
   width: 100%;
-  float: left;
-  margin: 0 11px 0 0;
+  max-width: 536px;
+  margin: 0;
   position: relative;
 }
 @media all and (max-width: 768px) {
@@ -3618,7 +3619,6 @@ html {
       -ms-flex-align: center;
           align-items: center;
   gap: 5px;
-  margin-left: 15px;
 }
 .atum-addons__nav-buttons .btn:hover, .atum-addons__nav-buttons .btn:focus {
   outline: none;
@@ -3687,7 +3687,7 @@ html {
   border: none;
 }
 .atum-addons__sidebar .dash-card img {
-  opacity: 0.8;
+  opacity: 0.65;
 }
 .atum-addons__sidebar .dash-card .card-content p {
   color: #6c757d;
@@ -3916,11 +3916,11 @@ html {
   font-size: 0.65rem;
   padding: 0.313rem 0.2rem;
 }
-.atum-addons .addon-footer .actions .btn.install-addon {
+.atum-addons .addon-footer .actions .btn.install-atum-addon {
   background-color: #69C61D;
   border-color: #69C61D;
 }
-.atum-addons .addon-footer .actions .btn.install-addon + .cancel-action {
+.atum-addons .addon-footer .actions .btn.install-atum-addon + .cancel-action {
   font-size: 0.75rem;
   padding: 0.313rem 0.6rem;
 }

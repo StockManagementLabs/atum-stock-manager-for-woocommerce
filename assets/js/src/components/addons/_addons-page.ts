@@ -140,7 +140,7 @@ export default class AddonsPage {
 						return false;
 					}
 
-					if ( $button.hasClass( 'install-addon' ) ) {
+					if ( $button.hasClass( 'install-atum-addon' ) ) {
 						this.maybeInstallAddon( $button );
 					}
 					else {
