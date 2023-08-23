@@ -407,7 +407,7 @@ body .select2-container.atum-select2 .select2-selection--single, body .select2-c
 body .select2-container.atum-select2 .select2-selection--single .select2-selection__rendered, body .select2-container.atum-enhanced-select .select2-selection--single .select2-selection__rendered {
   display: block;
   padding-left: 8px;
-  padding-right: 20px;
+  padding-right: 25px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -443,7 +443,7 @@ body .select2-container.atum-select2 .select2-selection--multiple .select2-selec
 }
 body .select2-container.atum-select2[dir=rtl] .select2-selection--single .select2-selection__rendered, body .select2-container.atum-enhanced-select[dir=rtl] .select2-selection--single .select2-selection__rendered {
   padding-right: 8px;
-  padding-left: 20px;
+  padding-left: 25px;
 }
 body .select2-container.atum-select2 .select2-search--inline, body .select2-container.atum-enhanced-select .select2-search--inline {
   float: left;

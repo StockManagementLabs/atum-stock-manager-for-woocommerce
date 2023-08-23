@@ -192,6 +192,13 @@ abstract class AtumOrderModel {
 		'publish',
 		'private',
 	);
+
+	/**
+	 * Flag to know whether the items were read for this order
+	 *
+	 * @var bool
+	 */
+	protected $has_read_items = FALSE;
 	
 	/**
 	 * AtumOrderModel constructor
@@ -293,6 +300,8 @@ abstract class AtumOrderModel {
 			foreach ( $atum_order_items as $atum_order_item ) {
 				$this->add_item( $atum_order_item );
 			}
+
+			$this->has_read_items = TRUE;
 
 		}
 
@@ -2213,7 +2222,6 @@ abstract class AtumOrderModel {
 	 * @return string
 	 */
 	public function get_wpml_lang() {
-
 		return apply_filters( 'atum/orders/wpml_lang', $this->get_meta( 'wpml_lang' ), $this );
 	}
 
@@ -2224,6 +2232,17 @@ abstract class AtumOrderModel {
 	 */
 	public function exists() {
 		return $this->id && $this->post;
+	}
+
+	/**
+	 * Check whether the items have been read for this order
+	 *
+	 * @since 1.9.33
+	 *
+	 * @return bool
+	 */
+	public function items_have_been_read() {
+		return $this->has_read_items;
 	}
 
 	/**********

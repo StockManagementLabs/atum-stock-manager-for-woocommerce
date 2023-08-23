@@ -1119,7 +1119,7 @@ class Settings {
 	}
 
 	/**
-	 * Get a dropdow of countries registered in WC
+	 * Get a dropdown of countries registered in WC
 	 *
 	 * @since 1.3.1
 	 *
