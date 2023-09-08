@@ -677,12 +677,12 @@ class Settings {
 
 			if ( ! Helpers::is_rest_request() && AtumCapabilities::current_user_can( 'manage_settings' ) ) {
 				add_settings_field(
-					$field,                                         // ID.
-					$options['name'],                               // Title.
-					array( $this, "display_{$options['type']}" ),   // Callback.
-					ATUM_PREFIX . "setting_{$options['section']}",  // Page.
-					ATUM_PREFIX . "setting_{$options['section']}",  // Section.
-					$options
+					$field,                                                                                                           // ID.
+					$options['name'] ?? '',                                                                                           // Title.
+					apply_filters( 'atum/settings/display_field', array( $this, "display_{$options['type']}" ), $options['type'] ),   // Callback.
+					ATUM_PREFIX . "setting_{$options['section']}",                                                                    // Page.
+					ATUM_PREFIX . "setting_{$options['section']}",                                                                    // Section.
+					$options                                                                                                          // Args.
 				);
 			}
 
