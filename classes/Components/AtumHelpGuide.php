@@ -170,6 +170,9 @@ class AtumHelpGuide {
 
 			if ( ! is_array( $closed_auto_guides ) || ! in_array( $auto_guide, $closed_auto_guides ) ) {
 				$vars['hgAutoGuide'] = json_decode( file_get_contents( $this->guides_paths[ $auto_guide ] . '.json' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+				// Disable the marketing popup while an auto-guide is running.
+				add_filter( 'atum/marketing_popup/is_disabled', '__return_true' );
 			}
 
 		}
