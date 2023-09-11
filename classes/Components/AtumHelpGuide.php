@@ -84,6 +84,7 @@ class AtumHelpGuide {
 		}
 
 		?>
+		<span class="spacer"></span>
 		<span class="help-guide-buttons" data-guide="<?php echo esc_attr( $this->guides_paths[ $guide ] ) ?>">
 			<i class="show-help-markers atum-icon atmi-flag atum-tooltip"
 			   title="<?php esc_attr_e( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ) ?>">
@@ -150,7 +151,10 @@ class AtumHelpGuide {
 	public function get_help_guide_js_vars( $auto_guide = '', $main_guide = '' ) {
 
 		$vars = array(
-			'hgIntroJsOptions'  => array(
+			'hgGotIt'              => __( 'Got it!', ATUM_TEXT_DOMAIN ),
+			'hgGuideButtonsTitle'  => __( 'Help guide buttons', ATUM_TEXT_DOMAIN ),
+			'hgGuideButtonsNotice' => __( 'You can access this help guide at any time from here.', ATUM_TEXT_DOMAIN ),
+			'hgIntroJsOptions'     => array(
 				'nextLabel'          => __( 'Next', ATUM_TEXT_DOMAIN ),
 				'prevLabel'          => __( 'Prev', ATUM_TEXT_DOMAIN ),
 				'doneLabel'          => __( 'Done', ATUM_TEXT_DOMAIN ),
@@ -158,9 +162,9 @@ class AtumHelpGuide {
 				'disableInteraction' => TRUE,
 				'scrollToElement'    => TRUE,
 			),
-			'hgNonce'           => wp_create_nonce( 'help-guide-nonce' ),
-			'hgShowHelpGuide'   => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
-			'hgShowHelpMarkers' => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
+			'hgNonce'              => wp_create_nonce( 'help-guide-nonce' ),
+			'hgShowHelpGuide'      => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
+			'hgShowHelpMarkers'    => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
 		);
 
 		// Add the auto help guide if passed and the user has not closed it yet.

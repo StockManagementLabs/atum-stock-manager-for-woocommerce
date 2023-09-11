@@ -299,6 +299,30 @@ export default class HelpGuide {
 				if ( this.isAuto && this.guide ) {
 					this.isAuto = false;
 					this.saveClosedAutoGuide();
+
+					// After closing an auto-guide, tell the user how to access it later.
+					const $helpGuideButtons: JQuery = $( '.help-guide-buttons' ).filter( ':visible' );
+
+					if ( $helpGuideButtons.length ) {
+
+						setTimeout( () => {
+
+							this.IntroJs.setOptions( {
+								steps: [
+									{
+										element : $helpGuideButtons.get(0),
+										title   : this.settings.get( 'hgGuideButtonsTitle' ),
+										intro   : this.settings.get( 'hgGuideButtonsNotice' ),
+										position: 'left',
+									},
+								],
+								doneLabel: this.settings.get( 'hgGotIt' )
+							} ).start();
+
+						}, 500 );
+
+					}
+
 				}
 
 				this.wpHooks.doAction( 'atum_helpGuide_onExit', this.guide );
@@ -324,6 +348,7 @@ export default class HelpGuide {
 		}
 
 		return `
+			<span class="spacer"></span>
 			<span class="help-guide-buttons" data-guide="${ guide }">
 				<i class="show-help-markers atum-icon atmi-flag atum-tooltip" title="${ this.settings.get( 'hgShowHelpMarkers' ) }"></i>
 				<i class="show-intro-guide atum-icon atmi-indent-increase atum-tooltip" title="${ this.settings.get( 'hgShowHelpGuide' ) }"></i>					

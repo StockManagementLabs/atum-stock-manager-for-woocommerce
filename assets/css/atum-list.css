@@ -3634,9 +3634,6 @@ tr.introjs-showElement > th {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
   gap: 5px;
   margin-top: 7px;
 }
