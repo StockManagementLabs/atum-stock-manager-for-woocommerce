@@ -217,12 +217,7 @@ export default class SettingsPage {
 
 			const $inputButton: JQuery = this.$form.find( 'input:submit' );
 
-			if ( $navLink.parent().hasClass( 'no-submit' ) ) {
-				$inputButton.hide();
-			}
-			else {
-				$inputButton.show();
-			}
+			$inputButton.toggle( ! $navLink.parent().hasClass( 'no-submit' ) );
 
 			// Enable Tooltips.
 			this.tooltip.addTooltips( this.$form );

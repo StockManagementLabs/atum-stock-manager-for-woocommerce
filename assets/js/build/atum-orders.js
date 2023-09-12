@@ -792,12 +792,7 @@ var AtumOrders = (function () {
         var $rows = $table.find('tr.selected'), $editControlsWrapper = $('div.atum-order-item-bulk-edit');
         if ($rows.length) {
             var $stockChangeButtons = $('.bulk-decrease-stock, .bulk-increase-stock');
-            if ($('table.atum_order_items').find('tr.item.selected').length) {
-                $stockChangeButtons.show();
-            }
-            else {
-                $stockChangeButtons.hide();
-            }
+            $stockChangeButtons.toggle($('table.atum_order_items').find('tr.item.selected').length);
             $editControlsWrapper.slideDown();
         }
         else {

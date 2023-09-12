@@ -321,7 +321,7 @@ var Dashboard = (function () {
                 data: {
                     action: 'atum_dashboard_add_widget',
                     security: _this.$widgetsContainer.data('nonce'),
-                    widget: widgetId
+                    widget: widgetId,
                 },
                 dataType: 'json',
                 beforeSend: function () { return $widgetContainer.addClass('overlay'); },
@@ -335,7 +335,7 @@ var Dashboard = (function () {
                         $widgetContainer.removeClass('overlay');
                         _this.bindWidgetControls();
                     }
-                }
+                },
             });
         });
         var $restoreDashDefaults = $('.restore-defaults');
@@ -357,7 +357,7 @@ var Dashboard = (function () {
                             method: 'POST',
                             data: {
                                 action: 'atum_dashboard_restore_layout',
-                                security: _this.$widgetsContainer.data('nonce')
+                                security: _this.$widgetsContainer.data('nonce'),
                             },
                             dataType: 'json',
                             beforeSend: function () {
@@ -368,10 +368,10 @@ var Dashboard = (function () {
                                 _this.saveWidgetsLayout();
                                 resolve();
                             },
-                            error: function () { return resolve(); }
+                            error: function () { return resolve(); },
                         });
                     });
-                }
+                },
             })
                 .then(function (result) {
                 if (result.isConfirmed) {
@@ -455,8 +455,8 @@ var Dashboard = (function () {
             data: {
                 action: 'atum_dashboard_save_layout',
                 security: this.$widgetsContainer.data('nonce'),
-                layout: this.serializeLayout(this.grid.grid.nodes)
-            }
+                layout: this.serializeLayout(this.grid.grid.nodes),
+            },
         });
     };
     Dashboard.prototype.serializeLayout = function (items) {
@@ -469,7 +469,7 @@ var Dashboard = (function () {
                 x: data.x,
                 y: data.y,
                 height: data.height,
-                width: data.width
+                width: data.width,
             };
         });
         return serializedItems;
@@ -511,7 +511,7 @@ __webpack_require__.r(__webpack_exports__);
                     security: _this.$widgetsContainer.data('nonce'),
                     categorySelected: $('.categories-list').val(),
                     productTypeSelected: $('.product-types-list').val(),
-                    writeOff: $('.write-off-filter').val() || 'no'
+                    writeOff: $('.write-off-filter').val() || 'no',
                 },
                 dataType: 'json',
                 beforeSend: function () { return _this.$currentStockValueWidget.addClass('overlay'); },
@@ -522,14 +522,9 @@ __webpack_require__.r(__webpack_exports__);
                         _this.$currentStockValueWidget.find('.items-count .total').html(response.data.current_stock_values.items_stocks_counter);
                         _this.$currentStockValueWidget.find('.items_without_purchase_price').html(itemsWithoutPurchasePrice);
                         _this.$currentStockValueWidget.removeClass('overlay');
-                        if (itemsWithoutPurchasePrice === '0') {
-                            $('.items-without-purchase-price').hide();
-                        }
-                        else {
-                            $('.items-without-purchase-price').show();
-                        }
+                        $('.items-without-purchase-price').toggle(itemsWithoutPurchasePrice !== '0');
                     }
-                }
+                },
             });
         });
     };

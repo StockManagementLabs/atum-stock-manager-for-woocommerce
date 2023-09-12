@@ -170,20 +170,10 @@ export default class DragScroll {
 		const navEl: Element = $nav.get( 0 );
 
 		// Show/hide the right opacity element.
-		if ( this.navIsRight( navEl ) ) {
-			$overflowOpacityRight.hide();
-		}
-		else {
-			$overflowOpacityRight.show();
-		}
+		$overflowOpacityRight.toggle( ! this.navIsRight( navEl ) );
 
 		// Show/hide the left opacity element.
-		if ( this.navIsLeft( navEl ) ) {
-			$overflowOpacityLeft.hide();
-		}
-		else {
-			$overflowOpacityLeft.show();
-		}
+		$overflowOpacityLeft.toggle( ! this.navIsLeft( navEl ) );
 
 		$nav.css( 'cursor', $overflowOpacityLeft.is( ':visible' ) || $overflowOpacityRight.is( ':visible' ) ? 'grab' : 'auto' );
 		

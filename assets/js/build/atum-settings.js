@@ -926,12 +926,7 @@ var SettingsPage = (function () {
             _this.$form.find('[data-dependency]').change().removeClass('dirty');
             _this.$form.show();
             var $inputButton = _this.$form.find('input:submit');
-            if ($navLink.parent().hasClass('no-submit')) {
-                $inputButton.hide();
-            }
-            else {
-                $inputButton.show();
-            }
+            $inputButton.toggle(!$navLink.parent().hasClass('no-submit'));
             _this.tooltip.addTooltips(_this.$form);
             _this.$settingsWrapper.trigger('atum-settings-page-loaded', [$navLink.data('tab')]);
             if ('visual_settings' === $navLink.data('tab')) {

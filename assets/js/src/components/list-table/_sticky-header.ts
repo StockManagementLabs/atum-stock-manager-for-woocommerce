@@ -51,12 +51,7 @@ export default class StickyHeader {
 				this.globals.$searchColumnDropdown.hide();
 
 				// Hide on mobile view.
-				if ( $( '#wpadminbar' ).css( 'position' ) === 'absolute' ) {
-					$floatContainer.hide();
-				}
-				else {
-					$floatContainer.show();
-				}
+				$floatContainer.toggle( $( '#wpadminbar' ).css( 'position' ) !== 'absolute' );
 
 				// Add the sticky columns to the floating header if needed.
 				if ( this.globals.enabledStickyColumns ) {

@@ -1389,12 +1389,7 @@ var BulkActions = (function () {
             _this.$bulkButton = $('.apply-bulk-action');
             _this.globals.$atumList.find('.bulkactions select').not($select).val(selected).trigger('change.select2');
             _this.updateBulkButton();
-            if (selected !== '-1') {
-                _this.$bulkButton.show();
-            }
-            else {
-                _this.$bulkButton.hide();
-            }
+            _this.$bulkButton.toggle(selected !== '-1');
         })
             .on('change', '.check-column input:checkbox', function () { return _this.updateBulkButton(); });
     };
@@ -1653,18 +1648,8 @@ var DragScroll = (function () {
             $('.enhanced').select2('close');
         }
         var navEl = $nav.get(0);
-        if (this.navIsRight(navEl)) {
-            $overflowOpacityRight.hide();
-        }
-        else {
-            $overflowOpacityRight.show();
-        }
-        if (this.navIsLeft(navEl)) {
-            $overflowOpacityLeft.hide();
-        }
-        else {
-            $overflowOpacityLeft.show();
-        }
+        $overflowOpacityRight.toggle(!this.navIsRight(navEl));
+        $overflowOpacityLeft.toggle(!this.navIsLeft(navEl));
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
     };
     DragScroll.prototype.navIsLeft = function (navEl) {
@@ -3390,12 +3375,7 @@ var StickyHeader = (function () {
                 $floatContainer.css('height', 'auto');
                 $('.jspContainer').height($('.jspPane').height());
                 _this.globals.$searchColumnDropdown.hide();
-                if ($('#wpadminbar').css('position') === 'absolute') {
-                    $floatContainer.hide();
-                }
-                else {
-                    $floatContainer.show();
-                }
+                $floatContainer.toggle($('#wpadminbar').css('position') !== 'absolute');
                 if (_this.globals.enabledStickyColumns) {
                     if (_this.globals.$stickyCols !== null) {
                         _this.globals.$stickyCols.css('top', -1 * ($floatContainer.height() - 1));

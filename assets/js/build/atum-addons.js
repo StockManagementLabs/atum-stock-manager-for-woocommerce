@@ -273,12 +273,7 @@ var AddonsPage = (function () {
                 $span.addClass('active');
                 _this.$addonsPage.find('.atum-addon').each(function (index, elem) {
                     var $addon = $(elem);
-                    if ('all' === status || $addon.hasClass(status) || $addon.find('.actions').hasClass(status)) {
-                        $addon.show();
-                    }
-                    else {
-                        $addon.hide();
-                    }
+                    $addon.toggle('all' === status || $addon.hasClass(status) || $addon.find('.actions').hasClass(status));
                 });
             }
         })
@@ -367,12 +362,7 @@ var AddonsPage = (function () {
                         numHidden_1++;
                     }
                 });
-                if (numHidden_1 >= $addons.length) {
-                    _this.$noResults.show();
-                }
-                else {
-                    _this.$noResults.hide();
-                }
+                _this.$noResults.toggle(numHidden_1 >= $addons.length);
             }
         })
             .on('click', '.atum-addons-sidebar__toggle', function (evt) {
@@ -633,18 +623,8 @@ var AddonsPage = (function () {
         }
         var $overflowOpacityRight = $nav.find('.overflow-opacity-effect-right'), $overflowOpacityLeft = $nav.find('.overflow-opacity-effect-left');
         var navEl = $nav.get(0);
-        if (this.navIsRight(navEl)) {
-            $overflowOpacityRight.hide();
-        }
-        else {
-            $overflowOpacityRight.show();
-        }
-        if (this.navIsLeft(navEl)) {
-            $overflowOpacityLeft.hide();
-        }
-        else {
-            $overflowOpacityLeft.show();
-        }
+        $overflowOpacityRight.toggle(!this.navIsRight(navEl));
+        $overflowOpacityLeft.toggle(!this.navIsLeft(navEl));
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
     };
     AddonsPage.prototype.navIsLeft = function (navEl) {

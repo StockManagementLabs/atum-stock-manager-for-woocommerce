@@ -31,12 +31,7 @@ export default class Supplier {
 			const $checkbox: JQuery     = $( evt.currentTarget ),
 			      $relatedInput: JQuery = $checkbox.closest( '.form-field' ).children( ':input' ).not( $checkbox );
 
-			if ( $checkbox.is( ':checked' ) ) {
-				$relatedInput.hide();
-			}
-			else {
-				$relatedInput.show();
-			}
+			$relatedInput.toggle( ! $checkbox.is( ':checked' ) );
 
 		} );
 

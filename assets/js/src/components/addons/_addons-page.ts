@@ -86,16 +86,8 @@ export default class AddonsPage {
 					$span.addClass( 'active' );
 
 					this.$addonsPage.find( '.atum-addon' ).each( ( index: number, elem: Element ) => {
-
 						const $addon: JQuery = $( elem );
-
-						if ( 'all' === status || $addon.hasClass( status ) || $addon.find( '.actions' ).hasClass( status ) ) {
-							$addon.show();
-						}
-						else {
-							$addon.hide();
-						}
-
+						$addon.toggle( 'all' === status || $addon.hasClass( status ) || $addon.find( '.actions' ).hasClass( status ) );
 					} );
 
 				}
@@ -227,12 +219,7 @@ export default class AddonsPage {
 
 					} );
 
-					if ( numHidden >= $addons.length ) {
-						this.$noResults.show();
-					}
-					else {
-						this.$noResults.hide();
-					}
+					this.$noResults.toggle( numHidden >= $addons.length );
 
 				}
 
@@ -663,21 +650,10 @@ export default class AddonsPage {
 		const navEl: Element = $nav.get( 0 );
 
 		// Show/hide the right opacity element.
-		if ( this.navIsRight( navEl ) ) {
-			$overflowOpacityRight.hide();
-		}
-		else {
-			$overflowOpacityRight.show();
-		}
+		$overflowOpacityRight.toggle( ! this.navIsRight( navEl ) );
 
 		// Show/hide the left opacity element.
-		if ( this.navIsLeft( navEl ) ) {
-			$overflowOpacityLeft.hide();
-		}
-		else {
-			$overflowOpacityLeft.show();
-		}
-
+		$overflowOpacityLeft.toggle( ! this.navIsLeft( navEl ) );
 		$nav.css( 'cursor', $overflowOpacityLeft.is( ':visible' ) || $overflowOpacityRight.is( ':visible' ) ? 'grab' : 'auto' );
 
 	}

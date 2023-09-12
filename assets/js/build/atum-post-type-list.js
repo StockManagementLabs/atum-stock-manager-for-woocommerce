@@ -1109,18 +1109,8 @@ var DragScroll = (function () {
             $('.enhanced').select2('close');
         }
         var navEl = $nav.get(0);
-        if (this.navIsRight(navEl)) {
-            $overflowOpacityRight.hide();
-        }
-        else {
-            $overflowOpacityRight.show();
-        }
-        if (this.navIsLeft(navEl)) {
-            $overflowOpacityLeft.hide();
-        }
-        else {
-            $overflowOpacityLeft.show();
-        }
+        $overflowOpacityRight.toggle(!this.navIsRight(navEl));
+        $overflowOpacityLeft.toggle(!this.navIsLeft(navEl));
         $nav.css('cursor', $overflowOpacityLeft.is(':visible') || $overflowOpacityRight.is(':visible') ? 'grab' : 'auto');
     };
     DragScroll.prototype.navIsLeft = function (navEl) {
