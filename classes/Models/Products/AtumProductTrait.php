@@ -70,6 +70,9 @@ trait AtumProductTrait {
 		'show_out_of_stock_inventories' => NULL, // MI.
 		'barcode_type'                  => NULL, // BP.
 		'committed_to_wc'               => NULL, // SOnly.
+		'uom_status'                    => NULL, // UOM.
+		'measure_type'                  => NULL, // UOM.
+		'measure_unit'                  => NULL, // UOM.
 	);
 
 
@@ -711,7 +714,15 @@ trait AtumProductTrait {
 	 * @return string
 	 */
 	public function get_uom_status( $context = 'view' ) {
-		return $this->get_prop( 'uom_status', $context );
+
+		$uom_status = $this->get_prop( 'uom_status', $context );
+
+		if ( ! is_null( $uom_status ) ) {
+			$uom_status = wc_bool_to_string( $uom_status );
+		}
+
+		return $uom_status;
+
 	}
 
 	/**
