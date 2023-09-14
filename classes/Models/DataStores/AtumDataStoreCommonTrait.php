@@ -135,7 +135,7 @@ trait AtumDataStoreCommonTrait {
 							'true',
 							1,
 							'1',
-						] ) ? 1 : 0; // These columns are saved as integers in db.
+						], TRUE ) ? 1 : 0; // These columns are saved as integers in the db.
 					}
 
 				}
