@@ -3836,6 +3836,12 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
   max-width: 317px;
   min-width: 200px;
 }
+.popover.with-select ~ .select2-container .select2-dropdown {
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--gray-500) !important;
+  top: 3px;
+}
 .popover input {
   width: 100%;
 }

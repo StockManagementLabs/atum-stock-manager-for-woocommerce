@@ -140,6 +140,23 @@ var PopoverBase = (function () {
             }
         }
     };
+    PopoverBase.prototype.maybeHideOtherPopovers = function ($target) {
+        var _this = this;
+        if (!$('.popover').length) {
+            return;
+        }
+        if (!$target.length || $target.hasClass('select2-selection__choice__remove') ||
+            $target.closest('.select2-container--open').length ||
+            $target.hasClass(this.popoverClassName) || $target.closest(".".concat(this.popoverClassName)).length) {
+            return;
+        }
+        $(".popover.".concat(this.popoverClassName)).each(function (index, elem) {
+            var $editButton = $("[aria-describedby=\"".concat($(elem).attr('id'), "\"]"));
+            if (!$editButton.is($target) && !$target.closest($editButton).length) {
+                _this.hidePopover($editButton);
+            }
+        });
+    };
     PopoverBase.prototype.getInstance = function ($popoverButton) {
         return bootstrap_js_dist_popover__WEBPACK_IMPORTED_MODULE_0___default.a.getInstance($popoverButton.get(0));
     };
@@ -740,18 +757,9 @@ var TableCellPopovers = (function (_super) {
         _this.popoverClassName = 'atum-popover';
         _this.wpHooks = window['wp']['hooks'];
         _this.bindPopovers();
-        $('body').click(function (evt) {
-            if (!$('.popover').length) {
-                return;
-            }
-            var $target = $(evt.target), $select2 = $target.closest('.select2-container');
-            if (!$target.length || $target.is('.popover') || $target.closest('.popover.show').length
-                || ($select2.length && $select2.find('.select2-search'))) {
-                return;
-            }
-            var $metaCell = $target.hasClass('set-meta') ? $('.set-meta[aria-describedby]').not($target) : $('.set-meta[aria-describedby]');
-            _this.hidePopover($metaCell);
-        });
+        $('body')
+            .off('click.atumTableCellPopover')
+            .on('click.atumTableCellPopover', function (evt) { return _this.maybeHideOtherPopovers($(evt.target)); });
         return _this;
     }
     TableCellPopovers.prototype.bindPopovers = function ($metaCells) {

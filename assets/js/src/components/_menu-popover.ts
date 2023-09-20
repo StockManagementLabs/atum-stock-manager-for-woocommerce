@@ -111,23 +111,7 @@ export default class MenuPopover extends PopoverBase{
 			// Hide any other opened popover before opening a new one.
 			// NOTE: using the off/on technique to not bind the event once per each instantiated menu.
 			.off( 'click.atumMenuPopover', '#wpbody-content' )
-			.on( 'click.atumMenuPopover', '#wpbody-content', ( evt: JQueryEventObject ) => {
-
-				if ( ! $( '.popover' ).length ) {
-					return;
-				}
-
-				const $target: JQuery = $( evt.target );
-
-				if ( ! $target.length || $target.hasClass( this.popoverButtonClassName ) || $target.hasClass( '.popover' ) || $target.closest( '.popover' ).length ) {
-					return;
-				}
-
-				$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
-					this.hidePopover( $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` ) );
-				} );
-
-			} )
+			.on( 'click.atumMenuPopover', '#wpbody-content', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) )
 
 			// Bind the menu items' clicks.
 			.off( 'click.atumMenuPopover', `.${ this.popoverClassName } a` )

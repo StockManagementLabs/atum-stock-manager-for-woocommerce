@@ -117,6 +117,38 @@ export default abstract class PopoverBase {
 	}
 
 	/**
+	 * Hide all the other opened popovers when opening the current one
+	 *
+	 * @param {JQuery} $target
+	 */
+	maybeHideOtherPopovers( $target: JQuery ) {
+
+		if ( ! $( '.popover' ).length ) {
+			return;
+		}
+
+		if (
+			! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
+			$target.closest( '.select2-container--open' ).length ||
+			$target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length
+		) {
+			return;
+		}
+
+		// Hide all the opened popovers.
+		$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
+
+			const $editButton: JQuery = $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` );
+
+			if ( ! $editButton.is( $target ) && ! $target.closest( $editButton ).length ) {
+				this.hidePopover( $editButton );
+			}
+
+		} );
+
+	}
+
+	/**
 	 * Get the BsPopover instance for any button
 	 *
 	 * @param {JQuery} $popoverButton

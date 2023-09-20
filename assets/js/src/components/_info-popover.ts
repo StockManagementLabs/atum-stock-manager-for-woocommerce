@@ -56,6 +56,11 @@ export default class InfoPopover extends PopoverBase{
 
 		}
 
+		// Auto-hide popvers.
+		$( 'body' )
+			.off( 'click.atumInfoPopover' ) // Make sure it's bound just once.
+			.on( 'click.atumInfoPopover', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) );
+
 	}
 	
 }
