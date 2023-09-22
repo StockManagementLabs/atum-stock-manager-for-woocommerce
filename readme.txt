@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.2.2
+Tested up to: 6.3.1
 Requires PHP: 7.1
 WC requires at least: 5.0
-WC tested up to: 7.9.0
-Stable tag: 1.9.32
+WC tested up to: 8.0.3
+Stable tag: 1.9.33
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,26 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.33`
+
+*2023-09-06*
+
+**Features**
+
+* Added suppliers lang twig template.
+* Added prop to the AtumOrderModel to know whether its items were read.
+
+**Changes**
+
+* CSS adjustments.
+* Refactoring.
+
+**Fixes**
+
+* Fixed incompatibility with WP Activity Log that was preventing addon licenses from being activated.
 
 ---
 

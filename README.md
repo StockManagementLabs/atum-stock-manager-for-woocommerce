@@ -196,6 +196,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.33`
+
+*2023-09-06*
+
+**Features**
+
+* Added suppliers lang twig template.
+* Added prop to the AtumOrderModel to know whether its items were read.
+
+**Changes**
+
+* CSS adjustments.
+* Refactoring.
+
+**Fixes**
+
+* Fixed incompatibility with WP Activity Log that was preventing addon licenses from being activated.
+
+---
+
 `1.9.32`
 
 *2023-08-01*

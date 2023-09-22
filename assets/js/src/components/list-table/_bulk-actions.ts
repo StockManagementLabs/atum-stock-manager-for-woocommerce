@@ -74,13 +74,7 @@ export default class BulkActions {
 				// Sync the top and bottom selects.
 				this.globals.$atumList.find( '.bulkactions select' ).not( $select ).val( selected ).trigger( 'change.select2' );
 				this.updateBulkButton();
-
-				if ( selected !== '-1' ) {
-					this.$bulkButton.show();
-				}
-				else {
-					this.$bulkButton.hide();
-				}
+				this.$bulkButton.toggle( selected !== '-1' );
 
 			} )
 

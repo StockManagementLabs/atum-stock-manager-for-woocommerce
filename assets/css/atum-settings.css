@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.32 
+ * @version 1.9.33 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -5125,8 +5125,8 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 .atum-settings-wrapper #atum-settings .section-fields .form-table {
   margin-top: 0;
 }
-.atum-settings-wrapper #atum-settings .section-fields tr:not(:last-child) {
-  border-bottom: 0.5px solid var(--gray-400);
+.atum-settings-wrapper #atum-settings .section-fields tr:not(:first-child):not(.no-sep) {
+  border-top: 0.5px solid var(--gray-400);
 }
 .atum-settings-wrapper #atum-settings .section-fields th, .atum-settings-wrapper #atum-settings .section-fields td {
   padding-top: 20px;

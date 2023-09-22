@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.32 
+ * @version 1.9.33 
  * @author Be Rebel  
  *
  * Author URI: https://berebel.io 
@@ -3634,9 +3634,6 @@ tr.introjs-showElement > th {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
   gap: 5px;
   margin-top: 7px;
 }
@@ -3838,6 +3835,12 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
 .popover.with-select .meta-value {
   max-width: 317px;
   min-width: 200px;
+}
+.popover.with-select ~ .select2-container .select2-dropdown {
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--gray-500) !important;
+  top: 3px;
 }
 .popover input {
   width: 100%;

@@ -54,7 +54,7 @@ export default class EditPopovers extends PopoverBase{
 				customClass: $editButton.data( 'bs-custom-class' ) ? `${ this.popoverClassName } ${ $editButton.data( 'bs-custom-class' ) }` : this.popoverClassName,
 				placement  : $editButton.data( 'bs-placement' ) || 'bottom',
 				trigger    : $editButton.data( 'bs-trigger' ) || 'click',
-				container  : $editButton.data( 'bs-container' ) || $fieldWrapper
+				container  : $editButton.data( 'bs-container' ) || $fieldWrapper,
 			} )
 
 			// Prepare the popover's fields when shown.
@@ -149,11 +149,12 @@ export default class EditPopovers extends PopoverBase{
 			.on( 'click', '.set-default-value', ( evt: JQueryEventObject ) => {
 				evt.preventDefault();
 				this.setDefaultValue( $( evt.currentTarget ) );
-			} );
+			} )
 
-		// Hide any other opened popover before opening a new one.
-		// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
-		$( '#wpbody-content' ).click( ( evt: JQueryEventObject ) => this.maybeHidePopovers( $( evt.target ) ) );
+			// Hide any other opened popover before opening a new one.
+			// NOTE: we are using the #wpbody-content element instead of the body tag to avoid closing when clicking within popovers.
+			.off( 'click.atumEditPopover', '#wpbody-content' ) // Make sure it's bound just once.
+			.on( 'click.atumEditPopover', '#wpbody-content', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) );
 
 	}
 
@@ -506,37 +507,6 @@ export default class EditPopovers extends PopoverBase{
 			}
 
 		}
-
-	}
-
-	/**
-	 * Hide all the other opened popovers when opening the current one
-	 *
-	 * @param {JQuery} $target
-	 */
-	maybeHidePopovers( $target: JQuery ) {
-
-		if ( ! $( '.popover' ).length ) {
-			return;
-		}
-
-		if (
-			! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
-			$target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length
-		) {
-			return;
-		}
-
-		// Hide all the opened popovers.
-		$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
-
-			const $editButton: JQuery = $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` );
-
-			if ( ! $editButton.is( $target ) && ! $target.closest( $editButton ).length ) {
-				super.hidePopover( $editButton );
-			}
-
-		} );
 
 	}
 	

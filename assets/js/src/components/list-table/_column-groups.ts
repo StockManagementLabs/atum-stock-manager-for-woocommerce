@@ -51,8 +51,8 @@ export default class ColumnGroups {
 			this.globals.$atumList.find( 'thead .column-groups th' ).each( ( index: number, elem: Element ) => {
 
 				const $elem: JQuery = $( elem ),
-				    // These th only have one class.
-				    cols: number  = this.globals.$atumList.find( `thead .col-${ $elem.attr( 'class' ) }:visible` ).length;
+				      // These th only have one class.
+				      cols: number  = this.globals.$atumList.find( `thead .col-${ $elem.attr( 'class' ) }:visible` ).length;
 
 				if ( cols ) {
 					// NOTE: for the first group we must count the checkbox column.

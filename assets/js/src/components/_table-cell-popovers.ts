@@ -1,5 +1,5 @@
 /* =======================================
-   POPOVER
+   TABLE CELL POPOVER
    ======================================= */
 
 import DateTimePicker from './_date-time-picker';
@@ -26,28 +26,9 @@ export default class TableCellPopovers extends PopoverBase{
 		this.bindPopovers();
 		
 		// Hide any other opened popover before opening a new one.
-		$( 'body' ).click( ( evt: JQueryEventObject ) => {
-
-			if ( ! $( '.popover' ).length ) {
-				return;
-			}
-
-			const $target: JQuery = $( evt.target ),
-				  $select2: JQuery = $target.closest( '.select2-container');
-
-			// Do not hide any popover if the click is being performed within one.
-			if ( ! $target.length || $target.is( '.popover' ) || $target.closest( '.popover.show' ).length
-				|| ( $select2.length && $select2.find( '.select2-search' ) ) ) {
-				return;
-			}
-
-			// If we are clicking on a editable cell, get the other opened popovers, if not, get all them all.
-			const $metaCell: JQuery = $target.hasClass( 'set-meta' ) ? $( '.set-meta[aria-describedby]' ).not( $target ) : $( '.set-meta[aria-describedby]' );
-			
-			// Hide all the opened popovers.
-			this.hidePopover( $metaCell );
-
-		} );
+		$( 'body' )
+			.off( 'click.atumTableCellPopover' ) // Make sure it's bound just once.
+			.on( 'click.atumTableCellPopover', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) );
 		
 	}
 	

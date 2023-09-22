@@ -612,8 +612,8 @@
 			}
 			
 			tr {
-				&:not(:last-child) {
-					border-bottom: 0.5px solid var(--gray-400);
+				&:not(:first-child):not(.no-sep) {
+					border-top: 0.5px solid var(--gray-400);
 				}
 			}
 			

@@ -8,6 +8,27 @@
 
 import BsPopover from 'bootstrap/js/dist/popover'; // Bootstrap 5 popover
 
+export interface IBsPopoverConfig {
+	allowList?: any;
+	animation?: boolean;
+	boundary?: string | Element;
+	container?: string | Element | false;
+	content?: string | Element | Function;
+	customClass?: string | Function;
+	delay?: number;
+	fallbackPlacements?: string[];
+	html?: boolean;
+	offset?: number | string | Function;
+	placement?: 'auto' | 'top' | 'bottom' | 'left' | 'right' | Function;
+	popperConfig?: any;
+	sanitize?: boolean;
+	sanitizeFn?: null | Function;
+	selector?: string | false;
+	template?: string;
+	title?: string | Element | Function;
+	trigger?: string;
+}
+
 export default abstract class PopoverBase {
 
 	abstract popoverClassName: string;
@@ -22,10 +43,10 @@ export default abstract class PopoverBase {
 	/**
 	 * Add the popover to any button
 	 *
-	 * @param {JQuery} $button
-	 * @param {any}    config
+	 * @param {JQuery}           $button
+	 * @param {IBsPopoverConfig} config
 	 */
-	addPopover( $button: JQuery, config: any ): BsPopover {
+	addPopover( $button: JQuery, config: IBsPopoverConfig ): BsPopover {
 
 		$button.data( 'atum-popover', this );
 		return new BsPopover( $button.get( 0 ), config );
@@ -92,6 +113,38 @@ export default abstract class PopoverBase {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Hide all the other opened popovers when opening the current one
+	 *
+	 * @param {JQuery} $target
+	 */
+	maybeHideOtherPopovers( $target: JQuery ) {
+
+		if ( ! $( '.popover' ).length ) {
+			return;
+		}
+
+		if (
+			! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
+			$target.closest( '.select2-container--open' ).length ||
+			$target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length
+		) {
+			return;
+		}
+
+		// Hide all the opened popovers.
+		$( `.popover.${ this.popoverClassName }` ).each( ( index: number, elem: Element ) => {
+
+			const $editButton: JQuery = $( `[aria-describedby="${ $( elem ).attr( 'id' ) }"]` );
+
+			if ( ! $editButton.is( $target ) && ! $target.closest( $editButton ).length ) {
+				this.hidePopover( $editButton );
+			}
+
+		} );
 
 	}
 

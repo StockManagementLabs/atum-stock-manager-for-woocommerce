@@ -214,12 +214,7 @@ __webpack_require__.r(__webpack_exports__);
     Supplier.prototype.bindEvents = function () {
         $('.default-checkbox').change(function (evt) {
             var $checkbox = $(evt.currentTarget), $relatedInput = $checkbox.closest('.form-field').children(':input').not($checkbox);
-            if ($checkbox.is(':checked')) {
-                $relatedInput.hide();
-            }
-            else {
-                $relatedInput.show();
-            }
+            $relatedInput.toggle(!$checkbox.is(':checked'));
         });
     };
     Supplier.prototype.initWpml = function () {

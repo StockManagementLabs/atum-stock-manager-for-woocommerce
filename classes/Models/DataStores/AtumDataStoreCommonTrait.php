@@ -129,7 +129,13 @@ trait AtumDataStoreCommonTrait {
 						$data[ $column ] = NULL;
 					}
 					else {
-						$data[ $column ] = 'yes' === $value ? 1 : 0; // These columns are saved as integers in db.
+						$data[ $column ] = in_array( $value, [
+							'yes',
+							TRUE,
+							'true',
+							1,
+							'1',
+						], TRUE ) ? 1 : 0; // These columns are saved as integers in the db.
 					}
 
 				}

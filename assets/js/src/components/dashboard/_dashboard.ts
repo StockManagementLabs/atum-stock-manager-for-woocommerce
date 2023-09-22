@@ -151,80 +151,80 @@ export default class Dashboard {
 		});
 		
 		// Add widget.
-		$('body').on('click', '.add-widget-popup .add-widget', (evt: JQueryEventObject) => {
-			
-			const $button: JQuery          = $(evt.currentTarget),
-			      widgetId: string         = $button.closest('li').data('widget'),
-			      $widgetContainer: JQuery = $('.add-widget-popup');
-			
-			$.ajax({
-				url       : window['ajaxurl'],
+		$( 'body' ).on( 'click', '.add-widget-popup .add-widget', ( evt: JQueryEventObject ) => {
+
+			const $button: JQuery          = $( evt.currentTarget ),
+			      widgetId: string         = $button.closest( 'li' ).data( 'widget' ),
+			      $widgetContainer: JQuery = $( '.add-widget-popup' );
+
+			$.ajax( {
+				url       : window[ 'ajaxurl' ],
 				method    : 'POST',
 				data      : {
 					action  : 'atum_dashboard_add_widget',
-					security: this.$widgetsContainer.data('nonce'),
-					widget  : widgetId
+					security: this.$widgetsContainer.data( 'nonce' ),
+					widget  : widgetId,
 				},
 				dataType  : 'json',
-				beforeSend: () => $widgetContainer.addClass('overlay'),
-				success   : (response: any) => {
-					
-					if (typeof response === 'object' && response.success === true) {
+				beforeSend: () => $widgetContainer.addClass( 'overlay' ),
+				success   : ( response: any ) => {
+
+					if ( typeof response === 'object' && response.success === true ) {
 						const layout = response.data.layout;
-						this.grid.addWidget($(response.data.widget), null, null, layout.min, layout.height, true);
-						this.initWidgets([widgetId]);
-						$button.hide().siblings('.btn-info').show();
-						this.toggleModalTemplateButtons(widgetId);
-						$widgetContainer.removeClass('overlay');
+						this.grid.addWidget( $( response.data.widget ), null, null, layout.min, layout.height, true );
+						this.initWidgets( [ widgetId ] );
+						$button.hide().siblings( '.btn-info' ).show();
+						this.toggleModalTemplateButtons( widgetId );
+						$widgetContainer.removeClass( 'overlay' );
 						this.bindWidgetControls();
 					}
-					
-				}
-			});
+
+				},
+			} );
 			
 		});
 		
 		// Restore default layout and widgets
-		const $restoreDashDefaults: JQuery = $('.restore-defaults');
+		const $restoreDashDefaults: JQuery = $( '.restore-defaults' );
 		$restoreDashDefaults.click( () => {
-			
-			Swal.fire({
-				title              : this.settings.get('areYouSure'),
-				text               : this.settings.get('defaultsWillRestore'),
+
+			Swal.fire( {
+				title              : this.settings.get( 'areYouSure' ),
+				text               : this.settings.get( 'defaultsWillRestore' ),
 				icon               : 'warning',
 				showCancelButton   : true,
-				confirmButtonText  : this.settings.get('continue'),
-				cancelButtonText   : this.settings.get('cancel'),
+				confirmButtonText  : this.settings.get( 'continue' ),
+				cancelButtonText   : this.settings.get( 'cancel' ),
 				reverseButtons     : true,
 				allowOutsideClick  : false,
 				showLoaderOnConfirm: true,
-				preConfirm: (): Promise<any> => {
-					
-					return new Promise( (resolve: Function, reject: Function) => {
-						
-						$.ajax({
-							url       : window['ajaxurl'],
+				preConfirm         : (): Promise<any> => {
+
+					return new Promise( ( resolve: Function, reject: Function ) => {
+
+						$.ajax( {
+							url       : window[ 'ajaxurl' ],
 							method    : 'POST',
 							data      : {
 								action  : 'atum_dashboard_restore_layout',
-								security: this.$widgetsContainer.data('nonce')
+								security: this.$widgetsContainer.data( 'nonce' ),
 							},
 							dataType  : 'json',
 							beforeSend: () => {
-								this.tooltip.destroyTooltips($restoreDashDefaults);
-								this.$atumDashboard.addClass('overlay');
+								this.tooltip.destroyTooltips( $restoreDashDefaults );
+								this.$atumDashboard.addClass( 'overlay' );
 							},
 							success   : () => {
 								this.saveWidgetsLayout();
 								resolve();
 							},
-							error: () => resolve()
-						});
-						
-					});
-					
-				}
-			})
+							error     : () => resolve(),
+						} );
+
+					} );
+
+				},
+			} )
 			.then( ( result: SweetAlertResult ) => {
 
 				if ( result.isConfirmed ) {
@@ -232,161 +232,163 @@ export default class Dashboard {
 				}
 
 			} );
-			
-		});
-		
+
+		} );
+
 	}
-	
-	toggleModalTemplateButtons(widgetId: string) {
-		this.$addWidgetModalContent.find('[data-widget="' + widgetId + '"]').find('.add-widget').toggle().siblings('.btn-info').toggle();
+
+	toggleModalTemplateButtons( widgetId: string ) {
+		this.$addWidgetModalContent.find( '[data-widget="' + widgetId + '"]' ).find( '.add-widget' ).toggle().siblings( '.btn-info' ).toggle();
 	}
 	
 	bindWidgetControls() {
-		
+
 		// Remove widget.
-		$('.atum-widget').find('.widget-close').click( (evt:JQueryEventObject) => {
-			const $widget: JQuery = $(evt.currentTarget).closest('.atum-widget');
-			this.grid.removeWidget($widget);
-			this.toggleModalTemplateButtons( $widget.data('gs-id') );
-		});
-		
+		$( '.atum-widget' ).find( '.widget-close' ).click( ( evt: JQueryEventObject ) => {
+			const $widget: JQuery = $( evt.currentTarget ).closest( '.atum-widget' );
+			this.grid.removeWidget( $widget );
+			this.toggleModalTemplateButtons( $widget.data( 'gs-id' ) );
+		} );
+
 		// Widget settings.
-		$('.atum-widget').find('.widget-settings').click( (evt: JQueryEventObject) => {
-			$(evt.currentTarget).closest('.widget-wrapper').find('.widget-config').show().siblings().hide();
-		});
+		$( '.atum-widget' ).find( '.widget-settings' ).click( ( evt: JQueryEventObject ) => {
+			$( evt.currentTarget ).closest( '.widget-wrapper' ).find( '.widget-config' ).show().siblings().hide();
+		} );
 		
 	}
 	
 	bindConfigControls() {
-		
+
 		// Cancel config.
-		$('.widget-config').find('.cancel-config').click( (evt: JQueryEventObject) => {
-			$(evt.currentTarget).closest('.widget-wrapper').find('.widget-config').hide().siblings().show();
-		});
-		
+		$( '.widget-config' ).find( '.cancel-config' ).click( ( evt: JQueryEventObject ) => {
+			$( evt.currentTarget ).closest( '.widget-wrapper' ).find( '.widget-config' ).hide().siblings().show();
+		} );
+
 		// Save config.
-		$('.widget-config').submit( (evt: JQueryEventObject) => {
+		$( '.widget-config' ).submit( ( evt: JQueryEventObject ) => {
 			evt.preventDefault();
-			
+
 			// TODO: IMPLEMENT WIDGET CONFIG
 			//console.log($(this).serialize());
-		});
+		} );
 		
 	}
 	
 	/**
 	 * If no widgets param is passed, all the widgets will be initialized
 	 */
-	initWidgets(widgets?: string[]) {
-		
+	initWidgets( widgets?: string[] ) {
+
 		// TODO: DO NOT INIT WIDGETS THAT ARE NOT BEING DISPLAYED
-		const noWidgets: boolean = !widgets || !Array.isArray(widgets);
-		
+		const noWidgets: boolean = ! widgets || ! Array.isArray( widgets );
+
 		// Statistics widget.
-		if (noWidgets || $.inArray('atum_statistics_widget', widgets) > -1) {
-			new StatisticsWidget(this.settings, this.$widgetsContainer);
+		if ( noWidgets || $.inArray( 'atum_statistics_widget', widgets ) > -1 ) {
+			new StatisticsWidget( this.settings, this.$widgetsContainer );
 		}
-		
+
 		// Sales Data widgets.
 		if (
-			noWidgets || $.inArray('atum_sales_widget', widgets) > -1 ||
-			$.inArray('atum_lost_sales_widget', widgets) > -1 || $.inArray('atum_orders_widget', widgets) > -1 ||
-			$.inArray('atum_promo_sales_widget', widgets) > -1
+			noWidgets || $.inArray( 'atum_sales_widget', widgets ) > -1 ||
+			$.inArray( 'atum_lost_sales_widget', widgets ) > -1 || $.inArray( 'atum_orders_widget', widgets ) > -1 ||
+			$.inArray( 'atum_promo_sales_widget', widgets ) > -1
 		) {
 			new SalesStatsWidget( this.$widgetsContainer );
 		}
-		
+
 		// Stock Control widget.
-		if (noWidgets || $.inArray('atum_stock_control_widget', widgets) > -1) {
-			new StockControlWidget(this.settings);
+		if ( noWidgets || $.inArray( 'atum_stock_control_widget', widgets ) > -1 ) {
+			new StockControlWidget( this.settings );
 		}
-		
+
 		// Current Stock Value widget.
-		if (noWidgets || $.inArray('atum_current_stock_value_widget', widgets) > -1) {
-			new CurrentStockValueWidget(this.$widgetsContainer);
+		if ( noWidgets || $.inArray( 'atum_current_stock_value_widget', widgets ) > -1 ) {
+			new CurrentStockValueWidget( this.$widgetsContainer );
 		}
-		
+
 		// Videos widget.
-		if (typeof widgets === 'undefined' || $.inArray('atum_videos_widget', widgets) > -1) {
-			new VideosWidget(this.$widgetsContainer);
+		if ( typeof widgets === 'undefined' || $.inArray( 'atum_videos_widget', widgets ) > -1 ) {
+			new VideosWidget( this.$widgetsContainer );
 		}
-		
+
 		// Lists' Scrollbars
-		NiceScroll.addScrollBars(this.$widgetsContainer);
-		
+		NiceScroll.addScrollBars( this.$widgetsContainer );
+
 		// Nice Selects.
 		this.doNiceSelects();
-		
+
 	}
-	
+
 	marketingBannerConfig() {
-		
+
 		// Hide banner.
-		$('.marketing-close').on('click', ( evt: JQueryEventObject ) => {
-			let transientKey: string = $(evt.currentTarget).data('transient-key');
-			$('.dash-marketing-banner-container').fadeOut();
-			$.ajax({
-				url       : window['ajaxurl'],
-				dataType  : 'json',
-				method    : 'post',
-				data      : {
+		$( '.marketing-close' ).on( 'click', ( evt: JQueryEventObject ) => {
+
+			const transientKey: string = $( evt.currentTarget ).data( 'transient-key' );
+			$( '.dash-marketing-banner-container' ).fadeOut();
+
+			$.ajax( {
+				url     : window[ 'ajaxurl' ],
+				dataType: 'json',
+				method  : 'post',
+				data    : {
 					action      : 'atum_hide_marketing_dashboard',
-					security    : this.$widgetsContainer.data('nonce'),
+					security    : this.$widgetsContainer.data( 'nonce' ),
 					transientKey: transientKey,
 				},
-			});
+			} );
 
-		});
-		
+		} );
+
 		// Redirect to button url.
-		$('.banner-button').on('click', (evt: JQueryEventObject) => {
-			window.open($(evt.currentTarget).data('url'), '_blank');
-		});
-		
+		$( '.banner-button' ).on( 'click', ( evt: JQueryEventObject ) => {
+			window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
+		} );
+
 	}
-	
-	doNiceSelects($widget?: JQuery) {
-		
+
+	doNiceSelects( $widget?: JQuery ) {
+
 		const $container: any = typeof $widget !== 'undefined' ? $widget : this.$widgetsContainer;
-		$container.find('select').niceSelect();
-		
+		$container.find( 'select' ).niceSelect();
+
 	}
-	
+
 	saveWidgetsLayout() {
-		
-		$.ajax({
-			url    : window['ajaxurl'],
-			method : 'POST',
-			data   : {
+
+		$.ajax( {
+			url   : window[ 'ajaxurl' ],
+			method: 'POST',
+			data  : {
 				action  : 'atum_dashboard_save_layout',
-				security: this.$widgetsContainer.data('nonce'),
-				layout  : this.serializeLayout(this.grid.grid.nodes)
-			}
-		});
-		
+				security: this.$widgetsContainer.data( 'nonce' ),
+				layout  : this.serializeLayout( this.grid.grid.nodes ),
+			},
+		} );
+
 	}
-	
-	serializeLayout(items?: any) {
-		
+
+	serializeLayout( items?: any ) {
+
 		let serializedItems: any = {};
-		
-		if (typeof items === 'undefined') {
+
+		if ( typeof items === 'undefined' ) {
 			return serializedItems;
 		}
-		
-		$.each(items, (index: number, data: any) => {
-			
-			serializedItems[data.id] = {
+
+		$.each( items, ( index: number, data: any ) => {
+
+			serializedItems[ data.id ] = {
 				x     : data.x,
 				y     : data.y,
 				height: data.height,
-				width : data.width
+				width : data.width,
 			};
-			
-		});
-		
+
+		} );
+
 		return serializedItems;
-		
+
 	}
 	
 }

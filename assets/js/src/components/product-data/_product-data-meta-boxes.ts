@@ -110,11 +110,10 @@ export default class ProductDataMetaBoxes {
 		if ( typeof this.settings.get( 'lockFields') !== 'undefined' && 'yes' === this.settings.get( 'lockFields') ) {
 
 			$( '.atum-field input' ).each( ( index: number, elem: Element ) => {
-
 				$( elem ).prop( 'readonly', true ).next().after( $( '.wcml_lock_img' ).clone().removeClass( 'wcml_lock_img' ).show() );
 			} );
-			$( '.atum-field select' ).each( ( index: number, elem: Element ) => {
 
+			$( '.atum-field select' ).each( ( index: number, elem: Element ) => {
 				$( elem ).prop( 'disabled', true ).next().next().after( $( '.wcml_lock_img' ).clone().removeClass( 'wcml_lock_img' ).show() );
 			} );
 

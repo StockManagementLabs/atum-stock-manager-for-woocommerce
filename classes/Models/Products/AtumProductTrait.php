@@ -70,6 +70,9 @@ trait AtumProductTrait {
 		'show_out_of_stock_inventories' => NULL, // MI.
 		'barcode_type'                  => NULL, // BP.
 		'committed_to_wc'               => NULL, // SOnly.
+		'uom_status'                    => NULL, // UOM.
+		'measure_type'                  => NULL, // UOM.
+		'measure_unit'                  => NULL, // UOM.
 	);
 
 
@@ -394,6 +397,17 @@ trait AtumProductTrait {
 		return $this->get_prop( 'barcode', $context );
 	}
 
+	/**
+	 * Returns the fields names in ATUM data.
+	 *
+	 * @since 1.9.29.1
+	 *
+	 * @return string[]
+	 */
+	public function get_atum_data_column_names() {
+		return apply_filters( 'atum/product_data/data_column_names', array_keys( $this->atum_data ) );
+	}
+
 
 	/****************************************
 	 * EXTRA GETTERS USED BY PREMIUM ADD-ONS
@@ -662,20 +676,6 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Returns the product's barcode type prop.
-	 *
-	 * @since   1.9.30
-	 * @package Barcodes PRO
-	 *
-	 * @param string $context What the value is for. Valid values are view and edit.
-	 *
-	 * @return string
-	 */
-	public function get_barcode_type( $context = 'view' ) {
-		return $this->get_prop( 'barcode_type', $context );
-	}
-
-	/**
 	 * Returns the product's calculated backorders prop.
 	 *
 	 * @since   1.9.20.4
@@ -690,16 +690,69 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Returns the fields names in atum data.
+	 * Returns the product's barcode type prop.
 	 *
-	 * @since 1.9.29.1
-	 * @package Integrations\WPML
+	 * @since   1.9.30
+	 * @package Barcodes PRO
 	 *
-	 * @return string[]
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
 	 */
-	public function get_atum_data_column_names() {
-		return apply_filters( 'atum/product_data/data_column_names', array_keys( $this->atum_data ) );
+	public function get_barcode_type( $context = 'view' ) {
+		return $this->get_prop( 'barcode_type', $context );
 	}
+
+	/**
+	 * Returns the product's UOM status prop.
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_uom_status( $context = 'view' ) {
+
+		$uom_status = $this->get_prop( 'uom_status', $context );
+
+		if ( ! is_null( $uom_status ) ) {
+			$uom_status = wc_bool_to_string( $uom_status );
+		}
+
+		return $uom_status;
+
+	}
+
+	/**
+	 * Returns the product's measure type prop.
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_measure_type( $context = 'view' ) {
+		return $this->get_prop( 'measure_type', $context );
+	}
+
+	/**
+	 * Returns the product's measure unit prop.
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_measure_unit( $context = 'view' ) {
+		return $this->get_prop( 'measure_unit', $context );
+	}
+
 
 	/*
 	|----------------------------------------------------------------------------
@@ -1260,11 +1313,49 @@ trait AtumProductTrait {
 	 */
 	public function set_barcode_type( $barcode_type ) {
 
-		if ( is_null( $barcode_type ) ) {
-			$this->set_prop( 'barcode_type', $barcode_type );
-		}
-
+		$this->set_prop( 'barcode_type', is_null( $barcode_type ) || 'global' === $barcode_type ? NULL : wc_string_to_bool( $barcode_type ) );
 	}
+
+	/**
+	 * Set UOM status for the current product
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string|NULL $uom_status For "global", set it to NULL.
+	 */
+	public function set_uom_status( $uom_status ) {
+
+		$this->set_prop( 'uom_status', is_null( $uom_status ) || 'global' === $uom_status ? NULL : wc_string_to_bool( $uom_status ) );
+	}
+
+	/**
+	 * Set measure type for the current product
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string $measure_type
+	 */
+	public function set_measure_type( $measure_type ) {
+
+		$this->set_prop( 'measure_type', sanitize_text_field( $measure_type ) );
+	}
+
+	/**
+	 * Set measure unit for the current product
+	 *
+	 * @since   1.9.34
+	 * @package Units of Measure
+	 *
+	 * @param string $measure_unit
+	 */
+	public function set_measure_unit( $measure_unit ) {
+
+		$this->set_prop( 'measure_unit', sanitize_text_field( $measure_unit ) );
+	}
+
+	// ------------------------------------ //
 
 	/**
 	 * Save the ATUM product data
