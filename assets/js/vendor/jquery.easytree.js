@@ -1,9 +1,5 @@
 ﻿/*!
  * jQuery EasyTree Plugin
- * http://www.EasyJsTree.com
- *
- * Copyright 2014 Matthew Rand
- * Released under the MIT license
  * V1.0.1
  *
  * ENHANCED AND FIXED BY ATUM
@@ -82,6 +78,7 @@
 			
 			var json = '';
 			if (_settings.dataUrl) {
+				
 				ajaxService(_settings.dataUrl, _settings.dataUrlJson, function (data) {
 					json = convertInputDataToJson(data);
 					if (!json) {
@@ -91,42 +88,58 @@
 					buildTree(json);
 					return this;
 				});
+				
 			}
 			else if (_settings.data) {
+				
 				json = convertInputDataToJson(_settings.data);
+				
 				if (!json) {
 					alert("EasyTree: Invalid data!");
 					return this;
 				}
+				
 				buildTree(json);
+				
 			}
 			else {
+				
 				json = convertInputDataToJson($this.html());
+				
 				if (!json) {
 					alert("EasyTree: Invalid data!");
 					return this;
 				}
+				
 				buildTree(json);
+				
 			}
 			
 			return this;
+			
 		};
 		
-		//public helpers
+		// public helpers
 		this.options = _settings;
 		this.rebuildTree = function (data) {
+			
 			var json = data ? convertInputDataToJson(data) : _nodes;
 			if (!json) {
 				alert("EasyTree: Invalid data!");
 			}
+			
 			buildTree(json);
+			
 		};
+		
 		this.getAllNodes = function () {
 			return _nodes;
 		};
+		
 		this.getNode = function (id) {
 			return getNode(_nodes, id);
 		};
+		
 		this.addNode = function (sourceNode, targetId) {
 			
 			if (!targetId) { // if blank targetId add to root node
@@ -145,11 +158,15 @@
 			}
 			
 			targetNode.children.push(sourceNode);
+			
 		};
+		
 		this.removeNode = function (id) {
 			removeNode(_nodes, id);
 		};
+		
 		this.activateNode = function (id) {
+			
 			unactivateAll(_nodes);
 			
 			if (!_settings.allowActivate) {
@@ -161,7 +178,9 @@
 			
 			node.isActive = true;
 			$('#' + node.id).addClass('easytree-active');
+			
 		};
+		
 		this.toggleNode = function (id) {
 			var node = getNode(_nodes, id);
 			if (!node) { return; }
@@ -171,6 +190,7 @@
 		
 		// events
 		function nodeClick(event) {
+			
 			var id = getElementId(this);
 			var nodes = event.data;
 			var node = getNode(nodes, id);
@@ -189,17 +209,22 @@
 				var j = getMinifiedJson(nodes);
 				_settings.stateChanged(nodes, j);
 			}
+			
 		}
+		
 		function toggleNodeEvt(event) {
+			
 			var id = getElementId(this);
 			var nodes = event.data;
 			var node = getNode(nodes, id);
 			if (!node) { return; }
 			
 			toggleNodeBegin(event, nodes, node);
+			
 		}
 		
 		function toggleNodeBegin(event, nodes, node) {
+			
 			var ret = ''; // return value of event
 			if (_settings.toggling) { // fire toggling event
 				ret = _settings.toggling(event, nodes, node);
@@ -208,30 +233,43 @@
 				}
 			}
 			
-			if (node.isExpanded) { // if closing node
-				if (_settings.closing) { // fire closing event
+			// if closing node
+			if (node.isExpanded) {
+				
+				// fire closing event
+				if (_settings.closing) {
 					ret = _settings.closing(event, nodes, node);
 					if (ret === false) {
 						return false;
 					}
 				}
+				
 			}
-			else { // if opening node
-				if (_settings.opening) { // fire opening event
+			// if opening node
+			else {
+				
+				// fire opening event
+				if (_settings.opening) {
 					ret = _settings.opening(event, nodes, node);
 					if (ret === false) {
 						return false;
 					}
 				}
+				
 			}
 			
-			if (node.isLazy && !node.isExpanded) { // if opening a lazy node
+			// if opening a lazy node
+			if (node.isLazy && !node.isExpanded) {
+				
 				var hasChildren = node.children && node.children.length > 0;
 				ret = true;
-				if (_settings.openLazyNode) { // fire openLazyNode event
+				
+				// fire openLazyNode event
+				if (_settings.openLazyNode) {
 					ret = _settings.openLazyNode(event, nodes, node, hasChildren);
 				}
 				if (node.lazyUrl && ret !== false) {
+					
 					ajaxService(node.lazyUrl, node.lazyUrlJson, function (data) {
 						if (data.d) {
 							data = data.d;
@@ -248,50 +286,71 @@
 						
 						buildTree(nodes);
 						toggleNodeEnd(event, nodes, node);
+						
 					});
 					
 					return false;
+					
 				}
+				
 			}
 			
 			toggleNodeEnd(event, nodes, node);
+			
 		}
+		
 		function toggleNodeEnd(event, nodes, node) {
-			if (node.isExpanded) { // if closing node
-				openCloseNode(nodes, node.id, "close");
-				renderNode(node, "close");
+			
+			
+			// if closing node
+			if (node.isExpanded) {
 				
-				if (_settings.closed) { // fire closed event
+				openCloseNode(nodes, node.id, 'close');
+				renderNode(node, 'close');
+				
+				
+				// fire closed event
+				if (_settings.closed) {
 					_settings.closed(event, nodes, node);
 				}
+				
 			}
-			else { // if opening node
-				openCloseNode(nodes, node.id, "open");
-				renderNode(node, "open");
+			// if opening node
+			else {
+				
+				openCloseNode(nodes, node.id, 'open');
+				renderNode(node, 'open');
 				
 				if (_settings.opened) { // fire opened event
 					_settings.opened(event, nodes, node);
 				}
+				
 			}
 			
 			if (_settings.toggled) { // fire toggled event
 				var ret = _settings.toggled(event, nodes, node);
 			}
+			
 		}
 		
 		// dnd
 		function dragStart(event) {
-			if (!_settings.enableDnd) { return; }
+			
+			if (!_settings.enableDnd) {
+				return;
+			}
 			
 			var el = event.target;
 			while (el) {
-				if (el.className.indexOf("easytree-draggable") > -1) {
+				if (el.className.indexOf('easytree-draggable') > -1) {
 					break;
 				}
 				el = el.parentElement;
 			}
 			
-			if (!el) { return; } // not draggable, no 'easytree-draggable' class found
+			if (!el) {
+				return; // not draggable, no 'easytree-draggable' class found
+			}
 			
 			unsourceAll(_nodes);
 			unactivateAll(_nodes);
@@ -305,10 +364,18 @@
 			_dnd.sourceNode = getNode(_nodes, _dnd.sourceId);
 			
 			return false;
+			
 		}
+		
 		function drag(event) {
-			if (!_dnd.dragok) { return; }
-			if (!_settings.enableDnd) { return; }
+			
+			if (!_dnd.dragok) {
+				return;
+			}
+			
+			if (!_settings.enableDnd) {
+				return;
+			}
 			
 			if (_dnd.createClone) {
 				if (!_dnd.clone) {
@@ -329,6 +396,7 @@
 				_dnd.canDrop = false;
 				return;
 			}
+			
 			if (targetEl.id == _dnd.targetId) { // return if drag target hasn't changed
 				return;
 			}
@@ -341,9 +409,9 @@
 			_dnd.targetId = targetEl.id;
 			_dnd.targetNode = getNode(_nodes, _dnd.targetId);
 			
-			log('source:' + (_dnd.sourceNode && _dnd.sourceNode.text ? _dnd.sourceNode.text : _dnd.sourceId));
-			log('target:' + (_dnd.targetNode && _dnd.targetNode.text ? _dnd.targetNode.text : _dnd.targetId));
-			log('isAncester:' + isAncester(_dnd.sourceNode, _dnd.targetId));
+			//log('source:' + (_dnd.sourceNode && _dnd.sourceNode.text ? _dnd.sourceNode.text : _dnd.sourceId));
+			//log('target:' + (_dnd.targetNode && _dnd.targetNode.text ? _dnd.targetNode.text : _dnd.targetId));
+			//log('isAncester:' + isAncester(_dnd.sourceNode, _dnd.targetId));
 			
 			var $target = $('#' + _dnd.targetId);
 			
@@ -351,12 +419,14 @@
 				showRejectDragHelper();
 				return;
 			}
+			
 			if (_dnd.targetId == _dnd.sourceId) { // don't allow drops to self
 				hideDragHelpers();
 				return;
 			}
 			
 			if (_settings.canDrop) {
+				
 				var isSourceNode = _dnd.sourceNode != null;
 				var source = isSourceNode ? _dnd.sourceNode : _dnd.sourceEl;
 				var isTargetNode = _dnd.targetNode != null;
@@ -376,26 +446,32 @@
 					showRejectDragHelper();
 					return;
 				}
+				
 			}
 			
 			if ($target.hasClass('easytree-reject')) {
 				showRejectDragHelper();
 			}
 			else if ($target.hasClass('easytree-accept')) {
+				
 				showAcceptDragHelper();
 				_dnd.canDrop = true;
 				_dnd.openDelayTimeout = window.setTimeout(function () {
 					openCloseNode(_nodes, _dnd.targetId, 'open');
 					renderNode(_dnd.targetNode, 'open');
 				}, 600);
+				
 			}
 			else {
 				hideDragHelpers();
 			}
 			
 			return false;
+			
 		}
+		
 		function dragEnd(event) {
+			
 			// define variables to send in events
 			var isSourceNode = _dnd.sourceNode != null;
 			var source = isSourceNode ? _dnd.sourceNode : _dnd.sourceEl;
@@ -439,14 +515,19 @@
 			resetDnd(_dnd);
 			
 			return false;
+			
 		}
+		
 		function createClone(sourceEl) {
-			$(sourceEl).remove(".easytree-expander");
-			var clone = $(sourceEl).clone().remove(".easytree-expander").removeClass('easytree-drag-source')[0];
+			
+			$(sourceEl).remove('.easytree-expander');
+			var clone = $(sourceEl).clone().remove('.easytree-expander').removeClass('easytree-drag-source')[0];
 			var firstChild = clone.children[0];
+			
 			if (firstChild && firstChild.className == 'easytree-expander') {
 				clone.removeChild(firstChild);
 			}
+			
 			clone.style.display = 'block';
 			clone.style.position = "absolute";
 			clone.style.opacity = 0.5;
@@ -455,7 +536,9 @@
 			
 			return clone;
 		}
+		
 		function getDroppableTargetEl(clientX, clientY) {
+			
 			var targetEl = document.elementFromPoint(clientX, clientY);
 			
 			while (targetEl) {
@@ -466,7 +549,9 @@
 			}
 			
 			return null;
+			
 		}
+		
 		function resetDnd(dnd) {
 			dnd.canDrop = false;
 			dnd.createClone = true;
@@ -483,22 +568,30 @@
 		
 		// tree manipulation
 		function getElementId(el) {
+			
 			while (el != null) {
 				if (el.id) {
 					return el.id;
 				}
 				el = el.parentElement;
 			}
+			
 			return null;
+			
 		}
+		
 		function getNode(nodes, id) {
+			
 			var i = 0;
 			for (i = 0; i < nodes.length; i++) {
+				
 				var n = nodes[i];
 				var t = n.text;
+				
 				if (n.id == id) {
 					return n;
 				}
+				
 				var hasChildren = n.children && n.children.length > 0;
 				if (hasChildren) {
 					var node = getNode(n.children, id);
@@ -506,75 +599,111 @@
 						return node;
 					}
 				}
+				
 			}
 			
 			return null;
+			
 		}
+		
 		function isAncester(node, id) {
+			
 			var i = 0;
+			
 			if (!node || !node.children || node.children.length == 0) {
 				return false;
 			}
+			
 			for (i = 0; i < node.children.length; i++) {
+				
 				var n = node.children[i];
 				var t = n.text;
+				
 				if (n.id == id) {
 					return true;
 				}
+				
 				var hasChildren = n.children && n.children.length > 0;
+				
 				if (hasChildren) {
 					var ancester = isAncester(n, id);
+					
 					if (ancester) {  // if true
 						return ancester;
 					}
 				}
+				
 			}
 			
 			return false;
+			
 		}
+		
 		function removeNode(nodes, id) {
+			
 			var i = 0;
 			for (i = 0; i < nodes.length; i++) {
+				
 				var n = nodes[i];
 				var t = n.text;
+				
 				if (n.id == id) {
 					nodes.splice(i, 1);
 					return;
 				}
+				
 				var hasChildren = n.children && n.children.length > 0;
+				
 				if (hasChildren) {
 					removeNode(n.children, id);
 				}
+				
 			}
+			
 		}
+		
 		function openCloseNode(nodes, id, openOrClose) {
+			
 			var i = 0;
+			
 			for (i = 0; i < nodes.length; i++) {
+				
 				var n = nodes[i];
 				var t = n.text;
+				
 				if (n.id == id) {
 					n.isExpanded = openOrClose == "open";
 					return;
 				}
+				
 				var hasChildren = n.children && n.children.length > 0;
 				if (hasChildren) {
 					openCloseNode(n.children, id, openOrClose);
 				}
+				
 			}
+			
 		}
+		
 		function unactivateAll(nodes) {
+			
 			var i = 0;
 			for (i = 0; i < nodes.length; i++) {
 				var n = nodes[i];
 				n.isActive = false;
 				$('#' + n.id).removeClass('easytree-active');
 				var hasChildren = n.children && n.children.length > 0;
+				
 				if (hasChildren) {
 					unactivateAll(n.children);
 				}
+				
 			}
+			
 		}
+		
 		function unsourceAll(nodes) {
+			
 			var i = 0;
 			for (i = 0; i < nodes.length; i++) {
 				var n = nodes[i];
@@ -584,8 +713,11 @@
 					unsourceAll(n.children);
 				}
 			}
+			
 		}
+		
 		function sort(nodes) {
+			
 			var i = 0;
 			
 			nodes = nodes.sort(function (n1, n2) {
@@ -619,28 +751,36 @@
 			}
 			
 			return nodes;
+			
 		}
+		
 		function giveUniqueIds(nodes, level, id) {
+			
 			var i = 0;
 			if (!level) {
 				level = 0;
-				id = "_st_node_" + id + "_";
+				id = '_st_node_' + id + '_';
 			}
+			
 			for (i = 0; i < nodes.length; i++) {
 				var n = nodes[i];
 				
 				if (!n.id) { // if no id so generate one //  || n.id.indexOf('_st_node_') == 0
 					n.id = id + i.toString();
 				}
+				
 				var hasChildren = n.children && n.children.length > 0;
+				
 				if (hasChildren) {
-					giveUniqueIds(n.children, level + 1, id + i + "_");
+					giveUniqueIds(n.children, level + 1, id + i + '_');
 				}
 			}
+			
 		}
 		
 		// rendering
 		function buildTree(nodes) {
+			
 			if (!nodes) { return; }
 			
 			var s1 = new Date();
@@ -718,19 +858,22 @@
 			var t8 = s9 - s8;
 			var t9 = s10 - s9;
 			var total = s10 - s1;
+			
 		}
+		
 		function getNodesAsHtml(nodes, level, display) {
+			
 			var html = '';
 			var i = 0;
 			
-			var ulCss = "";
+			var ulCss = '';
 			if (level == 0) {
-				ulCss += "ui-easytree easytree-container easytree-focused";
+				ulCss += 'ui-easytree easytree-container easytree-focused';
 			}
 			
 			var forceOpenNode = level < _settings.minOpenLevels;
 			
-			var ulStyle = level == 0 || display || forceOpenNode ? "" : " style='display:none' ";
+			var ulStyle = level == 0 || display || forceOpenNode ? '' : ' style="display:none" ';
 			html += '<ul tabindex="0" class="' + ulCss + '" ' + ulStyle + '">';
 			
 			for (i = 0; i < nodes.length; i++) {
@@ -743,16 +886,31 @@
 				var lastSibling = i == nodes.length - 1;
 				var spanCss = getSpanCss(n, lastSibling);
 				var dataAtts = '';
+				var tooltip = '';
 				
 				// ATUM: Add the coming data atts to the node element.
 				if (n.hasOwnProperty('dataAtts')) {
 					for (var dataAtt in n.dataAtts) {
-						dataAtts += ' data-' + dataAtt + '="' + n.dataAtts[dataAtt] + '"';
+						
+						// Save the tooltip for the inner span.
+						if ( spanCss.includes('atum-tooltip') && 'tip' === dataAtt ) {
+							tooltip = n.dataAtts[dataAtt];
+						}
+						else {
+							dataAtts += ' data-' + dataAtt + '="' + n.dataAtts[dataAtt] + '"';
+						}
 					}
 				}
 				
 				html += '<li' + dataAtts + '>';
-				html += '<span id="' + n.id + '" class="' + spanCss + ' ">'; // wrapper span
+				html += '<span id="' + n.id + '" class="' + spanCss + '"';
+				
+				// Move the tooltip to the span.
+				if ( tooltip ) {
+					html += ' title="' + tooltip + '"';
+				}
+				
+				html += '>';
 				html += forceOpenNode ? '' : '<span class="easytree-expander"></span>';
 				
 				html += getIconHtml(n);
@@ -771,24 +929,28 @@
 			
 			return html;
 		}
+		
 		function getSpanCss(node, lastSibling) {
+			
 			var hasChildren = node.children && node.children.length > 0;
-			var spanCss = "easytree-node ";
+			var spanCss = 'easytree-node ';
+			
 			if (_settings.enableDnd) {
-				spanCss += " easytree-draggable ";
+				spanCss += ' easytree-draggable ';
 			}
 			if (node.liClass) {
 				spanCss += node.liClass;
 			}
+			
 			if (node.isFolder && _settings.enableDnd) {
-				spanCss += " easytree-droppable easytree-accept ";
+				spanCss += ' easytree-droppable easytree-accept ';
 			}
 			else if (_settings.enableDnd) {
-				spanCss += " easytree-droppable easytree-reject ";
+				spanCss += ' easytree-droppable easytree-reject ';
 			}
 			
 			if (node.isActive && _settings.allowActivate) {
-				spanCss += " easytree-active ";
+				spanCss += ' easytree-active ';
 			}
 			
 			spanCss += getExpCss(node, lastSibling);
@@ -798,14 +960,18 @@
 				spanCss += ' ' + node.spanCss;
 			}
 			
-			var ico = node.isExpanded ? "e" : "c";
+			var ico = node.isExpanded ? 'e' : 'c';
+			
 			if (node.isFolder) {
-				ico += "f";
+				ico += 'f';
 			}
-			spanCss += " easytree-ico-" + ico;
+			
+			spanCss += ' easytree-ico-' + ico;
 			
 			return spanCss;
+			
 		}
+		
 		function getExpCss(node, lastSibling) {
 			var hasChildren = node.children && node.children.length > 0;
 			var exp = "";
@@ -842,37 +1008,52 @@
 			
 			return '<span class="easytree-icon"></span>';
 		}
+		
 		function getTitleHtml(node) {
+			
 			var html = '';
 			var tooltip = node.tooltip ? 'title="' + node.tooltip + '"' : "";
+			var titleCss = 'easytree-title';
 			
-			var titleCss = "easytree-title";
 			if (node.textCss) {
-				titleCss += " " + node.textCss;
+				titleCss += ' ' + node.textCss;
 			}
 			
 			html += '<span ' + tooltip + ' class="' + titleCss + '">';
 			
 			if (node.href) {
+				
 				html += '<a href="' + node.href + '" ';
+				
 				if (node.hrefTarget) {
 					html += ' target="' + node.hrefTarget + '" ';
 				}
+				
 				html += '>';
+				
 			}
+			
 			html += node.text;
+			
 			if (node.href) {
 				html += '</a>';
 			}
+			
 			html += '</span>';
 			
 			return html;
-		}
-		function renderNode(node, openOrClose) {
-			if (!node) { return; }
-			var classes = $('#' + node.id).attr('class');
 			
+		}
+		
+		function renderNode(node, openOrClose) {
+			
+			if (!node) {
+				return;
+			}
+			
+			var classes = $('#' + node.id).attr('class');
 			var expClassStart = classes.indexOf('easytree-exp-');
+			
 			if (expClassStart > -1) { // change arrow/expander class
 				var expClassEnd = classes.indexOf(' ', expClassStart);
 				var expClass = expClassEnd > -1 ? classes.substring(expClassStart, expClassEnd) : classes.substring(expClassStart);
@@ -882,14 +1063,15 @@
 			
 			var parentLi = $('#' + node.id).parents('li').first();
 			var childUl = parentLi.children('ul').first();
-			
 			var slideTime = parseInt(_settings.slidingTime, 10);
+			
 			if (openOrClose == "close") {
 				childUl.slideUp(slideTime);
 			}
 			else {
 				childUl.slideDown(slideTime);
 			}
+			
 		}
 		
 		// helpers
@@ -897,47 +1079,61 @@
 			$("#easytree-reject").hide();
 			$("#easytree-accept").hide();
 		}
+		
 		function showAcceptDragHelper() {
 			$("#easytree-accept").show();
 			$("#easytree-reject").hide();
 			
 		}
+		
 		function showRejectDragHelper() {
 			$("#easytree-reject").show();
 			$("#easytree-accept").hide();
 		}
+		
 		function getMinifiedJson(nodes) { // to increase the chance it can be stored in a 4kb cookie
+			
 			var j = JSON.stringify ? JSON.stringify(nodes) : 'Please import json2.js'; // for IE6/7 please import json2.js
+			
 			while (j.indexOf(',"children":[]') > -1) {
 				j = j.replace(',"children":[]', '');
 			}
+			
 			while (j.indexOf('"liClass":"",') > -1) {
 				j = j.replace('"liClass":"",', '');
 			}
+			
 			while (j.indexOf('"textCss":"",') > -1) {
 				j = j.replace('"textCss":"",', '');
 			}
+			
 			while (j.indexOf('"isExpanded":false,') > -1) {
 				j = j.replace('"isExpanded":false,', '');
 			}
+			
 			while (j.indexOf('"isActive":false,') > -1) {
 				j = j.replace('"isActive":false,', '');
 			}
+			
 			while (j.indexOf('"isFolder":false,') > -1) {
 				j = j.replace('"isFolder":false,', '');
 			}
+			
 			while (j.indexOf('"isLazy":false,') > -1) {
 				j = j.replace('"isLazy":false,', '');
 			}
 			
 			return j;
+			
 		}
 		
 		// initialisation
 		function init() {
+			
 			initDragHelpers();
 			resetDnd(_dnd);
-			$(document).on("mousemove", function (event) {
+			
+			$(document).on('mousemove', function (event) {
 				var top = event.pageY;
 				var left = event.pageX;
 				
@@ -946,8 +1142,11 @@
 				document.getElementById('easytree-accept').style.top = (top + 10) + 'px';
 				document.getElementById('easytree-accept').style.left = (left + 17) + 'px';
 			});
+			
 		}
+		
 		function initDragHelpers() {
+			
 			if (!$("#easytree-reject").length) {
 				var dragRejectHtml = '<div id="easytree-reject" class="easytree-drag-helper easytree-drop-reject">';
 				dragRejectHtml += '<span class="easytree-drag-helper-img"></span>';
@@ -955,6 +1154,7 @@
 				
 				$('body').append(dragRejectHtml);
 			}
+			
 			if (!$("#easytree-accept").length) {
 				var dragAcceptHtml = '<div id="easytree-accept" class="easytree-drag-helper easytree-drop-accept">';
 				dragAcceptHtml += '<span class="easytree-drag-helper-img"></span>';
@@ -962,8 +1162,11 @@
 				
 				$('body').append(dragAcceptHtml);
 			}
+			
 		}
+		
 		function ajaxService(actionUrl, json, callBack) {
+			
 			$.ajax({
 				url: actionUrl,
 				type: "POST",
@@ -974,26 +1177,36 @@
 					alert("Error: " + jqXHR.responseText);
 				}
 			});
+			
 		}
+		
 		function convertInputDataToJson(data) {
+			
 			var json = null;
+			
 			if (typeof data == 'object') {
 				json = data;
 			}
 			else if (typeof data == 'string') {
+				
 				data = $.trim(data);
-				if (data.indexOf('[') == 0 || data.indexOf('{') == 0) // assume json
-				{
+				
+				// assume json
+				if (data.indexOf('[') == 0 || data.indexOf('{') == 0) {
 					json = $.parseJSON(data);
 				}
 				else {
 					json = convertHtmlToJson(data); // parse html in json object
 				}
+				
 			}
 			
 			return json;
+			
 		}
+		
 		function convertHtmlToJson(html) {
+			
 			var i = 0;
 			var $html = $(html);
 			var nodes = [];
@@ -1002,8 +1215,11 @@
 			});
 			
 			return nodes;
+			
 		}
+		
 		function convertHtmlToNode(element) {
+			
 			var $el = $(element);
 			var node = {};
 			var data = $el.data();
@@ -1065,9 +1281,13 @@
 			});
 			
 			return node;
+			
 		}
+		
 		function getNodeValue(el) {
+			
 			var i = 0;
+			
 			for (i = 0; i < el.childNodes.length; i++) {
 				var child = el.childNodes[i];
 				while (child) {
@@ -1077,8 +1297,11 @@
 					child = child.firstChild;
 				}
 			}
+			
 			return '';
+			
 		}
+		
 		this.init(jQueryContext, options);
 		
 		// other
@@ -1090,4 +1313,5 @@
 		}
 		
 	}
+	
 }(jQuery));

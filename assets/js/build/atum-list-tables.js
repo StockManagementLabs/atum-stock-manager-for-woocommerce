@@ -7747,6 +7747,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 				titleCss += " " + node.textCss;
 			}
 			
+			console.log(node.dataAtts)
 			html += '<span ' + tooltip + ' class="' + titleCss + '">';
 			
 			if (node.href) {
