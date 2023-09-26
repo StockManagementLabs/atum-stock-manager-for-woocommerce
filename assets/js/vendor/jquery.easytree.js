@@ -815,21 +815,21 @@
 			var s6 = new Date();
 			
 			// Prevent double binding when rebuilding the tree.
-			$this.unbind( 'click.easytreeNode' );
+			//$this.unbind( 'click.easytreeNode' );
 			$this.unbind( 'click.easytreeExpander' );
 			$this.unbind( 'dblclick.easytreeNode' );
 			
 			$this
-				.on('click.easytreeNode', '.easytree-node', nodes, nodeClick)
+				//.on('click.easytreeNode', '.easytree-node', nodes, nodeClick)
 				.on('click.easytreeExpander', '.easytree-expander', nodes, toggleNodeEvt)
 				.on('dblclick.easytreeNode', '.easytree-icon, .easytree-title', nodes, toggleNodeEvt);
 			
 			var s7 = new Date();
 			
 			if (_settings.enableDnd) {
-				$(document).on("mousedown", dragStart);
-				$(document).on("mousemove", drag);
-				$(document).on("mouseup", dragEnd);
+				$(document).on('mousedown', dragStart);
+				$(document).on('mousemove', drag);
+				$(document).on('mouseup', dragEnd);
 			}
 			
 			var s8 = new Date();
