@@ -33,7 +33,7 @@ ul.easytree-container {
 	white-space: nowrap;
 	padding: 15px 10px !important;
 	margin: 0;
-	border: 1px solid var(--info);
+	border: 1px solid var(--gray-500);
 	border-radius: 6px;
 	overflow: auto;
 	height: 100%;
@@ -65,7 +65,8 @@ ul.easytree-container {
 	}
 	
 	.easytree-node {
-		display: inline-block;
+		display: flex;
+		align-items: center;
 	}
 	
 	ul {
@@ -94,19 +95,12 @@ ul.easytree-container {
 			&.easytree-lastsib {
 				background-image: none;
 			}
-			
-			.selected-node {
-				.easytree-title a, .atum-icon {
-					color: var(--tertiary) !important;
-				}
-			}
 		}
 	}
 	
 	// Style, when control is disabled
 	.ui-easytree-disabled & {
 		opacity: 0.5;
-		background-color: var(--secondary);
 	}
 	
 	// Custom icons
@@ -148,11 +142,26 @@ span {
 	}
 	
 	&.easytree-custom-icon {
-		display: inline-block !important;
-		vertical-align: -1px;
+		display: inline-flex;
+		gap: 3px;
 		color: var(--main-text);
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
+		
+		// Multi-Inventory support
+		&.atmi-multi-inventory {
+			&:before {
+				order: 2;
+			}
+			
+			&:after {
+				content: $atmi-arrow-child;
+			}
+			
+			+ .easytree-title {
+				color: var(--gray-600);
+			}
+		}
 	}
 	
 }
@@ -247,7 +256,8 @@ span.easytree-expander {
 //-------------
 
 .easytree-title {
-	display: inline-block;
+	display: flex;
+	align-items: center;
 	padding-left: 3px;
 	padding-right: 3px;
 	vertical-align: top;
@@ -258,24 +268,25 @@ span.easytree-expander {
 	
 	a {
 		color: var(--dark) !important;
+		transition: .2s ease-in-out;
 		
 		&:hover {
 			color: var(--primary) !important;
 		}
+		
+		.multiplier {
+			color: var(--gray-600);
+		}
 	}
+	
 }
 
 ul.easytree-container.easytree-focused {
 	
 	span {
 		&.easytree-selected, &.easytree-active {
-			.easytree-title {
-				background-color: var(--primary);
-				
-				&, a {
-					color: var(--atum-table-bg) !important;
-				}
-				
+			.easytree-custom-icon {
+				color: var(--primary);
 			}
 		}
 	}
@@ -323,28 +334,33 @@ ul.easytree-container.easytree-focused {
 			color: var(--atum-easytree-node) !important;
 		}
 		
-		&.easytree-active {
-			.easytree-title {
-				background-color: var(--gray-400) !important;
-			}
-		}
-		
 		&.checked {
 			a {
 				color: var(--primary) !important;
 			}
 			
 			&.easytree-active {
-				
-				.easytree-title {
-					background-color: var(--primary) !important;
-					
-					a {
-						color: var(--atum-table-bg) !important;
-					}
+				.easytree-custom-icon {
+					color: var(--primary) !important;
 				}
 			}
 		}
 	}
 
+}
+
+// BOM hierarchy tree speficity fix
+.swal2-modal {
+	.atum-tree {
+		.easytree-title {
+			a {
+				color: var(--dark) !important;
+				
+				&:hover {
+					color: var(--primary) !important;
+				}
+				
+			}
+		}
+	}
 }

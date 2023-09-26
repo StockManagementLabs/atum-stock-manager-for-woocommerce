@@ -4159,7 +4159,7 @@ ul.easytree-container {
   white-space: nowrap;
   padding: 15px 10px !important;
   margin: 0;
-  border: 1px solid var(--info);
+  border: 1px solid var(--gray-500);
   border-radius: 6px;
   overflow: auto;
   height: 100%;
@@ -4183,7 +4183,12 @@ ul.easytree-container:focus {
   outline: none;
 }
 ul.easytree-container .easytree-node {
-  display: inline-block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 ul.easytree-container ul {
   padding: 0 0 0 16px;
@@ -4206,12 +4211,8 @@ ul.easytree-container ul li .stock-negative, ul.easytree-container ul li .stock-
 ul.easytree-container ul li.easytree-lastsib {
   background-image: none;
 }
-ul.easytree-container ul li .selected-node .easytree-title a, ul.easytree-container ul li .selected-node .atum-icon {
-  color: var(--tertiary) !important;
-}
 .ui-easytree-disabled ul.easytree-container {
   opacity: 0.5;
-  background-color: var(--secondary);
 }
 ul.easytree-container img {
   width: 16px;
@@ -4239,11 +4240,24 @@ span.easytree-empty, span.easytree-vline, span.easytree-expander, span.easytree-
   color: var(--main-text);
 }
 span.easytree-custom-icon {
-  display: inline-block !important;
-  vertical-align: -1px;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  gap: 3px;
   color: var(--main-text);
   margin-left: 3px;
   text-indent: 0 !important;
+}
+span.easytree-custom-icon.atmi-multi-inventory:before {
+  -webkit-box-ordinal-group: 3;
+      -ms-flex-order: 2;
+          order: 2;
+}
+span.easytree-custom-icon.atmi-multi-inventory:after {
+  content: "\e912";
+}
+span.easytree-custom-icon.atmi-multi-inventory + .easytree-title {
+  color: var(--gray-600);
 }
 
 span.easytree-expander {
@@ -4290,7 +4304,12 @@ span.easytree-expander:hover {
 }
 
 .easytree-title {
-  display: inline-block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding-left: 3px;
   padding-right: 3px;
   vertical-align: top;
@@ -4301,16 +4320,18 @@ span.easytree-expander:hover {
 }
 .easytree-title a {
   color: var(--dark) !important;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 .easytree-title a:hover {
   color: var(--primary) !important;
 }
-
-ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title {
-  background-color: var(--primary);
+.easytree-title a .multiplier {
+  color: var(--gray-600);
 }
-ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, ul.easytree-container.easytree-focused span.easytree-selected .easytree-title a, ul.easytree-container.easytree-focused span.easytree-active .easytree-title, ul.easytree-container.easytree-focused span.easytree-active .easytree-title a {
-  color: var(--atum-table-bg) !important;
+
+ul.easytree-container.easytree-focused span.easytree-selected .easytree-custom-icon, ul.easytree-container.easytree-focused span.easytree-active .easytree-custom-icon {
+  color: var(--primary);
 }
 
 .tree-controls {
@@ -4340,17 +4361,18 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-title, u
 .edit-locations-modal .easytree-node a {
   color: var(--atum-easytree-node) !important;
 }
-.edit-locations-modal .easytree-node.easytree-active .easytree-title {
-  background-color: var(--gray-400) !important;
-}
 .edit-locations-modal .easytree-node.checked a {
   color: var(--primary) !important;
 }
-.edit-locations-modal .easytree-node.checked.easytree-active .easytree-title {
-  background-color: var(--primary) !important;
+.edit-locations-modal .easytree-node.checked.easytree-active .easytree-custom-icon {
+  color: var(--primary) !important;
 }
-.edit-locations-modal .easytree-node.checked.easytree-active .easytree-title a {
-  color: var(--atum-table-bg) !important;
+
+.swal2-modal .atum-tree .easytree-title a {
+  color: var(--dark) !important;
+}
+.swal2-modal .atum-tree .easytree-title a:hover {
+  color: var(--primary) !important;
 }
 
 .blockUI.blockOverlay:before {
