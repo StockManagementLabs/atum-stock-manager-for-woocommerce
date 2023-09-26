@@ -27,52 +27,53 @@ trait AtumProductTrait {
 	 * @var bool
 	 */
 	protected $atum_data = array(
-		'purchase_price'                => '',
-		'supplier_id'                   => NULL,
-		'supplier_sku'                  => '',
-		'atum_controlled'               => TRUE,
+		'purchase_price'                   => '',
+		'supplier_id'                      => NULL,
+		'supplier_sku'                     => '',
+		'atum_controlled'                  => TRUE,
 		// When a new product is created, the ATUM controlled should be enabled by default.
-		'out_stock_date'                => NULL,
-		'out_stock_threshold'           => '',
-		'inheritable'                   => FALSE,
-		'inbound_stock'                 => NULL,
-		'stock_on_hold'                 => NULL,
-		'sold_today'                    => NULL,
-		'sales_last_days'               => NULL,
-		'reserved_stock'                => NULL,
-		'customer_returns'              => NULL,
-		'warehouse_damage'              => NULL,
-		'lost_in_post'                  => NULL,
-		'other_logs'                    => NULL,
-		'out_stock_days'                => NULL,
-		'lost_sales'                    => NULL,
-		'has_location'                  => NULL,
-		'update_date'                   => NULL,
-		'atum_stock_status'             => 'instock',
-		'restock_status'                => NULL,
-		'sales_update_date'             => NULL,
-		'barcode'                       => NULL,
-		'calc_backorders'               => NULL,
+		'out_stock_date'                   => NULL,
+		'out_stock_threshold'              => '',
+		'inheritable'                      => FALSE,
+		'inbound_stock'                    => NULL,
+		'stock_on_hold'                    => NULL,
+		'sold_today'                       => NULL,
+		'sales_last_days'                  => NULL,
+		'reserved_stock'                   => NULL,
+		'customer_returns'                 => NULL,
+		'warehouse_damage'                 => NULL,
+		'lost_in_post'                     => NULL,
+		'other_logs'                       => NULL,
+		'out_stock_days'                   => NULL,
+		'lost_sales'                       => NULL,
+		'has_location'                     => NULL,
+		'update_date'                      => NULL,
+		'atum_stock_status'                => 'instock',
+		'restock_status'                   => NULL,
+		'sales_update_date'                => NULL,
+		'barcode'                          => NULL,
+		'calc_backorders'                  => NULL,
 		// Extra props (from ATUM add-ons).
-		'minimum_threshold'             => NULL, // PL.
-		'available_to_purchase'         => NULL, // PL.
-		'selling_priority'              => NULL, // PL.
-		'calculated_stock'              => NULL, // PL.
-		'is_bom'                        => 0,    // PL.
-		'multi_inventory'               => NULL, // MI.
-		'inventory_iteration'           => NULL, // MI.
-		'inventory_sorting_mode'        => NULL, // MI.
-		'expirable_inventories'         => NULL, // MI.
-		'price_per_inventory'           => NULL, // MI.
-		'selectable_inventories'        => NULL, // MI.
-		'selectable_inventories_mode'   => NULL, // MI.
-		'show_write_off_inventories'    => NULL, // MI.
-		'show_out_of_stock_inventories' => NULL, // MI.
-		'barcode_type'                  => NULL, // BP.
-		'committed_to_wc'               => NULL, // SOnly.
-		'uom_status'                    => NULL, // UOM.
-		'measure_type'                  => NULL, // UOM.
-		'measure_unit'                  => NULL, // UOM.
+		'minimum_threshold'                => NULL, // PL.
+		'available_to_purchase'            => NULL, // PL.
+		'selling_priority'                 => NULL, // PL.
+		'calculated_stock'                 => NULL, // PL.
+		'is_bom'                           => 0,    // PL.
+		'multi_inventory'                  => NULL, // MI.
+		'inventory_iteration'              => NULL, // MI.
+		'inventory_sorting_mode'           => NULL, // MI.
+		'expirable_inventories'            => NULL, // MI.
+		'price_per_inventory'              => NULL, // MI.
+		'selectable_inventories'           => NULL, // MI.
+		'selectable_inventories_mode'      => NULL, // MI.
+		'show_write_off_inventories'       => NULL, // MI.
+		'show_out_of_stock_inventories'    => NULL, // MI.
+		'low_stock_threshold_by_inventory' => NULL, // MI.
+		'barcode_type'                     => NULL, // BP.
+		'committed_to_wc'                  => NULL, // SOnly.
+		'uom_status'                       => NULL, // UOM.
+		'measure_type'                     => NULL, // UOM.
+		'measure_unit'                     => NULL, // UOM.
 	);
 
 
@@ -753,6 +754,26 @@ trait AtumProductTrait {
 		return $this->get_prop( 'measure_unit', $context );
 	}
 
+	/**
+	 * Returns the product's low_stock_threshold_by_inventory prop.
+	 *
+	 * @since   1.9.33
+	 * @package Multi-Inventory
+	 *
+	 * @param string $context What the value is for. Valid values are view and edit.
+	 *
+	 * @return string
+	 */
+	public function get_low_stock_threshold_by_inventory( $context = 'view' ) {
+
+		$low_stock_threshold_by_inventory = $this->get_prop( 'low_stock_threshold_by_inventory', $context );
+
+		if ( ! is_null( $low_stock_threshold_by_inventory ) ) {
+			$low_stock_threshold_by_inventory = wc_bool_to_string( $low_stock_threshold_by_inventory );
+		}
+
+		return $low_stock_threshold_by_inventory;
+	}
 
 	/*
 	|----------------------------------------------------------------------------
@@ -1353,6 +1374,20 @@ trait AtumProductTrait {
 	public function set_measure_unit( $measure_unit ) {
 
 		$this->set_prop( 'measure_unit', sanitize_text_field( $measure_unit ) );
+	}
+
+	/**
+	 * Set the Low Stock Threshold By Inventory option for the current product.
+	 *
+	 * @since   1.9.33
+	 * @package Multi-Inventory
+	 *
+	 * @param string $low_stock_threshold_by_inventory Allowed values: NULL, 'yes' and 'no'.
+	 */
+	public function set_low_stock_threshold_by_inventory( $low_stock_threshold_by_inventory ) {
+
+		$low_stock_threshold_by_inventory = ! is_null( $low_stock_threshold_by_inventory ) && 'global' !== $low_stock_threshold_by_inventory ? wc_string_to_bool( $low_stock_threshold_by_inventory ) : NULL;
+		$this->set_prop( 'low_stock_threshold_by_inventory', $low_stock_threshold_by_inventory );
 	}
 
 	// ------------------------------------ //
