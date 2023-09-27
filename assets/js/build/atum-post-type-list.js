@@ -1057,6 +1057,9 @@ var DragScroll = (function () {
     };
     DragScroll.prototype.loadHammer = function () {
         var _this = this;
+        if (!this.globals.$scrollPane || !this.globals.$scrollPane.length) {
+            return;
+        }
         var hammertime = new hammerjs_hammer_min__WEBPACK_IMPORTED_MODULE_1___default.a(this.globals.$scrollPane.get(0), {});
         hammertime
             .on('panstart', function () {

@@ -48,6 +48,10 @@ export default class DragScroll {
 	 * Load Hammer
 	 */
 	loadHammer() {
+
+		if ( ! this.globals.$scrollPane || ! this.globals.$scrollPane.length ) {
+			return;
+		}
 		
 		// Drag and drop scrolling on desktops.
 		const hammertime: any = new Hammer( this.globals.$scrollPane.get( 0 ), {} );
