@@ -4011,9 +4011,6 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 .tablenav .actions {
   white-space: nowrap;
 }
-.tablenav .actions .show-filters {
-  display: none;
-}
 @media all and (max-width: 480px) {
   .tablenav .actions {
     white-space: inherit;
@@ -4034,37 +4031,6 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   .tablenav .actions.bulkactions input[type=submit] {
     width: 100%;
     margin-top: 10px !important;
-  }
-}
-.tablenav .show-filters-wrapper {
-  display: none;
-  width: 100%;
-  margin-top: 15px;
-  font-size: 15px;
-}
-.tablenav .show-filters-wrapper .btn {
-  font-size: 15px;
-}
-@media all and (max-width: 480px) {
-  .tablenav .show-filters-wrapper {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-  }
-  .tablenav .show-filters-wrapper > span {
-    text-transform: uppercase;
-  }
-  .tablenav .show-filters-wrapper + .actions {
-    margin-top: 15px;
-  }
-  .tablenav .show-filters-wrapper + .actions .select2-container {
-    margin-bottom: 10px;
   }
 }
 .tablenav .tablenav-pages-container .btn {
@@ -4814,6 +4780,10 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   .atum-list-wrapper .search-box .table-style-buttons button, #posts-filter .search-box .table-style-buttons button {
     width: 44px;
     height: 44px;
+  }
+  .atum-list-wrapper .search-box .table-style-buttons button .atmi-wc-expand, #posts-filter .search-box .table-style-buttons button .atmi-wc-expand {
+    font-size: 19px;
+    top: 1px;
   }
   .atum-list-wrapper .search-box > .input-group, #posts-filter .search-box > .input-group {
     -webkit-box-flex: 1;

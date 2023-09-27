@@ -7,15 +7,13 @@ import Globals from './_globals';
 import ListTable from './_list-table';
 import Router from './_router';
 import Settings from '../../config/_settings';
-import ShowFilters from './_show-filters';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class Filters {
-	
-	showFilters: ShowFilters;
+
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
 	constructor(
@@ -29,8 +27,6 @@ export default class Filters {
 		
 		this.bindEvents();
 		this.addHooks();
-		
-		this.showFilters = new ShowFilters( this.globals.$atumList, this.settings);
 		
 		//
 		// Add date selector filter.

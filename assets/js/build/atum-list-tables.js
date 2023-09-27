@@ -1731,11 +1731,9 @@ var EditableCell = (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _show_filters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_show-filters */ "./assets/js/src/components/list-table/_show-filters.ts");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
-
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 
 
 var Filters = (function () {
@@ -1749,7 +1747,6 @@ var Filters = (function () {
         this.wpHooks = window['wp']['hooks'];
         this.bindEvents();
         this.addHooks();
-        this.showFilters = new _show_filters__WEBPACK_IMPORTED_MODULE_0__["default"](this.globals.$atumList, this.settings);
         this.addDateSelectorFilter();
     }
     Filters.prototype.bindEvents = function () {
@@ -1764,7 +1761,7 @@ var Filters = (function () {
             })
                 .on('keyup paste search input', '.atum-post-search', function (evt) {
                 var searchColumnBtnVal = _this.globals.$searchColumnBtn.data('value'), searchInputVal = $(evt.currentTarget).val();
-                _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal); }, 500);
+                _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].delay(function () { return _this.pseudoKeyUpAjax(searchColumnBtnVal, searchInputVal); }, 500);
             })
                 .on('change', '.current-page', function (evt) {
                 var currentPage = parseInt($(evt.currentTarget).val() || '1');
@@ -1840,7 +1837,7 @@ var Filters = (function () {
                 this.router.updateHash();
             }
             else {
-                _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].delay(function () { return _this.router.updateHash(); }, delay);
+                _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].delay(function () { return _this.router.updateHash(); }, delay);
             }
         }
         else {
@@ -1881,7 +1878,7 @@ var Filters = (function () {
         this.globals.$atumList.find('select[name="extra_filter"]').on('select2:select', function (evt) {
             var $select = $(evt.currentTarget);
             if ($.inArray($select.val(), _this.settings.get('dateSelectorFilters')) > -1) {
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
                     customClass: {
                         container: 'atum-modal',
                         popup: 'filter-range-dates-modal',
@@ -1898,7 +1895,7 @@ var Filters = (function () {
                             _this.globals.filterData['date_from'] = $modal.find('.date_from').val();
                             _this.globals.filterData['date_to'] = $modal.find('.date_to').val();
                             _this.keyUp(evt, true);
-                            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.close();
+                            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.close();
                         });
                     },
                     willClose: function () {
@@ -3225,44 +3222,6 @@ var SearchInColumn = (function () {
     return SearchInColumn;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (SearchInColumn);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
-
-/***/ }),
-
-/***/ "./assets/js/src/components/list-table/_show-filters.ts":
-/*!**************************************************************!*\
-  !*** ./assets/js/src/components/list-table/_show-filters.ts ***!
-  \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {var ShowFilters = (function () {
-    function ShowFilters($wrapper, settings) {
-        var _this = this;
-        this.$wrapper = $wrapper;
-        this.settings = settings;
-        this.$wrapper.on('click', '.show-filters', function (evt) {
-            var button = evt.target, $parent = $(button).parent();
-            if ('show' === button.dataset.action) {
-                button.dataset.action = 'hide';
-                button.innerText = _this.settings.get('hideFilters');
-                $parent.next().slideDown()
-                    .closest('.filters-container-box').next().children('.btn').removeClass('hidden-sm');
-            }
-            else {
-                button.dataset.action = 'show';
-                button.innerText = _this.settings.get('showFilters');
-                $parent.next().slideUp()
-                    .closest('.filters-container-box').next().children('.btn').addClass('hidden-sm');
-            }
-        });
-    }
-    return ShowFilters;
-}());
-/* harmony default export */ __webpack_exports__["default"] = (ShowFilters);
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
@@ -7723,9 +7682,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 			var s7 = new Date();
 			
 			if (_settings.enableDnd) {
-				$(document).on("mousedown", dragStart);
-				$(document).on("mousemove", drag);
-				$(document).on("mouseup", dragEnd);
+				$(document).on('mousedown', dragStart);
+				$(document).on('mousemove', drag);
+				$(document).on('mouseup', dragEnd);
 			}
 			
 			var s8 = new Date();

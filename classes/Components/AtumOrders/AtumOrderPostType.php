@@ -174,7 +174,7 @@ abstract class AtumOrderPostType {
 	public function register_post_type( $args = array() ) {
 
 		// Minimum capability required.
-		$read_capability = isset( $this->capabilities['read_post'] ) ? $this->capabilities['read_post'] : 'manage_woocommerce';
+		$read_capability = $this->capabilities['read_post'] ?? 'manage_woocommerce';
 		$is_user_allowed = current_user_can( $read_capability );
 		$main_menu_item  = Main::get_main_menu_item();
 		$post_type       = static::POST_TYPE;
@@ -426,7 +426,7 @@ abstract class AtumOrderPostType {
 				if ( ! is_wp_error( $atum_order ) ) {
 
 					$status        = $atum_order->get_status();
-					$status_name   = isset( $statuses[ $status ] ) ? $statuses[ $status ] : __( '(Unknown)', ATUM_TEXT_DOMAIN );
+					$status_name   = $statuses[ $status ] ?? __( '(Unknown)', ATUM_TEXT_DOMAIN );
 					$status_color  = ' style="background-color: ';
 					$status_color .= isset( $status_colors[ $status ] ) ? $status_colors[ $status ] . '"' : 'rgba(255,72,72,.5)"';
 
@@ -538,7 +538,7 @@ abstract class AtumOrderPostType {
 
 							$actions['complete'] = array(
 								'url'    => wp_nonce_url( admin_url( 'admin-ajax.php?action=atum_order_mark_status&status=' . static::FINISHED . "&atum_order_id=$post->ID" ), 'atum-order-mark-status' ),
-								/* translators: Change the order's status to finished */
+								/* translators: Change the order's status to "finished" */
 								'name'   => sprintf( __( 'Mark as %s', ATUM_TEXT_DOMAIN ), $statuses[ static::FINISHED ] ),
 								'action' => 'complete',
 								'target' => '_self',
@@ -983,7 +983,7 @@ abstract class AtumOrderPostType {
 					'deleteTaxNotice'           => __( 'Are you sure you wish to delete this tax column? This action cannot be undone.', ATUM_TEXT_DOMAIN ),
 					'done'                      => __( 'Done!', ATUM_TEXT_DOMAIN ),
 					// Disable order item selection for only PO when WC version >= 3.5.0.
-					'enableSelectItems'         => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type ? TRUE : FALSE,
+					'enableSelectItems'         => version_compare( WC()->version, '3.5.0', '<' ) || PurchaseOrders::POST_TYPE !== $post_type,
 					'error'                     => __( 'Error!', ATUM_TEXT_DOMAIN ),
 					'importOrderItemsIL'        => __( 'Do you want to import all the items within the selected order into this Inventory Log?', ATUM_TEXT_DOMAIN ),
 					'importOrderItemsPO'        => __( 'Do you want to import all the items within the selected order into this Purchase Order?', ATUM_TEXT_DOMAIN ),
@@ -993,7 +993,7 @@ abstract class AtumOrderPostType {
 					'metaPlaceholderValue'      => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
 					'no'                        => __( 'No', ATUM_TEXT_DOMAIN ),
 					'ok'                        => __( 'OK', ATUM_TEXT_DOMAIN ),
-					'postId'                    => isset( $post->ID ) ? $post->ID : '',
+					'postId'                    => $post->ID ?? '',
 					'priceDecimalSep'           => wc_get_price_decimal_separator(),
 					'priceNumDecimals'          => wc_get_price_decimals(),
 					'purchasePriceChanged'      => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
@@ -1028,10 +1028,7 @@ abstract class AtumOrderPostType {
 				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', $js_dependencies, ATUM_VERSION, TRUE );
 
 				$vars = array(
-					'hideFilters'       => __( 'Hide', ATUM_TEXT_DOMAIN ),
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
-					'showFilters'       => __( 'Show', ATUM_TEXT_DOMAIN ),
-					'showFiltersButton' => Helpers::load_view_to_string( 'list-tables/show-filters-button' ),
 				);
 
 				if ( $this->help_guide ) {

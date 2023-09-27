@@ -417,7 +417,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Remove _out_stock_threshold columns if not set, or add filters to get availability etc.
-		$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
+		$is_out_stock_threshold_managed = ! ( 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) );
 
 		if ( ! $is_out_stock_threshold_managed ) {
 
@@ -448,7 +448,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		}
 
-		$this->per_page = isset( $args['per_page'] ) ? $args['per_page'] : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
+		$this->per_page = $args['per_page'] ?? Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE );
 		$post_type_obj  = get_post_type_object( $this->post_type );
 
 		if ( ! $post_type_obj ) {
@@ -505,13 +505,9 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( 'top' === $which ) : ?>
 
-			<?php Helpers::load_view( 'list-tables/show-filters-button' ); ?>
-
 			<div class="alignleft actions">
 				<div class="actions-wrapper">
-
 					<?php $this->table_nav_filters() ?>
-
 				</div>
 			</div>
 
@@ -1680,7 +1676,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if ( $this->list_item->managing_stock() ) {
 
 			// Setings value is enabled?
-			$is_out_stock_threshold_managed = 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ? FALSE : TRUE;
+			$is_out_stock_threshold_managed = ! ( 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) );
 
 			if ( $is_out_stock_threshold_managed ) {
 
@@ -2466,7 +2462,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		/**
 		 * REQUIRED. Register our pagination options & calculations
 		 */
-		$found_posts = isset( $this->count_views['count_all'] ) ? $this->count_views['count_all'] : 0;
+		$found_posts = $this->count_views['count_all'] ?? 0;
 
 		if ( ! empty( $_REQUEST['view'] ) ) {
 
@@ -3416,7 +3412,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			'editLocationsInfo'              => __( 'Click on the location icons to switch the states. Locations marked with blue icons will be set and with gray icons will be unset.', ATUM_TEXT_DOMAIN ),
 			'editProductLocations'           => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
 			'from'                           => __( 'From', ATUM_TEXT_DOMAIN ),
-			'hideFilters'                    => __( 'Hide', ATUM_TEXT_DOMAIN ),
 			'listUrl'                        => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
 			'locationsSaved'                 => __( 'Locations saved successfully', ATUM_TEXT_DOMAIN ),
 			'newSupplier'                    => __( 'New Supplier', ATUM_TEXT_DOMAIN ),
@@ -3424,8 +3419,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'noActions'                      => __( 'No actions', ATUM_TEXT_DOMAIN ),
 			'nonce'                          => wp_create_nonce( 'atum-list-table-nonce' ),
 			'ok'                             => __( 'OK', ATUM_TEXT_DOMAIN ),
-			'order'                          => isset( $this->_pagination_args['order'] ) ? $this->_pagination_args['order'] : '',
-			'orderby'                        => isset( $this->_pagination_args['orderby'] ) ? $this->_pagination_args['orderby'] : '',
+			'order'                          => $this->_pagination_args['order'] ?? '',
+			'orderby'                        => $this->_pagination_args['orderby'] ?? '',
 			'perPage'                        => $this->per_page,
 			'productLocations'               => __( 'Product Locations', ATUM_TEXT_DOMAIN ),
 			'rowActions'                     => self::$row_actions,
@@ -3438,7 +3433,6 @@ abstract class AtumListTable extends \WP_List_Table {
 			'setValue'                       => __( 'Set the %% value', ATUM_TEXT_DOMAIN ),
 			'selectSetValue'                 => __( 'Set %%', ATUM_TEXT_DOMAIN ),
 			'showCb'                         => $this->show_cb,
-			'showFilters'                    => __( 'Show', ATUM_TEXT_DOMAIN ),
 			'stickyColumns'                  => $this->sticky_columns,
 			'stickyColumnsNonce'             => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
 			'supplierNameRequired'           => __( 'create supplier', ATUM_TEXT_DOMAIN ),

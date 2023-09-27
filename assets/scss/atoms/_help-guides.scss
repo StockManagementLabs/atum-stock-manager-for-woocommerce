@@ -559,6 +559,11 @@ tr.introjs-showElement {
 		}
 		
 	}
+	
+	@include mobile-max {
+		margin-top: 0;
+	}
+	
 }
 
 body {

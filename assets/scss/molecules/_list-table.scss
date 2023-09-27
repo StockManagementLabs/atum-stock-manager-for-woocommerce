@@ -617,13 +617,8 @@
 	.actions {
 		white-space: nowrap;
 		
-		.show-filters {
-			display: none;
-		}
-		
 		@include mobile-max {
 			white-space: inherit;
-			
 		}
 		
 		&.bulkactions {
@@ -643,38 +638,6 @@
 					margin-top: 10px !important;
 				}
 			}
-		}
-		
-	}
-	
-	.show-filters-wrapper {
-		display: none;
-		width: 100%;
-		margin-top: 15px;
-		font-size: 15px;
-		
-		.btn {
-			font-size: 15px;
-		}
-		
-		@include mobile-max {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			
-			> span {
-				text-transform: uppercase;
-			}
-			
-			+ .actions {
-				margin-top: 15px;
-				
-				.select2-container {
-					margin-bottom: 10px;
-				}
-			}
-			
-			
 		}
 		
 	}
@@ -1446,9 +1409,16 @@
 			display: flex;
 			width: 100%;
 			
-			.table-style-buttons button {
-				width: 44px;
-				height: 44px;
+			.table-style-buttons {
+				button {
+					width: 44px;
+					height: 44px;
+					
+					.atmi-wc-expand {
+						font-size: 19px;
+						top: 1px;
+					}
+				}
 			}
 			
 			> .input-group {

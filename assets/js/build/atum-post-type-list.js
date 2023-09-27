@@ -1245,8 +1245,6 @@ var Globals = (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _active_row__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_active-row */ "./assets/js/src/components/list-table/_active-row.ts");
-/* harmony import */ var _show_filters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./_show-filters */ "./assets/js/src/components/list-table/_show-filters.ts");
-
 
 var PostTypeList = (function () {
     function PostTypeList(settings, globals, enhancedSelect) {
@@ -1263,8 +1261,6 @@ var PostTypeList = (function () {
             .append($('.search-box'))
             .addClass('no-margin')
             .prependTo($('form#posts-filter'));
-        this.$topTableNav.find('.bulkactions').after(this.settings.get('showFiltersButton'));
-        this.showFilters = new _show_filters__WEBPACK_IMPORTED_MODULE_1__["default"](this.$topTableNav, this.settings);
         $('.wp-heading-inline').append($('.page-title-action').show());
         $('#posts-filter').prepend($('.list-table-header'));
         $('#post-query-submit').attr('class', 'btn btn-warning');
@@ -1362,44 +1358,6 @@ var ScrollBar = (function () {
     return ScrollBar;
 }());
 /* harmony default export */ __webpack_exports__["default"] = (ScrollBar);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
-
-/***/ }),
-
-/***/ "./assets/js/src/components/list-table/_show-filters.ts":
-/*!**************************************************************!*\
-  !*** ./assets/js/src/components/list-table/_show-filters.ts ***!
-  \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {var ShowFilters = (function () {
-    function ShowFilters($wrapper, settings) {
-        var _this = this;
-        this.$wrapper = $wrapper;
-        this.settings = settings;
-        this.$wrapper.on('click', '.show-filters', function (evt) {
-            var button = evt.target, $parent = $(button).parent();
-            if ('show' === button.dataset.action) {
-                button.dataset.action = 'hide';
-                button.innerText = _this.settings.get('hideFilters');
-                $parent.next().slideDown()
-                    .closest('.filters-container-box').next().children('.btn').removeClass('hidden-sm');
-            }
-            else {
-                button.dataset.action = 'show';
-                button.innerText = _this.settings.get('showFilters');
-                $parent.next().slideUp()
-                    .closest('.filters-container-box').next().children('.btn').addClass('hidden-sm');
-            }
-        });
-    }
-    return ShowFilters;
-}());
-/* harmony default export */ __webpack_exports__["default"] = (ShowFilters);
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
 
