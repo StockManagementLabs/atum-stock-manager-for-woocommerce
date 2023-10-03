@@ -147,6 +147,7 @@ span {
 		color: var(--main-text);
 		margin-left: 3px;
 		text-indent: 0 !important; // In case jQuery UI CSS is loaded
+		background-image: none !important; // In case jQuery UI CSS is loaded
 		
 		// Multi-Inventory support
 		&.atmi-multi-inventory {

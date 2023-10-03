@@ -4257,6 +4257,7 @@ span.easytree-custom-icon {
   color: var(--main-text);
   margin-left: 3px;
   text-indent: 0 !important;
+  background-image: none !important;
 }
 span.easytree-custom-icon.atmi-multi-inventory:before {
   -webkit-box-ordinal-group: 3;
