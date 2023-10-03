@@ -132,9 +132,9 @@ body {
 		
 	}
 	
-	.select2-dropdown {
+	span.select2-dropdown {
 		&.atum-select2-dropdown {
-			box-shadow: $dropdown-box-shadow;
+			box-shadow: $dropdown-box-shadow !important;  // Fix: added important to override WP admin CSS.
 			background-color: var(--atum-table-bg) !important;
 			border: 1px solid var(--gray-500);
 			border-radius: 4px;
@@ -543,7 +543,7 @@ body {
 				
 				.select2-results__option--highlighted {
 					color: var(--white) !important;
-					background-color: var(--atum-menu-text-highlight);
+					background-color: var(--atum-menu-text-highlight) !important; // Fix: added important to override WP admin CSS.
 				}
 				
 				.select2-results__option {
