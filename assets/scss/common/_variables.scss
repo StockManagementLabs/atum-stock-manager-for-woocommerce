@@ -358,7 +358,7 @@ $input-border-color:                    $gray-400 !default;
 $input-border-width:                    $input-btn-border-width !default;
 $input-box-shadow:                      inset 0 1px 1px rgba($black, .075) !default;
 
-$input-border-radius:                   $border-radius !default;
+$input-border-radius:                   4px !default;
 $input-border-radius-lg:                $border-radius-lg !default;
 $input-border-radius-sm:                $border-radius-sm !default;
 
@@ -561,7 +561,6 @@ $input-border-width:                    1px !default;
 $input-padding-y:                       .375rem !default;
 $input-padding-x:                       .75rem !default;
 $input-line-height:                     $input-btn-line-height !default;
-$input-border-radius:                   4px;
 $input-focus:                           $wp-input-focus !default;
 $input-group-addon-color:               $gray-600;
 $input-group-addon-bg:                  $blue-light;

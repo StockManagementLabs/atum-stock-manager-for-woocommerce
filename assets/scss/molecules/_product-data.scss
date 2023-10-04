@@ -41,7 +41,7 @@
 	.atum-field {
 		
 		.input-group-prepend {
-			@include border-left-radius(4px);
+			@include border-left-radius($input-border-radius);
 			
 			&.focus {
 				box-shadow: 0 0 0 1px $input-focus;
@@ -50,7 +50,6 @@
 		
 		.input-group-text {
 			padding: 4px 7px;
-			height: 20px;
 			
 			@media all and #{$bp-sm-max-wp} {
 				height: 30px; // The WC fields are higher for smaller screens.

@@ -6,7 +6,7 @@
 	position: relative;
 	display: flex;
 	flex-wrap: nowrap;
-	align-items: center;
+	align-items: stretch;
 	width: 100%;
 	
 	> .form-control,
@@ -17,6 +17,7 @@
 		// Add width 1% and flex-basis auto to ensure that button will not wrap out
 		// the column. Applies to IE Edge+ and Firefox. Chrome does not require this.
 		width: 1%;
+		min-width: 0;
 		margin-bottom: 0;
 		
 		// Bring the "active" form control to the top of surrounding elements
@@ -68,11 +69,10 @@
 			z-index: 0;
 			
 			.select2-selection--single {
-				border-bottom-left-radius: 0;
-				border-top-left-radius: 0;
-				border-bottom-right-radius: $input-border-radius;
-				border-top-right-radius: $input-border-radius;
+				@include border-left-radius(0);
+				@include border-right-radius($input-border-radius);
 			}
+			
 		}
 		
 	}
@@ -213,7 +213,7 @@
 	
 	input {
 		width: auto !important;
-		@include border-left-radius(4px);
+		@include border-left-radius($input-border-radius);
 		@include border-right-radius(0);
 		z-index: 2;
 		
@@ -225,12 +225,12 @@
 	
 	.input-group-append {
 		margin-left: -1px;
-		@include border-right-radius(4px);
+		@include border-right-radius($input-border-radius);
 		cursor: pointer;
 		
 		.input-group-text {
 			background-color: $gray-200;
-			@include border-right-radius(3px !important);
+			@include border-right-radius($input-border-radius !important);
 			transition: .2s ease-in-out;
 			
 			&:not(.active) {
