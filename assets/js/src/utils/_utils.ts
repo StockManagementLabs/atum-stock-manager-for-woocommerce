@@ -514,6 +514,21 @@ const Utils = {
 	},
 
 	/**
+	 * Count number of decimals
+	 *
+	 * @param {number} amount
+	 *
+	 * @return number
+	 */
+	countDecimals( amount: number ): number {
+		if ( Math.floor( amount ) === amount ) {
+			return 0;
+		}
+
+		return amount.toString().split( '.' )[ 1 ].length || 0;
+	},
+
+	/**
 	 * Check the parameter is numeric
 	 * NOTE: Previously we were using the jQuery.isNumeric() function but has been deprecated
 	 *
