@@ -328,7 +328,7 @@ const Utils = {
 		number = this.unformat( number );
 
 		const usePrecision = this.checkPrecision( precision ), // Clean up precision.
-		      negative     = number < 0 ? '-' : '', // Do some calc.
+		      negative     = <number> number < 0 ? '-' : '', // Do some calc.
 		      base         = parseInt( this.toFixed( Math.abs( <number> number || 0 ), usePrecision ), 10 ) + '',
 		      mod          = base.length > 3 ? base.length % 3 : 0;
 
@@ -380,7 +380,7 @@ const Utils = {
 		number = this.unformat( number );
 
 		const formats   = this.checkCurrencyFormat( format ), // Check format (returns object with pos, neg and zero).
-		      useFormat = number > 0 ? formats.pos : number < 0 ? formats.neg : formats.zero; // Choose which format to use for this value.
+		      useFormat = <number>number > 0 ? formats.pos : <number>number < 0 ? formats.neg : formats.zero; // Choose which format to use for this value.
 
 		// Return with currency symbol added.
 		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( precision ), thousand, decimal ) );

@@ -3017,7 +3017,7 @@ input.form-check-input {
      -moz-appearance: none;
           appearance: none;
   -webkit-print-color-adjust: exact;
-          color-adjust: exact;
+          print-color-adjust: exact;
 }
 input.form-check-input[type=checkbox] {
   border-radius: 0.25em;

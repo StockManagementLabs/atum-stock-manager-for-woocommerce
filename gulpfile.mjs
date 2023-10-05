@@ -1,26 +1,34 @@
 // Load all the modules from package.json
-var gulp          = require('gulp'),
-    plumber       = require('gulp-plumber'),
-    gulpif        = require('gulp-if'),
-    livereload    = require('gulp-livereload'),
-    notify        = require('gulp-notify'),
-    wrap          = require('gulp-wrap'),
-    autoprefix    = require('gulp-autoprefixer'),
-    sass          = require('gulp-sass')(require('sass')),
-    sourcemaps    = require('gulp-sourcemaps'),
-    composer      = require('gulp-composer'),
-    filter        = require('gulp-filter'),
-    cleanDir      = require('gulp-clean-dir'),
-    webpack       = require('webpack'),
-    webpackStream = require('webpack-stream'),
-	path          = require('path');
+import gulp from 'gulp';
+const { task, src, dest, watch, series } = gulp;
+
+import plumber from 'gulp-plumber';
+import gulpif from 'gulp-if';
+import livereload from 'gulp-livereload';
+//import notify from 'gulp-notify';
+import wrap from 'gulp-wrap';
+import autoprefix from 'gulp-autoprefixer';
+import sourcemaps from 'gulp-sourcemaps';
+import composer from 'gulp-composer';
+import filter from 'gulp-filter';
+import cleanDir from 'gulp-clean-dir';
+import webpack from 'webpack';
+import webpackStream from 'webpack-stream';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import * as dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+const sass = gulpSass(dartSass);
 
 // Plugin version
-var version = '1.9.33',
+const version = '1.9.33',
     curDate = new Date();
 
 // Global config
-var config = {
+const config = {
 	
 	assetsDir : './assets',
 	jsSrcDir  : path.join(__dirname, './assets/js/src/'),
@@ -47,21 +55,21 @@ var config = {
 };
 
 // CLI options
-var enabled = {
+const enabled = {
 	// Disable source maps when `--production`
 	maps: !config.production,
 };
 
 
 // Default error handler
-var onError = function (err) {
+const onError = (err) => {
 	console.log('An error occured:', err.message);
 	this.emit('end');
 }
 
 // As with javascripts this task creates two files, the regular and
 // the minified one. It automatically reloads browser as well.
-var options = {
+const options = {
 
 	sass: {
 		errLogToConsole: !config.production,
@@ -80,37 +88,36 @@ var options = {
 // SASS task
 //-----------
 
-gulp.task('sass::atum', function () {
-
-	var destDir = config.assetsDir + '/css';
+task('sass::atum', () => {
 	
-	return gulp.src([
-			config.assetsDir + '/scss/*.scss',
-			config.assetsDir + '/scss/rtl/*.scss',
-		])
-		.pipe(plumber({errorHandler: onError}))
-		.pipe(gulpif(enabled.maps, sourcemaps.init()))
-		.pipe(sass(options.sass))
-		.pipe(autoprefix('last 2 version'))
-		.pipe(wrap(config.decorate.templateCSS))
-		.pipe(gulpif(enabled.maps, sourcemaps.write('.', {
-			sourceRoot: 'assets/scss/',
-			sourceRoot: 'assets/scss/rtl/',
-		})))
-		.pipe(cleanDir(destDir))
-		.pipe(gulp.dest(destDir))
-		//.pipe(notify({message: 'sass task complete'}))
-		.pipe(filter("**/*.css"))
-		.pipe(livereload());
-
+	const destDir = config.assetsDir + '/css';
+	
+	return src([
+		config.assetsDir + '/scss/*.scss',
+		config.assetsDir + '/scss/rtl/*.scss',
+	])
+	.pipe(plumber({errorHandler: onError}))
+	.pipe(gulpif(enabled.maps, sourcemaps.init()))
+	.pipe(sass(options.sass))
+	.pipe(autoprefix('last 2 version'))
+	.pipe(wrap(config.decorate.templateCSS))
+	.pipe(gulpif(enabled.maps, sourcemaps.write('.', {
+		sourceRoot: ['assets/scss/', 'assets/scss/rtl/'],
+	})))
+	.pipe(cleanDir(destDir))
+	.pipe(dest(destDir))
+	//.pipe(notify({message: 'sass task complete'}))
+	.pipe(filter("**/*.css"))
+	.pipe(livereload());
+	
 });
 
 //
 // JS task
 //----------
 
-gulp.task('js::atum', function () {
-	return gulp.src(config.assetsDir + '/js/**/*.js')
+task('js::atum', () => {
+	return src(config.assetsDir + '/js/**/*.js')
 		// .pipe(webpackStream({
 		//   config: require('./webpack.config.js')
 		// }, webpack))
@@ -178,7 +185,10 @@ gulp.task('js::atum', function () {
 				
 				// Fixes warning in moment-with-locales.min.js
 				// Module not found: Error: Can't resolve './locale' in ...
-				new webpack.IgnorePlugin(/\.\/locale$/),
+				new webpack.IgnorePlugin({
+					resourceRegExp: /^\.\/locale$/,
+					contextRegExp: /moment/,
+				}),
 				
 				// Provide jQuery globally instead of having to import it everywhere.
 				new webpack.ProvidePlugin({
@@ -190,14 +200,14 @@ gulp.task('js::atum', function () {
 			
 		}, webpack))
 		.pipe(cleanDir(config.assetsDir + '/js/build/'))
-		.pipe(gulp.dest(config.assetsDir + '/js/build/'));
+		.pipe(dest(config.assetsDir + '/js/build/'));
 });
 
 //
 // Composer packages installation
 // ------------------------------
 
-gulp.task('composer::install', function ( done ) {
+task('composer::install', ( done ) => {
 	// Installation + optimization
 	composer({
 		cwd: '.',
@@ -207,7 +217,7 @@ gulp.task('composer::install', function ( done ) {
 	done();
 });
 
-gulp.task('composer::update', function ( done ) {
+task('composer::update', ( done ) => {
 	// Update + optinmization
 	composer('update', {
 		cwd: '.',
@@ -217,7 +227,7 @@ gulp.task('composer::update', function ( done ) {
 	done();
 });
 
-gulp.task('composer::optimize', function ( done ) {
+task('composer::optimize', ( done ) => {
 	// Just optimization (classmap autoloader array generation)
 	composer('dumpautoload', {
 		cwd     : '.',
@@ -232,14 +242,14 @@ gulp.task('composer::optimize', function ( done ) {
 // Start the livereload server and watch files for changes
 // -------------------------------------------------------
 
-gulp.task('watch::atum', function () {
+task('watch::atum', () => {
 
 	livereload.listen();
 
-	gulp.watch(config.assetsDir + '/scss/**/*.scss', gulp.series(['sass::atum']));
-	gulp.watch(config.jsSrcDir + '**/*.ts', gulp.series(['js::atum']));
+	watch(config.assetsDir + '/scss/**/*.scss', series(['sass::atum']));
+	watch(config.jsSrcDir + '**/*.ts', series(['js::atum']));
 
-	gulp.watch([
+	watch([
 
 		// PHP files
 		'./**/*.php',
@@ -251,13 +261,13 @@ gulp.task('watch::atum', function () {
 		'!' + config.assetsDir + '/js/build/**/*.js',
 		'!node_modules',
 
-	]).on('change', function (file) {
+	]).on('change', (file) => {
 		// reload browser whenever any PHP, SCSS, JS or image file changes
 		livereload.changed(file);
 	});
 });
 
 // Default task
-gulp.task('default', gulp.series(['sass::atum', 'js::atum']), function () {
+task('default', series(['sass::atum', 'js::atum']), () => {
 	
 });

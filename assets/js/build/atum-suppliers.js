@@ -1,331 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./assets/js/src/suppliers.ts");
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ "./assets/js/src/components/_enhanced-select.ts":
-/*!******************************************************!*\
-  !*** ./assets/js/src/components/_enhanced-select.ts ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var EnhancedSelect = (function () {
-    function EnhancedSelect($selects) {
-        if ($selects === void 0) { $selects = null; }
-        var _this = this;
-        this.addAtumClasses($selects);
-        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
-    }
-    EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
-        $('.select2-container--open').remove();
-        $('body').trigger('wc-enhanced-select-init');
-    };
-    EnhancedSelect.prototype.doSelect2 = function ($selector, options, avoidEmptySelections) {
-        var _this = this;
-        if (options === void 0) { options = {}; }
-        if (avoidEmptySelections === void 0) { avoidEmptySelections = false; }
-        if (typeof $.fn['select2'] !== 'function') {
-            return;
-        }
-        options = Object.assign({
-            minimumResultsForSearch: 10,
-        }, options);
-        $selector.each(function (index, elem) {
-            var $select = $(elem), selectOptions = __assign({}, options);
-            if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
-                $select.prop('multiple', true);
-            }
-            if (!$select.hasClass('atum-select2')) {
-                $select.addClass('atum-select2');
-                _this.addAtumClasses($select);
-            }
-            if (avoidEmptySelections) {
-                $select.on('select2:selecting', function (evt) {
-                    var $select = $(evt.currentTarget), value = $select.val();
-                    if (Array.isArray(value) && ($.inArray('', value) > -1 || $.inArray('-1', value) > -1)) {
-                        $.each(value, function (index, elem) {
-                            if (elem === '' || elem === '-1') {
-                                value.splice(index, 1);
-                            }
-                        });
-                        $select.val(value);
-                    }
-                });
-            }
-            $select.select2(selectOptions);
-            $select.siblings('.select2-container').addClass('atum-select2');
-            _this.maybeAddTooltip($select);
-        });
-    };
-    EnhancedSelect.prototype.addAtumClasses = function ($selects) {
-        var _this = this;
-        if ($selects === void 0) { $selects = null; }
-        $selects = $selects || $('select').filter('.atum-select2, .atum-enhanced-select');
-        if (!$selects.length) {
-            return;
-        }
-        $selects
-            .each(function (index, elem) {
-            var $select = $(elem), $select2Container = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select');
-            if ($select2Container.length) {
-                $select2Container.addClass($select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select');
-                _this.maybeAddTooltip($select);
-            }
-        })
-            .on('select2:opening', function (evt) {
-            var $select = $(evt.currentTarget), select2Data = $select.data();
-            if (select2Data.hasOwnProperty('select2')) {
-                var $dropdown = select2Data.select2.dropdown.$dropdown;
-                if ($dropdown.length) {
-                    $dropdown.addClass('atum-select2-dropdown');
-                }
-            }
-        });
-    };
-    EnhancedSelect.prototype.maybeAddTooltip = function ($select) {
-        if ($select.hasClass('atum-tooltip')) {
-            var $select2Rendered = $select.siblings('.select2-container').find('.select2-selection__rendered');
-            $select2Rendered.addClass('atum-tooltip');
-        }
-    };
-    return EnhancedSelect;
-}());
-/* harmony default export */ __webpack_exports__["default"] = (EnhancedSelect);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
-
-/***/ }),
-
-/***/ "./assets/js/src/components/suppliers/_supplier.ts":
-/*!*********************************************************!*\
-  !*** ./assets/js/src/components/suppliers/_supplier.ts ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {var Supplier = (function () {
-    function Supplier(settings, enhancedSelect) {
-        this.settings = settings;
-        this.enhancedSelect = enhancedSelect;
-        this.bindEvents();
-        if (undefined !== this.settings.get('wpmlActive') && '1' === this.settings.get('wpmlActive')) {
-            this.initWpml();
-        }
-    }
-    Supplier.prototype.bindEvents = function () {
-        $('.default-checkbox').change(function (evt) {
-            var $checkbox = $(evt.currentTarget), $relatedInput = $checkbox.closest('.form-field').children(':input').not($checkbox);
-            $relatedInput.toggle(!$checkbox.is(':checked'));
-        });
-    };
-    Supplier.prototype.initWpml = function () {
-        var _this = this;
-        var $select = $('#wpml_lang');
-        var addFlag = function (state, $element) {
-            if (!state.id) {
-                return state.text;
-            }
-            return _this.genLangOptionsContent($(state.element));
-        };
-        this.enhancedSelect.doSelect2($select, {
-            templateResult: addFlag,
-        });
-        $select.on('select2:select', function (evt) {
-            $('#select2-wpml_lang-container').html(_this.genLangOptionsContent($select.find(':selected')).html());
-        });
-        $('#select2-wpml_lang-container').html(this.genLangOptionsContent($select.find(':selected')).html());
-    };
-    Supplier.prototype.genLangOptionsContent = function ($option) {
-        var flag = $option.data('flag'), $state = $("<span class=\"".concat(flag.code, "\"><img src=\"").concat(flag.flag_url, " \" alt=\"").concat(flag.flag_alt, "\" class=\"").concat($option.data('flagClasses'), "\"/> <span>").concat($option.text(), "</span></span>")), $img = $state.find('img');
-        if (flag.flag_width) {
-            $img.width(flag.flag_width);
-        }
-        if (flag.flag_height) {
-            $img.height(flag.flag_height);
-        }
-        return $state;
-    };
-    return Supplier;
-}());
-/* harmony default export */ __webpack_exports__["default"] = (Supplier);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
-
-/***/ }),
-
-/***/ "./assets/js/src/config/_settings.ts":
-/*!*******************************************!*\
-  !*** ./assets/js/src/config/_settings.ts ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var Settings = (function () {
-    function Settings(varName, defaults) {
-        if (defaults === void 0) { defaults = {}; }
-        this.varName = varName;
-        this.defaults = defaults;
-        this.settings = {};
-        var localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
-        Object.assign(this.settings, defaults, localizedOpts);
-    }
-    Settings.prototype.get = function (prop) {
-        if (typeof this.settings[prop] !== 'undefined') {
-            return this.settings[prop];
-        }
-        return undefined;
-    };
-    Settings.prototype.getAll = function () {
-        return this.settings;
-    };
-    Settings.prototype.delete = function (prop) {
-        if (this.settings.hasOwnProperty(prop)) {
-            delete this.settings[prop];
-        }
-    };
-    return Settings;
-}());
-/* harmony default export */ __webpack_exports__["default"] = (Settings);
-
-
-/***/ }),
-
-/***/ "./assets/js/src/suppliers.ts":
-/*!************************************!*\
-  !*** ./assets/js/src/suppliers.ts ***!
-  \************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var _vendor_select2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../vendor/select2 */ "./assets/js/vendor/select2.js");
-/* harmony import */ var _vendor_select2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vendor_select2__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* harmony import */ var _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/suppliers/_supplier */ "./assets/js/src/components/suppliers/_supplier.ts");
-/* harmony import */ var _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
-
-
-
-
-jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumSupplierVars'), enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]();
-    new _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__["default"](settings, enhancedSelect);
-});
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
-
-/***/ }),
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./assets/js/vendor/select2.js":
 /*!*************************************!*\
   !*** ./assets/js/vendor/select2.js ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, exports, __webpack_require__) => {
 
-/* WEBPACK VAR INJECTION */(function($) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * Select2 4.0.13
  * https://select2.github.io
  *
@@ -336,9 +19,9 @@ jQuery(function ($) {
 	if (true) {
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "jquery")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else {}
 } (function (jQuery) {
 	// This is needed so we can catch the AMD loader configuration and use it
@@ -6416,7 +6099,217 @@ jQuery(function ($) {
 	return select2;
 }));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "jquery")))
+
+/***/ }),
+
+/***/ "./assets/js/src/components/_enhanced-select.ts":
+/*!******************************************************!*\
+  !*** ./assets/js/src/components/_enhanced-select.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var EnhancedSelect = (function () {
+    function EnhancedSelect($selects) {
+        var _this = this;
+        if ($selects === void 0) { $selects = null; }
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
+    }
+    EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
+        $('.select2-container--open').remove();
+        $('body').trigger('wc-enhanced-select-init');
+    };
+    EnhancedSelect.prototype.doSelect2 = function ($selector, options, avoidEmptySelections) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        if (avoidEmptySelections === void 0) { avoidEmptySelections = false; }
+        if (typeof $.fn['select2'] !== 'function') {
+            return;
+        }
+        options = Object.assign({
+            minimumResultsForSearch: 10,
+        }, options);
+        $selector.each(function (index, elem) {
+            var $select = $(elem), selectOptions = __assign({}, options);
+            if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
+                $select.prop('multiple', true);
+            }
+            if (!$select.hasClass('atum-select2')) {
+                $select.addClass('atum-select2');
+                _this.addAtumClasses($select);
+            }
+            if (avoidEmptySelections) {
+                $select.on('select2:selecting', function (evt) {
+                    var $select = $(evt.currentTarget), value = $select.val();
+                    if (Array.isArray(value) && ($.inArray('', value) > -1 || $.inArray('-1', value) > -1)) {
+                        $.each(value, function (index, elem) {
+                            if (elem === '' || elem === '-1') {
+                                value.splice(index, 1);
+                            }
+                        });
+                        $select.val(value);
+                    }
+                });
+            }
+            $select.select2(selectOptions);
+            $select.siblings('.select2-container').addClass('atum-select2');
+            _this.maybeAddTooltip($select);
+        });
+    };
+    EnhancedSelect.prototype.addAtumClasses = function ($selects) {
+        var _this = this;
+        if ($selects === void 0) { $selects = null; }
+        $selects = $selects || $('select').filter('.atum-select2, .atum-enhanced-select');
+        if (!$selects.length) {
+            return;
+        }
+        $selects
+            .each(function (index, elem) {
+            var $select = $(elem), $select2Container = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select');
+            if ($select2Container.length) {
+                $select2Container.addClass($select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select');
+                _this.maybeAddTooltip($select);
+            }
+        })
+            .on('select2:opening', function (evt) {
+            var $select = $(evt.currentTarget), select2Data = $select.data();
+            if (select2Data.hasOwnProperty('select2')) {
+                var $dropdown = select2Data.select2.dropdown.$dropdown;
+                if ($dropdown.length) {
+                    $dropdown.addClass('atum-select2-dropdown');
+                }
+            }
+        });
+    };
+    EnhancedSelect.prototype.maybeAddTooltip = function ($select) {
+        if ($select.hasClass('atum-tooltip')) {
+            var $select2Rendered = $select.siblings('.select2-container').find('.select2-selection__rendered');
+            $select2Rendered.addClass('atum-tooltip');
+        }
+    };
+    return EnhancedSelect;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EnhancedSelect);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/suppliers/_supplier.ts":
+/*!*********************************************************!*\
+  !*** ./assets/js/src/components/suppliers/_supplier.ts ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var Supplier = (function () {
+    function Supplier(settings, enhancedSelect) {
+        this.settings = settings;
+        this.enhancedSelect = enhancedSelect;
+        this.bindEvents();
+        if (undefined !== this.settings.get('wpmlActive') && '1' === this.settings.get('wpmlActive')) {
+            this.initWpml();
+        }
+    }
+    Supplier.prototype.bindEvents = function () {
+        $('.default-checkbox').change(function (evt) {
+            var $checkbox = $(evt.currentTarget), $relatedInput = $checkbox.closest('.form-field').children(':input').not($checkbox);
+            $relatedInput.toggle(!$checkbox.is(':checked'));
+        });
+    };
+    Supplier.prototype.initWpml = function () {
+        var _this = this;
+        var $select = $('#wpml_lang');
+        var addFlag = function (state, $element) {
+            if (!state.id) {
+                return state.text;
+            }
+            return _this.genLangOptionsContent($(state.element));
+        };
+        this.enhancedSelect.doSelect2($select, {
+            templateResult: addFlag,
+        });
+        $select.on('select2:select', function (evt) {
+            $('#select2-wpml_lang-container').html(_this.genLangOptionsContent($select.find(':selected')).html());
+        });
+        $('#select2-wpml_lang-container').html(this.genLangOptionsContent($select.find(':selected')).html());
+    };
+    Supplier.prototype.genLangOptionsContent = function ($option) {
+        var flag = $option.data('flag'), $state = $("<span class=\"".concat(flag.code, "\"><img src=\"").concat(flag.flag_url, " \" alt=\"").concat(flag.flag_alt, "\" class=\"").concat($option.data('flagClasses'), "\"/> <span>").concat($option.text(), "</span></span>")), $img = $state.find('img');
+        if (flag.flag_width) {
+            $img.width(flag.flag_width);
+        }
+        if (flag.flag_height) {
+            $img.height(flag.flag_height);
+        }
+        return $state;
+    };
+    return Supplier;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Supplier);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_settings.ts":
+/*!*******************************************!*\
+  !*** ./assets/js/src/config/_settings.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var Settings = (function () {
+    function Settings(varName, defaults) {
+        if (defaults === void 0) { defaults = {}; }
+        this.varName = varName;
+        this.defaults = defaults;
+        this.settings = {};
+        var localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
+        Object.assign(this.settings, defaults, localizedOpts);
+    }
+    Settings.prototype.get = function (prop) {
+        if (typeof this.settings[prop] !== 'undefined') {
+            return this.settings[prop];
+        }
+        return undefined;
+    };
+    Settings.prototype.getAll = function () {
+        return this.settings;
+    };
+    Settings.prototype.delete = function (prop) {
+        if (this.settings.hasOwnProperty(prop)) {
+            delete this.settings[prop];
+        }
+    };
+    return Settings;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Settings);
+
 
 /***/ }),
 
@@ -6424,12 +6317,106 @@ jQuery(function ($) {
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
+"use strict";
 module.exports = jQuery;
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!************************************!*\
+  !*** ./assets/js/src/suppliers.ts ***!
+  \************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _vendor_select2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../vendor/select2 */ "./assets/js/vendor/select2.js");
+/* harmony import */ var _vendor_select2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_vendor_select2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* harmony import */ var _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/suppliers/_supplier */ "./assets/js/src/components/suppliers/_supplier.ts");
+/* harmony import */ var _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+
+
+
+
+jQuery(function ($) {
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumSupplierVars'), enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    new _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__["default"](settings, enhancedSelect);
+});
+
+})();
+
+/******/ })()
+;
 //# sourceMappingURL=atum-suppliers.js.map
