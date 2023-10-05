@@ -542,15 +542,4 @@ final class Globals {
 
 	}
 
-	/**
-	 * Return max number of decimals for backend ATUM prices (in frontend WC setting will be applied)
-	 *
-	 * @since 1.8.4
-	 *
-	 * @return integer|boolean
-	 */
-	public static function get_prices_decimals() {
-
-		return apply_filters( 'atum/price_decimals', FALSE );
-	}
 }
