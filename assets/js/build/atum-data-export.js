@@ -1235,6 +1235,12 @@ var Utils = {
         }
         return format;
     },
+    countDecimals: function (amount) {
+        if (Math.floor(amount) === amount) {
+            return 0;
+        }
+        return amount.toString().split('.')[1].length || 0;
+    },
     isNumeric: function (n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     },

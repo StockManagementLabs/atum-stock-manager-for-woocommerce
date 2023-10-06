@@ -59,6 +59,7 @@
 			background-color: var(--white);
 			color: var(--atum-text-color-var1);
 		}
+		
 	}
 
 	.atum-nav {
@@ -67,11 +68,8 @@
 		background-color: var(--atum-settings-nav-bg);
 		position: relative;
 		min-width: 230px;
-		min-height: 550px;
-		
-		@include mobile-max {
-			min-height: inherit;
-		}
+		display: flex;
+		flex-direction: column;
 	}
 	
 	.atum-nav-header {
@@ -118,9 +116,7 @@
 	}
 
 	.nav-footer {
-		position: absolute;
-		margin: 0;
-		bottom: 0;
+		margin-top: $grid-gutter-width;
 		width: 100%;
 
 		.nav-footer-logo {
@@ -167,6 +163,7 @@
 		position: relative;
 		margin: 0;
 		list-style: none;
+		flex-grow: 1;
 	}
 
 	.expand-menu {
@@ -214,6 +211,8 @@
 			padding-top: 0.45em;
 			padding-bottom: 0.5em;
 			pointer-events: none;
+			display: flex;
+			align-items: center;
 
 			&:before, &:after {
 				content: '';

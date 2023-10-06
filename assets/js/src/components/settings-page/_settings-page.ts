@@ -69,9 +69,6 @@ export default class SettingsPage {
 		new SmartForm( this.$form, this.settings.get( 'atumPrefix' ) );
 
 		this.bindEvents();
-
-		// Adjust the nav height.
-		this.$nav.css( 'min-height', `${ this.$nav.find( '.atum-nav-list' ).outerHeight() + 200 }px` );
 	
 	}
 

@@ -4580,12 +4580,13 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   background-color: var(--atum-settings-nav-bg);
   position: relative;
   min-width: 230px;
-  min-height: 550px;
-}
-@media all and (max-width: 480px) {
-  .atum-settings-wrapper .atum-nav {
-    min-height: inherit;
-  }
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 .atum-settings-wrapper .atum-nav-header {
   background-color: var(--atum-settings-heads-bg);
@@ -4636,9 +4637,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   min-width: 25px;
 }
 .atum-settings-wrapper .nav-footer {
-  position: absolute;
-  margin: 0;
-  bottom: 0;
+  margin-top: 30px;
   width: 100%;
 }
 .atum-settings-wrapper .nav-footer .nav-footer-logo {
@@ -4691,6 +4690,9 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   position: relative;
   margin: 0;
   list-style: none;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 .atum-settings-wrapper .expand-menu {
   display: block !important;
@@ -4745,6 +4747,12 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   padding-top: 0.45em;
   padding-bottom: 0.5em;
   pointer-events: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 .atum-settings-wrapper .atum-nav-link .menu-helper:before, .atum-settings-wrapper .atum-nav-link .menu-helper:after {
   content: "";

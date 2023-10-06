@@ -14372,7 +14372,6 @@ var SettingsPage = (function () {
         this.toggleMenu();
         new _smart_form__WEBPACK_IMPORTED_MODULE_3__["default"](this.$form, this.settings.get('atumPrefix'));
         this.bindEvents();
-        this.$nav.css('min-height', "".concat(this.$nav.find('.atum-nav-list').outerHeight() + 200, "px"));
     }
     SettingsPage.prototype.bindEvents = function () {
         var _this = this;
