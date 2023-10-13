@@ -122,7 +122,7 @@ task('js::atum', () => {
 		//   config: require('./webpack.config.js')
 		// }, webpack))
 		.pipe(webpackStream({
-			devtool: config.production ? 'no' : 'source-map',
+			devtool: config.production ? false : 'source-map',
 			
 			entry: {
 				'addons'         : config.jsSrcDir + 'addons.ts',
