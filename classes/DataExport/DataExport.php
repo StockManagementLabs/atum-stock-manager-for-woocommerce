@@ -234,6 +234,8 @@ class DataExport {
 			$atum_stylesheet = apply_filters( 'atum/data_export/report_styles', file_get_contents( ATUM_PATH . 'assets/css/atum-list.css' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			$mpdf->WriteHTML( $atum_stylesheet, 1 );
 
+			$mpdf->WriteHTML( 'body { background: #fff; }', 1 );
+
 			$mpdf->WriteHTML( $html_report );
 
 			$date_now = date_i18n( 'Y-m-d' );
