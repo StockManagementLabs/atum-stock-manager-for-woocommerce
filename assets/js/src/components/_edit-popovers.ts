@@ -347,13 +347,13 @@ export default class EditPopovers extends PopoverBase{
 
 		if ( $fieldLabel.length ) {
 
-			let decimals: number = parseInt( $fieldLabel.data( 'decimals-number') || '0' );
+			const decimals: number = parseInt( $fieldLabel.data( 'decimals-number') || '0' );
 
 			$fieldLabel.addClass( 'unsaved' );
 
 			// For numeric labels, adjust the decimal separator if needed.
 			if ( Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
-				label = <string> Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ), $fieldLabel.data( 'strip-zeros' ) === 'yes' );
+				label = Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ) );
 			}
 
 			// Check if a template exists for the label
@@ -361,7 +361,7 @@ export default class EditPopovers extends PopoverBase{
 				$fieldLabel.html( $fieldLabel.data( 'template' ).replace( '%value%', label ) );
 			}
 			else if ( null === label ) {
-				const noneLabel: string = $fieldLabel.data( 'none' ) ? $fieldLabel.data( 'none' ) : this.settings.get( 'none' );
+				const noneLabel: string = $fieldLabel.data( 'none' ) || this.settings.get( 'none' );
 				$fieldLabel.text( noneLabel );
 			}
 			else {

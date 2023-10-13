@@ -6,7 +6,37 @@
    └───────┘
 */
 
-import bigDecimal from 'js-big-decimal';
+// https://mathjs.org/
+import {
+	format as mathFormat,
+	add as mathAdd,
+	subtract as mathSubtract,
+	divide as mathDivide,
+	multiply as mathMultiply,
+	bignumber as mathBignumber,
+	number as mathNumber,
+	isNumeric as mathIsNumeric,
+	unit as mathUnit,
+	BigNumber,
+} from 'mathjs';
+
+interface ICurrencyFormat {
+	pos: string;
+	neg: string;
+	zero: string;
+}
+
+const math: any = {
+	format: mathFormat,
+	add   : mathAdd,
+	subtract: mathSubtract,
+	divide: mathDivide,
+	multiply: mathMultiply,
+	bignumber: mathBignumber,
+	number: mathNumber,
+	unit: mathUnit,
+}
+window[ 'math' ] = math;
 
 const Utils = {
 	
@@ -16,18 +46,16 @@ const Utils = {
 	settings: {
 		delayTimer: 0,
 		number    : {
-			precision: 0,       // default precision on numbers is 0.
-			grouping : 3,       // digit grouping (not implemented yet).
-			thousand : ',',
-			decimal  : '.',
+			precision   : 0,       // default precision on numbers is 0.
+			thousandsSep: ',',     // default thousands separator.
+			decimalsSep : '.',     // default decimals separator.
 		},
 		currency  : {
-			symbol   : '$',
-			format   : '%s%v',	// controls output: %s = symbol, %v = value (can be object).
-			decimal  : '.',		// decimal point separator.
-			thousand : ',',		// thousands separator.
-			precision: 2,		// decimal places.
-			grouping : 3,		// digit grouping (not implemented yet).
+			symbol      : '$',     // default currency symbol.
+			format      : '%s%v',  // controls output: %s = symbol, %v = value (it can be an ICurrencyFormat object).
+			decimalsSep : '.',	   // default decimal point separator.
+			thousandsSep: ',',	   // default thousands separator.
+			precision   : 2,	   // default decimal places.
 		},
 	},
 	
@@ -76,6 +104,15 @@ const Utils = {
 
 	},
 
+	/**
+	 * Filter elements by data attributes
+	 *
+	 * @param {JQuery} $elem
+	 * @param {string} prop
+	 * @param val
+	 *
+	 * @return {JQuery}
+	 */
 	filterByData( $elem: JQuery, prop: string, val: any ): JQuery {
 
 		if ( typeof val === 'undefined' ) {
@@ -252,11 +289,11 @@ const Utils = {
 	 * @return {boolean}
 	 */
 	areEquivalent( a: any, b: any, strict: boolean = false ): boolean {
-		
+
 		// Create arrays of property names.
-		const aProps: string[] = Object.getOwnPropertyNames(a),
-			  bProps: string[] = Object.getOwnPropertyNames(b);
-		
+		const aProps: string[] = Object.getOwnPropertyNames( a ),
+		      bProps: string[] = Object.getOwnPropertyNames( b );
+
 		// If number of properties is different, objects are not equivalent.
 		if ( aProps.length != bProps.length ) {
 			return false;
@@ -286,9 +323,9 @@ const Utils = {
 
 		for ( let i: number = 0; i < nodes.length; i++ ) {
 
-			nodes[ i ].isExpanded = openOrClose == 'open'; // Either expand node or don't
+			nodes[ i ].isExpanded = openOrClose == 'open'; // Either expand node or not
 
-			// If has children open/close those as well.
+			// If it has children, open/close those them as well.
 			if ( nodes[ i ].children && nodes[ i ].children.length > 0 ) {
 				this.toggleNodes( nodes[ i ].children, openOrClose );
 			}
@@ -296,60 +333,39 @@ const Utils = {
 		}
 
 	},
-	
+
 	/**
-	 * Format a number, with comma-separated thousands and custom precision/decimal places.
-	 * Based on accounting.js.
+	 * Format a number according to the specified options
 	 *
-	 * Localise by overriding the precision and thousand / decimal separators.
+	 * @param {number} number
+	 * @param {number} precision
+	 * @param {string} thousandsSep
+	 * @param {string} decimalsSep
 	 *
-	 * @param {number}  number
-	 * @param {number}  precision
-	 * @param {string}  thousand
-	 * @param {string}  decimal
-	 * @param {boolean} stripZeros
-	 *
-	 * @return {string[] | string}
+	 * @return {string}
 	 */
 	formatNumber(
-		number: number[] | number,
-		precision: number = this.settings.number.precision,
-		thousand: string  = this.settings.number.thousand,
-		decimal: string   = this.settings.number.decimal,
-		stripZeros: boolean = false,
-	): string[] | string {
-		
-		// Resursively format arrays.
-		if ( Array.isArray( number ) ) {
-			return $.map( number, val => this.formatNumber( val, precision, thousand, decimal, stripZeros ) );
-		}
-		
-		// Clean up number.
-		number = this.unformat( number );
+		number: number,
+		precision: number    = this.settings.number.precision,
+		thousandsSep: string = this.settings.number.thousandsSep,
+		decimalsSep: string  = this.settings.number.decimalsSep,
+	): string {
 
-		const usePrecision = this.checkPrecision( precision ), // Clean up precision.
-		      negative     = <number> number < 0 ? '-' : '', // Do some calc.
-		      base         = parseInt( this.toFixed( Math.abs( <number> number || 0 ), usePrecision ), 10 ) + '',
-		      mod          = base.length > 3 ? base.length % 3 : 0;
-
-		let decimalsPart: string = '';
-
-		if ( usePrecision ) {
-
-			decimalsPart = this.toFixed( Math.abs( <number>number ), usePrecision );
-
-			// Check whether to strip trailing zeros from decimals.
-			if ( stripZeros ) {
-				decimalsPart = Number( decimalsPart ).toString();
-			}
-
-			decimalsPart = decimalsPart.includes( '.' ) ? decimal + decimalsPart.split( '.' )[1] : '';
-
+		// Make sure the separators are not equal and both required at the same time.
+		if ( number > 999 && thousandsSep === decimalsSep && ! Number.isInteger( number ) ) {
+			thousandsSep = '';
 		}
 
-		// Format the number.
-		return negative + ( mod ? base.substr( 0, mod ) + thousand : '' ) + base.substr( mod ).replace( /(\d{3})(?=\d)/g, '$1' + thousand ) + decimalsPart;
-		
+		// Format it to english notation and at least 1 digit.
+		const formattedNumber: string = number.toLocaleString( 'en', {
+			minimumFractionDigits   : precision,
+			minimumSignificantDigits: 1,
+		} );
+
+		return formattedNumber
+			.replace( new RegExp( '\\,', 'g' ), thousandsSep )
+			.replace( new RegExp( '\\.' ), decimalsSep );
+
 	},
 	
 	/**
@@ -359,73 +375,60 @@ const Utils = {
 	 * Usage: Utils.formatMoney( number, symbol, precision, thousandsSep, decimalSep, format )
 	 * defaults: (0, '$', 2, ',', '.', '%s%v')
 	 *
-	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
-	 * Second param can be an object matching `settings.currency` which is the easiest way.
+	 * Localise by overriding the symbol, precision, thousands / decimal separators and format
 	 */
 	formatMoney(
-		number: number[] | number,
-		symbol: string    = this.settings.currency.symbol,
-		precision: number = this.settings.currency.precision,
-		thousand: string  = this.settings.currency.thousand,
-		decimal: string   = this.settings.currency.decimal,
-		format: string    = this.settings.currency.format,
-	): string[] | string {
-		
-		// Resursively format arrays.
-		if ( Array.isArray( number ) ) {
-			return $.map( number, val => this.formatMoney( val, symbol, precision, thousand, decimal, format ) );
-		}
+		number: number,
+		symbol: string                   = this.settings.currency.symbol,
+		precision: number                = this.settings.currency.precision,
+		thousandsSep: string             = this.settings.currency.thousandsSep,
+		decimalsSep: string              = this.settings.currency.decimalsSep,
+		format: string | ICurrencyFormat = this.settings.currency.format,
+	): string {
 		
 		// Clean up number.
-		number = this.unformat( number );
+		if ( ! mathIsNumeric( number ) ) {
+			number = this.unformat( number );
+		}
 
-		const formats   = this.checkCurrencyFormat( format ), // Check format (returns object with pos, neg and zero).
-		      useFormat = <number>number > 0 ? formats.pos : <number>number < 0 ? formats.neg : formats.zero; // Choose which format to use for this value.
+		const formats: ICurrencyFormat = this.checkCurrencyFormat( format ), // Check format (returns an ICurrencyFormat object with pos, neg and zero).
+		      useFormat: string        = number > 0 ? formats.pos : ( number < 0 ? formats.neg : formats.zero ); // Choose which format to use for this value.
 
 		// Return with currency symbol added.
-		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( <number>number ), this.checkPrecision( precision ), thousand, decimal ) );
+		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( number ), this.checkPrecision( precision ), thousandsSep, decimalsSep ) );
 		
 	},
 	
 	/**
-	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
-	 * Based on accounting.js.
+	 * Takes a string, removes all formatting/cruft and returns the raw float value
 	 *
 	 * Decimal must be included in the regular expression to match floats (defaults to
 	 * Utils.settings.number.decimal), so if the number uses a non-standard decimal
 	 * separator, provide it as the second argument.
 	 *
-	 * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
+	 * Also matches bracketed negatives (ex. "$ (1.99)" => -1.99)
 	 *
-	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+	 * Doesn't throw any errors (`NaN`s become 0)
 	 *
-	 * @param {number | string} value
-	 * @param {string} decimal
+	 * @param {string} value
+	 * @param {string} decimalsSep
 	 *
-	 * @return {number | number[]}
+	 * @return {number}
 	 */
-	unformat( value: number | string, decimal: string = this.settings.number.decimal ): number[] | number {
+	unformat( value: string, decimalsSep: string = this.settings.number.decimalsSep ): number {
 		
-		// Recursively unformat arrays:
-		if ( Array.isArray( value ) ) {
-			return $.map( value, val => this.unformat( val, decimal ) );
-		}
-		
-		// Fails silently (need decent errors).
-		value = value || 0;
-		
-		// Return the value as-is if it's already a number.
+		// Return the value as-is in case it's already a number.
 		if ( typeof value === 'number' ) {
 			return value;
 		}
 		
 		// Build regex to strip out everything except digits, decimal point and minus sign.
-		const regex: RegExp       = new RegExp( `[^0-9-${ decimal }]`, 'g' ),
+		const regex: RegExp       = new RegExp( `[^0-9-${ decimalsSep }]`, 'g' ),
 		      unformatted: number = parseFloat(
 			      ( '' + value )
 				      .replace( /\((.*)\)/, '-$1' ) // replace bracketed values with negatives
 				      .replace( regex, '' )         // strip out any cruft
-				      .replace( decimal, '.' ),     // make sure decimal point is standard
+				      .replace( decimalsSep, '.' ), // make sure decimal point is standard
 		      );
 		
 		// This will fail silently which may cause trouble, let's wait and see.
@@ -444,6 +447,7 @@ const Utils = {
 	 */
 	checkPrecision( val: number, base: number = 0 ): number {
 		val = Math.round( Math.abs( val ) );
+
 		return isNaN( val ) ? base : val;
 	},
 	
@@ -451,7 +455,7 @@ const Utils = {
 	 * Implementation of toFixed() that treats floats more like decimals.
 	 * Based on accounting.js.
 	 *
-	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === "0.61") that present
+	 * Fixes binary rounding issues (ex. (0.615).toFixed(2) === "0.61") that present
 	 * problems for accounting and finance-related software.
 	 *
 	 * @param {number} value
@@ -461,10 +465,14 @@ const Utils = {
 	 */
 	toFixed( value: number, precision: number ): string {
 		precision = this.checkPrecision( precision, this.settings.number.precision );
-		const power = Math.pow( 10, precision );
+		const power: number = Math.pow( 10, precision );
+
+		if ( ! mathIsNumeric( value ) ) {
+			value = this.unformat( value );
+		}
 		
 		// Multiply up by precision, round accurately, then divide and use native toFixed().
-		return ( Math.round( this.unformat( value ) * power ) / power ).toFixed( precision );
+		return ( Math.round( value * power ) / power ).toFixed( precision );
 	},
 	
 	/**
@@ -475,18 +483,17 @@ const Utils = {
 	 * containing `pos` (required), `neg` and `zero` values (or a function returning
 	 * either a string or object)
 	 *
-	 * Either string or format.pos must contain '%v' (value) to be valid
+	 * Either string or format.pos must contain '%v' (value) to be valid.
+	 * To add the symbol it must contain a '%s'.
 	 */
-	checkCurrencyFormat( format: any | string ): any | string {
-		
-		const defaults = this.settings.currency.format;
+	checkCurrencyFormat( format: ICurrencyFormat | string | Function ): ICurrencyFormat | string {
 		
 		// Allow function as format parameter (should return string or object).
 		if ( typeof format === 'function' ) {
-			format = format();
+			return format();
 		}
 		// Format can be a string, in which case `value` ('%v') must be present.
-		else if ( typeof format === 'string' && format.match('%v') ) {
+		else if ( typeof format === 'string' && format.match( '%v' ) ) {
 			
 			// Create and return positive, negative and zero formats.
 			return {
@@ -497,35 +504,82 @@ const Utils = {
 			
 		}
 		// If no format, or object is missing valid positive value, use defaults.
-		else if ( ! format || ! format.pos || ! format.pos.match( '%v' ) ) {
+		else if ( ! format || ( typeof format === 'object' && ( ! format.pos || ! format.pos.match( '%v' ) ) ) ) {
+
+			const defaultFormat: string = this.settings.currency.format;
 			
 			// If defaults is a string, casts it to an object for faster checking next time.
-			return ( typeof defaults !== 'string' ) ? defaults : this.settings.currency.format = {
-				pos : defaults,
-				neg : defaults.replace( '%v', '-%v' ),
-				zero: defaults,
+			return ( typeof defaultFormat !== 'string' ) ? defaultFormat : this.settings.currency.format = {
+				pos : defaultFormat,
+				neg : defaultFormat.replace( '%v', '-%v' ),
+				zero: defaultFormat,
 			};
 			
 		}
-		
-		// Otherwise, assume format was fine.
-		return format;
 		
 	},
 
 	/**
 	 * Count number of decimals
 	 *
-	 * @param {number} amount
+	 * @param {number} value
 	 *
 	 * @return number
 	 */
-	countDecimals( amount: number ): number {
-		if ( Math.floor( amount ) === amount ) {
+	countDecimals( value: number ): number {
+		if ( Math.floor( value ) === value ) {
 			return 0;
 		}
 
-		return amount.toString().split( '.' )[ 1 ].length || 0;
+		return value.toString().split( '.' )[ 1 ].length || 0;
+	},
+
+	/**
+	 * Multiply a decimal number and return the right value
+	 *
+	 * @param {number} multiplicand
+	 * @param {number} multiplier
+	 *
+	 * @returns {number}
+	 */
+	multiplyDecimals( multiplicand: number, multiplier: number ): number {
+		return mathNumber( <BigNumber>mathMultiply( mathBignumber( multiplicand ), mathBignumber( multiplier ) ) );
+	},
+
+	/**
+	 * Divide a decimal number and return the right value
+	 *
+	 * @param {number} dividend
+	 * @param {number} divisor
+	 *
+	 * @returns {number}
+	 */
+	divideDecimals( dividend: number, divisor: number ): number {
+		return mathNumber( <BigNumber>mathDivide( mathBignumber( dividend ), mathBignumber( divisor ) ) );
+	},
+
+	/**
+	 * Sum two decimal numbers and return the right value
+	 *
+	 * @param {number} summand1
+	 * @param {number} summand2
+	 *
+	 * @returns {number}
+	 */
+	sumDecimals( summand1: number, summand2: number ): number {
+		return mathNumber( <BigNumber>mathAdd( mathBignumber( summand1 ), mathBignumber( summand2 ) ) );
+	},
+
+	/**
+	 * Subtract a decimal number to another and return the right value
+	 *
+	 * @param {number} minuend
+	 * @param {number} subtrahend
+	 *
+	 * @returns {number}
+	 */
+	subtractDecimals( minuend: number, subtrahend: number ): number {
+		return mathNumber( <BigNumber>mathSubtract( mathBignumber( minuend ), mathBignumber( subtrahend ) ) );
 	},
 
 	/**
@@ -537,7 +591,19 @@ const Utils = {
 	 * @return {boolean}
 	 */
 	isNumeric( n: any ): boolean {
-		return !isNaN( parseFloat( n ) ) && isFinite( n );
+		return mathIsNumeric( n );
+	},
+
+	/**
+	 * Convert a value from one unit to another
+	 * Reference: https://mathjs.org/docs/datatypes/units.html#reference
+	 *
+	 * @param {number} value
+	 * @param {string} fromUnit
+	 * @param {string} toUnit
+	 */
+	convertUnit( value: number, fromUnit: string, toUnit: string ): number {
+		return mathNumber( mathUnit( value, fromUnit ), toUnit );
 	},
 
 	/**
@@ -583,7 +649,7 @@ const Utils = {
 		      min: number                = parseFloat( minAtt || '0' ),
 		      max: number                = parseFloat( maxAtt || '0' );
 
-		if ( ! $.isNumeric( qty ) ) {
+		if ( ! mathIsNumeric( qty ) ) {
 			$input.val( undefined !== minAtt && ! isNaN( min ) && min > 0 ? min : 0 ); // Set to 0 or min (the greater).
 		}
 		else if ( undefined !== minAtt && value < min ) {
@@ -631,55 +697,6 @@ const Utils = {
 
 		}
 
-	},
-
-	/**
-	 * Multiply a decimal number and return the right value
-	 *
-	 * @param {number} multiplicand
-	 * @param {number} multiplier
-	 *
-	 * @returns {number}
-	 */
-	multiplyDecimal( multiplicand: number, multiplier: number ): number {
-		return parseFloat( bigDecimal.multiply( multiplicand.toString(), multiplier.toString() ) );
-	},
-
-	/**
-	 * Divide a decimal number and return the right value
-	 *
-	 * @param {number} dividend
-	 * @param {number} divisor
-	 * @param {number} precision
-	 *
-	 * @returns {number}
-	 */
-	divideDecimal( dividend: number, divisor: number, precision: number ): number {
-		return parseFloat( bigDecimal.divide( dividend.toString(), divisor.toString(), precision ) );
-	},
-
-	/**
-	 * Sum two decimal numbers and return the right value
-	 *
-	 * @param {number} summand1
-	 * @param {number} summand2
-	 *
-	 * @returns {number}
-	 */
-	sumDecimal( summand1: number, summand2: number ): number {
-		return parseFloat( bigDecimal.add( summand1.toString(), summand2.toString() ) );
-	},
-
-	/**
-	 * Subtract a decimal number to another and return the right value
-	 *
-	 * @param {number} minuend
-	 * @param {number} subtrahend
-	 *
-	 * @returns {number}
-	 */
-	subtractDecimal( minuend: number, subtrahend: number ): number {
-		return parseFloat( bigDecimal.subtract( minuend.toString(), subtrahend.toString() ) );
 	},
 
 	/**

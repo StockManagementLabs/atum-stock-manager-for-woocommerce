@@ -451,7 +451,9 @@ export default class AtumOrderItems {
 	setPurchasePrice( $item: JQuery, purchasePrice?: number, purchasePriceTxt?: string, itemName?: string ) {
 
 		const $lineSubTotal: JQuery = $item.find( 'input.line_subtotal' ),
-		      $lineTotal: JQuery    = $item.find( 'input.line_total' );
+		      $lineTotal: JQuery    = $item.find( 'input.line_total' ),
+		      decimalSep: string    = this.settings.get( 'priceDecimalSep' ) || '.',
+		      precision: number     = this.settings.get( 'priceNumDecimals' ) || 0
 
 		if ( ! itemName ) {
 			itemName = $item.find( '.atum-order-item-name' ).text().trim();
@@ -460,33 +462,33 @@ export default class AtumOrderItems {
 		if ( ! purchasePrice ) {
 
 			const qty: number       = parseFloat( $item.find( 'input.quantity' ).val() || 1 ),
-			      lineTotal: number = qty !== 0 ? <number> Utils.unformat( $lineTotal.val() || 0, this.settings.get( 'priceDecimalSep' ) ) : 0;
+			      lineTotal: number = qty !== 0 ? Utils.unformat( $lineTotal.val() || 0, decimalSep ) : 0;
 
-			purchasePrice = qty !== 0 ? lineTotal / qty : 0;
+			purchasePrice = qty !== 0 ? Utils.divideDecimals( lineTotal, qty ) : 0;
 
 		}
 
 		if ( ! purchasePriceTxt ) {
 
-			const purchasePriceFmt: string = purchasePrice % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : purchasePrice.toString();
+			const purchasePriceFmt: string = Utils.formatNumber( purchasePrice, precision, '', decimalSep );
 			purchasePriceTxt = purchasePriceFmt;
 
 			const rates: any = $item.find( '.item_cost' ).data( 'productTaxRates' );
 
 			if ( typeof rates === 'object' ) {
 
-				const taxes: number    = Utils.calcTaxesFromBase( purchasePrice, rates );
-				const taxesTxt: string = Utils.formatNumber( taxes, this.settings.get( 'priceNumDecimals' ) ).toString();
+				const taxes: number          = Utils.calcTaxesFromBase( purchasePrice, rates ),
+				      formattedTaxes: string = Utils.formatNumber( taxes, precision );
 
 				if ( taxes ) {
-					let purchasePriceWithTaxesFmt: string = ( purchasePrice + taxes ) % 1 !== 0 ? <string> Utils.formatNumber( purchasePrice + taxes, this.settings.get( 'priceNumDecimals' ), '', this.settings.get( 'priceDecimalSep' ) ) : ( purchasePrice + taxes ).toString();
-					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } ( ${ purchasePriceFmt } + ${ taxesTxt } ${ this.settings.get( 'taxesName' ) } )`;
-					purchasePrice    = <number> Utils.unformat( purchasePriceWithTaxesFmt, this.settings.get( 'priceDecimalSep' ) );
+					const purchasePriceWithTaxesFmt: string = Utils.formatNumber( Utils.sumDecimals( purchasePrice, taxes ), precision, '', decimalSep );
+					purchasePriceTxt = `${ purchasePriceWithTaxesFmt } ( ${ purchasePriceFmt } + ${ formattedTaxes } ${ this.settings.get( 'taxesName' ) } )`;
+					purchasePrice    = Utils.unformat( purchasePriceWithTaxesFmt, decimalSep );
 				}
 
 			}
 			else {
-				purchasePrice = <number> Utils.unformat( purchasePriceFmt, this.settings.get( 'priceDecimalSep' ) );
+				purchasePrice = Utils.unformat( purchasePriceFmt, decimalSep );
 			}
 
 		}

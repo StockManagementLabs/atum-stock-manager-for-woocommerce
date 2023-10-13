@@ -123,7 +123,7 @@ export default class TableCellPopovers extends PopoverBase{
 
 			// For currency numbers.
 			if ( symbol ) {
-				numericValue = Math.abs( <number> Utils.unformat( value.replace('>', '').trim(), this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
+				numericValue = Math.abs( Utils.unformat( value.replace( '>', '' ).trim(), this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
 			}
 			// For regular numbers.
 			else {
@@ -138,6 +138,7 @@ export default class TableCellPopovers extends PopoverBase{
 
 		}
 		else if ( isSelect ) {
+
 			const atts: string[] = [ 'allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected' ];
 
 			atts.forEach( ( attr: string ) => {

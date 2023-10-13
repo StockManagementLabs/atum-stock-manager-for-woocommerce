@@ -50,8 +50,8 @@
 		"jquery": "^3.7.1",
 		"jquery-nice-select": "^1.1.0",
 		"jquery.fancytable": "^1.0.32",
-		"js-big-decimal": "^1.3.10",
 		"lightgallery.js": "^1.4.0",
+		"mathjs" : "^11.11.1",
 		"moment": "^2.29.4",
 		"owl.carousel": "^2.3.4",
 		"sweetalert2": "^10.16.7"

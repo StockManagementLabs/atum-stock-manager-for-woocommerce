@@ -247,47 +247,41 @@ export default class AtumOrders {
 		      qty: number           = $input.val(),
 		      oQty: number          = $input.data( 'qty' ),
 		      $lineTotal: JQuery    = $row.find( 'input.line_total' ),
-		      $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' );
+		      $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' ),
+		      decimalSep: string    = this.settings.get( 'priceDecimalSep' ),
+		      precision: number     = this.settings.get( 'roundingPrecision' );
 		
 		// Totals
-		const unitTotal: number = <number> Utils.unformat( $lineTotal.data( 'total' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
+		const unitTotal: number = Utils.divideDecimals( Utils.unformat( $lineTotal.data( 'total' ), decimalSep ), oQty );
 
 		$lineTotal.val(
-			parseFloat( <string> Utils.formatNumber( unitTotal * qty, this.settings.get( 'roundingPrecision' ), '' ) )
-				.toString()
-				.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
+			Utils.formatNumber( Utils.multiplyDecimals( unitTotal, qty ), precision, '', decimalSep )
 		);
 
-		const unitSubtotal: number = <number> Utils.unformat( $lineSubtotal.data( 'subtotal' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
+		const unitSubtotal: number = Utils.divideDecimals( Utils.unformat( $lineSubtotal.data( 'subtotal' ), decimalSep ), oQty );
 
 		$lineSubtotal.val(
-			parseFloat( <string> Utils.formatNumber( unitSubtotal * qty, this.settings.get( 'roundingPrecision' ), '' ) )
-				.toString()
-				.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
+			Utils.formatNumber( Utils.multiplyDecimals( unitSubtotal, qty ), precision, '', decimalSep )
 		);
 		
 		// Taxes
-		$row.find( 'input.line_tax' ).each( ( index: number, elem: Element ) => {
+		$row.find( 'input.line_tax' ).each( ( i: number, elem: Element ) => {
 
 			const $lineTotalTax: JQuery    = $( elem ),
 			      taxId: string            = $lineTotalTax.data( 'tax_id' ),
-			      unitTotalTax: number     = <number> Utils.unformat( $lineTotalTax.data( 'total_tax' ), this.settings.get( 'priceDecimalSep' ) ) / oQty,
+			      unitTotalTax: number     = Utils.divideDecimals( Utils.unformat( $lineTotalTax.data( 'total_tax' ), decimalSep ), oQty ),
 			      $lineSubtotalTax: JQuery = $row.find( `input.line_subtotal_tax[data-tax_id="${ taxId }"]` ),
-			      unitSubtotalTax: number  = <number> Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), this.settings.get( 'priceDecimalSep' ) ) / oQty;
+			      unitSubtotalTax: number  = Utils.divideDecimals( Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), decimalSep ), oQty );
 
 			if ( 0 < unitTotalTax ) {
 				$lineTotalTax.val(
-					parseFloat( <string> Utils.formatNumber( unitTotalTax * qty, this.settings.get( 'roundingPrecision' ), '' ) )
-						.toString()
-						.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
+					Utils.formatNumber( Utils.multiplyDecimals( unitTotalTax, qty ), precision, '', decimalSep )
 				);
 			}
 
 			if ( 0 < unitSubtotalTax ) {
 				$lineSubtotalTax.val(
-					parseFloat( <string> Utils.formatNumber( unitSubtotalTax * qty, this.settings.get( 'roundingPrecision' ), '' ) )
-						.toString()
-						.replace( '.', this.settings.get( 'priceDecimalSep' ) ),
+					Utils.formatNumber( Utils.multiplyDecimals( unitSubtotalTax, qty ), precision, '', decimalSep )
 				);
 			}
 			
