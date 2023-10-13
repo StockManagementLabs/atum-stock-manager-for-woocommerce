@@ -5,20 +5,21 @@ namespace Mpdf;
 use Mpdf\File\LocalContentLoaderInterface;
 use Mpdf\File\StreamWrapperChecker;
 use Mpdf\Http\ClientInterface;
-use Mpdf\Http\Request;
 use Mpdf\Log\Context as LogContext;
+use Mpdf\PsrHttpMessageShim\Request;
+use Mpdf\PsrLogAwareTrait\PsrLogAwareTrait;
 use Psr\Log\LoggerInterface;
 
 class AssetFetcher implements \Psr\Log\LoggerAwareInterface
 {
+
+	use PsrLogAwareTrait;
 
 	private $mpdf;
 
 	private $contentLoader;
 
 	private $http;
-
-	private $logger;
 
 	public function __construct(Mpdf $mpdf, LocalContentLoaderInterface $contentLoader, ClientInterface $http, LoggerInterface $logger)
 	{
@@ -82,7 +83,7 @@ class AssetFetcher implements \Psr\Log\LoggerAwareInterface
 
 			$this->logger->debug(sprintf('Fetching remote content of file "%s"', $path), ['context' => LogContext::REMOTE_CONTENT]);
 
-			/** @var \Mpdf\Http\Response $response */
+			/** @var \Mpdf\PsrHttpMessageShim\Response $response */
 			$response = $this->http->sendRequest(new Request('GET', $path));
 
 			if ($response->getStatusCode() !== 200) {
@@ -113,12 +114,7 @@ class AssetFetcher implements \Psr\Log\LoggerAwareInterface
 
 	public function isPathLocal($path)
 	{
-		return strpos($path, '://') === false; // @todo More robust implementation
-	}
-
-	public function setLogger(LoggerInterface $logger)
-	{
-		$this->logger = $logger;
+		return str_starts_with($path, 'file://') || strpos($path, '://') === false; // @todo More robust implementation
 	}
 
 }

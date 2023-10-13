@@ -11,6 +11,7 @@ yarn.lock
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*
+vendor/mpdf/mpdf/tmp/*
 
 # Dev files
 *Dev.php
