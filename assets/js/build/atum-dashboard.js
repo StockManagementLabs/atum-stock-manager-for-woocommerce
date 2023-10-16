@@ -9573,14 +9573,6 @@ var Utils = {
         val = Math.round(Math.abs(val));
         return isNaN(val) ? base : val;
     },
-    toFixed: function (value, precision) {
-        precision = this.checkPrecision(precision, this.settings.number.precision);
-        var power = Math.pow(10, precision);
-        if (!(0,mathjs__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(value)) {
-            value = this.unformat(value);
-        }
-        return (Math.round(value * power) / power).toFixed(precision);
-    },
     checkCurrencyFormat: function (format) {
         if (typeof format === 'function') {
             return format();
@@ -9621,6 +9613,12 @@ var Utils = {
     },
     isNumeric: function (n) {
         return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(n);
+    },
+    round: function (n, precision) {
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.round)(n, precision);
+    },
+    convertUnit: function (value, fromUnit, toUnit) {
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.unit)(value, fromUnit), toUnit);
     },
     convertElemsToString: function ($elems) {
         return $('<div />').append($elems).html();
@@ -9668,24 +9666,25 @@ var Utils = {
         }
     },
     calcTaxesFromBase: function (price, rates) {
+        var _this = this;
         var taxes = [0], preCompoundTaxes;
         $.each(rates, function (i, rate) {
             if ('yes' === rate['compound']) {
                 return true;
             }
-            taxes.push(price * rate['rate'] / 100);
+            taxes.push(_this.divideDecimals(_this.multiplyDecimals(price, rate['rate']), 100));
         });
-        preCompoundTaxes = taxes.reduce(function (a, b) { return a + b; }, 0);
+        preCompoundTaxes = taxes.reduce(function (a, b) { return _this.sumDecimals(a, b); }, 0);
         $.each(rates, function (i, rate) {
             var currentTax;
             if ('no' === rate['compound']) {
                 return true;
             }
-            currentTax = (price + preCompoundTaxes) * rate['rate'] / 100;
+            currentTax = _this.divideDecimals(_this.multiplyDecimals(_this.sumDecimals(price, preCompoundTaxes), rate['rate']), 100);
             taxes.push(currentTax);
-            preCompoundTaxes += currentTax;
+            preCompoundTaxes = _this.sumDecimals(currentTax, preCompoundTaxes);
         });
-        return taxes.reduce(function (a, b) { return a + b; }, 0);
+        return taxes.reduce(function (a, b) { return _this.sumDecimals(a, b); }, 0);
     },
     pseudoClick: function (evt, $parentElem, pseudoElem) {
         if (pseudoElem === void 0) { pseudoElem = 'both'; }

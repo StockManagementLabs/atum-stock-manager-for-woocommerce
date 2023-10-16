@@ -304,10 +304,8 @@ export default class ListTable {
 	 */
 	setCellValue( $metaCell: JQuery, value: string ) {
 
-		let symbol: string      = $metaCell.data( 'symbol' ) || '',
-		    currencyPos: string = this.globals.$atumTable.data( 'currency-pos' );
-
-		const existRealValue: boolean = typeof $metaCell.data('realvalue') !== 'undefined';
+		const symbol: string          = $metaCell.data( 'symbol' ) || '',
+		      existRealValue: boolean = typeof $metaCell.data( 'realvalue' ) !== 'undefined';
 
 		if ( existRealValue ) {
 			$metaCell.data( 'realvalue', value );
@@ -318,18 +316,15 @@ export default class ListTable {
 		}
 		else if ( symbol ) {
 
-			const precision: number           = this.settings.get( 'currencyFormatNumDecimals' ),
-			      precisionMultiplier: number = Math.pow( 10, precision ),
-			      thousand: string            = '',
-			      decimal: string             = this.settings.get( 'currencyFormatDecimalSeparator' ),
-			      format: string              = this.settings.get( 'currencyFormat' );
+			const precision: number    = this.settings.get( 'currencyFormatNumDecimals' ),
+			      decimalsSep: string  = this.settings.get( 'currencyFormatDecimalSeparator' ),
+			      format: string       = this.settings.get( 'currencyFormat' ),
+			      numericValue: number = parseFloat( value );
 
-			let numericValue: number = parseFloat( value );
+			value = Utils.formatMoney( numericValue, symbol, precision, '', decimalsSep, format );
 
-			value = <string> Utils.formatMoney( numericValue, symbol, precision, thousand, decimal, format );
-
-			// Show > if the shown value is 0 but it has hidden digits
-			if ( existRealValue && 0.0 < numericValue && 0.0 === Math.round( numericValue * precisionMultiplier ) / 100 ) {
+			// Show > if the shown value is 0, but it has hidden digits
+			if ( existRealValue && 0.0 < numericValue && 0 === Utils.round( numericValue, precision ) ) {
 				value = `> ${value}`;
 			}
 

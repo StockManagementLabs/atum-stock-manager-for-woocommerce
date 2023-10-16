@@ -8,16 +8,16 @@
 
 // https://mathjs.org/
 import {
-	format as mathFormat,
 	add as mathAdd,
-	subtract as mathSubtract,
-	divide as mathDivide,
-	multiply as mathMultiply,
 	bignumber as mathBignumber,
-	number as mathNumber,
-	isNumeric as mathIsNumeric,
-	unit as mathUnit,
 	BigNumber,
+	divide as mathDivide,
+	isNumeric as mathIsNumeric,
+	multiply as mathMultiply,
+	number as mathNumber,
+	round as mathRound,
+	subtract as mathSubtract,
+	unit as mathUnit,
 } from 'mathjs';
 
 interface ICurrencyFormat {
@@ -25,18 +25,6 @@ interface ICurrencyFormat {
 	neg: string;
 	zero: string;
 }
-
-const math: any = {
-	format: mathFormat,
-	add   : mathAdd,
-	subtract: mathSubtract,
-	divide: mathDivide,
-	multiply: mathMultiply,
-	bignumber: mathBignumber,
-	number: mathNumber,
-	unit: mathUnit,
-}
-window[ 'math' ] = math;
 
 const Utils = {
 	
@@ -452,30 +440,6 @@ const Utils = {
 	},
 	
 	/**
-	 * Implementation of toFixed() that treats floats more like decimals.
-	 * Based on accounting.js.
-	 *
-	 * Fixes binary rounding issues (ex. (0.615).toFixed(2) === "0.61") that present
-	 * problems for accounting and finance-related software.
-	 *
-	 * @param {number} value
-	 * @param {number} precision
-	 *
-	 * @return {string}
-	 */
-	toFixed( value: number, precision: number ): string {
-		precision = this.checkPrecision( precision, this.settings.number.precision );
-		const power: number = Math.pow( 10, precision );
-
-		if ( ! mathIsNumeric( value ) ) {
-			value = this.unformat( value );
-		}
-		
-		// Multiply up by precision, round accurately, then divide and use native toFixed().
-		return ( Math.round( value * power ) / power ).toFixed( precision );
-	},
-	
-	/**
 	 * Parses a format string or object and returns format obj for use in rendering.
 	 * Based on accounting.js.
 	 *
@@ -592,6 +556,18 @@ const Utils = {
 	 */
 	isNumeric( n: any ): boolean {
 		return mathIsNumeric( n );
+	},
+
+	/**
+	 * Round a value with the sepcified precision
+	 *
+	 * @param {number} n
+	 * @param {number} precision
+	 *
+	 * @return {number}
+	 */
+	round( n: number, precision: number ): number {
+		return mathRound( n, precision );
 	},
 
 	/**
@@ -717,11 +693,11 @@ const Utils = {
 			if ( 'yes' === rate[ 'compound' ] ) {
 				return true;
 			}
-			taxes.push( price * rate[ 'rate' ] / 100 );
+			taxes.push( this.divideDecimals( this.multiplyDecimals( price, rate[ 'rate' ] ), 100 ) );
 
 		} );
 
-		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+		preCompoundTaxes = taxes.reduce( ( a: number, b: number ) => this.sumDecimals( a, b ), 0 );
 
 		// Compound taxes.
 		$.each( rates, ( i: number, rate: any ) => {
@@ -732,13 +708,14 @@ const Utils = {
 				return true;
 			}
 
-			currentTax = ( price + preCompoundTaxes ) * rate[ 'rate' ] / 100;
+			currentTax = this.divideDecimals( this.multiplyDecimals( this.sumDecimals( price, preCompoundTaxes ), rate[ 'rate' ] ), 100 );
 			taxes.push( currentTax );
-			preCompoundTaxes += currentTax;
+			preCompoundTaxes = this.sumDecimals( currentTax, preCompoundTaxes );
 
 		} );
 
-		return taxes.reduce( ( a: number, b: number ) => a + b, 0 );
+		return taxes.reduce( ( a: number, b: number ) => this.sumDecimals( a, b ), 0 );
+
 	},
 
 	/**
