@@ -193,7 +193,15 @@ class AtumColors {
 	 */
 	public static function convert_hexadecimal_to_rgb( $hex_value ) {
 
-		list( $r, $g, $b ) = sscanf( $hex_value, '#%02x%02x%02x' );
+        if ( str_contains( $hex_value, 'rgba(' ) )  {
+            list( $r, $g, $b, $a ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgba(%d,%d,%d,%f)' );
+        }
+        elseif ( str_contains( $hex_value, 'rgb(' ) )  {
+            list( $r, $g, $b ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgb(%d,%d,%d)' );
+        }
+        else {
+            list( $r, $g, $b ) = sscanf( $hex_value, '#%02x%02x%02x' );
+        }
 
 		return "$r, $g, $b";
 
