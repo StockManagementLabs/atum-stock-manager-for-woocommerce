@@ -2665,37 +2665,6 @@ final class Helpers {
 		}
 
 	}
-	
-	/**
-	 * Validate a given string as CSS color. This validation supports alpha channel.
-	 *
-	 * @since 1.4.13
-	 *
-	 * @param string $color The color can be transparent, in hexadecimal, RGB or RGBA notation.
-	 *
-	 * @return bool
-	 */
-	public static function validate_color( $color ) {
-		
-		$color = trim( $color );
-		
-		// Regex match.
-		if ( strpos( $color, '#' ) !== FALSE ) {
-			return (bool) preg_match( '/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/i', $color );
-		}
-		elseif ( strpos( $color, 'rgba' ) !== FALSE ) {
-			return (bool) preg_match( '/rgba\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?),\s*(\d*\.?\d*)\s*\)/', $color );
-		}
-		elseif ( strpos( $color, 'rgb' ) !== FALSE ) {
-			return (bool) preg_match( '/rgb\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?)\s*\)/', $color );
-		}
-		elseif ( ! $color || 'transparent' === $color ) {
-			return TRUE;
-		}
-		
-		return FALSE;
-		
-	}
 
 	/**
 	 * Like "array_unique" function but for multi-dimensional arrays where the specified key must be unique

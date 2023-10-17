@@ -975,11 +975,11 @@ class Settings {
 				break;
 
 			case 'color':
-				if ( $is_api_request && ! Helpers::validate_color( $input[ $key ] ) ) {
+				if ( $is_api_request && ! AtumColors::validate_color( $input[ $key ] ) ) {
 					return new \WP_Error( 'atum_rest_setting_value_invalid', __( 'An invalid setting value was passed.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] );
 				}
 
-				$sanitized_option = ( ! empty( $input[ $key ] ) && Helpers::validate_color( $input[ $key ] ) ) ? $input[ $key ] : $atts['default'];
+				$sanitized_option = ( ! empty( $input[ $key ] ) && AtumColors::validate_color( $input[ $key ] ) ) ? $input[ $key ] : $atts['default'];
 				break;
 
 			case 'theme_selector':
