@@ -46,6 +46,7 @@ defined( 'ABSPATH' ) || die;
  * @property int    $days_to_cancel
  * @property string $cancelation_policy
  * @property string $wpml_lang
+ * @property string $atum_barcode
  */
 class Supplier {
 
@@ -98,6 +99,7 @@ class Supplier {
 		'days_to_cancel'          => NULL,
 		'cancelation_policy'      => '',
 		'wpml_lang'               => '',
+		'atum_barcode'            => '', // NOTE: It must have this name to be compatible with Barcodes PRO.
 	);
 
 	/**
@@ -745,6 +747,24 @@ class Supplier {
 			$this->data['wpml_lang'] = $wpml_lang;
 			$this->register_change( 'wpml_lang' );
 		}
+	}
+
+	/**
+	 * Set the supplier barcode
+	 *
+	 * @since 1.9.32
+	 *
+	 * @param string $atum_barcode
+	 */
+	public function set_atum_barcode( $atum_barcode ) {
+
+		$atum_barcode = esc_attr( $atum_barcode );
+
+		if ( $this->data['atum_barcode'] !== $atum_barcode ) {
+			$this->data['atum_barcode'] = $atum_barcode;
+			$this->register_change( 'atum_barcode' );
+		}
+
 	}
 
 	/***********
