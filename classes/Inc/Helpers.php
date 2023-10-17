@@ -2698,41 +2698,6 @@ final class Helpers {
 	}
 
 	/**
-	 * Convert a hexadecimal color code to its RGB equivalent
-	 *
-	 * @since 1.9.32
-	 *
-	 * @param string $hex_str Hexadecimal color value.
-	 *
-	 * @return int[]
-	 */
-	public static function hex_to_rgb( $hex_str ) {
-
-		$trimmed_str = ltrim( $hex_str, '#' );
-
-		if ( strlen( $trimmed_str ) === 6 ) {
-			list( $red, $green, $blue ) = array_map( 'hexdec', str_split( $trimmed_str, 2 ) );
-		}
-		elseif ( strlen( $trimmed_str ) === 3 ) {
-
-			list( $red, $green, $blue ) = array_map(
-				function ( $s_color ) {
-					return hexdec( str_repeat( $s_color, 2 ) );
-				},
-				str_split( $trimmed_str )
-			);
-			
-		}
-
-		return [
-			$red,
-			$green,
-			$blue,
-		];
-
-	}
-
-	/**
 	 * Like "array_unique" function but for multi-dimensional arrays where the specified key must be unique
 	 *
 	 * @since 1.4.14
