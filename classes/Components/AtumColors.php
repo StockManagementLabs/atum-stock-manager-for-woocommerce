@@ -142,35 +142,34 @@ class AtumColors {
 				break;
 		}
 
-		$this->colors['gray_500_rgb']          = self::convert_hexadecimal_to_rgb( $this->colors['gray_500'] );
-		$this->colors['gray_600_rgb']          = self::convert_hexadecimal_to_rgb( $this->colors['gray_600'] );
-		$this->colors['blue_dark']             = self::convert_hexadecimal_to_rgb( $this->colors['blue_dark'] );
-		$this->colors['white_rgb']             = self::convert_hexadecimal_to_rgb( $this->colors['white'] );
-		$this->colors['black_rgb']             = self::convert_hexadecimal_to_rgb( $this->colors['black'] );
+		$this->colors['gray_500_rgb']          = self::hex_to_rgb( $this->colors['gray_500'] );
+		$this->colors['gray_600_rgb']          = self::hex_to_rgb( $this->colors['gray_600'] );
+		$this->colors['white_rgb']             = self::hex_to_rgb( $this->colors['white'] );
+		$this->colors['black_rgb']             = self::hex_to_rgb( $this->colors['black'] );
 		$this->colors['primary_color']         = ! empty( $visual_settings[ "{$prefix}primary_color" ] ) ? $visual_settings[ "{$prefix}primary_color" ] : $this->colors['blue'];
-		$this->colors['primary_color_rgb']     = self::convert_hexadecimal_to_rgb( $this->colors['primary_color'] );
+		$this->colors['primary_color_rgb']     = self::hex_to_rgb( $this->colors['primary_color'] );
 		$this->colors['primary_color_light']   = ! empty( $visual_settings[ "{$prefix}primary_color_light" ] ) ? $visual_settings[ "{$prefix}primary_color_light" ] : '#F5FDFF';
 		$this->colors['primary_color_dark']    = ! empty( $visual_settings[ "{$prefix}primary_color_dark" ] ) ? $visual_settings[ "{$prefix}primary_color_dark" ] : '#DBF9FF';
 		$this->colors['secondary_color']       = ! empty( $visual_settings[ "{$prefix}secondary_color" ] ) ? $visual_settings[ "{$prefix}secondary_color" ] : $this->colors['orange'];
-		$this->colors['secondary_color_rgb']   = self::convert_hexadecimal_to_rgb( $this->colors['secondary_color'] );
+		$this->colors['secondary_color_rgb']   = self::hex_to_rgb( $this->colors['secondary_color'] );
 		$this->colors['secondary_color_light'] = ! empty( $visual_settings[ "{$prefix}secondary_color_light" ] ) ? $visual_settings[ "{$prefix}secondary_color_light" ] : '#FFF4D6';
 		$this->colors['secondary_color_dark']  = ! empty( $visual_settings[ "{$prefix}secondary_color_dark" ] ) ? $visual_settings[ "{$prefix}secondary_color_dark" ] : '#FFEDBC';
 		$this->colors['tertiary_color']        = ! empty( $visual_settings[ "{$prefix}tertiary_color" ] ) ? $visual_settings[ "{$prefix}tertiary_color" ] : $this->colors['green'];
-		$this->colors['tertiary_color_rgb']    = self::convert_hexadecimal_to_rgb( $this->colors['tertiary_color'] );
+		$this->colors['tertiary_color_rgb']    = self::hex_to_rgb( $this->colors['tertiary_color'] );
 		$this->colors['tertiary_color_light']  = ! empty( $visual_settings[ "{$prefix}tertiary_color_light" ] ) ? $visual_settings[ "{$prefix}tertiary_color_light" ] : $this->colors['green'];
 		$this->colors['tertiary_color_dark']   = ! empty( $visual_settings[ "{$prefix}tertiary_color_dark" ] ) ? $visual_settings[ "{$prefix}tertiary_color_dark" ] : '#B4F0C9';
 		$this->colors['text_color']            = ! empty( $visual_settings[ "{$prefix}text_color" ] ) ? $visual_settings[ "{$prefix}text_color" ] : '#6C757D';
-		$this->colors['text_color_rgb']        = self::convert_hexadecimal_to_rgb( $this->colors['text_color'] );
+		$this->colors['text_color_rgb']        = self::hex_to_rgb( $this->colors['text_color'] );
 		$this->colors['text_color_2']          = ! empty( $visual_settings[ "{$prefix}text_color_2" ] ) ? $visual_settings[ "{$prefix}text_color_2" ] : $this->colors['gray_600'];
-		$this->colors['text_color_2_rgb']      = self::convert_hexadecimal_to_rgb( $this->colors['text_color_2'] );
+		$this->colors['text_color_2_rgb']      = self::hex_to_rgb( $this->colors['text_color_2'] );
 		$this->colors['text_color_expanded']   = ! empty( $visual_settings[ "{$prefix}text_color_expanded" ] ) ? $visual_settings[ "{$prefix}text_color_expanded" ] : $this->colors['white'];
 		$this->colors['border_color']          = ! empty( $visual_settings[ "{$prefix}border_color" ] ) ? $visual_settings[ "{$prefix}border_color" ] : '#E9ECEF';
-		$this->colors['border_color_rgb']      = self::convert_hexadecimal_to_rgb( $this->colors['border_color'] );
+		$this->colors['border_color_rgb']      = self::hex_to_rgb( $this->colors['border_color'] );
 		$this->colors['bg_1_color']            = ! empty( $visual_settings[ "{$prefix}bg_1_color" ] ) ? $visual_settings[ "{$prefix}bg_1_color" ] : $this->colors['white'];
-		$this->colors['bg_1_color_rgb']        = self::convert_hexadecimal_to_rgb( $this->colors['bg_1_color'] );
+		$this->colors['bg_1_color_rgb']        = self::hex_to_rgb( $this->colors['bg_1_color'] );
 		$this->colors['bg_2_color']            = ! empty( $visual_settings[ "{$prefix}bg_2_color" ] ) ? $visual_settings[ "{$prefix}bg_2_color" ] : $this->colors['gray_100'];
 		$this->colors['danger_color']          = ! empty( $visual_settings[ "{$prefix}danger_color" ] ) ? $visual_settings[ "{$prefix}danger_color" ] : '#FF4848';
-		$this->colors['danger_color_rgb']      = self::convert_hexadecimal_to_rgb( $this->colors['danger_color'] );
+		$this->colors['danger_color_rgb']      = self::hex_to_rgb( $this->colors['danger_color'] );
 		$this->colors['title_color']           = ! empty( $visual_settings[ "{$prefix}title_color" ] ) ? $visual_settings[ "{$prefix}title_color" ] : $this->colors['blue_dark'];
 		$this->colors['main_border_alt']       = ! empty( $visual_settings[ "{$prefix}main_border_alt" ] ) ? $visual_settings[ "{$prefix}main_border_alt" ] : '#6C757D';
 
@@ -183,27 +182,77 @@ class AtumColors {
 	}
 
 	/**
-	 * Convert hexadecimal to rgb
-	 *
-	 * @param string $hex_value
+	 * Convert hexadecimal to RGB
 	 *
 	 * @since 1.5.9
 	 *
-	 * @return string
+	 * @param string $hex_value
+	 * @param bool   $return_array
+	 *
+	 * @return string|int[]
 	 */
-	public static function convert_hexadecimal_to_rgb( $hex_value ) {
+	public static function hex_to_rgb( $hex_value, $return_array = FALSE ) {
 
-        if ( str_contains( $hex_value, 'rgba(' ) )  {
-            list( $r, $g, $b, $a ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgba(%d,%d,%d,%f)' );
-        }
-        elseif ( str_contains( $hex_value, 'rgb(' ) )  {
-            list( $r, $g, $b ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgb(%d,%d,%d)' );
-        }
-        else {
-            list( $r, $g, $b ) = sscanf( $hex_value, '#%02x%02x%02x' );
-        }
+		if ( strpos( $hex_value, 'rgba(' ) !== FALSE ) {
+			list( $r, $g, $b, $a ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgba(%d,%d,%d,%f)' );
+		}
+		elseif ( strpos( $hex_value, 'rgb(' ) !== FALSE ) {
+			list( $r, $g, $b ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgb(%d,%d,%d)' );
+		}
+		else {
 
-		return "$r, $g, $b";
+			$trimmed_str = ltrim( $hex_value, '#' );
+
+			// Standard notation.
+			if ( strlen( $trimmed_str ) === 6 ) {
+				list( $r, $g, $b ) = array_map( 'hexdec', str_split( $trimmed_str, 2 ) );
+			}
+			// Shorthand notation.
+			elseif ( strlen( $trimmed_str ) === 3 ) {
+
+				list( $r, $g, $b ) = array_map(
+					function ( $s_color ) {
+						return hexdec( str_repeat( $s_color, 2 ) );
+					},
+					str_split( $trimmed_str )
+				);
+
+			}
+
+		}
+
+		return ! $return_array ? "$r, $g, $b" : [ $r, $g, $b ];
+
+	}
+
+	/**
+	 * Validate a given string as CSS color. This validation supports alpha channel.
+	 *
+	 * @since 1.4.13
+	 *
+	 * @param string $color The color can be transparent, in hexadecimal, RGB or RGBA notation.
+	 *
+	 * @return bool
+	 */
+	public static function validate_color( $color ) {
+
+		$color = trim( $color );
+
+		// Regex match.
+		if ( strpos( $color, '#' ) !== FALSE ) {
+			return (bool) preg_match( '/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/i', $color );
+		}
+		elseif ( strpos( $color, 'rgba' ) !== FALSE ) {
+			return (bool) preg_match( '/rgba\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?),\s*(\d*\.?\d*)\s*\)/', $color );
+		}
+		elseif ( strpos( $color, 'rgb' ) !== FALSE ) {
+			return (bool) preg_match( '/rgb\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?)\s*\)/', $color );
+		}
+		elseif ( ! $color || 'transparent' === $color ) {
+			return TRUE;
+		}
+
+		return FALSE;
 
 	}
 
@@ -357,7 +406,7 @@ class AtumColors {
 	public function get_dark_mode_colors() {
 
 		$bg_1_color     = '#31324A';
-		$bg_1_color_rgb = self::convert_hexadecimal_to_rgb( $bg_1_color );
+		$bg_1_color_rgb = self::hex_to_rgb( $bg_1_color );
 		$bg_2_color     = '#3B3D5A';
 
 		$scheme = ":root {
