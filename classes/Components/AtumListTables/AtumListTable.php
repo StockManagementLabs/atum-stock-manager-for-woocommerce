@@ -4685,7 +4685,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 
 			add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args ) );
+			$children = new \WP_Query( apply_filters( 'atum/list_table/get_children/children_args', $children_args, $this ) );
 			remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
 
 			if ( 'grouped' === $parent_type && $this->is_searching_by_id_column() ) {
