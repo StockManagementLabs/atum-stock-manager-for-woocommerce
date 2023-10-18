@@ -5021,6 +5021,9 @@ table.wp-list-table td a {
 table.wp-list-table td a:hover, table.wp-list-table td a:focus, table.wp-list-table td a:active {
   color: var(--primary);
 }
+table.wp-list-table td span {
+  display: inline-block;
+}
 table.wp-list-table tbody tr:hover {
   -webkit-box-shadow: -1px -1px 19px -1px var(--atum-row-shadow) inset;
           box-shadow: -1px -1px 19px -1px var(--atum-row-shadow) inset;

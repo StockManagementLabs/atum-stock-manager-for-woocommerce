@@ -1675,6 +1675,10 @@ table.wp-list-table {
 				color: var(--primary);
 			}
 		}
+		
+		span {
+			display: inline-block;
+		}
 	}
 	
 	tbody {
