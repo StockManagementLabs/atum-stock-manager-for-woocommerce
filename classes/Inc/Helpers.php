@@ -1059,6 +1059,10 @@ final class Helpers {
 
 		$prop_value = NULL;
 
+		if ( ! self::is_atum_product( $product ) ) {
+			$product = self::get_atum_product( $product, TRUE );
+		}
+
 		if ( is_callable( array( $product, "get_$prop_name" ) ) ) {
 			$prop_value = call_user_func( array( $product, "get_$prop_name" ) );
 		}

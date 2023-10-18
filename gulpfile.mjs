@@ -5,7 +5,6 @@ const { task, src, dest, watch, series } = gulp;
 import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
 import livereload from 'gulp-livereload';
-//import notify from 'gulp-notify';
 import wrap from 'gulp-wrap';
 import autoprefix from 'gulp-autoprefixer';
 import sourcemaps from 'gulp-sourcemaps';
@@ -15,9 +14,6 @@ import cleanDir from 'gulp-clean-dir';
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
 import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
@@ -31,7 +27,7 @@ const version = '1.9.33',
 const config = {
 	
 	assetsDir : './assets',
-	jsSrcDir  : path.join(__dirname, './assets/js/src/'),
+	jsSrcDir  : './assets/js/src/',
 
 	devUrl    : 'http://atum.loc',
 	production: false,
