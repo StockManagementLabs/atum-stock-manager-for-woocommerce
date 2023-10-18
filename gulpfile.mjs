@@ -1,6 +1,6 @@
 // Load all the modules from package.json
 import gulp from 'gulp';
-const { task, src, dest, watch, series } = gulp;
+const { task, src, dest, watch, series, emit } = gulp;
 
 import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
@@ -13,7 +13,6 @@ import filter from 'gulp-filter';
 import cleanDir from 'gulp-clean-dir';
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
-import path from 'path';
 
 import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
@@ -27,7 +26,7 @@ const version = '1.9.33',
 const config = {
 	
 	assetsDir : './assets',
-	jsSrcDir  : './assets/js/src/',
+	jsSrcDir  : './assets/js/src',
 
 	devUrl    : 'http://atum.loc',
 	production: false,
@@ -60,7 +59,7 @@ const enabled = {
 // Default error handler
 const onError = (err) => {
 	console.log('An error occured:', err.message);
-	this.emit('end');
+	emit('end');
 }
 
 // As with javascripts this task creates two files, the regular and
@@ -121,20 +120,20 @@ task('js::atum', () => {
 			devtool: config.production ? false : 'source-map',
 			
 			entry: {
-				'addons'         : config.jsSrcDir + 'addons.ts',
-				'admin-modals'   : config.jsSrcDir + 'admin-modals.ts',
-				'check-orders'   : config.jsSrcDir + 'check-orders.ts',
-				'dashboard'      : config.jsSrcDir + 'dashboard.ts',
-				'data-export'    : config.jsSrcDir + 'data-export.ts',
-				'list-tables'    : config.jsSrcDir + 'list-tables.ts',
-				'marketing-popup': config.jsSrcDir + 'marketing-popup.ts',
-				'orders'         : config.jsSrcDir + 'orders.ts',
-				'post-type-list' : config.jsSrcDir + 'post-type-list-tables.ts',
-				'product-data'   : config.jsSrcDir + 'product-data.ts',
-				'search-orders'  : config.jsSrcDir + 'search-orders.ts',
-				'settings'       : config.jsSrcDir + 'settings.ts',
-				'suppliers'      : config.jsSrcDir + 'suppliers.ts',
-				'trials-modal'   : config.jsSrcDir + 'trials-modal.ts',
+				'addons'         : config.jsSrcDir + '/addons.ts',
+				'admin-modals'   : config.jsSrcDir + '/admin-modals.ts',
+				'check-orders'   : config.jsSrcDir + '/check-orders.ts',
+				'dashboard'      : config.jsSrcDir + '/dashboard.ts',
+				'data-export'    : config.jsSrcDir + '/data-export.ts',
+				'list-tables'    : config.jsSrcDir + '/list-tables.ts',
+				'marketing-popup': config.jsSrcDir + '/marketing-popup.ts',
+				'orders'         : config.jsSrcDir + '/orders.ts',
+				'post-type-list' : config.jsSrcDir + '/post-type-list-tables.ts',
+				'product-data'   : config.jsSrcDir + '/product-data.ts',
+				'search-orders'  : config.jsSrcDir + '/search-orders.ts',
+				'settings'       : config.jsSrcDir + '/settings.ts',
+				'suppliers'      : config.jsSrcDir + '/suppliers.ts',
+				'trials-modal'   : config.jsSrcDir + '/trials-modal.ts',
 			},
 			
 			output: {
