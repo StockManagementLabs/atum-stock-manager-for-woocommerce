@@ -5178,6 +5178,7 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   margin-top: 5px;
   font-weight: normal;
   font-size: 10px;
+  cursor: default;
 }
 .atum-settings-wrapper #atum-settings .section-fields th .label-secondary {
   background-color: var(--atum-text-color-var1);
