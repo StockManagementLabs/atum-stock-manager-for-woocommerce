@@ -100,7 +100,7 @@ final class Addons {
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 81;
+	const MENU_ORDER = 999; // The last one.
 
 	/**
 	 * Addons singleton constructor
@@ -211,7 +211,6 @@ final class Addons {
 		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', array( 'sweetalert2' ), ATUM_VERSION );
 
 		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-		Helpers::maybe_es6_promise();
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
@@ -266,10 +265,6 @@ final class Addons {
 		if ( is_rtl() ) {
 			wp_register_style( 'atum-addons-rtl', ATUM_URL . 'assets/css/atum-addons-rtl.css', array( 'atum-addons' ), ATUM_VERSION );
 			wp_enqueue_style( 'atum-addons-rtl' );
-		}
-
-		if ( wp_script_is( 'es6-promise', 'registered' ) ) {
-			wp_enqueue_script( 'es6-promise' );
 		}
 
 		wp_enqueue_script( 'sweetalert2' );
