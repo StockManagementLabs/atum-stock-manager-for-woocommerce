@@ -4414,12 +4414,6 @@ abstract class AtumListTable extends \WP_List_Table {
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-		Helpers::maybe_es6_promise();
-
-		if ( wp_script_is( 'es6-promise', 'registered' ) ) {
-			wp_enqueue_script( 'es6-promise' );
-		}
-
 		// List Table styles.
 		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );

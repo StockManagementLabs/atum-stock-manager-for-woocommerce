@@ -266,8 +266,6 @@ class Hooks {
 
 			// Enqueue scripts.
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
-			Helpers::maybe_es6_promise();
-
 			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', [ 'jquery', 'sweetalert2', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
 			$vars = apply_filters( 'atum/product_data/localized_vars', array(

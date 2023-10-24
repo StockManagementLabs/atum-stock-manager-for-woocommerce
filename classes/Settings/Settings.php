@@ -29,52 +29,62 @@ class Settings {
 	 * @var Settings
 	 */
 	private static $instance;
+
 	/**
 	 * Tabs (groups) and sections structure
 	 *
 	 * @var array
 	 */
 	private $tabs;
+
 	/**
 	 * Default active tab
 	 *
 	 * @var string
 	 */
 	private $active_tab = 'general';
+
 	/**
 	 * Store field structure and default values for the settings page
 	 *
 	 * @var array
 	 */
 	private $defaults;
+
 	/**
 	 * Store the fields that should be stored as user meta
 	 *
 	 * @var array
 	 */
 	private $user_meta_options = [];
+
 	/**
 	 * Holds the values to be used in the fields callbacks
 	 *
 	 * @var array
 	 */
 	private $options;
+
 	/**
 	 * The admin page slug
 	 */
 	const UI_SLUG = 'atum-settings';
+
 	/**
 	 * The option key name for the plugin settings
 	 */
 	const OPTION_NAME = ATUM_PREFIX . 'settings';
+
 	/**
 	 * The menu order for this module
 	 */
-	const MENU_ORDER = 80;
+	const MENU_ORDER = 998; // At the end of the list. Just one before add-ons.
+
 	/**
 	 * The sale days used when no value provided
 	 */
 	const DEFAULT_SALE_DAYS = 14;
+
 	/**
 	 * The default number of diaplayed posts per page
 	 */
@@ -143,6 +153,7 @@ class Settings {
 			'tabs'   => $this->tabs,
 			'active' => $this->active_tab,
 		) );
+
 	}
 
 	/**
@@ -195,7 +206,6 @@ class Settings {
 
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', [ 'wp-color-picker' ], ATUM_VERSION, TRUE );
-			Helpers::maybe_es6_promise();
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
@@ -245,10 +255,6 @@ class Settings {
 
 			// Load the ATUM colors.
 			Helpers::enqueue_atum_colors( self::UI_SLUG );
-
-			if ( wp_script_is( 'es6-promise', 'registered' ) ) {
-				wp_enqueue_script( 'es6-promise' );
-			}
 
 			wp_enqueue_editor();
 			wp_enqueue_media();
@@ -1098,9 +1104,9 @@ class Settings {
 	 */
 	public function display_number( $args ) {
 
-		$step    = isset( $args['options']['step'] ) ? $args['options']['step'] : 1;
-		$min     = isset( $args['options']['min'] ) ? $args['options']['min'] : 1;
-		$max     = isset( $args['options']['max'] ) ? $args['options']['max'] : '';
+		$step    = $args['options']['step'] ?? 1;
+		$min     = $args['options']['min'] ?? 1;
+		$max     = $args['options']['max'] ?? '';
 		$default = isset( $args['default'] ) ? " data-default='" . $args['default'] . "'" : '';
 
 		$output = sprintf(
@@ -1211,8 +1217,8 @@ class Settings {
 			$output  = $this->get_description( $args, 'no-padding' );
 		}
 
-		$checkboxes = isset( $stored_values['options'] ) ? $stored_values['options'] : [];
-		$check_defs = isset( $args['default_options'] ) ? $args['default_options'] : [];
+		$checkboxes = $stored_values['options'] ?? [];
+		$check_defs = $args['default_options'] ?? [];
 
 		if ( ! empty( $check_defs ) ) {
 
@@ -1261,12 +1267,12 @@ class Settings {
 
 		$id             = ATUM_PREFIX . $args['id'];
 		$name           = self::OPTION_NAME . "[{$args['id']}]";
-		$multiple       = isset( $args['options']['multiple'] ) ? $args['options']['multiple'] : ''; // allow to send array.
+		$multiple       = $args['options']['multiple'] ?? ''; // allow to send array.
 		$value          = $multiple ? maybe_unserialize( $this->find_option_value( $args['id'] ) ) : $this->find_option_value( $args['id'] );
-		$style          = isset( $args['options']['style'] ) ? $args['options']['style'] : 'secondary';
-		$size           = isset( $args['options']['size'] ) ? $args['options']['size'] : 'sm';
-		$input_type     = isset( $args['options']['input_type'] ) ? $args['options']['input_type'] : 'radio';
-		$required_value = isset( $args['options']['required_value'] ) ? $args['options']['required_value'] : '';
+		$style          = $args['options']['style'] ?? 'secondary';
+		$size           = $args['options']['size'] ?? 'sm';
+		$input_type     = $args['options']['input_type'] ?? 'radio';
+		$required_value = $args['options']['required_value'] ?? '';
 
 		$default = '';
 		if ( isset( $args['default'] ) ) {

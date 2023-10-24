@@ -941,12 +941,6 @@ abstract class AtumOrderPostType {
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
-				Helpers::maybe_es6_promise();
-
-				if ( wp_script_is( 'es6-promise', 'registered' ) ) {
-					wp_enqueue_script( 'es6-promise' );
-				}
-
 				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
 				wp_enqueue_style( 'atum-orders' );
 

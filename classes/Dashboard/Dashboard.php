@@ -291,7 +291,6 @@ class Dashboard {
 			 * SweetAlert 2.
 			 */
 			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
-			Helpers::maybe_es6_promise();
 
 			/*
 			 * Dependencies.

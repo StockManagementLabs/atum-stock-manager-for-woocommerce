@@ -1575,23 +1575,6 @@ final class Helpers {
 		return $return_bool ? FALSE : [];
 
 	}
-	
-	/**
-	 * Check whether to register the ES6 promise polyfill
-	 * This is only required for SweetAlert2 on IE<12
-	 *
-	 * @since 1.2.0
-	 *
-	 * @deprecated IE11 support was removed in WP 5.8 (https://make.wordpress.org/core/handbook/best-practices/browser-support/)
-	 */
-	public static function maybe_es6_promise() {
-		
-		global $is_IE;
-		// ES6 Polyfill (only for IE<12). Required by SweetAlert2.
-		if ( $is_IE ) {
-			wp_register_script( 'es6-promise', 'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js', [], ATUM_VERSION, TRUE );
-		}
-	}
 
 	/**
 	 * Trim inputs and arrays
