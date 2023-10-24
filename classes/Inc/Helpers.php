@@ -3949,4 +3949,16 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Global helper to have a standardized way to register the Sweet Alert 2 scripts
+	 *
+	 * @since 1.9.34
+	 */
+	public static function register_swal_scripts() {
+
+		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
+
+	}
+
 }

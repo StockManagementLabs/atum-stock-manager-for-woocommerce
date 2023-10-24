@@ -270,33 +270,35 @@ class Dashboard {
 
 			$user_widgets_layout = self::get_user_widgets_layout();
 
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', array(), ATUM_VERSION );
-			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', array(), ATUM_VERSION );
+			/**
+			 * Sweet Alert 2.
+			 */
+			Helpers::register_swal_scripts();
 
 			/*
-			 * Gridstack scripts.
+			 * Owl Carousel.
 			 */
-			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', array(), ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
-			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', array(), ATUM_VERSION, TRUE );
-			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'atum-lodash' ), ATUM_VERSION, TRUE );
-			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', array( 'gridstack' ), ATUM_VERSION, TRUE );
+			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', [], ATUM_VERSION );
+			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', [], ATUM_VERSION );
+
+			/*
+			 * Gridstack.
+			 */
+			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', [], ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
+			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', [], ATUM_VERSION, TRUE );
+			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', [ 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'atum-lodash' ], ATUM_VERSION, TRUE );
+			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', [ 'gridstack' ], ATUM_VERSION, TRUE );
 
 			/*
 			 * NiceScroll.
 			 */
-			wp_register_script( 'jquery-nice-scroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', array( 'jquery' ), ATUM_VERSION, TRUE );
-
-			/*
-			 * SweetAlert 2.
-			 */
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+			wp_register_script( 'jquery-nice-scroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', [ 'jquery' ], ATUM_VERSION, TRUE );
 
 			/*
 			 * Dependencies.
 			 */
-			$script_deps = array( 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-blockui', 'jquery-ui-sortable', 'wp-hooks' );
-			$style_deps  = array( 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' );
+			$script_deps = [ 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-blockui', 'jquery-ui-sortable', 'wp-hooks' ];
+			$style_deps  = [ 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ];
 
 			/*
 			 * Widgets scripts
@@ -314,7 +316,7 @@ class Dashboard {
 			wp_enqueue_style( 'atum-dashboard' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', array( 'atum-dashboard' ), ATUM_VERSION );
+				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', [ 'atum-dashboard' ], ATUM_VERSION );
 				wp_enqueue_style( 'atum-dashboard-rtl' );
 			}
 

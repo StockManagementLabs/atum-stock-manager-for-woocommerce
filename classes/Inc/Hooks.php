@@ -254,18 +254,18 @@ class Hooks {
 
 		if ( 'product' === $post_type && in_array( $hook, [ 'post.php', 'post-new.php' ], TRUE ) ) {
 
+			Helpers::register_swal_scripts();
+
 			// Enqueue styles.
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
 			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'sweetalert2' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-product-data' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', array( 'atum-product-data' ), ATUM_VERSION );
+				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', [ 'atum-product-data' ], ATUM_VERSION );
 				wp_enqueue_style( 'atum-product-data-rtl' );
 			}
 
 			// Enqueue scripts.
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', [ 'jquery', 'sweetalert2', 'wp-hooks' ], ATUM_VERSION, TRUE );
 
 			$vars = apply_filters( 'atum/product_data/localized_vars', array(

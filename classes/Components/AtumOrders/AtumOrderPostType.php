@@ -933,19 +933,18 @@ abstract class AtumOrderPostType {
 			global $post;
 
 			// Sweet Alert assets.
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', FALSE, ATUM_VERSION );
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', FALSE, ATUM_VERSION, TRUE );
+			Helpers::register_swal_scripts();
 
 			// ATUM marketing popup.
 			$show_marketing_popup = AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
-				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', array( 'sweetalert2' ), ATUM_VERSION );
+				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', [ 'sweetalert2' ], ATUM_VERSION );
 				wp_enqueue_style( 'atum-orders' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', array( 'atum-orders' ), ATUM_VERSION );
+					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', [ 'atum-orders' ], ATUM_VERSION );
 					wp_enqueue_style( 'atum-orders-rtl' );
 				}
 
@@ -1010,8 +1009,8 @@ abstract class AtumOrderPostType {
 			}
 			elseif ( 'edit.php' === $hook ) {
 
-				$css_dependencies = array();
-				$js_dependencies  = array( 'jquery', 'jquery-tiptip', 'wp-hooks' );
+				$css_dependencies = [];
+				$js_dependencies  = [ 'jquery', 'jquery-tiptip', 'wp-hooks' ];
 
 				if ( $show_marketing_popup ) {
 					$css_dependencies[] = 'sweetalert2';

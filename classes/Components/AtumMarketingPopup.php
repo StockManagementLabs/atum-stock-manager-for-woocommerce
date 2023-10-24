@@ -12,6 +12,9 @@
 
 namespace Atum\Components;
 
+use Atum\Inc\Helpers;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -184,8 +187,10 @@ class AtumMarketingPopup {
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 			);
 
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			Helpers::register_swal_scripts();
+
+			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', [ 'sweetalert2' ], ATUM_VERSION );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', [ 'jquery', 'sweetalert2' ], ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			wp_enqueue_style( 'atum-marketing-popup' );

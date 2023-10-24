@@ -4408,18 +4408,17 @@ abstract class AtumListTable extends \WP_List_Table {
 	public function enqueue_scripts( $hook ) {
 
 		// Sweet Alert 2.
-		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', array(), ATUM_VERSION );
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', array(), ATUM_VERSION, TRUE );
+		Helpers::register_swal_scripts();
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 		// List Table styles.
-		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', array( 'woocommerce_admin_styles', 'sweetalert2' ), ATUM_VERSION );
+		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', [ 'woocommerce_admin_styles', 'sweetalert2' ], ATUM_VERSION );
 		wp_enqueue_style( 'atum-list' );
 
 		if ( is_rtl() ) {
-			wp_register_style( 'atum-list-rtl', ATUM_URL . 'assets/css/atum-list-rtl.css', array( 'atum-list' ), ATUM_VERSION );
+			wp_register_style( 'atum-list-rtl', ATUM_URL . 'assets/css/atum-list-rtl.css', [ 'atum-list' ], ATUM_VERSION );
 			wp_enqueue_style( 'atum-list-rtl' );
 		}
 

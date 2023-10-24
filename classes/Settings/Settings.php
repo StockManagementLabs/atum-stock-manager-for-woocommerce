@@ -200,11 +200,10 @@ class Settings {
 
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
-			wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
+			Helpers::register_swal_scripts();
 
 			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', [ 'sweetalert2' ], ATUM_VERSION );
 
-			wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
 			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', [ 'wp-color-picker' ], ATUM_VERSION, TRUE );
 
 			// ATUM marketing popup.
