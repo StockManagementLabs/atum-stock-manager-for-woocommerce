@@ -192,13 +192,18 @@ class Upgrade {
 		}
 
 		// ** version 1.9.27 ** Clean up any possible wrong addons keys.
-		if ( version_compare( $db_version, '1.9.27', '<' ) ) {
+		if ( version_compare( $db_version, '1.9.27', '<' ) && ! $this->is_fresh_install ) {
 			$this->clean_up_addons_keys();
 		}
 
 		// ** version 1.9.29.1 ** Get rid of deprecated async actions.
-		if ( version_compare( $db_version, '1.9.29..1', '<' ) ) {
+		if ( version_compare( $db_version, '1.9.29.1', '<' ) && ! $this->is_fresh_install ) {
 			$this->remove_deprecated_queues();
+		}
+
+		// ** version 1.9.34 ** Migrate the supplier's description from meta to the post content.
+		if ( version_compare( $db_version, '1.9.34', '<' ) && ! $this->is_fresh_install ) {
+			$this->migrate_supplier_description();
 		}
 
 		/**********************
@@ -1240,7 +1245,7 @@ class Upgrade {
 	 *
 	 * @since 1.9.29.1
 	 */
-	public function remove_deprecated_queues() {
+	private function remove_deprecated_queues() {
 
 		$wc = WC();
 
@@ -1266,6 +1271,31 @@ class Upgrade {
 				$wc_queue->cancel( $hook_name, $pending_action->get_args(), $pending_action->get_group() );
 			}
 		}
+
+	}
+
+	/**
+	 * Migrate the supplier's description from meta to the post content.
+	 *
+	 * @since 1.9.34
+	 */
+	private function migrate_supplier_description() {
+
+		global $wpdb;
+
+		$wpdb->query( "
+			UPDATE $wpdb->posts p
+			INNER JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND pm.meta_key = '_description')
+			SET p.post_content = pm.meta_value
+			WHERE p.post_type = 'atum_supplier' 
+		" );
+
+		$wpdb->query( "
+			DELETE pm
+	        FROM $wpdb->postmeta pm
+			LEFT JOIN $wpdb->posts p ON (p.ID = pm.post_id)	
+			WHERE p.post_type = 'atum_supplier' AND pm.meta_key = '_description' 
+		" );
 
 	}
 

@@ -13,6 +13,9 @@ namespace Atum\Suppliers;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Models\AtumCPTModel;
+
+
 /**
  * Class Supplier
  *
@@ -48,21 +51,7 @@ defined( 'ABSPATH' ) || die;
  * @property string $wpml_lang
  * @property string $atum_barcode
  */
-class Supplier {
-
-	/**
-	 * The supplier's ID
-	 *
-	 * @var int
-	 */
-	protected $id = NULL;
-
-	/**
-	 * The post associated to this supplier
-	 *
-	 * @var \WP_Post
-	 */
-	protected $post;
+class Supplier extends AtumCPTModel {
 
 	/**
 	 * Stores the supplier's data
@@ -102,161 +91,9 @@ class Supplier {
 		'atum_barcode'            => '', // NOTE: It must have this name to be compatible with Barcodes PRO.
 	);
 
-	/**
-	 * Changes made to the supplier that should be updated
-	 *
-	 * @var array
-	 */
-	private $changes = array();
-
-
-	/**
-	 * Supplier constructor.
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param int $id
-	 */
-	public function __construct( $id = 0 ) {
-
-		$this->id = $id;
-
-		if ( $id ) {
-			$this->post = get_post( $id );
-			$this->read_data();
-		}
-
-	}
-
-	/**
-	 * Read the supplier's data from db
-	 *
-	 * @since 1.6.8
-	 */
-	public function read_data() {
-
-		$this->data = apply_filters( 'atum/supplier/data', $this->data );
-
-		if ( $this->post ) {
-
-			// Get the name from the inherent post.
-			$this->data['name'] = $this->post->post_title;
-
-			// Get the rest of the data from meta.
-			$meta_data = get_metadata( 'post', $this->id, '', TRUE );
-
-			if ( is_array( $meta_data ) ) {
-
-				foreach ( $meta_data as $meta_key => $meta_value ) {
-
-					$data_name = ltrim( $meta_key, '_' );
-					if ( array_key_exists( $data_name, $this->data ) ) {
-						$this->data[ $data_name ] = is_array( $meta_value ) ? current( $meta_value ) : $meta_value;
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Register any change done to any data field
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param string $data_field
-	 */
-	protected function register_change( $data_field ) {
-
-		if ( ! in_array( $data_field, $this->changes ) ) {
-			$this->changes[] = $data_field;
-		}
-
-	}
-
-	/**
-	 * Save the changes to the database
-	 *
-	 * @since 1.6.8
-	 *
-	 * @return int $supplier_id
-	 */
-	public function save() {
-
-		if ( ! empty( $this->changes ) ) {
-
-			if ( ! $this->id ) {
-				// Inserting.
-				if ( in_array( 'name', $this->changes ) ) {
-
-					$post = [
-						'post_title'  => $this->data['name'],
-						'post_status' => 'publish',
-						'post_type'   => Suppliers::POST_TYPE,
-					];
-
-					$meta_input = [];
-
-					foreach ( $this->changes as $changed_prop ) {
-						if ( 'name' !== $changed_prop && ! empty( $this->data[ $changed_prop ] ) ) {
-							$meta_input[ "_$changed_prop" ] = $this->data[ $changed_prop ];
-						}
-					}
-
-					$post['meta_input'] = $meta_input;
-
-					return wp_insert_post( $post );
-
-				}
-
-			}
-			else {
-				// Updating.
-				foreach ( $this->changes as $changed_prop ) {
-
-					if ( empty( $this->data[ $changed_prop ] ) ) {
-						delete_post_meta( $this->id, "_$changed_prop" );
-					}
-					else {
-						update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
-					}
-
-				}
-			}
-
-		}
-
-		return $this->id;
-
-	}
-
 	/**********
 	 * SETTERS
 	 **********/
-
-	/**
-	 * Set multiple properties at once
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param array $data
-	 */
-	public function set_data( $data ) {
-
-		if ( is_array( $data ) ) {
-
-			foreach ( $data as $field => $value ) {
-				if ( is_callable( array( $this, "set_$field" ) ) ) {
-					call_user_func( array( $this, "set_$field" ), $value );
-				}
-			}
-
-		}
-
-	}
 
 	/**
 	 * Set the supplier code
@@ -392,23 +229,6 @@ class Supplier {
 		if ( $this->data['ordering_email'] !== $ordering_email ) {
 			$this->data['ordering_email'] = $ordering_email;
 			$this->register_change( 'ordering_email' );
-		}
-	}
-
-	/**
-	 * Set the description
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param string $description
-	 */
-	public function set_description( $description ) {
-
-		$description = wp_kses_post( $description );
-
-		if ( $this->data['description'] !== $description ) {
-			$this->data['description'] = $description;
-			$this->register_change( 'description' );
 		}
 	}
 
@@ -584,23 +404,6 @@ class Supplier {
 	}
 
 	/**
-	 * Set the thumbnail ID
-	 *
-	 * @since 1.6.9
-	 *
-	 * @param string $thumbnail_id
-	 */
-	public function set_thumbnail_id( $thumbnail_id ) {
-
-		$thumbnail_id = absint( $thumbnail_id );
-
-		if ( $this->data['thumbnail_id'] !== $thumbnail_id ) {
-			$this->data['thumbnail_id'] = $thumbnail_id;
-			$this->register_change( 'thumbnail_id' );
-		}
-	}
-
-	/**
 	 * Set the discount
 	 *
 	 * @since 1.6.9
@@ -720,21 +523,6 @@ class Supplier {
 	}
 
 	/**
-	 * Set the name
-	 *
-	 * @since 1.9.6
-	 *
-	 * @param string $name
-	 */
-	public function set_name( $name ) {
-
-		if ( ! $this->data['name'] !== $name ) {
-			$this->data['name'] = $name;
-			$this->register_change( 'name' );
-		}
-	}
-
-	/**
 	 * Set WPML lang. Only when WPML is active
 	 *
 	 * @since 1.9.30
@@ -772,76 +560,14 @@ class Supplier {
 	 ***********/
 
 	/**
-	 * Getter for the Supplier's inherent post
+	 * Get the suppliers post type
 	 *
-	 * @since 1.6.8
-	 *
-	 * @return array|\WP_Post|null
-	 */
-	public function get_post() {
-		return $this->post;
-	}
-
-	/**
-	 * Get the Supplier's thumbnail URL
-	 *
-	 * @since 1.6.9
-	 *
-	 * @param string $size
+	 * @since 1.9.34
 	 *
 	 * @return string
 	 */
-	public function get_thumb( $size = 'thumbnail' ) {
-		return $this->data['thumbnail_id'] ? wp_get_attachment_image( $this->data['thumbnail_id'], $size ) : '';
-	}
-
-
-	/***************
-	 * MAGIC METHODS
-	 ***************/
-
-	/**
-	 * Magic Getter
-	 * To avoid illegal access errors, the property being accessed must be declared within data or meta prop arrays
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param string $name
-	 *
-	 * @return mixed|\WP_Error
-	 */
-	public function __get( $name ) {
-
-		// Search in declared class props.
-		if ( isset( $this->$name ) ) {
-			return $this->$name;
-		}
-
-		// Search in props array.
-		if ( array_key_exists( $name, $this->data ) ) {
-			return $this->data[ $name ];
-		}
-
-		return new \WP_Error( __( 'Invalid property', ATUM_TEXT_DOMAIN ) );
-
-	}
-
-	/**
-	 * Magic Unset
-	 *
-	 * @since 1.6.8
-	 *
-	 * @param string $name
-	 */
-	public function __unset( $name ) {
-
-		if ( isset( $this->$name ) ) {
-			unset( $this->$name );
-		}
-		elseif ( array_key_exists( $name, $this->data ) ) {
-			unset( $this->data[ $name ] );
-		}
-
+	public function get_post_type() {
+		return Suppliers::POST_TYPE;
 	}
 
 }

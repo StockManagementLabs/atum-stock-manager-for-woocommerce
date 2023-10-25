@@ -385,7 +385,7 @@ abstract class AtumOrderModel {
 			'fee_lines'            => 'fee',
 		) );
 
-		return isset( $group_to_type[ $group ] ) ? $group_to_type[ $group ] : '';
+		return $group_to_type[ $group ] ?? '';
 
 	}
 
@@ -905,7 +905,7 @@ abstract class AtumOrderModel {
 
 			$this->add_tax( array(
 				'rate_id'            => $tax_rate_id,
-				'tax_total'          => isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] : 0,
+				'tax_total'          => $cart_taxes[ $tax_rate_id ] ?? 0,
 				'shipping_tax_total' => ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0,
 			) );
 
