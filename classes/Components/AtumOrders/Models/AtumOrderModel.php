@@ -1931,7 +1931,7 @@ abstract class AtumOrderModel {
 		}
 		else {
 			/* translators: the order date */
-			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), ( new DateTime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) )->format( _x( 'M d, Y @ h:i A', 'ATUM Order date parsed by DateTime::format', ATUM_TEXT_DOMAIN ) ) );
 		}
 
 		return apply_filters( 'atum/orders/title', $post_title );
