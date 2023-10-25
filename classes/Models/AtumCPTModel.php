@@ -300,6 +300,17 @@ abstract class AtumCPTModel {
 	}
 
 	/**
+	 * Getter for the data prop
+	 *
+	 * @since 1.9.34
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+		return $this->data;
+	}
+
+	/**
 	 * Getter for the post type associated. Required.
 	 *
 	 * @since 1.9.34
