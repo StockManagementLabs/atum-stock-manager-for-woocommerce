@@ -126,7 +126,7 @@ class Log extends AtumOrderModel {
 		}
 		else {
 			/* translators: the log name */
-			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), ( new DateTime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) )->format( _x( 'M d, Y @ h:i A', 'Log date parsed by DateTime::format', ATUM_TEXT_DOMAIN ) ) );
+			$post_title = sprintf( __( 'Log &ndash; %s', ATUM_TEXT_DOMAIN ), ( new \DateTime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) )->format( _x( 'M d, Y @ h:i A', 'Log date parsed by DateTime::format', ATUM_TEXT_DOMAIN ) ) );
 		}
 
 		return apply_filters( 'atum/inventory_logs/log/title', $post_title );
