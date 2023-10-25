@@ -94,7 +94,7 @@
 .bs-popover-end {
 	
 	> .popover-arrow {
-		left: subtract(-$popover-arrow-height, $popover-border-width);
+		left: calc(-1 * $popover-arrow-width + $popover-border-width);
 		width: $popover-arrow-height;
 		height: $popover-arrow-width;
 		
