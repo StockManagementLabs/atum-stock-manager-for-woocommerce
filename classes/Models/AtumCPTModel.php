@@ -260,7 +260,9 @@ abstract class AtumCPTModel {
 	 */
 	public function set_name( $name ) {
 
-		if ( ! $this->data['name'] !== $name ) {
+		$name = sanitize_text_field( $name );
+
+		if ( $this->data['name'] !== $name ) {
 			$this->data['name'] = $name;
 			$this->register_change( 'name' );
 		}
@@ -271,7 +273,7 @@ abstract class AtumCPTModel {
 	 *
 	 * @since 1.9.34
 	 *
-	 * @param string $thumbnail_id
+	 * @param int $thumbnail_id
 	 */
 	public function set_thumbnail_id( $thumbnail_id ) {
 

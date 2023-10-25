@@ -374,7 +374,7 @@ class Supplier extends AtumCPTModel {
 	 *
 	 * @since 1.6.8
 	 *
-	 * @param string $user_id
+	 * @param int $user_id
 	 */
 	public function set_assigned_to( $user_id ) {
 
@@ -404,15 +404,15 @@ class Supplier extends AtumCPTModel {
 	}
 
 	/**
-	 * Set the discount
+	 * Set the discount percentage
 	 *
 	 * @since 1.6.9
 	 *
-	 * @param string $discount
+	 * @param int|float $discount
 	 */
 	public function set_discount( $discount ) {
 
-		$discount = absint( $discount );
+		$discount = floatval( $discount );
 
 		if ( $this->data['discount'] !== $discount ) {
 			$this->data['discount'] = $discount;
@@ -425,11 +425,11 @@ class Supplier extends AtumCPTModel {
 	 *
 	 * @since 1.6.9
 	 *
-	 * @param string $tax_rate
+	 * @param int|float $tax_rate
 	 */
 	public function set_tax_rate( $tax_rate ) {
 
-		$tax_rate = absint( $tax_rate );
+		$tax_rate = floatval( $tax_rate );
 
 		if ( $this->data['tax_rate'] !== $tax_rate ) {
 			$this->data['tax_rate'] = $tax_rate;
@@ -442,7 +442,7 @@ class Supplier extends AtumCPTModel {
 	 *
 	 * @since 1.6.9
 	 *
-	 * @param string $lead_time
+	 * @param int $lead_time
 	 */
 	public function set_lead_time( $lead_time ) {
 
@@ -493,7 +493,7 @@ class Supplier extends AtumCPTModel {
 	 *
 	 * @since 1.9.2
 	 *
-	 * @param string $days_to_cancel
+	 * @param int $days_to_cancel
 	 */
 	public function set_days_to_cancel( $days_to_cancel ) {
 
@@ -531,7 +531,9 @@ class Supplier extends AtumCPTModel {
 	 */
 	public function set_wpml_lang( $wpml_lang ) {
 
-		if ( ! $this->data['wpml_lang'] !== $wpml_lang ) {
+		$wpml_lang = esc_attr( $wpml_lang );
+
+		if ( $this->data['wpml_lang'] !== $wpml_lang ) {
 			$this->data['wpml_lang'] = $wpml_lang;
 			$this->register_change( 'wpml_lang' );
 		}
