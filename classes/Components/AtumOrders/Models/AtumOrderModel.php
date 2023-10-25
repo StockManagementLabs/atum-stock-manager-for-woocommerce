@@ -1502,13 +1502,13 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  bool $ex_tax  Optional. Show discount excl any tax.
+	 * @param bool $ex_tax  Optional. Show discount excl any tax.
 	 *
 	 * @return float
 	 */
 	public function get_total_discount( $ex_tax = TRUE ) {
 
-		$total_discount = $this->discount_total;
+		$total_discount = $this->discount_total ?? 0;
 
 		if ( ! $ex_tax ) {
 			$total_discount += $this->discount_tax;
