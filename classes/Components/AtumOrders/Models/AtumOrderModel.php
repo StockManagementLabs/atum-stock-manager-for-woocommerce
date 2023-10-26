@@ -385,7 +385,7 @@ abstract class AtumOrderModel {
 			'fee_lines'            => 'fee',
 		) );
 
-		return isset( $group_to_type[ $group ] ) ? $group_to_type[ $group ] : '';
+		return $group_to_type[ $group ] ?? '';
 
 	}
 
@@ -905,7 +905,7 @@ abstract class AtumOrderModel {
 
 			$this->add_tax( array(
 				'rate_id'            => $tax_rate_id,
-				'tax_total'          => isset( $cart_taxes[ $tax_rate_id ] ) ? $cart_taxes[ $tax_rate_id ] : 0,
+				'tax_total'          => $cart_taxes[ $tax_rate_id ] ?? 0,
 				'shipping_tax_total' => ! empty( $shipping_taxes[ $tax_rate_id ] ) ? $shipping_taxes[ $tax_rate_id ] : 0,
 			) );
 
@@ -1502,13 +1502,13 @@ abstract class AtumOrderModel {
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param  bool $ex_tax  Optional. Show discount excl any tax.
+	 * @param bool $ex_tax  Optional. Show discount excl any tax.
 	 *
 	 * @return float
 	 */
 	public function get_total_discount( $ex_tax = TRUE ) {
 
-		$total_discount = $this->discount_total;
+		$total_discount = $this->discount_total ?? 0;
 
 		if ( ! $ex_tax ) {
 			$total_discount += $this->discount_tax;
@@ -1931,7 +1931,7 @@ abstract class AtumOrderModel {
 		}
 		else {
 			/* translators: the order date */
-			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'ATUM Order date parsed by strftime', ATUM_TEXT_DOMAIN ), strtotime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) ) ); // phpcs:ignore WordPress.WP.I18n.UnorderedPlaceholdersText
+			$post_title = sprintf( __( 'ATUM Order &ndash; %s', ATUM_TEXT_DOMAIN ), ( new \DateTime( $this->date_created ?: date_i18n( 'Y-m-d H:i:s' ) ) )->format( _x( 'M d, Y @ h:i A', 'ATUM Order date parsed by DateTime::format', ATUM_TEXT_DOMAIN ) ) );
 		}
 
 		return apply_filters( 'atum/orders/title', $post_title );

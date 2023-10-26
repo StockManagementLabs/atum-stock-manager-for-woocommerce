@@ -182,6 +182,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\InventoryLogs\\Models\\LogItem' => __DIR__ . '/../..' . '/classes/InventoryLogs/Models/LogItem.php',
         'Atum\\MetaBoxes\\FileAttachment' => __DIR__ . '/../..' . '/classes/MetaBoxes/FileAttachment.php',
         'Atum\\MetaBoxes\\ProductDataMetaBoxes' => __DIR__ . '/../..' . '/classes/MetaBoxes/ProductDataMetaBoxes.php',
+        'Atum\\Models\\AtumCPTModel' => __DIR__ . '/../..' . '/classes/Models/AtumCPTModel.php',
         'Atum\\Models\\DataStores\\AtumDataStoreCPTTrait' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumDataStoreCPTTrait.php',
         'Atum\\Models\\DataStores\\AtumDataStoreCommonTrait' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumDataStoreCommonTrait.php',
         'Atum\\Models\\DataStores\\AtumProductBookingDataStoreCPT' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumProductBookingDataStoreCPT.php',

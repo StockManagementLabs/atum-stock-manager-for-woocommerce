@@ -102,6 +102,7 @@ return array(
     'Atum\\InventoryLogs\\Models\\LogItem' => $baseDir . '/classes/InventoryLogs/Models/LogItem.php',
     'Atum\\MetaBoxes\\FileAttachment' => $baseDir . '/classes/MetaBoxes/FileAttachment.php',
     'Atum\\MetaBoxes\\ProductDataMetaBoxes' => $baseDir . '/classes/MetaBoxes/ProductDataMetaBoxes.php',
+    'Atum\\Models\\AtumCPTModel' => $baseDir . '/classes/Models/AtumCPTModel.php',
     'Atum\\Models\\DataStores\\AtumDataStoreCPTTrait' => $baseDir . '/classes/Models/DataStores/AtumDataStoreCPTTrait.php',
     'Atum\\Models\\DataStores\\AtumDataStoreCommonTrait' => $baseDir . '/classes/Models/DataStores/AtumDataStoreCommonTrait.php',
     'Atum\\Models\\DataStores\\AtumProductBookingDataStoreCPT' => $baseDir . '/classes/Models/DataStores/AtumProductBookingDataStoreCPT.php',
