@@ -564,7 +564,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param \WP_Query $query
 	 */
 	public function do_extra_filter( $query ) {
-		// This should be defined in any children classes using it.
+		// This should be defined in any children classes using it (if needed).
 	}
 
 	/**
@@ -3365,7 +3365,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					</tr>
 				</thead>
 
-				<tbody id="the-list"<?php if ( $singular ) echo esc_attr( " data-wp-lists='list:$singular'" ); ?>>
+				<tbody id="the-list"<?php echo $singular ? esc_attr( " data-wp-lists='list:$singular'" ) : '' ?>>
 					<?php $this->display_rows_or_placeholder(); ?>
 				</tbody>
 
