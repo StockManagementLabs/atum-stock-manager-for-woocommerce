@@ -503,9 +503,9 @@ final class Ajax {
 
 		$args = array(
 			'per_page'        => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'show_cb'         => ! empty( $_REQUEST['show_cb'] ) ? (bool) $_REQUEST['show_cb'] : FALSE,
-			'show_controlled' => ! empty( $_REQUEST['show_controlled'] ) ? (bool) $_REQUEST['show_controlled'] : FALSE,
-			'screen'          => esc_attr( $_REQUEST['screen'] ),
+			'show_cb'         => ! empty( $_REQUEST['show_cb'] ) && (bool) $_REQUEST['show_cb'],
+			'show_controlled' => ! empty( $_REQUEST['show_controlled'] ) && (bool) $_REQUEST['show_controlled'],
+			'screen'          => esc_attr( $_REQUEST['screen'] ?? '' ),
 		);
 
 		do_action( 'atum/ajax/stock_central_list/before_fetch_list' );
@@ -543,7 +543,7 @@ final class Ajax {
 
 		$args = array(
 			'per_page' => ! empty( $_REQUEST['per_page'] ) ? absint( $_REQUEST['per_page'] ) : Helpers::get_option( 'posts_per_page', Settings::DEFAULT_POSTS_PER_PAGE ),
-			'screen'   => $_REQUEST['screen'],
+			'screen'   => $_REQUEST['screen'] ?? '',
 		);
 
 		do_action( 'atum/ajax/inbound_stock/before_fetch_list' );
@@ -658,7 +658,7 @@ final class Ajax {
 			case 'uncontrol_stock':
 				foreach ( $ids as $id ) {
 
-					// Support non numeric values (for MI items, for example) that will be treated later.
+					// Support non-numeric values (for MI items, for example) that will be treated later.
 					if ( ! is_numeric( $id ) ) {
 						continue;
 					}
@@ -2468,7 +2468,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Set the the Locations from tree for a specific product
+	 * Set the Locations from tree for a specific product
 	 *
 	 * @package ATUM List Tables
 	 *

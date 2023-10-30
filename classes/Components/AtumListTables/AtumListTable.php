@@ -4348,7 +4348,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'row_actions'    => self::$row_actions,
 		);
 
-		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
+		if ( ! empty( $_REQUEST['paged'] ) ) {
 			$response['paged'] = absint( $_REQUEST['paged'] );
 		}
 
