@@ -1124,9 +1124,12 @@ final class Ajax {
 
 				Addons::delete_status_transient( $addon_name );
 
+				// Store the license as active: the installing process in the SML server is going to activate it.
+				$license_status = in_array( $license_data->license, [ 'inactive', 'site_inactive' ] ) ? 'active' : $license_data->license;
+
 				$key_info = array(
 					'key'     => $key,
-					'status'  => $license_data->license,
+					'status'  => $license_status,
 					'expires' => $license_data->expires,
 				);
 
