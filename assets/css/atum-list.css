@@ -7487,7 +7487,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -webkit-box-shadow: none;
           box-shadow: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   height: 26px;
   width: 63px;
 }

@@ -4474,7 +4474,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   -webkit-box-shadow: none;
           box-shadow: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   height: 26px;
   width: 63px;
 }
