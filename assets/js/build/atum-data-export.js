@@ -3728,7 +3728,7 @@ var Utils = {
         if (thousandsSep === void 0) { thousandsSep = this.settings.currency.thousandsSep; }
         if (decimalsSep === void 0) { decimalsSep = this.settings.currency.decimalsSep; }
         if (format === void 0) { format = this.settings.currency.format; }
-        if (!(0,mathjs__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(number)) {
+        if (!this.isNumeric(number)) {
             number = this.unformat(number);
         }
         var formats = this.checkCurrencyFormat(format), useFormat = number > 0 ? formats.pos : (number < 0 ? formats.neg : formats.zero);
@@ -3789,7 +3789,7 @@ var Utils = {
         return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.subtract)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(minuend), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(subtrahend)));
     },
     isNumeric: function (n) {
-        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(n);
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.hasNumericValue)(n);
     },
     round: function (n, precision) {
         return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.round)(n, precision);
@@ -3809,7 +3809,7 @@ var Utils = {
         }
         var qty = $input.val();
         var value = parseFloat(qty || '0'), minAtt = $input.attr('min'), maxAtt = $input.attr('max'), min = parseFloat(minAtt || '0'), max = parseFloat(maxAtt || '0');
-        if (!(0,mathjs__WEBPACK_IMPORTED_MODULE_0__.isNumeric)(qty)) {
+        if (!this.isNumeric(qty)) {
             $input.val(undefined !== minAtt && !isNaN(min) && min > 0 ? min : 0);
         }
         else if (undefined !== minAtt && value < min) {
