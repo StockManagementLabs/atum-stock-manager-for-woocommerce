@@ -13,6 +13,7 @@ import filter from 'gulp-filter';
 import cleanDir from 'gulp-clean-dir';
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
+import TerserPlugin from 'terser-webpack-plugin';
 
 import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
@@ -169,7 +170,15 @@ task('js::atum', () => {
 			},
 			
 			optimization: {
-				minimize: config.production
+				minimize: config.production,
+				minimizer: [new TerserPlugin({
+					terserOptions: {
+						format: {
+							comments: false,
+						},
+					},
+					extractComments: false,
+				})],
 			},
 			mode        : config.production ? 'production' : 'development',
 			cache       : !config.production,

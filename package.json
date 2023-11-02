@@ -35,6 +35,7 @@
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-wrap": "^0.15.0",
 		"sass": "^1.69.4",
+		"terser-webpack-plugin" : "^5.3.9",
 		"ts-loader": "^9.5.0",
 		"typescript": "^5.2.2",
 		"webpack": "^5.89.0",
