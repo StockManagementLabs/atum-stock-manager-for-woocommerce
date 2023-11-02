@@ -42,6 +42,14 @@ class ListTable extends AtumListTable {
 	);
 
 	/**
+	 * Whether to show or not the unmanaged counters
+	 *
+	 * @var bool
+	 */
+	protected $show_unmanaged_counters = FALSE;
+
+
+	/**
 	 * ListTable Constructor
 	 *
 	 * The child class should call this constructor from its own constructor to override the default $args
@@ -59,9 +67,6 @@ class ListTable extends AtumListTable {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
-
-		// Prevent unmanaged counters.
-		$this->show_unmanaged_counters = FALSE;
 
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields

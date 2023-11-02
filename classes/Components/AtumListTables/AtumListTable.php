@@ -58,49 +58,49 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected static $default_hidden_columns = array();
+	protected static $default_hidden_columns = [];
 
 	/**
 	 * Which columns are numeric and searchable? and strings? append to this two keys
 	 *
 	 * @var array
 	 */
-	protected $searchable_columns = array();
+	protected $searchable_columns = [];
 
 	/**
 	 * Set up the ATUM columns and types for correct sorting
 	 *
 	 * @var array
 	 */
-	protected $atum_sortable_columns = array();
+	protected $atum_sortable_columns = [];
 
 	/**
 	 * The previously selected items
 	 *
 	 * @var array
 	 */
-	protected $selected = array();
+	protected $selected = [];
 
 	/**
 	 * Array of product IDs that are excluded from the list
 	 *
 	 * @var array
 	 */
-	protected $excluded = array();
+	protected $excluded = [];
 
 	/**
 	 * Group title columns
 	 *
 	 * @var array
 	 */
-	protected $group_columns = array();
+	protected $group_columns = [];
 
 	/**
 	 * Group members
 	 *
 	 * @var array
 	 */
-	protected $group_members = array();
+	protected $group_members = [];
 
 	/**
 	 * The array of container products
@@ -130,7 +130,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $children_products = array();
+	protected $children_products = [];
 
 	/**
 	 * Elements per page (in order to obviate option default)
@@ -144,42 +144,35 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $current_products = array();
+	protected $current_products = [];
 
 	/**
 	 * Used to include product variations in the Supplier filterings
 	 *
 	 * @var array
 	 */
-	protected $supplier_variation_products = array();
+	protected $supplier_variation_products = [];
 
 	/**
 	 * Taxonomies to filter by
 	 *
 	 * @var array
 	 */
-	protected $taxonomies = array();
+	protected $taxonomies = [];
 
 	/**
 	 * Extra meta args for the list query
 	 *
 	 * @var array
 	 */
-	protected $extra_meta = array();
+	protected $extra_meta = [];
 
 	/**
 	 * The ATUM product data used in WP_Query
 	 *
 	 * @var array
 	 */
-	protected $atum_query_data = array();
-
-	/**
-	 * The WC product data used in WP_Query (when using the new tables)
-	 *
-	 * @var array
-	 */
-	protected $wc_query_data = array();
+	protected $atum_query_data = [];
 
 	/**
 	 * IDs for views
@@ -276,7 +269,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $totalizers = array();
+	protected $totalizers = [];
 
 	/**
 	 * Whether to show the totals row
@@ -297,7 +290,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $query_filters = array();
+	protected $query_filters = [];
 
 	/**
 	 * Counter for the table rows
@@ -326,7 +319,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @var array
 	 */
-	protected $sticky_columns = array();
+	protected $sticky_columns = [];
 
 	/**
 	 * Report table flag
@@ -392,8 +385,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		$this->set_product_types_query_data();
 
 		$args = wp_parse_args( $args, array(
-			'show_cb'         => FALSE,
-			'show_controlled' => TRUE,
+			'show_cb'         => $this->show_cb,
+			'show_controlled' => $this->show_controlled,
 			'per_page'        => Settings::DEFAULT_POSTS_PER_PAGE,
 		) );
 
@@ -564,7 +557,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @param \WP_Query $query
 	 */
 	public function do_extra_filter( $query ) {
-		// This should be defined in any children classes using it.
+		// This should be defined in any children classes using it (if needed).
 	}
 
 	/**
@@ -2287,13 +2280,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function bulk_actions( $which = '' ) {
 
-		if ( is_null( $this->_actions ) ) {
-			$this->_actions = $this->get_bulk_actions();
-			$this->_actions = apply_filters( "atum/list_table/bulk_actions-{$this->screen->id}", $this->_actions );
-			$two            = '';
-		}
-		else {
-			$two = '2';
+		if ( empty( $this->_actions ) ) {
+			$this->_actions = apply_filters( "atum/list_table/bulk_actions-{$this->screen->id}", $this->get_bulk_actions() );
 		}
 
 		if ( empty( $this->_actions ) ) {
@@ -2302,7 +2290,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo esc_attr( $two ) ?>" class="wc-enhanced-select atum-enhanced-select atum-tooltip" id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off">
+		<select name="action<?php echo 'bottom' === $which ? '2' : '' ?>"
+	        class="wc-enhanced-select atum-enhanced-select atum-tooltip"
+            id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off"
+		>
 			<option value="-1"><?php esc_html_e( 'Bulk actions...', ATUM_TEXT_DOMAIN ) ?></option>
 
 			<?php foreach ( $this->_actions as $name => $title ) : ?>
@@ -2310,7 +2301,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			<?php endforeach; ?>
 		</select>
 		<?php
+
 		$this->add_apply_bulk_action_button();
+
 	}
 
 	/**
@@ -3365,7 +3358,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					</tr>
 				</thead>
 
-				<tbody id="the-list"<?php if ( $singular ) echo esc_attr( " data-wp-lists='list:$singular'" ); ?>>
+				<tbody id="the-list"<?php echo $singular ? esc_attr( " data-wp-lists='list:$singular'" ) : '' ?>>
 					<?php $this->display_rows_or_placeholder(); ?>
 				</tbody>
 
@@ -4355,7 +4348,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'row_actions'    => self::$row_actions,
 		);
 
-		if ( isset( $_REQUEST['paged'] ) && ! empty( $_REQUEST['paged'] ) ) {
+		if ( ! empty( $_REQUEST['paged'] ) ) {
 			$response['paged'] = absint( $_REQUEST['paged'] );
 		}
 

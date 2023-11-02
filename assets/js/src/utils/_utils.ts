@@ -12,7 +12,7 @@ import {
 	bignumber as mathBignumber,
 	BigNumber,
 	divide as mathDivide,
-	isNumeric as mathIsNumeric,
+	hasNumericValue as mathIsNumeric,
 	multiply as mathMultiply,
 	number as mathNumber,
 	round as mathRound,
@@ -375,7 +375,7 @@ const Utils = {
 	): string {
 		
 		// Clean up number.
-		if ( ! mathIsNumeric( number ) ) {
+		if ( ! this.isNumeric( number ) ) {
 			number = this.unformat( number );
 		}
 
@@ -555,7 +555,7 @@ const Utils = {
 	 * @return {boolean}
 	 */
 	isNumeric( n: any ): boolean {
-		return mathIsNumeric( n );
+		return <boolean>mathIsNumeric( n );
 	},
 
 	/**
@@ -625,7 +625,7 @@ const Utils = {
 		      min: number                = parseFloat( minAtt || '0' ),
 		      max: number                = parseFloat( maxAtt || '0' );
 
-		if ( ! mathIsNumeric( qty ) ) {
+		if ( ! this.isNumeric( qty ) ) {
 			$input.val( undefined !== minAtt && ! isNaN( min ) && min > 0 ? min : 0 ); // Set to 0 or min (the greater).
 		}
 		else if ( undefined !== minAtt && value < min ) {

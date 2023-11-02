@@ -3871,7 +3871,7 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
 }
 
 .bs-popover-end > .popover-arrow, .bs-popover-auto[data-popper-placement^=right] > .popover-arrow {
-  left: calc(-0.5rem - 1px);
+  left: calc(-1rem + 1px);
   width: 0.5rem;
   height: 1rem;
 }
@@ -7487,7 +7487,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   -webkit-box-shadow: none;
           box-shadow: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   height: 26px;
   width: 63px;
 }
