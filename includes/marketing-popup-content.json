@@ -1,56 +1,30 @@
 {
-	"background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
-		"bg_position": "bottom",
-		"bg_size"    : "contain",
-		"bg_repeat"  : "no-repeat",
-		"bg_color"   : "white"
+	"background" : {
+		"bg_image" : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
+		"bg_position" : "bottom",
+		"bg_size" : "contain",
+		"bg_repeat" : "no-repeat",
+		"bg_color" : "#f5fdff"
 	},
-	"dash_background": {
-		"bg_image"   : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
-		"bg_position": "bottom",
-		"bg_size"    : "contain",
-		"bg_repeat"  : "no-repeat",
-		"bg_color"   : "white"
-	},
-	"images": {
-		"logo"     : "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
-		"dash_logo": "https://stockmanagementlabs.com/wp-content/uploads/2023/03/atum_trial-license.png",
-		"logo_css" : "width:213px;margin-bottom:10px",
+	"images" : {
+		"logo" : "https://polls.stockmanagementlabs.com/upload/themes/survey/sml/files/survey.png",
+		"dash_logo" : "https://polls.stockmanagementlabs.com/upload/themes/survey/sml/files/survey.png",
+		"logo_css" : "position:absolute;top:9px;left:10px",
 		"top_left" : ""
 	},
-	"title": {
-		"text"      : "Trial our premium add-ons for free!",
-		"text_color": "black",
-		"text_size" : "28px",
-		"text_align": "center"
+	"version" : {
+		"text" : "",
+		"text_color" : "#FFF",
+		"background" : "#ff4848"
 	},
-	"version": {
-		"text"      : "",
-		"text_color": "#FFF",
-		"background": "#ff4848"
+	"description" : {
+		"text" : "<iframe src=\"https://polls.stockmanagementlabs.com/467347?lang=en\" style=\"width:100%;height:655px;\"></iframe>",
+		"text_color" : "#6c757d",
+		"text_size" : "14px",
+		"text_align" : "center",
+		"dash_text_align" : "left",
+		"padding" : "0"
 	},
-	"description": {
-		"text"           : "We have listened to all that found it difficult to use our Demos.<br>You can try the full version of all our premium add-ons free of charge for 14 days.<br><strong>What are you waiting for?!</strong>",
-		"text_color"     : "#6c757d",
-		"text_size"      : "14px",
-		"text_align"     : "center",
-		"dash_text_align": "left",
-		"padding"        : "0 28px 25px"
-	},
-	"buttons": [
-		{
-			"text" : "Get Started!",
-			"url"  : "https://stockmanagementlabs.com/addons/",
-			"class": "btn btn-primary",
-			"css"  : ""
-		},
-		{
-			"text" : "Read Documentation",
-			"url"  : "https://stockmanagementlabs.crunch.help/en/atum-core/atum-trials",
-			"class": "btn btn-outline-primary",
-			"css"  : ""
-		}
-	],
-	"transient_key":  "atum_trials"
+	"additional_class" : "wide",
+	"transient_key" : "atum_survey_improve"
 }
