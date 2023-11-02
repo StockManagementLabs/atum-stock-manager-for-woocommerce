@@ -2623,15 +2623,16 @@ final class Ajax {
 		if ( $marketing_popup->show() ) {
 
 			$marketing_popup_data = [
-				'background'    => $marketing_popup->get_background(),
-				'title'         => $marketing_popup->get_title(),
-				'description'   => $marketing_popup->get_description(),
-				'version'       => $marketing_popup->get_version(),
-				'buttons'       => $marketing_popup->get_buttons(),
-				'hoverButtons'  => $marketing_popup->get_buttons_hover_style_block(),
-				'images'        => $marketing_popup->get_images(),
-				'footerNotice'  => $marketing_popup->get_footer_notice(),
-				'transient_key' => AtumMarketingPopup::get_transient_key(),
+				'background'      => $marketing_popup->get_background(),
+				'additionalClass' => $marketing_popup->get_additional_class(),
+				'title'           => $marketing_popup->get_title(),
+				'description'     => $marketing_popup->get_description(),
+				'version'         => $marketing_popup->get_version(),
+				'buttons'         => $marketing_popup->get_buttons(),
+				'hoverButtons'    => $marketing_popup->get_buttons_hover_style_block(),
+				'images'          => $marketing_popup->get_images(),
+				'footerNotice'    => $marketing_popup->get_footer_notice(),
+				'transient_key'   => AtumMarketingPopup::get_transient_key(),
 			];
 
 			// Send marketing popup content.

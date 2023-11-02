@@ -12,9 +12,6 @@
 
 namespace Atum\Components;
 
-use Atum\Inc\Helpers;
-
-
 defined( 'ABSPATH' ) || die;
 
 
@@ -72,9 +69,9 @@ class AtumMarketingPopup {
 	/**
 	 * The marketing popup dash background
 	 *
-	 * @var object
+	 * @var string
 	 */
-	protected $dash_background = [];
+	protected $dash_background = '';
 
 	/**
 	 * The hide popup transient key
@@ -89,6 +86,13 @@ class AtumMarketingPopup {
 	 * @var bool
 	 */
 	protected $loaded = FALSE;
+
+	/**
+	 * Additional class to add to the marketing popup
+	 *
+	 * @var string
+	 */
+	protected $additional_class = '';
 
 	/**
 	 * Whether to disable the popup completely
@@ -144,13 +148,14 @@ class AtumMarketingPopup {
 			}
 
 			// Add attributes to marketing popup.
-			$this->images        = $marketing_popup->images ?? [];
-			$this->title         = $marketing_popup->title ?? '';
-			$this->description   = $marketing_popup->description ?? [];
-			$this->version       = $marketing_popup->version ?? [];
-			$this->buttons       = $marketing_popup->buttons ?? [];
-			$this->footer_notice = $marketing_popup->footer_notice ?? [];
-			self::$transient_key = $marketing_popup->transient_key;
+			$this->additional_class = $marketing_popup->additional_class ?? '';
+			$this->images           = $marketing_popup->images ?? [];
+			$this->title            = $marketing_popup->title ?? '';
+			$this->description      = $marketing_popup->description ?? [];
+			$this->version          = $marketing_popup->version ?? [];
+			$this->buttons          = $marketing_popup->buttons ?? [];
+			$this->footer_notice    = $marketing_popup->footer_notice ?? [];
+			self::$transient_key    = $marketing_popup->transient_key;
 
 			$this->loaded = TRUE;
 
@@ -187,10 +192,8 @@ class AtumMarketingPopup {
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 			);
 
-			Helpers::register_swal_scripts();
-
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', [ 'sweetalert2' ], ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', [ 'jquery', 'sweetalert2' ], ATUM_VERSION, TRUE );
+			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
+			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			wp_enqueue_style( 'atum-marketing-popup' );
@@ -214,6 +217,9 @@ class AtumMarketingPopup {
 	 * @return bool
 	 */
 	public function show( $which = 'popup' ) {
+
+
+		return TRUE;
 
 		// Only show the popup to users that can install plugins.
 		if ( ! current_user_can( 'install_plugins' ) ) {
@@ -250,6 +256,17 @@ class AtumMarketingPopup {
 
 		return TRUE;
 
+	}
+
+	/**
+	 * Getter for the additional class
+	 *
+	 * @since 1.9.35
+	 *
+	 * @return string
+	 */
+	public function get_additional_class() {
+		return $this->additional_class;
 	}
 
 	/**

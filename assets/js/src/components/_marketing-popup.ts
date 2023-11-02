@@ -36,6 +36,7 @@ interface MPopupFooterNotice {
 interface MPopupSettings {
 	background: string;
 	title: MPopupText;
+	additionalClass?: string;
 	description: MPopupText;
 	version?: MPopupLabel;
 	buttons?: MPopupButton[];
@@ -113,7 +114,8 @@ export default class MarketingPopup {
 						version = `<span class="version" style="${ versionBackground + versionColor }">${ popupSettings.version.text }</span>`;
 					}
 					
-					const title: string = popupSettings.title.text ? `<h1 style="${ titleColor + titleFontSize + titleAlign }"><span>${ popupSettings.title.text + version }</span></h1>` : '';
+					const title: string = popupSettings.title.text ? `<h1 style="${ titleColor + titleFontSize + titleAlign }"><span>${ popupSettings.title.text + version }</span></h1>` : '',
+					      additionalClass: string = ` ${popupSettings.additionalClass}` ?? '';
 					
 					// Add buttons.
 					if ( popupSettings.buttons && popupSettings.buttons.length ) {
@@ -140,7 +142,7 @@ export default class MarketingPopup {
 						width            : 520,
 						padding          : null,
 						customClass      : {
-							popup: 'marketing-popup',
+							popup: `marketing-popup${additionalClass}`,
 						},
 						background       : popupSettings.background,
 						showCloseButton  : true,

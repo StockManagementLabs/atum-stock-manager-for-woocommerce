@@ -4,6 +4,10 @@
 		min-height: 433px;
 		padding: 10px 10px 20px 10px;
 		
+		&.wide {
+			padding: 10px 0 0 0;
+		}
+		
 		.swal2-image {
 			width: 143px;
 			height: auto;
