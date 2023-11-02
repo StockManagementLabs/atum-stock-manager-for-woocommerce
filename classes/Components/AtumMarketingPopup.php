@@ -218,9 +218,6 @@ class AtumMarketingPopup {
 	 */
 	public function show( $which = 'popup' ) {
 
-
-		return TRUE;
-
 		// Only show the popup to users that can install plugins.
 		if ( ! current_user_can( 'install_plugins' ) ) {
 			return FALSE;
