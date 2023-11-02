@@ -532,6 +532,9 @@ class Hooks {
 				add_filter( 'woocommerce_' . $post_type . '_get_stock_status', array( $this, 'get_stock_status' ), 10, 2 );
 			}
 
+			// Prevent WooPayments reduce stock.
+			add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'can_reduce_order_stock' ), PHP_INT_MAX, 2 );
+
 		}
 
 	}
@@ -1583,6 +1586,8 @@ class Hooks {
 	/**
 	 * Check stock quantity when stock is value has decimals under 1.
 	 *
+	 * @since 1.9.34
+	 *
 	 * @param string      $stock_status
 	 * @param \WC_Product $product
 	 */
@@ -1598,6 +1603,29 @@ class Hooks {
 		}
 
 		return $stock_status;
+	}
+
+	/**
+	 * Prevent WooPayments reduce order stock and override ATUM methods.
+	 *
+	 * @since 1.9.34
+	 *
+	 * @param boolean   $can_reduce_stock
+	 * @param \WC_Order $order
+	 *
+	 * @return boolean
+	 */
+	public function can_reduce_order_stock( $can_reduce_stock, $order ) {
+
+		if ( class_exists( '\WC_Payment_Gateway_WCPay' ) &&
+			wc_string_to_bool( Helpers::get_option( 'chg_stock_order_complete', 'no' ) ) &&
+			'processing' === $order->get_status() &&
+			'woocommerce_payments' === $order->get_payment_method()
+		) {
+			$can_reduce_stock = FALSE;
+		}
+
+		return $can_reduce_stock;
 	}
 
 
