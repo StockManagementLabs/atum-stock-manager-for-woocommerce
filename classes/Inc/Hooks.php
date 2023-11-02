@@ -527,6 +527,11 @@ class Hooks {
 			// Change min_qty on quantity field on variable products if its necesary.
 			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
 
+			// Stock status for decimal numbers under 1.
+			foreach ( [ 'product', 'product_variation' ] as $post_type ) {
+				add_filter( 'woocommerce_' . $post_type . '_get_stock_status', array( $this, 'get_stock_status' ), 10, 2 );
+			}
+
 		}
 
 	}
@@ -1573,6 +1578,26 @@ class Hooks {
 
 		return $variation_atts;
 
+	}
+
+	/**
+	 * Check stock quantity when stock is value has decimals under 1.
+	 *
+	 * @param string      $stock_status
+	 * @param \WC_Product $product
+	 */
+	public function get_stock_status( $stock_status, $product ) {
+
+		$product = Helpers::get_atum_product( $product );
+
+		$stock = $product->get_stock_quantity();
+		$oost  = $product->get_out_stock_threshold();
+
+		if ( $stock < 1 && 'instock' !== $stock_status && $stock > $oost ) {
+			$stock_status = 'instock';
+		}
+
+		return $stock_status;
 	}
 
 
