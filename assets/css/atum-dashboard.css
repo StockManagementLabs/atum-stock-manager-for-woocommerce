@@ -4768,6 +4768,24 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   background-color: var(--dash-card-bg) !important;
   background-size: cover !important;
 }
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide .marketing-close {
+  right: 30px;
+  top: 20px;
+}
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide .mp-logo {
+  position: absolute;
+  top: 50px;
+  left: 70px;
+}
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide .content .content-description {
+  width: 100%;
+}
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide .content .content-buttons {
+  width: auto;
+}
+.atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide iframe {
+  border-radius: 5px;
+}
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner .marketing-close {
   right: 0;
   font-size: 20px;

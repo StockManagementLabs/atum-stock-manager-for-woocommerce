@@ -1999,6 +1999,9 @@ input[type=button].btn-block {
   min-height: 433px;
   padding: 10px 10px 20px 10px;
 }
+.swal2-container .marketing-popup.wide {
+  padding: 10px 0 0 0;
+}
 .swal2-container .marketing-popup .swal2-image {
   width: 143px;
   height: auto;

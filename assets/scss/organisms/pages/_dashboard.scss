@@ -181,6 +181,33 @@ body.toplevel_page_atum-dashboard {
 				background-color: var(--dash-card-bg) !important;
 				background-size: cover !important;
 				
+				&.wide {
+					
+					.marketing-close {
+						right: 30px;
+						top: 20px;
+					}
+					
+					.mp-logo {
+						position: absolute;
+						top: 50px;
+						left: 70px;
+					}
+					
+					.content {
+						.content-description {
+							width: 100%;
+						}
+						.content-buttons {
+							width: auto;
+						}
+					}
+					
+					iframe {
+						border-radius: 5px;
+					}
+				}
+				
 				.marketing-close {
 					right: 0;
 					font-size: 20px;

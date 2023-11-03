@@ -44,7 +44,7 @@ use Atum\Inc\Helpers;
 
 	<section class="dash-cards owl-carousel owl-theme dash-marketing-banner-container">
 
-		<div class="dash-card dash-marketing-banner" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ) ?>;">
+		<div class="dash-card dash-marketing-banner  <?php echo esc_attr( $marketing_popup->get_additional_class() ); ?>" style="background:<?php echo esc_attr( $marketing_popup->get_dash_background() ) ?>;">
 
 			<span class="atmi-cross marketing-close" data-transient-key="<?php echo esc_attr( AtumMarketingPopup::get_transient_key() ) ?>"></span>
 
