@@ -39,9 +39,9 @@ const config = {
 			'/** \n',
 			' * ATUM Inventory Management for WooCommerce CSS \n',
 			' * @version ' + version + ' \n',
-			' * @author Be Rebel  \n',
+			' * @author BE REBEL  \n',
 			' *\n',
-			' * Author URI: https://berebel.io \n',
+			' * Author URI: https://berebel.studio \n',
 			' * License : ©' + curDate.getFullYear() + ' Stock Management Labs \n',
 			' */\n',
 			'\n <%= contents %>'
