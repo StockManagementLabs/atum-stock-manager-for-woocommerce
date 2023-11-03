@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.3.1
-Requires PHP: 7.1
+Tested up to: 6.4.0
+Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.0.3
-Stable tag: 1.9.33
+WC tested up to: 8.2.1
+Stable tag: 1.9.34
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,67 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.34`
+
+*2023-11-02*
+
+**Features**
+
+* Added filters to Settings to be able to add custom fields externally.
+* Show the user how to access a help guide after closing an auto-guide.
+* Added UOM methods to the ATUM Product trait.
+* Allow saving UOM product props.
+* Added infoPopover JS component.
+* Added typings to popoverBase JS component.
+* Allow tooltips on BOM tree items.
+* Added "low_stock_threshold_by_inventory" property to product data.
+* Upgraded to webpack 5.
+* Modernized gulpfile.
+* Added new JS utility function.
+* Improved number formatting and decimals calculations JS functions.
+* Added barcode support to Suppliers.
+* Added listTable param to children args filter.
+* Created new AtumCPTModel abstract class.
+* Added new get_data method.
+
+**Changes**
+
+* CSS adjustments.
+* Disable the marketing popup while an auto-guide is running.
+* Refactoring.
+* Added strict comparison param.
+* ATUM popovers refactoring.
+* Updated addons loader.
+* Do not select a tree item when clicking its node.
+* Adjusted tree component styling.
+* Removed the "show filters" button.
+* Added spacer CSS.
+* Required node 18.
+* Adjusted webpack 5 configuration.
+* Updated mPDF dependency to 8.2.0.
+* Make white the List tables PDF export background.
+* Support rgb/rgba colors in hex2rgb converter.
+* Updated JS dependencies.
+* Adjusted ATUM menu items order.
+* Removed deprecated ES6 polyfill support.
+* Delayed registering scripts until they are safe to be registered.
+* Store the license as active if it’s going to be activated in the server.
+
+**Fixes**
+
+* Prevent JS function from load if an element does not exist.
+* CSS fix.
+* Fixed select2 CSS styling overrides.
+* Fixed JS tree icons when jQuery UI CSS is loaded.
+* Fixed settings footer logo overlapping at load.
+* PHP 8 compatibility adjustments.
+* Fixed tooltip reloads on list table cells with images.
+* Added missing namespace.
+* Fixed popover left arrow styles.
+* Fixed stock status for products with decimal stock under 1.
 
 ---
 
