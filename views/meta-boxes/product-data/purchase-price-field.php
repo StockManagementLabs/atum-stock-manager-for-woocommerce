@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Inc\Helpers;
 
 $invalid_purchase_price = apply_filters( 'atum/meta_boxes/purchase_price/invalid', ( $field_value > $price ), $product_id );
-$decimals               = apply_filters( 'atum/meta_boxes/purchase_price/allowed_decimals', wc_get_price_decimals() );
+$decimals               = apply_filters( 'atum/meta_boxes/purchase_price/allowed_decimals', '' ); // If blank, it will add the number of decimals specified in WC settings by default.
 $purchase_price         = is_numeric( $field_value ) ? wc_format_localized_price( wc_format_decimal( $field_value, $decimals ) ) : '';
 
 ?>
