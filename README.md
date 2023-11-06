@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.34.1`
+
+*2023-11-06*
+
+**Fixes**
+
+* Fixed Purchase Price decimals not allowed in edit product pages.
+
+---
+
 `1.9.34`
 
 *2023-10-31*
