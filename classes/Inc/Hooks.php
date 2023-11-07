@@ -509,8 +509,8 @@ class Hooks {
 		if ( Globals::get_stock_decimals() > 0 ) {
 
 			// Add step value to the quantity field (WC default = 1).
-			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
-			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_atts' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_step' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_min' ), 10, 2 );
 
 			// Removes the WooCommerce filter, that is validating the quantity to be an int.
 			remove_filter( 'woocommerce_stock_amount', 'intval' );
@@ -540,7 +540,7 @@ class Hooks {
 	}
 
 	/**
-	 * Set min and step value for the stock quantity input number field (WC default = 1)
+	 * Set step value for the stock quantity input number field (WC default = 1)
 	 *
 	 * @since 1.3.4
 	 *
@@ -549,14 +549,29 @@ class Hooks {
 	 *
 	 * @return float|int
 	 */
-	public function stock_quantity_input_atts( $value, $product ) {
-
-		if ( doing_filter( 'woocommerce_quantity_input_min' ) && 0 === $value ) {
-			return $value;
-		}
+	public function stock_quantity_input_step( $value, $product ) {
 
 		return Helpers::get_input_step();
 	}
+
+	/**
+	 * Set min and step value for the stock quantity input number field (WC default = 1)
+	 *
+	 * @since 1.3.41.9.34.1
+	 *
+	 * @param int         $value
+	 * @param \WC_Product $product
+	 *
+	 * @return float|int
+	 */
+	public function stock_quantity_input_min( $value, $product ) {
+
+		// Always > 0
+		$stock_decimals = Globals::get_stock_decimals();
+
+		return ( 10 / pow( 10, $stock_decimals + 1 ) );
+	}
+
 
 	/**
 	 * Customise the "Add to cart" messages to allow decimal places
