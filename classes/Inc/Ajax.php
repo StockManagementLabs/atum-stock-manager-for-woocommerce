@@ -1350,12 +1350,11 @@ final class Ajax {
 	 *
 	 * @since 1.9.14
 	 *
-	 * @param int[]             $ids
-	 * @param PurchaseOrder|Log $atum_order
+	 * @param int[] $ids
 	 *
 	 * @return array
 	 */
-	private function prepare_json_search_products( $ids, $atum_order = NULL ) {
+	private function prepare_json_search_products( $ids ) {
 
 		// Exclude variable products from results.
 		$exclude_types = (array) apply_filters( 'atum/ajax/search_products/excluded_product_types', array_diff( Globals::get_inheritable_product_types(), [ 'grouped', 'bundle' ] ) );
@@ -1364,6 +1363,10 @@ final class Ajax {
 		foreach ( $ids as $id ) {
 
 			$product = Helpers::get_atum_product( $id );
+
+			if ( ! $product instanceof \WC_Product ) {
+				continue;
+			}
 
 			if ( ! wc_products_array_filter_readable( $product ) ) {
 				continue;

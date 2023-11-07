@@ -1006,9 +1006,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			$supplier_post = get_post( $supplier_id );
 
 			if ( $supplier_post && Suppliers::POST_TYPE === $supplier_post->post_type ) {
-
 				$supplier = $supplier_post->post_title;
 			}
+
 		}
 
 		$supplier_length = absint( apply_filters( 'atum/list_table/column_supplier_length', 20 ) );
