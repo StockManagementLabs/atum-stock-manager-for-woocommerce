@@ -22655,6 +22655,7 @@ var BulkActions = (function () {
         this.settings = settings;
         this.globals = globals;
         this.listTable = listTable;
+        this.noOptionValue = '-1';
         this.wpHooks = window['wp']['hooks'];
         this.$bulkButton = $('.apply-bulk-action');
         this.bindEvents();
@@ -22685,21 +22686,24 @@ var BulkActions = (function () {
             _this.$bulkButton = $('.apply-bulk-action');
             _this.globals.$atumList.find('.bulkactions select').not($select).val(selected).trigger('change.select2');
             _this.updateBulkButton();
-            _this.$bulkButton.toggle(selected !== '-1');
+            _this.$bulkButton.toggle(selected !== _this.noOptionValue);
         })
             .on('change', '.check-column input:checkbox', function () { return _this.updateBulkButton(); });
     };
     BulkActions.prototype.applyBulk = function () {
-        var bulkAction = this.globals.$atumList.find('.bulkactions select').filter(function (index, elem) {
-            return $(elem).val() !== '-1';
+        var _this = this;
+        var $bulkSelect = this.globals.$atumList.find('.bulkactions select'), bulkAction = $bulkSelect.filter(function (index, elem) {
+            return $(elem).val() !== _this.noOptionValue;
         }).val(), selectedItems = [];
         this.globals.$atumList.find('tbody .check-column input:checkbox').filter(':checked').each(function (index, elem) {
             selectedItems.push($(elem).val());
         });
-        var processBulkAction = this.wpHooks.applyFilters('atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this);
-        if (processBulkAction) {
+        var allowProcessBulkAction = this.wpHooks.applyFilters('atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this);
+        if (allowProcessBulkAction) {
             this.processBulk(bulkAction, selectedItems);
         }
+        $bulkSelect.val(this.noOptionValue);
+        $bulkSelect.trigger('change.select2');
     };
     BulkActions.prototype.processBulk = function (bulkAction, selectedItems, extraData) {
         var _this = this;
@@ -22710,6 +22714,7 @@ var BulkActions = (function () {
             bulk_action: bulkAction,
             ids: selectedItems,
         };
+        extraData = this.wpHooks.applyFilters('atum_listTable_bulkAction_extraData', extraData, bulkAction);
         if (extraData) {
             data['extra_data'] = extraData;
         }

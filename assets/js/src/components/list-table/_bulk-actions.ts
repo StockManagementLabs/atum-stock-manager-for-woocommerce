@@ -11,6 +11,7 @@ import WPHooks from '../../interfaces/wp.hooks';
 
 export default class BulkActions {
 
+	noOptionValue: string = '-1';
 	$bulkButton: JQuery;
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
 	
@@ -74,7 +75,7 @@ export default class BulkActions {
 				// Sync the top and bottom selects.
 				this.globals.$atumList.find( '.bulkactions select' ).not( $select ).val( selected ).trigger( 'change.select2' );
 				this.updateBulkButton();
-				this.$bulkButton.toggle( selected !== '-1' );
+				this.$bulkButton.toggle( selected !== this.noOptionValue );
 
 			} )
 
@@ -90,23 +91,27 @@ export default class BulkActions {
 	 */
 	applyBulk() {
 
-		const bulkAction: string    = this.globals.$atumList.find( '.bulkactions select' ).filter(
-			( index: number, elem: Element ) => {
-				return $( elem ).val() !== '-1';
-			} ).val(),
-	        selectedItems: string[] = [];
+		const $bulkSelect: JQuery     = this.globals.$atumList.find( '.bulkactions select' ),
+		      bulkAction: string      = $bulkSelect.filter( ( index: number, elem: Element ) => {
+			      return $( elem ).val() !== this.noOptionValue;
+		      } ).val(),
+		      selectedItems: string[] = [];
 
 		this.globals.$atumList.find( 'tbody .check-column input:checkbox' ).filter( ':checked' ).each( ( index: number, elem: Element ) => {
 			selectedItems.push( $( elem ).val() );
 		} );
 
 		// Allow processing the bulk action externally.
-		const processBulkAction: boolean = this.wpHooks.applyFilters( 'atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this );
+		const allowProcessBulkAction: boolean = this.wpHooks.applyFilters( 'atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this );
 
-		if ( processBulkAction ) {
+		if ( allowProcessBulkAction ) {
 			this.processBulk( bulkAction, selectedItems );
 		}
-		
+
+		// Reset the bulk action select.
+		$bulkSelect.val( this.noOptionValue );
+		$bulkSelect.trigger( 'change.select2' );
+
 	}
 
 	/**
@@ -124,6 +129,8 @@ export default class BulkActions {
 			bulk_action: bulkAction,
 			ids        : selectedItems,
 		};
+
+		extraData = this.wpHooks.applyFilters( 'atum_listTable_bulkAction_extraData', extraData, bulkAction );
 
 		if ( extraData ) {
 			data[ 'extra_data' ] = extraData;
