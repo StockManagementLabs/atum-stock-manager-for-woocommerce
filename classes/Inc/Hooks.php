@@ -1608,16 +1608,16 @@ class Hooks {
 	 */
 	public function get_stock_status( $stock_status, $product ) {
 
-		if (  'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-			return $stock_status;
-		}
-
-		$product = Helpers::get_atum_product( $product );
+		$no_stock = floatval( get_option( 'woocommerce_notify_no_stock_amount' ) ) ?: 0;
+		$product  = Helpers::get_atum_product( $product );
 
 		$stock = $product->get_stock_quantity();
-		$oost  = $product->get_out_stock_threshold();
 
-		if ( "" !== $oost && $stock < 1 && 'instock' !== $stock_status && $stock > $oost ) {
+		if ( 'no' !== Helpers::get_option( 'out_stock_threshold', 'no' ) && $product->get_out_stock_threshold() !== '' ) {
+			$no_stock = $product->get_out_stock_threshold();
+		}
+
+		if ( $stock < 1 && 'instock' !== $stock_status && $stock > $no_stock ) {
 			$stock_status = 'instock';
 		}
 
