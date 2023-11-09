@@ -397,7 +397,12 @@ export default class AtumOrders {
 			// The Increase/Decrease stock buttons must be only visible when at least one product is selected
 			const $stockChangeButtons: JQuery = $( '.bulk-decrease-stock, .bulk-increase-stock' );
 
-			$stockChangeButtons.toggle( $( 'table.atum_order_items' ).find( 'tr.item.selected' ).length );
+			if ( $( 'table.atum_order_items' ).find( 'tr.item.selected' ).length ) {
+				$stockChangeButtons.show();
+			}
+			else {
+				$stockChangeButtons.hide();
+			}
 			$editControlsWrapper.slideDown();
 
 		}
