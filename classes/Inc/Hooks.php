@@ -140,6 +140,9 @@ class Hooks {
 			add_filter( 'woocommerce_shop_order_search_results', array( $this, 'search_orders_by_sku' ), 10, 3 );
 		}
 
+		// Avoid restock refunded items.
+		add_filter( 'woocommerce_can_restock_refunded_items', array( $this, 'maybe_allow_restock_refunded_items' ), 10, 3 );
+
 	}
 
 	/**
@@ -1647,6 +1650,24 @@ class Hooks {
 		return $can_reduce_stock;
 	}
 
+	/**
+	 * Avoid to restock refunded items.
+	 *
+	 * @since 1.9.34.1
+	 *
+	 * @param boolean   $allow
+	 * @param \WC_Order $order
+	 * @param mixed     $refunded_line_items
+	 *
+	 * @return boolean
+	 */
+	public function maybe_allow_restock_refunded_items( $allow, $order, $refunded_line_items ) {
+		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete', 'no' ) && 'completed' !== $order->get_status() ) {
+			$allow = FALSE;
+		}
+
+		return $allow;
+	}
 
 	/********************
 	 * Instance methods
