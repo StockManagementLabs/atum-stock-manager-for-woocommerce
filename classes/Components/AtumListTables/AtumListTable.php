@@ -3378,7 +3378,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			</table>
 
-			<input type="hidden" name="atum-column-edits" id="atum-column-edits" value="">
+			<input type="hidden" name="atum-column-edits" value="">
 		</div>
 		<?php
 
@@ -3473,8 +3473,8 @@ abstract class AtumListTable extends \WP_List_Table {
 		<div class="tablenav <?php echo esc_attr( $which ); ?> extend-list-table">
 
 			<?php if ( ! empty( $this->get_bulk_actions() ) || $extra_table_nav ) : ?>
-				<div id="scroll-filters_container" class="filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
-					<div id="filters_container" class="<?php echo 'top' === $which ? 'nav-with-scroll-effect dragscroll' : '' ?>">
+				<div class="scroll-filters-container filters-container-box <?php echo 'top' === $which && ( empty( $this->_pagination_args['total_pages'] ) || $this->_pagination_args['total_pages'] <= 1 ) ? 'no-pagination' : ''; ?><?php echo 'no' !== Helpers::get_option( 'enable_ajax_filter', 'yes' ) ? ' no-submit' : ''; ?>">
+					<div class="filters-container<?php echo 'top' === $which ? ' nav-with-scroll-effect dragscroll' : '' ?>">
 
 						<?php if ( ! empty( $this->get_bulk_actions() ) ) : ?>
 						<div class="alignleft actions bulkactions">

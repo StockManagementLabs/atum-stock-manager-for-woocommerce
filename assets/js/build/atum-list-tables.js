@@ -23255,10 +23255,10 @@ var __assign = (undefined && undefined.__assign) || function () {
 };
 
 var Globals = (function () {
-    function Globals(settings, defaults) {
+    function Globals($atumList, settings, defaults) {
+        this.$atumList = $atumList;
         this.settings = settings;
         this.defaults = defaults;
-        this.$atumList = null;
         this.$atumTable = null;
         this.$editInput = null;
         this.$searchInput = null;
@@ -23278,13 +23278,12 @@ var Globals = (function () {
     }
     Globals.prototype.initProps = function () {
         var _this = this;
-        this.$atumList = (this.defaults && this.defaults.$atumList) || $('.atum-list-wrapper');
         this.$atumTable = (this.defaults && this.defaults.$atumTable) || this.$atumList.find('.atum-list-table');
-        this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('#atum-column-edits');
+        this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('[name="atum-column-edits"]');
         this.$searchInput = (this.defaults && this.defaults.$searchInput) || this.$atumList.find('.atum-post-search');
-        this.$autoFilters = this.$atumList.find('#filters_container .auto-filter');
-        this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
-        this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
+        this.$autoFilters = this.$atumList.find('.filters-container .auto-filter');
+        this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('.search-column-btn');
+        this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('.search-column-dropdown');
         this.$autoFilters.each(function (index, elem) {
             _this.autoFiltersNames.push($(elem).attr('name'));
         });
@@ -23472,7 +23471,7 @@ var ListTable = (function () {
             this.globals.$atumList.find('.tablenav.bottom').empty();
         }
         if (tableData.extraTableNav) {
-            this.globals.$autoFilters = this.globals.$atumList.find('#filters_container .auto-filter');
+            this.globals.$autoFilters = this.globals.$atumList.find('.filters-container .auto-filter');
         }
         this.globals.$atumList.find('table').not('.cloned').find('tfoot tr.totals').html(tableData.totals);
         if ($.address.parameterNames().length) {
@@ -79493,30 +79492,33 @@ jQuery(function ($) {
         orderby: 'date',
         paged: 1,
     });
-    var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_10__["default"](settings);
     var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_8__["default"]();
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_25__["default"]();
     var helpGuide = new _components_help_guide__WEBPACK_IMPORTED_MODULE_11__["default"](settings);
-    var stickyCols = new _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_22__["default"](settings, globals);
-    var listTable = new _components_list_table_list_table__WEBPACK_IMPORTED_MODULE_13__["default"](settings, globals, tooltip, enhancedSelect, stickyCols, helpGuide);
-    var router = new _components_list_table_router__WEBPACK_IMPORTED_MODULE_16__["default"](settings, globals, listTable);
-    var stickyHeader = new _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_23__["default"](settings, globals, stickyCols, tooltip);
     var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
     var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_15__["default"](settings, dateTimePicker, enhancedSelect);
-    if (!_utils_utils__WEBPACK_IMPORTED_MODULE_26__["default"].checkRTL('isRTL')) {
-        new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_19__["default"](globals);
-    }
-    new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
-    new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_20__["default"](settings, tooltip, globals);
-    new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
-    new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
-    new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);
     new _components_light_box__WEBPACK_IMPORTED_MODULE_12__["default"]();
-    new _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_24__["default"](globals, tooltip, stickyCols, stickyHeader);
-    new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_18__["default"](globals, router, enhancedSelect);
-    new _components_list_table_bulk_actions__WEBPACK_IMPORTED_MODULE_3__["default"](settings, globals, listTable);
-    new _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_14__["default"](settings, globals, tooltip);
-    new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_17__["default"](settings, globals.$atumList);
+    $('.atum-list-wrapper[data-list]').each(function (index, elem) {
+        var $atumList = $(elem);
+        var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_10__["default"]($atumList, settings);
+        var stickyCols = new _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_22__["default"](settings, globals);
+        var listTable = new _components_list_table_list_table__WEBPACK_IMPORTED_MODULE_13__["default"](settings, globals, tooltip, enhancedSelect, stickyCols, helpGuide);
+        var router = new _components_list_table_router__WEBPACK_IMPORTED_MODULE_16__["default"](settings, globals, listTable);
+        var stickyHeader = new _components_list_table_sticky_header__WEBPACK_IMPORTED_MODULE_23__["default"](settings, globals, stickyCols, tooltip);
+        if (!_utils_utils__WEBPACK_IMPORTED_MODULE_26__["default"].checkRTL('isRTL')) {
+            new _components_list_table_scroll_bar__WEBPACK_IMPORTED_MODULE_19__["default"](globals);
+        }
+        new _components_list_table_drag_scroll__WEBPACK_IMPORTED_MODULE_5__["default"](globals, tooltip, popover);
+        new _components_list_table_search_in_column__WEBPACK_IMPORTED_MODULE_20__["default"](settings, tooltip, globals);
+        new _components_list_table_column_groups__WEBPACK_IMPORTED_MODULE_6__["default"](globals, stickyHeader);
+        new _components_list_table_filters__WEBPACK_IMPORTED_MODULE_9__["default"](settings, globals, listTable, router, tooltip, dateTimePicker);
+        new _components_list_table_editable_cell__WEBPACK_IMPORTED_MODULE_7__["default"](settings, globals, popover, listTable);
+        new _components_list_table_table_buttons__WEBPACK_IMPORTED_MODULE_24__["default"](globals, tooltip, stickyCols, stickyHeader);
+        new _components_list_table_sales_last_days__WEBPACK_IMPORTED_MODULE_18__["default"](globals, router, enhancedSelect);
+        new _components_list_table_bulk_actions__WEBPACK_IMPORTED_MODULE_3__["default"](settings, globals, listTable);
+        new _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_14__["default"](settings, globals, tooltip);
+        new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_17__["default"](settings, $atumList);
+    });
     if (settings.get('hgMainGuide')) {
         var $tableTitle = $('h1.wp-heading-inline');
         $tableTitle.append(helpGuide.getHelpGuideButtons(settings.get('hgMainGuide')));

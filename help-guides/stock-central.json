@@ -43,7 +43,7 @@
 	},
 	{
 		"title": "Bulk Actions & Filters",
-		"element": ".top #filters_container .bulkactions",
+		"element": ".top .filters-container .bulkactions",
 		"intro": "Apply bulk actions or filters to the Stock Central products.<br/><br/><ol><li>BULK ACTIONS: Using the checkbox located at the start of each row select the products you wish and apply the following bulk actions:<ul><li>Enable WC's Manage Stock.</li><li>Disable WC's Manage Stock.</li><li>Disable ATUM's Stock Control: This action will move the selected products to the Uncontrolled List.</li><li>Add to Purchase Order.</li></ul></li><li>FILTERS: This feature allows you to filter the Stock Central products. You can apply several filters at the same time. Available filters:<ul><li>PRODUCT CATEGORY.</li><li>PRODUCT TYPE.</li><li>SUPPLIER.</li><li>EXTRA FILTERS: You can filter the Stock Central products by other criteria such as: Inbound Stock, Stock on Hold, Reserved Stock, Backorders, Sold Today, Customer Returns, Warehouse Damages, Lost in Post, Best/Worst Sellers and BOM Related.</li></ul></li></ol>",
 		"load": "lazy"
 	},

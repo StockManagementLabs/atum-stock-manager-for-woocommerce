@@ -7,15 +7,13 @@
 	padding-right: 0px;
 	margin: 20px auto 20px 10px;
 	
-	#search_column_btn{
+	.search-column-btn{
 		border-left: 1px solid var(--main-border-alt);
 		border-right: none;
 		
 		@if $enable-rounded {
-			border-top-right-radius : $border-radius;
-			border-bottom-right-radius: $border-radius;
-			border-top-left-radius : 0;
-			border-bottom-left-radius: 0;
+			@include border-right-radius($border-radius !important);
+			@include border-left-radius(0 !important);
 		} @else {
 			border-radius: 0;
 		}

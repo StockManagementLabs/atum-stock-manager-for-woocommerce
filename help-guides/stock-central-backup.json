@@ -36,7 +36,7 @@
 	},
 	{
 		"title": "Bulk Actions",
-		"element": ".top #filters_container .bulkactions",
+		"element": ".top .filters-container .bulkactions",
 		"intro": "<p>Using the checkbox located at the start of each row select the products you wish and apply the following bulk actions:</p><ul><li><p>Enable WC's Manage Stock</p></li><li><p>Disable WC's Manage Stock</p></li><li><p>Disable ATUM's Stock Control: This action will move the selected products to the Uncontrolled List.</p></li><li><p>Add to Purchase Order</p></li></ul>"
 	},
 	{

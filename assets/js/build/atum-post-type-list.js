@@ -19995,10 +19995,10 @@ var __assign = (undefined && undefined.__assign) || function () {
 };
 
 var Globals = (function () {
-    function Globals(settings, defaults) {
+    function Globals($atumList, settings, defaults) {
+        this.$atumList = $atumList;
         this.settings = settings;
         this.defaults = defaults;
-        this.$atumList = null;
         this.$atumTable = null;
         this.$editInput = null;
         this.$searchInput = null;
@@ -20018,13 +20018,12 @@ var Globals = (function () {
     }
     Globals.prototype.initProps = function () {
         var _this = this;
-        this.$atumList = (this.defaults && this.defaults.$atumList) || $('.atum-list-wrapper');
         this.$atumTable = (this.defaults && this.defaults.$atumTable) || this.$atumList.find('.atum-list-table');
-        this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('#atum-column-edits');
+        this.$editInput = (this.defaults && this.defaults.$editInput) || this.$atumList.find('[name="atum-column-edits"]');
         this.$searchInput = (this.defaults && this.defaults.$searchInput) || this.$atumList.find('.atum-post-search');
-        this.$autoFilters = this.$atumList.find('#filters_container .auto-filter');
-        this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('#search_column_btn');
-        this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('#search_column_dropdown');
+        this.$autoFilters = this.$atumList.find('.filters-container .auto-filter');
+        this.$searchColumnBtn = (this.defaults && this.defaults.$searchColumnBtn) || this.$atumList.find('.search-column-btn');
+        this.$searchColumnDropdown = (this.defaults && this.defaults.$searchColumnDropdown) || this.$atumList.find('.search-column-dropdown');
         this.$autoFilters.each(function (index, elem) {
             _this.autoFiltersNames.push($(elem).attr('name'));
         });
@@ -74791,9 +74790,8 @@ __webpack_require__.r(__webpack_exports__);
 
 jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_9__["default"]('atumPostTypeListVars');
-    var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_4__["default"](settings, {
+    var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_4__["default"]($('#posts-filter, .atum-list-wrapper'), settings, {
         $atumTable: $('.wp-list-table'),
-        $atumList: $('#posts-filter, .atum-list-wrapper'),
         filterData: {},
     });
     var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]($('#wpbody-content select'));

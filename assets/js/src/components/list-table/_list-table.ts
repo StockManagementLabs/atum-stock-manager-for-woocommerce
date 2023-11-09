@@ -6,22 +6,21 @@ import ActiveRow from './_active-row';
 import BeforeUnload from '../_before-unload';
 import Blocker from '../_blocker';
 import EnhancedSelect from '../_enhanced-select';
+import HelpGuide from '../_help-guide';
 import Globals from './_globals';
 import { ITableData } from '../../interfaces/tabledata.interface';
 import Settings from '../../config/_settings';
+import StickyColumns from './_sticky-columns';
 import Swal from 'sweetalert2';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
-import StickyColumns from './_sticky-columns';
-import HelpGuide from '../_help-guide';
 
 export default class ListTable {
 	
 	doingAjax: JQueryXHR  = null;
 	isRowExpanding = {};
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
-	
 	constructor(
 		private settings: Settings,
 		private globals: Globals,
@@ -239,7 +238,7 @@ export default class ListTable {
 
 		// Update the autoFilters prop.
 		if ( tableData.extraTableNav ) {
-			this.globals.$autoFilters = this.globals.$atumList.find( '#filters_container .auto-filter' );
+			this.globals.$autoFilters = this.globals.$atumList.find( '.filters-container .auto-filter' );
 		}
 
 		// Update the totals row.

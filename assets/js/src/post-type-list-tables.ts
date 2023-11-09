@@ -36,9 +36,8 @@ jQuery( ( $: JQueryStatic ) => {
 
 	// Get the settings from localized var.
 	const settings = new Settings( 'atumPostTypeListVars' );
-	const globals = new Globals( settings, {
+	const globals = new Globals( $( '#posts-filter, .atum-list-wrapper' ), settings, {
 		$atumTable: $( '.wp-list-table' ),
-		$atumList : $( '#posts-filter, .atum-list-wrapper' ),
 		filterData: {},
 	} );
 	const enhancedSelect = new EnhancedSelect( $( '#wpbody-content select' ) );

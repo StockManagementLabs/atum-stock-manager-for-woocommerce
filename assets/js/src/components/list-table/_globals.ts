@@ -6,8 +6,7 @@ import Settings from '../../config/_settings';
 import Utils from '../../utils/_utils';
 
 export default class Globals {
-	
-	$atumList: JQuery = null;
+
 	$atumTable: JQuery = null;
 	$editInput: JQuery = null;
 	$searchInput: JQuery = null;
@@ -25,6 +24,7 @@ export default class Globals {
 	filterData: any = {};
 	
 	constructor(
+		public $atumList: JQuery,
 		protected settings: Settings,
 		protected defaults?: any
 	) {
@@ -36,13 +36,12 @@ export default class Globals {
 	initProps() {
 
 		// Initialize selectors.
-		this.$atumList = ( this.defaults && this.defaults.$atumList ) || $( '.atum-list-wrapper' );
 		this.$atumTable = ( this.defaults && this.defaults.$atumTable ) || this.$atumList.find( '.atum-list-table' );
-		this.$editInput = ( this.defaults && this.defaults.$editInput ) || this.$atumList.find( '#atum-column-edits' );
+		this.$editInput = ( this.defaults && this.defaults.$editInput ) || this.$atumList.find( '[name="atum-column-edits"]' );
 		this.$searchInput = ( this.defaults && this.defaults.$searchInput ) || this.$atumList.find( '.atum-post-search' );
-		this.$autoFilters = this.$atumList.find( '#filters_container .auto-filter' );
-		this.$searchColumnBtn = ( this.defaults && this.defaults.$searchColumnBtn ) || this.$atumList.find( '#search_column_btn' );
-		this.$searchColumnDropdown = ( this.defaults && this.defaults.$searchColumnDropdown ) || this.$atumList.find( '#search_column_dropdown' );
+		this.$autoFilters = this.$atumList.find( '.filters-container .auto-filter' );
+		this.$searchColumnBtn = ( this.defaults && this.defaults.$searchColumnBtn ) || this.$atumList.find( '.search-column-btn' );
+		this.$searchColumnDropdown = ( this.defaults && this.defaults.$searchColumnDropdown ) || this.$atumList.find( '.search-column-dropdown' );
 
 		this.$autoFilters.each( ( index: number, elem: Element ) => {
 			this.autoFiltersNames.push( $( elem ).attr( 'name' ) );

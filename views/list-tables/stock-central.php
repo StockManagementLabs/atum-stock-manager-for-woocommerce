@@ -30,7 +30,9 @@ use Atum\Inc\Helpers;
 
 	<hr class="wp-header-end">
 
-	<div class="atum-list-wrapper" data-action="atum_fetch_stock_central_list" data-screen="<?php echo esc_attr( $list->screen->id ) ?>">
+	<div class="atum-list-wrapper" data-list="stock-central" data-action="atum_fetch_stock_central_list"
+	     data-screen="<?php echo esc_attr( $list->screen->id ) ?>"
+	>
 		<div class="list-table-header">
 
 			<div id="scroll-stock_central_nav" class="nav-container-box">

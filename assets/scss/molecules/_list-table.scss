@@ -458,12 +458,11 @@
 		flex-wrap: nowrap;
 	}
 	
-	#search_column_btn{
+	.search-column-btn{
 		border-right: 1px solid var(--main-border-alt);
 		
 		@if $enable-rounded {
-			border-top-left-radius : $border-radius;
-			border-bottom-left-radius: $border-radius;
+			@include border-left-radius($border-radius !important);
 		} @else {
 			border-radius: 0;
 		}
@@ -834,7 +833,7 @@
 		.filters-container-box {
 			position: relative;
 			
-			#filters_container, .actions-wrapper {
+			.filters-container, .actions-wrapper {
 				display: flex;
 				align-items: center;
 				gap: 10px;
