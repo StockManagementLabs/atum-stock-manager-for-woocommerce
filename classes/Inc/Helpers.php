@@ -2824,7 +2824,7 @@ final class Helpers {
 	 *
 	 * @return string
 	 */
-	public static function image_placeholder( $image = '', $size = '', $dimensions = [] ) {
+	public static function get_product_image_placeholder( $image = '', $size = '', $dimensions = [] ) {
 		return '<span class="thumb-placeholder"><i class="atum-icon atmi-picture"></i></span>';
 	}
 

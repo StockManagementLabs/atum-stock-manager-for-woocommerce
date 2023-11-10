@@ -476,7 +476,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// Custom image placeholder.
-		add_filter( 'woocommerce_placeholder_img', array( '\Atum\Inc\Helpers', 'image_placeholder' ), 10, 3 );
+		add_filter( 'woocommerce_placeholder_img', array( '\Atum\Inc\Helpers', 'get_product_image_placeholder' ), 10, 3 );
 
 		self::$default_currency = get_woocommerce_currency();
 
