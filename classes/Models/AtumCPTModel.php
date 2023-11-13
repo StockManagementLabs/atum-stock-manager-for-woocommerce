@@ -334,6 +334,17 @@ abstract class AtumCPTModel {
 		return $this->data['thumbnail_id'] ? wp_get_attachment_image( $this->data['thumbnail_id'], $size ) : '';
 	}
 
+	/**
+	 * Whether the related post still exists.
+	 *
+	 * @since 1.9.35
+	 *
+	 * @return bool
+	 */
+	public function exists() {
+		return ! empty( $this->post );
+	}
+
 
 	/***************
 	 * MAGIC METHODS
