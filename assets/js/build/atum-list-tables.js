@@ -79485,21 +79485,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_21__["default"]('atumListVars', {
-        ajaxFilter: 'yes',
-        view: 'all_stock',
-        order: 'desc',
-        orderby: 'date',
-        paged: 1,
-    });
     var enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_8__["default"]();
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_25__["default"]();
-    var helpGuide = new _components_help_guide__WEBPACK_IMPORTED_MODULE_11__["default"](settings);
-    var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
-    var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_15__["default"](settings, dateTimePicker, enhancedSelect);
     new _components_light_box__WEBPACK_IMPORTED_MODULE_12__["default"]();
     $('.atum-list-wrapper[data-list]').each(function (index, elem) {
-        var $atumList = $(elem);
+        var $atumList = $(elem), listId = $atumList.data('list').replace('-', '_');
+        var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_21__["default"]("atumListVars".concat(listId), {
+            ajaxFilter: 'yes',
+            view: 'all_stock',
+            order: 'desc',
+            orderby: 'date',
+            paged: 1,
+        });
+        var helpGuide = new _components_help_guide__WEBPACK_IMPORTED_MODULE_11__["default"](settings);
+        var dateTimePicker = new _components_date_time_picker__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
+        var popover = new _components_table_cell_popovers__WEBPACK_IMPORTED_MODULE_15__["default"](settings, dateTimePicker, enhancedSelect);
         var globals = new _components_list_table_globals__WEBPACK_IMPORTED_MODULE_10__["default"]($atumList, settings);
         var stickyCols = new _components_list_table_sticky_columns__WEBPACK_IMPORTED_MODULE_22__["default"](settings, globals);
         var listTable = new _components_list_table_list_table__WEBPACK_IMPORTED_MODULE_13__["default"](settings, globals, tooltip, enhancedSelect, stickyCols, helpGuide);
@@ -79518,12 +79518,12 @@ jQuery(function ($) {
         new _components_list_table_bulk_actions__WEBPACK_IMPORTED_MODULE_3__["default"](settings, globals, listTable);
         new _components_list_table_locations_tree__WEBPACK_IMPORTED_MODULE_14__["default"](settings, globals, tooltip);
         new _components_list_table_row_actions__WEBPACK_IMPORTED_MODULE_17__["default"](settings, $atumList);
+        if (settings.get('hgMainGuide')) {
+            var $tableTitle = $('h1.wp-heading-inline');
+            $tableTitle.append(helpGuide.getHelpGuideButtons(settings.get('hgMainGuide')));
+            tooltip.addTooltips($tableTitle);
+        }
     });
-    if (settings.get('hgMainGuide')) {
-        var $tableTitle = $('h1.wp-heading-inline');
-        $tableTitle.append(helpGuide.getHelpGuideButtons(settings.get('hgMainGuide')));
-        tooltip.addTooltips($tableTitle);
-    }
 });
 
 })();

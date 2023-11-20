@@ -24,11 +24,18 @@ use Atum\PurchaseOrders\PurchaseOrders;
 class ListTable extends AtumListTable {
 
 	/**
+	 * The list ID
+	 *
+	 * @var string
+	 */
+	protected $id = 'inbound';
+
+	/**
 	 * The columns hidden by default
 	 *
 	 * @var array
 	 */
-	protected static $default_hidden_columns = array( 'ID' );
+	protected static $default_hidden_columns = [ 'ID' ];
 
 	/**
 	 * Just to center the numeric columns on this table
