@@ -22690,6 +22690,10 @@ var BulkActions = (function () {
         })
             .on('change', '.check-column input:checkbox', function () { return _this.updateBulkButton(); });
     };
+    BulkActions.prototype.addHooks = function () {
+        var _this = this;
+        this.wpHooks.addAction('atum_listTable_resetBulkFields', 'atum', function () { return _this.resetBulkFields(); });
+    };
     BulkActions.prototype.applyBulk = function () {
         var _this = this;
         var $bulkSelect = this.globals.$atumList.find('.bulkactions select'), bulkAction = $bulkSelect.filter(function (index, elem) {
@@ -22701,9 +22705,8 @@ var BulkActions = (function () {
         var allowProcessBulkAction = this.wpHooks.applyFilters('atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this);
         if (allowProcessBulkAction) {
             this.processBulk(bulkAction, selectedItems);
+            this.resetBulkFields();
         }
-        $bulkSelect.val(this.noOptionValue);
-        $bulkSelect.trigger('change.select2');
     };
     BulkActions.prototype.processBulk = function (bulkAction, selectedItems, extraData) {
         var _this = this;
@@ -22750,8 +22753,11 @@ var BulkActions = (function () {
         });
     };
     BulkActions.prototype.updateBulkButton = function () {
-        var numChecked = this.globals.$atumList.find('.check-column input:checkbox:checked').length, buttonText = numChecked > 1 ? this.settings.get('applyBulkAction') : this.settings.get('applyAction');
+        var numChecked = this.globals.$atumList.find('.check-column input:checkbox:checked').length, buttonText = this.settings.get(numChecked > 1 ? 'applyBulkAction' : 'applyAction');
         this.$bulkButton.text(buttonText);
+    };
+    BulkActions.prototype.resetBulkFields = function () {
+        this.globals.$atumList.find('.bulkactions select').val(this.noOptionValue).change();
     };
     return BulkActions;
 }());
@@ -23368,6 +23374,7 @@ var ListTable = (function () {
         this.doingAjax = null;
         this.isRowExpanding = {};
         this.wpHooks = window['wp']['hooks'];
+        this.id = globals.$atumList.data('list');
         this.bindEvents();
         this.addHooks();
         setTimeout(function () { _this.calculateCompoundedStocks(); }, 100);
