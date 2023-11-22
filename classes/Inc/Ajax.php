@@ -653,6 +653,7 @@ final class Ajax {
 
 		$ids         = array_unique( $_POST['ids'] );
 		$bulk_action = esc_attr( $_POST['bulk_action'] );
+		$executed    = FALSE; // Take control when the action was executed.
 
 		switch ( $bulk_action ) {
 			case 'uncontrol_stock':
@@ -667,6 +668,7 @@ final class Ajax {
 
 				}
 
+				$executed = TRUE;
 				break;
 
 			case 'control_stock':
@@ -681,6 +683,7 @@ final class Ajax {
 
 				}
 
+				$executed = TRUE;
 				break;
 
 			case 'unmanage_stock':
@@ -695,6 +698,7 @@ final class Ajax {
 
 				}
 
+				$executed = TRUE;
 				break;
 
 			case 'manage_stock':
@@ -709,10 +713,11 @@ final class Ajax {
 
 				}
 
+				$executed = TRUE;
 				break;
 		}
 
-		$args = [ $bulk_action, $ids ];
+		$args = [ $bulk_action, $ids, $executed ];
 
 		if ( ! empty( $_POST['extra_data'] ) ) {
 			$args[] = $_POST['extra_data'];
@@ -720,7 +725,12 @@ final class Ajax {
 
 		do_action_ref_array( 'atum/ajax/list_table/bulk_action_applied', $args );
 
-		wp_send_json_success( __( 'Action applied to the selected items successfully.', ATUM_TEXT_DOMAIN ) );
+		if ( $executed ) {
+			wp_send_json_success( __( 'Action applied to the selected items successfully.', ATUM_TEXT_DOMAIN ) );
+		}
+		else {
+			wp_send_json_error( __( 'Bulk action not found.', ATUM_TEXT_DOMAIN ) );
+		}
 
 	}
 
