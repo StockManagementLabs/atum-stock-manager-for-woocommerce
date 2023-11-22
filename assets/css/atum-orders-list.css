@@ -4015,6 +4015,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 }
 .tablenav .actions {
   white-space: nowrap;
+  margin-left: 1px;
 }
 @media all and (max-width: 480px) {
   .tablenav .actions {

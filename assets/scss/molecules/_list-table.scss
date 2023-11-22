@@ -615,6 +615,7 @@
 	
 	.actions {
 		white-space: nowrap;
+		margin-left: 1px;
 		
 		@include mobile-max {
 			white-space: inherit;

@@ -7028,6 +7028,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 .tablenav .actions {
   white-space: nowrap;
+  margin-left: 1px;
 }
 @media all and (max-width: 480px) {
   .tablenav .actions {
