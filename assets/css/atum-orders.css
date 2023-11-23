@@ -845,7 +845,7 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   background-color: var(--atum-menu-text-highlight);
 }
 body .select2-container--default .select2-dropdown.atum-select2-dropdown .select2-results__option[data-selected=true] {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-dark) !important;
   color: var(--atum-text-color-var3) !important;
 }
 body .select2-container--default .select2-dropdown.atum-select2-dropdown .select2-results__option.select2-results__message {
