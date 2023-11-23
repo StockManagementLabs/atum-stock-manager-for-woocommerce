@@ -717,15 +717,16 @@ final class Ajax {
 				break;
 		}
 
-		$args = [ $bulk_action, $ids, $executed ];
+		$args = compact( 'bulk_action', 'ids', 'executed' );
 
 		if ( ! empty( $_POST['extra_data'] ) ) {
-			$args[] = $_POST['extra_data'];
+			$args['extra_data'] = $_POST['extra_data'];
 		}
 
-		do_action_ref_array( 'atum/ajax/list_table/bulk_action_applied', $args );
+		// Pass the args by reference to be able to modify values externally (https://developer.wordpress.org/reference/functions/do_action_ref_array/#more-information).
+		do_action_ref_array( 'atum/ajax/list_table/bulk_action_applied', [ &$args ] );
 
-		if ( $executed ) {
+		if ( $args['executed'] ) {
 			wp_send_json_success( __( 'Action applied to the selected items successfully.', ATUM_TEXT_DOMAIN ) );
 		}
 		else {
