@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.4.0
+Tested up to: 6.4.1
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.2.1
-Stable tag: 1.9.34.1
+WC tested up to: 8.3.1
+Stable tag: 1.9.35
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,34 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.35`
+
+*2023-11-24*
+
+**Features**
+
+* Allow having 2 ATUM list tables on the same page.
+* Added method to check an ATUM CPT existence.
+* Allow setting multiple localized vars if there are more than one list tables present.
+* Allow resetting the bulk action fields externally.
+
+**Changes**
+
+* Refactoring.
+* Control when a bulk action is executed externally.
+* Added id to JS List Tables.
+
+**Fixes**
+
+* Fixed stock qty input is hidden when stock decimals > 0 and step = 1.
+* Fixed wrong ATUM stock status when stock decimals are set.
+* Fixed show/hide buttons when selecting items in ATUM orders.
+* Fixed check stock status for products with decimal stock.
+* Avoid to restock refunded items when order is not completed and the setting chg_stock_order_complete is enabled.
+* CSS fixes.
 
 ---
 
