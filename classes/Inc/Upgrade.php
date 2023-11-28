@@ -123,7 +123,7 @@ class Upgrade {
 		// ** version 1.7.2 ** Update the calculated props for variable products.
 		if ( version_compare( $db_version, '1.7.2', '<' ) && ! $this->is_fresh_install ) {
 			// Run the method asynchronously.
-			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( get_class(), 'update_variable_calc_props' ) );
+			AtumQueues::add_async_action( 'update_atum_product_calc_props', array( __CLASS__, 'update_variable_calc_props' ) );
 		}
 
 		// ** version 1.7.3 ** Delete the comments count transient, so the unapproved and spam comments are counted.
@@ -1038,7 +1038,7 @@ class Upgrade {
 
 		// Run this only if the product data table is empty.
 		if ( ! $wpdb->get_var( "SELECT COUNT(*) FROM $atum_data_table" ) ) { // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			AtumQueues::add_async_action( 'control_all_products_initial_setup', array( get_class(), 'control_all_products_deferred' ) );
+			AtumQueues::add_async_action( 'control_all_products_initial_setup', array( __CLASS__, 'control_all_products_deferred' ) );
 		}
 
 	}

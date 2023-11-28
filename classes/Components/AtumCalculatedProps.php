@@ -88,7 +88,7 @@ class AtumCalculatedProps {
 
 			}, self::$deferred_sales_calc_props );
 
-			AtumQueues::add_async_action( 'update_atum_sales_calc_props_deferred_hook', array( get_class(), 'update_atum_sales_calc_props_deferred_hook' ), [ self::$deferred_sales_calc_props ] );
+			AtumQueues::add_async_action( 'update_atum_sales_calc_props_deferred_hook', array( __CLASS__, 'update_atum_sales_calc_props_deferred_hook' ), [ self::$deferred_sales_calc_props ] );
 			self::$deferred_sales_calc_props = [];
 
 		}
@@ -100,7 +100,7 @@ class AtumCalculatedProps {
 			$product_ids = array_diff( self::$deferred_product_calc_props, $already_queued );
 
 			if ( ! empty( $product_ids ) ) {
-				AtumQueues::add_async_action( 'update_atum_product_calc_props_deferred_hook', array( get_class(), 'update_atum_product_calc_props_deferred_hook' ), [ $product_ids ] );
+				AtumQueues::add_async_action( 'update_atum_product_calc_props_deferred_hook', array( __CLASS__, 'update_atum_product_calc_props_deferred_hook' ), [ $product_ids ] );
 			}
 
 			self::$deferred_product_calc_props = [];

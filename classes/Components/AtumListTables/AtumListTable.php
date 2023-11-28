@@ -33,6 +33,13 @@ if ( ! class_exists( '\WP_List_Table' ) ) {
 abstract class AtumListTable extends \WP_List_Table {
 
 	/**
+	 * The list ID
+	 *
+	 * @var string
+	 */
+	protected $id = '';
+
+	/**
 	 * The post type used to build the table (WooCommerce product)
 	 *
 	 * @var string
@@ -3445,8 +3452,9 @@ abstract class AtumListTable extends \WP_List_Table {
 			$vars = array_merge( $vars, AtumHelpGuide::get_instance()->get_help_guide_js_vars( $this->help_guide, $this->help_guide ) );
 		}
 
-		$vars = apply_filters( 'atum/list_table/js_vars', $vars );
-		wp_localize_script( 'atum-list', 'atumListVars', $vars );
+		$vars      = apply_filters( 'atum/list_table/js_vars', $vars );
+		$list_name = str_replace( '-', '_', $this->id );
+		wp_localize_script( 'atum-list', "atumListVars{$list_name}", $vars );
 
 		if ( ModuleManager::is_module_active( 'purchase_orders' ) && AtumCapabilities::current_user_can( 'create_suppliers' ) ) {
 			Helpers::load_view( ATUM_PATH . 'views/js-templates/create-supplier' );
@@ -4431,6 +4439,15 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );
 
+	}
+
+	/**
+	 * Getter for the list ID.
+	 *
+	 * @return string
+	 */
+	public function get_id() {
+		return $this->id;
 	}
 
 	/**

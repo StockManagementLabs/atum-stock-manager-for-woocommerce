@@ -30,6 +30,13 @@ use Atum\Settings\Settings;
 class ListTable extends AtumListTable {
 
 	/**
+	 * The list ID
+	 *
+	 * @var string
+	 */
+	protected $id = 'stock-central';
+
+	/**
 	 * The columns hidden by default
 	 *
 	 * @var array

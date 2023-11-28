@@ -85,6 +85,13 @@ export default class BulkActions {
 			.on( 'change', '.check-column input:checkbox', () => this.updateBulkButton() );
 
 	}
+
+	addHooks() {
+
+		// Allow resetting the bulk fields externally.
+		this.wpHooks.addAction( 'atum_listTable_resetBulkFields', 'atum', () => this.resetBulkFields() );
+
+	}
 	
 	/**
 	 * Apply a bulk action for the selected rows
@@ -106,11 +113,10 @@ export default class BulkActions {
 
 		if ( allowProcessBulkAction ) {
 			this.processBulk( bulkAction, selectedItems );
-		}
 
-		// Reset the bulk action select.
-		$bulkSelect.val( this.noOptionValue );
-		$bulkSelect.trigger( 'change.select2' );
+			// Reset the bulk action select.
+			this.resetBulkFields();
+		}
 
 	}
 
@@ -179,10 +185,17 @@ export default class BulkActions {
 	updateBulkButton() {
 
 		const numChecked: number = this.globals.$atumList.find( '.check-column input:checkbox:checked' ).length,
-		      buttonText: string = numChecked > 1 ? this.settings.get( 'applyBulkAction' ) : this.settings.get( 'applyAction' );
+		      buttonText: string = this.settings.get( numChecked > 1 ? 'applyBulkAction' : 'applyAction' );
 
 		this.$bulkButton.text( buttonText );
 		
+	}
+
+	/**
+	 * Reset bulk fields
+	 */
+	resetBulkFields() {
+		this.globals.$atumList.find( '.bulkactions select' ).val( this.noOptionValue ).change();
 	}
 	
 }

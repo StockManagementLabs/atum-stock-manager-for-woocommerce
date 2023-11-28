@@ -562,7 +562,7 @@ body {
 					}
 					
 					&[data-selected=true] {
-						background-color: var(--primary-dark);
+						background-color: var(--primary-dark) !important;
 						color: var(--atum-text-color-var3) !important;
 					}
 					

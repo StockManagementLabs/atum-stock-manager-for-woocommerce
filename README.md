@@ -196,6 +196,34 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.35`
+
+*2023-11-24*
+
+**Features**
+
+* Allow having 2 ATUM list tables on the same page.
+* Added method to check an ATUM CPT existence.
+* Allow setting multiple localized vars if there are more than one list tables present.
+* Allow resetting the bulk action fields externally.
+
+**Changes**
+
+* Refactoring.
+* Control when a bulk action is executed externally.
+* Added id to JS List Tables.
+
+**Fixes**
+
+* Fixed stock qty input is hidden when stock decimals > 0 and step = 1.
+* Fixed wrong ATUM stock status when stock decimals are set.
+* Fixed show/hide buttons when selecting items in ATUM orders.
+* Fixed check stock status for products with decimal stock.
+* Avoid to restock refunded items when order is not completed and the setting chg_stock_order_complete is enabled.
+* CSS fixes.
+
+---
+
 `1.9.34.1`
 
 *2023-11-06*

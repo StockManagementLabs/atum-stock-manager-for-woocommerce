@@ -18,6 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
+use Atum\Models\Products\AtumProductTrait;
 
 
 trait AtumDataStoreCommonTrait {
@@ -27,7 +28,7 @@ trait AtumDataStoreCommonTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param \WC_Product $product The product object.
+	 * @param \WC_Product|AtumProductTrait $product The product object.
 	 */
 	public function update_atum_product_data( &$product ) {
 		
@@ -188,8 +189,8 @@ trait AtumDataStoreCommonTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param \WC_Product $product The product object.
-	 * @param array       $args    Array of args to pass to the delete method.
+	 * @param \WC_Product|AtumProductTrait $product The product object.
+	 * @param array                        $args    Array of args to pass to the delete method.
 	 */
 	public function delete( &$product, $args = array() ) {
 		
@@ -253,7 +254,7 @@ trait AtumDataStoreCommonTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param \WC_Product $product The product object.
+	 * @param \WC_Product|AtumProductTrait $product The product object.
 	 */
 	protected function clear_caches( &$product ) {
 

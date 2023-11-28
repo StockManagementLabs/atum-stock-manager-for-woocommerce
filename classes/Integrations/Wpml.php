@@ -962,13 +962,13 @@ class Wpml {
 	 *
 	 * @since 1.1.8
 	 *
-	 * @param string $query_select
-	 * @param string $product_type
-	 * @param array  $post_types
+	 * @param string   $query_select
+	 * @param string[] $product_type
+	 * @param array    $post_types
 	 *
 	 * @return string
 	 */
-	public function select_add_icl_translations( $query_select, $product_type = '', $post_types = [] ) {
+	public function select_add_icl_translations( $query_select, $product_type = [], $post_types = [] ) {
 
 		global $wpdb;
 
@@ -984,13 +984,13 @@ class Wpml {
 	 *
 	 * @since 1.1.8
 	 *
-	 * @param string $where_clause
-	 * @param string $product_type
-	 * @param array  $post_types
+	 * @param string   $where_clause
+	 * @param string[] $product_type
+	 * @param array    $post_types
 	 *
 	 * @return string
 	 */
-	public function where_add_icl_translations( $where_clause, $product_type = '', $post_types = [] ) {
+	public function where_add_icl_translations( $where_clause, $product_type = [], $post_types = [] ) {
 
 		$where_clause .= ' AND tr.source_language_code IS NULL';
 

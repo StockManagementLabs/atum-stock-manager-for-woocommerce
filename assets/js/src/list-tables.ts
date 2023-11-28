@@ -47,28 +47,30 @@ import Utils from './utils/_utils';
 
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
-	
-	// Get the settings from localized var.
-	const settings = new Settings( 'atumListVars', {
-		ajaxFilter: 'yes',
-		view      : 'all_stock',
-		order     : 'desc',
-		orderby   : 'date',
-		paged     : 1,
-	} );
 
 	// Initialize shared components.
 	const enhancedSelect = new EnhancedSelect();
 	const tooltip = new Tooltip();
-	const helpGuide = new HelpGuide( settings );
-	const dateTimePicker = new DateTimePicker( settings );
-	const popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
 	new LightBox();
 
 	// Initialize one instance per list table found on the current page (this allows us to have multiple tables).
 	$( '.atum-list-wrapper[data-list]' ).each( ( index: number, elem: Element ) => {
 
-		const $atumList: JQuery = $( elem );
+		const $atumList: JQuery = $( elem ),
+		      listId: string    = $atumList.data( 'list' ).replace( '-', '_' );
+
+		// Get the settings from localized var.
+		const settings = new Settings( `atumListVars${ listId }`, {
+			ajaxFilter: 'yes',
+			view      : 'all_stock',
+			order     : 'desc',
+			orderby   : 'date',
+			paged     : 1,
+		} );
+
+		const helpGuide = new HelpGuide( settings );
+		const dateTimePicker = new DateTimePicker( settings );
+		const popover = new TableCellPopovers( settings, dateTimePicker, enhancedSelect );
 
 		// Set globals.
 		const globals = new Globals( $atumList, settings );
@@ -94,13 +96,13 @@ jQuery( ( $: JQueryStatic ) => {
 		new LocationsTree( settings, globals, tooltip );
 		new RowActions( settings, $atumList );
 
-	} );
+		// Add the list table help guide (if available).
+		if ( settings.get( 'hgMainGuide' ) ) {
+			const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
+			$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
+			tooltip.addTooltips( $tableTitle );
+		}
 
-	// Add the list table help guide (if available).
-	if ( settings.get( 'hgMainGuide' ) ) {
-		const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
-		$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
-		tooltip.addTooltips( $tableTitle );
-	}
+	} );
 	
 });

@@ -17,10 +17,12 @@ import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class ListTable {
-	
+
+	id: string;
 	doingAjax: JQueryXHR  = null;
 	isRowExpanding = {};
 	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
+
 	constructor(
 		private settings: Settings,
 		private globals: Globals,
@@ -29,6 +31,8 @@ export default class ListTable {
 		private stickyCols: StickyColumns,
 		private helpGuide: HelpGuide = null
 	) {
+
+		this.id = globals.$atumList.data( 'list' );
 
 		// Bind events.
 		this.bindEvents();

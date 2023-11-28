@@ -490,13 +490,9 @@ class Hooks {
 	 * Delete the ATUM transients after the product stock changes
 	 *
 	 * @since 0.1.5
-	 *
-	 * @param \WC_Product $product The product.
 	 */
-	public function delete_transients( $product ) {
-
+	public function delete_transients() {
 		AtumCache::delete_transients();
-
 	}
 
 	/**

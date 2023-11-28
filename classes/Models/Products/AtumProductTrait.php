@@ -1334,7 +1334,7 @@ trait AtumProductTrait {
 	 */
 	public function set_barcode_type( $barcode_type ) {
 
-		$this->set_prop( 'barcode_type', is_null( $barcode_type ) || 'global' === $barcode_type ? NULL : wc_string_to_bool( $barcode_type ) );
+		$this->set_prop( 'barcode_type', is_null( $barcode_type ) || 'global' === $barcode_type ? NULL : esc_attr( $barcode_type ) );
 	}
 
 	/**
