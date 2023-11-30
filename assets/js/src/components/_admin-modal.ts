@@ -58,9 +58,10 @@ export default class AdminModal {
 		// By using await, we can queue multiple Swals on the same page.
 		for ( const key in this.swalConfigs ) {
 			await swalMixin.fire( {
-				...{ currentProgressStep: counter.toString() }, ...( <SweetAlertOptions>this.swalConfigs[ key ] )
-				} )
-			.then( () => this.hideModal( key ) );
+				...{ currentProgressStep: counter }, ...( <SweetAlertOptions>this.swalConfigs[ key ] )
+			} );
+
+			this.hideModal( key );
 			counter++;
 		}
 

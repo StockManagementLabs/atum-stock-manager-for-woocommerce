@@ -7,13 +7,12 @@
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Inc\Globals as AtumGlobals;
-use Atum\Inc\Helpers as AtumHelpers;
-use AtumMultiInventory\Inc\Helpers;
-
 ?>
 <script type="text/template" id="create-supplier-modal">
 	<div class="atum-modal-content">
+
+		<div class="note"><?php esc_html_e( 'Create a new supplier', ATUM_TEXT_DOMAIN ) ?></div>
+		<hr>
 
 		<form>
 			<fieldset>

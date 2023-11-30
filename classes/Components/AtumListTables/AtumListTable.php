@@ -1039,11 +1039,10 @@ abstract class AtumListTable extends \WP_List_Table {
 				'tooltip'    => $supplier_tooltip,
 				'cell_name'  => esc_attr__( 'Supplier', ATUM_TEXT_DOMAIN ),
 				'extra_data' => [
-					'selected-value'       => $supplier_id,
-					'select-options'       => [
-						(int) $supplier_id => esc_attr( $supplier ),
-						// Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
-					],
+					'selected-value'       => $supplier_id ?: '',
+					'select-options'       => $supplier_id ? [
+						(int) $supplier_id => esc_attr( $supplier ), // Make sure the supplier name is escaped to not cause conflicts when adding as an attribute.
+					] : [],
 					'extra-class'          => 'wc-product-search atum-enhanced-select',
 					'allow_clear'          => 'true',
 					'action'               => 'atum_json_search_suppliers',
@@ -3400,9 +3399,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'applyBulkAction'                => __( 'Apply Bulk Action', ATUM_TEXT_DOMAIN ),
 			'beginning'                      => __( 'Beginning', ATUM_TEXT_DOMAIN ),
 			'confirmNewSupplier'             => __( 'create supplier', ATUM_TEXT_DOMAIN ),
-			'createNewSupplier'              => __( 'Create a new supplier', ATUM_TEXT_DOMAIN ),
 			'createSupplierNonce'            => wp_create_nonce( 'create-supplier-nonce' ),
-			'currencyFormat'                 => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ),
+			'currencyFormat'                 => esc_attr( str_replace( [ '%1$s', '%2$s' ], [ '%s', '%v' ], get_woocommerce_price_format() ) ),
 			'currencyFormatDecimalSeparator' => wc_get_price_decimal_separator(),
 			'currencyFormatNumDecimals'      => wc_get_price_decimals(),
 			'dateSelectorFilters'            => [ 'best_seller', 'worst_seller' ],
@@ -3435,7 +3433,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'showCb'                         => $this->show_cb,
 			'stickyColumns'                  => $this->sticky_columns,
 			'stickyColumnsNonce'             => wp_create_nonce( 'atum-sticky-columns-button-nonce' ),
-			'supplierNameRequired'           => __( 'create supplier', ATUM_TEXT_DOMAIN ),
+			'supplierNameRequired'           => __( 'The supplier name is required', ATUM_TEXT_DOMAIN ),
 			'to'                             => __( 'To', ATUM_TEXT_DOMAIN ),
 		);
 

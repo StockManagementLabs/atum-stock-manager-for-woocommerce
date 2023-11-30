@@ -190,7 +190,9 @@ $card-text:             var(--dash-card-text);
 				flex-grow: 1;
 				color: var(--atum-text-color-var1);
 				
-				@include placeholder(--main-text);
+				@include placeholder {
+					color: var(--main-text);
+				}
 				
 				@include tablet-max {
 					padding: 6px 10px;

@@ -2849,17 +2849,6 @@ table.wp-list-table, .floatThead-container {
 
 // Filter Range Dates Modal
 .filter-range-dates-modal {
-	min-height: 200px !important;
-
-	.swal2-title {
-		
-		.title {
-			font-size: 26px;
-			font-weight: bold;
-			color:  var(--blue-dark);
-			margin: 0;
-		}
-	}
 	
 	.swal2-html-container {
 		
@@ -2926,7 +2915,7 @@ table.wp-list-table, .floatThead-container {
 	@include mobile-max {
 		height: 250px;
 		
-		.swal2-content {
+		.swal2-html-container {
 			flex-direction: column;
 			align-items: stretch;
 			
@@ -2936,8 +2925,8 @@ table.wp-list-table, .floatThead-container {
 			}
 			
 			.input-date {
-				
 				margin-right: 0;
+				
 				input {
 					width: 100%;
 				}

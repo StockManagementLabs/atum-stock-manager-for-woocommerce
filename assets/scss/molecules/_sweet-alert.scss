@@ -1,19 +1,55 @@
 //
-// Sweet alert customizations
-//----------------------------
+// Sweet Alert 2 customizations
+//------------------------------
+
+@keyframes scaleUpSwal {
+	0% {
+		transform:scale(.8) translateY(1000px);
+		opacity:0;
+	}
+	100% {
+		transform:scale(1) translateY(0px);
+		opacity:1;
+	}
+}
+
+@keyframes scaleDownSwal {
+	0% {
+		transform:scale(1) translateY(0px);
+		opacity:1;
+	}
+	100% {
+		transform:scale(.8) translateY(1000px);
+		opacity:0;
+	}
+}
+
+@keyframes fadeInSwal {
+	0% {
+		background: rgba($black, .0);
+	}
+	100% {
+		background: rgba($black, .7);
+	}
+}
+
+@keyframes fadeOutSwal {
+	0% {
+		background: rgba($black, .7);
+	}
+	100% {
+		background: rgba($black, .0);
+	}
+}
 
 .swal2-container {
 	z-index: 100000 !important;
+	word-break: normal;
 	
-	.swal2-header, .swal2-content {
+	.swal2-html-container {
 		padding: 0;
-	}
-	
-	.swal2-content, .swal2-title {
-		margin-bottom: $grid-gutter-width;
-	}
-	
-	.swal2-content {
+		overflow: visible;
+		
 		input[type=text] {
 			margin: 0;
 			border-radius: 4px;
@@ -27,8 +63,6 @@
 	}
 	
 	.swal2-title {
-		flex-wrap: wrap;
-		justify-content: center;
 		line-height: 1.3;
 		font-size: 23px;
 		color: var(--main-text);
@@ -58,7 +92,7 @@
 		}
 		
 		.swal2-validation-message {
-			margin: 1.625em -1.25rem -1.625em;
+			margin: 1.625em 0 0;
 			font-size: 14px;
 			text-align: left;
 			align-items: center;
@@ -145,4 +179,23 @@
 		right: 0;
 		margin: auto;
 	}
+	
+	.swal2-show {
+		opacity:0;
+		animation: scaleUpSwal .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+	}
+	
+	.swal2-hide {
+		animation: scaleDownSwal .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+	}
+	
+	&.swal2-backdrop-show {
+		background: rgba($black, .0);
+		animation: fadeInSwal .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+	}
+	
+	&.swal2-backdrop-hide {
+		animation: fadeOutSwal .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+	}
+	
 }

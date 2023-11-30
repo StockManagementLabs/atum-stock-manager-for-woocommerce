@@ -1,11 +1,11 @@
-/* =======================================
+/* =====================
  ADD SUPPLIER MODAL
- ======================================= */
+ ======================= */
 
-import Settings from '../../config/_settings';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
 import Globals from './_globals';
 import ListTable from './_list-table';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
+import Settings from '../../config/_settings';
 
 export default class AddSupplierModal {
 
@@ -31,7 +31,7 @@ export default class AddSupplierModal {
 	showModal() {
 
 		Swal.fire( {
-			title              : `${this.settings.get( 'newSupplier' )}<small>${this.settings.get( 'createNewSupplier' )}</small>`,
+			title              : this.settings.get( 'newSupplier' ),
 			html               : $( '#create-supplier-modal' ).html(),
 			customClass        : {
 				container: 'atum-modal',
@@ -46,6 +46,7 @@ export default class AddSupplierModal {
 			preConfirm         : (): Promise<void> => this.createSupplier(),
 
 		} );
+
 	}
 
 	/**
@@ -95,13 +96,13 @@ export default class AddSupplierModal {
 
 						let editedCols: any = this.globals.$editInput.val();
 
-						selectOptions[ response.data.supplier_id ] = response.data.supplier_name;
+						selectOptions[ response.data?.supplier_id ] = response.data?.supplier_name;
 
-						this.$setMeta.data( 'realValue', response.data.supplier_id );
-						this.$setMeta.data( 'selectedValue', response.data.supplier_id );
+						this.$setMeta.data( 'realValue', response.data?.supplier_id );
+						this.$setMeta.data( 'selectedValue', response.data?.supplier_id );
 						this.$setMeta.data( 'selectOptions', selectOptions );
 
-						this.listTable.setCellValue( this.$setMeta, response.data.supplier_name );
+						this.listTable.setCellValue( this.$setMeta, response.data?.supplier_name );
 
 						// Initialize the JSON object.
 						if ( editedCols ) {
@@ -118,7 +119,7 @@ export default class AddSupplierModal {
 							editedCols[ this.productId ][ meta ] = {};
 						}
 
-						editedCols[ this.productId ][ meta ] = response.data.supplier_id;
+						editedCols[ this.productId ][ meta ] = response.data?.supplier_id;
 
 						this.globals.$editInput.val( JSON.stringify( editedCols ) );
 

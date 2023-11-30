@@ -321,7 +321,7 @@ ul.easytree-container.easytree-focused {
 
 .edit-locations-modal {
 	
-	.swal2-content {
+	.swal2-html-container {
 		margin-bottom: 0;
 	}
 	
@@ -346,6 +346,7 @@ ul.easytree-container.easytree-focused {
 				}
 			}
 		}
+		
 	}
 
 }
@@ -353,6 +354,8 @@ ul.easytree-container.easytree-focused {
 // BOM hierarchy tree speficity fix
 .swal2-modal {
 	.atum-tree {
+		margin-bottom: math.div($grid-gutter-width, 2);
+		
 		.easytree-title {
 			a {
 				color: var(--dark) !important;

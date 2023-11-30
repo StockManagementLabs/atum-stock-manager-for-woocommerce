@@ -632,7 +632,9 @@ div.add_note {
 							color: $wp-gray-2;
 							background: transparent;
 							
-							@include placeholder($wp-gray-4);
+							@include placeholder {
+								color: $wp-gray-4;
+							}
 						}
 						
 					}

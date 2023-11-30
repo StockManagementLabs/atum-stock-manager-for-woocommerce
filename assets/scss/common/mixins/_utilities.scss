@@ -34,14 +34,17 @@
 }
 
 // Placeholder text
-@mixin placeholder($color: $input-color-placeholder) {
-	// Firefox
+@mixin placeholder {
+	&.placeholder {
+		@content;
+	}
 	&::-moz-placeholder {
-		color: var(--#{$color});
+		@content;
 		opacity: 1; // Override Firefox's unusual default opacity
 	}
-	&:-ms-input-placeholder { color: var(--#{$color}); } // Internet Explorer 10+
-	&::-webkit-input-placeholder  { color: var(--#{$color}); } // Safari and Chrome
+	&::-webkit-input-placeholder {
+		@content;
+	}
 }
 
 // Clearfix
