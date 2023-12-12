@@ -21697,8 +21697,8 @@ var __assign = (undefined && undefined.__assign) || function () {
 };
 var EnhancedSelect = (function () {
     function EnhancedSelect($selects) {
-        var _this = this;
         if ($selects === void 0) { $selects = null; }
+        var _this = this;
         this.addAtumClasses($selects);
         $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
@@ -22588,6 +22588,7 @@ var AddSupplierModal = (function () {
                 method: 'POST',
                 dataType: 'json',
                 success: function (response) {
+                    var _a, _b, _c, _d, _e, _f;
                     if (response.success === false) {
                         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage(response.data);
                     }
@@ -22601,11 +22602,11 @@ var AddSupplierModal = (function () {
                             showCloseButton: true,
                         }, meta = _this.$setMeta.data('meta'), selectOptions = _this.$setMeta.data('selectOptions');
                         var editedCols = _this.globals.$editInput.val();
-                        selectOptions[response.data.supplier_id] = response.data.supplier_name;
-                        _this.$setMeta.data('realValue', response.data.supplier_id);
-                        _this.$setMeta.data('selectedValue', response.data.supplier_id);
+                        selectOptions[(_a = response.data) === null || _a === void 0 ? void 0 : _a.supplier_id] = (_b = response.data) === null || _b === void 0 ? void 0 : _b.supplier_name;
+                        _this.$setMeta.data('realValue', (_c = response.data) === null || _c === void 0 ? void 0 : _c.supplier_id);
+                        _this.$setMeta.data('selectedValue', (_d = response.data) === null || _d === void 0 ? void 0 : _d.supplier_id);
                         _this.$setMeta.data('selectOptions', selectOptions);
-                        _this.listTable.setCellValue(_this.$setMeta, response.data.supplier_name);
+                        _this.listTable.setCellValue(_this.$setMeta, (_e = response.data) === null || _e === void 0 ? void 0 : _e.supplier_name);
                         if (editedCols) {
                             editedCols = JSON.parse(editedCols);
                         }
@@ -22616,7 +22617,7 @@ var AddSupplierModal = (function () {
                         if (!editedCols[_this.productId].hasOwnProperty(meta)) {
                             editedCols[_this.productId][meta] = {};
                         }
-                        editedCols[_this.productId][meta] = response.data.supplier_id;
+                        editedCols[_this.productId][meta] = (_f = response.data) === null || _f === void 0 ? void 0 : _f.supplier_id;
                         _this.globals.$editInput.val(JSON.stringify(editedCols));
                         sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire(successSwalOptions);
                         _this.listTable.maybeAddSaveButton();
@@ -23363,8 +23364,8 @@ var __assign = (undefined && undefined.__assign) || function () {
 
 var ListTable = (function () {
     function ListTable(settings, globals, toolTip, enhancedSelect, stickyCols, helpGuide) {
-        var _this = this;
         if (helpGuide === void 0) { helpGuide = null; }
+        var _this = this;
         this.settings = settings;
         this.globals = globals;
         this.toolTip = toolTip;
@@ -32988,7 +32989,6 @@ var createTyped = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1
     test: _utils_is_js__WEBPACK_IMPORTED_MODULE_2__.isObject
   } // order 'Object' last, it matches on other classes too
   ]);
-
   typed.addConversions([{
     from: 'number',
     to: 'BigNumber',
@@ -33514,6 +33514,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   string: () => (/* binding */ string),
 /* harmony export */   subset: () => (/* binding */ subset),
 /* harmony export */   subtract: () => (/* binding */ subtract),
+/* harmony export */   subtractScalar: () => (/* binding */ subtractScalar),
 /* harmony export */   sum: () => (/* binding */ sum),
 /* harmony export */   sylvester: () => (/* binding */ sylvester),
 /* harmony export */   tan: () => (/* binding */ tan),
@@ -33609,175 +33610,176 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/splitUnit.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/square.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/string.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/tan.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/typeOf.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acosh.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acsch.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/apply.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/asec.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/string/bin.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/combinationsWithRep.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/cosh.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/csch.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isNaN.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isPrime.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/randomInt.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/sech.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/sinh.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/sparse.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/sqrt.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/tanh.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/unaryMinus.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acoth.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/coth.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/fraction/function/fraction.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isNumeric.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_90__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/matrix.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_91__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromFunction.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_92__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mode.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_93__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/numeric.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_94__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/prod.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_95__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/reshape.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_96__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/size.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_97__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/squeeze.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_98__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/transpose.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_99__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/xgcd.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_100__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/zeros.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_101__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/asin.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_102__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/cbrt.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_103__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/concat.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_104__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/count.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_105__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ctranspose.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_106__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/diag.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_107__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/divideScalar.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_108__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotDivide.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_109__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/equal.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_110__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/flatten.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_111__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/hasNumericValue.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_112__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/identity.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_113__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/kron.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_114__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/largerEq.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_115__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/leftShift.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_116__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromColumns.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_117__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/nthRoot.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_118__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ones.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_119__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/resize.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_120__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/rightArithShift.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_121__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/round.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_122__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/smaller.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_123__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/subtract.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_124__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/unit/to.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_125__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/unequal.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_126__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/usolve.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_127__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/xor.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_128__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/add.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_129__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/atan2.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_130__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitAnd.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_131__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitXor.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_132__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/catalan.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_133__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compare.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_134__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compareText.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_135__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/cumsum.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_136__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/deepEqual.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_137__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/diff.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_138__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/geometry/distance.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_139__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/dot.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_140__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/equalText.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_141__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/floor.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_142__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/gcd.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_143__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/hypot.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_144__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/ImmutableDenseMatrix.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_145__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/MatrixIndex.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_146__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/larger.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_147__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/log.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_148__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lsolve.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_149__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromRows.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_150__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/min.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_151__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/mod.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_152__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/multiply.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_153__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/nthRoots.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_154__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/or.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_155__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/partitionSelect.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_156__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/qr.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_157__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/rightLogShift.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_158__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/slu.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_159__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/subset.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_160__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/sum.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_161__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/trace.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_162__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/usolveAll.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_163__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/zpk2tf.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_164__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitOr.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_165__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/ceil.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_166__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compareNatural.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_167__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/composition.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_168__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/cross.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_169__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/det.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_170__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotMultiply.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_171__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/FibonacciHeap.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_172__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/fix.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_173__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/index.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_174__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/geometry/intersect.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_175__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/invmod.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_176__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/lcm.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_177__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/log1p.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_178__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lsolveAll.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_179__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/max.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_180__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setCartesian.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_181__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setDistinct.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_182__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setIsSubset.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_183__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setPowerset.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_184__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/smallerEq.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_185__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/sort.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_186__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/and.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_187__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/range.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_188__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/row.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_189__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setDifference.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_190__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setMultiplicity.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_191__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setSymDifference.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_192__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/Spa.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_193__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/column.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_194__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/inv.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_195__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/lup.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_196__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/pinv.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_197__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/pow.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_198__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setIntersect.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_199__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setUnion.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_200__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/sqrtm.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_201__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/Unit.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_202__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotPow.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_203__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/expm.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_204__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/fft.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_205__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/gamma.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_206__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ifft.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_207__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/createUnit.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_208__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/divide.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_209__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/factorial.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_210__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lusolve.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_211__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/multinomial.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_212__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/permutations.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_213__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/polynomialRoot.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_214__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setSize.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_215__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/numeric/solveODE.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_216__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/stirlingS2.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_217__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/unit.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_218__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/bellNumbers.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_220__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mean.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/quantileSeq.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/variance.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/median.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/corr.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/freqz.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mad.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/std.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/special/zeta.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/norm.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotationMatrix.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/kldivergence.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/schur.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_233__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotate.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_234__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/sylvester.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_235__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/lyap.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/subtractScalar.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/tan.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/typeOf.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acosh.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acsch.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/apply.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/asec.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_74__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/string/bin.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_75__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/combinationsWithRep.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_76__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/cosh.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_77__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/csch.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_78__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isNaN.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_79__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isPrime.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_80__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/randomInt.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_81__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/sech.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_82__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/sinh.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_83__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/sparse.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_84__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/sqrt.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_85__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/tanh.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_86__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/unaryMinus.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_87__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/acoth.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_88__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/coth.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_89__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/fraction/function/fraction.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_90__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/isNumeric.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_91__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/matrix.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_92__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromFunction.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_93__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mode.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_94__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/numeric.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_95__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/prod.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_96__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/reshape.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_97__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/size.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_98__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/squeeze.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_99__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/transpose.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_100__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/xgcd.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_101__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/zeros.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_102__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/asin.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_103__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/cbrt.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_104__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/concat.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_105__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/count.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_106__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ctranspose.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_107__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/diag.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_108__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/divideScalar.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_109__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotDivide.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_110__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/equal.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_111__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/flatten.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_112__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/utils/hasNumericValue.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_113__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/identity.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_114__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/kron.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_115__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/largerEq.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_116__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/leftShift.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_117__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lsolve.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_118__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromColumns.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_119__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/nthRoot.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_120__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ones.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_121__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/qr.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_122__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/resize.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_123__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/rightArithShift.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_124__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/round.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_125__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/smaller.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_126__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/subtract.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_127__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/unit/to.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_128__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/unequal.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_129__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/usolve.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_130__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/xor.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_131__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/add.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_132__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/trigonometry/atan2.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_133__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitAnd.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_134__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitOr.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_135__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/bitXor.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_136__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/catalan.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_137__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compare.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_138__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compareText.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_139__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/cumsum.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_140__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/deepEqual.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_141__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/diff.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_142__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/geometry/distance.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_143__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/dot.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_144__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/equalText.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_145__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/floor.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_146__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/gcd.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_147__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/hypot.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_148__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/ImmutableDenseMatrix.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_149__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/MatrixIndex.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_150__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/larger.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_151__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/log.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_152__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lsolveAll.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_153__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/matrixFromRows.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_154__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/min.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_155__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/mod.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_156__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/multiply.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_157__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/nthRoots.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_158__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/or.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_159__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/partitionSelect.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_160__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/bitwise/rightLogShift.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_161__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/slu.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_162__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/subset.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_163__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/sum.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_164__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/trace.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_165__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/usolveAll.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_166__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/zpk2tf.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_167__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/ceil.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_168__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/compareNatural.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_169__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/composition.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_170__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/cross.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_171__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/det.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_172__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotMultiply.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_173__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/FibonacciHeap.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_174__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/fix.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_175__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/function/index.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_176__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/geometry/intersect.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_177__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/invmod.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_178__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/lcm.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_179__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/log1p.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_180__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/max.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_181__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setCartesian.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_182__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setDistinct.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_183__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setIsSubset.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_184__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setPowerset.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_185__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/relational/smallerEq.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_186__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/sort.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_187__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/logical/and.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_188__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/range.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_189__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/row.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_190__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setDifference.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_191__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setMultiplicity.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_192__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setSymDifference.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_193__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/matrix/Spa.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_194__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/column.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_195__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/inv.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_196__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/lup.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_197__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/pinv.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_198__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/pow.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_199__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setIntersect.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_200__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setUnion.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_201__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/sqrtm.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_202__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/Unit.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_203__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/dotPow.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_204__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/expm.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_205__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/fft.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_206__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/gamma.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_207__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/ifft.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_208__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/createUnit.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_209__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/divide.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_210__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/factorial.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_211__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/solver/lusolve.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_212__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/multinomial.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_213__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/permutations.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_214__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/polynomialRoot.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_215__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/set/setSize.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_216__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/numeric/solveODE.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_217__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/stirlingS2.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_218__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/unit.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/bellNumbers.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_220__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mean.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/quantileSeq.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/variance.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/median.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/corr.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/freqz.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mad.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/std.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/special/zeta.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/norm.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotationMatrix.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/kldivergence.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_233__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/schur.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_234__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotate.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_235__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/sylvester.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_236__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/lyap.js");
 /**
  * THIS FILE IS AUTO-GENERATED
  * DON'T MAKE CHANGES HERE
@@ -34072,157 +34074,160 @@ var square = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_65__.cr
 var string = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_66__.createString)({
   typed
 });
-var tan = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_67__.createTan)({
+var subtractScalar = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_67__.createSubtractScalar)({
   typed
 });
-var typeOf = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_68__.createTypeOf)({
+var tan = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_68__.createTan)({
   typed
 });
-var acosh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_69__.createAcosh)({
+var typeOf = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_69__.createTypeOf)({
+  typed
+});
+var acosh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_70__.createAcosh)({
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var acsch = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_70__.createAcsch)({
+var acsch = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_71__.createAcsch)({
   BigNumber,
   typed
 });
-var apply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_71__.createApply)({
+var apply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_72__.createApply)({
   isInteger,
   typed
 });
-var asec = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_72__.createAsec)({
+var asec = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_73__.createAsec)({
   BigNumber,
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var bin = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_73__.createBin)({
+var bin = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_74__.createBin)({
   format,
   typed
 });
-var combinationsWithRep = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_74__.createCombinationsWithRep)({
+var combinationsWithRep = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_75__.createCombinationsWithRep)({
   typed
 });
-var cosh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_75__.createCosh)({
+var cosh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_76__.createCosh)({
   typed
 });
-var csch = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_76__.createCsch)({
+var csch = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_77__.createCsch)({
   BigNumber,
   typed
 });
-var isNaN = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_77__.createIsNaN)({
+var isNaN = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_78__.createIsNaN)({
   typed
 });
-var isPrime = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_78__.createIsPrime)({
+var isPrime = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_79__.createIsPrime)({
   typed
 });
-var randomInt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_79__.createRandomInt)({
+var randomInt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_80__.createRandomInt)({
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var sech = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_80__.createSech)({
+var sech = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_81__.createSech)({
   BigNumber,
   typed
 });
-var sinh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_81__.createSinh)({
+var sinh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_82__.createSinh)({
   typed
 });
-var sparse = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_82__.createSparse)({
+var sparse = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_83__.createSparse)({
   SparseMatrix,
   typed
 });
-var sqrt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_83__.createSqrt)({
+var sqrt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_84__.createSqrt)({
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var tanh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_84__.createTanh)({
+var tanh = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_85__.createTanh)({
   typed
 });
-var unaryMinus = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_85__.createUnaryMinus)({
+var unaryMinus = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_86__.createUnaryMinus)({
   typed
 });
-var acoth = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_86__.createAcoth)({
+var acoth = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_87__.createAcoth)({
   BigNumber,
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var coth = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_87__.createCoth)({
+var coth = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_88__.createCoth)({
   BigNumber,
   typed
 });
-var fraction = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_88__.createFraction)({
+var fraction = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_89__.createFraction)({
   Fraction,
   typed
 });
-var isNumeric = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_89__.createIsNumeric)({
+var isNumeric = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_90__.createIsNumeric)({
   typed
 });
-var matrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_90__.createMatrix)({
+var matrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_91__.createMatrix)({
   DenseMatrix,
   Matrix,
   SparseMatrix,
   typed
 });
-var matrixFromFunction = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_91__.createMatrixFromFunction)({
+var matrixFromFunction = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_92__.createMatrixFromFunction)({
   isZero,
   matrix,
   typed
 });
-var mode = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_92__.createMode)({
+var mode = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_93__.createMode)({
   isNaN,
   isNumeric,
   typed
 });
-var numeric = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_93__.createNumeric)({
+var numeric = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_94__.createNumeric)({
   bignumber,
   fraction,
   number
 });
-var prod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_94__.createProd)({
+var prod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_95__.createProd)({
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   multiplyScalar,
   numeric,
   typed
 });
-var reshape = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_95__.createReshape)({
+var reshape = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_96__.createReshape)({
   isInteger,
   matrix,
   typed
 });
-var size = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_96__.createSize)({
+var size = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_97__.createSize)({
   matrix,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var squeeze = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_97__.createSqueeze)({
+var squeeze = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_98__.createSqueeze)({
   matrix,
   typed
 });
-var transpose = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_98__.createTranspose)({
+var transpose = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_99__.createTranspose)({
   matrix,
   typed
 });
-var xgcd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_99__.createXgcd)({
+var xgcd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_100__.createXgcd)({
   BigNumber,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   matrix,
   typed
 });
-var zeros = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_100__.createZeros)({
+var zeros = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_101__.createZeros)({
   BigNumber,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   matrix,
   typed
 });
-var asin = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_101__.createAsin)({
+var asin = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_102__.createAsin)({
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   typed
 });
-var cbrt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_102__.createCbrt)({
+var cbrt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_103__.createCbrt)({
   BigNumber,
   Complex,
   Fraction,
@@ -34232,32 +34237,32 @@ var cbrt = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_102__.cre
   typed,
   unaryMinus
 });
-var concat = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_103__.createConcat)({
+var concat = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_104__.createConcat)({
   isInteger,
   matrix,
   typed
 });
-var count = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_104__.createCount)({
+var count = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_105__.createCount)({
   prod,
   size,
   typed
 });
-var ctranspose = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_105__.createCtranspose)({
+var ctranspose = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_106__.createCtranspose)({
   conj,
   transpose,
   typed
 });
-var diag = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_106__.createDiag)({
+var diag = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_107__.createDiag)({
   DenseMatrix,
   SparseMatrix,
   matrix,
   typed
 });
-var divideScalar = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_107__.createDivideScalar)({
+var divideScalar = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_108__.createDivideScalar)({
   numeric,
   typed
 });
-var dotDivide = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_108__.createDotDivide)({
+var dotDivide = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_109__.createDotDivide)({
   DenseMatrix,
   concat,
   divideScalar,
@@ -34265,22 +34270,22 @@ var dotDivide = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_108_
   matrix,
   typed
 });
-var equal = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_109__.createEqual)({
+var equal = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_110__.createEqual)({
   DenseMatrix,
   concat,
   equalScalar,
   matrix,
   typed
 });
-var flatten = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_110__.createFlatten)({
+var flatten = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_111__.createFlatten)({
   matrix,
   typed
 });
-var hasNumericValue = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_111__.createHasNumericValue)({
+var hasNumericValue = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_112__.createHasNumericValue)({
   isNumeric,
   typed
 });
-var identity = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_112__.createIdentity)({
+var identity = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_113__.createIdentity)({
   BigNumber,
   DenseMatrix,
   SparseMatrix,
@@ -34288,19 +34293,19 @@ var identity = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_112__
   matrix,
   typed
 });
-var kron = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_113__.createKron)({
+var kron = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_114__.createKron)({
   matrix,
   multiplyScalar,
   typed
 });
-var largerEq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_114__.createLargerEq)({
+var largerEq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_115__.createLargerEq)({
   DenseMatrix,
   concat,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   matrix,
   typed
 });
-var leftShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_115__.createLeftShift)({
+var leftShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_116__.createLeftShift)({
   DenseMatrix,
   concat,
   equalScalar,
@@ -34308,289 +34313,35 @@ var leftShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_115_
   typed,
   zeros
 });
-var matrixFromColumns = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_116__.createMatrixFromColumns)({
+var lsolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_117__.createLsolve)({
+  DenseMatrix,
+  divideScalar,
+  equalScalar,
+  matrix,
+  multiplyScalar,
+  subtractScalar,
+  typed
+});
+var matrixFromColumns = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_118__.createMatrixFromColumns)({
   flatten,
   matrix,
   size,
   typed
 });
-var nthRoot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_117__.createNthRoot)({
+var nthRoot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_119__.createNthRoot)({
   BigNumber,
   concat,
   equalScalar,
   matrix,
   typed
 });
-var ones = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_118__.createOnes)({
+var ones = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_120__.createOnes)({
   BigNumber,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   matrix,
   typed
 });
-var resize = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_119__.createResize)({
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  matrix
-});
-var rightArithShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_120__.createRightArithShift)({
-  DenseMatrix,
-  concat,
-  equalScalar,
-  matrix,
-  typed,
-  zeros
-});
-var round = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_121__.createRound)({
-  BigNumber,
-  DenseMatrix,
-  equalScalar,
-  matrix,
-  typed,
-  zeros
-});
-var smaller = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_122__.createSmaller)({
-  DenseMatrix,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  matrix,
-  typed
-});
-var subtract = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_123__.createSubtract)({
-  DenseMatrix,
-  addScalar,
-  concat,
-  equalScalar,
-  matrix,
-  typed,
-  unaryMinus
-});
-var to = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_124__.createTo)({
-  concat,
-  matrix,
-  typed
-});
-var unequal = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_125__.createUnequal)({
-  DenseMatrix,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  equalScalar,
-  matrix,
-  typed
-});
-var usolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_126__.createUsolve)({
-  DenseMatrix,
-  divideScalar,
-  equalScalar,
-  matrix,
-  multiplyScalar,
-  subtract,
-  typed
-});
-var xor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_127__.createXor)({
-  DenseMatrix,
-  concat,
-  matrix,
-  typed
-});
-var add = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_128__.createAdd)({
-  DenseMatrix,
-  SparseMatrix,
-  addScalar,
-  concat,
-  equalScalar,
-  matrix,
-  typed
-});
-var atan2 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_129__.createAtan2)({
-  BigNumber,
-  DenseMatrix,
-  concat,
-  equalScalar,
-  matrix,
-  typed
-});
-var bitAnd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_130__.createBitAnd)({
-  concat,
-  equalScalar,
-  matrix,
-  typed
-});
-var bitXor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_131__.createBitXor)({
-  DenseMatrix,
-  concat,
-  matrix,
-  typed
-});
-var catalan = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_132__.createCatalan)({
-  addScalar,
-  combinations,
-  divideScalar,
-  isInteger,
-  isNegative,
-  multiplyScalar,
-  typed
-});
-var compare = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_133__.createCompare)({
-  BigNumber,
-  DenseMatrix,
-  Fraction,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  equalScalar,
-  matrix,
-  typed
-});
-var compareText = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_134__.createCompareText)({
-  concat,
-  matrix,
-  typed
-});
-var cumsum = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_135__.createCumSum)({
-  add,
-  typed,
-  unaryPlus
-});
-var deepEqual = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_136__.createDeepEqual)({
-  equal,
-  typed
-});
-var diff = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_137__.createDiff)({
-  matrix,
-  number,
-  subtract,
-  typed
-});
-var distance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_138__.createDistance)({
-  abs,
-  addScalar,
-  deepEqual,
-  divideScalar,
-  multiplyScalar,
-  sqrt,
-  subtract,
-  typed
-});
-var dot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_139__.createDot)({
-  addScalar,
-  conj,
-  multiplyScalar,
-  size,
-  typed
-});
-var equalText = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_140__.createEqualText)({
-  compareText,
-  isZero,
-  typed
-});
-var floor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_141__.createFloor)({
-  DenseMatrix,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  equalScalar,
-  matrix,
-  round,
-  typed,
-  zeros
-});
-var gcd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_142__.createGcd)({
-  BigNumber,
-  DenseMatrix,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  equalScalar,
-  matrix,
-  round,
-  typed,
-  zeros
-});
-var hypot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_143__.createHypot)({
-  abs,
-  addScalar,
-  divideScalar,
-  isPositive,
-  multiplyScalar,
-  smaller,
-  sqrt,
-  typed
-});
-var ImmutableDenseMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_144__.createImmutableDenseMatrixClass)({
-  DenseMatrix,
-  smaller
-});
-var Index = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_145__.createIndexClass)({
-  ImmutableDenseMatrix,
-  getMatrixDataType
-});
-var larger = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_146__.createLarger)({
-  DenseMatrix,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  matrix,
-  typed
-});
-var log = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_147__.createLog)({
-  Complex,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  divideScalar,
-  typed
-});
-var lsolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_148__.createLsolve)({
-  DenseMatrix,
-  divideScalar,
-  equalScalar,
-  matrix,
-  multiplyScalar,
-  subtract,
-  typed
-});
-var matrixFromRows = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_149__.createMatrixFromRows)({
-  flatten,
-  matrix,
-  size,
-  typed
-});
-var min = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_150__.createMin)({
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  numeric,
-  smaller,
-  typed
-});
-var mod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_151__.createMod)({
-  DenseMatrix,
-  concat,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  equalScalar,
-  matrix,
-  round,
-  typed,
-  zeros
-});
-var multiply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_152__.createMultiply)({
-  addScalar,
-  dot,
-  equalScalar,
-  matrix,
-  multiplyScalar,
-  typed
-});
-var nthRoots = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_153__.createNthRoots)({
-  Complex,
-  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
-  divideScalar,
-  typed
-});
-var or = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_154__.createOr)({
-  DenseMatrix,
-  concat,
-  equalScalar,
-  matrix,
-  typed
-});
-var partitionSelect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_155__.createPartitionSelect)({
-  compare,
-  isNaN,
-  isNumeric,
-  typed
-});
-var qr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_156__.createQr)({
+var qr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_121__.createQr)({
   addScalar,
   complex,
   conj,
@@ -34602,12 +34353,16 @@ var qr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_156__.creat
   multiplyScalar,
   sign,
   sqrt,
-  subtract,
+  subtractScalar,
   typed,
   unaryMinus,
   zeros
 });
-var rightLogShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_157__.createRightLogShift)({
+var resize = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_122__.createResize)({
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  matrix
+});
+var rightArithShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_123__.createRightArithShift)({
   DenseMatrix,
   concat,
   equalScalar,
@@ -34615,7 +34370,273 @@ var rightLogShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_
   typed,
   zeros
 });
-var slu = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_158__.createSlu)({
+var round = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_124__.createRound)({
+  BigNumber,
+  DenseMatrix,
+  equalScalar,
+  matrix,
+  typed,
+  zeros
+});
+var smaller = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_125__.createSmaller)({
+  DenseMatrix,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  matrix,
+  typed
+});
+var subtract = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_126__.createSubtract)({
+  DenseMatrix,
+  concat,
+  equalScalar,
+  matrix,
+  subtractScalar,
+  typed,
+  unaryMinus
+});
+var to = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_127__.createTo)({
+  concat,
+  matrix,
+  typed
+});
+var unequal = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_128__.createUnequal)({
+  DenseMatrix,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  equalScalar,
+  matrix,
+  typed
+});
+var usolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_129__.createUsolve)({
+  DenseMatrix,
+  divideScalar,
+  equalScalar,
+  matrix,
+  multiplyScalar,
+  subtractScalar,
+  typed
+});
+var xor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_130__.createXor)({
+  DenseMatrix,
+  concat,
+  matrix,
+  typed
+});
+var add = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_131__.createAdd)({
+  DenseMatrix,
+  SparseMatrix,
+  addScalar,
+  concat,
+  equalScalar,
+  matrix,
+  typed
+});
+var atan2 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_132__.createAtan2)({
+  BigNumber,
+  DenseMatrix,
+  concat,
+  equalScalar,
+  matrix,
+  typed
+});
+var bitAnd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_133__.createBitAnd)({
+  concat,
+  equalScalar,
+  matrix,
+  typed
+});
+var bitOr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_134__.createBitOr)({
+  DenseMatrix,
+  concat,
+  equalScalar,
+  matrix,
+  typed
+});
+var bitXor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_135__.createBitXor)({
+  DenseMatrix,
+  concat,
+  matrix,
+  typed
+});
+var catalan = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_136__.createCatalan)({
+  addScalar,
+  combinations,
+  divideScalar,
+  isInteger,
+  isNegative,
+  multiplyScalar,
+  typed
+});
+var compare = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_137__.createCompare)({
+  BigNumber,
+  DenseMatrix,
+  Fraction,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  equalScalar,
+  matrix,
+  typed
+});
+var compareText = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_138__.createCompareText)({
+  concat,
+  matrix,
+  typed
+});
+var cumsum = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_139__.createCumSum)({
+  add,
+  typed,
+  unaryPlus
+});
+var deepEqual = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_140__.createDeepEqual)({
+  equal,
+  typed
+});
+var diff = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_141__.createDiff)({
+  matrix,
+  number,
+  subtract,
+  typed
+});
+var distance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_142__.createDistance)({
+  abs,
+  addScalar,
+  deepEqual,
+  divideScalar,
+  multiplyScalar,
+  sqrt,
+  subtractScalar,
+  typed
+});
+var dot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_143__.createDot)({
+  addScalar,
+  conj,
+  multiplyScalar,
+  size,
+  typed
+});
+var equalText = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_144__.createEqualText)({
+  compareText,
+  isZero,
+  typed
+});
+var floor = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_145__.createFloor)({
+  DenseMatrix,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  equalScalar,
+  matrix,
+  round,
+  typed,
+  zeros
+});
+var gcd = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_146__.createGcd)({
+  BigNumber,
+  DenseMatrix,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  equalScalar,
+  matrix,
+  round,
+  typed,
+  zeros
+});
+var hypot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_147__.createHypot)({
+  abs,
+  addScalar,
+  divideScalar,
+  isPositive,
+  multiplyScalar,
+  smaller,
+  sqrt,
+  typed
+});
+var ImmutableDenseMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_148__.createImmutableDenseMatrixClass)({
+  DenseMatrix,
+  smaller
+});
+var Index = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_149__.createIndexClass)({
+  ImmutableDenseMatrix,
+  getMatrixDataType
+});
+var larger = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_150__.createLarger)({
+  DenseMatrix,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  matrix,
+  typed
+});
+var log = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_151__.createLog)({
+  Complex,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  divideScalar,
+  typed
+});
+var lsolveAll = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_152__.createLsolveAll)({
+  DenseMatrix,
+  divideScalar,
+  equalScalar,
+  matrix,
+  multiplyScalar,
+  subtractScalar,
+  typed
+});
+var matrixFromRows = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_153__.createMatrixFromRows)({
+  flatten,
+  matrix,
+  size,
+  typed
+});
+var min = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_154__.createMin)({
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  numeric,
+  smaller,
+  typed
+});
+var mod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_155__.createMod)({
+  DenseMatrix,
+  concat,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  equalScalar,
+  matrix,
+  round,
+  typed,
+  zeros
+});
+var multiply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_156__.createMultiply)({
+  addScalar,
+  dot,
+  equalScalar,
+  matrix,
+  multiplyScalar,
+  typed
+});
+var nthRoots = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_157__.createNthRoots)({
+  Complex,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
+  divideScalar,
+  typed
+});
+var or = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_158__.createOr)({
+  DenseMatrix,
+  concat,
+  equalScalar,
+  matrix,
+  typed
+});
+var partitionSelect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_159__.createPartitionSelect)({
+  compare,
+  isNaN,
+  isNumeric,
+  typed
+});
+var rightLogShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_160__.createRightLogShift)({
+  DenseMatrix,
+  concat,
+  equalScalar,
+  matrix,
+  typed,
+  zeros
+});
+var slu = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_161__.createSlu)({
   SparseMatrix,
   abs,
   add,
@@ -34627,47 +34648,40 @@ var slu = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_158__.crea
   transpose,
   typed
 });
-var subset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_159__.createSubset)({
+var subset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_162__.createSubset)({
   add,
   matrix,
   typed,
   zeros
 });
-var sum = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_160__.createSum)({
+var sum = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_163__.createSum)({
   add,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   numeric,
   typed
 });
-var trace = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_161__.createTrace)({
+var trace = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_164__.createTrace)({
   add,
   matrix,
   typed
 });
-var usolveAll = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_162__.createUsolveAll)({
+var usolveAll = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_165__.createUsolveAll)({
   DenseMatrix,
   divideScalar,
   equalScalar,
   matrix,
   multiplyScalar,
-  subtract,
+  subtractScalar,
   typed
 });
-var zpk2tf = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_163__.createZpk2tf)({
+var zpk2tf = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_166__.createZpk2tf)({
   Complex,
   add,
   multiply,
   number,
   typed
 });
-var bitOr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_164__.createBitOr)({
-  DenseMatrix,
-  concat,
-  equalScalar,
-  matrix,
-  typed
-});
-var ceil = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_165__.createCeil)({
+var ceil = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_167__.createCeil)({
   DenseMatrix,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   equalScalar,
@@ -34676,11 +34690,11 @@ var ceil = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_165__.cre
   typed,
   zeros
 });
-var compareNatural = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_166__.createCompareNatural)({
+var compareNatural = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_168__.createCompareNatural)({
   compare,
   typed
 });
-var composition = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_167__.createComposition)({
+var composition = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_169__.createComposition)({
   addScalar,
   combinations,
   isInteger,
@@ -34689,33 +34703,33 @@ var composition = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_16
   larger,
   typed
 });
-var cross = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_168__.createCross)({
+var cross = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_170__.createCross)({
   matrix,
   multiply,
   subtract,
   typed
 });
-var det = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_169__.createDet)({
+var det = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_171__.createDet)({
   divideScalar,
   isZero,
   matrix,
   multiply,
-  subtract,
+  subtractScalar,
   typed,
   unaryMinus
 });
-var dotMultiply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_170__.createDotMultiply)({
+var dotMultiply = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_172__.createDotMultiply)({
   concat,
   equalScalar,
   matrix,
   multiplyScalar,
   typed
 });
-var FibonacciHeap = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_171__.createFibonacciHeapClass)({
+var FibonacciHeap = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_173__.createFibonacciHeapClass)({
   larger,
   smaller
 });
-var fix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_172__.createFix)({
+var fix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_174__.createFix)({
   Complex,
   DenseMatrix,
   ceil,
@@ -34725,11 +34739,11 @@ var fix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_172__.crea
   typed,
   zeros
 });
-var index = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_173__.createIndex)({
+var index = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_175__.createIndex)({
   Index,
   typed
 });
-var intersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_174__.createIntersect)({
+var intersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_176__.createIntersect)({
   abs,
   add,
   addScalar,
@@ -34746,7 +34760,7 @@ var intersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_174_
   subtract,
   typed
 });
-var invmod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_175__.createInvmod)({
+var invmod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_177__.createInvmod)({
   BigNumber,
   add,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
@@ -34757,35 +34771,26 @@ var invmod = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_175__.c
   typed,
   xgcd
 });
-var lcm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_176__.createLcm)({
+var lcm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_178__.createLcm)({
   concat,
   equalScalar,
   matrix,
   typed
 });
-var log1p = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_177__.createLog1p)({
+var log1p = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_179__.createLog1p)({
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   divideScalar,
   log,
   typed
 });
-var lsolveAll = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_178__.createLsolveAll)({
-  DenseMatrix,
-  divideScalar,
-  equalScalar,
-  matrix,
-  multiplyScalar,
-  subtract,
-  typed
-});
-var max = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_179__.createMax)({
+var max = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_180__.createMax)({
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   larger,
   numeric,
   typed
 });
-var setCartesian = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_180__.createSetCartesian)({
+var setCartesian = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_181__.createSetCartesian)({
   DenseMatrix,
   Index,
   compareNatural,
@@ -34793,7 +34798,7 @@ var setCartesian = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_1
   subset,
   typed
 });
-var setDistinct = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_181__.createSetDistinct)({
+var setDistinct = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_182__.createSetDistinct)({
   DenseMatrix,
   Index,
   compareNatural,
@@ -34801,34 +34806,34 @@ var setDistinct = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_18
   subset,
   typed
 });
-var setIsSubset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_182__.createSetIsSubset)({
+var setIsSubset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_183__.createSetIsSubset)({
   Index,
   compareNatural,
   size,
   subset,
   typed
 });
-var setPowerset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_183__.createSetPowerset)({
+var setPowerset = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_184__.createSetPowerset)({
   Index,
   compareNatural,
   size,
   subset,
   typed
 });
-var smallerEq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_184__.createSmallerEq)({
+var smallerEq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_185__.createSmallerEq)({
   DenseMatrix,
   concat,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   matrix,
   typed
 });
-var sort = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_185__.createSort)({
+var sort = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_186__.createSort)({
   compare,
   compareNatural,
   matrix,
   typed
 });
-var and = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_186__.createAnd)({
+var and = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_187__.createAnd)({
   concat,
   equalScalar,
   matrix,
@@ -34836,7 +34841,7 @@ var and = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_186__.crea
   typed,
   zeros
 });
-var range = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_187__.createRange)({
+var range = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_188__.createRange)({
   bignumber,
   matrix,
   add,
@@ -34848,13 +34853,13 @@ var range = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_187__.cr
   smallerEq,
   typed
 });
-var row = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_188__.createRow)({
+var row = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_189__.createRow)({
   Index,
   matrix,
   range,
   typed
 });
-var setDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_189__.createSetDifference)({
+var setDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_190__.createSetDifference)({
   DenseMatrix,
   Index,
   compareNatural,
@@ -34862,14 +34867,14 @@ var setDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_
   subset,
   typed
 });
-var setMultiplicity = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_190__.createSetMultiplicity)({
+var setMultiplicity = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_191__.createSetMultiplicity)({
   Index,
   compareNatural,
   size,
   subset,
   typed
 });
-var setSymDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_191__.createSetSymDifference)({
+var setSymDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_192__.createSetSymDifference)({
   Index,
   concat,
   setDifference,
@@ -34877,18 +34882,18 @@ var setSymDifference = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODU
   subset,
   typed
 });
-var Spa = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_192__.createSpaClass)({
+var Spa = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_193__.createSpaClass)({
   FibonacciHeap,
   addScalar,
   equalScalar
 });
-var column = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_193__.createColumn)({
+var column = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_194__.createColumn)({
   Index,
   matrix,
   range,
   typed
 });
-var inv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_194__.createInv)({
+var inv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_195__.createInv)({
   abs,
   addScalar,
   det,
@@ -34899,7 +34904,7 @@ var inv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_194__.crea
   typed,
   unaryMinus
 });
-var lup = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_195__.createLup)({
+var lup = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_196__.createLup)({
   DenseMatrix,
   Spa,
   SparseMatrix,
@@ -34910,11 +34915,11 @@ var lup = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_195__.crea
   larger,
   matrix,
   multiplyScalar,
-  subtract,
+  subtractScalar,
   typed,
   unaryMinus
 });
-var pinv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_196__.createPinv)({
+var pinv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_197__.createPinv)({
   Complex,
   add,
   ctranspose,
@@ -34928,7 +34933,7 @@ var pinv = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_196__.cre
   multiply,
   typed
 });
-var pow = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_197__.createPow)({
+var pow = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_198__.createPow)({
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   fraction,
@@ -34939,7 +34944,7 @@ var pow = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_197__.crea
   number,
   typed
 });
-var setIntersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_198__.createSetIntersect)({
+var setIntersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_199__.createSetIntersect)({
   DenseMatrix,
   Index,
   compareNatural,
@@ -34947,7 +34952,7 @@ var setIntersect = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_1
   subset,
   typed
 });
-var setUnion = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_199__.createSetUnion)({
+var setUnion = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_200__.createSetUnion)({
   Index,
   concat,
   setIntersect,
@@ -34956,7 +34961,7 @@ var setUnion = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_199__
   subset,
   typed
 });
-var sqrtm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_200__.createSqrtm)({
+var sqrtm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_201__.createSqrtm)({
   abs,
   add,
   identity,
@@ -34969,7 +34974,7 @@ var sqrtm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_200__.cr
   subtract,
   typed
 });
-var Unit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_201__.createUnitClass)({
+var Unit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_202__.createUnitClass)({
   BigNumber,
   Complex,
   Fraction,
@@ -34985,7 +34990,7 @@ var Unit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_201__.cre
   number,
   pow,
   round,
-  subtract
+  subtractScalar
 });
 var vacuumImpedance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__.createVacuumImpedance)({
   BigNumber,
@@ -35027,7 +35032,7 @@ var deuteronMass = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var dotPow = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_202__.createDotPow)({
+var dotPow = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_203__.createDotPow)({
   DenseMatrix,
   concat,
   equalScalar,
@@ -35045,7 +35050,7 @@ var elementaryCharge = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODU
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var expm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_203__.createExpm)({
+var expm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_204__.createExpm)({
   abs,
   add,
   identity,
@@ -35058,7 +35063,7 @@ var faraday = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__.cr
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var fft = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_204__.createFft)({
+var fft = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_205__.createFft)({
   addScalar,
   ceil,
   conj,
@@ -35073,7 +35078,7 @@ var fft = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_204__.crea
   tau,
   typed
 });
-var gamma = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_205__.createGamma)({
+var gamma = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_206__.createGamma)({
   BigNumber,
   Complex,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
@@ -35091,7 +35096,7 @@ var hartreeEnergy = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var ifft = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_206__.createIfft)({
+var ifft = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_207__.createIfft)({
   conj,
   dotDivide,
   fft,
@@ -35197,11 +35202,11 @@ var bohrRadius = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var createUnit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_207__.createCreateUnit)({
+var createUnit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_208__.createCreateUnit)({
   Unit,
   typed
 });
-var divide = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_208__.createDivide)({
+var divide = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_209__.createDivide)({
   divideScalar,
   equalScalar,
   inv,
@@ -35214,7 +35219,7 @@ var electronMass = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var factorial = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_209__.createFactorial)({
+var factorial = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_210__.createFactorial)({
   gamma,
   typed
 });
@@ -35233,7 +35238,7 @@ var inverseConductanceQuantum = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPO
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var lusolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_210__.createLusolve)({
+var lusolve = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_211__.createLusolve)({
   DenseMatrix,
   lsolve,
   lup,
@@ -35252,7 +35257,7 @@ var molarMassC12 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var multinomial = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_211__.createMultinomial)({
+var multinomial = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_212__.createMultinomial)({
   add,
   divide,
   factorial,
@@ -35261,7 +35266,7 @@ var multinomial = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_21
   multiply,
   typed
 });
-var permutations = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_212__.createPermutations)({
+var permutations = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_213__.createPermutations)({
   factorial,
   typed
 });
@@ -35270,7 +35275,7 @@ var planckMass = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var polynomialRoot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_213__.createPolynomialRoot)({
+var polynomialRoot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_214__.createPolynomialRoot)({
   add,
   cbrt,
   divide,
@@ -35285,11 +35290,11 @@ var polynomialRoot = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE
   typed,
   unaryMinus
 });
-var setSize = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_214__.createSetSize)({
+var setSize = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_215__.createSetSize)({
   compareNatural,
   typed
 });
-var solveODE = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_215__.createSolveODE)({
+var solveODE = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_216__.createSolveODE)({
   abs,
   add,
   bignumber,
@@ -35306,7 +35311,7 @@ var solveODE = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_215__
   typed,
   unaryMinus
 });
-var stirlingS2 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_216__.createStirlingS2)({
+var stirlingS2 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_217__.createStirlingS2)({
   bignumber,
   addScalar,
   combinations,
@@ -35318,21 +35323,21 @@ var stirlingS2 = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_216
   multiplyScalar,
   number,
   pow,
-  subtract,
+  subtractScalar,
   typed
 });
-var unit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_217__.createUnitFunction)({
+var unit = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_218__.createUnitFunction)({
   Unit,
   typed
 });
-var bellNumbers = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_218__.createBellNumbers)({
+var bellNumbers = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__.createBellNumbers)({
   addScalar,
   isInteger,
   isNegative,
   stirlingS2,
   typed
 });
-var eigs = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__.createEigs)({
+var eigs = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_220__.createEigs)({
   abs,
   add,
   addScalar,
@@ -35357,7 +35362,9 @@ var eigs = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__.cre
   number,
   qr,
   re,
+  reshape,
   sin,
+  size,
   smaller,
   sqrt,
   subtract,
@@ -35375,7 +35382,7 @@ var gasConstant = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4_
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var mean = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_220__.createMean)({
+var mean = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__.createMean)({
   add,
   divide,
   typed
@@ -35390,7 +35397,7 @@ var planckConstant = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__.createQuantileSeq)({
+var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__.createQuantileSeq)({
   bignumber,
   add,
   compare,
@@ -35404,7 +35411,7 @@ var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_22
   subtract,
   typed
 });
-var variance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__.createVariance)({
+var variance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__.createVariance)({
   add,
   apply,
   divide,
@@ -35418,14 +35425,14 @@ var classicalElectronRadius = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORT
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var median = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__.createMedian)({
+var median = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__.createMedian)({
   add,
   compare,
   divide,
   partitionSelect,
   typed
 });
-var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__.createCorr)({
+var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.createCorr)({
   add,
   divide,
   matrix,
@@ -35437,7 +35444,7 @@ var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__.cre
   sum,
   typed
 });
-var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.createFreqz)({
+var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__.createFreqz)({
   Complex,
   add,
   divide,
@@ -35445,20 +35452,20 @@ var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.cr
   multiply,
   typed
 });
-var mad = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__.createMad)({
+var mad = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__.createMad)({
   abs,
   map,
   median,
   subtract,
   typed
 });
-var std = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__.createStd)({
+var std = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__.createStd)({
   map,
   sqrt,
   typed,
   variance
 });
-var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__.createZeta)({
+var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.createZeta)({
   BigNumber,
   Complex,
   add,
@@ -35476,7 +35483,7 @@ var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__.cre
   subtract,
   typed
 });
-var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.createNorm)({
+var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__.createNorm)({
   abs,
   add,
   conj,
@@ -35491,7 +35498,7 @@ var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.cre
   sqrt,
   typed
 });
-var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__.createRotationMatrix)({
+var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__.createRotationMatrix)({
   BigNumber,
   DenseMatrix,
   SparseMatrix,
@@ -35505,7 +35512,7 @@ var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE
   typed,
   unaryMinus
 });
-var kldivergence = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__.createKldivergence)({
+var kldivergence = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__.createKldivergence)({
   divide,
   dotDivide,
   isNumeric,
@@ -35521,7 +35528,7 @@ var planckTime = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var schur = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__.createSchur)({
+var schur = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_233__.createSchur)({
   identity,
   matrix,
   multiply,
@@ -35530,12 +35537,12 @@ var schur = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__.cr
   subtract,
   typed
 });
-var rotate = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_233__.createRotate)({
+var rotate = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_234__.createRotate)({
   multiply,
   rotationMatrix,
   typed
 });
-var sylvester = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_234__.createSylvester)({
+var sylvester = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_235__.createSylvester)({
   abs,
   add,
   concat,
@@ -35552,7 +35559,7 @@ var sylvester = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_234_
   transpose,
   typed
 });
-var lyap = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_235__.createLyap)({
+var lyap = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_236__.createLyap)({
   matrix,
   multiply,
   sylvester,
@@ -35702,7 +35709,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'lup';
-var dependencies = ['typed', 'matrix', 'abs', 'addScalar', 'divideScalar', 'multiplyScalar', 'subtract', 'larger', 'equalScalar', 'unaryMinus', 'DenseMatrix', 'SparseMatrix', 'Spa'];
+var dependencies = ['typed', 'matrix', 'abs', 'addScalar', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'larger', 'equalScalar', 'unaryMinus', 'DenseMatrix', 'SparseMatrix', 'Spa'];
 var createLup = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
@@ -35711,7 +35718,7 @@ var createLup = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
     addScalar,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     larger,
     equalScalar,
     unaryMinus,
@@ -35801,7 +35808,7 @@ var createLup = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
             // s = l[i, k] - data[k, j]
             s = addScalar(s, multiplyScalar(data[i][k], data[k][j]));
           }
-          data[i][j] = subtract(data[i][j], s);
+          data[i][j] = subtractScalar(data[i][j], s);
         }
       }
       // row with larger value in cvector, row >= j
@@ -36097,7 +36104,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'qr';
-var dependencies = ['typed', 'matrix', 'zeros', 'identity', 'isZero', 'equal', 'sign', 'sqrt', 'conj', 'unaryMinus', 'addScalar', 'divideScalar', 'multiplyScalar', 'subtract', 'complex'];
+var dependencies = ['typed', 'matrix', 'zeros', 'identity', 'isZero', 'equal', 'sign', 'sqrt', 'conj', 'unaryMinus', 'addScalar', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'complex'];
 var createQr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.factory)(name, dependencies, _ref => {
   var {
     typed,
@@ -36113,7 +36120,7 @@ var createQr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.
     addScalar,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     complex
   } = _ref;
   /**
@@ -36228,7 +36235,7 @@ var createQr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.
       var alpha = multiplyScalar(sgn, sqrt(alphaSquared));
       if (!isZero(alpha)) {
         // first element in vector u
-        var u1 = subtract(pivot, alpha);
+        var u1 = subtractScalar(pivot, alpha);
 
         // w = v * u1 / |u|    (only elements k to (rows-1) are used)
         w[k] = 1;
@@ -36263,7 +36270,7 @@ var createQr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.
           // calculate the jth element of [tau * transpose(w) * R]
           s = multiplyScalar(s, tau);
           for (i = k; i < rows; i++) {
-            Rdata[i][j] = multiplyScalar(subtract(Rdata[i][j], multiplyScalar(w[i], s)), conjSgn);
+            Rdata[i][j] = multiplyScalar(subtractScalar(Rdata[i][j], multiplyScalar(w[i], s)), conjSgn);
           }
         }
         /*
@@ -36284,7 +36291,7 @@ var createQr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.
           // calculate the ith element of [tau * Q * w]
           s = multiplyScalar(s, tau);
           for (j = k; j < rows; ++j) {
-            Qdata[i][j] = divideScalar(subtract(Qdata[i][j], multiplyScalar(s, conj(w[j]))), conjSgn);
+            Qdata[i][j] = divideScalar(subtractScalar(Qdata[i][j], multiplyScalar(s, conj(w[j]))), conjSgn);
           }
         }
       }
@@ -36743,14 +36750,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'lsolve';
-var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtract', 'equalScalar', 'DenseMatrix'];
+var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'equalScalar', 'DenseMatrix'];
 var createLsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     equalScalar,
     DenseMatrix
   } = _ref;
@@ -36821,7 +36828,7 @@ var createLsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
 
         // loop rows
         for (var i = j + 1; i < rows; i++) {
-          bdata[i] = [subtract(bdata[i][0] || 0, multiplyScalar(xj, mdata[i][j]))];
+          bdata[i] = [subtractScalar(bdata[i][0] || 0, multiplyScalar(xj, mdata[i][j]))];
         }
       } else {
         // degenerate row, we can choose any value
@@ -36883,7 +36890,7 @@ var createLsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
         var xj = divideScalar(bj, vjj);
         for (var _k = 0, l = jIndices.length; _k < l; _k++) {
           var _i = jIndices[_k];
-          bdata[_i] = [subtract(bdata[_i][0] || 0, multiplyScalar(xj, jValues[_k]))];
+          bdata[_i] = [subtractScalar(bdata[_i][0] || 0, multiplyScalar(xj, jValues[_k]))];
         }
         x[j] = [xj];
       } else {
@@ -36916,14 +36923,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'lsolveAll';
-var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtract', 'equalScalar', 'DenseMatrix'];
+var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'equalScalar', 'DenseMatrix'];
 var createLsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     equalScalar,
     DenseMatrix
   } = _ref;
@@ -36991,7 +36998,7 @@ var createLsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           b[i] = divideScalar(b[i], M[i][i]);
           for (var j = i + 1; j < columns; j++) {
             // b[j] -= b[i] * M[j,i]
-            b[j] = subtract(b[j], multiplyScalar(b[i], M[j][i]));
+            b[j] = subtractScalar(b[j], multiplyScalar(b[i], M[j][i]));
           }
         } else if (!equalScalar(b[i], 0)) {
           // singular row, nonzero RHS
@@ -37011,7 +37018,7 @@ var createLsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           var bNew = [...b];
           bNew[i] = 1;
           for (var _j = i + 1; _j < columns; _j++) {
-            bNew[_j] = subtract(bNew[_j], M[_j][i]);
+            bNew[_j] = subtractScalar(bNew[_j], M[_j][i]);
           }
           B.push(bNew);
         }
@@ -37066,7 +37073,7 @@ var createLsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           b[i] = divideScalar(b[i], Mii);
           for (var _j2 = 0, _lastIndex = iIndices.length; _j2 < _lastIndex; _j2++) {
             var _J = iIndices[_j2];
-            b[_J] = subtract(b[_J], multiplyScalar(b[i], iValues[_j2]));
+            b[_J] = subtractScalar(b[_J], multiplyScalar(b[i], iValues[_j2]));
           }
         } else if (!equalScalar(b[i], 0)) {
           // singular row, nonzero RHS
@@ -37087,7 +37094,7 @@ var createLsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           bNew[i] = 1;
           for (var _j3 = 0, _lastIndex2 = iIndices.length; _j3 < _lastIndex2; _j3++) {
             var _J2 = iIndices[_j3];
-            bNew[_J2] = subtract(bNew[_J2], iValues[_j3]);
+            bNew[_J2] = subtractScalar(bNew[_J2], iValues[_j3]);
           }
           B.push(bNew);
         }
@@ -37244,14 +37251,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'usolve';
-var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtract', 'equalScalar', 'DenseMatrix'];
+var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'equalScalar', 'DenseMatrix'];
 var createUsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     equalScalar,
     DenseMatrix
   } = _ref;
@@ -37324,7 +37331,7 @@ var createUsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
         // loop rows
         for (var i = j - 1; i >= 0; i--) {
           // update copy of b
-          bdata[i] = [subtract(bdata[i][0] || 0, multiplyScalar(xj, mdata[i][j]))];
+          bdata[i] = [subtractScalar(bdata[i][0] || 0, multiplyScalar(xj, mdata[i][j]))];
         }
       } else {
         // zero value at j
@@ -37388,7 +37395,7 @@ var createUsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
         var xj = divideScalar(bj, vjj);
         for (var _k = 0, _lastIndex = jIndices.length; _k < _lastIndex; _k++) {
           var _i = jIndices[_k];
-          bdata[_i] = [subtract(bdata[_i][0], multiplyScalar(xj, jValues[_k]))];
+          bdata[_i] = [subtractScalar(bdata[_i][0], multiplyScalar(xj, jValues[_k]))];
         }
         x[j] = [xj];
       } else {
@@ -37421,14 +37428,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'usolveAll';
-var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtract', 'equalScalar', 'DenseMatrix'];
+var dependencies = ['typed', 'matrix', 'divideScalar', 'multiplyScalar', 'subtractScalar', 'equalScalar', 'DenseMatrix'];
 var createUsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
     divideScalar,
     multiplyScalar,
-    subtract,
+    subtractScalar,
     equalScalar,
     DenseMatrix
   } = _ref;
@@ -37496,7 +37503,7 @@ var createUsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           b[i] = divideScalar(b[i], M[i][i]);
           for (var j = i - 1; j >= 0; j--) {
             // b[j] -= b[i] * M[j,i]
-            b[j] = subtract(b[j], multiplyScalar(b[i], M[j][i]));
+            b[j] = subtractScalar(b[j], multiplyScalar(b[i], M[j][i]));
           }
         } else if (!equalScalar(b[i], 0)) {
           // singular row, nonzero RHS
@@ -37516,7 +37523,7 @@ var createUsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           var bNew = [...b];
           bNew[i] = 1;
           for (var _j = i - 1; _j >= 0; _j--) {
-            bNew[_j] = subtract(bNew[_j], M[_j][i]);
+            bNew[_j] = subtractScalar(bNew[_j], M[_j][i]);
           }
           B.push(bNew);
         }
@@ -37573,7 +37580,7 @@ var createUsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           // loop upper triangular
           for (var _j2 = 0, _lastIndex = iIndices.length; _j2 < _lastIndex; _j2++) {
             var _J = iIndices[_j2];
-            b[_J] = subtract(b[_J], multiplyScalar(b[i], iValues[_j2]));
+            b[_J] = subtractScalar(b[_J], multiplyScalar(b[i], iValues[_j2]));
           }
         } else if (!equalScalar(b[i], 0)) {
           // singular row, nonzero RHS
@@ -37596,7 +37603,7 @@ var createUsolveAll = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
           // loop upper triangular
           for (var _j3 = 0, _lastIndex2 = iIndices.length; _j3 < _lastIndex2; _j3++) {
             var _J2 = iIndices[_j3];
-            bNew[_J2] = subtract(bNew[_J2], iValues[_j3]);
+            bNew[_J2] = subtractScalar(bNew[_J2], iValues[_j3]);
           }
           B.push(bNew);
         }
@@ -40435,14 +40442,12 @@ var createCube = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     Complex: function Complex(x) {
       return x.mul(x).mul(x); // Is faster than pow(x, 3)
     },
-
     BigNumber: function BigNumber(x) {
       return x.times(x).times(x);
     },
     Fraction: function Fraction(x) {
       return x.pow(3); // Is faster than mul()mul()mul()
     },
-
     Unit: function Unit(x) {
       return x.pow(3);
     }
@@ -42275,17 +42280,10 @@ var createMod = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
   return typed(name, {
     'number, number': _modNumber,
     'BigNumber, BigNumber': function BigNumberBigNumber(x, y) {
-      if (y.isNeg()) {
-        throw new Error('Cannot calculate mod for a negative divisor');
-      }
-      return y.isZero() ? x : x.mod(y);
+      return y.isZero() ? x : x.sub(y.mul(floor(x.div(y))));
     },
     'Fraction, Fraction': function FractionFraction(x, y) {
-      if (y.compare(0) < 0) {
-        throw new Error('Cannot calculate mod for a negative divisor');
-      }
-      // Workaround suggested in Fraction.js library to calculate correct modulo for negative dividend
-      return x.compare(0) >= 0 ? x.mod(y) : x.mod(y).add(y).mod(y);
+      return y.equals(0) ? x : x.sub(y.mul(floor(x.div(y))));
     }
   }, matrixAlgorithmSuite({
     SS: matAlgo05xSfSf,
@@ -43815,7 +43813,6 @@ var createNthRoots = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
         offset = 2 * +(a.im < 0) + 1; // complex value on the imaginary axis
       }
     }
-
     var arg = a.arg();
     var abs = a.abs();
     var roots = [];
@@ -44145,6 +44142,8 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
    *
    *    math.round(x)
    *    math.round(x, n)
+   *    math.round(unit, valuelessUnit)
+   *    math.round(unit, n, valuelessUnit)
    *
    * Examples:
    *
@@ -44162,14 +44161,21 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
    *    const c = math.complex(3.2, -2.7)
    *    math.round(c)                // returns Complex 3 - 3i
    *
+   *    const unit = math.unit('3.241 cm')
+   *    const cm = math.unit('cm')
+   *    const mm = math.unit('mm')
+   *    math.round(unit, 1, cm)      // returns Unit 3.2 cm
+   *    math.round(unit, 1, mm)      // returns Unit 32.4 mm
+   *
    *    math.round([3.2, 3.8, -4.7]) // returns Array [3, 4, -5]
    *
    * See also:
    *
    *    ceil, fix, floor
    *
-   * @param  {number | BigNumber | Fraction | Complex | Array | Matrix} x  Number to be rounded
+   * @param  {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} x  Value to be rounded
    * @param  {number | BigNumber | Array} [n=0]                            Number of decimals
+   * @param  {Unit} [valuelessUnit]                                        A valueless unit
    * @return {number | BigNumber | Fraction | Complex | Array | Matrix} Rounded value
    */
   return typed(name, {
@@ -44221,37 +44227,51 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
       }
       return x.round(n.toNumber());
     },
-    // deep map collection, skip zeros since round(0) = 0
-    'Array | Matrix': typed.referToSelf(self => x => (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_5__.deepMap)(x, self, true)),
-    'SparseMatrix, number | BigNumber': typed.referToSelf(self => (x, y) => {
-      return matAlgo11xS0s(x, y, self, false);
+    'Unit, number, Unit': typed.referToSelf(self => function (x, n, unit) {
+      var valueless = x.toNumeric(unit);
+      return unit.multiply(self(valueless, n));
     }),
-    'DenseMatrix, number | BigNumber': typed.referToSelf(self => (x, y) => {
-      return matAlgo14xDs(x, y, self, false);
+    'Unit, BigNumber, Unit': typed.referToSelf(self => (x, n, unit) => self(x, n.toNumber(), unit)),
+    'Unit, Unit': typed.referToSelf(self => (x, unit) => self(x, 0, unit)),
+    'Array | Matrix, number, Unit': typed.referToSelf(self => (x, n, unit) => {
+      // deep map collection, skip zeros since round(0) = 0
+      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_5__.deepMap)(x, value => self(value, n, unit), true);
     }),
-    'Array, number | BigNumber': typed.referToSelf(self => (x, y) => {
+    'Array | Matrix, BigNumber, Unit': typed.referToSelf(self => (x, n, unit) => self(x, n.toNumber(), unit)),
+    'Array | Matrix, Unit': typed.referToSelf(self => (x, unit) => self(x, 0, unit)),
+    'Array | Matrix': typed.referToSelf(self => x => {
+      // deep map collection, skip zeros since round(0) = 0
+      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_5__.deepMap)(x, self, true);
+    }),
+    'SparseMatrix, number | BigNumber': typed.referToSelf(self => (x, n) => {
+      return matAlgo11xS0s(x, n, self, false);
+    }),
+    'DenseMatrix, number | BigNumber': typed.referToSelf(self => (x, n) => {
+      return matAlgo14xDs(x, n, self, false);
+    }),
+    'Array, number | BigNumber': typed.referToSelf(self => (x, n) => {
       // use matrix implementation
-      return matAlgo14xDs(matrix(x), y, self, false).valueOf();
+      return matAlgo14xDs(matrix(x), n, self, false).valueOf();
     }),
-    'number | Complex | BigNumber | Fraction, SparseMatrix': typed.referToSelf(self => (x, y) => {
+    'number | Complex | BigNumber | Fraction, SparseMatrix': typed.referToSelf(self => (x, n) => {
       // check scalar is zero
       if (equalScalar(x, 0)) {
         // do not execute algorithm, result will be a zero matrix
-        return zeros(y.size(), y.storage());
+        return zeros(n.size(), n.storage());
       }
-      return matAlgo12xSfs(y, x, self, true);
+      return matAlgo12xSfs(n, x, self, true);
     }),
-    'number | Complex | BigNumber | Fraction, DenseMatrix': typed.referToSelf(self => (x, y) => {
+    'number | Complex | BigNumber | Fraction, DenseMatrix': typed.referToSelf(self => (x, n) => {
       // check scalar is zero
       if (equalScalar(x, 0)) {
         // do not execute algorithm, result will be a zero matrix
-        return zeros(y.size(), y.storage());
+        return zeros(n.size(), n.storage());
       }
-      return matAlgo14xDs(y, x, self, true);
+      return matAlgo14xDs(n, x, self, true);
     }),
-    'number | Complex | BigNumber | Fraction, Array': typed.referToSelf(self => (x, y) => {
+    'number | Complex | BigNumber | Fraction, Array': typed.referToSelf(self => (x, n) => {
       // use matrix implementation
-      return matAlgo14xDs(matrix(y), x, self, true).valueOf();
+      return matAlgo14xDs(matrix(n), x, self, true).valueOf();
     })
   });
 });
@@ -44517,13 +44537,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'subtract';
-var dependencies = ['typed', 'matrix', 'equalScalar', 'addScalar', 'unaryMinus', 'DenseMatrix', 'concat'];
+var dependencies = ['typed', 'matrix', 'equalScalar', 'subtractScalar', 'unaryMinus', 'DenseMatrix', 'concat'];
 var createSubtract = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
     equalScalar,
-    addScalar,
+    subtractScalar,
     unaryMinus,
     DenseMatrix,
     concat
@@ -44580,40 +44600,82 @@ var createSubtract = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
    *
    *    add
    *
-   * @param  {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} x
-   *            Initial value
-   * @param  {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} y
-   *            Value to subtract from `x`
-   * @return {number | BigNumber | Fraction | Complex | Unit | Array | Matrix}
-   *            Subtraction of `x` and `y`
+   * @param  {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} x Initial value
+   * @param  {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} y Value to subtract from `x`
+   * @return {number | BigNumber | Fraction | Complex | Unit | Array | Matrix} Subtraction of `x` and `y`
    */
   return typed(name, {
-    'number, number': (x, y) => x - y,
-    'Complex, Complex': (x, y) => x.sub(y),
-    'BigNumber, BigNumber': (x, y) => x.minus(y),
-    'Fraction, Fraction': (x, y) => x.sub(y),
-    'Unit, Unit': typed.referToSelf(self => (x, y) => {
-      if (x.value === null) {
-        throw new Error('Parameter x contains a unit with undefined value');
-      }
-      if (y.value === null) {
-        throw new Error('Parameter y contains a unit with undefined value');
-      }
-      if (!x.equalBase(y)) {
-        throw new Error('Units do not match');
-      }
-      var res = x.clone();
-      res.value = typed.find(self, [res.valueType(), y.valueType()])(res.value, y.value);
-      res.fixPrefix = false;
-      return res;
-    })
+    'any, any': subtractScalar
   }, matrixAlgorithmSuite({
+    elop: subtractScalar,
     SS: matAlgo05xSfSf,
     DS: matAlgo01xDSid,
     SD: matAlgo03xDSf,
     Ss: matAlgo12xSfs,
     sS: matAlgo10xSids
   }));
+});
+
+/***/ }),
+
+/***/ "./node_modules/mathjs/lib/esm/function/arithmetic/subtractScalar.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/mathjs/lib/esm/function/arithmetic/subtractScalar.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createSubtractScalar: () => (/* binding */ createSubtractScalar)
+/* harmony export */ });
+/* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
+/* harmony import */ var _plain_number_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../plain/number/index.js */ "./node_modules/mathjs/lib/esm/plain/number/arithmetic.js");
+
+
+var name = 'subtractScalar';
+var dependencies = ['typed'];
+var createSubtractScalar = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
+  var {
+    typed
+  } = _ref;
+  /**
+   * Subtract two scalar values, `x - y`.
+   * This function is meant for internal use: it is used by the public function
+   * `subtract`
+   *
+   * This function does not support collections (Array or Matrix).
+   *
+   * @param  {number | BigNumber | Fraction | Complex | Unit} x   First value
+   * @param  {number | BigNumber | Fraction | Complex} y          Second value to be subtracted from `x`
+   * @return {number | BigNumber | Fraction | Complex | Unit}     Difference of `x` and `y`
+   * @private
+   */
+  return typed(name, {
+    'number, number': _plain_number_index_js__WEBPACK_IMPORTED_MODULE_1__.subtractNumber,
+    'Complex, Complex': function ComplexComplex(x, y) {
+      return x.sub(y);
+    },
+    'BigNumber, BigNumber': function BigNumberBigNumber(x, y) {
+      return x.minus(y);
+    },
+    'Fraction, Fraction': function FractionFraction(x, y) {
+      return x.sub(y);
+    },
+    'Unit, Unit': typed.referToSelf(self => (x, y) => {
+      if (x.value === null || x.value === undefined) {
+        throw new Error('Parameter x contains a unit with undefined value');
+      }
+      if (y.value === null || y.value === undefined) {
+        throw new Error('Parameter y contains a unit with undefined value');
+      }
+      if (!x.equalBase(y)) throw new Error('Units do not match');
+      var res = x.clone();
+      res.value = typed.find(self, [res.valueType(), y.valueType()])(res.value, y.value);
+      res.fixPrefix = false;
+      return res;
+    })
+  });
 });
 
 /***/ }),
@@ -44735,15 +44797,12 @@ var createUnaryPlus = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     Complex: function Complex(x) {
       return x; // complex numbers are immutable
     },
-
     BigNumber: function BigNumber(x) {
       return x; // bignumbers are immutable
     },
-
     Fraction: function Fraction(x) {
       return x; // fractions are immutable
     },
-
     Unit: function Unit(x) {
       return x.clone();
     },
@@ -45821,12 +45880,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'stirlingS2';
-var dependencies = ['typed', 'addScalar', 'subtract', 'multiplyScalar', 'divideScalar', 'pow', 'factorial', 'combinations', 'isNegative', 'isInteger', 'number', '?bignumber', 'larger'];
+var dependencies = ['typed', 'addScalar', 'subtractScalar', 'multiplyScalar', 'divideScalar', 'pow', 'factorial', 'combinations', 'isNegative', 'isInteger', 'number', '?bignumber', 'larger'];
 var createStirlingS2 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     addScalar,
-    subtract,
+    subtractScalar,
     multiplyScalar,
     divideScalar,
     pow,
@@ -46159,12 +46218,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'distance';
-var dependencies = ['typed', 'addScalar', 'subtract', 'divideScalar', 'multiplyScalar', 'deepEqual', 'sqrt', 'abs'];
+var dependencies = ['typed', 'addScalar', 'subtractScalar', 'divideScalar', 'multiplyScalar', 'deepEqual', 'sqrt', 'abs'];
 var createDistance = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     addScalar,
-    subtract,
+    subtractScalar,
     multiplyScalar,
     divideScalar,
     deepEqual,
@@ -46238,9 +46297,9 @@ var createDistance = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
         if (deepEqual(y, z)) {
           throw new TypeError('LinePoint1 should not be same with LinePoint2');
         }
-        var xCoeff = subtract(z[1], y[1]);
-        var yCoeff = subtract(y[0], z[0]);
-        var constant = subtract(multiplyScalar(z[0], y[1]), multiplyScalar(y[0], z[1]));
+        var xCoeff = subtractScalar(z[1], y[1]);
+        var yCoeff = subtractScalar(y[0], z[0]);
+        var constant = subtractScalar(multiplyScalar(z[0], y[1]), multiplyScalar(y[0], z[1]));
         return _distancePointLine2D(x[0], x[1], xCoeff, yCoeff, constant);
       } else {
         throw new TypeError('Invalid Arguments: Try again');
@@ -46261,9 +46320,9 @@ var createDistance = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
           throw new TypeError('LinePoint1 should not be same with LinePoint2');
         }
         if ('pointX' in x && 'pointY' in x && 'lineOnePtX' in y && 'lineOnePtY' in y && 'lineTwoPtX' in z && 'lineTwoPtY' in z) {
-          var xCoeff = subtract(z.lineTwoPtY, y.lineOnePtY);
-          var yCoeff = subtract(y.lineOnePtX, z.lineTwoPtX);
-          var constant = subtract(multiplyScalar(z.lineTwoPtX, y.lineOnePtY), multiplyScalar(y.lineOnePtX, z.lineTwoPtY));
+          var xCoeff = subtractScalar(z.lineTwoPtY, y.lineOnePtY);
+          var yCoeff = subtractScalar(y.lineOnePtX, z.lineTwoPtX);
+          var constant = subtractScalar(multiplyScalar(z.lineTwoPtX, y.lineOnePtY), multiplyScalar(y.lineOnePtX, z.lineTwoPtY));
           return _distancePointLine2D(x.pointX, x.pointY, xCoeff, yCoeff, constant);
         } else {
           throw new TypeError('Key names do not match');
@@ -46427,7 +46486,7 @@ var createDistance = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     return divideScalar(num, den);
   }
   function _distancePointLine3D(x, y, z, x0, y0, z0, a, b, c) {
-    var num = [subtract(multiplyScalar(subtract(y0, y), c), multiplyScalar(subtract(z0, z), b)), subtract(multiplyScalar(subtract(z0, z), a), multiplyScalar(subtract(x0, x), c)), subtract(multiplyScalar(subtract(x0, x), b), multiplyScalar(subtract(y0, y), a))];
+    var num = [subtractScalar(multiplyScalar(subtractScalar(y0, y), c), multiplyScalar(subtractScalar(z0, z), b)), subtractScalar(multiplyScalar(subtractScalar(z0, z), a), multiplyScalar(subtractScalar(x0, x), c)), subtractScalar(multiplyScalar(subtractScalar(x0, x), b), multiplyScalar(subtractScalar(y0, y), a))];
     num = sqrt(addScalar(addScalar(multiplyScalar(num[0], num[0]), multiplyScalar(num[1], num[1])), multiplyScalar(num[2], num[2])));
     var den = sqrt(addScalar(addScalar(multiplyScalar(a, a), multiplyScalar(b, b)), multiplyScalar(c, c)));
     return divideScalar(num, den);
@@ -46437,7 +46496,7 @@ var createDistance = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var result = 0;
     var diff = 0;
     for (var i = 0; i < vectorSize; i++) {
-      diff = subtract(x[i], y[i]);
+      diff = subtractScalar(x[i], y[i]);
       result = addScalar(multiplyScalar(diff, diff), result);
     }
     return sqrt(result);
@@ -47629,12 +47688,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var name = 'det';
-var dependencies = ['typed', 'matrix', 'subtract', 'multiply', 'divideScalar', 'isZero', 'unaryMinus'];
+var dependencies = ['typed', 'matrix', 'subtractScalar', 'multiply', 'divideScalar', 'isZero', 'unaryMinus'];
 var createDet = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
     matrix,
-    subtract,
+    subtractScalar,
     multiply,
     divideScalar,
     isZero,
@@ -47730,7 +47789,7 @@ var createDet = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
     } else if (rows === 2) {
       // this is a 2 x 2 matrix
       // the determinant of [a11,a12;a21,a22] is det = a11*a22-a21*a12
-      return subtract(multiply(matrix[0][0], matrix[1][1]), multiply(matrix[1][0], matrix[0][1]));
+      return subtractScalar(multiply(matrix[0][0], matrix[1][1]), multiply(matrix[1][0], matrix[0][1]));
     } else {
       // Bareiss algorithm
       // this algorithm have same complexity as LUP decomposition (O(n^3))
@@ -47752,13 +47811,12 @@ var createDet = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
           }
           if (_k === rows) return matrix[k_][k]; // some zero of the type
         }
-
         var piv = matrix[k_][k];
         var piv_ = k === 0 ? 1 : matrix[rowIndices[k - 1]][k - 1];
         for (var i = k + 1; i < rows; i++) {
           var i_ = rowIndices[i];
           for (var j = k + 1; j < rows; j++) {
-            matrix[i_][j] = divideScalar(subtract(multiply(matrix[i_][j], piv), multiply(matrix[i_][k], matrix[k_][j])), piv_);
+            matrix[i_][j] = divideScalar(subtractScalar(multiply(matrix[i_][j], piv), multiply(matrix[i_][k], matrix[k_][j])), piv_);
           }
         }
       }
@@ -48048,7 +48106,6 @@ var createDiff = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(arr)) {
       arr = arr.toArray(); // Makes sure arrays like [ matrix([0, 1]), matrix([1, 0]) ] are processed properly
     }
-
     if (!Array.isArray(arr)) {
       throw RangeError('Array/Matrix does not have that many dimensions');
     }
@@ -48099,7 +48156,6 @@ var createDiff = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     if (!obj1IsArray && !obj2IsArray) {
       return subtract(obj2, obj1); // Difference is (second - first) NOT (first - second)
     }
-
     throw TypeError('Cannot calculate difference between 1 array and 1 non-array');
   }
 
@@ -48308,11 +48364,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createEigs: () => (/* binding */ createEigs)
 /* harmony export */ });
-/* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
-/* harmony import */ var _utils_string_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/string.js */ "./node_modules/mathjs/lib/esm/utils/string.js");
-/* harmony import */ var _eigs_complexEigs_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./eigs/complexEigs.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs/complexEigs.js");
-/* harmony import */ var _eigs_realSymetric_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./eigs/realSymetric.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymetric.js");
-/* harmony import */ var _utils_is_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/is.js */ "./node_modules/mathjs/lib/esm/utils/is.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
+/* harmony import */ var _utils_string_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/string.js */ "./node_modules/mathjs/lib/esm/utils/string.js");
+/* harmony import */ var _eigs_complexEigs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./eigs/complexEigs.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs/complexEigs.js");
+/* harmony import */ var _eigs_realSymmetric_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./eigs/realSymmetric.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymmetric.js");
+/* harmony import */ var _utils_is_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/is.js */ "./node_modules/mathjs/lib/esm/utils/is.js");
+
 
 
 
@@ -48321,8 +48379,8 @@ __webpack_require__.r(__webpack_exports__);
 var name = 'eigs';
 
 // The absolute state of math.js's dependency system:
-var dependencies = ['config', 'typed', 'matrix', 'addScalar', 'equal', 'subtract', 'abs', 'atan', 'cos', 'sin', 'multiplyScalar', 'divideScalar', 'inv', 'bignumber', 'multiply', 'add', 'larger', 'column', 'flatten', 'number', 'complex', 'sqrt', 'diag', 'qr', 'usolve', 'usolveAll', 'im', 're', 'smaller', 'matrixFromColumns', 'dot'];
-var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
+var dependencies = ['config', 'typed', 'matrix', 'addScalar', 'equal', 'subtract', 'abs', 'atan', 'cos', 'sin', 'multiplyScalar', 'divideScalar', 'inv', 'bignumber', 'multiply', 'add', 'larger', 'column', 'flatten', 'number', 'complex', 'sqrt', 'diag', 'size', 'reshape', 'qr', 'usolve', 'usolveAll', 'im', 're', 'smaller', 'matrixFromColumns', 'dot'];
+var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_1__.factory)(name, dependencies, _ref => {
   var {
     config,
     typed,
@@ -48347,6 +48405,8 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     complex,
     sqrt,
     diag,
+    size,
+    reshape,
     qr,
     usolve,
     usolveAll,
@@ -48356,7 +48416,7 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     matrixFromColumns,
     dot
   } = _ref;
-  var doRealSymetric = (0,_eigs_realSymetric_js__WEBPACK_IMPORTED_MODULE_1__.createRealSymmetric)({
+  var doRealSymmetric = (0,_eigs_realSymmetric_js__WEBPACK_IMPORTED_MODULE_2__.createRealSymmetric)({
     config,
     addScalar,
     subtract,
@@ -48374,7 +48434,7 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     multiply,
     add
   });
-  var doComplexEigs = (0,_eigs_complexEigs_js__WEBPACK_IMPORTED_MODULE_2__.createComplexEigs)({
+  var doComplexEigs = (0,_eigs_complexEigs_js__WEBPACK_IMPORTED_MODULE_3__.createComplexEigs)({
     config,
     addScalar,
     subtract,
@@ -48386,6 +48446,8 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     abs,
     bignumber,
     diag,
+    size,
+    reshape,
     qr,
     inv,
     usolve,
@@ -48399,26 +48461,54 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
   });
 
   /**
-   * Compute eigenvalues and eigenvectors of a matrix. The eigenvalues are sorted by their absolute value, ascending.
-   * An eigenvalue with multiplicity k will be listed k times. The eigenvectors are returned as columns of a matrix –
-   * the eigenvector that belongs to the j-th eigenvalue in the list (eg. `values[j]`) is the j-th column (eg. `column(vectors, j)`).
-   * If the algorithm fails to converge, it will throw an error – in that case, however, you may still find useful information
+   * Compute eigenvalues and optionally eigenvectors of a square matrix.
+   * The eigenvalues are sorted by their absolute value, ascending, and
+   * returned as a vector in the `values` property of the returned project.
+   * An eigenvalue with algebraic multiplicity k will be listed k times, so
+   * that the returned `values` vector always has length equal to the size
+   * of the input matrix.
+   *
+   * The `eigenvectors` property of the return value provides the eigenvectors.
+   * It is an array of plain objects: the `value` property of each gives the
+   * associated eigenvalue, and the `vector` property gives the eigenvector
+   * itself. Note that the same `value` property will occur as many times in
+   * the list provided by `eigenvectors` as the geometric multiplicity of
+   * that value.
+   *
+   * If the algorithm fails to converge, it will throw an error –
+   * in that case, however, you may still find useful information
    * in `err.values` and `err.vectors`.
+   *
+   * Note that the 'precision' option does not directly specify the _accuracy_
+   * of the returned eigenvalues. Rather, it determines how small an entry
+   * of the iterative approximations to an upper triangular matrix must be
+   * in order to be considered zero. The actual accuracy of the returned
+   * eigenvalues may be greater or less than the precision, depending on the
+   * conditioning of the matrix and how far apart or close the actual
+   * eigenvalues are. Note that currently, relatively simple, "traditional"
+   * methods of eigenvalue computation are being used; this is not a modern,
+   * high-precision eigenvalue computation. That said, it should typically
+   * produce fairly reasonable results.
    *
    * Syntax:
    *
    *     math.eigs(x, [prec])
+   *     math.eigs(x, {options})
    *
    * Examples:
    *
-   *     const { eigs, multiply, column, transpose } = math
+   *     const { eigs, multiply, column, transpose, matrixFromColumns } = math
    *     const H = [[5, 2.3], [2.3, 1]]
-   *     const ans = eigs(H) // returns {values: [E1,E2...sorted], vectors: [v1,v2.... corresponding vectors as columns]}
+   *     const ans = eigs(H) // returns {values: [E1,E2...sorted], eigenvectors: [{value: E1, vector: v2}, {value: e, vector: v2}, ...]
    *     const E = ans.values
-   *     const U = ans.vectors
-   *     multiply(H, column(U, 0)) // returns multiply(E[0], column(U, 0))
-   *     const UTxHxU = multiply(transpose(U), H, U) // diagonalizes H
-   *     E[0] == UTxHxU[0][0]  // returns true
+   *     const V = ans.eigenvectors
+   *     multiply(H, V[0].vector)) // returns multiply(E[0], V[0].vector))
+   *     const U = matrixFromColumns(...V.map(obj => obj.vector))
+   *     const UTxHxU = multiply(transpose(U), H, U) // diagonalizes H if possible
+   *     E[0] == UTxHxU[0][0]  // returns true always
+   *
+   *     // Compute only approximate eigenvalues:
+   *     const {values} = eigs(H, {eigenvectors: false, precision: 1e-6})
    *
    * See also:
    *
@@ -48426,59 +48516,98 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
    *
    * @param {Array | Matrix} x  Matrix to be diagonalized
    *
-   * @param {number | BigNumber} [prec] Precision, default value: 1e-15
-   * @return {{values: Array|Matrix, vectors: Array|Matrix}} Object containing an array of eigenvalues and a matrix with eigenvectors as columns.
+   * @param {number | BigNumber | OptsObject} [opts] Object with keys `precision`, defaulting to config.epsilon, and `eigenvectors`, defaulting to true and specifying whether to compute eigenvectors. If just a number, specifies precision.
+   * @return {{values: Array|Matrix, eigenvectors?: Array<EVobj>}} Object containing an array of eigenvalues and an array of {value: number|BigNumber, vector: Array|Matrix} objects. The eigenvectors property is undefined if eigenvectors were not requested.
    *
    */
   return typed('eigs', {
+    // The conversion to matrix in the first two implementations,
+    // just to convert back to an array right away in
+    // computeValuesAndVectors, is unfortunate, and should perhaps be
+    // streamlined. It is done because the Matrix object carries some
+    // type information about its entries, and so constructing the matrix
+    // is a roundabout way of doing type detection.
     Array: function Array(x) {
-      var mat = matrix(x);
-      return computeValuesAndVectors(mat);
+      return doEigs(matrix(x));
     },
     'Array, number|BigNumber': function ArrayNumberBigNumber(x, prec) {
-      var mat = matrix(x);
-      return computeValuesAndVectors(mat, prec);
+      return doEigs(matrix(x), {
+        precision: prec
+      });
+    },
+    'Array, Object'(x, opts) {
+      return doEigs(matrix(x), opts);
     },
     Matrix: function Matrix(mat) {
-      var {
-        values,
-        vectors
-      } = computeValuesAndVectors(mat);
-      return {
-        values: matrix(values),
-        vectors: matrix(vectors)
-      };
+      return doEigs(mat, {
+        matricize: true
+      });
     },
     'Matrix, number|BigNumber': function MatrixNumberBigNumber(mat, prec) {
-      var {
-        values,
-        vectors
-      } = computeValuesAndVectors(mat, prec);
-      return {
-        values: matrix(values),
-        vectors: matrix(vectors)
+      return doEigs(mat, {
+        precision: prec,
+        matricize: true
+      });
+    },
+    'Matrix, Object': function MatrixObject(mat, opts) {
+      var useOpts = {
+        matricize: true
       };
+      (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])(useOpts, opts);
+      return doEigs(mat, useOpts);
     }
   });
-  function computeValuesAndVectors(mat, prec) {
-    if (prec === undefined) {
-      prec = config.epsilon;
-    }
-    var size = mat.size();
-    if (size.length !== 2 || size[0] !== size[1]) {
-      throw new RangeError('Matrix must be square (size: ' + (0,_utils_string_js__WEBPACK_IMPORTED_MODULE_3__.format)(size) + ')');
-    }
-    var arr = mat.toArray();
-    var N = size[0];
-    if (isReal(arr, N, prec)) {
-      coerceReal(arr, N);
-      if (isSymmetric(arr, N, prec)) {
-        var _type = coerceTypes(mat, arr, N);
-        return doRealSymetric(arr, N, prec, _type);
+  function doEigs(mat) {
+    var _opts$precision;
+    var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var computeVectors = 'eigenvectors' in opts ? opts.eigenvectors : true;
+    var prec = (_opts$precision = opts.precision) !== null && _opts$precision !== void 0 ? _opts$precision : config.epsilon;
+    var result = computeValuesAndVectors(mat, prec, computeVectors);
+    if (opts.matricize) {
+      result.values = matrix(result.values);
+      if (computeVectors) {
+        result.eigenvectors = result.eigenvectors.map(_ref2 => {
+          var {
+            value,
+            vector
+          } = _ref2;
+          return {
+            value,
+            vector: matrix(vector)
+          };
+        });
       }
     }
-    var type = coerceTypes(mat, arr, N);
-    return doComplexEigs(arr, N, prec, type);
+    if (computeVectors) {
+      Object.defineProperty(result, 'vectors', {
+        enumerable: false,
+        // to make sure that the eigenvectors can still be
+        // converted to string.
+        get: () => {
+          throw new Error('eigs(M).vectors replaced with eigs(M).eigenvectors');
+        }
+      });
+    }
+    return result;
+  }
+  function computeValuesAndVectors(mat, prec, computeVectors) {
+    var arr = mat.toArray(); // NOTE: arr is guaranteed to be unaliased
+    // and so safe to modify in place
+    var asize = mat.size();
+    if (asize.length !== 2 || asize[0] !== asize[1]) {
+      throw new RangeError("Matrix must be square (size: ".concat((0,_utils_string_js__WEBPACK_IMPORTED_MODULE_4__.format)(asize), ")"));
+    }
+    var N = asize[0];
+    if (isReal(arr, N, prec)) {
+      coerceReal(arr, N); // modifies arr by side effect
+
+      if (isSymmetric(arr, N, prec)) {
+        var _type = coerceTypes(mat, arr, N); // modifies arr by side effect
+        return doRealSymmetric(arr, N, prec, _type, computeVectors);
+      }
+    }
+    var type = coerceTypes(mat, arr, N); // modifies arr by side effect
+    return doComplexEigs(arr, N, prec, type, computeVectors);
   }
 
   /** @return {boolean} */
@@ -48527,14 +48656,14 @@ var createEigs = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
     for (var i = 0; i < N; i++) {
       for (var j = 0; j < N; j++) {
         var el = arr[i][j];
-        if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_4__.isNumber)(el) || (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_4__.isFraction)(el)) {
+        if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_5__.isNumber)(el) || (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_5__.isFraction)(el)) {
           hasNumber = true;
-        } else if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_4__.isBigNumber)(el)) {
+        } else if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_5__.isBigNumber)(el)) {
           hasBig = true;
-        } else if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_4__.isComplex)(el)) {
+        } else if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_5__.isComplex)(el)) {
           hasComplex = true;
         } else {
-          throw TypeError('Unsupported type in Matrix: ' + (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_4__.typeOf)(el));
+          throw TypeError('Unsupported type in Matrix: ' + (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_5__.typeOf)(el));
         }
       }
     }
@@ -48597,6 +48726,8 @@ function createComplexEigs(_ref) {
     abs,
     bignumber,
     diag,
+    size,
+    reshape,
     inv,
     qr,
     usolve,
@@ -48617,11 +48748,8 @@ function createComplexEigs(_ref) {
    *
    * @returns {{ values: number[], vectors: number[][] }}
    */
-  function complexEigs(arr, N, prec, type, findVectors) {
-    if (findVectors === undefined) {
-      findVectors = true;
-    }
-
+  function complexEigs(arr, N, prec, type) {
+    var findVectors = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
     // TODO check if any row/col are zero except the diagonal
 
     // make sure corresponding rows and columns have similar magnitude
@@ -48630,9 +48758,9 @@ function createComplexEigs(_ref) {
     var R = balance(arr, N, prec, type, findVectors);
 
     // R is the row transformation matrix
-    // arr = A' = R A R⁻¹, A is the original matrix
+    // arr = A' = R A R^-1, A is the original matrix
     // (if findVectors is false, R is undefined)
-    // (And so to return to original matrix: A = R⁻¹ arr R)
+    // (And so to return to original matrix: A = R^-1 arr R)
 
     // TODO if magnitudes of elements vary over many orders,
     // move greatest elements to the top left corner
@@ -48642,7 +48770,7 @@ function createComplexEigs(_ref) {
     // updates the transformation matrix R with new row operationsq
     // MODIFIES arr by side effect!
     reduceToHessenberg(arr, N, prec, type, findVectors, R);
-    // still true that original A = R⁻¹ arr R)
+    // still true that original A = R^-1 arr R)
 
     // find eigenvalues
     var {
@@ -48653,17 +48781,18 @@ function createComplexEigs(_ref) {
     // values is the list of eigenvalues, C is the column
     // transformation matrix that transforms arr, the hessenberg
     // matrix, to upper triangular
-    // (So U = C⁻¹ arr C and the relationship between current arr
+    // (So U = C^-1 arr C and the relationship between current arr
     // and original A is unchanged.)
 
-    var vectors;
     if (findVectors) {
-      vectors = findEigenvectors(arr, N, C, R, values, prec, type);
-      vectors = matrixFromColumns(...vectors);
+      var eigenvectors = findEigenvectors(arr, N, C, R, values, prec, type);
+      return {
+        values,
+        eigenvectors
+      };
     }
     return {
-      values,
-      vectors
+      values
     };
   }
 
@@ -48703,9 +48832,8 @@ function createComplexEigs(_ref) {
         var rowNorm = realzero;
         for (var j = 0; j < N; j++) {
           if (i === j) continue;
-          var c = abs(arr[i][j]); // should be real
-          colNorm = addScalar(colNorm, c);
-          rowNorm = addScalar(rowNorm, c);
+          colNorm = addScalar(colNorm, abs(arr[j][i]));
+          rowNorm = addScalar(rowNorm, abs(arr[i][j]));
         }
         if (!equal(colNorm, 0) && !equal(rowNorm, 0)) {
           // find integer power closest to balancing the matrix
@@ -48713,21 +48841,21 @@ function createComplexEigs(_ref) {
           // so that we don't lose any precision due to round-off)
 
           var f = realone;
-          var _c = colNorm;
+          var c = colNorm;
           var rowDivRadix = divideScalar(rowNorm, radix);
           var rowMulRadix = multiplyScalar(rowNorm, radix);
-          while (smaller(_c, rowDivRadix)) {
-            _c = multiplyScalar(_c, radixSq);
+          while (smaller(c, rowDivRadix)) {
+            c = multiplyScalar(c, radixSq);
             f = multiplyScalar(f, radix);
           }
-          while (larger(_c, rowMulRadix)) {
-            _c = divideScalar(_c, radixSq);
+          while (larger(c, rowMulRadix)) {
+            c = divideScalar(c, radixSq);
             f = divideScalar(f, radix);
           }
 
           // check whether balancing is needed
           // condition = (c + rowNorm) / f < 0.95 * (colNorm + rowNorm)
-          var condition = smaller(divideScalar(addScalar(_c, rowNorm), f), multiplyScalar(addScalar(colNorm, rowNorm), 0.95));
+          var condition = smaller(divideScalar(addScalar(c, rowNorm), f), multiplyScalar(addScalar(colNorm, rowNorm), 0.95));
 
           // apply balancing similarity transformation
           if (condition) {
@@ -48739,13 +48867,13 @@ function createComplexEigs(_ref) {
               if (i === _j) {
                 continue;
               }
-              arr[i][_j] = multiplyScalar(arr[i][_j], f);
-              arr[_j][i] = multiplyScalar(arr[_j][i], g);
+              arr[i][_j] = multiplyScalar(arr[i][_j], g);
+              arr[_j][i] = multiplyScalar(arr[_j][i], f);
             }
 
             // keep track of transformations
             if (findVectors) {
-              Rdiag[i] = multiplyScalar(Rdiag[i], f);
+              Rdiag[i] = multiplyScalar(Rdiag[i], g);
             }
           }
         }
@@ -48753,7 +48881,7 @@ function createComplexEigs(_ref) {
     }
 
     // return the diagonal row transformation matrix
-    return diag(Rdiag);
+    return findVectors ? diag(Rdiag) : null;
   }
 
   /**
@@ -48852,7 +48980,7 @@ function createComplexEigs(_ref) {
 
     // The Francis Algorithm
     // The core idea of this algorithm is that doing successive
-    // A' = Q⁺AQ transformations will eventually converge to block-
+    // A' = QtAQ transformations will eventually converge to block-
     // upper-triangular with diagonal blocks either 1x1 or 2x2.
     // The Q here is the one from the QR decomposition, A = QR.
     // Since the eigenvalues of a block-upper-triangular matrix are
@@ -48874,7 +49002,7 @@ function createComplexEigs(_ref) {
     // N×N matrix describing the overall transformation done during the QR algorithm
     var Qtotal = findVectors ? diag(Array(N).fill(one)) : undefined;
 
-    // n×n matrix describing the QR transformations done since last convergence
+    // nxn matrix describing the QR transformations done since last convergence
     var Qpartial = findVectors ? diag(Array(n).fill(one)) : undefined;
 
     // last eigenvalue converged before this many steps
@@ -48886,7 +49014,12 @@ function createComplexEigs(_ref) {
 
       // Perform the factorization
 
-      var k = 0; // TODO set close to an eigenvalue
+      var k = arr[n - 1][n - 1]; // TODO this is apparently a somewhat
+      // old-fashioned choice; ideally set close to an eigenvalue, or
+      // perhaps better yet switch to the implicit QR version that is sometimes
+      // specifically called the "Francis algorithm" that is alluded to
+      // in the following TODO. (Or perhaps we switch to an independently
+      // optimized third-party package for the linear algebra operations...)
 
       for (var i = 0; i < n; i++) {
         arr[i][i] = subtract(arr[i][i], k);
@@ -49000,17 +49133,17 @@ function createComplexEigs(_ref) {
     // this way it is easier to find eigenvectors
     var uniqueValues = [];
     var multiplicities = [];
-    for (var λ of values) {
-      var i = indexOf(uniqueValues, λ, equal);
+    for (var lambda of values) {
+      var i = indexOf(uniqueValues, lambda, equal);
       if (i === -1) {
-        uniqueValues.push(λ);
+        uniqueValues.push(lambda);
         multiplicities.push(1);
       } else {
         multiplicities[i] += 1;
       }
     }
 
-    // find eigenvectors by solving U − λE = 0
+    // find eigenvectors by solving U − lambdaE = 0
     // TODO replace with an iterative eigenvector algorithm
     // (this one might fail for imprecise eigenvalues)
 
@@ -49018,40 +49151,34 @@ function createComplexEigs(_ref) {
     var len = uniqueValues.length;
     var b = Array(N).fill(zero);
     var E = diag(Array(N).fill(one));
-
-    // eigenvalues for which usolve failed (due to numerical error)
-    var failedLambdas = [];
     var _loop = function _loop() {
-      var λ = uniqueValues[_i4];
-      var S = subtract(U, multiply(λ, E)); // the characteristic matrix
+      var lambda = uniqueValues[_i4];
+      var S = subtract(U, multiply(lambda, E)); // the characteristic matrix
 
       var solutions = usolveAll(S, b);
       solutions.shift(); // ignore the null vector
 
       // looks like we missed something, try inverse iteration
+      // But if that fails, just presume that the original matrix truly
+      // was defective.
       while (solutions.length < multiplicities[_i4]) {
         var approxVec = inverseIterate(S, N, solutions, prec, type);
-        if (approxVec == null) {
-          // no more vectors were found
-          failedLambdas.push(λ);
+        if (approxVec === null) {
           break;
-        }
+        } // no more vectors were found
         solutions.push(approxVec);
       }
 
       // Transform back into original array coordinates
       var correction = multiply(inv(R), C);
       solutions = solutions.map(v => multiply(correction, v));
-      vectors.push(...solutions.map(v => flatten(v)));
+      vectors.push(...solutions.map(v => ({
+        value: lambda,
+        vector: flatten(v)
+      })));
     };
     for (var _i4 = 0; _i4 < len; _i4++) {
       _loop();
-    }
-    if (failedLambdas.length !== 0) {
-      var err = new Error('Failed to find eigenvectors for the following eigenvalues: ' + failedLambdas.join(', '));
-      err.values = values;
-      err.vectors = vectors;
-      throw err;
     }
     return vectors;
   }
@@ -49061,7 +49188,7 @@ function createComplexEigs(_ref) {
    * @return {[number,number]}
    */
   function eigenvalues2x2(a, b, c, d) {
-    // λ± = ½ trA ± ½ √( tr²A - 4 detA )
+    // lambda_+- = 1/2 trA +- 1/2 sqrt( tr^2 A - 4 detA )
     var trA = addScalar(a, d);
     var detA = subtract(multiplyScalar(a, d), multiplyScalar(b, c));
     var x = multiplyScalar(trA, 0.5);
@@ -49071,7 +49198,7 @@ function createComplexEigs(_ref) {
 
   /**
    * For an 2x2 matrix compute the transformation matrix S,
-   * so that SAS⁻¹ is an upper triangular matrix
+   * so that SAS^-1 is an upper triangular matrix
    * @return {[[number,number],[number,number]]}
    * @see https://math.berkeley.edu/~ogus/old/Math_54-05/webfoils/jordan.pdf
    * @see http://people.math.harvard.edu/~knill/teaching/math21b2004/exhibits/2dmatrices/index.html
@@ -49095,23 +49222,22 @@ function createComplexEigs(_ref) {
     }
 
     // matrix is not diagonalizable
-    // compute off-diagonal elements of N = A - λI
-    // N₁₂ = 0 ⇒ S = ( N⃗₁, I⃗₁ )
-    // N₁₂ ≠ 0 ⇒ S = ( N⃗₂, I⃗₂ )
-
+    // compute diagonal elements of N = A - lambdaI
     var na = subtract(a, l1);
-    var nb = subtract(b, l1);
-    var nc = subtract(c, l1);
     var nd = subtract(d, l1);
-    if (smaller(abs(nb), prec)) {
-      return [[na, one], [nc, zero]];
+
+    // col(N,2) = 0  implies  S = ( col(N,1), e_1 )
+    // col(N,2) != 0 implies  S = ( col(N,2), e_2 )
+
+    if (smaller(abs(b), prec) && smaller(abs(nd), prec)) {
+      return [[na, one], [c, zero]];
     } else {
-      return [[nb, zero], [nd, one]];
+      return [[b, zero], [nd, one]];
     }
   }
 
   /**
-   * Enlarge the matrix from n×n to N×N, setting the new
+   * Enlarge the matrix from nxn to NxN, setting the new
    * elements to 1 on diagonal and 0 elsewhere
    */
   function inflateMatrix(arr, N) {
@@ -49188,15 +49314,21 @@ function createComplexEigs(_ref) {
 
     // you better choose a random vector before I count to five
     var i = 0;
-    while (true) {
+    for (; i < 5; ++i) {
       b = randomOrthogonalVector(N, orthog, type);
-      b = usolve(A, b);
+      try {
+        b = usolve(A, b);
+      } catch (_unused) {
+        // That direction didn't work, likely because the original matrix
+        // was defective. But still make the full number of tries...
+        continue;
+      }
       if (larger(norm(b), largeNum)) {
         break;
       }
-      if (++i >= 5) {
-        return null;
-      }
+    }
+    if (i >= 5) {
+      return null; // couldn't find any orthogonal vector in the image
     }
 
     // you better converge before I count to ten
@@ -49246,8 +49378,10 @@ function createComplexEigs(_ref) {
    * Project vector v to the orthogonal complement of an array of vectors
    */
   function orthogonalComplement(v, orthog) {
+    var vectorShape = size(v);
     for (var w of orthog) {
-      // v := v − (w, v)/∥w∥² w
+      w = reshape(w, vectorShape); // make sure this is just a vector computation
+      // v := v − (w, v)/|w|^2 w
       v = subtract(v, multiply(divideScalar(dot(w, v), dot(w, w)), w));
     }
     return v;
@@ -49280,10 +49414,10 @@ function createComplexEigs(_ref) {
 
 /***/ }),
 
-/***/ "./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymetric.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymetric.js ***!
-  \**************************************************************************/
+/***/ "./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymmetric.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/mathjs/lib/esm/function/matrix/eigs/realSymmetric.js ***!
+  \***************************************************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -49317,25 +49451,29 @@ function createRealSymmetric(_ref) {
   function main(arr, N) {
     var prec = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : config.epsilon;
     var type = arguments.length > 3 ? arguments[3] : undefined;
+    var computeVectors = arguments.length > 4 ? arguments[4] : undefined;
     if (type === 'number') {
-      return diag(arr, prec);
+      return diag(arr, prec, computeVectors);
     }
     if (type === 'BigNumber') {
-      return diagBig(arr, prec);
+      return diagBig(arr, prec, computeVectors);
     }
     throw TypeError('Unsupported data type: ' + type);
   }
 
   // diagonalization implementation for number (efficient)
-  function diag(x, precision) {
+  function diag(x, precision, computeVectors) {
     var N = x.length;
     var e0 = Math.abs(precision / N);
     var psi;
-    var Sij = new Array(N);
-    // Sij is Identity Matrix
-    for (var i = 0; i < N; i++) {
-      Sij[i] = createArray(N, 0);
-      Sij[i][i] = 1.0;
+    var Sij;
+    if (computeVectors) {
+      Sij = new Array(N);
+      // Sij is Identity Matrix
+      for (var i = 0; i < N; i++) {
+        Sij[i] = Array(N).fill(0);
+        Sij[i][i] = 1.0;
+      }
     }
     // initial error
     var Vab = getAij(x);
@@ -49344,26 +49482,29 @@ function createRealSymmetric(_ref) {
       var j = Vab[0][1];
       psi = getTheta(x[_i][_i], x[j][j], x[_i][j]);
       x = x1(x, psi, _i, j);
-      Sij = Sij1(Sij, psi, _i, j);
+      if (computeVectors) Sij = Sij1(Sij, psi, _i, j);
       Vab = getAij(x);
     }
-    var Ei = createArray(N, 0); // eigenvalues
+    var Ei = Array(N).fill(0); // eigenvalues
     for (var _i2 = 0; _i2 < N; _i2++) {
       Ei[_i2] = x[_i2][_i2];
     }
-    return sorting((0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Ei), (0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Sij));
+    return sorting((0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Ei), Sij, computeVectors);
   }
 
   // diagonalization implementation for bigNumber
-  function diagBig(x, precision) {
+  function diagBig(x, precision, computeVectors) {
     var N = x.length;
     var e0 = abs(precision / N);
     var psi;
-    var Sij = new Array(N);
-    // Sij is Identity Matrix
-    for (var i = 0; i < N; i++) {
-      Sij[i] = createArray(N, 0);
-      Sij[i][i] = 1.0;
+    var Sij;
+    if (computeVectors) {
+      Sij = new Array(N);
+      // Sij is Identity Matrix
+      for (var i = 0; i < N; i++) {
+        Sij[i] = Array(N).fill(0);
+        Sij[i][i] = 1.0;
+      }
     }
     // initial error
     var Vab = getAijBig(x);
@@ -49372,15 +49513,15 @@ function createRealSymmetric(_ref) {
       var j = Vab[0][1];
       psi = getThetaBig(x[_i3][_i3], x[j][j], x[_i3][j]);
       x = x1Big(x, psi, _i3, j);
-      Sij = Sij1Big(Sij, psi, _i3, j);
+      if (computeVectors) Sij = Sij1Big(Sij, psi, _i3, j);
       Vab = getAijBig(x);
     }
-    var Ei = createArray(N, 0); // eigenvalues
+    var Ei = Array(N).fill(0); // eigenvalues
     for (var _i4 = 0; _i4 < N; _i4++) {
       Ei[_i4] = x[_i4][_i4];
     }
     // return [clone(Ei), clone(Sij)]
-    return sorting((0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Ei), (0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Sij));
+    return sorting((0,_utils_object_js__WEBPACK_IMPORTED_MODULE_0__.clone)(Ei), Sij, computeVectors);
   }
 
   // get angle
@@ -49408,8 +49549,8 @@ function createRealSymmetric(_ref) {
     var N = Sij.length;
     var c = Math.cos(theta);
     var s = Math.sin(theta);
-    var Ski = createArray(N, 0);
-    var Skj = createArray(N, 0);
+    var Ski = Array(N).fill(0);
+    var Skj = Array(N).fill(0);
     for (var k = 0; k < N; k++) {
       Ski[k] = c * Sij[k][i] - s * Sij[k][j];
       Skj[k] = s * Sij[k][i] + c * Sij[k][j];
@@ -49425,8 +49566,8 @@ function createRealSymmetric(_ref) {
     var N = Sij.length;
     var c = cos(theta);
     var s = sin(theta);
-    var Ski = createArray(N, bignumber(0));
-    var Skj = createArray(N, bignumber(0));
+    var Ski = Array(N).fill(bignumber(0));
+    var Skj = Array(N).fill(bignumber(0));
     for (var k = 0; k < N; k++) {
       Ski[k] = subtract(multiplyScalar(c, Sij[k][i]), multiplyScalar(s, Sij[k][j]));
       Skj[k] = addScalar(multiplyScalar(s, Sij[k][i]), multiplyScalar(c, Sij[k][j]));
@@ -49445,8 +49586,8 @@ function createRealSymmetric(_ref) {
     var s = bignumber(sin(theta));
     var c2 = multiplyScalar(c, c);
     var s2 = multiplyScalar(s, s);
-    var Aki = createArray(N, bignumber(0));
-    var Akj = createArray(N, bignumber(0));
+    var Aki = Array(N).fill(bignumber(0));
+    var Akj = Array(N).fill(bignumber(0));
     // 2cs Hij
     var csHij = multiply(bignumber(2), c, s, Hij[i][j]);
     //  Aii
@@ -49481,8 +49622,8 @@ function createRealSymmetric(_ref) {
     var s = Math.sin(theta);
     var c2 = c * c;
     var s2 = s * s;
-    var Aki = createArray(N, 0);
-    var Akj = createArray(N, 0);
+    var Aki = Array(N).fill(0);
+    var Akj = Array(N).fill(0);
     //  Aii
     var Aii = c2 * Hij[i][i] - 2 * c * s * Hij[i][j] + s2 * Hij[j][j];
     var Ajj = s2 * Hij[i][i] + 2 * c * s * Hij[i][j] + c2 * Hij[j][j];
@@ -49541,12 +49682,15 @@ function createRealSymmetric(_ref) {
   }
 
   // sort results
-  function sorting(E, S) {
+  function sorting(E, S, computeVectors) {
     var N = E.length;
     var values = Array(N);
-    var vectors = Array(N);
-    for (var k = 0; k < N; k++) {
-      vectors[k] = Array(N);
+    var vecs;
+    if (computeVectors) {
+      vecs = Array(N);
+      for (var k = 0; k < N; k++) {
+        vecs[k] = Array(N);
+      }
     }
     for (var i = 0; i < N; i++) {
       var minID = 0;
@@ -49558,30 +49702,24 @@ function createRealSymmetric(_ref) {
         }
       }
       values[i] = E.splice(minID, 1)[0];
-      for (var _k5 = 0; _k5 < N; _k5++) {
-        vectors[_k5][i] = S[_k5][minID];
-        S[_k5].splice(minID, 1);
+      if (computeVectors) {
+        for (var _k5 = 0; _k5 < N; _k5++) {
+          vecs[i][_k5] = S[_k5][minID];
+          S[_k5].splice(minID, 1);
+        }
       }
     }
+    if (!computeVectors) return {
+      values
+    };
+    var eigenvectors = vecs.map((vector, i) => ({
+      value: values[i],
+      vector
+    }));
     return {
       values,
-      vectors
+      eigenvectors
     };
-  }
-
-  /**
-   * Create an array of a certain size and fill all items with an initial value
-   * @param {number} size
-   * @param {number} value
-   * @return {number[]}
-   */
-  function createArray(size, value) {
-    // TODO: as soon as all browsers support Array.fill, use that instead (IE doesn't support it)
-    var array = new Array(size);
-    for (var i = 0; i < size; i++) {
-      array[i] = value;
-    }
-    return array;
   }
   return main;
 }
@@ -50838,7 +50976,6 @@ var createMatrixFromColumns = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPOR
 
     // TODO implement this properly for SparseMatrix
   });
-
   function _createArray(arr) {
     if (arr.length === 0) throw new TypeError('At least one column is needed to construct a matrix.');
     var N = checkVectorTypeAndReturnLength(arr[0]);
@@ -51031,7 +51168,6 @@ var createMatrixFromRows = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
 
     // TODO implement this properly for SparseMatrix
   });
-
   function _createArray(arr) {
     if (arr.length === 0) throw new TypeError('At least one row is needed to construct a matrix.');
     var N = checkVectorTypeAndReturnLength(arr[0]);
@@ -51328,7 +51464,6 @@ var createPartitionSelect = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTE
         return arr[i]; // return NaN
       }
     }
-
     var from = 0;
     var to = arr.length - 1;
 
@@ -51914,7 +52049,6 @@ var createResize = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
     if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_2__.isMatrix)(size)) {
       size = size.valueOf(); // get Array
     }
-
     if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_2__.isBigNumber)(size[0])) {
       // convert bignumbers to numbers
       size = size.map(function (value) {
@@ -53200,7 +53334,6 @@ var createTranspose = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     Matrix: transposeMatrix,
     any: _utils_object_js__WEBPACK_IMPORTED_MODULE_1__.clone // scalars
   });
-
   function transposeMatrix(x) {
     // matrix size
     var size = x.size();
@@ -54630,8 +54763,8 @@ var createPickRandom = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MOD
    * @param {Array | Matrix} array     A one dimensional array
    * @param {Int} number               An int or float
    * @param {Array | Matrix} weights   An array of ints or floats
-   * @return {number | Array}          Returns a single random value from array when number is 1 or undefined.
-   *                                   Returns an array with the configured number of elements when number is > 1.
+   * @return {number | Array}          Returns a single random value from array when number is undefined.
+   *                                   Returns an array with the configured number of elements when number is defined.
    */
   return typed(name, {
     'Array | Matrix': function ArrayMatrix(possibles) {
@@ -54689,7 +54822,6 @@ var createPickRandom = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MOD
     if (weights) {
       weights = weights.valueOf(); // get Array
     }
-
     if (elementWise === true) {
       possibles = (0,_utils_array_js__WEBPACK_IMPORTED_MODULE_3__.flatten)(possibles);
       weights = (0,_utils_array_js__WEBPACK_IMPORTED_MODULE_3__.flatten)(weights);
@@ -58460,7 +58592,6 @@ var createMedian = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
       throw new Error('median(A, dim) is not yet supported');
       // return reduce(arguments[0], arguments[1], ...)
     },
-
     // median(a, b, c, d, ...)
     '...': function _(args) {
       if ((0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_3__.containsCollections)(args)) {
@@ -58746,7 +58877,6 @@ var createProd = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
       throw new Error('prod(A, dim) is not yet supported');
       // return reduce(arguments[0], arguments[1], math.prod)
     },
-
     // prod(a, b, c, d, ...)
     '...': function _(args) {
       return _prod(args);
@@ -61758,7 +61888,6 @@ var createIsNegative = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MOD
     Fraction: function Fraction(x) {
       return x.s < 0; // It's enough to decide on the sign
     },
-
     Unit: typed.referToSelf(self => x => typed.find(self, x.valueType())(x.value)),
     'Array | Matrix': typed.referToSelf(self => x => (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_2__.deepMap)(x, self))
   });
@@ -62564,7 +62693,6 @@ function nthRootNumber(a) {
    return inv ? 1 / x : x
   */
 }
-
 function signNumber(x) {
   return (0,_utils_number_js__WEBPACK_IMPORTED_MODULE_0__.sign)(x);
 }
@@ -62873,7 +63001,6 @@ function gammaNumber(n) {
     if (n > 171) {
       return Infinity; // Will overflow
     }
-
     return (0,_utils_product_js__WEBPACK_IMPORTED_MODULE_1__.product)(1, n - 1);
   }
   if (n < 0.5) {
@@ -62882,7 +63009,6 @@ function gammaNumber(n) {
   if (n >= 171.35) {
     return Infinity; // will overflow
   }
-
   if (n > 85.0) {
     // Extended Stirling Approx
     var twoN = n * n;
@@ -63681,7 +63807,6 @@ var createComplex = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE
     string: function string(x) {
       return Complex(x); // for example '2 + 3i'
     },
-
     null: function _null(x) {
       return Complex(0);
     },
@@ -63838,7 +63963,6 @@ var createFraction = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     Fraction: function Fraction(x) {
       return x; // fractions are immutable
     },
-
     Unit: typed.referToSelf(self => x => {
       var clone = x.clone();
       clone.value = self(x.value);
@@ -70524,7 +70648,7 @@ function makeNumberFromNonDecimalParts(parts) {
   }
   var result = n + f;
   if (isNaN(result)) {
-    throw new SyntaxError('String "' + parts.input + '" is no valid number');
+    throw new SyntaxError('String "' + parts.input + '" is not a valid number');
   }
   return result;
 }
@@ -70580,7 +70704,7 @@ var createNumber = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
       }
       var num = Number(x);
       if (isNaN(num)) {
-        throw new SyntaxError('String "' + x + '" is no valid number');
+        throw new SyntaxError('String "' + x + '" is not a valid number');
       }
       if (wordSizeSuffixMatch) {
         // x is a signed bin, oct, or hex literal
@@ -70813,13 +70937,13 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 
 
 var name = 'Unit';
-var dependencies = ['?on', 'config', 'addScalar', 'subtract', 'multiplyScalar', 'divideScalar', 'pow', 'abs', 'fix', 'round', 'equal', 'isNumeric', 'format', 'number', 'Complex', 'BigNumber', 'Fraction'];
+var dependencies = ['?on', 'config', 'addScalar', 'subtractScalar', 'multiplyScalar', 'divideScalar', 'pow', 'abs', 'fix', 'round', 'equal', 'isNumeric', 'format', 'number', 'Complex', 'BigNumber', 'Fraction'];
 var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_2__.factory)(name, dependencies, _ref => {
   var {
     on,
     config,
     addScalar,
-    subtract,
+    subtractScalar,
     multiplyScalar,
     divideScalar,
     pow,
@@ -71545,7 +71669,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
         var unitValue = convert(ret.units[0].unit.value);
         var nominalOffset = convert(ret.units[0].unit.offset);
         var unitOffset = multiplyScalar(unitValue, nominalOffset);
-        ret.value = subtract(abs(addScalar(ret.value, unitOffset)), unitOffset);
+        ret.value = subtractScalar(abs(addScalar(ret.value, unitOffset)), unitOffset);
       }
     }
     for (var i in ret.units) {
@@ -71590,7 +71714,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       var otherUnitValue = other.units[0].unit.value;
       var otherNominalOffset = other.units[0].unit.offset;
       var otherUnitOffset = multiplyScalar(otherUnitValue, otherNominalOffset);
-      other.value = addScalar(value, convert(subtract(thisUnitOffset, otherUnitOffset)));
+      other.value = addScalar(value, convert(subtractScalar(thisUnitOffset, otherUnitOffset)));
     }
     other.fixPrefix = true;
     other.skipAutomaticSimplification = true;
@@ -71872,7 +71996,6 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     if (simp.value && (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_3__.isComplex)(simp.value)) {
       str = '(' + str + ')'; // Surround complex values with ( ) to enable better parsing
     }
-
     if (unitStr.length > 0 && str.length > 0) {
       str += ' ';
     }
@@ -71966,7 +72089,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       }
       var y = new Unit(xFixed, parts[i].toString());
       ret.push(y);
-      x = subtract(x, y);
+      x = subtractScalar(x, y);
     }
 
     // This little bit fixes a bug where the remainder should be 0 but is a little bit off.
@@ -74318,7 +74441,6 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       if (x !== null && x !== void 0 && x.isFraction) return new _BigNumber(x.n).div(x.d).times(x.s);
       return new _BigNumber(x + ''); // stringify to prevent constructor error
     },
-
     Fraction: function Fraction(x) {
       return new _Fraction(x);
     },
@@ -74856,12 +74978,10 @@ var createUnitFunction = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
       if (Unit.isValuelessUnit(x)) {
         return new Unit(null, x); // a pure unit
       }
-
       return Unit.parse(x, {
         allowNoUnits: true
       }); // a unit with value, like '5cm'
     },
-
     'number | BigNumber | Fraction | Complex, string | Unit': function numberBigNumberFractionComplexStringUnit(value, unit) {
       return new Unit(value, unit);
     },
@@ -77677,7 +77797,6 @@ function typeOf(x) {
     if (x.constructor && x.constructor.name) return x.constructor.name;
     return 'Object'; // just in case
   }
-
   return t; // can be 'string', 'number', 'boolean', 'function', 'bigint', ...
 }
 
@@ -78542,7 +78661,7 @@ function nearlyEqual(x, y, epsilon) {
   if (isFinite(x) && isFinite(y)) {
     // check numbers are very close, needed when comparing numbers near zero
     var diff = Math.abs(x - y);
-    if (diff < DBL_EPSILON) {
+    if (diff <= DBL_EPSILON) {
       return true;
     } else {
       // use relative error
@@ -78678,10 +78797,12 @@ function clone(x) {
   }
   if (x instanceof Date) return new Date(x.valueOf());
   if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isBigNumber)(x)) return x; // bignumbers are immutable
-  if (x instanceof RegExp) throw new TypeError('Cannot clone ' + x); // TODO: clone a RegExp
 
   // object
-  return mapObject(x, clone);
+  if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isObject)(x)) {
+    return mapObject(x, clone);
+  }
+  throw new TypeError("Cannot clone: unknown type of value (value: ".concat(x, ")"));
 }
 
 /**
@@ -79164,7 +79285,7 @@ function _format(value, options) {
     return formatArray(value, options);
   }
   if ((0,_is_js__WEBPACK_IMPORTED_MODULE_1__.isString)(value)) {
-    return '"' + value + '"';
+    return stringify(value);
   }
   if (typeof value === 'function') {
     return value.syntax ? String(value.syntax) : 'function';
@@ -79177,7 +79298,7 @@ function _format(value, options) {
       return value.toString(options);
     } else {
       var entries = Object.keys(value).map(key => {
-        return '"' + key + '": ' + format(value[key], options);
+        return stringify(key) + ': ' + format(value[key], options);
       });
       return '{' + entries.join(', ') + '}';
     }
@@ -79197,24 +79318,20 @@ function stringify(value) {
   var i = 0;
   while (i < text.length) {
     var c = text.charAt(i);
-    if (c === '\\') {
-      escaped += c;
-      i++;
-      c = text.charAt(i);
-      if (c === '' || '"\\/bfnrtu'.indexOf(c) === -1) {
-        escaped += '\\'; // no valid escape character -> escape it
-      }
-
-      escaped += c;
-    } else if (c === '"') {
-      escaped += '\\"';
-    } else {
-      escaped += c;
-    }
+    escaped += c in controlCharacters ? controlCharacters[c] : c;
     i++;
   }
   return '"' + escaped + '"';
 }
+var controlCharacters = {
+  '"': '\\"',
+  '\\': '\\\\',
+  '\b': '\\b',
+  '\f': '\\f',
+  '\n': '\\n',
+  '\r': '\\r',
+  '\t': '\\t'
+};
 
 /**
  * Escape special HTML characters
@@ -79327,7 +79444,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-var version = '11.11.2';
+var version = '12.2.0';
 // Note: This file is automatically generated when building math.js.
 // Changes made in this file will be overwritten.
 

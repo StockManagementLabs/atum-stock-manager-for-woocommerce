@@ -6127,8 +6127,8 @@ var __assign = (undefined && undefined.__assign) || function () {
 };
 var EnhancedSelect = (function () {
     function EnhancedSelect($selects) {
-        var _this = this;
         if ($selects === void 0) { $selects = null; }
+        var _this = this;
         this.addAtumClasses($selects);
         $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
     }
