@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || die;
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Stock will Last (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>
-			<td><?php esc_html_e( "A feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the past seven days (We do not include the current day sales).", ATUM_TEXT_DOMAIN ) ?></td>
+			<td><?php esc_html_e( "A feature that will tell the user the average amount of days that a product will keep 'in stock' status. By default, we base this indicator on sales for the Last X days (We do not include the current day sales).", ATUM_TEXT_DOMAIN ) ?></td>
 		</tr>
 		<tr>
 			<td><strong><?php esc_html_e( 'Out of Stock for (Days)', ATUM_TEXT_DOMAIN ) ?></strong></td>
