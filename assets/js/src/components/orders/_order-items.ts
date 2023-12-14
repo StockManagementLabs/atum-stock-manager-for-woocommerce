@@ -4,6 +4,7 @@
 
 import AtumOrders from './_atum-orders';
 import Blocker from '../_blocker';
+import { COLORS } from '../../config/_constants';
 import Settings from '../../config/_settings';
 import Swal, { SweetAlertResult } from 'sweetalert2';
 import Utils from '../../utils/_utils';
@@ -499,7 +500,7 @@ export default class AtumOrderItems {
 			icon               : 'question',
 			showCancelButton   : true,
 			confirmButtonText  : this.settings.get( 'continue' ),
-			confirmButtonColor : '#00B8DB',
+			confirmButtonColor : COLORS.primary,
 			cancelButtonText   : this.settings.get( 'cancel' ),
 			reverseButtons     : true,
 			showCloseButton    : true,

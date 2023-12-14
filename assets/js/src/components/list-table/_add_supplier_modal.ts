@@ -2,6 +2,7 @@
  ADD SUPPLIER MODAL
  ======================= */
 
+import { COLORS } from '../../config/_constants';
 import Globals from './_globals';
 import ListTable from './_list-table';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -11,8 +12,6 @@ export default class AddSupplierModal {
 
 	$modal: JQuery;
 	productId : number;
-
-	readonly buttonColor: string = '#69c61d';
 
 	constructor(
 		private settings: Settings,
@@ -31,19 +30,19 @@ export default class AddSupplierModal {
 	showModal() {
 
 		Swal.fire( {
-			title              : this.settings.get( 'newSupplier' ),
-			html               : $( '#create-supplier-modal' ).html(),
-			customClass        : {
+			title             : this.settings.get( 'newSupplier' ),
+			html              : $( '#create-supplier-modal' ).html(),
+			customClass       : {
 				container: 'atum-modal',
-				popup    : 'add-suppliers-modal'
+				popup    : 'add-suppliers-modal',
 			},
-			showCloseButton    : true,
+			showCloseButton   : true,
 			confirmButtonText : this.settings.get( 'confirmNewSupplier' ),
-			confirmButtonColor: this.buttonColor,
-			didOpen            : ( modal: HTMLElement ) => {
+			confirmButtonColor: COLORS.success,
+			didOpen           : ( modal: HTMLElement ) => {
 				this.$modal = $( modal );
 			},
-			preConfirm         : (): Promise<void> => this.createSupplier(),
+			preConfirm        : (): Promise<void> => this.createSupplier(),
 
 		} );
 
@@ -88,7 +87,7 @@ export default class AddSupplierModal {
 							      title             : response.data.message,
 							      html              : `<a target="_blank" class="atum-link" style="font-size: 10px;" href="${ response.data.supplier_link }">${ response.data.text_link }</a>`,
 							      confirmButtonText : this.settings.get( 'ok' ),
-							      confirmButtonColor: this.buttonColor,
+							      confirmButtonColor: COLORS.success,
 							      showCloseButton   : true,
 						      },
 						      meta: string                          = this.$setMeta.data( 'meta' ),

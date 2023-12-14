@@ -12,8 +12,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../config/_constants */ "./assets/js/src/config/_constants.ts");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 var __assign = (undefined && undefined.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -63,12 +64,13 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
     }
 };
 
+
 var AdminModal = (function () {
     function AdminModal(settings) {
         this.settings = settings;
         this.defaultSwalOptions = {
             icon: 'info',
-            confirmButtonColor: '#00B8DB',
+            confirmButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_0__.COLORS.primary,
             focusConfirm: false,
             showCloseButton: true,
         };
@@ -97,7 +99,7 @@ var AdminModal = (function () {
                             swalOpts.showClass = { backdrop: 'swal2-noanimation' };
                             swalOpts.hideClass = { backdrop: 'swal2-noanimation' };
                         }
-                        swalMixin = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().mixin(this.defaultSwalOptions);
+                        swalMixin = sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().mixin(this.defaultSwalOptions);
                         counter = 1;
                         _a = this.swalConfigs;
                         _b = [];
@@ -139,6 +141,28 @@ var AdminModal = (function () {
     return AdminModal;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AdminModal);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_constants.ts":
+/*!********************************************!*\
+  !*** ./assets/js/src/config/_constants.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   COLORS: () => (/* binding */ COLORS)
+/* harmony export */ });
+var COLORS;
+(function (COLORS) {
+    COLORS["success"] = "#69C61D";
+    COLORS["primary"] = "#00B8DB";
+    COLORS["warning"] = "#EFAF00";
+    COLORS["danger"] = "#FF4848";
+})(COLORS || (COLORS = {}));
+;
 
 
 /***/ }),

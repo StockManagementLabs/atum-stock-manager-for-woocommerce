@@ -22536,9 +22536,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _config_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../config/_constants */ "./assets/js/src/config/_constants.ts");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
 
 var AddSupplierModal = (function () {
     function AddSupplierModal(settings, globals, listTable, $setMeta) {
@@ -22546,22 +22548,21 @@ var AddSupplierModal = (function () {
         this.globals = globals;
         this.listTable = listTable;
         this.$setMeta = $setMeta;
-        this.buttonColor = '#69c61d';
         this.productId = $setMeta.closest('tr').data('id');
         this.showModal();
     }
     AddSupplierModal.prototype.showModal = function () {
         var _this = this;
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
             title: this.settings.get('newSupplier'),
             html: $('#create-supplier-modal').html(),
             customClass: {
                 container: 'atum-modal',
-                popup: 'add-suppliers-modal'
+                popup: 'add-suppliers-modal',
             },
             showCloseButton: true,
             confirmButtonText: this.settings.get('confirmNewSupplier'),
-            confirmButtonColor: this.buttonColor,
+            confirmButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_0__.COLORS.success,
             didOpen: function (modal) {
                 _this.$modal = $(modal);
             },
@@ -22573,7 +22574,7 @@ var AddSupplierModal = (function () {
         return new Promise(function (resolve) {
             var $supplierName = _this.$modal.find('#supplier-name');
             if (!$supplierName.val()) {
-                sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage(_this.settings.get('supplierNameRequired'));
+                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().showValidationMessage(_this.settings.get('supplierNameRequired'));
                 $supplierName.focus().select();
                 resolve();
                 return;
@@ -22590,7 +22591,7 @@ var AddSupplierModal = (function () {
                 success: function (response) {
                     var _a, _b, _c, _d, _e, _f;
                     if (response.success === false) {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage(response.data);
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().showValidationMessage(response.data);
                     }
                     else {
                         var successSwalOptions = {
@@ -22598,7 +22599,7 @@ var AddSupplierModal = (function () {
                             title: response.data.message,
                             html: "<a target=\"_blank\" class=\"atum-link\" style=\"font-size: 10px;\" href=\"".concat(response.data.supplier_link, "\">").concat(response.data.text_link, "</a>"),
                             confirmButtonText: _this.settings.get('ok'),
-                            confirmButtonColor: _this.buttonColor,
+                            confirmButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_0__.COLORS.success,
                             showCloseButton: true,
                         }, meta = _this.$setMeta.data('meta'), selectOptions = _this.$setMeta.data('selectOptions');
                         var editedCols = _this.globals.$editInput.val();
@@ -22619,7 +22620,7 @@ var AddSupplierModal = (function () {
                         }
                         editedCols[_this.productId][meta] = (_f = response.data) === null || _f === void 0 ? void 0 : _f.supplier_id;
                         _this.globals.$editInput.val(JSON.stringify(editedCols));
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire(successSwalOptions);
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire(successSwalOptions);
                         _this.listTable.maybeAddSaveButton();
                     }
                     resolve();
@@ -24848,6 +24849,29 @@ var TableButtons = (function () {
     return TableButtons;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TableButtons);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_constants.ts":
+/*!********************************************!*\
+  !*** ./assets/js/src/config/_constants.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   COLORS: () => (/* binding */ COLORS)
+/* harmony export */ });
+var COLORS;
+(function (COLORS) {
+    COLORS["success"] = "#69C61D";
+    COLORS["primary"] = "#00B8DB";
+    COLORS["warning"] = "#EFAF00";
+    COLORS["danger"] = "#FF4848";
+})(COLORS || (COLORS = {}));
+;
 
 
 /***/ }),

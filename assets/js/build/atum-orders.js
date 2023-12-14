@@ -11888,10 +11888,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
+/* harmony import */ var _config_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../config/_constants */ "./assets/js/src/config/_constants.ts");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
 
 
 
@@ -11995,7 +11997,7 @@ var AtumOrderItems = (function () {
         var _this = this;
         evt.preventDefault();
         var $item = $(evt.currentTarget);
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
             text: this.settings.get('deleteTaxNotice'),
             icon: 'warning',
             showCancelButton: true,
@@ -12019,7 +12021,7 @@ var AtumOrderItems = (function () {
     AtumOrderItems.prototype.recalculate = function (evt) {
         var _this = this;
         evt.preventDefault();
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
             text: this.settings.get('calcTotals'),
             icon: 'warning',
             showCancelButton: true,
@@ -12054,7 +12056,7 @@ var AtumOrderItems = (function () {
         evt.preventDefault();
         var $item = $(evt.currentTarget).closest('tr.item, tr.fee, tr.shipping'), atumOrderItemId = $item.data('atum_order_item_id'), $container = $item.closest('#atum_order_items');
         var options = [], modal;
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
             html: this.wpHooks.applyFilters('atum_ordersItems_deleteItemConfirmMessage', this.settings.get('removeItemNotice'), $item, atumOrderItemId),
             icon: 'warning',
             showCancelButton: true,
@@ -12093,7 +12095,7 @@ var AtumOrderItems = (function () {
                 dataType: 'json',
                 success: function (response) {
                     if (!response.success) {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().showValidationMessage(response.data);
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage(response.data);
                     }
                     resolve();
                 },
@@ -12118,7 +12120,7 @@ var AtumOrderItems = (function () {
     };
     AtumOrderItems.prototype.removeItemMeta = function (evt) {
         evt.preventDefault();
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
             text: this.settings.get('removeItemMeta'),
             icon: 'warning',
             showCancelButton: true,
@@ -12143,32 +12145,32 @@ var AtumOrderItems = (function () {
             itemName = $item.find('.atum-order-item-name').text().trim();
         }
         if (!purchasePrice) {
-            var qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat($lineTotal.val() || 0, decimalSep) : 0;
-            purchasePrice = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].divideDecimals(lineTotal, qty) : 0;
+            var qty = parseFloat($item.find('input.quantity').val() || 1), lineTotal = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].unformat($lineTotal.val() || 0, decimalSep) : 0;
+            purchasePrice = qty !== 0 ? _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].divideDecimals(lineTotal, qty) : 0;
         }
         if (!purchasePriceTxt) {
-            var purchasePriceFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(purchasePrice, precision, '', decimalSep);
+            var purchasePriceFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(purchasePrice, precision, '', decimalSep);
             purchasePriceTxt = purchasePriceFmt;
             var rates = $item.find('.item_cost').data('productTaxRates');
             if (typeof rates === 'object') {
-                var taxes = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].calcTaxesFromBase(purchasePrice, rates), formattedTaxes = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(taxes, precision);
+                var taxes = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].calcTaxesFromBase(purchasePrice, rates), formattedTaxes = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(taxes, precision);
                 if (taxes) {
-                    var purchasePriceWithTaxesFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].sumDecimals(purchasePrice, taxes), precision, '', decimalSep);
+                    var purchasePriceWithTaxesFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].sumDecimals(purchasePrice, taxes), precision, '', decimalSep);
                     purchasePriceTxt = "".concat(purchasePriceWithTaxesFmt, " ( ").concat(purchasePriceFmt, " + ").concat(formattedTaxes, " ").concat(this.settings.get('taxesName'), " )");
-                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceWithTaxesFmt, decimalSep);
+                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].unformat(purchasePriceWithTaxesFmt, decimalSep);
                 }
             }
             else {
-                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_2__["default"].unformat(purchasePriceFmt, decimalSep);
+                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].unformat(purchasePriceFmt, decimalSep);
             }
         }
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
             title: this.settings.get('confirmPurchasePriceTitle'),
             html: this.settings.get('confirmPurchasePrice').replace('{{number}}', "<code>".concat(purchasePriceTxt, "</code>")).replace('{{name}}', "<code>".concat(itemName, "</code>")),
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: this.settings.get('continue'),
-            confirmButtonColor: '#00B8DB',
+            confirmButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_1__.COLORS.primary,
             cancelButtonText: this.settings.get('cancel'),
             reverseButtons: true,
             showCloseButton: true,
@@ -12190,7 +12192,7 @@ var AtumOrderItems = (function () {
                         dataType: 'json',
                         success: function (response) {
                             if (response.success === false) {
-                                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().showValidationMessage(response.data);
+                                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage(response.data);
                             }
                             resolve();
                         },
@@ -12204,7 +12206,7 @@ var AtumOrderItems = (function () {
                     $lineSubTotal.val($lineTotal.val());
                     $lineSubTotal.data('subtotal', $lineTotal.data('total'));
                 }
-                sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+                sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
                     title: _this.settings.get('done'),
                     text: _this.settings.get('purchasePriceChanged'),
                     icon: 'success',
@@ -12303,6 +12305,29 @@ var OrderNotes = (function () {
     return OrderNotes;
 }());
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (OrderNotes);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_constants.ts":
+/*!********************************************!*\
+  !*** ./assets/js/src/config/_constants.ts ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   COLORS: () => (/* binding */ COLORS)
+/* harmony export */ });
+var COLORS;
+(function (COLORS) {
+    COLORS["success"] = "#69C61D";
+    COLORS["primary"] = "#00B8DB";
+    COLORS["warning"] = "#EFAF00";
+    COLORS["danger"] = "#FF4848";
+})(COLORS || (COLORS = {}));
+;
 
 
 /***/ }),

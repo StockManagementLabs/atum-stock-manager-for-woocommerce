@@ -2,6 +2,7 @@
    ADMIN MODAL
    ======================================= */
 
+import { COLORS } from '../config/_constants';
 import Settings from '../config/_settings';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 
@@ -9,7 +10,7 @@ export default class AdminModal {
 
 	defaultSwalOptions: SweetAlertOptions = {
 		icon              : 'info',
-		confirmButtonColor: '#00B8DB',
+		confirmButtonColor: COLORS.primary,
 		focusConfirm      : false,
 		showCloseButton   : true,
 	};
