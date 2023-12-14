@@ -501,49 +501,49 @@ const Utils = {
 	/**
 	 * Multiply a decimal number and return the right value
 	 *
-	 * @param {number} multiplicand
-	 * @param {number} multiplier
+	 * @param {number|string} multiplicand
+	 * @param {number|string} multiplier
 	 *
 	 * @returns {number}
 	 */
 	multiplyDecimals( multiplicand: number, multiplier: number ): number {
-		return mathNumber( <BigNumber>mathMultiply( mathBignumber( multiplicand ), mathBignumber( multiplier ) ) );
+		return mathNumber( <BigNumber>mathMultiply( mathBignumber( this.isNumeric( multiplicand ) ? multiplicand : 0 ), mathBignumber( this.isNumeric( multiplier ) ? multiplier : 0 ) ) );
 	},
 
 	/**
 	 * Divide a decimal number and return the right value
 	 *
-	 * @param {number} dividend
-	 * @param {number} divisor
+	 * @param {number|string} dividend
+	 * @param {number|string} divisor
 	 *
 	 * @returns {number}
 	 */
 	divideDecimals( dividend: number, divisor: number ): number {
-		return mathNumber( <BigNumber>mathDivide( mathBignumber( dividend ), mathBignumber( divisor ) ) );
+		return mathNumber( <BigNumber>mathDivide( mathBignumber( this.isNumeric( dividend ) ? dividend : 0 ), mathBignumber( this.isNumeric( divisor ) ? divisor : 0 ) ) );
 	},
 
 	/**
 	 * Sum two decimal numbers and return the right value
 	 *
-	 * @param {number} summand1
-	 * @param {number} summand2
+	 * @param {number|string} summand1
+	 * @param {number|string} summand2
 	 *
 	 * @returns {number}
 	 */
 	sumDecimals( summand1: number, summand2: number ): number {
-		return mathNumber( <BigNumber>mathAdd( mathBignumber( summand1 ), mathBignumber( summand2 ) ) );
+		return mathNumber( <BigNumber>mathAdd( mathBignumber( this.isNumeric( summand1 ) ? summand1 : 0 ), mathBignumber( this.isNumeric( summand2 ) ? summand2 : 0 ) ) );
 	},
 
 	/**
 	 * Subtract a decimal number to another and return the right value
 	 *
-	 * @param {number} minuend
-	 * @param {number} subtrahend
+	 * @param {number|string} minuend
+	 * @param {number|string} subtrahend
 	 *
 	 * @returns {number}
 	 */
 	subtractDecimals( minuend: number, subtrahend: number ): number {
-		return mathNumber( <BigNumber>mathSubtract( mathBignumber( minuend ), mathBignumber( subtrahend ) ) );
+		return mathNumber( <BigNumber>mathSubtract( mathBignumber( this.isNumeric( minuend ) ? minuend : 0 ), mathBignumber( this.isNumeric( subtrahend ) ? subtrahend : 0 ) ) );
 	},
 
 	/**
