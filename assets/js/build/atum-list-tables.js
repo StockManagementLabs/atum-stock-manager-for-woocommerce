@@ -25142,16 +25142,16 @@ var Utils = {
         return value.toString().split('.')[1].length || 0;
     },
     multiplyDecimals: function (multiplicand, multiplier) {
-        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.multiply)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(multiplicand), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(multiplier)));
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.multiply)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(multiplicand) ? multiplicand : 0), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(multiplier) ? multiplier : 0)));
     },
     divideDecimals: function (dividend, divisor) {
-        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.divide)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(dividend), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(divisor)));
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.divide)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(dividend) ? dividend : 0), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(divisor) ? divisor : 0)));
     },
     sumDecimals: function (summand1, summand2) {
-        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.add)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(summand1), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(summand2)));
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.add)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(summand1) ? summand1 : 0), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(summand2) ? summand2 : 0)));
     },
     subtractDecimals: function (minuend, subtrahend) {
-        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.subtract)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(minuend), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(subtrahend)));
+        return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.number)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.subtract)((0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(minuend) ? minuend : 0), (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.bignumber)(this.isNumeric(subtrahend) ? subtrahend : 0)));
     },
     isNumeric: function (n) {
         return (0,mathjs__WEBPACK_IMPORTED_MODULE_0__.hasNumericValue)(n);
@@ -27503,19 +27503,19 @@ function _extends() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPrimitive)
+/* harmony export */   "default": () => (/* binding */ toPrimitive)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 
-function _toPrimitive(input, hint) {
-  if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
 
 /***/ }),
@@ -27529,15 +27529,15 @@ function _toPrimitive(input, hint) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPropertyKey)
+/* harmony export */   "default": () => (/* binding */ toPropertyKey)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
 
 
-function _toPropertyKey(arg) {
-  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
-  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : String(i);
 }
 
 /***/ }),
