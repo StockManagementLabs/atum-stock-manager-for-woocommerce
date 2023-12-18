@@ -16,9 +16,11 @@
 	}
 	
 	.swal2-title {
-		color: var(--atum-text-modal-title);
+		color: var(--main-title);
 		font-size: 18px;
 		text-align: left;
+		padding-left: 1.1em;
+		padding-right: 1.1em;
 	}
 	
 	.swal2-html-container {
@@ -84,7 +86,7 @@
 					text-align: left;
 					padding-left: 20px;
 					font-size: 14px;
-					color: var(--atum-text-modal-title)!important;
+					color: var(--main-title) !important;
 					margin-bottom: 10px;
 				}
 			}
