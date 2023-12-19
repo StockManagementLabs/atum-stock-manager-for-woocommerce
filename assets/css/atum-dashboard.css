@@ -4359,7 +4359,7 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;
-  color: var(--main-text);
+  color: var(--main-title);
 }
 .swal2-container .swal2-title small {
   -ms-flex-preferred-size: 100%;

@@ -2902,7 +2902,7 @@ input[type=button].btn-block {
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;
-  color: var(--main-text);
+  color: var(--main-title);
 }
 .swal2-container .swal2-title small {
   -ms-flex-preferred-size: 100%;
@@ -3050,9 +3050,11 @@ input[type=button].btn-block {
   color: var(--atum-table-link-text);
 }
 .swal2-container.atum-modal .swal2-title {
-  color: var(--atum-text-modal-title);
+  color: var(--main-title);
   font-size: 18px;
   text-align: left;
+  padding-left: 1.1em;
+  padding-right: 1.1em;
 }
 .swal2-container.atum-modal .swal2-html-container {
   margin-top: 0;
@@ -3119,7 +3121,7 @@ input[type=button].btn-block {
   text-align: left;
   padding-left: 20px;
   font-size: 14px;
-  color: var(--atum-text-modal-title) !important;
+  color: var(--main-title) !important;
   margin-bottom: 10px;
 }
 .swal2-container.atum-modal .atum-modal-content form .input-group {

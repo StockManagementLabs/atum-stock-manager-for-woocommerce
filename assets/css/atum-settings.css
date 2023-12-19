@@ -3735,7 +3735,7 @@ h2 .atum-help-tip {
 .swal2-container .swal2-title {
   line-height: 1.3;
   font-size: 23px;
-  color: var(--main-text);
+  color: var(--main-title);
 }
 .swal2-container .swal2-title small {
   -ms-flex-preferred-size: 100%;
