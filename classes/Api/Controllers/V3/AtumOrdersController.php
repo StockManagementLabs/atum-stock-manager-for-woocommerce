@@ -665,8 +665,8 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 				else {
 					$total = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
 				}
-				$item->set_total( $total );
-				$item->set_subtotal( $total );
+
+				$posted['total'] = $posted['subtotal'] = $total;
 			}
 
 		}
