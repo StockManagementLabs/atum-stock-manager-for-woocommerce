@@ -22,6 +22,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemShipping;
 use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
+use Atum\PurchaseOrders\Items\POItemProduct;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -657,9 +658,15 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 			if ( 'create' === $action ) {
 				$quantity = isset( $posted['quantity'] ) ? $posted['quantity'] : 1;
-				$total    = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
-				$item->set_total( $total );
-				$item->set_subtotal( $total );
+				if ( $item instanceof POItemProduct ) {
+					$product = Helpers::get_atum_product( $product );
+					$total   = apply_filters( 'atum/api/atum_purchase_order/item_total', $product->get_purchase_price() * $quantity, $item, $posted );
+				}
+				else {
+					$total = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
+				}
+
+				$posted['total'] = $posted['subtotal'] = $total;
 			}
 
 		}

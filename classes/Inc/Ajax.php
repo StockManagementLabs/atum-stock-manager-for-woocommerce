@@ -653,7 +653,7 @@ final class Ajax {
 
 		$ids         = array_unique( $_POST['ids'] );
 		$bulk_action = esc_attr( $_POST['bulk_action'] );
-		$executed    = FALSE; // Take control when the action was executed.
+		$executed    = apply_filters( 'atum/ajax/executed_bulk_action', FALSE, $bulk_action, $ids ); // Take control when the action was executed.
 
 		switch ( $bulk_action ) {
 			case 'uncontrol_stock':
