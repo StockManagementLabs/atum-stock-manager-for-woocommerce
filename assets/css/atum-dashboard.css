@@ -2766,7 +2766,7 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 
 .woocommerce-help-tip + .form-switch {
   margin-left: 8px;
-  vertical-align: -3px;
+  vertical-align: -4px;
 }
 
 .dash-card {
