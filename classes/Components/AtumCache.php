@@ -59,7 +59,7 @@ final class AtumCache {
 		}
 		
 		array_walk_recursive( $args, function ( &$item, $key ) {
-			$item = (string) $item;
+			$item = (string) ( is_scalar( $item ) ? $item : $key ); // Make sure the arg can be converted to string to avoid issues.
 		} );
 		
 		return self::prepare_key( $name, $args, $prefix );
