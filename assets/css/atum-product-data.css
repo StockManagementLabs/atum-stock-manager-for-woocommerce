@@ -4,7 +4,7 @@
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
- * License : ©2023 Stock Management Labs 
+ * License : ©2024 Stock Management Labs 
  */
 
  @charset "UTF-8";
@@ -3433,6 +3433,9 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 .woocommerce_variations .form-row-first .atum-field, .woocommerce_variations .form-row-last .atum-field {
   position: relative;
   margin-top: 2px;
+}
+.woocommerce_variations .form-row-first .atum-field .input-group-prepend, .woocommerce_variations .form-row-last .atum-field .input-group-prepend {
+  max-height: 36px;
 }
 .woocommerce_variations .form-row-first .atum-field .input-group-text, .woocommerce_variations .form-row-last .atum-field .input-group-text {
   padding: 8px 7px;

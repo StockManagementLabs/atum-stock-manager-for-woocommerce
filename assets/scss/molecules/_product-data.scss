@@ -244,6 +244,10 @@
 			position: relative;
 			margin-top: 2px;
 			
+			.input-group-prepend {
+				max-height: 36px;
+			}
+			
 			.input-group-text {
 				padding: 8px 7px;
 			}
