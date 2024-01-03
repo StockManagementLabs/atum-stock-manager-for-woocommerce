@@ -1163,6 +1163,10 @@
 			}
 		}
 		
+		.hidden {
+			display: none !important;
+		}
+		
 		@include desktop-max {
 			.btn-group {
 				label {

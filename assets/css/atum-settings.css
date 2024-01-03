@@ -5717,6 +5717,9 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
   color: var(--blue);
   text-decoration: none;
 }
+.atum-settings-wrapper #atum-settings .hidden {
+  display: none !important;
+}
 @media all and (max-width: 992px) {
   .atum-settings-wrapper #atum-settings .btn-group label {
     line-height: 1.8;
