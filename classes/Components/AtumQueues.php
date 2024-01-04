@@ -4,8 +4,8 @@
  * It uses the WC_Queue that inherits from Action Scheduler: https://actionscheduler.org/
  *
  * @package     Components
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @since       1.5.8
  */

@@ -3,8 +3,8 @@
  * Abstract REST API's ATUM Order Notes controller
  *
  * @since       1.6.2
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3

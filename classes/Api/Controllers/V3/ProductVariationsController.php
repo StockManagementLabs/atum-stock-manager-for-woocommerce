@@ -5,8 +5,8 @@
  * The purpose of this class is to handle BATCH actions for all the variations at once (no matter its parent product) with one request.
  *
  * @since       1.8.0
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3

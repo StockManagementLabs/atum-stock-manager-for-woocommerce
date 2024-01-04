@@ -3,8 +3,8 @@
  * Main loader
  *
  * @package     Atum
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @since 0.0.1
  */

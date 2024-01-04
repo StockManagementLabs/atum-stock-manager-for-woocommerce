@@ -3,8 +3,8 @@
  * Adds a metabox to add documents to products that will be attached to WC order confirmation emails
  *
  * @since       1.8.4
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\MetaBoxes
  */

@@ -4,8 +4,8 @@
  *
  * @package         Atum\Models
  * @subpackage      DataStores
- * @author          Be Rebel - https://berebel.io
- * @copyright       ©2023 Stock Management Labs™
+ * @author          BE REBEL - https://berebel.studio
+ * @copyright       ©2024 Stock Management Labs™
  *
  * @since           1.5.0
  */

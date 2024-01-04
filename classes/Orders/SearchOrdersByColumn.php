@@ -3,8 +3,8 @@
  * Adds the "Search Orders By Column" field to the orders list
  *
  * @since       1.9.30
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\Orders
  */

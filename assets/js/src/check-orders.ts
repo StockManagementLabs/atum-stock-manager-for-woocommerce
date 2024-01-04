@@ -1,7 +1,7 @@
 /**
  * Check order prices from the WC Orders list
  *
- * @copyright Stock Management Labs ©2023
+ * @copyright Stock Management Labs ©2024
  *
  * @since 1.8.6
  */

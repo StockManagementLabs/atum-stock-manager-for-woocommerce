@@ -1,7 +1,7 @@
 /**
  * Atum Orders
  *
- * @copyright Stock Management Labs ©2023
+ * @copyright Stock Management Labs ©2024
  *
  * @since 1.2.4
  */

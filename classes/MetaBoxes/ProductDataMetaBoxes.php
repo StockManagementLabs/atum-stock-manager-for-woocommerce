@@ -3,8 +3,8 @@
  * Handle the ATUM meta boxes for WC's product data.
  *
  * @package     Atum\MetaBoxes
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @since       1.5.0
  */

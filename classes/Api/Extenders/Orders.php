@@ -3,8 +3,8 @@
  * Extender for the WC's orders endpoint
  *
  * @since       1.9.22
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\Api
  * @subpackage  Extenders

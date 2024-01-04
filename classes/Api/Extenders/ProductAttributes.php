@@ -3,8 +3,8 @@
  * Extender for the WC's product attributes endpoint
  *
  * @since       1.7.5
- * @author      Be Rebel - https://berebel.io
- * @copyright   ©2023 Stock Management Labs™
+ * @author      BE REBEL - https://berebel.studio
+ * @copyright   ©2024 Stock Management Labs™
  *
  * @package     Atum\Api
  * @subpackage  Extenders
