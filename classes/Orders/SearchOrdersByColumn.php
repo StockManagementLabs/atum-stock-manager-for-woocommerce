@@ -71,7 +71,7 @@ class SearchOrdersByColumn {
 
 		// Allow adding the columns externally. For now, we don't have columns in ATUM free.
 		$this->search_columns  = apply_filters( 'atum/orders/search_by_column/columns', $this->search_columns );
-		$this->order_types_ids = apply_filters( 'atum/orders/search_by_column/order_type_ids', Globals::get_order_type_table_id( '' ) );
+		$this->order_types_ids = apply_filters( 'atum/orders/search_by_column/order_type_ids', Globals::get_order_type_id( '' ) );
 
 	}
 

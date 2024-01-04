@@ -294,7 +294,7 @@ abstract class AtumOrderItemModel {
 
 				if ( $product instanceof \WC_Product ) {
 					$order = $this->atum_order_item->get_order();
-					AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_table_id( $order->get_post_type() ) );
+					AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_id( $order->get_post_type() ) );
 				}
 			}
 

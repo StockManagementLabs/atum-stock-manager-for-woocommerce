@@ -100,7 +100,7 @@ class Log extends AtumOrderModel {
 			 * @var LogItemProduct $item
 			 */
 			$product_id = $item->get_variation_id() ?: $item->get_product_id();
-			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_table_id( $this->get_post_type() ) );
+			AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_id( $this->get_post_type() ) );
 
 		}
 

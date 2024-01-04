@@ -175,11 +175,11 @@ export default class OrdersBulkActions {
 
 					return new Promise( ( resolve: Function, reject: Function ) => {
 
-						const modeProcess: string = $( '#bulk-change-stock-mode' ).length > 0 && $( '#bulk-change-stock-mode' ).is( ':checked' ) ? 'yes' : 'no';
-						// Allow bypassing the change (MI needs to run its own version).
-						const maybeProcessItems: boolean = this.wpHooks.applyFilters( 'atum_ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve );
+						/* Product Levels support */
+						const modeProcess: string = $( '#bulk-change-stock-mode' ).length > 0 && ! $( '#bulk-change-stock-mode' ).is( ':checked' ) ? 'no' : 'yes';
 
-						if ( maybeProcessItems ) {
+						// Allow bypassing the change (MI needs to run its own version).
+						if ( this.wpHooks.applyFilters( 'atum_ordersBulkActions_bulkChangeStock', true, $rows, action, modeProcess, resolve ) ) {
 
 							let quantities: any   = {},
 							    itemIds: number[] = [];

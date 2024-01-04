@@ -94,11 +94,11 @@ final class Globals {
 	private static $product_tab_fields = [ self::ATUM_CONTROL_STOCK_KEY => 'checkbox' ];
 	
 	/**
-	 * Existent Order types identification in tables
+	 * Order types ids
 	 *
 	 * @var array
 	 */
-	private static $order_type_tables_id = array(
+	private static $order_type_ids = array(
 		'shop_order'                    => 1,
 		ATUM_PREFIX . 'purchase_order'  => 2,
 		ATUM_PREFIX . 'inventory_log'   => 3,
@@ -479,7 +479,7 @@ final class Globals {
 	}
 	
 	/**
-	 * Get the current Order $table identifier. Defaults to 1 (WC Order)
+	 * Get the current Order type id. Defaults to 1 (WC Order)
 	 *
 	 * @since 1.5.0.2
 	 *
@@ -487,13 +487,13 @@ final class Globals {
 	 *
 	 * @return int|array|FALSE
 	 */
-	public static function get_order_type_table_id( $type = 'shop_order' ) {
+	public static function get_order_type_id( $type = 'shop_order' ) {
 
 		if ( $type ) {
-			return isset( self::$order_type_tables_id[ $type ] ) ? self::$order_type_tables_id[ $type ] : FALSE;
+			return isset( self::$order_type_ids[ $type ] ) ? self::$order_type_ids[ $type ] : FALSE;
 		}
 		
-		return self::$order_type_tables_id;
+		return self::$order_type_ids;
 		
 	}
 

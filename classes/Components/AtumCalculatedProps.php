@@ -155,7 +155,7 @@ class AtumCalculatedProps {
 
 			if ( $product_id ) {
 				$order_type = $order instanceof AtumOrderModel ? $order->get_post_type() : $order->get_type();
-				self::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_table_id( $order_type ) );
+				self::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_id( $order_type ) );
 			}
 
 		}

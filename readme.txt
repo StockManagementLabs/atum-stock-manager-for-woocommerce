@@ -2295,7 +2295,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Added custom triggers after running a bulk action.
 * Apply select2's dropdown styles to ATUM fields only.
 * AtumOrderModel refactoring.
-* "get_order_type_table_id" will return FALSE if "order_type" is not supported.
+* "get_order_type_id" will return FALSE if "order_type" is not supported.
 * Remove transients from "$alloptions" global when deleting them.
 * Updated ATUM icons font.
 * Refactoring.
