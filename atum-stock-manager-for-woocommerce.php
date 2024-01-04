@@ -13,7 +13,7 @@
  * Version:              1.9.35
  * Author:               Stock Management Labs™
  * Author URI:           https://stockmanagementlabs.com/
- * Contributors:         BE REBEL Studio - https://berebel.studio
+ * Contributors:         BE REBEL - https://berebel.studio
  * Requires at least:    5.6
  * Tested up to:         6.4.1
  * Requires PHP:         7.3
