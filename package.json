@@ -15,7 +15,7 @@
 		"lint:scripts:fix": "eslint --fix assets/js/src assets/js/build"
 	},
 	"engines": {
-		"node": "18"
+		"node": "20"
 	},
 	"devDependencies": {
 		"@types/es6-shim": "^0.31.45",
