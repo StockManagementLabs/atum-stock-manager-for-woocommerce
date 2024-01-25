@@ -1777,8 +1777,6 @@ class Wpml {
 	 */
 	public function add_po_where_clause( $where_clauses, $term, $type, $include_variations, $all_statuses, $limit, $include, $exclude ) {
 
-		global $wpdb;
-
 		$where_clauses[] = "trans.language_code = '{$this->current_language}' ";
 
 		return $where_clauses;
