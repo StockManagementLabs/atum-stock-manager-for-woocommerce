@@ -3308,6 +3308,11 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   border-bottom-left-radius: 0;
   border: 1px solid var(--main-border-alt);
 }
+@media all and (min-width: 1281px) {
+  .product_data .atum-field input[type=text], .product_data .atum-field input[type=number] {
+    width: calc(50% - 31px) !important;
+  }
+}
 .product_data .atum-field input[type=text]:focus, .product_data .atum-field input[type=number]:focus {
   -webkit-box-shadow: 0 0 0 1px #007CBA;
           box-shadow: 0 0 0 1px #007CBA;
@@ -3331,6 +3336,11 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
 .product_data .atum-field .select2-container.atum-select2, .product_data .atum-field .select2-container.atum-enhanced-select {
   float: none;
   max-width: calc(80% - 31px) !important;
+}
+@media all and (min-width: 1281px) {
+  .product_data .atum-field .select2-container.atum-select2, .product_data .atum-field .select2-container.atum-enhanced-select {
+    width: calc(50% - 31px) !important;
+  }
 }
 .product_data .atum-field .select2-container.atum-select2 .select2-selection--single, .product_data .atum-field .select2-container.atum-enhanced-select .select2-selection--single {
   height: 30px;
