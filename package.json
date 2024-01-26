@@ -19,7 +19,7 @@
 	},
 	"devDependencies": {
 		"@types/es6-shim": "^0.31.45",
-		"@types/jquery": "^2.0.66",
+		"@types/jquery": "^2.0.68",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.55.0",
 		"eslint-webpack-plugin": "^4.0.1",
