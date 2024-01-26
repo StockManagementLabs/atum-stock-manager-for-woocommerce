@@ -243,7 +243,9 @@ trait AtumOrderItemTrait {
 		$hideprefix_length = ! empty( $hideprefix ) ? strlen( $hideprefix ) : 0;
 		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : FALSE;
 		$order_item_name   = $this->get_name();
-		$item_meta         = $this->atum_order_item_model->get_all_meta();
+
+		$this->atum_order_item_model->read_meta(); // Re-read the meta so any new meta key added is included.
+		$item_meta = $this->atum_order_item_model->get_all_meta();
 
 		foreach ( $meta_data as $meta ) {
 
@@ -257,6 +259,10 @@ trait AtumOrderItemTrait {
 					if ( ! empty( $found_meta ) ) {
 						$found_meta = current( $found_meta );
 						$meta->id   = $found_meta->id;
+					}
+					// If not found within the item meta, read it from db.
+					else {
+						$this->read_meta_data(TRUE);
 					}
 
 				}
