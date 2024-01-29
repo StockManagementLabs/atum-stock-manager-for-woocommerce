@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.3.1
-Stable tag: 1.9.35
+WC tested up to: 8.5.2
+Stable tag: 1.9.36
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,40 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.36`
+
+*2024-01-29*
+
+**Features**
+
+* Allow to manage bulk actions from addons.
+* Trigger JS hook after executing a bulk action successfully.
+
+**Changes**
+
+* Refactoring.
+* Change help text.
+* Updated sweetAlert2 + modal styling improvements.
+* Updated dependencies.
+* CSS adjustments.
+* Added deprecated method name for backwards compatibility.
+* Removed name attribute from List Tables bulk actions select to avoid conflicts when embedding them.
+* Updated jQuery types.
+* Change suppliers selector placeholder on POs.
+* Removed p tag from ATUM order item meta values.
+
+**Fixes**
+
+* Fixed sanitization for barcode_type.
+* Fixed wrong status included in on hold filters.
+* Ensure JS math operators are numeric.
+* Apply purchase price when creating a new PO item through API.
+* Make sure a passed arg is scalar before converting it to string.
+* Fixed ATUM product fields length on screens wider than 1280px.
+* Fixed ATUM order item custom meta not showing until reloading the page.
 
 ---
 
