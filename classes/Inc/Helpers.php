@@ -2711,6 +2711,15 @@ final class Helpers {
 
 		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
 
+		$step_decimals = strlen( substr( strrchr( $step, "."), 1 ) );
+
+		if ( $step_decimals < $stock_decimals ) {
+			for ( $i = 0; $i < $stock_decimals - $step_decimals; $i++ ) {
+				$step .= '0';
+			}
+			return $step;
+		}
+
 		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
 		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 

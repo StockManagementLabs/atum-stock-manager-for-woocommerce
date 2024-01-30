@@ -556,7 +556,7 @@ class Hooks {
 	/**
 	 * Set min and step value for the stock quantity input number field (WC default = 1)
 	 *
-	 * @since 1.3.41.9.34.1
+	 * @since 1.9.34.1
 	 *
 	 * @param int         $value
 	 * @param \WC_Product $product
@@ -567,6 +567,17 @@ class Hooks {
 
 		// Always > 0
 		$stock_decimals = Globals::get_stock_decimals();
+
+		$step = Helpers::get_option( 'stock_quantity_step', 0 );
+
+		$step_decimals = strlen( substr( strrchr( $step, "."), 1 ) );
+
+		if ( $step_decimals < $stock_decimals ) {
+			for ( $i = 0; $i < $stock_decimals - $step_decimals; $i++ ) {
+				$step .= '0';
+			}
+			return $step;
+		}
 
 		return ( 10 / pow( 10, $stock_decimals + 1 ) );
 	}
