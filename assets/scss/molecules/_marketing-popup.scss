@@ -71,26 +71,10 @@
 				
 				&.btn-success, &.btn-success:focus, &.btn-outline-success, &.btn-outline-success:focus {
 					box-shadow: none;
-					
-					&.purple:hover {
-						opacity: 0.7;
-					}
 				}
 				
 				&.btn-outline-success {
 					background: $white;
-					
-					&.purple {
-						background: $white;
-						color: $purple-pl;
-						border-color: $purple-pl;
-						
-						&:hover {
-							background: $purple-pl;
-							color: $white;
-							border-color: $purple-pl;
-						}
-					}
 					
 					&:hover {
 						background: $green;
