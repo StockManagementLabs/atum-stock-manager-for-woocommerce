@@ -3036,7 +3036,7 @@ final class Helpers {
 
 		$classes = [];
 
-		foreach ( Globals::get_incompatible_products() as $product_type ) {
+		foreach ( Globals::get_incompatible_product_types() as $product_type ) {
 
 			$classes[] = "hide_if_$product_type";
 		}

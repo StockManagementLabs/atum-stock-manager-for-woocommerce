@@ -288,7 +288,7 @@ final class Globals {
 	 *
 	 * @return array
 	 */
-	public static function get_all_compatible_products() {
+	public static function get_all_compatible_product_types() {
 		return (array) apply_filters( 'atum/compatible_product_types', array_unique( array_merge( self::get_product_types(), self::get_inheritable_product_types(), self::get_child_product_types() ) ) );
 	}
 
@@ -300,7 +300,7 @@ final class Globals {
 	 * @return array
 	 */
 	public static function get_product_types_with_stock() {
-		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( self::get_all_compatible_products(), [ 'grouped' ] ) );
+		return (array) apply_filters( 'atum/product_types_with_stock', array_diff( self::get_all_compatible_product_types(), [ 'grouped' ] ) );
 
 	}
 
@@ -311,8 +311,8 @@ final class Globals {
 	 *
 	 * @return array
 	 */
-	public static function get_incompatible_products() {
-		return (array) apply_filters( 'atum/incompatible_product_types', array_diff( array_keys( wc_get_product_types() ), self::get_all_compatible_products() ) );
+	public static function get_incompatible_product_types() {
+		return (array) apply_filters( 'atum/incompatible_product_types', array_diff( array_keys( wc_get_product_types() ), self::get_all_compatible_product_types() ) );
 	}
 
 	/**
