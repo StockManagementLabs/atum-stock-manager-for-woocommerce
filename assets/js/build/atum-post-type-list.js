@@ -28549,7 +28549,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // create a read-only version of config
-var config = /* #__PURE__ */function config(options) {
+var config = function config(options) {
   if (options) {
     throw new Error('The global config is readonly. \n' + 'Please create a mathjs instance if you want to change the default configuration. \n' + 'Example:\n' + '\n' + '  import { create, all } from \'mathjs\';\n' + '  const mathjs = create(all);\n' + '  mathjs.config({ number: \'BigNumber\' });\n');
   }
@@ -29094,18 +29094,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_218__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/type/unit/function/unit.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_219__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/combinatorics/bellNumbers.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_220__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/eigs.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mean.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/quantileSeq.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/variance.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/median.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/corr.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/freqz.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mad.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/std.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/special/zeta.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/norm.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotationMatrix.js");
-/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/kldivergence.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/probability/kldivergence.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mean.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/quantileSeq.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/variance.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/median.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/corr.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/signal/freqz.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/mad.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/statistics/std.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/special/zeta.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/arithmetic/norm.js");
+/* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotationMatrix.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_233__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/decomposition/schur.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_234__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/matrix/rotate.js");
 /* harmony import */ var _factoriesAny_js__WEBPACK_IMPORTED_MODULE_235__ = __webpack_require__(/*! ../factoriesAny.js */ "./node_modules/mathjs/lib/esm/function/algebra/sylvester.js");
@@ -30712,7 +30712,18 @@ var gasConstant = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4_
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var mean = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__.createMean)({
+var kldivergence = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_221__.createKldivergence)({
+  divide,
+  dotDivide,
+  isNumeric,
+  log,
+  map,
+  matrix,
+  multiply,
+  sum,
+  typed
+});
+var mean = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__.createMean)({
   add,
   divide,
   typed
@@ -30727,7 +30738,7 @@ var planckConstant = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_222__.createQuantileSeq)({
+var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__.createQuantileSeq)({
   bignumber,
   add,
   compare,
@@ -30741,7 +30752,7 @@ var quantileSeq = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_22
   subtract,
   typed
 });
-var variance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_223__.createVariance)({
+var variance = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__.createVariance)({
   add,
   apply,
   divide,
@@ -30755,14 +30766,14 @@ var classicalElectronRadius = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORT
   Unit,
   config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config
 });
-var median = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_224__.createMedian)({
+var median = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.createMedian)({
   add,
   compare,
   divide,
   partitionSelect,
   typed
 });
-var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.createCorr)({
+var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__.createCorr)({
   add,
   divide,
   matrix,
@@ -30774,7 +30785,7 @@ var corr = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_225__.cre
   sum,
   typed
 });
-var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__.createFreqz)({
+var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__.createFreqz)({
   Complex,
   add,
   divide,
@@ -30782,20 +30793,20 @@ var freqz = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_226__.cr
   multiply,
   typed
 });
-var mad = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_227__.createMad)({
+var mad = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__.createMad)({
   abs,
   map,
   median,
   subtract,
   typed
 });
-var std = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_228__.createStd)({
+var std = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.createStd)({
   map,
   sqrt,
   typed,
   variance
 });
-var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.createZeta)({
+var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__.createZeta)({
   BigNumber,
   Complex,
   add,
@@ -30813,7 +30824,7 @@ var zeta = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_229__.cre
   subtract,
   typed
 });
-var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__.createNorm)({
+var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__.createNorm)({
   abs,
   add,
   conj,
@@ -30828,7 +30839,7 @@ var norm = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_230__.cre
   sqrt,
   typed
 });
-var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_231__.createRotationMatrix)({
+var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__.createRotationMatrix)({
   BigNumber,
   DenseMatrix,
   SparseMatrix,
@@ -30841,17 +30852,6 @@ var rotationMatrix = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE
   sin,
   typed,
   unaryMinus
-});
-var kldivergence = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_232__.createKldivergence)({
-  divide,
-  dotDivide,
-  isNumeric,
-  log,
-  map,
-  matrix,
-  multiply,
-  sum,
-  typed
 });
 var planckTime = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_4__.createPlanckTime)({
   BigNumber,
@@ -54884,8 +54884,8 @@ var dependencies = ['typed', 'format'];
  *    oct
  *    hex
  *
- * @param {number} value    Value to be stringified
- * @param {number} wordSize Optional word size (see `format`)
+ * @param {number | BigNumber} value    Value to be stringified
+ * @param {number | BigNumber} wordSize Optional word size (see `format`)
  * @return {string}         The formatted value
  */
 var createBin = (0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
@@ -54899,7 +54899,7 @@ var createBin = (0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name,
         notation: 'bin'
       });
     },
-    'number | BigNumber, number': function numberBigNumberNumber(n, wordSize) {
+    'number | BigNumber, number | BigNumber': function numberBigNumberNumberBigNumber(n, wordSize) {
       return format(n, {
         notation: 'bin',
         wordSize
@@ -54967,7 +54967,7 @@ var createFormat = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
    *      - `'bin'`, `'oct'`, or `'hex'`
    *        Format the number using binary, octal, or hexadecimal notation.
    *        For example `'0b1101'` and `'0x10fe'`.
-   *    - `wordSize: number`
+   *    - `wordSize: number | BigNumber`
    *      The word size in bits to use for formatting in binary, octal, or
    *      hexadecimal notation. To be used only with `'bin'`, `'oct'`, or `'hex'`
    *      values for `notation` option. When this option is defined the value
@@ -54975,7 +54975,7 @@ var createFormat = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
    *      size and the size suffix is appended to the output.
    *      For example `format(-1, {notation: 'hex', wordSize: 8}) === '0xffi8'`.
    *      Default value is undefined.
-   *    - `precision: number`
+   *    - `precision: number | BigNumber`
    *      Limit the number of digits of the formatted value.
    *      For regular numbers, must be a number between `0` and `16`.
    *      For bignumbers, the maximum depends on the configured precision,
@@ -55051,7 +55051,7 @@ var createFormat = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_
    */
   return typed(name, {
     any: _utils_string_js__WEBPACK_IMPORTED_MODULE_1__.format,
-    'any, Object | function | number': _utils_string_js__WEBPACK_IMPORTED_MODULE_1__.format
+    'any, Object | function | number | BigNumber': _utils_string_js__WEBPACK_IMPORTED_MODULE_1__.format
   });
 });
 
@@ -55089,8 +55089,8 @@ var dependencies = ['typed', 'format'];
  *    oct
  *    bin
  *
- * @param {number} value    Value to be stringified
- * @param {number} wordSize Optional word size (see `format`)
+ * @param {number | BigNumber} value    Value to be stringified
+ * @param {number | BigNumber} wordSize Optional word size (see `format`)
  * @return {string}         The formatted value
  */
 var createHex = (0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
@@ -55104,7 +55104,7 @@ var createHex = (0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name,
         notation: 'hex'
       });
     },
-    'number | BigNumber, number': function numberBigNumberNumber(n, wordSize) {
+    'number | BigNumber, number | BigNumber': function numberBigNumberNumberBigNumber(n, wordSize) {
       return format(n, {
         notation: 'hex',
         wordSize
@@ -55148,8 +55148,8 @@ var dependencies = ['typed', 'format'];
  *    bin
  *    hex
  *
- * @param {number} value    Value to be stringified
- * @param {number} wordSize Optional word size (see `format`)
+ * @param {number | BigNumber} value    Value to be stringified
+ * @param {number | BigNumber} wordSize Optional word size (see `format`)
  * @return {string}         The formatted value
  */
 
@@ -55164,7 +55164,7 @@ var createOct = (0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name,
         notation: 'oct'
       });
     },
-    'number | BigNumber, number': function numberBigNumberNumber(n, wordSize) {
+    'number | BigNumber, number | BigNumber': function numberBigNumberNumberBigNumber(n, wordSize) {
       return format(n, {
         notation: 'oct',
         wordSize
@@ -66989,7 +66989,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
   Unit.prototype.abs = function () {
     var ret = this.clone();
     if (ret.value !== null) {
-      if (ret._isDerived() || ret.units[0].unit.offset === 0) {
+      if (ret._isDerived() || ret.units.length === 0 || ret.units[0].unit.offset === 0) {
         ret.value = abs(ret.value);
       } else {
         // To give the correct, but unexpected, results for units with an offset.
@@ -67032,7 +67032,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     if (other.value !== null) {
       throw new Error('Cannot convert to a unit with a value');
     }
-    if (this.value === null || this._isDerived() || this.units[0].unit.offset === other.units[0].unit.offset) {
+    if (this.value === null || this._isDerived() || this.units.length === 0 || other.units.length === 0 || this.units[0].unit.offset === other.units[0].unit.offset) {
       other.value = (0,_utils_object_js__WEBPACK_IMPORTED_MODULE_4__.clone)(value);
     } else {
       /* Need to adjust value by difference in offset to convert */
@@ -67220,6 +67220,10 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     ret.units = proposedUnitList;
     ret.fixPrefix = true;
     ret.skipAutomaticSimplification = true;
+    if (this.value !== null) {
+      ret.value = null;
+      return this.to(ret);
+    }
     return ret;
   };
 
@@ -67500,6 +67504,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
         value: 1e24,
         scientific: true
       },
+      R: {
+        name: 'R',
+        value: 1e27,
+        scientific: true
+      },
+      Q: {
+        name: 'Q',
+        value: 1e30,
+        scientific: true
+      },
       d: {
         name: 'd',
         value: 1e-1,
@@ -67548,6 +67562,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       y: {
         name: 'y',
         value: 1e-24,
+        scientific: true
+      },
+      r: {
+        name: 'r',
+        value: 1e-27,
+        scientific: true
+      },
+      q: {
+        name: 'q',
+        value: 1e-30,
         scientific: true
       }
     },
@@ -67607,6 +67631,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
         value: 1e24,
         scientific: true
       },
+      ronna: {
+        name: 'ronna',
+        value: 1e27,
+        scientific: true
+      },
+      quetta: {
+        name: 'quetta',
+        value: 1e30,
+        scientific: true
+      },
       deci: {
         name: 'deci',
         value: 1e-1,
@@ -67655,6 +67689,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       yocto: {
         name: 'yocto',
         value: 1e-24,
+        scientific: true
+      },
+      ronto: {
+        name: 'ronto',
+        value: 1e-27,
+        scientific: true
+      },
+      quecto: {
+        name: 'quecto',
+        value: 1e-30,
         scientific: true
       }
     },
@@ -67714,6 +67758,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
         value: 1e48,
         scientific: true
       },
+      R: {
+        name: 'R',
+        value: 1e54,
+        scientific: true
+      },
+      Q: {
+        name: 'Q',
+        value: 1e60,
+        scientific: true
+      },
       d: {
         name: 'd',
         value: 1e-2,
@@ -67762,6 +67816,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       y: {
         name: 'y',
         value: 1e-48,
+        scientific: true
+      },
+      r: {
+        name: 'r',
+        value: 1e-54,
+        scientific: true
+      },
+      q: {
+        name: 'q',
+        value: 1e-60,
         scientific: true
       }
     },
@@ -67821,6 +67885,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
         value: 1e72,
         scientific: true
       },
+      R: {
+        name: 'R',
+        value: 1e81,
+        scientific: true
+      },
+      Q: {
+        name: 'Q',
+        value: 1e90,
+        scientific: true
+      },
       d: {
         name: 'd',
         value: 1e-3,
@@ -67869,6 +67943,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       y: {
         name: 'y',
         value: 1e-72,
+        scientific: true
+      },
+      r: {
+        name: 'r',
+        value: 1e-81,
+        scientific: true
+      },
+      q: {
+        name: 'q',
+        value: 1e-90,
         scientific: true
       }
     },
@@ -70433,7 +70517,7 @@ var createAvogadro = /* #__PURE__ */unitFactory('avogadro', '6.02214076e23', 'mo
 var createBoltzmann = /* #__PURE__ */unitFactory('boltzmann', '1.380649e-23', 'J K^-1');
 var createFaraday = /* #__PURE__ */unitFactory('faraday', '96485.33212331001', 'C mol^-1');
 var createFirstRadiation = /* #__PURE__ */unitFactory('firstRadiation', '3.7417718521927573e-16', 'W m^2');
-// export const createSpectralRadiance = /* #__PURE__ */ unitFactory('spectralRadiance', '1.1910429723971881e-16', 'W m^2 sr^-1') // TODO spectralRadiance
+// TODO spectralRadiance = 1.1910429723971881e-16 W m^2 sr^-1
 var createLoschmidt = /* #__PURE__ */unitFactory('loschmidt', '2.686780111798444e25', 'm^-3');
 var createGasConstant = /* #__PURE__ */unitFactory('gasConstant', '8.31446261815324', 'J K^-1 mol^-1');
 var createMolarPlanckConstant = /* #__PURE__ */unitFactory('molarPlanckConstant', '3.990312712893431e-10', 'J s mol^-1');
@@ -71931,7 +72015,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   toExponential: () => (/* binding */ toExponential),
 /* harmony export */   toFixed: () => (/* binding */ toFixed)
 /* harmony export */ });
+/* harmony import */ var _is_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../is.js */ "./node_modules/mathjs/lib/esm/utils/is.js");
 /* harmony import */ var _number_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../number.js */ "./node_modules/mathjs/lib/esm/utils/number.js");
+
 
 
 /**
@@ -72053,7 +72139,7 @@ function formatBigNumberToBase(n, base, size) {
  *    format(12400,  {notation: 'engineering'})          // returns '12.400e+3'
  *
  * @param {BigNumber} value
- * @param {Object | Function | number} [options]
+ * @param {Object | Function | number | BigNumber} [options]
  * @return {string} str The formatted value
  */
 function format(value, options) {
@@ -72066,30 +72152,11 @@ function format(value, options) {
   if (!value.isFinite()) {
     return value.isNaN() ? 'NaN' : value.gt(0) ? 'Infinity' : '-Infinity';
   }
-
-  // default values for options
-  var notation = 'auto';
-  var precision;
-  var wordSize;
-  if (options !== undefined) {
-    // determine notation from options
-    if (options.notation) {
-      notation = options.notation;
-    }
-
-    // determine precision from options
-    if (typeof options === 'number') {
-      precision = options;
-    } else if (options.precision !== undefined) {
-      precision = options.precision;
-    }
-    if (options.wordSize) {
-      wordSize = options.wordSize;
-      if (typeof wordSize !== 'number') {
-        throw new Error('Option "wordSize" must be a number');
-      }
-    }
-  }
+  var {
+    notation,
+    precision,
+    wordSize
+  } = (0,_number_js__WEBPACK_IMPORTED_MODULE_0__.normalizeFormatOptions)(options);
 
   // handle the various notations
   switch (notation) {
@@ -72109,8 +72176,8 @@ function format(value, options) {
       {
         // determine lower and upper bound for exponential notation.
         // TODO: implement support for upper and lower to be BigNumbers themselves
-        var lowerExp = options && options.lowerExp !== undefined ? options.lowerExp : -3;
-        var upperExp = options && options.upperExp !== undefined ? options.upperExp : 5;
+        var lowerExp = _toNumberOrDefault(options === null || options === void 0 ? void 0 : options.lowerExp, -3);
+        var upperExp = _toNumberOrDefault(options === null || options === void 0 ? void 0 : options.upperExp, 5);
 
         // handle special case zero
         if (value.isZero()) return '0';
@@ -72183,6 +72250,15 @@ function toExponential(value, precision) {
  */
 function toFixed(value, precision) {
   return value.toFixed(precision);
+}
+function _toNumberOrDefault(value, defaultValue) {
+  if ((0,_is_js__WEBPACK_IMPORTED_MODULE_1__.isNumber)(value)) {
+    return value;
+  } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_1__.isBigNumber)(value)) {
+    return value.toNumber();
+  } else {
+    return defaultValue;
+  }
 }
 
 /***/ }),
@@ -73395,6 +73471,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   log1p: () => (/* binding */ log1p),
 /* harmony export */   log2: () => (/* binding */ log2),
 /* harmony export */   nearlyEqual: () => (/* binding */ nearlyEqual),
+/* harmony export */   normalizeFormatOptions: () => (/* binding */ normalizeFormatOptions),
 /* harmony export */   roundDigits: () => (/* binding */ roundDigits),
 /* harmony export */   sign: () => (/* binding */ sign),
 /* harmony export */   sinh: () => (/* binding */ sinh),
@@ -73429,7 +73506,7 @@ function isInteger(value) {
  * @param {number} x
  * @returns {number}
  */
-var sign = /* #__PURE__ */Math.sign || function (x) {
+var sign = Math.sign || function (x) {
   if (x > 0) {
     return 1;
   } else if (x < 0) {
@@ -73444,7 +73521,7 @@ var sign = /* #__PURE__ */Math.sign || function (x) {
  * @param {number} x
  * @returns {number}
  */
-var log2 = /* #__PURE__ */Math.log2 || function log2(x) {
+var log2 = Math.log2 || function log2(x) {
   return Math.log(x) / Math.LN2;
 };
 
@@ -73453,7 +73530,7 @@ var log2 = /* #__PURE__ */Math.log2 || function log2(x) {
  * @param {number} x
  * @returns {number}
  */
-var log10 = /* #__PURE__ */Math.log10 || function log10(x) {
+var log10 = Math.log10 || function log10(x) {
   return Math.log(x) / Math.LN10;
 };
 
@@ -73462,7 +73539,7 @@ var log10 = /* #__PURE__ */Math.log10 || function log10(x) {
  * @param {number} x
  * @returns {number}
  */
-var log1p = /* #__PURE__ */Math.log1p || function (x) {
+var log1p = Math.log1p || function (x) {
   return Math.log(x + 1);
 };
 
@@ -73475,7 +73552,7 @@ var log1p = /* #__PURE__ */Math.log1p || function (x) {
  * @param {number} x
  * @returns {number} Returns the cubic root of x
  */
-var cbrt = /* #__PURE__ */Math.cbrt || function cbrt(x) {
+var cbrt = Math.cbrt || function cbrt(x) {
   if (x === 0) {
     return x;
   }
@@ -73499,7 +73576,7 @@ var cbrt = /* #__PURE__ */Math.cbrt || function cbrt(x) {
  * @param {number} x
  * @return {number} res
  */
-var expm1 = /* #__PURE__ */Math.expm1 || function expm1(x) {
+var expm1 = Math.expm1 || function expm1(x) {
   return x >= 2e-4 || x <= -2e-4 ? Math.exp(x) - 1 : x + x * x / 2 + x * x * x / 6;
 };
 
@@ -73642,30 +73719,11 @@ function format(value, options) {
   } else if (isNaN(value)) {
     return 'NaN';
   }
-
-  // default values for options
-  var notation = 'auto';
-  var precision;
-  var wordSize;
-  if (options) {
-    // determine notation from options
-    if (options.notation) {
-      notation = options.notation;
-    }
-
-    // determine precision from options
-    if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isNumber)(options)) {
-      precision = options;
-    } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isNumber)(options.precision)) {
-      precision = options.precision;
-    }
-    if (options.wordSize) {
-      wordSize = options.wordSize;
-      if (typeof wordSize !== 'number') {
-        throw new Error('Option "wordSize" must be a number');
-      }
-    }
-  }
+  var {
+    notation,
+    precision,
+    wordSize
+  } = normalizeFormatOptions(options);
 
   // handle the various notations
   switch (notation) {
@@ -73683,7 +73741,7 @@ function format(value, options) {
       return formatNumberToBase(value, 16, wordSize);
     case 'auto':
       // remove trailing zeros after the decimal point
-      return toPrecision(value, precision, options && options).replace(/((\.\d*?)(0+))($|e)/, function () {
+      return toPrecision(value, precision, options).replace(/((\.\d*?)(0+))($|e)/, function () {
         var digits = arguments[2];
         var e = arguments[4];
         return digits !== '.' ? digits + e : e;
@@ -73691,6 +73749,49 @@ function format(value, options) {
     default:
       throw new Error('Unknown notation "' + notation + '". ' + 'Choose "auto", "exponential", "fixed", "bin", "oct", or "hex.');
   }
+}
+
+/**
+ * Normalize format options into an object:
+ *   {
+ *     notation: string,
+ *     precision: number | undefined,
+ *     wordSize: number | undefined
+ *   }
+ */
+function normalizeFormatOptions(options) {
+  // default values for options
+  var notation = 'auto';
+  var precision;
+  var wordSize;
+  if (options !== undefined) {
+    if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isNumber)(options)) {
+      precision = options;
+    } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isBigNumber)(options)) {
+      precision = options.toNumber();
+    } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isObject)(options)) {
+      if (options.precision !== undefined) {
+        precision = _toNumberOrThrow(options.precision, () => {
+          throw new Error('Option "precision" must be a number or BigNumber');
+        });
+      }
+      if (options.wordSize !== undefined) {
+        wordSize = _toNumberOrThrow(options.wordSize, () => {
+          throw new Error('Option "wordSize" must be a number or BigNumber');
+        });
+      }
+      if (options.notation) {
+        notation = options.notation;
+      }
+    } else {
+      throw new Error('Unsupported type of options, number, BigNumber, or object expected');
+    }
+  }
+  return {
+    notation,
+    precision,
+    wordSize
+  };
 }
 
 /**
@@ -73856,8 +73957,8 @@ function toPrecision(value, precision, options) {
   }
 
   // determine lower and upper bound for exponential notation.
-  var lowerExp = options && options.lowerExp !== undefined ? options.lowerExp : -3;
-  var upperExp = options && options.upperExp !== undefined ? options.upperExp : 5;
+  var lowerExp = _toNumberOrDefault(options === null || options === void 0 ? void 0 : options.lowerExp, -3);
+  var upperExp = _toNumberOrDefault(options === null || options === void 0 ? void 0 : options.upperExp, 5);
   var split = splitNumber(value);
   var rounded = precision ? roundDigits(split, precision) : split;
   if (rounded.exponent < lowerExp || rounded.exponent >= upperExp) {
@@ -74062,6 +74163,24 @@ function copysign(x, y) {
   var signx = x > 0 ? true : x < 0 ? false : 1 / x === Infinity;
   var signy = y > 0 ? true : y < 0 ? false : 1 / y === Infinity;
   return signx ^ signy ? -x : x;
+}
+function _toNumberOrThrow(value, onError) {
+  if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isNumber)(value)) {
+    return value;
+  } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isBigNumber)(value)) {
+    return value.toNumber();
+  } else {
+    onError();
+  }
+}
+function _toNumberOrDefault(value, defaultValue) {
+  if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isNumber)(value)) {
+    return value;
+  } else if ((0,_is_js__WEBPACK_IMPORTED_MODULE_0__.isBigNumber)(value)) {
+    return value.toNumber();
+  } else {
+    return defaultValue;
+  }
 }
 
 /***/ }),
@@ -74774,7 +74893,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-var version = '12.2.1';
+var version = '12.3.1';
 // Note: This file is automatically generated when building math.js.
 // Changes made in this file will be overwritten.
 
