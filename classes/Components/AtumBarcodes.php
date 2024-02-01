@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
+use Atum\Inc\Globals as AtumGlobals;
 use Atum\Inc\Helpers;
 use Atum\Models\Products\AtumProductTrait;
 use AtumLevels\Levels\Products\BOMProductTrait;
@@ -53,7 +54,7 @@ class AtumBarcodes {
 				// Save the barcode field when saving the ATUM's meta boxes.
 				add_action( 'atum/product_data/data_to_save', array( $this, 'save_barcode_field' ), 10, 3 );
 
-				// Add the barcode columnn to SC and MC.
+				// Add the barcode column to SC and MC.
 				add_filter( 'atum/stock_central_list/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
 				add_filter( 'atum/product_levels/manufacturing_list_table/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
 				add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
@@ -81,9 +82,9 @@ class AtumBarcodes {
 	 *
 	 * @since 1.9.18
 	 *
-	 * @param int      $loop             Only for variations. The loop item number.
-	 * @param array    $variation_data   Only for variations. The variation item data.
-	 * @param \WP_Post $variation        Only for variations. The variation product.
+	 * @param int      $loop           Only for variations. The loop item number.
+	 * @param array    $variation_data Only for variations. The variation item data.
+	 * @param \WP_Post $variation      Only for variations. The variation product.
 	 */
 	public function add_barcode_field_to_products( $loop = NULL, $variation_data = array(), $variation = NULL ) {
 
@@ -114,7 +115,11 @@ class AtumBarcodes {
 
 		<?php else :
 
-			$barcode_field_classes = (array) apply_filters( 'atum/barcodes/product_data_field/classes', array_merge( [ 'show_if_simple' ], Helpers::get_option_group_hidden_classes() ) );
+			$visibility_classes = array_map( function ( $val ) {
+				return "show_if_{$val}";
+			}, AtumGlobals::get_product_types_with_stock() );
+
+			$barcode_field_classes = implode( ' ', $visibility_classes );
 
 			Helpers::load_view( 'meta-boxes/product-data/barcode-field', compact( 'barcode_field_name', 'barcode_field_id', 'variation', 'loop', 'barcode', 'barcode_field_classes' ) );
 
@@ -274,7 +279,7 @@ class AtumBarcodes {
 				'input_type' => 'text',
 				'tooltip'    => esc_attr__( 'Click to edit the barcode', ATUM_TEXT_DOMAIN ),
 				'cell_name'  => esc_attr__( 'Barcode', ATUM_TEXT_DOMAIN ),
-			) );
+			), $product );
 
 			$barcode = AtumListTable::get_editable_column( $args );
 

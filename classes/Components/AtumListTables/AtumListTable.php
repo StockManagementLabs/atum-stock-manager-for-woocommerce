@@ -2296,8 +2296,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		?>
 		<label for="bulk-action-selector-<?php echo esc_attr( $which ) ?>" class="screen-reader-text"><?php esc_html_e( 'Select bulk action', ATUM_TEXT_DOMAIN ) ?></label>
-		<select name="action<?php echo 'bottom' === $which ? '2' : '' ?>"
-	        class="wc-enhanced-select atum-enhanced-select atum-tooltip"
+		<select class="wc-enhanced-select atum-enhanced-select atum-tooltip"
             id="bulk-action-selector-<?php echo esc_attr( $which ) ?>" autocomplete="off"
 		>
 			<option value="-1"><?php esc_html_e( 'Bulk actions...', ATUM_TEXT_DOMAIN ) ?></option>

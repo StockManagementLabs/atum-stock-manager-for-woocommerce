@@ -48,8 +48,8 @@ $meta_data = $item->get_formatted_meta_data( '' );
 				endif;
 				?>
 				<tr>
-					<th><?php echo wp_kses_post( $meta->display_key ); ?>:</th>
-					<td><?php echo wp_kses_post( force_balance_tags( $meta->display_value ) ); ?></td>
+					<th><?php echo wp_kses_post( $meta->display_key ) ?>:</th>
+					<td><?php echo wp_kses_post( $meta->display_value ) ?></td>
 				</tr>
 
 			<?php endforeach; ?>

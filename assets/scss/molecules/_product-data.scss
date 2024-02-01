@@ -61,6 +61,10 @@
 			@include border-left-radius(0);
 			border: 1px solid var(--main-border-alt);
 			
+			@include desktop-min-wp {
+				width: calc(50% - 31px) !important;
+			}
+			
 			&:focus {
 				box-shadow: 0 0 0 1px $input-focus;
 				border-color: $input-focus;
@@ -89,6 +93,10 @@
 			&.atum-select2, &.atum-enhanced-select {
 				float: none;
 				max-width: calc(80% - 31px) !important;
+				
+				@include desktop-min-wp {
+					width: calc(50% - 31px) !important;
+				}
 				
 				.select2-selection--single {
 					height: 30px;

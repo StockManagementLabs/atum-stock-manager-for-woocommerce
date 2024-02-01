@@ -243,22 +243,24 @@ trait AtumOrderItemTrait {
 		$hideprefix_length = ! empty( $hideprefix ) ? strlen( $hideprefix ) : 0;
 		$product           = is_callable( array( $this, 'get_product' ) ) ? $this->get_product() : FALSE;
 		$order_item_name   = $this->get_name();
-		$item_meta         = $this->atum_order_item_model->get_all_meta();
+
+		$this->atum_order_item_model->read_meta(); // Re-read the meta so any new meta key added is included.
+		$item_meta = $this->atum_order_item_model->get_all_meta();
 
 		foreach ( $meta_data as $meta ) {
 
 			// After adding meta to any ATUM order item, it was discarding all the custom meta until reloading the page.
-			if ( $meta instanceof \WC_Meta_Data ) {
+			if ( $meta instanceof \WC_Meta_Data && empty( $meta->id ) ) {
 
-				if ( empty( $meta->id ) ) {
+				$found_meta = wp_list_filter( $item_meta, [ 'key' => $meta->key ] );
 
-					$found_meta = wp_list_filter( $item_meta, [ 'key' => $meta->key ] );
-
-					if ( ! empty( $found_meta ) ) {
-						$found_meta = current( $found_meta );
-						$meta->id   = $found_meta->id;
-					}
-
+				if ( ! empty( $found_meta ) ) {
+					$found_meta = current( $found_meta );
+					$meta->id   = $found_meta->id;
+				}
+				// If not found within the item meta, read it from db.
+				else {
+					$this->read_meta_data(TRUE);
 				}
 
 			}
@@ -295,7 +297,7 @@ trait AtumOrderItemTrait {
 				'key'           => $meta->key,
 				'value'         => $meta->value,
 				'display_key'   => apply_filters( 'atum/order_item/display_meta_key', $display_key, $meta, $this ),
-				'display_value' => wpautop( make_clickable( apply_filters( 'atum/order_item/display_meta_value', $display_value, $meta, $this ) ) ),
+				'display_value' => make_clickable( apply_filters( 'atum/order_item/display_meta_value', $display_value, $meta, $this ) ),
 			);
 		}
 

@@ -163,6 +163,7 @@ export default class BulkActions {
 					this.$bulkButton.hide();
 					this.listTable.updateTable();
 					this.$bulkButton.first().trigger( 'atum-list-table-bulk-actions-success', [ bulkAction, selectedItems ] );
+					this.wpHooks.doAction( 'atum_listTable_bulkAction_success', bulkAction, selectedItems );
 				}
 				else {
 					this.listTable.removeOverlay();

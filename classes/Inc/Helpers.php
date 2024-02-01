@@ -2711,6 +2711,15 @@ final class Helpers {
 
 		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
 
+		$step_decimals = strlen( substr( strrchr( $step, "."), 1 ) );
+
+		if ( $step_decimals < $stock_decimals ) {
+			for ( $i = 0; $i < $stock_decimals - $step_decimals; $i++ ) {
+				$step .= '0';
+			}
+			return $step;
+		}
+
 		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
 		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 
@@ -3027,7 +3036,7 @@ final class Helpers {
 
 		$classes = [];
 
-		foreach ( Globals::get_incompatible_products() as $product_type ) {
+		foreach ( Globals::get_incompatible_product_types() as $product_type ) {
 
 			$classes[] = "hide_if_$product_type";
 		}
@@ -3576,19 +3585,19 @@ final class Helpers {
 	 *
 	 * @since 1.9.14
 	 *
-	 * @param string     $term               Search term.
-	 * @param string     $type               Type of product.
-	 * @param bool       $include_variations Include variations in search or not.
-	 * @param bool       $all_statuses       Should we search all statuses or limit to published.
-	 * @param null|int   $limit              Limit returned results.
-	 * @param null|array $include            Keep specific results.
-	 * @param null|array $exclude            Discard specific results.
+	 * @param string        $term               Search term.
+	 * @param string        $type               Type of product.
+	 * @param bool          $include_variations Include variations in search or not.
+	 * @param bool|string[] $statuses           Set to "false" to search all statuses, or provide an array of statuses.
+	 * @param null|int      $limit              Limit returned results.
+	 * @param null|array    $include            Keep specific results.
+	 * @param null|array    $exclude            Discard specific results.
 	 *
 	 * @based \WC_Product_Data_Store_CPT::search_products()
 	 *
 	 * @return array of ids
 	 */
-	public static function search_products( $term, $type = '', $include_variations = FALSE, $all_statuses = FALSE, $limit = NULL, $include = NULL, $exclude = NULL ) {
+	public static function search_products( $term, $type = '', $include_variations = FALSE, $statuses = FALSE, $limit = NULL, $include = NULL, $exclude = NULL ) {
 
 		global $wpdb;
 
@@ -3599,12 +3608,12 @@ final class Helpers {
 		$join_query      = '';
 		$join_clauses    = [];
 
-		// When searching variations we should include the parent's meta table for use in searches.
+		// When searching variations we should include the parent's meta table for searches.
 		if ( $include_variations ) {
 			$join_clauses[] = "LEFT JOIN $wpdb->wc_product_meta_lookup parent_wc_product_meta_lookup
-			 ON (posts.post_type = 'product_variation' AND parent_wc_product_meta_lookup.product_id = posts.post_parent)";
+				ON (posts.post_type = 'product_variation' AND parent_wc_product_meta_lookup.product_id = posts.post_parent)";
 			$join_clauses[] = "LEFT JOIN $atum_data_table parent_apd
-			 ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
+				ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
 		}
 
 		$post_statuses = apply_filters( 'atum/search_products/post_statuses', Globals::get_queryable_product_statuses() );
@@ -3621,7 +3630,7 @@ final class Helpers {
 				$search_terms = self::get_valid_search_terms( $matches[0] );
 				$count        = count( $search_terms );
 
-				// if the search string has only short terms or stopwords, or is 10+ terms long, match it as sentence.
+				// If the search string has only short terms or stop words, or is 10+ terms long, match it as sentence.
 				if ( 9 < $count || 0 === $count ) {
 					$search_terms = array( $term_group );
 				}
@@ -3631,9 +3640,7 @@ final class Helpers {
 				$search_terms = array( $term_group );
 			}
 
-			$term_group_query = '';
-			$searchand        = '';
-			$variation_query  = '';
+			$term_group_query = $search_and = $variation_query = '';
 
 			foreach ( $search_terms as $search_term ) {
 
@@ -3647,7 +3654,7 @@ final class Helpers {
 
 				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$term_group_query .= $wpdb->prepare( " 
-					$searchand ( 
+					$search_and ( 
 						( posts.post_title LIKE %s) OR ( posts.post_excerpt LIKE %s) OR 
 						( posts.post_content LIKE %s ) OR ( wc_product_meta_lookup.sku LIKE %s ) OR 
 						( apd.supplier_sku LIKE %s ) $variation_query 
@@ -3655,7 +3662,7 @@ final class Helpers {
 				", $like, $like, $like, $like, $like );
 				// phpcs:enable
 
-				$searchand = ' AND ';
+				$search_and = ' AND ';
 
 			}
 
@@ -3666,8 +3673,7 @@ final class Helpers {
 		}
 
 		if ( ! empty( $join_clauses ) ) {
-
-			$join_query = implode( "\n", apply_filters( 'atum/search_products/join_clauses', $join_clauses, $term, $type = '', $include_variations, $all_statuses, $limit, $include, $exclude ) );
+			$join_query = implode( "\n", apply_filters( 'atum/search_products/join_clauses', $join_clauses, $term, $type, $include_variations, $statuses, $limit, $include, $exclude ) );
 		}
 
 		if ( ! empty( $search_queries ) ) {
@@ -3689,11 +3695,14 @@ final class Helpers {
 			$where_clauses[] = '( wc_product_meta_lookup.downloadable = 1 ) ';
 		}
 
-		if ( ! $all_statuses ) {
+		if ( ! $statuses || ! is_array( $statuses ) ) {
 			$where_clauses[] = "posts.post_status IN ('" . implode( "','", $post_statuses ) . "') ";
 		}
+		else {
+			$where_clauses[] = "posts.post_status IN ('" . implode( "','", $statuses ) . "') ";
+		}
 
-		$where_query = implode( ' AND ', apply_filters( 'atum/search_products/where_clauses', $where_clauses, $term, $type = '', $include_variations, $all_statuses, $limit, $include, $exclude ) );
+		$where_query = implode( ' AND ', apply_filters( 'atum/search_products/where_clauses', $where_clauses, $term, $type, $include_variations, $statuses, $limit, $include, $exclude ) );
 
 		if ( $limit ) {
 			$limit_query = $wpdb->prepare( ' LIMIT %d ', $limit );

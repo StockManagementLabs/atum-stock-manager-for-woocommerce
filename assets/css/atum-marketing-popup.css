@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.35 
+ * @version 1.9.36 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -2151,21 +2151,8 @@ input[type=button].btn-block {
   -webkit-box-shadow: none;
           box-shadow: none;
 }
-.swal2-container .marketing-popup .swal2-html-container button.btn-success.purple:hover, .swal2-container .marketing-popup .swal2-html-container button.btn-success:focus.purple:hover, .swal2-container .marketing-popup .swal2-html-container button.btn-outline-success.purple:hover, .swal2-container .marketing-popup .swal2-html-container button.btn-outline-success:focus.purple:hover {
-  opacity: 0.7;
-}
 .swal2-container .marketing-popup .swal2-html-container button.btn-outline-success {
   background: #fff;
-}
-.swal2-container .marketing-popup .swal2-html-container button.btn-outline-success.purple {
-  background: #fff;
-  color: #9357cc;
-  border-color: #9357cc;
-}
-.swal2-container .marketing-popup .swal2-html-container button.btn-outline-success.purple:hover {
-  background: #9357cc;
-  color: #fff;
-  border-color: #9357cc;
 }
 .swal2-container .marketing-popup .swal2-html-container button.btn-outline-success:hover {
   background: #69C61D;

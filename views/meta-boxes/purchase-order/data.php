@@ -56,8 +56,9 @@ $po_status = $atum_order->get_status();
 					<?php
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo Helpers::suppliers_dropdown( [
-						'selected' => $supplier ? $supplier->id : '',
-						'enhanced' => TRUE,
+						'selected'    => $supplier ? $supplier->id : '',
+						'enhanced'    => TRUE,
+						'placeholder' => __( 'Select supplier...', ATUM_TEXT_DOMAIN ),
 					] ); ?>
 					<input type="hidden" class="item-blocker-old-value" value="<?php echo esc_attr( $supplier ? $supplier->id : '' ) ?>">
 				</p>

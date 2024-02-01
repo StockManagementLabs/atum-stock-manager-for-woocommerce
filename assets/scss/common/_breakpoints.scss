@@ -12,12 +12,14 @@ $bp-md-min:     "(min-width: #{$screen-md-min})";
 $bp-md-min-wp:  "(min-width: #{$screen-md-min-wp})";
 $bp-lg-min:     "(min-width: #{$screen-lg-min})";
 $bp-xl-min:     "(min-width: #{$screen-xl-min})";
+$bp-xl-min-wp:  "(min-width: #{$screen-xl-min-wp})";
 
 $bp-xs-max:     "(max-width: #{$screen-xs-max})";
 $bp-sm-max:     "(max-width: #{$screen-sm-max})";
 $bp-sm-max-wp:  "(max-width: #{$screen-sm-max-wp})";
 $bp-md-max:     "(max-width: #{$screen-md-max})";
 $bp-lg-max:     "(max-width: #{$screen-lg-max})";
+$bp-lg-max-wp:  "(max-width: #{$screen-lg-max-wp})";
 
 
 // Media Mixins
@@ -69,6 +71,12 @@ $bp-lg-max:     "(max-width: #{$screen-lg-max})";
 	}
 }
 
+@mixin desktop-max-wp {
+	@media all and #{$bp-lg-max-wp} {
+		@content;
+	}
+}
+
 @mixin desktop-only {
 	@media all and #{$bp-md-min} and #{$bp-md-max} {
 		@content;
@@ -77,6 +85,12 @@ $bp-lg-max:     "(max-width: #{$screen-lg-max})";
 
 @mixin desktop-min {
 	@media all and #{$bp-xl-min} {
+		@content;
+	}
+}
+
+@mixin desktop-min-wp {
+	@media all and #{$bp-xl-min-wp} {
 		@content;
 	}
 }

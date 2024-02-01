@@ -307,6 +307,7 @@ $screen-md-max:                         992px !default;
 
 // Large screen / wide desktop
 $screen-lg-max:                         1200px !default;
+$screen-lg-max-wp:                      1280px !default;
 
 // So media queries don't overlap when required, provide a maximum
 $screen-sm-min:                         ($screen-xs-max + 1) !default;
@@ -314,6 +315,7 @@ $screen-md-min:                         ($screen-sm-max + 1) !default;
 $screen-md-min-wp:                      ($screen-sm-max-wp + 1) !default;
 $screen-lg-min:                         ($screen-md-max + 1) !default;
 $screen-xl-min:                         ($screen-lg-max + 1) !default;
+$screen-xl-min-wp:                      ($screen-lg-max-wp + 1) !default;
 
 
 // Buttons + Forms
