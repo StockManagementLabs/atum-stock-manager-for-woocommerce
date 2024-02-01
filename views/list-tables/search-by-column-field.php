@@ -50,7 +50,7 @@ $dropdown_required = empty( $menu_items ) || count( $menu_items ) > 1;
 
 		<?php else :
 			$current_item = current( $menu_items ); ?>
-			<span class="input-group-text atum-tooltip" title="<?php printf( esc_attr__( 'Search by %s' ), $current_item ) ?>">
+			<span class="input-group-text atum-tooltip" title="<?php printf( esc_attr__( 'Search by %s', ATUM_TEXT_DOMAIN ), $current_item ) ?>">
 				<?php echo esc_html( $current_item ) ?>
 				<input type="hidden" name="atum_search_column" value="<?php echo esc_attr( key( $menu_items ) ) ?>">
 			</span>
