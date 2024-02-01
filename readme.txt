@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 8.5.2
-Stable tag: 1.9.36
+Stable tag: 1.9.36.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,26 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.36.1`
+
+*2024-02-01*
+
+**Features**
+
+* Added ATUM barcodes support to all compatible product types.
+
+**Changes**
+
+* Removed unneeded CSS.
+* Updated marketing popup.
+
+**Fixes**
+
+* Fixed inputs min & step when decimals is greater than step.
+* Fixed barcode field visibility.
 
 ---
 

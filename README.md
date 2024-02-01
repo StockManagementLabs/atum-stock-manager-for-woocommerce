@@ -196,6 +196,26 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.36.1`
+
+*2024-02-01*
+
+**Features**
+
+* Added ATUM barcodes support to all compatible product types.
+
+**Changes**
+
+* Removed unneeded CSS.
+* Updated marketing popup.
+
+**Fixes**
+
+* Fixed inputs min & step when decimals is greater than step.
+* Fixed barcode field visibility.
+
+---
+
 `1.9.36`
 
 *2024-01-29*
