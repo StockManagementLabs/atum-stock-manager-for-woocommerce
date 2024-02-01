@@ -986,7 +986,7 @@ abstract class AtumOrderPostType {
 					'metaPlaceholderValue'      => esc_attr__( 'Value (required)', ATUM_TEXT_DOMAIN ),
 					'no'                        => __( 'No', ATUM_TEXT_DOMAIN ),
 					'ok'                        => __( 'OK', ATUM_TEXT_DOMAIN ),
-					'postId'                    => $post->ID ?? '',
+					'postId'                    => $post->ID ?: '',
 					'priceDecimalSep'           => wc_get_price_decimal_separator(),
 					'priceNumDecimals'          => wc_get_price_decimals(),
 					'purchasePriceChanged'      => __( 'The purchase price was changed successfully', ATUM_TEXT_DOMAIN ),
