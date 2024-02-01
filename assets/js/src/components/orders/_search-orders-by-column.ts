@@ -34,6 +34,9 @@ export default class SearchOrdersByColumn {
 		else if ( $dropdownLinks.length < 3 ) {
 			$dropdownLinks.eq( 1 ).click();
 		}
+		else {
+			$dropdownLinks.eq( 0 ).click(); // Force the search input to disable if no option is selected.
+		}
 
 	}
 
@@ -64,6 +67,7 @@ export default class SearchOrdersByColumn {
 				      noOptionLabel: string = this.$searchColumnDropdown.data( 'no-option' );
 
 				// Enable/Disable the input field.
+				console.log( 'value', value );
 				this.$searchInput.prop( 'disabled', ! value );
 
 				this.$searchColumnDropdown.children( 'input[type=hidden]' ).val( value );
@@ -83,7 +87,7 @@ export default class SearchOrdersByColumn {
 					this.$searchInput.focus();
 				}
 
-			} ).click();
+			} );
 
 		$( 'body' ).click( () => this.$searchColumnDropdown.hide() );
 

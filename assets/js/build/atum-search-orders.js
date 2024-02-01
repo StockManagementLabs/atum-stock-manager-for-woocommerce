@@ -8328,6 +8328,9 @@ var SearchOrdersByColumn = (function () {
         else if ($dropdownLinks.length < 3) {
             $dropdownLinks.eq(1).click();
         }
+        else {
+            $dropdownLinks.eq(0).click();
+        }
     }
     SearchOrdersByColumn.prototype.bindEvents = function () {
         var _this = this;
@@ -8341,6 +8344,7 @@ var SearchOrdersByColumn = (function () {
             .on('click', 'a', function (evt) {
             evt.preventDefault();
             var $item = $(evt.currentTarget), value = $item.data('value'), label = $item.text().trim(), noOptionLabel = _this.$searchColumnDropdown.data('no-option');
+            console.log('value', value);
             _this.$searchInput.prop('disabled', !value);
             _this.$searchColumnDropdown.children('input[type=hidden]').val(value);
             _this.$searchColumnDropdown.hide()
@@ -8354,7 +8358,7 @@ var SearchOrdersByColumn = (function () {
             if (value) {
                 _this.$searchInput.focus();
             }
-        }).click();
+        });
         $('body').click(function () { return _this.$searchColumnDropdown.hide(); });
     };
     return SearchOrdersByColumn;
