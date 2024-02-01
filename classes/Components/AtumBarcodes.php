@@ -117,7 +117,7 @@ class AtumBarcodes {
 
 			$visibility_classes = array_map( function ( $val ) {
 				return "show_if_{$val}";
-			}, AtumGlobals::get_product_types_with_stock() );
+			}, AtumGlobals::get_all_compatible_product_types() );
 
 			$barcode_field_classes = implode( ' ', $visibility_classes );
 

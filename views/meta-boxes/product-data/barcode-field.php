@@ -19,10 +19,10 @@ use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
 
 if ( empty( $variation ) ) : ?>
-<div class="options_group<?php echo esc_attr( $barcode_field_classes ) ?>">
+<div class="options_group <?php echo esc_attr( $barcode_field_classes ) ?>">
 <?php endif; ?>
 
-	<p class="form-field _barcode_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?><?php echo esc_attr( $barcode_field_classes ) ?>">
+	<p class="form-field _barcode_field<?php if ( ! empty( $variation ) ) echo ' form-row form-row-first ' ?> <?php echo esc_attr( $barcode_field_classes ) ?>">
 		<label for="<?php echo esc_attr( $barcode_field_id ) ?>"><?php esc_html_e( 'Barcode', ATUM_TEXT_DOMAIN ) ?></label>
 
 		<span class="atum-field input-group">
