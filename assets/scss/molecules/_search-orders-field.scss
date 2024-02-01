@@ -21,12 +21,15 @@ input.atum-post-search {
 	color: $blue-dark;
 	height: 29px !important;
 	
+	&:disabled {
+		background-color: $gray-100;
+	}
+	
 	@include tablet-max-wp {
 		max-width: inherit;
 		width: 100%;
 		margin-bottom: 0;
 	}
-	
 	
 	&::placeholder {
 		color: var(--atum-text-color-var2);
@@ -79,6 +82,8 @@ input.atum-post-search {
 	.input-group-append {
 		border: none;
 		height: 30px;
+		@include border-left-radius(3px);
+		overflow: hidden;
 		
 		.input-group-text {
 			background-color: $gray-200;
@@ -86,7 +91,6 @@ input.atum-post-search {
 			border-bottom-left-radius: 3px;
 			color: $blue-dark;
 			font-size: 14px;
-			width: 100px;
 			@include text-overflow();
 			display: inline-block;
 			cursor: default;

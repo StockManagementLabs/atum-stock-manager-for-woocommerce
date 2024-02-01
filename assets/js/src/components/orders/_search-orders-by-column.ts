@@ -12,8 +12,9 @@ import Utils from '../../utils/_utils';
 export default class SearchOrdersByColumn {
 
 	$searchColumnWrapper: JQuery = $( '#atum-search-by-column' );
-	$searchColumnBtn: JQuery = $( '#search_column_btn' );
-	$searchColumnDropdown: JQuery = $( '#search_column_dropdown' );
+	$searchColumnBtn: JQuery = this.$searchColumnWrapper.find( '.search-column-btn' );
+	$searchColumnDropdown: JQuery = this.$searchColumnWrapper.find( '#search_column_dropdown' );
+	$searchInput: JQuery = this.$searchColumnWrapper.find( 'input[type=search]' );
 
 	constructor(
 		private tooltip: Tooltip
@@ -62,7 +63,10 @@ export default class SearchOrdersByColumn {
 				      label: string = $item.text().trim(),
 				      noOptionLabel: string = this.$searchColumnDropdown.data( 'no-option' );
 
-				this.$searchColumnDropdown.children( 'input' ).val( value );
+				// Enable/Disable the input field.
+				this.$searchInput.prop( 'disabled', ! value );
+
+				this.$searchColumnDropdown.children( 'input[type=hidden]' ).val( value );
 
 				this.$searchColumnDropdown.hide()
 					.children( 'a.active' ).removeClass( 'active' );
@@ -75,7 +79,11 @@ export default class SearchOrdersByColumn {
 				this.tooltip.destroyTooltips( this.$searchColumnWrapper );
 				this.tooltip.addTooltips( this.$searchColumnWrapper );
 
-			} );
+				if ( value ) {
+					this.$searchInput.focus();
+				}
+
+			} ).click();
 
 		$( 'body' ).click( () => this.$searchColumnDropdown.hide() );
 
