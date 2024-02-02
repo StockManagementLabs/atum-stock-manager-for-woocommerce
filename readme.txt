@@ -7,7 +7,7 @@ Tested up to: 6.4.3
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 8.5.2
-Stable tag: 1.9.36.1
+Stable tag: 1.9.36.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,28 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.36.2`
+
+*2024-02-02*
+
+**Features**
+
+* Search orders by column improvements.
+
+**Changes**
+
+* Updated math.js dependency.
+* Fixed avoid to add zeros to integers in stock quantity step attribute.
+* Use "any" when 0 is set for step in stock decimals.
+
+**Fixes**
+
+* Fixed orders search by column component when there are multiple cols to search in.
+* Fixed wrong PHP operator used.
+* Fixed AtumAsssets class not found.
 
 ---
 

@@ -196,6 +196,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.36.2`
+
+*2024-02-02*
+
+**Features**
+
+* Search orders by column improvements.
+
+**Changes**
+
+* Updated math.js dependency.
+* Fixed avoid to add zeros to integers in stock quantity step attribute.
+* Use "any" when 0 is set for step in stock decimals.
+
+**Fixes**
+
+* Fixed orders search by column component when there are multiple cols to search in.
+* Fixed wrong PHP operator used.
+* Fixed AtumAsssets class not found.
+
+---
+
 `1.9.36.1`
 
 *2024-02-01*
