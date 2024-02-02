@@ -2701,7 +2701,7 @@ final class Helpers {
 		
 		$step = self::get_option( 'stock_quantity_step', 0 );
 
-		if ( ! is_numeric( $step ) || 0 === $step ) {
+		if ( ! is_numeric( $step ) || 0.0 === (float) $step ) {
 			return 'any';
 		}
 
