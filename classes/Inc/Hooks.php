@@ -570,12 +570,10 @@ class Hooks {
 
 		$step = Helpers::get_option( 'stock_quantity_step', 0 );
 
-		$step_decimals = strlen( substr( strrchr( $step, "."), 1 ) );
+		$step_decimals = strlen( $step - floor( $step ) );
 
-		if ( $step_decimals < $stock_decimals ) {
-			for ( $i = 0; $i < $stock_decimals - $step_decimals; $i++ ) {
-				$step .= '0';
-			}
+		if ( $step_decimals && $step_decimals < $stock_decimals ) {
+			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
 			return $step;
 		}
 
