@@ -344,7 +344,7 @@ class Settings {
 				'group'   => 'general',
 				'section' => 'general',
 				'name'    => __( 'Stock quantity steps', ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Tells WooCommerce how much to increase/decrease the stock quantity value in frontend number inputs with each arrow click. Example: If set to '0.5', the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Tells WooCommerce how much to increase/decrease the stock quantity value in frontend number inputs with each arrow click. Example: If set to '0.5', the stock will change from value '5' to value '5.5' when pressing the UP arrow. Pressing the DOWN arrow will reduce the stock to '4.5'. Leave it as '0' to set the step as 'any', so any number is decimals is preserved.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'number',
 				'default' => 0,
 				'options' => array(

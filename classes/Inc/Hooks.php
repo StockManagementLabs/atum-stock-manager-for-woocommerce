@@ -523,7 +523,7 @@ class Hooks {
 			// Add custom decimal quantities to order add products.
 			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
 
-			// Change min_qty on quantity field on variable products if its necesary.
+			// Change min_qty on quantity field on variable products if its necessary.
 			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
 
 			// Stock status for decimal numbers under 1.
@@ -549,7 +549,6 @@ class Hooks {
 	 * @return float|int
 	 */
 	public function stock_quantity_input_step( $value, $product ) {
-
 		return Helpers::get_input_step();
 	}
 
@@ -574,10 +573,12 @@ class Hooks {
 
 		if ( $step_decimals && $step_decimals < $stock_decimals ) {
 			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
+			
 			return $step;
 		}
 
 		return ( 10 / pow( 10, $stock_decimals + 1 ) );
+		
 	}
 
 
