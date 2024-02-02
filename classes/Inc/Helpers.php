@@ -2705,7 +2705,7 @@ final class Helpers {
 			return 'any';
 		}
 
-		$step_decimals = strlen( $step - floor( $step ) );
+		$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
 
 		// Allow values like 0.125 when 3 decimals are set and the step is like 0.1.
 		if ( $step_decimals && $step_decimals < $stock_decimals ) {
