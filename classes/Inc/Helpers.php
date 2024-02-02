@@ -2701,20 +2701,16 @@ final class Helpers {
 		
 		$step = self::get_option( 'stock_quantity_step', 0 );
 
-		if ( ! is_numeric( $step ) ) {
+		if ( ! is_numeric( $step ) || 0 === $step ) {
 			return 'any';
 		}
 
-		if ( 0 === $step ) {
-			return 1;
-		}
-
-		$step = $step ?: ( 10 / pow( 10, $stock_decimals + 1 ) );
-
 		$step_decimals = strlen( $step - floor( $step ) );
 
+		// Allow values like 0.125 when 3 decimals are set and the step is like 0.1.
 		if ( $step_decimals && $step_decimals < $stock_decimals ) {
 			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
+
 			return $step;
 		}
 
