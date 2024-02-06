@@ -45,7 +45,7 @@ class Bootstrap {
 	/**
 	 * The code for AtumException when throwing an exception trying to Bootstrap again
 	 */
-	const ALREADY_BOOTSTRAPED = 1;
+	const ALREADY_BOOTSTRAPPED = 1;
 
 	/**
 	 * The code for AtumException when throwing an exception of missing dependencies
@@ -59,11 +59,11 @@ class Bootstrap {
 	 */
 	private function __construct() {
 
-		// Check all the requirements before bootstraping.
+		// Check all the requirements before bootstrapping.
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );
 
-		// Register compatibility with HPOS.
-		add_action( 'before_woocommerce_init', array( $this, 'register_hpos_compatibility' ) );
+		// Register compatibility with new WC features.
+		add_action( 'before_woocommerce_init', array( $this, 'declare_wc_compatibilities' ) );
 
 		// Uninstallation tasks.
 		register_uninstall_hook( ATUM_PATH . 'atum-stock-manager-for-woocommerce.php', array( __CLASS__, 'uninstall' ) );
@@ -83,7 +83,7 @@ class Bootstrap {
 		try {
 
 			if ( $this->bootstrapped ) {
-				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPED );
+				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPPED );
 			}
 
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
@@ -102,7 +102,7 @@ class Bootstrap {
 
 		} catch ( AtumException $e ) {
 
-			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
+			if ( in_array( $e->getCode(), array( self::ALREADY_BOOTSTRAPPED, self::DEPENDENCIES_UNSATISFIED ) ) ) {
 				AtumAdminNotices::add_notice( $e->getMessage(), $e->getErrorCode(), 'error' );
 			}
 
@@ -183,13 +183,14 @@ class Bootstrap {
 	}
 
 	/**
-	 * Register ATUM's compatibility with HPOS.
+	 * Register ATUM's compatibility with new WC features.
 	 *
 	 * @since 1.9.23
 	 */
-	public function register_hpos_compatibility() {
+	public function declare_wc_compatibilities() {
 		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
-			FeaturesUtil::declare_compatibility( 'custom_order_tables', ATUM_BASENAME );
+			FeaturesUtil::declare_compatibility( 'custom_order_tables', ATUM_BASENAME ); // HPOS compatibility.
+			FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', ATUM_BASENAME ); // Checkout block compatibility.
 		}
 	}
 
