@@ -70,6 +70,7 @@ return array(
     'Atum\\Components\\AtumOrders\\Models\\AtumOrderItemModel' => $baseDir . '/classes/Components/AtumOrders/Models/AtumOrderItemModel.php',
     'Atum\\Components\\AtumOrders\\Models\\AtumOrderModel' => $baseDir . '/classes/Components/AtumOrders/Models/AtumOrderModel.php',
     'Atum\\Components\\AtumQueues' => $baseDir . '/classes/Components/AtumQueues.php',
+    'Atum\\Components\\AtumStockDecimals' => $baseDir . '/classes/Components/AtumStockDecimals.php',
     'Atum\\Components\\AtumWidget' => $baseDir . '/classes/Components/AtumWidget.php',
     'Atum\\Dashboard\\Dashboard' => $baseDir . '/classes/Dashboard/Dashboard.php',
     'Atum\\Dashboard\\WidgetHelpers' => $baseDir . '/classes/Dashboard/WidgetHelpers.php',

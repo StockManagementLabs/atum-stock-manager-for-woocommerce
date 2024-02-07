@@ -15,6 +15,8 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
+use Atum\Components\AtumStockDecimals;
+
 
 final class Globals {
 	
@@ -78,13 +80,6 @@ final class Globals {
 		'private',
 		'future',
 	];
-
-	/**
-	 * The number of decimals specified in settings to round the stock quantities
-	 *
-	 * @var int
-	 */
-	private static $stock_decimals = 0;
 
 	/**
 	 * The ATUM fields within the WC's Product Data meta box (ATUM Inventory tab)
@@ -356,20 +351,11 @@ final class Globals {
 	 * @since 1.3.4
 	 *
 	 * @return int
+	 *
+	 * @deprecated since 1.9.37. Moved to AtumStockDecimals.
 	 */
 	public static function get_stock_decimals() {
-		return (int) apply_filters( 'atum/stock_decimals', self::$stock_decimals );
-	}
-
-	/**
-	 * Setter for the Stock Decimals property
-	 *
-	 * @since 1.3.4
-	 *
-	 * @param int $stock_decimals
-	 */
-	public static function set_stock_decimals( $stock_decimals ) {
-		self::$stock_decimals = absint( $stock_decimals );
+		return AtumStockDecimals::get_stock_decimals();
 	}
 
 	/**

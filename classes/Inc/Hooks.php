@@ -155,9 +155,6 @@ class Hooks {
 		// Save the date when any product goes out of stock.
 		add_action( 'woocommerce_product_set_stock', array( $this, 'record_out_of_stock_date' ), 20 );
 
-		// Set the stock decimals setting globally.
-		add_action( 'init', array( $this, 'stock_decimals' ), 11 );
-
 		// Delete the views' transients after changing the stock of any product.
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
@@ -290,31 +287,6 @@ class Hooks {
 
 		}
 
-	}
-
-	/**
-	 * Add set min quantities script to WC orders
-	 *
-	 * @since 1.4.18
-	 *
-	 * @param \WC_Order $order
-	 */
-	public function wc_orders_min_qty( $order ) {
-
-		$step = Helpers::get_input_step();
-
-		?>
-		<script type="text/javascript">
-			jQuery(function($) {
-				var $script = $('#tmpl-wc-modal-add-products');
-
-				$script.html($script.html().replace('step="1"', 'step="<?php echo esc_attr( $step ) ?>"')
-					.replace('<?php echo esc_attr( 'step="1"' ) ?>', '<?php echo esc_attr( 'step="' . $step . '"' ) ?>'));
-
-			});
-		</script>
-
-		<?php
 	}
 
 	/**
@@ -496,131 +468,6 @@ class Hooks {
 	}
 
 	/**
-	 * Set the stock decimals
-	 *
-	 * @since 1.3.8.2
-	 */
-	public function stock_decimals() {
-
-		Globals::set_stock_decimals( Helpers::get_option( 'stock_quantity_decimals', 0 ) );
-
-		// Maybe allow decimals for WC products' stock quantity.
-		if ( Globals::get_stock_decimals() > 0 ) {
-
-			// Add step value to the quantity field (WC default = 1).
-			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_step' ), 10, 2 );
-			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_min' ), 10, 2 );
-
-			// Removes the WooCommerce filter, that is validating the quantity to be an int.
-			remove_filter( 'woocommerce_stock_amount', 'intval' );
-
-			// Replace the above filter with a custom one that validates the quantity to be a int or float and applies rounding.
-			add_filter( 'woocommerce_stock_amount', array( $this, 'round_stock_quantity' ) );
-
-			// Customise the "Add to Cart" message to allow decimals in quantities.
-			add_filter( 'wc_add_to_cart_message_html', array( $this, 'add_to_cart_message' ), 10, 2 );
-
-			// Add custom decimal quantities to order add products.
-			add_action( 'woocommerce_order_item_add_line_buttons', array( $this, 'wc_orders_min_qty' ) );
-
-			// Change min_qty on quantity field on variable products if its necessary.
-			add_filter( 'woocommerce_available_variation', array( $this, 'maybe_change_variable_min_qty' ) );
-
-			// Stock status for decimal numbers under 1.
-			foreach ( [ 'product', 'product_variation' ] as $post_type ) {
-				add_filter( 'woocommerce_' . $post_type . '_get_stock_status', array( $this, 'get_stock_status' ), 10, 2 );
-			}
-
-			// Prevent WooPayments reduce stock.
-			add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'can_reduce_order_stock' ), PHP_INT_MAX, 2 );
-
-		}
-
-	}
-
-	/**
-	 * Set step value for the stock quantity input number field (WC default = 1)
-	 *
-	 * @since 1.3.4
-	 *
-	 * @param int         $value
-	 * @param \WC_Product $product
-	 *
-	 * @return float|int
-	 */
-	public function stock_quantity_input_step( $value, $product ) {
-		return Helpers::get_input_step();
-	}
-
-	/**
-	 * Set min and step value for the stock quantity input number field (WC default = 1)
-	 *
-	 * @since 1.9.34.1
-	 *
-	 * @param int         $value
-	 * @param \WC_Product $product
-	 *
-	 * @return float|int
-	 */
-	public function stock_quantity_input_min( $value, $product ) {
-
-		// Always > 0
-		$stock_decimals = Globals::get_stock_decimals();
-
-		$step = Helpers::get_option( 'stock_quantity_step', 0 );
-
-		$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
-
-		if ( $step_decimals && $step_decimals < $stock_decimals ) {
-			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
-			
-			return $step;
-		}
-
-		return ( 10 / pow( 10, $stock_decimals + 1 ) );
-		
-	}
-
-
-	/**
-	 * Customise the "Add to cart" messages to allow decimal places
-	 *
-	 * @since 1.3.4.1
-	 *
-	 * @param string    $message
-	 * @param int|array $products
-	 *
-	 * @return string
-	 */
-	public function add_to_cart_message( $message, $products ) {
-
-		$titles = array();
-		$count  = 0;
-
-		foreach ( $products as $product_id => $qty ) {
-			/* translators: the product title */
-			$titles[] = ( 1 != $qty ? round( floatval( $qty ), Globals::get_stock_decimals() ) . ' &times; ' : '' ) . sprintf( _x( '&ldquo;%s&rdquo;', 'Item name in quotes', ATUM_TEXT_DOMAIN ), wp_strip_all_tags( get_the_title( $product_id ) ) ); // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-			$count   += $qty;
-		}
-
-		$titles = array_filter( $titles );
-		/* translators: the titles of products added to the cart */
-		$added_text = sprintf( _n( '%s has been added to your cart.', '%s have been added to your cart.', $count, ATUM_TEXT_DOMAIN ), wc_format_list_of_items( $titles ) );
-
-		// Output success messages.
-		if ( 'yes' === get_option( 'woocommerce_cart_redirect_after_add' ) ) {
-			$return_to = apply_filters( 'woocommerce_continue_shopping_redirect', wc_get_raw_referer() ? wp_validate_redirect( wc_get_raw_referer(), FALSE ) : wc_get_page_permalink( 'shop' ) );
-			$message   = sprintf( '<a href="%s" class="button wc-forward">%s</a> %s', esc_url( $return_to ), esc_html__( 'Continue shopping', ATUM_TEXT_DOMAIN ), esc_html( $added_text ) );
-		}
-		else {
-			$message = sprintf( '<a href="%s" class="button wc-forward">%s</a> %s', esc_url( wc_get_page_permalink( 'cart' ) ), esc_html__( 'View cart', ATUM_TEXT_DOMAIN ), esc_html( $added_text ) );
-		}
-
-		return $message;
-
-	}
-
-	/**
 	 * Execute tasks after ATUM settings updated.
 	 * Version 1.9.7 -> renamed from rebuild_stock_status_on_oost_changes
 	 *
@@ -688,27 +535,7 @@ class Hooks {
 	}
 
 	/**
-	 * Round the stock quantity according to the number of decimals specified in settings
-	 *
-	 * @since 1.4.13
-	 *
-	 * @param float|int $qty
-	 *
-	 * @return float|int
-	 */
-	public function round_stock_quantity( $qty ) {
-
-		if ( ! Globals::get_stock_decimals() ) {
-			return intval( $qty );
-		}
-		else {
-			return round( floatval( $qty ), Globals::get_stock_decimals() );
-		}
-
-	}
-
-	/**
-	 * Change the out of stock threshold if this->stock_threshold has value
+	 * Change the out-of-stock threshold if this->stock_threshold has value
 	 *
 	 * @since 1.4.15
 	 *
@@ -1587,76 +1414,6 @@ class Hooks {
 	}
 
 	/**
-	 * Check if its necesary change the variable min quantity value
-	 *
-	 * @since 1.9.2
-	 *        
-	 * @param array $variation_atts
-	 *
-	 * @return array
-	 */
-	public function maybe_change_variable_min_qty( $variation_atts ) {
-
-		$input_step = Helpers::get_input_step();
-
-		if ( $input_step ) {
-			$variation_atts['min_qty'] = $input_step;
-		}
-
-		return $variation_atts;
-
-	}
-
-	/**
-	 * Check stock quantity when stock is value has decimals under 1.
-	 *
-	 * @since 1.9.34
-	 *
-	 * @param string      $stock_status
-	 * @param \WC_Product $product
-	 */
-	public function get_stock_status( $stock_status, $product ) {
-
-		$no_stock = floatval( get_option( 'woocommerce_notify_no_stock_amount' ) ) ?: 0;
-		$product  = Helpers::get_atum_product( $product );
-
-		$stock = $product->get_stock_quantity();
-
-		if ( 'no' !== Helpers::get_option( 'out_stock_threshold', 'no' ) && $product->get_out_stock_threshold() !== '' ) {
-			$no_stock = $product->get_out_stock_threshold();
-		}
-
-		if ( $stock < 1 && 'instock' !== $stock_status && $stock > $no_stock ) {
-			$stock_status = 'instock';
-		}
-
-		return $stock_status;
-	}
-
-	/**
-	 * Prevent WooPayments reduce order stock and override ATUM methods.
-	 *
-	 * @since 1.9.34
-	 *
-	 * @param boolean   $can_reduce_stock
-	 * @param \WC_Order $order
-	 *
-	 * @return boolean
-	 */
-	public function can_reduce_order_stock( $can_reduce_stock, $order ) {
-
-		if ( class_exists( '\WC_Payment_Gateway_WCPay' ) &&
-			wc_string_to_bool( Helpers::get_option( 'chg_stock_order_complete', 'no' ) ) &&
-			'processing' === $order->get_status() &&
-			'woocommerce_payments' === $order->get_payment_method()
-		) {
-			$can_reduce_stock = FALSE;
-		}
-
-		return $can_reduce_stock;
-	}
-
-	/**
 	 * Avoid to restock refunded items.
 	 *
 	 * @since 1.9.34.1
@@ -1674,6 +1431,7 @@ class Hooks {
 
 		return $allow;
 	}
+
 
 	/********************
 	 * Instance methods

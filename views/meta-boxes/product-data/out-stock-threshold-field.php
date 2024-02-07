@@ -16,6 +16,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumStockDecimals;
 use Atum\Inc\Helpers;
 
 $visibility_classes = implode( ' ', $visibility_classes );
@@ -34,7 +35,7 @@ if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) : ?>
 			<span class="atum-field input-group">
 				<?php Helpers::atum_field_input_addon() ?>
 
-				<input type="number" class="short" step="<?php echo esc_attr( Helpers::get_input_step() ) ?>" name="<?php echo esc_attr( $out_stock_threshold_field_name ) ?>"
+				<input type="number" class="short" step="<?php echo esc_attr( AtumStockDecimals::get_input_step() ) ?>" name="<?php echo esc_attr( $out_stock_threshold_field_name ) ?>"
 					id="<?php echo esc_attr( $out_stock_threshold_field_id ) ?>" value="<?php echo esc_attr( $out_stock_threshold ) ?>"
 					<?php /* translators: the global WC out of stock threshold  */ ?>
 					placeholder="<?php printf( esc_attr__( 'Store-wide threshold (%d)', ATUM_TEXT_DOMAIN ), $woocommerce_notify_no_stock_amount ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"

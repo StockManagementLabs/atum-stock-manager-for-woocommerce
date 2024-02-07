@@ -28,6 +28,7 @@ use Atum\Components\AtumEmailNotifications;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumQueues;
+use Atum\Components\AtumStockDecimals;
 use Atum\Dashboard\Dashboard;
 use Atum\DataExport\DataExport;
 use Atum\InboundStock\InboundStock;
@@ -251,6 +252,7 @@ class Main {
 		ModuleManager::get_instance();
 		AtumCapabilities::get_instance();
 		Hooks::get_instance();
+		AtumStockDecimals::get_instance();
 		Addons::get_instance();
 		Ajax::get_instance();
 		Settings::get_instance();

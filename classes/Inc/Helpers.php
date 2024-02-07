@@ -21,6 +21,7 @@ use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
+use Atum\Components\AtumStockDecimals;
 use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
@@ -2690,33 +2691,11 @@ final class Helpers {
 	 * @since 1.4.18
 	 *
 	 * @return float|int
+	 *
+	 * @deprecated since 1.9.37. Moved to AtumStockDecimals.
 	 */
 	public static function get_input_step() {
-
-		$stock_decimals = Globals::get_stock_decimals();
-
-		if ( ! $stock_decimals ) {
-			return 1;
-		}
-		
-		$step = self::get_option( 'stock_quantity_step', 0 );
-
-		if ( ! is_numeric( $step ) || 0.0 === (float) $step ) {
-			return 'any';
-		}
-
-		$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
-
-		// Allow values like 0.125 when 3 decimals are set and the step is like 0.1.
-		if ( $step_decimals && $step_decimals < $stock_decimals ) {
-			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
-
-			return $step;
-		}
-
-		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
-		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-
+		return AtumStockDecimals::get_input_step();
 	}
 
 	/**

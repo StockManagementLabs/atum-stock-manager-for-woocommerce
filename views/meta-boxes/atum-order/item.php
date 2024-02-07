@@ -12,6 +12,7 @@
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumStockDecimals;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Components\AtumCapabilities;
@@ -25,7 +26,7 @@ if ( $product instanceof \WC_Product ) {
 	$product_id = 'variation' === $product->get_type() ? $product->get_parent_id() : $product->get_id();
 }
 
-$step         = Helpers::get_input_step();
+$step         = AtumStockDecimals::get_input_step();
 $product_link = $product_id ? admin_url( "post.php?post={$product_id}&action=edit" ) : '';
 $thumbnail    = $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $product->get_image( 'thumbnail', array( 'title' => '' ), FALSE ), $item_id, $item ) : '';
 ?>
