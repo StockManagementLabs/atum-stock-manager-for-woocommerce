@@ -507,7 +507,7 @@ class Settings {
 				'group'      => 'store_details',
 				'section'    => 'company',
 				'name'       => __( 'Use as shipping address', ATUM_TEXT_DOMAIN ),
-				'desc'       => __( "When enabled, the shipping address will be the same that the company's address.", ATUM_TEXT_DOMAIN ),
+				'desc'       => __( "When enabled, the shipping address will be the same as the company's address.", ATUM_TEXT_DOMAIN ),
 				'type'       => 'switcher',
 				'default'    => 'yes',
 				'dependency' => array(
