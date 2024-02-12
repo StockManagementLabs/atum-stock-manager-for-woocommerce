@@ -53,13 +53,6 @@ abstract class AtumOrderPostType {
 	protected $capabilities = array();
 
 	/**
-	 * The query var name used in list searches
-	 *
-	 * @var string
-	 */
-	protected $search_label = 'atum_order';
-
-	/**
 	 * The help guide for the list table page
 	 *
 	 * @var string
@@ -140,10 +133,8 @@ abstract class AtumOrderPostType {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
 			add_action( 'admin_footer', array( $this, 'print_scripts' ) );
 
-			// ATUM Orders search.
-			add_filter( 'get_search_query', array( $this, 'search_label' ) );
-			add_filter( 'query_vars', array( $this, 'add_custom_search_query_var' ) );
-			add_action( 'parse_query', array( $this, 'search_custom_fields' ) );
+			// Enhanced ATUM Orders search.
+			add_filter( 'posts_search', array( $this, 'add_search_criteria_to_orders_list' ), 100, 2 );
 
 			// Move the 'trash' status to the end of the list.
 			add_filter( "views_edit-$post_type", array( $this, 'edit_list_table_views' ) );
@@ -1080,69 +1071,36 @@ abstract class AtumOrderPostType {
 	}
 
 	/**
-	 * Change the label when searching ATUM Orders
+	 * Allow searching within ATUM orders' meta keys and ATUM order items.
 	 *
-	 * @since 1.3.9.2
+	 * @since 1.9.37
 	 *
-	 * @param mixed $query
+	 * @param string    $search   Search clause used.
+	 * @param \WP_Query $wp_query The current WP_Query object.
 	 *
 	 * @return string
 	 */
-	public function search_label( $query ) {
-
-		global $pagenow, $typenow;
-
-		if ( 'edit.php' !== $pagenow ) {
-			return $query;
-		}
-
-		if ( static::POST_TYPE !== $typenow ) {
-			return $query;
-		}
-
-		if ( ! get_query_var( $this->search_label ) ) {
-			return $query;
-		}
-
-		return wp_unslash( $_GET['s'] );
-
-	}
-
-	/**
-	 * Query vars for ATUM Order's custom searches
-	 *
-	 * @since 1.3.9.2
-	 *
-	 * @param mixed $public_query_vars
-	 *
-	 * @return array
-	 */
-	public function add_custom_search_query_var( $public_query_vars ) {
-		$public_query_vars[] = $this->search_label;
-
-		return $public_query_vars;
-	}
-
-	/**
-	 * Search custom fields as well as content
-	 *
-	 * @since 1.3.9.2
-	 *
-	 * @param \WP_Query $query
-	 */
-	public function search_custom_fields( $query ) {
+	public function add_search_criteria_to_orders_list( $search, $wp_query ) {
 
 		global $pagenow, $wpdb;
 
 		$post_type = static::POST_TYPE;
 
-		if ( 'edit.php' !== $pagenow || empty( $query->query_vars['s'] ) || $post_type !== $query->query_vars['post_type'] ) {
-			return;
+		// Check if we are on the pick-pack list table.
+		if ( $post_type !== $wp_query->get( 'post_type' ) ) {
+			return $search;
+		}
+
+		$search_term = $wp_query->get( 's' );
+
+		// Check if we are searching.
+		if ( 'edit.php' !== $pagenow || empty( $search_term ) ) {
+			return $search;
 		}
 
 		// Remove non-needed strings from search terms.
-		$term = str_replace(
-			array(
+		$search_term = str_replace(
+			apply_filters( "atum/$post_type/replace_order_name_strings", array(
 				__( 'Order #', ATUM_TEXT_DOMAIN ),
 				'Order #',
 				__( 'Purchase Order #', ATUM_TEXT_DOMAIN ),
@@ -1152,48 +1110,67 @@ abstract class AtumOrderPostType {
 				__( 'Log #', ATUM_TEXT_DOMAIN ),
 				'Log #',
 				'#',
-			),
+			) ),
 			'',
-			wc_clean( $_GET['s'] )
+			wc_clean( $wp_query->get( 's' ) )
 		);
 
-		// Searches on meta data can be slow - this let you choose what fields to search in.
-		$search_fields  = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_fields", [] ) );
-		$atum_order_ids = array();
+		$criteria = array(
+			'join' => array(
+				"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`",
+				"LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`",
+			),
+			'where' => array(
+				"`order_item_name` LIKE '%%$search_term%%'", // Search by order item names.
+			),
+		);
 
-		if ( is_numeric( $term ) ) {
-			$atum_order_ids[] = absint( $term );
+		// Join needed to search by SKU.
+		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
+			$criteria['join'][]  = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON oim.meta_value = pml.product_id";
+			$criteria['where'][] = "pml.sku LIKE '%%$search_term%%'"; // Search by SKU.
+		}
+		else {
+			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta AS pmoi ON (oim.meta_value = pmoi.post_id AND pmoi.meta_key = '_sku')";
+			$criteria['where'][] = "pmoi.meta_value LIKE '%%$search_term%%'"; // Search by SKU.
 		}
 
-		if ( ! empty( $search_fields ) ) {
+		// Search by order meta.
+		// NOTE: Searches on metadata can be slow - this let you choose what fields to search in.
+		$search_meta_keys = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_meta_keys", [] ) );
+		if ( ! empty( $search_meta_keys ) ) {
+			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta AS pmo ON (p.ID = pmo.post_id AND pmo.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_meta_keys ) ) . "'))";
+			$criteria['where'][] = "pmo.meta_value LIKE '%%$search_term%%'"; // Search by order meta keys.
+		}
 
-			// phpcs:disable
-			$atum_order_ids = array_unique( array_merge(
-				$atum_order_ids,
-				$wpdb->get_col(
-					"SELECT DISTINCT p1.post_id FROM $wpdb->postmeta p1 WHERE p1.meta_value LIKE '%" . $wpdb->esc_like( $term ) . "%'" .
-					" AND p1.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_fields ) ) . "')"
-				),
-				$wpdb->get_col(
-					"SELECT order_id FROM $wpdb->prefix" . self::ORDER_ITEMS_TABLE . " WHERE order_item_name LIKE '%" . $wpdb->esc_like( $term ) . "%'"
-				)
-			) );
-			// phpcs:enable
+		$criteria = apply_filters( "atum/$post_type/extra_search", $criteria, $search_term );
+
+		// phpcs:disable
+		$sql = $wpdb->prepare( "
+			SELECT DISTINCT `order_id` 			
+			FROM `$wpdb->prefix" . self::ORDER_ITEMS_TABLE . "` AS oi\n" .
+			implode( "\n", $criteria['join'] ) . "
+			WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
+			AND p.`post_type` = %s AND oim.`meta_value` > 0	AND  
+			(" . implode( ' OR ', $criteria['where'] ) . ")",
+			static::POST_TYPE
+		);
+		// phpcs:enable
+
+		$search_parts = explode( ')', $search );
+
+		foreach ( $search_parts as $index => $part ) {
+
+			// Search for the first occurrence of the closing parenthesis.
+			if ( ! $part ) {
+				// Insert the new search clause after this index.
+				array_splice( $search_parts, $index, 0, " OR ( $wpdb->posts.ID IN ($sql)" );
+				break;
+			}
 
 		}
 
-		$atum_order_ids = apply_filters( "atum/$post_type/search_results", $atum_order_ids, $term, $search_fields );
-
-		if ( ! empty( $atum_order_ids ) ) {
-			// Remove "s" - we don't want to search ATUM Order names.
-			unset( $query->query_vars['s'] );
-
-			// So we know we're doing this.
-			$query->query_vars[ $this->search_label ] = TRUE;
-
-			// Search by found posts.
-			$query->query_vars['post__in'] = array_merge( $atum_order_ids, [ 0 ] );
-		}
+		return implode( ')', $search_parts );
 
 	}
 

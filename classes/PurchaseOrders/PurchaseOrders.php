@@ -35,13 +35,6 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @var PurchaseOrders
 	 */
 	private static $instance;
-
-	/**
-	 * The query var name used in list searches
-	 *
-	 * @var string
-	 */
-	protected $search_label = ATUM_PREFIX . 'po_search';
 	
 	/**
 	 * Status that means an ATUM Order is finished
@@ -158,8 +151,8 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 4 );
 
 		// Add custom search for POs.
-		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'po_search' ), 10, 3 );
-		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+		add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'po_search' ), 10, 2 );
+		add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
 
 		// Add message before the PO product search.
 		add_action( 'atum/atum_order/before_product_search_modal', array( $this, 'product_search_message' ) );
@@ -690,7 +683,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Set the custom fields that are available for searches within the PO's list
+	 * Set the meta keys that are available for searches within the POs list
 	 *
 	 * @since 1.6.1
 	 *
@@ -698,9 +691,9 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @return array
 	 */
-	public function search_fields( $fields ) {
+	public function search_meta_keys( $fields ) {
 
-		// NOTE: For now we are going to support searches within the custom columns displayed on the ILs list.
+		// NOTE: For now we are going to support searches within the custom columns displayed on the POs list.
 		return array_merge( $fields, [ '_total' ] );
 
 	}
@@ -710,13 +703,15 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @since 1.6.1
 	 *
-	 * @param array $atum_order_ids
+	 * @param array $criteria {
+	 *    @type string[] $join
+	 *    @type string[] $where
+	 * }
 	 * @param mixed $term
-	 * @param array $search_fields
 	 *
 	 * @return array
 	 */
-	public function po_search( $atum_order_ids, $term, $search_fields ) {
+	public function po_search( $criteria, $term ) {
 
 		global $wpdb;
 
@@ -726,47 +721,31 @@ class PurchaseOrders extends AtumOrderPostType {
 		if ( ! is_numeric( $term ) && strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE );
-			$term = "%$date%";
+			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
 
-			$ids = $wpdb->get_col( $wpdb->prepare( "
-				SELECT ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = '_date_expected')
-				WHERE (meta_value LIKE %s OR post_date_gmt LIKE %s)
-				AND post_type = %s			
-			", $term, $term, self::POST_TYPE ) );
+			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = '_date_expected')";
+			$criteria['where'][] = "(pme1.meta_value LIKE '%%$date%%' OR p.post_date_gmt LIKE '%%$date%%')";
 
 		}
-		// Strings: search in supplier names or user names.
+		// Strings: search in supplier names or author names.
 		else {
 
-			$sup_ids = $wpdb->get_col( $wpdb->prepare( "
-				SELECT ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->postmeta pm ON (p.ID = pm.post_id AND meta_key = %s)
-				WHERE meta_value IN (
+			$criteria['join'][]  = $wpdb->prepare( "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = %s)", Suppliers::SUPPLIER_FIELD_KEY );
+			$criteria['where'][] = $wpdb->prepare( "
+				(pme1.meta_value IN (
 					SELECT ID FROM $wpdb->posts
 					WHERE post_title LIKE %s AND post_type = %s
-				)	
-				AND post_type = %s",
-				Suppliers::SUPPLIER_FIELD_KEY,
-				'%' . $wpdb->esc_like( $term ) . '%',
-				Suppliers::POST_TYPE,
-				self::POST_TYPE
-			) );
+				))",
+				"%%$term%%",
+				Suppliers::POST_TYPE
+			);
 
-			$usr_ids = $wpdb->get_col( $wpdb->prepare( "
-				SELECT p.ID FROM $wpdb->posts p
-				LEFT JOIN $wpdb->users u ON (p.post_author = u.ID)
-				WHERE user_login LIKE %s AND post_type = %s",
-				'%' . $wpdb->esc_like( $term ) . '%',
-				self::POST_TYPE
-			) );
-
-			$ids = array_merge( $sup_ids, $usr_ids );
+			$criteria['join'][]  = "LEFT JOIN $wpdb->users u ON (p.post_author = u.ID)";
+			$criteria['where'][] = $wpdb->prepare( "(u.user_login LIKE %s)", "%%$term%%" );
 
 		}
 
-		return array_unique( array_merge( $atum_order_ids, $ids ) );
+		return $criteria;
 
 	}
 

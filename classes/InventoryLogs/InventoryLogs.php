@@ -29,13 +29,6 @@ class InventoryLogs extends AtumOrderPostType {
 	private static $instance;
 
 	/**
-	 * The query var name used in list searches
-	 *
-	 * @var string
-	 */
-	protected $search_label = ATUM_PREFIX . 'log_search';
-
-	/**
 	 * The Inventory Log post type name
 	 */
 	const POST_TYPE = ATUM_PREFIX . 'inventory_log';
@@ -128,8 +121,8 @@ class InventoryLogs extends AtumOrderPostType {
 		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 
 		// Add custom search for ILs.
-		add_action( 'atum/' . self::POST_TYPE . '/search_results', array( $this, 'il_search' ), 10, 3 );
-		add_filter( 'atum/' . self::POST_TYPE . '/search_fields', array( $this, 'search_fields' ) );
+		add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'il_search' ), 10, 2 );
+		add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
 
 		// Add the buttons for increasing/decreasing the Log products' stock.
 		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
@@ -573,7 +566,7 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @return array
 	 */
-	public function search_fields( $fields ) {
+	public function search_meta_keys( $fields ) {
 
 		// NOTE: For now we are going to support searches within the custom columns displayed on the ILs list.
 		return array_merge( $fields, [ '_order', '_total', '_type', '_custom_name' ] );
@@ -585,33 +578,30 @@ class InventoryLogs extends AtumOrderPostType {
 	 *
 	 * @since 1.6.1
 	 *
-	 * @param array $atum_order_ids
+	 * @param array $criteria {
+	 *    @type string[] $join
+	 *    @type string[] $where
+	 * }
 	 * @param mixed $term
-	 * @param array $search_fields
 	 *
 	 * @return array
 	 */
-	public function il_search( $atum_order_ids, $term, $search_fields ) {
+	public function il_search( $criteria, $term ) {
 
 		global $wpdb;
 
-		// Dates: search in post_modified and date_expected dates.
+		// Dates: search in post_modified date, reservation_date, return_date or damage_date.
 		if ( strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE );
-			$term = "%$date%";
+			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
 
-			$ids = $wpdb->get_col( $wpdb->prepare( "
-				SELECT ID FROM $wpdb->posts p
-				WHERE post_date_gmt LIKE %s AND post_type = %s			
-			", $term, self::POST_TYPE ) );
-
-			$atum_order_ids = array_unique( array_merge( $atum_order_ids, $ids ) );
+			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key IN ('_reservation_date', '_return_date', '_damage_date'))";
+			$criteria['where'][] = "(pme1.meta_value LIKE '%%$date%%' OR p.post_date_gmt LIKE '%%$date%%')";
 
 		}
 
-		return $atum_order_ids;
+		return $criteria;
 
 	}
 
