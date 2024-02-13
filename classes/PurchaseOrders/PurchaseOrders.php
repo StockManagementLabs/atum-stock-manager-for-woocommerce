@@ -134,9 +134,6 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Add the "Purchase Orders" link to the ATUM's admin bar menu.
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 11 );
-
-		// Add the help tab to PO list page.
-		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 		
 		// Add pdf Purchase Order print.
 		add_filter( 'atum/' . self::POST_TYPE . '/admin_order_actions', array( $this, 'add_generate_pdf' ), 10, 2 );
@@ -149,10 +146,6 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		// Use the purchase price when adding products to a PO.
 		add_filter( 'atum/order/add_product/price', array( $this, 'use_purchase_price' ), 10, 4 );
-
-		// Add custom search for POs.
-		add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'po_search' ), 10, 2 );
-		add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
 
 		// Add message before the PO product search.
 		add_action( 'atum/atum_order/before_product_search_modal', array( $this, 'product_search_message' ) );
@@ -170,11 +163,20 @@ class PurchaseOrders extends AtumOrderPostType {
 		add_action( 'atum/orders/status_changed', array( $this, 'maybe_decrease_stock_levels' ), 10, 4 );
 
 		if ( is_admin() ) {
+
+			// Add the help tab to PO list page.
+			add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+
+			// Add custom search for POs.
+			add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'po_search' ), 10, 2 );
+			add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
+
 			// Add unknown status POs view if any. After Trash.
 			add_filter( 'views_edit-' . self::POST_TYPE, array( $this, 'maybe_add_unknown_view' ), 11 );
 
 			// Check whether to show an admin notice to the PO.
 			add_action( 'current_screen', array( $this, 'maybe_show_admin_notice' ), 9 );
+
 		}
 
 	}
@@ -704,9 +706,13 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @since 1.6.1
 	 *
 	 * @param array $criteria {
-	 *    @type string[] $join
-	 *    @type string[] $where
+	 *   @type string[] $cols
+	 *   @type string   $from
+	 *   @type string[] $join
+	 *   @type string[] $where
+	 *   @type string[] $search_where
 	 * }
+	 *
 	 * @param mixed $term
 	 *
 	 * @return array
@@ -723,15 +729,16 @@ class PurchaseOrders extends AtumOrderPostType {
 			// Format the date in MySQL format.
 			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
 
-			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = '_date_expected')";
-			$criteria['where'][] = "(pme1.meta_value LIKE '%%$date%%' OR p.post_date_gmt LIKE '%%$date%%')";
+			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = '_date_expected')";
+			$criteria['search_where'][] = $wpdb->prepare( 'pme1.meta_value LIKE %s', "%%$date%%" );
+			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date_gmt LIKE %s', "%%$date%%" );
 
 		}
 		// Strings: search in supplier names or author names.
 		else {
 
-			$criteria['join'][]  = $wpdb->prepare( "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = %s)", Suppliers::SUPPLIER_FIELD_KEY );
-			$criteria['where'][] = $wpdb->prepare( "
+			$criteria['join'][]         = $wpdb->prepare( "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = %s)", Suppliers::SUPPLIER_FIELD_KEY );
+			$criteria['search_where'][] = $wpdb->prepare( "
 				(pme1.meta_value IN (
 					SELECT ID FROM $wpdb->posts
 					WHERE post_title LIKE %s AND post_type = %s
@@ -740,8 +747,8 @@ class PurchaseOrders extends AtumOrderPostType {
 				Suppliers::POST_TYPE
 			);
 
-			$criteria['join'][]  = "LEFT JOIN $wpdb->users u ON (p.post_author = u.ID)";
-			$criteria['where'][] = $wpdb->prepare( "(u.user_login LIKE %s)", "%%$term%%" );
+			$criteria['join'][]         = "LEFT JOIN $wpdb->users u ON (p.post_author = u.ID)";
+			$criteria['search_where'][] = $wpdb->prepare( 'u.user_login LIKE %s', "%%$term%%" );
 
 		}
 

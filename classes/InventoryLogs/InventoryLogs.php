@@ -114,19 +114,23 @@ class InventoryLogs extends AtumOrderPostType {
 		// Add the "Inventory Logs" link to the ATUM's admin bar menu.
 		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
 
-		// Add the filters to the post type list table.
-		add_action( 'restrict_manage_posts', array( $this, 'add_log_filters' ) );
+		if ( is_admin() ) {
 
-		// Add the help tab to Inventory Logs' list page.
-		add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+			// Add the filters to the post type list table.
+			add_action( 'restrict_manage_posts', array( $this, 'add_log_filters' ) );
 
-		// Add custom search for ILs.
-		add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'il_search' ), 10, 2 );
-		add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
+			// Add the help tab to Inventory Logs' list page.
+			add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
 
-		// Add the buttons for increasing/decreasing the Log products' stock.
-		add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
-		
+			// Add custom search for ILs.
+			add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'il_search' ), 10, 2 );
+			add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
+
+			// Add the buttons for increasing/decreasing the Log products' stock.
+			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
+
+		}
+
 	}
 
 	/**
@@ -579,8 +583,11 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @since 1.6.1
 	 *
 	 * @param array $criteria {
+	 *    @type string[] $cols
+	 *    @type string   $from
 	 *    @type string[] $join
 	 *    @type string[] $where
+	 *    @type string[] $search_where
 	 * }
 	 * @param mixed $term
 	 *
@@ -596,8 +603,9 @@ class InventoryLogs extends AtumOrderPostType {
 			// Format the date in MySQL format.
 			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
 
-			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key IN ('_reservation_date', '_return_date', '_damage_date'))";
-			$criteria['where'][] = "(pme1.meta_value LIKE '%%$date%%' OR p.post_date_gmt LIKE '%%$date%%')";
+			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key IN ('_reservation_date', '_return_date', '_damage_date'))";
+			$criteria['search_where'][] = $wpdb->prepare( 'pme1.meta_value LIKE %s', "%%$date%%" );
+			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date_gmt LIKE %s', "%%$date%%" );
 
 		}
 
