@@ -1116,47 +1116,53 @@ abstract class AtumOrderPostType {
 		);
 
 		$criteria = array(
-			'join' => array(
-				"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`",
+			'cols'         => array( 'DISTINCT oi.`order_id`' ),
+			'from'         => "FROM `$wpdb->prefix" . self::ORDER_ITEMS_TABLE . "`",
+			'join'         => array(
+				"LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON (oi.`order_item_id` = oim.`order_item_id` AND oim.`meta_key` IN ('_product_id', '_variation_id'))",
 				"LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`",
 			),
-			'where' => array(
-				"`order_item_name` LIKE '%%$search_term%%'", // Search by order item names.
+			// The where is the main clause separated by ANDs.
+			'where'        => array(
+				"oi.`order_item_type` = 'line_item'",
+				'oim.`meta_value` > 0',
+				$wpdb->prepare( 'p.`post_type` = %s', static::POST_TYPE ),
+			),
+			// The search where is a clause separated by ORs.
+			'search_where' => array(
+				"oi.`order_item_name` LIKE '%%$search_term%%'", // Search by order item names.
 			),
 		);
 
 		// Join needed to search by SKU.
 		if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
-			$criteria['join'][]  = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON oim.meta_value = pml.product_id";
-			$criteria['where'][] = "pml.sku LIKE '%%$search_term%%'"; // Search by SKU.
+			$criteria['join'][]         = "LEFT JOIN $wpdb->wc_product_meta_lookup AS pml ON oim.`meta_value` = pml.`product_id`";
+			$criteria['search_where'][] = "pml.`sku` LIKE '%%$search_term%%'"; // Search by SKU.
 		}
 		else {
-			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta AS pmoi ON (oim.meta_value = pmoi.post_id AND pmoi.meta_key = '_sku')";
-			$criteria['where'][] = "pmoi.meta_value LIKE '%%$search_term%%'"; // Search by SKU.
+			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta AS pmoi ON (oim.`meta_value` = pmoi.`post_id` AND pmoi.`meta_key` = '_sku')";
+			$criteria['search_where'][] = "pmoi.`meta_value` LIKE '%%$search_term%%'"; // Search by SKU.
 		}
 
 		// Search by order meta.
-		// NOTE: Searches on metadata can be slow - this let you choose what fields to search in.
+		// NOTE: Searches on post metadata can be slow - this let you choose what fields to search in.
 		$search_meta_keys = array_map( 'wc_clean', apply_filters( "atum/$post_type/search_meta_keys", [] ) );
 		if ( ! empty( $search_meta_keys ) ) {
-			$criteria['join'][]  = "LEFT JOIN $wpdb->postmeta AS pmo ON (p.ID = pmo.post_id AND pmo.meta_key IN ('" . implode( "','", array_map( 'esc_sql', $search_meta_keys ) ) . "'))";
-			$criteria['where'][] = "pmo.meta_value LIKE '%%$search_term%%'"; // Search by order meta keys.
+			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta AS pmo ON (p.`ID` = pmo.`post_id` AND pmo.`meta_key` IN ('" . implode( "','", array_map( 'esc_sql', $search_meta_keys ) ) . "'))";
+			$criteria['search_where'][] = "pmo.`meta_value` LIKE '%%$search_term%%'"; // Search by order meta keys.
 		}
 
 		$criteria = apply_filters( "atum/$post_type/extra_search", $criteria, $search_term );
 
-		// phpcs:disable
-		$sql = $wpdb->prepare( "
-			SELECT DISTINCT `order_id` 			
-			FROM `$wpdb->prefix" . self::ORDER_ITEMS_TABLE . "` AS oi\n" .
-			implode( "\n", $criteria['join'] ) . "
-			WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
-			AND p.`post_type` = %s AND oim.`meta_value` > 0	AND  
-			(" . implode( ' OR ', $criteria['where'] ) . ")",
-			static::POST_TYPE
-		);
-		// phpcs:enable
+		$sql = '
+			SELECT ' . implode( ', ', $criteria['cols'] ) . "\n" .
+            $criteria['from'] . " AS oi\n" .
+			implode( "\n", $criteria['join'] ) . "\n
+			WHERE " . ( ! empty( $criteria['where'] ) ? implode( ' AND ', $criteria['where'] ) . " AND\n" : '' ) .
+			'(' . implode( ' OR ', $criteria['search_where'] ) . ')
+		';
 
+		// Add the extended search clause to the main search.
 		$search_parts = explode( ')', $search );
 
 		foreach ( $search_parts as $index => $part ) {
