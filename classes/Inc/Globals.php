@@ -97,7 +97,6 @@ final class Globals {
 		'shop_order'                    => 1,
 		ATUM_PREFIX . 'purchase_order'  => 2,
 		ATUM_PREFIX . 'inventory_log'   => 3,
-		ATUM_PREFIX . 'pick_pack_order' => 4,
 	);
 
 	/**
@@ -464,10 +463,13 @@ final class Globals {
 	public static function get_order_type_id( $type = 'shop_order' ) {
 
 		if ( $type ) {
-			return isset( self::$order_type_ids[ $type ] ) ? self::$order_type_ids[ $type ] : FALSE;
+			$order_type_id = self::$order_type_ids[ $type ] ?? FALSE;
+		}
+		else {
+			$order_type_id = self::$order_type_ids;
 		}
 		
-		return self::$order_type_ids;
+		return apply_filters( 'atum/order_type_ids', $order_type_id, $type );
 		
 	}
 
