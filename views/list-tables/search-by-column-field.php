@@ -24,7 +24,7 @@ $dropdown_required = empty( $menu_items ) || count( $menu_items ) > 1;
 				<?php if ( empty( $_REQUEST['atum_search_column'] ) ) : ?>
 					<?php echo esc_html( $no_option ?? __( 'Search In', ATUM_TEXT_DOMAIN ) ) ?>
 				<?php else : ?>
-					<?php echo esc_html( $_REQUEST['atum_search_column'] ) ?>
+					<?php echo esc_html( ucwords( $_REQUEST['atum_search_column'] ) ) ?>
 				<?php endif; ?>
 			</button>
 
