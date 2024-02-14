@@ -62,15 +62,14 @@ export default class SearchOrdersByColumn {
 				evt.preventDefault();
 
 				const $item: JQuery = $( evt.currentTarget ),
-				      value: string = $item.data( 'value' ),
+				      column: string = $item.data( 'value' ),
 				      label: string = $item.text().trim(),
 				      noOptionLabel: string = this.$searchColumnDropdown.data( 'no-option' );
 
 				// Enable/Disable the input field.
-				console.log( 'value', value );
-				this.$searchInput.prop( 'disabled', ! value );
+				this.$searchInput.prop( 'disabled', ! column );
 
-				this.$searchColumnDropdown.children( 'input[type=hidden]' ).val( value );
+				this.$searchColumnDropdown.children( 'input[type=hidden]' ).val( column );
 
 				this.$searchColumnDropdown.hide()
 					.children( 'a.active' ).removeClass( 'active' );
@@ -78,12 +77,12 @@ export default class SearchOrdersByColumn {
 
 				this.$searchColumnBtn.attr( 'data-bs-original-title', noOptionLabel !== label ? `${ noOptionLabel } ${ label }` : label );
 				this.$searchColumnBtn.text( label );
-				this.$searchColumnBtn.data( 'value', value );
+				this.$searchColumnBtn.data( 'value', column );
 
 				this.tooltip.destroyTooltips( this.$searchColumnWrapper );
 				this.tooltip.addTooltips( this.$searchColumnWrapper );
 
-				if ( value ) {
+				if ( column ) {
 					this.$searchInput.focus();
 				}
 
