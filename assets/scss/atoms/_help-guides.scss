@@ -212,6 +212,10 @@ tr.introjs-showElement {
 		margin: auto !important;
 		transform: translate(-50%, -50%);
 	}
+	
+	&.wider-tooltip {
+		min-width: 500px;
+	}
 }
 
 .introjs-tooltiptext {
@@ -224,6 +228,8 @@ tr.introjs-showElement {
 	
 	img {
 		max-width: 100%;
+		display: block;
+		margin: auto;
 	}
 }
 
