@@ -24,9 +24,9 @@
 		"background" : ""
 	},
 	"description" : {
-		"text" : "<strong>Introducing our Pick and Pack Inventory Premium Add-On:</strong> Streamline your operations and supercharge your business! Say goodbye to inventory management headaches and hello to efficient order fulfilment. Maximize productivity, minimize errors, and watch your sales soar! Try it out today and experience the power of seamless inventory management.",
+		"text" : "Introducing our Pick and Pack Inventory Premium Add-On: Streamline your operations and supercharge your business! Say goodbye to inventory management headaches and hello to efficient order fulfilment. Maximize productivity, minimize errors, and watch your sales soar! Try it out today and experience the power of seamless inventory management.",
 		"text_color" : "#6c757d",
-		"text_size" : "14px",
+		"text_size" : "13px",
 		"text_align" : "justify",
 		"dash_text_align" : "left",
 		"padding" : "0 9px 25px"
