@@ -1,50 +1,52 @@
 {
 	"background" : {
-		"bg_image" : "url(https://stockmanagementlabs.com/wp-content/uploads/2018/07/waves.svg)",
+		"bg_image" : "url(https://stockmanagementlabs.com/wp-content/uploads/2024/02/waves-pick-pack.svg)",
 		"bg_position" : "bottom",
 		"bg_size" : "contain",
 		"bg_repeat" : "no-repeat",
 		"bg_color" : "#f5fdff"
 	},
 	"images" : {
-		"logo" : "https://stockmanagementlabs.com/wp-content/uploads/edd/2022/02/icon-pl.svg",
-		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/edd/2022/02/icon-pl.svg",
-		"logo_css" : "",
-		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2024/01/label-new-featured2.svg"
+		"logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",
+		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",
+		"logo_css" : "width: 357px",
+		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/label-pickpack.svg"
 	},
 	"title": {
-		"text"      : "Product<strong>Levels</strong>",
+		"text"      : "Pick&<strong>Pack</strong>",
 		"text_color": "black",
 		"text_size" : "",
 		"text_align": "center"
 	},
 	"version" : {
-		"text" : "v1.9.2",
-		"text_color" : "#FFF",
-		"background" : "#9357cc"
+		"text" : "",
+		"text_color" : "",
+		"background" : ""
 	},
 	"description" : {
-		"text" : "<strong>NEW FEATURE!</strong> Product Levels Premium Add-on just got better. Produce from your Bill Of Materials with one simple click.",
+		"text" : "<strong>Introducing our Pick and Pack Inventory Premium Add-On:</strong> Streamline your operations and supercharge your business! Say goodbye to inventory management headaches and hello to efficient order fulfilment. Maximize productivity, minimize errors, and watch your sales soar! Try it out today and experience the power of seamless inventory management.",
 		"text_color" : "#6c757d",
 		"text_size" : "14px",
-		"text_align" : "center",
+		"text_align" : "justify",
 		"dash_text_align" : "left",
 		"padding" : "0 9px 25px"
 	},
 	"buttons": [
 		{
-			"text"      : "Purchase Now",
-			"url"       : "https://stockmanagementlabs.com/addons/atum-product-levels",
-			"class"     : "btn btn-purple-pl",
-			"css"       : ""
+			"text"      : "Try It Now",
+			"url"       : "https://stockmanagementlabs.com/addons/atum-pick-pack",
+			"class"     : "btn btn-primary",
+			"css"       : "background-color: #2B8DFC; border-color: #2B8DFC",
+			"hover"     : "background-color: #91B3FA !important"
 		},
 		{
 			"text"      : "Read documentation",
-			"url"       : "https://stockmanagementlabs.crunch.help/en/atum-product-levels/produce-items-according-to-bom",
-			"class"     : "btn btn-outline-purple-pl",
-			"css"       : ""
+			"url"       : "https://stockmanagementlabs.crunch.help/en/atum-pick-pack",
+			"class"     : "btn btn-outline-primary",
+			"css"       : "border-color: #2B8DFC; background-color: #FFF; color: #2B8DFC",
+			"hover"     : "background-color: #2B8DFC !important; color: #FFF !important"
 		}
 	],
 	"additional_class" : "",
-	"transient_key" : "produce_items"
+	"transient_key" : "pick&pack-launch"
 }

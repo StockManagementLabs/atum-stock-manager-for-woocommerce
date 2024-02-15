@@ -322,18 +322,15 @@ class AtumMarketingPopup {
 		$css = '';
 
 		$hovered_buttons = array_filter( $this->buttons, function ( $button ) {
-
 			return ! empty( $button->hover );
 		} );
 
 		if ( $hovered_buttons ) {
 
-			$css .= '<style type="text/css">';
+			$css .= '<style>.marketing-popup ';
 			foreach ( $hovered_buttons as $hovered_button ) {
-
 				$css .= '.' . implode( '.', explode( ' ', $hovered_button->class ) ) . ':hover';
 				$css .= "{ {$hovered_button->hover} }";
-
 			}
 
 			$css .= '</style>';
