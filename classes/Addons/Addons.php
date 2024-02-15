@@ -1737,6 +1737,10 @@ final class Addons {
 	 */
 	public static function get_last_api_access( $key ) {
 
+		if ( defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG ) {
+			return FALSE;
+		}
+
 		$limit_requests_transient = AtumCache::get_transient_key( 'sml_api_limit', $key );
 
 		return AtumCache::get_transient( $limit_requests_transient, TRUE );
