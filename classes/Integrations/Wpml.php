@@ -254,6 +254,9 @@ class Wpml {
 			// Add translations to inboud stock where clause.
 			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
 
+			// Add the current lang to counters transient.
+			add_filter( 'atum/list_table/get_counters_transient_args', array( $this, 'get_products_transient_param' ) );
+
 			if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
 
 				// Add supplier lang dropdown field nad remove standard WPML fields.
@@ -1834,6 +1837,22 @@ class Wpml {
 				'wpmlActive' => 1,
 			));
 		}
+	}
+
+	/**
+	 * Add current language to transient param.
+	 *
+	 * @since 1.9.36.2
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	public function get_products_transient_param( $params ) {
+		$lang_param = [
+			'lang' => $this->current_language,
+		];
+		return array_merge( $params, $lang_param );
 	}
 
 	/******************
