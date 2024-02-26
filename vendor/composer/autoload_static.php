@@ -150,6 +150,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Components\\AtumOrders\\Models\\AtumOrderItemModel' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Models/AtumOrderItemModel.php',
         'Atum\\Components\\AtumOrders\\Models\\AtumOrderModel' => __DIR__ . '/../..' . '/classes/Components/AtumOrders/Models/AtumOrderModel.php',
         'Atum\\Components\\AtumQueues' => __DIR__ . '/../..' . '/classes/Components/AtumQueues.php',
+        'Atum\\Components\\AtumReserveStock' => __DIR__ . '/../..' . '/classes/Components/AtumReserveStock.php',
         'Atum\\Components\\AtumStockDecimals' => __DIR__ . '/../..' . '/classes/Components/AtumStockDecimals.php',
         'Atum\\Components\\AtumWidget' => __DIR__ . '/../..' . '/classes/Components/AtumWidget.php',
         'Atum\\Dashboard\\Dashboard' => __DIR__ . '/../..' . '/classes/Dashboard/Dashboard.php',
