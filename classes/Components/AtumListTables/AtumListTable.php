@@ -5116,7 +5116,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$request_params = $_GET;
 		unset( $request_params['security'], $request_params['action'] );
 
-		return $request_params;
+		return apply_filters( 'atum/list_table/get_counters_transient_args', $request_params );
 
 	}
 
