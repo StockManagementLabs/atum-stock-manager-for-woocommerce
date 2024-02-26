@@ -39,7 +39,7 @@ class AtumCli {
 
 		add_action( 'cli_init', array( $this, 'add_commands' ) );
 
-		if ( method_exists( '\WP_CLI', 'add_hook' ) && method_exists( '\WP_CLI\Utils', 'describe_callable' ) ) {
+		if ( defined( 'WP_CLI' ) && \WP_CLI ) {
 			\WP_CLI::add_hook( 'before_add_command:atum', array( $this, 'add_tools_to_cli_commands' ) );
 		}
 
@@ -79,7 +79,7 @@ class AtumCli {
 	 */
 	public function add_commands() {
 
-		if ( method_exists( '\WP_CLI', 'add_command' ) ) {
+		if ( defined( 'WP_CLI' ) && \WP_CLI ) {
 
 			$parent = 'atum';
 			\WP_CLI::add_command( "$parent list", array( $this, 'display_commands_list' ) );
