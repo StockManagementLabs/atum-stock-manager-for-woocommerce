@@ -264,7 +264,7 @@ class Main {
 		SearchOrdersByColumn::get_instance();
 		AtumEmailNotifications::get_instance();
 
-		if ( class_exists( '\WP_CLI', FALSE ) ) {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			AtumCli::get_instance();
 		}
 
