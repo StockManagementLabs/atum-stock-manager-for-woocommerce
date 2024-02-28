@@ -196,6 +196,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.37`
+
+*2024-02-16*
+
+**Features**
+
+* Enhanced ATUM Orders searches.
+* Allow filtering the available ATUM order type IDs.
+* Added marketing popup for Pick&Pack launch.
+
+**Changes**
+
+* Refactoring.
+* Moved all the stock decimals code to its own class.
+* Updated marketing popup CSS.
+* Help guide adjustments.
+
+**Fixes**
+
+* Fixed wrong count of decimal places.
+
+---
+
 `1.9.36.2`
 
 *2024-02-02*

@@ -7,7 +7,7 @@ Tested up to: 6.4.3
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 8.5.2
-Stable tag: 1.9.36.2
+Stable tag: 1.9.37
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,29 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.37`
+
+*2024-02-16*
+
+**Features**
+
+* Enhanced ATUM Orders searches.
+* Allow filtering the available ATUM order type IDs.
+* Added marketing popup for Pick&Pack launch.
+
+**Changes**
+
+* Refactoring.
+* Moved all the stock decimals code to its own class.
+* Updated marketing popup CSS.
+* Help guide adjustments.
+
+**Fixes**
+
+* Fixed wrong count of decimal places.
 
 ---
 
