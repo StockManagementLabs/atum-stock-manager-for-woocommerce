@@ -229,7 +229,7 @@ abstract class AtumOrderPostType {
 		foreach ( $atum_statuses as $atum_status => $values ) {
 
 			// Only register the statuses that starts with the ATUM prefix.
-			if ( strpos( $atum_status, ATUM_PREFIX ) === FALSE ) {
+			if ( ! str_contains( $atum_status, ATUM_PREFIX ) ) {
 				continue;
 			}
 
@@ -819,7 +819,7 @@ abstract class AtumOrderPostType {
 	public function handle_bulk_actions( $redirect_to, $action, $ids ) {
 
 		// Bail out if this is not a status-changing action.
-		if ( FALSE === strpos( $action, 'atum_order_mark_' ) ) {
+		if ( ! str_contains( $action, 'atum_order_mark_' ) ) {
 			return $redirect_to;
 		}
 

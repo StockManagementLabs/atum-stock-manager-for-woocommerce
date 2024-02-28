@@ -1267,7 +1267,7 @@ class Upgrade {
 			 */
 			$hook_name = $pending_action->get_hook();
 
-			if ( strpos( $hook_name, 'atum' ) !== FALSE ) {
+			if ( str_contains( $hook_name, 'atum' ) ) {
 				$wc_queue->cancel( $hook_name, $pending_action->get_args(), $pending_action->get_group() );
 			}
 		}

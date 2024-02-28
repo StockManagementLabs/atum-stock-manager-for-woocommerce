@@ -342,7 +342,7 @@ class Updater {
 			return $_data;
 		}
 
-		if ( strpos( $_args->slug, sanitize_title( $this->api_data['item_name'] ) ) === FALSE ) {
+		if ( ! str_contains( $_args->slug, sanitize_title( $this->api_data['item_name'] ) ) ) {
 			return $_data;
 		}
 
@@ -412,7 +412,7 @@ class Updater {
 
 		$data = array_merge( $this->api_data, $data );
 
-		if ( strpos( sanitize_title( "ATUM {$this->api_data['item_name']}" ), $data['slug'] ) === FALSE ) {
+		if ( ! str_contains( sanitize_title( "ATUM {$this->api_data['item_name']}" ), $data['slug'] ) ) {
 			return FALSE;
 		}
 

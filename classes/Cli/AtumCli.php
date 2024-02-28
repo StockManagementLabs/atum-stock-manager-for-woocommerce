@@ -119,7 +119,7 @@ class AtumCli {
 		$list = array();
 
 		foreach ( $this->commands as $command => $content ) {
-			if ( strpos( $content['desc'], '<br>' ) > 0 ) {
+			if ( str_contains( $content['desc'], '<br>' ) ) {
 				$desc = explode( '<br>', $content['desc'] )[0];
 			}
 			else {

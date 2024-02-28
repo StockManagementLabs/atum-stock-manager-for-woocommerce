@@ -472,10 +472,10 @@ final class Ajax {
 				break;
 		}
 
-		if ( strpos( $chart_period, 'year' ) !== FALSE ) {
+		if ( str_contains( $chart_period, 'year' ) ) {
 			$period = 'month';
 		}
-		elseif ( strpos( $chart_period, 'month' ) !== FALSE ) {
+		elseif ( str_contains( $chart_period, 'month' ) ) {
 			$period = 'monthDay';
 		}
 		else {
@@ -1144,7 +1144,7 @@ final class Ajax {
 					'expires' => $license_data->expires,
 				);
 
-				if ( isset( $license_data->slug ) && strpos( $license_data->slug, 'trial' ) !== FALSE ) {
+				if ( isset( $license_data->slug ) && str_contains( $license_data->slug, 'trial' ) ) {
 					$key_info['trial'] = TRUE;
 
 					if ( empty( $license_data->trial_extendable ) ) {

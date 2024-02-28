@@ -571,7 +571,7 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		$screen = get_current_screen();
 
-		if ( $screen && FALSE !== strpos( $screen->id, self::POST_TYPE ) ) {
+		if ( $screen && str_contains( $screen->id, self::POST_TYPE ) ) {
 
 			$help_tabs = array(
 				array(

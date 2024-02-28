@@ -34,10 +34,8 @@ abstract class AtumReserveStock {
 	protected function register_hooks() {
 
 		// Replace the WC actions with our own copies to handle MIs.
-		if ( ! has_action( 'woocommerce_checkout_order_created', array( $this, 'maybe_reserve_stock_for_order' ) ) ) {
-			remove_action( 'woocommerce_checkout_order_created', 'wc_reserve_stock_for_order' );
-			add_action( 'woocommerce_checkout_order_created', array( $this, 'maybe_reserve_stock_for_order' ) );
-		}
+		remove_action( 'woocommerce_checkout_order_created', 'wc_reserve_stock_for_order' );
+		add_action( 'woocommerce_checkout_order_created', array( $this, 'maybe_reserve_stock_for_order' ) );
 
 		// Remove reserved inventories when needed.
 		add_action( 'woocommerce_checkout_order_exception', array( $this, 'release_atum_stock_for_order' ), 11 );
@@ -46,6 +44,9 @@ abstract class AtumReserveStock {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'release_atum_stock_for_order' ), 12 );
 		add_action( 'woocommerce_order_status_processing', array( $this, 'release_atum_stock_for_order' ), 12 );
 		add_action( 'woocommerce_order_status_on-hold', array( $this, 'release_atum_stock_for_order' ), 12 );
+
+		// Hack the Store API response to handle the ATUM reserved stock.
+		add_action( 'woocommerce_store_api_checkout_update_order_meta', array( $this, 'maybe_reserve_stock_for_store_api' ), PHP_INT_MAX );
 
 	}
 
@@ -102,7 +103,7 @@ abstract class AtumReserveStock {
 
 			$this->wc_threshold = wc_stock_amount( get_option( 'woocommerce_notify_no_stock_amount' ) );
 
-			$items        = array_filter(
+			$items = array_filter(
 				$order->get_items(),
 				function ( $item ) {
 
@@ -271,5 +272,37 @@ abstract class AtumReserveStock {
 	 * @param \WC_Order|object|int $order Order object.
 	 */
 	abstract public function release_atum_stock_for_order( $order );
+
+	/**
+	 * Reserve the ATUM stock during requests to the checkout endpoint on the Store API.
+	 *
+	 * @since 1.9.37
+	 *
+	 * @param \WC_Order $order
+	 */
+	public function maybe_reserve_stock_for_store_api( $order ) {
+
+		/**
+		 * Try to reserve stock for the order.
+		 */
+		try {
+
+			$this->reserve_stock_for_order( $order );
+
+			// As we are not receiving the request here, we've to try to generate it ourselves.
+			$request = new \WP_REST_Request( 'GET', '/wc/store/v1/checkout' );
+
+
+		} catch ( ReserveStockException $e ) {
+
+			throw new ReserveStockException(
+				$e->getErrorCode(),
+				$e->getMessage(),
+				$e->getCode()
+			);
+
+		}
+
+	}
 
 }

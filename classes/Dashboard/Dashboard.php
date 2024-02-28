@@ -266,7 +266,7 @@ class Dashboard {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		if ( FALSE !== strpos( $hook, self::UI_SLUG ) ) {
+		if ( str_contains( $hook, self::UI_SLUG ) ) {
 
 			$user_widgets_layout = self::get_user_widgets_layout();
 

@@ -888,7 +888,7 @@ class Settings {
 					// wc_country field.
 					if ( 'wc_country' === $field_type ) {
 
-						if ( strpos( $input[ $key ], ':' ) !== FALSE ) {
+						if ( str_contains( $input[ $key ], ':' ) ) {
 
 							$country_states          = WC()->countries->get_allowed_country_states();
 							list( $country, $state ) = explode( ':', $input[ $key ] );

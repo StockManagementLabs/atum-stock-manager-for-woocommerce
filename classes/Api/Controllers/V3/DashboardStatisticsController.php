@@ -197,10 +197,10 @@ class DashboardStatisticsController extends DashboardWidgetController {
 
 		}
 
-		if ( strpos( $chart_period, 'year' ) !== FALSE ) {
+		if ( str_contains( $chart_period, 'year' ) ) {
 			$data['period'] = 'month';
 		}
-		elseif ( strpos( $chart_period, 'month' ) !== FALSE ) {
+		elseif ( str_contains( $chart_period, 'month' ) ) {
 			$data['period'] = 'monthDay';
 		}
 		else {

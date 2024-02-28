@@ -193,10 +193,10 @@ class AtumColors {
 	 */
 	public static function hex_to_rgb( $hex_value, $return_array = FALSE ) {
 
-		if ( strpos( $hex_value, 'rgba(' ) !== FALSE ) {
+		if ( str_contains( $hex_value, 'rgba(' ) ) {
 			list( $r, $g, $b, $a ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgba(%d,%d,%d,%f)' );
 		}
-		elseif ( strpos( $hex_value, 'rgb(' ) !== FALSE ) {
+		elseif ( str_contains( $hex_value, 'rgb(' ) ) {
 			list( $r, $g, $b ) = sscanf( str_replace( ' ', '', $hex_value ), 'rgb(%d,%d,%d)' );
 		}
 		else {
@@ -239,13 +239,13 @@ class AtumColors {
 		$color = trim( $color );
 
 		// Regex match.
-		if ( strpos( $color, '#' ) !== FALSE ) {
+		if ( str_contains( $color, '#' ) ) {
 			return (bool) preg_match( '/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/i', $color );
 		}
-		elseif ( strpos( $color, 'rgba' ) !== FALSE ) {
+		elseif ( str_contains( $color, 'rgba' ) ) {
 			return (bool) preg_match( '/rgba\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?),\s*(\d*\.?\d*)\s*\)/', $color );
 		}
-		elseif ( strpos( $color, 'rgb' ) !== FALSE ) {
+		elseif ( str_contains( $color, 'rgb' ) ) {
 			return (bool) preg_match( '/rgb\(\s*(\d+\%?),\s*(\d+\%?),\s*(\d+\%?)\s*\)/', $color );
 		}
 		elseif ( ! $color || 'transparent' === $color ) {

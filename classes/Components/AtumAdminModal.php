@@ -133,7 +133,7 @@ class AtumAdminModal {
 		if ( ! empty( $this->exclusions ) ) {
 			foreach ( $this->exclusions as $exclusion ) {
 
-				if ( strpos( $hook, $exclusion ) !== FALSE ) {
+				if ( str_contains( $hook, $exclusion ) ) {
 					return;
 				}
 

@@ -374,7 +374,7 @@ class Main {
 
 				$slug = $menu_item['slug'];
 
-				if ( FALSE === strpos( $slug, ATUM_SHORT_NAME ) ) {
+				if ( ! str_contains( $slug, ATUM_SHORT_NAME ) ) {
 					$slug = ATUM_SHORT_NAME . "-$slug";
 				}
 
@@ -504,11 +504,11 @@ class Main {
 
 				$slug = $menu_item['slug'];
 
-				if ( strpos( $slug, ATUM_SHORT_NAME ) === FALSE ) {
+				if ( ! str_contains( $slug, ATUM_SHORT_NAME ) ) {
 					$slug = ATUM_SHORT_NAME . "-$slug";
 				}
 
-				$href = ( isset( $menu_item['href'] ) ) ? $menu_item['href'] : "admin.php?page=$slug";
+				$href = $menu_item['href'] ?? "admin.php?page=$slug";
 
 				$wp_admin_bar->add_node( array(
 					'id'     => "$slug-item",
@@ -541,7 +541,7 @@ class Main {
 			$excluded = (array) apply_filters( 'atum/admin/footer/pages_excluded', array( Dashboard::UI_SLUG ) );
 
 			foreach ( $excluded as $item ) {
-				if ( strpos( $current_screen->id, $item ) !== FALSE ) {
+				if ( str_contains( $current_screen->id, $item ) ) {
 					return '';
 				}
 			}
@@ -590,8 +590,8 @@ class Main {
 			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 			$is_request_to_rest_api = apply_filters( 'atum/api/bypass_wp_endpoints_with_wc_keys',
-				( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
-				( FALSE !== strpos( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
+				( ! str_contains( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
+				( ! str_contains( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
 			);
 
 		}

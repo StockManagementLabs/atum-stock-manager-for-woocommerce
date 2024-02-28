@@ -308,7 +308,7 @@ final class Addons {
 
 						$plugin_url_paths  = explode( '/', untrailingslashit( $plugin_url_paths['path'] ) );
 						$full_version_slug = str_replace( '-', '_', str_replace( 'atum-', '', end( $plugin_url_paths ) ) );
-						$is_trial_addon    = strpos( strtolower( $plugin_data['Name'] ), 'trial' ) !== FALSE;
+						$is_trial_addon    = str_contains( strtolower( $plugin_data['Name'] ), 'trial' );
 						$addon_slug        = $is_trial_addon ? "{$full_version_slug}_trial" : $full_version_slug;
 						$addon_path        = [];
 
@@ -338,9 +338,9 @@ final class Addons {
 
 				foreach ( $installed_addons as $addon_key => $addon_data ) {
 
-					if ( strpos( strtolower( $addon_data['name'] ), strtolower( $addon ) ) !== FALSE ) {
+					if ( str_contains( strtolower( $addon_data['name'] ), strtolower( $addon ) ) ) {
 
-						$is_trial_addon = strpos( $addon_key, 'trial' ) !== FALSE;
+						$is_trial_addon = str_contains( $addon_key, 'trial' );
 
 						// Avoid getting the wrong installed add-on (full or trial).
 						if ( ( $is_trial_license && ! $is_trial_addon ) || ( ! $is_trial_license && $is_trial_addon ) ) {
@@ -360,7 +360,7 @@ final class Addons {
 					is_array( $license_key ) && ! empty( $license_key['key'] )
 				) {
 
-					$is_trial_addon = strpos( $addon_slug, 'trial' ) !== FALSE;
+					$is_trial_addon = str_contains( $addon_slug, 'trial' );
 
 					if ( 'valid' === $license_key['status'] ) {
 
@@ -440,7 +440,7 @@ final class Addons {
 
 						}
 					}
-					elseif ( 'trial_used' === $license_key['status'] && strpos( $addon_slug, 'trial' ) !== FALSE ) {
+					elseif ( 'trial_used' === $license_key['status'] && str_contains( $addon_slug, 'trial' ) ) {
 
 						AtumAdminNotices::add_notice(
 						/* translators: the add-on name */
@@ -577,7 +577,7 @@ final class Addons {
 
 			$is_trial = FALSE;
 
-			if ( strpos( $addon_slug, 'trial' ) ) {
+			if ( str_contains( $addon_slug, 'trial' ) ) {
 				$addon_slug = str_replace( '-trial', '', $addon_slug );
 				$is_trial   = TRUE;
 			}
@@ -666,7 +666,7 @@ final class Addons {
 		$addon_name = strtolower( $addon_name );
 
 		// Make sure the full-version names are used for keys.
-		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+		if ( str_contains( $addon_name, 'trial' ) ) {
 			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
 		}
 
@@ -875,7 +875,7 @@ final class Addons {
 		$is_trial   = FALSE;
 
 		// Strip the 'trial' word from the addon name and use the same name for both.
-		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+		if ( str_contains( $addon_name, 'trial' ) ) {
 			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
 			$is_trial   = TRUE;
 		}
@@ -912,7 +912,7 @@ final class Addons {
 
 		$addon_name = strtolower( $addon_name );
 
-		if ( strpos( $addon_name, 'trial' ) !== FALSE ) {
+		if ( str_contains( $addon_name, 'trial' ) ) {
 			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
 		}
 
@@ -964,11 +964,11 @@ final class Addons {
 			}
 			else {
 
-				$trial_name = strtolower( strpos( $addon_name, 'Trial' ) === FALSE ? "$addon_name Trial" : $addon_name );
+				$trial_name = strtolower( ! str_contains( $addon_name, 'Trial' ) ? "$addon_name Trial" : $addon_name );
 
 				foreach ( self::$addons as $addon_key => $installed_addon ) {
 					if ( strtolower( $installed_addon['name'] ) === $trial_name ) {
-						if ( strpos( $addon_key, '_trial' ) !== FALSE ) {
+						if ( str_contains( $addon_key, '_trial' ) ) {
 							$addon_status->is_trial = TRUE;
 						}
 						break;
@@ -1013,7 +1013,7 @@ final class Addons {
 						if ( $license_data && TRUE === $license_data->success ) {
 
 							// Confirm that the license belongs to the installed add-on.
-							if ( isset( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && strpos( strtolower( $license_data->item_name ), 'trial' ) === FALSE ) {
+							if ( isset( $addon_status->is_trial ) && TRUE === $addon_status->is_trial && ! str_contains( strtolower( $license_data->item_name ), 'trial' ) ) {
 
 								// Is the user upgrading?
 								if ( 'valid' === $license_data->license && strtolower( $license_data->item_name ) === strtolower( $addon_name ) ) {
@@ -1025,7 +1025,7 @@ final class Addons {
 								}
 
 							}
-							elseif ( empty( $addon_status->is_trial ) && strpos( strtolower( $license_data->item_name ), 'trial' ) !== FALSE ) {
+							elseif ( empty( $addon_status->is_trial ) && str_contains( strtolower( $license_data->item_name ), 'trial' ) ) {
 								$addon_status->status = $saved_license['status'] = 'invalid';
 							}
 							else {
@@ -1309,7 +1309,7 @@ final class Addons {
 				) );
 
 				// If the user is upgrading a trial to full, uninstall the trial and block any uninstallation hooks.
-				$is_trial_addon = strpos( strtolower( $addon_name ), 'trial' ) !== FALSE;
+				$is_trial_addon = str_contains( strtolower( $addon_name ), 'trial' );
 				if ( ! $is_trial_addon && Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name' ) ) {
 					add_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
 					$plugin = [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ];
@@ -1642,7 +1642,7 @@ final class Addons {
 		$url = strtolower( trim( home_url() ) );
 
 		// Need to get the host...so let's add the scheme so we can use parse_url.
-		if ( FALSE === strpos( $url, 'http://' ) && FALSE === strpos( $url, 'https://' ) ) {
+		if ( ! str_contains( $url, 'http://' ) && ! str_contains( $url, 'https://' ) ) {
 			$url = "http://$url";
 		}
 
@@ -1669,7 +1669,7 @@ final class Addons {
 			);
 
 			foreach ( $tlds_to_check as $tld ) {
-				if ( FALSE !== strpos( $host, $tld ) ) {
+				if ( str_contains( $host, $tld ) ) {
 					$is_local_url = TRUE;
 					break;
 				}

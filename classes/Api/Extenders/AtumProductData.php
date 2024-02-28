@@ -862,7 +862,7 @@ class AtumProductData {
 
 		foreach ( $where_parts as $index => $part ) {
 
-			if ( strpos( $part, "{$wpdb->posts}.post_status" ) !== FALSE ) {
+			if ( str_contains( $part, "{$wpdb->posts}.post_status" ) ) {
 
 				if ( ! $added ) {
 					$where_parts[ $index ] = "$wpdb->posts.post_status IN ('" . implode( "','", $this->atum_post_status_param ) . "')";

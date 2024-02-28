@@ -110,7 +110,7 @@ class Media {
 
 		if ( $this->linked_post_type ) {
 
-			if ( strpos( $this->linked_post_type, ',' ) !== FALSE ) {
+			if ( str_contains( $this->linked_post_type, ',' ) ) {
 				$linked_post_types = array_map( 'trim', explode( ',', $this->linked_post_type ) );
 			}
 			else {

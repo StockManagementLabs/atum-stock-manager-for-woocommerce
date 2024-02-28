@@ -129,7 +129,7 @@ class Bootstrap {
 			$woo_inventory_page = 'page=wc-settings&tab=products&section=inventory';
 
 			// Special case for when the user is currently changing the stock option.
-			if ( isset( $_POST['_wp_http_referer'] ) && FALSE !== strpos( $_POST['_wp_http_referer'], $woo_inventory_page ) ) {
+			if ( isset( $_POST['_wp_http_referer'] ) && str_contains( $_POST['_wp_http_referer'], $woo_inventory_page ) ) {
 				// It's a checkbox, so it's not sent with the form if unchecked.
 				$display_stock_option_notice = ! isset( $_POST['woocommerce_manage_stock'] );
 			}

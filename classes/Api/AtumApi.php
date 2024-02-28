@@ -291,7 +291,7 @@ class AtumApi {
 		$origin = get_http_origin();
 
 		// Only alter the limit if the request is coming from the ATUM App.
-		if ( strpos( $origin, 'com.stockmanagementlabs.atum' ) === FALSE && strpos( $origin, 'qa.stockmanagementlabs.atum' ) === FALSE ) {
+		if ( ! str_contains( $origin, 'com.stockmanagementlabs.atum' ) && ! str_contains( $origin, 'qa.stockmanagementlabs.atum' ) ) {
 			return $query_params;
 		}
 
@@ -300,6 +300,7 @@ class AtumApi {
 		}
 
 		return $query_params;
+
 	}
 
 	/**
@@ -340,7 +341,7 @@ class AtumApi {
 	 */
 	public function validate_status_param( $value, $request, $param ) {
 
-		if ( strpos( $value, ',' ) === FALSE ) {
+		if ( ! str_contains( $value, ',' ) ) {
 			return rest_validate_request_arg( $value, $request, $param );
 		}
 

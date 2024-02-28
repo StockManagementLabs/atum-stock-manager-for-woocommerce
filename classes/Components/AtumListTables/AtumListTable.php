@@ -3803,7 +3803,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		if (
 			! is_admin() || 'product' !== $this->post_type ||
 			! in_array( $pagenow, array( 'edit.php', 'admin-ajax.php' ) ) ||
-			! isset( $_REQUEST['s'], $_REQUEST['action'] ) || FALSE === strpos( $_REQUEST['action'], ATUM_PREFIX )
+			! isset( $_REQUEST['s'], $_REQUEST['action'] ) || ! str_contains( $_REQUEST['action'], ATUM_PREFIX )
 		) {
 			return $search_where;
 		}

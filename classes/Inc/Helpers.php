@@ -1803,7 +1803,7 @@ final class Helpers {
 			// Filter by log status.
 			if ( $status ) {
 
-				if ( FALSE === strpos( $status, ATUM_PREFIX ) ) {
+				if ( ! str_contains( $status, ATUM_PREFIX ) ) {
 					$status = ATUM_PREFIX . $status;
 				}
 
@@ -2279,7 +2279,7 @@ final class Helpers {
 				// Any other text meta.
 				default:
 					// These fields are only needed for WPML compatibility.
-					if ( strpos( $meta_key, '_custom' ) !== FALSE || strpos( $meta_key, '_currency' ) !== FALSE ) {
+					if ( str_contains( $meta_key, '_custom' ) || str_contains( $meta_key, '_currency' ) ) {
 						break;
 					}
 
@@ -3153,7 +3153,7 @@ final class Helpers {
 
 		foreach ( $searched_texts as $searched_text ) {
 
-			if ( strpos( $note_data['comment_content'], $searched_text ) !== FALSE ) {
+			if ( str_contains( $note_data['comment_content'], $searched_text ) ) {
 				$found = TRUE;
 				break;
 			}

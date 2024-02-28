@@ -336,7 +336,7 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 
 		$base          = $this->rest_base;
 		$attrib_prefix = '(?P<';
-		if ( strpos( $base, $attrib_prefix ) !== FALSE ) {
+		if ( str_contains( $base, $attrib_prefix ) ) {
 
 			$attrib_names = array();
 			preg_match( '/\(\?P<[^>]+>.*\)/', $base, $attrib_names, PREG_OFFSET_CAPTURE );

@@ -412,7 +412,7 @@ final class WidgetHelpers {
 	 */
 	private static function get_chart_data_period( $time_window ) {
 
-		$which       = FALSE !== strpos( $time_window, 'previous' ) ? 'last' : 'this';
+		$which       = ! str_contains( $time_window, 'previous' ) ? 'last' : 'this';
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$period      = NULL;
 
@@ -683,7 +683,7 @@ final class WidgetHelpers {
 			$parents = array_unique( array_map( 'absint', wp_list_pluck( $results, 'post_parent' ) ) );
 
 			// Save them to be used when counting products.
-			if ( strpos( $parent_type, 'variable' ) !== FALSE ) {
+			if ( str_contains( $parent_type, 'variable' ) ) {
 				self::$variable_products = array_merge( self::$variable_products, $parents );
 			}
 			else {
