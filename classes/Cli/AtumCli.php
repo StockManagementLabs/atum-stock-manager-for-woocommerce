@@ -12,6 +12,9 @@
 
 namespace Atum\Cli;
 
+use Atum\Settings\Tools;
+
+
 defined( 'ABSPATH' ) || die;
 
 class AtumCli {
@@ -39,14 +42,19 @@ class AtumCli {
 
 		add_action( 'cli_init', array( $this, 'add_commands' ) );
 
+		// Add tools to AtumCli commands.
 		if ( method_exists( '\WP_CLI', 'add_hook' ) && method_exists( '\WP_CLI\Utils', 'describe_callable' ) ) {
 			\WP_CLI::add_hook( 'before_add_command:atum', array( $this, 'add_tools_to_cli_commands' ) );
+		}
+
+		if ( method_exists( '\WP_CLI', 'do_hook' ) ) {
+			\WP_CLI::do_hook( 'before_add_command:atum', Tools::get_instance()->add_settings_defaults( [] ), 'Atum\Settings' );
 		}
 
 	}
 
 	/**
-	 * Store Atum tools in AtumCli commands
+	 * Store ATUM tools in AtumCli commands
 	 *
 	 * @since 1.9.3.1
 	 *
@@ -79,7 +87,7 @@ class AtumCli {
 	 */
 	public function add_commands() {
 
-		if ( defined( 'WP_CLI' ) && \WP_CLI ) {
+		if ( method_exists( '\WP_CLI', 'add_command' ) ) {
 
 			$parent = 'atum';
 			\WP_CLI::add_command( "$parent list", array( $this, 'display_commands_list' ) );

@@ -86,7 +86,7 @@ class Settings {
 	const DEFAULT_SALE_DAYS = 14;
 
 	/**
-	 * The default number of diaplayed posts per page
+	 * The default number of displayed posts per page
 	 */
 	const DEFAULT_POSTS_PER_PAGE = 20;
 
@@ -104,12 +104,6 @@ class Settings {
 			// Add the module menu.
 			add_filter( 'atum/admin/menu_items', array( $this, 'add_menu' ), self::MENU_ORDER );
 
-		}
-
-		// Add tools to AtumCli commands.
-		if ( class_exists( '\WP_CLI', FALSE ) && method_exists( '\WP_CLI', 'do_hook' ) ) {
-			$tools = Tools::get_instance();
-			\WP_CLI::do_hook( 'before_add_command:atum', $tools->add_settings_defaults( [] ), __NAMESPACE__ );
 		}
 
 	}

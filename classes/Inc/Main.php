@@ -264,6 +264,7 @@ class Main {
 		SearchOrdersByColumn::get_instance();
 		AtumEmailNotifications::get_instance();
 
+		// Only load the WP CLI module if WP CLI is running.
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			AtumCli::get_instance();
 		}
