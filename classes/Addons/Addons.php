@@ -656,14 +656,14 @@ final class Addons {
 
 			foreach ( $keys as $key_name => $key_value ) {
 				if ( ! in_array( $key_name, array_keys( $lower_keys ) ) ) {
-					$lower_key                = strtolower( $key_name );
+					$lower_key                = strtolower( html_entity_decode( $key_name ) );
 					$lower_keys[ $lower_key ] = $key_value;
 				}
 			}
 
 		}
 
-		$addon_name = strtolower( $addon_name );
+		$addon_name = strtolower( html_entity_decode( $addon_name ) );
 
 		// Make sure the full-version names are used for keys.
 		if ( str_contains( $addon_name, 'trial' ) ) {
@@ -871,7 +871,7 @@ final class Addons {
 	 */
 	public static function update_key( $addon_name, $key_info ) {
 
-		$addon_name = strtolower( $addon_name );
+		$addon_name = strtolower( html_entity_decode( $addon_name ) );
 		$is_trial   = FALSE;
 
 		// Strip the 'trial' word from the addon name and use the same name for both.
@@ -910,7 +910,7 @@ final class Addons {
 	 */
 	public static function remove_key( $addon_name ) {
 
-		$addon_name = strtolower( $addon_name );
+		$addon_name = strtolower( html_entity_decode( $addon_name ) );
 
 		if ( str_contains( $addon_name, 'trial' ) ) {
 			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
