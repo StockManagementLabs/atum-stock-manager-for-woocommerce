@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.37.1`
+
+*2024-03-01*
+
+**Fixes**
+
+* Decode HTML entities from addons' names.
+
+---
+
 `1.9.37`
 
 *2024-03-01*
