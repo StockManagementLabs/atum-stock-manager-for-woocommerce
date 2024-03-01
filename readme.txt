@@ -6,7 +6,7 @@ Requires at least: 5.6
 Tested up to: 6.4.3
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.5.2
+WC tested up to: 8.6.1
 Stable tag: 1.9.37
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -218,13 +218,15 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.37`
 
-*2024-02-16*
+*2024-03-01*
 
 **Features**
 
 * Enhanced ATUM Orders searches.
 * Allow filtering the available ATUM order type IDs.
 * Added marketing popup for Pick&Pack launch.
+* Added filter to list/table counters transient params.
+* Added abstract base class for the Reserve Stock.
 
 **Changes**
 
@@ -232,10 +234,13 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Moved all the stock decimals code to its own class.
 * Updated marketing popup CSS.
 * Help guide adjustments.
+* Skip all WP-CLI logic on non-WP-CLI requests.
+* Updated addons loader.
 
 **Fixes**
 
 * Fixed wrong count of decimal places.
+* Fixed WP_CLI environment checking.
 
 ---
 
