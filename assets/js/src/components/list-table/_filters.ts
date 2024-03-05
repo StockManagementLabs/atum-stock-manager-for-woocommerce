@@ -319,7 +319,7 @@ export default class Filters {
 						// Init date time pickers.
 						this.dateTimePicker.addDateTimePickers( $modal.find( '.atum-datepicker' ), { minDate: false } );
 
-						$modal.find( '.swal2-content .apply' ).click( () => {
+						$modal.find( '.atum-modal-content .apply' ).click( () => {
 							this.globals.filterData[ 'date_from' ] = $modal.find( '.date_from' ).val();
 							this.globals.filterData[ 'date_to' ] = $modal.find( '.date_to' ).val();
 							this.keyUp( evt, true );
