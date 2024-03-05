@@ -8,6 +8,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:          ATUM Inventory Management for WooCommerce
+ * Requires Plugins:     woocommerce
  * Plugin URI:           https://stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
  * Version:              1.9.37.1
