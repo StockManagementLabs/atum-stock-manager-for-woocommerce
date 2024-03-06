@@ -412,7 +412,7 @@ final class WidgetHelpers {
 	 */
 	private static function get_chart_data_period( $time_window ) {
 
-		$which       = ! str_contains( $time_window, 'previous' ) ? 'last' : 'this';
+		$which       = str_contains( $time_window, 'previous' ) ? 'last' : 'this';
 		$period_time = str_replace( [ 'this', 'previous', '_' ], '', $time_window );
 		$period      = NULL;
 
