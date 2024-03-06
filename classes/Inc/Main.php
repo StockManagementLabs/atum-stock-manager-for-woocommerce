@@ -590,8 +590,8 @@ class Main {
 			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 			$is_request_to_rest_api = apply_filters( 'atum/api/bypass_wp_endpoints_with_wc_keys',
-				( ! str_contains( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
-				( ! str_contains( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
+				( str_contains( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
+				( str_contains( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
 			);
 
 		}
