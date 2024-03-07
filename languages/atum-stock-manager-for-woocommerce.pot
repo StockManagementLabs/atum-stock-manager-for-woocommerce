@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2024-02-15 13:06+0100\n"
+"POT-Creation-Date: 2024-03-07 08:53+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 "X-Poedit-SearchPathExcluded-2: vendor\n"
 
-#: atum-stock-manager-for-woocommerce.php:84
+#: atum-stock-manager-for-woocommerce.php:85
 #, php-format
 msgid ""
 "ATUM requires PHP version %s or greater. Please, update or contact your hosting "
@@ -86,7 +86,7 @@ msgstr ""
 #: classes/Addons/AddonsLoaderDev.php:262 classes/Components/AtumAdminModal.php:75
 #: classes/Components/AtumOrders/AtumOrderPostType.php:960
 #: classes/Dashboard/Dashboard.php:331 classes/Inc/Hooks.php:274
-#: classes/Settings/Settings.php:218 views/add-ons/add-on.php:161
+#: classes/Settings/Settings.php:212 views/add-ons/add-on.php:161
 #: views/add-ons/add-on.php:183 views/meta-boxes/atum-order/items.php:254
 #: views/widgets/lost-sales-config.php:24
 msgid "Cancel"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: classes/Addons/Addons.php:234
 #: classes/Components/AtumOrders/AtumOrderPostType.php:971
-#: classes/Inc/Hooks.php:278 classes/Settings/Settings.php:223
+#: classes/Inc/Hooks.php:278 classes/Settings/Settings.php:217
 msgid "Error!"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 #: classes/Addons/AddonsLoaderDev.php:265 classes/Components/AtumAdminModal.php:74
 #: classes/Components/AtumListTables/AtumListTable.php:3418
 #: classes/Components/AtumOrders/AtumOrderPostType.php:979
-#: classes/Settings/Settings.php:227
+#: classes/Settings/Settings.php:221
 msgid "OK"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgid "Premium Support"
 msgstr ""
 
 #: classes/Addons/Addons.php:1819 classes/Addons/Addons.php:1827
-#: classes/Api/AtumApi.php:378 classes/Api/AtumApi.php:385
+#: classes/Api/AtumApi.php:379 classes/Api/AtumApi.php:386
 #: classes/Api/Extenders/AtumProductData.php:892
 #: classes/Api/Extenders/AtumProductData.php:899
 #: classes/Api/Extenders/Media.php:143 classes/Api/Extenders/Media.php:150
@@ -393,8 +393,8 @@ msgstr ""
 #: classes/Api/Extenders/ProductAttributes.php:194
 #: classes/Api/Extenders/ProductCategories.php:88
 #: classes/Api/Extenders/ProductCategories.php:95 classes/Bootstrap.php:278
-#: classes/Bootstrap.php:285 classes/Cli/AtumCli.php:188
-#: classes/Cli/AtumCli.php:195 classes/Components/AtumAdminModal.php:241
+#: classes/Bootstrap.php:285 classes/Cli/AtumCli.php:196
+#: classes/Cli/AtumCli.php:203 classes/Components/AtumAdminModal.php:241
 #: classes/Components/AtumAdminModal.php:249
 #: classes/Components/AtumAdminNotices.php:312
 #: classes/Components/AtumAdminNotices.php:319
@@ -418,8 +418,8 @@ msgstr ""
 #: classes/Dashboard/Dashboard.php:490 classes/InboundStock/InboundStock.php:159
 #: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3015
 #: classes/Inc/Ajax.php:3022 classes/Inc/Hooks.php:1459 classes/Inc/Hooks.php:1467
-#: classes/Inc/Main.php:623 classes/Inc/Main.php:630
-#: classes/Integrations/Wpml.php:1848 classes/Integrations/Wpml.php:1856
+#: classes/Inc/Main.php:624 classes/Inc/Main.php:631
+#: classes/Integrations/Wpml.php:1867 classes/Integrations/Wpml.php:1875
 #: classes/InventoryLogs/InventoryLogs.php:668
 #: classes/InventoryLogs/InventoryLogs.php:675
 #: classes/MetaBoxes/FileAttachment.php:184
@@ -432,7 +432,7 @@ msgstr ""
 #: classes/Orders/SearchOrdersByColumn.php:147
 #: classes/PurchaseOrders/PurchaseOrders.php:1085
 #: classes/PurchaseOrders/PurchaseOrders.php:1092
-#: classes/Settings/Settings.php:1789 classes/Settings/Settings.php:1797
+#: classes/Settings/Settings.php:1783 classes/Settings/Settings.php:1791
 #: classes/Settings/Tools.php:184 classes/Settings/Tools.php:192
 #: classes/StockCentral/StockCentral.php:343
 #: classes/StockCentral/StockCentral.php:350 classes/Suppliers/Suppliers.php:793
@@ -456,6 +456,25 @@ msgstr ""
 msgid "Click %1$shere%2$s to purchase the full version."
 msgstr ""
 
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
+#, php-format
+msgid ""
+"The ATUM %1$s could not be loaded because its license is missing. Please, "
+"activate your trial from the %2$sadd-ons%3$s page."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
+#, php-format
+msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:157
+#, php-format
+msgid ""
+"The ATUM %s could not be loaded because the full version is installed. To use "
+"the trial, uninstall the full version first."
+msgstr ""
+
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:191
 #, php-format
 msgid ""
@@ -470,23 +489,9 @@ msgid ""
 "%2$supgrade to the full version%3$s."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:131
 #, php-format
-msgid ""
-"The ATUM %1$s could not be loaded because its license is missing. Please, "
-"activate your trial from the %2$sadd-ons%3$s page."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:157
-#, php-format
-msgid ""
-"The ATUM %s could not be loaded because the full version is installed. To use "
-"the trial, uninstall the full version first."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
-#, php-format
-msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
+msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:217
@@ -499,11 +504,6 @@ msgstr ""
 msgid ""
 "The ATUM %1$s add-on requires at least version %2$s to work with the current "
 "ATUM version. Please, update it."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:131
-#, php-format
-msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
 msgstr ""
 
 #: classes/Addons/Updater.php:297
@@ -2210,7 +2210,7 @@ msgid "Click to edit the purchase price"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:1428
-#: classes/Integrations/Wpml.php:740 classes/StockCentral/Lists/ListTable.php:337
+#: classes/Integrations/Wpml.php:743 classes/StockCentral/Lists/ListTable.php:337
 #: classes/StockCentral/Lists/UncontrolledListTable.php:74
 #: views/help-tabs/stock-central/product-details.php:56
 msgid "Purchase Price"
@@ -2346,7 +2346,7 @@ msgid "Apply"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:3149
-#: classes/Settings/Settings.php:228
+#: classes/Settings/Settings.php:222
 msgid "Select All"
 msgstr ""
 
@@ -2377,7 +2377,7 @@ msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:3406
 #: classes/Components/AtumOrders/AtumOrderPostType.php:968
-#: classes/Settings/Settings.php:222
+#: classes/Settings/Settings.php:216
 msgid "Done!"
 msgstr ""
 
@@ -2593,7 +2593,7 @@ msgstr[1] ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:956
 #: classes/Dashboard/Dashboard.php:329 classes/Inc/Hooks.php:272
-#: classes/Settings/Settings.php:215
+#: classes/Settings/Settings.php:209
 msgid "Are you sure?"
 msgstr ""
 
@@ -2773,6 +2773,11 @@ msgstr ""
 #: classes/Components/AtumQueues.php:391
 msgid ""
 "The callback must be called statically, $this isn't allowed within async actions."
+msgstr ""
+
+#: classes/Components/AtumReserveStock.php:137
+#, php-format
+msgid "&quot;%s&quot; is out of stock and cannot be purchased."
 msgstr ""
 
 #: classes/Components/AtumStockDecimals.php:182
@@ -3734,20 +3739,20 @@ msgstr ""
 msgid "No locations found"
 msgstr ""
 
-#: classes/Inc/Main.php:340 classes/MetaBoxes/ProductDataMetaBoxes.php:127
+#: classes/Inc/Main.php:341 classes/MetaBoxes/ProductDataMetaBoxes.php:127
 #: views/meta-boxes/product-data/atum-variation-panel.php:20
 msgid "ATUM Inventory"
 msgstr ""
 
-#: classes/Integrations/Wpml.php:1309
+#: classes/Integrations/Wpml.php:1312
 msgid "ATUM settings can not be edited within translations"
 msgstr ""
 
-#: classes/Integrations/Wpml.php:1312
+#: classes/Integrations/Wpml.php:1315
 msgid "You must edit original product instead."
 msgstr ""
 
-#: classes/Integrations/Wpml.php:1801
+#: classes/Integrations/Wpml.php:1804
 msgid "Supplier's language"
 msgstr ""
 
@@ -4369,27 +4374,27 @@ msgid ""
 "unblock it."
 msgstr ""
 
-#: classes/Settings/Settings.php:129 views/settings-page.php:21
+#: classes/Settings/Settings.php:123 views/settings-page.php:21
 msgid "Settings"
 msgstr ""
 
-#: classes/Settings/Settings.php:217 views/settings-page.php:129
+#: classes/Settings/Settings.php:211 views/settings-page.php:129
 msgid "Branded"
 msgstr ""
 
-#: classes/Settings/Settings.php:220
+#: classes/Settings/Settings.php:214
 msgid "I don't want to save, Continue"
 msgstr ""
 
-#: classes/Settings/Settings.php:221 views/settings-page.php:125
+#: classes/Settings/Settings.php:215 views/settings-page.php:125
 msgid "Dark"
 msgstr ""
 
-#: classes/Settings/Settings.php:225 views/settings-page.php:127
+#: classes/Settings/Settings.php:219 views/settings-page.php:127
 msgid "High Contrast"
 msgstr ""
 
-#: classes/Settings/Settings.php:231
+#: classes/Settings/Settings.php:225
 msgid ""
 "We are going to leave your saved values in your database in case you decide to "
 "re-enable the ATUM's Out of Stock threshold per product again. From now on, your "
@@ -4397,7 +4402,7 @@ msgid ""
 "(if set)."
 msgstr ""
 
-#: classes/Settings/Settings.php:233
+#: classes/Settings/Settings.php:227
 msgid ""
 "We did save all your previous 'Out of stock' values the last time you used this "
 "option. Would you like to clear all the saved data and to start fresh? If you've "
@@ -4405,89 +4410,89 @@ msgid ""
 "(if set)."
 msgstr ""
 
-#: classes/Settings/Settings.php:234
+#: classes/Settings/Settings.php:228
 msgid "Remove All!"
 msgstr ""
 
-#: classes/Settings/Settings.php:235
+#: classes/Settings/Settings.php:229
 msgid "Remove Range!"
 msgstr ""
 
-#: classes/Settings/Settings.php:236
+#: classes/Settings/Settings.php:230
 msgid "Run"
 msgstr ""
 
-#: classes/Settings/Settings.php:238
+#: classes/Settings/Settings.php:232
 msgid "Select Color"
 msgstr ""
 
-#: classes/Settings/Settings.php:239
+#: classes/Settings/Settings.php:233
 msgid "Start Fresh"
 msgstr ""
 
-#: classes/Settings/Settings.php:240
+#: classes/Settings/Settings.php:234
 msgid "An unexpected error occurred"
 msgstr ""
 
-#: classes/Settings/Settings.php:241
+#: classes/Settings/Settings.php:235
 msgid ""
 "If you move to another section without saving, you'll lose the changes you made "
 "to this Settings section"
 msgstr ""
 
-#: classes/Settings/Settings.php:242
+#: classes/Settings/Settings.php:236
 msgid "Unselect All"
 msgstr ""
 
-#: classes/Settings/Settings.php:243
+#: classes/Settings/Settings.php:237
 msgid "Use Saved Values"
 msgstr ""
 
-#: classes/Settings/Settings.php:287 classes/StockCentral/StockCentral.php:136
+#: classes/Settings/Settings.php:281 classes/StockCentral/StockCentral.php:136
 msgid "General"
 msgstr ""
 
-#: classes/Settings/Settings.php:290
+#: classes/Settings/Settings.php:284
 msgid "General Options"
 msgstr ""
 
-#: classes/Settings/Settings.php:291
+#: classes/Settings/Settings.php:285
 msgid "List Tables"
 msgstr ""
 
-#: classes/Settings/Settings.php:295
+#: classes/Settings/Settings.php:289
 msgid "Store Details"
 msgstr ""
 
-#: classes/Settings/Settings.php:298
+#: classes/Settings/Settings.php:292
 msgid "Company info"
 msgstr ""
 
-#: classes/Settings/Settings.php:299
+#: classes/Settings/Settings.php:293
 msgid "Shipping info"
 msgstr ""
 
-#: classes/Settings/Settings.php:303
+#: classes/Settings/Settings.php:297
 msgid "Advanced"
 msgstr ""
 
-#: classes/Settings/Settings.php:306
+#: classes/Settings/Settings.php:300
 msgid "Advanced Options"
 msgstr ""
 
-#: classes/Settings/Settings.php:315
+#: classes/Settings/Settings.php:309
 msgid "Enable admin bar menu"
 msgstr ""
 
-#: classes/Settings/Settings.php:316
+#: classes/Settings/Settings.php:310
 msgid "When enabled, the ATUM menu will be accessible through the WP admin bar."
 msgstr ""
 
-#: classes/Settings/Settings.php:323
+#: classes/Settings/Settings.php:317
 msgid "Out of stock threshold per product"
 msgstr ""
 
-#: classes/Settings/Settings.php:324
+#: classes/Settings/Settings.php:318
 msgid ""
 "Activate the switch to enable the ATUM's out of stock threshold field per "
 "product. All products will use the product-level value (if any) or will inherit "
@@ -4503,28 +4508,28 @@ msgid ""
 "individual out of stock threshold values in the 'Tools' section."
 msgstr ""
 
-#: classes/Settings/Settings.php:329 classes/Settings/Tools.php:128
+#: classes/Settings/Settings.php:323 classes/Settings/Tools.php:128
 msgid ""
 "This will clear all the Out Stock Threshold values that have been set in all "
 "products"
 msgstr ""
 
-#: classes/Settings/Settings.php:334
+#: classes/Settings/Settings.php:328
 msgid "Decimals in stock quantity"
 msgstr ""
 
-#: classes/Settings/Settings.php:335
+#: classes/Settings/Settings.php:329
 msgid ""
 "Enter the number of decimal places your shop needs in stock quantity fields. Set "
 "0 to disable decimals or 1 and higher to override the default WooCommerce's NO "
 "decimal setting. Example: 2 would allow 2 decimals (1.00)."
 msgstr ""
 
-#: classes/Settings/Settings.php:346
+#: classes/Settings/Settings.php:340
 msgid "Stock quantity steps"
 msgstr ""
 
-#: classes/Settings/Settings.php:347
+#: classes/Settings/Settings.php:341
 msgid ""
 "Tells WooCommerce how much to increase/decrease the stock quantity value in "
 "frontend number inputs with each arrow click. Example: If set to '0.5', the "
@@ -4533,22 +4538,22 @@ msgid ""
 "the step as 'any', so any number is decimals is preserved."
 msgstr ""
 
-#: classes/Settings/Settings.php:359
+#: classes/Settings/Settings.php:353
 msgid "Change stock on 'completed' status"
 msgstr ""
 
-#: classes/Settings/Settings.php:360
+#: classes/Settings/Settings.php:354
 msgid ""
 "When enabling this option, the products' stock will be discounted only when any "
 "WooCommerce order's status is changed to 'Completed'. Any other status won't "
 "alter the stocks."
 msgstr ""
 
-#: classes/Settings/Settings.php:367
+#: classes/Settings/Settings.php:361
 msgid "Search WC orders by SKU"
 msgstr ""
 
-#: classes/Settings/Settings.php:368
+#: classes/Settings/Settings.php:362
 msgid ""
 "When enabled, you can search on the WC orders list by product SKU or supplier "
 "SKU and will return any WC order containing a product matching the specified "
@@ -4556,80 +4561,80 @@ msgid ""
 "delay in returning the searched results on dbs with many orders."
 msgstr ""
 
-#: classes/Settings/Settings.php:375
+#: classes/Settings/Settings.php:369
 msgid "Enable filter autosearch"
 msgstr ""
 
-#: classes/Settings/Settings.php:376
+#: classes/Settings/Settings.php:370
 msgid ""
 "When enabled, the manual search button disappears. Disable this function if you "
 "don't use or find the automatic search feature helpful."
 msgstr ""
 
-#: classes/Settings/Settings.php:383
+#: classes/Settings/Settings.php:377
 msgid "Enhanced suppliers' filter"
 msgstr ""
 
-#: classes/Settings/Settings.php:384
+#: classes/Settings/Settings.php:378
 msgid ""
 "When enabled, the List Tables Suppliers' filter will be replaced by an advanced "
 "search box. Recommended for sites with many suppliers."
 msgstr ""
 
-#: classes/Settings/Settings.php:391
+#: classes/Settings/Settings.php:385
 msgid "Show totals row"
 msgstr ""
 
-#: classes/Settings/Settings.php:392
+#: classes/Settings/Settings.php:386
 msgid ""
 "When enabled, ATUM will display new row at the bottom of all the List Tables. "
 "You will be able to preview page column totals of essential stock counters."
 msgstr ""
 
-#: classes/Settings/Settings.php:399
+#: classes/Settings/Settings.php:393
 msgid "Gross profit"
 msgstr ""
 
-#: classes/Settings/Settings.php:400
+#: classes/Settings/Settings.php:394
 msgid ""
 "Choose how to show up the gross profit column values in List Tables by default "
 "(the other value will show up on a tooltip when hovering each value)."
 msgstr ""
 
-#: classes/Settings/Settings.php:405
+#: classes/Settings/Settings.php:399
 msgid "Percentage"
 msgstr ""
 
-#: classes/Settings/Settings.php:406
+#: classes/Settings/Settings.php:400
 msgid "Monetary Value"
 msgstr ""
 
-#: classes/Settings/Settings.php:413
+#: classes/Settings/Settings.php:407
 msgid "Profit margin"
 msgstr ""
 
-#: classes/Settings/Settings.php:414
+#: classes/Settings/Settings.php:408
 msgid ""
 "Your profit margin in percentage. We'll use this value to mark in red all the "
 "gross profit values that fall below this margin and in green all the values "
 "equal or greater than this margin."
 msgstr ""
 
-#: classes/Settings/Settings.php:425
+#: classes/Settings/Settings.php:419
 msgid "Display stock info for variations"
 msgstr ""
 
-#: classes/Settings/Settings.php:426
+#: classes/Settings/Settings.php:420
 msgid ""
 "When enabled, the variations' stock status and quantities will be displayed in "
 "the WooCommerce products' list (admin side) for variable products."
 msgstr ""
 
-#: classes/Settings/Settings.php:433
+#: classes/Settings/Settings.php:427
 msgid "Unmanaged product counters"
 msgstr ""
 
-#: classes/Settings/Settings.php:434
+#: classes/Settings/Settings.php:428
 msgid ""
 "Add 'In Stock', 'Out of Stock' and 'Backorder' counters and views for Unmanaged "
 "by WooCommerce Products in all ATUM list tables. This option will also add these "
@@ -4637,115 +4642,115 @@ msgid ""
 "option can affect the performance in stores with a large number of products."
 msgstr ""
 
-#: classes/Settings/Settings.php:441
+#: classes/Settings/Settings.php:435
 msgid "Show sales in the last selected days"
 msgstr ""
 
-#: classes/Settings/Settings.php:442
+#: classes/Settings/Settings.php:436
 msgid ""
 "Enter the number of days to calculate the number of sales in that period in ATUM "
 "List Tables."
 msgstr ""
 
-#: classes/Settings/Settings.php:453
+#: classes/Settings/Settings.php:447
 msgid "Company name"
 msgstr ""
 
-#: classes/Settings/Settings.php:454
+#: classes/Settings/Settings.php:448
 msgid "Fill your company's name"
 msgstr ""
 
-#: classes/Settings/Settings.php:461
+#: classes/Settings/Settings.php:455
 msgid "Tax/VAT number"
 msgstr ""
 
-#: classes/Settings/Settings.php:462
+#: classes/Settings/Settings.php:456
 msgid "Fill your company's Tax/VAT Number"
 msgstr ""
 
-#: classes/Settings/Settings.php:469 classes/Settings/Settings.php:529
+#: classes/Settings/Settings.php:463 classes/Settings/Settings.php:523
 msgid "Address line 1"
 msgstr ""
 
-#: classes/Settings/Settings.php:470
+#: classes/Settings/Settings.php:464
 msgid "The company's street address"
 msgstr ""
 
-#: classes/Settings/Settings.php:477 classes/Settings/Settings.php:537
+#: classes/Settings/Settings.php:471 classes/Settings/Settings.php:531
 msgid "Address line 2"
 msgstr ""
 
-#: classes/Settings/Settings.php:478
+#: classes/Settings/Settings.php:472
 msgid "Optional additional info for the address"
 msgstr ""
 
-#: classes/Settings/Settings.php:485 classes/Settings/Settings.php:545
+#: classes/Settings/Settings.php:479 classes/Settings/Settings.php:539
 #: views/meta-boxes/suppliers/billing-information.php:46
 msgid "City"
 msgstr ""
 
-#: classes/Settings/Settings.php:486
+#: classes/Settings/Settings.php:480
 msgid "The city where your business is located"
 msgstr ""
 
-#: classes/Settings/Settings.php:493 classes/Settings/Settings.php:553
+#: classes/Settings/Settings.php:487 classes/Settings/Settings.php:547
 msgid "Country/State"
 msgstr ""
 
-#: classes/Settings/Settings.php:494
+#: classes/Settings/Settings.php:488
 msgid "The country and state or province if any"
 msgstr ""
 
-#: classes/Settings/Settings.php:501 classes/Settings/Settings.php:561
+#: classes/Settings/Settings.php:495 classes/Settings/Settings.php:555
 msgid "Postcode/ZIP"
 msgstr ""
 
-#: classes/Settings/Settings.php:502
+#: classes/Settings/Settings.php:496
 msgid "The postal code of your business"
 msgstr ""
 
-#: classes/Settings/Settings.php:509
+#: classes/Settings/Settings.php:503
 msgid "Use as shipping address"
 msgstr ""
 
-#: classes/Settings/Settings.php:510
+#: classes/Settings/Settings.php:504
 msgid ""
-"When enabled, the shipping address will be the same that the company's address."
+"When enabled, the shipping address will be the same as the company's address."
 msgstr ""
 
-#: classes/Settings/Settings.php:521
+#: classes/Settings/Settings.php:515
 msgid "Ship to name"
 msgstr ""
 
-#: classes/Settings/Settings.php:522
+#: classes/Settings/Settings.php:516
 msgid "The ship to name that will appear in the Shipping address"
 msgstr ""
 
-#: classes/Settings/Settings.php:530
+#: classes/Settings/Settings.php:524
 msgid "The shipping street address"
 msgstr ""
 
-#: classes/Settings/Settings.php:538
+#: classes/Settings/Settings.php:532
 msgid "Optional additional info for the Shipping Address"
 msgstr ""
 
-#: classes/Settings/Settings.php:546
+#: classes/Settings/Settings.php:540
 msgid "The city where is your Shipping address"
 msgstr ""
 
-#: classes/Settings/Settings.php:554
+#: classes/Settings/Settings.php:548
 msgid "The country and state/province (if any)"
 msgstr ""
 
-#: classes/Settings/Settings.php:562
+#: classes/Settings/Settings.php:556
 msgid "The postal code of your Shipping address"
 msgstr ""
 
-#: classes/Settings/Settings.php:569
+#: classes/Settings/Settings.php:563
 msgid "Calculated properties CRON"
 msgstr ""
 
-#: classes/Settings/Settings.php:570
+#: classes/Settings/Settings.php:564
 msgid ""
 "When enabled, the products' calculated sales properties used on some ATUM List "
 "Tables columns (like Sales Last Days, Sold Today, etc) will be calculated in a "
@@ -4754,55 +4759,55 @@ msgid ""
 "calculated properties will show wrong values in ATUM List Tables."
 msgstr ""
 
-#: classes/Settings/Settings.php:594
+#: classes/Settings/Settings.php:588
 msgid "CRON interval"
 msgstr ""
 
-#: classes/Settings/Settings.php:595
+#: classes/Settings/Settings.php:589
 msgid ""
 "Specify the interval between cron executions. A maximum of 24 hours/60 minutes "
 "is allowed."
 msgstr ""
 
-#: classes/Settings/Settings.php:607
+#: classes/Settings/Settings.php:601
 msgid "CRON interval type"
 msgstr ""
 
-#: classes/Settings/Settings.php:608
+#: classes/Settings/Settings.php:602
 msgid "Choose the interval type between minutes and hours."
 msgstr ""
 
-#: classes/Settings/Settings.php:613
+#: classes/Settings/Settings.php:607
 msgid "Hours"
 msgstr ""
 
-#: classes/Settings/Settings.php:614
+#: classes/Settings/Settings.php:608
 msgid "Minutes"
 msgstr ""
 
-#: classes/Settings/Settings.php:621
+#: classes/Settings/Settings.php:615
 msgid "CRON start time"
 msgstr ""
 
-#: classes/Settings/Settings.php:622
+#: classes/Settings/Settings.php:616
 msgid "Choose the time when the CRON will be executed for the first time."
 msgstr ""
 
-#: classes/Settings/Settings.php:629
+#: classes/Settings/Settings.php:623
 msgid "Delete data when uninstalling"
 msgstr ""
 
-#: classes/Settings/Settings.php:630
+#: classes/Settings/Settings.php:624
 msgid ""
 "Enable before uninstalling to remove all the data stored by ATUM in your "
 "database. Not recommended if you plan to reinstall ATUM in the future."
 msgstr ""
 
-#: classes/Settings/Settings.php:637
+#: classes/Settings/Settings.php:631
 msgid "Use WooCommerce's order product lookup table"
 msgstr ""
 
-#: classes/Settings/Settings.php:638
+#: classes/Settings/Settings.php:632
 msgid ""
 "We use the WooCommerce's order product lookup table in some queries to improve "
 "the performance. If you see any issues of calculated sales props not showing "
@@ -4811,22 +4816,22 @@ msgid ""
 "Tables' loading time."
 msgstr ""
 
-#: classes/Settings/Settings.php:833 classes/Settings/Settings.php:853
-#: classes/Settings/Settings.php:871 classes/Settings/Settings.php:887
-#: classes/Settings/Settings.php:938 classes/Settings/Settings.php:956
-#: classes/Settings/Settings.php:984 classes/Settings/Settings.php:992
+#: classes/Settings/Settings.php:827 classes/Settings/Settings.php:847
+#: classes/Settings/Settings.php:865 classes/Settings/Settings.php:881
+#: classes/Settings/Settings.php:932 classes/Settings/Settings.php:950
+#: classes/Settings/Settings.php:978 classes/Settings/Settings.php:986
 msgid "An invalid setting value was passed."
 msgstr ""
 
-#: classes/Settings/Settings.php:1154
+#: classes/Settings/Settings.php:1148
 msgid "--- Select a country ---"
 msgstr ""
 
-#: classes/Settings/Settings.php:1555
+#: classes/Settings/Settings.php:1549
 msgid "Upload"
 msgstr ""
 
-#: classes/Settings/Settings.php:1688
+#: classes/Settings/Settings.php:1682
 msgid "Select time"
 msgstr ""
 
