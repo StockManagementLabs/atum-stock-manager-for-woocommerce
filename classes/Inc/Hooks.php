@@ -1425,7 +1425,7 @@ class Hooks {
 	 * @return boolean
 	 */
 	public function maybe_allow_restock_refunded_items( $allow, $order, $refunded_line_items ) {
-		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete', 'no' ) && 'completed' !== $order->get_status() ) {
+		if ( 'yes' === Helpers::get_option( 'chg_stock_order_complete', 'no' ) && ! did_action( 'woocommerce_order_status_completed_to_refunded' ) ) {
 			$allow = FALSE;
 		}
 
