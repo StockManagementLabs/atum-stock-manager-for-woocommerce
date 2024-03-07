@@ -196,6 +196,23 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.37.2`
+
+*2024-03-07*
+
+**Features**
+
+* Added the new "requires plugins" clause supported on WP6.5+.
+
+**Fixes**
+
+* Fixed best sellers filter in Stock Central.
+* Fixed wrong lang folder passed when loading the text domain.
+* Fixed widget text check.
+* Fixed is API request check.
+
+---
+
 `1.9.37.1`
 
 *2024-03-01*

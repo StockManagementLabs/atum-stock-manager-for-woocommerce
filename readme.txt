@@ -7,7 +7,7 @@ Tested up to: 6.4.3
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 8.6.1
-Stable tag: 1.9.37.1
+Stable tag: 1.9.37.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,23 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.37.2`
+
+*2024-03-07*
+
+**Features**
+
+* Added the new "requires plugins" clause supported on WP6.5+.
+
+**Fixes**
+
+* Fixed best sellers filter in Stock Central.
+* Fixed wrong lang folder passed when loading the text domain.
+* Fixed widget text check.
+* Fixed is API request check.
 
 ---
 
