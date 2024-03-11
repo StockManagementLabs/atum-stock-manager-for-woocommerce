@@ -158,146 +158,176 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 			'title'      => $this->post_type,
 			'type'       => 'object',
 			'properties' => array(
-				'id'                => array(
+				'id'                 => array(
 					'description' => __( 'Unique identifier for the resource.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
 				),
-				'name'              => array(
+				'name'               => array(
 					'description' => __( 'Supplier name.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'slug'              => array(
+				'slug'               => array(
 					'description' => __( 'Supplier slug.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'permalink'         => array(
+				'permalink'          => array(
 					'description' => __( 'Supplier URL.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'format'      => 'uri',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
 				),
-				'date_created'      => array(
+				'date_created'       => array(
 					'description' => __( "The date the supplier was created, in the site's timezone.", ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'date_created_gmt'  => array(
+				'date_created_gmt'   => array(
 					'description' => __( 'The date the supplier was created, as GMT.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'date_modified'     => array(
+				'date_modified'      => array(
 					'description' => __( "The date the supplier was last modified, in the site's timezone.", ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
 				),
-				'date_modified_gmt' => array(
+				'date_modified_gmt'  => array(
 					'description' => __( 'The date the supplier was last modified, as GMT.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => TRUE,
 				),
-				'status'            => array(
+				'status'             => array(
 					'description' => __( 'Supplier status (post status).', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'default'     => 'publish',
 					'enum'        => $this->get_supplier_post_statuses(),
 					'context'     => array( 'view', 'edit' ),
 				),
-				'code'              => array(
+				'code'               => array(
 					'description' => __( 'Supplier code.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'tax_number'        => array(
+				'tax_number'         => array(
 					'description' => __( 'Supplier tax/VAT number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'phone'             => array(
+				'phone'              => array(
 					'description' => __( 'Supplier phone number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'fax'               => array(
+				'fax'                => array(
 					'description' => __( 'Supplier fax number.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'website'           => array(
+				'website'            => array(
 					'description' => __( 'Supplier website.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'ordering_url'      => array(
+				'ordering_url'       => array(
 					'description' => __( 'Supplier ordering URL.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'general_email'     => array(
+				'general_email'      => array(
 					'description' => __( 'Supplier general email.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'ordering_email'    => array(
+				'ordering_email'     => array(
 					'description' => __( 'Supplier ordering email.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'description'       => array(
+				'description'        => array(
 					'description' => __( 'Supplier description.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'currency'          => array(
+				'currency'           => array(
 					'description' => __( 'Supplier currency.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'enum'        => array_keys( get_woocommerce_currencies() ),
 				),
-				'address'           => array(
+				'address'            => array(
 					'description' => __( 'Supplier address.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'city'              => array(
+				'city'               => array(
 					'description' => __( 'Supplier city.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'country'           => array(
+				'country'            => array(
 					'description' => __( 'Supplier country.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'enum'        => array_keys( WC()->countries->get_countries() ),
 				),
-				'state'             => array(
+				'state'              => array(
 					'description' => __( 'Supplier state.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'zip_code'          => array(
+				'zip_code'           => array(
 					'description' => __( 'Supplier ZIP code.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'assigned_to'       => array(
+				'assigned_to'        => array(
 					'description' => __( 'The user ID that this supplier is assigned to.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'location'          => array(
+				'location'           => array(
 					'description' => __( 'The location used in Purchase Orders assigned to this supplier.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 				),
-				'image'             => array(
+				'discount'           => array(
+					'description' => __( 'Discount applied by the supplier.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'number',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'tax_rate'           => array(
+					'description' => __( 'Tax rate applied by the supplier.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'integer',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'lead_time'          => array(
+					'description' => __( 'Lead time (in days).', ATUM_TEXT_DOMAIN ),
+					'type'        => 'integer',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'delivery_terms'     => array(
+					'description' => __( 'Delivery terms.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'days_to_cancel'     => array(
+					'description' => __( 'Days to cancel.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'integer',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'cancelation_policy' => array(
+					'description' => __( 'Cancelation policy.', ATUM_TEXT_DOMAIN ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+				),
+				'image'              => array(
 					'description' => __( 'Supplier featured image.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'object',
 					'context'     => array( 'view', 'edit' ),
@@ -352,7 +382,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 						),
 					),
 				),
-				'meta_data'         => array(
+				'meta_data'          => array(
 					'description' => __( 'Meta data.', ATUM_TEXT_DOMAIN ),
 					'type'        => 'array',
 					'context'     => array( 'view', 'edit' ),
@@ -884,6 +914,12 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'zip_code',
 				'assigned_to',
 				'location',
+				'discount',
+				'tax_rate',
+				'lead_time',
+				'delivery_terms',
+				'days_to_cancel',
+				'cancelation_policy',
 			] as $meta_key
 		) {
 
@@ -984,6 +1020,12 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'zip_code',
 				'assigned_to',
 				'location',
+				'discount',
+				'tax_rate',
+				'lead_time',
+				'delivery_terms',
+				'days_to_cancel',
+				'cancelation_policy',
 			] as $meta_key
 		) {
 
