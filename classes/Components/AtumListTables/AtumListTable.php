@@ -4234,6 +4234,10 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		$search_query = $search_op_str = $meta_search_query = '';
 
+		if ( '_low_stock_threshold' === $column ) {
+			$column = '_low_stock_amount';
+		}
+
 		/**
 		 * Filters the prefix that indicates that a search term should be excluded from results.
 		 * Note that uses the WP_Query's filter name for compatibility.
