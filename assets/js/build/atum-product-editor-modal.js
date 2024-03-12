@@ -2,97 +2,24 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./assets/js/src/components/addons/_trials.ts":
-/*!****************************************************!*\
-  !*** ./assets/js/src/components/addons/_trials.ts ***!
-  \****************************************************/
+/***/ "./assets/js/src/config/_constants.ts":
+/*!********************************************!*\
+  !*** ./assets/js/src/config/_constants.ts ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   COLORS: () => (/* binding */ COLORS)
 /* harmony export */ });
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
-
-var Trials = (function () {
-    function Trials(settings, successCallback) {
-        this.settings = settings;
-        this.successCallback = successCallback;
-        this.bindEvents();
-    }
-    Trials.prototype.bindEvents = function () {
-        var _this = this;
-        $('body').on('click', '.extend-atum-trial', function (evt) {
-            evt.preventDefault();
-            evt.stopImmediatePropagation();
-            var $button = $(evt.currentTarget);
-            _this.extendTrialConfirmation($button.closest('.atum-addon').data('addon'), $button.data('key'));
-        });
-    };
-    Trials.prototype.extendTrialConfirmation = function (addon, key) {
-        var _this = this;
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-            title: this.settings.get('trialExtension'),
-            text: this.settings.get('trialWillExtend'),
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: this.settings.get('extend'),
-            cancelButtonText: this.settings.get('cancel'),
-            showCloseButton: true,
-            allowEnterKey: false,
-            reverseButtons: true,
-            showLoaderOnConfirm: true,
-            preConfirm: function () {
-                return _this.extendTrial(addon, key, true, function (response) {
-                    if (!response.success) {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage(response.data);
-                    }
-                    else {
-                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-                            title: _this.settings.get('success'),
-                            html: response.data,
-                            icon: 'success',
-                            confirmButtonText: _this.settings.get('ok'),
-                        })
-                            .then(function (result) {
-                            if (_this.successCallback && result.isConfirmed) {
-                                _this.successCallback();
-                            }
-                        });
-                    }
-                });
-            },
-        });
-    };
-    Trials.prototype.extendTrial = function (addon, key, isSwal, callback) {
-        var _this = this;
-        if (isSwal === void 0) { isSwal = false; }
-        if (callback === void 0) { callback = null; }
-        return new Promise(function (resolve) {
-            $.ajax({
-                url: window['ajaxurl'],
-                method: 'POST',
-                dataType: 'json',
-                data: {
-                    action: 'atum_extend_trial',
-                    security: _this.settings.get('nonce'),
-                    addon: addon,
-                    key: key,
-                },
-                success: function (response) {
-                    if (callback) {
-                        callback(response);
-                    }
-                    resolve();
-                },
-            });
-        });
-    };
-    return Trials;
-}());
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Trials);
+var COLORS;
+(function (COLORS) {
+    COLORS["success"] = "#69C61D";
+    COLORS["primary"] = "#00B8DB";
+    COLORS["warning"] = "#EFAF00";
+    COLORS["danger"] = "#FF4848";
+})(COLORS || (COLORS = {}));
+;
 
 
 /***/ }),
@@ -228,22 +155,63 @@ module.exports = jQuery;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!***************************************!*\
-  !*** ./assets/js/src/trials-modal.ts ***!
-  \***************************************/
+/*!***********************************************!*\
+  !*** ./assets/js/src/product-editor-modal.ts ***!
+  \***********************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
+/* harmony import */ var _config_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_constants */ "./assets/js/src/config/_constants.ts");
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 /* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
+
+var ProductEditorModal = (function () {
+    function ProductEditorModal(settings) {
+        this.settings = settings;
+        this.bindEvents();
+    }
+    ProductEditorModal.prototype.bindEvents = function () {
+        var _this = this;
+        $('body').on('change', '#woocommerce_feature_product_block_editor_enabled', function (evt) {
+            var $checkbox = $(evt.currentTarget);
+            if ($checkbox.is(':checked')) {
+                _this.showModal();
+            }
+        });
+    };
+    ProductEditorModal.prototype.showModal = function () {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
+            icon: 'warning',
+            title: this.settings.get('title'),
+            html: this.settings.get('text'),
+            confirmButtonText: this.settings.get('confirm'),
+            showCancelButton: true,
+            cancelButtonText: this.settings.get('cancel'),
+            confirmButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_0__.COLORS.warning,
+            cancelButtonColor: _config_constants__WEBPACK_IMPORTED_MODULE_0__.COLORS.primary,
+            focusConfirm: false,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+        })
+            .then(function (result) {
+            if (result.isDismissed) {
+                $('#woocommerce_feature_product_block_editor_enabled').prop('checked', false);
+            }
+        });
+    };
+    return ProductEditorModal;
+}());
 jQuery(function ($) {
-    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumTrialsModal');
-    new _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumProductEditorModalVars');
+    new ProductEditorModal(settings);
 });
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=atum-trials-modal.js.map
+//# sourceMappingURL=atum-product-editor-modal.js.map

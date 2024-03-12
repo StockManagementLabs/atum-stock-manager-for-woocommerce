@@ -18,6 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\MetaBoxes\FileAttachment;
+use Atum\Models\Products\AtumProductTrait;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Automattic\WooCommerce\Utilities\OrderUtil;
@@ -142,6 +143,9 @@ class Hooks {
 
 		// Avoid restock refunded items.
 		add_filter( 'woocommerce_can_restock_refunded_items', array( $this, 'maybe_allow_restock_refunded_items' ), 10, 3 );
+
+		// Add a modal to the WC settings page to alert the user about the ATUM incompatibility with the new product editor.
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_wc_product_editor_modal' ) );
 
 	}
 
@@ -641,6 +645,9 @@ class Hooks {
 		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
 
 			// Ensure that is the product uses the ATUM models.
+			/**
+			 * @var AtumProductTrait $product
+			 */
 			$product = Helpers::get_atum_product( $product );
 
 			$this->current_out_stock_threshold = NULL;
@@ -1430,6 +1437,29 @@ class Hooks {
 		}
 
 		return $allow;
+	}
+
+	/**
+	 * Add a modal to the WC settings page to alert the user about the ATUM incompatibility with the new product editor.
+	 *
+	 * @since 1.9.38
+	 *
+	 * @param string $hook
+	 */
+	public function add_wc_product_editor_modal( $hook ) {
+
+		if ( 'woocommerce_page_wc-settings' === $hook ) {
+			Helpers::register_swal_scripts();
+			wp_register_script( 'atum_product_editor_modal', ATUM_URL . 'assets/js/build/atum-product-editor-modal.js', [ 'jquery', 'sweetalert2' ], ATUM_VERSION, TRUE );
+			wp_localize_script( 'atum_product_editor_modal', 'atumProductEditorModalVars', array(
+				'cancel'  => __( 'Cancel and disable it', ATUM_TEXT_DOMAIN ),
+				'confirm' => __( 'Understood, continue anyway', ATUM_TEXT_DOMAIN ),
+				'text'    => __( 'We kindly request that you do not use this new feature since it may create compatibility problems with ATUM plugin.<br>The new feature significantly modifies the product edit interface of WooCommerce, and we will be working on a solution to ensure that the functionality is smooth when it is officially released.<br>We appreciate your cooperation and understanding.<br><br>Thank you.', ATUM_TEXT_DOMAIN ),
+				'title'   => __( 'ATUM Compatibility Notice', ATUM_TEXT_DOMAIN ),
+			) );
+			wp_enqueue_script( 'atum_product_editor_modal' );
+		}
+
 	}
 
 
