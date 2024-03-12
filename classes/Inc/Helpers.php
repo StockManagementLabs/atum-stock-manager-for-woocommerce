@@ -1201,15 +1201,13 @@ final class Helpers {
 	 * @param string $view                  View file that should be loaded.
 	 * @param array  $args                  Optional. Variables that will be passed to the view.
 	 * @param bool   $allow_theme_override  Optional. Allow overriding views from the theme.
-	 *
-	 * @return void
 	 */
 	public static function load_view( $view, $args = [], $allow_theme_override = TRUE ) {
 		
 		$file = apply_filters( "atum/load_view/$view", $view, $args );
 		$args = apply_filters( "atum/load_view_args/$view", $args );
 		
-		// Whether or not .php was added.
+		// Whether .php was added.
 		if ( '.php' !== substr( $file, - 4 ) ) {
 			$file .= '.php';
 		}
@@ -1237,11 +1235,9 @@ final class Helpers {
 		}
 
 		if ( ATUM_DEBUG ) {
-			/* @noinspection PhpIncludeInspection */
 			include $file_path;
 		}
 		else {
-			/* @noinspection PhpIncludeInspection */
 			@include $file_path; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 		
@@ -2120,7 +2116,7 @@ final class Helpers {
 	 * @param mixed $the_product Post object or post ID of the product.
 	 * @param bool  $use_cache   Whether to use the ATUM cache or not.
 	 *
-	 * @return \WC_Product|AtumProductTrait|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|null|false
+	 * @return AtumProductTrait|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|\WC_Product|null|false
 	 */
 	public static function get_atum_product( $the_product = FALSE, $use_cache = FALSE ) {
 
@@ -3885,7 +3881,7 @@ final class Helpers {
 	 *
 	 * @since 1.9.27
 	 *
-	 * @param stdClass $data
+	 * @param object $data
 	 *
 	 * @return array
 	 */
