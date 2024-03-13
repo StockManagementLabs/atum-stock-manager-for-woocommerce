@@ -5664,8 +5664,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap base-component.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap base-component.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -5685,7 +5685,7 @@ function withinMaxClamp(min, value, max) {
    * Constants
    */
 
-  const VERSION = '5.3.2';
+  const VERSION = '5.3.3';
 
   /**
    * Class definition
@@ -5757,8 +5757,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module) {
 
 /*!
-  * Bootstrap data.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap data.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -5829,8 +5829,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap event-handler.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap event-handler.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -6075,8 +6075,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module) {
 
 /*!
-  * Bootstrap manipulator.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap manipulator.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -6156,8 +6156,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap selector-engine.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap selector-engine.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -6189,9 +6189,9 @@ function withinMaxClamp(min, value, max) {
       if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) {
         hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
       }
-      selector = hrefAttribute && hrefAttribute !== '#' ? index_js.parseSelector(hrefAttribute.trim()) : null;
+      selector = hrefAttribute && hrefAttribute !== '#' ? hrefAttribute.trim() : null;
     }
-    return selector;
+    return selector ? selector.split(',').map(sel => index_js.parseSelector(sel)).join(',') : null;
   };
   const SelectorEngine = {
     find(selector, element = document.documentElement) {
@@ -6269,8 +6269,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap tooltip.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap tooltip.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -6824,8 +6824,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap config.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap config.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -6901,8 +6901,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(__unused_webpack_module, exports) {
 
 /*!
-  * Bootstrap index.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap index.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -7063,7 +7063,6 @@ function withinMaxClamp(min, value, max) {
   const reflow = element => {
     element.offsetHeight; // eslint-disable-line no-unused-expressions
   };
-
   const getjQuery = () => {
     if (window.jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
       return window.jQuery;
@@ -7192,8 +7191,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(__unused_webpack_module, exports) {
 
 /*!
-  * Bootstrap sanitizer.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap sanitizer.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -7219,7 +7218,10 @@ function withinMaxClamp(min, value, max) {
     br: [],
     col: [],
     code: [],
+    dd: [],
     div: [],
+    dl: [],
+    dt: [],
     em: [],
     hr: [],
     h1: [],
@@ -7312,8 +7314,8 @@ function withinMaxClamp(min, value, max) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /*!
-  * Bootstrap template-factory.js v5.3.2 (https://getbootstrap.com/)
-  * Copyright 2011-2023 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap template-factory.js v5.3.3 (https://getbootstrap.com/)
+  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 (function (global, factory) {
@@ -21852,6 +21854,7 @@ var rightArithShift = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODUL
 var round = /* #__PURE__ */(0,_factoriesAny_js__WEBPACK_IMPORTED_MODULE_124__.createRound)({
   BigNumber,
   DenseMatrix,
+  config: _configReadonly_js__WEBPACK_IMPORTED_MODULE_1__.config,
   equalScalar,
   matrix,
   typed,
@@ -29925,11 +29928,11 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     // a dense
     var adata = a._data;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a.getDataType();
     // b dense
     var bdata = b._data;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b.getDataType();
     // rows & columns
     var alength = asize[0];
     var bcolumns = bsize[1];
@@ -29942,7 +29945,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var mf = multiplyScalar;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -29969,7 +29972,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     return a.createDenseMatrix({
       data: c,
       size: [bcolumns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   }
 
@@ -30013,10 +30016,10 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     // a dense
     var adata = a._data;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a.getDataType();
     // b dense
     var bdata = b._data;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b.getDataType();
     // rows & columns
     var arows = asize[0];
     var acolumns = asize[1];
@@ -30029,7 +30032,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var mf = multiplyScalar;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30058,7 +30061,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     return a.createDenseMatrix({
       data: c,
       size: [arows],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   }
 
@@ -30071,14 +30074,15 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
    * @return {Matrix}             DenseMatrix    (MxC)
    */
   function _multiplyDenseMatrixDenseMatrix(a, b) {
+    // getDataType()
     // a dense
     var adata = a._data;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a.getDataType();
     // b dense
     var bdata = b._data;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b.getDataType();
     // rows & columns
     var arows = asize[0];
     var acolumns = asize[1];
@@ -30092,7 +30096,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var mf = multiplyScalar;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30126,7 +30130,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     return a.createDenseMatrix({
       data: c,
       size: [arows, bcolumns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   }
 
@@ -30142,13 +30146,13 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     // a dense
     var adata = a._data;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a.getDataType();
     // b sparse
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
     // validate b matrix
     if (!bvalues) {
       throw new Error('Cannot multiply Dense Matrix times Pattern only Matrix');
@@ -30169,7 +30173,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var zero = 0;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30190,7 +30194,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
       index: cindex,
       ptr: cptr,
       size: [arows, bcolumns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
 
     // loop b columns
@@ -30254,14 +30258,14 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var avalues = a._values;
     var aindex = a._index;
     var aptr = a._ptr;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // validate a matrix
     if (!avalues) {
       throw new Error('Cannot multiply Pattern only Matrix times Dense Matrix');
     }
     // b dense
     var bdata = b._data;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b.getDataType();
     // rows & columns
     var arows = a._size[0];
     var brows = b._size[0];
@@ -30282,7 +30286,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var zero = 0;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30335,13 +30339,13 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     // update ptr
     cptr[1] = cindex.length;
 
-    // return sparse matrix
+    // matrix to return
     return a.createSparseMatrix({
       values: cvalues,
       index: cindex,
       ptr: cptr,
       size: [arows, 1],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   }
 
@@ -30358,14 +30362,14 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var avalues = a._values;
     var aindex = a._index;
     var aptr = a._ptr;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // validate a matrix
     if (!avalues) {
       throw new Error('Cannot multiply Pattern only Matrix times Dense Matrix');
     }
     // b dense
     var bdata = b._data;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b.getDataType();
     // rows & columns
     var arows = a._size[0];
     var brows = b._size[0];
@@ -30383,7 +30387,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var zero = 0;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30404,7 +30408,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
       index: cindex,
       ptr: cptr,
       size: [arows, bcolumns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
 
     // workspace
@@ -30471,12 +30475,12 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var avalues = a._values;
     var aindex = a._index;
     var aptr = a._ptr;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // b sparse
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // rows & columns
     var arows = a._size[0];
@@ -30492,7 +30496,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
     var mf = multiplyScalar;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signatures that matches (dt, dt)
@@ -30510,7 +30514,7 @@ var createMultiply = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
       index: cindex,
       ptr: cptr,
       size: [arows, bcolumns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
 
     // workspace
@@ -31578,11 +31582,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createRound: () => (/* binding */ createRound)
 /* harmony export */ });
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
-/* harmony import */ var _utils_collection_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/collection.js */ "./node_modules/mathjs/lib/esm/utils/collection.js");
+/* harmony import */ var _utils_collection_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/collection.js */ "./node_modules/mathjs/lib/esm/utils/collection.js");
+/* harmony import */ var _utils_number_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/number.js */ "./node_modules/mathjs/lib/esm/utils/number.js");
+/* harmony import */ var _utils_bignumber_nearlyEqual_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/bignumber/nearlyEqual.js */ "./node_modules/mathjs/lib/esm/utils/bignumber/nearlyEqual.js");
 /* harmony import */ var _type_matrix_utils_matAlgo11xS0s_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../type/matrix/utils/matAlgo11xS0s.js */ "./node_modules/mathjs/lib/esm/type/matrix/utils/matAlgo11xS0s.js");
 /* harmony import */ var _type_matrix_utils_matAlgo12xSfs_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../type/matrix/utils/matAlgo12xSfs.js */ "./node_modules/mathjs/lib/esm/type/matrix/utils/matAlgo12xSfs.js");
 /* harmony import */ var _type_matrix_utils_matAlgo14xDs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../type/matrix/utils/matAlgo14xDs.js */ "./node_modules/mathjs/lib/esm/type/matrix/utils/matAlgo14xDs.js");
-/* harmony import */ var _plain_number_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../plain/number/index.js */ "./node_modules/mathjs/lib/esm/plain/number/arithmetic.js");
+/* harmony import */ var _plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../plain/number/index.js */ "./node_modules/mathjs/lib/esm/plain/number/arithmetic.js");
+
+
 
 
 
@@ -31591,14 +31599,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var NO_INT = 'Number of decimals in function round must be an integer';
 var name = 'round';
-var dependencies = ['typed', 'matrix', 'equalScalar', 'zeros', 'BigNumber', 'DenseMatrix'];
+var dependencies = ['typed', 'config', 'matrix', 'equalScalar', 'zeros', 'BigNumber', 'DenseMatrix'];
 var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__.factory)(name, dependencies, _ref => {
   var {
     typed,
+    config,
     matrix,
     equalScalar,
     zeros,
-    BigNumber,
+    BigNumber: _BigNumber,
     DenseMatrix
   } = _ref;
   var matAlgo11xS0s = (0,_type_matrix_utils_matAlgo11xS0s_js__WEBPACK_IMPORTED_MODULE_1__.createMatAlgo11xS0s)({
@@ -31612,6 +31621,9 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
   var matAlgo14xDs = (0,_type_matrix_utils_matAlgo14xDs_js__WEBPACK_IMPORTED_MODULE_3__.createMatAlgo14xDs)({
     typed
   });
+  function toExponent(epsilon) {
+    return Math.abs((0,_utils_number_js__WEBPACK_IMPORTED_MODULE_4__.splitNumber)(epsilon).exponent);
+  }
 
   /**
    * Round a value towards the nearest rounded value.
@@ -31658,13 +31670,27 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
    * @return {number | BigNumber | Fraction | Complex | Array | Matrix} Rounded value
    */
   return typed(name, {
-    number: _plain_number_index_js__WEBPACK_IMPORTED_MODULE_4__.roundNumber,
-    'number, number': _plain_number_index_js__WEBPACK_IMPORTED_MODULE_4__.roundNumber,
+    number: function number(x) {
+      // Handle round off errors by first rounding to epsilon precision
+      var xEpsilon = (0,_plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__.roundNumber)(x, toExponent(config.epsilon));
+      var xSelected = (0,_utils_number_js__WEBPACK_IMPORTED_MODULE_4__.nearlyEqual)(x, xEpsilon, config.epsilon) ? xEpsilon : x;
+      return (0,_plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__.roundNumber)(xSelected);
+    },
+    'number, number': function numberNumber(x, n) {
+      // Same as number: unless user specifies more decimals than epsilon
+      var epsilonExponent = toExponent(config.epsilon);
+      if (n >= epsilonExponent) {
+        return (0,_plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__.roundNumber)(x, n);
+      }
+      var xEpsilon = (0,_plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__.roundNumber)(x, epsilonExponent);
+      var xSelected = (0,_utils_number_js__WEBPACK_IMPORTED_MODULE_4__.nearlyEqual)(x, xEpsilon, config.epsilon) ? xEpsilon : x;
+      return (0,_plain_number_index_js__WEBPACK_IMPORTED_MODULE_5__.roundNumber)(xSelected, n);
+    },
     'number, BigNumber': function numberBigNumber(x, n) {
       if (!n.isInteger()) {
         throw new TypeError(NO_INT);
       }
-      return new BigNumber(x).toDecimalPlaces(n.toNumber());
+      return new _BigNumber(x).toDecimalPlaces(n.toNumber());
     },
     Complex: function Complex(x) {
       return x.round();
@@ -31683,13 +31709,24 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
       return x.round(_n);
     },
     BigNumber: function BigNumber(x) {
-      return x.toDecimalPlaces(0);
+      // Handle round off errors by first rounding to epsilon precision
+      var xEpsilon = new _BigNumber(x).toDecimalPlaces(toExponent(config.epsilon));
+      var xSelected = (0,_utils_bignumber_nearlyEqual_js__WEBPACK_IMPORTED_MODULE_6__.nearlyEqual)(x, xEpsilon, config.epsilon) ? xEpsilon : x;
+      return xSelected.toDecimalPlaces(0);
     },
     'BigNumber, BigNumber': function BigNumberBigNumber(x, n) {
       if (!n.isInteger()) {
         throw new TypeError(NO_INT);
       }
-      return x.toDecimalPlaces(n.toNumber());
+
+      // Same as BigNumber: unless user specifies more decimals than epsilon
+      var epsilonExponent = toExponent(config.epsilon);
+      if (n >= epsilonExponent) {
+        return x.toDecimalPlaces(n.toNumber());
+      }
+      var xEpsilon = x.toDecimalPlaces(epsilonExponent);
+      var xSelected = (0,_utils_bignumber_nearlyEqual_js__WEBPACK_IMPORTED_MODULE_6__.nearlyEqual)(x, xEpsilon, config.epsilon) ? xEpsilon : x;
+      return xSelected.toDecimalPlaces(n.toNumber());
     },
     Fraction: function Fraction(x) {
       return x.round();
@@ -31714,13 +31751,13 @@ var createRound = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
     'Unit, Unit': typed.referToSelf(self => (x, unit) => self(x, 0, unit)),
     'Array | Matrix, number, Unit': typed.referToSelf(self => (x, n, unit) => {
       // deep map collection, skip zeros since round(0) = 0
-      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_5__.deepMap)(x, value => self(value, n, unit), true);
+      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_7__.deepMap)(x, value => self(value, n, unit), true);
     }),
     'Array | Matrix, BigNumber, Unit': typed.referToSelf(self => (x, n, unit) => self(x, n.toNumber(), unit)),
     'Array | Matrix, Unit': typed.referToSelf(self => (x, unit) => self(x, 0, unit)),
     'Array | Matrix': typed.referToSelf(self => x => {
       // deep map collection, skip zeros since round(0) = 0
-      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_5__.deepMap)(x, self, true);
+      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_7__.deepMap)(x, self, true);
     }),
     'SparseMatrix, number | BigNumber': typed.referToSelf(self => (x, n) => {
       return matAlgo11xS0s(x, n, self, false);
@@ -35737,9 +35774,9 @@ var createDot = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
   function _denseDot(a, b) {
     var N = _validateDim(a, b);
     var adata = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(a) ? a._data : a;
-    var adt = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(a) ? a._datatype : undefined;
+    var adt = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(a) ? a._datatype || a.getDataType() : undefined;
     var bdata = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(b) ? b._data : b;
-    var bdt = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(b) ? b._datatype : undefined;
+    var bdt = (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_1__.isMatrix)(b) ? b._datatype || b.getDataType() : undefined;
 
     // are these 2-dimensional column vectors? (as opposed to 1-dimensional vectors)
     var aIsColumn = _size(a).length === 2;
@@ -35748,7 +35785,7 @@ var createDot = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
     var mul = multiplyScalar;
 
     // process data types
-    if (adt && bdt && adt === bdt && typeof adt === 'string') {
+    if (adt && bdt && adt === bdt && typeof adt === 'string' && adt !== 'mixed') {
       var dt = adt;
       // find signatures that matches (dt, dt)
       add = typed.find(addScalar, [dt, dt]);
@@ -55965,13 +56002,13 @@ var createMatAlgo01xDSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     // dense matrix arrays
     var adata = denseMatrix._data;
     var asize = denseMatrix._size;
-    var adt = denseMatrix._datatype;
+    var adt = denseMatrix._datatype || denseMatrix.getDataType();
     // sparse matrix arrays
     var bvalues = sparseMatrix._values;
     var bindex = sparseMatrix._index;
     var bptr = sparseMatrix._ptr;
     var bsize = sparseMatrix._size;
-    var bdt = sparseMatrix._datatype;
+    var bdt = sparseMatrix._datatype || sparseMatrix._data === undefined ? sparseMatrix._datatype : sparseMatrix.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -55993,7 +56030,7 @@ var createMatAlgo01xDSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var columns = asize[1];
 
     // process data types
-    var dt = typeof adt === 'string' && adt === bdt ? adt : undefined;
+    var dt = typeof adt === 'string' && adt !== 'mixed' && adt === bdt ? adt : undefined;
     // callback function
     var cf = dt ? typed.find(callback, [dt, dt]) : callback;
 
@@ -56042,7 +56079,7 @@ var createMatAlgo01xDSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     return denseMatrix.createDenseMatrix({
       data: cdata,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === denseMatrix._datatype && bdt === sparseMatrix._datatype ? dt : undefined
     });
   };
 });
@@ -56094,13 +56131,13 @@ var createMatAlgo02xDS0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     // dense matrix arrays
     var adata = denseMatrix._data;
     var asize = denseMatrix._size;
-    var adt = denseMatrix._datatype;
+    var adt = denseMatrix._datatype || denseMatrix.getDataType();
     // sparse matrix arrays
     var bvalues = sparseMatrix._values;
     var bindex = sparseMatrix._index;
     var bptr = sparseMatrix._ptr;
     var bsize = sparseMatrix._size;
-    var bdt = sparseMatrix._datatype;
+    var bdt = sparseMatrix._datatype || sparseMatrix._data === undefined ? sparseMatrix._datatype : sparseMatrix.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56131,7 +56168,7 @@ var createMatAlgo02xDS0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -56174,7 +56211,7 @@ var createMatAlgo02xDS0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === denseMatrix._datatype && bdt === sparseMatrix._datatype ? dt : undefined
     });
   };
 });
@@ -56225,13 +56262,13 @@ var createMatAlgo03xDSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     // dense matrix arrays
     var adata = denseMatrix._data;
     var asize = denseMatrix._size;
-    var adt = denseMatrix._datatype;
+    var adt = denseMatrix._datatype || denseMatrix.getDataType();
     // sparse matrix arrays
     var bvalues = sparseMatrix._values;
     var bindex = sparseMatrix._index;
     var bptr = sparseMatrix._ptr;
     var bsize = sparseMatrix._size;
-    var bdt = sparseMatrix._datatype;
+    var bdt = sparseMatrix._datatype || sparseMatrix._data === undefined ? sparseMatrix._datatype : sparseMatrix.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56260,7 +56297,7 @@ var createMatAlgo03xDSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // convert 0 to the same datatype
@@ -56312,7 +56349,7 @@ var createMatAlgo03xDSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     return denseMatrix.createDenseMatrix({
       data: cdata,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === denseMatrix._datatype && bdt === sparseMatrix._datatype ? dt : undefined
     });
   };
 });
@@ -56365,13 +56402,13 @@ var createMatAlgo04xSidSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORT
     var aindex = a._index;
     var aptr = a._ptr;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56397,7 +56434,7 @@ var createMatAlgo04xSidSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORT
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -56507,7 +56544,7 @@ var createMatAlgo04xSidSid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORT
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
 });
@@ -56560,13 +56597,13 @@ var createMatAlgo05xSfSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var aindex = a._index;
     var aptr = a._ptr;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56592,7 +56629,7 @@ var createMatAlgo05xSfSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -56694,7 +56731,7 @@ var createMatAlgo05xSfSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
 });
@@ -56747,11 +56784,11 @@ var createMatAlgo06xS0S0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     // sparse matrix arrays
     var avalues = a._values;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bvalues = b._values;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56777,7 +56814,7 @@ var createMatAlgo06xS0S0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -56864,7 +56901,7 @@ var createMatAlgo06xS0S0 = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
 });
@@ -56910,10 +56947,10 @@ var createMatAlgo07xSSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
   return function matAlgo07xSSf(a, b, callback) {
     // sparse matrix arrays
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -56937,7 +56974,7 @@ var createMatAlgo07xSSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // convert 0 to the same datatype
@@ -56985,7 +57022,7 @@ var createMatAlgo07xSSf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_
     return new DenseMatrix({
       data: cdata,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
   function _scatter(m, j, w, x, mark) {
@@ -57052,13 +57089,13 @@ var createMatAlgo08xS0Sid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTE
     var aindex = a._index;
     var aptr = a._ptr;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -57089,7 +57126,7 @@ var createMatAlgo08xS0Sid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTE
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -57169,7 +57206,7 @@ var createMatAlgo08xS0Sid = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTE
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
 });
@@ -57222,13 +57259,13 @@ var createMatAlgo09xS0Sf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var aindex = a._index;
     var aptr = a._ptr;
     var asize = a._size;
-    var adt = a._datatype;
+    var adt = a._datatype || a._data === undefined ? a._datatype : a.getDataType();
     // sparse matrix arrays
     var bvalues = b._values;
     var bindex = b._index;
     var bptr = b._ptr;
     var bsize = b._size;
-    var bdt = b._datatype;
+    var bdt = b._datatype || b._data === undefined ? b._datatype : b.getDataType();
 
     // validate dimensions
     if (asize.length !== bsize.length) {
@@ -57254,7 +57291,7 @@ var createMatAlgo09xS0Sf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
     var cf = callback;
 
     // process data types
-    if (typeof adt === 'string' && adt === bdt) {
+    if (typeof adt === 'string' && adt === bdt && adt !== 'mixed') {
       // datatype
       dt = adt;
       // find signature that matches (dt, dt)
@@ -57327,7 +57364,7 @@ var createMatAlgo09xS0Sf = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED
       index: cindex,
       ptr: cptr,
       size: [rows, columns],
-      datatype: dt
+      datatype: adt === a._datatype && bdt === b._datatype ? dt : undefined
     });
   };
 });
@@ -65432,6 +65469,7 @@ function lruQueue(limit) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ObjectWrappingMap: () => (/* binding */ ObjectWrappingMap),
+/* harmony export */   PartitionedMap: () => (/* binding */ PartitionedMap),
 /* harmony export */   assign: () => (/* binding */ assign),
 /* harmony export */   createEmptyMap: () => (/* binding */ createEmptyMap),
 /* harmony export */   createMap: () => (/* binding */ createMap),
@@ -65454,9 +65492,10 @@ __webpack_require__.r(__webpack_exports__);
 class ObjectWrappingMap {
   constructor(object) {
     this.wrappedObject = object;
+    this[Symbol.iterator] = this.entries;
   }
   keys() {
-    return Object.keys(this.wrappedObject);
+    return Object.keys(this.wrappedObject).values();
   }
   get(key) {
     return (0,_customs_js__WEBPACK_IMPORTED_MODULE_0__.getSafeProperty)(this.wrappedObject, key);
@@ -65468,6 +65507,103 @@ class ObjectWrappingMap {
   has(key) {
     return (0,_customs_js__WEBPACK_IMPORTED_MODULE_0__.hasSafeProperty)(this.wrappedObject, key);
   }
+  entries() {
+    return mapIterator(this.keys(), key => [key, this.get(key)]);
+  }
+  forEach(callback) {
+    for (var key of this.keys()) {
+      callback(this.get(key), key, this);
+    }
+  }
+  delete(key) {
+    delete this.wrappedObject[key];
+  }
+  clear() {
+    for (var key of this.keys()) {
+      this.delete(key);
+    }
+  }
+  get size() {
+    return Object.keys(this.wrappedObject).length;
+  }
+}
+
+/**
+ * Create a map with two partitions: a and b.
+ * The set with bKeys determines which keys/values are read/written to map b,
+ * all other values are read/written to map a
+ *
+ * For example:
+ *
+ *   const a = new Map()
+ *   const b = new Map()
+ *   const p = new PartitionedMap(a, b, new Set(['x', 'y']))
+ *
+ * In this case, values `x` and `y` are read/written to map `b`,
+ * all other values are read/written to map `a`.
+ */
+class PartitionedMap {
+  /**
+   * @param {Map} a
+   * @param {Map} b
+   * @param {Set} bKeys
+   */
+  constructor(a, b, bKeys) {
+    this.a = a;
+    this.b = b;
+    this.bKeys = bKeys;
+    this[Symbol.iterator] = this.entries;
+  }
+  get(key) {
+    return this.bKeys.has(key) ? this.b.get(key) : this.a.get(key);
+  }
+  set(key, value) {
+    if (this.bKeys.has(key)) {
+      this.b.set(key, value);
+    } else {
+      this.a.set(key, value);
+    }
+    return this;
+  }
+  has(key) {
+    return this.b.has(key) || this.a.has(key);
+  }
+  keys() {
+    return new Set([...this.a.keys(), ...this.b.keys()])[Symbol.iterator]();
+  }
+  entries() {
+    return mapIterator(this.keys(), key => [key, this.get(key)]);
+  }
+  forEach(callback) {
+    for (var key of this.keys()) {
+      callback(this.get(key), key, this);
+    }
+  }
+  delete(key) {
+    return this.bKeys.has(key) ? this.b.delete(key) : this.a.delete(key);
+  }
+  clear() {
+    this.a.clear();
+    this.b.clear();
+  }
+  get size() {
+    return [...this.keys()].length;
+  }
+}
+
+/**
+ * Create a new iterator that maps over the provided iterator, applying a mapping function to each item
+ */
+function mapIterator(it, callback) {
+  return {
+    next: () => {
+      var n = it.next();
+      return n.done ? n : {
+        value: callback(n.value),
+        done: false
+      };
+    }
+  };
 }
 
 /**
@@ -67042,7 +67178,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-var version = '12.3.1';
+var version = '12.4.0';
 // Note: This file is automatically generated when building math.js.
 // Changes made in this file will be overwritten.
 
