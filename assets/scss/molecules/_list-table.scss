@@ -2386,18 +2386,22 @@ table.wp-list-table, .floatThead-container {
 			&.expandable {
 				td {
 					color: var(--atum-table-link-text);
+					
 					span:not(.atum-icon) {
 						color: var(--atum-table-link-text);
 					}
+					
 					&.column-calc_location {
 						a {
 							pointer-events: none;
+							
 							&:before {
 								content: '-';
 								color: var(--atum-text-color-var1);
 							}
 						}
 					}
+					
 				}
 			}
 			
