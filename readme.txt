@@ -11,7 +11,7 @@ Stable tag: 1.9.37.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock, Inventory Logs, WooCommerce Sales Statistics and New Updates Weekly.
+WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock, Inventory Logs, WooCommerce Sales Statistics and More.
 
 == Description ==
 
