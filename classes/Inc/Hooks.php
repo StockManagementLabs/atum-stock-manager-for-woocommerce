@@ -1452,7 +1452,7 @@ class Hooks {
 			Helpers::register_swal_scripts();
 			wp_register_script( 'atum_product_editor_modal', ATUM_URL . 'assets/js/build/atum-product-editor-modal.js', [ 'jquery', 'sweetalert2' ], ATUM_VERSION, TRUE );
 			wp_localize_script( 'atum_product_editor_modal', 'atumProductEditorModalVars', array(
-				'cancel'  => __( 'Cancel and disable it', ATUM_TEXT_DOMAIN ),
+				'cancel'  => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'confirm' => __( 'Understood, continue anyway', ATUM_TEXT_DOMAIN ),
 				'text'    => __( 'We kindly request that you do not use this new feature since it may create compatibility problems with ATUM plugin.<br>The new feature significantly modifies the product edit interface of WooCommerce, and we will be working on a solution to ensure that the functionality is smooth when it is officially released.<br>We appreciate your cooperation and understanding.<br><br>Thank you.', ATUM_TEXT_DOMAIN ),
 				'title'   => __( 'ATUM Compatibility Notice', ATUM_TEXT_DOMAIN ),
