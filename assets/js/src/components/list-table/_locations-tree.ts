@@ -289,7 +289,7 @@ export default class LocationsTree {
 		this.toSetLocations = this.locationsSet;
 
 		// When clicking on link or icon, set node as checked.
-		$locationsTreeContainer.find( 'a, .easytree-icon' ).click( ( evt: JQueryEventObject ) => {
+		$locationsTreeContainer.find( 'a, .easytree-icon' ).on( 'click', ( evt: JQueryEventObject ) => {
 
 			evt.preventDefault();
 
@@ -342,7 +342,7 @@ export default class LocationsTree {
 			if ( $node.hasClass( 'checked' ) ) {
 				const $parentNode: JQuery = $node.closest( 'ul' ).parent( 'li' );
 				if ( $parentNode.length ) {
-					$parentNode.children( '.easytree-exp-c, .easytree-exp-cl' ).find( '.easytree-expander' ).click();
+					$parentNode.children( '.easytree-exp-c, .easytree-exp-cl' ).find( '.easytree-expander' ).trigger( 'click' );
 				}
 			}
 

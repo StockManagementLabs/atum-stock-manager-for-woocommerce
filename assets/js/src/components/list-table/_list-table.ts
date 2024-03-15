@@ -707,7 +707,7 @@ export default class ListTable {
 
 			// If is not expanded, expand it.
 			if ( $containerRow.hasClass( 'main-row' ) && ! $containerRow.hasClass( 'expanded' ) && isChecked ) {
-				$containerRow.find( '.has-child' ).click();
+				$containerRow.find( '.has-child' ).trigger( 'click' );
 			}
 
 			let $nextRow: JQuery = $containerRow.next();
@@ -722,7 +722,7 @@ export default class ListTable {
 				this.wpHooks.doAction( 'atum_listTable_afterCheckRow', $checkbox );
 
 				if ( isChecked ) {
-					$nextRow.find( '.has-child' ).click();
+					$nextRow.find( '.has-child' ).trigger( 'click' );
 				}
 
 				$nextRow = $nextRow.next();
@@ -759,7 +759,7 @@ export default class ListTable {
 			$checkboxes = $checkboxes.filter( ':checked' );
 		}
 
-		$checkboxes.prop( 'checked', isChecked ).change();
+		$checkboxes.prop( 'checked', isChecked ).trigger( 'change' );
 		this.globals.$atumTable.find( '.manage-column :checkbox' ).not( $checkAll ).prop( 'checked', isChecked );
 
 	}

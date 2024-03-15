@@ -186,8 +186,8 @@ export default class Filters {
 	/**
 	 * Search box keyUp event callback
 	 *
-	 * @param Object  evt       The event data object.
-	 * @param Boolean noTimer   Optional. Whether to delay before triggering the update (used for autosearch).
+	 * @param {JQueryEventObject} evt     The event data object.
+	 * @param {boolean}           noTimer Optional. Whether to delay before triggering the update (used for autosearch).
 	 */
 	keyUp( evt: JQueryEventObject, noTimer?: boolean ) {
 		
@@ -319,7 +319,7 @@ export default class Filters {
 						// Init date time pickers.
 						this.dateTimePicker.addDateTimePickers( $modal.find( '.atum-datepicker' ), { minDate: false } );
 
-						$modal.find( '.atum-modal-content .apply' ).click( () => {
+						$modal.find( '.atum-modal-content .apply' ).on( 'click', () => {
 							this.globals.filterData[ 'date_from' ] = $modal.find( '.date_from' ).val();
 							this.globals.filterData[ 'date_to' ] = $modal.find( '.date_to' ).val();
 							this.keyUp( evt, true );

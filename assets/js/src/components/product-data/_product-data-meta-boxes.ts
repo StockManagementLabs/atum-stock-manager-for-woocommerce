@@ -30,10 +30,10 @@ export default class ProductDataMetaBoxes {
 		} );
 
 		// Toggle the "Out of Stock Threshold" field visibility.
-		$( '#_manage_stock' ).change( ( evt: JQueryEventObject ) => $( '#_out_stock_threshold' ).closest( '.options_group' ).css( 'display', $( evt.currentTarget ).is( ':checked' ) ? 'block' : 'none' ) ).change();
+		$( '#_manage_stock' ).on( 'change', ( evt: JQueryEventObject ) => $( '#_out_stock_threshold' ).closest( '.options_group' ).css( 'display', $( evt.currentTarget ).is( ':checked' ) ? 'block' : 'none' ) ).trigger( 'change' );
 		
 		// Run scripts for all the variations at once.
-		$( '.product-tab-runner' ).find( '.run-script' ).click( ( evt: JQueryEventObject ) => {
+		$( '.product-tab-runner' ).find( '.run-script' ).on( 'click', ( evt: JQueryEventObject ) => {
 
 			const $button: JQuery = $( evt.currentTarget ),
 			      value: string   = $button.siblings( 'select' ).val();

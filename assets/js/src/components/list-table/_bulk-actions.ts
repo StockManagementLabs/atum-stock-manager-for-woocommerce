@@ -196,7 +196,7 @@ export default class BulkActions {
 	 * Reset bulk fields
 	 */
 	resetBulkFields() {
-		this.globals.$atumList.find( '.bulkactions select' ).val( this.noOptionValue ).change();
+		this.globals.$atumList.find( '.bulkactions select' ).val( this.noOptionValue ).trigger( 'change' );
 	}
 	
 }

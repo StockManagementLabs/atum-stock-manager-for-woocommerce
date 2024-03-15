@@ -8635,7 +8635,7 @@ var AddonsPage = (function () {
             _this.$noResults.find('.no-results__term').text(term);
             if (!term) {
                 _this.$noResults.hide();
-                _this.$addonsPage.find('.nav-container-box .all').click();
+                _this.$addonsPage.find('.nav-container-box .all').trigger('click');
                 $addons.show();
                 $input.parent().removeClass('is-searching');
             }

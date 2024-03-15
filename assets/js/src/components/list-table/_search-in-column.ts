@@ -20,7 +20,7 @@ export default class SearchInColumn {
 			this.setup();
 
 			// Rearrange the dropdown items when changing the visible columns from Screen Options.
-			$( '#adv-settings input:checkbox' ).change( () => this.setup() );
+			$( '#adv-settings input:checkbox' ).on( 'change', () => this.setup() );
 
 			this.events();
 
@@ -84,7 +84,7 @@ export default class SearchInColumn {
 		this.globals.$searchColumnBtn
 
 			// Bind clicks on search in column button.
-			.click( ( evt: JQueryEventObject ) => {
+			.on( 'click', ( evt: JQueryEventObject ) => {
 				evt.stopPropagation();
 				$( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();
 			} )
@@ -129,7 +129,7 @@ export default class SearchInColumn {
 
 		} );
 
-		$( document ).click( () => this.globals.$searchColumnDropdown.hide() );
+		$( document ).on( 'click', () => this.globals.$searchColumnDropdown.hide() );
 		
 	}
 	

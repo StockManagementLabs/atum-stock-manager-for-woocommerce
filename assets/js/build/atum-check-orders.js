@@ -4845,7 +4845,7 @@ var CheckOrderPrices = (function () {
     }
     CheckOrderPrices.prototype.bindEvents = function () {
         var _this = this;
-        this.$checkPricesButton.click(function (evt) {
+        this.$checkPricesButton.on('click', function (evt) {
             evt.preventDefault();
             $.ajax({
                 url: window['ajaxurl'],

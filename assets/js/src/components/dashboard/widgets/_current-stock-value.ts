@@ -18,14 +18,14 @@ export default class CurrentStockValueWidget {
 
 		if ( this.$currentStockValueWidget.length ) {
 			this.onChange();
-			this.$currentStockValueWidget.find( 'select' ).first().change();
+			this.$currentStockValueWidget.find( 'select' ).first().trigger( 'change' );
 		}
 		
 	}
 	
 	onChange() {
 
-		this.$currentStockValueWidget.find( 'select' ).change( ( evt: JQueryEventObject ) => {
+		this.$currentStockValueWidget.find( 'select' ).on( 'change', ( evt: JQueryEventObject ) => {
 
 			$.ajax( {
 				url       : window[ 'ajaxurl' ],

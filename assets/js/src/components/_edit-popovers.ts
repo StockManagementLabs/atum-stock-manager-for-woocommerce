@@ -84,7 +84,7 @@ export default class EditPopovers extends PopoverBase{
 					ButtonGroup.doButtonGroups( $popover );
 				}
 
-				$popover.find( '.meta-value' ).first().focus().select();
+				$popover.find( '.meta-value' ).first().trigger( 'focus' ).trigger( 'select' );
 
 				// Trigger action after inserting the popover.
 				this.wpHooks.doAction( 'atum_editPopovers_inserted', $popover, $editButton );
@@ -116,7 +116,7 @@ export default class EditPopovers extends PopoverBase{
 
 				// Enter key.
 				if ( evt.keyCode === 13 ) {
-					$popover.find( '.set' ).click();
+					$popover.find( '.set' ).trigger( 'click' );
 				}
 				// Esc key.
 				else if ( evt.keyCode === 27 ) {
@@ -216,7 +216,7 @@ export default class EditPopovers extends PopoverBase{
 				oldValue[ inputName ] = $input.val();
 
 				if ( typeof newValue === 'object' && newValue.hasOwnProperty( inputName ) ) {
-					$input.val( newValue[ inputName ] ).change();
+					$input.val( newValue[ inputName ] ).trigger( 'change' );
 				}
 
 			} );
@@ -224,7 +224,7 @@ export default class EditPopovers extends PopoverBase{
 		}
 		else {
 			oldValue = $valueInput.val();
-			$valueInput.val( newValue ).change(); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
+			$valueInput.val( newValue ).trigger( 'change' ); // We need to trigger the change event, so WC is aware of the change made to any variation and updated its data.
 		}
 
 		// Set the field label.
@@ -403,7 +403,7 @@ export default class EditPopovers extends PopoverBase{
 
 						// Button group input.
 						if ( $targetInput.closest( '.btn-group' ).length ) {
-							$targetInput.closest( '.btn' ).click();
+							$targetInput.closest( '.btn' ).trigger( 'click' );
 						}
 						// Regular radio.
 						else {
@@ -445,7 +445,7 @@ export default class EditPopovers extends PopoverBase{
 					$select = $popover.find( 'select[multiple]' ).first();
 				}
 
-				$select.val( currentValue.split( ',' ) ).change();
+				$select.val( currentValue.split( ',' ) ).trigger( 'change' );
 
 			}
 
@@ -458,13 +458,13 @@ export default class EditPopovers extends PopoverBase{
 				$input = $popover.find( '.meta-value' ).first();
 			}
 
-			$input.val( currentValue ).change();
+			$input.val( currentValue ).trigger( 'change' );
 
 		}
 
 		// Input number restrictions.
 		if ( $popover.find( 'input[type=number]' ).length ) {
-			$popover.find( 'input[type=number]' ).change( 'change paste', ( evt: JQueryEventObject ) => {
+			$popover.find( 'input[type=number]' ).on( 'change paste', ( evt: JQueryEventObject ) => {
 				Utils.restrictNumberInputValues( $( evt.currentTarget ) );
 			} );
 		}
@@ -494,7 +494,7 @@ export default class EditPopovers extends PopoverBase{
 					// Input group append fields (set the right default value for the type).
 					if ( $relatedInput.parent( '.input-group-append' ).length ) {
 						if ( $relatedInput.val() !== defaultValue ) {
-							$relatedInput.parent( '.input-group-append' ).click(); // Force the change by triggering the event.
+							$relatedInput.parent( '.input-group-append' ).trigger( 'click' ); // Force the change by triggering the event.
 						}
 					}
 					// Any other input (set the right default value).

@@ -13652,7 +13652,7 @@ var ButtonGroup = {
                 $button.addClass('active');
             }
             _this.updateChecked($button.closest('.btn-group'));
-            $button.find('input').change();
+            $button.find('input').trigger('change');
             return false;
         });
     },
@@ -14024,7 +14024,7 @@ var FileUploader = (function () {
     FileUploader.prototype.doFileUploaders = function () {
         var _this = this;
         if (window['wp'].hasOwnProperty('media')) {
-            this.$buttons.click(function (evt) {
+            this.$buttons.on('click', function (evt) {
                 var $button = $(evt.currentTarget);
                 var modalOptions = __assign(__assign({}, _this.defaultOptions), _this.options);
                 if ($button.data('modal-title')) {
@@ -14112,7 +14112,7 @@ var SmartForm = (function () {
             }
         })
             .find('[data-dependency]').each(function (index, elem) {
-            $(elem).change().removeClass('dirty');
+            $(elem).trigger('change').removeClass('dirty');
         });
         _before_unload__WEBPACK_IMPORTED_MODULE_0__["default"].addPrompt(function () { return !$form.find('.dirty').length; });
     }
@@ -14165,7 +14165,7 @@ var SmartForm = (function () {
                     else {
                         $dependantInput.val(defaultValue);
                     }
-                    $dependantInput.change();
+                    $dependantInput.trigger('change');
                     this.$form.trigger('atum-smart-form-reset-default', [$dependantInput]);
                 }
             }
@@ -14442,7 +14442,7 @@ var SettingsPage = (function () {
         this.$nav.find('.atum-nav-link.active').not($navLink).removeClass('active');
         $navLink.addClass('active');
         $formSettingsWrapper.addClass('overlay');
-        this.$form.load("".concat($navLink.attr('href'), " .form-settings-wrapper"), function () {
+        this.$form.on('load', "".concat($navLink.attr('href'), " .form-settings-wrapper"), function () {
             _color_picker__WEBPACK_IMPORTED_MODULE_1__["default"].doColorPickers(_this.settings.get('selectColor'));
             _this.initRangeDateTimePicker();
             _this.enhancedSelect.maybeRestoreEnhancedSelect();
@@ -14450,7 +14450,7 @@ var SettingsPage = (function () {
             _this.doFileUploaders();
             _this.doImageSelector();
             _this.doEditors();
-            _this.$form.find('[data-dependency]').change().removeClass('dirty');
+            _this.$form.find('[data-dependency]').trigger('change').removeClass('dirty');
             _this.$form.show();
             var $inputButton = _this.$form.find('input:submit');
             $inputButton.toggle(!$navLink.parent().hasClass('no-submit'));
@@ -14464,8 +14464,8 @@ var SettingsPage = (function () {
     };
     SettingsPage.prototype.toggleMenu = function () {
         var $navList = this.$nav.find('.atum-nav-list');
-        $('.toogle-menu, .atum-nav-link').click(function () { return $navList.toggleClass('expand-menu'); });
-        $(window).resize(function () { return $navList.removeClass('expand-menu'); });
+        $('.toogle-menu, .atum-nav-link').on('click', function () { return $navList.toggleClass('expand-menu'); });
+        $(window).on('resize', function () { return $navList.removeClass('expand-menu'); });
     };
     SettingsPage.prototype.maybeClearOutStockThreshold = function ($checkbox) {
         var _this = this;
@@ -14708,7 +14708,7 @@ var SettingsPage = (function () {
                     }
                     _this.$form.find('.section-title h2 span').html(title);
                     $formSettingsWrapper.removeClass('overlay');
-                    _this.$form.find('input:submit').click();
+                    _this.$form.find('input:submit').trigger('click');
                 }
                 else {
                 }
@@ -14719,7 +14719,7 @@ var SettingsPage = (function () {
         var themeSelectedValue = $element.data('value'), $colorSettingsWrapper = this.$settingsWrapper.find('#atum_setting_color_scheme'), $colorInputs = $colorSettingsWrapper.find("input.atum-settings-input[data-display='".concat(themeSelectedValue, "']"));
         $colorInputs.each(function (index, elem) {
             var $elem = $(elem);
-            $elem.val($elem.data('default')).change();
+            $elem.val($elem.data('default')).trigger('change');
         });
     };
     SettingsPage.prototype.toggleMultiCheckboxPanel = function ($switcher) {

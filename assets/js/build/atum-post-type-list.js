@@ -19599,11 +19599,11 @@ var TableCellPopovers = (function (_super) {
                 }
             }
             if (!$metaInput.hasClass('atum-datepicker')) {
-                $activePopover.find('.meta-value').focus().select();
+                $activePopover.find('.meta-value').trigger('focus').trigger('select');
             }
             $activePopover.find('input').on('keyup', function (evt) {
                 if (13 === evt.which) {
-                    $activePopover.find('.set').click();
+                    $activePopover.find('.set').trigger('click');
                 }
                 else if (27 === evt.which) {
                     _this.hidePopover($metaCell);
@@ -19819,8 +19819,8 @@ __webpack_require__.r(__webpack_exports__);
 var ActiveRow = {
     addActiveClassRow: function ($listTable) {
         var _this = this;
-        $listTable.find('tbody .check-column input:checkbox').change(function (evt) { return _this.switchActiveClass($(evt.currentTarget)); });
-        $('#cb-select-all-1, #cb-select-all-2').change(function (evt) {
+        $listTable.find('tbody .check-column input:checkbox').on('change', function (evt) { return _this.switchActiveClass($(evt.currentTarget)); });
+        $('#cb-select-all-1, #cb-select-all-2').on('change', function (evt) {
             var $selectAll = $(evt.currentTarget);
             $listTable.find('tbody .check-column input:checkbox').each(function (index, elem) {
                 var $checkbox = $(elem);
@@ -20137,11 +20137,11 @@ var ScrollBar = (function () {
     }
     ScrollBar.prototype.bindEvents = function () {
         var _this = this;
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             if (_this.globals.$scrollPane && _this.globals.$scrollPane.length && typeof _this.globals.$scrollPane.data('jsp') !== 'undefined') {
                 _this.globals.jScrollApi.reinitialise();
             }
-        }).resize();
+        }).trigger('resize');
     };
     ScrollBar.prototype.addHooks = function () {
         var _this = this;

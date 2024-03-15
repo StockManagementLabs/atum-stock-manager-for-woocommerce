@@ -27,7 +27,7 @@ const ButtonGroup = {
 			}
 
 			this.updateChecked( $button.closest( '.btn-group' ) );
-			$button.find( 'input' ).change();
+			$button.find( 'input' ).trigger( 'change' );
 
 			return false; // This avoids from running this twice.
 

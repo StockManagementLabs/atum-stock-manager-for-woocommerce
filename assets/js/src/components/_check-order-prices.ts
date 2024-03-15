@@ -29,7 +29,7 @@ export default class CheckOrderPrices {
 	 */
 	bindEvents() {
 
-		this.$checkPricesButton.click( ( evt: JQueryEventObject ) => {
+		this.$checkPricesButton.on( 'click', ( evt: JQueryEventObject ) => {
 
 			evt.preventDefault();
 

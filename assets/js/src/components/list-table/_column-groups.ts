@@ -33,20 +33,20 @@ export default class ColumnGroups {
 			this.toggleGroupColumns( $groupToggler );
 			//$groupToggler.tooltip( 'hide' ); // TODO: WHY NOT TO USE THE TOOLTIP COMPONENT.
 
-		} ).find( '.column-groups th[data-collapsed="1"] .group-toggler' ).click();
+		} ).find( '.column-groups th[data-collapsed="1"] .group-toggler' ).trigger( 'click' );
 
 		// Show the toggleable group columns when opening the screen options.
 		// to avoid the hidden columns to be disabled when switching column visibilities.
-		$( '#show-settings-link' ).click( ( evt: JQueryEventObject ) => {
+		$( '#show-settings-link' ).on( 'click', ( evt: JQueryEventObject ) => {
 
 			if ( ! $( evt.currentTarget ).hasClass( 'screen-meta-active' ) ) {
-				this.globals.$atumTable.find( '.column-groups' ).find( 'th.collapsed' ).find( '.group-toggler' ).click();
+				this.globals.$atumTable.find( '.column-groups' ).find( 'th.collapsed' ).find( '.group-toggler' ).trigger( 'click' );
 			}
 
 		} );
 
 		// Hide/Show/Colspan column groups.
-		$( '#adv-settings .metabox-prefs input' ).change( ( evt: JQueryEventObject ) => {
+		$( '#adv-settings .metabox-prefs input' ).on( 'change', ( evt: JQueryEventObject ) => {
 
 			this.globals.$atumList.find( 'thead .column-groups th' ).each( ( index: number, elem: Element ) => {
 

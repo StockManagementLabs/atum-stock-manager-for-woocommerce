@@ -50,7 +50,7 @@ export default class FileUploader {
 		// The WP media must be enqueued.
 		if ( window['wp'].hasOwnProperty( 'media' ) ) {
 
-			this.$buttons.click( ( evt: JQueryEventObject ) => {
+			this.$buttons.on( 'click', ( evt: JQueryEventObject ) => {
 
 				const $button: JQuery = $( evt.currentTarget );
 

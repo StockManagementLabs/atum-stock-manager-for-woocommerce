@@ -22280,11 +22280,11 @@ var TableCellPopovers = (function (_super) {
                 }
             }
             if (!$metaInput.hasClass('atum-datepicker')) {
-                $activePopover.find('.meta-value').focus().select();
+                $activePopover.find('.meta-value').trigger('focus').trigger('select');
             }
             $activePopover.find('input').on('keyup', function (evt) {
                 if (13 === evt.which) {
-                    $activePopover.find('.set').click();
+                    $activePopover.find('.set').trigger('click');
                 }
                 else if (27 === evt.which) {
                     _this.hidePopover($metaCell);
@@ -22500,8 +22500,8 @@ __webpack_require__.r(__webpack_exports__);
 var ActiveRow = {
     addActiveClassRow: function ($listTable) {
         var _this = this;
-        $listTable.find('tbody .check-column input:checkbox').change(function (evt) { return _this.switchActiveClass($(evt.currentTarget)); });
-        $('#cb-select-all-1, #cb-select-all-2').change(function (evt) {
+        $listTable.find('tbody .check-column input:checkbox').on('change', function (evt) { return _this.switchActiveClass($(evt.currentTarget)); });
+        $('#cb-select-all-1, #cb-select-all-2').on('change', function (evt) {
             var $selectAll = $(evt.currentTarget);
             $listTable.find('tbody .check-column input:checkbox').each(function (index, elem) {
                 var $checkbox = $(elem);
@@ -22577,7 +22577,7 @@ var AddSupplierModal = (function () {
             var $supplierName = _this.$modal.find('#supplier-name');
             if (!$supplierName.val()) {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().showValidationMessage(_this.settings.get('supplierNameRequired'));
-                $supplierName.focus().select();
+                $supplierName.trigger('focus').trigger('select');
                 resolve();
                 return;
             }
@@ -22762,7 +22762,7 @@ var BulkActions = (function () {
         this.$bulkButton.text(buttonText);
     };
     BulkActions.prototype.resetBulkFields = function () {
-        this.globals.$atumList.find('.bulkactions select').val(this.noOptionValue).change();
+        this.globals.$atumList.find('.bulkactions select').val(this.noOptionValue).trigger('change');
     };
     return BulkActions;
 }());
@@ -22796,13 +22796,13 @@ var ColumnGroups = (function () {
         this.globals.$atumList.on('click', '.group-toggler', function (evt) {
             var $groupToggler = $(evt.currentTarget);
             _this.toggleGroupColumns($groupToggler);
-        }).find('.column-groups th[data-collapsed="1"] .group-toggler').click();
-        $('#show-settings-link').click(function (evt) {
+        }).find('.column-groups th[data-collapsed="1"] .group-toggler').trigger('click');
+        $('#show-settings-link').on('click', function (evt) {
             if (!$(evt.currentTarget).hasClass('screen-meta-active')) {
-                _this.globals.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').click();
+                _this.globals.$atumTable.find('.column-groups').find('th.collapsed').find('.group-toggler').trigger('click');
             }
         });
-        $('#adv-settings .metabox-prefs input').change(function (evt) {
+        $('#adv-settings .metabox-prefs input').on('change', function (evt) {
             _this.globals.$atumList.find('thead .column-groups th').each(function (index, elem) {
                 var $elem = $(elem), cols = _this.globals.$atumList.find("thead .col-".concat($elem.attr('class'), ":visible")).length;
                 if (cols) {
@@ -23217,7 +23217,7 @@ var Filters = (function () {
                     didOpen: function (modal) {
                         var $modal = $(modal);
                         _this.dateTimePicker.addDateTimePickers($modal.find('.atum-datepicker'), { minDate: false });
-                        $modal.find('.atum-modal-content .apply').click(function () {
+                        $modal.find('.atum-modal-content .apply').on('click', function () {
                             _this.globals.filterData['date_from'] = $modal.find('.date_from').val();
                             _this.globals.filterData['date_to'] = $modal.find('.date_to').val();
                             _this.keyUp(evt, true);
@@ -23736,7 +23736,7 @@ var ListTable = (function () {
         var isChecked = $parentCheckbox.is(':checked');
         if ($containerRow.find('.has-child').length) {
             if ($containerRow.hasClass('main-row') && !$containerRow.hasClass('expanded') && isChecked) {
-                $containerRow.find('.has-child').click();
+                $containerRow.find('.has-child').trigger('click');
             }
             var $nextRow = $containerRow.next();
             while ($nextRow.length && !$nextRow.hasClass('main-row')) {
@@ -23745,7 +23745,7 @@ var ListTable = (function () {
                 _active_row__WEBPACK_IMPORTED_MODULE_0__["default"].switchActiveClass($checkbox);
                 this.wpHooks.doAction('atum_listTable_afterCheckRow', $checkbox);
                 if (isChecked) {
-                    $nextRow.find('.has-child').click();
+                    $nextRow.find('.has-child').trigger('click');
                 }
                 $nextRow = $nextRow.next();
                 if (!$containerRow.hasClass('main-row') && $nextRow.hasClass('expandable')) {
@@ -23764,7 +23764,7 @@ var ListTable = (function () {
         else {
             $checkboxes = $checkboxes.filter(':checked');
         }
-        $checkboxes.prop('checked', isChecked).change();
+        $checkboxes.prop('checked', isChecked).trigger('change');
         this.globals.$atumTable.find('.manage-column :checkbox').not($checkAll).prop('checked', isChecked);
     };
     ListTable.prototype.controlAllProducts = function (evt) {
@@ -24018,7 +24018,7 @@ var LocationsTree = (function () {
     LocationsTree.prototype.bindEditTreeEvents = function ($locationsTreeContainer) {
         var _this = this;
         this.toSetLocations = this.locationsSet;
-        $locationsTreeContainer.find('a, .easytree-icon').click(function (evt) {
+        $locationsTreeContainer.find('a, .easytree-icon').on('click', function (evt) {
             evt.preventDefault();
             var $this = $(evt.currentTarget), catItem = '', classList = $this.closest('.easytree-node').attr('class').split(/\s+/);
             $.each(classList, function (index, item) {
@@ -24049,7 +24049,7 @@ var LocationsTree = (function () {
             if ($node.hasClass('checked')) {
                 var $parentNode = $node.closest('ul').parent('li');
                 if ($parentNode.length) {
-                    $parentNode.children('.easytree-exp-c, .easytree-exp-cl').find('.easytree-expander').click();
+                    $parentNode.children('.easytree-exp-c, .easytree-exp-cl').find('.easytree-expander').trigger('click');
                 }
             }
         });
@@ -24359,14 +24359,14 @@ var SalesLastDays = (function () {
         for (var i in days) {
             $selectableDays.append($('<option/>').html(days[i].toString()));
         }
-        $selectDays.html('<span class="textvalue">' + selectDaysText + '</span>');
+        $selectDays.html("<span class=\"textvalue\">".concat(selectDaysText, "</span>"));
         $selectDays.append($selectableDays);
         $selectDays.find('select').hide().val(selectDaysText);
-        $selectDays.click(function (evt) {
+        $selectDays.on('click', function (evt) {
             evt.preventDefault();
             evt.stopImmediatePropagation();
         });
-        $selectableDays.change(function (evt) {
+        $selectableDays.on('change', function (evt) {
             var $select = $(evt.currentTarget);
             $selectDays.find('.textvalue').text($select.val());
             $select.hide();
@@ -24376,7 +24376,7 @@ var SalesLastDays = (function () {
             _this.router.updateHash();
         });
         setTimeout(function () {
-            $selectDays.find('.textvalue').click(function (evt) {
+            $selectDays.find('.textvalue').on('click', function (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
                 $(evt.currentTarget).hide();
@@ -24422,11 +24422,11 @@ var ScrollBar = (function () {
     }
     ScrollBar.prototype.bindEvents = function () {
         var _this = this;
-        $(window).resize(function () {
+        $(window).on('resize', function () {
             if (_this.globals.$scrollPane && _this.globals.$scrollPane.length && typeof _this.globals.$scrollPane.data('jsp') !== 'undefined') {
                 _this.globals.jScrollApi.reinitialise();
             }
-        }).resize();
+        }).trigger('resize');
     };
     ScrollBar.prototype.addHooks = function () {
         var _this = this;
@@ -24502,7 +24502,7 @@ var SearchInColumn = (function () {
         this.globals = globals;
         if ($('.atum-post-search-with-dropdown').length) {
             this.setup();
-            $('#adv-settings input:checkbox').change(function () { return _this.setup(); });
+            $('#adv-settings input:checkbox').on('change', function () { return _this.setup(); });
             this.events();
         }
     }
@@ -24532,7 +24532,7 @@ var SearchInColumn = (function () {
     SearchInColumn.prototype.events = function () {
         var _this = this;
         this.globals.$searchColumnBtn
-            .click(function (evt) {
+            .on('click', function (evt) {
             evt.stopPropagation();
             $(evt.currentTarget).parent().find('.dropdown-menu').toggle();
         })
@@ -24557,7 +24557,7 @@ var SearchInColumn = (function () {
                 _this.globals.$searchColumnBtn.trigger('atum-search-column-data-changed');
             }
         });
-        $(document).click(function () { return _this.globals.$searchColumnDropdown.hide(); });
+        $(document).on('click', function () { return _this.globals.$searchColumnDropdown.hide(); });
     };
     return SearchInColumn;
 }());
@@ -24827,11 +24827,11 @@ var TableButtons = (function () {
             case 'expand':
                 if (enabled) {
                     this.globals.$atumTable.find('tr').not('.expanded')
-                        .find('.has-child').click();
+                        .find('.has-child').trigger('click');
                 }
                 else {
                     this.globals.$atumTable.find('tr.expanded')
-                        .find('.has-child').click();
+                        .find('.has-child').trigger('click');
                 }
                 break;
         }

@@ -3494,11 +3494,11 @@ var DataExport = (function () {
         $tab.attr('id', 'atum-export-link-wrap')
             .find('button').attr({
             'id': 'show-export-settings-link',
-            'aria-controls': 'atum-export-wrap'
+            'aria-controls': 'atum-export-wrap',
         }).text(this.settings.get('tabTitle'));
         this.$tabContentWrapper.append($tabContent);
         this.$tabsWrapper.prepend($tab);
-        $('#show-export-settings-link').click(window['screenMeta'].toggleEvent);
+        $('#show-export-settings-link').on('click', window['screenMeta'].toggleEvent);
         this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
     };
     DataExport.prototype.downloadReport = function () {

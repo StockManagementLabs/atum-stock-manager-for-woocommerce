@@ -11,17 +11,17 @@ export default class SalesStatsWidget {
 	constructor(
 		private $widgetsContainer: JQuery
 	) {
-		
-		$('.stats-data-widget').find('select').change( (evt: JQueryEventObject) => {
-			
+
+		$( '.stats-data-widget' ).find( 'select' ).on( 'change', ( evt: JQueryEventObject ) => {
+
 			evt.stopPropagation(); // Avoid event bubbling to not trigger the layout saving.
-			
-			const $select: JQuery          = $(evt.currentTarget),
-			      $widget: JQuery = $select.closest('.stats-data-widget');
+
+			const $select: JQuery = $( evt.currentTarget ),
+			      $widget: JQuery = $select.closest( '.stats-data-widget' );
 
 			this.loadSales( $widget, $select.val() );
-			
-		});
+
+		} );
 		
 	}
 
@@ -33,12 +33,12 @@ export default class SalesStatsWidget {
 	 */
 	loadSales( $widget: JQuery, filter: string ) {
 
-		const $salesData: JQuery = $widget.find(`[data-value="${ filter }"]`);
+		const $salesData: JQuery = $widget.find( `[data-value="${ filter }"]` );
 
 		// Just show the data.
-		if ( 'yes' === $salesData.data('updated') ) {
-			$widget.find('.data').not('.hidden').addClass('hidden');
-			$salesData.fadeIn('fast');
+		if ( 'yes' === $salesData.data( 'updated' ) ) {
+			$widget.find( '.data' ).not( '.hidden' ).addClass( 'hidden' );
+			$salesData.fadeIn( 'fast' );
 		}
 		// Load the data.
 		else {
@@ -64,14 +64,14 @@ export default class SalesStatsWidget {
 
 							$.each( data, ( key: string, value: any ) => {
 
-								if ( $salesData.find(`[data-prop="${ key }"]`).length ) {
-									$salesData.find(`[data-prop="${ key }"]`).html( value );
+								if ( $salesData.find( `[data-prop="${ key }"]` ).length ) {
+									$salesData.find( `[data-prop="${ key }"]` ).html( value );
 								}
 
 							} );
 
-							$widget.find('.data').not('.hidden').addClass('hidden');
-							$salesData.removeClass('hidden');
+							$widget.find( '.data' ).not( '.hidden' ).addClass( 'hidden' );
+							$salesData.removeClass( 'hidden' );
 
 						}
 

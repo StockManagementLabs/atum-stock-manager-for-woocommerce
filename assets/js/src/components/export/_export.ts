@@ -51,92 +51,92 @@ export default class DataExport {
 	 * Duplicate the "Screen Options" tab
 	 */
 	createExportTab() {
-		
-		const $tab: JQuery        = this.$tabsWrapper.find('#screen-options-link-wrap').clone(),
-		      $tabContent: JQuery = this.$tabContentWrapper.find('#screen-options-wrap').clone();
-		
-		$tabContent.attr({
+
+		const $tab: JQuery        = this.$tabsWrapper.find( '#screen-options-link-wrap' ).clone(),
+		      $tabContent: JQuery = this.$tabContentWrapper.find( '#screen-options-wrap' ).clone();
+
+		$tabContent.attr( {
 			'id'        : 'atum-export-wrap',
-			'aria-label': this.settings.get('tabTitle'),
-		});
-		
-		$tabContent.find('form').attr('id', 'atum-export-settings').find('input').removeAttr('id');
-		$tabContent.find('.screen-options').remove();
-		$tabContent.find('input[type=submit]').val( this.settings.get('submitTitle') );
-		$tabContent.find('#screenoptionnonce').remove();
-		
+			'aria-label': this.settings.get( 'tabTitle' ),
+		} );
+
+		$tabContent.find( 'form' ).attr( 'id', 'atum-export-settings' ).find( 'input' ).removeAttr( 'id' );
+		$tabContent.find( '.screen-options' ).remove();
+		$tabContent.find( 'input[type=submit]' ).val( this.settings.get( 'submitTitle' ) );
+		$tabContent.find( '#screenoptionnonce' ).remove();
+
 		// Add a fieldset for product type selection.
-		if (typeof this.settings.get('productTypes') !== 'undefined') {
-			
-			const $typeFieldset: JQuery = $('<fieldset class="product-type" />');
-			
-			$typeFieldset.append(`<legend>${ this.settings.get('productTypesTitle') }</legend>`);
-			$typeFieldset.append( this.settings.get('productTypes') );
-			$typeFieldset.insertAfter( $tabContent.find('fieldset').last() );
-			
+		if ( typeof this.settings.get( 'productTypes' ) !== 'undefined' ) {
+
+			const $typeFieldset: JQuery = $( '<fieldset class="product-type" />' );
+
+			$typeFieldset.append( `<legend>${ this.settings.get( 'productTypesTitle' ) }</legend>` );
+			$typeFieldset.append( this.settings.get( 'productTypes' ) );
+			$typeFieldset.insertAfter( $tabContent.find( 'fieldset' ).last() );
+
 		}
-		
+
 		// Add a fieldset for product category selection.
-		if (typeof this.settings.get('categories') !== 'undefined') {
-			
-			const $catFieldset: JQuery = $('<fieldset class="product-category" />');
-			
-			$catFieldset.append(`<legend>${ this.settings.get('categoriesTitle') }</legend>`);
-			$catFieldset.append( this.settings.get('categories') );
-			$catFieldset.insertAfter( $tabContent.find('fieldset').last() );
-			
+		if ( typeof this.settings.get( 'categories' ) !== 'undefined' ) {
+
+			const $catFieldset: JQuery = $( '<fieldset class="product-category" />' );
+
+			$catFieldset.append( `<legend>${ this.settings.get( 'categoriesTitle' ) }</legend>` );
+			$catFieldset.append( this.settings.get( 'categories' ) );
+			$catFieldset.insertAfter( $tabContent.find( 'fieldset' ).last() );
+
 		}
 
 		// Allow adding extra fieldsets for other purpossing.
-		if (typeof this.settings.get('extraFields') === 'object') {
+		if ( typeof this.settings.get( 'extraFields' ) === 'object' ) {
 
-			this.settings.get('extraFields').forEach( ( extraField ) => {
-				let $extraFieldset: JQuery = extraField.title === 'hidden' ? $('<span>') : $('<fieldset class="extra" />');
+			this.settings.get( 'extraFields' ).forEach( ( extraField ) => {
+				let $extraFieldset: JQuery = extraField.title === 'hidden' ? $( '<span>' ) : $( '<fieldset class="extra" />' );
 
 				if ( 'hidden' !== extraField.title ) {
 					$extraFieldset.append( `<legend>${ extraField.title }</legend>` );
 				}
 				$extraFieldset.append( extraField.content );
-				$extraFieldset.insertAfter( $tabContent.find('fieldset').last() );
+				$extraFieldset.insertAfter( $tabContent.find( 'fieldset' ).last() );
 			} );
 
 		}
 
 		// Add a fieldset for title length setup.
-		const $titleLengthFieldset: JQuery = $('<fieldset class="title-length" />');
-		
-		$titleLengthFieldset.append(`<legend>${ this.settings.get('titleLength') }</legend>`);
-		$titleLengthFieldset.append(`<input type="number" step="1" min="0" name="title_max_length" value="${ this.settings.get('maxLength') }"> `);
-		$titleLengthFieldset.append(`<label><input type="checkbox" id="disableMaxLength" value="yes">${ this.settings.get('disableMaxLength') }</label>`);
-		$titleLengthFieldset.insertAfter( $tabContent.find('fieldset').last() );
-		
+		const $titleLengthFieldset: JQuery = $( '<fieldset class="title-length" />' );
+
+		$titleLengthFieldset.append( `<legend>${ this.settings.get( 'titleLength' ) }</legend>` );
+		$titleLengthFieldset.append( `<input type="number" step="1" min="0" name="title_max_length" value="${ this.settings.get( 'maxLength' ) }"> ` );
+		$titleLengthFieldset.append( `<label><input type="checkbox" id="disableMaxLength" value="yes">${ this.settings.get( 'disableMaxLength' ) }</label>` );
+		$titleLengthFieldset.insertAfter( $tabContent.find( 'fieldset' ).last() );
+
 		// Add a fieldset for format output.
-		const $formatFieldset: JQuery = $('<fieldset class="output-format" />');
-		$formatFieldset.append(`<legend>${ this.settings.get('outputFormatTitle') }</legend>`);
-		
-		$.each(this.settings.get('outputFormats'), (key: string, value: string) => {
-			$formatFieldset.append(`<label><input type="radio" name="output-format" value="${ key }">${ value }</label>`);
-		});
-		
-		$formatFieldset.find('input[name=output-format]').first().prop('checked', true);
-		$formatFieldset.insertAfter( $tabContent.find('fieldset').last() );
-		
+		const $formatFieldset: JQuery = $( '<fieldset class="output-format" />' );
+		$formatFieldset.append( `<legend>${ this.settings.get( 'outputFormatTitle' ) }</legend>` );
+
+		$.each( this.settings.get( 'outputFormats' ), ( key: string, value: string ) => {
+			$formatFieldset.append( `<label><input type="radio" name="output-format" value="${ key }">${ value }</label>` );
+		} );
+
+		$formatFieldset.find( 'input[name=output-format]' ).first().prop( 'checked', true );
+		$formatFieldset.insertAfter( $tabContent.find( 'fieldset' ).last() );
+
 		// Clearfix
-		$tabContent.find('.submit').before('<div class="clear"></div>');
-		
-		$tab.attr('id', 'atum-export-link-wrap')
-			.find('button').attr({
-				'id'           : 'show-export-settings-link',
-				'aria-controls': 'atum-export-wrap'
-			}).text( this.settings.get('tabTitle') );
-		
-		this.$tabContentWrapper.append($tabContent);
-		this.$tabsWrapper.prepend($tab);
-		
+		$tabContent.find( '.submit' ).before( '<div class="clear"></div>' );
+
+		$tab.attr( 'id', 'atum-export-link-wrap' )
+			.find( 'button' ).attr( {
+			'id'           : 'show-export-settings-link',
+			'aria-controls': 'atum-export-wrap',
+		} ).text( this.settings.get( 'tabTitle' ) );
+
+		this.$tabContentWrapper.append( $tabContent );
+		this.$tabsWrapper.prepend( $tab );
+
 		// Use the WP's screenMeta toggleEvent method
-		$('#show-export-settings-link').click( window['screenMeta'].toggleEvent );
-		
-		this.$exportForm = this.$pageWrapper.find('#atum-export-settings');
+		$( '#show-export-settings-link' ).on( 'click', window[ 'screenMeta' ].toggleEvent );
+
+		this.$exportForm = this.$pageWrapper.find( '#atum-export-settings' );
 		
 	}
 	

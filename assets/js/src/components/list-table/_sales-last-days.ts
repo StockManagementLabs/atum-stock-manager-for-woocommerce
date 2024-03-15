@@ -35,16 +35,16 @@ export default class SalesLastDays {
 			$selectableDays.append( $( '<option/>' ).html( days[ i ].toString() ) );
 		}
 
-		$selectDays.html( '<span class="textvalue">' + selectDaysText + '</span>' );
+		$selectDays.html( `<span class="textvalue">${ selectDaysText }</span>` );
 		$selectDays.append( $selectableDays );
 		$selectDays.find( 'select' ).hide().val( selectDaysText );
 
-		$selectDays.click( ( evt: JQueryEventObject ) => {
+		$selectDays.on( 'click', ( evt: JQueryEventObject ) => {
 			evt.preventDefault();
 			evt.stopImmediatePropagation();
 		} );
 
-		$selectableDays.change( ( evt: JQueryEventObject ) => {
+		$selectableDays.on( 'change', ( evt: JQueryEventObject ) => {
 
 			let $select: JQuery = $( evt.currentTarget );
 
@@ -59,7 +59,7 @@ export default class SalesLastDays {
 		} );
 
 		setTimeout( () => {
-			$selectDays.find( '.textvalue' ).click( ( evt: JQueryEventObject ) => {
+			$selectDays.find( '.textvalue' ).on( 'click', ( evt: JQueryEventObject ) => {
 
 				evt.preventDefault();
 				evt.stopPropagation();

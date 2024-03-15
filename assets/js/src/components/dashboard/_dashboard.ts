@@ -27,108 +27,108 @@ export default class Dashboard {
 		private settings: Settings,
 		private tooltip: Tooltip
 	) {
-		
-		this.$atumDashboard = $('.atum-dashboard');
-		this.$widgetsContainer = this.$atumDashboard.find('.atum-widgets');
-		this.$addWidgetModalContent = this.$atumDashboard.find('#tmpl-atum-modal-add-widgets');
-		
+
+		this.$atumDashboard = $( '.atum-dashboard' );
+		this.$widgetsContainer = this.$atumDashboard.find( '.atum-widgets' );
+		this.$addWidgetModalContent = this.$atumDashboard.find( '#tmpl-atum-modal-add-widgets' );
+
 		this.buildWidgetsGrid();
 		this.bindDashButtons();
 		this.bindWidgetControls();
 		this.bindConfigControls();
 		this.initWidgets();
 		this.marketingBannerConfig();
-		
-		$(window).resize( () => this.onResize() ).resize();
+
+		$( window ).on( 'resize', () => this.onResize() ).trigger( 'resize' );
 	
 	}
 	
 	onResize() {
-		
-		let width: number      = $(window).width(),
-		    $dashCards: any = $('.dash-cards'),
-		    $videoList: any = $('.video-list-wrapper');
-		
-		if (width <= 480) {
-			
-			// Apply the caousel to dashboard cards in mobiles.
-			$dashCards.addClass('owl-carousel owl-theme').owlCarousel({
+
+		const width: number   = $( window ).width(),
+		      $dashCards: any = $( '.dash-cards' ),
+		      $videoList: any = $( '.video-list-wrapper' );
+
+		if ( width <= 480 ) {
+
+			// Apply the carousel to dashboard cards in mobiles.
+			$dashCards.addClass( 'owl-carousel owl-theme' ).owlCarousel( {
 				items       : 1,
 				margin      : 15,
 				stagePadding: 30,
-			});
-			
-			const videoCarousel: JQuery = $videoList.find('.scroll-box').addClass('owl-carousel owl-theme').owlCarousel({
+			} );
+
+			const videoCarousel: JQuery = $videoList.find( '.scroll-box' ).addClass( 'owl-carousel owl-theme' ).owlCarousel( {
 				items       : 2,
 				margin      : 1,
 				dots        : false,
-				stagePadding: 15
-			});
+				stagePadding: 15,
+			} );
 			
 			// Video Carousel nav.
-			const $videoNextNav: JQuery = $videoList.find('.carousel-nav-next'),
-			      $videoPrevNav: JQuery = $videoList.find('.carousel-nav-prev');
+			const $videoNextNav: JQuery = $videoList.find( '.carousel-nav-next' ),
+			      $videoPrevNav: JQuery = $videoList.find( '.carousel-nav-prev' );
 			
-			$videoNextNav.click( () => videoCarousel.trigger('next.owl.carousel') );
-			$videoPrevNav.click( () => videoCarousel.trigger('prev.owl.carousel') );
-			
-			videoCarousel.on('changed.owl.carousel', (evt: any) => {
-				
-				if (evt.item.index === 0) {
-					$videoPrevNav.addClass('disabled');
+			$videoNextNav.on( 'click', () => videoCarousel.trigger('next.owl.carousel') );
+			$videoPrevNav.on( 'click', () => videoCarousel.trigger('prev.owl.carousel') );
+
+			videoCarousel.on( 'changed.owl.carousel', ( evt: any ) => {
+
+				if ( evt.item.index === 0 ) {
+					$videoPrevNav.addClass( 'disabled' );
 				}
-				else if (evt.item.index === evt.item.count - 2) {
-					$videoNextNav.addClass('disabled');
+				else if ( evt.item.index === evt.item.count - 2 ) {
+					$videoNextNav.addClass( 'disabled' );
 				}
 				else {
-					$videoPrevNav.add($videoNextNav).removeClass('disabled');
+					$videoPrevNav.add( $videoNextNav ).removeClass( 'disabled' );
 				}
-				
-			});
+
+			} );
 			
 		}
 		else {
-			
+
 			// Remove the carousel in screens wider than mobile.
-			$('.owl-carousel').removeClass('owl-carousel owl-theme').trigger('destroy.owl.carousel');
-			
+			$( '.owl-carousel' ).removeClass( 'owl-carousel owl-theme' ).trigger( 'destroy.owl.carousel' );
+
 		}
 	
 	}
 	
 	buildWidgetsGrid() {
-		
-		const $gridStackElem: any = this.$widgetsContainer.find('.grid-stack');
-		
-		this.grid = $gridStackElem.gridstack({
+
+		const $gridStackElem: any = this.$widgetsContainer.find( '.grid-stack' );
+
+		this.grid = $gridStackElem.gridstack( {
 			handle                : '.widget-header',
-			alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+			alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test( navigator.userAgent ),
 			verticalMargin        : 30,
 			resizable             : {
 				autoHide   : true,
 				handles    : 'se, sw',
 				containment: 'parent',
 			},
-		}).data('gridstack');
-		
+		} ).data( 'gridstack' );
+
 		// Bind events.
-		$gridStackElem.on('change', () => {
+		$gridStackElem.on( 'change', () => {
 			this.saveWidgetsLayout();
-			NiceScroll.addScrollBars(this.$widgetsContainer);
-		});
-		
+			NiceScroll.addScrollBars( this.$widgetsContainer );
+		} );
+
 		// Dynamic min height for widgets.
-		$gridStackElem.on('resizestart', (evt: any, ui: any) =>  {
-			const minHeight = ui.element.find('.widget-body').outerHeight() + ui.element.find('.widget-header').outerHeight();
-			ui.element.closest('.atum-widget').css('min-height', minHeight);
-		});
+		$gridStackElem.on( 'resizestart', ( evt: any, ui: any ) => {
+			const minHeight = ui.element.find( '.widget-body' ).outerHeight() + ui.element.find( '.widget-header' ).outerHeight();
+			ui.element.closest( '.atum-widget' ).css( 'min-height', minHeight );
+		} );
 		
 	}
 	
 	bindDashButtons() {
-		
+
 		// "Add more widgets" popup.
-		$('.add-dash-widget').click( () => {
+		$( '.add-dash-widget' ).on( 'click', () => {
 
 			Swal.fire( {
 				title            : this.settings.get( 'availableWidgets' ),
@@ -147,9 +147,9 @@ export default class Dashboard {
 				},
 				willClose        : ( elem: any ) => NiceScroll.removeScrollBars( $( elem ) ),
 			} );
-			
-		});
-		
+
+		} );
+
 		// Add widget.
 		$( 'body' ).on( 'click', '.add-widget-popup .add-widget', ( evt: JQueryEventObject ) => {
 
@@ -181,12 +181,12 @@ export default class Dashboard {
 
 				},
 			} );
-			
-		});
-		
+
+		} );
+
 		// Restore default layout and widgets
 		const $restoreDashDefaults: JQuery = $( '.restore-defaults' );
-		$restoreDashDefaults.click( () => {
+		$restoreDashDefaults.on( 'click', () => {
 
 			Swal.fire( {
 				title              : this.settings.get( 'areYouSure' ),
@@ -244,14 +244,14 @@ export default class Dashboard {
 	bindWidgetControls() {
 
 		// Remove widget.
-		$( '.atum-widget' ).find( '.widget-close' ).click( ( evt: JQueryEventObject ) => {
+		$( '.atum-widget' ).find( '.widget-close' ).on( 'click', ( evt: JQueryEventObject ) => {
 			const $widget: JQuery = $( evt.currentTarget ).closest( '.atum-widget' );
 			this.grid.removeWidget( $widget );
 			this.toggleModalTemplateButtons( $widget.data( 'gs-id' ) );
 		} );
 
 		// Widget settings.
-		$( '.atum-widget' ).find( '.widget-settings' ).click( ( evt: JQueryEventObject ) => {
+		$( '.atum-widget' ).find( '.widget-settings' ).on( 'click', ( evt: JQueryEventObject ) => {
 			$( evt.currentTarget ).closest( '.widget-wrapper' ).find( '.widget-config' ).show().siblings().hide();
 		} );
 		
@@ -260,12 +260,12 @@ export default class Dashboard {
 	bindConfigControls() {
 
 		// Cancel config.
-		$( '.widget-config' ).find( '.cancel-config' ).click( ( evt: JQueryEventObject ) => {
+		$( '.widget-config' ).find( '.cancel-config' ).on( 'click', ( evt: JQueryEventObject ) => {
 			$( evt.currentTarget ).closest( '.widget-wrapper' ).find( '.widget-config' ).hide().siblings().show();
 		} );
 
 		// Save config.
-		$( '.widget-config' ).submit( ( evt: JQueryEventObject ) => {
+		$( '.widget-config' ).on( 'submit', ( evt: JQueryEventObject ) => {
 			evt.preventDefault();
 
 			// TODO: IMPLEMENT WIDGET CONFIG

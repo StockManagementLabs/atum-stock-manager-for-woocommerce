@@ -61,7 +61,7 @@ export default class AddSupplierModal {
 			if ( ! $supplierName.val() ) {
 
 				Swal.showValidationMessage( this.settings.get( 'supplierNameRequired' ) );
-				$supplierName.focus().select();
+				$supplierName.trigger( 'focus' ).trigger( 'select' );
 				resolve();
 				return;
 			}

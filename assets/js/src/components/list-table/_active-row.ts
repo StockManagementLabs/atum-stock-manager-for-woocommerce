@@ -7,14 +7,14 @@ const ActiveRow = {
 	/**
 	 * Add/remove row active class when checkbox is clicked.
 	 *
-	 * @param JQuery $listTable
+	 * @param {JQuery} $listTable
 	 */
 	addActiveClassRow( $listTable: JQuery ) {
 
-		$listTable.find( 'tbody .check-column input:checkbox' ).change( ( evt: JQueryEventObject ) => this.switchActiveClass( $( evt.currentTarget ) ) );
+		$listTable.find( 'tbody .check-column input:checkbox' ).on( 'change', ( evt: JQueryEventObject ) => this.switchActiveClass( $( evt.currentTarget ) ) );
 
-		// Selet all rows checkbox.
-		$( '#cb-select-all-1, #cb-select-all-2' ).change( ( evt: JQueryEventObject ) => {
+		// Select all rows checkbox.
+		$( '#cb-select-all-1, #cb-select-all-2' ).on( 'change', ( evt: JQueryEventObject ) => {
 
 			const $selectAll = $( evt.currentTarget );
 

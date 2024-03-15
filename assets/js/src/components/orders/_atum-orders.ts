@@ -93,16 +93,16 @@ export default class AtumOrders {
 		}
 		
 		// Trigger ATUM order type dependent fields.
-		$( '#atum_order_type' ).change( ( evt: JQueryEventObject ) => this.toggleExtraFields( evt ) ).change();
+		$( '#atum_order_type' ).on( 'change', ( evt: JQueryEventObject ) => this.toggleExtraFields( evt ) ).trigger( 'change' );
 
 		// Hide/show the blocker section on supplier dropdown changes.
-		this.$supplierDropdown.change( () => this.savePurchaseOrderSupplier() );
+		this.$supplierDropdown.on( 'change', () => this.savePurchaseOrderSupplier() );
 
 		// Trigger multiple suppliers' dependent fields.
-		this.$multipleSuppliers.change( () => this.toggleSupplierField() );
+		this.$multipleSuppliers.on( 'change', () => this.toggleSupplierField() );
 
 		// Ask for importing the order items after linking an order.
-		$( '#wc_order' ).change( ( evt: JQueryEventObject ) => this.importOrderItems( $( evt.currentTarget ), 'IL' ) );
+		$( '#wc_order' ).on( 'change', ( evt: JQueryEventObject ) => this.importOrderItems( $( evt.currentTarget ), 'IL' ) );
 
 		// Change button page-title-action position.
 		$( '.wp-heading-inline' ).append( $( '.page-title-action' ).show() );
@@ -452,7 +452,7 @@ export default class AtumOrders {
 
 		if ( this.$multipleSuppliers.is( ':checked' ) ) {
 			this.saveMultipleSuppliers( 'yes' );
-			this.$supplierDropdown.val( '' ).change();
+			this.$supplierDropdown.val( '' ).trigger( 'change' );
 			$body.addClass( 'allow-multiple-suppliers' );
 			this.toggleItemsBlocker();
 			$dropdownWrapper.slideUp();

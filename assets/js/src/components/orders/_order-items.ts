@@ -271,7 +271,7 @@ export default class AtumOrderItems {
 		$item.closest( 'tr' ).find( '.view' ).hide();
 		$item.closest( 'tr' ).find( '.edit' ).show();
 		$item.hide();
-		$( 'button.add-line-item' ).click();
+		$( 'button.add-line-item' ).trigger( 'click' );
 		$( 'button.cancel-action' ).data( 'reload', true );
 
 	}

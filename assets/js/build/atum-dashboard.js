@@ -8301,7 +8301,7 @@ var NiceScroll = {
                 cursorwidth: '4px',
                 cursorborderradius: '3px',
                 background: 'rgba(225, 225, 225, 0.3)',
-                bouncescroll: false
+                bouncescroll: false,
             }, opts);
             $boxSelector.niceScroll(opts);
         }
@@ -8315,7 +8315,7 @@ var NiceScroll = {
     resizeScrollBars: function ($elem) {
         var $boxSelector = this.getScrollBars($elem);
         if ($boxSelector.length) {
-            $boxSelector.getNiceScroll().resize();
+            $boxSelector.getNiceScroll().trigger('resize');
         }
     },
 };
@@ -8436,7 +8436,7 @@ var Dashboard = (function () {
         this.bindConfigControls();
         this.initWidgets();
         this.marketingBannerConfig();
-        $(window).resize(function () { return _this.onResize(); }).resize();
+        $(window).on('resize', function () { return _this.onResize(); }).trigger('resize');
     }
     Dashboard.prototype.onResize = function () {
         var width = $(window).width(), $dashCards = $('.dash-cards'), $videoList = $('.video-list-wrapper');
@@ -8450,11 +8450,11 @@ var Dashboard = (function () {
                 items: 2,
                 margin: 1,
                 dots: false,
-                stagePadding: 15
+                stagePadding: 15,
             });
             var $videoNextNav_1 = $videoList.find('.carousel-nav-next'), $videoPrevNav_1 = $videoList.find('.carousel-nav-prev');
-            $videoNextNav_1.click(function () { return videoCarousel_1.trigger('next.owl.carousel'); });
-            $videoPrevNav_1.click(function () { return videoCarousel_1.trigger('prev.owl.carousel'); });
+            $videoNextNav_1.on('click', function () { return videoCarousel_1.trigger('next.owl.carousel'); });
+            $videoPrevNav_1.on('click', function () { return videoCarousel_1.trigger('prev.owl.carousel'); });
             videoCarousel_1.on('changed.owl.carousel', function (evt) {
                 if (evt.item.index === 0) {
                     $videoPrevNav_1.addClass('disabled');
@@ -8495,7 +8495,7 @@ var Dashboard = (function () {
     };
     Dashboard.prototype.bindDashButtons = function () {
         var _this = this;
-        $('.add-dash-widget').click(function () {
+        $('.add-dash-widget').on('click', function () {
             sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
                 title: _this.settings.get('availableWidgets'),
                 html: _this.$addWidgetModalContent.html(),
@@ -8537,7 +8537,7 @@ var Dashboard = (function () {
             });
         });
         var $restoreDashDefaults = $('.restore-defaults');
-        $restoreDashDefaults.click(function () {
+        $restoreDashDefaults.on('click', function () {
             sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
                 title: _this.settings.get('areYouSure'),
                 text: _this.settings.get('defaultsWillRestore'),
@@ -8583,20 +8583,20 @@ var Dashboard = (function () {
     };
     Dashboard.prototype.bindWidgetControls = function () {
         var _this = this;
-        $('.atum-widget').find('.widget-close').click(function (evt) {
+        $('.atum-widget').find('.widget-close').on('click', function (evt) {
             var $widget = $(evt.currentTarget).closest('.atum-widget');
             _this.grid.removeWidget($widget);
             _this.toggleModalTemplateButtons($widget.data('gs-id'));
         });
-        $('.atum-widget').find('.widget-settings').click(function (evt) {
+        $('.atum-widget').find('.widget-settings').on('click', function (evt) {
             $(evt.currentTarget).closest('.widget-wrapper').find('.widget-config').show().siblings().hide();
         });
     };
     Dashboard.prototype.bindConfigControls = function () {
-        $('.widget-config').find('.cancel-config').click(function (evt) {
+        $('.widget-config').find('.cancel-config').on('click', function (evt) {
             $(evt.currentTarget).closest('.widget-wrapper').find('.widget-config').hide().siblings().show();
         });
-        $('.widget-config').submit(function (evt) {
+        $('.widget-config').on('submit', function (evt) {
             evt.preventDefault();
         });
     };
@@ -8697,12 +8697,12 @@ var CurrentStockValueWidget = (function () {
         this.$currentStockValueWidget = $('.current-stock-value-widget');
         if (this.$currentStockValueWidget.length) {
             this.onChange();
-            this.$currentStockValueWidget.find('select').first().change();
+            this.$currentStockValueWidget.find('select').first().trigger('change');
         }
     }
     CurrentStockValueWidget.prototype.onChange = function () {
         var _this = this;
-        this.$currentStockValueWidget.find('select').change(function (evt) {
+        this.$currentStockValueWidget.find('select').on('change', function (evt) {
             $.ajax({
                 url: window['ajaxurl'],
                 method: 'POST',
@@ -8751,7 +8751,7 @@ var SalesStatsWidget = (function () {
     function SalesStatsWidget($widgetsContainer) {
         var _this = this;
         this.$widgetsContainer = $widgetsContainer;
-        $('.stats-data-widget').find('select').change(function (evt) {
+        $('.stats-data-widget').find('select').on('change', function (evt) {
             evt.stopPropagation();
             var $select = $(evt.currentTarget), $widget = $select.closest('.stats-data-widget');
             _this.loadSales($widget, $select.val());
@@ -8857,7 +8857,7 @@ var StatisticsWidget = (function () {
                 pointBorderWidth: 2,
                 pointHoverRadius: 6,
                 tooltipBackground: 'linear-gradient(135deg, ' + this.settings.get('chartColors').green + ', ' + this.settings.get('chartColors').greenLight + ')',
-                fill: false
+                fill: false,
             }, {
                 id: 'products-chart',
                 units: '',
@@ -8872,14 +8872,14 @@ var StatisticsWidget = (function () {
                 pointBorderWidth: 2,
                 pointHoverRadius: 6,
                 tooltipBackground: 'linear-gradient(135deg, ' + this.settings.get('chartColors').blue + ', ' + this.settings.get('chartColors').greenBlue + ')',
-                fill: false
+                fill: false,
             }];
         var style = getComputedStyle(document.body);
         this.statsChartConfig = {
             type: 'line',
             data: {
                 labels: this.chartLabels,
-                datasets: this.statsDataSets
+                datasets: this.statsDataSets,
             },
             options: {
                 responsive: true,
@@ -8887,15 +8887,15 @@ var StatisticsWidget = (function () {
                 layout: {
                     padding: {
                         top: 10,
-                        left: 30
-                    }
+                        left: 30,
+                    },
                 },
                 legend: {
-                    display: false
+                    display: false,
                 },
                 hover: {
                     mode: 'nearest',
-                    intersect: true
+                    intersect: true,
                 },
                 scales: {
                     xAxes: [{
@@ -8904,12 +8904,12 @@ var StatisticsWidget = (function () {
                                 drawBorder: false,
                                 drawOnChartArea: true,
                                 drawTicks: true,
-                                color: style.getPropertyValue('--dash-statistics-grid-lines')
+                                color: style.getPropertyValue('--dash-statistics-grid-lines'),
                             },
                             ticks: {
                                 reverse: _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].checkRTL('reverse'),
                                 fontColor: style.getPropertyValue('--dash-statistics-ticks'),
-                            }
+                            },
                         }],
                     yAxes: [{
                             gridLines: {
@@ -8917,13 +8917,13 @@ var StatisticsWidget = (function () {
                                 drawBorder: false,
                                 drawOnChartArea: true,
                                 drawTicks: true,
-                                color: style.getPropertyValue('--dash-statistics-grid-lines')
+                                color: style.getPropertyValue('--dash-statistics-grid-lines'),
                             },
                             ticks: {
                                 fontColor: style.getPropertyValue('--dash-statistics-ticks'),
                             },
                             position: _utils_utils__WEBPACK_IMPORTED_MODULE_1__["default"].checkRTL('xSide'),
-                        }]
+                        }],
                 },
                 tooltips: {
                     enabled: false,
@@ -8957,9 +8957,9 @@ var StatisticsWidget = (function () {
                                 });
                             });
                         }
-                    }
-                }
-            }
+                    },
+                },
+            },
         };
         this.statsChart = new (chart_js_dist_Chart_bundle_min__WEBPACK_IMPORTED_MODULE_0___default())(this.statsCanvasCtx, this.statsChartConfig);
         this.doLegendSwitches();
@@ -8987,7 +8987,7 @@ var StatisticsWidget = (function () {
     };
     StatisticsWidget.prototype.doLegendSwitches = function () {
         var _this = this;
-        $('#value-chart, #products-chart').change(function (evt) {
+        $('#value-chart, #products-chart').on('change', function (evt) {
             evt.stopPropagation();
             var $activeCharts = $('.chart-legend').find('input:checkbox:checked'), activeDatasets = [];
             if ($activeCharts.length) {
@@ -9006,7 +9006,7 @@ var StatisticsWidget = (function () {
     };
     StatisticsWidget.prototype.changeChartType = function () {
         var _this = this;
-        $('.chart-type a').click(function (evt) {
+        $('.chart-type a').on('click', function (evt) {
             evt.preventDefault();
             var $chartTypeButton = $(evt.currentTarget), chartType = $chartTypeButton.data('view');
             if ($chartTypeButton.hasClass('active')) {
@@ -9047,19 +9047,19 @@ var StatisticsWidget = (function () {
                     }
                 });
                 _this.statsChart.update();
-            }
+            },
         })
             .draggable({
             connectToSortable: '.chart-legend',
             helper: 'clone',
-            revert: 'invalid'
+            revert: 'invalid',
         })
             .disableSelection();
     };
     StatisticsWidget.prototype.changeChartData = function () {
         var _this = this;
         var $chartFilter = $('.chart-filter'), statsAjaxFiltering = null;
-        $chartFilter.find('select').change(function (evt) {
+        $chartFilter.find('select').on('change', function (evt) {
             evt.stopPropagation();
             var $select = $(evt.currentTarget);
             if (statsAjaxFiltering) {
@@ -9072,7 +9072,7 @@ var StatisticsWidget = (function () {
                     action: 'atum_statistics_widget_chart',
                     security: _this.$widgetsContainer.data('nonce'),
                     chart_data: $chartFilter.find('select.chart-data').val(),
-                    chart_period: $chartFilter.find('select.chart-period').val()
+                    chart_period: $chartFilter.find('select.chart-period').val(),
                 },
                 dataType: 'json',
                 beforeSend: function () {
@@ -9101,13 +9101,13 @@ var StatisticsWidget = (function () {
                         _this.statsChart.update();
                         $select.siblings('.nice-select.loading').removeClass('loading');
                     }
-                }
+                },
             });
         });
     };
     StatisticsWidget.prototype.doMobileFilterNav = function () {
         var _this = this;
-        this.$statisticsWidget.find('.mobile-filter-nav li').click(function (evt) {
+        this.$statisticsWidget.find('.mobile-filter-nav li').on('click', function (evt) {
             var $navItem = $(evt.currentTarget);
             if ($navItem.hasClass('active')) {
                 $navItem.removeClass('active').find('.status').text('+');
@@ -9280,7 +9280,7 @@ var VideosWidget = (function () {
             $videoPlayer.find('.video-desc').text($videoItem.find('.video-desc').text().trim());
             $videoItem.data('video', videoId);
         });
-        this.$videosWidget.find('.video-list-layout a').click(function (evt) {
+        this.$videosWidget.find('.video-list-layout a').on('click', function (evt) {
             evt.preventDefault();
             var $button = $(evt.currentTarget);
             if ($button.hasClass('active')) {
@@ -9292,11 +9292,11 @@ var VideosWidget = (function () {
             $button.siblings('.active').removeClass('active');
             $button.addClass('active');
         });
-        this.$videosWidget.find('.video-filter-by').change(function (evt) {
+        this.$videosWidget.find('.video-filter-by').on('change', function (evt) {
             evt.stopPropagation();
             _this.filterVideos();
         });
-        this.$videosWidget.find('.video-sort-by').change(function (evt) {
+        this.$videosWidget.find('.video-sort-by').on('change', function (evt) {
             evt.stopPropagation();
             var sortBy = $(evt.currentTarget).val(), $videosWrapper = _this.$videosWidget.find('.scroll-box');
             $.ajax({

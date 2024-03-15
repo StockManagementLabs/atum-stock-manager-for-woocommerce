@@ -33,13 +33,13 @@ export default class ScrollBar {
 	bindEvents() {
 
 		// Reinitialise on window resizing.
-		$( window ).resize( () => {
+		$( window ).on( 'resize', () => {
 
 			if ( this.globals.$scrollPane && this.globals.$scrollPane.length && typeof this.globals.$scrollPane.data( 'jsp' ) !== 'undefined' ) {
 				this.globals.jScrollApi.reinitialise();
 			}
 
-		} ).resize();
+		} ).trigger( 'resize' );
 
 	}
 

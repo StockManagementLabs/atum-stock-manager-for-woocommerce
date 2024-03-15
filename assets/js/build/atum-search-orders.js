@@ -8325,19 +8325,19 @@ var SearchOrdersByColumn = (function () {
         this.tooltip.addTooltips(this.$searchColumnWrapper);
         var activeSearchCol = _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].getUrlParameter('atum_search_column'), $dropdownLinks = this.$searchColumnDropdown.children('a');
         if (activeSearchCol) {
-            _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData($dropdownLinks, 'value', activeSearchCol).click();
+            _utils_utils__WEBPACK_IMPORTED_MODULE_0__["default"].filterByData($dropdownLinks, 'value', activeSearchCol).trigger('click');
         }
         else if ($dropdownLinks.length < 3) {
-            $dropdownLinks.eq(1).click();
+            $dropdownLinks.eq(1).trigger('click');
         }
         else {
-            $dropdownLinks.eq(0).click();
+            $dropdownLinks.eq(0).trigger('click');
         }
     }
     SearchOrdersByColumn.prototype.bindEvents = function () {
         var _this = this;
         this.$searchColumnBtn
-            .click(function (evt) {
+            .on('click', function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
             $(evt.currentTarget).parent().find('.dropdown-menu').toggle();
@@ -8357,10 +8357,10 @@ var SearchOrdersByColumn = (function () {
             _this.tooltip.destroyTooltips(_this.$searchColumnWrapper);
             _this.tooltip.addTooltips(_this.$searchColumnWrapper);
             if (column) {
-                _this.$searchInput.focus();
+                _this.$searchInput.trigger('focus').trigger('select');
             }
         });
-        $('body').click(function () { return _this.$searchColumnDropdown.hide(); });
+        $('body').on('click', function () { return _this.$searchColumnDropdown.hide(); });
     };
     return SearchOrdersByColumn;
 }());

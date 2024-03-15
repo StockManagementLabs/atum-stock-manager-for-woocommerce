@@ -67,7 +67,7 @@ export default class TableCellPopovers extends PopoverBase{
 
 				// Do not focus over datepicker fields because the calendar is not showing.
 				if ( ! $metaInput.hasClass( 'atum-datepicker' ) ) {
-					$activePopover.find( '.meta-value' ).focus().select();
+					$activePopover.find( '.meta-value' ).trigger( 'focus' ).trigger( 'select' );
 				}
 
 				// Click the "Set" button when hitting enter on an input field.
@@ -75,7 +75,7 @@ export default class TableCellPopovers extends PopoverBase{
 
 					// Enter key.
 					if ( 13 === evt.which ) {
-						$activePopover.find( '.set' ).click();
+						$activePopover.find( '.set' ).trigger( 'click' );
 					}
 					// ESC key.
 					else if ( 27 === evt.which ) {

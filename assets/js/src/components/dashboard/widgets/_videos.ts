@@ -47,20 +47,18 @@ export default class VideosWidget {
 		} );
 		
 		// Video Layout Switcher
-		this.$videosWidget.find('.video-list-layout a').click( (evt: JQueryEventObject) => {
+		this.$videosWidget.find('.video-list-layout a').on( 'click', (evt: JQueryEventObject) => {
 
 			evt.preventDefault();
 
-			const $button = $( evt.currentTarget );
+			const $button: JQuery = $( evt.currentTarget );
 
 			if ( $button.hasClass( 'active' ) ) {
 				return false;
 			}
 
 			this.$videosWidget.find( '.video-list' ).attr( 'data-view', $button.data( 'view' ) );
-
 			NiceScroll.removeScrollBars( this.$videosWidget );
-
 			setTimeout( () => NiceScroll.addScrollBars( this.$videosWidget ), 400 );
 
 			$button.siblings( '.active' ).removeClass( 'active' );
@@ -69,13 +67,13 @@ export default class VideosWidget {
 		});
 
 		// Filter Videos.
-		this.$videosWidget.find( '.video-filter-by' ).change( ( evt: JQueryEventObject ) => {
+		this.$videosWidget.find( '.video-filter-by' ).on( 'change', ( evt: JQueryEventObject ) => {
 			evt.stopPropagation(); // Avoid event bubbling to not trigger the layout saving.
 			this.filterVideos();
 		} );
 		
 		// Sort Videos.
-		this.$videosWidget.find( '.video-sort-by' ).change( ( evt: JQueryEventObject ) => {
+		this.$videosWidget.find( '.video-sort-by' ).on( 'change', ( evt: JQueryEventObject ) => {
 
 			evt.stopPropagation(); // Avoid event bubbling to not trigger the layout saving.
 

@@ -195,7 +195,7 @@ export default class AddonsPage {
 
 				if ( ! term ) {
 					this.$noResults.hide();
-					this.$addonsPage.find( '.nav-container-box .all' ).click();
+					this.$addonsPage.find( '.nav-container-box .all' ).trigger( 'click' );
 					$addons.show();
 					$input.parent().removeClass( 'is-searching' );
 				}

@@ -200,7 +200,7 @@ export default class SettingsPage {
 
 		$formSettingsWrapper.addClass( 'overlay' );
 
-		this.$form.load( `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
+		this.$form.on( 'load', `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
 
 			ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
 			this.initRangeDateTimePicker();
@@ -209,7 +209,7 @@ export default class SettingsPage {
 			this.doFileUploaders();
 			this.doImageSelector();
 			this.doEditors();
-			this.$form.find( '[data-dependency]' ).change().removeClass( 'dirty' );
+			this.$form.find( '[data-dependency]' ).trigger( 'change' ).removeClass( 'dirty' );
 			this.$form.show();
 
 			const $inputButton: JQuery = this.$form.find( 'input:submit' );
@@ -238,9 +238,9 @@ export default class SettingsPage {
 
 		const $navList: JQuery = this.$nav.find( '.atum-nav-list' );
 
-		$( '.toogle-menu, .atum-nav-link' ).click( () => $navList.toggleClass( 'expand-menu' ) );
+		$( '.toogle-menu, .atum-nav-link' ).on( 'click', () => $navList.toggleClass( 'expand-menu' ) );
 
-		$( window ).resize( () => $navList.removeClass( 'expand-menu' ) );
+		$( window ).on( 'resize', () => $navList.removeClass( 'expand-menu' ) );
 		
 	}
 
@@ -584,7 +584,7 @@ export default class SettingsPage {
 
 				    this.$form.find( '.section-title h2 span' ).html( title );
 				    $formSettingsWrapper.removeClass( 'overlay' );
-				    this.$form.find( 'input:submit' ).click();
+				    this.$form.find( 'input:submit' ).trigger( 'click' );
 
 			    }
 			    else {
@@ -610,7 +610,7 @@ export default class SettingsPage {
 		$colorInputs.each( ( index: number, elem: Element ) => {
 			const $elem: JQuery = $( elem );
 
-			$elem.val( $elem.data( 'default' ) ).change();
+			$elem.val( $elem.data( 'default' ) ).trigger( 'change' );
 
 		} );
 		

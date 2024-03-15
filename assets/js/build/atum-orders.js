@@ -11450,10 +11450,10 @@ var AtumOrders = (function () {
                 .on('click', 'tr.item, tr.fee, tr.shipping', function (evt) { return _this.selectRow(evt); })
                 .on('click', 'tr.item :input, tr.fee :input, tr.shipping :input, tr.item a, tr.fee a, tr.shipping a', function (evt) { return evt.stopPropagation(); });
         }
-        $('#atum_order_type').change(function (evt) { return _this.toggleExtraFields(evt); }).change();
-        this.$supplierDropdown.change(function () { return _this.savePurchaseOrderSupplier(); });
-        this.$multipleSuppliers.change(function () { return _this.toggleSupplierField(); });
-        $('#wc_order').change(function (evt) { return _this.importOrderItems($(evt.currentTarget), 'IL'); });
+        $('#atum_order_type').on('change', function (evt) { return _this.toggleExtraFields(evt); }).trigger('change');
+        this.$supplierDropdown.on('change', function () { return _this.savePurchaseOrderSupplier(); });
+        this.$multipleSuppliers.on('change', function () { return _this.toggleSupplierField(); });
+        $('#wc_order').on('change', function (evt) { return _this.importOrderItems($(evt.currentTarget), 'IL'); });
         $('.wp-heading-inline').append($('.page-title-action').show());
         $(window).on('load', function () {
             if ($('.footer-box').hasClass('no-style')) {
@@ -11629,7 +11629,7 @@ var AtumOrders = (function () {
         var $body = $('body'), $dropdownWrapper = this.$supplierDropdown.parent();
         if (this.$multipleSuppliers.is(':checked')) {
             this.saveMultipleSuppliers('yes');
-            this.$supplierDropdown.val('').change();
+            this.$supplierDropdown.val('').trigger('change');
             $body.addClass('allow-multiple-suppliers');
             this.toggleItemsBlocker();
             $dropdownWrapper.slideUp();
@@ -12049,7 +12049,7 @@ var AtumOrderItems = (function () {
         $item.closest('tr').find('.view').hide();
         $item.closest('tr').find('.edit').show();
         $item.hide();
-        $('button.add-line-item').click();
+        $('button.add-line-item').trigger('click');
         $('button.cancel-action').data('reload', true);
     };
     AtumOrderItems.prototype.deleteItem = function (evt) {

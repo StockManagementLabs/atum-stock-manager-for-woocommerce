@@ -26,7 +26,7 @@ export default class Supplier {
 	bindEvents() {
 
 		// Set default checkboxes.
-		$( '.default-checkbox' ).change( ( evt: JQueryEventObject ) => {
+		$( '.default-checkbox' ).on( 'change', ( evt: JQueryEventObject ) => {
 
 			const $checkbox: JQuery     = $( evt.currentTarget ),
 			      $relatedInput: JQuery = $checkbox.closest( '.form-field' ).children( ':input' ).not( $checkbox );

@@ -68,11 +68,11 @@ export default class TableButtons {
 			case 'expand':
 				if ( enabled ) {
 					this.globals.$atumTable.find( 'tr' ).not( '.expanded' )
-						.find( '.has-child' ).click();
+						.find( '.has-child' ).trigger( 'click' );
 				}
 				else {
 					this.globals.$atumTable.find( 'tr.expanded' )
-						.find( '.has-child' ).click();
+						.find( '.has-child' ).trigger( 'click' );
 				}
 				break;
 		}

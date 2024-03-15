@@ -52,7 +52,7 @@ export default class SmartForm {
 
 			.find( '[data-dependency]' ).each( ( index: number, elem: Element ) => {
 
-				$( elem ).change().removeClass( 'dirty' );
+				$( elem ).trigger( 'change' ).removeClass( 'dirty' );
 
 			} );
 
@@ -143,7 +143,7 @@ export default class SmartForm {
 						$dependantInput.val( defaultValue );
 					}
 
-					$dependantInput.change();
+					$dependantInput.trigger( 'change' );
 
 					this.$form.trigger( 'atum-smart-form-reset-default', [ $dependantInput ] );
 

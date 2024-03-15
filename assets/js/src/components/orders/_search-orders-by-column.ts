@@ -28,14 +28,14 @@ export default class SearchOrdersByColumn {
 		      $dropdownLinks: JQuery  = this.$searchColumnDropdown.children( 'a' );
 
 		if ( activeSearchCol ) {
-			Utils.filterByData( $dropdownLinks, 'value', activeSearchCol ).click();
+			Utils.filterByData( $dropdownLinks, 'value', activeSearchCol ).trigger( 'click' );
 		}
 		// If there is only one column available, pre-select it.
 		else if ( $dropdownLinks.length < 3 ) {
-			$dropdownLinks.eq( 1 ).click();
+			$dropdownLinks.eq( 1 ).trigger( 'click' );
 		}
 		else {
-			$dropdownLinks.eq( 0 ).click(); // Force the search input to disable if no option is selected.
+			$dropdownLinks.eq( 0 ).trigger( 'click' ); // Force the search input to disable if no option is selected.
 		}
 
 	}
@@ -48,7 +48,7 @@ export default class SearchOrdersByColumn {
 		this.$searchColumnBtn
 
 			// Bind clicks on search in column button.
-			.click( ( evt: JQueryEventObject ) => {
+			.on( 'click', ( evt: JQueryEventObject ) => {
 				evt.preventDefault();
 				evt.stopPropagation();
 				$( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();
@@ -61,9 +61,9 @@ export default class SearchOrdersByColumn {
 
 				evt.preventDefault();
 
-				const $item: JQuery = $( evt.currentTarget ),
-				      column: string = $item.data( 'value' ),
-				      label: string = $item.text().trim(),
+				const $item: JQuery         = $( evt.currentTarget ),
+				      column: string        = $item.data( 'value' ),
+				      label: string         = $item.text().trim(),
 				      noOptionLabel: string = this.$searchColumnDropdown.data( 'no-option' );
 
 				// Enable/Disable the input field.
@@ -83,12 +83,12 @@ export default class SearchOrdersByColumn {
 				this.tooltip.addTooltips( this.$searchColumnWrapper );
 
 				if ( column ) {
-					this.$searchInput.focus();
+					this.$searchInput.trigger( 'focus' ).trigger( 'select' );
 				}
 
 			} );
 
-		$( 'body' ).click( () => this.$searchColumnDropdown.hide() );
+		$( 'body' ).on( 'click', () => this.$searchColumnDropdown.hide() );
 
 	}
 

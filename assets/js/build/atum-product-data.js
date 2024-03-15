@@ -26,7 +26,7 @@ var ButtonGroup = {
                 $button.addClass('active');
             }
             _this.updateChecked($button.closest('.btn-group'));
-            $button.find('input').change();
+            $button.find('input').trigger('change');
             return false;
         });
     },
@@ -188,7 +188,7 @@ var FileUploader = (function () {
     FileUploader.prototype.doFileUploaders = function () {
         var _this = this;
         if (window['wp'].hasOwnProperty('media')) {
-            this.$buttons.click(function (evt) {
+            this.$buttons.on('click', function (evt) {
                 var $button = $(evt.currentTarget);
                 var modalOptions = __assign(__assign({}, _this.defaultOptions), _this.options);
                 if ($button.data('modal-title')) {
@@ -347,8 +347,8 @@ var ProductDataMetaBoxes = (function () {
             _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(_this.$productDataMetaBox.find('.woocommerce_variations'));
             _this.maybeBlockFields();
         });
-        $('#_manage_stock').change(function (evt) { return $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none'); }).change();
-        $('.product-tab-runner').find('.run-script').click(function (evt) {
+        $('#_manage_stock').on('change', function (evt) { return $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none'); }).trigger('change');
+        $('.product-tab-runner').find('.run-script').on('click', function (evt) {
             var $button = $(evt.currentTarget), value = $button.siblings('select').val();
             sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
                 title: _this.settings.get('areYouSure'),

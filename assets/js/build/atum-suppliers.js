@@ -6233,7 +6233,7 @@ var Supplier = (function () {
         }
     }
     Supplier.prototype.bindEvents = function () {
-        $('.default-checkbox').change(function (evt) {
+        $('.default-checkbox').on('change', function (evt) {
             var $checkbox = $(evt.currentTarget), $relatedInput = $checkbox.closest('.form-field').children(':input').not($checkbox);
             $relatedInput.toggle(!$checkbox.is(':checked'));
         });
