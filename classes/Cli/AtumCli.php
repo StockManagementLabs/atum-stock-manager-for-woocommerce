@@ -78,7 +78,7 @@ class AtumCli {
 	public function init() {
 
 		// Add tools to ATUM CLI commands.
-		if ( method_exists( '\WP_CLI', 'add_hook' ) && method_exists( '\WP_CLI\Utils', 'describe_callable' ) ) {
+		if ( method_exists( '\WP_CLI', 'add_hook' ) ) {
 			\WP_CLI::add_hook( 'before_add_command:atum', array( $this, 'add_tools_to_cli_commands' ) );
 		}
 
