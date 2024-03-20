@@ -14442,7 +14442,7 @@ var SettingsPage = (function () {
         this.$nav.find('.atum-nav-link.active').not($navLink).removeClass('active');
         $navLink.addClass('active');
         $formSettingsWrapper.addClass('overlay');
-        this.$form.on('load', "".concat($navLink.attr('href'), " .form-settings-wrapper"), function () {
+        this.$form.load("".concat($navLink.attr('href'), " .form-settings-wrapper"), function () {
             _color_picker__WEBPACK_IMPORTED_MODULE_1__["default"].doColorPickers(_this.settings.get('selectColor'));
             _this.initRangeDateTimePicker();
             _this.enhancedSelect.maybeRestoreEnhancedSelect();
