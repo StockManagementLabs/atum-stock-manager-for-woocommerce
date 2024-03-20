@@ -200,7 +200,7 @@ export default class SettingsPage {
 
 		$formSettingsWrapper.addClass( 'overlay' );
 
-		this.$form.on( 'load', `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
+		this.$form.load( `${ $navLink.attr( 'href' ) } .form-settings-wrapper`, () => {
 
 			ColorPicker.doColorPickers( this.settings.get( 'selectColor' ) );
 			this.initRangeDateTimePicker();
