@@ -6266,7 +6266,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   background-color: var(--atum-table-bg);
 }
 .swal2-container.atum-modal h2.swal2-title small {
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
 }
 .swal2-container.atum-modal .swal2-title {
   color: var(--main-title);
@@ -6288,7 +6288,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .swal2-container.atum-modal .atum-modal-content .note {
   text-align: left;
   font-size: 12px;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-dark2);
   margin-bottom: 15px;
 }
 .swal2-container.atum-modal .atum-modal-content hr {
@@ -6310,20 +6310,20 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   text-align: left;
   font-size: 12px;
   font-style: italic;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
 }
 .swal2-container.atum-modal .atum-modal-content input[type=text]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-moz-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=number]::-moz-placeholder {
   text-align: left;
   font-size: 12px;
   font-style: italic;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
   opacity: 1;
 }
 .swal2-container.atum-modal .atum-modal-content input[type=text]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=email]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=search]::-webkit-input-placeholder, .swal2-container.atum-modal .atum-modal-content input[type=number]::-webkit-input-placeholder {
   text-align: left;
   font-size: 12px;
   font-style: italic;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
 }
 .swal2-container.atum-modal .atum-modal-content form {
   margin-left: -20px;
@@ -6359,7 +6359,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 }
 .swal2-container.atum-modal .atum-modal-content form .input-group label {
   font-size: 13px;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
 }
 .swal2-container.atum-modal .atum-modal-content form .input-group input[type=text], .swal2-container.atum-modal .atum-modal-content form .input-group input[type=email], .swal2-container.atum-modal .atum-modal-content form .input-group input[type=search], .swal2-container.atum-modal .atum-modal-content form .input-group select, .swal2-container.atum-modal .atum-modal-content form .input-group .atum-enhanced-select {
   width: 230px !important;
@@ -6375,7 +6375,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .swal2-container.atum-modal .atum-modal-content form .input-group .atum-enhanced-select .select2-selection__placeholder {
   font-size: 12px;
   font-style: italic;
-  color: var(--atum-table-link-text);
+  color: var(--atum-text-color-var1);
 }
 .swal2-container.atum-modal .atum-modal-content form .input-group .atum-enhanced-select .select2-selection__rendered {
   color: var(--atum-text-color-var3) !important;

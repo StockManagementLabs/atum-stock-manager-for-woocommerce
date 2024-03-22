@@ -12,7 +12,7 @@
 	}
 	
 	h2.swal2-title small {
-		color: var(--atum-table-link-text);
+		color: var(--atum-text-color-var1);
 	}
 	
 	.swal2-title {
@@ -37,7 +37,7 @@
 		.note {
 			text-align: left;
 			font-size: 12px;
-			color: var(--atum-table-link-text);
+			color: var(--atum-text-color-dark2);
 			margin-bottom: math.div($grid-gutter-width, 2);
 		}
 		
@@ -62,7 +62,7 @@
 				text-align: left;
 				font-size: 12px;
 				font-style: italic;
-				color: var(--atum-table-link-text);
+				color: var(--atum-text-color-var1);
 			}
 			
 		}
@@ -100,7 +100,7 @@
 				
 				label {
 					font-size: 13px;
-					color: var(--atum-table-link-text);
+					color: var(--atum-text-color-var1);
 				}
 				
 				input[type=text], input[type=email], input[type=search], select, .atum-enhanced-select {
@@ -120,7 +120,7 @@
 					.select2-selection__placeholder {
 						font-size: 12px;
 						font-style: italic;
-						color: var(--atum-table-link-text);
+						color: var(--atum-text-color-var1);
 					}
 					
 					.select2-selection__rendered {
