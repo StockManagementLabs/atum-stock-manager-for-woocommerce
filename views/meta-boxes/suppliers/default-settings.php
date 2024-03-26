@@ -20,11 +20,15 @@ defined( 'ABSPATH' ) || die;
 
 		<?php
 		$args = array(
-			'show_option_none' => esc_html__( 'Choose a user&hellip;', ATUM_TEXT_DOMAIN ),
-			'selected'         => $supplier->assigned_to,
-			'name'             => 'default_settings[assigned_to]',
-			'id'               => 'assigned_to',
-			'role__in'         => apply_filters( 'atum/suppliers/assigned_to_roles', [ 'administrator', 'shop_manager' ] ),
+			'id'                => 'assigned_to',
+			'name'              => 'default_settings[assigned_to]',
+			'option_none_value' => '',
+			'selected'          => $supplier->assigned_to,
+			'show_option_none'  => esc_html__( 'Choose a user&hellip;', ATUM_TEXT_DOMAIN ),
+			'role__in'          => apply_filters( 'atum/suppliers/assigned_to_roles', [
+				'administrator',
+				'shop_manager',
+			] ),
 		);
 		wp_dropdown_users( $args );
 		?>
