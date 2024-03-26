@@ -2335,6 +2335,7 @@ input[type=button].btn-block {
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+  background-image: none !important;
 }
 .swal2-container .swal2-modal button.swal2-confirm {
   background-color: var(--primary);

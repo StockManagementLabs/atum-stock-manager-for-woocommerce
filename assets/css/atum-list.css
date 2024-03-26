@@ -4157,6 +4157,7 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+  background-image: none !important;
 }
 .swal2-container .swal2-modal button.swal2-confirm {
   background-color: var(--primary);

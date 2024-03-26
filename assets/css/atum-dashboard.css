@@ -4416,6 +4416,7 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   padding: 9px 19px;
   font-size: 13px;
   letter-spacing: 1px;
+  background-image: none !important;
 }
 .swal2-container .swal2-modal button.swal2-confirm {
   background-color: var(--primary);
@@ -4858,7 +4859,7 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   width: 100%;
   min-height: 200px;
   margin: 20px 30px 0;
-  background-color: var(--dash-card-bg) !important;
+  background-color: var(--dash-card-bg);
   background-size: cover !important;
 }
 .atum-dashboard .dash-cards .dash-card.dash-marketing-banner.wide .marketing-close {

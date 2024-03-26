@@ -6,6 +6,9 @@
 		"bg_repeat"   : "no-repeat",
 		"bg_color"    : "#fff"
 	},
+	"dash_background" : {
+        "bg_color" : "#fff"
+    },
 	"images"           : {
 		"logo"      : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",
 		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",

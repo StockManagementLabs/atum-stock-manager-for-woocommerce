@@ -6,6 +6,9 @@
 		"bg_repeat" : "no-repeat",
 		"bg_color" : "#f5fdff"
 	},
+	"dash_background" : {
+		"bg_color" : "#fff"
+	},
 	"images" : {
 		"logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",
 		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",

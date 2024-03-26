@@ -128,10 +128,10 @@ class AtumMarketingPopup {
 				$background_color    = $background_data->bg_color ?? '';
 				$background_image    = $background_data->bg_image ?? '';
 				$background_position = $background_data->bg_position ?? '';
-				$background_size     = $background_data->bg_size ?? '';
+				$background_size     = ! empty( $background_data->bg_size ) ? "/$background_data->bg_size" : '';
 				$background_repeat   = $background_data->bg_repeat ?? '';
 
-				$this->background = "$background_color $background_image $background_position/$background_size $background_repeat";
+				$this->background = "$background_color $background_image $background_repeat $background_position$background_size";
 
 			}
 
@@ -140,10 +140,10 @@ class AtumMarketingPopup {
 				$background_color    = $dash_background_data->bg_color ?? '';
 				$background_image    = $dash_background_data->bg_image ?? '';
 				$background_position = $dash_background_data->bg_position ?? '';
-				$background_size     = $dash_background_data->bg_size ?? '';
+				$background_size     = ! empty( $dash_background_data->bg_size ) ? "/$dash_background_data->bg_size" : '';
 				$background_repeat   = $dash_background_data->bg_repeat ?? '';
 
-				$this->dash_background = "$background_color $background_image $background_position/$background_size $background_repeat;";
+				$this->dash_background = "$background_color $background_image $background_repeat $background_position$background_size";
 
 			}
 
@@ -390,7 +390,7 @@ class AtumMarketingPopup {
 	 *
 	 * @since 1.5.3
 	 *
-	 * @return object
+	 * @return string
 	 */
 	public function get_dash_background() {
 		return $this->dash_background;
