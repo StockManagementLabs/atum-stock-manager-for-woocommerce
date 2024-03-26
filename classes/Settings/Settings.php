@@ -1617,6 +1617,35 @@ class Settings {
 	}
 
 	/**
+	 * Get the settings option array and prints a time picker.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param array $args Field arguments.
+	 */
+	public function display_time_picker( $args ) {
+
+		$id    = ATUM_PREFIX . $args['id'];
+		$name  = self::OPTION_NAME . "[{$args['id']}]";
+		$value = $this->find_option_value( $args['id'] );
+
+		$default = '';
+		if ( isset( $args['default'] ) ) {
+			$default = $args['default'];
+			$default = " data-default='" . $default . "'";
+		}
+
+		ob_start();
+		?>
+		<div class="date-wrapper" style="position: relative">
+			<input type="text" id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="atum-datepicker" placeholder="<?php esc_attr_e( 'Select time', ATUM_TEXT_DOMAIN ) ?>"
+				value="<?php echo esc_attr( $this->find_option_value( $args['id'] ) ); ?>" data-format="HH:mm" data-min-date="false">
+		</div>
+		<?php
+		echo apply_filters( 'atum/settings/display_time_picker', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * Print field description if it exists
 	 *
 	 * @since 0.0.2
@@ -1656,36 +1685,6 @@ class Settings {
 
 	}
 
-
-	/**
-	 * Get the settings option array and prints a time picker.
-	 *
-	 * @since 1.9.7
-	 *
-	 * @param array $args Field arguments.
-	 */
-	public function display_time_picker( $args ) {
-
-		$id    = ATUM_PREFIX . $args['id'];
-		$name  = self::OPTION_NAME . "[{$args['id']}]";
-		$value = $this->find_option_value( $args['id'] );
-
-		$default = '';
-		if ( isset( $args['default'] ) ) {
-			$default = $args['default'];
-			$default = " data-default='" . $default . "'";
-		}
-
-		ob_start();
-		?>
-		<div class="date-wrapper" style="position: relative">
-			<input type="text" id="<?php echo esc_attr( $id ) ?>" name="<?php echo esc_attr( $name ) ?>" class="atum-datepicker" placeholder="<?php esc_attr_e( 'Select time', ATUM_TEXT_DOMAIN ) ?>"
-				value="<?php echo esc_attr( $this->find_option_value( $args['id'] ) ); ?>" data-format="HH:mm" data-min-date="false">
-		</div>
-		<?php
-		echo apply_filters( 'atum/settings/display_time_picker', ob_get_clean(), $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
-
 	/**
 	 * Getter for the tabs (groups) prop
 	 *
@@ -1694,7 +1693,6 @@ class Settings {
 	 * @return array
 	 */
 	public function get_groups() {
-
 		return $this->tabs;
 	}
 
@@ -1706,7 +1704,6 @@ class Settings {
 	 * @return array
 	 */
 	public function get_default_settings() {
-
 		return $this->defaults;
 	}
 
@@ -1718,7 +1715,6 @@ class Settings {
 	 * @return array
 	 */
 	public function get_user_meta_options() {
-
 		return $this->user_meta_options;
 	}
 
@@ -1730,7 +1726,6 @@ class Settings {
 	 * @param array $user_meta_options
 	 */
 	public function set_user_meta_options( $user_meta_options ) {
-
 		$this->user_meta_options = $user_meta_options;
 	}
 
@@ -1771,6 +1766,7 @@ class Settings {
 
 	}
 
+
 	/****************************
 	 * Instance methods
 	 ****************************/
@@ -1779,7 +1775,6 @@ class Settings {
 	 * Cannot be cloned
 	 */
 	public function __clone() {
-
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
@@ -1787,7 +1782,6 @@ class Settings {
 	 * Cannot be serialized
 	 */
 	public function __sleep() {
-
 		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', ATUM_TEXT_DOMAIN ), '1.0.0' );
 	}
 
