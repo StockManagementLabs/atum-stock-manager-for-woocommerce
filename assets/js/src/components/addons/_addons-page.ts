@@ -1,10 +1,10 @@
 /*
-   ┌──────────────┐
-   │              │
-   │ ADD-ONS PAGE │
-   │              │
-   └──────────────┘
-*/
+ ┌──────────────┐
+ │              │
+ │ ADD-ONS PAGE │
+ │              │
+ └──────────────┘
+ */
 
 import Blocker from '../_blocker';
 import dragscroll from '../../../vendor/dragscroll';
@@ -13,10 +13,10 @@ import Swal, { SweetAlertResult } from 'sweetalert2';
 import Trials from './_trials';
 
 export default class AddonsPage {
-	
+
 	$addonsPage: JQuery;
 	$noResults: JQuery;
-	
+
 	constructor(
 		private settings: Settings,
 		private trials: Trials
@@ -28,7 +28,7 @@ export default class AddonsPage {
 		this.prepareMenu();
 		this.initHorizontalDragScroll();
 		this.bindEvents();
-		
+
 	}
 
 	/**
@@ -294,7 +294,7 @@ export default class AddonsPage {
 				if ( true === response.success ) {
 
 					this.installAddon( addon, key )
-						.then( ( message: string ) => this.showSuccessAlert( message ) )
+						.then( ( message: string ) => this.showSuccessAlert( message, this.settings.get( 'installed' ) ) )
 						.catch( ( error: string ) => this.showErrorAlert( error ) )
 						.finally( () => this.afterAjax( $button ) );
 
@@ -346,7 +346,7 @@ export default class AddonsPage {
 		} );
 
 	}
-	
+
 	/**
 	 * Send the Ajax request to change a license status
 	 *
@@ -383,7 +383,7 @@ export default class AddonsPage {
 			} );
 
 		} );
-		
+
 	}
 
 	/**
@@ -414,49 +414,68 @@ export default class AddonsPage {
 
 			case 'activate':
 				Swal.fire( {
-					title              : this.settings.get( 'activation' ),
-					html               : message,
-					icon               : 'info',
-					showCancelButton   : true,
-					showLoaderOnConfirm: true,
-					confirmButtonText  : this.settings.get( 'activate' ),
-					allowOutsideClick  : false,
-					preConfirm         : (): Promise<void> => {
+						title              : this.settings.get( 'activation' ),
+						html               : message,
+						icon               : 'info',
+						showCancelButton   : true,
+						showLoaderOnConfirm: true,
+						confirmButtonText  : this.settings.get( 'activate' ),
+						allowOutsideClick  : false,
+						preConfirm         : (): Promise<void> => {
 
-						return new Promise( ( res: Function ) => {
+							return new Promise( ( res: Function ) => {
 
-							$.ajax( {
-								url     : window[ 'ajaxurl' ],
-								method  : 'POST',
-								dataType: 'json',
-								data: {
-									action  : 'atum_activate_license',
-									security: this.settings.get( 'nonce' ),
-									addon   : addon,
-									key     : key,
-								},
-								success : ( r: any ) => {
+								$.ajax( {
+									url     : window[ 'ajaxurl' ],
+									method  : 'POST',
+									dataType: 'json',
+									data: {
+										action  : 'atum_activate_license',
+										security: this.settings.get( 'nonce' ),
+										addon   : addon,
+										key     : key,
+									},
+									success : ( r: any ) => {
 
-									if ( r.success !== true ) {
-										Swal.showValidationMessage( `<span>${ r.data }</span>` );
-									}
+										if ( r.success !== true ) {
+											Swal.showValidationMessage( `<span>${ r.data }</span>` );
+										}
 
-									res();
+										res();
 
-								},
+									},
+								} );
+
 							} );
 
-						} );
+						},
+					} )
+					.then( ( result: SweetAlertResult ) => {
 
-					},
-				} )
-				.then( ( result: SweetAlertResult ) => {
+						if ( result.isConfirmed ) {
 
-					if ( result.isConfirmed ) {
-						this.showSuccessAlert( this.settings.get( 'addonActivated' ), this.settings.get( 'activated' ) );
-					}
+							// If the activation was successful, allow the user to install the addon.
+							Swal.fire( {
+								title            : this.settings.get( 'activated' ),
+								html             : this.settings.get( 'addonActivated' ),
+								icon             : 'success',
+								confirmButtonText: this.settings.get( 'install' ),
+								cancelButtonText : this.settings.get( 'cancel' ),
+								showCancelButton : true,
+								showCloseButton  : true,
+								showLoaderOnConfirm: true,
+								preConfirm       : (): Promise<void> => {
 
-				} );
+									return this.installAddon( addon, key )
+										.then( ( message: string ) => this.showSuccessAlert( message, this.settings.get( 'installed' ) ) )
+										.catch( ( error: string ) => Swal.showValidationMessage( `<span>${ error }</span>` ) );
+
+								}
+							} )
+
+						}
+
+					} );
 
 				break;
 
@@ -474,7 +493,7 @@ export default class AddonsPage {
 					preConfirm         : (): Promise<void> => {
 
 						return this.installAddon( addon, key )
-							.then( ( message: string ) => this.showSuccessAlert( message ) )
+							.then( ( message: string ) => this.showSuccessAlert( message, this.settings.get( 'installed' ) ) )
 							.catch( ( error: string ) => Swal.showValidationMessage( `<span>${ error }</span>` ) );
 
 					},
@@ -507,12 +526,13 @@ export default class AddonsPage {
 		}
 
 	}
-	
+
 	/**
 	 * Show a success alert
 	 *
-	 * @param {string} message
-	 * @param {string} title
+	 * @param {string}   message
+	 * @param {string}   title
+	 * @param {Function} callback
 	 */
 	showSuccessAlert( message: string, title?: string, callback?: Function ) {
 
@@ -521,15 +541,15 @@ export default class AddonsPage {
 		}
 
 		Swal.fire( {
-			title            : title,
-			html             : message,
-			icon             : 'success',
-			confirmButtonText: this.settings.get( 'ok' ),
-		} )
-		.then( () => callback ? callback() : location.reload() );
+				title            : title,
+				html             : message,
+				icon             : 'success',
+				confirmButtonText: this.settings.get( 'ok' ),
+			} )
+			.then( () => callback ? callback() : location.reload() );
 
 	}
-	
+
 	/**
 	 * Default error message
 	 *
@@ -545,7 +565,7 @@ export default class AddonsPage {
 		} );
 
 	}
-	
+
 	/**
 	 * Actions before an ajax request
 	 *
@@ -558,7 +578,7 @@ export default class AddonsPage {
 		$button.siblings( ':input' ).prop( 'disabled', true );
 
 	}
-	
+
 	/**
 	 * Actions after an ajax request
 	 *
@@ -635,8 +655,7 @@ export default class AddonsPage {
 	/**
 	 * Add horizontal scroll effect to menu views
 	 *
-	 * @param {JQuery}  $nav
-	 * @param {boolean} checkEnhanced
+	 * @param {JQuery} $nav
 	 */
 	addHorizontalDragScroll( $nav: JQuery ) {
 
@@ -694,5 +713,5 @@ export default class AddonsPage {
 		}
 
 	}
-	
+
 }

@@ -830,11 +830,11 @@ final class Ajax {
 				}
 				else {
 
-					if ( $license_data->activations_left < 1 ) {
+					if ( (int) $license_data->activations_left < 1 ) {
 						wp_send_json_error( __( "You've reached your license activation limit for this add-on.<br>Please contact the Stock Management Labs support team.", ATUM_TEXT_DOMAIN ) );
 					}
 
-					$licenses_after_activation = $license_data->activations_left - 1;
+					$licenses_after_activation = (int) $license_data->activations_left - 1;
 
 					wp_send_json( array(
 						'success' => 'activate',

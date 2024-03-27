@@ -67,22 +67,26 @@ endif;
 
 		<div class="addon-footer">
 
-			<?php if ( ! empty( $addon_status->notice ) ) : ?>
-				<div class="alert alert-<?php echo esc_attr( $addon_status->notice_type ); ?>">
-					<i class="atum-icon atmi-<?php echo esc_attr( in_array( $addon_status->notice_type, [ 'warning', 'danger' ] ) ? 'warning' : 'info' ) ?>"></i>
-					<span><?php echo $addon_status->notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-				</div>
-			<?php endif; ?>
+			<?php if ( ! $is_coming_soon_addon ) : ?>
 
-			<?php if ( $addon_status->installed && ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
-				<div class="alert alert-primary">
-					<i class="atum-icon atmi-info"></i>
-					<span>
-						<?php
-						/* translators: open and closing link tags */
-						printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php' ) ) . '">', '</a>' ); ?>
-					</span>
-				</div>
+				<?php if ( ! empty( $addon_status->notice ) ) : ?>
+					<div class="alert alert-<?php echo esc_attr( $addon_status->notice_type ); ?>">
+						<i class="atum-icon atmi-<?php echo esc_attr( in_array( $addon_status->notice_type, [ 'warning', 'danger' ] ) ? 'warning' : 'info' ) ?>"></i>
+						<span><?php echo $addon_status->notice; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+					</div>
+				<?php endif; ?>
+
+				<?php if ( $addon_status->installed && ! empty( $current_version ) && version_compare( $current_version, $addon['licensing']['version'], '<' ) ) : ?>
+					<div class="alert alert-primary">
+						<i class="atum-icon atmi-info"></i>
+						<span>
+							<?php
+							/* translators: open and closing link tags */
+							printf( esc_html__( 'There is a new version available. We recommend you %1$supdate%2$s it as soon as possible.', ATUM_TEXT_DOMAIN ), '<a href="' . esc_url( self_admin_url( 'update-core.php' ) ) . '">', '</a>' ); ?>
+						</span>
+					</div>
+				<?php endif; ?>
+
 			<?php endif; ?>
 
 			<div class="actions <?php echo esc_attr( implode( ' ', $addon_status->classes ) ) ?>">

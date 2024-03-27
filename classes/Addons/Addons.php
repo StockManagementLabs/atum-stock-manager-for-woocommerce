@@ -218,9 +218,9 @@ final class Addons {
 
 		$addons_vars = array(
 			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
-			'activated'            => __( 'Activated!', ATUM_TEXT_DOMAIN ),
+			'activated'            => __( 'License Activated!', ATUM_TEXT_DOMAIN ),
 			'activation'           => __( 'License Activation', ATUM_TEXT_DOMAIN ),
-			'addonActivated'       => __( 'Your add-on license has been activated.', ATUM_TEXT_DOMAIN ),
+			'addonActivated'       => __( 'Your add-on license has been activated.<br>Click the "Install" button to proceed with the installation.', ATUM_TEXT_DOMAIN ),
 			'addonInstalled'       => __( 'Add-on installed successfully', ATUM_TEXT_DOMAIN ),
 			'addonsPageUrl'        => add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ),
 			'addonNotInstalled'    => __( 'Add-on not installed', ATUM_TEXT_DOMAIN ),
@@ -910,17 +910,25 @@ final class Addons {
 	 */
 	public static function remove_key( $addon_name ) {
 
-		$addon_name = strtolower( html_entity_decode( $addon_name ) );
+		// NOTE: We are checking both names to make sure there is no issue when comparing them with stored names.
+		$addon_name           = strtolower( $addon_name );
+		$sanitized_addon_name = html_entity_decode( $addon_name );
 
-		if ( str_contains( $addon_name, 'trial' ) ) {
-			$addon_name = trim( str_replace( 'trial', '', $addon_name ) );
+		if ( str_contains( $addon_name, 'trial' ) || str_contains( $sanitized_addon_name, 'trial' ) ) {
+			$addon_name           = trim( str_replace( 'trial', '', $addon_name ) );
+			$sanitized_addon_name = trim( str_replace( 'trial', '', $sanitized_addon_name ) );
 		}
 
 		$saved_keys = self::get_keys();
 
-		if ( ! empty( $saved_keys ) && array_key_exists( $addon_name, $saved_keys ) ) {
-			unset( $saved_keys[ $addon_name ] );
+		if (
+			! empty( $saved_keys ) && (
+				array_key_exists( $addon_name, $saved_keys ) || array_key_exists( $sanitized_addon_name, $saved_keys )
+			)
+		) {
+			unset( $saved_keys[ $addon_name ], $saved_keys[ $sanitized_addon_name ] );
 			self::delete_status_transient( $addon_name );
+			self::delete_status_transient( $sanitized_addon_name );
 			update_option( self::ADDONS_KEY_OPTION, $saved_keys );
 		}
 

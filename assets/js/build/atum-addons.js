@@ -8696,7 +8696,7 @@ var AddonsPage = (function () {
             success: function (response) {
                 if (true === response.success) {
                     _this.installAddon(addon, key)
-                        .then(function (message) { return _this.showSuccessAlert(message); })
+                        .then(function (message) { return _this.showSuccessAlert(message, _this.settings.get('installed')); })
                         .catch(function (error) { return _this.showErrorAlert(error); })
                         .finally(function () { return _this.afterAjax($button); });
                 }
@@ -8803,7 +8803,21 @@ var AddonsPage = (function () {
                 })
                     .then(function (result) {
                     if (result.isConfirmed) {
-                        _this.showSuccessAlert(_this.settings.get('addonActivated'), _this.settings.get('activated'));
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
+                            title: _this.settings.get('activated'),
+                            html: _this.settings.get('addonActivated'),
+                            icon: 'success',
+                            confirmButtonText: _this.settings.get('install'),
+                            cancelButtonText: _this.settings.get('cancel'),
+                            showCancelButton: true,
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true,
+                            preConfirm: function () {
+                                return _this.installAddon(addon, key)
+                                    .then(function (message) { return _this.showSuccessAlert(message, _this.settings.get('installed')); })
+                                    .catch(function (error) { return sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage("<span>".concat(error, "</span>")); });
+                            }
+                        });
                     }
                 });
                 break;
@@ -8820,7 +8834,7 @@ var AddonsPage = (function () {
                     showLoaderOnConfirm: true,
                     preConfirm: function () {
                         return _this.installAddon(addon, key)
-                            .then(function (message) { return _this.showSuccessAlert(message); })
+                            .then(function (message) { return _this.showSuccessAlert(message, _this.settings.get('installed')); })
                             .catch(function (error) { return sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage("<span>".concat(error, "</span>")); });
                     },
                 });
