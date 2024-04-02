@@ -179,7 +179,7 @@ class Suppliers {
 			'show_in_nav_menus'   => FALSE,
 			'rewrite'             => FALSE,
 			'query_var'           => is_admin(),
-			'supports'            => array( 'title', 'thumbnail' ),
+			'supports'            => array( 'title', 'thumbnail', 'custom-fields' ),
 			'has_archive'         => FALSE,
 			'capabilities'        => array(
 				'edit_post'              => ATUM_PREFIX . 'edit_supplier',
