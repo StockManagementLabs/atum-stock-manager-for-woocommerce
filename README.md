@@ -196,6 +196,39 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.38`
+
+*2024-04-03*
+
+**Features**
+
+* Added product editor beta compatibility notice.
+* Added support for custom fields meta box to Suppliers.
+
+**Changes**
+
+* Added missing fields to supplier controller in REST API.
+* Updated minimum required PHP version.
+* Updated dependencies.
+* Text change.
+* Refactoring.
+* Removed "WP_CLI\Utils::describe_callable" method checking as Utils load later.
+* CSS adjustments for Sweetalert.
+
+**Fixes**
+
+* Fixed check refund order when "chg_stock_order_complete" setting is enabled.
+* Fixed meta key when filtering by low stock threshold in List Tables.
+* Fixed font color in large variation names in Stock Central.
+* Fixed jQuery deprecations.
+* Fixed "load_plugin_textdomain" relative path to languages folder.
+* Fixed settings page loading.
+* Fixed supplier's assigned user not possible to set empty.
+* Fixed background handling for marketing popup.
+* Fixed add-ons installation + activation in one step.
+
+---
+
 `1.9.37.2`
 
 *2024-03-07*

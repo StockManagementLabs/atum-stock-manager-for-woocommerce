@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce inventory management, suppliers, purchase orders, inbound stock, woocommerce statistics, decimals in stock quantities, full woocommerce stock manager, stock management, woocommerce, inventory logs, purchase orders, inbound stock, woocommerce stock control, stock for woocommerce, woocommerce products, woocommerce inventory, woocommerce for business, woocommerce shop organiser, woocommerce shop, inventory for woocommerce
 Requires at least: 5.6
-Tested up to: 6.4.3
+Tested up to: 6.5.0
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.6.1
-Stable tag: 1.9.37.2
+WC tested up to: 8.7.0
+Stable tag: 1.9.38
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,39 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.38`
+
+*2024-04-03*
+
+**Features**
+
+* Added product editor beta compatibility notice.
+* Added support for custom fields meta box to Suppliers.
+
+**Changes**
+
+* Added missing fields to supplier controller in REST API.
+* Updated minimum required PHP version.
+* Updated dependencies.
+* Text change.
+* Refactoring.
+* Removed "WP_CLI\Utils::describe_callable" method checking as Utils load later.
+* CSS adjustments for Sweetalert.
+
+**Fixes**
+
+* Fixed check refund order when "chg_stock_order_complete" setting is enabled.
+* Fixed meta key when filtering by low stock threshold in List Tables.
+* Fixed font color in large variation names in Stock Central.
+* Fixed jQuery deprecations.
+* Fixed "load_plugin_textdomain" relative path to languages folder.
+* Fixed settings page loading.
+* Fixed supplier's assigned user not possible to set empty.
+* Fixed background handling for marketing popup.
+* Fixed add-ons installation + activation in one step.
 
 ---
 
