@@ -1,55 +1,55 @@
 {
-	"background" : {
-		"bg_image" : "url(https://stockmanagementlabs.com/wp-content/uploads/2024/02/waves-pick-pack.svg)",
+	"background"       : {
+		"bg_image"    : "url(https://stockmanagementlabs.com/wp-content/uploads/2024/02/waves-pick-pack.svg)",
 		"bg_position" : "bottom",
-		"bg_size" : "contain",
-		"bg_repeat" : "no-repeat",
-		"bg_color" : "#f5fdff"
+		"bg_size"     : "contain",
+		"bg_repeat"   : "no-repeat",
+		"bg_color"    : "#fff"
 	},
 	"dash_background" : {
-		"bg_color" : "#fff"
+        "bg_color" : "#fff"
+    },
+	"images"           : {
+		"logo"      : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",
+		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",
+		"logo_css"  : "width: 357px",
+		"top_left"  : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/label-pickpack.svg"
 	},
-	"images" : {
-		"logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",
-		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/pick-pack-illustration.jpg",
-		"logo_css" : "width: 357px",
-		"top_left" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/label-pickpack.svg"
+	"title"            : {
+		"text"       : "Stock<strong>Takes</strong>",
+		"text_color" : "black",
+		"text_size"  : "",
+		"text_align" : "center"
 	},
-	"title": {
-		"text"      : "Pick&<strong>Pack</strong>",
-		"text_color": "black",
-		"text_size" : "",
-		"text_align": "center"
-	},
-	"version" : {
-		"text" : "",
+	"version"          : {
+		"text"       : "",
 		"text_color" : "",
 		"background" : ""
 	},
-	"description" : {
-		"text" : "Introducing our Pick and Pack Inventory Premium Add-On: Streamline your operations and supercharge your business! Say goodbye to inventory management headaches and hello to efficient order fulfilment. Maximize productivity, minimize errors, and watch your sales soar! Try it out today and experience the power of seamless inventory management.",
-		"text_color" : "#6c757d",
-		"text_size" : "13px",
-		"text_align" : "justify",
+	"description"      : {
+		"text"            : "Introducing our new ATUM Stock Takes Premium Add-On: We designed this add-on to simplify your inventory management process. With just a few clicks, you can generate a list of your WooCommerce products that require stock verification. The tool will automatically reconcile the stock levels and update every counted product. You can integrate ATUM Stock Takes with other add-ons, such as Multi-Inventory and effortlessly oversee stock across different locations. Increase your business efficiency today with our innovative tool!",
+		"text_color"      : "#6c757d",
+		"text_size"       : "13px",
+		"text_align"      : "justify",
 		"dash_text_align" : "left",
-		"padding" : "0 9px 25px"
+		"padding"         : "0 9px 25px"
 	},
-	"buttons": [
+	"buttons"          : [
 		{
-			"text"      : "Try It Now",
-			"url"       : "https://stockmanagementlabs.com/addons/atum-pick-pack",
-			"class"     : "btn btn-primary",
-			"css"       : "background-color: #2B8DFC; border-color: #2B8DFC",
-			"hover"     : "background-color: #91B3FA !important"
+			"text"  : "Try It Now",
+			"url"   : "https://stockmanagementlabs.com/addons/atum-stock-takes",
+			"class" : "btn btn-primary",
+			"css"   : "background-color: #2B8DFC; border-color: #2B8DFC",
+			"hover" : "background-color: #91B3FA !important"
 		},
 		{
-			"text"      : "Read documentation",
-			"url"       : "https://stockmanagementlabs.crunch.help/en/atum-pick-pack",
-			"class"     : "btn btn-outline-primary",
-			"css"       : "border-color: #2B8DFC; background-color: #FFF; color: #2B8DFC",
-			"hover"     : "background-color: #2B8DFC !important; color: #FFF !important"
+			"text"  : "Read documentation",
+			"url"   : "https://stockmanagementlabs.crunch.help/en/atum-stock-takes",
+			"class" : "btn btn-outline-primary",
+			"css"   : "border-color: #2B8DFC; background-color: #FFF; color: #2B8DFC",
+			"hover" : "background-color: #2B8DFC !important; color: #FFF !important"
 		}
 	],
 	"additional_class" : "",
-	"transient_key" : "pick-pack-launch"
+	"transient_key"    : "stock-takes-launch"
 }
