@@ -290,7 +290,7 @@ abstract class AtumReserveStock {
 			$this->reserve_stock_for_order( $order );
 
 			// Avoid the WC reserved stock to run by setting the hold_stock_minutes to 0.
-			// NOTE: This is a bit hacky, but it's the only way to avoid the WC reserved stock to run...
+			// NOTE: This is a bit hacky, but it's the only way to avoid the WC reserved stock to run for now...
 			add_filter( 'pre_option_woocommerce_hold_stock_minutes', '__return_zero' );
 
 		} catch ( ReserveStockException $e ) {
