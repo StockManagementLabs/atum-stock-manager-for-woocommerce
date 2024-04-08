@@ -289,9 +289,9 @@ abstract class AtumReserveStock {
 
 			$this->reserve_stock_for_order( $order );
 
-			// As we are not receiving the request here, we've to try to generate it ourselves.
-			$request = new \WP_REST_Request( 'GET', '/wc/store/v1/checkout' );
-
+			// Avoid the WC reserved stock to run by setting the hold_stock_minutes to 0.
+			// NOTE: This is a bit hacky, but it's the only way to avoid the WC reserved stock to run...
+			add_filter( 'pre_option_woocommerce_hold_stock_minutes', '__return_zero' );
 
 		} catch ( ReserveStockException $e ) {
 
