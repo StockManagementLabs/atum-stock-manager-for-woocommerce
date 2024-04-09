@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Api\AtumApi;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
+use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
 
 class SuppliersController extends \WC_REST_Posts_Controller {
@@ -1000,37 +1001,20 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 		$supplier_meta      = get_metadata( 'post', $supplier->ID );
 		$supplier_meta_keys = array_keys( $supplier_meta );
 
-		// Supplier's meta.
-		foreach (
-			[
-				'code',
-				'tax_number',
-				'phone',
-				'fax',
-				'website',
-				'ordering_url',
-				'general_email',
-				'ordering_email',
-				'description',
-				'currency',
-				'address',
-				'city',
-				'country',
-				'state',
-				'zip_code',
-				'assigned_to',
-				'location',
-				'discount',
-				'tax_rate',
-				'lead_time',
-				'delivery_terms',
-				'days_to_cancel',
-				'cancelation_policy',
-			] as $meta_key
-		) {
+		$supplier_obj       = new Supplier( $supplier->ID );
+		$supplier_data_keys = array_diff( $supplier_obj->get_data_keys(), [ 'id', 'name' ] );
 
-			if ( in_array( $meta_key, $fields, TRUE ) && in_array( "_$meta_key", $supplier_meta_keys, TRUE ) ) {
-				$data[ $meta_key ] = current( $supplier_meta[ "_$meta_key" ] );
+		// Supplier's data.
+		foreach ( $supplier_data_keys as $data_key ) {
+			$data[ $data_key ] = in_array( $data_key, $fields, TRUE ) && array_key_exists( "_$data_key", $supplier_meta ) ? current( $supplier_meta[ "_$data_key" ] ?? [] ) : null;
+		}
+
+		// Supplier's meta.
+		foreach ( $supplier_meta_keys as $meta_key ) {
+
+			// Add the other visible custom fields to the meta_data array.
+			if ( ! in_array( trim( $meta_key, '_' ), $fields, TRUE ) && substr( $meta_key, 0, 1 ) !== '_' ) {
+				$data['meta_data'][ $meta_key ] = current( $supplier_meta[ $meta_key ] ?? [] );
 			}
 
 		}

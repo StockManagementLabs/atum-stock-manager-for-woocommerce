@@ -19,37 +19,37 @@ use Atum\Models\AtumCPTModel;
 /**
  * Class Supplier
  *
- * @property int    $id
- * @property string $name
- * @property string $code
- * @property string $tax_number
- * @property string $phone
- * @property string $fax
- * @property string $website
- * @property string $ordering_url
- * @property string $general_email
- * @property string $ordering_email
- * @property string $description
- * @property string $use_default_description
- * @property string $currency
  * @property string $address
  * @property string $address_2
- * @property string $city
- * @property string $country
- * @property string $state
- * @property string $zip_code
  * @property int    $assigned_to
- * @property string $location
- * @property int    $thumbnail_id
- * @property int    $discount
- * @property int    $tax_rate
- * @property int    $lead_time
- * @property string $delivery_terms
- * @property string $use_default_terms
- * @property int    $days_to_cancel
- * @property string $cancelation_policy
- * @property string $wpml_lang
  * @property string $atum_barcode
+ * @property string $cancelation_policy
+ * @property int    $days_to_cancel
+ * @property string $delivery_terms
+ * @property string $description
+ * @property int    $discount
+ * @property string $city
+ * @property string $code
+ * @property string $country
+ * @property string $currency
+ * @property string $fax
+ * @property string $general_email
+ * @property int    $id
+ * @property int    $lead_time
+ * @property string $location
+ * @property string $name
+ * @property string $ordering_email
+ * @property string $ordering_url
+ * @property string $phone
+ * @property string $state
+ * @property string $tax_number
+ * @property int    $tax_rate
+ * @property int    $thumbnail_id
+ * @property string $use_default_description
+ * @property string $use_default_terms
+ * @property string $website
+ * @property string $wpml_lang
+ * @property string $zip_code
  */
 class Supplier extends AtumCPTModel {
 
@@ -59,36 +59,36 @@ class Supplier extends AtumCPTModel {
 	 * @var array
 	 */
 	protected $data = array(
-		'name'                    => '',
-		'code'                    => '',
-		'tax_number'              => '',
-		'phone'                   => '',
-		'fax'                     => '',
-		'website'                 => '',
-		'ordering_url'            => '',
-		'general_email'           => '',
-		'ordering_email'          => '',
-		'description'             => '',
-		'use_default_description' => 'yes',
-		'currency'                => '',
 		'address'                 => '',
 		'address_2'               => '',
-		'city'                    => '',
-		'country'                 => '',
-		'state'                   => '',
-		'zip_code'                => '',
 		'assigned_to'             => NULL,
-		'location'                => '',
-		'thumbnail_id'            => NULL,
-		'discount'                => NULL,
-		'tax_rate'                => NULL,
-		'lead_time'               => NULL,
-		'delivery_terms'          => '',
-		'use_default_terms'       => 'yes',
-		'days_to_cancel'          => NULL,
-		'cancelation_policy'      => '',
-		'wpml_lang'               => '',
 		'atum_barcode'            => '', // NOTE: It must have this name to be compatible with Barcodes PRO.
+		'cancelation_policy'      => '',
+		'days_to_cancel'          => NULL,
+		'delivery_terms'          => '',
+		'description'             => '',
+		'discount'                => NULL,
+		'city'                    => '',
+		'code'                    => '',
+		'country'                 => '',
+		'currency'                => '',
+		'fax'                     => '',
+		'general_email'           => '',
+		'lead_time'               => NULL,
+		'location'                => '',
+		'name'                    => '',
+		'ordering_email'          => '',
+		'ordering_url'            => '',
+		'phone'                   => '',
+		'state'                   => '',
+		'tax_number'              => '',
+		'tax_rate'                => NULL,
+		'thumbnail_id'            => NULL,
+		'use_default_description' => 'yes',
+		'use_default_terms'       => 'yes',
+		'website'                 => '',
+		'wpml_lang'               => '',
+		'zip_code'                => '',
 	);
 
 	/**********
@@ -570,6 +570,17 @@ class Supplier extends AtumCPTModel {
 	 */
 	public function get_post_type() {
 		return Suppliers::POST_TYPE;
+	}
+
+	/**
+	 * Get an array of supplier data keys
+	 *
+	 * @since 1.9.39
+	 *
+	 * @return string[]
+	 */
+	public function get_data_keys() {
+		return array_keys( $this->data );
 	}
 
 }
