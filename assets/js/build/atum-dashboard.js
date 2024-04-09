@@ -9353,8 +9353,8 @@ var COLORS;
     COLORS["primary"] = "#00B8DB";
     COLORS["warning"] = "#EFAF00";
     COLORS["danger"] = "#FF4848";
+    COLORS["grey"] = "#ADB5BD";
 })(COLORS || (COLORS = {}));
-;
 
 
 /***/ }),

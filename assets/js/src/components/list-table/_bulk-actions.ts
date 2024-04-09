@@ -96,7 +96,7 @@ export default class BulkActions {
 	/**
 	 * Apply a bulk action for the selected rows
 	 */
-	applyBulk() {
+	async applyBulk() {
 
 		const $bulkSelect: JQuery     = this.globals.$atumList.find( '.bulkactions select' ),
 		      bulkAction: string      = $bulkSelect.filter( ( index: number, elem: Element ) => {
@@ -108,14 +108,28 @@ export default class BulkActions {
 			selectedItems.push( $( elem ).val() );
 		} );
 
-		// Allow processing the bulk action externally.
+		// Let processing the bulk action externally.
 		const allowProcessBulkAction: boolean = this.wpHooks.applyFilters( 'atum_listTable_applyBulkAction', true, bulkAction, selectedItems, this );
 
 		if ( allowProcessBulkAction ) {
-			this.processBulk( bulkAction, selectedItems );
 
-			// Reset the bulk action select.
-			this.resetBulkFields();
+			try {
+
+				const extraData: any = await this.wpHooks.applyFilters( 'atum_listTable_preProcessBulkAction', null, bulkAction, selectedItems );
+
+				if ( extraData instanceof Error ) {
+					throw extraData;
+				}
+
+				this.processBulk( bulkAction, selectedItems, extraData );
+
+				// Reset the bulk action select.
+				this.resetBulkFields();
+
+			} catch ( error ) {
+				console.warn( error );
+			}
+
 		}
 
 	}
