@@ -11,4 +11,5 @@ export enum COLORS {
 	primary = '#00B8DB',
 	warning = '#EFAF00',
 	danger  = '#FF4848',
-};
+	grey    = '#ADB5BD',
+}
