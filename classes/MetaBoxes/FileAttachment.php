@@ -116,7 +116,10 @@ class FileAttachment {
 		$email_notifications = $allow_empty ? [ '' => __( 'None', ATUM_TEXT_DOMAIN ) ] : [];
 
 		foreach ( $email_templates as $email_template ) {
-			$email_notifications[ $email_template->id ] = $email_template->get_title();
+			if ( $email_template instanceof \WC_Email ) {
+				$email_notifications[ $email_template->id ] = $email_template->get_title();
+			}
+
 		}
 
 		return apply_filters( 'atum/meta_boxes/file_attachment/email_notifications', $email_notifications );
