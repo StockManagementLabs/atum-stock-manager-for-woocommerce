@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || die;
 				<h3><?php esc_html_e( 'Supplier Details', ATUM_TEXT_DOMAIN ); ?></h3>
 
 				<div class="input-group">
-					<label for="name"><?php esc_html_e( 'Name', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-name"><?php esc_html_e( 'Name', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="name-field">
 						<input type="text" name="name" id="supplier-name" required
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group">
 
-					<label for="code"><?php esc_html_e( 'Supplier Code', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-code"><?php esc_html_e( 'Supplier Code', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="code-field">
 						<input type="text" name="code" id="supplier-code"
@@ -40,7 +40,7 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group">
 
-					<label for="tax_number"><?php esc_html_e( 'Tax/VAT Number', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-tax_number"><?php esc_html_e( 'Tax/VAT Number', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="tax_number-field">
 						<input type="text" name="tax_number" id="supplier-tax_number"
@@ -50,7 +50,7 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group">
 
-					<label for="phone"><?php esc_html_e( 'Phone Number', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-phone"><?php esc_html_e( 'Phone Number', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="phone-field">
 						<input type="text" name="phone" id="supplier-phone"
@@ -60,7 +60,7 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group">
 
-					<label for="general_email"><?php esc_html_e( 'General Email Address', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-general_email"><?php esc_html_e( 'General Email Address', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="general_email-field">
 						<input type="text" name="general_email" id="supplier-general_email"
@@ -70,20 +70,20 @@ defined( 'ABSPATH' ) || die;
 
 				<div class="input-group">
 
-					<label for="tax_rate"><?php esc_html_e( 'Tax Rate', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-tax_rate"><?php esc_html_e( 'Tax Rate', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="tax_rate-field">
-						<input input type="number" step="1" min="0" name="tax_rate" id="supplier-tax_rate"
+						<input type="number" step="any" min="0" name="tax_rate" id="supplier-tax_rate"
 							placeholder="<?php esc_attr_e( 'Type the Tax Rate', ATUM_TEXT_DOMAIN ); ?>" value="">
 					</span>
 				</div>
 
 				<div class="input-group">
 
-					<label for="discount"><?php esc_html_e( 'Discount', ATUM_TEXT_DOMAIN ); ?></label>
+					<label for="supplier-discount"><?php esc_html_e( 'Discount', ATUM_TEXT_DOMAIN ); ?></label>
 
 					<span class="discount-field">
-						<input input type="number" step="1" min="0" name="discount" id="supplier-discount"
+						<input type="number" step="any" min="0" name="discount" id="supplier-discount"
 							placeholder="<?php esc_attr_e( 'Type the Discount', ATUM_TEXT_DOMAIN ); ?>" value="">
 					</span>
 				</div>

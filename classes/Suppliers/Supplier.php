@@ -27,7 +27,7 @@ use Atum\Models\AtumCPTModel;
  * @property int       $days_to_cancel
  * @property string    $delivery_terms
  * @property string    $description
- * @property int       $discount
+ * @property int|float $discount
  * @property string    $city
  * @property string    $code
  * @property string    $country

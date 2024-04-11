@@ -305,7 +305,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				),
 				'tax_rate'           => array(
 					'description' => __( 'Tax rate applied by the supplier.', ATUM_TEXT_DOMAIN ),
-					'type'        => 'integer',
+					'type'        => 'number',
 					'context'     => array( 'view', 'edit' ),
 				),
 				'lead_time'          => array(
