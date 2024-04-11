@@ -1079,17 +1079,14 @@ abstract class AtumOrderModel {
 			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp() );
 			$this->set_date_created( $date_created );
 
-			$id = wp_insert_post( apply_filters( 'atum/orders/new_order_data', array(
-				'post_date'     => Helpers::date_format( $date_created->getTimestamp() ),
-				'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
-				'post_type'     => $this->get_post_type(),
-				'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : $this->default_status,
-				'ping_status'   => 'closed',
-				'post_author'   => get_current_user_id(),
-				'post_title'    => $this->get_title(),
-				'post_content'  => $this->get_description(),
-				'post_password' => uniqid( 'atum_order_' ),
-			) ), TRUE );
+			$id = wp_insert_post( array_merge(
+				$this->get_post_data( $status ),
+				array(
+					'post_date'     => Helpers::date_format( $date_created->getOffsetTimestamp() ),
+					'post_date_gmt' => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
+					'post_password' => uniqid( 'atum_order_' ),
+				)
+			), TRUE );
 
 			if ( $id && ! is_wp_error( $id ) ) {
 				$this->id = $id;
@@ -1121,30 +1118,22 @@ abstract class AtumOrderModel {
 			return;
 		}
 
-		$date = $this->date_created;
+		$post_data = $this->get_post_data( $status );
+		$date      = $this->date_created;
 
 		if ( ! $date ) {
 			$date = ( ! empty( $this->post ) && $this->post->post_date ) ? $this->post->post_date : date_i18n( 'Y-m-d H:i:s' );
 		}
-
-		$date_created = Helpers::get_wc_time( $date );
 		
 		if ( ! empty( $this->post->post_date ) && $this->post->post_date !== $date ) {
 			// Empty the post title to be updated by the get_title() method.
 			$this->post->post_title = '';
+
+			// Update the post date.
+			$date                       = Helpers::get_wc_time( $date );
+			$post_data['post_date']     = Helpers::date_format( $date->getOffsetTimestamp() );
+			$post_data['post_date_gmt'] = Helpers::date_format( $date->getTimestamp(), TRUE, TRUE );
 		}
-
-		$allowed_statusses = array_merge( [ 'trash' ], array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) );
-
-		$post_data = array(
-			'post_date'         => Helpers::date_format( strtotime( $date ), TRUE, TRUE ),
-			'post_date_gmt'     => Helpers::date_format( $date_created->getTimestamp(), TRUE, TRUE ),
-			'post_status'       => in_array( $status, $allowed_statusses ) ? $status : $this->default_status,
-			'post_modified'     => current_time( 'mysql' ),
-			'post_modified_gmt' => current_time( 'mysql', 1 ),
-			'post_title'        => $this->get_title(),
-			'post_content'      => $this->get_description(),
-		);
 
 		/**
 		 * When updating this object, to prevent infinite loops, use $wpdb
@@ -1162,6 +1151,28 @@ abstract class AtumOrderModel {
 		}
 
 		$this->clear_caches();
+
+	}
+
+	/**
+	 * Get the post data to be saved to the ATUM Order post
+	 *
+	 * @since 1.9.39
+	 *
+	 * @param string $status
+	 *
+	 * @return array
+	 */
+	protected function get_post_data( $status ) {
+
+		return apply_filters( 'atum/orders/order_post_data', array(
+			'post_type'     => $this->get_post_type(),
+			'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : $this->default_status,
+			'ping_status'   => 'closed',
+			'post_author'   => get_current_user_id(),
+			'post_title'    => $this->get_title(),
+			'post_content'  => $this->get_description(),
+		) );
 
 	}
 
@@ -1551,6 +1562,11 @@ abstract class AtumOrderModel {
 
 		foreach ( $this->get_items( 'tax' ) as $key => $tax ) {
 
+			/**
+			 * Variable definition
+			 *
+			 * @var AtumOrderItemTax $tax
+			 */
 			$code = $tax->get_rate_code();
 
 			if ( ! isset( $tax_totals[ $code ] ) ) {
