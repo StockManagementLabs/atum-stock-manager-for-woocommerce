@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) || die;
 
 	<div class="form-field form-field-wide">
 		<label for="tax_rate"><?php esc_html_e( 'Tax Rate', ATUM_TEXT_DOMAIN ) ?></label>
-		<input type="number" step="1" min="0" id="tax_rate" name="default_settings[tax_rate]" value="<?php echo esc_attr( $supplier->tax_rate ) ?>">
+		<input type="number" step="any" min="0" id="tax_rate" name="default_settings[tax_rate]" value="<?php echo esc_attr( $supplier->tax_rate ) ?>">
 	</div>
 
 	<div class="form-field form-field-wide">
