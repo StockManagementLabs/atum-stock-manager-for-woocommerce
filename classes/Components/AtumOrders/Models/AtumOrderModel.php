@@ -1129,7 +1129,7 @@ abstract class AtumOrderModel {
 			// Empty the post title to be updated by the get_title() method.
 			$this->post->post_title = '';
 
-			// Update the post date.
+			// Update the date created if the user has changed it.
 			$date                       = Helpers::get_wc_time( $date );
 			$post_data['post_date']     = Helpers::date_format( $date->getOffsetTimestamp() );
 			$post_data['post_date_gmt'] = Helpers::date_format( $date->getTimestamp(), TRUE, TRUE );
