@@ -25,6 +25,7 @@ use Atum\Components\AtumStockDecimals;
 use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -526,8 +527,8 @@ final class Helpers {
 	 *
 	 * @since 1.2.3
 	 *
-	 * @param int       $date_start       The GMT date from when to start the items' sales calculations (must be a string format convertible with strtotime).
-	 * @param int       $date_end         Optional. The max GMT date to calculate the items' sales (must be a string format convertible with strtotime).
+	 * @param int       $date_start       The date from when to start the items' sales calculations (must be a string format convertible with strtotime in the WP's time zone).
+	 * @param int       $date_end         Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime in the WP's time zone).
 	 * @param array|int $items            Optional. Array of Product IDs (or single ID) we want to calculate sales from.
 	 * @param array     $colums           Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
 	 * @param bool      $use_lookup_table Optional. Whether to use the WC order product lookup tables (if available).
@@ -536,10 +537,11 @@ final class Helpers {
 	 */
 	public static function get_sold_last_days( $date_start, $date_end = NULL, $items = NULL, $colums = [ 'qty' ], $use_lookup_table = TRUE ) {
 
-		$items_sold = array();
+		$items_sold = [];
 
 		// Avoid duplicated queries in List Tables by using cache.
 		// NOTE: As the dates may change between calls to this function (mainly the seconds or minutes), to ensure we use the cache and not calculate again, we must reformat them.
+		// NOTE2: The "wc_orders" table (HPOS) works with GMT dates, and they are indexed, but the "wp_posts" table (Legacy) have local and GMT dates but only the local ones are indexed. So to avoid performance issues on legacy tables, we should always use the indexed ones.
 		$date_start_cache = self::validate_mysql_date( $date_start ) ? self::date_format( $date_start, FALSE, TRUE, 'Y-m-d H' ) : $date_start;
 		$date_end_cache   = self::validate_mysql_date( $date_end ) ? self::date_format( $date_end, FALSE, TRUE, 'Y-m-d H' ) : $date_end;
 		$cache_key        = AtumCache::get_cache_key( 'get_sold_last_days', [ $date_start_cache, $date_end_cache, $items, $colums ] );
@@ -556,23 +558,23 @@ final class Helpers {
 			$is_using_hpos_tables = self::is_using_hpos_tables();
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$date_start = self::date_format( strtotime( $date_start ), TRUE, TRUE );
+			$datetime_start = self::get_wc_time( strtotime( $date_start ) );
 
 			if ( $is_using_hpos_tables ) {
-				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', $date_start );
+				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE ) );
 			}
 			else {
-				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', $date_start );
+				$date_where = $wpdb->prepare( 'WHERE post_date >= %s', self::date_format( $datetime_start->getOffsetTimestamp() ) );
 			}
 
 			if ( $date_end ) {
-				$date_end = self::date_format( strtotime( $date_end ), TRUE, TRUE );
+				$datetime_end = self::get_wc_time( strtotime( $date_end ) );
 
 				if ( $is_using_hpos_tables ) {
-					$date_where .= $wpdb->prepare( ' AND date_created_gmt <= %s', $date_end );
+					$date_where .= $wpdb->prepare( ' AND date_created_gmt <= %s', self::date_format( $datetime_end->getTimestamp(), TRUE, TRUE ) );
 				}
 				else {
-					$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', $date_end );
+					$date_where .= $wpdb->prepare( ' AND post_date <= %s', self::date_format( $datetime_start->getOffsetTimestamp() ) );
 				}
 			}
 
@@ -2116,7 +2118,7 @@ final class Helpers {
 	 * @param mixed $the_product Post object or post ID of the product.
 	 * @param bool  $use_cache   Whether to use the ATUM cache or not.
 	 *
-	 * @return AtumProductTrait|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|\WC_Product|null|false
+	 * @return AtumProductInterface|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|\WC_Product|null|false
 	 */
 	public static function get_atum_product( $the_product = FALSE, $use_cache = FALSE ) {
 
@@ -3250,16 +3252,12 @@ final class Helpers {
 	 *
 	 * @since 1.8.2
 	 *
-	 * @return false|int|string
+	 * @param bool $gmt Optional. Whether to return the timestamp as GMT. Default is false.
+	 *
+	 * @return int
 	 */
-	public static function get_current_timestamp() {
-
-		if ( ! function_exists( 'wp_date' ) ) {
-			return current_time( 'timestamp', TRUE ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-		}
-
-		return wp_date( 'U' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-
+	public static function get_current_timestamp( $gmt = FALSE ) {
+		return current_time( 'timestamp', $gmt ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 	}
 
 	/**
@@ -3268,7 +3266,7 @@ final class Helpers {
 	 * @since 0.1.3
 	 *
 	 * @param string|int $date         Optional. The date to format. Can be an English date or a timestamp (with second param as true).
-	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timesptamp.
+	 * @param bool       $is_timestamp Optional. Whether the first param is a Unix timestamp.
 	 * @param bool       $gmt_date     Optional. Whether to return a GMT formatted date.
 	 * @param string     $format       Optional. A valid PHP date format. By default is 'Y-m-d H:i:s'.
 	 *
@@ -3314,7 +3312,7 @@ final class Helpers {
 	 *
 	 * @since 1.5.0.3
 	 *
-	 * @param string|integer|\WC_DateTime $value
+	 * @param string|int|\WC_DateTime $value
 	 *
 	 * @return \WC_DateTime|null
 	 */

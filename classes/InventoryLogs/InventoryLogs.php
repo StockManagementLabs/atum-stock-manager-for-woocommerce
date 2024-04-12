@@ -601,11 +601,11 @@ class InventoryLogs extends AtumOrderPostType {
 		if ( strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
+			$date = Helpers::date_format( strtotime( $term ), TRUE, FALSE, 'Y-m-d' );
 
 			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key IN ('_reservation_date', '_return_date', '_damage_date'))";
 			$criteria['search_where'][] = $wpdb->prepare( 'pme1.meta_value LIKE %s', "%%$date%%" );
-			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date_gmt LIKE %s', "%%$date%%" );
+			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date LIKE %s', "%%$date%%" );
 
 		}
 

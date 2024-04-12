@@ -245,7 +245,7 @@ class AtumCalculatedProps {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product|AtumProductTrait $product
+	 * @param AtumProductTrait|\WC_Product $product
 	 * @param int                          $order_type_id
 	 */
 	private static function update_atum_sales_calc_props( $product, $order_type_id = 1 ) {
@@ -273,7 +273,7 @@ class AtumCalculatedProps {
 			// WC Orders.
 			default:
 				$timestamp    = Helpers::get_current_timestamp();
-				$current_date = Helpers::date_format( $timestamp, TRUE, TRUE );
+				$current_date = Helpers::date_format( $timestamp );
 				$sale_days    = Helpers::get_sold_last_days_option();
 				$product_id   = $product->get_id();
 

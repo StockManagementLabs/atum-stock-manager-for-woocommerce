@@ -92,7 +92,7 @@ final class WidgetHelpers {
 			$stats['lost_products'] = 0;
 		}
 
-		$products_sold  = Helpers::get_sold_last_days( $date_start, ( isset( $date_end ) ? $date_end : NULL ), ! empty( $products ) ? $products : NULL, [ 'qty', 'total', 'prod_id' ] );
+		$products_sold  = Helpers::get_sold_last_days( $date_start, ( ! empty( $date_end ) ? $date_end : NULL ), ( ! empty( $products ) ? $products : NULL ), [ 'qty', 'total', 'prod_id' ] );
 		$lost_processed = array();
 
 		if ( $products_sold ) {
