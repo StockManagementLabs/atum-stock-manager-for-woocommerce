@@ -665,7 +665,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					if ( ! empty( $_REQUEST['view'] ) ) {
 
 						$view = esc_attr( $_REQUEST['view'] );
-						if ( ! in_array( $child_id, $this->id_views[ $view ] ) ) {
+						if ( ! in_array( $child_id, $this->get_id_views()[ $view ] ) ) {
 							continue;
 						}
 
@@ -1840,25 +1840,25 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			}
 			// Out of stock.
-			elseif ( in_array( $product_id, $this->id_views['out_stock'] ) ) {
+			elseif ( in_array( $product_id, $this->get_id_views()['out_stock'] ) ) {
 				$classes .= ' cell-red';
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-cross-circle tips"' . $data_tip . '></span>';
 			}
 			// Backorders.
-			elseif ( in_array( $product_id, $this->id_views['back_order'] ) ) {
+			elseif ( in_array( $product_id, $this->get_id_views()['back_order'] ) ) {
 				$classes .= ' cell-yellow';
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Out of Stock (backorders allowed)', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-circle-minus tips"' . $data_tip . '></span>';
 			}
 			// Restock Status.
-			elseif ( in_array( $product_id, $this->id_views['restock_status'] ) ) {
+			elseif ( in_array( $product_id, $this->get_id_views()['restock_status'] ) ) {
 				$classes .= ' cell-blue';
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'Restock Status', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-arrow-down-circle tips"' . $data_tip . '></span>';
 			}
 			// In Stock.
-			elseif ( in_array( $product_id, $this->id_views['in_stock'] ) ) {
+			elseif ( in_array( $product_id, $this->get_id_views()['in_stock'] ) ) {
 				$classes .= ' cell-green';
 				$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr__( 'In Stock', ATUM_TEXT_DOMAIN ) . '"' : '';
 				$content  = '<span class="atum-icon atmi-checkmark-circle tips"' . $data_tip . '></span>';
@@ -2467,7 +2467,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$view        = esc_attr( $_REQUEST['view'] );
 			$allow_query = FALSE;
 
-			foreach ( $this->id_views as $key => $post_ids ) {
+			foreach ( $this->get_id_views() as $key => $post_ids ) {
 
 				if ( $view === $key ) {
 
@@ -2800,6 +2800,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->show_unmanaged_counters ) {
 
+			// No need to use the getter in this function.
 			$this->id_views = array_merge( $this->id_views, array(
 				'managed'        => [],
 				'unm_in_stock'   => [],
@@ -2942,27 +2943,27 @@ abstract class AtumListTable extends \WP_List_Table {
 						return in_array( $row[0], $products );
 					} );
 
-					$this->id_views['unm_in_stock'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+					$this->get_id_views()['unm_in_stock'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
 						return 'instock' === $row[1];
 					} ), 0 );
 
-					$this->count_views['count_unm_in_stock'] = count( $this->id_views['unm_in_stock'] );
+					$this->count_views['count_unm_in_stock'] = count( $this->get_id_views()['unm_in_stock'] );
 
-					$this->id_views['unm_out_stock'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+					$this->get_id_views()['unm_out_stock'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
 						return 'outofstock' === $row[1];
 					} ), 0 );
 
-					$this->count_views['count_unm_out_stock'] = count( $this->id_views['unm_out_stock'] );
+					$this->count_views['count_unm_out_stock'] = count( $this->get_id_views()['unm_out_stock'] );
 
-					$this->id_views['unm_back_order'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
+					$this->get_id_views()['unm_back_order'] = array_column( array_filter( $products_unmanaged_status, function ( $row ) {
 						return 'onbackorder' === $row[1];
 					} ), 0 );
 
-					$this->count_views['count_unm_back_order'] = count( $this->id_views['unm_back_order'] );
+					$this->count_views['count_unm_back_order'] = count( $this->get_id_views()['unm_back_order'] );
 
 					$products_unmanaged = array_column( $products_unmanaged_status, 0 );
 
-					$this->id_views['managed'] = array_diff( $products, $products_unmanaged );
+					$this->get_id_views()['managed'] = array_diff( $products, $products_unmanaged );
 					// Need to substract count unmanaged because group items are not included twice in managed id_views.
 					$this->count_views['count_managed'] = $this->count_views['count_all'] - count( $products_unmanaged );
 
@@ -2979,11 +2980,11 @@ abstract class AtumListTable extends \WP_List_Table {
 				// Filter the unmanaged (also removes uncontrolled).
 				$products_unmanaged = array_intersect( $products, $products_unmanaged );
 
-				$this->id_views['unmanaged']          = $products_unmanaged;
+				$this->get_id_views()['unmanaged']          = $products_unmanaged;
 				$this->count_views['count_unmanaged'] = count( $products_unmanaged );
 
 				if ( ! empty( $products_unmanaged ) ) {
-					$products = ! empty( $this->count_views['count_managed'] ) ? $this->id_views['managed'] : array_diff( $products, $products_unmanaged );
+					$products = ! empty( $this->count_views['count_managed'] ) ? $this->get_id_views()['managed'] : array_diff( $products, $products_unmanaged );
 				}
 
 			}
@@ -3027,7 +3028,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$products_in_stock     = $products_in_stock instanceof \WP_Query && $products_in_stock->found_posts ?
 				$products_in_stock->posts : [];
 
-			$this->id_views['in_stock']          = (array) $products_in_stock;
+			$this->get_id_views()['in_stock']          = (array) $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
 
 			$products_not_stock = array_diff( (array) $products, (array) $products_in_stock, (array) $products_unmanaged );
@@ -3061,7 +3062,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$products_backorders   = $products_backorders instanceof \WP_Query && $products_backorders->found_posts ?
 				$products_backorders->posts : [];
 
-			$this->id_views['back_order']          = (array) $products_backorders;
+			$this->get_id_views()['back_order']          = (array) $products_backorders;
 			$this->count_views['count_back_order'] = count( $products_backorders );
 
 			// As the Group items might be displayed multiple times, we should count them multiple times too.
@@ -3092,7 +3093,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 				$products_restock_status = ! empty( $products_restock_status ) ? $products_restock_status : [];
 
-				$this->id_views['restock_status']          = (array) $products_restock_status;
+				$this->get_id_views()['restock_status']          = (array) $products_restock_status;
 				$this->count_views['count_restock_status'] = count( $products_restock_status );
 
 			}
@@ -3102,7 +3103,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			$products_out_stock = array_diff( $products_not_stock, (array) $products_backorders );
 
-			$this->id_views['out_stock']          = $products_out_stock;
+			$this->get_id_views()['out_stock']          = $products_out_stock;
 			$this->count_views['count_out_stock'] = $this->count_views['count_all'] - $this->count_views['count_in_stock'] - $this->count_views['count_back_order'] - $this->count_views['count_unmanaged'];
 
 			/**
@@ -3110,13 +3111,13 @@ abstract class AtumListTable extends \WP_List_Table {
 			 */
 			if ( $this->show_unmanaged_counters ) {
 
-				$this->id_views['all_in_stock']          = array_merge( $this->id_views['in_stock'], $this->id_views['unm_in_stock'] );
+				$this->get_id_views()['all_in_stock']          = array_merge( $this->get_id_views()['in_stock'], $this->get_id_views()['unm_in_stock'] );
 				$this->count_views['count_all_in_stock'] = $this->count_views['count_in_stock'] + $this->count_views['count_unm_in_stock'];
 
-				$this->id_views['all_out_stock']          = array_merge( $this->id_views['out_stock'], $this->id_views['unm_out_stock'] );
+				$this->get_id_views()['all_out_stock']          = array_merge( $this->get_id_views()['out_stock'], $this->get_id_views()['unm_out_stock'] );
 				$this->count_views['count_all_out_stock'] = $this->count_views['count_out_stock'] + $this->count_views['count_unm_out_stock'];
 
-				$this->id_views['all_back_order']          = array_merge( $this->id_views['back_order'], $this->id_views['unm_back_order'] );
+				$this->get_id_views()['all_back_order']          = array_merge( $this->get_id_views()['back_order'], $this->get_id_views()['unm_back_order'] );
 				$this->count_views['count_all_back_order'] = $this->count_views['count_back_order'] + $this->count_views['count_unm_back_order'];
 
 			}
@@ -5165,6 +5166,18 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		return array_map( 'get_term', $term_ids );
 
+	}
+
+	/**
+	 * Getter for the id views
+	 *
+	 * @since 1.9.39
+	 *
+	 * @return array
+	 */
+	protected function get_id_views() {
+
+		return apply_filters( 'atum/list_table/id_views', $this->id_views, $this );
 	}
 
 }
