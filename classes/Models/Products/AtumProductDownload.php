@@ -14,7 +14,10 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class AtumProductDownload extends \WC_Product_Download {
+use Atum\Models\Interfaces\AtumProductInterface;
+
+
+class AtumProductDownload extends \WC_Product_Download implements AtumProductInterface {
 
 	// Import the shared stuff.
 	use AtumProductTrait;

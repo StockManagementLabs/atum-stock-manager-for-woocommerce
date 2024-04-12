@@ -194,6 +194,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Models\\DataStores\\AtumProductSubscriptionDataStoreCPT' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumProductSubscriptionDataStoreCPT.php',
         'Atum\\Models\\DataStores\\AtumProductVariableDataStoreCPT' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumProductVariableDataStoreCPT.php',
         'Atum\\Models\\DataStores\\AtumProductVariationDataStoreCPT' => __DIR__ . '/../..' . '/classes/Models/DataStores/AtumProductVariationDataStoreCPT.php',
+        'Atum\\Models\\Interfaces\\AtumProductInterface' => __DIR__ . '/../..' . '/classes/Models/Interfaces/AtumProductInterface.php',
         'Atum\\Models\\Products\\AtumProductBooking' => __DIR__ . '/../..' . '/classes/Models/Products/AtumProductBooking.php',
         'Atum\\Models\\Products\\AtumProductBundle' => __DIR__ . '/../..' . '/classes/Models/Products/AtumProductBundle.php',
         'Atum\\Models\\Products\\AtumProductDownload' => __DIR__ . '/../..' . '/classes/Models/Products/AtumProductDownload.php',

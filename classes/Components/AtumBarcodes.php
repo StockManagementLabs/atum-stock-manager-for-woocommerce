@@ -17,8 +17,8 @@ use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Globals as AtumGlobals;
 use Atum\Inc\Helpers;
-use Atum\Models\Products\AtumProductTrait;
-use AtumLevels\Levels\Products\BOMProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
+use AtumLevels\Levels\Interfaces\BOMProductInterface;
 
 
 class AtumBarcodes {
@@ -250,10 +250,10 @@ class AtumBarcodes {
 	 *
 	 * @since 1.9.18
 	 *
-	 * @param string                                                             $column_item
-	 * @param \WP_Post                                                           $item
-	 * @param \WC_Product|\WC_Product_Variation|AtumProductTrait|BOMProductTrait $product
-	 * @param AtumListTable                                                      $list_table
+	 * @param string                                                                     $column_item
+	 * @param \WP_Post                                                                   $item
+	 * @param \WC_Product|\WC_Product_Variation|AtumProductInterface|BOMProductInterface $product
+	 * @param AtumListTable                                                              $list_table
 	 *
 	 * @return string
 	 */

@@ -20,11 +20,11 @@ use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
-use AtumLevels\Levels\Products\BOMProductTrait;
+use AtumLevels\Levels\Interfaces\BOMProductInterface;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -49,7 +49,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	/**
 	 * Current item being listed
 	 *
-	 * @var \WC_Product|\WC_Product_Variation|AtumProductTrait|BOMProductTrait
+	 * @var \WC_Product|\WC_Product_Variation|AtumProductInterface|BOMProductInterface
 	 */
 	protected $list_item;
 

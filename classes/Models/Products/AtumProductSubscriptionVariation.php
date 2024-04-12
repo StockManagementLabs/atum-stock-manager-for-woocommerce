@@ -18,7 +18,9 @@ if ( ! class_exists( '\WC_Product_Subscription_Variation' ) ) {
 	return;
 }
 
-class AtumProductSubscriptionVariation extends \WC_Product_Subscription_Variation {
+use Atum\Models\Interfaces\AtumProductInterface;
+
+class AtumProductSubscriptionVariation extends \WC_Product_Subscription_Variation implements AtumProductInterface {
 
 	// Import the shared stuff.
 	use AtumProductTrait;

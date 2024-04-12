@@ -14,7 +14,10 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || exit;
 
-class AtumProductSimple extends \WC_Product_Simple {
+use Atum\Models\Interfaces\AtumProductInterface;
+
+
+class AtumProductSimple extends \WC_Product_Simple implements AtumProductInterface {
 
 	// Import the shared stuff.
 	use AtumProductTrait;

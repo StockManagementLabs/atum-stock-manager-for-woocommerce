@@ -114,6 +114,7 @@ return array(
     'Atum\\Models\\DataStores\\AtumProductSubscriptionDataStoreCPT' => $baseDir . '/classes/Models/DataStores/AtumProductSubscriptionDataStoreCPT.php',
     'Atum\\Models\\DataStores\\AtumProductVariableDataStoreCPT' => $baseDir . '/classes/Models/DataStores/AtumProductVariableDataStoreCPT.php',
     'Atum\\Models\\DataStores\\AtumProductVariationDataStoreCPT' => $baseDir . '/classes/Models/DataStores/AtumProductVariationDataStoreCPT.php',
+    'Atum\\Models\\Interfaces\\AtumProductInterface' => $baseDir . '/classes/Models/Interfaces/AtumProductInterface.php',
     'Atum\\Models\\Products\\AtumProductBooking' => $baseDir . '/classes/Models/Products/AtumProductBooking.php',
     'Atum\\Models\\Products\\AtumProductBundle' => $baseDir . '/classes/Models/Products/AtumProductBundle.php',
     'Atum\\Models\\Products\\AtumProductDownload' => $baseDir . '/classes/Models/Products/AtumProductDownload.php',

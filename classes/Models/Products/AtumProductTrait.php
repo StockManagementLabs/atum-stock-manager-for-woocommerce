@@ -836,7 +836,7 @@ trait AtumProductTrait {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string|bool $atum_controlled Whether or not the ATUM control switch is enabled.
+	 * @param string|bool $atum_controlled Whether the ATUM control switch is enabled.
 	 */
 	public function set_atum_controlled( $atum_controlled ) {
 		$this->set_prop( 'atum_controlled', wc_string_to_bool( $atum_controlled ) );
@@ -872,7 +872,7 @@ trait AtumProductTrait {
 	}
 
 	/**
-	 * Set if the product is from an inheriable type.
+	 * Set if the product is from an inheritable type.
 	 *
 	 * @since 1.5.0
 	 *

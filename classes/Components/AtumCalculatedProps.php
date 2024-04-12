@@ -18,7 +18,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Hooks;
 use Atum\InventoryLogs\Models\Log;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 
 class AtumCalculatedProps {
 
@@ -245,8 +245,8 @@ class AtumCalculatedProps {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param AtumProductTrait|\WC_Product $product
-	 * @param int                          $order_type_id
+	 * @param \WC_Product|AtumProductInterface $product
+	 * @param int                              $order_type_id
 	 */
 	private static function update_atum_sales_calc_props( $product, $order_type_id = 1 ) {
 
@@ -341,7 +341,7 @@ class AtumCalculatedProps {
 			/**
 			 * Variable definition.
 			 *
-			 * @var AtumProductTrait $product
+			 * @var AtumProductInterface $product
 			 */
 			if ( ! Helpers::is_atum_product( $product ) ) {
 				// NOTE: We should be careful when using "get_atum_product" on a product with changes but not saved yet because the changes could be lost.

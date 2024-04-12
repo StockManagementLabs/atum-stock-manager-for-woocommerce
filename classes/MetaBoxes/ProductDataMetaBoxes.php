@@ -17,7 +17,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\Suppliers\Suppliers;
 
 
@@ -40,7 +40,7 @@ class ProductDataMetaBoxes {
 	/**
 	 * The product object currently saved.
 	 *
-	 * @var \WC_Product|AtumProductTrait
+	 * @var \WC_Product|AtumProductInterface
 	 */
 	private $product;
 

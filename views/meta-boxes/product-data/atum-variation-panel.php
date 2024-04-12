@@ -4,14 +4,15 @@
  *
  * @since 1.4.5
  *
- * @var int                                                          $loop
- * @var \WC_Product_Variation|\Atum\Models\Products\AtumProductTrait $variation
- * @var array                                                        $variation_data
+ * @var int                                        $loop
+ * @var \WC_Product_Variation|AtumProductInterface $variation
+ * @var array                                      $variation_data
  */
 
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Globals;
+use Atum\Models\Interfaces\AtumProductInterface;
 
 ?>
 <div class="atum-data-panel">

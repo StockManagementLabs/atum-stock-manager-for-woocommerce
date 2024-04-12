@@ -20,7 +20,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Items\AtumOrderItemProduct;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\Inc\Helpers;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Exports\POExport;
@@ -727,11 +727,11 @@ class PurchaseOrders extends AtumOrderPostType {
 		if ( ! is_numeric( $term ) && strtotime( $term ) ) {
 
 			// Format the date in MySQL format.
-			$date = Helpers::date_format( strtotime( $term ), TRUE, TRUE, 'Y-m-d' );
+			$date = Helpers::date_format( strtotime( $term ), TRUE, FALSE, 'Y-m-d' );
 
 			$criteria['join'][]         = "LEFT JOIN $wpdb->postmeta pme1 ON (p.ID = pme1.post_id AND pme1.meta_key = '_date_expected')";
 			$criteria['search_where'][] = $wpdb->prepare( 'pme1.meta_value LIKE %s', "%%$date%%" );
-			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date_gmt LIKE %s', "%%$date%%" );
+			$criteria['search_where'][] = $wpdb->prepare( 'p.post_date LIKE %s', "%%$date%%" );
 
 		}
 		// Strings: search in supplier names or author names.
@@ -812,10 +812,10 @@ class PurchaseOrders extends AtumOrderPostType {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param float                        $price
-	 * @param float                        $qty
-	 * @param \WC_Product|AtumProductTrait $product
-	 * @param AtumOrderModel               $order
+	 * @param float                            $price
+	 * @param float                            $qty
+	 * @param \WC_Product|AtumProductInterface $product
+	 * @param AtumOrderModel                   $order
 	 *
 	 * @return float|mixed|string
 	 */

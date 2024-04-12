@@ -21,7 +21,7 @@ use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\MetaBoxes\ProductDataMetaBoxes;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\StockCentral\Lists\ListTable;
@@ -1584,8 +1584,8 @@ class Wpml {
 	 *
 	 * @since 1.9.30
 	 *
-	 * @param array                        $where
-	 * @param \WC_Product|AtumProductTrait $product
+	 * @param array                            $where
+	 * @param \WC_Product|AtumProductInterface $product
 	 *
 	 * @return array
 	 */

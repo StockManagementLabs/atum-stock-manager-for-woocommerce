@@ -18,7 +18,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\MetaBoxes\FileAttachment;
-use Atum\Models\Products\AtumProductTrait;
+use Atum\Models\Interfaces\AtumProductInterface;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Automattic\WooCommerce\Utilities\OrderUtil;
@@ -646,7 +646,7 @@ class Hooks {
 
 			// Ensure that is the product uses the ATUM models.
 			/**
-			 * @var AtumProductTrait $product
+			 * @var AtumProductInterface $product
 			 */
 			$product = Helpers::get_atum_product( $product );
 

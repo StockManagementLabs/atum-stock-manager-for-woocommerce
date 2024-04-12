@@ -18,7 +18,9 @@ if ( ! class_exists( '\WC_Product_Booking' ) ) {
 	return;
 }
 
-class AtumProductBooking extends \WC_Product_Booking {
+use Atum\Models\Interfaces\AtumProductInterface;
+
+class AtumProductBooking extends \WC_Product_Booking implements AtumProductInterface {
 
 	// Import the shared stuff.
 	use AtumProductTrait;

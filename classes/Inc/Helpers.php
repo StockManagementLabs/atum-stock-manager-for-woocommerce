@@ -26,15 +26,12 @@ use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Models\Interfaces\AtumProductInterface;
-use Atum\Models\Products\AtumProductTrait;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Queries\ProductDataQuery;
 use Atum\Settings\Settings;
 use Atum\Suppliers\Suppliers;
-use AtumLevels\Levels\Products\BOMProductSimpleTrait;
-use AtumLevels\Levels\Products\BOMProductTrait;
-use AtumLevels\Levels\Products\BOMProductVariationTrait;
+use AtumLevels\Levels\Interfaces\BOMProductInterface;
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 use Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableQuery;
 use Automattic\WooCommerce\Utilities\OrderUtil;
@@ -1050,11 +1047,11 @@ final class Helpers {
 	 * @since   1.4.18
 	 * @version 1.1
 	 *
-	 * @param \WC_Product|AtumProductTrait $product      The ATUM product object.
-	 * @param string                       $prop_name    The prop name.
-	 * @param mixed                        $default      The default value for the global option.
-	 * @param string                       $prefix       Optional. The ATUM add-ons should use a prefix for their settings.
-	 * @param bool                         $allow_global Optional. If FALSE, only can return meta value or default. If TRUE, it could return 'global'.
+	 * @param \WC_Product|AtumProductInterface $product      The ATUM product object.
+	 * @param string                           $prop_name    The prop name.
+	 * @param mixed                            $default      The default value for the global option.
+	 * @param string                           $prefix       Optional. The ATUM add-ons should use a prefix for their settings.
+	 * @param bool                             $allow_global Optional. If FALSE, only can return meta value or default. If TRUE, it could return 'global'.
 	 *
 	 * @return mixed
 	 */
@@ -1922,8 +1919,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.4
 	 *
-	 * @param \WC_Product|AtumProductTrait $product  The product to check.
-	 * @param bool                         $force    Optional. Whether to force the recalculation from db.
+	 * @param \WC_Product|AtumProductInterface $product The product to check.
+	 * @param bool                             $force   Optional. Whether to force the recalculation from db.
 	 *
 	 * @return int|float
 	 */
@@ -1998,8 +1995,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param \WC_Product|AtumProductTrait $product
-	 * @param bool                         $force
+	 * @param \WC_Product|AtumProductInterface $product
+	 * @param bool                             $force
 	 *
 	 * @return int|float
 	 */
@@ -2118,7 +2115,7 @@ final class Helpers {
 	 * @param mixed $the_product Post object or post ID of the product.
 	 * @param bool  $use_cache   Whether to use the ATUM cache or not.
 	 *
-	 * @return AtumProductInterface|BOMProductTrait|BOMProductVariationTrait|BOMProductSimpleTrait|\WC_Product|null|false
+	 * @return AtumProductInterface|BOMProductInterface|\WC_Product|null|false
 	 */
 	public static function get_atum_product( $the_product = FALSE, $use_cache = FALSE ) {
 
@@ -2158,7 +2155,7 @@ final class Helpers {
 	 *
 	 * @since 1.7.2
 	 *
-	 * @param \WC_Product|AtumProductTrait|BOMProductTrait $product
+	 * @param \WC_Product|AtumProductInterface|BOMProductInterface $product
 	 *
 	 * @return bool
 	 */
@@ -2338,9 +2335,9 @@ final class Helpers {
 	 *
 	 * @since 1.4.10
 	 *
-	 * @param \WC_Product|AtumProductTrait $product    Optional. The product to rebuild the threshold for.
-	 * @param bool                         $clean_meta Optional. Whether to clean the threshold value.
-	 * @param bool                         $all        Optional. Whether to apply to all the products that reached the individual threshold.
+	 * @param \WC_Product|AtumProductInterface $product    Optional. The product to rebuild the threshold for.
+	 * @param bool                             $clean_meta Optional. Whether to clean the threshold value.
+	 * @param bool                             $all        Optional. Whether to apply to all the products that reached the individual threshold.
 	 */
 	public static function force_rebuild_stock_status( $product = NULL, $clean_meta = FALSE, $all = FALSE ) {
 
@@ -2921,8 +2918,8 @@ final class Helpers {
 	 *
 	 * @since 1.5.8
 	 *
-	 * @param AtumProductTrait $product    The product to check. It must be an ATUM product.
-	 * @param string           $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param AtumProductInterface $product    The product to check. It must be an ATUM product.
+	 * @param string               $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
 	 *
 	 * @return bool
 	 */
@@ -3075,8 +3072,8 @@ final class Helpers {
 	 *
 	 * @since 1.6.6
 	 *
-	 * @param \WC_Product|AtumProductTrait $product
-	 * @param bool                         $use_lookup_table
+	 * @param \WC_Product|AtumProductInterface $product
+	 * @param bool                             $use_lookup_table
 	 *
 	 * @return bool
 	 */

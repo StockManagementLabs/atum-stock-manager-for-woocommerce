@@ -18,7 +18,9 @@ if ( ! class_exists( '\WC_Product_Bundle' ) ) {
 	return;
 }
 
-class AtumProductBundle extends \WC_Product_Bundle {
+use Atum\Models\Interfaces\AtumProductInterface;
+
+class AtumProductBundle extends \WC_Product_Bundle implements AtumProductInterface {
 
 	// Import the shared stuff.
 	use AtumProductTrait;
