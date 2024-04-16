@@ -442,7 +442,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 			$object->save();
 
-			return $this->get_object( $object->get_id() );
+			return $object;
 
 		} catch ( \WC_Data_Exception $e ) {
 			return new \WP_Error( $e->getErrorCode(), $e->getMessage(), $e->getErrorData() );
