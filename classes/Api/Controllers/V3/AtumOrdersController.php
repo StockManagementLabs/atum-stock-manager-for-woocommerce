@@ -785,13 +785,13 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		do_action( 'atum/api/rest_set_atum_order_item', $item, $posted );
 
-		// If updating the ATUM Order, add the item to it.
-		if ( 'update' === $action ) {
+		// If creating the order, add the item to it.
+		if ( 'create' === $action ) {
+			$order->add_item( $item );
+		}
+		else {
 			$item->save();
 		}
-
-		// Add/Update the item on the ATUM Order object.
-		$order->add_item( $item );
 
 		do_action( 'atum/api/rest_after_set_atum_order_item', $item, $posted, $action );
 	}
