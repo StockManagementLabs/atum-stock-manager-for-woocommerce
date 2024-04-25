@@ -40,7 +40,7 @@ if ( empty( $variation ) ) : ?>
 		</span>
 	</p>
 
-	<?php do_action( 'atum/barcodes/after_barcode_field', $variation, $barcode ) ?>
+	<?php do_action( 'atum/barcodes/after_barcode_field', $variation, $barcode, $loop ) ?>
 
 <?php if ( empty( $variation ) ) : ?>
 </div>
