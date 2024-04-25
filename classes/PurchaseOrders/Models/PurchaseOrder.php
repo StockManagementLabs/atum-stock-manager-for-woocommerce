@@ -138,7 +138,7 @@ class PurchaseOrder extends AtumOrderModel {
 	 *
 	 * @since 1.2.9
 	 *
-	 * @param string $return    Optional. The type of object to return. Possible values 'id' or 'object'.
+	 * @param string $return Optional. The type of object to return. Possible values 'id' or 'object'.
 	 *
 	 * @return Supplier|int|NULL
 	 */
