@@ -2166,158 +2166,179 @@ final class Ajax {
 
 		check_ajax_referer( 'import-order-items', 'security' );
 
-		if ( ! current_user_can( 'edit_shop_orders' ) || ! AtumCapabilities::current_user_can( 'edit_inventory_log' ) ) {
-			wp_die( -1 );
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error( array( 'error' => __( 'You are not allowed to do so', ATUM_TEXT_DOMAIN ) ) );
 		}
 
-		if ( isset( $_POST['atum_order_id'], $_POST['wc_order_id'] ) ) {
+		if ( ! isset( $_POST['atum_order_id'], $_POST['wc_order_id'] ) ) {
+			wp_send_json_error( [ 'error' => __( 'Invalid Data', ATUM_TEXT_DOMAIN ) ] );
+		}
 
-			$atum_order_id = absint( $_POST['atum_order_id'] );
-			$wc_order_id   = absint( $_POST['wc_order_id'] );
-			$wc_order      = wc_get_order( $wc_order_id );
+		$atum_order_id = absint( $_POST['atum_order_id'] );
+		$wc_order_id   = absint( $_POST['wc_order_id'] );
+		$wc_order      = wc_get_order( $wc_order_id );
 
-			if ( ! empty( $wc_order ) ) {
+		if ( ! $wc_order ) {
+			wp_send_json_error( [ 'error' => __( "The order doesn't exist", ATUM_TEXT_DOMAIN ) ] );
+		}
 
-				$items = $wc_order->get_items( array( 'line_item', 'fee', 'shipping', 'tax' ) );
+		$items = $wc_order->get_items( [ 'line_item', 'fee', 'shipping', 'tax' ] );
 
-				if ( ! empty( $items ) ) {
+		if ( empty( $items ) ) {
+			wp_send_json_error( [ 'error' => __( 'The order is empty', ATUM_TEXT_DOMAIN ) ] );
+		}
 
-					$atum_order_type = get_post_type( $atum_order_id );
+		$atum_order_type = get_post_type( $atum_order_id );
+		$atum_order      = apply_filters( 'atum/ajax/import_wc_order_items/get_atum_order', NULL, $atum_order_id );
 
-					// *** NOTE: FOR NOW THIS IS ONLY USED ON LOGS, IF NEEDS TO BE COMPATIBLE WITH OTHER
-					// ATUM ORDERS IN THE FUTURE, THIS WILL NEED REFACTORY ***
-					$atum_order = apply_filters( 'atum/ajax/get_atum_order_import_items', new Log( $atum_order_id ), $atum_order_id );
+		// By default, ATUM free only supports logs here, but the above hook can be used externally to add any other ATUM Order.
+		if ( ! $atum_order ) {
+			$atum_order = new Log( $atum_order_id );
+		}
 
-					try {
+		try {
 
-						// The log only can have one tax applied, so check if already has one.
-						$current_tax = $atum_order->get_items( 'tax' );
+			foreach ( $items as $item ) {
 
-						foreach ( $items as $item ) {
+				// Allow bypassing some items externally.
+				if ( ! apply_filters( 'atum/ajax/import_wc_order_items/maybe_import_item', TRUE, $item, $atum_order ) ) {
+					continue;
+				}
 
-							if ( $item instanceof \WC_Order_Item_Product ) {
-								/**
-								 * Variable definition
-								 *
-								 * @var \WC_Order_Item_Product $item
-								 */
-								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
-									$imported_item = FALSE;
+				if ( $item instanceof \WC_Order_Item_Product ) {
 
-									foreach ( $atum_order->get_items( 'line_item' ) as $atum_order_item ) {
-										/**
-										 * Variable definition
-										 *
-										 * @var \WC_Order_Item_Product $atum_order_item
-										 */
-										if ( $item->get_product_id() === $atum_order_item->get_product_id() ) {
-											$imported_item = TRUE;
-											break;
-										}
-									}
-									if ( $imported_item ) {
-										continue;
-									}
-								}
-								$product  = Helpers::get_atum_product( $item->get_product() );
-								$log_item = $atum_order->add_product( $product, $item->get_quantity() );
+					/**
+					 * Variable definition
+					 *
+					 * @var \WC_Order_Item_Product $item
+					 */
+					if ( PurchaseOrders::POST_TYPE === $atum_order_type ) {
 
-								do_action( 'atum/atum_order/import_order_item', $log_item, $atum_order, $item, $wc_order );
-							}
-							elseif ( $item instanceof \WC_Order_Item_Fee ) {
-								/**
-								 * Variable definition
-								 *
-								 * @var \WC_Order_Item_Fee $item
-								 */
-								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
-									$imported_item = FALSE;
+						$imported_item = FALSE;
 
-									foreach ( $atum_order->get_items( 'fee' ) as $atum_order_item ) {
-										/**
-										 * Variable definition
-										 *
-										 * @var \WC_Order_Item_Fee $atum_order_item
-										 */
-										if ( $item->get_name() === $atum_order_item->get_name() && $item->get_amount() === $atum_order_item->get_amount() ) {
-											$imported_item = TRUE;
-											break;
-										}
-									}
-									if ( $imported_item ) {
-										continue;
-									}
-								}
-								$log_item = $atum_order->add_fee( $item );
-							}
-							elseif ( $item instanceof \WC_Order_Item_Shipping ) {
-								/**
-								 * Variable definition
-								 *
-								 * @var \WC_Order_Item_Shipping $item
-								 */
-								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
-									$imported_item = FALSE;
+						foreach ( $atum_order->get_items( 'line_item' ) as $atum_order_item ) {
 
-									foreach ( $atum_order->get_items( 'shipping' ) as $atum_order_item ) {
-										/**
-										 * Variable definition
-										 *
-										 * @var \WC_Order_Item_Shipping $atum_order_item
-										 */
-										if ( $item->get_name() === $atum_order_item->get_name() && $item->get_quantity() === $atum_order_item->get_quantity() ) {
-											$imported_item = TRUE;
-											break;
-										}
-									}
-									if ( $imported_item ) {
-										continue;
-									}
-								}
-								$log_item = $atum_order->add_shipping_cost( $item );
-							}
-							elseif ( empty( $current_tax ) && $item instanceof \WC_Order_Item_Tax ) {
-								/**
-								 * Variable definition
-								 *
-								 * @var \WC_Order_Item_Tax $item
-								 */
-								if ( PurchaseOrders::get_post_type() === $atum_order_type ) {
-									continue;
-								}
-								$log_item = $atum_order->add_tax( array( 'rate_id' => $item->get_rate_id() ), $item );
-							}
-
-							// Add the order ID as item's custom meta.
-							if ( ! empty( $log_item ) ) {
-								$log_item->add_meta_data( '_order_id', $wc_order_id, TRUE );
-								$log_item->save_meta_data();
+							/**
+							 * Variable definition
+							 *
+							 * @var \WC_Order_Item_Product $atum_order_item
+							 */
+							if ( $item->get_product_id() === $atum_order_item->get_product_id() ) {
+								$imported_item = TRUE;
+								break;
 							}
 
 						}
 
-						// Load template.
-						$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact( 'atum_order' ) );
+						if ( $imported_item ) {
+							continue;
+						}
 
-						wp_send_json_success( array( 'html' => $html ) );
-
-					} catch ( \Exception $e ) {
-						wp_send_json_error( array( 'error' => $e->getMessage() ) );
 					}
 
+					$product    = Helpers::get_atum_product( $item->get_product() );
+					$order_item = $atum_order->add_product( $product, $item->get_quantity() );
+
+					do_action( 'atum/atum_order/import_order_item', $order_item, $atum_order, $item, $wc_order );
+
 				}
-				else {
-					wp_send_json_error( array( 'error' => __( 'The order is empty', ATUM_TEXT_DOMAIN ) ) );
+				elseif ( $item instanceof \WC_Order_Item_Fee ) {
+
+					/**
+					 * Variable definition
+					 *
+					 * @var \WC_Order_Item_Fee $item
+					 */
+					if ( PurchaseOrders::POST_TYPE === $atum_order_type ) {
+
+						$imported_item = FALSE;
+
+						foreach ( $atum_order->get_items( 'fee' ) as $atum_order_item ) {
+
+							/**
+							 * Variable definition
+							 *
+							 * @var \WC_Order_Item_Fee $atum_order_item
+							 */
+							if ( $item->get_name() === $atum_order_item->get_name() && $item->get_amount() === $atum_order_item->get_amount() ) {
+								$imported_item = TRUE;
+								break;
+							}
+
+						}
+
+						if ( $imported_item ) {
+							continue;
+						}
+
+					}
+
+					$order_item = $atum_order->add_fee( $item );
+
+				}
+				elseif ( $item instanceof \WC_Order_Item_Shipping ) {
+
+					/**
+					 * Variable definition
+					 *
+					 * @var \WC_Order_Item_Shipping $item
+					 */
+					if ( PurchaseOrders::POST_TYPE === $atum_order_type ) {
+
+						$imported_item = FALSE;
+
+						foreach ( $atum_order->get_items( 'shipping' ) as $atum_order_item ) {
+							/**
+							 * Variable definition
+							 *
+							 * @var \WC_Order_Item_Shipping $atum_order_item
+							 */
+							if ( $item->get_name() === $atum_order_item->get_name() && $item->get_quantity() === $atum_order_item->get_quantity() ) {
+								$imported_item = TRUE;
+								break;
+							}
+						}
+
+						if ( $imported_item ) {
+							continue;
+						}
+
+					}
+
+					$order_item = $atum_order->add_shipping_cost( $item );
+
+				}
+				elseif ( empty( $atum_order->get_items( 'tax' ) ) && $item instanceof \WC_Order_Item_Tax ) {
+
+					/**
+					 * Variable definition
+					 *
+					 * @var \WC_Order_Item_Tax $item
+					 */
+					if ( PurchaseOrders::POST_TYPE === $atum_order_type ) {
+						continue;
+					}
+
+					$order_item = $atum_order->add_tax( [ 'rate_id' => $item->get_rate_id() ], $item );
+
+				}
+
+				// Add the order ID as item's custom meta.
+				if ( ! empty( $order_item ) ) {
+					$order_item->add_meta_data( '_order_id', $wc_order_id, TRUE );
+					$order_item->save_meta_data();
 				}
 
 			}
-			else {
-				wp_send_json_error( array( 'error' => __( 'The order doesn\t exist', ATUM_TEXT_DOMAIN ) ) );
-			}
 
+			// Load template.
+			$html = Helpers::load_view_to_string( 'meta-boxes/atum-order/items', compact( 'atum_order' ) );
+
+			wp_send_json_success( [ 'html' => $html ] );
+
+		} catch ( \Exception $e ) {
+			wp_send_json_error( [ 'error' => $e->getMessage() ] );
 		}
-
-		wp_die( - 1 );
 
 	}
 
