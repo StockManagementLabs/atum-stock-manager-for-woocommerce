@@ -63,14 +63,14 @@ export default class OrdersBulkActions {
 					showLoaderOnConfirm: true,
 					preConfirm         : (): Promise<any> => {
 
-						return new Promise( ( resolve: Function, reject: Function ) => {
+						return new Promise( ( resolve: Function ) => {
 
 							deferred = this.bulkDeleteItems( $rows );
 
 							if ( deferred.length ) {
 
-								$.when.apply( $, deferred ).done( () => {
-									this.atumOrders.reloadItems();
+								$.when.apply( $, deferred ).done( async () => {
+									await this.atumOrders.reloadItems();
 									resolve();
 								} );
 
@@ -92,12 +92,9 @@ export default class OrdersBulkActions {
 
 				if ( deferred.length ) {
 
-					$.when.apply( $, deferred ).done( () => {
-
-						this.atumOrders.reloadItems( () => {
-							Swal.close();
-						} );
-
+					$.when.apply( $, deferred ).done( async () => {
+						await this.atumOrders.reloadItems();
+						Swal.close();
 					} );
 
 				}

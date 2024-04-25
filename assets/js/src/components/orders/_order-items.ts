@@ -203,18 +203,14 @@ export default class AtumOrderItems {
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
-			preConfirm         : (): Promise<any> => {
+			preConfirm         : (): Promise<void> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
-
-					this.atumOrders.loadItemsTable( {
-						action       : 'atum_order_remove_tax',
-						rate_id      : $item.data( 'rate_id' ),
-						atum_order_id: this.settings.get( 'postId' ),
-						security     : this.settings.get( 'atumOrderItemNonce' ),
-					}, 'html', resolve );
-
-				} );
+				return this.atumOrders.loadItemsTable( {
+					action       : 'atum_order_remove_tax',
+					rate_id      : $item.data( 'rate_id' ),
+					atum_order_id: this.settings.get( 'postId' ),
+					security     : this.settings.get( 'atumOrderItemNonce' ),
+				}, 'html' );
 
 			},
 		} );
@@ -239,18 +235,14 @@ export default class AtumOrderItems {
 			reverseButtons     : true,
 			allowOutsideClick  : false,
 			showLoaderOnConfirm: true,
-			preConfirm         : (): Promise<any> => {
+			preConfirm         : (): Promise<void> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
-
-					this.atumOrders.loadItemsTable( {
-						action       : 'atum_order_calc_line_taxes',
-						atum_order_id: this.settings.get( 'postId' ),
-						items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
-						security     : this.settings.get( 'calcTotalsNonce' ),
-					}, 'html', resolve );
-
-				} );
+				return this.atumOrders.loadItemsTable( {
+					action       : 'atum_order_calc_line_taxes',
+					atum_order_id: this.settings.get( 'postId' ),
+					items        : $( 'table.atum_order_items :input[name], .atum-order-totals-items :input[name]' ).serialize(),
+					security     : this.settings.get( 'calcTotalsNonce' ),
+				}, 'html' );
 
 			},
 		} );
@@ -365,7 +357,7 @@ export default class AtumOrderItems {
 	 *
 	 * @param {JQueryEventObject} evt
 	 */
-	saveLineItems( evt: JQueryEventObject ) {
+	async saveLineItems( evt: JQueryEventObject ) {
 
 		evt.preventDefault();
 
@@ -376,7 +368,7 @@ export default class AtumOrderItems {
 			security     : this.settings.get( 'atumOrderItemNonce' ),
 		} );
 
-		this.atumOrders.loadItemsTable( data );
+		await this.atumOrders.loadItemsTable( data );
 		this.wpHooks.doAction( 'atum_orderItems_saveLineItems_itemsSaved' );
 
 	}

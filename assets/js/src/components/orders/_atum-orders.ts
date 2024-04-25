@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 import EnhancedSelect from '../_enhanced-select';
+import { Context } from '@popperjs/core';
 
 export default class AtumOrders {
 
@@ -294,63 +295,66 @@ export default class AtumOrders {
 	/**
 	 * Load the items table from backend
 	 *
-	 * @param {any}      data
-	 * @param {string}   dataType
-	 * @param {Function} callback
+	 * @param {any}    data
+	 * @param {string} dataType
+	 *
+	 * @return {Promise<void>}
 	 */
-	loadItemsTable( data: any, dataType?: string, callback?: Function ) {
+	loadItemsTable( data: any, dataType?: string ): Promise<void> {
 
-		Blocker.block( this.$container );
-		dataType = dataType || 'html';
+		return new Promise( ( resolve: Function ) => {
 
-		$.ajax( {
-			url     : window[ 'ajaxurl' ],
-			data    : data,
-			dataType: dataType,
-			method  : 'POST',
-			success : ( response: any ) => {
+			Blocker.block( this.$container );
+			dataType = dataType || 'html';
 
-				if ( ( typeof response === 'object' && response.success === true ) || typeof response !== 'object' ) {
+			$.ajax( {
+				url     : window[ 'ajaxurl' ],
+				data    : data,
+				dataType: dataType,
+				method  : 'POST',
+				success : ( response: any ) => {
 
-					const itemsTable: string = dataType === 'html' ? response : response.data.html;
+					if ( ( typeof response === 'object' && response.success === true ) || typeof response !== 'object' ) {
 
-					this.$container.find( '.inside' ).empty().append( itemsTable );
-					this.tooltip.addTooltips();
-					StupidTable.init( $( 'table.atum_order_items' ) );
+						const itemsTable: string = dataType === 'html' ? response : response.data.html;
 
-				}
-				else if ( typeof response === 'object' && response.success === false ) {
-					this.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
-				}
+						this.$container.find( '.inside' ).empty().append( itemsTable );
+						this.tooltip.addTooltips();
+						StupidTable.init( $( 'table.atum_order_items' ) );
 
-				Blocker.unblock( this.$container );
+					}
+					else if ( typeof response === 'object' && response.success === false ) {
+						this.showAlert( 'error', this.settings.get( 'error' ), response.data.error );
+					}
 
-				if ( callback ) {
-					callback();
-				}
+					Blocker.unblock( this.$container );
 
-				this.wpHooks.doAction( 'atum_orders_afterLoadItemsTable' );
+					this.wpHooks.doAction( 'atum_orders_afterLoadItemsTable' );
 
-				if ( 'atum_order_import_items' === data.action ) {
-					this.wpHooks.doAction( 'atum_orders_afterImportItems' );
-				}
-			},
+					if ( 'atum_order_import_items' === data.action ) {
+						this.wpHooks.doAction( 'atum_orders_afterImportItems' );
+					}
+
+					resolve();
+
+				},
+				error: () => resolve(),
+			} );
+
 		} );
 
 	}
 
 	/**
 	 * Reload the order items
-	 *
-	 * @param {Function} callback
 	 */
-	reloadItems( callback?: Function ) {
+	reloadItems(): Promise<void> {
 
-		this.loadItemsTable( {
+		return this.loadItemsTable( {
 			atum_order_id: this.settings.get( 'postId' ),
 			action       : 'atum_order_load_items',
 			security     : this.settings.get( 'atumOrderItemNonce' ),
-		}, 'html', callback );
+		}, 'html' );
 
 	}
 
@@ -520,36 +524,32 @@ export default class AtumOrders {
 	 *
 	 * @param {JQuery} $wcOrder
 	 * @param {string} orderType
-	 * @returns {boolean}
 	 */
 	importOrderItems( $wcOrder: JQuery, orderType: string ) {
 
 		const orderId: number  = $wcOrder.val();
 
 		if ( ! orderId || this.isEditable == 'false' ) {
-			return false;
+			return;
 		}
 
 		Swal.fire( {
-			text             : this.settings.get( `importOrderItems${orderType}` ),
-			icon             : 'warning',
-			showCancelButton : true,
-			confirmButtonText: this.settings.get( 'yes' ),
-			cancelButtonText : this.settings.get( 'no' ),
-			reverseButtons   : true,
-			allowOutsideClick: false,
-			preConfirm       : (): Promise<any> => {
+			text               : this.settings.get( `importOrderItems${ orderType }` ),
+			icon               : 'warning',
+			showCancelButton   : true,
+			confirmButtonText  : this.settings.get( 'yes' ),
+			cancelButtonText   : this.settings.get( 'no' ),
+			reverseButtons     : true,
+			allowOutsideClick  : false,
+			showLoaderOnConfirm: true,
+			preConfirm         : (): Promise<void> => {
 
-				return new Promise( ( resolve: Function, reject: Function ) => {
-
-					this.loadItemsTable( {
-						action       : 'atum_order_import_items',
-						wc_order_id  : orderId,
-						atum_order_id: this.settings.get( 'postId' ),
-						security     : this.settings.get( 'importOrderItemsNonce' ),
-					}, 'json', resolve );
-
-				} );
+				return this.loadItemsTable( {
+					action       : 'atum_order_import_items',
+					wc_order_id  : orderId,
+					atum_order_id: this.settings.get( 'postId' ),
+					security     : this.settings.get( 'importOrderItemsNonce' ),
+				}, 'json' );
 
 			},
 		} );

@@ -11543,42 +11543,43 @@ var AtumOrders = (function () {
         });
         $input.trigger('quantity_changed');
     };
-    AtumOrders.prototype.loadItemsTable = function (data, dataType, callback) {
+    AtumOrders.prototype.loadItemsTable = function (data, dataType) {
         var _this = this;
-        _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].block(this.$container);
-        dataType = dataType || 'html';
-        $.ajax({
-            url: window['ajaxurl'],
-            data: data,
-            dataType: dataType,
-            method: 'POST',
-            success: function (response) {
-                if ((typeof response === 'object' && response.success === true) || typeof response !== 'object') {
-                    var itemsTable = dataType === 'html' ? response : response.data.html;
-                    _this.$container.find('.inside').empty().append(itemsTable);
-                    _this.tooltip.addTooltips();
-                    _stupid_table__WEBPACK_IMPORTED_MODULE_4__["default"].init($('table.atum_order_items'));
-                }
-                else if (typeof response === 'object' && response.success === false) {
-                    _this.showAlert('error', _this.settings.get('error'), response.data.error);
-                }
-                _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].unblock(_this.$container);
-                if (callback) {
-                    callback();
-                }
-                _this.wpHooks.doAction('atum_orders_afterLoadItemsTable');
-                if ('atum_order_import_items' === data.action) {
-                    _this.wpHooks.doAction('atum_orders_afterImportItems');
-                }
-            },
+        return new Promise(function (resolve) {
+            _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].block(_this.$container);
+            dataType = dataType || 'html';
+            $.ajax({
+                url: window['ajaxurl'],
+                data: data,
+                dataType: dataType,
+                method: 'POST',
+                success: function (response) {
+                    if ((typeof response === 'object' && response.success === true) || typeof response !== 'object') {
+                        var itemsTable = dataType === 'html' ? response : response.data.html;
+                        _this.$container.find('.inside').empty().append(itemsTable);
+                        _this.tooltip.addTooltips();
+                        _stupid_table__WEBPACK_IMPORTED_MODULE_4__["default"].init($('table.atum_order_items'));
+                    }
+                    else if (typeof response === 'object' && response.success === false) {
+                        _this.showAlert('error', _this.settings.get('error'), response.data.error);
+                    }
+                    _blocker__WEBPACK_IMPORTED_MODULE_2__["default"].unblock(_this.$container);
+                    _this.wpHooks.doAction('atum_orders_afterLoadItemsTable');
+                    if ('atum_order_import_items' === data.action) {
+                        _this.wpHooks.doAction('atum_orders_afterImportItems');
+                    }
+                    resolve();
+                },
+                error: function () { return resolve(); },
+            });
         });
     };
-    AtumOrders.prototype.reloadItems = function (callback) {
-        this.loadItemsTable({
+    AtumOrders.prototype.reloadItems = function () {
+        return this.loadItemsTable({
             atum_order_id: this.settings.get('postId'),
             action: 'atum_order_load_items',
             security: this.settings.get('atumOrderItemNonce'),
-        }, 'html', callback);
+        }, 'html');
     };
     AtumOrders.prototype.showAlert = function (type, title, message) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
@@ -11671,7 +11672,7 @@ var AtumOrders = (function () {
         var _this = this;
         var orderId = $wcOrder.val();
         if (!orderId || this.isEditable == 'false') {
-            return false;
+            return;
         }
         sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
             text: this.settings.get("importOrderItems".concat(orderType)),
@@ -11681,15 +11682,14 @@ var AtumOrders = (function () {
             cancelButtonText: this.settings.get('no'),
             reverseButtons: true,
             allowOutsideClick: false,
+            showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    _this.loadItemsTable({
-                        action: 'atum_order_import_items',
-                        wc_order_id: orderId,
-                        atum_order_id: _this.settings.get('postId'),
-                        security: _this.settings.get('importOrderItemsNonce'),
-                    }, 'json', resolve);
-                });
+                return _this.loadItemsTable({
+                    action: 'atum_order_import_items',
+                    wc_order_id: orderId,
+                    atum_order_id: _this.settings.get('postId'),
+                    security: _this.settings.get('importOrderItemsNonce'),
+                }, 'json');
             },
         });
     };
@@ -11715,6 +11715,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 var OrdersBulkActions = (function () {
@@ -11753,13 +11789,20 @@ var OrdersBulkActions = (function () {
                     allowOutsideClick: false,
                     showLoaderOnConfirm: true,
                     preConfirm: function () {
-                        return new Promise(function (resolve, reject) {
+                        return new Promise(function (resolve) {
                             deferred = _this.bulkDeleteItems($rows);
                             if (deferred.length) {
-                                $.when.apply($, deferred).done(function () {
-                                    _this.atumOrders.reloadItems();
-                                    resolve();
-                                });
+                                $.when.apply($, deferred).done(function () { return __awaiter(_this, void 0, void 0, function () {
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4, this.atumOrders.reloadItems()];
+                                            case 1:
+                                                _a.sent();
+                                                resolve();
+                                                return [2];
+                                        }
+                                    });
+                                }); });
                             }
                             else {
                                 resolve();
@@ -11772,11 +11815,17 @@ var OrdersBulkActions = (function () {
                 deferred = this.bulkDeleteItems($rows);
                 this.askRemoval = true;
                 if (deferred.length) {
-                    $.when.apply($, deferred).done(function () {
-                        _this.atumOrders.reloadItems(function () {
-                            sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().close();
+                    $.when.apply($, deferred).done(function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4, this.atumOrders.reloadItems()];
+                                case 1:
+                                    _a.sent();
+                                    sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().close();
+                                    return [2];
+                            }
                         });
-                    });
+                    }); });
                 }
             }
         }
@@ -11894,6 +11943,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/_utils */ "./assets/js/src/utils/_utils.ts");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 
@@ -12008,14 +12093,12 @@ var AtumOrderItems = (function () {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    _this.atumOrders.loadItemsTable({
-                        action: 'atum_order_remove_tax',
-                        rate_id: $item.data('rate_id'),
-                        atum_order_id: _this.settings.get('postId'),
-                        security: _this.settings.get('atumOrderItemNonce'),
-                    }, 'html', resolve);
-                });
+                return _this.atumOrders.loadItemsTable({
+                    action: 'atum_order_remove_tax',
+                    rate_id: $item.data('rate_id'),
+                    atum_order_id: _this.settings.get('postId'),
+                    security: _this.settings.get('atumOrderItemNonce'),
+                }, 'html');
             },
         });
     };
@@ -12032,14 +12115,12 @@ var AtumOrderItems = (function () {
             allowOutsideClick: false,
             showLoaderOnConfirm: true,
             preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    _this.atumOrders.loadItemsTable({
-                        action: 'atum_order_calc_line_taxes',
-                        atum_order_id: _this.settings.get('postId'),
-                        items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-                        security: _this.settings.get('calcTotalsNonce'),
-                    }, 'html', resolve);
-                });
+                return _this.atumOrders.loadItemsTable({
+                    action: 'atum_order_calc_line_taxes',
+                    atum_order_id: _this.settings.get('postId'),
+                    items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
+                    security: _this.settings.get('calcTotalsNonce'),
+                }, 'html');
             },
         });
     };
@@ -12104,15 +12185,26 @@ var AtumOrderItems = (function () {
         });
     };
     AtumOrderItems.prototype.saveLineItems = function (evt) {
-        evt.preventDefault();
-        var data = this.wpHooks.applyFilters('atum_orderItems_saveLineItems_data', {
-            atum_order_id: this.settings.get('postId'),
-            items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
-            action: 'atum_order_save_items',
-            security: this.settings.get('atumOrderItemNonce'),
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        evt.preventDefault();
+                        data = this.wpHooks.applyFilters('atum_orderItems_saveLineItems_data', {
+                            atum_order_id: this.settings.get('postId'),
+                            items: $('table.atum_order_items :input[name], .atum-order-totals-items :input[name]').serialize(),
+                            action: 'atum_order_save_items',
+                            security: this.settings.get('atumOrderItemNonce'),
+                        });
+                        return [4, this.atumOrders.loadItemsTable(data)];
+                    case 1:
+                        _a.sent();
+                        this.wpHooks.doAction('atum_orderItems_saveLineItems_itemsSaved');
+                        return [2];
+                }
+            });
         });
-        this.atumOrders.loadItemsTable(data);
-        this.wpHooks.doAction('atum_orderItems_saveLineItems_itemsSaved');
     };
     AtumOrderItems.prototype.addItemMeta = function (evt) {
         evt.preventDefault();
