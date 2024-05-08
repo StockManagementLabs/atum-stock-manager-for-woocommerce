@@ -4234,9 +4234,10 @@ abstract class AtumListTable extends \WP_List_Table {
 		global $wpdb;
 
 		$search_query = $search_op_str = $meta_search_query = '';
+		$s_column     = $column;
 
 		if ( '_low_stock_threshold' === $column ) {
-			$column = '_low_stock_amount';
+			$s_column = '_low_stock_amount';
 		}
 
 		/**
@@ -4287,8 +4288,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			// Search in column.
 			else {
-				$column        = $table_prefix ? "$table_prefix.$column" : $column;
-				$search_query .= "{$search_op_str}(($column $operator $term))";
+				$s_column      = $table_prefix ? "$table_prefix.$column" : $column;
+				$search_query .= "{$search_op_str}(($s_column $operator $term))";
 			}
 
 			$search_op_str = " $search_op ";
@@ -4297,7 +4298,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $is_meta_search ) {
 			$meta_key_column = $table_prefix ? "$table_prefix.meta_key" : 'meta_key';
-			$search_query    = " ($meta_search_query) AND $meta_key_column = '$column'";
+			$search_query    = " ($meta_search_query) AND $meta_key_column = '$s_column'";
 		}
 
 		return $search_query;
