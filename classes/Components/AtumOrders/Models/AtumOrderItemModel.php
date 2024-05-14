@@ -313,9 +313,11 @@ abstract class AtumOrderItemModel {
 
 		global $wpdb;
 
+		$atum_order_item_meta_table = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
+
 		$query = $wpdb->prepare( "
 			SELECT meta_id AS `id`, meta_key AS `key`, meta_value AS `value`
-			FROM $wpdb->atum_order_itemmeta
+			FROM $atum_order_item_meta_table
 			WHERE order_item_id = %d
 			ORDER BY meta_id
 		", $this->id );

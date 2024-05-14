@@ -484,11 +484,14 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		$expected_after  = ! empty( $query_args['expected_after'] ) ? "AND de.`meta_value` > '" . $query_args['expected_after'] . "'" : '';
 		$expected_join   = $expected_before || $expected_after ? "LEFT JOIN `$wpdb->postmeta` AS de ON (de.`post_id` = p.`ID` AND de.`meta_key` = '_date_expected')" : '';
 
+		$atum_order_items_table      = $wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE;
+		$atum_order_items_meta_table = $wpdb->prefix . AtumOrderPostType::ORDER_ITEM_META_TABLE;
+
 		// phpcs:disable
 		$sql = $wpdb->prepare("
 			SELECT MAX(CAST( oim.`meta_value` AS SIGNED )) AS product_id, oi.`order_item_id`, `order_id`, `order_item_name` 			
-			FROM `$wpdb->prefix" . AtumOrderPostType::ORDER_ITEMS_TABLE . "` AS oi 
-			LEFT JOIN `$wpdb->atum_order_itemmeta` AS oim ON oi.`order_item_id` = oim.`order_item_id`
+			FROM `$atum_order_items_table` AS oi 
+			LEFT JOIN `$atum_order_items_meta_table` AS oim ON oi.`order_item_id` = oim.`order_item_id`
 			LEFT JOIN `$wpdb->posts` AS p ON oi.`order_id` = p.`ID`
 			$expected_join
 			WHERE oim.`meta_key` IN ('_product_id', '_variation_id') AND `order_item_type` = 'line_item' 
