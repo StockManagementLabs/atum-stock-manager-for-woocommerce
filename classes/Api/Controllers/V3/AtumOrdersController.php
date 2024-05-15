@@ -102,18 +102,6 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 
-		$params['modified_before'] = [
-			'description' => __( 'Limit response to orders modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
-			'type'        => 'string',
-			'format'      => 'date-time',
-		];
-
-		$params['modified_after'] = [
-			'description' => __( 'Limit response to orders modified after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
-			'type'        => 'string',
-			'format'      => 'date-time',
-		];
-
 		return $params;
 
 	}
@@ -533,17 +521,44 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		}
 
-		// Before modification date filter.
-		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
-			$args['date_query'][0]['before'] = $request['modified_before'];
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+		$date_query = array();
+		$use_gmt    = $request['dates_are_gmt'] ?? FALSE;
+
+		if ( isset( $request['before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'before' => $request['before'],
+			);
 		}
 
-		// After modification date filter.
-		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
-			$args['date_query'][0]['after']  = $request['modified_after'];
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+		if ( isset( $request['after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'after'  => $request['after'],
+			);
 		}
+
+		if ( isset( $request['modified_before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'before' => $request['modified_before'],
+			);
+		}
+
+		if ( isset( $request['modified_after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'after'  => $request['modified_after'],
+			);
+		}
+
+		if ( ! empty( $date_query ) ) {
+			$date_query['relation'] = 'AND';
+			$args['date_query']     = $date_query;
+		}
+
+		// Force the post_type argument, since it's not a user input variable.
+		$args['post_type'] = $this->post_type;
 
 		/**
 		 * Filter the query arguments for a request.

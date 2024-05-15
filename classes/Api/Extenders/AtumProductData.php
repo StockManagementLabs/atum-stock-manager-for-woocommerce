@@ -654,16 +654,40 @@ class AtumProductData {
 
 		}
 
-		// Before modification date filter.
-		if ( isset( $request['modified_before'] ) && ! isset( $request['before'] ) ) {
-			$args['date_query'][0]['before'] = esc_attr( $request['modified_before'] );
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+		$date_query = array();
+		$use_gmt    = $request['dates_are_gmt'] ?? FALSE;
+
+		if ( isset( $request['before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'before' => $request['before'],
+			);
 		}
 
-		// After modification date filter.
-		if ( isset( $request['modified_after'] ) && ! isset( $request['after'] ) ) {
-			$args['date_query'][0]['after']  = esc_attr( $request['modified_after'] );
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+		if ( isset( $request['after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'after'  => $request['after'],
+			);
+		}
+
+		if ( isset( $request['modified_before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'before' => $request['modified_before'],
+			);
+		}
+
+		if ( isset( $request['modified_after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'after'  => $request['modified_after'],
+			);
+		}
+
+		if ( ! empty( $date_query ) ) {
+			$date_query['relation'] = 'AND';
+			$args['date_query']     = $date_query;
 		}
 
 		// Post status filter.
@@ -779,17 +803,40 @@ class AtumProductData {
 	 */
 	public function add_collection_params( $params, $post_type ) {
 
+		$params['before'] = array(
+			'description'       => __( 'Limit response to resources published before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
+		$params['after'] = array(
+			'description'       => __( 'Limit response to resources published after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
 		$params['modified_before'] = [
-			'description' => __( 'Limit response to products modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
-			'type'        => 'string',
-			'format'      => 'date-time',
+			'description'       => __( 'Limit response to products modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
 		];
 
 		$params['modified_after'] = [
-			'description' => __( 'Limit response to products modified after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
-			'type'        => 'string',
-			'format'      => 'date-time',
+			'description'       => __( 'Limit response to products modified after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'string',
+			'format'            => 'date-time',
+			'validate_callback' => 'rest_validate_request_arg',
 		];
+
+		$params['dates_are_gmt'] = array(
+			'description'       => __( 'Whether to consider GMT post dates when limiting response by published or modified date.', ATUM_TEXT_DOMAIN ),
+			'type'              => 'boolean',
+			'default'           => FALSE,
+			'validate_callback' => 'rest_validate_request_arg',
+		);
 
 		$params['atum_post_status'] = [
 			'description'       => __( 'Limit response to products to the specified statuses. This param supports multiple statuses separated by commas.', ATUM_TEXT_DOMAIN ),

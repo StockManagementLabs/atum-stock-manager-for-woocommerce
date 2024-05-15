@@ -467,6 +467,24 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 				'sanitize_callback' => 'absint',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
+			'dates_are_gmt'   => array(
+				'description'       => __( 'Whether to consider GMT post dates when limiting response by published or modified date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'boolean',
+				'default'           => FALSE,
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'before'          => array(
+				'description'       => __( 'Limit response to resources published before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'after'           => array(
+				'description'       => __( 'Limit response to resources published after a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'format'            => 'date-time',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
 			'modified_before' => array(
 				'description' => __( 'Limit response to orders modified before a given ISO8601 compliant date.', ATUM_TEXT_DOMAIN ),
 				'type'        => 'string',
@@ -685,26 +703,40 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		}
 
-		$args['date_query'] = array();
+		$date_query = array();
+		$use_gmt    = $request['dates_are_gmt'] ?? FALSE;
 
-		// Set before into date query. Date query must be specified as an array of an array.
 		if ( isset( $request['before'] ) ) {
-			$args['date_query'][0]['before'] = $request['before'];
-		}
-		// Before modification date filter.
-		elseif ( isset( $request['modified_before'] ) ) {
-			$args['date_query'][0]['before'] = $request['modified_before'];
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'before' => $request['before'],
+			);
 		}
 
-		// Set after into date query. Date query must be specified as an array of an array.
 		if ( isset( $request['after'] ) ) {
-			$args['date_query'][0]['after'] = $request['after'];
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_date_gmt' : 'post_date',
+				'after'  => $request['after'],
+			);
 		}
-		// After modification date filter.
-		elseif ( isset( $request['modified_after'] ) ) {
-			$args['date_query'][0]['after']  = $request['modified_after'];
-			$args['date_query'][0]['column'] = 'post_modified_gmt';
+
+		if ( isset( $request['modified_before'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'before' => $request['modified_before'],
+			);
+		}
+
+		if ( isset( $request['modified_after'] ) ) {
+			$date_query[] = array(
+				'column' => $use_gmt ? 'post_modified_gmt' : 'post_modified',
+				'after'  => $request['modified_after'],
+			);
+		}
+
+		if ( ! empty( $date_query ) ) {
+			$date_query['relation'] = 'AND';
+			$args['date_query']     = $date_query;
 		}
 
 		// Force the post_type argument, since it's not a user input variable.
