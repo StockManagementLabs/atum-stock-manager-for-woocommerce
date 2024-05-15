@@ -132,13 +132,20 @@ class Main {
 		// Load front stuff (priority must be higher than 10).
 		add_action( 'init', array( $this, 'init' ), 11 );
 
-		// Load ATUM modules.
-		add_action( 'setup_theme', array( $this, 'load_modules' ) );
-
-		// This filter needs to be registered at the right time.
+		// These filters need to be registered early.
 		add_action( 'setup_theme', function() {
+
+			// Allow authenticating some WP API's endpoints using the WC API keys.
 			add_filter( 'woocommerce_rest_is_request_to_rest_api', array( $this, 'bypass_wp_endpoints_with_wc_keys' ) );
+
+			// Fix for authenticating with application passwords on ATUM API endpoints.
+			add_filter( 'application_password_is_api_request', array( $this, 'check_application_password_api_request' ) );
+
 		}, 1 );
+
+		// Load ATUM modules.
+		// TODO: PERHAPS WE SHOULD USE A DIFFERENT HOOK FOR THIS. WHEN WC IS FULLY LOADED, FOR EXAMPLE.
+		add_action( 'setup_theme', array( $this, 'load_modules' ) );
 
 	}
 
@@ -248,7 +255,8 @@ class Main {
 
 		//
 		// Load core modules
-		// ------------------!
+		// NOTE: The order of the modules is important.
+		// --------------------------------------------!
 		ModuleManager::get_instance();
 		AtumCapabilities::get_instance();
 		Hooks::get_instance();
@@ -257,44 +265,12 @@ class Main {
 		Ajax::get_instance();
 		Settings::get_instance();
 		ProductDataMetaBoxes::get_instance();
-		FileAttachment::get_instance();
 		AtumQueues::get_instance();
 		AtumCalculatedProps::get_instance();
-		CheckOrderPrices::get_instance();
-		SearchOrdersByColumn::get_instance();
-		AtumEmailNotifications::get_instance();
-
-		// Only load the WP CLI module if WP CLI is running.
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			AtumCli::get_instance();
-		}
 
 		//
-		// Enable WPML module if needed
-		// -----------------------------!
-		if ( class_exists( '\SitePress' ) && class_exists( '\woocommerce_wpml' ) ) {
-			Wpml::get_instance();
-		}
-		
-		//
-		// Load extra modules
-		// -------------------!
-		if ( ModuleManager::is_module_active( 'api' ) ) {
-			AtumApi::get_instance();
-		}
-
-		if ( ModuleManager::is_module_active( 'dashboard' ) ) {
-			Dashboard::get_instance();
-		}
-
-		if ( ModuleManager::is_module_active( 'stock_central' ) ) {
-			StockCentral::get_instance();
-		}
-
-		if ( AtumCapabilities::current_user_can( 'export_data' ) && ModuleManager::is_module_active( 'data_export' ) ) {
-			new DataExport();
-		}
-
+		// Load conditional modules
+		// ------------------------!
 		if ( AtumCapabilities::current_user_can( 'read_inventory_log' ) && ModuleManager::is_module_active( 'inventory_logs' ) ) {
 			InventoryLogs::get_instance();
 		}
@@ -318,12 +294,46 @@ class Main {
 
 		}
 
+		if ( ModuleManager::is_module_active( 'barcodes' ) ) {
+			AtumBarcodes::get_instance();
+		}
+
+		if ( ModuleManager::is_module_active( 'api' ) ) {
+			AtumApi::get_instance();
+		}
+
+		if ( ModuleManager::is_module_active( 'dashboard' ) ) {
+			Dashboard::get_instance();
+		}
+
+		if ( ModuleManager::is_module_active( 'stock_central' ) ) {
+			StockCentral::get_instance();
+		}
+
+		if ( AtumCapabilities::current_user_can( 'export_data' ) && ModuleManager::is_module_active( 'data_export' ) ) {
+			new DataExport();
+		}
+
 		if ( ModuleManager::is_module_active( 'visual_settings' ) && AtumCapabilities::current_user_can( 'edit_visual_settings' ) ) {
 			AtumColors::get_instance();
 		}
 
-		if ( ModuleManager::is_module_active( 'barcodes' ) ) {
-			AtumBarcodes::get_instance();
+		//
+		// Low priority modules
+		//----------------------!
+		CheckOrderPrices::get_instance();
+		SearchOrdersByColumn::get_instance();
+		AtumEmailNotifications::get_instance();
+		FileAttachment::get_instance();
+
+		// Only load the WP CLI module if WP CLI is running.
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			AtumCli::get_instance();
+		}
+
+		// WPML compatibility
+		if ( class_exists( '\SitePress' ) && class_exists( '\woocommerce_wpml' ) ) {
+			Wpml::get_instance();
 		}
 
 	}
@@ -598,6 +608,19 @@ class Main {
 
 		return $is_request_to_rest_api;
 
+	}
+
+	/**
+	 * Fix for authentication with application passwords over ATUM API endpoints
+	 *
+	 * @since 1.9.39
+	 *
+	 * @param bool $is_api_request
+	 *
+	 * @return bool
+	 */
+	public function check_application_password_api_request ( $is_api_request ) {
+		return $is_api_request || Helpers::is_rest_request();
 	}
 
 	/**
