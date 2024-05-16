@@ -371,6 +371,9 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		}
 
+		// Force the order to reload the items in case they've changed.
+		$order->read_items();
+
 		/**
 		 * Filters an object before it is inserted via the REST API.
 		 *
@@ -435,7 +438,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		} catch ( \WC_Data_Exception $e ) {
 			return new \WP_Error( $e->getErrorCode(), $e->getMessage(), $e->getErrorData() );
 		}
-		/* @noinspection PhpRedundantCatchClauseInspection */
+			/* @noinspection PhpRedundantCatchClauseInspection */
 		catch ( \WC_REST_Exception $e ) {
 			return new \WP_Error( $e->getErrorCode(), $e->getMessage(), array( 'status' => $e->getCode() ) );
 		}
@@ -636,15 +639,16 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		$data = parent::get_order_item_data( $item );
 
-		// Get rid of the internal meta data from the meta_data object.
+		// Get rid of the internal metadata from the meta_data object.
 		if ( ! empty( $data['meta_data'] ) ) {
 
 			foreach ( $data['meta_data'] as $index => $meta ) {
-				$meta = (object) $meta;
-				if ( $item->is_internal_meta( $meta->key ) ) {
+				if ( isset( $meta['key'] ) && $item->is_internal_meta( $meta['key'] ) ) {
 					unset( $data['meta_data'][ $index ] );
 				}
 			}
+
+			$data['meta_data'] = array_values( $data['meta_data'] );
 
 		}
 
@@ -660,6 +664,8 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 * @param array                $posted Line item data.
 	 * @param string               $action 'create' to add line item or 'update' to update it.
 	 * @param AtumOrderItemProduct $item   The item to prepare.
+	 *
+	 * @return AtumOrderItemProduct
 	 *
 	 * @throws \WC_REST_Exception
 	 */
@@ -696,6 +702,8 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			'stock_changed',
 		), $posted );
 		$this->maybe_set_item_meta_data( $item, $posted );
+
+		return $item;
 
 	}
 
@@ -809,6 +817,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		}
 
 		do_action( 'atum/api/rest_after_set_atum_order_item', $item, $posted, $action );
+
 	}
 
 	/**

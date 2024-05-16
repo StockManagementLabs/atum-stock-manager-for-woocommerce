@@ -80,13 +80,15 @@ trait AtumOrderItemTrait {
 	 */
 	public function save() {
 
-		// Save the Log Item and its meta data.
+		if ( ! $this->atum_order_item_model ) {
+			return $this->get_id();
+		}
+
+		// Save the ATUM Order Item and its metadata.
 		$atum_order_item_id = $this->atum_order_item_model->save();
 
 		if ( $atum_order_item_id && ! is_wp_error( $atum_order_item_id ) ) {
 			$this->set_id( $this->id );
-			$this->save_item_data();
-			$this->save_meta_data();
 		}
 
 		do_action( 'atum/atum_order/order_item_saved', $this );
@@ -120,7 +122,7 @@ trait AtumOrderItemTrait {
 	}
 
 	/**
-	 * Update extra custom Meta Data in the database
+	 * Update extra custom metadata in the database
 	 *
 	 * @since 1.2.9
 	 */
@@ -158,7 +160,7 @@ trait AtumOrderItemTrait {
 		}
 
 		if ( ! empty( $this->cache_group ) ) {
-			$cache_key = \WC_Cache_Helper::get_cache_prefix( $this->cache_group ) . \WC_Cache_Helper::get_cache_prefix( 'object_' . $this->get_id() ) . 'object_meta_' . $this->get_id();
+			$cache_key = self::generate_meta_cache_key( $this->get_id(), $this->cache_group );
 			wp_cache_delete( $cache_key, $this->cache_group );
 		}
 
@@ -210,7 +212,7 @@ trait AtumOrderItemTrait {
 
 		return in_array( $meta_key, $this->internal_meta_keys );
 	}
-	
+
 	/**
 	 * Get parent order object.
 	 *
@@ -219,7 +221,7 @@ trait AtumOrderItemTrait {
 	 * @return AtumOrderModel|\WP_Error
 	 */
 	public function get_order() {
-		
+
 		return Helpers::get_atum_order_model( $this->get_atum_order_id(), TRUE );
 	}
 
@@ -229,7 +231,7 @@ trait AtumOrderItemTrait {
 	 * @since 1.6.1.1
 	 *
 	 * @param string $hideprefix  Meta data prefix, (default: _).
-	 * @param bool   $include_all Include all meta data, this stop skip items with values already in the product name.
+	 * @param bool   $include_all Include all metadata, this stop skip items with values already in the product name.
 	 *
 	 * @return array
 	 */
@@ -299,6 +301,28 @@ trait AtumOrderItemTrait {
 		}
 
 		return apply_filters( 'atum/order_item/get_formatted_meta_data', $formatted_meta, $this );
+
+	}
+
+	/**
+	 * Return data changes only.
+	 *
+	 * @since 1.9.39
+	 *
+	 * @return array
+	 */
+	public function get_changes() {
+		return $this->changes;
+	}
+
+	/**
+	 * Merge changes with data and clear.
+	 *
+	 * @since 1.9.39
+	 */
+	public function apply_changes() {
+		$this->data    = array_replace_recursive( $this->data, $this->changes );
+		$this->changes = array();
 	}
 
 	/**
@@ -307,10 +331,8 @@ trait AtumOrderItemTrait {
 	 * @since 1.8.2
 	 */
 	public function __clone() {
-
 		$this->id = 0;
 		$this->load();
-
 	}
 
 }

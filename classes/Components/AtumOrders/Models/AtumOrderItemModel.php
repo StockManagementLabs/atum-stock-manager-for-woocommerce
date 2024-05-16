@@ -102,7 +102,7 @@ abstract class AtumOrderItemModel {
 			}
 
 			if ( ! $data ) {
-				throw new AtumException( 'invalid_item', __( 'Invalid item', ATUM_TEXT_DOMAIN ) );
+				throw new AtumException( 'invalid_item', __( 'Invalid ATUM Order item', ATUM_TEXT_DOMAIN ) );
 			}
 
 			$this->atum_order_item->set_atum_order_id( $data->order_id );
@@ -113,7 +113,7 @@ abstract class AtumOrderItemModel {
 
 			// Read the ATUM Order item props from db.
 			switch ( $this->atum_order_item->get_type() ) {
-				
+
 				case 'line_item':
 					$line_total    = $this->get_meta( '_line_total' );
 					$line_subtotal = $this->get_meta( '_line_subtotal' );
@@ -127,7 +127,7 @@ abstract class AtumOrderItemModel {
 						'taxes'         => $this->get_meta( '_line_tax_data' ),
 						'stock_changed' => $this->get_meta( '_stock_changed' ),
 					) );
-					
+
 					break;
 
 				case 'fee':
@@ -240,10 +240,11 @@ abstract class AtumOrderItemModel {
 		if ( $inserted ) {
 			$this->id = $wpdb->insert_id;
 			$this->atum_order_item->set_id( $this->id );
+			$this->atum_order_item->save_meta_data();
+			$this->atum_order_item->apply_changes();
+			$this->clear_cache();
 			do_action( 'atum/orders/new_item', $this );
 		}
-
-		$this->clear_cache();
 
 	}
 
@@ -256,19 +257,26 @@ abstract class AtumOrderItemModel {
 
 		global $wpdb;
 
-		$wpdb->update(
-			$wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE,
-			array(
-				'order_item_type' => $this->atum_order_item->get_type(),
-				'order_item_name' => $this->atum_order_item->get_name(),
-				'order_id'        => $this->atum_order_item->get_atum_order_id(),
-			),
-			array( 'order_item_id' => $this->id )
-		);
+		$changes = $this->atum_order_item->get_changes();
+
+		if ( array_intersect( array( 'name', 'order_id' ), array_keys( $changes ) ) ) {
+			$wpdb->update(
+				$wpdb->prefix . AtumOrderPostType::ORDER_ITEMS_TABLE,
+				array(
+					'order_item_type' => $this->atum_order_item->get_type(),
+					'order_item_name' => $this->atum_order_item->get_name(),
+					'order_id'        => $this->atum_order_item->get_atum_order_id(),
+				),
+				array( 'order_item_id' => $this->id )
+			);
+		}
+
+		$this->atum_order_item->save_item_data();
+		$this->atum_order_item->save_meta_data();
+		$this->atum_order_item->apply_changes();
+		$this->clear_cache();
 
 		do_action( 'atum/orders/update_item', $this );
-
-		$this->clear_cache();
 
 	}
 
@@ -290,13 +298,15 @@ abstract class AtumOrderItemModel {
 			// Recalculate ATUM props for this item.
 			if ( 'line_item' === $this->atum_order_item->get_type() ) {
 				$product_id = $this->atum_order_item->get_variation_id() ?: $this->atum_order_item->get_product_id();
-				$product    = Helpers::get_atum_product( $product_id );
+				$product    = Helpers::get_atum_product( $product_id, TRUE );
 
 				if ( $product instanceof \WC_Product ) {
 					$order = $this->atum_order_item->get_order();
 					AtumCalculatedProps::defer_update_atum_sales_calc_props( $product_id, Globals::get_order_type_id( $order->get_post_type() ) );
 				}
 			}
+
+			$this->clear_cache();
 
 			do_action( 'atum/orders/after_delete_item', $this, $this->atum_order_item );
 
@@ -465,6 +475,5 @@ abstract class AtumOrderItemModel {
 		return $key;
 
 	}
-
 
 }

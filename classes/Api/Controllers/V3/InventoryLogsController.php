@@ -378,7 +378,7 @@ class InventoryLogsController extends AtumOrdersController {
 	/**
 	 * Get formatted item data.
 	 *
-	 * @since  1.6.2
+	 * @since 1.6.2
 	 *
 	 * @param Log $object Log instance.
 	 *
@@ -462,9 +462,9 @@ class InventoryLogsController extends AtumOrdersController {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param array  $posted Line item data.
-	 * @param string $action 'create' to add line item or 'update' to update it.
-	 * @param object $item Passed when updating an item. Null during creation.
+	 * @param array               $posted Line item data.
+	 * @param string              $action 'create' to add line item or 'update' to update it.
+	 * @param LogItemProduct|NULL $item   Passed when updating an item. Null during creation.
 	 *
 	 * @return LogItemProduct
 	 *
@@ -474,9 +474,8 @@ class InventoryLogsController extends AtumOrdersController {
 
 		// TODO: IF THIS LOG HAS AN ORDER ASSIGNED WE SHOULD ONLY ALLOW TO ADD PRODUCTS LINKED TO IT.
 		$item = is_null( $item ) ? new LogItemProduct( ! empty( $posted['id'] ) ? $posted['id'] : '' ) : $item;
-		$this->prepare_item_product( $posted, $action, $item );
 
-		return $item;
+		return $this->prepare_item_product( $posted, $action, $item );
 
 	}
 
