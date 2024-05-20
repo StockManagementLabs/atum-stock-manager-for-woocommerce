@@ -414,6 +414,11 @@ class Supplier extends AtumCPTModel {
 
 		$discount = floatval( $discount );
 
+		// If it has decimals, allow max 2.
+		if ( floor( $discount ) !== $discount ) {
+			$discount = wc_format_decimal( $discount, 2, TRUE );
+		}
+
 		if ( $this->data['discount'] !== $discount ) {
 			$this->data['discount'] = $discount;
 			$this->register_change( 'discount' );
@@ -430,6 +435,11 @@ class Supplier extends AtumCPTModel {
 	public function set_tax_rate( $tax_rate ) {
 
 		$tax_rate = floatval( $tax_rate );
+
+		// If it has decimals, allow max 2.
+		if ( floor( $tax_rate ) !== $tax_rate ) {
+			$tax_rate = wc_format_decimal( $tax_rate, 2, TRUE );
+		}
 
 		if ( $this->data['tax_rate'] !== $tax_rate ) {
 			$this->data['tax_rate'] = $tax_rate;
