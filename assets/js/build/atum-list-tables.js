@@ -25133,17 +25133,21 @@ var Utils = {
             }
         }
     },
-    formatNumber: function (number, precision, thousandsSep, decimalsSep) {
+    formatNumber: function (number, precision, thousandsSep, decimalsSep, minimumSignificantDigits) {
         if (precision === void 0) { precision = this.settings.number.precision; }
         if (thousandsSep === void 0) { thousandsSep = this.settings.number.thousandsSep; }
         if (decimalsSep === void 0) { decimalsSep = this.settings.number.decimalsSep; }
+        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = 1; }
         if (number > 999 && thousandsSep === decimalsSep && !Number.isInteger(number)) {
             thousandsSep = '';
         }
-        var formattedNumber = number.toLocaleString('en', {
+        var formatOptions = {
             minimumFractionDigits: precision,
-            minimumSignificantDigits: 1,
-        });
+        };
+        if (minimumSignificantDigits) {
+            formatOptions.minimumSignificantDigits = minimumSignificantDigits;
+        }
+        var formattedNumber = number.toLocaleString('en', formatOptions);
         return formattedNumber
             .replace(new RegExp('\\,', 'g'), thousandsSep)
             .replace(new RegExp('\\.'), decimalsSep);
@@ -25158,7 +25162,7 @@ var Utils = {
             number = this.unformat(number);
         }
         var formats = this.checkCurrencyFormat(format), useFormat = number > 0 ? formats.pos : (number < 0 ? formats.neg : formats.zero);
-        return useFormat.replace('%s', symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(precision), thousandsSep, decimalsSep));
+        return useFormat.replace('%s', symbol).replace('%v', this.formatNumber(Math.abs(number), this.checkPrecision(precision), thousandsSep, decimalsSep, null));
     },
     unformat: function (value, decimalsSep) {
         if (decimalsSep === void 0) { decimalsSep = this.settings.number.decimalsSep; }

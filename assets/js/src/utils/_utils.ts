@@ -325,18 +325,20 @@ const Utils = {
 	/**
 	 * Format a number according to the specified options
 	 *
-	 * @param {number} number
-	 * @param {number} precision
-	 * @param {string} thousandsSep
-	 * @param {string} decimalsSep
+	 * @param {number}      number
+	 * @param {number}      precision
+	 * @param {string}      thousandsSep
+	 * @param {string}      decimalsSep
+	 * @param {number|null} minimumSignificantDigits
 	 *
 	 * @return {string}
 	 */
 	formatNumber(
 		number: number,
-		precision: number    = this.settings.number.precision,
-		thousandsSep: string = this.settings.number.thousandsSep,
-		decimalsSep: string  = this.settings.number.decimalsSep,
+		precision: number                       = this.settings.number.precision,
+		thousandsSep: string                    = this.settings.number.thousandsSep,
+		decimalsSep: string                     = this.settings.number.decimalsSep,
+		minimumSignificantDigits: number | null = 1,
 	): string {
 
 		// Make sure the separators are not equal and both required at the same time.
@@ -345,10 +347,15 @@ const Utils = {
 		}
 
 		// Format it to english notation and at least 1 digit.
-		const formattedNumber: string = number.toLocaleString( 'en', {
-			minimumFractionDigits   : precision,
-			minimumSignificantDigits: 1,
-		} );
+		const formatOptions: Intl.NumberFormatOptions = {
+			minimumFractionDigits: precision,
+		};
+
+		if ( minimumSignificantDigits ) {
+			formatOptions.minimumSignificantDigits = minimumSignificantDigits;
+		}
+
+		const formattedNumber: string = number.toLocaleString( 'en', formatOptions );
 
 		return formattedNumber
 			.replace( new RegExp( '\\,', 'g' ), thousandsSep )
@@ -383,7 +390,7 @@ const Utils = {
 		      useFormat: string        = number > 0 ? formats.pos : ( number < 0 ? formats.neg : formats.zero ); // Choose which format to use for this value.
 
 		// Return with currency symbol added.
-		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( number ), this.checkPrecision( precision ), thousandsSep, decimalsSep ) );
+		return useFormat.replace( '%s', symbol ).replace( '%v', this.formatNumber( Math.abs( number ), this.checkPrecision( precision ), thousandsSep, decimalsSep, null ) );
 		
 	},
 	
