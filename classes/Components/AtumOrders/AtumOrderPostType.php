@@ -1196,6 +1196,13 @@ abstract class AtumOrderPostType {
 		$atum_order = $this->get_current_atum_order( $po_id, TRUE );
 		$atum_order->after_save( $atum_order );
 
+		if ( doing_action( 'trashed_post' ) ) {
+			update_post_meta( $po_id, '_status', 'trash' );
+		}
+		if ( doing_action( 'untrashed_post' ) ) {
+			update_post_meta( $po_id, '_status', $atum_order->get_post()->post_status );
+		}
+
 	}
 
 	/**
