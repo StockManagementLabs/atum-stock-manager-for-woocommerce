@@ -240,6 +240,7 @@ abstract class AtumOrderItemModel {
 		if ( $inserted ) {
 			$this->id = $wpdb->insert_id;
 			$this->atum_order_item->set_id( $this->id );
+			$this->atum_order_item->save_item_data();
 			$this->atum_order_item->save_meta_data();
 			$this->atum_order_item->apply_changes();
 			$this->clear_cache();
