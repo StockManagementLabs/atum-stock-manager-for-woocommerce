@@ -16,10 +16,9 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
-use Atum\InventoryLogs\InventoryLogs;
+use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\FileAttachment;
 use Atum\Models\Interfaces\AtumProductInterface;
-use Atum\PurchaseOrders\PurchaseOrders;
 use Atum\Settings\Settings;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
@@ -839,7 +838,7 @@ class Hooks {
 	}
 
 	/**
-	 * When a purchase order or inventory log is moved or restored from trash, restore original status
+	 * When an ATUM Order is moved or restored from trash, restore original status
 	 *
 	 * @param string $new_status      The new status of the post being restored.
 	 * @param int    $post_id         The ID of the post being restored.
@@ -851,9 +850,9 @@ class Hooks {
 	 */
 	public function maybe_change_post_status( $new_status, $post_id, $previous_status ) {
 
-		$post_type = get_post_type( $post_id );
+		$atum_order = Helpers::get_atum_order_model( $post_id, FALSE );
 
-		if ( PurchaseOrders::POST_TYPE !== $post_type && InventoryLogs::POST_TYPE !== $post_type ) {
+		if ( ! $atum_order instanceof AtumOrderModel ) {
 			return;
 		}
 
