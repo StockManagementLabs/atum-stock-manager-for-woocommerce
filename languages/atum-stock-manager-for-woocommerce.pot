@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2024-03-27 11:00+0100\n"
+"POT-Creation-Date: 2024-05-27 08:28+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 
 #: classes/Addons/Addons.php:193 classes/Dashboard/Widgets/Videos.php:52
-#: classes/Inc/Hooks.php:702 views/dash-cards/add-ons.php:16
+#: classes/Inc/Hooks.php:701 views/dash-cards/add-ons.php:16
 msgid "Add-ons"
 msgstr ""
 
@@ -87,8 +87,8 @@ msgstr ""
 #: classes/Addons/Addons.php:231 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:262 classes/Components/AtumAdminModal.php:75
 #: classes/Components/AtumOrders/AtumOrderPostType.php:960
-#: classes/Dashboard/Dashboard.php:331 classes/Inc/Hooks.php:278
-#: classes/Inc/Hooks.php:1455 classes/Settings/Settings.php:212
+#: classes/Dashboard/Dashboard.php:331 classes/Inc/Hooks.php:277
+#: classes/Inc/Hooks.php:1454 classes/Settings/Settings.php:212
 #: views/add-ons/add-on.php:165 views/add-ons/add-on.php:187
 #: views/meta-boxes/atum-order/items.php:254 views/widgets/lost-sales-config.php:24
 msgid "Cancel"
@@ -106,7 +106,7 @@ msgstr ""
 
 #: classes/Addons/Addons.php:234
 #: classes/Components/AtumOrders/AtumOrderPostType.php:971
-#: classes/Inc/Hooks.php:282 classes/Settings/Settings.php:217
+#: classes/Inc/Hooks.php:281 classes/Settings/Settings.php:217
 msgid "Error!"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/Addons/Addons.php:241 classes/Addons/AddonsLoader.php:8
 #: classes/Addons/AddonsLoaderDev.php:265 classes/Components/AtumAdminModal.php:74
-#: classes/Components/AtumListTables/AtumListTable.php:3418
+#: classes/Components/AtumListTables/AtumListTable.php:3419
 #: classes/Components/AtumOrders/AtumOrderPostType.php:979
 #: classes/Settings/Settings.php:221
 msgid "OK"
@@ -147,7 +147,7 @@ msgid "Show"
 msgstr ""
 
 #: classes/Addons/Addons.php:244 classes/Addons/AddonsLoader.php:8
-#: classes/Addons/AddonsLoaderDev.php:266 classes/Inc/Hooks.php:286
+#: classes/Addons/AddonsLoaderDev.php:266 classes/Inc/Hooks.php:285
 msgid "Success!"
 msgstr ""
 
@@ -385,8 +385,8 @@ msgstr ""
 
 #: classes/Addons/Addons.php:1827 classes/Addons/Addons.php:1835
 #: classes/Api/AtumApi.php:379 classes/Api/AtumApi.php:386
-#: classes/Api/Extenders/AtumProductData.php:892
-#: classes/Api/Extenders/AtumProductData.php:899
+#: classes/Api/Extenders/AtumProductData.php:939
+#: classes/Api/Extenders/AtumProductData.php:946
 #: classes/Api/Extenders/Media.php:143 classes/Api/Extenders/Media.php:150
 #: classes/Api/Extenders/OrderNotes.php:200
 #: classes/Api/Extenders/OrderNotes.php:207 classes/Api/Extenders/Orders.php:78
@@ -418,14 +418,14 @@ msgstr ""
 #: classes/Components/AtumStockDecimals.php:382
 #: classes/Components/AtumStockDecimals.php:390 classes/Dashboard/Dashboard.php:483
 #: classes/Dashboard/Dashboard.php:490 classes/InboundStock/InboundStock.php:159
-#: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3015
-#: classes/Inc/Ajax.php:3022 classes/Inc/Hooks.php:1489 classes/Inc/Hooks.php:1497
-#: classes/Inc/Main.php:624 classes/Inc/Main.php:631
+#: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3036
+#: classes/Inc/Ajax.php:3043 classes/Inc/Hooks.php:1488 classes/Inc/Hooks.php:1496
+#: classes/Inc/Main.php:647 classes/Inc/Main.php:654
 #: classes/Integrations/Wpml.php:1867 classes/Integrations/Wpml.php:1875
 #: classes/InventoryLogs/InventoryLogs.php:668
 #: classes/InventoryLogs/InventoryLogs.php:675
-#: classes/MetaBoxes/FileAttachment.php:184
-#: classes/MetaBoxes/FileAttachment.php:191
+#: classes/MetaBoxes/FileAttachment.php:187
+#: classes/MetaBoxes/FileAttachment.php:194
 #: classes/MetaBoxes/ProductDataMetaBoxes.php:611
 #: classes/MetaBoxes/ProductDataMetaBoxes.php:618
 #: classes/Modules/ModuleManager.php:228 classes/Modules/ModuleManager.php:235
@@ -453,23 +453,6 @@ msgstr[1] ""
 msgid "Why are these add-ons expired and blocked? %1$sREAD INFO%2$s"
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:226
-#, php-format
-msgid "Click %1$shere%2$s to purchase the full version."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
-#, php-format
-msgid ""
-"The ATUM %1$s could not be loaded because its license is missing. Please, "
-"activate your trial from the %2$sadd-ons%3$s page."
-msgstr ""
-
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
-#, php-format
-msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
-msgstr ""
-
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:157
 #, php-format
 msgid ""
@@ -491,14 +474,31 @@ msgid ""
 "%2$supgrade to the full version%3$s."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:131
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
 #, php-format
-msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
+msgid ""
+"The ATUM %1$s could not be loaded because its license is missing. Please, "
+"activate your trial from the %2$sadd-ons%3$s page."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:226
+#, php-format
+msgid "Click %1$shere%2$s to purchase the full version."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
+#, php-format
+msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:217
 #, php-format
 msgid "Your ATUM %1$s has expired and it has been disabled."
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:131
+#, php-format
+msgid "The ATUM %s add-on could not be loaded because is not a known add-on."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:141
@@ -543,13 +543,13 @@ msgstr ""
 
 #: classes/Api/Controllers/V3/AddonsController.php:106
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:92
-#: classes/Api/Controllers/V3/AtumOrdersController.php:135
+#: classes/Api/Controllers/V3/AtumOrdersController.php:123
 #: classes/Api/Controllers/V3/DashboardController.php:117
 #: classes/Api/Controllers/V3/DashboardWidgetController.php:64
 #: classes/Api/Controllers/V3/InboundStockController.php:264
 #: classes/Api/Controllers/V3/SettingOptionsController.php:184
 #: classes/Api/Controllers/V3/SettingsController.php:97
-#: classes/Api/Controllers/V3/SuppliersController.php:497
+#: classes/Api/Controllers/V3/SuppliersController.php:516
 #: classes/Api/Controllers/V3/ToolsController.php:174
 msgid "Sorry, you cannot list resources."
 msgstr ""
@@ -557,8 +557,8 @@ msgstr ""
 #: classes/Api/Controllers/V3/AllOrderRefundsController.php:57
 #: classes/Api/Controllers/V3/InboundStockController.php:76
 #: classes/Api/Controllers/V3/InboundStockController.php:113
-#: classes/Api/Controllers/V3/SuppliersController.php:93
-#: classes/Api/Controllers/V3/SuppliersController.php:162
+#: classes/Api/Controllers/V3/SuppliersController.php:94
+#: classes/Api/Controllers/V3/SuppliersController.php:163
 #: classes/Api/Controllers/V3/ToolsController.php:61
 msgid "Unique identifier for the resource."
 msgstr ""
@@ -576,21 +576,21 @@ msgid "Limit result to user or system notes."
 msgstr ""
 
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:111
-#: classes/Api/Controllers/V3/SuppliersController.php:516
+#: classes/Api/Controllers/V3/SuppliersController.php:535
 msgid "Sorry, you are not allowed to create resources."
 msgstr ""
 
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:132
-#: classes/Api/Controllers/V3/AtumOrdersController.php:157
+#: classes/Api/Controllers/V3/AtumOrdersController.php:145
 #: classes/Api/Controllers/V3/InboundStockController.php:291
-#: classes/Api/Controllers/V3/SuppliersController.php:537
+#: classes/Api/Controllers/V3/SuppliersController.php:556
 #: classes/Api/Controllers/V3/ToolsController.php:193
 msgid "Sorry, you cannot view this resource."
 msgstr ""
 
 #: classes/Api/Controllers/V3/AtumOrderNotesController.php:152
-#: classes/Api/Controllers/V3/AtumOrdersController.php:201
-#: classes/Api/Controllers/V3/SuppliersController.php:579
+#: classes/Api/Controllers/V3/AtumOrdersController.php:189
+#: classes/Api/Controllers/V3/SuppliersController.php:598
 msgid "Sorry, you are not allowed to delete this resource."
 msgstr ""
 
@@ -631,39 +631,29 @@ msgstr ""
 msgid "Limit result set to ATUM orders which have specific statuses."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:106
-#: classes/Api/Controllers/V3/SuppliersController.php:470
-msgid "Limit response to orders modified before a given ISO8601 compliant date."
-msgstr ""
-
-#: classes/Api/Controllers/V3/AtumOrdersController.php:112
-#: classes/Api/Controllers/V3/SuppliersController.php:475
-msgid "Limit response to orders modified after a given ISO8601 compliant date."
-msgstr ""
-
-#: classes/Api/Controllers/V3/AtumOrdersController.php:179
-#: classes/Api/Controllers/V3/SuppliersController.php:558
+#: classes/Api/Controllers/V3/AtumOrdersController.php:167
+#: classes/Api/Controllers/V3/SuppliersController.php:577
 msgid "Sorry, you are not allowed to edit this resource."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:223
+#: classes/Api/Controllers/V3/AtumOrdersController.php:211
 msgid "Sorry, you are not allowed to create this resource."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:243
-#: classes/Api/Controllers/V3/SuppliersController.php:598
+#: classes/Api/Controllers/V3/AtumOrdersController.php:231
+#: classes/Api/Controllers/V3/SuppliersController.php:617
 msgid "Sorry, you are not allowed to batch manipulate this resource."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:700
+#: classes/Api/Controllers/V3/AtumOrdersController.php:724
 msgid "Shipping method ID is required."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:722
+#: classes/Api/Controllers/V3/AtumOrdersController.php:746
 msgid "Fee name is required."
 msgstr ""
 
-#: classes/Api/Controllers/V3/AtumOrdersController.php:777
+#: classes/Api/Controllers/V3/AtumOrdersController.php:801
 msgid "Order item ID provided is not associated with ATUM order."
 msgstr ""
 
@@ -1072,7 +1062,7 @@ msgid ""
 msgstr ""
 
 #: classes/Api/Controllers/V3/InboundStockController.php:397
-#: classes/Api/Controllers/V3/SuppliersController.php:1263
+#: classes/Api/Controllers/V3/SuppliersController.php:1279
 msgid "Invalid ID."
 msgstr ""
 
@@ -1278,243 +1268,269 @@ msgstr ""
 msgid "No setting groups have been registered."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:122
+#: classes/Api/Controllers/V3/SuppliersController.php:123
 msgid "Whether to bypass trash and force deletion."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:168
+#: classes/Api/Controllers/V3/SuppliersController.php:169
 msgid "Supplier name."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:173
+#: classes/Api/Controllers/V3/SuppliersController.php:174
 msgid "Supplier slug."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:178
+#: classes/Api/Controllers/V3/SuppliersController.php:179
 msgid "Supplier URL."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:185
+#: classes/Api/Controllers/V3/SuppliersController.php:186
 msgid "The date the supplier was created, in the site's timezone."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:190
+#: classes/Api/Controllers/V3/SuppliersController.php:191
 msgid "The date the supplier was created, as GMT."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:195
+#: classes/Api/Controllers/V3/SuppliersController.php:196
 msgid "The date the supplier was last modified, in the site's timezone."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:201
+#: classes/Api/Controllers/V3/SuppliersController.php:202
 msgid "The date the supplier was last modified, as GMT."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:207
+#: classes/Api/Controllers/V3/SuppliersController.php:208
 msgid "Supplier status (post status)."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:214
+#: classes/Api/Controllers/V3/SuppliersController.php:215
 msgid "Supplier code."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:219
+#: classes/Api/Controllers/V3/SuppliersController.php:220
 msgid "Supplier tax/VAT number."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:224
+#: classes/Api/Controllers/V3/SuppliersController.php:225
 msgid "Supplier phone number."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:229
+#: classes/Api/Controllers/V3/SuppliersController.php:230
 msgid "Supplier fax number."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:234
+#: classes/Api/Controllers/V3/SuppliersController.php:235
 msgid "Supplier website."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:239
+#: classes/Api/Controllers/V3/SuppliersController.php:240
 msgid "Supplier ordering URL."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:244
+#: classes/Api/Controllers/V3/SuppliersController.php:245
 msgid "Supplier general email."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:249
+#: classes/Api/Controllers/V3/SuppliersController.php:250
 msgid "Supplier ordering email."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:254
+#: classes/Api/Controllers/V3/SuppliersController.php:255
 msgid "Supplier description."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:259
+#: classes/Api/Controllers/V3/SuppliersController.php:260
 msgid "Supplier currency."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:265
+#: classes/Api/Controllers/V3/SuppliersController.php:266
 msgid "Supplier address."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:270
+#: classes/Api/Controllers/V3/SuppliersController.php:271
 msgid "Supplier city."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:275
+#: classes/Api/Controllers/V3/SuppliersController.php:276
 msgid "Supplier country."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:281
+#: classes/Api/Controllers/V3/SuppliersController.php:282
 msgid "Supplier state."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:286
+#: classes/Api/Controllers/V3/SuppliersController.php:287
 msgid "Supplier ZIP code."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:291
+#: classes/Api/Controllers/V3/SuppliersController.php:292
 msgid "The user ID that this supplier is assigned to."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:296
+#: classes/Api/Controllers/V3/SuppliersController.php:297
 msgid "The location used in Purchase Orders assigned to this supplier."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:301
+#: classes/Api/Controllers/V3/SuppliersController.php:302
 msgid "Discount applied by the supplier."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:306
+#: classes/Api/Controllers/V3/SuppliersController.php:307
 msgid "Tax rate applied by the supplier."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:311
+#: classes/Api/Controllers/V3/SuppliersController.php:312
 msgid "Lead time (in days)."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:316
+#: classes/Api/Controllers/V3/SuppliersController.php:317
 msgid "Delivery terms."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:321
+#: classes/Api/Controllers/V3/SuppliersController.php:322
 msgid "Days to cancel."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:326
+#: classes/Api/Controllers/V3/SuppliersController.php:327
 msgid "Cancelation policy."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:331
+#: classes/Api/Controllers/V3/SuppliersController.php:332
 msgid "Supplier featured image."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:338
+#: classes/Api/Controllers/V3/SuppliersController.php:339
 msgid "Image ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:343
+#: classes/Api/Controllers/V3/SuppliersController.php:344
 msgid "The date the image was created, in the site's timezone."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:349
+#: classes/Api/Controllers/V3/SuppliersController.php:350
 msgid "The date the image was created, as GMT"
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:355
+#: classes/Api/Controllers/V3/SuppliersController.php:356
 msgid "The date the image was modified, in the site's timezone."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:361
+#: classes/Api/Controllers/V3/SuppliersController.php:362
 msgid "The date the image was modified, as GMT."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:367
+#: classes/Api/Controllers/V3/SuppliersController.php:368
 msgid "Image URL."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:373
+#: classes/Api/Controllers/V3/SuppliersController.php:374
 msgid "Image name."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:378
+#: classes/Api/Controllers/V3/SuppliersController.php:379
 msgid "Image alternative text."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:386
+#: classes/Api/Controllers/V3/SuppliersController.php:387
 msgid "Meta data."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:393
+#: classes/Api/Controllers/V3/SuppliersController.php:394
 msgid "Meta ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:399
+#: classes/Api/Controllers/V3/SuppliersController.php:400
 msgid "Meta key."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:404
+#: classes/Api/Controllers/V3/SuppliersController.php:405
 msgid "Meta value."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:431
+#: classes/Api/Controllers/V3/SuppliersController.php:432
 msgid "Limit result set to suppliers with a specific slug."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:437
+#: classes/Api/Controllers/V3/SuppliersController.php:438
 msgid "Limit result set to suppliers assigned a specific status."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:444
+#: classes/Api/Controllers/V3/SuppliersController.php:445
 msgid "Limit result set to suppliers using the specified currency code."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:451
+#: classes/Api/Controllers/V3/SuppliersController.php:452
 msgid "Limit result set to suppliers from the specified country code."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:458
+#: classes/Api/Controllers/V3/SuppliersController.php:459
 msgid "Limit result set to suppliers assigned to the specified user ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:464
+#: classes/Api/Controllers/V3/SuppliersController.php:465
 msgid "Limit result set to suppliers assigned to the specific product ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1101
+#: classes/Api/Controllers/V3/SuppliersController.php:471
+#: classes/Api/Extenders/AtumProductData.php:835
+msgid ""
+"Whether to consider GMT post dates when limiting response by published or "
+"modified date."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:477
+#: classes/Api/Extenders/AtumProductData.php:807
+msgid ""
+"Limit response to resources published before a given ISO8601 compliant date."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:483
+#: classes/Api/Extenders/AtumProductData.php:814
+msgid "Limit response to resources published after a given ISO8601 compliant date."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:489
+msgid "Limit response to orders modified before a given ISO8601 compliant date."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:494
+msgid "Limit response to orders modified after a given ISO8601 compliant date."
+msgstr ""
+
+#: classes/Api/Controllers/V3/SuppliersController.php:1117
 msgid "Cannot create existing supplier."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1192
+#: classes/Api/Controllers/V3/SuppliersController.php:1208
 msgid "ID is invalid."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1279
+#: classes/Api/Controllers/V3/SuppliersController.php:1295
 msgid "Sorry, you are not allowed to delete Suppliers."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1309
+#: classes/Api/Controllers/V3/SuppliersController.php:1325
 msgid "The Suppliers do not support trashing."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1314
+#: classes/Api/Controllers/V3/SuppliersController.php:1330
 msgid "The Supplier has already been deleted."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1322
+#: classes/Api/Controllers/V3/SuppliersController.php:1338
 msgid "The Supplier cannot be deleted."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1380
+#: classes/Api/Controllers/V3/SuppliersController.php:1396
 msgid "Invalid featured media ID."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1409
+#: classes/Api/Controllers/V3/SuppliersController.php:1425
 msgid "Sorry, you are not allowed to create private posts in this post type."
 msgstr ""
 
-#: classes/Api/Controllers/V3/SuppliersController.php:1416
+#: classes/Api/Controllers/V3/SuppliersController.php:1432
 msgid "Sorry, you are not allowed to publish posts in this post type."
 msgstr ""
 
@@ -1602,12 +1618,12 @@ msgid "Invalid tool ID."
 msgstr ""
 
 #: classes/Api/Controllers/V3/ToolsController.php:445
-#: classes/Cli/CliCommands.php:102 classes/Inc/Ajax.php:2593
+#: classes/Cli/CliCommands.php:102 classes/Inc/Ajax.php:2614
 msgid "All your previously saved values were cleared successfully."
 msgstr ""
 
 #: classes/Api/Controllers/V3/ToolsController.php:448
-#: classes/Cli/CliCommands.php:106 classes/Inc/Ajax.php:2596
+#: classes/Cli/CliCommands.php:106 classes/Inc/Ajax.php:2617
 msgid "Something failed clearing the Out of Stock Threshold values"
 msgstr ""
 
@@ -1756,15 +1772,15 @@ msgstr ""
 msgid "Invalid product with ID #%s."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:783
+#: classes/Api/Extenders/AtumProductData.php:821
 msgid "Limit response to products modified before a given ISO8601 compliant date."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:789
+#: classes/Api/Extenders/AtumProductData.php:828
 msgid "Limit response to products modified after a given ISO8601 compliant date."
 msgstr ""
 
-#: classes/Api/Extenders/AtumProductData.php:795
+#: classes/Api/Extenders/AtumProductData.php:842
 msgid ""
 "Limit response to products to the specified statuses. This param supports "
 "multiple statuses separated by commas."
@@ -1844,7 +1860,7 @@ msgstr ""
 msgid "Calculated properties successfully updated"
 msgstr ""
 
-#: classes/Cli/CliCommands.php:148 classes/Inc/Ajax.php:2887
+#: classes/Cli/CliCommands.php:148 classes/Inc/Ajax.php:2908
 msgid "All your saved temporary data were cleared successfully."
 msgstr ""
 
@@ -2365,188 +2381,188 @@ msgid "Bulk actions..."
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:2322
-#: classes/Components/AtumListTables/AtumListTable.php:3396
-#: views/meta-boxes/product-data/atum-tab-panel.php:45
-#: views/meta-boxes/product-data/atum-tab-panel.php:61
+#: classes/Components/AtumListTables/AtumListTable.php:3397
+#: views/meta-boxes/product-data/atum-tab-panel.php:46
+#: views/meta-boxes/product-data/atum-tab-panel.php:62
 msgid "Apply"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3149
+#: classes/Components/AtumListTables/AtumListTable.php:3150
 #: classes/Settings/Settings.php:222
 msgid "Select All"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3245
+#: classes/Components/AtumListTables/AtumListTable.php:3246
 #, php-format
 msgid "Show/Hide the '%s' columns"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3300
+#: classes/Components/AtumListTables/AtumListTable.php:3301
 msgid "Totals"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3397
+#: classes/Components/AtumListTables/AtumListTable.php:3398
 msgid "Apply Action"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3398
+#: classes/Components/AtumListTables/AtumListTable.php:3399
 msgid "Apply Bulk Action"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3399
+#: classes/Components/AtumListTables/AtumListTable.php:3400
 msgid "Beginning"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3400
+#: classes/Components/AtumListTables/AtumListTable.php:3401
 msgid "create supplier"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3406
+#: classes/Components/AtumListTables/AtumListTable.php:3407
 #: classes/Components/AtumOrders/AtumOrderPostType.php:968
 #: classes/Settings/Settings.php:216
 msgid "Done!"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3408
+#: classes/Components/AtumListTables/AtumListTable.php:3409
 msgid "Edit Locations"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3409
+#: classes/Components/AtumListTables/AtumListTable.php:3410
 msgid ""
 "Click on the location icons to switch the states. Locations marked with blue "
 "icons will be set and with gray icons will be unset."
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3410
+#: classes/Components/AtumListTables/AtumListTable.php:3411
 msgid "Edit Product Locations"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3411
+#: classes/Components/AtumListTables/AtumListTable.php:3412
 msgid "From"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3413
+#: classes/Components/AtumListTables/AtumListTable.php:3414
 msgid "Locations saved successfully"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3414
+#: classes/Components/AtumListTables/AtumListTable.php:3415
 #: classes/Suppliers/Suppliers.php:157
 msgid "New Supplier"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3415
+#: classes/Components/AtumListTables/AtumListTable.php:3416
 msgid "No Items Selected"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3416
+#: classes/Components/AtumListTables/AtumListTable.php:3417
 msgid "No actions"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3422
+#: classes/Components/AtumListTables/AtumListTable.php:3423
 msgid "Product Locations"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3424
+#: classes/Components/AtumListTables/AtumListTable.php:3425
 #: views/meta-boxes/atum-order/items.php:255 views/widgets/lost-sales-config.php:23
 msgid "Save"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3426
+#: classes/Components/AtumListTables/AtumListTable.php:3427
 msgid "Select the date range to filter the products."
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3427
+#: classes/Components/AtumListTables/AtumListTable.php:3428
 msgid ""
 "Please, check the boxes for all the items to which you want to apply this bulk "
 "action"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3428
+#: classes/Components/AtumListTables/AtumListTable.php:3429
 msgid "Set"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3429
-msgid "Set Time Window"
-msgstr ""
-
 #: classes/Components/AtumListTables/AtumListTable.php:3430
-#, php-format
-msgid "Set the %% value"
+msgid "Set Time Window"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:3431
 #, php-format
+msgid "Set the %% value"
+msgstr ""
+
+#: classes/Components/AtumListTables/AtumListTable.php:3432
+#, php-format
 msgid "Set %%"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3435
+#: classes/Components/AtumListTables/AtumListTable.php:3436
 msgid "The supplier name is required"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3436
+#: classes/Components/AtumListTables/AtumListTable.php:3437
 msgid "To"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3443
+#: classes/Components/AtumListTables/AtumListTable.php:3444
 msgid "Important!"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3444
+#: classes/Components/AtumListTables/AtumListTable.php:3445
 msgid ""
 "To prevent any loss of data, please, hit the blue 'Save Data' button at the top "
 "left after completing edits."
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3507
+#: classes/Components/AtumListTables/AtumListTable.php:3508
 msgid "Filter"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3533
+#: classes/Components/AtumListTables/AtumListTable.php:3534
 #, php-format
 msgid " with query '%s'"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3548
+#: classes/Components/AtumListTables/AtumListTable.php:3549
 msgid "0 items"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3561
-#: classes/Components/AtumListTables/AtumListTable.php:4372
+#: classes/Components/AtumListTables/AtumListTable.php:3562
+#: classes/Components/AtumListTables/AtumListTable.php:4374
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3595
+#: classes/Components/AtumListTables/AtumListTable.php:3596
 msgid "First page"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3611
+#: classes/Components/AtumListTables/AtumListTable.php:3612
 msgid "Previous page"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3620
-#: classes/Components/AtumListTables/AtumListTable.php:3626
+#: classes/Components/AtumListTables/AtumListTable.php:3621
+#: classes/Components/AtumListTables/AtumListTable.php:3627
 msgid "Current Page"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3634
+#: classes/Components/AtumListTables/AtumListTable.php:3635
 #, php-format
 msgctxt "paging"
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3646
+#: classes/Components/AtumListTables/AtumListTable.php:3647
 msgid "Next page"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:3660
+#: classes/Components/AtumListTables/AtumListTable.php:3661
 msgid "Last page"
 msgstr ""
 
-#: classes/Components/AtumListTables/AtumListTable.php:4159
-#: classes/Inc/Helpers.php:3739
+#: classes/Components/AtumListTables/AtumListTable.php:4160
+#: classes/Inc/Helpers.php:3734
 msgctxt "Comma-separated list of search stopwords in your language"
 msgid ""
 "about,an,are,as,at,be,by,com,for,from,how,in,is,it,of,on,or,that,the,this,to,was,"
@@ -2618,7 +2634,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:956
-#: classes/Dashboard/Dashboard.php:329 classes/Inc/Hooks.php:276
+#: classes/Dashboard/Dashboard.php:329 classes/Inc/Hooks.php:275
 #: classes/Settings/Settings.php:209
 msgid "Are you sure?"
 msgstr ""
@@ -2735,7 +2751,7 @@ msgstr ""
 msgid "Log #"
 msgstr ""
 
-#: classes/Components/AtumOrders/AtumOrderPostType.php:1218
+#: classes/Components/AtumOrders/AtumOrderPostType.php:1225
 #: classes/Components/AtumOrders/Models/AtumOrderModel.php:1037
 #: classes/Components/AtumOrders/Models/AtumOrderModel.php:1038
 #: classes/PurchaseOrders/PurchaseOrders.php:995
@@ -2743,7 +2759,7 @@ msgid "Unknown"
 msgstr ""
 
 #: classes/Components/AtumOrders/Models/AtumOrderItemModel.php:105
-msgid "Invalid item"
+msgid "Invalid ATUM Order item"
 msgstr ""
 
 #: classes/Components/AtumOrders/Models/AtumOrderItemModel.php:194
@@ -2765,33 +2781,33 @@ msgid "Click the Create button on the top right to add/edit items."
 msgstr ""
 
 #: classes/Components/AtumOrders/Models/AtumOrderModel.php:1041
-#: classes/Inc/Hooks.php:1214
+#: classes/Inc/Hooks.php:1213
 #, php-format
 msgid "Order status changed from %1$s to %2$s."
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1615
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1631
 #, php-format
 msgid "(includes %s)"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1929
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1945
 #: classes/InventoryLogs/Models/Log.php:124
 #: classes/PurchaseOrders/Models/PurchaseOrder.php:125
 msgid "Auto Draft"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1934
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1950
 #, php-format
 msgid "ATUM Order &ndash; %s"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1934
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1950
 msgctxt "ATUM Order date parsed by DateTime::format"
 msgid "M d, Y @ h:i A"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:2710
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:2726
 #: classes/Models/AtumCPTModel.php:375
 msgid "Invalid property"
 msgstr ""
@@ -2923,25 +2939,25 @@ msgstr ""
 msgid "All product types"
 msgstr ""
 
-#: classes/Dashboard/WidgetHelpers.php:734 classes/Inc/Helpers.php:1646
+#: classes/Dashboard/WidgetHelpers.php:734 classes/Inc/Helpers.php:1645
 msgid "Grouped product"
 msgstr ""
 
-#: classes/Dashboard/WidgetHelpers.php:738 classes/Inc/Helpers.php:1650
+#: classes/Dashboard/WidgetHelpers.php:738 classes/Inc/Helpers.php:1649
 msgid "Variable product"
 msgstr ""
 
-#: classes/Dashboard/WidgetHelpers.php:742 classes/Inc/Helpers.php:1654
+#: classes/Dashboard/WidgetHelpers.php:742 classes/Inc/Helpers.php:1653
 msgid "Simple product"
 msgstr ""
 
 #: classes/Dashboard/WidgetHelpers.php:754
-#: classes/DataExport/Reports/HtmlReport.php:518 classes/Inc/Helpers.php:1666
+#: classes/DataExport/Reports/HtmlReport.php:518 classes/Inc/Helpers.php:1665
 msgid "Downloadable"
 msgstr ""
 
 #: classes/Dashboard/WidgetHelpers.php:755
-#: classes/DataExport/Reports/HtmlReport.php:522 classes/Inc/Helpers.php:1667
+#: classes/DataExport/Reports/HtmlReport.php:522 classes/Inc/Helpers.php:1666
 msgid "Virtual"
 msgstr ""
 
@@ -3095,7 +3111,7 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:356 classes/Inc/Hooks.php:392
+#: classes/DataExport/DataExport.php:356 classes/Inc/Hooks.php:391
 #: classes/StockCentral/Lists/ListTable.php:334 classes/Suppliers/Suppliers.php:233
 #: views/help-tabs/stock-central/product-details.php:68
 #: views/meta-boxes/atum-order/items.php:57
@@ -3202,7 +3218,7 @@ msgstr ""
 msgid "That widget is not available"
 msgstr ""
 
-#: classes/Inc/Ajax.php:339 classes/Inc/Ajax.php:411 classes/Inc/Ajax.php:2903
+#: classes/Inc/Ajax.php:339 classes/Inc/Ajax.php:411 classes/Inc/Ajax.php:2924
 msgid "Invalid data"
 msgstr ""
 
@@ -3417,83 +3433,91 @@ msgstr ""
 msgid "Product not found"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2310
+#: classes/Inc/Ajax.php:2170
+msgid "You are not allowed to do so"
+msgstr ""
+
+#: classes/Inc/Ajax.php:2174
+msgid "Invalid Data"
+msgstr ""
+
+#: classes/Inc/Ajax.php:2182
+msgid "The order doesn't exist"
+msgstr ""
+
+#: classes/Inc/Ajax.php:2188
 msgid "The order is empty"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2315
-msgid "The order doesn\\t exist"
-msgstr ""
-
-#: classes/Inc/Ajax.php:2369 classes/Inc/Ajax.php:2405
+#: classes/Inc/Ajax.php:2390 classes/Inc/Ajax.php:2426
 msgid "No parent ID specified"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2373
+#: classes/Inc/Ajax.php:2394
 msgid "Please, choose a status from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2379 classes/Inc/Ajax.php:2411
+#: classes/Inc/Ajax.php:2400 classes/Inc/Ajax.php:2432
 msgid "Invalid parent product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2389 classes/Inc/Ajax.php:2423
+#: classes/Inc/Ajax.php:2410 classes/Inc/Ajax.php:2444
 msgid "All the variations were updated successfully"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2441 classes/Inc/Ajax.php:2499
+#: classes/Inc/Ajax.php:2462 classes/Inc/Ajax.php:2520
 msgid "No valid product ID provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2453
+#: classes/Inc/Ajax.php:2474
 msgid "No locations were set for this product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2534 classes/Inc/Ajax.php:2562
+#: classes/Inc/Ajax.php:2555 classes/Inc/Ajax.php:2583
 msgid "Please select an option from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2545
+#: classes/Inc/Ajax.php:2566
 msgid "Something failed changing the Manage Stock option"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2573
+#: classes/Inc/Ajax.php:2594
 msgid "Something failed changing the Control Stock option"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2829
+#: classes/Inc/Ajax.php:2850
 msgid "Please enter the number of products you want to process per AJAX call"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2907
+#: classes/Inc/Ajax.php:2928
 msgid "Purchase Orders module isn't active."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2911
+#: classes/Inc/Ajax.php:2932
 msgid "You don't have enough privileges."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2917
+#: classes/Inc/Ajax.php:2938
 msgid "The Supplier name is required"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2925
+#: classes/Inc/Ajax.php:2946
 msgid "Something failed when creating the supplier."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2929
+#: classes/Inc/Ajax.php:2950
 msgid "Supplier Created"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2930
+#: classes/Inc/Ajax.php:2951
 msgid "Complete supplier details"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2950
+#: classes/Inc/Ajax.php:2971
 msgid "The guide name is required"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2961
+#: classes/Inc/Ajax.php:2982
 msgid "Guide not found"
 msgstr ""
 
@@ -3590,136 +3614,136 @@ msgstr ""
 msgid "Decrement Second"
 msgstr ""
 
-#: classes/Inc/Helpers.php:139 views/list-tables/search-by-column-field.php:68
+#: classes/Inc/Helpers.php:137 views/list-tables/search-by-column-field.php:68
 msgid "ATUM field"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1520
+#: classes/Inc/Helpers.php:1519
 msgid "All your products were updated successfully"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1531
+#: classes/Inc/Helpers.php:1530
 msgid "Something failed while updating your products"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1634
+#: classes/Inc/Helpers.php:1633
 msgid "All product types..."
 msgstr ""
 
-#: classes/Inc/Helpers.php:1705
+#: classes/Inc/Helpers.php:1704
 msgid "All suppliers..."
 msgstr ""
 
-#: classes/Inc/Helpers.php:1739
+#: classes/Inc/Helpers.php:1738
 msgid "Show all suppliers"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1742 classes/Inc/Helpers.php:1753
+#: classes/Inc/Helpers.php:1741 classes/Inc/Helpers.php:1752
 msgid "(no title)"
 msgstr ""
 
-#: classes/Inc/Helpers.php:1889
+#: classes/Inc/Helpers.php:1888
 msgid "No valid ID provided"
 msgstr ""
 
-#: classes/Inc/Helpers.php:2321
+#: classes/Inc/Helpers.php:2320
 msgid "Get Premium Support"
 msgstr ""
 
-#: classes/Inc/Helpers.php:2325 views/atum-footer.php:28
+#: classes/Inc/Helpers.php:2324 views/atum-footer.php:28
 #: views/help-tabs/help-sidebar.php:17
 msgid "Get Support"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3376
+#: classes/Inc/Helpers.php:3371
 msgid "HELP US TO IMPROVE!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3379
+#: classes/Inc/Helpers.php:3374
 #, php-format
 msgid ""
 "If you like <strong>ATUM</strong> please leave us a %1$s&#9733;&#9733;&#9733;"
 "&#9733;&#9733;%2$s rating. Huge thanks in advance!"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3379
+#: classes/Inc/Helpers.php:3374
 msgid "Thanks :)"
 msgstr ""
 
-#: classes/Inc/Helpers.php:3389
+#: classes/Inc/Helpers.php:3384
 msgid "Thank you for trusting <strong>ATUM</strong> to manage your inventory 🙌"
 msgstr ""
 
-#: classes/Inc/Hooks.php:277 views/meta-boxes/product/file-attachment.php:15
+#: classes/Inc/Hooks.php:276 views/meta-boxes/product/file-attachment.php:15
 msgid "Attach to email:"
 msgstr ""
 
-#: classes/Inc/Hooks.php:279
+#: classes/Inc/Hooks.php:278
 msgid "Yes, Continue"
 msgstr ""
 
-#: classes/Inc/Hooks.php:280 views/meta-boxes/product/file-attachment.php:40
+#: classes/Inc/Hooks.php:279 views/meta-boxes/product/file-attachment.php:40
 msgid "Delete attachment"
 msgstr ""
 
-#: classes/Inc/Hooks.php:362
+#: classes/Inc/Hooks.php:361
 msgid "In stock"
 msgstr ""
 
-#: classes/Inc/Hooks.php:366
+#: classes/Inc/Hooks.php:365
 msgid "On backorder"
 msgstr ""
 
-#: classes/Inc/Hooks.php:370
+#: classes/Inc/Hooks.php:369
 msgid "Out of stock"
 msgstr ""
 
-#: classes/Inc/Hooks.php:700
+#: classes/Inc/Hooks.php:699
 msgid "Go to ATUM's knowledgebase"
 msgstr ""
 
-#: classes/Inc/Hooks.php:700 views/dash-cards/docs.php:15
+#: classes/Inc/Hooks.php:699 views/dash-cards/docs.php:15
 msgid "Documentation"
 msgstr ""
 
-#: classes/Inc/Hooks.php:701
+#: classes/Inc/Hooks.php:700
 msgid "View ATUM Video Tutorials"
 msgstr ""
 
-#: classes/Inc/Hooks.php:701
+#: classes/Inc/Hooks.php:700
 msgid "Videos"
 msgstr ""
 
-#: classes/Inc/Hooks.php:702
+#: classes/Inc/Hooks.php:701
 msgid "View ATUM add-ons"
 msgstr ""
 
-#: classes/Inc/Hooks.php:703
+#: classes/Inc/Hooks.php:702
 msgid "Visit ATUM support forums"
 msgstr ""
 
-#: classes/Inc/Hooks.php:703 views/dash-cards/support.php:16
+#: classes/Inc/Hooks.php:702 views/dash-cards/support.php:16
 msgid "Support"
 msgstr ""
 
-#: classes/Inc/Hooks.php:704
+#: classes/Inc/Hooks.php:703
 msgid "Read the ATUM REST API docs"
 msgstr ""
 
-#: classes/Inc/Hooks.php:704
+#: classes/Inc/Hooks.php:703
 msgid "API Docs"
 msgstr ""
 
-#: classes/Inc/Hooks.php:1205
+#: classes/Inc/Hooks.php:1204
 #, php-format
 msgid "Order status set to %s."
 msgstr ""
 
-#: classes/Inc/Hooks.php:1456
+#: classes/Inc/Hooks.php:1455
 msgid "Understood, continue anyway"
 msgstr ""
 
-#: classes/Inc/Hooks.php:1457
+#: classes/Inc/Hooks.php:1456
 msgid ""
 "We kindly request that you do not use this new feature since it may create "
 "compatibility problems with ATUM plugin.<br>The new feature significantly "
@@ -3728,62 +3752,62 @@ msgid ""
 "released.<br>We appreciate your cooperation and understanding.<br><br>Thank you."
 msgstr ""
 
-#: classes/Inc/Hooks.php:1458
+#: classes/Inc/Hooks.php:1457
 msgid "ATUM Compatibility Notice"
 msgstr ""
 
-#: classes/Inc/Main.php:190
+#: classes/Inc/Main.php:197
 msgctxt "taxonomy general name"
 msgid "ATUM Locations"
 msgstr ""
 
-#: classes/Inc/Main.php:191
+#: classes/Inc/Main.php:198
 msgctxt "taxonomy singular name"
 msgid "Location"
 msgstr ""
 
-#: classes/Inc/Main.php:192
+#: classes/Inc/Main.php:199
 msgid "Search locations"
 msgstr ""
 
-#: classes/Inc/Main.php:193
+#: classes/Inc/Main.php:200
 msgid "All locations"
 msgstr ""
 
-#: classes/Inc/Main.php:194
+#: classes/Inc/Main.php:201
 msgid "Parent location"
 msgstr ""
 
-#: classes/Inc/Main.php:195
+#: classes/Inc/Main.php:202
 msgid "Parent location:"
 msgstr ""
 
-#: classes/Inc/Main.php:196
+#: classes/Inc/Main.php:203
 msgid "Edit location"
 msgstr ""
 
-#: classes/Inc/Main.php:197
+#: classes/Inc/Main.php:204
 msgid "Update location"
 msgstr ""
 
-#: classes/Inc/Main.php:198
+#: classes/Inc/Main.php:205
 msgid "Add new location"
 msgstr ""
 
-#: classes/Inc/Main.php:199
+#: classes/Inc/Main.php:206
 msgid "New location name"
 msgstr ""
 
-#: classes/Inc/Main.php:200
+#: classes/Inc/Main.php:207
 msgid "ATUM Locations"
 msgstr ""
 
-#: classes/Inc/Main.php:201
+#: classes/Inc/Main.php:208
 msgid "No locations found"
 msgstr ""
 
-#: classes/Inc/Main.php:341 classes/MetaBoxes/ProductDataMetaBoxes.php:127
-#: views/meta-boxes/product-data/atum-variation-panel.php:20
+#: classes/Inc/Main.php:351 classes/MetaBoxes/ProductDataMetaBoxes.php:127
+#: views/meta-boxes/product-data/atum-variation-panel.php:21
 msgid "ATUM Inventory"
 msgstr ""
 
@@ -5194,7 +5218,7 @@ msgid ""
 "Bundles in Stock Central."
 msgstr ""
 
-#: classes/Suppliers/Suppliers.php:150 classes/Suppliers/Suppliers.php:775
+#: classes/Suppliers/Suppliers.php:150
 msgid "Suppliers"
 msgstr ""
 
@@ -6457,56 +6481,56 @@ msgstr ""
 msgid "Log description"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:23
-#: views/meta-boxes/product-data/atum-variation-panel.php:27
+#: views/meta-boxes/product-data/atum-tab-panel.php:24
+#: views/meta-boxes/product-data/atum-variation-panel.php:28
 msgid "ATUM Control Switch"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:25
-#: views/meta-boxes/product-data/atum-variation-panel.php:29
+#: views/meta-boxes/product-data/atum-tab-panel.php:26
+#: views/meta-boxes/product-data/atum-variation-panel.php:30
 msgid ""
 "Turn the switch ON or OFF to allow the ATUM plugin to include this product in "
 "its lists, counters and statistics."
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:37
+#: views/meta-boxes/product-data/atum-tab-panel.php:38
 msgid "Variations' ATUM Control"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:39
+#: views/meta-boxes/product-data/atum-tab-panel.php:40
 msgid "Controlled"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:40
+#: views/meta-boxes/product-data/atum-tab-panel.php:41
 msgid "Uncontrolled"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:44
+#: views/meta-boxes/product-data/atum-tab-panel.php:45
 #, php-format
 msgid ""
 "This will change the ATUM Control Switch for all the variations within this "
 "product to %s"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:48
+#: views/meta-boxes/product-data/atum-tab-panel.php:49
 msgid ""
 "Changes the ATUM Control switch for all the variations to the status set at once."
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:52
+#: views/meta-boxes/product-data/atum-tab-panel.php:53
 msgid "Variations' Supplier"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:57
+#: views/meta-boxes/product-data/atum-tab-panel.php:58
 msgid "No supplier"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:60
+#: views/meta-boxes/product-data/atum-tab-panel.php:61
 msgid ""
 "This will set the specified supplier for all the variations within this product"
 msgstr ""
 
-#: views/meta-boxes/product-data/atum-tab-panel.php:64
+#: views/meta-boxes/product-data/atum-tab-panel.php:65
 msgid "Sets the supplier for all the variations at once"
 msgstr ""
 
