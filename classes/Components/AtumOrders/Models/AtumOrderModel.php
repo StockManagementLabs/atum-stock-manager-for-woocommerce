@@ -1169,7 +1169,7 @@ abstract class AtumOrderModel {
 			'post_type'     => $this->get_post_type(),
 			'post_status'   => in_array( $status, array_keys( Helpers::get_atum_order_post_type_statuses( $this->get_post_type() ) ) ) ? $status : $this->default_status,
 			'ping_status'   => 'closed',
-			'post_author'   => get_current_user_id(),
+			'post_author'   => $this->get_author_id() ?: get_current_user_id(),
 			'post_title'    => $this->get_title(),
 			'post_content'  => $this->get_description(),
 		) );
@@ -2259,6 +2259,19 @@ abstract class AtumOrderModel {
 	 */
 	public function items_have_been_read() {
 		return $this->has_read_items;
+	}
+
+	/**
+	 * Get the current post author
+	 *
+	 * @since 1.9.40
+	 *
+	 * @return int|string|null
+	 */
+	public function get_author_id() {
+
+		return $this->exists() ? $this->post->post_author : NULL;
+
 	}
 
 	/**********
