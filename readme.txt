@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.6
-Tested up to: 6.5.2
+Tested up to: 6.5.3
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.7.0
-Stable tag: 1.9.38
+WC tested up to: 8.9.1
+Stable tag: 1.9.39
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,46 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.39`
+
+*2024-05-27*
+
+**Features**
+
+* Show the custom supplier metadata in REST API requests.
+* Added color constant.
+* Allow passing extra data to bulk actions externally.
+* Allow decimals on the supplier tax rate field.
+* Allow decimals on the PO discount field.
+* Added getter for id_views.
+* Performance improvement: always use indexed dates on SQL queries.
+* Added support for filtering ATUM entities by GMT and non-GMT dates when listing them through API.
+* Added compatibility for application passwords to the ATUM API.
+
+**Changes**
+
+* Disable the WC reserve stock checking after ATUM has reserved the stock itself.
+* Refactoring.
+* Prevent trying to access emails if they aren’t set properly.
+* Allow bypassing some items when adding sales order items to an ATUM order.
+* Added the $loop variable to the atum_barcode_field filter.
+* Prevent concatenating prefixes in searches for ATUM product data in Stock Central.
+* Refactoring to avoid issues when getting ATUM Orders from REST API.
+* Restrict the supplier's default discount and tax rate up to 2 decimals.
+* Update ATUM Orders status meta to allow "trash" when moved to trash.
+
+**Fixes**
+
+* Avoid error preparing PO item when purchase price is empty.
+* Fixed ATUM Orders dates not being saved correctly.
+* Fixed updating, creating ATUM orders through the REST API.
+* Fixed caching issue when returning an ATUM order updated through REST API.
+* Fixed ATUM order items not being updated through API.
+* Fixed default ATUM item metadata isn't saved when inserting.
+* Allow all the ATUM orders be restored to their previous status.
 
 ---
 
