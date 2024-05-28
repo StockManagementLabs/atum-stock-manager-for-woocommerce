@@ -10,13 +10,13 @@
         "bg_color" : "#fff"
     },
 	"images"           : {
-		"logo"      : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",
-		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/screenshot.png",
+		"logo"      : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
+		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2023/06/st-pp-addons.svg",
 		"logo_css"  : "width: 357px",
 		"top_left"  : "https://stockmanagementlabs.com/wp-content/uploads/2024/02/label-pickpack.svg"
 	},
 	"title"            : {
-		"text"       : "Stock<strong>Takes</strong>",
+		"text"       : "",
 		"text_color" : "black",
 		"text_size"  : "",
 		"text_align" : "center"
@@ -27,29 +27,22 @@
 		"background" : ""
 	},
 	"description"      : {
-		"text"            : "Introducing our new ATUM Stock Takes Premium Add-On: We designed this add-on to simplify your inventory management process. With just a few clicks, you can generate a list of your WooCommerce products that require stock verification. The tool will automatically reconcile the stock levels and update every counted product. You can integrate ATUM Stock Takes with other add-ons, such as Multi-Inventory and effortlessly oversee stock across different locations. Increase your business efficiency today with our innovative tool!",
+		"text"            : "Increase your business efficiency today with our latest stock management tools!",
 		"text_color"      : "#6c757d",
 		"text_size"       : "13px",
-		"text_align"      : "justify",
+		"text_align"      : "",
 		"dash_text_align" : "left",
-		"padding"         : "0 9px 25px"
+		"padding"         : "15px 9px 25px"
 	},
 	"buttons"          : [
 		{
-			"text"  : "Try It Now",
-			"url"   : "https://stockmanagementlabs.com/addons/atum-stock-takes",
+			"text"  : "Try ATUM Add-ons",
+			"url"   : "https://stockmanagementlabs.com/addons/",
 			"class" : "btn btn-primary",
 			"css"   : "background-color: #2B8DFC; border-color: #2B8DFC",
 			"hover" : "background-color: #91B3FA !important"
-		},
-		{
-			"text"  : "Read documentation",
-			"url"   : "https://stockmanagementlabs.crunch.help/en/atum-stock-takes",
-			"class" : "btn btn-outline-primary",
-			"css"   : "border-color: #2B8DFC; background-color: #FFF; color: #2B8DFC",
-			"hover" : "background-color: #2B8DFC !important; color: #FFF !important"
 		}
 	],
 	"additional_class" : "",
-	"transient_key"    : "stock-takes-launch"
+	"transient_key"    : "stock-takes-pick-pack-addons"
 }
