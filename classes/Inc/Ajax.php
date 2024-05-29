@@ -2223,7 +2223,8 @@ final class Ajax {
 							 *
 							 * @var \WC_Order_Item_Product $atum_order_item
 							 */
-							if ( $item->get_product_id() === $atum_order_item->get_product_id() ) {
+							if ( $item->get_product_id() === $atum_order_item->get_product_id() &&
+								$item->get_variation_id() === $atum_order_item->get_variation_id() ) {
 								$imported_item = TRUE;
 								break;
 							}
