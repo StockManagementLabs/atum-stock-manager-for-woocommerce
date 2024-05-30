@@ -62,17 +62,21 @@ export default class Supplier {
 
 		};
 
-		this.enhancedSelect.doSelect2( $select, {
-			templateResult: addFlag,
-		} );
+		if ( $select.length ) {
 
-		$select.on( 'select2:select', ( evt: Event)=>{
+			this.enhancedSelect.doSelect2( $select, {
+				templateResult: addFlag,
+			} );
+
+			$select.on( 'select2:select', ( evt: Event)=>{
+
+				$( '#select2-wpml_lang-container' ).html( this.genLangOptionsContent( $select.find(':selected') ).html() );
+
+			});
 
 			$( '#select2-wpml_lang-container' ).html( this.genLangOptionsContent( $select.find(':selected') ).html() );
 
-		});
-
-		$( '#select2-wpml_lang-container' ).html( this.genLangOptionsContent( $select.find(':selected') ).html() );
+		}
 
 	}
 
