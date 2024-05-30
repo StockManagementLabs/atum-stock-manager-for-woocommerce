@@ -196,6 +196,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.39.2`
+
+*2024-05-30*
+
+**Fixes**
+
+* Prevent changing the ATUM Order author when updating.
+* Fixed only one variation per variable is copied to PO when multiple variants are included in a WC Order.
+* Fixed sales last days when filtering by GMT dates.
+
+---
+
+`1.9.39.1`
+
+*2024-05-28*
+
+**Changes**
+
+* Compiled assets for release.
+
+---
+
 `1.9.39`
 
 *2024-05-27*

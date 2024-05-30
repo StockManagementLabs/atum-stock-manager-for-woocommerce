@@ -7,7 +7,7 @@ Tested up to: 6.5.3
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 8.9.1
-Stable tag: 1.9.39.1
+Stable tag: 1.9.39.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,18 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.39.2`
+
+*2024-05-30*
+
+**Fixes**
+
+* Prevent changing the ATUM Order author when updating.
+* Fixed only one variation per variable is copied to PO when multiple variants are included in a WC Order.
+* Fixed sales last days when filtering by GMT dates.
 
 ---
 
