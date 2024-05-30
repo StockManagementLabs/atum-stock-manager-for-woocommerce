@@ -555,23 +555,23 @@ final class Helpers {
 			$is_using_hpos_tables = self::is_using_hpos_tables();
 
 			// Prepare the SQL query to get the orders in the specified time window.
-			$datetime_start = self::get_wc_time( strtotime( $date_start ) );
+			$datetime_start = self::get_wc_time( $date_start );
 
 			if ( $is_using_hpos_tables ) {
 				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE ) );
 			}
 			else {
-				$date_where = $wpdb->prepare( 'WHERE post_date >= %s', self::date_format( $datetime_start->getOffsetTimestamp() ) );
+				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE  ) );
 			}
 
 			if ( $date_end ) {
-				$datetime_end = self::get_wc_time( strtotime( $date_end ) );
+				$datetime_end = self::get_wc_time( $date_end );
 
 				if ( $is_using_hpos_tables ) {
 					$date_where .= $wpdb->prepare( ' AND date_created_gmt <= %s', self::date_format( $datetime_end->getTimestamp(), TRUE, TRUE ) );
 				}
 				else {
-					$date_where .= $wpdb->prepare( ' AND post_date <= %s', self::date_format( $datetime_start->getOffsetTimestamp() ) );
+					$date_where .= $wpdb->prepare( ' AND post_date_gmt <= %s', self::date_format( $datetime_end->getTimestamp(), TRUE, TRUE ) );
 				}
 			}
 
