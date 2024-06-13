@@ -671,26 +671,29 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	 */
 	protected function prepare_item_product( $posted, $action, $item ) {
 
-		$product = Helpers::get_atum_product( $this->get_product_id( $posted ), TRUE );
+		if ( ! empty( $posted['product_id'] ) || ! empty( $posted['sku'] ) ) {
 
-		if ( $product instanceof \WC_Product && $product !== $item->get_product() ) {
+			$product = Helpers::get_atum_product( $this->get_product_id( $posted ), TRUE );
 
-			$item->set_product( $product );
+			if ( $product instanceof \WC_Product && $product !== $item->get_product() ) {
 
-			if ( 'create' === $action ) {
-				$quantity = isset( $posted['quantity'] ) ? $posted['quantity'] : 1;
-				if ( $item instanceof POItemProduct ) {
-					$product        = Helpers::get_atum_product( $product );
-					$purchase_price = ! empty( $product->get_purchase_price() ) ? $product->get_purchase_price() : 0;
-					$total          = apply_filters( 'atum/api/atum_purchase_order/item_total', $purchase_price * $quantity, $item, $posted );
+				$item->set_product( $product );
+
+				if ( 'create' === $action ) {
+					$quantity = isset( $posted['quantity'] ) ? $posted['quantity'] : 1;
+					if ( $item instanceof POItemProduct ) {
+						$product        = Helpers::get_atum_product( $product );
+						$purchase_price = ! empty( $product->get_purchase_price() ) ? $product->get_purchase_price() : 0;
+						$total          = apply_filters( 'atum/api/atum_purchase_order/item_total', $purchase_price * $quantity, $item, $posted );
+					}
+					else {
+						$total = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
+					}
+
+					$posted['total'] = $posted['subtotal'] = $total;
 				}
-				else {
-					$total = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );
-				}
 
-				$posted['total'] = $posted['subtotal'] = $total;
 			}
-
 		}
 
 		$this->maybe_set_item_props( $item, array(
