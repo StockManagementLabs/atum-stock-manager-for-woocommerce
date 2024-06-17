@@ -78,7 +78,7 @@ class ListTable extends AtumListTable {
 		// NAMING CONVENTION: The column names starting by underscore (_) are based on meta keys (the name must match the meta key name),
 		// the column names starting with "calc_" are calculated fields and the rest are WP's standard fields
 		// *** Following this convention is necessary for column sorting functionality ***!
-		self::$table_columns = array(
+		self::$table_columns = (array) apply_filters( 'atum/inbound_stock_list/table_columns', array(
 			'thumb'              => '<span class="atum-icon atmi-picture tips" data-bs-placement="bottom" data-tip="' . esc_attr__( 'Image', ATUM_TEXT_DOMAIN ) . '">' . __( 'Thumb', ATUM_TEXT_DOMAIN ) . '</span>',
 			'ID'                 => __( 'ID', ATUM_TEXT_DOMAIN ),
 			'title'              => __( 'Product Name', ATUM_TEXT_DOMAIN ),
@@ -88,7 +88,7 @@ class ListTable extends AtumListTable {
 			'_date_ordered'      => __( 'Date Ordered', ATUM_TEXT_DOMAIN ),
 			'_date_expected'     => __( 'Date Expected', ATUM_TEXT_DOMAIN ),
 			'_purchase_order'    => __( 'PO', ATUM_TEXT_DOMAIN ),
-		);
+		) );
 
 		// Initialize totalizers.
 		$this->totalizers = apply_filters( 'atum/inbound_stock_list/totalizers', array( 'calc_inbound_stock' => 0 ) );
