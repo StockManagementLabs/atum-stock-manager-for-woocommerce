@@ -1184,7 +1184,7 @@ final class Helpers {
 			add_filter( 'woocommerce_price_trim_zeros', '__return_true' );
 		}
 
-		$price = apply_filters( 'atum/format_price', wp_strip_all_tags( wc_price( round( $price, 2 ), $args ) ) );
+		$price = apply_filters( 'atum/format_price', wp_strip_all_tags( wc_price( $price, $args ) ) );
 
 		remove_filter( 'woocommerce_price_trim_zeros', '__return_true' );
 
