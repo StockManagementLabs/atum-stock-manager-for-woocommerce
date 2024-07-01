@@ -226,23 +226,19 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 /*!***************************************!*\
   !*** ./assets/js/src/trials-modal.ts ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var trials_modal_jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
-jQuery(function ($) {
+trials_modal_jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumTrialsModal');
     new _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
-
-})();
 
 /******/ })()
 ;

@@ -5082,11 +5082,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_check-order-prices */ "./assets/js/src/components/_check-order-prices.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var check_orders_jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
 
-jQuery(function ($) {
+check_orders_jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumCheckOrders');
     var tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_2__["default"](false);
     new _components_check_order_prices__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip);

@@ -296,23 +296,19 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 /*!***************************************!*\
   !*** ./assets/js/src/admin-modals.ts ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_admin_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/_admin-modal */ "./assets/js/src/components/_admin-modal.ts");
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var admin_modals_jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
-jQuery(function ($) {
+admin_modals_jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAdminModalVars');
     new _components_admin_modal__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
-
-})();
 
 /******/ })()
 ;
