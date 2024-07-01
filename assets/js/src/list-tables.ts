@@ -14,7 +14,6 @@ import '../vendor/jquery.address.min';               // This is not downloading 
 import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
 import '../vendor/select2';                          // A fixed version compatible with webpack
 
-
 /**
  * Components
  */
@@ -44,13 +43,13 @@ import TableButtons from './components/list-table/_table-buttons';
 import Tooltip from './components/_tooltip';
 import Utils from './utils/_utils';
 
-
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 
 	// Initialize shared components.
 	const enhancedSelect = new EnhancedSelect();
 	const tooltip = new Tooltip();
+
 	new LightBox();
 
 	// Initialize one instance per list table found on the current page (this allows us to have multiple tables).
@@ -81,7 +80,7 @@ jQuery( ( $: JQueryStatic ) => {
 		const router = new Router( settings, globals, listTable );
 		const stickyHeader = new StickyHeader( settings, globals, stickyCols, tooltip );
 
-		if ( ! Utils.checkRTL( 'isRTL' ) ) {
+		if ( !Utils.checkRTL( 'isRTL' ) ) {
 			new ScrollBar( globals );
 		}
 
@@ -99,10 +98,11 @@ jQuery( ( $: JQueryStatic ) => {
 		// Add the list table help guide (if available).
 		if ( settings.get( 'hgMainGuide' ) ) {
 			const $tableTitle: JQuery = $( 'h1.wp-heading-inline' );
+
 			$tableTitle.append( helpGuide.getHelpGuideButtons( settings.get( 'hgMainGuide' ) ) );
 			tooltip.addTooltips( $tableTitle );
 		}
 
 	} );
 	
-});
+} );
