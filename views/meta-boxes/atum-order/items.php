@@ -25,9 +25,10 @@ if ( wc_tax_enabled() ) {
 	$show_tax_columns = 1 === count( $taxes );
 }
 
-$currency    = $atum_order->currency;
-$post_type   = get_post_type_object( get_post_type( $atum_order->get_id() ) );
-$post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limit="' . $atum_order->get_id() . '"' : '';
+$currency       = $atum_order->currency;
+$post_type      = get_post_type_object( get_post_type( $atum_order->get_id() ) );
+$post_search    = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limit="' . $atum_order->get_id() . '"' : '';
+$added_products = array();
 ?>
 
 <div class="atum-meta-box <?php echo esc_attr( $post_type->name ) ?>_items">
@@ -100,6 +101,7 @@ $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limi
 
 					do_action( 'atum/atum_order/before_item_' . $item->get_type() . '_html', $item_id, $item, $atum_order );
 					include 'item.php';
+					$added_products[] = $item->get_variation_id() ?: $item->get_product_id();
 					do_action( 'atum/atum_order/after_item_' . $item->get_type() . '_html', $item_id, $item, $atum_order );
 
 				endforeach;
@@ -270,9 +272,13 @@ $post_search = PurchaseOrders::get_post_type() === $post_type->name ? 'data-limi
 					<article>
 						<?php do_action( 'atum/atum_order/before_product_search_modal', $atum_order ); ?>
 						<form action="" method="post">
-							<select class="wc-product-search atum-enhanced-select" multiple="multiple" style="width: 50%;" id="add_item_id" name="add_atum_order_items[]"
-								data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>" data-action="atum_json_search_products"
-								<?php echo $post_search; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>></select>
+							<select class="wc-product-search atum-enhanced-select" multiple="multiple" style="width: 50%;" id="add_item_id"
+								name="add_atum_order_items[]"
+								data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', ATUM_TEXT_DOMAIN ); ?>"
+								data-action="atum_json_search_products"
+								data-exclude="<?php echo esc_attr( implode( ',', $added_products ) ); ?>"
+								<?php echo $post_search; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							></select>
 						</form>
 					</article>
 

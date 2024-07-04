@@ -1309,8 +1309,8 @@ final class Ajax {
 		}
 
 		$limit       = ! empty( $_GET['limit'] ) ? absint( $_GET['limit'] ) : absint( apply_filters( 'atum/ajax/search_products/json_search_limit', 30 ) );
-		$include_ids = ! empty( $_GET['include'] ) ? array_map( 'absint', (array) wp_unslash( $_GET['include'] ) ) : [];
-		$exclude_ids = ! empty( $_GET['exclude'] ) ? array_map( 'absint', (array) wp_unslash( $_GET['exclude'] ) ) : [];
+		$include_ids = ! empty( $_GET['include'] ) ? explode( ',', wp_unslash( $_GET['include'] ) ) : [];
+		$exclude_ids = ! empty( $_GET['exclude'] ) ? explode( ',', wp_unslash( $_GET['exclude'] ) ) : [];
 
 		$ids = Helpers::search_products( $term, '', TRUE, FALSE, $limit, $include_ids, $exclude_ids );
 		
