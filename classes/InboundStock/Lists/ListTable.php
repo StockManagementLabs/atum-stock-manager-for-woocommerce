@@ -285,7 +285,7 @@ class ListTable extends AtumListTable {
 				return parent::column_calc_type( $item );
 		}
 
-		$data_tip = ! $this->is_report ? ' data-tip="' . esc_attr( $product_tip ) . '"' : '';
+		$data_tip = ! self::$is_report ? ' data-tip="' . esc_attr( $product_tip ) . '"' : '';
 
 		return apply_filters( 'atum/inbound_stock_list/column_type', '<span class="product-type tips ' . $type . '"' . $data_tip . '></span>', $item, $this->list_item );
 
