@@ -4,6 +4,7 @@
 	"license": "Copyrighted",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
+	"type": "wordpress-plugin",
 	"config": {
 		"preferred-install": "dist"
 	},
