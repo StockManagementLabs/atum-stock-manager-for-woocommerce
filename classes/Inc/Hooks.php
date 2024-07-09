@@ -146,6 +146,9 @@ class Hooks {
 		// Add a modal to the WC settings page to alert the user about the ATUM incompatibility with the new product editor.
 		add_action( 'admin_enqueue_scripts', array( $this, 'add_wc_product_editor_modal' ) );
 
+		// Prevent WooPayments reduce stock. (move this)
+		add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'maybe_skip_woopayments_reduce_order_stock' ), PHP_INT_MAX, 2 );
+
 	}
 
 	/**
@@ -1458,6 +1461,31 @@ class Hooks {
 			) );
 			wp_enqueue_script( 'atum_product_editor_modal' );
 		}
+
+	}
+
+	/**
+	 * Prevent WooPayments reduce order stock and override ATUM methods.
+	 *
+	 * @since 1.9.34
+	 *
+	 * @param boolean   $can_reduce_stock
+	 * @param \WC_Order $order
+	 *
+	 * @return boolean
+	 */
+	public function maybe_skip_woopayments_reduce_order_stock( $can_reduce_stock, $order ) {
+
+		if (
+			class_exists( '\WC_Payment_Gateway_WCPay' ) &&
+			wc_string_to_bool( Helpers::get_option( 'chg_stock_order_complete', 'no' ) ) &&
+			'processing' === $order->get_status() &&
+			'woocommerce_payments' === $order->get_payment_method()
+		) {
+			$can_reduce_stock = apply_filters( 'atum/reduce_order_stock/maybe_allow_woopayments', FALSE, $order );
+		}
+
+		return $can_reduce_stock;
 
 	}
 
