@@ -71,6 +71,18 @@ final class Globals {
 	];
 
 	/**
+	 * WC_Order on hold statuses
+	 *
+	 * @since 1.9.39.3
+	 *
+	 * @var string[]
+	 */
+	private static $order_statuses_on_hold = [
+		'wc-processing',
+		'wc-on-hold',
+	];
+
+	/**
 	 * Product statuses that are supported on ATUM queries
 	 *
 	 * @var string[]
@@ -329,6 +341,19 @@ final class Globals {
 	 */
 	public static function get_order_statuses_change_stock() {
 		return (array) apply_filters( 'atum/order_statuses_allow_change_stock', self::$order_statuses_change_stock );
+	}
+
+	/**
+	 * Get the WC_Order statuses considered as on hold
+	 *
+	 * @since 1.9.39.3
+	 *
+	 * @return string[]
+	 */
+	public static function get_order_statuses_on_hold() {
+
+		return (array) apply_filters( 'atum/order_statuses_on_hold', self::$order_statuses_on_hold );
+
 	}
 
 	/**
