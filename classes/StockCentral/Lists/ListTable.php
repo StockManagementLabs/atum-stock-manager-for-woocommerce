@@ -972,11 +972,13 @@ class ListTable extends AtumListTable {
 					break;
 
 				case 'stock_on_hold':
+					$on_hold_statuses = "'" . implode( "','", Globals::get_order_statuses_on_hold() ) . "'";
+
 					if ( Helpers::is_using_hpos_tables() ) {
-						$orders_sql = "SELECT `id` FROM `{$wpdb->prefix}wc_orders` WHERE `type` = 'shop_order' AND `status` IN ('wc-processing', 'wc-on-hold')";
+						$orders_sql = "SELECT `id` FROM `{$wpdb->prefix}wc_orders` WHERE `type` = 'shop_order' AND `status` IN ($on_hold_statuses)";
 					}
 					else {
-						$orders_sql = "SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ('wc-processing', 'wc-on-hold')";
+						$orders_sql = "SELECT `ID` FROM `$wpdb->posts` WHERE `post_type` = 'shop_order' AND `post_status` IN ($on_hold_statuses)";
 					}
 
 					$sql = "

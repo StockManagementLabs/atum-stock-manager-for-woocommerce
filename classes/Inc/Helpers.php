@@ -2026,14 +2026,15 @@ final class Helpers {
 
 				}
 
-				$product_ids = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
-				$product_sql = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
+				$product_ids      = apply_filters( 'atum/product_calc_stock_on_hold/product_ids', $product->get_id(), $post_type );
+				$product_sql      = is_array( $product_ids ) ? 'IN (' . implode( ',', $product_ids ) . ')' : "= $product_ids";
+				$on_hold_statuses = "'" . implode( "','", Globals::get_order_statuses_on_hold() ) . "'";
 
 				if ( self::is_using_hpos_tables() ) {
-					$orders_sql = "SELECT id FROM {$wpdb->prefix}wc_orders WHERE type = 'shop_order' AND status IN ('wc-processing', 'wc-on-hold')";
+					$orders_sql = "SELECT id FROM {$wpdb->prefix}wc_orders WHERE type = 'shop_order' AND status IN ($on_hold_statuses)";
 				}
 				else {
-					$orders_sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ('wc-processing', 'wc-on-hold')";
+					$orders_sql = "SELECT ID FROM $wpdb->posts WHERE post_type = 'shop_order' AND post_status IN ($on_hold_statuses)";
 				}
 
 				// phpcs:disable
