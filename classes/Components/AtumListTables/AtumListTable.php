@@ -4288,7 +4288,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			elseif ( empty( $column ) ) {
 
 				$empty_search = '';
-				$table_prefix ?: $wpdb->posts;
+				$table_prefix = $wpdb->posts ?: '';
 
 				foreach ( (array) apply_filters( 'atum/list_table/post_search_columns', [ 'post_title', 'post_excerpt', 'post_content' ], $term, $this ) as $search_field ) {
 
