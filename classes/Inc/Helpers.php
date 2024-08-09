@@ -2260,6 +2260,8 @@ final class Helpers {
 						$product->set_date_on_sale_from( $date_from_str );
 						$product->set_date_on_sale_to( $date_to_str );
 
+						unset( $product_data['_sale_price_dates_from'], $product_data['_sale_price_dates_to'] );
+
 					}
 					
 					break;
