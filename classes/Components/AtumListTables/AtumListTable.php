@@ -4254,13 +4254,15 @@ abstract class AtumListTable extends \WP_List_Table {
 			$exclude = $exclusion_prefix && ( substr( $term, 0, 1 ) === $exclusion_prefix );
 
 			if ( $exclude ) {
-				$operator = 'string' === $format ? 'NOT LIKE' : '!=';
-				$andor_op = 'AND';
-				$term     = substr( $term, 1 );
+				$operator   = 'string' === $format ? 'NOT LIKE' : '!=';
+				$andor_op   = 'AND';
+				$term       = substr( $term, 1 );
+				$neutral_op = '1=1';
 			}
 			else {
-				$operator = 'string' === $format ? 'LIKE' : '=';
-				$andor_op = 'OR';
+				$operator   = 'string' === $format ? 'LIKE' : '=';
+				$andor_op   = 'OR';
+				$neutral_op = '1=0';
 			}
 
 			switch ( $format ) {
@@ -4284,7 +4286,17 @@ abstract class AtumListTable extends \WP_List_Table {
 			}
 			// Regular search.
 			elseif ( empty( $column ) ) {
-				$search_query .= "{$search_op_str}(({$wpdb->posts}.post_title $operator $term) $andor_op ({$wpdb->posts}.post_excerpt $operator $term) $andor_op ({$wpdb->posts}.post_content $operator $term))";
+
+				$empty_search = '';
+				$table_prefix = $table_prefix ?: $wpdb->posts;
+
+				foreach ( (array) apply_filters( 'atum/list_table/post_search_columns', [ 'post_title', 'post_excerpt', 'post_content' ], $term, $this ) as $search_field ) {
+
+					$empty_search .= "($table_prefix.$search_field $operator $term) $andor_op ";
+				}
+
+
+				$search_query .= "{$search_op_str}($empty_search $neutral_op)";
 			}
 			// Search in column.
 			else {

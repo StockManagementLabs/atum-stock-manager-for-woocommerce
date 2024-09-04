@@ -934,7 +934,7 @@ final class WidgetHelpers {
             WHERE pch3.post_parent = p0.ID AND apd3.purchase_price IS NOT NULL AND apd3.purchase_price > 0
         ";
 
-		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', "IF( ms.meta_value = 'yes', CAST( st.meta_value AS DECIMAL(10,6) ), 0 )" );
+		$base_stock_field                   = apply_filters( 'atum/dashboard/stock_field', "IF( ms.meta_value = 'yes', CAST( st.meta_value AS DECIMAL(20,6) ), 0 )" );
 		$stock_field                        = "IF( NOT EXISTS($variation_children) OR EXISTS($unmanaged_children), IF( $base_stock_field > 0, $base_stock_field, 0 ), 0 )";
 		$stock_wo_purchase_price_field      = 'IF( ' . apply_filters( 'atum/dashboard/purchase_price_field', 'apd0.purchase_price > 0' ) . ", 0, $base_stock_field )";
 		$stock_without_purchase_price_field = "IF( NOT EXISTS($children_with_pp) AND (NOT EXISTS($variation_children) OR EXISTS($unmanaged_children)), $stock_wo_purchase_price_field, 0 )";
