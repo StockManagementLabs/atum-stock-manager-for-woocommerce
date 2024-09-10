@@ -462,10 +462,11 @@ abstract class AtumOrderModel {
 				$qty = $product->get_min_purchase_quantity();
 			}
 
+			$product_name  = apply_filters( 'atum/order/add_product/name', $product->get_name(), $product, $this );
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product, $this );
 
 			$default_args = array(
-				'name'         => $product->get_name(),
+				'name'         => $product_name,
 				'tax_class'    => $product->get_tax_class(),
 				'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
 				'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
