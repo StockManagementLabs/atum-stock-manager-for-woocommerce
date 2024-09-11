@@ -46,6 +46,11 @@ class AtumApi {
 	const ATUM_QA_APP_ORIGIN = 'capacitor://qa.stockmanagementlabs.atum';
 
 	/**
+	 * The CORS origin coming from the ATUM App running on a browser
+	 */
+	const ATUM_APP_BROWSER = 'https://com.stockmanagementlabs.atum';
+
+	/**
 	 * Max size limit for the API response pages.
 	 */
 	const PER_PAGE_LIMIT = 500;
@@ -256,7 +261,10 @@ class AtumApi {
 		if ( $origin ) {
 
 			// Requests from file:// and data: URLs send "Origin: null".
-			if ( self::ATUM_APP_ORIGIN !== $origin && self::ATUM_QA_APP_ORIGIN !== $origin && 'null' !== $origin ) {
+			if (
+				self::ATUM_APP_ORIGIN !== $origin && self::ATUM_QA_APP_ORIGIN !== $origin &&
+				self::ATUM_APP_BROWSER !== $origin && 'null' !== $origin
+			) {
 				$origin = esc_url_raw( $origin );
 			}
 
