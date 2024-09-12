@@ -6,23 +6,19 @@ export default [
 	{
 		plugins: { '@stylistic': pluginStylistic },
 		rules  : {
-			'@stylistic/indent'    : [ 'warn', 'tab' ],
-			'@stylistic/jsx-indent': [ 'error', 'tab', {
+			'capitalized-comments'                : [ 'warn', 'always' ],
+			'@stylistic/array-bracket-spacing'    : [ 'warn', 'always' ],
+			'@stylistic/arrow-parens'             : [ 'warn', 'always' ],
+			'@stylistic/computed-property-spacing': [ 'warn', 'always' ],
+			'@stylistic/indent'                   : [ 'warn', 'tab' ],
+			'@stylistic/indent-binary-ops'        : [ 'error', 'tab' ],
+			'@stylistic/jsx-curly-spacing'        : [ 'warn', 'always' ],
+			'@stylistic/jsx-indent'               : [ 'error', 'tab', {
 				checkAttributes         : true,
 				indentLogicalExpressions: true,
 			} ],
-			'@stylistic/indent-binary-ops': [ 'error', 'tab' ],
-			'@stylistic/jsx-indent-props' : [ 'error', 'tab' ],
-			'@stylistic/semi'             : [ 'warn', 'always' ],
-			'@stylistic/quotes'           : [ 'error', 'single', {
-				avoidEscape          : true,
-				allowTemplateLiterals: true,
-			} ],
-			'@stylistic/array-bracket-spacing'    : [ 'warn', 'always' ],
-			'@stylistic/no-tabs'                  : [ 'error', { allowIndentationTabs: true } ],
-			'@stylistic/computed-property-spacing': [ 'warn', 'always' ],
-			'@stylistic/jsx-curly-spacing'        : [ 'warn', 'always' ],
-			'@stylistic/key-spacing'              : [ 'warn', {
+			'@stylistic/jsx-indent-props': [ 'error', 'tab' ],
+			'@stylistic/key-spacing'     : [ 'warn', {
 				singleLine: {
 					beforeColon: false,
 					afterColon : true,
@@ -33,23 +29,7 @@ export default [
 					align      : 'colon',
 				},
 			} ],
-			'@stylistic/space-in-parens'                : [ 'warn', 'always' ],
-			'@stylistic/no-extra-semi'                  : 'error',
-			'@stylistic/padding-line-between-statements': [
-				'error',
-				{ blankLine: 'always', prev: '*', next: 'return' },
-				{ blankLine: 'always', prev: [ 'const', 'let', 'var' ], next: '*' },
-				{ blankLine: 'any', prev: [ 'const', 'let', 'var' ], next: [ 'const', 'let', 'var' ] },
-				{ blankLine: 'always', prev: [ 'case', 'default' ], next: '*' },
-				{ blankLine: 'always', prev: [ 'block', 'block-like' ], next: '*' },
-			],
-			'@stylistic/switch-colon-spacing'   : 'warn',
-			'@stylistic/template-curly-spacing' : [ 'warn', 'always' ],
-			'@stylistic/no-multi-spaces'        : 'off', // TODO...
-			'@stylistic/type-annotation-spacing': 'off', // TODO...
-			'@stylistic/no-trailing-spaces'     : [ 'error', { skipBlankLines: true } ],
-			'@stylistic/arrow-parens'           : [ 'warn', 'always' ],
-			'@stylistic/member-delimiter-style' : [
+			'@stylistic/member-delimiter-style': [
 				'warn',
 				{
 					multiline: {
@@ -63,9 +43,30 @@ export default [
 					multilineDetection: 'brackets',
 				},
 			],
-			'@stylistic/multiline-comment-style': [ 'warn', 'starred-block' ],
-			'@stylistic/padded-blocks'          : 'off',
-			'capitalized-comments'              : [ 'warn', 'always' ],
+			'@stylistic/multiline-comment-style'        : [ 'warn', 'starred-block' ],
+			'@stylistic/no-extra-semi'                  : 'error',
+			'@stylistic/no-mixed-spaces-and-tabs'       : [ 'error', 'smart-tabs' ],
+			'@stylistic/no-multi-spaces'                : 'off', // TODO...
+			'@stylistic/no-tabs'                        : [ 'off' ],
+			'@stylistic/no-trailing-spaces'             : [ 'error', { skipBlankLines: true } ],
+			'@stylistic/padded-blocks'                  : 'off',
+			'@stylistic/padding-line-between-statements': [
+				'error',
+				{ blankLine: 'always', prev: '*', next: 'return' },
+				{ blankLine: 'always', prev: [ 'const', 'let', 'var' ], next: '*' },
+				{ blankLine: 'any', prev: [ 'const', 'let', 'var' ], next: [ 'const', 'let', 'var' ] },
+				{ blankLine: 'always', prev: [ 'case', 'default' ], next: '*' },
+				{ blankLine: 'always', prev: [ 'block', 'block-like' ], next: '*' },
+			],
+			'@stylistic/quotes': [ 'error', 'single', {
+				avoidEscape          : true,
+				allowTemplateLiterals: true,
+			} ],
+			'@stylistic/semi'                   : [ 'warn', 'always' ],
+			'@stylistic/space-in-parens'        : [ 'warn', 'always' ],
+			'@stylistic/switch-colon-spacing'   : 'warn',
+			'@stylistic/template-curly-spacing' : [ 'warn', 'always' ],
+			'@stylistic/type-annotation-spacing': 'off', // TODO...
 			
 		},
 	},
