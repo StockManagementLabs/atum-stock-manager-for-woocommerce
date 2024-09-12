@@ -163,7 +163,7 @@ class AtumHelpGuide {
 				'scrollToElement'    => TRUE,
 			),
 			'hgNonce'              => wp_create_nonce( 'help-guide-nonce' ),
-			'hgShowHelpGuide'      => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
+			'hgShowHelpGuide'      => __( 'Show ATUM help guide', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpMarkers'    => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
 		);
 
