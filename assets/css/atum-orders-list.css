@@ -2968,6 +2968,8 @@ input[type=button].btn-block {
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;

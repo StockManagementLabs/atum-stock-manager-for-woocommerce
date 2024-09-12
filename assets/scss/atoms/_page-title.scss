@@ -38,6 +38,7 @@
 					top: 0;
 					transition: .2s ease-in-out;
 					display: inline-block;
+					box-sizing: content-box;
 					
 					&.extend-list-table {
 						font-size: 12px;

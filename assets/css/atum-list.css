@@ -3055,6 +3055,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3768,6 +3770,36 @@ body.atum-show-help-markers .atum-help-marker.active:hover:before {
 }
 body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-help-guide .atum-help-marker.active:hover:before {
   visibility: hidden !important;
+}
+
+#screen-meta-links #atum-help-guide-link-wrap {
+  float: left;
+  margin: -6px 0 0 6px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .show-settings {
+  padding-left: 7px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .show-settings:after {
+  content: none;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons {
+  margin-top: 0;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i {
+  border: none;
+  padding: 5px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i:hover {
+  background-color: transparent;
+  color: #00B8DB;
+}
+@media all and (max-width: 782px) {
+  #screen-meta-links #atum-help-guide-link-wrap {
+    margin-top: -1px !important;
+  }
+  #screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i {
+    padding: 8px;
+  }
 }
 
 @-webkit-keyframes loader-rotate {
