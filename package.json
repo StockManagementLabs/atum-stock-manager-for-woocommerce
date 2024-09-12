@@ -18,11 +18,11 @@
 		"node": ">=20"
 	},
 	"devDependencies": {
-		"@stylistic/eslint-plugin": "^2.3.0",
+		"@stylistic/eslint-plugin": "^2.8.0",
 		"@types/es6-shim": "^0.31.45",
-		"@types/jquery": "^2.0.68",
-		"autoprefixer": "^10.4.19",
-		"eslint": "^9.6.0",
+		"@types/jquery": "^2.0.66",
+		"autoprefixer": "^10.4.20",
+		"eslint": "^9.10.0",
 		"eslint-webpack-plugin": "^4.2.0",
 		"gulp": "^5.0.0",
 		"gulp-autoprefixer": "^9.0.0",
@@ -35,12 +35,12 @@
 		"gulp-sass": "^5.1.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-wrap": "^0.15.0",
-		"sass": "^1.77.6",
-		"terser-webpack-plugin": "^5.3.10",
+		"sass": "^1.78.0",
+		"terser-webpack-plugin" : "^5.3.10",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.5.2",
-		"typescript-eslint": "^8.0.0-alpha.38",
-		"webpack": "^5.92.1",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.5.0",
+		"webpack": "^5.94.0",
 		"webpack-stream": "^7.0.0"
 	},
 	"dependencies": {
