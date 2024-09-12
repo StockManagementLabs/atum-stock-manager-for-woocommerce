@@ -7,4 +7,459 @@
  * License : ©2024 Stock Management Labs 
  */
 
- :root{--gray-100: #f8f9fa;--gray-100-hover: rgba(248, 249, 250, 0.6);--gray-100-shadow: rgba(248, 249, 250, 0.2);--gray-200: #e9ecef;--gray-200-hover: rgba(233, 236, 239, 0.6);--gray-200-shadow: rgba(233, 236, 239, 0.2);--gray-300: #dee2e6;--gray-300-hover: rgba(222, 226, 230, 0.6);--gray-300-shadow: rgba(222, 226, 230, 0.2);--gray-400: #ced4da;--gray-400-hover: rgba(206, 212, 218, 0.6);--gray-400-shadow: rgba(206, 212, 218, 0.2);--gray-500: #adb5bd;--gray-500-hover: rgba(173, 181, 189, 0.6);--gray-500-shadow: rgba(173, 181, 189, 0.2);--gray-600: #6c757d;--gray-600-hover: rgba(108, 117, 125, 0.6);--gray-600-shadow: rgba(108, 117, 125, 0.2);--gray-700: #495057;--gray-700-hover: rgba(73, 80, 87, 0.6);--gray-700-shadow: rgba(73, 80, 87, 0.2);--gray-800: #343a40;--gray-800-hover: rgba(52, 58, 64, 0.6);--gray-800-shadow: rgba(52, 58, 64, 0.2);--gray-900: #212529;--gray-900-hover: rgba(33, 37, 41, 0.6);--gray-900-shadow: rgba(33, 37, 41, 0.2);--blue: #00B8DB;--blue-hover: rgba(0, 184, 219, 0.6);--blue-shadow: rgba(0, 184, 219, 0.2);--blue-gray-light: #E3E8F5;--blue-gray-light-hover: rgba(227, 232, 245, 0.6);--blue-gray-light-shadow: rgba(227, 232, 245, 0.2);--orange: #EFAF00;--orange-hover: rgba(239, 175, 0, 0.6);--orange-shadow: rgba(239, 175, 0, 0.2);--red: #ff4848;--red-hover: rgba(255, 72, 72, 0.6);--red-shadow: rgba(255, 72, 72, 0.2);--red-light: #ffe1e1;--red-light-hover: rgba(255, 225, 225, 0.6);--red-light-shadow: rgba(255, 225, 225, 0.2);--red-light-2: #fff5f5;--red-light-2-hover: rgba(255, 245, 245, 0.6);--red-light-2-shadow: rgba(255, 245, 245, 0.2);--green: #69C61D;--green-hover: rgba(105, 198, 29, 0.6);--green-shadow: rgba(105, 198, 29, 0.2);--green-light: #d5f5ba;--green-light-hover: rgba(213, 245, 186, 0.6);--green-light-shadow: rgba(213, 245, 186, 0.2);--blue-light: #dbf9ff;--blue-light-hover: rgba(219, 249, 255, 0.6);--blue-light-shadow: rgba(219, 249, 255, 0.2);--blue-dark: #27283B;--blue-dark-hover: rgba(39, 40, 59, 0.6);--blue-dark-shadow: rgba(39, 40, 59, 0.2);--blue-dark-lighten: #3b3d5a;--blue-dark-lighten-hover: rgba(59, 61, 90, 0.6);--blue-dark-lighten-shadow: rgba(59, 61, 90, 0.2);--blue-dark-light-2: #8284ac;--blue-dark-light-2-hover: rgba(130, 132, 172, 0.6);--blue-dark-light-2-shadow: rgba(130, 132, 172, 0.2);--white: #fff;--white-hover: rgba(255, 255, 255, 0.6);--white-shadow: rgba(255, 255, 255, 0.2);--gray: #adb5bd;--gray-hover: rgba(173, 181, 189, 0.6);--gray-shadow: rgba(173, 181, 189, 0.2);--gray-light: #e9ecef;--gray-light-hover: rgba(233, 236, 239, 0.6);--gray-light-shadow: rgba(233, 236, 239, 0.2);--gray-dark: #343a40;--gray-dark-hover: rgba(52, 58, 64, 0.6);--gray-dark-shadow: rgba(52, 58, 64, 0.2);--purple: #BA7DF7;--purple-hover: rgba(186, 125, 247, 0.6);--purple-shadow: rgba(186, 125, 247, 0.2);--purple-light: #edddfd;--purple-light-hover: rgba(237, 221, 253, 0.6);--purple-light-shadow: rgba(237, 221, 253, 0.2);--purple-pl: #9357cc;--purple-pl-hover: rgba(147, 87, 204, 0.6);--purple-pl-shadow: rgba(147, 87, 204, 0.2);--black: #000;--black-hover: rgba(0, 0, 0, 0.6);--black-shadow: rgba(0, 0, 0, 0.2);--primary: #00B8DB;--primary-hover: rgba(0, 184, 219, 0.6);--primary-shadow: rgba(0, 184, 219, 0.2);--primary-hover-border: none;--secondary: #EFAF00;--secondary-hover: rgba(239, 175, 0, 0.6);--secondary-shadow: rgba(239, 175, 0, 0.2);--secondary-hover-border: none;--tertiary: #69C61D;--tertiary-hover: rgba(105, 198, 29, 0.6);--tertiary-shadow: rgba(105, 198, 29, 0.2);--tertiary-hover-border: none;--success: #69C61D;--success-hover: rgba(105, 198, 29, 0.6);--success-shadow: rgba(105, 198, 29, 0.2);--success-hover-border: none;--main: #00B8DB;--main-hover: rgba(0, 184, 219, 0.6);--main-shadow: rgba(0, 184, 219, 0.2);--main-hover-border: none;--info: #E3E8F5;--info-hover: rgba(227, 232, 245, 0.6);--info-shadow: rgba(227, 232, 245, 0.2);--info-hover-border: none;--warning: #EFAF00;--warning-hover: rgba(239, 175, 0, 0.6);--warning-shadow: rgba(239, 175, 0, 0.2);--warning-hover-border: none;--danger: #ff4848;--danger-hover: rgba(255, 72, 72, 0.6);--danger-shadow: rgba(255, 72, 72, 0.2);--danger-hover-border: none;--light: #f8f9fa;--light-hover: rgba(248, 249, 250, 0.6);--light-shadow: rgba(248, 249, 250, 0.2);--light-hover-border: none;--dark: #343a40;--dark-hover: rgba(52, 58, 64, 0.6);--dark-shadow: rgba(52, 58, 64, 0.2);--dark-hover-border: none;--purple-pl: #9357cc;--purple-pl-hover: rgba(147, 87, 204, 0.6);--purple-pl-shadow: rgba(147, 87, 204, 0.2);--purple-pl-hover-border: none;--gray: #6c757d;--gray-hover: rgba(108, 117, 125, 0.6);--gray-shadow: rgba(108, 117, 125, 0.2);--gray-hover-border: none;--default: #adb5bd;--default-hover: rgba(173, 181, 189, 0.6);--default-shadow: rgba(173, 181, 189, 0.2);--default-hover-border: none;--wp-link: #0073AA;--wp-link-hover: rgba(0, 115, 170, 0.6);--wp-link-shadow: rgba(0, 115, 170, 0.2);--wp-link-hover: #00A0D2;--wp-link-hover-hover: rgba(0, 160, 210, 0.6);--wp-link-hover-shadow: rgba(0, 160, 210, 0.2);--wp-input-focus: #007CBA;--wp-input-focus-hover: rgba(0, 124, 186, 0.6);--wp-input-focus-shadow: rgba(0, 124, 186, 0.2);--wp-pink: #E6CCE1;--wp-pink-hover: rgba(230, 204, 225, 0.6);--wp-pink-shadow: rgba(230, 204, 225, 0.2);--wp-pink-light: #F5EBF3;--wp-pink-light-hover: rgba(245, 235, 243, 0.6);--wp-pink-light-shadow: rgba(245, 235, 243, 0.2);--wp-pink-lighter: #FBF9FB;--wp-pink-lighter-hover: rgba(251, 249, 251, 0.6);--wp-pink-lighter-shadow: rgba(251, 249, 251, 0.2);--wp-gray-dark: #32373C;--wp-gray-dark-hover: rgba(50, 55, 60, 0.6);--wp-gray-dark-shadow: rgba(50, 55, 60, 0.2);--wp-gray-1: #999;--wp-gray-1-hover: rgba(153, 153, 153, 0.6);--wp-gray-1-shadow: rgba(153, 153, 153, 0.2);--wp-gray-3: #B4B9BE;--wp-gray-3-hover: rgba(180, 185, 190, 0.6);--wp-gray-3-shadow: rgba(180, 185, 190, 0.2);--wp-gray-4: #DDD;--wp-gray-4-hover: rgba(221, 221, 221, 0.6);--wp-gray-4-shadow: rgba(221, 221, 221, 0.2);--wp-gray-5: #E5E5E5;--wp-gray-5-hover: rgba(229, 229, 229, 0.6);--wp-gray-5-shadow: rgba(229, 229, 229, 0.2);--wp-gray-6: #f9f9f9;--wp-gray-6-hover: rgba(249, 249, 249, 0.6);--wp-gray-6-shadow: rgba(249, 249, 249, 0.2);--wp-gray-7: #888;--wp-gray-7-hover: rgba(136, 136, 136, 0.6);--wp-gray-7-shadow: rgba(136, 136, 136, 0.2);--wc-blue-gray: #2e4453;--wc-blue-gray-hover: rgba(46, 68, 83, 0.6);--wc-blue-gray-shadow: rgba(46, 68, 83, 0.2);--wc-blue-gray-light: #C8D7E1;--wc-blue-gray-light-hover: rgba(200, 215, 225, 0.6);--wc-blue-gray-light-shadow: rgba(200, 215, 225, 0.2);--wc-green: #5B841B;--wc-green-hover: rgba(91, 132, 27, 0.6);--wc-green-shadow: rgba(91, 132, 27, 0.2);--wc-green-light: #C6E1C6;--wc-green-light-hover: rgba(198, 225, 198, 0.6);--wc-green-light-shadow: rgba(198, 225, 198, 0.2);--wc-orange: #94660c;--wc-orange-hover: rgba(148, 102, 12, 0.6);--wc-orange-shadow: rgba(148, 102, 12, 0.2);--wc-orange-light: #f8dda7;--wc-orange-light-hover: rgba(248, 221, 167, 0.6);--wc-orange-light-shadow: rgba(248, 221, 167, 0.2);--orange-light-2: #fff8e5;--orange-light-2-hover: rgba(255, 248, 229, 0.6);--orange-light-2-shadow: rgba(255, 248, 229, 0.2);--wc-red: #761919;--wc-red-hover: rgba(118, 25, 25, 0.6);--wc-red-shadow: rgba(118, 25, 25, 0.2);--wc-red-light: #eba3a3;--wc-red-light-hover: rgba(235, 163, 163, 0.6);--wc-red-light-shadow: rgba(235, 163, 163, 0.2);--wc-purple: #9a69c7;--wc-purple-hover: rgba(154, 105, 199, 0.6);--wc-purple-shadow: rgba(154, 105, 199, 0.2);--atum-add-widget-title: #343a40;--atum-add-widget-separator: #f8f9fa;--atum-bg-white: #fff;--atum-border-expanded: #adb5bd;--atum-border-var: #e9ecef;--atum-cloned-list-table-shadow: rgba(0, 0, 0, 0.04);--atum-column-groups-bg: #e9ecef;--atum-dark-bg: #3b3d5a;--atum-dropdown-toggle-bg: #e9ecef;--atum-easytree-node: #343a40;--atum-expanded-bg: #fff;--atum-footer-title: #27283B;--atum-footer-link: #0073AA;--atum-footer-text: #495057;--atum-menu-text: #00B8DB;--atum-menu-text-highlight: #00B8DB;--atum-pagination-bg: #e9ecef;--atum-pagination-border: transparent;--atum-pagination-border-disabled: transparent;--atum-row-shadow: rgba(0, 0, 0, 0.04);--atum-settings-btn-save: #fff;--atum-settings-btn-save-hover: #dbf9ff;--atum-settings-input-border: #e9ecef;--atum-settings-heads-bg: #00B8DB;--atum-settings-nav-bg: #fff;--atum-settings-nav-link: #00B8DB;--atum-settings-section-general-bg: #3b3d5a;--atum-settings-section-bg: #fff;--atum-settings-text-logo: #27283B;--atum-settings-wp-color-bg: transparent;--atum-table-bg: #fff;--atum-table-bg2: #f8f9fa;--atum-table-filter-dropdown: #6c757d;--atum-table-link-text: #00B8DB;--atum-table-row-variation-text: #fff;--atum-table-search-submit-bg: #adb5bd;--atum-table-search-text-disabled: #ced4da;--atum-table-views-tabs: #6c757d;--atum-table-views-tabs-active: #00B8DB;--atum-table-views-tabs-active-text: #fff;--atum-table-text: #343a40;--atum-text-color-dark2: #6c757d;--atum-text-color-var1: #adb5bd;--atum-text-color-var2: #adb5bd;--atum-text-color-var3: #6c757d;--atum-text-white: #fff;--atum-version: #fff;--atum-version-bg: rgba(0, 0, 0, 0.2);--atum-checkbox-label: #000;--atum-input-text: #6c757d;--atum-setting-info: #495057;--atum-section-field: #fff;--black-shadow-light: rgba(0, 0, 0, 0.04);--blue-light-expanded: #dbf9ff;--danger-hover-border: 1px solid transparent;--danger-hover-text: #fff;--dash-add-widget-color: #adb5bd;--dash-add-widget-color-dark: #00B8DB;--dash-atum-version: rgba(0, 0, 0, 0.1);--dash-blue-trans: rgba(0, 183, 219, 0.79);--dash-card-bg: #f8f9fa;--dash-card-text: #6c757d;--dash-green-blue: rgba(30, 200, 149, 0.79);--dash-green-light: #d5f5ba;--dash-green-trans: rgba(106, 200, 30, 0.79);--dash-input-group-bg: rgba(255, 255, 255, 0.66);--dash-input-group-shadow: rgba(255, 255, 255, 0.2);--dash-next-text: #e9ecef;--dash-nice-select-bg: #fff;--dash-nice-select-disabled: #eff1f3;--dash-nice-select-disabled-after: #e6e8ea;--dash-nice-select-hover: #cbd3da;--dash-nice-select-list-bg: #fff;--dash-nice-select-option-hover-bg: #f8f9fa;--dash-nice-select-option-selected-bg: #dbf9ff;--dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);--dash-statistics-chart-type-selected-bg: transparent;--dash-statistics-chart-type-selected-text: #EFAF00;--dash-statistics-grid-lines: #e9ecef;--dash-statistics-legend-switch-bg: rgba(248, 249, 250, 0.2);--dash-statistics-ticks: #27283B;--dash-stats-data-widget-primary: #00B8DB;--dash-stats-data-widget-success: #69C61D;--dash-subscription-input: rgba(255, 255, 255, 0.7);--dash-video-title: #343a40;--dash-video-subs-text: #adb5bd;--dash-widget-current-stock-value-bg: #ffe1e1;--dash-widget-current-stock-value-text: #ff4848;--dash-widget-icon: #adb5bd;--dash-widget-list-border: rgba(248, 249, 250, 0.5);--green-light-expanded: #d5f5ba;--info-hover-border: 1px solid transparent;--main-border: rgba(255, 255, 255, 0.2);--main-border-alt: #6c757d;--main-dropdown-border: #dee2e6;--main-text: #343a40;--main-text-expanded: #fff;--main-title: #27283B;--orange-dark-light: #ffdf89;--order-green-light: #d5f5ba;--overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));--overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));--popover-black-shadow: rgba(0, 0, 0, 0.2);--primary-dark: #dbf9ff;--primary-light: #f5fdff;--primary-hover-border: none;--primary-hover-text: #00B8DB;--primary-var-dark: #00B8DB;--primary-var-text2: #00B8DB;--secondary: #EFAF00;--secondary-dark: #ffedbc;--secondary-hover: rgba(239, 175, 0, 0.6);--secondary-hover-border: none;--secondary-hover-text: #EFAF00;--secondary-light: #fff8e5;--secondary-var: #EFAF00;--success-hover-border: 1px solid transparent;--tertiary-hover-border: none;--tertiary-hover-text: #69C61D;--tertiary-light: #f0fbe7;--tertiary-var: #69C61D;--warning-hover-border: 1px solid transparent;--wp-link-hover: #00B8DB;--wp-nth-child: #f8f9fa;--wp-pink-darken-expanded: #e7d0e3;--wc-purple-expanded: #9a69c7;--wp-yiq-text-dark: #212529;--wp-yiq-text-light: #fff}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif}.po-wrapper{width:calc(100% - 40px);padding:30px 20px 20px 20px;font-size:14px}.float-left{float:left}.float-right{float:right}.label{font-weight:bold}.content-header .float-right{text-align:right;width:250px}.content-header .float-left{width:60%}.content-header strong{font-size:20px}.po-title{margin-top:0;margin-bottom:10px;font-size:25px;color:#00b8db;text-transform:uppercase}.content-address .float-left{width:40%}.content-address .float-right{width:40%}.content-address h4{font-size:18px;background-color:#00b8db;color:#fff;padding:5px 10px;margin:0;text-transform:uppercase}.content-lines{padding:0 20px}.content-lines table{width:100%;border-collapse:collapse}.content-lines .po-li-head{background-color:#00b8db}.content-lines .po-li-head th{color:#fff;text-transform:uppercase}.content-lines th,.content-lines td{font-size:14px;text-align:right;width:10%;white-space:nowrap;vertical-align:top;padding:5px 10px}.content-lines .description{text-align:left;white-space:unset !important}.content-lines .qty{text-align:center}.content-lines td.total,.content-lines .po-lines tr:nth-child(even) td{background-color:rgba(0,184,219,.1)}.atum-order-item-sku{color:#888;font-size:12px}.content-totals .subtotal td{border-top:2px solid #00b8db;padding-top:20px}.po-total .label,.po-total .total{border-top:2px solid #00b8db;font-weight:bold}.content-description .label{text-transform:uppercase}.po-content{border:1px solid #ddd;padding:10px;margin-top:10px}
+ /*
+ * Bootstrap 5
+ */
+:root {
+  --gray-100: #f8f9fa;
+  --gray-100-hover: rgba(248, 249, 250, 0.6);
+  --gray-100-shadow: rgba(248, 249, 250, 0.2);
+  --gray-200: #e9ecef;
+  --gray-200-hover: rgba(233, 236, 239, 0.6);
+  --gray-200-shadow: rgba(233, 236, 239, 0.2);
+  --gray-300: #dee2e6;
+  --gray-300-hover: rgba(222, 226, 230, 0.6);
+  --gray-300-shadow: rgba(222, 226, 230, 0.2);
+  --gray-400: #ced4da;
+  --gray-400-hover: rgba(206, 212, 218, 0.6);
+  --gray-400-shadow: rgba(206, 212, 218, 0.2);
+  --gray-500: #adb5bd;
+  --gray-500-hover: rgba(173, 181, 189, 0.6);
+  --gray-500-shadow: rgba(173, 181, 189, 0.2);
+  --gray-600: #6c757d;
+  --gray-600-hover: rgba(108, 117, 125, 0.6);
+  --gray-600-shadow: rgba(108, 117, 125, 0.2);
+  --gray-700: #495057;
+  --gray-700-hover: rgba(73, 80, 87, 0.6);
+  --gray-700-shadow: rgba(73, 80, 87, 0.2);
+  --gray-800: #343a40;
+  --gray-800-hover: rgba(52, 58, 64, 0.6);
+  --gray-800-shadow: rgba(52, 58, 64, 0.2);
+  --gray-900: #212529;
+  --gray-900-hover: rgba(33, 37, 41, 0.6);
+  --gray-900-shadow: rgba(33, 37, 41, 0.2);
+  --blue: #00B8DB;
+  --blue-hover: rgba(0, 184, 219, 0.6);
+  --blue-shadow: rgba(0, 184, 219, 0.2);
+  --blue-gray-light: #E3E8F5;
+  --blue-gray-light-hover: rgba(227, 232, 245, 0.6);
+  --blue-gray-light-shadow: rgba(227, 232, 245, 0.2);
+  --orange: #EFAF00;
+  --orange-hover: rgba(239, 175, 0, 0.6);
+  --orange-shadow: rgba(239, 175, 0, 0.2);
+  --red: #ff4848;
+  --red-hover: rgba(255, 72, 72, 0.6);
+  --red-shadow: rgba(255, 72, 72, 0.2);
+  --red-light: #ffe1e1;
+  --red-light-hover: rgba(255, 225, 225, 0.6);
+  --red-light-shadow: rgba(255, 225, 225, 0.2);
+  --red-light-2: #fff5f5;
+  --red-light-2-hover: rgba(255, 245, 245, 0.6);
+  --red-light-2-shadow: rgba(255, 245, 245, 0.2);
+  --green: #69C61D;
+  --green-hover: rgba(105, 198, 29, 0.6);
+  --green-shadow: rgba(105, 198, 29, 0.2);
+  --green-light: #d5f5ba;
+  --green-light-hover: rgba(213, 245, 186, 0.6);
+  --green-light-shadow: rgba(213, 245, 186, 0.2);
+  --blue-light: #dbf9ff;
+  --blue-light-hover: rgba(219, 249, 255, 0.6);
+  --blue-light-shadow: rgba(219, 249, 255, 0.2);
+  --blue-dark: #27283B;
+  --blue-dark-hover: rgba(39, 40, 59, 0.6);
+  --blue-dark-shadow: rgba(39, 40, 59, 0.2);
+  --blue-dark-lighten: #3b3d5a;
+  --blue-dark-lighten-hover: rgba(59, 61, 90, 0.6);
+  --blue-dark-lighten-shadow: rgba(59, 61, 90, 0.2);
+  --blue-dark-light-2: #8284ac;
+  --blue-dark-light-2-hover: rgba(130, 132, 172, 0.6);
+  --blue-dark-light-2-shadow: rgba(130, 132, 172, 0.2);
+  --white: #fff;
+  --white-hover: rgba(255, 255, 255, 0.6);
+  --white-shadow: rgba(255, 255, 255, 0.2);
+  --gray: #adb5bd;
+  --gray-hover: rgba(173, 181, 189, 0.6);
+  --gray-shadow: rgba(173, 181, 189, 0.2);
+  --gray-light: #e9ecef;
+  --gray-light-hover: rgba(233, 236, 239, 0.6);
+  --gray-light-shadow: rgba(233, 236, 239, 0.2);
+  --gray-dark: #343a40;
+  --gray-dark-hover: rgba(52, 58, 64, 0.6);
+  --gray-dark-shadow: rgba(52, 58, 64, 0.2);
+  --purple: #BA7DF7;
+  --purple-hover: rgba(186, 125, 247, 0.6);
+  --purple-shadow: rgba(186, 125, 247, 0.2);
+  --purple-light: #edddfd;
+  --purple-light-hover: rgba(237, 221, 253, 0.6);
+  --purple-light-shadow: rgba(237, 221, 253, 0.2);
+  --purple-pl: #9357cc;
+  --purple-pl-hover: rgba(147, 87, 204, 0.6);
+  --purple-pl-shadow: rgba(147, 87, 204, 0.2);
+  --black: #000;
+  --black-hover: rgba(0, 0, 0, 0.6);
+  --black-shadow: rgba(0, 0, 0, 0.2);
+  --primary: #00B8DB;
+  --primary-hover: rgba(0, 184, 219, 0.6);
+  --primary-shadow: rgba(0, 184, 219, 0.2);
+  --primary-hover-border: none;
+  --secondary: #EFAF00;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
+  --secondary-shadow: rgba(239, 175, 0, 0.2);
+  --secondary-hover-border: none;
+  --tertiary: #69C61D;
+  --tertiary-hover: rgba(105, 198, 29, 0.6);
+  --tertiary-shadow: rgba(105, 198, 29, 0.2);
+  --tertiary-hover-border: none;
+  --success: #69C61D;
+  --success-hover: rgba(105, 198, 29, 0.6);
+  --success-shadow: rgba(105, 198, 29, 0.2);
+  --success-hover-border: none;
+  --main: #00B8DB;
+  --main-hover: rgba(0, 184, 219, 0.6);
+  --main-shadow: rgba(0, 184, 219, 0.2);
+  --main-hover-border: none;
+  --info: #E3E8F5;
+  --info-hover: rgba(227, 232, 245, 0.6);
+  --info-shadow: rgba(227, 232, 245, 0.2);
+  --info-hover-border: none;
+  --warning: #EFAF00;
+  --warning-hover: rgba(239, 175, 0, 0.6);
+  --warning-shadow: rgba(239, 175, 0, 0.2);
+  --warning-hover-border: none;
+  --danger: #ff4848;
+  --danger-hover: rgba(255, 72, 72, 0.6);
+  --danger-shadow: rgba(255, 72, 72, 0.2);
+  --danger-hover-border: none;
+  --light: #f8f9fa;
+  --light-hover: rgba(248, 249, 250, 0.6);
+  --light-shadow: rgba(248, 249, 250, 0.2);
+  --light-hover-border: none;
+  --dark: #343a40;
+  --dark-hover: rgba(52, 58, 64, 0.6);
+  --dark-shadow: rgba(52, 58, 64, 0.2);
+  --dark-hover-border: none;
+  --purple-pl: #9357cc;
+  --purple-pl-hover: rgba(147, 87, 204, 0.6);
+  --purple-pl-shadow: rgba(147, 87, 204, 0.2);
+  --purple-pl-hover-border: none;
+  --gray: #6c757d;
+  --gray-hover: rgba(108, 117, 125, 0.6);
+  --gray-shadow: rgba(108, 117, 125, 0.2);
+  --gray-hover-border: none;
+  --default: #adb5bd;
+  --default-hover: rgba(173, 181, 189, 0.6);
+  --default-shadow: rgba(173, 181, 189, 0.2);
+  --default-hover-border: none;
+  --wp-link: #0073AA;
+  --wp-link-hover: rgba(0, 115, 170, 0.6);
+  --wp-link-shadow: rgba(0, 115, 170, 0.2);
+  --wp-link-hover: #00A0D2;
+  --wp-link-hover-hover: rgba(0, 160, 210, 0.6);
+  --wp-link-hover-shadow: rgba(0, 160, 210, 0.2);
+  --wp-input-focus: #007CBA;
+  --wp-input-focus-hover: rgba(0, 124, 186, 0.6);
+  --wp-input-focus-shadow: rgba(0, 124, 186, 0.2);
+  --wp-pink: #E6CCE1;
+  --wp-pink-hover: rgba(230, 204, 225, 0.6);
+  --wp-pink-shadow: rgba(230, 204, 225, 0.2);
+  --wp-pink-light: #F5EBF3;
+  --wp-pink-light-hover: rgba(245, 235, 243, 0.6);
+  --wp-pink-light-shadow: rgba(245, 235, 243, 0.2);
+  --wp-pink-lighter: #FBF9FB;
+  --wp-pink-lighter-hover: rgba(251, 249, 251, 0.6);
+  --wp-pink-lighter-shadow: rgba(251, 249, 251, 0.2);
+  --wp-gray-dark: #32373C;
+  --wp-gray-dark-hover: rgba(50, 55, 60, 0.6);
+  --wp-gray-dark-shadow: rgba(50, 55, 60, 0.2);
+  --wp-gray-1: #999;
+  --wp-gray-1-hover: rgba(153, 153, 153, 0.6);
+  --wp-gray-1-shadow: rgba(153, 153, 153, 0.2);
+  --wp-gray-3: #B4B9BE;
+  --wp-gray-3-hover: rgba(180, 185, 190, 0.6);
+  --wp-gray-3-shadow: rgba(180, 185, 190, 0.2);
+  --wp-gray-4: #DDD;
+  --wp-gray-4-hover: rgba(221, 221, 221, 0.6);
+  --wp-gray-4-shadow: rgba(221, 221, 221, 0.2);
+  --wp-gray-5: #E5E5E5;
+  --wp-gray-5-hover: rgba(229, 229, 229, 0.6);
+  --wp-gray-5-shadow: rgba(229, 229, 229, 0.2);
+  --wp-gray-6: #f9f9f9;
+  --wp-gray-6-hover: rgba(249, 249, 249, 0.6);
+  --wp-gray-6-shadow: rgba(249, 249, 249, 0.2);
+  --wp-gray-7: #888;
+  --wp-gray-7-hover: rgba(136, 136, 136, 0.6);
+  --wp-gray-7-shadow: rgba(136, 136, 136, 0.2);
+  --wc-blue-gray: #2e4453;
+  --wc-blue-gray-hover: rgba(46, 68, 83, 0.6);
+  --wc-blue-gray-shadow: rgba(46, 68, 83, 0.2);
+  --wc-blue-gray-light: #C8D7E1;
+  --wc-blue-gray-light-hover: rgba(200, 215, 225, 0.6);
+  --wc-blue-gray-light-shadow: rgba(200, 215, 225, 0.2);
+  --wc-green: #5B841B;
+  --wc-green-hover: rgba(91, 132, 27, 0.6);
+  --wc-green-shadow: rgba(91, 132, 27, 0.2);
+  --wc-green-light: #C6E1C6;
+  --wc-green-light-hover: rgba(198, 225, 198, 0.6);
+  --wc-green-light-shadow: rgba(198, 225, 198, 0.2);
+  --wc-orange: #94660c;
+  --wc-orange-hover: rgba(148, 102, 12, 0.6);
+  --wc-orange-shadow: rgba(148, 102, 12, 0.2);
+  --wc-orange-light: #f8dda7;
+  --wc-orange-light-hover: rgba(248, 221, 167, 0.6);
+  --wc-orange-light-shadow: rgba(248, 221, 167, 0.2);
+  --orange-light-2: #fff8e5;
+  --orange-light-2-hover: rgba(255, 248, 229, 0.6);
+  --orange-light-2-shadow: rgba(255, 248, 229, 0.2);
+  --wc-red: #761919;
+  --wc-red-hover: rgba(118, 25, 25, 0.6);
+  --wc-red-shadow: rgba(118, 25, 25, 0.2);
+  --wc-red-light: #eba3a3;
+  --wc-red-light-hover: rgba(235, 163, 163, 0.6);
+  --wc-red-light-shadow: rgba(235, 163, 163, 0.2);
+  --wc-purple: #9a69c7;
+  --wc-purple-hover: rgba(154, 105, 199, 0.6);
+  --wc-purple-shadow: rgba(154, 105, 199, 0.2);
+  --atum-add-widget-title: #343a40;
+  --atum-add-widget-separator: #f8f9fa;
+  --atum-bg-white: #fff;
+  --atum-border-expanded: #adb5bd;
+  --atum-border-var: #e9ecef;
+  --atum-cloned-list-table-shadow: rgba(0, 0, 0, 0.04);
+  --atum-column-groups-bg: #e9ecef;
+  --atum-dark-bg: #3b3d5a;
+  --atum-dropdown-toggle-bg: #e9ecef;
+  --atum-easytree-node: #343a40;
+  --atum-expanded-bg: #fff;
+  --atum-footer-title: #27283B;
+  --atum-footer-link: #0073AA;
+  --atum-footer-text: #495057;
+  --atum-menu-text: #00B8DB;
+  --atum-menu-text-highlight: #00B8DB;
+  --atum-pagination-bg: #e9ecef;
+  --atum-pagination-border: transparent;
+  --atum-pagination-border-disabled: transparent;
+  --atum-row-shadow: rgba(0, 0, 0, 0.04);
+  --atum-settings-btn-save: #fff;
+  --atum-settings-btn-save-hover: #dbf9ff;
+  --atum-settings-input-border: #e9ecef;
+  --atum-settings-heads-bg: #00B8DB;
+  --atum-settings-nav-bg: #fff;
+  --atum-settings-nav-link: #00B8DB;
+  --atum-settings-section-general-bg: #3b3d5a;
+  --atum-settings-section-bg: #fff;
+  --atum-settings-text-logo: #27283B;
+  --atum-settings-wp-color-bg: transparent;
+  --atum-table-bg: #fff;
+  --atum-table-bg2: #f8f9fa;
+  --atum-table-filter-dropdown: #6c757d;
+  --atum-table-link-text: #00B8DB;
+  --atum-table-row-variation-text: #fff;
+  --atum-table-search-submit-bg: #adb5bd;
+  --atum-table-search-text-disabled: #ced4da;
+  --atum-table-views-tabs: #6c757d;
+  --atum-table-views-tabs-active: #00B8DB;
+  --atum-table-views-tabs-active-text: #fff;
+  --atum-table-text: #343a40;
+  --atum-text-color-dark2: #6c757d;
+  --atum-text-color-var1: #adb5bd;
+  --atum-text-color-var2: #adb5bd;
+  --atum-text-color-var3: #6c757d;
+  --atum-text-white: #fff;
+  --atum-version: #fff;
+  --atum-version-bg: rgba(0, 0, 0, 0.2);
+  --atum-checkbox-label: #000;
+  --atum-input-text: #6c757d;
+  --atum-setting-info: #495057;
+  --atum-section-field: #fff;
+  --black-shadow-light: rgba(0, 0, 0, 0.04);
+  --blue-light-expanded: #dbf9ff;
+  --danger-hover-border: 1px solid transparent;
+  --danger-hover-text: #fff;
+  --dash-add-widget-color: #adb5bd;
+  --dash-add-widget-color-dark: #00B8DB;
+  --dash-atum-version: rgba(0, 0, 0, 0.1);
+  --dash-blue-trans: rgba(0, 183, 219, 0.79);
+  --dash-card-bg: #f8f9fa;
+  --dash-card-text: #6c757d;
+  --dash-green-blue: rgba(30, 200, 149, 0.79);
+  --dash-green-light: #d5f5ba;
+  --dash-green-trans: rgba(106, 200, 30, 0.79);
+  --dash-input-group-bg: rgba(255, 255, 255, 0.66);
+  --dash-input-group-shadow: rgba(255, 255, 255, 0.2);
+  --dash-next-text: #e9ecef;
+  --dash-nice-select-bg: #fff;
+  --dash-nice-select-disabled: #eff1f3;
+  --dash-nice-select-disabled-after: #e6e8ea;
+  --dash-nice-select-hover: #cbd3da;
+  --dash-nice-select-list-bg: #fff;
+  --dash-nice-select-option-hover-bg: #f8f9fa;
+  --dash-nice-select-option-selected-bg: #dbf9ff;
+  --dash-statistics-chart-type-bg: rgba(248, 249, 250, 0.2);
+  --dash-statistics-chart-type-selected-bg: transparent;
+  --dash-statistics-chart-type-selected-text: #EFAF00;
+  --dash-statistics-grid-lines: #e9ecef;
+  --dash-statistics-legend-switch-bg: rgba(248, 249, 250, 0.2);
+  --dash-statistics-ticks: #27283B;
+  --dash-stats-data-widget-primary: #00B8DB;
+  --dash-stats-data-widget-success: #69C61D;
+  --dash-subscription-input: rgba(255, 255, 255, 0.7);
+  --dash-video-title: #343a40;
+  --dash-video-subs-text: #adb5bd;
+  --dash-widget-current-stock-value-bg: #ffe1e1;
+  --dash-widget-current-stock-value-text: #ff4848;
+  --dash-widget-icon: #adb5bd;
+  --dash-widget-list-border: rgba(248, 249, 250, 0.5);
+  --green-light-expanded: #d5f5ba;
+  --info-hover-border: 1px solid transparent;
+  --main-border: rgba(255, 255, 255, 0.2);
+  --main-border-alt: #6c757d;
+  --main-dropdown-border: #dee2e6;
+  --main-text: #343a40;
+  --main-text-expanded: #fff;
+  --main-title: #27283B;
+  --orange-dark-light: #ffdf89;
+  --order-green-light: #d5f5ba;
+  --overflow-opacity-left: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  --overflow-opacity-rigth: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.9));
+  --popover-black-shadow: rgba(0, 0, 0, 0.2);
+  --primary-dark: #dbf9ff;
+  --primary-light: #f5fdff;
+  --primary-hover-border: none;
+  --primary-hover-text: #00B8DB;
+  --primary-var-dark: #00B8DB;
+  --primary-var-text2: #00B8DB;
+  --secondary: #EFAF00;
+  --secondary-dark: #ffedbc;
+  --secondary-hover: rgba(239, 175, 0, 0.6);
+  --secondary-hover-border: none;
+  --secondary-hover-text: #EFAF00;
+  --secondary-light: #fff8e5;
+  --secondary-var: #EFAF00;
+  --success-hover-border: 1px solid transparent;
+  --tertiary-hover-border: none;
+  --tertiary-hover-text: #69C61D;
+  --tertiary-light: #f0fbe7;
+  --tertiary-var: #69C61D;
+  --warning-hover-border: 1px solid transparent;
+  --wp-link-hover: #00B8DB;
+  --wp-nth-child: #f8f9fa;
+  --wp-pink-darken-expanded: #e7d0e3;
+  --wc-purple-expanded: #9a69c7;
+  --wp-yiq-text-dark: #212529;
+  --wp-yiq-text-light: #fff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.po-wrapper {
+  width: calc(100% - 40px);
+  padding: 30px 20px 20px 20px;
+  font-size: 14px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.content-header .float-right {
+  text-align: right;
+  width: 250px;
+}
+.content-header .float-left {
+  width: 60%;
+}
+.content-header strong {
+  font-size: 20px;
+}
+
+.po-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 25px;
+  color: #00B8DB;
+  text-transform: uppercase;
+}
+
+.content-address .float-left {
+  width: 40%;
+}
+.content-address .float-right {
+  width: 40%;
+}
+.content-address h4 {
+  font-size: 18px;
+  background-color: #00B8DB;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.content-lines {
+  padding: 0 20px;
+}
+.content-lines table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.content-lines .po-li-head {
+  background-color: #00B8DB;
+}
+.content-lines .po-li-head th {
+  color: #fff;
+  text-transform: uppercase;
+}
+.content-lines th, .content-lines td {
+  font-size: 14px;
+  text-align: right;
+  width: 10%;
+  white-space: nowrap;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+.content-lines .description {
+  text-align: left;
+  white-space: unset !important;
+}
+.content-lines .qty {
+  text-align: center;
+}
+.content-lines td.total, .content-lines .po-lines tr:nth-child(even) td {
+  background-color: rgba(0, 184, 219, 0.1);
+}
+
+.atum-order-item-sku {
+  color: #888;
+  font-size: 12px;
+}
+
+.content-totals .subtotal td {
+  border-top: 2px solid #00B8DB;
+  padding-top: 20px;
+}
+
+.po-total .label, .po-total .total {
+  border-top: 2px solid #00B8DB;
+  font-weight: bold;
+}
+
+.content-description .label {
+  text-transform: uppercase;
+}
+
+.po-content {
+  border: 1px solid #DDD;
+  padding: 10px;
+  margin-top: 10px;
+}
+/*# sourceMappingURL=atum-po-export.css.map */

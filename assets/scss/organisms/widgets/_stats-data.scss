@@ -24,6 +24,9 @@
 	}
 	
 	h3 {
+		font-size: 35px;
+		font-weight: bold;
+		
 		&.widget-success {
 			color: var(--dash-stats-data-widget-success) !important;
 		}
@@ -31,9 +34,6 @@
 		&.widget-primary {
 			color: var(--primary) !important;
 		}
-		
-		font-size: 35px;
-		font-weight: bold;
 	}
 	
 	h5 {

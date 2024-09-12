@@ -68,7 +68,8 @@
 	z-index: $zindex;
 }
 
-// Loading Spinner
+// Loading Spinner.
+// NOTE: Requires loader-rotate-animation mixin. Make sure you add it to the bottom of the file when imported.
 @mixin loader($size: 15px, $color: #0073AA, $border-size: 2px, $duration: 1s, $zindex: 50) {
 	width: $size;
 	height: $size;
@@ -78,7 +79,6 @@
 	position: absolute;
 	z-index: $zindex;
 	animation: loader-rotate $duration linear infinite;
-	@include loader-rotate-animation;
 }
 
 @mixin loader-rotate-animation {
