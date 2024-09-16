@@ -193,8 +193,9 @@ class ColorConverter
 		} elseif (strpos($color, '#') === 0) { // case of #nnnnnn or #nnn
 			$c = $this->processHashColor($color);
 		} elseif (preg_match('/(rgba|rgb|device-cmyka|cmyka|device-cmyk|cmyk|hsla|hsl|spot)\((.*?)\)/', $color, $m)) {
-			// ignore colors containing CSS variables
-			if (str_starts_with(mb_strtolower($m[2]), 'var(--')) {
+			// quickfix for color containing CSS variable
+			preg_match('/var\(--([a-z-_]+)\)/i', $m[0], $var);
+			if ($var) {
 				$m[2] = '0, 0, 0, 100';
 			}
 			$c = $this->processModeColor($m[1], explode(',', $m[2]));

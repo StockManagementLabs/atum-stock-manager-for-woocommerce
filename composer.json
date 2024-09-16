@@ -8,11 +8,11 @@
 		"preferred-install": "dist"
 	},
 	"require": {
-		"php"                     : ">=7.1",
-		"mpdf/mpdf"               : "^v8.2.4",
-		"madcoda/php-youtube-api" : "^v1.2.6",
-		"jimmiw/php-time-ago"     : "^3.2.4",
-		"ext-zip"                 : "*"
+		"php": ">=7.1",
+		"mpdf/mpdf": "v8.2.0",
+		"madcoda/php-youtube-api": "^v1.2.6",
+		"jimmiw/php-time-ago": "^3.2.4",
+		"ext-zip": "*"
 	},
 	"require-dev": {
 	},
