@@ -3784,6 +3784,8 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
 }
 #screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons {
   margin-top: 0;
+  position: relative;
+  top: 2px;
 }
 #screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i {
   border: none;
