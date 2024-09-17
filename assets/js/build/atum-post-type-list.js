@@ -19276,6 +19276,7 @@ var HelpGuide = (function () {
         this.isAuto = false;
         this.guide = null;
         this.markersEnabled = false;
+        this.onBeforeChangeActions = {};
         this.wpHooks = window['wp']['hooks'];
         var autoGuide = this.settings.get('hgAutoGuide');
         if (autoGuide && Array.isArray(autoGuide) && autoGuide.length) {
@@ -19400,7 +19401,7 @@ var HelpGuide = (function () {
                         reject(response.data);
                     }
                 },
-                error: function () { return reject(); }
+                error: function () { return reject(); },
             });
         });
     };
@@ -19429,12 +19430,21 @@ var HelpGuide = (function () {
                                     position: 'left',
                                 },
                             ],
-                            doneLabel: _this.settings.get('hgGotIt')
+                            doneLabel: _this.settings.get('hgGotIt'),
                         }).start();
                     }, 500);
                 }
             }
             _this.wpHooks.doAction('atum_helpGuide_onExit', _this.guide);
+        })
+            .onbeforechange(function (targetElem) {
+            for (var elemSelector in _this.onBeforeChangeActions) {
+                if ($(targetElem).is($(elemSelector))) {
+                    var fn = function () { };
+                    eval("fn = ".concat(_this.onBeforeChangeActions[elemSelector]));
+                    fn();
+                }
+            }
         })
             .onchange(function (targetElem) { return _this.wpHooks.doAction('atum_helpGuide_onChange', _this.guide, targetElem); })
             .start();
@@ -19446,7 +19456,13 @@ var HelpGuide = (function () {
         return "\n\t\t\t<span class=\"spacer\"></span>\n\t\t\t<span class=\"help-guide-buttons\" data-guide=\"".concat(guide, "\">\n\t\t\t\t<i class=\"show-help-markers atum-icon atmi-flag atum-tooltip\" title=\"").concat(this.settings.get('hgShowHelpMarkers'), "\"></i>\n\t\t\t\t<i class=\"show-intro-guide atum-icon atmi-indent-increase atum-tooltip\" title=\"").concat(this.settings.get('hgShowHelpGuide'), "\"></i>\t\t\t\t\t\n\t\t\t</span>\n\t\t");
     };
     HelpGuide.prototype.setGuideSteps = function (guideSteps) {
+        var _this = this;
         this.guideSteps = guideSteps;
+        guideSteps.forEach(function (step) {
+            if (step.hasOwnProperty('onBeforeChange')) {
+                _this.onBeforeChangeActions[step.element] = step.onBeforeChange;
+            }
+        });
         if (!this.cachedGuides.hasOwnProperty(this.guide)) {
             this.addHelpMarkers();
         }
@@ -19459,7 +19475,7 @@ var HelpGuide = (function () {
             data: {
                 action: 'atum_save_closed_auto_guide',
                 security: this.settings.get('hgNonce'),
-                guide: this.guide
+                guide: this.guide,
             },
         });
     };
@@ -19486,10 +19502,10 @@ var HelpGuide = (function () {
         }
     };
     HelpGuide.prototype.prepareHelpMarker = function (step, index) {
-        if (!step.element && !step.elementSelector) {
+        if (!step.element) {
             return;
         }
-        var $elem = $(step.element || step.elementSelector);
+        var $elem = $(step.element);
         if (!$elem.length) {
             console.warn('Guide element not found', step);
             return;
