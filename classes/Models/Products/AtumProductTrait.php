@@ -14,6 +14,7 @@ namespace Atum\Models\Products;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumBarcodes;
 use Atum\Models\DataStores\AtumDataStoreCommonTrait;
 use Atum\Models\DataStores\AtumDataStoreCPTTrait;
 use Atum\Suppliers\Suppliers;
@@ -819,6 +820,7 @@ trait AtumProductTrait {
 
 		if ( $supplier_sku ) {
 
+            // The supplier SKU must be unique.
 			$supplier_sku_found = apply_filters( 'atum/model/product/supplier_sku_found', Suppliers::get_product_id_by_supplier_sku( $this->get_id(), $supplier_sku ), $supplier_sku, $this );
 
 			if ( $this->get_object_read() && $supplier_sku_found ) {
@@ -827,7 +829,7 @@ trait AtumProductTrait {
 
 		}
 
-		$this->set_prop( 'supplier_sku', $supplier_sku );
+		$this->set_prop( 'supplier_sku', sanitize_text_field( $supplier_sku ) );
 
 	}
 
@@ -1079,7 +1081,22 @@ trait AtumProductTrait {
 	 * @param string $barcode
 	 */
 	public function set_barcode( $barcode ) {
+
+        $barcode = (string) $barcode;
+
+        if ( $barcode ) {
+
+            // The barcode must be unique.
+            $barcode_found = apply_filters( 'atum/model/product/barcode_found', AtumBarcodes::get_product_id_by_barcode( $this->get_id(), $barcode ), $barcode, $this );
+
+            if ( $this->get_object_read() && $barcode_found ) {
+                $this->error( 'product_invalid_barcode', __( 'Invalid or duplicated barcode.', ATUM_TEXT_DOMAIN ), 400, array( 'resource_id' => $barcode_found ) );
+            }
+
+        }
+
 		$this->set_prop( 'barcode', sanitize_text_field( $barcode ) );
+
 	}
 
 

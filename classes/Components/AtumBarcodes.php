@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
-use Atum\Inc\Globals as AtumGlobals;
 use Atum\Inc\Helpers;
 use Atum\Models\Interfaces\AtumProductInterface;
 use AtumLevels\Levels\Interfaces\BOMProductInterface;
@@ -117,7 +116,7 @@ class AtumBarcodes {
 
 			$visibility_classes = array_map( function ( $val ) {
 				return "show_if_{$val}";
-			}, AtumGlobals::get_all_compatible_product_types() );
+			}, Globals::get_all_compatible_product_types() );
 
 			$barcode_field_classes = implode( ' ', $visibility_classes );
 
@@ -338,6 +337,47 @@ class AtumBarcodes {
 		}
 
 	}
+
+    /**
+     * Check if the passed barcode is being used by another product.
+     *
+     * @since 1.9.41
+     *
+     * @param int    $product_id Product ID to exclude from the query.
+     * @param string $barcode    Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+     *
+     * @return int
+     */
+    public static function get_product_id_by_barcode( $product_id, $barcode ) {
+
+        $cache_key        = AtumCache::get_cache_key( 'product_id_by_barcode', [ $product_id, $barcode ] );
+        $found_product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+        if ( ! $has_cache ) {
+
+            global $wpdb;
+
+            $atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+            // phpcs:disable WordPress.DB.PreparedSQL
+            $found_product_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT p.ID
+				FROM $wpdb->posts p
+				LEFT JOIN $atum_data_table apd ON ( p.ID = apd.product_id )
+				WHERE p.post_status != 'trash' AND apd.barcode = %s AND p.ID <> %d
+				LIMIT 1",
+                wp_slash( $barcode ),
+                $product_id
+            ) );
+            // phpcs:enable
+
+            AtumCache::set_cache( $cache_key, $found_product_id );
+
+        }
+
+        return $found_product_id;
+
+    }
 
 
 	/*******************
