@@ -264,7 +264,50 @@ class FullExportController extends \WC_REST_Controller {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 
-		if ( self::are_there_pending_exports() ) {
+        // TODO: remove this when the App is released.
+        // Return a mock zip file for testing purposes.
+        if (
+            ! empty( $request['mock'] ) && 'true' === $request['mock'] &&
+            defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG
+        ) {
+
+            $zip_name = self::get_full_export_upload_dir() . 'mock.zip';
+
+            if ( file_exists( $zip_name ) ) {
+
+                $headers = [
+                    'Content-Type'              => 'application/zip',
+                    'Content-Transfer-Encoding' => 'Binary',
+                    'Content-Length'            => filesize( $zip_name ),
+                    'Content-Disposition'       => 'attachment; filename="' . basename( $zip_name ) . '"',
+                ];
+
+                $server = rest_get_server();
+
+                nocache_headers();
+
+                foreach ( $headers as $header => $data ) {
+                    $server->send_header( $header, $data );
+                }
+
+                // Fix CORS issues through localhost requests.
+                // NOTE: this shouldn't imply any security risk because when we reach this point, the authenticated request was previously passed.
+                $server->send_header( 'Access-Control-Allow-Origin', '*' );
+
+                readfile( $zip_name );
+                die(); // We've already sent the file, so we can stop the execution here.
+
+            }
+            else {
+                $response = array(
+                    'success' => FALSE,
+                    'code'    => 'no_results',
+                    'message' => __( 'Mock file not found.', ATUM_TEXT_DOMAIN ),
+                );
+            }
+
+        }
+		elseif ( self::are_there_pending_exports() ) {
 
 			$response = array(
 				'success' => FALSE,
