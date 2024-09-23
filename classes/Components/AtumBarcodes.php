@@ -332,8 +332,25 @@ class AtumBarcodes {
 	public function save_barcode_term_meta( $term_id, $tt_id ) {
 
 		if ( isset( $_POST['barcode_term_meta'] ) ) {
-			$field_value = esc_attr( stripslashes( $_POST['barcode_term_meta'] ) );
-			update_term_meta( $term_id, 'barcode', $field_value );
+
+            $field_value        = esc_attr( stripslashes( $_POST['barcode_term_meta'] ) );
+            $term_barcode_found = self::get_term_id_by_barcode( $term_id, $field_value, $_POST['taxonomy'] );
+
+            if ( $term_barcode_found ) {
+
+                AtumAdminNotices::add_notice(
+                    __( 'Error saving the term: Invalid or duplicated barcode.', ATUM_TEXT_DOMAIN ),
+                    'invalid_barcode',
+                    'error',
+                    FALSE,
+                    TRUE
+                );
+
+            }
+            else {
+			    update_term_meta( $term_id, 'barcode', $field_value );
+            }
+
 		}
 
 	}
@@ -376,6 +393,48 @@ class AtumBarcodes {
         }
 
         return $found_product_id;
+
+    }
+
+    /**
+     * Check if the passed barcode is being used by another term.
+     *
+     * @since 1.9.41
+     *
+     * @param int    $term_id  Term ID to exclude from the query.
+     * @param string $barcode  Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+     * @param string $taxonomy The taxonomy to search for the barcode.
+     *
+     * @return int
+     */
+    public static function get_term_id_by_barcode( $term_id, $barcode, $taxonomy ) {
+
+        $cache_key        = AtumCache::get_cache_key( 'term_id_by_barcode', [ $term_id, $barcode ] );
+        $found_term_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+        if ( ! $has_cache ) {
+
+            global $wpdb;
+
+            // phpcs:disable WordPress.DB.PreparedSQL
+            $found_term_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT t.term_id
+                FROM $wpdb->termmeta tm
+                LEFT JOIN $wpdb->terms t ON ( t.term_id = tm.term_id AND tm.meta_key = 'barcode' )
+                LEFT JOIN $wpdb->term_taxonomy tt ON ( t.term_id = tt.term_id )
+                WHERE tt.taxonomy = %s AND tm.meta_value = %s AND t.term_id <> %d
+                LIMIT 1",
+                $taxonomy,
+                wp_slash( $barcode ),
+                $term_id
+            ) );
+            // phpcs:enable
+
+            AtumCache::set_cache( $cache_key, $found_term_id );
+
+        }
+
+        return $found_term_id;
 
     }
 
