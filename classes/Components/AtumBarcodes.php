@@ -409,7 +409,7 @@ class AtumBarcodes {
      */
     public static function get_term_id_by_barcode( $term_id, $barcode, $taxonomy ) {
 
-        $cache_key        = AtumCache::get_cache_key( 'term_id_by_barcode', [ $term_id, $barcode ] );
+        $cache_key     = AtumCache::get_cache_key( 'term_id_by_barcode', [ $term_id, $barcode, $taxonomy ] );
         $found_term_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
         if ( ! $has_cache ) {
@@ -424,7 +424,7 @@ class AtumBarcodes {
                 LEFT JOIN $wpdb->term_taxonomy tt ON ( t.term_id = tt.term_id )
                 WHERE tt.taxonomy = %s AND tm.meta_value = %s AND t.term_id <> %d
                 LIMIT 1",
-                $taxonomy,
+                esc_attr( $taxonomy ),
                 wp_slash( $barcode ),
                 $term_id
             ) );
