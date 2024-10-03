@@ -109,7 +109,7 @@ class PurchaseOrdersController extends AtumOrdersController {
 			'context'     => array( 'view', 'edit' ),
 		);
 
-		return $schema;
+		return apply_filters( 'atum/api/atum_purchase_order/item_schema', $schema );
 
 	}
 
