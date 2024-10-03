@@ -12,6 +12,9 @@
 
 namespace Atum\Components;
 
+use Atum\Inc\Helpers;
+
+
 defined( 'ABSPATH' ) || die;
 
 
@@ -302,6 +305,24 @@ final class AtumCache {
 	 */
 	public static function delete_transients( $type = '', $prefix = ATUM_PREFIX ) {
 
+		if ( 'no' === Helpers::get_option( 'calc_prop_cron', 'no' ) ) {
+			self::do_delete_transients( $type, $prefix );
+		}
+
+		return TRUE;
+	}
+
+	/**
+	 * Delete all the ATUM transients
+	 *
+	 * @since 1.9.40
+	 *
+	 * @param string $type   Optional. If specified will remove specific type of ATUM transients.
+	 * @param string $prefix Optional. The prefix for the transients that should be deleted.
+	 *
+	 * @return int|bool The number of transients deleted on success or false on error
+	 */
+	public static function do_delete_transients( $type = '', $prefix = ATUM_PREFIX ) {
 		global $wpdb;
 
 		$type         = esc_attr( $type );

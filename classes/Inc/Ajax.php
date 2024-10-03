@@ -23,6 +23,7 @@ use Atum\Components\AtumColors;
 use Atum\Components\AtumException;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
+use Atum\Components\AtumQueues;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
@@ -2895,10 +2896,37 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
-		AtumCache::delete_transients();
+		$wc_queue = \WC()->queue();
+
+		$deleting = FALSE;
+
+		$running_actions = $wc_queue->search( array(
+			'group'  => AtumQueues::QUEUES_GROUP,
+			'status' => \ActionScheduler_Store::STATUS_RUNNING,
+		) );
+
+		if ( ! empty( $running_actions ) ) {
+
+			foreach ( $running_actions as $action ) {
+				/**
+				 * Variable definition.
+				 *
+				 * @var \ActionScheduler_Action $action
+				 */
+				if ( 'atum/delete_transients' === $action->get_hook() ) {
+					$deleting = TRUE;
+				}
+			}
+
+		}
+
+		if ( ! $deleting ) {
+			AtumCache::do_delete_transients();
+		}
 
 		do_action( 'atum/ajax/tool_clear_out_atum_transients' );
 		wp_send_json_success( __( 'All your saved temporary data were cleared successfully.', ATUM_TEXT_DOMAIN ) );
+
 
 	}
 
