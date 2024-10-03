@@ -561,7 +561,7 @@ final class Helpers {
 				$date_where = $wpdb->prepare( 'WHERE date_created_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE ) );
 			}
 			else {
-				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE  ) );
+				$date_where = $wpdb->prepare( 'WHERE post_date_gmt >= %s', self::date_format( $datetime_start->getTimestamp(), TRUE, TRUE ) );
 			}
 
 			if ( $date_end ) {
@@ -3667,6 +3667,14 @@ final class Helpers {
 		}
 		else {
 			$where_clauses[] = "posts.post_status IN ('" . implode( "','", $statuses ) . "') ";
+		}
+
+		// Parent statuses.
+		if ( ! $statuses || ! is_array( $statuses ) ) {
+			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT posts.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $post_statuses ) . "') ) ";
+		}
+		else {
+			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT posts.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $statuses ) . "') ) ";
 		}
 
 		$where_query = implode( ' AND ', apply_filters( 'atum/search_products/where_clauses', $where_clauses, $term, $type, $include_variations, $statuses, $limit, $include, $exclude ) );
