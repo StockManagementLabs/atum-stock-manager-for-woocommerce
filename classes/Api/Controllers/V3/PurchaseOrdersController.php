@@ -238,7 +238,7 @@ class PurchaseOrdersController extends AtumOrdersController {
 
 		// Format date values.
 		foreach ( $format_date as $key ) {
-			if ( in_array( $key, $this->rest_data_keys ) ) {
+			if ( in_array( $key, apply_filters( 'atum/api/atum_purchase_order/rest_data_keys', $this->rest_data_keys ) ) ) {
 				$datetime                       = $formatted_data[ $key ];
 				$formatted_data[ $key ]         = wc_rest_prepare_date_response( $datetime, FALSE );
 				$formatted_data[ "{$key}_gmt" ] = wc_rest_prepare_date_response( $datetime );

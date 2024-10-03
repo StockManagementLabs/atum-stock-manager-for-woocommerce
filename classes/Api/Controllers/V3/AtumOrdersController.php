@@ -616,7 +616,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		foreach ( $data as $data_key => $data_value ) {
 
-			if ( in_array( $data_key, $this->rest_data_keys ) ) {
+			if ( in_array( $data_key, apply_filters( 'atum/api/atum_purchase_order/rest_data_keys', $this->rest_data_keys ) ) ) {
 				$formatted_data[ $data_key ] = $data_value;
 			}
 
