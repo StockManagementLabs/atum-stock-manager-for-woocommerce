@@ -271,7 +271,8 @@ class FullExportController extends \WC_REST_Controller {
             defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG
         ) {
 
-            $zip_name = self::get_full_export_upload_dir() . 'mock.zip';
+            $page     = ! empty( $request['page'] ) ? $request['page'] : '';
+            $zip_name = self::get_full_export_upload_dir() . "mock{$page}.zip";
 
             if ( file_exists( $zip_name ) ) {
 
