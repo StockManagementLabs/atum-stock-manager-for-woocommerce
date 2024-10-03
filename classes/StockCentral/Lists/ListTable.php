@@ -1085,10 +1085,13 @@ class ListTable extends AtumListTable {
 
 				case 'sold_today':
 					// Get the orders processed today.
-					$atts = array(
-						'status'     => [ 'wc-processing', 'wc-completed' ],
-						'date_start' => 'today midnight',
-					);
+                    $atts = array(
+                        'status'     => (array) apply_filters( 'atum/get_sold_last_days/orders_status', [
+                            'wc-processing',
+                            'wc-completed',
+                        ] ),
+                        'date_start' => 'today midnight',
+                    );
 
 					// Disable our custom filters to not alter the orders query.
 					$has_atum_clauses_filter = $has_wc_clauses_filter = FALSE;
