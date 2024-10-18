@@ -616,7 +616,7 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 
 		foreach ( $data as $data_key => $data_value ) {
 
-			if ( in_array( $data_key, $this->rest_data_keys ) ) {
+			if ( in_array( $data_key, apply_filters( 'atum/api/atum_purchase_order/rest_data_keys', $this->rest_data_keys ) ) ) {
 				$formatted_data[ $data_key ] = $data_value;
 			}
 
@@ -684,7 +684,17 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 					if ( $item instanceof POItemProduct ) {
 						$product        = Helpers::get_atum_product( $product );
 						$purchase_price = ! empty( $product->get_purchase_price() ) ? $product->get_purchase_price() : 0;
-						$total          = apply_filters( 'atum/api/atum_purchase_order/item_total', $purchase_price * $quantity, $item, $posted );
+
+                        if ( $product->is_taxable() && wc_prices_include_tax() ) {
+
+                            $tax_rates       = \WC_Tax::get_rates( $product->get_tax_class() );
+                            $base_tax_rates  = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
+                            $remove_taxes    = apply_filters( 'woocommerce_adjust_non_base_location_prices', TRUE ) ? \WC_Tax::calc_tax( $purchase_price, $base_tax_rates, TRUE ) : \WC_Tax::calc_tax( $purchase_price, $tax_rates, TRUE );
+                            $purchase_price -= array_sum( $remove_taxes ); // Unrounded since we're dealing with tax inclusive prices. Matches logic in cart-totals class. @see adjust_non_base_location_price.
+
+                        }
+
+						$total = apply_filters( 'atum/api/atum_purchase_order/item_total', $purchase_price * $quantity, $item, $posted );
 					}
 					else {
 						$total = wc_get_price_excluding_tax( $product, [ 'qty' => $quantity ] );

@@ -37,8 +37,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -296,19 +296,23 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 /*!***************************************!*\
   !*** ./assets/js/src/admin-modals.ts ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_admin_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/_admin-modal */ "./assets/js/src/components/_admin-modal.ts");
-/* provided dependency */ var admin_modals_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
-admin_modals_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumAdminModalVars');
     new _components_admin_modal__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
 });
+
+})();
 
 /******/ })()
 ;

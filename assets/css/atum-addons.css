@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -2757,26 +2757,6 @@ input[type=button].btn-block {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .note .blockUI.blockOverlay:after {
   top: 38%;
   width: 25px;
@@ -2789,7 +2769,8 @@ input[type=button].btn-block {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
+
+@-webkit-keyframes loader-rotate {
   from {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -2800,6 +2781,16 @@ input[type=button].btn-block {
   }
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 @-webkit-keyframes scaleUpSwal {
   0% {
     -webkit-transform: scale(0.8) translateY(1000px);
@@ -2812,7 +2803,6 @@ input[type=button].btn-block {
     opacity: 1;
   }
 }
-
 @keyframes scaleUpSwal {
   0% {
     -webkit-transform: scale(0.8) translateY(1000px);
@@ -3012,16 +3002,6 @@ input[type=button].btn-block {
   right: 0;
   margin: auto;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .swal2-container .swal2-show {
   opacity: 0;
   -webkit-animation: scaleUpSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -3041,6 +3021,16 @@ input[type=button].btn-block {
           animation: fadeOutSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .swal2-container.atum-modal {
   text-align: left;
 }
@@ -3887,16 +3877,6 @@ html {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .atum-addons .addon-thumb {
   width: 100%;
   background-size: cover;
@@ -4182,5 +4162,16 @@ html {
 }
 .auto-installer-modal .swal2-validation-message {
   margin-bottom: -1.2em !important;
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 /*# sourceMappingURL=atum-addons.css.map */

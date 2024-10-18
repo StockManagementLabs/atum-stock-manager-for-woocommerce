@@ -15,9 +15,9 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
-use Atum\Inc\Globals as AtumGlobals;
 use Atum\Inc\Helpers;
 use Atum\Models\Interfaces\AtumProductInterface;
+use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Interfaces\BOMProductInterface;
 
 
@@ -117,7 +117,7 @@ class AtumBarcodes {
 
 			$visibility_classes = array_map( function ( $val ) {
 				return "show_if_{$val}";
-			}, AtumGlobals::get_all_compatible_product_types() );
+			}, Globals::get_all_compatible_product_types() );
 
 			$barcode_field_classes = implode( ' ', $visibility_classes );
 
@@ -333,11 +333,163 @@ class AtumBarcodes {
 	public function save_barcode_term_meta( $term_id, $tt_id ) {
 
 		if ( isset( $_POST['barcode_term_meta'] ) ) {
-			$field_value = esc_attr( stripslashes( $_POST['barcode_term_meta'] ) );
-			update_term_meta( $term_id, 'barcode', $field_value );
+
+            $field_value        = esc_attr( stripslashes( $_POST['barcode_term_meta'] ) );
+            $term_barcode_found = self::get_term_id_by_barcode( $term_id, $field_value, $_POST['taxonomy'] );
+
+            if ( $term_barcode_found ) {
+
+                AtumAdminNotices::add_notice(
+                    __( 'Error saving the term: Invalid or duplicated barcode.', ATUM_TEXT_DOMAIN ),
+                    'invalid_barcode',
+                    'error',
+                    FALSE,
+                    TRUE
+                );
+
+            }
+            else {
+			    update_term_meta( $term_id, 'barcode', $field_value );
+            }
+
 		}
 
 	}
+
+    /**
+     * Check if the passed barcode is being used by another product.
+     *
+     * @since 1.9.41
+     *
+     * @param int    $product_id Product ID to exclude from the query.
+     * @param string $barcode    Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+     *
+     * @return int|NULL
+     */
+    public static function get_product_id_by_barcode( $product_id, $barcode ) {
+
+        if ( ! $product_id || ! $barcode ) {
+            return NULL;
+        }
+
+        $cache_key        = AtumCache::get_cache_key( 'product_id_by_barcode', [ $product_id, $barcode ] );
+        $found_product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+        if ( ! $has_cache ) {
+
+            global $wpdb;
+
+            $atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
+
+            // phpcs:disable WordPress.DB.PreparedSQL
+            $found_product_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT p.ID
+				FROM $wpdb->posts p
+				LEFT JOIN $atum_data_table apd ON ( p.ID = apd.product_id )
+				WHERE p.post_status != 'trash' AND apd.barcode = %s AND p.ID <> %d
+				LIMIT 1",
+                wp_slash( $barcode ),
+                $product_id
+            ) );
+            // phpcs:enable
+
+            AtumCache::set_cache( $cache_key, $found_product_id );
+
+        }
+
+        return $found_product_id;
+
+    }
+
+    /**
+     * Check if the passed barcode is being used by another term.
+     *
+     * @since 1.9.41
+     *
+     * @param int    $term_id  Term ID to exclude from the query.
+     * @param string $barcode  Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+     * @param string $taxonomy The taxonomy to search for the barcode.
+     *
+     * @return int|NULL
+     */
+    public static function get_term_id_by_barcode( $term_id, $barcode, $taxonomy ) {
+
+        if ( ! $term_id || ! $barcode || ! $taxonomy ) {
+            return NULL;
+        }
+
+        $cache_key     = AtumCache::get_cache_key( 'term_id_by_barcode', [ $term_id, $barcode, $taxonomy ] );
+        $found_term_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+        if ( ! $has_cache ) {
+
+            global $wpdb;
+
+            // phpcs:disable WordPress.DB.PreparedSQL
+            $found_term_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT t.term_id
+                FROM $wpdb->termmeta tm
+                LEFT JOIN $wpdb->terms t ON ( t.term_id = tm.term_id AND tm.meta_key = 'barcode' )
+                LEFT JOIN $wpdb->term_taxonomy tt ON ( t.term_id = tt.term_id )
+                WHERE tt.taxonomy = %s AND tm.meta_value = %s AND t.term_id <> %d
+                LIMIT 1",
+                esc_attr( $taxonomy ),
+                wp_slash( $barcode ),
+                $term_id
+            ) );
+            // phpcs:enable
+
+            AtumCache::set_cache( $cache_key, $found_term_id );
+
+        }
+
+        return $found_term_id;
+
+    }
+
+    /**
+     * Check if the passed barcode is being used by another supplier.
+     *
+     * @since 1.9.41
+     *
+     * @param int    $supplier_id Supplier ID to exclude from the query.
+     * @param string $barcode     Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+     *
+     * @return int|NULL
+     */
+    public static function get_supplier_id_by_barcode( $supplier_id, $barcode ) {
+
+        if ( ! $supplier_id || ! $barcode ) {
+            return NULL;
+        }
+
+        $cache_key         = AtumCache::get_cache_key( 'supplier_id_by_barcode', [ $supplier_id, $barcode ] );
+        $found_supplier_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+        if ( ! $has_cache ) {
+
+            global $wpdb;
+
+            // phpcs:disable WordPress.DB.PreparedSQL
+            $found_supplier_id = $wpdb->get_var( $wpdb->prepare( "
+				SELECT p.ID
+				FROM $wpdb->posts p
+				LEFT JOIN $wpdb->postmeta pm ON ( p.ID = pm.post_id AND pm.meta_key = '_atum_barcode' )
+				WHERE p.post_status != 'trash' AND p.post_type = %s AND pm.meta_value = %s AND p.ID <> %d
+				LIMIT 1",
+                Suppliers::POST_TYPE,
+                wp_slash( $barcode ),
+                $supplier_id
+            ) );
+            // phpcs:enable
+
+            AtumCache::set_cache( $cache_key, $found_supplier_id );
+
+        }
+
+        return $found_supplier_id;
+
+    }
 
 
 	/*******************

@@ -264,7 +264,51 @@ class FullExportController extends \WC_REST_Controller {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 
-		if ( self::are_there_pending_exports() ) {
+        // TODO: remove this when the App is released.
+        // Return a mock zip file for testing purposes.
+        if (
+            ! empty( $request['mock'] ) && 'true' === $request['mock'] &&
+            defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG
+        ) {
+
+            $page     = ! empty( $request['page'] ) ? $request['page'] : '';
+            $zip_name = self::get_full_export_upload_dir() . "mock{$page}.zip";
+
+            if ( file_exists( $zip_name ) ) {
+
+                $headers = [
+                    'Content-Type'              => 'application/zip',
+                    'Content-Transfer-Encoding' => 'Binary',
+                    'Content-Length'            => filesize( $zip_name ),
+                    'Content-Disposition'       => 'attachment; filename="' . basename( $zip_name ) . '"',
+                ];
+
+                $server = rest_get_server();
+
+                nocache_headers();
+
+                foreach ( $headers as $header => $data ) {
+                    $server->send_header( $header, $data );
+                }
+
+                // Fix CORS issues through localhost requests.
+                // NOTE: this shouldn't imply any security risk because when we reach this point, the authenticated request was previously passed.
+                $server->send_header( 'Access-Control-Allow-Origin', '*' );
+
+                readfile( $zip_name );
+                die(); // We've already sent the file, so we can stop the execution here.
+
+            }
+            else {
+                $response = array(
+                    'success' => FALSE,
+                    'code'    => 'no_results',
+                    'message' => __( 'Mock file not found.', ATUM_TEXT_DOMAIN ),
+                );
+            }
+
+        }
+		elseif ( self::are_there_pending_exports() ) {
 
 			$response = array(
 				'success' => FALSE,
@@ -285,6 +329,7 @@ class FullExportController extends \WC_REST_Controller {
 
 				$files = array();
 
+				// Get the files for the requested endpoints.
 				foreach ( $endpoints as $endpoint ) {
 
 					if ( $endpoint ) {
@@ -298,7 +343,8 @@ class FullExportController extends \WC_REST_Controller {
 
 				if ( ! empty( $files ) ) {
 
-					$data = [];
+					/* Deprecated code. Instead of sending a huge JSON request, we send now a zip with all the files. */
+					/*$data = [];
 
 					foreach ( $files as $endpoint_key => $file ) {
 
@@ -359,6 +405,60 @@ class FullExportController extends \WC_REST_Controller {
 						$response = array(
 							'success' => TRUE,
 							'data'    => $data,
+						);
+
+					}*/
+
+					$zip      = new \ZipArchive();
+					$zip_name =  $upload_dir . 'atum-full-export.zip';
+
+					if ( $zip->open( $zip_name, \ZipArchive::CREATE | \ZipArchive::OVERWRITE ) === TRUE) {
+
+						foreach ( $files as $file ) {
+
+							// In the case there are multiple exports of the same endpoint with distinct filters.
+							$file = is_array( $file ) ? $file : [ $file ];
+
+							foreach ( $file as $f ) {
+								if ( is_file( $f ) ) {
+									$zip->addFile( $f, basename( $f ) );
+								}
+							}
+
+						}
+
+						$zip->close();
+
+						$headers = [
+							'Content-Type'              => 'application/zip',
+							'Content-Transfer-Encoding' => 'Binary',
+							'Content-Length'            => filesize( $zip_name ),
+							'Content-Disposition'       => 'attachment; filename="' . basename( $zip_name ) . '"',
+						];
+
+						$server = rest_get_server();
+
+						nocache_headers();
+
+						foreach ( $headers as $header => $data ) {
+							$server->send_header( $header, $data );
+						}
+
+						// Fix CORS issues through localhost requests.
+						// NOTE: this shouldn't imply any security risk because when we reach this point, the authenticated request was previously passed.
+						$server->send_header( 'Access-Control-Allow-Origin', '*' );
+
+						readfile( $zip_name );
+						unlink( $zip_name );
+						die(); // We've already sent the file, so we can stop the execution here.
+
+					}
+					else {
+
+						$response = array(
+							'success' => FALSE,
+							'code'    => 'error',
+							'message' => __( 'The export files could not be zipped. Please, enable the PHP zip extension on your web server.', ATUM_TEXT_DOMAIN ),
 						);
 
 					}

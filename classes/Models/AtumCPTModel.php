@@ -11,6 +11,9 @@
 
 namespace Atum\Models;
 
+use Atum\Components\AtumAdminNotices;
+
+
 defined( 'ABSPATH' ) || die;
 
 /**
@@ -54,6 +57,13 @@ abstract class AtumCPTModel {
 	 * @var array
 	 */
 	protected $changes = [];
+
+    /**
+     * Any errors that occurred during the save process
+     *
+     * @var \WP_Error[]
+     */
+    protected $errors = [];
 
 
 	/**
@@ -135,73 +145,86 @@ abstract class AtumCPTModel {
 
 		if ( ! empty( $this->changes ) ) {
 
-			/**
-			 * Insert.
-			 */
-			if ( ! $this->id ) {
+            try {
 
-				// The post name is required.
-				if ( in_array( 'name', $this->changes ) ) {
+                // Check if there are any errors from before saving.
+                if ( ! empty( $this->errors ) ) {
+                    foreach ( $this->errors as $error ) {
+                        AtumAdminNotices::add_notice( $error->get_error_message(), $error->get_error_code(), 'error', FALSE, TRUE );
+                    }
+                }
 
-					$post = [
-						'post_title'   => $this->data['name'],
-						'post_content' => $this->data['description'],
-						'post_status'  => 'publish',
-						'post_type'    => $this->get_post_type(),
-					];
+                /**
+                 * Insert.
+                 */
+                if ( ! $this->id ) {
 
-					$meta_input = [];
+                    // The post name is required.
+                    if ( in_array( 'name', $this->changes ) ) {
 
-					foreach ( $this->changes as $changed_prop ) {
-						if ( 'name' !== $changed_prop && ! empty( $this->data[ $changed_prop ] ) ) {
-							$meta_input[ "_$changed_prop" ] = $this->data[ $changed_prop ];
-						}
-					}
+                        $post = [
+                            'post_title'   => $this->data['name'],
+                            'post_content' => $this->data['description'],
+                            'post_status'  => 'publish',
+                            'post_type'    => $this->get_post_type(),
+                        ];
 
-					$post['meta_input'] = $meta_input;
+                        $meta_input = [];
 
-					return wp_insert_post( $post );
+                        foreach ( $this->changes as $changed_prop ) {
+                            if ( 'name' !== $changed_prop && ! empty( $this->data[ $changed_prop ] ) ) {
+                                $meta_input["_$changed_prop"] = $this->data[ $changed_prop ];
+                            }
+                        }
 
-				}
-				else {
-					return new \WP_Error( 'atum_cpt_name_empty', __( 'The name is required', ATUM_TEXT_DOMAIN ) );
-				}
+                        $post['meta_input'] = $meta_input;
 
-			}
-			/**
-			 * Update
-			 */
-			else {
+                        return wp_insert_post( $post );
 
-				$post_data = [];
+                    }
+                    else {
+                        return new \WP_Error( 'atum_cpt_name_empty', __( 'The name is required', ATUM_TEXT_DOMAIN ) );
+                    }
 
-				foreach ( $this->changes as $changed_prop ) {
+                }
+                /**
+                 * Update
+                 */
+                else {
 
-					if ( 'name' === $changed_prop ) {
-						$post_data['post_title'] = $this->data[ 'name' ];
-					}
-					elseif ( 'description' === $changed_prop ) {
-						$post_data['post_content'] = $this->data[ 'description' ];
-					}
-					else {
+                    $post_data = [];
 
-						if ( empty( $this->data[ $changed_prop ] ) ) {
-							delete_post_meta( $this->id, "_$changed_prop" );
-						}
-						else {
-							update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
-						}
+                    foreach ( $this->changes as $changed_prop ) {
 
-					}
+                        if ( 'name' === $changed_prop ) {
+                            $post_data['post_title'] = $this->data['name'];
+                        }
+                        elseif ( 'description' === $changed_prop ) {
+                            $post_data['post_content'] = $this->data['description'];
+                        }
+                        else {
 
-				}
+                            if ( empty( $this->data[ $changed_prop ] ) ) {
+                                delete_post_meta( $this->id, "_$changed_prop" );
+                            }
+                            else {
+                                update_post_meta( $this->id, "_$changed_prop", $this->data[ $changed_prop ] );
+                            }
 
-				if ( ! empty( $post_data ) ) {
-					$post_data['ID'] = $this->id;
-					wp_update_post( $post_data );
-				}
+                        }
 
-			}
+                    }
+
+                    if ( ! empty( $post_data ) ) {
+                        $post_data['ID'] = $this->id;
+                        wp_update_post( $post_data );
+                    }
+
+                }
+
+            } catch ( \Exception $e ) {
+                return new \WP_Error( 'atum_cpt_save_error', $e->getMessage() );
+            }
 
 		}
 
@@ -234,6 +257,13 @@ abstract class AtumCPTModel {
 
 	}
 
+    public function set_prop( $prop, $value ) {
+        if ( array_key_exists( $prop, $this->data ) && $this->data[ $prop ] !== $value ) {
+            $this->data[ $prop ] = $value;
+            $this->register_change( $prop );
+        }
+    }
+
 	/**
 	 * Set the description
 	 *
@@ -242,13 +272,7 @@ abstract class AtumCPTModel {
 	 * @param string $description
 	 */
 	public function set_description( $description ) {
-
-		$description = wp_kses_post( $description );
-
-		if ( $this->data['description'] !== $description ) {
-			$this->data['description'] = $description;
-			$this->register_change( 'description' );
-		}
+		$this->set_prop( 'description', wp_kses_post( $description ) );
 	}
 
 	/**
@@ -259,13 +283,7 @@ abstract class AtumCPTModel {
 	 * @param string $name
 	 */
 	public function set_name( $name ) {
-
-		$name = sanitize_text_field( $name );
-
-		if ( $this->data['name'] !== $name ) {
-			$this->data['name'] = $name;
-			$this->register_change( 'name' );
-		}
+        $this->set_prop( 'name', sanitize_text_field( $name ) );
 	}
 
 	/**
@@ -276,13 +294,7 @@ abstract class AtumCPTModel {
 	 * @param int $thumbnail_id
 	 */
 	public function set_thumbnail_id( $thumbnail_id ) {
-
-		$thumbnail_id = absint( $thumbnail_id );
-
-		if ( $this->data['thumbnail_id'] !== $thumbnail_id ) {
-			$this->data['thumbnail_id'] = $thumbnail_id;
-			$this->register_change( 'thumbnail_id' );
-		}
+        $this->set_prop( 'thumbnail_id', absint( $thumbnail_id ) );
 	}
 
 

@@ -14,6 +14,7 @@ namespace Atum\Components\AtumOrders\Models;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
@@ -462,10 +463,11 @@ abstract class AtumOrderModel {
 				$qty = $product->get_min_purchase_quantity();
 			}
 
+			$product_name  = apply_filters( 'atum/order/add_product/name', $product->get_name(), $product, $this );
 			$product_price = apply_filters( 'atum/order/add_product/price', wc_get_price_excluding_tax( $product, array( 'qty' => $qty ) ), $qty, $product, $this );
 
 			$default_args = array(
-				'name'         => $product->get_name(),
+				'name'         => $product_name,
 				'tax_class'    => $product->get_tax_class(),
 				'product_id'   => $product->is_type( 'variation' ) ? $product->get_parent_id() : $product->get_id(),
 				'variation_id' => $product->is_type( 'variation' ) ? $product->get_id() : 0,
@@ -929,30 +931,49 @@ abstract class AtumOrderModel {
 	 */
 	public function save( $including_meta = TRUE ) {
 
-		// Trigger action before saving to the DB. Allows you to adjust object props before save.
-		do_action( 'atum/order/before_object_save', $this );
+        try {
 
-		if ( $this->id ) {
-			$this->update();
-			$action = 'update';
-		}
-		else {
-			$this->create();
-			$action = 'create';
-		}
+            // Trigger action before saving to the DB. Allows you to adjust object props before save.
+            do_action( 'atum/order/before_object_save', $this );
 
-		if ( $including_meta ) {
-			$this->save_meta();
-		}
+            if ( $this->id ) {
+                $this->update();
+                $action = 'update';
+            }
+            else {
+                $this->create();
+                $action = 'create';
+            }
 
-		$this->process_status();
-		$this->save_items();
+            if ( $including_meta ) {
+                $this->save_meta();
+            }
 
-		$this->after_save( $action );
+            $this->process_status();
+            $this->save_items();
 
-		do_action( 'atum/order/after_object_save', $this );
+            $this->after_save( $action );
 
-		return $this->id;
+            do_action( 'atum/order/after_object_save', $this );
+
+        }
+        catch ( \Exception $e ) {
+
+            AtumAdminNotices::add_notice(
+                sprintf(
+                    /* translators: the error message. */
+                    __( 'Error saving the order: %s', ATUM_TEXT_DOMAIN ),
+                    $e->getMessage()
+                ),
+                'invalid_barcode',
+                'error',
+                FALSE,
+                TRUE
+            );
+
+        }
+
+        return $this->id;
 
 	}
 

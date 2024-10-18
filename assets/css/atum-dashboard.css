@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -4469,26 +4469,6 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   right: 0;
   margin: auto;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .swal2-container .swal2-show {
   opacity: 0;
   -webkit-animation: scaleUpSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -4508,6 +4488,27 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
           animation: fadeOutSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .alert {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -5178,16 +5179,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
           animation: loader-rotate 1s linear infinite;
   border-top-color: var(--gray-600);
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .atum-dashboard .atum-widget .widget-config {
   display: none;
 }
@@ -5299,16 +5290,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
           animation: loader-rotate 1s linear infinite;
   border-top-color: var(--atum-text-color-var1);
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .add-widget-popup .swal2-html-container {
   margin-bottom: 0;
 }
@@ -5418,6 +5399,16 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   margin-top: 7px;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .statistics-widget {
   height: 322px;
   display: -webkit-box;
@@ -5522,16 +5513,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
           animation: loader-rotate 1s linear infinite;
   top: 2px;
   right: -8px;
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
 }
 @media all and (max-width: 768px) {
   .statistics-widget .nice-select {
@@ -5665,6 +5646,16 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   pointer-events: none;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .stats-data-widget {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -6043,16 +6034,6 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   right: 0;
   margin: auto;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .videos-widget .video-list article {
   width: 99%;
   display: -webkit-box;
@@ -6364,6 +6345,16 @@ body.toplevel_page_atum-dashboard #wpbody-content > .notice-error, body.toplevel
   }
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .atum_news_widget .widget-wrapper {
   overflow: hidden !important;
 }

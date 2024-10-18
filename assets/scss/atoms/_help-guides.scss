@@ -659,3 +659,51 @@ body {
 	}
 	
 }
+
+// Help guide buttons on the screen options tabs
+#screen-meta-links {
+	
+	#atum-help-guide-link-wrap {
+		float: left;
+		margin: -6px 0 0 6px;
+		
+		.show-settings {
+			padding-left: 7px;
+			
+			&:after{
+				content: none;
+			}
+		}
+		
+		.help-guide-buttons {
+			margin-top: 0;
+			position: relative;
+			top: 2px;
+			
+			i {
+				border: none;
+				padding: 5px;
+				
+				&:hover {
+					background-color: transparent;
+					color: $blue;
+				}
+			}
+		}
+	}
+	
+	@include tablet-max-wp {
+		#atum-help-guide-link-wrap {
+			margin-top: -1px !important;
+			
+			.help-guide-buttons {
+				i {
+					padding: 8px;
+				}
+			}
+		}
+	}
+}
+
+
+@include loader-rotate-animation;

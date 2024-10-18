@@ -17,22 +17,22 @@ import TerserPlugin from 'terser-webpack-plugin';
 
 import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
-const sass = gulpSass(dartSass);
+const sass = gulpSass( dartSass );
 
 // Plugin version
-const version = '1.9.39.2',
-    curDate = new Date();
+const version = '1.9.40',
+	curDate = new Date();
 
 // Global config
 const config = {
 	
-	assetsDir : './assets',
-	jsSrcDir  : './assets/js/src',
+	assetsDir: './assets',
+	jsSrcDir : './assets/js/src',
 
 	devUrl    : 'http://atum.loc',
 	production: false,
 
-	// decorate
+	// Decorate
 	decorate: {
 
 		templateCSS: [
@@ -44,10 +44,10 @@ const config = {
 			' * Author URI: https://berebel.studio \n',
 			' * License : ©' + curDate.getFullYear() + ' Stock Management Labs \n',
 			' */\n',
-			'\n <%= contents %>'
-		].join('')
+			'\n <%= contents %>',
+		].join( '' ),
 
-	}
+	},
 };
 
 // CLI options
@@ -56,68 +56,75 @@ const enabled = {
 	maps: !config.production,
 };
 
-
 // Default error handler
-const onError = (err) => {
-	console.log('An error occured:', err.message);
-	emit('end');
-}
+const onError = ( err ) => {
+	console.log( 'An error occured:', err.message );
+	emit( 'end' );
+};
 
-// As with javascripts this task creates two files, the regular and
-// the minified one. It automatically reloads browser as well.
+/*
+ * As with javascripts this task creates two files, the regular and
+ * the minified one. It automatically reloads browser as well.
+ */
 const options = {
 
 	sass: {
 		errLogToConsole: !config.production,
 		outputStyle    : config.production ? 'compressed' : 'expanded',
-		//precision      : 10,
+		// Precision      : 10,
 		includePaths   : [
 			'.',
-			config.assetsDir + '/scss'
-		]
-		//imagePath: 'assets/img'
-	}
+			config.assetsDir + '/scss',
+		],
+		// ImagePath: 'assets/img'
+	},
 
 };
 
-//
-// SASS task
-//-----------
+/*
+ *
+ *  SASS task
+ * -----------
+ */
 
-task('sass::atum', () => {
+task( 'sass::atum', () => {
 	
 	const destDir = config.assetsDir + '/css';
 	
-	return src([
+	return src( [
 		config.assetsDir + '/scss/*.scss',
 		config.assetsDir + '/scss/rtl/*.scss',
-	])
-	.pipe(plumber({errorHandler: onError}))
-	.pipe(gulpif(enabled.maps, sourcemaps.init()))
-	.pipe(sass(options.sass))
-	.pipe(autoprefix('last 2 version'))
-	.pipe(wrap(config.decorate.templateCSS))
-	.pipe(gulpif(enabled.maps, sourcemaps.write('.', {
-		sourceRoot: ['assets/scss/', 'assets/scss/rtl/'],
-	})))
-	.pipe(cleanDir(destDir))
-	.pipe(dest(destDir))
-	//.pipe(notify({message: 'sass task complete'}))
-	.pipe(filter("**/*.css"))
-	.pipe(livereload());
+	] )
+		.pipe( plumber( { errorHandler: onError } ) )
+		.pipe( gulpif( enabled.maps, sourcemaps.init() ) )
+		.pipe( sass( options.sass ) )
+		.pipe( autoprefix( 'last 2 version' ) )
+		.pipe( wrap( config.decorate.templateCSS ) )
+		.pipe( gulpif( enabled.maps, sourcemaps.write( '.', {
+			sourceRoot: [ 'assets/scss/', 'assets/scss/rtl/' ],
+		} ) ) )
+		.pipe( cleanDir( destDir ) )
+		.pipe( dest( destDir ) )
+	// .pipe(notify({message: 'sass task complete'}))
+		.pipe( filter( '**/*.css' ) )
+		.pipe( livereload() );
 	
-});
+} );
 
-//
-// JS task
-//----------
+/*
+ *
+ *  JS task
+ * ----------
+ */
 
-task('js::atum', () => {
-	return src(config.assetsDir + '/js/**/*.js')
-		// .pipe(webpackStream({
-		//   config: require('./webpack.config.js')
-		// }, webpack))
-		.pipe(webpackStream({
+task( 'js::atum', () => {
+	return src( config.assetsDir + '/js/**/*.js' )
+		/*
+		 * .pipe(webpackStream({
+		 *   config: require('./webpack.config.js')
+		 * }, webpack))
+		 */
+		.pipe( webpackStream( {
 			devtool: config.production ? false : 'source-map',
 			
 			entry: {
@@ -139,11 +146,11 @@ task('js::atum', () => {
 			},
 			
 			output: {
-				filename: 'atum-[name].js'
+				filename: 'atum-[name].js',
 			},
 			
 			resolve: {
-				extensions: ['.js', '.ts']
+				extensions: [ '.js', '.ts' ],
 			},
 			
 			externals: {
@@ -154,107 +161,114 @@ task('js::atum', () => {
 			
 			module: {
 				rules: [
-					/* {
-						enforce: 'pre',
-						test   : /\.js$/,
-						exclude: /node_modules/,
-						use    : 'eslint-loader',
-					}, */
+					/*
+					 * {
+					 * enforce: 'pre',
+					 * test   : /\.js$/,
+					 * exclude: /node_modules/,
+					 * use    : 'eslint-loader',
+					 * },
+					 */
 					{
 						test   : /\.ts$/,
 						exclude: /node_modules/,
 						use    : {
-							loader: 'ts-loader'
-						}
+							loader: 'ts-loader',
+						},
 					},
 				],
 			},
 			
 			optimization: {
-				minimize: config.production,
-				minimizer: [new TerserPlugin({
+				minimize : config.production,
+				minimizer: [ new TerserPlugin( {
 					terserOptions: {
 						format: {
 							comments: false,
 						},
 					},
 					extractComments: false,
-				})],
+				} ) ],
 			},
-			mode        : config.production ? 'production' : 'development',
-			cache       : !config.production,
-			bail        : false,
-			watch       : false,
+			mode : config.production ? 'production' : 'development',
+			cache: !config.production,
+			bail : false,
+			watch: false,
 			
 			plugins: [
 				
-				// Fixes warning in moment-with-locales.min.js
-				// Module not found: Error: Can't resolve './locale' in ...
-				new webpack.IgnorePlugin({
+				/*
+				 * Fixes warning in moment-with-locales.min.js
+				 * Module not found: Error: Can't resolve './locale' in ...
+				 */
+				new webpack.IgnorePlugin( {
 					resourceRegExp: /^\.\/locale$/,
-					contextRegExp: /moment/,
-				}),
+					contextRegExp : /moment/,
+				} ),
 				
 				// Provide jQuery globally instead of having to import it everywhere.
-				new webpack.ProvidePlugin({
+				new webpack.ProvidePlugin( {
 					$     : 'jquery',
 					jQuery: 'jquery',
-				})
+				} ),
 			
 			],
 			
-		}, webpack))
-		.pipe(cleanDir(config.assetsDir + '/js/build/'))
-		.pipe(dest(config.assetsDir + '/js/build/'));
-});
+		}, webpack ) )
+		.pipe( cleanDir( config.assetsDir + '/js/build/' ) )
+		.pipe( dest( config.assetsDir + '/js/build/' ) );
+} );
 
-//
-// Composer packages installation
-// ------------------------------
+/*
+ *
+ * Composer packages installation
+ * ------------------------------
+ */
 
-task('composer::install', ( done ) => {
+task( 'composer::install', ( done ) => {
 	// Installation + optimization
-	composer({
+	composer( {
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
-	});
+	} );
 	done();
-});
+} );
 
-task('composer::update', ( done ) => {
+task( 'composer::update', ( done ) => {
 	// Update + optinmization
-	composer('update', {
+	composer( 'update', {
 		cwd: '.',
 		o  : true,
 		bin: '/usr/local/bin/composer',
-	});
+	} );
 	done();
-});
+} );
 
-task('composer::optimize', ( done ) => {
+task( 'composer::optimize', ( done ) => {
 	// Just optimization (classmap autoloader array generation)
-	composer('dumpautoload', {
+	composer( 'dumpautoload', {
 		cwd     : '.',
 		optimize: true,
 		bin     : '/usr/local/bin/composer',
-	});
+	} );
 	done();
-});
+} );
 
+/*
+ *
+ * Start the livereload server and watch files for changes
+ * -------------------------------------------------------
+ */
 
-//
-// Start the livereload server and watch files for changes
-// -------------------------------------------------------
-
-task('watch::atum', () => {
+task( 'watch::atum', () => {
 
 	livereload.listen();
 
-	watch(config.assetsDir + '/scss/**/*.scss', series(['sass::atum']));
-	watch(config.jsSrcDir + '**/*.ts', series(['js::atum']));
+	watch( config.assetsDir + '/scss/**/*.scss', series( [ 'sass::atum' ] ) );
+	watch( config.jsSrcDir + '**/*.ts', series( [ 'js::atum' ] ) );
 
-	watch([
+	watch( [
 
 		// PHP files
 		'./**/*.php',
@@ -266,13 +280,13 @@ task('watch::atum', () => {
 		'!' + config.assetsDir + '/js/build/**/*.js',
 		'!node_modules',
 
-	]).on('change', (file) => {
-		// reload browser whenever any PHP, SCSS, JS or image file changes
-		livereload.changed(file);
-	});
-});
+	] ).on( 'change', ( file ) => {
+		// Reload browser whenever any PHP, SCSS, JS or image file changes
+		livereload.changed( file );
+	} );
+} );
 
 // Default task
-task('default', series(['sass::atum', 'js::atum']), () => {
+task( 'default', series( [ 'sass::atum', 'js::atum' ] ), () => {
 	
-});
+} );

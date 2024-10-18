@@ -190,15 +190,6 @@ abstract class AtumOrderPostType {
 		// Register the ATUM Order post type.
 		register_post_type( $post_type, $args );
 
-		/**
-		// Add inventory log and purchase order post type on wc navigation system.
-		// Check if the WC method are availables.
-		if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Screen' ) && method_exists( Screen::class, 'register_post_type' ) ) {
-			Screen::register_post_type( $post_type );
-			add_action( 'atum/after_adding_menu', array( $this, 'add_order_post_type_wcmenu' ), 10, 0 );
-		}
-		*/
-
 		// Register the post statuses.
 		$atum_statuses = [];
 		foreach ( static::get_statuses() as $status => $label ) {
@@ -256,34 +247,6 @@ abstract class AtumOrderPostType {
 		}
 
 	}
-
-	/**
-	 * Add supplier post type to the new wc navigation system
-	 *
-	 * @since 1.8.9
-	public function add_order_post_type_wcmenu() {
-		$post_type_items = Menu::get_post_type_items(
-			'atum_purchase_order',
-			array(
-				'title'  => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
-				'parent' => 'ATUM',
-			)
-		);
-
-		Menu::add_plugin_item( $post_type_items['all'] );
-
-		$post_type_items = Menu::get_post_type_items(
-			'atum_inventory_log',
-			array(
-				'title'  => __( 'Inventory Logs', ATUM_TEXT_DOMAIN ),
-				'parent' => 'ATUM',
-			)
-		);
-
-		Menu::add_plugin_item( $post_type_items['all'] );
-	}
-	 */
-
 
 	/**
 	 * Method for recounting order terms (types)

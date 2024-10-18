@@ -153,6 +153,8 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 /*!***********************************************!*\
   !*** ./assets/js/src/product-editor-modal.ts ***!
   \***********************************************/
@@ -162,7 +164,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_2__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
-/* provided dependency */ var product_editor_modal_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
 
@@ -203,10 +205,12 @@ var ProductEditorModal = (function () {
     };
     return ProductEditorModal;
 }());
-product_editor_modal_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumProductEditorModalVars');
     new ProductEditorModal(settings);
 });
+
+})();
 
 /******/ })()
 ;

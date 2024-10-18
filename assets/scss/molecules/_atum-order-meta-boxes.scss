@@ -4,6 +4,10 @@
 
 @use "sass:math";
 
+#atum-help-guide-link-wrap {
+	margin-top: -5px !important;
+}
+
 //
 // Data meta box
 //---------------
@@ -295,9 +299,10 @@ div.add_note {
 		border-bottom: 1px solid $gray-300;
 		padding: 1.5em 2em;
 		background: $gray-100;
-		@include clearfix;
 		line-height: 2em;
 		text-align: right;
+		
+		@include clearfix;
 		
 		p {
 			margin: 0;

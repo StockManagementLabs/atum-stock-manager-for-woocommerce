@@ -5,13 +5,15 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"config": {
-		"preferred-install": "dist"
+		"preferred-install": "dist",
+        "plaform-check": false
 	},
 	"require": {
 		"php": ">=7.1",
-		"mpdf/mpdf": "^v8.2.0",
+		"mpdf/mpdf": "v8.2.0",
 		"madcoda/php-youtube-api": "^v1.2.6",
-		"jimmiw/php-time-ago": "^3.2.4"
+		"jimmiw/php-time-ago": "^3.2.4",
+		"ext-zip": "*"
 	},
 	"require-dev": {
 	},

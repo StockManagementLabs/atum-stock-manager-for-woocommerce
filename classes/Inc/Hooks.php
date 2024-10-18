@@ -964,6 +964,7 @@ class Hooks {
 			'product_id',
 			'out_stock_date',
 			'supplier_sku', // This is not calculated but must be unique.
+			'barcode',      // This is not calculated but must be unique.
 			'inbound_stock',
 			'stock_on_hold',
 			'sold_today',

@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -2968,6 +2968,8 @@ input[type=button].btn-block {
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3048,26 +3050,6 @@ h2 .atum-help-tip {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .note .blockUI.blockOverlay:after {
   top: 38%;
   width: 25px;
@@ -3080,7 +3062,8 @@ h2 .atum-help-tip {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
+
+@-webkit-keyframes loader-rotate {
   from {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
@@ -3091,6 +3074,16 @@ h2 .atum-help-tip {
   }
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 #wpfooter {
   padding-top: 0;
   display: none;
@@ -5429,16 +5422,6 @@ table.wp-list-table tr.no-items td .alert .atum-spinner span, .floatThead-contai
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 @media all and (max-width: 768px) {
   table.wp-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert {
     width: calc(100vw - 93px);
@@ -6027,6 +6010,16 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
   visibility: hidden !important;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 #posts-filter table.wp-list-table th.check-column input[type=checkbox] {
   -webkit-transform: none;
           transform: none;

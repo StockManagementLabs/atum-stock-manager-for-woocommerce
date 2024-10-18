@@ -25,8 +25,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -56,8 +56,8 @@ var MarketingPopup = (function () {
     function MarketingPopup(settings) {
         this.settings = settings;
         this.key = '';
-        if (!window.hasOwnProperty('atum') ||
-            (window.hasOwnProperty('atum') && !window['atum'].hasOwnProperty('AdminModal'))) {
+        if (!window.hasOwnProperty('atum')
+            || (window.hasOwnProperty('atum') && !window['atum'].hasOwnProperty('AdminModal'))) {
             this.getPopupInfo();
         }
     }
@@ -74,9 +74,8 @@ var MarketingPopup = (function () {
             success: function (response) { return __awaiter(_this, void 0, void 0, function () {
                 var popupSettings, descriptionColor, descriptionFontSize, descriptionAlign, descriptionPadding, description, titleColor, titleFontSize, titleAlign, hoverButtons, imageTopLeft, footerNoticeStyle, footerNotice, logo, versionColor, versionBackground, version, buttons_1, title, additionalClass;
                 var _this = this;
-                var _a;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
                             if (!(response.success === true)) return [3, 2];
                             popupSettings = response.data, descriptionColor = popupSettings.description.text_color ? "color:".concat(popupSettings.description.text_color, ";") : '', descriptionFontSize = popupSettings.description.text_size ? "font-size:".concat(popupSettings.description.text_size, ";") : '', descriptionAlign = popupSettings.description.text_align ? "text-align:".concat(popupSettings.description.text_align, ";") : '', descriptionPadding = popupSettings.description.padding ? "padding:".concat(popupSettings.description.padding, ";") : '', description = "<p style=\"".concat(descriptionColor + descriptionFontSize + descriptionAlign + descriptionPadding, "\">").concat(popupSettings.description.text, "</p>"), titleColor = popupSettings.title.text_color ? "color:".concat(popupSettings.title.text_color, ";") : '', titleFontSize = popupSettings.title.text_size ? "font-size:".concat(popupSettings.title.text_size, ";") : '', titleAlign = popupSettings.title.text_align ? "text-align:".concat(popupSettings.title.text_align, ";") : '', hoverButtons = popupSettings.hoverButtons || '', imageTopLeft = popupSettings.images.top_left, footerNoticeStyle = popupSettings.footerNotice.bg_color ? " style=\"background-color:".concat(popupSettings.footerNotice.bg_color, ";\"") : '', footerNotice = popupSettings.footerNotice.text ? "<div class=\"footer-notice\"".concat(footerNoticeStyle, ">").concat(popupSettings.footerNotice.text, "</div>") : '';
@@ -90,7 +89,7 @@ var MarketingPopup = (function () {
                                 versionBackground = popupSettings.version.background ? "background:".concat(popupSettings.version.background, ";") : '';
                                 version = "<span class=\"version\" style=\"".concat(versionBackground + versionColor, "\">").concat(popupSettings.version.text, "</span>");
                             }
-                            title = popupSettings.title.text ? "<h1 style=\"".concat(titleColor + titleFontSize + titleAlign, "\"><span>").concat(popupSettings.title.text + version, "</span></h1>") : '', additionalClass = (_a = " ".concat(popupSettings.additionalClass)) !== null && _a !== void 0 ? _a : '';
+                            title = popupSettings.title.text ? "<h1 style=\"".concat(titleColor + titleFontSize + titleAlign, "\"><span>").concat(popupSettings.title.text + version, "</span></h1>") : '', additionalClass = popupSettings.additionalClass ? " ".concat(popupSettings.additionalClass) : '';
                             if (popupSettings.buttons && popupSettings.buttons.length) {
                                 if (hoverButtons) {
                                     $(hoverButtons).appendTo('body');
@@ -121,8 +120,8 @@ var MarketingPopup = (function () {
                                     _this.hideMarketingPopup();
                                 })];
                         case 1:
-                            _b.sent();
-                            _b.label = 2;
+                            _a.sent();
+                            _a.label = 2;
                         case 2: return [2];
                     }
                 });
@@ -277,19 +276,23 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 /*!******************************************!*\
   !*** ./assets/js/src/marketing-popup.ts ***!
   \******************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_marketing_popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/_marketing-popup */ "./assets/js/src/components/_marketing-popup.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* provided dependency */ var marketing_popup_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
-marketing_popup_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumMarketingPopupVars');
     new _components_marketing_popup__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
 });
+
+})();
 
 /******/ })()
 ;

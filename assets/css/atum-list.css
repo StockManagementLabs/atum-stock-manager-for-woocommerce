@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -3055,6 +3055,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline #posts-filter .page-title-action.subsubsub, #posts-filter .wrap h1.wp-heading-inline .page-title-action.subsubsub, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3702,26 +3704,6 @@ tr.introjs-showElement > th {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 @media all and (max-width: 480px) {
   .help-guide-buttons {
     margin-top: 0;
@@ -3790,6 +3772,59 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
   visibility: hidden !important;
 }
 
+#screen-meta-links #atum-help-guide-link-wrap {
+  float: left;
+  margin: -6px 0 0 6px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .show-settings {
+  padding-left: 7px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .show-settings:after {
+  content: none;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons {
+  margin-top: 0;
+  position: relative;
+  top: 2px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i {
+  border: none;
+  padding: 5px;
+}
+#screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i:hover {
+  background-color: transparent;
+  color: #00B8DB;
+}
+@media all and (max-width: 782px) {
+  #screen-meta-links #atum-help-guide-link-wrap {
+    margin-top: -1px !important;
+  }
+  #screen-meta-links #atum-help-guide-link-wrap .help-guide-buttons i {
+    padding: 8px;
+  }
+}
+
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .popover {
   position: absolute;
   top: 0;
@@ -4210,16 +4245,6 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
   right: 0;
   margin: auto;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .swal2-container .swal2-show {
   opacity: 0;
   -webkit-animation: scaleUpSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -4239,6 +4264,16 @@ body.running-atum-help-guide .atum-help-marker.active:before, body.running-atum-
           animation: fadeOutSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .atum-tree {
   position: relative;
   min-height: 100px;
@@ -4507,16 +4542,6 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-custom-i
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .note .blockUI.blockOverlay:after {
   top: 38%;
   width: 25px;
@@ -4529,6 +4554,7 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-custom-i
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
+
 @keyframes loader-rotate {
   from {
     -webkit-transform: rotate(0deg);
@@ -4539,7 +4565,6 @@ ul.easytree-container.easytree-focused span.easytree-selected .easytree-custom-i
             transform: rotate(360deg);
   }
 }
-
 #atum-export-link-wrap {
   float: right;
   height: 28px;
@@ -8493,16 +8518,6 @@ table.wp-list-table tr.no-items td .alert .atum-spinner span, .floatThead-contai
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 @media all and (max-width: 768px) {
   table.wp-list-table tr.no-items td .alert, .floatThead-container tr.no-items td .alert {
     width: calc(100vw - 93px);
@@ -9091,6 +9106,16 @@ table.wp-list-table .column-groups th.actions, .floatThead-container .column-gro
   visibility: hidden !important;
 }
 
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 #posts-filter table.wp-list-table th.check-column input[type=checkbox] {
   -webkit-transform: none;
           transform: none;

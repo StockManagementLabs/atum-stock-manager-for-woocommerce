@@ -544,6 +544,8 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 /*!***************************************!*\
   !*** ./assets/js/src/product-data.ts ***!
   \***************************************/
@@ -551,15 +553,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/product-data/_file-attachments */ "./assets/js/src/components/product-data/_file-attachments.ts");
 /* harmony import */ var _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/product-data/_product-data-meta-boxes */ "./assets/js/src/components/product-data/_product-data-meta-boxes.ts");
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
-/* provided dependency */ var product_data_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
 
-product_data_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumProductData');
     new _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
     new _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
 });
+
+})();
 
 /******/ })()
 ;

@@ -2,12 +2,12 @@
 
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
-Requires at least: 5.6
-Tested up to: 6.5.3
+Requires at least: 5.9
+Tested up to: 6.6.1
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 8.9.1
-Stable tag: 1.9.39.2
+WC tested up to: 9.2.3
+Stable tag: 1.9.40
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,39 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.40`
+
+*2024-09-05*
+
+**Features**
+
+* Allow filtering Stock Inbound columns programmatically.
+* Added eslint config.
+* Add filter for on hold WC Orders statuses.
+* Allow filtering the default search fields in AtumListTable programmatically.
+
+**Changes**
+
+* Include disabled variations in IL and PO searches.
+* Avoid to check product when product item is empty (for items with deleted products) in AtumOrders API requests.
+* Round prices shown in Stock Central depending on the WC settings.
+* Updated JS dependencies.
+* Refactoring.
+* Do not allow to add duplicated products to ATUM Orders.
+* Removed decimals limit when displaying purchase price in product meta boxes.
+* Moved WooPayments restriction method to Hooks class.
+* Increased number of digits for products in stock widget.
+
+**Fixes**
+
+* Prevent ATUM orders and suppliers' JS from failing if the WPML lang dropdown isn't found.
+* Fixed deprecation message in Inbound Stock list for some products.
+* Fixed wrong posts table.
+* Fixed posts table not included in SQL sentence when searching.
+* Prevent saving wrong "from" and "to" sales meta fields.
 
 ---
 

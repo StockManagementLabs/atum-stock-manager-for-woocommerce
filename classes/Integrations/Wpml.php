@@ -209,6 +209,7 @@ class Wpml {
 			add_filter( 'atum/product_data', array( $this, 'update_multicurrency_translations_data' ), 10, 2 );
 			add_action( 'atum/product_data_updated', array( $this, 'update_translations_data' ), 10, 2 );
 			add_filter( 'atum/model/product/supplier_sku_found', array( $this, 'skip_translations' ), 10, 3 );
+			add_filter( 'atum/model/product/barcode_found', array( $this, 'skip_translations' ), 10, 3 );
 
 			// Prevent WPML from deleting meta when updating from SC.
 			add_filter( 'atum/ajax/before_update_product_meta', array( $this, 'prevent_deleting_product_translations_meta' ), 2 );
@@ -1007,18 +1008,17 @@ class Wpml {
 	 * @since 1.5.0
 	 *
 	 * @param int         $product_id
-	 * @param string      $supplier_sku
+	 * @param string      $value
 	 * @param \WC_Product $product
 	 *
-	 * @return integer|bool
+	 * @return int|bool
 	 */
-	public function skip_translations( $product_id, $supplier_sku, $product ) {
+	public function skip_translations( $product_id, $value, $product ) {
 
 		if ( $product_id ) {
 
 			$post_type = get_post_type( $product_id );
 
-			/* @noinspection PhpUndefinedMethodInspection */
 			if ( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ) === self::$sitepress->get_element_trid( $product->get_id(), 'post_' . $post_type ) ) {
 				return FALSE;
 			}

@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -3137,6 +3137,8 @@ input.form-check-input[disabled] ~ .form-check-label, input.form-check-input:dis
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3570,26 +3572,6 @@ h2 .atum-help-tip {
   right: 0;
   margin: auto;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .swal2-container .swal2-show {
   opacity: 0;
   -webkit-animation: scaleUpSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -3609,6 +3591,27 @@ h2 .atum-help-tip {
           animation: fadeOutSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .blockUI.blockOverlay:before {
   display: none;
 }
@@ -3628,16 +3631,6 @@ h2 .atum-help-tip {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .note .blockUI.blockOverlay:after {
   top: 38%;
   width: 25px;
@@ -3650,6 +3643,7 @@ h2 .atum-help-tip {
   -webkit-animation: loader-rotate 1s linear infinite;
           animation: loader-rotate 1s linear infinite;
 }
+
 @keyframes loader-rotate {
   from {
     -webkit-transform: rotate(0deg);
@@ -3660,7 +3654,6 @@ h2 .atum-help-tip {
             transform: rotate(360deg);
   }
 }
-
 .atum-meta-box {
   padding: 15px 10px;
 }
@@ -3934,6 +3927,10 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
 }
 .select2-container.atum-select2:focus, .select2-container.atum-select2 .selection:focus, .select2-container.atum-select2 .select2-selection--single:focus, .select2-container.atum-enhanced-select:focus, .select2-container.atum-enhanced-select .selection:focus, .select2-container.atum-enhanced-select .select2-selection--single:focus {
   outline: none;
+}
+
+#atum-help-guide-link-wrap {
+  margin-top: -5px !important;
 }
 
 #atum_order_data .hndle, #atum_order_data .handlediv, #atum_order_data .postbox-header {

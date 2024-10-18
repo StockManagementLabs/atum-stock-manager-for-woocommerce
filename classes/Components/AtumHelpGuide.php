@@ -56,13 +56,15 @@ class AtumHelpGuide {
 	 */
 	public function get_guide_steps( $guide_file ) {
 
-		$guide_file .= '.json';
+		if ( ! str_contains( $guide_file, '.json' ) ) {
+			$guide_file .= '.json';
+		}
 
 		if ( file_exists( $guide_file ) ) {
 			$guide_steps = json_decode( file_get_contents( $guide_file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 			if ( ! empty( $guide_steps ) && is_array( $guide_steps ) ) {
-				return $guide_steps;
+				return apply_filters( 'atum/help_guides/guide_steps', $guide_steps, $guide_file );
 			}
 		}
 
@@ -163,7 +165,7 @@ class AtumHelpGuide {
 				'scrollToElement'    => TRUE,
 			),
 			'hgNonce'              => wp_create_nonce( 'help-guide-nonce' ),
-			'hgShowHelpGuide'      => __( 'Show help guide', ATUM_TEXT_DOMAIN ),
+			'hgShowHelpGuide'      => __( 'Show ATUM help guide', ATUM_TEXT_DOMAIN ),
 			'hgShowHelpMarkers'    => __( 'Display ATUM help guide markers', ATUM_TEXT_DOMAIN ),
 		);
 

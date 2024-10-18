@@ -8978,8 +8978,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -11792,20 +11792,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
 
-function _defineProperty(obj, key, value) {
-  key = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
+function _defineProperty(e, r, t) {
+  return (r = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
 }
+
 
 /***/ }),
 
@@ -11821,19 +11816,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ _extends)
 /* harmony export */ });
 function _extends() {
-  _extends = Object.assign ? Object.assign.bind() : function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
+  return _extends = Object.assign ? Object.assign.bind() : function (n) {
+    for (var e = 1; e < arguments.length; e++) {
+      var t = arguments[e];
+      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
     }
-    return target;
-  };
-  return _extends.apply(this, arguments);
+    return n;
+  }, _extends.apply(null, arguments);
 }
+
 
 /***/ }),
 
@@ -11861,6 +11852,7 @@ function toPrimitive(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js":
@@ -11880,8 +11872,9 @@ __webpack_require__.r(__webpack_exports__);
 
 function toPropertyKey(t) {
   var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
-  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : String(i);
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
 }
+
 
 /***/ }),
 
@@ -11905,6 +11898,7 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
+
 
 /***/ }),
 
@@ -17115,23 +17109,13 @@ function configFactory(config, emit) {
 }
 
 /**
- * Test whether an Array contains a specific item.
- * @param {Array.<string>} array
- * @param {string} item
- * @return {boolean}
- */
-function contains(array, item) {
-  return array.indexOf(item) !== -1;
-}
-
-/**
  * Validate an option
  * @param {Object} options         Object with options
  * @param {string} name            Name of the option to validate
  * @param {Array.<string>} values  Array with valid values for this option
  */
 function validateOption(options, name, values) {
-  if (options[name] !== undefined && !contains(values, options[name])) {
+  if (options[name] !== undefined && !values.includes(options[name])) {
     // unknown value
     console.warn('Warning: Unknown value "' + options[name] + '" for configuration option "' + name + '". ' + 'Available options: ' + values.map(value => JSON.stringify(value)).join(', ') + '.');
   }
@@ -22133,6 +22117,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csFkeep_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csFkeep.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csFkeep.js");
 /* harmony import */ var _csFlip_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./csFlip.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csFlip.js");
 /* harmony import */ var _csTdfs_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./csTdfs.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csTdfs.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 
@@ -22150,8 +22137,6 @@ var createCsAmd = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
    * heuristic for finding a permutation P so that P*A*P' has fewer nonzeros in its factorization
    * than A. It is a gready method that selects the sparsest pivot row and column during the course
    * of a right looking sparse Cholesky factorization.
-   *
-   * Reference: http://faculty.cse.tamu.edu/davis/publications.html
    *
    * @param {Number} order    0: Natural, 1: Cholesky, 2: LU, 3: QR
    * @param {Matrix} m        Sparse Matrix
@@ -22728,6 +22713,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
 /* harmony import */ var _csLeaf_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csLeaf.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csLeaf.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 var name = 'csCounts';
@@ -22745,8 +22733,6 @@ var createCsCounts = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODUL
    * @param {Matrix} ata         Count the columns of A'A instead
    *
    * @return                     An array of size n of the column counts or null on error
-   *
-   * Reference: http://faculty.cse.tamu.edu/davis/publications.html
    */
   return function (a, parent, post, ata) {
     // check inputs
@@ -22870,6 +22856,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csMarked_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./csMarked.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csMarked.js");
 /* harmony import */ var _csMark_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csMark.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csMark.js");
 /* harmony import */ var _csUnflip_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./csUnflip.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csUnflip.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 
@@ -22887,8 +22876,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Array}   pinv            The inverse row permutation vector, must be null for L * x = b
  *
  * @return {Number}                 New value of top
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csDfs(j, g, top, xi, pinv) {
   // g arrays
@@ -22959,14 +22946,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csEtree: () => (/* binding */ csEtree)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Computes the elimination tree of Matrix A (using triu(A)) or the
  * elimination tree of A'A without forming A'A.
  *
  * @param {Matrix}  a               The A Matrix
  * @param {boolean} ata             A value of true the function computes the etree of A'A
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csEtree(a, ata) {
   // check inputs
@@ -23042,6 +23031,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csFkeep: () => (/* binding */ csFkeep)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Keeps entries in the matrix when the callback function returns true, removes the entry otherwise
  *
@@ -23054,8 +23047,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {any}      other          The state
  *
  * @return                          The number of nonzero elements in the matrix
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csFkeep(a, callback, other) {
   // a arrays
@@ -23112,12 +23103,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csFlip: () => (/* binding */ csFlip)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * This function "flips" its input about the integer -1.
  *
  * @param {Number}  i               The value to flip
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csFlip(i) {
   // flip the value
@@ -23137,6 +23130,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csIpvec: () => (/* binding */ csIpvec)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Permutes a vector; x = P'b. In MATLAB notation, x(p)=b.
  *
@@ -23180,6 +23177,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csLeaf: () => (/* binding */ csLeaf)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * This function determines if j is a leaf of the ith row subtree.
  * Consider A(i,j), node j in ith row subtree and return lca(jprev,j)
@@ -23193,8 +23194,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Number}  ancestor        The index offset within the workspace for the ancestor array
  *
  * @return {Object}
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csLeaf(i, j, w, first, maxfirst, prevleaf, ancestor) {
   var s, sparent;
@@ -23250,6 +23249,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
 /* harmony import */ var _csSpsolve_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csSpsolve.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csSpsolve.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 
 
 var name = 'csLu';
@@ -23282,8 +23285,6 @@ var createCsLu = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0_
    * @param {Number}  tol             Partial pivoting threshold (1 for partial pivoting)
    *
    * @return {Number}                 The numeric LU factorization of A or null
-   *
-   * Reference: http://faculty.cse.tamu.edu/davis/publications.html
    */
   return function csLu(m, s, tol) {
     // validate input
@@ -23445,6 +23446,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   csMark: () => (/* binding */ csMark)
 /* harmony export */ });
 /* harmony import */ var _csFlip_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./csFlip.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csFlip.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 
 
 /**
@@ -23452,8 +23457,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param {Array}   w               The array
  * @param {Number}  j               The array index
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csMark(w, j) {
   // mark w[j]
@@ -23473,13 +23476,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csMarked: () => (/* binding */ csMarked)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Checks if the node at w[j] is marked
  *
  * @param {Array}   w               The array
  * @param {Number}  j               The array index
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csMarked(w, j) {
   // check node is marked
@@ -23499,6 +23504,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csPermute: () => (/* binding */ csPermute)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Permutes a sparse matrix C = P * A * Q
  *
@@ -23508,8 +23517,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {boolean} values          Create a pattern matrix (false), values and pattern otherwise
  *
  * @return {Matrix}                 C = P * A * Q, null on error
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csPermute(a, pinv, q, values) {
   // a arrays
@@ -23573,6 +23580,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   csPost: () => (/* binding */ csPost)
 /* harmony export */ });
 /* harmony import */ var _csTdfs_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./csTdfs.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csTdfs.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 /**
@@ -23580,8 +23590,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @param {Array}   parent          The tree or forest
  * @param {Number}  n               Number of columns
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csPost(parent, n) {
   // check inputs
@@ -23641,6 +23649,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csMarked_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./csMarked.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csMarked.js");
 /* harmony import */ var _csMark_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./csMark.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csMark.js");
 /* harmony import */ var _csDfs_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csDfs.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csDfs.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 
 
 
@@ -23658,8 +23670,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Array}   pinv            The inverse row permutation vector
  *
  * @return {Number}                 The index for the nonzero pattern
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csReach(g, b, k, xi, pinv) {
   // g arrays
@@ -23707,6 +23717,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _csReach_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csReach.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csReach.js");
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 var name = 'csSpsolve';
@@ -23733,8 +23746,6 @@ var createCsSpsolve = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
    * @param {boolean} lo              The lower (true) upper triangular (false) flag
    *
    * @return {Number}                 The index for the nonzero pattern
-   *
-   * Reference: http://faculty.cse.tamu.edu/davis/publications.html
    */
   return function csSpsolve(g, b, k, xi, x, pinv, lo) {
     // g arrays
@@ -23810,6 +23821,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csAmd_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csAmd.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csAmd.js");
 /* harmony import */ var _csCounts_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./csCounts.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csCounts.js");
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 
@@ -23842,8 +23856,6 @@ var createCsSqr = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
    *                                  symbolic ordering and analysis for LU decomposition (false)
    *
    * @return {Object}                 The Symbolic ordering and analysis for matrix A
-   *
-   * Reference: http://faculty.cse.tamu.edu/davis/publications.html
    */
   return function csSqr(order, a, qr) {
     // a arrays
@@ -24002,6 +24014,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   csTdfs: () => (/* binding */ csTdfs)
 /* harmony export */ });
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
+
 /**
  * Depth-first search and postorder of a tree rooted at node j
  *
@@ -24012,8 +24028,6 @@ __webpack_require__.r(__webpack_exports__);
  * @param {Number}  next            The index offset within the workspace for the next array
  * @param {Array}   post            The post ordering array
  * @param {Number}  stack           The index offset within the workspace for the stack array
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csTdfs(j, k, w, head, next, post, stack) {
   // variables
@@ -24057,14 +24071,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   csUnflip: () => (/* binding */ csUnflip)
 /* harmony export */ });
 /* harmony import */ var _csFlip_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./csFlip.js */ "./node_modules/mathjs/lib/esm/function/algebra/sparse/csFlip.js");
+// Copyright (c) 2006-2024, Timothy A. Davis, All Rights Reserved.
+// SPDX-License-Identifier: LGPL-2.1+
+// https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/CSparse/Source
 
 
 /**
  * Flips the value if it is negative of returns the same value otherwise.
  *
  * @param {Number}  i               The value to flip
- *
- * Reference: http://faculty.cse.tamu.edu/davis/publications.html
  */
 function csUnflip(i) {
   // flip the value if it is negative
@@ -42636,7 +42651,7 @@ var createMad = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
         return abs(subtract(value, med));
       }));
     } catch (err) {
-      if (err instanceof TypeError && err.message.indexOf('median') !== -1) {
+      if (err instanceof TypeError && err.message.includes('median')) {
         throw new TypeError(err.message.replace('median', 'mad'));
       } else {
         throw (0,_utils_improveErrorMessage_js__WEBPACK_IMPORTED_MODULE_2__.improveErrorMessage)(err, 'mad');
@@ -43600,7 +43615,7 @@ var createStd = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0__
         return sqrt(v);
       }
     } catch (err) {
-      if (err instanceof TypeError && err.message.indexOf(' variance') !== -1) {
+      if (err instanceof TypeError && err.message.includes(' variance')) {
         throw new TypeError(err.message.replace(' variance', ' std'));
       } else {
         throw err;
@@ -43739,11 +43754,11 @@ __webpack_require__.r(__webpack_exports__);
 function improveErrorMessage(err, fnName, value) {
   // TODO: add information with the index (also needs transform in expression parser)
   var details;
-  if (String(err).indexOf('Unexpected type') !== -1) {
+  if (String(err).includes('Unexpected type')) {
     details = arguments.length > 2 ? ' (type: ' + (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_0__.typeOf)(value) + ', value: ' + JSON.stringify(value) + ')' : ' (type: ' + err.data.actual + ')';
     return new TypeError('Cannot calculate ' + fnName + ', unexpected type of argument' + details);
   }
-  if (String(err).indexOf('complex numbers') !== -1) {
+  if (String(err).includes('complex numbers')) {
     details = arguments.length > 2 ? ' (type: ' + (0,_utils_is_js__WEBPACK_IMPORTED_MODULE_0__.typeOf)(value) + ', value: ' + JSON.stringify(value) + ')' : '';
     return new TypeError('Cannot calculate ' + fnName + ', no ordering relation is defined for complex numbers' + details);
   }
@@ -46222,9 +46237,7 @@ var createIsNaN = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODULE_0
     Unit: function Unit(x) {
       return Number.isNaN(x.value);
     },
-    'Array | Matrix': function ArrayMatrix(x) {
-      return (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_2__.deepMap)(x, Number.isNaN);
-    }
+    'Array | Matrix': typed.referToSelf(self => x => (0,_utils_collection_js__WEBPACK_IMPORTED_MODULE_2__.deepMap)(x, self))
   });
 });
 
@@ -56174,7 +56187,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
     return {
       mathjs: 'Unit',
       value: this._denormalize(this.value),
-      unit: this.formatUnits(),
+      unit: this.units.length > 0 ? this.formatUnits() : null,
       fixPrefix: this.fixPrefix
     };
   };
@@ -56187,7 +56200,8 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
    * @return {Unit}
    */
   Unit.fromJSON = function (json) {
-    var unit = new Unit(json.value, json.unit);
+    var _json$unit;
+    var unit = new Unit(json.value, (_json$unit = json.unit) !== null && _json$unit !== void 0 ? _json$unit : undefined);
     unit.fixPrefix = json.fixPrefix || false;
     return unit;
   };
@@ -58597,6 +58611,7 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
   };
 
   // aliases (formerly plurals)
+  // note that ALIASES is only used at creation to create more entries in UNITS by copying the aliased units
   var ALIASES = {
     meters: 'meter',
     inches: 'inch',
@@ -59242,13 +59257,16 @@ var createUnitClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_MODU
       _alias.name = aliasName;
       Unit.UNITS[aliasName] = _alias;
     }
-    // delete the memoization cache, since adding a new unit to the array
-    // invalidates all old results
+
+    // delete the memoization cache because we created a new unit
     delete _findUnit.cache;
     return new Unit(null, name);
   };
   Unit.deleteUnit = function (name) {
     delete Unit.UNITS[name];
+
+    // delete the memoization cache because we deleted a unit
+    delete _findUnit.cache;
   };
 
   // expose arrays with prefixes, dimensions, units, systems
@@ -59746,7 +59764,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   checkBroadcastingRules: () => (/* binding */ checkBroadcastingRules),
 /* harmony export */   clone: () => (/* binding */ clone),
 /* harmony export */   concat: () => (/* binding */ concat),
-/* harmony export */   contains: () => (/* binding */ contains),
 /* harmony export */   filter: () => (/* binding */ filter),
 /* harmony export */   filterRegExp: () => (/* binding */ filterRegExp),
 /* harmony export */   flatten: () => (/* binding */ flatten),
@@ -60394,16 +60411,6 @@ function last(array) {
  */
 function initial(array) {
   return array.slice(0, array.length - 1);
-}
-
-/**
- * Test whether an array or string contains an item
- * @param {Array | string} array
- * @param {*} item
- * @return {boolean}
- */
-function contains(array, item) {
-  return array.indexOf(item) !== -1;
 }
 
 /**
@@ -61291,7 +61298,7 @@ function toEngineering(value, precision) {
   // find difference in exponents, and calculate the value without exponent
   var valueWithoutExp = value.mul(Math.pow(10, -newExp));
   var valueStr = valueWithoutExp.toPrecision(precision);
-  if (valueStr.indexOf('e') !== -1) {
+  if (valueStr.includes('e')) {
     var BigNumber = value.constructor;
     valueStr = new BigNumber(valueStr).toFixed();
   }
@@ -61810,9 +61817,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   sortFactories: () => (/* binding */ sortFactories),
 /* harmony export */   stripOptionalNotation: () => (/* binding */ stripOptionalNotation)
 /* harmony export */ });
-/* harmony import */ var _array_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array.js */ "./node_modules/mathjs/lib/esm/utils/array.js");
 /* harmony import */ var _object_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./object.js */ "./node_modules/mathjs/lib/esm/utils/object.js");
-
 
 
 /**
@@ -61871,7 +61876,7 @@ function sortFactories(factories) {
   function containsDependency(factory, dependency) {
     // TODO: detect circular references
     if (isFactory(factory)) {
-      if ((0,_array_js__WEBPACK_IMPORTED_MODULE_1__.contains)(factory.dependencies, dependency.fn || dependency.name)) {
+      if (factory.dependencies.includes(dependency.fn || dependency.name)) {
         return true;
       }
       if (factory.dependencies.some(d => containsDependency(factoriesByName[d], dependency))) {
@@ -63379,8 +63384,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   pick: () => (/* binding */ pick),
 /* harmony export */   pickShallow: () => (/* binding */ pickShallow),
 /* harmony export */   set: () => (/* binding */ set),
-/* harmony export */   traverse: () => (/* binding */ traverse),
-/* harmony export */   values: () => (/* binding */ values)
+/* harmony export */   traverse: () => (/* binding */ traverse)
 /* harmony export */ });
 /* harmony import */ var _is_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is.js */ "./node_modules/mathjs/lib/esm/utils/is.js");
 
@@ -63750,13 +63754,10 @@ function pickShallow(object, properties) {
   }
   return copy;
 }
-function values(object) {
-  return Object.keys(object).map(key => object[key]);
-}
 
 // helper function to test whether a string contains a path like 'user.name'
 function isPath(str) {
-  return str.indexOf('.') !== -1;
+  return str.includes('.');
 }
 
 /***/ }),
@@ -64064,7 +64065,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-var version = '12.4.0';
+var version = '12.4.3';
 // Note: This file is automatically generated when building math.js.
 // Changes made in this file will be overwritten.
 
@@ -64175,13 +64176,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_tooltip__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/_tooltip */ "./assets/js/src/components/_tooltip.ts");
 /* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
-/* provided dependency */ var addons_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
 
 
 
-addons_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumAddons'), tooltip = new _components_tooltip__WEBPACK_IMPORTED_MODULE_3__["default"](), trials = new _components_addons_trials__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
     var addonsPage = new _components_addons_addons_page__WEBPACK_IMPORTED_MODULE_0__["default"](settings, trials);
     new _components_addons_auto_installer__WEBPACK_IMPORTED_MODULE_1__["default"](settings, addonsPage, tooltip);

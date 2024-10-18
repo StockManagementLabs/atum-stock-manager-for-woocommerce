@@ -689,13 +689,14 @@
 		}
 		
 		@include tablet-max-wp{
+			width: 100%;
+			text-align: center;
+			
 			a:not(.extend-list-table) {
 				display: flex;
 				align-items: center;
 				justify-content: center;
 			}
-			width: 100%;
-			text-align: center;
 		}
 		
 	}
@@ -1192,6 +1193,7 @@
 					font-size: 14px;
 					font-weight: normal;
 					color:  var(--primary);
+					
 					&.empty {
 						color: var(--atum-table-views-tabs);
 						a {
@@ -1199,6 +1201,7 @@
 							color: var(--atum-table-views-tabs);
 						}
 					}
+					
 					a {
 						padding: 0;
 						color:  var(--primary);
@@ -1207,14 +1210,13 @@
 				
 				.count {
 					font-size: 16px;
+					font-weight: bold;
+					color: var(--primary);
 					
 					&.extra-links-container {
 						font-size: 14px;
 						font-weight: normal;
 					}
-					
-					font-weight: bold;
-					color: var(--primary);
 					
 					&.empty {
 						color: var(--atum-table-views-tabs);
@@ -2773,10 +2775,11 @@ table.wp-list-table, .floatThead-container {
 		}
 		
 		th {
+			padding: 0 5px !important;
+			
 			&.column-primary {
 				width: auto !important;
 			}
-			padding: 0 5px !important;
 		}
 		
 		tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
@@ -3023,3 +3026,5 @@ table.wp-list-table, .floatThead-container {
 		}
 	}
 }
+
+@include loader-rotate-animation;

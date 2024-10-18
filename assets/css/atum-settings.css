@@ -1,6 +1,6 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.39.2 
+ * @version 1.9.40 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
@@ -3122,6 +3122,8 @@ body .select2-container--default .select2-dropdown.atum-select2-dropdown .select
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   display: inline-block;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
 }
 .wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
   font-size: 12px;
@@ -3845,26 +3847,6 @@ h2 .atum-help-tip {
   right: 0;
   margin: auto;
 }
-@-webkit-keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .swal2-container .swal2-show {
   opacity: 0;
   -webkit-animation: scaleUpSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -3884,6 +3866,27 @@ h2 .atum-help-tip {
           animation: fadeOutSwal 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+@-webkit-keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 #wpfooter {
   padding-top: 0;
   display: none;
@@ -5049,16 +5052,6 @@ body.allow-multiple-suppliers .wc-backbone-modal .alert {
           animation: loader-rotate 1s linear infinite;
   border-top-color: var(--atum-text-color-var1);
 }
-@keyframes loader-rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .atum-settings-wrapper #atum-settings .btn {
   line-height: 18px;
 }
@@ -5885,5 +5878,16 @@ input[type=search]::placeholder {
 
 .select2-results .select2-results__option:focus {
   outline: none;
+}
+
+@keyframes loader-rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
 }
 /*# sourceMappingURL=atum-settings.css.map */
