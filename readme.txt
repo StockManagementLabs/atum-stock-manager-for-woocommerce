@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 7.3
 WC requires at least: 5.0
-WC tested up to: 9.2.3
-Stable tag: 1.9.40
+WC tested up to: 9.3.3
+Stable tag: 1.9.41
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,42 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.41`
+
+*2024-10-07*
+
+**Features**
+
+* Added filter for order item name.
+* Allow adding the help guide buttons to the screen options tabs.
+* Support running JS code before loading help guide steps.
+* Allow filtering the help guides externally.
+* Do not allow adding duplicated barcodes.
+* New marketing popup for the Barcodes PRO add-on launch.
+
+**Changes**
+
+* Allow CORS for ATUM App's web version.
+* Updated composer dependencies.
+* Updated eslint config.
+* Updated dev dependencies.
+* Text changes.
+* Moved the list tables help guide to a screen options tab.
+* Disabled platform check on composer.
+* Do not clone the product barcode when duplicating a product.
+* Handle errors when saving ATUM orders.
+* Refactoring.
+* Add the get_sold_last_days filter to the get sold today column calcs.
+
+**Fixes**
+
+* Fixed product variations permission callback.
+* Fixed not instantiated variable.
+* Fixed SCSS deprecation messages.
+* Fixed wrong tax calculation in REST API when creating a PO and price includes taxes.
 
 ---
 
