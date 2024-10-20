@@ -202,15 +202,6 @@ class Suppliers {
 		// Register the Suppliers post type.
 		register_post_type( self::POST_TYPE, $args );
 
-		/**
-		// Add suppliers post type on wc navigation system.
-		// Check if the WC method are availables.
-		if ( class_exists( 'Automattic\WooCommerce\Admin\Features\Navigation\Screen' ) && method_exists( Screen::class, 'register_post_type' ) ) {
-		Screen::register_post_type( self::POST_TYPE );
-		add_action( 'atum/after_adding_menu', array( $this, 'add_supplier_post_type_wcmenu' ), 10, 0 );
-		}
-		 */
-
 	}
 
 	/**
@@ -761,26 +752,6 @@ class Suppliers {
 		return $found_product_id;
 
 	}
-
-	/**
-	 * Add supplier post type to the new wc navigation system
-	 *
-	 * @since 1.8.9
-	 */
-	/*public function add_supplier_post_type_wcmenu() {
-
-		$post_type_items = Menu::get_post_type_items(
-			'atum_supplier',
-			array(
-				'title'  => __( 'Suppliers', ATUM_TEXT_DOMAIN ),
-				'parent' => 'ATUM',
-			)
-		);
-
-		Menu::add_plugin_item( $post_type_items['all'] );
-
-	}*/
-
 
 	/*******************
 	 * Instance methods

@@ -20,6 +20,9 @@ export default class DateTimePicker {
 		const langs: string[] = [ 'haz', 'as', 'ar', 'as', 'azb', 'bo', 'dz', 'fa', 'gu', 'he', 'hi', 'hy', 'ka', 'kk', 'km', 'kn', 'ko', 'ku', 'lo', 'ml', 'mr', 'my', 'ne', 'pa', 'ps', 'sd', 'si', 'skr', 'ta', 'ur' ];
 		const mylang: string  = langs.includes( this.settings.get( 'calendarLocale' ) ) ? 'en' : this.settings.get( 'calendarLocale' );
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
 		this.defaults = {
 			format           : this.settings.get( 'dateFormat' ),
 			useCurrent       : false,
@@ -35,7 +38,7 @@ export default class DateTimePicker {
 				clear   : 'atum-icon atmi-trash',
 				close   : 'atum-icon atmi-ok',
 			},
-			minDate          : new Date(), // By default, we are not allowing to select dates before today
+			minDate          : today, // By default, we are not allowing to select dates before today
 			showClear        : true,
 			showTodayButton  : true,
 			widgetPositioning: {

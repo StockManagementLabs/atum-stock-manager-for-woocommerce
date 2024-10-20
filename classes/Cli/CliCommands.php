@@ -141,7 +141,7 @@ final class CliCommands {
 	 * @since 1.9.3.1
 	 */
 	public static function atum_tool_clear_out_atum_transients() {
-		AtumCache::delete_transients();
+		AtumCache::do_delete_transients();
 
 		do_action( 'atum/cli/tool_clear_out_atum_transients' );
 		\WP_CLI::line( '' );

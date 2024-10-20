@@ -6407,12 +6407,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
 /* harmony import */ var _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/suppliers/_supplier */ "./assets/js/src/components/suppliers/_supplier.ts");
 /* harmony import */ var _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
-/* provided dependency */ var suppliers_jQuery = __webpack_require__(/*! jquery */ "jquery");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
 
 
 
 
-suppliers_jQuery(function ($) {
+jQuery(function ($) {
     var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_1__["default"]('atumSupplierVars'), enhancedSelect = new _components_enhanced_select__WEBPACK_IMPORTED_MODULE_3__["default"]();
     new _components_suppliers_supplier__WEBPACK_IMPORTED_MODULE_2__["default"](settings, enhancedSelect);
 });
