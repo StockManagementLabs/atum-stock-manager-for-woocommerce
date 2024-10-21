@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2024-09-04 13:18+0200\n"
+"POT-Creation-Date: 2024-10-03 09:16+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: atum-stock-manager-for-woocommerce.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -88,7 +88,7 @@ msgstr ""
 #: classes/Addons/AddonsLoaderDev.php:262 classes/Components/AtumAdminModal.php:75
 #: classes/Components/AtumOrders/AtumOrderPostType.php:960
 #: classes/Dashboard/Dashboard.php:331 classes/Inc/Hooks.php:280
-#: classes/Inc/Hooks.php:1457 classes/Settings/Settings.php:212
+#: classes/Inc/Hooks.php:1458 classes/Settings/Settings.php:212
 #: views/add-ons/add-on.php:165 views/add-ons/add-on.php:187
 #: views/meta-boxes/atum-order/items.php:256 views/widgets/lost-sales-config.php:24
 msgid "Cancel"
@@ -384,7 +384,7 @@ msgid "Premium Support"
 msgstr ""
 
 #: classes/Addons/Addons.php:1827 classes/Addons/Addons.php:1835
-#: classes/Api/AtumApi.php:379 classes/Api/AtumApi.php:386
+#: classes/Api/AtumApi.php:387 classes/Api/AtumApi.php:394
 #: classes/Api/Extenders/AtumProductData.php:939
 #: classes/Api/Extenders/AtumProductData.php:946
 #: classes/Api/Extenders/Media.php:143 classes/Api/Extenders/Media.php:150
@@ -400,7 +400,7 @@ msgstr ""
 #: classes/Components/AtumAdminModal.php:249
 #: classes/Components/AtumAdminNotices.php:312
 #: classes/Components/AtumAdminNotices.php:319
-#: classes/Components/AtumBarcodes.php:351 classes/Components/AtumBarcodes.php:358
+#: classes/Components/AtumBarcodes.php:503 classes/Components/AtumBarcodes.php:510
 #: classes/Components/AtumCalculatedProps.php:528
 #: classes/Components/AtumCalculatedProps.php:537
 #: classes/Components/AtumCapabilities.php:183
@@ -408,8 +408,8 @@ msgstr ""
 #: classes/Components/AtumColors.php:1099 classes/Components/AtumColors.php:1106
 #: classes/Components/AtumEmailNotifications.php:182
 #: classes/Components/AtumEmailNotifications.php:189
-#: classes/Components/AtumHelpGuide.php:213
-#: classes/Components/AtumHelpGuide.php:220
+#: classes/Components/AtumHelpGuide.php:215
+#: classes/Components/AtumHelpGuide.php:222
 #: classes/Components/AtumMarketingPopup.php:429
 #: classes/Components/AtumMarketingPopup.php:436
 #: classes/Components/AtumOrders/AtumComments.php:201
@@ -419,7 +419,7 @@ msgstr ""
 #: classes/Components/AtumStockDecimals.php:362 classes/Dashboard/Dashboard.php:483
 #: classes/Dashboard/Dashboard.php:490 classes/InboundStock/InboundStock.php:159
 #: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3029
-#: classes/Inc/Ajax.php:3036 classes/Inc/Hooks.php:1516 classes/Inc/Hooks.php:1524
+#: classes/Inc/Ajax.php:3036 classes/Inc/Hooks.php:1517 classes/Inc/Hooks.php:1525
 #: classes/Inc/Main.php:647 classes/Inc/Main.php:654
 #: classes/Integrations/Wpml.php:1867 classes/Integrations/Wpml.php:1875
 #: classes/InventoryLogs/InventoryLogs.php:668
@@ -973,35 +973,39 @@ msgstr ""
 msgid "Sorry, you are not allowed to run a full export."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:272
-#: classes/Api/Controllers/V3/FullExportController.php:518
+#: classes/Api/Controllers/V3/FullExportController.php:306
+msgid "Mock file not found."
+msgstr ""
+
+#: classes/Api/Controllers/V3/FullExportController.php:316
+#: classes/Api/Controllers/V3/FullExportController.php:618
 msgid "The export is still running. Please try again later."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:353
+#: classes/Api/Controllers/V3/FullExportController.php:461
 msgid ""
-"No exported files found with the specified criteria. Please do run a new full "
-"export or try to change filters."
+"The export files could not be zipped. Please, enable the PHP zip extension on "
+"your web server."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:372
+#: classes/Api/Controllers/V3/FullExportController.php:472
 msgid "No exported files found. Please do run a new full export."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:383
+#: classes/Api/Controllers/V3/FullExportController.php:483
 msgid "The export upload dir was not found."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:504
+#: classes/Api/Controllers/V3/FullExportController.php:604
 #, php-format
 msgid "The endpoint '%s' wasn't found."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:546
+#: classes/Api/Controllers/V3/FullExportController.php:646
 msgid "The export has been started."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:574
+#: classes/Api/Controllers/V3/FullExportController.php:674
 msgid ""
 "Something failed when creating a temporary directory under the uploads folder, "
 "please check that you have the right permissions"
@@ -1882,6 +1886,10 @@ msgstr ""
 msgid "The barcode for all the products linked to this term."
 msgstr ""
 
+#: classes/Components/AtumBarcodes.php:343
+msgid "Error saving the term: Invalid or duplicated barcode."
+msgstr ""
+
 #: classes/Components/AtumColors.php:655 classes/Modules/ModuleManager.php:153
 msgid "Visual Settings"
 msgstr ""
@@ -2056,40 +2064,36 @@ msgstr ""
 msgid "Email Notifications"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:90 classes/Components/AtumHelpGuide.php:167
+#: classes/Components/AtumHelpGuide.php:92 classes/Components/AtumHelpGuide.php:169
 msgid "Display ATUM help guide markers"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:94
+#: classes/Components/AtumHelpGuide.php:96 classes/Components/AtumHelpGuide.php:168
 msgid "Show ATUM help guide"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:154
+#: classes/Components/AtumHelpGuide.php:156
 msgid "Got it!"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:155
+#: classes/Components/AtumHelpGuide.php:157
 msgid "Help guide buttons"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:156
+#: classes/Components/AtumHelpGuide.php:158
 msgid "You can access this help guide at any time from here."
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:158
+#: classes/Components/AtumHelpGuide.php:160
 msgid "Next"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:159
+#: classes/Components/AtumHelpGuide.php:161
 msgid "Prev"
 msgstr ""
 
-#: classes/Components/AtumHelpGuide.php:160
+#: classes/Components/AtumHelpGuide.php:162
 msgid "Done"
-msgstr ""
-
-#: classes/Components/AtumHelpGuide.php:166
-msgid "Show help guide"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:438
@@ -2252,7 +2256,7 @@ msgid "Click to edit the purchase price"
 msgstr ""
 
 #: classes/Components/AtumListTables/AtumListTable.php:1428
-#: classes/Integrations/Wpml.php:743 classes/StockCentral/Lists/ListTable.php:337
+#: classes/Integrations/Wpml.php:744 classes/StockCentral/Lists/ListTable.php:337
 #: classes/StockCentral/Lists/UncontrolledListTable.php:74
 #: views/help-tabs/stock-central/product-details.php:56
 msgid "Purchase Price"
@@ -2574,7 +2578,7 @@ msgid "This is where ATUM orders are stored."
 msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:411
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1023
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1044
 msgid "Trash"
 msgstr ""
 
@@ -2752,8 +2756,8 @@ msgid "Log #"
 msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:1225
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1037
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1038
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1058
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1059
 #: classes/PurchaseOrders/PurchaseOrders.php:995
 msgid "Unknown"
 msgstr ""
@@ -2776,39 +2780,44 @@ msgstr ""
 msgid "Please provide a valid type for the %s item"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:211
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:212
 msgid "Click the Create button on the top right to add/edit items."
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1041
-#: classes/Inc/Hooks.php:1216
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:965
+#, php-format
+msgid "Error saving the order: %s"
+msgstr ""
+
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1062
+#: classes/Inc/Hooks.php:1217
 #, php-format
 msgid "Order status changed from %1$s to %2$s."
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1631
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1652
 #, php-format
 msgid "(includes %s)"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1945
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1966
 #: classes/InventoryLogs/Models/Log.php:124
 #: classes/PurchaseOrders/Models/PurchaseOrder.php:125
 msgid "Auto Draft"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1950
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1971
 #, php-format
 msgid "ATUM Order &ndash; %s"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1950
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:1971
 msgctxt "ATUM Order date parsed by DateTime::format"
 msgid "M d, Y @ h:i A"
 msgstr ""
 
-#: classes/Components/AtumOrders/Models/AtumOrderModel.php:2739
-#: classes/Models/AtumCPTModel.php:375
+#: classes/Components/AtumOrders/Models/AtumOrderModel.php:2760
+#: classes/Models/AtumCPTModel.php:387
 msgid "Invalid property"
 msgstr ""
 
@@ -3734,16 +3743,16 @@ msgstr ""
 msgid "API Docs"
 msgstr ""
 
-#: classes/Inc/Hooks.php:1207
+#: classes/Inc/Hooks.php:1208
 #, php-format
 msgid "Order status set to %s."
 msgstr ""
 
-#: classes/Inc/Hooks.php:1458
+#: classes/Inc/Hooks.php:1459
 msgid "Understood, continue anyway"
 msgstr ""
 
-#: classes/Inc/Hooks.php:1459
+#: classes/Inc/Hooks.php:1460
 msgid ""
 "We kindly request that you do not use this new feature since it may create "
 "compatibility problems with ATUM plugin.<br>The new feature significantly "
@@ -3752,7 +3761,7 @@ msgid ""
 "released.<br>We appreciate your cooperation and understanding.<br><br>Thank you."
 msgstr ""
 
-#: classes/Inc/Hooks.php:1460
+#: classes/Inc/Hooks.php:1461
 msgid "ATUM Compatibility Notice"
 msgstr ""
 
@@ -4099,12 +4108,17 @@ msgstr ""
 msgid "Purchase price"
 msgstr ""
 
-#: classes/Models/AtumCPTModel.php:167
+#: classes/Models/AtumCPTModel.php:186
 msgid "The name is required"
 msgstr ""
 
-#: classes/Models/Products/AtumProductTrait.php:825
+#: classes/Models/Products/AtumProductTrait.php:827
 msgid "Invalid or duplicated Supplier SKU."
+msgstr ""
+
+#: classes/Models/Products/AtumProductTrait.php:1093
+#: classes/Suppliers/Supplier.php:420
+msgid "Invalid or duplicated barcode."
 msgstr ""
 
 #: classes/Modules/ModuleManager.php:79
