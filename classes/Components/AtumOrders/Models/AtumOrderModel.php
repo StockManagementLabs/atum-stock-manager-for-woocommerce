@@ -1097,7 +1097,7 @@ abstract class AtumOrderModel {
 			}
 
 			$status       = $this->get_status();
-			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp() );
+			$date_created = Helpers::get_wc_time( $this->date_created ?: Helpers::get_current_timestamp( TRUE ) );
 			$this->set_date_created( $date_created );
 
 			$id = wp_insert_post( array_merge(
