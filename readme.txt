@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.41`
 
-*2024-10-07*
+*2024-10-22*
 
 **Features**
 
@@ -228,6 +228,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Allow filtering the help guides externally.
 * Do not allow adding duplicated barcodes.
 * New marketing popup for the Barcodes PRO add-on launch.
+* Added filter at PO API to allow adding extra data keys.
 
 **Changes**
 
@@ -242,6 +243,9 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Handle errors when saving ATUM orders.
 * Refactoring.
 * Add the get_sold_last_days filter to the get sold today column calcs.
+* Added parent status criteria to product search in order to exclude variations from draft variables.
+* Include the delete transients execution in the CRON.
+* Removed WC navigation references.
 
 **Fixes**
 
@@ -249,6 +253,8 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed not instantiated variable.
 * Fixed SCSS deprecation messages.
 * Fixed wrong tax calculation in REST API when creating a PO and price includes taxes.
+* Fixed select today date in atum-datepicker from other time zones.
+* Fixed deprecation warnings from new Sass compiler.
 
 ---
 
