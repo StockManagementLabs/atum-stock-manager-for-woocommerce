@@ -1,72 +1,10 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.40 
+ * @version 1.9.41 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
  * License : ©2024 Stock Management Labs 
  */
 
- /*
- * Bootstrap 5
- */
-[class^=atmi-], [class*=" atmi-"], .atum-icon {
-  padding: 5px 0 0 5px;
-}
-
-.wrap h1.wp-heading-inline {
-  margin-left: 15px;
-  margin-right: 0px;
-}
-.wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
-  margin-left: 4px;
-  margin-right: 14px;
-}
-.wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
-  margin-right: 14px;
-  margin-left: 0px;
-}
-
-.form-switch {
-  padding-left: 0px;
-}
-.form-switch input.form-check-input {
-  margin-left: 0px;
-}
-
-.atum-meta-box .form-field {
-  float: right;
-}
-
-#atum_order_items .atum-order-totals {
-  float: left;
-  text-align: left;
-}
-#atum_order_items .atum-order-data-row {
-  text-align: left;
-}
-#atum_order_items .atum-order-data-row p {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-#atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost {
-  text-align: left;
-}
-#atum_order_items .atum_order_items_wrapper table.atum_order_items thead th {
-  text-align: right;
-}
-#atum_order_items .atum_order_items_wrapper table.atum_order_items thead th:first-child {
-  padding-right: 2em;
-}
-#atum_order_items .atum_order_items_wrapper table.atum_order_items tbody th, #atum_order_items .atum_order_items_wrapper table.atum_order_items td {
-  text-align: right;
-}
-#atum_order_items .atum_order_items_wrapper table.atum_order_items tbody th:first-child, #atum_order_items .atum_order_items_wrapper table.atum_order_items td:first-child {
-  padding-right: 2em;
-  padding-left: 1em;
-}
-/*# sourceMappingURL=atum-orders-rtl.css.map */
+ [class^=atmi-],[class*=" atmi-"],.atum-icon{padding:5px 0 0 5px}.wrap h1.wp-heading-inline{margin-left:15px;margin-right:0px}.wrap h1.wp-heading-inline .page-title-action,.wrap h1.wp-heading-inline .page-title-action:active{margin-left:4px;margin-right:14px}.wrap h1.wp-heading-inline .page-title-action.extend-list-table,.wrap h1.wp-heading-inline .page-title-action:active.extend-list-table{margin-right:14px;margin-left:0px}.form-switch{padding-left:0px}.form-switch input.form-check-input{margin-left:0px}.atum-meta-box .form-field{float:right}#atum_order_items .atum-order-totals{float:left;text-align:left}#atum_order_items .atum-order-data-row{text-align:left}#atum_order_items .atum-order-data-row p{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}#atum_order_items .atum_order_items_wrapper table.atum_order_items .line_cost{text-align:left}#atum_order_items .atum_order_items_wrapper table.atum_order_items thead th{text-align:right}#atum_order_items .atum_order_items_wrapper table.atum_order_items thead th:first-child{padding-right:2em}#atum_order_items .atum_order_items_wrapper table.atum_order_items tbody th,#atum_order_items .atum_order_items_wrapper table.atum_order_items td{text-align:right}#atum_order_items .atum_order_items_wrapper table.atum_order_items tbody th:first-child,#atum_order_items .atum_order_items_wrapper table.atum_order_items td:first-child{padding-right:2em;padding-left:1em}
