@@ -58,7 +58,7 @@ const enabled = {
 
 // Default error handler
 const onError = ( err ) => {
-    console.log( 'An error occured:', err.message );
+    console.log( 'An error occurred:', err.message );
     emit( 'end' );
 };
 
@@ -76,6 +76,7 @@ const options = {
             '.',
             config.assetsDir + '/scss',
         ],
+		silenceDeprecations: ['legacy-js-api'], // TODO: MIGRATE TO THE MODERN API (https://sass-lang.com/documentation/breaking-changes/legacy-js-api/).
         // ImagePath: 'assets/img'
     },
 
@@ -105,7 +106,7 @@ task( 'sass::atum', () => {
         } ) ) )
         .pipe( cleanDir( destDir ) )
         .pipe( dest( destDir ) )
-    // .pipe(notify({message: 'sass task complete'}))
+    	// .pipe(notify({message: 'sass task complete'}))
         .pipe( filter( '**/*.css' ) )
         .pipe( livereload() );
 	
@@ -119,11 +120,11 @@ task( 'sass::atum', () => {
 
 task( 'js::atum', () => {
     return src( config.assetsDir + '/js/**/*.js' )
-    /*
-     * .pipe(webpackStream({
-     *   config: require('./webpack.config.js')
-     * }, webpack))
-     */
+		/*
+		 * .pipe(webpackStream({
+		 *   config: require('./webpack.config.js')
+		 * }, webpack))
+		 */
         .pipe( webpackStream( {
             devtool: config.production ? false : 'source-map',
 			
@@ -218,6 +219,87 @@ task( 'js::atum', () => {
         .pipe( cleanDir( config.assetsDir + '/js/build/' ) )
         .pipe( dest( config.assetsDir + '/js/build/' ) );
 } );
+
+// task( 'scss::webpack::atum', () => {
+//     return src( config.assetsDir + '/scss/**/*.scss' )
+// 		/*
+// 		 // .pipe(webpackStream({
+// 		 //  config: require('./webpack.config.js')
+// 		 // }, webpack))
+// 		 */
+//         .pipe( webpackStream( {
+//             devtool: config.production ? false : 'source-map',
+//
+//             entry: {
+//                 'addons'              : config.assetsDir + '/scss/atum-addons.scss',
+//                 'admin-modals'        : config.assetsDir + '/scss/atum-admin-modals.scss',
+//                 'check-orders'        : config.assetsDir + '/scss/atum-check-orders.scss',
+//                 'dashboard'           : config.assetsDir + '/scss/atum-dashboard.scss',
+//                 'icons'		          : config.assetsDir + '/scss/atum-icons.scss',
+//                 'list'		          : config.assetsDir + '/scss/atum-list.scss',
+//                 'marketing-popup'     : config.assetsDir + '/scss/atum-marketing-popup.scss',
+//                 'orders'              : config.assetsDir + '/scss/atum-orders.scss',
+//                 'orders-list'         : config.assetsDir + '/scss/atum-orders-list.scss',
+//                 'po-export'		      : config.assetsDir + '/scss/atum-po-export.scss',
+//                 'post-type-list'      : config.assetsDir + '/scss/atum-post-type-list.scss',
+//                 'product-data'        : config.assetsDir + '/scss/atum-product-data.scss',
+//                 'search-orders'       : config.assetsDir + '/scss/atum-search-orders.scss',
+//                 'settings'            : config.assetsDir + '/scss/atum-settings.scss',
+//                 'suppliers'           : config.assetsDir + '/scss/atum-suppliers.scss',
+//             },
+//
+//             output: {
+//                 filename: '[name].css',
+//             },
+//
+//             resolve: {
+//                 extensions: [ '.scss', '.css' ],
+//             },
+//
+//             module: {
+//                 rules: [
+// 					{
+// 						test: /\.s[ac]ss$/i,
+// 						use: [
+// 							"sass-loader",
+// 							{
+// 								loader: "sass-loader",
+// 								options: {
+// 									api: "modern-compiler",
+// 									sassOptions: {
+// 										sourceMap: !config.production
+// 									},
+// 								},
+// 							}
+// 						],
+// 					},
+//                 ],
+//             },
+//
+//             optimization: {
+//                 minimize : config.production,
+//                 minimizer: [ new TerserPlugin( {
+//                     terserOptions: {
+//                         format: {
+//                             comments: false,
+//                         },
+//                     },
+//                     extractComments: false,
+//                 } ) ],
+//             },
+//             mode : config.production ? 'production' : 'development',
+//             cache: !config.production,
+//             bail : false,
+//             watch: false,
+//
+//             plugins: [
+//
+//             ],
+//
+//         }, webpack ) )
+//         .pipe( cleanDir( config.assetsDir + '/css/' ) )
+//         .pipe( dest( config.assetsDir + '/css/' ) );
+// } );
 
 /*
  *
