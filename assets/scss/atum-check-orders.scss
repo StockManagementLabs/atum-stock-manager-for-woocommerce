@@ -2,12 +2,7 @@
 // ATUM check orders
 //------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
+@use "atoms/atum-icons";
+@use "atoms/tooltip";
 
-@import "atoms/atum-icons";
-@import "atoms/tooltip";
-
-@import "molecules/check-order-prices";
+@use "molecules/check-order-prices";

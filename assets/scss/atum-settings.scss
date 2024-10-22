@@ -2,27 +2,22 @@
 // Atum settings page
 //-------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/animations";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/tooltip";
-@import "atoms/buttons";
-@import "atoms/select2";
-@import "atoms/atum-icons";
-@import "atoms/page-title";
-@import "atoms/form-check";
-@import "atoms/image-selector";
-@import "atoms/help-tip";
+@use "atoms/tooltip";
+@use "atoms/buttons";
+@use "atoms/select2";
+@use "atoms/atum-icons";
+@use "atoms/page-title";
+@use "atoms/form-check";
+@use "atoms/image-selector";
+@use "atoms/help-tip";
 
-@import "molecules/alert";
-@import "molecules/button-groups";
-@import "molecules/sweet-alert";
-@import "molecules/atum-footer";
-@import "molecules/meta-boxes";
-@import "molecules/bootstrap-datetimepicker";
+@use "molecules/alert";
+@use "molecules/button-groups";
+@use "molecules/sweet-alert";
+@use "molecules/atum-footer";
+@use "molecules/meta-boxes";
+@use "molecules/bootstrap-datetimepicker";
 
-@import "organisms/pages/settings";
+@use "organisms/pages/settings";

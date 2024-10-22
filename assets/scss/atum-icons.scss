@@ -2,7 +2,4 @@
 // ATUM Icons
 //------------
 
-@import "common/functions";
-@import "common/variables";
-
-@import "atoms/atum-icons";
+@use "atoms/atum-icons";

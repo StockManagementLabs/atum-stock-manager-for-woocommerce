@@ -2,16 +2,12 @@
 // Atum Suppliers
 //---------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/select2";
-@import "atoms/atum-icons";
+@use "atoms/select2";
+@use "atoms/atum-icons";
 
-@import "molecules/atum-footer";
-@import "molecules/meta-boxes";
+@use "molecules/atum-footer";
+@use "molecules/meta-boxes";
 
-@import "organisms/pages/atum-supplier";
+@use "organisms/pages/atum-supplier";

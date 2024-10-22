@@ -1,3 +1,7 @@
+@use "sass:color";
+@use "../common/variables" as *;
+@use "../common/mixins/utilities" as *;
+
 //
 // Check order prices component
 //------------------------------
@@ -35,14 +39,14 @@
 	transition: .2s ease-in-out;
 	
 	&:hover {
-		background-color: darken( $warning, 5% );
+		background-color: color.adjust( $warning, $lightness: -5% );
 	}
 	
 	&.background-success {
 		background-color: $success;
 		
 		&:hover {
-			background-color: darken( $success, 5% );
+			background-color: color.adjust( $success, $lightness: -5% );
 		}
 	}
 }

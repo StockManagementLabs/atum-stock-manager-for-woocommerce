@@ -2,22 +2,17 @@
 // ATUM add-ons page
 //------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/utilities";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/buttons";
-@import "atoms/atum-icons";
-@import "atoms/tooltip";
-@import "atoms/dash-cards";
+@use "atoms/buttons";
+@use "atoms/atum-icons";
+@use "atoms/tooltip";
+@use "atoms/dash-cards";
 
-@import "molecules/alert";
-@import "molecules/block-ui";
-@import "molecules/sweet-alert";
-@import "molecules/atum-modals";
-@import "molecules/atum-footer";
+@use "molecules/alert";
+@use "molecules/block-ui";
+@use "molecules/sweet-alert";
+@use "molecules/atum-modals";
+@use "molecules/atum-footer";
 
-@import "organisms/pages/addons";
+@use "organisms/pages/addons";

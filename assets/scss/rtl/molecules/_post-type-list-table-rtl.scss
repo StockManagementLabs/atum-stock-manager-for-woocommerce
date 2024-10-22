@@ -3,7 +3,7 @@
 //--------------------------------
 
 #posts-filter {
-	@extend .atum-list-wrapper;
+	@extend .atum-list-wrapper !optional;
 	
 	.nav-with-scroll-effect .subsubsub {
 		li {

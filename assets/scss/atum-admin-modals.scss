@@ -2,17 +2,13 @@
 // ATUM admin modals
 //------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/root";
+@use "common/root";
 
 // Atoms
-@import "atoms/buttons";
-@import "atoms/atum-icons";
+@use "atoms/buttons";
+@use "atoms/atum-icons";
 
 // Molecules
-@import "molecules/sweet-alert";
-@import "molecules/atum-modals";
-@import "molecules/trial-modal";
+@use "molecules/sweet-alert";
+@use "molecules/atum-modals";
+@use "molecules/trial-modal";

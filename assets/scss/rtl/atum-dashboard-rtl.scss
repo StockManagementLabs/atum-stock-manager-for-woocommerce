@@ -2,16 +2,12 @@
 // ATUM Dashboard RTL
 //---------------
 
-@import "../common/functions";
-@import "../common/variables";
-@import "../common/mixins";
+@use "atoms/nice-select-rtl";
+@use "atoms/form-check-rtl";
 
-@import "atoms/nice-select-rtl";
-@import "atoms/form-check-rtl";
+@use "organisms/pages/dashboard-rtl";
 
-@import "organisms/pages/dashboard-rtl";
-
-@import "organisms/widgets/statistics-rtl";
-@import "organisms/widgets/stock-control-rtl";
-@import "organisms/widgets/current-stock-value-rtl";
-@import "organisms/widgets/videos-rtl";
+@use "organisms/widgets/statistics-rtl";
+@use "organisms/widgets/stock-control-rtl";
+@use "organisms/widgets/current-stock-value-rtl";
+@use "organisms/widgets/videos-rtl";

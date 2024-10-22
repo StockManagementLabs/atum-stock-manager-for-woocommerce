@@ -2,25 +2,20 @@
 // Atum Orders
 //-------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/utilities";
-@import "common/breakpoints";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/select2";
-@import "atoms/tooltip";
-@import "atoms/atum-icons";
-@import "atoms/buttons";
-@import "atoms/form-check";
-@import "atoms/page-title";
-@import "atoms/help-tip";
+@use "atoms/select2";
+@use "atoms/tooltip";
+@use "atoms/atum-icons";
+@use "atoms/buttons";
+@use "atoms/form-check";
+@use "atoms/page-title";
+@use "atoms/help-tip";
 
-@import "molecules/pagination";
-@import "molecules/sweet-alert";
-@import "molecules/block-ui";
-@import "molecules/meta-boxes";
-@import "molecules/atum-order-meta-boxes";
-@import "molecules/atum-footer";
-@import "molecules/bootstrap-datetimepicker";
+@use "molecules/pagination";
+@use "molecules/sweet-alert";
+@use "molecules/block-ui";
+@use "molecules/meta-boxes";
+@use "molecules/atum-order-meta-boxes";
+@use "molecules/atum-footer";
+@use "molecules/bootstrap-datetimepicker";

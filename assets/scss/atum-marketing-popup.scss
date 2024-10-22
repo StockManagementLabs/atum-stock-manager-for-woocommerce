@@ -2,13 +2,8 @@
 // ATUM marketing popup page
 //------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
+@use "atoms/buttons";
+@use "atoms/atum-icons";
 
-@import "atoms/buttons";
-@import "atoms/atum-icons";
-
-@import "molecules/sweet-alert";
-@import "molecules/marketing-popup";
+@use "molecules/sweet-alert";
+@use "molecules/marketing-popup";

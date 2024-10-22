@@ -2,35 +2,30 @@
 // Atum List
 //-----------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/utilities";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/thumb-placeholder";
-@import "atoms/atum-icons";
-@import "atoms/tooltip";
-@import "atoms/buttons";
-@import "atoms/select2";
-@import "atoms/page-title";
-@import "atoms/help-tip";
-@import "atoms/help-guides";
+@use "atoms/thumb-placeholder";
+@use "atoms/atum-icons";
+@use "atoms/tooltip";
+@use "atoms/buttons";
+@use "atoms/select2";
+@use "atoms/page-title";
+@use "atoms/help-tip";
+@use "atoms/help-guides";
 
-@import "molecules/popovers";
-@import "molecules/sweet-alert";
-@import "molecules/tree";
-@import "molecules/block-ui";
-@import "molecules/data-export";
-@import "molecules/input-group";
-@import "molecules/pagination";
-@import "molecules/dropdown";
-@import "molecules/atum-footer";
-@import "molecules/alert";
-@import "molecules/lightgallery";
-@import "molecules/bootstrap-datetimepicker";
-@import "molecules/menu-popover";
-@import "molecules/atum-modals";
-@import "molecules/list-table";
-@import "molecules/post-type-list-table";
+@use "molecules/popovers";
+@use "molecules/sweet-alert";
+@use "molecules/tree";
+@use "molecules/block-ui";
+@use "molecules/data-export";
+@use "molecules/input-group";
+@use "molecules/pagination";
+@use "molecules/dropdown";
+@use "molecules/atum-footer";
+@use "molecules/alert";
+@use "molecules/lightgallery";
+@use "molecules/bootstrap-datetimepicker";
+@use "molecules/menu-popover";
+@use "molecules/atum-modals";
+@use "molecules/list-table";
+@use "molecules/post-type-list-table";

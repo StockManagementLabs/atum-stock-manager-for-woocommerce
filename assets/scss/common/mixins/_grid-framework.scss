@@ -1,3 +1,8 @@
+@use "sass:map";
+@use "../variables" as *;
+@use "breakpoints";
+@use "grid";
+
 //
 // Framework grid generation (Bootstrap 4)
 //----------------------------------------
@@ -15,8 +20,8 @@
 		padding-left: ($gutter / 2);
 	}
 	
-	@each $breakpoint in map-keys($breakpoints) {
-		$infix: breakpoint-infix($breakpoint, $breakpoints);
+	@each $breakpoint in map.keys($breakpoints) {
+		$infix: breakpoints.breakpoint-infix($breakpoint, $breakpoints);
 		
 		// Allow columns to stretch full width below their breakpoints
 		@for $i from 1 through $columns {
@@ -29,7 +34,7 @@
 			@extend %grid-column;
 		}
 		
-		@include media-breakpoint-up($breakpoint, $breakpoints) {
+		@include breakpoints.media-breakpoint-up($breakpoint, $breakpoints) {
 			// Provide basic `.col-{bp}` classes for equal-width flexbox columns
 			.col#{$infix} {
 				flex-basis: 0;
@@ -44,7 +49,7 @@
 			
 			@for $i from 1 through $columns {
 				.col#{$infix}-#{$i} {
-					@include make-col($i, $columns);
+					@include grid.make-col($i, $columns);
 				}
 			}
 			
@@ -60,7 +65,7 @@
 			@for $i from 0 through ($columns - 1) {
 				@if not ($infix == "" and $i == 0) { // Avoid emitting useless .offset-0
 					.offset#{$infix}-#{$i} {
-						@include make-col-offset($i, $columns);
+						@include grid.make-col-offset($i, $columns);
 					}
 				}
 			}

@@ -1,8 +1,11 @@
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+
 //
 // Global Variables
 //------------------
 
-@use "sass:math";
 
 // Paths
 $atum-assets-path:                      "../" !default;
@@ -60,7 +63,7 @@ $gray-900:                              #212529 !default;
 $black:                                 #000 !default;
 
 $grays: () !default;
-$grays: map-merge((
+$grays: map.merge((
 		"100": $gray-100,
 		"200": $gray-200,
 		"300": $gray-300,
@@ -75,29 +78,29 @@ $grays: map-merge((
 $blue:                                  #00B8DB !default;
 $blue-dark:                             #27283B !default;
 $blue-dark-lighten:                     #3b3d5a;
-$blue-dark-light-2:                     lighten($blue-dark, 40%) !default;
-$blue-light:                            lighten($blue, 50%) !default;
-$blue-light-2:                          lighten($blue, 55%) !default;
+$blue-dark-light-2:                     color.adjust($blue-dark, $lightness: 40%) !default;
+$blue-light:                            color.adjust($blue, $lightness: 50%) !default;
+$blue-light-2:                          color.adjust($blue, $lightness: 55%) !default;
 $blue-gray-light:                       #E3E8F5 !default;
 $orange:                                #EFAF00 !default;
-$orange-light:                          lighten($orange, 40%) !default;
-$orange-dark-light:                     darken($orange-light, 10%);
-$orange-light-2:                        lighten($orange, 48%) !default;
+$orange-light:                          color.adjust($orange, $lightness: 40%) !default;
+$orange-dark-light:                     color.adjust($orange-light, $lightness: -10%);
+$orange-light-2:                        color.adjust($orange, $lightness: 48%) !default;
 $red:                                   #ff4848 !default;
-$red-light:                             lighten($red, 30%) !default;
-$red-light-2:                           lighten($red, 34%) !default;
+$red-light:                             color.adjust($red, $lightness: 30%) !default;
+$red-light-2:                           color.adjust($red, $lightness: 34%) !default;
 $green:                                 #69C61D !default;
-$green-light:                           lighten($green, 40%) !default;
-$green-light-2:                         lighten($green, 50%) !default;
+$green-light:                           color.adjust($green, $lightness: 40%) !default;
+$green-light-2:                         color.adjust($green, $lightness: 50%) !default;
 $purple:                                #BA7DF7 !default;
-$purple-light:                          lighten($purple, 20%) !default;
+$purple-light:                          color.adjust($purple, $lightness: 20%) !default;
 $purple-pl:                             #9357cc !default;
 $blue-trans:                            rgba(0, 183, 219, 0.79);
 $green-trans:                           rgba(106, 200, 30, 0.79);
 $green-blue:                            rgba(30, 200, 149, 0.79);
 
 $colors: () !default;
-$colors: map-merge((
+$colors: map.merge((
 		"blue":              $blue,
 		"blue-gray-light":   $blue-gray-light,
 		"orange":            $orange,
@@ -133,7 +136,7 @@ $light:                                 $gray-100 !default;
 $dark:                                  $gray-800 !default;
 
 $theme-colors: () !default;
-$theme-colors: map-merge((
+$theme-colors: map.merge((
 		"primary":    $primary,
 		"secondary":  $secondary,
 		"tertiary":   $tertiary,
@@ -155,7 +158,7 @@ $wp-link-hover:                         #00A0D2 !default;
 $wp-input-focus:                        #007CBA !default;
 $wp-pink:                               #E6CCE1 !default;
 $wp-pink-light:                         #F5EBF3 !default;
-$wp-pink-darken:                        darken($wp-pink-light, 8%);
+$wp-pink-darken:                        color.adjust($wp-pink-light, $lightness: -8%);
 $wp-pink-lighter:                       #FBF9FB !default;
 $wp-gray-dark:                          #32373C !default;
 $wp-gray-1:                             #999 !default;
@@ -169,7 +172,7 @@ $wp-gray-8:                             #F0F0F1 !default;
 $wp-red:                                #A00 !default;
 
 $wp-colors: () !default;
-$wp-colors: map-merge((
+$wp-colors: map.merge((
 		"wp-link":         $wp-link,
 		"wp-link-hover":   $wp-link-hover,
 		"wp-input-focus":  $wp-input-focus,
@@ -199,7 +202,7 @@ $wc-purple:                             #9a69c7 !default;
 $wc-disabled:                           #CCC !default;
 
 $wc-colors: () !default;
-$wc-colors: map-merge((
+$wc-colors: map.merge((
 		"wc-blue-gray":       $wc-blue-gray,
 		"wc-blue-gray-light": $wc-blue-gray-light,
 		"wc-green":           $wc-green,
@@ -228,13 +231,13 @@ $body-color:                            $gray-900 !default;
 
 $link-color:                            $primary !default;
 $link-decoration:                       none !default;
-$link-hover-color:                      darken($link-color, 5%) !default;
+$link-hover-color:                      color.adjust($link-color, $lightness: -5%) !default;
 $link-hover-decoration:                 underline !default;
 
 $border-color:                          $gray-300 !default;
 
 $component-active-color:                $white !default;
-$component-active-bg:                   theme-color("primary") !default;
+$component-active-bg:                   $primary !default;
 
 $caret-width:                           .37em !default;
 
@@ -259,13 +262,13 @@ $yiq-text-light:                        $white !default;
 
 // Spacing
 //
-// Control the default styling of most elements by modifying these variables. Mostly focused on spacing.
+// Control the default styling of most elements by modifying these  Mostly focused on spacing.
 // You can add more entries to the $spacers map, should you need more variation.
 
 // stylelint-disable
 $spacer: 1rem !default;
 $spacers: () !default;
-$spacers: map-merge((
+$spacers: map.merge((
 		0: 0,
 		1: ($spacer * .25),
 		2: ($spacer * .5),
@@ -276,7 +279,7 @@ $spacers: map-merge((
 
 // This variable affects the `.h-*` and `.w-*` classes.
 $sizes: () !default;
-$sizes: map-merge((
+$sizes: map.merge((
 		25: 25%,
 		50: 50%,
 		75: 75%,
@@ -365,7 +368,7 @@ $input-border-radius-lg:                $border-radius-lg !default;
 $input-border-radius-sm:                $border-radius-sm !default;
 
 $input-focus-bg:                        $input-bg !default;
-$input-focus-border-color:              lighten($component-active-bg, 25%) !default;
+$input-focus-border-color:              color.adjust($component-active-bg, $lightness: 25%) !default;
 $input-focus-color:                     $input-color !default;
 $input-focus-width:                     $input-btn-focus-width !default;
 $input-focus-box-shadow:                $input-btn-focus-box-shadow !default;
@@ -445,7 +448,7 @@ $form-switch-bg-image:                  url("data:image/svg+xml,<svg xmlns='http
 $form-switch-border-radius:             $form-switch-width !default;
 $form-switch-transition:                background-position .15s ease-in-out !default;
 
-$form-switch-focus-color:               lighten($success, 25%) !default;
+$form-switch-focus-color:               color.adjust($success, $lightness: 25%) !default;
 $form-switch-focus-bg-image:            url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-focus-color}'/></svg>") !default;
 
 $form-switch-checked-color:             $component-active-color !default;
@@ -465,7 +468,7 @@ $dropdown-box-shadow:                   0 0 6px 0 rgba(0, 0, 0, 0.2);
 //$dropdown-box-shadow:                   0 0 10px 0 rgba($black, .6) !default;
 
 $dropdown-link-color:                   $gray-900 !default;
-$dropdown-link-hover-color:             darken($gray-900, 5%) !default;
+$dropdown-link-hover-color:             color.adjust($gray-900, $lightness: -5%) !default;
 $dropdown-link-hover-bg:                $gray-100 !default;
 
 $dropdown-link-active-color:            $component-active-color !default;
@@ -524,7 +527,7 @@ $popover-border-width:                  $border-width !default;
 $popover-fallback-border-color:         #CCC !default;
 $popover-border-radius:                 6px !default;
 $popover-font-size:                     $font-size-sm !default;
-$popover-inner-border-radius:           subtract($popover-border-radius, $popover-border-width) !default;
+$popover-inner-border-radius:           calc(#{$popover-border-radius} - #{$popover-border-width}) !default;
 
 $popover-header-bg:                     $gray-100 !default;
 $popover-header-padding-y:              .5rem !default;
@@ -540,7 +543,7 @@ $popover-arrow-color:                   var(--atum-table-bg) !default;
 
 $popover-arrow-outer-width:             ($popover-arrow-width + 1) !default;
 $popover-arrow-outer-color:             var(--atum-text-color-var1) !default;
-$popover-arrow-outer-fallback-color:    darken($popover-fallback-border-color, 20%) !default;
+$popover-arrow-outer-fallback-color:    color.adjust($popover-fallback-border-color, $lightness: -20%) !default;
 
 $zindex-popover:                        99998 !default; // 1px lower than the WP admin bar
 

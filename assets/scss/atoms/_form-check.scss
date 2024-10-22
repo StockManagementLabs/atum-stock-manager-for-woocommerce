@@ -1,3 +1,7 @@
+@use "sass:color";
+@use "../common/functions" as *;
+@use "../common/variables" as *;
+
 //
 // Bootstrap 5 form-check
 //-----------------------
@@ -123,7 +127,7 @@ input.form-check-input {
 		// Blue switches
 		&.blue-switch {
 			
-			$form-blue-switch-focus-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{lighten($primary, 25%)}'/></svg>") !default;
+			$form-blue-switch-focus-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{color.adjust($primary, $lightness: 25%)}'/></svg>") !default;
 			
 			&:focus {
 				border-color: $primary;

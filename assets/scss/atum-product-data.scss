@@ -2,18 +2,14 @@
 // Atum Product Data
 //-------------------
 
-@import "common/functions";
-@import "common/variables";
-@import "common/mixins";
-@import "common/breakpoints";
-@import "common/root";
+@use "common/root";
 
-@import "atoms/buttons";
-@import "atoms/atum-icons";
-@import "atoms/select2";
-@import "atoms/form-check";
+@use "atoms/buttons";
+@use "atoms/atum-icons";
+@use "atoms/select2";
+@use "atoms/form-check";
 
-@import "molecules/button-groups";
-@import "molecules/input-group";
-@import "molecules/product-data";
-@import "molecules/atum-attachments";
+@use "molecules/button-groups";
+@use "molecules/input-group";
+@use "molecules/product-data";
+@use "molecules/atum-attachments";
