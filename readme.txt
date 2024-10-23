@@ -7,7 +7,7 @@ Tested up to: 6.6.2
 Requires PHP: 7.3
 WC requires at least: 5.0
 WC tested up to: 9.3.3
-Stable tag: 1.9.41.1
+Stable tag: 1.9.41.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.41.2`
+
+*2024-10-23*
+
+**Fixes**
+
+* Added Barcodes PRO addon entry to the addons paths list.
 
 ---
 

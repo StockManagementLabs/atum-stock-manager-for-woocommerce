@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.41.2`
+
+*2024-10-23*
+
+**Fixes**
+
+* Added Barcodes PRO addon entry to the addons paths list.
+
+---
+
 `1.9.41.1`
 
 *2024-10-23*
