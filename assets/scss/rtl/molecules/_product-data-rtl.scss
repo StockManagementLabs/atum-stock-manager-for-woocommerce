@@ -1,6 +1,10 @@
+@use "../../common/mixins/border-radius" as *;
+
+
 //
 // Product Data meta box RTL
 //----------------------
+
 #woocommerce-product-data {
 	
 	ul{

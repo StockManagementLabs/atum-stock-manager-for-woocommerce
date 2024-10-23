@@ -2,7 +2,7 @@
 // ATUM check orders
 //------------------
 
-@import "atoms/atum-icons";
-@import "atoms/tooltip";
+@use "atoms/atum-icons";
+@use "atoms/tooltip";
 
-@import "molecules/check-order-prices";
+@use "molecules/check-order-prices";

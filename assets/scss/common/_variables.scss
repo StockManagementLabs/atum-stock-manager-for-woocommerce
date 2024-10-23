@@ -1,12 +1,11 @@
 @use "sass:color";
 @use "sass:map";
-@use "functions";
+@use "sass:math";
 
 //
 // Global Variables
 //------------------
 
-@use "sass:math";
 
 // Paths
 $atum-assets-path:                      "../" !default;
@@ -238,7 +237,7 @@ $link-hover-decoration:                 underline !default;
 $border-color:                          $gray-300 !default;
 
 $component-active-color:                $white !default;
-$component-active-bg:                   functions.theme-color("primary") !default;
+$component-active-bg:                   $primary !default;
 
 $caret-width:                           .37em !default;
 
@@ -528,7 +527,7 @@ $popover-border-width:                  $border-width !default;
 $popover-fallback-border-color:         #CCC !default;
 $popover-border-radius:                 6px !default;
 $popover-font-size:                     $font-size-sm !default;
-$popover-inner-border-radius:           functions.subtract($popover-border-radius, $popover-border-width) !default;
+$popover-inner-border-radius:           calc(#{$popover-border-radius} - #{$popover-border-width}) !default;
 
 $popover-header-bg:                     $gray-100 !default;
 $popover-header-padding-y:              .5rem !default;

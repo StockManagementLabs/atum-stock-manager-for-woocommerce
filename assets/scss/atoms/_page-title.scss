@@ -1,8 +1,11 @@
+@use "sass:math";
+@use "../common/breakpoints" as *;
+@use "../common/variables" as *;
+
 //
 // Page Title
 //------------
 
-@use "sass:math";
 
 .wrap {
 	h1 {

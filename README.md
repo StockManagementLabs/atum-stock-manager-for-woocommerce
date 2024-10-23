@@ -198,7 +198,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.9.41`
 
-*2024-10-07*
+*2024-10-21*
 
 **Features**
 
@@ -208,6 +208,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Allow filtering the help guides externally.
 * Do not allow adding duplicated barcodes.
 * New marketing popup for the Barcodes PRO add-on launch.
+* Added filter at PO API to allow adding extra data keys.
 
 **Changes**
 
@@ -222,6 +223,9 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Handle errors when saving ATUM orders.
 * Refactoring.
 * Add the get_sold_last_days filter to the get sold today column calcs.
+* Added parent status criteria to product search in order to exclude variations from draft variables.
+* Include the delete transients execution in the CRON.
+* Removed WC navigation references.
 
 **Fixes**
 
@@ -229,6 +233,8 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Fixed not instantiated variable.
 * Fixed SCSS deprecation messages.
 * Fixed wrong tax calculation in REST API when creating a PO and price includes taxes.
+* Fixed select today date in atum-datepicker from other time zones.
+* Fixed deprecation warnings from new Sass compiler.
 
 ---
 

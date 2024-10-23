@@ -1,8 +1,8 @@
 @use "../common/functions" as *;
-@use "../common/mixins/border-radius" as *;
+@use "../common/variables" as *;
 @use "../common/mixins/reset-text" as *;
 @use "../common/mixins/rfs" as *;
-@use "../common/variables" as *;
+@use "../common/mixins/border-radius" as *;
 
 //
 // Bootstrap Popovers

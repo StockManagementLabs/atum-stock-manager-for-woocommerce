@@ -1,3 +1,10 @@
+@use "sass:color";
+@use "sass:map";
+@use "../../common/breakpoints" as *;
+@use "../../common/mixins/utilities" as *;
+@use "../../common/variables" as *;
+@use "../pages/dashboard" as *;
+
 //
 // "Statistics" widget
 //-----------------------
@@ -13,7 +20,7 @@
 		display: none;
 		margin-left: math.div($grid-gutter-width, -2);
 		margin-right:  math.div($grid-gutter-width, -2);
-		margin-top: -$grid-gutter-width;
+		margin-top: -($grid-gutter-width);
 		
 		@include mobile-max {
 			display: block;
@@ -66,7 +73,7 @@
 			}
 			
 			&.visible-filter {
-				animation: fadeInDown .3s map_get($easing, 'ease-in-quad');
+				animation: fadeInDown .3s map.get($easing, 'ease-in-quad');
 				animation-fill-mode: both;
 			}
 		}
@@ -164,7 +171,7 @@
 			}
 			
 			&.legend-placeholder {
-				background-color: transparentize($light, 0.85);
+				background-color: color.adjust($light, $alpha: -0.85);
 				border-style: dashed;
 				
 				&:before {

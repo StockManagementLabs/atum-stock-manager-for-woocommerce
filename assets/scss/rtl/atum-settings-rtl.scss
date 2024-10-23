@@ -2,6 +2,6 @@
 // Atum settings page RTL
 //-------------------
 
-@import "atoms/page-title-rtl";
+@use "atoms/page-title-rtl";
 
-@import "organisms/pages/settings-rtl";
+@use "organisms/pages/settings-rtl";

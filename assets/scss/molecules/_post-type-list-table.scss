@@ -1,9 +1,12 @@
+@use "../common/breakpoints" as *;
+@use "../common/variables" as *;
+
 //
 // Atum List Tables for Post Types
 //--------------------------------
 
 #posts-filter {
-	@extend .atum-list-wrapper;
+	@extend .atum-list-wrapper !optional;
 	
 	table.wp-list-table {
 		th.check-column {
@@ -65,7 +68,7 @@
 	}
 	
 	.subsubsub {
-		@extend .extend-list-table;
+		@extend .extend-list-table !optional;
 	}
 	
 	.nav-with-scroll-effect .subsubsub {

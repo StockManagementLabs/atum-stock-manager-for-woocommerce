@@ -2,6 +2,6 @@
 // Atum Purchase Orders Export
 //----------------------------
 
-@import "common/root";
+@use "common/root";
 
-@import "molecules/po-export";
+@use "molecules/po-export";

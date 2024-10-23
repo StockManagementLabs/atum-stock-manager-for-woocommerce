@@ -2,10 +2,10 @@
 // Atum Orders RTL
 //-------------
 
-@import "atoms/atum-icons-rtl";
-@import "atoms/page-title-rtl";
-@import "atoms/form-check-rtl";
+@use "atoms/atum-icons-rtl";
+@use "atoms/page-title-rtl";
+@use "atoms/form-check-rtl";
 
-@import "molecules/meta-boxes-rtl";
-@import "molecules/atum-order-meta-boxes-rtl";
+@use "molecules/meta-boxes-rtl";
+@use "molecules/atum-order-meta-boxes-rtl";
 

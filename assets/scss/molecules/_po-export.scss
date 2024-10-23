@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../common/variables" as *;
+
 body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
@@ -99,7 +102,7 @@ body {
 	}
 	
 	td.total, .po-lines tr:nth-child(even) td {
-		background-color: transparentize($primary, .9);
+		background-color: color.adjust($primary, $alpha: -.9);
 	}
 }
 

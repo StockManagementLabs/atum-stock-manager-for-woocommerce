@@ -18,11 +18,11 @@
 		"node": ">=20"
 	},
 	"devDependencies": {
-		"@stylistic/eslint-plugin": "^2.8.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/es6-shim": "^0.31.45",
-		"@types/jquery": "^2.0.66",
+		"@types/jquery": "^2.0.68",
 		"autoprefixer": "^10.4.20",
-		"eslint": "^9.10.0",
+		"eslint": "^9.13.0",
 		"eslint-webpack-plugin": "^4.2.0",
 		"gulp": "^5.0.0",
 		"gulp-autoprefixer": "^9.0.0",
@@ -35,12 +35,12 @@
 		"gulp-sass": "^5.1.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-wrap": "^0.15.0",
-		"sass": "^1.78.0",
-		"terser-webpack-plugin" : "^5.3.10",
+		"sass": "^1.80.3",
+		"sass-loader": "^16.0.2",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.6.2",
-		"typescript-eslint": "^8.5.0",
-		"webpack": "^5.94.0",
+		"typescript": "^5.6.3",
+		"typescript-eslint": "^8.11.0",
+		"webpack": "^5.95.0",
 		"webpack-stream": "^7.0.0"
 	},
 	"dependencies": {
@@ -53,8 +53,8 @@
 		"jquery-nice-select": "^1.1.0",
 		"jquery.fancytable": "^1.0.32",
 		"lightgallery.js": "^1.4.0",
-		"mathjs": "^12.4.0",
-		"moment": "^2.29.4",
+		"mathjs": "^12.4.3",
+		"moment": "^2.30.1",
 		"owl.carousel": "^2.3.4",
 		"sweetalert2": "^11.10.6"
 	}

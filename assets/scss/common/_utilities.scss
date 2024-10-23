@@ -1,4 +1,4 @@
-@use "mixins/utilities";
+@use "mixins/utilities" as *;
 
 //
 // Utilities
@@ -7,10 +7,10 @@
 @use "sass:math";
 
 // Brand colors
-@include utilities.brand_colors();
+@include brand_colors();
 
 // Brand backgrounds
-@include utilities.brand_bg_colors();
+@include brand_bg_colors();
 
 // Embed
 .embed-responsive {

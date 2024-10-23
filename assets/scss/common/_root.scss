@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "variables" as *;
+
 :root {
 	// Custom variable values only support SassScript inside `#{}`.
 	@each $color, $value in $grays {
@@ -89,28 +92,28 @@
 	--danger-hover-text: #{$white};
 	--dash-add-widget-color: #{$gray-500};
 	--dash-add-widget-color-dark: #{$blue};
-	--dash-atum-version: #{transparentize($black, 0.9)};
+	--dash-atum-version: #{color.adjust($black, $alpha: -0.9)};
 	--dash-blue-trans: #{$blue-trans};
 	--dash-card-bg: #{$gray-100};
 	--dash-card-text: #{$gray-600};
 	--dash-green-blue: #{$green-blue};
 	--dash-green-light: #{$green-light};
 	--dash-green-trans: #{$green-trans};
-	--dash-input-group-bg: #{transparentize($white, 0.34)};
-	--dash-input-group-shadow: #{transparentize($white, 0.8)};
+	--dash-input-group-bg: #{color.adjust($white, $alpha: -0.34)};
+	--dash-input-group-shadow: #{color.adjust($white, $alpha: -0.8)};
 	--dash-next-text:  #{$gray-200};
 	--dash-nice-select-bg: #{$white};
-	--dash-nice-select-disabled: #{lighten($gray-200, 2%)};
-	--dash-nice-select-disabled-after: #{lighten($gray-500, 20%)};
-	--dash-nice-select-hover: #{darken($gray-200, 10%)};
+	--dash-nice-select-disabled: #{color.adjust($gray-200, $lightness: 2%)};
+	--dash-nice-select-disabled-after: #{color.adjust($gray-500, $lightness: 20%)};
+	--dash-nice-select-hover: #{color.adjust($gray-200, $lightness: -10%)};
 	--dash-nice-select-list-bg: #{$white};
 	--dash-nice-select-option-hover-bg: #{$gray-100};
 	--dash-nice-select-option-selected-bg: #{$blue-light};
-	--dash-statistics-chart-type-bg: #{transparentize($light, 0.8)};
+	--dash-statistics-chart-type-bg: #{color.adjust($light, $alpha: -0.8)};
 	--dash-statistics-chart-type-selected-bg: transparent;
 	--dash-statistics-chart-type-selected-text: #{$warning};
 	--dash-statistics-grid-lines: #{$gray-200};
-	--dash-statistics-legend-switch-bg: #{transparentize($light, 0.8)};
+	--dash-statistics-legend-switch-bg: #{color.adjust($light, $alpha: -0.8)};
 	--dash-statistics-ticks: #{$blue-dark};
 	--dash-stats-data-widget-primary: #{$widget-primary};
 	--dash-stats-data-widget-success: #{$widget-success};
@@ -120,7 +123,7 @@
 	--dash-widget-current-stock-value-bg: #{$red-light};
 	--dash-widget-current-stock-value-text: #{$red};
 	--dash-widget-icon: #{$gray-500};
-	--dash-widget-list-border: #{transparentize($light, 0.5)};
+	--dash-widget-list-border: #{color.adjust($light, $alpha: -0.5)};
 	--green-light-expanded: #{$green-light};
 	--info-hover-border: 1px solid transparent;
 	--main-border: #{rgba($white, 0.2)};

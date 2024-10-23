@@ -3,10 +3,10 @@
 //------------------------------------
 
 // Import atoms.
-@import "atoms/tooltip";
-@import "atoms/buttons";
+@use "atoms/tooltip";
+@use "atoms/buttons";
 
 // Import molecules.
-@import "molecules/input-group";
-@import "molecules/dropdown";
-@import "molecules/search-orders-field";
+@use "molecules/input-group";
+@use "molecules/dropdown";
+@use "molecules/search-orders-field";

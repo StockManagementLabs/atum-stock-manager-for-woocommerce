@@ -1,3 +1,8 @@
+@use "../common/variables" as *;
+@use "../common/mixins/hover" as *;
+@use "../common/mixins/border-radius" as *;
+@use "../common/mixins/box-shadow" as *;
+
 //
 // Button groups
 //---------------
@@ -34,7 +39,7 @@
 	.btn + .btn-group,
 	.btn-group + .btn,
 	.btn-group + .btn-group {
-		margin-left: -$btn-border-width;
+		margin-left: -($btn-border-width);
 	}
 }
 

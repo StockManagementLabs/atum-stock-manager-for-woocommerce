@@ -2,8 +2,8 @@
 // Atum Product Data RTL
 //-------------------
 
-@import "molecules/input-group-rtl";
-@import "molecules/product-data-rtl";
+@use "molecules/input-group-rtl";
+@use "molecules/product-data-rtl";
 
-@import "molecules/button-groups-rtl";
+@use "molecules/button-groups-rtl";
 
