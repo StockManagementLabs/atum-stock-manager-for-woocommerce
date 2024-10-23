@@ -196,9 +196,19 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.41.1`
+
+*2024-10-23*
+
+**Fixes**
+
+* Recompiled CSS.
+
+---
+
 `1.9.41`
 
-*2024-10-21*
+*2024-10-22*
 
 **Features**
 
