@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../variables" as *;
+
 //
 // Utilities
 //----------
@@ -116,7 +119,7 @@
 	
 	&[href] {
 		&:hover, &:focus {
-			background-color: darken($color, 10%);
+			background-color: color.adjust($color, $lightness: -10%);
 		}
 	}
 }
@@ -128,11 +131,11 @@
 	border-color: $border;
 	
 	hr {
-		border-top-color: darken($border, 5%);
+		border-top-color: color.adjust($border, $lightness: -5%);
 	}
 	
 	.alert-link {
-		color: darken($color, 10%);
+		color: color.adjust($color, $lightness: -10%);
 	}
 }
 

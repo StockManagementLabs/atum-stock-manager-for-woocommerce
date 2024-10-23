@@ -1,3 +1,5 @@
+@use "../common/variables" as *;
+
 @font-face {
 	font-family: '#{$atum-icon-font}';
 	src:  url('#{$atum-font-path}#{$atum-icon-font}.eot?h88pav');

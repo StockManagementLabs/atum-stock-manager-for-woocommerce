@@ -1,3 +1,5 @@
+@use "mixins/utilities";
+
 //
 // Utilities
 //----------
@@ -5,10 +7,10 @@
 @use "sass:math";
 
 // Brand colors
-@include brand_colors();
+@include utilities.brand_colors();
 
 // Brand backgrounds
-@include brand_bg_colors();
+@include utilities.brand_bg_colors();
 
 // Embed
 .embed-responsive {
@@ -36,24 +38,24 @@
 
 .embed-responsive-21by9 {
 	&::before {
-		padding-top: percentage(math.div(9, 21));
+		padding-top: math.percentage(math.div(9, 21));
 	}
 }
 
 .embed-responsive-16by9 {
 	&::before {
-		padding-top: percentage(math.div(9, 16));
+		padding-top: math.percentage(math.div(9, 16));
 	}
 }
 
 .embed-responsive-4by3 {
 	&::before {
-		padding-top: percentage(math.div(3, 4));
+		padding-top: math.percentage(math.div(3, 4));
 	}
 }
 
 .embed-responsive-1by1 {
 	&::before {
-		padding-top: percentage(math.div(1, 1));
+		padding-top: math.percentage(math.div(1, 1));
 	}
 }

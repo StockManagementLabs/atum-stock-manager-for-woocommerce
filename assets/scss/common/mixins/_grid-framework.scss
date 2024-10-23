@@ -1,3 +1,8 @@
+@use "sass:map";
+@use "../variables" as *;
+@use "breakpoints" as *;
+@use "grid" as *;
+
 //
 // Framework grid generation (Bootstrap 4)
 //----------------------------------------
@@ -15,7 +20,7 @@
 		padding-left: ($gutter / 2);
 	}
 	
-	@each $breakpoint in map-keys($breakpoints) {
+	@each $breakpoint in map.keys($breakpoints) {
 		$infix: breakpoint-infix($breakpoint, $breakpoints);
 		
 		// Allow columns to stretch full width below their breakpoints

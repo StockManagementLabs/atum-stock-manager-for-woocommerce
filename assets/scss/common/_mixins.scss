@@ -3,27 +3,26 @@
 //--------
 
 // Vendor
-@import "mixins/rfs";
+@use "mixins/rfs";
 
 // Utilities
 
-@import "mixins/border-radius";
-@import "mixins/box-shadow";
-@import "mixins/breakpoints";
-@import "mixins/fonts";
-@import "mixins/gradients";
-@import "mixins/hover";
-@import "mixins/utilities";
-@import "mixins/reset-text";
+@use "mixins/border-radius";
+@use "mixins/box-shadow";
+@use "mixins/breakpoints";
+@use "mixins/fonts";
+@use "mixins/gradients";
+@use "mixins/hover";
+@use "mixins/utilities";
+@use "mixins/reset-text";
 
 // Layout
 
-@import "mixins/grid-framework";
-@import "mixins/grid";
+@use "mixins/grid-framework";
+@use "mixins/grid";
 
 // Components
 
-@import "mixins/caret";
-@import "mixins/buttons";
-@import "mixins/nav-divider";
-@import "mixins/lightgallery";
+@use "mixins/caret";
+@use "mixins/buttons";
+@use "mixins/nav-divider";
