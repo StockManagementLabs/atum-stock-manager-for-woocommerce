@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.41`
 
-*2024-10-07*
+*2024-10-23*
 
 **Features**
 
@@ -249,6 +249,8 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed not instantiated variable.
 * Fixed SCSS deprecation messages.
 * Fixed wrong tax calculation in REST API when creating a PO and price includes taxes.
+* Apply the time zone to the current timestamp when crating an ATUM Order.
+* Fixed worst sellers filter in Stock Central.
 
 ---
 
