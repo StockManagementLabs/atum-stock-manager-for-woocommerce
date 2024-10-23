@@ -865,7 +865,7 @@ class ListTable extends AtumListTable {
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-							LEFT JOIN {$wpdb->prefix}wc_orders ord ON (order_items.order_id = ord.id)
+							INNER JOIN {$wpdb->prefix}wc_orders ord ON (order_items.order_id = ord.id)
 							WHERE (pr.post_type IN ('product', 'product_variation')
 							AND ord.status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
 							$dates_where ) OR ord.date_created_gmt IS NULL
@@ -889,7 +889,7 @@ class ListTable extends AtumListTable {
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_pr_id ON (pr.ID = meta_pr_id.meta_value) AND (meta_pr_id.meta_key IN ('_product_id', '_variation_id') ) 
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta meta_qty ON ( meta_pr_id.order_item_id = meta_qty.order_item_id) AND (meta_qty.meta_key = '_qty') 
 							LEFT JOIN {$wpdb->prefix}woocommerce_order_items order_items ON (meta_pr_id.order_item_id = order_items.order_item_id)
-							LEFT JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
+							INNER JOIN $wpdb->posts ord ON (order_items.order_id = ord.ID)
 							WHERE (pr.post_type IN ('product', 'product_variation')
 							AND ord.post_status IN ( '" . implode( "','", Globals::get_order_statuses_change_stock() ) . "')
 							$dates_where ) OR ord.post_date IS NULL
