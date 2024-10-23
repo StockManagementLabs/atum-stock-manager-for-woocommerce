@@ -80,6 +80,10 @@ final class Addons {
 			'name'     => 'Stock Takes',
 			'basename' => 'atum-stock-takes/atum-stock-takes.php',
 		],
+		'barcodes_pro'     => [
+			'name'     => 'Barcodes PRO',
+			'basename' => 'atum-barcodes-pro/atum-barcodes-pro.php',
+		],
 	);
 
 	/**
