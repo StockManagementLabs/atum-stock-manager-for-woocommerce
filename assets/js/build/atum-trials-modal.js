@@ -1,1 +1,249 @@
-(()=>{"use strict";var t={1669:t=>{t.exports=jQuery}},e={};function n(i){var s=e[i];if(void 0!==s)return s.exports;var o=e[i]={exports:{}};return t[i](o,o.exports,n),o.exports}n.n=t=>{var e=t&&t.__esModule?()=>t.default:()=>t;return n.d(e,{a:e}),e},n.d=(t,e)=>{for(var i in e)n.o(e,i)&&!n.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},n.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);const i=function(){function t(t,e){void 0===e&&(e={}),this.varName=t,this.defaults=e,this.settings={};var n=void 0!==window[t]?window[t]:{};Object.assign(this.settings,e,n)}return t.prototype.get=function(t){if(void 0!==this.settings[t])return this.settings[t]},t.prototype.getAll=function(){return this.settings},t.prototype.delete=function(t){this.settings.hasOwnProperty(t)&&delete this.settings[t]},t}(),s=Swal;var o=n.n(s),r=n(1669);const a=function(){function t(t,e){this.settings=t,this.successCallback=e,this.bindEvents()}return t.prototype.bindEvents=function(){var t=this;r("body").on("click",".extend-atum-trial",(function(e){e.preventDefault(),e.stopImmediatePropagation();var n=r(e.currentTarget);t.extendTrialConfirmation(n.closest(".atum-addon").data("addon"),n.data("key"))}))},t.prototype.extendTrialConfirmation=function(t,e){var n=this;o().fire({title:this.settings.get("trialExtension"),text:this.settings.get("trialWillExtend"),icon:"info",showCancelButton:!0,confirmButtonText:this.settings.get("extend"),cancelButtonText:this.settings.get("cancel"),showCloseButton:!0,allowEnterKey:!1,reverseButtons:!0,showLoaderOnConfirm:!0,preConfirm:function(){return n.extendTrial(t,e,!0,(function(t){t.success?o().fire({title:n.settings.get("success"),html:t.data,icon:"success",confirmButtonText:n.settings.get("ok")}).then((function(t){n.successCallback&&t.isConfirmed&&n.successCallback()})):o().showValidationMessage(t.data)}))}})},t.prototype.extendTrial=function(t,e,n,i){var s=this;return void 0===n&&(n=!1),void 0===i&&(i=null),new Promise((function(n){r.ajax({url:window.ajaxurl,method:"POST",dataType:"json",data:{action:"atum_extend_trial",security:s.settings.get("nonce"),addon:t,key:e},success:function(t){i&&i(t),n()}})}))},t}();n(1669)((function(t){var e=new i("atumTrialsModal");new a(e)}))})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/js/src/components/addons/_trials.ts":
+/*!****************************************************!*\
+  !*** ./assets/js/src/components/addons/_trials.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "sweetalert2");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
+var Trials = (function () {
+    function Trials(settings, successCallback) {
+        this.settings = settings;
+        this.successCallback = successCallback;
+        this.bindEvents();
+    }
+    Trials.prototype.bindEvents = function () {
+        var _this = this;
+        $('body').on('click', '.extend-atum-trial', function (evt) {
+            evt.preventDefault();
+            evt.stopImmediatePropagation();
+            var $button = $(evt.currentTarget);
+            _this.extendTrialConfirmation($button.closest('.atum-addon').data('addon'), $button.data('key'));
+        });
+    };
+    Trials.prototype.extendTrialConfirmation = function (addon, key) {
+        var _this = this;
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+            title: this.settings.get('trialExtension'),
+            text: this.settings.get('trialWillExtend'),
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: this.settings.get('extend'),
+            cancelButtonText: this.settings.get('cancel'),
+            showCloseButton: true,
+            allowEnterKey: false,
+            reverseButtons: true,
+            showLoaderOnConfirm: true,
+            preConfirm: function () {
+                return _this.extendTrial(addon, key, true, function (response) {
+                    if (!response.success) {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage(response.data);
+                    }
+                    else {
+                        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+                            title: _this.settings.get('success'),
+                            html: response.data,
+                            icon: 'success',
+                            confirmButtonText: _this.settings.get('ok'),
+                        })
+                            .then(function (result) {
+                            if (_this.successCallback && result.isConfirmed) {
+                                _this.successCallback();
+                            }
+                        });
+                    }
+                });
+            },
+        });
+    };
+    Trials.prototype.extendTrial = function (addon, key, isSwal, callback) {
+        var _this = this;
+        if (isSwal === void 0) { isSwal = false; }
+        if (callback === void 0) { callback = null; }
+        return new Promise(function (resolve) {
+            $.ajax({
+                url: window['ajaxurl'],
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'atum_extend_trial',
+                    security: _this.settings.get('nonce'),
+                    addon: addon,
+                    key: key,
+                },
+                success: function (response) {
+                    if (callback) {
+                        callback(response);
+                    }
+                    resolve();
+                },
+            });
+        });
+    };
+    return Trials;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Trials);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_settings.ts":
+/*!*******************************************!*\
+  !*** ./assets/js/src/config/_settings.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var Settings = (function () {
+    function Settings(varName, defaults) {
+        if (defaults === void 0) { defaults = {}; }
+        this.varName = varName;
+        this.defaults = defaults;
+        this.settings = {};
+        var localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
+        Object.assign(this.settings, defaults, localizedOpts);
+    }
+    Settings.prototype.get = function (prop) {
+        if (typeof this.settings[prop] !== 'undefined') {
+            return this.settings[prop];
+        }
+        return undefined;
+    };
+    Settings.prototype.getAll = function () {
+        return this.settings;
+    };
+    Settings.prototype.delete = function (prop) {
+        if (this.settings.hasOwnProperty(prop)) {
+            delete this.settings[prop];
+        }
+    };
+    return Settings;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Settings);
+
+
+/***/ }),
+
+/***/ "sweetalert2":
+/*!***********************!*\
+  !*** external "Swal" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = Swal;
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!***************************************!*\
+  !*** ./assets/js/src/trials-modal.ts ***!
+  \***************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* harmony import */ var _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/addons/_trials */ "./assets/js/src/components/addons/_trials.ts");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+
+
+jQuery(function ($) {
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_0__["default"]('atumTrialsModal');
+    new _components_addons_trials__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
+});
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=atum-trials-modal.js.map

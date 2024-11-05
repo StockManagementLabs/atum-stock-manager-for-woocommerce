@@ -147,10 +147,11 @@ class AtumHelpGuide {
 	 *
 	 * @param string $auto_guide Optional. Key for the auto-guide (if any).
 	 * @param string $main_guide Optional. Key for the main guide (used for help markers and the show intro buttons).
+	 * @param string $url 		 Optional. URL to the add-on directory (where assets within JSONs must be loaded from).
 	 *
 	 * @return array
 	 */
-	public function get_help_guide_js_vars( $auto_guide = '', $main_guide = '' ) {
+	public function get_help_guide_js_vars( $auto_guide = '', $main_guide = '', $url = '' ) {
 
 		$vars = array(
 			'hgGotIt'              => __( 'Got it!', ATUM_TEXT_DOMAIN ),
@@ -186,6 +187,11 @@ class AtumHelpGuide {
 		// Add the help markers and main guide vars (if requested).
 		if ( $main_guide && array_key_exists( $main_guide, $this->guides_paths ) && file_exists( $this->guides_paths[ $main_guide ] . '.json' ) ) {
 			$vars['hgMainGuide'] = $main_guide;
+		}
+
+		// Add the URL to the add-on directory (where assets within JSONs must be loaded).
+		if ( $url ) {
+			$vars['hgPluginUrl'] = $url;
 		}
 
 		return $vars;

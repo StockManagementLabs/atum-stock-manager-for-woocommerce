@@ -100,11 +100,20 @@ export default class HelpGuide {
 
             this.maybeCacheGuide();
 
-            // There are selectors that introJS doesn't understand, so let's use jQuery here.
+            const pluginUrl: string = this.settings.get( 'hgPluginUrl' );
+
             this.guideSteps.forEach( ( step: IGuideStep ) => {
+
+                // There are selectors that introJS doesn't understand, so let's use jQuery here.
                 if ( step.element ) {
                     step.element = $( step.element ).get( 0 );
                 }
+
+                // If there are guides that include some URL placeholders, replace them.
+                if ( step.intro && pluginUrl ) {
+                    step.intro = step.intro.replace( /{{pluginUrl}}/g, pluginUrl );
+                }
+
             } );
 
             this.introOptions.steps = this.guideSteps;

@@ -246,6 +246,9 @@
 			width: 90%;
 			margin: 10px auto;
 		}
+		.btn {
+			padding: $btn-padding-y $btn-padding-x;
+		}
 	}
 
 }
