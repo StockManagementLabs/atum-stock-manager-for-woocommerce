@@ -883,16 +883,6 @@
 						.tool-fields-from, .tool-fields-to {
 							position: relative;
 							
-							&::after {
-								content: $atmi-calendar-full;
-								@include atum-icon-font-family;
-								font-size: 12px;
-								top: 7px;
-								right: 6px;
-								position: absolute;
-								pointer-events: none;
-							}
-							
 							.range-datepicker {
 								width: inherit;
 							}
@@ -951,6 +941,20 @@
 						margin-top: math.div($grid-gutter-width, 2);
 						font-weight: normal;
 						font-size: 12px;
+					}
+					
+					&.range-fields-block {
+						.tool-fields-from, .tool-fields-to {
+							&::after {
+								content: $atmi-calendar-full;
+								@include atum-icon-font-family;
+								font-size: 12px;
+								top: 7px;
+								right: 6px;
+								position: absolute;
+								pointer-events: none;
+							}
+						}
 					}
 					
 				}
@@ -1302,7 +1306,7 @@
 	&:after {
 		@include atum-icon-font-family;
 		content: $atmi-magnifier;
-		padding-right: 15px;
+		padding-right: 7px;
 		font-size: 12px;
 		top: 13px;
 		right: 0;
