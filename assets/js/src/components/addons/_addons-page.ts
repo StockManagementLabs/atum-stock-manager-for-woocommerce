@@ -9,7 +9,7 @@
 import Blocker from '../_blocker';
 import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Trials from './_trials';
 
 export default class AddonsPage {

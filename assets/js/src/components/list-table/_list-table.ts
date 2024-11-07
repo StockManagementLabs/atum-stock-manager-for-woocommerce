@@ -11,7 +11,7 @@ import Globals from './_globals';
 import { ITableData } from '../../interfaces/tabledata.interface';
 import Settings from '../../config/_settings';
 import StickyColumns from './_sticky-columns';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2-neutral';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';

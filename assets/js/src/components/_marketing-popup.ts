@@ -5,7 +5,7 @@
  */
 
 import Settings from '../config/_settings';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2-neutral';
 
 // Interfaces.
 interface MPopupText {

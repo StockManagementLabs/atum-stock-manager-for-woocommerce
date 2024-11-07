@@ -4,7 +4,7 @@
 
 import { COLORS } from '../config/_constants';
 import Settings from '../config/_settings';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2-neutral';
 
 export default class AdminModal {
 

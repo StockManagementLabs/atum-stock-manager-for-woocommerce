@@ -12,7 +12,7 @@ import Settings from '../../config/_settings';
 import SalesStatsWidget from './widgets/_sales-stats';
 import StatisticsWidget from './widgets/_statistics';
 import StockControlWidget from './widgets/_stock-control';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Tooltip from '../_tooltip';
 import VideosWidget from './widgets/_videos';
 
