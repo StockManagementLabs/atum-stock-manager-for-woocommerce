@@ -9,7 +9,7 @@ import '../../../vendor/jquery.easytree';
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Tooltip from '../_tooltip';
 import WPHooks from '../../interfaces/wp.hooks';
 

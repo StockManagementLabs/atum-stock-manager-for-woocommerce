@@ -5,7 +5,7 @@
 import AtumOrders from './_atum-orders';
 import Blocker from '../_blocker';
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import WPHooks from '../../interfaces/wp.hooks';
 
 export default class OrdersBulkActions {

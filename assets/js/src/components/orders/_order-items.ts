@@ -6,7 +6,7 @@ import AtumOrders from './_atum-orders';
 import Blocker from '../_blocker';
 import { COLORS } from '../../config/_constants';
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 

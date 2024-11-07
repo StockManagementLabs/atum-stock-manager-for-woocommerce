@@ -10,7 +10,7 @@ import OrdersBulkActions from './_bulk-actions';
 import Tooltip from '../_tooltip';
 import Settings from '../../config/_settings';
 import StupidTable from '../_stupid-table';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2-neutral';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 import EnhancedSelect from '../_enhanced-select';

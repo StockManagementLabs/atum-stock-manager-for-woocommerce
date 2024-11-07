@@ -8,7 +8,7 @@
 
 import AddonsPage from './_addons-page';
 import Settings from '../../config/_settings';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2-neutral';
 import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 

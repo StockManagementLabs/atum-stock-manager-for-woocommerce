@@ -7,7 +7,7 @@
  */
 
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 
 export default class Trials {
 

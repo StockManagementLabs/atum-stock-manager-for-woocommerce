@@ -5,7 +5,7 @@
 import ButtonGroup from '../_button-group';
 import EnhancedSelect from '../_enhanced-select';
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 
 export default class ProductDataMetaBoxes {
 	

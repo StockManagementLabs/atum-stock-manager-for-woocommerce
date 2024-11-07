@@ -5,7 +5,7 @@
 import { COLORS } from '../../config/_constants';
 import Globals from './_globals';
 import ListTable from './_list-table';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2-neutral';
 import Settings from '../../config/_settings';
 
 export default class AddSupplierModal {

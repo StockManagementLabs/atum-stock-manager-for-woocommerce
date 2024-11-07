@@ -4,7 +4,7 @@
 
 import Blocker from '../_blocker';
 import Settings from '../../config/_settings';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 
 export default class OrderNotes {
 	

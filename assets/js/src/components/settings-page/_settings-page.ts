@@ -9,7 +9,7 @@ import DateTimePicker from '../_date-time-picker';
 import FileUploader, { WPMediaModalOptions } from '../_file-uploader';
 import Settings from '../../config/_settings';
 import SmartForm from '../_smart-form';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import TabLoader from '../_tab-loader';
 import Tooltip from '../_tooltip';
 import WPHooks from '../../interfaces/wp.hooks';
