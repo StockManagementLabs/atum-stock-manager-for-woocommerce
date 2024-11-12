@@ -196,6 +196,16 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.43.1`
+
+*2024-11-12*
+
+**Fixes**
+
+* Fixed modals library conflict.
+
+---
+
 `1.9.42`
 
 *2024-11-07*
