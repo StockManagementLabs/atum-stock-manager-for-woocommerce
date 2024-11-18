@@ -20,7 +20,7 @@ import gulpSass from 'gulp-sass';
 const sass = gulpSass( dartSass );
 
 // Plugin version
-const version = '1.9.42',
+const version = '1.9.43.1',
       curDate = new Date();
 
 // Global config
@@ -76,7 +76,7 @@ const options = {
             '.',
             config.assetsDir + '/scss',
         ],
-		silenceDeprecations: ['legacy-js-api'], // TODO: MIGRATE TO THE MODERN API (https://sass-lang.com/documentation/breaking-changes/legacy-js-api/).
+        silenceDeprecations: [ 'legacy-js-api' ], // TODO: MIGRATE TO THE MODERN API (https://sass-lang.com/documentation/breaking-changes/legacy-js-api/).
         // ImagePath: 'assets/img'
     },
 
@@ -106,7 +106,7 @@ task( 'sass::atum', () => {
         } ) ) )
         .pipe( cleanDir( destDir ) )
         .pipe( dest( destDir ) )
-    	// .pipe(notify({message: 'sass task complete'}))
+    // .pipe(notify({message: 'sass task complete'}))
         .pipe( filter( '**/*.css' ) )
         .pipe( livereload() );
 	
@@ -120,11 +120,11 @@ task( 'sass::atum', () => {
 
 task( 'js::atum', () => {
     return src( config.assetsDir + '/js/**/*.js' )
-		/*
-		 * .pipe(webpackStream({
-		 *   config: require('./webpack.config.js')
-		 * }, webpack))
-		 */
+    /*
+     * .pipe(webpackStream({
+     *   config: require('./webpack.config.js')
+     * }, webpack))
+     */
         .pipe( webpackStream( {
             devtool: config.production ? false : 'source-map',
 			
@@ -155,9 +155,10 @@ task( 'js::atum', () => {
             },
 			
             externals: {
-                jquery     : 'jQuery',
-                $          : 'jQuery',
-                sweetalert2: 'Swal',
+                'jquery'             : 'jQuery',
+                '$'                  : 'jQuery',
+                'sweetalert2'        : 'Swal',
+                'sweetalert2-neutral': 'Swal',
             },
 			
             module: {
@@ -220,17 +221,17 @@ task( 'js::atum', () => {
         .pipe( dest( config.assetsDir + '/js/build/' ) );
 } );
 
-// task( 'scss::webpack::atum', () => {
-//     return src( config.assetsDir + '/scss/**/*.scss' )
+// Task( 'scss::webpack::atum', () => {
+//     Return src( config.assetsDir + '/scss/**/*.scss' )
 // 		/*
 // 		 // .pipe(webpackStream({
 // 		 //  config: require('./webpack.config.js')
 // 		 // }, webpack))
 // 		 */
 //         .pipe( webpackStream( {
-//             devtool: config.production ? false : 'source-map',
+//             Devtool: config.production ? false : 'source-map',
 //
-//             entry: {
+//             Entry: {
 //                 'addons'              : config.assetsDir + '/scss/atum-addons.scss',
 //                 'admin-modals'        : config.assetsDir + '/scss/atum-admin-modals.scss',
 //                 'check-orders'        : config.assetsDir + '/scss/atum-check-orders.scss',
@@ -248,26 +249,26 @@ task( 'js::atum', () => {
 //                 'suppliers'           : config.assetsDir + '/scss/atum-suppliers.scss',
 //             },
 //
-//             output: {
-//                 filename: '[name].css',
+//             Output: {
+//                 Filename: '[name].css',
 //             },
 //
-//             resolve: {
-//                 extensions: [ '.scss', '.css' ],
+//             Resolve: {
+//                 Extensions: [ '.scss', '.css' ],
 //             },
 //
-//             module: {
-//                 rules: [
+//             Module: {
+//                 Rules: [
 // 					{
-// 						test: /\.s[ac]ss$/i,
-// 						use: [
+// 						Test: /\.s[ac]ss$/i,
+// 						Use: [
 // 							"sass-loader",
 // 							{
-// 								loader: "sass-loader",
-// 								options: {
-// 									api: "modern-compiler",
-// 									sassOptions: {
-// 										sourceMap: !config.production
+// 								Loader: "sass-loader",
+// 								Options: {
+// 									Api: "modern-compiler",
+// 									SassOptions: {
+// 										SourceMap: !config.production
 // 									},
 // 								},
 // 							}
@@ -276,23 +277,23 @@ task( 'js::atum', () => {
 //                 ],
 //             },
 //
-//             optimization: {
-//                 minimize : config.production,
-//                 minimizer: [ new TerserPlugin( {
-//                     terserOptions: {
-//                         format: {
-//                             comments: false,
+//             Optimization: {
+//                 Minimize : config.production,
+//                 Minimizer: [ new TerserPlugin( {
+//                     TerserOptions: {
+//                         Format: {
+//                             Comments: false,
 //                         },
 //                     },
-//                     extractComments: false,
+//                     ExtractComments: false,
 //                 } ) ],
 //             },
-//             mode : config.production ? 'production' : 'development',
-//             cache: !config.production,
-//             bail : false,
-//             watch: false,
+//             Mode : config.production ? 'production' : 'development',
+//             Cache: !config.production,
+//             Bail : false,
+//             Watch: false,
 //
-//             plugins: [
+//             Plugins: [
 //
 //             ],
 //
