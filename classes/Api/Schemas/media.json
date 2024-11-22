@@ -1,0 +1,78 @@
+{
+	"title" : "media",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"alt" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"src" : {
+			"type" : "string"
+		},
+		"file" : {
+			"type" : "string"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

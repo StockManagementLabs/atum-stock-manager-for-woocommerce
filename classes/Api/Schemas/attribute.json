@@ -1,0 +1,116 @@
+{
+	"title" : "attribute",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id",
+		"name"
+	],
+	"properties" : {
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"id" : {
+			"type" : "number"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"orderBy" : {
+			"type" : "string"
+		},
+		"hasArchives" : {
+			"type" : "boolean"
+		},
+		"terms" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"name" : {
+						"type" : "string"
+					},
+					"slug" : {
+						"type" : "string"
+					},
+					"description" : {
+						"type" : "string"
+					},
+					"count" : {
+						"type" : "number"
+					},
+					"menuOrder" : {
+						"type" : "number"
+					},
+					"bom" : {
+						"type" : "object",
+						"properties" : {
+							"id" : { "type" : "string" },
+							"name" : { "type" : "string" },
+							"type" : { "type" : "string" },
+							"qty" : { "type" : "number" },
+							"delete" : { "type" : "boolean" }
+						}
+					},
+					"value" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"id" : {
+						"type" : "number"
+					}
+				},
+				"required" : [
+					"name"
+				]
+			}
+		},
+		"bom" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" },
+				"type" : { "type" : "string" },
+				"qty" : { "type" : "number" },
+				"delete" : { "type" : "boolean" }
+			}
+		}
+	}
+}

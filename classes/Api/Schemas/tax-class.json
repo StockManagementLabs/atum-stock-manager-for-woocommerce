@@ -1,0 +1,26 @@
+{
+	"title" : "tax-class",
+	"version" : 0,
+	"primaryKey" : "slug",
+	"type" : "object",
+	"properties" : {
+		"slug" : {
+			"type" : "string"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}

@@ -1,0 +1,243 @@
+{
+	"title" : "inventory-log",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateReservation" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateReservationGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateReturn" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateReturnGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateDamage" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateDamageGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"shippingCompany" : {
+			"type" : "string"
+		},
+		"customName" : {
+			"type" : "string"
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"currency" : {
+			"type" : "string"
+		},
+		"order" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"lineItems" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"quantity" : {
+						"type" : "number"
+					},
+					"subtotal" : {
+						"type" : "number"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"sku" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"feeLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"shippingLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"methodTitle" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"taxLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"rateCode" : {
+						"type" : "string"
+					},
+					"ratePercent" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"notes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"content" : {
+						"type" : "string"
+					},
+					"date" : {
+						"type" : "string",
+						"format" : "date-time"
+					}
+				}
+			}
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : ["string", "number", "boolean", "object", "array"]
+					}
+				}
+			}
+		},
+		"total" : {
+			"type" : "number"
+		},
+		"totalTax" : {
+			"type" : "number"
+		},
+		"discountTotal" : {
+			"type" : "number"
+		},
+		"discountTax" : {
+			"type" : "number"
+		},
+		"shippingTotal" : {
+			"type" : "number"
+		},
+		"shippingTax" : {
+			"type" : "number"
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

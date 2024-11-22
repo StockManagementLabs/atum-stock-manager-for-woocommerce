@@ -1,0 +1,466 @@
+{
+	"title" : "product",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+        "date_created": {
+            "type": "string"
+        },
+        "date_created_gmt": {
+            "type": "string"
+        },
+        "date_modified": {
+            "type": "string"
+        },
+        "date_modified_gmt": {
+            "type": "string"
+        },
+		"parent" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"parentSku" : {
+			"type" : "string"
+		},
+		"image" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+				},
+				"src" : {
+					"type" : "string"
+				},
+				"alt" : {
+					"type" : "string"
+				}
+			}
+		},
+		"gallery" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						
+					},
+					"src" : {
+						"type" : "string"
+					},
+					"alt" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"catalogVisibility" : {
+			"type" : "string"
+		},
+		"featured" : {
+			"type" : "boolean"
+		},
+		"type" : {
+			"type" : "string",
+			"enum" : [
+				"simple",
+				"variable",
+				"external",
+				"grouped",
+				"inventory",
+				"missing",
+				"variation",
+				"product-part",
+				"variable-product-part",
+				"raw-material",
+				"variable-raw-material"
+			]
+		},
+		"virtual" : {
+			"type" : "boolean"
+		},
+		"downloadable" : {
+			"type" : "boolean"
+		},
+		"externalUrl" : {
+			"type" : "string"
+		},
+		"buttonText" : {
+			"type" : "string"
+		},
+		"regularPrice" : {
+			"type" : "number"
+		},
+		"salePrice" : {
+			"type" : "number"
+		},
+		"dateOnSaleFrom" : {
+			"type" : "string" 
+		},
+		"dateOnSaleFromGMT" : {
+			"type" : "string" 
+		},
+		"dateOnSaleTo" : {
+			"type" : "string" 
+		},
+		"dateOnSaleToGMT" : {
+			"type" : "string" 
+		},
+		"purchasePrice" : {
+			"type" : "number"
+		},
+		"taxStatus" : {
+			"type" : "string"
+		},
+		"taxClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+				
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"downloads" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"file" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"downloadLimit" : {
+			"type" : "number"
+		},
+		"downloadExpiry" : {
+			"type" : "number"
+		},
+		"sku" : {
+			"type" : "string"
+		},
+		"barcode" : {
+			"type" : "string"
+		},
+		"manageStock" : {
+			"type" : "boolean"
+		},
+		"stockQuantity" : {
+			"type" : "number"
+		},
+		"backorders" : {
+			"type" : "string"
+		},
+		"lowStockThreshold" : {
+			"type" : "number"
+		},
+		"outStockThreshold" : {
+			"type" : "number"
+		},
+		"stockStatus" : {
+			"type" : "string"
+		},
+		"outStockDate" : {
+			"type" : "string" 
+		},
+		"outStockDateGMT" : {
+			"type" : "string" 
+		},
+		"soldIndividually" : {
+			"type" : "boolean"
+		},
+		"supplier" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"supplierSku" : {
+			"type" : "string"
+		},
+		"atumControlled" : {
+			"type" : "boolean"
+		},
+		"weight" : {
+			"type" : "number"
+		},
+		"dimensions" : {
+			"type" : "object",
+			"properties" : {
+				"length" : {
+					"type" : "string"
+				},
+				"width" : {
+					"type" : "string"
+				},
+				"height" : {
+					"type" : "string"
+				}
+			}
+		},
+		"shippingClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"groupedProducts" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"upsells" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"crossSells" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"attributes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name",
+					"options"
+				],
+				"properties" : {
+					"id" : {
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"options" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"required" : [
+								"name"
+							],
+							"properties" : {
+								"id" : {
+								},
+								"_id" : {
+									"type" : "string"
+								},
+								"name" : {
+									"type" : "string"
+								}
+							}
+						}
+					},
+					"position" : {
+						"type" : "number"
+					},
+					"visible" : {
+						"type" : "boolean"
+					},
+					"variation" : {
+						"type" : "boolean"
+					}
+				}
+			}
+		},
+		"defaultAttributes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"option" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"variations" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"purchaseNote" : {
+			"type" : "string"
+		},
+		"menuOrder" : {
+			"type" : "number"
+		},
+		"reviewsAllowed" : {
+			"type" : "boolean"
+		},
+		"categories" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"slug" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"tags" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"slug" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"atumLocations" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"slug" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"hasLocation" : {
+			"type" : "boolean"
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

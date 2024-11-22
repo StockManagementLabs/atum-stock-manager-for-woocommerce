@@ -1,0 +1,44 @@
+{
+	"title" : "tag",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+        "_rev",
+        "_meta",
+        "_attachments",
+        "id",
+		"name",
+		"slug"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"count" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}

@@ -1,0 +1,570 @@
+{
+	"title" : "store-settings",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"_id",
+		"app",
+		"atum",
+		"wc"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"app" : {
+			"type" : "object",
+			"required" : ["general", "barcode", "sync", "pos", "stockTakes", "pickingPack", "stockCentral", "manufacturingCentral"],
+			"properties" : {
+				"general" : {
+					"type" : "object",
+					"required" : ["debug", "downloadImages", "autoSelectInventory", "autoRecalculateOrder"],
+					"properties" : {
+						"debug" : { "type" : "boolean" },
+						"downloadImages" : { "type" : "boolean" },
+						"autoSelectInventory" : { "type" : "boolean" },
+						"autoRecalculateOrder" : { "type" : "boolean" }
+					}
+				},
+				"barcode" : {
+					"type" : "object",
+					"required" : ["enabled", "sku", "supplierSku", "category", "supplier", "location", "variation", "inventory", "lot", "embed"],
+					"properties" : {
+						"enabled" : { "type" : "boolean" },
+						"sku" : { "type" : "boolean" },
+						"supplierSku" : { "type" : "boolean" },
+						"category" : { "type" : "boolean" },
+						"supplier" : { "type" : "boolean" },
+						"location" : { "type" : "boolean" },
+						"variation" : { "type" : "boolean" },
+						"inventory" : { "type" : "boolean" },
+						"lot" : { "type" : "boolean" },
+						"embed" : {
+							"type" : "object",
+							"required" : ["enabled", "weightFlag", "priceFlag"],
+							"properties" : {
+								"enabled" : { "type" : "boolean" },
+								"weightFlag" : { "type" : "string" },
+								"priceFlag" : { "type" : "string" }
+							}
+						}
+					}
+				},
+				"sync" : {
+					"type" : "object",
+					"required" : ["enabled", "programmed", "items"],
+					"properties" : {
+						"enabled" : { "type" : "boolean" },
+						"alwaysDeep" : { "type" : "boolean" },
+						"showOnList" : { "type" : "boolean" },
+						"itemsPerPage" : { "type" : "number" },
+						"limitPagesPerCall" : { "type" : "boolean" },
+						"pagesPerCall" : { "type" : "number" },
+						"askItems" : { "type" : "boolean" },
+						"programmed" : {
+							"type" : "object",
+							"required" : ["enabled", "frequency"],
+							"properties" : {
+								"enabled" : { "type" : "boolean" },
+								"frequency" : {
+									"type" : "string",
+									"enum" : ["hourly", "daily", "weekly", "monthly"]
+								}
+							}
+						},
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"storeSetting" : { "type" : "boolean" },
+								"media" : { "type" : "boolean" },
+								"attribute" : { "type" : "boolean" },
+								"category" : { "type" : "boolean" },
+								"location" : { "type" : "boolean" },
+								"tag" : { "type" : "boolean" },
+								"taxClass" : { "type" : "boolean" },
+								"taxRate" : { "type" : "boolean" },
+								"supplier" : { "type" : "boolean" },
+								"product" : { "type" : "boolean" },
+								"variation" : { "type" : "boolean" },
+								"inventory" : { "type" : "boolean" },
+								"customer" : { "type" : "boolean" },
+								"coupon" : { "type" : "boolean" },
+								"order" : { "type" : "boolean" },
+								"refund" : { "type" : "boolean" },
+								"purchaseOrder" : { "type" : "boolean" },
+								"inventoryLog" : { "type" : "boolean" },
+								"comment" : { "type" : "boolean" }
+							}
+						}
+					}
+				},
+				"pos" : {
+					"type" : "object",
+					"required" : [
+						"enabled",
+						"multipleCart",
+						"completeOrders",
+						"payments",
+						"board",
+						"listCategories",
+						"listVariations",
+						"listInventories",
+						"collapseSmallCategories",
+						"barcodeScanner",
+						"gridView",
+						"noStockProducts",
+						"noSellableProducts"
+					],
+					"properties" : {
+						"enabled" : { "type" : "boolean" },
+						"backorders" : { "type" : "boolean" },
+						"minimumStockAmount" : { "type" : "number" },
+						"multipleCart" : { "type" : "boolean" },
+						"completeOrders" : { "type" : "boolean" },
+						"payments" : { "type" : "boolean" },
+						"board" : { "type" : "boolean" },
+						"listCategories" : { "type" : "boolean" },
+						"listVariations" : { "type" : "boolean" },
+						"listInventories" : { "type" : "boolean" },
+						"collapseSmallCategories" : { "type" : "boolean" },
+						"barcodeScanner" : { "type" : "boolean" },
+						"gridView" : { "type" : "boolean" },
+						"noStockProducts" : { "type" : "boolean" },
+						"noSellableProducts" : { "type" : "boolean" }
+					}
+				},
+				"stockTakes" : {
+					"type" : "object",
+					"required" : [
+						"enabled",
+						"barcodeScanner",
+						"keepScanning",
+						"manageStock",
+						"setMissingStock",
+						"itemData",
+						"inventoryData",
+						"barcodeData"
+					],
+					"properties" : {
+						"enabled" : { "type" : "boolean" },
+						"barcodeScanner" : { "type" : "boolean" },
+						"keepScanning" : { "type" : "boolean" },
+						"manageStock" : { "type" : "boolean" },
+						"setMissingStock" : { "type" : "boolean" },
+						"itemData" : { "type" : "boolean" },
+						"inventoryData" : { "type" : "boolean" },
+						"barcodeData" : { "type" : "boolean" }
+					}
+				},
+				"pickingPack" : {
+					"type" : "object",
+					"required" : ["enabled", "barcodeScanner", "keepScanning", "packing"],
+					"properties" : {
+						"enabled" : { "type" : "boolean" },
+						"barcodeScanner" : { "type" : "boolean" },
+						"keepScanning" : { "type" : "boolean" },
+						"packing" : { "type" : "boolean" }
+					}
+				},
+				"stockCentral" : {
+					"type" : "object",
+					"required" : ["editable", "searchbar", "showTotals", "pagination", "itemsPerPage", "expanded", "properties"],
+					"properties" : {
+						"editable" : { "type" : "boolean" },
+						"searchbar" : { "type" : "boolean" },
+						"showTotals" : { "type" : "boolean" },
+						"pagination" : { "type" : "boolean" },
+						"itemsPerPage" : { "type" : "number" },
+						"expanded" : { "type" : "boolean" },
+						"properties" : {
+							"type" : "array",
+							"items" : {
+								"type" : "object"
+							}
+						}
+					}
+				},
+				"manufacturingCentral" : {
+					"type" : "object",
+					"required" : ["editable", "searchbar", "showTotals", "pagination", "itemsPerPage", "expanded", "properties"],
+					"properties" : {
+						"editable" : { "type" : "boolean" },
+						"searchbar" : { "type" : "boolean" },
+						"showTotals" : { "type" : "boolean" },
+						"pagination" : { "type" : "boolean" },
+						"itemsPerPage" : { "type" : "number" },
+						"expanded" : { "type" : "boolean" },
+						"properties" : {
+							"type" : "array",
+							"items" : {
+								"type" : "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"atum" : {
+			"type" : "object",
+			"required" : ["general", "storeDetails", "moduleManager", "actionLogs", "multiInventory", "productLevels"],
+			"properties" : {
+				"general" : {
+					"type" : "object",
+					"required" : ["showTotals", "grossProfit", "profitMargin"],
+					"properties" : {
+						"showTotals" : {
+							"type" : "boolean",
+							"description" : "Stock central totals row"
+						},
+						"grossProfit" : {
+							"type" : "string",
+							"enum" : ["percentage", "monetary"],
+							"description" : "Gross profit type"
+						},
+						"profitMargin" : {
+							"type" : "number",
+							"minimum" : 0,
+							"maximum" : 100,
+							"description" : "Profit margin percentage"
+						}
+					}
+				},
+				"storeDetails" : {
+					"type" : "object",
+					"required" : ["company", "shipping"],
+					"properties" : {
+						"siteIcon" : {
+							"type" : "object",
+							"properties" : {
+								"id" : { "type" : "number" },
+								"_id" : { "type" : "string" }
+							}
+						},
+						"company" : {
+							"type" : "object",
+							"required" : ["name", "sameShipAddress"],
+							"properties" : {
+								"name" : { "type" : "string" },
+								"taxNumber" : { "type" : "string" },
+								"address1" : { "type" : "string" },
+								"address2" : { "type" : "string" },
+								"city" : { "type" : "string" },
+								"country" : { "type" : "string" },
+								"state" : { "type" : "string" },
+								"zip" : { "type" : "string" },
+								"sameShipAddress" : { "type" : "boolean" }
+							}
+						},
+						"shipping" : {
+							"type" : "object",
+							"required" : ["name"],
+							"properties" : {
+								"name" : { "type" : "string" },
+								"address1" : { "type" : "string" },
+								"address2" : { "type" : "string" },
+								"city" : { "type" : "string" },
+								"country" : { "type" : "string" },
+								"state" : { "type" : "string" },
+								"zip" : { "type" : "string" }
+							}
+						}
+					}
+				},
+				"moduleManager" : {
+					"type" : "object",
+					"properties" : {
+						"dashboardModule" : { "type" : "boolean" },
+						"stockCentralModule" : { "type" : "boolean" },
+						"inventoryLogsModule" : { "type" : "boolean" },
+						"purchaseOrdersModule" : { "type" : "boolean" },
+						"dataExportModule" : { "type" : "boolean" },
+						"visualSettingsModule" : { "type" : "boolean" }
+					}
+				},
+				"actionLogs" : {
+					"type" : "object",
+					"properties" : {
+						"showAvatar" : { "type" : "boolean" },
+						"logsPerPage" : {
+							"type" : "number",
+							"minimum" : 1,
+							"maximum" : 50
+						},
+						"relativeDate" : { "type" : "boolean" }
+					}
+				},
+				"multiInventory" : {
+					"type" : "object",
+					"required" : [
+						"regionRestrictionMode",
+						"defaultShippingZone",
+						"defaultZoneForEmptyRegions",
+						"defaultCountry",
+						"defaultCountryForEmptyRegions",
+						"expiryDatesInCart",
+						"listTablesFilter",
+						"batchTracking",
+						"multiInventory",
+						"inventorySortingMode",
+						"inventoryIteration",
+						"expirableInventories",
+						"pricePerInventory",
+						"selectableInventories",
+						"inventorySelectionMode"
+					],
+					"properties" : {
+						"regionRestrictionMode" : {
+							"type" : "string",
+							"enum" : ["none", "shipping_zone", "country"]
+						},
+						"defaultShippingZone" : {
+							"type" : "object",
+							"properties" : {
+								"id" : { "type" : "string" },
+								"name" : { "type" : "string" }
+							}
+						},
+						"defaultZoneForEmptyRegions" : { "type" : "boolean" },
+						"defaultCountry" : {
+							"type" : "object",
+							"properties" : {
+								"id" : { "type" : "string" },
+								"name" : { "type" : "string" }
+							}
+						},
+						"defaultCountryForEmptyRegions" : { "type" : "boolean" },
+						"expiryDatesInCart" : { "type" : "boolean" },
+						"listTablesFilter" : { "type" : "boolean" },
+						"batchTracking" : { "type" : "boolean" },
+						"multiInventory" : { "type" : "boolean" },
+						"inventorySortingMode" : {
+							"type" : "string",
+							"enum" : ["fifo", "lifo", "fefo", "lefo", "priority"]
+						},
+						"inventoryIteration" : {
+							"type" : "string",
+							"enum" : ["global", "shipping_zone", "country"]
+						},
+						"expirableInventories" : { "type" : "boolean" },
+						"pricePerInventory" : { "type" : "boolean" },
+						"selectableInventories" : { "type" : "boolean" },
+						"inventorySelectionMode" : {
+							"type" : "string",
+							"enum" : ["auto", "manual"]
+						}
+					}
+				},
+				"productLevels" : {
+					"type" : "object",
+					"properties" : {
+						"bomStockControl" : { "type" : "boolean" },
+						"defaultBomSelling" : { "type" : "boolean" },
+						"bomItemRealCost" : { "type" : "boolean" },
+						"manufacturingPostsPerPage" : {
+							"type" : "number",
+							"minimum" : -1,
+							"maximum" : 500
+						},
+						"manufacturingSaleDays" : {
+							"type" : "number",
+							"minimum" : -1,
+							"maximum" : 365
+						}
+					}
+				}
+			}
+		},
+		"wc" : {
+			"type" : "object",
+			"required" : ["admin", "general", "products", "tax"],
+			"properties" : {
+				"admin" : {
+					"type" : "object",
+					"required" : ["excludedReportOrderStatuses", "actionableOrderStatuses"],
+					"properties" : {
+						"excludedReportOrderStatuses" : {
+							"type" : "array",
+							"items" : {
+								"type" : "string",
+								"enum" : ["pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed"]
+							}
+						},
+						"actionableOrderStatuses" : {
+							"type" : "array",
+							"items" : {
+								"type" : "string",
+								"enum" : ["pending", "processing", "on-hold", "completed", "cancelled", "refunded", "failed"]
+							}
+						}
+					}
+				},
+				"general" : {
+					"type" : "object",
+					"required" : [
+						"currency",
+						"currencySymbol",
+						"currencyPosition",
+						"numberOfDecimals",
+						"allowedCountries",
+						"allExceptCountries",
+						"specificAllowedCountries",
+						"shipToCountries",
+						"specificShipToCountries",
+						"defaultCustomerAddress",
+						"calcTaxes",
+						"enableCoupons",
+						"calcDiscountsSequentially",
+						"priceThousandSep",
+						"priceDecimalSep",
+						"priceNumDecimals",
+						"store"
+					],
+					"properties" : {
+						"currency" : { "type" : "string" },
+						"currencySymbol" : { "type" : "string" },
+						"currencyPosition" : {
+							"type" : "string",
+							"enum" : ["left", "right", "left_space", "right_space"]
+						},
+						"numberOfDecimals" : { "type" : "number" },
+						"allowedCountries" : {
+							"type" : "string",
+							"enum" : ["all", "specific", "all_except"]
+						},
+						"allExceptCountries" : {
+							"type" : "array",
+							"items" : { "type" : "string" }
+						},
+						"specificAllowedCountries" : {
+							"type" : "array",
+							"items" : { "type" : "string" }
+						},
+						"shipToCountries" : {
+							"type" : "string",
+							"enum" : ["all", "specific", "disabled"]
+						},
+						"specificShipToCountries" : {
+							"type" : "array",
+							"items" : { "type" : "string" }
+						},
+						"defaultCustomerAddress" : {
+							"type" : "string",
+							"enum" : ["base", "geolocation", "geolocation_ajax"]
+						},
+						"calcTaxes" : { "type" : "boolean" },
+						"enableCoupons" : { "type" : "boolean" },
+						"calcDiscountsSequentially" : { "type" : "boolean" },
+						"priceThousandSep" : { "type" : "string" },
+						"priceDecimalSep" : { "type" : "string" },
+						"priceNumDecimals" : { "type" : "number" },
+						"store" : {
+							"type" : "object",
+							"properties" : {
+								"address" : { "type" : "string" },
+								"city" : { "type" : "string" },
+								"postcode" : { "type" : "string" },
+								"country" : { "type" : "string" }
+							}
+						}
+					}
+				},
+				"products" : {
+					"type" : "object",
+					"required" : [
+						"placeholderImage",
+						"weightUnit",
+						"dimensionUnit",
+						"manageStock",
+						"holdStockMinutes",
+						"notifyLowStock",
+						"notifyNoStock",
+						"notifyLowStockAmount",
+						"notifyNoStockAmount"
+					],
+					"properties" : {
+						"placeholderImage" : {
+							"type" : "object",
+							"properties" : {
+								"id" : { "type" : "number" },
+								"src" : { "type" : "string" }
+							}
+						},
+						"weightUnit" : {
+							"type" : "string",
+							"enum" : ["kg", "g", "lbs", "oz"]
+						},
+						"dimensionUnit" : {
+							"type" : "string",
+							"enum" : ["m", "cm", "mm", "in", "yd"]
+						},
+						"manageStock" : { "type" : "boolean" },
+						"holdStockMinutes" : { "type" : "number" },
+						"notifyLowStock" : { "type" : "boolean" },
+						"notifyNoStock" : { "type" : "boolean" },
+						"notifyLowStockAmount" : { "type" : "number" },
+						"notifyNoStockAmount" : { "type" : "number" }
+					}
+				},
+				"tax" : {
+					"type" : "object",
+					"required" : [
+						"pricesIncludeTax",
+						"taxBasedOn",
+						"shippingTaxClass",
+						"taxRoundAtSubtotal",
+						"taxTotalDisplay"
+					],
+					"properties" : {
+						"pricesIncludeTax" : { "type" : "boolean" },
+						"taxBasedOn" : {
+							"type" : "string",
+							"enum" : ["shipping", "billing", "base"]
+						},
+						"shippingTaxClass" : {
+							"type" : "object",
+							"properties" : {
+								"id" : { "type" : "string" },
+								"name" : { "type" : "string" }
+							}
+						},
+						"taxRoundAtSubtotal" : { "type" : "boolean" },
+						"taxTotalDisplay" : { "type" : "boolean" }
+					}
+				}
+			}
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : ["lwt"],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

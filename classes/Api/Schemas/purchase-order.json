@@ -1,0 +1,358 @@
+{
+	"title" : "purchase-order",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"multipleSuppliers",
+		"dateCreated",
+		"dateCreatedGMT",
+		"dateModified",
+		"dateModifiedGMT",
+		"status",
+		"currency"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"multipleSuppliers" : {
+			"type" : "boolean"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCompleted" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCompletedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"supplier" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"currency" : {
+			"type" : "string"
+		},
+		"dateExpected" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateExpectedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"lineItems" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"quantity" : {
+						"type" : "number"
+					},
+					"taxClass" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"subtotal" : {
+						"type" : "number"
+					},
+					"subtotalTax" : {
+						"type" : "number"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					},
+					"price" : {
+						"type" : "number"
+					},
+					"stock" : {
+						"type" : "object",
+						"properties" : {
+							"action" : {
+								"type" : "string"
+							},
+							"quantity" : {
+								"type" : "number"
+							},
+							"changedStock" : {
+								"type" : "boolean"
+							}
+						}
+					},
+					"metaData" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"id" : {
+									"type" : "number"
+								},
+								"key" : {
+									"type" : "string"
+								},
+								"value" : {
+									"type" : "string"
+								}
+							}
+						}
+					},
+					"sku" : {
+						"type" : "string"
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					}
+				},
+				"required" : [
+					"name",
+					"quantity"
+				]
+			}
+		},
+		"feeLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					}
+				},
+				"required" : [
+					"name"
+				]
+			}
+		},
+		"shippingLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					}
+				},
+				"required" : [
+					"name"
+				]
+			}
+		},
+		"taxLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"rateCode" : {
+						"type" : "string"
+					},
+					"rateId" : {
+						"type" : "string"
+					},
+					"label" : {
+						"type" : "string"
+					},
+					"compound" : {
+						"type" : "boolean"
+					},
+					"taxTotal" : {
+						"type" : "string"
+					},
+					"shippingTaxTotal" : {
+						"type" : "string"
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					}
+				}
+			}
+		},
+		"total" : {
+			"type" : "number"
+		},
+		"totalTax" : {
+			"type" : "number"
+		},
+		"discountTotal" : {
+			"type" : "number"
+		},
+		"discountTax" : {
+			"type" : "number"
+		},
+		"shippingTotal" : {
+			"type" : "number"
+		},
+		"shippingTax" : {
+			"type" : "number"
+		},
+		"notes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"author" : {
+						"type" : "string"
+					},
+					"dateCreated" : {
+						"type" : "string",
+						"format" : "date-time"
+					},
+					"dateCreatedGMT" : {
+						"type" : "string",
+						"format" : "date-time"
+					},
+					"note" : {
+						"type" : "string"
+					},
+					"customerNote" : {
+						"type" : "boolean"
+					}
+				}
+			}
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

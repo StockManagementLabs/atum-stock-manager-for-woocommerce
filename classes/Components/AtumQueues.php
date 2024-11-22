@@ -372,6 +372,11 @@ class AtumQueues {
 			foreach ( $files as $file ) {
 				if ( is_file( $file ) ) {
 
+					// Do not remove the htaccess and index.html files.
+					if ( in_array( basename( $file ), [ '.htaccess', 'index.html' ], TRUE ) ) {
+						continue;
+					}
+
 					$file_time = filemtime( $file );
 
 					if ( $file_time + WEEK_IN_SECONDS < time() ) {

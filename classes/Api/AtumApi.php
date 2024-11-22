@@ -105,30 +105,39 @@ class AtumApi {
 	/**
 	 * All the exportable endpoint paths
 	 *
+	 * NOTE: We are using the schema names as endpoint keys for compatibility.
+	 *
 	 * @var string[]
 	 */
 	private static $exportable_endpoints = array(
-		'attributes'         => '/wc/v3/products/attributes',
-		'atum-locations'     => '/wc/v3/products/atum-locations',
-		'atum-order-notes'   => '/wc/v3/atum/atum-order-notes',
-		'categories'         => '/wc/v3/products/categories',
-		'classes'            => '/wc/v3/taxes/classes',
-		'comments'           => '/wp/v2/comments',
-		'coupons'            => '/wc/v3/coupons',
-		'customers'          => '/wc/v3/customers',
-		'dashboard'          => '/wc/v3/atum/dashboard',
-		'inbound-stock'      => '/wc/v3/atum/inbound-stock',
-		'inventory-logs'     => '/wc/v3/atum/inventory-logs',
-		'media'              => '/wp/v2/media',
-		'orders'             => '/wc/v3/orders',
-		'order-refunds'      => '/wc/v3/atum/order-refunds',
-		'products'           => '/wc/v3/products',
-		'product-variations' => '/wc/v3/atum/product-variations',
-		'purchase-orders'    => '/wc/v3/atum/purchase-orders',
-		'settings'           => '/wc/v3/settings',
-		'suppliers'          => '/wc/v3/atum/suppliers',
-		'tags'               => '/wc/v3/products/tags',
-		'taxes'              => '/wc/v3/taxes',
+		'attribute'      => '/wc/v3/products/attributes',
+		'category'       => '/wc/v3/products/categories',
+		'comment'        => array(
+			'atum-order-notes' => '/wc/v3/atum/atum-order-notes', // TODO: Is this needed? Is not enough the comments export?
+			'comments'         => '/wp/v2/comments',
+		),
+		'coupon'         => '/wc/v3/coupons',
+		'customer'       => '/wc/v3/customers',
+		'dashboard'      => '/wc/v3/atum/dashboard',
+		'inbound-stock'  => '/wc/v3/atum/inbound-stock',
+		'inventory-log'  => '/wc/v3/atum/inventory-logs',
+		'location'       => '/wc/v3/products/atum-locations',
+		'media'          => '/wp/v2/media',
+		'order'          => '/wc/v3/orders',
+		'payment-method' => '/wc/v3/payment_gateways',
+		'product'        => '/wc/v3/products',
+		'purchase-order' => '/wc/v3/atum/purchase-orders',
+		'refund'         => '/wc/v3/atum/order-refunds',
+		'shipping-method' => '/wc/v3/shipping_methods',
+		'store-settings' => array(
+			'wc'   => '/wc/v3/settings',
+			'atum' => '/wc/v3/atum/settings',
+		),
+		'supplier'       => '/wc/v3/atum/suppliers',
+		'tag'            => '/wc/v3/products/tags',
+		'tax-class'      => '/wc/v3/taxes/classes',
+		'tax-rate'       => '/wc/v3/taxes',
+		'variation'      => '/wc/v3/atum/product-variations',
 	);
 
 	/**
@@ -320,7 +329,17 @@ class AtumApi {
 
 		// Exportable endpoints hooks.
 		foreach ( self::get_exportable_endpoints() as $key => $exportable_endpoint ) {
-			add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+
+			if ( is_array( $exportable_endpoint ) ) {
+
+				foreach ( $exportable_endpoint as $sub_key => $sub_exportable_endpoint ) {
+					add_action( "atum_api_export_endpoint_{$key}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+				}
+
+			}
+			else {
+				add_action( "atum_api_export_endpoint_$key", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+			}
 		}
 
 	}

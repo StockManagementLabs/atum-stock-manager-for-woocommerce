@@ -1,0 +1,307 @@
+{
+	"title" : "variation",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+        "_rev",
+        "_meta",
+        "_attachments",
+        "id",
+		"parent",
+		"type"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"parent" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"parentType" : {
+			"type" : "string"
+		},
+		"parentName" : {
+			"type" : "string"
+		},
+		"parentSku" : {
+			"type" : "string"
+		},
+		"parentTaxClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"default" : {
+			"type" : "boolean"
+		},
+		"image" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "number" },
+				"src" : { "type" : "string" },
+				"title" : { "type" : "string" },
+				"alt" : { "type" : "string" }
+			}
+		},
+		"attributes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name",
+					"option"
+				],
+				"properties" : {
+					"name" : { "type" : "string" },
+					"option" : {
+						"type" : "object",
+						"required" : [
+							"name"
+						],
+						"properties" : {
+							"name" : { "type" : "string" },
+							"_id" : { "type" : "string" },
+							"id" : { "type" : "number" }
+						}
+					},
+					"_id" : { "type" : "string" },
+					"id" : { "type" : "number" }
+				}
+			}
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"downloadable" : {
+			"type" : "boolean"
+		},
+		"virtual" : {
+			"type" : "boolean"
+		},
+		"manageStock" : {
+			"type" : "boolean"
+		},
+		"sku" : {
+			"type" : "string"
+		},
+		"barcode" : {
+			"type" : "string"
+		},
+		"regularPrice" : {
+			"type" : "number"
+		},
+		"salePrice" : {
+			"type" : "number"
+		},
+		"dateOnSaleFrom" : {
+			"type" : "string"
+		},
+		"dateOnSaleFromGMT" : {
+			"type" : "string"
+		},
+		"dateOnSaleTo" : {
+			"type" : "string"
+		},
+		"dateOnSaleToGMT" : {
+			"type" : "string"
+		},
+		"purchasePrice" : {
+			"type" : "number"
+		},
+		"supplier" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"supplierSku" : {
+			"type" : "string"
+		},
+		"stockQuantity" : {
+			"type" : "number"
+		},
+		"backorders" : {
+			"type" : "string"
+		},
+		"backordersAllowed" : {
+			"type" : "boolean"
+		},
+		"outStockThreshold" : {
+			"type" : "number"
+		},
+		"stockStatus" : {
+			"type" : "string"
+		},
+		"outStockDate" : {
+			"type" : "string"
+		},
+		"outStockDateGMT" : {
+			"type" : "string"
+		},
+		"weight" : {
+			"type" : "number"
+		},
+		"dimensions" : {
+			"type" : "object",
+			"properties" : {
+				"length" : { "type" : "number" },
+				"width" : { "type" : "number" },
+				"height" : { "type" : "number" }
+			}
+		},
+		"shippingClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"taxClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"taxStatus" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"downloads" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : { "type" : "string" },
+					"name" : { "type" : "string" },
+					"file" : { "type" : "string" }
+				}
+			}
+		},
+		"downloadLimit" : {
+			"type" : "number"
+		},
+		"downloadExpiry" : {
+			"type" : "number"
+		},
+		"atumControlled" : {
+			"type" : "boolean"
+		},
+		"menuOrder" : {
+			"type" : "number"
+		},
+		"atumLocations" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : { "type" : "number" },
+					"name" : { "type" : "string" },
+					"slug" : { "type" : "string" },
+					"description" : { "type" : "string" },
+					"parent" : {
+						"type" : "object",
+						"properties" : {
+							"id" : { "type" : "string" },
+							"name" : { "type" : "string" }
+						}
+					},
+					"count" : { "type" : "number" },
+					"_id" : { "type" : "string" },
+					"_rev" : { "type" : "string" },
+					"_deleted" : { "type" : "boolean" },
+                    "conflict" : { "type" : "boolean" }
+				}
+			}
+		},
+		"hasLocation" : {
+			"type" : "boolean"
+		},
+		"categories" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : { "type" : "number" },
+					"name" : { "type" : "string" },
+					"slug" : { "type" : "string" },
+					"parent" : {
+						"type" : "object",
+						"properties" : {
+							"id" : { "type" : "string" },
+							"name" : { "type" : "string" }
+						}
+					},
+					"description" : { "type" : "string" },
+					"display" : { "type" : "string" },
+					"image" : {
+						"type" : "object",
+						"properties" : {
+							"id" : { "type" : "number" },
+							"src" : { "type" : "string" },
+							"title" : { "type" : "string" },
+							"alt" : { "type" : "string" }
+						}
+					},
+					"menuOrder" : { "type" : "number" },
+					"count" : { "type" : "number" },
+					"_id" : { "type" : "string" },
+					"_rev" : { "type" : "string" },
+					"_deleted" : { "type" : "boolean" },
+                    "conflict" : { "type" : "boolean" }
+				}
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+        "_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"minimumThreshold" : {
+			"type" : "number"
+		},
+		"availableToPurchase" : {
+			"type" : "number"
+		},
+		"sellingPriority" : {
+			"type" : "number"
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"key" : { "type" : "string" },
+					"value" : { "type" : "string" }
+				}
+			}
+		}
+	}
+}

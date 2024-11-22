@@ -1,0 +1,57 @@
+{
+	"title" : "tax-rate",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"country" : {
+			"type" : "string"
+		},
+		"state" : {
+			"type" : "string"
+		},
+		"postcode" : {
+			"type" : "string"
+		},
+		"city" : {
+			"type" : "string"
+		},
+		"rate" : {
+			"type" : "number"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"priority" : {
+			"type" : "number"
+		},
+		"compound" : {
+			"type" : "boolean"
+		},
+		"shipping" : {
+			"type" : "boolean"
+		},
+		"taxClass" : {
+			"type" : "object",
+			"properties" : {
+				"id" : { "type" : "string" },
+				"name" : { "type" : "string" }
+			}
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}

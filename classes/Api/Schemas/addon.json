@@ -1,0 +1,103 @@
+{
+	"title" : "addon",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"_id"
+	],
+	"properties" : {
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		},
+		"_id" : {
+			"type" : "string",
+			"maxLength" : 100
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"plugin" : {
+			"type" : "string"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"version" : {
+			"type" : "string"
+		},
+		"versionLatest" : {
+			"type" : "string"
+		},
+		"url" : {
+			"type" : "string"
+		},
+		"authorName" : {
+			"type" : "string"
+		},
+		"authorUrl" : {
+			"type" : "string"
+		},
+		"networkActivated" : {
+			"type" : "boolean"
+		},
+		"active" : {
+			"type" : "boolean"
+		},
+		"valid" : {
+			"type" : "boolean"
+		},
+		"image" : {
+			"type" : "string"
+		},
+		"tags" : {
+			"type" : "array",
+			"items" : {
+				"type" : "string"
+			}
+		},
+		"versionRequired" : {
+			"type" : "string"
+		},
+		"key" : {
+			"type" : "string"
+		},
+		"deleted" : {
+			"type" : "boolean"
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"enabled" : {
+			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string"
+		}
+	}
+}

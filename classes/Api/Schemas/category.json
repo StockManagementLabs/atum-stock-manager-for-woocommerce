@@ -1,0 +1,96 @@
+{
+	"title" : "category",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"menuOrder" : {
+			"type" : "number"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"parent" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				}
+			}
+		},
+		"display" : {
+			"type" : "string"
+		},
+		"barcode" : {
+			"type" : "string"
+		},
+		"count" : {
+			"type" : "number"
+		},
+		"countChildren" : {
+			"type" : "number"
+		},
+		"children" : {
+			"type" : "number"
+		},
+		"image" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"src" : {
+					"type" : "string"
+				},
+				"title" : {
+					"type" : "string"
+				},
+				"alt" : {
+					"type" : "string"
+				}
+			}
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		},
+		"isDefault" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}

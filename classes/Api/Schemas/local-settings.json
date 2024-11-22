@@ -1,0 +1,109 @@
+{
+	"title" : "local-settings",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"_id",
+		"general"
+	],
+	"properties" : {
+		"_id" : {
+			"maxLength" : 100,
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"general" : {
+			"type" : "object",
+			"required" : [
+				"language",
+				"theme",
+				"dateFormat",
+				"timeFormat",
+				"widgets"
+			],
+			"properties" : {
+				"language" : {
+					"type" : "string"
+				},
+				"theme" : {
+					"type" : "string"
+				},
+				"dateFormat" : {
+					"type" : "string"
+				},
+				"timeFormat" : {
+					"type" : "string"
+				},
+				"widgets" : {
+					"type" : "object",
+					"required" : [
+						"orders",
+						"stockControl",
+						"promoSales",
+						"currentStockValue",
+						"lostSales",
+						"atumStatistics",
+						"sales"
+					],
+					"properties" : {
+						"orders" : {
+							"type" : "boolean"
+						},
+						"stockControl" : {
+							"type" : "boolean"
+						},
+						"promoSales" : {
+							"type" : "boolean"
+						},
+						"currentStockValue" : {
+							"type" : "boolean"
+						},
+						"lostSales" : {
+							"type" : "boolean"
+						},
+						"atumStatistics" : {
+							"type" : "boolean"
+						},
+						"sales" : {
+							"type" : "boolean"
+						}
+					}
+				}
+			}
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01,
+					"minimum" : 1,
+					"type" : "number"
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

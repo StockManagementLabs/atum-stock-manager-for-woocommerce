@@ -1,0 +1,70 @@
+{
+	"title" : "location",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"code" : {
+			"type" : "string"
+		},
+		"barcode" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"parent" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"count" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

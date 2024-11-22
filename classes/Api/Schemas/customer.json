@@ -1,0 +1,175 @@
+{
+	"title": "customer",
+	"version": 0,
+	"primaryKey": "id",
+	"type": "object",
+	"required": [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id",
+		"dateCreated",
+		"dateCreatedGMT",
+		"dateModified",
+		"dateModifiedGMT",
+		"email",
+		"firstName",
+		"lastName",
+		"role",
+		"username",
+		"billing",
+		"shipping",
+		"isPayingCustomer",
+		"avatarUrl",
+		"trash"
+	],
+	"properties": {
+		"id": {
+			"type": "number"
+		},
+		"dateCreated": {
+			"type": "string"
+		},
+		"dateCreatedGMT": {
+			"type": "string"
+		},
+		"dateModified": {
+			"type": "string"
+		},
+		"dateModifiedGMT": {
+			"type": "string"
+		},
+		"email": {
+			"type": "string"
+		},
+		"firstName": {
+			"type": "string"
+		},
+		"lastName": {
+			"type": "string"
+		},
+		"role": {
+			"type": "string"
+		},
+		"username": {
+			"type": "string"
+		},
+		"password": {
+			"type": "string"
+		},
+		"billing": {
+			"type": "object",
+			"properties": {
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
+					"type": "string"
+				},
+				"company": {
+					"type": "string"
+				},
+				"address1": {
+					"type": "string"
+				},
+				"address2": {
+					"type": "string"
+				},
+				"city": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				},
+				"postcode": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				}
+			}
+		},
+		"shipping": {
+			"type": "object",
+			"properties": {
+				"firstName": {
+					"type": "string"
+				},
+				"lastName": {
+					"type": "string"
+				},
+				"company": {
+					"type": "string"
+				},
+				"address1": {
+					"type": "string"
+				},
+				"address2": {
+					"type": "string"
+				},
+				"city": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				},
+				"postcode": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				},
+				"phone": {
+					"type": "string"
+				}
+			}
+		},
+		"isPayingCustomer": {
+			"type": "boolean"
+		},
+		"avatarUrl": {
+			"type": "string"
+		},
+		"itemType": {
+			"type": "string"
+		},
+		"_id": {
+			"type": "string"
+		},
+		"_rev": {
+			"type": "string",
+			"minLength": 1
+		},
+		"conflict": {
+			"type": "boolean"
+		},
+		"_deleted": {
+			"type": "boolean"
+		},
+		"trash": {
+			"type": "boolean"
+		},
+		"_meta": {
+			"type": "object",
+			"required": ["lwt"],
+			"properties": {
+				"lwt": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 1000000000000000,
+					"multipleOf": 0.01
+				}
+			}
+		},
+		"_attachments": {
+			"type": "object"
+		}
+	}
+}

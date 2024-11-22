@@ -1,0 +1,192 @@
+{
+	"title" : "coupon",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		},
+		"id" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"code" : {
+			"type" : "string"
+		},
+		"amount" : {
+			"type" : "number"
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"discountType" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"dateExpires" : {
+			"type" : "string"
+		},
+		"dateExpiresGMT" : {
+			"type" : "string"
+		},
+		"usageCount" : {
+			"type" : "number"
+		},
+		"individualUse" : {
+			"type" : "boolean"
+		},
+		"products" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"excludedProducts" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"usageLimit" : {
+			"type" : "number"
+		},
+		"usageLimitPerUser" : {
+			"type" : "number"
+		},
+		"usageLimitPerItems" : {
+			"type" : "number"
+		},
+		"freeShipping" : {
+			"type" : "boolean"
+		},
+		"productCategories" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"excludedProductCategories" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"excludeSaleItems" : {
+			"type" : "boolean"
+		},
+		"minimumAmount" : {
+			"type" : "number"
+		},
+		"maximumAmount" : {
+			"type" : "number"
+		},
+		"emailRestrictions" : {
+			"type" : "array",
+			"items" : {
+				"type" : "string"
+			}
+		},
+		"usedBy" : {
+			"type" : "array",
+			"items" : {
+				"oneOf" : [
+					{
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					{
+						"type" : "string"
+					}
+				]
+			}
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}

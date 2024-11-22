@@ -1,0 +1,601 @@
+{
+	"title" : "order",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"dateCreated",
+		"dateCreatedGMT",
+		"dateModified",
+		"dateModifiedGMT",
+		"status",
+		"currency",
+		"refunds"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"currency" : {
+			"type" : "string"
+		},
+		"customer" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"lineItems" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name",
+					"quantity",
+					"metaData"
+				],
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"quantity" : {
+						"type" : "number"
+					},
+					"taxClass" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"subtotal" : {
+						"type" : "number"
+					},
+					"subtotalTax" : {
+						"type" : "number"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					},
+					"price" : {
+						"type" : "number"
+					},
+					"stock" : {
+						"type" : "object",
+						"required" : [
+							"action",
+							"quantity",
+							"changedStock"
+						],
+						"properties" : {
+							"action" : {
+								"type" : "string"
+							},
+							"quantity" : {
+								"type" : "number"
+							},
+							"changedStock" : {
+								"type" : "boolean"
+							}
+						}
+					},
+					"metaData" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"key" : {
+									"type" : "string"
+								},
+								"value" : {
+									"type" : [
+										"string",
+										"number",
+										"boolean",
+										"object"
+									]
+								}
+							}
+						}
+					},
+					"sku" : {
+						"type" : "string"
+					},
+					"taxes" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"id" : {
+									"type" : "number"
+								},
+								"rate" : {
+									"type" : "number"
+								},
+								"label" : {
+									"type" : "string"
+								},
+								"compound" : {
+									"type" : "boolean"
+								}
+							}
+						}
+					},
+					"order" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"parent" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"product" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"variation" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"inventories" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"required" : [
+								"_id",
+								"quantity",
+								"inventory",
+								"product",
+								"variation",
+								"order",
+								"orderType",
+								"subtotal",
+								"total"
+							],
+							"properties" : {
+								"id" : {
+									"type" : "number"
+								},
+								"_id" : {
+									"type" : "string"
+								},
+								"quantity" : {
+									"type" : "number"
+								},
+								"inventory" : {
+									"type" : "object",
+									"properties" : {
+										"id" : {
+											"type" : "number"
+										},
+										"_id" : {
+											"type" : "string"
+										}
+									}
+								},
+								"product" : {
+									"type" : "object",
+									"properties" : {
+										"id" : {
+											"type" : "number"
+										},
+										"_id" : {
+											"type" : "string"
+										}
+									}
+								},
+								"variation" : {
+									"type" : "object",
+									"properties" : {
+										"id" : {
+											"type" : "number"
+										},
+										"_id" : {
+											"type" : "string"
+										}
+									}
+								},
+								"order" : {
+									"type" : "object",
+									"properties" : {
+										"id" : {
+											"type" : "number"
+										},
+										"_id" : {
+											"type" : "string"
+										}
+									}
+								},
+								"orderType" : {
+									"type" : "string"
+								},
+								"stock" : {
+									"type" : "object",
+									"required" : [
+										"action",
+										"quantity",
+										"changedStock"
+									],
+									"properties" : {
+										"action" : {
+											"type" : "string"
+										},
+										"quantity" : {
+											"type" : "number"
+										},
+										"changedStock" : {
+											"type" : "boolean"
+										}
+									}
+								},
+								"subtotal" : {
+									"type" : "number"
+								},
+								"total" : {
+									"type" : "number"
+								},
+								"refundQuantity" : {
+									"type" : "number"
+								},
+								"refundTotal" : {
+									"type" : "number"
+								},
+								"open" : {
+									"type" : "boolean"
+								}
+							}
+						}
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					}
+				}
+			}
+		},
+		"feeLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name"
+				],
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"shippingLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name"
+				],
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"total" : {
+						"type" : "number"
+					},
+					"totalTax" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"taxLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"label",
+					"taxTotal",
+					"rate"
+				],
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"label" : {
+						"type" : "string"
+					},
+					"taxTotal" : {
+						"type" : "number"
+					},
+					"rate" : {
+						"type" : "number"
+					},
+					"taxRate" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"taxClass" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"shippingTaxTotal" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"total" : {
+			"type" : "number"
+		},
+		"totalTax" : {
+			"type" : "number"
+		},
+		"discountTotal" : {
+			"type" : "number"
+		},
+		"discountTax" : {
+			"type" : "number"
+		},
+		"shippingTotal" : {
+			"type" : "number"
+		},
+		"shippingTax" : {
+			"type" : "number"
+		},
+		"refunds" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"reason",
+					"amount"
+				],
+				"properties" : {
+					"reason" : {
+						"type" : "string"
+					},
+					"amount" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"notes" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"author" : {
+						"type" : "string"
+					},
+					"dateCreated" : {
+						"type" : "string",
+						"format" : "date-time"
+					},
+					"dateCreatedGMT" : {
+						"type" : "string",
+						"format" : "date-time"
+					},
+					"note" : {
+						"type" : "string"
+					},
+					"customerNote" : {
+						"type" : "boolean"
+					}
+				}
+			}
+		},
+		"couponLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"code" : {
+						"type" : "string"
+					},
+					"discount" : {
+						"type" : "number"
+					},
+					"discountTax" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"pricesIncludeTax" : {
+			"type" : "boolean"
+		},
+		"inventoryLogs" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"pickingPack" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"paymentLines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"method" : {
+						"type" : "string"
+					},
+					"amount" : {
+						"type" : "number"
+					}
+				}
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

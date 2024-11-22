@@ -1,0 +1,189 @@
+{
+	"title" : "stock-takes",
+	"version" : 0,
+	"primaryKey" : "id",
+	"type" : "object",
+	"properties" : {
+		"itemType" : {
+			"type" : "string",
+			"enum" : [
+				"stockTakes"
+			]
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"user" : {
+			"oneOf" : [
+				{
+					"type" : "string"
+				},
+				{
+					"type" : "object",
+					"properties" : {
+						"id" : {
+							"type" : "number"
+						},
+						"_id" : {
+							"type" : "string"
+						}
+					}
+				}
+			]
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"description" : {
+			"type" : "string"
+		},
+		"dateReconciled" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateReconciledGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"lines" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"required" : [
+					"name",
+					"notes"
+				],
+				"properties" : {
+					"item" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"notes" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"required" : [
+								"description"
+							],
+							"properties" : {
+								"name" : {
+									"type" : "string"
+								},
+								"description" : {
+									"type" : "string"
+								},
+								"_id" : {
+									"type" : "string"
+								},
+								"dateCreated" : {
+									"type" : "string",
+									"format" : "date-time"
+								},
+								"dateCreatedGMT" : {
+									"type" : "string",
+									"format" : "date-time"
+								},
+								"dateModified" : {
+									"type" : "string",
+									"format" : "date-time"
+								},
+								"dateModifiedGMT" : {
+									"type" : "string",
+									"format" : "date-time"
+								}
+							}
+						}
+					},
+					"count" : {
+						"type" : "number"
+					},
+					"quantity" : {
+						"type" : "number"
+					},
+					"image" : {
+						"type" : "object",
+						"properties" : {
+							"id" : { "type": "number" },
+							"_id" : { "type": "string" },
+							"_rev" : { "type": "string" },
+							"name" : { "type": "string" },
+							"slug" : { "type": "string" },
+							"alt" : { "type": "string" },
+							"type" : { "type": "string" },
+							"src" : { "type": "string" },
+							"file" : { "type": "string" },
+							"dateCreated" : { "type": "string" },
+							"dateCreatedGMT" : { "type": "string" },
+							"dateModified" : { "type": "string" },
+							"dateModifiedGMT" : { "type": "string" },
+							"_deleted" : { "type": "boolean" }
+						}
+					},
+					"inventories" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"item" : {
+									"type" : "object",
+									"properties" : {
+										"id" : {
+											"type" : "number"
+										},
+										"_id" : {
+											"type" : "string"
+										}
+									}
+								},
+								"lot" : {
+									"type" : "string"
+								},
+								"bbeDate" : {
+									"type" : "string",
+									"format" : "date-time"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

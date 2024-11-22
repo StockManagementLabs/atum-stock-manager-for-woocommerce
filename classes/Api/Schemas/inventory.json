@@ -1,0 +1,288 @@
+{
+	"title": "inventory",
+	"version": 0,
+	"primaryKey": "id",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "number"
+		},
+		"type": {
+			"type": "string",
+			"enum": ["inventory"]
+		},
+		"parent": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"_id": {
+					"type": "string"
+				}
+			}
+		},
+		"name": {
+			"type": "string"
+		},
+		"priority": {
+			"type": "number"
+		},
+		"isMain": {
+			"type": "boolean"
+		},
+		"inventoryDate": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"inventoryDateGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"lot": {
+			"type": "string"
+		},
+		"writeOff": {
+			"type": "boolean"
+		},
+		"region": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"_id": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"locations": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"bbeDate": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"bbeDateGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"expiryDays": {
+			"type": "number"
+		},
+		"inboundStock": {
+			"type": "number"
+		},
+		"stockOnHold": {
+			"type": "number"
+		},
+		"soldToday": {
+			"type": "number"
+		},
+		"salesLastDays": {
+			"type": "number"
+		},
+		"reservedStock": {
+			"type": "number"
+		},
+		"customerReturns": {
+			"type": "number"
+		},
+		"warehouseDamage": {
+			"type": "number"
+		},
+		"lostInPost": {
+			"type": "number"
+		},
+		"otherLogs": {
+			"type": "number"
+		},
+		"outStockDays": {
+			"type": "number"
+		},
+		"lostSales": {
+			"type": "number"
+		},
+		"shippingClass": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"_id": {
+					"type": "string"
+				}
+			}
+		},
+		"dateModified": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateModifiedGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"_id": {
+			"type": "string"
+		},
+		"_rev": {
+			"type": "string",
+			"minLength": 1
+		},
+		"_deleted": {
+			"type": "boolean"
+		},
+		"trash": {
+			"type": "boolean"
+		},
+		"menuOrder": {
+			"type": "number"
+		},
+		"parentTaxClass": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"_id": {
+					"type": "string"
+				}
+			}
+		},
+		"categories": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"name": {
+						"type": "string"
+					},
+					"slug": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"parentSku": {
+			"type": "string"
+		},
+		"sku": {
+			"type": "string"
+		},
+		"barcode": {
+			"type": "string"
+		},
+		"manageStock": {
+			"type": "boolean"
+		},
+		"stockQuantity": {
+			"type": "number"
+		},
+		"calculatedStock": {
+			"type": "number"
+		},
+		"expiredStock": {
+			"type": "number"
+		},
+		"backorders": {
+			"type": "string"
+		},
+		"soldIndividually": {
+			"type": "boolean"
+		},
+		"stockStatus": {
+			"type": "string"
+		},
+		"supplier": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"_id": {
+					"type": "string"
+				}
+			}
+		},
+		"supplierSku": {
+			"type": "string"
+		},
+		"outStockThreshold": {
+			"type": "number"
+		},
+		"purchasePrice": {
+			"type": "number"
+		},
+		"price": {
+			"type": "number"
+		},
+		"regularPrice": {
+			"type": "number"
+		},
+		"salePrice": {
+			"type": "number"
+		},
+		"dateOnSaleFrom": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateOnSaleFromGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateOnSaleTo": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateOnSaleToGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"outStockDate": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"outStockDateGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"conflict": {
+			"type": "boolean"
+		},
+		"_meta": {
+			"type": "object",
+			"required": ["lwt"],
+			"properties": {
+				"lwt": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 1000000000000000,
+					"multipleOf": 0.01
+				}
+			}
+		},
+		"_attachments": {
+			"type": "object"
+		}
+	}
+}

@@ -1,0 +1,57 @@
+{
+	"title" : "payment-method",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_id",
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments"
+	],
+	"properties" : {
+		"id" : {
+			"type" : "number"
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"slug" : {
+			"type" : "string"
+		},
+		"name" : {
+			"type" : "string"
+		},
+		"default" : {
+			"type" : "boolean"
+		},
+		"enabled" : {
+			"type" : "boolean"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		}
+	}
+}

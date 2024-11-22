@@ -1,0 +1,188 @@
+{
+	"title" : "comment",
+	"version" : 0,
+	"primaryKey" : "_id",
+	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"_id"
+	],
+	"properties" : {
+		"_id" : {
+			"type" : "string"
+		},
+		"id" : {
+			"type" : "number"
+		},
+		"author" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				},
+				"email" : {
+					"type" : "string"
+				},
+				"avatar" : {
+					"type" : "string"
+				},
+				"userAgent" : {
+					"type" : "string"
+				}
+			}
+		},
+		"content" : {
+			"type" : "string"
+		},
+		"date" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"parent" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				}
+			}
+		},
+		"post" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : "number"
+				},
+				"_id" : {
+					"type" : "string"
+				},
+				"type" : {
+					"type" : "string"
+				}
+			}
+		},
+		"postType" : {
+			"type" : "string"
+		},
+		"actionType" : {
+			"type" : "string"
+		},
+		"data" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"displayKey" : {
+						"type" : "string"
+					},
+					"displayValue" : {
+						"type" : "string"
+					}
+				},
+				"required" : [
+					"key",
+					"value"
+				]
+			}
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"addedByUser" : {
+			"type" : "boolean"
+		},
+		"customerNote" : {
+			"type" : "boolean"
+		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					},
+					"_id" : {
+						"type" : "string"
+					},
+					"displayKey" : {
+						"type" : "string"
+					},
+					"displayValue" : {
+						"type" : "string"
+					}
+				},
+				"required" : [
+					"key",
+					"value"
+				]
+			}
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		}
+	}
+}
