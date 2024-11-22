@@ -276,17 +276,17 @@ class POExport extends PurchaseOrder {
 		try {
 
 			$return_html = TRUE === $this->debug_mode || TRUE === $this->return_html;
-			$uploads     = wp_upload_dir();
-			$temp_dir    = $uploads['basedir'] . apply_filters( 'atum/purchase_orders/po_export/temp_pdf_dir', '/atum' );
+			$atum_dir    = Helpers::get_atum_uploads_dir();
+			$temp_dir    = $atum_dir . apply_filters( 'atum/purchase_orders/po_export/temp_pdf_dir', 'tmp' );
 
 			if ( ! is_dir( $temp_dir ) ) {
 
 				// Try to create it.
-				$success = mkdir( $temp_dir, 0777, TRUE );
+				$success = mkdir( $temp_dir, 0755, TRUE );
 
-				// If can't create it, use default uploads folder.
+				// If wasn't created, use default uploads folder.
 				if ( ! $success || ! is_writable( $temp_dir ) ) {
-					$temp_dir = $uploads['basedir'];
+					$temp_dir = $atum_dir;
 				}
 
 			}

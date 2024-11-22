@@ -119,18 +119,17 @@ class DataExport {
 
 		try {
 
-			$uploads = wp_upload_dir();
-			
-			$temp_dir = $uploads['basedir'] . apply_filters( 'atum/data_export/pdf_folder', '/atum' );
+			$atum_dir = Helpers::get_atum_uploads_dir();
+			$temp_dir = $atum_dir . apply_filters( 'atum/data_export/pdf_folder', 'tmp' );
 			
 			if ( ! is_dir( $temp_dir ) ) {
 				
 				// Try to create it.
-				$success = mkdir( $temp_dir, 0777, TRUE );
+				$success = mkdir( $temp_dir, 0755, TRUE );
 				
-				// If can't create it, use default uploads folder.
+				// If wasn't created, use default uploads folder.
 				if ( ! $success || ! is_writable( $temp_dir ) ) {
-					$temp_dir = $uploads['basedir'];
+					$temp_dir = $atum_dir;
 				}
 				
 			}
