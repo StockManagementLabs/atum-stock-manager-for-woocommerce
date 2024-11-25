@@ -55,8 +55,9 @@ export default class FileAttachments {
 
 			attachments.forEach( ( attachment: any ) => {
 
-				const $listItem: JQuery = $( '<li>' ).data( 'id', attachment.id ),
-				      url: string       = attachment.hasOwnProperty( 'url' ) ? attachment.url : attachment.sizes.full.url;
+                const $listItem: JQuery = $( '<li>' ).data( 'id', attachment.id ),
+                      url: string       = attachment.hasOwnProperty( 'url' ) ? attachment.url : attachment.sizes.full.url,
+                      imgToShow: string = attachment.hasOwnProperty( 'sizes' ) ? attachment.sizes.medium.url : url;
 
 				$listItem
 					.append( `<label>${ this.settings.get( 'attachToEmail' ) }</label>` )
@@ -64,8 +65,8 @@ export default class FileAttachments {
 
 				let thumb: string = '';
 
-				if ( [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg' ].includes( attachment.subtype ) && attachment.sizes.medium.url ) {
-					thumb = `<img src="${ attachment.sizes.medium.url }" alt="${ attachment.title }">`;
+				if ( [ 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg' ].includes( attachment.subtype ) &&  imgToShow ) {
+					thumb = `<img src="${ imgToShow }" alt="${ attachment.title }">`;
 				}
 				else {
 					thumb = `<div class="atum-attachment-icon"><i class="atum-icon atmi-file-empty" title="${ attachment.title }"></i></div>`;
