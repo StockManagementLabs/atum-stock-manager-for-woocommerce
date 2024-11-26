@@ -4,7 +4,7 @@ Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
 Tested up to: 6.7
-Requires PHP: 7.3
+Requires PHP: 7.4
 WC requires at least: 5.0
 WC tested up to: 9.3.3
 Stable tag: 1.9.43.1

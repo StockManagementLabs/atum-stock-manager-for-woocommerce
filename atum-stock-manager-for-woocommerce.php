@@ -41,7 +41,7 @@ if ( ! defined( 'ATUM_WP_MINIMUM_VERSION' ) ) {
 }
 
 if ( ! defined( 'ATUM_PHP_MINIMUM_VERSION' ) ) {
-	define( 'ATUM_PHP_MINIMUM_VERSION', '7.3' );
+	define( 'ATUM_PHP_MINIMUM_VERSION', '7.4' );
 }
 
 if ( ! defined( 'ATUM_PATH' ) ) {
