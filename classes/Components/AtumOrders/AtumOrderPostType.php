@@ -164,6 +164,8 @@ abstract class AtumOrderPostType {
 	 */
 	public function register_post_type( $args = array() ) {
 
+		$this->set_labels();
+
 		// Minimum capability required.
 		$read_capability = $this->capabilities['read_post'] ?? 'manage_woocommerce';
 		$is_user_allowed = current_user_can( $read_capability );
@@ -1304,5 +1306,12 @@ abstract class AtumOrderPostType {
 	public static function get_type_taxonomy() {
 		return ! empty( static::TAXONOMY ) ? static::TAXONOMY : FALSE;
 	}
+
+	/**
+	 * Set the post type labels
+	 *
+	 * @since 1.9.44
+	 */
+	abstract protected function set_labels();
 
 }

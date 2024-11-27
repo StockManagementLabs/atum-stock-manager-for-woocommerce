@@ -76,6 +76,41 @@ class InventoryLogs extends AtumOrderPostType {
 	 */
 	private function __construct() {
 
+		// Initialize.
+		$this->init();
+
+		// Add item order.
+		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
+
+		// Add the "Inventory Logs" link to the ATUM's admin bar menu.
+		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
+
+		if ( is_admin() ) {
+
+			// Add the filters to the post type list table.
+			add_action( 'restrict_manage_posts', array( $this, 'add_log_filters' ) );
+
+			// Add the help tab to Inventory Logs' list page.
+			add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
+
+			// Add custom search for ILs.
+			add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'il_search' ), 10, 2 );
+			add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
+
+			// Add the buttons for increasing/decreasing the Log products' stock.
+			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
+
+		}
+
+	}
+
+	/**
+	 * Set Inventory Logs post type labels
+	 *
+	 * @since 1.9.44
+	 */
+	protected function set_labels() {
+
 		// Set post type labels.
 		$this->labels = array(
 			'name'                  => __( 'Inventory Logs', ATUM_TEXT_DOMAIN ),
@@ -104,33 +139,6 @@ class InventoryLogs extends AtumOrderPostType {
 			'notes'   => __( 'Log Notes', ATUM_TEXT_DOMAIN ),
 			'actions' => __( 'Log Actions', ATUM_TEXT_DOMAIN ),
 		);
-
-		// Initialize.
-		$this->init();
-
-		// Add item order.
-		add_filter( 'atum/admin/menu_items_order', array( $this, 'add_item_order' ) );
-
-		// Add the "Inventory Logs" link to the ATUM's admin bar menu.
-		add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ) );
-
-		if ( is_admin() ) {
-
-			// Add the filters to the post type list table.
-			add_action( 'restrict_manage_posts', array( $this, 'add_log_filters' ) );
-
-			// Add the help tab to Inventory Logs' list page.
-			add_action( 'load-edit.php', array( $this, 'add_help_tab' ) );
-
-			// Add custom search for ILs.
-			add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'il_search' ), 10, 2 );
-			add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
-
-			// Add the buttons for increasing/decreasing the Log products' stock.
-			add_action( 'atum/atum_order/item_bulk_controls', array( $this, 'add_stock_buttons' ) );
-
-		}
-
 	}
 
 	/**
