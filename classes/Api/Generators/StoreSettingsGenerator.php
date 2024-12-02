@@ -187,6 +187,19 @@ class StoreSettingsGenerator extends GeneratorBase {
 	}
 
 	/**
+	 * Validate and sanitize enum setting
+	 *
+	 * @param mixed  $value
+	 * @param array  $allowed_values
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
+	private function validate_enum_setting($value, array $allowed_values, $default) {
+		return in_array($value, $allowed_values, true) ? $value : $default;
+	}
+
+	/**
 	 * Map ATUM general settings
 	 *
 	 * @since 1.9.44
@@ -196,13 +209,19 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_atum_general_settings( array $json_data ): array {
-
 		return [
 			'enableAdminBarMenu'     => $this->get_boolean_setting( $json_data, 'enable_admin_bar_menu' ),
 			'outStockThreshold'      => $this->get_boolean_setting( $json_data, 'out_stock_threshold' ),
 			'stockQuantityDecimals'  => $this->get_int_setting( $json_data, 'stock_quantity_decimals' ),
 			'salesLastNDays'         => $this->get_int_setting( $json_data, 'sales_last_ndays', 14 ),
 			'enableCheckOrderPrices' => $this->get_boolean_setting( $json_data, 'enable_check_order_prices' ),
+			'showTotals'             => $this->get_boolean_setting( $json_data, 'show_totals', false ),
+			'grossProfit'            => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'gross_profit_type' ), 
+				['percentage', 'monetary'], 
+				'percentage'
+			),
+			'profitMargin'           => $this->get_int_setting( $json_data, 'profit_margin', 0 ),
 		];
 	}
 
@@ -216,24 +235,30 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_atum_store_details_settings( array $json_data ): array {
-
 		return [
+			'siteIcon' => [
+				'id'  => $this->get_int_setting( $json_data, 'site_icon_id' ),
+				'_id' => $this->get_string_setting( $json_data, 'site_icon_uid' ),
+			],
 			'company' => [
-				'name'      => $this->get_string_setting( $json_data, 'company_name' ),
-				'taxNumber' => $this->get_string_setting( $json_data, 'tax_number' ),
-				'siteIcon'  => $this->get_int_setting( $json_data, 'site_icon' ),
+				'name'            => $this->get_string_setting( $json_data, 'company_name' ),
+				'taxNumber'       => $this->get_string_setting( $json_data, 'tax_number' ),
+				'address1'        => $this->get_string_setting( $json_data, 'company_address_1' ),
+				'address2'        => $this->get_string_setting( $json_data, 'company_address_2' ),
+				'city'            => $this->get_string_setting( $json_data, 'company_city' ),
+				'country'         => $this->get_string_setting( $json_data, 'company_country' ),
+				'state'           => $this->get_string_setting( $json_data, 'company_state' ),
+				'zip'             => $this->get_string_setting( $json_data, 'company_zip' ),
+				'sameShipAddress' => $this->get_boolean_setting( $json_data, 'same_ship_address', true ),
 			],
-			'address' => [
-				'addressLine1' => $this->get_string_setting( $json_data, 'address_1' ),
-				'addressLine2' => $this->get_string_setting( $json_data, 'address_2' ),
-				'city'         => $this->get_string_setting( $json_data, 'city' ),
-				'state'        => $this->get_string_setting( $json_data, 'state' ),
-				'postcode'     => $this->get_string_setting( $json_data, 'ship_zip' ),
-				'country'      => $this->get_string_setting( $json_data, 'ship_country' ),
-			],
-			'contact' => [
-				'phone' => $this->get_string_setting( $json_data, 'phone' ),
-				'email' => $this->get_string_setting( $json_data, 'email' ),
+			'shipping' => [
+				'name'     => $this->get_string_setting( $json_data, 'shipping_name' ),
+				'address1' => $this->get_string_setting( $json_data, 'shipping_address_1' ),
+				'address2' => $this->get_string_setting( $json_data, 'shipping_address_2' ),
+				'city'     => $this->get_string_setting( $json_data, 'shipping_city' ),
+				'country'  => $this->get_string_setting( $json_data, 'shipping_country' ),
+				'state'    => $this->get_string_setting( $json_data, 'shipping_state' ),
+				'zip'      => $this->get_string_setting( $json_data, 'shipping_zip' ),
 			],
 		];
 	}
@@ -269,13 +294,41 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_atum_multi_inventory_settings( array $json_data ): array {
-
 		return [
 			'defaultMultiInventory' => $this->get_boolean_setting( $json_data, 'mi_default_multi_inventory' ),
-			'regionRestrictionMode' => $this->get_string_setting( $json_data, 'mi_region_restriction_mode', 'no-restriction' ),
+			'regionRestrictionMode' => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'mi_region_restriction_mode' ), 
+				['none', 'shipping_zone', 'country'], 
+				'none'
+			),
 			'detailsColumnExpanded' => $this->get_boolean_setting( $json_data, 'mi_details_column_expanded' ),
 			'totalFilteredProduct'  => $this->get_boolean_setting( $json_data, 'mi_total_filtered_product' ),
 			'geopromptPrivacyText'  => $this->get_string_setting( $json_data, 'mi_geoprompt_privacy_text', 'I accept the [link]privacy policy[/link]' ),
+			'defaultShippingZone' => $this->get_string_setting( $json_data, 'mi_default_shipping_zone' ),
+			'defaultZoneForEmptyRegions' => $this->get_boolean_setting( $json_data, 'mi_default_zone_for_empty_regions', false ),
+			'defaultCountry' => $this->get_string_setting( $json_data, 'mi_default_country' ),
+			'defaultCountryForEmptyRegions' => $this->get_boolean_setting( $json_data, 'mi_default_country_for_empty_regions', false ),
+			'expiryDatesInCart'     => $this->get_boolean_setting( $json_data, 'mi_expiry_dates_in_cart', false ),
+			'listTablesFilter'      => $this->get_boolean_setting( $json_data, 'mi_list_tables_filter', true ),
+			'batchTracking'         => $this->get_boolean_setting( $json_data, 'mi_batch_tracking', false ),
+			'inventorySortingMode'  => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'mi_inventory_sorting_mode' ),
+				['fifo', 'lifo', 'bbe', 'manual'], 
+				'fifo'
+			),
+			'inventoryIteration'    => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'mi_inventory_iteration' ),
+				['global', 'shipping_zone', 'country'], 
+				'global'
+			),
+			'expirableInventories'  => $this->get_boolean_setting( $json_data, 'mi_default_expirable_inventories', false ),
+			'pricePerInventory'     => $this->get_boolean_setting( $json_data, 'mi_default_price_per_inventory', false ),
+			'selectableInventories' => $this->get_boolean_setting( $json_data, 'mi_default_selectable_inventories', false ),
+			'inventorySelectionMode'=> $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'mi_default_selectable_inventories_mode' ),
+				['auto', 'manual'], 
+				'auto'
+			),
 		];
 	}
 
@@ -337,17 +390,44 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_general_settings( array $json_data ): array {
-
 		return [
-			'address' => [
-				'line1' => $this->get_string_setting( $json_data, 'woocommerce_store_address' ),
-				'line2' => $this->get_string_setting( $json_data, 'woocommerce_store_address_2' ),
-				'city'  => $this->get_string_setting( $json_data, 'woocommerce_store_city' ),
-			],
-			'pricing' => [
-				'thousandSeparator' => $this->get_string_setting( $json_data, 'woocommerce_price_thousand_sep', ',' ),
-				'decimalSeparator'  => $this->get_string_setting( $json_data, 'woocommerce_price_decimal_sep', '.' ),
-				'numberOfDecimals'  => $this->get_int_setting( $json_data, 'woocommerce_price_num_decimals', 2 ),
+			'currency'                  => $this->get_string_setting( $json_data, 'woocommerce_currency' ),
+			'currencySymbol'            => $this->get_string_setting( $json_data, 'woocommerce_currency_symbol' ),
+			'currencyPosition'          => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_currency_pos' ), 
+				['left', 'right', 'left_space', 'right_space'], 
+				'left'
+			),
+			'numberOfDecimals'          => $this->get_int_setting( $json_data, 'woocommerce_price_num_decimals', 2 ),
+			'allowedCountries'          => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_allowed_countries' ), 
+				['all', 'specific', 'all_except'], 
+				'all'
+			),
+			'allExceptCountries'        => $this->get_array_setting( $json_data, 'woocommerce_all_except_countries', [] ),
+			'specificAllowedCountries'  => $this->get_array_setting( $json_data, 'woocommerce_specific_allowed_countries', [] ),
+			'shipToCountries'           => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_ship_to_countries' ), 
+				['all', 'specific', 'disabled'], 
+				'all'
+			),
+			'specificShipToCountries'   => $this->get_array_setting( $json_data, 'woocommerce_specific_ship_to_countries', [] ),
+			'defaultCustomerAddress'    => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_default_customer_address' ), 
+				['base', 'geolocation', 'geolocation_ajax'], 
+				'base'
+			),
+			'calcTaxes'                 => $this->get_boolean_setting( $json_data, 'woocommerce_calc_taxes', false ),
+			'enableCoupons'             => $this->get_boolean_setting( $json_data, 'woocommerce_enable_coupons', true ),
+			'calcDiscountsSequentially' => $this->get_boolean_setting( $json_data, 'woocommerce_calc_discounts_sequentially', false ),
+			'priceThousandSep'          => $this->get_string_setting( $json_data, 'woocommerce_price_thousand_sep', ',' ),
+			'priceDecimalSep'           => $this->get_string_setting( $json_data, 'woocommerce_price_decimal_sep', '.' ),
+			'priceNumDecimals'          => $this->get_int_setting( $json_data, 'woocommerce_price_num_decimals', 2 ),
+			'store'                     => [
+				'address'  => $this->get_string_setting( $json_data, 'woocommerce_store_address' ),
+				'city'     => $this->get_string_setting( $json_data, 'woocommerce_store_city' ),
+				'postcode' => $this->get_string_setting( $json_data, 'woocommerce_store_postcode' ),
+				'country'  => $this->get_string_setting( $json_data, 'woocommerce_store_country' ),
 			],
 		];
 	}
@@ -362,16 +442,27 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_product_settings( array $json_data ): array {
-
 		return [
-			'shopPage'                => $this->get_int_setting( $json_data, 'woocommerce_shop_page_id' ),
-			'cartRedirectAfterAdd'    => $this->get_boolean_setting( $json_data, 'woocommerce_cart_redirect_after_add' ),
-			'enableAjaxAddToCart'     => $this->get_boolean_setting( $json_data, 'woocommerce_enable_ajax_add_to_cart', TRUE ),
-			'matchFeaturedImageBySku' => $this->get_boolean_setting( $json_data, 'woocommerce_product_match_featured_image_by_sku' ),
-			'attributeLookup'         => [
-				'directUpdates'    => $this->get_boolean_setting( $json_data, 'woocommerce_attribute_lookup_direct_updates' ),
-				'optimizedUpdates' => $this->get_boolean_setting( $json_data, 'woocommerce_attribute_lookup_optimized_updates' ),
+			'placeholderImage' => [
+				'id'  => $this->get_int_setting( $json_data, 'woocommerce_placeholder_image_id' ),
+				'src' => $this->get_string_setting( $json_data, 'woocommerce_placeholder_image_src' ),
 			],
+			'weightUnit'           => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_weight_unit' ), 
+				['kg', 'g', 'lbs', 'oz'], 
+				'kg'
+			),
+			'dimensionUnit'        => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_dimension_unit' ), 
+				['m', 'cm', 'mm', 'in', 'yd'], 
+				'cm'
+			),
+			'manageStock'          => $this->get_boolean_setting( $json_data, 'woocommerce_manage_stock', true ),
+			'holdStockMinutes'     => $this->get_int_setting( $json_data, 'woocommerce_hold_stock_minutes', 60 ),
+			'notifyLowStock'       => $this->get_boolean_setting( $json_data, 'woocommerce_notify_low_stock', true ),
+			'notifyNoStock'        => $this->get_boolean_setting( $json_data, 'woocommerce_notify_no_stock', true ),
+			'notifyLowStockAmount' => $this->get_int_setting( $json_data, 'woocommerce_notify_low_stock_amount', 2 ),
+			'notifyNoStockAmount'  => $this->get_int_setting( $json_data, 'woocommerce_notify_no_stock_amount', 0 ),
 		];
 	}
 
@@ -385,17 +476,31 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_tax_settings( array $json_data ): array {
-
 		return [
 			'pricesIncludeTax'    => $this->get_boolean_setting( $json_data, 'woocommerce_prices_include_tax' ),
-			'taxBasedOn'          => $this->get_string_setting( $json_data, 'woocommerce_tax_based_on', 'shipping' ),
+			'taxBasedOn'          => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_tax_based_on' ), 
+				['shipping', 'billing', 'base'], 
+				'shipping'
+			),
 			'shippingTaxClass'    => [
 				'id'   => $this->get_string_setting( $json_data, 'woocommerce_shipping_tax_class', 'inherit' ),
 				'name' => $this->get_shipping_tax_class_name( $json_data ),
 			],
-			'displayPricesInCart' => $this->get_string_setting( $json_data, 'woocommerce_tax_display_cart', 'excl' ),
+			'displayPricesInCart' => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_tax_display_cart' ), 
+				['excl', 'incl'], 
+				'excl'
+			),
 			'priceDisplaySuffix'  => $this->get_string_setting( $json_data, 'woocommerce_price_display_suffix' ),
+			'taxTotalDisplay'     => $this->validate_enum_setting(
+				$this->get_string_setting( $json_data, 'woocommerce_tax_total_display' ), 
+				['itemized', 'single'], 
+				'itemized'
+			),
+			'taxRoundAtSubtotal' => $this->get_boolean_setting( $json_data, 'woocommerce_tax_round_at_subtotal', false ),
 			'taxTotalDisplay'     => $this->get_string_setting( $json_data, 'woocommerce_tax_total_display', 'itemized' ),
+			'taxRoundAtSubtotal' => $this->get_boolean_setting( $json_data, 'woocommerce_tax_round_at_subtotal', false ),
 		];
 	}
 

@@ -110,7 +110,7 @@ class AtumApi {
 	 * @var string[]
 	 */
 	private static $exportable_endpoints = array(
-		/*'attribute'       => '/wc/v3/products/attributes',
+		'attribute'       => '/wc/v3/products/attributes',
 		'category'        => '/wc/v3/products/categories',
 		'comment'         => array(
 			'atum-order-notes' => '/wc/v3/atum/atum-order-notes', // TODO: Is this needed? Is not enough with the comments export?
@@ -128,7 +128,7 @@ class AtumApi {
 		'product'         => '/wc/v3/products',
 		'purchase-order'  => '/wc/v3/atum/purchase-orders',
 		'refund'          => '/wc/v3/atum/order-refunds',
-		'shipping-method' => '/wc/v3/shipping_methods',*/
+		'shipping-method' => '/wc/v3/shipping_methods',
 		'store-settings'  => array(
 			'wc.general'          => '/wc/v3/settings/general',
 			'wc.admin'            => '/wc/v3/settings/wc_admin',
@@ -141,11 +141,11 @@ class AtumApi {
 			'atum.productLevels'  => '/wc/v3/atum/settings/product_levels',
 			//'atum.stockTakes' => '/wc/v3/atum/settings/stock_takes',
 		),
-		/*'supplier'        => '/wc/v3/atum/suppliers',
+		'supplier'        => '/wc/v3/atum/suppliers',
 		'tag'             => '/wc/v3/products/tags',
 		'tax-class'       => '/wc/v3/taxes/classes',
 		'tax-rate'        => '/wc/v3/taxes',
-		'variation'       => '/wc/v3/atum/product-variations',*/
+		'variation'       => '/wc/v3/atum/product-variations',
 	);
 
 	/**

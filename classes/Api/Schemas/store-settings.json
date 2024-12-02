@@ -387,10 +387,7 @@
 							"type"       : "object",
 							"properties" : {
 								"id"  : {
-									"type" : [
-										"number",
-										"null"
-									]
+									"type" : "number"
 								},
 								"_id" : {
 									"type" : "string"
@@ -552,9 +549,8 @@
 							"enum" : [
 								"fifo",
 								"lifo",
-								"fefo",
-								"lefo",
-								"priority"
+								"bbe",
+								"manual"
 							]
 						},
 						"inventoryIteration"            : {
@@ -754,10 +750,7 @@
 							"type"       : "object",
 							"properties" : {
 								"id"  : {
-									"type" : [
-										"number",
-										"null"
-									]
+									"type" : "number"
 								},
 								"src" : {
 									"type" : "string"
