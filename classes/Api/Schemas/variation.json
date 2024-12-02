@@ -1,307 +1,434 @@
 {
-	"title" : "variation",
-	"version" : 0,
+	"title"      : "variation",
+	"version"    : 0,
 	"primaryKey" : "id",
-	"type" : "object",
-	"required" : [
+	"type"       : "object",
+	"required"   : [
 		"_deleted",
-        "_rev",
-        "_meta",
-        "_attachments",
-        "id",
-		"parent",
-		"type"
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
 	],
 	"properties" : {
-		"id" : {
+		"id"                  : {
 			"type" : "number"
 		},
-		"parent" : {
-			"type" : "object",
+		"parent"              : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" }
+				"id"   : {
+					"type" : "number"
+				},
+				"name" : {
+					"type" : "string"
+				}
 			}
 		},
-		"parentType" : {
+		"parentType"          : {
 			"type" : "string"
 		},
-		"parentName" : {
+		"parentName"          : {
 			"type" : "string"
 		},
-		"parentSku" : {
+		"parentSku"           : {
 			"type" : "string"
 		},
-		"parentTaxClass" : {
-			"type" : "object",
+		"parentTaxClass"      : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" }
+				"id"   : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				}
 			}
 		},
-		"name" : {
+		"name"                : {
 			"type" : "string"
 		},
-		"type" : {
+		"type"                : {
 			"type" : "string"
 		},
-		"default" : {
+		"default"             : {
 			"type" : "boolean"
 		},
-		"image" : {
-			"type" : "object",
+		"image"               : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "number" },
-				"src" : { "type" : "string" },
-				"title" : { "type" : "string" },
-				"alt" : { "type" : "string" }
+				"id"    : {
+					"type" : "number"
+				},
+				"src"   : {
+					"type" : "string"
+				},
+				"title" : {
+					"type" : "string"
+				},
+				"alt"   : {
+					"type" : "string"
+				}
 			}
 		},
-		"attributes" : {
-			"type" : "array",
+		"attributes"          : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
-				"required" : [
-					"name",
-					"option"
-				],
+				"type"       : "object",
 				"properties" : {
-					"name" : { "type" : "string" },
+					"name"   : {
+						"type" : "string"
+					},
 					"option" : {
-						"type" : "object",
-						"required" : [
-							"name"
-						],
+						"type"       : "object",
 						"properties" : {
-							"name" : { "type" : "string" },
-							"_id" : { "type" : "string" },
-							"id" : { "type" : "number" }
+							"name" : {
+								"type" : "string"
+							},
+							"_id"  : {
+								"type" : "string"
+							},
+							"id"   : {
+								"type" : "number"
+							}
 						}
 					},
-					"_id" : { "type" : "string" },
-					"id" : { "type" : "number" }
+					"_id"    : {
+						"type" : "string"
+					},
+					"id"     : {
+						"type" : "number"
+					}
 				}
 			}
 		},
-		"status" : {
+		"status"              : {
 			"type" : "string"
 		},
-		"downloadable" : {
+		"downloadable"        : {
 			"type" : "boolean"
 		},
-		"virtual" : {
+		"virtual"             : {
 			"type" : "boolean"
 		},
-		"manageStock" : {
+		"manageStock"         : {
 			"type" : "boolean"
 		},
-		"sku" : {
+		"sku"                 : {
 			"type" : "string"
 		},
-		"barcode" : {
+		"barcode"             : {
 			"type" : "string"
 		},
-		"regularPrice" : {
+		"regularPrice"        : {
 			"type" : "number"
 		},
-		"salePrice" : {
+		"salePrice"           : {
 			"type" : "number"
 		},
-		"dateOnSaleFrom" : {
-			"type" : "string"
+		"dateOnSaleFrom"      : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"dateOnSaleFromGMT" : {
-			"type" : "string"
+		"dateOnSaleFromGMT"   : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"dateOnSaleTo" : {
-			"type" : "string"
+		"dateOnSaleTo"        : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"dateOnSaleToGMT" : {
-			"type" : "string"
+		"dateOnSaleToGMT"     : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"purchasePrice" : {
+		"purchasePrice"       : {
 			"type" : "number"
 		},
-		"supplier" : {
-			"type" : "object",
+		"supplier"            : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" }
+				"id"   : {
+					"type" : "number"
+				},
+				"name" : {
+					"type" : "string"
+				}
 			}
 		},
-		"supplierSku" : {
+		"supplierSku"         : {
 			"type" : "string"
 		},
-		"stockQuantity" : {
+		"stockQuantity"       : {
 			"type" : "number"
 		},
-		"backorders" : {
+		"backorders"          : {
 			"type" : "string"
 		},
-		"backordersAllowed" : {
+		"backordersAllowed"   : {
 			"type" : "boolean"
 		},
-		"outStockThreshold" : {
+		"outStockThreshold"   : {
 			"type" : "number"
 		},
-		"stockStatus" : {
+		"stockStatus"         : {
 			"type" : "string"
 		},
-		"outStockDate" : {
-			"type" : "string"
+		"outStockDate"        : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"outStockDateGMT" : {
-			"type" : "string"
+		"outStockDateGMT"     : {
+			"type"   : "string",
+			"format" : "date-time"
 		},
-		"weight" : {
+		"weight"              : {
 			"type" : "number"
 		},
-		"dimensions" : {
-			"type" : "object",
+		"dimensions"          : {
+			"type"       : "object",
 			"properties" : {
-				"length" : { "type" : "number" },
-				"width" : { "type" : "number" },
-				"height" : { "type" : "number" }
+				"length" : {
+					"type" : "number"
+				},
+				"width"  : {
+					"type" : "number"
+				},
+				"height" : {
+					"type" : "number"
+				}
 			}
 		},
-		"shippingClass" : {
-			"type" : "object",
+		"shippingClass"       : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" }
+				"id"   : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				}
 			}
 		},
-		"taxClass" : {
-			"type" : "object",
+		"taxClass"            : {
+			"type"       : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" }
+				"id"   : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				}
 			}
 		},
-		"taxStatus" : {
+		"taxStatus"           : {
 			"type" : "string"
 		},
-		"description" : {
+		"description"         : {
 			"type" : "string"
 		},
-		"downloads" : {
-			"type" : "array",
+		"downloads"           : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
+				"type"       : "object",
 				"properties" : {
-					"id" : { "type" : "string" },
-					"name" : { "type" : "string" },
-					"file" : { "type" : "string" }
+					"id"   : {
+						"type" : "string"
+					},
+					"name" : {
+						"type" : "string"
+					},
+					"file" : {
+						"type" : "string"
+					}
 				}
 			}
 		},
-		"downloadLimit" : {
+		"downloadLimit"       : {
 			"type" : "number"
 		},
-		"downloadExpiry" : {
+		"downloadExpiry"      : {
 			"type" : "number"
 		},
-		"atumControlled" : {
+		"atumControlled"      : {
 			"type" : "boolean"
 		},
-		"menuOrder" : {
+		"menuOrder"           : {
 			"type" : "number"
 		},
-		"atumLocations" : {
-			"type" : "array",
+		"atumLocations"       : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
+				"type"       : "object",
 				"properties" : {
-					"id" : { "type" : "number" },
-					"name" : { "type" : "string" },
-					"slug" : { "type" : "string" },
-					"description" : { "type" : "string" },
-					"parent" : {
-						"type" : "object",
+					"id"          : {
+						"type" : "number"
+					},
+					"name"        : {
+						"type" : "string"
+					},
+					"slug"        : {
+						"type" : "string"
+					},
+					"description" : {
+						"type" : "string"
+					},
+					"parent"      : {
+						"type"       : "object",
 						"properties" : {
-							"id" : { "type" : "string" },
-							"name" : { "type" : "string" }
+							"id"   : {
+								"type" : "number"
+							},
+							"name" : {
+								"type" : "string"
+							}
 						}
 					},
-					"count" : { "type" : "number" },
-					"_id" : { "type" : "string" },
-					"_rev" : { "type" : "string" },
-					"_deleted" : { "type" : "boolean" },
-                    "conflict" : { "type" : "boolean" }
+					"count"       : {
+						"type" : "number"
+					},
+					"_id"         : {
+						"type" : "string"
+					},
+					"_rev"        : {
+						"type" : "string"
+					},
+					"_deleted"    : {
+						"type" : "boolean"
+					},
+					"conflict"    : {
+						"type" : "boolean"
+					}
 				}
 			}
 		},
-		"hasLocation" : {
+		"hasLocation"         : {
 			"type" : "boolean"
 		},
-		"categories" : {
-			"type" : "array",
+		"categories"          : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
+				"type"       : "object",
 				"properties" : {
-					"id" : { "type" : "number" },
-					"name" : { "type" : "string" },
-					"slug" : { "type" : "string" },
-					"parent" : {
-						"type" : "object",
+					"id"          : {
+						"type" : "number"
+					},
+					"name"        : {
+						"type" : "string"
+					},
+					"slug"        : {
+						"type" : "string"
+					},
+					"parent"      : {
+						"type"       : "object",
 						"properties" : {
-							"id" : { "type" : "string" },
-							"name" : { "type" : "string" }
+							"id"   : {
+								"type" : "number"
+							},
+							"name" : {
+								"type" : "string"
+							}
 						}
 					},
-					"description" : { "type" : "string" },
-					"display" : { "type" : "string" },
-					"image" : {
-						"type" : "object",
+					"description" : {
+						"type" : "string"
+					},
+					"display"     : {
+						"type" : "string"
+					},
+					"image"       : {
+						"type"       : "object",
 						"properties" : {
-							"id" : { "type" : "number" },
-							"src" : { "type" : "string" },
-							"title" : { "type" : "string" },
-							"alt" : { "type" : "string" }
+							"id"    : {
+								"type" : "number"
+							},
+							"src"   : {
+								"type" : "string"
+							},
+							"title" : {
+								"type" : "string"
+							},
+							"alt"   : {
+								"type" : "string"
+							}
 						}
 					},
-					"menuOrder" : { "type" : "number" },
-					"count" : { "type" : "number" },
-					"_id" : { "type" : "string" },
-					"_rev" : { "type" : "string" },
-					"_deleted" : { "type" : "boolean" },
-                    "conflict" : { "type" : "boolean" }
+					"menuOrder"   : {
+						"type" : "number"
+					},
+					"count"       : {
+						"type" : "number"
+					},
+					"_id"         : {
+						"type" : "string"
+					},
+					"_rev"        : {
+						"type" : "string"
+					},
+					"_deleted"    : {
+						"type" : "boolean"
+					},
+					"conflict"    : {
+						"type" : "boolean"
+					}
 				}
 			}
 		},
-		"trash" : {
+		"trash"               : {
 			"type" : "boolean"
 		},
-        "_id" : {
+		"_id"                 : {
 			"type" : "string"
 		},
-		"_rev" : {
-			"type" : "string"
+		"_rev"                : {
+			"type"      : "string",
+			"minLength" : 1
 		},
-		"_deleted" : {
+		"_deleted"            : {
 			"type" : "boolean"
 		},
-		"conflict" : {
+		"conflict"            : {
 			"type" : "boolean"
 		},
-		"minimumThreshold" : {
+		"minimumThreshold"    : {
 			"type" : "number"
 		},
 		"availableToPurchase" : {
 			"type" : "number"
 		},
-		"sellingPriority" : {
+		"sellingPriority"     : {
 			"type" : "number"
 		},
-		"metaData" : {
-			"type" : "array",
+		"metaData"            : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
+				"type"       : "object",
 				"properties" : {
-					"key" : { "type" : "string" },
-					"value" : { "type" : "string" }
+					"key"   : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					}
 				}
 			}
+		},
+		"_meta"               : {
+			"type"       : "object",
+			"required"   : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type"       : "number",
+					"minimum"    : 1,
+					"maximum"    : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments"        : {
+			"type" : "object"
 		}
 	}
 }

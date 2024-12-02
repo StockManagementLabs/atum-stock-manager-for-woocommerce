@@ -34,8 +34,8 @@ class AddonGenerator extends GeneratorBase {
 	protected function prepare_data( array $addon ): array {
 
 		return [
-			'_id'              => 'addon:' . $this->generate_uuid(),
-			'_rev'             => '1-' . $this->generate_revision_id(),
+			'_id'              => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'             => $this->revision,
 			'_deleted'         => FALSE,
 			'_meta'            => [
 				'lwt' => $this->generate_timestamp(),
@@ -46,7 +46,7 @@ class AddonGenerator extends GeneratorBase {
 			'plugin'           => $addon['plugin'],
 			'name'             => $addon['name'],
 			'version'          => $addon['version'],
-			'versionLatest'    => $addon['version_latest'] ?? $addon['version'],
+			'versionLatest'    => $addon['version_latest'] ?? $addon->version,
 			'url'              => $addon['url'],
 			'authorName'       => $addon['author_name'],
 			'authorUrl'        => $addon['author_url'],

@@ -3,6 +3,13 @@
 	"version" : 0,
 	"primaryKey" : "slug",
 	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"slug"
+	],
 	"properties" : {
 		"slug" : {
 			"type" : "string"
@@ -14,13 +21,31 @@
 			"type" : "string"
 		},
 		"_rev" : {
-			"type" : "string"
+			"type" : "string",
+			"minLength" : 1
 		},
 		"_deleted" : {
 			"type" : "boolean"
 		},
 		"conflict" : {
 			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
 		}
 	}
 }

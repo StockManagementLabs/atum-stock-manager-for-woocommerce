@@ -3,6 +3,13 @@
 	"version": 0,
 	"primaryKey": "id",
 	"type": "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
+	],
 	"properties": {
 		"id": {
 			"type": "number"
@@ -139,33 +146,6 @@
 			"type": "string",
 			"format": "date-time"
 		},
-		"_id": {
-			"type": "string"
-		},
-		"_rev": {
-			"type": "string",
-			"minLength": 1
-		},
-		"_deleted": {
-			"type": "boolean"
-		},
-		"trash": {
-			"type": "boolean"
-		},
-		"menuOrder": {
-			"type": "number"
-		},
-		"parentTaxClass": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "number"
-				},
-				"_id": {
-					"type": "string"
-				}
-			}
-		},
 		"categories": {
 			"type": "array",
 			"items": {
@@ -180,6 +160,17 @@
 					"slug": {
 						"type": "string"
 					}
+				}
+			}
+		},
+		"parentTaxClass": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"_id": {
+					"type": "string"
 				}
 			}
 		},
@@ -265,6 +256,19 @@
 		"outStockDateGMT": {
 			"type": "string",
 			"format": "date-time"
+		},
+		"_id": {
+			"type": "string"
+		},
+		"_rev": {
+			"type": "string",
+			"minLength": 1
+		},
+		"_deleted": {
+			"type": "boolean"
+		},
+		"trash": {
+			"type": "boolean"
 		},
 		"conflict": {
 			"type": "boolean"

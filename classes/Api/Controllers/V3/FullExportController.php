@@ -40,7 +40,7 @@ class FullExportController extends \WC_REST_Controller {
 	/**
 	 * Transient key name for exported endpoints.
 	 */
-	const EXPORTED_ENDPOINTS_TRANSIENT = 'api_run_full_export_endpoints';
+	const EXPORTED_ENDPOINTS_TRANSIENT = 'api_run_full_export_endpoints_';
 
 	/**
 	 * Transient key name for the list of App subscribers that initiated a full export.
@@ -51,6 +51,33 @@ class FullExportController extends \WC_REST_Controller {
 	 * Cloud function to send notification to the App user when the full export is completed.
 	 */
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
+
+	/**
+	 * The exported endpoints counter. For the sqlite dump only.
+	 */
+	private static $exported_endpoints_counters = array(
+		'attribute'       => 0,
+		'category'        => 0,
+		'comment'         => 0,
+		'coupon'          => 0,
+		'customer'        => 0,
+		'inbound-stock'   => 0,
+		'inventory-log'   => 0,
+		'location'        => 0,
+		'media'           => 0,
+		'order'           => 0,
+		'payment-method'  => 0,
+		'product'         => 0,
+		'purchase-order'  => 0,
+		'refund'          => 0,
+		'shipping-method' => 0,
+		'store-settings'  => 0,
+		'supplier'        => 0,
+		'tag'             => 0,
+		'tax-class'       => 0,
+		'tax-rate'        => 0,
+		'variation'       => 0,
+	);
 
 	/**
 	 * Register the routes for tools
@@ -298,12 +325,12 @@ class FullExportController extends \WC_REST_Controller {
 			// Extract the file content from the $body variable
 			$body_data = json_decode( $body, TRUE );
 
-			if ( empty( $body_data['storeId'] ) && empty( $body_data['userId'] ) && empty( $body_data['revision'] ) && empty( $body_data['storeSettings'] ) ) {
+			if ( empty( $body_data['storeId'] ) || empty( $body_data['userId'] ) || empty( $body_data['revision'] ) ) {
 
 				$response = array(
 					'success' => FALSE,
 					'code'    => 'error',
-					'message' => __( 'If you want to retrieve an SQLite dump file, please send the storeId, userId, revision and storeSettings on the request body.', ATUM_TEXT_DOMAIN ),
+					'message' => __( 'If you want to retrieve an SQLite dump file, please send the storeId, userId and revision on the request body.', ATUM_TEXT_DOMAIN ),
 				);
 
 			}
@@ -656,17 +683,16 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		foreach ( $files as $endpoint_key => $file ) {
+		foreach ( $files as $file ) {
 
-			// In the case there are multiple exports of the same endpoint with distinct filters.
-			$file   = is_array( $file ) ? $file : [ $file ];
-			$schema = Generator::get_schema( $endpoint_key );
+			// In the case there are multiple exports of the same endpoint with distinct filters or sub-endpoints.
+			$file = is_array( $file ) ? Helpers::flat_array( $file ) : [ $file ];
 
 			foreach ( $file as $f ) {
 
 				if ( is_file( $f ) ) {
 
-					$json = wp_json_file_decode( $f );
+					$json = wp_json_file_decode( $f, [ 'associative' => TRUE ] );
 
 					if ( $json ) {
 
@@ -675,16 +701,21 @@ class FullExportController extends \WC_REST_Controller {
 
 							// Initialize the generator with table name components
 							$generator = new Generator(
-								$body_data['storeId'],
-								$body_data['userId'],
-								'attribute'
+								$json['schema'],
+								$body_data
 							);
 
 							// Generate SQL statements for the specific endpoint.
-							$data .= "\n" . $generator->generate( 'attribute', $json );
+							$data .= "\n" . $generator->generate( $json );
 
-						} catch (\Exception $e) {
-							error_log($e->getMessage());
+						} catch ( \Exception $e ) {
+
+							return  array(
+								'success' => FALSE,
+								'code'    => 'error',
+								'message' => $e->getMessage(),
+							);
+
 						}
 
 					}
@@ -692,6 +723,8 @@ class FullExportController extends \WC_REST_Controller {
 				}
 			}
 		}
+
+		return $data;
 
 		$dump_name = self::get_full_export_upload_dir() . "atum_db_dump.sql";
 
@@ -835,8 +868,35 @@ class FullExportController extends \WC_REST_Controller {
 
 		// Check if there are multiple endpoints separated by commas.
 		if ( $requested_endpoint ) {
+
 			$requested_endpoint = array_filter( array_unique( explode( ',', $requested_endpoint ) ) );
-			$endpoints      	= array_intersect_key( $exportable_endpoints, $requested_endpoint );
+			$endpoints          = [];
+
+			foreach ( $requested_endpoint as $ep ) {
+
+				$found = FALSE;
+
+				foreach ( $exportable_endpoints as $schema => $endpoint ) {
+
+					// Handle nested endpoints.
+					if ( is_array( $endpoint ) && in_array( $ep, $endpoint ) ) {
+						$endpoints[ $schema ][] = $ep;
+						$found = TRUE;
+						break;
+					}
+					elseif ( $endpoint === $ep ) {
+						$endpoints[ $schema ] = $ep;
+						$found = TRUE;
+						break;
+					}
+
+				}
+
+				if ( ! $found ) {
+					// Endpoint not found.
+					return new \WP_Error( 'atum_rest_invalid_endpoint', __( 'Invalid endpoint specified.', ATUM_TEXT_DOMAIN ) );
+				}
+			}
 		}
 		else {
 			$endpoints = $exportable_endpoints;
@@ -849,11 +909,11 @@ class FullExportController extends \WC_REST_Controller {
 			$params            = ! empty( $request[ $schema ] ) ? $request[ $schema ] : '';
 			$exported_endpoint = NULL;
 
-			if ( is_array( $exportable_endpoints[ $schema ] ) ) {
+			if ( is_array( $endpoint ) ) {
 
-				foreach ( $exportable_endpoints[ $schema ] as $sub_key => $sub_ep ) {
-					$exported_endpoint_transient_keys[ $sub_key ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $sub_ep, $schema, $params ) );
-					$exported_endpoint[]   		        		  = AtumCache::get_transient( $exported_endpoint_transient_keys[ $sub_key ], TRUE );
+				foreach ( $endpoint as $sub_key => $sub_ep ) {
+					$exported_endpoint_transient_keys[ "{$schema}.{$sub_key}" ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $sub_ep, $schema, $params ) );
+					$exported_endpoint[] = AtumCache::get_transient( $exported_endpoint_transient_keys[ "{$schema}.{$sub_key}" ], TRUE );
 				}
 
 				$exported_endpoint = array_filter( $exported_endpoint );
@@ -861,17 +921,15 @@ class FullExportController extends \WC_REST_Controller {
 			}
 			else {
 				$exported_endpoint_transient_keys[ $schema ] = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $schema, $params ) );
-				$exported_endpoint                       		   = AtumCache::get_transient( $exported_endpoint_transient_keys[ $schema ], TRUE );
+				$exported_endpoint                           = AtumCache::get_transient( $exported_endpoint_transient_keys[ $schema ], TRUE );
 			}
 
 			if ( ! empty( $exported_endpoint ) ) {
-
 				return array(
 					'success' => FALSE,
 					'code'    => 'running',
 					'message' => __( 'The export is still running. Please try again later.', ATUM_TEXT_DOMAIN ),
 				);
-
 			}
 
 		}
@@ -879,18 +937,20 @@ class FullExportController extends \WC_REST_Controller {
 		// Schedule the export for each endpoint.
 		foreach ( $endpoints as $key => $endpoint ) {
 
+			$params = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
+
+			// Nested endpoints.
 			if ( is_array( $endpoint ) ) {
 
 				foreach ( $endpoint as $sub_key => $sub_ep ) {
 
-					AtumCache::set_transient( $exported_endpoint_transient_keys[ $sub_key ], $sub_ep, DAY_IN_SECONDS, TRUE );
+					AtumCache::set_transient( $exported_endpoint_transient_keys[ "{$key}.{$sub_key}" ], $sub_ep, DAY_IN_SECONDS, TRUE );
 
 					$hook_name = "atum_api_export_endpoint_{$key}_{$sub_key}";
 					$hook_args = [ $sub_ep, self::get_admin_user(), $params, 1 ];
 
 					if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
-						$params = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
-						$this->delete_old_export( $sub_ep, $schema, $params );
+						$this->delete_old_export( $sub_ep, $key, $params );
 
 						/**
 						 * Hook args: endpoint, user_id, param and, page.
@@ -898,9 +958,11 @@ class FullExportController extends \WC_REST_Controller {
 						 */
 						as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
 					}
+
 				}
 
 			}
+			// Non-nested endpoints.
 			else {
 
 				AtumCache::set_transient( $exported_endpoint_transient_keys[ $key ], $endpoint, DAY_IN_SECONDS, TRUE );
@@ -909,8 +971,7 @@ class FullExportController extends \WC_REST_Controller {
 				$hook_args = [ $endpoint, self::get_admin_user(), $params, 1 ];
 
 				if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
-					$params = ! empty( $request[ $key ] ) ? esc_attr( $request[ $key ] ) : '';
-					$this->delete_old_export( $endpoint, $schema, $params );
+					$this->delete_old_export( $endpoint, $key, $params );
 
 					/**
 					 * Hook args: endpoint, user_id, param and, page.
@@ -978,14 +1039,25 @@ class FullExportController extends \WC_REST_Controller {
 
 		$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
-		if ( ! ( $schema = array_search( $endpoint, $exportable_endpoints ) ) ) {
-			// Perhaps is it a sub-endpoint?
-			foreach ( $exportable_endpoints as $key => $ep ) {
-				if ( is_array( $ep ) && in_array( $endpoint, $ep ) ) {
-					$schema = $key;
-					break;
-				}
+		// Find the schema for the endpoint.
+		$schema = FALSE;
+		foreach ( $exportable_endpoints as $key => $ep ) {
+
+			// Nested endpoints.
+			if ( is_array( $ep ) && in_array( $endpoint, $ep ) ) {
+				$schema = $key;
+				break;
 			}
+			elseif ( $ep === $endpoint ) {
+				$schema = $key;
+				break;
+			}
+
+		}
+
+		if ( ! $schema ) {
+			// Endpoint not found.
+			return;
 		}
 
 		$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $schema, $params ) );
@@ -999,11 +1071,22 @@ class FullExportController extends \WC_REST_Controller {
 
 		$page_suffix      = '';
 		$admin_user 	  = self::get_admin_user();
+		$logged_in_user   = get_current_user_id();
 		$delete_transient = TRUE;
 
 		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
-		if ( ! $admin_user || $admin_user !== $user_id ) {
-			wp_set_current_user( $user_id );
+		if ( ! $logged_in_user ) {
+
+			if ( $admin_user && $user_id !== $admin_user ) {
+				wp_set_current_user( $admin_user );
+			}
+			else {
+				wp_set_current_user( $user_id );
+			}
+
+		}
+		elseif ( $admin_user && $admin_user !== $user_id ) {
+			wp_set_current_user( $admin_user );
 		}
 
 		// The /atum-order-notes endpoint is fake, so change the path to comments first.
@@ -1047,6 +1130,10 @@ class FullExportController extends \WC_REST_Controller {
 
 			case '/wc/v3/customers':
 				$query_params['role'] = 'all';
+				break;
+
+			case '/wc/v3/products/attributes':
+				$query_params['with_terms'] = 'yes';
 				break;
 
 			case '/wc/v3/products/categories':
@@ -1171,11 +1258,11 @@ class FullExportController extends \WC_REST_Controller {
 			if ( ! empty( $saved_subscribers ) ) {
 
 				// If, for some instance, the current user was logged in with another user, restore their log-in.
-				if ( $admin_user && get_current_user_id() !== $admin_user ) {
-					wp_set_current_user( $admin_user );
+				if ( get_current_user_id() !== $user_id ) {
+					wp_set_current_user( $user_id );
 				}
 				// Or if wasn't logged in, close the session for security reasons.
-				elseif ( ! $admin_user && is_user_logged_in() ) {
+				elseif ( ! $user_id && is_user_logged_in() ) {
 					wp_logout();
 				}
 
@@ -1247,7 +1334,7 @@ class FullExportController extends \WC_REST_Controller {
 		$name_parts = [
 			$schema,
 			str_replace( '/', '_', ltrim( $endpoint, '/' ) ),
-			str_replace( [ '-', ',', ':' ], '_', $params )
+			str_replace( [ '-', ',', ':' ], '_', $params ),
 		];
 
 		return implode( '-', array_filter( $name_parts ) );
@@ -1299,7 +1386,26 @@ class FullExportController extends \WC_REST_Controller {
 			'number'  => 1,
 		] );
 
-		return ! empty( $admin_user ) ? $admin_user[0]->ID : FALSE;
+		return ! empty( $admin_user ) ? absint( $admin_user[0]->ID ) : FALSE;
+
+	}
+
+	/**
+	 * Increase the counter for the exported endpoints and return the current value.
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param string $schema
+	 *
+	 * @return int|\WP_Error
+	 */
+	public static function get_current_counter( $schema ) {
+
+		if ( ! isset( self::$exported_endpoints_counters[ $schema ] ) ) {
+			return new \WP_Error( 'atum_rest_no_counter', __( 'The counter for the requested schema was not found.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		return ++self::$exported_endpoints_counters[ $schema ];
 
 	}
 

@@ -5,70 +5,87 @@
 	"type" : "object",
 	"required" : [
 		"_deleted",
-		"_rev",
-		"_meta",
-		"_attachments",
-		"id"
+        "_rev",
+        "_meta",
+        "_attachments",
+		"id",
+		"name"
 	],
 	"properties" : {
-		"type" : {
-			"type" : "string"
+		"id" : {
+			"type" : "number"
 		},
-		"_deleted" : {
-			"type" : "boolean"
-		},
-		"date_modified_gmt" : {
+		"name" : {
 			"type" : "string"
 		},
 		"slug" : {
 			"type" : "string"
 		},
+		"status" : {
+			"type" : "string"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
 		"permalink" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"image" : {
+			"type" : "object",
+			"properties" : {
+				"id" : {
+					"type" : ["number", "null"]
+				},
+				"src" : {
+					"type" : "string"
+				},
+				"alt" : {
+					"type" : "string"
+				}
+			}
+		},
+		"_id" : {
 			"type" : "string"
 		},
 		"_rev" : {
 			"type" : "string",
 			"minLength" : 1
 		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
 		"_meta" : {
-			"type" : "object",
-			"required" : [
-				"lwt"
-			],
-			"properties" : {
-				"lwt" : {
-					"type" : "number",
-					"multipleOf" : 0.01,
-					"minimum" : 1,
-					"maximum" : 1000000000000000
-				}
-			}
-		},
-		"date_created" : {
-			"type" : "string"
-		},
-		"status" : {
-			"type" : "string"
-		},
+            "type" : "object",
+            "required" : [
+                "lwt"
+            ],
+            "properties" : {
+                "lwt" : {
+                    "type" : "number",
+                    "multipleOf" : 0.01,
+                    "minimum" : 1,
+                    "maximum" : 1000000000000000
+                }
+            }
+        },
 		"_attachments" : {
-			"type" : "object"
-		},
-		"date_modified" : {
-			"type" : "string"
-		},
-		"date_created_gmt" : {
-			"type" : "string"
-		},
-		"_id" : {
-			"maxLength" : 100,
-			"type" : "string"
-		},
-		"name" : {
-			"type" : "string"
-		},
-		"id" : {
-			"maxLength" : 100,
-			"type" : "string"
-		}
+            "type" : "object"
+        }
 	}
 }

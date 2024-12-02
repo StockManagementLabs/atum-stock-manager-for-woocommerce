@@ -35,60 +35,60 @@ class ProductGenerator extends GeneratorBase {
 
 		$prepared_data = [
 			// Required base fields
-			'_id'               => 'product:' . $this->generate_uuid(),
-			'_rev'              => '1-' . $this->generate_revision_id(),
+			'_id'               => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'              => $this->revision,
 			'_deleted'          => FALSE,
-			'_meta'            => [
-				'lwt' => $this->generate_timestamp()
+			'_meta'             => [
+				'lwt' => $this->generate_timestamp(),
 			],
 			'_attachments'      => new \stdClass(),
-			
+
 			// Product specific fields
-			'id'               => (int) $product['id'],
-			'name'             => $product['name'],
-			'slug'             => $product['slug'],
-			'type'             => $product['type'],
-			'status'           => $product['status'],
-			'description'      => $product['description'],
-			'sku'              => $product['sku'],
-			'price'            => (float) $product['price'],
-			'regularPrice'     => (float) $product['regular_price'],
-			'salePrice'        => (float) ($product['sale_price'] ?: 0),
-			'featured'         => (bool) $product['featured'],
-			'catalogVisibility'=> $product['catalog_visibility'],
-			'virtual'          => (bool) $product['virtual'],
-			'downloadable'     => (bool) $product['downloadable'],
-			'manageStock'      => (bool) $product['manage_stock'],
-			'stockQuantity'    => $product['stock_quantity'] ? (int) $product['stock_quantity'] : NULL,
-			'stockStatus'      => $product['stock_status'],
-			
+			'id'                => (int) $product['id'],
+			'name'              => $product['name'],
+			'slug'              => $product['slug'],
+			'type'              => $product['type'],
+			'status'            => $product['status'],
+			'description'       => $product['description'],
+			'sku'               => $product['sku'],
+			'price'             => (float) $product['price'],
+			'regularPrice'      => (float) $product['regular_price'],
+			'salePrice'         => (float) ( $product['sale_price'] ?: 0 ),
+			'featured'          => (bool) $product['featured'],
+			'catalogVisibility' => $product['catalog_visibility'],
+			'virtual'           => (bool) $product['virtual'],
+			'downloadable'      => (bool) $product['downloadable'],
+			'manageStock'       => (bool) $product['manage_stock'],
+			'stockQuantity'     => $product['stock_quantity'] ? (int) $product['stock_quantity'] : NULL,
+			'stockStatus'       => $product['stock_status'],
+
 			// Date fields (required by schema)
-			'dateCreated'      => $product['date_created'],
-			'dateCreatedGMT'   => $product['date_created_gmt'],
-			'dateModified'     => $product['date_modified'],
-			'dateModifiedGMT'  => $product['date_modified_gmt'],
-			
+			'dateCreated'       => $product['date_created'],
+			'dateCreatedGMT'    => $product['date_created_gmt'],
+			'dateModified'      => $product['date_modified'],
+			'dateModifiedGMT'   => $product['date_modified_gmt'],
+
 			// Arrays and objects
-			'categories'       => $this->prepare_taxonomies($product['categories']),
-			'tags'            => $this->prepare_taxonomies($product['tags']),
-			'attributes'       => $this->prepare_attributes($product['attributes']),
-			'image'           => $this->prepare_image($product['images'][0] ?? NULL),
-			'gallery'         => $this->prepare_gallery($product['images']),
-			'dimensions'      => $this->prepare_dimensions($product['dimensions']),
-			'metaData'        => $this->prepare_meta_data($product['meta_data']),
-			'atumLocations'   => $this->prepare_taxonomies($product['atum_locations']),
-			
+			'categories'        => $this->prepare_taxonomies( $product['categories'] ),
+			'tags'              => $this->prepare_taxonomies( $product['tags'] ),
+			'attributes'        => $this->prepare_attributes( $product['attributes'] ),
+			'image'             => $this->prepare_image( $product['images'][0] ?? NULL ),
+			'gallery'           => $this->prepare_gallery( $product['images'] ),
+			'dimensions'        => $this->prepare_dimensions( $product['dimensions'] ),
+			'metaData'          => $this->prepare_meta_data( $product['meta_data'] ),
+			'atumLocations'     => $this->prepare_taxonomies( $product['atum_locations'] ),
+
 			// ATUM specific fields
-			'hasLocation'     => (bool) $product['has_location'],
-			'atumControlled'  => (bool) $product['atum_controlled'],
-			'barcode'         => $product['barcode']
+			'hasLocation'       => (bool) $product['has_location'],
+			'atumControlled'    => (bool) $product['atum_controlled'],
+			'barcode'           => $product['barcode'],
 		];
 
 		// Handle parent if exists
-		if (!empty($product['parent_id'])) {
-			$prepared_data['parent'] = [
+		if ( ! empty( $product['parent_id'] ) ) {
+			$prepared_data['parent']    = [
 				'id'  => (int) $product['parent_id'],
-				'_id' => 'product:' . $this->generate_uuid()
+				'_id' => 'product:' . $this->generate_uuid(),
 			];
 			$prepared_data['parentSku'] = $product['parent_sku'] ?? '';
 		}
@@ -183,23 +183,6 @@ class ProductGenerator extends GeneratorBase {
 			'width'  => (string) $dimensions['width'],
 			'height' => (string) $dimensions['height'],
 		];
-	}
-
-	/**
-	 * Prepare meta data
-	 *
-	 * @since 1.9.44
-	 */
-	private function prepare_meta_data( array $meta_data ): array {
-
-		return array_map( function ( $meta ) {
-
-			return [
-				'id'    => (int) $meta['id'],
-				'key'   => $meta['key'],
-				'value' => (string) $meta['value'],
-			];
-		}, $meta_data );
 	}
 
 } 

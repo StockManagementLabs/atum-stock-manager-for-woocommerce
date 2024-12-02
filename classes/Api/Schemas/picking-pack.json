@@ -3,6 +3,13 @@
 	"version" : 0,
 	"primaryKey" : "id",
 	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
+	],
 	"properties" : {
 		"id" : {
 			"type" : "number"
@@ -29,7 +36,7 @@
 					"type" : "object",
 					"properties" : {
 						"id" : {
-							"type" : "number"
+							"type" : ["number", "null"]
 						},
 						"_id" : {
 							"type" : "string"
@@ -56,17 +63,12 @@
 			"type" : "array",
 			"items" : {
 				"type" : "object",
-				"required" : [
-					"name",
-					"notes",
-					"orderLines"
-				],
 				"properties" : {
 					"item" : {
 						"type" : "object",
 						"properties" : {
 							"id" : {
-								"type" : "number"
+								"type" : ["number", "null"]
 							},
 							"_id" : {
 								"type" : "string"
@@ -80,9 +82,6 @@
 						"type" : "array",
 						"items" : {
 							"type" : "object",
-							"required" : [
-								"description"
-							],
 							"properties" : {
 								"name" : {
 									"type" : "string"
@@ -97,18 +96,12 @@
 						"type" : "array",
 						"items" : {
 							"type" : "object",
-							"required" : [
-								"order",
-								"orderLine",
-								"count",
-								"quantity"
-							],
 							"properties" : {
 								"order" : {
 									"type" : "object",
 									"properties" : {
 										"id" : {
-											"type" : "number"
+											"type" : ["number", "null"]
 										},
 										"_id" : {
 											"type" : "string"
@@ -119,7 +112,7 @@
 									"type" : "object",
 									"properties" : {
 										"id" : {
-											"type" : "number"
+											"type" : ["number", "null"]
 										},
 										"_id" : {
 											"type" : "string"
@@ -166,7 +159,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"_id" : {
 						"type" : "string"

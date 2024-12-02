@@ -1,27 +1,37 @@
 {
-	"title" : "stock-takes",
-	"version" : 0,
+	"title"      : "stock-takes",
+	"version"    : 0,
 	"primaryKey" : "id",
-	"type" : "object",
+	"type"       : "object",
+	"required"   : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
+	],
 	"properties" : {
-		"itemType" : {
+		"id"                : {
+			"type" : "number"
+		},
+		"itemType"          : {
 			"type" : "string",
 			"enum" : [
 				"stockTakes"
 			]
 		},
-		"name" : {
+		"name"              : {
 			"type" : "string"
 		},
-		"user" : {
+		"user"              : {
 			"oneOf" : [
 				{
 					"type" : "string"
 				},
 				{
-					"type" : "object",
+					"type"       : "object",
 					"properties" : {
-						"id" : {
+						"id"  : {
 							"type" : "number"
 						},
 						"_id" : {
@@ -31,33 +41,29 @@
 				}
 			]
 		},
-		"status" : {
+		"status"            : {
 			"type" : "string"
 		},
-		"description" : {
+		"description"       : {
 			"type" : "string"
 		},
-		"dateReconciled" : {
-			"type" : "string",
+		"dateReconciled"    : {
+			"type"   : "string",
 			"format" : "date-time"
 		},
 		"dateReconciledGMT" : {
-			"type" : "string",
+			"type"   : "string",
 			"format" : "date-time"
 		},
-		"lines" : {
-			"type" : "array",
+		"lines"             : {
+			"type"  : "array",
 			"items" : {
-				"type" : "object",
-				"required" : [
-					"name",
-					"notes"
-				],
+				"type"       : "object",
 				"properties" : {
-					"item" : {
-						"type" : "object",
+					"item"        : {
+						"type"       : "object",
 						"properties" : {
-							"id" : {
+							"id"  : {
 								"type" : "number"
 							},
 							"_id" : {
@@ -65,79 +71,118 @@
 							}
 						}
 					},
-					"name" : {
+					"name"        : {
 						"type" : "string"
 					},
-					"notes" : {
-						"type" : "array",
+					"notes"       : {
+						"type"  : "array",
 						"items" : {
-							"type" : "object",
-							"required" : [
-								"description"
-							],
+							"type"       : "object",
 							"properties" : {
-								"name" : {
+								"name"            : {
 									"type" : "string"
 								},
-								"description" : {
+								"description"     : {
 									"type" : "string"
 								},
-								"_id" : {
+								"_id"             : {
 									"type" : "string"
 								},
-								"dateCreated" : {
-									"type" : "string",
+								"dateCreated"     : {
+									"type"   : "string",
 									"format" : "date-time"
 								},
-								"dateCreatedGMT" : {
-									"type" : "string",
+								"dateCreatedGMT"  : {
+									"type"   : "string",
 									"format" : "date-time"
 								},
-								"dateModified" : {
-									"type" : "string",
+								"dateModified"    : {
+									"type"   : "string",
 									"format" : "date-time"
 								},
 								"dateModifiedGMT" : {
-									"type" : "string",
+									"type"   : "string",
 									"format" : "date-time"
 								}
 							}
 						}
 					},
-					"count" : {
+					"orderLines"  : {
+						"type"  : "array",
+						"items" : {
+							"type"       : "object",
+							"properties" : {
+								"id"  : {
+									"type" : "number"
+								},
+								"_id" : {
+									"type" : "string"
+								}
+							}
+						}
+					},
+					"count"       : {
 						"type" : "number"
 					},
-					"quantity" : {
+					"quantity"    : {
 						"type" : "number"
 					},
-					"image" : {
-						"type" : "object",
+					"image"       : {
+						"type"       : "object",
 						"properties" : {
-							"id" : { "type": "number" },
-							"_id" : { "type": "string" },
-							"_rev" : { "type": "string" },
-							"name" : { "type": "string" },
-							"slug" : { "type": "string" },
-							"alt" : { "type": "string" },
-							"type" : { "type": "string" },
-							"src" : { "type": "string" },
-							"file" : { "type": "string" },
-							"dateCreated" : { "type": "string" },
-							"dateCreatedGMT" : { "type": "string" },
-							"dateModified" : { "type": "string" },
-							"dateModifiedGMT" : { "type": "string" },
-							"_deleted" : { "type": "boolean" }
+							"id"              : {
+								"type" : "number"
+							},
+							"_id"             : {
+								"type" : "string"
+							},
+							"_rev"            : {
+								"type" : "string"
+							},
+							"name"            : {
+								"type" : "string"
+							},
+							"slug"            : {
+								"type" : "string"
+							},
+							"alt"             : {
+								"type" : "string"
+							},
+							"type"            : {
+								"type" : "string"
+							},
+							"src"             : {
+								"type" : "string"
+							},
+							"file"            : {
+								"type" : "string"
+							},
+							"dateCreated"     : {
+								"type" : "string"
+							},
+							"dateCreatedGMT"  : {
+								"type" : "string"
+							},
+							"dateModified"    : {
+								"type" : "string"
+							},
+							"dateModifiedGMT" : {
+								"type" : "string"
+							},
+							"_deleted"        : {
+								"type" : "boolean"
+							}
 						}
 					},
 					"inventories" : {
-						"type" : "array",
+						"type"  : "array",
 						"items" : {
-							"type" : "object",
+							"type"       : "object",
 							"properties" : {
-								"item" : {
-									"type" : "object",
+								"item"    : {
+									"type"       : "object",
 									"properties" : {
-										"id" : {
+										"id"  : {
 											"type" : "number"
 										},
 										"_id" : {
@@ -145,11 +190,11 @@
 										}
 									}
 								},
-								"lot" : {
+								"lot"     : {
 									"type" : "string"
 								},
 								"bbeDate" : {
-									"type" : "string",
+									"type"   : "string",
 									"format" : "date-time"
 								}
 							}
@@ -158,31 +203,47 @@
 				}
 			}
 		},
-		"_id" : {
+		"dateCreated"       : {
+			"type"   : "string",
+			"format" : "date-time"
+		},
+		"dateCreatedGMT"    : {
+			"type"   : "string",
+			"format" : "date-time"
+		},
+		"dateModified"      : {
+			"type"   : "string",
+			"format" : "date-time"
+		},
+		"dateModifiedGMT"   : {
+			"type"   : "string",
+			"format" : "date-time"
+		},
+		"_id"               : {
 			"type" : "string"
 		},
-		"_rev" : {
-			"type" : "string",
+		"_rev"              : {
+			"type"      : "string",
 			"minLength" : 1
 		},
-		"_deleted" : {
+		"_deleted"          : {
 			"type" : "boolean"
 		},
-		"_meta" : {
-			"type" : "object",
-			"required" : [
+		"_meta"             : {
+			"type"       : "object",
+			"required"   : [
 				"lwt"
 			],
 			"properties" : {
 				"lwt" : {
-					"type" : "number",
-					"minimum" : 1,
-					"maximum" : 1000000000000000,
+					"type"       : "number",
+					"minimum"    : 1,
+					"maximum"    : 1000000000000000,
 					"multipleOf" : 0.01
 				}
 			}
 		},
-		"_attachments" : {
+		"_attachments"      : {
 			"type" : "object"
 		}
 	}

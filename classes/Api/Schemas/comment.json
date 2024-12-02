@@ -154,7 +154,13 @@
 				]
 			}
 		},
+		"deleted" : {
+			"type" : "boolean"
+		},
 		"trash" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
 			"type" : "boolean"
 		},
 		"_rev" : {
@@ -180,9 +186,6 @@
 		},
 		"_attachments" : {
 			"type" : "object"
-		},
-		"conflict" : {
-			"type" : "boolean"
 		}
 	}
 }

@@ -34,8 +34,8 @@ class PurchaseOrderGenerator extends GeneratorBase {
 	protected function prepare_data( array $purchase_order ): array {
 
 		$prepared_data = [
-			'_id'               => 'purchase-order:' . $this->generate_uuid(),
-			'_rev'              => '1-' . $this->generate_revision_id(),
+			'_id'               => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'              => $this->revision,
 			'_deleted'          => false,
 			'_meta'             => [
 				'lwt' => $this->generate_timestamp()
@@ -182,23 +182,6 @@ class PurchaseOrderGenerator extends GeneratorBase {
 				'_deleted' => FALSE,
 			];
 		}, $fee_lines );
-	}
-
-	/**
-	 * Prepare meta data
-	 *
-	 * @since 1.9.44
-	 */
-	private function prepare_meta_data( array $meta_data ): array {
-
-		return array_map( function ( $meta ) {
-
-			return [
-				'id'    => (int) $meta['id'],
-				'key'   => $meta['key'],
-				'value' => (string) $meta['value'],
-			];
-		}, $meta_data );
 	}
 
 } 

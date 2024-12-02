@@ -11,12 +11,6 @@
 		"id",
 		"name",
 		"sku",
-		"image",
-		"dateOrdered",
-		"dateOnSaleFromGMT",
-		"dateExpected",
-		"dateExpectedGMT",
-		"item",
 		"inboundStock",
 		"purchaseOrder"
 	],
@@ -45,10 +39,10 @@
 				"src" : {
 					"type" : "string"
 				},
-				"title" : {
+				"alt" : {
 					"type" : "string"
 				},
-				"alt" : {
+				"title" : {
 					"type" : "string"
 				}
 			}
@@ -98,6 +92,9 @@
 			"type" : "string"
 		},
 		"trash" : {
+			"type" : "boolean"
+		},
+		"deleted" : {
 			"type" : "boolean"
 		},
 		"_rev" : {

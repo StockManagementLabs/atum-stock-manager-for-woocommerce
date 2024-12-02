@@ -35,8 +35,8 @@ class InboundStockGenerator extends GeneratorBase {
 
 		$prepared_data = [
 			// Base schema fields
-			'_id'             => 'inbound-stock:' . $this->generate_uuid(),
-			'_rev'            => '1-' . $this->generate_revision_id(),
+			'_id'             => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'            => $this->revision,
 			'_deleted'        => FALSE,
 			'_meta'           => [
 				'lwt' => $this->generate_timestamp(),
@@ -49,24 +49,19 @@ class InboundStockGenerator extends GeneratorBase {
 			'type'            => $inbound_stock['type'] ?? 'simple',
 			'sku'             => $inbound_stock['sku'] ?? '',
 
-			// Image handling
-			'image'           => $this->prepare_image( $inbound_stock ),
-
 			// Date fields with GMT variants
-			'dateOrdered'     => $this->format_date( $inbound_stock['date_ordered'] ),
-			'dateOrderedGMT'  => $this->format_date( $inbound_stock['date_ordered_gmt'] ),
-			'dateExpected'    => $this->format_date( $inbound_stock['date_expected'] ?? '' ),
-			'dateExpectedGMT' => $this->format_date( $inbound_stock['date_expected_gmt'] ?? '' ),
+			'dateOrdered'     => $inbound_stock['date_ordered'],
+			'dateOrderedGMT'  => $inbound_stock['date_ordered_gmt'],
+			'dateExpected'    => $inbound_stock['date_expected'] ?? '',
+			'dateExpectedGMT' => $inbound_stock['date_expected_gmt'] ?? '',
 
 			// Item and Purchase Order references
 			'item'            => [
-				'id'  => (int) $inbound_stock['id'],
-				'_id' => 'product:' . $this->generate_uuid(),
+				'id'  => (int) $inbound_stock['id']
 			],
 			'inboundStock'    => (float) $inbound_stock['inbound_stock'],
 			'purchaseOrder'   => [
-				'id'  => (int) $inbound_stock['purchase_order'],
-				'_id' => 'purchase-order:' . $this->generate_uuid(),
+				'id'  => (int) $inbound_stock['purchase_order']
 			],
 
 			// Optional fields
@@ -75,48 +70,7 @@ class InboundStockGenerator extends GeneratorBase {
 		];
 
 		return $prepared_data;
-	}
-
-	/**
-	 * Prepare image data
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param array $inbound_stock
-	 *
-	 * @return array
-	 */
-	private function prepare_image( array $inbound_stock ): array {
-
-		// Default empty image object
-		return [
-			'id'    => 0,
-			'src'   => '',
-			'title' => '',
-			'alt'   => '',
-		];
 
 	}
 
-	/**
-	 * Format date with fallback
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param string $date_string
-	 *
-	 * @return string
-	 */
-	private function format_date( string $date_string ): string {
-
-		if ( empty( $date_string ) ) {
-			return '';
-		}
-
-		try {
-			return ( new \DateTime( $date_string ) )->format( 'c' );
-		} catch ( \Exception $e ) {
-			return '';
-		}
-	}
 }

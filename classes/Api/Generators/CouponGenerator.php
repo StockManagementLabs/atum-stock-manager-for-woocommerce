@@ -34,8 +34,8 @@ class CouponGenerator extends GeneratorBase {
 	protected function prepare_data( array $coupon ): array {
 
 		return [
-			'_id'                       => 'coupon:' . $this->generate_uuid(),
-			'_rev'                      => '1-' . $this->generate_revision_id(),
+			'_id'                       => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'                      => $this->revision,
 			'_deleted'                  => FALSE,
 			'_meta'                     => [
 				'lwt' => $this->generate_timestamp(),
@@ -136,28 +136,6 @@ class CouponGenerator extends GeneratorBase {
 			return $user; // Email string
 
 		}, $used_by );
-	}
-
-	/**
-	 * Prepare meta data
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param array $meta_data Array of meta data
-	 *
-	 * @return array Prepared meta data
-	 */
-	private function prepare_meta_data( array $meta_data ): array {
-
-		return array_map( function ( $meta ) {
-
-			return [
-				'id'    => (int) $meta['id'],
-				'key'   => $meta['key'],
-				'value' => (string) $meta['value'],
-			];
-
-		}, $meta_data );
 	}
 
 } 

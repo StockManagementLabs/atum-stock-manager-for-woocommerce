@@ -3,6 +3,13 @@
 	"version" : 0,
 	"primaryKey" : "id",
 	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
+	],
 	"properties" : {
 		"id" : {
 			"type" : "number"

@@ -34,8 +34,8 @@ class InventoryLogGenerator extends GeneratorBase {
 	protected function prepare_data( array $log ): array {
 
 		$prepared_data = [
-			'_id'             => 'inventory-log:' . $this->generate_uuid(),
-			'_rev'            => '1-' . $this->generate_revision_id(),
+			'_id'             => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'            => $this->revision,
 			'_deleted'        => FALSE,
 			'_meta'           => [
 				'lwt' => $this->generate_timestamp(),
@@ -131,16 +131,6 @@ class InventoryLogGenerator extends GeneratorBase {
 				'ratePercent' => (float) ( $tax['rate_percent'] ?? 0 )
 			];
 		}, $taxes );
-	}
-
-	private function prepare_meta_data( array $meta_data ): array {
-		return array_map( function ( $meta ) {
-			return [
-				'id'    => (int) $meta['id'],
-				'key'   => $meta['key'],
-				'value' => $meta['value']
-			];
-		}, $meta_data );
 	}
 
 } 

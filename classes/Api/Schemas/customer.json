@@ -9,36 +9,27 @@
 		"_meta",
 		"_attachments",
 		"id",
-		"dateCreated",
-		"dateCreatedGMT",
-		"dateModified",
-		"dateModifiedGMT",
-		"email",
-		"firstName",
-		"lastName",
-		"role",
-		"username",
-		"billing",
-		"shipping",
-		"isPayingCustomer",
-		"avatarUrl",
-		"trash"
+		"email"
 	],
 	"properties": {
 		"id": {
 			"type": "number"
 		},
 		"dateCreated": {
-			"type": "string"
+			"type": "string",
+			"format" : "date-time"
 		},
 		"dateCreatedGMT": {
-			"type": "string"
+			"type": "string",
+			"format" : "date-time"
 		},
 		"dateModified": {
-			"type": "string"
+			"type": "string",
+			"format" : "date-time"
 		},
 		"dateModifiedGMT": {
-			"type": "string"
+			"type": "string",
+			"format" : "date-time"
 		},
 		"email": {
 			"type": "string"
@@ -125,9 +116,6 @@
 				},
 				"country": {
 					"type": "string"
-				},
-				"phone": {
-					"type": "string"
 				}
 			}
 		},
@@ -143,17 +131,20 @@
 		"_id": {
 			"type": "string"
 		},
-		"_rev": {
-			"type": "string",
-			"minLength": 1
+		"deleted": {
+			"type": "boolean"
+		},
+		"trash": {
+			"type": "boolean"
 		},
 		"conflict": {
 			"type": "boolean"
 		},
-		"_deleted": {
-			"type": "boolean"
+		"_rev": {
+			"type": "string",
+			"minLength": 1
 		},
-		"trash": {
+		"_deleted": {
 			"type": "boolean"
 		},
 		"_meta": {

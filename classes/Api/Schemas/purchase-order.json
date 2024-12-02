@@ -8,13 +8,7 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"multipleSuppliers",
-		"dateCreated",
-		"dateCreatedGMT",
-		"dateModified",
-		"dateModifiedGMT",
-		"status",
-		"currency"
+		"id"
 	],
 	"properties" : {
 		"id" : {

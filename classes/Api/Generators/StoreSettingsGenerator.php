@@ -23,11 +23,18 @@ class StoreSettingsGenerator extends GeneratorBase {
 	protected string $schema_name = 'store-settings';
 
 	/**
-	 * Accumulated settings
+	 * Store settings ID
+	 *
+	 * @var string
+	 */
+	private string $store_settings_id;
+
+	/**
+	 * Accumulated store settings (saved statically)
 	 *
 	 * @var array
 	 */
-	private array $accumulated_settings = [
+	public static array $accumulated_store_settings = [
 		'app'  => [],
 		'atum' => [
 			'general'        => [],
@@ -46,35 +53,25 @@ class StoreSettingsGenerator extends GeneratorBase {
 	];
 
 	/**
-	 * Existing record
-	 *
-	 * @var array|null
-	 */
-	private ?array $existing_record = NULL;
-
-	/**
-	 * Retrieve existing record from SQLite database as the store settings can only have a single record.
+	 * StoreSettingsGenerator constructor.
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param \PDO $sqlite_connection
+	 * @param string $table_name               The table name with prefix for the SQL statements.
+	 * @param string $revision                 The revision code.
+	 * @param string $store_settings_id        The store settings ID in the SQLite db.
+	 * @param array  $store_settings_app_group The store settings app group data.
 	 */
-	private function load_existing_record( \PDO $sqlite_connection ) {
+	public function __construct( string $table_name, string $revision, string $store_settings_id, array $store_settings_app_group ) {
 
-		$stmt = $sqlite_connection->prepare( "SELECT * FROM $this->table_name LIMIT 1" );
-		$stmt->execute();
-		$this->existing_record = $stmt->fetch( \PDO::FETCH_ASSOC );
-
-		if ( $this->existing_record ) {
-			// Parse the JSON data from the existing record
-			$existing_data = json_decode( $this->existing_record['data'], TRUE );
-
-			// Preserve the app settings
-			$this->accumulated_settings['app'] = $existing_data['app'] ?? [];
-
-			// Preserve the actionLogs settings for now (they are not needed?).
-			$this->accumulated_settings['atum']['actionLogs'] = $existing_data['atum']['actionLogs'] ?? [];
+		if ( empty( $store_settings_id ) || empty( $store_settings_app_group ) ) {
+			throw new \Exception( 'The body data has missing store settings info' );
 		}
+
+		parent::__construct( $table_name, $revision );
+
+		$this->store_settings_id                 = $store_settings_id;
+		self::$accumulated_store_settings['app'] = $store_settings_app_group;
 
 	}
 
@@ -85,18 +82,20 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 */
 	private function update_accumulated_settings( string $main_group, string $sub_group, array $json_data ) {
 
-		// Validate main group and subgroup
-		if ( ! isset( $this->accumulated_settings[ $main_group ] ) ||
-			 ! isset( $this->accumulated_settings[ $main_group ][ $sub_group ] ) ) {
+		// Validate main group and subgroup.
+		if (
+			! isset( self::$accumulated_store_settings[ $main_group ] ) ||
+			! isset( self::$accumulated_store_settings[ $main_group ][ $sub_group ] )
+		) {
 			throw new \InvalidArgumentException( "Invalid group or subgroup: $main_group.$sub_group" );
 		}
 
-		// Transform settings based on main group and sub group
+		// Transform settings based on main group and subgroup.
 		$transformed_settings = $this->transform_settings( $main_group, $sub_group, $json_data );
 
-		// Merge transformed settings
-		$this->accumulated_settings[ $main_group ][ $sub_group ] = array_merge(
-			$this->accumulated_settings[ $main_group ][ $sub_group ],
+		// Merge transformed settings.
+		self::$accumulated_store_settings[ $main_group ][ $sub_group ] = array_merge(
+			self::$accumulated_store_settings[ $main_group ][ $sub_group ],
 			$transformed_settings
 		);
 	}
@@ -109,34 +108,32 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @param array  $json_data
 	 * @param string $main_group
 	 * @param string $sub_group
-	 * @param \PDO   $sqlite_connection
 	 *
 	 * @return string
 	 */
-	public function generate_sql_update( array $json_data, string $main_group, string $sub_group, \PDO $sqlite_connection ): string {
+	public function generate_sql_update( array $json_data, string $main_group, string $sub_group ): string {
 
-		// Load existing record if not already loaded
-		if ( $this->existing_record === NULL ) {
-			$this->load_existing_record( $sqlite_connection );
-		}
+		// Update the accumulated settings.
+		$this->update_accumulated_settings( $main_group, $sub_group, $json_data['results'] );
 
-		// Update the accumulated settings
-		$this->update_accumulated_settings( $main_group, $sub_group, $json_data );
-
-		// Check if all settings are populated
+		// Check if all settings are populated.
 		if ( $this->are_all_settings_populated() ) {
 
-			$existing_data = json_decode($this->existing_record['data'], true);
-			$prepared_data = $this->prepare_data( $existing_data);
+			$existing_data = array(
+				'_id'  => $this->store_settings_id,
+				'_rev' => $this->revision,
+			);
+			$prepared_data = $this->prepare_data( $existing_data );
 			$this->validate_data( $prepared_data );
 
-			// Prepare SQL update statement
+			// Prepare SQL update statement.
 			return sprintf(
 				"UPDATE store_settings SET data = '%s', lastWriteTime = '%s' WHERE id = '%s'",
 				$this->sanitize_value( json_encode( $prepared_data ) ),
 				$this->sanitize_value( $this->generate_timestamp() ),
-				$this->sanitize_value( $this->existing_record['id'] )
+				$this->sanitize_value( $this->store_settings_id )
 			);
+
 		}
 
 		return '';
@@ -152,16 +149,16 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 */
 	private function are_all_settings_populated(): bool {
 
-		// Check if all subgroups are populated
-		return ! empty( $this->accumulated_settings['atum']['general'] ) &&
-			   ! empty( $this->accumulated_settings['atum']['storeDetails'] ) &&
-			   ! empty( $this->accumulated_settings['atum']['moduleManager'] ) &&
-			   ! empty( $this->accumulated_settings['atum']['multiInventory'] ) &&
-			   ! empty( $this->accumulated_settings['atum']['productLevels'] ) &&
-			   ! empty( $this->accumulated_settings['wc']['admin'] ) &&
-			   ! empty( $this->accumulated_settings['wc']['general'] ) &&
-			   ! empty( $this->accumulated_settings['wc']['products'] ) &&
-			   ! empty( $this->accumulated_settings['wc']['tax'] );
+		// Check if all subgroups are populated.
+		return ! empty( self::$accumulated_store_settings['atum']['general'] ) &&
+			   ! empty( self::$accumulated_store_settings['atum']['storeDetails'] ) &&
+			   ! empty( self::$accumulated_store_settings['atum']['moduleManager'] ) &&
+			   ! empty( self::$accumulated_store_settings['atum']['multiInventory'] ) &&
+			   ! empty( self::$accumulated_store_settings['atum']['productLevels'] ) &&
+			   ! empty( self::$accumulated_store_settings['wc']['admin'] ) &&
+			   ! empty( self::$accumulated_store_settings['wc']['general'] ) &&
+			   ! empty( self::$accumulated_store_settings['wc']['products'] ) &&
+			   ! empty( self::$accumulated_store_settings['wc']['tax'] );
 	}
 
 	/**
@@ -176,15 +173,15 @@ class StoreSettingsGenerator extends GeneratorBase {
 		return [
 			'_id'          => $existing_data['_id'],
 			'_rev'         => $existing_data['_rev'],
-			'_deleted'     => false,
+			'_deleted'     => FALSE,
 			'_meta'        => [
-				'lwt' => $this->generate_timestamp()
+				'lwt' => $this->generate_timestamp(),
 			],
 			'_attachments' => new \stdClass(),
-			'conflict'     => false,
-			'app'  => $this->accumulated_settings['app'],
-			'atum' => $this->accumulated_settings['atum'],
-			'wc'   => $this->accumulated_settings['wc']
+			'conflict'     => FALSE,
+			'app'          => self::$accumulated_store_settings['app'],
+			'atum'         => self::$accumulated_store_settings['atum'],
+			'wc'           => self::$accumulated_store_settings['wc'],
 		];
 
 	}

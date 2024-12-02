@@ -68,8 +68,8 @@ class VariationGenerator extends GeneratorBase {
 		];
 
 		return [
-			'_id'                 => 'variation:' . $this->generate_uuid(),
-			'_rev'                => '1-' . $this->generate_revision_id(),
+			'_id'                 => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'                => $this->revision,
 			'_deleted'            => FALSE,
 			'_meta'               => [
 				'lwt' => $this->generate_timestamp(),

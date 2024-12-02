@@ -8,8 +8,7 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"_id",
-		"general"
+		"_id"
 	],
 	"properties" : {
 		"_id" : {
@@ -31,13 +30,6 @@
 		},
 		"general" : {
 			"type" : "object",
-			"required" : [
-				"language",
-				"theme",
-				"dateFormat",
-				"timeFormat",
-				"widgets"
-			],
 			"properties" : {
 				"language" : {
 					"type" : "string"
@@ -53,15 +45,6 @@
 				},
 				"widgets" : {
 					"type" : "object",
-					"required" : [
-						"orders",
-						"stockControl",
-						"promoSales",
-						"currentStockValue",
-						"lostSales",
-						"atumStatistics",
-						"sales"
-					],
 					"properties" : {
 						"orders" : {
 							"type" : "boolean"

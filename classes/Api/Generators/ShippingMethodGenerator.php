@@ -38,8 +38,8 @@ class ShippingMethodGenerator extends GeneratorBase {
 		$type = in_array($shipping_method['id'], $allowed_types) ? $shipping_method['id'] : 'flat_rate';
 
 		return [
-			'_id'          => 'shipping-method:' . $this->generate_uuid(),
-			'_rev'         => '1-' . $this->generate_revision_id(),
+			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'         => $this->revision,
 			'_deleted'     => FALSE,
 			'_meta'        => [
 				'lwt' => $this->generate_timestamp(),

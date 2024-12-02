@@ -3,31 +3,14 @@
 	"version" : 0,
 	"primaryKey" : "id",
 	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id"
+	],
 	"properties" : {
-		"_deleted" : {
-			"type" : "boolean"
-		},
-		"_rev" : {
-			"type" : "string",
-			"minLength" : 1
-		},
-		"_meta" : {
-			"type" : "object",
-			"required" : [
-				"lwt"
-			],
-			"properties" : {
-				"lwt" : {
-					"type" : "number",
-					"minimum" : 1,
-					"maximum" : 1000000000000000,
-					"multipleOf" : 0.01
-				}
-			}
-		},
-		"_attachments" : {
-			"type" : "object"
-		},
 		"id" : {
 			"type" : "number"
 		},
@@ -40,20 +23,24 @@
 		"amount" : {
 			"type" : "number"
 		},
-		"status" : {
-			"type" : "string"
-		},
 		"discountType" : {
-			"type" : "string"
+			"type" : "string",
+			"enum" : [
+				"percent",
+				"fixed_cart",
+				"fixed_product"
+			]
 		},
 		"description" : {
 			"type" : "string"
 		},
 		"dateExpires" : {
-			"type" : "string"
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"dateExpiresGMT" : {
-			"type" : "string"
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"usageCount" : {
 			"type" : "number"
@@ -67,7 +54,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"_id" : {
 						"type" : "string"
@@ -81,7 +68,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"_id" : {
 						"type" : "string"
@@ -107,7 +94,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"_id" : {
 						"type" : "string"
@@ -121,7 +108,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"_id" : {
 						"type" : "string"
@@ -152,7 +139,7 @@
 						"type" : "object",
 						"properties" : {
 							"id" : {
-								"type" : "number"
+								"type" : ["number", "null"]
 							},
 							"_id" : {
 								"type" : "string"
@@ -171,7 +158,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : ["number", "null"]
 					},
 					"key" : {
 						"type" : "string"
@@ -185,8 +172,35 @@
 		"trash" : {
 			"type" : "boolean"
 		},
+		"deleted" : {
+			"type" : "boolean"
+		},
 		"conflict" : {
 			"type" : "boolean"
+		},
+		"_rev" : {
+			"type" : "string",
+			"minLength" : 1
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+			"type" : "object",
+			"required" : [
+				"lwt"
+			],
+			"properties" : {
+				"lwt" : {
+					"type" : "number",
+					"minimum" : 1,
+					"maximum" : 1000000000000000,
+					"multipleOf" : 0.01
+				}
+			}
+		},
+		"_attachments" : {
+			"type" : "object"
 		}
 	}
 }

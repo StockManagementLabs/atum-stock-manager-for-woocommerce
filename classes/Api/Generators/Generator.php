@@ -11,6 +11,9 @@
 
 namespace Atum\Api\Generators;
 
+use Atum\Api\AtumApi;
+
+
 defined( 'ABSPATH' ) || exit;
 
 class Generator {
@@ -60,25 +63,61 @@ class Generator {
 	private string $user_id;
 
 	/**
-	 * Table name
+	 * Revision code
 	 *
 	 * @var string
 	 */
-	private string $table_name;
+	private string $revision;
+
+	/**
+	 * Store settings ID
+	 *
+	 * @var string
+	 */
+	private string $store_settings_id;
+
+	/**
+	 * Store settings' app group
+	 *
+	 * @var array
+	 */
+	private array $store_settings_app_group;
+
+	/**
+	 * The schema name.
+	 * Must match the key assigned to one of the available generators
+	 *
+	 * @var string
+	 */
+	private string $schema_name;
 
 	/**
 	 * Constructor
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param string $store_id   Store ID part of the table name
-	 * @param string $user_id    User ID part of the table name
-	 * @param string $table_name Table name part
+	 * @param string $schema_name The schema name.
+	 * @param array  $body_data   The request body data.
+	 *
+	 * @throws \Exception If generator type is not supported.
 	 */
-	public function __construct( string $store_id, string $user_id, string $table_name ) {
-		$this->store_id   = $store_id;
-		$this->user_id    = $user_id;
-		$this->table_name = $table_name;
+	public function __construct( string $schema_name, array $body_data ) {
+
+		if ( ! isset( self::$available_generators[ $schema_name ] ) ) {
+			throw new \Exception( "Unsupported generator type: $schema_name" );
+		}
+
+		$this->schema_name              = $schema_name;
+		$this->store_id                 = $body_data['storeId'] ?? '';
+		$this->user_id                  = $body_data['userId'] ?? '';
+		$this->revision                 = $body_data['revision'] ?? '';
+		$this->store_settings_id        = $body_data['storeSettingsId'] ?? '';
+		$this->store_settings_app_group = $body_data['appStoreSettings'] ?? '';
+
+		if ( empty( $this->store_id ) || empty( $this->user_id ) || empty( $this->revision ) ) {
+			throw new \Exception( 'The body data has missing info' );
+		}
+
 	}
 
 	/**
@@ -86,30 +125,43 @@ class Generator {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param string $schema_name The generator schema to use (e.g., 'attribute')
-	 * @param array  $json_data   The JSON data to transform
+	 * @param array $json_data The JSON data to transform.
 	 *
-	 * @return string The generated SQL statements
-	 * @throws \InvalidArgumentException If generator type is not supported
+	 * @return string The generated SQL statements.
+	 * @throws \InvalidArgumentException If generator type is not supported.
 	 */
-	public function generate( string $schema_name, array $json_data ): string {
+	public function generate( array $json_data ): string {
 
-		$schema_name = strtolower( $schema_name );
-
-		if ( ! isset( self::$available_generators[ $schema_name ] ) ) {
-			throw new \InvalidArgumentException( "Unsupported generator type: $schema_name" );
+		if ( empty( $json_data ) ) {
+			return '';
 		}
 
-		$generator_class = self::$available_generators[ $schema_name ];
+		$generator_class = self::$available_generators[ $this->schema_name ];
 		$table_name      = $this->add_table_prefix();
 
-		$generator = new $generator_class( $table_name );
-
+		// Special case for Store Settings.
 		// This table must have only one record, so we must update it instead of inserting a new one.
-		// TODO...
-		/*if ( 'store-settings' === $generator_type ) {
-			return $generator->generate_sql_update( $json_data );
-		}*/
+		if ( 'store-settings' === $this->schema_name ) {
+
+			$generator = new StoreSettingsGenerator( $table_name, $this->revision, $this->store_settings_id, $this->store_settings_app_group );
+
+			$exportable_endpoints = AtumApi::get_exportable_endpoints();
+			$endpoint_key 	      = array_search( $json_data['endpoint'], (array) $exportable_endpoints['store-settings'] );
+
+			if ( ! $endpoint_key ) {
+				return '';
+			}
+
+			[ $main_group, $subgroup ] = explode( '.', $endpoint_key );
+
+			return $generator->generate_sql_update( $json_data, $main_group, $subgroup );
+
+		}
+
+		/**
+		 * @var GeneratorBase $generator
+		 */
+		$generator = new $generator_class( $table_name, $this->revision );
 
 		return $generator->generate_sql_inserts( $json_data );
 
@@ -123,77 +175,7 @@ class Generator {
 	 * @return string The complete table prefix
 	 */
 	private function add_table_prefix(): string {
-		return sprintf( '%s:%s:%s.db-0', $this->store_id, $this->user_id, $this->table_name );
-	}
-
-	/**
-	 * Get the schema for a given endpoint (used by the full export)
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param string $endpoint_key
-	 *
-	 * @return string
-	 */
-	public static function get_schema( $endpoint_key ) {
-
-		$schema = '';
-
-		switch ( $endpoint_key ) {
-			case 'attributes':
-				$schema = array_search( AttributeGenerator::class, self::$available_generators );
-				break;
-
-			case 'atum-locations':
-				$schema = array_search( LocationGenerator::class, self::$available_generators );
-				break;
-
-			case 'atum-order-notes':
-			case 'comments':
-				$schema = array_search( CommentGenerator::class, self::$available_generators );
-				break;
-
-			case 'categories':
-				$schema = array_search( CategoryGenerator::class, self::$available_generators );
-				break;
-
-			case 'classes':
-				$schema = array_search( TaxClassGenerator::class, self::$available_generators );
-				break;
-
-			case 'coupons':
-				$schema = array_search( CouponGenerator::class, self::$available_generators );
-				break;
-
-			case 'customers':
-				$schema = array_search( CustomerGenerator::class, self::$available_generators );
-				break;
-
-			case 'inventories':
-				$schema = array_search( InventoryGenerator::class, self::$available_generators );
-				break;
-
-			case 'inventory-logs':
-				$schema = array_search( InventoryLogGenerator::class, self::$available_generators );
-				break;
-
-			case 'media':
-				$schema = array_search( MediaGenerator::class, self::$available_generators );
-				break;
-
-			case 'orders':
-				$schema = array_search( OrderGenerator::class, self::$available_generators );
-				break;
-
-			case 'order-refunds':
-				$schema = array_search( RefundGenerator::class, self::$available_generators );
-				break;
-
-			case 'payment-gateways':
-		}
-
-		return $schema;
-
+		return sprintf( '%s:%s:%s.db-0', $this->store_id, $this->user_id, $this->schema_name );
 	}
 
 }

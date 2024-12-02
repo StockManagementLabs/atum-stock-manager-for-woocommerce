@@ -12,33 +12,6 @@
 		"name"
 	],
 	"properties" : {
-		"_deleted" : {
-			"type" : "boolean"
-		},
-		"_rev" : {
-			"type" : "string",
-			"minLength" : 1
-		},
-		"_meta" : {
-			"type" : "object",
-			"required" : [
-				"lwt"
-			],
-			"properties" : {
-				"lwt" : {
-					"type" : "number",
-					"minimum" : 1,
-					"maximum" : 1000000000000000,
-					"multipleOf" : 0.01
-				}
-			}
-		},
-		"_attachments" : {
-			"type" : "object"
-		},
-		"_id" : {
-			"type" : "string"
-		},
 		"id" : {
 			"type" : "number"
 		},
@@ -61,7 +34,16 @@
 			"type" : "array",
 			"items" : {
 				"type" : "object",
+				"required" : [
+					"name"
+				],
 				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					},
 					"name" : {
 						"type" : "string"
 					},
@@ -80,37 +62,74 @@
 					"bom" : {
 						"type" : "object",
 						"properties" : {
-							"id" : { "type" : "string" },
-							"name" : { "type" : "string" },
-							"type" : { "type" : "string" },
-							"qty" : { "type" : "number" },
-							"delete" : { "type" : "boolean" }
+							"id" : {
+								"type" : "string"
+							},
+							"name" : {
+								"type" : "string"
+							},
+							"type" : {
+								"type" : "string"
+							},
+							"qty" : {
+								"type" : "number"
+							},
+							"delete" : {
+								"type" : "boolean"
+							}
 						}
 					},
 					"value" : {
 						"type" : "number"
-					},
-					"_id" : {
-						"type" : "string"
-					},
-					"id" : {
-						"type" : "number"
 					}
-				},
-				"required" : [
-					"name"
-				]
+				}
 			}
 		},
 		"bom" : {
 			"type" : "object",
 			"properties" : {
-				"id" : { "type" : "string" },
-				"name" : { "type" : "string" },
-				"type" : { "type" : "string" },
-				"qty" : { "type" : "number" },
-				"delete" : { "type" : "boolean" }
+				"id" : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
+				},
+				"type" : {
+					"type" : "string"
+				},
+				"qty" : {
+					"type" : "number"
+				},
+				"delete" : {
+					"type" : "boolean"
+				}
 			}
-		}
+		},
+		"_id" : {
+			"type" : "string"
+		},
+		"_rev" : {
+			"type" : "string"
+		},
+		"_deleted" : {
+			"type" : "boolean"
+		},
+		"_meta" : {
+            "type" : "object",
+            "required" : [
+                "lwt"
+            ],
+            "properties" : {
+                "lwt" : {
+                    "type" : "number",
+                    "minimum" : 1,
+                    "maximum" : 1000000000000000,
+                    "multipleOf" : 0.01
+                }
+            }
+        },
+        "_attachments" : {
+            "type" : "object"
+        }
 	}
 }

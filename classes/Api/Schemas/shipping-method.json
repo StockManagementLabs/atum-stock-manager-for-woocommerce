@@ -8,14 +8,11 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"title",
-		"description",
-		"type",
-		"slug"
+		"_id"
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"_id" : {
 			"type" : "string"
@@ -24,17 +21,6 @@
 			"type" : "string"
 		},
 		"description" : {
-			"type" : "string"
-		},
-		"type" : {
-			"type" : "string",
-			"enum" : [
-				"flat_rate",
-				"free_shipping",
-				"local_pickup"
-			]
-		},
-		"slug" : {
 			"type" : "string"
 		},
 		"_deleted" : {

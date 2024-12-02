@@ -3,23 +3,24 @@
 	"version" : 0,
 	"primaryKey" : "id",
 	"type" : "object",
+	"required" : [
+		"_deleted",
+		"_rev",
+		"_meta",
+		"_attachments",
+		"id",
+		"name",
+		"type"
+	],
 	"properties" : {
-        "date_created": {
-            "type": "string"
-        },
-        "date_created_gmt": {
-            "type": "string"
-        },
-        "date_modified": {
-            "type": "string"
-        },
-        "date_modified_gmt": {
-            "type": "string"
-        },
+		"id" : {
+			"type" : "number"
+		},
 		"parent" : {
 			"type" : "object",
 			"properties" : {
 				"id" : {
+					"type" : "number"
 				},
 				"_id" : {
 					"type" : "string"
@@ -33,6 +34,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
+					"type" : "number"
 				},
 				"src" : {
 					"type" : "string"
@@ -48,7 +50,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						
+						"type" : "number"
 					},
 					"src" : {
 						"type" : "string"
@@ -85,7 +87,6 @@
 				"external",
 				"grouped",
 				"inventory",
-				"missing",
 				"variation",
 				"product-part",
 				"variable-product-part",
@@ -112,16 +113,20 @@
 			"type" : "number"
 		},
 		"dateOnSaleFrom" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"dateOnSaleFromGMT" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"dateOnSaleTo" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"dateOnSaleToGMT" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"purchasePrice" : {
 			"type" : "number"
@@ -133,7 +138,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-				
+					"type" : "number"
 				},
 				"_id" : {
 					"type" : "string"
@@ -146,7 +151,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						
+						"type" : "number"
 					},
 					"name" : {
 						"type" : "string"
@@ -188,10 +193,12 @@
 			"type" : "string"
 		},
 		"outStockDate" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"outStockDateGMT" : {
-			"type" : "string" 
+			"type" : "string",
+			"format" : "date-time"
 		},
 		"soldIndividually" : {
 			"type" : "boolean"
@@ -200,7 +207,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					
+					"type" : "number"
 				},
 				"_id" : {
 					"type" : "string"
@@ -220,13 +227,13 @@
 			"type" : "object",
 			"properties" : {
 				"length" : {
-					"type" : "string"
+					"type" : "number"
 				},
 				"width" : {
-					"type" : "string"
+					"type" : "number"
 				},
 				"height" : {
-					"type" : "string"
+					"type" : "number"
 				}
 			}
 		},
@@ -234,6 +241,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
+					"type" : "number"
 				},
 				"_id" : {
 					"type" : "string"
@@ -246,6 +254,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"_id" : {
 						"type" : "string"
@@ -259,6 +268,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"_id" : {
 						"type" : "string"
@@ -272,6 +282,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"_id" : {
 						"type" : "string"
@@ -284,11 +295,11 @@
 			"items" : {
 				"type" : "object",
 				"required" : [
-					"name",
-					"options"
+					"name"
 				],
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"_id" : {
 						"type" : "string"
@@ -305,6 +316,7 @@
 							],
 							"properties" : {
 								"id" : {
+									"type" : "number"
 								},
 								"_id" : {
 									"type" : "string"
@@ -333,6 +345,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"name" : {
 						"type" : "string"
@@ -349,6 +362,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"_id" : {
 						"type" : "string"
@@ -371,6 +385,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"name" : {
 						"type" : "string"
@@ -387,6 +402,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"name" : {
 						"type" : "string"
@@ -403,6 +419,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"name" : {
 						"type" : "string"
@@ -422,6 +439,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
+						"type" : "number"
 					},
 					"key" : {
 						"type" : "string"

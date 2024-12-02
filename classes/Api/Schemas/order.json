@@ -8,13 +8,7 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"dateCreated",
-		"dateCreatedGMT",
-		"dateModified",
-		"dateModifiedGMT",
-		"status",
-		"currency",
-		"refunds"
+		"id"
 	],
 	"properties" : {
 		"id" : {
@@ -57,11 +51,6 @@
 			"type" : "array",
 			"items" : {
 				"type" : "object",
-				"required" : [
-					"name",
-					"quantity",
-					"metaData"
-				],
 				"properties" : {
 					"id" : {
 						"type" : "number"
@@ -103,11 +92,6 @@
 					},
 					"stock" : {
 						"type" : "object",
-						"required" : [
-							"action",
-							"quantity",
-							"changedStock"
-						],
 						"properties" : {
 							"action" : {
 								"type" : "string"
@@ -129,12 +113,7 @@
 									"type" : "string"
 								},
 								"value" : {
-									"type" : [
-										"string",
-										"number",
-										"boolean",
-										"object"
-									]
+									"type" : "string"
 								}
 							}
 						}
@@ -210,17 +189,6 @@
 						"type" : "array",
 						"items" : {
 							"type" : "object",
-							"required" : [
-								"_id",
-								"quantity",
-								"inventory",
-								"product",
-								"variation",
-								"order",
-								"orderType",
-								"subtotal",
-								"total"
-							],
 							"properties" : {
 								"id" : {
 									"type" : "number"
@@ -279,23 +247,7 @@
 									"type" : "string"
 								},
 								"stock" : {
-									"type" : "object",
-									"required" : [
-										"action",
-										"quantity",
-										"changedStock"
-									],
-									"properties" : {
-										"action" : {
-											"type" : "string"
-										},
-										"quantity" : {
-											"type" : "number"
-										},
-										"changedStock" : {
-											"type" : "boolean"
-										}
-									}
+									"type" : "object"
 								},
 								"subtotal" : {
 									"type" : "number"
@@ -315,6 +267,15 @@
 							}
 						}
 					},
+					"bomItems" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object"
+						}
+					},
+					"deleted" : {
+						"type" : "boolean"
+					},
 					"_deleted" : {
 						"type" : "boolean"
 					}
@@ -325,9 +286,6 @@
 			"type" : "array",
 			"items" : {
 				"type" : "object",
-				"required" : [
-					"name"
-				],
 				"properties" : {
 					"id" : {
 						"type" : "number"
@@ -338,11 +296,25 @@
 					"name" : {
 						"type" : "string"
 					},
+					"taxClass" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string"
+							}
+						}
+					},
 					"total" : {
 						"type" : "number"
 					},
 					"totalTax" : {
 						"type" : "number"
+					},
+					"taxStatus" : {
+						"type" : "string"
 					}
 				}
 			}
@@ -448,10 +420,6 @@
 			"type" : "array",
 			"items" : {
 				"type" : "object",
-				"required" : [
-					"reason",
-					"amount"
-				],
 				"properties" : {
 					"reason" : {
 						"type" : "string"
@@ -519,52 +487,10 @@
 		"pricesIncludeTax" : {
 			"type" : "boolean"
 		},
-		"inventoryLogs" : {
-			"type" : "array",
-			"items" : {
-				"type" : "object",
-				"properties" : {
-					"id" : {
-						"type" : "number"
-					},
-					"_id" : {
-						"type" : "string"
-					}
-				}
-			}
-		},
-		"pickingPack" : {
-			"type" : "object",
-			"properties" : {
-				"id" : {
-					"type" : "number"
-				},
-				"_id" : {
-					"type" : "string"
-				}
-			}
-		},
-		"paymentLines" : {
-			"type" : "array",
-			"items" : {
-				"type" : "object",
-				"properties" : {
-					"id" : {
-						"type" : "number"
-					},
-					"_id" : {
-						"type" : "string"
-					},
-					"method" : {
-						"type" : "string"
-					},
-					"amount" : {
-						"type" : "number"
-					}
-				}
-			}
-		},
 		"trash" : {
+			"type" : "boolean"
+		},
+		"deleted" : {
 			"type" : "boolean"
 		},
 		"_id" : {

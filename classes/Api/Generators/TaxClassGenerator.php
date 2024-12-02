@@ -34,8 +34,8 @@ class TaxClassGenerator extends GeneratorBase {
 	protected function prepare_data( array $tax_class ): array {
 
 		return [
-			'_id'          => 'tax-class:' . $this->generate_uuid(),
-			'_rev'         => '1-' . $this->generate_revision_id(),
+			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'         => $this->revision,
 			'_deleted'     => false,
 			'_meta'        => [
 				'lwt' => $this->generate_timestamp(),
