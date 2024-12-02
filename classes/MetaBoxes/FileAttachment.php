@@ -97,7 +97,12 @@ class FileAttachment {
 			return;
 		}
 
-		update_post_meta( $product_id, self::ATUM_ATTACHMENTS_META_KEY, sanitize_text_field( $_POST['atum-attachments'] ) );
+		if ( '[]' === $_POST['atum-attachments'] ) {
+			delete_post_meta( $product_id, self::ATUM_ATTACHMENTS_META_KEY );
+		}
+		else {
+			update_post_meta( $product_id, self::ATUM_ATTACHMENTS_META_KEY, sanitize_text_field( $_POST['atum-attachments'] ) );
+		}
 
 	}
 

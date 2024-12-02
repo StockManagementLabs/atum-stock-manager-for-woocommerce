@@ -144,14 +144,7 @@ final class Addons {
 
 				if ( ! empty( $this->no_activated_licenses ) ) {
 
-					$message = sprintf(
-						/* translators: opening and closing HTML link to the add-ons page  */
-						__( 'Please, activate %1$syour ATUM premium add-ons licenses%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
-						'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
-						'</a>'
-					);
-
-					AtumAdminNotices::add_notice( $message, 'activate_addons_licenses', 'info', TRUE, FALSE, 'activate-addons' );
+					add_action( 'init', array( $this, 'no_activated_licenses_notice' ) );
 
 				}
 
@@ -164,6 +157,23 @@ final class Addons {
 
 		}
 
+	}
+
+	/**
+	 * Add the not activated licenses notice
+	 *
+	 * @since 1.9.44
+	 */
+	public function no_activated_licenses_notice() {
+
+		$message = sprintf(
+		/* translators: opening and closing HTML link to the add-ons page  */
+			__( 'Please, activate %1$syour ATUM premium add-ons licenses%2$s to receive automatic updates.', ATUM_TEXT_DOMAIN ),
+			'<a href="' . add_query_arg( 'page', 'atum-addons', admin_url( 'admin.php' ) ) . '">',
+			'</a>'
+		);
+
+		AtumAdminNotices::add_notice( $message, 'activate_addons_licenses', 'info', TRUE, FALSE, 'activate-addons' );
 	}
 
 	/**

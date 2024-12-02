@@ -97,35 +97,6 @@ class PurchaseOrders extends AtumOrderPostType {
 	 */
 	private function __construct() {
 
-		// Set post type labels.
-		$this->labels = array(
-			'name'                  => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
-			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralContext
-			'singular_name'         => _x( 'Purchase Order', self::POST_TYPE . ' post type singular name', ATUM_TEXT_DOMAIN ),
-			'add_new'               => __( 'Add New PO', ATUM_TEXT_DOMAIN ),
-			'add_new_item'          => __( 'Add New PO', ATUM_TEXT_DOMAIN ),
-			'edit'                  => __( 'Edit', ATUM_TEXT_DOMAIN ),
-			'edit_item'             => __( 'Edit PO', ATUM_TEXT_DOMAIN ),
-			'new_item'              => __( 'New PO', ATUM_TEXT_DOMAIN ),
-			'view'                  => __( 'View PO', ATUM_TEXT_DOMAIN ),
-			'view_item'             => __( 'View PO', ATUM_TEXT_DOMAIN ),
-			'search_items'          => __( 'Search POs', ATUM_TEXT_DOMAIN ),
-			'not_found'             => __( 'No purchase orders found', ATUM_TEXT_DOMAIN ),
-			'not_found_in_trash'    => __( 'No purchase orders found in trash', ATUM_TEXT_DOMAIN ),
-			'parent'                => __( 'Parent purchase order', ATUM_TEXT_DOMAIN ),
-			'menu_name'             => _x( 'Purchase Orders', 'Admin menu name', ATUM_TEXT_DOMAIN ),
-			'filter_items_list'     => __( 'Filter purchase orders', ATUM_TEXT_DOMAIN ),
-			'items_list_navigation' => __( 'Purchase orders navigation', ATUM_TEXT_DOMAIN ),
-			'items_list'            => __( 'Purchase orders list', ATUM_TEXT_DOMAIN ),
-		);
-
-		// Set meta box labels.
-		$this->metabox_labels = array(
-			'data'    => __( 'PO Data', ATUM_TEXT_DOMAIN ),
-			'notes'   => __( 'PO Notes', ATUM_TEXT_DOMAIN ),
-			'actions' => __( 'PO Actions', ATUM_TEXT_DOMAIN ),
-		);
-
 		// Initialize.
 		$this->init();
 
@@ -179,6 +150,43 @@ class PurchaseOrders extends AtumOrderPostType {
 
 		}
 
+	}
+
+	/**
+	 * Set Purchase Orders post type labels
+	 *
+	 * @since 1.9.44
+	 */
+	protected function set_labels() {
+
+		// Set post type labels.
+		$this->labels = array(
+			'name'                  => __( 'Purchase Orders', ATUM_TEXT_DOMAIN ),
+			// phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralContext
+			'singular_name'         => _x( 'Purchase Order', self::POST_TYPE . ' post type singular name', ATUM_TEXT_DOMAIN ),
+			'add_new'               => __( 'Add New PO', ATUM_TEXT_DOMAIN ),
+			'add_new_item'          => __( 'Add New PO', ATUM_TEXT_DOMAIN ),
+			'edit'                  => __( 'Edit', ATUM_TEXT_DOMAIN ),
+			'edit_item'             => __( 'Edit PO', ATUM_TEXT_DOMAIN ),
+			'new_item'              => __( 'New PO', ATUM_TEXT_DOMAIN ),
+			'view'                  => __( 'View PO', ATUM_TEXT_DOMAIN ),
+			'view_item'             => __( 'View PO', ATUM_TEXT_DOMAIN ),
+			'search_items'          => __( 'Search POs', ATUM_TEXT_DOMAIN ),
+			'not_found'             => __( 'No purchase orders found', ATUM_TEXT_DOMAIN ),
+			'not_found_in_trash'    => __( 'No purchase orders found in trash', ATUM_TEXT_DOMAIN ),
+			'parent'                => __( 'Parent purchase order', ATUM_TEXT_DOMAIN ),
+			'menu_name'             => _x( 'Purchase Orders', 'Admin menu name', ATUM_TEXT_DOMAIN ),
+			'filter_items_list'     => __( 'Filter purchase orders', ATUM_TEXT_DOMAIN ),
+			'items_list_navigation' => __( 'Purchase orders navigation', ATUM_TEXT_DOMAIN ),
+			'items_list'            => __( 'Purchase orders list', ATUM_TEXT_DOMAIN ),
+		);
+
+		// Set meta box labels.
+		$this->metabox_labels = array(
+			'data'    => __( 'PO Data', ATUM_TEXT_DOMAIN ),
+			'notes'   => __( 'PO Notes', ATUM_TEXT_DOMAIN ),
+			'actions' => __( 'PO Actions', ATUM_TEXT_DOMAIN ),
+		);
 	}
 
 	/**
