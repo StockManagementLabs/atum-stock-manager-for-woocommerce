@@ -33,35 +33,19 @@ class MediaGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $media ): array {
 
-		$prepared_data = [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
-			'id'           => (int) $media['id'],
-			'name'         => $media['title']['rendered'] ?? '',
-			'slug'         => $media['slug'] ?? '',
-			'alt'          => $media['alt_text'] ?? '',
-			'type'         => $media['media_type'] ?? '',
-			'src'          => $media['source_url'] ?? '',
-			'file'         => $media['media_details']['file'] ?? '',
-		];
+		return array_merge( $this->get_base_fields(), [
+			'id'              => (int) $media['id'],
+			'name'            => $media['title']['rendered'] ?? '',
+			'slug'            => $media['slug'] ?? '',
+			'alt'             => $media['alt_text'] ?? '',
+			'type'            => $media['media_type'] ?? '',
+			'src'             => $media['source_url'] ?? '',
+			'file'            => $media['media_details']['file'] ?? '',
+			'dateCreated'     => $media['date'] ?? '',
+			'dateModified'    => $media['modified'] ?? '',
+			'dateModifiedGMT' => $media['modified_gmt'] ?? '',
+		] );
 
-		// Handle dates
-		if ( isset( $media['date'] ) ) {
-			$prepared_data['dateCreated']    = $media['date'];
-			$prepared_data['dateCreatedGMT'] = $media['date_gmt'];
-		}
-
-		if ( isset( $media['modified'] ) ) {
-			$prepared_data['dateModified']    = $media['modified'];
-			$prepared_data['dateModifiedGMT'] = $media['modified_gmt'];
-		}
-
-		return $prepared_data;
 	}
 
 } 

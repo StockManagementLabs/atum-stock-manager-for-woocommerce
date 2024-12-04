@@ -33,14 +33,7 @@ class OrderGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $order ): array {
 
-		$prepared_data = [
-			'_id'              => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'             => $this->revision,
-			'_deleted'         => FALSE,
-			'_meta'            => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'     => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'               => (int) $order['id'],
 			'status'           => $order['status'],
 			'currency'         => $order['currency'],
@@ -55,30 +48,16 @@ class OrderGenerator extends GeneratorBase {
 			'shippingTotal'    => (float) $order['shipping_total'],
 			'shippingTax'      => (float) $order['shipping_tax'],
 			'pricesIncludeTax' => (bool) $order['prices_include_tax'],
+			'customer'         => $this->prepare_ids( $order['customer'] ?? NULL ),
+			'lineItems'        => $this->prepare_line_items( $order['line_items'] ?? [] ),
+			'refunds'          => $this->prepare_refunds( $order['refunds'] ?? [] ),
+			'taxLines'         => $this->prepare_tax_lines( $order['tax_lines'] ?? [] ),
+			'couponLines'      => $this->prepare_coupon_lines( $order['coupon_lines'] ?? [] ),
+			'paymentLines'     => $this->prepare_payment_lines( $order ),
 			'trash'            => FALSE,
-			'conflict'         => FALSE
-		];
+			'conflict'         => FALSE,
+		] );
 
-		// Handle customer
-		if ( ! empty( $order['customer_id'] ) ) {
-			$prepared_data['customer'] = [
-				'id'  => (int) $order['customer_id'],
-				'_id' => 'customer:' . $this->generate_uuid(),
-			];
-		}
-
-		// Handle line items with proper schema validation
-		$prepared_data['lineItems'] = $this->prepare_line_items( $order['line_items'] ?? [] );
-
-		// Handle refunds (required by schema)
-		$prepared_data['refunds'] = $this->prepare_refunds( $order['refunds'] ?? [] );
-
-		// Handle other lines
-		$prepared_data['taxLines'] = $this->prepare_tax_lines( $order['tax_lines'] ?? [] );
-		$prepared_data['couponLines'] = $this->prepare_coupon_lines( $order['coupon_lines'] ?? [] );
-		$prepared_data['paymentLines'] = $this->prepare_payment_lines( $order );
-
-		return $prepared_data;
 	}
 
 	/**
@@ -86,35 +65,24 @@ class OrderGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $line_items Raw line items data
+	 * @param array $line_items Raw line items data.
+	 *
+	 * @return array Prepared line items data.
 	 */
 	private function prepare_line_items( array $line_items ): array {
 
 		return array_map( function ( $item ) {
 
-			$prepared_item = [
+			return [
 				'_id'      => 'order-item:' . $this->generate_uuid(),
 				'id'       => (int) $item['id'],
 				'name'     => $item['name'],
 				'quantity' => (int) $item['quantity'],
 				'metaData' => $this->prepare_meta_data( $item['meta_data'] ),
+				'product'	=> $this->prepare_ids( $item['product_id'] ?? NULL ),
+				'variation' => $this->prepare_ids( $item['variation_id'] ?? NULL ),
 			];
 
-			if ( ! empty( $item['product_id'] ) ) {
-				$prepared_item['product'] = [
-					'id'  => (int) $item['product_id'],
-					'_id' => 'product:' . $this->generate_uuid(),
-				];
-			}
-
-			if ( ! empty( $item['variation_id'] ) ) {
-				$prepared_item['variation'] = [
-					'id'  => (int) $item['variation_id'],
-					'_id' => 'product-variation:' . $this->generate_uuid(),
-				];
-			}
-
-			return $prepared_item;
 		}, $line_items );
 	}
 
@@ -122,6 +90,10 @@ class OrderGenerator extends GeneratorBase {
 	 * Prepare tax lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $tax_lines Raw tax lines data.
+	 *
+	 * @return array Prepared tax lines data.
 	 */
 	private function prepare_tax_lines( array $tax_lines ): array {
 
@@ -134,6 +106,7 @@ class OrderGenerator extends GeneratorBase {
 				'taxTotal' => (float) $tax['tax_total'],
 				'rate'     => (float) $tax['rate_percent'],
 			];
+
 		}, $tax_lines );
 	}
 
@@ -141,6 +114,10 @@ class OrderGenerator extends GeneratorBase {
 	 * Prepare coupon lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $coupon_lines Raw coupon lines data.
+	 *
+	 * @return array Prepared coupon lines data.
 	 */
 	private function prepare_coupon_lines( array $coupon_lines ): array {
 
@@ -153,6 +130,7 @@ class OrderGenerator extends GeneratorBase {
 				'discount'    => (float) $coupon['discount'],
 				'discountTax' => (float) $coupon['discount_tax'],
 			];
+
 		}, $coupon_lines );
 	}
 
@@ -160,6 +138,10 @@ class OrderGenerator extends GeneratorBase {
 	 * Prepare refunds data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $refunds Raw refunds data.
+	 *
+	 * @return array Prepared refunds data.
 	 */
 	private function prepare_refunds( array $refunds ): array {
 
@@ -169,6 +151,7 @@ class OrderGenerator extends GeneratorBase {
 				'reason' => $refund['reason'] ?? '',
 				'amount' => (float) str_replace( '-', '', $refund['total'] ?? 0 ),
 			];
+
 		}, $refunds );
 	}
 
@@ -176,6 +159,10 @@ class OrderGenerator extends GeneratorBase {
 	 * Prepare payment lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $order Raw order data.
+	 *
+	 * @return array Prepared payment lines data.
 	 */
 	private function prepare_payment_lines( array $order ): array {
 
@@ -190,6 +177,7 @@ class OrderGenerator extends GeneratorBase {
 		}
 
 		return $payment_lines;
+
 	}
 
 } 

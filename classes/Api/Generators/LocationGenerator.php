@@ -33,14 +33,7 @@ class LocationGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $location ): array {
 
-		$prepared_data = [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'           => (int) $location['id'],
 			'name'         => $location['name'],
 			'slug'         => $location['slug'],
@@ -48,18 +41,10 @@ class LocationGenerator extends GeneratorBase {
 			'barcode'      => $location['barcode'] ?? '',
 			'code'         => $location['code'] ?? '',
 			'count'        => (int) $location['count'],
+			'parent'       => $this->prepare_ids( $location['parent'] ?? NULL ),
 			'conflict'     => FALSE,
-		];
+		] );
 
-		// Handle parent if it exists and is not 0
-		if ( ! empty( $location['parent'] ) && $location['parent'] !== 0 ) {
-			$prepared_data['parent'] = [
-				'id'  => (int) $location['parent'],
-				'_id' => 'location:' . $this->generate_uuid(),
-			];
-		}
-
-		return $prepared_data;
 	}
 
 } 

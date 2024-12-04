@@ -27,26 +27,20 @@ class PaymentMethodGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $payment_method Raw payment method data
+	 * @param array $payment_method Raw payment method data.
 	 *
-	 * @return array Prepared payment method data
+	 * @return array Prepared payment method data.
 	 */
 	protected function prepare_data( array $payment_method ): array {
 
-		return [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'           => (int) $payment_method['id'],
 			'slug'         => sanitize_title( $payment_method['method_title'] ),
 			'name'         => $payment_method['method_title'],
 			'enabled'      => (bool) $payment_method['enabled'],
 			'default'      => FALSE,
-		];
+		] );
+
 	}
 
 } 

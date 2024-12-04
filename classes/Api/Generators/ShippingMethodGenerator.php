@@ -27,30 +27,24 @@ class ShippingMethodGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $shipping_method Raw shipping method data
+	 * @param array $shipping_method Raw shipping method data.
 	 *
-	 * @return array Prepared shipping method data
+	 * @return array Prepared shipping method data.
 	 */
 	protected function prepare_data( array $shipping_method ): array {
 
-		// Validate shipping method type against allowed enum values
-		$allowed_types = ['flat_rate', 'free_shipping', 'local_pickup'];
-		$type = in_array($shipping_method['id'], $allowed_types) ? $shipping_method['id'] : 'flat_rate';
+		// Validate shipping method type against allowed enum values.
+		$allowed_types = [ 'flat_rate', 'free_shipping', 'local_pickup' ];
+		$type          = in_array( $shipping_method['id'], $allowed_types ) ? $shipping_method['id'] : 'flat_rate';
 
-		return [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'           => $shipping_method['id'],
 			'title'        => $shipping_method['title'],
 			'description'  => $shipping_method['description'],
 			'type'         => $type,
 			'slug'         => sanitize_title( $shipping_method['title'] ),
-		];
+		] );
+
 	}
 
 } 

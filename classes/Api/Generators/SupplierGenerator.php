@@ -33,25 +33,19 @@ class SupplierGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $supplier ): array {
 
-		return [
-			'_id'               => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'              => $this->revision,
-			'_deleted'          => FALSE,
-			'_meta'             => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'      => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'                => (string) $supplier['id'],
 			'name'              => $supplier['name'] ?? '',
 			'slug'              => $supplier['slug'] ?? '',
 			'permalink'         => $supplier['permalink'] ?? '',
-			'date_created'      => $supplier['date_created'] ?? null,
-			'date_created_gmt'  => $supplier['date_created_gmt'] ?? null,
-			'date_modified'     => $supplier['date_modified'] ?? null,
-			'date_modified_gmt' => $supplier['date_modified_gmt'] ?? null,
+			'date_created'      => $supplier['date_created'] ?? '',
+			'date_created_gmt'  => $supplier['date_created_gmt'] ?? '',
+			'date_modified'     => $supplier['date_modified'] ?? '',
+			'date_modified_gmt' => $supplier['date_modified_gmt'] ?? '',
 			'status'            => $supplier['status'] ?? 'publish',
 			'type'              => 'supplier',
-		];
+		] );
+
 	}
 
 } 

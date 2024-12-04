@@ -27,24 +27,18 @@ class TaxClassGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $tax_class Raw tax class data
+	 * @param array $tax_class Raw tax class data.
 	 *
-	 * @return array Prepared tax class data
+	 * @return array Prepared tax class data.
 	 */
 	protected function prepare_data( array $tax_class ): array {
 
-		return [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => false,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'slug'         => $tax_class['slug'],
 			'name'         => $tax_class['name'],
 			'conflict'     => false,
-		];
+		] );
+
 	}
 
 } 

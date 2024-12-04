@@ -53,33 +53,6 @@ class FullExportController extends \WC_REST_Controller {
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
 
 	/**
-	 * The exported endpoints counter. For the sqlite dump only.
-	 */
-	private static $exported_endpoints_counters = array(
-		'attribute'       => 0,
-		'category'        => 0,
-		'comment'         => 0,
-		'coupon'          => 0,
-		'customer'        => 0,
-		'inbound-stock'   => 0,
-		'inventory-log'   => 0,
-		'location'        => 0,
-		'media'           => 0,
-		'order'           => 0,
-		'payment-method'  => 0,
-		'product'         => 0,
-		'purchase-order'  => 0,
-		'refund'          => 0,
-		'shipping-method' => 0,
-		'store-settings'  => 0,
-		'supplier'        => 0,
-		'tag'             => 0,
-		'tax-class'       => 0,
-		'tax-rate'        => 0,
-		'variation'       => 0,
-	);
-
-	/**
 	 * Register the routes for tools
 	 *
 	 * @since 1.9.19
@@ -724,15 +697,13 @@ class FullExportController extends \WC_REST_Controller {
 			}
 		}
 
-		return $data;
-
-		$dump_name = self::get_full_export_upload_dir() . "atum_db_dump.sql";
+		$dump_name = self::get_full_export_upload_dir() . 'atum_sqlite_dump.sql';
+		file_put_contents( $dump_name, $data );
 
 		if ( file_exists( $dump_name ) ) {
 
 			$headers = [
 				'Content-Type'        => 'application/sql',
-				//'Content-Transfer-Encoding' => 'Binary',
 				'Content-Length'      => filesize( $dump_name ),
 				'Content-Disposition' => 'attachment; filename="' . basename( $dump_name ) . '"',
 			];
@@ -741,8 +712,8 @@ class FullExportController extends \WC_REST_Controller {
 
 			nocache_headers();
 
-			foreach ( $headers as $header => $data ) {
-				$server->send_header( $header, $data );
+			foreach ( $headers as $header => $header_data ) {
+				$server->send_header( $header, $header_data );
 			}
 
 			// Fix CORS issues through localhost requests.
@@ -753,15 +724,12 @@ class FullExportController extends \WC_REST_Controller {
 			die(); // We've already sent the file, so we can stop the execution here.
 
 		}
-		else {
-			$response = array(
-				'success' => FALSE,
-				'code'    => 'no_results',
-				'message' => __( 'Mock file not found.', ATUM_TEXT_DOMAIN ),
-			);
-		}
 
-		return $response;
+		return array(
+			'success' => FALSE,
+			'code'    => 'error',
+			'message' => __( "The dump file couldn't be generated.", ATUM_TEXT_DOMAIN ),
+		);
 
 	}
 
@@ -1387,25 +1355,6 @@ class FullExportController extends \WC_REST_Controller {
 		] );
 
 		return ! empty( $admin_user ) ? absint( $admin_user[0]->ID ) : FALSE;
-
-	}
-
-	/**
-	 * Increase the counter for the exported endpoints and return the current value.
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param string $schema
-	 *
-	 * @return int|\WP_Error
-	 */
-	public static function get_current_counter( $schema ) {
-
-		if ( ! isset( self::$exported_endpoints_counters[ $schema ] ) ) {
-			return new \WP_Error( 'atum_rest_no_counter', __( 'The counter for the requested schema was not found.', ATUM_TEXT_DOMAIN ) );
-		}
-
-		return ++self::$exported_endpoints_counters[ $schema ];
 
 	}
 

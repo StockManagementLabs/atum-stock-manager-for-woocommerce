@@ -33,14 +33,7 @@ class RefundGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $refund ): array {
 
-		return [
-			'_id'             => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'            => $this->revision,
-			'_deleted'        => FALSE,
-			'_meta'           => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'    => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'              => (int) $refund['id'],
 			'dateCreated'     => $refund['date_created'],
 			'dateCreatedGMT'  => $refund['date_created_gmt'],
@@ -52,26 +45,22 @@ class RefundGenerator extends GeneratorBase {
 			'refundedPayment' => (bool) $refund['refunded_payment'],
 			'trash'           => FALSE,
 			'conflict'        => FALSE,
-			'parent'          => [
-				'id'  => (int) $refund['parent_id'],
-				'_id' => 'order:' . $this->generate_uuid(),
-			],
-			'taxRate'         => !empty($refund['tax_rate_id']) ? [
-				'id'  => (int) $refund['tax_rate_id'],
-				'_id' => 'tax-rate:' . $this->generate_uuid(),
-			] : null,
-			'taxClass'        => !empty($refund['tax_class_id']) ? [
-				'id'  => (int) $refund['tax_class_id'],
-				'_id' => 'tax-class:' . $this->generate_uuid(),
-			] : null,
+			'parent'          => $this->prepare_ids( $refund['parent_id'] ?? NULL ),
+			'taxRate'         => $this->prepare_ids( $refund['tax_rate_id'] ?? NULL ),
+			'taxClass'        => $this->prepare_ids( $refund['tax_class_id'] ?? NULL ),
 			'lineItems'       => $this->prepare_line_items( $refund['line_items'] ?? [] ),
-		];
+		] );
+
 	}
 
 	/**
 	 * Prepare line items data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $line_items Raw line items data.
+	 *
+	 * @return array Prepared line items data.
 	 */
 	private function prepare_line_items( array $line_items ): array {
 
@@ -86,7 +75,9 @@ class RefundGenerator extends GeneratorBase {
 				'subtotal' => (float) $item['subtotal'],
 				'_deleted' => FALSE,
 			];
+
 		}, $line_items );
+
 	}
 
 } 

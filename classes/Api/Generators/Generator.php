@@ -49,6 +49,36 @@ class Generator {
 	];
 
 	/**
+	 * The exported records counter. For the sqlite dump only.
+	 *
+	 * @var array
+	 */
+	private static $exported_records_counters = array(
+		'attribute'       => 0,
+		'category'        => 0,
+		'comment'         => 0,
+		'coupon'          => 0,
+		'customer'        => 0,
+		'inbound-stock'   => 0,
+		'inventory'       => 0,
+		'inventory-log'   => 0,
+		'location'        => 0,
+		'media'           => 0,
+		'order'           => 0,
+		'payment-method'  => 0,
+		'product'         => 0,
+		'purchase-order'  => 0,
+		'refund'          => 0,
+		'shipping-method' => 0,
+		'store-settings'  => 0,
+		'supplier'        => 0,
+		'tag'             => 0,
+		'tax-class'       => 0,
+		'tax-rate'        => 0,
+		'variation'       => 0,
+	);
+
+	/**
 	 * Store ID for the table name prefix
 	 *
 	 * @var string
@@ -163,7 +193,11 @@ class Generator {
 		 */
 		$generator = new $generator_class( $table_name, $this->revision );
 
-		return $generator->generate_sql_inserts( $json_data );
+		if ( ! empty( $json_data['results'] ) ) {
+			return $generator->generate_sql_inserts( $json_data['results'] );
+		}
+
+		return '';
 
 	}
 
@@ -176,6 +210,25 @@ class Generator {
 	 */
 	private function add_table_prefix(): string {
 		return sprintf( '%s:%s:%s.db-0', $this->store_id, $this->user_id, $this->schema_name );
+	}
+
+	/**
+	 * Increase the counter for the exported records and return the current value.
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param string $schema
+	 *
+	 * @return int|\WP_Error
+	 */
+	public static function get_current_counter( $schema ) {
+
+		if ( ! isset( self::$exported_records_counters[ $schema ] ) ) {
+			return new \WP_Error( 'atum_rest_no_counter', __( 'The counter for the requested schema was not found.', ATUM_TEXT_DOMAIN ) );
+		}
+
+		return ++self::$exported_records_counters[ $schema ];
+
 	}
 
 }

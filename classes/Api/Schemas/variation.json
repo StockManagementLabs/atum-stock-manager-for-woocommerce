@@ -20,7 +20,7 @@
 				"id"   : {
 					"type" : "number"
 				},
-				"name" : {
+				"_id" : {
 					"type" : "string"
 				}
 			}

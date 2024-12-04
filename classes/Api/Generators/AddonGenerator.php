@@ -27,26 +27,19 @@ class AddonGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $addon Raw addon data
+	 * @param array $addon Raw addon data.
 	 *
-	 * @return array Prepared addon data
+	 * @return array Prepared addon data.
 	 */
 	protected function prepare_data( array $addon ): array {
 
-		return [
-			'_id'              => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'             => $this->revision,
-			'_deleted'         => FALSE,
-			'_meta'            => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'     => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'itemType'         => 'addon',
 			'slug'             => $addon['slug'],
 			'plugin'           => $addon['plugin'],
 			'name'             => $addon['name'],
 			'version'          => $addon['version'],
-			'versionLatest'    => $addon['version_latest'] ?? $addon->version,
+			'versionLatest'    => $addon['version_latest'] ?? $addon['version'],
 			'url'              => $addon['url'],
 			'authorName'       => $addon['author_name'],
 			'authorUrl'        => $addon['author_url'],
@@ -60,7 +53,8 @@ class AddonGenerator extends GeneratorBase {
 			'deleted'          => FALSE,
 			'status'           => $addon['status'] ?? 'inactive',
 			'enabled'          => (bool) ( $addon['enabled'] ?? FALSE ),
-		];
+		] );
+
 	}
 
 }

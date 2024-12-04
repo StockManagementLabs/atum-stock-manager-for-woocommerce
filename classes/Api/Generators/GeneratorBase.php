@@ -96,32 +96,39 @@ abstract class GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $json_data The addon data from API response.
+	 * @param array $results The addon data from API response.
 	 *
 	 * @return string The SQL insert statements.
 	 *
 	 * @throws \Exception If data validation fails.
 	 */
-	public function generate_sql_inserts( array $json_data ): string {
+	public function generate_sql_inserts( array $results ): string {
 
+		// Create the table if not exists.
+		$create_sql = "CREATE TABLE IF NOT EXISTS '$this->table_name' ('id' TEXT NOT NULL PRIMARY KEY, 'revision' TEXT, 'deleted' BOOLEAN NOT NULL CHECK (deleted IN (0, 1)), 'lastWriteTime' INTEGER NOT NULL, 'data' json) WITHOUT ROWID;";
+
+		// Prepare and validate data.
 		$sql_inserts = [];
 
-		foreach ( $json_data['results'] as $item ) {
+		foreach ( $results as $item ) {
 
 			$prepared_data = $this->prepare_data( $item );
 			$this->validate_data( $prepared_data );
 
+			// TODO: CHECK THE IDS USED, RELATIONS AND UUID GENERATED, ETC.
 			$sql_inserts[] = sprintf(
 				"('%s', '%s', '0', '%s', '%s')",
-				$this->sanitize_value( FullExportController::get_current_counter( $this->schema_name ) ),
-				$this->sanitize_value( $this->revision ),
+				Generator::get_current_counter( $this->schema_name ),
+				$this->sanitize_value( $this->revision, TRUE ),
 				$this->sanitize_value( $prepared_data['_meta']['lwt'] ),
-				$this->sanitize_value( json_encode( $prepared_data ) )
+				$this->sanitize_value( json_encode( $prepared_data ), TRUE )
 			);
 
 		}
 
-		return "INSERT INTO '$this->table_name' ('id', 'revision', 'deleted', 'lastWriteTime', 'data') VALUES\n" . implode( ",\n", $sql_inserts ) . ';';
+		$insert_sql = "INSERT OR REPLACE INTO '$this->table_name' ('id', 'revision', 'deleted', 'lastWriteTime', 'data') VALUES\n" . implode( ",\n", $sql_inserts ) . ';';
+
+		return $create_sql . "\n" . $insert_sql;
 
 	}
 
@@ -177,6 +184,11 @@ abstract class GeneratorBase {
 		}
 
 		if ( empty( $property_schema['type'] ) ) {
+			return;
+		}
+
+		// Always allow null values.
+		if ( is_null( $value) ) {
 			return;
 		}
 
@@ -301,9 +313,9 @@ abstract class GeneratorBase {
 	 *
 	 * @param mixed $value The value to sanitize
 	 *
-	 * @return string Sanitized value
+	 * @return string|null Sanitized value
 	 */
-	protected function sanitize_value( $value ): string {
+	protected function sanitize_value( $value, $allow_null = FALSE ): ?string {
 
 		if ( is_string( $value ) ) {
 			return str_replace( "'", "''", $value );
@@ -314,7 +326,7 @@ abstract class GeneratorBase {
 		}
 
 		if ( is_null( $value ) ) {
-			return 'NULL';
+			return $allow_null ? NULL : '';
 		}
 
 		if ( is_array( $value ) || is_object( $value ) ) {
@@ -430,6 +442,45 @@ abstract class GeneratorBase {
 	}
 
 	/**
+	 * Prepare IDs
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param int[]|int|null $ids Array of item IDs or a single ID.
+	 *
+	 * @return array|null Prepared IDs.
+	 */
+	protected function prepare_ids( ?array $ids ): ?array {
+
+		if ( is_array( $ids ) ) {
+
+			if ( empty( $ids ) ) {
+				return NULL;
+			}
+
+			return array_map( function ( $id ) {
+
+				if ( is_numeric( $id ) ) {
+					return [
+						'id'  => (int) $id,
+						'_id' => NULL,
+					];
+				}
+
+				return NULL;
+
+			}, $ids );
+
+		}
+
+		return is_numeric( $ids ) ? [
+			'id'  => (int) $ids,
+			'_id' => NULL,
+		] : NULL;
+
+	}
+
+	/**
 	 * Prepare data for insertion
 	 *
 	 * @since 1.9.44
@@ -437,5 +488,26 @@ abstract class GeneratorBase {
 	 * @param array $data Raw data
 	 */
 	abstract protected function prepare_data( array $data ): array;
+
+	/**
+	 * Get base fields
+	 *
+	 * @since 1.9.44
+	 *
+	 * @return array
+	 */
+	protected function get_base_fields() {
+
+		return [
+			'_id'           => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'          => $this->revision,
+			'_deleted'      => FALSE,
+			'_meta'         => [
+				'lwt' => $this->generate_timestamp(),
+			],
+			'_attachments'  => new \stdClass(),
+		];
+
+	}
 
 }

@@ -27,23 +27,14 @@ class ProductGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $product Raw product data
+	 * @param array $product Raw product data.
 	 *
-	 * @return array Prepared product data
+	 * @return array Prepared product data.
 	 */
 	protected function prepare_data( array $product ): array {
 
-		$prepared_data = [
-			// Required base fields
-			'_id'               => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'              => $this->revision,
-			'_deleted'          => FALSE,
-			'_meta'             => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'      => new \stdClass(),
-
-			// Product specific fields
+		return array_merge( $this->get_base_fields(), [
+			// Product specific fields.
 			'id'                => (int) $product['id'],
 			'name'              => $product['name'],
 			'slug'              => $product['slug'],
@@ -61,14 +52,16 @@ class ProductGenerator extends GeneratorBase {
 			'manageStock'       => (bool) $product['manage_stock'],
 			'stockQuantity'     => $product['stock_quantity'] ? (int) $product['stock_quantity'] : NULL,
 			'stockStatus'       => $product['stock_status'],
+			'parent'            => $this->prepare_ids( $product['parent'] ?? NULL ),
+			'parentSku'         => $product['parent_sku'] ?? '',
 
-			// Date fields (required by schema)
-			'dateCreated'       => $product['date_created'],
-			'dateCreatedGMT'    => $product['date_created_gmt'],
-			'dateModified'      => $product['date_modified'],
-			'dateModifiedGMT'   => $product['date_modified_gmt'],
+			// Date fields (required by schema).
+			'dateCreated'       => $product['date_created'] ?? '',
+			'dateCreatedGMT'    => $product['date_created_gmt'] ?? '',
+			'dateModified'      => $product['date_modified'] ?? '',
+			'dateModifiedGMT'   => $product['date_modified_gmt'] ?? '',
 
-			// Arrays and objects
+			// Arrays and objects.
 			'categories'        => $this->prepare_taxonomies( $product['categories'] ),
 			'tags'              => $this->prepare_taxonomies( $product['tags'] ),
 			'attributes'        => $this->prepare_attributes( $product['attributes'] ),
@@ -78,28 +71,22 @@ class ProductGenerator extends GeneratorBase {
 			'metaData'          => $this->prepare_meta_data( $product['meta_data'] ),
 			'atumLocations'     => $this->prepare_taxonomies( $product['atum_locations'] ),
 
-			// ATUM specific fields
+			// ATUM specific fields.
 			'hasLocation'       => (bool) $product['has_location'],
 			'atumControlled'    => (bool) $product['atum_controlled'],
-			'barcode'           => $product['barcode'],
-		];
+			'barcode'           => $product['barcode'] ?? '',
+		] );
 
-		// Handle parent if exists
-		if ( ! empty( $product['parent_id'] ) ) {
-			$prepared_data['parent']    = [
-				'id'  => (int) $product['parent_id'],
-				'_id' => 'product:' . $this->generate_uuid(),
-			];
-			$prepared_data['parentSku'] = $product['parent_sku'] ?? '';
-		}
-
-		return $prepared_data;
 	}
 
 	/**
 	 * Prepare taxonomy data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $taxonomies Raw taxonomy data
+	 *
+	 * @return array Prepared taxonomy data
 	 */
 	private function prepare_taxonomies( array $taxonomies ): array {
 
@@ -110,6 +97,7 @@ class ProductGenerator extends GeneratorBase {
 				'name' => $tax['name'],
 				'slug' => $tax['slug'],
 			];
+
 		}, $taxonomies );
 	}
 
@@ -117,26 +105,33 @@ class ProductGenerator extends GeneratorBase {
 	 * Prepare attributes data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $attributes Raw attributes data
+	 *
+	 * @return array Prepared attributes data
 	 */
 	private function prepare_attributes( array $attributes ): array {
 
 		return array_map( function ( $attr ) {
 
 			return [
-				'_id'       => 'product-attribute:' . $this->generate_uuid(),
+				'_id'       => NULL,
 				'id'        => (int) $attr['id'],
 				'name'      => $attr['name'],
-				'options'   => array_map( function ( $option ) {
+				'options'   => array_map( function ( $option_name = '', $option_id = NULL ) {
 
 					return [
-						'_id'  => 'attribute-term:' . $this->generate_uuid(),
-						'name' => $option,
+						'_id'  => NULL,
+						'id'   => $option_id,
+						'name' => $option_name,
 					];
-				}, $attr['options'] ),
+
+				}, $attr['options'] ?? [], $attr['option_ids'] ?? [] ),
 				'position'  => (int) ( $attr['position'] ?? 0 ),
 				'visible'   => (bool) ( $attr['visible'] ?? TRUE ),
 				'variation' => (bool) ( $attr['variation'] ?? FALSE ),
 			];
+
 		}, $attributes );
 	}
 
@@ -144,6 +139,10 @@ class ProductGenerator extends GeneratorBase {
 	 * Prepare image data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array|null $image Raw image data.
+	 *
+	 * @return array|null Prepared image data.
 	 */
 	private function prepare_image( ?array $image ): ?array {
 
@@ -156,12 +155,17 @@ class ProductGenerator extends GeneratorBase {
 			'src' => $image['src'],
 			'alt' => $image['alt'] ?? '',
 		];
+
 	}
 
 	/**
 	 * Prepare gallery images
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $images Raw gallery images data.
+	 *
+	 * @return array Prepared gallery images data.
 	 */
 	private function prepare_gallery( array $images ): array {
 
@@ -169,12 +173,17 @@ class ProductGenerator extends GeneratorBase {
 		$gallery_images = array_slice( $images, 1 );
 
 		return array_map( [ $this, 'prepare_image' ], $gallery_images );
+
 	}
 
 	/**
 	 * Prepare dimensions data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $dimensions Raw dimensions data.
+	 *
+	 * @return array Prepared dimensions data.
 	 */
 	private function prepare_dimensions( array $dimensions ): array {
 

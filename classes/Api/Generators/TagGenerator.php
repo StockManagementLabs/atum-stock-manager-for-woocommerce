@@ -27,27 +27,21 @@ class TagGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $tag Raw tag data
+	 * @param array $tag Raw tag data.
 	 *
-	 * @return array Prepared tag data
+	 * @return array Prepared tag data.
 	 */
 	protected function prepare_data( array $tag ): array {
 
-		return [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'           => (int) $tag['id'],
 			'name'         => $tag['name'],
 			'slug'         => $tag['slug'],
 			'description'  => $tag['description'] ?? '',
 			'count'        => (int) ($tag['count'] ?? 0),
 			'conflict'     => FALSE,
-		];
+		] );
+
 	}
 
 } 

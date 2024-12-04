@@ -7,6 +7,7 @@
  * @copyright   ©2024 BE REBEL Studio
  *
  * @package     Atum\Api\Generators
+ * TODO: REVIEW EVERYTHING
  */
 
 namespace Atum\Api\Generators;
@@ -128,7 +129,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 
 			// Prepare SQL update statement.
 			return sprintf(
-				"UPDATE store_settings SET data = '%s', lastWriteTime = '%s' WHERE id = '%s'",
+				"UPDATE '$this->table_name' SET data = '%s', lastWriteTime = '%s' WHERE id = '%s';",
 				$this->sanitize_value( json_encode( $prepared_data ) ),
 				$this->sanitize_value( $this->generate_timestamp() ),
 				$this->sanitize_value( $this->store_settings_id )
@@ -170,19 +171,14 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( $existing_data ): array {
 
-		return [
-			'_id'          => $existing_data['_id'],
-			'_rev'         => $existing_data['_rev'],
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
+			'_id'          => $existing_data['_id'], // Overwrite the _id.
+			'_rev'         => $existing_data['_rev'], // Overwrite the _rev.
 			'conflict'     => FALSE,
 			'app'          => self::$accumulated_store_settings['app'],
 			'atum'         => self::$accumulated_store_settings['atum'],
 			'wc'           => self::$accumulated_store_settings['wc'],
-		];
+		] );
 
 	}
 
@@ -235,12 +231,10 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_atum_store_details_settings( array $json_data ): array {
+
 		return [
-			'siteIcon' => [
-				'id'  => $this->get_int_setting( $json_data, 'site_icon_id' ),
-				'_id' => $this->get_string_setting( $json_data, 'site_icon_uid' ),
-			],
-			'company' => [
+			'siteIcon' => $this->prepare_ids( $this->get_int_setting( $json_data, 'site_icon_id' ) ),
+			'company'  => [
 				'name'            => $this->get_string_setting( $json_data, 'company_name' ),
 				'taxNumber'       => $this->get_string_setting( $json_data, 'tax_number' ),
 				'address1'        => $this->get_string_setting( $json_data, 'company_address_1' ),
@@ -249,7 +243,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 				'country'         => $this->get_string_setting( $json_data, 'company_country' ),
 				'state'           => $this->get_string_setting( $json_data, 'company_state' ),
 				'zip'             => $this->get_string_setting( $json_data, 'company_zip' ),
-				'sameShipAddress' => $this->get_boolean_setting( $json_data, 'same_ship_address', true ),
+				'sameShipAddress' => $this->get_boolean_setting( $json_data, 'same_ship_address', TRUE ),
 			],
 			'shipping' => [
 				'name'     => $this->get_string_setting( $json_data, 'shipping_name' ),
@@ -261,6 +255,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 				'zip'      => $this->get_string_setting( $json_data, 'shipping_zip' ),
 			],
 		];
+
 	}
 
 	/**
@@ -282,6 +277,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 			'apiModule'            => $this->get_boolean_setting( $json_data, 'api_module', TRUE ),
 			'barcodesModule'       => $this->get_boolean_setting( $json_data, 'barcodes_module', TRUE ),
 		];
+
 	}
 
 	/**
@@ -294,6 +290,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_atum_multi_inventory_settings( array $json_data ): array {
+
 		return [
 			'defaultMultiInventory' => $this->get_boolean_setting( $json_data, 'mi_default_multi_inventory' ),
 			'regionRestrictionMode' => $this->validate_enum_setting(
@@ -330,6 +327,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 				'auto'
 			),
 		];
+
 	}
 
 	/**
@@ -378,6 +376,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 			'defaultDateRange'            => $this->get_string_setting( $json_data, 'woocommerce_default_date_range', 'period=month&compare=previous_year' ),
 			'dateType'                    => $this->get_string_setting( $json_data, 'woocommerce_date_type' ),
 		];
+
 	}
 
 	/**
@@ -390,6 +389,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_general_settings( array $json_data ): array {
+
 		return [
 			'currency'                  => $this->get_string_setting( $json_data, 'woocommerce_currency' ),
 			'currencySymbol'            => $this->get_string_setting( $json_data, 'woocommerce_currency_symbol' ),
@@ -430,6 +430,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 				'country'  => $this->get_string_setting( $json_data, 'woocommerce_store_country' ),
 			],
 		];
+
 	}
 
 	/**
@@ -442,6 +443,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_product_settings( array $json_data ): array {
+
 		return [
 			'placeholderImage' => [
 				'id'  => $this->get_int_setting( $json_data, 'woocommerce_placeholder_image_id' ),
@@ -464,6 +466,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 			'notifyLowStockAmount' => $this->get_int_setting( $json_data, 'woocommerce_notify_low_stock_amount', 2 ),
 			'notifyNoStockAmount'  => $this->get_int_setting( $json_data, 'woocommerce_notify_no_stock_amount', 0 ),
 		];
+
 	}
 
 	/**
@@ -476,6 +479,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 * @return array
 	 */
 	private function map_wc_tax_settings( array $json_data ): array {
+
 		return [
 			'pricesIncludeTax'    => $this->get_boolean_setting( $json_data, 'woocommerce_prices_include_tax' ),
 			'taxBasedOn'          => $this->validate_enum_setting(
@@ -499,9 +503,8 @@ class StoreSettingsGenerator extends GeneratorBase {
 				'itemized'
 			),
 			'taxRoundAtSubtotal' => $this->get_boolean_setting( $json_data, 'woocommerce_tax_round_at_subtotal', false ),
-			'taxTotalDisplay'     => $this->get_string_setting( $json_data, 'woocommerce_tax_total_display', 'itemized' ),
-			'taxRoundAtSubtotal' => $this->get_boolean_setting( $json_data, 'woocommerce_tax_round_at_subtotal', false ),
 		];
+
 	}
 
 	/**
@@ -525,6 +528,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		];
 
 		return $tax_class_names[ $shipping_tax_class ] ?? 'Standard';
+
 	}
 
 	/**
@@ -543,6 +547,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		$setting = $this->find_setting_by_id( $json_data, $id );
 
 		return $setting ? (array) $setting['value'] : $default;
+
 	}
 
 	/**
@@ -561,6 +566,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		$setting = $this->find_setting_by_id( $json_data, $id );
 
 		return $setting ? ( $setting['value'] === 'yes' ) : $default;
+
 	}
 
 	/**
@@ -579,6 +585,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		$setting = $this->find_setting_by_id( $json_data, $id );
 
 		return $setting ? (string) $setting['value'] : $default;
+
 	}
 
 	/**
@@ -597,6 +604,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		$setting = $this->find_setting_by_id( $json_data, $id );
 
 		return $setting ? (int) $setting['value'] : $default;
+
 	}
 
 	/**
@@ -618,6 +626,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		}
 
 		return NULL;
+
 	}
 
 	/**
@@ -657,6 +666,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		}
 
 		return $transformations[ $main_group ][ $sub_group ]( $json_data );
+
 	}
 
 }

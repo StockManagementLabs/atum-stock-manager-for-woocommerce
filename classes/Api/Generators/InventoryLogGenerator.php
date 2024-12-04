@@ -33,14 +33,7 @@ class InventoryLogGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $log ): array {
 
-		$prepared_data = [
-			'_id'             => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'            => $this->revision,
-			'_deleted'        => FALSE,
-			'_meta'           => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'    => new \stdClass(),
+		$prepared_data = array_merge( $this->get_base_fields(), [
 			'id'              => (int) $log['id'],
 			'type'            => $log['type'],
 			'status'          => $log['status'],
@@ -54,83 +47,95 @@ class InventoryLogGenerator extends GeneratorBase {
 			'discountTax'     => (float) $log['discount_tax'],
 			'shippingTotal'   => (float) $log['shipping_total'],
 			'shippingTax'     => (float) $log['shipping_tax'],
+			'order'           => $this->prepare_ids( $log['order'] ?? NULL ),
+			'lineItems'       => $this->prepare_line_items( $log['line_items'] ?? [] ),
+			'taxLines'        => $this->prepare_tax_lines( $log['tax_lines'] ?? [] ),
+			'metaData'        => $this->prepare_meta_data( $log['meta_data'] ?? [] ),
 			'trash'           => FALSE,
 			'conflict'        => FALSE,
-		];
+		] );
 
-		// Handle dates
-		$this->handle_dates($log, $prepared_data);
-
-		// Handle line items
-		$prepared_data['lineItems'] = $this->prepare_line_items($log['line_items'] ?? []);
-
-		// Handle tax lines
-		$prepared_data['taxLines'] = $this->prepare_tax_lines($log['tax_lines'] ?? []);
-
-		// Handle meta data
-		$prepared_data['metaData'] = $this->prepare_meta_data($log['meta_data'] ?? []);
-
-		// Handle order reference
-		if ( ! empty( $log['order'] ) && $log['order'] !== FALSE ) {
-			$prepared_data['order'] = [
-				'id'  => (int) $log['order'],
-					'_id' => 'order:' . $this->generate_uuid(),
-			];
-		}
+		// Handle dates.
+		$this->handle_dates( $log, $prepared_data );
 
 		return $prepared_data;
+
 	}
 
-	private function handle_dates( array $log, array &$prepared_data ): void {
-		// Standard dates
-		$standard_dates = [
-			'dateCreated'   => 'date_created',
-			'dateModified'  => 'date_modified'
+	/**
+	 * Handle dates
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $log
+	 * @param array $prepared_data
+	 */
+	private function handle_dates( array $log, array &$prepared_data ) {
+
+		$date_fields = [
+			'dateCreated'     => 'date_created',
+			'dateModified'    => 'date_modified',
+			'dateReturn'      => 'return_date',
+			'dateReservation' => 'reservation_date',
+			'dateDamage'      => 'damage_date',
 		];
 
-		foreach ( $standard_dates as $schemaKey => $sourceKey ) {
-			if ( ! empty( $log[ $sourceKey ] ) ) {
-				$prepared_data[ $schemaKey ] = $log[ $sourceKey ];
-				$prepared_data[ "{$schemaKey}GMT" ] = $log[ "{$sourceKey}_gmt" ] ?? '';
+		foreach ( $date_fields as $schema_key => $source_key ) {
+			if ( ! empty( $log[ $source_key ] ) ) {
+				$prepared_data[ $schema_key ]      = $log[ $source_key ];
+				$prepared_data["{$schema_key}GMT"] = $log["{$source_key}_gmt"] ?? '';
 			}
 		}
 
-		// Special dates
-		$special_dates = [
-			'return'      => 'return_date',
-			'reservation' => 'reservation_date',
-			'damage'      => 'damage_date'
-		];
-
-		foreach ( $special_dates as $type => $sourceKey ) {
-			if ( ! empty( $log[ $sourceKey ] ) ) {
-				$prepared_data[ "date" . ucfirst( $type ) ] = $log[ $sourceKey ];
-				$prepared_data[ "date" . ucfirst( $type ) . "GMT" ] = $log[ "{$sourceKey}_gmt" ] ?? '';
-			}
-		}
 	}
 
+	/**
+	 * Prepare line items
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $items
+	 *
+	 * @return array
+	 */
 	private function prepare_line_items( array $items ): array {
+
 		return array_map( function ( $item ) {
+
 			return [
 				'id'       => (int) $item['id'],
 				'name'     => $item['name'],
 				'quantity' => (float) $item['quantity'],
 				'subtotal' => (float) $item['subtotal'],
 				'total'    => (float) $item['total'],
-				'sku'      => $item['sku'] ?? ''
+				'sku'      => $item['sku'] ?? '',
 			];
+
 		}, $items );
+
 	}
 
+	/**
+	 * Prepare tax lines
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $taxes
+	 *
+	 * @return array
+	 */
 	private function prepare_tax_lines( array $taxes ): array {
+
 		return array_map( function ( $tax ) {
+
 			return [
 				'id'          => (int) $tax['id'],
 				'rateCode'    => $tax['rate_code'] ?? '',
-				'ratePercent' => (float) ( $tax['rate_percent'] ?? 0 )
+				'ratePercent' => (float) ( $tax['rate_percent'] ?? 0 ),
 			];
+
 		}, $taxes );
+
 	}
 
 } 

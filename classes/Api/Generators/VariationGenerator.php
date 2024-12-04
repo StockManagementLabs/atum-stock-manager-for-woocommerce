@@ -33,39 +33,44 @@ class VariationGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $variation ): array {
 
-		// Prepare parent data
-		$parent = [
-			'id'   => (string) $variation['parent_id'],
-			'name' => $variation['parent_name'] ?? ''
-		];
-
-		// Prepare attributes data
+		// Prepare attributes data.
 		$attributes = array_map( function ( $attr ) {
 
 			return [
 				'name'   => $attr['name'],
 				'option' => [
 					'name' => $attr['option'],
-					'_id'  => 'attribute_option:' . $this->generate_uuid(),
-					'id'   => (int) $attr['id']
+					'_id'  => NULL,
+					'id'   => NULL
 				],
-				'_id'    => 'attribute:' . $this->generate_uuid(),
+				'_id'    => NULL,
 				'id'     => (int) $attr['id']
 			];
+
 		}, $variation['attributes'] ?? [] );
 
-		// Prepare tax class data
+		// Prepare tax class data.
 		$tax_class = [
 			'id'   => $variation['tax_class'] ?: 'standard',
 			'name' => ucfirst( $variation['tax_class'] ?: 'standard' ) . ' Rate'
 		];
 
-		// Prepare dimensions with proper defaults
+		// Prepare dimensions with proper defaults.
 		$dimensions = [
 			'length' => (float) ($variation['dimensions']['length'] ?? 0),
 			'width'  => (float) ($variation['dimensions']['width'] ?? 0),
 			'height' => (float) ($variation['dimensions']['height'] ?? 0)
 		];
+
+		// Prepare meta data.
+		$meta_data = array_map( function ( $meta ) {
+
+			return [
+				'key'   => $meta['key'],
+				'value' => (string) $meta['value']
+			];
+
+		}, $variation['meta_data'] ?? [] );
 
 		return [
 			'_id'                 => $this->schema_name . ':' . $this->generate_uuid(),
@@ -76,7 +81,7 @@ class VariationGenerator extends GeneratorBase {
 			],
 			'_attachments'        => new \stdClass(),
 			'id'                  => (int) $variation['id'],
-			'parent'              => $parent,
+			'parent'              => $this->prepare_ids( $variation['parent_id'] ),
 			'type'                => $variation['type'],
 			'name'                => $variation['name'] ?? '',
 			'status'              => $variation['status'] ?? 'publish',
@@ -100,15 +105,10 @@ class VariationGenerator extends GeneratorBase {
 			'minimumThreshold'    => $variation['minimum_threshold'] ? (float) $variation['minimum_threshold'] : NULL,
 			'availableToPurchase' => $variation['available_to_purchase'] ? (float) $variation['available_to_purchase'] : NULL,
 			'sellingPriority'     => $variation['selling_priority'] ? (int) $variation['selling_priority'] : NULL,
-			'metaData'            => array_map( function ( $meta ) {
-
-				return [
-					'key'   => $meta['key'],
-					'value' => (string) $meta['value']
-				];
-			}, $variation['meta_data'] ?? [] ),
+			'metaData'            => $meta_data,
 			'conflict'            => FALSE,
 		];
+
 	}
 
 } 

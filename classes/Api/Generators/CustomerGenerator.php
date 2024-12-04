@@ -27,20 +27,13 @@ class CustomerGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $customer Raw customer data
+	 * @param array $customer Raw customer data.
 	 *
-	 * @return array Prepared customer data
+	 * @return array Prepared customer data.
 	 */
 	protected function prepare_data( array $customer ): array {
 
-		return [
-			'_id'              => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'             => $this->revision,
-			'_deleted'         => FALSE,
-			'_meta'            => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'     => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'               => (int) $customer['id'],
 			'dateCreated'      => $customer['date_created'],
 			'dateCreatedGMT'   => $customer['date_created_gmt'],
@@ -57,7 +50,8 @@ class CustomerGenerator extends GeneratorBase {
 			'avatarUrl'        => $customer['avatar_url'],
 			'trash'            => FALSE,
 			'conflict'         => FALSE,
-		];
+		] );
+
 	}
 
 	/**

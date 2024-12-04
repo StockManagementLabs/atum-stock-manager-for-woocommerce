@@ -33,73 +33,46 @@ class PurchaseOrderGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $purchase_order ): array {
 
-		$prepared_data = [
-			'_id'               => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'              => $this->revision,
-			'_deleted'          => false,
-			'_meta'             => [
-				'lwt' => $this->generate_timestamp()
-			],
-			'_attachments'      => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'                => (int) $purchase_order['id'],
 			'status'            => $purchase_order['status'],
 			'currency'          => $purchase_order['currency'],
 			'multipleSuppliers' => (bool) $purchase_order['multiple_suppliers'],
-			'dateCreated'       => $purchase_order['date_created'],
-			'dateCreatedGMT'    => $purchase_order['date_created_gmt'],
-			'dateModified'      => $purchase_order['date_modified'],
-			'dateModifiedGMT'   => $purchase_order['date_modified_gmt'],
-			'dateCompleted'     => $purchase_order['date_completed'] ?? null,
-			'dateCompletedGMT'  => $purchase_order['date_completed_gmt'] ?? null,
-			'dateExpected'      => $purchase_order['date_expected'] ?? null,
-			'dateExpectedGMT'   => $purchase_order['date_expected_gmt'] ?? null,
+			'supplier'          => $this->prepare_ids( $purchase_order['supplier'] ?? NULL ),
+			'dateCreated'       => $purchase_order['date_created'] ?? '',
+			'dateCreatedGMT'    => $purchase_order['date_created_gmt'] ?? '',
+			'dateModified'      => $purchase_order['date_modified'] ?? '',
+			'dateModifiedGMT'   => $purchase_order['date_modified_gmt'] ?? '',
+			'dateCompleted'     => $purchase_order['date_completed'] ?? '',
+			'dateCompletedGMT'  => $purchase_order['date_completed_gmt'] ?? '',
+			'dateExpected'      => $purchase_order['date_expected'] ?? '',
+			'dateExpectedGMT'   => $purchase_order['date_expected_gmt'] ?? '',
 			'description'       => $purchase_order['description'] ?? '',
-			'total'             => (float) ($purchase_order['total'] ?? 0),
-			'totalTax'          => (float) ($purchase_order['total_tax'] ?? 0),
-			'discountTotal'     => (float) ($purchase_order['discount_total'] ?? 0),
-			'discountTax'       => (float) ($purchase_order['discount_tax'] ?? 0),
-			'shippingTotal'     => (float) ($purchase_order['shipping_total'] ?? 0),
-			'shippingTax'       => (float) ($purchase_order['shipping_tax'] ?? 0),
-			'trash'             => false,
-			'conflict'          => false
-		];
+			'total'             => (float) ( $purchase_order['total'] ?? 0 ),
+			'totalTax'          => (float) ( $purchase_order['total_tax'] ?? 0 ),
+			'discountTotal'     => (float) ( $purchase_order['discount_total'] ?? 0 ),
+			'discountTax'       => (float) ( $purchase_order['discount_tax'] ?? 0 ),
+			'shippingTotal'     => (float) ( $purchase_order['shipping_total'] ?? 0 ),
+			'shippingTax'       => (float) ( $purchase_order['shipping_tax'] ?? 0 ),
+			'lineItems'         => $this->prepare_line_items( $purchase_order['line_items'] ?? [] ),
+			'taxLines'          => $this->prepare_tax_lines( $purchase_order['tax_lines'] ?? [] ),
+			'shippingLines'     => $this->prepare_shipping_lines( $purchase_order['shipping_lines'] ?? [] ),
+			'feeLines'          => $this->prepare_fee_lines( $purchase_order['fee_lines'] ?? [] ),
+			'metaData'          => $this->prepare_meta_data( $purchase_order['meta_data'] ?? [] ),
+			'trash'             => FALSE,
+			'conflict'          => FALSE,
+		] );
 
-		if (!empty($purchase_order['supplier'])) {
-			$prepared_data['supplier'] = $this->prepare_supplier($purchase_order['supplier'] ?? null);
-		}
-
-		$prepared_data['lineItems'] = $this->prepare_line_items($purchase_order['line_items'] ?? []);
-		$prepared_data['taxLines'] = $this->prepare_tax_lines($purchase_order['tax_lines'] ?? []);
-		$prepared_data['shippingLines'] = $this->prepare_shipping_lines($purchase_order['shipping_lines'] ?? []);
-		$prepared_data['feeLines'] = $this->prepare_fee_lines($purchase_order['fee_lines'] ?? []);
-		$prepared_data['metaData'] = $this->prepare_meta_data($purchase_order['meta_data'] ?? []);
-
-		return $prepared_data;
-	}
-
-	/**
-	 * Prepare supplier data
-	 *
-	 * @since 1.9.44
-	 *
-	 * @param int|null $supplier_id Supplier ID
-	 */
-	private function prepare_supplier( ?int $supplier_id ): ?array {
-
-		if ( ! $supplier_id ) {
-			return NULL;
-		}
-
-		return [
-			'id'  => $supplier_id,
-			'_id' => 'supplier:' . $this->generate_uuid(),
-		];
 	}
 
 	/**
 	 * Prepare line items data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $line_items Raw line items data.
+	 *
+	 * @return array Prepared line items data.
 	 */
 	private function prepare_line_items( array $line_items ): array {
 
@@ -118,13 +91,19 @@ class PurchaseOrderGenerator extends GeneratorBase {
 				'metaData'    => $this->prepare_meta_data( $item['meta_data'] ),
 				'_deleted'    => FALSE,
 			];
+
 		}, $line_items );
+
 	}
 
 	/**
 	 * Prepare tax lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $tax_lines Raw tax lines data.
+	 *
+	 * @return array Prepared tax lines data.
 	 */
 	private function prepare_tax_lines( array $tax_lines ): array {
 
@@ -141,13 +120,19 @@ class PurchaseOrderGenerator extends GeneratorBase {
 				'shippingTaxTotal' => (string) ( $tax['shipping_tax_total'] ?? '0' ),
 				'_deleted'         => FALSE,
 			];
+
 		}, $tax_lines );
+
 	}
 
 	/**
 	 * Prepare shipping lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $shipping_lines Raw shipping lines data.
+	 *
+	 * @return array Prepared shipping lines data.
 	 */
 	private function prepare_shipping_lines( array $shipping_lines ): array {
 
@@ -161,13 +146,19 @@ class PurchaseOrderGenerator extends GeneratorBase {
 				'totalTax' => (float) ( $shipping['total_tax'] ?? 0 ),
 				'_deleted' => FALSE,
 			];
+
 		}, $shipping_lines );
+
 	}
 
 	/**
 	 * Prepare fee lines data
 	 *
 	 * @since 1.9.44
+	 *
+	 * @param array $fee_lines Raw fee lines data.
+	 *
+	 * @return array Prepared fee lines data.
 	 */
 	private function prepare_fee_lines( array $fee_lines ): array {
 
@@ -181,7 +172,9 @@ class PurchaseOrderGenerator extends GeneratorBase {
 				'totalTax' => (float) ( $fee['total_tax'] ?? 0 ),
 				'_deleted' => FALSE,
 			];
+
 		}, $fee_lines );
+
 	}
 
 } 

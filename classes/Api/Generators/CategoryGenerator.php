@@ -33,7 +33,7 @@ class CategoryGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $category ): array {
 
-		// Prepare image data if exists
+		// Prepare image data if exists.
 		$image = NULL;
 		if ( ! empty( $category['image'] ) ) {
 			$image = [
@@ -44,25 +44,13 @@ class CategoryGenerator extends GeneratorBase {
 			];
 		}
 
-		return [
-			// Required base fields
-			'_id'           => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'          => $this->revision,
-			'_deleted'      => FALSE,
-			'_meta'         => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'  => new \stdClass(),
-
-			// Category specific fields
+		return array_merge( $this->get_base_fields(), [
 			'id'            => (int) $category['id'],
 			'name'          => $category['name'],
 			'slug'          => $category['slug'],
 			'description'   => $category['description'] ?? '',
 			'menuOrder'     => (int) ( $category['menu_order'] ?? 0 ),
-			'parent'        => [
-				'id' => (int) ( $category['parent'] ?? 0 ),
-			],
+			'parent'        => $this->prepare_ids( $category['parent'] ?? NULL ),
 			'display'       => $category['display'] ?? 'default',
 			'barcode'       => $category['barcode'] ?? '',
 			'count'         => (int) ( $category['count'] ?? 0 ),
@@ -71,7 +59,8 @@ class CategoryGenerator extends GeneratorBase {
 			'image'         => $image,
 			'isDefault'     => FALSE,
 			'conflict'      => FALSE,
-		];
+		] );
+
 	}
 
 } 

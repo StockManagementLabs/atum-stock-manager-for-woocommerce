@@ -27,20 +27,13 @@ class TaxRateGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $tax_rate Raw tax rate data
+	 * @param array $tax_rate Raw tax rate data.
 	 *
-	 * @return array Prepared tax rate data
+	 * @return array Prepared tax rate data.
 	 */
 	protected function prepare_data( array $tax_rate ): array {
 
-		return [
-			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'         => $this->revision,
-			'_deleted'     => FALSE,
-			'_meta'        => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments' => new \stdClass(),
+		return array_merge( $this->get_base_fields(), [
 			'id'           => (int) $tax_rate['id'],
 			'country'      => $tax_rate['country'],
 			'state'        => $tax_rate['state'],
@@ -51,12 +44,9 @@ class TaxRateGenerator extends GeneratorBase {
 			'priority'     => (int) $tax_rate['priority'],
 			'compound'     => (bool) $tax_rate['compound'],
 			'shipping'     => (bool) $tax_rate['shipping'],
-			'taxClass'     => [
-				'_id'   => '',
-				'slug' => $tax_rate['class'] ?? 'standard',
-			],
+			'class'        => $tax_rate['class'] ?? 'standard',
 			'conflict'     => FALSE,
-		];
+		] );
 	}
 
 } 
