@@ -64,13 +64,13 @@ class FullExportController extends \WC_REST_Controller {
 			'/' . $this->rest_base,
 			array(
 				array(
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'methods'             => 'POST',
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
 					'args'                => $this->get_collection_params(),
 				),
 				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
+					'methods'             => 'PUT',
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 					'args'                => $this->get_collection_params(),
@@ -228,7 +228,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Check whether a given request has permission to view a the full export status
+	 * Check whether a given request has permission to view the full export status
 	 *
 	 * @since 1.9.19
 	 *
@@ -236,7 +236,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return \WP_Error|bool
 	 */
-	public function get_item_permissions_check( $request ) {
+	public function update_item_permissions_check( $request ) {
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_view', __( 'Sorry, you cannot view the full export status.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
@@ -255,7 +255,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return \WP_Error|bool
 	 */
-	public function update_item_permissions_check( $request ) {
+	public function create_item_permissions_check( $request ) {
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_update', __( 'Sorry, you are not allowed to run a full export.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
@@ -266,7 +266,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Return the full export status (if running)
+	 * Return the full export status (if running) or data (if completed)
 	 *
 	 * @since 1.9.19
 	 *
@@ -274,12 +274,12 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
-	public function get_item( $request ) {
+	public function update_item( $request ) {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 		$format             = $request['format'] ?? 'json';
 		$response           = array();
-		$body_data          = array();
+		$store_app_settings          = array();
 
 		if ( 'sqlite' === $format ) {
 
@@ -290,20 +290,25 @@ class FullExportController extends \WC_REST_Controller {
 				$response = array(
 					'success' => FALSE,
 					'code'    => 'error',
-					'message' => __( 'The request body is empty.', ATUM_TEXT_DOMAIN ),
+					'message' => __( 'The request body is empty. It must have the app store settings JSON.', ATUM_TEXT_DOMAIN ),
 				);
 
 			}
 
-			// Extract the file content from the $body variable
-			$body_data = json_decode( $body, TRUE );
+			// Extract the file content from the $body variable.
+			$store_app_settings = json_decode( $body, TRUE );
 
-			if ( empty( $body_data['storeId'] ) || empty( $body_data['userId'] ) || empty( $body_data['revision'] ) ) {
+			$store_id          = $request['storeId'] ?? '';
+			$user_id           = $request['userId'] ?? '';
+			$revision          = $request['revision'] ?? '';
+			$store_settings_id = $request['storeSettingsId'] ?? '';
+
+			if ( empty( $store_id ) || empty( $user_id ) || empty( $revision ) || empty( $store_settings_id ) ) {
 
 				$response = array(
 					'success' => FALSE,
 					'code'    => 'error',
-					'message' => __( 'If you want to retrieve an SQLite dump file, please send the storeId, userId and revision on the request body.', ATUM_TEXT_DOMAIN ),
+					'message' => __( 'If you want to retrieve an SQLite dump file, please send the storeId, userId, revision and storeSettingsId as params.', ATUM_TEXT_DOMAIN ),
 				);
 
 			}
@@ -371,7 +376,7 @@ class FullExportController extends \WC_REST_Controller {
 				$response = $this->export_json_files( $requested_endpoint );
 			}
 			elseif ( 'sqlite' === $format ) {
-				$response = $this->export_sql_dump( $body_data );
+				$response = $this->export_sql_dump( compact( 'store_id', 'user_id', 'revision', 'store_settings_id', 'store_app_settings' ) );
 			}
 			else {
 
@@ -637,11 +642,11 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @since 1.9.42
 	 *
-	 * @param array $body_data
+	 * @param array $dump_config
 	 *
 	 * @return array|void
 	 */
-	private function export_sql_dump( $body_data ) {
+	private function export_sql_dump( $dump_config ) {
 
 		$data  = '';
 		$files = $this->get_exported_files();
@@ -675,7 +680,7 @@ class FullExportController extends \WC_REST_Controller {
 							// Initialize the generator with table name components
 							$generator = new Generator(
 								$json['schema'],
-								$body_data
+								$dump_config
 							);
 
 							// Generate SQL statements for the specific endpoint.
@@ -751,7 +756,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Update (run) a full export
+	 * Create (run) a full export
 	 *
 	 * @since 1.9.19
 	 *
@@ -759,7 +764,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
-	public function update_item( $request ) {
+	public function create_item( $request ) {
 
 		// It can be one or multiple endpoint keys separated by commas.
 		$endpoint = $request['endpoint'] ?? '';

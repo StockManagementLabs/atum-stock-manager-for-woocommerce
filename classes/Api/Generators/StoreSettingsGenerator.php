@@ -120,11 +120,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 		// Check if all settings are populated.
 		if ( $this->are_all_settings_populated() ) {
 
-			$existing_data = array(
-				'_id'  => $this->store_settings_id,
-				'_rev' => $this->revision,
-			);
-			$prepared_data = $this->prepare_data( $existing_data );
+			$prepared_data = $this->prepare_data( [ '_id'  => $this->store_settings_id, '_rev' => $this->revision, ] );
 			$this->validate_data( $prepared_data );
 
 			// Prepare SQL update statement.

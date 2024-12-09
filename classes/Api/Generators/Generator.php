@@ -127,22 +127,30 @@ class Generator {
 	 * @since 1.9.44
 	 *
 	 * @param string $schema_name The schema name.
-	 * @param array  $body_data   The request body data.
+	 * @param array $dump_config {
+	 * 		The dump config data coming in the request.
+	 *
+	 *		@type string $store_id The store ID.
+	 *  	@type string $user_id The user ID.
+	 *  	@type string $revision The revision code.
+	 *  	@type string $store_settings_id The store settings ID.
+	 *  	@type array  $store_settings_app_group The store settings' app group.
+	 * }
 	 *
 	 * @throws \Exception If generator type is not supported.
 	 */
-	public function __construct( string $schema_name, array $body_data ) {
+	public function __construct( string $schema_name, array $dump_config ) {
 
 		if ( ! isset( self::$available_generators[ $schema_name ] ) ) {
 			throw new \Exception( "Unsupported generator type: $schema_name" );
 		}
 
 		$this->schema_name              = $schema_name;
-		$this->store_id                 = $body_data['storeId'] ?? '';
-		$this->user_id                  = $body_data['userId'] ?? '';
-		$this->revision                 = $body_data['revision'] ?? '';
-		$this->store_settings_id        = $body_data['storeSettingsId'] ?? '';
-		$this->store_settings_app_group = $body_data['appStoreSettings'] ?? '';
+		$this->store_id                 = $dump_config['store_id'] ?? '';
+		$this->user_id                  = $dump_config['user_id'] ?? '';
+		$this->revision                 = $dump_config['revision'] ?? '';
+		$this->store_settings_id        = $dump_config['store_settings_id'] ?? '';
+		$this->store_settings_app_group = $dump_config['store_app_settings'] ?? [];
 
 		if ( empty( $this->store_id ) || empty( $this->user_id ) || empty( $this->revision ) ) {
 			throw new \Exception( 'The body data has missing info' );

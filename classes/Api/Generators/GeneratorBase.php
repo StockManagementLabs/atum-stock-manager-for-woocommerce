@@ -450,7 +450,7 @@ abstract class GeneratorBase {
 	 *
 	 * @return array|null Prepared IDs.
 	 */
-	protected function prepare_ids( ?array $ids ): ?array {
+	protected function prepare_ids( $ids ): ?array {
 
 		if ( is_array( $ids ) ) {
 
