@@ -678,7 +678,14 @@ class FullExportController extends \WC_REST_Controller {
 						try {
 
 							if ( ! empty( $json['code'] ) && ! empty( $json['message'] ) ) {
+
+								// There will be sites that have no premium add-ons, so avoid failing when exporting its settings.
+								if ( 'atum_rest_setting_group_invalid' === $json['code'] ) {
+									continue;
+								}
+
 								throw new \Exception( sprintf( __( "There is an error in the '$1%s' exported file: '$2%s'. Please run a new full export", ATUM_TEXT_DOMAIN ), basename( $f ), $json['message'] ) );
+
 							}
 
 							// Initialize the generator with table name components
