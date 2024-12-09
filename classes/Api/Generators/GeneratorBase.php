@@ -271,6 +271,13 @@ abstract class GeneratorBase {
 				}
 				break;
 
+			// Special case for mixed types where the data types in the db are inconsistent.
+			case 'mixed':
+				if ( ! is_string( $value ) && ! is_numeric( $value ) && ! is_bool( $value ) ) {
+					throw new \Exception( "Property '$key' must be mixed (string or numeric or boolean) type according to schema '$this->schema_name'" );
+				}
+				break;
+
 			default:
 				throw new \Exception( "Unsupported property type: '{$property_schema['type']}' in schema '$this->schema_name'" );
 		}
@@ -370,9 +377,9 @@ abstract class GeneratorBase {
 			try {
 				$this->validate_property( $key, $value, $allowed_value );
 
-				return; // If we get here, validation passed
+				return; // If we get here, validation passed.
 			} catch ( \Exception $e ) {
-				continue; // Try next schema
+				continue; // Try next schema.
 			}
 		}
 
@@ -385,14 +392,15 @@ abstract class GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array $meta_data Raw meta data
-	 * @return array Prepared meta data
+	 * @param array $meta_data Raw meta data.
+	 *
+	 * @return array Prepared meta data.
 	 */
 	protected function prepare_meta_data( array $meta_data ): array {
 
 		return array_map( function ( $meta ) {
 
-			// Normalize the value to a string representation
+			// Normalize the value to a string representation.
 			$value = $this->normalize_meta_value( $meta['value'] );
 
 			$prepared_meta = [

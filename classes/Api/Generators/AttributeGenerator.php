@@ -54,10 +54,10 @@ class AttributeGenerator extends GeneratorBase {
 					'name'        => $term['name'],
 					'slug'        => $term['slug'],
 					'description' => $term['description'] ?? NULL,
-					'count'       => (int) $term['count'] ?? 0,
-					'menuOrder'   => (int) $term['menu_order'] ?? 0,
+					'count'       => (int) ( $term['count'] ?? 0 ),
+					'menuOrder'   => (int) ( $term['menu_order'] ?? 0 ),
 					'bom'         => NULL,
-					'value'       => (float) $term['value'] ?? 0,
+					'value'       => (float) ( $term['value'] ?? 0 ),
 				];
 
 				// BOM object structure as per schema.

@@ -316,7 +316,7 @@
 							],
 							"properties" : {
 								"id" : {
-									"type" : "number"
+									"type" : "mixed"
 								},
 								"_id" : {
 									"type" : "string"
