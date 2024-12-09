@@ -677,6 +677,10 @@ class FullExportController extends \WC_REST_Controller {
 						// Use the appropriate generator for the endpoint.
 						try {
 
+							if ( ! empty( $json['code'] ) && ! empty( $json['message'] ) ) {
+								throw new \Exception( sprintf( __( "There is an error in the '$1%s' exported file: '$2%s'. Please run a new full export", ATUM_TEXT_DOMAIN ), basename( $f ), $json['message'] ) );
+							}
+
 							// Initialize the generator with table name components
 							$generator = new Generator(
 								$json['schema'],
