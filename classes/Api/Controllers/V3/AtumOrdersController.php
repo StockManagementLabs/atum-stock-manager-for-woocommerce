@@ -578,6 +578,26 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 	}
 
 	/**
+	 * Prepare a single order output for response.
+	 *
+	 * @since  3.0.0
+	 *
+	 * @param  AtumOrderModel $object ATUM Order instance.
+	 * @param  \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response
+	 */
+	public function prepare_object_for_response( $object, $request ) {
+
+		if ( ! $object->get_post() instanceof \WP_Post ) {
+			return rest_ensure_response( new \WP_Error( 'atum_rest_invalid_post_id', __( 'ATUM Order ID is invalid.', ATUM_TEXT_DOMAIN ), [ 'status' => 400 ] ) );
+		}
+
+		return parent::prepare_object_for_response( $object, $request );
+
+	}
+
+	/**
 	 * Get formatted item data.
 	 *
 	 * @since  1.6.2
