@@ -223,6 +223,30 @@ class FullExportController extends \WC_REST_Controller {
 				'sanitize_callback' => 'sanitize_key',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
+			'storeId'           => array(
+				'description'       => __( "The app's internal store ID.", ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'userId'           => array(
+				'description'       => __( "The app's internal user ID.", ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'revision'           => array(
+				'description'       => __( "The app's internal revision ID.", ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
+			'storeSettingsId'           => array(
+				'description'       => __( "The app's internal atum store settings ID.", ATUM_TEXT_DOMAIN ),
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
 		);
 
 	}
@@ -1077,14 +1101,13 @@ class FullExportController extends \WC_REST_Controller {
 		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
 		$query_params  = [
 			'page'     => $page,
-			'per_page' => 100,
+			'per_page' => 300,
 		];
 
 		// Add extra params for some endpoints.
 		switch ( $endpoint ) {
 			case '/wp/v2/comments':
-				$query_params['type']     = 'order_note';
-				$query_params['per_page'] = 300;
+				$query_params['type'] = 'order_note';
 
 				// Export only notes after a given date?
 				if ( $params ) {
@@ -1096,8 +1119,7 @@ class FullExportController extends \WC_REST_Controller {
 				break;
 
 			case '/wc/v3/atum/atum-order-notes':
-				$query_params['type']     = AtumComments::NOTES_KEY;
-				$query_params['per_page'] = 300;
+				$query_params['type'] = AtumComments::NOTES_KEY;
 
 				// Export only notes after a given date?
 				if ( $params ) {
