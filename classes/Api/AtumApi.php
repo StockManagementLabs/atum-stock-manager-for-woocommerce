@@ -92,14 +92,15 @@ class AtumApi {
 	 */
 	private $paginable_collections = [
 		'attachment',
+		'comment',
 		'product',
-		'product_variation',
-		'shop_order',
-		'shop_coupon',
-		'shop_order_refund',
+		'product_attributes',
 		'product_cat',
 		'product_tag',
-		'comment',
+		'product_variation',
+		'shop_coupon',
+		'shop_order',
+		'shop_order_refund',
 	];
 
 	/**
@@ -303,7 +304,7 @@ class AtumApi {
 	}
 
 	/**
-	 * Increase the posts per page limit (that is set to 100 by WP) when syncing through the ATUM App
+	 * Increase the posts per page limit (that is set to 100 by WP) when syncing through the ATUM App or running a full export
 	 *
 	 * @since 1.9.4
 	 *
