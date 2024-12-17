@@ -70,9 +70,10 @@ export default class BulkActions {
 				const $select: JQuery  = $( evt.currentTarget ),
 				      selected: string = $select.val();
 
-				this.$bulkButton = $( '.apply-bulk-action' ); // If the table's DOM has been updated, we must reassign the bulk button.
+				//this.$bulkButton = $( '.apply-bulk-action' ); // If the table's DOM has been updated, we must reassign the bulk button.
+                this.$bulkButton = $select.closest('.atum-list-wrapper' ).find('.apply-bulk-action' );
 
-				// Sync the top and bottom selects.
+                // Sync the top and bottom selects.
 				this.globals.$atumList.find( '.bulkactions select' ).not( $select ).val( selected ).trigger( 'change.select2' );
 				this.updateBulkButton();
 				this.$bulkButton.toggle( selected !== this.noOptionValue );
