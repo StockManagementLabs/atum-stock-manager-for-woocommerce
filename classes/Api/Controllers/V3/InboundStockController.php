@@ -400,14 +400,14 @@ class InboundStockController  extends \WC_REST_Products_Controller {
 		// It could return multiple products (same product within distinct POs.
 		if ( is_array( $objects ) && count( $objects ) > 1 ) {
 
-			$objects = array();
+			$response_objects = array();
 
 			foreach ( $objects as $item ) {
-				$data      = $this->prepare_object_for_response( $item, $request );
-				$objects[] = $this->prepare_response_for_collection( $data );
+				$data               = $this->prepare_object_for_response( $item, $request );
+				$response_objects[] = $this->prepare_response_for_collection( $data );
 			}
 
-			$response = rest_ensure_response( $objects );
+			$response = rest_ensure_response( $response_objects );
 
 		}
 		else {
