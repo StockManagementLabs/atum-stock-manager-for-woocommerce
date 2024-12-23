@@ -48,6 +48,11 @@ class FullExportController extends \WC_REST_Controller {
 	const SUBSCRIBER_IDS_TRANSIENT = 'api_run_full_export_subscribers';
 
 	/**
+	 * Transient key name for the SQLite dump config.
+	 */
+	const DUMP_CONFIG_TRANSIENT = 'api_run_full_export_dump_config';
+
+	/**
 	 * Cloud function to send notification to the App user when the full export is completed.
 	 */
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
@@ -302,8 +307,8 @@ class FullExportController extends \WC_REST_Controller {
 
 		$requested_endpoint = $request['endpoint'] ?? '';
 		$format             = $request['format'] ?? 'json';
-		$response           = array();
-		$store_app_settings          = array();
+		$response           = [];
+		$store_app_settings = [];
 
 		if ( 'sqlite' === $format ) {
 
@@ -353,7 +358,7 @@ class FullExportController extends \WC_REST_Controller {
 			}
 			// TODO: remove this when the App is released.
 			// Return a mock zip file with all the JSON files for testing purposes.
-			elseif ( 'mock' === $format && defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG ) {
+			/*elseif ( 'mock' === $format && defined( 'ATUM_DEBUG' ) && TRUE === ATUM_DEBUG ) {
 
 				$page     = ! empty( $request['page'] ) ? $request['page'] : '';
 				$zip_name = self::get_full_export_upload_dir() . "mock{$page}.zip";
@@ -391,7 +396,7 @@ class FullExportController extends \WC_REST_Controller {
 					);
 				}
 
-			}
+			}*/
 			// Prepare a zip file with all the exported JSON files and return it.
 			elseif ( 'json_zip' === $format ) {
 				$response = $this->export_json_zip( $requested_endpoint );
@@ -430,7 +435,7 @@ class FullExportController extends \WC_REST_Controller {
 	private function export_json_zip( $requested_endpoint ) {
 
 		$upload_dir = self::get_full_export_upload_dir();
-		$files 		= $this->get_exported_files( $requested_endpoint );
+		$files 		= self::get_exported_files( $requested_endpoint );
 
 		if ( empty( $files ) ) {
 
@@ -516,7 +521,7 @@ class FullExportController extends \WC_REST_Controller {
 		// Check if there are multiple endpoints separated by commas.
 		$endpoint_keys  = $requested_endpoint ? array_filter( array_unique( explode( ',', $requested_endpoint ) ) ) : array_keys( $exportable_endpoints );
 
-		$files = $this->get_exported_files( $requested_endpoint );
+		$files = self::get_exported_files( $requested_endpoint );
 
 		if ( is_wp_error( $files ) ) {
 
@@ -606,7 +611,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return array|\WP_Error
 	 */
-	private function get_exported_files( $requested_endpoint = NULL ) {
+	private static function get_exported_files( $requested_endpoint = NULL ) {
 
 		$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
@@ -662,18 +667,25 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Export a SQL dump file with the ATUM App's SQLite structure
+	 * Export a SQL `dump` file with the ATUM App's SQLite structure
 	 *
 	 * @since 1.9.42
 	 *
-	 * @param array $dump_config
+	 * @param array $dump_config {
+	 *  The dump configuration.
+	 *	@type string $store_id 			The app's internal store ID.
+	 * 	@type string $user_id 			The app's internal user ID.
+	 * 	@type string $revision 			The app's internal revision ID.
+	 * 	@type string $store_settings_id The app's internal atum store settings ID.
+	 * 	@type array $store_app_settings The app's store settings.
+	 * }
 	 *
-	 * @return array|void
+	 * @return array|bool
 	 */
-	private function export_sql_dump( $dump_config ) {
+	private static function export_sql_dump( $endpoint, $schema, $user_id, $params, $user_app_id ) {
 
-		$data  = '';
-		$files = $this->get_exported_files();
+		$dump_data = '';
+		$files     = self::get_exported_files( $endpoint );
 
 		if ( is_wp_error( $files ) ) {
 
@@ -685,6 +697,23 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
+		$transient_key = AtumCache::get_transient_key( self::DUMP_CONFIG_TRANSIENT, [ $user_app_id ] );
+		$dump_config   = AtumCache::get_transient( $transient_key, TRUE );
+
+		if ( empty( $dump_config ) ) {
+
+			return array(
+				'success' => FALSE,
+				'code'    => 'error',
+				'message' => __( 'The dump configuration transient was not found. Please, run the full export again.', ATUM_TEXT_DOMAIN ),
+			);
+
+		}
+
+		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
+		self::prepare_cron_job_user( $user_id );
+
+		// TODO: SHOULD WE DUMP EVERY SINGLE FILE SEPARATELY IN A CRON TO AVOID CRASHES?
 		foreach ( $files as $file ) {
 
 			// In the case there are multiple exports of the same endpoint with distinct filters or sub-endpoints.
@@ -719,11 +748,11 @@ class FullExportController extends \WC_REST_Controller {
 							);
 
 							// Generate SQL statements for the specific endpoint.
-							$data .= "\n" . $generator->generate( $json );
+							$dump_data .= "\n" . $generator->generate( $json );
 
 						} catch ( \Exception $e ) {
 
-							return  array(
+							return array(
 								'success' => FALSE,
 								'code'    => 'error',
 								'message' => $e->getMessage(),
@@ -737,15 +766,16 @@ class FullExportController extends \WC_REST_Controller {
 			}
 		}
 
-		$dump_name = self::get_full_export_upload_dir() . 'atum_sqlite_dump.sql';
-		file_put_contents( $dump_name, $data );
+		$dump_file = self::get_full_export_upload_dir() . "atum_sqlite_dump_{$dump_config['userId']}_{$dump_config['storeId']}.sql";
+		file_put_contents( $dump_file, $dump_data, FILE_APPEND );
 
-		if ( file_exists( $dump_name ) ) {
+		if ( file_exists( $dump_file ) ) {
 
-			$headers = [
+			// TODO: THE COMMENTED CODE IS DEPRECATED. REMOVE IT WHEN THE APP IS RELEASED.
+			/*$headers = [
 				'Content-Type'        => 'application/sql',
-				'Content-Length'      => filesize( $dump_name ),
-				'Content-Disposition' => 'attachment; filename="' . basename( $dump_name ) . '"',
+				'Content-Length'      => filesize( $dump_file ),
+				'Content-Disposition' => 'attachment; filename="' . basename( $dump_file ) . '"',
 			];
 
 			$server = rest_get_server();
@@ -760,8 +790,18 @@ class FullExportController extends \WC_REST_Controller {
 			// NOTE: this shouldn't imply any security risk because when we reach this point, the authenticated request was previously passed.
 			$server->send_header( 'Access-Control-Allow-Origin', '*' );
 
-			readfile( $dump_name );
-			die(); // We've already sent the file, so we can stop the execution here.
+			readfile( $dump_file );
+			die(); // We've already sent the file, so we can stop the execution here.*/
+
+			$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $schema, $params ) );
+			AtumCache::delete_transients( $pending_endpoint_transient_key );
+
+			// Send the completed export notification once all the export tasks have been completed.
+			if ( ! self::are_there_pending_exports() ) {
+				self::notify_subscriber( $user_id );
+			}
+
+			return TRUE;
 
 		}
 
@@ -811,6 +851,16 @@ class FullExportController extends \WC_REST_Controller {
 		}
 
 		$this->maybe_save_subscriber_id( $request['subscriber_id'] );
+
+		$format = $request['format'] ?? 'json';
+
+		if ( 'sqlite' === $format ) {
+			$saved_dump_config = $this->maybe_save_dump_config( $request );
+
+			if ( is_wp_error( $saved_dump_config ) ) {
+				return $saved_dump_config;
+			}
+		}
 
 		$request->set_param( 'context', 'edit' );
 		$response = $this->prepare_item_for_response( $status, $request );
@@ -942,6 +992,9 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
+		$format 	 = $request['format'] ?? 'json';
+		$user_app_id = $request['userId'] ?? NULL;
+
 		// Schedule the export for each endpoint.
 		foreach ( $endpoints as $key => $endpoint ) {
 
@@ -955,13 +1008,13 @@ class FullExportController extends \WC_REST_Controller {
 					AtumCache::set_transient( $exported_endpoint_transient_keys[ "{$key}.{$sub_key}" ], $sub_ep, DAY_IN_SECONDS, TRUE );
 
 					$hook_name = "atum_api_export_endpoint_{$key}_{$sub_key}";
-					$hook_args = [ $sub_ep, self::get_admin_user(), $params, 1 ];
+					$hook_args = [ $sub_ep, self::get_admin_user(), $params, 1, $format, $user_app_id ];
 
 					if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
 						$this->delete_old_export( $sub_ep, $key, $params );
 
 						/**
-						 * Hook args: endpoint, user_id, param and, page.
+						 * Hook args: endpoint, user_id, param, page, format and user_app_id.
 						 * NOTE: These are the parameters that are passed later to the run_export method.
 						 */
 						as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
@@ -976,13 +1029,13 @@ class FullExportController extends \WC_REST_Controller {
 				AtumCache::set_transient( $exported_endpoint_transient_keys[ $key ], $endpoint, DAY_IN_SECONDS, TRUE );
 
 				$hook_name = "atum_api_export_endpoint_$key";
-				$hook_args = [ $endpoint, self::get_admin_user(), $params, 1 ];
+				$hook_args = [ $endpoint, self::get_admin_user(), $params, 1, $format, $user_app_id ];
 
 				if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
 					$this->delete_old_export( $endpoint, $key, $params );
 
 					/**
-					 * Hook args: endpoint, user_id, param and, page.
+					 * Hook args: endpoint, user_id, param, page, format and user_app_id.
 					 * NOTE: These are the parameters that are passed later to the run_export method.
 					 */
 					as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
@@ -1038,30 +1091,17 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @since 1.9.19
 	 *
-	 * @param string $endpoint The endpoint that is being exported.
-	 * @param int    $user_id  The ID of the user that initialized the export.
-	 * @param string $params   Optional. Any other params passed to the endpoint.
-	 * @param int    $page     Optional. If passed, will export the specified page of results.
+	 * @param string $endpoint 	  The endpoint that is being exported.
+	 * @param int    $user_id  	  The ID of the user that initialized the export.
+	 * @param string $params   	  Optional. Any other params passed to the endpoint.
+	 * @param int    $page     	  Optional. If passed, will export the specified page of results.
+	 * @param string $format   	  Optional. The format of the export (json, json_zip, sqlite).
+	 * @param string $user_app_id Optional. The app's internal user ID.
 	 */
-	public static function run_export( $endpoint, $user_id, $params = '', $page = 1 ) {
-
-		$exportable_endpoints = AtumApi::get_exportable_endpoints();
+	public static function run_export( $endpoint, $user_id, $params = '', $page = 1, $format = 'json', $user_app_id = NULL ) {
 
 		// Find the schema for the endpoint.
-		$schema = FALSE;
-		foreach ( $exportable_endpoints as $key => $ep ) {
-
-			// Nested endpoints.
-			if ( is_array( $ep ) && in_array( $endpoint, $ep ) ) {
-				$schema = $key;
-				break;
-			}
-			elseif ( $ep === $endpoint ) {
-				$schema = $key;
-				break;
-			}
-
-		}
+		$schema = self::find_endpoint_schema( $endpoint );
 
 		if ( ! $schema ) {
 			// Endpoint not found.
@@ -1078,24 +1118,10 @@ class FullExportController extends \WC_REST_Controller {
 		}
 
 		$page_suffix      = '';
-		$admin_user 	  = self::get_admin_user();
-		$logged_in_user   = get_current_user_id();
-		$delete_transient = TRUE;
+		$has_missing_data = FALSE;
 
 		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
-		if ( ! $logged_in_user ) {
-
-			if ( $admin_user && $user_id !== $admin_user ) {
-				wp_set_current_user( $admin_user );
-			}
-			else {
-				wp_set_current_user( $user_id );
-			}
-
-		}
-		elseif ( $admin_user && $admin_user !== $user_id ) {
-			wp_set_current_user( $admin_user );
-		}
+		self::prepare_cron_job_user( $user_id );
 
 		// The /atum-order-notes endpoint is fake, so change the path to comments first.
 		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
@@ -1135,7 +1161,8 @@ class FullExportController extends \WC_REST_Controller {
 				break;
 
 			case '/wc/v3/customers':
-				$query_params['role'] = 'all';
+				$query_params['role'] 	  = 'all';
+				$query_params['per_page'] = 100; // For now, we couldn't find a way to increase the per_page limit here.
 				break;
 
 			case '/wc/v3/products/attributes':
@@ -1145,6 +1172,7 @@ class FullExportController extends \WC_REST_Controller {
 			case '/wc/v3/products/categories':
 			case '/wc/v3/products/tags':
 				$query_params['hide_empty'] = TRUE;
+				$query_params['per_page'] = 100; // For now, we couldn't find a way to increase the per_page limit here.
 				break;
 
 			case '/wc/v3/products':
@@ -1172,18 +1200,24 @@ class FullExportController extends \WC_REST_Controller {
 				}
 				break;
 
+			case '/wc/v3/taxes':
+			case '/wc/v3/taxes/classes':
+				$query_params['per_page'] = 100; // Not need to increase the limit here.
+				break;
+
 		}
 
 		// Trick to be able to increase the posts per page limit (check \Atum\Api\AtumApi::increase_posts_per_page).
 		$_SERVER['HTTP_ORIGIN'] = 'com.stockmanagementlabs.atum';
 
-		// Do the request to the endpoint internally.
+		// Do the request to the API endpoint internally.
 		$request = new \WP_REST_Request( 'GET', $endpoint_path );
 		$request->set_query_params( $query_params );
 
-		$server   = rest_get_server();
-		$response = rest_do_request( $request );
-		$data     = $server->response_to_data( $response, FALSE );
+		$server            = rest_get_server();
+		$response          = rest_do_request( $request );
+		$data              = $server->response_to_data( $response, FALSE );
+		$current_hook_name = current_action();
 
 		if ( 200 === $response->status ) {
 
@@ -1198,16 +1232,17 @@ class FullExportController extends \WC_REST_Controller {
 					if ( $total_pages > $page ) {
 
 						/**
-						 * Hook args: endpoint, user_id, param and, page.
+						 * Hook args: endpoint, user_id, param, page, format and user_app_id.
 						 * NOTE: These are the parameters that are passed later to the run_export method.
 						 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
 						 */
-						$scheduled = as_schedule_single_action( gmdate( 'U' ), current_action(), [ $endpoint, $user_id, $params, $page + 1 ], 'atum', FALSE, 1 );
+						$hook_args = [ $endpoint, $user_id, $params, $page + 1, $format, $user_app_id ];
+						$scheduled = as_schedule_single_action( gmdate( 'U' ), $current_hook_name, $hook_args, 'atum', FALSE, 1 );
 
 						if ( $scheduled ) {
 							// Re-add the endpoint transient again because is not fully exported yet.
 							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
-							$delete_transient = FALSE; // Avoid removing the transient below.
+							$has_missing_data = TRUE; // Avoid removing the transient below.
 						}
 
 					}
@@ -1250,45 +1285,105 @@ class FullExportController extends \WC_REST_Controller {
 
 		}
 
-		if ( $delete_transient ) {
-			AtumCache::delete_transients( $pending_endpoint_transient_key );
+		if ( ! $has_missing_data ) {
+
+			// If the format is SQLite, add a final scheduled action to process the data and add the queries to the dump file.
+			if ( 'sqlite' === $format )  {
+
+				$hook_name = str_replace( 'atum_api_export_endpoint_', 'atum_api_dump_endpoint_', $current_hook_name );
+				$hook_args = [ $endpoint, $schema, $user_id, $params, $user_app_id ];
+
+				if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
+					as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
+				}
+
+			}
+			// For json formats, just delete the transients and notify the customer.
+			else {
+				AtumCache::delete_transients( $pending_endpoint_transient_key );
+			}
+
 		}
 
 		// Send the completed export notification once all the export tasks have been completed.
 		if ( ! self::are_there_pending_exports() ) {
+			self::notify_subscriber( $user_id );
+		}
 
-			$subscribers_transient_key = AtumCache::get_transient_key( self::SUBSCRIBER_IDS_TRANSIENT );
-			$saved_subscribers         = AtumCache::get_transient( $subscribers_transient_key, TRUE );
+	}
 
-			// If, for some instance, there are no subscribers saved, do not send the notification.
-			if ( ! empty( $saved_subscribers ) ) {
+	/**
+	 * Find the schema for the endpoint
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param string $endpoint
+	 *
+	 * @return false|string
+	 */
+	private static function find_endpoint_schema( $endpoint ) {
 
-				// If, for some instance, the current user was logged in with another user, restore their log-in.
-				if ( get_current_user_id() !== $user_id ) {
-					wp_set_current_user( $user_id );
-				}
-				// Or if wasn't logged in, close the session for security reasons.
-				elseif ( ! $user_id && is_user_logged_in() ) {
-					wp_logout();
-				}
+		$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
-				// Send a notification to the user(s) once the full export is completed.
-				$response = wp_remote_post( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
-					'timeout'   => 0.01,
-					'blocking'  => FALSE,
-					'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-					'headers'   => array(
-						'Origin' => home_url( '/' ),
-					),
-					'body'      => array(
-						'subscribers' => $saved_subscribers,
-					),
-				] );
+		// Find the schema for the endpoint.
+		$schema = FALSE;
+		foreach ( $exportable_endpoints as $key => $ep ) {
 
-				if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
-					AtumCache::delete_transients( $subscribers_transient_key );
-				}
+			// Nested endpoints.
+			if ( is_array( $ep ) && in_array( $endpoint, $ep ) ) {
+				$schema = $key;
+				break;
+			}
+			elseif ( $ep === $endpoint ) {
+				$schema = $key;
+				break;
+			}
 
+		}
+
+		return $schema;
+
+	}
+
+	/**
+	 * Notify the subscriber that the full export has been completed
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param int $user_id
+	 */
+	private static function notify_subscriber( $user_id ) {
+
+		$subscribers_transient_key = AtumCache::get_transient_key( self::SUBSCRIBER_IDS_TRANSIENT );
+		$saved_subscribers         = AtumCache::get_transient( $subscribers_transient_key, TRUE );
+
+		// If, for some instance, there are no subscribers saved, do not send the notification.
+		if ( ! empty( $saved_subscribers ) ) {
+
+			// If the user was logged in with another user before the export process started, restore their log-in.
+			if ( get_current_user_id() !== $user_id ) {
+				wp_set_current_user( $user_id );
+			}
+			// Or if they weren't logged in, close the session for security reasons.
+			elseif ( ! $user_id && is_user_logged_in() ) {
+				wp_logout();
+			}
+
+			// Send a notification to the user(s) once the full export is completed.
+			$response = wp_remote_post( self::COMPLETED_FULL_EXPORT_NOTICE_URL, [
+				'timeout'   => 0.01,
+				'blocking'  => FALSE,
+				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+				'headers'   => array(
+					'Origin' => home_url( '/' ),
+				),
+				'body'      => array(
+					'subscribers' => $saved_subscribers,
+				),
+			] );
+
+			if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
+				AtumCache::delete_transients( $subscribers_transient_key );
 			}
 
 		}
@@ -1372,6 +1467,57 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
+	 * Save the SQLite dump config
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return \WP_Error|bool
+	 */
+	private function maybe_save_dump_config( $request ) {
+
+		$store_app_id          = $request['storeId'] ?? '';
+		$user_app_id           = $request['userId'] ?? '';
+		$app_revision          = $request['revision'] ?? '';
+		$store_settings_app_id = $request['storeSettingsId'] ?? '';
+
+		if ( empty( $store_app_id ) || empty( $user_app_id ) || empty( $app_revision ) || empty( $store_settings_app_id ) ) {
+			return new \WP_Error( 'atum_rest_malformed_request', __( 'If you want to retrieve an SQLite dump file, please send the storeId, userId, revision and storeSettingsId as params.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+		}
+
+		// Save the transient and make sure it does not conflict with another possible user.
+		$transient_key     = AtumCache::get_transient_key( self::DUMP_CONFIG_TRANSIENT, [ $user_app_id ] );
+		$saved_dump_config = AtumCache::get_transient( $transient_key, TRUE );
+
+		if ( empty( $saved_dump_config ) ) {
+
+			$body = $request->get_body();
+
+			if ( ! $body ) {
+				return new \WP_Error( 'atum_rest_malformed_request', __( 'The request body is empty. It must have the app store settings JSON.', ATUM_TEXT_DOMAIN ), [ 'status' => 404 ] );
+			}
+
+			// Extract the file content from the $body variable.
+			$store_app_settings = json_decode( $body, TRUE );
+
+			$dump_config = array(
+				'storeId'          => $store_app_id,
+				'userId'           => $user_app_id,
+				'revision'         => $app_revision,
+				'storeSettingsId'  => $store_settings_app_id,
+				'storeAppSettings' => $store_app_settings,
+			);
+
+			AtumCache::set_transient( $transient_key, $dump_config, 0, TRUE );
+
+		}
+
+		return TRUE;
+
+	}
+
+	/**
 	 * Get the admin user ID
 	 *
 	 * @since 1.9.44
@@ -1393,6 +1539,28 @@ class FullExportController extends \WC_REST_Controller {
 		] );
 
 		return ! empty( $admin_user ) ? absint( $admin_user[0]->ID ) : FALSE;
+
+	}
+
+	private static function prepare_cron_job_user( $user_id ) {
+
+		$admin_user 	  = self::get_admin_user();
+		$logged_in_user   = get_current_user_id();
+
+		// If this is reached through a cron job, there won't be any user logged in and all these endpoints need a user with permission to be logged in.
+		if ( ! $logged_in_user ) {
+
+			if ( $admin_user && $user_id !== $admin_user ) {
+				wp_set_current_user( $admin_user );
+			}
+			else {
+				wp_set_current_user( $user_id );
+			}
+
+		}
+		elseif ( $admin_user && $admin_user !== $user_id ) {
+			wp_set_current_user( $admin_user );
+		}
 
 	}
 

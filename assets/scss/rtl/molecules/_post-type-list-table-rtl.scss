@@ -1,9 +1,11 @@
+@use "../molecules/list-table-rtl" as *;
+
 //
 // Atum List Tables for Post Types RTL
 //--------------------------------
 
 #posts-filter {
-	@extend .atum-list-wrapper !optional;
+	@extend .atum-list-wrapper;
 	
 	.nav-with-scroll-effect .subsubsub {
 		li {

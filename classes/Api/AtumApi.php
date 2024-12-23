@@ -93,6 +93,7 @@ class AtumApi {
 	private $paginable_collections = [
 		'attachment',
 		'comment',
+		'inventories', // ATUM Multi Inventory hack.
 		'product',
 		'product_attributes',
 		'product_cat',
@@ -342,12 +343,14 @@ class AtumApi {
 			if ( is_array( $exportable_endpoint ) ) {
 
 				foreach ( $exportable_endpoint as $sub_key => $sub_endpoint ) {
-					add_action( "atum_api_export_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+					add_action( "atum_api_export_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
+					add_action( "atum_api_dump_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'export_sql_dump' ), 10, 5 );
 				}
 
 			}
 			else {
-				add_action( "atum_api_export_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+				add_action( "atum_api_export_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
+				add_action( "atum_api_dump_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'export_sql_dump' ), 10, 5 );
 			}
 		}
 
