@@ -3379,7 +3379,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
 .wrap h1.wp-heading-inline {
   margin-bottom: 0;
 }
-.wrap h1.wp-heading-inline.extend-list-table {
+.wrap h1.wp-heading-inline.extend-list-table, .wrap #posts-filter h1.wp-heading-inline.subsubsub, #posts-filter .wrap h1.wp-heading-inline.subsubsub {
   line-height: 1;
   margin-bottom: 15px;
   position: relative;
@@ -3485,7 +3485,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
           align-items: center;
   margin: 0;
 }
-.subsubsub.extend-list-table {
+.subsubsub.extend-list-table, #posts-filter .subsubsub {
   width: inherit;
   margin: 10px 0 !important;
   -ms-flex-wrap: nowrap;
@@ -3496,11 +3496,11 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   border-radius: 0;
   border-bottom: 0;
 }
-.subsubsub.extend-list-table li {
+.subsubsub.extend-list-table li, #posts-filter .subsubsub li {
   padding: 0;
   color: transparent;
 }
-.subsubsub.extend-list-table li span {
+.subsubsub.extend-list-table li span, #posts-filter .subsubsub li span {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3513,102 +3513,102 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   margin-left: 3px;
   border-radius: 5px;
 }
-.subsubsub.extend-list-table li span.active {
+.subsubsub.extend-list-table li span.active, #posts-filter .subsubsub li span.active {
   background-color: var(--primary);
   letter-spacing: 0.4px;
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .text-blue {
+.subsubsub.extend-list-table li span.active .text-blue, #posts-filter .subsubsub li span.active .text-blue {
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .extra-links-container {
+.subsubsub.extend-list-table li span.active .extra-links-container, #posts-filter .subsubsub li span.active .extra-links-container {
   font-size: 14px;
   font-weight: normal;
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .extra-links-container.empty {
+.subsubsub.extend-list-table li span.active .extra-links-container.empty, #posts-filter .subsubsub li span.active .extra-links-container.empty {
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .extra-links-container a {
+.subsubsub.extend-list-table li span.active .extra-links-container a, #posts-filter .subsubsub li span.active .extra-links-container a {
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .extra-links-container a.empty {
+.subsubsub.extend-list-table li span.active .extra-links-container a.empty, #posts-filter .subsubsub li span.active .extra-links-container a.empty {
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active a {
+.subsubsub.extend-list-table li span.active a, #posts-filter .subsubsub li span.active a {
   color: var(--white);
   padding: 0;
 }
-.subsubsub.extend-list-table li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, .subsubsub.extend-list-table li span.active a.tips:hover, .subsubsub.extend-list-table li span.active a.empty {
+.subsubsub.extend-list-table li span.active a.empty, #posts-filter .subsubsub li span.active a.empty, .subsubsub.extend-list-table li span.active a.tips, #posts-filter .subsubsub li span.active a.tips, .subsubsub.extend-list-table li span.active a.tips:hover, .subsubsub.extend-list-table li span.active a.empty {
   color: var(--white) !important;
 }
-.subsubsub.extend-list-table li span.active a .active {
+.subsubsub.extend-list-table li span.active a .active, #posts-filter .subsubsub li span.active a .active {
   padding: 0;
 }
-.subsubsub.extend-list-table li span.active .count {
+.subsubsub.extend-list-table li span.active .count, #posts-filter .subsubsub li span.active .count {
   font-size: 16px;
   font-weight: bold;
   color: var(--white);
 }
-.subsubsub.extend-list-table li span.active .count.empty {
+.subsubsub.extend-list-table li span.active .count.empty, #posts-filter .subsubsub li span.active .count.empty {
   color: var(--white);
 }
-.subsubsub.extend-list-table li span a {
+.subsubsub.extend-list-table li span a, #posts-filter .subsubsub li span a {
   color: var(--atum-table-views-tabs);
   padding: 0;
   -webkit-transition: color 0.2s ease-in-out;
   transition: color 0.2s ease-in-out;
 }
-.subsubsub.extend-list-table li span a.current {
+.subsubsub.extend-list-table li span a.current, #posts-filter .subsubsub li span a.current {
   pointer-events: none;
   color: var(--white);
   font-weight: bold;
 }
-.subsubsub.extend-list-table li span a .text-blue {
+.subsubsub.extend-list-table li span a .text-blue, #posts-filter .subsubsub li span a .text-blue {
   color: var(--primary);
 }
-.subsubsub.extend-list-table li span a.tips {
+.subsubsub.extend-list-table li span a.tips, #posts-filter .subsubsub li span a.tips {
   color: var(--primary);
 }
-.subsubsub.extend-list-table li span a.tips:hover {
+.subsubsub.extend-list-table li span a.tips:hover, #posts-filter .subsubsub li span a.tips:hover {
   cursor: pointer;
 }
-.subsubsub.extend-list-table li span a.empty {
+.subsubsub.extend-list-table li span a.empty, #posts-filter .subsubsub li span a.empty {
   color: var(--atum-table-views-tabs);
 }
-.subsubsub.extend-list-table li span:hover a {
+.subsubsub.extend-list-table li span:hover a, #posts-filter .subsubsub li span:hover a {
   color: var(--primary) !important;
 }
-.subsubsub.extend-list-table li span .extra-links-container {
+.subsubsub.extend-list-table li span .extra-links-container, #posts-filter .subsubsub li span .extra-links-container {
   font-size: 14px;
   font-weight: normal;
   color: var(--primary);
 }
-.subsubsub.extend-list-table li span .extra-links-container.empty {
+.subsubsub.extend-list-table li span .extra-links-container.empty, #posts-filter .subsubsub li span .extra-links-container.empty {
   color: var(--atum-table-views-tabs);
 }
-.subsubsub.extend-list-table li span .extra-links-container.empty a {
+.subsubsub.extend-list-table li span .extra-links-container.empty a, #posts-filter .subsubsub li span .extra-links-container.empty a {
   padding: 0;
   color: var(--atum-table-views-tabs);
 }
-.subsubsub.extend-list-table li span .extra-links-container a {
+.subsubsub.extend-list-table li span .extra-links-container a, #posts-filter .subsubsub li span .extra-links-container a {
   padding: 0;
   color: var(--primary);
 }
-.subsubsub.extend-list-table li span .count {
+.subsubsub.extend-list-table li span .count, #posts-filter .subsubsub li span .count {
   font-size: 16px;
   font-weight: bold;
   color: var(--primary);
 }
-.subsubsub.extend-list-table li span .count.extra-links-container {
+.subsubsub.extend-list-table li span .count.extra-links-container, #posts-filter .subsubsub li span .count.extra-links-container {
   font-size: 14px;
   font-weight: normal;
 }
-.subsubsub.extend-list-table li span .count.empty {
+.subsubsub.extend-list-table li span .count.empty, #posts-filter .subsubsub li span .count.empty {
   color: var(--atum-table-views-tabs);
 }
 @media all and (max-width: 480px) {
-  .subsubsub.extend-list-table:first-child li span, .subsubsub.extend-list-table:first-child li span:active {
+  .subsubsub.extend-list-table:first-child li span, #posts-filter .subsubsub:first-child li span, .subsubsub.extend-list-table:first-child li span:active {
     margin-left: 0;
   }
 }
@@ -3692,7 +3692,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
     margin: 0 0 15px 0;
   }
 }
-.search-box.extend-list-table, p.search-box.extend-list-table {
+.search-box.extend-list-table, #posts-filter .search-box.subsubsub, p.search-box.extend-list-table {
   padding: 0;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3705,7 +3705,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   margin: 0 0 3px auto !important;
 }
 @media all and (max-width: 782px) {
-  .search-box.extend-list-table, p.search-box.extend-list-table {
+  .search-box.extend-list-table, #posts-filter .search-box.subsubsub, p.search-box.extend-list-table {
     margin: 0 !important;
     float: none;
   }
@@ -4130,24 +4130,24 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
             justify-content: center;
   }
 }
-.tablenav.top.extend-list-table {
+.tablenav.top.extend-list-table, #posts-filter .tablenav.top.subsubsub {
   padding: 0 11px;
   height: 52px;
   -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
 }
 @media all and (max-width: 782px) {
-  .tablenav.top.extend-list-table {
+  .tablenav.top.extend-list-table, #posts-filter .tablenav.top.subsubsub {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     height: auto;
   }
 }
-.tablenav.top.extend-list-table .actions {
+.tablenav.top.extend-list-table .actions, #posts-filter .tablenav.top.subsubsub .actions {
   white-space: inherit;
 }
 @media all and (max-width: 480px) {
-  .tablenav.top.extend-list-table {
+  .tablenav.top.extend-list-table, #posts-filter .tablenav.top.subsubsub {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     display: -webkit-box;
@@ -4381,7 +4381,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   content: "\e942";
 }
 
-.atum-list-wrapper {
+.atum-list-wrapper, #posts-filter {
   width: 100%;
   overflow: hidden;
   border-radius: 5px;
@@ -4393,19 +4393,19 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   padding: 0 0 10px;
   margin: 0 0 18px;
 }
-.atum-list-wrapper a {
+.atum-list-wrapper a, #posts-filter a {
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
 }
-.atum-list-wrapper a:focus {
+.atum-list-wrapper a:focus, #posts-filter a:focus {
   -webkit-box-shadow: none;
           box-shadow: none;
 }
-.atum-list-wrapper .rotate {
+.atum-list-wrapper .rotate, #posts-filter .rotate {
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
 }
-.atum-list-wrapper .table-style-buttons {
+.atum-list-wrapper .table-style-buttons, #posts-filter .table-style-buttons {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -4415,7 +4415,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   gap: 4px;
   margin-left: 5px;
 }
-.atum-list-wrapper .table-style-buttons button {
+.atum-list-wrapper .table-style-buttons button, #posts-filter .table-style-buttons button {
   width: 33px;
   height: 33px;
   border-radius: 5px;
@@ -4427,29 +4427,29 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   transition: all 0.2s ease-in-out;
   line-height: 2.4;
 }
-.atum-list-wrapper .table-style-buttons button .atmi-wc-expand {
+.atum-list-wrapper .table-style-buttons button .atmi-wc-expand, #posts-filter .table-style-buttons button .atmi-wc-expand {
   font-size: 18px;
   line-height: 1.6;
   position: relative;
   right: -0.4px;
 }
-.atum-list-wrapper .table-style-buttons button:focus {
+.atum-list-wrapper .table-style-buttons button:focus, #posts-filter .table-style-buttons button:focus {
   outline: 0;
 }
-.atum-list-wrapper .table-style-buttons button.active, .atum-list-wrapper .table-style-buttons button:hover {
+.atum-list-wrapper .table-style-buttons button.active, #posts-filter .table-style-buttons button.active, .atum-list-wrapper .table-style-buttons button:hover, #posts-filter .table-style-buttons button:hover {
   background-color: var(--primary);
   color: var(--atum-table-bg);
   border-color: var(--primary);
 }
-.atum-list-wrapper .table-style-buttons button:hover {
+.atum-list-wrapper .table-style-buttons button:hover, #posts-filter .table-style-buttons button:hover {
   background-color: var(--blue-hover);
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .table-style-buttons {
+  .atum-list-wrapper .table-style-buttons, #posts-filter .table-style-buttons {
     display: none;
   }
 }
-.atum-list-wrapper .search-submit {
+.atum-list-wrapper .search-submit, #posts-filter .search-submit {
   margin-left: 4px;
   background-color: var(--secondary) !important;
   color: var(--main-text-expanded) !important;
@@ -4465,26 +4465,26 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   height: 26px;
   width: 63px;
 }
-.atum-list-wrapper .search-submit:hover, .atum-list-wrapper .search-submit:active, .atum-list-wrapper .search-submit:focus {
+.atum-list-wrapper .search-submit:hover, #posts-filter .search-submit:hover, .atum-list-wrapper .search-submit:active, #posts-filter .search-submit:active, .atum-list-wrapper .search-submit:focus, #posts-filter .search-submit:focus {
   background-color: var(--secondary-hover);
   color: var(--white);
   -webkit-box-shadow: none;
           box-shadow: none;
 }
-.atum-list-wrapper .search-submit:disabled {
+.atum-list-wrapper .search-submit:disabled, #posts-filter .search-submit:disabled {
   opacity: 1;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .search-submit {
+  .atum-list-wrapper .search-submit, #posts-filter .search-submit {
     height: 31px;
     padding: 0;
     margin-bottom: 0;
   }
 }
-.atum-list-wrapper .tablenav-pages, .atum-list-wrapper .search-box {
+.atum-list-wrapper .tablenav-pages, #posts-filter .tablenav-pages, .atum-list-wrapper .search-box, #posts-filter .search-box {
   position: relative;
 }
-.atum-list-wrapper .subsubsub {
+.atum-list-wrapper .subsubsub, #posts-filter .subsubsub {
   position: relative;
   font-size: 16px;
   letter-spacing: 0.4px;
@@ -4493,16 +4493,16 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   margin: 10px 20px;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .subsubsub {
+  .atum-list-wrapper .subsubsub, #posts-filter .subsubsub {
     margin: 10px 10px;
   }
 }
-.atum-list-wrapper .subsubsub li {
+.atum-list-wrapper .subsubsub li, #posts-filter .subsubsub li {
   margin-right: 15px;
   color: var(--atum-table-views-tabs);
   text-transform: uppercase;
 }
-.atum-list-wrapper .subsubsub li span {
+.atum-list-wrapper .subsubsub li span, #posts-filter .subsubsub li span {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -4514,7 +4514,7 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
           align-items: center;
   margin-left: 3px;
 }
-.atum-list-wrapper .subsubsub li span.active {
+.atum-list-wrapper .subsubsub li span.active, #posts-filter .subsubsub li span.active {
   border-radius: 5px;
   background-color: var(--primary);
   font-size: 16px;
@@ -4523,91 +4523,91 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   letter-spacing: 0.4px;
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .text-blue {
+.atum-list-wrapper .subsubsub li span.active .text-blue, #posts-filter .subsubsub li span.active .text-blue {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .extra-links-container {
+.atum-list-wrapper .subsubsub li span.active .extra-links-container, #posts-filter .subsubsub li span.active .extra-links-container {
   font-size: 14px;
   font-weight: normal;
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .extra-links-container.empty {
+.atum-list-wrapper .subsubsub li span.active .extra-links-container.empty, #posts-filter .subsubsub li span.active .extra-links-container.empty {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .extra-links-container a {
+.atum-list-wrapper .subsubsub li span.active .extra-links-container a, #posts-filter .subsubsub li span.active .extra-links-container a {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .extra-links-container a.empty {
+.atum-list-wrapper .subsubsub li span.active .extra-links-container a.empty, #posts-filter .subsubsub li span.active .extra-links-container a.empty {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active a {
+.atum-list-wrapper .subsubsub li span.active a, #posts-filter .subsubsub li span.active a {
   color: var(--atum-table-views-tabs-active-text);
   padding: 0;
 }
-.atum-list-wrapper .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty {
+.atum-list-wrapper .subsubsub li span.active a.empty, #posts-filter .subsubsub li span.active a.empty, .atum-list-wrapper .subsubsub li span.active a.tips, #posts-filter .subsubsub li span.active a.tips, .atum-list-wrapper .subsubsub li span.active a.empty {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active a.tips:hover {
+.atum-list-wrapper .subsubsub li span.active a.tips:hover, #posts-filter .subsubsub li span.active a.tips:hover {
   color: var(--atum-table-views-tabs-active-text) !important;
 }
-.atum-list-wrapper .subsubsub li span.active a .active {
+.atum-list-wrapper .subsubsub li span.active a .active, #posts-filter .subsubsub li span.active a .active {
   padding: 0;
 }
-.atum-list-wrapper .subsubsub li span.active .count {
+.atum-list-wrapper .subsubsub li span.active .count, #posts-filter .subsubsub li span.active .count {
   font-size: 16px;
   font-weight: bold;
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span.active .count.empty {
+.atum-list-wrapper .subsubsub li span.active .count.empty, #posts-filter .subsubsub li span.active .count.empty {
   color: var(--atum-table-views-tabs-active-text);
 }
-.atum-list-wrapper .subsubsub li span a {
+.atum-list-wrapper .subsubsub li span a, #posts-filter .subsubsub li span a {
   color: var(--atum-table-views-tabs);
   padding: 0;
 }
-.atum-list-wrapper .subsubsub li span a.current {
+.atum-list-wrapper .subsubsub li span a.current, #posts-filter .subsubsub li span a.current {
   pointer-events: none;
   color: var(--white);
   font-weight: bold;
 }
-.atum-list-wrapper .subsubsub li span a .text-blue {
+.atum-list-wrapper .subsubsub li span a .text-blue, #posts-filter .subsubsub li span a .text-blue {
   color: var(--primary);
 }
-.atum-list-wrapper .subsubsub li span a.tips {
+.atum-list-wrapper .subsubsub li span a.tips, #posts-filter .subsubsub li span a.tips {
   color: var(--primary);
 }
-.atum-list-wrapper .subsubsub li span a.empty {
+.atum-list-wrapper .subsubsub li span a.empty, #posts-filter .subsubsub li span a.empty {
   color: var(--atum-table-views-tabs);
 }
-.atum-list-wrapper .subsubsub li span .extra-links-container {
+.atum-list-wrapper .subsubsub li span .extra-links-container, #posts-filter .subsubsub li span .extra-links-container {
   font-size: 14px;
   font-weight: normal;
   color: var(--primary);
 }
-.atum-list-wrapper .subsubsub li span .extra-links-container.empty {
+.atum-list-wrapper .subsubsub li span .extra-links-container.empty, #posts-filter .subsubsub li span .extra-links-container.empty {
   color: var(--atum-table-views-tabs);
 }
-.atum-list-wrapper .subsubsub li span .extra-links-container.empty a {
+.atum-list-wrapper .subsubsub li span .extra-links-container.empty a, #posts-filter .subsubsub li span .extra-links-container.empty a {
   padding: 0;
   color: var(--atum-table-views-tabs);
 }
-.atum-list-wrapper .subsubsub li span .extra-links-container a {
+.atum-list-wrapper .subsubsub li span .extra-links-container a, #posts-filter .subsubsub li span .extra-links-container a {
   padding: 0;
   color: var(--primary);
 }
-.atum-list-wrapper .subsubsub li span .count {
+.atum-list-wrapper .subsubsub li span .count, #posts-filter .subsubsub li span .count {
   font-size: 16px;
   font-weight: bold;
   color: var(--primary);
 }
-.atum-list-wrapper .subsubsub li span .count.extra-links-container {
+.atum-list-wrapper .subsubsub li span .count.extra-links-container, #posts-filter .subsubsub li span .count.extra-links-container {
   font-size: 14px;
   font-weight: normal;
 }
-.atum-list-wrapper .subsubsub li span .count.empty {
+.atum-list-wrapper .subsubsub li span .count.empty, #posts-filter .subsubsub li span .count.empty {
   color: var(--atum-table-views-tabs);
 }
-.atum-list-wrapper .reset-filters {
+.atum-list-wrapper .reset-filters, #posts-filter .reset-filters {
   border-radius: 50%;
   text-align: center;
   border: none;
@@ -4623,49 +4623,49 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   transition: 0.2s ease-in-out;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .reset-filters {
+  .atum-list-wrapper .reset-filters, #posts-filter .reset-filters {
     margin-left: 0;
   }
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .reset-filters {
+  .atum-list-wrapper .reset-filters, #posts-filter .reset-filters {
     margin-bottom: 3px;
     margin-right: 10px;
   }
 }
-.atum-list-wrapper .reset-filters:focus {
+.atum-list-wrapper .reset-filters:focus, #posts-filter .reset-filters:focus {
   outline: none;
 }
-.atum-list-wrapper .reset-filters:hover {
+.atum-list-wrapper .reset-filters:hover, #posts-filter .reset-filters:hover {
   background-color: var(--primary-hover-var);
 }
-.atum-list-wrapper .reset-filters i {
+.atum-list-wrapper .reset-filters i, #posts-filter .reset-filters i {
   font-size: 18px;
 }
-.atum-list-wrapper .actions.bulkactions {
+.atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
   padding-right: 0;
 }
-.atum-list-wrapper .actions.bulkactions select {
+.atum-list-wrapper .actions.bulkactions select, #posts-filter .actions.bulkactions select {
   max-width: 150px;
 }
-.atum-list-wrapper .actions.bulkactions button {
+.atum-list-wrapper .actions.bulkactions button, #posts-filter .actions.bulkactions button {
   height: 30px;
   line-height: 0;
   text-transform: uppercase;
   font-size: 12px;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .actions.bulkactions button {
+  .atum-list-wrapper .actions.bulkactions button, #posts-filter .actions.bulkactions button {
     font-size: 14px;
     height: 35px;
   }
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .actions.bulkactions {
+  .atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
     display: block;
     float: left;
   }
-  .atum-list-wrapper .actions.bulkactions select {
+  .atum-list-wrapper .actions.bulkactions select, #posts-filter .actions.bulkactions select {
     width: auto;
     float: none;
     display: block;
@@ -4673,52 +4673,52 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   }
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .actions.bulkactions {
+  .atum-list-wrapper .actions.bulkactions, #posts-filter .actions.bulkactions {
     width: 100%;
     float: none;
   }
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .actions .btn {
+  .atum-list-wrapper .actions .btn, #posts-filter .actions .btn {
     width: 100%;
     margin: 10px 0;
   }
 }
-.atum-list-wrapper .actions input[type=submit] {
+.atum-list-wrapper .actions input[type=submit], #posts-filter .actions input[type=submit] {
   font-size: 12px;
 }
-.atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+.atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
   height: 30px;
   float: none;
 }
-.atum-list-wrapper .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection__arrow {
+.atum-list-wrapper .actions input .select2-selection__arrow, #posts-filter .actions input .select2-selection__arrow, .atum-list-wrapper .actions select .select2-selection__arrow, #posts-filter .actions select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container .select2-selection__arrow, #posts-filter .actions .select2-container .select2-selection__arrow {
   height: 24px;
   background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") no-repeat right 5px top 55%;
   background-size: 16px 16px;
   width: 28px;
 }
-.atum-list-wrapper .actions input .select2-selection__arrow:after, .atum-list-wrapper .actions select .select2-selection__arrow:after, .atum-list-wrapper .actions .select2-container .select2-selection__arrow:after {
+.atum-list-wrapper .actions input .select2-selection__arrow:after, #posts-filter .actions input .select2-selection__arrow:after, .atum-list-wrapper .actions select .select2-selection__arrow:after, #posts-filter .actions select .select2-selection__arrow:after, .atum-list-wrapper .actions .select2-container .select2-selection__arrow:after, #posts-filter .actions .select2-container .select2-selection__arrow:after {
   display: none;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+  .atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
     height: 44px;
   }
-  .atum-list-wrapper .actions input.atum-select2 .select2-selection, .atum-list-wrapper .actions input.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection, .atum-list-wrapper .actions select.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
+  .atum-list-wrapper .actions input.atum-select2 .select2-selection, #posts-filter .actions input.atum-select2 .select2-selection, .atum-list-wrapper .actions input.atum-select2 .select2-selection__rendered, #posts-filter .actions input.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, #posts-filter .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection, #posts-filter .actions input.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions input.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection, #posts-filter .actions select.atum-select2 .select2-selection, .atum-list-wrapper .actions select.atum-select2 .select2-selection__rendered, #posts-filter .actions select.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, #posts-filter .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection, #posts-filter .actions select.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions select.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection, #posts-filter .actions .select2-container.atum-select2 .select2-selection, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__rendered, #posts-filter .actions .select2-container.atum-select2 .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, #posts-filter .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__rendered, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__rendered, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
     height: 44px;
     line-height: 44px;
   }
-  .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
+  .atum-list-wrapper .actions input.atum-select2 .select2-selection__arrow, #posts-filter .actions input.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions input.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions input.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions select.atum-select2 .select2-selection__arrow, #posts-filter .actions select.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions select.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions select.atum-enhanced-select .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-select2 .select2-selection__arrow, #posts-filter .actions .select2-container.atum-select2 .select2-selection__arrow, .atum-list-wrapper .actions .select2-container.atum-enhanced-select .select2-selection__arrow, #posts-filter .actions .select2-container.atum-enhanced-select .select2-selection__arrow {
     top: 1px;
   }
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .actions input, .atum-list-wrapper .actions select, .atum-list-wrapper .actions .select2-container {
+  .atum-list-wrapper .actions input, #posts-filter .actions input, .atum-list-wrapper .actions select, #posts-filter .actions select, .atum-list-wrapper .actions .select2-container, #posts-filter .actions .select2-container {
     width: 100% !important;
     margin: 0;
   }
 }
-.atum-list-wrapper .actions input[type=submit] {
+.atum-list-wrapper .actions input[type=submit], #posts-filter .actions input[type=submit] {
   line-height: 0;
   text-transform: uppercase;
   font-size: 12px;
@@ -4726,30 +4726,30 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   margin-left: 0;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper .actions input[type=submit] {
+  .atum-list-wrapper .actions input[type=submit], #posts-filter .actions input[type=submit] {
     font-size: 14px;
     height: 35px;
   }
 }
-.atum-list-wrapper .actions .filter-text {
+.atum-list-wrapper .actions .filter-text, #posts-filter .actions .filter-text {
   display: inline;
   float: left;
   line-height: 28px;
   padding-right: 10px;
 }
-.atum-list-wrapper .actions .dropdown_extra_filter {
+.atum-list-wrapper .actions .dropdown_extra_filter, #posts-filter .actions .dropdown_extra_filter {
   max-width: 160px;
 }
-.atum-list-wrapper .floatThead-wrapper tr.size-row {
+.atum-list-wrapper .floatThead-wrapper tr.size-row, #posts-filter .floatThead-wrapper tr.size-row {
   display: none;
 }
-.atum-list-wrapper .floatThead-wrapper .floatThead-container {
+.atum-list-wrapper .floatThead-wrapper .floatThead-container, #posts-filter .floatThead-wrapper .floatThead-container {
   height: 0;
 }
-.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler {
+.atum-list-wrapper .floatThead-wrapper .floatThead-container .group-toggler, #posts-filter .floatThead-wrapper .floatThead-container .group-toggler {
   display: none;
 }
-.atum-list-wrapper .atum-list-table.cloned {
+.atum-list-wrapper .atum-list-table.cloned, #posts-filter .atum-list-table.cloned {
   width: auto;
   position: absolute;
   top: 0;
@@ -4758,32 +4758,32 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
           box-shadow: var(--atum-cloned-list-table-shadow) 5px 1px 10px;
 }
 @media all and (max-width: 782px) {
-  .atum-list-wrapper ul.subsubsub {
+  .atum-list-wrapper ul.subsubsub, #posts-filter ul.subsubsub {
     font-size: 16px;
     float: none;
     text-align: left;
   }
-  .atum-list-wrapper .search-box {
+  .atum-list-wrapper .search-box, #posts-filter .search-box {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     width: 100%;
   }
-  .atum-list-wrapper .search-box .table-style-buttons button {
+  .atum-list-wrapper .search-box .table-style-buttons button, #posts-filter .search-box .table-style-buttons button {
     width: 44px;
     height: 44px;
   }
-  .atum-list-wrapper .search-box .table-style-buttons button .atmi-wc-expand {
+  .atum-list-wrapper .search-box .table-style-buttons button .atmi-wc-expand, #posts-filter .search-box .table-style-buttons button .atmi-wc-expand {
     font-size: 19px;
     top: 1px;
   }
-  .atum-list-wrapper .search-box > .input-group {
+  .atum-list-wrapper .search-box > .input-group, #posts-filter .search-box > .input-group {
     -webkit-box-flex: 1;
         -ms-flex-positive: 1;
             flex-grow: 1;
     margin: 0;
   }
-  .atum-list-wrapper .filter-box {
+  .atum-list-wrapper .filter-box, #posts-filter .filter-box {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -4791,13 +4791,13 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
     margin: auto;
     width: 90%;
   }
-  .atum-list-wrapper .tablenav .tablenav-pages {
+  .atum-list-wrapper .tablenav .tablenav-pages, #posts-filter .tablenav .tablenav-pages {
     width: auto;
     margin: 0 0 0 auto;
   }
 }
 @media all and (max-width: 480px) {
-  .atum-list-wrapper .tablenav .tablenav-pages {
+  .atum-list-wrapper .tablenav .tablenav-pages, #posts-filter .tablenav .tablenav-pages {
     width: 100%;
     margin: 10px 0 0 0;
   }

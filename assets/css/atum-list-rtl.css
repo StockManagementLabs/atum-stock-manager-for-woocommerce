@@ -42,11 +42,11 @@
   padding-right: 0px;
 }
 
-.atum-list-wrapper .subsubsub li {
+.atum-list-wrapper .subsubsub li, #posts-filter .subsubsub li {
   margin-right: 0px;
   margin-left: 15px;
 }
-.atum-list-wrapper .subsubsub li span {
+.atum-list-wrapper .subsubsub li span, #posts-filter .subsubsub li span {
   margin-left: 0px;
   margin-right: 3px;
 }
