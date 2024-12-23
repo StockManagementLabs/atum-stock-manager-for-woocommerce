@@ -497,7 +497,8 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 			),
 		);
 
-		return array_merge( $params, $supplier_params );
+		// Allow filtering of the location collection parameters.
+		return apply_filters( "rest_{$this->post_type}_collection_params", array_merge( $params, $supplier_params ), $this->post_type );
 
 	}
 
