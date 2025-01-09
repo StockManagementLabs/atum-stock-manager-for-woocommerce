@@ -705,7 +705,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Export a SQL `dump` file with the ATUM App's SQLite structure
+	 * Generate a SQL `dump` file with the ATUM App's SQLite structure
 	 *
 	 * @since 1.9.44
 	 *
@@ -717,7 +717,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return array|true
 	 */
-	public static function export_sql_dump( $endpoint, $schema, $user_id, $params, $user_app_id ) {
+	public static function generate_sql_dump( $endpoint, $schema, $user_id, $params, $user_app_id ) {
 
 		$dump_data = '';
 		$files     = self::get_exported_files( $endpoint );
@@ -1334,15 +1334,13 @@ class FullExportController extends \WC_REST_Controller {
 				}
 
 			}
-			// For json formats the process has ended, so delete the transients and notify the customer.
-			else {
-				AtumCache::delete_transients( $pending_endpoint_transient_key );
-			}
+
+			AtumCache::delete_transients( $pending_endpoint_transient_key );
 
 		}
 
 		// Send the completed export notification once all the export tasks have been completed.
-		if ( ! self::are_there_pending_exports() ) {
+		if ( ! self::are_there_pending_exports() && 'sqlite' !== $format ) {
 			self::notify_subscriber( $user_id );
 		}
 
@@ -1445,9 +1443,11 @@ class FullExportController extends \WC_REST_Controller {
 				),
 			] );
 
-			if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) < 300 ) {
-				AtumCache::delete_transients( $subscribers_transient_key );
+			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) < 300 ) {
+				error_log( 'ATUM error sending the push notification to the app user: ' . $response->get_error_message() );
 			}
+
+			AtumCache::delete_transients( $subscribers_transient_key );
 
 		}
 
@@ -1470,6 +1470,7 @@ class FullExportController extends \WC_REST_Controller {
 
 			$name_pattern = self::get_file_name( $endpoint, $schema, $params );
 			$files        = glob( $upload_dir . ( $endpoint ? "$name_pattern*.json" : '*.json' ) );
+			$files        = array_merge( $files, glob( $upload_dir . '*.{sql,zip}' ) );
 
 			foreach ( $files as $file ) {
 				// As there can be endpoints that share a part of the name pattern, make sure we remove the right ones.
