@@ -38,9 +38,9 @@ class CategoryGenerator extends GeneratorBase {
 		if ( ! empty( $category['image'] ) ) {
 			$image = [
 				'id'    => (int) $category['image']['id'],
-				'src'   => $category['image']['src'],
-				'title' => $category['image']['title'],
-				'alt'   => $category['image']['alt'],
+				'src'   => $category['image']['src'] ?? '',
+				'title' => $category['image']['title'] ?? '',
+				'alt'   => $category['image']['alt'] ?? '',
 			];
 		}
 

@@ -35,7 +35,7 @@ class InventoryGenerator extends GeneratorBase {
 
 		// Prepare regions.
 		$prepared_regions = [];
-		if ( ! empty( $inventory['region'] ) ) {
+		if ( ! empty( $inventory['region'] ) && is_array( $inventory['region'] ) ) {
 			foreach ( $inventory['region'] as $region_id => $region_name ) {
 				$prepared_regions[] = $this->prepare_ids( $region_id );
 			}
@@ -43,7 +43,7 @@ class InventoryGenerator extends GeneratorBase {
 
 		// Prepare locations.
 		$prepared_locations = [];
-		if ( ! empty( $inventory['location'] ) ) {
+		if ( ! empty( $inventory['location'] ) && is_array( $inventory['location'] ) ) {
 			foreach ( $inventory['location'] as $location_id => $location_name ) {
 				$prepared_locations[] = [
 					'id'   => (int) $location_id,
@@ -63,19 +63,19 @@ class InventoryGenerator extends GeneratorBase {
 			'region'            => $prepared_regions,
 			'locations'         => $prepared_locations,
 			'expiryDays'        => (int) ( $inventory['expiry_threshold'] ?? 0 ),
-			'sku'               => $inventory['sku'] ?? '',
-			'manageStock'       => (bool) ( $inventory['manage_stock'] ?? FALSE ),
-			'stockQuantity'     => $inventory['stock_quantity'] !== NULL ? (float) $inventory['stock_quantity'] : NULL,
-			'backorders'        => $inventory['backorders'] ?? 'no',
-			'stockStatus'       => $inventory['stock_status'] ?? '',
-			'barcode'           => $inventory['barcode'] ?? '',
-			'soldIndividually'  => (bool) ( $inventory['sold_individually'] ?? FALSE ),
-			'outStockThreshold' => isset( $inventory['out_stock_threshold'] ) ? (float) $inventory['out_stock_threshold'] : NULL,
-			'purchasePrice'     => isset( $inventory['purchase_price'] ) ? (float) $inventory['purchase_price'] : NULL,
-			'price'             => isset( $inventory['price'] ) ? (float) $inventory['price'] : NULL,
-			'regularPrice'      => isset( $inventory['regular_price'] ) ? (float) $inventory['regular_price'] : NULL,
-			'salePrice'         => isset( $inventory['sale_price'] ) ? (float) $inventory['sale_price'] : NULL,
-			'supplier'          => $this->prepare_ids( $inventory['supplier_id'] ?? NULL ),
+			'sku'               => $inventory['meta_data']['sku'] ?? '',
+			'manageStock'       => (bool) ( $inventory['meta_data']['manage_stock'] ?? FALSE ),
+			'stockQuantity'     => ( isset( $inventory['meta_data']['stock_quantity'] ) && ! is_null( $inventory['meta_data']['stock_quantity'] ) ) ? (float) $inventory['meta_data']['stock_quantity'] : NULL,
+			'backorders'        => $inventory['meta_data']['backorders'] ?? 'no',
+			'stockStatus'       => $inventory['meta_data']['stock_status'] ?? '',
+			'barcode'           => $inventory['meta_data']['barcode'] ?? '',
+			'soldIndividually'  => (bool) ( $inventory['meta_data']['sold_individually'] ?? FALSE ),
+			'outStockThreshold' => isset( $inventory['meta_data']['out_stock_threshold'] ) ? (float) $inventory['meta_data']['out_stock_threshold'] : NULL,
+			'purchasePrice'     => isset( $inventory['meta_data']['purchase_price'] ) ? (float) $inventory['meta_data']['purchase_price'] : NULL,
+			'price'             => isset( $inventory['meta_data']['price'] ) ? (float) $inventory['meta_data']['price'] : NULL,
+			'regularPrice'      => isset( $inventory['meta_data']['regular_price'] ) ? (float) $inventory['meta_data']['regular_price'] : NULL,
+			'salePrice'         => isset( $inventory['meta_data']['sale_price'] ) ? (float) $inventory['meta_data']['sale_price'] : NULL,
+			'supplier'          => $this->prepare_ids( $inventory['meta_data']['supplier_id'] ?? NULL ),
 			'parent'            => $this->prepare_ids( $inventory['product_id'] ),
 			// Stock numbers with proper type casting.
 			'inboundStock'      => (float) ( $inventory['inbound_stock'] ?? 0 ),
@@ -108,20 +108,34 @@ class InventoryGenerator extends GeneratorBase {
 	 */
 	private function handle_dates( array $inventory, array &$prepared_data ) {
 
-		$dates = [
-			'inventoryDate'  => 'inventory_date',
-			'updateDate'     => 'update_date',
-			'bbeDate'        => 'bbe_date',
+		$data_dates = [
+			'inventoryDate' => 'inventory_date',
+			'updateDate'    => 'update_date',
+			'bbeDate'       => 'bbe_date',
+		];
+
+		$meta_data_dates = [
 			'dateOnSaleFrom' => 'date_on_sale_from',
 			'dateOnSaleTo'   => 'date_on_sale_to',
 			'outStockDate'   => 'out_stock_date',
 		];
 
-		foreach ( $dates as $schemaKey => $sourceKey ) {
-			if ( ! empty( $inventory[ $sourceKey ] ) ) {
-				$prepared_data[ $schemaKey ]      = $inventory[ $sourceKey ];
-				$prepared_data["{$schemaKey}GMT"] = str_replace( 'T', ' ', $inventory["{$sourceKey}_gmt"] ?? '' );
+		foreach ( array_merge( $data_dates, $meta_data_dates ) as $schema_key => $source_key ) {
+
+			if ( ! empty( $inventory[ $source_key ] ) ) {
+
+				// It is supposed that all the inventory dates are stored in GMT.
+				if ( array_key_exists( $schema_key, $meta_data_dates ) ) {
+					$prepared_data[ $schema_key ]      = $inventory['meta_data'][ $source_key ];
+					$prepared_data["{$schema_key}GMT"] = $inventory['meta_data'][ $source_key ];
+				}
+				else {
+					$prepared_data[ $schema_key ]      = $inventory[ $source_key ];
+					$prepared_data["{$schema_key}GMT"] = $inventory[ $source_key ];
+				}
+
 			}
+
 		}
 
 	}

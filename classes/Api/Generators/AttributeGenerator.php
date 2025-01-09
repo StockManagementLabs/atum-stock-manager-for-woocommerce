@@ -67,7 +67,7 @@ class AttributeGenerator extends GeneratorBase {
 						'name'   => $term['bom']['name'],
 						'type'   => $term['bom']['type'],
 						'qty'    => (float) $term['bom']['qty'],
-						'delete' => (bool) $term['bom']['delete'],
+						'delete' => (bool) ( $term['bom']['delete'] ?? FALSE ),
 					];
 				}
 
