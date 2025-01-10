@@ -81,9 +81,6 @@ class AtumQueues {
 		// Add the sales calc recurring hook.
 		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'action_update_last_sales_calc_props' ) );
 
-		// Add the delete transients recurring hook.
-		add_action( 'atum/delete_transients', array( $this, 'delete_transients' ) );
-
 		// Add the tmp folders clean up hook.
 		add_action( 'atum/clean_up_tmp_folders', array( $this, 'action_clean_up_tmp_folders' ) );
 
@@ -131,7 +128,7 @@ class AtumQueues {
 			];
 
 			$this->recurring_hooks['atum/cron_update_sales_calc_props'] = $time_interval;
-			$this->recurring_hooks['atum/delete_transients']            = $time_interval;
+
 		}
 
 		// Allow registering queues externally.
@@ -341,17 +338,6 @@ class AtumQueues {
 
 		// Wait until finished.
 		update_option( ATUM_PREFIX . 'last_sales_calc', Helpers::date_format( '', TRUE, TRUE ) );
-
-	}
-
-	/**
-	 * Delete transients
-	 *
-	 * @since 1.9.40
-	 */
-	public function delete_transients() {
-
-		AtumCache::do_delete_transients();
 
 	}
 
