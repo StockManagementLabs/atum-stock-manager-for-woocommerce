@@ -14,7 +14,15 @@ namespace Atum\Api\Generators;
 
 defined( 'ABSPATH' ) || exit;
 
+use Atum\Addons\Addons;
+use Atum\Components\AtumCache;
+
 class StoreSettingsGenerator extends GeneratorBase {
+
+	/**
+	 * The transient key for the accumulated store settings.
+	 */
+	const SETTINGS_TRANSIENT = 'atum_store_settings';
 
 	/**
 	 * The schema name
@@ -44,6 +52,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 			'actionLogs'     => [],
 			'multiInventory' => [],
 			'productLevels'  => [],
+			//'stockTakes'     => [],
 		],
 		'wc'   => [
 			'admin'    => [],
@@ -71,8 +80,19 @@ class StoreSettingsGenerator extends GeneratorBase {
 
 		parent::__construct( $table_name, $revision );
 
-		$this->store_settings_id                 = $store_settings_id;
-		self::$accumulated_store_settings['app'] = $store_settings_app_group;
+		// As we need to persist the accumulated settings between different instances of the generator, we need to save then in a transient.
+		$settings_transient_key = AtumCache::get_transient_key( self::SETTINGS_TRANSIENT, [ $store_settings_id ] );
+		$accumulated_settings   = AtumCache::get_transient( $settings_transient_key, TRUE );
+
+		if ( ! empty( $accumulated_settings ) && is_array( $accumulated_settings ) ) {
+			self::$accumulated_store_settings = $accumulated_settings;
+		}
+
+		$this->store_settings_id = $store_settings_id;
+
+		if ( empty( self::$accumulated_store_settings['app'] ) ) {
+			self::$accumulated_store_settings['app'] = $store_settings_app_group;
+		}
 
 	}
 
@@ -117,11 +137,16 @@ class StoreSettingsGenerator extends GeneratorBase {
 		// Update the accumulated settings.
 		$this->update_accumulated_settings( $main_group, $sub_group, $json_data['results'] );
 
+		$settings_transient_key = AtumCache::get_transient_key( self::SETTINGS_TRANSIENT, [ $this->store_settings_id ] );
+
 		// Check if all settings are populated.
 		if ( $this->are_all_settings_populated() ) {
 
 			$prepared_data = $this->prepare_data( [ '_id'  => $this->store_settings_id, '_rev' => $this->revision, ] );
 			$this->validate_data( $prepared_data );
+
+			// Delete the transient (not needed anymore).
+			AtumCache::delete_transients( $settings_transient_key );
 
 			// Prepare SQL update statement.
 			return sprintf(
@@ -131,6 +156,9 @@ class StoreSettingsGenerator extends GeneratorBase {
 				$this->sanitize_value( $this->store_settings_id )
 			);
 
+		}
+		else {
+			AtumCache::set_transient( $settings_transient_key, self::$accumulated_store_settings );
 		}
 
 		return '';
@@ -146,12 +174,26 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 */
 	private function are_all_settings_populated(): bool {
 
+		/* Multi-Inventory support */
+		if ( Addons::is_addon_active( 'multi_inventory' ) && empty( self::$accumulated_store_settings['atum']['multiInventory'] ) ) {
+			return FALSE;
+		}
+
+		/* Product Levels support */
+		if ( Addons::is_addon_active( 'product_levels' ) && empty( self::$accumulated_store_settings['atum']['productLevels'] ) ) {
+			return FALSE;
+		}
+
+		/* Stock Takes support */
+		// TODO: DISABLED UNTIL WE ADD FULL SUPPORT TO STOCK TAKES TO THE APP.
+		/*if ( Addons::is_addon_active( 'stock_takes' ) && empty( self::$accumulated_store_settings['atum']['stockTakes'] ) ) {
+			return FALSE;
+		}*/
+
 		// Check if all subgroups are populated.
 		return ! empty( self::$accumulated_store_settings['atum']['general'] ) &&
 			   ! empty( self::$accumulated_store_settings['atum']['storeDetails'] ) &&
 			   ! empty( self::$accumulated_store_settings['atum']['moduleManager'] ) &&
-			   ! empty( self::$accumulated_store_settings['atum']['multiInventory'] ) &&
-			   ! empty( self::$accumulated_store_settings['atum']['productLevels'] ) &&
 			   ! empty( self::$accumulated_store_settings['wc']['admin'] ) &&
 			   ! empty( self::$accumulated_store_settings['wc']['general'] ) &&
 			   ! empty( self::$accumulated_store_settings['wc']['products'] ) &&
