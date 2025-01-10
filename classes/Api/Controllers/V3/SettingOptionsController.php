@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Helpers;
+use Atum\Modules\ModuleManager;
 use Atum\Settings\Settings;
 
 class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
@@ -414,7 +415,14 @@ class SettingOptionsController extends \WC_REST_Setting_Options_Controller {
 		}
 
 		if ( empty( $this->atum_settings->get_groups() ) ) {
+
+			// Hack to load ATUM settings through a CRON job.
+			if ( ! function_exists( 'add_settings_section' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/template.php';
+			}
+
 			$this->atum_settings->register_settings();
+
 		}
 
 	}
