@@ -293,11 +293,11 @@ class AtumApi {
 			header( 'Access-Control-Allow-Origin: ' . $origin );
 			header( 'Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE' );
 			header( 'Access-Control-Allow-Credentials: true' );
-			header( 'Vary: Origin', false );
+			header( 'Vary: Origin', FALSE );
 
 		}
 		elseif ( ! headers_sent() && 'GET' === $_SERVER['REQUEST_METHOD'] && ! is_user_logged_in() ) {
-			header( 'Vary: Origin', false );
+			header( 'Vary: Origin', FALSE );
 		}
 
 		return $value;
@@ -344,17 +344,13 @@ class AtumApi {
 
 				foreach ( $exportable_endpoint as $sub_key => $sub_endpoint ) {
 					add_action( "atum_api_export_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
-					add_action( "atum_api_dump_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController',
-						'generate_sql_dump'
-					), 10, 5 );
+					add_action( "atum_api_dump_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'generate_sql_dump' ), 10, 3 );
 				}
 
 			}
 			else {
 				add_action( "atum_api_export_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
-				add_action( "atum_api_dump_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController',
-					'generate_sql_dump'
-				), 10, 5 );
+				add_action( "atum_api_dump_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'generate_sql_dump' ), 10, 3 );
 			}
 		}
 
