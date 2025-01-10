@@ -154,7 +154,7 @@ class StoreSettingsGenerator extends GeneratorBase {
 				$this->sanitize_value( json_encode( $prepared_data ) ),
 				$this->sanitize_value( $this->generate_timestamp() ),
 				$this->sanitize_value( $this->store_settings_id )
-			);
+			) . "\n";
 
 		}
 		else {

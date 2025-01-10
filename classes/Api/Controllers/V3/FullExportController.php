@@ -769,7 +769,7 @@ class FullExportController extends \WC_REST_Controller {
 							);
 
 							// Generate SQL statements for the specific endpoint.
-							$dump_data .= "\n" . $generator->generate( $json );
+							$dump_data .= $generator->generate( $json );
 
 						} catch ( \Exception $e ) {
 
@@ -1374,14 +1374,31 @@ class FullExportController extends \WC_REST_Controller {
 		// Find the exportable endpoint within the array.
 		foreach ( $endpoints as $endpoint ) {
 
-			$found_endpoints = array_merge( $found_endpoints, array_filter( $exportable_endpoints, function( $ep ) use ( $endpoint ) {
-				return is_array( $ep ) ? in_array( $endpoint, $ep ) : $ep === $endpoint;
-			} ) );
+			foreach ( $exportable_endpoints as $schema => $ep ) {
 
+				// Handle nested endpoints (like store-settings)
+				if ( is_array( $ep ) ) {
+
+					// Check if the endpoint exists in the nested array
+					$nested_match = array_filter( $ep, function ( $sub_endpoint ) use ( $endpoint ) {
+
+						return $sub_endpoint === $endpoint;
+					} );
+
+					if ( ! empty( $nested_match ) ) {
+						// Find the key of the matched endpoint
+						$matched_key                                = array_search( $endpoint, $ep );
+						$found_endpoints[ $schema ][ $matched_key ] = $endpoint;
+					}
+				}
+				// Handle non-nested endpoints
+				elseif ( $ep === $endpoint ) {
+					$found_endpoints[ $schema ] = $ep;
+				}
+			}
 		}
 
 		return array_filter( $found_endpoints );
-
 	}
 
 	/**

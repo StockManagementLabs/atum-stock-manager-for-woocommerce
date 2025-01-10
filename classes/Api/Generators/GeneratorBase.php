@@ -128,7 +128,7 @@ abstract class GeneratorBase {
 
 		$insert_sql = "INSERT OR REPLACE INTO '$this->table_name' ('id', 'revision', 'deleted', 'lastWriteTime', 'data') VALUES\n" . implode( ",\n", $sql_inserts ) . ';';
 
-		return $create_sql . "\n" . $insert_sql;
+		return $create_sql . "\n" . $insert_sql . "\n";
 
 	}
 
