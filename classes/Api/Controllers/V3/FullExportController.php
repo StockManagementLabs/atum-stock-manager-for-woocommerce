@@ -600,7 +600,7 @@ class FullExportController extends \WC_REST_Controller {
 		else {
 
 			$headers = [
-				'Content-Type'        => 'application/sql',
+				'Content-Type'        => 'text/sql',
 				'Content-Length'      => filesize( $dump_file ),
 				'Content-Disposition' => 'attachment; filename="' . basename( $dump_file ) . '"',
 			];
