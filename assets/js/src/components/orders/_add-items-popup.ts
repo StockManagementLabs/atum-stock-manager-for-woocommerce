@@ -39,6 +39,7 @@ export default class AddItemsPopup {
 
         const $select: JQuery = $( '#wc-backbone-modal-dialog [name="add_atum_order_items[]"]' );
 
+        // Add the items to the excluded data so they cannot be added twice.
         if ( this.addedItems.length && $select.length ) {
 
             let excludedItems: string[] = [];
