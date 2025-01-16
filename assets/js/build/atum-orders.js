@@ -11298,6 +11298,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _blocker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_blocker */ "./assets/js/src/components/_blocker.ts");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 
 var AddItemsPopup = (function () {
     function AddItemsPopup(settings, $container, atumOrders, tooltip) {
@@ -11307,11 +11316,21 @@ var AddItemsPopup = (function () {
         this.atumOrders = atumOrders;
         this.tooltip = tooltip;
         this.wpHooks = window['wp']['hooks'];
+        this.addedItems = [];
         $('body')
             .on('wc_backbone_modal_loaded', function (evt, target) { return _this.init(evt, target); })
             .on('wc_backbone_modal_response', function (evt, target, data) { return _this.response(evt, target, data); });
     }
     AddItemsPopup.prototype.init = function (evt, target) {
+        var $select = $('#wc-backbone-modal-dialog [name="add_atum_order_items[]"]');
+        if (this.addedItems.length && $select.length) {
+            var excludedItems = [];
+            var excluded = $select.data('exclude');
+            if (excluded) {
+                excludedItems = excluded.split(',');
+            }
+            $select.data('exclude', __spreadArray(__spreadArray([], excludedItems, true), this.addedItems, true).join(','));
+        }
         if ('atum-modal-add-products' === target) {
             $('body').trigger('wc-enhanced-select-init');
         }
@@ -11348,6 +11367,12 @@ var AddItemsPopup = (function () {
                 }
                 _this.tooltip.addTooltips();
                 _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock(_this.$container);
+                if (Array.isArray(itemIds)) {
+                    _this.addedItems = __spreadArray(__spreadArray([], _this.addedItems, true), itemIds, true);
+                }
+                else {
+                    _this.addedItems.push(itemIds);
+                }
             }, 'json');
         }
     };
