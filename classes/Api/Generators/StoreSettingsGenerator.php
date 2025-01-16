@@ -149,12 +149,12 @@ class StoreSettingsGenerator extends GeneratorBase {
 			AtumCache::delete_transients( $settings_transient_key );
 
 			// Prepare SQL update statement.
-			return sprintf(
+			return $this->add_starting_comment() . sprintf(
 				"UPDATE '$this->table_name' SET data = '%s', lastWriteTime = '%s' WHERE id = '%s';",
 				$this->sanitize_value( json_encode( $prepared_data ) ),
 				$this->sanitize_value( $this->generate_timestamp() ),
 				$this->sanitize_value( $this->store_settings_id )
-			) . "\n";
+			) . "\n" . $this->add_ending_comment();
 
 		}
 		else {

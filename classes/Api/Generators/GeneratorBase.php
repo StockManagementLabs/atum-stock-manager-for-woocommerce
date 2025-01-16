@@ -128,7 +128,7 @@ abstract class GeneratorBase {
 
 		$insert_sql = "INSERT OR REPLACE INTO '$this->table_name' ('id', 'revision', 'deleted', 'lastWriteTime', 'data') VALUES\n" . implode( ",\n", $sql_inserts ) . ';';
 
-		return $create_sql . "\n" . $insert_sql . "\n";
+		return $this->add_starting_comment() . $create_sql . "\n" . $insert_sql . "\n" . $this->add_ending_comment();
 
 	}
 
@@ -515,6 +515,40 @@ abstract class GeneratorBase {
 			],
 			'_attachments'  => new \stdClass(),
 		];
+
+	}
+
+	/**
+	 * Add a starting comment to the SQL
+	 *
+	 * @since 1.9.44
+	 *
+	 * @return string
+	 */
+	protected function add_starting_comment() {
+
+		$comment  = "#\n";
+		$comment .= "# Schema: `$this->schema_name`\n";
+		$comment .= "#\n";
+
+		return $comment;
+
+	}
+
+	/**
+	 * Add a ending comment to the SQL
+	 *
+	 * @since 1.9.44
+	 *
+	 * @return string
+	 */
+	protected function add_ending_comment() {
+
+		$comment  = "#\n";
+		$comment .= "# End of schema: `$this->schema_name`\n";
+		$comment .= "#\n\n";
+
+		return $comment;
 
 	}
 

@@ -380,7 +380,7 @@ class FullExportController extends \WC_REST_Controller {
 
 			}
 			else {
-				$response = $this->export_dump_file( $user_app_id );
+				$response = $this->export_dump_file( $user_app_id, $request['schema'] ?? '' );
 			}
 
 		}
@@ -583,10 +583,11 @@ class FullExportController extends \WC_REST_Controller {
 	 * @since 1.9.44
 	 *
 	 * @param string $user_app_id
+	 * @param string $schema
 	 *
 	 * @return array|void
 	 */
-	private function export_dump_file( $user_app_id ) {
+	private function export_dump_file( $user_app_id, $schema = '' ) {
 
 		$dump_file = self::get_dump_file( $user_app_id );
 
@@ -617,7 +618,28 @@ class FullExportController extends \WC_REST_Controller {
 			// NOTE: this shouldn't imply any security risk because when we reach this point, the authenticated request was previously passed.
 			$server->send_header( 'Access-Control-Allow-Origin', '*' );
 
-			readfile( $dump_file );
+			if ( $schema ) {
+
+				$sql_blocks = $this->get_sql_blocks( $dump_file, $schema );
+
+				if ( ! empty( $sql_blocks ) ) {
+					foreach ( $sql_blocks as $block ) {
+						echo $block;
+					}
+				}
+				else {
+					return array(
+						'success' => FALSE,
+						'code'    => 'error',
+						'message' => __( 'Schema block not found in the SQL dump.', ATUM_TEXT_DOMAIN ),
+					);
+				}
+
+			}
+			else {
+				readfile( $dump_file );
+			}
+
 			die(); // We've already sent the file, so we can stop the execution here.
 
 		}
@@ -1601,6 +1623,13 @@ class FullExportController extends \WC_REST_Controller {
 
 	}
 
+	/**
+	 * Prepare the user for the cron job
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param int $user_id
+	 */
 	private static function prepare_cron_job_user( $user_id ) {
 
 		$admin_user 	  = self::get_admin_user();
@@ -1620,6 +1649,38 @@ class FullExportController extends \WC_REST_Controller {
 		elseif ( $admin_user && $admin_user !== $user_id ) {
 			wp_set_current_user( $admin_user );
 		}
+
+	}
+
+	/**
+	 * Get a schema's blocks of queries from a SQL file.
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param string $file_path
+	 * @param string $schema_name
+	 *
+	 * @return string[]|null
+	 */
+	private function get_sql_blocks( $file_path, $schema_name ) {
+
+		$file_content = file_get_contents( $file_path );
+		if ( $file_content === FALSE ) {
+			return NULL;
+		}
+
+		// Find the schema block(s) in the file.
+		$pattern = sprintf(
+			'/#\s*Schema:\s*`%s`\s*#(.*?)#\s*End of schema:\s*`%s`\s*#/s',
+			preg_quote( $schema_name, '/' ),
+			preg_quote( $schema_name, '/' )
+		);
+
+		if ( preg_match_all( $pattern, $file_content, $matches ) ) {
+			return array_map( 'trim', $matches[1] );
+		}
+
+		return NULL;
 
 	}
 
