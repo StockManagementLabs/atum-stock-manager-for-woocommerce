@@ -12,7 +12,7 @@
 	"images"           : {
 		"logo"      : "https://stockmanagementlabs.com/wp-content/uploads/2024/09/barcodes-pro-illustration.jpeg",
 		"dash_logo" : "https://stockmanagementlabs.com/wp-content/uploads/2024/09/barcodes-pro-illustration.jpeg",
-		"logo_css"  : "width:95%;margin-bottom:10px;border-radius:5px;",
+		"logo_css"  : "width:85%;margin-bottom:10px;border-radius:5px;",
 		"top_left"  : "https://stockmanagementlabs.com/wp-content/uploads/2024/09/label-barcodes.svg"
 	},
 	"title"            : {

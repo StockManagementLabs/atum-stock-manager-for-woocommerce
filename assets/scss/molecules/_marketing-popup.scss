@@ -107,6 +107,10 @@
 			margin-right: 10px;
 		}
 		
+		.swal2-close {
+			background: #FFF; // Avoid visibility issues when there is any image below the button.
+		}
+		
 		.mp-logo {
 			width: 170px;
 			height: auto;

@@ -11692,7 +11692,6 @@ var AtumOrders = (function () {
                     action: 'atum_order_import_items',
                     wc_order_id: orderId,
                     atum_order_id: _this.settings.get('postId'),
-                    supplier_id: $('#supplier').val(),
                     security: _this.settings.get('importOrderItemsNonce'),
                 }, 'json');
             },
