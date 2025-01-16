@@ -624,7 +624,7 @@ class FullExportController extends \WC_REST_Controller {
 
 				if ( ! empty( $sql_blocks ) ) {
 					foreach ( $sql_blocks as $block ) {
-						echo $block;
+						echo $block . "\n";
 					}
 				}
 				else {
@@ -1658,29 +1658,37 @@ class FullExportController extends \WC_REST_Controller {
 	 * @since 1.9.44
 	 *
 	 * @param string $file_path
-	 * @param string $schema_name
+	 * @param string $schema
 	 *
-	 * @return string[]|null
+	 * @return string[]
 	 */
-	private function get_sql_blocks( $file_path, $schema_name ) {
+	private function get_sql_blocks( $file_path, $schema ) {
 
 		$file_content = file_get_contents( $file_path );
 		if ( $file_content === FALSE ) {
 			return NULL;
 		}
 
-		// Find the schema block(s) in the file.
-		$pattern = sprintf(
-			'/#\s*Schema:\s*`%s`\s*#(.*?)#\s*End of schema:\s*`%s`\s*#/s',
-			preg_quote( $schema_name, '/' ),
-			preg_quote( $schema_name, '/' )
-		);
+		// In case there are multiple schemas separated by commas.
+		$schema_arr = array_map( 'trim', explode( ',', $schema ) );
+		$blocks    = [];
 
-		if ( preg_match_all( $pattern, $file_content, $matches ) ) {
-			return array_map( 'trim', $matches[1] );
+		foreach ( $schema_arr as $sch ) {
+
+			// Find the schema block(s) in the file.
+			$pattern = sprintf(
+				'/#\n# Schema: `%s`\n#(.*?)#\n# End of schema: `%s`\n#/s',
+				preg_quote( $sch, '/' ),
+				preg_quote( $sch, '/' )
+			);
+
+			if ( preg_match_all( $pattern, $file_content, $matches ) ) {
+				$blocks = array_merge( $blocks, array_map( 'trim', $matches[1] ) );
+			}
+
 		}
 
-		return NULL;
+		return $blocks;
 
 	}
 
