@@ -6,7 +6,7 @@
  * @subpackage  Components
  * @since       1.9.18
  * @author      BE REBEL - https://berebel.studio
- * @copyright   ©2024 Stock Management Labs™
+ * @copyright   ©2025 Stock Management Labs™
  */
 
 namespace Atum\Components;

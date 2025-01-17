@@ -4,7 +4,7 @@
  *
  * @since       1.9.34
  * @author      Be Rebel - https://berebel.studio
- * @copyright   ©2024 Stock Management Labs™
+ * @copyright   ©2025 Stock Management Labs™
  *
  * @package     Atum\Models
  */

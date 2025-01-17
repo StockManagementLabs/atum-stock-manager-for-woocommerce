@@ -1,7 +1,7 @@
 /**
  * Check order prices from the WC Orders list
  *
- * @copyright Stock Management Labs ©2024
+ * @copyright Stock Management Labs ©2025
  *
  * @since 1.8.6
  */
@@ -17,10 +17,10 @@ import Tooltip from './components/_tooltip';
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 
-	// Get the settings from localized var.
-	const settings = new Settings('atumCheckOrders');
-	const tooltip  = new Tooltip( false );
+    // Get the settings from localized var.
+    const settings = new Settings( 'atumCheckOrders' );
+    const tooltip  = new Tooltip( false );
 
-	new CheckOrderPrices( settings, tooltip );
+    new CheckOrderPrices( settings, tooltip );
 
-});
+} );

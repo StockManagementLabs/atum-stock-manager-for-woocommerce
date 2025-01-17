@@ -4,7 +4,7 @@
  *
  * @since       1.9.44
  * @author      BE REBEL - https://berebel.studio
- * @copyright   ©2024 BE REBEL Studio
+ * @copyright   ©2025 BE REBEL Studio
  *
  * @package     Atum\Api\Generators
  * TODO: REVIEW EVERYTHING

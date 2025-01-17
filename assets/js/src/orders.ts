@@ -1,7 +1,7 @@
 /**
  * Atum Orders
  *
- * @copyright Stock Management Labs ©2024
+ * @copyright Stock Management Labs ©2025
  *
  * @since 1.2.4
  */
@@ -17,16 +17,16 @@ import OrderNotes from './components/orders/_order-notes';
 import Settings from './config/_settings';
 import Tooltip from './components/_tooltip';
 
-
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 	
-	// Get the settings from localized var.
-	const settings = new Settings( 'atumOrder' );
-	const tooltip = new Tooltip();
-	const dateTimePicker = new DateTimePicker( settings );
-	const enhancedSelect : EnhancedSelect = new EnhancedSelect();
-	new AtumOrders( settings, tooltip, dateTimePicker, enhancedSelect );
-	new OrderNotes( settings );
+    // Get the settings from localized var.
+    const settings = new Settings( 'atumOrder' );
+    const tooltip = new Tooltip();
+    const dateTimePicker = new DateTimePicker( settings );
+    const enhancedSelect : EnhancedSelect = new EnhancedSelect();
+
+    new AtumOrders( settings, tooltip, dateTimePicker, enhancedSelect );
+    new OrderNotes( settings );
 	
-});
+} );

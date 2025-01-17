@@ -1,7 +1,7 @@
 /**
  * Atum Settings
  *
- * @copyright Stock Management Labs ©2024
+ * @copyright Stock Management Labs ©2025
  *
  * @since 0.0.2
  */
@@ -11,7 +11,6 @@
  */
 
 import '../vendor/select2';             // A fixed version compatible with webpack
-
 
 /**
  * Components
@@ -26,11 +25,12 @@ import DateTimePicker from './components/_date-time-picker';
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 	
-	// Get the options from the localized var.
-	const settings = new Settings('atumSettingsVars');
-	const enhancedSelect = new EnhancedSelect();
-	const tooltip = new Tooltip();
-	const dateTimePicker = new DateTimePicker( settings );
-	new SettingsPage( settings, enhancedSelect, tooltip, dateTimePicker );
+    // Get the options from the localized var.
+    const settings = new Settings( 'atumSettingsVars' );
+    const enhancedSelect = new EnhancedSelect();
+    const tooltip = new Tooltip();
+    const dateTimePicker = new DateTimePicker( settings );
 
-});
+    new SettingsPage( settings, enhancedSelect, tooltip, dateTimePicker );
+
+} );

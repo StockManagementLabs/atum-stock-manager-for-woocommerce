@@ -1,7 +1,7 @@
 /**
  * Atum Admin Modals
  *
- * @copyright Stock Management Labs ©2024
+ * @copyright Stock Management Labs ©2025
  *
  * @since 1.9.27
  */
@@ -12,12 +12,12 @@
 import Settings from './config/_settings';
 import AdminModal from './components/_admin-modal';
 
-
 // Modules that need to execute when the DOM is ready should go here.
 jQuery( ( $: JQueryStatic ) => {
 	
-	// Get the options from the localized var.
-	const settings = new Settings( 'atumAdminModalVars' );
-	new AdminModal( settings );
+    // Get the options from the localized var.
+    const settings = new Settings( 'atumAdminModalVars' );
+
+    new AdminModal( settings );
 	
-});
+} );
