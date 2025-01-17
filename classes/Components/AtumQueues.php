@@ -200,7 +200,7 @@ class AtumQueues {
 
 		}
 
-		AtumCache::set_transient( $check_queues_key, 'checked', DAY_IN_SECONDS, TRUE );
+		AtumCache::set_transient( $check_queues_key, 'checked', HOUR_IN_SECONDS, TRUE );
 
 	}
 
