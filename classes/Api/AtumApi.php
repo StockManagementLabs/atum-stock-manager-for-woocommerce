@@ -161,6 +161,9 @@ class AtumApi {
 				$this->api_controllers['atum-inventory-logs'],
 				$this->api_controllers['atum-inventory-log-notes']
 			);
+			unset(
+				self::$exportable_endpoints['inventory-log'],
+			);
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
@@ -170,6 +173,12 @@ class AtumApi {
 				$this->api_controllers['atum-suppliers'],
 				$this->api_controllers['atum-locations'],
 				$this->api_controllers['atum-inbound-stock']
+			);
+			unset(
+				self::$exportable_endpoints['purchase-order'],
+				self::$exportable_endpoints['supplier'],
+				self::$exportable_endpoints['location'],
+				self::$exportable_endpoints['inbound-stock']
 			);
 		}
 
