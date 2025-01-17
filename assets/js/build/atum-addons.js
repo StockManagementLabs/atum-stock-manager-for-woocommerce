@@ -8579,7 +8579,7 @@ var AddonsPage = (function () {
                 var isTrial = $button.closest('.actions').hasClass('trial');
                 sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
                     title: _this.settings.get(isTrial ? 'trialDeactivation' : 'limitedDeactivations'),
-                    html: _this.settings.get(isTrial ? 'trialWillDisable' : 'allowedDeactivations'),
+                    html: "<div style=\"padding:15px\">".concat(_this.settings.get(isTrial ? 'trialWillDisable' : 'allowedDeactivations'), "</div>"),
                     icon: 'warning',
                     confirmButtonText: _this.settings.get('continue'),
                     cancelButtonText: _this.settings.get('cancel'),
@@ -8627,7 +8627,7 @@ var AddonsPage = (function () {
                         _blocker__WEBPACK_IMPORTED_MODULE_0__["default"].unblock($addon);
                         _this.showErrorAlert(response.data);
                     }
-                }
+                },
             });
         })
             .on('keyup paste search', '#addons-search', function (evt) {
@@ -8704,7 +8704,7 @@ var AddonsPage = (function () {
                     _this.licenseChangeResponse(response.success, response.data, addon, key);
                     _this.afterAjax($button);
                 }
-            }
+            },
         });
     };
     AddonsPage.prototype.installAddon = function (addon, key) {
@@ -8773,7 +8773,7 @@ var AddonsPage = (function () {
             case 'activate':
                 sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
                     title: this.settings.get('activation'),
-                    html: message,
+                    html: "<div style=\"padding:15px\">".concat(message, "</div>"),
                     icon: 'info',
                     showCancelButton: true,
                     showLoaderOnConfirm: true,
@@ -8805,7 +8805,7 @@ var AddonsPage = (function () {
                     if (result.isConfirmed) {
                         sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
                             title: _this.settings.get('activated'),
-                            html: _this.settings.get('addonActivated'),
+                            html: "<div style=\"padding:15px\">".concat(_this.settings.get('addonActivated'), "</div>"),
                             icon: 'success',
                             confirmButtonText: _this.settings.get('install'),
                             cancelButtonText: _this.settings.get('cancel'),
@@ -8816,7 +8816,7 @@ var AddonsPage = (function () {
                                 return _this.installAddon(addon, key)
                                     .then(function (message) { return _this.showSuccessAlert(message, _this.settings.get('installed')); })
                                     .catch(function (error) { return sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage("<span>".concat(error, "</span>")); });
-                            }
+                            },
                         });
                     }
                 });
@@ -8825,7 +8825,7 @@ var AddonsPage = (function () {
                 sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
                     icon: 'info',
                     title: this.settings.get('trial'),
-                    html: message,
+                    html: "<div style=\"padding:15px\">".concat(message, "</div>"),
                     showCancelButton: true,
                     showCloseButton: true,
                     confirmButtonText: this.settings.get('agree'),
@@ -8843,7 +8843,7 @@ var AddonsPage = (function () {
                 sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
                     icon: 'info',
                     title: this.settings.get('trialExpired'),
-                    html: message,
+                    html: "<div style=\"padding:15px\">".concat(message, "</div>"),
                     showCancelButton: true,
                     showCloseButton: true,
                     confirmButtonText: this.settings.get('extend'),
@@ -8865,7 +8865,7 @@ var AddonsPage = (function () {
         }
         sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
             title: title,
-            html: message,
+            html: "<div style=\"padding:15px\">".concat(message, "</div>"),
             icon: 'success',
             confirmButtonText: this.settings.get('ok'),
         })
@@ -8874,7 +8874,7 @@ var AddonsPage = (function () {
     AddonsPage.prototype.showErrorAlert = function (message) {
         sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
             title: this.settings.get('error'),
-            html: message,
+            html: "<div style=\"padding:15px\">".concat(message, "</div>"),
             icon: 'error',
             confirmButtonText: this.settings.get('ok'),
         });
@@ -8893,8 +8893,8 @@ var AddonsPage = (function () {
     AddonsPage.prototype.addMouseWheelSupport = function () {
         $('.nav-with-scroll-effect').off('wheel DOMMouseScroll').on('wheel DOMMouseScroll', function (evt) {
             var $nav = $(evt.currentTarget);
-            if ($nav.find('.overflow-opacity-effect-right').is(':hidden') &&
-                $nav.find('.overflow-opacity-effect-left').is(':hidden')) {
+            if ($nav.find('.overflow-opacity-effect-right').is(':hidden')
+                && $nav.find('.overflow-opacity-effect-left').is(':hidden')) {
                 return;
             }
             var navEl = $nav.get(0), originalEvent = evt.originalEvent;
