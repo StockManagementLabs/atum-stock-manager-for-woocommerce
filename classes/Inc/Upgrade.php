@@ -63,7 +63,7 @@ class Upgrade {
 		update_option( 'atum_version', ATUM_VERSION );
 
 		// Delete transients if after every version change.
-		AtumCache::do_delete_transients();
+		AtumCache::delete_transients();
 
 		/************************
 		 * UPGRADE ACTIONS START

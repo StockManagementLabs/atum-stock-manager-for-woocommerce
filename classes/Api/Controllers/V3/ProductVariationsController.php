@@ -37,7 +37,7 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 	 *
 	 * @var string
 	 */
-	protected $post_type = 'product';
+	protected $post_type = 'product_variation';
 
 
 	/**
@@ -140,8 +140,8 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 	 */
 	public function get_items( $request ) {
 
-		$this->post_type    = 'product_variation';
 		$request['orderby'] = 'id';
+
 		if ( ! isset( $request['page'] ) ) {
 			$request['page'] = 1;
 		}
@@ -151,6 +151,7 @@ class ProductVariationsController extends \WC_REST_Product_Variations_Controller
 		remove_filter( 'woocommerce_rest_product_variation_schema', array( $this, 'add_extra_fields' ) );
 
 		return $response;
+
 	}
 
 	/**

@@ -129,8 +129,13 @@ final class AtumStockDecimals {
 
 		$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
 
-		if ( $step_decimals && $step_decimals < $stock_decimals ) {
-			$step .= str_repeat( '0', $stock_decimals - $step_decimals );
+		if ( $step_decimals < $stock_decimals ) {
+            if ( str_contains( $step, '.' ) ) {
+                $step .= str_repeat( '0', $stock_decimals - $step_decimals );
+            }
+            else {
+                $step .= '.' . str_repeat( '0', $stock_decimals - $step_decimals );
+            }
 
 			return $step;
 		}

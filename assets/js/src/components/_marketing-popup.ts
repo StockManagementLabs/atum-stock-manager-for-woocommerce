@@ -135,6 +135,8 @@ export default class MarketingPopup {
                     $( 'body' ).on( 'click', '.swal2-container button[data-url]', ( evt: JQueryEventObject ) => {
                         evt.preventDefault();
                         window.open( $( evt.currentTarget ).data( 'url' ), '_blank' );
+                        Swal.close();
+                        this.hideMarketingPopup();
                     } );
 
                     /*

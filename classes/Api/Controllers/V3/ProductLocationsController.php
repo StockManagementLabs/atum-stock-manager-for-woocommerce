@@ -202,4 +202,18 @@ class ProductLocationsController extends \WC_REST_Product_Categories_Controller 
 
 	}
 
+	/**
+	 * Get the query params for collections
+	 *
+	 * @since 1.9.44
+	 *
+	 * @return array
+	 */
+	public function get_collection_params() {
+		$params = parent::get_collection_params();
+
+		// Allow filtering of the location collection parameters.
+		return apply_filters( "rest_{$this->taxonomy}_collection_params", $params, $this->taxonomy );
+	}
+
 }

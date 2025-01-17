@@ -4,7 +4,7 @@
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
- * License : ©2024 Stock Management Labs 
+ * License : ©2025 Stock Management Labs 
  */
 
  body .select2-container--default[dir=rtl].atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default[dir=rtl].atum-enhanced-select .select2-selection--single .select2-selection__arrow {
@@ -42,11 +42,11 @@
   padding-right: 0px;
 }
 
-.atum-list-wrapper .subsubsub li {
+.atum-list-wrapper .subsubsub li, #posts-filter .subsubsub li {
   margin-right: 0px;
   margin-left: 15px;
 }
-.atum-list-wrapper .subsubsub li span {
+.atum-list-wrapper .subsubsub li span, #posts-filter .subsubsub li span {
   margin-left: 0px;
   margin-right: 3px;
 }

@@ -92,14 +92,16 @@ class AtumApi {
 	 */
 	private $paginable_collections = [
 		'attachment',
+		'comment',
+		'inventories', // ATUM Multi Inventory hack.
 		'product',
-		'product_variation',
-		'shop_order',
-		'shop_coupon',
-		'shop_order_refund',
+		'product_attributes',
 		'product_cat',
 		'product_tag',
-		'comment',
+		'product_variation',
+		'shop_coupon',
+		'shop_order',
+		'shop_order_refund',
 	];
 
 	/**
@@ -137,9 +139,6 @@ class AtumApi {
 			'atum.general'        => '/wc/v3/atum/settings/general',
 			'atum.storeDetails'   => '/wc/v3/atum/settings/store_details',
 			'atum.moduleManager'  => '/wc/v3/atum/settings/module_manager',
-			'atum.multiInventory' => '/wc/v3/atum/settings/multi_inventory',
-			'atum.productLevels'  => '/wc/v3/atum/settings/product_levels',
-			//'atum.stockTakes' => '/wc/v3/atum/settings/stock_takes',
 		),
 		'supplier'        => '/wc/v3/atum/suppliers',
 		'tag'             => '/wc/v3/products/tags',
@@ -300,11 +299,11 @@ class AtumApi {
 			header( 'Access-Control-Allow-Origin: ' . $origin );
 			header( 'Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE' );
 			header( 'Access-Control-Allow-Credentials: true' );
-			header( 'Vary: Origin', false );
+			header( 'Vary: Origin', FALSE );
 
 		}
 		elseif ( ! headers_sent() && 'GET' === $_SERVER['REQUEST_METHOD'] && ! is_user_logged_in() ) {
-			header( 'Vary: Origin', false );
+			header( 'Vary: Origin', FALSE );
 		}
 
 		return $value;
@@ -312,7 +311,7 @@ class AtumApi {
 	}
 
 	/**
-	 * Increase the posts per page limit (that is set to 100 by WP) when syncing through the ATUM App
+	 * Increase the posts per page limit (that is set to 100 by WP) when syncing through the ATUM App or running a full export
 	 *
 	 * @since 1.9.4
 	 *
@@ -350,12 +349,14 @@ class AtumApi {
 			if ( is_array( $exportable_endpoint ) ) {
 
 				foreach ( $exportable_endpoint as $sub_key => $sub_endpoint ) {
-					add_action( "atum_api_export_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+					add_action( "atum_api_export_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
+					add_action( "atum_api_dump_endpoint_{$schema}_{$sub_key}", array( '\Atum\Api\Controllers\V3\FullExportController', 'generate_sql_dump' ), 10, 3 );
 				}
 
 			}
 			else {
-				add_action( "atum_api_export_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 4 );
+				add_action( "atum_api_export_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'run_export' ), 10, 6 );
+				add_action( "atum_api_dump_endpoint_$schema", array( '\Atum\Api\Controllers\V3\FullExportController', 'generate_sql_dump' ), 10, 3 );
 			}
 		}
 

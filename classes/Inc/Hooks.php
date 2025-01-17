@@ -109,7 +109,7 @@ class Hooks {
 		// Firefox fix to not preserve the dropdown.
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
-		// Rebuild stock status in all products with _out_stock_threshold when we disable this setting.
+		// Do some tasks after saving ATUM settings.
 		add_action( 'updated_option', array( $this, 'after_update_options_tasks' ), 10, 3 );
 
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
@@ -509,11 +509,25 @@ class Hooks {
 				Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
 				Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
 			}
-			// Remove control time option when product sales properties cron disabled.
-			if ( isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) && 'yes' === isset( $old_value['calc_prop_cron'] ) &&
-				'no' === isset( $old_value['$option_value'] ) ) {
 
+			// Remove control time option when product sales properties cron disabled.
+			if (
+				isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) &&
+				'yes' === $old_value['calc_prop_cron'] && 'no' === $option_value['calc_prop_cron']
+			) {
 				delete_option( ATUM_PREFIX . 'last_sales_calc' );
+			}
+
+			// Remove the ATUM queues checking transient when changing any sales CRON option.
+			if (
+				( ! isset( $old_value['calc_prop_cron'] ) && isset( $option_value['calc_prop_cron'] ) ) || (
+					$old_value['calc_prop_cron'] !== $option_value['calc_prop_cron'] ||
+					$old_value['calc_prop_cron_interval'] !== $option_value['calc_prop_cron_interval'] ||
+					$old_value['calc_prop_cron_type'] !== $option_value['calc_prop_cron_type'] ||
+					$old_value['calc_prop_cron_start'] !== $option_value['calc_prop_cron_start']
+				)
+			) {
+				delete_transient( AtumCache::get_transient_key( 'check_queues' ) );
 			}
 
 		}

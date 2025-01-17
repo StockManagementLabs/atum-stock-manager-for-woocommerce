@@ -2921,7 +2921,7 @@ final class Ajax {
 		}
 
 		if ( ! $deleting ) {
-			AtumCache::do_delete_transients();
+			AtumCache::delete_transients();
 		}
 
 		do_action( 'atum/ajax/tool_clear_out_atum_transients' );

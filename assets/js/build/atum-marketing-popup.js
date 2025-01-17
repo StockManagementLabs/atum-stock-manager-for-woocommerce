@@ -101,6 +101,8 @@ var MarketingPopup = (function () {
                             $('body').on('click', '.swal2-container button[data-url]', function (evt) {
                                 evt.preventDefault();
                                 window.open($(evt.currentTarget).data('url'), '_blank');
+                                sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_0___default().close();
+                                _this.hideMarketingPopup();
                             });
                             return [4, sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_0___default().fire({
                                     width: 520,

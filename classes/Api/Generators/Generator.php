@@ -146,14 +146,14 @@ class Generator {
 		}
 
 		$this->schema_name              = $schema_name;
-		$this->store_id                 = $dump_config['store_id'] ?? '';
-		$this->user_id                  = $dump_config['user_id'] ?? '';
+		$this->store_id                 = $dump_config['storeId'] ?? '';
+		$this->user_id                  = $dump_config['userId'] ?? '';
 		$this->revision                 = $dump_config['revision'] ?? '';
-		$this->store_settings_id        = $dump_config['store_settings_id'] ?? '';
-		$this->store_settings_app_group = $dump_config['store_app_settings'] ?? [];
+		$this->store_settings_id        = $dump_config['storeSettingsId'] ?? '';
+		$this->store_settings_app_group = $dump_config['storeAppSettings'] ?? [];
 
 		if ( empty( $this->store_id ) || empty( $this->user_id ) || empty( $this->revision ) ) {
-			throw new \Exception( 'The body data has missing info' );
+			throw new \Exception( 'Unable to generate dump. The dump config is missing.' );
 		}
 
 	}
