@@ -1163,7 +1163,7 @@ class FullExportController extends \WC_REST_Controller {
 		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
 		$query_params  = [
 			'page'     => $page,
-			'per_page' => 300,
+			'per_page' => 200,
 		];
 
 		// Add extra params for some endpoints.
@@ -1193,7 +1193,6 @@ class FullExportController extends \WC_REST_Controller {
 
 			case '/wp/v2/media':
 				$query_params['linked_post_type'] = 'atum_supplier,product';
-				$query_params['per_page']         = 200;
 				break;
 
 			case '/wc/v3/customers':
