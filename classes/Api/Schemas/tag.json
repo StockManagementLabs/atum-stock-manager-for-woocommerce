@@ -14,7 +14,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : ["number", "null"]
+			"type" : "number"
 		},
 		"name" : {
 			"type" : "string"
@@ -26,7 +26,7 @@
 			"type" : "string"
 		},
 		"count" : {
-			"type" : ["number", "null"]
+			"type" : "number"
 		},
 		"deleted" : {
 			"type" : "boolean"
