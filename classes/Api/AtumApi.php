@@ -181,6 +181,12 @@ class AtumApi {
 			);
 		}
 
+		if ( ! wc_coupons_enabled() ) {
+			unset(
+				self::$exportable_endpoints['coupon']
+			);
+		}
+
 		// Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3).
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
 
