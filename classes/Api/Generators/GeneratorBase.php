@@ -160,6 +160,7 @@ abstract class GeneratorBase {
 				$this->validate_property( $key, $value, $this->schema['properties'][ $key ] );
 			}
 		}
+
 	}
 
 	/**
