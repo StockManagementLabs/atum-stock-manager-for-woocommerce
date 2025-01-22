@@ -372,7 +372,8 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		}
 
 		// Force the order to reload the items in case they've changed.
-		$order->read_items();
+		$order->save();
+		//$order->read_items(); This was causing that if an item gets deleted, the returned order was not updated.
 
 		/**
 		 * Filters an object before it is inserted via the REST API.
