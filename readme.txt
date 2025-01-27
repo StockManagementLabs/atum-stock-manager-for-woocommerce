@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.7
+Tested up to: 6.7.1
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 9.3.3
-Stable tag: 1.9.43.1
+WC tested up to: 9.6.0
+Stable tag: 1.9.44
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,46 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.44`
+
+*2025-01-27*
+
+**Features**
+
+* Standardize a common uploads folder for all the ATUM plugins.
+* Add to the ATUM Orders post types searching of several terms in products and metas.
+
+**Changes**
+
+* Changed SCSS variable.
+* Added Barcodes Pro icon to ATUM assets.
+* Updated minimum PHP version to 7.4.
+* Refactoring.
+* Added missing paginable collections.
+* Make sure the sales props cron is registered after changing any of its options from settings.
+* Remove automatic transients deletion cron.
+* Move the MI and PL exportable settings endpoints to their corresponding add-ons.
+* Add some padding to addons messages within modals.
+* Reduce the check addons transient expiration.
+* Adjusted exportable endpoints depending on active modules.
+* Updated addons loader.
+
+**Fixes**
+
+* Fixed ATUM attachments not displaying images.
+* Fixed ATUM Orders post types "_load_textdomain_just_in_time" notice.
+* Fixed add-ons "_load_textdomain_just_in_time" notice.
+* Fixed variations post type on All variations API endpoint.
+* Fixed API inbound stock controller returning an empty array if more than one row found when filtering.
+* Avoid to update all the apply bulk buttons when several lists with bulk actions exist.
+* Fixed min value for stock inputs with decimals.
+* CSS fixes.
+* Fixed some settings options not being exported through CRON jobs.
+* Fixed marketing popup’s close button visibility issues.
+* Fixed duplicated products can be added to ATUM Orders before saving.
 
 ---
 
