@@ -2169,6 +2169,7 @@ final class Ajax {
 
 		$atum_order_id = absint( $_POST['atum_order_id'] );
 		$wc_order_id   = absint( $_POST['wc_order_id'] );
+		$supplier_id   = absint( $_POST['supplier_id'] );
 		$wc_order      = wc_get_order( $wc_order_id );
 
 		if ( ! $wc_order ) {
@@ -2205,6 +2206,12 @@ final class Ajax {
 					 *
 					 * @var \WC_Order_Item_Product $item
 					 */
+					$product = Helpers::get_atum_product( $item->get_product() );
+
+					if ( ! ( $product instanceof \WC_Product ) || ( ! apply_filters( 'atum/orders/maybe_bypass_supplier_check', FALSE, $atum_order ) && $supplier_id && $product->get_supplier_id() !== $supplier_id ) ) {
+						continue;
+					}
+
 					if ( PurchaseOrders::POST_TYPE === $atum_order_type ) {
 
 						$imported_item = FALSE;
@@ -2230,7 +2237,6 @@ final class Ajax {
 
 					}
 
-					$product    = Helpers::get_atum_product( $item->get_product() );
 					$order_item = $atum_order->add_product( $product, $item->get_quantity() );
 
 					do_action( 'atum/atum_order/import_order_item', $order_item, $atum_order, $item, $wc_order );

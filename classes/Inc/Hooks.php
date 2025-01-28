@@ -231,6 +231,9 @@ class Hooks {
 		$this->prevent_stock_emails();
 		add_action( 'woocommerce_reduce_order_stock', array( $this, 'maybe_trigger_stock_change_notifications' ) );
 
+        // Global scripts.
+        add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
+
 	}
 
 	/**
@@ -1503,6 +1506,21 @@ class Hooks {
 		return $can_reduce_stock;
 
 	}
+
+    public function wp_enqueue_scripts( $hook ) {
+
+        $decimals = Helpers::get_option( 'stock_quantity_decimals', 0 );
+        $steps    = Helpers::get_option( 'stock_quantity_step', 0 );
+
+        if ( intval( $decimals ) > 0 ) {
+            wp_register_script( 'atum-qty-input-step', ATUM_URL . 'assets/js/build/atum-qty-input-step.js', [ 'jquery' ], ATUM_VERSION, TRUE );
+            wp_localize_script( 'atum-qty-input-step', 'atumQtyInputStepVars', array(
+                'decimals' => $decimals,
+                'steps'    => $steps,
+            ) );
+            wp_enqueue_script( 'atum-qty-input-step' );
+        }
+    }
 
 
 	/********************

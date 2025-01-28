@@ -552,6 +552,7 @@ export default class AtumOrders {
 					action       : 'atum_order_import_items',
 					wc_order_id  : orderId,
 					atum_order_id: this.settings.get( 'postId' ),
+                    supplier_id  : $('#supplier').val(),
 					security     : this.settings.get( 'importOrderItemsNonce' ),
 				}, 'json' );
 
