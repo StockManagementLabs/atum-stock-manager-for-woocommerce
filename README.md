@@ -196,6 +196,18 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.44.1`
+
+*2025-01-29*
+
+**Changes**
+
+* Added supplier check when importing order items to ATUM orders.
+* Removed unused enqueue script method.
+* Remove the abstract declaration to the 'get_labels' function in the AtumOrderPostType class to prevent incompatibilities with older add-ons.
+
+---
+
 `1.9.44`
 
 *2025-01-27*
