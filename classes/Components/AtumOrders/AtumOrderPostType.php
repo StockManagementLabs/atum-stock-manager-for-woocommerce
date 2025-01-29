@@ -1349,6 +1349,6 @@ abstract class AtumOrderPostType {
 	 *
 	 * @since 1.9.44
 	 */
-	abstract protected function set_labels();
+	protected function set_labels() {}
 
 }
