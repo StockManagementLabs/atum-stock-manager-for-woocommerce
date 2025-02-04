@@ -3671,10 +3671,10 @@ final class Helpers {
 
 		// Parent statuses.
 		if ( ! $statuses || ! is_array( $statuses ) ) {
-			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT posts.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $post_statuses ) . "') ) ";
+			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT pp.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $post_statuses ) . "') ) ";
 		}
 		else {
-			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT posts.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $statuses ) . "') ) ";
+			$where_clauses[] = "( posts.post_parent = 0 OR ( SELECT pp.post_status FROM $wpdb->posts pp WHERE pp.ID = posts.post_parent ) IN ('" . implode( "','", $statuses ) . "') ) ";
 		}
 
 		$where_query = implode( ' AND ', apply_filters( 'atum/search_products/where_clauses', $where_clauses, $term, $type, $include_variations, $statuses, $limit, $include, $exclude ) );
