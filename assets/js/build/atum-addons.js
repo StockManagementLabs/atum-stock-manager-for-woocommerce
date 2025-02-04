@@ -4990,1434 +4990,6 @@ function withinMaxClamp(min, value, max) {
 
 /***/ }),
 
-/***/ "./node_modules/complex.js/complex.js":
-/*!********************************************!*\
-  !*** ./node_modules/complex.js/complex.js ***!
-  \********************************************/
-/***/ (function(module, exports) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
- * @license Complex.js v2.1.1 12/05/2020
- *
- * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- **/
-
-/**
- *
- * This class allows the manipulation of complex numbers.
- * You can pass a complex number in different formats. Either as object, double, string or two integer parameters.
- *
- * Object form
- * { re: <real>, im: <imaginary> }
- * { arg: <angle>, abs: <radius> }
- * { phi: <angle>, r: <radius> }
- *
- * Array / Vector form
- * [ real, imaginary ]
- *
- * Double form
- * 99.3 - Single double value
- *
- * String form
- * '23.1337' - Simple real number
- * '15+3i' - a simple complex number
- * '3-i' - a simple complex number
- *
- * Example:
- *
- * var c = new Complex('99.3+8i');
- * c.mul({r: 3, i: 9}).div(4.9).sub(3, 2);
- *
- */
-
-(function(root) {
-
-  'use strict';
-
-  var cosh = Math.cosh || function(x) {
-    return Math.abs(x) < 1e-9 ? 1 - x : (Math.exp(x) + Math.exp(-x)) * 0.5;
-  };
-
-  var sinh = Math.sinh || function(x) {
-    return Math.abs(x) < 1e-9 ? x : (Math.exp(x) - Math.exp(-x)) * 0.5;
-  };
-
-  /**
-   * Calculates cos(x) - 1 using Taylor series if x is small (-¼π ≤ x ≤ ¼π).
-   *
-   * @param {number} x
-   * @returns {number} cos(x) - 1
-   */
-  var cosm1 = function(x) {
-
-    var b = Math.PI / 4;
-    if (-b > x || x > b) {
-      return Math.cos(x) - 1.0;
-    }
-
-    /* Calculate horner form of polynomial of taylor series in Q
-    var fac = 1, alt = 1, pol = {};
-    for (var i = 0; i <= 16; i++) {
-      fac*= i || 1;
-      if (i % 2 == 0) {
-        pol[i] = new Fraction(1, alt * fac);
-        alt = -alt;
-      }
-    }
-    console.log(new Polynomial(pol).toHorner()); // (((((((1/20922789888000x^2-1/87178291200)x^2+1/479001600)x^2-1/3628800)x^2+1/40320)x^2-1/720)x^2+1/24)x^2-1/2)x^2+1
-    */
-
-    var xx = x * x;
-    return xx * (
-      xx * (
-        xx * (
-          xx * (
-            xx * (
-              xx * (
-                xx * (
-                  xx / 20922789888000
-                  - 1 / 87178291200)
-                + 1 / 479001600)
-              - 1 / 3628800)
-            + 1 / 40320)
-          - 1 / 720)
-        + 1 / 24)
-      - 1 / 2);
-  };
-
-  var hypot = function(x, y) {
-
-    var a = Math.abs(x);
-    var b = Math.abs(y);
-
-    if (a < 3000 && b < 3000) {
-      return Math.sqrt(a * a + b * b);
-    }
-
-    if (a < b) {
-      a = b;
-      b = x / y;
-    } else {
-      b = y / x;
-    }
-    return a * Math.sqrt(1 + b * b);
-  };
-
-  var parser_exit = function() {
-    throw SyntaxError('Invalid Param');
-  };
-
-  /**
-   * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows
-   *
-   * @param {number} a
-   * @param {number} b
-   * @returns {number}
-   */
-  function logHypot(a, b) {
-
-    var _a = Math.abs(a);
-    var _b = Math.abs(b);
-
-    if (a === 0) {
-      return Math.log(_b);
-    }
-
-    if (b === 0) {
-      return Math.log(_a);
-    }
-
-    if (_a < 3000 && _b < 3000) {
-      return Math.log(a * a + b * b) * 0.5;
-    }
-
-    /* I got 4 ideas to compute this property without overflow:
-     *
-     * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
-     *
-     * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
-
-     Math.log(a * a + b * b) / 2
-
-     *
-     *
-     * 2. Try to use the non-overflowing pythagoras: (OVERALL ERROR: 8.889760039210159e-10)
-
-     var fn = function(a, b) {
-     a = Math.abs(a);
-     b = Math.abs(b);
-     var t = Math.min(a, b);
-     a = Math.max(a, b);
-     t = t / a;
-
-     return Math.log(a) + Math.log(1 + t * t) / 2;
-     };
-
-     * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): (OVERALL ERROR: 3.4780178737037204e-10)
-
-     Math.log(a / Math.cos(Math.atan2(b, a)))
-
-     * 4. Use 3. and apply log rules: (OVERALL ERROR: 1.2014087502620896e-9)
-
-     Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
-
-     */
-
-     a = a / 2;
-     b = b / 2;
-
-    return 0.5 * Math.log(a * a + b * b) + Math.LN2;
-  }
-
-  var parse = function(a, b) {
-
-    var z = { 're': 0, 'im': 0 };
-
-    if (a === undefined || a === null) {
-      z['re'] =
-      z['im'] = 0;
-    } else if (b !== undefined) {
-      z['re'] = a;
-      z['im'] = b;
-    } else
-      switch (typeof a) {
-
-        case 'object':
-
-          if ('im' in a && 're' in a) {
-            z['re'] = a['re'];
-            z['im'] = a['im'];
-          } else if ('abs' in a && 'arg' in a) {
-            if (!Number.isFinite(a['abs']) && Number.isFinite(a['arg'])) {
-              return Complex['INFINITY'];
-            }
-            z['re'] = a['abs'] * Math.cos(a['arg']);
-            z['im'] = a['abs'] * Math.sin(a['arg']);
-          } else if ('r' in a && 'phi' in a) {
-            if (!Number.isFinite(a['r']) && Number.isFinite(a['phi'])) {
-              return Complex['INFINITY'];
-            }
-            z['re'] = a['r'] * Math.cos(a['phi']);
-            z['im'] = a['r'] * Math.sin(a['phi']);
-          } else if (a.length === 2) { // Quick array check
-            z['re'] = a[0];
-            z['im'] = a[1];
-          } else {
-            parser_exit();
-          }
-          break;
-
-        case 'string':
-
-          z['im'] = /* void */
-          z['re'] = 0;
-
-          var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
-          var plus = 1;
-          var minus = 0;
-
-          if (tokens === null) {
-            parser_exit();
-          }
-
-          for (var i = 0; i < tokens.length; i++) {
-
-            var c = tokens[i];
-
-            if (c === ' ' || c === '\t' || c === '\n') {
-              /* void */
-            } else if (c === '+') {
-              plus++;
-            } else if (c === '-') {
-              minus++;
-            } else if (c === 'i' || c === 'I') {
-
-              if (plus + minus === 0) {
-                parser_exit();
-              }
-
-              if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
-                z['im'] += parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
-                i++;
-              } else {
-                z['im'] += parseFloat((minus % 2 ? '-' : '') + '1');
-              }
-              plus = minus = 0;
-
-            } else {
-
-              if (plus + minus === 0 || isNaN(c)) {
-                parser_exit();
-              }
-
-              if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
-                z['im'] += parseFloat((minus % 2 ? '-' : '') + c);
-                i++;
-              } else {
-                z['re'] += parseFloat((minus % 2 ? '-' : '') + c);
-              }
-              plus = minus = 0;
-            }
-          }
-
-          // Still something on the stack
-          if (plus + minus > 0) {
-            parser_exit();
-          }
-          break;
-
-        case 'number':
-          z['im'] = 0;
-          z['re'] = a;
-          break;
-
-        default:
-          parser_exit();
-      }
-
-    if (isNaN(z['re']) || isNaN(z['im'])) {
-      // If a calculation is NaN, we treat it as NaN and don't throw
-      //parser_exit();
-    }
-
-    return z;
-  };
-
-  /**
-   * @constructor
-   * @returns {Complex}
-   */
-  function Complex(a, b) {
-
-    if (!(this instanceof Complex)) {
-      return new Complex(a, b);
-    }
-
-    var z = parse(a, b);
-
-    this['re'] = z['re'];
-    this['im'] = z['im'];
-  }
-
-  Complex.prototype = {
-
-    're': 0,
-    'im': 0,
-
-    /**
-     * Calculates the sign of a complex number, which is a normalized complex
-     *
-     * @returns {Complex}
-     */
-    'sign': function() {
-
-      var abs = this['abs']();
-
-      return new Complex(
-        this['re'] / abs,
-        this['im'] / abs);
-    },
-
-    /**
-     * Adds two complex numbers
-     *
-     * @returns {Complex}
-     */
-    'add': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      // Infinity + Infinity = NaN
-      if (this['isInfinite']() && z['isInfinite']()) {
-        return Complex['NAN'];
-      }
-
-      // Infinity + z = Infinity { where z != Infinity }
-      if (this['isInfinite']() || z['isInfinite']()) {
-        return Complex['INFINITY'];
-      }
-
-      return new Complex(
-        this['re'] + z['re'],
-        this['im'] + z['im']);
-    },
-
-    /**
-     * Subtracts two complex numbers
-     *
-     * @returns {Complex}
-     */
-    'sub': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      // Infinity - Infinity = NaN
-      if (this['isInfinite']() && z['isInfinite']()) {
-        return Complex['NAN'];
-      }
-
-      // Infinity - z = Infinity { where z != Infinity }
-      if (this['isInfinite']() || z['isInfinite']()) {
-        return Complex['INFINITY'];
-      }
-
-      return new Complex(
-        this['re'] - z['re'],
-        this['im'] - z['im']);
-    },
-
-    /**
-     * Multiplies two complex numbers
-     *
-     * @returns {Complex}
-     */
-    'mul': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      // Infinity * 0 = NaN
-      if ((this['isInfinite']() && z['isZero']()) || (this['isZero']() && z['isInfinite']())) {
-        return Complex['NAN'];
-      }
-
-      // Infinity * z = Infinity { where z != 0 }
-      if (this['isInfinite']() || z['isInfinite']()) {
-        return Complex['INFINITY'];
-      }
-
-      // Short circuit for real values
-      if (z['im'] === 0 && this['im'] === 0) {
-        return new Complex(this['re'] * z['re'], 0);
-      }
-
-      return new Complex(
-        this['re'] * z['re'] - this['im'] * z['im'],
-        this['re'] * z['im'] + this['im'] * z['re']);
-    },
-
-    /**
-     * Divides two complex numbers
-     *
-     * @returns {Complex}
-     */
-    'div': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      // 0 / 0 = NaN and Infinity / Infinity = NaN
-      if ((this['isZero']() && z['isZero']()) || (this['isInfinite']() && z['isInfinite']())) {
-        return Complex['NAN'];
-      }
-
-      // Infinity / 0 = Infinity
-      if (this['isInfinite']() || z['isZero']()) {
-        return Complex['INFINITY'];
-      }
-
-      // 0 / Infinity = 0
-      if (this['isZero']() || z['isInfinite']()) {
-        return Complex['ZERO'];
-      }
-
-      a = this['re'];
-      b = this['im'];
-
-      var c = z['re'];
-      var d = z['im'];
-      var t, x;
-
-      if (0 === d) {
-        // Divisor is real
-        return new Complex(a / c, b / c);
-      }
-
-      if (Math.abs(c) < Math.abs(d)) {
-
-        x = c / d;
-        t = c * x + d;
-
-        return new Complex(
-          (a * x + b) / t,
-          (b * x - a) / t);
-
-      } else {
-
-        x = d / c;
-        t = d * x + c;
-
-        return new Complex(
-          (a + b * x) / t,
-          (b - a * x) / t);
-      }
-    },
-
-    /**
-     * Calculate the power of two complex numbers
-     *
-     * @returns {Complex}
-     */
-    'pow': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      a = this['re'];
-      b = this['im'];
-
-      if (z['isZero']()) {
-        return Complex['ONE'];
-      }
-
-      // If the exponent is real
-      if (z['im'] === 0) {
-
-        if (b === 0 && a > 0) {
-
-          return new Complex(Math.pow(a, z['re']), 0);
-
-        } else if (a === 0) { // If base is fully imaginary
-
-          switch ((z['re'] % 4 + 4) % 4) {
-            case 0:
-              return new Complex(Math.pow(b, z['re']), 0);
-            case 1:
-              return new Complex(0, Math.pow(b, z['re']));
-            case 2:
-              return new Complex(-Math.pow(b, z['re']), 0);
-            case 3:
-              return new Complex(0, -Math.pow(b, z['re']));
-          }
-        }
-      }
-
-      /* I couldn't find a good formula, so here is a derivation and optimization
-       *
-       * z_1^z_2 = (a + bi)^(c + di)
-       *         = exp((c + di) * log(a + bi)
-       *         = pow(a^2 + b^2, (c + di) / 2) * exp(i(c + di)atan2(b, a))
-       * =>...
-       * Re = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * cos(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
-       * Im = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * sin(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
-       *
-       * =>...
-       * Re = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * cos(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
-       * Im = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * sin(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
-       *
-       * =>
-       * Re = exp(c * logsq2 - d * arg(z_1)) * cos(d * logsq2 + c * arg(z_1))
-       * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
-       *
-       */
-
-      if (a === 0 && b === 0 && z['re'] > 0 && z['im'] >= 0) {
-        return Complex['ZERO'];
-      }
-
-      var arg = Math.atan2(b, a);
-      var loh = logHypot(a, b);
-
-      a = Math.exp(z['re'] * loh - z['im'] * arg);
-      b = z['im'] * loh + z['re'] * arg;
-      return new Complex(
-        a * Math.cos(b),
-        a * Math.sin(b));
-    },
-
-    /**
-     * Calculate the complex square root
-     *
-     * @returns {Complex}
-     */
-    'sqrt': function() {
-
-      var a = this['re'];
-      var b = this['im'];
-      var r = this['abs']();
-
-      var re, im;
-
-      if (a >= 0) {
-
-        if (b === 0) {
-          return new Complex(Math.sqrt(a), 0);
-        }
-
-        re = 0.5 * Math.sqrt(2.0 * (r + a));
-      } else {
-        re = Math.abs(b) / Math.sqrt(2 * (r - a));
-      }
-
-      if (a <= 0) {
-        im = 0.5 * Math.sqrt(2.0 * (r - a));
-      } else {
-        im = Math.abs(b) / Math.sqrt(2 * (r + a));
-      }
-
-      return new Complex(re, b < 0 ? -im : im);
-    },
-
-    /**
-     * Calculate the complex exponent
-     *
-     * @returns {Complex}
-     */
-    'exp': function() {
-
-      var tmp = Math.exp(this['re']);
-
-      if (this['im'] === 0) {
-        //return new Complex(tmp, 0);
-      }
-      return new Complex(
-        tmp * Math.cos(this['im']),
-        tmp * Math.sin(this['im']));
-    },
-
-    /**
-     * Calculate the complex exponent and subtracts one.
-     *
-     * This may be more accurate than `Complex(x).exp().sub(1)` if
-     * `x` is small.
-     *
-     * @returns {Complex}
-     */
-    'expm1': function() {
-
-      /**
-       * exp(a + i*b) - 1
-       = exp(a) * (cos(b) + j*sin(b)) - 1
-       = expm1(a)*cos(b) + cosm1(b) + j*exp(a)*sin(b)
-       */
-
-      var a = this['re'];
-      var b = this['im'];
-
-      return new Complex(
-        Math.expm1(a) * Math.cos(b) + cosm1(b),
-        Math.exp(a) * Math.sin(b));
-    },
-
-    /**
-     * Calculate the natural log
-     *
-     * @returns {Complex}
-     */
-    'log': function() {
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (b === 0 && a > 0) {
-        //return new Complex(Math.log(a), 0);
-      }
-
-      return new Complex(
-        logHypot(a, b),
-        Math.atan2(b, a));
-    },
-
-    /**
-     * Calculate the magnitude of the complex number
-     *
-     * @returns {number}
-     */
-    'abs': function() {
-
-      return hypot(this['re'], this['im']);
-    },
-
-    /**
-     * Calculate the angle of the complex number
-     *
-     * @returns {number}
-     */
-    'arg': function() {
-
-      return Math.atan2(this['im'], this['re']);
-    },
-
-    /**
-     * Calculate the sine of the complex number
-     *
-     * @returns {Complex}
-     */
-    'sin': function() {
-
-      // sin(z) = ( e^iz - e^-iz ) / 2i 
-      //        = sin(a)cosh(b) + i cos(a)sinh(b)
-
-      var a = this['re'];
-      var b = this['im'];
-
-      return new Complex(
-        Math.sin(a) * cosh(b),
-        Math.cos(a) * sinh(b));
-    },
-
-    /**
-     * Calculate the cosine
-     *
-     * @returns {Complex}
-     */
-    'cos': function() {
-
-      // cos(z) = ( e^iz + e^-iz ) / 2 
-      //        = cos(a)cosh(b) - i sin(a)sinh(b)
-
-      var a = this['re'];
-      var b = this['im'];
-
-      return new Complex(
-        Math.cos(a) * cosh(b),
-        -Math.sin(a) * sinh(b));
-    },
-
-    /**
-     * Calculate the tangent
-     *
-     * @returns {Complex}
-     */
-    'tan': function() {
-
-      // tan(z) = sin(z) / cos(z) 
-      //        = ( e^iz - e^-iz ) / ( i( e^iz + e^-iz ) )
-      //        = ( e^2iz - 1 ) / i( e^2iz + 1 )
-      //        = ( sin(2a) + i sinh(2b) ) / ( cos(2a) + cosh(2b) )
-
-      var a = 2 * this['re'];
-      var b = 2 * this['im'];
-      var d = Math.cos(a) + cosh(b);
-
-      return new Complex(
-        Math.sin(a) / d,
-        sinh(b) / d);
-    },
-
-    /**
-     * Calculate the cotangent
-     *
-     * @returns {Complex}
-     */
-    'cot': function() {
-
-      // cot(c) = i(e^(ci) + e^(-ci)) / (e^(ci) - e^(-ci))
-
-      var a = 2 * this['re'];
-      var b = 2 * this['im'];
-      var d = Math.cos(a) - cosh(b);
-
-      return new Complex(
-        -Math.sin(a) / d,
-        sinh(b) / d);
-    },
-
-    /**
-     * Calculate the secant
-     *
-     * @returns {Complex}
-     */
-    'sec': function() {
-
-      // sec(c) = 2 / (e^(ci) + e^(-ci))
-
-      var a = this['re'];
-      var b = this['im'];
-      var d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
-
-      return new Complex(
-        Math.cos(a) * cosh(b) / d,
-        Math.sin(a) * sinh(b) / d);
-    },
-
-    /**
-     * Calculate the cosecans
-     *
-     * @returns {Complex}
-     */
-    'csc': function() {
-
-      // csc(c) = 2i / (e^(ci) - e^(-ci))
-
-      var a = this['re'];
-      var b = this['im'];
-      var d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
-
-      return new Complex(
-        Math.sin(a) * cosh(b) / d,
-        -Math.cos(a) * sinh(b) / d);
-    },
-
-    /**
-     * Calculate the complex arcus sinus
-     *
-     * @returns {Complex}
-     */
-    'asin': function() {
-
-      // asin(c) = -i * log(ci + sqrt(1 - c^2))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      var t1 = new Complex(
-        b * b - a * a + 1,
-        -2 * a * b)['sqrt']();
-
-      var t2 = new Complex(
-        t1['re'] - b,
-        t1['im'] + a)['log']();
-
-      return new Complex(t2['im'], -t2['re']);
-    },
-
-    /**
-     * Calculate the complex arcus cosinus
-     *
-     * @returns {Complex}
-     */
-    'acos': function() {
-
-      // acos(c) = i * log(c - i * sqrt(1 - c^2))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      var t1 = new Complex(
-        b * b - a * a + 1,
-        -2 * a * b)['sqrt']();
-
-      var t2 = new Complex(
-        t1['re'] - b,
-        t1['im'] + a)['log']();
-
-      return new Complex(Math.PI / 2 - t2['im'], t2['re']);
-    },
-
-    /**
-     * Calculate the complex arcus tangent
-     *
-     * @returns {Complex}
-     */
-    'atan': function() {
-
-      // atan(c) = i / 2 log((i + x) / (i - x))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (a === 0) {
-
-        if (b === 1) {
-          return new Complex(0, Infinity);
-        }
-
-        if (b === -1) {
-          return new Complex(0, -Infinity);
-        }
-      }
-
-      var d = a * a + (1.0 - b) * (1.0 - b);
-
-      var t1 = new Complex(
-        (1 - b * b - a * a) / d,
-        -2 * a / d).log();
-
-      return new Complex(-0.5 * t1['im'], 0.5 * t1['re']);
-    },
-
-    /**
-     * Calculate the complex arcus cotangent
-     *
-     * @returns {Complex}
-     */
-    'acot': function() {
-
-      // acot(c) = i / 2 log((c - i) / (c + i))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (b === 0) {
-        return new Complex(Math.atan2(1, a), 0);
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).atan()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).atan();
-    },
-
-    /**
-     * Calculate the complex arcus secant
-     *
-     * @returns {Complex}
-     */
-    'asec': function() {
-
-      // asec(c) = -i * log(1 / c + sqrt(1 - i / c^2))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (a === 0 && b === 0) {
-        return new Complex(0, Infinity);
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).acos()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).acos();
-    },
-
-    /**
-     * Calculate the complex arcus cosecans
-     *
-     * @returns {Complex}
-     */
-    'acsc': function() {
-
-      // acsc(c) = -i * log(i / c + sqrt(1 - 1 / c^2))
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (a === 0 && b === 0) {
-        return new Complex(Math.PI / 2, Infinity);
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).asin()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).asin();
-    },
-
-    /**
-     * Calculate the complex sinh
-     *
-     * @returns {Complex}
-     */
-    'sinh': function() {
-
-      // sinh(c) = (e^c - e^-c) / 2
-
-      var a = this['re'];
-      var b = this['im'];
-
-      return new Complex(
-        sinh(a) * Math.cos(b),
-        cosh(a) * Math.sin(b));
-    },
-
-    /**
-     * Calculate the complex cosh
-     *
-     * @returns {Complex}
-     */
-    'cosh': function() {
-
-      // cosh(c) = (e^c + e^-c) / 2
-
-      var a = this['re'];
-      var b = this['im'];
-
-      return new Complex(
-        cosh(a) * Math.cos(b),
-        sinh(a) * Math.sin(b));
-    },
-
-    /**
-     * Calculate the complex tanh
-     *
-     * @returns {Complex}
-     */
-    'tanh': function() {
-
-      // tanh(c) = (e^c - e^-c) / (e^c + e^-c)
-
-      var a = 2 * this['re'];
-      var b = 2 * this['im'];
-      var d = cosh(a) + Math.cos(b);
-
-      return new Complex(
-        sinh(a) / d,
-        Math.sin(b) / d);
-    },
-
-    /**
-     * Calculate the complex coth
-     *
-     * @returns {Complex}
-     */
-    'coth': function() {
-
-      // coth(c) = (e^c + e^-c) / (e^c - e^-c)
-
-      var a = 2 * this['re'];
-      var b = 2 * this['im'];
-      var d = cosh(a) - Math.cos(b);
-
-      return new Complex(
-        sinh(a) / d,
-        -Math.sin(b) / d);
-    },
-
-    /**
-     * Calculate the complex coth
-     *
-     * @returns {Complex}
-     */
-    'csch': function() {
-
-      // csch(c) = 2 / (e^c - e^-c)
-
-      var a = this['re'];
-      var b = this['im'];
-      var d = Math.cos(2 * b) - cosh(2 * a);
-
-      return new Complex(
-        -2 * sinh(a) * Math.cos(b) / d,
-        2 * cosh(a) * Math.sin(b) / d);
-    },
-
-    /**
-     * Calculate the complex sech
-     *
-     * @returns {Complex}
-     */
-    'sech': function() {
-
-      // sech(c) = 2 / (e^c + e^-c)
-
-      var a = this['re'];
-      var b = this['im'];
-      var d = Math.cos(2 * b) + cosh(2 * a);
-
-      return new Complex(
-        2 * cosh(a) * Math.cos(b) / d,
-        -2 * sinh(a) * Math.sin(b) / d);
-    },
-
-    /**
-     * Calculate the complex asinh
-     *
-     * @returns {Complex}
-     */
-    'asinh': function() {
-
-      // asinh(c) = log(c + sqrt(c^2 + 1))
-
-      var tmp = this['im'];
-      this['im'] = -this['re'];
-      this['re'] = tmp;
-      var res = this['asin']();
-
-      this['re'] = -this['im'];
-      this['im'] = tmp;
-      tmp = res['re'];
-
-      res['re'] = -res['im'];
-      res['im'] = tmp;
-      return res;
-    },
-
-    /**
-     * Calculate the complex acosh
-     *
-     * @returns {Complex}
-     */
-    'acosh': function() {
-
-      // acosh(c) = log(c + sqrt(c^2 - 1))
-
-      var res = this['acos']();
-      if (res['im'] <= 0) {
-        var tmp = res['re'];
-        res['re'] = -res['im'];
-        res['im'] = tmp;
-      } else {
-        var tmp = res['im'];
-        res['im'] = -res['re'];
-        res['re'] = tmp;
-      }
-      return res;
-    },
-
-    /**
-     * Calculate the complex atanh
-     *
-     * @returns {Complex}
-     */
-    'atanh': function() {
-
-      // atanh(c) = log((1+c) / (1-c)) / 2
-
-      var a = this['re'];
-      var b = this['im'];
-
-      var noIM = a > 1 && b === 0;
-      var oneMinus = 1 - a;
-      var onePlus = 1 + a;
-      var d = oneMinus * oneMinus + b * b;
-
-      var x = (d !== 0)
-        ? new Complex(
-          (onePlus * oneMinus - b * b) / d,
-          (b * oneMinus + onePlus * b) / d)
-        : new Complex(
-          (a !== -1) ? (a / 0) : 0,
-          (b !== 0) ? (b / 0) : 0);
-
-      var temp = x['re'];
-      x['re'] = logHypot(x['re'], x['im']) / 2;
-      x['im'] = Math.atan2(x['im'], temp) / 2;
-      if (noIM) {
-        x['im'] = -x['im'];
-      }
-      return x;
-    },
-
-    /**
-     * Calculate the complex acoth
-     *
-     * @returns {Complex}
-     */
-    'acoth': function() {
-
-      // acoth(c) = log((c+1) / (c-1)) / 2
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (a === 0 && b === 0) {
-        return new Complex(0, Math.PI / 2);
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).atanh()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).atanh();
-    },
-
-    /**
-     * Calculate the complex acsch
-     *
-     * @returns {Complex}
-     */
-    'acsch': function() {
-
-      // acsch(c) = log((1+sqrt(1+c^2))/c)
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (b === 0) {
-
-        return new Complex(
-          (a !== 0)
-            ? Math.log(a + Math.sqrt(a * a + 1))
-            : Infinity, 0);
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).asinh()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).asinh();
-    },
-
-    /**
-     * Calculate the complex asech
-     *
-     * @returns {Complex}
-     */
-    'asech': function() {
-
-      // asech(c) = log((1+sqrt(1-c^2))/c)
-
-      var a = this['re'];
-      var b = this['im'];
-
-      if (this['isZero']()) {
-        return Complex['INFINITY'];
-      }
-
-      var d = a * a + b * b;
-      return (d !== 0)
-        ? new Complex(
-          a / d,
-          -b / d).acosh()
-        : new Complex(
-          (a !== 0) ? a / 0 : 0,
-          (b !== 0) ? -b / 0 : 0).acosh();
-    },
-
-    /**
-     * Calculate the complex inverse 1/z
-     *
-     * @returns {Complex}
-     */
-    'inverse': function() {
-
-      // 1 / 0 = Infinity and 1 / Infinity = 0
-      if (this['isZero']()) {
-        return Complex['INFINITY'];
-      }
-
-      if (this['isInfinite']()) {
-        return Complex['ZERO'];
-      }
-
-      var a = this['re'];
-      var b = this['im'];
-
-      var d = a * a + b * b;
-
-      return new Complex(a / d, -b / d);
-    },
-
-    /**
-     * Returns the complex conjugate
-     *
-     * @returns {Complex}
-     */
-    'conjugate': function() {
-
-      return new Complex(this['re'], -this['im']);
-    },
-
-    /**
-     * Gets the negated complex number
-     *
-     * @returns {Complex}
-     */
-    'neg': function() {
-
-      return new Complex(-this['re'], -this['im']);
-    },
-
-    /**
-     * Ceils the actual complex number
-     *
-     * @returns {Complex}
-     */
-    'ceil': function(places) {
-
-      places = Math.pow(10, places || 0);
-
-      return new Complex(
-        Math.ceil(this['re'] * places) / places,
-        Math.ceil(this['im'] * places) / places);
-    },
-
-    /**
-     * Floors the actual complex number
-     *
-     * @returns {Complex}
-     */
-    'floor': function(places) {
-
-      places = Math.pow(10, places || 0);
-
-      return new Complex(
-        Math.floor(this['re'] * places) / places,
-        Math.floor(this['im'] * places) / places);
-    },
-
-    /**
-     * Ceils the actual complex number
-     *
-     * @returns {Complex}
-     */
-    'round': function(places) {
-
-      places = Math.pow(10, places || 0);
-
-      return new Complex(
-        Math.round(this['re'] * places) / places,
-        Math.round(this['im'] * places) / places);
-    },
-
-    /**
-     * Compares two complex numbers
-     *
-     * **Note:** new Complex(Infinity).equals(Infinity) === false
-     *
-     * @returns {boolean}
-     */
-    'equals': function(a, b) {
-
-      var z = new Complex(a, b);
-
-      return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
-        Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
-    },
-
-    /**
-     * Clones the actual object
-     *
-     * @returns {Complex}
-     */
-    'clone': function() {
-
-      return new Complex(this['re'], this['im']);
-    },
-
-    /**
-     * Gets a string of the actual complex number
-     *
-     * @returns {string}
-     */
-    'toString': function() {
-
-      var a = this['re'];
-      var b = this['im'];
-      var ret = "";
-
-      if (this['isNaN']()) {
-        return 'NaN';
-      }
-
-      if (this['isInfinite']()) {
-        return 'Infinity';
-      }
-
-      if (Math.abs(a) < Complex['EPSILON']) {
-        a = 0;
-      }
-
-      if (Math.abs(b) < Complex['EPSILON']) {
-        b = 0;
-      }
-
-      // If is real number
-      if (b === 0) {
-        return ret + a;
-      }
-
-      if (a !== 0) {
-        ret += a;
-        ret += " ";
-        if (b < 0) {
-          b = -b;
-          ret += "-";
-        } else {
-          ret += "+";
-        }
-        ret += " ";
-      } else if (b < 0) {
-        b = -b;
-        ret += "-";
-      }
-
-      if (1 !== b) { // b is the absolute imaginary part
-        ret += b;
-      }
-      return ret + "i";
-    },
-
-    /**
-     * Returns the actual number as a vector
-     *
-     * @returns {Array}
-     */
-    'toVector': function() {
-
-      return [this['re'], this['im']];
-    },
-
-    /**
-     * Returns the actual real value of the current object
-     *
-     * @returns {number|null}
-     */
-    'valueOf': function() {
-
-      if (this['im'] === 0) {
-        return this['re'];
-      }
-      return null;
-    },
-
-    /**
-     * Determines whether a complex number is not on the Riemann sphere.
-     *
-     * @returns {boolean}
-     */
-    'isNaN': function() {
-      return isNaN(this['re']) || isNaN(this['im']);
-    },
-
-    /**
-     * Determines whether or not a complex number is at the zero pole of the
-     * Riemann sphere.
-     *
-     * @returns {boolean}
-     */
-    'isZero': function() {
-      return this['im'] === 0 && this['re'] === 0;
-    },
-
-    /**
-     * Determines whether a complex number is not at the infinity pole of the
-     * Riemann sphere.
-     *
-     * @returns {boolean}
-     */
-    'isFinite': function() {
-      return isFinite(this['re']) && isFinite(this['im']);
-    },
-
-    /**
-     * Determines whether or not a complex number is at the infinity pole of the
-     * Riemann sphere.
-     *
-     * @returns {boolean}
-     */
-    'isInfinite': function() {
-      return !(this['isNaN']() || this['isFinite']());
-    }
-  };
-
-  Complex['ZERO'] = new Complex(0, 0);
-  Complex['ONE'] = new Complex(1, 0);
-  Complex['I'] = new Complex(0, 1);
-  Complex['PI'] = new Complex(Math.PI, 0);
-  Complex['E'] = new Complex(Math.E, 0);
-  Complex['INFINITY'] = new Complex(Infinity, Infinity);
-  Complex['NAN'] = new Complex(NaN, NaN);
-  Complex['EPSILON'] = 1e-15;
-
-  if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
-      return Complex;
-    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else {}
-
-})(this);
-
-
-/***/ }),
-
 /***/ "./node_modules/javascript-natural-sort/naturalSort.js":
 /*!*************************************************************!*\
   !*** ./node_modules/javascript-natural-sort/naturalSort.js ***!
@@ -9655,16 +8227,14 @@ module.exports = jQuery;
   function ok() {
     return true;
   }
-
   function notOk() {
     return false;
   }
-
   function undef() {
     return undefined;
   }
-
   const NOT_TYPED_FUNCTION = 'Argument is not a typed-function.';
+
   /**
    * @typedef {{
    *   params: Param[],
@@ -9705,7 +8275,6 @@ module.exports = jQuery;
   /**
    * @returns {() => function}
    */
-
   function create() {
     // data type tests
 
@@ -9715,7 +8284,6 @@ module.exports = jQuery;
     function isPlainObject(x) {
       return typeof x === 'object' && x !== null && x.constructor === Object;
     }
-
     const _types = [{
       name: 'number',
       test: function (x) {
@@ -9767,23 +8335,25 @@ module.exports = jQuery;
       name: 'any',
       test: ok,
       isAny: true
-    }; // Data structures to track the types. As these are local variables in
+    };
+
+    // Data structures to track the types. As these are local variables in
     // create(), each typed universe will get its own copy, but the variables
     // will only be accessible through the (closures of the) functions supplied
     // as properties of the typed object, not directly.
     // These will be initialized in clear() below
-
     let typeMap; // primary store of all types
-
     let typeList; // Array of just type names, for the sake of ordering
+
     // And similar data structures for the type conversions:
+    let nConversions = 0;
+    // the actual conversions are stored on a property of the destination types
 
-    let nConversions = 0; // the actual conversions are stored on a property of the destination types
     // This is a temporary object, will be replaced with a function at the end
-
     let typed = {
       createCount: 0
     };
+
     /**
      * Takes a type name and returns the corresponding official type object
      * for that type.
@@ -9791,28 +8361,24 @@ module.exports = jQuery;
      * @param {string} typeName
      * @returns {TypeDef} type
      */
-
     function findType(typeName) {
       const type = typeMap.get(typeName);
-
       if (type) {
         return type;
-      } // Remainder is error handling
-
-
+      }
+      // Remainder is error handling
       let message = 'Unknown type "' + typeName + '"';
       const name = typeName.toLowerCase();
       let otherName;
-
       for (otherName of typeList) {
         if (otherName.toLowerCase() === name) {
           message += '. Did you mean "' + otherName + '" ?';
           break;
         }
       }
-
       throw new TypeError(message);
     }
+
     /**
      * Adds an array `types` of type definitions to this typed instance.
      * Each type definition should be an object with properties:
@@ -9826,24 +8392,18 @@ module.exports = jQuery;
      * @param {TypeDef[]} types
      * @param {string | boolean} [beforeSpec='any'] before
      */
-
-
     function addTypes(types) {
       let beforeSpec = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'any';
       const beforeIndex = beforeSpec ? findType(beforeSpec).index : typeList.length;
       const newTypes = [];
-
       for (let i = 0; i < types.length; ++i) {
         if (!types[i] || typeof types[i].name !== 'string' || typeof types[i].test !== 'function') {
           throw new TypeError('Object with properties {name: string, test: function} expected');
         }
-
         const typeName = types[i].name;
-
         if (typeMap.has(typeName)) {
           throw new TypeError('Duplicate type name "' + typeName + '"');
         }
-
         newTypes.push(typeName);
         typeMap.set(typeName, {
           name: typeName,
@@ -9851,79 +8411,71 @@ module.exports = jQuery;
           isAny: types[i].isAny,
           index: beforeIndex + i,
           conversionsTo: [] // Newly added type can't have any conversions to it
-
         });
-      } // update the typeList
-
-
+      }
+      // update the typeList
       const affectedTypes = typeList.slice(beforeIndex);
-      typeList = typeList.slice(0, beforeIndex).concat(newTypes).concat(affectedTypes); // Fix the indices
-
+      typeList = typeList.slice(0, beforeIndex).concat(newTypes).concat(affectedTypes);
+      // Fix the indices
       for (let i = beforeIndex + newTypes.length; i < typeList.length; ++i) {
         typeMap.get(typeList[i]).index = i;
       }
     }
+
     /**
      * Removes all types and conversions from this typed instance.
      * May cause previously constructed typed-functions to throw
      * strange errors when they are called with types that do not
      * match any of their signatures.
      */
-
-
     function clear() {
       typeMap = new Map();
       typeList = [];
       nConversions = 0;
       addTypes([anyType], false);
-    } // initialize the types to the default list
+    }
 
-
+    // initialize the types to the default list
     clear();
     addTypes(_types);
+
     /**
      * Removes all conversions, leaving the types alone.
      */
-
     function clearConversions() {
       let typeName;
-
       for (typeName of typeList) {
         typeMap.get(typeName).conversionsTo = [];
       }
-
       nConversions = 0;
     }
+
     /**
      * Find the type names that match a value.
      * @param {*} value
      * @return {string[]} Array of names of types for which
      *                  the type test matches the value.
      */
-
-
     function findTypeNames(value) {
       const matches = typeList.filter(name => {
         const type = typeMap.get(name);
         return !type.isAny && type.test(value);
       });
-
       if (matches.length) {
         return matches;
       }
-
       return ['any'];
     }
+
     /**
      * Check if an entity is a typed function created by any instance
      * @param {any} entity
      * @returns {boolean}
      */
-
-
     function isTypedFunction(entity) {
       return entity && typeof entity === 'function' && '_typedFunctionData' in entity;
     }
+
     /**
      * Find a specific signature from a (composed) typed function, for example:
      *
@@ -9958,86 +8510,73 @@ module.exports = jQuery;
      *     Returns the matching signature, or throws an error when no signature
      *     is found.
      */
-
-
     function findSignature(fn, signature, options) {
       if (!isTypedFunction(fn)) {
         throw new TypeError(NOT_TYPED_FUNCTION);
-      } // Canonicalize input
+      }
 
-
+      // Canonicalize input
       const exact = options && options.exact;
       const stringSignature = Array.isArray(signature) ? signature.join(',') : signature;
       const params = parseSignature(stringSignature);
-      const canonicalSignature = stringifyParams(params); // First hope we get lucky and exactly match a signature
+      const canonicalSignature = stringifyParams(params);
 
+      // First hope we get lucky and exactly match a signature
       if (!exact || canonicalSignature in fn.signatures) {
         // OK, we can check the internal signatures
         const match = fn._typedFunctionData.signatureMap.get(canonicalSignature);
-
         if (match) {
           return match;
         }
-      } // Oh well, we did not; so we have to go back and check the parameters
+      }
+
+      // Oh well, we did not; so we have to go back and check the parameters
       // one by one, in order to catch things like `any` and rest params.
       // Note here we can assume there is at least one parameter, because
       // the empty signature would have matched successfully above.
-
-
       const nParams = params.length;
       let remainingSignatures;
-
       if (exact) {
         remainingSignatures = [];
         let name;
-
         for (name in fn.signatures) {
           remainingSignatures.push(fn._typedFunctionData.signatureMap.get(name));
         }
       } else {
         remainingSignatures = fn._typedFunctionData.signatures;
       }
-
       for (let i = 0; i < nParams; ++i) {
         const want = params[i];
         const filteredSignatures = [];
         let possibility;
-
         for (possibility of remainingSignatures) {
           const have = getParamAtIndex(possibility.params, i);
-
           if (!have || want.restParam && !have.restParam) {
             continue;
           }
-
           if (!have.hasAny) {
             // have to check all of the wanted types are available
             const haveTypes = paramTypeSet(have);
-
             if (want.types.some(wtype => !haveTypes.has(wtype.name))) {
               continue;
             }
-          } // OK, this looks good
-
-
+          }
+          // OK, this looks good
           filteredSignatures.push(possibility);
         }
-
         remainingSignatures = filteredSignatures;
         if (remainingSignatures.length === 0) break;
-      } // Return the first remaining signature that was totally matched:
-
-
+      }
+      // Return the first remaining signature that was totally matched:
       let candidate;
-
       for (candidate of remainingSignatures) {
         if (candidate.params.length <= nParams) {
           return candidate;
         }
       }
-
       throw new TypeError('Signature not found (signature: ' + (fn.name || 'unnamed') + '(' + stringifyParams(params, ', ') + '))');
     }
+
     /**
      * Find the proper function to call for a specific signature from
      * a (composed) typed function, for example:
@@ -10064,62 +8603,51 @@ module.exports = jQuery;
      *     Returns the function to call for the given signature, or throws an
      *     error if no match is found.
      */
-
-
     function find(fn, signature, options) {
       return findSignature(fn, signature, options).implementation;
     }
+
     /**
      * Convert a given value to another data type, specified by type name.
      *
      * @param {*} value
      * @param {string} typeName
      */
-
-
     function convert(value, typeName) {
       // check conversion is needed
       const type = findType(typeName);
-
       if (type.test(value)) {
         return value;
       }
-
       const conversions = type.conversionsTo;
-
       if (conversions.length === 0) {
         throw new Error('There are no conversions to ' + typeName + ' defined.');
       }
-
       for (let i = 0; i < conversions.length; i++) {
         const fromType = findType(conversions[i].from);
-
         if (fromType.test(value)) {
           return conversions[i].convert(value);
         }
       }
-
       throw new Error('Cannot convert ' + value + ' to ' + typeName);
     }
+
     /**
      * Stringify parameters in a normalized way
      * @param {Param[]} params
      * @param {string} [','] separator
      * @return {string}
      */
-
-
     function stringifyParams(params) {
       let separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ',';
       return params.map(p => p.name).join(separator);
     }
+
     /**
      * Parse a parameter, like "...number | boolean"
      * @param {string} param
      * @return {Param} param
      */
-
-
     function parseParam(param) {
       const restParam = param.indexOf('...') === 0;
       const types = !restParam ? param : param.length > 3 ? param.slice(3) : 'any';
@@ -10147,14 +8675,13 @@ module.exports = jQuery;
         restParam
       };
     }
+
     /**
      * Expands a parsed parameter with the types available from currently
      * defined conversions.
      * @param {Param} param
      * @return {Param} param
      */
-
-
     function expandParam(param) {
       const typeNames = param.types.map(t => t.name);
       const matchingConversions = availableConversions(typeNames);
@@ -10181,6 +8708,7 @@ module.exports = jQuery;
         restParam: param.restParam
       };
     }
+
     /**
      * Return the set of type names in a parameter.
      * Caches the result for efficiency
@@ -10188,16 +8716,14 @@ module.exports = jQuery;
      * @param {Param} param
      * @return {Set<string>} typenames
      */
-
-
     function paramTypeSet(param) {
       if (!param.typeSet) {
         param.typeSet = new Set();
         param.types.forEach(type => param.typeSet.add(type.name));
       }
-
       return param.typeSet;
     }
+
     /**
      * Parse a signature with comma separated parameters,
      * like "number | boolean, ...string"
@@ -10205,59 +8731,46 @@ module.exports = jQuery;
      * @param {string} signature
      * @return {Param[]} params
      */
-
-
     function parseSignature(rawSignature) {
       const params = [];
-
       if (typeof rawSignature !== 'string') {
         throw new TypeError('Signatures must be strings');
       }
-
       const signature = rawSignature.trim();
-
       if (signature === '') {
         return params;
       }
-
       const rawParams = signature.split(',');
-
       for (let i = 0; i < rawParams.length; ++i) {
         const parsedParam = parseParam(rawParams[i].trim());
-
         if (parsedParam.restParam && i !== rawParams.length - 1) {
           throw new SyntaxError('Unexpected rest parameter "' + rawParams[i] + '": ' + 'only allowed for the last parameter');
-        } // if invalid, short-circuit (all the types may have been filtered)
-
-
+        }
+        // if invalid, short-circuit (all the types may have been filtered)
         if (parsedParam.types.length === 0) {
           return null;
         }
-
         params.push(parsedParam);
       }
-
       return params;
     }
+
     /**
      * Test whether a set of params contains a restParam
      * @param {Param[]} params
      * @return {boolean} Returns true when the last parameter is a restParam
      */
-
-
     function hasRestParam(params) {
       const param = last(params);
       return param ? param.restParam : false;
     }
+
     /**
      * Create a type test for a single parameter, which can have one or multiple
      * types.
      * @param {Param} param
      * @return {function(x: *) : boolean} Returns a test function
      */
-
-
     function compileTest(param) {
       if (!param || param.types.length === 0) {
         // nothing to do
@@ -10281,44 +8794,37 @@ module.exports = jQuery;
               return true;
             }
           }
-
           return false;
         };
       }
     }
+
     /**
      * Create a test for all parameters of a signature
      * @param {Param[]} params
      * @return {function(args: Array<*>) : boolean}
      */
-
-
     function compileTests(params) {
       let tests, test0, test1;
-
       if (hasRestParam(params)) {
         // variable arguments like '...number'
         tests = initial(params).map(compileTest);
         const varIndex = tests.length;
         const lastTest = compileTest(last(params));
-
         const testRestParam = function (args) {
           for (let i = varIndex; i < args.length; i++) {
             if (!lastTest(args[i])) {
               return false;
             }
           }
-
           return true;
         };
-
         return function testArgs(args) {
           for (let i = 0; i < tests.length; i++) {
             if (!tests[i](args[i])) {
               return false;
             }
           }
-
           return testRestParam(args) && args.length >= varIndex + 1;
         };
       } else {
@@ -10347,12 +8853,12 @@ module.exports = jQuery;
                 return false;
               }
             }
-
             return args.length === tests.length;
           };
         }
       }
     }
+
     /**
      * Find the parameter at a specific index of a Params list.
      * Handles rest parameters.
@@ -10361,38 +8867,33 @@ module.exports = jQuery;
      * @return {Param | null} Returns the matching parameter when found,
      *                        null otherwise.
      */
-
-
     function getParamAtIndex(params, index) {
       return index < params.length ? params[index] : hasRestParam(params) ? last(params) : null;
     }
+
     /**
      * Get all type names of a parameter
      * @param {Params[]} params
      * @param {number} index
      * @return {string[]} Returns an array with type names
      */
-
-
     function getTypeSetAtIndex(params, index) {
       const param = getParamAtIndex(params, index);
-
       if (!param) {
         return new Set();
       }
-
       return paramTypeSet(param);
     }
+
     /**
      * Test whether a type is an exact type or conversion
      * @param {Type} type
      * @return {boolean} Returns true when
      */
-
-
     function isExactType(type) {
       return type.conversion === null || type.conversion === undefined;
     }
+
     /**
      * Helper function for creating error messages: create an array with
      * all available types on a specific argument index.
@@ -10400,20 +8901,18 @@ module.exports = jQuery;
      * @param {number} index
      * @return {string[]} Returns an array with available types
      */
-
-
     function mergeExpectedParams(signatures, index) {
       const typeSet = new Set();
       signatures.forEach(signature => {
         const paramSet = getTypeSetAtIndex(signature.params, index);
         let name;
-
         for (name of paramSet) {
           typeSet.add(name);
         }
       });
       return typeSet.has('any') ? ['any'] : Array.from(typeSet);
     }
+
     /**
      * Create
      * @param {string} name             The name of the function
@@ -10422,32 +8921,25 @@ module.exports = jQuery;
      * @return {TypeError} Returns a type error with additional data
      *                     attached to it in the property `data`
      */
-
-
     function createError(name, args, signatures) {
       let err, expected;
+      const _name = name || 'unnamed';
 
-      const _name = name || 'unnamed'; // test for wrong type at some index
-
-
+      // test for wrong type at some index
       let matchingSignatures = signatures;
       let index;
-
       for (index = 0; index < args.length; index++) {
         const nextMatchingDefs = [];
         matchingSignatures.forEach(signature => {
           const param = getParamAtIndex(signature.params, index);
           const test = compileTest(param);
-
           if ((index < signature.params.length || hasRestParam(signature.params)) && test(args[index])) {
             nextMatchingDefs.push(signature);
           }
         });
-
         if (nextMatchingDefs.length === 0) {
           // no matching signatures anymore, throw error "wrong type"
           expected = mergeExpectedParams(matchingSignatures, index);
-
           if (expected.length > 0) {
             const actualTypes = findTypeNames(args[index]);
             err = new TypeError('Unexpected type of argument in function ' + _name + ' (expected: ' + expected.join(' or ') + ', actual: ' + actualTypes.join(' | ') + ', index: ' + index + ')');
@@ -10463,13 +8955,12 @@ module.exports = jQuery;
         } else {
           matchingSignatures = nextMatchingDefs;
         }
-      } // test for too few arguments
+      }
 
-
+      // test for too few arguments
       const lengths = matchingSignatures.map(function (signature) {
         return hasRestParam(signature.params) ? Infinity : signature.params.length;
       });
-
       if (args.length < Math.min.apply(null, lengths)) {
         expected = mergeExpectedParams(matchingSignatures, index);
         err = new TypeError('Too few arguments in function ' + _name + ' (expected: ' + expected.join(' or ') + ', index: ' + args.length + ')');
@@ -10480,11 +8971,10 @@ module.exports = jQuery;
           expected
         };
         return err;
-      } // test for too many arguments
+      }
 
-
+      // test for too many arguments
       const maxLength = Math.max.apply(null, lengths);
-
       if (args.length > maxLength) {
         err = new TypeError('Too many arguments in function ' + _name + ' (expected: ' + maxLength + ', actual: ' + args.length + ')');
         err.data = {
@@ -10494,15 +8984,13 @@ module.exports = jQuery;
           expectedLength: maxLength
         };
         return err;
-      } // Generic error
+      }
 
-
+      // Generic error
       const argTypes = [];
-
       for (let i = 0; i < args.length; ++i) {
         argTypes.push(findTypeNames(args[i]).join('|'));
       }
-
       err = new TypeError('Arguments of type "' + argTypes.join(', ') + '" do not match any of the defined signatures of function ' + _name + '.');
       err.data = {
         category: 'mismatch',
@@ -10510,43 +8998,38 @@ module.exports = jQuery;
       };
       return err;
     }
+
     /**
      * Find the lowest index of all exact types of a parameter (no conversions)
      * @param {Param} param
      * @return {number} Returns the index of the lowest type in typed.types
      */
-
-
     function getLowestTypeIndex(param) {
       let min = typeList.length + 1;
-
       for (let i = 0; i < param.types.length; i++) {
         if (isExactType(param.types[i])) {
           min = Math.min(min, param.types[i].typeIndex);
         }
       }
-
       return min;
     }
+
     /**
      * Find the lowest index of the conversion of all types of the parameter
      * having a conversion
      * @param {Param} param
      * @return {number} Returns the lowest index of the conversions of this type
      */
-
-
     function getLowestConversionIndex(param) {
       let min = nConversions + 1;
-
       for (let i = 0; i < param.types.length; i++) {
         if (!isExactType(param.types[i])) {
           min = Math.min(min, param.types[i].conversionIndex);
         }
       }
-
       return min;
     }
+
     /**
      * Compare two params
      * @param {Param} param1
@@ -10555,8 +9038,6 @@ module.exports = jQuery;
      *                  index than param2, 1 when the opposite,
      *                  or zero when both are equal
      */
-
-
     function compareParams(param1, param2) {
       // We compare a number of metrics on a param in turn:
       // 1) 'any' parameters are the least preferred
@@ -10566,51 +9047,48 @@ module.exports = jQuery;
         }
       } else if (param2.hasAny) {
         return -1;
-      } // 2) Prefer non-rest to rest parameters
+      }
 
-
+      // 2) Prefer non-rest to rest parameters
       if (param1.restParam) {
         if (!param2.restParam) {
           return 1;
         }
       } else if (param2.restParam) {
         return -1;
-      } // 3) Prefer exact type match to conversions
+      }
 
-
+      // 3) Prefer exact type match to conversions
       if (param1.hasConversion) {
         if (!param2.hasConversion) {
           return 1;
         }
       } else if (param2.hasConversion) {
         return -1;
-      } // 4) Prefer lower type index:
+      }
 
-
+      // 4) Prefer lower type index:
       const typeDiff = getLowestTypeIndex(param1) - getLowestTypeIndex(param2);
-
       if (typeDiff < 0) {
         return -1;
       }
-
       if (typeDiff > 0) {
         return 1;
-      } // 5) Prefer lower conversion index
+      }
 
-
+      // 5) Prefer lower conversion index
       const convDiff = getLowestConversionIndex(param1) - getLowestConversionIndex(param2);
-
       if (convDiff < 0) {
         return -1;
       }
-
       if (convDiff > 0) {
         return 1;
-      } // Don't have a basis for preference
+      }
 
-
+      // Don't have a basis for preference
       return 0;
     }
+
     /**
      * Compare two signatures
      * @param {Signature} signature1
@@ -10619,109 +9097,100 @@ module.exports = jQuery;
      *                  index than param2, a positive number when the opposite,
      *                  or zero when both are equal
      */
-
-
     function compareSignatures(signature1, signature2) {
       const pars1 = signature1.params;
       const pars2 = signature2.params;
       const last1 = last(pars1);
       const last2 = last(pars2);
       const hasRest1 = hasRestParam(pars1);
-      const hasRest2 = hasRestParam(pars2); // We compare a number of metrics on signatures in turn:
+      const hasRest2 = hasRestParam(pars2);
+      // We compare a number of metrics on signatures in turn:
       // 1) An "any rest param" is least preferred
-
       if (hasRest1 && last1.hasAny) {
         if (!hasRest2 || !last2.hasAny) {
           return 1;
         }
       } else if (hasRest2 && last2.hasAny) {
         return -1;
-      } // 2) Minimize the number of 'any' parameters
+      }
 
-
+      // 2) Minimize the number of 'any' parameters
       let any1 = 0;
       let conv1 = 0;
       let par;
-
       for (par of pars1) {
         if (par.hasAny) ++any1;
         if (par.hasConversion) ++conv1;
       }
-
       let any2 = 0;
       let conv2 = 0;
-
       for (par of pars2) {
         if (par.hasAny) ++any2;
         if (par.hasConversion) ++conv2;
       }
-
       if (any1 !== any2) {
         return any1 - any2;
-      } // 3) A conversion rest param is less preferred
+      }
 
-
+      // 3) A conversion rest param is less preferred
       if (hasRest1 && last1.hasConversion) {
         if (!hasRest2 || !last2.hasConversion) {
           return 1;
         }
       } else if (hasRest2 && last2.hasConversion) {
         return -1;
-      } // 4) Minimize the number of conversions
+      }
 
-
+      // 4) Minimize the number of conversions
       if (conv1 !== conv2) {
         return conv1 - conv2;
-      } // 5) Prefer no rest param
+      }
 
-
+      // 5) Prefer no rest param
       if (hasRest1) {
         if (!hasRest2) {
           return 1;
         }
       } else if (hasRest2) {
         return -1;
-      } // 6) Prefer shorter with rest param, longer without
+      }
 
-
+      // 6) Prefer shorter with rest param, longer without
       const lengthCriterion = (pars1.length - pars2.length) * (hasRest1 ? -1 : 1);
-
       if (lengthCriterion !== 0) {
         return lengthCriterion;
-      } // Signatures are identical in each of the above metrics.
+      }
+
+      // Signatures are identical in each of the above metrics.
       // In particular, they are the same length.
       // We can therefore compare the parameters one by one.
       // First we count which signature has more preferred parameters.
-
-
       const comparisons = [];
       let tc = 0;
-
       for (let i = 0; i < pars1.length; ++i) {
         const thisComparison = compareParams(pars1[i], pars2[i]);
         comparisons.push(thisComparison);
         tc += thisComparison;
       }
-
       if (tc !== 0) {
         return tc;
-      } // They have the same number of preferred parameters, so go by the
+      }
+
+      // They have the same number of preferred parameters, so go by the
       // earliest parameter in which we have a preference.
       // In other words, dispatch is driven somewhat more by earlier
       // parameters than later ones.
-
-
       let c;
-
       for (c of comparisons) {
         if (c !== 0) {
           return c;
         }
-      } // It's a tossup:
+      }
 
-
+      // It's a tossup:
       return 0;
     }
+
     /**
      * Produce a list of all conversions from distinct types to one of
      * the given types.
@@ -10730,34 +9199,24 @@ module.exports = jQuery;
      * @return {ConversionDef[]} Returns the conversions that are available
      *                        resulting in any given type (if any)
      */
-
-
     function availableConversions(typeNames) {
       if (typeNames.length === 0) {
         return [];
       }
-
       const types = typeNames.map(findType);
-
       if (typeNames.length > 1) {
         types.sort((t1, t2) => t1.index - t2.index);
       }
-
       let matches = types[0].conversionsTo;
-
       if (typeNames.length === 1) {
         return matches;
       }
-
       matches = matches.concat([]); // shallow copy the matches
       // Since the types are now in index order, we just want the first
       // occurrence of any from type:
-
       const knownTypes = new Set(typeNames);
-
       for (let i = 1; i < types.length; ++i) {
         let newMatch;
-
         for (newMatch of types[i].conversionsTo) {
           if (!knownTypes.has(newMatch.from)) {
             matches.push(newMatch);
@@ -10765,9 +9224,9 @@ module.exports = jQuery;
           }
         }
       }
-
       return matches;
     }
+
     /**
      * Preprocess arguments before calling the original function:
      * - if needed convert the parameters
@@ -10776,51 +9235,42 @@ module.exports = jQuery;
      * @param {function} fn
      * @return {function} Returns a wrapped function
      */
-
-
     function compileArgsPreprocessing(params, fn) {
-      let fnConvert = fn; // TODO: can we make this wrapper function smarter/simpler?
+      let fnConvert = fn;
+
+      // TODO: can we make this wrapper function smarter/simpler?
 
       if (params.some(p => p.hasConversion)) {
         const restParam = hasRestParam(params);
         const compiledConversions = params.map(compileArgConversion);
-
         fnConvert = function convertArgs() {
           const args = [];
           const last = restParam ? arguments.length - 1 : arguments.length;
-
           for (let i = 0; i < last; i++) {
             args[i] = compiledConversions[i](arguments[i]);
           }
-
           if (restParam) {
             args[last] = arguments[last].map(compiledConversions[last]);
           }
-
           return fn.apply(this, args);
         };
       }
-
       let fnPreprocess = fnConvert;
-
       if (hasRestParam(params)) {
         const offset = params.length - 1;
-
         fnPreprocess = function preprocessRestParams() {
           return fnConvert.apply(this, slice(arguments, 0, offset).concat([slice(arguments, offset)]));
         };
       }
-
       return fnPreprocess;
     }
+
     /**
      * Compile conversion for a parameter to the right type
      * @param {Param} param
      * @return {function} Returns the wrapped function that will convert arguments
      *
      */
-
-
     function compileArgConversion(param) {
       let test0, test1, conversion0, conversion1;
       const tests = [];
@@ -10830,14 +9280,14 @@ module.exports = jQuery;
           tests.push(findType(type.conversion.from).test);
           conversions.push(type.conversion.convert);
         }
-      }); // create optimized conversion functions depending on the number of conversions
+      });
 
+      // create optimized conversion functions depending on the number of conversions
       switch (conversions.length) {
         case 0:
           return function convertArg(arg) {
             return arg;
           };
-
         case 1:
           test0 = tests[0];
           conversion0 = conversions[0];
@@ -10845,10 +9295,8 @@ module.exports = jQuery;
             if (test0(arg)) {
               return conversion0(arg);
             }
-
             return arg;
           };
-
         case 2:
           test0 = tests[0];
           test1 = tests[1];
@@ -10858,14 +9306,11 @@ module.exports = jQuery;
             if (test0(arg)) {
               return conversion0(arg);
             }
-
             if (test1(arg)) {
               return conversion1(arg);
             }
-
             return arg;
           };
-
         default:
           return function convertArg(arg) {
             for (let i = 0; i < conversions.length; i++) {
@@ -10873,11 +9318,11 @@ module.exports = jQuery;
                 return conversions[i](arg);
               }
             }
-
             return arg;
           };
       }
     }
+
     /**
      * Split params with union types in to separate params.
      *
@@ -10895,19 +9340,15 @@ module.exports = jQuery;
      * @param {Param[]} params
      * @return {Param[]}
      */
-
-
     function splitParams(params) {
       function _splitParams(params, index, paramsSoFar) {
         if (index < params.length) {
           const param = params[index];
           let resultingParams = [];
-
           if (param.restParam) {
             // split the types of a rest parameter in two:
             // one with only exact types, and one with exact types and conversions
             const exactTypes = param.types.filter(isExactType);
-
             if (exactTypes.length < param.types.length) {
               resultingParams.push({
                 types: exactTypes,
@@ -10917,7 +9358,6 @@ module.exports = jQuery;
                 restParam: true
               });
             }
-
             resultingParams.push(param);
           } else {
             // split all the types of a regular parameter into one type per param
@@ -10930,9 +9370,9 @@ module.exports = jQuery;
                 restParam: false
               };
             });
-          } // recurse over the groups with types
+          }
 
-
+          // recurse over the groups with types
           return flatMap(resultingParams, function (nextParam) {
             return _splitParams(params, index + 1, paramsSoFar.concat([nextParam]));
           });
@@ -10941,44 +9381,39 @@ module.exports = jQuery;
           return [paramsSoFar];
         }
       }
-
       return _splitParams(params, 0, []);
     }
+
     /**
      * Test whether two param lists represent conflicting signatures
      * @param {Param[]} params1
      * @param {Param[]} params2
      * @return {boolean} Returns true when the signatures conflict, false otherwise.
      */
-
-
     function conflicting(params1, params2) {
       const ii = Math.max(params1.length, params2.length);
-
       for (let i = 0; i < ii; i++) {
         const typeSet1 = getTypeSetAtIndex(params1, i);
         const typeSet2 = getTypeSetAtIndex(params2, i);
         let overlap = false;
         let name;
-
         for (name of typeSet2) {
           if (typeSet1.has(name)) {
             overlap = true;
             break;
           }
         }
-
         if (!overlap) {
           return false;
         }
       }
-
       const len1 = params1.length;
       const len2 = params2.length;
       const restParam1 = hasRestParam(params1);
       const restParam2 = hasRestParam(params2);
       return restParam1 ? restParam2 ? len1 === len2 : len2 >= len1 : restParam2 ? len1 >= len2 : len1 === len2;
     }
+
     /**
      * Helper function for `resolveReferences` that returns a copy of
      * functionList wihe any prior resolutions cleared out, in case we are
@@ -10987,21 +9422,18 @@ module.exports = jQuery;
      * @param {Array.<function|typed-reference>} functionList
      * @return {Array.<function|typed-reference>}
      */
-
-
     function clearResolutions(functionList) {
       return functionList.map(fn => {
         if (isReferToSelf(fn)) {
           return referToSelf(fn.referToSelf.callback);
         }
-
         if (isReferTo(fn)) {
           return makeReferTo(fn.referTo.references, fn.referTo.callback);
         }
-
         return fn;
       });
     }
+
     /**
      * Take a list of references, a list of functions functionList, and a
      * signatureMap indexing signatures into functionList, and return
@@ -11013,30 +9445,23 @@ module.exports = jQuery;
      * @param {Object.<string, integer>} signatureMap
      * @return {function[] | false} resolutions
      */
-
-
     function collectResolutions(references, functionList, signatureMap) {
       const resolvedReferences = [];
       let reference;
-
       for (reference of references) {
         let resolution = signatureMap[reference];
-
         if (typeof resolution !== 'number') {
           throw new TypeError('No definition for referenced signature "' + reference + '"');
         }
-
         resolution = functionList[resolution];
-
         if (typeof resolution !== 'function') {
           return false;
         }
-
         resolvedReferences.push(resolution);
       }
-
       return resolvedReferences;
     }
+
     /**
      * Resolve any references in the functionList for the typed function
      * itself. The signatureMap tells which index in the functionList a
@@ -11048,33 +9473,27 @@ module.exports = jQuery;
      * @param {function} self  The typed-function itself
      * @return {Array<function>} The list of resolved functions
      */
-
-
     function resolveReferences(functionList, signatureMap, self) {
       const resolvedFunctions = clearResolutions(functionList);
       const isResolved = new Array(resolvedFunctions.length).fill(false);
       let leftUnresolved = true;
-
       while (leftUnresolved) {
         leftUnresolved = false;
         let nothingResolved = true;
-
         for (let i = 0; i < resolvedFunctions.length; ++i) {
           if (isResolved[i]) continue;
           const fn = resolvedFunctions[i];
-
           if (isReferToSelf(fn)) {
-            resolvedFunctions[i] = fn.referToSelf.callback(self); // Preserve reference in case signature is reused someday:
-
+            resolvedFunctions[i] = fn.referToSelf.callback(self);
+            // Preserve reference in case signature is reused someday:
             resolvedFunctions[i].referToSelf = fn.referToSelf;
             isResolved[i] = true;
             nothingResolved = false;
           } else if (isReferTo(fn)) {
             const resolvedReferences = collectResolutions(fn.referTo.references, resolvedFunctions, signatureMap);
-
             if (resolvedReferences) {
-              resolvedFunctions[i] = fn.referTo.callback.apply(this, resolvedReferences); // Preserve reference in case signature is reused someday:
-
+              resolvedFunctions[i] = fn.referTo.callback.apply(this, resolvedReferences);
+              // Preserve reference in case signature is reused someday:
               resolvedFunctions[i].referTo = fn.referTo;
               isResolved[i] = true;
               nothingResolved = false;
@@ -11083,14 +9502,13 @@ module.exports = jQuery;
             }
           }
         }
-
         if (nothingResolved && leftUnresolved) {
           throw new SyntaxError('Circular reference detected in resolving typed.referTo');
         }
       }
-
       return resolvedFunctions;
     }
+
     /**
      * Validate whether any of the function bodies contains a self-reference
      * usage like `this(...)` or `this.signatures`. This self-referencing is
@@ -11098,20 +9516,19 @@ module.exports = jQuery;
      * the functions typed.referTo and typed.referToSelf.
      * @param {Object.<string, function>} signaturesMap
      */
-
-
     function validateDeprecatedThis(signaturesMap) {
       // TODO: remove this deprecation warning logic some day (it's introduced in v3)
+
       // match occurrences like 'this(' and 'this.signatures'
       const deprecatedThisRegex = /\bthis(\(|\.signatures\b)/;
       Object.keys(signaturesMap).forEach(signature => {
         const fn = signaturesMap[signature];
-
         if (deprecatedThisRegex.test(fn.toString())) {
           throw new SyntaxError('Using `this` to self-reference a function ' + 'is deprecated since typed-function@3. ' + 'Use typed.referTo and typed.referToSelf instead.');
         }
       });
     }
+
     /**
      * Create a typed function
      * @param {String} name               The name for the typed function
@@ -11122,50 +9539,42 @@ module.exports = jQuery;
      *                                    signature as value.
      * @return {function}  Returns the created typed function.
      */
-
-
     function createTypedFunction(name, rawSignaturesMap) {
       typed.createCount++;
-
       if (Object.keys(rawSignaturesMap).length === 0) {
         throw new SyntaxError('No signatures provided');
       }
-
       if (typed.warnAgainstDeprecatedThis) {
         validateDeprecatedThis(rawSignaturesMap);
-      } // Main processing loop for signatures
+      }
 
-
+      // Main processing loop for signatures
       const parsedParams = [];
       const originalFunctions = [];
       const signaturesMap = {};
       const preliminarySignatures = []; // may have duplicates from conversions
-
       let signature;
-
       for (signature in rawSignaturesMap) {
         // A) Protect against polluted Object prototype:
         if (!Object.prototype.hasOwnProperty.call(rawSignaturesMap, signature)) {
           continue;
-        } // B) Parse the signature
-
-
+        }
+        // B) Parse the signature
         const params = parseSignature(signature);
-        if (!params) continue; // C) Check for conflicts
-
+        if (!params) continue;
+        // C) Check for conflicts
         parsedParams.forEach(function (pp) {
           if (conflicting(pp, params)) {
             throw new TypeError('Conflicting signatures "' + stringifyParams(pp) + '" and "' + stringifyParams(params) + '".');
           }
         });
-        parsedParams.push(params); // D) Store the provided function and add conversions
-
+        parsedParams.push(params);
+        // D) Store the provided function and add conversions
         const functionIndex = originalFunctions.length;
         originalFunctions.push(rawSignaturesMap[signature]);
-        const conversionParams = params.map(expandParam); // E) Split the signatures and collect them up
-
+        const conversionParams = params.map(expandParam);
+        // E) Split the signatures and collect them up
         let sp;
-
         for (sp of splitParams(conversionParams)) {
           const spName = stringifyParams(sp);
           preliminarySignatures.push({
@@ -11173,28 +9582,25 @@ module.exports = jQuery;
             name: spName,
             fn: functionIndex
           });
-
           if (sp.every(p => !p.hasConversion)) {
             signaturesMap[spName] = functionIndex;
           }
         }
       }
+      preliminarySignatures.sort(compareSignatures);
 
-      preliminarySignatures.sort(compareSignatures); // Note the forward reference to theTypedFn
+      // Note the forward reference to theTypedFn
+      const resolvedFunctions = resolveReferences(originalFunctions, signaturesMap, theTypedFn);
 
-      const resolvedFunctions = resolveReferences(originalFunctions, signaturesMap, theTypedFn); // Fill in the proper function for each signature
-
+      // Fill in the proper function for each signature
       let s;
-
       for (s in signaturesMap) {
         if (Object.prototype.hasOwnProperty.call(signaturesMap, s)) {
           signaturesMap[s] = resolvedFunctions[signaturesMap[s]];
         }
       }
-
       const signatures = [];
       const internalSignatureMap = new Map(); // benchmarks faster than object
-
       for (s of preliminarySignatures) {
         // Note it's only safe to eliminate duplicates like this
         // _after_ the signature sorting step above; otherwise we might
@@ -11204,21 +9610,21 @@ module.exports = jQuery;
           signatures.push(s);
           internalSignatureMap.set(s.name, s);
         }
-      } // we create a highly optimized checks for the first couple of signatures with max 2 arguments
+      }
 
-
+      // we create a highly optimized checks for the first couple of signatures with max 2 arguments
       const ok0 = signatures[0] && signatures[0].params.length <= 2 && !hasRestParam(signatures[0].params);
       const ok1 = signatures[1] && signatures[1].params.length <= 2 && !hasRestParam(signatures[1].params);
       const ok2 = signatures[2] && signatures[2].params.length <= 2 && !hasRestParam(signatures[2].params);
       const ok3 = signatures[3] && signatures[3].params.length <= 2 && !hasRestParam(signatures[3].params);
       const ok4 = signatures[4] && signatures[4].params.length <= 2 && !hasRestParam(signatures[4].params);
       const ok5 = signatures[5] && signatures[5].params.length <= 2 && !hasRestParam(signatures[5].params);
-      const allOk = ok0 && ok1 && ok2 && ok3 && ok4 && ok5; // compile the tests
+      const allOk = ok0 && ok1 && ok2 && ok3 && ok4 && ok5;
 
+      // compile the tests
       for (let i = 0; i < signatures.length; ++i) {
         signatures[i].test = compileTests(signatures[i].params);
       }
-
       const test00 = ok0 ? compileTest(signatures[0].params[0]) : notOk;
       const test10 = ok1 ? compileTest(signatures[1].params[0]) : notOk;
       const test20 = ok2 ? compileTest(signatures[2].params[0]) : notOk;
@@ -11230,12 +9636,12 @@ module.exports = jQuery;
       const test21 = ok2 ? compileTest(signatures[2].params[1]) : notOk;
       const test31 = ok3 ? compileTest(signatures[3].params[1]) : notOk;
       const test41 = ok4 ? compileTest(signatures[4].params[1]) : notOk;
-      const test51 = ok5 ? compileTest(signatures[5].params[1]) : notOk; // compile the functions
+      const test51 = ok5 ? compileTest(signatures[5].params[1]) : notOk;
 
+      // compile the functions
       for (let i = 0; i < signatures.length; ++i) {
         signatures[i].implementation = compileArgsPreprocessing(signatures[i].params, signatures[i].fn);
       }
-
       const fn0 = ok0 ? signatures[0].implementation : undef;
       const fn1 = ok1 ? signatures[1].implementation : undef;
       const fn2 = ok2 ? signatures[2].implementation : undef;
@@ -11247,14 +9653,14 @@ module.exports = jQuery;
       const len2 = ok2 ? signatures[2].params.length : -1;
       const len3 = ok3 ? signatures[3].params.length : -1;
       const len4 = ok4 ? signatures[4].params.length : -1;
-      const len5 = ok5 ? signatures[5].params.length : -1; // simple and generic, but also slow
+      const len5 = ok5 ? signatures[5].params.length : -1;
 
+      // simple and generic, but also slow
       const iStart = allOk ? 6 : 0;
-      const iEnd = signatures.length; // de-reference ahead for execution speed:
-
+      const iEnd = signatures.length;
+      // de-reference ahead for execution speed:
       const tests = signatures.map(s => s.test);
       const fns = signatures.map(s => s.implementation);
-
       const generic = function generic() {
 
         for (let i = iStart; i < iEnd; i++) {
@@ -11262,94 +9668,87 @@ module.exports = jQuery;
             return fns[i].apply(this, arguments);
           }
         }
-
         return typed.onMismatch(name, arguments, signatures);
-      }; // create the typed function
+      };
+
+      // create the typed function
       // fast, specialized version. Falls back to the slower, generic one if needed
-
-
       function theTypedFn(arg0, arg1) {
 
         if (arguments.length === len0 && test00(arg0) && test01(arg1)) {
           return fn0.apply(this, arguments);
         }
-
         if (arguments.length === len1 && test10(arg0) && test11(arg1)) {
           return fn1.apply(this, arguments);
         }
-
         if (arguments.length === len2 && test20(arg0) && test21(arg1)) {
           return fn2.apply(this, arguments);
         }
-
         if (arguments.length === len3 && test30(arg0) && test31(arg1)) {
           return fn3.apply(this, arguments);
         }
-
         if (arguments.length === len4 && test40(arg0) && test41(arg1)) {
           return fn4.apply(this, arguments);
         }
-
         if (arguments.length === len5 && test50(arg0) && test51(arg1)) {
           return fn5.apply(this, arguments);
         }
-
         return generic.apply(this, arguments);
-      } // attach name the typed function
+      }
 
-
+      // attach name the typed function
       try {
         Object.defineProperty(theTypedFn, 'name', {
           value: name
         });
-      } catch (err) {// old browsers do not support Object.defineProperty and some don't support setting the name property
+      } catch (err) {
+        // old browsers do not support Object.defineProperty and some don't support setting the name property
         // the function name is not essential for the functioning, it's mostly useful for debugging,
         // so it's fine to have unnamed functions.
-      } // attach signatures to the function.
+      }
+
+      // attach signatures to the function.
       // This property is close to the original collection of signatures
       // used to create the typed-function, just with unions split:
+      theTypedFn.signatures = signaturesMap;
 
-
-      theTypedFn.signatures = signaturesMap; // Store internal data for functions like resolve, find, etc.
+      // Store internal data for functions like resolve, find, etc.
       // Also serves as the flag that this is a typed-function
-
       theTypedFn._typedFunctionData = {
         signatures,
         signatureMap: internalSignatureMap
       };
       return theTypedFn;
     }
+
     /**
      * Action to take on mismatch
      * @param {string} name      Name of function that was attempted to be called
      * @param {Array} args       Actual arguments to the call
      * @param {Array} signatures Known signatures of the named typed-function
      */
-
-
     function _onMismatch(name, args, signatures) {
       throw createError(name, args, signatures);
     }
+
     /**
      * Return all but the last items of an array or function Arguments
      * @param {Array | Arguments} arr
      * @return {Array}
      */
-
-
     function initial(arr) {
       return slice(arr, 0, arr.length - 1);
     }
+
     /**
      * return the last item of an array or function Arguments
      * @param {Array | Arguments} arr
      * @return {*}
      */
-
-
     function last(arr) {
       return arr[arr.length - 1];
     }
+
     /**
      * Slice an array or function Arguments
      * @param {Array | Arguments | IArguments} arr
@@ -11357,11 +9756,10 @@ module.exports = jQuery;
      * @param {number} [end]
      * @return {Array}
      */
-
-
     function slice(arr, start, end) {
       return Array.prototype.slice.call(arr, start, end);
     }
+
     /**
      * Return the first item from an array for which test(arr[i]) returns true
      * @param {Array} arr
@@ -11369,17 +9767,15 @@ module.exports = jQuery;
      * @return {* | undefined} Returns the first matching item
      *                         or undefined when there is no match
      */
-
-
     function findInArray(arr, test) {
       for (let i = 0; i < arr.length; i++) {
         if (test(arr[i])) {
           return arr[i];
         }
       }
-
       return undefined;
     }
+
     /**
      * Flat map the result invoking a callback for every item in an array.
      * https://gist.github.com/samgiles/762ee337dff48623e729
@@ -11387,11 +9783,10 @@ module.exports = jQuery;
      * @param {function} callback
      * @return {Array}
      */
-
-
     function flatMap(arr, callback) {
       return Array.prototype.concat.apply([], arr.map(callback));
     }
+
     /**
      * Create a reference callback to one or multiple signatures
      *
@@ -11403,19 +9798,14 @@ module.exports = jQuery;
      *
      * @returns {{referTo: {references: string[], callback}}}
      */
-
-
     function referTo() {
       const references = initial(arguments).map(s => stringifyParams(parseSignature(s)));
       const callback = last(arguments);
-
       if (typeof callback !== 'function') {
         throw new TypeError('Callback function expected as last argument');
       }
-
       return makeReferTo(references, callback);
     }
-
     function makeReferTo(references, callback) {
       return {
         referTo: {
@@ -11424,25 +9814,24 @@ module.exports = jQuery;
         }
       };
     }
+
     /**
      * Create a reference callback to the typed-function itself
      *
      * @param {(self: function) => function} callback
      * @returns {{referToSelf: { callback: function }}}
      */
-
-
     function referToSelf(callback) {
       if (typeof callback !== 'function') {
         throw new TypeError('Callback function expected as first argument');
       }
-
       return {
         referToSelf: {
           callback
         }
       };
     }
+
     /**
      * Test whether something is a referTo object, holding a list with reference
      * signatures and a callback.
@@ -11450,11 +9839,10 @@ module.exports = jQuery;
      * @param {Object | function} objectOrFn
      * @returns {boolean}
      */
-
-
     function isReferTo(objectOrFn) {
       return objectOrFn && typeof objectOrFn.referTo === 'object' && Array.isArray(objectOrFn.referTo.references) && typeof objectOrFn.referTo.callback === 'function';
     }
+
     /**
      * Test whether something is a referToSelf object, holding a callback where
      * to pass `self`.
@@ -11462,11 +9850,10 @@ module.exports = jQuery;
      * @param {Object | function} objectOrFn
      * @returns {boolean}
      */
-
-
     function isReferToSelf(objectOrFn) {
       return objectOrFn && typeof objectOrFn.referToSelf === 'object' && typeof objectOrFn.referToSelf.callback === 'function';
     }
+
     /**
      * Check if name is (A) new, (B) a match, or (C) a mismatch; and throw
      * an error in case (C).
@@ -11475,13 +9862,10 @@ module.exports = jQuery;
      * @param { string | undefined } newName
      * @returns { string } updated name
      */
-
-
     function checkName(nameSoFar, newName) {
       if (!nameSoFar) {
         return newName;
       }
-
       if (newName && newName !== nameSoFar) {
         const err = new Error('Function names do not match (expected: ' + nameSoFar + ', actual: ' + newName + ')');
         err.data = {
@@ -11490,20 +9874,17 @@ module.exports = jQuery;
         };
         throw err;
       }
-
       return nameSoFar;
     }
+
     /**
      * Retrieve the implied name from an object with signature keys
      * and function values, checking whether all value names match
      *
      * @param { {string: function} } obj
      */
-
-
     function getObjectName(obj) {
       let name;
-
       for (const key in obj) {
         // Only pay attention to own properties, and only if their values
         // are typed functions or functions with a signature property
@@ -11511,9 +9892,9 @@ module.exports = jQuery;
           name = checkName(name, obj[key].name);
         }
       }
-
       return name;
     }
+
     /**
      * Copy all of the signatures from the second argument into the first,
      * which is modified by side effect, checking for conflicts
@@ -11521,11 +9902,8 @@ module.exports = jQuery;
      * @param {Object.<string, function|typed-reference>} dest
      * @param {Object.<string, function|typed-reference>} source
      */
-
-
     function mergeSignatures(dest, source) {
       let key;
-
       for (key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           if (key in dest) {
@@ -11537,16 +9915,15 @@ module.exports = jQuery;
                 destFunction: dest[key]
               };
               throw err;
-            } // else: both signatures point to the same function, that's fine
-
+            }
+            // else: both signatures point to the same function, that's fine
           }
-
           dest[key] = source[key];
         }
       }
     }
-
     const saveTyped = typed;
+
     /**
      * Originally the main function was a typed function itself, but then
      * it might not be able to generate error messages if the client
@@ -11569,21 +9946,17 @@ module.exports = jQuery;
      * @param {(function|object)[]} signature providers
      * @returns {typed-function}
      */
-
     typed = function (maybeName) {
       const named = typeof maybeName === 'string';
       const start = named ? 1 : 0;
       let name = named ? maybeName : '';
       const allSignatures = {};
-
       for (let i = start; i < arguments.length; ++i) {
         const item = arguments[i];
         let theseSignatures = {};
         let thisName;
-
         if (typeof item === 'function') {
           thisName = item.name;
-
           if (typeof item.signature === 'string') {
             // Case 1: Ordinary function with a string 'signature' property
             theseSignatures[item.signature] = item;
@@ -11594,12 +9967,10 @@ module.exports = jQuery;
         } else if (isPlainObject(item)) {
           // Case 3: Plain object, assume keys = signatures, values = functions
           theseSignatures = item;
-
           if (!named) {
             thisName = getObjectName(item);
           }
         }
-
         if (Object.keys(theseSignatures).length === 0) {
           const err = new TypeError('Argument to \'typed\' at index ' + i + ' is not a (typed) function, ' + 'nor an object with signatures as keys and functions as values.');
           err.data = {
@@ -11608,17 +9979,13 @@ module.exports = jQuery;
           };
           throw err;
         }
-
         if (!named) {
           name = checkName(name, thisName);
         }
-
         mergeSignatures(allSignatures, theseSignatures);
       }
-
       return createTypedFunction(name || '', allSignatures);
     };
-
     typed.create = create;
     typed.createCount = saveTyped.createCount;
     typed.onMismatch = _onMismatch;
@@ -11628,7 +9995,6 @@ module.exports = jQuery;
     typed.clearConversions = clearConversions;
     typed.addTypes = addTypes;
     typed._findType = findType; // For unit testing only
-
     typed.referTo = referTo;
     typed.referToSelf = referToSelf;
     typed.convert = convert;
@@ -11636,6 +10002,7 @@ module.exports = jQuery;
     typed.find = find;
     typed.isTypedFunction = isTypedFunction;
     typed.warnAgainstDeprecatedThis = true;
+
     /**
      * add a type (convenience wrapper for typed.addTypes)
      * @param {{name: string, test: function}} type
@@ -11644,16 +10011,14 @@ module.exports = jQuery;
      *                          the test with name 'Object' (if any), since
      *                          tests for Object match Array and classes too.
      */
-
     typed.addType = function (type, beforeObjectTest) {
       let before = 'any';
-
       if (beforeObjectTest !== false && typeMap.has('Object')) {
         before = 'Object';
       }
-
       typed.addTypes([type], before);
     };
+
     /**
      * Verify that the ConversionDef conversion has a valid format.
      *
@@ -11661,55 +10026,60 @@ module.exports = jQuery;
      * @return {void}
      * @throws {TypeError|SyntaxError}
      */
-
-
     function _validateConversion(conversion) {
       if (!conversion || typeof conversion.from !== 'string' || typeof conversion.to !== 'string' || typeof conversion.convert !== 'function') {
         throw new TypeError('Object with properties {from: string, to: string, convert: function} expected');
       }
-
       if (conversion.to === conversion.from) {
         throw new SyntaxError('Illegal to define conversion from "' + conversion.from + '" to itself.');
       }
     }
+
     /**
      * Add a conversion
      *
      * @param {ConversionDef} conversion
+     * @param {{override: boolean}} [options]
      * @returns {void}
      * @throws {TypeError}
      */
-
-
     typed.addConversion = function (conversion) {
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        override: false
+      };
       _validateConversion(conversion);
-
       const to = findType(conversion.to);
-
-      if (to.conversionsTo.every(function (other) {
-        return other.from !== conversion.from;
-      })) {
-        to.conversionsTo.push({
-          from: conversion.from,
-          convert: conversion.convert,
-          index: nConversions++
-        });
-      } else {
-        throw new Error('There is already a conversion from "' + conversion.from + '" to "' + to.name + '"');
+      const existing = to.conversionsTo.find(other => other.from === conversion.from);
+      if (existing) {
+        if (options && options.override) {
+          typed.removeConversion({
+            from: existing.from,
+            to: conversion.to,
+            convert: existing.convert
+          });
+        } else {
+          throw new Error('There is already a conversion from "' + conversion.from + '" to "' + to.name + '"');
+        }
       }
+      to.conversionsTo.push({
+        from: conversion.from,
+        convert: conversion.convert,
+        index: nConversions++
+      });
     };
+
     /**
      * Convenience wrapper to call addConversion on each conversion in a list.
      *
-     @param {ConversionDef[]} conversions
-     @returns {void}
-     @throws {TypeError}
+     * @param {ConversionDef[]} conversions
+     * @param {{override: boolean}} [options]
+     * @returns {void}
+     * @throws {TypeError}
      */
-
-
-    typed.addConversions = function (conversions) {
-      conversions.forEach(typed.addConversion);
+    typed.addConversions = function (conversions, options) {
+      conversions.forEach(conversion => typed.addConversion(conversion, options));
     };
+
     /**
      * Remove the specified conversion. The format is the same as for
      * addConversion, and the convert function must match or an error
@@ -11719,25 +10089,20 @@ module.exports = jQuery;
      * @returns {void}
      * @throws {TypeError|SyntaxError|Error}
      */
-
-
     typed.removeConversion = function (conversion) {
       _validateConversion(conversion);
-
       const to = findType(conversion.to);
       const existingConversion = findInArray(to.conversionsTo, c => c.from === conversion.from);
-
       if (!existingConversion) {
         throw new Error('Attempt to remove nonexistent conversion from ' + conversion.from + ' to ' + conversion.to);
       }
-
       if (existingConversion.convert !== conversion.convert) {
         throw new Error('Conversion to remove does not match existing conversion');
       }
-
       const index = to.conversionsTo.indexOf(existingConversion);
       to.conversionsTo.splice(index, 1);
     };
+
     /**
      * Produce the specific signature that a typed function
      * will execute on the given arguments. Here, a "signature" is an
@@ -11748,27 +10113,20 @@ module.exports = jQuery;
      * @param {any[]} argList
      * @returns {{params: string, test: function, fn: function, implementation: function}}
      */
-
-
     typed.resolve = function (tf, argList) {
       if (!isTypedFunction(tf)) {
         throw new TypeError(NOT_TYPED_FUNCTION);
       }
-
       const sigs = tf._typedFunctionData.signatures;
-
       for (let i = 0; i < sigs.length; ++i) {
         if (sigs[i].test(argList)) {
           return sigs[i];
         }
       }
-
       return null;
     };
-
     return typed;
   }
-
   var typedFunction = create();
 
   return typedFunction;
@@ -11898,6 +10256,1431 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/complex.js/dist/complex.mjs":
+/*!**************************************************!*\
+  !*** ./node_modules/complex.js/dist/complex.mjs ***!
+  \**************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Complex: () => (/* binding */ Complex),
+/* harmony export */   "default": () => (/* binding */ Complex)
+/* harmony export */ });
+
+
+/**
+ *
+ * This class allows the manipulation of complex numbers.
+ * You can pass a complex number in different formats. Either as object, double, string or two integer parameters.
+ *
+ * Object form
+ * { re: <real>, im: <imaginary> }
+ * { arg: <angle>, abs: <radius> }
+ * { phi: <angle>, r: <radius> }
+ *
+ * Array / Vector form
+ * [ real, imaginary ]
+ *
+ * Double form
+ * 99.3 - Single double value
+ *
+ * String form
+ * '23.1337' - Simple real number
+ * '15+3i' - a simple complex number
+ * '3-i' - a simple complex number
+ *
+ * Example:
+ *
+ * const c = new Complex('99.3+8i');
+ * c.mul({r: 3, i: 9}).div(4.9).sub(3, 2);
+ *
+ */
+
+
+const cosh = Math.cosh || function (x) {
+  return Math.abs(x) < 1e-9 ? 1 - x : (Math.exp(x) + Math.exp(-x)) * 0.5;
+};
+
+const sinh = Math.sinh || function (x) {
+  return Math.abs(x) < 1e-9 ? x : (Math.exp(x) - Math.exp(-x)) * 0.5;
+};
+
+/**
+ * Calculates cos(x) - 1 using Taylor series if x is small (-¼π ≤ x ≤ ¼π).
+ *
+ * @param {number} x
+ * @returns {number} cos(x) - 1
+ */
+const cosm1 = function (x) {
+
+  const b = Math.PI / 4;
+  if (-b > x || x > b) {
+    return Math.cos(x) - 1.0;
+  }
+
+  /* Calculate horner form of polynomial of taylor series in Q
+  let fac = 1, alt = 1, pol = {};
+  for (let i = 0; i <= 16; i++) {
+    fac*= i || 1;
+    if (i % 2 == 0) {
+      pol[i] = new Fraction(1, alt * fac);
+      alt = -alt;
+    }
+  }
+  console.log(new Polynomial(pol).toHorner()); // (((((((1/20922789888000x^2-1/87178291200)x^2+1/479001600)x^2-1/3628800)x^2+1/40320)x^2-1/720)x^2+1/24)x^2-1/2)x^2+1
+  */
+
+  const xx = x * x;
+  return xx * (
+    xx * (
+      xx * (
+        xx * (
+          xx * (
+            xx * (
+              xx * (
+                xx / 20922789888000
+                - 1 / 87178291200)
+              + 1 / 479001600)
+            - 1 / 3628800)
+          + 1 / 40320)
+        - 1 / 720)
+      + 1 / 24)
+    - 1 / 2);
+};
+
+const hypot = function (x, y) {
+
+  x = Math.abs(x);
+  y = Math.abs(y);
+
+  // Ensure `x` is the larger value
+  if (x < y) [x, y] = [y, x];
+
+  // If both are below the threshold, use straightforward Pythagoras
+  if (x < 1e8) return Math.sqrt(x * x + y * y);
+
+  // For larger values, scale to avoid overflow
+  y /= x;
+  return x * Math.sqrt(1 + y * y);
+};
+
+const parser_exit = function () {
+  throw SyntaxError('Invalid Param');
+};
+
+/**
+ * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+function logHypot(a, b) {
+
+  const _a = Math.abs(a);
+  const _b = Math.abs(b);
+
+  if (a === 0) {
+    return Math.log(_b);
+  }
+
+  if (b === 0) {
+    return Math.log(_a);
+  }
+
+  if (_a < 3000 && _b < 3000) {
+    return Math.log(a * a + b * b) * 0.5;
+  }
+
+  /* I got 4 ideas to compute this property without overflow:
+   *
+   * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
+   *
+   * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
+
+   Math.log(a * a + b * b) / 2
+
+   *
+   *
+   * 2. Try to use the non-overflowing pythagoras: (OVERALL ERROR: 8.889760039210159e-10)
+
+   const fn = function(a, b) {
+   a = Math.abs(a);
+   b = Math.abs(b);
+   let t = Math.min(a, b);
+   a = Math.max(a, b);
+   t = t / a;
+
+   return Math.log(a) + Math.log(1 + t * t) / 2;
+   };
+
+   * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): (OVERALL ERROR: 3.4780178737037204e-10)
+
+   Math.log(a / Math.cos(Math.atan2(b, a)))
+
+   * 4. Use 3. and apply log rules: (OVERALL ERROR: 1.2014087502620896e-9)
+
+   Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
+
+   */
+
+  a = a * 0.5;
+  b = b * 0.5;
+
+  return 0.5 * Math.log(a * a + b * b) + Math.LN2;
+}
+
+const P = { 're': 0, 'im': 0 };
+const parse = function (a, b) {
+
+  const z = P;
+
+  if (a === undefined || a === null) {
+    z['re'] =
+      z['im'] = 0;
+  } else if (b !== undefined) {
+    z['re'] = a;
+    z['im'] = b;
+  } else
+    switch (typeof a) {
+
+      case 'object':
+
+        if ('im' in a && 're' in a) {
+          z['re'] = a['re'];
+          z['im'] = a['im'];
+        } else if ('abs' in a && 'arg' in a) {
+          if (!isFinite(a['abs']) && isFinite(a['arg'])) {
+            return Complex['INFINITY'];
+          }
+          z['re'] = a['abs'] * Math.cos(a['arg']);
+          z['im'] = a['abs'] * Math.sin(a['arg']);
+        } else if ('r' in a && 'phi' in a) {
+          if (!isFinite(a['r']) && isFinite(a['phi'])) {
+            return Complex['INFINITY'];
+          }
+          z['re'] = a['r'] * Math.cos(a['phi']);
+          z['im'] = a['r'] * Math.sin(a['phi']);
+        } else if (a.length === 2) { // Quick array check
+          z['re'] = a[0];
+          z['im'] = a[1];
+        } else {
+          parser_exit();
+        }
+        break;
+
+      case 'string':
+
+        z['im'] = /* void */
+        z['re'] = 0;
+
+        const tokens = a.replace(/_/g, '')
+          .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
+        let plus = 1;
+        let minus = 0;
+
+        if (tokens === null) {
+          parser_exit();
+        }
+
+        for (let i = 0; i < tokens.length; i++) {
+
+          const c = tokens[i];
+
+          if (c === ' ' || c === '\t' || c === '\n') {
+            /* void */
+          } else if (c === '+') {
+            plus++;
+          } else if (c === '-') {
+            minus++;
+          } else if (c === 'i' || c === 'I') {
+
+            if (plus + minus === 0) {
+              parser_exit();
+            }
+
+            if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
+              z['im'] += parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
+              i++;
+            } else {
+              z['im'] += parseFloat((minus % 2 ? '-' : '') + '1');
+            }
+            plus = minus = 0;
+
+          } else {
+
+            if (plus + minus === 0 || isNaN(c)) {
+              parser_exit();
+            }
+
+            if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
+              z['im'] += parseFloat((minus % 2 ? '-' : '') + c);
+              i++;
+            } else {
+              z['re'] += parseFloat((minus % 2 ? '-' : '') + c);
+            }
+            plus = minus = 0;
+          }
+        }
+
+        // Still something on the stack
+        if (plus + minus > 0) {
+          parser_exit();
+        }
+        break;
+
+      case 'number':
+        z['im'] = 0;
+        z['re'] = a;
+        break;
+
+      default:
+        parser_exit();
+    }
+
+  if (isNaN(z['re']) || isNaN(z['im'])) {
+    // If a calculation is NaN, we treat it as NaN and don't throw
+    //parser_exit();
+  }
+
+  return z;
+};
+
+/**
+ * @constructor
+ * @returns {Complex}
+ */
+function Complex(a, b) {
+
+  if (!(this instanceof Complex)) {
+    return new Complex(a, b);
+  }
+
+  const z = parse(a, b);
+
+  this['re'] = z['re'];
+  this['im'] = z['im'];
+}
+
+Complex.prototype = {
+
+  're': 0,
+  'im': 0,
+
+  /**
+   * Calculates the sign of a complex number, which is a normalized complex
+   *
+   * @returns {Complex}
+   */
+  'sign': function () {
+
+    const abs = hypot(this['re'], this['im']);
+
+    return new Complex(
+      this['re'] / abs,
+      this['im'] / abs);
+  },
+
+  /**
+   * Adds two complex numbers
+   *
+   * @returns {Complex}
+   */
+  'add': function (a, b) {
+
+    const z = parse(a, b);
+
+    const tInfin = this['isInfinite']();
+    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+
+    if (tInfin || zInfin) {
+
+      if (tInfin && zInfin) {
+        // Infinity + Infinity = NaN
+        return Complex['NAN'];
+      }
+      // Infinity + z = Infinity { where z != Infinity }
+      return Complex['INFINITY'];
+    }
+
+    return new Complex(
+      this['re'] + z['re'],
+      this['im'] + z['im']);
+  },
+
+  /**
+   * Subtracts two complex numbers
+   *
+   * @returns {Complex}
+   */
+  'sub': function (a, b) {
+
+    const z = parse(a, b);
+
+    const tInfin = this['isInfinite']();
+    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+
+    if (tInfin || zInfin) {
+
+      if (tInfin && zInfin) {
+        // Infinity - Infinity = NaN
+        return Complex['NAN'];
+      }
+      // Infinity - z = Infinity { where z != Infinity }
+      return Complex['INFINITY'];
+    }
+
+    return new Complex(
+      this['re'] - z['re'],
+      this['im'] - z['im']);
+  },
+
+  /**
+   * Multiplies two complex numbers
+   *
+   * @returns {Complex}
+   */
+  'mul': function (a, b) {
+
+    const z = parse(a, b);
+
+    const tInfin = this['isInfinite']();
+    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const tIsZero = this['re'] === 0 && this['im'] === 0;
+    const zIsZero = z['re'] === 0 && z['im'] === 0;
+
+    // Infinity * 0 = NaN
+    if (tInfin && zIsZero || zInfin && tIsZero) {
+      return Complex['NAN'];
+    }
+
+    // Infinity * z = Infinity { where z != 0 }
+    if (tInfin || zInfin) {
+      return Complex['INFINITY'];
+    }
+
+    // Shortcut for real values
+    if (z['im'] === 0 && this['im'] === 0) {
+      return new Complex(this['re'] * z['re'], 0);
+    }
+
+    return new Complex(
+      this['re'] * z['re'] - this['im'] * z['im'],
+      this['re'] * z['im'] + this['im'] * z['re']);
+  },
+
+  /**
+   * Divides two complex numbers
+   *
+   * @returns {Complex}
+   */
+  'div': function (a, b) {
+
+    const z = parse(a, b);
+
+    const tInfin = this['isInfinite']();
+    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const tIsZero = this['re'] === 0 && this['im'] === 0;
+    const zIsZero = z['re'] === 0 && z['im'] === 0;
+
+    // 0 / 0 = NaN and Infinity / Infinity = NaN
+    if (tIsZero && zIsZero || tInfin && zInfin) {
+      return Complex['NAN'];
+    }
+
+    // Infinity / 0 = Infinity
+    if (zIsZero || tInfin) {
+      return Complex['INFINITY'];
+    }
+
+    // 0 / Infinity = 0
+    if (tIsZero || zInfin) {
+      return Complex['ZERO'];
+    }
+
+    if (0 === z['im']) {
+      // Divisor is real
+      return new Complex(this['re'] / z['re'], this['im'] / z['re']);
+    }
+
+    if (Math.abs(z['re']) < Math.abs(z['im'])) {
+
+      const x = z['re'] / z['im'];
+      const t = z['re'] * x + z['im'];
+
+      return new Complex(
+        (this['re'] * x + this['im']) / t,
+        (this['im'] * x - this['re']) / t);
+
+    } else {
+
+      const x = z['im'] / z['re'];
+      const t = z['im'] * x + z['re'];
+
+      return new Complex(
+        (this['re'] + this['im'] * x) / t,
+        (this['im'] - this['re'] * x) / t);
+    }
+  },
+
+  /**
+   * Calculate the power of two complex numbers
+   *
+   * @returns {Complex}
+   */
+  'pow': function (a, b) {
+
+    const z = parse(a, b);
+
+    const tIsZero = this['re'] === 0 && this['im'] === 0;
+    const zIsZero = z['re'] === 0 && z['im'] === 0;
+
+    if (zIsZero) {
+      return Complex['ONE'];
+    }
+
+    // If the exponent is real
+    if (z['im'] === 0) {
+
+      if (this['im'] === 0 && this['re'] > 0) {
+
+        return new Complex(Math.pow(this['re'], z['re']), 0);
+
+      } else if (this['re'] === 0) { // If base is fully imaginary
+
+        switch ((z['re'] % 4 + 4) % 4) {
+          case 0:
+            return new Complex(Math.pow(this['im'], z['re']), 0);
+          case 1:
+            return new Complex(0, Math.pow(this['im'], z['re']));
+          case 2:
+            return new Complex(-Math.pow(this['im'], z['re']), 0);
+          case 3:
+            return new Complex(0, -Math.pow(this['im'], z['re']));
+        }
+      }
+    }
+
+    /* I couldn't find a good formula, so here is a derivation and optimization
+     *
+     * z_1^z_2 = (a + bi)^(c + di)
+     *         = exp((c + di) * log(a + bi)
+     *         = pow(a^2 + b^2, (c + di) / 2) * exp(i(c + di)atan2(b, a))
+     * =>...
+     * Re = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * cos(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
+     * Im = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * sin(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
+     *
+     * =>...
+     * Re = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * cos(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
+     * Im = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * sin(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
+     *
+     * =>
+     * Re = exp(c * logsq2 - d * arg(z_1)) * cos(d * logsq2 + c * arg(z_1))
+     * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
+     *
+     */
+
+    if (tIsZero && z['re'] > 0) { // Same behavior as Wolframalpha, Zero if real part is zero
+      return Complex['ZERO'];
+    }
+
+    const arg = Math.atan2(this['im'], this['re']);
+    const loh = logHypot(this['re'], this['im']);
+
+    let re = Math.exp(z['re'] * loh - z['im'] * arg);
+    let im = z['im'] * loh + z['re'] * arg;
+    return new Complex(
+      re * Math.cos(im),
+      re * Math.sin(im));
+  },
+
+  /**
+   * Calculate the complex square root
+   *
+   * @returns {Complex}
+   */
+  'sqrt': function () {
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (b === 0) {
+      // Real number case
+      if (a >= 0) {
+        return new Complex(Math.sqrt(a), 0);
+      } else {
+        return new Complex(0, Math.sqrt(-a));
+      }
+    }
+
+    const r = hypot(a, b);
+
+    let re = Math.sqrt(0.5 * (r + Math.abs(a))); // sqrt(2x) / 2 = sqrt(x / 2)
+    let im = Math.abs(b) / (2 * re);
+
+    if (a >= 0) {
+      return new Complex(re, b < 0 ? -im : im);
+    } else {
+      return new Complex(im, b < 0 ? -re : re);
+    }
+  },
+
+  /**
+   * Calculate the complex exponent
+   *
+   * @returns {Complex}
+   */
+  'exp': function () {
+
+    const er = Math.exp(this['re']);
+
+    if (this['im'] === 0) {
+      return new Complex(er, 0);
+    }
+    return new Complex(
+      er * Math.cos(this['im']),
+      er * Math.sin(this['im']));
+  },
+
+  /**
+   * Calculate the complex exponent and subtracts one.
+   *
+   * This may be more accurate than `Complex(x).exp().sub(1)` if
+   * `x` is small.
+   *
+   * @returns {Complex}
+   */
+  'expm1': function () {
+
+    /**
+     * exp(a + i*b) - 1
+     = exp(a) * (cos(b) + j*sin(b)) - 1
+     = expm1(a)*cos(b) + cosm1(b) + j*exp(a)*sin(b)
+     */
+
+    const a = this['re'];
+    const b = this['im'];
+
+    return new Complex(
+      Math.expm1(a) * Math.cos(b) + cosm1(b),
+      Math.exp(a) * Math.sin(b));
+  },
+
+  /**
+   * Calculate the natural log
+   *
+   * @returns {Complex}
+   */
+  'log': function () {
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (b === 0 && a > 0) {
+      return new Complex(Math.log(a), 0);
+    }
+
+    return new Complex(
+      logHypot(a, b),
+      Math.atan2(b, a));
+  },
+
+  /**
+   * Calculate the magnitude of the complex number
+   *
+   * @returns {number}
+   */
+  'abs': function () {
+
+    return hypot(this['re'], this['im']);
+  },
+
+  /**
+   * Calculate the angle of the complex number
+   *
+   * @returns {number}
+   */
+  'arg': function () {
+
+    return Math.atan2(this['im'], this['re']);
+  },
+
+  /**
+   * Calculate the sine of the complex number
+   *
+   * @returns {Complex}
+   */
+  'sin': function () {
+
+    // sin(z) = ( e^iz - e^-iz ) / 2i 
+    //        = sin(a)cosh(b) + i cos(a)sinh(b)
+
+    const a = this['re'];
+    const b = this['im'];
+
+    return new Complex(
+      Math.sin(a) * cosh(b),
+      Math.cos(a) * sinh(b));
+  },
+
+  /**
+   * Calculate the cosine
+   *
+   * @returns {Complex}
+   */
+  'cos': function () {
+
+    // cos(z) = ( e^iz + e^-iz ) / 2 
+    //        = cos(a)cosh(b) - i sin(a)sinh(b)
+
+    const a = this['re'];
+    const b = this['im'];
+
+    return new Complex(
+      Math.cos(a) * cosh(b),
+      -Math.sin(a) * sinh(b));
+  },
+
+  /**
+   * Calculate the tangent
+   *
+   * @returns {Complex}
+   */
+  'tan': function () {
+
+    // tan(z) = sin(z) / cos(z) 
+    //        = ( e^iz - e^-iz ) / ( i( e^iz + e^-iz ) )
+    //        = ( e^2iz - 1 ) / i( e^2iz + 1 )
+    //        = ( sin(2a) + i sinh(2b) ) / ( cos(2a) + cosh(2b) )
+
+    const a = 2 * this['re'];
+    const b = 2 * this['im'];
+    const d = Math.cos(a) + cosh(b);
+
+    return new Complex(
+      Math.sin(a) / d,
+      sinh(b) / d);
+  },
+
+  /**
+   * Calculate the cotangent
+   *
+   * @returns {Complex}
+   */
+  'cot': function () {
+
+    // cot(c) = i(e^(ci) + e^(-ci)) / (e^(ci) - e^(-ci))
+
+    const a = 2 * this['re'];
+    const b = 2 * this['im'];
+    const d = Math.cos(a) - cosh(b);
+
+    return new Complex(
+      -Math.sin(a) / d,
+      sinh(b) / d);
+  },
+
+  /**
+   * Calculate the secant
+   *
+   * @returns {Complex}
+   */
+  'sec': function () {
+
+    // sec(c) = 2 / (e^(ci) + e^(-ci))
+
+    const a = this['re'];
+    const b = this['im'];
+    const d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
+
+    return new Complex(
+      Math.cos(a) * cosh(b) / d,
+      Math.sin(a) * sinh(b) / d);
+  },
+
+  /**
+   * Calculate the cosecans
+   *
+   * @returns {Complex}
+   */
+  'csc': function () {
+
+    // csc(c) = 2i / (e^(ci) - e^(-ci))
+
+    const a = this['re'];
+    const b = this['im'];
+    const d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
+
+    return new Complex(
+      Math.sin(a) * cosh(b) / d,
+      -Math.cos(a) * sinh(b) / d);
+  },
+
+  /**
+   * Calculate the complex arcus sinus
+   *
+   * @returns {Complex}
+   */
+  'asin': function () {
+
+    // asin(c) = -i * log(ci + sqrt(1 - c^2))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    const t1 = new Complex(
+      b * b - a * a + 1,
+      -2 * a * b)['sqrt']();
+
+    const t2 = new Complex(
+      t1['re'] - b,
+      t1['im'] + a)['log']();
+
+    return new Complex(t2['im'], -t2['re']);
+  },
+
+  /**
+   * Calculate the complex arcus cosinus
+   *
+   * @returns {Complex}
+   */
+  'acos': function () {
+
+    // acos(c) = i * log(c - i * sqrt(1 - c^2))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    const t1 = new Complex(
+      b * b - a * a + 1,
+      -2 * a * b)['sqrt']();
+
+    const t2 = new Complex(
+      t1['re'] - b,
+      t1['im'] + a)['log']();
+
+    return new Complex(Math.PI / 2 - t2['im'], t2['re']);
+  },
+
+  /**
+   * Calculate the complex arcus tangent
+   *
+   * @returns {Complex}
+   */
+  'atan': function () {
+
+    // atan(c) = i / 2 log((i + x) / (i - x))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (a === 0) {
+
+      if (b === 1) {
+        return new Complex(0, Infinity);
+      }
+
+      if (b === -1) {
+        return new Complex(0, -Infinity);
+      }
+    }
+
+    const d = a * a + (1.0 - b) * (1.0 - b);
+
+    const t1 = new Complex(
+      (1 - b * b - a * a) / d,
+      -2 * a / d).log();
+
+    return new Complex(-0.5 * t1['im'], 0.5 * t1['re']);
+  },
+
+  /**
+   * Calculate the complex arcus cotangent
+   *
+   * @returns {Complex}
+   */
+  'acot': function () {
+
+    // acot(c) = i / 2 log((c - i) / (c + i))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (b === 0) {
+      return new Complex(Math.atan2(1, a), 0);
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).atan()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).atan();
+  },
+
+  /**
+   * Calculate the complex arcus secant
+   *
+   * @returns {Complex}
+   */
+  'asec': function () {
+
+    // asec(c) = -i * log(1 / c + sqrt(1 - i / c^2))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (a === 0 && b === 0) {
+      return new Complex(0, Infinity);
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).acos()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).acos();
+  },
+
+  /**
+   * Calculate the complex arcus cosecans
+   *
+   * @returns {Complex}
+   */
+  'acsc': function () {
+
+    // acsc(c) = -i * log(i / c + sqrt(1 - 1 / c^2))
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (a === 0 && b === 0) {
+      return new Complex(Math.PI / 2, Infinity);
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).asin()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).asin();
+  },
+
+  /**
+   * Calculate the complex sinh
+   *
+   * @returns {Complex}
+   */
+  'sinh': function () {
+
+    // sinh(c) = (e^c - e^-c) / 2
+
+    const a = this['re'];
+    const b = this['im'];
+
+    return new Complex(
+      sinh(a) * Math.cos(b),
+      cosh(a) * Math.sin(b));
+  },
+
+  /**
+   * Calculate the complex cosh
+   *
+   * @returns {Complex}
+   */
+  'cosh': function () {
+
+    // cosh(c) = (e^c + e^-c) / 2
+
+    const a = this['re'];
+    const b = this['im'];
+
+    return new Complex(
+      cosh(a) * Math.cos(b),
+      sinh(a) * Math.sin(b));
+  },
+
+  /**
+   * Calculate the complex tanh
+   *
+   * @returns {Complex}
+   */
+  'tanh': function () {
+
+    // tanh(c) = (e^c - e^-c) / (e^c + e^-c)
+
+    const a = 2 * this['re'];
+    const b = 2 * this['im'];
+    const d = cosh(a) + Math.cos(b);
+
+    return new Complex(
+      sinh(a) / d,
+      Math.sin(b) / d);
+  },
+
+  /**
+   * Calculate the complex coth
+   *
+   * @returns {Complex}
+   */
+  'coth': function () {
+
+    // coth(c) = (e^c + e^-c) / (e^c - e^-c)
+
+    const a = 2 * this['re'];
+    const b = 2 * this['im'];
+    const d = cosh(a) - Math.cos(b);
+
+    return new Complex(
+      sinh(a) / d,
+      -Math.sin(b) / d);
+  },
+
+  /**
+   * Calculate the complex coth
+   *
+   * @returns {Complex}
+   */
+  'csch': function () {
+
+    // csch(c) = 2 / (e^c - e^-c)
+
+    const a = this['re'];
+    const b = this['im'];
+    const d = Math.cos(2 * b) - cosh(2 * a);
+
+    return new Complex(
+      -2 * sinh(a) * Math.cos(b) / d,
+      2 * cosh(a) * Math.sin(b) / d);
+  },
+
+  /**
+   * Calculate the complex sech
+   *
+   * @returns {Complex}
+   */
+  'sech': function () {
+
+    // sech(c) = 2 / (e^c + e^-c)
+
+    const a = this['re'];
+    const b = this['im'];
+    const d = Math.cos(2 * b) + cosh(2 * a);
+
+    return new Complex(
+      2 * cosh(a) * Math.cos(b) / d,
+      -2 * sinh(a) * Math.sin(b) / d);
+  },
+
+  /**
+   * Calculate the complex asinh
+   *
+   * @returns {Complex}
+   */
+  'asinh': function () {
+
+    // asinh(c) = log(c + sqrt(c^2 + 1))
+
+    let tmp = this['im'];
+    this['im'] = -this['re'];
+    this['re'] = tmp;
+    const res = this['asin']();
+
+    this['re'] = -this['im'];
+    this['im'] = tmp;
+    tmp = res['re'];
+
+    res['re'] = -res['im'];
+    res['im'] = tmp;
+    return res;
+  },
+
+  /**
+   * Calculate the complex acosh
+   *
+   * @returns {Complex}
+   */
+  'acosh': function () {
+
+    // acosh(c) = log(c + sqrt(c^2 - 1))
+
+    const res = this['acos']();
+    if (res['im'] <= 0) {
+      const tmp = res['re'];
+      res['re'] = -res['im'];
+      res['im'] = tmp;
+    } else {
+      const tmp = res['im'];
+      res['im'] = -res['re'];
+      res['re'] = tmp;
+    }
+    return res;
+  },
+
+  /**
+   * Calculate the complex atanh
+   *
+   * @returns {Complex}
+   */
+  'atanh': function () {
+
+    // atanh(c) = log((1+c) / (1-c)) / 2
+
+    const a = this['re'];
+    const b = this['im'];
+
+    const noIM = a > 1 && b === 0;
+    const oneMinus = 1 - a;
+    const onePlus = 1 + a;
+    const d = oneMinus * oneMinus + b * b;
+
+    const x = (d !== 0)
+      ? new Complex(
+        (onePlus * oneMinus - b * b) / d,
+        (b * oneMinus + onePlus * b) / d)
+      : new Complex(
+        (a !== -1) ? (a / 0) : 0,
+        (b !== 0) ? (b / 0) : 0);
+
+    const temp = x['re'];
+    x['re'] = logHypot(x['re'], x['im']) / 2;
+    x['im'] = Math.atan2(x['im'], temp) / 2;
+    if (noIM) {
+      x['im'] = -x['im'];
+    }
+    return x;
+  },
+
+  /**
+   * Calculate the complex acoth
+   *
+   * @returns {Complex}
+   */
+  'acoth': function () {
+
+    // acoth(c) = log((c+1) / (c-1)) / 2
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (a === 0 && b === 0) {
+      return new Complex(0, Math.PI / 2);
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).atanh()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).atanh();
+  },
+
+  /**
+   * Calculate the complex acsch
+   *
+   * @returns {Complex}
+   */
+  'acsch': function () {
+
+    // acsch(c) = log((1+sqrt(1+c^2))/c)
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (b === 0) {
+
+      return new Complex(
+        (a !== 0)
+          ? Math.log(a + Math.sqrt(a * a + 1))
+          : Infinity, 0);
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).asinh()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).asinh();
+  },
+
+  /**
+   * Calculate the complex asech
+   *
+   * @returns {Complex}
+   */
+  'asech': function () {
+
+    // asech(c) = log((1+sqrt(1-c^2))/c)
+
+    const a = this['re'];
+    const b = this['im'];
+
+    if (this['isZero']()) {
+      return Complex['INFINITY'];
+    }
+
+    const d = a * a + b * b;
+    return (d !== 0)
+      ? new Complex(
+        a / d,
+        -b / d).acosh()
+      : new Complex(
+        (a !== 0) ? a / 0 : 0,
+        (b !== 0) ? -b / 0 : 0).acosh();
+  },
+
+  /**
+   * Calculate the complex inverse 1/z
+   *
+   * @returns {Complex}
+   */
+  'inverse': function () {
+
+    // 1 / 0 = Infinity and 1 / Infinity = 0
+    if (this['isZero']()) {
+      return Complex['INFINITY'];
+    }
+
+    if (this['isInfinite']()) {
+      return Complex['ZERO'];
+    }
+
+    const a = this['re'];
+    const b = this['im'];
+
+    const d = a * a + b * b;
+
+    return new Complex(a / d, -b / d);
+  },
+
+  /**
+   * Returns the complex conjugate
+   *
+   * @returns {Complex}
+   */
+  'conjugate': function () {
+
+    return new Complex(this['re'], -this['im']);
+  },
+
+  /**
+   * Gets the negated complex number
+   *
+   * @returns {Complex}
+   */
+  'neg': function () {
+
+    return new Complex(-this['re'], -this['im']);
+  },
+
+  /**
+   * Ceils the actual complex number
+   *
+   * @returns {Complex}
+   */
+  'ceil': function (places) {
+
+    places = Math.pow(10, places || 0);
+
+    return new Complex(
+      Math.ceil(this['re'] * places) / places,
+      Math.ceil(this['im'] * places) / places);
+  },
+
+  /**
+   * Floors the actual complex number
+   *
+   * @returns {Complex}
+   */
+  'floor': function (places) {
+
+    places = Math.pow(10, places || 0);
+
+    return new Complex(
+      Math.floor(this['re'] * places) / places,
+      Math.floor(this['im'] * places) / places);
+  },
+
+  /**
+   * Ceils the actual complex number
+   *
+   * @returns {Complex}
+   */
+  'round': function (places) {
+
+    places = Math.pow(10, places || 0);
+
+    return new Complex(
+      Math.round(this['re'] * places) / places,
+      Math.round(this['im'] * places) / places);
+  },
+
+  /**
+   * Compares two complex numbers
+   *
+   * **Note:** new Complex(Infinity).equals(Infinity) === false
+   *
+   * @returns {boolean}
+   */
+  'equals': function (a, b) {
+
+    const z = parse(a, b);
+
+    return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
+      Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
+  },
+
+  /**
+   * Clones the actual object
+   *
+   * @returns {Complex}
+   */
+  'clone': function () {
+
+    return new Complex(this['re'], this['im']);
+  },
+
+  /**
+   * Gets a string of the actual complex number
+   *
+   * @returns {string}
+   */
+  'toString': function () {
+
+    let a = this['re'];
+    let b = this['im'];
+    let ret = "";
+
+    if (this['isNaN']()) {
+      return 'NaN';
+    }
+
+    if (this['isInfinite']()) {
+      return 'Infinity';
+    }
+
+    if (Math.abs(a) < Complex['EPSILON']) {
+      a = 0;
+    }
+
+    if (Math.abs(b) < Complex['EPSILON']) {
+      b = 0;
+    }
+
+    // If is real number
+    if (b === 0) {
+      return ret + a;
+    }
+
+    if (a !== 0) {
+      ret += a;
+      ret += " ";
+      if (b < 0) {
+        b = -b;
+        ret += "-";
+      } else {
+        ret += "+";
+      }
+      ret += " ";
+    } else if (b < 0) {
+      b = -b;
+      ret += "-";
+    }
+
+    if (1 !== b) { // b is the absolute imaginary part
+      ret += b;
+    }
+    return ret + "i";
+  },
+
+  /**
+   * Returns the actual number as a vector
+   *
+   * @returns {Array}
+   */
+  'toVector': function () {
+
+    return [this['re'], this['im']];
+  },
+
+  /**
+   * Returns the actual real value of the current object
+   *
+   * @returns {number|null}
+   */
+  'valueOf': function () {
+
+    if (this['im'] === 0) {
+      return this['re'];
+    }
+    return null;
+  },
+
+  /**
+   * Determines whether a complex number is not on the Riemann sphere.
+   *
+   * @returns {boolean}
+   */
+  'isNaN': function () {
+    return isNaN(this['re']) || isNaN(this['im']);
+  },
+
+  /**
+   * Determines whether or not a complex number is at the zero pole of the
+   * Riemann sphere.
+   *
+   * @returns {boolean}
+   */
+  'isZero': function () {
+    return this['im'] === 0 && this['re'] === 0;
+  },
+
+  /**
+   * Determines whether a complex number is not at the infinity pole of the
+   * Riemann sphere.
+   *
+   * @returns {boolean}
+   */
+  'isFinite': function () {
+    return isFinite(this['re']) && isFinite(this['im']);
+  },
+
+  /**
+   * Determines whether or not a complex number is at the infinity pole of the
+   * Riemann sphere.
+   *
+   * @returns {boolean}
+   */
+  'isInfinite': function () {
+    return !this['isFinite']();
+  }
+};
+
+Complex['ZERO'] = new Complex(0, 0);
+Complex['ONE'] = new Complex(1, 0);
+Complex['I'] = new Complex(0, 1);
+Complex['PI'] = new Complex(Math.PI, 0);
+Complex['E'] = new Complex(Math.E, 0);
+Complex['INFINITY'] = new Complex(Infinity, Infinity);
+Complex['NAN'] = new Complex(NaN, NaN);
+Complex['EPSILON'] = 1e-15;
+
 
 
 /***/ }),
@@ -47938,7 +47721,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   createComplexClass: () => (/* binding */ createComplexClass)
 /* harmony export */ });
-/* harmony import */ var complex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! complex.js */ "./node_modules/complex.js/complex.js");
+/* harmony import */ var complex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! complex.js */ "./node_modules/complex.js/dist/complex.mjs");
 /* harmony import */ var _utils_number_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/number.js */ "./node_modules/mathjs/lib/esm/utils/number.js");
 /* harmony import */ var _utils_is_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/is.js */ "./node_modules/mathjs/lib/esm/utils/is.js");
 /* harmony import */ var _utils_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/factory.js */ "./node_modules/mathjs/lib/esm/utils/factory.js");
@@ -47952,19 +47735,19 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
   /**
    * Attach type information
    */
-  Object.defineProperty(complex_js__WEBPACK_IMPORTED_MODULE_0__, 'name', {
+  Object.defineProperty(complex_js__WEBPACK_IMPORTED_MODULE_0__["default"], 'name', {
     value: 'Complex'
   });
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.constructor = complex_js__WEBPACK_IMPORTED_MODULE_0__;
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.type = 'Complex';
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.isComplex = true;
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.constructor = complex_js__WEBPACK_IMPORTED_MODULE_0__["default"];
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.type = 'Complex';
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.isComplex = true;
 
   /**
    * Get a JSON representation of the complex number
    * @returns {Object} Returns a JSON object structured as:
    *                   `{"mathjs": "Complex", "re": 2, "im": 3}`
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.toJSON = function () {
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toJSON = function () {
     return {
       mathjs: 'Complex',
       re: this.re,
@@ -47977,7 +47760,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
    * The angle phi will be set in the interval of [-pi, pi].
    * @return {{r: number, phi: number}} Returns and object with properties r and phi.
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.toPolar = function () {
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toPolar = function () {
     return {
       r: this.abs(),
       phi: this.arg()
@@ -47993,7 +47776,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
    *                                                options.
    * @return {string} str
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.format = function (options) {
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.format = function (options) {
     var str = '';
     var im = this.im;
     var re = this.re;
@@ -48053,13 +47836,13 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
    * @param {*} args...
    * @return {Complex}
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.fromPolar = function (args) {
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].fromPolar = function (args) {
     switch (arguments.length) {
       case 1:
         {
           var arg = arguments[0];
           if (typeof arg === 'object') {
-            return complex_js__WEBPACK_IMPORTED_MODULE_0__(arg);
+            return (0,complex_js__WEBPACK_IMPORTED_MODULE_0__["default"])(arg);
           } else {
             throw new TypeError('Input has to be an object with r and phi keys.');
           }
@@ -48074,7 +47857,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
               phi = phi.toNumber('rad');
             }
             if ((0,_utils_is_js__WEBPACK_IMPORTED_MODULE_3__.isNumber)(phi)) {
-              return new complex_js__WEBPACK_IMPORTED_MODULE_0__({
+              return new complex_js__WEBPACK_IMPORTED_MODULE_0__["default"]({
                 r,
                 phi
               });
@@ -48088,7 +47871,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
         throw new SyntaxError('Wrong number of arguments in function fromPolar');
     }
   };
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.valueOf = complex_js__WEBPACK_IMPORTED_MODULE_0__.prototype.toString;
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.valueOf = complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.toString;
 
   /**
    * Create a Complex number from a JSON object
@@ -48098,8 +47881,8 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
    *                       for `re` and `im` are 0.
    * @return {Complex} Returns a new Complex number
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.fromJSON = function (json) {
-    return new complex_js__WEBPACK_IMPORTED_MODULE_0__(json);
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].fromJSON = function (json) {
+    return new complex_js__WEBPACK_IMPORTED_MODULE_0__["default"](json);
   };
 
   /**
@@ -48117,7 +47900,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
    * @params {Complex} b
    * @returns {number} Returns the comparison result: -1, 0, or 1
    */
-  complex_js__WEBPACK_IMPORTED_MODULE_0__.compare = function (a, b) {
+  complex_js__WEBPACK_IMPORTED_MODULE_0__["default"].compare = function (a, b) {
     if (a.re > b.re) {
       return 1;
     }
@@ -48132,7 +47915,7 @@ var createComplexClass = /* #__PURE__ */(0,_utils_factory_js__WEBPACK_IMPORTED_M
     }
     return 0;
   };
-  return complex_js__WEBPACK_IMPORTED_MODULE_0__;
+  return complex_js__WEBPACK_IMPORTED_MODULE_0__["default"];
 }, {
   isClass: true
 });

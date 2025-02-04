@@ -7,7 +7,7 @@ Tested up to: 6.7.1
 Requires PHP: 7.4
 WC requires at least: 5.0
 WC tested up to: 9.6.0
-Stable tag: 1.9.44
+Stable tag: 1.9.44.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,18 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.44.1`
+
+*2025-01-29*
+
+**Changes**
+
+* Added supplier check when importing order items to ATUM orders.
+* Removed unused enqueue script method.
+* Remove the abstract declaration to the 'get_labels' function in the AtumOrderPostType class to prevent incompatibilities with older add-ons.
 
 ---
 
