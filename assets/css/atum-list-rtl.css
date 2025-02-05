@@ -1,10 +1,92 @@
 /** 
  * ATUM Inventory Management for WooCommerce CSS 
- * @version 1.9.44 
+ * @version 1.9.44.1 
  * @author BE REBEL  
  *
  * Author URI: https://berebel.studio 
  * License : ©2025 Stock Management Labs 
  */
 
- body .select2-container--default[dir=rtl].atum-select2 .select2-selection--single .select2-selection__arrow,body .select2-container--default[dir=rtl].atum-enhanced-select .select2-selection--single .select2-selection__arrow{left:10px;right:auto}.wrap h1.wp-heading-inline{margin-left:15px;margin-right:0px}.wrap h1.wp-heading-inline .page-title-action,.wrap h1.wp-heading-inline .page-title-action:active{margin-left:4px;margin-right:14px}.wrap h1.wp-heading-inline .page-title-action.extend-list-table,.wrap h1.wp-heading-inline .page-title-action:active.extend-list-table{margin-right:14px;margin-left:0px}.search-box,p.search-box{padding-left:1px;padding-right:0px;margin:20px auto 20px 10px}.search-box .search-column-btn,p.search-box .search-column-btn{border-left:1px solid var(--main-border-alt);border-right:none;border-top-right-radius:.25rem !important;border-bottom-right-radius:.25rem !important;border-top-left-radius:0 !important;border-bottom-left-radius:0 !important}.search-box .input-group,p.search-box .input-group{padding-right:0px}.atum-list-wrapper .subsubsub li,#posts-filter .subsubsub li{margin-right:0px;margin-left:15px}.atum-list-wrapper .subsubsub li span,#posts-filter .subsubsub li span{margin-left:0px;margin-right:3px}table.wp-list-table th.check-column{padding:11px 3px 0 20px}table.atum-list-table th.sortable.numeric a>span:first-child{padding-left:0;padding-right:10px}.atum-table-wrapper{overflow-x:auto}.atum-table-wrapper .subsubsub.extend-list-table li span{margin-left:0;margin-right:3px}.overflow-opacity-effect-right{right:auto;left:0;background-image:var(--overflow-opacity-left)}.overflow-opacity-effect-left{display:none;left:auto;right:0;background-image:var(--overflow-opacity-rigth)}.tablenav.top .tablenav-pages-container .tablenav-pages{margin:0 auto 0 0}#posts-filter .nav-with-scroll-effect .subsubsub li:first-child{padding-left:0px;padding-right:10px}
+ body .select2-container--default[dir=rtl].atum-select2 .select2-selection--single .select2-selection__arrow, body .select2-container--default[dir=rtl].atum-enhanced-select .select2-selection--single .select2-selection__arrow {
+  left: 10px;
+  right: auto;
+}
+
+.wrap h1.wp-heading-inline {
+  margin-left: 15px;
+  margin-right: 0px;
+}
+.wrap h1.wp-heading-inline .page-title-action, .wrap h1.wp-heading-inline .page-title-action:active {
+  margin-left: 4px;
+  margin-right: 14px;
+}
+.wrap h1.wp-heading-inline .page-title-action.extend-list-table, .wrap h1.wp-heading-inline .page-title-action:active.extend-list-table {
+  margin-right: 14px;
+  margin-left: 0px;
+}
+
+.search-box, p.search-box {
+  padding-left: 1px;
+  padding-right: 0px;
+  margin: 20px auto 20px 10px;
+}
+.search-box .search-column-btn, p.search-box .search-column-btn {
+  border-left: 1px solid var(--main-border-alt);
+  border-right: none;
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.search-box .input-group, p.search-box .input-group {
+  padding-right: 0px;
+}
+
+.atum-list-wrapper .subsubsub li, #posts-filter .subsubsub li {
+  margin-right: 0px;
+  margin-left: 15px;
+}
+.atum-list-wrapper .subsubsub li span, #posts-filter .subsubsub li span {
+  margin-left: 0px;
+  margin-right: 3px;
+}
+
+table.wp-list-table th.check-column {
+  padding: 11px 3px 0 20px;
+}
+
+table.atum-list-table th.sortable.numeric a > span:first-child {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.atum-table-wrapper {
+  overflow-x: auto;
+}
+.atum-table-wrapper .subsubsub.extend-list-table li span {
+  margin-left: 0;
+  margin-right: 3px;
+}
+
+.overflow-opacity-effect-right {
+  right: auto;
+  left: 0;
+  background-image: var(--overflow-opacity-left);
+}
+
+.overflow-opacity-effect-left {
+  display: none;
+  left: auto;
+  right: 0;
+  background-image: var(--overflow-opacity-rigth);
+}
+
+.tablenav.top .tablenav-pages-container .tablenav-pages {
+  margin: 0 auto 0 0;
+}
+
+#posts-filter .nav-with-scroll-effect .subsubsub li:first-child {
+  padding-left: 0px;
+  padding-right: 10px;
+}
+/*# sourceMappingURL=atum-list-rtl.css.map */

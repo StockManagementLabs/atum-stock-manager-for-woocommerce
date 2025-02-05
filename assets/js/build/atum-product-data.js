@@ -1,1 +1,570 @@
-(()=>{"use strict";var t={1669:t=>{t.exports=jQuery}},e={};function n(i){var a=e[i];if(void 0!==a)return a.exports;var o=e[i]={exports:{}};return t[i](o,o.exports,n),o.exports}n.n=t=>{var e=t&&t.__esModule?()=>t.default:()=>t;return n.d(e,{a:e}),e},n.d=(t,e)=>{for(var i in e)n.o(e,i)&&!n.o(t,i)&&Object.defineProperty(t,i,{enumerable:!0,get:e[i]})},n.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e);var i=n(1669),a=function(){return a=Object.assign||function(t){for(var e,n=1,i=arguments.length;n<i;n++)for(var a in e=arguments[n])Object.prototype.hasOwnProperty.call(e,a)&&(t[a]=e[a]);return t},a.apply(this,arguments)};const o=function(){function t(t,e,n){void 0===n&&(n=!1),this.$buttons=t,this.options=e,this.preview=n,this.defaultOptions={frame:"select",multiple:!1},this.wpHooks=window.wp.hooks,this.doFileUploaders()}return t.prototype.doFileUploaders=function(){var t=this;window.wp.hasOwnProperty("media")&&this.$buttons.on("click",(function(e){var n=i(e.currentTarget),o=a(a({},t.defaultOptions),t.options);n.data("modal-title")&&(o.title=n.data("modal-title")),n.data("modal-button")&&(o.button={text:n.data("modal-button")});var s=window.wp.media(o).on("select",(function(){var e=s.state().get("selection"),i=o.multiple?e.toJSON():e.first().toJSON(),a=n.siblings("input:hidden");if(o.multiple){var c=[];i.forEach((function(t){c.push(t.id)})),a.val(JSON.stringify(t.wpHooks.applyFilters("atum_fileUploader_inputVal",c,a)))}else a.val(t.wpHooks.applyFilters("atum_fileUploader_inputVal",i.id,a));t.preview&&(!o.library.type||o.library.type.indexOf("image")>-1)&&(n.siblings("img").remove(),o.multiple?i.forEach((function(t){n.after('<img class="atum-file-uploader__preview" src="'.concat(t.url,'">'))})):n.after('<img class="atum-file-uploader__preview" src="'.concat(i.url,'">'))),t.wpHooks.doAction("atum_fileUploader_selected",s,n)})).open()}))},t}();var s=n(1669);const c=function(){function t(t){var e=this;this.settings=t,this.$emailSelector=s("<select>",{class:"attach-to-email"}),this.wpHooks=window.wp.hooks,this.$attachmentsList=s(".atum-attachments-list"),this.$input=s("#atum-attachments"),s.each(this.settings.get("emailNotifications"),(function(t,n){e.$emailSelector.append('\n\t\t\t\t<option value="'.concat(t,'">').concat(n,"</option>\n\t\t\t"))})),this.addHooks(),this.bindEvents();new o(s("#atum_files").find(".atum-file-uploader"),{multiple:!0})}return t.prototype.addHooks=function(){var t=this;this.wpHooks.addAction("atum_fileUploader_selected","atum",(function(e){e.state().get("selection").toJSON().forEach((function(e){var n=s("<li>").data("id",e.id),i=e.hasOwnProperty("url")?e.url:e.sizes.full.url,a=e.hasOwnProperty("sizes")?e.sizes.medium.url:i;n.append("<label>".concat(t.settings.get("attachToEmail"),"</label>")).append(t.$emailSelector.clone());var o="";o=["jpg","jpeg","jpe","gif","png","webp","svg"].includes(e.subtype)&&a?'<img src="'.concat(a,'" alt="').concat(e.title,'">'):'<div class="atum-attachment-icon"><i class="atum-icon atmi-file-empty" title="'.concat(e.title,'"></i></div>'),n.append('\n\t\t\t\t\t<a href="'.concat(i,'" target="_blank" title="').concat(e.title,'">\n\t\t\t\t\t\t').concat(o,'\n\t\t\t\t\t</a>\n\t\t\t\t\t<i class="delete-attachment dashicons dashicons-dismiss atum-tooltip" title="').concat(t.settings.get("deleteAttachment"),'"></i>\n\t\t\t\t')),t.$attachmentsList.append(n)})),t.updateInput()}))},t.prototype.bindEvents=function(){var t=this;this.$attachmentsList.on("change",".attach-to-email",(function(){return t.updateInput()})).on("click",".delete-attachment",(function(e){var n=s(e.currentTarget),i=n.attr("aria-describedby");n.closest("li").remove(),s("#".concat(i)).remove(),t.updateInput()}))},t.prototype.updateInput=function(){var t=[];this.$attachmentsList.find("li").each((function(e,n){var i=s(n);t.push({id:i.data("id"),email:i.find(".attach-to-email").val()})})),this.$input.val(JSON.stringify(t))},t}();var r=n(1669);const l={doButtonGroups:function(t){var e=this;t.on("click",".btn-group .btn",(function(t){var n=r(t.currentTarget);return n.find(":checkbox").length?n.toggleClass("active"):(n.siblings(".active").removeClass("active"),n.addClass("active")),e.updateChecked(n.closest(".btn-group")),n.find("input").trigger("change"),!1}))},updateChecked:function(t){t.find(".btn").each((function(t,e){var n=r(e);n.find("input").prop("checked",n.hasClass("active"))}))}};var u=n(1669),d=function(){return d=Object.assign||function(t){for(var e,n=1,i=arguments.length;n<i;n++)for(var a in e=arguments[n])Object.prototype.hasOwnProperty.call(e,a)&&(t[a]=e[a]);return t},d.apply(this,arguments)};const p=function(){function t(t){void 0===t&&(t=null);var e=this;this.addAtumClasses(t),u("body").on("wc-enhanced-select-init",(function(){return e.addAtumClasses(t)}))}return t.prototype.maybeRestoreEnhancedSelect=function(){u(".select2-container--open").remove(),u("body").trigger("wc-enhanced-select-init")},t.prototype.doSelect2=function(t,e,n){var i=this;void 0===e&&(e={}),void 0===n&&(n=!1),"function"==typeof u.fn.select2&&(e=Object.assign({minimumResultsForSearch:10},e),t.each((function(t,a){var o=u(a),s=d({},e);o.hasClass("atum-select-multiple")&&!1===o.prop("multiple")&&o.prop("multiple",!0),o.hasClass("atum-select2")||(o.addClass("atum-select2"),i.addAtumClasses(o)),n&&o.on("select2:selecting",(function(t){var e=u(t.currentTarget),n=e.val();Array.isArray(n)&&(u.inArray("",n)>-1||u.inArray("-1",n)>-1)&&(u.each(n,(function(t,e){""!==e&&"-1"!==e||n.splice(t,1)})),e.val(n))})),o.select2(s),o.siblings(".select2-container").addClass("atum-select2"),i.maybeAddTooltip(o)})))},t.prototype.addAtumClasses=function(t){var e=this;void 0===t&&(t=null),(t=t||u("select").filter(".atum-select2, .atum-enhanced-select")).length&&t.each((function(t,n){var i=u(n),a=i.siblings(".select2-container").not(".atum-select2, .atum-enhanced-select");a.length&&(a.addClass(i.hasClass("atum-select2")?"atum-select2":"atum-enhanced-select"),e.maybeAddTooltip(i))})).on("select2:opening",(function(t){var e=u(t.currentTarget).data();if(e.hasOwnProperty("select2")){var n=e.select2.dropdown.$dropdown;n.length&&n.addClass("atum-select2-dropdown")}}))},t.prototype.maybeAddTooltip=function(t){t.hasClass("atum-tooltip")&&t.siblings(".select2-container").find(".select2-selection__rendered").addClass("atum-tooltip")},t}(),f=Swal;var h=n.n(f),m=n(1669);const g=function(){function t(t){var e=this;this.settings=t,this.$productDataMetaBox=m("#woocommerce-product-data"),new p,l.doButtonGroups(this.$productDataMetaBox),this.$productDataMetaBox.on("woocommerce_variations_loaded woocommerce_variations_added",(function(){l.doButtonGroups(e.$productDataMetaBox.find(".woocommerce_variations")),e.maybeBlockFields()})),m("#_manage_stock").on("change",(function(t){return m("#_out_stock_threshold").closest(".options_group").css("display",m(t.currentTarget).is(":checked")?"block":"none")})).trigger("change"),m(".product-tab-runner").find(".run-script").on("click",(function(t){var n=m(t.currentTarget),i=n.siblings("select").val();h().fire({title:e.settings.get("areYouSure"),text:n.data("confirm").replace("%s",'"'.concat(i,'"')),icon:"warning",showCancelButton:!0,confirmButtonText:e.settings.get("continue"),cancelButtonText:e.settings.get("cancel"),reverseButtons:!0,showLoaderOnConfirm:!0,preConfirm:function(){return new Promise((function(t,a){m.ajax({url:window.ajaxurl,data:{action:n.data("action"),security:e.settings.get("nonce"),parent_id:m("#post_ID").val(),value:i},method:"POST",dataType:"json",success:function(e){"object"==typeof e&&!0===e.success||h().showValidationMessage(e.data),t(e.data)}})}))},allowOutsideClick:function(){return!h().isLoading()}}).then((function(t){t.isConfirmed&&h().fire({icon:"success",title:e.settings.get("success"),text:t.value}).then((function(){return location.reload()}))}))})),this.$productDataMetaBox.on("focus select2:opening",".atum-field :input",(function(t){return m(t.target).siblings(".input-group-prepend").addClass("focus")})).on("blur select2:close",".atum-field :input",(function(t){return m(t.target).siblings(".input-group-prepend").removeClass("focus")})),this.maybeBlockFields()}return t.prototype.maybeBlockFields=function(){void 0!==this.settings.get("lockFields")&&"yes"===this.settings.get("lockFields")&&(m(".atum-field input").each((function(t,e){m(e).prop("readonly",!0).next().after(m(".wcml_lock_img").clone().removeClass("wcml_lock_img").show())})),m(".atum-field select").each((function(t,e){m(e).prop("disabled",!0).next().next().after(m(".wcml_lock_img").clone().removeClass("wcml_lock_img").show())})))},t}();const v=function(){function t(t,e){void 0===e&&(e={}),this.varName=t,this.defaults=e,this.settings={};var n=void 0!==window[t]?window[t]:{};Object.assign(this.settings,e,n)}return t.prototype.get=function(t){if(void 0!==this.settings[t])return this.settings[t]},t.prototype.getAll=function(){return this.settings},t.prototype.delete=function(t){this.settings.hasOwnProperty(t)&&delete this.settings[t]},t}();n(1669)((function(t){var e=new v("atumProductData");new g(e),new c(e)}))})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/js/src/components/_button-group.ts":
+/*!***************************************************!*\
+  !*** ./assets/js/src/components/_button-group.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var ButtonGroup = {
+    doButtonGroups: function ($container) {
+        var _this = this;
+        $container.on('click', '.btn-group .btn', function (evt) {
+            var $button = $(evt.currentTarget);
+            if ($button.find(':checkbox').length) {
+                $button.toggleClass('active');
+            }
+            else {
+                $button.siblings('.active').removeClass('active');
+                $button.addClass('active');
+            }
+            _this.updateChecked($button.closest('.btn-group'));
+            $button.find('input').trigger('change');
+            return false;
+        });
+    },
+    updateChecked: function ($buttonGroup) {
+        $buttonGroup.find('.btn').each(function (index, elem) {
+            var $button = $(elem);
+            $button.find('input').prop('checked', $button.hasClass('active'));
+        });
+    }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ButtonGroup);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/_enhanced-select.ts":
+/*!******************************************************!*\
+  !*** ./assets/js/src/components/_enhanced-select.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var EnhancedSelect = (function () {
+    function EnhancedSelect($selects) {
+        if ($selects === void 0) { $selects = null; }
+        var _this = this;
+        this.addAtumClasses($selects);
+        $('body').on('wc-enhanced-select-init', function () { return _this.addAtumClasses($selects); });
+    }
+    EnhancedSelect.prototype.maybeRestoreEnhancedSelect = function () {
+        $('.select2-container--open').remove();
+        $('body').trigger('wc-enhanced-select-init');
+    };
+    EnhancedSelect.prototype.doSelect2 = function ($selector, options, avoidEmptySelections) {
+        var _this = this;
+        if (options === void 0) { options = {}; }
+        if (avoidEmptySelections === void 0) { avoidEmptySelections = false; }
+        if (typeof $.fn['select2'] !== 'function') {
+            return;
+        }
+        options = Object.assign({
+            minimumResultsForSearch: 10,
+        }, options);
+        $selector.each(function (index, elem) {
+            var $select = $(elem), selectOptions = __assign({}, options);
+            if ($select.hasClass('atum-select-multiple') && $select.prop('multiple') === false) {
+                $select.prop('multiple', true);
+            }
+            if (!$select.hasClass('atum-select2')) {
+                $select.addClass('atum-select2');
+                _this.addAtumClasses($select);
+            }
+            if (avoidEmptySelections) {
+                $select.on('select2:selecting', function (evt) {
+                    var $select = $(evt.currentTarget), value = $select.val();
+                    if (Array.isArray(value) && ($.inArray('', value) > -1 || $.inArray('-1', value) > -1)) {
+                        $.each(value, function (index, elem) {
+                            if (elem === '' || elem === '-1') {
+                                value.splice(index, 1);
+                            }
+                        });
+                        $select.val(value);
+                    }
+                });
+            }
+            $select.select2(selectOptions);
+            $select.siblings('.select2-container').addClass('atum-select2');
+            _this.maybeAddTooltip($select);
+        });
+    };
+    EnhancedSelect.prototype.addAtumClasses = function ($selects) {
+        var _this = this;
+        if ($selects === void 0) { $selects = null; }
+        $selects = $selects || $('select').filter('.atum-select2, .atum-enhanced-select');
+        if (!$selects.length) {
+            return;
+        }
+        $selects
+            .each(function (index, elem) {
+            var $select = $(elem), $select2Container = $select.siblings('.select2-container').not('.atum-select2, .atum-enhanced-select');
+            if ($select2Container.length) {
+                $select2Container.addClass($select.hasClass('atum-select2') ? 'atum-select2' : 'atum-enhanced-select');
+                _this.maybeAddTooltip($select);
+            }
+        })
+            .on('select2:opening', function (evt) {
+            var $select = $(evt.currentTarget), select2Data = $select.data();
+            if (select2Data.hasOwnProperty('select2')) {
+                var $dropdown = select2Data.select2.dropdown.$dropdown;
+                if ($dropdown.length) {
+                    $dropdown.addClass('atum-select2-dropdown');
+                }
+            }
+        });
+    };
+    EnhancedSelect.prototype.maybeAddTooltip = function ($select) {
+        if ($select.hasClass('atum-tooltip')) {
+            var $select2Rendered = $select.siblings('.select2-container').find('.select2-selection__rendered');
+            $select2Rendered.addClass('atum-tooltip');
+        }
+    };
+    return EnhancedSelect;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EnhancedSelect);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/_file-uploader.ts":
+/*!****************************************************!*\
+  !*** ./assets/js/src/components/_file-uploader.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var FileUploader = (function () {
+    function FileUploader($buttons, options, preview) {
+        if (preview === void 0) { preview = false; }
+        this.$buttons = $buttons;
+        this.options = options;
+        this.preview = preview;
+        this.defaultOptions = {
+            frame: 'select',
+            multiple: false,
+        };
+        this.wpHooks = window['wp']['hooks'];
+        this.doFileUploaders();
+    }
+    FileUploader.prototype.doFileUploaders = function () {
+        var _this = this;
+        if (window['wp'].hasOwnProperty('media')) {
+            this.$buttons.on('click', function (evt) {
+                var $button = $(evt.currentTarget);
+                var modalOptions = __assign(__assign({}, _this.defaultOptions), _this.options);
+                if ($button.data('modal-title')) {
+                    modalOptions.title = $button.data('modal-title');
+                }
+                if ($button.data('modal-button')) {
+                    modalOptions.button = {
+                        text: $button.data('modal-button')
+                    };
+                }
+                var uploader = window['wp'].media(modalOptions)
+                    .on('select', function () {
+                    var selection = uploader.state().get('selection'), attachment = modalOptions.multiple ? selection.toJSON() : selection.first().toJSON(), $input = $button.siblings('input:hidden');
+                    if (modalOptions.multiple) {
+                        var attachmentIds_1 = [];
+                        attachment.forEach(function (att) {
+                            attachmentIds_1.push(att.id);
+                        });
+                        $input.val(JSON.stringify(_this.wpHooks.applyFilters('atum_fileUploader_inputVal', attachmentIds_1, $input)));
+                    }
+                    else {
+                        $input.val(_this.wpHooks.applyFilters('atum_fileUploader_inputVal', attachment.id, $input));
+                    }
+                    if (_this.preview && (!modalOptions.library.type || modalOptions.library.type.indexOf('image') > -1)) {
+                        $button.siblings('img').remove();
+                        if (modalOptions.multiple) {
+                            attachment.forEach(function (att) {
+                                $button.after("<img class=\"atum-file-uploader__preview\" src=\"".concat(att.url, "\">"));
+                            });
+                        }
+                        else {
+                            $button.after("<img class=\"atum-file-uploader__preview\" src=\"".concat(attachment.url, "\">"));
+                        }
+                    }
+                    _this.wpHooks.doAction('atum_fileUploader_selected', uploader, $button);
+                })
+                    .open();
+            });
+        }
+    };
+    return FileUploader;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FileUploader);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/product-data/_file-attachments.ts":
+/*!********************************************************************!*\
+  !*** ./assets/js/src/components/product-data/_file-attachments.ts ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _file_uploader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_file-uploader */ "./assets/js/src/components/_file-uploader.ts");
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
+var FileAttachments = (function () {
+    function FileAttachments(settings) {
+        var _this = this;
+        this.settings = settings;
+        this.$emailSelector = $('<select>', { class: 'attach-to-email' });
+        this.wpHooks = window['wp']['hooks'];
+        this.$attachmentsList = $('.atum-attachments-list');
+        this.$input = $('#atum-attachments');
+        $.each(this.settings.get('emailNotifications'), function (key, title) {
+            _this.$emailSelector.append("\n\t\t\t\t<option value=\"".concat(key, "\">").concat(title, "</option>\n\t\t\t"));
+        });
+        this.addHooks();
+        this.bindEvents();
+        var uploaderOptions = {
+            multiple: true,
+        };
+        new _file_uploader__WEBPACK_IMPORTED_MODULE_0__["default"]($('#atum_files').find('.atum-file-uploader'), uploaderOptions);
+    }
+    FileAttachments.prototype.addHooks = function () {
+        var _this = this;
+        this.wpHooks.addAction('atum_fileUploader_selected', 'atum', function (uploader) {
+            var attachments = uploader.state().get('selection').toJSON();
+            attachments.forEach(function (attachment) {
+                var $listItem = $('<li>').data('id', attachment.id), url = attachment.hasOwnProperty('url') ? attachment.url : attachment.sizes.full.url, imgToShow = attachment.hasOwnProperty('sizes') ? attachment.sizes.medium.url : url;
+                $listItem
+                    .append("<label>".concat(_this.settings.get('attachToEmail'), "</label>"))
+                    .append(_this.$emailSelector.clone());
+                var thumb = '';
+                if (['jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'svg'].includes(attachment.subtype) && imgToShow) {
+                    thumb = "<img src=\"".concat(imgToShow, "\" alt=\"").concat(attachment.title, "\">");
+                }
+                else {
+                    thumb = "<div class=\"atum-attachment-icon\"><i class=\"atum-icon atmi-file-empty\" title=\"".concat(attachment.title, "\"></i></div>");
+                }
+                $listItem.append("\n\t\t\t\t\t<a href=\"".concat(url, "\" target=\"_blank\" title=\"").concat(attachment.title, "\">\n\t\t\t\t\t\t").concat(thumb, "\n\t\t\t\t\t</a>\n\t\t\t\t\t<i class=\"delete-attachment dashicons dashicons-dismiss atum-tooltip\" title=\"").concat(_this.settings.get('deleteAttachment'), "\"></i>\n\t\t\t\t"));
+                _this.$attachmentsList.append($listItem);
+            });
+            _this.updateInput();
+        });
+    };
+    FileAttachments.prototype.bindEvents = function () {
+        var _this = this;
+        this.$attachmentsList
+            .on('change', '.attach-to-email', function () { return _this.updateInput(); })
+            .on('click', '.delete-attachment', function (evt) {
+            var $button = $(evt.currentTarget), tooltipId = $button.attr('aria-describedby');
+            $button.closest('li').remove();
+            $("#".concat(tooltipId)).remove();
+            _this.updateInput();
+        });
+    };
+    FileAttachments.prototype.updateInput = function () {
+        var value = [];
+        this.$attachmentsList.find('li').each(function (index, elem) {
+            var $elem = $(elem);
+            value.push({
+                id: $elem.data('id'),
+                email: $elem.find('.attach-to-email').val(),
+            });
+        });
+        this.$input.val(JSON.stringify(value));
+    };
+    return FileAttachments;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FileAttachments);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/components/product-data/_product-data-meta-boxes.ts":
+/*!***************************************************************************!*\
+  !*** ./assets/js/src/components/product-data/_product-data-meta-boxes.ts ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _button_group__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../_button-group */ "./assets/js/src/components/_button-group.ts");
+/* harmony import */ var _enhanced_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../_enhanced-select */ "./assets/js/src/components/_enhanced-select.ts");
+/* harmony import */ var sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! sweetalert2-neutral */ "sweetalert2-neutral");
+/* harmony import */ var sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2__);
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
+
+
+
+var ProductDataMetaBoxes = (function () {
+    function ProductDataMetaBoxes(settings) {
+        var _this = this;
+        this.settings = settings;
+        this.$productDataMetaBox = $('#woocommerce-product-data');
+        new _enhanced_select__WEBPACK_IMPORTED_MODULE_1__["default"]();
+        _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(this.$productDataMetaBox);
+        this.$productDataMetaBox.on('woocommerce_variations_loaded woocommerce_variations_added', function () {
+            _button_group__WEBPACK_IMPORTED_MODULE_0__["default"].doButtonGroups(_this.$productDataMetaBox.find('.woocommerce_variations'));
+            _this.maybeBlockFields();
+        });
+        $('#_manage_stock').on('change', function (evt) { return $('#_out_stock_threshold').closest('.options_group').css('display', $(evt.currentTarget).is(':checked') ? 'block' : 'none'); }).trigger('change');
+        $('.product-tab-runner').find('.run-script').on('click', function (evt) {
+            var $button = $(evt.currentTarget), value = $button.siblings('select').val();
+            sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
+                title: _this.settings.get('areYouSure'),
+                text: $button.data('confirm').replace('%s', "\"".concat(value, "\"")),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: _this.settings.get('continue'),
+                cancelButtonText: _this.settings.get('cancel'),
+                reverseButtons: true,
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: window['ajaxurl'],
+                            data: {
+                                action: $button.data('action'),
+                                security: _this.settings.get('nonce'),
+                                parent_id: $('#post_ID').val(),
+                                value: value,
+                            },
+                            method: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (typeof response !== 'object' || response.success !== true) {
+                                    sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().showValidationMessage(response.data);
+                                }
+                                resolve(response.data);
+                            },
+                        });
+                    });
+                },
+                allowOutsideClick: function () { return !sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().isLoading(); },
+            })
+                .then(function (result) {
+                if (result.isConfirmed) {
+                    sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
+                        icon: 'success',
+                        title: _this.settings.get('success'),
+                        text: result.value,
+                    })
+                        .then(function () { return location.reload(); });
+                }
+            });
+        });
+        this.$productDataMetaBox
+            .on('focus select2:opening', '.atum-field :input', function (evt) { return $(evt.target).siblings('.input-group-prepend').addClass('focus'); })
+            .on('blur select2:close', '.atum-field :input', function (evt) { return $(evt.target).siblings('.input-group-prepend').removeClass('focus'); });
+        this.maybeBlockFields();
+    }
+    ProductDataMetaBoxes.prototype.maybeBlockFields = function () {
+        if (typeof this.settings.get('lockFields') !== 'undefined' && 'yes' === this.settings.get('lockFields')) {
+            $('.atum-field input').each(function (index, elem) {
+                $(elem).prop('readonly', true).next().after($('.wcml_lock_img').clone().removeClass('wcml_lock_img').show());
+            });
+            $('.atum-field select').each(function (index, elem) {
+                $(elem).prop('disabled', true).next().next().after($('.wcml_lock_img').clone().removeClass('wcml_lock_img').show());
+            });
+        }
+    };
+    return ProductDataMetaBoxes;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProductDataMetaBoxes);
+
+
+/***/ }),
+
+/***/ "./assets/js/src/config/_settings.ts":
+/*!*******************************************!*\
+  !*** ./assets/js/src/config/_settings.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var Settings = (function () {
+    function Settings(varName, defaults) {
+        if (defaults === void 0) { defaults = {}; }
+        this.varName = varName;
+        this.defaults = defaults;
+        this.settings = {};
+        var localizedOpts = typeof window[varName] !== 'undefined' ? window[varName] : {};
+        Object.assign(this.settings, defaults, localizedOpts);
+    }
+    Settings.prototype.get = function (prop) {
+        if (typeof this.settings[prop] !== 'undefined') {
+            return this.settings[prop];
+        }
+        return undefined;
+    };
+    Settings.prototype.getAll = function () {
+        return this.settings;
+    };
+    Settings.prototype.delete = function (prop) {
+        if (this.settings.hasOwnProperty(prop)) {
+            delete this.settings[prop];
+        }
+    };
+    return Settings;
+}());
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Settings);
+
+
+/***/ }),
+
+/***/ "sweetalert2-neutral":
+/*!***********************!*\
+  !*** external "Swal" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = Swal;
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = jQuery;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!***************************************!*\
+  !*** ./assets/js/src/product-data.ts ***!
+  \***************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/product-data/_file-attachments */ "./assets/js/src/components/product-data/_file-attachments.ts");
+/* harmony import */ var _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/product-data/_product-data-meta-boxes */ "./assets/js/src/components/product-data/_product-data-meta-boxes.ts");
+/* harmony import */ var _config_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/_settings */ "./assets/js/src/config/_settings.ts");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "jquery");
+
+
+
+jQuery(function ($) {
+    var settings = new _config_settings__WEBPACK_IMPORTED_MODULE_2__["default"]('atumProductData');
+    new _components_product_data_product_data_meta_boxes__WEBPACK_IMPORTED_MODULE_1__["default"](settings);
+    new _components_product_data_file_attachments__WEBPACK_IMPORTED_MODULE_0__["default"](settings);
+});
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=atum-product-data.js.map
