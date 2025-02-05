@@ -528,7 +528,7 @@ final class Helpers {
 	 * @param int       $date_end         Optional. The max date to calculate the items' sales (must be a string format convertible with strtotime in the WP's time zone).
 	 * @param array|int $items            Optional. Array of Product IDs (or single ID) we want to calculate sales from.
 	 * @param array     $colums           Optional. Which columns to return from DB. Possible values: "qty", "total" and "prod_id".
-	 * @param bool      $use_lookup_table Optional. Whether to use the WC order product lookup tables (if available).
+	 * @param bool      $use_lookup_table Optional. Whether to use the WC order product lookup tables (if available). NOTE: This should be set to false when we pretend to save a calculated value to avoid using the lookup tables when they are not updated yet.
 	 *
 	 * @return array|int|float
 	 */
@@ -3124,7 +3124,7 @@ final class Helpers {
 		$use_lookup = $wpdb->get_var( "SHOW TABLES LIKE '$order_product_lookup_table';" ) && $wpdb->get_var( "SELECT COUNT(*) FROM $order_product_lookup_table" ) > 0;
 		AtumCache::set_transient( $transient_key, wc_bool_to_string( $use_lookup ), WEEK_IN_SECONDS, TRUE );
 
-		return $use_lookup;
+		return apply_filters( 'atum/use_wc_order_product_lookup_table', $use_lookup );
 
 	}
 
