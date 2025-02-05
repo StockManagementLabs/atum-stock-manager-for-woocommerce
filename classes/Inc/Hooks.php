@@ -1381,7 +1381,7 @@ class Hooks {
 			}
 
 			self::trigger_stock_change_notifications( $order, $changes );
-			
+
 		}
 
 	}
