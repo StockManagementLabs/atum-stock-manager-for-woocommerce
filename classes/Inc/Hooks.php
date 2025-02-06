@@ -520,7 +520,15 @@ class Hooks {
 
 			// Remove the ATUM queues checking transient when changing any sales CRON option.
 			if (
-				( ! isset( $old_value['calc_prop_cron'] ) && isset( $option_value['calc_prop_cron'] ) ) || (
+				( ! isset( $old_value['calc_prop_cron'] ) && isset( $option_value['calc_prop_cron'] ) ) ||
+				( isset( $old_value['calc_prop_cron'] ) && ! isset( $option_value['calc_prop_cron'] ) ) ||
+				( isset( $old_value['calc_prop_cron_interval'] ) && ! isset( $option_value['calc_prop_cron_interval'] ) ) ||
+				( ! isset( $old_value['calc_prop_cron_interval'] ) && isset( $option_value['calc_prop_cron_interval'] ) ) ||
+				( isset( $old_value['calc_prop_cron_type'] ) && ! isset( $option_value['calc_prop_cron_type'] ) ) ||
+				( ! isset( $old_value['calc_prop_cron_type'] ) && isset( $option_value['calc_prop_cron_type'] ) ) ||
+				( isset( $old_value['calc_prop_cron_start'] ) && ! isset( $option_value['calc_prop_cron_start'] ) ) ||
+				( ! isset( $old_value['calc_prop_cron_start'] ) && isset( $option_value['calc_prop_cron_start'] ) ) ||
+				(
 					$old_value['calc_prop_cron'] !== $option_value['calc_prop_cron'] ||
 					$old_value['calc_prop_cron_interval'] !== $option_value['calc_prop_cron_interval'] ||
 					$old_value['calc_prop_cron_type'] !== $option_value['calc_prop_cron_type'] ||
