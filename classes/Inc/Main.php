@@ -123,9 +123,6 @@ class Main {
 		// Add the ATUM menu to admin bar.
 		add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 
-		// Load language files.
-		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' ); // phpcs:ignore: WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
-
 		// Create menu (priority must be lower than 10).
 		add_action( 'init', array( $this, 'pre_init' ), 1 );
 
@@ -189,6 +186,9 @@ class Main {
 	 * @since 1.2.0
 	 */
 	public function init() {
+
+		// Load language files.
+		load_plugin_textdomain( ATUM_TEXT_DOMAIN, FALSE, plugin_basename( ATUM_PATH ) . '/languages' ); // phpcs:ignore: WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
 
 		//
 		// Register the Locations taxonomy and link it to products
