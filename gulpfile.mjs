@@ -3,11 +3,9 @@ import gulp from 'gulp';
 const { task, src, dest, watch, series, emit } = gulp;
 
 import plumber from 'gulp-plumber';
-import gulpif from 'gulp-if';
 import livereload from 'gulp-livereload';
 import wrap from 'gulp-wrap';
 import autoprefix from 'gulp-autoprefixer';
-import sourcemaps from 'gulp-sourcemaps';
 import composer from 'gulp-composer';
 import filter from 'gulp-filter';
 import cleanDir from 'gulp-clean-dir';
@@ -29,7 +27,7 @@ const config = {
     assetsDir: './assets',
     jsSrcDir : './assets/js/src',
 
-    devUrl    : 'http://atum.loc',
+    devUrl    : 'https://atum.loc',
     production: false,
 
     // Decorate
@@ -63,27 +61,22 @@ const onError = ( err ) => {
 };
 
 /*
- * As with javascripts this task creates two files, the regular and
- * the minified one. It automatically reloads browser as well.
+ * Compilation options
  */
 const options = {
 
     sass: {
         errLogToConsole: !config.production,
-        outputStyle    : config.production ? 'compressed' : 'expanded',
-        // Precision      : 10,
+        style          : config.production ? 'compressed' : 'expanded',
         includePaths   : [
             '.',
             config.assetsDir + '/scss',
         ],
-        silenceDeprecations: [ 'legacy-js-api' ], // TODO: MIGRATE TO THE MODERN API (https://sass-lang.com/documentation/breaking-changes/legacy-js-api/).
-        // ImagePath: 'assets/img'
     },
 
 };
 
 /*
- *
  *  SASS task
  * -----------
  */
@@ -95,25 +88,18 @@ task( 'sass::atum', () => {
     return src( [
         config.assetsDir + '/scss/*.scss',
         config.assetsDir + '/scss/rtl/*.scss',
-    ] )
+    ], { sourcemaps: enabled.maps } )
         .pipe( plumber( { errorHandler: onError } ) )
-        .pipe( gulpif( enabled.maps, sourcemaps.init() ) )
         .pipe( sass( options.sass ) )
         .pipe( autoprefix( 'last 2 version' ) )
         .pipe( wrap( config.decorate.templateCSS ) )
-        .pipe( gulpif( enabled.maps, sourcemaps.write( '.', {
-            sourceRoot: [ 'assets/scss/', 'assets/scss/rtl/' ],
-        } ) ) )
         .pipe( cleanDir( destDir ) )
-        .pipe( dest( destDir ) )
-    // .pipe(notify({message: 'sass task complete'}))
+        .pipe( dest( destDir, { sourcemaps: '.' } ) )
         .pipe( filter( '**/*.css' ) )
         .pipe( livereload() );
-	
 } );
 
 /*
- *
  *  JS task
  * ----------
  */
