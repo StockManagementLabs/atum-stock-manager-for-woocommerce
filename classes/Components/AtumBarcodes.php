@@ -17,6 +17,7 @@ use Atum\Components\AtumListTables\AtumListTable;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Models\Interfaces\AtumProductInterface;
+use Atum\Modules\ModuleManager;
 use Atum\Suppliers\Suppliers;
 use AtumLevels\Levels\Interfaces\BOMProductInterface;
 
@@ -197,8 +198,11 @@ class AtumBarcodes {
 
 			$new_table_colums[ $column_key ] = $column_value;
 
-			// Add the barcode col.
-			if ( '_supplier_sku' === $column_key ) {
+			// Add the barcode col after the supplier SKU (if the PO module is enabled).
+			if (
+				( ModuleManager::is_module_active( 'purchase_orders' ) && '_supplier_sku' === $column_key ) ||
+				'_sku' === $column_key
+			) {
 				$new_table_colums[ self::BARCODE_FIELD_KEY ] = __( 'Barcode', ATUM_TEXT_DOMAIN );
 			}
 
