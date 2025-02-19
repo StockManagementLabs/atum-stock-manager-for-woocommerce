@@ -4018,4 +4018,15 @@ final class Helpers {
 
 	}
 
+	/**
+	 * Check whether the WP CLI is running a command
+	 *
+	 * @since 1.9.45
+	 *
+	 * @return bool
+	 */
+	public static function is_running_cli() {
+		return defined( 'WP_CLI' ) && WP_CLI;
+	}
+
 }

@@ -327,7 +327,7 @@ class Main {
 		FileAttachment::get_instance();
 
 		// Only load the WP CLI module if WP CLI is running.
-		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		if ( Helpers::is_running_cli() ) {
 			AtumCli::get_instance();
 		}
 
