@@ -142,9 +142,7 @@ class Suppliers {
 	 */
 	public function register_post_type( $args = array() ) {
 
-		// Minimum capability required.
-		$is_user_allowed = AtumCapabilities::current_user_can( 'read_supplier' );
-		$main_menu_item  = Main::get_main_menu_item();
+		$main_menu_item = Main::get_main_menu_item();
 
 		$this->labels = array(
 			'name'                  => __( 'Suppliers', ATUM_TEXT_DOMAIN ),
@@ -171,16 +169,17 @@ class Suppliers {
 			'labels'              => $this->labels,
 			'description'         => __( 'This is where Suppliers are stored.', ATUM_TEXT_DOMAIN ),
 			'public'              => FALSE,
-			'show_ui'             => $is_user_allowed,
+			'show_ui'             => TRUE,
 			'publicly_queryable'  => FALSE,
 			'exclude_from_search' => TRUE,
 			'hierarchical'        => FALSE,
-			'show_in_menu'        => $is_user_allowed ? $main_menu_item['slug'] : FALSE,
+			'show_in_menu'        => $main_menu_item['slug'],
 			'show_in_nav_menus'   => FALSE,
 			'rewrite'             => FALSE,
 			'query_var'           => is_admin(),
 			'supports'            => array( 'title', 'thumbnail', 'custom-fields' ),
 			'has_archive'         => FALSE,
+			'map_meta_cap'        => TRUE,
 			'capabilities'        => array(
 				'edit_post'              => ATUM_PREFIX . 'edit_supplier',
 				'read_post'              => ATUM_PREFIX . 'read_supplier',

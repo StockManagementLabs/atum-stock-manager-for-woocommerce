@@ -165,21 +165,17 @@ abstract class AtumOrderPostType {
 	public function register_post_type( $args = array() ) {
 
 		$this->set_labels();
-
-		// Minimum capability required.
-		$read_capability = $this->capabilities['read_post'] ?? 'manage_woocommerce';
-		$is_user_allowed = current_user_can( $read_capability );
-		$main_menu_item  = Main::get_main_menu_item();
-		$post_type       = static::POST_TYPE;
+		$main_menu_item = Main::get_main_menu_item();
+		$post_type      = static::POST_TYPE;
 
 		$args = apply_filters( 'atum/order_post_type/post_type_args', wp_parse_args( array(
 			'labels'              => $this->labels,
 			'description'         => __( 'This is where ATUM orders are stored.', ATUM_TEXT_DOMAIN ),
 			'public'              => FALSE,
-			'show_ui'             => $is_user_allowed,
+			'show_ui'             => TRUE,
 			'publicly_queryable'  => FALSE,
 			'exclude_from_search' => TRUE,
-			'show_in_menu'        => $is_user_allowed ? $main_menu_item['slug'] : FALSE,
+			'show_in_menu'        => $main_menu_item['slug'],
 			'hierarchical'        => FALSE,
 			'show_in_nav_menus'   => FALSE,
 			'rewrite'             => FALSE,
@@ -187,6 +183,7 @@ abstract class AtumOrderPostType {
 			'supports'            => array( 'title', 'comments', 'custom-fields' ),
 			'has_archive'         => FALSE,
 			'capabilities'        => $this->capabilities,
+			'map_meta_cap'        => TRUE,
 		), $args ), $post_type );
 
 		// Register the ATUM Order post type.
