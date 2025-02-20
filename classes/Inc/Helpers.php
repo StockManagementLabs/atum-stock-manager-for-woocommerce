@@ -1692,7 +1692,7 @@ final class Helpers {
 	 */
 	public static function suppliers_dropdown( $args ) {
 
-		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			return '';
 		}
 

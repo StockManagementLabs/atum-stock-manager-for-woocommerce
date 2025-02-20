@@ -258,7 +258,6 @@ class Main {
 		// NOTE: The order of the modules is important.
 		// --------------------------------------------!
 		ModuleManager::get_instance();
-		AtumCapabilities::get_instance();
 		Hooks::get_instance();
 		AtumStockDecimals::get_instance();
 		Addons::get_instance();
@@ -271,17 +270,17 @@ class Main {
 		//
 		// Load conditional modules
 		// ------------------------!
-		if ( AtumCapabilities::current_user_can( 'read_inventory_log' ) && ModuleManager::is_module_active( 'inventory_logs' ) ) {
+		if ( AtumCapabilities::current_user_can( 'read_inventory_logs' ) && ModuleManager::is_module_active( 'inventory_logs' ) ) {
 			InventoryLogs::get_instance();
 		}
 
 		if ( ModuleManager::is_module_active( 'purchase_orders' ) ) {
 
-			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 				Suppliers::get_instance();
 
 				// The Suppliers is a dependency for Purchase Orders.
-				if ( AtumCapabilities::current_user_can( 'read_purchase_order' ) ) {
+				if ( AtumCapabilities::current_user_can( 'read_purchase_orders' ) ) {
 
 					PurchaseOrders::get_instance();
 

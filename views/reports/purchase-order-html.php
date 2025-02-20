@@ -107,7 +107,7 @@ use Atum\Inc\Helpers;
 						<?php
 						$product = Helpers::get_atum_product( $item->get_product() );
 
-						if ( $product instanceof \WC_Product && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
+						if ( $product instanceof \WC_Product && AtumCapabilities::current_user_can( 'read_suppliers' ) ) :
 
 							$supplier_sku = (array) apply_filters( 'atum/atum_order/po_report/supplier_sku', [ $product->get_supplier_sku() ], $item );
 

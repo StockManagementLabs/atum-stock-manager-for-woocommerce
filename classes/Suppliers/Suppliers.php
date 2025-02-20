@@ -90,7 +90,7 @@ class Suppliers {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 
 		// Global hooks.
-		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 
 			// Add the "Suppliers" link to the ATUM's admin bar menu.
 			add_filter( 'atum/admin/top_bar/menu_items', array( $this, 'add_admin_bar_link' ), 12 );
@@ -103,7 +103,7 @@ class Suppliers {
 		// Admin hooks.
 		if ( is_admin() ) {
 
-			if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+			if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 
 				// Add custom columns to Suppliers' post type list table.
 				add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_columns' ) );
@@ -114,7 +114,7 @@ class Suppliers {
 
 			}
 
-			if ( AtumCapabilities::current_user_can( 'edit_supplier' ) ) {
+			if ( AtumCapabilities::current_user_can( 'edit_suppliers' ) ) {
 
 				// Add meta boxes to Supplier post UI.
 				add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'add_meta_boxes' ), 30 );
@@ -183,6 +183,7 @@ class Suppliers {
 			'capabilities'        => array(
 				'edit_post'              => ATUM_PREFIX . 'edit_supplier',
 				'read_post'              => ATUM_PREFIX . 'read_supplier',
+				'read' 		             => ATUM_PREFIX . 'read_suppliers',
 				'delete_post'            => ATUM_PREFIX . 'delete_supplier',
 				'edit_posts'             => ATUM_PREFIX . 'edit_suppliers',
 				'edit_others_posts'      => ATUM_PREFIX . 'edit_others_suppliers',

@@ -282,25 +282,21 @@ class HtmlReport extends ListTable {
 	 */
 	protected function column__supplier( $item, $editable = FALSE ) {
 
-		$supplier = self::EMPTY_COL;
+		$supplier    = self::EMPTY_COL;
+		$supplier_id = $this->list_item->get_supplier_id();
 
-		if ( ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! $supplier_id || ! AtumCapabilities::current_user_can( 'read_supplier', $supplier_id ) ) {
 			return $supplier;
 		}
 
-		$supplier_id = $this->list_item->get_supplier_id();
+		$supplier_post = get_post( $supplier_id );
 
-		if ( $supplier_id ) {
-
-			$supplier_post = get_post( $supplier_id );
-
-			if ( $supplier_post ) {
-				$supplier = $supplier_post->post_title;
-			}
-
+		if ( $supplier_post ) {
+			$supplier = $supplier_post->post_title;
 		}
 
 		return apply_filters( 'atum/data_export/html_report/column_supplier', $supplier, $item, $this->list_item );
+
 	}
 
 	/**

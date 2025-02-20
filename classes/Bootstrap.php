@@ -14,6 +14,7 @@ namespace Atum;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumAdminNotices;
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumException;
 use Atum\Components\AtumOrders\AtumOrderPostType;
@@ -64,6 +65,9 @@ class Bootstrap {
 
 		// Register compatibility with new WC features.
 		add_action( 'before_woocommerce_init', array( $this, 'declare_wc_compatibilities' ) );
+
+		// Activation tasks.
+		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 
 		// Uninstallation tasks.
 		register_uninstall_hook( ATUM_PATH . 'atum-stock-manager-for-woocommerce.php', array( __CLASS__, 'uninstall' ) );
@@ -195,7 +199,17 @@ class Bootstrap {
 	}
 
 	/**
-	 * Uninstallation checks (this will run only once at plugin uninstallation)
+	 * Activation tasks (this will run only once at plugin activation)
+	 *
+	 * @since 1.9.45
+	 */
+	public static function activate() {
+		// As the capabilities are saved in the DB, we need to register them once on activation.
+		AtumCapabilities::register_atum_capabilities();
+	}
+
+	/**
+	 * Uninstallation tasks (this will run only once at plugin uninstallation)
 	 *
 	 * @since 1.3.7.1
 	 */

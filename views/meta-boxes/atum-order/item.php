@@ -45,7 +45,7 @@ $thumbnail    = $product_id ? apply_filters( 'atum/atum_order/item_thumbnail', $
 			<div class="atum-order-item-sku"><strong><?php esc_html_e( 'SKU:', ATUM_TEXT_DOMAIN ) ?></strong> <?php echo esc_html( $product->get_sku() ) ?></div>
 		<?php endif;
 
-		if ( $product_id && AtumCapabilities::current_user_can( 'read_supplier' ) ) :
+		if ( $product_id && AtumCapabilities::current_user_can( 'read_suppliers' ) ) :
 			$supplier_sku = $product->get_supplier_sku();
 
 			if ( $supplier_sku ) : ?>

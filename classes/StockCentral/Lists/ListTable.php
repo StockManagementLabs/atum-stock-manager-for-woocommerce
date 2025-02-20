@@ -265,7 +265,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
-		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			$this->group_members['product-details']['members'] = array_diff( $this->group_members['product-details']['members'], [ '_sku', '_supplier_sku' ] );
 		}
 
@@ -363,7 +363,7 @@ class ListTable extends AtumListTable {
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
-		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			unset( $table_columns['_supplier'], $table_columns['_supplier_sku'] );
 		}
 

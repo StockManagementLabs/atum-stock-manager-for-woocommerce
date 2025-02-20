@@ -87,7 +87,7 @@ class UncontrolledListTable extends AtumUncontrolledListTable {
 		}
 
 		// Hide the supplier's columns if the current user has not the capability.
-		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			unset( self::$table_columns['_supplier'] );
 			unset( self::$table_columns['_supplier_sku'] );
 		}

@@ -84,7 +84,7 @@ class ProductDataMetaBoxes {
 		}
 
 		// Add the supplier's fields to products if allowed.
-		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			add_action( 'woocommerce_variation_options_pricing', array( $this, 'add_product_supplier_fields' ), 11, 3 );
 			add_action( 'woocommerce_product_options_inventory_product_data', array( $this, 'add_product_supplier_fields' ) );
 		}
@@ -421,7 +421,7 @@ class ProductDataMetaBoxes {
 		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
 
 		// If the user is not allowed to edit Suppliers, add a hidden input.
-		if ( ! AtumCapabilities::current_user_can( 'edit_supplier' ) ) : ?>
+		if ( ! AtumCapabilities::current_user_can( 'edit_supplier', $supplier->ID ) ) : ?>
 
 			<input type="hidden" name="<?php echo esc_attr( $supplier_field_name ) ?>" id="<?php echo esc_attr( $supplier_field_id ) ?>" value="<?php echo esc_attr( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
 			<input type="hidden" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>" id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ?: '' ) ?>">
@@ -562,7 +562,7 @@ class ProductDataMetaBoxes {
 			$this->save_out_stock_threshold_field();
 		}
 
-		if ( AtumCapabilities::current_user_can( 'read_supplier' ) ) {
+		if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			$this->save_product_supplier_fields();
 		}
 

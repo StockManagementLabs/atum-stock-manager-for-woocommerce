@@ -15,6 +15,8 @@ namespace Atum\Components\AtumOrders\Items;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Inc\Helpers;
+use Atum\Models\Products\AtumProductTrait;
+
 
 abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 
@@ -91,7 +93,7 @@ abstract class AtumOrderItemProduct extends \WC_Order_Item_Product {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @return \WC_Product|bool
+	 * @return \WC_Product|AtumProductTrait|bool
 	 */
 	public function get_product() {
 		

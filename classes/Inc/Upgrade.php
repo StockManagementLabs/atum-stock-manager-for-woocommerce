@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || die;
 use Atum\Addons\Addons;
 use Atum\Components\AtumCache;
 use Atum\Components\AtumCalculatedProps;
+use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumQueues;
 use Atum\InboundStock\InboundStock;
 use Atum\InventoryLogs\Models\Log;
@@ -68,6 +69,11 @@ class Upgrade {
 		/************************
 		 * UPGRADE ACTIONS START
 		 **********************!*/
+
+		// ** version 1.9.44.2 ** Some extra capabilities were added.
+		if ( version_compare( $db_version, '1.9.44.2', '<' ) ) {
+			$this->register_new_atum_capabilities();
+		}
 
 		// ** version 1.2.4 ** The Inventory Logs was introduced.
 		if ( version_compare( $db_version, '1.2.4', '<' ) ) {
@@ -1297,6 +1303,15 @@ class Upgrade {
 			WHERE p.post_type = 'atum_supplier' AND pm.meta_key = '_description' 
 		" );
 
+	}
+
+	/**
+	 * Register new ATUM capabilities to the admin roles.
+	 *
+	 * @since 1.9.44.2
+	 */
+	private function register_new_atum_capabilities() {
+		AtumCapabilities::register_atum_capabilities();
 	}
 
 }
