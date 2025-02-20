@@ -216,10 +216,10 @@ class Main {
 			'rewrite'      => FALSE,
 			'public'       => FALSE,
 			'capabilities' => array(
-				'manage_terms' => ATUM_PREFIX . 'manage_location_terms',
-				'edit_terms'   => ATUM_PREFIX . 'edit_location_terms',
-				'delete_terms' => ATUM_PREFIX . 'delete_location_terms',
-				'assign_terms' => ATUM_PREFIX . 'assign_location_terms',
+				'manage_terms' => 'atum_manage_location_terms',
+				'edit_terms'   => 'atum_edit_location_terms',
+				'delete_terms' => 'atum_delete_location_terms',
+				'assign_terms' => 'atum_assign_location_terms',
 			),
 		) );
 

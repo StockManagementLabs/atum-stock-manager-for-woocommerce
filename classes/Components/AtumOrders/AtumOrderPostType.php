@@ -81,9 +81,6 @@ abstract class AtumOrderPostType {
 	 */
 	protected function init() {
 
-		// Add the ATUM prefix to all the capabilities.
-		$this->capabilities = preg_filter( '/^/', ATUM_PREFIX, $this->capabilities );
-
 		// Add the ATUM Orders' meta table to wpdb.
 		global $wpdb;
 

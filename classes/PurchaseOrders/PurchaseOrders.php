@@ -71,17 +71,17 @@ class PurchaseOrders extends AtumOrderPostType {
 	 * @var array
 	 */
 	protected $capabilities = array(
-		'edit_post'          => 'edit_purchase_order',
-		'read_post'          => 'read_purchase_order',
-		'read'	             => 'read_purchase_orders',
-		'delete_post'        => 'delete_purchase_order',
-		'edit_posts'         => 'edit_purchase_orders',
-		'edit_others_posts'  => 'edit_others_purchase_orders',
-		'read_private_posts' => 'read_private_purchase_orders',
-		'publish_posts'      => 'publish_purchase_orders',
-		'create_posts'       => 'create_purchase_orders',
-		'delete_posts'       => 'delete_purchase_orders',
-		'delete_other_posts' => 'delete_other_purchase_orders',
+		'edit_post'          => 'atum_edit_purchase_order',
+		'read_post'          => 'atum_read_purchase_order',
+		'read'	             => 'atum_read_purchase_orders',
+		'delete_post'        => 'atum_delete_purchase_order',
+		'edit_posts'         => 'atum_edit_purchase_orders',
+		'edit_others_posts'  => 'atum_edit_others_purchase_orders',
+		'read_private_posts' => 'atum_read_private_purchase_orders',
+		'publish_posts'      => 'atum_publish_purchase_orders',
+		'create_posts'       => 'atum_create_purchase_orders',
+		'delete_posts'       => 'atum_delete_purchase_orders',
+		'delete_other_posts' => 'atum_delete_other_purchase_orders',
 	);
 
 	/**

@@ -56,17 +56,17 @@ class InventoryLogs extends AtumOrderPostType {
 	 * @var array
 	 */
 	protected $capabilities = array(
-		'edit_post'          => 'edit_inventory_log',
-		'read_post'          => 'read_inventory_log',
-		'read' 		         => 'read_inventory_logs',
-		'delete_post'        => 'delete_inventory_log',
-		'edit_posts'         => 'edit_inventory_logs',
-		'edit_others_posts'  => 'edit_others_inventory_logs',
-		'read_private_posts' => 'read_private_inventory_logs',
-		'publish_posts'      => 'publish_inventory_logs',
-		'create_posts'       => 'create_inventory_logs',
-		'delete_posts'       => 'delete_inventory_logs',
-		'delete_other_posts' => 'delete_other_inventory_logs',
+		'edit_post'          => 'atum_edit_inventory_log',
+		'read_post'          => 'atum_read_inventory_log',
+		'read' 		         => 'atum_read_inventory_logs',
+		'delete_post'        => 'atum_delete_inventory_log',
+		'edit_posts'         => 'atum_edit_inventory_logs',
+		'edit_others_posts'  => 'atum_edit_others_inventory_logs',
+		'read_private_posts' => 'atum_read_private_inventory_logs',
+		'publish_posts'      => 'atum_publish_inventory_logs',
+		'create_posts'       => 'atum_create_inventory_logs',
+		'delete_posts'       => 'atum_delete_inventory_logs',
+		'delete_other_posts' => 'atum_delete_other_inventory_logs',
 	);
 
 
