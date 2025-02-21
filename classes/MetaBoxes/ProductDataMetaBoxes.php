@@ -421,7 +421,7 @@ class ProductDataMetaBoxes {
 		$supplier_sku_field_id   = empty( $variation ) ? $supplier_sku_meta : $supplier_sku_meta . $loop;
 
 		// If the user is not allowed to edit Suppliers, add a hidden input.
-		if ( ! AtumCapabilities::current_user_can( 'edit_supplier', $supplier->ID ) ) : ?>
+		if ( ! AtumCapabilities::current_user_can( 'edit_suppliers' ) ) : ?>
 
 			<input type="hidden" name="<?php echo esc_attr( $supplier_field_name ) ?>" id="<?php echo esc_attr( $supplier_field_id ) ?>" value="<?php echo esc_attr( ! empty( $supplier ) ? esc_attr( $supplier->ID ) : '' ) ?>">
 			<input type="hidden" name="<?php echo esc_attr( $supplier_sku_field_name ) ?>" id="<?php echo esc_attr( $supplier_sku_field_id ) ?>" value="<?php echo esc_attr( $supplier_sku ?: '' ) ?>">

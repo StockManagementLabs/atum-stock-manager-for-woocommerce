@@ -574,7 +574,7 @@ class SuppliersController extends \WC_REST_Posts_Controller {
 
 		$object = $this->get_object( (int) $request['id'] );
 
-		if ( $object && 0 !== $object->ID && ! AtumCapabilities::current_user_can( 'edit_supplier', $object->ID ) ) {
+		if ( $object && 0 !== $object->ID && ! AtumCapabilities::current_user_can( 'edit_suppliers' ) ) {
 			return new \WP_Error( 'atum_rest_cannot_edit', __( 'Sorry, you are not allowed to edit this resource.', ATUM_TEXT_DOMAIN ), [ 'status' => rest_authorization_required_code() ] );
 		}
 

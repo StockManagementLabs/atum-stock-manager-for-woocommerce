@@ -1040,7 +1040,7 @@ class FullExportController extends \WC_REST_Controller {
 						 * Hook args: endpoint, user_id, param, page, format and user_app_id.
 						 * NOTE: These are the parameters that are passed later to the run_export method.
 						 */
-						as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
+						as_enqueue_async_action( $hook_name, $hook_args, 'atum' );
 					}
 
 				}
@@ -1061,7 +1061,7 @@ class FullExportController extends \WC_REST_Controller {
 					 * Hook args: endpoint, user_id, param, page, format and user_app_id.
 					 * NOTE: These are the parameters that are passed later to the run_export method.
 					 */
-					as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
+					as_enqueue_async_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum' );
 				}
 
 			}
@@ -1163,7 +1163,7 @@ class FullExportController extends \WC_REST_Controller {
 		$endpoint_path = '/wc/v3/atum/atum-order-notes' === $endpoint ? '/wp/v2/comments' : $endpoint;
 		$query_params  = [
 			'page'     => $page,
-			'per_page' => 200,
+			'per_page' => Helpers::is_running_cli() ? 100 : 150,  // TODO: The posts per page increase is not working in WP CLI.
 		];
 
 		// Add extra params for some endpoints.
@@ -1272,13 +1272,15 @@ class FullExportController extends \WC_REST_Controller {
 						 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
 						 */
 						$hook_args = [ $endpoint, $user_id, $params, $page + 1, $format, $user_app_id ];
-						$scheduled = as_schedule_single_action( gmdate( 'U' ), $current_hook_name, $hook_args, 'atum', FALSE, 1 );
+						$scheduled = as_enqueue_async_action( $current_hook_name, $hook_args, 'atum' );
 
-						if ( $scheduled ) {
-							// Re-add the endpoint transient again because is not fully exported yet.
-							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
-							$has_missing_data = TRUE; // Avoid removing the transient below.
+						if ( ! $scheduled ) {
+							error_log( "The next page of the export couldn't be scheduled: " . var_export( $hook_args, TRUE ) );
 						}
+
+						// Re-add the endpoint transient again because is not fully exported yet.
+						AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
+						$has_missing_data = TRUE; // Avoid removing the transient below.
 
 					}
 
@@ -1329,7 +1331,7 @@ class FullExportController extends \WC_REST_Controller {
 				$hook_args = [ $endpoint, $user_id, $user_app_id ];
 
 				if ( ! as_next_scheduled_action( $hook_name, $hook_args, 'atum' ) ) {
-					as_schedule_single_action( gmdate( 'U' ), $hook_name, $hook_args, 'atum', TRUE, 1 );
+					as_enqueue_async_action( $hook_name, $hook_args, 'atum' );
 				}
 
 			}

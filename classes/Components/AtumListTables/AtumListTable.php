@@ -1000,13 +1000,13 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function column__supplier( $item, $editable = TRUE ) {
 
-		$supplier 	 = self::EMPTY_COL;
-		$supplier_id = $this->list_item->get_supplier_id();
+		$supplier = self::EMPTY_COL;
 
-		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_supplier', $supplier_id ) ) {
+		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			return $supplier;
 		}
 
+		$supplier_id = $this->list_item->get_supplier_id();
 
 		if ( $supplier_id ) {
 
@@ -1084,19 +1084,19 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function column__supplier_sku( $item, $editable = TRUE ) {
 
 		$supplier_sku = self::EMPTY_COL;
-		$supplier_id  = $this->list_item->get_supplier_id();
 
-		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_supplier', $supplier_id ) ) {
+		if ( ! $this->allow_calcs || ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 			return $supplier_sku;
 		}
 
+		$supplier_id  = $this->list_item->get_supplier_id();
 		$supplier_sku = $this->list_item->get_supplier_sku();
 
 		if ( 0 === strlen( $supplier_sku ) ) {
 			$supplier_sku = self::EMPTY_COL;
 		}
 
-		if ( $editable && $this->allow_edit && AtumCapabilities::current_user_can( 'edit_supplier', $supplier_id ) ) {
+		if ( $editable && $this->allow_edit && AtumCapabilities::current_user_can( 'edit_suppliers' ) ) {
 
 			$args = apply_filters( 'atum/list_table/args_supplier_sku', array(
 				'meta_key'   => 'supplier_sku',
@@ -2433,7 +2433,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			$supplier = absint( $_REQUEST['supplier'] );
 
-			if ( AtumCapabilities::current_user_can( 'read_supplier', $supplier ) ) {
+			if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 
 				// This query does not get product variations and as each variation may have a distinct supplier,
 				// we have to get them separately and to add their variables to the results.
@@ -2692,14 +2692,12 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( ! empty( $_REQUEST['supplier'] ) ) {
 
-			$supplier = absint( $_REQUEST['supplier'] );
-
-			if ( AtumCapabilities::current_user_can( 'read_supplier', $supplier ) ) {
+			if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 
 				global $wpdb;
 
+				$supplier = absint( $_REQUEST['supplier'] );
 				$pd_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
-
 				$statuses = Globals::get_queryable_product_statuses();
 
 				$subquery = "
