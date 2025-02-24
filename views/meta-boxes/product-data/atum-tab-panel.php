@@ -25,7 +25,7 @@ use Atum\Models\Interfaces\AtumProductInterface;
 
 			<?php echo wc_help_tip( __( 'Turn the switch ON or OFF to allow the ATUM plugin to include this product in its lists, counters and statistics.', ATUM_TEXT_DOMAIN ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-			<?php $field_value = 'auto-draft' === $product_status ? 'yes' : $product->get_atum_controlled() ?>
+			<?php $field_value = 'auto-draft' === ( $product_status || ! $product instanceof \WC_Product ) ? 'yes' : $product->get_atum_controlled() ?>
 			<span class="form-switch">
 				<input type="checkbox" name="<?php echo esc_attr( 'atum_product_tab[' . Globals::ATUM_CONTROL_STOCK_KEY . ']' ) ?>"
 					id="<?php echo esc_attr( Globals::ATUM_CONTROL_STOCK_KEY ) ?>" class="form-check-input"
