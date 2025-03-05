@@ -90,7 +90,7 @@ abstract class AtumOrderPostType {
 		}
 
 		// Register the post type.
-		add_action( 'init', array( $this, 'register_post_type' ), 1 );
+		add_action( 'init', array( $this, 'register_post_type' ) );
 		$post_type = static::POST_TYPE;
 
 		if ( is_admin() ) {

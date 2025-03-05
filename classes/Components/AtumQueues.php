@@ -92,12 +92,14 @@ class AtumQueues {
 		add_action( 'update_option', array( $this, 'maybe_cancel_sales_cron' ), 10, 3 );
 
 		// Fine-tune the ATUM queues for high volumes (https://github.com/woocommerce/action-scheduler-high-volume).
-		if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' ) {
+		if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' || Helpers::is_running_cli() ) {
 			add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'as_increase_queue_batch_size' ) );
 			add_filter( 'action_scheduler_queue_runner_concurrent_batches',  array( $this, 'as_increase_concurrent_batches' ) );
 			add_filter( 'action_scheduler_timeout_period', array( $this, 'as_increase_timeout' ) );
 			add_filter( 'action_scheduler_failure_period', array( $this, 'as_increase_timeout' ) );
 			add_filter( 'action_scheduler_queue_runner_time_limit', array( $this, 'as_increase_time_limit' ) );
+
+			// TODO: These are disabled for now because the user needs to be admin to run our privileged actions.
 			//add_action( 'action_scheduler_run_queue', array( $this, 'as_request_additional_runners' ), 0 );
 			//add_action( 'wp_ajax_nopriv_atum_as_create_additional_runners', array( $this, 'as_create_additional_runners' ), 0 );
 		}
@@ -685,7 +687,7 @@ class AtumQueues {
 	 * @return int
 	 */
 	public function as_increase_concurrent_batches( $concurrent_batches ) {
-		return apply_filters( 'atum/queues/as_concurrent_batches', $concurrent_batches * 2 );
+		return apply_filters( 'atum/queues/as_concurrent_batches', 3 );
 	}
 
 	/**
@@ -699,7 +701,7 @@ class AtumQueues {
 	 * @return int
 	 */
 	public function as_increase_timeout( $timeout ) {
-		return apply_filters( 'atum/queues/as_timeout', $timeout * 3 );
+		return apply_filters( 'atum/queues/as_timeout', 300 ); // 5 minutes.
 	}
 
 	/**

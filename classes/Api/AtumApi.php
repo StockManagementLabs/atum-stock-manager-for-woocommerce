@@ -20,6 +20,7 @@ use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
 use Atum\Inc\Globals;
+use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\PurchaseOrders;
@@ -222,6 +223,9 @@ class AtumApi {
 		// Add the exportable endpoint hooks.
 		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
 
+		// Handle running full export scheduled actions that were marked as failed after a timeout.
+		add_action( 'action_scheduler_failed_action', array( $this, 'maybe_retry_full_export_action' ), 10, 2 );
+
 		$this->load_extenders();
 
 	}
@@ -330,7 +334,7 @@ class AtumApi {
 		$origin = get_http_origin();
 
 		// Only alter the limit if the request is coming from the ATUM App.
-		if ( ! str_contains( $origin, 'com.stockmanagementlabs.atum' ) && ! str_contains( $origin, 'qa.stockmanagementlabs.atum' ) ) {
+		if ( ! str_contains( $origin, 'com.stockmanagementlabs.atum' ) && ! str_contains( $origin, 'qa.stockmanagementlabs.atum' ) && ! Helpers::is_running_cli() ) {
 			return $query_params;
 		}
 
@@ -415,6 +419,52 @@ class AtumApi {
 		}
 
 		return TRUE;
+
+	}
+
+	/**
+	 * Retry failed full export action
+	 *
+	 * @since 1.9.45
+	 *
+	 * @param int $action_id
+	 * @param int $timeout
+	 */
+	public function maybe_retry_full_export_action( $action_id, $timeout ) {
+
+		$as_store        = \ActionScheduler_Store::instance();
+		$action_to_reset = $as_store->fetch_action( $action_id );
+		$action_hook 	 = $action_to_reset->get_hook();
+		$status 		 = $as_store->get_status( $action_id );
+
+		if (
+			'atum' === strtolower( $action_to_reset->get_group() ) &&
+			( str_contains( $action_hook, 'atum_api_export' ) || str_contains( $action_hook, 'atum_api_dump' ) )  &&
+			\ActionScheduler_Store::STATUS_FAILED === $status
+		) {
+
+			$logs 	  = \ActionScheduler_Logger::instance()->get_logs( $action_id );
+			$last_log = array_pop( $logs ); // Get last log.
+
+			// Only reschedule if the last log contains a timeout message.
+			if ( str_contains( $last_log->get_message(), 'action marked as failed after' ) ) {
+
+				error_log( sprintf( 'ATUM: The scheduled action %s has failed due to timeout. Rescheduling....', $action_id ) );
+
+				// Reschedule.
+				$scheduled = as_enqueue_async_action( $action_hook, $action_to_reset->get_args(), 'atum' );
+
+				if ( ! $scheduled ) {
+					error_log( sprintf( "ATUM: The failed action %s couldn't be rescheduled", $action_id ) );
+				}
+				// Delete the failed action so it isn't rescheduled again.
+				else {
+					$as_store->delete_action( $action_id );
+				}
+
+			}
+
+		}
 
 	}
 
