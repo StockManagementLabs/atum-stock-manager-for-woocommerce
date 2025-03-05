@@ -70,16 +70,6 @@ class Upgrade {
 		 * UPGRADE ACTIONS START
 		 **********************!*/
 
-		// ** version 1.9.44.3 ** Secure ATUM's directories.
-		if ( version_compare( $db_version, '1.9.44.3', '<' ) ) {
-			$this->secure_atum_directories();
-		}
-
-		// ** version 1.9.44.2 ** Some extra capabilities were added.
-		if ( version_compare( $db_version, '1.9.44.2', '<' ) ) {
-			$this->register_new_atum_capabilities();
-		}
-
 		// ** version 1.2.4 ** The Inventory Logs was introduced.
 		if ( version_compare( $db_version, '1.2.4', '<' ) ) {
 			$this->create_atum_order_items_tables();
@@ -215,6 +205,16 @@ class Upgrade {
 		// ** version 1.9.34 ** Migrate the supplier's description from meta to the post content.
 		if ( version_compare( $db_version, '1.9.34', '<' ) && ! $this->is_fresh_install ) {
 			$this->migrate_supplier_description();
+		}
+
+		// ** version 1.9.44.2 ** Some extra capabilities were added.
+		if ( version_compare( $db_version, '1.9.44.2', '<' ) ) {
+			$this->register_new_atum_capabilities();
+		}
+
+		// ** version 1.9.44.3 ** Secure ATUM's directories.
+		if ( version_compare( $db_version, '1.9.44.3', '<' ) ) {
+			$this->secure_atum_directories();
 		}
 
 		/**********************
