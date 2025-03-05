@@ -27,6 +27,7 @@ use Atum\StockCentral\StockCentral;
 use Atum\StockCentral\Lists\ListTable;
 use Atum\Suppliers\Supplier;
 use Atum\Suppliers\Suppliers;
+use Faker\Provider\DateTime;
 
 
 class Upgrade {
@@ -942,7 +943,13 @@ class Upgrade {
 				continue;
 			}
 
-			$next = $action->get_schedule()->get_date()->format( 'Y-m-d H:i:s' );
+			$next = $action->get_schedule()->get_date();
+
+			if ( ! $next ) {
+				continue;
+			}
+
+			$next = $next->format( 'Y-m-d H:i:s' );
 
 			if ( array_key_exists( $hook, $processed ) ) {
 
