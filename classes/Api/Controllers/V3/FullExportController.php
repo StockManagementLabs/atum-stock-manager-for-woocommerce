@@ -21,6 +21,7 @@ use Atum\Components\AtumCache;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Inc\Helpers;
 
+
 class FullExportController extends \WC_REST_Controller {
 
 	/**
@@ -589,21 +590,21 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	private function export_dump_file( $user_app_id, $schema = '' ) {
 
-		$dump_file = self::get_dump_file( $user_app_id );
+		$upload_dir = self::get_full_export_upload_dir();
+		$dump_files = glob( $upload_dir . "*$user_app_id.sql" );
 
-		if ( ! file_exists( $dump_file ) ) {
+		if ( ! $dump_files ) {
 			return array(
 				'success' => FALSE,
 				'code'    => 'error',
-				'message' => __( 'The dump file was not found. Please, run the full export again.', ATUM_TEXT_DOMAIN ),
+				'message' => __( 'The dump was not found. Please, run the full export again.', ATUM_TEXT_DOMAIN ),
 			);
 		}
 		else {
 
 			$headers = [
 				'Content-Type'        => 'text/sql',
-				'Content-Length'      => filesize( $dump_file ),
-				'Content-Disposition' => 'attachment; filename="' . basename( $dump_file ) . '"',
+				'Content-Disposition' => 'attachment; filename="atum_dump_' . $user_app_id . '.sql"',
 			];
 
 			$server = rest_get_server();
@@ -620,24 +621,33 @@ class FullExportController extends \WC_REST_Controller {
 
 			if ( $schema ) {
 
-				$sql_blocks = $this->get_sql_blocks( $dump_file, $schema );
+				// In case there are multiple schemas separated by commas.
+				$schema_arr = array_map( 'trim', explode( ',', $schema ) );
 
-				if ( ! empty( $sql_blocks ) ) {
-					foreach ( $sql_blocks as $block ) {
-						echo $block . "\n";
+				foreach ( $schema_arr as $s ) {
+
+					$dump_file = $upload_dir . "atum_dump_{$s}_{$user_app_id}.sql";
+					if ( file_exists( $dump_file ) ) {
+						readfile( $dump_file );
 					}
-				}
-				else {
-					return array(
-						'success' => FALSE,
-						'code'    => 'error',
-						'message' => __( 'Schema block not found in the SQL dump.', ATUM_TEXT_DOMAIN ),
-					);
+					else {
+						return array(
+							'success' => FALSE,
+							'code'    => 'error',
+							'message' => sprintf( __( "No dump found for schema '%s'.", ATUM_TEXT_DOMAIN ), $s ),
+						);
+					}
+
 				}
 
 			}
 			else {
-				readfile( $dump_file );
+
+				// If no specific schema is passed, read all the dump files.
+				foreach ( $dump_files as $dump_file ) {
+					readfile( $dump_file );
+				}
+
 			}
 
 			die(); // We've already sent the file, so we can stop the execution here.
@@ -813,22 +823,30 @@ class FullExportController extends \WC_REST_Controller {
 			}
 		}
 
-		$dump_file = self::get_dump_file( $user_app_id );
-		file_put_contents( $dump_file, $dump_data, FILE_APPEND );
+		$dump_file = self::get_dump_file( $user_app_id, self::find_endpoint_schema( $endpoint ) );
+		$written   = file_put_contents( $dump_file, $dump_data, FILE_APPEND );
 
-		if ( file_exists( $dump_file ) ) {
+		if ( $written !== FALSE ) {
 
-			// Send the completed export notification once all the export tasks have been completed.
-			if ( ! self::are_there_pending_exports() ) {
-				self::notify_subscriber( $user_id );
+			if ( file_exists( $dump_file ) ) {
+
+				// Send the completed export notification once all the export tasks have been completed.
+				if ( ! self::are_there_pending_exports() ) {
+					self::notify_subscriber( $user_id );
+				}
+
+				return TRUE;
+
 			}
 
-			return TRUE;
+			$dump_error_msg = __( "The dump file couldn't be generated.", ATUM_TEXT_DOMAIN );
+			error_log( 'ATUM Full export error: ' . $dump_error_msg );
 
 		}
-
-		$dump_error_msg = __( "The dump file couldn't be generated.", ATUM_TEXT_DOMAIN );
-		error_log( $dump_error_msg );
+		else {
+			$dump_error_msg = __( "The data couldn't be added to the dump file.", ATUM_TEXT_DOMAIN );
+			error_log( 'ATUM Full export error: ' . $dump_error_msg );
+		}
 
 		return array(
 			'success' => FALSE,
@@ -1119,11 +1137,12 @@ class FullExportController extends \WC_REST_Controller {
 	 * @since 1.9.44
 	 *
 	 * @param string $user_app_id
+	 * @param string $schema
 	 *
 	 * @return string
 	 */
-	public static function get_dump_file( $user_app_id ) {
-		return self::get_full_export_upload_dir() . "atum_dump_$user_app_id.sql";
+	public static function get_dump_file( $user_app_id, $schema ) {
+		return self::get_full_export_upload_dir() . "atum_dump_{$schema}_{$user_app_id}.sql";
 	}
 
 	/**
