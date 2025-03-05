@@ -70,6 +70,11 @@ class Upgrade {
 		 * UPGRADE ACTIONS START
 		 **********************!*/
 
+		// ** version 1.9.44.3 ** Secure ATUM's directories.
+		if ( version_compare( $db_version, '1.9.44.3', '<' ) ) {
+			$this->secure_atum_directories();
+		}
+
 		// ** version 1.9.44.2 ** Some extra capabilities were added.
 		if ( version_compare( $db_version, '1.9.44.2', '<' ) ) {
 			$this->register_new_atum_capabilities();
@@ -1312,6 +1317,47 @@ class Upgrade {
 	 */
 	private function register_new_atum_capabilities() {
 		AtumCapabilities::register_atum_capabilities();
+	}
+
+	/**
+	 * Secure ATUM directories.
+	 *
+	 * @since 1.9.44.3
+	 */
+	private function secure_atum_directories() {
+
+		$uploads  = wp_upload_dir();
+		$atum_dir = trailingslashit( $uploads['basedir'] ) . 'atum';
+
+		// ATUM's main directory.
+		if ( is_dir( $atum_dir ) ) {
+			chmod( $atum_dir, 0775 );
+
+			if ( ! file_exists( $atum_dir . '/.htaccess' ) ) {
+				Helpers::secure_directory( $atum_dir );
+			}
+		}
+
+		// Temp directory.
+		$tmp_dir = $atum_dir . '/tmp';
+		if ( is_dir( $tmp_dir ) ) {
+			chmod( $tmp_dir, 0775 );
+
+			if ( ! file_exists( $tmp_dir . '/.htaccess' ) ) {
+				Helpers::secure_directory( $tmp_dir );
+			}
+		}
+
+		// Full export dir.
+		$full_export_dir = $atum_dir . '/atum-api-full-export';
+		if ( is_dir( $full_export_dir ) ) {
+			chmod( $full_export_dir, 0775 );
+
+			if ( ! file_exists( $full_export_dir . '/.htaccess' ) ) {
+				Helpers::secure_directory( $full_export_dir );
+			}
+		}
+
 	}
 
 }

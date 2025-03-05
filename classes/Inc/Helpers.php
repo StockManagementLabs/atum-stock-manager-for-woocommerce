@@ -3986,35 +3986,48 @@ final class Helpers {
 		// If the ATUM uploads directory does not exist, try to create it.
 		if ( ! is_dir( $atum_dir ) ) {
 
-			$success = mkdir( $atum_dir, 0755, TRUE );
+			$success = mkdir( $atum_dir, 0775, TRUE );
 
 			// If wasn't created, use default uploads folder.
 			if ( ! $success || ! is_writable( $atum_dir ) ) {
 				return new \WP_Error( 'atum_uploads_dir', esc_html__( 'ATUM uploads directory could not be created or is not writable.', ATUM_TEXT_DOMAIN ) );
 			}
 
-			// Create .htaccess file to prevent direct access.
-			$htaccess_content = "# Prevent direct access to exported files\n";
-			$htaccess_content .= "Order Allow,Deny\n";
-			$htaccess_content .= "Deny from all\n";
-			$htaccess_content .= "\n";
-			$htaccess_content .= "# Allow internal WordPress requests\n";
-			$htaccess_content .= "<IfModule mod_rewrite.c>\n";
-			$htaccess_content .= "RewriteEngine On\n";
-			$htaccess_content .= "RewriteCond %{REQUEST_URI} !^/wp-admin [NC]\n";
-			$htaccess_content .= "RewriteCond %{REQUEST_URI} !^/wp-includes [NC]\n";
-			$htaccess_content .= "RewriteRule ^.*$ - [F,L]\n";
-			$htaccess_content .= "</IfModule>\n";
-
-			// Write .htaccess file.
-			file_put_contents( $atum_dir . '/.htaccess', $htaccess_content );
-
-			// Create an index.html to further prevent directory listing.
-			touch( $atum_dir . '/index.html' );
+			self::secure_directory( $atum_dir );
 
 		}
 
 		return 'path' === $type ? trailingslashit( $atum_dir ) : trailingslashit( $uploads['baseurl'] ) . 'atum/';
+
+	}
+
+	/**
+	 * Secure a directory
+	 *
+	 * @since 1.9.45
+	 *
+	 * @param string $dir_path
+	 */
+	public static function secure_directory( $dir_path ) {
+
+		// Create .htaccess file to prevent direct access.
+		$htaccess_content = "# Prevent direct access to exported files\n";
+		$htaccess_content .= "Order Allow,Deny\n";
+		$htaccess_content .= "Deny from all\n";
+		$htaccess_content .= "\n";
+		$htaccess_content .= "# Allow internal WordPress requests\n";
+		$htaccess_content .= "<IfModule mod_rewrite.c>\n";
+		$htaccess_content .= "RewriteEngine On\n";
+		$htaccess_content .= "RewriteCond %{REQUEST_URI} !^/wp-admin [NC]\n";
+		$htaccess_content .= "RewriteCond %{REQUEST_URI} !^/wp-includes [NC]\n";
+		$htaccess_content .= "RewriteRule ^.*$ - [F,L]\n";
+		$htaccess_content .= "</IfModule>\n";
+
+		// Write .htaccess file.
+		file_put_contents( $dir_path . '/.htaccess', $htaccess_content );
+
+		// Create an index.html to further prevent directory listing.
+		touch( $dir_path . '/index.html' );
 
 	}
 

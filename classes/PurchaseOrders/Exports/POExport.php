@@ -282,7 +282,7 @@ class POExport extends PurchaseOrder {
 			if ( ! is_dir( $temp_dir ) ) {
 
 				// Try to create it.
-				$success = mkdir( $temp_dir, 0755, TRUE );
+				$success = mkdir( $temp_dir, 0775, TRUE );
 
 				// If wasn't created, use default uploads folder.
 				if ( ! $success || ! is_writable( $temp_dir ) ) {
