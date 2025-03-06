@@ -122,6 +122,13 @@ class Generator {
 	private string $schema_name;
 
 	/**
+	 * A combination of [current_page, total_pages] being processed for the current schema.
+	 *
+	 * @var null|int[]
+	 */
+	private $page = NULL;
+
+	/**
 	 * Constructor
 	 *
 	 * @since 1.9.44
@@ -136,16 +143,18 @@ class Generator {
 	 *  	@type string $store_settings_id The store settings ID.
 	 *  	@type array  $store_settings_app_group The store settings' app group.
 	 * }
+	 * @param int[]|null $page
 	 *
 	 * @throws \Exception If generator type is not supported.
 	 */
-	public function __construct( string $schema_name, array $dump_config ) {
+	public function __construct( string $schema_name, array $dump_config, $page = NULL ) {
 
 		if ( ! isset( self::$available_generators[ $schema_name ] ) ) {
 			throw new \Exception( "Unsupported generator type: $schema_name" );
 		}
 
 		$this->schema_name              = $schema_name;
+		$this->page              	    = $page;
 		$this->store_id                 = $dump_config['storeId'] ?? '';
 		$this->user_id                  = $dump_config['userId'] ?? '';
 		$this->revision                 = $dump_config['revision'] ?? '';
@@ -192,7 +201,7 @@ class Generator {
 
 			[ $main_group, $subgroup ] = explode( '.', $endpoint_key );
 
-			return $generator->generate_sql_update( $json_data, $main_group, $subgroup );
+			return $generator->generate_sql_update( $json_data, $main_group, $subgroup, $this->page );
 
 		}
 
@@ -202,7 +211,7 @@ class Generator {
 		$generator = new $generator_class( $table_name, $this->revision );
 
 		if ( ! empty( $json_data['results'] ) ) {
-			return $generator->generate_sql_inserts( $json_data['results'] );
+			return $generator->generate_sql_inserts( $json_data['results'], $this->page );
 		}
 
 		return '';

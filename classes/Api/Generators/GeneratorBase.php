@@ -13,8 +13,6 @@ namespace Atum\Api\Generators;
 
 defined( 'ABSPATH' ) || exit;
 
-use Atum\Api\Controllers\V3\FullExportController;
-
 abstract class GeneratorBase {
 
 	/**
@@ -83,7 +81,7 @@ abstract class GeneratorBase {
 		}
 
 		$schema = json_decode( $schema_content, TRUE );
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
+		if ( function_exists( 'json_last_error' ) && json_last_error() !== JSON_ERROR_NONE ) {
 			throw new \Exception( 'Invalid JSON in schema file: ' . json_last_error_msg() );
 		}
 
@@ -97,12 +95,13 @@ abstract class GeneratorBase {
 	 * @since 1.9.44
 	 *
 	 * @param array $results The addon data from API response.
+	 * @param int[]|null     The pagination data for the current set of results.
 	 *
 	 * @return string The SQL insert statements.
 	 *
 	 * @throws \Exception If data validation fails.
 	 */
-	public function generate_sql_inserts( array $results ): string {
+	public function generate_sql_inserts( array $results, $page = NULL ): string {
 
 		// Create the table if not exists.
 		$create_sql = "CREATE TABLE IF NOT EXISTS '$this->table_name' ('id' TEXT NOT NULL PRIMARY KEY, 'revision' TEXT, 'deleted' BOOLEAN NOT NULL CHECK (deleted IN (0, 1)), 'lastWriteTime' INTEGER NOT NULL, 'data' json) WITHOUT ROWID;";
@@ -524,12 +523,19 @@ abstract class GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
+	 * @param int[]|null $page
+	 *
 	 * @return string
 	 */
-	protected function add_starting_comment() {
+	protected function add_starting_comment( $page = NULL ) {
 
 		$comment  = "#\n";
 		$comment .= "# Schema: `$this->schema_name`\n";
+
+		if ( ! empty( $page ) ) {
+			$comment .= "# Page: " . implode( ' of ', $page ) . "\n";
+		}
+
 		$comment .= "#\n";
 
 		return $comment;

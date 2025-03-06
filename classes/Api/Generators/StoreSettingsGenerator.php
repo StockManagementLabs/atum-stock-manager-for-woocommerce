@@ -126,13 +126,14 @@ class StoreSettingsGenerator extends GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param array  $json_data
-	 * @param string $main_group
-	 * @param string $sub_group
+	 * @param array      $json_data
+	 * @param string     $main_group
+	 * @param string     $sub_group
+	 * @param int[]|null $page
 	 *
 	 * @return string
 	 */
-	public function generate_sql_update( array $json_data, string $main_group, string $sub_group ): string {
+	public function generate_sql_update( array $json_data, string $main_group, string $sub_group, $page = NULL ): string {
 
 		// Update the accumulated settings.
 		$this->update_accumulated_settings( $main_group, $sub_group, $json_data['results'] );

@@ -797,7 +797,8 @@ class FullExportController extends \WC_REST_Controller {
 							// Initialize the generator with table name components
 							$generator = new Generator(
 								$json['schema'],
-								$dump_config
+								$dump_config,
+								array( $json['page'], $json['total_pages'] ),
 							);
 
 							Helpers::adjust_long_process_settings();
