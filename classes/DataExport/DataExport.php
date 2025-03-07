@@ -136,6 +136,9 @@ class DataExport {
 				}
 				
 			}
+
+			// Try to set the backtrack limit to a higher value and avoid issues with huge amount of data.
+			@ini_set( 'pcre.backtrack_limit', '9999999' );
 			
 			$mpdf = new Mpdf( [
 				'mode'    => 'utf-8',
