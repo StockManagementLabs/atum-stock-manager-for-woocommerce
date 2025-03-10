@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 9.6.0
-Stable tag: 1.9.44.2
+WC tested up to: 9.7.1
+Stable tag: 1.9.45
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,40 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.45`
+
+*2025-03-10*
+
+**Features**
+
+* Added filter to bypass using lookup tables.
+* Added helper to determine if WP CLI is running.
+* Added high volume config settings for Action Scheduler.
+* Secure ATUM directories.
+* Full export improvements for WP CLI.
+
+**Changes**
+
+* Refactoring.
+* Postpone the "load_plugin_textdomain" call until init.
+* Updated JS dependencies.
+* Dump schemas to separated files to avoid concurrent writes.
+* Added pagination comments to exported dumps.
+
+**Fixes**
+
+* Fixed status table in parents statuses criteria when searching products.
+* Fixed stock change notifications notice when a product no longer exists.
+* Prevent undefined key notices when changing the ATUM cron props from settings.
+* Fixed expandable rows in list tables when checking/unchecking checkboxes.
+* Do not hide the barcodes column in List Tables when the PO module is disabled.
+* CPT registration fixes to avoid WP CLI errors.
+* Fixed capabilities and CPT registrations.
+* Prevent warnings when a product does not exist.
+* Make sure a variable has value before formatting it.
 
 ---
 
@@ -1036,92 +1070,3 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed wrong SQL delimeter.
 * Fixed SML link.
 * Avoid script error when multiple listtables are loaded.
-
----
-
-`1.9.25.1`
-
-*2022-12-22*
-
-**Fixes**
-
-* Make sure the post is already existing before assigning the ATUM Order description.
-
----
-
-`1.9.25`
-
-*2022-12-20*
-
-**Features**
-
-* Add isotope layout dependencies.
-* Added support for custom meta data to the ATUM Orders API endpoints.
-* Allow auto-dismissing admin notices shown via JS.
-* Added a expand/collapse all rows button to List Tables.
-
-**Changes**
-
-* Refactory ListTable array in scripts.
-* Prevent saving an invalid addon license.
-* Allow accessing to filterData at list-table scripts.
-* Updated composer files.
-* Ensure all atum addon names are stored lower case in the licenses setting.
-* Refactoring.
-* Pass an extra param to external columns calling in List Tables.
-* Ensure WP_Query objects are set.
-* Removed unused import.
-* Removed debugging code.
-* Make sure the new HPOS class exists before checking it.
-* Updated minimum WC version.
-* Added link to the ATUM’s Youtube channel when the videos couldn’t be loaded.
-* Do not auto-create a Log or PO when instantating the model.
-* Remove non-legacy unnused functions.
-
-**Fixes**
-
-* Check if function exists before calling it.
-* When applying filters, controlled products appear in the uncontrolled products view and they appear repeated.
-* Fixed the dragScroll opacity blocks visibility under some scenarios.
-* Fixed wrong initial date created on ATUM Orders.
-* Dashboard widget fix: if there are no decimals, the comma is removed.
-* Fixed ATUM Orders API endpoints after WC HPOS.
-
----
-
-`1.9.24.1`
-
-*2022-11-14*
-
-**Features**
-
-* Performance improvement: prevent querying for the nex scheduled action twice.
-
-**Changes**
-
-* Check if the recurring hooks are queued only on the admin side.
-* Exclude adding to PO and IL variation products if they are disabled.
-* Refactoring.
-* Dashboard widgets: do not show a comma if there are no decimals, show whole number.
-* Readded renamed function as deprecated for compatibility with old versions.
-
----
-
-`1.9.24`
-
-*2022-11-09*
-
-**Features**
-
-* Add full compatibility with the new WooCommerce's HPOS tables.
-* Add JS hook after selecting items in SC.
-* Allow disable editing on some List Tables.
-
-**Changes**
-
-* Refactoring.
-* Show the List Table filters even if the table has no bulk actions.
-
-**Fixes**
-
-* Show all attribute names for variations in List Tables.

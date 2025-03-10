@@ -196,6 +196,40 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.45`
+
+*2025-03-10*
+
+**Features**
+
+* Added filter to bypass using lookup tables.
+* Added helper to determine if WP CLI is running.
+* Added high volume config settings for Action Scheduler.
+* Secure ATUM directories.
+* Full export improvements for WP CLI.
+
+**Changes**
+
+* Refactoring.
+* Postpone the "load_plugin_textdomain" call until init.
+* Updated JS dependencies.
+* Dump schemas to separated files to avoid concurrent writes.
+* Added pagination comments to exported dumps.
+
+**Fixes**
+
+* Fixed status table in parents statuses criteria when searching products.
+* Fixed stock change notifications notice when a product no longer exists.
+* Prevent undefined key notices when changing the ATUM cron props from settings.
+* Fixed expandable rows in list tables when checking/unchecking checkboxes.
+* Do not hide the barcodes column in List Tables when the PO module is disabled.
+* CPT registration fixes to avoid WP CLI errors.
+* Fixed capabilities and CPT registrations.
+* Prevent warnings when a product does not exist.
+* Make sure a variable has value before formatting it.
+
+---
+
 `1.9.44.1`
 
 *2025-01-29*
