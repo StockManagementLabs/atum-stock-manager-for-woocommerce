@@ -1171,14 +1171,10 @@ class FullExportController extends \WC_REST_Controller {
 		try {
 
 			$pending_endpoint_transient_key = AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT . self::get_file_name( $endpoint, $schema, $params ) );
-			$pending_endpoint               = AtumCache::get_transient( $pending_endpoint_transient_key, TRUE );
-	
+			AtumCache::delete_transients( $pending_endpoint_transient_key );
+
 			Helpers::adjust_long_process_settings();
-	
-			if ( $pending_endpoint ) {
-				AtumCache::delete_transients( $pending_endpoint_transient_key );
-			}
-	
+
 			$page_suffix      = '';
 			$has_missing_data = FALSE;
 	
