@@ -10277,7 +10277,7 @@ var AtumOrders = (function () {
         }
         sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_5___default().fire({
             text: this.settings.get("importOrderItems".concat(orderType)),
-            icon: 'warning',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonText: this.settings.get('yes'),
             cancelButtonText: this.settings.get('no'),
