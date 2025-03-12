@@ -198,7 +198,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 `1.9.45`
 
-*2025-03-10*
+*2025-03-12*
 
 **Features**
 
@@ -207,6 +207,7 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Added high volume config settings for Action Scheduler.
 * Secure ATUM directories.
 * Full export improvements for WP CLI.
+* Added debug mode to the SC export class.
 
 **Changes**
 
@@ -215,6 +216,9 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 * Updated JS dependencies.
 * Dump schemas to separated files to avoid concurrent writes.
 * Added pagination comments to exported dumps.
+* Try to prevent pcre.backtrack_limit errors.
+* Removed unused code.
+* Changed a swal icon to question.
 
 **Fixes**
 

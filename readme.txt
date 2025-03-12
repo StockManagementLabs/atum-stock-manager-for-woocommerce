@@ -218,7 +218,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 `1.9.45`
 
-*2025-03-10*
+*2025-03-12*
 
 **Features**
 
@@ -227,6 +227,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Added high volume config settings for Action Scheduler.
 * Secure ATUM directories.
 * Full export improvements for WP CLI.
+* Added debug mode to the SC export class.
 
 **Changes**
 
@@ -235,6 +236,9 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Updated JS dependencies.
 * Dump schemas to separated files to avoid concurrent writes.
 * Added pagination comments to exported dumps.
+* Try to prevent pcre.backtrack_limit errors.
+* Removed unused code.
+* Changed a swal icon to question.
 
 **Fixes**
 
