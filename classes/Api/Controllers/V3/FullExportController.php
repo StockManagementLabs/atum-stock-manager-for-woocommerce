@@ -1120,8 +1120,6 @@ class FullExportController extends \WC_REST_Controller {
 				return new \WP_Error( 'atum_rest_upload_dir_creation_failed', __( 'Something failed when creating a temporary directory under the uploads folder, please check that you have the right permissions', ATUM_TEXT_DOMAIN ) );
 			}
 
-			Helpers::secure_directory( $upload_dir );
-
 		}
 
 		if ( 'path' === $type ) {

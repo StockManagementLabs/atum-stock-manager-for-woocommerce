@@ -143,9 +143,6 @@ class DataExport {
 				if ( ! $success || ! is_writable( $temp_dir ) ) {
 					$temp_dir = $atum_dir;
 				}
-				else {
-					Helpers::secure_directory( $temp_dir );
-				}
 				
 			}
 
