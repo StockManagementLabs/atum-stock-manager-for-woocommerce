@@ -139,7 +139,7 @@ class AtumCapabilities {
 	 *
 	 * @since 1.3.6
 	 *
-	 * @param string $capability The capatibily name without the ATUM prefix.
+	 * @param string $capability The capability name without the ATUM prefix.
 	 * @param int    $object_id  Optional. Check "current_user_can" function.
 	 *
 	 * @return bool
