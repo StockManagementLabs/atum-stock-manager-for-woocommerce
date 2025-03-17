@@ -167,6 +167,19 @@ class Tools {
 			),
 		);
 
+		$defaults['reset_atum_capabilities'] = array(
+			'group'   => 'tools',
+			'section' => 'tools',
+			'name'    => __( 'Reset ATUM capabilities', ATUM_TEXT_DOMAIN ) . $atum_label,
+			'desc'    => __( 'If for some reason, you cannot view some ATUM menus and custom post types while logged in with an admin user, this tool will reset the custom capabilities registered by ATUM to their defaults.', ATUM_TEXT_DOMAIN ),
+			'type'    => 'script_runner',
+			'options' => array(
+				'button_text'   => __( 'Reset Now!', ATUM_TEXT_DOMAIN ),
+				'script_action' => 'atum_tool_reset_atum_capabilities',
+				'confirm_msg'   => esc_attr( __( 'This will reset all the ATUM capabilities to their defaults', ATUM_TEXT_DOMAIN ) ),
+			),
+		);
+
 		return $defaults;
 
 	}

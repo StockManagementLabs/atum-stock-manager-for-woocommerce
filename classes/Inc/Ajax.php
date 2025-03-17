@@ -155,6 +155,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_tool_clear_out_stock_threshold', array( $this, 'clear_out_stock_threshold' ) );
 		add_action( 'wp_ajax_atum_tool_update_calc_props', array( $this, 'update_calc_props' ) );
 		add_action( 'wp_ajax_atum_tool_clear_out_atum_transients', array( $this, 'clear_out_atum_transients' ) );
+		add_action( 'wp_ajax_atum_tool_reset_atum_capabilities', array( $this, 'reset_atum_capabilities' ) );
 
 		// Change sticky columns settting.
 		add_action( 'wp_ajax_atum_change_table_style_setting', array( $this, 'change_table_style_user_meta' ) );
@@ -2933,6 +2934,21 @@ final class Ajax {
 		do_action( 'atum/ajax/tool_clear_out_atum_transients' );
 		wp_send_json_success( __( 'All your saved temporary data were cleared successfully.', ATUM_TEXT_DOMAIN ) );
 
+	}
+
+	/**
+	 * Reset the ATUM capabilities to their defaults
+	 *
+	 * @package    Settings
+	 * @subpackage Tools
+	 *
+	 * @since 1.9.45.1
+	 */
+	public function reset_atum_capabilities() {
+
+		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
+		AtumCapabilities::register_atum_capabilities();
+		wp_send_json_success( __( 'ATUM capabilities restored successfully.', ATUM_TEXT_DOMAIN ) );
 
 	}
 
