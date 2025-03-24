@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2025-03-06 10:38+0100\n"
+"POT-Creation-Date: 2025-03-24 13:07+0100\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -416,8 +416,8 @@ msgstr ""
 #: classes/Components/AtumStockDecimals.php:359
 #: classes/Components/AtumStockDecimals.php:367 classes/Dashboard/Dashboard.php:483
 #: classes/Dashboard/Dashboard.php:490 classes/InboundStock/InboundStock.php:159
-#: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3063
-#: classes/Inc/Ajax.php:3070 classes/Inc/Hooks.php:1537 classes/Inc/Hooks.php:1545
+#: classes/InboundStock/InboundStock.php:167 classes/Inc/Ajax.php:3079
+#: classes/Inc/Ajax.php:3086 classes/Inc/Hooks.php:1537 classes/Inc/Hooks.php:1545
 #: classes/Inc/Main.php:610 classes/Inc/Main.php:617
 #: classes/Integrations/Wpml.php:1867 classes/Integrations/Wpml.php:1875
 #: classes/InventoryLogs/InventoryLogs.php:677
@@ -433,11 +433,18 @@ msgstr ""
 #: classes/PurchaseOrders/PurchaseOrders.php:1094
 #: classes/PurchaseOrders/PurchaseOrders.php:1101
 #: classes/Settings/Settings.php:1786 classes/Settings/Settings.php:1793
-#: classes/Settings/Tools.php:184 classes/Settings/Tools.php:192
+#: classes/Settings/Tools.php:197 classes/Settings/Tools.php:205
 #: classes/StockCentral/StockCentral.php:343
 #: classes/StockCentral/StockCentral.php:350 classes/Suppliers/Suppliers.php:764
 #: classes/Suppliers/Suppliers.php:771
 msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
+#, php-format
+msgid ""
+"The ATUM %1$s could not be loaded because its license is missing. Please, "
+"activate your trial from the %2$sadd-ons%3$s page."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:131
@@ -452,9 +459,9 @@ msgid ""
 "the trial, uninstall the full version first."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:217
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
 #, php-format
-msgid "Your ATUM %1$s has expired and it has been disabled."
+msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:191
@@ -471,11 +478,6 @@ msgid ""
 "%2$supgrade to the full version%3$s."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:221
-#, php-format
-msgid "Your ATUM %1$s has expired on %2$s, and it has been disabled."
-msgstr ""
-
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:141
 #, php-format
 msgid ""
@@ -483,11 +485,9 @@ msgid ""
 "ATUM version. Please, update it."
 msgstr ""
 
-#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:168
+#: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:217
 #, php-format
-msgid ""
-"The ATUM %1$s could not be loaded because its license is missing. Please, "
-"activate your trial from the %2$sadd-ons%3$s page."
+msgid "Your ATUM %1$s has expired and it has been disabled."
 msgstr ""
 
 #: classes/Addons/AddonsLoader.php:8 classes/Addons/AddonsLoaderDev.php:226
@@ -833,16 +833,16 @@ msgstr ""
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:169
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:185
 #: classes/Dashboard/Widgets/Sales.php:36
-#: classes/Dashboard/Widgets/Statistics.php:70 classes/Inc/Ajax.php:442
-#: classes/Inc/Ajax.php:458 views/widgets/statistics.php:35
+#: classes/Dashboard/Widgets/Statistics.php:70 classes/Inc/Ajax.php:443
+#: classes/Inc/Ajax.php:459 views/widgets/statistics.php:35
 msgid "Sales"
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:170
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:178
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:186
-#: classes/Dashboard/Widgets/Statistics.php:71 classes/Inc/Ajax.php:443
-#: classes/Inc/Ajax.php:451 classes/Inc/Ajax.php:459
+#: classes/Dashboard/Widgets/Statistics.php:71 classes/Inc/Ajax.php:444
+#: classes/Inc/Ajax.php:452 classes/Inc/Ajax.php:460
 #: views/widgets/lost-sales.php:31 views/widgets/lost-sales.php:43
 #: views/widgets/promo-sales.php:35 views/widgets/promo-sales.php:47
 #: views/widgets/promo-sales.php:59 views/widgets/promo-sales.php:71
@@ -851,7 +851,7 @@ msgid "Products"
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:177
-#: classes/Dashboard/Widgets/LostSales.php:36 classes/Inc/Ajax.php:450
+#: classes/Dashboard/Widgets/LostSales.php:36 classes/Inc/Ajax.php:451
 #: classes/StockCentral/Lists/ListTable.php:356
 #: views/help-tabs/stock-central/stock-selling-manager.php:32
 #: views/widgets/statistics.php:36
@@ -859,7 +859,7 @@ msgid "Lost Sales"
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:193
-#: classes/Inc/Ajax.php:466 views/widgets/lost-sales.php:26
+#: classes/Inc/Ajax.php:467 views/widgets/lost-sales.php:26
 #: views/widgets/lost-sales.php:38 views/widgets/orders.php:30
 #: views/widgets/orders.php:42 views/widgets/orders.php:54
 #: views/widgets/orders.php:66 views/widgets/promo-sales.php:30
@@ -870,7 +870,7 @@ msgid "Value"
 msgstr ""
 
 #: classes/Api/Controllers/V3/DashboardStatisticsController.php:194
-#: classes/Dashboard/Widgets/Orders.php:36 classes/Inc/Ajax.php:467
+#: classes/Dashboard/Widgets/Orders.php:36 classes/Inc/Ajax.php:468
 #: views/widgets/orders.php:35 views/widgets/orders.php:47
 #: views/widgets/orders.php:59 views/widgets/orders.php:71
 #: views/widgets/statistics.php:38
@@ -1072,13 +1072,13 @@ msgid ""
 "please check that you have the right permissions"
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:1603
+#: classes/Api/Controllers/V3/FullExportController.php:1597
 msgid ""
 "If you want to retrieve an SQLite dump file, please send the storeId, userId, "
 "revision and storeSettingsId as params."
 msgstr ""
 
-#: classes/Api/Controllers/V3/FullExportController.php:1615
+#: classes/Api/Controllers/V3/FullExportController.php:1609
 msgid "The request body is empty. It must have the app store settings JSON."
 msgstr ""
 
@@ -1693,12 +1693,12 @@ msgid "Invalid tool ID."
 msgstr ""
 
 #: classes/Api/Controllers/V3/ToolsController.php:445
-#: classes/Cli/CliCommands.php:102 classes/Inc/Ajax.php:2614
+#: classes/Cli/CliCommands.php:102 classes/Inc/Ajax.php:2615
 msgid "All your previously saved values were cleared successfully."
 msgstr ""
 
 #: classes/Api/Controllers/V3/ToolsController.php:448
-#: classes/Cli/CliCommands.php:106 classes/Inc/Ajax.php:2617
+#: classes/Cli/CliCommands.php:106 classes/Inc/Ajax.php:2618
 msgid "Something failed clearing the Out of Stock Threshold values"
 msgstr ""
 
@@ -1939,7 +1939,7 @@ msgstr ""
 msgid "Calculated properties successfully updated"
 msgstr ""
 
-#: classes/Cli/CliCommands.php:148 classes/Inc/Ajax.php:2934
+#: classes/Cli/CliCommands.php:148 classes/Inc/Ajax.php:2935
 msgid "All your saved temporary data were cleared successfully."
 msgstr ""
 
@@ -2813,7 +2813,7 @@ msgid "Search..."
 msgstr ""
 
 #: classes/Components/AtumOrders/AtumOrderPostType.php:1077
-#: classes/Inc/Ajax.php:1451 classes/InventoryLogs/InventoryLogs.php:344
+#: classes/Inc/Ajax.php:1452 classes/InventoryLogs/InventoryLogs.php:344
 #: views/meta-boxes/inventory-log/data.php:109
 msgid "Order #"
 msgstr ""
@@ -3134,23 +3134,23 @@ msgstr ""
 msgid "Beta"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:72
+#: classes/DataExport/DataExport.php:79
 msgid "Show all categories"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:79
+#: classes/DataExport/DataExport.php:86
 msgid "Product Category"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:80
+#: classes/DataExport/DataExport.php:87
 msgid "Disable"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:87
+#: classes/DataExport/DataExport.php:94
 msgid "Output Format"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:89 classes/DataExport/DataExport.php:357
+#: classes/DataExport/DataExport.php:96 classes/DataExport/DataExport.php:369
 #: classes/InboundStock/Lists/ListTable.php:85
 #: classes/StockCentral/Lists/ListTable.php:330
 #: classes/StockCentral/Lists/UncontrolledListTable.php:71
@@ -3159,43 +3159,43 @@ msgstr ""
 msgid "Product Type"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:91
+#: classes/DataExport/DataExport.php:98
 msgid "Export"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:92
+#: classes/DataExport/DataExport.php:99
 msgid "Export Data"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:93
+#: classes/DataExport/DataExport.php:100
 msgid "Product Name (number of characters)"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:112
+#: classes/DataExport/DataExport.php:124
 msgid "ATUM Stock Central Report"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:203
+#: classes/DataExport/DataExport.php:215
 msgid "Report generated by ATUM DATA EXPORT module."
 msgstr ""
 
-#: classes/DataExport/DataExport.php:218
+#: classes/DataExport/DataExport.php:230
 #, php-format
 msgid "Page %1$s of %2$s"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:280
+#: classes/DataExport/DataExport.php:292
 msgid "Report class not found"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:356
+#: classes/DataExport/DataExport.php:368
 #: classes/InboundStock/Lists/ListTable.php:82
 #: classes/StockCentral/Lists/ListTable.php:327
 #: classes/StockCentral/Lists/UncontrolledListTable.php:65
 msgid "Image"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:358 classes/Inc/Hooks.php:394
+#: classes/DataExport/DataExport.php:370 classes/Inc/Hooks.php:394
 #: classes/StockCentral/Lists/ListTable.php:334 classes/Suppliers/Suppliers.php:224
 #: views/help-tabs/stock-central/product-details.php:68
 #: views/meta-boxes/atum-order/items.php:58
@@ -3203,7 +3203,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: classes/DataExport/DataExport.php:359
+#: classes/DataExport/DataExport.php:371
 #: classes/StockCentral/Lists/ListTable.php:357
 #: views/help-tabs/stock-central/stock-selling-manager.php:36
 msgid "Stock Indicator"
@@ -3290,63 +3290,63 @@ msgstr ""
 msgid "Variation Product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:242 classes/Inc/Ajax.php:265
+#: classes/Inc/Ajax.php:243 classes/Inc/Ajax.php:266
 msgid "Invalid widget"
 msgstr ""
 
-#: classes/Inc/Ajax.php:251
+#: classes/Inc/Ajax.php:252
 msgid "That widget was already added to your dashboard"
 msgstr ""
 
-#: classes/Inc/Ajax.php:259
+#: classes/Inc/Ajax.php:260
 msgid "That widget is not available"
 msgstr ""
 
-#: classes/Inc/Ajax.php:340 classes/Inc/Ajax.php:412 classes/Inc/Ajax.php:2951
+#: classes/Inc/Ajax.php:341 classes/Inc/Ajax.php:413 classes/Inc/Ajax.php:2967
 msgid "Invalid data"
 msgstr ""
 
-#: classes/Inc/Ajax.php:581 classes/Inc/Ajax.php:595
+#: classes/Inc/Ajax.php:582 classes/Inc/Ajax.php:596
 msgid "Error saving the table data."
 msgstr ""
 
-#: classes/Inc/Ajax.php:626
+#: classes/Inc/Ajax.php:627
 msgid "Data saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:648
+#: classes/Inc/Ajax.php:649
 msgid "No Items Selected."
 msgstr ""
 
-#: classes/Inc/Ajax.php:652
+#: classes/Inc/Ajax.php:653
 msgid "Invalid bulk action."
 msgstr ""
 
-#: classes/Inc/Ajax.php:731
+#: classes/Inc/Ajax.php:732
 msgid "Action applied to the selected items successfully."
 msgstr ""
 
-#: classes/Inc/Ajax.php:734
+#: classes/Inc/Ajax.php:735
 msgid "Bulk action not found."
 msgstr ""
 
-#: classes/Inc/Ajax.php:767
+#: classes/Inc/Ajax.php:768
 msgid "This license is not valid."
 msgstr ""
 
-#: classes/Inc/Ajax.php:773
+#: classes/Inc/Ajax.php:774
 msgid "ATUM API error"
 msgstr ""
 
-#: classes/Inc/Ajax.php:785
+#: classes/Inc/Ajax.php:786
 msgid "This is a trial license and cannot be used for your full version."
 msgstr ""
 
-#: classes/Inc/Ajax.php:807
+#: classes/Inc/Ajax.php:808
 msgid "Your add-on license was saved."
 msgstr ""
 
-#: classes/Inc/Ajax.php:819
+#: classes/Inc/Ajax.php:820
 #, php-format
 msgid ""
 "This is an 'ATUM %s trial' license, and you'll be able to try out this add-on "
@@ -3354,20 +3354,20 @@ msgid ""
 "agree, please click the button to activate and install."
 msgstr ""
 
-#: classes/Inc/Ajax.php:828
+#: classes/Inc/Ajax.php:829
 msgid ""
 "Your license is valid.<br>This site has been recognised as a staging site and "
 "won't compute as a new activation.<br>Please, click the button to activate and "
 "install."
 msgstr ""
 
-#: classes/Inc/Ajax.php:835
+#: classes/Inc/Ajax.php:836
 msgid ""
 "You've reached your license activation limit for this add-on.<br>Please contact "
 "the Stock Management Labs support team."
 msgstr ""
 
-#: classes/Inc/Ajax.php:845
+#: classes/Inc/Ajax.php:846
 #, php-format
 msgid ""
 "Your license is valid.<br>After the activation you will have %s remaining "
@@ -3378,230 +3378,234 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/Inc/Ajax.php:863
+#: classes/Inc/Ajax.php:864
 msgid ""
 "This trial license has expired.<br>Do you want to extend it for 7 days more?"
 msgstr ""
 
-#: classes/Inc/Ajax.php:872 classes/Inc/Ajax.php:971
+#: classes/Inc/Ajax.php:873 classes/Inc/Ajax.php:972
 #, php-format
 msgid "Your license key expired on %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:881
+#: classes/Inc/Ajax.php:882
 msgid "This license has been disabled"
 msgstr ""
 
-#: classes/Inc/Ajax.php:885 classes/Inc/Ajax.php:1005
+#: classes/Inc/Ajax.php:886 classes/Inc/Ajax.php:1006
 msgid ""
 "This trial key has already been activated on another site and is for single use "
 "only."
 msgstr ""
 
-#: classes/Inc/Ajax.php:927
+#: classes/Inc/Ajax.php:928
 msgid "No add-on name provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:931
+#: classes/Inc/Ajax.php:932
 msgid "Please enter a valid add-on license key"
 msgstr ""
 
-#: classes/Inc/Ajax.php:948 classes/Inc/Ajax.php:1063 classes/Inc/Ajax.php:1116
+#: classes/Inc/Ajax.php:949 classes/Inc/Ajax.php:1064 classes/Inc/Ajax.php:1117
 msgid "An error occurred, please try again later."
 msgstr ""
 
-#: classes/Inc/Ajax.php:978
+#: classes/Inc/Ajax.php:979
 msgid "Your license key has been disabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:983
+#: classes/Inc/Ajax.php:984
 msgid "Invalid license."
 msgstr ""
 
-#: classes/Inc/Ajax.php:987
+#: classes/Inc/Ajax.php:988
 msgid "The site URL is required to activate a license."
 msgstr ""
 
-#: classes/Inc/Ajax.php:991
+#: classes/Inc/Ajax.php:992
 msgid "Your license is not active for this site."
 msgstr ""
 
-#: classes/Inc/Ajax.php:997
+#: classes/Inc/Ajax.php:998
 #, php-format
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1001
+#: classes/Inc/Ajax.php:1002
 msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1041
+#: classes/Inc/Ajax.php:1042
 msgid "Your license has been activated."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1085
+#: classes/Inc/Ajax.php:1086
 msgid "Your license has been deactivated and removed."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1092
+#: classes/Inc/Ajax.php:1093
 #, php-format
 msgid ""
 "You've reached the limit of allowed deactivations for this license. Please "
 "%1$sopen a support ticket%2$s to request the deactivation."
 msgstr ""
 
-#: classes/Inc/Ajax.php:1186 classes/Inc/Ajax.php:1209
+#: classes/Inc/Ajax.php:1187 classes/Inc/Ajax.php:1210
 msgid "Add-on name not provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1193
+#: classes/Inc/Ajax.php:1194
 msgid "Your license was deactivated successfully"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1220 classes/Inc/Ajax.php:1251
+#: classes/Inc/Ajax.php:1221 classes/Inc/Ajax.php:1252
 msgid "License refreshed successfully"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1286
+#: classes/Inc/Ajax.php:1287
 #, php-format
 msgid "Trial extended successfully until %s"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1640
+#: classes/Inc/Ajax.php:1641
 msgid "Invalid log"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1640
+#: classes/Inc/Ajax.php:1641
 msgid "Invalid purchase order"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1822
+#: classes/Inc/Ajax.php:1823
 msgid "You aren't allowed to edit shop orders"
 msgstr ""
 
-#: classes/Inc/Ajax.php:1853
+#: classes/Inc/Ajax.php:1854
 msgid "The item couldn't be removed: invalid or missing data"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2005 classes/Inc/Ajax.php:2120
+#: classes/Inc/Ajax.php:2006 classes/Inc/Ajax.php:2121
 msgid "You are not allowed to do this"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2009 classes/Inc/Ajax.php:2124
+#: classes/Inc/Ajax.php:2010 classes/Inc/Ajax.php:2125
 msgid "Invalid data provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2053 classes/PurchaseOrders/PurchaseOrders.php:953
+#: classes/Inc/Ajax.php:2054 classes/PurchaseOrders/PurchaseOrders.php:953
 msgid "Stock levels increased:"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2056 classes/PurchaseOrders/PurchaseOrders.php:956
+#: classes/Inc/Ajax.php:2057 classes/PurchaseOrders/PurchaseOrders.php:956
 msgid "Stock levels reduced:"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2090
+#: classes/Inc/Ajax.php:2091
 #, php-format
 msgid ""
 "No products had their stock %s - they may not have stock management enabled."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2091
+#: classes/Inc/Ajax.php:2092
 msgid "increased"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2091
+#: classes/Inc/Ajax.php:2092
 msgid "decreased"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2139
+#: classes/Inc/Ajax.php:2140
 msgid "Product not found"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2163
+#: classes/Inc/Ajax.php:2164
 msgid "You are not allowed to do so"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2167
+#: classes/Inc/Ajax.php:2168
 msgid "Invalid Data"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2176
+#: classes/Inc/Ajax.php:2177
 msgid "The order doesn't exist"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2182
+#: classes/Inc/Ajax.php:2183
 msgid "The order is empty"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2390 classes/Inc/Ajax.php:2426
+#: classes/Inc/Ajax.php:2391 classes/Inc/Ajax.php:2427
 msgid "No parent ID specified"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2394
+#: classes/Inc/Ajax.php:2395
 msgid "Please, choose a status from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2400 classes/Inc/Ajax.php:2432
+#: classes/Inc/Ajax.php:2401 classes/Inc/Ajax.php:2433
 msgid "Invalid parent product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2410 classes/Inc/Ajax.php:2444
+#: classes/Inc/Ajax.php:2411 classes/Inc/Ajax.php:2445
 msgid "All the variations were updated successfully"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2462 classes/Inc/Ajax.php:2520
+#: classes/Inc/Ajax.php:2463 classes/Inc/Ajax.php:2521
 msgid "No valid product ID provided"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2474
+#: classes/Inc/Ajax.php:2475
 msgid "No locations were set for this product"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2555 classes/Inc/Ajax.php:2583
+#: classes/Inc/Ajax.php:2556 classes/Inc/Ajax.php:2584
 msgid "Please select an option from the dropdown"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2566
+#: classes/Inc/Ajax.php:2567
 msgid "Something failed changing the Manage Stock option"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2594
+#: classes/Inc/Ajax.php:2595
 msgid "Something failed changing the Control Stock option"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2850
+#: classes/Inc/Ajax.php:2851
 msgid "Please enter the number of products you want to process per AJAX call"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2955
+#: classes/Inc/Ajax.php:2951
+msgid "ATUM capabilities restored successfully."
+msgstr ""
+
+#: classes/Inc/Ajax.php:2971
 msgid "Purchase Orders module isn't active."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2959
+#: classes/Inc/Ajax.php:2975
 msgid "You don't have enough privileges."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2965
+#: classes/Inc/Ajax.php:2981
 msgid "The Supplier name is required"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2973
+#: classes/Inc/Ajax.php:2989
 msgid "Something failed when creating the supplier."
 msgstr ""
 
-#: classes/Inc/Ajax.php:2977
+#: classes/Inc/Ajax.php:2993
 msgid "Supplier Created"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2978
+#: classes/Inc/Ajax.php:2994
 msgid "Complete supplier details"
 msgstr ""
 
-#: classes/Inc/Ajax.php:2998
+#: classes/Inc/Ajax.php:3014
 msgid "The guide name is required"
 msgstr ""
 
-#: classes/Inc/Ajax.php:3009
+#: classes/Inc/Ajax.php:3025
 msgid "Guide not found"
 msgstr ""
 
@@ -4329,7 +4333,7 @@ msgstr ""
 msgid "Not a Purchase Order (%d)"
 msgstr ""
 
-#: classes/PurchaseOrders/Exports/POExport.php:307
+#: classes/PurchaseOrders/Exports/POExport.php:310
 #: views/meta-boxes/purchase-order/data.php:26
 #: views/reports/purchase-order-html.php:35
 msgid "Purchase Order"
@@ -5118,6 +5122,25 @@ msgstr ""
 
 #: classes/Settings/Tools.php:166
 msgid "This will clear all the temporary ATUM transients"
+msgstr ""
+
+#: classes/Settings/Tools.php:173
+msgid "Reset ATUM capabilities"
+msgstr ""
+
+#: classes/Settings/Tools.php:174
+msgid ""
+"If for some reason, you cannot view some ATUM menus and custom post types while "
+"logged in with an admin user, this tool will reset the custom capabilities "
+"registered by ATUM to their defaults."
+msgstr ""
+
+#: classes/Settings/Tools.php:177
+msgid "Reset Now!"
+msgstr ""
+
+#: classes/Settings/Tools.php:179
+msgid "This will reset all the ATUM capabilities to their defaults"
 msgstr ""
 
 #: classes/StockCentral/Lists/ListTable.php:211
