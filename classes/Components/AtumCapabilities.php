@@ -119,7 +119,7 @@ class AtumCapabilities {
 	 */
 	public static function register_atum_capabilities( $capabilities = [] ) {
 
-		$capabilities = empty( $capabilities ) ? self::$capabilities : $capabilities;
+		$capabilities = (array) empty( $capabilities ) ? apply_filters( 'atum/capabilities/caps', self::$capabilities ) : $capabilities;
 		$admin_roles  = (array) apply_filters( 'atum/capabilities/admin_roles', [ get_role( 'administrator' ) ] );
 
 		foreach ( $admin_roles as $admin_role ) {

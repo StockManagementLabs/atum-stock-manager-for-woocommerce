@@ -30,6 +30,13 @@ abstract class AddonBootstrap {
 	protected static $bootstrapped = FALSE;
 
 	/**
+	 * The add-on capabilities
+	 *
+	 * @var array
+	 */
+	protected static $capabilities = [];
+
+	/**
 	 * Addons generic constructor
 	 *
 	 * @param string $addon_key The add-on key to be registered.
@@ -45,6 +52,9 @@ abstract class AddonBootstrap {
 
 			// Load after ATUM is fully loaded.
 			add_action( 'atum/after_init', array( $this, 'init' ) );
+
+			// Register the add-on capabilities.
+			add_filter( 'atum/capabilities/caps', array( $this, 'register_addon_capabilities' ) );
 
 			// Load dependencies.
 			$this->load_dependencies();
@@ -72,6 +82,23 @@ abstract class AddonBootstrap {
 	 */
 	public static function is_bootstrapped() {
 		return self::$bootstrapped;
+	}
+
+	/**
+	 * Register the add-on capabilities (if any).
+	 *
+	 * @since 1.9.46
+	 *
+	 * @param array $capabilities The capabilities to be registered.
+	 *
+	 * @return array
+	 */
+	public function register_addon_capabilities( $capabilities ) {
+		if ( ! empty( static::$capabilities ) ) {
+			$capabilities[] = array_merge( $capabilities, static::$capabilities );
+		}
+
+		return $capabilities;
 	}
 
 }
