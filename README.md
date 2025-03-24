@@ -196,6 +196,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.46`
+
+*2025-03-24*
+
+**Features**
+
+* Added a new tool to reset the ATUM capabilities to its defaults.
+* Allow the addons to register extra capabilities.
+
+**Changes**
+
+* Do not need to secure subdirectories if the main directory is already secure.
+* Updated JS dependencies.
+* Refactoring.
+
+**Fixes**
+
+* Fixed typo.
+
+---
+
 `1.9.45`
 
 *2025-03-12*

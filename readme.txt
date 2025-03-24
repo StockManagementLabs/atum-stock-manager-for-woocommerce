@@ -7,7 +7,7 @@ Tested up to: 6.7.2
 Requires PHP: 7.4
 WC requires at least: 5.0
 WC tested up to: 9.7.1
-Stable tag: 1.9.45
+Stable tag: 1.9.46
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,27 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.46`
+
+*2025-03-24*
+
+**Features**
+
+* Added a new tool to reset the ATUM capabilities to its defaults.
+* Allow the addons to register extra capabilities.
+
+**Changes**
+
+* Do not need to secure subdirectories if the main directory is already secure.
+* Updated JS dependencies.
+* Refactoring.
+
+**Fixes**
+
+* Fixed typo.
 
 ---
 
