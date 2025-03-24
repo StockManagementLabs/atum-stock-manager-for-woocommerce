@@ -35,7 +35,7 @@ const config = {
 
         templateCSS: [
             '/** \n',
-            ' * ATUM Inventory Management for WooCommerce CSS \n',
+            ' * ATUM Inventory Management for WooCommerce - CSS \n',
             ' * @version ' + version + ' \n',
             ' * @author BE REBEL  \n',
             ' *\n',
