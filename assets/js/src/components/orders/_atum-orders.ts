@@ -16,7 +16,6 @@ import Swal from 'sweetalert2-neutral';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 import EnhancedSelect from '../_enhanced-select';
-import { Context } from '@popperjs/core';
 
 export default class AtumOrders {
 
@@ -67,10 +66,10 @@ export default class AtumOrders {
         // Bind items' events.
         this.$container
 
-        // Qty.
+            // Qty.
             .on( 'change', 'input.quantity', ( evt: JQueryEventObject ) => this.quantityChanged( evt ) )
 
-        // Subtotal/total.
+            // Subtotal/total.
             .on( 'keyup change', '.split-input :input', ( evt: JQueryEventObject ) => {
 
                 const $input: JQuery    = $( evt.currentTarget ),
