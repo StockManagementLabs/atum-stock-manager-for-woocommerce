@@ -18,7 +18,7 @@ import gulpSass from 'gulp-sass';
 const sass = gulpSass( dartSass );
 
 // Plugin version
-const version = '1.9.45',
+const version = '1.9.46',
       curDate = new Date();
 
 // Global config
