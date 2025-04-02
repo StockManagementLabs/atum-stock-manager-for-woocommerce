@@ -90,6 +90,11 @@ class Bootstrap {
 				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPPED );
 			}
 
+			// Make sure the capabilities are registered.
+			if ( is_super_admin() && ! AtumCapabilities::current_user_can( 'view_admin_menu' ) ) {
+				AtumCapabilities::register_atum_capabilities();
+			}
+
 			// The ATUM comments must be instantiated before checking dependencies to ensure that are not displayed
 			// in queries when any dependency is not met.
 			AtumComments::get_instance();
