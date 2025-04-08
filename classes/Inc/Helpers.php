@@ -22,7 +22,6 @@ use Atum\Components\AtumColors;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Components\AtumStockDecimals;
-use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Models\Interfaces\AtumProductInterface;
@@ -3574,7 +3573,7 @@ final class Helpers {
 
 		global $wpdb;
 
-		$atum_data_table = $wpdb->prefix . AtumGlobals::ATUM_PRODUCT_DATA_TABLE;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$post_types      = $include_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 		$where_clauses   = [ "posts.post_type IN ('" . implode( "','", $post_types ) . "')" ];
 		$limit_query     = '';
