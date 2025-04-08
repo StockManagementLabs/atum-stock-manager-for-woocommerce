@@ -22,7 +22,6 @@ use Atum\Components\AtumColors;
 use Atum\Components\AtumOrders\AtumOrderPostType;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Components\AtumStockDecimals;
-use Atum\Inc\Globals as AtumGlobals;
 use Atum\InventoryLogs\InventoryLogs;
 use Atum\InventoryLogs\Models\Log;
 use Atum\Models\Interfaces\AtumProductInterface;
@@ -2922,13 +2921,19 @@ final class Helpers {
 	 * @since 1.5.8
 	 *
 	 * @param AtumProductInterface $product    The product to check. It must be an ATUM product.
-	 * @param string               $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param string               $time_frame Optional. A time string compatible with strtotime. By default, is 1 day in the past.
 	 *
 	 * @return bool
 	 */
 	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
 
+		// Disable the realtime queries for calculated props when the cron is enabled.
+		if ( 'yes' === self::get_option( 'calc_prop_cron', 'no' ) ) {
+			return FALSE;
+		}
+
 		return is_null( $product->get_sales_update_date() ) || strtotime( $product->get_sales_update_date() ) <= strtotime( $time_frame );
+
 	}
 
 	/**
@@ -3568,7 +3573,7 @@ final class Helpers {
 
 		global $wpdb;
 
-		$atum_data_table = $wpdb->prefix . AtumGlobals::ATUM_PRODUCT_DATA_TABLE;
+		$atum_data_table = $wpdb->prefix . Globals::ATUM_PRODUCT_DATA_TABLE;
 		$post_types      = $include_variations ? [ 'product', 'product_variation' ] : [ 'product' ];
 		$where_clauses   = [ "posts.post_type IN ('" . implode( "','", $post_types ) . "')" ];
 		$limit_query     = '';

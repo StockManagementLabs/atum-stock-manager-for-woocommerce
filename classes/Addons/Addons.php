@@ -863,6 +863,10 @@ final class Addons {
 			'redirection' => 1,
 			'user-agent'  => Helpers::get_atum_user_agent(),
 			'sslverify'   => FALSE,
+			'headers'     => array(
+				'Content-Type' => 'application/json',
+				'Accept'       => 'application/json',
+			),
 		);
 
 		$function = 'wp_remote_get';
