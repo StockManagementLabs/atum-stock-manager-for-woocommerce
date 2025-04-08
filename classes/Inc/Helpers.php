@@ -2922,13 +2922,19 @@ final class Helpers {
 	 * @since 1.5.8
 	 *
 	 * @param AtumProductInterface $product    The product to check. It must be an ATUM product.
-	 * @param string               $time_frame Optional. A time string compatible with strtotime. By default is 1 day in the past.
+	 * @param string               $time_frame Optional. A time string compatible with strtotime. By default, is 1 day in the past.
 	 *
 	 * @return bool
 	 */
 	public static function is_product_data_outdated( $product, $time_frame = '-1 day' ) {
 
+		// Disable the realtime queries for calculated props when the cron is enabled.
+		if ( 'yes' === self::get_option( 'calc_prop_cron', 'no' ) ) {
+			return FALSE;
+		}
+
 		return is_null( $product->get_sales_update_date() ) || strtotime( $product->get_sales_update_date() ) <= strtotime( $time_frame );
+
 	}
 
 	/**
