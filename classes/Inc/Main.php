@@ -14,10 +14,6 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
-/**
-* For WC navigation system.
-* use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
-*/
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
 use Atum\Cli\AtumCli;

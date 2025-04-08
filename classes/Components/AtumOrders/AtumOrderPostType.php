@@ -14,11 +14,6 @@ namespace Atum\Components\AtumOrders;
 
 defined( 'ABSPATH' ) || die;
 
-/**
- * // For WC navigation system.
- * use Automattic\WooCommerce\Admin\Features\Navigation\Screen;
- * use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
- */
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
