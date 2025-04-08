@@ -208,14 +208,14 @@ class Upgrade {
 			$this->migrate_supplier_description();
 		}
 
-		// ** version 1.9.44.2 ** Some extra capabilities were added.
-		if ( version_compare( $db_version, '1.9.44.2', '<' ) ) {
-			$this->register_new_atum_capabilities();
-		}
-
 		// ** version 1.9.44.3 ** Secure ATUM's directory.
 		if ( version_compare( $db_version, '1.9.44.3', '<' ) ) {
 			$this->secure_atum_directory();
+		}
+
+		// ** version 1.9.47 ** Some extra capabilities were added.
+		if ( version_compare( $db_version, '1.9.47', '<' ) ) {
+			$this->register_new_atum_capabilities();
 		}
 
 		/**********************
@@ -1318,15 +1318,6 @@ class Upgrade {
 	}
 
 	/**
-	 * Register new ATUM capabilities to the admin roles.
-	 *
-	 * @since 1.9.44.2
-	 */
-	private function register_new_atum_capabilities() {
-		AtumCapabilities::register_atum_capabilities();
-	}
-
-	/**
 	 * Secure ATUM directory.
 	 *
 	 * @since 1.9.44.3
@@ -1345,6 +1336,15 @@ class Upgrade {
 			}
 		}
 
+	}
+
+	/**
+	 * Register new ATUM capabilities to the admin roles.
+	 *
+	 * @since 1.9.47
+	 */
+	private function register_new_atum_capabilities() {
+		AtumCapabilities::register_atum_capabilities();
 	}
 
 }

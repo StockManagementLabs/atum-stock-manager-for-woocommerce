@@ -95,7 +95,7 @@ abstract class AddonBootstrap {
 	 */
 	public function register_addon_capabilities( $capabilities ) {
 		if ( ! empty( static::$capabilities ) ) {
-			$capabilities[] = array_merge( $capabilities, static::$capabilities );
+			$capabilities = array_merge( $capabilities, static::$capabilities );
 		}
 
 		return $capabilities;
