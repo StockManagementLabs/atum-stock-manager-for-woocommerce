@@ -11,8 +11,11 @@
 		"_attachments"
 	],
 	"properties" : {
+		"itemType" : {
+			"type" : "string"
+		},
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"_id" : {
 			"type" : "string"

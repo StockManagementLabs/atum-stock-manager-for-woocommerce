@@ -13,7 +13,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"name" : {
 			"type" : "string"
@@ -29,6 +29,15 @@
 		},
 		"hasArchives" : {
 			"type" : "boolean"
+		},
+		"deleted" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string"
 		},
 		"terms" : {
 			"type" : "array",
@@ -51,7 +60,8 @@
 						"type" : "string"
 					},
 					"description" : {
-						"type" : "string"
+						"type" : "string",
+						"nullable" : true
 					},
 					"count" : {
 						"type" : "number"
@@ -59,8 +69,12 @@
 					"menuOrder" : {
 						"type" : "number"
 					},
+					"deleted" : {
+						"type" : "boolean"
+					},
 					"bom" : {
 						"type" : "object",
+						"nullable" : true,
 						"properties" : {
 							"id" : {
 								"type" : "string"
@@ -80,13 +94,22 @@
 						}
 					},
 					"value" : {
-						"type" : "number"
+						"type" : "number",
+						"nullable" : true
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					},
+					"_rev" : {
+						"type" : "string",
+						"nullable" : true
 					}
 				}
 			}
 		},
 		"bom" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "string"
@@ -109,7 +132,8 @@
 			"type" : "string"
 		},
 		"_rev" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"_deleted" : {
 			"type" : "boolean"

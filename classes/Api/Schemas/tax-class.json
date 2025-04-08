@@ -27,8 +27,15 @@
 		"_deleted" : {
 			"type" : "boolean"
 		},
+		"deleted" : {
+			"type" : "boolean"
+		},
 		"conflict" : {
 			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string",
+			"const": "tax-class"
 		},
 		"_meta" : {
 			"type" : "object",

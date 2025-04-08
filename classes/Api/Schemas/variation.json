@@ -14,6 +14,10 @@
 		"id"                  : {
 			"type" : "number"
 		},
+		"uid"                 : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"parent"              : {
 			"type"       : "object",
 			"properties" : {
@@ -21,21 +25,25 @@
 					"type" : "number"
 				},
 				"_id" : {
-					"type" : "string"
+					"type" : "string",
+					"nullable" : true
 				}
 			}
 		},
 		"parentType"          : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"parentName"          : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"parentSku"           : {
 			"type" : "string"
 		},
 		"parentTaxClass"      : {
-			"type"       : "object",
+			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id"   : {
 					"type" : "string"
@@ -48,14 +56,42 @@
 		"name"                : {
 			"type" : "string"
 		},
+		"slug"                : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"type"                : {
+			"type" : "string"
+		},
+		"itemType"            : {
 			"type" : "string"
 		},
 		"default"             : {
 			"type" : "boolean"
 		},
+		"dateCreated"         : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateCreatedGMT"      : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateModified"        : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateModifiedGMT"     : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
 		"image"               : {
-			"type"       : "object",
+			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id"    : {
 					"type" : "number"
@@ -86,15 +122,18 @@
 								"type" : "string"
 							},
 							"_id"  : {
-								"type" : "string"
+								"type" : "string",
+			"nullable" : true
 							},
 							"id"   : {
-								"type" : "number"
+								"type" : "string",
+								"nullable" : true
 							}
 						}
 					},
 					"_id"    : {
-						"type" : "string"
+						"type" : "string",
+			"nullable" : true
 					},
 					"id"     : {
 						"type" : "number"
@@ -118,35 +157,42 @@
 			"type" : "string"
 		},
 		"barcode"             : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"regularPrice"        : {
 			"type" : "number"
 		},
 		"salePrice"           : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"dateOnSaleFrom"      : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleFromGMT"   : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleTo"        : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleToGMT"     : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"purchasePrice"       : {
 			"type" : "number"
 		},
 		"supplier"            : {
-			"type"       : "object",
+			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id"   : {
 					"type" : "number"
@@ -159,6 +205,10 @@
 		"supplierSku"         : {
 			"type" : "string"
 		},
+		"stock"               : {
+			"type" : "number",
+			"nullable" : true
+		},
 		"stockQuantity"       : {
 			"type" : "number"
 		},
@@ -169,17 +219,24 @@
 			"type" : "boolean"
 		},
 		"outStockThreshold"   : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
+		},
+		"lowStockThreshold"   : {
+			"type" : "number",
+			"nullable" : true
 		},
 		"stockStatus"         : {
 			"type" : "string"
 		},
 		"outStockDate"        : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"outStockDateGMT"     : {
-			"type"   : "string",
+			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"weight"              : {
@@ -200,7 +257,8 @@
 			}
 		},
 		"shippingClass"       : {
-			"type"       : "object",
+			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id"   : {
 					"type" : "string"
@@ -211,7 +269,8 @@
 			}
 		},
 		"taxClass"            : {
-			"type"       : "object",
+			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id"   : {
 					"type" : "string"
@@ -245,16 +304,117 @@
 			}
 		},
 		"downloadLimit"       : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"downloadExpiry"      : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"atumControlled"      : {
 			"type" : "boolean"
 		},
 		"menuOrder"           : {
 			"type" : "number"
+		},
+		"miInventories"       : {
+			"type" : "array"
+		},
+		"inventoryStock"      : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"inventoryMainStock"  : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"multiInventory"      : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"inventorySortingMode": {
+			"type" : "string",
+			"nullable" : true
+		},
+		"inventoryIteration"  : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"expirableInventories": {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"pricePerInventory"   : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"selectableInventories": {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"inventorySelectionMode": {
+			"type" : "string",
+			"nullable" : true
+		},
+		"calcBackOrders"      : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"calcStockIndicator"  : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"calcWillLast"        : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"lowStockAmount"      : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"customerReturns"     : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"warehouseDamage"     : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"inboundStock"        : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"lostInPost"          : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"lostSales"           : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"otherLogs"           : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"outStockDays"        : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"reservedStock"       : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"salesLastDays"       : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"soldToday"           : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"stockOnHold"         : {
+			"type" : "number",
+			"nullable" : true
 		},
 		"atumLocations"       : {
 			"type"  : "array",
@@ -374,7 +534,61 @@
 				}
 			}
 		},
+		"linkedBoms"          : {
+			"type" : "array"
+		},
+		"syncPurchasePrice"   : {
+			"type" : "boolean"
+		},
+		"isBom"               : {
+			"type" : "boolean"
+		},
+		"isUsedBom"           : {
+			"type" : "boolean"
+		},
 		"trash"               : {
+			"type" : "boolean"
+		},
+		"minimumThreshold"    : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"bomSellable"         : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"availableToPurchase" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"calculatedStock"     : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"bomStock"            : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"sellingPriority"     : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"metaData"            : {
+			"type"  : "array",
+			"items" : {
+				"type"       : "object",
+				"properties" : {
+					"key"   : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : ["string", "object", "array", "number", "boolean"],
+						"nullable" : true
+					}
+				}
+			}
+		},
+		"deleted"             : {
 			"type" : "boolean"
 		},
 		"_id"                 : {
@@ -389,29 +603,6 @@
 		},
 		"conflict"            : {
 			"type" : "boolean"
-		},
-		"minimumThreshold"    : {
-			"type" : "number"
-		},
-		"availableToPurchase" : {
-			"type" : "number"
-		},
-		"sellingPriority"     : {
-			"type" : "number"
-		},
-		"metaData"            : {
-			"type"  : "array",
-			"items" : {
-				"type"       : "object",
-				"properties" : {
-					"key"   : {
-						"type" : "string"
-					},
-					"value" : {
-						"type" : "string"
-					}
-				}
-			}
 		},
 		"_meta"               : {
 			"type"       : "object",

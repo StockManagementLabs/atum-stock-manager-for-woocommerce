@@ -12,16 +12,45 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"_id" : {
 			"type" : "string"
+		},
+		"slug": {
+			"type": "string"
+		},
+		"uid": {
+			"type" : "string",
+			"nullable" : true
+		},
+		"itemType": {
+			"type": "string"
 		},
 		"code" : {
 			"type" : "string"
 		},
 		"amount" : {
 			"type" : "number"
+		},
+		"status": {
+			"type": "string"
+		},
+		"dateCreated": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateCreatedGMT": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateModified": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"dateModifiedGMT": {
+			"type": "string",
+			"format": "date-time"
 		},
 		"discountType" : {
 			"type" : "string",
@@ -32,14 +61,17 @@
 			]
 		},
 		"description" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"dateExpires" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateExpiresGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"usageCount" : {
@@ -77,13 +109,16 @@
 			}
 		},
 		"usageLimit" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"usageLimitPerUser" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"usageLimitPerItems" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"freeShipping" : {
 			"type" : "boolean"

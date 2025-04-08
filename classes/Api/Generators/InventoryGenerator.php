@@ -89,6 +89,15 @@ class InventoryGenerator extends GeneratorBase {
 			'otherLogs'         => (float) ( $inventory['other_logs'] ?? 0 ),
 			'outStockDays'      => (float) ( $inventory['out_stock_days'] ?? 0 ),
 			'lostSales'         => (float) ( $inventory['lost_sales'] ?? 0 ),
+			'calculatedStock'   => NULL,
+			'expiredStock'      => $inventory['meta_data']['expired_stock'] ?? NULL,
+			'shippingClass'     => NULL,
+			'supplierSku'       => $inventory['meta_data']['supplier_sku'] ?? '',
+			'categories'        => [],
+			'itemType'          => 'inventory',
+			'parentSku'         => NULL,
+			'parentTaxClass'    => NULL,
+			'atumControlled'    => TRUE,
 		];
 
 		// Handle dates with proper format.
@@ -122,20 +131,15 @@ class InventoryGenerator extends GeneratorBase {
 
 		foreach ( array_merge( $data_dates, $meta_data_dates ) as $schema_key => $source_key ) {
 
-			if ( ! empty( $inventory[ $source_key ] ) ) {
-
-				// It is supposed that all the inventory dates are stored in GMT.
-				if ( array_key_exists( $schema_key, $meta_data_dates ) ) {
-					$prepared_data[ $schema_key ]      = $inventory['meta_data'][ $source_key ];
-					$prepared_data["{$schema_key}GMT"] = $inventory['meta_data'][ $source_key ];
-				}
-				else {
-					$prepared_data[ $schema_key ]      = $inventory[ $source_key ];
-					$prepared_data["{$schema_key}GMT"] = $inventory[ $source_key ];
-				}
-
+			if ( array_key_exists( $schema_key, $meta_data_dates ) ) {
+				$date_value = isset( $inventory['meta_data'][ $source_key ] ) ? $inventory['meta_data'][ $source_key ] : NULL;
+			} 
+			else {
+				$date_value = isset( $inventory[ $source_key ] ) ? $inventory[ $source_key ] : NULL;
 			}
 
+			$prepared_data[ $schema_key ]      = $date_value;
+			$prepared_data["{$schema_key}GMT"] = $date_value;
 		}
 
 	}

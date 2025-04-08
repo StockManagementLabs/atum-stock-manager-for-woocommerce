@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"country" : {
 			"type" : "string"
@@ -41,8 +41,20 @@
 		"shipping" : {
 			"type" : "boolean"
 		},
+		"taxClass" : {
+			"type" : "object",
+			"properties": {
+				"slug": {
+					"type": "string"
+				},
+				"_id": {
+					"type": "string"
+				}
+			}
+		},
 		"class" : {
-			"type" : "string"
+			"type" : "string",
+			"deprecated": true
 		},
 		"_id" : {
 			"type" : "string"

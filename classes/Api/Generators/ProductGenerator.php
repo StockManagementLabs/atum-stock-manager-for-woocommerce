@@ -33,48 +33,114 @@ class ProductGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $product ): array {
 
-		return array_merge( $this->get_base_fields(), [
+		$base_fields = $this->get_base_fields();
+		
+		return array_merge( $base_fields, [
 			// Product specific fields.
-			'id'                => (int) $product['id'],
-			'name'              => $product['name'],
-			'slug'              => $product['slug'],
-			'type'              => $product['type'],
-			'status'            => $product['status'],
-			'description'       => $product['description'],
-			'sku'               => $product['sku'],
-			'price'             => (float) $product['price'],
-			'regularPrice'      => (float) $product['regular_price'],
-			'salePrice'         => (float) ( $product['sale_price'] ?: 0 ),
-			'featured'          => (bool) $product['featured'],
-			'catalogVisibility' => $product['catalog_visibility'],
-			'virtual'           => (bool) $product['virtual'],
-			'downloadable'      => (bool) $product['downloadable'],
-			'manageStock'       => (bool) $product['manage_stock'],
-			'stockQuantity'     => $product['stock_quantity'] ? (int) $product['stock_quantity'] : NULL,
-			'stockStatus'       => $product['stock_status'],
-			'parent'            => $this->prepare_ids( $product['parent'] ?? NULL ),
-			'parentSku'         => $product['parent_sku'] ?? '',
-
-			// Date fields (required by schema).
-			'dateCreated'       => $product['date_created'] ?? '',
-			'dateCreatedGMT'    => $product['date_created_gmt'] ?? '',
-			'dateModified'      => $product['date_modified'] ?? '',
-			'dateModifiedGMT'   => $product['date_modified_gmt'] ?? '',
+			'id'                  => (string) $product['id'],
+			'uid'                 => $product['uid'] ?? NULL,
+			'itemType'            => $product['itemType'] ?? 'product',
+			'name'                => $product['name'],
+			'slug'                => $product['slug'],
+			'permalink'           => $product['permalink'] ?? NULL,
+			'type'                => $product['type'],
+			'status'              => $product['status'],
+			'description'         => $product['description'],
+			'shortDescription'    => $product['short_description'] ?? NULL,
+			'sku'                 => $product['sku'],
+			'barcode'             => $product['barcode'] ?? NULL,
+			'price'               => $product['price'] !== NULL ? (float) $product['price'] : NULL,
+			'regularPrice'        => (float) $product['regular_price'],
+			'salePrice'           => $product['sale_price'] ? (float) $product['sale_price'] : NULL,
+			'purchasePrice'       => (float) ( $product['purchase_price'] ?? 0 ),
+			'featured'            => (bool) $product['featured'],
+			'catalogVisibility'   => $product['catalog_visibility'],
+			'virtual'             => (bool) $product['virtual'],
+			'downloadable'        => (bool) $product['downloadable'],
+			'externalUrl'         => $product['external_url'] ?? NULL,
+			'buttonText'          => $product['button_text'] ?? NULL,
+			'manageStock'         => (bool) $product['manage_stock'],
+			'stockQuantity'       => $product['stock_quantity'] ? (int) $product['stock_quantity'] : NULL,
+			'stock'               => $product['stock'] ?? NULL,
+			'stockStatus'         => $product['stock_status'],
+			'backorders'          => $product['backorders'] ?? 'no',
+			'lowStockThreshold'   => $product['low_stock_threshold'] ?? '',
+			'lowStockAmount'      => $product['low_stock_amount'] ?? NULL,
+			'outStockThreshold'   => $product['out_stock_threshold'] ?? NULL,
+			'outStockDate'        => $product['out_stock_date'] ?? NULL,
+			'outStockDateGMT'     => $product['out_stock_date_gmt'] ?? NULL,
+			'outStockDays'        => $product['out_stock_days'] ?? NULL,
+			'parent'              => $this->prepare_ids( $product['parent'] ?? NULL ),
+			'parentSku'           => $product['parent_sku'] ?? '',
+			'soldIndividually'    => (bool) ( $product['sold_individually'] ?? FALSE ),
+			'weight'              => $product['weight'] ?? NULL,
+			'menuOrder'           => (int) ( $product['menu_order'] ?? 0 ),
+			'reviewsAllowed'      => (bool) ( $product['reviews_allowed'] ?? FALSE ),
+			'purchaseNote'        => $product['purchase_note'] ?? '',
+			
+			// Date fields 
+			'dateCreated'         => $product['date_created'] ?? NULL,
+			'dateCreatedGMT'      => $product['date_created_gmt'] ?? NULL,
+			'dateModified'        => $product['date_modified'] ?? NULL,
+			'dateModifiedGMT'     => $product['date_modified_gmt'] ?? NULL,
+			'dateOnSaleFrom'      => $product['date_on_sale_from'] ?? NULL,
+			'dateOnSaleFromGMT'   => $product['date_on_sale_from_gmt'] ?? NULL,
+			'dateOnSaleTo'        => $product['date_on_sale_to'] ?? NULL,
+			'dateOnSaleToGMT'     => $product['date_on_sale_to_gmt'] ?? NULL,
 
 			// Arrays and objects.
-			'categories'        => $this->prepare_taxonomies( $product['categories'] ),
-			'tags'              => $this->prepare_taxonomies( $product['tags'] ),
-			'attributes'        => $this->prepare_attributes( $product['attributes'] ),
-			'image'             => $this->prepare_image( $product['images'][0] ?? NULL ),
-			'gallery'           => $this->prepare_gallery( $product['images'] ),
-			'dimensions'        => $this->prepare_dimensions( $product['dimensions'] ),
-			'metaData'          => $this->prepare_meta_data( $product['meta_data'] ),
-			'atumLocations'     => $this->prepare_taxonomies( $product['atum_locations'] ),
+			'categories'          => $this->prepare_taxonomies( $product['categories'] ?? [] ),
+			'tags'                => $this->prepare_taxonomies( $product['tags'] ?? [] ),
+			'attributes'          => $this->prepare_attributes( $product['attributes'] ?? [] ),
+			'defaultAttributes'   => $product['default_attributes'] ?? [],
+			'variations'          => $product['variations'] ?? [],
+			'image'               => $this->prepare_image( $product['images'][0] ?? NULL ),
+			'gallery'             => $this->prepare_gallery( $product['images'] ?? [] ),
+			'dimensions'          => $this->prepare_dimensions( $product['dimensions'] ?? ['length' => NULL, 'width' => NULL, 'height' => NULL] ),
+			'metaData'            => $this->prepare_meta_data( $product['meta_data'] ?? [] ),
+			'atumLocations'       => $this->prepare_taxonomies( $product['atum_locations'] ?? [] ),
+			'downloads'           => $product['downloads'] ?? [],
+			'downloadLimit'       => $product['download_limit'] ?? NULL,
+			'downloadExpiry'      => $product['download_expiry'] ?? NULL,
+			'shippingClass'       => $product['shipping_class'] ?? NULL,
+			'taxClass'            => $product['tax_class'] ?? ['slug' => 'standard', '_id' => '', 'itemType' => 'tax-class'],
+			'groupedProducts'     => $product['grouped_products'] ?? [],
+			'upsells'             => $product['upsells'] ?? [],
+			'crossSells'          => $product['cross_sells'] ?? [],
+			'supplier'            => $product['supplier'] ?? NULL,
+			'supplierSku'         => $product['supplier_sku'] ?? NULL,
 
 			// ATUM specific fields.
-			'hasLocation'       => (bool) $product['has_location'],
-			'atumControlled'    => (bool) $product['atum_controlled'],
-			'barcode'           => $product['barcode'] ?? '',
+			'hasLocation'         => isset($product['has_location']) ? (bool) $product['has_location'] : NULL,
+			'atumControlled'      => (bool) ( $product['atum_controlled'] ?? FALSE ),
+			'miInventories'       => $product['mi_inventories'] ?? [],
+			'inventoryStock'      => $product['inventory_stock'] ?? NULL,
+			'inventoryMainStock'  => $product['inventory_main_stock'] ?? NULL,
+			'multiInventory'      => $product['multi_inventory'] ?? NULL,
+			'linkedBoms'          => $product['linked_boms'] ?? [],
+			'isBom'               => (bool) ( $product['is_bom'] ?? FALSE ),
+			'isUsedBom'           => (bool) ( $product['is_used_bom'] ?? FALSE ),
+			'calculatedStock'     => $product['calculated_stock'] ?? NULL,
+			'bomStock'            => $product['bom_stock'] ?? NULL,
+			'syncPurchasePrice'   => (bool) ( $product['sync_purchase_price'] ?? FALSE ),
+			'calcBackOrders'      => (int) ( $product['calc_back_orders'] ?? 0 ),
+			'calcStockIndicator'  => $product['calc_stock_indicator'] ?? NULL,
+			'calcWillLast'        => $product['calc_will_last'] ?? NULL,
+			'customerReturns'     => (int) ( $product['customer_returns'] ?? 0 ),
+			'warehouseDamage'     => (int) ( $product['warehouse_damage'] ?? 0 ),
+			'inboundStock'        => $product['inbound_stock'] ?? NULL,
+			'lostInPost'          => (int) ( $product['lost_in_post'] ?? 0 ),
+			'lostSales'           => $product['lost_sales'] ?? NULL,
+			'otherLogs'           => (int) ( $product['other_logs'] ?? 0 ),
+			'reservedStock'       => (int) ( $product['reserved_stock'] ?? 0 ),
+			'salesLastDays'       => $product['sales_last_days'] ?? NULL,
+			'soldToday'           => $product['sold_today'] ?? NULL,
+			'stockOnHold'         => $product['stock_on_hold'] ?? NULL,
+			
+			// Required by schema
+			'trash'               => FALSE,
+			'conflict'            => FALSE,
+			'deleted'             => FALSE,
 		] );
 
 	}
@@ -96,6 +162,7 @@ class ProductGenerator extends GeneratorBase {
 				'id'   => (int) $tax['id'],
 				'name' => $tax['name'],
 				'slug' => $tax['slug'],
+				'_id'  => NULL,
 			];
 
 		}, $taxonomies );
@@ -151,9 +218,19 @@ class ProductGenerator extends GeneratorBase {
 		}
 
 		return [
-			'id'  => (int) $image['id'],
-			'src' => $image['src'],
-			'alt' => $image['alt'] ?? '',
+			'id'        => (int) $image['id'],
+			'src'       => $image['src'],
+			'alt'       => $image['alt'] ?? '',
+			'_id'       => NULL,
+			'uid'       => NULL,
+			'file'      => NULL,
+			'name'      => $image['name'] ?? '',
+			'_deleted'  => NULL,
+			'_rev'      => NULL,
+			'conflict'  => FALSE,
+			'deleted'   => FALSE,
+			'itemType'  => 'media',
+			'trash'     => FALSE,
 		];
 
 	}
@@ -188,9 +265,9 @@ class ProductGenerator extends GeneratorBase {
 	private function prepare_dimensions( array $dimensions ): array {
 
 		return [
-			'length' => (string) $dimensions['length'],
-			'width'  => (string) $dimensions['width'],
-			'height' => (string) $dimensions['height'],
+			'length' => $dimensions['length'] ?? NULL,
+			'width'  => $dimensions['width'] ?? NULL,
+			'height' => $dimensions['height'] ?? NULL,
 		];
 	}
 

@@ -34,11 +34,12 @@ class PaymentMethodGenerator extends GeneratorBase {
 	protected function prepare_data( array $payment_method ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'           => (int) $payment_method['id'],
-			'slug'         => sanitize_title( $payment_method['method_title'] ),
-			'name'         => $payment_method['method_title'],
-			'enabled'      => (bool) $payment_method['enabled'],
-			'default'      => FALSE,
+			'id'           => (string) $payment_method['id'],
+			'slug'         => isset( $payment_method['method_title'] ) ? sanitize_title( $payment_method['method_title'] ) : null,
+			'name'         => isset( $payment_method['method_title'] ) ? $payment_method['method_title'] : null,
+			'enabled'      => isset( $payment_method['enabled'] ) ? (bool) $payment_method['enabled'] : null,
+			'default'      => isset( $payment_method['default'] ) ? (bool) $payment_method['default'] : FALSE,
+			'itemType'     => 'payment-method',
 		] );
 
 	}

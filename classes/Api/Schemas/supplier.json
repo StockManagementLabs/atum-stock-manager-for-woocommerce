@@ -13,16 +13,23 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"name" : {
 			"type" : "string"
+		},
+		"description" : {
+			"type" : "string",
+			"nullable" : true
 		},
 		"slug" : {
 			"type" : "string"
 		},
 		"status" : {
 			"type" : "string"
+		},
+		"trash" : {
+			"type" : "boolean"
 		},
 		"dateCreated" : {
 			"type" : "string",
@@ -40,14 +47,86 @@
 			"type" : "string",
 			"format" : "date-time"
 		},
-		"permalink" : {
-			"type" : "string"
+		"address" : {
+			"type" : "string",
+			"nullable" : true
 		},
-		"type" : {
+		"assignedTo" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"city" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"country" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"fax" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"generalEmail" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"orderingEmail" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"orderingUrl" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"phone" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"state" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"taxNumber" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"website" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"zipCode" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"location" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"currency" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"barcode" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"code" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"deleted" : {
+			"type" : "boolean"
+		},
+		"itemType" : {
 			"type" : "string"
 		},
 		"image" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"

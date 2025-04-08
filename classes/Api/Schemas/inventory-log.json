@@ -14,6 +14,21 @@
 		"id" : {
 			"type" : "number"
 		},
+		"uid" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"itemType" : {
+			"type" : "string"
+		},
+		"name" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"slug" : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"type" : {
 			"type" : "string"
 		},
@@ -35,33 +50,41 @@
 		},
 		"dateReservation" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateReservationGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateReturn" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateReturnGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateDamage" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateDamageGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"shippingCompany" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"customName" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"status" : {
 			"type" : "string"
@@ -71,17 +94,23 @@
 		},
 		"order" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"
 				},
 				"_id" : {
+					"type" : "string",
+					"nullable" : true
+				},
+				"itemType" : {
 					"type" : "string"
 				}
 			}
 		},
 		"description" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"lineItems" : {
 			"type" : "array",
@@ -97,14 +126,93 @@
 					"quantity" : {
 						"type" : "number"
 					},
+					"product" : {
+						"type" : "object",
+						"properties" : {
+							"id" : {
+								"type" : "number"
+							},
+							"_id" : {
+								"type" : "string",
+								"nullable" : true
+							}
+						}
+					},
+					"variation" : {
+						"type" : "object",
+						"nullable" : true
+					},
+					"inventories" : {
+						"type" : "array"
+					},
+					"bomItems" : {
+						"type" : "array"
+					},
+					"taxClass" : {
+						"type" : "object",
+						"properties" : {
+							"slug" : {
+								"type" : "string"
+							},
+							"_id" : {
+								"type" : "string"
+							},
+							"itemType" : {
+								"type" : "string"
+							}
+						}
+					},
 					"subtotal" : {
+						"type" : "number"
+					},
+					"subtotalTax" : {
 						"type" : "number"
 					},
 					"total" : {
 						"type" : "number"
 					},
+					"totalTax" : {
+						"type" : "number"
+					},
+					"taxes" : {
+						"type" : "array"
+					},
+					"price" : {
+						"type" : "number"
+					},
 					"sku" : {
 						"type" : "string"
+					},
+					"stock" : {
+						"type" : "object",
+						"properties" : {
+							"action" : {
+								"type" : "string"
+							},
+							"changedStock" : {
+								"type" : "boolean"
+							},
+							"quantity" : {
+								"type" : "number"
+							}
+						}
+					},
+					"metaData" : {
+						"type" : "array"
+					},
+					"_id" : {
+						"type" : "string",
+						"nullable" : true
+					},
+					"deleted" : {
+						"type" : "boolean"
+					},
+					"_deleted" : {
+						"type" : "boolean"
+					},
+					"parent" : {
+						"type" : "object",
+						"nullable" : true
 					}
 				}
 			}
@@ -213,7 +321,16 @@
 		"shippingTax" : {
 			"type" : "number"
 		},
+		"feeTotal" : {
+			"type" : "number"
+		},
+		"feeTax" : {
+			"type" : "number"
+		},
 		"trash" : {
+			"type" : "boolean"
+		},
+		"deleted" : {
 			"type" : "boolean"
 		},
 		"_id" : {

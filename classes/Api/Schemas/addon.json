@@ -27,12 +27,69 @@
 			"type" : "string"
 		},
 		"version" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"active" : {
 			"type" : "boolean"
 		},
 		"installed" : {
+			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string"
+		},
+		"deleted" : {
+			"type" : "boolean"
+		},
+		"enabled" : {
+			"type" : "boolean"
+		},
+		"valid" : {
+			"type" : "boolean"
+		},
+		"key" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"networkActivated" : {
+			"type" : "boolean"
+		},
+		"versionLatest" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"versionRequired" : {
+			"type" : "string"
+		},
+		"image" : {
+			"type" : "string"
+		},
+		"plugin" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"tags" : {
+			"type" : "array",
+			"items" : {
+				"type" : "string"
+			}
+		},
+		"url" : {
+			"type" : "string"
+		},
+		"authorName" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"authorUrl" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"status" : {
+			"type" : "string"
+		},
+		"conflict" : {
 			"type" : "boolean"
 		},
 		"_id" : {
@@ -43,9 +100,6 @@
 			"minLength" : 1
 		},
 		"_deleted" : {
-			"type" : "boolean"
-		},
-		"conflict" : {
 			"type" : "boolean"
 		},
 		"_meta" : {
