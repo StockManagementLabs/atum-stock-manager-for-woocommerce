@@ -81,7 +81,7 @@ class Suppliers {
 	private function __construct() {
 
 		// Register the Supplier post type.
-		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_post_type' ), 5 );  // Using the same priority as WooCommerce.
 
 		// Global hooks.
 		if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {

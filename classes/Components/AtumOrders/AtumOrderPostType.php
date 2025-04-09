@@ -85,7 +85,7 @@ abstract class AtumOrderPostType {
 		}
 
 		// Register the post type.
-		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_post_type' ), 5 ); // Using the same priority as WooCommerce.
 		$post_type = static::POST_TYPE;
 
 		if ( is_admin() ) {
