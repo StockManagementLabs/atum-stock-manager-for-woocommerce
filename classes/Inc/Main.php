@@ -14,10 +14,6 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
-/**
-* For WC navigation system.
-* use Automattic\WooCommerce\Admin\Features\Navigation\Menu;
-*/
 use Atum\Addons\Addons;
 use Atum\Api\AtumApi;
 use Atum\Cli\AtumCli;
@@ -129,20 +125,8 @@ class Main {
 		// Load front stuff (priority must be higher than 10).
 		add_action( 'init', array( $this, 'init' ), 11 );
 
-		// These filters need to be registered early.
-		add_action( 'setup_theme', function() {
-
-			// Allow authenticating some WP API's endpoints using the WC API keys.
-			add_filter( 'woocommerce_rest_is_request_to_rest_api', array( $this, 'bypass_wp_endpoints_with_wc_keys' ) );
-
-			// Fix for authenticating with application passwords on ATUM API endpoints.
-			add_filter( 'application_password_is_api_request', array( $this, 'check_application_password_api_request' ) );
-
-		}, 1 );
-
 		// Load ATUM modules.
-		// TODO: PERHAPS WE SHOULD USE A DIFFERENT HOOK FOR THIS. WHEN WC IS FULLY LOADED, FOR EXAMPLE.
-		add_action( 'setup_theme', array( $this, 'load_modules' ) );
+		$this->load_modules();
 
 	}
 
@@ -543,50 +527,6 @@ class Main {
 	}
 
 	/**
-	 * Allow authenticating some WP API's endpoints using the WC API keys, so we can upload images to products, list comments, etc.
-	 *
-	 * @since 1.7.5
-	 *
-	 * @param bool $is_request_to_rest_api
-	 *
-	 * @return bool
-	 */
-	public function bypass_wp_endpoints_with_wc_keys( $is_request_to_rest_api ) {
-
-		if ( ! $is_request_to_rest_api ) {
-
-			if ( empty( $_SERVER['REQUEST_URI'] ) ) {
-				return FALSE;
-			}
-
-			$rest_prefix = trailingslashit( rest_get_url_prefix() );
-			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
-
-			$is_request_to_rest_api = apply_filters( 'atum/api/bypass_wp_endpoints_with_wc_keys',
-				( str_contains( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
-				( str_contains( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
-			);
-
-		}
-
-		return $is_request_to_rest_api;
-
-	}
-
-	/**
-	 * Fix for authentication with application passwords over ATUM API endpoints
-	 *
-	 * @since 1.9.39
-	 *
-	 * @param bool $is_api_request
-	 *
-	 * @return bool
-	 */
-	public function check_application_password_api_request ( $is_api_request ) {
-		return $is_api_request || Helpers::is_rest_request();
-	}
-
-	/**
 	 * Getter for the main_menu_item prop
 	 *
 	 * @since 1.3.6
@@ -594,7 +534,6 @@ class Main {
 	 * @return array
 	 */
 	public static function get_main_menu_item() {
-
 		return self::$main_menu_item;
 	}
 	

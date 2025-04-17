@@ -90,6 +90,16 @@ class Bootstrap {
 				throw new AtumException( 'already_bootstrapped', __( 'ATUM plugin can only be called once', ATUM_TEXT_DOMAIN ), self::ALREADY_BOOTSTRAPPED );
 			}
 
+			/**
+			 * NOTE: the 2 hooks below must be registered before accessing any user-related function (like "current_user_can") when doing API requests.
+			 */
+
+			// Allow authenticating some WP API's endpoints using the WC API keys.
+			add_filter( 'woocommerce_rest_is_request_to_rest_api', array( $this, 'bypass_wp_endpoints_with_wc_keys' ) );
+
+			// Fix for authenticating with application passwords on ATUM API endpoints.
+			add_filter( 'application_password_is_api_request', array( $this, 'check_application_password_api_request' ) );
+
 			// Make sure the capabilities are registered.
 			if ( is_super_admin() && ! AtumCapabilities::current_user_can( 'view_admin_menu' ) ) {
 				AtumCapabilities::register_atum_capabilities();
@@ -283,6 +293,50 @@ class Bootstrap {
 
 		}
 
+	}
+
+	/**
+	 * Allow authenticating some WP API's endpoints using the WC API keys, so we can upload images to products, list comments, etc.
+	 *
+	 * @since 1.7.5
+	 *
+	 * @param bool $is_request_to_rest_api
+	 *
+	 * @return bool
+	 */
+	public function bypass_wp_endpoints_with_wc_keys( $is_request_to_rest_api ) {
+
+		if ( ! $is_request_to_rest_api ) {
+
+			if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+				return FALSE;
+			}
+
+			$rest_prefix = trailingslashit( rest_get_url_prefix() );
+			$request_uri = esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+
+			$is_request_to_rest_api = apply_filters( 'atum/api/bypass_wp_endpoints_with_wc_keys',
+				( str_contains( $request_uri, $rest_prefix . 'wp/v2/media' ) ) ||
+				( str_contains( $request_uri, $rest_prefix . 'wp/v2/comments' ) )
+			);
+
+		}
+
+		return $is_request_to_rest_api;
+
+	}
+
+	/**
+	 * Fix for authentication with application passwords over ATUM API endpoints
+	 *
+	 * @since 1.9.39
+	 *
+	 * @param bool $is_api_request
+	 *
+	 * @return bool
+	 */
+	public function check_application_password_api_request ( $is_api_request ) {
+		return $is_api_request || Helpers::is_rest_request();
 	}
 
 
