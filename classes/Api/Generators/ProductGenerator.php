@@ -116,7 +116,7 @@ class ProductGenerator extends GeneratorBase {
 			'miInventories'       => $product['mi_inventories'] ?? [],
 			'inventoryStock'      => $product['inventory_stock'] ?? NULL,
 			'inventoryMainStock'  => $product['inventory_main_stock'] ?? NULL,
-			'multiInventory'      => $product['multi_inventory'] ?? NULL,
+			'multiInventory'      => (bool) ( $product['multi_inventory'] ?? FALSE ),
 			'linkedBoms'          => $product['linked_boms'] ?? [],
 			'isBom'               => (bool) ( $product['is_bom'] ?? FALSE ),
 			'isUsedBom'           => (bool) ( $product['is_used_bom'] ?? FALSE ),

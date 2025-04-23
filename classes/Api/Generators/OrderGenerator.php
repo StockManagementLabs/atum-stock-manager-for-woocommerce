@@ -47,14 +47,14 @@ class OrderGenerator extends GeneratorBase {
 			'discountTax'      => (float) $order['discount_tax'],
 			'shippingTotal'    => (float) $order['shipping_total'],
 			'shippingTax'      => (float) $order['shipping_tax'],
-			'feeTotal'         => (float) ($order['fee_total'] ?? 0),
-			'feeTax'           => (float) ($order['fee_tax'] ?? 0),
+			'feeTotal'         => (float) ( $order['fee_total'] ?? 0 ),
+			'feeTax'           => (float) ( $order['fee_tax'] ?? 0 ),
 			'pricesIncludeTax' => (bool) $order['prices_include_tax'],
-			'slug'             => $order['slug'] ?? null,
-			'uid'              => $order['uid'] ?? null,
+			'slug'             => $order['slug'] ?? NULL,
+			'uid'              => $order['uid'] ?? NULL,
 			'itemType'         => 'order',
-			'name'             => $order['name'] ?? null,
-			'customer'         => $this->prepare_ids( $order['customer'] ?? null ),
+			'name'             => $order['name'] ?? NULL,
+			'customer'         => $this->prepare_ids( $order['customer'] ?? NULL ),
 			'billing'          => $this->prepare_billing( $order['billing'] ?? [] ),
 			'shipping'         => $this->prepare_shipping( $order['shipping'] ?? [] ),
 			'lineItems'        => $this->prepare_line_items( $order['line_items'] ?? [] ),
@@ -66,11 +66,11 @@ class OrderGenerator extends GeneratorBase {
 			'refunds'          => $this->prepare_refunds( $order['refunds'] ?? [] ),
 			'notes'            => $this->prepare_notes( $order['notes'] ?? [] ),
 			'inventoryLogs'    => $order['inventory_logs'] ?? [],
-			'pickingPack'      => $order['picking_pack'] ?? null,
+			'pickingPack'      => $order['picking_pack'] ?? NULL,
 			'metaData'         => $this->prepare_meta_data( $order['meta_data'] ?? [] ),
-			'trash'            => (bool) ($order['trash'] ?? false),
-			'conflict'         => (bool) ($order['conflict'] ?? false),
-			'deleted'          => (bool) ($order['deleted'] ?? false),
+			'trash'            => (bool) ( $order['trash'] ?? FALSE ),
+			'conflict'         => (bool) ( $order['conflict'] ?? FALSE ),
+			'deleted'          => (bool) ( $order['deleted'] ?? FALSE ),
 		] );
 
 	}
@@ -174,7 +174,7 @@ class OrderGenerator extends GeneratorBase {
 			return [
 				'_id'      => 'order-fee:' . $this->generate_uuid(),
 				'id'       => (int) $fee['id'],
-				'name'     => $fee['name'],
+				'name'     => $fee['name'] ?? '',
 				'total'    => (float) ($fee['total'] ?? 0),
 				'totalTax' => (float) ($fee['total_tax'] ?? 0),
 				'taxStatus' => $fee['tax_status'] ?? '',
@@ -196,7 +196,7 @@ class OrderGenerator extends GeneratorBase {
 			return [
 				'_id'      => 'order-shipping:' . $this->generate_uuid(),
 				'id'       => (int) $shipping['id'],
-				'name'     => $shipping['name'],
+				'name'     => $shipping['name'] ?? '',
 				'total'    => (float) ($shipping['total'] ?? 0),
 				'totalTax' => (float) ($shipping['total_tax'] ?? 0),
 			];
@@ -219,7 +219,7 @@ class OrderGenerator extends GeneratorBase {
 			return [
 				'_id'      => 'order-tax:' . $this->generate_uuid(),
 				'id'       => (int) $tax['id'],
-				'label'    => $tax['label'],
+				'label'    => $tax['label'] ?? '',
 				'taxTotal' => (float) $tax['tax_total'],
 				'rate'     => (float) $tax['rate_percent'],
 				'shippingTaxTotal' => (float) ($tax['shipping_tax_total'] ?? 0),
@@ -308,17 +308,21 @@ class OrderGenerator extends GeneratorBase {
 	 * @return array Prepared notes data.
 	 */
 	private function prepare_notes( array $notes ): array {
+
 		return array_map( function ( $note ) {
+
 			return [
-				'_id'           => 'order-note:' . $this->generate_uuid(),
-				'id'            => (int) $note['id'],
-				'author'        => $note['author'] ?? '',
-				'dateCreated'   => $note['date_created'] ?? '',
+				'_id'            => 'order-note:' . $this->generate_uuid(),
+				'id'             => (int) $note['id'],
+				'author'         => $note['author'] ?? '',
+				'dateCreated'    => $note['date_created'] ?? '',
 				'dateCreatedGMT' => $note['date_created_gmt'] ?? '',
-				'note'          => $note['note'] ?? '',
-				'customerNote'  => (bool) ($note['customer_note'] ?? false),
+				'note'           => $note['note'] ?? '',
+				'customerNote'   => (bool) ( $note['customer_note'] ?? FALSE ),
 			];
+
 		}, $notes );
+
 	}
 
 } 
