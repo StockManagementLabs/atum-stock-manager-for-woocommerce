@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.7.2
+Tested up to: 6.8
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 9.7.1
-Stable tag: 1.9.46
+WC tested up to: 9.8.2
+Stable tag: 1.9.47
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,29 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.47`
+
+*2025-04-24*
+
+**Changes**
+
+* Text change.
+* Added missing fields to full export.
+* Adjusted headers on SML requests.
+* Don't perform calc sales props calculations in real time if the cron is enabled.
+* Refactoring.
+* Get rid of deprecated code.
+
+**Fixes**
+
+* Check if a product is valid before getting its props.
+* Fixed tools script runner not restoring original state after failing.
+* Fixed errors when registering addons capabilities.
+* Fixed errors when doing API requests with an application password.
+* Fixed errors when runing ATUM jobs via WP CLI.
 
 ---
 
