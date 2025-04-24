@@ -149,6 +149,9 @@ class Hooks {
 		// Prevent WooPayments reduce stock. (move this)
 		add_filter( 'woocommerce_can_reduce_order_stock', array( $this, 'maybe_skip_woopayments_reduce_order_stock' ), PHP_INT_MAX, 2 );
 
+		// Avoid wp.org API request for ATUM addons when WP checks the plugin dependencies on the plugins list.
+		add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 9, 3 );
+
 	}
 
 	/**
@@ -1507,6 +1510,35 @@ class Hooks {
 		}
 
 		return $can_reduce_stock;
+
+	}
+
+	/**
+	 * Avoid wp.org API request for ATUM addons when WP checks the plugin dependencies on the plugins list.
+	 *
+	 * @since 1.9.48
+	 *
+	 * @param mixed  $_data
+	 * @param string $_action
+	 * @param object $_args
+	 *
+	 * @return object|bool $_data
+	 */
+	public function plugins_api_filter( $_data, $_action = '', $_args = NULL ) {
+
+		$screen = get_current_screen();
+
+		if (
+			is_object( $screen ) && isset( $screen->id ) && 'plugins' === $screen->id &&
+			'plugin_information' === $_action && isset( $_args->slug ) &&
+			strpos( $_args->slug, 'atum-' ) === 0 && 'atum-stock-manager-for-woocommerce' !== $_args->slug
+		) {
+			return (object) array(
+				'name' => $_args->slug,
+			);
+		}
+
+		return $_data;
 
 	}
 

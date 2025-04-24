@@ -196,6 +196,29 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.47`
+
+*2025-04-24*
+
+**Changes**
+
+* Text change.
+* Added missing fields to full export.
+* Adjusted headers on SML requests.
+* Don't perform calc sales props calculations in real time if the cron is enabled.
+* Refactoring.
+* Get rid of deprecated code.
+
+**Fixes**
+
+* Check if a product is valid before getting its props.
+* Fixed tools script runner not restoring original state after failing.
+* Fixed errors when registering addons capabilities.
+* Fixed errors when doing API requests with an application password.
+* Fixed errors when runing ATUM jobs via WP CLI.
+
+---
+
 `1.9.46`
 
 *2025-03-24*
