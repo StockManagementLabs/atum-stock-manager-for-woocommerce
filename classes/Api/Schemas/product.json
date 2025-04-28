@@ -71,7 +71,7 @@
 				},
 				"_rev" : {
 					"type" : "string",
-			"nullable" : true
+					"nullable" : true
 				},
 				"conflict" : {
 					"type" : "boolean"
@@ -723,7 +723,7 @@
 			"nullable" : true
 		},
 		"availableToPurchase" : {
-			"type" : "boolean",
+			"type" : "number",
 			"nullable" : true
 		},
 		"sellingPriority" : {

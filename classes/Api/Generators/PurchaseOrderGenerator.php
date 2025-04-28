@@ -66,10 +66,6 @@ class PurchaseOrderGenerator extends GeneratorBase {
 			'feeLines'          => $this->prepare_fee_lines( $purchase_order['fee_lines'] ?? [] ),
 			'notes'             => [],
 			'metaData'          => $this->prepare_meta_data( $purchase_order['meta_data'] ?? [] ),
-			'trash'             => FALSE,
-			'deleted'           => FALSE,
-			'_deleted'          => FALSE,
-			'conflict'          => FALSE,
 		] );
 
 	}

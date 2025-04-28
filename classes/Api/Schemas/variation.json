@@ -167,6 +167,10 @@
 			"type" : "number",
 			"nullable" : true
 		},
+		"price" : {
+			"type" : "number",
+			"nullable" : true
+		},
 		"dateOnSaleFrom"      : {
 			"type" : "string",
 			"nullable" : true,

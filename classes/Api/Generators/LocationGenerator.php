@@ -42,10 +42,7 @@ class LocationGenerator extends GeneratorBase {
 			'code'        => $location['code'] ?? '',
 			'count'       => (int) ($location['count'] ?? 0),
 			'parent'      => $this->prepare_ids( $location['parent'] ?? NULL ),
-			'deleted'     => FALSE,
-			'trash'       => FALSE,
 			'itemType'    => 'location',
-			'conflict'    => FALSE,
 		] );
 
 	}

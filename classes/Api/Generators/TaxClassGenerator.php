@@ -33,15 +33,12 @@ class TaxClassGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $tax_class ): array {
 
-		$data = array_merge( $this->get_base_fields(), [
-			'slug'         => isset( $tax_class['slug'] ) ? $tax_class['slug'] : null,
-			'name'         => isset( $tax_class['name'] ) ? $tax_class['name'] : null,
-			'conflict'     => false,
-			'itemType'     => 'tax-class',
-			'deleted'      => false,
+		return array_merge( $this->get_base_fields(), [
+			'slug'     => isset( $tax_class['slug'] ) ? $tax_class['slug'] : NULL,
+			'name'     => isset( $tax_class['name'] ) ? $tax_class['name'] : NULL,
+			'itemType' => 'tax-class',
 		] );
 
-		return $data;
 	}
 
 } 

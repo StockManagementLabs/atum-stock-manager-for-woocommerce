@@ -65,9 +65,6 @@ class CouponGenerator extends GeneratorBase {
 			'emailRestrictions'         => $coupon['email_restrictions'] ?? [],
 			'usedBy'                    => $this->prepare_ids( $coupon['used_by'] ?? [] ),
 			'metaData'                  => $this->prepare_meta_data( $coupon['meta_data'] ?? [] ),
-			'trash'                     => false,
-			'deleted'                   => false,
-			'conflict'                  => false,
 		] );
 
 	}

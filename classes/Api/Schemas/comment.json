@@ -61,7 +61,8 @@
 				"_id" : {
 					"type" : "string"
 				}
-			}
+			},
+			"nullable" : true
 		},
 		"post" : {
 			"type" : "object",

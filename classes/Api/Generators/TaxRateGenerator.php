@@ -50,7 +50,6 @@ class TaxRateGenerator extends GeneratorBase {
 				'_id'  => "tax-class:" . $this->generate_uuid(),
 			],
 			'class'        => $class,
-			'conflict'     => FALSE,
 		] );
 	}
 

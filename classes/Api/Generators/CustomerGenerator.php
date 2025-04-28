@@ -50,8 +50,6 @@ class CustomerGenerator extends GeneratorBase {
 			'shipping'         => $this->prepare_shipping_data( $customer['shipping'] ),
 			'isPayingCustomer' => (bool) $customer['is_paying_customer'],
 			'avatarUrl'        => $customer['avatar_url'],
-			'trash'            => FALSE,
-			'conflict'         => FALSE,
 		] );
 
 	}

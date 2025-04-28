@@ -34,16 +34,14 @@ class AttributeGenerator extends GeneratorBase {
 	protected function prepare_data( array $attribute ): array {
 
 		$prepared_data = [
-			'id'           => (string) $attribute['id'],
-			'name'         => $attribute['name'],
-			'slug'         => $attribute['slug'] ?? NULL,
-			'type'         => $attribute['type'] ?? NULL,
-			'orderBy'      => $attribute['order_by'] ?? NULL,
-			'hasArchives'  => (bool) ($attribute['has_archives'] ?? false),
-			'deleted'      => (bool) ($attribute['deleted'] ?? false),
-			'conflict'     => (bool) ($attribute['conflict'] ?? false),
-			'itemType'     => $attribute['itemType'] ?? 'attribute',
-			'terms'        => [],
+			'id'          => (string) $attribute['id'],
+			'name'        => $attribute['name'],
+			'slug'        => $attribute['slug'] ?? NULL,
+			'type'        => $attribute['type'] ?? NULL,
+			'orderBy'     => $attribute['order_by'] ?? NULL,
+			'hasArchives' => (bool) ( $attribute['has_archives'] ?? FALSE ),
+			'itemType'    => $attribute['itemType'] ?? 'attribute',
+			'terms'       => [],
 			'bom'         => NULL,
 		];
 

@@ -62,9 +62,6 @@ class CommentGenerator extends GeneratorBase {
 			'addedByUser'  => FALSE,
 			'customerNote' => FALSE,
 			'metaData'     => [],
-			'deleted'      => FALSE,
-			'trash'        => FALSE,
-			'conflict'     => FALSE,
 		];
 
 		// Add data array if needed based on content.

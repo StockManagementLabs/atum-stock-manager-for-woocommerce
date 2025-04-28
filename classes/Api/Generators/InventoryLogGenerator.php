@@ -60,9 +60,6 @@ class InventoryLogGenerator extends GeneratorBase {
 			'metaData'        => $this->prepare_meta_data( $log['meta_data'] ?? [] ),
 			'feeTotal'        => (float) ( $log['fee_total'] ?? 0 ),
 			'feeTax'          => (float) ( $log['fee_tax'] ?? 0 ),
-			'trash'           => FALSE,
-			'deleted'         => FALSE,
-			'conflict'        => FALSE,
 		] );
 
 		// Handle dates.

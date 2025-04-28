@@ -8,8 +8,7 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"id",
-	
+		"id"
 	],
 	"properties" : {
 		"id" : {

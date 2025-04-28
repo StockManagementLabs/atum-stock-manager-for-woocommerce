@@ -34,13 +34,11 @@ class TagGenerator extends GeneratorBase {
 	protected function prepare_data( array $tag ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'           => (string) $tag['id'],
-			'name'         => $tag['name'],
-			'slug'         => $tag['slug'],
-			'description'  => isset($tag['description']) ? $tag['description'] : null,
-			'count'        => isset($tag['count']) ? (int) $tag['count'] : null,
-			'deleted'      => FALSE,
-			'conflict'     => FALSE,
+			'id'          => (string) $tag['id'],
+			'name'        => $tag['name'],
+			'slug'        => $tag['slug'],
+			'description' => isset( $tag['description'] ) ? $tag['description'] : NULL,
+			'count'       => isset( $tag['count'] ) ? (int) $tag['count'] : NULL,
 		] );
 
 	}

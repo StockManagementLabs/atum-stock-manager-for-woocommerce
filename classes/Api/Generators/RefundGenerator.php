@@ -43,8 +43,6 @@ class RefundGenerator extends GeneratorBase {
 			'reason'          => $refund['reason'],
 			'amount'          => (float) $refund['amount'],
 			'refundedPayment' => (bool) $refund['refunded_payment'],
-			'trash'           => FALSE,
-			'conflict'        => FALSE,
 			'parent'          => $this->prepare_ids( $refund['parent_id'] ?? NULL ),
 			'taxRate'         => $this->prepare_ids( $refund['tax_rate_id'] ?? NULL ),
 			'taxClass'        => $this->prepare_ids( $refund['tax_class_id'] ?? NULL ),

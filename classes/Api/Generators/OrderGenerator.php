@@ -68,9 +68,6 @@ class OrderGenerator extends GeneratorBase {
 			'inventoryLogs'    => $order['inventory_logs'] ?? [],
 			'pickingPack'      => $order['picking_pack'] ?? NULL,
 			'metaData'         => $this->prepare_meta_data( $order['meta_data'] ?? [] ),
-			'trash'            => (bool) ( $order['trash'] ?? FALSE ),
-			'conflict'         => (bool) ( $order['conflict'] ?? FALSE ),
-			'deleted'          => (bool) ( $order['deleted'] ?? FALSE ),
 		] );
 
 	}

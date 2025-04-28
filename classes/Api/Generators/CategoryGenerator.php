@@ -66,11 +66,8 @@ class CategoryGenerator extends GeneratorBase {
 			'countChildren' => 0,
 			'children'      => 0,
 			'image'         => $image,
-			'deleted'       => false,
-			'isDefault'     => false,
-			'conflict'      => false,
+			'isDefault'     => FALSE,
 			'itemType'      => 'category',
-			'trash'         => false,
 			'uid'           => NULL,
 		] );
 
