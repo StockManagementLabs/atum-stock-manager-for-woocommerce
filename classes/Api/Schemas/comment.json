@@ -21,7 +21,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
@@ -33,7 +33,8 @@
 					"type" : "string"
 				},
 				"avatar" : {
-					"type" : "string"
+					"type" : "string",
+					"nullable" : true
 				},
 				"userAgent" : {
 					"type" : "string"
@@ -55,24 +56,32 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
 				}
-			}
+			},
+			"nullable" : true
 		},
 		"post" : {
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
 				},
 				"type" : {
 					"type" : "string"
+				},
+				"itemType" : {
+					"type" : "string"
+				},
+				"uid" : {
+					"type" : "string",
+					"nullable" : true
 				}
 			}
 		},

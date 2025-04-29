@@ -35,6 +35,10 @@ class InventoryLogGenerator extends GeneratorBase {
 
 		$prepared_data = array_merge( $this->get_base_fields(), [
 			'id'              => (int) $log['id'],
+			'uid'             => null,
+			'itemType'        => 'inventory-log',
+			'name'            => null,
+			'slug'            => null,
 			'type'            => $log['type'],
 			'status'          => $log['status'],
 			'currency'        => $log['currency'],
@@ -50,9 +54,12 @@ class InventoryLogGenerator extends GeneratorBase {
 			'order'           => $this->prepare_ids( $log['order'] ?? NULL ),
 			'lineItems'       => $this->prepare_line_items( $log['line_items'] ?? [] ),
 			'taxLines'        => $this->prepare_tax_lines( $log['tax_lines'] ?? [] ),
+			'shippingLines'   => $this->prepare_shipping_lines( $log['shipping_lines'] ?? [] ),
+			'feeLines'        => $this->prepare_fee_lines( $log['fee_lines'] ?? [] ),
+			'notes'           => $this->prepare_notes( $log['notes'] ?? [] ),
 			'metaData'        => $this->prepare_meta_data( $log['meta_data'] ?? [] ),
-			'trash'           => FALSE,
-			'conflict'        => FALSE,
+			'feeTotal'        => (float) ( $log['fee_total'] ?? 0 ),
+			'feeTax'          => (float) ( $log['fee_tax'] ?? 0 ),
 		] );
 
 		// Handle dates.
@@ -85,6 +92,11 @@ class InventoryLogGenerator extends GeneratorBase {
 				$prepared_data[ $schema_key ]      = $log[ $source_key ];
 				$prepared_data["{$schema_key}GMT"] = $log["{$source_key}_gmt"] ?? '';
 			}
+			else {
+				// Preserve null values for date fields not present in API response
+				$prepared_data[ $schema_key ]      = null;
+				$prepared_data["{$schema_key}GMT"] = null;
+			}
 		}
 
 	}
@@ -102,14 +114,47 @@ class InventoryLogGenerator extends GeneratorBase {
 
 		return array_map( function ( $item ) {
 
-			return [
-				'id'       => (int) $item['id'],
-				'name'     => $item['name'],
-				'quantity' => (float) $item['quantity'],
-				'subtotal' => (float) $item['subtotal'],
-				'total'    => (float) $item['total'],
-				'sku'      => $item['sku'] ?? '',
+			$line_item = [
+				'id'           => (int) $item['id'],
+				'name'         => $item['name'],
+				'quantity'     => (float) $item['quantity'],
+				'subtotal'     => (float) $item['subtotal'],
+				'subtotalTax'  => (float) ( $item['subtotal_tax'] ?? 0 ),
+				'total'        => (float) $item['total'],
+				'totalTax'     => (float) ( $item['total_tax'] ?? 0 ),
+				'sku'          => $item['sku'] ?? '',
+				'price'        => (float) ( $item['price'] ?? 0 ),
+				'taxes'        => $item['taxes'] ?? [],
+				'product'      => isset( $item['product_id'] ) ? [
+					'id'       => (int) $item['product_id'],
+					'_id'      => null
+				] : null,
+				'variation'    => isset( $item['variation_id'] ) && $item['variation_id'] ? [
+					'id'       => (int) $item['variation_id'],
+					'_id'      => null
+				] : null,
+				'inventories'  => $item['mi_inventories'] ?? [],
+				'bomItems'     => $item['bom_items'] ?? [],
+				'metaData'     => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
+				'stock'        => [
+					'action'       => 'reduceStock',
+					'changedStock' => isset( $item['stock_changed'] ) && $item['stock_changed'] === 'yes',
+					'quantity'     => (float) $item['quantity']
+				],
+				'_id'          => null,
+				'deleted'      => false,
+				'_deleted'     => false,
+				'parent'       => null
 			];
+			
+			// Add taxClass if we need to infer it
+			$line_item['taxClass'] = [
+				'slug'     => $item['tax_class'] ?? 'standard',
+				'_id'      => 'tax-class:' . $this->generate_uuid(),
+				'itemType' => 'tax-class'
+			];
+
+			return $line_item;
 
 		}, $items );
 
@@ -135,6 +180,75 @@ class InventoryLogGenerator extends GeneratorBase {
 			];
 
 		}, $taxes );
+
+	}
+
+	/**
+	 * Prepare shipping lines
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $shipping
+	 *
+	 * @return array
+	 */
+	private function prepare_shipping_lines( array $shipping ): array {
+
+		return array_map( function ( $ship ) {
+
+			return [
+				'id'          => (int) $ship['id'],
+				'methodTitle' => $ship['method_title'] ?? '',
+				'total'       => (float) ( $ship['total'] ?? 0 ),
+			];
+
+		}, $shipping );
+
+	}
+
+	/**
+	 * Prepare fee lines
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $fees
+	 *
+	 * @return array
+	 */
+	private function prepare_fee_lines( array $fees ): array {
+
+		return array_map( function ( $fee ) {
+
+			return [
+				'id'    => (int) $fee['id'],
+				'name'  => $fee['name'] ?? '',
+				'total' => (float) ( $fee['total'] ?? 0 ),
+			];
+
+		}, $fees );
+
+	}
+
+	/**
+	 * Prepare notes
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param array $notes
+	 *
+	 * @return array
+	 */
+	private function prepare_notes( array $notes ): array {
+
+		return array_map( function ( $note ) {
+
+			return [
+				'id'      => (int) $note['id'],
+				'content' => $note['content'] ?? '',
+				'date'    => $note['date'] ?? '',
+			];
+
+		}, $notes );
 
 	}
 

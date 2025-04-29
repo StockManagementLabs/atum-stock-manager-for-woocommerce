@@ -36,24 +36,31 @@ class InboundStockGenerator extends GeneratorBase {
 		return array_merge( $this->get_base_fields(), [
 			// Required fields from schema.
 			'id'              => (int) $inbound_stock['id'],
-			'name'            => $inbound_stock['name'],
+			'name'            => $inbound_stock['name'] ?? NULL,
+			'itemType'        => $inbound_stock['item_type'] ?? NULL,
 			'type'            => $inbound_stock['type'] ?? 'simple',
-			'sku'             => $inbound_stock['sku'] ?? '',
+			'sku'             => $inbound_stock['sku'] ?? NULL,
 
-			// Date fields with GMT variants.
-			'dateOrdered'     => $inbound_stock['date_ordered'] ?? '',
-			'dateOrderedGMT'  => $inbound_stock['date_ordered_gmt'] ?? '',
-			'dateExpected'    => $inbound_stock['date_expected'] ?? '',
-			'dateExpectedGMT' => $inbound_stock['date_expected_gmt'] ?? '',
+			// Image object (null if not provided)
+			'image'           => isset( $inbound_stock['image'] ) ? [
+				'id'    => $inbound_stock['image']['id'] ?? NULL,
+				'src'   => $inbound_stock['image']['src'] ?? NULL,
+				'alt'   => $inbound_stock['image']['alt'] ?? NULL,
+				'title' => $inbound_stock['image']['title'] ?? NULL,
+			] : NULL,
 
-			// Item and Purchase Order references.
+			// Date fields
+			'dateOrdered'     => $inbound_stock['date_ordered'] ?? NULL,
+			'dateOrderedGmt'  => $inbound_stock['date_ordered_gmt'] ?? NULL,
+			'dateExpected'    => $inbound_stock['date_expected'] ?? NULL,
+			'dateExpectedGmt' => $inbound_stock['date_expected_gmt'] ?? NULL,
+
+			// Item reference
 			'item'            => $this->prepare_ids( $inbound_stock['id'] ?? NULL ),
-			'inboundStock'    => (float) $inbound_stock['inbound_stock'],
-			'purchaseOrder'   => $this->prepare_ids( $inbound_stock['purchase_order'] ?? NULL ),
 
-			// Optional fields.
-			'itemType'        => $inbound_stock['type'] ?? '',
-			'trash'           => FALSE,
+			// Numeric fields
+			'inboundStock'    => (float) ( $inbound_stock['inbound_stock'] ?? 0 ),
+			'purchaseOrder'   => isset( $inbound_stock['purchase_order'] ) ? (int) $inbound_stock['purchase_order'] : NULL,
 		] );
 
 	}

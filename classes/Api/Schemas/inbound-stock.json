@@ -8,11 +8,7 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"id",
-		"name",
-		"sku",
-		"inboundStock",
-		"purchaseOrder"
+		"id"
 	],
 	"properties" : {
 		"id" : {
@@ -51,6 +47,10 @@
 			"type" : "string",
 			"format" : "date-time"
 		},
+		"dateOrderedGmt" : {
+			"type" : "string",
+			"format" : "date-time"
+		},
 		"dateOnSaleFromGMT" : {
 			"type" : "string",
 			"format" : "date-time"
@@ -78,15 +78,7 @@
 			"type" : "number"
 		},
 		"purchaseOrder" : {
-			"type" : "object",
-			"properties" : {
-				"id" : {
-					"type" : "number"
-				},
-				"_id" : {
-					"type" : "string"
-				}
-			}
+			"type" : "number"
 		},
 		"_id" : {
 			"type" : "string"

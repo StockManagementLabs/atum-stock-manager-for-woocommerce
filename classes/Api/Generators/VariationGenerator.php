@@ -50,10 +50,13 @@ class VariationGenerator extends GeneratorBase {
 		}, $variation['attributes'] ?? [] );
 
 		// Prepare tax class data.
-		$tax_class = [
-			'id'   => $variation['tax_class'] ?: 'standard',
-			'name' => ucfirst( $variation['tax_class'] ?: 'standard' ) . ' Rate'
-		];
+		$tax_class = NULL;
+		if ( isset( $variation['tax_class'] ) || isset( $variation['tax_status'] ) ) {
+			$tax_class = [
+				'id'   => $variation['tax_class'] ?: 'standard',
+				'name' => ucfirst( $variation['tax_class'] ?: 'standard' ) . ' Rate'
+			];
+		}
 
 		// Prepare dimensions with proper defaults.
 		$dimensions = [
@@ -72,43 +75,120 @@ class VariationGenerator extends GeneratorBase {
 
 		}, $variation['meta_data'] ?? [] );
 
-		return [
-			'_id'                 => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'                => $this->revision,
-			'_deleted'            => FALSE,
-			'_meta'               => [
-				'lwt' => $this->generate_timestamp(),
-			],
-			'_attachments'        => new \stdClass(),
-			'id'                  => (int) $variation['id'],
-			'parent'              => $this->prepare_ids( $variation['parent_id'] ),
-			'type'                => $variation['type'],
-			'name'                => $variation['name'] ?? '',
-			'status'              => $variation['status'] ?? 'publish',
-			'sku'                 => $variation['sku'] ?? '',
-			'barcode'             => $variation['barcode'] ?? '',
-			'regularPrice'        => (float) ( $variation['regular_price'] ?? 0 ),
-			'salePrice'           => (float) ( $variation['sale_price'] ?? 0 ),
-			'stockQuantity'       => (int) ( $variation['stock_quantity'] ?? 0 ),
-			'manageStock'         => (bool) ( $variation['manage_stock'] ?? FALSE ),
-			'stockStatus'         => $variation['stock_status'] ?? 'instock',
-			'backorders'          => $variation['backorders'] ?? 'no',
-			'virtual'             => (bool) ( $variation['virtual'] ?? FALSE ),
-			'downloadable'        => (bool) ( $variation['downloadable'] ?? FALSE ),
-			'taxStatus'           => $variation['tax_status'] ?? 'taxable',
-			'taxClass'            => $tax_class,
-			'weight'              => (float) ( $variation['weight'] ?? 0 ),
-			'dimensions'          => $dimensions,
-			'attributes'          => $attributes,
-			'menuOrder'           => (int) ( $variation['menu_order'] ?? 0 ),
-			'atumControlled'      => (bool) ( $variation['atum_controlled'] ?? FALSE ),
-			'minimumThreshold'    => isset( $variation['minimum_threshold'] ) ? (float) $variation['minimum_threshold'] : NULL,
-			'availableToPurchase' => isset( $variation['available_to_purchase'] ) ? (float) $variation['available_to_purchase'] : NULL,
-			'sellingPriority'     => isset( $variation['selling_priority'] ) ? (int) $variation['selling_priority'] : NULL,
-			'metaData'            => $meta_data,
-			'conflict'            => FALSE,
+		// Prepare parent data
+		$parent = [
+			'id'  => (int) $variation['parent_id'],
+			'_id' => NULL
 		];
 
-	}
+		// Prepare image data
+		$image = NULL;
+		if ( isset( $variation['image'] ) && ! empty( $variation['image'] ) ) {
+			$image = [
+				'id'    => (int) ($variation['image']['id'] ?? 0),
+				'src'   => $variation['image']['src'] ?? '',
+				'title' => $variation['image']['title'] ?? '',
+				'alt'   => $variation['image']['alt'] ?? ''
+			];
+		}
 
+		// Prepare dates
+		$dates = [
+			'dateCreated'       => $variation['date_created'] ?? NULL,
+			'dateCreatedGMT'    => $variation['date_created_gmt'] ?? NULL,
+			'dateModified'      => $variation['date_modified'] ?? NULL,
+			'dateModifiedGMT'   => $variation['date_modified_gmt'] ?? NULL,
+			'dateOnSaleFrom'    => $variation['date_on_sale_from'] ?? NULL,
+			'dateOnSaleFromGMT' => $variation['date_on_sale_from_gmt'] ?? NULL,
+			'dateOnSaleTo'      => $variation['date_on_sale_to'] ?? NULL,
+			'dateOnSaleToGMT'   => $variation['date_on_sale_to_gmt'] ?? NULL,
+			'outStockDate'      => $variation['out_stock_date'] ?? NULL,
+			'outStockDateGMT'   => $variation['out_stock_date_gmt'] ?? NULL,
+		];
+
+		return [
+		   'id'                     => (int) $variation['id'],
+		   'uid'                    => $variation['global_unique_id'] ?? NULL,
+		   'parent'                 => $parent,
+		   'parentType'             => NULL,
+		   'parentName'             => NULL,
+		   'parentSku'              => $variation['parent_sku'] ?? '',
+		   'parentTaxClass'         => NULL,
+		   'type'                   => $variation['type'],
+		   'itemType'               => 'variation',
+		   'default'                => (bool) ( $variation['default'] ?? FALSE ),
+		   'name'                   => $variation['name'] ?? '',
+		   'slug'                   => $variation['slug'] ?? NULL,
+		   'status'                 => $variation['status'] ?? 'publish',
+		   'sku'                    => $variation['sku'] ?? '',
+		   'barcode'                => $variation['barcode'] ?? NULL,
+		   'price'                  => ! $this->is_null_value( $variation['price'] ) ? (float) $variation['price'] : NULL,
+		   'regularPrice'           => ! $this->is_null_value( $variation['regular_price'] ) ? (float) $variation['regular_price'] : NULL,
+		   'salePrice'              => ! $this->is_null_value( $variation['sale_price'] ) ? (float) $variation['sale_price'] : NULL,
+		   'stockQuantity'          => ! $this->is_null_value( $variation['stock_quantity'] ) ? (float) $variation['stock_quantity'] : NULL,
+		   'stock'                  => ! $this->is_null_value( $variation['stock'] ) ? (float) $variation['stock'] : NULL,
+		   'manageStock'            => (bool) ( $variation['manage_stock'] ?? FALSE ),
+		   'stockStatus'            => $variation['stock_status'] ?? 'instock',
+		   'backorders'             => $variation['backorders'] ?? 'no',
+		   'backordersAllowed'      => (bool) ( $variation['backorders_allowed'] ?? FALSE ),
+		   'virtual'                => (bool) ( $variation['virtual'] ?? FALSE ),
+		   'downloadable'           => (bool) ( $variation['downloadable'] ?? FALSE ),
+		   'taxStatus'              => $variation['tax_status'] ?? 'taxable',
+		   'taxClass'               => $tax_class,
+		   'weight'                 => (float) ( $variation['weight'] ?? 0 ),
+		   'dimensions'             => $dimensions,
+		   'outStockThreshold'      => $variation['out_stock_threshold'] ?? NULL,
+		   'lowStockThreshold'      => $variation['low_stock_amount'] ?? '',
+		   'description'            => $variation['description'] ?? '',
+		   'downloads'              => $variation['downloads'] ?? [],
+		   'downloadLimit'          => $variation['download_limit'] ?? NULL,
+		   'downloadExpiry'         => $variation['download_expiry'] ?? NULL,
+		   'attributes'             => $attributes,
+		   'menuOrder'              => (int) ( $variation['menu_order'] ?? 0 ),
+		   'atumControlled'         => (bool) ( $variation['atum_controlled'] ?? FALSE ),
+		   'minimumThreshold'       => (float) ( $variation['minimum_threshold'] ?? 0 ),
+		   'availableToPurchase'    => (float) ( $variation['available_to_purchase'] ?? 0 ),
+		   'sellingPriority'        => (int) ( $variation['selling_priority'] ?? 0 ),
+		   'purchasePrice'          => (float) ( $variation['purchase_price'] ?? 0 ),
+		   'supplier'               => $variation['supplier'] ?? NULL,
+		   'supplierSku'            => $variation['supplier_sku'] ?? '',
+		   'shippingClass'          => $variation['shipping_class'] ?? NULL,
+		   'image'                  => $image,
+		   'inboundStock'           => $variation['inbound_stock'] ?? NULL,
+		   'stockOnHold'            => $variation['stock_on_hold'] ?? NULL,
+		   'soldToday'              => $variation['sold_today'] ?? NULL,
+		   'salesLastDays'          => $variation['sales_last_days'] ?? NULL,
+		   'reservedStock'          => $variation['reserved_stock'] ?? NULL,
+		   'customerReturns'        => $variation['customer_returns'] ?? NULL,
+		   'warehouseDamage'        => $variation['warehouse_damage'] ?? NULL,
+		   'lostInPost'             => $variation['lost_in_post'] ?? NULL,
+		   'otherLogs'              => $variation['other_logs'] ?? NULL,
+		   'outStockDays'           => $variation['out_stock_days'] ?? NULL,
+		   'lostSales'              => $variation['lost_sales'] ?? NULL,
+		   'calcBackOrders'         => $variation['calc_backorders'] ?? NULL,
+		   'calcStockIndicator'     => $variation['calc_stock_indicator'] ?? NULL,
+		   'calcWillLast'           => $variation['calc_will_last'] ?? NULL,
+		   'miInventories'          => $variation['mi_inventories'] ?? [],
+		   'inventoryStock'         => ! $this->is_null_value( $variation['inventory_stock'] ) ? (int) $variation['inventory_stock'] : NULL,
+		   'inventoryMainStock'     => ! $this->is_null_value( $variation['inventory_main_stock'] ) ? (int) $variation['inventory_main_stock'] : NULL,
+		   'multiInventory'         => (bool) ( $variation['multi_inventory'] ?? FALSE ),
+		   'inventorySortingMode'   => $variation['inventory_sorting_mode'] ?? NULL,
+		   'inventoryIteration'     => $variation['inventory_iteration'] ?? NULL,
+		   'expirableInventories'   => (bool) ( $variation['expirable_inventories'] ?? FALSE ),
+		   'pricePerInventory'      => (bool) ( $variation['price_per_inventory'] ?? FALSE ),
+		   'selectableInventories'  => (bool) ( $variation['selectable_inventories'] ?? FALSE ),
+		   'inventorySelectionMode' => $variation['selectable_inventories_mode'] ?? NULL,
+		   'atumLocations'          => [],
+		   'hasLocation'            => FALSE,
+		   'categories'             => [],
+		   'linkedBoms'             => $variation['linked_boms'] ?? [],
+		   'syncPurchasePrice'      => (bool) ( $variation['sync_purchase_price'] ?? FALSE ),
+		   'isBom'                  => (bool) ( $variation['is_bom'] ?? FALSE ),
+		   'isUsedBom'              => FALSE,
+		   'bomSellable'            => (bool) ( $variation['bom_sellable'] ?? FALSE ),
+		   'calculatedStock'        => $variation['calculated_stock'] ?? NULL,
+		   'bomStock'               => $product['bom_stock'] ?? NULL,
+		   'metaData'               => $meta_data,
+	   ] + $dates;
+	}
 } 

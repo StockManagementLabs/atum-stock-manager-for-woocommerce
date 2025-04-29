@@ -14,7 +14,15 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
+		},
+		"uid" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"itemType" : {
+			"type" : "string",
+			"nullable" : true
 		},
 		"parent" : {
 			"type" : "object",
@@ -41,6 +49,41 @@
 				},
 				"alt" : {
 					"type" : "string"
+				},
+				"_id" : {
+					"type" : "string",
+			"nullable" : true
+				},
+				"uid" : {
+					"type" : "string",
+			"nullable" : true
+				},
+				"file" : {
+					"type" : "string",
+			"nullable" : true
+				},
+				"name" : {
+					"type" : "string"
+				},
+				"_deleted" : {
+					"type" : "boolean",
+					"nullable" : true
+				},
+				"_rev" : {
+					"type" : "string",
+					"nullable" : true
+				},
+				"conflict" : {
+					"type" : "boolean"
+				},
+				"deleted" : {
+					"type" : "boolean"
+				},
+				"itemType" : {
+					"type" : "string"
+				},
+				"trash" : {
+					"type" : "boolean"
 				}
 			}
 		},
@@ -67,11 +110,39 @@
 		"slug" : {
 			"type" : "string"
 		},
+		"permalink" : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"description" : {
 			"type" : "string"
 		},
+		"shortDescription" : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"status" : {
 			"type" : "string"
+		},
+		"dateCreated" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateCreatedGMT" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateModified" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateModifiedGMT" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
 		},
 		"catalogVisibility" : {
 			"type" : "string"
@@ -101,31 +172,55 @@
 			"type" : "boolean"
 		},
 		"externalUrl" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"buttonText" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"regularPrice" : {
 			"type" : "number"
 		},
 		"salePrice" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"price" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"priceHtml" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"onSale" : {
+			"type" : "boolean"
+		},
+		"purchasable" : {
+			"type" : "boolean"
+		},
+		"totalSales" : {
 			"type" : "number"
 		},
 		"dateOnSaleFrom" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleFromGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleTo" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateOnSaleToGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"purchasePrice" : {
@@ -138,9 +233,16 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "number",
+					"nullable" : true
 				},
 				"_id" : {
+					"type" : "string"
+				},
+				"slug" : {
+					"type" : "string"
+				},
+				"itemType" : {
 					"type" : "string"
 				}
 			}
@@ -163,16 +265,19 @@
 			}
 		},
 		"downloadLimit" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"downloadExpiry" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"sku" : {
 			"type" : "string"
 		},
 		"barcode" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"manageStock" : {
 			"type" : "boolean"
@@ -180,31 +285,57 @@
 		"stockQuantity" : {
 			"type" : "number"
 		},
+		"stock" : {
+			"type" : "number",
+			"nullable" : true
+		},
 		"backorders" : {
 			"type" : "string"
 		},
 		"lowStockThreshold" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
+		},
+		"lowStockAmount" : {
+			"type" : "number",
+			"nullable" : true
 		},
 		"outStockThreshold" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"stockStatus" : {
 			"type" : "string"
 		},
+		"inStock" : {
+			"type" : "boolean"
+		},
+		"backordersAllowed" : {
+			"type" : "boolean"
+		},
+		"backordered" : {
+			"type" : "boolean"
+		},
 		"outStockDate" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"outStockDateGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
+		},
+		"outStockDays" : {
+			"type" : "number",
+			"nullable" : true
 		},
 		"soldIndividually" : {
 			"type" : "boolean"
 		},
 		"supplier" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"
@@ -215,30 +346,36 @@
 			}
 		},
 		"supplierSku" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"atumControlled" : {
 			"type" : "boolean"
 		},
 		"weight" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"dimensions" : {
 			"type" : "object",
 			"properties" : {
 				"length" : {
-					"type" : "number"
+					"type" : "number",
+					"nullable" : true
 				},
 				"width" : {
-					"type" : "number"
+					"type" : "number",
+					"nullable" : true
 				},
 				"height" : {
-					"type" : "number"
+					"type" : "number",
+					"nullable" : true
 				}
 			}
 		},
 		"shippingClass" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"
@@ -247,6 +384,15 @@
 					"type" : "string"
 				}
 			}
+		},
+		"shippingRequired" : {
+			"type" : "boolean"
+		},
+		"shippingTaxable" : {
+			"type" : "boolean"
+		},
+		"shippingClassId" : {
+			"type" : "number"
 		},
 		"groupedProducts" : {
 			"type" : "array",
@@ -288,6 +434,24 @@
 						"type" : "string"
 					}
 				}
+			}
+		},
+		"upsellIds" : {
+			"type" : "array",
+			"items" : {
+				"type" : "number"
+			}
+		},
+		"crossSellIds" : {
+			"type" : "array",
+			"items" : {
+				"type" : "number"
+			}
+		},
+		"relatedIds" : {
+			"type" : "array",
+			"items" : {
+				"type" : "number"
 			}
 		},
 		"attributes" : {
@@ -379,6 +543,12 @@
 		"reviewsAllowed" : {
 			"type" : "boolean"
 		},
+		"averageRating" : {
+			"type" : "string"
+		},
+		"ratingCount" : {
+			"type" : "number"
+		},
 		"categories" : {
 			"type" : "array",
 			"items" : {
@@ -392,6 +562,10 @@
 					},
 					"slug" : {
 						"type" : "string"
+					},
+					"_id" : {
+						"type" : "string",
+			"nullable" : true
 					}
 				}
 			}
@@ -409,6 +583,10 @@
 					},
 					"slug" : {
 						"type" : "string"
+					},
+					"_id" : {
+						"type" : "string",
+			"nullable" : true
 					}
 				}
 			}
@@ -426,12 +604,17 @@
 					},
 					"slug" : {
 						"type" : "string"
+					},
+					"_id" : {
+						"type" : "string",
+			"nullable" : true
 					}
 				}
 			}
 		},
 		"hasLocation" : {
-			"type" : "boolean"
+			"type" : "boolean",
+			"nullable" : true
 		},
 		"metaData" : {
 			"type" : "array",
@@ -450,7 +633,156 @@
 				}
 			}
 		},
+		"miInventories" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"inventoryStock" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"inventoryMainStock" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"multiInventory" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"inventorySortingMode" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"inventoryIteration" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"expirableInventories" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"pricePerInventory" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"selectableInventories" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"inventorySelectionMode" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"linkedBoms" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
+		"isBom" : {
+			"type" : "boolean"
+		},
+		"isUsedBom" : {
+			"type" : "boolean"
+		},
+		"calculatedStock" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"bomStock" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"syncPurchasePrice" : {
+			"type" : "boolean"
+		},
+		"minimumThreshold" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"bomSellable" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"availableToPurchase" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"sellingPriority" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"calcBackOrders" : {
+			"type" : "number"
+		},
+		"calcStockIndicator" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"calcWillLast" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"customerReturns" : {
+			"type" : "number"
+		},
+		"warehouseDamage" : {
+			"type" : "number"
+		},
+		"inboundStock" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"lostInPost" : {
+			"type" : "number"
+		},
+		"lostSales" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"otherLogs" : {
+			"type" : "number"
+		},
+		"reservedStock" : {
+			"type" : "number"
+		},
+		"salesLastDays" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"soldToday" : {
+			"type" : "number",
+			"nullable" : true
+		},
+		"stockOnHold" : {
+			"type" : "number",
+			"nullable" : true
+		},
 		"trash" : {
+			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean"
+		},
+		"deleted" : {
 			"type" : "boolean"
 		},
 		"_id" : {

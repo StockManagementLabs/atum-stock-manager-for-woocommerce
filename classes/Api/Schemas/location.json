@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"slug" : {
 			"type" : "string"
@@ -31,6 +31,7 @@
 		},
 		"parent" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"
@@ -52,6 +53,15 @@
 		},
 		"_deleted" : {
 			"type" : "boolean"
+		},
+		"deleted" : {
+			"type" : "boolean"
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string"
 		},
 		"conflict" : {
 			"type" : "boolean"

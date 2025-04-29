@@ -14,7 +14,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"name" : {
 			"type" : "string"
@@ -79,6 +79,16 @@
 		},
 		"conflict" : {
 			"type" : "boolean"
+		},
+		"itemType" : {
+			"type" : "string"
+		},
+		"trash" : {
+			"type" : "boolean"
+		},
+		"uid" : {
+			"type" : "string",
+			"nullable" : true
 		},
 		"_id" : {
 			"type" : "string"

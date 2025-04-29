@@ -70,6 +70,7 @@
 		},
 		"parent" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
 				"id" : {
 					"type" : "number"
@@ -105,7 +106,19 @@
 			"type" : "boolean"
 		},
 		"trash" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"deleted" : {
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"_deleted" : {
 			"type" : "boolean"
+		},
+		"conflict" : {
+			"type" : "boolean",
+			"nullable" : true
 		},
 		"_id" : {
 			"type" : "string"
@@ -113,12 +126,6 @@
 		"_rev" : {
 			"type" : "string",
 			"minLength" : 1
-		},
-		"_deleted" : {
-			"type" : "boolean"
-		},
-		"conflict" : {
-			"type" : "boolean"
 		},
 		"_meta" : {
 			"type" : "object",

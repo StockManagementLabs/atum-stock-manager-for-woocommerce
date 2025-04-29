@@ -34,15 +34,15 @@ class LocationGenerator extends GeneratorBase {
 	protected function prepare_data( array $location ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'           => (int) $location['id'],
-			'name'         => $location['name'],
-			'slug'         => $location['slug'],
-			'description'  => $location['description'] ?? '',
-			'barcode'      => $location['barcode'] ?? '',
-			'code'         => $location['code'] ?? '',
-			'count'        => (int) $location['count'],
-			'parent'       => $this->prepare_ids( $location['parent'] ?? NULL ),
-			'conflict'     => FALSE,
+			'id'          => (string) $location['id'],
+			'name'        => $location['name'],
+			'slug'        => $location['slug'],
+			'description' => $location['description'] ?? '',
+			'barcode'     => $location['barcode'] ?? '',
+			'code'        => $location['code'] ?? '',
+			'count'       => (int) ($location['count'] ?? 0),
+			'parent'      => $this->prepare_ids( $location['parent'] ?? NULL ),
+			'itemType'    => 'location',
 		] );
 
 	}

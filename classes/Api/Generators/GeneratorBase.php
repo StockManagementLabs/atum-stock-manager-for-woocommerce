@@ -77,12 +77,12 @@ abstract class GeneratorBase {
 
 		$schema_content = file_get_contents( $schema_path );
 		if ( $schema_content === FALSE ) {
-			throw new \Exception( 'Unable to read schema file' );
+			throw new \Exception( "Unable to read $this->schema_name schema file" );
 		}
 
 		$schema = json_decode( $schema_content, TRUE );
 		if ( function_exists( 'json_last_error' ) && json_last_error() !== JSON_ERROR_NONE ) {
-			throw new \Exception( 'Invalid JSON in schema file: ' . json_last_error_msg() );
+			throw new \Exception( "Invalid JSON in $this->schema_name schema file: " . json_last_error_msg() );
 		}
 
 		$this->schema = $schema;
@@ -192,34 +192,36 @@ abstract class GeneratorBase {
 			return;
 		}
 
+		$received_value = "\nReceived value: " . var_export( $value, TRUE );
+
 		switch ( $property_schema['type'] ) {
 			case 'string':
 				if ( ! is_string( $value ) ) {
-					throw new \Exception( "Property '$key' must be a string according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be a string according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['minLength'] ) && strlen( $value ) < $property_schema['minLength'] ) {
-					throw new \Exception( "Property '$key' is shorter than minimum length of {$property_schema['minLength']} according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' is shorter than minimum length of {$property_schema['minLength']} according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['format'] ) && $property_schema['format'] === 'date-time' ) {
 					if ( ! $this->is_valid_date_time( $value ) ) {
-						throw new \Exception( "Property '$key' must be a valid date-time string according to schema '$this->schema_name'" );
+						throw new \Exception( "Property '$key' must be a valid date-time string according to schema '$this->schema_name'$received_value" );
 					}
 				}
 				break;
 
 			case 'number':
 				if ( ! is_numeric( $value ) ) {
-					throw new \Exception( "Property '$key' must be a number according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be a number according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['minimum'] ) && $value < $property_schema['minimum'] ) {
-					throw new \Exception( "Property '$key' is less than minimum value of {$property_schema['minimum']} according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' is less than minimum value of {$property_schema['minimum']} according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['maximum'] ) && $value > $property_schema['maximum'] ) {
-					throw new \Exception( "Property '$key' is greater than maximum value of {$property_schema['maximum']} according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' is greater than maximum value of {$property_schema['maximum']} according to schema '$this->schema_name'$received_value" );
 				}
 
 				// Commented for now as the only prop that is using it is the _meta.lwt and we are generating the value ourselves.
@@ -227,20 +229,20 @@ abstract class GeneratorBase {
 					$remainder = fmod( $value, $property_schema['multipleOf'] );
 
 					if ( abs( $remainder ) > 0.00001 ) { // Using small epsilon for float comparison
-						throw new \Exception( "Property '$key' must be a multiple of {$property_schema['multipleOf']} according to schema '$this->schema_name'" );
+						throw new \Exception( "Property '$key' must be a multiple of {$property_schema['multipleOf']} according to schema '$this->schema_name'$received_value" );
 					}
 				}*/
 				break;
 
 			case 'boolean':
 				if ( ! is_bool( $value ) ) {
-					throw new \Exception( "Property '$key' must be a boolean according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be a boolean according to schema '$this->schema_name'$received_value" );
 				}
 				break;
 
 			case 'object':
 				if ( ! is_object( $value ) && ! is_array( $value ) ) {
-					throw new \Exception( "Property '$key' must be an object according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be an object according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['properties'] ) ) {
@@ -254,7 +256,7 @@ abstract class GeneratorBase {
 
 			case 'array':
 				if ( ! is_array( $value ) ) {
-					throw new \Exception( "Property '$key' must be an array according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be an array according to schema '$this->schema_name'$received_value" );
 				}
 
 				if ( isset( $property_schema['items'] ) ) {
@@ -274,12 +276,12 @@ abstract class GeneratorBase {
 			// Special case for mixed types where the data types in the db are inconsistent.
 			case 'mixed':
 				if ( ! is_string( $value ) && ! is_numeric( $value ) && ! is_bool( $value ) ) {
-					throw new \Exception( "Property '$key' must be mixed (string or numeric or boolean) type according to schema '$this->schema_name'" );
+					throw new \Exception( "Property '$key' must be mixed (string or numeric or boolean) type according to schema '$this->schema_name'$received_value" );
 				}
 				break;
 
 			default:
-				throw new \Exception( "Unsupported property type: '{$property_schema['type']}' in schema '$this->schema_name'" );
+				throw new \Exception( "Unsupported property type: '{$property_schema['type']}' in schema '$this->schema_name'$received_value" );
 		}
 
 	}
@@ -454,7 +456,7 @@ abstract class GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @param int[]|int|null $ids Array of item IDs or a single ID.
+	 * @param string[]|string|null $ids Array of item IDs or a single ID.
 	 *
 	 * @return array|null Prepared IDs.
 	 */
@@ -470,7 +472,7 @@ abstract class GeneratorBase {
 
 				if ( is_numeric( $id ) ) {
 					return [
-						'id'  => (int) $id,
+						'id'  => (string) $id,
 						'_id' => NULL,
 					];
 				}
@@ -482,7 +484,7 @@ abstract class GeneratorBase {
 		}
 
 		return is_numeric( $ids ) ? [
-			'id'  => (int) $ids,
+			'id'  => (string) $ids,
 			'_id' => NULL,
 		] : NULL;
 
@@ -507,13 +509,16 @@ abstract class GeneratorBase {
 	protected function get_base_fields() {
 
 		return [
-			'_id'           => $this->schema_name . ':' . $this->generate_uuid(),
-			'_rev'          => $this->revision,
-			'_deleted'      => FALSE,
-			'_meta'         => [
+			'_id'          => $this->schema_name . ':' . $this->generate_uuid(),
+			'_rev'         => $this->revision,
+			'_deleted'     => FALSE,
+			'_meta'        => [
 				'lwt' => $this->generate_timestamp(),
 			],
-			'_attachments'  => new \stdClass(),
+			'_attachments' => new \stdClass(),
+			'trash'        => FALSE,
+			'conflict'     => FALSE,
+			'deleted'      => FALSE,
 		];
 
 	}
@@ -557,6 +562,19 @@ abstract class GeneratorBase {
 
 		return $comment;
 
+	}
+
+	/**
+	 * Check if a value is nullable
+	 *
+	 * @since 1.9.48
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	protected function is_null_value( $value ) {
+		return is_null( $value ) || $value === '';
 	}
 
 }

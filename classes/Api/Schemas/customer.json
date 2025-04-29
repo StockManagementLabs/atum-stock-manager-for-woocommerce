@@ -13,7 +13,7 @@
 	],
 	"properties": {
 		"id": {
-			"type": "number"
+			"type": "string"
 		},
 		"dateCreated": {
 			"type": "string",
@@ -47,7 +47,8 @@
 			"type": "string"
 		},
 		"password": {
-			"type": "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"billing": {
 			"type": "object",
@@ -126,19 +127,23 @@
 			"type": "string"
 		},
 		"itemType": {
-			"type": "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"_id": {
-			"type": "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"deleted": {
-			"type": "boolean"
+			"type" : "boolean",
+			"nullable" : true
 		},
 		"trash": {
 			"type": "boolean"
 		},
 		"conflict": {
-			"type": "boolean"
+			"type" : "boolean",
+			"nullable" : true
 		},
 		"_rev": {
 			"type": "string",

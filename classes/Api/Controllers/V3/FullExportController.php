@@ -808,7 +808,7 @@ class FullExportController extends \WC_REST_Controller {
 
 						} catch ( \Exception $e ) {
 
-							error_log( $e->getMessage() );
+							error_log( 'ATUM Full export error: ' . $e->getMessage() );
 
 							return array(
 								'success' => FALSE,

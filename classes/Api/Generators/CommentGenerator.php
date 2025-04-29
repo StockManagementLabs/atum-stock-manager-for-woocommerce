@@ -35,13 +35,13 @@ class CommentGenerator extends GeneratorBase {
 
 		// Base data structure as per schema requirements.
 		$prepared_data = [
-			'id'           => (int) $comment['id'],
+			'id'           => (string) $comment['id'],
 			'author'       => [
-				'id'        => (int) $comment['author'],
+				'id'        => (string) $comment['author'],
 				'_id'       => NULL,
 				'name'      => $comment['author_name'] ?? '',
 				'email'     => '',
-				'avatar'    => '',
+				'avatar'    => NULL,
 				'userAgent' => '',
 			],
 			'content'      => strip_tags( $comment['content']['rendered'] ?? '' ),
@@ -49,19 +49,19 @@ class CommentGenerator extends GeneratorBase {
 			'dateGMT'      => $comment['date_gmt'],
 			'parent'       => $this->prepare_ids( $comment['parent'] ?? NULL ),
 			'post'         => [
-				'id'   => (int) $comment['post'],
-				'_id'  => NULL,
-				'type' => NULL, // TODO: DO WE NEED TO SET THIS?
+				'id'       => (string) $comment['post'],
+				'_id'      => NULL,
+				'type'     => NULL,
+				'itemType' => NULL,
+				'uid'      => NULL
 			],
-			'postType'     => NULL, // TODO: DO WE NEED TO SET THIS?
+			'postType'     => $this->get_post_type($comment['post']),
 			'actionType'   => $this->extract_action_type( $comment['content']['rendered'] ),
 			'status'       => $comment['status'],
 			'type'         => $comment['type'],
 			'addedByUser'  => FALSE,
 			'customerNote' => FALSE,
 			'metaData'     => [],
-			'trash'        => FALSE,
-			'conflict'     => FALSE,
 		];
 
 		// Add data array if needed based on content.
@@ -72,6 +72,20 @@ class CommentGenerator extends GeneratorBase {
 
 		return array_merge( $this->get_base_fields(), $prepared_data );
 
+	}
+
+	/**
+	 * Get post type for a given post ID
+	 *
+	 * @since 1.9.44
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return string|null The post type or null if not found.
+	 */
+	private function get_post_type( $post_id ): ?string {
+		$post_type = get_post_type( $post_id );
+		return $post_type ?: NULL;
 	}
 
 	/**
@@ -112,14 +126,13 @@ class CommentGenerator extends GeneratorBase {
 
 		$data = [];
 
-		// Extract stock level changes.
-		// TODO: THIS IS PROBABLY WRONG, NEED TO FIX.
+		// Extract stock level changes
 		if ( str_contains( $content, 'Stock levels reduced' ) ) {
-
 			preg_match_all( '/([^(]+) \(([^)]+)\) (\d+)→(\d+)/', $content, $matches, PREG_SET_ORDER );
 
 			foreach ( $matches as $match ) {
 				$data[] = [
+					'id'           => NULL,
 					'_id'          => 'stock_change:' . $this->generate_uuid(),
 					'key'          => 'stock_change',
 					'value'        => sprintf( '%d→%d', $match[3], $match[4] ),

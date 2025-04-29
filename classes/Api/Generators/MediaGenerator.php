@@ -34,16 +34,19 @@ class MediaGenerator extends GeneratorBase {
 	protected function prepare_data( array $media ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'              => (int) $media['id'],
+			'id'              => (string) $media['id'],
 			'name'            => $media['title']['rendered'] ?? '',
-			'slug'            => $media['slug'] ?? '',
-			'alt'             => $media['alt_text'] ?? '',
-			'type'            => $media['media_type'] ?? '',
+			'slug'            => $media['slug'] ?? NULL,
+			'alt'             => $media['alt_text'] ?? NULL,
+			'type'            => $media['media_type'] ?? NULL,
 			'src'             => $media['source_url'] ?? '',
-			'file'            => $media['media_details']['file'] ?? '',
-			'dateCreated'     => $media['date'] ?? '',
-			'dateModified'    => $media['modified'] ?? '',
-			'dateModifiedGMT' => $media['modified_gmt'] ?? '',
+			'file'            => $media['media_details']['file'] ?? NULL,
+			'dateCreated'     => $media['date'] ?? NULL,
+			'dateCreatedGMT'  => $media['date_gmt'] ?? NULL,
+			'dateModified'    => $media['modified'] ?? NULL,
+			'dateModifiedGMT' => $media['modified_gmt'] ?? NULL,
+			'uid'             => NULL,
+			'itemType'        => 'media',
 		] );
 
 	}

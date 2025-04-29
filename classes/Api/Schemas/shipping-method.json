@@ -11,6 +11,10 @@
 		"_id"
 	],
 	"properties" : {
+		"itemType" : {
+			"type" : "string",
+			"const": "shipping-method"
+		},
 		"id" : {
 			"type" : "string"
 		},
@@ -21,6 +25,12 @@
 			"type" : "string"
 		},
 		"description" : {
+			"type" : "string"
+		},
+		"type" : {
+			"type" : "string"
+		},
+		"slug" : {
 			"type" : "string"
 		},
 		"_deleted" : {

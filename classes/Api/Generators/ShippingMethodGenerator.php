@@ -37,14 +37,17 @@ class ShippingMethodGenerator extends GeneratorBase {
 		$allowed_types = [ 'flat_rate', 'free_shipping', 'local_pickup' ];
 		$type          = in_array( $shipping_method['id'], $allowed_types ) ? $shipping_method['id'] : 'flat_rate';
 
-		return array_merge( $this->get_base_fields(), [
-			'id'           => $shipping_method['id'],
-			'title'        => $shipping_method['title'],
-			'description'  => $shipping_method['description'],
-			'type'         => $type,
-			'slug'         => sanitize_title( $shipping_method['title'] ),
-		] );
-
+		return array_merge( 
+			$this->get_base_fields(), 
+			[
+				'itemType'     => 'shipping-method',
+				'id'           => $shipping_method['id'] ?? null,
+				'title'        => $shipping_method['title'] ?? null,
+				'description'  => $shipping_method['description'] ?? null,
+				'type'         => $type,
+				'slug'         => isset($shipping_method['title']) ? sanitize_title( $shipping_method['title'] ) : null,
+			] 
+		);
 	}
 
 } 

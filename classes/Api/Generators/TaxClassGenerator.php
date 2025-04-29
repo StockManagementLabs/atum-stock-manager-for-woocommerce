@@ -34,9 +34,9 @@ class TaxClassGenerator extends GeneratorBase {
 	protected function prepare_data( array $tax_class ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'slug'         => $tax_class['slug'],
-			'name'         => $tax_class['name'],
-			'conflict'     => false,
+			'slug'     => isset( $tax_class['slug'] ) ? $tax_class['slug'] : NULL,
+			'name'     => isset( $tax_class['name'] ) ? $tax_class['name'] : NULL,
+			'itemType' => 'tax-class',
 		] );
 
 	}

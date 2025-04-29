@@ -12,7 +12,22 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
+		},
+		"uid" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"name" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"slug" : {
+			"type" : "string",
+			"nullable" : true
+		},
+		"itemType" : {
+			"type" : "string"
 		},
 		"multipleSuppliers" : {
 			"type" : "boolean"
@@ -76,6 +91,55 @@
 				"properties" : {
 					"id" : {
 						"type" : "number"
+					},
+					"product" : {
+						"type" : "object",
+						"nullable" : true
+					},
+					"variation" : {
+						"type" : "object",
+						"nullable" : true
+					},
+					"inventories" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object"
+						}
+					},
+					"bomItems" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object"
+						}
+					},
+					"order" : {
+						"type" : "object",
+						"properties" : {
+							"_id" : {
+								"type" : "string",
+								"nullable" : true
+							},
+							"itemType" : {
+								"type" : "string"
+							},
+							"id" : {
+								"type" : "number"
+							},
+							"uid" : {
+								"type" : "string",
+								"nullable" : true
+							}
+						}
+					},
+					"parent" : {
+						"type" : "string",
+						"nullable" : true
+					},
+					"taxes" : {
+						"type" : "array",
+						"items" : {
+							"type" : "object"
+						}
 					},
 					"_id" : {
 						"type" : "string"
@@ -347,6 +411,12 @@
 		},
 		"_attachments" : {
 			"type" : "object"
+		},
+		"feeTotal" : {
+			"type" : "number"
+		},
+		"feeTax" : {
+			"type" : "number"
 		}
 	}
 }

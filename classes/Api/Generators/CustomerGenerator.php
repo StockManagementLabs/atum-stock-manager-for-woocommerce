@@ -34,7 +34,8 @@ class CustomerGenerator extends GeneratorBase {
 	protected function prepare_data( array $customer ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'               => (int) $customer['id'],
+			'id'               => (string) $customer['id'],
+			'itemType'         => $customer['itemType'] ?? 'customer',
 			'dateCreated'      => $customer['date_created'],
 			'dateCreatedGMT'   => $customer['date_created_gmt'],
 			'dateModified'     => $customer['date_modified'],
@@ -44,12 +45,11 @@ class CustomerGenerator extends GeneratorBase {
 			'lastName'         => $customer['last_name'],
 			'role'             => $customer['role'],
 			'username'         => $customer['username'],
+			'password'         => null,
 			'billing'          => $this->prepare_billing_data( $customer['billing'] ),
 			'shipping'         => $this->prepare_shipping_data( $customer['shipping'] ),
 			'isPayingCustomer' => (bool) $customer['is_paying_customer'],
 			'avatarUrl'        => $customer['avatar_url'],
-			'trash'            => FALSE,
-			'conflict'         => FALSE,
 		] );
 
 	}
@@ -66,17 +66,17 @@ class CustomerGenerator extends GeneratorBase {
 	private function prepare_billing_data( array $billing ): array {
 
 		return [
-			'firstName' => $billing['first_name'],
-			'lastName'  => $billing['last_name'],
-			'company'   => $billing['company'],
-			'address1'  => $billing['address_1'],
-			'address2'  => $billing['address_2'],
-			'city'      => $billing['city'],
-			'state'     => $billing['state'],
-			'postcode'  => $billing['postcode'],
-			'country'   => $billing['country'],
-			'email'     => $billing['email'],
-			'phone'     => $billing['phone'],
+			'firstName' => $billing['first_name'] ?? null,
+			'lastName'  => $billing['last_name'] ?? null,
+			'company'   => $billing['company'] ?? null,
+			'address1'  => $billing['address_1'] ?? null,
+			'address2'  => $billing['address_2'] ?? null,
+			'city'      => $billing['city'] ?? null,
+			'state'     => $billing['state'] ?? null,
+			'postcode'  => $billing['postcode'] ?? null,
+			'country'   => $billing['country'] ?? null,
+			'email'     => $billing['email'] ?? null,
+			'phone'     => $billing['phone'] ?? null,
 		];
 	}
 
@@ -92,16 +92,16 @@ class CustomerGenerator extends GeneratorBase {
 	private function prepare_shipping_data( array $shipping ): array {
 
 		return [
-			'firstName' => $shipping['first_name'],
-			'lastName'  => $shipping['last_name'],
-			'company'   => $shipping['company'],
-			'address1'  => $shipping['address_1'],
-			'address2'  => $shipping['address_2'],
-			'city'      => $shipping['city'],
-			'state'     => $shipping['state'],
-			'postcode'  => $shipping['postcode'],
-			'country'   => $shipping['country'],
-			'phone'     => $shipping['phone'],
+			'firstName' => $shipping['first_name'] ?? null,
+			'lastName'  => $shipping['last_name'] ?? null,
+			'company'   => $shipping['company'] ?? null,
+			'address1'  => $shipping['address_1'] ?? null,
+			'address2'  => $shipping['address_2'] ?? null,
+			'city'      => $shipping['city'] ?? null,
+			'state'     => $shipping['state'] ?? null,
+			'postcode'  => $shipping['postcode'] ?? null,
+			'country'   => $shipping['country'] ?? null,
+			'phone'     => $shipping['phone'] ?? null,
 		];
 	}
 

@@ -8,11 +8,12 @@
 		"_rev",
 		"_meta",
 		"_attachments",
-		"id"
+		"id",
+		"type"
 	],
 	"properties": {
 		"id": {
-			"type": "number"
+			"type": "string"
 		},
 		"type": {
 			"type": "string",
@@ -68,8 +69,10 @@
 		},
 		"locations": {
 			"type": "array",
+			"description": "List of locations associated with this inventory item",
 			"items": {
 				"type": "object",
+				"required": ["id", "name"],
 				"properties": {
 					"id": {
 						"type": "number"
@@ -148,8 +151,10 @@
 		},
 		"categories": {
 			"type": "array",
+			"description": "Product categories associated with this inventory item",
 			"items": {
 				"type": "object",
+				"required": ["id", "name", "slug"],
 				"properties": {
 					"id": {
 						"type": "number"

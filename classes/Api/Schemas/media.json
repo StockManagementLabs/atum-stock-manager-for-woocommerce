@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"_id" : {
 			"type" : "string"
@@ -21,42 +21,71 @@
 			"type" : "string",
 			"minLength" : 1
 		},
+		"uid" : {
+			"type" : "string",
+			"nullable" : true
+		},
 		"name" : {
 			"type" : "string"
 		},
 		"slug" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"alt" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"type" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"src" : {
 			"type" : "string"
 		},
 		"file" : {
-			"type" : "string"
+			"type" : "string",
+			"nullable" : true
 		},
 		"dateCreated" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateCreatedGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateModified" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"dateModifiedGMT" : {
 			"type" : "string",
+			"nullable" : true,
 			"format" : "date-time"
 		},
 		"_deleted" : {
-			"type" : "boolean"
+			"type" : "boolean",
+			"nullable" : true
+		},
+		"itemType" : {
+			"type" : "string",
+			"enum" : ["media"]
+		},
+		"conflict" : {
+			"type" : "boolean",
+			"default" : false
+		},
+		"deleted" : {
+			"type" : "boolean",
+			"default" : false
+		},
+		"trash" : {
+			"type" : "boolean",
+			"default" : false
 		},
 		"_meta" : {
 			"type" : "object",

@@ -50,7 +50,6 @@ class AddonGenerator extends GeneratorBase {
 			'tags'             => $addon['tags'] ?? [],
 			'versionRequired'  => $addon['version_required'] ?? '',
 			'key'              => $addon['key'] ?? NULL,
-			'deleted'          => FALSE,
 			'status'           => $addon['status'] ?? 'inactive',
 			'enabled'          => (bool) ( $addon['enabled'] ?? FALSE ),
 		] );
