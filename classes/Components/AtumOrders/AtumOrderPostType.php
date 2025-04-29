@@ -53,6 +53,13 @@ abstract class AtumOrderPostType {
 	 * @var string
 	 */
 	protected $help_guide = '';
+
+	/**
+	 * Number of ATUM orders with unknown status
+	 *
+	 * @var int
+	 */
+	protected $unknown_status_orders = 0;
 	
 	/**
 	 * Status that means an ATUM Order is finished
@@ -130,6 +137,9 @@ abstract class AtumOrderPostType {
 
 			// Move the 'trash' status to the end of the list.
 			add_filter( "views_edit-$post_type", array( $this, 'edit_list_table_views' ) );
+
+			// Filter the unknown status in ATUM Orders list tables.
+			add_action( 'load-edit.php', array( $this, 'maybe_add_unknown_status_filter' ), 9 );
 			
 		}
 
@@ -371,7 +381,7 @@ abstract class AtumOrderPostType {
 				if ( ! is_wp_error( $atum_order ) ) {
 
 					$status        = $atum_order->get_status();
-					$status_name   = $statuses[ $status ] ?? __( '(Unknown)', ATUM_TEXT_DOMAIN );
+					$status_name   = $statuses[ $status ] ?? sprintf( __( '%s (unknown)', ATUM_TEXT_DOMAIN ), $status );
 					$status_color  = ' style="background-color: ';
 					$status_color .= isset( $status_colors[ $status ] ) ? $status_colors[ $status ] . '"' : 'rgba(255,72,72,.5)"';
 
@@ -1271,13 +1281,90 @@ abstract class AtumOrderPostType {
 	public function edit_list_table_views( $views ) {
 
 		// Send the trash status to the end of the status views list on ATUM Orders' List Tables.
+		// But before the "Unknown" status if it exists.
 		if ( array_key_exists( 'trash', $views ) ) {
 			$trash_status = $views['trash'];
 			unset( $views['trash'] );
 			$views['trash'] = $trash_status;
 		}
 
+		// Check if there are ATUM Orders with unknown statuses.
+		if ( $this->unknown_status_orders ) {
+			// Maybe add the current class.
+			$current = ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ? 'class="current" ' : '';
+
+			$views['unknown'] = '<a ' . $current . 'href="edit.php?post_status=unknown&#038;post_type=' . static::POST_TYPE . '">' . esc_html__( 'Unknown', ATUM_TEXT_DOMAIN ) . "<span class='count'>($this->unknown_status_orders)</span></a>";
+		}
+
+		// Ensure publish is not present.
+		unset( $views['publish'] );
+
 		return $views;
+
+	}
+
+	/**
+	 * Add the hook to filter the unknown status if loading the ATUM Orders list table
+	 *
+	 * @since 1.9.48
+	 */
+	public function maybe_add_unknown_status_filter() {
+
+		$screen = get_current_screen();
+
+		if ( $screen && str_contains( $screen->id, static::POST_TYPE ) ) {
+			add_filter( 'posts_where', array( $this, 'filter_unknown_status' ), 10, 2 );
+		}
+
+	}
+
+	/**
+	 * Modify the WP Query to list the ATUM Orders with unknown status.
+	 *
+	 * @since 1.9.11
+	 *
+	 * @param string    $where
+	 * @param \WP_Query $wp_query
+	 *
+	 * @return string
+	 */
+	public function filter_unknown_status( $where, $wp_query ) {
+
+		global $wpdb;
+
+		// Ensure it's the correct WP Query.
+		if ( static::POST_TYPE === $wp_query->query_vars['post_type'] ) {
+
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$where_clause     = $wpdb->prepare( "
+				post_type = %s AND post_status NOT IN (
+			    '" . implode( "','", array_merge( array_keys( static::get_statuses() ), [ 'auto-draft', 'trash' ] ) ) . "')", static::POST_TYPE );
+			$unknown_statuses = $wpdb->get_col( "SELECT DISTINCT post_status FROM $wpdb->posts WHERE $where_clause" );
+
+			if ( $unknown_statuses ) {
+
+				$this->unknown_status_orders = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE $where_clause" );
+
+				// Filter ATUM Orders with unknown statuses if queried.
+				if ( ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ) {
+
+					// Remove the post_status query used and replace it with the unknown statuses query.
+					$begin           = strpos( $where, "{$wpdb->posts}.post_status" );
+					$last_occurrence = strrpos( $where, "{$wpdb->posts}.post_status" );
+					$end             = strpos( $where, ')', $last_occurrence );
+
+					$post_status_query = "{$wpdb->posts}.post_status IN ('" . implode( "','", $unknown_statuses ) . "')";
+
+					$where = substr_replace( $where, $post_status_query, $begin, $end - $begin );
+
+				}
+
+			}
+			//phpcs:enable
+
+		}
+
+		return $where;
 
 	}
 

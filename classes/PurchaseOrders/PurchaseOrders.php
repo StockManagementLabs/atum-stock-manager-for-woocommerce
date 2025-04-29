@@ -83,13 +83,6 @@ class PurchaseOrders extends AtumOrderPostType {
 		'delete_posts'       => 'atum_delete_purchase_orders',
 		'delete_other_posts' => 'atum_delete_other_purchase_orders',
 	);
-
-	/**
-	 * Number of POs with unknown status
-	 *
-	 * @var int
-	 */
-	protected $unknown_status_pos = 0;
 	
 	/**
 	 * PurchaseOrders singleton constructor
@@ -142,9 +135,6 @@ class PurchaseOrders extends AtumOrderPostType {
 			// Add custom search for POs.
 			add_action( 'atum/' . self::POST_TYPE . '/extra_search', array( $this, 'po_search' ), 10, 2 );
 			add_filter( 'atum/' . self::POST_TYPE . '/search_meta_keys', array( $this, 'search_meta_keys' ) );
-
-			// Add unknown status POs view if any. After Trash.
-			add_filter( 'views_edit-' . self::POST_TYPE, array( $this, 'maybe_add_unknown_view' ), 11 );
 
 			// Check whether to show an admin notice to the PO.
 			add_action( 'current_screen', array( $this, 'maybe_show_admin_notice' ), 9 );
@@ -572,7 +562,7 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Add the help tab to the PO list page and allow filtering unknown status POs
+	 * Add the help tab to the PO list page.
 	 *
 	 * @since 1.3.0
 	 */
@@ -590,8 +580,6 @@ class PurchaseOrders extends AtumOrderPostType {
 			);
 
 			Helpers::add_help_tab( $help_tabs, $this );
-
-			add_filter( 'posts_where', array( $this, 'filter_po_unknown_status' ), 10, 2 );
 
 		}
 
@@ -985,82 +973,6 @@ class PurchaseOrders extends AtumOrderPostType {
 	}
 
 	/**
-	 * Add an unknown status view if any PO has an unknown status.
-	 *
-	 * @since 1.9.11
-	 *
-	 * @param array $status_views
-	 *
-	 * @return array
-	 */
-	public function maybe_add_unknown_view( $status_views ) {
-
-		// Check if there are POs with unknown statuses.
-		if ( $this->unknown_status_pos ) {
-
-			// Maybe add the current class.
-			$current = ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ? 'class="current" ' : '';
-
-			$status_views['unknown'] = '<a ' . $current . 'href="edit.php?post_status=unknown&#038;post_type=atum_purchase_order">' . esc_html__( 'Unknown', ATUM_TEXT_DOMAIN ) . "<span class='count'>($this->unknown_status_pos)</span></a>";
-		}
-
-		// Ensure publish is not present.
-		unset( $status_views['publish'] );
-
-		return $status_views;
-	}
-
-	/**
-	 * Modify the WP Query to list the POs with unknown status.
-	 *
-	 * @since 1.9.11
-	 *
-	 * @param string    $where
-	 * @param \WP_Query $wp_query
-	 *
-	 * @return string
-	 */
-	public function filter_po_unknown_status( $where, $wp_query ) {
-
-		global $wpdb;
-
-		// Ensure it's the correct WP Query.
-		if ( self::POST_TYPE === $wp_query->query_vars['post_type'] ) {
-
-			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$where_clause     = $wpdb->prepare( "
-			post_type = %s AND post_status NOT IN (
-			    '" . implode( "','", array_merge( array_keys( static::get_statuses() ), [ 'auto-draft' ] ) ) . "')", self::POST_TYPE );
-			$unknown_statuses = $wpdb->get_col( "SELECT DISTINCT post_status FROM $wpdb->posts WHERE $where_clause" );
-
-			if ( $unknown_statuses ) {
-
-				$this->unknown_status_pos = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE $where_clause" );
-
-				// Filter POs with unknown statuses if queried.
-				if ( ! empty( $_REQUEST['post_status'] ) && 'unknown' === $_REQUEST['post_status'] ) {
-
-					// Remove the post_status query used and replace it with the unknown statuses query.
-					$begin           = strpos( $where, "{$wpdb->posts}.post_status" );
-					$last_occurrence = strrpos( $where, "{$wpdb->posts}.post_status" );
-					$end             = strpos( $where, ')', $last_occurrence );
-
-					$post_status_query = "{$wpdb->posts}.post_status IN ('" . implode( "','", $unknown_statuses ) . "')";
-
-					$where = substr_replace( $where, $post_status_query, $begin, $end - $begin );
-
-				}
-
-			}
-			//phpcs:enable
-
-		}
-
-		return $where;
-
-	}
-
-	/**
 	 * Check whether to show an admin notice on the POs
 	 *
 	 * @since 0.9.27
@@ -1072,7 +984,7 @@ class PurchaseOrders extends AtumOrderPostType {
 		// Add the unknow status notice if necessary.
 		if (
 			'post.php' === $pagenow && self::POST_TYPE === $typenow &&
-			! empty( $_GET['post'] ) && ! array_key_exists( get_post_status( absint( $_GET['post'] ) ), static::get_statuses() )
+			! empty( $_GET['post'] ) && ! array_key_exists( get_post_status( absint( $_GET['post'] ) ), self::get_statuses() )
 		) {
 			AtumAdminNotices::add_notice(
 				__( 'This PO has an unknown status, please change it to any known one and save it to unblock it.', ATUM_TEXT_DOMAIN ),
