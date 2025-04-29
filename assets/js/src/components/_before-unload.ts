@@ -1,36 +1,42 @@
-/* =======================================
-   BEFORE UNLOAD PROMPT
-   ======================================= */
+/*
+ * =======================================
+ * BEFORE UNLOAD PROMPT
+ * =======================================
+ */
 
 const BeforeUnload = {
 
-	addPrompt( checkCallback: Function ) {
+    /**
+     * Add a before unload prompt.
+     *
+     * @param checkCallback - Function to check if the prompt should not be shown.
+     */
+    addPrompt( checkCallback: Function ) {
 
-		// Before unload alert.
-		$( window ).on( 'beforeunload', (): boolean | void => {
+        // Before unload alert.
+        $( window ).on( 'beforeunload', (): boolean | void => {
 
-			if ( checkCallback() ) {
-				return;
-			}
+            if ( checkCallback() ) {
+                return;
+            }
 
-			// Prevent multiple prompts - seen on Chrome and IE.
-			if ( navigator.userAgent.toLowerCase().match( /msie|chrome/ ) ) {
+            // Prevent multiple prompts - seen on Chrome and IE.
+            if ( navigator.userAgent.toLowerCase().match( /msie|chrome/ ) ) {
 
-				if ( window[ 'aysHasPrompted' ] ) {
-					return;
-				}
+                if ( window[ 'aysHasPrompted' ] ) {
+                    return;
+                }
 
-				window[ 'aysHasPrompted' ] = true;
-				window.setTimeout( () => window[ 'aysHasPrompted' ] = false, 900 );
+                window[ 'aysHasPrompted' ] = true;
+                window.setTimeout( () => window[ 'aysHasPrompted' ] = false, 900 );
 
-			}
+            }
 
-			return false;
+            return false;
 
-		} );
-
-	},
+        } );
+    },
 	
-}
+};
 
 export default BeforeUnload;
