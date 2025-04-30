@@ -14,7 +14,7 @@ const BeforeUnload = {
     addPrompt( checkCallback: Function ) {
 
         // Before unload alert.
-        $( window ).on( 'beforeunload', (): boolean | void => {
+        $( window ).on( 'beforeunload.atum', (): boolean | void => {
 
             if ( checkCallback() ) {
                 return;
@@ -35,6 +35,13 @@ const BeforeUnload = {
             return false;
 
         } );
+    },
+    
+    /**
+     * Remove the before unload prompt.
+     */
+    removePrompt() {
+        $( window ).off( 'beforeunload.atum' );
     },
 	
 };

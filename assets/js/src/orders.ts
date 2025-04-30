@@ -32,5 +32,8 @@ jQuery( ( $: JQueryStatic ) => {
     
     // Before unload alert.
     BeforeUnload.addPrompt( () => $( '[name="post_status"]' ).val() !== 'auto-draft' );
+    
+    // Remove the prompt when the form is submitted.
+    $( document ).on( 'submit', '#post', () => BeforeUnload.removePrompt() );
 	
 } );
