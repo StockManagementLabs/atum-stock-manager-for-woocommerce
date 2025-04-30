@@ -565,7 +565,7 @@
 					},
 					"_id" : {
 						"type" : "string",
-			"nullable" : true
+						"nullable" : true
 					}
 				}
 			}
@@ -586,7 +586,7 @@
 					},
 					"_id" : {
 						"type" : "string",
-			"nullable" : true
+						"nullable" : true
 					}
 				}
 			}
@@ -607,7 +607,7 @@
 					},
 					"_id" : {
 						"type" : "string",
-			"nullable" : true
+						"nullable" : true
 					}
 				}
 			}

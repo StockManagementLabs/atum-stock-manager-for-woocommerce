@@ -15,7 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 var BeforeUnload = {
     addPrompt: function (checkCallback) {
-        $(window).on('beforeunload', function () {
+        $(window).on('beforeunload.atum', function () {
             if (checkCallback()) {
                 return;
             }
@@ -28,6 +28,9 @@ var BeforeUnload = {
             }
             return false;
         });
+    },
+    removePrompt: function () {
+        $(window).off('beforeunload.atum');
     },
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BeforeUnload);
@@ -67267,6 +67270,7 @@ jQuery(function ($) {
     new _components_orders_atum_orders__WEBPACK_IMPORTED_MODULE_0__["default"](settings, tooltip, dateTimePicker, enhancedSelect);
     new _components_orders_order_notes__WEBPACK_IMPORTED_MODULE_4__["default"](settings);
     _components_before_unload__WEBPACK_IMPORTED_MODULE_1__["default"].addPrompt(function () { return $('[name="post_status"]').val() !== 'auto-draft'; });
+    $(document).on('submit', '#post', function () { return _components_before_unload__WEBPACK_IMPORTED_MODULE_1__["default"].removePrompt(); });
 });
 
 })();

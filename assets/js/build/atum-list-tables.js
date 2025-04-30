@@ -107,7 +107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "jquery");
 var BeforeUnload = {
     addPrompt: function (checkCallback) {
-        $(window).on('beforeunload', function () {
+        $(window).on('beforeunload.atum', function () {
             if (checkCallback()) {
                 return;
             }
@@ -120,6 +120,9 @@ var BeforeUnload = {
             }
             return false;
         });
+    },
+    removePrompt: function () {
+        $(window).off('beforeunload.atum');
     },
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BeforeUnload);

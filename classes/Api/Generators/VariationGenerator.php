@@ -75,12 +75,6 @@ class VariationGenerator extends GeneratorBase {
 
 		}, $variation['meta_data'] ?? [] );
 
-		// Prepare parent data
-		$parent = [
-			'id'  => (int) $variation['parent_id'],
-			'_id' => NULL
-		];
-
 		// Prepare image data
 		$image = NULL;
 		if ( isset( $variation['image'] ) && ! empty( $variation['image'] ) ) {
@@ -109,7 +103,7 @@ class VariationGenerator extends GeneratorBase {
 		return [
 		   'id'                     => (int) $variation['id'],
 		   'uid'                    => $variation['global_unique_id'] ?? NULL,
-		   'parent'                 => $parent,
+		   'parent'                 => $this->prepare_ids( $variation['parent_id'] ?? NULL ),
 		   'parentType'             => NULL,
 		   'parentName'             => NULL,
 		   'parentSku'              => $variation['parent_sku'] ?? '',
@@ -122,11 +116,11 @@ class VariationGenerator extends GeneratorBase {
 		   'status'                 => $variation['status'] ?? 'publish',
 		   'sku'                    => $variation['sku'] ?? '',
 		   'barcode'                => $variation['barcode'] ?? NULL,
-		   'price'                  => ! $this->is_null_value( $variation['price'] ) ? (float) $variation['price'] : NULL,
-		   'regularPrice'           => ! $this->is_null_value( $variation['regular_price'] ) ? (float) $variation['regular_price'] : NULL,
-		   'salePrice'              => ! $this->is_null_value( $variation['sale_price'] ) ? (float) $variation['sale_price'] : NULL,
-		   'stockQuantity'          => ! $this->is_null_value( $variation['stock_quantity'] ) ? (float) $variation['stock_quantity'] : NULL,
-		   'stock'                  => ! $this->is_null_value( $variation['stock'] ) ? (float) $variation['stock'] : NULL,
+		   'price'                  => ( isset( $variation['price'] ) && ! $this->is_null_value( $variation['price'] ) ) ? (float) $variation['price'] : NULL,
+		   'regularPrice'           => ( isset( $variation['regular_price'] ) && ! $this->is_null_value( $variation['regular_price'] ) ) ? (float) $variation['regular_price'] : NULL,
+		   'salePrice'              => ( isset( $variation['sale_price'] ) && ! $this->is_null_value( $variation['sale_price'] ) ) ? (float) $variation['sale_price'] : NULL,
+		   'stockQuantity'          => ( isset( $variation['stock_quantity'] ) && ! $this->is_null_value( $variation['stock_quantity'] ) ) ? (float) $variation['stock_quantity'] : NULL,
+		   'stock'                  => ( isset( $variation['stock'] ) && ! $this->is_null_value( $variation['stock'] ) ) ? (float) $variation['stock'] : NULL,
 		   'manageStock'            => (bool) ( $variation['manage_stock'] ?? FALSE ),
 		   'stockStatus'            => $variation['stock_status'] ?? 'instock',
 		   'backorders'             => $variation['backorders'] ?? 'no',
@@ -168,9 +162,9 @@ class VariationGenerator extends GeneratorBase {
 		   'calcBackOrders'         => $variation['calc_backorders'] ?? NULL,
 		   'calcStockIndicator'     => $variation['calc_stock_indicator'] ?? NULL,
 		   'calcWillLast'           => $variation['calc_will_last'] ?? NULL,
-		   'miInventories'          => $variation['mi_inventories'] ?? [],
-		   'inventoryStock'         => ! $this->is_null_value( $variation['inventory_stock'] ) ? (int) $variation['inventory_stock'] : NULL,
-		   'inventoryMainStock'     => ! $this->is_null_value( $variation['inventory_main_stock'] ) ? (int) $variation['inventory_main_stock'] : NULL,
+		   'miInventories'          => $this->prepare_ids( $variation['mi_inventories'] ?? NULL ),
+		   'inventoryStock'         => ( isset( $variation['inventory_stock'] ) && ! $this->is_null_value( $variation['inventory_stock'] ) ) ? (int) $variation['inventory_stock'] : NULL,
+		   'inventoryMainStock'     => ( isset( $variation['inventory_main_stock'] ) && ! $this->is_null_value( $variation['inventory_main_stock'] ) ) ? (int) $variation['inventory_main_stock'] : NULL,
 		   'multiInventory'         => (bool) ( $variation['multi_inventory'] ?? FALSE ),
 		   'inventorySortingMode'   => $variation['inventory_sorting_mode'] ?? NULL,
 		   'inventoryIteration'     => $variation['inventory_iteration'] ?? NULL,
@@ -181,7 +175,7 @@ class VariationGenerator extends GeneratorBase {
 		   'atumLocations'          => [],
 		   'hasLocation'            => FALSE,
 		   'categories'             => [],
-		   'linkedBoms'             => $variation['linked_boms'] ?? [],
+		   'linkedBoms'             => $this->prepare_ids( $variation['linked_boms'] ?? NULL ),
 		   'syncPurchasePrice'      => (bool) ( $variation['sync_purchase_price'] ?? FALSE ),
 		   'isBom'                  => (bool) ( $variation['is_bom'] ?? FALSE ),
 		   'isUsedBom'              => FALSE,
