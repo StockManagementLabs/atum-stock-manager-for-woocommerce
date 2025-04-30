@@ -25,8 +25,7 @@
 					"type" : "number"
 				},
 				"_id" : {
-					"type" : "string",
-					"nullable" : true
+					"type" : "string"
 				}
 			}
 		},
@@ -122,18 +121,15 @@
 								"type" : "string"
 							},
 							"_id"  : {
-								"type" : "string",
-			"nullable" : true
+								"type" : "string"
 							},
 							"id"   : {
-								"type" : "string",
-								"nullable" : true
+								"type" : "string"
 							}
 						}
 					},
 					"_id"    : {
-						"type" : "string",
-			"nullable" : true
+						"type" : "string"
 					},
 					"id"     : {
 						"type" : "number"
@@ -322,7 +318,18 @@
 			"type" : "number"
 		},
 		"miInventories"       : {
-			"type" : "array"
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
 		},
 		"inventoryStock"      : {
 			"type" : "number",
@@ -539,7 +546,18 @@
 			}
 		},
 		"linkedBoms"          : {
-			"type" : "array"
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
+					"_id" : {
+						"type" : "string"
+					}
+				}
+			}
 		},
 		"syncPurchasePrice"   : {
 			"type" : "boolean"
