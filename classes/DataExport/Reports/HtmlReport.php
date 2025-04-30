@@ -59,6 +59,8 @@ class HtmlReport extends ListTable {
 			$this->title_max_length = absint( $args['title_max_length'] );
 		}
 
+		do_action( 'atum/data_export/html_report/before_construct', $args );
+
 		parent::__construct( $args );
 
 		// Add the font icons inline for thumb and product type columns.
