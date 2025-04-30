@@ -196,6 +196,27 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.48`
+
+*2025-04-30*
+
+**Features**
+
+* Show the beforeUnload alert when trying to close a new ATUM Order without saving.
+* Added the "unknown" status views to ILs list tables.
+* Added hook in SC ListTable before adding table columns.
+
+**Changes**
+
+* Avoid wp.org API request for ATUM addons when WP checks the plugin dependencies on the plugins list.
+* Refactoring.
+
+**Fixes**
+
+* Do not show the "beforeUnload" prompt when submitting the post form.
+
+---
+
 `1.9.47`
 
 *2025-04-24*

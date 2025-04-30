@@ -7,7 +7,7 @@ Tested up to: 6.8
 Requires PHP: 7.4
 WC requires at least: 5.0
 WC tested up to: 9.8.2
-Stable tag: 1.9.47
+Stable tag: 1.9.48
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,27 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.48`
+
+*2025-04-30*
+
+**Features**
+
+* Show the beforeUnload alert when trying to close a new ATUM Order without saving.
+* Added the "unknown" status views to ILs list tables.
+* Added hook in SC ListTable before adding table columns.
+
+**Changes**
+
+* Avoid wp.org API request for ATUM addons when WP checks the plugin dependencies on the plugins list.
+* Refactoring.
+
+**Fixes**
+
+* Do not show the "beforeUnload" prompt when submitting the post form.
 
 ---
 
