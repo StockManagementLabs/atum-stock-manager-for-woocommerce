@@ -193,6 +193,9 @@ class ListTable extends AtumListTable {
 	 * }
 	 */
 	public function __construct( $args = array() ) {
+
+        // Prepare ListTable.
+        do_action( 'atum/stock_central/list_table/before_construct', $this );
 		
 		// Activate managed/unmanaged counters separation.
 		$this->show_unmanaged_counters = 'yes' === Helpers::get_option( 'unmanaged_counters', 'no' );
