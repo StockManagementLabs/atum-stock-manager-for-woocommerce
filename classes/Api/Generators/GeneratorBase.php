@@ -357,9 +357,17 @@ abstract class GeneratorBase {
 	 */
 	private function is_valid_date_time( string $date_string ): bool {
 
+		// The dates can be in the format YYYY-MM-DD HH:MM:SS or YYYY-MM-DDTHH:MM:SS
 		$date = \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $date_string );
 
-		return $date && $date->format( 'Y-m-d\TH:i:s' ) === $date_string;
+		if ( $date ) {
+			return $date->format( 'Y-m-d\TH:i:s' ) === $date_string;
+		}
+
+		$date = \DateTime::createFromFormat( 'Y-m-d H:i:s', $date_string );
+
+		return $date && $date->format( 'Y-m-d H:i:s' ) === $date_string;
+
 	}
 
 	/**
