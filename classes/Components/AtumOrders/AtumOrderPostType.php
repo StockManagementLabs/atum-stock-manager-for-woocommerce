@@ -1296,8 +1296,10 @@ abstract class AtumOrderPostType {
 			$views['unknown'] = '<a ' . $current . 'href="edit.php?post_status=unknown&#038;post_type=' . static::POST_TYPE . '">' . esc_html__( 'Unknown', ATUM_TEXT_DOMAIN ) . "<span class='count'>($this->unknown_status_orders)</span></a>";
 		}
 
-		// Ensure publish is not present.
-		unset( $views['publish'] );
+		// Ensure publish is not present if not needed.
+		if ( ! array_key_exists( 'publish', static::get_statuses() ) ) {
+			unset( $views['publish'] );
+		}
 
 		return $views;
 
