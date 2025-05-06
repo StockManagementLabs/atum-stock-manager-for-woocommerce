@@ -1526,6 +1526,10 @@ class Hooks {
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = NULL ) {
 
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return $_data;
+		}
+
 		$screen = get_current_screen();
 
 		if (
