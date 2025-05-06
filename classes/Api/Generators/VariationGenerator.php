@@ -53,7 +53,8 @@ class VariationGenerator extends GeneratorBase {
 		$tax_class = NULL;
 		if ( ! empty( $variation['tax_class'] ) ) {
 			$tax_class = [
-				'id'   => $variation['tax_class'] ?: 'standard',
+				'_id'  => $variation['tax_class'] ?: 'standard',
+				'slug' => $variation['tax_class'] ?: 'standard',
 				'name' => ucfirst( $variation['tax_class'] ?: 'standard' ) . ' Rate'
 			];
 		}

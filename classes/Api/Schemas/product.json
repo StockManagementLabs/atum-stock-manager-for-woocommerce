@@ -231,18 +231,15 @@
 		},
 		"taxClass" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
-				"id" : {
-					"type" : "number",
-					"nullable" : true
-				},
-				"_id" : {
+				"_id"   : {
 					"type" : "string"
 				},
 				"slug" : {
 					"type" : "string"
 				},
-				"itemType" : {
+				"name" : {
 					"type" : "string"
 				}
 			}
