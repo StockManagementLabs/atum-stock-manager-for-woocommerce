@@ -192,74 +192,75 @@ abstract class GeneratorBase {
 			return;
 		}
 
+		$error          = '';
 		$received_value = "\nReceived value: " . var_export( $value, TRUE );
 
 		switch ( $property_schema['type'] ) {
 			case 'string':
 				if ( ! is_string( $value ) ) {
-					throw new \Exception( "Property '$key' must be a string according to schema '$this->schema_name'$received_value" );
-				}
-
-				if ( isset( $property_schema['minLength'] ) && strlen( $value ) < $property_schema['minLength'] ) {
-					throw new \Exception( "Property '$key' is shorter than minimum length of {$property_schema['minLength']} according to schema '$this->schema_name'$received_value" );
-				}
-
-				if ( isset( $property_schema['format'] ) && $property_schema['format'] === 'date-time' ) {
-					if ( ! $this->is_valid_date_time( $value ) ) {
-						throw new \Exception( "Property '$key' must be a valid date-time string according to schema '$this->schema_name'$received_value" );
+					// Just leave the numeric values that are compatible with strings.
+					if ( ! is_numeric( $value ) ) {
+						$error = "Property '$key' must be a string according to schema '$this->schema_name'";
 					}
 				}
+				elseif ( isset( $property_schema['minLength'] ) && strlen( $value ) < $property_schema['minLength'] ) {
+					$error = "Property '$key' is shorter than minimum length of {$property_schema['minLength']} according to schema '$this->schema_name'";
+				}
+				elseif ( isset( $property_schema['format'] ) && $property_schema['format'] === 'date-time' && ! $this->is_valid_date_time( $value ) ) {
+					$error = "Property '$key' must be a valid date-time string according to schema '$this->schema_name'";
+				}
+
 				break;
 
 			case 'number':
 				if ( ! is_numeric( $value ) ) {
-					throw new \Exception( "Property '$key' must be a number according to schema '$this->schema_name'$received_value" );
+					$error = "Property '$key' must be a number according to schema '$this->schema_name'";
 				}
-
-				if ( isset( $property_schema['minimum'] ) && $value < $property_schema['minimum'] ) {
-					throw new \Exception( "Property '$key' is less than minimum value of {$property_schema['minimum']} according to schema '$this->schema_name'$received_value" );
+				elseif ( isset( $property_schema['minimum'] ) && $value < $property_schema['minimum'] ) {
+					$error = "Property '$key' is less than minimum value of {$property_schema['minimum']} according to schema '$this->schema_name'";
 				}
-
-				if ( isset( $property_schema['maximum'] ) && $value > $property_schema['maximum'] ) {
-					throw new \Exception( "Property '$key' is greater than maximum value of {$property_schema['maximum']} according to schema '$this->schema_name'$received_value" );
+				elseif ( isset( $property_schema['maximum'] ) && $value > $property_schema['maximum'] ) {
+					$error = "Property '$key' is greater than maximum value of {$property_schema['maximum']} according to schema '$this->schema_name'";
 				}
-
-				// Commented for now as the only prop that is using it is the _meta.lwt and we are generating the value ourselves.
-				/*if ( isset( $property_schema['multipleOf'] ) ) {
+				// NOTE: Commented for now as the only prop that is using it is the _meta.lwt and we are generating the value ourselves.
+				/*elseif ( isset( $property_schema['multipleOf'] ) ) {
 					$remainder = fmod( $value, $property_schema['multipleOf'] );
 
 					if ( abs( $remainder ) > 0.00001 ) { // Using small epsilon for float comparison
-						throw new \Exception( "Property '$key' must be a multiple of {$property_schema['multipleOf']} according to schema '$this->schema_name'$received_value" );
+						$error = "Property '$key' must be a multiple of {$property_schema['multipleOf']} according to schema '$this->schema_name'";
 					}
 				}*/
+
 				break;
 
 			case 'boolean':
 				if ( ! is_bool( $value ) ) {
-					throw new \Exception( "Property '$key' must be a boolean according to schema '$this->schema_name'$received_value" );
+					$error = "Property '$key' must be a boolean according to schema '$this->schema_name'";
 				}
 				break;
 
 			case 'object':
 				if ( ! is_object( $value ) && ! is_array( $value ) ) {
-					throw new \Exception( "Property '$key' must be an object according to schema '$this->schema_name'$received_value" );
+					$error = "Property '$key' must be an object according to schema '$this->schema_name'";
 				}
+				elseif ( isset( $property_schema['properties'] ) ) {
 
-				if ( isset( $property_schema['properties'] ) ) {
 					foreach ( $property_schema['properties'] as $prop_key => $prop_schema ) {
 						if ( isset( $value[ $prop_key ] ) ) {
 							$this->validate_property( "$key.$prop_key", $value[ $prop_key ], $prop_schema );
 						}
 					}
+
 				}
+
 				break;
 
 			case 'array':
 				if ( ! is_array( $value ) ) {
-					throw new \Exception( "Property '$key' must be an array according to schema '$this->schema_name'$received_value" );
+					$error = "Property '$key' must be an array according to schema '$this->schema_name'";
 				}
+				elseif ( isset( $property_schema['items'] ) ) {
 
-				if ( isset( $property_schema['items'] ) ) {
 					foreach ( $value as $index => $item ) {
 
 						if ( isset( $property_schema['items']['oneOf'] ) ) {
@@ -270,18 +271,30 @@ abstract class GeneratorBase {
 						}
 
 					}
+
 				}
 				break;
 
 			// Special case for mixed types where the data types in the db are inconsistent.
 			case 'mixed':
 				if ( ! is_string( $value ) && ! is_numeric( $value ) && ! is_bool( $value ) ) {
-					throw new \Exception( "Property '$key' must be mixed (string or numeric or boolean) type according to schema '$this->schema_name'$received_value" );
+					$error = "Property '$key' must be mixed (string or numeric or boolean) type according to schema '$this->schema_name'";
 				}
 				break;
 
 			default:
-				throw new \Exception( "Unsupported property type: '{$property_schema['type']}' in schema '$this->schema_name'$received_value" );
+				$error = "Unsupported property '$key' type '{$property_schema['type']}' in schema '$this->schema_name'";
+				break;
+		}
+
+		if ( $error ) {
+
+			if ( is_string( $received_value ) ) {
+				$error .= $received_value;
+			}
+
+			throw new \Exception( $error );
+
 		}
 
 	}

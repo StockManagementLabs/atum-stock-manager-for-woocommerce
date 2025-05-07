@@ -250,7 +250,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"name" : {
 						"type" : "string"
@@ -375,7 +375,7 @@
 			"nullable" : true,
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
@@ -389,7 +389,8 @@
 			"type" : "boolean"
 		},
 		"shippingClassId" : {
-			"type" : "number"
+			"type" : "number",
+			"nullable" : true
 		},
 		"groupedProducts" : {
 			"type" : "array",

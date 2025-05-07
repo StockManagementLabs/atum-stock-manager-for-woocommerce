@@ -223,11 +223,14 @@
 						}
 					},
 					"metaData"    : {
-						"type"  : "array",
+						"type" : "array",
 						"items" : {
-							"type"       : "object",
+							"type" : "object",
 							"properties" : {
-								"key"   : {
+								"id" : {
+									"type" : "number"
+								},
+								"key" : {
 									"type" : "string"
 								},
 								"value" : {
@@ -675,18 +678,14 @@
 			"items" : {
 				"type"       : "object",
 				"properties" : {
+					"id" : {
+						"type" : "number"
+					},
 					"key"   : {
 						"type" : "string"
 					},
 					"value" : {
-						"type" : [
-							"string",
-							"number",
-							"boolean",
-							"object",
-							"array"
-						],
-						"nullable" : true
+						"type" : "string"
 					}
 				}
 			}

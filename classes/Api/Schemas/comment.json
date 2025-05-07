@@ -146,21 +146,8 @@
 					},
 					"value" : {
 						"type" : "string"
-					},
-					"_id" : {
-						"type" : "string"
-					},
-					"displayKey" : {
-						"type" : "string"
-					},
-					"displayValue" : {
-						"type" : "string"
 					}
-				},
-				"required" : [
-					"key",
-					"value"
-				]
+				}
 			}
 		},
 		"deleted" : {

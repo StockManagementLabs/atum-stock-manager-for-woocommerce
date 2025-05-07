@@ -198,7 +198,21 @@
 						}
 					},
 					"metaData" : {
-						"type" : "array"
+						"type" : "array",
+						"items" : {
+							"type" : "object",
+							"properties" : {
+								"id" : {
+									"type" : "number"
+								},
+								"key" : {
+									"type" : "string"
+								},
+								"value" : {
+									"type" : "string"
+								}
+							}
+						}
 					},
 					"_id" : {
 						"type" : "string",

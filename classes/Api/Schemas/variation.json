@@ -263,10 +263,14 @@
 				"id"   : {
 					"type" : "string"
 				},
-				"name" : {
+				"_id" : {
 					"type" : "string"
 				}
 			}
+		},
+		"shippingClassId" : {
+			"type" : "number",
+			"nullable" : true
 		},
 		"taxClass"            : {
 			"type" : "object",

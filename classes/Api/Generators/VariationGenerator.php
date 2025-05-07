@@ -53,9 +53,9 @@ class VariationGenerator extends GeneratorBase {
 		$tax_class = NULL;
 		if ( ! empty( $variation['tax_class'] ) ) {
 			$tax_class = [
-				'_id'  => $variation['tax_class'] ?: 'standard',
-				'slug' => $variation['tax_class'] ?: 'standard',
-				'name' => ucfirst( $variation['tax_class'] ?: 'standard' ) . ' Rate'
+				'_id'  => $variation['tax_class'],
+				'slug' => $variation['tax_class'],
+				'name' => ucfirst( $variation['tax_class'] ) . ' Rate'
 			];
 		}
 
@@ -130,7 +130,7 @@ class VariationGenerator extends GeneratorBase {
 			'purchasePrice'          => (float) ( $variation['purchase_price'] ?? 0 ),
 			'supplier'               => $variation['supplier'] ?? NULL,
 			'supplierSku'            => $variation['supplier_sku'] ?? '',
-			'shippingClass'          => $variation['shipping_class'] ?? NULL,
+			'shippingClass'          => $this->prepare_ids( $variation['shipping_class'] ?? NULL ),
 			'image'                  => $image,
 			'inboundStock'           => $variation['inbound_stock'] ?? NULL,
 			'stockOnHold'            => $variation['stock_on_hold'] ?? NULL,
