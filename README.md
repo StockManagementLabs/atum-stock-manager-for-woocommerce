@@ -196,6 +196,21 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.48.1`
+
+*2025-05-09*
+
+**Changes**
+
+* Refactoring.
+
+**Fixes**
+
+* Fixed error when trying to get eh current screen too early.
+* Fixed publish status view being unset for ATUM orders that are using it.
+
+---
+
 `1.9.48`
 
 *2025-04-30*

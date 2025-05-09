@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.8.1
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 9.8.2
-Stable tag: 1.9.48
+WC tested up to: 9.8.4
+Stable tag: 1.9.48.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,21 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.48.1`
+
+*2025-05-09*
+
+**Changes**
+
+* Refactoring.
+
+**Fixes**
+
+* Fixed error when trying to get eh current screen too early.
+* Fixed publish status view being unset for ATUM orders that are using it.
 
 ---
 
