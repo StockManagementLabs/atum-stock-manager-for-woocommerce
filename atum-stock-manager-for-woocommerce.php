@@ -15,10 +15,10 @@
  * Author URI:           https://stockmanagementlabs.com/
  * Contributors:         BE REBEL - https://berebel.studio
  * Requires at least:    5.9
- * Tested up to:         6.8
+ * Tested up to:         6.8.1
  * Requires PHP:         7.4
  * WC requires at least: 5.0
- * WC tested up to:      9.8.2
+ * WC tested up to:      9.8.4
  * Text Domain:          atum-stock-manager-for-woocommerce
  * Domain Path:          /languages
  * License:              GPLv2 or later
@@ -28,7 +28,7 @@
 defined( 'ABSPATH' ) || die;
 
 if ( ! defined( 'ATUM_VERSION' ) ) {
-	define( 'ATUM_VERSION', '1.9.48' );
+	define( 'ATUM_VERSION', '1.9.48.1' );
 }
 
 if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
