@@ -1675,16 +1675,32 @@ abstract class AtumListTable extends \WP_List_Table {
 		// Check the Out of Stock Threshold.
 		if ( $this->list_item->managing_stock() ) {
 
-			// Setings value is enabled?
+			// Global setting is enabled?
 			$is_out_stock_threshold_managed = ! ( 'no' === Helpers::get_option( 'out_stock_threshold', 'no' ) );
 
-			if ( $is_out_stock_threshold_managed ) {
+			// NOTE: makes no sense to show the OOT message if the stock is 0 (this only would be a threshold if backorders is enabled).
+			if ( $stock > 0 || $stock < 0 || ( (float) $stock === 0.0 && $this->list_item->backorders_allowed() ) ) {
 
-				$out_stock_threshold = $this->list_item->get_out_stock_threshold();
+				if ( $is_out_stock_threshold_managed ) {
 
-				if ( strlen( $out_stock_threshold ) > 0 ) {
+					$out_stock_threshold = $this->list_item->get_out_stock_threshold();
 
-					if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+					if ( $out_stock_threshold !== '' && ! is_null( $out_stock_threshold ) ) {
+
+						if ( wc_stock_amount( $out_stock_threshold ) >= $stock ) {
+
+							if ( ! $editable ) {
+								$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
+							}
+							else {
+								$classes_title   = ' class="cell-yellow"';
+								$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
+							}
+
+						}
+
+					}
+					elseif ( $wc_notify_no_stock_amount >= $stock ) {
 
 						if ( ! $editable ) {
 							$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
@@ -1707,17 +1723,6 @@ abstract class AtumListTable extends \WP_List_Table {
 						$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
 					}
 
-				}
-
-			}
-			elseif ( $wc_notify_no_stock_amount >= $stock ) {
-
-				if ( ! $editable ) {
-					$classes_title = ' class="cell-yellow" title="' . esc_attr__( 'Stock reached the Out of Stock Threshold', ATUM_TEXT_DOMAIN ) . '"';
-				}
-				else {
-					$classes_title   = ' class="cell-yellow"';
-					$tooltip_warning = esc_attr__( 'Click to edit the stock quantity (it reached the Out of Stock Threshold)', ATUM_TEXT_DOMAIN );
 				}
 
 			}

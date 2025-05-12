@@ -354,10 +354,8 @@ class AtumCalculatedProps {
 
 				if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
 
-					$out_of_stock_threshold = $product->get_out_stock_threshold();
-
 					// Allow to be hooked externally.
-					$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product->get_id() );
+					$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $product->get_out_stock_threshold(), $product->get_id() );
 
 					if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
 
