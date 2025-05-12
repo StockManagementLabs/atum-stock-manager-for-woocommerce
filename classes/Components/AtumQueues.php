@@ -52,6 +52,10 @@ class AtumQueues {
 			'time'     => 'now',
 			'interval' => WEEK_IN_SECONDS,
 		],
+		'atum/healthcheck'                   => [
+			'time'     => 'now',
+			'interval' => HOUR_IN_SECONDS,
+		],
 	);
 
 	/**
@@ -83,6 +87,9 @@ class AtumQueues {
 
 		// Add the tmp folders clean up hook.
 		add_action( 'atum/clean_up_tmp_folders', array( $this, 'action_clean_up_tmp_folders' ) );
+
+		// Do the scheduled internal healthcheck.
+		add_action( 'atum/healthcheck', array( $this, 'action_healthcheck' ) );
 
 		// Add the ATUM Queues async hooks listeners.
 		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
@@ -384,6 +391,98 @@ class AtumQueues {
 
 				}
 			}
+
+		}
+
+	}
+
+	/**
+	 * Healthcheck tasks
+	 *
+	 * @since 1.9.49
+	 */
+	public function action_healthcheck() {
+
+		// Check if there is any hang process from the full export queue.
+		global $wpdb;
+
+		$full_export_transients = $wpdb->get_results( "
+			SELECT option_name, option_value FROM $wpdb->options 
+		 	WHERE option_name LIKE '_transient_" . FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . "%'
+		" );
+
+		if ( ! empty( $full_export_transients ) ) {
+
+			// Check if there are any pending AS actions.
+			$pending_actions = $wpdb->get_results( $wpdb->prepare( "
+				SELECT action_id FROM {$wpdb->prefix}actionscheduler_actions 
+			 	WHERE status IN (%s, %s)
+				AND ( hook LIKE 'atum_api_dump_endpoint%' OR hook LIKE 'atum_api_export_endpoint_%' )
+			", \ActionScheduler_Store::STATUS_PENDING, \ActionScheduler_Store::STATUS_RUNNING ) );
+
+			// If there are no pending actions it means there are hang processes.
+			if ( ! empty( $pending_actions ) ) {
+
+				$full_export_dir = FullExportController::get_full_export_upload_dir();
+
+				foreach ( $full_export_transients as $transient ) {
+
+					$endpoint  = $transient->option_value;
+					$schema    = FullExportController::find_endpoint_schema( $endpoint );
+					$file_name = FullExportController::get_file_name( $endpoint, $schema );
+
+					// Find the last JSON file created for this endpoint.
+					$endpoint_files = glob( $full_export_dir . $file_name . '*' );
+
+					if ( ! empty( $endpoint_files ) ) {
+						$last_file = array_pop( $endpoint_files );
+					}
+
+					if ( file_exists( $last_file ) ) {
+
+						$json        = json_decode( file_get_contents( $last_file ), TRUE );
+						$total_pages = $json['total_pages'] ?? 1;
+						$last_page   = $json['page'] ?? 1;
+
+						if ( $total_pages > $last_page ) {
+
+							$user_id = FullExportController::get_admin_user();
+
+							// Get dump transient key.
+							$dump_config = $wpdb->get_var( "
+								SELECT option_value FROM $wpdb->options 
+							 	WHERE option_name LIKE '_transient_" . FullExportController::DUMP_CONFIG_TRANSIENT . "%'
+							" );
+
+							if ( $dump_config ) {
+								$dump_config = maybe_unserialize( $dump_config );
+							}
+
+							/**
+							 * Hook args: endpoint, user_id, params, page, format and user_app_id.
+							 * NOTE: These are the parameters that are passed later to the run_export method.
+							 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
+							 */
+							$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'json', $dump_config->user_app_id ?? '' ];
+							$scheduled = as_enqueue_async_action( "atum_api_export_endpoint_$schema", $hook_args, 'atum' );
+
+							//if ( ! $scheduled ) {
+								error_log( "ATUM Healthcheck: The next page of the endpoint $endpoint is scheduled: " );
+								error_log( 'Hook args: ' . var_export( $hook_args, TRUE ) );
+							//}
+
+							// Re-add the endpoint transient again because is not fully exported yet.
+							$pending_endpoint_transient_key = AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . FullExportController::get_file_name( $endpoint, $schema, $json['params'] ?? '' ) );
+							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
+
+						}
+
+					}
+
+				}
+
+			}
+
 
 		}
 

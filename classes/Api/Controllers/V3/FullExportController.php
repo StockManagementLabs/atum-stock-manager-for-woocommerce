@@ -1385,7 +1385,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return false|string
 	 */
-	private static function find_endpoint_schema( $endpoint ) {
+	public static function find_endpoint_schema( $endpoint ) {
 
 		$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
@@ -1542,7 +1542,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return string
 	 */
-	private static function get_file_name( $endpoint = '', $schema = '', $params = '' ) {
+	public static function get_file_name( $endpoint = '', $schema = '', $params = '' ) {
 
 		$name_parts = [
 			$schema,
@@ -1636,7 +1636,7 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return int|bool
 	 */
-	private static function get_admin_user() {
+	public static function get_admin_user() {
 
 		// First get the current user and check if it's an admin.
 		if ( current_user_can( 'manage_options' ) ) {
