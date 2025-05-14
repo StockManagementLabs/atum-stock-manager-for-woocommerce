@@ -1748,7 +1748,9 @@ final class Helpers {
 				data-multiple="false" data-selected="" data-minimum_input_length="1" style="width: 165px">
 				<?php if ( $selected ) :
 					$supplier = get_post( $selected ); ?>
-					<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ?: __( '(no title)', ATUM_TEXT_DOMAIN ) ) ?></option>
+					<?php if ( $supplier instanceof \WP_Post ) : ?>
+						<option value="<?php echo esc_attr( $selected ) ?>" selected="selected"><?php echo esc_attr( $supplier->post_title ?: __( '(no title)', ATUM_TEXT_DOMAIN ) ) ?></option>
+					<?php endif; ?>
 				<?php endif; ?>
 			</select>
 
