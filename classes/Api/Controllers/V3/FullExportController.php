@@ -1050,7 +1050,7 @@ class FullExportController extends \WC_REST_Controller {
 
 				foreach ( $endpoint as $sub_key => $sub_ep ) {
 
-					AtumCache::set_transient( $exported_endpoint_transient_keys[ "{$key}.{$sub_key}" ], $sub_ep, DAY_IN_SECONDS, TRUE );
+					AtumCache::set_transient( $exported_endpoint_transient_keys[ "{$key}.{$sub_key}" ], $sub_ep, WEEK_IN_SECONDS, TRUE );
 
 					$hook_name = "atum_api_export_endpoint_{$key}_{$sub_key}";
 					$hook_args = [ $sub_ep, self::get_admin_user(), $params, 1, $format, $user_app_id ];
@@ -1071,7 +1071,7 @@ class FullExportController extends \WC_REST_Controller {
 			// Non-nested endpoints.
 			else {
 
-				AtumCache::set_transient( $exported_endpoint_transient_keys[ $key ], $endpoint, DAY_IN_SECONDS, TRUE );
+				AtumCache::set_transient( $exported_endpoint_transient_keys[ $key ], $endpoint, WEEK_IN_SECONDS, TRUE );
 
 				$hook_name = "atum_api_export_endpoint_$key";
 				$hook_args = [ $endpoint, self::get_admin_user(), $params, 1, $format, $user_app_id ];
@@ -1301,7 +1301,7 @@ class FullExportController extends \WC_REST_Controller {
 							}
 	
 							// Re-add the endpoint transient again because is not fully exported yet.
-							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
+							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, WEEK_IN_SECONDS, TRUE );
 							$has_missing_data = TRUE; // Avoid removing the transient below.
 	
 						}
@@ -1574,7 +1574,7 @@ class FullExportController extends \WC_REST_Controller {
 			$saved_subscribers[] = $subscriber_id;
 		}
 
-		AtumCache::set_transient( $transient_key, $saved_subscribers, 0, TRUE );
+		AtumCache::set_transient( $transient_key, $saved_subscribers, WEEK_IN_SECONDS, TRUE );
 
 	}
 
@@ -1621,7 +1621,7 @@ class FullExportController extends \WC_REST_Controller {
 				'storeAppSettings' => $store_app_settings,
 			);
 
-			AtumCache::set_transient( $transient_key, $dump_config, 0, TRUE );
+			AtumCache::set_transient( $transient_key, $dump_config, WEEK_IN_SECONDS, TRUE );
 
 		}
 

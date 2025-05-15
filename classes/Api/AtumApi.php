@@ -224,7 +224,8 @@ class AtumApi {
 		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
 
 		// Handle running full export scheduled actions that were marked as failed after a timeout.
-		add_action( 'action_scheduler_failed_action', array( $this, 'maybe_retry_full_export_action' ), 10, 2 );
+		// TODO: DISABLED BECAUSE WE NOW HAVE THE HEALTHCHECK CRON. REMOVE IT LATER IF NOT NEEDED.
+		//add_action( 'action_scheduler_failed_action', array( $this, 'maybe_retry_full_export_action' ), 10, 2 );
 
 		$this->load_extenders();
 
