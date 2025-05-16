@@ -451,13 +451,19 @@ class AtumQueues {
 
 				foreach ( $exportable_endpoints as $schema => $endpoint ) {
 
-					$file_name = FullExportController::get_file_name( $endpoint, $schema );
-					$endpoint_files = array_filter( $exported_files, function( $file ) use ( $file_name ) {
-						return str_contains( $file, $file_name );
-					} );
+					$endpoint = is_array( $endpoint ) ? $endpoint : [ $endpoint ];
 
-					if ( ! empty( $endpoint_files ) ) {
-						self::maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema );
+					foreach ( $endpoint as $sub_endpoint ) {
+
+						$file_name = FullExportController::get_file_name( $sub_endpoint, $schema );
+						$endpoint_files = array_filter( $exported_files, function( $file ) use ( $file_name ) {
+							return str_contains( $file, $file_name );
+						} );
+
+						if ( ! empty( $endpoint_files ) ) {
+							self::maybe_reschedule_full_export_action( $endpoint_files, $sub_endpoint, $schema );
+						}
+
 					}
 
 				}
@@ -485,10 +491,11 @@ class AtumQueues {
 		$last_file = array_pop( $endpoint_files );
 
 		// Get the page number from the file name.
-		$file_name  = basename( $last_file );
+		$file_name  = str_replace( '.json', '', basename( $last_file ) );
 		$name_parts = explode( '-', $file_name );
-		$pagination = str_replace( '.json', '', array_pop( $name_parts ) );
-		list( $last_page, $total_pages ) = explode( '_', $pagination );
+		$pagination = explode( '_', array_pop( $name_parts ) );
+
+		list( $last_page, $total_pages ) = count( $pagination ) > 1 ? $pagination : [ 1, 1 ];
 
 		if ( is_numeric( $last_page ) && is_numeric( $total_pages ) && (int) $total_pages > (int) $last_page ) {
 
@@ -510,7 +517,16 @@ class AtumQueues {
 			 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
 			 */
 			$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'json', $dump_config['userId'] ?? '' ];
-			$scheduled = as_enqueue_async_action( "atum_api_export_endpoint_$schema", $hook_args, 'atum' );
+			$hook_name = "atum_api_export_endpoint_$schema";
+
+			// If it is a sub-endpoint, we need to add its key to the hook name as well.
+			$exportable_endpoints = AtumApi::get_exportable_endpoints();
+
+			if ( is_array( $exportable_endpoints[ $schema ] ) ) {
+				$hook_name .= '_' . array_search( $endpoint, $exportable_endpoints[ $schema ], TRUE );
+			}
+
+			$scheduled = as_enqueue_async_action( $hook_name, $hook_args, 'atum' );
 
 			if ( ! $scheduled ) {
 				error_log( "ATUM Healthcheck: The next page of the endpoint $endpoint could not be scheduled: " );
