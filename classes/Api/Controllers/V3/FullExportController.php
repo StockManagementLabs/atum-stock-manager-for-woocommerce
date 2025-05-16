@@ -865,13 +865,25 @@ class FullExportController extends \WC_REST_Controller {
 	 *
 	 * @return bool
 	 */
-	private static function are_there_pending_exports() {
+	public static function are_there_pending_exports( $check_transients = TRUE ) {
 
 		global $wpdb;
 
-		$transient_name = '_transient_' . AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		return ! empty( $wpdb->get_col( "SELECT option_id FROM $wpdb->options WHERE option_name LIKE '{$transient_name}%'" ) );
+		$pending_transients = [];
+
+		if ( $check_transients ) {
+			$transient_name = '_transient_' . AtumCache::get_transient_key( self::EXPORTED_ENDPOINTS_TRANSIENT );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$pending_transients = $wpdb->get_col( "SELECT option_id FROM $wpdb->options WHERE option_name LIKE '{$transient_name}%'" );
+		}
+
+		$pending_actions = $wpdb->get_col( $wpdb->prepare( "
+			SELECT action_id FROM {$wpdb->prefix}actionscheduler_actions 
+			WHERE status IN (%s, %s)
+			AND ( hook LIKE 'atum_api_dump_endpoint%' OR hook LIKE 'atum_api_export_endpoint_%' )
+		", \ActionScheduler_Store::STATUS_PENDING, \ActionScheduler_Store::STATUS_RUNNING ) );
+
+		return ! empty( $pending_transients ) && ! empty( $pending_actions );
 
 	}
 

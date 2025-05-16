@@ -14,6 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\AtumApi;
 use Atum\Api\Controllers\V3\FullExportController;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -408,20 +409,13 @@ class AtumQueues {
 
 		$full_export_transients = $wpdb->get_results( "
 			SELECT option_name, option_value FROM $wpdb->options 
-		 	WHERE option_name LIKE '_transient_atum_" . FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . "%'
+		 	WHERE option_name LIKE '_transient_" . AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT ) . "%'
 		" );
 
 		if ( ! empty( $full_export_transients ) ) {
 
-			// Check if there are any pending AS actions.
-			$pending_actions = $wpdb->get_results( $wpdb->prepare( "
-				SELECT action_id FROM {$wpdb->prefix}actionscheduler_actions 
-			 	WHERE status IN (%s, %s)
-				AND ( hook LIKE 'atum_api_dump_endpoint%' OR hook LIKE 'atum_api_export_endpoint_%' )
-			", \ActionScheduler_Store::STATUS_PENDING, \ActionScheduler_Store::STATUS_RUNNING ) );
-
 			// If there are no pending actions, it means there are hang processes.
-			if ( empty( $pending_actions ) ) {
+			if ( ! FullExportController::are_there_pending_exports( FALSE ) ) {
 
 				$full_export_dir = FullExportController::get_full_export_upload_dir();
 
@@ -438,54 +432,95 @@ class AtumQueues {
 						continue; // TODO: WHAT IF THERE ARE NO FILES BECAUSE FAILED THE VERY FIRST IMPORT?
 					}
 
-					natsort( $endpoint_files );
-					$last_file = array_pop( $endpoint_files );
+					self::maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema );
 
-					if ( file_exists( $last_file ) ) {
+				}
 
-						$json        = json_decode( file_get_contents( $last_file ), TRUE );
-						$total_pages = $json['total_pages'] ?? 1;
-						$last_page   = $json['page'] ?? 1;
+			}
 
-						if ( $total_pages > $last_page ) {
+		}
+		// We've seen cases when there are no transients nor actions, but there are entities that are still not completed.
+		else {
 
-							$user_id = FullExportController::get_admin_user();
+			$full_export_dir = FullExportController::get_full_export_upload_dir();
+			$exported_files  = glob( $full_export_dir . '*.json' );
 
-							// Get dump transient key.
-							$dump_config = $wpdb->get_var( "
-								SELECT option_value FROM $wpdb->options 
-							 	WHERE option_name LIKE '_transient_atum_" . FullExportController::DUMP_CONFIG_TRANSIENT . "%'
-							" );
+			if ( ! empty( $exported_files ) ) {
 
-							if ( $dump_config ) {
-								$dump_config = maybe_unserialize( $dump_config );
-							}
+				$exportable_endpoints = AtumApi::get_exportable_endpoints();
 
-							/**
-							 * Hook args: endpoint, user_id, params, page, format and user_app_id.
-							 * NOTE: These are the parameters that are passed later to the run_export method.
-							 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
-							 */
-							$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'json', $dump_config['userId'] ?? '' ];
-							$scheduled = as_enqueue_async_action( "atum_api_export_endpoint_$schema", $hook_args, 'atum' );
+				foreach ( $exportable_endpoints as $schema => $endpoint ) {
 
-							if ( ! $scheduled ) {
-								error_log( "ATUM Healthcheck: The next page of the endpoint $endpoint could not be scheduled: " );
-								error_log( 'Hook args: ' . var_export( $hook_args, TRUE ) );
-							}
+					$file_name = FullExportController::get_file_name( $endpoint, $schema );
+					$endpoint_files = array_filter( $exported_files, function( $file ) use ( $file_name ) {
+						return str_contains( $file, $file_name );
+					} );
 
-							// Re-add the endpoint transient again because is not fully exported yet.
-							// TODO: Do we need this? It is supposed that the transients were there.
-							$pending_endpoint_transient_key = AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . FullExportController::get_file_name( $endpoint, $schema, $json['params'] ?? '' ) );
-							AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, DAY_IN_SECONDS, TRUE );
-
-						}
-
+					if ( ! empty( $endpoint_files ) ) {
+						self::maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema );
 					}
 
 				}
 
 			}
+
+		}
+
+	}
+
+	/**
+	 * Reschedule the full export action if it was not completed.
+	 *
+	 * @since 1.9.49
+	 *
+	 * @param array  $endpoint_files The endpoint files.
+	 * @param string $endpoint       The endpoint name.
+	 * @param string $schema         The schema name.
+	 */
+	private static function maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema ) {
+
+		global $wpdb;
+
+		natsort( $endpoint_files );
+		$last_file = array_pop( $endpoint_files );
+
+		// Get the page number from the file name.
+		$file_name  = basename( $last_file );
+		$name_parts = explode( '-', $file_name );
+		$pagination = str_replace( '.json', '', array_pop( $name_parts ) );
+		list( $last_page, $total_pages ) = explode( '_', $pagination );
+
+		if ( is_numeric( $last_page ) && is_numeric( $total_pages ) && (int) $total_pages > (int) $last_page ) {
+
+			$user_id = FullExportController::get_admin_user();
+
+			// Get the dump transient key.
+			$dump_config = $wpdb->get_var( "
+				SELECT option_value FROM $wpdb->options 
+				WHERE option_name LIKE '_transient_" . AtumCache::get_transient_key( FullExportController::DUMP_CONFIG_TRANSIENT ) . "%'
+			" );
+
+			if ( $dump_config ) {
+				$dump_config = maybe_unserialize( $dump_config );
+			}
+
+			/**
+			 * Hook args: endpoint, user_id, params, page, format and user_app_id.
+			 * NOTE: These are the parameters that are passed later to the run_export method.
+			 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
+			 */
+			$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'json', $dump_config['userId'] ?? '' ];
+			$scheduled = as_enqueue_async_action( "atum_api_export_endpoint_$schema", $hook_args, 'atum' );
+
+			if ( ! $scheduled ) {
+				error_log( "ATUM Healthcheck: The next page of the endpoint $endpoint could not be scheduled: " );
+				error_log( 'Hook args: ' . var_export( $hook_args, TRUE ) );
+			}
+
+			// Re-add the endpoint transient again because is not fully exported yet.
+			// TODO: Do we need this? It is supposed that the transients were there.
+			$pending_endpoint_transient_key = AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . FullExportController::get_file_name( $endpoint, $schema, $json['params'] ?? '' ) );
+			AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, WEEK_IN_SECONDS, TRUE );
 
 		}
 
