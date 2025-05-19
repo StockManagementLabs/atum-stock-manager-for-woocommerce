@@ -3590,9 +3590,16 @@ final class Helpers {
 				ON (posts.post_type = 'product_variation' AND parent_apd.product_id = posts.post_parent)";
 		}
 
-		$post_statuses = apply_filters( 'atum/search_products/post_statuses', Globals::get_queryable_product_statuses() );
+		// Allow choosing the searchable statuses from the ATUM Settings.
+		$searchable_statuses = self::get_option( 'searchable_statuses', Globals::get_queryable_product_statuses() );
 
-		// See if search term contains OR keywords.
+		if ( array_key_exists( 'options', $searchable_statuses ) ) {
+			$searchable_statuses = array_keys( $searchable_statuses['options'], 'yes' );
+		}
+
+		$post_statuses = apply_filters( 'atum/search_products/post_statuses', $searchable_statuses );
+
+		// See if the search term contains OR keywords.
 		$term_groups    = stristr( $term, ' or ' ) ? preg_split( '/\s+or\s+/i', $term ) : [ $term ];
 		$search_queries = [];
 

@@ -276,6 +276,36 @@ class Settings {
 		$default_address_2 = $countries->get_base_address_2();
 		$default_postcode  = $countries->get_base_postcode();
 
+		$searchable_statuses = array();
+
+		// All enabled by default.
+		foreach ( Globals::get_queryable_product_statuses( FALSE ) as $status_key ) {
+
+			switch ( $status_key ) {
+				case 'publish':
+					$label = __( 'Published', ATUM_TEXT_DOMAIN );
+			        break;
+
+				case 'private':
+					$label = __( 'Private', ATUM_TEXT_DOMAIN );
+			        break;
+
+				case 'future':
+					$label = __( 'Scheduled', ATUM_TEXT_DOMAIN );
+			        break;
+
+				default:
+					$label = ucwords( str_replace( '-', ' ', $status_key ) );
+					break;
+			}
+
+
+			$searchable_statuses[ $status_key ] = array(
+				'value' => 'yes',
+				'name'  => $label,
+			);
+		}
+
 		$this->tabs = array(
 			'general'       => array(
 				'label'    => __( 'General', ATUM_TEXT_DOMAIN ),
@@ -362,6 +392,16 @@ class Settings {
 				'desc'    => __( 'When enabled, you can search on the WC orders list by product SKU or supplier SKU and will return any WC order containing a product matching the specified term. Please, note that due to the complexity of this query, it could cause a delay in returning the searched results on dbs with many orders.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no',
+			),
+			'searchable_statuses'           => array(
+				'group'   => 'general',
+				'section' => 'general',
+				'name'    => __( 'Searchable product statuses', ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Choose which statuses can be used in search results in ATUM search fields (for example, when adding items to a PO).', ATUM_TEXT_DOMAIN ),
+				'type'    => 'multi_checkbox',
+				'default'         => 'yes',
+				'main_switcher'   => FALSE,
+				'default_options' => $searchable_statuses,
 			),
 			'enable_ajax_filter'             => array(
 				'group'   => 'general',
