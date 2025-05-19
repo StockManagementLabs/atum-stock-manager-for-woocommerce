@@ -54,7 +54,7 @@ class OrderGenerator extends GeneratorBase {
 			'uid'              => $order['uid'] ?? NULL,
 			'itemType'         => 'order',
 			'name'             => $order['name'] ?? NULL,
-			'customer'         => $this->prepare_ids( $order['customer'] ?? NULL ),
+			'customer'         => $this->prepare_ids( $order['customer_id'] ?? NULL ),
 			'billing'          => $this->prepare_billing( $order['billing'] ?? [] ),
 			'shipping'         => $this->prepare_shipping( $order['shipping'] ?? [] ),
 			'lineItems'        => $this->prepare_line_items( $order['line_items'] ?? [] ),
@@ -137,21 +137,25 @@ class OrderGenerator extends GeneratorBase {
 		return array_map( function ( $item ) {
 
 			return [
-				'_id'      => 'order-item:' . $this->generate_uuid(),
-				'id'       => (int) $item['id'],
-				'name'     => $item['name'],
-				'quantity' => (int) $item['quantity'],
-				'metaData' => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
-				'product'	=> $this->prepare_ids( $item['product_id'] ?? null ),
-				'variation' => $this->prepare_ids( $item['variation_id'] ?? null ),
-				'subtotal' => (float) ($item['subtotal'] ?? 0),
-				'subtotalTax' => (float) ($item['subtotal_tax'] ?? 0),
-				'total' => (float) ($item['total'] ?? 0),
-				'totalTax' => (float) ($item['total_tax'] ?? 0),
-				'price' => (float) ($item['price'] ?? 0),
-				'sku' => $item['sku'] ?? '',
-				'taxes' => [],
-				'stock' => $item['stock'] ?? null,
+				'_id'         => 'order-item:' . $this->generate_uuid(),
+				'id'          => (int) $item['id'],
+				'name'        => $item['name'],
+				'quantity'    => (int) $item['quantity'],
+				'metaData'    => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
+				'product'     => $this->prepare_ids( $item['product_id'] ?? NULL ),
+				'variation'   => $this->prepare_ids( $item['variation_id'] ?? NULL ),
+				'subtotal'    => (float) ( $item['subtotal'] ?? 0 ),
+				'subtotalTax' => (float) ( $item['subtotal_tax'] ?? 0 ),
+				'total'       => (float) ( $item['total'] ?? 0 ),
+				'totalTax'    => (float) ( $item['total_tax'] ?? 0 ),
+				'price'       => (float) ( $item['price'] ?? 0 ),
+				'sku'         => $item['sku'] ?? '',
+				'taxes'       => $item['taxes'] ?? [],
+				'stock'       => $item['stock'] ?? NULL,
+				'inventories' => $item['mi_inventories'] ?? [],
+				'bomItems'    => $item['bom_items'] ?? [],
+				'taxClass'    => $item['tax_class'] ?? '',
+				'parent'      => $item['parent_name'] ?? NULL,
 			];
 
 		}, $line_items );
@@ -167,16 +171,20 @@ class OrderGenerator extends GeneratorBase {
 	 * @return array Prepared fee lines data.
 	 */
 	private function prepare_fee_lines( array $fee_lines ): array {
+
 		return array_map( function ( $fee ) {
+
 			return [
-				'_id'      => 'order-fee:' . $this->generate_uuid(),
-				'id'       => (int) $fee['id'],
-				'name'     => $fee['name'] ?? '',
-				'total'    => (float) ($fee['total'] ?? 0),
-				'totalTax' => (float) ($fee['total_tax'] ?? 0),
+				'_id'       => 'order-fee:' . $this->generate_uuid(),
+				'id'        => (int) $fee['id'],
+				'name'      => $fee['name'] ?? '',
+				'total'     => (float) ( $fee['total'] ?? 0 ),
+				'totalTax'  => (float) ( $fee['total_tax'] ?? 0 ),
 				'taxStatus' => $fee['tax_status'] ?? '',
 			];
+
 		}, $fee_lines );
+
 	}
 
 	/**
@@ -189,15 +197,19 @@ class OrderGenerator extends GeneratorBase {
 	 * @return array Prepared shipping lines data.
 	 */
 	private function prepare_shipping_lines( array $shipping_lines ): array {
+
 		return array_map( function ( $shipping ) {
+
 			return [
 				'_id'      => 'order-shipping:' . $this->generate_uuid(),
 				'id'       => (int) $shipping['id'],
 				'name'     => $shipping['name'] ?? '',
-				'total'    => (float) ($shipping['total'] ?? 0),
-				'totalTax' => (float) ($shipping['total_tax'] ?? 0),
+				'total'    => (float) ( $shipping['total'] ?? 0 ),
+				'totalTax' => (float) ( $shipping['total_tax'] ?? 0 ),
 			];
+
 		}, $shipping_lines );
+
 	}
 
 	/**
@@ -214,15 +226,16 @@ class OrderGenerator extends GeneratorBase {
 		return array_map( function ( $tax ) {
 
 			return [
-				'_id'      => 'order-tax:' . $this->generate_uuid(),
-				'id'       => (int) $tax['id'],
-				'label'    => $tax['label'] ?? '',
-				'taxTotal' => (float) $tax['tax_total'],
-				'rate'     => (float) $tax['rate_percent'],
-				'shippingTaxTotal' => (float) ($tax['shipping_tax_total'] ?? 0),
+				'_id'              => 'order-tax:' . $this->generate_uuid(),
+				'id'               => (int) $tax['id'],
+				'label'            => $tax['label'] ?? '',
+				'taxTotal'         => (float) $tax['tax_total'],
+				'rate'             => (float) $tax['rate_percent'],
+				'shippingTaxTotal' => (float) ( $tax['shipping_tax_total'] ?? 0 ),
 			];
 
 		}, $tax_lines );
+
 	}
 
 	/**
@@ -241,12 +254,13 @@ class OrderGenerator extends GeneratorBase {
 			return [
 				'_id'         => 'order-coupon:' . $this->generate_uuid(),
 				'id'          => (int) $coupon['id'],
-				'code'        => $coupon['code'],
+				'code'        => $coupon['code'] ?? '',
 				'discount'    => (float) $coupon['discount'],
 				'discountTax' => (float) $coupon['discount_tax'],
 			];
 
 		}, $coupon_lines );
+
 	}
 
 	/**
@@ -268,6 +282,7 @@ class OrderGenerator extends GeneratorBase {
 			];
 
 		}, $refunds );
+
 	}
 
 	/**
