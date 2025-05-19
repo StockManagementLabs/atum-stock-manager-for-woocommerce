@@ -13,12 +13,14 @@ namespace Atum\Api;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Api\Controllers\V3\FullExportController;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
 use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
+use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
@@ -217,15 +219,15 @@ class AtumApi {
 			add_filter( "rest_{$collection}_collection_params", array( $this, 'increase_posts_per_page' ) );
 		}
 
-		// Fix CORS issue when connecting through Ionic's Capacitor to our API.
+		// Fix the CORS issue when connecting through Ionic's Capacitor to our API.
 		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
 
 		// Add the exportable endpoint hooks.
 		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
 
-		// Handle running full export scheduled actions that were marked as failed after a timeout.
-		// TODO: DISABLED BECAUSE WE NOW HAVE THE HEALTHCHECK CRON. REMOVE IT LATER IF NOT NEEDED.
-		//add_action( 'action_scheduler_failed_action', array( $this, 'maybe_retry_full_export_action' ), 10, 2 );
+		// Add the healthcheck CRON job for the full export.
+		add_filter( 'atum/queues/recurring_hooks', array( $this, 'add_healthcheck_cron' ) );
+		add_action( 'atum/api_healthcheck', array( $this, 'action_healthcheck' ) );
 
 		$this->load_extenders();
 
@@ -424,46 +426,165 @@ class AtumApi {
 	}
 
 	/**
-	 * Retry failed full export action
+	 * Add the healthcheck CRON for the full export
 	 *
-	 * @since 1.9.45
+	 * @since 1.9.49
 	 *
-	 * @param int $action_id
-	 * @param int $timeout
+	 * @param array $recurring_hooks
+	 *
+	 * @return array
 	 */
-	public function maybe_retry_full_export_action( $action_id, $timeout ) {
+	public function add_healthcheck_cron( $recurring_hooks ) {
 
-		$as_store        = \ActionScheduler_Store::instance();
-		$action_to_reset = $as_store->fetch_action( $action_id );
-		$action_hook 	 = $action_to_reset->get_hook();
-		$status 		 = $as_store->get_status( $action_id );
+		$recurring_hooks['atum/api_healthcheck'] = array(
+			'time'     => 'now',
+			'interval' => HOUR_IN_SECONDS,
+		);
 
-		if (
-			'atum' === strtolower( $action_to_reset->get_group() ) &&
-			( str_contains( $action_hook, 'atum_api_export' ) || str_contains( $action_hook, 'atum_api_dump' ) )  &&
-			\ActionScheduler_Store::STATUS_FAILED === $status
-		) {
+		return $recurring_hooks;
 
-			$logs 	  = \ActionScheduler_Logger::instance()->get_logs( $action_id );
-			$last_log = array_pop( $logs ); // Get last log.
+	}
 
-			// Only reschedule if the last log contains a timeout message.
-			if ( str_contains( $last_log->get_message(), 'action marked as failed after' ) ) {
+	/**
+	 * Healthcheck tasks
+	 *
+	 * @since 1.9.49
+	 */
+	public function action_healthcheck() {
 
-				error_log( sprintf( 'ATUM: The scheduled action %s has failed due to timeout. Rescheduling....', $action_id ) );
+		// Check if there is any hang process from the full export queue.
+		global $wpdb;
 
-				// Reschedule.
-				$scheduled = as_enqueue_async_action( $action_hook, $action_to_reset->get_args(), 'atum' );
+		$full_export_transients = $wpdb->get_results( "
+			SELECT option_name, option_value FROM $wpdb->options 
+		 	WHERE option_name LIKE '_transient_" . AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT ) . "%'
+		" );
 
-				if ( ! $scheduled ) {
-					error_log( sprintf( "ATUM: The failed action %s couldn't be rescheduled", $action_id ) );
-				}
-				// Delete the failed action so it isn't rescheduled again.
-				else {
-					$as_store->delete_action( $action_id );
+		if ( ! empty( $full_export_transients ) ) {
+
+			// If there are no pending actions, it means there are hang processes.
+			if ( ! FullExportController::are_there_pending_exports( FALSE ) ) {
+
+				$full_export_dir = FullExportController::get_full_export_upload_dir();
+
+				foreach ( $full_export_transients as $transient ) {
+
+					$endpoint  = $transient->option_value;
+					$schema    = FullExportController::find_endpoint_schema( $endpoint );
+					$file_name = FullExportController::get_file_name( $endpoint, $schema );
+
+					// Find the last JSON file created for this endpoint.
+					$endpoint_files = glob( $full_export_dir . $file_name . '*' );
+
+					if ( empty( $endpoint_files ) ) {
+						continue; // TODO: WHAT IF THERE ARE NO FILES BECAUSE FAILED THE VERY FIRST IMPORT?
+					}
+
+					self::maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema );
+
 				}
 
 			}
+
+		}
+		// We've seen cases when there are no transients nor actions, but there are entities that are still not completed.
+		else {
+
+			$full_export_dir = FullExportController::get_full_export_upload_dir();
+			$exported_files  = glob( $full_export_dir . '*.json' );
+
+			if ( ! empty( $exported_files ) ) {
+
+				$exportable_endpoints = self::get_exportable_endpoints();
+
+				foreach ( $exportable_endpoints as $schema => $endpoint ) {
+
+					$endpoint = is_array( $endpoint ) ? $endpoint : [ $endpoint ];
+
+					foreach ( $endpoint as $sub_endpoint ) {
+
+						$file_name = FullExportController::get_file_name( $sub_endpoint, $schema );
+						$endpoint_files = array_filter( $exported_files, function( $file ) use ( $file_name ) {
+							return str_contains( $file, $file_name );
+						} );
+
+						if ( ! empty( $endpoint_files ) ) {
+							self::maybe_reschedule_full_export_action( $endpoint_files, $sub_endpoint, $schema );
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Reschedule the full export action if it was not completed.
+	 *
+	 * @since 1.9.49
+	 *
+	 * @param array  $endpoint_files The endpoint files.
+	 * @param string $endpoint       The endpoint name.
+	 * @param string $schema         The schema name.
+	 */
+	private static function maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema ) {
+
+		global $wpdb;
+
+		natsort( $endpoint_files );
+		$last_file = array_pop( $endpoint_files );
+
+		// Get the page number from the file name.
+		$file_name  = str_replace( '.json', '', basename( $last_file ) );
+		$name_parts = explode( '-', $file_name );
+		$pagination = explode( '_', array_pop( $name_parts ) );
+
+		list( $last_page, $total_pages ) = count( $pagination ) > 1 ? $pagination : [ 1, 1 ];
+
+		if ( is_numeric( $last_page ) && is_numeric( $total_pages ) && (int) $total_pages > (int) $last_page ) {
+
+			$user_id = FullExportController::get_admin_user();
+
+			// Get the dump transient key.
+			$dump_config = $wpdb->get_var( "
+				SELECT option_value FROM $wpdb->options 
+				WHERE option_name LIKE '_transient_" . AtumCache::get_transient_key( FullExportController::DUMP_CONFIG_TRANSIENT ) . "%'
+			" );
+
+			if ( $dump_config ) {
+				$dump_config = maybe_unserialize( $dump_config );
+			}
+
+			/**
+			 * Hook args: endpoint, user_id, params, page, format and user_app_id.
+			 * NOTE: These are the parameters that are passed later to the run_export method.
+			 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
+			 */
+			$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'sqlite', $dump_config['userId'] ?? '' ];
+			$hook_name = "atum_api_export_endpoint_$schema";
+
+			// If it is a sub-endpoint, we need to add its key to the hook name as well.
+			$exportable_endpoints = self::get_exportable_endpoints();
+
+			if ( is_array( $exportable_endpoints[ $schema ] ) ) {
+				$hook_name .= '_' . array_search( $endpoint, $exportable_endpoints[ $schema ], TRUE );
+			}
+
+			$scheduled = as_enqueue_async_action( $hook_name, $hook_args, 'atum' );
+
+			if ( ! $scheduled ) {
+				error_log( "ATUM API Healthcheck error: The next page of the endpoint $endpoint could not be scheduled: " );
+				error_log( 'Hook args: ' . var_export( $hook_args, TRUE ) );
+			}
+
+			// Re-add the endpoint transient again because is not fully exported yet.
+			// TODO: Do we need this? It is supposed that the transients were there.
+			$pending_endpoint_transient_key = AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . FullExportController::get_file_name( $endpoint, $schema, $json['params'] ?? '' ) );
+			AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, WEEK_IN_SECONDS, TRUE );
 
 		}
 
