@@ -169,13 +169,17 @@
 			}
 		},
 		"parentTaxClass": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "number"
+			"type" : "object",
+			"nullable" : true,
+			"properties" : {
+				"_id"   : {
+					"type" : "string"
 				},
-				"_id": {
-					"type": "string"
+				"slug" : {
+					"type" : "string"
+				},
+				"name" : {
+					"type" : "string"
 				}
 			}
 		},

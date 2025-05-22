@@ -182,13 +182,17 @@
 					"quantity"    : {
 						"type" : "number"
 					},
-					"taxClass"    : {
-						"type"       : "object",
+					"taxClass" : {
+						"type" : "object",
+						"nullable" : true,
 						"properties" : {
-							"id"  : {
-								"type" : "number"
+							"_id"   : {
+								"type" : "string"
 							},
-							"_id" : {
+							"slug" : {
+								"type" : "string"
+							},
+							"name" : {
 								"type" : "string"
 							}
 						}
@@ -417,13 +421,17 @@
 					"name"      : {
 						"type" : "string"
 					},
-					"taxClass"  : {
-						"type"       : "object",
+					"taxClass" : {
+						"type" : "object",
+						"nullable" : true,
 						"properties" : {
-							"id"  : {
-								"type" : "number"
+							"_id"   : {
+								"type" : "string"
 							},
-							"_id" : {
+							"slug" : {
+								"type" : "string"
+							},
+							"name" : {
 								"type" : "string"
 							}
 						}
@@ -502,13 +510,17 @@
 							}
 						}
 					},
-					"taxClass"         : {
-						"type"       : "object",
+					"taxClass" : {
+						"type" : "object",
+						"nullable" : true,
 						"properties" : {
-							"id"  : {
-								"type" : "number"
+							"_id"   : {
+								"type" : "string"
 							},
-							"_id" : {
+							"slug" : {
+								"type" : "string"
+							},
+							"name" : {
 								"type" : "string"
 							}
 						}

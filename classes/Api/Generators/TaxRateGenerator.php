@@ -32,7 +32,6 @@ class TaxRateGenerator extends GeneratorBase {
 	 * @return array Prepared tax rate data.
 	 */
 	protected function prepare_data( array $tax_rate ): array {
-		$class = $tax_rate['class'] ?? 'standard';
 		
 		return array_merge( $this->get_base_fields(), [
 			'id'           => (string) $tax_rate['id'],
@@ -45,11 +44,8 @@ class TaxRateGenerator extends GeneratorBase {
 			'priority'     => (int) ($tax_rate['priority'] ?? 0),
 			'compound'     => (bool) ($tax_rate['compound'] ?? false),
 			'shipping'     => (bool) ($tax_rate['shipping'] ?? false),
-			'taxClass'     => [
-				'slug' => $class,
-				'_id'  => "tax-class:" . $this->generate_uuid(),
-			],
-			'class'        => $class,
+			'taxClass'     => $this->prepare_tax_class( $tax_rate['class'] ?? NULL ),
+			'class'        => $tax_rate['class'] ?? NULL,
 		] );
 	}
 

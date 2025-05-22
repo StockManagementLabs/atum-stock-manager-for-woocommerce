@@ -569,7 +569,7 @@ abstract class GeneratorBase {
 	}
 
 	/**
-	 * Add a ending comment to the SQL
+	 * Add an ending comment to the SQL
 	 *
 	 * @since 1.9.44
 	 *
@@ -596,6 +596,31 @@ abstract class GeneratorBase {
 	 */
 	protected function is_null_value( $value ) {
 		return is_null( $value ) || $value === '';
+	}
+
+	/**
+	 * Prepare tax class data
+	 *
+	 * @since 1.9.49
+	 *
+	 * @param string $tax_class The tax class slug.
+	 *
+	 * @return array|null Prepared tax class data.
+	 */
+	protected function prepare_tax_class( $tax_class ) {
+
+		$converted_tax_class = NULL;
+
+		if ( ! empty( $tax_class ) ) {
+			$converted_tax_class = [
+				'_id'  => 'tax-class:' . $this->generate_uuid(),
+				'slug' => $tax_class,
+				'name' => ucwords( str_replace( '-', ' ', $tax_class ) ) . ' Rate'
+			];
+		}
+
+		return $converted_tax_class;
+
 	}
 
 }

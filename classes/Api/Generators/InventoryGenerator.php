@@ -100,7 +100,7 @@ class InventoryGenerator extends GeneratorBase {
 			'atumControlled'    => TRUE,
 		];
 
-		// Handle dates with proper format.
+		// Handle dates with the proper format.
 		$this->handle_dates( $inventory, $prepared_data );
 
 		return array_merge( $this->get_base_fields(), $prepared_data );

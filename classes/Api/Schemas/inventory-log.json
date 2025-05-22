@@ -150,14 +150,15 @@
 					},
 					"taxClass" : {
 						"type" : "object",
+						"nullable" : true,
 						"properties" : {
+							"_id"   : {
+								"type" : "string"
+							},
 							"slug" : {
 								"type" : "string"
 							},
-							"_id" : {
-								"type" : "string"
-							},
-							"itemType" : {
+							"name" : {
 								"type" : "string"
 							}
 						}

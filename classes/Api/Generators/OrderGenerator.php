@@ -154,8 +154,8 @@ class OrderGenerator extends GeneratorBase {
 				'stock'       => $item['stock'] ?? NULL,
 				'inventories' => $item['mi_inventories'] ?? [],
 				'bomItems'    => $item['bom_items'] ?? [],
-				'taxClass'    => $item['tax_class'] ?? '',
-				'parent'      => $item['parent_name'] ?? NULL,
+				'taxClass'    => $this->prepare_tax_class( $item['tax_class'] ?? NULL ),
+				'parent'      => $this->prepare_ids( $item['parent_name'] ?? NULL ),
 			];
 
 		}, $line_items );
@@ -181,6 +181,7 @@ class OrderGenerator extends GeneratorBase {
 				'total'     => (float) ( $fee['total'] ?? 0 ),
 				'totalTax'  => (float) ( $fee['total_tax'] ?? 0 ),
 				'taxStatus' => $fee['tax_status'] ?? '',
+				'taxClass'  => $this->prepare_tax_class( $fee['tax_class'] ?? NULL ),
 			];
 
 		}, $fee_lines );
@@ -232,6 +233,7 @@ class OrderGenerator extends GeneratorBase {
 				'taxTotal'         => (float) $tax['tax_total'],
 				'rate'             => (float) $tax['rate_percent'],
 				'shippingTaxTotal' => (float) ( $tax['shipping_tax_total'] ?? 0 ),
+				'taxClass'         => $this->prepare_tax_class( $tax['tax_class'] ?? NULL ),
 			];
 
 		}, $tax_lines );

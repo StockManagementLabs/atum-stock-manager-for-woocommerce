@@ -43,21 +43,10 @@ class VariationGenerator extends GeneratorBase {
 					'_id'  => NULL,
 					'id'   => NULL,
 				],
-				'_id'    => NULL,
-				'id'     => (int) $attr['id'],
+				$this->prepare_ids( $attr['id'] ),
 			];
 
 		}, $variation['attributes'] ?? [] );
-
-		// Prepare tax class data.
-		$tax_class = NULL;
-		if ( ! empty( $variation['tax_class'] ) ) {
-			$tax_class = [
-				'_id'  => $variation['tax_class'],
-				'slug' => $variation['tax_class'],
-				'name' => ucfirst( $variation['tax_class'] ) . ' Rate'
-			];
-		}
 
 		// Prepare meta data.
 		$meta_data = array_map( function ( $meta ) {
@@ -108,7 +97,7 @@ class VariationGenerator extends GeneratorBase {
 			'virtual'                => (bool) ( $variation['virtual'] ?? FALSE ),
 			'downloadable'           => (bool) ( $variation['downloadable'] ?? FALSE ),
 			'taxStatus'              => $variation['tax_status'] ?? 'taxable',
-			'taxClass'               => $tax_class,
+			'taxClass'               => $this->prepare_tax_class( $variation['tax_class'] ?? NULL ),
 			'weight'                 => (float) ( $variation['weight'] ?? 0 ),
 			'dimensions'             => [
 				'length' => (float) ( $variation['dimensions']['length'] ?? 0 ),

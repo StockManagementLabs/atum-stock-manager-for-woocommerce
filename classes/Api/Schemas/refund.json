@@ -93,11 +93,15 @@
 		},
 		"taxClass" : {
 			"type" : "object",
+			"nullable" : true,
 			"properties" : {
-				"id" : {
-					"type" : "number"
+				"_id"   : {
+					"type" : "string"
 				},
-				"_id" : {
+				"slug" : {
+					"type" : "string"
+				},
+				"name" : {
 					"type" : "string"
 				}
 			}

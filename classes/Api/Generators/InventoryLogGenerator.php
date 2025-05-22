@@ -114,47 +114,33 @@ class InventoryLogGenerator extends GeneratorBase {
 
 		return array_map( function ( $item ) {
 
-			$line_item = [
-				'id'           => (int) $item['id'],
-				'name'         => $item['name'],
-				'quantity'     => (float) $item['quantity'],
-				'subtotal'     => (float) $item['subtotal'],
-				'subtotalTax'  => (float) ( $item['subtotal_tax'] ?? 0 ),
-				'total'        => (float) $item['total'],
-				'totalTax'     => (float) ( $item['total_tax'] ?? 0 ),
-				'sku'          => $item['sku'] ?? '',
-				'price'        => (float) ( $item['price'] ?? 0 ),
-				'taxes'        => $item['taxes'] ?? [],
-				'product'      => isset( $item['product_id'] ) ? [
-					'id'       => (int) $item['product_id'],
-					'_id'      => null
-				] : null,
-				'variation'    => isset( $item['variation_id'] ) && $item['variation_id'] ? [
-					'id'       => (int) $item['variation_id'],
-					'_id'      => null
-				] : null,
-				'inventories'  => $item['mi_inventories'] ?? [],
-				'bomItems'     => $item['bom_items'] ?? [],
-				'metaData'     => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
-				'stock'        => [
+			return array(
+				'id'          => (int) $item['id'],
+				'name'        => $item['name'],
+				'quantity'    => (float) $item['quantity'],
+				'subtotal'    => (float) $item['subtotal'],
+				'subtotalTax' => (float) ( $item['subtotal_tax'] ?? 0 ),
+				'total'       => (float) $item['total'],
+				'totalTax'    => (float) ( $item['total_tax'] ?? 0 ),
+				'sku'         => $item['sku'] ?? '',
+				'price'       => (float) ( $item['price'] ?? 0 ),
+				'taxes'       => $item['taxes'] ?? [],
+				'product'     => $this->prepare_ids( $item['product_id'] ??  NULL ),
+				'variation'   => $this->prepare_ids( $item['variation_id'] ??  NULL ),
+				'inventories' => $item['mi_inventories'] ?? [],
+				'bomItems'    => $item['bom_items'] ?? [],
+				'metaData'    => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
+				'stock'       => [
 					'action'       => 'reduceStock',
 					'changedStock' => isset( $item['stock_changed'] ) && $item['stock_changed'] === 'yes',
-					'quantity'     => (float) $item['quantity']
+					'quantity'     => (float) $item['quantity'],
 				],
-				'_id'          => null,
-				'deleted'      => false,
-				'_deleted'     => false,
-				'parent'       => null
-			];
-			
-			// Add taxClass if we need to infer it
-			$line_item['taxClass'] = [
-				'slug'     => $item['tax_class'] ?? 'standard',
-				'_id'      => 'tax-class:' . $this->generate_uuid(),
-				'itemType' => 'tax-class'
-			];
-
-			return $line_item;
+				'_id'         => NULL,
+				'deleted'     => FALSE,
+				'_deleted'    => FALSE,
+				'parent'      => NULL,
+				'taxClass'    => $this->prepare_tax_class( $item['tax_class'] ?? NULL ),
+			);
 
 		}, $items );
 
