@@ -85,6 +85,7 @@ class InventoryLogGenerator extends GeneratorBase {
 			'dateReturn'      => 'return_date',
 			'dateReservation' => 'reservation_date',
 			'dateDamage'      => 'damage_date',
+			'dateCompleted'   => 'date_completed',
 		];
 
 		foreach ( $date_fields as $schema_key => $source_key ) {

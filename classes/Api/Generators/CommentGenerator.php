@@ -102,6 +102,9 @@ class CommentGenerator extends GeneratorBase {
 		if ( str_contains( $content, 'Stock levels reduced' ) ) {
 			return 'stock_reduced';
 		}
+		elseif( str_contains( $content, 'Stock levels increased' ) ) {
+			return 'stock_increased';
+		}
 		elseif ( str_contains( $content, 'Order status changed' ) ) {
 			return 'status_changed';
 		}
@@ -127,17 +130,17 @@ class CommentGenerator extends GeneratorBase {
 		$data = [];
 
 		// Extract stock level changes
-		if ( str_contains( $content, 'Stock levels reduced' ) ) {
-			preg_match_all( '/([^(]+) \(([^)]+)\) (\d+)→(\d+)/', $content, $matches, PREG_SET_ORDER );
+		if ( str_contains( $content, 'Stock levels reduced' ) || str_contains( $content, 'Stock levels increased' ) ) {
+			preg_match_all( '/([^(]+) \(([^)]+)\) ([\d.]+)→([\d.]+)/', $content, $matches, PREG_SET_ORDER );
 
 			foreach ( $matches as $match ) {
 				$data[] = [
 					'id'           => NULL,
 					'_id'          => 'stock_change:' . $this->generate_uuid(),
 					'key'          => 'stock_change',
-					'value'        => sprintf( '%d→%d', $match[3], $match[4] ),
+					'value'        => sprintf( '%s→%s', $match[3], $match[4] ),
 					'displayKey'   => $match[1],
-					'displayValue' => sprintf( 'Stock changed from %d to %d', $match[3], $match[4] ),
+					'displayValue' => sprintf( 'Stock changed from %s to %s', $match[3], $match[4] ),
 				];
 			}
 

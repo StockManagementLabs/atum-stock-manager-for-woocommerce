@@ -54,9 +54,11 @@ class FullExportController extends \WC_REST_Controller {
 	const DUMP_CONFIG_TRANSIENT = 'api_run_full_export_dump_config';
 
 	/**
-	 * Cloud function to send notification to the App user when the full export is completed.
+	 * Cloud function to send a notification to the App user when the full export is completed.
 	 */
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
+
+	const DEBUG_MODE = TRUE;
 
 	/**
 	 * Register the routes for tools

@@ -54,7 +54,7 @@ class InventoryGenerator extends GeneratorBase {
 
 		$prepared_data = [
 			'type'              => 'inventory',
-			'id'                => (int) $inventory['id'],
+			'id'                => (string) $inventory['id'],
 			'name'              => $inventory['name'],
 			'priority'          => (int) $inventory['priority'],
 			'isMain'            => (bool) $inventory['is_main'],
@@ -65,16 +65,16 @@ class InventoryGenerator extends GeneratorBase {
 			'expiryDays'        => (int) ( $inventory['expiry_threshold'] ?? 0 ),
 			'sku'               => $inventory['meta_data']['sku'] ?? '',
 			'manageStock'       => (bool) ( $inventory['meta_data']['manage_stock'] ?? FALSE ),
-			'stockQuantity'     => ( isset( $inventory['meta_data']['stock_quantity'] ) && ! is_null( $inventory['meta_data']['stock_quantity'] ) ) ? (float) $inventory['meta_data']['stock_quantity'] : NULL,
+			'stockQuantity'     => ( isset( $inventory['meta_data']['stock_quantity'] ) && ! $this->is_null_value( $inventory['meta_data']['stock_quantity'] ) ) ? (float) $inventory['meta_data']['stock_quantity'] : NULL,
 			'backorders'        => $inventory['meta_data']['backorders'] ?? 'no',
 			'stockStatus'       => $inventory['meta_data']['stock_status'] ?? '',
 			'barcode'           => $inventory['meta_data']['barcode'] ?? '',
 			'soldIndividually'  => (bool) ( $inventory['meta_data']['sold_individually'] ?? FALSE ),
-			'outStockThreshold' => isset( $inventory['meta_data']['out_stock_threshold'] ) ? (float) $inventory['meta_data']['out_stock_threshold'] : NULL,
-			'purchasePrice'     => isset( $inventory['meta_data']['purchase_price'] ) ? (float) $inventory['meta_data']['purchase_price'] : NULL,
-			'price'             => isset( $inventory['meta_data']['price'] ) ? (float) $inventory['meta_data']['price'] : NULL,
-			'regularPrice'      => isset( $inventory['meta_data']['regular_price'] ) ? (float) $inventory['meta_data']['regular_price'] : NULL,
-			'salePrice'         => isset( $inventory['meta_data']['sale_price'] ) ? (float) $inventory['meta_data']['sale_price'] : NULL,
+			'outStockThreshold' => ( isset( $inventory['meta_data']['out_stock_threshold'] ) && ! $this->is_null_value( $inventory['meta_data']['out_stock_threshold'] ) ) ? (float) $inventory['meta_data']['out_stock_threshold'] : NULL,
+			'purchasePrice'     => ( isset( $inventory['meta_data']['purchase_price'] ) && ! $this->is_null_value( $inventory['meta_data']['purchase_price'] ) ) ? (float) $inventory['meta_data']['purchase_price'] : NULL,
+			'price'             => ( isset( $inventory['meta_data']['price'] ) && ! $this->is_null_value( $inventory['meta_data']['price'] ) ) ? (float) $inventory['meta_data']['price'] : NULL,
+			'regularPrice'      => ( isset( $inventory['meta_data']['regular_price'] ) && ! $this->is_null_value( $inventory['meta_data']['regular_price'] ) ) ? (float) $inventory['meta_data']['regular_price'] : NULL,
+			'salePrice'         => ( isset( $inventory['meta_data']['sale_price'] ) && ! $this->is_null_value( $inventory['meta_data']['sale_price'] ) ) ? (float) $inventory['meta_data']['sale_price'] : NULL,
 			'supplier'          => $this->prepare_ids( $inventory['meta_data']['supplier_id'] ?? NULL ),
 			'parent'            => $this->prepare_ids( $inventory['product_id'] ),
 			// Stock numbers with proper type casting.
@@ -93,11 +93,9 @@ class InventoryGenerator extends GeneratorBase {
 			'expiredStock'      => $inventory['meta_data']['expired_stock'] ?? NULL,
 			'shippingClass'     => NULL,
 			'supplierSku'       => $inventory['meta_data']['supplier_sku'] ?? '',
-			'categories'        => [],
-			'itemType'          => 'inventory',
+			'categories'        => [],	
 			'parentSku'         => NULL,
-			'parentTaxClass'    => NULL,
-			'atumControlled'    => TRUE,
+			'parentTaxClass'    => NULL,		
 		];
 
 		// Handle dates with the proper format.
@@ -119,7 +117,7 @@ class InventoryGenerator extends GeneratorBase {
 
 		$data_dates = [
 			'inventoryDate' => 'inventory_date',
-			'updateDate'    => 'update_date',
+			'dateModified'  => 'update_date',
 			'bbeDate'       => 'bbe_date',
 		];
 

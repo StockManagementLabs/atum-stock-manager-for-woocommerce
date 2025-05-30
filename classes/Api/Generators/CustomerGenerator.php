@@ -50,6 +50,7 @@ class CustomerGenerator extends GeneratorBase {
 			'shipping'         => $this->prepare_shipping_data( $customer['shipping'] ),
 			'isPayingCustomer' => (bool) $customer['is_paying_customer'],
 			'avatarUrl'        => $customer['avatar_url'],
+			'metaData'         => $this->prepare_meta_data( $customer['meta_data'] ?? [] ),
 		] );
 
 	}
@@ -101,7 +102,6 @@ class CustomerGenerator extends GeneratorBase {
 			'state'     => $shipping['state'] ?? null,
 			'postcode'  => $shipping['postcode'] ?? null,
 			'country'   => $shipping['country'] ?? null,
-			'phone'     => $shipping['phone'] ?? null,
 		];
 	}
 

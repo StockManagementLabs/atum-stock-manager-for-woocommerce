@@ -11,6 +11,9 @@
 
 namespace Atum\Api\Generators;
 
+use Atum\Api\Controllers\V3\FullExportController;
+
+
 defined( 'ABSPATH' ) || exit;
 
 abstract class GeneratorBase {
@@ -65,7 +68,7 @@ abstract class GeneratorBase {
 	 *
 	 * @since 1.9.44
 	 *
-	 * @throws \Exception If schema file is not found or invalid
+	 * @throws \Exception If the schema file is not found or invalid
 	 */
 	protected function load_schema() {
 
@@ -109,10 +112,20 @@ abstract class GeneratorBase {
 		// Prepare and validate data.
 		$sql_inserts = [];
 
+		// // Save debug info if debug mode is enabled.
+		if ( FullExportController::DEBUG_MODE ) {
+			$debug_file = FullExportController::get_full_export_upload_dir() . "{$this->schema_name}_debug.json";
+			$debug_json = file_exists( $debug_file ) ? json_decode( file_get_contents( $debug_file ), TRUE ) : [];
+		}
+
 		foreach ( $results as $item ) {
 
 			$prepared_data = $this->prepare_data( $item );
 			$this->validate_data( $prepared_data );
+
+			if ( FullExportController::DEBUG_MODE ) {
+				$debug_json[] = $prepared_data;
+			}
 
 			// TODO: CHECK THE IDS USED, RELATIONS AND UUID GENERATED, ETC.
 			$sql_inserts[] = sprintf(
@@ -123,6 +136,10 @@ abstract class GeneratorBase {
 				$this->sanitize_value( json_encode( $prepared_data ), TRUE )
 			);
 
+		}
+
+		if ( FullExportController::DEBUG_MODE ) {
+			file_put_contents( $debug_file, json_encode( $debug_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT ) );
 		}
 
 		$insert_sql = "INSERT OR REPLACE INTO '$this->table_name' ('id', 'revision', 'deleted', 'lastWriteTime', 'data') VALUES\n" . implode( ",\n", $sql_inserts ) . ';';
@@ -486,7 +503,7 @@ abstract class GeneratorBase {
 		if ( is_array( $ids ) ) {
 
 			if ( empty( $ids ) ) {
-				return NULL;
+				return [];
 			}
 
 			return array_map( function ( $id ) {
@@ -596,6 +613,19 @@ abstract class GeneratorBase {
 	 */
 	protected function is_null_value( $value ) {
 		return is_null( $value ) || $value === '';
+	}
+	
+	/**
+	 * Convert a string to a boolean and control 'global' values
+	 *
+	 * @since 1.9.49
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 */
+	protected function string_to_bool( $value ) {
+		return ( 'global' === $value || $this->is_null_value( $value ) ) ? NULL : wc_string_to_bool( $value );
 	}
 
 	/**

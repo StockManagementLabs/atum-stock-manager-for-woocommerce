@@ -37,7 +37,7 @@ class TagGenerator extends GeneratorBase {
 			'id'          => (string) $tag['id'],
 			'name'        => $tag['name'],
 			'slug'        => $tag['slug'],
-			'description' => isset( $tag['description'] ) ? $tag['description'] : NULL,
+			'description' => $tag['description'] ?? NULL,
 			'count'       => isset( $tag['count'] ) ? (int) $tag['count'] : NULL,
 		] );
 

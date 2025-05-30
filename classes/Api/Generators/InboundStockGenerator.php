@@ -57,6 +57,7 @@ class InboundStockGenerator extends GeneratorBase {
 
 			// Item reference
 			'item'            => $this->prepare_ids( $inbound_stock['id'] ?? NULL ),
+			'itemType' 		  => $inbound_stock['type'] ?? NULL,
 
 			// Numeric fields
 			'inboundStock'    => (float) ( $inbound_stock['inbound_stock'] ?? 0 ),

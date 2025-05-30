@@ -86,6 +86,16 @@
 			"type" : "string",
 			"nullable" : true
 		},
+		"dateCompleted" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
+		"dateCompletedGMT" : {
+			"type" : "string",
+			"nullable" : true,
+			"format" : "date-time"
+		},
 		"status" : {
 			"type" : "string"
 		},

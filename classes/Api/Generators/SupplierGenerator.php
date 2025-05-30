@@ -61,10 +61,10 @@ class SupplierGenerator extends GeneratorBase {
 			'barcode'         => $supplier['atum_barcode'] ?? NULL,
 			'code'            => $supplier['code'] ?? NULL,
 			'itemType'        => 'supplier',
-			'image'           => $supplier['thumbnail_id'] ? [
-				'id'  => (int) $supplier['thumbnail_id'],
-				'src' => '',
-				'alt' => '',
+			'image'           => ! empty( $supplier['image'] ) ? [
+				'id'  => (int) $supplier['image']['id'],
+				'src' => $supplier['image']['src'] ?? '',
+				'alt' => $supplier['image']['alt'] ?? '',
 			] : NULL,
 		] );
 

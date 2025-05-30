@@ -57,7 +57,7 @@ class CategoryGenerator extends GeneratorBase {
 			'countChildren' => 0,
 			'children'      => 0,
 			'image'         => $image,
-			'isDefault'     => FALSE,
+			'isDefault'     => wc_string_to_bool( $category['is_default'] ?? 'no' ),
 			'itemType'      => 'category',
 			'uid'           => NULL,
 		] );

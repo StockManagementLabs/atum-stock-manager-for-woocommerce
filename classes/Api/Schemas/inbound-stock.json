@@ -51,10 +51,6 @@
 			"type" : "string",
 			"format" : "date-time"
 		},
-		"dateOnSaleFromGMT" : {
-			"type" : "string",
-			"format" : "date-time"
-		},
 		"dateExpected" : {
 			"type" : "string",
 			"format" : "date-time"
