@@ -1378,7 +1378,7 @@ abstract class AtumOrderPostType {
 	 * @param int  $post_id
 	 * @param bool $read_items
 	 *
-	 * @return AtumOrderModel
+	 * @return AtumOrderModel|NULL
 	 */
 	abstract public function get_current_atum_order( $post_id, $read_items );
 

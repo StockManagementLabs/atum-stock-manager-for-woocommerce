@@ -33,6 +33,13 @@ class CommentGenerator extends GeneratorBase {
 	 */
 	protected function prepare_data( array $comment ): array {
 
+		$author = array_merge( $this->prepare_ids( $comment['author'] ?? 0 ), [			
+			'name'      => $comment['author_name'] ?? '',
+			'email'     => '',
+			'avatar'    => NULL,
+			'userAgent' => '',
+		] );
+
 		// Base data structure as per schema requirements.
 		$prepared_data = [
 			'id'           => (string) $comment['id'],
@@ -48,7 +55,7 @@ class CommentGenerator extends GeneratorBase {
 			'date'         => $comment['date'],
 			'dateGMT'      => $comment['date_gmt'],
 			'parent'       => $this->prepare_ids( $comment['parent'] ?? NULL ),
-			'post'         => [
+			'post'         => [	
 				'id'       => (string) $comment['post'],
 				'_id'      => NULL,
 				'type'     => NULL,
