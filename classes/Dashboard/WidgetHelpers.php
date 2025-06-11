@@ -805,14 +805,14 @@ final class WidgetHelpers {
 					'operator' => 'NOT IN',
 				),
 			),
-			'meta_query'     => array(
+			// TODO: DO WE NEED TO EXCLUDE UNMANAGED PRODUCTS?
+			/*'meta_query'     => array(
 				// Exclude unmanaged products.
-				// TODO: DO WE NEED TO EXCLUDE UNMANAGED PRODUCTS?
-				/*array(
+				array(
 					'key'   => '_manage_stock',
 					'value' => 'yes',
-				),*/
-			),
+				),
+			),*/
 		);
 
 		// As when we filter by any taxonomy, the variation products are lost,

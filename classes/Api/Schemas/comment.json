@@ -15,7 +15,7 @@
 			"type" : "string"
 		},
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"author" : {
 			"type" : "object",
@@ -97,7 +97,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"key" : {
 						"type" : "string"
@@ -139,7 +139,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"key" : {
 						"type" : "string"
