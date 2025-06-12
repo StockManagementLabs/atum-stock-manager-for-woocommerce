@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id"                  : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"uid"                 : {
 			"type" : "string",
@@ -22,7 +22,7 @@
 			"type"       : "object",
 			"properties" : {
 				"id"   : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
@@ -96,7 +96,7 @@
 			"nullable" : true,
 			"properties" : {
 				"id"    : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"src"   : {
 					"type" : "string"
@@ -135,7 +135,7 @@
 						"type" : "string"
 					},
 					"id"     : {
-						"type" : "number"
+						"type" : "string"
 					}
 				}
 			}
@@ -198,7 +198,7 @@
 			"nullable" : true,
 			"properties" : {
 				"id"   : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"name" : {
 					"type" : "string"
@@ -272,7 +272,7 @@
 			}
 		},
 		"shippingClassId" : {
-			"type" : "number",
+			"type" : "string",
 			"nullable" : true
 		},
 		"taxClass"            : {
@@ -333,7 +333,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -443,7 +443,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"          : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"name"        : {
 						"type" : "string"
@@ -504,7 +504,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"   : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"name" : {
 								"type" : "string"
@@ -521,7 +521,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"    : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"src"   : {
 								"type" : "string"
@@ -561,7 +561,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -611,7 +611,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"key" : {
 						"type" : "string"

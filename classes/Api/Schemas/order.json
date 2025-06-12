@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id"               : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"slug"             : {
 			"type"     : "string",
@@ -55,7 +55,7 @@
 			"type"       : "object",
 			"properties" : {
 				"id"  : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type"     : "string",
@@ -171,7 +171,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"          : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"         : {
 						"type" : "string"
@@ -232,7 +232,7 @@
 							"type" : "object",
 							"properties" : {
 								"id" : {
-									"type" : "number"
+									"type" : "string"
 								},
 								"key" : {
 									"type" : "string"
@@ -252,7 +252,7 @@
 							"type"       : "object",
 							"properties" : {
 								"id"       : {
-									"type" : "number"
+									"type" : "string"
 								},
 								"rate"     : {
 									"type" : "number"
@@ -270,7 +270,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"  : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"_id" : {
 								"type" : "string"
@@ -281,7 +281,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"  : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"_id" : {
 								"type" : "string"
@@ -292,7 +292,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"  : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"_id" : {
 								"type" : "string"
@@ -303,7 +303,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"  : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"_id" : {
 								"type" : "string"
@@ -316,7 +316,7 @@
 							"type"       : "object",
 							"properties" : {
 								"id"             : {
-									"type" : "number"
+									"type" : "string"
 								},
 								"_id"            : {
 									"type" : "string"
@@ -328,7 +328,7 @@
 									"type"       : "object",
 									"properties" : {
 										"id"  : {
-											"type" : "number"
+											"type" : "string"
 										},
 										"_id" : {
 											"type" : "string"
@@ -339,7 +339,7 @@
 									"type"       : "object",
 									"properties" : {
 										"id"  : {
-											"type" : "number"
+											"type" : "string"
 										},
 										"_id" : {
 											"type" : "string"
@@ -350,7 +350,7 @@
 									"type"       : "object",
 									"properties" : {
 										"id"  : {
-											"type" : "number"
+											"type" : "string"
 										},
 										"_id" : {
 											"type" : "string"
@@ -413,7 +413,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"        : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"       : {
 						"type" : "string"
@@ -457,7 +457,7 @@
 				],
 				"properties" : {
 					"id"       : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"      : {
 						"type" : "string"
@@ -485,7 +485,7 @@
 				],
 				"properties" : {
 					"id"               : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"              : {
 						"type" : "string"
@@ -503,7 +503,7 @@
 						"type"       : "object",
 						"properties" : {
 							"id"  : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"_id" : {
 								"type" : "string"
@@ -555,7 +555,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"     : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"    : {
 						"type"     : "string",
@@ -576,7 +576,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"             : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"            : {
 						"type" : "string"
@@ -607,7 +607,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id"          : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id"         : {
 						"type" : "string"
@@ -691,7 +691,7 @@
 				"type"       : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"key"   : {
 						"type" : "string"

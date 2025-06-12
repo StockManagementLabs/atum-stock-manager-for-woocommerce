@@ -167,12 +167,10 @@ class ProductGenerator extends GeneratorBase {
 
 		return array_map( function ( $tax ) {
 
-			return [
-				'id'   => (int) $tax['id'],
+			return array_merge( $this->prepare_ids( $tax['id'] ?? NULL ), [
 				'name' => $tax['name'],
 				'slug' => $tax['slug'],
-				'_id'  => NULL,
-			];
+			] );
 
 		}, $taxonomies );
 	}
@@ -190,23 +188,19 @@ class ProductGenerator extends GeneratorBase {
 
 		return array_map( function ( $attr ) {
 
-			return [
-				'_id'       => NULL,
-				'id'        => (int) $attr['id'],
+			return array_merge( $this->prepare_ids( $attr['id'] ?? NULL ), [
 				'name'      => $attr['name'],
 				'options'   => array_map( function ( $option_name = '', $option_id = NULL ) {
 
-					return [
-						'_id'  => NULL,
-						'id'   => $option_id,
+					return array_merge( $this->prepare_ids( $option_id ?? NULL ), [
 						'name' => $option_name,
-					];
+					] );
 
 				}, $attr['options'] ?? [], $attr['option_ids'] ?? [] ),
 				'position'  => (int) ( $attr['position'] ?? 0 ),
 				'visible'   => (bool) ( $attr['visible'] ?? TRUE ),
 				'variation' => (bool) ( $attr['variation'] ?? FALSE ),
-			];
+			]  );
 
 		}, $attributes );
 	}
@@ -226,11 +220,9 @@ class ProductGenerator extends GeneratorBase {
 			return NULL;
 		}
 
-		return [
-			'id'        => (int) $image['id'],
+		return array_merge( $this->prepare_ids( $image['id'] ?? NULL ), [
 			'src'       => $image['src'],
-			'alt'       => $image['alt'] ?? '',
-			'_id'       => NULL,
+			'alt'       => $image['alt'] ?? '',		
 			'uid'       => NULL,
 			'file'      => NULL,
 			'name'      => $image['name'] ?? '',
@@ -240,7 +232,7 @@ class ProductGenerator extends GeneratorBase {
 			'deleted'   => FALSE,
 			'itemType'  => 'media',
 			'trash'     => FALSE,
-		];
+		] );
 
 	}
 

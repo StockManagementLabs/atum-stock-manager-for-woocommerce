@@ -34,7 +34,7 @@
 			"nullable" : true,
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"

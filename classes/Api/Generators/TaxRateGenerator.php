@@ -45,7 +45,6 @@ class TaxRateGenerator extends GeneratorBase {
 			'compound'     => (bool) ($tax_rate['compound'] ?? false),
 			'shipping'     => (bool) ($tax_rate['shipping'] ?? false),
 			'taxClass'     => $this->prepare_tax_class( $tax_rate['class'] ?? NULL ),
-			'class'        => $tax_rate['class'] ?? NULL,
 		] );
 	}
 

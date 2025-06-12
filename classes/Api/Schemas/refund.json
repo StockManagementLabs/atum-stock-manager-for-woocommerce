@@ -12,7 +12,7 @@
 	],
 	"properties" : {
 		"id" : {
-			"type" : "number"
+			"type" : "string"
 		},
 		"dateCreated" : {
 			"type" : "string",
@@ -45,7 +45,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -73,7 +73,7 @@
 			"nullable" : true,
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
@@ -84,7 +84,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"

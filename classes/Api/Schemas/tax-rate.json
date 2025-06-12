@@ -56,10 +56,6 @@
 				}
 			}
 		},
-		"class" : {
-			"type" : "string",
-			"deprecated": true
-		},
 		"_id" : {
 			"type" : "string"
 		},

@@ -266,6 +266,9 @@
 			"type": "string",
 			"format": "date-time"
 		},
+		"itemType" : {
+			"type" : "string"
+		},
 		"_id": {
 			"type": "string"
 		},

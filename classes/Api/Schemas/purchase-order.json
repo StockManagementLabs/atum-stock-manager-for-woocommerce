@@ -60,7 +60,7 @@
 			"type" : "object",
 			"properties" : {
 				"id" : {
-					"type" : "number"
+					"type" : "string"
 				},
 				"_id" : {
 					"type" : "string"
@@ -90,7 +90,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"product" : {
 						"type" : "object",
@@ -123,7 +123,7 @@
 								"type" : "string"
 							},
 							"id" : {
-								"type" : "number"
+								"type" : "string"
 							},
 							"uid" : {
 								"type" : "string",
@@ -200,7 +200,7 @@
 							"type" : "object",
 							"properties" : {
 								"id" : {
-									"type" : "number"
+									"type" : "string"
 								},
 								"key" : {
 									"type" : "string"
@@ -230,7 +230,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -259,7 +259,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -288,7 +288,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -341,7 +341,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"_id" : {
 						"type" : "string"
@@ -372,7 +372,7 @@
 				"type" : "object",
 				"properties" : {
 					"id" : {
-						"type" : "number"
+						"type" : "string"
 					},
 					"key" : {
 						"type" : "string"

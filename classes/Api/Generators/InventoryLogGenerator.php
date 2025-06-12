@@ -34,7 +34,7 @@ class InventoryLogGenerator extends GeneratorBase {
 	protected function prepare_data( array $log ): array {
 
 		$prepared_data = array_merge( $this->get_base_fields(), [
-			'id'              => (int) $log['id'],
+			'id'              => (string) $log['id'],
 			'uid'             => null,
 			'itemType'        => 'inventory-log',
 			'name'            => null,
@@ -116,7 +116,7 @@ class InventoryLogGenerator extends GeneratorBase {
 		return array_map( function ( $item ) {
 
 			return array(
-				'id'          => (int) $item['id'],
+				'id'          => (string) $item['id'],
 				'name'        => $item['name'],
 				'quantity'    => (float) $item['quantity'],
 				'subtotal'    => (float) $item['subtotal'],
@@ -161,7 +161,7 @@ class InventoryLogGenerator extends GeneratorBase {
 		return array_map( function ( $tax ) {
 
 			return [
-				'id'          => (int) $tax['id'],
+				'id'          => (string) $tax['id'],
 				'rateCode'    => $tax['rate_code'] ?? '',
 				'ratePercent' => (float) ( $tax['rate_percent'] ?? 0 ),
 			];
@@ -184,7 +184,7 @@ class InventoryLogGenerator extends GeneratorBase {
 		return array_map( function ( $ship ) {
 
 			return [
-				'id'          => (int) $ship['id'],
+				'id'          => (string) $ship['id'],
 				'methodTitle' => $ship['method_title'] ?? '',
 				'total'       => (float) ( $ship['total'] ?? 0 ),
 			];
@@ -207,7 +207,7 @@ class InventoryLogGenerator extends GeneratorBase {
 		return array_map( function ( $fee ) {
 
 			return [
-				'id'    => (int) $fee['id'],
+				'id'    => (string) $fee['id'],
 				'name'  => $fee['name'] ?? '',
 				'total' => (float) ( $fee['total'] ?? 0 ),
 			];
@@ -230,7 +230,7 @@ class InventoryLogGenerator extends GeneratorBase {
 		return array_map( function ( $note ) {
 
 			return [
-				'id'      => (int) $note['id'],
+				'id'      => (string) $note['id'],
 				'content' => $note['content'] ?? '',
 				'date'    => $note['date'] ?? '',
 			];

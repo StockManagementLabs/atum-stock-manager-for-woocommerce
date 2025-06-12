@@ -85,7 +85,7 @@ class PurchaseOrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'         => isset( $item['id'] ) ? 'purchase-order-item:' . $this->generate_uuid() : NULL,
-				'id'          => (int) $item['id'],
+				'id'          => (string) $item['id'],
 				'name'        => $item['name'],
 				'quantity'    => (int) $item['quantity'],
 				'subtotal'    => (float) $item['subtotal'],
@@ -136,7 +136,7 @@ class PurchaseOrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'              => 'purchase-order-tax:' . $this->generate_uuid(),
-				'id'               => (int) $tax['id'],
+				'id'               => (string) $tax['id'],
 				'rateCode'         => $tax['rate_code'] ?? '',
 				'rateId'           => (string) ( $tax['rate_id'] ?? '' ),
 				'label'            => $tax['label'] ?? '',
@@ -165,7 +165,7 @@ class PurchaseOrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'      => 'purchase-order-shipping:' . $this->generate_uuid(),
-				'id'       => (int) $shipping['id'],
+				'id'       => (string) $shipping['id'],
 				'name'     => $shipping['method_title'] ?? '',
 				'total'    => (float) ( $shipping['total'] ?? 0 ),
 				'totalTax' => (float) ( $shipping['total_tax'] ?? 0 ),
@@ -191,7 +191,7 @@ class PurchaseOrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'      => 'purchase-order-fee:' . $this->generate_uuid(),
-				'id'       => (int) $fee['id'],
+				'id'       => (string) $fee['id'],
 				'name'     => $fee['name'] ?? '',
 				'total'    => (float) ( $fee['total'] ?? 0 ),
 				'totalTax' => (float) ( $fee['total_tax'] ?? 0 ),

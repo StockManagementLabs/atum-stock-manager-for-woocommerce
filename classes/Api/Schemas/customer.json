@@ -130,6 +130,23 @@
 			"type" : "string",
 			"nullable" : true
 		},
+		"metaData" : {
+			"type" : "array",
+			"items" : {
+				"type" : "object",
+				"properties" : {
+					"id" : {
+						"type" : "string"
+					},
+					"key" : {
+						"type" : "string"
+					},
+					"value" : {
+						"type" : "string"
+					}
+				}
+			}
+		},
 		"_id": {
 			"type" : "string",
 			"nullable" : true

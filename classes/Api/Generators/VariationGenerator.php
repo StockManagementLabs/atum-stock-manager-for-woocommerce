@@ -43,26 +43,16 @@ class VariationGenerator extends GeneratorBase {
 					'_id'  => NULL,
 					'id'   => NULL,
 				],
-				$this->prepare_ids( $attr['id'] ),
+				$this->prepare_ids( $attr['id'] ?? NULL ),
 			];
 
 		}, $variation['attributes'] ?? [] );
-
-		// Prepare meta data.
-		$meta_data = array_map( function ( $meta ) {
-
-			return [
-				'key'   => $meta['key'],
-				'value' => (string) $meta['value']
-			];
-
-		}, $variation['meta_data'] ?? [] );
 
 		// Prepare image data
 		$image = NULL;
 		if ( ! empty( $variation['image'] ) ) {
 			$image = [
-				'id'    => (int) ($variation['image']['id'] ?? 0),
+				'id'    => ! empty( $variation['image']['id'] ) ? (string) $variation['image']['id'] : NULL,
 				'src'   => $variation['image']['src'] ?? '',
 				'title' => $variation['image']['title'] ?? '',
 				'alt'   => $variation['image']['alt'] ?? ''
@@ -70,7 +60,7 @@ class VariationGenerator extends GeneratorBase {
 		}
 
 		return array_merge( $this->get_base_fields(), [
-			'id'                     => (int) $variation['id'],
+			'id'                     => (string) $variation['id'],
 			'uid'                    => $variation['global_unique_id'] ?? NULL,
 			'parent'                 => $this->prepare_ids( $variation['parent_id'] ?? NULL ),
 			'parentType'             => NULL,
@@ -155,7 +145,7 @@ class VariationGenerator extends GeneratorBase {
 			'bomSellable'            => $this->string_to_bool( $variation['bom_sellable'] ?? FALSE ),
 			'calculatedStock'        => $variation['calculated_stock'] ?? NULL,
 			'bomStock'               => $variation['bom_stock'] ?? NULL,
-			'metaData'               => $meta_data,
+			'metaData'               => $$this->prepare_meta_data( $product['meta_data'] ?? [] ),
 			'dateCreated'            => $variation['date_created'] ?? NULL,
 			'dateCreatedGMT'         => $variation['date_created_gmt'] ?? NULL,
 			'dateModified'           => $variation['date_modified'] ?? NULL,

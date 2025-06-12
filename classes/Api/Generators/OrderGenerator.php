@@ -34,7 +34,7 @@ class OrderGenerator extends GeneratorBase {
 	protected function prepare_data( array $order ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'               => (int) $order['id'],
+			'id'               => (string) $order['id'],
 			'status'           => $order['status'],
 			'currency'         => $order['currency'],
 			'dateCreated'      => $order['date_created'],
@@ -138,7 +138,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'         => 'order-item:' . $this->generate_uuid(),
-				'id'          => (int) $item['id'],
+				'id'          => (string) $item['id'],
 				'name'        => $item['name'],
 				'quantity'    => (int) $item['quantity'],
 				'metaData'    => $this->prepare_meta_data( $item['meta_data'] ?? [] ),
@@ -176,7 +176,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'       => 'order-fee:' . $this->generate_uuid(),
-				'id'        => (int) $fee['id'],
+				'id'        => (string) $fee['id'],
 				'name'      => $fee['name'] ?? '',
 				'total'     => (float) ( $fee['total'] ?? 0 ),
 				'totalTax'  => (float) ( $fee['total_tax'] ?? 0 ),
@@ -203,7 +203,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'      => 'order-shipping:' . $this->generate_uuid(),
-				'id'       => (int) $shipping['id'],
+				'id'       => (string) $shipping['id'],
 				'name'     => $shipping['name'] ?? '',
 				'total'    => (float) ( $shipping['total'] ?? 0 ),
 				'totalTax' => (float) ( $shipping['total_tax'] ?? 0 ),
@@ -228,7 +228,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'              => 'order-tax:' . $this->generate_uuid(),
-				'id'               => (int) $tax['id'],
+				'id'               => (string) $tax['id'],
 				'label'            => $tax['label'] ?? '',
 				'taxTotal'         => (float) $tax['tax_total'],
 				'rate'             => (float) $tax['rate_percent'],
@@ -255,7 +255,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'         => 'order-coupon:' . $this->generate_uuid(),
-				'id'          => (int) $coupon['id'],
+				'id'          => (string) $coupon['id'],
 				'code'        => $coupon['code'] ?? '',
 				'discount'    => (float) $coupon['discount'],
 				'discountTax' => (float) $coupon['discount_tax'],
@@ -327,7 +327,7 @@ class OrderGenerator extends GeneratorBase {
 
 			return [
 				'_id'            => 'order-note:' . $this->generate_uuid(),
-				'id'             => (int) $note['id'],
+				'id'             => (string) $note['id'],
 				'author'         => $note['author'] ?? '',
 				'dateCreated'    => $note['date_created'] ?? '',
 				'dateCreatedGMT' => $note['date_created_gmt'] ?? '',

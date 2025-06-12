@@ -96,6 +96,7 @@ class InventoryGenerator extends GeneratorBase {
 			'categories'        => [],	
 			'parentSku'         => NULL,
 			'parentTaxClass'    => NULL,		
+			'itemType'          => 'inventory',
 		];
 
 		// Handle dates with the proper format.

@@ -34,7 +34,7 @@ class RefundGenerator extends GeneratorBase {
 	protected function prepare_data( array $refund ): array {
 
 		return array_merge( $this->get_base_fields(), [
-			'id'              => (int) $refund['id'],
+			'id'              => (string) $refund['id'],
 			'dateCreated'     => $refund['date_created'],
 			'dateCreatedGMT'  => $refund['date_created_gmt'],
 			'dateModified'    => $refund['date_modified'] ?? null,
@@ -66,7 +66,7 @@ class RefundGenerator extends GeneratorBase {
 
 			return [
 				'_id'      => 'refund-item:' . $this->generate_uuid(),
-				'id'       => (int) $item['id'],
+				'id'       => (string) $item['id'],
 				'name'     => $item['name'],
 				'quantity' => (float) $item['quantity'],
 				'total'    => (float) $item['total'],
