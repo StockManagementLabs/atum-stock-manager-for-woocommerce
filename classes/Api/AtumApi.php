@@ -496,7 +496,9 @@ class AtumApi {
 			if ( ! empty( $exported_files ) ) {
 
 				$exportable_endpoints = self::get_exportable_endpoints();
+				$rescheduled          = FALSE;
 
+				// First, check if all the JSON files have been exported for each endpoint.
 				foreach ( $exportable_endpoints as $schema => $endpoint ) {
 
 					$endpoint = is_array( $endpoint ) ? $endpoint : [ $endpoint ];
@@ -509,9 +511,59 @@ class AtumApi {
 						} );
 
 						if ( ! empty( $endpoint_files ) ) {
-							self::maybe_reschedule_full_export_action( $endpoint_files, $sub_endpoint, $schema );
+							$success = self::maybe_reschedule_full_export_action( $endpoint_files, $sub_endpoint, $schema );
+
+							if ( $success ) {
+								$rescheduled = TRUE;
+							}
 						}
 
+					}
+
+				}
+
+				// Once done, also check if all the dump files have been created for each endpoint.
+				if ( ! $rescheduled ) {
+
+					$exported_dumps = glob( $full_export_dir . '*.sql' );
+
+					if ( ! empty( $exported_dumps ) ) {
+
+						$user_id = FullExportController::get_admin_user();
+
+						// Get the dump transient key.
+						$dump_config = $wpdb->get_var( "
+							SELECT option_value FROM $wpdb->options 
+							WHERE option_name LIKE '_transient_" . AtumCache::get_transient_key( FullExportController::DUMP_CONFIG_TRANSIENT ) . "%'
+						" );
+
+						if ( ! $dump_config ) {
+							return;
+						}
+
+						$dump_config = maybe_unserialize( $dump_config );
+
+						foreach ( $exportable_endpoints as $schema => $endpoint ) {
+
+							$dump_files = array_filter( $exported_dumps, function( $file ) use ( $schema ) {
+								return str_contains( $file, "atum_dump_$schema" );
+							} );
+
+							if ( empty( $dump_files ) ) {
+
+								if ( FullExportController::DEBUG_MODE ) {
+									error_log( "ATUM API Healthcheck: Generating missing dump for the schema $schema..." );
+								}
+
+								$dump_generated = FullExportController::generate_sql_dump( $endpoint, $user_id, $dump_config['userId'] ?? '' );
+
+								if ( is_array( $dump_generated ) && FALSE === $dump_generated['success'] ) {
+									error_log( "ATUM API Healthcheck error: The dump for the schema $schema could not be generated. Error: {$dump_generated['message']}" );
+								}
+
+							}
+
+						}
 					}
 
 				}
@@ -530,6 +582,8 @@ class AtumApi {
 	 * @param array  $endpoint_files The endpoint files.
 	 * @param string $endpoint       The endpoint name.
 	 * @param string $schema         The schema name.
+	 *
+	 * @return bool
 	 */
 	private static function maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema ) {
 
@@ -586,7 +640,11 @@ class AtumApi {
 			$pending_endpoint_transient_key = AtumCache::get_transient_key( FullExportController::EXPORTED_ENDPOINTS_TRANSIENT . FullExportController::get_file_name( $endpoint, $schema, $json['params'] ?? '' ) );
 			AtumCache::set_transient( $pending_endpoint_transient_key, $endpoint, WEEK_IN_SECONDS, TRUE );
 
+			return TRUE;
+
 		}
+
+		return FALSE;
 
 	}
 

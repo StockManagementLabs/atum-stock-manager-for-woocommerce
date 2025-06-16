@@ -693,6 +693,7 @@ class FullExportController extends \WC_REST_Controller {
 				foreach ( $endpoint as $sub_key => $sub_ep ) {
 
 					$found_files = glob( $upload_dir . self::get_file_name( $sub_ep, $schema )  . '*.json' );
+					natsort( $found_files );
 
 					if ( $found_files ) {
 						$files[ $schema ][ $sub_key ] = $found_files;
@@ -704,6 +705,7 @@ class FullExportController extends \WC_REST_Controller {
 			else {
 
 				$found_files = glob( $upload_dir . self::get_file_name( $endpoint, $schema )  . '*.json' );
+				natsort( $found_files );
 
 				if ( $found_files ) {
 					$files[ $schema ] = $found_files;
@@ -722,7 +724,7 @@ class FullExportController extends \WC_REST_Controller {
 	}
 
 	/**
-	 * Generate a SQL `dump` file with the ATUM App's SQLite structure
+	 * Generate an SQL `dump` file with the ATUM App's SQLite structure
 	 *
 	 * @since 1.9.44
 	 *
@@ -771,8 +773,9 @@ class FullExportController extends \WC_REST_Controller {
 		// TODO: SHOULD WE DUMP EVERY SINGLE FILE SEPARATELY IN A CRON TO AVOID CRASHES (FOR CASES OF ENTITIES WITH MANY PAGES)?
 		foreach ( $files as $file ) {
 
-			// In the case there are multiple exports of the same endpoint with distinct filters or sub-endpoints.
+			// In case there are multiple exports of the same endpoint with distinct filters or sub-endpoints.
 			$file = is_array( $file ) ? Helpers::flat_array( $file ) : [ $file ];
+			natsort( $file );
 
 			foreach ( $file as $f ) {
 
@@ -800,7 +803,7 @@ class FullExportController extends \WC_REST_Controller {
 							$generator = new Generator(
 								$json['schema'],
 								$dump_config,
-								array( $json['page'], $json['total_pages'] ),
+								array( $json['page'], $json['total_pages'] )
 							);
 
 							Helpers::adjust_long_process_settings();
@@ -1652,7 +1655,7 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	public static function get_admin_user() {
 
-		// First get the current user and check if it's an admin.
+		// First, get the current user and check if it's an admin.
 		if ( current_user_can( 'manage_options' ) ) {
 			return get_current_user_id();
 		}
