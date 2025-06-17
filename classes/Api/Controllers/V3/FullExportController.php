@@ -58,7 +58,7 @@ class FullExportController extends \WC_REST_Controller {
 	 */
 	const COMPLETED_FULL_EXPORT_NOTICE_URL = 'https://us-central1-atum-app.cloudfunctions.net/completedFullExport';
 
-	const DEBUG_MODE = TRUE;
+	const DEBUG_MODE = FALSE;
 
 	/**
 	 * Register the routes for tools
