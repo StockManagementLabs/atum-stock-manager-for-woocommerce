@@ -811,7 +811,7 @@ class FullExportController extends \WC_REST_Controller {
 							// Generate SQL statements for the specific endpoint.
 							$dump_data .= $generator->generate( $json );
 
-						} catch ( \Exception $e ) {
+						} catch ( \Throwable $e ) {
 
 							$dump_error_msg =  $e->getMessage();
 							error_log( 'ATUM Full export error: ' . $dump_error_msg );
@@ -1385,7 +1385,7 @@ class FullExportController extends \WC_REST_Controller {
 				self::notify_subscriber( $user_id );
 			}
 
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 
 			error_log( 'ATUM Error: ' . $e->getMessage() );
 

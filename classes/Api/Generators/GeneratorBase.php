@@ -418,7 +418,7 @@ abstract class GeneratorBase {
 				$this->validate_property( $key, $value, $allowed_value );
 
 				return; // If we get here, validation passed.
-			} catch ( \Exception $e ) {
+			} catch ( \Throwable $e ) {
 				continue; // Try next schema.
 			}
 		}

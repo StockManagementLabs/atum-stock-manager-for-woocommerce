@@ -167,7 +167,7 @@ class ProductGenerator extends GeneratorBase {
 
 		return array_map( function ( $tax ) {
 
-			return array_merge( $this->prepare_ids( $tax['id'] ?? NULL ), [
+			return array_merge( $this->prepare_ids( $tax['id'] ?? 0 ), [
 				'name' => $tax['name'],
 				'slug' => $tax['slug'],
 			] );
@@ -188,11 +188,11 @@ class ProductGenerator extends GeneratorBase {
 
 		return array_map( function ( $attr ) {
 
-			return array_merge( $this->prepare_ids( $attr['id'] ?? NULL ), [
+			return array_merge( $this->prepare_ids( $attr['id'] ?? 0 ), [
 				'name'      => $attr['name'],
 				'options'   => array_map( function ( $option_name = '', $option_id = NULL ) {
 
-					return array_merge( $this->prepare_ids( $option_id ?? NULL ), [
+					return array_merge( $this->prepare_ids( $option_id ?? 0 ), [
 						'name' => $option_name,
 					] );
 
@@ -220,7 +220,7 @@ class ProductGenerator extends GeneratorBase {
 			return NULL;
 		}
 
-		return array_merge( $this->prepare_ids( $image['id'] ?? NULL ), [
+		return array_merge( $this->prepare_ids( $image['id'] ?? 0 ), [
 			'src'       => $image['src'],
 			'alt'       => $image['alt'] ?? '',		
 			'uid'       => NULL,
