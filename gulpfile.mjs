@@ -28,7 +28,7 @@ const config = {
     jsSrcDir : './assets/js/src',
 
     devUrl    : 'https://atum.loc',
-    production: true,
+    production: false,
 
     // Decorate
     decorate: {
