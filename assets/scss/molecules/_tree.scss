@@ -285,6 +285,22 @@ span.easytree-expander {
 	
 }
 
+.zero-linked .easytree-title {
+	
+	.easytree-custom-icon {
+		opacity: 0.5;
+	}
+	
+	
+	a {
+		color: var(--gray-300);
+	}
+	.multiplier {
+		color: var(--gray-300);
+	}
+}
+
+
 ul.easytree-container.easytree-focused {
 	
 	span {
@@ -367,6 +383,18 @@ ul.easytree-container.easytree-focused {
 					color: var(--primary) !important;
 				}
 				
+			}
+		}
+		
+		.zero-linked {
+			.easytree-custom-icon {
+				opacity: 0.5;
+			}
+			a {
+				color: var(--gray-300) !important;
+				&:hover {
+					opacity: 0.5;
+				}
 			}
 		}
 	}
