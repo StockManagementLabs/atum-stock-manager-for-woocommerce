@@ -6,8 +6,8 @@ Requires at least: 5.9
 Tested up to: 6.8.1
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 9.8.4
-Stable tag: 1.9.48.1
+WC tested up to: 9.9.4
+Stable tag: 1.9.49
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,28 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.49`
+
+*2025-06-18*
+
+**Features**
+
+* Added API healthcheck cron.
+* Allow choosing the order items' searchable statuses from ATUM Settings.
+
+**Changes**
+
+* Do not show out-of-stock messages when the stock is 0 and backorders is not enabled.
+* Refactoring.
+* Add tree styles to support linked BOMs with qty 0 in Product Levels.
+
+**Fixes**
+
+* Fixed warning when the supplier previously assigned to a PO no longer exists.
+* Fixed ATUM order items can be found by ID no matter their status.
 
 ---
 

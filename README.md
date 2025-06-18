@@ -196,6 +196,28 @@ We do not plan any support for older PHP and version 5.6 is the minimum.
 
 ---
 
+`1.9.49`
+
+*2025-06-17*
+
+**Features**
+
+* Added API healthcheck cron.
+* Allow choosing the order items' searchable statuses from ATUM Settings.
+
+**Changes**
+
+* Do not show out-of-stock messages when the stock is 0 and backorders is not enabled.
+* Refactoring.
+* Add tree styles to support linked BOMs with qty 0 in Product Levels.
+
+**Fixes**
+
+* Fixed warning when the supplier previously assigned to a PO no longer exists.
+* Fixed ATUM order items can be found by ID no matter their status.
+
+---
+
 `1.9.48.1`
 
 *2025-05-09*
