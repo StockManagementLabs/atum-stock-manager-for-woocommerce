@@ -145,7 +145,7 @@ class VariationGenerator extends GeneratorBase {
 			'bomSellable'            => $this->string_to_bool( $variation['bom_sellable'] ?? FALSE ),
 			'calculatedStock'        => $variation['calculated_stock'] ?? NULL,
 			'bomStock'               => $variation['bom_stock'] ?? NULL,
-			'metaData'               => $$this->prepare_meta_data( $product['meta_data'] ?? [] ),
+			'metaData'               => $this->prepare_meta_data( $product['meta_data'] ?? [] ),
 			'dateCreated'            => $variation['date_created'] ?? NULL,
 			'dateCreatedGMT'         => $variation['date_created_gmt'] ?? NULL,
 			'dateModified'           => $variation['date_modified'] ?? NULL,

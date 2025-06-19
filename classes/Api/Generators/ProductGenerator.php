@@ -190,11 +190,13 @@ class ProductGenerator extends GeneratorBase {
 
 			return array_merge( $this->prepare_ids( $attr['id'] ?? 0 ), [
 				'name'      => $attr['name'],
-				'options'   => array_map( function ( $option_name = '', $option_id = NULL ) {
+				'options'   => array_map( function ( $option_name = '', $option_id = 0 ) {
 
-					return array_merge( $this->prepare_ids( $option_id ?? 0 ), [
+					return [
+						'_id'  => NULL,
+						'id'   => $option_id,
 						'name' => $option_name,
-					] );
+					];
 
 				}, $attr['options'] ?? [], $attr['option_ids'] ?? [] ),
 				'position'  => (int) ( $attr['position'] ?? 0 ),
