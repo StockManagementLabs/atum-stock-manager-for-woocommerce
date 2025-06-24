@@ -64,7 +64,7 @@ export default class AddonsPage {
 
         this.$addonsPage
 
-        // Apply filters
+            // Apply filters
             .on( 'click', '.nav-container-box li', ( evt: JQueryEventObject ) => {
 
                 const $li: JQuery          = $( evt.currentTarget ),
@@ -94,7 +94,7 @@ export default class AddonsPage {
                 }
             } )
 
-        // Do key actions.
+            // Do key actions.
             .on( 'click', '.addon-key button', ( evt: JQueryEventObject ) => {
 
                 evt.preventDefault();
@@ -144,7 +144,7 @@ export default class AddonsPage {
 
             } )
 
-        // Show the key fields.
+            // Show the key fields.
             .on( 'click', '.show-key', ( evt: JQueryEventObject ) => {
 
                 evt.preventDefault();
@@ -152,7 +152,7 @@ export default class AddonsPage {
 
             } )
 
-        // Refresh license for expired keys
+            // Refresh license for expired keys
             .on( 'click', '.alert .refresh-status', ( evt: JQueryEventObject ) => {
 
                 evt.preventDefault();
@@ -185,7 +185,7 @@ export default class AddonsPage {
 
             } )
 
-        // Search addons.
+            // Search addons.
             .on( 'keyup paste search', '#addons-search', ( evt: JQueryEventObject ) => {
 
                 const $input: JQuery  = $( evt.currentTarget ),
@@ -226,7 +226,7 @@ export default class AddonsPage {
 
             } )
 
-        // Expand/Collapse sidebar.
+            // Expand/Collapse sidebar.
             .on( 'click', '.atum-addons-sidebar__toggle', ( evt: JQueryEventObject ) => {
 
                 evt.preventDefault();
@@ -247,7 +247,7 @@ export default class AddonsPage {
 
             } )
 
-        // Toggle between list and grid views.
+            // Toggle between list and grid views.
             .on( 'click', '.atum-addons__nav-buttons .btn', ( evt: JQueryEventObject ) => {
 
                 const $button: JQuery     = $( evt.currentTarget ),
@@ -376,7 +376,15 @@ export default class AddonsPage {
                 success   : ( response: any ) => {
 
                     this.afterAjax( $button );
-                    this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+                    
+                    // Check if the user must uninstall the trial before activating the full license.
+                    if ( response.success !== true && response.data === 'uninstall-trial' ) {
+                        this.licenseChangeResponse( 'uninstall-trial', response.data, addon, key, isSwal );
+                    }
+                    else {
+                        this.licenseChangeResponse( response.success, response.data, addon, key, isSwal );
+                    }
+                    
                     resolve();
 
                 },
@@ -439,7 +447,14 @@ export default class AddonsPage {
                             success: ( r: any ) => {
 
                                 if ( r.success !== true ) {
-                                    Swal.showValidationMessage( `<span>${ r.data }</span>` );
+
+                                    if ( r.data === 'uninstall-trial' ) {
+                                        this.licenseChangeResponse( 'uninstall-trial', message, addon, key, isSwal );
+                                    }
+                                    else {
+                                        Swal.showValidationMessage( `<span>${ r.data }</span>` );
+                                    }
+
                                 }
 
                                 res();
@@ -524,6 +539,52 @@ export default class AddonsPage {
 
             break;
 
+        case 'uninstall-trial':
+
+            Swal.fire( {
+                title              : this.settings.get( 'activation' ),
+                html               : this.settings.get( 'uninstallTrial' ),
+                icon               : 'info',
+                showCancelButton   : true,
+                showLoaderOnConfirm: true,
+                confirmButtonText  : this.settings.get( 'uninstallIt' ),
+                cancelButtonText   : this.settings.get( 'cancel' ),
+                allowOutsideClick  : false,
+                preConfirm         : (): Promise<void> => {
+
+                    return new Promise( ( res: Function ) => {
+
+                        $.ajax( {
+                            url     : window[ 'ajaxurl' ],
+                            method  : 'POST',
+                            dataType: 'json',
+                            data    : {
+                                action  : 'atum_uninstall_trial',
+                                security: this.settings.get( 'nonce' ),
+                                addon   : addon,
+                                key     : key,
+                            },
+                            success: ( r: any ) => {
+
+                                if ( r.success !== true ) {
+                                    Swal.showValidationMessage( `<span>${ r.data }</span>` );
+                                }
+                                else {
+                                    this.licenseChangeResponse( 'activate', this.settings.get( 'uninstalled' ), addon, key, isSwal );
+                                }
+
+                                res();
+
+                            },
+                        } );
+
+                    } );
+
+                },
+            } );
+
+            break;
+    
         }
 
     }

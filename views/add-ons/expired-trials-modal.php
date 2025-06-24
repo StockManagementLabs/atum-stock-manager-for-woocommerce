@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || die;
 
 							$time_ago = new \Westsworld\TimeAgo();
 							/* translators: the expiration date */
-							printf( esc_html__( 'Trial expired %s', ATUM_TEXT_DOMAIN ), esc_html( $time_ago->inWordsFromStrings( $expired_trial['expires'] ) ) );
+							printf( esc_html__( 'Trial expired %s', ATUM_TEXT_DOMAIN ), esc_html( $time_ago->inWordsFromStrings( strtotime( $expired_trial['expires'] ) ? $expired_trial['expires'] : date_i18n( 'Y-m-d' ) ) ) );
 
 						endif; ?>
 					</small>

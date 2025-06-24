@@ -264,6 +264,9 @@ final class Addons {
 			'trialExtension'       => __( 'Trial extension', ATUM_TEXT_DOMAIN ),
 			'trialWillDisable'     => __( 'If you remove a trial license, your installed add-on will be disabled. Please, only remove this trial license if you are going to uninstall the add-on or replace it by a full version license key.', ATUM_TEXT_DOMAIN ),
 			'trialWillExtend'      => __( 'You are going to extend this trial for 7 days more', ATUM_TEXT_DOMAIN ),
+			'uninstalled'		   => __( 'The trial was uninstalled successfully.<br>You can continue with the full version activation.', ATUM_TEXT_DOMAIN ),
+			'uninstallIt'          => __( 'Yes, uninstall it!', ATUM_TEXT_DOMAIN ),
+			'uninstallTrial'	   => __( 'We have detected that you still have the trial version installed. The trial version cannot coexist with the full version.<br>Do you want to uninstall the trial plugin?', ATUM_TEXT_DOMAIN ),
 		);
 
 		if ( isset( $_GET['auto-install'], $_GET['token'] ) && '1' === $_GET['auto-install'] ) {
@@ -1516,6 +1519,43 @@ final class Addons {
 
 		return $result;
 
+	}
+	
+	/**
+	 * Uninstall an ATUM trial add-on
+	 *
+	 * @since 1.9.50
+	 *
+	 * @param string $addon The addon name.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function uninstall_trial( $addon ) {
+		
+		foreach ( self::$addons_paths as $addons_path ) {
+			if (
+				strtolower( $addons_path['name'] ) === strtolower( $addon ) ||
+				strtolower( $addons_path['name'] ) === strtolower( "{$addon} (Trial version)" )
+			) {
+				$path = $addons_path['basename'];
+				break;
+			}
+		}
+	
+		if ( ! empty( $path ) ) {
+			
+			$trial_path  = str_replace( '.php', '-trial.php', str_replace( '/', '-trial/', $path ) );
+			$uninstalled = delete_plugins( [ $trial_path ] );
+			
+			if ( is_wp_error( $uninstalled ) ) {
+				return $uninstalled;
+			}
+			
+			return true;
+		}
+		
+		return new \WP_Error( 'not_found_error', sprintf( __( 'The %s trial add-on could not be found.', ATUM_TEXT_DOMAIN ), $addon ) );
+	
 	}
 
 	/**

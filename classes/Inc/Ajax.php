@@ -103,6 +103,7 @@ final class Ajax {
 		add_action( 'wp_ajax_atum_remove_license', array( $this, 'remove_license' ) );
 		add_action( 'wp_ajax_atum_refresh_license', array( $this, 'refresh_license_status' ) );
 		add_action( 'wp_ajax_atum_extend_trial', array( $this, 'extend_trial' ) );
+		add_action( 'wp_ajax_atum_uninstall_trial', array( $this, 'uninstall_trial' ) );
 
 		// Search for products from enhanced selects.
 		add_action( 'wp_ajax_atum_json_search_products', array( $this, 'search_products' ) );
@@ -821,7 +822,7 @@ final class Ajax {
 					) );
 				}
 
-				// The staging sites doesn't compute as a new activation.
+				// The staging sites don't compute as a new activation.
 				if ( Addons::is_local_url() ) {
 
 					wp_send_json( array(
@@ -841,10 +842,10 @@ final class Ajax {
 					wp_send_json( array(
 						'success' => 'activate',
 						'data'    => sprintf(
-							/* translators: the number of remaininig licenses */
+							/* translators: the number of remaining licenses */
 							_n(
-								'Your license is valid.<br>After the activation you will have %s remaining license.<br>Please, click the button to activate and install.',
-								'Your license is valid.<br>After the activation you will have %s remaining licenses.<br>Please, click the button to activate and install.',
+								'Your license is valid.<br>After the activation, you will have %s remaining license.<br>Please, click the button to activate and install.',
+								'Your license is valid.<br>After the activation, you will have %s remaining licenses.<br>Please, click the button to activate and install.',
 								$licenses_after_activation,
 								ATUM_TEXT_DOMAIN
 							),
@@ -950,6 +951,43 @@ final class Ajax {
 
 		if ( ! $addon_name || ! $key ) {
 			wp_send_json_error( $default_error );
+		}
+		
+		// Before activating the license, if the user has a trial, ask them to uninstall it first.
+		if ( Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name' ) ) {
+			
+			// Check if the license is for a trial or for a full version.
+			$check_license_trial_resp = Addons::get_latest_version( "$addon_name Trial", $key, '0.0' );
+			
+			// Make sure the response came back okay.
+			if ( is_wp_error( $check_license_trial_resp ) || 200 !== wp_remote_retrieve_response_code( $check_license_trial_resp ) ) {
+				$message = is_wp_error( $check_license_trial_resp ) ? $check_license_trial_resp->get_error_message() : $default_error;
+				wp_send_json_error( $message );
+			}
+			
+			$check_license_trial = json_decode( wp_remote_retrieve_body( $check_license_trial_resp ) );
+			
+			if (
+				! empty( $check_license_trial->msg ) &&
+				str_contains( $check_license_trial->msg, 'License key is not valid for' )
+			) {
+				
+				$check_license_full_resp = Addons::get_latest_version( $addon_name, $key, '0.0' );
+				
+				// Make sure the response came back okay.
+				if ( is_wp_error( $check_license_full_resp ) || 200 !== wp_remote_retrieve_response_code( $check_license_full_resp ) ) {
+					$message = is_wp_error( $check_license_full_resp ) ? $check_license_full_resp->get_error_message() : $default_error;
+					wp_send_json_error( $message );
+				}
+				
+				$check_license_full = json_decode( wp_remote_retrieve_body( $check_license_full_resp ) );
+				
+				if ( ! empty( $check_license_full->new_version ) ) {
+					wp_send_json_error( 'uninstall-trial' );
+				}
+				
+			}
+			
 		}
 
 		$response = Addons::activate_license( $addon_name, $key );
@@ -1285,6 +1323,27 @@ final class Ajax {
 
 		/* translators: the expiration date */
 		wp_send_json_success( sprintf( __( 'Trial extended successfully until %s', ATUM_TEXT_DOMAIN ), date_i18n( 'Y-m-d', strtotime( $expires ) ) ) );
+
+	}
+	
+	/**
+	 * Uninstall a trial add-on before installing the full version.
+	 *
+	 * @package Add-ons
+	 *
+	 * @since 1.9.50
+	 */
+	public function uninstall_trial() {
+
+		$this->check_license_post_data();
+
+		$result = Addons::uninstall_trial( esc_attr( $_POST['addon'] ) );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		}
+		
+		wp_send_json_success( __( 'Trial uninstalled successfully', ATUM_TEXT_DOMAIN ) );
 
 	}
 
