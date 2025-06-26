@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumWidget;
-use Atum\Dashboard\WidgetHelpers;
 use Atum\Inc\Helpers;
 
 
@@ -71,18 +70,14 @@ class CurrentStockValue extends AtumWidget {
 		}
 		else {
 
-			/**
-			 * If too many products exist, the dashboard loading may spend too mucho time.
-			 * $current_stock_values = WidgetHelpers::get_items_in_stock();
-			 */
-
-			// Initialice empty data and load by Ajax later.
-			$current_stock_values = $counters = [
+			// Initialize empty data and load by Ajax later.
+			$current_stock_values = [
 				'items_stocks_counter'         => 0,
 				'items_purchase_price_total'   => 0,
 				'items_without_purchase_price' => 0,
 			];
-			$config               = $this->get_config();
+
+			$config = $this->get_config();
 
 			Helpers::load_view( 'widgets/current-stock-value', compact( 'config', 'current_stock_values' ) );
 
