@@ -27,7 +27,7 @@ $title_color             = 'color: #333;';
 	}
 </style>
 <div class="atum-report">
-	<h1><?php echo esc_html( apply_filters( 'atum/data_export/report_title', __( 'Atum Stock Central Report', ATUM_TEXT_DOMAIN ) ) ) ?></h1>
+	<h1><?php echo esc_html( apply_filters( 'atum/data_export/report_title', __( 'ATUM Stock Central Report', ATUM_TEXT_DOMAIN ) ) ) ?></h1>
 	<h3><?php bloginfo( 'title' ) ?></h3>
 
 	<table class="report-header">

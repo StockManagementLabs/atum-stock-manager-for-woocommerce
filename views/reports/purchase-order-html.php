@@ -102,7 +102,7 @@ use Atum\Inc\Helpers;
 				 */
 				?>
 				<tr class="po-line">
-					<td class="description"><?php echo esc_html( $item->get_name() ) ?>
+					<td class="description"><?php echo wp_kses_post( $item->get_name() ) ?>
 
 						<?php
 						$product = Helpers::get_atum_product( $item->get_product() );
