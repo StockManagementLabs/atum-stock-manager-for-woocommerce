@@ -807,15 +807,23 @@ class Hooks {
 	 */
 	public function before_delete_order_item( $order_item_id ) {
 
-		$item = new \WC_Order_Item_Product( $order_item_id );
+		// Prevent issues if, for some reason, this hook is called multiple times and the item does not exist anymore.
+		try {
 
-		if ( $item ) {
+			$item = new \WC_Order_Item_Product( $order_item_id );
 
-			global $atum_delete_item_product_id;
+			if ( $item ) {
 
-			$atum_delete_item_product_id = $item->get_variation_id() ?: $item->get_product_id();
-			do_action( 'atum/before_delete_order_item', $order_item_id );
+				global $atum_delete_item_product_id;
 
+				$atum_delete_item_product_id = $item->get_variation_id() ?: $item->get_product_id();
+				do_action( 'atum/before_delete_order_item', $order_item_id );
+
+			}
+
+		} catch ( \Exception $e ) {
+			error_log( 'ATUM Error when deleting order item: ' . $e->getMessage() );
+			return;
 		}
 
 	}
