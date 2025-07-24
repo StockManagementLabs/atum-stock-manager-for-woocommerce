@@ -182,7 +182,6 @@ class Wpml {
 
 			// Make Atum orders not translatable, but set a single lang for the order.
 			add_action( 'atum/order_post_type/init', array( $this, 'register_atum_order_hooks' ) );
-			add_filter( 'wpml_ls_directories_to_scan', array( $this, 'add_wpml_templates' ) );
 			add_action( 'atum/atum_order/actions_meta_box_start', array( $this, 'add_lang_dropdown_to_po' ) );
 			add_filter( 'atum/order_post_type/js_vars', array( $this, 'add_wpml_active_var' ) );
 			add_filter( 'atum/purchase_orders/save_meta_boxes_props', array( $this, 'save_wpml_lang_order_prop' ), 10, 2 );
@@ -1610,22 +1609,6 @@ class Wpml {
 	}
 
 	/**
-	 * Add ATUM WPML twig templates folder to the folders to scan
-	 *
-	 * @since 1.9.30
-	 *
-	 * @param array $dirs_to_scan
-	 *
-	 * @return array
-	 */
-	public function add_wpml_templates( $dirs_to_scan ) {
-
-		$dirs_to_scan[] = ATUM_PATH . 'views/wpml/language-switchers';
-
-		return $dirs_to_scan;
-	}
-
-	/**
 	 * Add the language dropdown to ATUM Orders.
 	 *
 	 * @since 1.9.30
@@ -1638,29 +1621,15 @@ class Wpml {
 			return;
 		}
 
-		$lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
+		$po_lang = get_post_meta( $post_id, '_wpml_lang', TRUE );
 
-		if ( $lang ) {
-			self::$sitepress->switch_lang( $lang );
+		if ( $po_lang ) {
+			self::$sitepress->switch_lang( $po_lang );
 		}
 
-		?>
+		$this->echo_lang_flag_dropdown( $po_lang );
 
-		<li class="wide">
-
-			<p>
-				<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-				do_action( 'wpml_add_language_selector', [
-					'display_flags'                => 1,
-					'display_names_in_native_lang' => 0, // Options won't work from the twig template settings.
-					'template'                     => 'atum-inventory-management-for-woocommerce-atum-order-language-dropdown',
-				] ); ?>
-			</p>
-		</li>
-
-		<?php
-
-		if ( $lang ) {
+		if ( $po_lang ) {
 			self::$sitepress->switch_lang( $this->current_language );
 		}
 
@@ -1803,12 +1772,7 @@ class Wpml {
 
 			<label for="wpml-lang"><?php esc_html_e( "Supplier's language", ATUM_TEXT_DOMAIN ) ?></label>
 			<p>
-				<?php // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-				do_action( 'wpml_add_language_selector', [
-					'display_flags'                => 1,
-					'display_names_in_native_lang' => 0, // Options won't work from the twig template settings.
-					'template'                     => 'atum-inventory-management-for-woocommerce-atum-suppliers-language-dropdown',
-				] ); ?>
+				<?php $this->echo_lang_flag_dropdown( $supplier->wpml_lang ); ?>
 			</p>
 		</div>
 
@@ -1818,6 +1782,50 @@ class Wpml {
 		if ( $supplier->wpml_lang ) {
 			self::$sitepress->switch_lang( $this->current_language );
 		}
+	}
+
+	/**
+	 * Echo the language dropdown for WPML
+	 *
+	 * @since 1.9.30
+	 *
+	 * @param string $current_lang
+	 */
+	public function echo_lang_flag_dropdown( $current_lang ) {
+
+		$active_languages = apply_filters( 'wpml_active_languages', NULL, NULL );
+
+		if ( ! empty( $active_languages ) ) : ?>
+			<select name="wpml_lang" id="wpml_lang">
+				<?php foreach ( $active_languages as $lang ) :
+
+					$is_current_lang = $lang['code'] === $current_lang;
+					$css_classes = 'wpml-ls-item wpml-ls-flag-' . $lang['code'];
+					if ( $is_current_lang ) {
+						$css_classes .= ' wpml-ls-current-language';
+					}
+
+					$flag = [
+						'code'         => $lang['code'],
+						'display_name' => $lang['native_name'],
+						'flag_alt'     => '',
+						'flag_height'  => \WPML_LS_Settings::DEFAULT_FLAG_HEIGHT,
+						'flag_width'   => \WPML_LS_Settings::DEFAULT_FLAG_WIDTH,
+						'flag_title'   => $lang['native_name'],
+						'flag_url'     => $lang['country_flag_url'],
+						'active'       => $is_current_lang ? 'true' : 'false',
+						'url'          => '#',
+						'css_classes'  => $css_classes,
+
+					];
+					?>
+					<option data-flag='<?php echo htmlspecialchars( json_encode( $flag ), ENT_QUOTES, 'UTF-8' ); ?>' value="<?php echo esc_attr( $lang['code'] ); ?>" <?php selected( $lang['code'], $current_lang ); ?>>
+						<?php echo esc_html( $lang['native_name'] ); ?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+		<?php endif;
+
 	}
 
 	/**
