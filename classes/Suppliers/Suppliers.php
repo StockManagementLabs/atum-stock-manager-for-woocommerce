@@ -401,6 +401,10 @@ class Suppliers {
 
 		}
 
+		if ( isset( $_POST['wpml_lang'] ) ) {
+			$supplier->set_wpml_lang( $_POST['wpml_lang'] );
+		}
+
 		$supplier->save();
 
 	}
