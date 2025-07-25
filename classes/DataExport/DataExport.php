@@ -163,13 +163,13 @@ class DataExport {
 			$mpdf->SetTitle( $report_title );
 
 			// Add the icon fonts to mPDF.
-			$fontdata = array(
+			$font_data = array(
 				'atum-icon-font' => array(
 					'R' => '../../../../assets/fonts/atum-icon-font.ttf',
 				),
 			);
 
-			foreach ( $fontdata as $f => $fs ) {
+			foreach ( $font_data as $f => $fs ) {
 				$mpdf->fontdata[ $f ] = $fs;
 
 				foreach ( [ 'R', 'B', 'I', 'BI' ] as $style ) {
