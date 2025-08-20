@@ -216,6 +216,24 @@ class PurchaseOrdersController extends AtumOrdersController {
 			);
 
 		}
+		// PO supplier.
+		if ( ! empty( $request['supplier'] ) ) {
+			$args['meta_query'][] = array(
+				'key'     => '_supplier',
+				'value'   => $request['supplier'],
+				'compare' => '=',
+				'type'    => 'NUMERIC',
+			);
+		}
+
+		// Multiple suppliers switch.
+		if ( isset( $request['multiple_suppliers'] ) ) {
+			$args['meta_query'][] = array(
+				'key'     => '_multiple_suppliers',
+				'value'   => $request['multiple_suppliers'] ? 'yes' : 'no',
+				'compare' => '=',
+			);
+		}
 
 		return $args;
 
