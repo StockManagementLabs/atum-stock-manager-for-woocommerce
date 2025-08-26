@@ -460,7 +460,7 @@ abstract class AtumOrderModel {
 		if ( $product instanceof \WC_Product ) {
 			
 			if ( is_null( $qty ) ) {
-				$qty = $product->get_min_purchase_quantity();
+				$qty = apply_filters( 'atum/order/add_product/default_qty', $product->get_min_purchase_quantity() );
 			}
 
 			$product_name  = apply_filters( 'atum/order/add_product/name', $product->get_name(), $product, $this );
