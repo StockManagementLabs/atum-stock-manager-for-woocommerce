@@ -125,19 +125,24 @@ final class AtumStockDecimals {
 		// Always > 0
 		$stock_decimals = self::get_stock_decimals();
 
-		$step = Helpers::get_option( 'stock_quantity_step', 0 );
+		// NOTE: As the "woocommerce_quantity_input_min" is running on many places (not only the frontend),
+		// if we don't add this check, it was causing issues, like for example, adding items to new PO frees with qty 0.
+		if ( ! is_admin() ) {
 
-		$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
+			$step          = Helpers::get_option( 'stock_quantity_step', 0 );
+			$step_decimals = strlen( substr( strrchr( $step - floor( $step ), '.' ), 1 ) );
 
-		if ( $step_decimals < $stock_decimals ) {
-            if ( str_contains( $step, '.' ) ) {
-                $step .= str_repeat( '0', $stock_decimals - $step_decimals );
-            }
-            else {
-                $step .= '.' . str_repeat( '0', $stock_decimals - $step_decimals );
-            }
+			if ( $step_decimals < $stock_decimals ) {
+				if ( str_contains( $step, '.' ) ) {
+					$step .= str_repeat( '0', $stock_decimals - $step_decimals );
+				}
+				else {
+					$step .= '.' . str_repeat( '0', $stock_decimals - $step_decimals );
+				}
 
-			return $step;
+				return $step;
+			}
+
 		}
 
 		return ( 10 / pow( 10, $stock_decimals + 1 ) );
