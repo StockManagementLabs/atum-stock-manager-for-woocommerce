@@ -865,4 +865,17 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		return apply_filters( 'atum/api/atum_orders/statuses', array_merge( array_keys( Helpers::get_atum_order_post_type_statuses( $this->post_type ) ), [ 'any', 'trash' ] ) );
 	}
 
+	/**
+	 * Hack to disable COGS on ATUM Orders (not applicable).
+	 *
+	 * @since 1.9.50
+	 *
+	 * @param string|null $doing_it_wrong_function_name
+	 *
+	 * @return bool
+	 */
+	protected function cogs_is_enabled( ?string $doing_it_wrong_function_name = null ): bool {
+		return FALSE;
+	}
+
 }
