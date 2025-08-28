@@ -881,7 +881,9 @@ class Wpml {
 			/* @noinspection PhpUndefinedMethodInspection */
 			$product_translations = self::$sitepress->get_element_translations( self::$sitepress->get_element_trid( $product_id, 'post_' . $post_type ), 'post_' . $post_type );
 			foreach ( $product_translations as $translation ) {
-				$translations[ $translation->language_code ] = (int) $translation->element_id;
+				if ( ! empty( $translation->element_id ) ) {
+					$translations[ $translation->language_code ] = (int) $translation->element_id;
+				}
 			}
 
 		}
@@ -1597,11 +1599,19 @@ class Wpml {
 
 			global $wpdb;
 
-			$original_clause = $wpdb->prepare( 'oim.`meta_value` = %d', $product_id );
+			// Exclude empty values (NULL, 0, '', FALSE, etc.)
+			$translations = array_filter( $translations, function( $val ) {
+				return !empty( $val );
+			} );
 
-			$index = array_search( $original_clause, $where );
+			if ( ! empty( $translations ) ) {
 
-			$where[ $index ] = 'oim.`meta_value` IN (' . implode( ',', $translations ) . ')';
+				$original_clause = $wpdb->prepare( 'oim.`meta_value` = %d', $product_id );
+
+				$index = array_search( $original_clause, $where );
+
+				$where[ $index ] = 'oim.`meta_value` IN (' . implode( ',', $translations ) . ')';
+			}
 
 		}
 
