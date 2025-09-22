@@ -1,6 +1,8 @@
-/* =======================================
-   SEARCH IN COLUMN FOR LIST TABLES
-   ======================================= */
+/*
+ * =======================================
+ * SEARCH IN COLUMN FOR LIST TABLES
+ * =======================================
+ */
 
 import Globals from './_globals';
 import Settings from '../../config/_settings';
@@ -9,128 +11,133 @@ import Utils from '../../utils/_utils';
 
 export default class SearchInColumn {
 
-	constructor(
-		private settings: Settings,
-		private tooltip: Tooltip,
-		private globals: Globals
-	) {
+    constructor(
+        private settings: Settings,
+        private tooltip: Tooltip,
+        private globals: Globals,
+    ) {
 
-		if ( $( '.atum-post-search-with-dropdown' ).length ) {
+        if ( $( '.atum-post-search-with-dropdown' ).length ) {
 
-			this.setup();
+            this.setup();
 
-			// Rearrange the dropdown items when changing the visible columns from Screen Options.
-			$( '#adv-settings input:checkbox' ).on( 'change', () => this.setup() );
+            // Rearrange the dropdown items when changing the visible columns from Screen Options.
+            $( '#adv-settings input:checkbox' ).on( 'change', () => this.setup() );
 
-			this.events();
+            this.events();
 
-		}
+        }
 		
-	}
+    }
 	
-	/**
-	 * Fill the search by column dropdown with the active screen options checkboxes
-	 */
-	setup() {
+    /**
+     * Fill the search by column dropdown with the active screen options checkboxes
+     */
+    setup() {
 
-		const $dropdownItem: JQuery = $( '<a class="dropdown-item" href="#" />' );
+        const $dropdownItem: JQuery = $( '<a class="dropdown-item" href="#" />' );
+        
+        if ( this.globals.$searchColumnDropdown.find( '.dropdown-item' ).length  ) {
+            return; // Do not alter the dropdown if it already has items.
+        }
 
-		this.globals.$searchColumnDropdown.empty();
+        this.globals.$searchColumnDropdown.empty();
 
-		// Append the no column and the title items.
-		const noOptionText: string = this.globals.$searchColumnDropdown.data( 'no-option' );
+        // Append the no column and the title items.
+        const noOptionText: string = this.globals.$searchColumnDropdown.data( 'no-option' );
 
-		if ( noOptionText ) {
-			this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', '' ).addClass( 'active' ).text( noOptionText ) );
-		}
+        if ( noOptionText ) {
+            this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', '' ).addClass( 'active' ).text( noOptionText ) );
+        }
 
-		const titleText: string = this.globals.$searchColumnDropdown.data( 'product-title' );
+        const titleText: string = this.globals.$searchColumnDropdown.data( 'product-title' );
 
-		if ( titleText ) {
-			this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', 'title' ).text( titleText ) );
-		}
+        if ( titleText ) {
+            this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', 'title' ).text( titleText ) );
+        }
 
-		// Reset the button value.
-		this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ '', this.globals.$searchColumnDropdown.data( 'no-option' ) ] );
+        // Reset the button value.
+        this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ '', this.globals.$searchColumnDropdown.data( 'no-option' ) ] );
 
-		// Only list columns that are visible (checked on Screen Options).
-		$( '#adv-settings input:checked' ).each( ( index: number, elem: Element ) => {
+        // Only list columns that are visible (checked on Screen Options).
+        $( '#adv-settings input:checked' ).each( ( index: number, elem: Element ) => {
 
-			const $elem: JQuery       = $( elem ),
-			      optionVal: string   = $elem.val(),
-			      columnLabel: string = $elem.parent().text().trim();
+            const $elem: JQuery       = $( elem ),
+                  optionVal: string   = $elem.val(),
+                  columnLabel: string = $elem.parent().text().trim();
 
-			// Calc values are not searchable, also we can't search on thumb and supplier has its own filter.
-			if ( ! optionVal.startsWith( 'calc_' ) && optionVal !== 'thumb' && optionVal !== '_supplier' ) {
+            // Calc values are not searchable, also we can't search on thumb and supplier has its own filter.
+            if ( !optionVal.startsWith( 'calc_' ) && optionVal !== 'thumb' && optionVal !== '_supplier' ) {
 
-				this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', optionVal ).text( columnLabel ) );
+                this.globals.$searchColumnDropdown.append( $dropdownItem.clone().data( 'value', optionVal ).text( columnLabel ) );
 
-				// Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change.
-				if ( $.address.parameter( 'search_column' ) !== this.globals.$searchColumnBtn.data( 'value' ) && this.globals.$searchColumnBtn.data( 'value' ) === optionVal ) {
-					this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, columnLabel ] );
-				}
+                // Most probably, we are on init and ?search_column has a value. Or maybe not, but, if this happens, force change.
+                if ( $.address.parameter( 'search_column' ) !== this.globals.$searchColumnBtn.data( 'value' ) && this.globals.$searchColumnBtn.data( 'value' ) === optionVal ) {
+                    this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ optionVal, columnLabel ] );
+                }
 
-			}
+            }
 
-		} );
+        } );
 		
-	}
+    }
 	
-	/**
-	 * Bind events
-	 */
-	events() {
+    /**
+     * Bind events
+     */
+    events() {
 		
-		this.globals.$searchColumnBtn
+        this.globals.$searchColumnBtn
 
-			// Bind clicks on search in column button.
-			.on( 'click', ( evt: JQueryEventObject ) => {
-				evt.stopPropagation();
-				$( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();
-			} )
+        // Bind clicks on search in column button.
+            .on( 'click', ( evt: JQueryEventObject ) => {
+                evt.stopPropagation();
+                $( evt.currentTarget ).parent().find( '.dropdown-menu' ).toggle();
+            } )
 
-			// Set $searchColumnBtn data-value and label.
-			.on( 'atum-search-column-set-data', ( evt: JQueryEventObject, value: string, label: string ) => {
+        // Set $searchColumnBtn data-value and label.
+            .on( 'atum-search-column-set-data', ( evt: JQueryEventObject, value: string, label: string ) => {
 
-				const $searchColBtn: JQuery  = $( evt.currentTarget ),
-				      $wrapper: JQuery       = $searchColBtn.parent(),
-				      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children( 'a' ),
-				      noOptionLabel: string  = this.globals.$searchColumnDropdown.data( 'no-option' );
+                const $searchColBtn: JQuery  = $( evt.currentTarget ),
+                      $wrapper: JQuery       = $searchColBtn.parent(),
+                      $dropDownLinks: JQuery = this.globals.$searchColumnDropdown.children( 'a' ),
+                      noOptionLabel: string  = this.globals.$searchColumnDropdown.data( 'no-option' );
 
-				$searchColBtn.text( label );
-				$searchColBtn.data( 'value', value );
-				$searchColBtn.attr( 'data-bs-original-title', label !== noOptionLabel ? `${ noOptionLabel } ${ label }` : label );
+                $searchColBtn.text( label );
+                $searchColBtn.data( 'value', value );
+                $searchColBtn.attr( 'data-bs-original-title', label !== noOptionLabel ? `${ noOptionLabel } ${ label }` : label );
 
-				this.tooltip.destroyTooltips( $wrapper );
-				this.tooltip.addTooltips( $wrapper );
+                this.tooltip.destroyTooltips( $wrapper );
+                this.tooltip.addTooltips( $wrapper );
 
-				$dropDownLinks.filter( '.active' ).removeClass( 'active' );
-				Utils.filterByData( $dropDownLinks, 'value', value ).addClass( 'active' );
+                $dropDownLinks.filter( '.active' ).removeClass( 'active' );
+                Utils.filterByData( $dropDownLinks, 'value', value ).addClass( 'active' );
 
-			} );
+            } );
 		
-		// Bind clicks on dropdown menu items.
-		this.globals.$searchColumnDropdown.on( 'click', 'a', ( evt: JQueryEventObject ) => {
+        // Bind clicks on dropdown menu items.
+        this.globals.$searchColumnDropdown.on( 'click', 'a', ( evt: JQueryEventObject ) => {
 
-			evt.preventDefault();
+            evt.preventDefault();
 
-			const $item: JQuery = $( evt.currentTarget );
+            const $item: JQuery = $( evt.currentTarget );
 
-			this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ $item.data( 'value' ), $item.text().trim() ] );
+            this.globals.$searchColumnBtn.trigger( 'atum-search-column-set-data', [ $item.data( 'value' ), $item.text().trim() ] );
 
-			$item.closest( '.dropdown-menu' ).hide();
+            $item.closest( '.dropdown-menu' ).hide();
 
-			const fieldType: string = $.inArray( $item.data( 'value' ), this.settings.get( 'searchableColumns' ).numeric ) > -1 ? 'number' : 'search';
-			this.globals.$searchInput.attr( 'type', fieldType );
+            const fieldType: string = $.inArray( $item.data( 'value' ), this.settings.get( 'searchableColumns' ).numeric ) > -1 ? 'number' : 'search';
 
-			if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
-				this.globals.$searchColumnBtn.trigger( 'atum-search-column-data-changed' );
-			}
+            this.globals.$searchInput.attr( 'type', fieldType );
 
-		} );
+            if ( this.settings.get( 'ajaxFilter' ) === 'yes' ) {
+                this.globals.$searchColumnBtn.trigger( 'atum-search-column-data-changed' );
+            }
 
-		$( document ).on( 'click', () => this.globals.$searchColumnDropdown.hide() );
+        } );
+
+        $( document ).on( 'click', () => this.globals.$searchColumnDropdown.hide() );
 		
-	}
+    }
 	
 }

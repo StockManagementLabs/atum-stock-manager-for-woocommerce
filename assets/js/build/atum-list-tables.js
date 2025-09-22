@@ -3233,6 +3233,9 @@ var SearchInColumn = (function () {
     SearchInColumn.prototype.setup = function () {
         var _this = this;
         var $dropdownItem = $('<a class="dropdown-item" href="#" />');
+        if (this.globals.$searchColumnDropdown.find('.dropdown-item').length) {
+            return;
+        }
         this.globals.$searchColumnDropdown.empty();
         var noOptionText = this.globals.$searchColumnDropdown.data('no-option');
         if (noOptionText) {
