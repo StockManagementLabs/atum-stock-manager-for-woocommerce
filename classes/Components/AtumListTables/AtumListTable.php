@@ -1248,7 +1248,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param \WP_Post $item The WooCommerce product post to use in calculations.
+	 * @param \WP_Post $item The WooCommerce's product post to use in calculations.
 	 *
 	 * @return string
 	 */
@@ -1268,7 +1268,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'currency' => self::$default_currency,
 				] );
 
-				if ( 0.0 < $regular_price_orig && 0.0 === round( $regular_price_orig, wc_get_price_decimals() ) ) {
+				if ( 0.0 < $regular_price_orig && 0.0 === round( $regular_price_orig, wc_get_price_decimals(), PHP_ROUND_HALF_UP ) ) {
 
 					$regular_price_value = "> $regular_price_value";
 				}
@@ -1325,7 +1325,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'currency' => self::$default_currency,
 				] );
 
-				if ( 0.0 < $sale_price_orig && 0.0 === round( $sale_price_orig, wc_get_price_decimals() ) ) {
+				if ( 0.0 < $sale_price_orig && 0.0 === round( $sale_price_orig, wc_get_price_decimals(), PHP_ROUND_HALF_UP ) ) {
 
 					$sale_price_value = "> $sale_price_value";
 				}
@@ -1409,7 +1409,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					'currency' => self::$default_currency,
 				] );
 
-				if ( 0.0 < $purchase_price_orig && 0.0 === round( $purchase_price_orig, wc_get_price_decimals() ) ) {
+				if ( 0.0 < $purchase_price_orig && 0.0 === round( $purchase_price_orig, wc_get_price_decimals(), PHP_ROUND_HALF_UP ) ) {
 					$purchase_price_value = "> $purchase_price_value";
 				}
 
@@ -1470,8 +1470,8 @@ abstract class AtumListTable extends \WP_List_Table {
 				$base_tax_rates = \WC_Tax::get_base_tax_rates( $this->list_item->get_tax_class() );
 				$base_pur_taxes = \WC_Tax::calc_tax( $purchase_price, $base_tax_rates, true );
 				$base_reg_taxes = \WC_Tax::calc_tax( $price, $base_tax_rates, true );
-				$purchase_price = round( $purchase_price - array_sum( $base_pur_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
-				$price          = round( $price - array_sum( $base_reg_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+				$purchase_price = round( $purchase_price - array_sum( $base_pur_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ), PHP_ROUND_HALF_UP );
+				$price          = round( $price - array_sum( $base_reg_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ), PHP_ROUND_HALF_UP );
 			}
 
 			if ( $purchase_price > 0 && $price > 0 ) {
@@ -3321,7 +3321,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			elseif ( in_array( $column_key, array_keys( $this->totalizers ) ) ) {
 				$total          = $this->totalizers[ $column_key ];
 				$total_class    = $total < 0 ? ' class="danger"' : '';
-				$column_display = "<span{$total_class}>" . round( $total, 2 ) . '</span>';
+				$column_display = "<span{$total_class}>" . round( $total, 2, PHP_ROUND_HALF_UP ) . '</span>';
 			}
 			else {
 				$column_display = '';
