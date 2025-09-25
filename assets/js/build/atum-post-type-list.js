@@ -1183,6 +1183,7 @@ var Globals = (function () {
             }
             autoFiltersValues[name] = value;
         });
+        console.log('Auto filters values', autoFiltersValues);
         return autoFiltersValues;
     };
     return Globals;
