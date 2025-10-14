@@ -6,8 +6,8 @@ Requires at least: 5.9
 Tested up to: 6.8.2
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 10.1.1
-Stable tag: 1.9.50
+WC tested up to: 10.2.2
+Stable tag: 1.9.51
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,25 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.51`
+
+*2025-10-14*
+
+**Features**
+
+* Added a new helper function to get the post type name from a give order type ID.
+
+**Changes**
+
+* Refactoring.
+* Dot not override the "search in" dropdown items if there are values.
+
+**Fixes**
+
+* Fixed PHP 8.4 compatibility.
 
 ---
 

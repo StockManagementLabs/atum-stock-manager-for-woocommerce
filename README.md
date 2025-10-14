@@ -196,6 +196,25 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.51`
+
+*2025-10-14*
+
+**Features**
+
+* Added a new helper function to get the post type name from a give order type ID.
+
+**Changes**
+
+* Refactoring.
+* Dot not override the "search in" dropdown items if there are values.
+
+**Fixes**
+
+* Fixed PHP 8.4 compatibility.
+
+---
+
 `1.9.50`
 
 *2025-08-28*
