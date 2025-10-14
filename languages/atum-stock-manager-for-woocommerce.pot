@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ATUM Stock Manager for WooCommerce\n"
-"POT-Creation-Date: 2025-08-28 10:33+0200\n"
+"POT-Creation-Date: 2025-10-14 17:19+0200\n"
 "PO-Revision-Date: 2017-01-15 12:21+0100\n"
 "Last-Translator: Salva Machí <salvamb@sispixels.com>\n"
 "Language-Team: BE REBEL <https://berebel.studio>\n"
@@ -3636,96 +3636,96 @@ msgstr ""
 msgid "Guide not found"
 msgstr ""
 
-#: classes/Inc/Globals.php:520
+#: classes/Inc/Globals.php:526
 msgid "Go to today"
 msgstr ""
 
-#: classes/Inc/Globals.php:521
+#: classes/Inc/Globals.php:527
 msgid "Clear selection"
 msgstr ""
 
-#: classes/Inc/Globals.php:522
+#: classes/Inc/Globals.php:528
 msgid "Close the picker"
 msgstr ""
 
-#: classes/Inc/Globals.php:523
+#: classes/Inc/Globals.php:529
 msgid "Select Month"
 msgstr ""
 
-#: classes/Inc/Globals.php:524 views/widgets/orders.php:22
+#: classes/Inc/Globals.php:530 views/widgets/orders.php:22
 #: views/widgets/promo-sales.php:22 views/widgets/statistics.php:45
 msgid "Previous Month"
 msgstr ""
 
-#: classes/Inc/Globals.php:525
+#: classes/Inc/Globals.php:531
 msgid "Next Month"
 msgstr ""
 
-#: classes/Inc/Globals.php:526
+#: classes/Inc/Globals.php:532
 msgid "Select Year"
 msgstr ""
 
-#: classes/Inc/Globals.php:527 views/widgets/statistics.php:43
+#: classes/Inc/Globals.php:533 views/widgets/statistics.php:43
 msgid "Previous Year"
 msgstr ""
 
-#: classes/Inc/Globals.php:528
+#: classes/Inc/Globals.php:534
 msgid "Next Year"
 msgstr ""
 
-#: classes/Inc/Globals.php:529
+#: classes/Inc/Globals.php:535
 msgid "Select Decade"
 msgstr ""
 
-#: classes/Inc/Globals.php:530
+#: classes/Inc/Globals.php:536
 msgid "Previous Decade"
 msgstr ""
 
-#: classes/Inc/Globals.php:531
+#: classes/Inc/Globals.php:537
 msgid "Next Decade"
 msgstr ""
 
-#: classes/Inc/Globals.php:532
+#: classes/Inc/Globals.php:538
 msgid "Previous Century"
 msgstr ""
 
-#: classes/Inc/Globals.php:533
+#: classes/Inc/Globals.php:539
 msgid "Next Century"
 msgstr ""
 
-#: classes/Inc/Globals.php:534
+#: classes/Inc/Globals.php:540
 msgid "Increment Hour"
 msgstr ""
 
-#: classes/Inc/Globals.php:535
+#: classes/Inc/Globals.php:541
 msgid "Pick Hour"
 msgstr ""
 
-#: classes/Inc/Globals.php:536
+#: classes/Inc/Globals.php:542
 msgid "Decrement Hour"
 msgstr ""
 
-#: classes/Inc/Globals.php:537
+#: classes/Inc/Globals.php:543
 msgid "Increment Minute"
 msgstr ""
 
-#: classes/Inc/Globals.php:538
+#: classes/Inc/Globals.php:544
 msgid "Pick Minute"
 msgstr ""
 
-#: classes/Inc/Globals.php:539
+#: classes/Inc/Globals.php:545
 msgid "Decrement Minute"
 msgstr ""
 
-#: classes/Inc/Globals.php:540
+#: classes/Inc/Globals.php:546
 msgid "Increment Second"
 msgstr ""
 
-#: classes/Inc/Globals.php:541
+#: classes/Inc/Globals.php:547
 msgid "Pick Second"
 msgstr ""
 
-#: classes/Inc/Globals.php:542
+#: classes/Inc/Globals.php:548
 msgid "Decrement Second"
 msgstr ""
 
