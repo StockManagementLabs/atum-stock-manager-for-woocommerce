@@ -13,14 +13,14 @@ namespace Atum\Api;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Api\Controllers\V3\FullExportController;
+//use Atum\Api\Controllers\V3\FullExportController;
 use Atum\Api\Extenders\AtumProductData;
 use Atum\Api\Extenders\Media;
 use Atum\Api\Extenders\OrderNotes;
 use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
-use Atum\Components\AtumCache;
+//use Atum\Components\AtumCache;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
@@ -84,7 +84,8 @@ class AtumApi {
 		'atum-setting-options'               => __NAMESPACE__ . '\Controllers\V3\SettingOptionsController',
 		'atum-suppliers'                     => __NAMESPACE__ . '\Controllers\V3\SuppliersController',
 		'atum-tools'                         => __NAMESPACE__ . '\Controllers\V3\ToolsController',
-		'atum-full-export'                   => __NAMESPACE__ . '\Controllers\V3\FullExportController',
+		/* @deprecated ATUM Mobile App stuff */
+		//'atum-full-export'                   => __NAMESPACE__ . '\Controllers\V3\FullExportController',
 		'atum-order-refunds'                 => __NAMESPACE__ . '\Controllers\V3\AllOrderRefundsController',
 	);
 
@@ -113,8 +114,9 @@ class AtumApi {
 	 * NOTE: We are using the schema names as endpoint keys for compatibility.
 	 *
 	 * @var string[]
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	private static $exportable_endpoints = array(
+	/*private static $exportable_endpoints = array(
 		'attribute'       => '/wc/v3/products/attributes',
 		'category'        => '/wc/v3/products/categories',
 		'comment'         => array(
@@ -148,7 +150,7 @@ class AtumApi {
 		'tax-class'       => '/wc/v3/taxes/classes',
 		'tax-rate'        => '/wc/v3/taxes',
 		'variation'       => '/wc/v3/atum/product-variations',
-	);
+	);*/
 
 	/**
 	 * AtumApi constructor
@@ -222,12 +224,14 @@ class AtumApi {
 		// Fix the CORS issue when connecting through Ionic's Capacitor to our API.
 		add_action( 'rest_api_init', array( $this, 'add_cors_hooks' ), 15 );
 
+		/* @deprecated ATUM Mobile App stuff */
 		// Add the exportable endpoint hooks.
-		add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
+		//add_action( 'init', array( $this, 'add_exportable_endpoints_hooks' ), 11 );
 
+		/* @deprecated ATUM Mobile App stuff */
 		// Add the healthcheck CRON job for the full export.
-		add_filter( 'atum/queues/recurring_hooks', array( $this, 'add_healthcheck_cron' ) );
-		add_action( 'atum/api_healthcheck', array( $this, 'action_healthcheck' ) );
+		//add_filter( 'atum/queues/recurring_hooks', array( $this, 'add_healthcheck_cron' ) );
+		//add_action( 'atum/api_healthcheck', array( $this, 'action_healthcheck' ) );
 
 		$this->load_extenders();
 
@@ -353,8 +357,9 @@ class AtumApi {
 	 * Add the hooks for the exportable endpoints
 	 *
 	 * @since 1.9.19
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function add_exportable_endpoints_hooks() {
+	/*public function add_exportable_endpoints_hooks() {
 
 		// Exportable endpoints hooks.
 		foreach ( self::get_exportable_endpoints() as $schema => $exportable_endpoint ) {
@@ -373,7 +378,7 @@ class AtumApi {
 			}
 		}
 
-	}
+	}*/
 
 	/**
 	 * Getter for the exportable endpoints
@@ -381,13 +386,14 @@ class AtumApi {
 	 * @since 1.9.19
 	 *
 	 * @return string[]
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public static function get_exportable_endpoints() {
+	/*public static function get_exportable_endpoints() {
 		return apply_filters( 'atum/api/exportable_endpoints', self::$exportable_endpoints );
-	}
+	}*/
 
 	/**
-	 * Special validation for the post status param (allowing multiple statuses at once)
+	 * Special validation for the the post status param (allowing multiple statuses at once)
 	 *
 	 * @since 1.9.22
 	 *
@@ -433,8 +439,9 @@ class AtumApi {
 	 * @param array $recurring_hooks
 	 *
 	 * @return array
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function add_healthcheck_cron( $recurring_hooks ) {
+	/*public function add_healthcheck_cron( $recurring_hooks ) {
 
 		$recurring_hooks['atum/api_healthcheck'] = array(
 			'time'     => 'now',
@@ -443,14 +450,15 @@ class AtumApi {
 
 		return $recurring_hooks;
 
-	}
+	}*/
 
 	/**
 	 * Healthcheck tasks
 	 *
 	 * @since 1.9.49
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function action_healthcheck() {
+	/*public function action_healthcheck() {
 
 		// Check if there is any hang process from the full export queue.
 		global $wpdb;
@@ -572,7 +580,7 @@ class AtumApi {
 
 		}
 
-	}
+	}*/
 
 	/**
 	 * Reschedule the full export action if it was not completed.
@@ -585,7 +593,7 @@ class AtumApi {
 	 *
 	 * @return bool
 	 */
-	private static function maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema ) {
+	/*private static function maybe_reschedule_full_export_action( $endpoint_files, $endpoint, $schema ) {
 
 		global $wpdb;
 
@@ -613,11 +621,11 @@ class AtumApi {
 				$dump_config = maybe_unserialize( $dump_config );
 			}
 
-			/**
-			 * Hook args: endpoint, user_id, params, page, format and user_app_id.
-			 * NOTE: These are the parameters that are passed later to the run_export method.
-			 * NOTE2: This hook cannot be unique because the previous page schedule is still running here.
-			 */
+			//
+			// Hook args: endpoint, user_id, params, page, format and user_app_id.
+			// NOTE: These are the parameters that are passed later to the run_export method.
+			// NOTE2: This hook cannot be unique because the previous page schedule is still running here.
+			//
 			$hook_args = [ $endpoint, $user_id, $json['params'] ?? '', $last_page + 1, 'sqlite', $dump_config['userId'] ?? '' ];
 			$hook_name = "atum_api_export_endpoint_$schema";
 
@@ -646,7 +654,7 @@ class AtumApi {
 
 		return FALSE;
 
-	}
+	}*/
 
 
 	/****************************

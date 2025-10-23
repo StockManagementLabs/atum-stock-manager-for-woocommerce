@@ -14,7 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Api\Controllers\V3\FullExportController;
+//use Atum\Api\Controllers\V3\FullExportController;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;
@@ -81,8 +81,9 @@ class AtumQueues {
 		// Add the sales calc recurring hook.
 		add_action( 'atum/cron_update_sales_calc_props', array( $this, 'action_update_last_sales_calc_props' ) );
 
+		/* @deprecated ATUM Mobile App stuff */
 		// Add the tmp folders clean-up hook.
-		add_action( 'atum/clean_up_tmp_folders', array( $this, 'action_clean_up_tmp_folders' ) );
+		//add_action( 'atum/clean_up_tmp_folders', array( $this, 'action_clean_up_tmp_folders' ) );
 
 		// Add the ATUM Queues async hooks listeners.
 		add_action( 'wp_ajax_atum_async_hooks', array( $this, 'handle_async_hooks' ) );
@@ -358,8 +359,9 @@ class AtumQueues {
 	 * Clean up ATUM temporary folders
 	 *
 	 * @since 1.9.19
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function action_clean_up_tmp_folders() {
+	/*public function action_clean_up_tmp_folders() {
 
 		// Clean up any old full API exportation older than 7 days.
 		$full_export_dir = FullExportController::get_full_export_upload_dir();
@@ -387,7 +389,7 @@ class AtumQueues {
 
 		}
 
-	}
+	}*/
 
 	/**
 	 * Defer an action to run one time on the WP's 'shutdown' action.
