@@ -297,8 +297,16 @@ class Dashboard {
 			/*
 			 * Dependencies.
 			 */
-			$script_deps = [ 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-blockui', 'jquery-ui-sortable', 'wp-hooks' ];
+			$script_deps = [ 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-ui-sortable', 'wp-hooks' ];
 			$style_deps  = [ 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ];
+
+			/* @deprecated since WC 10.3.0 */
+			if ( version_compare( WC()->version, '10.3.0', '<' ) ) {
+				$script_deps[] = 'jquery-blockui';
+			}
+			else {
+				$script_deps[] = 'wc-jquery-blockui';
+			}
 
 			/*
 			 * Widgets scripts

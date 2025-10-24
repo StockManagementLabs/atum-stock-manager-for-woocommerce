@@ -907,11 +907,18 @@ abstract class AtumOrderPostType {
 				$wc_dependencies = (array) apply_filters('atum/order_post_type/scripts/woocommerce_dependencies', array(
 					'wc-enhanced-select',
 					'wc-backbone-modal',
-					'jquery-blockui',
 					'stupidtable',
 					'sweetalert2',
 					'wp-hooks',
 				));
+
+				/* @deprecated since WC 10.3.0 */
+				if ( version_compare( WC()->version, '10.3.0', '<' ) ) {
+					$wc_dependencies[] = 'jquery-blockui';
+				}
+				else {
+					$wc_dependencies[] = 'wc-jquery-blockui';
+				}
 
 				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
 

@@ -228,7 +228,17 @@ final class Addons {
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', [ 'jquery', 'jquery-blockui', 'sweetalert2' ], ATUM_VERSION, TRUE );
+		$deps = [ 'jquery', 'sweetalert2' ];
+
+		/* @deprecated since WC 10.3.0 */
+		if ( version_compare( WC()->version, '10.3.0', '<' ) ) {
+			$deps[] = 'jquery-blockui';
+		}
+		else {
+			$deps[] = 'wc-jquery-blockui';
+		}
+
+		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', $deps, ATUM_VERSION, TRUE );
 
 		$addons_vars = array(
 			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),

@@ -4462,8 +4462,18 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->first_edit_key = $first_edit_key;
 		}
 
+		$deps = [ 'jquery', 'sweetalert2', 'wc-enhanced-select', 'wp-hooks' ];
+
+		/* @deprecated since WC 10.3.0 */
+		if ( version_compare( WC()->version, '10.3.0', '<' ) ) {
+			$deps[] = 'jquery-blockui';
+		}
+		else {
+			$deps[] = 'wc-jquery-blockui';
+		}
+
 		// List Table script.
-		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum-list-tables.js', [ 'jquery', 'jquery-blockui', 'sweetalert2', 'wc-enhanced-select', 'wp-hooks' ], ATUM_VERSION, TRUE );
+		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum-list-tables.js', $deps, ATUM_VERSION, TRUE );
 		wp_enqueue_script( 'atum-list' );
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );
