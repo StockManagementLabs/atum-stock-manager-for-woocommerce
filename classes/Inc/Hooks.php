@@ -513,7 +513,7 @@ class Hooks {
 				Helpers::force_rebuild_stock_status( NULL, FALSE, TRUE );
 			}
 
-			// Remove control time option when product sales properties cron disabled.
+			// Remove the control time option when product sales properties cron disabled.
 			if (
 				isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) &&
 				'yes' === $old_value['calc_prop_cron'] && 'no' === $option_value['calc_prop_cron']
@@ -532,10 +532,10 @@ class Hooks {
 				( isset( $old_value['calc_prop_cron_start'] ) && ! isset( $option_value['calc_prop_cron_start'] ) ) ||
 				( ! isset( $old_value['calc_prop_cron_start'] ) && isset( $option_value['calc_prop_cron_start'] ) ) ||
 				(
-					$old_value['calc_prop_cron'] !== $option_value['calc_prop_cron'] ||
-					$old_value['calc_prop_cron_interval'] !== $option_value['calc_prop_cron_interval'] ||
-					$old_value['calc_prop_cron_type'] !== $option_value['calc_prop_cron_type'] ||
-					$old_value['calc_prop_cron_start'] !== $option_value['calc_prop_cron_start']
+					( isset( $old_value['calc_prop_cron'], $option_value['calc_prop_cron'] ) && $old_value['calc_prop_cron'] !== $option_value['calc_prop_cron'] ) ||
+					( isset( $old_value['calc_prop_cron_interval'], $option_value['calc_prop_cron_interval'] ) && $old_value['calc_prop_cron_interval'] !== $option_value['calc_prop_cron_interval'] ) ||
+					( isset( $old_value['calc_prop_cron_type'], $option_value['calc_prop_cron_type'] ) && $old_value['calc_prop_cron_type'] !== $option_value['calc_prop_cron_type'] ) ||
+					( isset( $old_value['calc_prop_cron_start'], $option_value['calc_prop_cron_start'] ) && $old_value['calc_prop_cron_start'] !== $option_value['calc_prop_cron_start'] )
 				)
 			) {
 				delete_transient( AtumCache::get_transient_key( 'check_queues' ) );
