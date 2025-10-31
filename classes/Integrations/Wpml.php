@@ -248,8 +248,8 @@ class Wpml {
 			// Enable comments translations.
 			add_action( 'atum/comments/enable_translations', array( $this, 'enable_comments_translations' ) );
 
-			// Exclude duplicated categories at SC categories dropdown.
-			add_filter( 'atum/list_table/get_terms_categories_extra_criteria', array( $this, 'exclude_duplicated_categories' ), PHP_INT_MAX, 2 );
+			// Exclude duplicated categories at SC categories and locations dropdown.
+			add_filter( 'atum/list_table/get_filtered_terms_extra_criteria', array( $this, 'exclude_duplicated_terms' ), PHP_INT_MAX, 2 );
 
 			// Add translations to inboud stock where clause.
 			add_filter( 'atum/product_inbound_stock/sql_where', array( $this, 'include_translations_inbound_where' ), 10, 2 );
@@ -1532,27 +1532,29 @@ class Wpml {
 	}
 
 	/**
-	 * Exclude WPML translations in the SC categories filter dropdown.
+	 * Exclude WPML translations in the SC categories and locations filter dropdown.
 	 *
 	 * @since 1.9.18.1
 	 *
 	 * @param string    $criteria
-	 * @param ListTable $listtable
+	 * @param ListTable $list_table
 	 *
 	 * @return string
 	 */
-	public function exclude_duplicated_categories( $criteria, $listtable ) {
+	public function exclude_duplicated_terms( $criteria, $list_table ) {
+
 		global $wpdb;
 
-		if ( $listtable instanceof ListTable ) {
+		if ( $list_table instanceof ListTable ) {
 			$criteria .= "
 				AND tt.term_taxonomy_id IN (
-					SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type = 'tax_product_cat' AND language_code = '{$this->current_language}'
+					SELECT DISTINCT element_id FROM {$wpdb->prefix}icl_translations WHERE element_type IN ('tax_product_cat', 'tax_atum_location') AND language_code = '$this->current_language'
 				)
 			";
 		}
 
 		return $criteria;
+
 	}
 
 	/**

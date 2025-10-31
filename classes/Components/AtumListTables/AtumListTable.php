@@ -382,7 +382,10 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-		$this->is_filtering  = ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) || ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) || ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST['supplier'] );
+		$this->is_filtering  = ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) ||
+							   ! empty( $_REQUEST['search_column'] ) || ! empty( $_REQUEST['product_cat'] ) ||
+							   ! empty( $_REQUEST['product_type'] ) || ! empty( $_REQUEST[ Globals::PRODUCT_LOCATION_TAXONOMY ] ) ||
+							   ! empty( $_REQUEST['supplier'] );
 		$this->query_filters = $this->get_filters_query_string();
 		$this->day           = Helpers::date_format( '', TRUE, TRUE );
 
@@ -522,7 +525,8 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	protected function table_nav_filters() {
 
-		add_filter( 'get_terms', array( $this, 'get_terms_categories' ), 10, 4 );
+		// Before get categories.
+		add_filter( 'get_terms', array( $this, 'get_filtered_terms' ), 10, 4 );
 
 		// Category filtering.
 		wc_product_dropdown_categories( array(
@@ -532,7 +536,8 @@ abstract class AtumListTable extends \WP_List_Table {
 			'show_option_none' => __( 'All categories...', ATUM_TEXT_DOMAIN ),
 		) );
 
-		remove_filter( 'get_terms', array( $this, 'get_terms_categories' ) );
+		// After get categories.
+		remove_filter( 'get_terms', array( $this, 'get_filtered_terms' ) );
 
 		do_action( 'atum/list_table/before_product_types_dropdown', $this->show_controlled );
 
@@ -541,6 +546,28 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		do_action( 'atum/list_table/after_product_types_dropdown', $this->show_controlled );
 
+		// Before get locations.
+		add_filter( 'get_terms', array( $this, 'get_filtered_terms' ), 10, 4 );
+
+		// Locations filtering.
+		$args = array(
+			'pad_counts'         => 1,
+			'hierarchical'       => 1,
+			'show_uncategorized' => 1,
+			'orderby'            => 'name',
+			'selected'           => ! empty( $_REQUEST[ Globals::PRODUCT_LOCATION_TAXONOMY ] ) ? esc_attr( $_REQUEST[ Globals::PRODUCT_LOCATION_TAXONOMY ] ) : '',
+			'show_option_none' => __( 'All locations...', ATUM_TEXT_DOMAIN ),
+			'option_none_value'  => '',
+			'value_field'        => 'slug',
+			'taxonomy'           => Globals::PRODUCT_LOCATION_TAXONOMY,
+			'name'               => Globals::PRODUCT_LOCATION_TAXONOMY,
+			'class'              => 'wc-enhanced-select atum-enhanced-select dropdown_atum_location atum-tooltip auto-filter',
+		);
+
+		wp_dropdown_categories( $args );
+
+		// After get locations.
+		remove_filter( 'get_terms', array( $this, 'get_filtered_terms' ) );
 
 		// Supplier filtering.
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2367,13 +2394,28 @@ abstract class AtumListTable extends \WP_List_Table {
 		 * Tax filter
 		 */
 
-		// Add product category to the tax query.
+		// Add the product category to the tax query.
 		if ( ! empty( $_REQUEST['product_cat'] ) ) {
 
 			$this->taxonomies[] = array(
 				'taxonomy' => 'product_cat',
 				'field'    => 'slug',
 				'terms'    => esc_attr( $_REQUEST['product_cat'] ),
+			);
+
+		}
+
+		/**
+		 * Location filter
+		 */
+
+		// Add the product location to the tax query.
+		if ( ! empty( $_REQUEST[ Globals::PRODUCT_LOCATION_TAXONOMY ] ) ) {
+
+			$this->taxonomies[] = array(
+				'taxonomy' => Globals::PRODUCT_LOCATION_TAXONOMY,
+				'field'    => 'slug',
+				'terms'    => esc_attr( $_REQUEST[ Globals::PRODUCT_LOCATION_TAXONOMY ] ),
 			);
 
 		}
@@ -4891,17 +4933,18 @@ abstract class AtumListTable extends \WP_List_Table {
 	protected function get_filters_query_string( $format = 'array' ) {
 
 		$default_filters = array(
-			'paged'          => 1,
-			'order'          => 'desc',
-			'orderby'        => 'date',
-			'view'           => 'all_stock',
-			'product_cat'    => '',
-			'product_type'   => '',
-			'supplier'       => '',
-			'extra_filter'   => '',
-			's'              => '',
-			'search_column'  => '',
-			'sold_last_days' => '',
+			'paged'                            => 1,
+			'order'                            => 'desc',
+			'orderby'                          => 'date',
+			'view'                             => 'all_stock',
+			'product_cat'                      => '',
+			'product_type'                     => '',
+			Globals::PRODUCT_LOCATION_TAXONOMY => '',
+			'supplier'                         => '',
+			'extra_filter'                     => '',
+			's'                                => '',
+			'search_column'                    => '',
+			'sold_last_days'                   => '',
 		);
 
 		parse_str( $_SERVER['QUERY_STRING'], $query_string );
@@ -5163,7 +5206,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
-	 * Filters the found terms for the categories' dropdown.
+	 * Filters the found terms for the categories and locations dropdown.
 	 *
 	 * @since 1.9.18.1
 	 *
@@ -5174,16 +5217,16 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *
 	 * @return \WP_Term[]
 	 */
-	public function get_terms_categories( $terms, $taxonomies, $args, $term_query ) {
+	public function get_filtered_terms( $terms, $taxonomies, $args, $term_query ) {
 
 		global $wpdb;
 
-		$extra_criteria = apply_filters( 'atum/list_table/get_terms_categories_extra_criteria', '1', $this );
+		$extra_criteria = apply_filters( 'atum/list_table/get_filtered_terms_extra_criteria', '1', $this );
 
 		$sql = "
 			SELECT DISTINCT t.term_id FROM $wpdb->terms AS t  
 		    INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id 
-          	WHERE tt.taxonomy = 'product_cat' 
+          	WHERE tt.taxonomy IN ('" . implode( "','", $taxonomies ) . "') 
 			AND ( 
 			    tt.term_taxonomy_id IN (
 			    	SELECT DISTINCT tr.term_taxonomy_id FROM $wpdb->term_relationships tr 
