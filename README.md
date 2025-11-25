@@ -196,6 +196,16 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.52.1`
+
+*2025-11-25*
+
+**Fixes**
+
+* Fixed site crash when using some specific PHP versions.
+
+---
+
 `1.9.52`
 
 *2025-11-25*
