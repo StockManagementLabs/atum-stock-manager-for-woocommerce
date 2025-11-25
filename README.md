@@ -196,6 +196,20 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.53`
+
+*2025-11-25*
+
+**Changes**
+
+* Updated JS dependencies.
+
+**Fixes**
+
+* Released new version to fix wordpress.org issue with the updates.
+
+---
+
 `1.9.52.1`
 
 *2025-11-25*
