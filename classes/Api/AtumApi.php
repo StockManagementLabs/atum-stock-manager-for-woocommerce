@@ -165,9 +165,11 @@ class AtumApi {
 				$this->api_controllers['atum-inventory-logs'],
 				$this->api_controllers['atum-inventory-log-notes']
 			);
-			unset(
+
+			/* @deprecated ATUM Mobile App stuff */
+			/*unset(
 				self::$exportable_endpoints['inventory-log'],
-			);
+			);*/
 		}
 
 		if ( ! ModuleManager::is_module_active( 'purchase_orders' ) ) {
@@ -178,19 +180,22 @@ class AtumApi {
 				$this->api_controllers['atum-locations'],
 				$this->api_controllers['atum-inbound-stock']
 			);
-			unset(
+
+			/* @deprecated ATUM Mobile App stuff */
+			/*unset(
 				self::$exportable_endpoints['purchase-order'],
 				self::$exportable_endpoints['supplier'],
 				self::$exportable_endpoints['location'],
 				self::$exportable_endpoints['inbound-stock']
-			);
+			);*/
 		}
 
-		if ( ! wc_coupons_enabled() ) {
+		/* @deprecated ATUM Mobile App stuff */
+		/*if ( ! wc_coupons_enabled() ) {
 			unset(
 				self::$exportable_endpoints['coupon']
 			);
-		}
+		}*/
 
 		// Add the ATUM controllers to the WooCommerce API (/wp-json/wc/v3).
 		add_filter( 'woocommerce_rest_api_get_rest_namespaces', array( $this, 'register_api_controllers' ) );
