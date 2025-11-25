@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.8.2
+Tested up to: 6.9.0
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 10.2.2
-Stable tag: 1.9.51
+WC tested up to: 10.3.5
+Stable tag: 1.9.52
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,26 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.52`
+
+*2025-11-25*
+
+**Features**
+
+* Added a dropdown to filter products by location to Stock Central.
+
+**Changes**
+
+* Removed full export endpoint.
+* Avoid issues when a product type is not supported by ATUM.
+
+**Fixes**
+
+* Fixed a deprecated notice for the block-ui enqueue.
+* Fixed undefined array key notices in some scenarios.
 
 ---
 

@@ -196,6 +196,26 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.52`
+
+*2025-11-25*
+
+**Features**
+
+* Added a dropdown to filter products by location to Stock Central.
+
+**Changes**
+
+* Removed full export endpoint.
+* Avoid issues when a product type is not supported by ATUM.
+
+**Fixes**
+
+* Fixed a deprecated notice for the block-ui enqueue.
+* Fixed undefined array key notices in some scenarios.
+
+---
+
 `1.9.51`
 
 *2025-10-14*
