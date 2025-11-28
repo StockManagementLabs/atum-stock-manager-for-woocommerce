@@ -2604,7 +2604,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $allow_query ) {
 
-			if ( ! empty( $this->excluded ) ) {
+			if ( ! empty( $this->excluded ) )  {
 
 				if ( isset( $args['post__not_in'] ) ) {
 					$args['post__not_in'] = array_merge( $args['post__not_in'], $this->excluded );
@@ -4787,10 +4787,12 @@ abstract class AtumListTable extends \WP_List_Table {
 						$this->container_products['variable'] = array_unique( array_merge( $this->container_products['variable'], $parents_with_child ) );
 
 						// Exclude all those variations with no children from the list.
-						$this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable'], $this->container_products['variable'] ) ) );
+                        if ( apply_filters( 'atum/list_table/get_children/exclude_empty_variable_products', TRUE, $this ) ) {
+                            $this->excluded = array_unique( array_merge( $this->excluded, array_diff( $this->container_products['all_variable'], $this->container_products['variable'] ) ) );
+                        }
 						break;
 
-					case 'grouped':
+					case 'group ed':
 						$this->container_products['grouped'] = array_unique( array_merge( $this->container_products['grouped'], $parents_with_child ) );
 
 						// Exclude all those grouped with no children from the list.
