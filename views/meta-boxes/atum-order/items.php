@@ -161,7 +161,7 @@ $added_products = array();
 				<tr>
 					<td class="label">
 						<?php /* translators: the post type name */ ?>
-						<span class="atum-help-tip atum-tooltip" data-tip="<?php esc_attr_e( sprintf( 'This is the shipping and handling total costs for this %s.', strtolower( $post_type->labels->singular_name ) ), ATUM_TEXT_DOMAIN ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
+						<span class="atum-help-tip atum-tooltip" data-tip="<?php echo esc_attr( sprintf( __( 'This is the shipping and handling total costs for this %s.', ATUM_TEXT_DOMAIN ), strtolower( $post_type->labels->singular_name ) ) ) ?>"></span> <?php esc_html_e( 'Shipping:', ATUM_TEXT_DOMAIN ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
 					</td>
 					<td style="width: 1%"></td>
 					<td class="total">
