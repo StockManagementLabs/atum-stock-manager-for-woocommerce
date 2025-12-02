@@ -2,6 +2,7 @@ import tsParser from '@typescript-eslint/parser';
 import pluginStylistic from '@stylistic/eslint-plugin';
 
 export default [
+    { ignores: [ 'node_modules/', 'assets/js/vendor/' ] },
     pluginStylistic.configs[ 'recommended-flat' ],
     {
         plugins: { '@stylistic': pluginStylistic },
