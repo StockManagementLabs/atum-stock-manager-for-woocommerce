@@ -1,0 +1,20 @@
+.atum-filter-badge {
+	font-size: 12px;
+	background-color: var(--primary);
+	color: white;
+	padding: 6px 9px;
+	border-radius: 20px;
+	font-weight: normal;
+	display: inline-block;
+	
+	i {
+		margin-left: 2px;
+		display: inline-block;
+		transition: .2s ease-in-out;
+		
+		&:hover {
+			cursor: pointer;
+			font-weight: bold;
+		}
+	}
+}

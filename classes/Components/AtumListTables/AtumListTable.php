@@ -584,6 +584,39 @@ abstract class AtumListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Print the extra filters dropdown
+	 *
+	 * @since 1.9.54
+	 */
+	protected function print_extra_filters() {
+
+		// Extra filters.
+		$extra_filters = $this->get_extra_filters();
+
+		if ( empty( $extra_filters ) ) {
+			return;
+		}
+
+		$active_extra_filter = $_REQUEST['extra_filter'] ?? NULL;
+
+		?>
+		<select name="extra_filter" class="wc-enhanced-select atum-enhanced-select dropdown_extra_filter auto-filter" autocomplete="off">
+			<option value=""><?php esc_html_e( 'Extra filters...', ATUM_TEXT_DOMAIN ) ?></option>
+
+			<?php foreach ( $extra_filters as $extra_filter => $filter_config ) : ?>
+				<option value="<?php echo esc_attr( $extra_filter ) ?>"
+					<?php
+					// NOTE: If the extra filter has values, the filter should not remain selected. We will show the selected values with another component.
+					selected( empty( $filter_config['values'] ) && $active_extra_filter === $extra_filter ); ?>
+					<?php if ( $filter_config['auto'] === FALSE ) echo ' data-auto-filter="no"' ?>
+				><?php echo esc_html( $filter_config['label'] ) ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+
+	}
+
+	/**
 	 * Apply an extra filter to the current List Table query
 	 *
 	 * @since 1.9.6
@@ -3465,6 +3498,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			'editLocations'                  => __( 'Edit Locations', ATUM_TEXT_DOMAIN ),
 			'editLocationsInfo'              => __( 'Click on the location icons to switch the states. Locations marked with blue icons will be set and with gray icons will be unset.', ATUM_TEXT_DOMAIN ),
 			'editProductLocations'           => __( 'Edit Product Locations', ATUM_TEXT_DOMAIN ),
+			'extraFiltersConfig'			 => $this->get_extra_filters(),
 			'from'                           => __( 'From', ATUM_TEXT_DOMAIN ),
 			'listUrl'                        => esc_url( add_query_arg( 'page', $plugin_page, admin_url() ) ),
 			'locationsSaved'                 => __( 'Locations saved successfully', ATUM_TEXT_DOMAIN ),
@@ -5258,8 +5292,18 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_id_views() {
-
 		return apply_filters( 'atum/list_table/id_views', $this->id_views, $this );
+	}
+
+	/**
+	 * Get the extra filters used for the list table.
+	 *
+	 * @since 1.9.54
+	 *
+	 * @return array
+	 */
+	protected function get_extra_filters() {
+		return [];
 	}
 
 }

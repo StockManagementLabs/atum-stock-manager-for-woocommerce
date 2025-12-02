@@ -14,6 +14,18 @@ import Tooltip from '../_tooltip';
 import Utils from '../../utils/_utils';
 import WPHooks from '../../interfaces/wp.hooks';
 
+interface ExtraFilterConfig {
+    label : string;
+    auto  : boolean;
+    values: ExtraFilterValue[];
+}
+
+interface ExtraFilterValue {
+    label : string;
+    name  : string;
+    value?: string | number;
+}
+
 export default class Filters {
 
     wpHooks: WPHooks = window[ 'wp' ][ 'hooks' ]; // WP hooks.
@@ -31,11 +43,15 @@ export default class Filters {
         this.addHooks();
 		
         /*
-         *
          * Add date selector filter.
          * -------------------------
          */
         this.addDateSelectorFilter();
+        
+        /**
+         * Add the selected extra filters badge
+         */
+        this.maybeAddSelectedExtraFilters();
 		
     }
 
@@ -45,7 +61,6 @@ export default class Filters {
     bindEvents() {
 
         /*
-         *
          * Ajax filters.
          * -------------
          */
@@ -74,7 +89,7 @@ export default class Filters {
 
                 } )
 
-            // Pagination input changes.
+                // Pagination input changes.
                 .on( 'change', '.current-page', ( evt: JQueryEventObject ) => {
 
                     const currentPage: number = parseInt( $( evt.currentTarget ).val() || '1' );
@@ -89,10 +104,26 @@ export default class Filters {
                 this.pseudoKeyUpAjax( $( evt.currentTarget ).data( 'value' ), decodeURIComponent( this.globals.$searchInput.val() ) );
             } );
 
+            // Remove extra filter badges.
+            $( 'body' ).on( 'click', '.atum-filter-badge', ( evt: JQueryEventObject ) => {
+
+                const $badge: JQuery = $( evt.currentTarget );
+
+                $.address.parameter( $badge.data( 'name' ), '' );
+                $badge.remove();
+
+                // If there are no more badges to remove, remove the extra filter param too.
+                if ( !$( '.atum-filter-badge' ).length ) {
+                    $.address.parameter( 'extra_filter', '' );
+                }
+
+                this.keyUp( evt, true );
+
+            } );
+
         }
 
         /*
-         *
          * Non-ajax filters.
          * -----------------
          */
@@ -159,17 +190,15 @@ export default class Filters {
         }
 
         /*
-         *
          * Events common to all filters.
          * -----------------------------
          */
         this.globals.$atumList
 
-        /*
-         *
-         * Reset Filters button.
-         * ---------------------
-         */
+            /*
+             * Reset Filters button.
+             * ---------------------
+             */
             .on( 'click', '.reset-filters', ( evt: JQueryEventObject ) => {
 
                 this.tooltip.destroyTooltips();
@@ -193,7 +222,13 @@ export default class Filters {
      */
     addHooks() {
 
-        this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => this.addDateSelectorFilter() );
+        this.wpHooks.addAction( 'atum_listTable_tableUpdated', 'atum', () => {
+
+            // Re-add some functions after the table has been updated.
+            this.addDateSelectorFilter();
+            this.maybeAddSelectedExtraFilters();
+
+        } );
 
     }
 	
@@ -355,6 +390,63 @@ export default class Filters {
 			
         } );
 		
+    }
+    
+    /**
+     * Add the selected extra filters badge. If active.
+     */
+    maybeAddSelectedExtraFilters() {
+        
+        const extraFilter: string = $.address.parameter( 'extra_filter' ),
+              extraFilterConfig: ExtraFilterConfig[] = this.settings.get( 'extraFiltersConfig' );
+
+        if ( extraFilter && extraFilterConfig.hasOwnProperty( extraFilter ) ) {
+
+            // Only add the extra filter badge if the filter has values and there is any active value.
+            const filterValues: ExtraFilterValue[]     = extraFilterConfig[ extraFilter ].values;
+            let activeFilterValues: ExtraFilterValue[] = [];
+
+            filterValues.forEach( ( filterValueData: ExtraFilterValue ) => {
+
+                const filterValue = $.address.parameter( filterValueData.name );
+                const { label, name }  = filterValueData;
+
+                if ( filterValue ) {
+                    activeFilterValues.push( { label, name, value: filterValue } );
+                }
+
+            } );
+
+            if ( activeFilterValues.length ) {
+
+                const $pageHeading: JQuery = $( 'h1.wp-heading-inline' );
+
+                activeFilterValues.forEach( ( filterValue ) => {
+
+                    const $existingFilterBadge: JQuery = $pageHeading.find( `.atum-filter-badge[data-name="${ filterValue.name }"]` );
+
+                    if ( $existingFilterBadge.length ) {
+                        $existingFilterBadge.remove();
+                    }
+
+                    $pageHeading.append( `
+                        <span class="atum-filter-badge" 
+                            data-name="${ filterValue.name }" 
+                            data-value="${ filterValue.value }"
+                        >
+                            <strong>${ filterValue.label }:</strong> ${ filterValue.value }
+                            <i class="atum-icon atmi-cross"></i>
+                        </span>
+                    ` );
+                } );
+
+            }
+            else {
+                $( '.atum-filter-badge' ).remove();
+            }
+
+        }
+        
     }
 	
 }

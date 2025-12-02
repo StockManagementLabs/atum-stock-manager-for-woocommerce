@@ -396,37 +396,7 @@ class ListTable extends AtumListTable {
 		parent::table_nav_filters();
 
 		// Extra filters.
-		$extra_filters = (array) apply_filters( 'atum/stock_central_list/extra_filters', array(
-			'inbound_stock'     => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
-			'stock_on_hold'     => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
-			'reserved_stock'    => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
-			'backorders'        => __( 'Backorders', ATUM_TEXT_DOMAIN ),
-			'sold_today'        => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
-			'customer_returns'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
-			'warehouse_damages' => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
-			'lost_in_post'      => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
-			'other'             => __( 'Other', ATUM_TEXT_DOMAIN ),
-			'best_seller'       => __( 'Best Sellers', ATUM_TEXT_DOMAIN ),
-			'worst_seller'      => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
-		));
-
-		$no_auto_filter = array(
-			'best_seller',
-			'worst_seller',
-		);
-
-		?>
-		<select name="extra_filter" class="wc-enhanced-select atum-enhanced-select dropdown_extra_filter auto-filter" autocomplete="off">
-			<option value=""><?php esc_html_e( 'Extra filters...', ATUM_TEXT_DOMAIN ) ?></option>
-
-			<?php foreach ( $extra_filters as $extra_filter => $label ) : ?>
-				<option value="<?php echo esc_attr( $extra_filter ) ?>"
-					<?php selected( ! empty( $_REQUEST['extra_filter'] ) && $_REQUEST['extra_filter'] === $extra_filter, TRUE ); ?>
-					<?php if ( in_array( $extra_filter, $no_auto_filter, TRUE ) ) echo ' data-auto-filter="no"' ?>
-				><?php echo esc_attr( $label ) ?></option>
-			<?php endforeach; ?>
-		</select>
-		<?php
+		$this->print_extra_filters();
 
 	}
 
@@ -1331,5 +1301,91 @@ class ListTable extends AtumListTable {
 		<?php
 
 	}
-	
+
+	/**
+	 * Get the extra filters used for the list table.
+	 *
+	 * @since 1.9.54
+	 *
+	 * @return array
+	 */
+	protected function get_extra_filters() {
+
+		return (array) apply_filters( 'atum/stock_central_list/extra_filters', array(
+			'inbound_stock'     => array(
+				'label'  => __( 'Inbound Stock', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'stock_on_hold'     => array(
+				'label'  => __( 'Stock on Hold', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'reserved_stock'    => array(
+				'label'  => __( 'Reserved Stock', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'backorders'        => array(
+				'label'  => __( 'Backorders', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'sold_today'        => array(
+				'label'  => __( 'Sold Today', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'customer_returns'  => array(
+				'label'  => __( 'Customer Returns', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'warehouse_damages' => array(
+				'label'  => __( 'Warehouse Damages', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'lost_in_post'      => array(
+				'label'  => __( 'Lost in Post', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'other'             => array(
+				'label'  => __( 'Other', ATUM_TEXT_DOMAIN ),
+				'auto'   => TRUE,
+				'values' => [],
+			),
+			'best_seller'       => array(
+				'label'  => __( 'Best Sellers', ATUM_TEXT_DOMAIN ),
+				'auto'   => FALSE,
+				'values' => array(
+					array(
+						'label' => __( 'Date from', ATUM_TEXT_DOMAIN ),
+						'name'  => 'date_from',
+					),
+					array(
+						'label' => __( 'Date to', ATUM_TEXT_DOMAIN ),
+						'name'  => 'date_to',
+					)
+				),
+			),
+			'worst_seller'      => array(
+				'label'  => __( 'Worst Sellers', ATUM_TEXT_DOMAIN ),
+				'auto'   => FALSE,
+				'values' => array(
+					array(
+						'label' => __( 'Date from', ATUM_TEXT_DOMAIN ),
+						'name'  => 'date_from',
+					),
+					array(
+						'label' => __( 'Date to', ATUM_TEXT_DOMAIN ),
+						'name'  => 'date_to',
+					)
+				),
+			),
+		) );
+	}
+
 }
