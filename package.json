@@ -33,11 +33,11 @@
 		"gulp-plumber": "^1.2.1",
 		"gulp-sass": "^6.0.1",
 		"gulp-wrap": "^0.15.0",
-		"sass": "^1.94.2",
+		"sass": "^1.95.1",
 		"sass-loader": "^16.0.6",
 		"ts-loader": "^9.5.4",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.48.0",
+		"typescript-eslint": "^8.49.0",
 		"webpack": "^5.103.0",
 		"webpack-stream": "^7.0.0"
 	},
