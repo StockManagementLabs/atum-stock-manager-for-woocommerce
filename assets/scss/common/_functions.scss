@@ -90,7 +90,7 @@
 // Request a theme color level
 @function theme-color-level($color-name: "primary", $level: 0) {
 	$color: theme-color($color-name);
-	$color-base: if($level > 0, $black, $white);
+	$color-base: if(sass($level > 0): $black; else: $white);
 	$level: math.abs($level);
 	
 	@return color.mix($color-base, $color, $level * $theme-color-interval);
@@ -113,7 +113,7 @@
 		@return $value1 - $value2;
 	}
 	
-	@return if($return-calc == true, calc(#{$value1} - #{$value2}), $value1 + string.unquote(" - ") + $value2);
+	@return if(sass($return-calc == true): calc(#{$value1} - #{$value2}); else: $value1 + string.unquote(" - ") + $value2);
 }
 
 // Shade a color: mix a color with black
