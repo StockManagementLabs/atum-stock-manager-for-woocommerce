@@ -1,7 +1,7 @@
 /**
  * Atum Data Export
  *
- * @copyright Stock Management Labs ©2025
+ * @copyright Stock Management Labs ©2026
  *
  * @since 1.2.5
  */
