@@ -5,7 +5,7 @@
  * @package         Atum\StockCentral
  * @subpackage      Lists
  * @author          BE REBEL - https://berebel.studio
- * @copyright       ©2025 Stock Management Labs™
+ * @copyright       ©2026 Stock Management Labs™
  *
  * @since           1.4.1
  */

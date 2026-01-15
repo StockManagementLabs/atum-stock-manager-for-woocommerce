@@ -6,7 +6,7 @@
  *
  * @since       1.8.0
  * @author      BE REBEL - https://berebel.studio
- * @copyright   ©2025 Stock Management Labs™
+ * @copyright   ©2026 Stock Management Labs™
  *
  * @package     Atum\Api\Controllers
  * @subpackage  V3
