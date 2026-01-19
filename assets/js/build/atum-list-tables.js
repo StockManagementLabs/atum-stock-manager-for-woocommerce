@@ -1975,11 +1975,15 @@ var Filters = (function () {
         if (extraFilter && extraFilterConfig.hasOwnProperty(extraFilter)) {
             var filterValues = extraFilterConfig[extraFilter].values;
             var activeFilterValues_1 = [];
+            console.log(filterValues);
+            console.log(extraFilterConfig);
+            console.log(extraFilter);
+            var extraFilterLabel_1 = extraFilter.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
             filterValues.forEach(function (filterValueData) {
                 var filterValue = $.address.parameter(filterValueData.name);
                 var label = filterValueData.label, name = filterValueData.name;
                 if (filterValue) {
-                    activeFilterValues_1.push({ label: label, name: name, value: filterValue });
+                    activeFilterValues_1.push({ label: "".concat(extraFilterLabel_1, " ").concat(label), name: name, value: filterValue });
                 }
             });
             if (activeFilterValues_1.length) {

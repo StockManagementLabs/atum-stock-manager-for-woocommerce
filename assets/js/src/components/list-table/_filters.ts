@@ -405,6 +405,12 @@ export default class Filters {
             // Only add the extra filter badge if the filter has values and there is any active value.
             const filterValues: ExtraFilterValue[]     = extraFilterConfig[ extraFilter ].values;
             let activeFilterValues: ExtraFilterValue[] = [];
+            
+            console.log( filterValues );
+            console.log( extraFilterConfig );
+            console.log( extraFilter );
+            
+            const extraFilterLabel = extraFilter.replace( /_/g, ' ' ).replace( /\b\w/g, ( l ) => l.toUpperCase() );
 
             filterValues.forEach( ( filterValueData: ExtraFilterValue ) => {
 
@@ -412,7 +418,7 @@ export default class Filters {
                 const { label, name }  = filterValueData;
 
                 if ( filterValue ) {
-                    activeFilterValues.push( { label, name, value: filterValue } );
+                    activeFilterValues.push( { label: `${ extraFilterLabel } ${ label }`, name, value: filterValue } );
                 }
 
             } );
