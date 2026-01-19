@@ -196,6 +196,23 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.54`
+
+*2026-01-19*
+
+**Features**
+
+* Added filter when excluding variable products from List Tables.
+* Added filter badges when an extra filter with values is active.
+* Added an action after an ATUM order gets created.
+
+**Fixes**
+
+* Fixed deprecated jQuery functions.
+* Fixed SASS deprecated warnings.
+
+---
+
 `1.9.53`
 
 *2025-11-25*

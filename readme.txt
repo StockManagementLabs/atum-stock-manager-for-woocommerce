@@ -6,8 +6,8 @@ Requires at least: 5.9
 Tested up to: 6.9.0
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 10.3.5
-Stable tag: 1.9.53
+WC tested up to: 10.4.3
+Stable tag: 1.9.54
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,23 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.54`
+
+*2026-01-19*
+
+**Features**
+
+* Added filter when excluding variable products from List Tables.
+* Added filter badges when an extra filter with values is active.
+* Added an action after an ATUM order gets created.
+
+**Fixes**
+
+* Fixed deprecated jQuery functions.
+* Fixed SASS deprecated warnings.
 
 ---
 
