@@ -1973,17 +1973,15 @@ var Filters = (function () {
     Filters.prototype.maybeAddSelectedExtraFilters = function () {
         var extraFilter = $.address.parameter('extra_filter'), extraFilterConfig = this.settings.get('extraFiltersConfig');
         if (extraFilter && extraFilterConfig.hasOwnProperty(extraFilter)) {
-            var filterValues = extraFilterConfig[extraFilter].values;
+            var filterValues_1 = extraFilterConfig[extraFilter].values;
+            var extraFilterLabel_1 = extraFilterConfig[extraFilter].label;
             var activeFilterValues_1 = [];
-            console.log(filterValues);
-            console.log(extraFilterConfig);
-            console.log(extraFilter);
-            var extraFilterLabel_1 = extraFilter.replace(/_/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
-            filterValues.forEach(function (filterValueData) {
+            filterValues_1.forEach(function (filterValueData) {
                 var filterValue = $.address.parameter(filterValueData.name);
                 var label = filterValueData.label, name = filterValueData.name;
                 if (filterValue) {
-                    activeFilterValues_1.push({ label: "".concat(extraFilterLabel_1, " ").concat(label), name: name, value: filterValue });
+                    extraFilterLabel_1 = filterValues_1.length > 1 ? "".concat(extraFilterLabel_1, " ").concat(label) : label;
+                    activeFilterValues_1.push({ label: extraFilterLabel_1, name: name, value: filterValue });
                 }
             });
             if (activeFilterValues_1.length) {

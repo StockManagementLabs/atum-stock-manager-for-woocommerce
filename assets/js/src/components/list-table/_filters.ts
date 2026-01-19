@@ -403,14 +403,9 @@ export default class Filters {
         if ( extraFilter && extraFilterConfig.hasOwnProperty( extraFilter ) ) {
 
             // Only add the extra filter badge if the filter has values and there is any active value.
-            const filterValues: ExtraFilterValue[]     = extraFilterConfig[ extraFilter ].values;
+            const filterValues: ExtraFilterValue[] = extraFilterConfig[ extraFilter ].values;
+            let extraFilterLabel: string = extraFilterConfig[ extraFilter ].label;
             let activeFilterValues: ExtraFilterValue[] = [];
-            
-            console.log( filterValues );
-            console.log( extraFilterConfig );
-            console.log( extraFilter );
-            
-            const extraFilterLabel = extraFilter.replace( /_/g, ' ' ).replace( /\b\w/g, ( l ) => l.toUpperCase() );
 
             filterValues.forEach( ( filterValueData: ExtraFilterValue ) => {
 
@@ -418,7 +413,8 @@ export default class Filters {
                 const { label, name }  = filterValueData;
 
                 if ( filterValue ) {
-                    activeFilterValues.push( { label: `${ extraFilterLabel } ${ label }`, name, value: filterValue } );
+                    extraFilterLabel = filterValues.length > 1 ? `${ extraFilterLabel } ${ label }` : label;
+                    activeFilterValues.push( { label: extraFilterLabel, name, value: filterValue } );
                 }
 
             } );
