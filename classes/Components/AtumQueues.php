@@ -48,10 +48,11 @@ class AtumQueues {
 			'time'     => 'midnight tomorrow',
 			'interval' => DAY_IN_SECONDS,
 		],
+		/* @deprecated ATUM Mobile App stuff
 		'atum/clean_up_tmp_folders'          => [
 			'time'     => 'now',
 			'interval' => WEEK_IN_SECONDS,
-		],
+		],*/
 	);
 
 	/**
@@ -205,11 +206,19 @@ class AtumQueues {
 
 			}
 
-			$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args, self::QUEUES_GROUP );
+			// Make sure the hook callback has been registered or will fail silently.
+			if ( has_action( $hook_name ) ) {
 
-			if ( is_null( $next_scheduled_date ) ) {
-				$wc_queue->cancel_all( $hook_name, $schedule_args, self::QUEUES_GROUP ); // Ensure all the actions are canceled before adding a new one.
-				$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args, self::QUEUES_GROUP );
+				$next_scheduled_date = $wc_queue->get_next( $hook_name, $schedule_args, self::QUEUES_GROUP );
+
+				if ( is_null( $next_scheduled_date ) ) {
+					$wc_queue->cancel_all( $hook_name, $schedule_args, self::QUEUES_GROUP ); // Ensure all the actions are canceled before adding a new one.
+					$wc_queue->schedule_recurring( strtotime( $hook_data['time'] ), $hook_data['interval'], $hook_name, $schedule_args, self::QUEUES_GROUP );
+				}
+
+			}
+			elseif ( defined( 'ATUM_DEBUG' ) && ATUM_DEBUG ) {
+				error_log( __METHOD__ . ": The ATUM queue action '$hook_name' was not found. Please make sure it's registered." );
 			}
 
 		}
