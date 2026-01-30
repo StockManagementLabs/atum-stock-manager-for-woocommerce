@@ -3453,10 +3453,7 @@ abstract class AtumListTable extends \WP_List_Table {
 					</tr>
 				</thead>
 
-				<tbody id="the-list"<?php echo $singular ? esc_attr( " data-wp-lists='list:$singular'" ) : '' ?>>
-					<?php $this->display_rows_or_placeholder(); ?>
-				</tbody>
-
+				<?php // NOTE: to avoid issues with mPDF, the tfoot should be placed above the tbody (as per HTML4 specs). ?>
 				<tfoot>
 
 					<?php if ( $this->show_totals ) : ?>
@@ -3470,6 +3467,10 @@ abstract class AtumListTable extends \WP_List_Table {
 					</tr>
 
 				</tfoot>
+
+				<tbody id="the-list"<?php echo $singular ? esc_attr( " data-wp-lists='list:$singular'" ) : '' ?>>
+					<?php $this->display_rows_or_placeholder(); ?>
+				</tbody>
 
 			</table>
 
