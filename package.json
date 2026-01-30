@@ -11,8 +11,8 @@
 	"scripts": {
 		"build": "gulp",
 		"watch": "gulp watch",
-		"lint:scripts": "eslint assets/js/src assets/js/build",
-		"lint:scripts:fix": "eslint --fix assets/js/src assets/js/build"
+		"lint:scripts": "eslint assets/js/src",
+		"lint:scripts:fix": "eslint --fix assets/js/src"
 	},
 	"engines": {
 		"node": ">=22"
