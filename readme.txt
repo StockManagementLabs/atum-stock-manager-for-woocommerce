@@ -7,7 +7,7 @@ Tested up to: 6.9.0
 Requires PHP: 7.4
 WC requires at least: 5.0
 WC tested up to: 10.4.3
-Stable tag: 1.9.54
+Stable tag: 1.9.54.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,24 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.54.1`
+
+*2026-02-03*
+
+**Changes**
+
+* Updated addons minimum versions.
+* Update wpml-config.xml.
+* Make sure an ATUM queue hook callback has been registered before scheduling it.
+* Changed addons alert color.
+* Refactoring.
+
+**Fixes**
+
+* Fixed issue with some list tables when being loaded as a report.
 
 ---
 

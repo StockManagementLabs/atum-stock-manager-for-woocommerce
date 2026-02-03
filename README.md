@@ -196,6 +196,24 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.54.1`
+
+*2026-02-03*
+
+**Changes**
+
+* Updated addons minimum versions.
+* Update wpml-config.xml.
+* Make sure an ATUM queue hook callback has been registered before scheduling it.
+* Changed addons alert color.
+* Refactoring.
+
+**Fixes**
+
+* Fixed issue with some list tables when being loaded as a report.
+
+---
+
 `1.9.54`
 
 *2026-01-19*
