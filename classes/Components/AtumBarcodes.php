@@ -59,7 +59,7 @@ class AtumBarcodes {
 				add_filter( 'atum/stock_central_list/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
 				add_filter( 'atum/product_levels/manufacturing_list_table/column_group_members', array( $this, 'add_barcode_column_to_group' ) );
 				add_filter( 'atum/stock_central_list/table_columns', array( $this, 'add_barcode_column' ) );
-				add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ) );
+				add_filter( 'atum/product_levels/manufacturing_list_table/table_columns', array( $this, 'add_barcode_column' ), 10, 2 );
 				add_filter( 'atum/stock_central_list/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
 				add_filter( 'atum/product_levels/manufacturing_list_table/searchable_columns', array( $this, 'add_searchable_barcode_column' ) );
 				add_filter( 'atum/list_table/atum_sortable_columns', array( $this, 'add_sortable_atum_column' ) );
@@ -153,7 +153,7 @@ class AtumBarcodes {
 	}
 
 	/**
-	 * Add the barcode column to List Table group
+	 * Add the barcode column to the List Table group
 	 *
 	 * @since 1.9.18
 	 *
@@ -181,15 +181,16 @@ class AtumBarcodes {
 	}
 
 	/**
-	 * Filter the List Table columns array, to add the barcode column
+	 * Filter the List Table columns array to add the barcode column
 	 *
 	 * @since 1.9.18
 	 *
-	 * @param array $table_columns
+	 * @param array $table_columns The columns of the list table.
+	 * @param bool  $is_report     Whether the list table is used in a report.
 	 *
 	 * @return array
 	 */
-	public function add_barcode_column( $table_columns ) {
+	public function add_barcode_column( $table_columns, $is_report = FALSE ) {
 
 		$new_table_colums = array();
 

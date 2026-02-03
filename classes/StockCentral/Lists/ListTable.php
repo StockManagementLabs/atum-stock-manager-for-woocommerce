@@ -375,7 +375,7 @@ class ListTable extends AtumListTable {
 			unset( $table_columns['_purchase_price'], $table_columns['_inbound_stock'], $table_columns['calc_gross_profit'] );
 		}
 
-		$table_columns = (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns );
+		$table_columns = (array) apply_filters( 'atum/stock_central_list/table_columns', $table_columns, self::is_report() );
 
 		// Check if the user has disabled any column from settings.
 		if ( ! $force_defaults ) {
