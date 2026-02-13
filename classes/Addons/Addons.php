@@ -1271,7 +1271,6 @@ final class Addons {
 
 	}
 
-	/* @noinspection PhpDocRedundantThrowsInspection */
 	/**
 	 * Download an ATUM addon and install it
 	 *
@@ -1302,14 +1301,13 @@ final class Addons {
 
 		// Start the addon download and installation.
 		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		WP_Filesystem();
 
 		$skin         = new \Automatic_Upgrader_Skin();
-		$upgrader     = new \WP_Upgrader( $skin );
+		$upgrader     = new \Plugin_Upgrader( $skin );
 		$addon_folder = self::get_addon_folder( $addon_slug );
 		$plugin       = $addon_folder && $addon_folder !== $addon_slug ? "$addon_folder/$addon_folder.php" : "$addon_slug/$addon_slug.php";
 		$installed    = Helpers::is_plugin_installed( $plugin, 'file' );
@@ -1323,42 +1321,43 @@ final class Addons {
 
 			try {
 
-				$download = $upgrader->download_package( $download_link );
-
-				if ( is_wp_error( $download ) ) {
-					throw new AtumException( 'addon_download_error', $download->get_error_message() ?: $download->get_error_data() );
-				}
-
-				$working_dir = $upgrader->unpack_package( $download );
-
-				if ( is_wp_error( $working_dir ) ) {
-					throw new AtumException( 'addon_unpack_error', $working_dir->get_error_message() ?: $working_dir->get_error_data() );
-				}
-
-				$result = $upgrader->install_package( array(
-					'source'                      => $working_dir,
-					'destination'                 => WP_PLUGIN_DIR,
-					'clear_destination'           => TRUE,
-					'abort_if_destination_exists' => FALSE,
-					'clear_working'               => TRUE,
-					'hook_extra'                  => array(
-						'type'   => 'plugin',
-						'action' => 'install',
-					),
-				) );
+				$result = $upgrader->install(
+					$download_link,
+					array(
+						'clear_update_cache' => TRUE,
+						'overwrite_package'  => TRUE,
+					)
+				);
 
 				// If the user is upgrading a trial to full, uninstall the trial and block any uninstallation hooks.
 				$is_trial_addon = str_contains( strtolower( $addon_name ), 'trial' );
 				if ( ! $is_trial_addon && Helpers::is_plugin_installed( "ATUM $addon_name (Trial version)", 'name' ) ) {
 					add_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
-					$plugin = [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ];
-					deactivate_plugins( $plugin, TRUE );
-					delete_plugins( $plugin );
+					$trial_plugin = [ "{$addon_folder}-trial/{$addon_folder}-trial.php" ];
+					deactivate_plugins( $trial_plugin, TRUE );
+					delete_plugins( $trial_plugin );
 					remove_filter( 'atum/addons/prevent_uninstall_data_removal', '__return_true' );
 				}
 
-				if ( is_wp_error( $result ) ) {
-					throw new AtumException( 'addon_not_installed', $result->get_error_message() ?: $result->get_error_data() );
+				if ( is_wp_error( $result ) || ! $result ) {
+					$message = '';
+
+					if ( is_wp_error( $result ) ) {
+						$message = $result->get_error_message() ?: $result->get_error_data();
+					}
+					else {
+						$upgrade_messages = $skin->get_upgrade_messages();
+						if ( ! empty( $upgrade_messages ) ) {
+							$message = implode( ' ', $upgrade_messages );
+						}
+					}
+
+					throw new AtumException( 'addon_not_installed', $message );
+				}
+
+				$installed_plugin_file = $upgrader->plugin_info();
+				if ( $installed_plugin_file ) {
+					$plugin = $installed_plugin_file;
 				}
 
 				$activate = TRUE;
@@ -1386,10 +1385,12 @@ final class Addons {
 					'data'    => $message,
 				);
 
+			} finally {
+				// Always discard suppressed upgrader feedback.
+				if ( ob_get_level() ) {
+					ob_end_clean();
+				}
 			}
-
-			// Discard feedback.
-			ob_end_clean();
 
 		}
 
@@ -1410,7 +1411,7 @@ final class Addons {
 				return array(
 					'success' => FALSE,
 					'data'    => sprintf(
-						/* translators: first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page */
+						/* translators: the first one is the add-on nam, and the others are the opening and closing HTML link tags to the plugins page */
 						__( 'ATUM %1$s was installed but could not be activated.<br>Please, activate it manually from the %2$splugins page.%3$s', ATUM_TEXT_DOMAIN ),
 						$addon_name,
 						'<a href="' . admin_url( 'plugins.php' ) . '">',
