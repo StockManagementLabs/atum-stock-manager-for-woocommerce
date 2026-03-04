@@ -57,6 +57,7 @@ final class AtumStockDecimals {
 
 			// Add step value to the quantity field (WC default = 1).
 			add_filter( 'woocommerce_quantity_input_step', array( $this, 'stock_quantity_input_step' ), 10, 2 );
+			add_filter( 'woocommerce_quantity_input_args', array( $this, 'stock_quantity_input_args' ), 10, 2 );
 			add_filter( 'woocommerce_quantity_input_min', array( $this, 'stock_quantity_input_min' ), 10, 2 );
 
 			// Removes the WooCommerce filter, that is validating the quantity to be an int.
@@ -107,7 +108,40 @@ final class AtumStockDecimals {
 	 * @return float|int
 	 */
 	public function stock_quantity_input_step( $value, $product ) {
-		return self::get_input_step();
+
+		$step = self::get_input_step();
+
+		// Note: "get_purchase_quantity_step" was introduced in WC 10.1 and broke our previous implementation.
+		$is_wc_strict_purchase_step = is_object( $product ) && method_exists( $product, 'get_purchase_quantity_step' );
+
+		if ( $is_wc_strict_purchase_step && 'any' === $step ) {
+			$raw_step = Helpers::get_option( 'stock_quantity_step', 0 );
+			$step     = ( is_numeric( $raw_step ) && (float) $raw_step > 0 ) ? (float) $raw_step : ( 1 / pow( 10, self::get_stock_decimals() ) );
+		}
+
+		return $step;
+	}
+
+	/**
+	 * Ensure the UI quantity input can keep using "any" when configured.
+	 * WooCommerce >= 10.1.0 requires numeric values in get_purchase_quantity_step(),
+	 * so we set the HTML input step separately here.
+	 *
+	 * @since 1.9.37
+	 *
+	 * @param array            $args
+	 * @param \WC_Product|null $product
+	 *
+	 * @return array
+	 */
+	public function stock_quantity_input_args( $args, $product ) {
+
+		if ( 'any' === self::get_input_step() ) {
+			$args['step'] = 'any';
+		}
+
+		return $args;
+
 	}
 
 	/**
@@ -332,8 +366,10 @@ final class AtumStockDecimals {
 			return $step;
 		}
 
+		$return_step = floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+
 		// Avoid returning 1 when we should allow stock decimals to avoid HTML5 validation errors.
-		return floor( $step ) == $step ? 'any' : $step; // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+		return $return_step;
 
 	}
 
