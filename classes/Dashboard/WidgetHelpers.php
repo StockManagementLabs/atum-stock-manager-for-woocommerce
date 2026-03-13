@@ -867,21 +867,12 @@ final class WidgetHelpers {
 
 		}
 
-		// We need to apply the stock_status criteria to query only if we aren't filtering. Otherwise, may exclude unmanaged parents and get no results.
-		if ( ! $children_query_needed ) {
-			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_atum_args', array(
-				'key'   => 'atum_stock_status',
-				'value' => [ 'instock', 'onbackorder' ],
-				'type'  => 'CHAR',
-			) );
-		}
-
 		// Get products in stock.
 		add_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
-		$products_in_stock_query = new \WP_Query( apply_filters( 'atum/dashboard/get_items_in_stock/in_stock_products_args', $args ) );
+		$products_query = new \WP_Query( apply_filters( 'atum/dashboard/get_items/products_args', $args ) );
 		remove_filter( 'posts_clauses', array( __CLASS__, 'atum_product_data_query_clauses' ) );
 
-		$products_in_stock_sql = $products_in_stock_query->request;
+		$products_sql = $products_query->request;
 
 		if ( class_exists( '\WC_Product_Bundle' ) && ( ! $product_type || 'bundle' === $product_type ) ) {
 			$bundle_args = array(
@@ -898,14 +889,14 @@ final class WidgetHelpers {
 			$stock_bundles_sql = "OR p0.ID IN ( SELECT sbp.ID FROM $wpdb->posts sbp\n\t
 				{$bundle_clauses['join']}\n\t
 				WHERE sbp.post_status IN ('" . implode( "', '", Globals::get_queryable_product_statuses() ) . "')\n\t" .
-				"AND sbp.ID NOT IN (
+								 "AND sbp.ID NOT IN (
 					SELECT wbi.bundle_id FROM {$wpdb->prefix}woocommerce_bundled_items wbi
 					LEFT JOIN {$wpdb->prefix}woocommerce_bundled_itemmeta wbm ON wbi.bundled_item_id = wbm.bundled_item_id AND wbm.meta_key = 'optional'
 					WHERE wbm.meta_value = 'no'
 				)" .
-				$bundle_clauses['where'] . ' )';
+								 $bundle_clauses['where'] . ' )';
 
-			//$products_in_stock_sql = "( ( $products_in_stock_sql ) UNION ( $stock_bundles_sql ) )";
+			//$products_sql = "( ( $products_sql ) UNION ( $stock_bundles_sql ) )";
 		}
 		else {
 			$stock_bundles_sql = '';
@@ -913,10 +904,9 @@ final class WidgetHelpers {
 
 		if ( $children_query_needed ) {
 
-			$products_in_stock_sql = "SELECT DISTINCT pist.ID FROM ( ( $products_in_stock_sql ) UNION ( SELECT p.ID FROM $wpdb->posts p
-				LEFT JOIN $atum_product_data_table apd ON (p.ID = apd.product_id)
-				WHERE apd.atum_stock_status IN ('instock', 'onbackorder') AND p.post_type = 'product_variation'
-				AND p.post_parent IN ( $products_in_stock_sql ) ) ) pist ";
+			$products_sql = "SELECT DISTINCT pist.ID FROM ( ( $products_sql ) UNION ( SELECT p.ID FROM $wpdb->posts p
+				WHERE p.post_type = 'product_variation'
+				AND p.post_parent IN ( $products_sql ) ) ) pist ";
 		}
 
 		$variation_children = "
@@ -951,14 +941,14 @@ final class WidgetHelpers {
 				"LEFT JOIN $wpdb->postmeta ms ON p0.ID = ms.post_id AND ms.meta_key = '_manage_stock'",
 				"LEFT JOIN $atum_product_data_table apd0 ON p0.ID = apd0.product_id",
 			),
-			'where'  => "p0.ID IN ( $products_in_stock_sql ) $stock_bundles_sql",
+			'where'  => "p0.ID IN ( $products_sql ) $stock_bundles_sql",
 		) );
 
 		// phpcs:disable
 		$sql_string = 'SELECT ' . implode( ",\n", $items_in_stock_sql['fields'] ) .
-		              "\n\nFROM $wpdb->posts p0 " . implode( "\n\t", $items_in_stock_sql['join'] ) .
-		              "\n\nWHERE " . $items_in_stock_sql['where'] .
-		              "\n\nGROUP BY " . apply_filters( 'atum/dashboard/current_stock_query_group_by', 'p0.ID' );
+					  "\n\nFROM $wpdb->posts p0 " . implode( "\n\t", $items_in_stock_sql['join'] ) .
+					  "\n\nWHERE " . $items_in_stock_sql['where'] .
+					  "\n\nGROUP BY " . apply_filters( 'atum/dashboard/current_stock_query_group_by', 'p0.ID' );
 
 		$counters = (array) $wpdb->get_row( "SELECT SUM( t.items_stocks_counter ) items_stocks_counter,
             SUM( t.items_purchase_price_total ) items_purchase_price_total,
