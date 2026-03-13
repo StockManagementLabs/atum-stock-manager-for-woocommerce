@@ -99,14 +99,14 @@ class Hooks {
 		// Enqueue scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Show the right stock status on WC products list when ATUM is managing the stock.
+		// Show the right stock status on the WC products list when ATUM is managing the stock.
 		add_filter( 'woocommerce_admin_stock_html', array( $this, 'set_wc_products_list_stock_status' ), 10, 2 );
 
 		// Add the location column to the items table in WC orders.
 		add_action( 'woocommerce_admin_order_item_headers', array( $this, 'wc_order_add_location_column_header' ) );
 		add_action( 'woocommerce_admin_order_item_values', array( $this, 'wc_order_add_location_column_value' ), 10, 3 );
 
-		// Firefox fix to not preserve the dropdown.
+		// Firefox fix to don't preserve the dropdown.
 		add_filter( 'wp_dropdown_cats', array( $this, 'set_dropdown_autocomplete' ), 10, 2 );
 
 		// Do some tasks after saving ATUM settings.
@@ -115,10 +115,10 @@ class Hooks {
 		// Sometimes the paid date was not being set by WC when changing the status to completed.
 		add_action( 'woocommerce_order_status_completed', array( $this, 'maybe_save_paid_date' ), 10, 2 );
 
-		// Clean up the ATUM data when a product is deleted from database.
+		// Clean up the ATUM data when a product is deleted from the database.
 		add_action( 'delete_post', array( $this, 'before_delete_product' ) );
 
-		// Save the ATUM product data for all the variations when created from attibutes.
+		// Save the ATUM product data for all the variations when created from attributes.
 		add_action( 'product_variation_linked', array( $this, 'save_variation_atum_data' ) );
 
 		// Save the orders-related data every time order items change.
@@ -132,7 +132,7 @@ class Hooks {
 		// Delete transients after bulk changing products from SC.
 		add_action( 'atum/ajax/list_table/bulk_action_applied', array( $this, 'delete_transients' ) );
 
-		// Make simple product types available for every addons.
+		// Make simple product types available for every addon.
 		add_filter( 'atum/get_simple_product_types', array( $this, 'get_simple_product_types' ) );
 
 		// Allow searching orders by inner products' SKUs.
@@ -197,12 +197,23 @@ class Hooks {
 		// Save the orders-related data every time an order is saved.
 		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
 
-		// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
-		add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
-		add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
+		// NOTE: Avoid unnecessarily registering this hook in the frontend to improve performance.
+		if ( Helpers::is_not_front_request() ) {
 
-		// Check if its necesary change the post status on purchase orders and inventory logs.
-		add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status' ), 10, 3 );
+			// Recalculate the ATUM props for products within ATUM Orders, every time an ATUM Order is moved or restored from trash.
+			add_action( 'trashed_post', array( $this, 'maybe_save_order_items_props' ) );
+			add_action( 'untrashed_post', array( $this, 'maybe_save_order_items_props' ) );
+
+			// Check if its necessary change the post status on purchase orders and inventory logs.
+			add_filter( 'wp_untrash_post_status', array( $this, 'maybe_change_post_status' ), 10, 3 );
+
+			// Fix the upload_dir url protocol if the siteurl is not properly configured.
+			add_filter( 'upload_dir', array( $this, 'check_url_protocol' ) );
+
+			// Parse WC order note to add metadata.
+			add_filter( 'woocommerce_order_note_added', array( $this, 'parse_wc_order_note' ), 10, 2 );
+
+		}
 
 		// Add ATUM product caching when needed for performance reasons.
 		add_action( 'woocommerce_before_single_product', array( $this, 'allow_product_caching' ) );
@@ -224,11 +235,6 @@ class Hooks {
 			remove_action( 'woocommerce_payment_complete', 'wc_maybe_reduce_stock_levels' );
 
 		}
-
-		add_filter( 'upload_dir', array( $this, 'check_url_protocol' ) );
-
-		// Parse WC order note to add metadata.
-		add_filter( 'woocommerce_order_note_added', array( $this, 'parse_wc_order_note' ), 10, 2 );
 
 		// Hack WC email notification for use Atum out of stock threshold values.
 		$this->prevent_stock_emails();

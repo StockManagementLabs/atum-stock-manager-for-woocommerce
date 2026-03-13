@@ -4046,4 +4046,15 @@ final class Helpers {
 		return defined( 'WP_CLI' ) && WP_CLI;
 	}
 
+	/**
+	 * Check whether the current user is not a frontend request.
+	 *
+	 * @since 1.9.55
+	 *
+	 * @return bool
+	 */
+	public static function is_not_front_request() {
+		return is_admin() || wp_doing_ajax() || wp_doing_cron() || Helpers::is_rest_request() || Helpers::is_running_cli();
+	}
+
 }

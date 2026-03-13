@@ -50,9 +50,6 @@ class AtumCalculatedProps {
 	 */
 	private function __construct() {
 
-		// We must run this before the AtumQueues' "trigger_async_action" because we are using the same hook to register the async actions (when needed).
-		add_action( 'shutdown', array( $this, 'maybe_create_defer_update_async_action' ), 1 );
-
 		// Update atum_stock_status and restock_status if needed.
 		add_action( 'woocommerce_after_product_object_save', array( $this, 'after_product_save' ), PHP_INT_MAX, 2 );
 
@@ -220,6 +217,10 @@ class AtumCalculatedProps {
 
 		if ( ! in_array( $ids_str, self::$deferred_sales_calc_props ) ) {
 			self::$deferred_sales_calc_props[] = $ids_str;
+
+			if ( ! has_action( 'shutdown', array( self::get_instance(), 'maybe_create_defer_update_async_action' ) ) ) {
+				add_action( 'shutdown', array( self::get_instance(), 'maybe_create_defer_update_async_action' ), 1 );
+			}
 		}
 
 	}
@@ -235,6 +236,10 @@ class AtumCalculatedProps {
 
 		if ( ! in_array( $product_id, self::$deferred_product_calc_props ) ) {
 			self::$deferred_product_calc_props[] = $product_id;
+
+			if ( ! has_action( 'shutdown', array( self::get_instance(), 'maybe_create_defer_update_async_action' ) ) ) {
+				add_action( 'shutdown', array( self::get_instance(), 'maybe_create_defer_update_async_action' ), 1 );
+			}
 		}
 
 	}

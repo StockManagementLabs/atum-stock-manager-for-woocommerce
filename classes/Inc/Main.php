@@ -100,6 +100,10 @@ class Main {
 		// Add the menus.
 		add_action( 'admin_menu', array( $this, 'create_menu' ), 1 );
 
+		// Reorder the admin submenus.
+		add_filter( 'custom_menu_order', '__return_true' );
+		add_filter( 'menu_order', array( $this, 'set_menu_order' ) );
+
 		// Load dependencies.
 		add_action( 'init', array( $this, 'admin_load' ) );
 
@@ -112,11 +116,8 @@ class Main {
 	 */
 	protected function main_global_hooks() {
 
-		// Reorder the admin submenus.
-		add_filter( 'custom_menu_order', '__return_true' );
-		add_filter( 'menu_order', array( $this, 'set_menu_order' ) );
-
-		// Add the ATUM menu to admin bar.
+		// Add the ATUM menu to the admin bar.
+		// NOTE: this must be registered globally or the menu won't display on the frontend admin bar.
 		add_action( 'wp_before_admin_bar_render', array( $this, 'add_admin_bar_menu' ) );
 
 		// Create menu (priority must be lower than 10).

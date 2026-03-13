@@ -74,7 +74,25 @@ class AtumQueues {
 	 */
 	private function __construct() {
 
-		add_action( 'init', array( $this, 'check_queues' ), PHP_INT_MAX );
+		// NOTE: Avoid unnecessarily registering this hook in the frontend to improve performance.
+		if ( Helpers::is_not_front_request() ) {
+
+			add_action( 'init', array( $this, 'check_queues' ), PHP_INT_MAX );
+
+			// Fine-tune the ATUM queues for high volumes (https://github.com/woocommerce/action-scheduler-high-volume).
+			if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' || Helpers::is_running_cli() ) {
+				add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'as_increase_queue_batch_size' ) );
+				add_filter( 'action_scheduler_queue_runner_concurrent_batches',  array( $this, 'as_increase_concurrent_batches' ) );
+				add_filter( 'action_scheduler_timeout_period', array( $this, 'as_increase_timeout' ) );
+				add_filter( 'action_scheduler_failure_period', array( $this, 'as_increase_timeout' ) );
+				add_filter( 'action_scheduler_queue_runner_time_limit', array( $this, 'as_increase_time_limit' ) );
+
+				// TODO: These are disabled for now because the user needs to be admin to run our privileged actions.
+				//add_action( 'action_scheduler_run_queue', array( $this, 'as_request_additional_runners' ), 0 );
+				//add_action( 'wp_ajax_nopriv_atum_as_create_additional_runners', array( $this, 'as_create_additional_runners' ), 0 );
+			}
+
+		}
 
 		// Add the ATUM's recurring hooks.
 		add_action( 'atum/update_expiring_product_props', array( $this, 'action_update_expiring_product_props' ) );
@@ -92,19 +110,6 @@ class AtumQueues {
 
 		// Cancel the calc sales properties cron if settings changed.
 		add_action( 'update_option', array( $this, 'maybe_cancel_sales_cron' ), 10, 3 );
-
-		// Fine-tune the ATUM queues for high volumes (https://github.com/woocommerce/action-scheduler-high-volume).
-		if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' || Helpers::is_running_cli() ) {
-			add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'as_increase_queue_batch_size' ) );
-			add_filter( 'action_scheduler_queue_runner_concurrent_batches',  array( $this, 'as_increase_concurrent_batches' ) );
-			add_filter( 'action_scheduler_timeout_period', array( $this, 'as_increase_timeout' ) );
-			add_filter( 'action_scheduler_failure_period', array( $this, 'as_increase_timeout' ) );
-			add_filter( 'action_scheduler_queue_runner_time_limit', array( $this, 'as_increase_time_limit' ) );
-
-			// TODO: These are disabled for now because the user needs to be admin to run our privileged actions.
-			//add_action( 'action_scheduler_run_queue', array( $this, 'as_request_additional_runners' ), 0 );
-			//add_action( 'wp_ajax_nopriv_atum_as_create_additional_runners', array( $this, 'as_create_additional_runners' ), 0 );
-		}
 
 	}
 
