@@ -22,6 +22,7 @@
 		"@types/es6-shim": "^0.31.46",
 		"@types/jquery": "2.0.68",
 		"autoprefixer": "^10.4.22",
+		"baseline-browser-mapping": "^2.10.8",
 		"eslint": "^9.39.1",
 		"eslint-webpack-plugin": "^5.0.2",
 		"gulp": "^5.0.1",
