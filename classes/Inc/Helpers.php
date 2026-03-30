@@ -2190,8 +2190,9 @@ final class Helpers {
 		if ( ! $product || ! $product instanceof \WC_Product ) {
 			return;
 		}
-		
-		$product_data = apply_filters( 'atum/product_data', $product_data, $product_id );
+
+		$product_data          = apply_filters( 'atum/product_data', $product_data, $product_id );
+		$original_product_data = $product_data;
 		
 		foreach ( $product_data as $meta_key => &$meta_value ) {
 			
@@ -2306,16 +2307,16 @@ final class Helpers {
 		$product->save();
 
 		// Trigger the "after_save_purchase_price" hook is needed if the PL's sync purchase price option is enabled.
-		if ( array_key_exists( substr( Globals::PURCHASE_PRICE_KEY, 1 ), $product_data ) ) {
-			do_action( 'atum/product_data/after_save_purchase_price', $product_id, $product_data[ substr( Globals::PURCHASE_PRICE_KEY, 1 ) ], NULL );
+		if ( array_key_exists( substr( Globals::PURCHASE_PRICE_KEY, 1 ), $original_product_data ) ) {
+			do_action( 'atum/product_data/after_save_purchase_price', $product_id, $original_product_data[ substr( Globals::PURCHASE_PRICE_KEY, 1 ) ], NULL );
 		}
 		
 		if ( ! $skip_action ) {
-			do_action( 'atum/product_data_updated', $product_id, $product_data );
+			do_action( 'atum/product_data_updated', $product_id, $original_product_data );
 		}
 
 		// Run all the hooks that are triggered after a product is saved.
-		do_action( 'atum/product_data/after_save_data', $product_data, $product );
+		do_action( 'atum/product_data/after_save_data', $original_product_data, $product );
 
 	}
 	
