@@ -196,6 +196,29 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`1.9.55`
+
+*2026-03-30*
+
+**Features**
+
+* Several performance improvements.
+* Added new setting to disable ATUM object caching on orders.
+
+**Changes**
+
+* Removed deprecated wp_enqueue_js.
+* Refactoring.
+* Removed product stock status from the current stock value widget query.
+* Updated minimum required addons versions.
+* Allow sale dates propagation when editing from Stock Central.
+
+**Fixes**
+
+* Fixed input step quantity when stock decimals is enabled in WC 10.1+.
+
+---
+
 `1.9.54.1`
 
 *2026-02-03*

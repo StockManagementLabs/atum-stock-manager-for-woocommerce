@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.9.0
+Tested up to: 6.9.4
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 10.4.3
-Stable tag: 1.9.54.1
+WC tested up to: 10.6.1
+Stable tag: 1.9.55
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,29 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.55`
+
+*2026-03-30*
+
+**Features**
+
+* Several performance improvements.
+* Added new setting to disable ATUM object caching on orders.
+
+**Changes**
+
+* Removed deprecated wp_enqueue_js.
+* Refactoring.
+* Removed product stock status from the current stock value widget query.
+* Updated minimum required addons versions.
+* Allow sale dates propagation when editing from Stock Central.
+
+**Fixes**
+
+* Fixed input step quantity when stock decimals is enabled in WC 10.1+.
 
 ---
 
