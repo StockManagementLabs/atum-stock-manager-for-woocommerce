@@ -1854,19 +1854,25 @@ final class Helpers {
 			$post_type = get_post_type( $atum_order_id );
 		}
 
+		$has_cache = FALSE;
+
 		// Use cache to avoid reading order data every time.
-		// TODO: THIS NEEDS TO BE TESTED DEEPLY AS IT COULD CAUSE ISSUES.
-		$cache_key  = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, $read_items, $post_type ] );
-		$atum_order = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		if ( 'no' === Helpers::get_option( 'disable_atum_object_caching', 'no' ) ) {
 
-		// If the read items is set to false, but we have an order cached with items, return that one instead of getting it again.
-		if ( ! $read_items && ! $has_cache ) {
-			$cache_key_alt = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, TRUE, $post_type ] );
-			$atum_order    = AtumCache::get_cache( $cache_key_alt, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+			$cache_key  = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, $read_items, $post_type ] );
+			$atum_order = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
 
-			if ( $has_cache ) {
-				$cache_key = $cache_key_alt;
+			// If the read items arg is set to false, but we have an order cached with items, return that one instead of getting it again.
+			if ( ! $read_items && ! $has_cache ) {
+				$cache_key_alt = AtumCache::get_cache_key( 'get_atum_order_model', [ $atum_order_id, TRUE, $post_type ] );
+				$atum_order    = AtumCache::get_cache( $cache_key_alt, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+
+				if ( $has_cache ) {
+					AtumCache::delete_cache( $cache_key ); // Try to avoid issues with the previous cache on external caching systems.
+					$cache_key = $cache_key_alt;
+				}
 			}
+
 		}
 
 		if ( ! $has_cache ) {
@@ -1890,7 +1896,10 @@ final class Helpers {
 			}
 
 			$atum_order = new $model_class( $atum_order_id, $read_items );
-			AtumCache::set_cache( $cache_key, $atum_order );
+
+			if ( ! empty( $cache_key ) ) {
+				AtumCache::set_cache( $cache_key, $atum_order );
+			}
 
 		}
 
@@ -2637,7 +2646,6 @@ final class Helpers {
 					if ( class_exists( $class ) ) {
 
 						if ( $is_singleton ) {
-							/* @noinspection PhpUndefinedMethodInspection */
 							$class::get_instance();
 						}
 						else {

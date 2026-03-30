@@ -676,10 +676,18 @@ class Settings {
 			'enable_action_scheduler_high_volume' => array(
 				'group'   => 'advanced',
 				'section' => 'advanced',
-				'name'    => __( "Fine-tune Action Scheduler for high volumes", ATUM_TEXT_DOMAIN ),
+				'name'    => __( 'Fine-tune Action Scheduler for high volumes', ATUM_TEXT_DOMAIN ),
 				'desc'    => __( "Increase the processing thresholds for <a href='https://actionscheduler.org/' target='_blank'>Action Scheduler</a> to process large queues of actions more quickly. Handy for high volume websites with more server resources.<br>If your server has resources, this is recommended when doing the initial data sync with ATUM's mobile App.<br>The default configuration will be adjusted to:<br><ul><li>Time Limit: to process queues for up to 120 seconds, instead of the default limit of 30 seconds.</li><li>Batch Size: to process batches of 100 actions and reduce time taken to claim additional actions.</li><li>Concurrency: to allow 10 concurrent queues to process actions, up from 5.</li></ul>", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => 'no',
+			),
+			'disable_atum_object_caching' => array(
+				'group'   => 'advanced',
+				'section' => 'advanced',
+				'name'    => __( "Disable ATUM's object caching", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Disable the object caching on some places where a few external caching systems are causing issues across ATUM pages. Recommended when your site is hosted at WP Engine.<br>NOTE: Enabling this could affect the overall ATUM performance.', ATUM_TEXT_DOMAIN ),
+				'type'    => 'switcher',
+				'default' => function_exists('is_wpe') ? 'yes' : 'no', // Only enable by default for WP Engine hosting.
 			),
 		);
 
