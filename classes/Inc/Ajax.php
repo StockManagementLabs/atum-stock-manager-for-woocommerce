@@ -1595,7 +1595,7 @@ final class Ajax {
 
 			$atum_order = Helpers::get_atum_order_model( $post_id, FALSE );
 
-			if ( ! is_wp_error( $atum_order ) ) {
+			if ( $atum_order && ! is_wp_error( $atum_order ) ) {
 
 				$comment_id = $atum_order->add_order_note( $note, TRUE );
 				Helpers::save_order_note_meta( $comment_id, [ 'action' => 'ajax_note' ] );
@@ -1658,7 +1658,7 @@ final class Ajax {
 		$atum_order_id = absint( $_POST['atum_order_id'] );
 		$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-		if ( is_wp_error( $atum_order ) ) {
+		if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 			wp_die( -1 );
 		}
 
@@ -1761,6 +1761,10 @@ final class Ajax {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
 			}
 
+			if ( ! $atum_order ) {
+				throw new AtumException( 'invalid_atum_order', __( 'Invalid ATUM Order', ATUM_TEXT_DOMAIN ) );
+			}
+
 			// Add a fee line item.
 			$item    = $atum_order->add_fee();
 			$item_id = $item->get_id();
@@ -1802,6 +1806,10 @@ final class Ajax {
 
 			if ( is_wp_error( $atum_order ) ) {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
+			}
+
+			if ( ! $atum_order ) {
+				throw new AtumException( 'invalid_atum_order', __( 'Invalid ATUM Order', ATUM_TEXT_DOMAIN ) );
 			}
 
 			$shipping_methods = WC()->shipping() ? WC()->shipping->load_shipping_methods() : array();
@@ -1851,6 +1859,10 @@ final class Ajax {
 				throw new AtumException( $atum_order->get_error_code(), $atum_order->get_error_message() );
 			}
 
+			if ( ! $atum_order ) {
+				throw new AtumException( 'invalid_atum_order', __( 'Invalid ATUM Order', ATUM_TEXT_DOMAIN ) );
+			}
+
 			// Add new tax.
 			$atum_order->add_tax( array( 'rate_id' => $rate_id ) );
 
@@ -1895,7 +1907,7 @@ final class Ajax {
 
 			$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-			if ( is_wp_error( $atum_order ) ) {
+			if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 				wp_send_json_error( 'Something failed while reading the order. Please, save and try again.', ATUM_TEXT_DOMAIN );
 			}
 
@@ -1936,7 +1948,7 @@ final class Ajax {
 		$rate_id       = absint( $_POST['rate_id'] );
 		$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-		if ( is_wp_error( $atum_order ) ) {
+		if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
 		}
 
@@ -1975,7 +1987,7 @@ final class Ajax {
 
 		$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-		if ( is_wp_error( $atum_order ) ) {
+		if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 			wp_die( - 1 );
 		}
 
@@ -2011,7 +2023,7 @@ final class Ajax {
 			$atum_order_id = absint( $_POST['atum_order_id'] );
 			$atum_order    = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-			if ( is_wp_error( $atum_order ) ) {
+			if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
 			}
 
@@ -2420,7 +2432,7 @@ final class Ajax {
 			$status     = sanitize_text_field( $_GET['status'] );
 			$atum_order = Helpers::get_atum_order_model( $atum_order_id, TRUE );
 
-			if ( is_wp_error( $atum_order ) ) {
+			if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 				wp_die( - 1 );
 			}
 

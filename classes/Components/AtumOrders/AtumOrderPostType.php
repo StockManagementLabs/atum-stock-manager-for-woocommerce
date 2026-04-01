@@ -378,7 +378,7 @@ abstract class AtumOrderPostType {
 				$status_colors = static::get_status_colors();
 				$atum_order    = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
-				if ( ! is_wp_error( $atum_order ) ) {
+				if ( $atum_order && ! is_wp_error( $atum_order ) ) {
 
 					$status        = $atum_order->get_status();
 					$status_name   = $statuses[ $status ] ?? sprintf( __( '%s (unknown)', ATUM_TEXT_DOMAIN ), $status );
@@ -464,7 +464,7 @@ abstract class AtumOrderPostType {
 			case 'total':
 				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
-				if ( ! is_wp_error( $atum_order ) ) {
+				if ( $atum_order && ! is_wp_error( $atum_order ) ) {
 					$output = $atum_order->get_formatted_total();
 				}
 
@@ -473,7 +473,7 @@ abstract class AtumOrderPostType {
 			case 'actions':
 				$atum_order = Helpers::get_atum_order_model( $post->ID, FALSE, $post_type );
 
-				if ( is_wp_error( $atum_order ) ) {
+				if ( ! $atum_order || is_wp_error( $atum_order ) ) {
 					break;
 				}
 
