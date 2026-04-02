@@ -218,6 +218,11 @@ class Upgrade {
 			$this->register_new_atum_capabilities();
 		}
 
+		// ** version 1.9.55.1 ** Auto-disable the ATUM order model caching on WP Engine.
+		if ( version_compare( $db_version, '1.9.55.1', '<' ) ) {
+			$this->maybe_disable_atum_order_caching();
+		}
+
 		/**********************
 		 * UPGRADE ACTIONS END
 		 ********************!*/
@@ -1345,6 +1350,19 @@ class Upgrade {
 	 */
 	private function register_new_atum_capabilities() {
 		AtumCapabilities::register_atum_capabilities();
+	}
+
+	/**
+	 * Disable the ATUM Order object cache in WP Engine by default.
+	 *
+	 * @since 1.9.55.1
+	 */
+	private function maybe_disable_atum_order_caching() {
+
+		if ( function_exists('is_wpe') ) {
+			Helpers::update_atum_setting( 'disable_atum_object_caching', 'yes' );
+		}
+
 	}
 
 }

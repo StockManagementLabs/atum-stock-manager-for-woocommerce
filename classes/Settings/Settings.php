@@ -684,8 +684,8 @@ class Settings {
 			'disable_atum_object_caching' => array(
 				'group'   => 'advanced',
 				'section' => 'advanced',
-				'name'    => __( "Disable ATUM's object caching", ATUM_TEXT_DOMAIN ),
-				'desc'    => __( 'Disable the object caching on some places where a few external caching systems are causing issues across ATUM pages. Recommended when your site is hosted at WP Engine.<br>NOTE: Enabling this could affect the overall ATUM performance.', ATUM_TEXT_DOMAIN ),
+				'name'    => __( "Disable ATUM orders' object caching", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( 'Disable the object caching on ATUM Orders when some external caching systems were causing issues across ATUM pages. Recommended when your site is hosted at WP Engine and you have their object cache enabled.', ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => function_exists('is_wpe') ? 'yes' : 'no', // Only enable by default for WP Engine hosting.
 			),
