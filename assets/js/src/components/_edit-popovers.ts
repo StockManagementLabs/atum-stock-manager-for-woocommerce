@@ -341,9 +341,9 @@ export default class EditPopovers extends PopoverBase{
 	 * Set the label for an edit field
 	 *
 	 * @param {JQuery} $fieldLabel
-	 * @param {string} label
+	 * @param {string | null} label Pass null to show the data-none placeholder (e.g. en dash).
 	 */
-	setEditFieldLabel( $fieldLabel: JQuery, label: string ) {
+	setEditFieldLabel( $fieldLabel: JQuery, label: string | null ) {
 
 		if ( $fieldLabel.length ) {
 
@@ -352,7 +352,7 @@ export default class EditPopovers extends PopoverBase{
 			$fieldLabel.addClass( 'unsaved' );
 
 			// For numeric labels, adjust the decimal separator if needed.
-			if ( Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
+			if ( null !== label && Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
 				label = Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ) );
 			}
 
