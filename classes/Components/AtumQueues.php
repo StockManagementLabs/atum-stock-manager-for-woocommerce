@@ -79,8 +79,9 @@ class AtumQueues {
 
 			add_action( 'init', array( $this, 'check_queues' ), PHP_INT_MAX );
 
+			/* @deprecated ATUM Mobile App stuff */
 			// Fine-tune the ATUM queues for high volumes (https://github.com/woocommerce/action-scheduler-high-volume).
-			if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' || Helpers::is_running_cli() ) {
+			/*if ( Helpers::get_option( 'enable_action_scheduler_high_volume', 'no' ) === 'yes' || Helpers::is_running_cli() ) {
 				add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'as_increase_queue_batch_size' ) );
 				add_filter( 'action_scheduler_queue_runner_concurrent_batches',  array( $this, 'as_increase_concurrent_batches' ) );
 				add_filter( 'action_scheduler_timeout_period', array( $this, 'as_increase_timeout' ) );
@@ -90,7 +91,7 @@ class AtumQueues {
 				// TODO: These are disabled for now because the user needs to be admin to run our privileged actions.
 				//add_action( 'action_scheduler_run_queue', array( $this, 'as_request_additional_runners' ), 0 );
 				//add_action( 'wp_ajax_nopriv_atum_as_create_additional_runners', array( $this, 'as_create_additional_runners' ), 0 );
-			}
+			}*/
 
 		}
 
@@ -680,10 +681,11 @@ class AtumQueues {
 	 * @param int $batch_size
 	 *
 	 * @since 1.9.45
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_increase_queue_batch_size( $batch_size ) {
+	/*public function as_increase_queue_batch_size( $batch_size ) {
 		return apply_filters( 'atum/queues/as_queue_batch_size', $batch_size * 4 );
-	}
+	}*/
 
 	/**
 	 * Action scheduler processes queues of actions in parallel to speed up the processing of large numbers
@@ -701,10 +703,12 @@ class AtumQueues {
 	 * @param int $concurrent_batches
 	 *
 	 * @return int
+	 *
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_increase_concurrent_batches( $concurrent_batches ) {
+	/*public function as_increase_concurrent_batches( $concurrent_batches ) {
 		return apply_filters( 'atum/queues/as_concurrent_batches', 3 );
-	}
+	}*/
 
 	/**
 	 * Action scheduler reset actions claimed for more than 5 minutes. Because we're increasing the batch size, we
@@ -715,10 +719,12 @@ class AtumQueues {
 	 * @param int $timeout
 	 *
 	 * @return int
+	 *
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_increase_timeout( $timeout ) {
+	/*public function as_increase_timeout( $timeout ) {
 		return apply_filters( 'atum/queues/as_timeout', 300 ); // 5 minutes.
-	}
+	}*/
 
 	/**
 	 * Action scheduler initiates one queue runner every time the 'action_scheduler_run_queue' action is triggered.
@@ -730,8 +736,10 @@ class AtumQueues {
 	 * @since 1.9.45
 	 *
 	 * TODO: This is disabled for now because the user needs to be admin to run our privileged actions.
+	 *
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_request_additional_runners() {
+	/*public function as_request_additional_runners() {
 
 		$num_runners = apply_filters( 'atum/queues/as_additional_runners', 5 );
 
@@ -759,7 +767,7 @@ class AtumQueues {
 			) );
 		}
 
-	}
+	}*/
 
 	/**
 	 * Handle requests initiated by as_request_additional_runners() and start a queue runner if the request is valid.
@@ -767,8 +775,10 @@ class AtumQueues {
 	 * @since 1.9.45
 	 *
 	 * TODO: This is disabled for now because the user needs to be admin to run our privileged actions.
+	 *
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_create_additional_runners() {
+	/*public function as_create_additional_runners() {
 
 		if ( isset( $_POST['atum_as_nonce'], $_POST['instance'] ) && wp_verify_nonce( $_POST['atum_as_nonce'], 'atum_as_additional_runner_' . $_POST['instance'] ) ) {
 			\ActionScheduler_QueueRunner::instance()->run();
@@ -776,7 +786,7 @@ class AtumQueues {
 
 		wp_die();
 
-	}
+	}*/
 
 	/**
 	 * Action Scheduler provides a default maximum of 30 seconds in which to process actions. Increase this to 120
@@ -786,10 +796,12 @@ class AtumQueues {
 	 * Note, WP Engine only supports a maximum of 60 seconds - if using WP Engine, this will need to be decreased to 60.
 	 *
 	 * @since 1.9.45
+	 *
+	 * @deprecated ATUM Mobile App stuff
 	 */
-	public function as_increase_time_limit() {
+	/*public function as_increase_time_limit() {
 		return apply_filters( 'atum/queues/as_time_limit', 120 );
-	}
+	}*/
 
 
 	/*******************
