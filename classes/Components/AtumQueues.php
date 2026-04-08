@@ -155,7 +155,7 @@ class AtumQueues {
 		// Allow registering queues externally.
 		$this->recurring_hooks = apply_filters( 'atum/queues/recurring_hooks', $this->recurring_hooks );
 
-		// Search for any orphan actions that may exist with old names.
+		// Search for any orphan with old names or duplicated actions that may exist.
 		$actions = $wc_queue->search( array(
 			'group'  => self::QUEUES_GROUP,
 			'status' => \ActionScheduler_Store::STATUS_PENDING,
@@ -163,15 +163,26 @@ class AtumQueues {
 
 		if ( ! empty( $actions ) ) {
 
+			$processed_actions = [];
+
 			foreach ( $actions as $action ) {
+
+				$action_hook = $action->get_hook();
+
 				/**
 				 * Variable definition.
 				 *
 				 * @var \ActionScheduler_Action $action
 				 */
-				if ( ! array_key_exists( $action->get_hook(), $this->recurring_hooks ) ) {
-					$wc_queue->cancel( $action->get_hook(), $action->get_args(), $action->get_group() );
+				if (
+					in_array( $action_hook, $processed_actions, TRUE ) ||
+					! array_key_exists( $action_hook, $this->recurring_hooks )
+				) {
+					$wc_queue->cancel( $action_hook, $action->get_args(), $action->get_group() );
 				}
+
+				$processed_actions[] = $action_hook;
+
 			}
 
 		}
