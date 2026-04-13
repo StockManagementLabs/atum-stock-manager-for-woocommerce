@@ -31,7 +31,7 @@
 		margin-bottom: 0;
 		max-height: 263px;
 		overflow: auto;
-		padding-right: 6px;
+		padding: 0 25px;
 		
 		li {
 			display: flex;
@@ -72,7 +72,7 @@
 			&-thumb {
 				display: flex;
 				background-color: $gray-200;
-				border-radius: 5px;
+				border-radius: $border-radius;
 				padding: 6px;
 				
 				img {
@@ -89,7 +89,7 @@
 				
 				.btn {
 					padding: 0.25rem 0.55rem;
-					border-radius: 5px;
+					border-radius: $border-radius;
 					text-transform: uppercase;
 					transition: .2s ease-in-out;
 					font-size: 12px;

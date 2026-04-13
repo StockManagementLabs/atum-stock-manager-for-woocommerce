@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../common/variables" as *;
 
 //
@@ -5,14 +6,12 @@
 // (https://github.com/hernansartorio/jquery-nice-select)
 //--------------------------------------------------------
 
-@use "sass:math";
-
 // Scoped variables
 $ns-font-size:                     14px !default;
 $ns-font-size-small:               12px !default;
 
-$ns-dropdown-border-radius:        5px !default;
-$ns-list-border-radius:            5px !default;
+$ns-dropdown-border-radius:        $border-radius !default;
+$ns-list-border-radius:            $border-radius !default;
 $ns-dropdown-height:               35px !default;
 $ns-dropdown-height-small:         26px !default;
 $ns-dropdown-padding:              18px !default;

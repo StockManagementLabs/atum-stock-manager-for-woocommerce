@@ -29,7 +29,7 @@
 			.page-title-action {
 				
 				&, &:active {
-					border-radius: 5px;
+					border-radius: $border-radius;
 					background-color: var(--tertiary-var);
 					color: var(--white);
 					font-size: 14px;

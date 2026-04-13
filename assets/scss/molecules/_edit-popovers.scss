@@ -62,7 +62,7 @@
 		
 		.select2-container {
 			.select2-selection {
-				border-radius: 0.2rem;
+				border-radius: $border-radius;
 				border: 1px solid var(--main-border-alt) !important;
 				padding-left: 5px;
 				

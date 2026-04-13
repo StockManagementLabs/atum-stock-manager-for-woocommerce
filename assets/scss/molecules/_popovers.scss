@@ -227,10 +227,14 @@
 		line-height: 0;
 		margin-left: 5px;
 		color: var(--atum-table-bg);
+		
+		.wc-wp-version-gte-70 & {
+			height: 40px;
+		}
 	}
 	
 	> input[type=number], > input[type=text] {
-		border-radius: 5px;
+		border-radius: $border-radius;
 		background-color: var(--atum-table-bg);
 		border: 1px solid var(--main-border-alt);
 		font-size: 15px;

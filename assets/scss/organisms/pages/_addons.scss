@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/variables" as *;
 @use "../../common/mixins/utilities" as *;
@@ -5,8 +6,6 @@
 //
 // Atum add-ons
 //---------------
-
-@use "sass:math";
 
 html {
 	scroll-behavior: smooth;
@@ -155,7 +154,7 @@ html {
 		margin: 0;
 		background-color: $white;
 		box-shadow: 0 4px 0 0 $gray-200;
-		border-radius: 8px;
+		border-radius: $border-radius;
 		padding: 0 10px;
 		grid-area: header;
 		
@@ -182,6 +181,15 @@ html {
 			align-items: center;
 			justify-content: space-between;
 			gap: 5px;
+		}
+		
+		&-buttons {
+			.btn {
+				.wc-wp-version-gte-70 & {
+					min-height: 40px;
+					padding: 0.5rem 0.7rem;
+				}
+			}
 		}
 		
 		.nav-with-scroll-effect {
@@ -282,13 +290,13 @@ html {
 						justify-content: center;
 						align-items: center;
 						margin-left: 3px;
-						border-radius: 5px;
+						border-radius: $border-radius;
 						line-height: 32px;
 						cursor: pointer;
 						transition: .2s ease-in-out;
 						
 						&.active {
-							border-radius: 5px;
+							border-radius: $border-radius;
 							background-color: $primary;
 							font-size: 16px;
 							padding: 0 10px;
@@ -368,13 +376,17 @@ html {
 		}
 		
 		#addons-search {
-			border: 1px solid $gray-300;
-			border-radius: 5px;
+			border: 1px solid var(--main-border-alt);
+			border-radius: $border-radius;
 			color: $gray-600;
 			font-size: 12px;
 			min-height: auto;
 			height: auto;
 			padding: 0.11rem 0.6rem;
+			
+			.wc-wp-version-gte-70 & {
+				min-height: 40px;
+			}
 		}
 	}
 	
@@ -387,7 +399,7 @@ html {
 		grid-area: sidebar;
 		background-color: $white;
 		padding: math.div($grid-gutter-width, 2);
-		border-radius: 8px;
+		border-radius: $border-radius;
 		box-shadow: 0 4px 0 0 $gray-200;
 		
 		header {
@@ -499,7 +511,7 @@ html {
 		display: flex;
 		align-items: stretch;
 		min-height: 222px;
-		border-radius: 8px;
+		border-radius: $border-radius;
 		box-shadow: 0 4px 0 0 $gray-200;
 		
 		> .more-details {
@@ -524,7 +536,7 @@ html {
 				left: 10px;
 				padding: 3px 9px;
 				color: $white;
-				border-radius: 4px;
+				border-radius: $border-radius;
 				z-index: 1;
 				text-transform: uppercase;
 				font-size: 12px;
@@ -664,6 +676,14 @@ html {
 				
 			}
 			
+			.addon-key {
+				.btn {
+					.wc-wp-version-gte-70 & {
+						min-height: 40px;
+					}
+				}
+			}
+			
 			input {
 				font-size: .65rem;
 			}
@@ -710,7 +730,7 @@ html {
 				font-size: .65rem;
 				font-weight: 400;
 				padding: 4px 10px;
-				border-radius: 5px;
+				border-radius: $border-radius;
 				@include text-overflow;
 			}
 			
@@ -763,7 +783,7 @@ html {
 			}
 			
 			.addon-thumb {
-				border-radius: 8px 8px 0 0;
+				border-radius: $border-radius $border-radius 0 0;
 			}
 			
 			.actions__buttons {
@@ -867,7 +887,7 @@ html {
 			font-weight: normal;
 			font-size: 10px;
 			padding: 3px 5px;
-			border-radius: 4px;
+			border-radius: $border-radius;
 		}
 	}
 	

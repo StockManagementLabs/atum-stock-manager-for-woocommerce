@@ -1,11 +1,10 @@
+@use "sass:math";
 @use "../common/variables" as *;
 @use "../common/mixins/utilities" as *;
 
 //
 // ATUM Tree
 //-----------
-
-@use "sass:math";
 
 .atum-tree {
 	position: relative;
@@ -37,11 +36,10 @@ ul.easytree-container {
 	padding: 15px 10px !important;
 	margin: 0;
 	border: 1px solid var(--gray-500);
-	border-radius: 6px;
+	border-radius: $border-radius;
 	overflow: auto;
 	height: 100%;
 	text-align: left;
-	padding: 10px 5px;
 	
 	> li {
 		

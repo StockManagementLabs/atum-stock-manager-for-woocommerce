@@ -1,11 +1,10 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/variables" as *;
 
 //
 // "Stock Control" widget
 //-----------------------
-
-@use "sass:math";
 
 .atum-widget.atum_stock_control_widget {
 	.widget-body {
@@ -30,7 +29,7 @@
 			&:before {
 				width: 29px;
 				height: 29px;
-				border-radius: 5px;
+				border-radius: $border-radius;
 				content: ' ';
 				display: inline-block;
 				margin-right: 10px;
@@ -74,7 +73,7 @@
 			position: absolute;
 			background: rgba($black, .7);
 			color: $white;
-			border-radius: 3px;
+			border-radius: $border-radius;
 			transition: all .1s ease;
 			pointer-events: none;
 			transform: translate(-50%, 0);

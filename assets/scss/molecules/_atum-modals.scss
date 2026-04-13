@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../common/variables" as *;
 @use "../common/mixins/utilities" as *;
 
@@ -5,13 +6,12 @@
 // ATUM Modals
 //------------
 
-@use "sass:math";
-
 .swal2-container.atum-modal {
 	text-align: left;
 	
 	.swal2-popup {
 		background-color: var(--atum-table-bg);
+		border-radius: $border-radius;
 	}
 	
 	h2.swal2-title small {
@@ -54,6 +54,10 @@
 		input[type=text], input[type=email], input[type=search] {
 			width: 100% !important;
 			height: 31px !important;
+			
+			.wc-wp-version-gte-70 & {
+				height: 40px !important;
+			}
 		}
 		
 		input[type=text], input[type=email], input[type=search], input[type=number] {
@@ -116,7 +120,7 @@
 				
 				.atum-enhanced-select {
 					.select2-selection--single {
-						border-radius: 4px;
+						border-radius: $border-radius;
 						text-align: left;
 					}
 					

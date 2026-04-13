@@ -199,7 +199,7 @@
 }
 
 @mixin atum-panel() {
-	border-radius: 5px;
+	border-radius: $border-radius;
 	background-color: var(--white);
 	box-shadow: 0 4px 0 0 var(--gray-400);
 	border: 1px solid var(--gray-400);
@@ -231,7 +231,7 @@
 			
 			> mark {
 				background-color: var(--light);
-				border-radius: 4px;
+				border-radius: $border-radius;
 				cursor: default;
 				width: 16px;
 				height: 16px;

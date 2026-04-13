@@ -1,11 +1,10 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/variables" as *;
 
 //
 // "Stats Data" widgets
 //-----------------------
-
-@use "sass:math";
 
 .stats-data-widget {
 	display: flex;
@@ -47,11 +46,8 @@
 	}
 	
 	hr {
-		border: {
-			width: 1px;
-			color: var(--gray-400);
-			bottom: none;
-		}
+		border: 1px solid var(--gray-500);
+		border-bottom: none;
 		margin: $grid-gutter-width 0;
 	}
 	
