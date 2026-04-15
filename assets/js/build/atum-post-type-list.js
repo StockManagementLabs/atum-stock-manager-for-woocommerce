@@ -724,7 +724,7 @@ var TableCellPopovers = (function (_super) {
             if (_this.dateTimePicker) {
                 var $dateInputs = $activePopover.find('.atum-datepicker');
                 if ($dateInputs.length) {
-                    _this.dateTimePicker.addDateTimePickers($dateInputs);
+                    _this.dateTimePicker.addDateTimePickers($dateInputs, { keepInvalid: true });
                 }
             }
             if (!$metaInput.hasClass('atum-datepicker')) {
@@ -818,9 +818,6 @@ var TableCellPopovers = (function (_super) {
             $extraFields = $('<div />').append($input).append('<hr>');
             $.each(extraMeta, function (index, metaAtts) {
                 $extraFields.append($('<input />', metaAtts));
-                if ($.isNumeric(metaAtts.value) && parseFloat(metaAtts.value) > 0) {
-                    console.log(metaAtts);
-                }
             });
         }
         if (isSelect) {
