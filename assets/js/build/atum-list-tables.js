@@ -1036,6 +1036,9 @@ var TableCellPopovers = (function (_super) {
             $extraFields = $('<div />').append($input).append('<hr>');
             $.each(extraMeta, function (index, metaAtts) {
                 $extraFields.append($('<input />', metaAtts));
+                if ($.isNumeric(metaAtts.value) && parseFloat(metaAtts.value) > 0) {
+                    console.log(metaAtts);
+                }
             });
         }
         if (isSelect) {
@@ -4989,7 +4992,7 @@ __webpack_require__.r(__webpack_exports__);
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			
@@ -9900,7 +9903,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 				return function()
 				{
 					arrowScroll(dirX, dirY, this, ele);
-					this.blur();
+					this.trigger('blur');
 					return false;
 				};
 			}

@@ -2947,7 +2947,7 @@ __webpack_require__.r(__webpack_exports__);
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			

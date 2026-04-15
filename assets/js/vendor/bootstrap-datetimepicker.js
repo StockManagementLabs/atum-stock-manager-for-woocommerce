@@ -930,7 +930,7 @@ import moment from 'moment/min/moment-with-locales.min';
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			
