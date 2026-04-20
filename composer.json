@@ -7,7 +7,7 @@
 	"type": "wordpress-plugin",
 	"config": {
 		"preferred-install": "dist",
-        "plaform-check": false
+        "platform-check": false
 	},
 	"require": {
 		"php": ">=7.4",
