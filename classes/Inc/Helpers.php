@@ -1190,7 +1190,35 @@ final class Helpers {
 		return $price;
 
 	}
-	
+
+	/**
+	 * Apply rounding to a line tax value following the WC core semantics.
+	 *
+	 * Mirrors `\Automattic\WooCommerce\Internal\Traits\WC_Item_Totals::round_line_tax()`:
+	 * if `woocommerce_tax_round_at_subtotal` is enabled, the value is returned
+	 * untouched (so callers can sum line taxes in full precision and round only the
+	 * grand total). Otherwise, the value is rounded to the store's price decimals.
+	 *
+	 * This helper deliberately does NOT know about any premium addon settings
+	 * (e.g. `po_*`). Addons must implement their own wrappers if needed.
+	 *
+	 * @since 1.9.62
+	 *
+	 * @param float $value    Tax value (in store currency, NOT in cents by default).
+	 * @param bool  $in_cents Whether the precision of $value is in cents.
+	 *
+	 * @return float
+	 */
+	public static function round_line_tax( $value, $in_cents = FALSE ) {
+
+		if ( 'yes' !== get_option( 'woocommerce_tax_round_at_subtotal' ) ) {
+			$value = wc_round_tax_total( $value, $in_cents ? 0 : NULL );
+		}
+
+		return (float) $value;
+
+	}
+
 	/**
 	 * Display the template for the given view
 	 *

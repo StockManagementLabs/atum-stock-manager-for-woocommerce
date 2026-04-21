@@ -329,6 +329,14 @@ const Utils = {
     /**
      * Format a number according to the specified options
      *
+     * NOTE: `minimumSignificantDigits` defaults to `null` on purpose. With the
+     * default `roundingPriority: "auto"` of `Intl.NumberFormat`, having both
+     * `minimumSignificantDigits` and `minimumFractionDigits` makes the
+     * significant-digits constraint win, which would render integers like `16`
+     * with `precision = 2` as "16" instead of the expected "16.00". Pass an
+     * explicit number only when you actually need significant-digit semantics
+     * (e.g. scientific notation).
+     *
      * @param {number}      number
      * @param {number}      precision
      * @param {string}      thousandsSep
@@ -342,7 +350,7 @@ const Utils = {
         precision: number                       = this.settings.number.precision,
         thousandsSep: string                    = this.settings.number.thousandsSep,
         decimalsSep: string                     = this.settings.number.decimalsSep,
-        minimumSignificantDigits: number | null = 1,
+        minimumSignificantDigits: number | null = null,
     ): string {
 
         // Make sure the separators are not equal and both required at the same time.

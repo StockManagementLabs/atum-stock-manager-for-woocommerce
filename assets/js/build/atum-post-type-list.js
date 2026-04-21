@@ -1523,7 +1523,7 @@ var Utils = {
         if (precision === void 0) { precision = this.settings.number.precision; }
         if (thousandsSep === void 0) { thousandsSep = this.settings.number.thousandsSep; }
         if (decimalsSep === void 0) { decimalsSep = this.settings.number.decimalsSep; }
-        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = 1; }
+        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = null; }
         if (number > 999 && thousandsSep === decimalsSep && !Number.isInteger(number)) {
             thousandsSep = '';
         }

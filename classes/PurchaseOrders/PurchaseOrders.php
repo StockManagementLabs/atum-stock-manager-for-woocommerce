@@ -833,7 +833,8 @@ class PurchaseOrders extends AtumOrderPostType {
 			if ( $product->is_taxable() && wc_prices_include_tax() ) {
 				$tax_rates = \WC_Tax::get_base_tax_rates( $product->get_tax_class( 'unfiltered' ) );
 				$taxes     = \WC_Tax::calc_tax( $price * $qty, $tax_rates, TRUE );
-				$price     = \WC_Tax::round( $price * $qty - array_sum( $taxes ) );
+				// Keep full precision: rounding is applied only when displaying.
+				$price     = $price * $qty - array_sum( $taxes );
 			}
 			else {
 				$price *= $qty;
