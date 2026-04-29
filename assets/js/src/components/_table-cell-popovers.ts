@@ -1,6 +1,8 @@
-/* =======================================
-   TABLE CELL POPOVER
-   ======================================= */
+/*
+ * =======================================
+ * TABLE CELL POPOVER
+ * =======================================
+ */
 
 import DateTimePicker from './_date-time-picker';
 import EnhancedSelect from './_enhanced-select';
@@ -9,277 +11,279 @@ import Settings from '../config/_settings';
 import Utils from '../utils/_utils';
 import WPHooks from '../interfaces/wp.hooks';
 
-export default class TableCellPopovers extends PopoverBase{
+export default class TableCellPopovers extends PopoverBase {
 
-	popoverClassName: string = 'atum-popover';
-	wpHooks: WPHooks = window['wp']['hooks']; // WP hooks.
+    popoverClassName: string = 'atum-popover';
+    wpHooks         : WPHooks = window[ 'wp' ][ 'hooks' ]; // WP hooks.
 	
-	constructor(
-		private settings: Settings,
-		private dateTimePicker?: DateTimePicker,
-		private enhancedSelect?: EnhancedSelect,
-	) {
+    constructor(
+        private settings: Settings,
+        private dateTimePicker?: DateTimePicker,
+        private enhancedSelect?: EnhancedSelect,
+    ) {
 
-		super();
+        super();
 		
-		// Init popovers.
-		this.bindPopovers();
+        // Init popovers.
+        this.bindPopovers();
 		
-		// Hide any other opened popover before opening a new one.
-		$( 'body' )
-			.off( 'click.atumTableCellPopover' ) // Make sure it's bound just once.
-			.on( 'click.atumTableCellPopover', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) );
+        // Hide any other opened popover before opening a new one.
+        $( 'body' )
+            .off( 'click.atumTableCellPopover' ) // Make sure it's bound just once.
+            .on( 'click.atumTableCellPopover', ( evt: JQueryEventObject ) => this.maybeHideOtherPopovers( $( evt.target ) ) );
 		
-	}
+    }
 	
-	/**
-	 * Enable "Set Field" popovers
-	 */
-	bindPopovers( $metaCells?: JQuery ) {
+    /**
+     * Enable "Set Field" popovers
+     */
+    bindPopovers( $metaCells?: JQuery ) {
 
-		if ( ! $metaCells ) {
-			$metaCells = $( '.set-meta' );
-		}
+        if ( !$metaCells ) {
+            $metaCells = $( '.set-meta' );
+        }
 		
-		// Set meta value for listed products.
-		$metaCells.each( ( index: number, elem: Element ) => {
-			this.doPopovers( $( elem ) );
-		} );
+        // Set meta value for listed products.
+        $metaCells.each( ( index: number, elem: Element ) => {
+            this.doPopovers( $( elem ) );
+        } );
 		
-		$metaCells
+        $metaCells
 
-			// Focus on the input field and set a reference to the popover to the editable column.
-			.on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
+        // Focus on the input field and set a reference to the popover to the editable column.
+            .on( 'shown.bs.popover', ( evt: JQueryEventObject ) => {
 
-				const $metaCell: JQuery      = $( evt.currentTarget ),
-				      $activePopover: JQuery = $( '.popover.show' ),
-				      $metaInput: JQuery     = $activePopover.find( '.meta-value' );
+                const $metaCell: JQuery      = $( evt.currentTarget ),
+                      $activePopover: JQuery = $( '.popover.show' ),
+                      $metaInput: JQuery     = $activePopover.find( '.meta-value' );
 
-				if ( this.dateTimePicker ) {
+                if ( this.dateTimePicker ) {
 
-					const $dateInputs: JQuery = $activePopover.find( '.atum-datepicker' );
+                    const $dateInputs: JQuery = $activePopover.find( '.atum-datepicker' );
 
-					if ( $dateInputs.length ) {
-						this.dateTimePicker.addDateTimePickers( $dateInputs );
-					}
+                    if ( $dateInputs.length ) {
+                        // Keep invalid stored dates visible (before minDate); minDate still blocks picking past dates in the widget.
+                        this.dateTimePicker.addDateTimePickers( $dateInputs, { keepInvalid: true } );
+                    }
 
-				}
+                }
 
-				// Do not focus over datepicker fields because the calendar is not showing.
-				if ( ! $metaInput.hasClass( 'atum-datepicker' ) ) {
-					$activePopover.find( '.meta-value' ).trigger( 'focus' ).trigger( 'select' );
-				}
+                // Do not focus over datepicker fields because the calendar is not showing.
+                if ( !$metaInput.hasClass( 'atum-datepicker' ) ) {
+                    $activePopover.find( '.meta-value' ).trigger( 'focus' ).trigger( 'select' );
+                }
 
-				// Click the "Set" button when hitting enter on an input field.
-				$activePopover.find( 'input' ).on( 'keyup', ( evt: JQueryEventObject ) => {
+                // Click the "Set" button when hitting enter on an input field.
+                $activePopover.find( 'input' ).on( 'keyup', ( evt: JQueryEventObject ) => {
 
-					// Enter key.
-					if ( 13 === evt.which ) {
-						$activePopover.find( '.set' ).trigger( 'click' );
-					}
-					// ESC key.
-					else if ( 27 === evt.which ) {
-						this.hidePopover( $metaCell );
-					}
+                    // Enter key.
+                    if ( 13 === evt.which ) {
+                        $activePopover.find( '.set' ).trigger( 'click' );
+                    }
+                    // ESC key.
+                    else if ( 27 === evt.which ) {
+                        this.hidePopover( $metaCell );
+                    }
 
-				} );
+                } );
 
-				if ( $metaInput.hasClass( 'wc-product-search' ) && this.enhancedSelect ) {
-					$( 'body' ).trigger( 'wc-enhanced-select-init' );
-				}
+                if ( $metaInput.hasClass( 'wc-product-search' ) && this.enhancedSelect ) {
+                    $( 'body' ).trigger( 'wc-enhanced-select-init' );
+                }
 
-			} );
+            } );
 		
-	}
+    }
 	
-	/**
-	 * Bind the editable cell's popovers
-	 *
-	 * @param {JQuery} $metaCell The cell where the popover will be attached.
-	 */
-	doPopovers( $metaCell: JQuery ) {
+    /**
+     * Bind the editable cell's popovers
+     *
+     * @param {JQuery} $metaCell The cell where the popover will be attached.
+     */
+    doPopovers( $metaCell: JQuery ) {
 
-		const symbol: string    = $metaCell.data( 'symbol' ) || '',
-		      cellName: string  = $metaCell.data( 'cell-name' ) || '',
-		      inputType: string = $metaCell.data( 'input-type' ) || 'number',
-		      isSelect: boolean = inputType === 'select',
-		      realValue: string = $metaCell.data( 'realvalue' ) || '',
-		      value: string     = $metaCell.text().trim(),
-		      inputAtts: any    = {
-			      type : inputType || 'number',
-			      value: value,
-			      class: $metaCell.data( 'extraClass' ) ? `meta-value ${ $metaCell.data( 'extraClass' ) }` : 'meta-value',
-		      };
+        const symbol: string    = $metaCell.data( 'symbol' ) || '',
+              cellName: string  = $metaCell.data( 'cell-name' ) || '',
+              inputType: string = $metaCell.data( 'input-type' ) || 'number',
+              isSelect: boolean = inputType === 'select',
+              realValue: string = $metaCell.data( 'realvalue' ) || '',
+              value: string     = $metaCell.text().trim(),
+              inputAtts: any    = {
+                  type : inputType || 'number',
+                  value: value,
+                  class: $metaCell.data( 'extraClass' ) ? `meta-value ${ $metaCell.data( 'extraClass' ) }` : 'meta-value',
+              };
 
-		// Handle the popover externally?
-		if ( inputType === 'externalAction' ) {
-			this.wpHooks.doAction( 'atum_tableCellPopovers_externalActionType', $metaCell, this );
-			return;
-		}
-		else if ( inputType === 'number' || symbol ) {
+        // Handle the popover externally?
+        if ( inputType === 'externalAction' ) {
+            this.wpHooks.doAction( 'atum_tableCellPopovers_externalActionType', $metaCell, this );
 
-			let numericValue: number;
-			const numericRealValue: number = parseFloat( realValue );
+            return;
+        }
+        else if ( inputType === 'number' || symbol ) {
 
-			// For currency numbers.
-			if ( symbol ) {
-				numericValue = Math.abs( Utils.unformat( value.replace( '>', '' ).trim(), this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
-			}
-			// For regular numbers.
-			else {
-				numericValue = parseFloat( value );
-			}
+            let numericValue: number;
+            const numericRealValue: number = parseFloat( realValue );
 
-			if ( ! isNaN( numericRealValue) && numericValue !== numericRealValue ) {
-				numericValue = numericRealValue;
-			}
+            // For currency numbers.
+            if ( symbol ) {
+                numericValue = Math.abs( Utils.unformat( value.replace( '>', '' ).trim(), this.settings.get( 'currencyFormatDecimalSeparator' ) ) );
+            }
+            // For regular numbers.
+            else {
+                numericValue = parseFloat( value );
+            }
 
-			inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
+            if ( !isNaN( numericRealValue ) && numericValue !== numericRealValue ) {
+                numericValue = numericRealValue;
+            }
 
-		}
-		else if ( isSelect ) {
+            inputAtts.value = isNaN( numericValue ) ? 0 : numericValue;
 
-			const atts: string[] = [ 'allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected' ];
+        }
+        else if ( isSelect ) {
 
-			atts.forEach( ( attr: string ) => {
-				if ( typeof $metaCell.data( attr ) !== 'undefined' ) {
-					inputAtts[ `data-${attr}` ] = $metaCell.data( attr );
-				}
-			} );
+            const atts: string[] = [ 'allow_clear', 'action', 'placeholder', 'multiple', 'minimum_input_length', 'container-css', 'selected' ];
 
-		}
-		else if ( value === '-' ) {
-			inputAtts.value = '';
-		}
+            atts.forEach( ( attr: string ) => {
+                if ( typeof $metaCell.data( attr ) !== 'undefined' ) {
+                    inputAtts[ `data-${ attr }` ] = $metaCell.data( attr );
+                }
+            } );
+
+        }
+        else if ( value === '-' ) {
+            inputAtts.value = '';
+        }
 		
-		if ( inputType === 'number' ) {
-			inputAtts.min = symbol ? '0' : ''; // The minimum value for currency fields is 0.
-			inputAtts.step = symbol ? '0.1' : '1'; // Allow decimals only for the currency fields for now.
-		}
+        if ( inputType === 'number' ) {
+            inputAtts.min = symbol ? '0' : ''; // The minimum value for currency fields is 0.
+            inputAtts.step = symbol ? '0.1' : '1'; // Allow decimals only for the currency fields for now.
+        }
 
-		const $input: JQuery     = isSelect ? $( '<select />', inputAtts ) : $( '<input />', inputAtts ),
-		      $setButton: JQuery = $( '<button />', {
-			      type : 'button',
-			      class: 'set btn btn-primary button-small',
-			      text : this.settings.get( 'setButton' ),
-		      } ),
-		      extraMeta: any     = $metaCell.data( 'extra-meta' );
+        const $input: JQuery     = isSelect ? $( '<select />', inputAtts ) : $( '<input />', inputAtts ),
+              $setButton: JQuery = $( '<button />', {
+                  type : 'button',
+                  class: 'set btn btn-primary button-small',
+                  text : this.settings.get( 'setButton' ),
+              } ),
+              extraMeta: any     = $metaCell.data( 'extra-meta' );
 
-		// Add the datepicker to the input field if needed.
-		if ( $metaCell.data( 'has-datepicker' ) === 'yes' ) {
-			$input.addClass( 'atum-datepicker' );
+        // Add the datepicker to the input field if needed.
+        if ( $metaCell.data( 'has-datepicker' ) === 'yes' ) {
+            $input.addClass( 'atum-datepicker' );
 
-			if ( typeof $metaCell.data( 'value-in-placeholder' ) !== 'undefined' ) {
-				$input.attr( 'placeholder', value );
-			}
+            if ( typeof $metaCell.data( 'value-in-placeholder' ) !== 'undefined' ) {
+                $input.attr( 'placeholder', value );
+            }
 
-			if ( typeof $metaCell.data( 'date-format' ) !== 'undefined' ) {
-				$input.data( 'date-format', $metaCell.data( 'date-format' ) );
-			}
+            if ( typeof $metaCell.data( 'date-format' ) !== 'undefined' ) {
+                $input.data( 'date-format', $metaCell.data( 'date-format' ) );
+            }
 
-			if ( typeof $metaCell.data( 'min-date' ) !== 'undefined' ) {
-				$input.data( 'min-date', $metaCell.data( 'min-date' ) );
-			}
+            if ( typeof $metaCell.data( 'min-date' ) !== 'undefined' ) {
+                $input.data( 'min-date', $metaCell.data( 'min-date' ) );
+            }
 
-			if ( typeof $metaCell.data( 'max-date' ) !== 'undefined' ) {
-				$input.data( 'max-date', $metaCell.data( 'max-date' ) );
-			}
-		}
+            if ( typeof $metaCell.data( 'max-date' ) !== 'undefined' ) {
+                $input.data( 'max-date', $metaCell.data( 'max-date' ) );
+            }
+        }
 
-		if ( isSelect ) {
+        if ( isSelect ) {
 
-			const selectedValue: string = $metaCell.data( 'selected-value' ),
-			      selectOptions: any    = $metaCell.data( 'select-options' );
+            const selectedValue: string = $metaCell.data( 'selected-value' ),
+                  selectOptions: any    = $metaCell.data( 'select-options' );
 
-			if ( typeof selectOptions === 'object' && Object.keys( selectOptions ).length ) {
+            if ( typeof selectOptions === 'object' && Object.keys( selectOptions ).length ) {
 
-				$.each( selectOptions, ( index: string, value: any ) => {
+                $.each( selectOptions, ( index: string, value: any ) => {
 
-					const selected: string = selectedValue.toString() === index ? ' selected' : '';
+                    const selected: string = selectedValue.toString() === index ? ' selected' : '';
 
-					$input.append( `
+                    $input.append( `
 						<option value="${ index }"${ selected }>
                            ${ value === this.settings.get( 'emptyCol' ) ? '' : value }
                         </option>
 					` );
 
-				} );
+                } );
 
-			}
+            }
 
-		}
+        }
 
-		let popoverClass: string = this.popoverClassName,
-		    $extraFields: JQuery = null;
+        let popoverClass: string = this.popoverClassName,
+            $extraFields: JQuery = null;
 
-		// Check whether to add extra fields to the popover.
-		if ( typeof extraMeta !== 'undefined' ) {
+        // Check whether to add extra fields to the popover.
+        if ( typeof extraMeta !== 'undefined' ) {
 
-			popoverClass += ' with-meta';
-			$extraFields  = $( '<div />' ).append( $input ).append( '<hr>' );
+            popoverClass += ' with-meta';
+            $extraFields  = $( '<div />' ).append( $input ).append( '<hr>' );
 
-			$.each( extraMeta, ( index: number, metaAtts: any ) => {
-				$extraFields.append( $( '<input />', metaAtts ) );
-			} );
+            $.each( extraMeta, ( index: number, metaAtts: any ) => {
+                $extraFields.append( $( '<input />', metaAtts ) );
+            } );
 
-		}
+        }
 
-		// Add class if has select.
-		if ( isSelect ) {
-			popoverClass += ' with-select';
-		}
+        // Add class if has select.
+        if ( isSelect ) {
+            popoverClass += ' with-select';
+        }
 
-		let $content: JQuery = $( '<div class="edit-popover-content" />' );
+        let $content: JQuery = $( '<div class="edit-popover-content" />' );
 
-		if ( $extraFields ) {
-			$content.append( $extraFields ).append( $setButton );
-		}
-		else {
-			$content.append( $input ).append( $setButton );
-		}
+        if ( $extraFields ) {
+            $content.append( $extraFields ).append( $setButton );
+        }
+        else {
+            $content.append( $input ).append( $setButton );
+        }
 
-		if ( $metaCell.data( 'footerContent' ) ) {
-			$content = $( '<div class="edit-popover-wrapper" />' ).append( $content ).append( $metaCell.data( 'footerContent' ) );
-		}
+        if ( $metaCell.data( 'footerContent' ) ) {
+            $content = $( '<div class="edit-popover-wrapper" />' ).append( $content ).append( $metaCell.data( 'footerContent' ) );
+        }
 
-		const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
+        const titleSetting: string = isSelect ? 'selectSetValue' : 'setValue';
 
-		// Create the meta edit popover.
-		this.addPopover( $metaCell, {
-			title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
-			content    : $content.get( 0 ), // It supports one element only.
-			html       : true,
-			customClass: popoverClass,
-			placement  : 'bottom',
-			trigger    : 'click',
-			container  : 'body',
-		} );
+        // Create the meta edit popover.
+        this.addPopover( $metaCell, {
+            title      : this.settings.get( titleSetting ) ? this.settings.get( titleSetting ).replace( '%%', cellName ) : cellName,
+            content    : $content.get( 0 ), // It supports one element only.
+            html       : true,
+            customClass: popoverClass,
+            placement  : 'bottom',
+            trigger    : 'click',
+            container  : 'body',
+        } );
 		
-	}
+    }
 	
-	/**
-	 * Destroy a popover attached to a specified table cell
-	 *
-	 * @param jQuery $metaCell Optional. The table cell where is attached the visible popover.
-	 */
-	destroyPopover( $metaCell?: JQuery ) {
+    /**
+     * Destroy a popover attached to a specified table cell
+     *
+     * @param jQuery $metaCell Optional. The table cell where is attached the visible popover.
+     */
+    destroyPopover( $metaCell?: JQuery ) {
 
-		// If not passing the popover to destroy, try to find out the currently active.
-		if ( ! $metaCell || ! $metaCell.length ) {
-			$metaCell = $( '.set-meta[aria-describedby]' );
-		}
+        // If not passing the popover to destroy, try to find out the currently active.
+        if ( !$metaCell || !$metaCell.length ) {
+            $metaCell = $( '.set-meta[aria-describedby]' );
+        }
 
-		if ( $metaCell.length ) {
+        if ( $metaCell.length ) {
 
-			super.destroyPopover( $metaCell, () => {
+            super.destroyPopover( $metaCell, () => {
 
-				// Give a small lapse to complete the 'fadeOut' animation before re-binding.
-				setTimeout( () => this.bindPopovers( $metaCell ), 300 );
+                // Give a small lapse to complete the 'fadeOut' animation before re-binding.
+                setTimeout( () => this.bindPopovers( $metaCell ), 300 );
 
-			} );
+            } );
 
-		}
+        }
 
-	}
+    }
 	
 }

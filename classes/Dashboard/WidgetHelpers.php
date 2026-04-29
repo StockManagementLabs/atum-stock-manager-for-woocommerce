@@ -571,7 +571,7 @@ final class WidgetHelpers {
 
 			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_stock_levels/in_stock_products_atum_args', array(
 				'key'   => 'atum_stock_status',
-				'value' => [ 'instock', 'onbackorder' ],
+				'value' => 'instock',
 				'type'  => 'CHAR',
 			) );
 
@@ -587,7 +587,7 @@ final class WidgetHelpers {
 			 */
 			self::$atum_query_data['where'][] = apply_filters( 'atum/dashboard/get_stock_levels/out_stock_products_atum_args', array(
 				'key'   => 'atum_stock_status',
-				'value' => 'outofstock',
+				'value' => ['outofstock', 'onbackorder'],
 				'type'  => 'CHAR',
 			) );
 

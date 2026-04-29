@@ -707,18 +707,19 @@ var AtumOrders = (function () {
         });
     };
     AtumOrders.prototype.quantityChanged = function (evt) {
-        var $input = $(evt.currentTarget), $row = $input.closest('tr.item'), qty = $input.val(), oQty = $input.data('qty'), $lineTotal = $row.find('input.line_total'), $lineSubtotal = $row.find('input.line_subtotal'), decimalSep = this.settings.get('priceDecimalSep'), precision = this.settings.get('roundingPrecision');
+        var $input = $(evt.currentTarget), $row = $input.closest('tr.item'), qty = $input.val(), oQty = $input.data('qty'), $lineTotal = $row.find('input.line_total'), $lineSubtotal = $row.find('input.line_subtotal'), decimalSep = this.settings.get('priceDecimalSep');
+        var rawString = function (n) { return (n.toString().replace('.', decimalSep)); };
         var unitTotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].divideDecimals(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotal.data('total'), decimalSep), oQty);
-        $lineTotal.val(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitTotal, qty), precision, '', decimalSep));
+        $lineTotal.val(rawString(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitTotal, qty)));
         var unitSubtotal = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].divideDecimals(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotal.data('subtotal'), decimalSep), oQty);
-        $lineSubtotal.val(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitSubtotal, qty), precision, '', decimalSep));
+        $lineSubtotal.val(rawString(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitSubtotal, qty)));
         $row.find('input.line_tax').each(function (i, elem) {
             var $lineTotalTax = $(elem), taxId = $lineTotalTax.data('tax_id'), unitTotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].divideDecimals(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineTotalTax.data('total_tax'), decimalSep), oQty), $lineSubtotalTax = $row.find("input.line_subtotal_tax[data-tax_id=\"".concat(taxId, "\"]")), unitSubtotalTax = _utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].divideDecimals(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].unformat($lineSubtotalTax.data('subtotal_tax'), decimalSep), oQty);
             if (0 < unitTotalTax) {
-                $lineTotalTax.val(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitTotalTax, qty), precision, '', decimalSep));
+                $lineTotalTax.val(rawString(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitTotalTax, qty)));
             }
             if (0 < unitSubtotalTax) {
-                $lineSubtotalTax.val(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitSubtotalTax, qty), precision, '', decimalSep));
+                $lineSubtotalTax.val(rawString(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["default"].multiplyDecimals(unitSubtotalTax, qty)));
             }
         });
         $input.trigger('quantity_changed');
@@ -1429,13 +1430,10 @@ var AtumOrderItems = (function () {
             if (typeof rates === 'object') {
                 var taxes = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].calcTaxesFromBase(purchasePrice, rates), formattedTaxes = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(taxes, precision);
                 if (taxes) {
-                    var purchasePriceWithTaxesFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(_utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].sumDecimals(purchasePrice, taxes), precision, '', decimalSep);
+                    var purchasePriceWithTaxes = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].sumDecimals(purchasePrice, taxes), purchasePriceWithTaxesFmt = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].formatNumber(purchasePriceWithTaxes, precision, '', decimalSep);
                     purchasePriceTxt = "".concat(purchasePriceWithTaxesFmt, " ( ").concat(purchasePriceFmt, " + ").concat(formattedTaxes, " ").concat(this.settings.get('taxesName'), " )");
-                    purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].unformat(purchasePriceWithTaxesFmt, decimalSep);
+                    purchasePrice = purchasePriceWithTaxes;
                 }
-            }
-            else {
-                purchasePrice = _utils_utils__WEBPACK_IMPORTED_MODULE_3__["default"].unformat(purchasePriceFmt, decimalSep);
             }
         }
         sweetalert2_neutral__WEBPACK_IMPORTED_MODULE_2___default().fire({
@@ -1805,7 +1803,7 @@ var Utils = {
         if (precision === void 0) { precision = this.settings.number.precision; }
         if (thousandsSep === void 0) { thousandsSep = this.settings.number.thousandsSep; }
         if (decimalsSep === void 0) { decimalsSep = this.settings.number.decimalsSep; }
-        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = 1; }
+        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = null; }
         if (number > 999 && thousandsSep === decimalsSep && !Number.isInteger(number)) {
             thousandsSep = '';
         }
@@ -2947,7 +2945,7 @@ __webpack_require__.r(__webpack_exports__);
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			

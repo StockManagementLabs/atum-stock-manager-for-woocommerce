@@ -255,22 +255,22 @@ export default class AtumOrders {
               oQty: number          = $input.data( 'qty' ),
               $lineTotal: JQuery    = $row.find( 'input.line_total' ),
               $lineSubtotal: JQuery = $row.find( 'input.line_subtotal' ),
-              decimalSep: string    = this.settings.get( 'priceDecimalSep' ),
-              precision: number     = this.settings.get( 'roundingPrecision' );
-		
+              decimalSep: string    = this.settings.get( 'priceDecimalSep' );
+
+        // Inject the raw, full-precision value into the hidden inputs. Display formatting
+        // (rounding to the store's price decimals) is handled server-side when the row
+        // is re-rendered. This mirrors how WooCommerce stores line amounts internally.
+        const rawString = ( n: number ): string => ( n.toString().replace( '.', decimalSep ) );
+
         // Totals
         const unitTotal: number = Utils.divideDecimals( Utils.unformat( $lineTotal.data( 'total' ), decimalSep ), oQty );
 
-        $lineTotal.val(
-            Utils.formatNumber( Utils.multiplyDecimals( unitTotal, qty ), precision, '', decimalSep ),
-        );
+        $lineTotal.val( rawString( Utils.multiplyDecimals( unitTotal, qty ) ) );
 
         const unitSubtotal: number = Utils.divideDecimals( Utils.unformat( $lineSubtotal.data( 'subtotal' ), decimalSep ), oQty );
 
-        $lineSubtotal.val(
-            Utils.formatNumber( Utils.multiplyDecimals( unitSubtotal, qty ), precision, '', decimalSep ),
-        );
-		
+        $lineSubtotal.val( rawString( Utils.multiplyDecimals( unitSubtotal, qty ) ) );
+
         // Taxes
         $row.find( 'input.line_tax' ).each( ( i: number, elem: Element ) => {
 
@@ -281,21 +281,17 @@ export default class AtumOrders {
                   unitSubtotalTax: number  = Utils.divideDecimals( Utils.unformat( $lineSubtotalTax.data( 'subtotal_tax' ), decimalSep ), oQty );
 
             if ( 0 < unitTotalTax ) {
-                $lineTotalTax.val(
-                    Utils.formatNumber( Utils.multiplyDecimals( unitTotalTax, qty ), precision, '', decimalSep ),
-                );
+                $lineTotalTax.val( rawString( Utils.multiplyDecimals( unitTotalTax, qty ) ) );
             }
 
             if ( 0 < unitSubtotalTax ) {
-                $lineSubtotalTax.val(
-                    Utils.formatNumber( Utils.multiplyDecimals( unitSubtotalTax, qty ), precision, '', decimalSep ),
-                );
+                $lineSubtotalTax.val( rawString( Utils.multiplyDecimals( unitSubtotalTax, qty ) ) );
             }
-			
+
         } );
-		
+
         $input.trigger( 'quantity_changed' );
-		
+
     }
 
     /**

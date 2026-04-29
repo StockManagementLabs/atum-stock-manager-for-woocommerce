@@ -52,7 +52,7 @@ input.atum-post-search {
 #atum-search-by-column {
 	
 	&.input-group {
-		border-radius: 3px;
+		border-radius: $border-radius;
 		border: solid 1px var(--main-border-alt);
 		background-color:  var(--atum-table-bg);
 		margin-left: 10px;
@@ -86,7 +86,6 @@ input.atum-post-search {
 	
 	.input-group-append {
 		border: none;
-		height: 30px;
 		@include border-left-radius(3px);
 		overflow: hidden;
 		
@@ -137,11 +136,11 @@ input.atum-post-search {
 	
 	.dropdown-menu{
 		margin-top: 1px;
-		right: 0px;
+		right: 0;
 		box-shadow: $dropdown-box-shadow;
 		background-color: var(--atum-table-bg);
 		border: none;
-		border-radius: 3px;
+		border-radius: $border-radius;
 		max-height: 300px;
 		overflow-y: auto;
 	}

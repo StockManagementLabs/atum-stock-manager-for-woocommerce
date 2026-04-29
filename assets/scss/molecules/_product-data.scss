@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../common/breakpoints" as *;
 @use "../common/variables" as *;
 @use "../common/mixins/border-radius" as *;
@@ -7,7 +8,6 @@
 // Product Data meta box
 //----------------------
 
-@use "sass:math";
 
 .product_data {
 	
@@ -162,6 +162,20 @@
 		.atum-section-title {
 			font-size: 1.15em;
 			padding-left: 10px;
+		}
+		
+		.form-field {
+			.woocommerce-help-tip {
+				.wc-wp-version-gte-70 & {
+					margin-top: 0;
+				}
+			}
+			
+			> label {
+				.wc-wp-version-gte-70 & {
+					padding-top: 0;
+				}
+			}
 		}
 	}
 	

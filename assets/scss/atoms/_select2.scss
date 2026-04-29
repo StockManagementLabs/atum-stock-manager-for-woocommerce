@@ -58,6 +58,10 @@ body {
 					line-height: 27px;
 					font-family: atum-icon-font;
 					font-size: 10px;
+					
+					.wc-wp-version-gte-70 & {
+						line-height: 37px;
+					}
 				}
 			}
 			
@@ -67,6 +71,10 @@ body {
 				display: block;
 				height: 28px;
 				user-select: none;
+				
+				.wc-wp-version-gte-70 & {
+					height: 38px;
+				}
 				
 				.select2-selection__rendered {
 					display: block;
@@ -96,6 +104,10 @@ body {
 				display: block;
 				min-height: 32px;
 				user-select: none;
+				
+				.wc-wp-version-gte-70 & {
+					min-height: 40px;
+				}
 				
 				.select2-selection__rendered {
 					padding-left: 8px;
@@ -141,7 +153,7 @@ body {
 			box-shadow: $dropdown-box-shadow !important;  // Fix: added important to override WP admin CSS.
 			background-color: var(--atum-table-bg) !important;
 			border: 1px solid var(--gray-500);
-			border-radius: 4px;
+			border-radius: $border-radius;
 			overflow: hidden;
 			box-sizing: border-box;
 			display: block;
@@ -167,7 +179,7 @@ body {
 				}
 				
 				&::-webkit-scrollbar-thumb {
-					border-radius: 4px;
+					border-radius: $border-radius;
 					background-color: var(--gray-500);
 				}
 			}
@@ -227,7 +239,7 @@ body {
 					width: 100%;
 					box-sizing: border-box;
 					min-width: inherit;
-					border-radius: 4px;
+					border-radius: $border-radius;
 					border-color: var(--main-border-alt);
 					
 					&::-webkit-search-cancel-button {
@@ -277,15 +289,23 @@ body {
 			
 			.select2-selection--single {
 				height: 30px;
-				border-radius: 4px;
+				border-radius: $border-radius;
 				border: 1px solid var(--main-border-alt);
 				background-color: var(--atum-table-bg);
+				
+				.wc-wp-version-gte-70 & {
+					height: 40px;
+				}
 				
 				.select2-selection__rendered {
 					line-height: 27px;
 					color: var(--atum-text-color-var3);
 					font-size: 15px;
 					padding-left: 10px;
+					
+					.wc-wp-version-gte-70 & {
+						line-height: 37px !important;
+					}
 				}
 				
 				.select2-selection__clear {
@@ -302,8 +322,12 @@ body {
 					height: 26px;
 					position: absolute;
 					top: 3px;
-					right: 0;
+					right: 3px;
 					width: 18px;
+					
+					.wc-wp-version-gte-70 & {
+						height: 36px;
+					}
 					
 					b {
 						border-color: var(--main-border-alt) transparent transparent transparent;
@@ -327,9 +351,13 @@ body {
 	
 	#bulk-edit {
 		.select2-selection__arrow {
-			right: 0px;
+			right: 0;
 			height: 30px;
 			top: 0;
+			
+			.wc-wp-version-gte-70 & {
+				height: 40px;
+			}
 		}
 	}
 	
@@ -378,7 +406,7 @@ body {
 			.select2-selection--multiple {
 				background-color: var(--white);
 				border: 1px solid var(--gray-500);
-				border-radius: 4px;
+				border-radius: $border-radius;
 				cursor: text;
 				
 				.select2-selection__rendered {
@@ -410,10 +438,9 @@ body {
 				.select2-selection__choice {
 					background-color: var(--gray-500);
 					border: none;
-					border-radius: 4px;
+					border-radius: $border-radius;
 					cursor: default;
 					float: left;
-					margin: 4px 5px 0 0;
 					padding: 3px 5px;
 					height: 24px;
 					overflow: hidden;
@@ -423,6 +450,10 @@ body {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+					
+					.wc-wp-version-gte-70 & {
+						min-height: 34px;
+					}
 				}
 				
 				.select2-selection__choice__remove {
@@ -531,7 +562,11 @@ body {
 						height: 30px;
 						border-color: var(--main-border-alt);
 						box-shadow: none;
-						border-radius: 4px;
+						border-radius: $border-radius;
+						
+						.wc-wp-version-gte-70 & {
+							height: 40px;
+						}
 					}
 				}
 				
@@ -626,7 +661,7 @@ body {
 			.select2-selection--single {
 				background-color: var(--gray-100);
 				border: 1px solid var(--gray-500);
-				border-radius: 4px;
+				border-radius: $border-radius;
 				outline: 0;
 				background-image: linear-gradient(to bottom, $white 50%, $wp-gray-5 100%);
 				background-repeat: repeat-x;
@@ -638,6 +673,10 @@ body {
 				.select2-selection__rendered {
 					color: var(--gray-700);
 					line-height: 28px;
+					
+					.wc-wp-version-gte-70 & {
+						min-height: 38px;
+					}
 				}
 				
 				.select2-selection__clear {
@@ -664,6 +703,10 @@ body {
 					width: 20px;
 					background-image: linear-gradient(to bottom, $wp-gray-5 50%, $gray-500 100%);
 					background-repeat: repeat-x;
+					
+					.wc-wp-version-gte-70 & {
+						min-height: 36px;
+					}
 					
 					b {
 						border-color: $wp-gray-7 transparent transparent transparent;
@@ -737,7 +780,7 @@ body {
 			.select2-selection--multiple {
 				background-color: var(--white);
 				border: 1px solid var(--gray-500);
-				border-radius: 4px;
+				border-radius: $border-radius;
 				cursor: text;
 				outline: 0;
 				
@@ -758,7 +801,7 @@ body {
 				.select2-selection__choice {
 					background-color: $wp-gray-5;
 					border: 1px solid var(--gray-500);
-					border-radius: 4px;
+					border-radius: $border-radius;
 					cursor: default;
 					float: left;
 					margin-right: 5px;

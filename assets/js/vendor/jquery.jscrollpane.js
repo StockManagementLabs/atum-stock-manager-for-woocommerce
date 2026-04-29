@@ -579,7 +579,7 @@
 				return function()
 				{
 					arrowScroll(dirX, dirY, this, ele);
-					this.blur();
+					this.trigger('blur');
 					return false;
 				};
 			}

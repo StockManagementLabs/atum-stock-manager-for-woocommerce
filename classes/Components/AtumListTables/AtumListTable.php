@@ -1379,20 +1379,22 @@ abstract class AtumListTable extends \WP_List_Table {
 
 		if ( $this->allow_calcs ) {
 
-			$sale_price_orig = $this->list_item->get_sale_price();
-			if ( is_numeric( $sale_price_orig ) ) {
+			$sale_price_value = $this->list_item->get_sale_price();
+			$is_on_sale       = $this->list_item->is_on_sale();
 
-				$sale_price_value = Helpers::format_price( $sale_price_orig, [
+			if ( is_numeric( $sale_price_value ) ) {
+
+				$formatted_sale_price = Helpers::format_price( $sale_price_value, [
 					'currency' => self::$default_currency,
 				] );
 
-				if ( 0.0 < $sale_price_orig && 0.0 === round( $sale_price_orig, wc_get_price_decimals(), PHP_ROUND_HALF_UP ) ) {
-
-					$sale_price_value = "> $sale_price_value";
+				if ( 0.0 < $sale_price_value && 0.0 === round( $sale_price_value, wc_get_price_decimals(), PHP_ROUND_HALF_UP ) ) {
+					$formatted_sale_price = "> $formatted_sale_price";
 				}
+
 			}
 			else {
-				$sale_price_value = $sale_price;
+				$formatted_sale_price = $sale_price;
 			}
 
 			if ( $this->allow_edit ) {
@@ -1401,13 +1403,13 @@ abstract class AtumListTable extends \WP_List_Table {
 				$date_on_sale_to   = $this->list_item->get_date_on_sale_to( 'edit' ) ? date_i18n( 'Y-m-d', $this->list_item->get_date_on_sale_to( 'edit' )->getOffsetTimestamp() ) : '';
 
 				$args = apply_filters( 'atum/list_table/args_sale_price', array(
-					'meta_key'   => 'sale_price',
-					'value'      => $sale_price_value,
-					'symbol'     => get_woocommerce_currency_symbol(),
-					'currency'   => self::$default_currency,
-					'tooltip'    => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
-					'cell_name'  => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
-					'extra_meta' => array(
+					'meta_key'      => 'sale_price',
+					'value'         => $formatted_sale_price,
+					'symbol'        => get_woocommerce_currency_symbol(),
+					'currency'      => self::$default_currency,
+					'tooltip'       => esc_attr__( 'Click to edit the sale price', ATUM_TEXT_DOMAIN ),
+					'cell_name'     => esc_attr__( 'Sale Price', ATUM_TEXT_DOMAIN ),
+					'extra_meta'    => array(
 						array(
 							'name'        => '_sale_price_dates_from',
 							'type'        => 'text',
@@ -1427,14 +1429,15 @@ abstract class AtumListTable extends \WP_List_Table {
 							'class'       => 'atum-datepicker to',
 						),
 					),
-					'extra_data' => [ 'realValue' => $sale_price_orig ],
+					'extra_data'    => [ 'realValue' => $sale_price_value ],
+					'extra_classes' => ! $is_on_sale && $sale_price_value > 0 ? ' cell-red' : '',
 				), $this->list_item );
 
 				$sale_price = self::get_editable_column( $args );
 
 			}
 			else {
-				$sale_price = $sale_price_value;
+				$sale_price = ! $is_on_sale && $sale_price_value > 0 ? '<span class="cell-red">' . $formatted_sale_price . '</span>' : $formatted_sale_price;
 			}
 
 		}
@@ -2015,6 +2018,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 *      @type string $tooltip_position  Where to place the tooltip.
 	 *      @type string $cell_name         The display name for the cell.
 	 *      @type array  $extra_data        Any other array of data that should be added to the element.
+	 *      @type string $extra_classes     Any other classes that should be added to the element.
 	 * }
 	 *
 	 * @return string
@@ -2041,10 +2045,10 @@ abstract class AtumListTable extends \WP_List_Table {
 			'symbol'           => '',
 			'tooltip'          => '',
 			'input_type'       => 'number',
-			'extra_meta'       => array(),
+			'extra_meta'       => [],
 			'tooltip_position' => 'top',
 			'cell_name'        => '',
-			'extra_data'       => array(),
+			'extra_data'       => [],
 			'extra_classes'    => '',
 		) ) );
 

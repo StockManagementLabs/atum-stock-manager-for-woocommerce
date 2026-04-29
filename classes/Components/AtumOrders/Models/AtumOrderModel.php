@@ -914,8 +914,12 @@ abstract class AtumOrderModel {
 		}
 
 		// Save tax totals.
-		$this->set_shipping_tax( \WC_Tax::round( array_sum( $shipping_taxes ) ) );
-		$this->set_cart_tax( \WC_Tax::round( array_sum( $cart_taxes ) ) );
+		// NOTE: Do NOT round prematurely. Tax totals must keep full precision in DB so that
+		// callers can sum line taxes accurately. Display-time rounding is handled by views.
+		// When `woocommerce_tax_round_at_subtotal=no`, Helpers::round_line_tax() applies the
+		// per-store rounding policy; otherwise the value is preserved untouched.
+		$this->set_shipping_tax( Helpers::round_line_tax( array_sum( $shipping_taxes ) ) );
+		$this->set_cart_tax( Helpers::round_line_tax( array_sum( $cart_taxes ) ) );
 		$this->save();
 
 	}
@@ -1448,7 +1452,9 @@ abstract class AtumOrderModel {
 		$cart_tax       = ! is_wp_error( $this->cart_tax ) ? (float) $this->cart_tax : 0;
 
 		/* @noinspection PhpWrongStringConcatenationInspection */
-		$grand_total = round( $total + $fee_total + $shipping_total + $cart_tax + $shipping_tax, wc_get_price_decimals() );
+		// Keep the grand total in full precision. Display-time rounding happens in the views
+		// via wc_price()/format_price().
+		$grand_total = $total + $fee_total + $shipping_total + $cart_tax + $shipping_tax;
 
 		$this->set_discount_total( $subtotal - $total );
 		$this->set_discount_tax( $subtotal_tax - $total_tax );
@@ -1474,7 +1480,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @return float
 	 */
-	public function get_item_subtotal( $item, $inc_tax = FALSE, $round = TRUE ) {
+	public function get_item_subtotal( $item, $inc_tax = FALSE, $round = FALSE ) {
 
 		$subtotal = 0;
 
@@ -1508,7 +1514,7 @@ abstract class AtumOrderModel {
 	 *
 	 * @return float
 	 */
-	public function get_item_total( $item, $inc_tax = FALSE, $round = TRUE ) {
+	public function get_item_total( $item, $inc_tax = FALSE, $round = FALSE ) {
 
 		$total = 0;
 

@@ -149,7 +149,7 @@ export default class SettingsPage {
                             this.moveToTab( $navLink );
                         }
                         else {
-                            $navLink.blur();
+                            $navLink.trigger( 'blur' );
                         }
 
                     } );

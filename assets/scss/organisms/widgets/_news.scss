@@ -1,11 +1,10 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/variables" as *;
 
 //
 // "News" widget
 //-----------------
-
-@use "sass:math";
 
 .atum_news_widget {
 	.widget-wrapper {

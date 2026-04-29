@@ -827,7 +827,7 @@ var SettingsPage = (function () {
                         _this.moveToTab($navLink);
                     }
                     else {
-                        $navLink.blur();
+                        $navLink.trigger('blur');
                     }
                 });
             }
@@ -2187,7 +2187,7 @@ __webpack_require__.r(__webpack_exports__);
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			

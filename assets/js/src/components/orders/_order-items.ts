@@ -477,16 +477,17 @@ export default class AtumOrderItems {
                       formattedTaxes: string = Utils.formatNumber( taxes, precision );
 
                 if ( taxes ) {
-                    const purchasePriceWithTaxesFmt: string = Utils.formatNumber( Utils.sumDecimals( purchasePrice, taxes ), precision, '', decimalSep );
+                    const purchasePriceWithTaxes: number    = Utils.sumDecimals( purchasePrice, taxes ),
+                          purchasePriceWithTaxesFmt: string = Utils.formatNumber( purchasePriceWithTaxes, precision, '', decimalSep );
 
                     purchasePriceTxt = `${ purchasePriceWithTaxesFmt } ( ${ purchasePriceFmt } + ${ formattedTaxes } ${ this.settings.get( 'taxesName' ) } )`;
-                    purchasePrice    = Utils.unformat( purchasePriceWithTaxesFmt, decimalSep );
+                    // Persist the unrounded value: round-tripping through the formatted
+                    // string would silently drop precision below `priceNumDecimals`.
+                    purchasePrice    = purchasePriceWithTaxes;
                 }
 
             }
-            else {
-                purchasePrice = Utils.unformat( purchasePriceFmt, decimalSep );
-            }
+            // No taxes leg: keep the original (already unrounded) `purchasePrice`.
 
         }
 

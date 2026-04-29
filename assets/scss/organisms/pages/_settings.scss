@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/variables" as *;
 @use "../../common/mixins/utilities" as *;
@@ -5,8 +6,6 @@
 //
 // Atum Settings
 //---------------
-
-@use "sass:math";
 
 #wpwrap {
 	overflow: hidden;
@@ -22,7 +21,6 @@
 
 	h1 {
 		text-transform: capitalize;
-		margin-bottom: math.div($grid-gutter-width, 2);
 		font-weight: bold;
 		color: var(--blue-dark);
 		font-size: 36px;
@@ -82,8 +80,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-top-right-radius: 4px;
-		border-top-left-radius: 4px;
+		border-top-right-radius: $border-radius;
+		border-top-left-radius: $border-radius;
 
 		.toogle-menu {
 			font-size: 20px;
@@ -285,7 +283,7 @@
 		border: 0;
 		
 		&:checked::before {
-			border-radius: 4px;
+			border-radius: $border-radius;
 			background-color: var(--success);
 			color: var(--white);
 			content: $atmi-checkmark;
@@ -372,8 +370,8 @@
 			}
 
 			.atum-nav-header {
-				border-bottom-right-radius: 6px;
-				border-bottom-left-radius: 6px;
+				border-bottom-right-radius: $border-radius;
+				border-bottom-left-radius: $border-radius;
 
 				.toogle-menu {
 					display: block;
@@ -467,7 +465,7 @@
 		.section-general-title {
 			padding: 0 20px;
 			background-color: var(--atum-settings-heads-bg);
-			border-radius: 6px;
+			border-radius: $border-radius;
 			height: 51px;
 			display: flex;
 			align-items: center;
@@ -489,12 +487,11 @@
 				font-size: 18px;
 				font-weight: bold;
 				padding-left: 5px;
-				font-weight: bold;
 			}
 		}
 		
 		.settings-section {
-			border-radius: 6px;
+			border-radius: $border-radius;
 			
 			&#atum_setting_shipping {
 				display: none;
@@ -506,8 +503,8 @@
 			border: 1px solid var(--gray-400);
 			border-bottom: none;
 			background-color: var(--atum-settings-section-bg);
-			border-top-right-radius: 6px;
-			border-top-left-radius: 6px;
+			border-top-right-radius: $border-radius;
+			border-top-left-radius: $border-radius;
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
@@ -596,9 +593,9 @@
 		}
 		
 		.section-fields {
-			padding: 0px 20px 120px 25px;
-			border-bottom-right-radius: 6px;
-			border-bottom-left-radius: 6px;
+			padding: 0 20px 120px 25px;
+			border-bottom-right-radius: $border-radius;
+			border-bottom-left-radius: $border-radius;
 			background: var(--atum-settings-section-bg) url("#{$atum-img-path}settings/bg-settings.png") no-repeat bottom;
 			background-size: 100% auto;
 			box-shadow: 0 4px 0 0 var(--gray-400);
@@ -651,7 +648,7 @@
 				padding-top: 25px;
 				
 				.label {
-					border-radius: 4px;
+					border-radius: $border-radius;
 					padding: 2px 6px;
 					display: inline-block;
 					margin-top: 5px;
@@ -692,7 +689,7 @@
 							width: 171px;
 							height: 129px;
 							border: 2px solid var(--gray-500);
-							border-radius: 5px;
+							border-radius: $border-radius;
 							
 							&.active {
 								border: 2px solid var(--blue);
@@ -732,7 +729,6 @@
 					
 					li {
 						list-style: disc;
-						line-height: 1.1;
 						line-height: 1.47;
 						margin-bottom: 0;
 						
@@ -747,7 +743,7 @@
 			input[type=text], input[type=number], select, textarea {
 				padding: 6px;
 				margin: 0;
-				border-radius: 4px;
+				border-radius: $border-radius;
 				height: 30px;
 				color: var(--atum-input-text);
 				border: 1px solid var(--main-border-alt);
@@ -824,7 +820,7 @@
 					&.atum-select2, &.atum-enhanced-select {
 						
 						.select2-selection--multiple {
-							border-radius: 4px;
+							border-radius: $border-radius;
 							line-height: 1;
 							margin-top: 2px;
 							
@@ -960,7 +956,7 @@
 				}
 				
 				button {
-					border-radius: 4px;
+					border-radius: $border-radius;
 				}
 				
 			}
@@ -996,13 +992,12 @@
 		
 		input[type=submit] {
 			width: 144px;
-			height: 30px;
 			text-transform: uppercase;
 			padding: 11px 20px 9px;
 			line-height: 1;
 			height: auto;
 			background: var(--atum-settings-btn-save);
-			border-radius: 5px;
+			border-radius: $border-radius;
 			text-shadow: none;
 			box-shadow: none;
 			font-size: 12px;
@@ -1079,7 +1074,7 @@
 			button.wp-color-result {
 				height: 30px;
 				box-shadow: none;
-				border-radius: 5px;
+				border-radius: $border-radius;
 				width: 180px;
 				margin-right: 10px;
 				border: solid 0.5px var(--main-border-alt);
@@ -1102,7 +1097,6 @@
 				}
 				
 				.wp-color-result-text {
-					line-height: 29px;
 					background-color: transparent;
 					color: var(--main-text);
 					border-left: none;
@@ -1113,7 +1107,7 @@
 				}
 				
 				.color-picker-preview {
-					border-radius: 5px;
+					border-radius: $border-radius;
 					width: 22px;
 					height: 22px;
 					background-color: transparent;

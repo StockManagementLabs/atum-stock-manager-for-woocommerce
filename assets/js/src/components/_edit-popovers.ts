@@ -352,8 +352,36 @@ export default class EditPopovers extends PopoverBase{
 			$fieldLabel.addClass( 'unsaved' );
 
 			// For numeric labels, adjust the decimal separator if needed.
+			//
+			// IMPORTANT: round to the field's `decimals-number` BEFORE handing the
+			// value to `Utils.formatNumber()`. Hidden inputs keep the full
+			// precision (see `_atum-orders.ts` / `_po-items.ts`); this is the
+			// designated display-side rounding step.
+			//
+			// We pass `null` as `minimumSignificantDigits` because, with the
+			// default `roundingPriority: "auto"` in `Intl.NumberFormat`, having
+			// both `minimumSignificantDigits` and `minimumFractionDigits` makes
+			// significant digits win. That would render `16` as "16" (and `15.3`
+			// as "15.3") instead of "16,00" / "15,30" for currency labels.
+			//
+			// `data-strip-zeros="yes"` opts out of zero-padding for fields that
+			// represent counts/quantities (e.g. PO item qty, MI inventory qty),
+			// where a raw `1` should render as "1", not "1,0000", even when the
+			// store allows N stock decimals. Currency labels keep the default
+			// padding so prices always show all configured decimals (e.g. "15,30").
 			if ( null !== label && Utils.isNumeric( label ) && $fieldLabel.data( 'decimal-separator' ) ) {
-				label = Utils.formatNumber( parseFloat( label ), decimals, '', $fieldLabel.data( 'decimal-separator' ) );
+
+				const rounded: number    = Utils.round( parseFloat( label ), decimals ),
+				      sep: string        = $fieldLabel.data( 'decimal-separator' ),
+				      stripZeros: boolean = 'yes' === $fieldLabel.data( 'strip-zeros' );
+
+				if ( stripZeros ) {
+					label = rounded.toString().replace( '.', sep );
+				}
+				else {
+					label = Utils.formatNumber( rounded, decimals, '', sep, null );
+				}
+
 			}
 
 			// Check if a template exists for the label

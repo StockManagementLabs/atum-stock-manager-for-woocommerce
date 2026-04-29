@@ -1,9 +1,8 @@
+@use "sass:math";
 @use "../common/mixins/border-radius" as *;
 @use "../common/mixins/reset-text" as *;
 @use "../common/mixins/rfs" as *;
 @use "../common/variables" as *;
-
-@use "sass:math";
 
 // Base class
 .tooltip {

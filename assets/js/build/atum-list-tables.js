@@ -942,7 +942,7 @@ var TableCellPopovers = (function (_super) {
             if (_this.dateTimePicker) {
                 var $dateInputs = $activePopover.find('.atum-datepicker');
                 if ($dateInputs.length) {
-                    _this.dateTimePicker.addDateTimePickers($dateInputs);
+                    _this.dateTimePicker.addDateTimePickers($dateInputs, { keepInvalid: true });
                 }
             }
             if (!$metaInput.hasClass('atum-datepicker')) {
@@ -3847,7 +3847,7 @@ var Utils = {
         if (precision === void 0) { precision = this.settings.number.precision; }
         if (thousandsSep === void 0) { thousandsSep = this.settings.number.thousandsSep; }
         if (decimalsSep === void 0) { decimalsSep = this.settings.number.decimalsSep; }
-        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = 1; }
+        if (minimumSignificantDigits === void 0) { minimumSignificantDigits = null; }
         if (number > 999 && thousandsSep === decimalsSep && !Number.isInteger(number)) {
             thousandsSep = '';
         }
@@ -4989,7 +4989,7 @@ __webpack_require__.r(__webpack_exports__);
 				    date: date.clone()
 			    });
 			
-			    input.blur();
+			    input.trigger('blur');
 			
 			    viewDate = date.clone();
 			
@@ -9900,7 +9900,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 				return function()
 				{
 					arrowScroll(dirX, dirY, this, ele);
-					this.blur();
+					this.trigger('blur');
 					return false;
 				};
 			}

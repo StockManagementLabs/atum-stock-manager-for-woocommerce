@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../../common/breakpoints" as *;
 @use "../../common/mixins/utilities" as *;
 @use "../../common/variables" as *;
@@ -5,8 +6,6 @@
 //
 // "Videos" widget
 //-----------------
-
-@use "sass:math";
 
 .atum_videos_widget {
 	.grid-stack-item-content {
@@ -152,7 +151,7 @@
 				right: 2px;
 				color: var(--white);
 				background-color: var(--black);
-				border-radius: 2px;
+				border-radius: $border-radius;
 				font-size: 9px;
 				line-height: 1;
 				padding: 2px 3px;

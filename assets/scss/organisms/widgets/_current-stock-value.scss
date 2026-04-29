@@ -1,3 +1,4 @@
+@use "../../common/variables" as *;
 @use "../../common/breakpoints" as *;
 
 //
@@ -89,7 +90,7 @@
 		}
 		
 		.items-without-purchase-price {
-			border-radius: 4px;
+			border-radius: $border-radius;
 			background-color: var(--dash-widget-current-stock-value-bg);
 			font-size: 12px;
 			line-height: 1;

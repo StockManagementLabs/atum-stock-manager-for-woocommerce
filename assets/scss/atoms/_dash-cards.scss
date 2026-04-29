@@ -17,7 +17,7 @@ $card-text:             var(--dash-card-text);
 	margin: math.div($grid-gutter-width, 2) math.div($grid-gutter-width, 4);
 	width: 33.3333%;
 	border: 1px solid var(--gray-400);
-	border-radius: 5px;
+	border-radius: $border-radius;
 	background: $card-bg center 1px no-repeat;
 	background-position: bottom;
 	background-size: contain;
@@ -178,7 +178,7 @@ $card-text:             var(--dash-card-text);
 			
 			.input-group {
 				background-color: var(--dash-input-group-bg);
-				border-radius: 5px;
+				border-radius: $border-radius;
 				box-shadow: 0 0 0 3px var(--dash-input-group-shadow);
 				display: flex;
 			}
