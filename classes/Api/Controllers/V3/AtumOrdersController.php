@@ -23,6 +23,7 @@ use Atum\Components\AtumOrders\Items\AtumOrderItemTax;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\Inc\Helpers;
 use Atum\PurchaseOrders\Items\POItemProduct;
+use Atum\PurchaseOrders\Models\PurchaseOrder;
 use Atum\PurchaseOrders\PurchaseOrders;
 
 
@@ -727,6 +728,23 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 			}
 		}
 
+		// Support passing unit price on REST payloads by converting it to line totals.
+		// WC/ATUM calculate "price" in responses from total/qty, so we need totals for persistence.
+		if ( isset( $posted['price'] ) || isset( $posted['quantity'] ) ) {
+			$qty = isset( $posted['quantity'] ) ? (float) $posted['quantity'] : (float) $item->get_quantity();
+			$qty = $qty > 0 ? $qty : 1;
+
+			$price = isset( $posted['price'] ) ? (float) $posted['price'] : (float) ( $item->get_order() instanceof PurchaseOrder ? $item->get_product()->get_purchase_price() : $item->get_product()->get_sale_price() );
+
+			if ( ! isset( $posted['total'] ) ) {
+				$posted['total'] = $price * $qty;
+			}
+
+			if ( ! isset( $posted['subtotal'] ) ) {
+				$posted['subtotal'] = $price * $qty;
+			}
+		}
+
 		$this->maybe_set_item_props( $item, array(
 			'name',
 			'quantity',
@@ -848,6 +866,8 @@ abstract class AtumOrdersController extends \WC_REST_Orders_Controller {
 		}
 		else {
 			$item->save();
+			// Keep the in-memory order items synced so the same REST response reflects updates.
+			$order->add_item( $item );
 		}
 
 		do_action( 'atum/api/rest_after_set_atum_order_item', $item, $posted, $action );
