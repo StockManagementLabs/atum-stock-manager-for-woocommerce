@@ -749,6 +749,10 @@
 				border: 1px solid var(--main-border-alt);
 				box-shadow: none;
 				
+				.wc-wp-version-gte-70 & {
+					height: 40px;
+				}
+				
 				&:focus {
 					border: solid 1px var(--blue);
 				}
@@ -760,6 +764,10 @@
 			
 			input[type=text], input[type=number] {
 				height: 30px;
+				
+				.wc-wp-version-gte-70 & {
+					height: 40px;
+				}
 			}
 			
 			input[type=number] {
@@ -798,11 +806,19 @@
 					font-size: 12px;
 					height: 30px;
 					line-height: 1;
+					
+					.wc-wp-version-gte-70 & {
+						height: 40px;
+					}
 				}
 				
 				.atum-select2-container {
 					height: 30px;
 					padding-bottom: 8px;
+					
+					.wc-wp-version-gte-70 & {
+						height: 40px;
+					}
 					
 					@include tablet-max {
 						width: 80%;
@@ -852,6 +868,10 @@
 					display: flex;
 					align-items: center;
 					gap: 5px;
+					
+					.wc-wp-version-gte-70 & {
+						line-height: 40px;
+					}
 					
 					> input[type=checkbox] {
 						margin: 0;
@@ -949,6 +969,10 @@
 								right: 6px;
 								position: absolute;
 								pointer-events: none;
+								
+								.wc-wp-version-gte-70 & {
+									top: 13px;
+								}
 							}
 						}
 					}
@@ -1082,6 +1106,10 @@
 				position: relative;
 				padding: 0 0 0 20px;
 				
+				.wc-wp-version-gte-70 & {
+					height: 40px;
+				}
+				
 				&:focus {
 					border-color: var(--blue);
 					
@@ -1103,13 +1131,13 @@
 					font-size: 12px;
 					line-height: 1.17px;
 					text-align: left;
-					padding-left: 13px;
+					padding-left: 23px;
 				}
 				
 				.color-picker-preview {
 					border-radius: $border-radius;
-					width: 22px;
-					height: 22px;
+					width: 32px;
+					height: 32px;
 					background-color: transparent;
 					position: absolute;
 					left: 4px;
@@ -1125,6 +1153,11 @@
 				height: 30px;
 				line-height: 30px;
 				text-transform: uppercase;
+				
+				.wc-wp-version-gte-70 & {
+					height: 40px;
+					line-height: 40px;
+				}
 				
 				&:hover {
 					background-color: var(--secondary-hover);
@@ -1300,9 +1333,9 @@
 	&:after {
 		@include atum-icon-font-family;
 		content: $atmi-magnifier;
-		padding-right: 7px;
+		padding-right: 10px;
 		font-size: 12px;
-		top: 13px;
+		top: 18px;
 		right: 0;
 		position: absolute;
 	}
