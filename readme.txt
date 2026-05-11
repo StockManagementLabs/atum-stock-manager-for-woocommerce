@@ -3,11 +3,11 @@
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
 Requires at least: 5.9
-Tested up to: 6.9.4
+Tested up to: 7.1.0
 Requires PHP: 7.4
 WC requires at least: 5.0
-WC tested up to: 10.6.1
-Stable tag: 1.9.55
+WC tested up to: 10.7.0
+Stable tag: 1.9.56
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,34 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`1.9.56`
+
+*2026-05-11*
+
+**Features**
+
+* Show the sale price in red if the product is not on-sale anymore.
+
+**Changes**
+
+* Make sure an ATUM order exists before using it.
+* Disable the ATUM Order object caching in WP Engine by default.
+* Allow passing null to the edit popover.
+* Disabled enable_action_scheduler_high_volume option as we don’t really need it anymore.
+* Cancel any posible duplicated ATUM job in Action Scheduler.
+* Do not get rid of the date values in SC datepicker inputs if they are not valid.
+* Count the "onbackorder" items as part of the out-of-stock counter in the dashboard widget.
+* Do not apply any roundings until a price is displayed.
+
+**Fixes**
+
+* WP 7 compatibility fixes.
+* Fixed deprecated .blur usage.
+* Fixed composer.json option.
+* Fixed item quantities not saving correctly through the API.
 
 ---
 
