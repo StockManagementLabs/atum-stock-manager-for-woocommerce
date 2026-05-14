@@ -15,7 +15,8 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Addons\Addons;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
+use Atum\Cache\WCProductCacheCompat;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
@@ -2287,9 +2288,12 @@ final class Helpers {
 
 		if ( ! $has_cache ) {
 
-			Globals::enable_atum_product_data_models();
-			$product = wc_get_product( $the_product );
-			Globals::disable_atum_product_data_models();
+			$product = self::wc_get_atum_product_instance( $the_product );
+
+			if ( self::should_retry_atum_product_instance_cache( $product ) ) {
+				WCProductCacheCompat::delete_cached_product_variants( $product->get_id() );
+				$product = self::wc_get_atum_product_instance( $the_product );
+			}
 
 			if ( $product instanceof \WC_Product && $use_cache && $cache_key ) {
 				// L1-only: rebuilding from ID re-runs `wc_get_product()` which already hits WC's own product / meta
@@ -2303,6 +2307,51 @@ final class Helpers {
 		}
 
 		return $product;
+
+	}
+
+	/**
+	 * Run wc_get_product() with ATUM product data models and the WC ProductCache ATUM namespace enabled.
+	 *
+	 * @since 1.9.56
+	 *
+	 * @param mixed $the_product Post object, WC product object or post ID of the product.
+	 *
+	 * @return \WC_Product|bool
+	 */
+	private static function wc_get_atum_product_instance( $the_product ) {
+
+		WCProductCacheCompat::enter_atum_product_context();
+		Globals::enable_atum_product_data_models();
+
+		try {
+			return wc_get_product( $the_product );
+		} finally {
+			Globals::disable_atum_product_data_models();
+			WCProductCacheCompat::leave_atum_product_context();
+		}
+
+	}
+
+	/**
+	 * Determine whether a WC product should be retried after clearing the ATUM namespaced ProductCache entry.
+	 *
+	 * This is a defensive fallback for WooCommerce's experimental product_instance_caching feature: if a stale
+	 * non-ATUM product is somehow found while ATUM context is active, remove only ATUM's namespaced variant and try once.
+	 *
+	 * @since 1.9.56
+	 *
+	 * @param mixed $product The product returned by wc_get_product().
+	 *
+	 * @return bool
+	 */
+	private static function should_retry_atum_product_instance_cache( $product ) {
+
+		return (
+			$product instanceof \WC_Product &&
+			! self::is_atum_product( $product ) &&
+			WCProductCacheCompat::is_product_instance_caching_enabled()
+		);
 
 	}
 

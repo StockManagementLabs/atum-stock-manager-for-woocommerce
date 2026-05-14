@@ -14,7 +14,7 @@ namespace Atum\Inc;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\FileAttachment;

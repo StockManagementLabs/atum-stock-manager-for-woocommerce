@@ -14,7 +14,7 @@ namespace Atum\Addons;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Inc\Helpers;
 
 

@@ -14,6 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Cache\AtumCache;
 use Atum\Inc\Helpers;
 
 class AtumAdminModal {

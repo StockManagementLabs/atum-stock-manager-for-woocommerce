@@ -14,6 +14,7 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Cache\AtumCache;
 
 class AtumMarketingPopup {
 

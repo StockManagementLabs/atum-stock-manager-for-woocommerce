@@ -10,7 +10,7 @@
  * @since          1.5.0
  */
 
-namespace Atum\Components;
+namespace Atum\Cache;
 
 defined( 'ABSPATH' ) || die;
 

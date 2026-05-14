@@ -13,6 +13,7 @@ namespace Atum;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Cache\WCProductCacheCompat;
 use Atum\Components\AtumAdminNotices;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
@@ -59,6 +60,10 @@ class Bootstrap {
 	 * @since 0.0.2
 	 */
 	private function __construct() {
+
+		// Must be registered as soon as possible because Woo ProductCache
+		// memoizes its cache engine the first time wc_get_product() is called.
+		WCProductCacheCompat::init();
 
 		// Check all the requirements before bootstrapping.
 		add_action( 'plugins_loaded', array( $this, 'maybe_bootstrap' ) );

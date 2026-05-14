@@ -15,7 +15,7 @@ namespace Atum\Addons;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumAdminNotices;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;

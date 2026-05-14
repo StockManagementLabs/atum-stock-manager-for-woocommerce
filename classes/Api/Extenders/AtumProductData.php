@@ -16,7 +16,7 @@ namespace Atum\Api\Extenders;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Api\AtumApi;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumCapabilities;
 use Atum\Inc\Globals;

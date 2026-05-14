@@ -13,6 +13,8 @@ namespace Atum\Components;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Cache\AtumCache;
+
 final class AtumAdminNotices {
 
 	/**

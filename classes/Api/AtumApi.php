@@ -20,7 +20,7 @@ use Atum\Api\Extenders\OrderNotes;
 use Atum\Api\Extenders\Orders;
 use Atum\Api\Extenders\ProductAttributes;
 use Atum\Api\Extenders\ProductCategories;
-//use Atum\Components\AtumCache;
+//use Atum\Cache\AtumCache;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\InventoryLogs\InventoryLogs;

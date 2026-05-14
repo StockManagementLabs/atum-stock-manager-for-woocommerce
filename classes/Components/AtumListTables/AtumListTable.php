@@ -14,7 +14,7 @@ namespace Atum\Components\AtumListTables;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;

@@ -14,7 +14,7 @@ namespace Atum\Models\DataStores;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 
 class AtumProductBookingDataStoreCPT extends \WC_Product_Booking_Data_Store_CPT {
 	

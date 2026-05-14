@@ -15,7 +15,7 @@ namespace Atum\Components\AtumOrders\Models;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumAdminNotices;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Components\AtumOrders\AtumOrderPostType;

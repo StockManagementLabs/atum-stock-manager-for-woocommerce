@@ -15,7 +15,7 @@ namespace Atum\Api\Generators;
 defined( 'ABSPATH' ) || exit;
 
 use Atum\Addons\Addons;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 
 class StoreSettingsGenerator extends GeneratorBase {
 

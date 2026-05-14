@@ -14,7 +14,7 @@ namespace Atum\Suppliers;
 
 defined( 'ABSPATH' ) || die;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;

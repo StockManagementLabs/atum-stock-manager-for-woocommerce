@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 use Atum\Api\AtumApi;
 use Atum\Api\Generators\Generator;
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumOrders\AtumComments;
 use Atum\Inc\Helpers;
 

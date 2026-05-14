@@ -12,74 +12,74 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
     );
 
     public static $prefixLengthsPsr4 = array (
-        's' => 
+        's' =>
         array (
             'setasign\\Fpdi\\' => 14,
         ),
-        'W' => 
+        'W' =>
         array (
             'Westsworld\\' => 11,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
         ),
-        'M' => 
+        'M' =>
         array (
             'Mpdf\\PsrLogAwareTrait\\' => 22,
             'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
             'Madcoda\\Youtube\\' => 16,
         ),
-        'D' => 
+        'D' =>
         array (
             'DeepCopy\\' => 9,
         ),
-        'A' => 
+        'A' =>
         array (
             'Atum\\' => 5,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'setasign\\Fpdi\\' => 
+        'setasign\\Fpdi\\' =>
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
         ),
-        'Westsworld\\' => 
+        'Westsworld\\' =>
         array (
             0 => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Mpdf\\PsrLogAwareTrait\\' => 
+        'Mpdf\\PsrLogAwareTrait\\' =>
         array (
             0 => __DIR__ . '/..' . '/mpdf/psr-log-aware-trait/src',
         ),
-        'Mpdf\\PsrHttpMessageShim\\' => 
+        'Mpdf\\PsrHttpMessageShim\\' =>
         array (
             0 => __DIR__ . '/..' . '/mpdf/psr-http-message-shim/src',
         ),
-        'Mpdf\\' => 
+        'Mpdf\\' =>
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
         ),
-        'Madcoda\\Youtube\\' => 
+        'Madcoda\\Youtube\\' =>
         array (
             0 => __DIR__ . '/..' . '/madcoda/php-youtube-api/src',
         ),
-        'DeepCopy\\' => 
+        'DeepCopy\\' =>
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Atum\\' => 
+        'Atum\\' =>
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),
@@ -149,12 +149,14 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Api\\Generators\\TaxRateGenerator' => __DIR__ . '/../..' . '/classes/Api/Generators/TaxRateGenerator.php',
         'Atum\\Api\\Generators\\VariationGenerator' => __DIR__ . '/../..' . '/classes/Api/Generators/VariationGenerator.php',
         'Atum\\Bootstrap' => __DIR__ . '/../..' . '/classes/Bootstrap.php',
+        'Atum\\Cache\\AtumCache' => __DIR__ . '/../..' . '/classes/Cache/AtumCache.php',
+        'Atum\\Cache\\WCProductCacheCompat' => __DIR__ . '/../..' . '/classes/Cache/WCProductCacheCompat.php',
+        'Atum\\Cache\\WCProductCacheEngine' => __DIR__ . '/../..' . '/classes/Cache/WCProductCacheEngine.php',
         'Atum\\Cli\\AtumCli' => __DIR__ . '/../..' . '/classes/Cli/AtumCli.php',
         'Atum\\Cli\\CliCommands' => __DIR__ . '/../..' . '/classes/Cli/CliCommands.php',
         'Atum\\Components\\AtumAdminModal' => __DIR__ . '/../..' . '/classes/Components/AtumAdminModal.php',
         'Atum\\Components\\AtumAdminNotices' => __DIR__ . '/../..' . '/classes/Components/AtumAdminNotices.php',
         'Atum\\Components\\AtumBarcodes' => __DIR__ . '/../..' . '/classes/Components/AtumBarcodes.php',
-        'Atum\\Components\\AtumCache' => __DIR__ . '/../..' . '/classes/Components/AtumCache.php',
         'Atum\\Components\\AtumCalculatedProps' => __DIR__ . '/../..' . '/classes/Components/AtumCalculatedProps.php',
         'Atum\\Components\\AtumCapabilities' => __DIR__ . '/../..' . '/classes/Components/AtumCapabilities.php',
         'Atum\\Components\\AtumColors' => __DIR__ . '/../..' . '/classes/Components/AtumColors.php',

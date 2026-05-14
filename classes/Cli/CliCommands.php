@@ -12,7 +12,7 @@
 
 namespace Atum\Cli;
 
-use Atum\Components\AtumCache;
+use Atum\Cache\AtumCache;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
