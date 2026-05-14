@@ -12,7 +12,7 @@
 		
 		&.wp-heading-inline {
 			margin-left: math.div($grid-gutter-width, 2);
-			margin-right: 0px;
+			margin-right: 0;
 			
 			.page-title-action {
 				&, &:active {
@@ -21,7 +21,7 @@
 					
 					&.extend-list-table {
 						margin-right: 14px;
-						margin-left: 0px;
+						margin-left: 0;
 					}
 				}
 			}

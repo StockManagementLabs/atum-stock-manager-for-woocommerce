@@ -49,7 +49,8 @@
 			box-shadow: none;
 			display: inline-block;
 			top: 1px;
-			height: 30px;
+			height: 32px;
+			min-height: 30px;
 			
 			&:hover {
 				background-color: var(--blue-hover);

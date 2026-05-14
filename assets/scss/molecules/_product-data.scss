@@ -109,12 +109,24 @@
 					font-size: $font-size-base;
 					border: 1px solid var(--main-border-alt);
 					
+					.wc-wp-version-gte-70 & {
+						height: 40px;
+						
+						.select2-selection__arrow {
+							height: 34px !important;
+						}
+					}
+					
 					@media all and #{$bp-sm-max-wp} {
 						height: 40px; // The WC fields are higher for smaller screens.
 					}
 					
 					.select2-selection__rendered {
 						line-height: 2;
+						
+						.wc-wp-version-gte-70 & {
+							line-height: 2.7;
+						}
 						
 						@media all and #{$bp-sm-max-wp} {
 							line-height: 2.4;
