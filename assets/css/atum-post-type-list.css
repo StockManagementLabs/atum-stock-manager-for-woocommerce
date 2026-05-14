@@ -3270,10 +3270,14 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   -webkit-box-shadow: none;
           box-shadow: none;
 }
+.wc-wp-version-gte-70 .atum-list-wrapper .pagination-links #current-page-selector, .wc-wp-version-gte-70 #posts-filter .pagination-links #current-page-selector {
+  min-height: 32px;
+}
 .atum-list-wrapper .pagination-links #current-page-selector:focus, #posts-filter .pagination-links #current-page-selector:focus {
   outline: 0;
   -webkit-box-shadow: none;
           box-shadow: none;
+  background-color: transparent;
 }
 @media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links #current-page-selector, #posts-filter .pagination-links #current-page-selector {
@@ -3289,6 +3293,10 @@ body.post-php #wpfooter, body.post-new-php #wpfooter {
   background-color: var(--atum-pagination-bg);
   border: 1px solid var(--main-border-alt);
   padding: 6px 12px;
+}
+.wc-wp-version-gte-70 .atum-list-wrapper .pagination-links .tablenav-current-page, .wc-wp-version-gte-70 #posts-filter .pagination-links .tablenav-current-page {
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
 @media all and (max-width: 782px) {
   .atum-list-wrapper .pagination-links .tablenav-current-page, #posts-filter .pagination-links .tablenav-current-page {

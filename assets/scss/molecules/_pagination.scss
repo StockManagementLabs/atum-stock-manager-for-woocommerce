@@ -42,9 +42,14 @@
 			vertical-align: 0;
 			box-shadow: none;
 			
+			.wc-wp-version-gte-70 & {
+				min-height: 32px;
+			}
+			
 			&:focus {
 				outline: 0;
 				box-shadow: none;
+				background-color: transparent;
 			}
 			
 			@include tablet-max-wp {
@@ -63,6 +68,11 @@
 			background-color: var(--atum-pagination-bg);
 			border: 1px solid var(--main-border-alt);
 			padding: 6px 12px;
+			
+			.wc-wp-version-gte-70 & {
+				padding-top: 7px;
+				padding-bottom: 7px;
+			}
 			
 			@include tablet-max-wp {
 				padding: 13px 18px;
