@@ -797,7 +797,7 @@ class Suppliers {
 		if ( self::POST_TYPE !== get_post_type( $post_id ) ) {
 			return;
 		}
-		
+
 		self::delete_supplier_summary_cache( $post_id );
 	}
 
