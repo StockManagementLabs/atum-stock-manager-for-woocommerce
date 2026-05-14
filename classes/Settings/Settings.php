@@ -682,7 +682,7 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),*/
-			/* @deprecated since ATUM 1.9.56. Remove when safe. */
+			/* @deprecated since ATUM 1.9.57. Remove when safe. */
 			'disable_atum_object_caching' => array(
 				'group'   => 'advanced',
 				'section' => 'advanced',

@@ -347,7 +347,7 @@ final class AtumCache {
 	 * Add-on constants are optional because some add-ons may not be loaded on every request. Only defined
 	 * constants are added, and the list remains filterable for extensions/custom ATUM add-ons.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @return string[]
 	 */
@@ -368,7 +368,7 @@ final class AtumCache {
 	 * The schema version is also baked in, so bumping CACHE_SCHEMA_VERSION across an upgrade
 	 * orphans every entry written by older plugin versions.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param string $cache_group
 	 *
@@ -400,7 +400,7 @@ final class AtumCache {
 	/**
 	 * Rotate the version prefix for a cache group — orphans all existing keys.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param string $cache_group
 	 *
@@ -416,7 +416,7 @@ final class AtumCache {
 	/**
 	 * Apply the versioned group prefix to a logical cache key, producing the final wp_cache key.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param string $cache_key
 	 * @param string $cache_group
@@ -430,7 +430,7 @@ final class AtumCache {
 	/**
 	 * Build the L1 (in-process) lookup key.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param string $cache_group
 	 * @param string $cache_key
@@ -445,7 +445,7 @@ final class AtumCache {
 	 * Validate a cache value against an optional expected type.
 	 * Always rejects `__PHP_Incomplete_Class`.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param mixed  $value
 	 * @param string $expected_type Optional. FQCN or one of 'object'|'array'|'int'|'string'|'numeric'.
@@ -488,7 +488,7 @@ final class AtumCache {
 	 *
 	 * Only runs when ATUM_DEBUG is on. Never affects behaviour — just logs.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param mixed  $value
 	 * @param string $cache_key
@@ -515,7 +515,7 @@ final class AtumCache {
 	 * Recursively look for the first PHP object instance inside a cache payload.
 	 * Returns its class name, or empty string if no objects are found.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param mixed $value
 	 * @param int   $depth Current recursion depth (capped at 6 to avoid runaway scans).

@@ -2000,7 +2000,7 @@ final class Helpers {
 	 * Internal helper extracted from get_atum_order_model() so the same construction path is used by both
 	 * the cache-miss branch and the L2 (ID-only) rehydration branch.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param int    $atum_order_id
 	 * @param bool   $read_items

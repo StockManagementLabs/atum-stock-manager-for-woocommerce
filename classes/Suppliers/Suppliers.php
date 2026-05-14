@@ -715,22 +715,12 @@ class Suppliers {
 	}
 
 	/**
-	 * Check if product supplier's SKU is found for any other product IDs.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int    $product_id   Product ID to exclude from the query.
-	 * @param string $supplier_sku Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
-	 *
-	 * @return int
-	 */
-	/**
 	 * Get a lightweight read-only summary of a supplier — just the fields used by hot list-table loops.
 	 *
 	 * Returns a plain array (no `Supplier` model instance) so it's safe to store in the persistent cache
 	 * layer (Redis/Memcached) without serialization issues.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param int $supplier_id The supplier post ID.
 	 *
@@ -780,7 +770,7 @@ class Suppliers {
 	/**
 	 * Bust the supplier_summary cache for a single supplier ID.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param int $supplier_id
 	 */
@@ -799,7 +789,7 @@ class Suppliers {
 	 * `before_delete_post` callback that only busts the supplier_summary cache when the post being deleted is actually
 	 * an ATUM supplier. Cheaper than registering a per-post-type hook because WP fires this once per delete regardless.
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @param int $post_id
 	 */
@@ -807,9 +797,20 @@ class Suppliers {
 		if ( self::POST_TYPE !== get_post_type( $post_id ) ) {
 			return;
 		}
+		
 		self::delete_supplier_summary_cache( $post_id );
 	}
 
+	/**
+	 * Check if product supplier's SKU is found for any other product IDs.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int    $product_id   Product ID to exclude from the query.
+	 * @param string $supplier_sku Will be slashed to work around https://core.trac.wordpress.org/ticket/27421.
+	 *
+	 * @return int
+	 */
 	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
 
 		$cache_key        = AtumCache::get_cache_key( 'product_id_by_supplier_sku', [ $product_id, $supplier_sku ] );

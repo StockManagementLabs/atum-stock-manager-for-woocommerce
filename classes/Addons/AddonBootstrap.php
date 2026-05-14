@@ -133,7 +133,7 @@ abstract class AddonBootstrap {
 	/**
 	 * Get the add-on key
 	 *
-	 * @since 1.9.56
+	 * @since 1.9.57
 	 *
 	 * @return string
 	 */
