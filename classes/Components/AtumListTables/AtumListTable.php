@@ -3108,19 +3108,24 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'CHAR',
 			);
 
+			// NOTE: we used to cache the full WP_Query object here. That broke under persistent object caches
+			// (Redis/Memcached) when the cached payload came back as `__PHP_Incomplete_Class` or got dropped.
+			// Now we cache only the ID list — WP_Query.posts is already an int[] because $products_args sets
+			// 'fields' => 'ids'.
 			$in_stock_transient = AtumCache::get_transient_key( 'list_table_in_stock', $this->get_transient_args() );
 			$products_in_stock  = AtumCache::get_transient( $in_stock_transient );
 
-			if ( empty( $products_in_stock ) && ! empty( $products ) ) {
+			if ( ! is_array( $products_in_stock ) && ! empty( $products ) ) {
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-				$products_in_stock = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_products_args', $products_args ) );
+				$in_stock_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/in_stock_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+
+				$products_in_stock = $in_stock_query->found_posts ? (array) $in_stock_query->posts : [];
 				AtumCache::set_transient( $in_stock_transient, $products_in_stock );
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
-			$products_in_stock     = $products_in_stock instanceof \WP_Query && $products_in_stock->found_posts ?
-				$products_in_stock->posts : [];
+			$products_in_stock     = is_array( $products_in_stock ) ? $products_in_stock : [];
 
 			$this->id_views['in_stock']          = (array) $products_in_stock;
 			$this->count_views['count_in_stock'] = count( $products_in_stock );
@@ -3142,19 +3147,21 @@ abstract class AtumListTable extends \WP_List_Table {
 				'type'  => 'CHAR',
 			);
 
+			// Same treatment as the in-stock cache above — store the ID list, not the WP_Query instance.
 			$backorders_transient = AtumCache::get_transient_key( 'list_table_backorders', $this->get_transient_args() );
 			$products_backorders  = AtumCache::get_transient( $backorders_transient );
 
-			if ( empty( $products_backorders ) && ! empty( $products_not_stock ) ) {
+			if ( ! is_array( $products_backorders ) && ! empty( $products_not_stock ) ) {
 				add_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
-				$products_backorders = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
+				$backorders_query = new \WP_Query( apply_filters( 'atum/list_table/set_views_data/back_order_products_args', $products_args ) );
 				remove_filter( 'posts_clauses', array( $this, 'atum_product_data_query_clauses' ) );
+
+				$products_backorders = $backorders_query->found_posts ? (array) $backorders_query->posts : [];
 				AtumCache::set_transient( $backorders_transient, $products_backorders );
 			}
 
 			$this->atum_query_data = $temp_atum_query_data;
-			$products_backorders   = $products_backorders instanceof \WP_Query && $products_backorders->found_posts ?
-				$products_backorders->posts : [];
+			$products_backorders   = is_array( $products_backorders ) ? $products_backorders : [];
 
 			$this->id_views['back_order']          = (array) $products_backorders;
 			$this->count_views['count_back_order'] = count( $products_backorders );
@@ -3915,7 +3922,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		$search_term   = sanitize_text_field( urldecode( stripslashes( trim( $_REQUEST['s'] ) ) ) );
 
 		$cache_key    = AtumCache::get_cache_key( 'product_search', [ $search_column, $search_term ] );
-		$search_where = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$search_where = AtumCache::get_cache( $cache_key, $has_cache );
 
 		if ( $has_cache ) {
 			return $search_where;
@@ -4791,7 +4798,7 @@ abstract class AtumListTable extends \WP_List_Table {
 
 			// Sometimes with the general cache for this function is not enough to avoid duplicated queries.
 			$cache_key    = AtumCache::get_cache_key( 'get_children_query', $children_args );
-			$children_ids = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+			$children_ids = AtumCache::get_cache( $cache_key, $has_cache );
 
 			if ( $has_cache ) {
 				return $children_ids;

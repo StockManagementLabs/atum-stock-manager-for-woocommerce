@@ -378,7 +378,7 @@ class AtumBarcodes {
         }
 
         $cache_key        = AtumCache::get_cache_key( 'product_id_by_barcode', [ $product_id, $barcode ] );
-        $found_product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+        $found_product_id = AtumCache::get_cache( $cache_key, $has_cache );
 
         if ( ! $has_cache ) {
 
@@ -424,7 +424,7 @@ class AtumBarcodes {
         }
 
         $cache_key     = AtumCache::get_cache_key( 'term_id_by_barcode', [ $term_id, $barcode, $taxonomy ] );
-        $found_term_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+        $found_term_id = AtumCache::get_cache( $cache_key, $has_cache );
 
         if ( ! $has_cache ) {
 
@@ -469,7 +469,7 @@ class AtumBarcodes {
         }
 
         $cache_key         = AtumCache::get_cache_key( 'supplier_id_by_barcode', [ $supplier_id, $barcode ] );
-        $found_supplier_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+        $found_supplier_id = AtumCache::get_cache( $cache_key, $has_cache );
 
         if ( ! $has_cache ) {
 

@@ -83,6 +83,10 @@ class Suppliers {
 		// Register the Supplier post type.
 		add_action( 'init', array( $this, 'register_post_type' ), 5 );  // Using the same priority as WooCommerce.
 
+		// Bust the supplier_summary cache whenever a supplier is saved or removed (used by PO/MI hot loops).
+		add_action( 'save_post_' . self::POST_TYPE, array( __CLASS__, 'delete_supplier_summary_cache' ) );
+		add_action( 'before_delete_post', array( __CLASS__, 'maybe_delete_supplier_summary_cache_on_delete' ) );
+
 		// Global hooks.
 		if ( AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
 
@@ -720,10 +724,96 @@ class Suppliers {
 	 *
 	 * @return int
 	 */
+	/**
+	 * Get a lightweight read-only summary of a supplier — just the fields used by hot list-table loops.
+	 *
+	 * Returns a plain array (no `Supplier` model instance) so it's safe to store in the persistent cache
+	 * layer (Redis/Memcached) without serialization issues.
+	 *
+	 * @since 1.9.56
+	 *
+	 * @param int $supplier_id The supplier post ID.
+	 *
+	 * @return array{tax_rate: float, name: string, discount: float}|null  NULL if the supplier doesn't exist.
+	 */
+	public static function get_supplier_summary( $supplier_id ) {
+
+		$supplier_id = absint( $supplier_id );
+		if ( ! $supplier_id ) {
+			return NULL;
+		}
+
+		$cache_key = AtumCache::get_cache_key( 'supplier_summary', $supplier_id );
+		$summary   = AtumCache::get_cache( $cache_key, $has_cache );
+
+		if ( $has_cache ) {
+			return is_array( $summary ) ? $summary : NULL;
+		}
+
+		// Build the summary by spinning up the Supplier model once. After this call any subsequent hits
+		// in the same request (or any other request within the TTL) get the plain array directly.
+		$supplier = new Supplier( $supplier_id );
+
+		// The Supplier class extends AtumCPTModel, which exposes `id` via __get() and loads `$this->post` via get_post().
+		// Use the post existence as the source of truth — a non-existent supplier ID still gets `$supplier->id` set,
+		// but `$supplier->post` will be NULL.
+		if ( empty( $supplier->post ) ) {
+			return NULL;
+		}
+
+		$summary = array(
+			'tax_rate' => (float) $supplier->tax_rate,
+			'name'     => (string) $supplier->name,
+			'discount' => (float) ( method_exists( $supplier, 'get_discount' ) ? $supplier->get_discount() : 0 ),
+		);
+
+		// Long TTL — suppliers are saved infrequently. Invalidation happens via the save_post_atum_supplier
+		// and delete_post hooks registered in the Suppliers class constructor (see register_supplier_hooks).
+		AtumCache::set_cache( $cache_key, $summary, ATUM_TEXT_DOMAIN, [
+			'expire' => HOUR_IN_SECONDS
+		] );
+
+		return $summary;
+
+	}
+
+	/**
+	 * Bust the supplier_summary cache for a single supplier ID.
+	 *
+	 * @since 1.9.56
+	 *
+	 * @param int $supplier_id
+	 */
+	public static function delete_supplier_summary_cache( $supplier_id ) {
+
+		$supplier_id = absint( $supplier_id );
+		if ( ! $supplier_id ) {
+			return;
+		}
+
+		$cache_key = AtumCache::get_cache_key( 'supplier_summary', $supplier_id );
+		AtumCache::delete_cache( $cache_key );
+	}
+
+	/**
+	 * `before_delete_post` callback that only busts the supplier_summary cache when the post being deleted is actually
+	 * an ATUM supplier. Cheaper than registering a per-post-type hook because WP fires this once per delete regardless.
+	 *
+	 * @since 1.9.56
+	 *
+	 * @param int $post_id
+	 */
+	public static function maybe_delete_supplier_summary_cache_on_delete( $post_id ) {
+		if ( self::POST_TYPE !== get_post_type( $post_id ) ) {
+			return;
+		}
+		self::delete_supplier_summary_cache( $post_id );
+	}
+
 	public static function get_product_id_by_supplier_sku( $product_id, $supplier_sku ) {
 
 		$cache_key        = AtumCache::get_cache_key( 'product_id_by_supplier_sku', [ $product_id, $supplier_sku ] );
-		$found_product_id = AtumCache::get_cache( $cache_key, ATUM_TEXT_DOMAIN, FALSE, $has_cache );
+		$found_product_id = AtumCache::get_cache( $cache_key, $has_cache );
 
 		if ( ! $has_cache ) {
 

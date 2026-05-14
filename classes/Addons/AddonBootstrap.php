@@ -22,7 +22,7 @@ abstract class AddonBootstrap {
 	 *
 	 * @var string
 	 */
-	protected $addon_key = '';
+	protected static $addon_key = '';
 
 	/**
 	 * Whether the add-on was correctly bootstrapped
@@ -52,12 +52,17 @@ abstract class AddonBootstrap {
 	 */
 	public function __construct( $addon_key ) {
 
-		$this->addon_key = $addon_key;
+		self::$addon_key = $addon_key;
 
 		// Do not allow loading the add-on if it was not correctly bootstrapped.
-		if ( $this->addon_key && Addons::is_addon_bootstrapped( $this->addon_key ) ) {
+		if ( self::$addon_key && Addons::is_addon_bootstrapped( self::$addon_key ) ) {
 
 			self::$bootstrapped = TRUE;
+
+			// Register the addon cache group.
+			add_filter( 'atum/cache/groups', function ( $groups ) {
+				return array_merge( $groups, [ self::$addon_key ] );
+			} );
 
 			// If it is an admin-side-only addon, don't load it on the frontend.
 			if ( ! $this->is_admin_addon || ( $this->is_admin_addon && Helpers::is_not_front_request() ) ) {
@@ -123,6 +128,17 @@ abstract class AddonBootstrap {
 		}
 
 		return $capabilities;
+	}
+
+	/**
+	 * Get the add-on key
+	 *
+	 * @since 1.9.56
+	 *
+	 * @return string
+	 */
+	public static function get_addon_key() {
+		return self::$addon_key;
 	}
 
 }
