@@ -2,12 +2,12 @@
 
 Contributors: stockmanagementlabs, salvamb, japiera, agimeno82, dorquium
 Tags: woocommerce stock management, suppliers, purchase orders, inbound stock, inventory logs
-Requires at least: 5.9
+Requires at least: 6.8
 Tested up to: 7.0
 Requires PHP: 7.4
-WC requires at least: 5.0
+WC requires at least: 6.0
 WC tested up to: 10.7.0
-Stable tag: 1.9.56
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ WooCommerce Full Inventory Management, Purchase Orders, Suppliers, Inbound Stock
 
 == Description ==
 
-**✨ NEW IMPROVED ATUM v1.9 ✨**
+**✨ NEW IMPROVED ATUM v2.0 ✨**
 
 [youtube https://www.youtube.com/watch?v=uAUXj4vUYRs]
 
