@@ -1,20 +1,20 @@
 {
 	"compilerOptions": {
 		"baseUrl": ".",
-		"outDir": "./assets/js/build/",
-		"lib": ["es6", "dom", "es2017"],
-		"module": "es6",
-		"target": "es5",
+		"lib": [ "es2020", "dom" ],
+		"module": "esnext",
+		"target": "es2020",
+		"moduleResolution": "bundler",
 		"sourceMap": true,
 		"removeComments": true,
-		"moduleResolution": "node",
-		"typeRoots": [ "./assets/js/src/types", "./node_modules/@types"],
-		"incremental": true,
-		"tsBuildInfoFile": "./assets/js/build/buildcache",
+		"typeRoots": [ "./assets/js/src/types", "./node_modules/@types" ],
 		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"noEmit": true
 	},
 	"exclude": [
 		"node_modules",
+		"dist",
 		"./assets/js/src/types",
 		"./vendor"
 	]

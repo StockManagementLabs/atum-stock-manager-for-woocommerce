@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || die;
 
 use Atum\Components\AtumAdminNotices;
 use Atum\Cache\AtumCache;
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumException;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Helpers;
@@ -221,9 +222,7 @@ final class Addons {
 	 */
 	public function load_addons_page() {
 
-		Helpers::register_swal_scripts();
-
-		wp_register_style( 'atum-addons', ATUM_URL . 'assets/css/atum-addons.css', [ 'sweetalert2' ], ATUM_VERSION );
+		AtumAssets::register_style( 'atum-addons', 'atum-addons.css', [ 'atum-sweetalert2' ] );
 
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
@@ -238,7 +237,7 @@ final class Addons {
 			$deps[] = 'wc-jquery-blockui';
 		}
 
-		wp_register_script( 'atum-addons', ATUM_URL . 'assets/js/build/atum-addons.js', $deps, ATUM_VERSION, TRUE );
+		AtumAssets::register_script( 'atum-addons', 'atum-addons.js', $deps );
 
 		$addons_vars = array(
 			'activate'             => __( 'Activate', ATUM_TEXT_DOMAIN ),
@@ -287,7 +286,7 @@ final class Addons {
 		wp_enqueue_style( 'atum-addons' );
 
 		if ( is_rtl() ) {
-			wp_register_style( 'atum-addons-rtl', ATUM_URL . 'assets/css/atum-addons-rtl.css', [ 'atum-addons' ], ATUM_VERSION );
+			AtumAssets::register_style( 'atum-addons-rtl',  'atum-addons-rtl.css', [ 'atum-addons' ] );
 			wp_enqueue_style( 'atum-addons-rtl' );
 		}
 

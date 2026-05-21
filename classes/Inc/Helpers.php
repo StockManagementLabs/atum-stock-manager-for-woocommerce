@@ -3189,60 +3189,9 @@ final class Helpers {
 
 		return wp_doing_ajax() && ! empty( $_REQUEST['action'] ) && 'atum_' === substr( $_REQUEST['action'], 0, 5 ); // phpcs:ignore WordPress.Security.NonceVerification
 	}
-	
-	/**
-	 * Get selected visual mode style
-	 *
-	 * @since 1.5.9
-	 *
-	 * @return string
-	 */
-	public static function get_visual_mode_style() {
-
-		$theme       = AtumColors::get_user_theme();
-		$atum_colors = AtumColors::get_instance();
-
-		switch ( $theme ) {
-			case 'dark_mode':
-				return $atum_colors->get_dark_mode_colors();
-
-			case 'hc_mode':
-				return $atum_colors->get_high_contrast_mode_colors();
-
-			default:
-				return $atum_colors->get_branded_mode_colors();
-		}
-
-	}
 
 	/**
-	 * Get selected color value
-	 *
-	 * @since 1.5.9
-	 *
-	 * @param string $color_name
-	 *
-	 * @return string
-	 */
-	public static function get_color_value( $color_name ) {
-
-		return AtumColors::get_user_color( $color_name, 0 );
-
-	}
-
-	/**
-	 * Add the inline style for the ATUM colors
-	 *
-	 * @sine 1.5.9
-	 *
-	 * @param string $handle  The enqueued stylesheet handle needed to add the extra CSS styles to.
-	 */
-	public static function enqueue_atum_colors( $handle ) {
-		wp_add_inline_style( $handle, self::get_visual_mode_style() );
-	}
-
-	/**
-	 * Return the classes (product types ) to hide option groups in WC data panels
+	 * Return the classes (product types) to hide option groups in WC data panels
 	 *
 	 * @since 1.5.8.3
 	 *
@@ -4178,13 +4127,14 @@ final class Helpers {
 	}
 
 	/**
-	 * Global helper to have a standardized way to register the Sweet Alert 2 scripts
+	 * Whether the Vite dev server is active (local HMR).
 	 *
-	 * @since 1.9.34
+	 * @since 2.0.0
+	 *
+	 * @return bool
 	 */
-	public static function register_swal_scripts() {
-		wp_register_style( 'sweetalert2', ATUM_URL . 'assets/css/vendor/sweetalert2.min.css', [], ATUM_VERSION );
-		wp_register_script( 'sweetalert2', ATUM_URL . 'assets/js/vendor/sweetalert2.min.js', [], ATUM_VERSION, TRUE );
+	public static function is_vite_dev_server_active() {
+		return defined( 'ATUM_VITE_DEV_SERVER_ACTIVE' ) && ATUM_VITE_DEV_SERVER_ACTIVE;
 	}
 
 	/**

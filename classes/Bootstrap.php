@@ -105,6 +105,9 @@ class Bootstrap {
 			// Fix for authenticating with application passwords on ATUM API endpoints.
 			add_filter( 'application_password_is_api_request', array( $this, 'check_application_password_api_request' ) );
 
+			// Register isolated atum-* vendor handles (Chart.js, Bootstrap, intro.js, Hammer) before any ATUM script enqueue runs.
+			add_action( 'admin_enqueue_scripts', array( '\Atum\Components\AtumAssets', 'register_atum_vendor_scripts' ), 1 );
+
 			// Make sure the capabilities are registered.
 			if ( is_super_admin() && ! AtumCapabilities::current_user_can( 'view_admin_menu' ) ) {
 				AtumCapabilities::register_atum_capabilities();

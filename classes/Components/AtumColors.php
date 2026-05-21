@@ -1082,9 +1082,56 @@ class AtumColors {
 	 * @return string
 	 */
 	public function get_default_color( $color_name ) {
-
 		return $this->defaults[ $color_name ];
+	}
 
+	/**
+	 * Get the selected color value
+	 *
+	 * @since 1.5.9
+	 *
+	 * @param string $color_name
+	 *
+	 * @return string
+	 */
+	public static function get_color_value( $color_name ) {
+		return self::get_user_color( $color_name, 0 );
+	}
+
+	/**
+	 * Get selected visual mode style
+	 *
+	 * @since 1.5.9
+	 *
+	 * @return string
+	 */
+	public static function get_visual_mode_style() {
+
+		$theme       = self::get_user_theme();
+		$atum_colors = self::get_instance();
+
+		switch ( $theme ) {
+			case 'dark_mode':
+				return $atum_colors->get_dark_mode_colors();
+
+			case 'hc_mode':
+				return $atum_colors->get_high_contrast_mode_colors();
+
+			default:
+				return $atum_colors->get_branded_mode_colors();
+		}
+
+	}
+
+	/**
+	 * Add the inline style for the ATUM colors
+	 *
+	 * @sine 1.5.9
+	 *
+	 * @param string $handle  The enqueued stylesheet handle needed to add the extra CSS styles to.
+	 */
+	public static function enqueue_atum_colors( $handle ) {
+		wp_add_inline_style( $handle, self::get_visual_mode_style() );
 	}
 
 

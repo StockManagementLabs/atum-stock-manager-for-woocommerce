@@ -193,8 +193,8 @@ class AtumMarketingPopup {
 				'nonce' => wp_create_nonce( 'atum-marketing-popup-nonce' ),
 			);
 
-			wp_register_style( 'atum-marketing-popup', ATUM_URL . 'assets/css/atum-marketing-popup.css', array(), ATUM_VERSION );
-			wp_register_script( 'atum-marketing-popup', ATUM_URL . 'assets/js/build/atum-marketing-popup.js', array( 'jquery', 'sweetalert2' ), ATUM_VERSION, TRUE );
+			AtumAssets::register_style( 'atum-marketing-popup', 'atum-marketing-popup.css' );
+			AtumAssets::register_script( 'atum-marketing-popup', 'atum-marketing-popup.js', [ 'jquery', 'atum-sweetalert2' ] );
 			wp_localize_script( 'atum-marketing-popup', 'atumMarketingPopupVars', $marketing_popup_vars );
 
 			wp_enqueue_style( 'atum-marketing-popup' );

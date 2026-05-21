@@ -51,6 +51,14 @@ if ( ! defined( 'ATUM_URL' ) ) {
 	define( 'ATUM_URL', plugin_dir_url( __FILE__ ) );
 }
 
+if ( ! defined( 'ATUM_DIST_URL' ) ) {
+	define( 'ATUM_DIST_URL', ATUM_URL . 'dist/' );
+}
+
+if ( ! defined( 'ATUM_DIST_PATH' ) ) {
+	define( 'ATUM_DIST_PATH', ATUM_PATH . 'dist/' );
+}
+
 if ( ! defined( 'ATUM_BASENAME' ) ) {
 	define( 'ATUM_BASENAME', plugin_basename( __FILE__ ) );
 }
@@ -93,6 +101,9 @@ else {
 
 	// Use Composer's autoloader and PSR4 for naming convention.
 	require ATUM_PATH . 'vendor/autoload.php';
+
+	\Atum\Inc\ViteDevServer::maybe_bootstrap();
+
 	\Atum\Bootstrap::get_instance();
 
 }

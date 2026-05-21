@@ -20,6 +20,10 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         array (
             'Westsworld\\' => 11,
         ),
+        'V' =>
+        array (
+            'ViteWordPress\\' => 14,
+        ),
         'P' =>
         array (
             'Psr\\Log\\' => 8,
@@ -50,6 +54,10 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Westsworld\\' =>
         array (
             0 => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld',
+        ),
+        'ViteWordPress\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/mrottow/vite-wordpress/src',
         ),
         'Psr\\Log\\' =>
         array (
@@ -156,6 +164,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Cli\\CliCommands' => __DIR__ . '/../..' . '/classes/Cli/CliCommands.php',
         'Atum\\Components\\AtumAdminModal' => __DIR__ . '/../..' . '/classes/Components/AtumAdminModal.php',
         'Atum\\Components\\AtumAdminNotices' => __DIR__ . '/../..' . '/classes/Components/AtumAdminNotices.php',
+        'Atum\\Components\\AtumAssets' => __DIR__ . '/../..' . '/classes/Components/AtumAssets.php',
         'Atum\\Components\\AtumBarcodes' => __DIR__ . '/../..' . '/classes/Components/AtumBarcodes.php',
         'Atum\\Components\\AtumCalculatedProps' => __DIR__ . '/../..' . '/classes/Components/AtumCalculatedProps.php',
         'Atum\\Components\\AtumCapabilities' => __DIR__ . '/../..' . '/classes/Components/AtumCapabilities.php',
@@ -200,6 +209,7 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Inc\\Hooks' => __DIR__ . '/../..' . '/classes/Inc/Hooks.php',
         'Atum\\Inc\\Main' => __DIR__ . '/../..' . '/classes/Inc/Main.php',
         'Atum\\Inc\\Upgrade' => __DIR__ . '/../..' . '/classes/Inc/Upgrade.php',
+        'Atum\\Inc\\ViteDevServer' => __DIR__ . '/../..' . '/classes/Inc/ViteDevServer.php',
         'Atum\\Integrations\\Wpml' => __DIR__ . '/../..' . '/classes/Integrations/Wpml.php',
         'Atum\\InventoryLogs\\InventoryLogs' => __DIR__ . '/../..' . '/classes/InventoryLogs/InventoryLogs.php',
         'Atum\\InventoryLogs\\Items\\LogItemFee' => __DIR__ . '/../..' . '/classes/InventoryLogs/Items/LogItemFee.php',
@@ -539,6 +549,11 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/DummyTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'ViteWordPress\\DevServer' => __DIR__ . '/..' . '/mrottow/vite-wordpress/src/DevServer.php',
+        'ViteWordPress\\DevServerInterface' => __DIR__ . '/..' . '/mrottow/vite-wordpress/src/DevServerInterface.php',
+        'ViteWordPress\\Manifest' => __DIR__ . '/..' . '/mrottow/vite-wordpress/src/Manifest.php',
+        'ViteWordPress\\ManifestResolver' => __DIR__ . '/..' . '/mrottow/vite-wordpress/src/ManifestResolver.php',
+        'ViteWordPress\\ManifestResolverInterface' => __DIR__ . '/..' . '/mrottow/vite-wordpress/src/ManifestResolverInterface.php',
         'Westsworld\\TimeAgo' => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld/TimeAgo.php',
         'Westsworld\\TimeAgo\\Language' => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld/TimeAgo/Language.php',
         'Westsworld\\TimeAgo\\Translations\\Ar' => __DIR__ . '/..' . '/jimmiw/php-time-ago/src/Westsworld/TimeAgo/Translations/Ar.php',

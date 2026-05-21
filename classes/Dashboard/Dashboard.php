@@ -14,6 +14,7 @@ namespace Atum\Dashboard;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumWidget;
@@ -270,32 +271,29 @@ class Dashboard {
 
 			$user_widgets_layout = self::get_user_widgets_layout();
 
-			/**
-			 * Sweet Alert 2.
-			 */
-			Helpers::register_swal_scripts();
-
 			/*
 			 * Owl Carousel.
 			 */
-			wp_register_style( 'owl.carousel', ATUM_URL . 'assets/css/vendor/owl.carousel.min.css', [], ATUM_VERSION );
-			wp_register_style( 'owl.carousel.theme', ATUM_URL . 'assets/css/vendor/owl.theme.default.min.css', [], ATUM_VERSION );
+			AtumAssets::register_style( 'owl.carousel', 'owl.carousel.min.css', [], TRUE );
+			AtumAssets::register_style( 'owl.carousel.theme', 'owl.theme.default.min.css', [], TRUE );
 
 			/*
 			 * Gridstack.
 			 */
-			wp_register_script( 'atum-lodash', ATUM_URL . 'assets/js/vendor/lodash.min.js', [], ATUM_VERSION, TRUE ); // Custom handler required to not load the WP version.
-			wp_register_script( 'jquery-ui-touch', ATUM_URL . 'assets/js/vendor/jquery.ui.touch-punch.min.js', [], ATUM_VERSION, TRUE );
-			wp_register_script( 'gridstack', ATUM_URL . 'assets/js/vendor/gridstack.min.js', [ 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'atum-lodash' ], ATUM_VERSION, TRUE );
-			wp_register_script( 'gridstack-jquery-ui', ATUM_URL . 'assets/js/vendor/gridstack.jqueryui.min.js', [ 'gridstack' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_script( 'atum-lodash', 'lodash.min.js', [], TRUE ); // Required by the legacy gridstack 1.0.0-dev bundled in assets/js/vendor.
+			AtumAssets::register_script( 'jquery-ui-touch', 'jquery.ui.touch-punch.min.js', [], TRUE );
+			AtumAssets::register_script( 'gridstack', 'gridstack.min.js', [ 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-draggable', 'jquery-ui-resizable', 'jquery-ui-touch', 'atum-lodash' ], TRUE );
+			AtumAssets::register_script( 'gridstack-jquery-ui', 'gridstack.jqueryui.min.js', [ 'gridstack' ], TRUE );
 
 			/*
 			 * NiceScroll.
 			 */
-			wp_register_script( 'jquery-nice-scroll', ATUM_URL . 'assets/js/vendor/jquery.nicescroll.min.js', [ 'jquery' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_script( 'jquery-nice-scroll', 'jquery.nice-scroll.min.js', [ 'jquery' ], TRUE );
 
 			/*
-			 * Dependencies.
+			 * Dependencies. `atum-chartjs`, `atum-bootstrap`, etc. are auto-added
+			 * by `get_asset_dependencies()` if the bundle imports them (union with
+			 * the fallback below).
 			 */
 			$script_deps = [ 'gridstack', 'gridstack-jquery-ui', 'sweetalert2', 'jquery-nice-scroll', 'jquery-ui-sortable', 'wp-hooks' ];
 			$style_deps  = [ 'sweetalert2', 'owl.carousel', 'owl.carousel.theme' ];
@@ -320,18 +318,18 @@ class Dashboard {
 			/*
 			 * ATUM Dashboard scripts.
 			 */
-			wp_register_style( 'atum-dashboard', ATUM_URL . 'assets/css/atum-dashboard.css', $style_deps, ATUM_VERSION );
+			AtumAssets::register_style( 'atum-dashboard', 'atum-dashboard.css', $style_deps );
 			wp_enqueue_style( 'atum-dashboard' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-dashboard-rtl', ATUM_URL . 'assets/css/atum-dashboard-rtl.css', [ 'atum-dashboard' ], ATUM_VERSION );
+				AtumAssets::register_style( 'atum-dashboard-rtl', 'atum-dashboard-rtl.css', [ 'atum-dashboard' ] );
 				wp_enqueue_style( 'atum-dashboard-rtl' );
 			}
 
 			// Load the ATUM colors.
-			Helpers::enqueue_atum_colors( 'atum-dashboard' );
+			AtumColors::enqueue_atum_colors( 'atum-dashboard' );
 
-			wp_register_script( 'atum-dashboard', ATUM_URL . 'assets/js/build/atum-dashboard.js', $script_deps, ATUM_VERSION, TRUE );
+			AtumAssets::register_script( 'atum-dashboard', 'atum-dashboard.js', $script_deps );
 
 			$dash_vars = array(
 				'areYouSure'            => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),

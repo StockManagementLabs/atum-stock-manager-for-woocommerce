@@ -2,7 +2,7 @@ import tsParser from '@typescript-eslint/parser';
 import pluginStylistic from '@stylistic/eslint-plugin';
 
 export default [
-    { ignores: [ 'node_modules/', 'assets/js/vendor/', 'assets/js/build/' ] },
+    { ignores: [ 'node_modules/', 'dist/', 'assets/js/vendor/' ] },
     pluginStylistic.configs[ 'recommended' ],
     {
         plugins: { '@stylistic': pluginStylistic },
@@ -98,5 +98,16 @@ export default [
     {
         files          : [ 'assets/js/src/**/*.jsx' ],
         languageOptions: { parserOptions: { jsx: true } },
+    },
+    // Build tooling (Node ESM). Tab-indented like the rest of build/.
+    {
+        files          : [ 'build/**/*.mjs' ],
+        languageOptions: {
+            ecmaVersion: 2023,
+            sourceType : 'module',
+        },
+        rules: {
+            '@stylistic/indent': [ 'warn', 'tab' ],
+        },
     },
 ];

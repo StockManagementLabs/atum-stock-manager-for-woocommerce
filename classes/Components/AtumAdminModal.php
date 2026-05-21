@@ -141,13 +141,11 @@ class AtumAdminModal {
 			}
 		}
 
-		Helpers::register_swal_scripts();
-
-		wp_register_style( 'atum-admin-modals', ATUM_URL . 'assets/css/atum-admin-modals.css', [ 'sweetalert2' ], ATUM_VERSION );
+		AtumAssets::register_style( 'atum-admin-modals', 'atum-admin-modals.css', [ 'atum-sweetalert2' ] );
 
 		$js_deps = array_merge( [ 'jquery', 'sweetalert2' ], $this->js_dependencies );
 
-		wp_register_script( 'atum-admin-modals', ATUM_URL . 'assets/js/build/atum-admin-modals.js', $js_deps, ATUM_VERSION, TRUE );
+		AtumAssets::register_script( 'atum-admin-modals', 'atum-admin-modals.js', $js_deps );
 		wp_localize_script( 'atum-admin-modals', 'atumAdminModalVars', $admin_modal_vars );
 
 		wp_enqueue_style( 'atum-admin-modals' );

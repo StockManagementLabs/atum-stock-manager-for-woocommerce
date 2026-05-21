@@ -15,6 +15,7 @@ namespace Atum\Settings;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Cache\AtumCache;
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumCapabilities;
 use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
@@ -194,17 +195,14 @@ class Settings {
 
 		if ( in_array( $hook, [ Globals::ATUM_UI_HOOK . '_page_' . self::UI_SLUG, 'toplevel_page_' . self::UI_SLUG ] ) ) {
 
-			Helpers::register_swal_scripts();
 
-			wp_register_style( self::UI_SLUG, ATUM_URL . 'assets/css/atum-settings.css', [ 'sweetalert2' ], ATUM_VERSION );
-
-			wp_register_script( 'color-picker-alpha', ATUM_URL . 'assets/js/vendor/wp-color-picker-alpha.js', [ 'wp-color-picker' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_style( self::UI_SLUG, 'atum-settings.css', [ 'atum-sweetalert2' ] );
+			AtumAssets::register_script( 'color-picker-alpha', 'wp-color-picker-alpha.min.js', [ 'wp-color-picker' ], TRUE );
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-			wp_register_script( self::UI_SLUG, ATUM_URL . 'assets/js/build/atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ], ATUM_VERSION, TRUE );
-
+			AtumAssets::register_script( self::UI_SLUG, 'atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ] );
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'areYouSure'         => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'atumPrefix'         => ATUM_PREFIX,
@@ -242,12 +240,12 @@ class Settings {
 			wp_enqueue_style( self::UI_SLUG );
 
 			if ( is_rtl() ) {
-				wp_register_style( self::UI_SLUG . '-rtl', ATUM_URL . 'assets/css/atum-settings-rtl.css', array( self::UI_SLUG ), ATUM_VERSION );
+				AtumAssets::register_style(  self::UI_SLUG . '-rtl', 'atum-settings-rtl.css', [ self::UI_SLUG ] );
 				wp_enqueue_style( self::UI_SLUG . '-rtl' );
 			}
 
 			// Load the ATUM colors.
-			Helpers::enqueue_atum_colors( self::UI_SLUG );
+			AtumColors::enqueue_atum_colors( self::UI_SLUG );
 
 			wp_enqueue_editor();
 			wp_enqueue_media();

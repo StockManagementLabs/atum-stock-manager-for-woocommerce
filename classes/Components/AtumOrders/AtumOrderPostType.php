@@ -14,7 +14,9 @@ namespace Atum\Components\AtumOrders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
@@ -22,6 +24,7 @@ use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\Inc\Main;
 use Atum\PurchaseOrders\PurchaseOrders;
+use AtumExport\Integrations\Atum;
 
 
 abstract class AtumOrderPostType {
@@ -887,19 +890,16 @@ abstract class AtumOrderPostType {
 
 			global $post;
 
-			// Sweet Alert assets.
-			Helpers::register_swal_scripts();
-
 			// ATUM marketing popup.
 			$show_marketing_popup = AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 			if ( in_array( $hook, [ 'post-new.php', 'post.php' ] ) ) {
 
-				wp_register_style( 'atum-orders', ATUM_URL . 'assets/css/atum-orders.css', [ 'sweetalert2' ], ATUM_VERSION );
+				AtumAssets::register_style( 'atum-orders', 'atum-orders.css', [ 'atum-sweetalert2' ] );
 				wp_enqueue_style( 'atum-orders' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-orders-rtl', ATUM_URL . 'assets/css/atum-orders-rtl.css', [ 'atum-orders' ], ATUM_VERSION );
+					AtumAssets::register_style( 'atum-orders-rtl', 'atum-orders-rtl.css', [ 'atum-orders' ] );
 					wp_enqueue_style( 'atum-orders-rtl' );
 				}
 
@@ -908,7 +908,7 @@ abstract class AtumOrderPostType {
 					'wc-enhanced-select',
 					'wc-backbone-modal',
 					'stupidtable',
-					'sweetalert2',
+					'atum-sweetalert2',
 					'wp-hooks',
 				));
 
@@ -920,7 +920,7 @@ abstract class AtumOrderPostType {
 					$wc_dependencies[] = 'wc-jquery-blockui';
 				}
 
-				wp_register_script( 'atum-orders', ATUM_URL . 'assets/js/build/atum-orders.js', $wc_dependencies, ATUM_VERSION, TRUE );
+				AtumAssets::register_script( 'atum-orders', 'atum-orders.js', $wc_dependencies );
 
 				$vars = apply_filters( 'atum/order_post_type/js_vars', array(
 					'addNoteNonce'              => wp_create_nonce( 'add-atum-order-note' ),
@@ -979,8 +979,8 @@ abstract class AtumOrderPostType {
 					$js_dependencies[]  = 'sweetalert2';
 				}
 
-				wp_register_style( 'atum-orders-list', ATUM_URL . 'assets/css/atum-orders-list.css', $css_dependencies, ATUM_VERSION );
-				wp_register_script( 'atum-orders-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', $js_dependencies, ATUM_VERSION, TRUE );
+				AtumAssets::register_style( 'atum-orders-list', 'atum-orders-list.css', $css_dependencies );
+				AtumAssets::register_script( 'atum-orders-list', 'atum-post-type-list.js', $js_dependencies );
 
 				$vars = array(
 					'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
@@ -996,10 +996,10 @@ abstract class AtumOrderPostType {
 				wp_enqueue_script( 'atum-orders-list' );
 
 				// Load the ATUM colors.
-				Helpers::enqueue_atum_colors( 'atum-orders-list' );
+				AtumColors::enqueue_atum_colors( 'atum-orders-list' );
 
 				if ( is_rtl() ) {
-					wp_register_style( 'atum-orders-list-rtl', ATUM_URL . 'assets/css/atum-orders-list-rtl.css', array( 'atum-orders-list' ), ATUM_VERSION );
+					AtumAssets::register_style( 'atum-orders-list-rtl', 'atum-orders-list-rtl.css', [ 'atum-orders-list' ] );				
 					wp_enqueue_style( 'atum-orders-list-rtl' );
 				}
 

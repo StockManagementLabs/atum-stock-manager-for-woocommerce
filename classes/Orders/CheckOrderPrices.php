@@ -14,6 +14,7 @@ namespace Atum\Orders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAssets;
 use Atum\Inc\Helpers;
 
 
@@ -129,17 +130,15 @@ class CheckOrderPrices {
 				return;
 			}
 
-			wp_register_style( 'atum-check-orders', ATUM_URL . 'assets/css/atum-check-orders.css', [], ATUM_VERSION );
+			AtumAssets::register_style( 'atum-check-orders', 'atum-check-orders.css' );
 			wp_enqueue_style( 'atum-check-orders' );
 
-			wp_register_script( 'atum-check-orders', ATUM_URL . 'assets/js/build/atum-check-orders.js', [ 'jquery' ], ATUM_VERSION, TRUE );
-
+			AtumAssets::register_script( 'atum-check-orders', 'atum-check-orders.js', [ 'jquery' ] );
 			wp_localize_script( 'atum-check-orders', 'atumCheckOrders', array(
 				'checkingPrices'   => __( 'Checking prices...', ATUM_TEXT_DOMAIN ),
 				'checkOrderPrices' => __( 'Check order prices', ATUM_TEXT_DOMAIN ),
 				'nonce'            => wp_create_nonce( 'atum-check-order-prices-nonce' ),
 			) );
-
 			wp_enqueue_script( 'atum-check-orders' );
 
 		}

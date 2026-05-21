@@ -1,0 +1,125 @@
+/**
+ * Factory for ATUM plugin Vite configs (base + addons).
+ *
+ * - `createAtumViteConfig()` builds the **dev / serve** config (HMR in wp-admin).
+ * - `resolveAtumOptions()` exposes the resolved entry map + paths so the
+ *   production builder (`build/build.mjs`) can compile one IIFE bundle per entry.
+ *
+ * Production builds do NOT go through this `defineConfig` (Vite/Rollup cannot
+ * emit `format: 'iife'` with multiple inputs in a single build). Use
+ * `bun build/build.mjs` instead.
+ */
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { defineConfig } from 'vite';
+
+import { discoverAtumEntries, getJsEntriesForViteWordPress } from './discover-entries.mjs';
+import {
+	wordpressExternalsPlugin,
+	viteWordPressServerPlugin,
+	devImageServerPlugin,
+	getWordPressOptimizeDeps,
+	getWordPressCssConfig,
+	getWordPressServerConfig,
+	getWordPressBase,
+	getWordPressResolveConfig,
+} from './vite.shared.mjs';
+
+const ATUM_BUILD_DIR = path.dirname( fileURLToPath( import.meta.url ) );
+
+/**
+ * CSS-only entries (`.scss`) from the discovered entry map.
+ *
+ * @param {Record<string, string>} entries
+ * @returns {Record<string, string>}
+ */
+function getCssEntries( entries ) {
+	const cssEntries = {};
+
+	for ( const [ key, src ] of Object.entries( entries ) ) {
+		if ( key.startsWith( 'css/' ) ) {
+			cssEntries[ key ] = src;
+		}
+	}
+
+	return cssEntries;
+}
+
+/**
+ * Resolve the shared, fully-computed options for a plugin (paths, entries,
+ * ports). Consumed by both the serve config and the production builder.
+ *
+ * @param {object} options See `createAtumViteConfig`.
+ */
+export function resolveAtumOptions( options = {} ) {
+	const pluginRoot = options.pluginRoot || path.resolve( ATUM_BUILD_DIR, '..' );
+	const pluginSlug = options.pluginSlug || path.basename( pluginRoot );
+	const port = options.port ?? 5173;
+	const basePath = `/wp-content/plugins/${ pluginSlug }/`;
+
+	const entries = discoverAtumEntries( pluginRoot, {
+		jsFilePrefix: options.jsFilePrefix ?? 'atum-',
+		jsRename    : options.jsRename,
+	} );
+
+	const jsEntries = getJsEntriesForViteWordPress( entries );
+	const cssEntries = getCssEntries( entries );
+
+	const copyDirs = options.copyDirs ?? [
+		{
+			src  : path.join( pluginRoot, 'assets/images' ),
+			dest : path.join( pluginRoot, 'dist/images' ),
+			label: 'images/',
+		},
+	];
+
+	return {
+		pluginRoot,
+		pluginSlug,
+		port,
+		basePath,
+		entries,
+		jsEntries,
+		cssEntries,
+		copyDirs,
+		displayName: options.displayName || pluginSlug,
+		cssBanner  : options.cssBanner || '',
+	};
+}
+
+/**
+ * @param {object} options
+ * @param {string} [options.pluginSlug] WordPress plugin folder name.
+ * @param {number} [options.port] Dev server port.
+ * @param {string} [options.jsFilePrefix] Output JS prefix (e.g. atum-, atum-mi-).
+ * @param {Record<string, string>} [options.jsRename]
+ * @param {string} [options.cssBanner] Prepended to built CSS files.
+ * @param {string} [options.displayName] Post-build log label.
+ * @param {string} [options.pluginRoot] Absolute plugin root (default: parent of build/).
+ * @param {Array<{src: string, dest: string, label: string}>} [options.copyDirs]
+ */
+export function createAtumViteConfig( options = {} ) {
+	const resolved = resolveAtumOptions( options );
+	const { pluginRoot, pluginSlug, port, basePath, jsEntries } = resolved;
+
+	return defineConfig( ( { command } ) => ( {
+		root        : pluginRoot,
+		resolve     : getWordPressResolveConfig( { pluginRoot } ),
+		css         : getWordPressCssConfig(),
+		optimizeDeps: getWordPressOptimizeDeps(),
+		base        : getWordPressBase( basePath, command ),
+		server      : getWordPressServerConfig( port ),
+		plugins     : [
+			wordpressExternalsPlugin(),
+			devImageServerPlugin( {
+				assetsDir: path.join( pluginRoot, 'assets' ),
+				basePath : `/wp-content/plugins/${ pluginSlug }`,
+			} ),
+			viteWordPressServerPlugin( {
+				base   : basePath,
+				entries: jsEntries,
+			} ),
+		],
+	} ) );
+}

@@ -13,6 +13,7 @@ namespace Atum\Orders;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAssets;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 
@@ -118,10 +119,10 @@ class SearchOrdersByColumn {
 			)
 		) {
 
-			wp_register_style( 'atum-search-orders', ATUM_URL . 'assets/css/atum-search-orders.css', [], ATUM_VERSION );
-			wp_register_script( 'atum-search-orders', ATUM_URL . 'assets/js/build/atum-search-orders.js', [ 'jquery' ], ATUM_VERSION, TRUE );
-
+			AtumAssets::register_style( 'atum-search-orders', 'atum-search-orders.css' );
 			wp_enqueue_style( 'atum-search-orders' );
+
+			AtumAssets::register_script( 'atum-search-orders', 'atum-search-orders.js', [ 'jquery' ] );
 			wp_enqueue_script( 'atum-search-orders' );
 
 		}

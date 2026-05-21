@@ -16,6 +16,7 @@ namespace Atum\DataExport;
 
 defined( 'ABSPATH' ) || die;
 
+use Atum\Components\AtumAssets;
 use Atum\DataExport\Reports\HtmlReport;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -71,7 +72,7 @@ class DataExport {
 
 		if ( in_array( $hook, $allowed_pages, TRUE ) || ( 'post.php' === $hook && in_array( $post_type, apply_filters( 'atum/data_export/allowed_post_types', [] ) ) ) ) {
 
-			wp_register_script( 'atum-data-export', ATUM_URL . 'assets/js/build/atum-data-export.js', [ 'jquery', 'wp-hooks' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_script( 'atum-data-export', 'atum-data-export.js', [ 'jquery', 'wp-hooks' ] );
 
 			ob_start();
 			wc_product_dropdown_categories( array(
@@ -247,7 +248,7 @@ class DataExport {
 			$wc_admin_stylesheet = file_get_contents( WC_ABSPATH . 'assets/css/admin.css' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			$mpdf->WriteHTML( $wc_admin_stylesheet, 1 );
 
-			$atum_stylesheet = apply_filters( 'atum/data_export/report_styles', file_get_contents( ATUM_PATH . 'assets/css/atum-list.css' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+			$atum_stylesheet = apply_filters( 'atum/data_export/report_styles', file_get_contents( AtumAssets::get_dist_path( 'atum-list.css', 'css' ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 			$mpdf->WriteHTML( $atum_stylesheet, 1 );
 
 			$mpdf->WriteHTML( 'body { background: #fff; }', 1 );

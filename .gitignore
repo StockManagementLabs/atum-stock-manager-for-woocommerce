@@ -8,7 +8,7 @@ node_modules
 .vscode
 package-lock.json
 yarn.lock
-.vite-dist
+/dist
 
 # mPDF temp dir
 vendor/mpdf/mpdf/ttfontdata/*

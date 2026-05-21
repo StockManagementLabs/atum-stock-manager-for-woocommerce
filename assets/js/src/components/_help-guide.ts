@@ -349,10 +349,14 @@ export default class HelpGuide {
 
                     if ( $( targetElem ).is( $( elemSelector ) ) ) {
 
-                        let fn: Function = () => {};
+                        // Indirect evaluation via the Function constructor (no
+                        // direct `eval`: avoids scope capture and minifier issues).
+                        const fnFactory: Function = new Function( `return ( ${ this.onBeforeChangeActions[ elemSelector ] } );` );
+                        const fn: unknown = fnFactory();
 
-                        eval( `fn = ${ this.onBeforeChangeActions[ elemSelector ] }` );
-                        fn();
+                        if ( typeof fn === 'function' ) {
+                            fn();
+                        }
 
                     }
                 }

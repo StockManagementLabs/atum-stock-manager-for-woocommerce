@@ -2815,7 +2815,7 @@ final class Ajax {
 		if ( 0 === absint( $_POST['reset'] ) ) {
 
 			foreach ( AtumColors::DEFAULT_COLOR_SCHEMES as $dset => $dval ) {
-				$val = Helpers::get_color_value( $dset );
+				$val = AtumColors::get_color_value( $dset );
 
 				if ( $val && $val !== $dval ) {
 					$custom_settings[ $dset ] = $val;

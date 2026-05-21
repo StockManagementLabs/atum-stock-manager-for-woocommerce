@@ -15,6 +15,7 @@ namespace Atum\Inc;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Cache\AtumCache;
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumCalculatedProps;
 use Atum\Components\AtumOrders\Models\AtumOrderModel;
 use Atum\MetaBoxes\FileAttachment;
@@ -269,19 +270,17 @@ class Hooks {
 
 		if ( 'product' === $post_type && in_array( $hook, [ 'post.php', 'post-new.php' ], TRUE ) ) {
 
-			Helpers::register_swal_scripts();
-
 			// Enqueue styles.
-			wp_register_style( 'atum-product-data', ATUM_URL . 'assets/css/atum-product-data.css', [ 'sweetalert2' ], ATUM_VERSION );
+			AtumAssets::register_style( 'atum-product-data', 'atum-product-data.css', [ 'atum-sweetalert2' ] );
 			wp_enqueue_style( 'atum-product-data' );
 
 			if ( is_rtl() ) {
-				wp_register_style( 'atum-product-data-rtl', ATUM_URL . 'assets/css/atum-product-data-rtl.css', [ 'atum-product-data' ], ATUM_VERSION );
+				AtumAssets::register_style( 'atum-product-data-rtl', 'atum-product-data-rtl.css', [ 'atum-product-data' ] );
 				wp_enqueue_style( 'atum-product-data-rtl' );
 			}
 
 			// Enqueue scripts.
-			wp_register_script( 'atum-product-data', ATUM_URL . 'assets/js/build/atum-product-data.js', [ 'jquery', 'sweetalert2', 'wp-hooks' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_script( 'atum-product-data', 'atum-product-data.js', [ 'jquery', 'atum-sweetalert2', 'wp-hooks' ] );
 
 			$vars = apply_filters( 'atum/product_data/localized_vars', array(
 				'areYouSure'                    => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
@@ -1489,8 +1488,7 @@ class Hooks {
 	public function add_wc_product_editor_modal( $hook ) {
 
 		if ( 'woocommerce_page_wc-settings' === $hook ) {
-			Helpers::register_swal_scripts();
-			wp_register_script( 'atum_product_editor_modal', ATUM_URL . 'assets/js/build/atum-product-editor-modal.js', [ 'jquery', 'sweetalert2' ], ATUM_VERSION, TRUE );
+			AtumAssets::register_script(  'atum_product_editor_modal', 'atum-product-editor-modal.js', [ 'jquery', 'atum-sweetalert2' ] );
 			wp_localize_script( 'atum_product_editor_modal', 'atumProductEditorModalVars', array(
 				'cancel'  => __( 'Cancel', ATUM_TEXT_DOMAIN ),
 				'confirm' => __( 'Understood, continue anyway', ATUM_TEXT_DOMAIN ),

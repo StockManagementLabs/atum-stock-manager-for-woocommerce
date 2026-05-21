@@ -15,7 +15,9 @@ namespace Atum\Components\AtumListTables;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Cache\AtumCache;
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumHelpGuide;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
@@ -4526,23 +4528,20 @@ abstract class AtumListTable extends \WP_List_Table {
 	 */
 	public function enqueue_scripts( $hook ) {
 
-		// Sweet Alert 2.
-		Helpers::register_swal_scripts();
-
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
 		// List Table styles.
-		wp_register_style( 'atum-list', ATUM_URL . 'assets/css/atum-list.css', [ 'woocommerce_admin_styles', 'sweetalert2' ], ATUM_VERSION );
+		AtumAssets::register_style( 'atum-list', 'atum-list.css', [ 'woocommerce_admin_styles', 'atum-sweetalert2' ] );
 		wp_enqueue_style( 'atum-list' );
 
 		if ( is_rtl() ) {
-			wp_register_style( 'atum-list-rtl', ATUM_URL . 'assets/css/atum-list-rtl.css', [ 'atum-list' ], ATUM_VERSION );
+			AtumAssets::register_style( 'atum-list-rtl', 'atum-list-rtl.css', [ 'atum-list' ] );
 			wp_enqueue_style( 'atum-list-rtl' );
 		}
 
 		// Load the ATUM colors.
-		Helpers::enqueue_atum_colors( 'atum-list' );
+		AtumColors::enqueue_atum_colors( 'atum-list' );
 
 		// If it's the first time the user edits the List Table, load the sweetalert to show the popup.
 		// TODO: WHAT IS THIS????
@@ -4551,7 +4550,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->first_edit_key = $first_edit_key;
 		}
 
-		$deps = [ 'jquery', 'sweetalert2', 'wc-enhanced-select', 'wp-hooks' ];
+		$deps = [ 'jquery', 'atum-sweetalert2', 'wc-enhanced-select', 'wp-hooks' ];
 
 		/* @deprecated since WC 10.3.0 */
 		if ( version_compare( WC()->version, '10.3.0', '<' ) ) {
@@ -4562,7 +4561,7 @@ abstract class AtumListTable extends \WP_List_Table {
 		}
 
 		// List Table script.
-		wp_register_script( 'atum-list', ATUM_URL . 'assets/js/build/atum-list-tables.js', $deps, ATUM_VERSION, TRUE );
+		AtumAssets::register_script( 'atum-list', 'atum-list-tables.js', $deps );
 		wp_enqueue_script( 'atum-list' );
 
 		do_action( 'atum/list_table/after_enqueue_scripts', $this );

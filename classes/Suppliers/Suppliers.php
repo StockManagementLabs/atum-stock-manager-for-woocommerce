@@ -15,7 +15,9 @@ namespace Atum\Suppliers;
 defined( 'ABSPATH' ) || die;
 
 use Atum\Cache\AtumCache;
+use Atum\Components\AtumAssets;
 use Atum\Components\AtumCapabilities;
+use Atum\Components\AtumColors;
 use Atum\Components\AtumMarketingPopup;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
@@ -431,36 +433,32 @@ class Suppliers {
 				// Suppliers List Table.
 				if ( 'edit.php' === $hook ) {
 
-					// Sweet Alert 2.
-					Helpers::register_swal_scripts();
-
-					wp_register_style( 'atum-post-type-list', ATUM_URL . 'assets/css/atum-post-type-list.css', [ 'sweetalert2' ], ATUM_VERSION );
+					AtumAssets::register_style( 'atum-post-type-list', 'atum-post-type-list.css', [ 'atum-sweetalert2' ] );
 					wp_enqueue_style( 'atum-post-type-list' );
 
 					if ( is_rtl() ) {
-						wp_register_style( 'atum-post-type-list-rtl', ATUM_URL . 'assets/css/atum-post-type-list-rtl.css', [ 'atum-post-type-list' ], ATUM_VERSION );
+						AtumAssets::register_style( 'atum-post-type-list-rtl', 'atum-post-type-list-rtl.css', [ 'atum-post-type-list' ] );
 						wp_enqueue_style( 'atum-post-type-list-rtl' );
 					}
 
 					// Load the ATUM colors.
-					Helpers::enqueue_atum_colors( 'atum-post-type-list' );
+					AtumColors::enqueue_atum_colors( 'atum-post-type-list' );
 
-					wp_register_script( 'atum-post-type-list', ATUM_URL . 'assets/js/build/atum-post-type-list.js', [ 'jquery', 'wp-hooks', 'sweetalert2' ], ATUM_VERSION, TRUE );
-
+					AtumAssets::register_script( 'atum-post-type-list', 'atum-post-type-list.js', [ 'jquery', 'wp-hooks', 'atum-sweetalert2' ] );
 					wp_localize_script( 'atum-post-type-list', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 					) );
-
 					wp_enqueue_script( 'atum-post-type-list' );
 
 				}
 				// Supplier page.
 				else {
 
-					wp_register_style( 'atum-suppliers', ATUM_URL . 'assets/css/atum-suppliers.css', [], ATUM_VERSION );
+					AtumAssets::register_style( 'atum-suppliers', 'atum-suppliers.css' );
 					wp_enqueue_style( 'atum-suppliers' );
 
-					wp_enqueue_script( 'atum-suppliers', ATUM_URL . 'assets/js/build/atum-suppliers.js', [ 'jquery' ], ATUM_VERSION, TRUE );
+					AtumAssets::register_script( 'atum-suppliers', 'atum-suppliers.js', [ 'jquery' ] );
+					wp_enqueue_script( 'atum-suppliers' );
 
 				}
 
