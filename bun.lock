@@ -10,7 +10,7 @@
         "chart.js": "^4.5.1",
         "gridstack": "^12.6.0",
         "hammerjs": "^2.0.8",
-        "intro.js": "^7.2.0",
+        "intro.js": "^8.3.2",
         "jquery": "^3.7.1",
         "jquery-nice-select": "^1.1.0",
         "jquery.fancytable": "^1.0.36",
@@ -356,7 +356,7 @@
 
     "imurmurhash": ["imurmurhash@0.1.4", "", {}, "sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA=="],
 
-    "intro.js": ["intro.js@7.2.0", "", {}, "sha512-qbMfaB70rOXVBceIWNYnYTpVTiZsvQh/MIkfdQbpA9di9VBfj1GigUPfcCv3aOfsbrtPcri8vTLTA4FcEDcHSQ=="],
+    "intro.js": ["intro.js@8.3.2", "", {}, "sha512-+QsuU8P7Z/O7stAwZ8Uj6CPyKsY6xVx/7hKTVLjlIEPYHaT43XnEUUYHCln6Ehr7GlDuwczh6I8PD/HGf4EG0A=="],
 
     "is-extglob": ["is-extglob@2.1.1", "", {}, "sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ=="],
 

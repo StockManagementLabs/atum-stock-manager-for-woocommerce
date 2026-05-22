@@ -48,7 +48,7 @@ interface IGuideStep {
 
 export default class HelpGuide {
 
-    IntroJs     : any = introJs();
+    IntroJs     : any = introJs.tour();
     introOptions: IIntroOptions;
     guideSteps  : IGuideStep[] = [];
     cachedGuides: { string?: IGuideStep[] } = {};
@@ -296,16 +296,13 @@ export default class HelpGuide {
     runGuide() {
 
         $( 'body' ).addClass( 'running-atum-help-guide' );
+
+        const initialStep: number = this.step;
+
         this.IntroJs.setOptions( this.introOptions );
-
-        if ( this.step ) {
-            this.IntroJs._currentStepNumber = this.step;
-        }
-
-        // @ts-ignore
         this.IntroJs
 
-            .onexit( () => {
+            .onExit( () => {
 
                 $( 'body' ).removeClass( 'running-atum-help-guide' );
 
@@ -343,7 +340,7 @@ export default class HelpGuide {
 
             } )
             // Run actions before the guide step changes, so we can run some JS coming from the config JSON.
-            .onbeforechange( ( targetElem: HTMLElement ) => {
+            .onBeforeChange( ( targetElem: HTMLElement ) => {
 
                 for ( const elemSelector in this.onBeforeChangeActions ) {
 
@@ -363,8 +360,19 @@ export default class HelpGuide {
 
             } )
             // Run a hook when the guide step changes, so we can adjust the UI externally if needed.
-            .onchange( ( targetElem: HTMLElement ) => this.wpHooks.doAction( 'atum_helpGuide_onChange', this.guide, targetElem ) )
-            .start();
+            .onChange( ( targetElem: HTMLElement ) => this.wpHooks.doAction( 'atum_helpGuide_onChange', this.guide, targetElem ) );
+
+        const startPromise: Promise<any> = this.IntroJs.start();
+
+        if ( initialStep > 1 ) {
+            startPromise.then( () => {
+                const goToStep: Function = this.IntroJs.goToStepNumber || this.IntroJs.goToStep;
+
+                if ( typeof goToStep === 'function' ) {
+                    goToStep.call( this.IntroJs, initialStep );
+                }
+            } );
+        }
 
     }
 
