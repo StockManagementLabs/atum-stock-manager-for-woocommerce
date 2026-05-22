@@ -11,7 +11,7 @@
  */
 
 import 'jquery-nice-select/js/jquery.nice-select.min';      // From node_modules
-import 'chart.js/dist/Chart.bundle.min';                    // From node_modules
+import 'chart.js/auto';                                     // From node_modules
 import 'owl.carousel/dist/owl.carousel.min';                // From node_modules
 
 /**

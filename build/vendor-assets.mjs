@@ -37,7 +37,7 @@ export function getVendorAssets( pluginRoot ) {
 		 * another plugin shipping its own version.
 		 */
 		{
-			src    : nm( 'chart.js/dist/Chart.bundle.min.js' ),
+			src    : nm( 'chart.js/dist/chart.umd.min.js' ),
 			dest   : 'chart.bundle.min.js',
 			isolate: { capture: 'Chart', expose: 'atumChart' },
 		},

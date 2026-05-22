@@ -126,7 +126,7 @@ export function createAtumViteConfig( options = {} ) {
 			...( command === 'serve' ? [ basicSsl() ] : [] ),
 			/*
 			 * Shim FIRST so its resolveId provides virtual modules for
-			 * `import 'chart.js/dist/Chart.bundle.min'` and the rest of the
+			 * `import 'chart.js/auto'` and the rest of the
 			 * STATIC_EXTERNALS that Vite's default resolver can't find,
 			 * AND its transform prepends jQuery imports for source files
 			 * that use them as free globals (ProvidePlugin style).

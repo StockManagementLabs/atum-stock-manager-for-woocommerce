@@ -6,7 +6,7 @@
    └─────────────────────────────┘
 */
 
-import Chart from 'chart.js/dist/Chart.bundle.min';
+import Chart from 'chart.js/auto';
 import Settings from '../../../config/_settings';
 import Utils from '../../../utils/_utils';
 
@@ -26,7 +26,7 @@ export default class StatisticsWidget {
 	
 	constructor(
 		private settings: Settings,
-		private $widgetsContainer: JQuery
+		private $widgetsContainer: JQuery,
 	) {
 
 		this.$statisticsWidget = $( '.statistics-widget' );
@@ -61,7 +61,11 @@ export default class StatisticsWidget {
 			data                : this.chartData.value || [],
 			backgroundColor     : this.settings.get( 'chartColors' ).greenLight,
 			borderColor         : this.gradientGreen,
+			lineBorderColor     : this.gradientGreen,
+			barBorderColor      : this.settings.get( 'chartColors' ).greenTrans,
 			borderWidth         : 8,
+			borderSkipped       : false,
+			tension             : 0.4,
 			pointRadius         : 6,
 			pointBackgroundColor: this.settings.get( 'chartColors' ).green,
 			pointBorderColor    : '#FFF',
@@ -76,7 +80,11 @@ export default class StatisticsWidget {
 			data                : this.chartData.products || [],
 			backgroundColor     : this.settings.get( 'chartColors' ).greenBlue,
 			borderColor         : this.gradientBlue,
+			lineBorderColor     : this.gradientBlue,
+			barBorderColor      : this.settings.get( 'chartColors' ).blueTrans,
 			borderWidth         : 8,
+			borderSkipped       : false,
+			tension             : 0.4,
 			pointRadius         : 6,
 			pointBackgroundColor: this.settings.get( 'chartColors' ).blue,
 			pointBorderColor    : '#FFF',
@@ -103,92 +111,101 @@ export default class StatisticsWidget {
 						left: 30,
 					},
 				},
-				legend             : {
-					display: false,
+				plugins            : {
+					legend : {
+						display: false,
+					},
+					tooltip: {
+						enabled  : false,
+						mode     : 'nearest',
+						intersect: false,
+						external : ( context: any ) => {
+
+							const tooltip: any = context.tooltip;
+
+							$( this.statsChart.canvas ).css( 'cursor', 'pointer' );
+
+							const positionY: number = this.statsChart.canvas.offsetTop,
+							      positionX: number = this.statsChart.canvas.offsetLeft;
+
+							$( '.stats-chart-tooltip' ).css( 'opacity', 0 );
+
+							if ( !tooltip || !tooltip.opacity ) {
+								return;
+							}
+
+							if ( tooltip.dataPoints.length > 0 ) {
+
+								tooltip.dataPoints.forEach( ( dataPoint: any ) => {
+
+									if ( typeof this.statsDataSets[ dataPoint.datasetIndex ].curSymbol !== 'undefined' ) {
+
+										const curSymbol: string   = this.statsDataSets[ dataPoint.datasetIndex ].curSymbol,
+										      curPosition: string = this.statsDataSets[ dataPoint.datasetIndex ].curPosition;
+
+										if ( curPosition === 'left' ) {
+											dataPoint.formattedValue = curSymbol + dataPoint.formattedValue;
+										}
+										else {
+											dataPoint.formattedValue += curSymbol;
+										}
+
+									}
+
+									const content: string  = dataPoint.formattedValue,
+									      $tooltip: JQuery = $( `#stats-chart-tooltip-${ dataPoint.datasetIndex }` ),
+									      point: any       = dataPoint.element || {};
+
+									$tooltip.html( content );
+									$tooltip.css( {
+										opacity   : 1,
+										top       : positionY + ( point.y ?? dataPoint.y ) + 'px',
+										left      : positionX + ( point.x ?? dataPoint.x ) + 'px',
+										background: this.statsDataSets[ dataPoint.datasetIndex ].tooltipBackground,
+									} );
+
+								} );
+
+							}
+
+						},
+					},
 				},
-				hover              : {
+				interaction        : {
 					mode     : 'nearest',
 					intersect: true,
 				},
 				scales             : {
-					xAxes: [ {
-						gridLines: {
+					x: {
+						grid   : {
 							display        : false,
-							drawBorder     : false,
 							drawOnChartArea: true,
 							drawTicks      : true,
 							color          : style.getPropertyValue( '--dash-statistics-grid-lines' ),
 						},
-						ticks    : {
-							reverse  : Utils.checkRTL( 'reverse' ),
-							fontColor: style.getPropertyValue( '--dash-statistics-ticks' ),
+						border : {
+							display: false,
 						},
+						ticks  : {
+							color: style.getPropertyValue( '--dash-statistics-ticks' ),
+						},
+						reverse: <boolean> Utils.checkRTL( 'reverse' ),
 
-					} ],
-					yAxes: [ {
-						gridLines: {
+					},
+					y: {
+						grid    : {
 							display        : true,
-							drawBorder     : false,
 							drawOnChartArea: true,
 							drawTicks      : true,
 							color          : style.getPropertyValue( '--dash-statistics-grid-lines' ),
 						},
-						ticks    : {
-							fontColor: style.getPropertyValue( '--dash-statistics-ticks' ),
+						border  : {
+							display: false,
 						},
-						position : Utils.checkRTL( 'xSide' ),
-					} ],
-				},
-				tooltips           : {
-					enabled  : false,
-					mode     : 'nearest',
-					intersect: false,
-					custom   : ( tooltip: any ) => {
-
-						$( this.statsChart.canvas ).css( 'cursor', 'pointer' );
-
-						const positionY: number = this.statsChart.canvas.offsetTop,
-						      positionX: number = this.statsChart.canvas.offsetLeft;
-
-						$( '.stats-chart-tooltip' ).css( 'opacity', 0 );
-
-						if ( ! tooltip || ! tooltip.opacity ) {
-							return;
-						}
-
-						if ( tooltip.dataPoints.length > 0 ) {
-
-							tooltip.dataPoints.forEach( ( dataPoint: any ) => {
-
-								if ( typeof this.statsDataSets[ dataPoint.datasetIndex ].curSymbol !== 'undefined' ) {
-
-									const curSymbol: string   = this.statsDataSets[ dataPoint.datasetIndex ].curSymbol,
-									      curPosition: string = this.statsDataSets[ dataPoint.datasetIndex ].curPosition;
-
-									if ( curPosition === 'left' ) {
-										dataPoint.yLabel = curSymbol + dataPoint.yLabel;
-									}
-									else {
-										dataPoint.yLabel += curSymbol;
-									}
-
-								}
-
-								const content: string  = dataPoint.yLabel,
-								      $tooltip: JQuery = $( `#stats-chart-tooltip-${ dataPoint.datasetIndex }` );
-
-								$tooltip.html( content );
-								$tooltip.css( {
-									opacity   : 1,
-									top       : positionY + dataPoint.y + 'px',
-									left      : positionX + dataPoint.x + 'px',
-									background: this.statsDataSets[ dataPoint.datasetIndex ].tooltipBackground,
-								} );
-
-							} );
-
-						}
-
+						ticks   : {
+							color: style.getPropertyValue( '--dash-statistics-ticks' ),
+						},
+						position: <string> Utils.checkRTL( 'xSide' ),
 					},
 				},
 			},
@@ -280,6 +297,11 @@ export default class StatisticsWidget {
 
 			if ( chartType === 'bar' ) {
 				this.statsChartConfig.type = 'bar';
+
+				$.each( this.statsChartConfig.data.datasets, ( index: number, dataset: any ) => {
+					this.statsChartConfig.data.datasets[ index ].borderColor = dataset.barBorderColor;
+					this.statsChartConfig.data.datasets[ index ].fill = false;
+				} );
 			}
 			else {
 
@@ -287,6 +309,7 @@ export default class StatisticsWidget {
 				this.statsChartConfig.type = 'line';
 
 				$.each( this.statsChartConfig.data.datasets, ( index: number, dataset: any ) => {
+					this.statsChartConfig.data.datasets[ index ].borderColor = dataset.lineBorderColor;
 					this.statsChartConfig.data.datasets[ index ].fill = fillingMode;
 				} );
 

@@ -63,7 +63,7 @@ const STATIC_EXTERNALS = {
 	 * whatever it was before, so a third-party plugin shipping its own Chart
 	 * version cannot collide with ours (and vice versa).
 	 */
-	'chart.js/dist/Chart.bundle.min': { global: 'window.atumChart', handle: 'atum-chartjs' },
+	'chart.js/auto': { global: 'window.atumChart', handle: 'atum-chartjs' },
 
 	/*
 	 * Bootstrap 5: shipped as a single isolated UMD (window.atumBootstrap)
@@ -169,7 +169,7 @@ export function wordpressGlobalsShimPlugin() {
 		name   : 'atum-wordpress-globals-shim',
 		/*
 		 * Runs in BOTH `serve` and `build`. In dev it's the only thing that
-		 * can resolve `import 'chart.js/dist/Chart.bundle.min'` and friends
+		 * can resolve `import 'chart.js/auto'` and friends
 		 * (Vite's normal resolver chokes on the extensionless deep path);
 		 * without it the dashboard JS entry fails to load and the page
 		 * renders empty.

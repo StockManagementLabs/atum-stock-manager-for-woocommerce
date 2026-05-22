@@ -6,7 +6,7 @@
    └────────────────────────────────┘
 */
 
-import Chart from 'chart.js/dist/Chart.bundle.min';
+import Chart from 'chart.js/auto';
 import Settings from '../../../config/_settings';
 
 export default class StockControlWidget {
@@ -15,7 +15,7 @@ export default class StockControlWidget {
 	stockControlChart: any;
 	
 	constructor(
-		private settings: Settings
+		private settings: Settings,
 	) {
 		
 		this.$stockControlWidget = $('.stock-chart');
@@ -53,7 +53,7 @@ export default class StockControlWidget {
                               style.getPropertyValue('--blue'),
                           ],
                           hoverBorderColor: style.getPropertyValue('--main-text-expanded'),
-                          borderColor: style.getPropertyValue('--main-text-expanded')
+                          borderColor: style.getPropertyValue('--main-text-expanded'),
 				      }],
 				      labels  : [
 					      this.settings.get('lowStockLabel'),
@@ -64,78 +64,88 @@ export default class StockControlWidget {
 			      },
 			      options: {
 				      responsive         : true,
-				      legend             : {
-					      display: false,
-				      },
 				      maintainAspectRatio: false,
 				      animation          : {
 					      animateScale : true,
 					      animateRotate: true,
 				      },
-				      cutoutPercentage   : 25,
-				      tooltips           : {
-					      enabled: false,
-					      custom : (tooltip: any) => {
-						
-						      // Tooltip Element.
-						      const tooltipEl: HTMLElement = (<HTMLElement>$('.stock-chart-tooltip').get(0));
-						
-						      // Hide if no tooltip.
-						      if (tooltip.opacity === 0) {
-							      tooltipEl.style.opacity = '0';
-							      return;
-						      }
-						
-						      // Set caret Position.
-						      tooltipEl.classList.remove('above', 'below', 'no-transform');
-						
-						      if (tooltip.yAlign) {
-							      tooltipEl.classList.add(tooltip.yAlign);
-						      }
-						      else {
-							      tooltipEl.classList.add('no-transform');
-						      }
-						
-						      // Set Text.
-						      if (tooltip.body) {
-							
-							      let titleLines: string[] = tooltip.title || [],
-							          bodyLines: string[]  = tooltip.body.map((bodyItem: any) => {
-								          return bodyItem.lines;
-							          }),
-							          innerHtml: string    = '<thead>';
-							
-							      titleLines.forEach((title: string) => {
-								      innerHtml += '<tr><th>' + title + '</th></tr>';
-							      });
-							
-							      innerHtml += '</thead><tbody>';
-							
-							      bodyLines.forEach((body: string, i: number) => {
-								
-								      const colors: any   = tooltip.labelColors[i],
-								            style: string = `background:${colors.backgroundColor}; border-color:${colors.borderColor}; border-width: 2px`,
-								            span: string  = `<span class="stock-chart-tooltip-key" style="${style}"></span>`;
-								
-								      innerHtml += `<tr><td>${span + body}</td></tr>`;
-								
-							      });
-							
-							      innerHtml += '</tbody>';
-							
-							      tooltipEl.querySelector('table').innerHTML = innerHtml;
-							
-						      }
-						
-						      const positionY: number = this.stockControlChart.canvas.offsetTop,
-						            positionX: number = this.stockControlChart.canvas.offsetLeft;
-						
-						      // Display, position, and set styles for font.
-						      tooltipEl.style.opacity = '1';
-						      tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-						      tooltipEl.style.top = positionY + tooltip.caretY + 'px';
-						      tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-						
+				      cutout             : '25%',
+				      plugins            : {
+					      legend : {
+						      display: false,
+					      },
+					      tooltip: {
+						      enabled : false,
+						      external: ( context: any ) => {
+
+							      const tooltip: any = context.tooltip;
+
+							      // Tooltip Element.
+							      const tooltipEl: HTMLElement = <HTMLElement> $( '.stock-chart-tooltip' ).get( 0 );
+
+							      // Hide if no tooltip.
+							      if ( tooltip.opacity === 0 ) {
+								      tooltipEl.style.opacity = '0';
+
+								      return;
+							      }
+
+							      // Set caret Position.
+							      tooltipEl.classList.remove( 'above', 'below', 'no-transform' );
+
+							      if ( tooltip.yAlign ) {
+								      tooltipEl.classList.add( tooltip.yAlign );
+							      }
+							      else {
+								      tooltipEl.classList.add( 'no-transform' );
+							      }
+
+							      // Set Text.
+							      if ( tooltip.body ) {
+
+								      let titleLines: string[] = tooltip.title || [],
+								          bodyLines: string[]  = tooltip.body.map( ( bodyItem: any ) => {
+									          return bodyItem.lines;
+								          } ),
+								          innerHtml: string    = '<thead>';
+
+								      titleLines.forEach( ( title: string ) => {
+									      innerHtml += '<tr><th>' + title + '</th></tr>';
+								      } );
+
+								      innerHtml += '</thead><tbody>';
+
+								      bodyLines.forEach( ( body: string, i: number ) => {
+
+									      const colors: any   = tooltip.labelColors[ i ],
+									            style: string = `background:${ colors.backgroundColor }; border-color:${ colors.borderColor }; border-width: 2px`,
+									            span: string  = `<span class="stock-chart-tooltip-key" style="${ style }"></span>`;
+
+									      innerHtml += `<tr><td>${ span + body }</td></tr>`;
+
+								      } );
+
+								      innerHtml += '</tbody>';
+
+								      tooltipEl.querySelector( 'table' ).innerHTML = innerHtml;
+
+							      }
+
+							      const positionY: number = this.stockControlChart.canvas.offsetTop,
+							            positionX: number = this.stockControlChart.canvas.offsetLeft;
+
+							      // Display, position, and set styles for font.
+							      tooltipEl.style.opacity = '1';
+							      tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+							      tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+
+							      const padding: any    = tooltip.options.padding || 0,
+							            paddingY: number = typeof padding === 'object' ? padding.top || 0 : padding,
+							            paddingX: number = typeof padding === 'object' ? padding.left || 0 : padding;
+
+							      tooltipEl.style.padding = paddingY + 'px ' + paddingX + 'px';
+
+						      },
 					      },
 				      },
 			      },
