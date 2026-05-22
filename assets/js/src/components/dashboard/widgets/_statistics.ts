@@ -138,10 +138,16 @@ export default class StatisticsWidget {
 
 								tooltip.dataPoints.forEach( ( dataPoint: any ) => {
 
-									if ( typeof this.statsDataSets[ dataPoint.datasetIndex ].curSymbol !== 'undefined' ) {
+									const dataset: any = this.getActiveDataset( dataPoint.datasetIndex );
 
-										const curSymbol: string   = this.statsDataSets[ dataPoint.datasetIndex ].curSymbol,
-										      curPosition: string = this.statsDataSets[ dataPoint.datasetIndex ].curPosition;
+									if ( !dataset ) {
+										return;
+									}
+
+									if ( typeof dataset.curSymbol !== 'undefined' ) {
+
+										const curSymbol: string   = dataset.curSymbol,
+										      curPosition: string = dataset.curPosition;
 
 										if ( curPosition === 'left' ) {
 											dataPoint.formattedValue = curSymbol + dataPoint.formattedValue;
@@ -152,16 +158,17 @@ export default class StatisticsWidget {
 
 									}
 
-									const content: string  = dataPoint.formattedValue,
-									      $tooltip: JQuery = $( `#stats-chart-tooltip-${ dataPoint.datasetIndex }` ),
-									      point: any       = dataPoint.element || {};
+									const content: string       = dataPoint.formattedValue,
+									      tooltipIndex: number = this.getTooltipElementIndex( dataset.id ),
+									      $tooltip: JQuery     = $( `#stats-chart-tooltip-${ tooltipIndex }` ),
+									      point: any           = dataPoint.element || {};
 
 									$tooltip.html( content );
 									$tooltip.css( {
 										opacity   : 1,
 										top       : positionY + ( point.y ?? dataPoint.y ) + 'px',
 										left      : positionX + ( point.x ?? dataPoint.x ) + 'px',
-										background: this.statsDataSets[ dataPoint.datasetIndex ].tooltipBackground,
+										background: dataset.tooltipBackground,
 									} );
 
 								} );
@@ -219,6 +226,14 @@ export default class StatisticsWidget {
 		this.changeChartData();
 		this.doMobileFilterNav();
 	
+	}
+
+	getActiveDataset( datasetIndex: number ): any {
+		return this.statsChartConfig.data.datasets[ datasetIndex ];
+	}
+
+	getTooltipElementIndex( datasetId: string ): number {
+		return datasetId === 'products-chart' ? 1 : 0;
 	}
 
 	getChartLabels( dataPeriod: string ): string[] {
