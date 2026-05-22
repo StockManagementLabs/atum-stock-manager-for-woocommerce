@@ -17,7 +17,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { build, transformWithEsbuild } from 'vite';
+import { build, transformWithOxc } from 'vite';
 
 import { resolveAtumOptions } from './create-atum-vite-config.mjs';
 import { getVendorAssets } from './vendor-assets.mjs';
@@ -126,12 +126,11 @@ async function shipVendorAssets( pluginRoot ) {
 		let code   = fs.readFileSync( asset.src, 'utf8' );
 
 		if ( asset.minify ) {
-			const result = await transformWithEsbuild( code, asset.dest, {
-				minify  : true,
-				loader  : kind, // 'js' or 'css'
-				platform: 'browser',
-				target  : 'es2017',
-			} );
+			/*
+			 * Oxc minify (Vite 8). Conservative: keeps global IIFE vendor
+			 * scripts intact (no tree-shaking, unlike `minifySync`).
+			 */
+			const result = await transformWithOxc( code, asset.dest, { minify: true } );
 
 			code = result.code;
 		}
@@ -190,15 +189,20 @@ export async function runBuild( options = {} ) {
 	};
 
 	const buildBase = {
-		outDir           : 'dist',
-		emptyOutDir      : false,
-		manifest         : false,
-		sourcemap        : false,
-		minify           : true,
-		cssMinify        : true,
-		target           : 'es2020',
-		assetsInlineLimit: 0,
-		copyPublicDir    : false,
+		outDir               : 'dist',
+		emptyOutDir          : false,
+		manifest             : false,
+		sourcemap            : false,
+		minify               : true,
+		cssMinify            : true,
+		target               : 'es2020',
+		assetsInlineLimit    : 0,
+		copyPublicDir        : false,
+		/*
+		 * Each entry is a deliberate single self-contained IIFE (no code
+		 * splitting), so big admin bundles are expected — silence the noise.
+		 */
+		chunkSizeWarningLimit: 4000,
 	};
 
 	const jsList = Object.entries( jsEntries );
@@ -234,11 +238,15 @@ export async function runBuild( options = {} ) {
 				rollupOptions: {
 					input : { [ base ]: src },
 					output: {
-						format              : 'iife',
-						name                : iifeName( base ),
-						inlineDynamicImports: true,
-						entryFileNames      : `js/${ base }.js`,
-						assetFileNames      : 'images/[name][extname]',
+						format        : 'iife',
+						name          : iifeName( base ),
+						/*
+						 * `format: 'iife'` already forces a single chunk
+						 * (codeSplitting:false), which makes inlineDynamicImports
+						 * implicit — setting it explicitly only triggers a warning.
+						 */
+						entryFileNames: `js/${ base }.js`,
+						assetFileNames: 'images/[name][extname]',
 					},
 				},
 			},

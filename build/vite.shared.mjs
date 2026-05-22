@@ -166,7 +166,7 @@ function mappingForModuleId( id ) {
  */
 export function wordpressGlobalsShimPlugin() {
 	return {
-		name: 'atum-wordpress-globals-shim',
+		name   : 'atum-wordpress-globals-shim',
 		/*
 		 * Runs in BOTH `serve` and `build`. In dev it's the only thing that
 		 * can resolve `import 'chart.js/dist/Chart.bundle.min'` and friends
@@ -269,8 +269,10 @@ export function atumDevScssAutoImportPlugin( { entries, aliases = {} } ) {
 	}
 
 	const jsToScss = {};
+
 	for ( const [ jsPath, jsSlug ] of Object.entries( jsSlugByPath ) ) {
 		const cssSlug = slugAliases[ jsSlug ] || jsSlug;
+
 		if ( cssPathBySlug[ cssSlug ] ) {
 			jsToScss[ jsPath ] = cssPathBySlug[ cssSlug ];
 		}
@@ -639,8 +641,10 @@ export function getWordPressServerConfig( port ) {
 		port,
 		strictPort: true,
 		cors      : true,
-		// HTTPS via @vitejs/plugin-basic-ssl (added in createAtumViteConfig).
-		// `origin` must match so HMR + asset URLs all use the same scheme.
+		/*
+		 * HTTPS via @vitejs/plugin-basic-ssl (added in createAtumViteConfig).
+		 * `origin` must match so HMR + asset URLs all use the same scheme.
+		 */
 		origin    : `https://localhost:${ port }`,
 		watch     : {
 			/*
@@ -689,9 +693,11 @@ export function getWordPressRollupOutput() {
 				return `css/${ cssName }`;
 			}
 
-			// `base` already carries the original extension under Rolldown's
-			// `[name]` semantics — appending `[extname]` would double it
-			// (e.g. `foo.ttf.ttf`).
+			/*
+			 * `base` already carries the original extension under Rolldown's
+			 * `[name]` semantics — appending `[extname]` would double it
+			 * (e.g. `foo.ttf.ttf`).
+			 */
 			return `assets/${ base }`;
 		},
 	};
