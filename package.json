@@ -12,16 +12,16 @@
 		"lint:scripts:fix": "eslint --fix assets/js/src build"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": ">=24"
 	},
 	"devDependencies": {
-		"@stylistic/eslint-plugin": "^5.6.1",
+		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/es6-shim": "^0.31.46",
 		"@types/jquery": "2.0.68",
 		"@vitejs/plugin-basic-ssl": "^2.3.0",
-		"eslint": "^9.39.1",
+		"eslint": "^10.4.0",
 		"sass": "^1.100.0",
-		"typescript": "^6.0.3",
+		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.59.4",
 		"vite": "^8.0.14"
 	},
