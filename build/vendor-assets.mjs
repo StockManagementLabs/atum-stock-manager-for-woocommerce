@@ -1,12 +1,18 @@
 /**
  * Vendor assets pipeline for the ATUM base plugin.
  *
- * Each entry is shipped to `dist/vendor/<dest>` at build time:
- *   - `src`     Absolute path to the source (node_modules or assets/js/vendor).
- *   - `dest`    File name under `dist/vendor/`.
+ * Each entry is shipped at build time. The destination directory under `dist/`
+ * is derived from `kind`:
+ *   - `kind: 'js'`  (default) → `dist/js/vendor/<dest>`
+ *   - `kind: 'css'`           → `dist/css/vendor/<dest>`
+ *
+ * Fields:
+ *   - `src`     Absolute path to the source (node_modules or assets/{js,css}/vendor).
+ *   - `dest`    File name under the destination directory.
+ *   - `kind`    Optional. 'js' (default) or 'css'.
  *   - `minify`  Optional. Run through esbuild minifier (use for non-`.min` sources).
- *   - `isolate` Optional. Wrap the script so its global is captured under a
- *               private namespace and the original `window[capture]` is
+ *   - `isolate` Optional, JS-only. Wrap the script so its global is captured
+ *               under a private namespace and the original `window[capture]` is
  *               restored after load — same pattern as the chart.js pilot:
  *                  { capture: 'Chart', expose: 'atumChart' }
  *               Use ONLY for libraries that own a top-level global. Never for
@@ -14,19 +20,21 @@
  *               real global to work).
  *
  * @param {string} pluginRoot Absolute plugin root.
- * @returns {Array<{src:string, dest:string, minify?:boolean, isolate?:{capture:string, expose:string}}>}
+ * @returns {Array<{src:string, dest:string, kind?:'js'|'css', minify?:boolean, isolate?:{capture:string, expose:string}}>}
  */
 import path from 'path';
 
 export function getVendorAssets( pluginRoot ) {
-	const nm = ( p ) => path.join( pluginRoot, 'node_modules', p );
-	const src = ( p ) => path.join( pluginRoot, 'assets/js/vendor', p );
+	const nm     = ( p ) => path.join( pluginRoot, 'node_modules', p );
+	const srcJs  = ( p ) => path.join( pluginRoot, 'assets/js/vendor', p );
+	const srcCss = ( p ) => path.join( pluginRoot, 'assets/css/vendor', p );
 
 	return [
 		/*
-		 * Source-imported npm libraries — externalized via the globals shim
-		 * (see STATIC_EXTERNALS in build/vite.shared.mjs) and isolated so they
-		 * never collide with another plugin shipping its own version.
+		 * --- JS: Source-imported npm libraries ---
+		 * Externalized via the globals shim (see STATIC_EXTERNALS in
+		 * build/vite.shared.mjs) and isolated so they never collide with
+		 * another plugin shipping its own version.
 		 */
 		{
 			src    : nm( 'chart.js/dist/Chart.bundle.min.js' ),
@@ -40,7 +48,7 @@ export function getVendorAssets( pluginRoot ) {
 		},
 		{
 			src    : nm( 'intro.js/minified/intro.min.js' ),
-			dest   : 'intro.min.js',
+			dest   : 'introjs.min.js',
 			isolate: { capture: 'introJs', expose: 'atumIntroJs' },
 		},
 		{
@@ -50,22 +58,24 @@ export function getVendorAssets( pluginRoot ) {
 		},
 
 		/*
-		 * PHP-enqueued static vendor files migrated from `assets/js/vendor`.
-		 * Not isolated: most of these patch jQuery / jQuery UI and need to
-		 * mutate the real global. Lodash and GridStack expose top-level
-		 * globals but ATUM downstream scripts consume them by name — leaving
-		 * them as-is for now (isolation would require touching every consumer).
+		 * --- JS: PHP-enqueued static vendor files ---
+		 * Not isolated: scripts that patch jQuery need to mutate the real
+		 * global to work.
 		 */
 		{
-			src   : src( 'wp-color-picker-alpha.js' ),
+			src   : srcJs( 'wp-color-picker-alpha.js' ),
 			dest  : 'wp-color-picker-alpha.min.js',
 			minify: true,
 		},
-		{ src: src( 'sweetalert2.min.js' ),            dest: 'sweetalert2.min.js' },
-		{ src: src( 'lodash.min.js' ),                 dest: 'lodash.min.js' },
-		{ src: src( 'jquery.ui.touch-punch.min.js' ),  dest: 'jquery.ui.touch-punch.min.js' },
-		{ src: src( 'gridstack.min.js' ),              dest: 'gridstack.min.js' },
-		{ src: src( 'gridstack.jqueryui.min.js' ),     dest: 'gridstack.jqueryui.min.js' },
-		{ src: src( 'jquery.nicescroll.min.js' ),      dest: 'jquery.nicescroll.min.js' },
+		{ src: srcJs( 'sweetalert2.min.js' ),       dest: 'sweetalert2.min.js' },
+		{ src: srcJs( 'jquery.nicescroll.min.js' ), dest: 'jquery.nicescroll.min.js' },
+
+		/*
+		 * --- CSS: PHP-enqueued vendor stylesheets ---
+		 * Copied as-is to dist/css/vendor/.
+		 */
+		{ src: srcCss( 'sweetalert2.min.css' ),       dest: 'sweetalert2.min.css',       kind: 'css' },
+		{ src: srcCss( 'owl.carousel.min.css' ),      dest: 'owl.carousel.min.css',      kind: 'css' },
+		{ src: srcCss( 'owl.theme.default.min.css' ), dest: 'owl.theme.default.min.css', kind: 'css' },
 	];
 }

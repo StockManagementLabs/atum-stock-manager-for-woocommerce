@@ -13,10 +13,13 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 import { discoverAtumEntries, getJsEntriesForViteWordPress } from './discover-entries.mjs';
 import {
 	wordpressExternalsPlugin,
+	wordpressGlobalsShimPlugin,
+	atumDevScssAutoImportPlugin,
 	viteWordPressServerPlugin,
 	devImageServerPlugin,
 	getWordPressOptimizeDeps,
@@ -101,7 +104,7 @@ export function resolveAtumOptions( options = {} ) {
  */
 export function createAtumViteConfig( options = {} ) {
 	const resolved = resolveAtumOptions( options );
-	const { pluginRoot, pluginSlug, port, basePath, jsEntries } = resolved;
+	const { pluginRoot, pluginSlug, port, basePath, entries } = resolved;
 
 	return defineConfig( ( { command } ) => ( {
 		root        : pluginRoot,
@@ -111,14 +114,39 @@ export function createAtumViteConfig( options = {} ) {
 		base        : getWordPressBase( basePath, command ),
 		server      : getWordPressServerConfig( port ),
 		plugins     : [
+			/*
+			 * Self-signed cert so the dev server runs over HTTPS, matching
+			 * the parent site (HTTPS atum.loc / .local). Without this the
+			 * browser warns "Mixed Content" for every asset URL the rewriter
+			 * sends to the dev server (and some — especially images
+			 * referenced from CSS — are blocked outright). User accepts the
+			 * self-signed cert once in the browser (visit
+			 * https://localhost:5173/ and "Proceed").
+			 */
+			...( command === 'serve' ? [ basicSsl() ] : [] ),
+			/*
+			 * Shim FIRST so its resolveId provides virtual modules for
+			 * `import 'chart.js/dist/Chart.bundle.min'` and the rest of the
+			 * STATIC_EXTERNALS that Vite's default resolver can't find,
+			 * AND its transform prepends jQuery imports for source files
+			 * that use them as free globals (ProvidePlugin style).
+			 */
+			wordpressGlobalsShimPlugin(),
+			/*
+			 * Auto-import each entry's matching SCSS into its JS entry, so
+			 * Vite handles CSS as a JS module → real HMR for SCSS partials
+			 * without a page reload. Dev-only (`apply: 'serve'`); production
+			 * keeps the separate CSS build via `build/build.mjs`.
+			 */
+			atumDevScssAutoImportPlugin( { entries } ),
 			wordpressExternalsPlugin(),
 			devImageServerPlugin( {
 				assetsDir: path.join( pluginRoot, 'assets' ),
 				basePath : `/wp-content/plugins/${ pluginSlug }`,
 			} ),
 			viteWordPressServerPlugin( {
-				base   : basePath,
-				entries: jsEntries,
+				base: basePath,
+				entries,
 			} ),
 		],
 	} ) );

@@ -143,7 +143,7 @@ class AtumAdminModal {
 
 		AtumAssets::register_style( 'atum-admin-modals', 'atum-admin-modals.css', [ 'atum-sweetalert2' ] );
 
-		$js_deps = array_merge( [ 'jquery', 'sweetalert2' ], $this->js_dependencies );
+		$js_deps = array_merge( [ 'jquery', 'atum-sweetalert2' ], $this->js_dependencies );
 
 		AtumAssets::register_script( 'atum-admin-modals', 'atum-admin-modals.js', $js_deps );
 		wp_localize_script( 'atum-admin-modals', 'atumAdminModalVars', $admin_modal_vars );

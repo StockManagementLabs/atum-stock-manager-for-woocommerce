@@ -227,7 +227,7 @@ final class Addons {
 		// ATUM marketing popup.
 		AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-		$deps = [ 'jquery', 'sweetalert2' ];
+		$deps = [ 'jquery', 'atum-sweetalert2' ];
 
 		/* @deprecated since WC 10.3.0 */
 		if ( version_compare( WC()->version, '10.3.0', '<' ) ) {

@@ -202,7 +202,7 @@ class Settings {
 			// ATUM marketing popup.
 			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-			AtumAssets::register_script( self::UI_SLUG, 'atum-settings.js', [ 'jquery', 'sweetalert2', 'wp-color-picker', 'wp-hooks' ] );
+			AtumAssets::register_script( self::UI_SLUG, 'atum-settings.js', [ 'jquery', 'atum-sweetalert2', 'wp-color-picker', 'wp-hooks' ] );
 			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
 				'areYouSure'         => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'atumPrefix'         => ATUM_PREFIX,

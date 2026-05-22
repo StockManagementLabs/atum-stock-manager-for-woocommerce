@@ -51,8 +51,8 @@ export function wrapVendor( code, capture, expose ) {
 const STATIC_EXTERNALS = {
 	'jquery'                        : { global: 'window.jQuery', handle: 'jquery' },
 	'$'                             : { global: 'window.jQuery', handle: 'jquery' },
-	'sweetalert2'                   : { global: 'window.Swal', handle: 'sweetalert2' },
-	'sweetalert2-neutral'           : { global: 'window.Swal', handle: 'sweetalert2' },
+	'sweetalert2'                   : { global: 'window.Swal', handle: 'atum-sweetalert2' },
+	'sweetalert2-neutral'           : { global: 'window.Swal', handle: 'atum-sweetalert2' },
 	'moment'                        : { global: 'window.moment', handle: 'moment' },
 	/*
 	 * Keep the heavy Chart.js UMD out of atum-dashboard.js and load it as a
@@ -166,9 +166,14 @@ function mappingForModuleId( id ) {
  */
 export function wordpressGlobalsShimPlugin() {
 	return {
-		name   : 'atum-wordpress-globals-shim',
-		apply  : 'build',
+		name: 'atum-wordpress-globals-shim',
 		/*
+		 * Runs in BOTH `serve` and `build`. In dev it's the only thing that
+		 * can resolve `import 'chart.js/dist/Chart.bundle.min'` and friends
+		 * (Vite's normal resolver chokes on the extensionless deep path);
+		 * without it the dashboard JS entry fails to load and the page
+		 * renders empty.
+		 *
 		 * `pre`: prepend the jQuery imports on the raw source, before Vite's
 		 * TS/oxc transform — otherwise the transform hook is skipped for .ts.
 		 */
@@ -221,6 +226,77 @@ export function wordpressGlobalsShimPlugin() {
 			}
 
 			return { code: prologue + code, map: null };
+		},
+	};
+}
+
+/**
+ * Dev-only plugin: for each JS entry that has a matching SCSS entry by slug
+ * (`assets/js/src/dashboard.ts` ↔ `assets/scss/atum-dashboard.scss`), prepend
+ * an `import` of the SCSS into the JS source. Vite then handles the SCSS as
+ * a CSS module — compiled on the fly, injected as a `<style>` tag with HMR
+ * tracking — so partial edits hot-reload without a page refresh.
+ *
+ * Production builds ignore this plugin (`apply: 'serve'`): the CSS keeps its
+ * own per-entry build via `build/build.mjs` and is enqueued by PHP.
+ *
+ * @param {object} opts
+ * @param {Record<string, string>} opts.entries Discovered entries (both js/ and css/).
+ */
+export function atumDevScssAutoImportPlugin( { entries, aliases = {} } ) {
+	/*
+	 * Manual JS-slug → CSS-slug aliases for cases where the two entries don't
+	 * share a name. Default covers `atum-list-tables.js` (Stock Central JS)
+	 * → `atum-list.css` (Stock Central CSS), the only mismatch in the base
+	 * plugin today. Addons can pass extras via `createAtumViteConfig`.
+	 */
+	const slugAliases = {
+		'atum-list-tables': 'atum-list',
+		...aliases,
+	};
+
+	// Build a quick lookup: absolute JS source path → absolute SCSS source path.
+	const jsSlugByPath = {};
+	const cssPathBySlug = {};
+
+	for ( const [ key, src ] of Object.entries( entries ) ) {
+		if ( key.startsWith( 'js/' ) ) {
+			jsSlugByPath[ src ] = key.slice( 3 ); // 'atum-dashboard'
+		}
+		else if ( key.startsWith( 'css/' ) ) {
+			cssPathBySlug[ key.slice( 4 ) ] = src;
+		}
+	}
+
+	const jsToScss = {};
+	for ( const [ jsPath, jsSlug ] of Object.entries( jsSlugByPath ) ) {
+		const cssSlug = slugAliases[ jsSlug ] || jsSlug;
+		if ( cssPathBySlug[ cssSlug ] ) {
+			jsToScss[ jsPath ] = cssPathBySlug[ cssSlug ];
+		}
+	}
+
+	return {
+		name   : 'atum-dev-scss-auto-import',
+		apply  : 'serve',
+		enforce: 'pre',
+		transform( code, id ) {
+			const cleanId = id.split( '?' )[ 0 ].split( '#' )[ 0 ];
+			const scssPath = jsToScss[ cleanId ];
+
+			if ( !scssPath ) {
+				return null;
+			}
+
+			// Avoid double-inject if our previous run already added it.
+			if ( code.includes( scssPath ) ) {
+				return null;
+			}
+
+			return {
+				code: `import ${ JSON.stringify( scssPath ) };\n${ code }`,
+				map : null,
+			};
 		},
 	};
 }
@@ -397,7 +473,16 @@ export function viteWordPressServerPlugin( { base, entries } ) {
 				const buildMap = {};
 
 				for ( const [ outputName, srcPath ] of Object.entries( entries ) ) {
-					const outputFile = `${ outputName }.js`;
+					/*
+					 * Pick the destination extension by entry kind:
+					 *   - `js/atum-X`  → `js/atum-X.js`
+					 *   - `css/atum-X` → `css/atum-X.css`
+					 *
+					 * Used by mrottow/vite-wordpress to rewrite the WP-registered
+					 * asset URLs to the corresponding source in the dev server.
+					 */
+					const isCss = outputName.startsWith( 'css/' );
+					const outputFile = isCss ? `${ outputName }.css` : `${ outputName }.js`;
 
 					buildMap[ outputFile ] = {
 						file   : outputFile,
@@ -407,10 +492,18 @@ export function viteWordPressServerPlugin( { base, entries } ) {
 				}
 
 				const config = {
-					base,
+					/*
+					 * `base` MUST NOT have a trailing slash. mrottow's
+					 * `get_file_name()` does `explode("{base}/{outDir}/", $url)`;
+					 * if base ends in `/` the separator becomes `//dist/`
+					 * (double slash) and never matches the real asset URL —
+					 * URL rewriting silently fails and HMR does nothing.
+					 */
+					base  : base.replace( /\/+$/, '' ),
 					outDir: 'dist',
 					srcDir: '.',
-					css   : 'css',
+					// SCSS sources for the file-system fallback (.css → .scss).
+					css   : 'scss',
 					buildMap,
 				};
 
@@ -546,7 +639,20 @@ export function getWordPressServerConfig( port ) {
 		port,
 		strictPort: true,
 		cors      : true,
-		origin    : `http://localhost:${ port }`,
+		// HTTPS via @vitejs/plugin-basic-ssl (added in createAtumViteConfig).
+		// `origin` must match so HMR + asset URLs all use the same scheme.
+		origin    : `https://localhost:${ port }`,
+		watch     : {
+			/*
+			 * IDEs with "safe write" (PHPStorm/IntelliJ family, by default)
+			 * save edits as `write-tmp → rename`; chokidar's fsevents on macOS
+			 * sometimes misses that pattern and HMR never fires. Polling
+			 * sidesteps the issue and works with any editor. Modest CPU cost
+			 * (~0.5%/file) acceptable in dev.
+			 */
+			usePolling: true,
+			interval  : 300,
+		},
 	};
 }
 
@@ -569,8 +675,12 @@ export function getWordPressRollupOutput() {
 		assetFileNames: ( assetInfo ) => {
 			const base = getOutputBaseName( assetInfo );
 
-			if ( /\.(png|jpe?g|gif|svg|webp|ico)$/.test( base ) ) {
+			if ( /\.(png|jpe?g|gif|svg|webp|ico)$/i.test( base ) ) {
 				return `images/${ base }`;
+			}
+
+			if ( /\.(woff2?|ttf|otf|eot)$/i.test( base ) ) {
+				return `fonts/${ base }`;
 			}
 
 			if ( base.endsWith( '.css' ) || assetInfo.names?.some( ( n ) => n.endsWith( '.css' ) ) ) {
@@ -579,7 +689,10 @@ export function getWordPressRollupOutput() {
 				return `css/${ cssName }`;
 			}
 
-			return `assets/${ base }[extname]`;
+			// `base` already carries the original extension under Rolldown's
+			// `[name]` semantics — appending `[extname]` would double it
+			// (e.g. `foo.ttf.ttf`).
+			return `assets/${ base }`;
 		},
 	};
 }

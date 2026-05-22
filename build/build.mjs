@@ -110,9 +110,11 @@ function writeManifest( resolved ) {
  * @param {string} pluginRoot
  */
 async function shipVendorAssets( pluginRoot ) {
-	const vendorDir = path.join( pluginRoot, 'dist', 'js', 'vendor' );
+	const jsVendorDir  = path.join( pluginRoot, 'dist', 'js', 'vendor' );
+	const cssVendorDir = path.join( pluginRoot, 'dist', 'css', 'vendor' );
 
-	fs.mkdirSync( vendorDir, { recursive: true } );
+	fs.mkdirSync( jsVendorDir, { recursive: true } );
+	fs.mkdirSync( cssVendorDir, { recursive: true } );
 
 	for ( const asset of getVendorAssets( pluginRoot ) ) {
 		if ( !fs.existsSync( asset.src ) ) {
@@ -120,12 +122,13 @@ async function shipVendorAssets( pluginRoot ) {
 			continue;
 		}
 
-		let code = fs.readFileSync( asset.src, 'utf8' );
+		const kind = asset.kind === 'css' ? 'css' : 'js';
+		let code   = fs.readFileSync( asset.src, 'utf8' );
 
 		if ( asset.minify ) {
 			const result = await transformWithEsbuild( code, asset.dest, {
 				minify  : true,
-				loader  : 'js',
+				loader  : kind, // 'js' or 'css'
 				platform: 'browser',
 				target  : 'es2017',
 			} );
@@ -137,13 +140,15 @@ async function shipVendorAssets( pluginRoot ) {
 			code = wrapVendor( code, asset.isolate.capture, asset.isolate.expose );
 		}
 
-		fs.writeFileSync( path.join( vendorDir, asset.dest ), code );
+		const destDir = kind === 'css' ? cssVendorDir : jsVendorDir;
+
+		fs.writeFileSync( path.join( destDir, asset.dest ), code );
 
 		const tag = asset.isolate
 			? `(isolated → window.${ asset.isolate.expose })`
 			: asset.minify ? '(minified)' : '';
 
-		console.log( `  ✓ js/vendor/${ asset.dest } ${ tag }`.trimEnd() );
+		console.log( `  ✓ ${ kind }/vendor/${ asset.dest } ${ tag }`.trimEnd() );
 	}
 }
 
@@ -165,6 +170,15 @@ export async function runBuild( options = {} ) {
 	// Empty dist once (per-entry builds run with emptyOutDir:false to accumulate).
 	fs.rmSync( path.join( pluginRoot, 'dist' ), { recursive: true, force: true } );
 
+	/*
+	 * Asset URLs in built CSS are emitted with this base prefix, so a CSS at
+	 * `dist/css/atum-X.css` referencing an image emits `/wp-content/plugins/
+	 * <slug>/dist/images/Y.png` instead of `../images/Y.png`. This avoids any
+	 * server- or browser-side quirks normalizing the `..` traversal (some
+	 * setups eat the `..` segment and the request lands at
+	 * `dist/css/images/Y.png` → 404). Absolute paths from the domain root
+	 * are unambiguous.
+	 */
 	const baseShared = {
 		configFile  : false,
 		root        : pluginRoot,
@@ -172,7 +186,7 @@ export async function runBuild( options = {} ) {
 		resolve     : getWordPressResolveConfig( { pluginRoot } ),
 		css         : getWordPressCssConfig(),
 		optimizeDeps: getWordPressOptimizeDeps(),
-		base        : './',
+		base        : `/wp-content/plugins/${ pluginSlug }/dist/`,
 	};
 
 	const buildBase = {

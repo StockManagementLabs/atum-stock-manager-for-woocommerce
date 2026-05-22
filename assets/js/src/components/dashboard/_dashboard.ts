@@ -16,12 +16,16 @@ import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Tooltip from '../_tooltip';
 import VideosWidget from './widgets/_videos';
 
+// Gridstack v12: vanilla TS, no jQuery / lodash / jquery-ui dependencies.
+import { GridStack, type GridStackNode } from 'gridstack';
+import 'gridstack/dist/gridstack.min.css';
+
 export default class Dashboard {
 	
 	$atumDashboard: JQuery;
 	$widgetsContainer: JQuery;
 	$addWidgetModalContent: JQuery;
-	grid: any;
+	grid: GridStack;
 	
 	constructor(
 		private settings: Settings,
@@ -98,31 +102,47 @@ export default class Dashboard {
 	
 	buildWidgetsGrid() {
 
-		const $gridStackElem: any = this.$widgetsContainer.find( '.grid-stack' );
+		const gridEl: HTMLElement | undefined = this.$widgetsContainer.find( '.grid-stack' ).get( 0 ) as HTMLElement | undefined;
 
-		this.grid = $gridStackElem.gridstack( {
+		if ( !gridEl ) {
+			return;
+		}
+
+		const isMobile: boolean = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test( navigator.userAgent );
+
+		this.grid = GridStack.init( {
 			handle                : '.widget-header',
-			alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test( navigator.userAgent ),
-			verticalMargin        : 30,
+			alwaysShowResizeHandle: isMobile,
+			/*
+			 * Reproduce the legacy gridstack v1 metrics so existing user
+			 * layouts (saved as integer rows) render at the SAME pixel height:
+			 *   v1: cellHeight 60 + verticalMargin 30 → row pitch 90px,
+			 *       widget height = 60h + 30(h-1) = 90h - 30, gaps of 30px.
+			 *   v12: height = h × cellHeight, gap = 2 × margin.
+			 *   → cellHeight 90 + margin 15 gives height = 90h - 30 and 30px
+			 *     gaps — identical to v1 for every h.
+			 */
+			cellHeight            : 90,
+			margin                : 15,
 			resizable             : {
-				autoHide   : true,
-				handles    : 'se, sw',
-				containment: 'parent',
+				autoHide: true,
+				handles : 'se, sw',
 			},
-		} ).data( 'gridstack' );
+		}, gridEl );
 
-		// Bind events.
-		$gridStackElem.on( 'change', () => {
+		// Layout change → persist + refresh scrollbars.
+		this.grid.on( 'change', () => {
 			this.saveWidgetsLayout();
 			NiceScroll.addScrollBars( this.$widgetsContainer );
 		} );
 
-		// Dynamic min height for widgets.
-		$gridStackElem.on( 'resizestart', ( evt: any, ui: any ) => {
-			const minHeight = ui.element.find( '.widget-body' ).outerHeight() + ui.element.find( '.widget-header' ).outerHeight();
-			ui.element.closest( '.atum-widget' ).css( 'min-height', minHeight );
+		// Dynamic min height while resizing.
+		this.grid.on( 'resizestart', ( _event: Event, el: HTMLElement ) => {
+			const $el: JQuery = $( el );
+			const minHeight: number = ( $el.find( '.widget-body' ).outerHeight() || 0 ) + ( $el.find( '.widget-header' ).outerHeight() || 0 );
+			$el.css( 'min-height', minHeight );
 		} );
-		
+
 	}
 	
 	bindDashButtons() {
@@ -170,8 +190,19 @@ export default class Dashboard {
 				success   : ( response: any ) => {
 
 					if ( typeof response === 'object' && response.success === true ) {
-						const layout = response.data.layout;
-						this.grid.addWidget( $( response.data.widget ), null, null, layout.min, layout.height, true );
+
+						// The server returns the full `<div class="atum-widget grid-stack-item">…</div>`
+						// markup (with `data-gs-*` attributes for width/height/etc.). We append it to
+						// the grid container and let `makeWidget` adopt it; gridstack reads the
+						// dimensions from the data-attributes — no need to pass them again here.
+						const widgetEl: HTMLElement | null = ( $( response.data.widget ).get( 0 ) as HTMLElement | undefined ) ?? null;
+						const gridEl: HTMLElement | undefined = this.$widgetsContainer.find( '.grid-stack' ).get( 0 ) as HTMLElement | undefined;
+
+						if ( widgetEl && gridEl ) {
+							gridEl.appendChild( widgetEl );
+							this.grid.makeWidget( widgetEl, { autoPosition: true } );
+						}
+
 						this.initWidgets( [ widgetId ] );
 						$button.hide().siblings( '.btn-info' ).show();
 						this.toggleModalTemplateButtons( widgetId );
@@ -246,7 +277,12 @@ export default class Dashboard {
 		// Remove widget.
 		$( '.atum-widget' ).find( '.widget-close' ).on( 'click', ( evt: JQueryEventObject ) => {
 			const $widget: JQuery = $( evt.currentTarget ).closest( '.atum-widget' );
-			this.grid.removeWidget( $widget );
+			const widgetEl: HTMLElement | null = ( $widget.get( 0 ) as HTMLElement | undefined ) ?? null;
+
+			if ( widgetEl ) {
+				this.grid.removeWidget( widgetEl );
+			}
+
 			this.toggleModalTemplateButtons( $widget.data( 'gs-id' ) );
 		} );
 
@@ -362,27 +398,33 @@ export default class Dashboard {
 			data  : {
 				action  : 'atum_dashboard_save_layout',
 				security: this.$widgetsContainer.data( 'nonce' ),
-				layout  : this.serializeLayout( this.grid.grid.nodes ),
+				// `save(false)` returns the layout without inlining each
+				// widget's HTML content — just position/size descriptors.
+				layout  : this.serializeLayout( this.grid.save( false ) as GridStackNode[] ),
 			},
 		} );
 
 	}
 
-	serializeLayout( items?: any ) {
+	serializeLayout( items?: GridStackNode[] ) {
 
-		let serializedItems: any = {};
+		const serializedItems: Record<string, { x: number; y: number; w: number; h: number }> = {};
 
-		if ( typeof items === 'undefined' ) {
+		if ( !Array.isArray( items ) ) {
 			return serializedItems;
 		}
 
-		$.each( items, ( index: number, data: any ) => {
+		items.forEach( ( node: GridStackNode ) => {
 
-			serializedItems[ data.id ] = {
-				x     : data.x,
-				y     : data.y,
-				height: data.height,
-				width : data.width,
+			if ( !node.id ) {
+				return;
+			}
+
+			serializedItems[ node.id ] = {
+				x: node.x ?? 0,
+				y: node.y ?? 0,
+				w: node.w ?? 1,
+				h: node.h ?? 1,
 			};
 
 		} );

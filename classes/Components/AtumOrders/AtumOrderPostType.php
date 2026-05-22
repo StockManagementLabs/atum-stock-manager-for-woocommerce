@@ -975,8 +975,8 @@ abstract class AtumOrderPostType {
 				$js_dependencies  = [ 'jquery', 'jquery-tiptip', 'wp-hooks' ];
 
 				if ( $show_marketing_popup ) {
-					$css_dependencies[] = 'sweetalert2';
-					$js_dependencies[]  = 'sweetalert2';
+					$css_dependencies[] = 'atum-sweetalert2';
+					$js_dependencies[]  = 'atum-sweetalert2';
 				}
 
 				AtumAssets::register_style( 'atum-orders-list', 'atum-orders-list.css', $css_dependencies );

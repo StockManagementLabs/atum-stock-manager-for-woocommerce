@@ -29,7 +29,7 @@ final class AtumAssets {
 		self::register_script( 'atum-bootstrap', 'bootstrap.bundle.min.js', [], TRUE );
 		self::register_script( 'atum-introjs', 'introjs.min.js', [], TRUE );
 		self::register_script( 'atum-hammer', 'hammer.min.js', [], TRUE );
-		self::register_style( 'atum-sweetalert2', 'sweetalert2.min.css' );
+		self::register_style( 'atum-sweetalert2', 'sweetalert2.min.css', [], TRUE );
 		self::register_script( 'atum-sweetalert2', 'sweetalert2.min.js', [], TRUE );
 	}
 
@@ -45,19 +45,40 @@ final class AtumAssets {
 	 */
 	public static function get_asset_info( $slug, $attribute = NULL ) {
 
+		static $cache = [];
+
 		// If a filename was passed, strip the extension.
 		if ( str_contains( $slug, '.' ) ) {
 			$slug_parts = explode( '.', $slug );
 			$slug       = $slug_parts[0];
 		}
 
-		if ( file_exists( self::get_dist_path( "{$slug}.asset.php" ) ) ) {
-			$asset = require_once self::get_dist_path( "{$slug}.asset.php" );
+		if ( ! array_key_exists( $slug, $cache ) ) {
+
+			$js_path  = self::get_dist_path( "{$slug}.asset.php" );
+			$css_path = self::get_dist_path( "{$slug}.asset.php", 'css' );
+
+			/*
+			 * NOTE: must be `require`, NOT `require_once`. `require_once`
+			 * returns `true` on subsequent includes, which would corrupt the
+			 * per-bundle metadata (the boolean casts to `'1'` for version and
+			 * fails the `is_array()` check for dependencies). The static
+			 * `$cache` avoids re-reading the same file multiple times.
+			 */
+			if ( file_exists( $js_path ) ) {
+				$cache[ $slug ] = require $js_path;
+			}
+			elseif ( file_exists( $css_path ) ) {
+				$cache[ $slug ] = require $css_path;
+			}
+			else {
+				$cache[ $slug ] = NULL;
+			}
 		}
-		elseif ( file_exists( self::get_dist_path( "{$slug}.asset.php", 'css' ) ) ) {
-			$asset = require_once self::get_dist_path( "{$slug}.asset.php", 'css' );
-		}
-		else {
+
+		$asset = $cache[ $slug ];
+
+		if ( ! is_array( $asset ) ) {
 			return NULL;
 		}
 
@@ -120,7 +141,9 @@ final class AtumAssets {
 	 * @return string
 	 */
 	public static function get_vendor_version( $filename ) {
-		$path = self::get_dist_path( $filename, 'js', TRUE );
+		// Vendor files live under dist/js/vendor or dist/css/vendor; pick by extension.
+		$kind = 'css' === pathinfo( $filename, PATHINFO_EXTENSION ) ? 'css' : 'js';
+		$path = self::get_dist_path( $filename, $kind, TRUE );
 		return file_exists( $path ) ? (string) filemtime( $path ) : ATUM_VERSION;
 	}
 
@@ -137,10 +160,10 @@ final class AtumAssets {
 	 */
 	public static function get_dist_url( $file_name, $kind = 'js', $is_vendor = FALSE ) {
 
-		$vendor_path = $is_vendor ? 'vendor' : '';
 		$kind        = in_array( $kind, [ 'js', 'css', 'images', 'fonts' ] ) ? $kind : 'js';
+		$vendor_path = $is_vendor ? 'vendor/' : '';
 
-		return ATUM_DIST_URL . "$kind/$vendor_path/$file_name";
+		return ATUM_DIST_URL . "$kind/$vendor_path$file_name";
 
 	}
 
@@ -157,10 +180,10 @@ final class AtumAssets {
 	 */
 	public static function get_dist_path( $file_name, $kind = 'js', $is_vendor = FALSE ) {
 
-		$vendor_path = $is_vendor ? 'vendor' : '';
 		$kind        = in_array( $kind, [ 'js', 'css', 'images', 'fonts' ] ) ? $kind : 'js';
+		$vendor_path = $is_vendor ? 'vendor/' : '';
 
-		return ATUM_DIST_PATH . "$kind/$vendor_path/$file_name";
+		return ATUM_DIST_PATH . "$kind/$vendor_path$file_name";
 
 	}
 
