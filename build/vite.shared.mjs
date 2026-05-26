@@ -53,7 +53,8 @@ const STATIC_EXTERNALS = {
 	'$'                             : { global: 'window.jQuery', handle: 'jquery' },
 	'sweetalert2'                   : { global: 'window.Swal', handle: 'atum-sweetalert2' },
 	'sweetalert2-neutral'           : { global: 'window.Swal', handle: 'atum-sweetalert2' },
-	'moment'                        : { global: 'window.moment', handle: 'moment' },
+	'moment'                         : { global: 'window.moment', handle: 'moment' },
+	'moment/min/moment-with-locales.min': { global: 'window.moment', handle: 'moment' },
 	/*
 	 * Keep the heavy Chart.js UMD out of atum-dashboard.js and load it as a
 	 * WordPress-registered script (handle `atum-chartjs`).
@@ -467,7 +468,7 @@ export function wordpressAssetPhpPlugin() {
 	};
 }
 
-export function viteWordPressServerPlugin( { base, entries } ) {
+export function viteWordPressServerPlugin( { base, entries, pluginRoot } ) {
 	return {
 		name: 'atum-vite-wordpress-server',
 		configureServer( server ) {
@@ -485,10 +486,13 @@ export function viteWordPressServerPlugin( { base, entries } ) {
 					 */
 					const isCss = outputName.startsWith( 'css/' );
 					const outputFile = isCss ? `${ outputName }.css` : `${ outputName }.js`;
+					const src = pluginRoot
+						? path.relative( pluginRoot, srcPath ).split( path.sep ).join( '/' )
+						: srcPath;
 
 					buildMap[ outputFile ] = {
 						file   : outputFile,
-						src    : srcPath,
+						src,
 						isEntry: true,
 					};
 				}

@@ -6,7 +6,6 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "bun build/build.mjs",
-		"start": "bun run dev",
 		"typecheck": "tsc --noEmit",
 		"lint:scripts": "eslint assets/js/src build",
 		"lint:scripts:fix": "eslint --fix assets/js/src build"
@@ -22,7 +21,7 @@
 		"eslint": "^10.4.0",
 		"sass": "^1.100.0",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.59.4",
+		"typescript-eslint": "^8.60.0",
 		"vite": "^8.0.14"
 	},
 	"dependencies": {

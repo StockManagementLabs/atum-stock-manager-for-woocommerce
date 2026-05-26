@@ -17,6 +17,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import { build, transformWithOxc } from 'vite';
 
 import { resolveAtumOptions } from './create-atum-vite-config.mjs';
@@ -33,6 +34,34 @@ import {
 } from './vite.shared.mjs';
 
 const JS_BUILD_CONCURRENCY = Math.max( 2, Math.min( 6, os.cpus().length ) );
+
+/**
+ * Load addon/base build options from a Vite config module.
+ *
+ * Addons keep their build-specific values beside the Vite serve config and
+ * export them as `atumBuildOptions`. The older/addon-specific names are
+ * accepted so existing wrappers can be simplified incrementally.
+ *
+ * @param {string} configPath
+ * @returns {Promise<object>}
+ */
+async function loadBuildOptionsFromConfig( configPath ) {
+	const absolutePath = path.resolve( process.cwd(), configPath );
+	const configModule = await import( pathToFileURL( absolutePath ).href );
+	const options = configModule.atumBuildOptions
+		?? configModule.atumAddonOptions
+		?? configModule.atumMiOptions
+		?? configModule.atumBaseOptions;
+
+	if ( !options || typeof options !== 'object' ) {
+		throw new Error(
+			`No ATUM build options export found in ${ absolutePath }. `
+			+ 'Expected `atumBuildOptions`.',
+		);
+	}
+
+	return options;
+}
 
 /**
  * Run `worker` over `items` with at most `limit` in flight at once.
@@ -164,6 +193,7 @@ export async function runBuild( options = {} ) {
 		copyDirs,
 		displayName,
 		cssBanner,
+		vendorAssets,
 	} = resolved;
 
 	// Empty dist once (per-entry builds run with emptyOutDir:false to accumulate).
@@ -279,7 +309,9 @@ export async function runBuild( options = {} ) {
 	}
 
 	// 3) Vendor assets (npm UMDs + static files) → dist/vendor/.
-	await shipVendorAssets( pluginRoot );
+	if ( vendorAssets ) {
+		await shipVendorAssets( pluginRoot );
+	}
 
 	writeManifest( resolved );
 
@@ -292,9 +324,11 @@ const invokedDirectly
 		&& path.resolve( process.argv[ 1 ] ) === path.resolve( new URL( import.meta.url ).pathname );
 
 if ( invokedDirectly ) {
-	const { atumBaseOptions } = await import( './atum-base-options.mjs' );
+	const options = process.argv[ 2 ]
+		? await loadBuildOptionsFromConfig( process.argv[ 2 ] )
+		: ( await import( './atum-base-options.mjs' ) ).atumBaseOptions;
 
-	runBuild( atumBaseOptions ).catch( ( err ) => {
+	runBuild( options ).catch( ( err ) => {
 		console.error( err );
 		process.exit( 1 );
 	} );
