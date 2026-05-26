@@ -89,6 +89,8 @@ export function resolveAtumOptions( options = {} ) {
 		displayName: options.displayName || pluginSlug,
 		cssBanner  : options.cssBanner || '',
 		scssAliases: options.scssAliases || {},
+		cssReplacements: options.cssReplacements || [],
+		deletePaths: options.deletePaths || [],
 		vendorAssets: options.vendorAssets ?? true,
 	};
 }
@@ -104,6 +106,8 @@ export function resolveAtumOptions( options = {} ) {
  * @param {string} [options.pluginRoot] Absolute plugin root (default: parent of build/).
  * @param {Array<{src: string, dest: string, label: string}>} [options.copyDirs]
  * @param {Record<string, string>} [options.scssAliases] JS slug → CSS slug aliases for dev HMR.
+ * @param {Array<{search: string|RegExp, replace: string}>} [options.cssReplacements] Post-build CSS replacements.
+ * @param {string[]} [options.deletePaths] Post-build paths to delete (relative to plugin root or absolute).
  * @param {boolean} [options.vendorAssets] Whether to ship base vendor assets in production.
  */
 export function createAtumViteConfig( options = {} ) {

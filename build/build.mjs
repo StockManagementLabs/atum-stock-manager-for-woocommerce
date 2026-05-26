@@ -193,6 +193,8 @@ export async function runBuild( options = {} ) {
 		copyDirs,
 		displayName,
 		cssBanner,
+		cssReplacements,
+		deletePaths,
 		vendorAssets,
 	} = resolved;
 
@@ -295,6 +297,8 @@ export async function runBuild( options = {} ) {
 					displayName,
 					copyDirs,
 					cssBanner,
+					cssReplacements,
+					deletePaths,
 				} ),
 			],
 			build: {

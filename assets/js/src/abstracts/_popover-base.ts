@@ -130,6 +130,7 @@ export default abstract class PopoverBase {
 		if (
 			! $target.length || $target.hasClass( 'select2-selection__choice__remove' ) ||
 			$target.closest( '.select2-container--open' ).length ||
+			$target.closest( '.tempus-dominus-widget' ).length ||
 			$target.hasClass( this.popoverClassName ) || $target.closest( `.${ this.popoverClassName }` ).length
 		) {
 			return;
