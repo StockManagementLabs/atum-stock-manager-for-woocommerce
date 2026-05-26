@@ -53,7 +53,8 @@ const STATIC_EXTERNALS = {
 	'$'                             : { global: 'window.jQuery', handle: 'jquery' },
 	'sweetalert2'                   : { global: 'window.Swal', handle: 'atum-sweetalert2' },
 	'sweetalert2-neutral'           : { global: 'window.Swal', handle: 'atum-sweetalert2' },
-	'moment'                        : { global: 'window.moment', handle: 'moment' },
+	'moment'                         : { global: 'window.moment', handle: 'moment' },
+	'moment/min/moment-with-locales.min': { global: 'window.moment', handle: 'moment' },
 	/*
 	 * Keep the heavy Chart.js UMD out of atum-dashboard.js and load it as a
 	 * WordPress-registered script (handle `atum-chartjs`).
@@ -72,6 +73,7 @@ const STATIC_EXTERNALS = {
 	 */
 	'bootstrap/js/dist/tooltip': { global: 'window.atumBootstrap.Tooltip', handle: 'atum-bootstrap' },
 	'bootstrap/js/dist/popover': { global: 'window.atumBootstrap.Popover', handle: 'atum-bootstrap' },
+	'bootstrap/js/dist/collapse': { global: 'window.atumBootstrap.Collapse', handle: 'atum-bootstrap' },
 
 	// Intro.js — isolated as window.atumIntroJs.
 	'intro.js/minified/intro.min': { global: 'window.atumIntroJs', handle: 'atum-introjs' },
@@ -467,7 +469,7 @@ export function wordpressAssetPhpPlugin() {
 	};
 }
 
-export function viteWordPressServerPlugin( { base, entries } ) {
+export function viteWordPressServerPlugin( { base, entries, pluginRoot } ) {
 	return {
 		name: 'atum-vite-wordpress-server',
 		configureServer( server ) {
@@ -485,10 +487,13 @@ export function viteWordPressServerPlugin( { base, entries } ) {
 					 */
 					const isCss = outputName.startsWith( 'css/' );
 					const outputFile = isCss ? `${ outputName }.css` : `${ outputName }.js`;
+					const src = pluginRoot
+						? path.relative( pluginRoot, srcPath ).split( path.sep ).join( '/' )
+						: srcPath;
 
 					buildMap[ outputFile ] = {
 						file   : outputFile,
-						src    : srcPath,
+						src,
 						isEntry: true,
 					};
 				}
@@ -576,11 +581,27 @@ export function copyDirSync( src, dest ) {
 	}
 }
 
+function removeEmptyParentsUntil( startDir, stopDir ) {
+	let current = startDir;
+	const stop = path.resolve( stopDir );
+
+	while ( path.resolve( current ).startsWith( stop ) && path.resolve( current ) !== stop ) {
+		if ( !fs.existsSync( current ) || fs.readdirSync( current ).length ) {
+			break;
+		}
+
+		fs.rmdirSync( current );
+		current = path.dirname( current );
+	}
+}
+
 export function wordpressPostBuildPlugin( options = {} ) {
 	const {
 		displayName = 'ATUM',
 		copyDirs = [],
 		cssBanner = '',
+		cssReplacements = [],
+		deletePaths = [],
 	} = options;
 
 	return {
@@ -605,10 +626,43 @@ export function wordpressPostBuildPlugin( options = {} ) {
 					}
 				}
 
+				if ( cssReplacements.length && fs.existsSync( 'dist/css' ) ) {
+					for ( const file of fs.readdirSync( 'dist/css' ) ) {
+						if ( !file.endsWith( '.css' ) ) {
+							continue;
+						}
+
+						const cssPath = path.join( 'dist/css', file );
+						let contents = fs.readFileSync( cssPath, 'utf-8' );
+
+						for ( const { search, replace } of cssReplacements ) {
+							contents = 'string' === typeof search
+								? contents.split( search ).join( replace )
+								: contents.replace( search, replace );
+						}
+
+						fs.writeFileSync( cssPath, contents );
+					}
+				}
+
 				for ( const { src, dest, label } of copyDirs ) {
 					if ( fs.existsSync( src ) ) {
 						copyDirSync( src, dest );
 						console.log( `  ✓ ${ label }` );
+					}
+				}
+
+				for ( const deletePath of deletePaths ) {
+					const target = path.resolve( deletePath );
+
+					if ( fs.existsSync( target ) ) {
+						const stat = fs.statSync( target );
+
+						fs.rmSync( target, { recursive: true, force: true } );
+
+						if ( stat.isFile() ) {
+							removeEmptyParentsUntil( path.dirname( target ), path.resolve( 'dist' ) );
+						}
 					}
 				}
 
@@ -629,7 +683,8 @@ export function getWordPressCssConfig() {
 		devSourcemap       : true,
 		preprocessorOptions: {
 			scss: {
-				includePaths: [ 'assets/scss' ],
+				includePaths        : [ 'assets/scss' ],
+				silenceDeprecations : [ 'import' ],
 			},
 		},
 	};

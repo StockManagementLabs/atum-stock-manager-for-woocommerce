@@ -6,7 +6,6 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "bun build/build.mjs",
-		"start": "bun run dev",
 		"typecheck": "tsc --noEmit",
 		"lint:scripts": "eslint assets/js/src build",
 		"lint:scripts:fix": "eslint --fix assets/js/src build"
@@ -22,10 +21,11 @@
 		"eslint": "^10.4.0",
 		"sass": "^1.100.0",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.59.4",
+		"typescript-eslint": "^8.60.0",
 		"vite": "^8.0.14"
 	},
 	"dependencies": {
+		"@eonasdan/tempus-dominus": "^6.10.4",
 		"@popperjs/core": "^2.11.8",
 		"bootstrap": "^5.3.8",
 		"chart.js": "^4.5.1",
@@ -37,7 +37,6 @@
 		"jquery.fancytable": "^1.0.36",
 		"lightgallery.js": "^1.4.0",
 		"mathjs": "^15.2.0",
-		"moment": "^2.30.1",
 		"owl.carousel": "^2.3.4",
 		"sweetalert2-neutral": "^11.22.2-neutral"
 	}

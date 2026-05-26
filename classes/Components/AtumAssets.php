@@ -40,12 +40,20 @@ final class AtumAssets {
 	 *
 	 * @param string      $slug      Bundle slug without extension (e.g. atum-settings).
 	 * @param string|null $attribute Optional. version|dependencies.
+	 * @param array       $asset_context {
+	 *     Optional addon asset context.
+	 *
+	 *     @type string $dist_url  Base dist URL. Defaults to ATUM_DIST_URL.
+	 *     @type string $dist_path Base dist path. Defaults to ATUM_DIST_PATH.
+	 *     @type string $version   Fallback version. Defaults to ATUM_VERSION.
+	 * }
 	 *
 	 * @return string|array|null
 	 */
-	public static function get_asset_info( $slug, $attribute = NULL ) {
+	public static function get_asset_info( $slug, $attribute = NULL, array $asset_context = [] ) {
 
 		static $cache = [];
+		$asset_context = self::normalize_asset_context( $asset_context );
 
 		// If a filename was passed, strip the extension.
 		if ( str_contains( $slug, '.' ) ) {
@@ -53,10 +61,12 @@ final class AtumAssets {
 			$slug       = $slug_parts[0];
 		}
 
-		if ( ! array_key_exists( $slug, $cache ) ) {
+		$cache_key = $asset_context['dist_path'] . '|' . $slug;
 
-			$js_path  = self::get_dist_path( "{$slug}.asset.php" );
-			$css_path = self::get_dist_path( "{$slug}.asset.php", 'css' );
+		if ( ! array_key_exists( $cache_key, $cache ) ) {
+
+			$js_path  = self::get_dist_path( "{$slug}.asset.php", 'js', FALSE, $asset_context );
+			$css_path = self::get_dist_path( "{$slug}.asset.php", 'css', FALSE, $asset_context );
 
 			/*
 			 * NOTE: must be `require`, NOT `require_once`. `require_once`
@@ -66,17 +76,17 @@ final class AtumAssets {
 			 * `$cache` avoids re-reading the same file multiple times.
 			 */
 			if ( file_exists( $js_path ) ) {
-				$cache[ $slug ] = require $js_path;
+				$cache[ $cache_key ] = require $js_path;
 			}
 			elseif ( file_exists( $css_path ) ) {
-				$cache[ $slug ] = require $css_path;
+				$cache[ $cache_key ] = require $css_path;
 			}
 			else {
-				$cache[ $slug ] = NULL;
+				$cache[ $cache_key ] = NULL;
 			}
 		}
 
-		$asset = $cache[ $slug ];
+		$asset = $cache[ $cache_key ];
 
 		if ( ! is_array( $asset ) ) {
 			return NULL;
@@ -104,11 +114,12 @@ final class AtumAssets {
 	 *
 	 * @param string $slug
 	 * @param array  $fallback
+	 * @param array  $asset_context Optional addon asset context.
 	 *
 	 * @return array
 	 */
-	public static function get_asset_dependencies( $slug, array $fallback = [] ) {
-		$deps = self::get_asset_info( $slug, 'dependencies' );
+	public static function get_asset_dependencies( $slug, array $fallback = [], array $asset_context = [] ) {
+		$deps = self::get_asset_info( $slug, 'dependencies', $asset_context );
 
 		if ( ! is_array( $deps ) ) {
 			$deps = [];
@@ -123,12 +134,15 @@ final class AtumAssets {
 	 * @since 2.0.0
 	 *
 	 * @param string $slug
+	 * @param array  $asset_context Optional addon asset context.
 	 *
 	 * @return string
 	 */
-	public static function get_asset_version( $slug ) {
-		$version = self::get_asset_info( $slug, 'version' );
-		return $version ? (string) $version : ATUM_VERSION;
+	public static function get_asset_version( $slug, array $asset_context = [] ) {
+		$asset_context = self::normalize_asset_context( $asset_context );
+		$version = self::get_asset_info( $slug, 'version', $asset_context );
+
+		return $version ? (string) $version : $asset_context['version'];
 	}
 
 	/**
@@ -137,14 +151,18 @@ final class AtumAssets {
 	 * @since 2.0.0
 	 *
 	 * @param string $filename Bare filename, e.g. `chart.bundle.min.js`.
+	 * @param array  $asset_context Optional addon asset context.
 	 *
 	 * @return string
 	 */
-	public static function get_vendor_version( $filename ) {
+	public static function get_vendor_version( $filename, array $asset_context = [] ) {
+		$asset_context = self::normalize_asset_context( $asset_context );
+
 		// Vendor files live under dist/js/vendor or dist/css/vendor; pick by extension.
 		$kind = 'css' === pathinfo( $filename, PATHINFO_EXTENSION ) ? 'css' : 'js';
-		$path = self::get_dist_path( $filename, $kind, TRUE );
-		return file_exists( $path ) ? (string) filemtime( $path ) : ATUM_VERSION;
+		$path = self::get_dist_path( $filename, $kind, TRUE, $asset_context );
+
+		return file_exists( $path ) ? (string) filemtime( $path ) : $asset_context['version'];
 	}
 
 	/**
@@ -155,15 +173,17 @@ final class AtumAssets {
 	 * @param string $file_name The file name.
 	 * @param string $kind		Optional. "css", "js", "images" or "fonts". Defaults to "js".
 	 * @param bool   $is_vendor Optional. If it is a vendor asset. Defaults to false.
+	 * @param array  $asset_context Optional addon asset context.
 	 *
 	 * @return string
 	 */
-	public static function get_dist_url( $file_name, $kind = 'js', $is_vendor = FALSE ) {
+	public static function get_dist_url( $file_name, $kind = 'js', $is_vendor = FALSE, array $asset_context = [] ) {
+		$asset_context = self::normalize_asset_context( $asset_context );
 
 		$kind        = in_array( $kind, [ 'js', 'css', 'images', 'fonts' ] ) ? $kind : 'js';
 		$vendor_path = $is_vendor ? 'vendor/' : '';
 
-		return ATUM_DIST_URL . "$kind/$vendor_path$file_name";
+		return $asset_context['dist_url'] . "$kind/$vendor_path$file_name";
 
 	}
 
@@ -175,15 +195,17 @@ final class AtumAssets {
 	 * @param string $file_name The file name.
 	 * @param string $kind		Optional. "css", "js", "images" or "fonts". Defaults to "js".
 	 * @param bool   $is_vendor Optional. If it is a vendor asset. Defaults to false.
+	 * @param array  $asset_context Optional addon asset context.
 	 *
 	 * @return string
 	 */
-	public static function get_dist_path( $file_name, $kind = 'js', $is_vendor = FALSE ) {
+	public static function get_dist_path( $file_name, $kind = 'js', $is_vendor = FALSE, array $asset_context = [] ) {
+		$asset_context = self::normalize_asset_context( $asset_context );
 
 		$kind        = in_array( $kind, [ 'js', 'css', 'images', 'fonts' ] ) ? $kind : 'js';
 		$vendor_path = $is_vendor ? 'vendor/' : '';
 
-		return ATUM_DIST_PATH . "$kind/$vendor_path$file_name";
+		return $asset_context['dist_path'] . "$kind/$vendor_path$file_name";
 
 	}
 
@@ -197,13 +219,14 @@ final class AtumAssets {
 	 * @param string[] $deps
 	 * @param bool     $in_footer
 	 * @param bool     $is_vendor
+	 * @param array    $asset_context Optional addon asset context.
 	 */
-	public static function register_script( $handle, $file_name, $deps = [], $is_vendor = FALSE, $in_footer = TRUE ) {
+	public static function register_script( $handle, $file_name, $deps = [], $is_vendor = FALSE, $in_footer = TRUE, array $asset_context = [] ) {
 		wp_register_script(
 			$handle,
-			AtumAssets::get_dist_url( $file_name, 'js', $is_vendor ),
-			! $is_vendor ? AtumAssets::get_asset_dependencies( $file_name, $deps ) : $deps,
-			! $is_vendor ? AtumAssets::get_asset_version( $file_name ) : AtumAssets::get_vendor_version( $file_name ),
+			AtumAssets::get_dist_url( $file_name, 'js', $is_vendor, $asset_context ),
+			! $is_vendor ? AtumAssets::get_asset_dependencies( $file_name, $deps, $asset_context ) : $deps,
+			! $is_vendor ? AtumAssets::get_asset_version( $file_name, $asset_context ) : AtumAssets::get_vendor_version( $file_name, $asset_context ),
 			$in_footer
 		);
 	}
@@ -218,14 +241,32 @@ final class AtumAssets {
 	 * @param string[] $deps
 	 * @param bool     $in_footer
 	 * @param bool     $is_vendor
+	 * @param array    $asset_context Optional addon asset context.
 	 */
-	public static function register_style( $handle, $file_name, $deps = [], $is_vendor = FALSE ) {
+	public static function register_style( $handle, $file_name, $deps = [], $is_vendor = FALSE, array $asset_context = [] ) {
 		wp_register_style(
 			$handle,
-			AtumAssets::get_dist_url( $file_name, 'css', $is_vendor ),
+			AtumAssets::get_dist_url( $file_name, 'css', $is_vendor, $asset_context ),
 			$deps,
-			! $is_vendor ? AtumAssets::get_asset_version( $file_name ) : AtumAssets::get_vendor_version( $file_name )
+			! $is_vendor ? AtumAssets::get_asset_version( $file_name, $asset_context ) : AtumAssets::get_vendor_version( $file_name, $asset_context )
 		);
+	}
+
+	/**
+	 * Normalize an asset context for base-plugin and addon asset registration.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $asset_context
+	 *
+	 * @return array{dist_url:string,dist_path:string,version:string}
+	 */
+	private static function normalize_asset_context( array $asset_context = [] ) {
+		return [
+			'dist_url'  => trailingslashit( $asset_context['dist_url'] ?? ATUM_DIST_URL ),
+			'dist_path' => trailingslashit( $asset_context['dist_path'] ?? ATUM_DIST_PATH ),
+			'version'   => (string) ( $asset_context['version'] ?? ATUM_VERSION ),
+		];
 	}
 	
 }

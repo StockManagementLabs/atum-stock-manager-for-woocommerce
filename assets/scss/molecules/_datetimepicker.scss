@@ -1,0 +1,83 @@
+@use "../common/variables" as *;
+
+//
+// Tempus Dominus Datetimepicker
+// ----------------------------------
+
+$td-light: $white !default;
+$td-widget-background: $white !default;
+$td-font-color: $gray-900 !default;
+$td-timepicker-font-size: 1.2em !default;
+$td-active-bg: $primary !default;
+$td-active-color: $white !default;
+$td-active-border-color: $white !default;
+$td-border-radius: $btn-border-radius !default;
+$td-btn-hover-bg: $light !default;
+$td-disabled-color: $gray-300 !default;
+$td-alternate-color: $gray-500 !default;
+$td-secondary-border-color: $gray-400 !default;
+$td-secondary-border-color-rgba: rgba($black, 0.2) !default;
+$td-primary-border-color: $white !default;
+$td-text-shadow: 0 -1px 0 rgba($black, 0.25) !default;
+$td-dow-color: rgba($black, 0.5) !default;
+$td-widget-z-index: 9995 !default;
+
+@import "../../../node_modules/@eonasdan/tempus-dominus/src/scss/tempus-dominus";
+
+.tempus-dominus-widget {
+	width: 19em;
+	z-index: 9996 !important; // Must sit above Bootstrap popovers when opened from editable cells.
+	font-size: $font-size-base;
+	color: var(--td-font-color);
+	background-color: var(--td-widget-background);
+	border: 1px solid rgba($black, 0.15);
+	border-radius: .25rem;
+	box-shadow: 0 .5rem 1rem rgba($black, 0.175);
+
+	.calendar-header {
+		padding-top: 10px;
+	}
+
+	&.calendarWeeks {
+		width: 21em;
+	}
+
+	&.timepicker-sbs {
+		width: 38em;
+	}
+
+	button,
+	[data-action] {
+		box-shadow: none;
+	}
+
+	button {
+		font-size: $font-size-base;
+	}
+
+	.date-container-days,
+	.date-container-decades,
+	.date-container-months,
+	.date-container-years,
+	.time-container-clock,
+	.time-container-hour,
+	.time-container-minute,
+	.time-container-second {
+		div:not(.no-highlight).active {
+			background-color: var(--td-active-bg);
+			color: var(--td-active-color);
+			text-shadow: var(--td-text-shadow);
+		}
+	}
+
+	.toolbar {
+		div {
+			border-radius: var(--td-border-radius);
+		}
+	}
+
+	.atum-icon {
+		font-size: 1rem;
+		line-height: 1;
+	}
+}

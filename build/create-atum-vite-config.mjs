@@ -88,6 +88,10 @@ export function resolveAtumOptions( options = {} ) {
 		copyDirs,
 		displayName: options.displayName || pluginSlug,
 		cssBanner  : options.cssBanner || '',
+		scssAliases: options.scssAliases || {},
+		cssReplacements: options.cssReplacements || [],
+		deletePaths: options.deletePaths || [],
+		vendorAssets: options.vendorAssets ?? true,
 	};
 }
 
@@ -101,10 +105,14 @@ export function resolveAtumOptions( options = {} ) {
  * @param {string} [options.displayName] Post-build log label.
  * @param {string} [options.pluginRoot] Absolute plugin root (default: parent of build/).
  * @param {Array<{src: string, dest: string, label: string}>} [options.copyDirs]
+ * @param {Record<string, string>} [options.scssAliases] JS slug → CSS slug aliases for dev HMR.
+ * @param {Array<{search: string|RegExp, replace: string}>} [options.cssReplacements] Post-build CSS replacements.
+ * @param {string[]} [options.deletePaths] Post-build paths to delete (relative to plugin root or absolute).
+ * @param {boolean} [options.vendorAssets] Whether to ship base vendor assets in production.
  */
 export function createAtumViteConfig( options = {} ) {
 	const resolved = resolveAtumOptions( options );
-	const { pluginRoot, pluginSlug, port, basePath, entries } = resolved;
+	const { pluginRoot, pluginSlug, port, basePath, entries, scssAliases } = resolved;
 
 	return defineConfig( ( { command } ) => ( {
 		root        : pluginRoot,
@@ -120,10 +128,16 @@ export function createAtumViteConfig( options = {} ) {
 			 * browser warns "Mixed Content" for every asset URL the rewriter
 			 * sends to the dev server (and some — especially images
 			 * referenced from CSS — are blocked outright). User accepts the
-			 * self-signed cert once in the browser (visit
-			 * https://localhost:5173/ and "Proceed").
+			 * self-signed cert once in the browser (visit the configured
+			 * dev-server URL and "Proceed"). All ATUM/addon dev servers share
+			 * the base plugin cert cache so accepting it for ATUM also covers
+			 * addon ports.
 			 */
-			...( command === 'serve' ? [ basicSsl() ] : [] ),
+			...( command === 'serve' ? [
+				basicSsl( {
+					certDir: path.join( path.resolve( ATUM_BUILD_DIR, '..' ), 'node_modules/.vite/basic-ssl' ),
+				} ),
+			] : [] ),
 			/*
 			 * Shim FIRST so its resolveId provides virtual modules for
 			 * `import 'chart.js/auto'` and the rest of the
@@ -138,15 +152,16 @@ export function createAtumViteConfig( options = {} ) {
 			 * without a page reload. Dev-only (`apply: 'serve'`); production
 			 * keeps the separate CSS build via `build/build.mjs`.
 			 */
-			atumDevScssAutoImportPlugin( { entries } ),
+			atumDevScssAutoImportPlugin( { entries, aliases: scssAliases } ),
 			wordpressExternalsPlugin(),
 			devImageServerPlugin( {
 				assetsDir: path.join( pluginRoot, 'assets' ),
 				basePath : `/wp-content/plugins/${ pluginSlug }`,
 			} ),
 			viteWordPressServerPlugin( {
-				base: basePath,
+				base      : basePath,
 				entries,
+				pluginRoot,
 			} ),
 		],
 	} ) );
