@@ -197,7 +197,7 @@ class Settings {
 
 
 			AtumAssets::register_style( self::UI_SLUG, 'atum-settings.css', [ 'atum-sweetalert2' ] );
-			AtumAssets::register_script( 'color-picker-alpha', 'wp-color-picker-alpha.min.js', [ 'wp-color-picker' ], TRUE );
+			AtumAssets::register_script( 'atum-color-picker-alpha', 'wp-color-picker-alpha.min.js', [ 'wp-color-picker' ], TRUE );
 
 			// ATUM marketing popup.
 			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
@@ -249,7 +249,7 @@ class Settings {
 
 			wp_enqueue_editor();
 			wp_enqueue_media();
-			wp_enqueue_script( 'color-picker-alpha' );
+			wp_enqueue_script( 'atum-color-picker-alpha' );
 			wp_enqueue_script( self::UI_SLUG );
 
 		}

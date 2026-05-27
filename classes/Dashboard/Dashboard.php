@@ -317,14 +317,14 @@ class Dashboard {
 			/*
 			 * NiceScroll.
 			 */
-			AtumAssets::register_script( 'jquery-nice-scroll', 'jquery.nicescroll.min.js', [ 'jquery' ], TRUE );
+			AtumAssets::register_script( 'atum-jquery-nice-scroll', 'jquery.nicescroll.min.js', [ 'jquery' ], TRUE );
 
 			/*
 			 * Dependencies. `atum-chartjs`, `atum-bootstrap`, etc. are auto-added
 			 * by `get_asset_dependencies()` if the bundle imports them (union with
 			 * the fallback below).
 			 */
-			$script_deps = [ 'atum-sweetalert2', 'jquery-nice-scroll', 'jquery-ui-sortable', 'jquery-ui-draggable', 'wp-hooks' ];
+			$script_deps = [ 'atum-sweetalert2', 'atum-jquery-nice-scroll', 'jquery-ui-sortable', 'jquery-ui-draggable', 'wp-hooks' ];
 			$style_deps  = [ 'atum-sweetalert2', 'owl.carousel', 'owl.carousel.theme' ];
 
 			/* @deprecated since WC 10.3.0 */
