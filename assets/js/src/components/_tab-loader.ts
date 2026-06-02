@@ -1,8 +1,8 @@
 /* =======================================
    TAB LOADER
-   ======================================= */
-
-import '../../vendor/jquery.address.min';
+   =======================================
+   jquery.address is loaded externally via the `atum-jquery-address` WP handle.
+*/
 
 export default class TabLoader {
 	

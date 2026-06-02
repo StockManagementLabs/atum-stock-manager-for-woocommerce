@@ -7,13 +7,9 @@
  */
 
 /**
- * Third Party Plugins
- */
-
-import '../vendor/select2';      // A fixed version compatible with webpack
-
-/**
  * Components
+ *
+ * Select2 is enqueued as the `atum-select2` WP handle from `Suppliers.php` deps.
  */
 
 import Settings from './config/_settings';

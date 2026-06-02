@@ -21,7 +21,7 @@ import { pathToFileURL } from 'url';
 import { build, transformWithOxc } from 'vite';
 
 import { resolveAtumOptions } from './create-atum-vite-config.mjs';
-import { getVendorAssets } from './vendor-assets.mjs';
+import { getVendorAssets as getBaseVendorAssets } from './vendor-assets.mjs';
 import {
 	wordpressAssetPhpPlugin,
 	wordpressPostBuildPlugin,
@@ -132,9 +132,45 @@ function writeManifest( resolved ) {
 }
 
 /**
- * Ship every entry from `vendor-assets.mjs` to `dist/vendor/`. Minifies
- * non-`.min` sources via esbuild and applies the isolation wrapper when the
- * entry declares `isolate: { capture, expose }`.
+ * Resolve the vendor manifest for `pluginRoot`. If the plugin ships its own
+ * `build/vendor-assets.mjs`, load it dynamically (addons declare their own
+ * vendors there). Otherwise fall back to the base manifest.
+ *
+ * @param {string} pluginRoot
+ * @returns {Promise<Array<object>>}
+ */
+async function resolveVendorAssets( pluginRoot ) {
+	const local = path.join( pluginRoot, 'build', 'vendor-assets.mjs' );
+
+	if ( !fs.existsSync( local ) ) {
+		return getBaseVendorAssets( pluginRoot );
+	}
+
+	let mod;
+
+	try {
+		mod = await import( pathToFileURL( local ).href );
+	}
+	catch ( err ) {
+		throw new Error(
+			`Failed to load addon vendor manifest at ${ local }: ${ err.message }`,
+		);
+	}
+
+	if ( typeof mod.getVendorAssets !== 'function' ) {
+		throw new Error(
+			`Addon vendor manifest at ${ local } does not export `
+			+ '`getVendorAssets(pluginRoot)` function.',
+		);
+	}
+
+	return mod.getVendorAssets( pluginRoot );
+}
+
+/**
+ * Ship every entry from the resolved vendor manifest to `dist/vendor/`.
+ * Minifies non-`.min` sources via Oxc and applies the isolation wrapper when
+ * the entry declares `isolate: { capture, expose }`.
  *
  * @param {string} pluginRoot
  */
@@ -145,7 +181,9 @@ async function shipVendorAssets( pluginRoot ) {
 	fs.mkdirSync( jsVendorDir, { recursive: true } );
 	fs.mkdirSync( cssVendorDir, { recursive: true } );
 
-	for ( const asset of getVendorAssets( pluginRoot ) ) {
+	const assets = await resolveVendorAssets( pluginRoot );
+
+	for ( const asset of assets ) {
 		if ( !fs.existsSync( asset.src ) ) {
 			console.warn( `  ⚠ vendor source missing, skipped: ${ path.relative( pluginRoot, asset.src ) }` );
 			continue;

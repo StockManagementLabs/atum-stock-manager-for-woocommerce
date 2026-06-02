@@ -7,13 +7,10 @@
  */
 
 /**
- * Third Party Plugins
- */
-
-import '../vendor/select2';      // A fixed version compatible with webpack
-
-/**
  * Components
+ *
+ * Vendor plugins (select2, jquery.jscrollpane, dragscroll) are enqueued as
+ * ATUM-owned WP handles from `Suppliers.php` / `AtumOrderPostType.php` deps.
  */
 
 import DateTimePicker from './components/_date-time-picker';

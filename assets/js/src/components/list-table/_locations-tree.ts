@@ -1,11 +1,8 @@
 /* =======================================
    LOCATIONS TREE FOR LIST TABLES
-   ======================================= */
-
-/**
- * Third party plugins
- */
-import '../../../vendor/jquery.easytree';
+   =======================================
+   jquery.easytree is loaded externally via the `atum-easytree` WP handle.
+*/
 
 import Settings from '../../config/_settings';
 import Globals from './_globals';

@@ -1,11 +1,14 @@
 /* =======================================
    DRAG-SCROLL FOR LIST TABLES
-   ======================================= */
+   =======================================
+   dragscroll (patched fork) is loaded externally via the `atum-dragscroll` WP
+   handle. The vendor script sets `window.dragscroll`; declared here as a
+   global so any consumer (base or addons that transitively import this file)
+   gets the type without extra typeRoots setup.
+*/
 
-/**
- * Third party plugins
- */
-import dragscroll from '../../../vendor/dragscroll';             // A patched fork of dragscroll
+declare const dragscroll: { reset(): void };
+
 import Hammer from 'hammerjs/hammer.min';                        // From node_modules
 
 import Globals from './_globals';
@@ -148,7 +151,10 @@ export default class DragScroll {
 		} );
 
 		this.addMouseWheelSupport();
-		dragscroll.reset();
+
+		if ( typeof dragscroll !== 'undefined' ) {
+			dragscroll.reset();
+		}
 
 	}
 	
@@ -167,7 +173,7 @@ export default class DragScroll {
 		const $overflowOpacityRight: JQuery = $nav.find( '.overflow-opacity-effect-right' ),
 		      $overflowOpacityLeft: JQuery  = $nav.find( '.overflow-opacity-effect-left' );
 
-		if ( checkEnhanced ) {
+		if ( checkEnhanced && typeof $.fn[ 'select2' ] === 'function' ) {
 			( <any> $( '.enhanced' ) ).select2( 'close' );
 		}
 

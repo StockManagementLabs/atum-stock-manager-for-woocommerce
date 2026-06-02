@@ -4550,7 +4550,7 @@ abstract class AtumListTable extends \WP_List_Table {
 			$this->first_edit_key = $first_edit_key;
 		}
 
-		$deps = [ 'jquery', 'atum-sweetalert2', 'wc-enhanced-select', 'wp-hooks' ];
+		$deps = [ 'jquery', 'atum-sweetalert2', 'wc-enhanced-select', 'wp-hooks', 'atum-select2', 'atum-jquery-address', 'atum-jscrollpane', 'atum-floatthead', 'atum-easytree', 'atum-dragscroll' ];
 
 		/* @deprecated since WC 10.3.0 */
 		if ( version_compare( WC()->version, '10.3.0', '<' ) ) {

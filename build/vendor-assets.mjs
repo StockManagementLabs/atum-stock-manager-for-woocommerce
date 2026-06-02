@@ -71,6 +71,22 @@ export function getVendorAssets( pluginRoot ) {
 		{ src: srcJs( 'jquery.nicescroll.min.js' ), dest: 'jquery.nicescroll.min.js' },
 
 		/*
+		 * --- JS: UMD jQuery/DOM plugins, externalized after the Vite migration ---
+		 * These TS entries used to do `import '../vendor/<file>'` so the UMD's
+		 * "browser globals" branch would run and attach to the real jQuery.
+		 * Rolldown takes the CommonJS branch and never invokes the factory, so
+		 * they're shipped as standalone vendor scripts and enqueued via their
+		 * own WP handle (`atum-select2`, `atum-floatthead`, …) in PHP.
+		 * Not isolated: they must patch the real `window.jQuery`.
+		 */
+		{ src: srcJs( 'select2.js' ),              dest: 'select2.min.js',              minify: true },
+		{ src: srcJs( 'jquery.address.min.js' ),   dest: 'jquery.address.min.js'                     },
+		{ src: srcJs( 'jquery.floatThead.js' ),    dest: 'jquery.floatThead.min.js',    minify: true },
+		{ src: srcJs( 'jquery.jscrollpane.js' ),   dest: 'jquery.jscrollpane.min.js',   minify: true },
+		{ src: srcJs( 'jquery.easytree.js' ),      dest: 'jquery.easytree.min.js',      minify: true },
+		{ src: srcJs( 'dragscroll.js' ),           dest: 'dragscroll.min.js',           minify: true },
+
+		/*
 		 * --- CSS: PHP-enqueued vendor stylesheets ---
 		 * Copied as-is to dist/css/vendor/.
 		 */

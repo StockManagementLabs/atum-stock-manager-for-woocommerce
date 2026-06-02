@@ -7,8 +7,11 @@
  */
 
 import Blocker from '../_blocker';
-import dragscroll from '../../../vendor/dragscroll';
 import Settings from '../../config/_settings';
+
+// dragscroll is loaded via the `atum-dragscroll` WP handle and exposed as a
+// global; declared here so consumers don't need extra typeRoots setup.
+declare const dragscroll: { reset(): void };
 import Swal, { SweetAlertResult } from 'sweetalert2-neutral';
 import Trials from './_trials';
 
@@ -709,7 +712,10 @@ export default class AddonsPage {
         } );
 
         this.addMouseWheelSupport();
-        dragscroll.reset();
+
+        if ( typeof dragscroll !== 'undefined' ) {
+            dragscroll.reset();
+        }
 
     }
 

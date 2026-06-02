@@ -444,7 +444,7 @@ class Suppliers {
 					// Load the ATUM colors.
 					AtumColors::enqueue_atum_colors( 'atum-post-type-list' );
 
-					AtumAssets::register_script( 'atum-post-type-list', 'atum-post-type-list.js', [ 'jquery', 'wp-hooks', 'atum-sweetalert2' ] );
+					AtumAssets::register_script( 'atum-post-type-list', 'atum-post-type-list.js', [ 'jquery', 'wp-hooks', 'atum-sweetalert2', 'atum-select2', 'atum-jscrollpane', 'atum-dragscroll' ] );
 					wp_localize_script( 'atum-post-type-list', 'atumPostTypeListVars', array(
 						'placeholderSearch' => __( 'Search...', ATUM_TEXT_DOMAIN ),
 					) );
@@ -457,7 +457,7 @@ class Suppliers {
 					AtumAssets::register_style( 'atum-suppliers', 'atum-suppliers.css' );
 					wp_enqueue_style( 'atum-suppliers' );
 
-					AtumAssets::register_script( 'atum-suppliers', 'atum-suppliers.js', [ 'jquery' ] );
+					AtumAssets::register_script( 'atum-suppliers', 'atum-suppliers.js', [ 'jquery', 'atum-select2' ] );
 					wp_enqueue_script( 'atum-suppliers' );
 
 				}

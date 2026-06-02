@@ -972,7 +972,7 @@ abstract class AtumOrderPostType {
 			elseif ( 'edit.php' === $hook ) {
 
 				$css_dependencies = [];
-				$js_dependencies  = [ 'jquery', 'jquery-tiptip', 'wp-hooks' ];
+				$js_dependencies  = [ 'jquery', 'jquery-tiptip', 'wp-hooks', 'atum-select2', 'atum-jscrollpane', 'atum-dragscroll' ];
 
 				if ( $show_marketing_popup ) {
 					$css_dependencies[] = 'atum-sweetalert2';

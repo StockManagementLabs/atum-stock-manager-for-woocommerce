@@ -1,11 +1,8 @@
 /* =======================================
    SCROLL BAR FOR LIST TABLES
-   ======================================= */
-
-/**
- * Third party plugins
- */
-import '../../../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
+   =======================================
+   jquery.jscrollpane is loaded externally via the `atum-jscrollpane` WP handle.
+*/
 
 import Globals from './_globals';
 import Utils from '../../utils/_utils';

@@ -7,13 +7,10 @@
  */
 
 /**
- * Third Party Plugins
- */
-
-import '../vendor/select2';             // A fixed version compatible with webpack
-
-/**
  * Components
+ *
+ * Vendor plugins (select2, jquery.address) are enqueued as ATUM-owned WP
+ * handles (`atum-select2`, `atum-jquery-address`) from `Settings.php` deps.
  */
 
 import EnhancedSelect from './components/_enhanced-select';

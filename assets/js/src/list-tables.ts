@@ -7,15 +7,12 @@
  */
 
 /**
- * Third Party Plugins
- */
-
-import '../vendor/jquery.address.min';               // This is not downloading the sources
-import '../vendor/jquery.jscrollpane';               // A fixed version compatible with webpack
-import '../vendor/select2';                          // A fixed version compatible with webpack
-
-/**
  * Components
+ *
+ * Vendor plugins (select2, jquery.address, jquery.jscrollpane, jquery.floatThead,
+ * jquery.easytree, dragscroll) are enqueued as ATUM-owned WP handles
+ * (`atum-select2`, `atum-jquery-address`, …) from PHP — see `AtumListTable.php`
+ * deps array. They patch the real `window.jQuery` before this bundle runs.
  */
 
 import BulkActions from './components/list-table/_bulk-actions';

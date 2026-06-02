@@ -202,8 +202,8 @@ class Settings {
 			// ATUM marketing popup.
 			AtumMarketingPopup::get_instance()->maybe_enqueue_scripts();
 
-			AtumAssets::register_script( self::UI_SLUG, 'atum-settings.js', [ 'jquery', 'atum-sweetalert2', 'wp-color-picker', 'wp-hooks' ] );
-			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array(
+			AtumAssets::register_script( self::UI_SLUG, 'atum-settings.js', [ 'jquery', 'atum-sweetalert2', 'atum-select2', 'atum-jquery-address', 'wp-color-picker', 'wp-hooks' ] );
+			wp_localize_script( self::UI_SLUG, 'atumSettingsVars', array_merge( Globals::get_date_time_picker_js_vars(), array(
 				'areYouSure'         => __( 'Are you sure?', ATUM_TEXT_DOMAIN ),
 				'atumPrefix'         => ATUM_PREFIX,
 				'branded'            => __( 'Branded', ATUM_TEXT_DOMAIN ),
@@ -233,7 +233,7 @@ class Settings {
 				'unsavedData'        => __( "If you move to another section without saving, you'll lose the changes you made to this Settings section", ATUM_TEXT_DOMAIN ),
 				'unselectAll'        => __( 'Unselect All', ATUM_TEXT_DOMAIN ),
 				'useSavedValues'     => __( 'Use Saved Values', ATUM_TEXT_DOMAIN ),
-			) );
+			) ) );
 
 			wp_enqueue_style( 'woocommerce_admin_styles' );
 			wp_enqueue_style( 'wp-color-picker' );

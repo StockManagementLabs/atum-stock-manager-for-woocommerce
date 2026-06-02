@@ -14,23 +14,67 @@ namespace Atum\Components;
 final class AtumAssets {
 
 	/**
-	 * Register the isolated atum-* vendor script handles.
+	 * Register the full set of `atum-*` vendor handles needed in the admin.
 	 *
-	 * Each handle points to a UMD shipped under `dist/vendor/` and wrapped at
-	 * build time so its top-level global lives under a private namespace
-	 * (`window.atumChart`, `window.atumBootstrap`, …) and the real
-	 * `window.Chart` / `window.bootstrap` / etc. stays untouched — preventing
-	 * conflicts with other plugins shipping a different version of the same lib.
+	 * Two groups:
+	 *
+	 * 1. **Isolated UMDs** (`atum-chartjs`, `atum-bootstrap`, `atum-introjs`,
+	 *    `atum-hammer`): wrapped at build time so their top-level global lives
+	 *    under a private namespace (`window.atumChart`, `window.atumBootstrap`,
+	 *    …). The real `window.Chart` / `window.bootstrap` / etc. stays untouched —
+	 *    preventing conflicts with other plugins shipping a different version.
+	 *
+	 * 2. **jQuery / DOM plugins** (`atum-select2`, `atum-jquery-address`,
+	 *    `atum-floatthead`, `atum-jscrollpane`, `atum-easytree`, `atum-dragscroll`):
+	 *    NOT isolated. They must mutate the real `window.jQuery` (or `window`)
+	 *    to attach `$.fn.select2`, `$.fn.floatThead`, etc. Previously bundled
+	 *    via `import '../vendor/<file>'` in TS; the Vite/Rolldown migration
+	 *    broke that pattern (UMD CommonJS branch, factory never invoked) so
+	 *    they're now shipped as standalone vendor scripts and enqueued as deps
+	 *    of the ATUM scripts that need them.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @see self::register_atum_vendor_scripts_public() For the narrower frontend subset.
 	 */
 	public static function register_atum_vendor_scripts() {
+		// Isolated UMDs.
 		self::register_script( 'atum-chartjs', 'chart.bundle.min.js', [], TRUE );
 		self::register_script( 'atum-bootstrap', 'bootstrap.bundle.min.js', [], TRUE );
 		self::register_script( 'atum-introjs', 'introjs.min.js', [], TRUE );
 		self::register_script( 'atum-hammer', 'hammer.min.js', [], TRUE );
 		self::register_style( 'atum-sweetalert2', 'sweetalert2.min.css', [], TRUE );
 		self::register_script( 'atum-sweetalert2', 'sweetalert2.min.js', [], TRUE );
+
+		// jQuery / DOM plugins that must patch the real global.
+		self::register_script( 'atum-select2', 'select2.min.js', [ 'jquery' ], TRUE );
+		self::register_script( 'atum-jquery-address', 'jquery.address.min.js', [ 'jquery' ], TRUE );
+		self::register_script( 'atum-floatthead', 'jquery.floatThead.min.js', [ 'jquery' ], TRUE );
+		self::register_script( 'atum-jscrollpane', 'jquery.jscrollpane.min.js', [ 'jquery' ], TRUE );
+		self::register_script( 'atum-easytree', 'jquery.easytree.min.js', [ 'jquery' ], TRUE );
+		self::register_script( 'atum-dragscroll', 'dragscroll.min.js', [], TRUE );
+	}
+
+	/**
+	 * Register the narrow `atum-*` vendor subset actually needed on the public
+	 * (frontend) side.
+	 *
+	 * Only the handles used by frontend features get registered here, so the
+	 * `wp_enqueue_scripts` hook doesn't pay the cost of registering the full
+	 * admin set on every public page request.
+	 *
+	 * Current frontend consumers:
+	 *   - `atum-select2` — required by Multi-Inventory's `GeoPrompt` /
+	 *     `UserDestinationForm` widget which call `$select.select2(...)`.
+	 *
+	 * If a future ATUM feature needs another `atum-*` vendor on the frontend,
+	 * add it here (do NOT just hook `register_atum_vendor_scripts` to
+	 * `wp_enqueue_scripts` — that would re-introduce the per-request bloat).
+	 *
+	 * @since 2.0.0
+	 */
+	public static function register_atum_vendor_scripts_public() {
+		self::register_script( 'atum-select2', 'select2.min.js', [ 'jquery' ], TRUE );
 	}
 
 	/**
@@ -217,8 +261,8 @@ final class AtumAssets {
 	 * @param string   $handle
 	 * @param string   $file_name
 	 * @param string[] $deps
-	 * @param bool     $in_footer
 	 * @param bool     $is_vendor
+	 * @param bool     $in_footer
 	 * @param array    $asset_context Optional addon asset context.
 	 */
 	public static function register_script( $handle, $file_name, $deps = [], $is_vendor = FALSE, $in_footer = TRUE, array $asset_context = [] ) {
@@ -239,7 +283,6 @@ final class AtumAssets {
 	 * @param string   $handle
 	 * @param string   $file_name
 	 * @param string[] $deps
-	 * @param bool     $in_footer
 	 * @param bool     $is_vendor
 	 * @param array    $asset_context Optional addon asset context.
 	 */
