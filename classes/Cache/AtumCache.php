@@ -330,9 +330,15 @@ final class AtumCache {
 	 */
 	public static function delete_all_atum_caches() {
 
-		$cache_groups = array_unique( array_merge( self::get_registered_cache_groups(), self::$cache_groups ) );
+		$cache_groups = array_unique( array_merge( self::get_registered_cache_groups(), array_keys( self::$cache_groups ) ) );
 
 		foreach ( $cache_groups as $cache_group ) {
+			// Request hand-off group (e.g. Product Levels deferred BOM recalc). Do not rotate globally:
+			// delete_all may run between defer() calls in the same request; shutdown consumes via delete_cache().
+			if ( '' === $cache_group ) {
+				continue;
+			}
+
 			self::delete_group_cache( $cache_group );
 		}
 
