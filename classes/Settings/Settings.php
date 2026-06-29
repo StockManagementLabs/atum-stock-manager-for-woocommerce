@@ -680,12 +680,12 @@ class Settings {
 				'type'    => 'switcher',
 				'default' => 'no',
 			),*/
-			/* @deprecated since ATUM 1.9.57. Remove when safe. */
+			/* @deprecated since ATUM 2.0. Remove when safe. */
 			'disable_atum_object_caching' => array(
 				'group'   => 'advanced',
 				'section' => 'advanced',
 				'name'    => __( "Disable ATUM orders' object caching", ATUM_TEXT_DOMAIN ),
-				'desc'    => __( "Bypasses ATUM's in-memory cache for Logs and Purchase Orders. From v1.9.56 onwards, ATUM no longer stores PHP object instances in persistent caches (Redis, Memcached, LiteSpeed…), so this switch should generally NOT be needed. Leave it OFF for best performance and only enable it if you still see stale data or fatals related to ATUM orders after a deploy and a cache flush.", ATUM_TEXT_DOMAIN ),
+				'desc'    => __( "Bypasses ATUM's in-memory cache for Logs and Purchase Orders. From v2.0 onwards, ATUM no longer stores PHP object instances in persistent caches (Redis, Memcached, LiteSpeed…), so this switch should generally NOT be needed. Leave it OFF for best performance and only enable it if you still see stale data or fatals related to ATUM orders after a deploy and a cache flush.", ATUM_TEXT_DOMAIN ),
 				'type'    => 'switcher',
 				'default' => function_exists('is_wpe') ? 'yes' : 'no', // Only enable by default for WP Engine hosting.
 			),

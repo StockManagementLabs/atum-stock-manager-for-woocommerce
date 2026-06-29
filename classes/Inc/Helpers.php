@@ -2886,19 +2886,6 @@ final class Helpers {
 		return $temp_array;
 
 	}
-	
-	/**
-	 * Return the step to input stock quantities attending ATUM custom decimals set.
-	 *
-	 * @since 1.4.18
-	 *
-	 * @return float|int
-	 *
-	 * @deprecated since 1.9.37. Moved to AtumStockDecimals.
-	 */
-	public static function get_input_step() {
-		return AtumStockDecimals::get_input_step();
-	}
 
 	/**
 	 * Read the type of the parent product (variable) of a child product (variation) from db, caching the result to improve performance

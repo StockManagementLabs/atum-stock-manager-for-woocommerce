@@ -370,19 +370,6 @@ final class Globals {
 	}
 
 	/**
-	 * Getter for the Stock Decimals property
-	 *
-	 * @since 1.3.4
-	 *
-	 * @return int
-	 *
-	 * @deprecated since 1.9.37. Moved to AtumStockDecimals.
-	 */
-	public static function get_stock_decimals() {
-		return AtumStockDecimals::get_stock_decimals();
-	}
-
-	/**
 	 * Getter for the Product Data Tab Fields property
 	 *
 	 * @since 1.4.1

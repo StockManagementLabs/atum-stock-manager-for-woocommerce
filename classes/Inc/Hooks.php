@@ -34,14 +34,14 @@ class Hooks {
 	private static $instance;
 
 	/**
-	 * Store current out of stock threshold
+	 * Store current out-of-stock threshold
 	 *
 	 * @var int
 	 */
 	public $current_out_stock_threshold = NULL;
 
 	/**
-	 * WoCommerce shortcode product loops types.
+	 * WooCommerce shortcode product loops types.
 	 *
 	 * @var array
 	 */
@@ -168,32 +168,6 @@ class Hooks {
 		// Delete the views' transients after changing the stock of any product.
 		add_action( 'woocommerce_product_set_stock', array( $this, 'delete_transients' ) );
 		add_action( 'woocommerce_variation_set_stock', array( $this, 'delete_transients' ) );
-
-		/*
-		 * TODO: Remove these Hooks if finally no needed.
-		 * @deprecated
-		 * // Add out_stock_threshold hooks if required.
-		if ( 'yes' === Helpers::get_option( 'out_stock_threshold', 'no' ) ) {
-
-			add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-			add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-
-			add_action( 'woocommerce_product_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
-			add_action( 'woocommerce_variation_set_stock_status', array( $this, 'check_stock_status_set' ), 10, 3 );
-
-			// woocommerce_variation_set_stock doesn't fires properly when updating from backend, so we need to change status for variations after save.
-			add_action( 'woocommerce_save_product_variation', array( $this, 'maybe_change_variation_stock_status' ), 10, 2 );
-
-			add_action( 'woocommerce_process_product_meta', array( $this, 'add_stock_status_threshold' ), 19 );
-			add_action( 'woocommerce_process_product_meta', array( $this, 'remove_stock_status_threshold' ), 21 );
-
-			add_action( 'atum/product_data/before_save_product_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
-			add_action( 'atum/product_data/after_save_product_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
-			add_action( 'atum/product_data/before_save_product_variation_meta_boxes', array( $this, 'add_stock_status_threshold' ) );
-			add_action( 'atum/product_data/after_save_product_variation_meta_boxes', array( $this, 'remove_stock_status_threshold' ) );
-
-		}
-		*/
 
 		// Save the orders-related data every time an order is saved.
 		add_action( 'woocommerce_saved_order_items', array( $this, 'save_order_items_props' ), PHP_INT_MAX, 2 );
@@ -499,19 +473,6 @@ class Hooks {
 			if ( isset( $option_value['out_stock_threshold'], $old_value['out_stock_threshold'] ) &&
 				$old_value['out_stock_threshold'] !== $option_value['out_stock_threshold'] &&
 				Helpers::is_any_out_stock_threshold_set() ) {
-				/*
-				* TODO: Remove this code if finally not needed.
-				* // When updating the out of stock threshold on ATUM settings, the hooks that trigger the stock status
-				// changes should be added or removed depending on the new option.
-				if ( 'no' === $option_value['out_stock_threshold'] ) {
-					remove_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-					remove_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				}
-				else {
-					add_action( 'woocommerce_product_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-					add_action( 'woocommerce_variation_set_stock', array( $this, 'maybe_change_out_stock_threshold' ) );
-				}
-				*/
 
 				// Ensure the option is up to date.
 				Helpers::get_option( 'out_stock_threshold', 'no', FALSE, TRUE );
@@ -582,46 +543,7 @@ class Hooks {
 	 * @return mixed
 	 */
 	public function get_custom_out_stock_threshold( $pre, $option, $default ) {
-
 		return is_null( $this->current_out_stock_threshold ) ? $pre : $this->current_out_stock_threshold;
-	}
-
-	/**
-	 * Change the stock status if current variation has one set.
-	 * TODO: Maybe remove when hooks removed
-	 *
-	 * @since 1.4.15
-	 *
-	 * @param int $variation_id
-	 * @param int $i
-	 */
-	public function maybe_change_variation_stock_status( $variation_id, $i ) {
-
-		// Do not process again the products that were already processed to avoid causing undending loops.
-		if ( in_array( $variation_id, $this->processed_oost_products ) ) {
-			return;
-		}
-
-		$this->current_out_stock_threshold = NULL;
-
-		$product                = Helpers::get_atum_product( $variation_id );
-		$out_of_stock_threshold = $product->get_out_stock_threshold();
-
-		// Allow to be hooked externally.
-		$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $variation_id );
-
-		if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
-
-			$this->processed_oost_products[] = $variation_id;
-
-			// TODO: TEST THIS WITH STOCK DECIMALS.
-			$this->current_out_stock_threshold = (int) $out_of_stock_threshold;
-			$this->add_stock_status_threshold();
-			$product->save();
-			$this->remove_stock_status_threshold();
-
-		}
-
 	}
 
 	/**
@@ -648,71 +570,6 @@ class Hooks {
 	 */
 	public function remove_stock_status_threshold( $product_id = 0 ) {
 		remove_filter( 'pre_option_woocommerce_notify_no_stock_amount', array( $this, 'get_custom_out_stock_threshold' ) );
-	}
-
-	/**
-	 * Check if the product status set is the correct status.
-	 * TODO: Maybe remove when hooks removed
-	 *
-	 * @since 1.7.1
-	 *
-	 * @param int         $product_id
-	 * @param string      $stock_status
-	 * @param \WC_Product $product
-	 */
-	public function check_stock_status_set( $product_id, $stock_status, $product ) {
-		$this->maybe_change_out_stock_threshold( $product );
-	}
-
-	/**
-	 * Change the stock threshold if current product has one set.
-	 * TODO: Maybe remove when hooks removed
-	 *
-	 * @since 1.4.15
-	 *
-	 * @param \WC_Product $product The product.
-	 */
-	public function maybe_change_out_stock_threshold( $product ) {
-
-		if ( in_array( $product->get_type(), Globals::get_product_types_with_stock() ) ) {
-
-			// Ensure that is the product uses the ATUM models.
-			/**
-			 * @var AtumProductInterface $product
-			 */
-			$product = Helpers::get_atum_product( $product );
-
-			$this->current_out_stock_threshold = NULL;
-
-			// When the product is being created, no change is needed.
-			if ( ! $product instanceof \WC_Product ) {
-				return;
-			}
-
-			$product_id = $product->get_id();
-
-			// Do not process again the products that were already processed to avoid causing undending loops.
-			if ( in_array( $product_id, $this->processed_oost_products ) ) {
-				return;
-			}
-
-			$out_of_stock_threshold = $product->get_out_stock_threshold();
-
-			// Allow to be hooked externally.
-			$out_of_stock_threshold = apply_filters( 'atum/out_of_stock_threshold_for_product', $out_of_stock_threshold, $product_id );
-
-			if ( FALSE !== $out_of_stock_threshold && '' !== $out_of_stock_threshold ) {
-
-				$this->processed_oost_products[] = $product_id;
-
-				$this->current_out_stock_threshold = (int) $out_of_stock_threshold;
-				$this->add_stock_status_threshold();
-				$product->save();
-				$this->remove_stock_status_threshold();
-
-			}
-
-		}
 	}
 
 	/**
@@ -1078,7 +935,6 @@ class Hooks {
 	 * @since 1.7.2
 	 */
 	public function allow_product_caching() {
-
 		add_filter( 'atum/get_atum_product/use_cache', '__return_true' );
 	}
 
@@ -1104,6 +960,7 @@ class Hooks {
 		}
 
 		return $prevent;
+
 	}
 
 	/**

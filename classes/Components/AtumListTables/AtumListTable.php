@@ -3806,21 +3806,7 @@ abstract class AtumListTable extends \WP_List_Table {
 	 * @return int
 	 */
 	protected function get_current_list_item_id() {
-
-		if ( 'variation' === $this->list_item->get_type() ) {
-			/**
-			 * Deprecated notice
-			 *
-			 * @deprecated
-			 * The get_variation_id() method was deprecated in WC 3.0.0
-			 * In newer versions the get_id() method always be the variation_id if it's a variation
-			 */
-			/* @noinspection PhpDeprecationInspection */
-			return version_compare( WC()->version, '3.0.0', '<' ) ? $this->list_item->get_variation_id() : $this->list_item->get_id();
-		}
-
 		return $this->list_item->get_id();
-
 	}
 
 	/**
