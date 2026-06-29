@@ -34,7 +34,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
             'Mpdf\\PsrLogAwareTrait\\' => 22,
             'Mpdf\\PsrHttpMessageShim\\' => 24,
             'Mpdf\\' => 5,
-            'Madcoda\\Youtube\\' => 16,
         ),
         'D' =>
         array (
@@ -78,10 +77,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Mpdf\\' =>
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
-        ),
-        'Madcoda\\Youtube\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/madcoda/php-youtube-api/src',
         ),
         'DeepCopy\\' =>
         array (
@@ -198,7 +193,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'Atum\\Dashboard\\Widgets\\Sales' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Sales.php',
         'Atum\\Dashboard\\Widgets\\Statistics' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Statistics.php',
         'Atum\\Dashboard\\Widgets\\StockControl' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/StockControl.php',
-        'Atum\\Dashboard\\Widgets\\Videos' => __DIR__ . '/../..' . '/classes/Dashboard/Widgets/Videos.php',
         'Atum\\DataExport\\DataExport' => __DIR__ . '/../..' . '/classes/DataExport/DataExport.php',
         'Atum\\DataExport\\Reports\\HtmlReport' => __DIR__ . '/../..' . '/classes/DataExport/Reports/HtmlReport.php',
         'Atum\\InboundStock\\InboundStock' => __DIR__ . '/../..' . '/classes/InboundStock/InboundStock.php',
@@ -289,12 +283,6 @@ class ComposerStaticInitb5eb915d7249c0bad4569c36eaa9393c
         'DeepCopy\\TypeFilter\\Spl\\SplDoublyLinkedListFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/Spl/SplDoublyLinkedListFilter.php',
         'DeepCopy\\TypeFilter\\TypeFilter' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeFilter/TypeFilter.php',
         'DeepCopy\\TypeMatcher\\TypeMatcher' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/TypeMatcher/TypeMatcher.php',
-        'Madcoda\\Youtube\\Constants' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Constants.php',
-        'Madcoda\\Youtube\\Facades\\Youtube' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Facades/Youtube.php',
-        'Madcoda\\Youtube\\Youtube' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/Youtube.php',
-        'Madcoda\\Youtube\\YoutubeServiceProviderLaravel4' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/YoutubeServiceProviderLaravel4.php',
-        'Madcoda\\Youtube\\YoutubeServiceProviderLaravel5' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/YoutubeServiceProviderLaravel5.php',
-        'Madcoda\\compat' => __DIR__ . '/..' . '/madcoda/php-youtube-api/src/compat.php',
         'Mpdf\\AssetFetcher' => __DIR__ . '/..' . '/mpdf/mpdf/src/AssetFetcher.php',
         'Mpdf\\Barcode' => __DIR__ . '/..' . '/mpdf/mpdf/src/Barcode.php',
         'Mpdf\\Barcode\\AbstractBarcode' => __DIR__ . '/..' . '/mpdf/mpdf/src/Barcode/AbstractBarcode.php',

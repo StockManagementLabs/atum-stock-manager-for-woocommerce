@@ -19,15 +19,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'madcoda/php-youtube-api' => array(
-            'pretty_version' => 'v1.2.6',
-            'version' => '1.2.6.0',
-            'reference' => '70debe2a140339e145a57d64cd4e9e12f393332f',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../madcoda/php-youtube-api',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'mpdf/mpdf' => array(
             'pretty_version' => 'v8.2.0',
             'version' => '8.2.0.0',

@@ -47,7 +47,7 @@ class Dashboard {
 		 * NOTE on heights: `min-h` is intentionally GREATER than `h` (legacy
 		 * v1 behaviour). Both gridstack v1 and v12 clamp the rendered height
 		 * up to `min-h` (`h = max(h, min-h)`), so the standard widgets render
-		 * at 5 rows and videos at 7. With cellHeight 90 (see _dashboard.ts)
+		 * at 5 rows at 7. With cellHeight 90 (see _dashboard.ts)
 		 * that reproduces the exact v1 pixel heights. Do NOT "fix" min-h to be
 		 * <= h or every existing user's widgets would shrink.
 		 */
@@ -99,13 +99,6 @@ class Dashboard {
 			'w'          => 6,
 			'h'          => 4,
 			'min-h'      => 5,
-		),
-		ATUM_PREFIX . 'videos_widget'              => array(
-			'x'          => 0,
-			'y'          => 15,
-			'w'          => 12,
-			'h'          => 5,
-			'min-h'      => 7,
 		),
 	);
 

@@ -27,7 +27,6 @@ use Atum\Components\AtumQueues;
 use Atum\Components\AtumWidget;
 use Atum\Dashboard\Dashboard;
 use Atum\Dashboard\WidgetHelpers;
-use Atum\Dashboard\Widgets\Videos;
 use Atum\InboundStock\Lists\ListTable as InboundStockListTable;
 use Atum\Modules\ModuleManager;
 use Atum\PurchaseOrders\Models\PurchaseOrder;
@@ -67,9 +66,6 @@ final class Ajax {
 
 		// Change the Statistics widget chart data.
 		add_action( 'wp_ajax_atum_statistics_widget_chart', array( $this, 'statistics_widget_chart' ) );
-
-		// Sort the videos within the Videos Widget.
-		add_action( 'wp_ajax_atum_videos_widget_sorting', array( $this, 'videos_widget_sorting' ) );
 
 		// Filter current stock values within the Dashboard widget.
 		add_action( 'wp_ajax_atum_current_stock_values', array( $this, 'current_stock_values' ) );
@@ -281,29 +277,6 @@ final class Ajax {
 		);
 
 		wp_send_json_success( $widget_data );
-
-	}
-
-	/**
-	 * Sort the videos within the Videos Widget
-	 *
-	 * @package    Dashboard
-	 * @subpackage Videos Widget
-	 *
-	 * @since 1.4.0
-	 */
-	public function videos_widget_sorting() {
-
-		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
-
-		if ( empty( $_POST['sortby'] ) ) {
-			wp_die( - 1 );
-		}
-
-		ob_start();
-		Helpers::load_view( 'widgets/videos', Videos::get_filtered_videos( esc_attr( $_POST['sortby'] ) ) );
-
-		wp_die( ob_get_clean() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 
