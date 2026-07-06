@@ -1499,17 +1499,23 @@ final class Ajax {
 
 		check_ajax_referer( 'search-products', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'read_suppliers' ) ) {
+			wp_die( -1 );
+		}
+
 		global $wpdb;
 		ob_start();
-		$where = '';
+
+		$where      = '';
+		$where_args = [];
 
 		if ( is_numeric( $_GET['term'] ) ) {
-			$supplier_id = absint( $_GET['term'] );
-			$where       = "AND ID LIKE $supplier_id";
+			$where        = 'AND ID LIKE %d';
+			$where_args[] = absint( $_GET['term'] );
 		}
 		elseif ( ! empty( $_GET['term'] ) ) {
-			$supplier_name = $wpdb->esc_like( $_GET['term'] );
-			$where         = "AND post_title LIKE '%%{$supplier_name}%%'";
+			$where        = 'AND post_title LIKE %s';
+			$where_args[] = '%' . $wpdb->esc_like( wc_clean( wp_unslash( $_GET['term'] ) ) ) . '%';
 		}
 		else {
 			wp_die( [] );
@@ -1519,15 +1525,16 @@ final class Ajax {
 		$max_results   = absint( apply_filters( 'atum/ajax/search_suppliers/max_results', 10 ) );
 		$post_statuses = AtumCapabilities::current_user_can( 'edit_private_suppliers' ) ? [ 'private', 'publish' ] : [ 'publish' ];
 
+		$prepare_args = array_merge( [ Suppliers::POST_TYPE ], $where_args, $post_statuses, [ $max_results ] );
+
 		// phpcs:disable WordPress.DB.PreparedSQL
 		$query = $wpdb->prepare(
 			"SELECT DISTINCT ID, post_title from $wpdb->posts 
 			WHERE post_type = %s $where
-			AND post_status IN ('" . implode( "','", $post_statuses ) . "')
+			AND post_status IN (" . implode( ',', array_fill( 0, count( $post_statuses ), '%s' ) ) . ")
 			ORDER by post_title ASC
 			LIMIT %d",
-			Suppliers::POST_TYPE,
-			$max_results
+			$prepare_args
 		);
 		// phpcs:enable
 
