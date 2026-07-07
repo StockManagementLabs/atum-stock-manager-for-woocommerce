@@ -119,9 +119,8 @@ export default class OrdersBulkActions {
 		let deleteItems: number[] = [],
 		    deferred: any[]       = [];
 
-		$.map( $rows, ( $row: JQuery ) => {
-			deleteItems.push( parseInt( $row.data( 'atum_order_item_id' ), 10 ) );
-			return;
+		$rows.each( ( index: number, elem: Element ) => {
+			deleteItems.push( parseInt( $( elem ).data( 'atum_order_item_id' ), 10 ) );
 		} );
 
 		if ( deleteItems.length ) {
