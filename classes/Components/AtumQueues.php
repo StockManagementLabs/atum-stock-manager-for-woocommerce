@@ -569,6 +569,11 @@ class AtumQueues {
 
 		check_ajax_referer( 'atum_async_hooks', 'security' );
 
+		// Only ATUM's own background requests use this endpoint (see trigger_async_actions()).
+		if ( empty( $_SERVER['HTTP_USER_AGENT'] ) || Helpers::get_atum_user_agent() !== $_SERVER['HTTP_USER_AGENT'] ) {
+			wp_die( -1, 403 );
+		}
+
 		// Refresh the available async transient.
 		AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );
 

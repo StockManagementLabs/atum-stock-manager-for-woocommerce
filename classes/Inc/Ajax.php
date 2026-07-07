@@ -2715,6 +2715,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-list-table-style', 'security' );
 
+		if ( ! current_user_can( 'edit_products' ) ) {
+			wp_die( -1, 403 );
+		}
+
 		if ( ! isset( $_POST['enabled'], $_POST['feature'] ) ) {
 			wp_die( -1 );
 		}
