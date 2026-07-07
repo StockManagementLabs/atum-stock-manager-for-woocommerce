@@ -21,6 +21,7 @@ use Atum\DataExport\Reports\HtmlReport;
 use Atum\Inc\Globals;
 use Atum\Inc\Helpers;
 use Atum\StockCentral\StockCentral;
+use Atum\Components\AtumCapabilities;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
@@ -116,7 +117,7 @@ class DataExport {
 
 		check_ajax_referer( 'atum-data-export-nonce', 'security' );
 
-		if ( ! \Atum\Components\AtumCapabilities::current_user_can( 'export_data' ) ) {
+		if ( ! AtumCapabilities::current_user_can( 'export_data' ) ) {
 			wp_die( -1, 403 );
 		}
 
