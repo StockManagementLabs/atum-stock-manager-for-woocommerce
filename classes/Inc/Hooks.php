@@ -1005,12 +1005,14 @@ class Hooks {
 				LEFT JOIN {$atum_product_data_table} apd ON (apd.product_id = oim.meta_value)
 			";
 
+			$like = '%' . $wpdb->esc_like( $term ) . '%';
+
 			// Search by SKU using the product meta lookup table (preferably).
 			if ( ! empty( $wpdb->wc_product_meta_lookup ) ) {
 
 				$sql .= "
 					LEFT JOIN $wpdb->wc_product_meta_lookup pml ON(pml.product_id = oim.meta_value)
-					WHERE pml.sku LIKE '%%" . $wpdb->esc_like( $term ) . "%%'
+					WHERE pml.sku LIKE %s
 				";
 
 			}
@@ -1019,15 +1021,15 @@ class Hooks {
 
 				$sql .= "
 					LEFT JOIN $wpdb->postmeta pm ON(pm.post_id = oim.meta_value AND pm.meta_key = '_sku')
-					WHERE pm.meta_value LIKE '%%" . $wpdb->esc_like( $term ) . "%%'
+					WHERE pm.meta_value LIKE %s
 				";
 
 			}
 
 			// Also search by Supplier SKU.
-			$sql .= " OR apd.supplier_sku LIKE '%%" . $wpdb->esc_like( $term ) . "%%'";
+			$sql .= ' OR apd.supplier_sku LIKE %s';
 
-			$order_ids = array_unique( array_merge( $order_ids, $wpdb->get_col( $sql ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$order_ids = array_unique( array_merge( $order_ids, $wpdb->get_col( $wpdb->prepare( $sql, $like, $like ) ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		}
 

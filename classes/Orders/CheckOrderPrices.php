@@ -154,6 +154,10 @@ class CheckOrderPrices {
 
 		check_ajax_referer( 'atum-check-order-prices-nonce', 'security' );
 
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_send_json_error();
+		}
+
 		parse_str( ltrim( $_POST['query_string'], '?' ), $query_args );
 
 		$editable_statuses  = ! empty( $query_args['post_status'] ) ? [ esc_attr( $query_args['post_status'] ) ] : $this->editable_order_statuses;
@@ -170,7 +174,9 @@ class CheckOrderPrices {
 			$tooltip  = sprintf( _n( 'There is %d order with mismatching prices.', 'There are %d orders with mismatching prices.', $mismatching_orders_count, ATUM_TEXT_DOMAIN ), $mismatching_orders_count );
 			$tooltip .= '<br>' . _n( 'Click to show the order', 'Click to show the orders', $mismatching_orders_count, ATUM_TEXT_DOMAIN );
 
-			wp_send_json_success( '<a href="' . $_POST['query_string'] . '&atum_show_mismatching=yes" id="atum-mismatching-orders" class="atum-tooltip" title="' . esc_attr( $tooltip ) . '">' . $mismatching_orders_count . '</a>' );
+			$mismatching_url = esc_url( wp_unslash( $_POST['query_string'] ) . '&atum_show_mismatching=yes' );
+
+			wp_send_json_success( '<a href="' . $mismatching_url . '" id="atum-mismatching-orders" class="atum-tooltip" title="' . esc_attr( $tooltip ) . '">' . $mismatching_orders_count . '</a>' );
 
 		}
 

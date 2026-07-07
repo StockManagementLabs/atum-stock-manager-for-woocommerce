@@ -628,9 +628,15 @@ class FullExportController extends \WC_REST_Controller {
 
 				foreach ( $schema_arr as $s ) {
 
-					$dump_file = $upload_dir . "atum_dump_{$s}_{$user_app_id}.sql";
-					if ( file_exists( $dump_file ) ) {
-						readfile( $dump_file );
+					// Sanitize the path components and confine the resolved file within the upload dir
+					// to prevent path traversal (e.g. schema/userId containing "../").
+					$dump_name = sanitize_file_name( "atum_dump_{$s}_{$user_app_id}.sql" );
+					$dump_file = $upload_dir . $dump_name;
+					$real_dir  = realpath( $upload_dir );
+					$real_file = realpath( $dump_file );
+
+					if ( FALSE !== $real_file && FALSE !== $real_dir && 0 === strpos( $real_file, trailingslashit( $real_dir ) ) && is_file( $real_file ) ) {
+						readfile( $real_file );
 					}
 					else {
 						return array(

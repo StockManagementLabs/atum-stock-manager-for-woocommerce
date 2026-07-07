@@ -552,6 +552,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'security' );
 
+		if ( ! current_user_can( 'edit_products' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		if ( empty( $_POST['data'] ) ) {
 			wp_send_json_error( __( 'Error saving the table data.', ATUM_TEXT_DOMAIN ) );
 		}
@@ -577,8 +581,14 @@ final class Ajax {
 			}
 
 			// If the first edit notice was already shown, save it as user meta.
+			// The key is always an ATUM "first edit" flag (ATUM_PREFIX . "first_edit_{$hook}"), so
+			// restrict it to that prefix to avoid writing arbitrary user meta keys.
 			if ( ! empty( $_POST['first_edit_key'] ) ) {
-				update_user_meta( get_current_user_id(), esc_attr( $_POST['first_edit_key'] ), 1 );
+				$first_edit_key = sanitize_key( wp_unslash( $_POST['first_edit_key'] ) );
+
+				if ( 0 === strpos( $first_edit_key, ATUM_PREFIX . 'first_edit_' ) ) {
+					update_user_meta( get_current_user_id(), $first_edit_key, 1 );
+				}
 			}
 
 			do_action( 'atum/ajax/after_update_list_data', $data );
@@ -618,6 +628,10 @@ final class Ajax {
 	public function apply_bulk_action() {
 
 		check_ajax_referer( 'atum-list-table-nonce', 'security' );
+
+		if ( ! current_user_can( 'edit_products' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_POST['ids'] ) || ! is_array( $_POST['ids'] ) ) {
 			wp_send_json_error( __( 'No Items Selected.', ATUM_TEXT_DOMAIN ) );
@@ -1431,6 +1445,10 @@ final class Ajax {
 	public function search_wc_orders() {
 
 		check_ajax_referer( 'search-products', 'security' );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) ) {
+			wp_die( -1 );
+		}
 
 		ob_start();
 
@@ -2572,6 +2590,10 @@ final class Ajax {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
+		if ( ! current_user_can( 'edit_product', absint( $_POST['product_id'] ) ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		$terms = empty( $_POST['terms'] ) ? [] : $_POST['terms'];
 
 		$product_id      = absint( $_POST['product_id'] );
@@ -2603,6 +2625,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
 		}
@@ -2631,6 +2657,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please select an option from the dropdown', ATUM_TEXT_DOMAIN ) );
 		}
@@ -2658,6 +2688,10 @@ final class Ajax {
 	public function clear_out_stock_threshold() {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		Helpers::force_rebuild_stock_status( NULL, TRUE, TRUE );
 
@@ -2826,6 +2860,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-order-item', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'edit_purchase_orders' ) ) {
+			wp_send_json_error();
+		}
+
 		$atum_order_id = absint( $_POST['atum_order_id'] );
 		$supplier      = absint( $_POST['supplier'] );
 
@@ -2862,6 +2900,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-order-item', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'edit_purchase_orders' ) ) {
+			wp_send_json_error();
+		}
+
 		$atum_order_id = absint( $_POST['atum_order_id'] );
 		$multiple      = stripslashes( $_POST['multiple'] );
 
@@ -2897,6 +2939,10 @@ final class Ajax {
 	public function update_calc_props() {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
+
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_POST['option'] ) ) {
 			wp_send_json_error( __( 'Please enter the number of products you want to process per AJAX call', ATUM_TEXT_DOMAIN ) );
@@ -2954,6 +3000,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'manage_settings' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		$wc_queue = \WC()->queue();
 
 		$deleting = FALSE;
@@ -2998,6 +3048,12 @@ final class Ajax {
 	public function reset_atum_capabilities() {
 
 		check_ajax_referer( 'atum-script-runner-nonce', 'security' );
+
+		// Restoring role capabilities is an administrator-level operation.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		AtumCapabilities::register_atum_capabilities();
 		wp_send_json_success( __( 'ATUM capabilities restored successfully.', ATUM_TEXT_DOMAIN ) );
 

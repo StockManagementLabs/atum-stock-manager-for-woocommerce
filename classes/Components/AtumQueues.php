@@ -587,6 +587,13 @@ class AtumQueues {
 						$hook_data['callback'][0] = stripslashes( $hook_data['callback'][0] );
 					}
 
+					// SECURITY: the callback is supplied within the request, so it must be restricted to
+					// ATUM's own static methods. This prevents an attacker (who obtained the nonce) from
+					// turning this endpoint into arbitrary code execution (e.g. callback = 'system').
+					if ( ! self::is_allowed_async_callback( $hook_data['callback'] ) ) {
+						continue;
+					}
+
 					if ( is_callable( $hook_data['callback'] ) ) {
 
 						if ( isset( $hook_data['params'] ) && is_array( $hook_data['params'] ) ) {
@@ -603,6 +610,43 @@ class AtumQueues {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Whether the given callback is allowed to be executed through the async hooks endpoint.
+	 *
+	 * Only class-based callbacks belonging to an ATUM namespace are permitted. String callbacks
+	 * (e.g. 'system', 'exec') and third-party classes are rejected to avoid remote code execution.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @param mixed $callback
+	 *
+	 * @return bool
+	 */
+	private static function is_allowed_async_callback( $callback ) {
+
+		// Only [ class, method ] callbacks are allowed (no plain function-name strings or closures).
+		if ( ! is_array( $callback ) || 2 !== count( $callback ) || ! is_string( $callback[0] ) || ! is_string( $callback[1] ) ) {
+			return FALSE;
+		}
+
+		$class = ltrim( $callback[0], '\\' );
+
+		// The class must belong to an ATUM (core or add-on) namespace.
+		if ( ! preg_match( '/^Atum[A-Za-z]*\\\\/', $class ) ) {
+			return FALSE;
+		}
+
+		// The method must exist and be static (async callbacks can't rely on an instance).
+		if ( ! class_exists( $class ) || ! method_exists( $class, $callback[1] ) ) {
+			return FALSE;
+		}
+
+		$reflection = new \ReflectionMethod( $class, $callback[1] );
+
+		return $reflection->isStatic();
 
 	}
 

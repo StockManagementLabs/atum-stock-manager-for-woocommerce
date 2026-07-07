@@ -116,6 +116,10 @@ class DataExport {
 
 		check_ajax_referer( 'atum-data-export-nonce', 'security' );
 
+		if ( ! \Atum\Components\AtumCapabilities::current_user_can( 'export_data' ) ) {
+			wp_die( -1, 403 );
+		}
+
 		$html_report  = $this->generate_html_report( $_GET );
 
 		if ( self::DEBUG_MODE ) {
