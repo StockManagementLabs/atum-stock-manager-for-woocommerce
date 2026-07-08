@@ -17,7 +17,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { pathToFileURL } from 'url';
+import { pathToFileURL, fileURLToPath } from 'url';
 import { build, transformWithOxc } from 'vite';
 
 import { resolveAtumOptions } from './create-atum-vite-config.mjs';
@@ -363,7 +363,7 @@ export async function runBuild( options = {} ) {
 // Run when invoked directly (not when imported by an addon's build script).
 const invokedDirectly
 	= process.argv[ 1 ]
-		&& path.resolve( process.argv[ 1 ] ) === path.resolve( new URL( import.meta.url ).pathname );
+		&& path.resolve( process.argv[ 1 ] ) === path.resolve( fileURLToPath( import.meta.url ) );
 
 if ( invokedDirectly ) {
 	const options = process.argv[ 2 ]
