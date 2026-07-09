@@ -2179,6 +2179,16 @@ final class Helpers {
 			$product = wc_get_product( $the_product );
 			Globals::disable_atum_product_data_models();
 
+			// If the returned product is not an ATUM product (e.g. returned from WooCommerce's
+			// ProductCache), instantiate the correct ATUM class directly.
+			if ( $product instanceof \WC_Product && ! self::is_atum_product( $product ) ) {
+				$atum_class = self::get_atum_product_class( $product->get_type() );
+
+				if ( $atum_class && class_exists( $atum_class ) && $atum_class !== get_class( $product ) ) {
+					$product = new $atum_class( $product->get_id() );
+				}
+			}
+
 			if ( $product instanceof \WC_Product && $use_cache ) {
 				AtumCache::set_cache( $cache_key, $product );
 			}

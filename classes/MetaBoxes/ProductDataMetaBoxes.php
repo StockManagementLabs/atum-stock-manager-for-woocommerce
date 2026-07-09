@@ -258,7 +258,7 @@ class ProductDataMetaBoxes {
 
 		$product_id          = empty( $variation ) ? $post->ID : $variation->ID;
 		$product             = Helpers::get_atum_product( $product_id );
-		$out_stock_threshold = $product->get_out_stock_threshold();
+		$out_stock_threshold = is_callable( array( $product, 'get_out_stock_threshold' ) ) ? $product->get_out_stock_threshold() : NULL;
 		$product_type        = empty( $variation ) ? $product->get_type() : '';
 
 		$out_stock_threshold_field_name = empty( $variation ) ? $meta_key : "variation{$meta_key}[$loop]";
@@ -300,7 +300,7 @@ class ProductDataMetaBoxes {
 		$out_stock_threshold = $this->is_variation ? $_POST[ 'variation' . Globals::OUT_STOCK_THRESHOLD_KEY ][ $this->loop ] : $_POST[ Globals::OUT_STOCK_THRESHOLD_KEY ];
 
 		// Force product validate and save to rebuild stock_status (probably _out_stock_threshold has been disabled for this product).
-		if ( (float) $this->product->get_out_stock_threshold() !== (float) $out_stock_threshold ) {
+		if ( is_callable( array( $this->product, 'get_out_stock_threshold' ) ) && (float) $this->product->get_out_stock_threshold() !== (float) $out_stock_threshold ) {
 			Helpers::force_rebuild_stock_status( $this->product );
 		}
 
