@@ -35,7 +35,7 @@ class Orders extends AtumWidget {
 
 		$this->title       = __( 'Orders', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'Periodic Order and Revenue Statistics', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-orders.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-orders.png';
 
 		parent::__construct();
 	}

@@ -136,7 +136,7 @@ final class Helpers {
 		?>
 		<span class="input-group-<?php echo esc_attr( $side ) ?>" title="<?php esc_attr_e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
 			<span class="input-group-text">
-				<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" alt="">
+				<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/atum-icon.svg" alt="">
 			</span>
 		</span>
 		<?php
@@ -3390,7 +3390,7 @@ final class Helpers {
 	 */
 	public static function get_atum_image_placeholder() {
 		return '<span class="atum-img-placeholder">
-			<img src="' . esc_url( ATUM_URL ) . 'assets/images/atum-icon.svg" alt="">
+			<img src="' . esc_url( ATUM_DIST_URL ) . 'images/atum-icon.svg" alt="">
 		</span>';
 	}
 

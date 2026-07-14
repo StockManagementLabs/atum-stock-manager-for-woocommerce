@@ -17,7 +17,7 @@ use Atum\Models\Interfaces\AtumProductInterface;
 ?>
 <div class="atum-data-panel">
 	<h2 class="atum-section-title">
-		<img src="<?php echo esc_url( ATUM_URL ) . 'assets/images/atum-icon.svg'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+		<img src="<?php echo esc_url( ATUM_DIST_URL ) . 'images/atum-icon.svg'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 		<?php esc_html_e( 'ATUM Inventory', ATUM_TEXT_DOMAIN ) ?>
 	</h2>
 

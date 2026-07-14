@@ -35,7 +35,7 @@ class CurrentStockValue extends AtumWidget {
 
 		$this->title          = __( 'Current Stock Value', ATUM_TEXT_DOMAIN );
 		$this->description    = __( 'Get current all items stock value', ATUM_TEXT_DOMAIN );
-		$this->thumbnail      = ATUM_URL . 'assets/images/dashboard/widget-thumb-stock-control.png';
+		$this->thumbnail      = ATUM_DIST_URL . 'images/dashboard/widget-thumb-stock-control.png';
 		$this->default_layout = array(
 			'x'          => 0,
 			'y'          => 10,

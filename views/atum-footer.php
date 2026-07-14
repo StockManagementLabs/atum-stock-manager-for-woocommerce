@@ -13,7 +13,7 @@
 <div class="footer-box <?php echo ! $footer_class ? 'no-style' : ''; ?>">
 	<div class="footer-atum-content">
 		<div class="footer-atum-logo">
-			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/atum-icon.svg" title="<?php esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>" alt="">
+			<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/atum-icon.svg" title="<?php esc_attr_e( 'Visit ATUM Website', ATUM_TEXT_DOMAIN ) ?>" alt="">
 			<span>
 				<?php echo esc_attr( __( 'ATUM', ATUM_TEXT_DOMAIN ) ) ?>
 			</span>

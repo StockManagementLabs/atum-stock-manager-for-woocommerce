@@ -35,7 +35,7 @@ class PromoSales extends AtumWidget {
 
 		$this->title       = __( 'Promo Sales', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'Periodic Promo Orders and Revenue Statistics', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-promo-sales.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-promo-sales.png';
 
 		parent::__construct();
 	}

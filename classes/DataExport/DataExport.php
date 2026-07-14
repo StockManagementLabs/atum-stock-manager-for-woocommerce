@@ -173,7 +173,7 @@ class DataExport {
 			// Add the icon fonts to mPDF.
 			$font_data = array(
 				'atum-icon-font' => array(
-					'R' => '../../../../assets/fonts/atum-icon-font.ttf',
+					'R' => '../../../../dist/fonts/atum-icon-font.ttf',
 				),
 			);
 

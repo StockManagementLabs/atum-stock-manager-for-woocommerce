@@ -35,7 +35,7 @@ class LostSales extends AtumWidget {
 
 		$this->title       = __( 'Lost Sales', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'Periodic Lost Sales Statistics', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-lost-sales.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-lost-sales.png';
 
 		parent::__construct();
 	}

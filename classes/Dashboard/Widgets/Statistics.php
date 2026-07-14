@@ -35,7 +35,7 @@ class Statistics extends AtumWidget {
 
 		$this->title       = __( 'ATUM Statistics', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'Graphical Preview of Periodic Sales', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-statistics.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-statistics.png';
 
 		parent::__construct();
 	}

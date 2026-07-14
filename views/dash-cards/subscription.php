@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="card-img">
-		<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-subscription-img.png" alt="">
+		<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/dashboard/card-subscription-img.png" alt="">
 	</div>
 
 	<form action="https://stockmanagementlabs.us12.list-manage.com/subscribe/post?u=bc146f9acefd460717d243671&id=b0263fe4a6" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>

@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || die;
 	</div>
 
 	<div class="card-img">
-		<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/card-add-ons-img.png" alt="">
+		<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/dashboard/card-add-ons-img.png" alt="">
 	</div>
 
 </div>

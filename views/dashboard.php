@@ -30,7 +30,7 @@ use Atum\Inc\Helpers;
 		</div>
 
 		<div class="dash-header-logo">
-			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/header-logo<?php if ( $dark_mode ) echo '-white'; ?>.svg" alt="ATUM">
+			<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/dashboard/header-logo<?php if ( $dark_mode ) echo '-white'; ?>.svg" alt="ATUM">
 			<h3><?php esc_html_e( 'Inventory Management for WooCommerce', ATUM_TEXT_DOMAIN ) ?></h3>
 			<a href="https://stockmanagementlabs.com/the-changelog/" target="_blank" class="atum-version">v<?php echo esc_html( ATUM_VERSION ) ?></a>
 		</div>
@@ -159,7 +159,7 @@ use Atum\Inc\Helpers;
 					<?php endforeach; ?>
 
 					<li class="coming-soon">
-						<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/dashboard/atum-widgets-coming-soon.png" alt="">
+						<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/dashboard/atum-widgets-coming-soon.png" alt="">
 					</li>
 				</ul>
 			</div>

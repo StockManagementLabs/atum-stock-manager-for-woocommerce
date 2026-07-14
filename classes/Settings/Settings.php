@@ -1556,7 +1556,7 @@ class Settings {
 
 				<div class="selector-container">
 					<div class="selector-box" data-value="<?php echo esc_attr( $option['key'] ); ?>" data-reset="0">
-						<img src="<?php echo esc_attr( ATUM_URL . 'assets/images/settings/' . $option['thumb'] ); ?>" alt=""
+						<img src="<?php echo esc_attr( ATUM_DIST_URL . 'images/settings/' . $option['thumb'] ); ?>" alt=""
 							class="<?php echo ! $theme && 'branded_mode' === $option['key'] || $theme === $option['key'] ? ' active' : ''; ?>">
 					</div>
 

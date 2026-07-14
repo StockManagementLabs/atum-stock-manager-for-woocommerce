@@ -35,7 +35,7 @@ class Sales extends AtumWidget {
 
 		$this->title       = __( 'Sales', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'Periodic Sales Statistics', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-sales.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-sales.png';
 
 		parent::__construct();
 	}

@@ -17,7 +17,7 @@ use Atum\Inc\Helpers;
 	<div>
 
 		<div class="atum-addons__header-logo">
-			<img src="<?php echo esc_url( ATUM_URL ) ?>assets/images/add-ons/atum-logo-addons.svg" alt="ATUM Premium Add-ons">
+			<img src="<?php echo esc_url( ATUM_DIST_URL ) ?>images/add-ons/atum-logo-addons.svg" alt="ATUM Premium Add-ons">
 			<h3><?php esc_html_e( 'Bring your e-commerce to the next level and get the complete control over ready to sell inventory in one beautifully designed stock management package.', ATUM_TEXT_DOMAIN ) ?></h3>
 		</div>
 

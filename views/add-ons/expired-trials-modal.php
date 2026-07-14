@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || die;
 
 				<span class="atum-trial-list__item-thumb">
 					<?php $addon_slug = str_replace( '-trial', '', str_replace( '_', '-', $slug ) ) ?>
-					<img src="<?php echo esc_url( ATUM_URL . 'assets/images/add-ons/icon-' . $addon_slug . '.svg' ) ?>" alt="<?php echo esc_html( $expired_trial['name'] ) ?>">
+					<img src="<?php echo esc_url( ATUM_DIST_URL . 'images/add-ons/icon-' . $addon_slug . '.svg' ) ?>" alt="<?php echo esc_html( $expired_trial['name'] ) ?>">
 				</span>
 				<span class="atum-trial-list__item-name">
 					<?php echo esc_html( trim( str_replace( 'Trial', '', $expired_trial['name'] ) ) ) ?> <i class="atum-icon atmi-lock"></i><br>

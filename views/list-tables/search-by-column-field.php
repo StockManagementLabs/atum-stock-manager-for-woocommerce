@@ -65,7 +65,7 @@ $dropdown_required = empty( $menu_items ) || count( $menu_items ) > 1;
 
 	<?php if ( ! empty( $show_atum_icon ) ) : ?>
 		<span class="input-group-text atum-tooltip" title="<?php esc_attr_e( 'ATUM Search by Column', ATUM_TEXT_DOMAIN ) ?>">
-			<img src="<?php echo esc_url( ATUM_URL . 'assets/images/atum-icon.svg' ) ?>" alt="<?php esc_attr_e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
+			<img src="<?php echo esc_url( ATUM_DIST_URL . 'images/atum-icon.svg' ) ?>" alt="<?php esc_attr_e( 'ATUM field', ATUM_TEXT_DOMAIN ) ?>">
 		</span>
 	<?php endif; ?>
 

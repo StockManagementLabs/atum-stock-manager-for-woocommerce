@@ -37,7 +37,7 @@ class StockControl extends AtumWidget {
 
 		$this->title       = __( 'Stock Control', ATUM_TEXT_DOMAIN );
 		$this->description = __( 'In, Low and Out of Stock Statistics', ATUM_TEXT_DOMAIN );
-		$this->thumbnail   = ATUM_URL . 'assets/images/dashboard/widget-thumb-stock-control.png';
+		$this->thumbnail   = ATUM_DIST_URL . 'images/dashboard/widget-thumb-stock-control.png';
 
 		parent::__construct();
 
