@@ -196,9 +196,9 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
-`2.0`
+`2.0.1`
 
-*2026-07-14*
+*2026-07-15*
 
 **Features**
 
