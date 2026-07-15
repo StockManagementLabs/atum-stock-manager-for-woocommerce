@@ -10,7 +10,7 @@
  * Requires Plugins:     woocommerce
  * Plugin URI:           https://stockmanagementlabs.com/
  * Description:          The ultimate stock management plugin for serious WooCommerce sellers
- * Version:              2.0.1
+ * Version:              2.0.2
  * Author:               Stock Management Labs™
  * Author URI:           https://stockmanagementlabs.com/
  * Contributors:         BE REBEL - https://berebel.studio
@@ -28,7 +28,7 @@
 defined( 'ABSPATH' ) || die;
 
 if ( ! defined( 'ATUM_VERSION' ) ) {
-	define( 'ATUM_VERSION', '2.0.1' );
+	define( 'ATUM_VERSION', '2.0.2' );
 }
 
 if ( ! defined( 'ATUM_WC_MINIMUM_VERSION' ) ) {
