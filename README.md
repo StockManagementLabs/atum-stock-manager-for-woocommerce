@@ -4,7 +4,7 @@ Most Advanced WooCommerce Inventory Manager - Inventory Statistics (Periodical S
 
 ##Description
 
-**✨ NEW IMPROVED ATUM v1.9**
+**✨ NEW IMPROVED ATUM v2**
 
 **💻 NEW [ATUM REST API](https://stockmanagementlabs.github.io/atum-rest-api-docs/)**
 
@@ -193,6 +193,38 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 
 ## Changelog
+
+---
+
+`2.0`
+
+*2026-07-14*
+
+**Features**
+
+* Improved ATUM cache system.
+* Added compatibility to "WC Product Object Caching" feature.
+* Modernized dev environment.
+* New AtumAssets class.
+* Upgraded to gridstack v12.
+* Upgraded chart.js.
+* Upgraded intro.js.
+
+**Changes**
+
+* Refactoring.
+* Removed deprecated news and video widgets.
+* Removed deprecated code.
+
+**Fixes**
+
+* CSS fixes.
+* Fixed namespaces.
+* Fixed wrong tooltips shown when the sales statistics chart is disabled.
+* Fixed jquery compatible versions.
+* Security fix in ajax callback (thanks @Saher).
+* Several security fixes and hardening.
+* Fixed delete IL items in bulk.
 
 ---
 
