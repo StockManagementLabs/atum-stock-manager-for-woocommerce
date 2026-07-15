@@ -196,6 +196,16 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`2.0.2`
+
+*2026-07-15*
+
+**Fixes**
+
+* Fixed dist folder not being deployed.
+
+---
+
 `2.0.1`
 
 *2026-07-15*
