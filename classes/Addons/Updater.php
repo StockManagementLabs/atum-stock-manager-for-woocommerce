@@ -124,6 +124,7 @@ class Updater {
 		remove_action( 'after_plugin_row_' . $this->name, 'wp_plugin_update_row' );
 		add_action( 'after_plugin_row_' . $this->name, array( $this, 'show_update_notification' ), 10, 2 );
 		add_action( 'admin_init', array( $this, 'show_changelog' ) );
+		add_action( "in_plugin_update_message-{$this->name}", array( $this, 'show_requires_atum_notice' ), 10, 2 );
 
 	}
 
@@ -319,9 +320,57 @@ class Updater {
 
 			do_action( "in_plugin_update_message-{$file}", $plugin, $version_info ); // phpcs:ignore  WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
+			$requires_atum = $this->get_requires_atum_from_version_info( $version_info );
+			if ( Addons::is_addon_update_blocked_by_atum( $requires_atum ) ) {
+				echo '<br />' . esc_html( Addons::get_requires_atum_block_message( $requires_atum ) );
+			}
+
 			echo '</div></td></tr>';
 
 		}
+
+	}
+
+	/**
+	 * Append a notice under the plugin update row when ATUM is too old for this update.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param array  $plugin_data
+	 * @param object $response
+	 */
+	public function show_requires_atum_notice( $plugin_data, $response ) {
+
+		$requires_atum = $this->get_requires_atum_from_version_info( $response );
+
+		if ( ! Addons::is_addon_update_blocked_by_atum( $requires_atum ) ) {
+			return;
+		}
+
+		echo '<br /><strong>' . esc_html( Addons::get_requires_atum_block_message( $requires_atum ) ) . '</strong>';
+
+	}
+
+	/**
+	 * Extract requires_atum from API / transient version info.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param object|array|null $version_info
+	 *
+	 * @return string
+	 */
+	private function get_requires_atum_from_version_info( $version_info ) {
+
+		if ( is_object( $version_info ) && ! empty( $version_info->requires_atum ) ) {
+			return (string) $version_info->requires_atum;
+		}
+
+		if ( is_array( $version_info ) && ! empty( $version_info['requires_atum'] ) ) {
+			return (string) $version_info['requires_atum'];
+		}
+
+		return '';
 
 	}
 

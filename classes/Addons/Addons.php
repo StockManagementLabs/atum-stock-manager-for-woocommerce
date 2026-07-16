@@ -127,10 +127,18 @@ final class Addons {
 		$addons_loader = self::get_addons_loader_class();
 		new $addons_loader();
 
+		// Gate add-on installs/auto-updates even outside wp-admin (cron auto-updates).
+		add_filter( 'auto_update_plugin', array( __CLASS__, 'maybe_block_addon_auto_update' ), 10, 2 );
+		add_filter( 'upgrader_pre_install', array( __CLASS__, 'maybe_block_addon_upgrade' ), 10, 2 );
+		add_filter( 'site_transient_update_plugins', array( __CLASS__, 'prioritize_atum_in_update_transient' ) );
+
 		if ( is_admin() ) {
 
 			// Automatic updates for addons.
 			add_action( 'admin_init', array( $this, 'check_addons_updates' ), 0 );
+
+			// Ensure ATUM core updates before add-ons in bulk manual updates.
+			add_action( 'load-update.php', array( __CLASS__, 'prioritize_atum_in_bulk_updates' ) );
 
 			// Check if there are ATUM add-ons installed that are not activated.
 			if ( ! empty( self::$addons ) ) {
@@ -1278,12 +1286,20 @@ final class Addons {
 	 * @param string $addon_name    The addon name.
 	 * @param string $addon_slug    The addon slug.
 	 * @param string $download_link The link to download the addon zip file.
+	 * @param string $requires_atum Optional minimum ATUM version required by this package.
 	 *
 	 * @return array    An array with the result and the message.
 	 *
 	 * @throws AtumException If the download fails could throw an exception.
 	 */
-	public static function install_addon( $addon_name, $addon_slug, $download_link ) {
+	public static function install_addon( $addon_name, $addon_slug, $download_link, $requires_atum = '' ) {
+
+		if ( self::is_addon_update_blocked_by_atum( $requires_atum ) ) {
+			return array(
+				'success' => FALSE,
+				'data'    => self::get_requires_atum_block_message( $requires_atum ),
+			);
+		}
 
 		// Ensure that the download link URL is pointing to the right place.
 		if (
@@ -1617,6 +1633,263 @@ final class Addons {
 		}
 
 		return $version;
+
+	}
+
+	/**
+	 * Get the ATUM core version currently on disk (not the in-memory constant).
+	 * Needed during bulk/auto-updates where ATUM_VERSION may still be the pre-upgrade value.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @return string
+	 */
+	public static function get_installed_atum_version() {
+
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$plugin_file = WP_PLUGIN_DIR . '/' . ATUM_BASENAME;
+
+		if ( ! file_exists( $plugin_file ) ) {
+			return defined( 'ATUM_VERSION' ) ? ATUM_VERSION : '0';
+		}
+
+		$plugin_data = get_plugin_data( $plugin_file, FALSE, FALSE );
+
+		return ! empty( $plugin_data['Version'] ) ? $plugin_data['Version'] : ( defined( 'ATUM_VERSION' ) ? ATUM_VERSION : '0' );
+
+	}
+
+	/**
+	 * Whether an add-on package should be blocked because installed ATUM is too old.
+	 * Empty/missing requires_atum never blocks.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string|null $requires_atum
+	 *
+	 * @return bool
+	 */
+	public static function is_addon_update_blocked_by_atum( $requires_atum ) {
+
+		$requires_atum = is_string( $requires_atum ) ? trim( $requires_atum ) : '';
+
+		if ( '' === $requires_atum ) {
+			return FALSE;
+		}
+
+		return version_compare( self::get_installed_atum_version(), $requires_atum, '<' );
+
+	}
+
+	/**
+	 * User-facing message when an add-on update requires a newer ATUM.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $requires_atum
+	 *
+	 * @return string
+	 */
+	public static function get_requires_atum_block_message( $requires_atum ) {
+
+		return sprintf(
+			/* translators: %s: minimum required ATUM version */
+			__( 'This update requires ATUM %s or greater. Please update ATUM first.', ATUM_TEXT_DOMAIN ),
+			$requires_atum
+		);
+
+	}
+
+	/**
+	 * Move ATUM core to the front of a plugins list when present.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param array $plugins
+	 *
+	 * @return array
+	 */
+	public static function move_atum_first_in_plugins_list( $plugins ) {
+
+		if ( empty( $plugins ) || ! is_array( $plugins ) ) {
+			return $plugins;
+		}
+
+		$atum_key = array_search( ATUM_BASENAME, $plugins, TRUE );
+
+		if ( FALSE === $atum_key ) {
+			return $plugins;
+		}
+
+		unset( $plugins[ $atum_key ] );
+
+		return array_merge( [ ATUM_BASENAME ], array_values( $plugins ) );
+
+	}
+
+	/**
+	 * Prioritize ATUM in the update_plugins transient so auto-updates install it first.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param object|mixed $transient
+	 *
+	 * @return object|mixed
+	 */
+	public static function prioritize_atum_in_update_transient( $transient ) {
+
+		if ( ! is_object( $transient ) || empty( $transient->response ) || ! is_array( $transient->response ) ) {
+			return $transient;
+		}
+
+		if ( ! isset( $transient->response[ ATUM_BASENAME ] ) ) {
+			return $transient;
+		}
+
+		$atum_update = $transient->response[ ATUM_BASENAME ];
+		unset( $transient->response[ ATUM_BASENAME ] );
+		$transient->response = array_merge( [ ATUM_BASENAME => $atum_update ], $transient->response );
+
+		return $transient;
+
+	}
+
+	/**
+	 * Prioritize ATUM in bulk plugin updates (update-selected).
+	 *
+	 * @since 2.0.3
+	 */
+	public static function prioritize_atum_in_bulk_updates() {
+
+		if ( empty( $_REQUEST['action'] ) || 'update-selected' !== $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		if ( isset( $_GET['plugins'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$plugins         = explode( ',', wp_unslash( $_GET['plugins'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$plugins         = array_map( 'urldecode', $plugins );
+			$_GET['plugins'] = implode( ',', self::move_atum_first_in_plugins_list( $plugins ) );
+		}
+
+		if ( isset( $_POST['checked'] ) && is_array( $_POST['checked'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$_POST['checked'] = self::move_atum_first_in_plugins_list( wp_unslash( $_POST['checked'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		}
+
+	}
+
+	/**
+	 * Whether a plugin file belongs to an ATUM premium add-on (not ATUM core).
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $plugin
+	 *
+	 * @return bool
+	 */
+	public static function is_atum_addon_plugin( $plugin ) {
+		return ! empty( $plugin ) && ATUM_BASENAME !== $plugin && 0 === strpos( $plugin, 'atum-' );
+	}
+
+	/**
+	 * Resolve requires_atum for a plugin from an update item or the update_plugins transient.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string        $plugin
+	 * @param object|mixed  $item
+	 *
+	 * @return string
+	 */
+	public static function get_requires_atum_for_plugin( $plugin, $item = NULL ) {
+
+		if ( is_object( $item ) && ! empty( $item->requires_atum ) ) {
+			return (string) $item->requires_atum;
+		}
+
+		if ( is_array( $item ) && ! empty( $item['requires_atum'] ) ) {
+			return (string) $item['requires_atum'];
+		}
+
+		$update_plugins = get_site_transient( 'update_plugins' );
+
+		if ( ! empty( $update_plugins->response[ $plugin ]->requires_atum ) ) {
+			return (string) $update_plugins->response[ $plugin ]->requires_atum;
+		}
+
+		return '';
+
+	}
+
+	/**
+	 * Block WordPress auto-updates for add-ons that require a newer ATUM.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param bool|null   $update
+	 * @param object|string $item
+	 *
+	 * @return bool|null
+	 */
+	public static function maybe_block_addon_auto_update( $update, $item ) {
+
+		$plugin = '';
+
+		if ( is_object( $item ) && ! empty( $item->plugin ) ) {
+			$plugin = $item->plugin;
+		}
+		elseif ( is_string( $item ) ) {
+			$plugin = $item;
+		}
+
+		if ( ! self::is_atum_addon_plugin( $plugin ) ) {
+			return $update;
+		}
+
+		$requires_atum = self::get_requires_atum_for_plugin( $plugin, $item );
+
+		if ( self::is_addon_update_blocked_by_atum( $requires_atum ) ) {
+			return FALSE;
+		}
+
+		return $update;
+
+	}
+
+	/**
+	 * Block add-on upgrades when installed ATUM is below requires_atum.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param bool|\WP_Error $reply
+	 * @param array          $hook_extra
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public static function maybe_block_addon_upgrade( $reply, $hook_extra ) {
+
+		if ( is_wp_error( $reply ) ) {
+			return $reply;
+		}
+
+		$plugin = ! empty( $hook_extra['plugin'] ) ? $hook_extra['plugin'] : '';
+
+		if ( ! self::is_atum_addon_plugin( $plugin ) ) {
+			return $reply;
+		}
+
+		$requires_atum = self::get_requires_atum_for_plugin( $plugin );
+
+		if ( self::is_addon_update_blocked_by_atum( $requires_atum ) ) {
+			return new \WP_Error(
+				'atum_requires_newer_core',
+				self::get_requires_atum_block_message( $requires_atum )
+			);
+		}
+
+		return $reply;
 
 	}
 

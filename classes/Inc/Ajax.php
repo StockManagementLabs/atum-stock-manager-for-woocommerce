@@ -1182,7 +1182,12 @@ final class Ajax {
 				Addons::update_key( $addon_name, $key_info );
 
 				/* @noinspection PhpUnhandledExceptionInspection */
-				$result = Addons::install_addon( $license_data->name, $license_data->slug, $license_data->download_link );
+				$result = Addons::install_addon(
+					$license_data->name,
+					$license_data->slug,
+					$license_data->download_link,
+					$license_data->requires_atum ?? ''
+				);
 				wp_send_json( $result );
 
 			}
