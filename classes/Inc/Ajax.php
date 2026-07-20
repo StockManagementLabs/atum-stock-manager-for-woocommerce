@@ -292,6 +292,10 @@ final class Ajax {
 
 		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
 
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		$current_stock_values = WidgetHelpers::get_items_in_stock( $_POST['categorySelected'], $_POST['productTypeSelected'] );
 		$current_stock_values = array_map( 'strval', $current_stock_values ); // Avoid issues with decimals when encoding to JSON.
 
@@ -310,6 +314,10 @@ final class Ajax {
 	public function load_sales_data() {
 
 		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
+
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_POST['widget'] ) || empty( $_POST['filter'] ) ) {
 			wp_send_json_error( __( 'Invalid data', ATUM_TEXT_DOMAIN ) );
@@ -402,6 +410,10 @@ final class Ajax {
 	public function statistics_widget_chart() {
 
 		check_ajax_referer( 'atum-dashboard-widgets', 'security' );
+
+		if ( ! AtumCapabilities::current_user_can( 'view_statistics' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_POST['chart_data'] ) || empty( $_POST['chart_period'] ) ) {
 			wp_send_json_error();
@@ -735,6 +747,11 @@ final class Ajax {
 	public function control_all_products() {
 
 		check_ajax_referer( 'atum-control-all-products-nonce', 'security' );
+
+		if ( ! current_user_can( 'edit_products' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		Helpers::change_status_meta( Globals::ATUM_CONTROL_STOCK_KEY, 'yes' );
 
 	}
@@ -911,6 +928,10 @@ final class Ajax {
 	private function check_license_post_data() {
 
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_REQUEST['addon'] ) ) {
 			wp_send_json_error( __( 'No add-on name provided', ATUM_TEXT_DOMAIN ) );
@@ -1137,6 +1158,10 @@ final class Ajax {
 
 		$this->check_license_post_data();
 
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		$addon_name    = esc_attr( $_REQUEST['addon'] );
 		$key           = esc_attr( $_REQUEST['key'] );
 		$default_error = __( 'An error occurred, please try again later.', ATUM_TEXT_DOMAIN );
@@ -1213,6 +1238,10 @@ final class Ajax {
 
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
 
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		if ( empty( $_POST['addon'] ) ) {
 			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
 		}
@@ -1235,6 +1264,10 @@ final class Ajax {
 	public function refresh_license_status() {
 
 		check_ajax_referer( ATUM_PREFIX . 'manage_license', 'security' );
+
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		if ( empty( $_POST['addon'] ) ) {
 			wp_send_json_error( __( 'Add-on name not provided', ATUM_TEXT_DOMAIN ) );
@@ -1328,6 +1361,10 @@ final class Ajax {
 	public function uninstall_trial() {
 
 		$this->check_license_post_data();
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
 
 		$result = Addons::uninstall_trial( esc_attr( $_POST['addon'] ) );
 
@@ -2465,6 +2502,10 @@ final class Ajax {
 			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
 		}
 
+		if ( ! current_user_can( 'edit_product', absint( $_POST['parent_id'] ) ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		if ( empty( $_POST['value'] ) ) {
 			wp_send_json_error( __( 'Please, choose a status from the dropdown', ATUM_TEXT_DOMAIN ) );
 		}
@@ -2501,13 +2542,17 @@ final class Ajax {
 			wp_send_json_error( __( 'No parent ID specified', ATUM_TEXT_DOMAIN ) );
 		}
 
+		if ( ! current_user_can( 'edit_product', absint( $_POST['parent_id'] ) ) ) {
+			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
+		}
+
 		$product = Helpers::get_atum_product( absint( $_POST['parent_id'] ) );
 
 		if ( ! $product instanceof \WC_Product_Variable ) {
 			wp_send_json_error( __( 'Invalid parent product', ATUM_TEXT_DOMAIN ) );
 		}
 
-		$supplier_id = $_POST['value'] ?: NULL;
+		$supplier_id = $_POST['value'] ? absint( $_POST['value'] ) : NULL;
 		$variations  = $product->get_children();
 
 		foreach ( $variations as $variation_id ) {
