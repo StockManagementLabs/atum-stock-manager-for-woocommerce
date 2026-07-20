@@ -7,7 +7,7 @@ Tested up to: 7.0
 Requires PHP: 7.4
 WC requires at least: 6.0
 WC tested up to: 10.9.4
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -213,6 +213,20 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 
 == Changelog ==
+
+---
+
+`2.0.3`
+
+*2026-07-20*
+
+**Changes**
+
+* Check minimum ATUM version required before installing addons via automatic updates.
+
+**Fixes**
+
+* Security fixes and hardening.
 
 ---
 
