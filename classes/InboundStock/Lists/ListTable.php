@@ -394,17 +394,19 @@ class ListTable extends AtumListTable {
 
 		if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) > 0 ) {
 
-			$search    = esc_attr( $_REQUEST['s'] );
-			$sub_where = array();
+			$raw_search = wp_unslash( $_REQUEST['s'] );
+			$search     = esc_attr( $raw_search ); // Kept for the filter argument below (backwards compat).
+			$like       = '%' . $wpdb->esc_like( $raw_search ) . '%';
+			$sub_where  = array();
 
-			if ( is_numeric( $search ) ) {
+			if ( is_numeric( $raw_search ) ) {
 				$sub_where[] = 'oim.`meta_value` = ' . absint( $_REQUEST['s'] );
 			}
 			else {
-				$sub_where[] = "oi.`order_item_name` LIKE '%{$search}%'";
+				$sub_where[] = $wpdb->prepare( 'oi.`order_item_name` LIKE %s', $like );
 			}
 
-			$sub_where[] = "prm.`meta_value` LIKE '%{$search}%'";
+			$sub_where[] = $wpdb->prepare( 'prm.`meta_value` LIKE %s', $like );
 
 			$where[] = '(' . implode( ' OR ', apply_filters( 'atum/inbound_stock_list/prepare_fields_where', $sub_where, $search ) ) . ')';
 

@@ -196,6 +196,14 @@ class AtumProductData {
 	 */
 	public function register_product_fields() {
 
+		// Only expose the ATUM product fields on the authenticated WC REST API (wc/v1..v3). register_rest_field()
+		// attaches by object type ('product'/'product_variation'), so without this guard the fields would also
+		// be registered on the public core /wp/v2/product route — where they'd show up as empty/null values
+		// (misleading: e.g. a null purchase_price that isn't actually empty) and advertise that ATUM is installed.
+		if ( ! $this->is_wc_rest_namespace_request() ) {
+			return;
+		}
+
 		$product_fields = apply_filters( 'atum/api/product_data/product_fields', $this->product_fields );
 
 		foreach ( $product_fields as $field_name => $field_supports ) {
@@ -221,6 +229,37 @@ class AtumProductData {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Whether the current REST request targets the authenticated WC REST API namespace (wc/v1..v3).
+	 *
+	 * Used to keep the ATUM product fields off the public core /wp/v2/product route (they are registered by
+	 * object type, which would otherwise attach them there). Excludes the public WC Store API (wc/store).
+	 *
+	 * @since 2.0.3
+	 *
+	 * @return bool
+	 */
+	private function is_wc_rest_namespace_request() {
+
+		$rest_route = isset( $GLOBALS['wp'], $GLOBALS['wp']->query_vars['rest_route'] ) ? $GLOBALS['wp']->query_vars['rest_route'] : '';
+
+		// Fallback to the request URI when the rest_route query var isn't populated.
+		if ( '' === $rest_route && ! empty( $_SERVER['REQUEST_URI'] ) ) {
+
+			$prefix = trailingslashit( rest_get_url_prefix() );
+			$path   = (string) wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH );
+			$pos    = strpos( $path, $prefix );
+
+			if ( FALSE !== $pos ) {
+				$rest_route = substr( $path, $pos + strlen( $prefix ) - 1 );
+			}
+
+		}
+
+		return 0 === strpos( ltrim( (string) $rest_route, '/' ), 'wc/v' );
 
 	}
 
@@ -422,6 +461,9 @@ class AtumProductData {
 	 */
 	private function get_field_required_capability( $field_name ) {
 
+		// NOTE: keep this map in sync with the capability-based field stripping in the constructor. Both
+		// encode the same field -> capability policy: the constructor controls schema registration, this
+		// controls per-request serving of the value.
 		$field_capabilities = array(
 			'purchase_price' => 'view_purchase_price',
 			'inbound_stock'  => 'read_inbound_stock',
@@ -459,7 +501,9 @@ class AtumProductData {
 		 * the add-on fields served through this same callback) to unauthenticated users. Refuse to
 		 * serve the value for any request outside the WC REST namespace.
 		 */
-		if ( ! $request instanceof \WP_REST_Request || 0 !== strpos( ltrim( (string) $request->get_route(), '/' ), 'wc/' ) ) {
+		// NOTE: gate on the authenticated WC REST namespace 'wc/v' (wc/v1..v3) — NOT the broader 'wc/', which
+		// would also admit the public, unauthenticated WC Store API (wc/store).
+		if ( ! $request instanceof \WP_REST_Request || 0 !== strpos( ltrim( (string) $request->get_route(), '/' ), 'wc/v' ) ) {
 			return NULL;
 		}
 
@@ -748,9 +792,14 @@ class AtumProductData {
 		// Post status filter.
 		if ( ! empty( $request['atum_post_status'] ) ) {
 
-			$statuses = array_map( 'esc_attr', array_map( 'trim', explode( ',', $request['atum_post_status'] ) ) );
+			// SECURITY: whitelist against real registered post statuses (these values are later inlined into
+			// a post_status IN (...) clause), instead of relying on esc_attr as a SQL sanitizer.
+			$statuses = array_values( array_intersect(
+				array_map( 'trim', explode( ',', $request['atum_post_status'] ) ),
+				get_post_stati()
+			) );
 
-			if ( ! in_array( 'private', $statuses ) || ( in_array( 'private', $statuses ) && current_user_can( 'read_private_posts' ) ) ) {
+			if ( ! in_array( 'private', $statuses, TRUE ) || current_user_can( 'read_private_posts' ) ) {
 				add_filter( 'posts_where', array( $this, 'add_search_criteria_to_wp_query_where' ) );
 				$this->atum_post_status_param = $statuses;
 			}

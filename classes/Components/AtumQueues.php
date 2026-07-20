@@ -64,6 +64,14 @@ class AtumQueues {
 	private static $async_hooks = array();
 
 	/**
+	 * Cache of the async callback signatures (Class::method) legitimately registered via add_async_action().
+	 * Used to restrict what the async hooks endpoint is allowed to execute.
+	 *
+	 * @var null|string[]
+	 */
+	private static $allowed_async_callbacks = NULL;
+
+	/**
 	 * Group used for the ATUM queues
 	 */
 	const QUEUES_GROUP = 'ATUM';
@@ -447,6 +455,9 @@ class AtumQueues {
 				'params'   => $params,
 			);
 
+			// Remember this callback so the async hooks endpoint can restrict execution to it (see handle_async_hooks()).
+			self::remember_allowed_async_callback( $callback );
+
 			// Ensure that we add the action only once.
 			if ( ! has_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) ) ) {
 				add_action( 'shutdown', array( self::get_instance(), 'trigger_async_actions' ) );
@@ -651,7 +662,104 @@ class AtumQueues {
 
 		$reflection = new \ReflectionMethod( $class, $callback[1] );
 
-		return $reflection->isStatic();
+		if ( ! $reflection->isStatic() ) {
+			return FALSE;
+		}
+
+		$allowed = self::get_allowed_async_callbacks();
+
+		// If the allow-list hasn't been populated yet (fresh install, object-cache lag, or an upgrade
+		// window where an old loopback request hits the new handler), fall back to the namespace + static
+		// checks above rather than silently dropping a legitimate async task.
+		if ( empty( $allowed ) ) {
+			return TRUE;
+		}
+
+		// SECURITY: even among ATUM static methods, only run the exact callbacks ATUM has registered as
+		// async actions (shrinks the reachable surface to the handful enqueued via add_async_action()).
+		$signature = $class . '::' . $callback[1];
+
+		if ( ! in_array( $signature, $allowed, TRUE ) ) {
+			error_log( sprintf( 'ATUM: async callback "%s" rejected — not in the registered async allow-list.', $signature ) );
+			return FALSE;
+		}
+
+		return TRUE;
+
+	}
+
+	/**
+	 * Persist the signature of a legitimately-registered async callback.
+	 *
+	 * The async hooks endpoint receives its callbacks from the request body, so it can only be trusted to
+	 * run callbacks ATUM itself registered through add_async_action(). Recording them here lets the endpoint
+	 * restrict execution to that set (defense in depth against the endpoint being turned into a call-gadget).
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param mixed $callback
+	 */
+	private static function remember_allowed_async_callback( $callback ) {
+
+		$signature = self::get_async_callback_signature( $callback );
+
+		if ( ! $signature ) {
+			return;
+		}
+
+		$allowed = self::get_allowed_async_callbacks();
+
+		if ( ! in_array( $signature, $allowed, TRUE ) ) {
+			$allowed[]                     = $signature;
+			self::$allowed_async_callbacks = $allowed;
+			update_option( 'atum_async_allowed_callbacks', $allowed, TRUE );
+		}
+
+	}
+
+	/**
+	 * Get the list of async callback signatures (Class::method) allowed on the async hooks endpoint.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @return string[]
+	 */
+	private static function get_allowed_async_callbacks() {
+
+		if ( is_null( self::$allowed_async_callbacks ) ) {
+			self::$allowed_async_callbacks = array_values( array_filter( (array) get_option( 'atum_async_allowed_callbacks', array() ), 'is_string' ) );
+		}
+
+		return self::$allowed_async_callbacks;
+
+	}
+
+	/**
+	 * Normalize a class-based callback into a "Class::method" signature.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param mixed $callback
+	 *
+	 * @return string Empty string when the callback isn't a supported [ class, method ] pair.
+	 */
+	private static function get_async_callback_signature( $callback ) {
+
+		if ( ! is_array( $callback ) || 2 !== count( $callback ) || ! is_string( $callback[1] ) ) {
+			return '';
+		}
+
+		if ( is_object( $callback[0] ) ) {
+			$class = get_class( $callback[0] );
+		}
+		elseif ( is_string( $callback[0] ) ) {
+			$class = $callback[0];
+		}
+		else {
+			return '';
+		}
+
+		return ltrim( $class, '\\' ) . '::' . $callback[1];
 
 	}
 
