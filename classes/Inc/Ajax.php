@@ -2640,13 +2640,18 @@ final class Ajax {
 			wp_send_json_error( __( 'No valid product ID provided', ATUM_TEXT_DOMAIN ) );
 		}
 
-		if ( ! current_user_can( 'edit_product', absint( $_POST['product_id'] ) ) ) {
+		$product_id = absint( $_POST['product_id'] );
+
+		// Variations aren't registered with 'map_meta_cap', so the 'edit_product' meta cap doesn't resolve
+		// against a variation ID. Check the capability against the parent product when dealing with variations.
+		$cap_product_id = wp_get_post_parent_id( $product_id ) ?: $product_id;
+
+		if ( ! current_user_can( 'edit_post', $cap_product_id ) ) {
 			wp_send_json_error( __( 'You do not have permission to perform this action.', ATUM_TEXT_DOMAIN ) );
 		}
 
 		$terms = empty( $_POST['terms'] ) ? [] : $_POST['terms'];
 
-		$product_id      = absint( $_POST['product_id'] );
 		$sanitized_terms = array_map( 'absint', $terms );
 
 		do_action( 'atum/ajax/stock_central_list/before_set_locations', $product_id, $sanitized_terms );
