@@ -7,7 +7,7 @@ Tested up to: 7.0
 Requires PHP: 7.4
 WC requires at least: 6.0
 WC tested up to: 10.9.4
-Stable tag: 2.0.3
+Stable tag: 2.0.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -216,6 +216,16 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 ---
 
+`2.0.3.1`
+
+*2026-07-21*
+
+**Fixes**
+
+* Fixed capability check on variation products.
+
+---
+
 `2.0.3`
 
 *2026-07-20*
@@ -226,7 +236,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 
 **Fixes**
 
-* Security fixes and hardening.
+* General hardening.
 
 ---
 
@@ -267,7 +277,7 @@ We officially support: WooCommerce Product Bundles, WooCommerce Subscriptions, W
 * Fixed wrong tooltips shown when the sales statistics chart is disabled.
 * Fixed jquery compatible versions.
 * Security fix in ajax callback (thanks @Saher).
-* Several security fixes and hardening.
+* General hardening.
 * Fixed delete IL items in bulk.
 
 ---

@@ -196,6 +196,16 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`2.0.3.1`
+
+*2026-07-21*
+
+**Fixes**
+
+* Fixed capability check on variation products.
+
+---
+
 `2.0.3`
 
 *2026-07-20*
@@ -206,7 +216,7 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 **Fixes**
 
-* Security fixes and hardening.
+* General hardening.
 
 ---
 
@@ -247,7 +257,7 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 * Fixed wrong tooltips shown when the sales statistics chart is disabled.
 * Fixed jquery compatible versions.
 * Security fix in ajax callback (thanks @Saher).
-* Several security fixes and hardening.
+* General hardening.
 * Fixed delete IL items in bulk.
 
 ---
