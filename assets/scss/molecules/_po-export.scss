@@ -102,7 +102,7 @@ body {
 	}
 	
 	td.total, .po-lines tr:nth-child(even) td {
-		background-color: color.adjust($primary, $alpha: -.9);
+		background-color: color.mix($primary, $white, 10%);
 	}
 }
 
