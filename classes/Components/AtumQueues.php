@@ -580,10 +580,12 @@ class AtumQueues {
 
 		check_ajax_referer( 'atum_async_hooks', 'security' );
 
-		// Only ATUM's own background requests use this endpoint (see trigger_async_actions()).
-		if ( empty( $_SERVER['HTTP_USER_AGENT'] ) || Helpers::get_atum_user_agent() !== $_SERVER['HTTP_USER_AGENT'] ) {
-			wp_die( -1, 403 );
-		}
+		// NOTE: do not gate this endpoint on the User-Agent header. It is fully client-controlled and both parts of
+		// Helpers::get_atum_user_agent() (the plugin version and home_url()) are public, so it stops no attacker, while
+		// it does reject legitimate loopback requests whenever a proxy/WAF rewrites the header or home_url() resolves
+		// differently for the incoming request (multilingual sites, www/non-www, http/https, multisite), and during the
+		// upgrade window when ATUM_VERSION changes between the request that enqueues and the one that executes.
+		// The actual protections for this endpoint are the nonce above and the callback allow-list applied below.
 
 		// Refresh the available async transient.
 		AtumCache::set_transient( self::$async_available_transient, 1, DAY_IN_SECONDS, TRUE );
@@ -818,7 +820,10 @@ class AtumQueues {
 				'sslverify' => apply_filters( 'https_local_ssl_verify', FALSE ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			] );
 
-			$remote_available = is_wp_error( $response ) || 200 === wp_remote_retrieve_response_code( $response );
+			// A failed request means the loopback is NOT available, so the caller must fall back to running the
+			// hooks synchronously. Treating a WP_Error as "available" sent those sites down the remote-post branch,
+			// where the post failed too and the deferred calculated props were silently dropped.
+			$remote_available = ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response );
 
 		}
 
