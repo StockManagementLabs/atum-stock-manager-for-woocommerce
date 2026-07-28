@@ -196,6 +196,21 @@ We do not plan any support for older PHP, and version 7.4 is the minimum.
 
 ---
 
+`2.0.3.2`
+
+*2026-07-28*
+
+**Changes**
+
+* Refactoring.
+
+**Fixes**
+
+* Fixed PO PDF colors.
+* Fixed calc props not working on some sites.
+
+---
+
 `2.0.3.1`
 
 *2026-07-21*
